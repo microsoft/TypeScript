@@ -1768,10 +1768,8 @@ namespace ts {
         name: "typescript:values",
         scoped: false,
         text: `
-            var __values = (this && this.__values) || function (o) {
-                var i = typeof Symbol === "function" && o[Symbol.iterator] || 0, d;
-                return i ? i.call(o) : { next: function () { return { done: d = d || i >= o.length, value: d ? void 0 : o[i++] }; } };
-            };`
+            var __values = (this && this.__values) || function (o) { return (i = typeof Symbol === "function" && o[Symbol.iterator] || 0) ? i.call(o) : { next: function () { return { done: d = d || i >= o.length, value: d ? void 0 : o[i++] }; } }; var i, d; };
+        `
     };
 
     export function createValuesHelper(context: TransformationContext, expression: Expression, location?: TextRange) {
@@ -1788,9 +1786,8 @@ namespace ts {
         name: "typescript:step",
         scoped: false,
         text: `
-            var __step = (this && this.__step) || function (r) {
-                return !(r.done || (r.done = (r.result = r.iterator.next()).done));
-            };`
+            var __step = (this && this.__step) || function (r) { return !(r.done || (r.done = (r.result = r.iterator.next()).done)); };
+        `
     };
 
     export function createStepHelper(context: TransformationContext, iteratorRecord: Expression, location?: TextRange) {
@@ -1807,10 +1804,8 @@ namespace ts {
         name: "typescript:close",
         scoped: false,
         text: `
-            var __close = (this && this.__close) || function (r) {
-                var m = !(r && r.done) && r.iterator["return"];
-                if (m) return m.call(r.iterator);
-            };`
+            var __close = (this && this.__close) || function (r) { return (m = !(r && r.done) && r.iterator["return"]) && m.call(r.iterator); var m; };
+        `
     };
 
     export function createCloseHelper(context: TransformationContext, iteratorRecord: Expression, location?: TextRange) {
@@ -1834,7 +1829,8 @@ namespace ts {
                 catch (error) { e = { error: error }; }
                 finally { try { if (m = !(r && r.done) && i["return"]) m.call(i); } finally { if (e) throw e.error; } }
                 return ar;
-            };`
+            };
+        `
     };
 
     export function createReadHelper(context: TransformationContext, iteratorRecord: Expression, count: number | undefined, location?: TextRange) {

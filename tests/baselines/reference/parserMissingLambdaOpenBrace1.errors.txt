@@ -1,4 +1,4 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserMissingLambdaOpenBrace1.ts(2,19): error TS2314: Generic type 'Iterator<T>' requires 1 type argument(s).
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserMissingLambdaOpenBrace1.ts(2,19): error TS2304: Cannot find name 'Iterator'.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserMissingLambdaOpenBrace1.ts(2,42): error TS2304: Cannot find name 'Query'.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserMissingLambdaOpenBrace1.ts(3,16): error TS2304: Cannot find name 'fromDoWhile'.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserMissingLambdaOpenBrace1.ts(4,13): error TS1005: '{' expected.
@@ -8,8 +8,8 @@ tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserMissingLambdaOpen
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserMissingLambdaOpenBrace1.ts (5 errors) ====
     class C {
         where(filter: Iterator<T, boolean>): Query<T> {
-                      ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2314: Generic type 'Iterator<T>' requires 1 type argument(s).
+                      ~~~~~~~~
+!!! error TS2304: Cannot find name 'Iterator'.
                                              ~~~~~
 !!! error TS2304: Cannot find name 'Query'.
             return fromDoWhile(test =>

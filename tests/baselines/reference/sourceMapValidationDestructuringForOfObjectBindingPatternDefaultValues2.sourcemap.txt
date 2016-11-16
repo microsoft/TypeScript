@@ -8,17 +8,9 @@ sources: sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2
 emittedFile:tests/cases/compiler/sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.js
 sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts
 -------------------------------------------------------------------
->>>var __values = (this && this.__values) || function (o) {
->>>    var i = o.__iterator__ || 0, d;
->>>    return i ? i.call(o) : { next: function () { return { done: d = d || i >= o.length, value: d ? void 0 : o[i++] }; } };
->>>};
->>>var __step = (this && this.__step) || function (r) {
->>>    return !(r.done || (r.done = (r.result = r.iterator.next()).done));
->>>};
->>>var __close = (this && this.__close) || function (r) {
->>>    var m = !(r && r.done) && r.iterator["return"];
->>>    if (m) return m.call(r.iterator);
->>>};
+>>>var __values = (this && this.__values) || function (o) { return (i = typeof Symbol === "function" && o[Symbol.iterator] || 0) ? i.call(o) : { next: function () { return { done: d = d || i >= o.length, value: d ? void 0 : o[i++] }; } }; var i, d; };
+>>>var __step = (this && this.__step) || function (r) { return !(r.done || (r.done = (r.result = r.iterator.next()).done)); };
+>>>var __close = (this && this.__close) || function (r) { return (m = !(r && r.done) && r.iterator["return"]) && m.call(r.iterator); var m; };
 >>>var robots = [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }];
 1 >
 2 >^^^^
@@ -88,32 +80,32 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 24>                                                                                       }
 25>                                                                                        ]
 26>                                                                                         ;
-1 >Emitted(12, 1) Source(17, 1) + SourceIndex(0)
-2 >Emitted(12, 5) Source(17, 5) + SourceIndex(0)
-3 >Emitted(12, 11) Source(17, 11) + SourceIndex(0)
-4 >Emitted(12, 14) Source(17, 23) + SourceIndex(0)
-5 >Emitted(12, 15) Source(17, 24) + SourceIndex(0)
-6 >Emitted(12, 17) Source(17, 26) + SourceIndex(0)
-7 >Emitted(12, 21) Source(17, 30) + SourceIndex(0)
-8 >Emitted(12, 23) Source(17, 32) + SourceIndex(0)
-9 >Emitted(12, 30) Source(17, 39) + SourceIndex(0)
-10>Emitted(12, 32) Source(17, 41) + SourceIndex(0)
-11>Emitted(12, 37) Source(17, 46) + SourceIndex(0)
-12>Emitted(12, 39) Source(17, 48) + SourceIndex(0)
-13>Emitted(12, 47) Source(17, 56) + SourceIndex(0)
-14>Emitted(12, 49) Source(17, 58) + SourceIndex(0)
-15>Emitted(12, 51) Source(17, 60) + SourceIndex(0)
-16>Emitted(12, 53) Source(17, 62) + SourceIndex(0)
-17>Emitted(12, 57) Source(17, 66) + SourceIndex(0)
-18>Emitted(12, 59) Source(17, 68) + SourceIndex(0)
-19>Emitted(12, 68) Source(17, 77) + SourceIndex(0)
-20>Emitted(12, 70) Source(17, 79) + SourceIndex(0)
-21>Emitted(12, 75) Source(17, 84) + SourceIndex(0)
-22>Emitted(12, 77) Source(17, 86) + SourceIndex(0)
-23>Emitted(12, 87) Source(17, 96) + SourceIndex(0)
-24>Emitted(12, 89) Source(17, 98) + SourceIndex(0)
-25>Emitted(12, 90) Source(17, 99) + SourceIndex(0)
-26>Emitted(12, 91) Source(17, 100) + SourceIndex(0)
+1 >Emitted(4, 1) Source(17, 1) + SourceIndex(0)
+2 >Emitted(4, 5) Source(17, 5) + SourceIndex(0)
+3 >Emitted(4, 11) Source(17, 11) + SourceIndex(0)
+4 >Emitted(4, 14) Source(17, 23) + SourceIndex(0)
+5 >Emitted(4, 15) Source(17, 24) + SourceIndex(0)
+6 >Emitted(4, 17) Source(17, 26) + SourceIndex(0)
+7 >Emitted(4, 21) Source(17, 30) + SourceIndex(0)
+8 >Emitted(4, 23) Source(17, 32) + SourceIndex(0)
+9 >Emitted(4, 30) Source(17, 39) + SourceIndex(0)
+10>Emitted(4, 32) Source(17, 41) + SourceIndex(0)
+11>Emitted(4, 37) Source(17, 46) + SourceIndex(0)
+12>Emitted(4, 39) Source(17, 48) + SourceIndex(0)
+13>Emitted(4, 47) Source(17, 56) + SourceIndex(0)
+14>Emitted(4, 49) Source(17, 58) + SourceIndex(0)
+15>Emitted(4, 51) Source(17, 60) + SourceIndex(0)
+16>Emitted(4, 53) Source(17, 62) + SourceIndex(0)
+17>Emitted(4, 57) Source(17, 66) + SourceIndex(0)
+18>Emitted(4, 59) Source(17, 68) + SourceIndex(0)
+19>Emitted(4, 68) Source(17, 77) + SourceIndex(0)
+20>Emitted(4, 70) Source(17, 79) + SourceIndex(0)
+21>Emitted(4, 75) Source(17, 84) + SourceIndex(0)
+22>Emitted(4, 77) Source(17, 86) + SourceIndex(0)
+23>Emitted(4, 87) Source(17, 96) + SourceIndex(0)
+24>Emitted(4, 89) Source(17, 98) + SourceIndex(0)
+25>Emitted(4, 90) Source(17, 99) + SourceIndex(0)
+26>Emitted(4, 91) Source(17, 100) + SourceIndex(0)
 ---
 >>>var multiRobots = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
 1 >
@@ -161,28 +153,28 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 20>                                                                            "none"
 21>                                                                                   }
 22>                                                                                     }
-1 >Emitted(13, 1) Source(18, 1) + SourceIndex(0)
-2 >Emitted(13, 5) Source(18, 5) + SourceIndex(0)
-3 >Emitted(13, 16) Source(18, 16) + SourceIndex(0)
-4 >Emitted(13, 19) Source(18, 33) + SourceIndex(0)
-5 >Emitted(13, 20) Source(18, 34) + SourceIndex(0)
-6 >Emitted(13, 22) Source(18, 36) + SourceIndex(0)
-7 >Emitted(13, 26) Source(18, 40) + SourceIndex(0)
-8 >Emitted(13, 28) Source(18, 42) + SourceIndex(0)
-9 >Emitted(13, 35) Source(18, 49) + SourceIndex(0)
-10>Emitted(13, 37) Source(18, 51) + SourceIndex(0)
-11>Emitted(13, 43) Source(18, 57) + SourceIndex(0)
-12>Emitted(13, 45) Source(18, 59) + SourceIndex(0)
-13>Emitted(13, 47) Source(18, 61) + SourceIndex(0)
-14>Emitted(13, 54) Source(18, 68) + SourceIndex(0)
-15>Emitted(13, 56) Source(18, 70) + SourceIndex(0)
-16>Emitted(13, 64) Source(18, 78) + SourceIndex(0)
-17>Emitted(13, 66) Source(18, 80) + SourceIndex(0)
-18>Emitted(13, 75) Source(18, 89) + SourceIndex(0)
-19>Emitted(13, 77) Source(18, 91) + SourceIndex(0)
-20>Emitted(13, 83) Source(18, 97) + SourceIndex(0)
-21>Emitted(13, 85) Source(18, 99) + SourceIndex(0)
-22>Emitted(13, 87) Source(18, 101) + SourceIndex(0)
+1 >Emitted(5, 1) Source(18, 1) + SourceIndex(0)
+2 >Emitted(5, 5) Source(18, 5) + SourceIndex(0)
+3 >Emitted(5, 16) Source(18, 16) + SourceIndex(0)
+4 >Emitted(5, 19) Source(18, 33) + SourceIndex(0)
+5 >Emitted(5, 20) Source(18, 34) + SourceIndex(0)
+6 >Emitted(5, 22) Source(18, 36) + SourceIndex(0)
+7 >Emitted(5, 26) Source(18, 40) + SourceIndex(0)
+8 >Emitted(5, 28) Source(18, 42) + SourceIndex(0)
+9 >Emitted(5, 35) Source(18, 49) + SourceIndex(0)
+10>Emitted(5, 37) Source(18, 51) + SourceIndex(0)
+11>Emitted(5, 43) Source(18, 57) + SourceIndex(0)
+12>Emitted(5, 45) Source(18, 59) + SourceIndex(0)
+13>Emitted(5, 47) Source(18, 61) + SourceIndex(0)
+14>Emitted(5, 54) Source(18, 68) + SourceIndex(0)
+15>Emitted(5, 56) Source(18, 70) + SourceIndex(0)
+16>Emitted(5, 64) Source(18, 78) + SourceIndex(0)
+17>Emitted(5, 66) Source(18, 80) + SourceIndex(0)
+18>Emitted(5, 75) Source(18, 89) + SourceIndex(0)
+19>Emitted(5, 77) Source(18, 91) + SourceIndex(0)
+20>Emitted(5, 83) Source(18, 97) + SourceIndex(0)
+21>Emitted(5, 85) Source(18, 99) + SourceIndex(0)
+22>Emitted(5, 87) Source(18, 101) + SourceIndex(0)
 ---
 >>>    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }];
 1 >^^^^
@@ -226,26 +218,26 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 18>                                                                            }
 19>                                                                             ]
 20>                                                                              ;
-1 >Emitted(14, 5) Source(19, 5) + SourceIndex(0)
-2 >Emitted(14, 7) Source(19, 7) + SourceIndex(0)
-3 >Emitted(14, 11) Source(19, 11) + SourceIndex(0)
-4 >Emitted(14, 13) Source(19, 13) + SourceIndex(0)
-5 >Emitted(14, 22) Source(19, 22) + SourceIndex(0)
-6 >Emitted(14, 24) Source(19, 24) + SourceIndex(0)
-7 >Emitted(14, 30) Source(19, 30) + SourceIndex(0)
-8 >Emitted(14, 32) Source(19, 32) + SourceIndex(0)
-9 >Emitted(14, 34) Source(19, 34) + SourceIndex(0)
-10>Emitted(14, 41) Source(19, 41) + SourceIndex(0)
-11>Emitted(14, 43) Source(19, 43) + SourceIndex(0)
-12>Emitted(14, 53) Source(19, 53) + SourceIndex(0)
-13>Emitted(14, 55) Source(19, 55) + SourceIndex(0)
-14>Emitted(14, 64) Source(19, 64) + SourceIndex(0)
-15>Emitted(14, 66) Source(19, 66) + SourceIndex(0)
-16>Emitted(14, 74) Source(19, 74) + SourceIndex(0)
-17>Emitted(14, 76) Source(19, 76) + SourceIndex(0)
-18>Emitted(14, 78) Source(19, 78) + SourceIndex(0)
-19>Emitted(14, 79) Source(19, 79) + SourceIndex(0)
-20>Emitted(14, 80) Source(19, 80) + SourceIndex(0)
+1 >Emitted(6, 5) Source(19, 5) + SourceIndex(0)
+2 >Emitted(6, 7) Source(19, 7) + SourceIndex(0)
+3 >Emitted(6, 11) Source(19, 11) + SourceIndex(0)
+4 >Emitted(6, 13) Source(19, 13) + SourceIndex(0)
+5 >Emitted(6, 22) Source(19, 22) + SourceIndex(0)
+6 >Emitted(6, 24) Source(19, 24) + SourceIndex(0)
+7 >Emitted(6, 30) Source(19, 30) + SourceIndex(0)
+8 >Emitted(6, 32) Source(19, 32) + SourceIndex(0)
+9 >Emitted(6, 34) Source(19, 34) + SourceIndex(0)
+10>Emitted(6, 41) Source(19, 41) + SourceIndex(0)
+11>Emitted(6, 43) Source(19, 43) + SourceIndex(0)
+12>Emitted(6, 53) Source(19, 53) + SourceIndex(0)
+13>Emitted(6, 55) Source(19, 55) + SourceIndex(0)
+14>Emitted(6, 64) Source(19, 64) + SourceIndex(0)
+15>Emitted(6, 66) Source(19, 66) + SourceIndex(0)
+16>Emitted(6, 74) Source(19, 74) + SourceIndex(0)
+17>Emitted(6, 76) Source(19, 76) + SourceIndex(0)
+18>Emitted(6, 78) Source(19, 78) + SourceIndex(0)
+19>Emitted(6, 79) Source(19, 79) + SourceIndex(0)
+20>Emitted(6, 80) Source(19, 80) + SourceIndex(0)
 ---
 >>>function getRobots() {
 1 >
@@ -253,7 +245,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 1 >
   >
   >
-1 >Emitted(15, 1) Source(21, 1) + SourceIndex(0)
+1 >Emitted(7, 1) Source(21, 1) + SourceIndex(0)
 ---
 >>>    return robots;
 1->^^^^
@@ -267,11 +259,11 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 3 >           
 4 >           robots
 5 >                 ;
-1->Emitted(16, 5) Source(22, 5) + SourceIndex(0)
-2 >Emitted(16, 11) Source(22, 11) + SourceIndex(0)
-3 >Emitted(16, 12) Source(22, 12) + SourceIndex(0)
-4 >Emitted(16, 18) Source(22, 18) + SourceIndex(0)
-5 >Emitted(16, 19) Source(22, 19) + SourceIndex(0)
+1->Emitted(8, 5) Source(22, 5) + SourceIndex(0)
+2 >Emitted(8, 11) Source(22, 11) + SourceIndex(0)
+3 >Emitted(8, 12) Source(22, 12) + SourceIndex(0)
+4 >Emitted(8, 18) Source(22, 18) + SourceIndex(0)
+5 >Emitted(8, 19) Source(22, 19) + SourceIndex(0)
 ---
 >>>}
 1 >
@@ -280,8 +272,8 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 1 >
   >
 2 >}
-1 >Emitted(17, 1) Source(23, 1) + SourceIndex(0)
-2 >Emitted(17, 2) Source(23, 2) + SourceIndex(0)
+1 >Emitted(9, 1) Source(23, 1) + SourceIndex(0)
+2 >Emitted(9, 2) Source(23, 2) + SourceIndex(0)
 ---
 >>>function getMultiRobots() {
 1->
@@ -289,7 +281,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 1->
   >
   >
-1->Emitted(18, 1) Source(25, 1) + SourceIndex(0)
+1->Emitted(10, 1) Source(25, 1) + SourceIndex(0)
 ---
 >>>    return multiRobots;
 1->^^^^
@@ -303,11 +295,11 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 3 >           
 4 >           multiRobots
 5 >                      ;
-1->Emitted(19, 5) Source(26, 5) + SourceIndex(0)
-2 >Emitted(19, 11) Source(26, 11) + SourceIndex(0)
-3 >Emitted(19, 12) Source(26, 12) + SourceIndex(0)
-4 >Emitted(19, 23) Source(26, 23) + SourceIndex(0)
-5 >Emitted(19, 24) Source(26, 24) + SourceIndex(0)
+1->Emitted(11, 5) Source(26, 5) + SourceIndex(0)
+2 >Emitted(11, 11) Source(26, 11) + SourceIndex(0)
+3 >Emitted(11, 12) Source(26, 12) + SourceIndex(0)
+4 >Emitted(11, 23) Source(26, 23) + SourceIndex(0)
+5 >Emitted(11, 24) Source(26, 24) + SourceIndex(0)
 ---
 >>>}
 1 >
@@ -316,8 +308,8 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 1 >
   >
 2 >}
-1 >Emitted(20, 1) Source(27, 1) + SourceIndex(0)
-2 >Emitted(20, 2) Source(27, 2) + SourceIndex(0)
+1 >Emitted(12, 1) Source(27, 1) + SourceIndex(0)
+2 >Emitted(12, 2) Source(27, 2) + SourceIndex(0)
 ---
 >>>var nameA, primaryA, secondaryA, i, skillA;
 1->
@@ -346,18 +338,18 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 10>                                  , 
 11>                                    skillA: string
 12>                                          ;
-1->Emitted(21, 1) Source(29, 1) + SourceIndex(0)
-2 >Emitted(21, 5) Source(29, 5) + SourceIndex(0)
-3 >Emitted(21, 10) Source(29, 18) + SourceIndex(0)
-4 >Emitted(21, 12) Source(29, 20) + SourceIndex(0)
-5 >Emitted(21, 20) Source(29, 36) + SourceIndex(0)
-6 >Emitted(21, 22) Source(29, 38) + SourceIndex(0)
-7 >Emitted(21, 32) Source(29, 56) + SourceIndex(0)
-8 >Emitted(21, 34) Source(29, 58) + SourceIndex(0)
-9 >Emitted(21, 35) Source(29, 67) + SourceIndex(0)
-10>Emitted(21, 37) Source(29, 69) + SourceIndex(0)
-11>Emitted(21, 43) Source(29, 83) + SourceIndex(0)
-12>Emitted(21, 44) Source(29, 84) + SourceIndex(0)
+1->Emitted(13, 1) Source(29, 1) + SourceIndex(0)
+2 >Emitted(13, 5) Source(29, 5) + SourceIndex(0)
+3 >Emitted(13, 10) Source(29, 18) + SourceIndex(0)
+4 >Emitted(13, 12) Source(29, 20) + SourceIndex(0)
+5 >Emitted(13, 20) Source(29, 36) + SourceIndex(0)
+6 >Emitted(13, 22) Source(29, 38) + SourceIndex(0)
+7 >Emitted(13, 32) Source(29, 56) + SourceIndex(0)
+8 >Emitted(13, 34) Source(29, 58) + SourceIndex(0)
+9 >Emitted(13, 35) Source(29, 67) + SourceIndex(0)
+10>Emitted(13, 37) Source(29, 69) + SourceIndex(0)
+11>Emitted(13, 43) Source(29, 83) + SourceIndex(0)
+12>Emitted(13, 44) Source(29, 84) + SourceIndex(0)
 ---
 >>>var name, primary, secondary, skill;
 1 >
@@ -381,16 +373,16 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 8 >                            , 
 9 >                              skill: string
 10>                                   ;
-1 >Emitted(22, 1) Source(30, 1) + SourceIndex(0)
-2 >Emitted(22, 5) Source(30, 5) + SourceIndex(0)
-3 >Emitted(22, 9) Source(30, 17) + SourceIndex(0)
-4 >Emitted(22, 11) Source(30, 19) + SourceIndex(0)
-5 >Emitted(22, 18) Source(30, 34) + SourceIndex(0)
-6 >Emitted(22, 20) Source(30, 36) + SourceIndex(0)
-7 >Emitted(22, 29) Source(30, 53) + SourceIndex(0)
-8 >Emitted(22, 31) Source(30, 55) + SourceIndex(0)
-9 >Emitted(22, 36) Source(30, 68) + SourceIndex(0)
-10>Emitted(22, 37) Source(30, 69) + SourceIndex(0)
+1 >Emitted(14, 1) Source(30, 1) + SourceIndex(0)
+2 >Emitted(14, 5) Source(30, 5) + SourceIndex(0)
+3 >Emitted(14, 9) Source(30, 17) + SourceIndex(0)
+4 >Emitted(14, 11) Source(30, 19) + SourceIndex(0)
+5 >Emitted(14, 18) Source(30, 34) + SourceIndex(0)
+6 >Emitted(14, 20) Source(30, 36) + SourceIndex(0)
+7 >Emitted(14, 29) Source(30, 53) + SourceIndex(0)
+8 >Emitted(14, 31) Source(30, 55) + SourceIndex(0)
+9 >Emitted(14, 36) Source(30, 68) + SourceIndex(0)
+10>Emitted(14, 37) Source(30, 69) + SourceIndex(0)
 ---
 >>>try {
 >>>    for (var robots_1 = { iterator: __values(robots) }; __step(robots_1);) {
@@ -425,20 +417,20 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 12>                                                    
 13>                                                      
 14>                                                        {name: nameA = "noName" }
-1 >Emitted(24, 5) Source(32, 1) + SourceIndex(0)
-2 >Emitted(24, 8) Source(32, 4) + SourceIndex(0)
-3 >Emitted(24, 9) Source(32, 5) + SourceIndex(0)
-4 >Emitted(24, 10) Source(32, 35) + SourceIndex(0)
-5 >Emitted(24, 14) Source(32, 35) + SourceIndex(0)
-6 >Emitted(24, 25) Source(32, 35) + SourceIndex(0)
-7 >Emitted(24, 27) Source(32, 35) + SourceIndex(0)
-8 >Emitted(24, 37) Source(32, 35) + SourceIndex(0)
-9 >Emitted(24, 46) Source(32, 35) + SourceIndex(0)
-10>Emitted(24, 52) Source(32, 41) + SourceIndex(0)
-11>Emitted(24, 53) Source(32, 41) + SourceIndex(0)
-12>Emitted(24, 55) Source(32, 41) + SourceIndex(0)
-13>Emitted(24, 57) Source(32, 6) + SourceIndex(0)
-14>Emitted(24, 73) Source(32, 31) + SourceIndex(0)
+1 >Emitted(16, 5) Source(32, 1) + SourceIndex(0)
+2 >Emitted(16, 8) Source(32, 4) + SourceIndex(0)
+3 >Emitted(16, 9) Source(32, 5) + SourceIndex(0)
+4 >Emitted(16, 10) Source(32, 35) + SourceIndex(0)
+5 >Emitted(16, 14) Source(32, 35) + SourceIndex(0)
+6 >Emitted(16, 25) Source(32, 35) + SourceIndex(0)
+7 >Emitted(16, 27) Source(32, 35) + SourceIndex(0)
+8 >Emitted(16, 37) Source(32, 35) + SourceIndex(0)
+9 >Emitted(16, 46) Source(32, 35) + SourceIndex(0)
+10>Emitted(16, 52) Source(32, 41) + SourceIndex(0)
+11>Emitted(16, 53) Source(32, 41) + SourceIndex(0)
+12>Emitted(16, 55) Source(32, 41) + SourceIndex(0)
+13>Emitted(16, 57) Source(32, 6) + SourceIndex(0)
+14>Emitted(16, 73) Source(32, 31) + SourceIndex(0)
 ---
 >>>        _a = robots_1.result.value.name, nameA = _a === void 0 ? "noName" : _a;
 1->^^^^^^^^
@@ -449,10 +441,10 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 2 >        name: nameA = "noName"
 3 >                                       
 4 >                                         name: nameA = "noName"
-1->Emitted(25, 9) Source(32, 7) + SourceIndex(0)
-2 >Emitted(25, 40) Source(32, 29) + SourceIndex(0)
-3 >Emitted(25, 42) Source(32, 7) + SourceIndex(0)
-4 >Emitted(25, 79) Source(32, 29) + SourceIndex(0)
+1->Emitted(17, 9) Source(32, 7) + SourceIndex(0)
+2 >Emitted(17, 40) Source(32, 29) + SourceIndex(0)
+3 >Emitted(17, 42) Source(32, 7) + SourceIndex(0)
+4 >Emitted(17, 79) Source(32, 29) + SourceIndex(0)
 ---
 >>>        console.log(nameA);
 1 >^^^^^^^^
@@ -472,20 +464,20 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                    nameA
 7 >                         )
 8 >                          ;
-1 >Emitted(26, 9) Source(33, 5) + SourceIndex(0)
-2 >Emitted(26, 16) Source(33, 12) + SourceIndex(0)
-3 >Emitted(26, 17) Source(33, 13) + SourceIndex(0)
-4 >Emitted(26, 20) Source(33, 16) + SourceIndex(0)
-5 >Emitted(26, 21) Source(33, 17) + SourceIndex(0)
-6 >Emitted(26, 26) Source(33, 22) + SourceIndex(0)
-7 >Emitted(26, 27) Source(33, 23) + SourceIndex(0)
-8 >Emitted(26, 28) Source(33, 24) + SourceIndex(0)
+1 >Emitted(18, 9) Source(33, 5) + SourceIndex(0)
+2 >Emitted(18, 16) Source(33, 12) + SourceIndex(0)
+3 >Emitted(18, 17) Source(33, 13) + SourceIndex(0)
+4 >Emitted(18, 20) Source(33, 16) + SourceIndex(0)
+5 >Emitted(18, 21) Source(33, 17) + SourceIndex(0)
+6 >Emitted(18, 26) Source(33, 22) + SourceIndex(0)
+7 >Emitted(18, 27) Source(33, 23) + SourceIndex(0)
+8 >Emitted(18, 28) Source(33, 24) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^^
 1 >
   >}
-1 >Emitted(27, 6) Source(34, 2) + SourceIndex(0)
+1 >Emitted(19, 6) Source(34, 2) + SourceIndex(0)
 ---
 >>>}
 >>>catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -526,21 +518,21 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 13>                                                           
 14>                                                             
 15>                                                               {name: nameA = "noName" }
-1 >Emitted(34, 5) Source(35, 1) + SourceIndex(0)
-2 >Emitted(34, 8) Source(35, 4) + SourceIndex(0)
-3 >Emitted(34, 9) Source(35, 5) + SourceIndex(0)
-4 >Emitted(34, 10) Source(35, 35) + SourceIndex(0)
-5 >Emitted(34, 14) Source(35, 35) + SourceIndex(0)
-6 >Emitted(34, 27) Source(35, 35) + SourceIndex(0)
-7 >Emitted(34, 29) Source(35, 35) + SourceIndex(0)
-8 >Emitted(34, 39) Source(35, 35) + SourceIndex(0)
-9 >Emitted(34, 48) Source(35, 35) + SourceIndex(0)
-10>Emitted(34, 57) Source(35, 44) + SourceIndex(0)
-11>Emitted(34, 59) Source(35, 46) + SourceIndex(0)
-12>Emitted(34, 60) Source(35, 46) + SourceIndex(0)
-13>Emitted(34, 62) Source(35, 46) + SourceIndex(0)
-14>Emitted(34, 64) Source(35, 6) + SourceIndex(0)
-15>Emitted(34, 82) Source(35, 31) + SourceIndex(0)
+1 >Emitted(26, 5) Source(35, 1) + SourceIndex(0)
+2 >Emitted(26, 8) Source(35, 4) + SourceIndex(0)
+3 >Emitted(26, 9) Source(35, 5) + SourceIndex(0)
+4 >Emitted(26, 10) Source(35, 35) + SourceIndex(0)
+5 >Emitted(26, 14) Source(35, 35) + SourceIndex(0)
+6 >Emitted(26, 27) Source(35, 35) + SourceIndex(0)
+7 >Emitted(26, 29) Source(35, 35) + SourceIndex(0)
+8 >Emitted(26, 39) Source(35, 35) + SourceIndex(0)
+9 >Emitted(26, 48) Source(35, 35) + SourceIndex(0)
+10>Emitted(26, 57) Source(35, 44) + SourceIndex(0)
+11>Emitted(26, 59) Source(35, 46) + SourceIndex(0)
+12>Emitted(26, 60) Source(35, 46) + SourceIndex(0)
+13>Emitted(26, 62) Source(35, 46) + SourceIndex(0)
+14>Emitted(26, 64) Source(35, 6) + SourceIndex(0)
+15>Emitted(26, 82) Source(35, 31) + SourceIndex(0)
 ---
 >>>        _b = iterator_1.result.value.name, nameA = _b === void 0 ? "noName" : _b;
 1->^^^^^^^^
@@ -551,10 +543,10 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 2 >        name: nameA = "noName"
 3 >                                         
 4 >                                           name: nameA = "noName"
-1->Emitted(35, 9) Source(35, 7) + SourceIndex(0)
-2 >Emitted(35, 42) Source(35, 29) + SourceIndex(0)
-3 >Emitted(35, 44) Source(35, 7) + SourceIndex(0)
-4 >Emitted(35, 81) Source(35, 29) + SourceIndex(0)
+1->Emitted(27, 9) Source(35, 7) + SourceIndex(0)
+2 >Emitted(27, 42) Source(35, 29) + SourceIndex(0)
+3 >Emitted(27, 44) Source(35, 7) + SourceIndex(0)
+4 >Emitted(27, 81) Source(35, 29) + SourceIndex(0)
 ---
 >>>        console.log(nameA);
 1 >^^^^^^^^
@@ -574,20 +566,20 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                    nameA
 7 >                         )
 8 >                          ;
-1 >Emitted(36, 9) Source(36, 5) + SourceIndex(0)
-2 >Emitted(36, 16) Source(36, 12) + SourceIndex(0)
-3 >Emitted(36, 17) Source(36, 13) + SourceIndex(0)
-4 >Emitted(36, 20) Source(36, 16) + SourceIndex(0)
-5 >Emitted(36, 21) Source(36, 17) + SourceIndex(0)
-6 >Emitted(36, 26) Source(36, 22) + SourceIndex(0)
-7 >Emitted(36, 27) Source(36, 23) + SourceIndex(0)
-8 >Emitted(36, 28) Source(36, 24) + SourceIndex(0)
+1 >Emitted(28, 9) Source(36, 5) + SourceIndex(0)
+2 >Emitted(28, 16) Source(36, 12) + SourceIndex(0)
+3 >Emitted(28, 17) Source(36, 13) + SourceIndex(0)
+4 >Emitted(28, 20) Source(36, 16) + SourceIndex(0)
+5 >Emitted(28, 21) Source(36, 17) + SourceIndex(0)
+6 >Emitted(28, 26) Source(36, 22) + SourceIndex(0)
+7 >Emitted(28, 27) Source(36, 23) + SourceIndex(0)
+8 >Emitted(28, 28) Source(36, 24) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^^
 1 >
   >}
-1 >Emitted(37, 6) Source(37, 2) + SourceIndex(0)
+1 >Emitted(29, 6) Source(37, 2) + SourceIndex(0)
 ---
 >>>}
 >>>catch (e_2_1) { e_2 = { error: e_2_1 }; }
@@ -658,37 +650,37 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 29>                                                                                                    [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]
 30>                                                                                                                  
 31>                                                                                                                    [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]
-1 >Emitted(43, 1) Source(38, 1) + SourceIndex(0)
-2 >Emitted(43, 4) Source(38, 4) + SourceIndex(0)
-3 >Emitted(43, 5) Source(38, 5) + SourceIndex(0)
-4 >Emitted(43, 6) Source(38, 35) + SourceIndex(0)
-5 >Emitted(43, 16) Source(38, 111) + SourceIndex(0)
-6 >Emitted(43, 18) Source(38, 35) + SourceIndex(0)
-7 >Emitted(43, 24) Source(38, 36) + SourceIndex(0)
-8 >Emitted(43, 26) Source(38, 38) + SourceIndex(0)
-9 >Emitted(43, 30) Source(38, 42) + SourceIndex(0)
-10>Emitted(43, 32) Source(38, 44) + SourceIndex(0)
-11>Emitted(43, 39) Source(38, 51) + SourceIndex(0)
-12>Emitted(43, 41) Source(38, 53) + SourceIndex(0)
-13>Emitted(43, 46) Source(38, 58) + SourceIndex(0)
-14>Emitted(43, 48) Source(38, 60) + SourceIndex(0)
-15>Emitted(43, 56) Source(38, 68) + SourceIndex(0)
-16>Emitted(43, 58) Source(38, 70) + SourceIndex(0)
-17>Emitted(43, 60) Source(38, 72) + SourceIndex(0)
-18>Emitted(43, 62) Source(38, 74) + SourceIndex(0)
-19>Emitted(43, 66) Source(38, 78) + SourceIndex(0)
-20>Emitted(43, 68) Source(38, 80) + SourceIndex(0)
-21>Emitted(43, 77) Source(38, 89) + SourceIndex(0)
-22>Emitted(43, 79) Source(38, 91) + SourceIndex(0)
-23>Emitted(43, 84) Source(38, 96) + SourceIndex(0)
-24>Emitted(43, 86) Source(38, 98) + SourceIndex(0)
-25>Emitted(43, 96) Source(38, 108) + SourceIndex(0)
-26>Emitted(43, 98) Source(38, 110) + SourceIndex(0)
-27>Emitted(43, 99) Source(38, 111) + SourceIndex(0)
-28>Emitted(43, 101) Source(38, 35) + SourceIndex(0)
-29>Emitted(43, 115) Source(38, 111) + SourceIndex(0)
-30>Emitted(43, 117) Source(38, 35) + SourceIndex(0)
-31>Emitted(43, 121) Source(38, 111) + SourceIndex(0)
+1 >Emitted(35, 1) Source(38, 1) + SourceIndex(0)
+2 >Emitted(35, 4) Source(38, 4) + SourceIndex(0)
+3 >Emitted(35, 5) Source(38, 5) + SourceIndex(0)
+4 >Emitted(35, 6) Source(38, 35) + SourceIndex(0)
+5 >Emitted(35, 16) Source(38, 111) + SourceIndex(0)
+6 >Emitted(35, 18) Source(38, 35) + SourceIndex(0)
+7 >Emitted(35, 24) Source(38, 36) + SourceIndex(0)
+8 >Emitted(35, 26) Source(38, 38) + SourceIndex(0)
+9 >Emitted(35, 30) Source(38, 42) + SourceIndex(0)
+10>Emitted(35, 32) Source(38, 44) + SourceIndex(0)
+11>Emitted(35, 39) Source(38, 51) + SourceIndex(0)
+12>Emitted(35, 41) Source(38, 53) + SourceIndex(0)
+13>Emitted(35, 46) Source(38, 58) + SourceIndex(0)
+14>Emitted(35, 48) Source(38, 60) + SourceIndex(0)
+15>Emitted(35, 56) Source(38, 68) + SourceIndex(0)
+16>Emitted(35, 58) Source(38, 70) + SourceIndex(0)
+17>Emitted(35, 60) Source(38, 72) + SourceIndex(0)
+18>Emitted(35, 62) Source(38, 74) + SourceIndex(0)
+19>Emitted(35, 66) Source(38, 78) + SourceIndex(0)
+20>Emitted(35, 68) Source(38, 80) + SourceIndex(0)
+21>Emitted(35, 77) Source(38, 89) + SourceIndex(0)
+22>Emitted(35, 79) Source(38, 91) + SourceIndex(0)
+23>Emitted(35, 84) Source(38, 96) + SourceIndex(0)
+24>Emitted(35, 86) Source(38, 98) + SourceIndex(0)
+25>Emitted(35, 96) Source(38, 108) + SourceIndex(0)
+26>Emitted(35, 98) Source(38, 110) + SourceIndex(0)
+27>Emitted(35, 99) Source(38, 111) + SourceIndex(0)
+28>Emitted(35, 101) Source(38, 35) + SourceIndex(0)
+29>Emitted(35, 115) Source(38, 111) + SourceIndex(0)
+30>Emitted(35, 117) Source(38, 35) + SourceIndex(0)
+31>Emitted(35, 121) Source(38, 111) + SourceIndex(0)
 ---
 >>>    _d = _c[_i].name, nameA = _d === void 0 ? "noName" : _d;
 1 >^^^^
@@ -699,10 +691,10 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 2 >    name: nameA = "noName"
 3 >                    
 4 >                      name: nameA = "noName"
-1 >Emitted(44, 5) Source(38, 7) + SourceIndex(0)
-2 >Emitted(44, 21) Source(38, 29) + SourceIndex(0)
-3 >Emitted(44, 23) Source(38, 7) + SourceIndex(0)
-4 >Emitted(44, 60) Source(38, 29) + SourceIndex(0)
+1 >Emitted(36, 5) Source(38, 7) + SourceIndex(0)
+2 >Emitted(36, 21) Source(38, 29) + SourceIndex(0)
+3 >Emitted(36, 23) Source(38, 7) + SourceIndex(0)
+4 >Emitted(36, 60) Source(38, 29) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -722,21 +714,21 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                nameA
 7 >                     )
 8 >                      ;
-1 >Emitted(45, 5) Source(39, 5) + SourceIndex(0)
-2 >Emitted(45, 12) Source(39, 12) + SourceIndex(0)
-3 >Emitted(45, 13) Source(39, 13) + SourceIndex(0)
-4 >Emitted(45, 16) Source(39, 16) + SourceIndex(0)
-5 >Emitted(45, 17) Source(39, 17) + SourceIndex(0)
-6 >Emitted(45, 22) Source(39, 22) + SourceIndex(0)
-7 >Emitted(45, 23) Source(39, 23) + SourceIndex(0)
-8 >Emitted(45, 24) Source(39, 24) + SourceIndex(0)
+1 >Emitted(37, 5) Source(39, 5) + SourceIndex(0)
+2 >Emitted(37, 12) Source(39, 12) + SourceIndex(0)
+3 >Emitted(37, 13) Source(39, 13) + SourceIndex(0)
+4 >Emitted(37, 16) Source(39, 16) + SourceIndex(0)
+5 >Emitted(37, 17) Source(39, 17) + SourceIndex(0)
+6 >Emitted(37, 22) Source(39, 22) + SourceIndex(0)
+7 >Emitted(37, 23) Source(39, 23) + SourceIndex(0)
+8 >Emitted(37, 24) Source(39, 24) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^->
 1 >
   >}
-1 >Emitted(46, 2) Source(40, 2) + SourceIndex(0)
+1 >Emitted(38, 2) Source(40, 2) + SourceIndex(0)
 ---
 >>>try {
 >>>    for (var multiRobots_1 = { iterator: __values(multiRobots) }; __step(multiRobots_1);) {
@@ -772,20 +764,20 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 13>                                                                
 14>                                                                  { skills: { primary: primaryA = "primary", secondary: secondaryA = "secondary" } =
   >                                                                      { primary: "nosKill", secondary: "noSkill" } }
-1->Emitted(48, 5) Source(41, 1) + SourceIndex(0)
-2 >Emitted(48, 8) Source(41, 4) + SourceIndex(0)
-3 >Emitted(48, 9) Source(41, 5) + SourceIndex(0)
-4 >Emitted(48, 10) Source(42, 55) + SourceIndex(0)
-5 >Emitted(48, 14) Source(42, 55) + SourceIndex(0)
-6 >Emitted(48, 30) Source(42, 55) + SourceIndex(0)
-7 >Emitted(48, 32) Source(42, 55) + SourceIndex(0)
-8 >Emitted(48, 42) Source(42, 55) + SourceIndex(0)
-9 >Emitted(48, 51) Source(42, 55) + SourceIndex(0)
-10>Emitted(48, 62) Source(42, 66) + SourceIndex(0)
-11>Emitted(48, 63) Source(42, 66) + SourceIndex(0)
-12>Emitted(48, 65) Source(42, 66) + SourceIndex(0)
-13>Emitted(48, 67) Source(41, 6) + SourceIndex(0)
-14>Emitted(48, 88) Source(42, 51) + SourceIndex(0)
+1->Emitted(40, 5) Source(41, 1) + SourceIndex(0)
+2 >Emitted(40, 8) Source(41, 4) + SourceIndex(0)
+3 >Emitted(40, 9) Source(41, 5) + SourceIndex(0)
+4 >Emitted(40, 10) Source(42, 55) + SourceIndex(0)
+5 >Emitted(40, 14) Source(42, 55) + SourceIndex(0)
+6 >Emitted(40, 30) Source(42, 55) + SourceIndex(0)
+7 >Emitted(40, 32) Source(42, 55) + SourceIndex(0)
+8 >Emitted(40, 42) Source(42, 55) + SourceIndex(0)
+9 >Emitted(40, 51) Source(42, 55) + SourceIndex(0)
+10>Emitted(40, 62) Source(42, 66) + SourceIndex(0)
+11>Emitted(40, 63) Source(42, 66) + SourceIndex(0)
+12>Emitted(40, 65) Source(42, 66) + SourceIndex(0)
+13>Emitted(40, 67) Source(41, 6) + SourceIndex(0)
+14>Emitted(40, 88) Source(42, 51) + SourceIndex(0)
 ---
 >>>        _e = multiRobots_1.result.value.skills, _f = _e === void 0 ? { primary: "nosKill", secondary: "noSkill" } : _e, _g = _f.primary, primaryA = _g === void 0 ? "primary" : _g, _h = _f.secondary, secondaryA = _h === void 0 ? "secondary" : _h;
 1->^^^^^^^^
@@ -814,18 +806,18 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 10>                                                                                                                                                                                    secondary: secondaryA = "secondary"
 11>                                                                                                                                                                                                     
 12>                                                                                                                                                                                                       secondary: secondaryA = "secondary"
-1->Emitted(49, 9) Source(41, 8) + SourceIndex(0)
-2 >Emitted(49, 47) Source(42, 49) + SourceIndex(0)
-3 >Emitted(49, 49) Source(41, 8) + SourceIndex(0)
-4 >Emitted(49, 119) Source(42, 49) + SourceIndex(0)
-5 >Emitted(49, 121) Source(41, 18) + SourceIndex(0)
-6 >Emitted(49, 136) Source(41, 47) + SourceIndex(0)
-7 >Emitted(49, 138) Source(41, 18) + SourceIndex(0)
-8 >Emitted(49, 179) Source(41, 47) + SourceIndex(0)
-9 >Emitted(49, 181) Source(41, 49) + SourceIndex(0)
-10>Emitted(49, 198) Source(41, 84) + SourceIndex(0)
-11>Emitted(49, 200) Source(41, 49) + SourceIndex(0)
-12>Emitted(49, 245) Source(41, 84) + SourceIndex(0)
+1->Emitted(41, 9) Source(41, 8) + SourceIndex(0)
+2 >Emitted(41, 47) Source(42, 49) + SourceIndex(0)
+3 >Emitted(41, 49) Source(41, 8) + SourceIndex(0)
+4 >Emitted(41, 119) Source(42, 49) + SourceIndex(0)
+5 >Emitted(41, 121) Source(41, 18) + SourceIndex(0)
+6 >Emitted(41, 136) Source(41, 47) + SourceIndex(0)
+7 >Emitted(41, 138) Source(41, 18) + SourceIndex(0)
+8 >Emitted(41, 179) Source(41, 47) + SourceIndex(0)
+9 >Emitted(41, 181) Source(41, 49) + SourceIndex(0)
+10>Emitted(41, 198) Source(41, 84) + SourceIndex(0)
+11>Emitted(41, 200) Source(41, 49) + SourceIndex(0)
+12>Emitted(41, 245) Source(41, 84) + SourceIndex(0)
 ---
 >>>        console.log(primaryA);
 1 >^^^^^^^^
@@ -846,20 +838,20 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                    primaryA
 7 >                            )
 8 >                             ;
-1 >Emitted(50, 9) Source(43, 5) + SourceIndex(0)
-2 >Emitted(50, 16) Source(43, 12) + SourceIndex(0)
-3 >Emitted(50, 17) Source(43, 13) + SourceIndex(0)
-4 >Emitted(50, 20) Source(43, 16) + SourceIndex(0)
-5 >Emitted(50, 21) Source(43, 17) + SourceIndex(0)
-6 >Emitted(50, 29) Source(43, 25) + SourceIndex(0)
-7 >Emitted(50, 30) Source(43, 26) + SourceIndex(0)
-8 >Emitted(50, 31) Source(43, 27) + SourceIndex(0)
+1 >Emitted(42, 9) Source(43, 5) + SourceIndex(0)
+2 >Emitted(42, 16) Source(43, 12) + SourceIndex(0)
+3 >Emitted(42, 17) Source(43, 13) + SourceIndex(0)
+4 >Emitted(42, 20) Source(43, 16) + SourceIndex(0)
+5 >Emitted(42, 21) Source(43, 17) + SourceIndex(0)
+6 >Emitted(42, 29) Source(43, 25) + SourceIndex(0)
+7 >Emitted(42, 30) Source(43, 26) + SourceIndex(0)
+8 >Emitted(42, 31) Source(43, 27) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^^
 1 >
   >}
-1 >Emitted(51, 6) Source(44, 2) + SourceIndex(0)
+1 >Emitted(43, 6) Source(44, 2) + SourceIndex(0)
 ---
 >>>}
 >>>catch (e_3_1) { e_3 = { error: e_3_1 }; }
@@ -902,21 +894,21 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 14>                                                                  
 15>                                                                    { skills: { primary: primaryA = "primary", secondary: secondaryA = "secondary" } =
   >                                                                        { primary: "nosKill", secondary: "noSkill" } }
-1 >Emitted(58, 5) Source(45, 1) + SourceIndex(0)
-2 >Emitted(58, 8) Source(45, 4) + SourceIndex(0)
-3 >Emitted(58, 9) Source(45, 5) + SourceIndex(0)
-4 >Emitted(58, 10) Source(46, 55) + SourceIndex(0)
-5 >Emitted(58, 14) Source(46, 55) + SourceIndex(0)
-6 >Emitted(58, 27) Source(46, 55) + SourceIndex(0)
-7 >Emitted(58, 29) Source(46, 55) + SourceIndex(0)
-8 >Emitted(58, 39) Source(46, 55) + SourceIndex(0)
-9 >Emitted(58, 48) Source(46, 55) + SourceIndex(0)
-10>Emitted(58, 62) Source(46, 69) + SourceIndex(0)
-11>Emitted(58, 64) Source(46, 71) + SourceIndex(0)
-12>Emitted(58, 65) Source(46, 71) + SourceIndex(0)
-13>Emitted(58, 67) Source(46, 71) + SourceIndex(0)
-14>Emitted(58, 69) Source(45, 6) + SourceIndex(0)
-15>Emitted(58, 87) Source(46, 51) + SourceIndex(0)
+1 >Emitted(50, 5) Source(45, 1) + SourceIndex(0)
+2 >Emitted(50, 8) Source(45, 4) + SourceIndex(0)
+3 >Emitted(50, 9) Source(45, 5) + SourceIndex(0)
+4 >Emitted(50, 10) Source(46, 55) + SourceIndex(0)
+5 >Emitted(50, 14) Source(46, 55) + SourceIndex(0)
+6 >Emitted(50, 27) Source(46, 55) + SourceIndex(0)
+7 >Emitted(50, 29) Source(46, 55) + SourceIndex(0)
+8 >Emitted(50, 39) Source(46, 55) + SourceIndex(0)
+9 >Emitted(50, 48) Source(46, 55) + SourceIndex(0)
+10>Emitted(50, 62) Source(46, 69) + SourceIndex(0)
+11>Emitted(50, 64) Source(46, 71) + SourceIndex(0)
+12>Emitted(50, 65) Source(46, 71) + SourceIndex(0)
+13>Emitted(50, 67) Source(46, 71) + SourceIndex(0)
+14>Emitted(50, 69) Source(45, 6) + SourceIndex(0)
+15>Emitted(50, 87) Source(46, 51) + SourceIndex(0)
 ---
 >>>        _j = iterator_2.result.value.skills, _k = _j === void 0 ? { primary: "nosKill", secondary: "noSkill" } : _j, _l = _k.primary, primaryA = _l === void 0 ? "primary" : _l, _m = _k.secondary, secondaryA = _m === void 0 ? "secondary" : _m;
 1->^^^^^^^^
@@ -945,18 +937,18 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 10>                                                                                                                                                                                 secondary: secondaryA = "secondary"
 11>                                                                                                                                                                                                  
 12>                                                                                                                                                                                                    secondary: secondaryA = "secondary"
-1->Emitted(59, 9) Source(45, 8) + SourceIndex(0)
-2 >Emitted(59, 44) Source(46, 49) + SourceIndex(0)
-3 >Emitted(59, 46) Source(45, 8) + SourceIndex(0)
-4 >Emitted(59, 116) Source(46, 49) + SourceIndex(0)
-5 >Emitted(59, 118) Source(45, 18) + SourceIndex(0)
-6 >Emitted(59, 133) Source(45, 47) + SourceIndex(0)
-7 >Emitted(59, 135) Source(45, 18) + SourceIndex(0)
-8 >Emitted(59, 176) Source(45, 47) + SourceIndex(0)
-9 >Emitted(59, 178) Source(45, 49) + SourceIndex(0)
-10>Emitted(59, 195) Source(45, 84) + SourceIndex(0)
-11>Emitted(59, 197) Source(45, 49) + SourceIndex(0)
-12>Emitted(59, 242) Source(45, 84) + SourceIndex(0)
+1->Emitted(51, 9) Source(45, 8) + SourceIndex(0)
+2 >Emitted(51, 44) Source(46, 49) + SourceIndex(0)
+3 >Emitted(51, 46) Source(45, 8) + SourceIndex(0)
+4 >Emitted(51, 116) Source(46, 49) + SourceIndex(0)
+5 >Emitted(51, 118) Source(45, 18) + SourceIndex(0)
+6 >Emitted(51, 133) Source(45, 47) + SourceIndex(0)
+7 >Emitted(51, 135) Source(45, 18) + SourceIndex(0)
+8 >Emitted(51, 176) Source(45, 47) + SourceIndex(0)
+9 >Emitted(51, 178) Source(45, 49) + SourceIndex(0)
+10>Emitted(51, 195) Source(45, 84) + SourceIndex(0)
+11>Emitted(51, 197) Source(45, 49) + SourceIndex(0)
+12>Emitted(51, 242) Source(45, 84) + SourceIndex(0)
 ---
 >>>        console.log(primaryA);
 1 >^^^^^^^^
@@ -977,20 +969,20 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                    primaryA
 7 >                            )
 8 >                             ;
-1 >Emitted(60, 9) Source(47, 5) + SourceIndex(0)
-2 >Emitted(60, 16) Source(47, 12) + SourceIndex(0)
-3 >Emitted(60, 17) Source(47, 13) + SourceIndex(0)
-4 >Emitted(60, 20) Source(47, 16) + SourceIndex(0)
-5 >Emitted(60, 21) Source(47, 17) + SourceIndex(0)
-6 >Emitted(60, 29) Source(47, 25) + SourceIndex(0)
-7 >Emitted(60, 30) Source(47, 26) + SourceIndex(0)
-8 >Emitted(60, 31) Source(47, 27) + SourceIndex(0)
+1 >Emitted(52, 9) Source(47, 5) + SourceIndex(0)
+2 >Emitted(52, 16) Source(47, 12) + SourceIndex(0)
+3 >Emitted(52, 17) Source(47, 13) + SourceIndex(0)
+4 >Emitted(52, 20) Source(47, 16) + SourceIndex(0)
+5 >Emitted(52, 21) Source(47, 17) + SourceIndex(0)
+6 >Emitted(52, 29) Source(47, 25) + SourceIndex(0)
+7 >Emitted(52, 30) Source(47, 26) + SourceIndex(0)
+8 >Emitted(52, 31) Source(47, 27) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^^
 1 >
   >}
-1 >Emitted(61, 6) Source(48, 2) + SourceIndex(0)
+1 >Emitted(53, 6) Source(48, 2) + SourceIndex(0)
 ---
 >>>}
 >>>catch (e_4_1) { e_4 = { error: e_4_1 }; }
@@ -1056,33 +1048,33 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 25>                                                                                                         "none"
 26>                                                                                                                }
 27>                                                                                                                  }
-1 >Emitted(68, 5) Source(49, 1) + SourceIndex(0)
-2 >Emitted(68, 8) Source(49, 4) + SourceIndex(0)
-3 >Emitted(68, 9) Source(49, 5) + SourceIndex(0)
-4 >Emitted(68, 10) Source(51, 5) + SourceIndex(0)
-5 >Emitted(68, 14) Source(51, 5) + SourceIndex(0)
-6 >Emitted(68, 27) Source(51, 5) + SourceIndex(0)
-7 >Emitted(68, 29) Source(51, 5) + SourceIndex(0)
-8 >Emitted(68, 39) Source(51, 5) + SourceIndex(0)
-9 >Emitted(68, 48) Source(51, 19) + SourceIndex(0)
-10>Emitted(68, 49) Source(51, 20) + SourceIndex(0)
-11>Emitted(68, 51) Source(51, 22) + SourceIndex(0)
-12>Emitted(68, 55) Source(51, 26) + SourceIndex(0)
-13>Emitted(68, 57) Source(51, 28) + SourceIndex(0)
-14>Emitted(68, 64) Source(51, 35) + SourceIndex(0)
-15>Emitted(68, 66) Source(51, 37) + SourceIndex(0)
-16>Emitted(68, 72) Source(51, 43) + SourceIndex(0)
-17>Emitted(68, 74) Source(51, 45) + SourceIndex(0)
-18>Emitted(68, 76) Source(51, 47) + SourceIndex(0)
-19>Emitted(68, 83) Source(51, 54) + SourceIndex(0)
-20>Emitted(68, 85) Source(51, 56) + SourceIndex(0)
-21>Emitted(68, 93) Source(51, 64) + SourceIndex(0)
-22>Emitted(68, 95) Source(51, 66) + SourceIndex(0)
-23>Emitted(68, 104) Source(51, 75) + SourceIndex(0)
-24>Emitted(68, 106) Source(51, 77) + SourceIndex(0)
-25>Emitted(68, 112) Source(51, 83) + SourceIndex(0)
-26>Emitted(68, 114) Source(51, 85) + SourceIndex(0)
-27>Emitted(68, 116) Source(51, 87) + SourceIndex(0)
+1 >Emitted(60, 5) Source(49, 1) + SourceIndex(0)
+2 >Emitted(60, 8) Source(49, 4) + SourceIndex(0)
+3 >Emitted(60, 9) Source(49, 5) + SourceIndex(0)
+4 >Emitted(60, 10) Source(51, 5) + SourceIndex(0)
+5 >Emitted(60, 14) Source(51, 5) + SourceIndex(0)
+6 >Emitted(60, 27) Source(51, 5) + SourceIndex(0)
+7 >Emitted(60, 29) Source(51, 5) + SourceIndex(0)
+8 >Emitted(60, 39) Source(51, 5) + SourceIndex(0)
+9 >Emitted(60, 48) Source(51, 19) + SourceIndex(0)
+10>Emitted(60, 49) Source(51, 20) + SourceIndex(0)
+11>Emitted(60, 51) Source(51, 22) + SourceIndex(0)
+12>Emitted(60, 55) Source(51, 26) + SourceIndex(0)
+13>Emitted(60, 57) Source(51, 28) + SourceIndex(0)
+14>Emitted(60, 64) Source(51, 35) + SourceIndex(0)
+15>Emitted(60, 66) Source(51, 37) + SourceIndex(0)
+16>Emitted(60, 72) Source(51, 43) + SourceIndex(0)
+17>Emitted(60, 74) Source(51, 45) + SourceIndex(0)
+18>Emitted(60, 76) Source(51, 47) + SourceIndex(0)
+19>Emitted(60, 83) Source(51, 54) + SourceIndex(0)
+20>Emitted(60, 85) Source(51, 56) + SourceIndex(0)
+21>Emitted(60, 93) Source(51, 64) + SourceIndex(0)
+22>Emitted(60, 95) Source(51, 66) + SourceIndex(0)
+23>Emitted(60, 104) Source(51, 75) + SourceIndex(0)
+24>Emitted(60, 106) Source(51, 77) + SourceIndex(0)
+25>Emitted(60, 112) Source(51, 83) + SourceIndex(0)
+26>Emitted(60, 114) Source(51, 85) + SourceIndex(0)
+27>Emitted(60, 116) Source(51, 87) + SourceIndex(0)
 ---
 >>>            { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]) }; __step(iterator_3);) {
 1 >^^^^^^^^^^^^
@@ -1134,29 +1126,29 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 22>                                                                                         
 23>                                                                                           { skills: { primary: primaryA = "primary", secondary: secondaryA = "secondary" } =
   >                                                                                               { primary: "nosKill", secondary: "noSkill" } }
-1 >Emitted(69, 13) Source(52, 9) + SourceIndex(0)
-2 >Emitted(69, 15) Source(52, 11) + SourceIndex(0)
-3 >Emitted(69, 19) Source(52, 15) + SourceIndex(0)
-4 >Emitted(69, 21) Source(52, 17) + SourceIndex(0)
-5 >Emitted(69, 30) Source(52, 26) + SourceIndex(0)
-6 >Emitted(69, 32) Source(52, 28) + SourceIndex(0)
-7 >Emitted(69, 38) Source(52, 34) + SourceIndex(0)
-8 >Emitted(69, 40) Source(52, 36) + SourceIndex(0)
-9 >Emitted(69, 42) Source(52, 38) + SourceIndex(0)
-10>Emitted(69, 49) Source(52, 45) + SourceIndex(0)
-11>Emitted(69, 51) Source(52, 47) + SourceIndex(0)
-12>Emitted(69, 61) Source(52, 57) + SourceIndex(0)
-13>Emitted(69, 63) Source(52, 59) + SourceIndex(0)
-14>Emitted(69, 72) Source(52, 68) + SourceIndex(0)
-15>Emitted(69, 74) Source(52, 70) + SourceIndex(0)
-16>Emitted(69, 82) Source(52, 78) + SourceIndex(0)
-17>Emitted(69, 84) Source(52, 80) + SourceIndex(0)
-18>Emitted(69, 86) Source(52, 82) + SourceIndex(0)
-19>Emitted(69, 87) Source(52, 83) + SourceIndex(0)
-20>Emitted(69, 88) Source(52, 83) + SourceIndex(0)
-21>Emitted(69, 90) Source(52, 83) + SourceIndex(0)
-22>Emitted(69, 92) Source(49, 6) + SourceIndex(0)
-23>Emitted(69, 110) Source(50, 51) + SourceIndex(0)
+1 >Emitted(61, 13) Source(52, 9) + SourceIndex(0)
+2 >Emitted(61, 15) Source(52, 11) + SourceIndex(0)
+3 >Emitted(61, 19) Source(52, 15) + SourceIndex(0)
+4 >Emitted(61, 21) Source(52, 17) + SourceIndex(0)
+5 >Emitted(61, 30) Source(52, 26) + SourceIndex(0)
+6 >Emitted(61, 32) Source(52, 28) + SourceIndex(0)
+7 >Emitted(61, 38) Source(52, 34) + SourceIndex(0)
+8 >Emitted(61, 40) Source(52, 36) + SourceIndex(0)
+9 >Emitted(61, 42) Source(52, 38) + SourceIndex(0)
+10>Emitted(61, 49) Source(52, 45) + SourceIndex(0)
+11>Emitted(61, 51) Source(52, 47) + SourceIndex(0)
+12>Emitted(61, 61) Source(52, 57) + SourceIndex(0)
+13>Emitted(61, 63) Source(52, 59) + SourceIndex(0)
+14>Emitted(61, 72) Source(52, 68) + SourceIndex(0)
+15>Emitted(61, 74) Source(52, 70) + SourceIndex(0)
+16>Emitted(61, 82) Source(52, 78) + SourceIndex(0)
+17>Emitted(61, 84) Source(52, 80) + SourceIndex(0)
+18>Emitted(61, 86) Source(52, 82) + SourceIndex(0)
+19>Emitted(61, 87) Source(52, 83) + SourceIndex(0)
+20>Emitted(61, 88) Source(52, 83) + SourceIndex(0)
+21>Emitted(61, 90) Source(52, 83) + SourceIndex(0)
+22>Emitted(61, 92) Source(49, 6) + SourceIndex(0)
+23>Emitted(61, 110) Source(50, 51) + SourceIndex(0)
 ---
 >>>        _o = iterator_3.result.value.skills, _p = _o === void 0 ? { primary: "nosKill", secondary: "noSkill" } : _o, _q = _p.primary, primaryA = _q === void 0 ? "primary" : _q, _r = _p.secondary, secondaryA = _r === void 0 ? "secondary" : _r;
 1->^^^^^^^^
@@ -1185,18 +1177,18 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 10>                                                                                                                                                                                 secondary: secondaryA = "secondary"
 11>                                                                                                                                                                                                  
 12>                                                                                                                                                                                                    secondary: secondaryA = "secondary"
-1->Emitted(70, 9) Source(49, 8) + SourceIndex(0)
-2 >Emitted(70, 44) Source(50, 49) + SourceIndex(0)
-3 >Emitted(70, 46) Source(49, 8) + SourceIndex(0)
-4 >Emitted(70, 116) Source(50, 49) + SourceIndex(0)
-5 >Emitted(70, 118) Source(49, 18) + SourceIndex(0)
-6 >Emitted(70, 133) Source(49, 47) + SourceIndex(0)
-7 >Emitted(70, 135) Source(49, 18) + SourceIndex(0)
-8 >Emitted(70, 176) Source(49, 47) + SourceIndex(0)
-9 >Emitted(70, 178) Source(49, 49) + SourceIndex(0)
-10>Emitted(70, 195) Source(49, 84) + SourceIndex(0)
-11>Emitted(70, 197) Source(49, 49) + SourceIndex(0)
-12>Emitted(70, 242) Source(49, 84) + SourceIndex(0)
+1->Emitted(62, 9) Source(49, 8) + SourceIndex(0)
+2 >Emitted(62, 44) Source(50, 49) + SourceIndex(0)
+3 >Emitted(62, 46) Source(49, 8) + SourceIndex(0)
+4 >Emitted(62, 116) Source(50, 49) + SourceIndex(0)
+5 >Emitted(62, 118) Source(49, 18) + SourceIndex(0)
+6 >Emitted(62, 133) Source(49, 47) + SourceIndex(0)
+7 >Emitted(62, 135) Source(49, 18) + SourceIndex(0)
+8 >Emitted(62, 176) Source(49, 47) + SourceIndex(0)
+9 >Emitted(62, 178) Source(49, 49) + SourceIndex(0)
+10>Emitted(62, 195) Source(49, 84) + SourceIndex(0)
+11>Emitted(62, 197) Source(49, 49) + SourceIndex(0)
+12>Emitted(62, 242) Source(49, 84) + SourceIndex(0)
 ---
 >>>        console.log(primaryA);
 1 >^^^^^^^^
@@ -1219,20 +1211,20 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                    primaryA
 7 >                            )
 8 >                             ;
-1 >Emitted(71, 9) Source(53, 5) + SourceIndex(0)
-2 >Emitted(71, 16) Source(53, 12) + SourceIndex(0)
-3 >Emitted(71, 17) Source(53, 13) + SourceIndex(0)
-4 >Emitted(71, 20) Source(53, 16) + SourceIndex(0)
-5 >Emitted(71, 21) Source(53, 17) + SourceIndex(0)
-6 >Emitted(71, 29) Source(53, 25) + SourceIndex(0)
-7 >Emitted(71, 30) Source(53, 26) + SourceIndex(0)
-8 >Emitted(71, 31) Source(53, 27) + SourceIndex(0)
+1 >Emitted(63, 9) Source(53, 5) + SourceIndex(0)
+2 >Emitted(63, 16) Source(53, 12) + SourceIndex(0)
+3 >Emitted(63, 17) Source(53, 13) + SourceIndex(0)
+4 >Emitted(63, 20) Source(53, 16) + SourceIndex(0)
+5 >Emitted(63, 21) Source(53, 17) + SourceIndex(0)
+6 >Emitted(63, 29) Source(53, 25) + SourceIndex(0)
+7 >Emitted(63, 30) Source(53, 26) + SourceIndex(0)
+8 >Emitted(63, 31) Source(53, 27) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^^
 1 >
   >}
-1 >Emitted(72, 6) Source(54, 2) + SourceIndex(0)
+1 >Emitted(64, 6) Source(54, 2) + SourceIndex(0)
 ---
 >>>}
 >>>catch (e_5_1) { e_5 = { error: e_5_1 }; }
@@ -1272,20 +1264,20 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 12>                                                    
 13>                                                      
 14>                                                        { name = "noName" }
-1 >Emitted(79, 5) Source(56, 1) + SourceIndex(0)
-2 >Emitted(79, 8) Source(56, 4) + SourceIndex(0)
-3 >Emitted(79, 9) Source(56, 5) + SourceIndex(0)
-4 >Emitted(79, 10) Source(56, 29) + SourceIndex(0)
-5 >Emitted(79, 14) Source(56, 29) + SourceIndex(0)
-6 >Emitted(79, 25) Source(56, 29) + SourceIndex(0)
-7 >Emitted(79, 27) Source(56, 29) + SourceIndex(0)
-8 >Emitted(79, 37) Source(56, 29) + SourceIndex(0)
-9 >Emitted(79, 46) Source(56, 29) + SourceIndex(0)
-10>Emitted(79, 52) Source(56, 35) + SourceIndex(0)
-11>Emitted(79, 53) Source(56, 35) + SourceIndex(0)
-12>Emitted(79, 55) Source(56, 35) + SourceIndex(0)
-13>Emitted(79, 57) Source(56, 6) + SourceIndex(0)
-14>Emitted(79, 73) Source(56, 25) + SourceIndex(0)
+1 >Emitted(71, 5) Source(56, 1) + SourceIndex(0)
+2 >Emitted(71, 8) Source(56, 4) + SourceIndex(0)
+3 >Emitted(71, 9) Source(56, 5) + SourceIndex(0)
+4 >Emitted(71, 10) Source(56, 29) + SourceIndex(0)
+5 >Emitted(71, 14) Source(56, 29) + SourceIndex(0)
+6 >Emitted(71, 25) Source(56, 29) + SourceIndex(0)
+7 >Emitted(71, 27) Source(56, 29) + SourceIndex(0)
+8 >Emitted(71, 37) Source(56, 29) + SourceIndex(0)
+9 >Emitted(71, 46) Source(56, 29) + SourceIndex(0)
+10>Emitted(71, 52) Source(56, 35) + SourceIndex(0)
+11>Emitted(71, 53) Source(56, 35) + SourceIndex(0)
+12>Emitted(71, 55) Source(56, 35) + SourceIndex(0)
+13>Emitted(71, 57) Source(56, 6) + SourceIndex(0)
+14>Emitted(71, 73) Source(56, 25) + SourceIndex(0)
 ---
 >>>        _s = robots_2.result.value.name, name = _s === void 0 ? "noName" : _s;
 1->^^^^^^^^
@@ -1296,10 +1288,10 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 2 >        name = "noName"
 3 >                                       
 4 >                                         name = "noName"
-1->Emitted(80, 9) Source(56, 8) + SourceIndex(0)
-2 >Emitted(80, 40) Source(56, 23) + SourceIndex(0)
-3 >Emitted(80, 42) Source(56, 8) + SourceIndex(0)
-4 >Emitted(80, 78) Source(56, 23) + SourceIndex(0)
+1->Emitted(72, 9) Source(56, 8) + SourceIndex(0)
+2 >Emitted(72, 40) Source(56, 23) + SourceIndex(0)
+3 >Emitted(72, 42) Source(56, 8) + SourceIndex(0)
+4 >Emitted(72, 78) Source(56, 23) + SourceIndex(0)
 ---
 >>>        console.log(nameA);
 1 >^^^^^^^^
@@ -1319,20 +1311,20 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                    nameA
 7 >                         )
 8 >                          ;
-1 >Emitted(81, 9) Source(57, 5) + SourceIndex(0)
-2 >Emitted(81, 16) Source(57, 12) + SourceIndex(0)
-3 >Emitted(81, 17) Source(57, 13) + SourceIndex(0)
-4 >Emitted(81, 20) Source(57, 16) + SourceIndex(0)
-5 >Emitted(81, 21) Source(57, 17) + SourceIndex(0)
-6 >Emitted(81, 26) Source(57, 22) + SourceIndex(0)
-7 >Emitted(81, 27) Source(57, 23) + SourceIndex(0)
-8 >Emitted(81, 28) Source(57, 24) + SourceIndex(0)
+1 >Emitted(73, 9) Source(57, 5) + SourceIndex(0)
+2 >Emitted(73, 16) Source(57, 12) + SourceIndex(0)
+3 >Emitted(73, 17) Source(57, 13) + SourceIndex(0)
+4 >Emitted(73, 20) Source(57, 16) + SourceIndex(0)
+5 >Emitted(73, 21) Source(57, 17) + SourceIndex(0)
+6 >Emitted(73, 26) Source(57, 22) + SourceIndex(0)
+7 >Emitted(73, 27) Source(57, 23) + SourceIndex(0)
+8 >Emitted(73, 28) Source(57, 24) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^^
 1 >
   >}
-1 >Emitted(82, 6) Source(58, 2) + SourceIndex(0)
+1 >Emitted(74, 6) Source(58, 2) + SourceIndex(0)
 ---
 >>>}
 >>>catch (e_6_1) { e_6 = { error: e_6_1 }; }
@@ -1372,21 +1364,21 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 13>                                                           
 14>                                                             
 15>                                                               { name = "noName" }
-1 >Emitted(89, 5) Source(59, 1) + SourceIndex(0)
-2 >Emitted(89, 8) Source(59, 4) + SourceIndex(0)
-3 >Emitted(89, 9) Source(59, 5) + SourceIndex(0)
-4 >Emitted(89, 10) Source(59, 29) + SourceIndex(0)
-5 >Emitted(89, 14) Source(59, 29) + SourceIndex(0)
-6 >Emitted(89, 27) Source(59, 29) + SourceIndex(0)
-7 >Emitted(89, 29) Source(59, 29) + SourceIndex(0)
-8 >Emitted(89, 39) Source(59, 29) + SourceIndex(0)
-9 >Emitted(89, 48) Source(59, 29) + SourceIndex(0)
-10>Emitted(89, 57) Source(59, 38) + SourceIndex(0)
-11>Emitted(89, 59) Source(59, 40) + SourceIndex(0)
-12>Emitted(89, 60) Source(59, 40) + SourceIndex(0)
-13>Emitted(89, 62) Source(59, 40) + SourceIndex(0)
-14>Emitted(89, 64) Source(59, 6) + SourceIndex(0)
-15>Emitted(89, 82) Source(59, 25) + SourceIndex(0)
+1 >Emitted(81, 5) Source(59, 1) + SourceIndex(0)
+2 >Emitted(81, 8) Source(59, 4) + SourceIndex(0)
+3 >Emitted(81, 9) Source(59, 5) + SourceIndex(0)
+4 >Emitted(81, 10) Source(59, 29) + SourceIndex(0)
+5 >Emitted(81, 14) Source(59, 29) + SourceIndex(0)
+6 >Emitted(81, 27) Source(59, 29) + SourceIndex(0)
+7 >Emitted(81, 29) Source(59, 29) + SourceIndex(0)
+8 >Emitted(81, 39) Source(59, 29) + SourceIndex(0)
+9 >Emitted(81, 48) Source(59, 29) + SourceIndex(0)
+10>Emitted(81, 57) Source(59, 38) + SourceIndex(0)
+11>Emitted(81, 59) Source(59, 40) + SourceIndex(0)
+12>Emitted(81, 60) Source(59, 40) + SourceIndex(0)
+13>Emitted(81, 62) Source(59, 40) + SourceIndex(0)
+14>Emitted(81, 64) Source(59, 6) + SourceIndex(0)
+15>Emitted(81, 82) Source(59, 25) + SourceIndex(0)
 ---
 >>>        _t = iterator_4.result.value.name, name = _t === void 0 ? "noName" : _t;
 1 >^^^^^^^^
@@ -1397,10 +1389,10 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 2 >        name = "noName"
 3 >                                         
 4 >                                           name = "noName"
-1 >Emitted(90, 9) Source(59, 8) + SourceIndex(0)
-2 >Emitted(90, 42) Source(59, 23) + SourceIndex(0)
-3 >Emitted(90, 44) Source(59, 8) + SourceIndex(0)
-4 >Emitted(90, 80) Source(59, 23) + SourceIndex(0)
+1 >Emitted(82, 9) Source(59, 8) + SourceIndex(0)
+2 >Emitted(82, 42) Source(59, 23) + SourceIndex(0)
+3 >Emitted(82, 44) Source(59, 8) + SourceIndex(0)
+4 >Emitted(82, 80) Source(59, 23) + SourceIndex(0)
 ---
 >>>        console.log(nameA);
 1 >^^^^^^^^
@@ -1420,20 +1412,20 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                    nameA
 7 >                         )
 8 >                          ;
-1 >Emitted(91, 9) Source(60, 5) + SourceIndex(0)
-2 >Emitted(91, 16) Source(60, 12) + SourceIndex(0)
-3 >Emitted(91, 17) Source(60, 13) + SourceIndex(0)
-4 >Emitted(91, 20) Source(60, 16) + SourceIndex(0)
-5 >Emitted(91, 21) Source(60, 17) + SourceIndex(0)
-6 >Emitted(91, 26) Source(60, 22) + SourceIndex(0)
-7 >Emitted(91, 27) Source(60, 23) + SourceIndex(0)
-8 >Emitted(91, 28) Source(60, 24) + SourceIndex(0)
+1 >Emitted(83, 9) Source(60, 5) + SourceIndex(0)
+2 >Emitted(83, 16) Source(60, 12) + SourceIndex(0)
+3 >Emitted(83, 17) Source(60, 13) + SourceIndex(0)
+4 >Emitted(83, 20) Source(60, 16) + SourceIndex(0)
+5 >Emitted(83, 21) Source(60, 17) + SourceIndex(0)
+6 >Emitted(83, 26) Source(60, 22) + SourceIndex(0)
+7 >Emitted(83, 27) Source(60, 23) + SourceIndex(0)
+8 >Emitted(83, 28) Source(60, 24) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^^
 1 >
   >}
-1 >Emitted(92, 6) Source(61, 2) + SourceIndex(0)
+1 >Emitted(84, 6) Source(61, 2) + SourceIndex(0)
 ---
 >>>}
 >>>catch (e_7_1) { e_7 = { error: e_7_1 }; }
@@ -1504,37 +1496,37 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 29>                                                                                                    [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]
 30>                                                                                                                  
 31>                                                                                                                    [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]
-1 >Emitted(98, 1) Source(62, 1) + SourceIndex(0)
-2 >Emitted(98, 4) Source(62, 4) + SourceIndex(0)
-3 >Emitted(98, 5) Source(62, 5) + SourceIndex(0)
-4 >Emitted(98, 6) Source(62, 29) + SourceIndex(0)
-5 >Emitted(98, 16) Source(62, 105) + SourceIndex(0)
-6 >Emitted(98, 18) Source(62, 29) + SourceIndex(0)
-7 >Emitted(98, 24) Source(62, 30) + SourceIndex(0)
-8 >Emitted(98, 26) Source(62, 32) + SourceIndex(0)
-9 >Emitted(98, 30) Source(62, 36) + SourceIndex(0)
-10>Emitted(98, 32) Source(62, 38) + SourceIndex(0)
-11>Emitted(98, 39) Source(62, 45) + SourceIndex(0)
-12>Emitted(98, 41) Source(62, 47) + SourceIndex(0)
-13>Emitted(98, 46) Source(62, 52) + SourceIndex(0)
-14>Emitted(98, 48) Source(62, 54) + SourceIndex(0)
-15>Emitted(98, 56) Source(62, 62) + SourceIndex(0)
-16>Emitted(98, 58) Source(62, 64) + SourceIndex(0)
-17>Emitted(98, 60) Source(62, 66) + SourceIndex(0)
-18>Emitted(98, 62) Source(62, 68) + SourceIndex(0)
-19>Emitted(98, 66) Source(62, 72) + SourceIndex(0)
-20>Emitted(98, 68) Source(62, 74) + SourceIndex(0)
-21>Emitted(98, 77) Source(62, 83) + SourceIndex(0)
-22>Emitted(98, 79) Source(62, 85) + SourceIndex(0)
-23>Emitted(98, 84) Source(62, 90) + SourceIndex(0)
-24>Emitted(98, 86) Source(62, 92) + SourceIndex(0)
-25>Emitted(98, 96) Source(62, 102) + SourceIndex(0)
-26>Emitted(98, 98) Source(62, 104) + SourceIndex(0)
-27>Emitted(98, 99) Source(62, 105) + SourceIndex(0)
-28>Emitted(98, 101) Source(62, 29) + SourceIndex(0)
-29>Emitted(98, 115) Source(62, 105) + SourceIndex(0)
-30>Emitted(98, 117) Source(62, 29) + SourceIndex(0)
-31>Emitted(98, 121) Source(62, 105) + SourceIndex(0)
+1 >Emitted(90, 1) Source(62, 1) + SourceIndex(0)
+2 >Emitted(90, 4) Source(62, 4) + SourceIndex(0)
+3 >Emitted(90, 5) Source(62, 5) + SourceIndex(0)
+4 >Emitted(90, 6) Source(62, 29) + SourceIndex(0)
+5 >Emitted(90, 16) Source(62, 105) + SourceIndex(0)
+6 >Emitted(90, 18) Source(62, 29) + SourceIndex(0)
+7 >Emitted(90, 24) Source(62, 30) + SourceIndex(0)
+8 >Emitted(90, 26) Source(62, 32) + SourceIndex(0)
+9 >Emitted(90, 30) Source(62, 36) + SourceIndex(0)
+10>Emitted(90, 32) Source(62, 38) + SourceIndex(0)
+11>Emitted(90, 39) Source(62, 45) + SourceIndex(0)
+12>Emitted(90, 41) Source(62, 47) + SourceIndex(0)
+13>Emitted(90, 46) Source(62, 52) + SourceIndex(0)
+14>Emitted(90, 48) Source(62, 54) + SourceIndex(0)
+15>Emitted(90, 56) Source(62, 62) + SourceIndex(0)
+16>Emitted(90, 58) Source(62, 64) + SourceIndex(0)
+17>Emitted(90, 60) Source(62, 66) + SourceIndex(0)
+18>Emitted(90, 62) Source(62, 68) + SourceIndex(0)
+19>Emitted(90, 66) Source(62, 72) + SourceIndex(0)
+20>Emitted(90, 68) Source(62, 74) + SourceIndex(0)
+21>Emitted(90, 77) Source(62, 83) + SourceIndex(0)
+22>Emitted(90, 79) Source(62, 85) + SourceIndex(0)
+23>Emitted(90, 84) Source(62, 90) + SourceIndex(0)
+24>Emitted(90, 86) Source(62, 92) + SourceIndex(0)
+25>Emitted(90, 96) Source(62, 102) + SourceIndex(0)
+26>Emitted(90, 98) Source(62, 104) + SourceIndex(0)
+27>Emitted(90, 99) Source(62, 105) + SourceIndex(0)
+28>Emitted(90, 101) Source(62, 29) + SourceIndex(0)
+29>Emitted(90, 115) Source(62, 105) + SourceIndex(0)
+30>Emitted(90, 117) Source(62, 29) + SourceIndex(0)
+31>Emitted(90, 121) Source(62, 105) + SourceIndex(0)
 ---
 >>>    _w = _v[_u].name, name = _w === void 0 ? "noName" : _w;
 1 >^^^^
@@ -1545,10 +1537,10 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 2 >    name = "noName"
 3 >                    
 4 >                      name = "noName"
-1 >Emitted(99, 5) Source(62, 8) + SourceIndex(0)
-2 >Emitted(99, 21) Source(62, 23) + SourceIndex(0)
-3 >Emitted(99, 23) Source(62, 8) + SourceIndex(0)
-4 >Emitted(99, 59) Source(62, 23) + SourceIndex(0)
+1 >Emitted(91, 5) Source(62, 8) + SourceIndex(0)
+2 >Emitted(91, 21) Source(62, 23) + SourceIndex(0)
+3 >Emitted(91, 23) Source(62, 8) + SourceIndex(0)
+4 >Emitted(91, 59) Source(62, 23) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -1568,21 +1560,21 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                nameA
 7 >                     )
 8 >                      ;
-1 >Emitted(100, 5) Source(63, 5) + SourceIndex(0)
-2 >Emitted(100, 12) Source(63, 12) + SourceIndex(0)
-3 >Emitted(100, 13) Source(63, 13) + SourceIndex(0)
-4 >Emitted(100, 16) Source(63, 16) + SourceIndex(0)
-5 >Emitted(100, 17) Source(63, 17) + SourceIndex(0)
-6 >Emitted(100, 22) Source(63, 22) + SourceIndex(0)
-7 >Emitted(100, 23) Source(63, 23) + SourceIndex(0)
-8 >Emitted(100, 24) Source(63, 24) + SourceIndex(0)
+1 >Emitted(92, 5) Source(63, 5) + SourceIndex(0)
+2 >Emitted(92, 12) Source(63, 12) + SourceIndex(0)
+3 >Emitted(92, 13) Source(63, 13) + SourceIndex(0)
+4 >Emitted(92, 16) Source(63, 16) + SourceIndex(0)
+5 >Emitted(92, 17) Source(63, 17) + SourceIndex(0)
+6 >Emitted(92, 22) Source(63, 22) + SourceIndex(0)
+7 >Emitted(92, 23) Source(63, 23) + SourceIndex(0)
+8 >Emitted(92, 24) Source(63, 24) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^->
 1 >
   >}
-1 >Emitted(101, 2) Source(64, 2) + SourceIndex(0)
+1 >Emitted(93, 2) Source(64, 2) + SourceIndex(0)
 ---
 >>>try {
 >>>    for (var multiRobots_2 = { iterator: __values(multiRobots) }; __step(multiRobots_2);) {
@@ -1626,20 +1618,20 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
   >                                                                          secondary = "secondary"
   >                                                                      } = { primary: "noSkill", secondary: "noSkill" }
   >                                                                  }
-1->Emitted(103, 5) Source(65, 1) + SourceIndex(0)
-2 >Emitted(103, 8) Source(65, 4) + SourceIndex(0)
-3 >Emitted(103, 9) Source(65, 5) + SourceIndex(0)
-4 >Emitted(103, 10) Source(70, 6) + SourceIndex(0)
-5 >Emitted(103, 14) Source(70, 6) + SourceIndex(0)
-6 >Emitted(103, 30) Source(70, 6) + SourceIndex(0)
-7 >Emitted(103, 32) Source(70, 6) + SourceIndex(0)
-8 >Emitted(103, 42) Source(70, 6) + SourceIndex(0)
-9 >Emitted(103, 51) Source(70, 6) + SourceIndex(0)
-10>Emitted(103, 62) Source(70, 17) + SourceIndex(0)
-11>Emitted(103, 63) Source(70, 17) + SourceIndex(0)
-12>Emitted(103, 65) Source(70, 17) + SourceIndex(0)
-13>Emitted(103, 67) Source(65, 6) + SourceIndex(0)
-14>Emitted(103, 88) Source(70, 2) + SourceIndex(0)
+1->Emitted(95, 5) Source(65, 1) + SourceIndex(0)
+2 >Emitted(95, 8) Source(65, 4) + SourceIndex(0)
+3 >Emitted(95, 9) Source(65, 5) + SourceIndex(0)
+4 >Emitted(95, 10) Source(70, 6) + SourceIndex(0)
+5 >Emitted(95, 14) Source(70, 6) + SourceIndex(0)
+6 >Emitted(95, 30) Source(70, 6) + SourceIndex(0)
+7 >Emitted(95, 32) Source(70, 6) + SourceIndex(0)
+8 >Emitted(95, 42) Source(70, 6) + SourceIndex(0)
+9 >Emitted(95, 51) Source(70, 6) + SourceIndex(0)
+10>Emitted(95, 62) Source(70, 17) + SourceIndex(0)
+11>Emitted(95, 63) Source(70, 17) + SourceIndex(0)
+12>Emitted(95, 65) Source(70, 17) + SourceIndex(0)
+13>Emitted(95, 67) Source(65, 6) + SourceIndex(0)
+14>Emitted(95, 88) Source(70, 2) + SourceIndex(0)
 ---
 >>>        _x = multiRobots_2.result.value.skills, _y = _x === void 0 ? { primary: "noSkill", secondary: "noSkill" } : _x, _z = _y.primary, primary = _z === void 0 ? "primary" : _z, _0 = _y.secondary, secondary = _0 === void 0 ? "secondary" : _0;
 1->^^^^^^^^
@@ -1673,18 +1665,18 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 10>                                                                                                                                                                                   secondary = "secondary"
 11>                                                                                                                                                                                                    
 12>                                                                                                                                                                                                      secondary = "secondary"
-1->Emitted(104, 9) Source(66, 5) + SourceIndex(0)
-2 >Emitted(104, 47) Source(69, 53) + SourceIndex(0)
-3 >Emitted(104, 49) Source(66, 5) + SourceIndex(0)
-4 >Emitted(104, 119) Source(69, 53) + SourceIndex(0)
-5 >Emitted(104, 121) Source(67, 9) + SourceIndex(0)
-6 >Emitted(104, 136) Source(67, 28) + SourceIndex(0)
-7 >Emitted(104, 138) Source(67, 9) + SourceIndex(0)
-8 >Emitted(104, 178) Source(67, 28) + SourceIndex(0)
-9 >Emitted(104, 180) Source(68, 9) + SourceIndex(0)
-10>Emitted(104, 197) Source(68, 32) + SourceIndex(0)
-11>Emitted(104, 199) Source(68, 9) + SourceIndex(0)
-12>Emitted(104, 243) Source(68, 32) + SourceIndex(0)
+1->Emitted(96, 9) Source(66, 5) + SourceIndex(0)
+2 >Emitted(96, 47) Source(69, 53) + SourceIndex(0)
+3 >Emitted(96, 49) Source(66, 5) + SourceIndex(0)
+4 >Emitted(96, 119) Source(69, 53) + SourceIndex(0)
+5 >Emitted(96, 121) Source(67, 9) + SourceIndex(0)
+6 >Emitted(96, 136) Source(67, 28) + SourceIndex(0)
+7 >Emitted(96, 138) Source(67, 9) + SourceIndex(0)
+8 >Emitted(96, 178) Source(67, 28) + SourceIndex(0)
+9 >Emitted(96, 180) Source(68, 9) + SourceIndex(0)
+10>Emitted(96, 197) Source(68, 32) + SourceIndex(0)
+11>Emitted(96, 199) Source(68, 9) + SourceIndex(0)
+12>Emitted(96, 243) Source(68, 32) + SourceIndex(0)
 ---
 >>>        console.log(primaryA);
 1 >^^^^^^^^
@@ -1706,20 +1698,20 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                    primaryA
 7 >                            )
 8 >                             ;
-1 >Emitted(105, 9) Source(71, 5) + SourceIndex(0)
-2 >Emitted(105, 16) Source(71, 12) + SourceIndex(0)
-3 >Emitted(105, 17) Source(71, 13) + SourceIndex(0)
-4 >Emitted(105, 20) Source(71, 16) + SourceIndex(0)
-5 >Emitted(105, 21) Source(71, 17) + SourceIndex(0)
-6 >Emitted(105, 29) Source(71, 25) + SourceIndex(0)
-7 >Emitted(105, 30) Source(71, 26) + SourceIndex(0)
-8 >Emitted(105, 31) Source(71, 27) + SourceIndex(0)
+1 >Emitted(97, 9) Source(71, 5) + SourceIndex(0)
+2 >Emitted(97, 16) Source(71, 12) + SourceIndex(0)
+3 >Emitted(97, 17) Source(71, 13) + SourceIndex(0)
+4 >Emitted(97, 20) Source(71, 16) + SourceIndex(0)
+5 >Emitted(97, 21) Source(71, 17) + SourceIndex(0)
+6 >Emitted(97, 29) Source(71, 25) + SourceIndex(0)
+7 >Emitted(97, 30) Source(71, 26) + SourceIndex(0)
+8 >Emitted(97, 31) Source(71, 27) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^^
 1 >
   >}
-1 >Emitted(106, 6) Source(72, 2) + SourceIndex(0)
+1 >Emitted(98, 6) Source(72, 2) + SourceIndex(0)
 ---
 >>>}
 >>>catch (e_8_1) { e_8 = { error: e_8_1 }; }
@@ -1770,21 +1762,21 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
   >                                                                            secondary = "secondary"
   >                                                                        } = { primary: "noSkill", secondary: "noSkill" }
   >                                                                    }
-1 >Emitted(113, 5) Source(73, 1) + SourceIndex(0)
-2 >Emitted(113, 8) Source(73, 4) + SourceIndex(0)
-3 >Emitted(113, 9) Source(73, 5) + SourceIndex(0)
-4 >Emitted(113, 10) Source(78, 6) + SourceIndex(0)
-5 >Emitted(113, 14) Source(78, 6) + SourceIndex(0)
-6 >Emitted(113, 27) Source(78, 6) + SourceIndex(0)
-7 >Emitted(113, 29) Source(78, 6) + SourceIndex(0)
-8 >Emitted(113, 39) Source(78, 6) + SourceIndex(0)
-9 >Emitted(113, 48) Source(78, 6) + SourceIndex(0)
-10>Emitted(113, 62) Source(78, 20) + SourceIndex(0)
-11>Emitted(113, 64) Source(78, 22) + SourceIndex(0)
-12>Emitted(113, 65) Source(78, 22) + SourceIndex(0)
-13>Emitted(113, 67) Source(78, 22) + SourceIndex(0)
-14>Emitted(113, 69) Source(73, 6) + SourceIndex(0)
-15>Emitted(113, 87) Source(78, 2) + SourceIndex(0)
+1 >Emitted(105, 5) Source(73, 1) + SourceIndex(0)
+2 >Emitted(105, 8) Source(73, 4) + SourceIndex(0)
+3 >Emitted(105, 9) Source(73, 5) + SourceIndex(0)
+4 >Emitted(105, 10) Source(78, 6) + SourceIndex(0)
+5 >Emitted(105, 14) Source(78, 6) + SourceIndex(0)
+6 >Emitted(105, 27) Source(78, 6) + SourceIndex(0)
+7 >Emitted(105, 29) Source(78, 6) + SourceIndex(0)
+8 >Emitted(105, 39) Source(78, 6) + SourceIndex(0)
+9 >Emitted(105, 48) Source(78, 6) + SourceIndex(0)
+10>Emitted(105, 62) Source(78, 20) + SourceIndex(0)
+11>Emitted(105, 64) Source(78, 22) + SourceIndex(0)
+12>Emitted(105, 65) Source(78, 22) + SourceIndex(0)
+13>Emitted(105, 67) Source(78, 22) + SourceIndex(0)
+14>Emitted(105, 69) Source(73, 6) + SourceIndex(0)
+15>Emitted(105, 87) Source(78, 2) + SourceIndex(0)
 ---
 >>>        _1 = iterator_5.result.value.skills, _2 = _1 === void 0 ? { primary: "noSkill", secondary: "noSkill" } : _1, _3 = _2.primary, primary = _3 === void 0 ? "primary" : _3, _4 = _2.secondary, secondary = _4 === void 0 ? "secondary" : _4;
 1->^^^^^^^^
@@ -1818,18 +1810,18 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 10>                                                                                                                                                                                secondary = "secondary"
 11>                                                                                                                                                                                                 
 12>                                                                                                                                                                                                   secondary = "secondary"
-1->Emitted(114, 9) Source(74, 5) + SourceIndex(0)
-2 >Emitted(114, 44) Source(77, 53) + SourceIndex(0)
-3 >Emitted(114, 46) Source(74, 5) + SourceIndex(0)
-4 >Emitted(114, 116) Source(77, 53) + SourceIndex(0)
-5 >Emitted(114, 118) Source(75, 9) + SourceIndex(0)
-6 >Emitted(114, 133) Source(75, 28) + SourceIndex(0)
-7 >Emitted(114, 135) Source(75, 9) + SourceIndex(0)
-8 >Emitted(114, 175) Source(75, 28) + SourceIndex(0)
-9 >Emitted(114, 177) Source(76, 9) + SourceIndex(0)
-10>Emitted(114, 194) Source(76, 32) + SourceIndex(0)
-11>Emitted(114, 196) Source(76, 9) + SourceIndex(0)
-12>Emitted(114, 240) Source(76, 32) + SourceIndex(0)
+1->Emitted(106, 9) Source(74, 5) + SourceIndex(0)
+2 >Emitted(106, 44) Source(77, 53) + SourceIndex(0)
+3 >Emitted(106, 46) Source(74, 5) + SourceIndex(0)
+4 >Emitted(106, 116) Source(77, 53) + SourceIndex(0)
+5 >Emitted(106, 118) Source(75, 9) + SourceIndex(0)
+6 >Emitted(106, 133) Source(75, 28) + SourceIndex(0)
+7 >Emitted(106, 135) Source(75, 9) + SourceIndex(0)
+8 >Emitted(106, 175) Source(75, 28) + SourceIndex(0)
+9 >Emitted(106, 177) Source(76, 9) + SourceIndex(0)
+10>Emitted(106, 194) Source(76, 32) + SourceIndex(0)
+11>Emitted(106, 196) Source(76, 9) + SourceIndex(0)
+12>Emitted(106, 240) Source(76, 32) + SourceIndex(0)
 ---
 >>>        console.log(primaryA);
 1 >^^^^^^^^
@@ -1851,20 +1843,20 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                    primaryA
 7 >                            )
 8 >                             ;
-1 >Emitted(115, 9) Source(79, 5) + SourceIndex(0)
-2 >Emitted(115, 16) Source(79, 12) + SourceIndex(0)
-3 >Emitted(115, 17) Source(79, 13) + SourceIndex(0)
-4 >Emitted(115, 20) Source(79, 16) + SourceIndex(0)
-5 >Emitted(115, 21) Source(79, 17) + SourceIndex(0)
-6 >Emitted(115, 29) Source(79, 25) + SourceIndex(0)
-7 >Emitted(115, 30) Source(79, 26) + SourceIndex(0)
-8 >Emitted(115, 31) Source(79, 27) + SourceIndex(0)
+1 >Emitted(107, 9) Source(79, 5) + SourceIndex(0)
+2 >Emitted(107, 16) Source(79, 12) + SourceIndex(0)
+3 >Emitted(107, 17) Source(79, 13) + SourceIndex(0)
+4 >Emitted(107, 20) Source(79, 16) + SourceIndex(0)
+5 >Emitted(107, 21) Source(79, 17) + SourceIndex(0)
+6 >Emitted(107, 29) Source(79, 25) + SourceIndex(0)
+7 >Emitted(107, 30) Source(79, 26) + SourceIndex(0)
+8 >Emitted(107, 31) Source(79, 27) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^^
 1 >
   >}
-1 >Emitted(116, 6) Source(80, 2) + SourceIndex(0)
+1 >Emitted(108, 6) Source(80, 2) + SourceIndex(0)
 ---
 >>>}
 >>>catch (e_9_1) { e_9 = { error: e_9_1 }; }
@@ -1928,30 +1920,30 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 22>                                                                                "none"
 23>                                                                                       }
 24>                                                                                         }
-1 >Emitted(122, 1) Source(81, 1) + SourceIndex(0)
-2 >Emitted(122, 4) Source(81, 4) + SourceIndex(0)
-3 >Emitted(122, 5) Source(81, 5) + SourceIndex(0)
-4 >Emitted(122, 6) Source(86, 6) + SourceIndex(0)
-5 >Emitted(122, 16) Source(87, 79) + SourceIndex(0)
-6 >Emitted(122, 18) Source(86, 6) + SourceIndex(0)
-7 >Emitted(122, 24) Source(86, 7) + SourceIndex(0)
-8 >Emitted(122, 26) Source(86, 9) + SourceIndex(0)
-9 >Emitted(122, 30) Source(86, 13) + SourceIndex(0)
-10>Emitted(122, 32) Source(86, 15) + SourceIndex(0)
-11>Emitted(122, 39) Source(86, 22) + SourceIndex(0)
-12>Emitted(122, 41) Source(86, 24) + SourceIndex(0)
-13>Emitted(122, 47) Source(86, 30) + SourceIndex(0)
-14>Emitted(122, 49) Source(86, 32) + SourceIndex(0)
-15>Emitted(122, 51) Source(86, 34) + SourceIndex(0)
-16>Emitted(122, 58) Source(86, 41) + SourceIndex(0)
-17>Emitted(122, 60) Source(86, 43) + SourceIndex(0)
-18>Emitted(122, 68) Source(86, 51) + SourceIndex(0)
-19>Emitted(122, 70) Source(86, 53) + SourceIndex(0)
-20>Emitted(122, 79) Source(86, 62) + SourceIndex(0)
-21>Emitted(122, 81) Source(86, 64) + SourceIndex(0)
-22>Emitted(122, 87) Source(86, 70) + SourceIndex(0)
-23>Emitted(122, 89) Source(86, 72) + SourceIndex(0)
-24>Emitted(122, 91) Source(86, 74) + SourceIndex(0)
+1 >Emitted(114, 1) Source(81, 1) + SourceIndex(0)
+2 >Emitted(114, 4) Source(81, 4) + SourceIndex(0)
+3 >Emitted(114, 5) Source(81, 5) + SourceIndex(0)
+4 >Emitted(114, 6) Source(86, 6) + SourceIndex(0)
+5 >Emitted(114, 16) Source(87, 79) + SourceIndex(0)
+6 >Emitted(114, 18) Source(86, 6) + SourceIndex(0)
+7 >Emitted(114, 24) Source(86, 7) + SourceIndex(0)
+8 >Emitted(114, 26) Source(86, 9) + SourceIndex(0)
+9 >Emitted(114, 30) Source(86, 13) + SourceIndex(0)
+10>Emitted(114, 32) Source(86, 15) + SourceIndex(0)
+11>Emitted(114, 39) Source(86, 22) + SourceIndex(0)
+12>Emitted(114, 41) Source(86, 24) + SourceIndex(0)
+13>Emitted(114, 47) Source(86, 30) + SourceIndex(0)
+14>Emitted(114, 49) Source(86, 32) + SourceIndex(0)
+15>Emitted(114, 51) Source(86, 34) + SourceIndex(0)
+16>Emitted(114, 58) Source(86, 41) + SourceIndex(0)
+17>Emitted(114, 60) Source(86, 43) + SourceIndex(0)
+18>Emitted(114, 68) Source(86, 51) + SourceIndex(0)
+19>Emitted(114, 70) Source(86, 53) + SourceIndex(0)
+20>Emitted(114, 79) Source(86, 62) + SourceIndex(0)
+21>Emitted(114, 81) Source(86, 64) + SourceIndex(0)
+22>Emitted(114, 87) Source(86, 70) + SourceIndex(0)
+23>Emitted(114, 89) Source(86, 72) + SourceIndex(0)
+24>Emitted(114, 91) Source(86, 74) + SourceIndex(0)
 ---
 >>>    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]; _5 < _6.length; _5++) {
 1->^^^^
@@ -2004,29 +1996,29 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 22>                                                                                              
 23>                                                                                                [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
   >                                                                                                    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]
-1->Emitted(123, 5) Source(87, 5) + SourceIndex(0)
-2 >Emitted(123, 7) Source(87, 7) + SourceIndex(0)
-3 >Emitted(123, 11) Source(87, 11) + SourceIndex(0)
-4 >Emitted(123, 13) Source(87, 13) + SourceIndex(0)
-5 >Emitted(123, 22) Source(87, 22) + SourceIndex(0)
-6 >Emitted(123, 24) Source(87, 24) + SourceIndex(0)
-7 >Emitted(123, 30) Source(87, 30) + SourceIndex(0)
-8 >Emitted(123, 32) Source(87, 32) + SourceIndex(0)
-9 >Emitted(123, 34) Source(87, 34) + SourceIndex(0)
-10>Emitted(123, 41) Source(87, 41) + SourceIndex(0)
-11>Emitted(123, 43) Source(87, 43) + SourceIndex(0)
-12>Emitted(123, 53) Source(87, 53) + SourceIndex(0)
-13>Emitted(123, 55) Source(87, 55) + SourceIndex(0)
-14>Emitted(123, 64) Source(87, 64) + SourceIndex(0)
-15>Emitted(123, 66) Source(87, 66) + SourceIndex(0)
-16>Emitted(123, 74) Source(87, 74) + SourceIndex(0)
-17>Emitted(123, 76) Source(87, 76) + SourceIndex(0)
-18>Emitted(123, 78) Source(87, 78) + SourceIndex(0)
-19>Emitted(123, 79) Source(87, 79) + SourceIndex(0)
-20>Emitted(123, 81) Source(86, 6) + SourceIndex(0)
-21>Emitted(123, 95) Source(87, 79) + SourceIndex(0)
-22>Emitted(123, 97) Source(86, 6) + SourceIndex(0)
-23>Emitted(123, 101) Source(87, 79) + SourceIndex(0)
+1->Emitted(115, 5) Source(87, 5) + SourceIndex(0)
+2 >Emitted(115, 7) Source(87, 7) + SourceIndex(0)
+3 >Emitted(115, 11) Source(87, 11) + SourceIndex(0)
+4 >Emitted(115, 13) Source(87, 13) + SourceIndex(0)
+5 >Emitted(115, 22) Source(87, 22) + SourceIndex(0)
+6 >Emitted(115, 24) Source(87, 24) + SourceIndex(0)
+7 >Emitted(115, 30) Source(87, 30) + SourceIndex(0)
+8 >Emitted(115, 32) Source(87, 32) + SourceIndex(0)
+9 >Emitted(115, 34) Source(87, 34) + SourceIndex(0)
+10>Emitted(115, 41) Source(87, 41) + SourceIndex(0)
+11>Emitted(115, 43) Source(87, 43) + SourceIndex(0)
+12>Emitted(115, 53) Source(87, 53) + SourceIndex(0)
+13>Emitted(115, 55) Source(87, 55) + SourceIndex(0)
+14>Emitted(115, 64) Source(87, 64) + SourceIndex(0)
+15>Emitted(115, 66) Source(87, 66) + SourceIndex(0)
+16>Emitted(115, 74) Source(87, 74) + SourceIndex(0)
+17>Emitted(115, 76) Source(87, 76) + SourceIndex(0)
+18>Emitted(115, 78) Source(87, 78) + SourceIndex(0)
+19>Emitted(115, 79) Source(87, 79) + SourceIndex(0)
+20>Emitted(115, 81) Source(86, 6) + SourceIndex(0)
+21>Emitted(115, 95) Source(87, 79) + SourceIndex(0)
+22>Emitted(115, 97) Source(86, 6) + SourceIndex(0)
+23>Emitted(115, 101) Source(87, 79) + SourceIndex(0)
 ---
 >>>    _7 = _6[_5].skills, _8 = _7 === void 0 ? { primary: "noSkill", secondary: "noSkill" } : _7, _9 = _8.primary, primary = _9 === void 0 ? "primary" : _9, _10 = _8.secondary, secondary = _10 === void 0 ? "secondary" : _10;
 1->^^^^
@@ -2060,18 +2052,18 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 10>                                                                                                                                                           secondary = "secondary"
 11>                                                                                                                                                                             
 12>                                                                                                                                                                               secondary = "secondary"
-1->Emitted(124, 5) Source(82, 5) + SourceIndex(0)
-2 >Emitted(124, 23) Source(85, 53) + SourceIndex(0)
-3 >Emitted(124, 25) Source(82, 5) + SourceIndex(0)
-4 >Emitted(124, 95) Source(85, 53) + SourceIndex(0)
-5 >Emitted(124, 97) Source(83, 9) + SourceIndex(0)
-6 >Emitted(124, 112) Source(83, 28) + SourceIndex(0)
-7 >Emitted(124, 114) Source(83, 9) + SourceIndex(0)
-8 >Emitted(124, 154) Source(83, 28) + SourceIndex(0)
-9 >Emitted(124, 156) Source(84, 9) + SourceIndex(0)
-10>Emitted(124, 174) Source(84, 32) + SourceIndex(0)
-11>Emitted(124, 176) Source(84, 9) + SourceIndex(0)
-12>Emitted(124, 222) Source(84, 32) + SourceIndex(0)
+1->Emitted(116, 5) Source(82, 5) + SourceIndex(0)
+2 >Emitted(116, 23) Source(85, 53) + SourceIndex(0)
+3 >Emitted(116, 25) Source(82, 5) + SourceIndex(0)
+4 >Emitted(116, 95) Source(85, 53) + SourceIndex(0)
+5 >Emitted(116, 97) Source(83, 9) + SourceIndex(0)
+6 >Emitted(116, 112) Source(83, 28) + SourceIndex(0)
+7 >Emitted(116, 114) Source(83, 9) + SourceIndex(0)
+8 >Emitted(116, 154) Source(83, 28) + SourceIndex(0)
+9 >Emitted(116, 156) Source(84, 9) + SourceIndex(0)
+10>Emitted(116, 174) Source(84, 32) + SourceIndex(0)
+11>Emitted(116, 176) Source(84, 9) + SourceIndex(0)
+12>Emitted(116, 222) Source(84, 32) + SourceIndex(0)
 ---
 >>>    console.log(primaryA);
 1 >^^^^
@@ -2094,21 +2086,21 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                primaryA
 7 >                        )
 8 >                         ;
-1 >Emitted(125, 5) Source(88, 5) + SourceIndex(0)
-2 >Emitted(125, 12) Source(88, 12) + SourceIndex(0)
-3 >Emitted(125, 13) Source(88, 13) + SourceIndex(0)
-4 >Emitted(125, 16) Source(88, 16) + SourceIndex(0)
-5 >Emitted(125, 17) Source(88, 17) + SourceIndex(0)
-6 >Emitted(125, 25) Source(88, 25) + SourceIndex(0)
-7 >Emitted(125, 26) Source(88, 26) + SourceIndex(0)
-8 >Emitted(125, 27) Source(88, 27) + SourceIndex(0)
+1 >Emitted(117, 5) Source(88, 5) + SourceIndex(0)
+2 >Emitted(117, 12) Source(88, 12) + SourceIndex(0)
+3 >Emitted(117, 13) Source(88, 13) + SourceIndex(0)
+4 >Emitted(117, 16) Source(88, 16) + SourceIndex(0)
+5 >Emitted(117, 17) Source(88, 17) + SourceIndex(0)
+6 >Emitted(117, 25) Source(88, 25) + SourceIndex(0)
+7 >Emitted(117, 26) Source(88, 26) + SourceIndex(0)
+8 >Emitted(117, 27) Source(88, 27) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^->
 1 >
   >}
-1 >Emitted(126, 2) Source(89, 2) + SourceIndex(0)
+1 >Emitted(118, 2) Source(89, 2) + SourceIndex(0)
 ---
 >>>try {
 >>>    for (var robots_3 = { iterator: __values(robots) }; __step(robots_3);) {
@@ -2144,20 +2136,20 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 12>                                                    
 13>                                                      
 14>                                                        {name: nameA = "noName", skill: skillA = "noSkill" }
-1->Emitted(128, 5) Source(92, 1) + SourceIndex(0)
-2 >Emitted(128, 8) Source(92, 4) + SourceIndex(0)
-3 >Emitted(128, 9) Source(92, 5) + SourceIndex(0)
-4 >Emitted(128, 10) Source(92, 62) + SourceIndex(0)
-5 >Emitted(128, 14) Source(92, 62) + SourceIndex(0)
-6 >Emitted(128, 25) Source(92, 62) + SourceIndex(0)
-7 >Emitted(128, 27) Source(92, 62) + SourceIndex(0)
-8 >Emitted(128, 37) Source(92, 62) + SourceIndex(0)
-9 >Emitted(128, 46) Source(92, 62) + SourceIndex(0)
-10>Emitted(128, 52) Source(92, 68) + SourceIndex(0)
-11>Emitted(128, 53) Source(92, 68) + SourceIndex(0)
-12>Emitted(128, 55) Source(92, 68) + SourceIndex(0)
-13>Emitted(128, 57) Source(92, 6) + SourceIndex(0)
-14>Emitted(128, 73) Source(92, 58) + SourceIndex(0)
+1->Emitted(120, 5) Source(92, 1) + SourceIndex(0)
+2 >Emitted(120, 8) Source(92, 4) + SourceIndex(0)
+3 >Emitted(120, 9) Source(92, 5) + SourceIndex(0)
+4 >Emitted(120, 10) Source(92, 62) + SourceIndex(0)
+5 >Emitted(120, 14) Source(92, 62) + SourceIndex(0)
+6 >Emitted(120, 25) Source(92, 62) + SourceIndex(0)
+7 >Emitted(120, 27) Source(92, 62) + SourceIndex(0)
+8 >Emitted(120, 37) Source(92, 62) + SourceIndex(0)
+9 >Emitted(120, 46) Source(92, 62) + SourceIndex(0)
+10>Emitted(120, 52) Source(92, 68) + SourceIndex(0)
+11>Emitted(120, 53) Source(92, 68) + SourceIndex(0)
+12>Emitted(120, 55) Source(92, 68) + SourceIndex(0)
+13>Emitted(120, 57) Source(92, 6) + SourceIndex(0)
+14>Emitted(120, 73) Source(92, 58) + SourceIndex(0)
 ---
 >>>        _11 = robots_3.result.value, _12 = _11.name, nameA = _12 === void 0 ? "noName" : _12, _13 = _11.skill, skillA = _13 === void 0 ? "noSkill" : _13;
 1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2176,14 +2168,14 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                                                                                              skill: skillA = "noSkill"
 7 >                                                                                                             
 8 >                                                                                                               skill: skillA = "noSkill"
-1->Emitted(129, 38) Source(92, 7) + SourceIndex(0)
-2 >Emitted(129, 52) Source(92, 29) + SourceIndex(0)
-3 >Emitted(129, 54) Source(92, 7) + SourceIndex(0)
-4 >Emitted(129, 93) Source(92, 29) + SourceIndex(0)
-5 >Emitted(129, 95) Source(92, 31) + SourceIndex(0)
-6 >Emitted(129, 110) Source(92, 56) + SourceIndex(0)
-7 >Emitted(129, 112) Source(92, 31) + SourceIndex(0)
-8 >Emitted(129, 153) Source(92, 56) + SourceIndex(0)
+1->Emitted(121, 38) Source(92, 7) + SourceIndex(0)
+2 >Emitted(121, 52) Source(92, 29) + SourceIndex(0)
+3 >Emitted(121, 54) Source(92, 7) + SourceIndex(0)
+4 >Emitted(121, 93) Source(92, 29) + SourceIndex(0)
+5 >Emitted(121, 95) Source(92, 31) + SourceIndex(0)
+6 >Emitted(121, 110) Source(92, 56) + SourceIndex(0)
+7 >Emitted(121, 112) Source(92, 31) + SourceIndex(0)
+8 >Emitted(121, 153) Source(92, 56) + SourceIndex(0)
 ---
 >>>        console.log(nameA);
 1 >^^^^^^^^
@@ -2203,20 +2195,20 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                    nameA
 7 >                         )
 8 >                          ;
-1 >Emitted(130, 9) Source(93, 5) + SourceIndex(0)
-2 >Emitted(130, 16) Source(93, 12) + SourceIndex(0)
-3 >Emitted(130, 17) Source(93, 13) + SourceIndex(0)
-4 >Emitted(130, 20) Source(93, 16) + SourceIndex(0)
-5 >Emitted(130, 21) Source(93, 17) + SourceIndex(0)
-6 >Emitted(130, 26) Source(93, 22) + SourceIndex(0)
-7 >Emitted(130, 27) Source(93, 23) + SourceIndex(0)
-8 >Emitted(130, 28) Source(93, 24) + SourceIndex(0)
+1 >Emitted(122, 9) Source(93, 5) + SourceIndex(0)
+2 >Emitted(122, 16) Source(93, 12) + SourceIndex(0)
+3 >Emitted(122, 17) Source(93, 13) + SourceIndex(0)
+4 >Emitted(122, 20) Source(93, 16) + SourceIndex(0)
+5 >Emitted(122, 21) Source(93, 17) + SourceIndex(0)
+6 >Emitted(122, 26) Source(93, 22) + SourceIndex(0)
+7 >Emitted(122, 27) Source(93, 23) + SourceIndex(0)
+8 >Emitted(122, 28) Source(93, 24) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^^
 1 >
   >}
-1 >Emitted(131, 6) Source(94, 2) + SourceIndex(0)
+1 >Emitted(123, 6) Source(94, 2) + SourceIndex(0)
 ---
 >>>}
 >>>catch (e_10_1) { e_10 = { error: e_10_1 }; }
@@ -2257,21 +2249,21 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 13>                                                           
 14>                                                             
 15>                                                               {name: nameA = "noName", skill: skillA = "noSkill"  }
-1 >Emitted(138, 5) Source(95, 1) + SourceIndex(0)
-2 >Emitted(138, 8) Source(95, 4) + SourceIndex(0)
-3 >Emitted(138, 9) Source(95, 5) + SourceIndex(0)
-4 >Emitted(138, 10) Source(95, 63) + SourceIndex(0)
-5 >Emitted(138, 14) Source(95, 63) + SourceIndex(0)
-6 >Emitted(138, 27) Source(95, 63) + SourceIndex(0)
-7 >Emitted(138, 29) Source(95, 63) + SourceIndex(0)
-8 >Emitted(138, 39) Source(95, 63) + SourceIndex(0)
-9 >Emitted(138, 48) Source(95, 63) + SourceIndex(0)
-10>Emitted(138, 57) Source(95, 72) + SourceIndex(0)
-11>Emitted(138, 59) Source(95, 74) + SourceIndex(0)
-12>Emitted(138, 60) Source(95, 74) + SourceIndex(0)
-13>Emitted(138, 62) Source(95, 74) + SourceIndex(0)
-14>Emitted(138, 64) Source(95, 6) + SourceIndex(0)
-15>Emitted(138, 82) Source(95, 59) + SourceIndex(0)
+1 >Emitted(130, 5) Source(95, 1) + SourceIndex(0)
+2 >Emitted(130, 8) Source(95, 4) + SourceIndex(0)
+3 >Emitted(130, 9) Source(95, 5) + SourceIndex(0)
+4 >Emitted(130, 10) Source(95, 63) + SourceIndex(0)
+5 >Emitted(130, 14) Source(95, 63) + SourceIndex(0)
+6 >Emitted(130, 27) Source(95, 63) + SourceIndex(0)
+7 >Emitted(130, 29) Source(95, 63) + SourceIndex(0)
+8 >Emitted(130, 39) Source(95, 63) + SourceIndex(0)
+9 >Emitted(130, 48) Source(95, 63) + SourceIndex(0)
+10>Emitted(130, 57) Source(95, 72) + SourceIndex(0)
+11>Emitted(130, 59) Source(95, 74) + SourceIndex(0)
+12>Emitted(130, 60) Source(95, 74) + SourceIndex(0)
+13>Emitted(130, 62) Source(95, 74) + SourceIndex(0)
+14>Emitted(130, 64) Source(95, 6) + SourceIndex(0)
+15>Emitted(130, 82) Source(95, 59) + SourceIndex(0)
 ---
 >>>        _14 = iterator_6.result.value, _15 = _14.name, nameA = _15 === void 0 ? "noName" : _15, _16 = _14.skill, skillA = _16 === void 0 ? "noSkill" : _16;
 1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2290,14 +2282,14 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                                                                                                skill: skillA = "noSkill"
 7 >                                                                                                               
 8 >                                                                                                                 skill: skillA = "noSkill"
-1->Emitted(139, 40) Source(95, 7) + SourceIndex(0)
-2 >Emitted(139, 54) Source(95, 29) + SourceIndex(0)
-3 >Emitted(139, 56) Source(95, 7) + SourceIndex(0)
-4 >Emitted(139, 95) Source(95, 29) + SourceIndex(0)
-5 >Emitted(139, 97) Source(95, 31) + SourceIndex(0)
-6 >Emitted(139, 112) Source(95, 56) + SourceIndex(0)
-7 >Emitted(139, 114) Source(95, 31) + SourceIndex(0)
-8 >Emitted(139, 155) Source(95, 56) + SourceIndex(0)
+1->Emitted(131, 40) Source(95, 7) + SourceIndex(0)
+2 >Emitted(131, 54) Source(95, 29) + SourceIndex(0)
+3 >Emitted(131, 56) Source(95, 7) + SourceIndex(0)
+4 >Emitted(131, 95) Source(95, 29) + SourceIndex(0)
+5 >Emitted(131, 97) Source(95, 31) + SourceIndex(0)
+6 >Emitted(131, 112) Source(95, 56) + SourceIndex(0)
+7 >Emitted(131, 114) Source(95, 31) + SourceIndex(0)
+8 >Emitted(131, 155) Source(95, 56) + SourceIndex(0)
 ---
 >>>        console.log(nameA);
 1 >^^^^^^^^
@@ -2317,20 +2309,20 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                    nameA
 7 >                         )
 8 >                          ;
-1 >Emitted(140, 9) Source(96, 5) + SourceIndex(0)
-2 >Emitted(140, 16) Source(96, 12) + SourceIndex(0)
-3 >Emitted(140, 17) Source(96, 13) + SourceIndex(0)
-4 >Emitted(140, 20) Source(96, 16) + SourceIndex(0)
-5 >Emitted(140, 21) Source(96, 17) + SourceIndex(0)
-6 >Emitted(140, 26) Source(96, 22) + SourceIndex(0)
-7 >Emitted(140, 27) Source(96, 23) + SourceIndex(0)
-8 >Emitted(140, 28) Source(96, 24) + SourceIndex(0)
+1 >Emitted(132, 9) Source(96, 5) + SourceIndex(0)
+2 >Emitted(132, 16) Source(96, 12) + SourceIndex(0)
+3 >Emitted(132, 17) Source(96, 13) + SourceIndex(0)
+4 >Emitted(132, 20) Source(96, 16) + SourceIndex(0)
+5 >Emitted(132, 21) Source(96, 17) + SourceIndex(0)
+6 >Emitted(132, 26) Source(96, 22) + SourceIndex(0)
+7 >Emitted(132, 27) Source(96, 23) + SourceIndex(0)
+8 >Emitted(132, 28) Source(96, 24) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^^
 1 >
   >}
-1 >Emitted(141, 6) Source(97, 2) + SourceIndex(0)
+1 >Emitted(133, 6) Source(97, 2) + SourceIndex(0)
 ---
 >>>}
 >>>catch (e_11_1) { e_11 = { error: e_11_1 }; }
@@ -2402,37 +2394,37 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 29>                                                                                                      [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]
 30>                                                                                                                      
 31>                                                                                                                        [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]
-1 >Emitted(147, 1) Source(98, 1) + SourceIndex(0)
-2 >Emitted(147, 4) Source(98, 4) + SourceIndex(0)
-3 >Emitted(147, 5) Source(98, 5) + SourceIndex(0)
-4 >Emitted(147, 6) Source(98, 63) + SourceIndex(0)
-5 >Emitted(147, 17) Source(98, 139) + SourceIndex(0)
-6 >Emitted(147, 19) Source(98, 63) + SourceIndex(0)
-7 >Emitted(147, 26) Source(98, 64) + SourceIndex(0)
-8 >Emitted(147, 28) Source(98, 66) + SourceIndex(0)
-9 >Emitted(147, 32) Source(98, 70) + SourceIndex(0)
-10>Emitted(147, 34) Source(98, 72) + SourceIndex(0)
-11>Emitted(147, 41) Source(98, 79) + SourceIndex(0)
-12>Emitted(147, 43) Source(98, 81) + SourceIndex(0)
-13>Emitted(147, 48) Source(98, 86) + SourceIndex(0)
-14>Emitted(147, 50) Source(98, 88) + SourceIndex(0)
-15>Emitted(147, 58) Source(98, 96) + SourceIndex(0)
-16>Emitted(147, 60) Source(98, 98) + SourceIndex(0)
-17>Emitted(147, 62) Source(98, 100) + SourceIndex(0)
-18>Emitted(147, 64) Source(98, 102) + SourceIndex(0)
-19>Emitted(147, 68) Source(98, 106) + SourceIndex(0)
-20>Emitted(147, 70) Source(98, 108) + SourceIndex(0)
-21>Emitted(147, 79) Source(98, 117) + SourceIndex(0)
-22>Emitted(147, 81) Source(98, 119) + SourceIndex(0)
-23>Emitted(147, 86) Source(98, 124) + SourceIndex(0)
-24>Emitted(147, 88) Source(98, 126) + SourceIndex(0)
-25>Emitted(147, 98) Source(98, 136) + SourceIndex(0)
-26>Emitted(147, 100) Source(98, 138) + SourceIndex(0)
-27>Emitted(147, 101) Source(98, 139) + SourceIndex(0)
-28>Emitted(147, 103) Source(98, 63) + SourceIndex(0)
-29>Emitted(147, 119) Source(98, 139) + SourceIndex(0)
-30>Emitted(147, 121) Source(98, 63) + SourceIndex(0)
-31>Emitted(147, 126) Source(98, 139) + SourceIndex(0)
+1 >Emitted(139, 1) Source(98, 1) + SourceIndex(0)
+2 >Emitted(139, 4) Source(98, 4) + SourceIndex(0)
+3 >Emitted(139, 5) Source(98, 5) + SourceIndex(0)
+4 >Emitted(139, 6) Source(98, 63) + SourceIndex(0)
+5 >Emitted(139, 17) Source(98, 139) + SourceIndex(0)
+6 >Emitted(139, 19) Source(98, 63) + SourceIndex(0)
+7 >Emitted(139, 26) Source(98, 64) + SourceIndex(0)
+8 >Emitted(139, 28) Source(98, 66) + SourceIndex(0)
+9 >Emitted(139, 32) Source(98, 70) + SourceIndex(0)
+10>Emitted(139, 34) Source(98, 72) + SourceIndex(0)
+11>Emitted(139, 41) Source(98, 79) + SourceIndex(0)
+12>Emitted(139, 43) Source(98, 81) + SourceIndex(0)
+13>Emitted(139, 48) Source(98, 86) + SourceIndex(0)
+14>Emitted(139, 50) Source(98, 88) + SourceIndex(0)
+15>Emitted(139, 58) Source(98, 96) + SourceIndex(0)
+16>Emitted(139, 60) Source(98, 98) + SourceIndex(0)
+17>Emitted(139, 62) Source(98, 100) + SourceIndex(0)
+18>Emitted(139, 64) Source(98, 102) + SourceIndex(0)
+19>Emitted(139, 68) Source(98, 106) + SourceIndex(0)
+20>Emitted(139, 70) Source(98, 108) + SourceIndex(0)
+21>Emitted(139, 79) Source(98, 117) + SourceIndex(0)
+22>Emitted(139, 81) Source(98, 119) + SourceIndex(0)
+23>Emitted(139, 86) Source(98, 124) + SourceIndex(0)
+24>Emitted(139, 88) Source(98, 126) + SourceIndex(0)
+25>Emitted(139, 98) Source(98, 136) + SourceIndex(0)
+26>Emitted(139, 100) Source(98, 138) + SourceIndex(0)
+27>Emitted(139, 101) Source(98, 139) + SourceIndex(0)
+28>Emitted(139, 103) Source(98, 63) + SourceIndex(0)
+29>Emitted(139, 119) Source(98, 139) + SourceIndex(0)
+30>Emitted(139, 121) Source(98, 63) + SourceIndex(0)
+31>Emitted(139, 126) Source(98, 139) + SourceIndex(0)
 ---
 >>>    _19 = _18[_17], _20 = _19.name, nameA = _20 === void 0 ? "noName" : _20, _21 = _19.skill, skillA = _21 === void 0 ? "noSkill" : _21;
 1->^^^^^^^^^^^^^^^^^^^^
@@ -2451,14 +2443,14 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                                                                             skill: skillA = "noSkill"
 7 >                                                                                            
 8 >                                                                                              skill: skillA = "noSkill"
-1->Emitted(148, 21) Source(98, 7) + SourceIndex(0)
-2 >Emitted(148, 35) Source(98, 29) + SourceIndex(0)
-3 >Emitted(148, 37) Source(98, 7) + SourceIndex(0)
-4 >Emitted(148, 76) Source(98, 29) + SourceIndex(0)
-5 >Emitted(148, 78) Source(98, 31) + SourceIndex(0)
-6 >Emitted(148, 93) Source(98, 56) + SourceIndex(0)
-7 >Emitted(148, 95) Source(98, 31) + SourceIndex(0)
-8 >Emitted(148, 136) Source(98, 56) + SourceIndex(0)
+1->Emitted(140, 21) Source(98, 7) + SourceIndex(0)
+2 >Emitted(140, 35) Source(98, 29) + SourceIndex(0)
+3 >Emitted(140, 37) Source(98, 7) + SourceIndex(0)
+4 >Emitted(140, 76) Source(98, 29) + SourceIndex(0)
+5 >Emitted(140, 78) Source(98, 31) + SourceIndex(0)
+6 >Emitted(140, 93) Source(98, 56) + SourceIndex(0)
+7 >Emitted(140, 95) Source(98, 31) + SourceIndex(0)
+8 >Emitted(140, 136) Source(98, 56) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -2478,21 +2470,21 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                nameA
 7 >                     )
 8 >                      ;
-1 >Emitted(149, 5) Source(99, 5) + SourceIndex(0)
-2 >Emitted(149, 12) Source(99, 12) + SourceIndex(0)
-3 >Emitted(149, 13) Source(99, 13) + SourceIndex(0)
-4 >Emitted(149, 16) Source(99, 16) + SourceIndex(0)
-5 >Emitted(149, 17) Source(99, 17) + SourceIndex(0)
-6 >Emitted(149, 22) Source(99, 22) + SourceIndex(0)
-7 >Emitted(149, 23) Source(99, 23) + SourceIndex(0)
-8 >Emitted(149, 24) Source(99, 24) + SourceIndex(0)
+1 >Emitted(141, 5) Source(99, 5) + SourceIndex(0)
+2 >Emitted(141, 12) Source(99, 12) + SourceIndex(0)
+3 >Emitted(141, 13) Source(99, 13) + SourceIndex(0)
+4 >Emitted(141, 16) Source(99, 16) + SourceIndex(0)
+5 >Emitted(141, 17) Source(99, 17) + SourceIndex(0)
+6 >Emitted(141, 22) Source(99, 22) + SourceIndex(0)
+7 >Emitted(141, 23) Source(99, 23) + SourceIndex(0)
+8 >Emitted(141, 24) Source(99, 24) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^->
 1 >
   >}
-1 >Emitted(150, 2) Source(100, 2) + SourceIndex(0)
+1 >Emitted(142, 2) Source(100, 2) + SourceIndex(0)
 ---
 >>>try {
 >>>    for (var multiRobots_3 = { iterator: __values(multiRobots) }; __step(multiRobots_3);) {
@@ -2538,20 +2530,20 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
   >                                                                          secondary: secondaryA = "secondary"
   >                                                                      } = { primary: "noSkill", secondary: "noSkill" }
   >                                                                  }
-1->Emitted(152, 5) Source(101, 1) + SourceIndex(0)
-2 >Emitted(152, 8) Source(101, 4) + SourceIndex(0)
-3 >Emitted(152, 9) Source(101, 5) + SourceIndex(0)
-4 >Emitted(152, 10) Source(107, 6) + SourceIndex(0)
-5 >Emitted(152, 14) Source(107, 6) + SourceIndex(0)
-6 >Emitted(152, 30) Source(107, 6) + SourceIndex(0)
-7 >Emitted(152, 32) Source(107, 6) + SourceIndex(0)
-8 >Emitted(152, 42) Source(107, 6) + SourceIndex(0)
-9 >Emitted(152, 51) Source(107, 6) + SourceIndex(0)
-10>Emitted(152, 62) Source(107, 17) + SourceIndex(0)
-11>Emitted(152, 63) Source(107, 17) + SourceIndex(0)
-12>Emitted(152, 65) Source(107, 17) + SourceIndex(0)
-13>Emitted(152, 67) Source(101, 6) + SourceIndex(0)
-14>Emitted(152, 88) Source(107, 2) + SourceIndex(0)
+1->Emitted(144, 5) Source(101, 1) + SourceIndex(0)
+2 >Emitted(144, 8) Source(101, 4) + SourceIndex(0)
+3 >Emitted(144, 9) Source(101, 5) + SourceIndex(0)
+4 >Emitted(144, 10) Source(107, 6) + SourceIndex(0)
+5 >Emitted(144, 14) Source(107, 6) + SourceIndex(0)
+6 >Emitted(144, 30) Source(107, 6) + SourceIndex(0)
+7 >Emitted(144, 32) Source(107, 6) + SourceIndex(0)
+8 >Emitted(144, 42) Source(107, 6) + SourceIndex(0)
+9 >Emitted(144, 51) Source(107, 6) + SourceIndex(0)
+10>Emitted(144, 62) Source(107, 17) + SourceIndex(0)
+11>Emitted(144, 63) Source(107, 17) + SourceIndex(0)
+12>Emitted(144, 65) Source(107, 17) + SourceIndex(0)
+13>Emitted(144, 67) Source(101, 6) + SourceIndex(0)
+14>Emitted(144, 88) Source(107, 2) + SourceIndex(0)
 ---
 >>>        _22 = multiRobots_3.result.value, _23 = _22.name, nameA = _23 === void 0 ? "noName" : _23, _24 = _22.skills, _25 = _24 === void 0 ? { primary: "noSkill", secondary: "noSkill" } : _24, _26 = _25.primary, primaryA = _26 === void 0 ? "primary" : _26, _27 = _25.secondary, secondaryA = _27 === void 0 ? "secondary" : _27;
 1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2594,22 +2586,22 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 14>                                                                                                                                                                                                                                                                secondary: secondaryA = "secondary"
 15>                                                                                                                                                                                                                                                                                   
 16>                                                                                                                                                                                                                                                                                     secondary: secondaryA = "secondary"
-1->Emitted(153, 43) Source(102, 5) + SourceIndex(0)
-2 >Emitted(153, 57) Source(102, 27) + SourceIndex(0)
-3 >Emitted(153, 59) Source(102, 5) + SourceIndex(0)
-4 >Emitted(153, 98) Source(102, 27) + SourceIndex(0)
-5 >Emitted(153, 100) Source(103, 5) + SourceIndex(0)
-6 >Emitted(153, 116) Source(106, 53) + SourceIndex(0)
-7 >Emitted(153, 118) Source(103, 5) + SourceIndex(0)
-8 >Emitted(153, 191) Source(106, 53) + SourceIndex(0)
-9 >Emitted(153, 193) Source(104, 9) + SourceIndex(0)
-10>Emitted(153, 210) Source(104, 38) + SourceIndex(0)
-11>Emitted(153, 212) Source(104, 9) + SourceIndex(0)
-12>Emitted(153, 255) Source(104, 38) + SourceIndex(0)
-13>Emitted(153, 257) Source(105, 9) + SourceIndex(0)
-14>Emitted(153, 276) Source(105, 44) + SourceIndex(0)
-15>Emitted(153, 278) Source(105, 9) + SourceIndex(0)
-16>Emitted(153, 325) Source(105, 44) + SourceIndex(0)
+1->Emitted(145, 43) Source(102, 5) + SourceIndex(0)
+2 >Emitted(145, 57) Source(102, 27) + SourceIndex(0)
+3 >Emitted(145, 59) Source(102, 5) + SourceIndex(0)
+4 >Emitted(145, 98) Source(102, 27) + SourceIndex(0)
+5 >Emitted(145, 100) Source(103, 5) + SourceIndex(0)
+6 >Emitted(145, 116) Source(106, 53) + SourceIndex(0)
+7 >Emitted(145, 118) Source(103, 5) + SourceIndex(0)
+8 >Emitted(145, 191) Source(106, 53) + SourceIndex(0)
+9 >Emitted(145, 193) Source(104, 9) + SourceIndex(0)
+10>Emitted(145, 210) Source(104, 38) + SourceIndex(0)
+11>Emitted(145, 212) Source(104, 9) + SourceIndex(0)
+12>Emitted(145, 255) Source(104, 38) + SourceIndex(0)
+13>Emitted(145, 257) Source(105, 9) + SourceIndex(0)
+14>Emitted(145, 276) Source(105, 44) + SourceIndex(0)
+15>Emitted(145, 278) Source(105, 9) + SourceIndex(0)
+16>Emitted(145, 325) Source(105, 44) + SourceIndex(0)
 ---
 >>>        console.log(nameA);
 1 >^^^^^^^^
@@ -2631,20 +2623,20 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                    nameA
 7 >                         )
 8 >                          ;
-1 >Emitted(154, 9) Source(108, 5) + SourceIndex(0)
-2 >Emitted(154, 16) Source(108, 12) + SourceIndex(0)
-3 >Emitted(154, 17) Source(108, 13) + SourceIndex(0)
-4 >Emitted(154, 20) Source(108, 16) + SourceIndex(0)
-5 >Emitted(154, 21) Source(108, 17) + SourceIndex(0)
-6 >Emitted(154, 26) Source(108, 22) + SourceIndex(0)
-7 >Emitted(154, 27) Source(108, 23) + SourceIndex(0)
-8 >Emitted(154, 28) Source(108, 24) + SourceIndex(0)
+1 >Emitted(146, 9) Source(108, 5) + SourceIndex(0)
+2 >Emitted(146, 16) Source(108, 12) + SourceIndex(0)
+3 >Emitted(146, 17) Source(108, 13) + SourceIndex(0)
+4 >Emitted(146, 20) Source(108, 16) + SourceIndex(0)
+5 >Emitted(146, 21) Source(108, 17) + SourceIndex(0)
+6 >Emitted(146, 26) Source(108, 22) + SourceIndex(0)
+7 >Emitted(146, 27) Source(108, 23) + SourceIndex(0)
+8 >Emitted(146, 28) Source(108, 24) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^^
 1 >
   >}
-1 >Emitted(155, 6) Source(109, 2) + SourceIndex(0)
+1 >Emitted(147, 6) Source(109, 2) + SourceIndex(0)
 ---
 >>>}
 >>>catch (e_12_1) { e_12 = { error: e_12_1 }; }
@@ -2697,21 +2689,21 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
   >                                                                            secondary: secondaryA = "secondary"
   >                                                                        } = { primary: "noSkill", secondary: "noSkill" }
   >                                                                    }
-1 >Emitted(162, 5) Source(110, 1) + SourceIndex(0)
-2 >Emitted(162, 8) Source(110, 4) + SourceIndex(0)
-3 >Emitted(162, 9) Source(110, 5) + SourceIndex(0)
-4 >Emitted(162, 10) Source(116, 6) + SourceIndex(0)
-5 >Emitted(162, 14) Source(116, 6) + SourceIndex(0)
-6 >Emitted(162, 27) Source(116, 6) + SourceIndex(0)
-7 >Emitted(162, 29) Source(116, 6) + SourceIndex(0)
-8 >Emitted(162, 39) Source(116, 6) + SourceIndex(0)
-9 >Emitted(162, 48) Source(116, 6) + SourceIndex(0)
-10>Emitted(162, 62) Source(116, 20) + SourceIndex(0)
-11>Emitted(162, 64) Source(116, 22) + SourceIndex(0)
-12>Emitted(162, 65) Source(116, 22) + SourceIndex(0)
-13>Emitted(162, 67) Source(116, 22) + SourceIndex(0)
-14>Emitted(162, 69) Source(110, 6) + SourceIndex(0)
-15>Emitted(162, 87) Source(116, 2) + SourceIndex(0)
+1 >Emitted(154, 5) Source(110, 1) + SourceIndex(0)
+2 >Emitted(154, 8) Source(110, 4) + SourceIndex(0)
+3 >Emitted(154, 9) Source(110, 5) + SourceIndex(0)
+4 >Emitted(154, 10) Source(116, 6) + SourceIndex(0)
+5 >Emitted(154, 14) Source(116, 6) + SourceIndex(0)
+6 >Emitted(154, 27) Source(116, 6) + SourceIndex(0)
+7 >Emitted(154, 29) Source(116, 6) + SourceIndex(0)
+8 >Emitted(154, 39) Source(116, 6) + SourceIndex(0)
+9 >Emitted(154, 48) Source(116, 6) + SourceIndex(0)
+10>Emitted(154, 62) Source(116, 20) + SourceIndex(0)
+11>Emitted(154, 64) Source(116, 22) + SourceIndex(0)
+12>Emitted(154, 65) Source(116, 22) + SourceIndex(0)
+13>Emitted(154, 67) Source(116, 22) + SourceIndex(0)
+14>Emitted(154, 69) Source(110, 6) + SourceIndex(0)
+15>Emitted(154, 87) Source(116, 2) + SourceIndex(0)
 ---
 >>>        _28 = iterator_7.result.value, _29 = _28.name, nameA = _29 === void 0 ? "noName" : _29, _30 = _28.skills, _31 = _30 === void 0 ? { primary: "noSkill", secondary: "noSkill" } : _30, _32 = _31.primary, primaryA = _32 === void 0 ? "primary" : _32, _33 = _31.secondary, secondaryA = _33 === void 0 ? "secondary" : _33;
 1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2754,22 +2746,22 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 14>                                                                                                                                                                                                                                                             secondary: secondaryA = "secondary"
 15>                                                                                                                                                                                                                                                                                
 16>                                                                                                                                                                                                                                                                                  secondary: secondaryA = "secondary"
-1->Emitted(163, 40) Source(111, 5) + SourceIndex(0)
-2 >Emitted(163, 54) Source(111, 27) + SourceIndex(0)
-3 >Emitted(163, 56) Source(111, 5) + SourceIndex(0)
-4 >Emitted(163, 95) Source(111, 27) + SourceIndex(0)
-5 >Emitted(163, 97) Source(112, 5) + SourceIndex(0)
-6 >Emitted(163, 113) Source(115, 53) + SourceIndex(0)
-7 >Emitted(163, 115) Source(112, 5) + SourceIndex(0)
-8 >Emitted(163, 188) Source(115, 53) + SourceIndex(0)
-9 >Emitted(163, 190) Source(113, 9) + SourceIndex(0)
-10>Emitted(163, 207) Source(113, 38) + SourceIndex(0)
-11>Emitted(163, 209) Source(113, 9) + SourceIndex(0)
-12>Emitted(163, 252) Source(113, 38) + SourceIndex(0)
-13>Emitted(163, 254) Source(114, 9) + SourceIndex(0)
-14>Emitted(163, 273) Source(114, 44) + SourceIndex(0)
-15>Emitted(163, 275) Source(114, 9) + SourceIndex(0)
-16>Emitted(163, 322) Source(114, 44) + SourceIndex(0)
+1->Emitted(155, 40) Source(111, 5) + SourceIndex(0)
+2 >Emitted(155, 54) Source(111, 27) + SourceIndex(0)
+3 >Emitted(155, 56) Source(111, 5) + SourceIndex(0)
+4 >Emitted(155, 95) Source(111, 27) + SourceIndex(0)
+5 >Emitted(155, 97) Source(112, 5) + SourceIndex(0)
+6 >Emitted(155, 113) Source(115, 53) + SourceIndex(0)
+7 >Emitted(155, 115) Source(112, 5) + SourceIndex(0)
+8 >Emitted(155, 188) Source(115, 53) + SourceIndex(0)
+9 >Emitted(155, 190) Source(113, 9) + SourceIndex(0)
+10>Emitted(155, 207) Source(113, 38) + SourceIndex(0)
+11>Emitted(155, 209) Source(113, 9) + SourceIndex(0)
+12>Emitted(155, 252) Source(113, 38) + SourceIndex(0)
+13>Emitted(155, 254) Source(114, 9) + SourceIndex(0)
+14>Emitted(155, 273) Source(114, 44) + SourceIndex(0)
+15>Emitted(155, 275) Source(114, 9) + SourceIndex(0)
+16>Emitted(155, 322) Source(114, 44) + SourceIndex(0)
 ---
 >>>        console.log(nameA);
 1 >^^^^^^^^
@@ -2791,20 +2783,20 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                    nameA
 7 >                         )
 8 >                          ;
-1 >Emitted(164, 9) Source(117, 5) + SourceIndex(0)
-2 >Emitted(164, 16) Source(117, 12) + SourceIndex(0)
-3 >Emitted(164, 17) Source(117, 13) + SourceIndex(0)
-4 >Emitted(164, 20) Source(117, 16) + SourceIndex(0)
-5 >Emitted(164, 21) Source(117, 17) + SourceIndex(0)
-6 >Emitted(164, 26) Source(117, 22) + SourceIndex(0)
-7 >Emitted(164, 27) Source(117, 23) + SourceIndex(0)
-8 >Emitted(164, 28) Source(117, 24) + SourceIndex(0)
+1 >Emitted(156, 9) Source(117, 5) + SourceIndex(0)
+2 >Emitted(156, 16) Source(117, 12) + SourceIndex(0)
+3 >Emitted(156, 17) Source(117, 13) + SourceIndex(0)
+4 >Emitted(156, 20) Source(117, 16) + SourceIndex(0)
+5 >Emitted(156, 21) Source(117, 17) + SourceIndex(0)
+6 >Emitted(156, 26) Source(117, 22) + SourceIndex(0)
+7 >Emitted(156, 27) Source(117, 23) + SourceIndex(0)
+8 >Emitted(156, 28) Source(117, 24) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^^
 1 >
   >}
-1 >Emitted(165, 6) Source(118, 2) + SourceIndex(0)
+1 >Emitted(157, 6) Source(118, 2) + SourceIndex(0)
 ---
 >>>}
 >>>catch (e_13_1) { e_13 = { error: e_13_1 }; }
@@ -2874,33 +2866,33 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 25>                                                                                                         "none"
 26>                                                                                                                }
 27>                                                                                                                  }
-1 >Emitted(172, 5) Source(119, 1) + SourceIndex(0)
-2 >Emitted(172, 8) Source(119, 4) + SourceIndex(0)
-3 >Emitted(172, 9) Source(119, 5) + SourceIndex(0)
-4 >Emitted(172, 10) Source(125, 6) + SourceIndex(0)
-5 >Emitted(172, 14) Source(125, 6) + SourceIndex(0)
-6 >Emitted(172, 27) Source(125, 6) + SourceIndex(0)
-7 >Emitted(172, 29) Source(125, 6) + SourceIndex(0)
-8 >Emitted(172, 39) Source(125, 6) + SourceIndex(0)
-9 >Emitted(172, 48) Source(125, 20) + SourceIndex(0)
-10>Emitted(172, 49) Source(125, 21) + SourceIndex(0)
-11>Emitted(172, 51) Source(125, 23) + SourceIndex(0)
-12>Emitted(172, 55) Source(125, 27) + SourceIndex(0)
-13>Emitted(172, 57) Source(125, 29) + SourceIndex(0)
-14>Emitted(172, 64) Source(125, 36) + SourceIndex(0)
-15>Emitted(172, 66) Source(125, 38) + SourceIndex(0)
-16>Emitted(172, 72) Source(125, 44) + SourceIndex(0)
-17>Emitted(172, 74) Source(125, 46) + SourceIndex(0)
-18>Emitted(172, 76) Source(125, 48) + SourceIndex(0)
-19>Emitted(172, 83) Source(125, 55) + SourceIndex(0)
-20>Emitted(172, 85) Source(125, 57) + SourceIndex(0)
-21>Emitted(172, 93) Source(125, 65) + SourceIndex(0)
-22>Emitted(172, 95) Source(125, 67) + SourceIndex(0)
-23>Emitted(172, 104) Source(125, 76) + SourceIndex(0)
-24>Emitted(172, 106) Source(125, 78) + SourceIndex(0)
-25>Emitted(172, 112) Source(125, 84) + SourceIndex(0)
-26>Emitted(172, 114) Source(125, 86) + SourceIndex(0)
-27>Emitted(172, 116) Source(125, 88) + SourceIndex(0)
+1 >Emitted(164, 5) Source(119, 1) + SourceIndex(0)
+2 >Emitted(164, 8) Source(119, 4) + SourceIndex(0)
+3 >Emitted(164, 9) Source(119, 5) + SourceIndex(0)
+4 >Emitted(164, 10) Source(125, 6) + SourceIndex(0)
+5 >Emitted(164, 14) Source(125, 6) + SourceIndex(0)
+6 >Emitted(164, 27) Source(125, 6) + SourceIndex(0)
+7 >Emitted(164, 29) Source(125, 6) + SourceIndex(0)
+8 >Emitted(164, 39) Source(125, 6) + SourceIndex(0)
+9 >Emitted(164, 48) Source(125, 20) + SourceIndex(0)
+10>Emitted(164, 49) Source(125, 21) + SourceIndex(0)
+11>Emitted(164, 51) Source(125, 23) + SourceIndex(0)
+12>Emitted(164, 55) Source(125, 27) + SourceIndex(0)
+13>Emitted(164, 57) Source(125, 29) + SourceIndex(0)
+14>Emitted(164, 64) Source(125, 36) + SourceIndex(0)
+15>Emitted(164, 66) Source(125, 38) + SourceIndex(0)
+16>Emitted(164, 72) Source(125, 44) + SourceIndex(0)
+17>Emitted(164, 74) Source(125, 46) + SourceIndex(0)
+18>Emitted(164, 76) Source(125, 48) + SourceIndex(0)
+19>Emitted(164, 83) Source(125, 55) + SourceIndex(0)
+20>Emitted(164, 85) Source(125, 57) + SourceIndex(0)
+21>Emitted(164, 93) Source(125, 65) + SourceIndex(0)
+22>Emitted(164, 95) Source(125, 67) + SourceIndex(0)
+23>Emitted(164, 104) Source(125, 76) + SourceIndex(0)
+24>Emitted(164, 106) Source(125, 78) + SourceIndex(0)
+25>Emitted(164, 112) Source(125, 84) + SourceIndex(0)
+26>Emitted(164, 114) Source(125, 86) + SourceIndex(0)
+27>Emitted(164, 116) Source(125, 88) + SourceIndex(0)
 ---
 >>>            { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]) }; __step(iterator_8);) {
 1 >^^^^^^^^^^^^
@@ -2957,29 +2949,29 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
   >                                                                                                   secondary: secondaryA = "secondary"
   >                                                                                               } = { primary: "noSkill", secondary: "noSkill" }
   >                                                                                           }
-1 >Emitted(173, 13) Source(126, 5) + SourceIndex(0)
-2 >Emitted(173, 15) Source(126, 7) + SourceIndex(0)
-3 >Emitted(173, 19) Source(126, 11) + SourceIndex(0)
-4 >Emitted(173, 21) Source(126, 13) + SourceIndex(0)
-5 >Emitted(173, 30) Source(126, 22) + SourceIndex(0)
-6 >Emitted(173, 32) Source(126, 24) + SourceIndex(0)
-7 >Emitted(173, 38) Source(126, 30) + SourceIndex(0)
-8 >Emitted(173, 40) Source(126, 32) + SourceIndex(0)
-9 >Emitted(173, 42) Source(126, 34) + SourceIndex(0)
-10>Emitted(173, 49) Source(126, 41) + SourceIndex(0)
-11>Emitted(173, 51) Source(126, 43) + SourceIndex(0)
-12>Emitted(173, 61) Source(126, 53) + SourceIndex(0)
-13>Emitted(173, 63) Source(126, 55) + SourceIndex(0)
-14>Emitted(173, 72) Source(126, 64) + SourceIndex(0)
-15>Emitted(173, 74) Source(126, 66) + SourceIndex(0)
-16>Emitted(173, 82) Source(126, 74) + SourceIndex(0)
-17>Emitted(173, 84) Source(126, 76) + SourceIndex(0)
-18>Emitted(173, 86) Source(126, 78) + SourceIndex(0)
-19>Emitted(173, 87) Source(126, 79) + SourceIndex(0)
-20>Emitted(173, 88) Source(126, 79) + SourceIndex(0)
-21>Emitted(173, 90) Source(126, 79) + SourceIndex(0)
-22>Emitted(173, 92) Source(119, 6) + SourceIndex(0)
-23>Emitted(173, 110) Source(125, 2) + SourceIndex(0)
+1 >Emitted(165, 13) Source(126, 5) + SourceIndex(0)
+2 >Emitted(165, 15) Source(126, 7) + SourceIndex(0)
+3 >Emitted(165, 19) Source(126, 11) + SourceIndex(0)
+4 >Emitted(165, 21) Source(126, 13) + SourceIndex(0)
+5 >Emitted(165, 30) Source(126, 22) + SourceIndex(0)
+6 >Emitted(165, 32) Source(126, 24) + SourceIndex(0)
+7 >Emitted(165, 38) Source(126, 30) + SourceIndex(0)
+8 >Emitted(165, 40) Source(126, 32) + SourceIndex(0)
+9 >Emitted(165, 42) Source(126, 34) + SourceIndex(0)
+10>Emitted(165, 49) Source(126, 41) + SourceIndex(0)
+11>Emitted(165, 51) Source(126, 43) + SourceIndex(0)
+12>Emitted(165, 61) Source(126, 53) + SourceIndex(0)
+13>Emitted(165, 63) Source(126, 55) + SourceIndex(0)
+14>Emitted(165, 72) Source(126, 64) + SourceIndex(0)
+15>Emitted(165, 74) Source(126, 66) + SourceIndex(0)
+16>Emitted(165, 82) Source(126, 74) + SourceIndex(0)
+17>Emitted(165, 84) Source(126, 76) + SourceIndex(0)
+18>Emitted(165, 86) Source(126, 78) + SourceIndex(0)
+19>Emitted(165, 87) Source(126, 79) + SourceIndex(0)
+20>Emitted(165, 88) Source(126, 79) + SourceIndex(0)
+21>Emitted(165, 90) Source(126, 79) + SourceIndex(0)
+22>Emitted(165, 92) Source(119, 6) + SourceIndex(0)
+23>Emitted(165, 110) Source(125, 2) + SourceIndex(0)
 ---
 >>>        _34 = iterator_8.result.value, _35 = _34.name, nameA = _35 === void 0 ? "noName" : _35, _36 = _34.skills, _37 = _36 === void 0 ? { primary: "noSkill", secondary: "noSkill" } : _36, _38 = _37.primary, primaryA = _38 === void 0 ? "primary" : _38, _39 = _37.secondary, secondaryA = _39 === void 0 ? "secondary" : _39;
 1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3022,22 +3014,22 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 14>                                                                                                                                                                                                                                                             secondary: secondaryA = "secondary"
 15>                                                                                                                                                                                                                                                                                
 16>                                                                                                                                                                                                                                                                                  secondary: secondaryA = "secondary"
-1->Emitted(174, 40) Source(120, 5) + SourceIndex(0)
-2 >Emitted(174, 54) Source(120, 27) + SourceIndex(0)
-3 >Emitted(174, 56) Source(120, 5) + SourceIndex(0)
-4 >Emitted(174, 95) Source(120, 27) + SourceIndex(0)
-5 >Emitted(174, 97) Source(121, 5) + SourceIndex(0)
-6 >Emitted(174, 113) Source(124, 53) + SourceIndex(0)
-7 >Emitted(174, 115) Source(121, 5) + SourceIndex(0)
-8 >Emitted(174, 188) Source(124, 53) + SourceIndex(0)
-9 >Emitted(174, 190) Source(122, 9) + SourceIndex(0)
-10>Emitted(174, 207) Source(122, 38) + SourceIndex(0)
-11>Emitted(174, 209) Source(122, 9) + SourceIndex(0)
-12>Emitted(174, 252) Source(122, 38) + SourceIndex(0)
-13>Emitted(174, 254) Source(123, 9) + SourceIndex(0)
-14>Emitted(174, 273) Source(123, 44) + SourceIndex(0)
-15>Emitted(174, 275) Source(123, 9) + SourceIndex(0)
-16>Emitted(174, 322) Source(123, 44) + SourceIndex(0)
+1->Emitted(166, 40) Source(120, 5) + SourceIndex(0)
+2 >Emitted(166, 54) Source(120, 27) + SourceIndex(0)
+3 >Emitted(166, 56) Source(120, 5) + SourceIndex(0)
+4 >Emitted(166, 95) Source(120, 27) + SourceIndex(0)
+5 >Emitted(166, 97) Source(121, 5) + SourceIndex(0)
+6 >Emitted(166, 113) Source(124, 53) + SourceIndex(0)
+7 >Emitted(166, 115) Source(121, 5) + SourceIndex(0)
+8 >Emitted(166, 188) Source(124, 53) + SourceIndex(0)
+9 >Emitted(166, 190) Source(122, 9) + SourceIndex(0)
+10>Emitted(166, 207) Source(122, 38) + SourceIndex(0)
+11>Emitted(166, 209) Source(122, 9) + SourceIndex(0)
+12>Emitted(166, 252) Source(122, 38) + SourceIndex(0)
+13>Emitted(166, 254) Source(123, 9) + SourceIndex(0)
+14>Emitted(166, 273) Source(123, 44) + SourceIndex(0)
+15>Emitted(166, 275) Source(123, 9) + SourceIndex(0)
+16>Emitted(166, 322) Source(123, 44) + SourceIndex(0)
 ---
 >>>        console.log(nameA);
 1 >^^^^^^^^
@@ -3060,20 +3052,20 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                    nameA
 7 >                         )
 8 >                          ;
-1 >Emitted(175, 9) Source(127, 5) + SourceIndex(0)
-2 >Emitted(175, 16) Source(127, 12) + SourceIndex(0)
-3 >Emitted(175, 17) Source(127, 13) + SourceIndex(0)
-4 >Emitted(175, 20) Source(127, 16) + SourceIndex(0)
-5 >Emitted(175, 21) Source(127, 17) + SourceIndex(0)
-6 >Emitted(175, 26) Source(127, 22) + SourceIndex(0)
-7 >Emitted(175, 27) Source(127, 23) + SourceIndex(0)
-8 >Emitted(175, 28) Source(127, 24) + SourceIndex(0)
+1 >Emitted(167, 9) Source(127, 5) + SourceIndex(0)
+2 >Emitted(167, 16) Source(127, 12) + SourceIndex(0)
+3 >Emitted(167, 17) Source(127, 13) + SourceIndex(0)
+4 >Emitted(167, 20) Source(127, 16) + SourceIndex(0)
+5 >Emitted(167, 21) Source(127, 17) + SourceIndex(0)
+6 >Emitted(167, 26) Source(127, 22) + SourceIndex(0)
+7 >Emitted(167, 27) Source(127, 23) + SourceIndex(0)
+8 >Emitted(167, 28) Source(127, 24) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^^
 1 >
   >}
-1 >Emitted(176, 6) Source(128, 2) + SourceIndex(0)
+1 >Emitted(168, 6) Source(128, 2) + SourceIndex(0)
 ---
 >>>}
 >>>catch (e_14_1) { e_14 = { error: e_14_1 }; }
@@ -3113,20 +3105,20 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 12>                                                    
 13>                                                      
 14>                                                        { name = "noName", skill  = "noSkill" }
-1 >Emitted(183, 5) Source(130, 1) + SourceIndex(0)
-2 >Emitted(183, 8) Source(130, 4) + SourceIndex(0)
-3 >Emitted(183, 9) Source(130, 5) + SourceIndex(0)
-4 >Emitted(183, 10) Source(130, 49) + SourceIndex(0)
-5 >Emitted(183, 14) Source(130, 49) + SourceIndex(0)
-6 >Emitted(183, 25) Source(130, 49) + SourceIndex(0)
-7 >Emitted(183, 27) Source(130, 49) + SourceIndex(0)
-8 >Emitted(183, 37) Source(130, 49) + SourceIndex(0)
-9 >Emitted(183, 46) Source(130, 49) + SourceIndex(0)
-10>Emitted(183, 52) Source(130, 55) + SourceIndex(0)
-11>Emitted(183, 53) Source(130, 55) + SourceIndex(0)
-12>Emitted(183, 55) Source(130, 55) + SourceIndex(0)
-13>Emitted(183, 57) Source(130, 6) + SourceIndex(0)
-14>Emitted(183, 73) Source(130, 45) + SourceIndex(0)
+1 >Emitted(175, 5) Source(130, 1) + SourceIndex(0)
+2 >Emitted(175, 8) Source(130, 4) + SourceIndex(0)
+3 >Emitted(175, 9) Source(130, 5) + SourceIndex(0)
+4 >Emitted(175, 10) Source(130, 49) + SourceIndex(0)
+5 >Emitted(175, 14) Source(130, 49) + SourceIndex(0)
+6 >Emitted(175, 25) Source(130, 49) + SourceIndex(0)
+7 >Emitted(175, 27) Source(130, 49) + SourceIndex(0)
+8 >Emitted(175, 37) Source(130, 49) + SourceIndex(0)
+9 >Emitted(175, 46) Source(130, 49) + SourceIndex(0)
+10>Emitted(175, 52) Source(130, 55) + SourceIndex(0)
+11>Emitted(175, 53) Source(130, 55) + SourceIndex(0)
+12>Emitted(175, 55) Source(130, 55) + SourceIndex(0)
+13>Emitted(175, 57) Source(130, 6) + SourceIndex(0)
+14>Emitted(175, 73) Source(130, 45) + SourceIndex(0)
 ---
 >>>        _40 = robots_4.result.value, _41 = _40.name, name = _41 === void 0 ? "noName" : _41, _42 = _40.skill, skill = _42 === void 0 ? "noSkill" : _42;
 1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3145,14 +3137,14 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                                                                                             skill  = "noSkill"
 7 >                                                                                                            
 8 >                                                                                                              skill  = "noSkill"
-1->Emitted(184, 38) Source(130, 8) + SourceIndex(0)
-2 >Emitted(184, 52) Source(130, 23) + SourceIndex(0)
-3 >Emitted(184, 54) Source(130, 8) + SourceIndex(0)
-4 >Emitted(184, 92) Source(130, 23) + SourceIndex(0)
-5 >Emitted(184, 94) Source(130, 25) + SourceIndex(0)
-6 >Emitted(184, 109) Source(130, 43) + SourceIndex(0)
-7 >Emitted(184, 111) Source(130, 25) + SourceIndex(0)
-8 >Emitted(184, 151) Source(130, 43) + SourceIndex(0)
+1->Emitted(176, 38) Source(130, 8) + SourceIndex(0)
+2 >Emitted(176, 52) Source(130, 23) + SourceIndex(0)
+3 >Emitted(176, 54) Source(130, 8) + SourceIndex(0)
+4 >Emitted(176, 92) Source(130, 23) + SourceIndex(0)
+5 >Emitted(176, 94) Source(130, 25) + SourceIndex(0)
+6 >Emitted(176, 109) Source(130, 43) + SourceIndex(0)
+7 >Emitted(176, 111) Source(130, 25) + SourceIndex(0)
+8 >Emitted(176, 151) Source(130, 43) + SourceIndex(0)
 ---
 >>>        console.log(nameA);
 1 >^^^^^^^^
@@ -3172,20 +3164,20 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                    nameA
 7 >                         )
 8 >                          ;
-1 >Emitted(185, 9) Source(131, 5) + SourceIndex(0)
-2 >Emitted(185, 16) Source(131, 12) + SourceIndex(0)
-3 >Emitted(185, 17) Source(131, 13) + SourceIndex(0)
-4 >Emitted(185, 20) Source(131, 16) + SourceIndex(0)
-5 >Emitted(185, 21) Source(131, 17) + SourceIndex(0)
-6 >Emitted(185, 26) Source(131, 22) + SourceIndex(0)
-7 >Emitted(185, 27) Source(131, 23) + SourceIndex(0)
-8 >Emitted(185, 28) Source(131, 24) + SourceIndex(0)
+1 >Emitted(177, 9) Source(131, 5) + SourceIndex(0)
+2 >Emitted(177, 16) Source(131, 12) + SourceIndex(0)
+3 >Emitted(177, 17) Source(131, 13) + SourceIndex(0)
+4 >Emitted(177, 20) Source(131, 16) + SourceIndex(0)
+5 >Emitted(177, 21) Source(131, 17) + SourceIndex(0)
+6 >Emitted(177, 26) Source(131, 22) + SourceIndex(0)
+7 >Emitted(177, 27) Source(131, 23) + SourceIndex(0)
+8 >Emitted(177, 28) Source(131, 24) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^^
 1 >
   >}
-1 >Emitted(186, 6) Source(132, 2) + SourceIndex(0)
+1 >Emitted(178, 6) Source(132, 2) + SourceIndex(0)
 ---
 >>>}
 >>>catch (e_15_1) { e_15 = { error: e_15_1 }; }
@@ -3226,21 +3218,21 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 13>                                                           
 14>                                                             
 15>                                                               { name = "noName", skill = "noSkill"  }
-1 >Emitted(193, 5) Source(133, 1) + SourceIndex(0)
-2 >Emitted(193, 8) Source(133, 4) + SourceIndex(0)
-3 >Emitted(193, 9) Source(133, 5) + SourceIndex(0)
-4 >Emitted(193, 10) Source(133, 49) + SourceIndex(0)
-5 >Emitted(193, 14) Source(133, 49) + SourceIndex(0)
-6 >Emitted(193, 27) Source(133, 49) + SourceIndex(0)
-7 >Emitted(193, 29) Source(133, 49) + SourceIndex(0)
-8 >Emitted(193, 39) Source(133, 49) + SourceIndex(0)
-9 >Emitted(193, 48) Source(133, 49) + SourceIndex(0)
-10>Emitted(193, 57) Source(133, 58) + SourceIndex(0)
-11>Emitted(193, 59) Source(133, 60) + SourceIndex(0)
-12>Emitted(193, 60) Source(133, 60) + SourceIndex(0)
-13>Emitted(193, 62) Source(133, 60) + SourceIndex(0)
-14>Emitted(193, 64) Source(133, 6) + SourceIndex(0)
-15>Emitted(193, 82) Source(133, 45) + SourceIndex(0)
+1 >Emitted(185, 5) Source(133, 1) + SourceIndex(0)
+2 >Emitted(185, 8) Source(133, 4) + SourceIndex(0)
+3 >Emitted(185, 9) Source(133, 5) + SourceIndex(0)
+4 >Emitted(185, 10) Source(133, 49) + SourceIndex(0)
+5 >Emitted(185, 14) Source(133, 49) + SourceIndex(0)
+6 >Emitted(185, 27) Source(133, 49) + SourceIndex(0)
+7 >Emitted(185, 29) Source(133, 49) + SourceIndex(0)
+8 >Emitted(185, 39) Source(133, 49) + SourceIndex(0)
+9 >Emitted(185, 48) Source(133, 49) + SourceIndex(0)
+10>Emitted(185, 57) Source(133, 58) + SourceIndex(0)
+11>Emitted(185, 59) Source(133, 60) + SourceIndex(0)
+12>Emitted(185, 60) Source(133, 60) + SourceIndex(0)
+13>Emitted(185, 62) Source(133, 60) + SourceIndex(0)
+14>Emitted(185, 64) Source(133, 6) + SourceIndex(0)
+15>Emitted(185, 82) Source(133, 45) + SourceIndex(0)
 ---
 >>>        _43 = iterator_9.result.value, _44 = _43.name, name = _44 === void 0 ? "noName" : _44, _45 = _43.skill, skill = _45 === void 0 ? "noSkill" : _45;
 1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3259,14 +3251,14 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                                                                                               skill = "noSkill"
 7 >                                                                                                              
 8 >                                                                                                                skill = "noSkill"
-1->Emitted(194, 40) Source(133, 8) + SourceIndex(0)
-2 >Emitted(194, 54) Source(133, 23) + SourceIndex(0)
-3 >Emitted(194, 56) Source(133, 8) + SourceIndex(0)
-4 >Emitted(194, 94) Source(133, 23) + SourceIndex(0)
-5 >Emitted(194, 96) Source(133, 25) + SourceIndex(0)
-6 >Emitted(194, 111) Source(133, 42) + SourceIndex(0)
-7 >Emitted(194, 113) Source(133, 25) + SourceIndex(0)
-8 >Emitted(194, 153) Source(133, 42) + SourceIndex(0)
+1->Emitted(186, 40) Source(133, 8) + SourceIndex(0)
+2 >Emitted(186, 54) Source(133, 23) + SourceIndex(0)
+3 >Emitted(186, 56) Source(133, 8) + SourceIndex(0)
+4 >Emitted(186, 94) Source(133, 23) + SourceIndex(0)
+5 >Emitted(186, 96) Source(133, 25) + SourceIndex(0)
+6 >Emitted(186, 111) Source(133, 42) + SourceIndex(0)
+7 >Emitted(186, 113) Source(133, 25) + SourceIndex(0)
+8 >Emitted(186, 153) Source(133, 42) + SourceIndex(0)
 ---
 >>>        console.log(nameA);
 1 >^^^^^^^^
@@ -3286,20 +3278,20 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                    nameA
 7 >                         )
 8 >                          ;
-1 >Emitted(195, 9) Source(134, 5) + SourceIndex(0)
-2 >Emitted(195, 16) Source(134, 12) + SourceIndex(0)
-3 >Emitted(195, 17) Source(134, 13) + SourceIndex(0)
-4 >Emitted(195, 20) Source(134, 16) + SourceIndex(0)
-5 >Emitted(195, 21) Source(134, 17) + SourceIndex(0)
-6 >Emitted(195, 26) Source(134, 22) + SourceIndex(0)
-7 >Emitted(195, 27) Source(134, 23) + SourceIndex(0)
-8 >Emitted(195, 28) Source(134, 24) + SourceIndex(0)
+1 >Emitted(187, 9) Source(134, 5) + SourceIndex(0)
+2 >Emitted(187, 16) Source(134, 12) + SourceIndex(0)
+3 >Emitted(187, 17) Source(134, 13) + SourceIndex(0)
+4 >Emitted(187, 20) Source(134, 16) + SourceIndex(0)
+5 >Emitted(187, 21) Source(134, 17) + SourceIndex(0)
+6 >Emitted(187, 26) Source(134, 22) + SourceIndex(0)
+7 >Emitted(187, 27) Source(134, 23) + SourceIndex(0)
+8 >Emitted(187, 28) Source(134, 24) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^^
 1 >
   >}
-1 >Emitted(196, 6) Source(135, 2) + SourceIndex(0)
+1 >Emitted(188, 6) Source(135, 2) + SourceIndex(0)
 ---
 >>>}
 >>>catch (e_16_1) { e_16 = { error: e_16_1 }; }
@@ -3371,37 +3363,37 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 29>                                                                                                      [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]
 30>                                                                                                                      
 31>                                                                                                                        [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]
-1 >Emitted(202, 1) Source(136, 1) + SourceIndex(0)
-2 >Emitted(202, 4) Source(136, 4) + SourceIndex(0)
-3 >Emitted(202, 5) Source(136, 5) + SourceIndex(0)
-4 >Emitted(202, 6) Source(136, 49) + SourceIndex(0)
-5 >Emitted(202, 17) Source(136, 125) + SourceIndex(0)
-6 >Emitted(202, 19) Source(136, 49) + SourceIndex(0)
-7 >Emitted(202, 26) Source(136, 50) + SourceIndex(0)
-8 >Emitted(202, 28) Source(136, 52) + SourceIndex(0)
-9 >Emitted(202, 32) Source(136, 56) + SourceIndex(0)
-10>Emitted(202, 34) Source(136, 58) + SourceIndex(0)
-11>Emitted(202, 41) Source(136, 65) + SourceIndex(0)
-12>Emitted(202, 43) Source(136, 67) + SourceIndex(0)
-13>Emitted(202, 48) Source(136, 72) + SourceIndex(0)
-14>Emitted(202, 50) Source(136, 74) + SourceIndex(0)
-15>Emitted(202, 58) Source(136, 82) + SourceIndex(0)
-16>Emitted(202, 60) Source(136, 84) + SourceIndex(0)
-17>Emitted(202, 62) Source(136, 86) + SourceIndex(0)
-18>Emitted(202, 64) Source(136, 88) + SourceIndex(0)
-19>Emitted(202, 68) Source(136, 92) + SourceIndex(0)
-20>Emitted(202, 70) Source(136, 94) + SourceIndex(0)
-21>Emitted(202, 79) Source(136, 103) + SourceIndex(0)
-22>Emitted(202, 81) Source(136, 105) + SourceIndex(0)
-23>Emitted(202, 86) Source(136, 110) + SourceIndex(0)
-24>Emitted(202, 88) Source(136, 112) + SourceIndex(0)
-25>Emitted(202, 98) Source(136, 122) + SourceIndex(0)
-26>Emitted(202, 100) Source(136, 124) + SourceIndex(0)
-27>Emitted(202, 101) Source(136, 125) + SourceIndex(0)
-28>Emitted(202, 103) Source(136, 49) + SourceIndex(0)
-29>Emitted(202, 119) Source(136, 125) + SourceIndex(0)
-30>Emitted(202, 121) Source(136, 49) + SourceIndex(0)
-31>Emitted(202, 126) Source(136, 125) + SourceIndex(0)
+1 >Emitted(194, 1) Source(136, 1) + SourceIndex(0)
+2 >Emitted(194, 4) Source(136, 4) + SourceIndex(0)
+3 >Emitted(194, 5) Source(136, 5) + SourceIndex(0)
+4 >Emitted(194, 6) Source(136, 49) + SourceIndex(0)
+5 >Emitted(194, 17) Source(136, 125) + SourceIndex(0)
+6 >Emitted(194, 19) Source(136, 49) + SourceIndex(0)
+7 >Emitted(194, 26) Source(136, 50) + SourceIndex(0)
+8 >Emitted(194, 28) Source(136, 52) + SourceIndex(0)
+9 >Emitted(194, 32) Source(136, 56) + SourceIndex(0)
+10>Emitted(194, 34) Source(136, 58) + SourceIndex(0)
+11>Emitted(194, 41) Source(136, 65) + SourceIndex(0)
+12>Emitted(194, 43) Source(136, 67) + SourceIndex(0)
+13>Emitted(194, 48) Source(136, 72) + SourceIndex(0)
+14>Emitted(194, 50) Source(136, 74) + SourceIndex(0)
+15>Emitted(194, 58) Source(136, 82) + SourceIndex(0)
+16>Emitted(194, 60) Source(136, 84) + SourceIndex(0)
+17>Emitted(194, 62) Source(136, 86) + SourceIndex(0)
+18>Emitted(194, 64) Source(136, 88) + SourceIndex(0)
+19>Emitted(194, 68) Source(136, 92) + SourceIndex(0)
+20>Emitted(194, 70) Source(136, 94) + SourceIndex(0)
+21>Emitted(194, 79) Source(136, 103) + SourceIndex(0)
+22>Emitted(194, 81) Source(136, 105) + SourceIndex(0)
+23>Emitted(194, 86) Source(136, 110) + SourceIndex(0)
+24>Emitted(194, 88) Source(136, 112) + SourceIndex(0)
+25>Emitted(194, 98) Source(136, 122) + SourceIndex(0)
+26>Emitted(194, 100) Source(136, 124) + SourceIndex(0)
+27>Emitted(194, 101) Source(136, 125) + SourceIndex(0)
+28>Emitted(194, 103) Source(136, 49) + SourceIndex(0)
+29>Emitted(194, 119) Source(136, 125) + SourceIndex(0)
+30>Emitted(194, 121) Source(136, 49) + SourceIndex(0)
+31>Emitted(194, 126) Source(136, 125) + SourceIndex(0)
 ---
 >>>    _48 = _47[_46], _49 = _48.name, name = _49 === void 0 ? "noName" : _49, _50 = _48.skill, skill = _50 === void 0 ? "noSkill" : _50;
 1->^^^^^^^^^^^^^^^^^^^^
@@ -3420,14 +3412,14 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                                                                            skill  = "noSkill"
 7 >                                                                                           
 8 >                                                                                             skill  = "noSkill"
-1->Emitted(203, 21) Source(136, 8) + SourceIndex(0)
-2 >Emitted(203, 35) Source(136, 23) + SourceIndex(0)
-3 >Emitted(203, 37) Source(136, 8) + SourceIndex(0)
-4 >Emitted(203, 75) Source(136, 23) + SourceIndex(0)
-5 >Emitted(203, 77) Source(136, 25) + SourceIndex(0)
-6 >Emitted(203, 92) Source(136, 43) + SourceIndex(0)
-7 >Emitted(203, 94) Source(136, 25) + SourceIndex(0)
-8 >Emitted(203, 134) Source(136, 43) + SourceIndex(0)
+1->Emitted(195, 21) Source(136, 8) + SourceIndex(0)
+2 >Emitted(195, 35) Source(136, 23) + SourceIndex(0)
+3 >Emitted(195, 37) Source(136, 8) + SourceIndex(0)
+4 >Emitted(195, 75) Source(136, 23) + SourceIndex(0)
+5 >Emitted(195, 77) Source(136, 25) + SourceIndex(0)
+6 >Emitted(195, 92) Source(136, 43) + SourceIndex(0)
+7 >Emitted(195, 94) Source(136, 25) + SourceIndex(0)
+8 >Emitted(195, 134) Source(136, 43) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -3447,21 +3439,21 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                nameA
 7 >                     )
 8 >                      ;
-1 >Emitted(204, 5) Source(137, 5) + SourceIndex(0)
-2 >Emitted(204, 12) Source(137, 12) + SourceIndex(0)
-3 >Emitted(204, 13) Source(137, 13) + SourceIndex(0)
-4 >Emitted(204, 16) Source(137, 16) + SourceIndex(0)
-5 >Emitted(204, 17) Source(137, 17) + SourceIndex(0)
-6 >Emitted(204, 22) Source(137, 22) + SourceIndex(0)
-7 >Emitted(204, 23) Source(137, 23) + SourceIndex(0)
-8 >Emitted(204, 24) Source(137, 24) + SourceIndex(0)
+1 >Emitted(196, 5) Source(137, 5) + SourceIndex(0)
+2 >Emitted(196, 12) Source(137, 12) + SourceIndex(0)
+3 >Emitted(196, 13) Source(137, 13) + SourceIndex(0)
+4 >Emitted(196, 16) Source(137, 16) + SourceIndex(0)
+5 >Emitted(196, 17) Source(137, 17) + SourceIndex(0)
+6 >Emitted(196, 22) Source(137, 22) + SourceIndex(0)
+7 >Emitted(196, 23) Source(137, 23) + SourceIndex(0)
+8 >Emitted(196, 24) Source(137, 24) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^->
 1 >
   >}
-1 >Emitted(205, 2) Source(138, 2) + SourceIndex(0)
+1 >Emitted(197, 2) Source(138, 2) + SourceIndex(0)
 ---
 >>>try {
 >>>    for (var multiRobots_4 = { iterator: __values(multiRobots) }; __step(multiRobots_4);) {
@@ -3507,20 +3499,20 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
   >                                                                          secondary = "secondary"
   >                                                                      } = { primary: "noSkill", secondary: "noSkill" }
   >                                                                  }
-1->Emitted(207, 5) Source(139, 1) + SourceIndex(0)
-2 >Emitted(207, 8) Source(139, 4) + SourceIndex(0)
-3 >Emitted(207, 9) Source(139, 5) + SourceIndex(0)
-4 >Emitted(207, 10) Source(145, 6) + SourceIndex(0)
-5 >Emitted(207, 14) Source(145, 6) + SourceIndex(0)
-6 >Emitted(207, 30) Source(145, 6) + SourceIndex(0)
-7 >Emitted(207, 32) Source(145, 6) + SourceIndex(0)
-8 >Emitted(207, 42) Source(145, 6) + SourceIndex(0)
-9 >Emitted(207, 51) Source(145, 6) + SourceIndex(0)
-10>Emitted(207, 62) Source(145, 17) + SourceIndex(0)
-11>Emitted(207, 63) Source(145, 17) + SourceIndex(0)
-12>Emitted(207, 65) Source(145, 17) + SourceIndex(0)
-13>Emitted(207, 67) Source(139, 6) + SourceIndex(0)
-14>Emitted(207, 88) Source(145, 2) + SourceIndex(0)
+1->Emitted(199, 5) Source(139, 1) + SourceIndex(0)
+2 >Emitted(199, 8) Source(139, 4) + SourceIndex(0)
+3 >Emitted(199, 9) Source(139, 5) + SourceIndex(0)
+4 >Emitted(199, 10) Source(145, 6) + SourceIndex(0)
+5 >Emitted(199, 14) Source(145, 6) + SourceIndex(0)
+6 >Emitted(199, 30) Source(145, 6) + SourceIndex(0)
+7 >Emitted(199, 32) Source(145, 6) + SourceIndex(0)
+8 >Emitted(199, 42) Source(145, 6) + SourceIndex(0)
+9 >Emitted(199, 51) Source(145, 6) + SourceIndex(0)
+10>Emitted(199, 62) Source(145, 17) + SourceIndex(0)
+11>Emitted(199, 63) Source(145, 17) + SourceIndex(0)
+12>Emitted(199, 65) Source(145, 17) + SourceIndex(0)
+13>Emitted(199, 67) Source(139, 6) + SourceIndex(0)
+14>Emitted(199, 88) Source(145, 2) + SourceIndex(0)
 ---
 >>>        _51 = multiRobots_4.result.value, _52 = _51.name, name = _52 === void 0 ? "noName" : _52, _53 = _51.skills, _54 = _53 === void 0 ? { primary: "noSkill", secondary: "noSkill" } : _53, _55 = _54.primary, primary = _55 === void 0 ? "primary" : _55, _56 = _54.secondary, secondary = _56 === void 0 ? "secondary" : _56;
 1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3563,22 +3555,22 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 14>                                                                                                                                                                                                                                                              secondary = "secondary"
 15>                                                                                                                                                                                                                                                                                 
 16>                                                                                                                                                                                                                                                                                   secondary = "secondary"
-1->Emitted(208, 43) Source(140, 5) + SourceIndex(0)
-2 >Emitted(208, 57) Source(140, 20) + SourceIndex(0)
-3 >Emitted(208, 59) Source(140, 5) + SourceIndex(0)
-4 >Emitted(208, 97) Source(140, 20) + SourceIndex(0)
-5 >Emitted(208, 99) Source(141, 5) + SourceIndex(0)
-6 >Emitted(208, 115) Source(144, 53) + SourceIndex(0)
-7 >Emitted(208, 117) Source(141, 5) + SourceIndex(0)
-8 >Emitted(208, 190) Source(144, 53) + SourceIndex(0)
-9 >Emitted(208, 192) Source(142, 9) + SourceIndex(0)
-10>Emitted(208, 209) Source(142, 28) + SourceIndex(0)
-11>Emitted(208, 211) Source(142, 9) + SourceIndex(0)
-12>Emitted(208, 253) Source(142, 28) + SourceIndex(0)
-13>Emitted(208, 255) Source(143, 9) + SourceIndex(0)
-14>Emitted(208, 274) Source(143, 32) + SourceIndex(0)
-15>Emitted(208, 276) Source(143, 9) + SourceIndex(0)
-16>Emitted(208, 322) Source(143, 32) + SourceIndex(0)
+1->Emitted(200, 43) Source(140, 5) + SourceIndex(0)
+2 >Emitted(200, 57) Source(140, 20) + SourceIndex(0)
+3 >Emitted(200, 59) Source(140, 5) + SourceIndex(0)
+4 >Emitted(200, 97) Source(140, 20) + SourceIndex(0)
+5 >Emitted(200, 99) Source(141, 5) + SourceIndex(0)
+6 >Emitted(200, 115) Source(144, 53) + SourceIndex(0)
+7 >Emitted(200, 117) Source(141, 5) + SourceIndex(0)
+8 >Emitted(200, 190) Source(144, 53) + SourceIndex(0)
+9 >Emitted(200, 192) Source(142, 9) + SourceIndex(0)
+10>Emitted(200, 209) Source(142, 28) + SourceIndex(0)
+11>Emitted(200, 211) Source(142, 9) + SourceIndex(0)
+12>Emitted(200, 253) Source(142, 28) + SourceIndex(0)
+13>Emitted(200, 255) Source(143, 9) + SourceIndex(0)
+14>Emitted(200, 274) Source(143, 32) + SourceIndex(0)
+15>Emitted(200, 276) Source(143, 9) + SourceIndex(0)
+16>Emitted(200, 322) Source(143, 32) + SourceIndex(0)
 ---
 >>>        console.log(nameA);
 1 >^^^^^^^^
@@ -3600,20 +3592,20 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                    nameA
 7 >                         )
 8 >                          ;
-1 >Emitted(209, 9) Source(146, 5) + SourceIndex(0)
-2 >Emitted(209, 16) Source(146, 12) + SourceIndex(0)
-3 >Emitted(209, 17) Source(146, 13) + SourceIndex(0)
-4 >Emitted(209, 20) Source(146, 16) + SourceIndex(0)
-5 >Emitted(209, 21) Source(146, 17) + SourceIndex(0)
-6 >Emitted(209, 26) Source(146, 22) + SourceIndex(0)
-7 >Emitted(209, 27) Source(146, 23) + SourceIndex(0)
-8 >Emitted(209, 28) Source(146, 24) + SourceIndex(0)
+1 >Emitted(201, 9) Source(146, 5) + SourceIndex(0)
+2 >Emitted(201, 16) Source(146, 12) + SourceIndex(0)
+3 >Emitted(201, 17) Source(146, 13) + SourceIndex(0)
+4 >Emitted(201, 20) Source(146, 16) + SourceIndex(0)
+5 >Emitted(201, 21) Source(146, 17) + SourceIndex(0)
+6 >Emitted(201, 26) Source(146, 22) + SourceIndex(0)
+7 >Emitted(201, 27) Source(146, 23) + SourceIndex(0)
+8 >Emitted(201, 28) Source(146, 24) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^^
 1 >
   >}
-1 >Emitted(210, 6) Source(147, 2) + SourceIndex(0)
+1 >Emitted(202, 6) Source(147, 2) + SourceIndex(0)
 ---
 >>>}
 >>>catch (e_17_1) { e_17 = { error: e_17_1 }; }
@@ -3666,21 +3658,21 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
   >                                                                             secondary = "secondary"
   >                                                                         } = { primary: "noSkill", secondary: "noSkill" }
   >                                                                     }
-1 >Emitted(217, 5) Source(148, 1) + SourceIndex(0)
-2 >Emitted(217, 8) Source(148, 4) + SourceIndex(0)
-3 >Emitted(217, 9) Source(148, 5) + SourceIndex(0)
-4 >Emitted(217, 10) Source(154, 6) + SourceIndex(0)
-5 >Emitted(217, 14) Source(154, 6) + SourceIndex(0)
-6 >Emitted(217, 28) Source(154, 6) + SourceIndex(0)
-7 >Emitted(217, 30) Source(154, 6) + SourceIndex(0)
-8 >Emitted(217, 40) Source(154, 6) + SourceIndex(0)
-9 >Emitted(217, 49) Source(154, 6) + SourceIndex(0)
-10>Emitted(217, 63) Source(154, 20) + SourceIndex(0)
-11>Emitted(217, 65) Source(154, 22) + SourceIndex(0)
-12>Emitted(217, 66) Source(154, 22) + SourceIndex(0)
-13>Emitted(217, 68) Source(154, 22) + SourceIndex(0)
-14>Emitted(217, 70) Source(148, 6) + SourceIndex(0)
-15>Emitted(217, 89) Source(154, 2) + SourceIndex(0)
+1 >Emitted(209, 5) Source(148, 1) + SourceIndex(0)
+2 >Emitted(209, 8) Source(148, 4) + SourceIndex(0)
+3 >Emitted(209, 9) Source(148, 5) + SourceIndex(0)
+4 >Emitted(209, 10) Source(154, 6) + SourceIndex(0)
+5 >Emitted(209, 14) Source(154, 6) + SourceIndex(0)
+6 >Emitted(209, 28) Source(154, 6) + SourceIndex(0)
+7 >Emitted(209, 30) Source(154, 6) + SourceIndex(0)
+8 >Emitted(209, 40) Source(154, 6) + SourceIndex(0)
+9 >Emitted(209, 49) Source(154, 6) + SourceIndex(0)
+10>Emitted(209, 63) Source(154, 20) + SourceIndex(0)
+11>Emitted(209, 65) Source(154, 22) + SourceIndex(0)
+12>Emitted(209, 66) Source(154, 22) + SourceIndex(0)
+13>Emitted(209, 68) Source(154, 22) + SourceIndex(0)
+14>Emitted(209, 70) Source(148, 6) + SourceIndex(0)
+15>Emitted(209, 89) Source(154, 2) + SourceIndex(0)
 ---
 >>>        _57 = iterator_10.result.value, _58 = _57.name, name = _58 === void 0 ? "noName" : _58, _59 = _57.skills, _60 = _59 === void 0 ? { primary: "noSkill", secondary: "noSkill" } : _59, _61 = _60.primary, primary = _61 === void 0 ? "primary" : _61, _62 = _60.secondary, secondary = _62 === void 0 ? "secondary" : _62;
 1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3723,22 +3715,22 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 14>                                                                                                                                                                                                                                                            secondary = "secondary"
 15>                                                                                                                                                                                                                                                                               
 16>                                                                                                                                                                                                                                                                                 secondary = "secondary"
-1->Emitted(218, 41) Source(149, 5) + SourceIndex(0)
-2 >Emitted(218, 55) Source(149, 20) + SourceIndex(0)
-3 >Emitted(218, 57) Source(149, 5) + SourceIndex(0)
-4 >Emitted(218, 95) Source(149, 20) + SourceIndex(0)
-5 >Emitted(218, 97) Source(150, 5) + SourceIndex(0)
-6 >Emitted(218, 113) Source(153, 53) + SourceIndex(0)
-7 >Emitted(218, 115) Source(150, 5) + SourceIndex(0)
-8 >Emitted(218, 188) Source(153, 53) + SourceIndex(0)
-9 >Emitted(218, 190) Source(151, 9) + SourceIndex(0)
-10>Emitted(218, 207) Source(151, 28) + SourceIndex(0)
-11>Emitted(218, 209) Source(151, 9) + SourceIndex(0)
-12>Emitted(218, 251) Source(151, 28) + SourceIndex(0)
-13>Emitted(218, 253) Source(152, 9) + SourceIndex(0)
-14>Emitted(218, 272) Source(152, 32) + SourceIndex(0)
-15>Emitted(218, 274) Source(152, 9) + SourceIndex(0)
-16>Emitted(218, 320) Source(152, 32) + SourceIndex(0)
+1->Emitted(210, 41) Source(149, 5) + SourceIndex(0)
+2 >Emitted(210, 55) Source(149, 20) + SourceIndex(0)
+3 >Emitted(210, 57) Source(149, 5) + SourceIndex(0)
+4 >Emitted(210, 95) Source(149, 20) + SourceIndex(0)
+5 >Emitted(210, 97) Source(150, 5) + SourceIndex(0)
+6 >Emitted(210, 113) Source(153, 53) + SourceIndex(0)
+7 >Emitted(210, 115) Source(150, 5) + SourceIndex(0)
+8 >Emitted(210, 188) Source(153, 53) + SourceIndex(0)
+9 >Emitted(210, 190) Source(151, 9) + SourceIndex(0)
+10>Emitted(210, 207) Source(151, 28) + SourceIndex(0)
+11>Emitted(210, 209) Source(151, 9) + SourceIndex(0)
+12>Emitted(210, 251) Source(151, 28) + SourceIndex(0)
+13>Emitted(210, 253) Source(152, 9) + SourceIndex(0)
+14>Emitted(210, 272) Source(152, 32) + SourceIndex(0)
+15>Emitted(210, 274) Source(152, 9) + SourceIndex(0)
+16>Emitted(210, 320) Source(152, 32) + SourceIndex(0)
 ---
 >>>        console.log(nameA);
 1 >^^^^^^^^
@@ -3760,20 +3752,20 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                    nameA
 7 >                         )
 8 >                          ;
-1 >Emitted(219, 9) Source(155, 5) + SourceIndex(0)
-2 >Emitted(219, 16) Source(155, 12) + SourceIndex(0)
-3 >Emitted(219, 17) Source(155, 13) + SourceIndex(0)
-4 >Emitted(219, 20) Source(155, 16) + SourceIndex(0)
-5 >Emitted(219, 21) Source(155, 17) + SourceIndex(0)
-6 >Emitted(219, 26) Source(155, 22) + SourceIndex(0)
-7 >Emitted(219, 27) Source(155, 23) + SourceIndex(0)
-8 >Emitted(219, 28) Source(155, 24) + SourceIndex(0)
+1 >Emitted(211, 9) Source(155, 5) + SourceIndex(0)
+2 >Emitted(211, 16) Source(155, 12) + SourceIndex(0)
+3 >Emitted(211, 17) Source(155, 13) + SourceIndex(0)
+4 >Emitted(211, 20) Source(155, 16) + SourceIndex(0)
+5 >Emitted(211, 21) Source(155, 17) + SourceIndex(0)
+6 >Emitted(211, 26) Source(155, 22) + SourceIndex(0)
+7 >Emitted(211, 27) Source(155, 23) + SourceIndex(0)
+8 >Emitted(211, 28) Source(155, 24) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^^
 1 >
   >}
-1 >Emitted(220, 6) Source(156, 2) + SourceIndex(0)
+1 >Emitted(212, 6) Source(156, 2) + SourceIndex(0)
 ---
 >>>}
 >>>catch (e_18_1) { e_18 = { error: e_18_1 }; }
@@ -3838,30 +3830,30 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 22>                                                                                  "none"
 23>                                                                                         }
 24>                                                                                           }
-1 >Emitted(226, 1) Source(157, 1) + SourceIndex(0)
-2 >Emitted(226, 4) Source(157, 4) + SourceIndex(0)
-3 >Emitted(226, 5) Source(157, 5) + SourceIndex(0)
-4 >Emitted(226, 6) Source(163, 6) + SourceIndex(0)
-5 >Emitted(226, 17) Source(164, 79) + SourceIndex(0)
-6 >Emitted(226, 19) Source(163, 6) + SourceIndex(0)
-7 >Emitted(226, 26) Source(163, 7) + SourceIndex(0)
-8 >Emitted(226, 28) Source(163, 9) + SourceIndex(0)
-9 >Emitted(226, 32) Source(163, 13) + SourceIndex(0)
-10>Emitted(226, 34) Source(163, 15) + SourceIndex(0)
-11>Emitted(226, 41) Source(163, 22) + SourceIndex(0)
-12>Emitted(226, 43) Source(163, 24) + SourceIndex(0)
-13>Emitted(226, 49) Source(163, 30) + SourceIndex(0)
-14>Emitted(226, 51) Source(163, 32) + SourceIndex(0)
-15>Emitted(226, 53) Source(163, 34) + SourceIndex(0)
-16>Emitted(226, 60) Source(163, 41) + SourceIndex(0)
-17>Emitted(226, 62) Source(163, 43) + SourceIndex(0)
-18>Emitted(226, 70) Source(163, 51) + SourceIndex(0)
-19>Emitted(226, 72) Source(163, 53) + SourceIndex(0)
-20>Emitted(226, 81) Source(163, 62) + SourceIndex(0)
-21>Emitted(226, 83) Source(163, 64) + SourceIndex(0)
-22>Emitted(226, 89) Source(163, 70) + SourceIndex(0)
-23>Emitted(226, 91) Source(163, 72) + SourceIndex(0)
-24>Emitted(226, 93) Source(163, 74) + SourceIndex(0)
+1 >Emitted(218, 1) Source(157, 1) + SourceIndex(0)
+2 >Emitted(218, 4) Source(157, 4) + SourceIndex(0)
+3 >Emitted(218, 5) Source(157, 5) + SourceIndex(0)
+4 >Emitted(218, 6) Source(163, 6) + SourceIndex(0)
+5 >Emitted(218, 17) Source(164, 79) + SourceIndex(0)
+6 >Emitted(218, 19) Source(163, 6) + SourceIndex(0)
+7 >Emitted(218, 26) Source(163, 7) + SourceIndex(0)
+8 >Emitted(218, 28) Source(163, 9) + SourceIndex(0)
+9 >Emitted(218, 32) Source(163, 13) + SourceIndex(0)
+10>Emitted(218, 34) Source(163, 15) + SourceIndex(0)
+11>Emitted(218, 41) Source(163, 22) + SourceIndex(0)
+12>Emitted(218, 43) Source(163, 24) + SourceIndex(0)
+13>Emitted(218, 49) Source(163, 30) + SourceIndex(0)
+14>Emitted(218, 51) Source(163, 32) + SourceIndex(0)
+15>Emitted(218, 53) Source(163, 34) + SourceIndex(0)
+16>Emitted(218, 60) Source(163, 41) + SourceIndex(0)
+17>Emitted(218, 62) Source(163, 43) + SourceIndex(0)
+18>Emitted(218, 70) Source(163, 51) + SourceIndex(0)
+19>Emitted(218, 72) Source(163, 53) + SourceIndex(0)
+20>Emitted(218, 81) Source(163, 62) + SourceIndex(0)
+21>Emitted(218, 83) Source(163, 64) + SourceIndex(0)
+22>Emitted(218, 89) Source(163, 70) + SourceIndex(0)
+23>Emitted(218, 91) Source(163, 72) + SourceIndex(0)
+24>Emitted(218, 93) Source(163, 74) + SourceIndex(0)
 ---
 >>>    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]; _63 < _64.length; _63++) {
 1->^^^^
@@ -3914,29 +3906,29 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 22>                                                                                                
 23>                                                                                                  [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
   >                                                                                                      { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]
-1->Emitted(227, 5) Source(164, 5) + SourceIndex(0)
-2 >Emitted(227, 7) Source(164, 7) + SourceIndex(0)
-3 >Emitted(227, 11) Source(164, 11) + SourceIndex(0)
-4 >Emitted(227, 13) Source(164, 13) + SourceIndex(0)
-5 >Emitted(227, 22) Source(164, 22) + SourceIndex(0)
-6 >Emitted(227, 24) Source(164, 24) + SourceIndex(0)
-7 >Emitted(227, 30) Source(164, 30) + SourceIndex(0)
-8 >Emitted(227, 32) Source(164, 32) + SourceIndex(0)
-9 >Emitted(227, 34) Source(164, 34) + SourceIndex(0)
-10>Emitted(227, 41) Source(164, 41) + SourceIndex(0)
-11>Emitted(227, 43) Source(164, 43) + SourceIndex(0)
-12>Emitted(227, 53) Source(164, 53) + SourceIndex(0)
-13>Emitted(227, 55) Source(164, 55) + SourceIndex(0)
-14>Emitted(227, 64) Source(164, 64) + SourceIndex(0)
-15>Emitted(227, 66) Source(164, 66) + SourceIndex(0)
-16>Emitted(227, 74) Source(164, 74) + SourceIndex(0)
-17>Emitted(227, 76) Source(164, 76) + SourceIndex(0)
-18>Emitted(227, 78) Source(164, 78) + SourceIndex(0)
-19>Emitted(227, 79) Source(164, 79) + SourceIndex(0)
-20>Emitted(227, 81) Source(163, 6) + SourceIndex(0)
-21>Emitted(227, 97) Source(164, 79) + SourceIndex(0)
-22>Emitted(227, 99) Source(163, 6) + SourceIndex(0)
-23>Emitted(227, 104) Source(164, 79) + SourceIndex(0)
+1->Emitted(219, 5) Source(164, 5) + SourceIndex(0)
+2 >Emitted(219, 7) Source(164, 7) + SourceIndex(0)
+3 >Emitted(219, 11) Source(164, 11) + SourceIndex(0)
+4 >Emitted(219, 13) Source(164, 13) + SourceIndex(0)
+5 >Emitted(219, 22) Source(164, 22) + SourceIndex(0)
+6 >Emitted(219, 24) Source(164, 24) + SourceIndex(0)
+7 >Emitted(219, 30) Source(164, 30) + SourceIndex(0)
+8 >Emitted(219, 32) Source(164, 32) + SourceIndex(0)
+9 >Emitted(219, 34) Source(164, 34) + SourceIndex(0)
+10>Emitted(219, 41) Source(164, 41) + SourceIndex(0)
+11>Emitted(219, 43) Source(164, 43) + SourceIndex(0)
+12>Emitted(219, 53) Source(164, 53) + SourceIndex(0)
+13>Emitted(219, 55) Source(164, 55) + SourceIndex(0)
+14>Emitted(219, 64) Source(164, 64) + SourceIndex(0)
+15>Emitted(219, 66) Source(164, 66) + SourceIndex(0)
+16>Emitted(219, 74) Source(164, 74) + SourceIndex(0)
+17>Emitted(219, 76) Source(164, 76) + SourceIndex(0)
+18>Emitted(219, 78) Source(164, 78) + SourceIndex(0)
+19>Emitted(219, 79) Source(164, 79) + SourceIndex(0)
+20>Emitted(219, 81) Source(163, 6) + SourceIndex(0)
+21>Emitted(219, 97) Source(164, 79) + SourceIndex(0)
+22>Emitted(219, 99) Source(163, 6) + SourceIndex(0)
+23>Emitted(219, 104) Source(164, 79) + SourceIndex(0)
 ---
 >>>    _65 = _64[_63], _66 = _65.name, name = _66 === void 0 ? "noName" : _66, _67 = _65.skills, _68 = _67 === void 0 ? { primary: "noSkill", secondary: "noSkill" } : _67, _69 = _68.primary, primary = _69 === void 0 ? "primary" : _69, _70 = _68.secondary, secondary = _70 === void 0 ? "secondary" : _70;
 1->^^^^^^^^^^^^^^^^^^^^
@@ -3979,22 +3971,22 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 14>                                                                                                                                                                                                                                        secondary = "secondary"
 15>                                                                                                                                                                                                                                                           
 16>                                                                                                                                                                                                                                                             secondary = "secondary"
-1->Emitted(228, 21) Source(158, 5) + SourceIndex(0)
-2 >Emitted(228, 35) Source(158, 20) + SourceIndex(0)
-3 >Emitted(228, 37) Source(158, 5) + SourceIndex(0)
-4 >Emitted(228, 75) Source(158, 20) + SourceIndex(0)
-5 >Emitted(228, 77) Source(159, 5) + SourceIndex(0)
-6 >Emitted(228, 93) Source(162, 53) + SourceIndex(0)
-7 >Emitted(228, 95) Source(159, 5) + SourceIndex(0)
-8 >Emitted(228, 168) Source(162, 53) + SourceIndex(0)
-9 >Emitted(228, 170) Source(160, 9) + SourceIndex(0)
-10>Emitted(228, 187) Source(160, 28) + SourceIndex(0)
-11>Emitted(228, 189) Source(160, 9) + SourceIndex(0)
-12>Emitted(228, 231) Source(160, 28) + SourceIndex(0)
-13>Emitted(228, 233) Source(161, 9) + SourceIndex(0)
-14>Emitted(228, 252) Source(161, 32) + SourceIndex(0)
-15>Emitted(228, 254) Source(161, 9) + SourceIndex(0)
-16>Emitted(228, 300) Source(161, 32) + SourceIndex(0)
+1->Emitted(220, 21) Source(158, 5) + SourceIndex(0)
+2 >Emitted(220, 35) Source(158, 20) + SourceIndex(0)
+3 >Emitted(220, 37) Source(158, 5) + SourceIndex(0)
+4 >Emitted(220, 75) Source(158, 20) + SourceIndex(0)
+5 >Emitted(220, 77) Source(159, 5) + SourceIndex(0)
+6 >Emitted(220, 93) Source(162, 53) + SourceIndex(0)
+7 >Emitted(220, 95) Source(159, 5) + SourceIndex(0)
+8 >Emitted(220, 168) Source(162, 53) + SourceIndex(0)
+9 >Emitted(220, 170) Source(160, 9) + SourceIndex(0)
+10>Emitted(220, 187) Source(160, 28) + SourceIndex(0)
+11>Emitted(220, 189) Source(160, 9) + SourceIndex(0)
+12>Emitted(220, 231) Source(160, 28) + SourceIndex(0)
+13>Emitted(220, 233) Source(161, 9) + SourceIndex(0)
+14>Emitted(220, 252) Source(161, 32) + SourceIndex(0)
+15>Emitted(220, 254) Source(161, 9) + SourceIndex(0)
+16>Emitted(220, 300) Source(161, 32) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -4017,21 +4009,21 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValue
 6 >                nameA
 7 >                     )
 8 >                      ;
-1 >Emitted(229, 5) Source(165, 5) + SourceIndex(0)
-2 >Emitted(229, 12) Source(165, 12) + SourceIndex(0)
-3 >Emitted(229, 13) Source(165, 13) + SourceIndex(0)
-4 >Emitted(229, 16) Source(165, 16) + SourceIndex(0)
-5 >Emitted(229, 17) Source(165, 17) + SourceIndex(0)
-6 >Emitted(229, 22) Source(165, 22) + SourceIndex(0)
-7 >Emitted(229, 23) Source(165, 23) + SourceIndex(0)
-8 >Emitted(229, 24) Source(165, 24) + SourceIndex(0)
+1 >Emitted(221, 5) Source(165, 5) + SourceIndex(0)
+2 >Emitted(221, 12) Source(165, 12) + SourceIndex(0)
+3 >Emitted(221, 13) Source(165, 13) + SourceIndex(0)
+4 >Emitted(221, 16) Source(165, 16) + SourceIndex(0)
+5 >Emitted(221, 17) Source(165, 17) + SourceIndex(0)
+6 >Emitted(221, 22) Source(165, 22) + SourceIndex(0)
+7 >Emitted(221, 23) Source(165, 23) + SourceIndex(0)
+8 >Emitted(221, 24) Source(165, 24) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
-1 >Emitted(230, 2) Source(166, 2) + SourceIndex(0)
+1 >Emitted(222, 2) Source(166, 2) + SourceIndex(0)
 ---
 >>>var _a, e_1, _b, e_2, _d, _e, _f, _g, _h, e_3, _j, _k, _l, _m, e_4, _o, _p, _q, _r, e_5, _s, e_6, _t, e_7, _w, _x, _y, _z, _0, e_8, _1, _2, _3, _4, e_9, _7, _8, _9, _10, _11, _12, _13, e_10, _14, _15, _16, e_11, _19, _20, _21, _22, _23, _24, _25, _26, _27, e_12, _28, _29, _30, _31, _32, _33, e_13, _34, _35, _36, _37, _38, _39, e_14, _40, _41, _42, e_15, _43, _44, _45, e_16, _48, _49, _50, _51, _52, _53, _54, _55, _56, e_17, _57, _58, _59, _60, _61, _62, e_18, _65, _66, _67, _68, _69, _70;
 >>>//# sourceMappingURL=sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.js.map

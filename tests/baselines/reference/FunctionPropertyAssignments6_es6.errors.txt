@@ -1,6 +1,8 @@
+error TS2318: Cannot find global type 'IterableIterator'.
 tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments6_es6.ts(1,12): error TS1003: Identifier expected.
 
 
+!!! error TS2318: Cannot find global type 'IterableIterator'.
 ==== tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments6_es6.ts (1 errors) ====
     var v = { *<T>() { } }
                ~

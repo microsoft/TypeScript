@@ -73,7 +73,7 @@ function e0({x: [number, number, number]}) { }  // error, duplicate identifier;
 // The identifiers specified in parameter declarations and binding patterns
 // in a parameter list must be unique within that parameter list.
 var __read = (this && this.__read) || function (o, n) {
-    if (!(m = o.__iterator__)) return o;
+    if (!(m = typeof Symbol === "function" && o[Symbol.iterator])) return o;
     var m, i = m.call(o), ar = [], r, e;
     try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
     catch (error) { e = { error: error }; }

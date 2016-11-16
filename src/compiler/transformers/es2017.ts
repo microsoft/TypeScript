@@ -808,10 +808,8 @@ namespace ts {
         name: "typescript:asyncValues",
         scoped: false,
         text: `
-            var __asyncValues = (this && this.__asyncIterator) || function (o) {
-                var m = o[Symbol.asyncIterator];
-                return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
-            };`
+            var __asyncValues = (this && this.__asyncIterator) || function (o) { return (m = o[Symbol.asyncIterator]) ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator](); var m; };
+        `
     };
 
     function createAsyncValuesHelper(context: TransformationContext, expression: Expression, location?: TextRange) {
@@ -836,7 +834,8 @@ namespace ts {
                 var i = { next: verb("next"), "throw": verb("throw", function (e) { throw e; }), "return": verb("return", function (v) { return { value: v, done: true }; }) };
                 return o = __asyncValues(o), i[Symbol.iterator] = function () { return this; }, i;
                 function verb(n, f) { return function (v) { return { value: ["delegate", (o[n] || f).call(o, v)], done: false }; }; }
-            };`
+            };
+        `
     };
 
     function createAsyncDelegatorHelper(context: TransformationContext, expression: Expression, location?: TextRange) {
@@ -857,9 +856,8 @@ namespace ts {
         name: "typescript:asyncStep",
         scoped: false,
         text: `
-            var __asyncStep = (this && this.__asyncStep) || function (r) {
-                return !r.done && Promise.resolve(r.iterator.next()).then(function (_) { return !(r.done = (r.result = _).done); });
-            };`
+            var __asyncStep = (this && this.__asyncStep) || function (r) { return !r.done && Promise.resolve(r.iterator.next()).then(function (_) { return !(r.done = (r.result = _).done); }); };
+        `
     };
 
     function createAsyncStepHelper(context: TransformationContext, iteratorRecord: Expression, location?: TextRange) {
@@ -876,7 +874,8 @@ namespace ts {
         name: "typescript:async-super",
         scoped: true,
         text: `
-            const _super = name => super[name];`
+            const _super = name => super[name];
+        `
     };
 
     const advancedAsyncSuperHelper: EmitHelper = {
@@ -886,6 +885,7 @@ namespace ts {
             const _super = (function (geti, seti) {
                 const cache = Object.create(null);
                 return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
-            })(name => super[name], (name, value) => super[name] = value);`
+            })(name => super[name], (name, value) => super[name] = value);
+        `
     };
 }

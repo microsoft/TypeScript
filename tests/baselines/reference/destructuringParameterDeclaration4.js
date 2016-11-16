@@ -41,7 +41,7 @@ foo1(1, 2, "string", E1.a, E.b);  // Error
 // If the parameter is a rest parameter, the parameter type is any[]
 // A type annotation for a rest parameter must denote an array type.
 var __read = (this && this.__read) || function (o, n) {
-    if (!(m = o.__iterator__)) return o;
+    if (!(m = typeof Symbol === "function" && o[Symbol.iterator])) return o;
     var m, i = m.call(o), ar = [], r, e;
     try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
     catch (error) { e = { error: error }; }

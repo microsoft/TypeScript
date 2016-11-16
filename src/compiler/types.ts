@@ -2968,6 +2968,7 @@ namespace ts {
 
     /* @internal */
     export interface PromiseOrAwaitableType extends ObjectType, UnionType {
+        promiseTypeOfPromiseConstructor?: Type;
         promisedTypeOfPromise?: Type;
         awaitedTypeOfType?: Type;
     }

@@ -6,7 +6,7 @@ function h1([a, [b], [[c]], {x = 10, y = [1, 2, 3], z: {a1, b1}}]){ }
 
 //// [declarationEmitDestructuring2.js]
 var __read = (this && this.__read) || function (o, n) {
-    if (!(m = o.__iterator__)) return o;
+    if (!(m = typeof Symbol === "function" && o[Symbol.iterator])) return o;
     var m, i = m.call(o), ar = [], r, e;
     try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
     catch (error) { e = { error: error }; }

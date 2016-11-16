@@ -176,11 +176,6 @@ namespace ts {
         */
         let patternAmbientModules: PatternAmbientModule[];
 
-        let getGlobalESSymbolConstructorSymbol: () => Symbol;
-
-        let getGlobalPromiseConstructorSymbol: () => Symbol;
-        let tryGetGlobalPromiseConstructorSymbol: () => Symbol;
-
         let globalObjectType: ObjectType;
         let globalFunctionType: ObjectType;
         let globalArrayType: GenericType;
@@ -189,13 +184,6 @@ namespace ts {
         let globalNumberType: ObjectType;
         let globalBooleanType: ObjectType;
         let globalRegExpType: ObjectType;
-        let globalESSymbolType: ObjectType;
-        let globalIterableType: GenericType;
-        let globalIteratorType: GenericType;
-        let globalIterableIteratorType: GenericType;
-        let globalAsyncIterableType: GenericType;
-        let globalAsyncIteratorType: GenericType;
-        let globalAsyncIterableIteratorType: GenericType;
         let anyArrayType: Type;
         let autoArrayType: Type;
         let anyReadonlyArrayType: Type;
@@ -203,14 +191,20 @@ namespace ts {
         // The library files are only loaded when the feature is used.
         // This allows users to just specify library files they want to used through --lib
         // and they will not get an error from not having unrelated library files
-        let getGlobalTemplateStringsArrayType: () => ObjectType;
-
-        let getGlobalTypedPropertyDescriptorType: () => GenericType;
-        let getGlobalPromiseType: () => GenericType;
-        let tryGetGlobalPromiseType: () => GenericType;
-        let getGlobalPromiseConstructorLikeType: () => ObjectType;
-
-        let jsxElementClassType: Type;
+        let deferredGlobalESSymbolConstructorSymbol: Symbol;
+        let deferredGlobalESSymbolType: ObjectType;
+        let deferredGlobalTypedPropertyDescriptorType: GenericType;
+        let deferredGlobalPromiseType: GenericType;
+        let deferredGlobalPromiseConstructorSymbol: Symbol;
+        let deferredGlobalPromiseConstructorLikeType: ObjectType;
+        let deferredGlobalIterableType: GenericType;
+        let deferredGlobalIteratorType: GenericType;
+        let deferredGlobalIterableIteratorType: GenericType;
+        let deferredGlobalAsyncIterableType: GenericType;
+        let deferredGlobalAsyncIteratorType: GenericType;
+        let deferredGlobalAsyncIterableIteratorType: GenericType;
+        let defferedGlobalTemplateStringsArrayType: ObjectType;
+        let deferredJsxElementClassType: Type;
 
         let deferredNodes: Node[];
         let deferredUnusedIdentifierNodes: Node[];
@@ -5519,32 +5513,56 @@ namespace ts {
             return symbol || !unchecked ? getTypeOfGlobalSymbol(symbol, arity) : undefined;
         }
 
+        function getGlobalTypedPropertyDescriptorType() {
+            return deferredGlobalTypedPropertyDescriptorType || (deferredGlobalTypedPropertyDescriptorType = getGlobalType("TypedPropertyDescriptor", 1)) || emptyGenericType;
+        }
+
+        function getGlobalTemplateStringsArrayType() {
+            return defferedGlobalTemplateStringsArrayType || (defferedGlobalTemplateStringsArrayType = getGlobalType("TemplateStringsArray")) || emptyObjectType;
+        }
+
+        function getGlobalESSymbolConstructorSymbol(checked: boolean) {
+            return deferredGlobalESSymbolConstructorSymbol || (deferredGlobalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol", !checked));
+        }
+
         function getGlobalESSymbolType(checked: boolean) {
-            return globalESSymbolType || (globalESSymbolType = getGlobalType("Symbol", 0, !checked)) || emptyObjectType;
+            return deferredGlobalESSymbolType || (deferredGlobalESSymbolType = getGlobalType("Symbol", 0, !checked)) || emptyObjectType;
+        }
+
+        function getGlobalPromiseType(checked: boolean) {
+            return deferredGlobalPromiseType || (deferredGlobalPromiseType = getGlobalType("Promise", 1, !checked)) || emptyGenericType;
+        }
+
+        function getGlobalPromiseConstructorSymbol(checked: boolean): Symbol | undefined {
+            return deferredGlobalPromiseConstructorSymbol || (deferredGlobalPromiseConstructorSymbol = getGlobalValueSymbol("Promise", !checked));
+        }
+
+        function getGlobalPromiseConstructorLikeType(checked: boolean) {
+            return deferredGlobalPromiseConstructorLikeType || (deferredGlobalPromiseConstructorLikeType = getGlobalType("PromiseConstructorLike", 0, !checked)) || emptyObjectType;
         }
 
         function getGlobalAsyncIterableType(checked: boolean) {
-            return globalAsyncIterableType || (globalAsyncIterableType = getGlobalType("AsyncIterable", 1, !checked)) || emptyGenericType;
+            return deferredGlobalAsyncIterableType || (deferredGlobalAsyncIterableType = getGlobalType("AsyncIterable", 1, !checked)) || emptyGenericType;
         }
 
         function getGlobalAsyncIteratorType(checked: boolean) {
-            return globalAsyncIteratorType || (globalAsyncIteratorType = getGlobalType("AsyncIterator", 1, !checked)) || emptyGenericType;
+            return deferredGlobalAsyncIteratorType || (deferredGlobalAsyncIteratorType = getGlobalType("AsyncIterator", 1, !checked)) || emptyGenericType;
         }
 
         function getGlobalAsyncIterableIteratorType(checked: boolean) {
-            return globalAsyncIterableIteratorType || (globalAsyncIterableIteratorType = getGlobalType("AsyncIterableIterator", 1, !checked)) || emptyGenericType;
+            return deferredGlobalAsyncIterableIteratorType || (deferredGlobalAsyncIterableIteratorType = getGlobalType("AsyncIterableIterator", 1, !checked)) || emptyGenericType;
         }
 
         function getGlobalIterableType(checked: boolean) {
-            return globalIterableType || (globalIterableType = getGlobalType("Iterable", 1, !checked)) || emptyGenericType;
+            return deferredGlobalIterableType || (deferredGlobalIterableType = getGlobalType("Iterable", 1, !checked)) || emptyGenericType;
         }
 
         function getGlobalIteratorType(checked: boolean) {
-            return globalIteratorType || (globalIteratorType = getGlobalType("Iterator", 1, !checked)) || emptyGenericType;
+            return deferredGlobalIteratorType || (deferredGlobalIteratorType = getGlobalType("Iterator", 1, !checked)) || emptyGenericType;
         }
 
         function getGlobalIterableIteratorType(checked: boolean) {
-            return globalIterableIteratorType || (globalIterableIteratorType = getGlobalType("IterableIterator", 1, !checked)) || emptyGenericType;
+            return deferredGlobalIterableIteratorType || (deferredGlobalIterableIteratorType = getGlobalType("IterableIterator", 1, !checked)) || emptyGenericType;
         }
 
         /**
@@ -5558,20 +5576,14 @@ namespace ts {
         }
 
         /**
-          * Creates a TypeReference for a generic `TypedPropertyDescriptor<T>`.
-          */
-        function createTypedPropertyDescriptorType(propertyType: Type): Type {
-            const globalTypedPropertyDescriptorType = getGlobalTypedPropertyDescriptorType();
-            return globalTypedPropertyDescriptorType !== emptyGenericType
-                ? createTypeReference(<GenericType>globalTypedPropertyDescriptorType, [propertyType])
-                : emptyObjectType;
-        }
-
-        /**
          * Instantiates a global type that is generic with some element type, and returns that instantiation.
          */
         function createTypeFromGenericGlobalType(genericGlobalType: GenericType, typeArguments: Type[]): ObjectType {
             return genericGlobalType !== emptyGenericType ? createTypeReference(genericGlobalType, typeArguments) : emptyObjectType;
+        }
+
+        function createTypedPropertyDescriptorType(propertyType: Type): Type {
+            return createTypeFromGenericGlobalType(getGlobalTypedPropertyDescriptorType(), [propertyType]);
         }
 
         function createAsyncIterableType(iteratedType: Type): Type {
@@ -11796,10 +11808,10 @@ namespace ts {
         }
 
         function getJsxGlobalElementClassType(): Type {
-            if (!jsxElementClassType) {
-                jsxElementClassType = getExportedTypeFromNamespace(JsxNames.JSX, JsxNames.ElementClass);
+            if (!deferredJsxElementClassType) {
+                deferredJsxElementClassType = getExportedTypeFromNamespace(JsxNames.JSX, JsxNames.ElementClass);
             }
-            return jsxElementClassType;
+            return deferredJsxElementClassType;
         }
 
         /// Returns all the properties of the Jsx.IntrinsicElements interface
@@ -12216,7 +12228,7 @@ namespace ts {
                 return false;
             }
 
-            const globalESSymbol = getGlobalESSymbolConstructorSymbol();
+            const globalESSymbol = getGlobalESSymbolConstructorSymbol(/*checked*/ true);
             if (!globalESSymbol) {
                 // Already errored when we tried to look up the symbol
                 return false;
@@ -13673,7 +13685,7 @@ namespace ts {
 
         function createPromiseType(promisedType: Type): Type {
             // creates a `Promise<T>` type where `T` is the promisedType argument
-            const globalPromiseType = getGlobalPromiseType();
+            const globalPromiseType = getGlobalPromiseType(/*checked*/ true);
             if (globalPromiseType !== emptyGenericType) {
                 // if the promised type is itself a promise, get the underlying type; otherwise, fallback to the promised type
                 promisedType = getAwaitedType(promisedType) || emptyObjectType;
@@ -16039,8 +16051,7 @@ namespace ts {
                 return typeAsPromise.promisedTypeOfPromise;
             }
 
-            if (isReferenceToType(promise, tryGetGlobalPromiseType()) ||
-                isReferenceToType(promise, getGlobalPromiseType())) {
+            if (isReferenceToType(promise, getGlobalPromiseType(/*checked*/ false))) {
                 return typeAsPromise.promisedTypeOfPromise = (<GenericType>promise).typeArguments[0];
             }
 
@@ -16231,8 +16242,8 @@ namespace ts {
                 if (returnType === unknownType) {
                     return unknownType;
                 }
-                const globalPromiseType = getGlobalPromiseType();
-                if (globalPromiseType !== emptyGenericType && globalPromiseType !== getTargetType(returnType)) {
+                const globalPromiseType = getGlobalPromiseType(/*checked*/ true);
+                if (globalPromiseType !== emptyGenericType && !isReferenceToType(returnType, globalPromiseType)) {
                     // The promise type was not a valid type reference to the global promise type, so we
                     // report an error and return the unknown type.
                     error(node.type, Diagnostics.The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type);
@@ -16260,7 +16271,7 @@ namespace ts {
                     return unknownType;
                 }
 
-                const globalPromiseConstructorLikeType = getGlobalPromiseConstructorLikeType();
+                const globalPromiseConstructorLikeType = getGlobalPromiseConstructorLikeType(/*checked*/ true);
                 if (globalPromiseConstructorLikeType === emptyObjectType) {
                     // If we couldn't resolve the global PromiseConstructorLike type we cannot verify
                     // compatibility with __awaiter.
@@ -20235,7 +20246,7 @@ namespace ts {
         function getTypeReferenceSerializationKind(typeName: EntityName, location?: Node): TypeReferenceSerializationKind {
             // Resolve the symbol as a value to ensure the type can be reached at runtime during emit.
             const valueSymbol = resolveEntityName(typeName, SymbolFlags.Value, /*ignoreErrors*/ true, /*dontResolveAlias*/ false, location);
-            const globalPromiseSymbol = tryGetGlobalPromiseConstructorSymbol();
+            const globalPromiseSymbol = getGlobalPromiseConstructorSymbol(/*checked*/ false);
             if (globalPromiseSymbol && valueSymbol === globalPromiseSymbol) {
                 return TypeReferenceSerializationKind.Promise;
             }
@@ -20556,17 +20567,7 @@ namespace ts {
             globalNumberType = getGlobalType("Number");
             globalBooleanType = getGlobalType("Boolean");
             globalRegExpType = getGlobalType("RegExp");
-
             jsxElementType = getExportedTypeFromNamespace("JSX", JsxNames.Element);
-            getGlobalTypedPropertyDescriptorType = memoize(() => getGlobalType("TypedPropertyDescriptor", /*arity*/ 1));
-            getGlobalESSymbolConstructorSymbol = memoize(() => getGlobalValueSymbol("Symbol"));
-            getGlobalPromiseType = memoize(() => getGlobalType("Promise", /*arity*/ 1));
-            tryGetGlobalPromiseType = memoize(() => getGlobalSymbol("Promise", SymbolFlags.Type, /*diagnostic*/ undefined) && getGlobalPromiseType());
-            getGlobalPromiseConstructorSymbol = memoize(() => getGlobalValueSymbol("Promise"));
-            tryGetGlobalPromiseConstructorSymbol = memoize(() => getGlobalSymbol("Promise", SymbolFlags.Value, /*diagnostic*/ undefined) && getGlobalPromiseConstructorSymbol());
-            getGlobalPromiseConstructorLikeType = memoize(() => getGlobalType("PromiseConstructorLike"));
-            getGlobalTemplateStringsArrayType = memoize(() => getGlobalType("TemplateStringsArray"));
-
             anyArrayType = createArrayType(anyType);
             autoArrayType = createArrayType(autoType);
 
