@@ -417,15 +417,15 @@ namespace ts {
         HasImplicitReturn =  1 << 7,  // If function implicitly returns on one of codepaths (initialized by binding)
         HasExplicitReturn =  1 << 8,  // If function has explicit reachable return on one of codepaths (initialized by binding)
         GlobalAugmentation = 1 << 9,  // Set if module declaration is an augmentation for the global scope
-        HasAsyncFunctions =  1 << 13, // If the file has async functions (initialized by binding)
-        DisallowInContext =  1 << 16, // If node was parsed in a context where 'in-expressions' are not allowed
-        YieldContext =       1 << 17, // If node was parsed in the 'yield' context created when parsing a generator
-        DecoratorContext =   1 << 18, // If node was parsed as part of a decorator
-        AwaitContext =       1 << 19, // If node was parsed in the 'await' context created when parsing an async function
-        ThisNodeHasError =   1 << 20, // If the parser encountered an error when parsing the code that created this node
-        JavaScriptFile =     1 << 21, // If node was parsed in a JavaScript
-        ThisNodeOrAnySubNodesHasError = 1 << 22, // If this node or any of its children had an error
-        HasAggregatedChildData = 1 << 23, // If we've computed data from children and cached it in this node
+        HasAsyncFunctions =  1 << 10, // If the file has async functions (initialized by binding)
+        DisallowInContext =  1 << 11, // If node was parsed in a context where 'in-expressions' are not allowed
+        YieldContext =       1 << 12, // If node was parsed in the 'yield' context created when parsing a generator
+        DecoratorContext =   1 << 13, // If node was parsed as part of a decorator
+        AwaitContext =       1 << 14, // If node was parsed in the 'await' context created when parsing an async function
+        ThisNodeHasError =   1 << 15, // If the parser encountered an error when parsing the code that created this node
+        JavaScriptFile =     1 << 16, // If node was parsed in a JavaScript
+        ThisNodeOrAnySubNodesHasError = 1 << 17, // If this node or any of its children had an error
+        HasAggregatedChildData = 1 << 18, // If we've computed data from children and cached it in this node
 
         BlockScoped = Let | Const,
 
@@ -3697,6 +3697,10 @@ namespace ts {
         readonly priority?: number; // Helpers with a higher priority are emitted earlier than other helpers on the node.
     }
 
+    /**
+     * Used by the checker, this enum keeps track of external emit helpers that should be type
+     * checked.
+     */
     /* @internal */
     export const enum ExternalEmitHelpers {
         Extends = 1 << 0,           // __extends (used by the ES2015 class transformation)
@@ -3707,7 +3711,6 @@ namespace ts {
         Param = 1 << 5,             // __param (used by TypeScript decorators transformation)
         Awaiter = 1 << 6,           // __awaiter (used by ES2017 async functions transformation)
         Generator = 1 << 7,         // __generator (used by ES2015 generator transformation)
-
         Values = 1 << 8,            // __values (used by ES2015 for..of and yield* transformations)
         Step = 1 << 9,              // __step (used by ES2015 for..of transformation)
         Close = 1 << 10,            // __close (used by ES2015 for..of transformation)

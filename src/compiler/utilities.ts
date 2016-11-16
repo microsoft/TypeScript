@@ -423,6 +423,10 @@ namespace ts {
         return false;
     }
 
+    export function isEffectiveExternalModule(node: SourceFile, compilerOptions: CompilerOptions) {
+        return isExternalModule(node) || compilerOptions.isolatedModules;
+    }
+
     export function isBlockScope(node: Node, parentNode: Node) {
         switch (node.kind) {
             case SyntaxKind.SourceFile:

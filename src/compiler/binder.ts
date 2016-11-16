@@ -518,7 +518,6 @@ namespace ts {
                 hasExplicitReturn = false;
                 bindChildren(node);
                 // Reset all reachability check related flags on node (for incremental scenarios)
-                // Reset all emit helper flags on node (for incremental scenarios)
                 node.flags &= ~NodeFlags.ReachabilityAndEmitFlags;
                 if (!(currentFlow.flags & FlowFlags.Unreachable) && containerFlags & ContainerFlags.IsFunctionLike && nodeIsPresent((<FunctionLikeDeclaration>node).body)) {
                     node.flags |= NodeFlags.HasImplicitReturn;
