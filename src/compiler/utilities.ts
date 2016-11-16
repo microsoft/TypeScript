@@ -493,7 +493,7 @@ namespace ts {
         case SyntaxKind.NumericLiteral:
             return (<LiteralExpression>name).text;
         case SyntaxKind.ComputedPropertyName:
-            if (isStringOrNumericLiteral((<ComputedPropertyName>name).expression.kind)) {
+            if (isStringOrNumericLiteral((<ComputedPropertyName>name).expression)) {
                 return (<LiteralExpression>(<ComputedPropertyName>name).expression).text;
             }
         }
@@ -1880,8 +1880,10 @@ namespace ts {
         return isFunctionLike(node) && hasModifier(node, ModifierFlags.Async) && !isAccessor(node);
     }
 
-    export function isStringOrNumericLiteral(kind: SyntaxKind): boolean {
-        return kind === SyntaxKind.StringLiteral || kind === SyntaxKind.NumericLiteral;
+    export function isStringOrNumericLiteral(node: Node): node is StringLiteral | NumericLiteral {
+        const kind = node.kind;
+        return kind === SyntaxKind.StringLiteral
+            || kind === SyntaxKind.NumericLiteral;
     }
 
     /**
@@ -1897,7 +1899,7 @@ namespace ts {
 
     export function isDynamicName(name: DeclarationName): boolean {
         return name.kind === SyntaxKind.ComputedPropertyName &&
-            !isStringOrNumericLiteral((<ComputedPropertyName>name).expression.kind) &&
+            !isStringOrNumericLiteral((<ComputedPropertyName>name).expression) &&
             !isWellKnownSymbolSyntactically((<ComputedPropertyName>name).expression);
     }
 
@@ -1910,7 +1912,7 @@ namespace ts {
         return isPropertyAccessExpression(node) && isESSymbolIdentifier(node.expression);
     }
 
-    export function getPropertyNameForPropertyNameNode(name: DeclarationName): string {
+    export function getPropertyNameForPropertyNameNode(name: DeclarationName | ParameterDeclaration): string {
         if (name.kind === SyntaxKind.Identifier || name.kind === SyntaxKind.StringLiteral || name.kind === SyntaxKind.NumericLiteral || name.kind === SyntaxKind.Parameter) {
             return (<Identifier | LiteralExpression>name).text;
         }
@@ -3138,19 +3140,21 @@ namespace ts {
         }
     }
 
-    export function isAssignmentExpression(node: Node): node is AssignmentExpression {
+    export function isAssignmentExpression(node: Node, excludeCompoundAssignment: true): node is AssignmentExpression<EqualsToken>;
+    export function isAssignmentExpression(node: Node, excludeCompoundAssignment?: false): node is AssignmentExpression<AssignmentOperatorToken>;
+    export function isAssignmentExpression(node: Node, excludeCompoundAssignment?: boolean): node is AssignmentExpression<AssignmentOperatorToken> {
         return isBinaryExpression(node)
-            && isAssignmentOperator(node.operatorToken.kind)
+            && (excludeCompoundAssignment
+                ? node.operatorToken.kind === SyntaxKind.EqualsToken
+                : isAssignmentOperator(node.operatorToken.kind))
             && isLeftHandSideExpression(node.left);
     }
 
     export function isDestructuringAssignment(node: Node): node is DestructuringAssignment {
-        if (isBinaryExpression(node)) {
-            if (node.operatorToken.kind === SyntaxKind.EqualsToken) {
-                const kind = node.left.kind;
-                return kind === SyntaxKind.ObjectLiteralExpression
-                    || kind === SyntaxKind.ArrayLiteralExpression;
-            }
+        if (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true)) {
+            const kind = node.left.kind;
+            return kind === SyntaxKind.ObjectLiteralExpression
+                || kind === SyntaxKind.ArrayLiteralExpression;
         }
 
         return false;
@@ -3931,6 +3935,14 @@ namespace ts {
 
     // Binding patterns
 
+    export function isArrayBindingPattern(node: Node): node is ArrayBindingPattern {
+        return node.kind === SyntaxKind.ArrayBindingPattern;
+    }
+
+    export function isObjectBindingPattern(node: Node): node is ObjectBindingPattern {
+        return node.kind === SyntaxKind.ObjectBindingPattern;
+    }
+
     export function isBindingPattern(node: Node): node is BindingPattern {
         if (node) {
             const kind = node.kind;
@@ -3941,6 +3953,12 @@ namespace ts {
         return false;
     }
 
+    export function isAssignmentPattern(node: Node): node is AssignmentPattern {
+        const kind = node.kind;
+        return kind === SyntaxKind.ArrayLiteralExpression
+            || kind === SyntaxKind.ObjectLiteralExpression;
+    }
+
     export function isBindingElement(node: Node): node is BindingElement {
         return node.kind === SyntaxKind.BindingElement;
     }
@@ -3949,6 +3967,55 @@ namespace ts {
         const kind = node.kind;
         return kind === SyntaxKind.BindingElement
             || kind === SyntaxKind.OmittedExpression;
+    }
+
+
+    /**
+     * Determines whether the BindingOrAssignmentElement is a BindingElement-like declaration
+     */
+    export function isDeclarationBindingElement(bindingElement: BindingOrAssignmentElement): bindingElement is VariableDeclaration | ParameterDeclaration | BindingElement {
+        switch (bindingElement.kind) {
+            case SyntaxKind.VariableDeclaration:
+            case SyntaxKind.Parameter:
+            case SyntaxKind.BindingElement:
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Determines whether a node is a BindingOrAssignmentPattern
+     */
+    export function isBindingOrAssignmentPattern(node: BindingOrAssignmentElementTarget): node is BindingOrAssignmentPattern {
+        return isObjectBindingOrAssignmentPattern(node)
+            || isArrayBindingOrAssignmentPattern(node);
+    }
+
+    /**
+     * Determines whether a node is an ObjectBindingOrAssignmentPattern
+     */
+    export function isObjectBindingOrAssignmentPattern(node: BindingOrAssignmentElementTarget): node is ObjectBindingOrAssignmentPattern {
+        switch (node.kind) {
+            case SyntaxKind.ObjectBindingPattern:
+            case SyntaxKind.ObjectLiteralExpression:
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Determines whether a node is an ArrayBindingOrAssignmentPattern
+     */
+    export function isArrayBindingOrAssignmentPattern(node: BindingOrAssignmentElementTarget): node is ArrayBindingOrAssignmentPattern {
+        switch (node.kind) {
+            case SyntaxKind.ArrayBindingPattern:
+            case SyntaxKind.ArrayLiteralExpression:
+                return true;
+        }
+
+        return false;
     }
 
     // Expression

@@ -21,6 +21,7 @@ namespace ts {
     export function transformTypeScript(context: TransformationContext) {
         const {
             startLexicalEnvironment,
+            resumeLexicalEnvironment,
             endLexicalEnvironment,
             hoistVariableDeclaration,
         } = context;
@@ -885,9 +886,8 @@ namespace ts {
             // downlevel the '...args' portion less efficiently by naively copying the contents of 'arguments' to an array.
             // Instead, we'll avoid using a rest parameter and spread into the super call as
             // 'super(...arguments)' instead of 'super(...args)', as you can see in "transformConstructorBody".
-            return constructor
-                ? visitNodes(constructor.parameters, visitor, isParameter)
-                : <ParameterDeclaration[]>[];
+            return visitParameterList(constructor && constructor.parameters, visitor, context)
+                || <ParameterDeclaration[]>[];
         }
 
         /**
@@ -902,8 +902,7 @@ namespace ts {
             const statements: Statement[] = [];
             let indexOfFirstStatement = 0;
 
-            // The body of a constructor is a new lexical environment
-            startLexicalEnvironment();
+            resumeLexicalEnvironment();
 
             if (constructor) {
                 indexOfFirstStatement = addPrologueDirectivesAndInitialSuperCall(constructor, statements);
@@ -1819,12 +1818,7 @@ namespace ts {
                     const temp = createTempVariable(hoistVariableDeclaration);
                     return createLogicalOr(
                         createLogicalAnd(
-                            createStrictEquality(
-                                createTypeOf(
-                                    createAssignment(temp, serialized)
-                                ),
-                                createLiteral("function")
-                            ),
+                            createTypeCheck(createAssignment(temp, serialized), "function"),
                             temp
                         ),
                         createIdentifier("Object")
@@ -1933,13 +1927,8 @@ namespace ts {
          */
         function getGlobalSymbolNameWithFallback(): Expression {
             return createConditional(
-                createStrictEquality(
-                    createTypeOf(createIdentifier("Symbol")),
-                    createLiteral("function")
-                ),
-                createToken(SyntaxKind.QuestionToken),
+                createTypeCheck(createIdentifier("Symbol"), "function"),
                 createIdentifier("Symbol"),
-                createToken(SyntaxKind.ColonToken),
                 createIdentifier("Object")
             );
         }
@@ -2063,26 +2052,23 @@ namespace ts {
             if (!shouldEmitFunctionLikeDeclaration(node)) {
                 return undefined;
             }
-
-            const method = createMethod(
+            const updated = updateMethod(
+                node,
                 /*decorators*/ undefined,
                 visitNodes(node.modifiers, modifierVisitor, isModifier),
-                node.asteriskToken,
                 visitPropertyNameOfClassElement(node),
                 /*typeParameters*/ undefined,
-                visitNodes(node.parameters, visitor, isParameter),
+                visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
-                transformFunctionBody(node),
-                /*location*/ node
+                visitFunctionBody(node.body, visitor, context)
             );
-
-            // While we emit the source map for the node after skipping decorators and modifiers,
-            // we need to emit the comments for the original range.
-            setCommentRange(method, node);
-            setSourceMapRange(method, moveRangePastDecorators(node));
-            setOriginalNode(method, node);
-
-            return method;
+            if (updated !== node) {
+                // While we emit the source map for the node after skipping decorators and modifiers,
+                // we need to emit the comments for the original range.
+                setCommentRange(updated, node);
+                setSourceMapRange(updated, moveRangePastDecorators(node));
+            }
+            return updated;
         }
 
         /**
@@ -2108,24 +2094,22 @@ namespace ts {
             if (!shouldEmitAccessorDeclaration(node)) {
                 return undefined;
             }
-
-            const accessor = createGetAccessor(
+            const updated = updateGetAccessor(
+                node,
                 /*decorators*/ undefined,
                 visitNodes(node.modifiers, modifierVisitor, isModifier),
                 visitPropertyNameOfClassElement(node),
-                visitNodes(node.parameters, visitor, isParameter),
+                visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
-                node.body ? visitEachChild(node.body, visitor, context) : createBlock([]),
-                /*location*/ node
+                visitFunctionBody(node.body, visitor, context) || createBlock([])
             );
-
-            // While we emit the source map for the node after skipping decorators and modifiers,
-            // we need to emit the comments for the original range.
-            setOriginalNode(accessor, node);
-            setCommentRange(accessor, node);
-            setSourceMapRange(accessor, moveRangePastDecorators(node));
-
-            return accessor;
+            if (updated !== node) {
+                // While we emit the source map for the node after skipping decorators and modifiers,
+                // we need to emit the comments for the original range.
+                setCommentRange(updated, node);
+                setSourceMapRange(updated, moveRangePastDecorators(node));
+            }
+            return updated;
         }
 
         /**
@@ -2141,23 +2125,21 @@ namespace ts {
             if (!shouldEmitAccessorDeclaration(node)) {
                 return undefined;
             }
-
-            const accessor = createSetAccessor(
+            const updated = updateSetAccessor(
+                node,
                 /*decorators*/ undefined,
                 visitNodes(node.modifiers, modifierVisitor, isModifier),
                 visitPropertyNameOfClassElement(node),
-                visitNodes(node.parameters, visitor, isParameter),
-                node.body ? visitEachChild(node.body, visitor, context) : createBlock([]),
-                /*location*/ node
+                visitParameterList(node.parameters, visitor, context),
+                visitFunctionBody(node.body, visitor, context) || createBlock([])
             );
-
-            // While we emit the source map for the node after skipping decorators and modifiers,
-            // we need to emit the comments for the original range.
-            setOriginalNode(accessor, node);
-            setCommentRange(accessor, node);
-            setSourceMapRange(accessor, moveRangePastDecorators(node));
-
-            return accessor;
+            if (updated !== node) {
+                // While we emit the source map for the node after skipping decorators and modifiers,
+                // we need to emit the comments for the original range.
+                setCommentRange(updated, node);
+                setSourceMapRange(updated, moveRangePastDecorators(node));
+            }
+            return updated;
         }
 
         /**
@@ -2174,27 +2156,22 @@ namespace ts {
             if (!shouldEmitFunctionLikeDeclaration(node)) {
                 return createNotEmittedStatement(node);
             }
-
-            const func = createFunctionDeclaration(
+            const updated = updateFunctionDeclaration(
+                node,
                 /*decorators*/ undefined,
                 visitNodes(node.modifiers, modifierVisitor, isModifier),
-                node.asteriskToken,
                 node.name,
                 /*typeParameters*/ undefined,
-                visitNodes(node.parameters, visitor, isParameter),
+                visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
-                transformFunctionBody(node),
-                /*location*/ node
+                visitFunctionBody(node.body, visitor, context) || createBlock([])
             );
-            setOriginalNode(func, node);
-
             if (isNamespaceExport(node)) {
-                const statements: Statement[] = [func];
+                const statements: Statement[] = [updated];
                 addExportMemberAssignment(statements, node);
                 return statements;
             }
-
-            return func;
+            return updated;
         }
 
         /**
@@ -2209,21 +2186,16 @@ namespace ts {
             if (nodeIsMissing(node.body)) {
                 return createOmittedExpression();
             }
-
-            const func = createFunctionExpression(
+            const updated = updateFunctionExpression(
+                node,
                 visitNodes(node.modifiers, modifierVisitor, isModifier),
-                node.asteriskToken,
                 node.name,
                 /*typeParameters*/ undefined,
-                visitNodes(node.parameters, visitor, isParameter),
+                visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
-                transformFunctionBody(node),
-                /*location*/ node
+                visitFunctionBody(node.body, visitor, context)
             );
-
-            setOriginalNode(func, node);
-
-            return func;
+            return updated;
         }
 
         /**
@@ -2232,62 +2204,15 @@ namespace ts {
          * - The node has type annotations
          */
         function visitArrowFunction(node: ArrowFunction) {
-            const func = createArrowFunction(
+            const updated = updateArrowFunction(
+                node,
                 visitNodes(node.modifiers, modifierVisitor, isModifier),
                 /*typeParameters*/ undefined,
-                visitNodes(node.parameters, visitor, isParameter),
+                visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
-                node.equalsGreaterThanToken,
-                transformConciseBody(node),
-                /*location*/ node
+                visitFunctionBody(node.body, visitor, context)
             );
-
-            setOriginalNode(func, node);
-
-            return func;
-        }
-
-        function transformFunctionBody(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression): FunctionBody {
-            return transformFunctionBodyWorker(node.body);
-        }
-
-        function transformFunctionBodyWorker(body: Block, start = 0) {
-            const savedCurrentScope = currentScope;
-            const savedCurrentScopeFirstDeclarationsOfName = currentScopeFirstDeclarationsOfName;
-            currentScope = body;
-            currentScopeFirstDeclarationsOfName = createMap<Node>();
-            startLexicalEnvironment();
-
-            const statements = visitNodes(body.statements, visitor, isStatement, start);
-            const visited = updateBlock(body, statements);
-            const declarations = endLexicalEnvironment();
-            currentScope = savedCurrentScope;
-            currentScopeFirstDeclarationsOfName = savedCurrentScopeFirstDeclarationsOfName;
-            return mergeFunctionBodyLexicalEnvironment(visited, declarations);
-        }
-
-        function transformConciseBody(node: ArrowFunction): ConciseBody {
-            return transformConciseBodyWorker(node.body, /*forceBlockFunctionBody*/ false);
-        }
-
-        function transformConciseBodyWorker(body: Block | Expression, forceBlockFunctionBody: boolean) {
-            if (isBlock(body)) {
-                return transformFunctionBodyWorker(body);
-            }
-            else {
-                startLexicalEnvironment();
-                const visited: Expression | Block = visitNode(body, visitor, isConciseBody);
-                const declarations = endLexicalEnvironment();
-                const merged = mergeFunctionBodyLexicalEnvironment(visited, declarations);
-                if (forceBlockFunctionBody && !isBlock(merged)) {
-                    return createBlock([
-                        createReturn(<Expression>merged)
-                    ]);
-                }
-                else {
-                    return merged;
-                }
-            }
+            return updated;
         }
 
         /**
@@ -2355,11 +2280,13 @@ namespace ts {
         function transformInitializedVariable(node: VariableDeclaration): Expression {
             const name = node.name;
             if (isBindingPattern(name)) {
-                return flattenVariableDestructuringToExpression(
+                return flattenDestructuringAssignment(
                     node,
-                    hoistVariableDeclaration,
-                    createNamespaceExportExpression,
-                    visitor
+                    visitor,
+                    context,
+                    FlattenLevel.All,
+                    /*needsValue*/ false,
+                    createNamespaceExportExpression
                 );
             }
             else {

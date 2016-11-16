@@ -52,18 +52,18 @@ var o = { a: 1, b: 'no' };
 var clone = __rest(o, []);
 var { a } = o, justB = __rest(o, ["a"]);
 var { a, b: renamed } = o, empty = __rest(o, ["a", "b"]);
-var _a = 'b', renamed = o[_a], justA = __rest(o, [typeof _a === "symbol" ? _a : _a + ""]);
-var { 'b': renamed } = o, justA = __rest(o, ["b"]);
+var { ['b']: renamed } = o, justA = __rest(o, ['b']);
+var { 'b': renamed } = o, justA = __rest(o, ['b']);
 var { b: { '0': n, '1': oooo } } = o, justA = __rest(o, ["b"]);
 let o2 = { c: 'terrible idea?', d: 'yes' };
 var { d: renamed } = o2, d = __rest(o2, ["d"]);
 let nestedrest;
-var { x } = nestedrest, _b = nestedrest.n1, { y } = _b, _c = _b.n2, { z } = _c, nr = __rest(_c.n3, []), restrest = __rest(nestedrest, ["x", "n1"]);
+var { x } = nestedrest, _a = nestedrest.n1, { y } = _a, _b = _a.n2, { z } = _b, nr = __rest(_b.n3, []), restrest = __rest(nestedrest, ["x", "n1"]);
 let complex;
-var _d = complex.x, { ka } = _d, nested = __rest(_d, ["ka"]), { y: other } = complex, rest = __rest(complex, ["x", "y"]);
-(_e = complex.x, { ka } = _e, nested = __rest(_e, ["ka"]), { y: other } = complex, rest = __rest(complex, ["x", "y"]), complex);
-var _f = { x: 1, y: 2 }, { x } = _f, fresh = __rest(_f, ["x"]);
-(_g = { x: 1, y: 2 }, { x } = _g, fresh = __rest(_g, ["x"]), _g);
+var _c = complex.x, { ka } = _c, nested = __rest(_c, ["ka"]), { y: other } = complex, rest = __rest(complex, ["x", "y"]);
+(_d = complex.x, { ka } = _d, nested = __rest(_d, ["ka"]), { y: other } = complex, rest = __rest(complex, ["x", "y"]));
+var _e = { x: 1, y: 2 }, { x } = _e, fresh = __rest(_e, ["x"]);
+(_f = { x: 1, y: 2 }, { x } = _f, fresh = __rest(_f, ["x"]));
 class Removable {
     set z(value) { }
     get both() { return 12; }
@@ -74,6 +74,6 @@ var removable = new Removable();
 var { removed } = removable, removableRest = __rest(removable, ["removed"]);
 let computed = 'b';
 let computed2 = 'a';
-var _h = computed, stillNotGreat = o[_h], _j = computed2, soSo = o[_j], o = __rest(o, [typeof _h === "symbol" ? _h : _h + "", typeof _j === "symbol" ? _j : _j + ""]);
-(_k = computed, stillNotGreat = o[_k], _l = computed2, soSo = o[_l], o = __rest(o, [typeof _k === "symbol" ? _k : _k + "", typeof _l === "symbol" ? _l : _l + ""]), o);
-var _e, _g, _k, _l;
+var _g = computed, stillNotGreat = o[_g], _h = computed2, soSo = o[_h], o = __rest(o, [typeof _g === "symbol" ? _g : _g + "", typeof _h === "symbol" ? _h : _h + ""]);
+(_j = computed, stillNotGreat = o[_j], _k = computed2, soSo = o[_k], o = __rest(o, [typeof _j === "symbol" ? _j : _j + "", typeof _k === "symbol" ? _k : _k + ""]));
+var _d, _f, _j, _k;

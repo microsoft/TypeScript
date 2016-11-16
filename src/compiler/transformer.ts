@@ -154,14 +154,16 @@ namespace ts {
      * @param transforms An array of Transformers.
      */
     export function transformFiles(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformers: Transformer[]): TransformationResult {
-        const lexicalEnvironmentVariableDeclarationsStack: VariableDeclaration[][] = [];
-        const lexicalEnvironmentFunctionDeclarationsStack: FunctionDeclaration[][] = [];
         const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);
 
+        let lexicalEnvironmentDisabled = false;
+
         let lexicalEnvironmentStackOffset = 0;
-        let hoistedVariableDeclarations: VariableDeclaration[];
-        let hoistedFunctionDeclarations: FunctionDeclaration[];
-        let lexicalEnvironmentDisabled: boolean;
+        let lexicalEnvironmentVariableDeclarations: VariableDeclaration[];
+        let lexicalEnvironmentFunctionDeclarations: FunctionDeclaration[];
+        let lexicalEnvironmentVariableDeclarationsStack: VariableDeclaration[][] = [];
+        let lexicalEnvironmentFunctionDeclarationsStack: FunctionDeclaration[][] = [];
+        let lexicalEnvironmentSuspended = false;
 
         // The transformation context is provided to each transformer as part of transformer
         // initialization.
@@ -169,10 +171,12 @@ namespace ts {
             getCompilerOptions: () => host.getCompilerOptions(),
             getEmitResolver: () => resolver,
             getEmitHost: () => host,
+            startLexicalEnvironment,
+            suspendLexicalEnvironment,
+            resumeLexicalEnvironment,
+            endLexicalEnvironment,
             hoistVariableDeclaration,
             hoistFunctionDeclaration,
-            startLexicalEnvironment,
-            endLexicalEnvironment,
             onSubstituteNode: (_emitContext, node) => node,
             enableSubstitution,
             isSubstitutionEnabled,
@@ -285,11 +289,11 @@ namespace ts {
         function hoistVariableDeclaration(name: Identifier): void {
             Debug.assert(!lexicalEnvironmentDisabled, "Cannot modify the lexical environment during the print phase.");
             const decl = createVariableDeclaration(name);
-            if (!hoistedVariableDeclarations) {
-                hoistedVariableDeclarations = [decl];
+            if (!lexicalEnvironmentVariableDeclarations) {
+                lexicalEnvironmentVariableDeclarations = [decl];
             }
             else {
-                hoistedVariableDeclarations.push(decl);
+                lexicalEnvironmentVariableDeclarations.push(decl);
             }
         }
 
@@ -298,11 +302,11 @@ namespace ts {
          */
         function hoistFunctionDeclaration(func: FunctionDeclaration): void {
             Debug.assert(!lexicalEnvironmentDisabled, "Cannot modify the lexical environment during the print phase.");
-            if (!hoistedFunctionDeclarations) {
-                hoistedFunctionDeclarations = [func];
+            if (!lexicalEnvironmentFunctionDeclarations) {
+                lexicalEnvironmentFunctionDeclarations = [func];
             }
             else {
-                hoistedFunctionDeclarations.push(func);
+                lexicalEnvironmentFunctionDeclarations.push(func);
             }
         }
 
@@ -312,16 +316,31 @@ namespace ts {
          */
         function startLexicalEnvironment(): void {
             Debug.assert(!lexicalEnvironmentDisabled, "Cannot start a lexical environment during the print phase.");
+            Debug.assert(!lexicalEnvironmentSuspended, "Lexical environment is suspended.");
 
             // Save the current lexical environment. Rather than resizing the array we adjust the
             // stack size variable. This allows us to reuse existing array slots we've
             // already allocated between transformations to avoid allocation and GC overhead during
             // transformation.
-            lexicalEnvironmentVariableDeclarationsStack[lexicalEnvironmentStackOffset] = hoistedVariableDeclarations;
-            lexicalEnvironmentFunctionDeclarationsStack[lexicalEnvironmentStackOffset] = hoistedFunctionDeclarations;
+            lexicalEnvironmentVariableDeclarationsStack[lexicalEnvironmentStackOffset] = lexicalEnvironmentVariableDeclarations;
+            lexicalEnvironmentFunctionDeclarationsStack[lexicalEnvironmentStackOffset] = lexicalEnvironmentFunctionDeclarations;
             lexicalEnvironmentStackOffset++;
-            hoistedVariableDeclarations = undefined;
-            hoistedFunctionDeclarations = undefined;
+            lexicalEnvironmentVariableDeclarations = undefined;
+            lexicalEnvironmentFunctionDeclarations = undefined;
+        }
+
+        /** Suspends the current lexical environment, usually after visiting a parameter list. */
+        function suspendLexicalEnvironment(): void {
+            Debug.assert(!lexicalEnvironmentDisabled, "Cannot suspend a lexical environment during the print phase.");
+            Debug.assert(!lexicalEnvironmentSuspended, "Lexical environment is already suspended.");
+            lexicalEnvironmentSuspended = true;
+        }
+
+        /** Resumes a suspended lexical environment, usually before visiting a function body. */
+        function resumeLexicalEnvironment(): void {
+            Debug.assert(!lexicalEnvironmentDisabled, "Cannot resume a lexical environment during the print phase.");
+            Debug.assert(lexicalEnvironmentSuspended, "Lexical environment is not suspended suspended.");
+            lexicalEnvironmentSuspended = false;
         }
 
         /**
@@ -330,17 +349,18 @@ namespace ts {
          */
         function endLexicalEnvironment(): Statement[] {
             Debug.assert(!lexicalEnvironmentDisabled, "Cannot end a lexical environment during the print phase.");
+            Debug.assert(!lexicalEnvironmentSuspended, "Lexical environment is suspended.");
 
             let statements: Statement[];
-            if (hoistedVariableDeclarations || hoistedFunctionDeclarations) {
-                if (hoistedFunctionDeclarations) {
-                    statements = [...hoistedFunctionDeclarations];
+            if (lexicalEnvironmentVariableDeclarations || lexicalEnvironmentFunctionDeclarations) {
+                if (lexicalEnvironmentFunctionDeclarations) {
+                    statements = [...lexicalEnvironmentFunctionDeclarations];
                 }
 
-                if (hoistedVariableDeclarations) {
+                if (lexicalEnvironmentVariableDeclarations) {
                     const statement = createVariableStatement(
                         /*modifiers*/ undefined,
-                        createVariableDeclarationList(hoistedVariableDeclarations)
+                        createVariableDeclarationList(lexicalEnvironmentVariableDeclarations)
                     );
 
                     if (!statements) {
@@ -354,8 +374,12 @@ namespace ts {
 
             // Restore the previous lexical environment.
             lexicalEnvironmentStackOffset--;
-            hoistedVariableDeclarations = lexicalEnvironmentVariableDeclarationsStack[lexicalEnvironmentStackOffset];
-            hoistedFunctionDeclarations = lexicalEnvironmentFunctionDeclarationsStack[lexicalEnvironmentStackOffset];
+            lexicalEnvironmentVariableDeclarations = lexicalEnvironmentVariableDeclarationsStack[lexicalEnvironmentStackOffset];
+            lexicalEnvironmentFunctionDeclarations = lexicalEnvironmentFunctionDeclarationsStack[lexicalEnvironmentStackOffset];
+            if (lexicalEnvironmentStackOffset === 0) {
+                lexicalEnvironmentVariableDeclarationsStack = [];
+                lexicalEnvironmentFunctionDeclarationsStack = [];
+            }
             return statements;
         }
     }

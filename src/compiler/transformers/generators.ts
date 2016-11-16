@@ -227,7 +227,7 @@ namespace ts {
 
     export function transformGenerators(context: TransformationContext) {
         const {
-            startLexicalEnvironment,
+            resumeLexicalEnvironment,
             endLexicalEnvironment,
             hoistFunctionDeclaration,
             hoistVariableDeclaration,
@@ -449,11 +449,11 @@ namespace ts {
                 node = setOriginalNode(
                     createFunctionDeclaration(
                         /*decorators*/ undefined,
-                        /*modifiers*/ undefined,
+                        node.modifiers,
                         /*asteriskToken*/ undefined,
                         node.name,
                         /*typeParameters*/ undefined,
-                        node.parameters,
+                        visitParameterList(node.parameters, visitor, context),
                         /*type*/ undefined,
                         transformGeneratorFunctionBody(node.body),
                         /*location*/ node
@@ -500,7 +500,7 @@ namespace ts {
                         /*asteriskToken*/ undefined,
                         node.name,
                         /*typeParameters*/ undefined,
-                        node.parameters,
+                        visitParameterList(node.parameters, visitor, context),
                         /*type*/ undefined,
                         transformGeneratorFunctionBody(node.body),
                         /*location*/ node
@@ -578,7 +578,7 @@ namespace ts {
             state = createTempVariable(/*recordTempVariable*/ undefined);
 
             // Build the generator
-            startLexicalEnvironment();
+            resumeLexicalEnvironment();
 
             const statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false, visitor);
 
