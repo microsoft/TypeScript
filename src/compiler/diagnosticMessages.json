@@ -1995,6 +1995,10 @@
         "category": "Error",
         "code": 2701
     },
+    "'{0}' only refers to a type, but is being used as a namespace here.": {
+        "category": "Error",
+        "code": 2702
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
