@@ -1,4 +1,4 @@
-/* @internal */
+﻿/* @internal */
 namespace ts.JsDoc {
     const jsDocTagNames = [
         "augments",
@@ -168,13 +168,18 @@ namespace ts.JsDoc {
         const indentationStr = sourceFile.text.substr(lineStart, posLineAndChar.character);
 
         let docParams = "";
+        let isJavaScriptFile = hasJavaScriptFileExtension(sourceFile.fileName); // JSX or JS file
         for (let i = 0, numParams = parameters.length; i < numParams; i++) {
             const currentName = parameters[i].name;
             const paramName = currentName.kind === SyntaxKind.Identifier ?
                 (<Identifier>currentName).text :
                 "param" + i;
-
-            docParams += `${indentationStr} * @param ${paramName}${newLine}`;
+            if (isJavaScriptFile) {
+                docParams += `${indentationStr} * @param {any} ${paramName}${newLine}`;
+            }
+            else {
+                docParams += `${indentationStr} * @param ${paramName}${newLine}`;
+            }
         }
 
         // A doc comment consists of the following
