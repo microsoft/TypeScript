@@ -3322,6 +3322,8 @@ namespace ts {
     /* @internal */
     export interface TsConfigOnlyOption extends CommandLineOptionBase {
         type: "object";
+        optionDeclarations?: CommandLineOption[];
+        extraKeyDiagnosticMessage?: DiagnosticMessage;
     }
 
     /* @internal */

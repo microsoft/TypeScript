@@ -1876,13 +1876,13 @@ namespace Harness {
             for (let i = 0; i < testUnitData.length; i++) {
                 const data = testUnitData[i];
                 if (ts.getBaseFileName(data.name).toLowerCase() === "tsconfig.json") {
-                    const configJson = ts.parseConfigFileTextToJson(data.name, data.content);
-                    assert.isTrue(configJson.config !== undefined);
+                    const configJson = ts.parseJsonText(data.name, data.content);
+                    assert.isTrue(configJson.node !== undefined);
                     let baseDir = ts.normalizePath(ts.getDirectoryPath(data.name));
                     if (rootDir) {
                         baseDir = ts.getNormalizedAbsolutePath(baseDir, rootDir);
                     }
-                    tsConfig = ts.parseJsonConfigFileContent(configJson.config, parseConfigHost, baseDir);
+                    tsConfig = ts.parseJsonNodeConfigFileContent(configJson.node, parseConfigHost, baseDir);
                     tsConfig.options.configFilePath = data.name;
 
                     // delete entry from the list

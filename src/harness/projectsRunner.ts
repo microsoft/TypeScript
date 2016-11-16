@@ -210,22 +210,21 @@ class ProjectRunner extends RunnerBase {
 
             let errors: ts.Diagnostic[];
             if (configFileName) {
-                const result = ts.readConfigFile(configFileName, getSourceFileText);
-                if (!result.config) {
+                const result = ts.readConfigFileToJsonNode(configFileName, getSourceFileText);
+                if (!result.node) {
                     return {
                         moduleKind,
                         errors: result.errors
                     };
                 }
 
-                const configObject = result.config;
                 const configParseHost: ts.ParseConfigHost = {
                     useCaseSensitiveFileNames: Harness.IO.useCaseSensitiveFileNames(),
                     fileExists,
                     readDirectory,
                     readFile
                 };
-                const configParseResult = ts.parseJsonConfigFileContent(configObject, configParseHost, ts.getDirectoryPath(configFileName), compilerOptions);
+                const configParseResult = ts.parseJsonNodeConfigFileContent(result.node, configParseHost, ts.getDirectoryPath(configFileName), compilerOptions);
                 if (configParseResult.errors.length > 0) {
                     return {
                         moduleKind,

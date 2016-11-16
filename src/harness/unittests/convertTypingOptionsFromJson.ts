@@ -4,6 +4,11 @@
 namespace ts {
     describe("convertTypingOptionsFromJson", () => {
         function assertTypingOptions(json: any, configFileName: string, expectedResult: { typingOptions: TypingOptions, errors: Diagnostic[] }) {
+            assertTypingOptionsWithJson(json, configFileName, expectedResult);
+            assertTypingOptionsWithJsonNode(json, configFileName, expectedResult);
+        }
+
+        function assertTypingOptionsWithJson(json: any, configFileName: string, expectedResult: { typingOptions: TypingOptions, errors: Diagnostic[] }) {
             const { options: actualTypingOptions, errors: actualErrors } = convertTypingOptionsFromJson(json["typingOptions"], "/apath/", configFileName);
             const parsedTypingOptions = JSON.stringify(actualTypingOptions);
             const expectedTypingOptions = JSON.stringify(expectedResult.typingOptions);
@@ -16,6 +21,31 @@ namespace ts {
                 const expectedError = expectedErrors[i];
                 assert.equal(actualError.code, expectedError.code, `Expected error-code: ${JSON.stringify(expectedError.code)}. Actual error-code: ${JSON.stringify(actualError.code)}.`);
                 assert.equal(actualError.category, expectedError.category, `Expected error-category: ${JSON.stringify(expectedError.category)}. Actual error-category: ${JSON.stringify(actualError.category)}.`);
+            }
+        }
+
+        function assertTypingOptionsWithJsonNode(json: any, configFileName: string, expectedResult: { typingOptions: TypingOptions, errors: Diagnostic[] }) {
+            const fileText = JSON.stringify(json);
+            const { node, errors } = parseJsonText(configFileName, fileText);
+            assert(!errors.length);
+            assert(!!node);
+            const host: ParseConfigHost = new Utils.MockParseConfigHost("/apath/", true, []);
+            const { typingOptions: actualTypingOptions, errors: actualParseErrors } = parseJsonNodeConfigFileContent(node, host, "/apath/", /*existingOptions*/ undefined, configFileName);
+            const parsedTypingOptions = JSON.stringify(actualTypingOptions);
+            const expectedTypingOptions = JSON.stringify(expectedResult.typingOptions);
+            assert.equal(parsedTypingOptions, expectedTypingOptions);
+
+            const actualErrors = filter(actualParseErrors, error => error.code !== Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code);
+            const expectedErrors = expectedResult.errors;
+            assert.isTrue(expectedResult.errors.length === actualErrors.length, `Expected error: ${JSON.stringify(expectedResult.errors)}. Actual error: ${JSON.stringify(actualErrors)}.`);
+            for (let i = 0; i < actualErrors.length; i++) {
+                const actualError = actualErrors[i];
+                const expectedError = expectedErrors[i];
+                assert.equal(actualError.code, expectedError.code, `Expected error-code: ${JSON.stringify(expectedError.code)}. Actual error-code: ${JSON.stringify(actualError.code)}.`);
+                assert.equal(actualError.category, expectedError.category, `Expected error-category: ${JSON.stringify(expectedError.category)}. Actual error-category: ${JSON.stringify(actualError.category)}.`);
+                assert(actualError.file);
+                assert(actualError.start);
+                assert(actualError.length);
             }
         }
 
@@ -154,7 +184,7 @@ namespace ts {
                     },
                     errors: [
                         {
-                            category: Diagnostics.Unknown_compiler_option_0.category,
+                            category: Diagnostics.Unknown_typing_option_0.category,
                             code: Diagnostics.Unknown_typing_option_0.code,
                             file: undefined,
                             start: 0,

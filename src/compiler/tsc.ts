@@ -366,15 +366,14 @@ namespace ts {
                 return;
             }
 
-            const result = parseConfigFileTextToJson(configFileName, cachedConfigFileText);
+            const result = parseJsonText(configFileName, cachedConfigFileText);
             reportDiagnostics(result.errors, /* compilerHost */ undefined);
-            const configObject = result.config;
-            if (!configObject) {
+            if (!result.node) {
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 return;
             }
             const cwd = sys.getCurrentDirectory();
-            const configParseResult = parseJsonConfigFileContent(configObject, sys, getNormalizedAbsolutePath(getDirectoryPath(configFileName), cwd), commandLine.options, getNormalizedAbsolutePath(configFileName, cwd));
+            const configParseResult = parseJsonNodeConfigFileContent(result.node, sys, getNormalizedAbsolutePath(getDirectoryPath(configFileName), cwd), commandLine.options, getNormalizedAbsolutePath(configFileName, cwd));
             if (configParseResult.errors.length > 0) {
                 reportDiagnostics(configParseResult.errors, /* compilerHost */ undefined);
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);

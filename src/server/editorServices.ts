@@ -782,14 +782,18 @@ namespace ts.server {
             return findProjectByName(projectFileName, this.externalProjects);
         }
 
+        private getDefaultParsedJsonNode(): EndOfFileToken {
+            return <EndOfFileToken>{ kind: SyntaxKind.EndOfFileToken };
+        }
+
         private convertConfigFileContentToProjectOptions(configFilename: string): ConfigFileConversionResult {
             configFilename = normalizePath(configFilename);
 
             const configFileContent = this.host.readFile(configFilename);
 
-            const { config = {}, errors } = parseConfigFileTextToJson(configFilename, configFileContent);
-            const parsedCommandLine = parseJsonConfigFileContent(
-                config,
+            const { node = this.getDefaultParsedJsonNode(), errors } = parseJsonText(configFilename, configFileContent);
+            const parsedCommandLine = parseJsonNodeConfigFileContent(
+                node,
                 this.host,
                 getDirectoryPath(configFilename),
                 /*existingOptions*/ {},
@@ -809,7 +813,7 @@ namespace ts.server {
             const projectOptions: ProjectOptions = {
                 files: parsedCommandLine.fileNames,
                 compilerOptions: parsedCommandLine.options,
-                configHasFilesProperty: config["files"] !== undefined,
+                configHasFilesProperty: parsedCommandLine.raw["files"] !== undefined,
                 wildcardDirectories: createMap(parsedCommandLine.wildcardDirectories),
                 typingOptions: parsedCommandLine.typingOptions,
                 compileOnSave: parsedCommandLine.compileOnSave

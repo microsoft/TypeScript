@@ -448,7 +448,7 @@ namespace ts {
         return Parser.parseIsolatedEntityName(text, languageVersion);
     }
 
-    export type ParsedNodeResults<T extends Node> = { node: T; errors: Diagnostic[] };
+    export type ParsedNodeResults<T extends Node> = { node?: T; errors: Diagnostic[] };
 
     /**
      * Parse json text into SyntaxTree and return node and parse errors if any

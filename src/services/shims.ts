@@ -1133,9 +1133,9 @@ namespace ts {
                 () => {
                     const text = sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength());
 
-                    const result = parseConfigFileTextToJson(fileName, text);
+                    const result = parseJsonText(fileName, text);
 
-                    if (!result.config) {
+                    if (!result.node) {
                         return {
                             options: {},
                             typingOptions: {},
@@ -1146,7 +1146,7 @@ namespace ts {
                     }
 
                     const normalizedFileName = normalizeSlashes(fileName);
-                    const configFile = parseJsonConfigFileContent(result.config, this.host, getDirectoryPath(normalizedFileName), /*existingOptions*/ {}, normalizedFileName);
+                    const configFile = parseJsonNodeConfigFileContent(result.node, this.host, getDirectoryPath(normalizedFileName), /*existingOptions*/ {}, normalizedFileName);
 
                     return {
                         options: configFile.options,
