@@ -862,7 +862,6 @@ namespace ts {
             const statements: Statement[] = [];
             let indexOfFirstStatement = 0;
 
-            // The body of a constructor is a new lexical environment
             resumeLexicalEnvironment();
 
             if (constructor) {

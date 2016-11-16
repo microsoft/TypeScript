@@ -61,13 +61,10 @@ namespace ts {
         }
 
         function visitor(node: Node): VisitResult<Node> {
-            if (node.transformFlags & TransformFlags.ContainsES2017) {
-                return visitorWorker(node);
+            if ((node.transformFlags & TransformFlags.ContainsES2017) === 0) {
+                return node;
             }
-            return node;
-        }
 
-        function visitorWorker(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.AsyncKeyword:
                     // ES2017 async modifier should be elided for targets < ES2017
@@ -211,6 +208,8 @@ namespace ts {
         function transformAsyncFunctionBody(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression): FunctionBody;
         function transformAsyncFunctionBody(node: ArrowFunction): ConciseBody;
         function transformAsyncFunctionBody(node: FunctionLikeDeclaration): ConciseBody {
+            resumeLexicalEnvironment();
+
             const original = getOriginalNode(node, isFunctionLike);
             const nodeType = original.type;
             const promiseConstructor = languageVersion < ScriptTarget.ES2015 ? getPromiseConstructor(nodeType) : undefined;
@@ -222,7 +221,6 @@ namespace ts {
             // `this` and `arguments` objects to `__awaiter`. The generator function
             // passed to `__awaiter` is executed inside of the callback to the
             // promise constructor.
-            resumeLexicalEnvironment();
 
             if (!isArrowFunction) {
                 const statements: Statement[] = [];

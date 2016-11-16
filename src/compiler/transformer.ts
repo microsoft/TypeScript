@@ -265,7 +265,7 @@ namespace ts {
         /** Resumes a suspended lexical environment, usually before visiting a function body. */
         function resumeLexicalEnvironment(): void {
             Debug.assert(!scopeModificationDisabled, "Cannot resume a lexical environment during the print phase.");
-            Debug.assert(lexicalEnvironmentSuspended, "Lexical environment is not suspended suspended.");
+            Debug.assert(lexicalEnvironmentSuspended, "Lexical environment is not suspended.");
             lexicalEnvironmentSuspended = false;
         }
 
