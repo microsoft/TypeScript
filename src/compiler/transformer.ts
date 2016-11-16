@@ -156,7 +156,7 @@ namespace ts {
     export function transformFiles(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformers: Transformer[]): TransformationResult {
         const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);
 
-        let scopeModificationDisabled = false;
+        let lexicalEnvironmentDisabled = false;
 
         let lexicalEnvironmentStackOffset = 0;
         let lexicalEnvironmentVariableDeclarations: VariableDeclaration[];
@@ -192,7 +192,7 @@ namespace ts {
         const transformed = map(sourceFiles, transformSourceFile);
 
         // Disable modification of the lexical environment.
-        scopeModificationDisabled = true;
+        lexicalEnvironmentDisabled = true;
 
         return {
             transformed,
@@ -287,7 +287,7 @@ namespace ts {
          * Records a hoisted variable declaration for the provided name within a lexical environment.
          */
         function hoistVariableDeclaration(name: Identifier): void {
-            Debug.assert(!scopeModificationDisabled, "Cannot modify the lexical environment during the print phase.");
+            Debug.assert(!lexicalEnvironmentDisabled, "Cannot modify the lexical environment during the print phase.");
             const decl = createVariableDeclaration(name);
             if (!lexicalEnvironmentVariableDeclarations) {
                 lexicalEnvironmentVariableDeclarations = [decl];
@@ -301,7 +301,7 @@ namespace ts {
          * Records a hoisted function declaration within a lexical environment.
          */
         function hoistFunctionDeclaration(func: FunctionDeclaration): void {
-            Debug.assert(!scopeModificationDisabled, "Cannot modify the lexical environment during the print phase.");
+            Debug.assert(!lexicalEnvironmentDisabled, "Cannot modify the lexical environment during the print phase.");
             if (!lexicalEnvironmentFunctionDeclarations) {
                 lexicalEnvironmentFunctionDeclarations = [func];
             }
@@ -315,7 +315,7 @@ namespace ts {
          * are pushed onto a stack, and the related storage variables are reset.
          */
         function startLexicalEnvironment(): void {
-            Debug.assert(!scopeModificationDisabled, "Cannot start a lexical environment during the print phase.");
+            Debug.assert(!lexicalEnvironmentDisabled, "Cannot start a lexical environment during the print phase.");
             Debug.assert(!lexicalEnvironmentSuspended, "Lexical environment is suspended.");
 
             // Save the current lexical environment. Rather than resizing the array we adjust the
@@ -331,14 +331,14 @@ namespace ts {
 
         /** Suspends the current lexical environment, usually after visiting a parameter list. */
         function suspendLexicalEnvironment(): void {
-            Debug.assert(!scopeModificationDisabled, "Cannot suspend a lexical environment during the print phase.");
+            Debug.assert(!lexicalEnvironmentDisabled, "Cannot suspend a lexical environment during the print phase.");
             Debug.assert(!lexicalEnvironmentSuspended, "Lexical environment is already suspended.");
             lexicalEnvironmentSuspended = true;
         }
 
         /** Resumes a suspended lexical environment, usually before visiting a function body. */
         function resumeLexicalEnvironment(): void {
-            Debug.assert(!scopeModificationDisabled, "Cannot resume a lexical environment during the print phase.");
+            Debug.assert(!lexicalEnvironmentDisabled, "Cannot resume a lexical environment during the print phase.");
             Debug.assert(lexicalEnvironmentSuspended, "Lexical environment is not suspended suspended.");
             lexicalEnvironmentSuspended = false;
         }
@@ -348,7 +348,7 @@ namespace ts {
          * any hoisted declarations added in this environment are returned.
          */
         function endLexicalEnvironment(): Statement[] {
-            Debug.assert(!scopeModificationDisabled, "Cannot end a lexical environment during the print phase.");
+            Debug.assert(!lexicalEnvironmentDisabled, "Cannot end a lexical environment during the print phase.");
             Debug.assert(!lexicalEnvironmentSuspended, "Lexical environment is suspended.");
 
             let statements: Statement[];
