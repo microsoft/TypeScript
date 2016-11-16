@@ -287,7 +287,7 @@ namespace ts {
                     flattenContext.emitBindingOrAssignment(flattenContext.createObjectBindingOrAssignmentPattern(bindingElements), value, location, pattern);
                     bindingElements = undefined;
                 }
-                const rhsValue = createRestCall(value, elements, computedTempVariables, pattern);
+                const rhsValue = createRestCall(flattenContext.context, value, elements, computedTempVariables, pattern);
                 flattenBindingOrAssignmentElement(flattenContext, element, rhsValue, element);
             }
         }
@@ -451,9 +451,25 @@ namespace ts {
         return name;
     }
 
+    const restHelper: EmitHelper = {
+        name: "typescript:rest",
+        scoped: false,
+        text: `
+            var __rest = (this && this.__rest) || function (s, e) {
+                var t = {};
+                for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+                    t[p] = s[p];
+                if (typeof Object.getOwnPropertySymbols === "function")
+                    for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+                        t[p[i]] = s[p[i]];
+                return t;
+            };`
+    };
+
     /** Given value: o, propName: p, pattern: { a, b, ...p } from the original statement
      * `{ a, b, ...p } = o`, create `p = __rest(o, ["a", "b"]);`*/
-    function createRestCall(value: Expression, elements: BindingOrAssignmentElement[], computedTempVariables: Expression[], location: TextRange): Expression {
+    function createRestCall(context: TransformationContext, value: Expression, elements: BindingOrAssignmentElement[], computedTempVariables: Expression[], location: TextRange): Expression {
+        context.requestEmitHelper(restHelper);
         const propertyNames: Expression[] = [];
         let computedTempVariableOffset = 0;
         for (let i = 0; i < elements.length - 1; i++) {
@@ -476,6 +492,6 @@ namespace ts {
                 }
             }
         }
-        return createCall(createIdentifier("__rest"), undefined, [value, createArrayLiteral(propertyNames, location)]);
+        return createCall(getHelperName("__rest"), undefined, [value, createArrayLiteral(propertyNames, location)]);
     }
 }

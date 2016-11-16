@@ -3,7 +3,6 @@
 
 /*@internal*/
 namespace ts {
-
     const enum ES2015SubstitutionFlags {
         /** Enables substitutions for captured `this` */
         CapturedThis = 1 << 0,
@@ -210,7 +209,13 @@ namespace ts {
 
             currentSourceFile = node;
             currentText = node.text;
-            return visitNode(node, visitor, isSourceFile);
+
+            const visited = saveStateAndInvoke(node, visitSourceFile);
+            addEmitHelpers(visited, context.readEmitHelpers());
+
+            currentSourceFile = undefined;
+            currentText = undefined;
+            return visited;
         }
 
         function visitor(node: Node): VisitResult<Node> {
@@ -254,6 +259,47 @@ namespace ts {
             currentParent = savedCurrentParent;
             currentNode = savedCurrentNode;
             return visited;
+        }
+
+        function onBeforeVisitNode(node: Node) {
+            if (currentNode) {
+                if (isBlockScope(currentNode, currentParent)) {
+                    enclosingBlockScopeContainer = currentNode;
+                    enclosingBlockScopeContainerParent = currentParent;
+                }
+
+                if (isFunctionLike(currentNode)) {
+                    enclosingFunction = currentNode;
+                    if (currentNode.kind !== SyntaxKind.ArrowFunction) {
+                        enclosingNonArrowFunction = currentNode;
+                        if (!(getEmitFlags(currentNode) & EmitFlags.AsyncFunctionBody)) {
+                            enclosingNonAsyncFunctionBody = currentNode;
+                        }
+                    }
+                }
+
+                // keep track of the enclosing variable statement when in the context of
+                // variable statements, variable declarations, binding elements, and binding
+                // patterns.
+                switch (currentNode.kind) {
+                    case SyntaxKind.VariableStatement:
+                        enclosingVariableStatement = <VariableStatement>currentNode;
+                        break;
+
+                    case SyntaxKind.VariableDeclarationList:
+                    case SyntaxKind.VariableDeclaration:
+                    case SyntaxKind.BindingElement:
+                    case SyntaxKind.ObjectBindingPattern:
+                    case SyntaxKind.ArrayBindingPattern:
+                        break;
+
+                    default:
+                        enclosingVariableStatement = undefined;
+                }
+            }
+
+            currentParent = currentNode;
+            currentNode = node;
         }
 
         function returnCapturedThis(node: Node): Node {
@@ -418,6 +464,9 @@ namespace ts {
                 case SyntaxKind.YieldExpression:
                     return visitYieldExpression(<YieldExpression>node);
 
+                case SyntaxKind.SpreadElement:
+                    return visitSpreadElement(<SpreadElement>node);
+
                 case SyntaxKind.SuperKeyword:
                     return visitSuperKeyword();
 
@@ -428,9 +477,6 @@ namespace ts {
                 case SyntaxKind.MethodDeclaration:
                     return visitMethodDeclaration(<MethodDeclaration>node);
 
-                case SyntaxKind.SourceFile:
-                    return visitSourceFileNode(<SourceFile>node);
-
                 case SyntaxKind.VariableStatement:
                     return visitVariableStatement(<VariableStatement>node);
 
@@ -438,48 +484,19 @@ namespace ts {
                     Debug.failBadSyntaxKind(node);
                     return visitEachChild(node, visitor, context);
             }
-
         }
 
-        function onBeforeVisitNode(node: Node) {
-            if (currentNode) {
-                if (isBlockScope(currentNode, currentParent)) {
-                    enclosingBlockScopeContainer = currentNode;
-                    enclosingBlockScopeContainerParent = currentParent;
-                }
-
-                if (isFunctionLike(currentNode)) {
-                    enclosingFunction = currentNode;
-                    if (currentNode.kind !== SyntaxKind.ArrowFunction) {
-                        enclosingNonArrowFunction = currentNode;
-                        if (!(getEmitFlags(currentNode) & EmitFlags.AsyncFunctionBody)) {
-                            enclosingNonAsyncFunctionBody = currentNode;
-                        }
-                    }
-                }
-
-                // keep track of the enclosing variable statement when in the context of
-                // variable statements, variable declarations, binding elements, and binding
-                // patterns.
-                switch (currentNode.kind) {
-                    case SyntaxKind.VariableStatement:
-                        enclosingVariableStatement = <VariableStatement>currentNode;
-                        break;
-
-                    case SyntaxKind.VariableDeclarationList:
-                    case SyntaxKind.VariableDeclaration:
-                    case SyntaxKind.BindingElement:
-                    case SyntaxKind.ObjectBindingPattern:
-                    case SyntaxKind.ArrayBindingPattern:
-                        break;
-
-                    default:
-                        enclosingVariableStatement = undefined;
-                }
-            }
-
-            currentParent = currentNode;
-            currentNode = node;
+        function visitSourceFile(node: SourceFile): SourceFile {
+            const statements: Statement[] = [];
+            startLexicalEnvironment();
+            const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ false, visitor);
+            addCaptureThisForNodeIfNeeded(statements, node);
+            addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
+            addRange(statements, endLexicalEnvironment());
+            return updateSourceFileNode(
+                node,
+                createNodeArray(statements, node.statements)
+            );
         }
 
         function visitSwitchStatement(node: SwitchStatement): SwitchStatement {
@@ -779,7 +796,7 @@ namespace ts {
             if (extendsClauseElement) {
                 statements.push(
                     createStatement(
-                        createExtendsHelper(currentSourceFile.externalHelpersModuleName, getLocalName(node)),
+                        createExtendsHelper(context, getLocalName(node)),
                         /*location*/ extendsClauseElement
                     )
                 );
@@ -851,7 +868,7 @@ namespace ts {
                 // If a super call has already been synthesized,
                 // we're going to assume that we should just transform everything after that.
                 // The assumption is that no prior step in the pipeline has added any prologue directives.
-                statementOffset = 1;
+                statementOffset = 0;
             }
             else if (constructor) {
                 // Otherwise, try to emit all potential prologue directives first.
@@ -1391,20 +1408,13 @@ namespace ts {
         function transformClassMethodDeclarationToStatement(receiver: LeftHandSideExpression, member: MethodDeclaration) {
             const commentRange = getCommentRange(member);
             const sourceMapRange = getSourceMapRange(member);
-
-            const func = transformFunctionLikeToExpression(member, /*location*/ member, /*name*/ undefined);
-            setEmitFlags(func, EmitFlags.NoComments);
-            setSourceMapRange(func, sourceMapRange);
+            const memberName = createMemberAccessForPropertyName(receiver, visitNode(member.name, visitor, isPropertyName), /*location*/ member.name);
+            const memberFunction = transformFunctionLikeToExpression(member, /*location*/ member, /*name*/ undefined);
+            setEmitFlags(memberFunction, EmitFlags.NoComments);
+            setSourceMapRange(memberFunction, sourceMapRange);
 
             const statement = createStatement(
-                createAssignment(
-                    createMemberAccessForPropertyName(
-                        receiver,
-                        visitNode(member.name, visitor, isPropertyName),
-                        /*location*/ member.name
-                    ),
-                    func
-                ),
+                createAssignment(memberName, memberFunction),
                 /*location*/ member
             );
 
@@ -1682,7 +1692,7 @@ namespace ts {
          *
          * @param node An ExpressionStatement node.
          */
-        function visitExpressionStatement(node: ExpressionStatement): ExpressionStatement {
+        function visitExpressionStatement(node: ExpressionStatement): Statement {
             // If we are here it is most likely because our expression is a destructuring assignment.
             switch (node.expression.kind) {
                 case SyntaxKind.ParenthesizedExpression:
@@ -1722,13 +1732,14 @@ namespace ts {
          */
         function visitBinaryExpression(node: BinaryExpression, needsDestructuringValue: boolean): Expression {
             // If we are here it is because this is a destructuring assignment.
-            Debug.assert(isDestructuringAssignment(node));
-            return flattenDestructuringAssignment(
-                <DestructuringAssignment>node,
-                visitor,
-                context,
-                FlattenLevel.All,
-                needsDestructuringValue);
+            if (isDestructuringAssignment(node)) {
+                return flattenDestructuringAssignment(
+                    <DestructuringAssignment>node,
+                    visitor,
+                    context,
+                    FlattenLevel.All,
+                    needsDestructuringValue);
+            }
         }
 
         function visitVariableStatement(node: VariableStatement): Statement {
@@ -2927,6 +2938,10 @@ namespace ts {
             );
         }
 
+        function visitSpreadElement(node: SpreadElement) {
+            return visitNode(node.expression, visitor, isExpression);
+        }
+
         /**
          * Transforms the expression of a SpreadExpression node.
          *
@@ -3113,19 +3128,6 @@ namespace ts {
                     : createIdentifier("_super");
         }
 
-        function visitSourceFileNode(node: SourceFile): SourceFile {
-            const [prologue, remaining] = span(node.statements, isPrologueDirective);
-            const statements: Statement[] = [];
-            startLexicalEnvironment();
-            addRange(statements, prologue);
-            addCaptureThisForNodeIfNeeded(statements, node);
-            addRange(statements, visitNodes(createNodeArray(remaining), visitor, isStatement));
-            addRange(statements, endLexicalEnvironment());
-            const clone = getMutableClone(node);
-            clone.statements = createNodeArray(statements, /*location*/ node.statements);
-            return clone;
-        }
-
         /**
          * Called by the printer just before a node is printed.
          *
@@ -3287,8 +3289,7 @@ namespace ts {
                 return false;
             }
 
-            const parameter = singleOrUndefined(constructor.parameters);
-            if (!parameter || !nodeIsSynthesized(parameter) || !parameter.dotDotDotToken) {
+            if (some(constructor.parameters)) {
                 return false;
             }
 
@@ -3313,7 +3314,31 @@ namespace ts {
             }
 
             const expression = (<SpreadElement>callArgument).expression;
-            return isIdentifier(expression) && expression === parameter.name;
+            return isIdentifier(expression) && expression.text === "arguments";
         }
     }
+
+    function createExtendsHelper(context: TransformationContext, name: Identifier) {
+        context.requestEmitHelper(extendsHelper);
+        return createCall(
+            getHelperName("__extends"),
+            /*typeArguments*/ undefined,
+            [
+                name,
+                createIdentifier("_super")
+            ]
+        );
+    }
+
+    const extendsHelper: EmitHelper = {
+        name: "typescript:extends",
+        scoped: false,
+        priority: 0,
+        text: `
+            var __extends = (this && this.__extends) || function (d, b) {
+                for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+                function __() { this.constructor = d; }
+                d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+            };`
+    };
 }

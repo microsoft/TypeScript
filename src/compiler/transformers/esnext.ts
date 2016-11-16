@@ -15,7 +15,9 @@ namespace ts {
                 return node;
             }
 
-            return visitEachChild(node, visitor, context);
+            const visited = visitEachChild(node, visitor, context);
+            addEmitHelpers(visited, context.readEmitHelpers());
+            return visited;
         }
 
         function visitor(node: Node): VisitResult<Node> {
@@ -112,7 +114,7 @@ namespace ts {
                 if (objects.length && objects[0].kind !== SyntaxKind.ObjectLiteralExpression) {
                     objects.unshift(createObjectLiteral());
                 }
-                return createCall(createIdentifier("__assign"), undefined, objects);
+                return createAssignHelper(context, objects);
             }
             return visitEachChild(node, visitor, context);
         }
@@ -382,5 +384,32 @@ namespace ts {
             }
             return body;
         }
+    }
+
+    const assignHelper: EmitHelper = {
+        name: "typescript:assign",
+        scoped: false,
+        priority: 1,
+        text: `
+            var __assign = (this && this.__assign) || Object.assign || function(t) {
+                for (var s, i = 1, n = arguments.length; i < n; i++) {
+                    s = arguments[i];
+                    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                        t[p] = s[p];
+                    if (typeof Object.getOwnPropertySymbols === "function")
+                        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++)
+                            t[p[i]] = s[p[i]];
+                }
+                return t;
+            };`
+    };
+
+    export function createAssignHelper(context: TransformationContext, attributesSegments: Expression[]) {
+        context.requestEmitHelper(assignHelper);
+        return createCall(
+            getHelperName("__assign"),
+            /*typeArguments*/ undefined,
+            attributesSegments
+        );
     }
 }

@@ -28,21 +28,6 @@ namespace ts {
         string(): string;
     }
 
-    export interface EmitHost extends ScriptReferenceHost {
-        getSourceFiles(): SourceFile[];
-
-        /* @internal */
-        isSourceFileFromExternalLibrary(file: SourceFile): boolean;
-
-        getCommonSourceDirectory(): string;
-        getCanonicalFileName(fileName: string): string;
-        getNewLine(): string;
-
-        isEmitBlocked(emitFileName: string): boolean;
-
-        writeFile: WriteFileCallback;
-    }
-
     // Pool writers to avoid needing to allocate them for every symbol we write.
     const stringWriters: StringSymbolWriter[] = [];
     export function getSingleLineStringWriter(): StringSymbolWriter {
@@ -626,8 +611,9 @@ namespace ts {
         return n.kind === SyntaxKind.CallExpression && (<CallExpression>n).expression.kind === SyntaxKind.SuperKeyword;
     }
 
-    export function isPrologueDirective(node: Node): boolean {
-        return node.kind === SyntaxKind.ExpressionStatement && (<ExpressionStatement>node).expression.kind === SyntaxKind.StringLiteral;
+    export function isPrologueDirective(node: Node): node is PrologueDirective {
+        return node.kind === SyntaxKind.ExpressionStatement
+            && (<ExpressionStatement>node).expression.kind === SyntaxKind.StringLiteral;
     }
 
     export function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode: SourceFile) {
@@ -2148,6 +2134,7 @@ namespace ts {
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.OmittedExpression:
+            case SyntaxKind.RawExpression:
                 return 19;
 
             case SyntaxKind.TaggedTemplateExpression:
@@ -3572,153 +3559,6 @@ namespace ts {
         return positionIsSynthesized(range.pos) ? -1 : skipTrivia(sourceFile.text, range.pos);
     }
 
-    export interface ExternalModuleInfo {
-        externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[]; // imports of other external modules
-        exportSpecifiers: Map<ExportSpecifier[]>; // export specifiers by name
-        exportedBindings: Map<Identifier[]>; // exported names of local declarations
-        exportedNames: Identifier[]; // all exported names local to module
-        exportEquals: ExportAssignment | undefined; // an export= declaration if one was present
-        hasExportStarsToExportValues: boolean; // whether this module contains export*
-    }
-
-    export function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver): ExternalModuleInfo {
-        const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
-        const exportSpecifiers = createMap<ExportSpecifier[]>();
-        const exportedBindings = createMap<Identifier[]>();
-        const uniqueExports = createMap<Identifier>();
-        let hasExportDefault = false;
-        let exportEquals: ExportAssignment = undefined;
-        let hasExportStarsToExportValues = false;
-        for (const node of sourceFile.statements) {
-            switch (node.kind) {
-                case SyntaxKind.ImportDeclaration:
-                    // import "mod"
-                    // import x from "mod"
-                    // import * as x from "mod"
-                    // import { x, y } from "mod"
-                    externalImports.push(<ImportDeclaration>node);
-                    break;
-
-                case SyntaxKind.ImportEqualsDeclaration:
-                    if ((<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference) {
-                        // import x = require("mod")
-                        externalImports.push(<ImportEqualsDeclaration>node);
-                    }
-
-                    break;
-
-                case SyntaxKind.ExportDeclaration:
-                    if ((<ExportDeclaration>node).moduleSpecifier) {
-                        if (!(<ExportDeclaration>node).exportClause) {
-                            // export * from "mod"
-                            externalImports.push(<ExportDeclaration>node);
-                            hasExportStarsToExportValues = true;
-                        }
-                        else {
-                            // export { x, y } from "mod"
-                            externalImports.push(<ExportDeclaration>node);
-                        }
-                    }
-                    else {
-                        // export { x, y }
-                        for (const specifier of (<ExportDeclaration>node).exportClause.elements) {
-                            if (!uniqueExports[specifier.name.text]) {
-                                const name = specifier.propertyName || specifier.name;
-                                multiMapAdd(exportSpecifiers, name.text, specifier);
-
-                                const decl = resolver.getReferencedImportDeclaration(name)
-                                    || resolver.getReferencedValueDeclaration(name);
-
-                                if (decl) {
-                                    multiMapAdd(exportedBindings, getOriginalNodeId(decl), specifier.name);
-                                }
-
-                                uniqueExports[specifier.name.text] = specifier.name;
-                            }
-                        }
-                    }
-                    break;
-
-                case SyntaxKind.ExportAssignment:
-                    if ((<ExportAssignment>node).isExportEquals && !exportEquals) {
-                        // export = x
-                        exportEquals = <ExportAssignment>node;
-                    }
-                    break;
-
-                case SyntaxKind.VariableStatement:
-                    if (hasModifier(node, ModifierFlags.Export)) {
-                        for (const decl of (<VariableStatement>node).declarationList.declarations) {
-                            collectExportedVariableInfo(decl, uniqueExports);
-                        }
-                    }
-                    break;
-
-                case SyntaxKind.FunctionDeclaration:
-                    if (hasModifier(node, ModifierFlags.Export)) {
-                        if (hasModifier(node, ModifierFlags.Default)) {
-                            // export default function() { }
-                            if (!hasExportDefault) {
-                                multiMapAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<FunctionDeclaration>node));
-                                hasExportDefault = true;
-                            }
-                        }
-                        else {
-                            // export function x() { }
-                            const name = (<FunctionDeclaration>node).name;
-                            if (!uniqueExports[name.text]) {
-                                multiMapAdd(exportedBindings, getOriginalNodeId(node), name);
-                                uniqueExports[name.text] = name;
-                            }
-                        }
-                    }
-                    break;
-
-                case SyntaxKind.ClassDeclaration:
-                    if (hasModifier(node, ModifierFlags.Export)) {
-                        if (hasModifier(node, ModifierFlags.Default)) {
-                            // export default class { }
-                            if (!hasExportDefault) {
-                                multiMapAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<ClassDeclaration>node));
-                                hasExportDefault = true;
-                            }
-                        }
-                        else {
-                            // export class x { }
-                            const name = (<ClassDeclaration>node).name;
-                            if (!uniqueExports[name.text]) {
-                                multiMapAdd(exportedBindings, getOriginalNodeId(node), name);
-                                uniqueExports[name.text] = name;
-                            }
-                        }
-                    }
-                    break;
-            }
-        }
-
-        let exportedNames: Identifier[];
-        for (const key in uniqueExports) {
-            exportedNames = ts.append(exportedNames, uniqueExports[key]);
-        }
-
-        return { externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues, exportedBindings, exportedNames };
-    }
-
-    function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<Identifier>) {
-        if (isBindingPattern(decl.name)) {
-            for (const element of decl.name.elements) {
-                if (!isOmittedExpression(element)) {
-                    collectExportedVariableInfo(element, uniqueExports);
-                }
-            }
-        }
-        else if (!isGeneratedIdentifier(decl.name)) {
-            if (!uniqueExports[decl.name.text]) {
-                uniqueExports[decl.name.text] = decl.name;
-            }
-        }
-    }
-
     /**
      * Determines whether a name was originally the declaration name of an enum or namespace
      * declaration.
@@ -4086,7 +3926,8 @@ namespace ts {
             || kind === SyntaxKind.ThisKeyword
             || kind === SyntaxKind.TrueKeyword
             || kind === SyntaxKind.SuperKeyword
-            || kind === SyntaxKind.NonNullExpression;
+            || kind === SyntaxKind.NonNullExpression
+            || kind === SyntaxKind.RawExpression;
     }
 
     export function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression {
@@ -4116,6 +3957,7 @@ namespace ts {
             || kind === SyntaxKind.SpreadElement
             || kind === SyntaxKind.AsExpression
             || kind === SyntaxKind.OmittedExpression
+            || kind === SyntaxKind.RawExpression
             || isUnaryExpressionKind(kind);
     }
 

@@ -669,9 +669,12 @@ namespace ts {
      * Starts a new lexical environment and visits a statement list, ending the lexical environment
      * and merging hoisted declarations upon completion.
      */
-    export function visitLexicalEnvironment(statements: NodeArray<Statement>, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment, start?: number) {
+    export function visitLexicalEnvironment(statements: NodeArray<Statement>, visitor: (node: Node) => VisitResult<Node>, context: TransformationContext, start?: number, ensureUseStrict?: boolean) {
         context.startLexicalEnvironment();
         statements = visitNodes(statements, visitor, isStatement, start);
+        if (ensureUseStrict && !startsWithUseStrict(statements)) {
+            statements = createNodeArray([createStatement(createLiteral("use strict")), ...statements], statements);
+        }
         const declarations = context.endLexicalEnvironment();
         return createNodeArray(concatenate(statements, declarations), statements);
     }
@@ -680,9 +683,9 @@ namespace ts {
      * Starts a new lexical environment and visits a parameter list, suspending the lexical
      * environment upon completion.
      */
-    export function visitParameterList(nodes: NodeArray<ParameterDeclaration>, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment) {
+    export function visitParameterList(nodes: NodeArray<ParameterDeclaration>, visitor: (node: Node) => VisitResult<Node>, context: TransformationContext) {
         context.startLexicalEnvironment();
-        const updated = visitNodes(nodes, visitor, isParameter);
+        const updated = visitNodes(nodes, visitor, isParameterDeclaration);
         context.suspendLexicalEnvironment();
         return updated;
     }
@@ -691,21 +694,22 @@ namespace ts {
      * Resumes a suspended lexical environment and visits a function body, ending the lexical
      * environment and merging hoisted declarations upon completion.
      */
-    export function visitFunctionBody(node: FunctionBody, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment): FunctionBody;
+    export function visitFunctionBody(node: FunctionBody, visitor: (node: Node) => VisitResult<Node>, context: TransformationContext): FunctionBody;
     /**
      * Resumes a suspended lexical environment and visits a concise body, ending the lexical
      * environment and merging hoisted declarations upon completion.
      */
-    export function visitFunctionBody(node: ConciseBody, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment): ConciseBody;
-    export function visitFunctionBody(node: ConciseBody, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment) {
+    export function visitFunctionBody(node: ConciseBody, visitor: (node: Node) => VisitResult<Node>, context: TransformationContext): ConciseBody;
+    export function visitFunctionBody(node: ConciseBody, visitor: (node: Node) => VisitResult<Node>, context: TransformationContext): ConciseBody {
         context.resumeLexicalEnvironment();
-        const visited = visitNode(node, visitor, isConciseBody);
+        const updated = visitNode(node, visitor, isConciseBody);
         const declarations = context.endLexicalEnvironment();
         if (some(declarations)) {
-            const block = convertToFunctionBody(visited);
-            return updateBlock(block, createNodeArray(concatenate(block.statements, declarations), block.statements));
+            const block = convertToFunctionBody(updated);
+            const statements = mergeLexicalEnvironment(block.statements, declarations);
+            return updateBlock(block, statements);
         }
-        return visited;
+        return updated;
     }
 
     /**
@@ -715,8 +719,8 @@ namespace ts {
      * @param visitor The callback used to visit each child.
      * @param context A lexical environment context for the visitor.
      */
-    export function visitEachChild<T extends Node>(node: T, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment): T;
-    export function visitEachChild(node: Node, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment): Node {
+    export function visitEachChild<T extends Node>(node: T, visitor: (node: Node) => VisitResult<Node>, context: TransformationContext): T;
+    export function visitEachChild(node: Node, visitor: (node: Node) => VisitResult<Node>, context: TransformationContext): Node {
         if (node === undefined) {
             return undefined;
         }
@@ -1042,7 +1046,7 @@ namespace ts {
                     visitNodes((<FunctionDeclaration>node).typeParameters, visitor, isTypeParameter),
                     visitParameterList((<FunctionDeclaration>node).parameters, visitor, context),
                     visitNode((<FunctionDeclaration>node).type, visitor, isTypeNode, /*optional*/ true),
-                    visitFunctionBody((<FunctionDeclaration>node).body, visitor, context));
+                    visitFunctionBody((<FunctionExpression>node).body, visitor, context));
 
             case SyntaxKind.ClassDeclaration:
                 return updateClassDeclaration(<ClassDeclaration>node,
@@ -1208,6 +1212,24 @@ namespace ts {
 
         // return node;
     }
+
+    /**
+     * Merges generated lexical declarations into a new statement list.
+     */
+    export function mergeLexicalEnvironment(statements: NodeArray<Statement>, declarations: Statement[]): NodeArray<Statement>;
+    /**
+     * Appends generated lexical declarations to an array of statements.
+     */
+    export function mergeLexicalEnvironment(statements: Statement[], declarations: Statement[]): Statement[];
+    export function mergeLexicalEnvironment(statements: Statement[], declarations: Statement[]) {
+        if (!some(declarations)) {
+            return statements;
+        }
+        return isNodeArray(statements)
+            ? createNodeArray(concatenate(statements, declarations), statements)
+            : addRange(statements, declarations);
+    }
+
 
     /**
      * Merges generated lexical declarations into the FunctionBody of a non-arrow function-like declaration.

@@ -27,84 +27,6 @@ namespace ts {
         EmitNotifications = 1 << 1,
     }
 
-    export interface TransformationResult {
-        /**
-         * Gets the transformed source files.
-         */
-        transformed: SourceFile[];
-
-        /**
-         * Emits the substitute for a node, if one is available; otherwise, emits the node.
-         *
-         * @param emitContext The current emit context.
-         * @param node The node to substitute.
-         * @param emitCallback A callback used to emit the node or its substitute.
-         */
-        emitNodeWithSubstitution(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void;
-
-        /**
-         * Emits a node with possible notification.
-         *
-         * @param emitContext The current emit context.
-         * @param node The node to emit.
-         * @param emitCallback A callback used to emit the node.
-         */
-        emitNodeWithNotification(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void;
-    }
-
-    export interface TransformationContext extends LexicalEnvironment {
-        getCompilerOptions(): CompilerOptions;
-        getEmitResolver(): EmitResolver;
-        getEmitHost(): EmitHost;
-
-        /**
-         * Hoists a function declaration to the containing scope.
-         */
-        hoistFunctionDeclaration(node: FunctionDeclaration): void;
-
-        /**
-         * Hoists a variable declaration to the containing scope.
-         */
-        hoistVariableDeclaration(node: Identifier): void;
-
-        /**
-         * Enables expression substitutions in the pretty printer for the provided SyntaxKind.
-         */
-        enableSubstitution(kind: SyntaxKind): void;
-
-        /**
-         * Determines whether expression substitutions are enabled for the provided node.
-         */
-        isSubstitutionEnabled(node: Node): boolean;
-
-        /**
-         * Hook used by transformers to substitute expressions just before they
-         * are emitted by the pretty printer.
-         */
-        onSubstituteNode?: (emitContext: EmitContext, node: Node) => Node;
-
-        /**
-         * Enables before/after emit notifications in the pretty printer for the provided
-         * SyntaxKind.
-         */
-        enableEmitNotification(kind: SyntaxKind): void;
-
-        /**
-         * Determines whether before/after emit notifications should be raised in the pretty
-         * printer when it emits a node.
-         */
-        isEmitNotificationEnabled(node: Node): boolean;
-
-        /**
-         * Hook used to allow transformers to capture state before or after
-         * the printer emits a node.
-         */
-        onEmitNode?: (emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void) => void;
-    }
-
-    /* @internal */
-    export type Transformer = (context: TransformationContext) => (node: SourceFile) => SourceFile;
-
     export function getTransformers(compilerOptions: CompilerOptions) {
         const jsx = compilerOptions.jsx;
         const languageVersion = getEmitScriptTarget(compilerOptions);
@@ -158,12 +80,14 @@ namespace ts {
 
         let lexicalEnvironmentDisabled = false;
 
-        let lexicalEnvironmentStackOffset = 0;
         let lexicalEnvironmentVariableDeclarations: VariableDeclaration[];
         let lexicalEnvironmentFunctionDeclarations: FunctionDeclaration[];
         let lexicalEnvironmentVariableDeclarationsStack: VariableDeclaration[][] = [];
         let lexicalEnvironmentFunctionDeclarationsStack: FunctionDeclaration[][] = [];
+        let lexicalEnvironmentStackOffset = 0;
         let lexicalEnvironmentSuspended = false;
+
+        let emitHelpers: EmitHelper[];
 
         // The transformation context is provided to each transformer as part of transformer
         // initialization.
@@ -177,6 +101,8 @@ namespace ts {
             endLexicalEnvironment,
             hoistVariableDeclaration,
             hoistFunctionDeclaration,
+            requestEmitHelper,
+            readEmitHelpers,
             onSubstituteNode: (_emitContext, node) => node,
             enableSubstitution,
             isSubstitutionEnabled,
@@ -339,7 +265,7 @@ namespace ts {
         /** Resumes a suspended lexical environment, usually before visiting a function body. */
         function resumeLexicalEnvironment(): void {
             Debug.assert(!lexicalEnvironmentDisabled, "Cannot resume a lexical environment during the print phase.");
-            Debug.assert(lexicalEnvironmentSuspended, "Lexical environment is not suspended suspended.");
+            Debug.assert(lexicalEnvironmentSuspended, "Lexical environment is not suspended.");
             lexicalEnvironmentSuspended = false;
         }
 
@@ -381,6 +307,19 @@ namespace ts {
                 lexicalEnvironmentFunctionDeclarationsStack = [];
             }
             return statements;
+        }
+
+        function requestEmitHelper(helper: EmitHelper): void {
+            Debug.assert(!lexicalEnvironmentDisabled, "Cannot modify the lexical environment during the print phase.");
+            Debug.assert(!helper.scoped, "Cannot request a scoped emit helper.");
+            emitHelpers = append(emitHelpers, helper);
+        }
+
+        function readEmitHelpers(): EmitHelper[] | undefined {
+            Debug.assert(!lexicalEnvironmentDisabled, "Cannot modify the lexical environment during the print phase.");
+            const helpers = emitHelpers;
+            emitHelpers = undefined;
+            return helpers;
         }
     }
 }

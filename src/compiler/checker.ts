@@ -19632,7 +19632,7 @@ namespace ts {
 
         function isNameOfModuleOrEnumDeclaration(node: Identifier) {
             const parent = node.parent;
-            return isModuleOrEnumDeclaration(parent) && node === parent.name;
+            return parent && isModuleOrEnumDeclaration(parent) && node === parent.name;
         }
 
         // When resolved as an expression identifier, if the given node references an exported entity, return the declaration
