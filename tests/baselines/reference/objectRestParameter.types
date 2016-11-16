@@ -53,4 +53,27 @@ suddenly(({ x: { z = 12, ...nested }, ...rest } = { x: { z: 1, ka: 1 }, y: 'noo'
 >nested : { ka: any; }
 >ka : any
 
+class C {
+>C : C
+
+    m({ a, ...clone }: { a: number, b: string}): void {
+>m : ({a, ...clone}: { a: number; b: string; }) => void
+>a : number
+>clone : { b: string; }
+>a : number
+>b : string
+
+        // actually, never mind, don't clone
+    }
+    set p({ a, ...clone }: { a: number, b: string}) {
+>p : { a: number; b: string; }
+>a : number
+>clone : { b: string; }
+>a : number
+>b : string
+
+        // actually, never mind, don't clone
+    }
+}
+
 

@@ -102,12 +102,12 @@ namespace ts {
 
     // Literals
 
-    export function createLiteral(textSource: StringLiteral | Identifier, location?: TextRange): StringLiteral;
+    export function createLiteral(textSource: StringLiteral | NumericLiteral | Identifier, location?: TextRange): StringLiteral;
     export function createLiteral(value: string, location?: TextRange): StringLiteral;
     export function createLiteral(value: number, location?: TextRange): NumericLiteral;
     export function createLiteral(value: boolean, location?: TextRange): BooleanLiteral;
     export function createLiteral(value: string | number | boolean, location?: TextRange): PrimaryExpression;
-    export function createLiteral(value: string | number | boolean | StringLiteral | Identifier, location?: TextRange): PrimaryExpression {
+    export function createLiteral(value: string | number | boolean | StringLiteral | NumericLiteral | Identifier, location?: TextRange): PrimaryExpression {
         if (typeof value === "number") {
             const node = <NumericLiteral>createNode(SyntaxKind.NumericLiteral, location, /*flags*/ undefined);
             node.text = value.toString();
@@ -238,9 +238,9 @@ namespace ts {
         return node;
     }
 
-    export function updateParameter(node: ParameterDeclaration, decorators: Decorator[], modifiers: Modifier[], name: BindingName, type: TypeNode, initializer: Expression) {
-        if (node.decorators !== decorators || node.modifiers !== modifiers || node.name !== name || node.type !== type || node.initializer !== initializer) {
-            return updateNode(createParameter(decorators, modifiers, node.dotDotDotToken, name, node.questionToken, type, initializer, /*location*/ node, /*flags*/ node.flags), node);
+    export function updateParameter(node: ParameterDeclaration, decorators: Decorator[], modifiers: Modifier[], dotDotDotToken: DotDotDotToken, name: BindingName, type: TypeNode, initializer: Expression) {
+        if (node.decorators !== decorators || node.modifiers !== modifiers || node.dotDotDotToken !== dotDotDotToken || node.name !== name || node.type !== type || node.initializer !== initializer) {
+            return updateNode(createParameter(decorators, modifiers, dotDotDotToken, name, node.questionToken, type, initializer, /*location*/ node, /*flags*/ node.flags), node);
         }
 
         return node;
@@ -378,9 +378,9 @@ namespace ts {
         return node;
     }
 
-    export function updateBindingElement(node: BindingElement, propertyName: PropertyName, name: BindingName, initializer: Expression) {
-        if (node.propertyName !== propertyName || node.name !== name || node.initializer !== initializer) {
-            return updateNode(createBindingElement(propertyName, node.dotDotDotToken, name, initializer, node), node);
+    export function updateBindingElement(node: BindingElement, dotDotDotToken: DotDotDotToken, propertyName: PropertyName, name: BindingName, initializer: Expression) {
+        if (node.propertyName !== propertyName || node.dotDotDotToken !== dotDotDotToken || node.name !== name || node.initializer !== initializer) {
+            return updateNode(createBindingElement(propertyName, dotDotDotToken, name, initializer, node), node);
         }
         return node;
     }
@@ -646,13 +646,25 @@ namespace ts {
         return node;
     }
 
-    export function createConditional(condition: Expression, questionToken: QuestionToken, whenTrue: Expression, colonToken: ColonToken, whenFalse: Expression, location?: TextRange) {
-        const node = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression, location);
-        node.condition = condition;
-        node.questionToken = questionToken;
-        node.whenTrue = whenTrue;
-        node.colonToken = colonToken;
-        node.whenFalse = whenFalse;
+    export function createConditional(condition: Expression, whenTrue: Expression, whenFalse: Expression, location?: TextRange): ConditionalExpression;
+    export function createConditional(condition: Expression, questionToken: QuestionToken, whenTrue: Expression, colonToken: ColonToken, whenFalse: Expression, location?: TextRange): ConditionalExpression;
+    export function createConditional(condition: Expression, questionTokenOrWhenTrue: QuestionToken | Expression, whenTrueOrWhenFalse: Expression, colonTokenOrLocation?: ColonToken | TextRange, whenFalse?: Expression, location?: TextRange) {
+        const node = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression, whenFalse ? location : colonTokenOrLocation);
+        node.condition = parenthesizeForConditionalHead(condition);
+        if (whenFalse) {
+            // second overload
+            node.questionToken = <QuestionToken>questionTokenOrWhenTrue;
+            node.whenTrue = whenTrueOrWhenFalse;
+            node.colonToken = <ColonToken>colonTokenOrLocation;
+            node.whenFalse = whenFalse;
+        }
+        else {
+            // first overload
+            node.questionToken = createToken(SyntaxKind.QuestionToken);
+            node.whenTrue = <Expression>questionTokenOrWhenTrue;
+            node.colonToken = createToken(SyntaxKind.ColonToken);
+            node.whenFalse = whenTrueOrWhenFalse;
+        }
         return node;
     }
 
@@ -1405,7 +1417,7 @@ namespace ts {
         return node;
     }
 
-   export function updateShorthandPropertyAssignment(node: ShorthandPropertyAssignment, name: Identifier, objectAssignmentInitializer: Expression) {
+    export function updateShorthandPropertyAssignment(node: ShorthandPropertyAssignment, name: Identifier, objectAssignmentInitializer: Expression) {
         if (node.name !== name || node.objectAssignmentInitializer !== objectAssignmentInitializer) {
             return updateNode(createShorthandPropertyAssignment(name, objectAssignmentInitializer, node), node);
         }
@@ -1419,7 +1431,7 @@ namespace ts {
         return node;
     }
 
-   // Top-level nodes
+    // Top-level nodes
 
     export function updateSourceFileNode(node: SourceFile, statements: Statement[]) {
         if (node.statements !== statements) {
@@ -1453,7 +1465,6 @@ namespace ts {
             if (node.resolvedTypeReferenceDirectiveNames !== undefined) updated.resolvedTypeReferenceDirectiveNames = node.resolvedTypeReferenceDirectiveNames;
             if (node.imports !== undefined) updated.imports = node.imports;
             if (node.moduleAugmentations !== undefined) updated.moduleAugmentations = node.moduleAugmentations;
-            if (node.externalHelpersModuleName !== undefined) updated.externalHelpersModuleName = node.externalHelpersModuleName;
             return updateNode(updated, node);
         }
 
@@ -1518,6 +1529,19 @@ namespace ts {
         return node;
     }
 
+    /**
+     * Creates a node that emits a string of raw text in an expression position. Raw text is never
+     * transformed, should be ES3 compliant, and should have the same precedence as
+     * PrimaryExpression.
+     *
+     * @param text The raw text of the node.
+     */
+    export function createRawExpression(text: string) {
+        const node = <RawExpression>createNode(SyntaxKind.RawExpression);
+        node.text = text;
+        return node;
+    }
+
     // Compound nodes
 
     export function createComma(left: Expression, right: Expression) {
@@ -1528,6 +1552,8 @@ namespace ts {
         return <Expression>createBinary(left, SyntaxKind.LessThanToken, right, location);
     }
 
+    export function createAssignment(left: ObjectLiteralExpression | ArrayLiteralExpression, right: Expression, location?: TextRange): DestructuringAssignment;
+    export function createAssignment(left: Expression, right: Expression, location?: TextRange): BinaryExpression;
     export function createAssignment(left: Expression, right: Expression, location?: TextRange) {
         return createBinary(left, SyntaxKind.EqualsToken, right, location);
     }
@@ -1566,6 +1592,14 @@ namespace ts {
 
     export function createVoidZero() {
         return createVoid(createLiteral(0));
+    }
+
+    export type TypeOfTag = "undefined" | "number" | "boolean" | "string" | "symbol" | "object" | "function";
+
+    export function createTypeCheck(value: Expression, tag: TypeOfTag) {
+        return tag === "undefined"
+            ? createStrictEquality(value, createVoidZero())
+            : createStrictEquality(createTypeOf(value), createLiteral(tag));
     }
 
     export function createMemberAccessForPropertyName(target: Expression, memberName: PropertyName, location?: TextRange): MemberExpression {
@@ -1635,7 +1669,7 @@ namespace ts {
         // flag and setting a parent node.
         const react = createIdentifier(reactNamespace || "React");
         react.flags &= ~NodeFlags.Synthesized;
-        // Set the parent that is in parse tree 
+        // Set the parent that is in parse tree
         // this makes sure that parent chain is intact for checker to traverse complete scope tree
         react.parent = getParseTreeNode(parent);
         return react;
@@ -1720,279 +1754,11 @@ namespace ts {
 
     // Helpers
 
-    export function createHelperName(externalHelpersModuleName: Identifier | undefined, name: string) {
-        return externalHelpersModuleName
-            ? createPropertyAccess(externalHelpersModuleName, name)
-            : createIdentifier(name);
+    export function getHelperName(name: string) {
+        return setEmitFlags(createIdentifier(name), EmitFlags.HelperName | EmitFlags.AdviseOnEmitNode);
     }
 
-    export function createExtendsHelper(externalHelpersModuleName: Identifier | undefined, name: Identifier) {
-        return createCall(
-            createHelperName(externalHelpersModuleName, "__extends"),
-            /*typeArguments*/ undefined,
-            [
-                name,
-                createIdentifier("_super")
-            ]
-        );
-    }
-
-    export function createAssignHelper(externalHelpersModuleName: Identifier | undefined, attributesSegments: Expression[]) {
-        return createCall(
-            createHelperName(externalHelpersModuleName, "__assign"),
-            /*typeArguments*/ undefined,
-            attributesSegments
-        );
-    }
-
-    export function createParamHelper(externalHelpersModuleName: Identifier | undefined, expression: Expression, parameterOffset: number, location?: TextRange) {
-        return createCall(
-            createHelperName(externalHelpersModuleName, "__param"),
-            /*typeArguments*/ undefined,
-            [
-                createLiteral(parameterOffset),
-                expression
-            ],
-            location
-        );
-    }
-
-    export function createMetadataHelper(externalHelpersModuleName: Identifier | undefined, metadataKey: string, metadataValue: Expression) {
-        return createCall(
-            createHelperName(externalHelpersModuleName, "__metadata"),
-            /*typeArguments*/ undefined,
-            [
-                createLiteral(metadataKey),
-                metadataValue
-            ]
-        );
-    }
-
-    export function createDecorateHelper(externalHelpersModuleName: Identifier | undefined, decoratorExpressions: Expression[], target: Expression, memberName?: Expression, descriptor?: Expression, location?: TextRange) {
-        const argumentsArray: Expression[] = [];
-        argumentsArray.push(createArrayLiteral(decoratorExpressions, /*location*/ undefined, /*multiLine*/ true));
-        argumentsArray.push(target);
-        if (memberName) {
-            argumentsArray.push(memberName);
-            if (descriptor) {
-                argumentsArray.push(descriptor);
-            }
-        }
-
-        return createCall(createHelperName(externalHelpersModuleName, "__decorate"), /*typeArguments*/ undefined, argumentsArray, location);
-    }
-
-    export function createAwaiterHelper(externalHelpersModuleName: Identifier | undefined, hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression, body: Block) {
-        const generatorFunc = createFunctionExpression(
-            /*modifiers*/ undefined,
-            createToken(SyntaxKind.AsteriskToken),
-            /*name*/ undefined,
-            /*typeParameters*/ undefined,
-            /*parameters*/ [],
-            /*type*/ undefined,
-            body
-        );
-
-        // Mark this node as originally an async function
-        (generatorFunc.emitNode || (generatorFunc.emitNode = {})).flags |= EmitFlags.AsyncFunctionBody;
-
-        return createCall(
-            createHelperName(externalHelpersModuleName, "__awaiter"),
-            /*typeArguments*/ undefined,
-            [
-                createThis(),
-                hasLexicalArguments ? createIdentifier("arguments") : createVoidZero(),
-                promiseConstructor ? createExpressionFromEntityName(promiseConstructor) : createVoidZero(),
-                generatorFunc
-            ]
-        );
-    }
-
-    export function createHasOwnProperty(target: LeftHandSideExpression, propertyName: Expression) {
-        return createCall(
-            createPropertyAccess(target, "hasOwnProperty"),
-            /*typeArguments*/ undefined,
-            [propertyName]
-        );
-    }
-
-    function createObjectCreate(prototype: Expression) {
-        return createCall(
-            createPropertyAccess(createIdentifier("Object"), "create"),
-            /*typeArguments*/ undefined,
-            [prototype]
-        );
-    }
-
-    function createGeti(target: LeftHandSideExpression) {
-        // name => super[name]
-        return createArrowFunction(
-            /*modifiers*/ undefined,
-            /*typeParameters*/ undefined,
-            [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "name")],
-            /*type*/ undefined,
-            createToken(SyntaxKind.EqualsGreaterThanToken),
-            createElementAccess(target, createIdentifier("name"))
-        );
-    }
-
-    function createSeti(target: LeftHandSideExpression) {
-        // (name, value) => super[name] = value
-        return createArrowFunction(
-            /*modifiers*/ undefined,
-            /*typeParameters*/ undefined,
-            [
-                createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "name"),
-                createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "value")
-            ],
-            /*type*/ undefined,
-            createToken(SyntaxKind.EqualsGreaterThanToken),
-            createAssignment(
-                createElementAccess(
-                    target,
-                    createIdentifier("name")
-                ),
-                createIdentifier("value")
-            )
-        );
-    }
-
-    export function createAdvancedAsyncSuperHelper() {
-        //  const _super = (function (geti, seti) {
-        //      const cache = Object.create(null);
-        //      return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
-        //  })(name => super[name], (name, value) => super[name] = value);
-
-        // const cache = Object.create(null);
-        const createCache = createVariableStatement(
-            /*modifiers*/ undefined,
-            createConstDeclarationList([
-                createVariableDeclaration(
-                    "cache",
-                    /*type*/ undefined,
-                    createObjectCreate(createNull())
-                )
-            ])
-        );
-
-        // get value() { return geti(name); }
-        const getter = createGetAccessor(
-            /*decorators*/ undefined,
-            /*modifiers*/ undefined,
-            "value",
-            /*parameters*/ [],
-            /*type*/ undefined,
-            createBlock([
-                createReturn(
-                    createCall(
-                        createIdentifier("geti"),
-                        /*typeArguments*/ undefined,
-                        [createIdentifier("name")]
-                    )
-                )
-            ])
-        );
-
-        // set value(v) { seti(name, v); }
-        const setter = createSetAccessor(
-            /*decorators*/ undefined,
-            /*modifiers*/ undefined,
-            "value",
-            [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "v")],
-            createBlock([
-                createStatement(
-                    createCall(
-                        createIdentifier("seti"),
-                        /*typeArguments*/ undefined,
-                        [
-                            createIdentifier("name"),
-                            createIdentifier("v")
-                        ]
-                    )
-                )
-            ])
-        );
-
-        // return name => cache[name] || ...
-        const getOrCreateAccessorsForName = createReturn(
-            createArrowFunction(
-                /*modifiers*/ undefined,
-                /*typeParameters*/ undefined,
-                [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "name")],
-                /*type*/ undefined,
-                createToken(SyntaxKind.EqualsGreaterThanToken),
-                createLogicalOr(
-                    createElementAccess(
-                        createIdentifier("cache"),
-                        createIdentifier("name")
-                    ),
-                    createParen(
-                        createAssignment(
-                            createElementAccess(
-                                createIdentifier("cache"),
-                                createIdentifier("name")
-                            ),
-                            createObjectLiteral([
-                                getter,
-                                setter
-                            ])
-                        )
-                    )
-                )
-            )
-        );
-
-        //  const _super = (function (geti, seti) {
-        //      const cache = Object.create(null);
-        //      return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
-        //  })(name => super[name], (name, value) => super[name] = value);
-        return createVariableStatement(
-            /*modifiers*/ undefined,
-            createConstDeclarationList([
-                createVariableDeclaration(
-                    "_super",
-                    /*type*/ undefined,
-                    createCall(
-                        createParen(
-                            createFunctionExpression(
-                                /*modifiers*/ undefined,
-                                /*asteriskToken*/ undefined,
-                                /*name*/ undefined,
-                                /*typeParameters*/ undefined,
-                                [
-                                    createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "geti"),
-                                    createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "seti")
-                                ],
-                                /*type*/ undefined,
-                                createBlock([
-                                    createCache,
-                                    getOrCreateAccessorsForName
-                                ])
-                            )
-                        ),
-                        /*typeArguments*/ undefined,
-                        [
-                            createGeti(createSuper()),
-                            createSeti(createSuper())
-                        ]
-                    )
-                )
-            ])
-        );
-    }
-
-    export function createSimpleAsyncSuperHelper() {
-        return createVariableStatement(
-            /*modifiers*/ undefined,
-            createConstDeclarationList([
-                createVariableDeclaration(
-                    "_super",
-                    /*type*/ undefined,
-                    createGeti(createSuper())
-                )
-            ])
-        );
-    }
+    // Utilities
 
     export interface CallBinding {
         target: LeftHandSideExpression;
@@ -2339,7 +2105,9 @@ namespace ts {
         return qualifiedName;
     }
 
-    // Utilities
+    export function convertToFunctionBody(node: ConciseBody, multiLine?: boolean) {
+        return isBlock(node) ? node : createBlock([createReturn(node, /*location*/ node)], /*location*/ node, multiLine);
+    }
 
     function isUseStrictPrologue(node: ExpressionStatement): boolean {
         return (node.expression as StringLiteral).text === "use strict";
@@ -2390,14 +2158,21 @@ namespace ts {
         return statementOffset;
     }
 
+    export function startsWithUseStrict(statements: Statement[]) {
+        const firstStatement = firstOrUndefined(statements);
+        return firstStatement !== undefined
+            && isPrologueDirective(firstStatement)
+            && isUseStrictPrologue(firstStatement);
+    }
+
     /**
      * Ensures "use strict" directive is added
      *
-     * @param node source file
+     * @param statements An array of statements
      */
-    export function ensureUseStrict(node: SourceFile): SourceFile {
+    export function ensureUseStrict(statements: NodeArray<Statement>): NodeArray<Statement> {
         let foundUseStrict = false;
-        for (const statement of node.statements) {
+        for (const statement of statements) {
             if (isPrologueDirective(statement)) {
                 if (isUseStrictPrologue(statement as ExpressionStatement)) {
                     foundUseStrict = true;
@@ -2408,13 +2183,15 @@ namespace ts {
                 break;
             }
         }
+
         if (!foundUseStrict) {
-            const statements: Statement[] = [];
-            statements.push(startOnNewLine(createStatement(createLiteral("use strict"))));
-            // add "use strict" as the first statement
-            return updateSourceFileNode(node, statements.concat(node.statements));
+            return createNodeArray<Statement>([
+                startOnNewLine(createStatement(createLiteral("use strict"))),
+                ...statements
+            ], statements);
         }
-        return node;
+
+        return statements;
     }
 
     /**
@@ -2592,6 +2369,16 @@ namespace ts {
         }
 
         return SyntaxKind.Unknown;
+    }
+
+    export function parenthesizeForConditionalHead(condition: Expression) {
+        const conditionalPrecedence = getOperatorPrecedence(SyntaxKind.ConditionalExpression, SyntaxKind.QuestionToken);
+        const emittedCondition = skipPartiallyEmittedExpressions(condition);
+        const conditionPrecedence = getExpressionPrecedence(emittedCondition);
+        if (compareValues(conditionPrecedence, conditionalPrecedence) === Comparison.LessThan) {
+            return createParen(condition);
+        }
+        return condition;
     }
 
     /**
@@ -2833,12 +2620,21 @@ namespace ts {
     }
 
     function mergeEmitNode(sourceEmitNode: EmitNode, destEmitNode: EmitNode) {
-        const { flags, commentRange, sourceMapRange, tokenSourceMapRanges } = sourceEmitNode;
-        if (!destEmitNode && (flags || commentRange || sourceMapRange || tokenSourceMapRanges)) destEmitNode = {};
+        const {
+            flags,
+            commentRange,
+            sourceMapRange,
+            tokenSourceMapRanges,
+            constantValue,
+            helpers
+        } = sourceEmitNode;
+        if (!destEmitNode) destEmitNode = {};
         if (flags) destEmitNode.flags = flags;
         if (commentRange) destEmitNode.commentRange = commentRange;
         if (sourceMapRange) destEmitNode.sourceMapRange = sourceMapRange;
         if (tokenSourceMapRanges) destEmitNode.tokenSourceMapRanges = mergeTokenSourceMapRanges(tokenSourceMapRanges, destEmitNode.tokenSourceMapRanges);
+        if (constantValue !== undefined) destEmitNode.constantValue = constantValue;
+        if (helpers) destEmitNode.helpers = addRange(destEmitNode.helpers, helpers);
         return destEmitNode;
     }
 
@@ -2875,7 +2671,7 @@ namespace ts {
      *
      * @param node The node.
      */
-    function getOrCreateEmitNode(node: Node) {
+    export function getOrCreateEmitNode(node: Node) {
         if (!node.emitNode) {
             if (isParseTreeNode(node)) {
                 // To avoid holding onto transformation artifacts, we keep track of any
@@ -2917,6 +2713,16 @@ namespace ts {
     }
 
     /**
+     * Gets a custom text range to use when emitting source maps.
+     *
+     * @param node The node.
+     */
+    export function getSourceMapRange(node: Node) {
+        const emitNode = node.emitNode;
+        return (emitNode && emitNode.sourceMapRange) || node;
+    }
+
+    /**
      * Sets a custom text range to use when emitting source maps.
      *
      * @param node The node.
@@ -2925,6 +2731,18 @@ namespace ts {
     export function setSourceMapRange<T extends Node>(node: T, range: TextRange) {
         getOrCreateEmitNode(node).sourceMapRange = range;
         return node;
+    }
+
+    /**
+     * Gets the TextRange to use for source maps for a token of a node.
+     *
+     * @param node The node.
+     * @param token The token.
+     */
+    export function getTokenSourceMapRange(node: Node, token: SyntaxKind) {
+        const emitNode = node.emitNode;
+        const tokenSourceMapRanges = emitNode && emitNode.tokenSourceMapRanges;
+        return tokenSourceMapRanges && tokenSourceMapRanges[token];
     }
 
     /**
@@ -2942,14 +2760,6 @@ namespace ts {
     }
 
     /**
-     * Sets a custom text range to use when emitting comments.
-     */
-    export function setCommentRange<T extends Node>(node: T, range: TextRange) {
-        getOrCreateEmitNode(node).commentRange = range;
-        return node;
-    }
-
-    /**
      * Gets a custom text range to use when emitting comments.
      *
      * @param node The node.
@@ -2960,25 +2770,11 @@ namespace ts {
     }
 
     /**
-     * Gets a custom text range to use when emitting source maps.
-     *
-     * @param node The node.
+     * Sets a custom text range to use when emitting comments.
      */
-    export function getSourceMapRange(node: Node) {
-        const emitNode = node.emitNode;
-        return (emitNode && emitNode.sourceMapRange) || node;
-    }
-
-    /**
-     * Gets the TextRange to use for source maps for a token of a node.
-     *
-     * @param node The node.
-     * @param token The token.
-     */
-    export function getTokenSourceMapRange(node: Node, token: SyntaxKind) {
-        const emitNode = node.emitNode;
-        const tokenSourceMapRanges = emitNode && emitNode.tokenSourceMapRanges;
-        return tokenSourceMapRanges && tokenSourceMapRanges[token];
+    export function setCommentRange<T extends Node>(node: T, range: TextRange) {
+        getOrCreateEmitNode(node).commentRange = range;
+        return node;
     }
 
     /**
@@ -2996,6 +2792,113 @@ namespace ts {
         const emitNode = getOrCreateEmitNode(node);
         emitNode.constantValue = value;
         return node;
+    }
+
+    export function getExternalHelpersModuleName(node: SourceFile) {
+        const parseNode = getOriginalNode(node, isSourceFile);
+        const emitNode = parseNode && parseNode.emitNode;
+        return emitNode && emitNode.externalHelpersModuleName;
+    }
+
+    export function getOrCreateExternalHelpersModuleNameIfNeeded(node: SourceFile, compilerOptions: CompilerOptions) {
+        if (compilerOptions.importHelpers && (isExternalModule(node) || compilerOptions.isolatedModules)) {
+            const externalHelpersModuleName = getExternalHelpersModuleName(node);
+            if (externalHelpersModuleName) {
+                return externalHelpersModuleName;
+            }
+
+            const helpers = getEmitHelpers(node);
+            if (helpers) {
+                for (const helper of helpers) {
+                    if (!helper.scoped) {
+                        const parseNode = getOriginalNode(node, isSourceFile);
+                        const emitNode = getOrCreateEmitNode(parseNode);
+                        return emitNode.externalHelpersModuleName || (emitNode.externalHelpersModuleName = createUniqueName(externalHelpersModuleNameText));
+                    }
+                }
+            }
+        }
+    }
+    /**
+     * Adds an EmitHelper to a node.
+     */
+    export function addEmitHelper<T extends Node>(node: T, helper: EmitHelper): T {
+        const emitNode = getOrCreateEmitNode(node);
+        emitNode.helpers = append(emitNode.helpers, helper);
+        return node;
+    }
+
+    /**
+     * Adds an EmitHelper to a node.
+     */
+    export function addEmitHelpers<T extends Node>(node: T, helpers: EmitHelper[] | undefined): T {
+        if (some(helpers)) {
+            const emitNode = getOrCreateEmitNode(node);
+            for (const helper of helpers) {
+                if (!contains(emitNode.helpers, helper)) {
+                    emitNode.helpers = append(emitNode.helpers, helper);
+                }
+            }
+        }
+        return node;
+    }
+
+    /**
+     * Removes an EmitHelper from a node.
+     */
+    export function removeEmitHelper(node: Node, helper: EmitHelper): boolean {
+        const emitNode = node.emitNode;
+        if (emitNode) {
+            const helpers = emitNode.helpers;
+            if (helpers) {
+                return orderedRemoveItem(helpers, helper);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Gets the EmitHelpers of a node.
+     */
+    export function getEmitHelpers(node: Node): EmitHelper[] | undefined {
+        const emitNode = node.emitNode;
+        return emitNode && emitNode.helpers;
+    }
+
+    /**
+     * Moves matching emit helpers from a source node to a target node.
+     */
+    export function moveEmitHelpers(source: Node, target: Node, predicate: (helper: EmitHelper) => boolean) {
+        const sourceEmitNode = source.emitNode;
+        const sourceEmitHelpers = sourceEmitNode && sourceEmitNode.helpers;
+        if (!some(sourceEmitHelpers)) return;
+
+        const targetEmitNode = getOrCreateEmitNode(target);
+        let helpersRemoved = 0;
+        for (let i = 0; i < sourceEmitHelpers.length; i++) {
+            const helper = sourceEmitHelpers[i];
+            if (predicate(helper)) {
+                helpersRemoved++;
+                if (!contains(targetEmitNode.helpers, helper)) {
+                    targetEmitNode.helpers = append(targetEmitNode.helpers, helper);
+                }
+            }
+            else if (helpersRemoved > 0) {
+                sourceEmitHelpers[i - helpersRemoved] = helper;
+            }
+        }
+
+        if (helpersRemoved > 0) {
+            sourceEmitHelpers.length -= helpersRemoved;
+        }
+    }
+
+    export function compareEmitHelpers(x: EmitHelper, y: EmitHelper) {
+        if (x === y) return Comparison.EqualTo;
+        if (x.priority === y.priority) return Comparison.EqualTo;
+        if (x.priority === undefined) return Comparison.GreaterThan;
+        if (y.priority === undefined) return Comparison.LessThan;
+        return compareValues(x.priority, y.priority);
     }
 
     export function setTextRange<T extends TextRange>(node: T, location: TextRange): T {
@@ -3094,536 +2997,432 @@ namespace ts {
     }
 
     /**
-     * Transforms the body of a function-like node.
-     *
-     * @param node A function-like node.
+     * Gets the initializer of an BindingOrAssignmentElement.
      */
-    export function transformFunctionBody(node: FunctionLikeDeclaration,
-                                          visitor: (node: Node) => VisitResult<Node>,
-                                          currentSourceFile: SourceFile,
-                                          context: TransformationContext,
-                                          enableSubstitutionsForCapturedThis: () => void,
-                                          convertObjectRest?: boolean) {
-        let multiLine = false; // indicates whether the block *must* be emitted as multiple lines
-        let singleLine = false; // indicates whether the block *may* be emitted as a single line
-        let statementsLocation: TextRange;
-        let closeBraceLocation: TextRange;
-
-        const statements: Statement[] = [];
-        const body = node.body;
-        let statementOffset: number;
-
-        context.startLexicalEnvironment();
-        if (isBlock(body)) {
-            // ensureUseStrict is false because no new prologue-directive should be added.
-            // addPrologueDirectives will simply put already-existing directives at the beginning of the target statement-array
-            statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false, visitor);
+    export function getInitializerOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): Expression | undefined {
+        if (isDeclarationBindingElement(bindingElement)) {
+            // `1` in `let { a = 1 } = ...`
+            // `1` in `let { a: b = 1 } = ...`
+            // `1` in `let { a: {b} = 1 } = ...`
+            // `1` in `let { a: [b] = 1 } = ...`
+            // `1` in `let [a = 1] = ...`
+            // `1` in `let [{a} = 1] = ...`
+            // `1` in `let [[a] = 1] = ...`
+            return bindingElement.initializer;
         }
 
-        addCaptureThisForNodeIfNeeded(statements, node, enableSubstitutionsForCapturedThis);
-        addDefaultValueAssignmentsIfNeeded(statements, node, visitor, convertObjectRest);
-        addRestParameterIfNeeded(statements, node, /*inConstructorWithSynthesizedSuper*/ false);
-
-        // If we added any generated statements, this must be a multi-line block.
-        if (!multiLine && statements.length > 0) {
-            multiLine = true;
+        if (isPropertyAssignment(bindingElement)) {
+            // `1` in `({ a: b = 1 } = ...)`
+            // `1` in `({ a: {b} = 1 } = ...)`
+            // `1` in `({ a: [b] = 1 } = ...)`
+            return isAssignmentExpression(bindingElement.initializer, /*excludeCompoundAssignment*/ true)
+                ? bindingElement.initializer.right
+                : undefined;
         }
 
-        if (isBlock(body)) {
-            statementsLocation = body.statements;
-            addRange(statements, visitNodes(body.statements, visitor, isStatement, statementOffset));
-
-            // If the original body was a multi-line block, this must be a multi-line block.
-            if (!multiLine && body.multiLine) {
-                multiLine = true;
-            }
-        }
-        else {
-            Debug.assert(node.kind === SyntaxKind.ArrowFunction);
-
-            // To align with the old emitter, we use a synthetic end position on the location
-            // for the statement list we synthesize when we down-level an arrow function with
-            // an expression function body. This prevents both comments and source maps from
-            // being emitted for the end position only.
-            statementsLocation = moveRangeEnd(body, -1);
-
-            const equalsGreaterThanToken = (<ArrowFunction>node).equalsGreaterThanToken;
-            if (!nodeIsSynthesized(equalsGreaterThanToken) && !nodeIsSynthesized(body)) {
-                if (rangeEndIsOnSameLineAsRangeStart(equalsGreaterThanToken, body, currentSourceFile)) {
-                    singleLine = true;
-                }
-                else {
-                    multiLine = true;
-                }
-            }
-
-            const expression = visitNode(body, visitor, isExpression);
-            const returnStatement = createReturn(expression, /*location*/ body);
-            setEmitFlags(returnStatement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTrailingComments);
-            statements.push(returnStatement);
-
-            // To align with the source map emit for the old emitter, we set a custom
-            // source map location for the close brace.
-            closeBraceLocation = body;
+        if (isShorthandPropertyAssignment(bindingElement)) {
+            // `1` in `({ a = 1 } = ...)`
+            return bindingElement.objectAssignmentInitializer;
         }
 
-        const lexicalEnvironment = context.endLexicalEnvironment();
-        addRange(statements, lexicalEnvironment);
-
-        // If we added any final generated statements, this must be a multi-line block
-        if (!multiLine && lexicalEnvironment && lexicalEnvironment.length) {
-            multiLine = true;
+        if (isAssignmentExpression(bindingElement, /*excludeCompoundAssignment*/ true)) {
+            // `1` in `[a = 1] = ...`
+            // `1` in `[{a} = 1] = ...`
+            // `1` in `[[a] = 1] = ...`
+            return bindingElement.right;
         }
 
-        const block = createBlock(createNodeArray(statements, statementsLocation), node.body, multiLine);
-        if (!multiLine && singleLine) {
-            setEmitFlags(block, EmitFlags.SingleLine);
+        if (isSpreadExpression(bindingElement)) {
+            // Recovery consistent with existing emit.
+            return getInitializerOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.expression);
         }
-
-        if (closeBraceLocation) {
-            setTokenSourceMapRange(block, SyntaxKind.CloseBraceToken, closeBraceLocation);
-        }
-
-        setOriginalNode(block, node.body);
-        return block;
     }
 
     /**
-     * Adds a statement to capture the `this` of a function declaration if it is needed.
-     *
-     * @param statements The statements for the new function body.
-     * @param node A node.
+     * Gets the name of an BindingOrAssignmentElement.
      */
-    export function addCaptureThisForNodeIfNeeded(statements: Statement[], node: Node, enableSubstitutionsForCapturedThis: () => void): void {
-        if (node.transformFlags & TransformFlags.ContainsCapturedLexicalThis && node.kind !== SyntaxKind.ArrowFunction) {
-            captureThisForNode(statements, node, createThis(), enableSubstitutionsForCapturedThis);
+    export function getTargetOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): BindingOrAssignmentElementTarget {
+        if (isDeclarationBindingElement(bindingElement)) {
+            // `a` in `let { a } = ...`
+            // `a` in `let { a = 1 } = ...`
+            // `b` in `let { a: b } = ...`
+            // `b` in `let { a: b = 1 } = ...`
+            // `a` in `let { ...a } = ...`
+            // `{b}` in `let { a: {b} } = ...`
+            // `{b}` in `let { a: {b} = 1 } = ...`
+            // `[b]` in `let { a: [b] } = ...`
+            // `[b]` in `let { a: [b] = 1 } = ...`
+            // `a` in `let [a] = ...`
+            // `a` in `let [a = 1] = ...`
+            // `a` in `let [...a] = ...`
+            // `{a}` in `let [{a}] = ...`
+            // `{a}` in `let [{a} = 1] = ...`
+            // `[a]` in `let [[a]] = ...`
+            // `[a]` in `let [[a] = 1] = ...`
+            return <ObjectBindingPattern | ArrayBindingPattern | Identifier>bindingElement.name;
+        }
+
+        if (isObjectLiteralElementLike(bindingElement)) {
+            switch (bindingElement.kind) {
+                case SyntaxKind.PropertyAssignment:
+                    // `b` in `({ a: b } = ...)`
+                    // `b` in `({ a: b = 1 } = ...)`
+                    // `{b}` in `({ a: {b} } = ...)`
+                    // `{b}` in `({ a: {b} = 1 } = ...)`
+                    // `[b]` in `({ a: [b] } = ...)`
+                    // `[b]` in `({ a: [b] = 1 } = ...)`
+                    // `b.c` in `({ a: b.c } = ...)`
+                    // `b.c` in `({ a: b.c = 1 } = ...)`
+                    // `b[0]` in `({ a: b[0] } = ...)`
+                    // `b[0]` in `({ a: b[0] = 1 } = ...)`
+                    return getTargetOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.initializer);
+
+                case SyntaxKind.ShorthandPropertyAssignment:
+                    // `a` in `({ a } = ...)`
+                    // `a` in `({ a = 1 } = ...)`
+                    return bindingElement.name;
+
+                case SyntaxKind.SpreadAssignment:
+                    // `a` in `({ ...a } = ...)`
+                    return getTargetOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.expression);
+            }
+
+            // no target
+            return undefined;
+        }
+
+        if (isAssignmentExpression(bindingElement, /*excludeCompoundAssignment*/ true)) {
+            // `a` in `[a = 1] = ...`
+            // `{a}` in `[{a} = 1] = ...`
+            // `[a]` in `[[a] = 1] = ...`
+            // `a.b` in `[a.b = 1] = ...`
+            // `a[0]` in `[a[0] = 1] = ...`
+            return getTargetOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.left);
+        }
+
+        if (isSpreadExpression(bindingElement)) {
+            // `a` in `[...a] = ...`
+            return getTargetOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.expression);
+        }
+
+        // `a` in `[a] = ...`
+        // `{a}` in `[{a}] = ...`
+        // `[a]` in `[[a]] = ...`
+        // `a.b` in `[a.b] = ...`
+        // `a[0]` in `[a[0]] = ...`
+        return bindingElement;
+    }
+
+    /**
+     * Determines whether an BindingOrAssignmentElement is a rest element.
+     */
+    export function getRestIndicatorOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): BindingOrAssignmentElementRestIndicator {
+        switch (bindingElement.kind) {
+            case SyntaxKind.Parameter:
+            case SyntaxKind.BindingElement:
+                // `...` in `let [...a] = ...`
+                return (<ParameterDeclaration | BindingElement>bindingElement).dotDotDotToken;
+
+            case SyntaxKind.SpreadElement:
+            case SyntaxKind.SpreadAssignment:
+                // `...` in `[...a] = ...`
+                return <SpreadElement | SpreadAssignment>bindingElement;
+        }
+
+        return undefined;
+    }
+
+    /**
+     * Gets the property name of a BindingOrAssignmentElement
+     */
+    export function getPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement) {
+        switch (bindingElement.kind) {
+            case SyntaxKind.BindingElement:
+                // `a` in `let { a: b } = ...`
+                // `[a]` in `let { [a]: b } = ...`
+                // `"a"` in `let { "a": b } = ...`
+                // `1` in `let { 1: b } = ...`
+                if ((<BindingElement>bindingElement).propertyName) {
+                    const propertyName = (<BindingElement>bindingElement).propertyName;
+                    return isComputedPropertyName(propertyName) && isStringOrNumericLiteral(propertyName.expression)
+                        ? propertyName.expression
+                        : propertyName;
+                }
+
+                break;
+
+            case SyntaxKind.PropertyAssignment:
+                // `a` in `({ a: b } = ...)`
+                // `[a]` in `({ [a]: b } = ...)`
+                // `"a"` in `({ "a": b } = ...)`
+                // `1` in `({ 1: b } = ...)`
+                if ((<PropertyAssignment>bindingElement).name) {
+                    const propertyName = (<PropertyAssignment>bindingElement).name;
+                    return isComputedPropertyName(propertyName) && isStringOrNumericLiteral(propertyName.expression)
+                        ? propertyName.expression
+                        : propertyName;
+                }
+
+                break;
+
+            case SyntaxKind.SpreadAssignment:
+                // `a` in `({ ...a } = ...)`
+                return (<SpreadAssignment>bindingElement).name;
+        }
+
+        const target = getTargetOfBindingOrAssignmentElement(bindingElement);
+        if (target && isPropertyName(target)) {
+            return isComputedPropertyName(target) && isStringOrNumericLiteral(target.expression)
+                ? target.expression
+                : target;
+        }
+
+        Debug.fail("Invalid property name for binding element.");
+    }
+
+    /**
+     * Gets the elements of a BindingOrAssignmentPattern
+     */
+    export function getElementsOfBindingOrAssignmentPattern(name: BindingOrAssignmentPattern): BindingOrAssignmentElement[] {
+        switch (name.kind) {
+            case SyntaxKind.ObjectBindingPattern:
+            case SyntaxKind.ArrayBindingPattern:
+            case SyntaxKind.ArrayLiteralExpression:
+                // `a` in `{a}`
+                // `a` in `[a]`
+                return <BindingOrAssignmentElement[]>name.elements;
+
+            case SyntaxKind.ObjectLiteralExpression:
+                // `a` in `{a}`
+                return <BindingOrAssignmentElement[]>name.properties;
         }
     }
 
-    export function captureThisForNode(statements: Statement[], node: Node, initializer: Expression | undefined, enableSubstitutionsForCapturedThis?: () => void, originalStatement?: Statement): void {
-        enableSubstitutionsForCapturedThis();
-        const captureThisStatement = createVariableStatement(
+    export function convertToArrayAssignmentElement(element: BindingOrAssignmentElement) {
+        if (isBindingElement(element)) {
+            if (element.dotDotDotToken) {
+                Debug.assertNode(element.name, isIdentifier);
+                return setOriginalNode(createSpread(<Identifier>element.name, element), element);
+            }
+            const expression = convertToAssignmentElementTarget(<ObjectBindingPattern | ArrayBindingPattern | Identifier>element.name);
+            return element.initializer ? setOriginalNode(createAssignment(expression, element.initializer, element), element) : expression;
+        }
+        Debug.assertNode(element, isExpression);
+        return <Expression>element;
+    }
+
+    export function convertToObjectAssignmentElement(element: BindingOrAssignmentElement) {
+        if (isBindingElement(element)) {
+            if (element.dotDotDotToken) {
+                Debug.assertNode(element.name, isIdentifier);
+                return setOriginalNode(createSpreadAssignment(<Identifier>element.name, element), element);
+            }
+            if (element.propertyName) {
+                const expression = convertToAssignmentElementTarget(<ObjectBindingPattern | ArrayBindingPattern | Identifier>element.name);
+                return setOriginalNode(createPropertyAssignment(element.propertyName, element.initializer ? createAssignment(expression, element.initializer) : expression, element), element);
+            }
+            Debug.assertNode(element.name, isIdentifier);
+            return setOriginalNode(createShorthandPropertyAssignment(<Identifier>element.name, element.initializer, element), element);
+        }
+        Debug.assertNode(element, isObjectLiteralElementLike);
+        return <ObjectLiteralElementLike>element;
+    }
+
+    export function convertToAssignmentPattern(node: BindingOrAssignmentPattern): AssignmentPattern {
+        switch (node.kind) {
+            case SyntaxKind.ArrayBindingPattern:
+            case SyntaxKind.ArrayLiteralExpression:
+                return convertToArrayAssignmentPattern(node);
+
+            case SyntaxKind.ObjectBindingPattern:
+            case SyntaxKind.ObjectLiteralExpression:
+                return convertToObjectAssignmentPattern(node);
+        }
+    }
+
+    export function convertToObjectAssignmentPattern(node: ObjectBindingOrAssignmentPattern) {
+        if (isObjectBindingPattern(node)) {
+            return setOriginalNode(createObjectLiteral(map(node.elements, convertToObjectAssignmentElement), node), node);
+        }
+        Debug.assertNode(node, isObjectLiteralExpression);
+        return <ObjectLiteralExpression>node;
+    }
+
+    export function convertToArrayAssignmentPattern(node: ArrayBindingOrAssignmentPattern) {
+        if (isArrayBindingPattern(node)) {
+            return setOriginalNode(createArrayLiteral(map(node.elements, convertToArrayAssignmentElement), node), node);
+        }
+        Debug.assertNode(node, isArrayLiteralExpression);
+        return <ArrayLiteralExpression>node;
+    }
+
+    export function convertToAssignmentElementTarget(node: BindingOrAssignmentElementTarget): Expression {
+        if (isBindingPattern(node)) {
+            return convertToAssignmentPattern(node);
+        }
+
+        Debug.assertNode(node, isExpression);
+        return <Expression>node;
+    }
+
+    export interface ExternalModuleInfo {
+        externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[]; // imports of other external modules
+        externalHelpersImportDeclaration: ImportDeclaration | undefined; // import of external helpers
+        exportSpecifiers: Map<ExportSpecifier[]>; // export specifiers by name
+        exportedBindings: Map<Identifier[]>; // exported names of local declarations
+        exportedNames: Identifier[]; // all exported names local to module
+        exportEquals: ExportAssignment | undefined; // an export= declaration if one was present
+        hasExportStarsToExportValues: boolean; // whether this module contains export*
+    }
+
+    export function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver, compilerOptions: CompilerOptions): ExternalModuleInfo {
+        const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
+        const exportSpecifiers = createMap<ExportSpecifier[]>();
+        const exportedBindings = createMap<Identifier[]>();
+        const uniqueExports = createMap<boolean>();
+        let exportedNames: Identifier[];
+        let hasExportDefault = false;
+        let exportEquals: ExportAssignment = undefined;
+        let hasExportStarsToExportValues = false;
+
+        const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(sourceFile, compilerOptions);
+        const externalHelpersImportDeclaration = externalHelpersModuleName && createImportDeclaration(
+            /*decorators*/ undefined,
             /*modifiers*/ undefined,
-            createVariableDeclarationList([
-                createVariableDeclaration(
-                    "_this",
-                    /*type*/ undefined,
-                    initializer
-                )
-            ]),
-            originalStatement
-        );
+            createImportClause(/*name*/ undefined, createNamespaceImport(externalHelpersModuleName)),
+            createLiteral(externalHelpersModuleNameText));
 
-        setEmitFlags(captureThisStatement, EmitFlags.NoComments | EmitFlags.CustomPrologue);
-        setSourceMapRange(captureThisStatement, node);
-        statements.push(captureThisStatement);
+        if (externalHelpersImportDeclaration) {
+            externalImports.push(externalHelpersImportDeclaration);
+        }
+
+        for (const node of sourceFile.statements) {
+            switch (node.kind) {
+                case SyntaxKind.ImportDeclaration:
+                    // import "mod"
+                    // import x from "mod"
+                    // import * as x from "mod"
+                    // import { x, y } from "mod"
+                    externalImports.push(<ImportDeclaration>node);
+                    break;
+
+                case SyntaxKind.ImportEqualsDeclaration:
+                    if ((<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference) {
+                        // import x = require("mod")
+                        externalImports.push(<ImportEqualsDeclaration>node);
+                    }
+
+                    break;
+
+                case SyntaxKind.ExportDeclaration:
+                    if ((<ExportDeclaration>node).moduleSpecifier) {
+                        if (!(<ExportDeclaration>node).exportClause) {
+                            // export * from "mod"
+                            externalImports.push(<ExportDeclaration>node);
+                            hasExportStarsToExportValues = true;
+                        }
+                        else {
+                            // export { x, y } from "mod"
+                            externalImports.push(<ExportDeclaration>node);
+                        }
+                    }
+                    else {
+                        // export { x, y }
+                        for (const specifier of (<ExportDeclaration>node).exportClause.elements) {
+                            if (!uniqueExports[specifier.name.text]) {
+                                const name = specifier.propertyName || specifier.name;
+                                multiMapAdd(exportSpecifiers, name.text, specifier);
+
+                                const decl = resolver.getReferencedImportDeclaration(name)
+                                    || resolver.getReferencedValueDeclaration(name);
+
+                                if (decl) {
+                                    multiMapAdd(exportedBindings, getOriginalNodeId(decl), specifier.name);
+                                }
+
+                                uniqueExports[specifier.name.text] = true;
+                                exportedNames = append(exportedNames, specifier.name);
+                            }
+                        }
+                    }
+                    break;
+
+                case SyntaxKind.ExportAssignment:
+                    if ((<ExportAssignment>node).isExportEquals && !exportEquals) {
+                        // export = x
+                        exportEquals = <ExportAssignment>node;
+                    }
+                    break;
+
+                case SyntaxKind.VariableStatement:
+                    if (hasModifier(node, ModifierFlags.Export)) {
+                        for (const decl of (<VariableStatement>node).declarationList.declarations) {
+                            exportedNames = collectExportedVariableInfo(decl, uniqueExports, exportedNames);
+                        }
+                    }
+                    break;
+
+                case SyntaxKind.FunctionDeclaration:
+                    if (hasModifier(node, ModifierFlags.Export)) {
+                        if (hasModifier(node, ModifierFlags.Default)) {
+                            // export default function() { }
+                            if (!hasExportDefault) {
+                                multiMapAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<FunctionDeclaration>node));
+                                hasExportDefault = true;
+                            }
+                        }
+                        else {
+                            // export function x() { }
+                            const name = (<FunctionDeclaration>node).name;
+                            if (!uniqueExports[name.text]) {
+                                multiMapAdd(exportedBindings, getOriginalNodeId(node), name);
+                                uniqueExports[name.text] = true;
+                                exportedNames = append(exportedNames, name);
+                            }
+                        }
+                    }
+                    break;
+
+                case SyntaxKind.ClassDeclaration:
+                    if (hasModifier(node, ModifierFlags.Export)) {
+                        if (hasModifier(node, ModifierFlags.Default)) {
+                            // export default class { }
+                            if (!hasExportDefault) {
+                                multiMapAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<ClassDeclaration>node));
+                                hasExportDefault = true;
+                            }
+                        }
+                        else {
+                            // export class x { }
+                            const name = (<ClassDeclaration>node).name;
+                            if (!uniqueExports[name.text]) {
+                                multiMapAdd(exportedBindings, getOriginalNodeId(node), name);
+                                uniqueExports[name.text] = true;
+                                exportedNames = append(exportedNames, name);
+                            }
+                        }
+                    }
+                    break;
+            }
+        }
+
+        return { externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues, exportedBindings, exportedNames, externalHelpersImportDeclaration };
     }
 
-    /**
-     * Gets a value indicating whether we need to add default value assignments for a
-     * function-like node.
-     *
-     * @param node A function-like node.
-     */
-    function shouldAddDefaultValueAssignments(node: FunctionLikeDeclaration): boolean {
-        return (node.transformFlags & TransformFlags.ContainsDefaultValueAssignments) !== 0;
-    }
-
-    /**
-     * Adds statements to the body of a function-like node if it contains parameters with
-     * binding patterns or initializers.
-     *
-     * @param statements The statements for the new function body.
-     * @param node A function-like node.
-     */
-    export function addDefaultValueAssignmentsIfNeeded(statements: Statement[],
-                                                       node: FunctionLikeDeclaration,
-                                                       visitor: (node: Node) => VisitResult<Node>,
-                                                       convertObjectRest: boolean): void {
-        if (!shouldAddDefaultValueAssignments(node)) {
-            return;
-        }
-
-        for (const parameter of node.parameters) {
-            const { name, initializer, dotDotDotToken } = parameter;
-
-            // A rest parameter cannot have a binding pattern or an initializer,
-            // so let's just ignore it.
-            if (dotDotDotToken) {
-                continue;
-            }
-
-            if (isBindingPattern(name)) {
-                addDefaultValueAssignmentForBindingPattern(statements, parameter, name, initializer, visitor, convertObjectRest);
-            }
-            else if (initializer) {
-                addDefaultValueAssignmentForInitializer(statements, parameter, name, initializer, visitor);
+    function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<boolean>, exportedNames: Identifier[]) {
+        if (isBindingPattern(decl.name)) {
+            for (const element of decl.name.elements) {
+                if (!isOmittedExpression(element)) {
+                    exportedNames = collectExportedVariableInfo(element, uniqueExports, exportedNames);
+                }
             }
         }
-    }
-
-    /**
-     * Adds statements to the body of a function-like node for parameters with binding patterns
-     *
-     * @param statements The statements for the new function body.
-     * @param parameter The parameter for the function.
-     * @param name The name of the parameter.
-     * @param initializer The initializer for the parameter.
-     */
-    function addDefaultValueAssignmentForBindingPattern(statements: Statement[],
-                                                        parameter: ParameterDeclaration,
-                                                        name: BindingPattern, initializer: Expression,
-                                                        visitor: (node: Node) => VisitResult<Node>,
-                                                        convertObjectRest: boolean): void {
-        const temp = getGeneratedNameForNode(parameter);
-
-        // In cases where a binding pattern is simply '[]' or '{}',
-        // we usually don't want to emit a var declaration; however, in the presence
-        // of an initializer, we must emit that expression to preserve side effects.
-        if (name.elements.length > 0) {
-            statements.push(
-                setEmitFlags(
-                    createVariableStatement(
-                        /*modifiers*/ undefined,
-                        createVariableDeclarationList(
-                            flattenParameterDestructuring(parameter, temp, visitor, convertObjectRest)
-                        )
-                    ),
-                    EmitFlags.CustomPrologue
-                )
-            );
-        }
-        else if (initializer) {
-            statements.push(
-                setEmitFlags(
-                    createStatement(
-                        createAssignment(
-                            temp,
-                            visitNode(initializer, visitor, isExpression)
-                        )
-                    ),
-                    EmitFlags.CustomPrologue
-                )
-            );
-        }
-    }
-
-    /**
-     * Adds statements to the body of a function-like node for parameters with initializers.
-     *
-     * @param statements The statements for the new function body.
-     * @param parameter The parameter for the function.
-     * @param name The name of the parameter.
-     * @param initializer The initializer for the parameter.
-     */
-    function addDefaultValueAssignmentForInitializer(statements: Statement[],
-                                                     parameter: ParameterDeclaration,
-                                                     name: Identifier,
-                                                     initializer: Expression,
-                                                     visitor: (node: Node) => VisitResult<Node>): void {
-        initializer = visitNode(initializer, visitor, isExpression);
-        const statement = createIf(
-            createStrictEquality(
-                getSynthesizedClone(name),
-                createVoidZero()
-            ),
-            setEmitFlags(
-                createBlock([
-                    createStatement(
-                        createAssignment(
-                            setEmitFlags(getMutableClone(name), EmitFlags.NoSourceMap),
-                            setEmitFlags(initializer, EmitFlags.NoSourceMap | getEmitFlags(initializer)),
-                            /*location*/ parameter
-                        )
-                    )
-                ], /*location*/ parameter),
-                EmitFlags.SingleLine | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTokenSourceMaps
-            ),
-            /*elseStatement*/ undefined,
-            /*location*/ parameter
-        );
-        statement.startsOnNewLine = true;
-        setEmitFlags(statement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.CustomPrologue);
-        statements.push(statement);
-    }
-
-    /**
-     * Gets a value indicating whether we need to add statements to handle a rest parameter.
-     *
-     * @param node A ParameterDeclaration node.
-     * @param inConstructorWithSynthesizedSuper A value indicating whether the parameter is
-     *                                          part of a constructor declaration with a
-     *                                          synthesized call to `super`
-     */
-    function shouldAddRestParameter(node: ParameterDeclaration, inConstructorWithSynthesizedSuper: boolean) {
-        return node && node.dotDotDotToken && node.name.kind === SyntaxKind.Identifier && !inConstructorWithSynthesizedSuper;
-    }
-
-    /**
-     * Adds statements to the body of a function-like node if it contains a rest parameter.
-     *
-     * @param statements The statements for the new function body.
-     * @param node A function-like node.
-     * @param inConstructorWithSynthesizedSuper A value indicating whether the parameter is
-     *                                          part of a constructor declaration with a
-     *                                          synthesized call to `super`
-     */
-    export function addRestParameterIfNeeded(statements: Statement[], node: FunctionLikeDeclaration, inConstructorWithSynthesizedSuper: boolean): void {
-        const parameter = lastOrUndefined(node.parameters);
-        if (!shouldAddRestParameter(parameter, inConstructorWithSynthesizedSuper)) {
-            return;
-        }
-
-        // `declarationName` is the name of the local declaration for the parameter.
-        const declarationName = getMutableClone(<Identifier>parameter.name);
-        setEmitFlags(declarationName, EmitFlags.NoSourceMap);
-
-        // `expressionName` is the name of the parameter used in expressions.
-        const expressionName = getSynthesizedClone(<Identifier>parameter.name);
-        const restIndex = node.parameters.length - 1;
-        const temp = createLoopVariable();
-
-        // var param = [];
-        statements.push(
-            setEmitFlags(
-                createVariableStatement(
-                    /*modifiers*/ undefined,
-                    createVariableDeclarationList([
-                        createVariableDeclaration(
-                            declarationName,
-                            /*type*/ undefined,
-                            createArrayLiteral([])
-                        )
-                    ]),
-                    /*location*/ parameter
-                ),
-                EmitFlags.CustomPrologue
-            )
-        );
-
-        // for (var _i = restIndex; _i < arguments.length; _i++) {
-        //   param[_i - restIndex] = arguments[_i];
-        // }
-        const forStatement = createFor(
-            createVariableDeclarationList([
-                createVariableDeclaration(temp, /*type*/ undefined, createLiteral(restIndex))
-            ], /*location*/ parameter),
-            createLessThan(
-                temp,
-                createPropertyAccess(createIdentifier("arguments"), "length"),
-                /*location*/ parameter
-            ),
-            createPostfixIncrement(temp, /*location*/ parameter),
-            createBlock([
-                startOnNewLine(
-                    createStatement(
-                        createAssignment(
-                            createElementAccess(
-                                expressionName,
-                                createSubtract(temp, createLiteral(restIndex))
-                            ),
-                            createElementAccess(createIdentifier("arguments"), temp)
-                        ),
-                        /*location*/ parameter
-                    )
-                )
-            ])
-        );
-
-        setEmitFlags(forStatement, EmitFlags.CustomPrologue);
-        startOnNewLine(forStatement);
-        statements.push(forStatement);
-    }
-
-
-
-
-    export function convertForOf(node: ForOfStatement, convertedLoopBodyStatements: Statement[],
-                                 visitor: (node: Node) => VisitResult<Node>,
-                                 enableSubstitutionsForBlockScopedBindings: () => void,
-                                 context: TransformationContext,
-                                 convertObjectRest?: boolean): ForStatement | ForOfStatement {
-        // The following ES6 code:
-        //
-        //    for (let v of expr) { }
-        //
-        // should be emitted as
-        //
-        //    for (var _i = 0, _a = expr; _i < _a.length; _i++) {
-        //        var v = _a[_i];
-        //    }
-        //
-        // where _a and _i are temps emitted to capture the RHS and the counter,
-        // respectively.
-        // When the left hand side is an expression instead of a let declaration,
-        // the "let v" is not emitted.
-        // When the left hand side is a let/const, the v is renamed if there is
-        // another v in scope.
-        // Note that all assignments to the LHS are emitted in the body, including
-        // all destructuring.
-        // Note also that because an extra statement is needed to assign to the LHS,
-        // for-of bodies are always emitted as blocks.
-
-        const expression = visitNode(node.expression, visitor, isExpression);
-        const initializer = node.initializer;
-        const statements: Statement[] = [];
-
-        // In the case where the user wrote an identifier as the RHS, like this:
-        //
-        //     for (let v of arr) { }
-        //
-        // we don't want to emit a temporary variable for the RHS, just use it directly.
-        const counter = convertObjectRest ? undefined : createLoopVariable();
-        const rhsReference = expression.kind === SyntaxKind.Identifier
-            ? createUniqueName((<Identifier>expression).text)
-            : createTempVariable(/*recordTempVariable*/ undefined);
-        const elementAccess = convertObjectRest ? rhsReference : createElementAccess(rhsReference, counter);
-
-        // Initialize LHS
-        // var v = _a[_i];
-        if (isVariableDeclarationList(initializer)) {
-            if (initializer.flags & NodeFlags.BlockScoped) {
-                enableSubstitutionsForBlockScopedBindings();
-            }
-
-            const firstOriginalDeclaration = firstOrUndefined(initializer.declarations);
-            if (firstOriginalDeclaration && isBindingPattern(firstOriginalDeclaration.name)) {
-                // This works whether the declaration is a var, let, or const.
-                // It will use rhsIterationValue _a[_i] as the initializer.
-                const declarations = flattenVariableDestructuring(
-                    firstOriginalDeclaration,
-                    elementAccess,
-                    visitor,
-                    /*recordTempVariable*/ undefined,
-                    convertObjectRest
-                );
-
-                const declarationList = createVariableDeclarationList(declarations, /*location*/ initializer);
-                setOriginalNode(declarationList, initializer);
-
-                // Adjust the source map range for the first declaration to align with the old
-                // emitter.
-                const firstDeclaration = declarations[0];
-                const lastDeclaration = lastOrUndefined(declarations);
-                setSourceMapRange(declarationList, createRange(firstDeclaration.pos, lastDeclaration.end));
-
-                statements.push(
-                    createVariableStatement(
-                        /*modifiers*/ undefined,
-                        declarationList
-                    )
-                );
-            }
-            else {
-                // The following call does not include the initializer, so we have
-                // to emit it separately.
-                statements.push(
-                    createVariableStatement(
-                        /*modifiers*/ undefined,
-                        setOriginalNode(
-                            createVariableDeclarationList([
-                                createVariableDeclaration(
-                                    firstOriginalDeclaration ? firstOriginalDeclaration.name : createTempVariable(/*recordTempVariable*/ undefined),
-                                    /*type*/ undefined,
-                                    createElementAccess(rhsReference, counter)
-                                )
-                            ], /*location*/ moveRangePos(initializer, -1)),
-                            initializer
-                        ),
-                        /*location*/ moveRangeEnd(initializer, -1)
-                    )
-                );
+        else if (!isGeneratedIdentifier(decl.name)) {
+            if (!uniqueExports[decl.name.text]) {
+                uniqueExports[decl.name.text] = true;
+                exportedNames = append(exportedNames, decl.name);
             }
         }
-        else {
-            // Initializer is an expression. Emit the expression in the body, so that it's
-            // evaluated on every iteration.
-            const assignment = createAssignment(initializer, elementAccess);
-            if (isDestructuringAssignment(assignment)) {
-                // This is a destructuring pattern, so we flatten the destructuring instead.
-                statements.push(
-                    createStatement(
-                        flattenDestructuringAssignment(
-                            context,
-                            assignment,
-                            /*needsValue*/ false,
-                            context.hoistVariableDeclaration,
-                            visitor,
-                            convertObjectRest
-                        )
-                    )
-                );
-            }
-            else {
-                // Currently there is not way to check that assignment is binary expression of destructing assignment
-                // so we have to cast never type to binaryExpression
-                (<BinaryExpression>assignment).end = initializer.end;
-                statements.push(createStatement(assignment, /*location*/ moveRangeEnd(initializer, -1)));
-            }
-        }
-
-        let bodyLocation: TextRange;
-        let statementsLocation: TextRange;
-        if (convertedLoopBodyStatements) {
-            addRange(statements, convertedLoopBodyStatements);
-        }
-        else {
-            const statement = visitNode(node.statement, visitor, isStatement);
-            if (isBlock(statement)) {
-                addRange(statements, statement.statements);
-                bodyLocation = statement;
-                statementsLocation = statement.statements;
-            }
-            else {
-                statements.push(statement);
-            }
-        }
-
-        // The old emitter does not emit source maps for the expression
-        setEmitFlags(expression, EmitFlags.NoSourceMap | getEmitFlags(expression));
-
-        // The old emitter does not emit source maps for the block.
-        // We add the location to preserve comments.
-        const body = createBlock(
-            createNodeArray(statements, /*location*/ statementsLocation),
-            /*location*/ bodyLocation
-        );
-
-        setEmitFlags(body, EmitFlags.NoSourceMap | EmitFlags.NoTokenSourceMaps);
-
-        let forStatement: ForStatement | ForOfStatement;
-        if (convertObjectRest) {
-            forStatement = createForOf(
-                createVariableDeclarationList([
-                    createVariableDeclaration(rhsReference, /*type*/ undefined, /*initializer*/ undefined, /*location*/ node.expression)
-                ], /*location*/ node.expression),
-                node.expression,
-                body,
-                /*location*/ node
-            );
-        }
-        else {
-            forStatement = createFor(
-                setEmitFlags(
-                    createVariableDeclarationList([
-                        createVariableDeclaration(counter, /*type*/ undefined, createLiteral(0), /*location*/ moveRangePos(node.expression, -1)),
-                        createVariableDeclaration(rhsReference, /*type*/ undefined, expression, /*location*/ node.expression)
-                    ], /*location*/ node.expression),
-                    EmitFlags.NoHoisting
-                ),
-                createLessThan(
-                    counter,
-                    createPropertyAccess(rhsReference, "length"),
-                    /*location*/ node.expression
-                ),
-                createPostfixIncrement(counter, /*location*/ node.expression),
-                body,
-                /*location*/ node
-            );
-        }
-
-        // Disable trailing source maps for the OpenParenToken to align source map emit with the old emitter.
-        setEmitFlags(forStatement, EmitFlags.NoTokenTrailingSourceMaps);
-        return forStatement;
+        return exportedNames;
     }
 }

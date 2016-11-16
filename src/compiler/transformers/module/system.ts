@@ -73,7 +73,7 @@ namespace ts {
             // see comment to 'substitutePostfixUnaryExpression' for more details
 
             // Collect information about the external module and dependency groups.
-            moduleInfo = moduleInfoMap[id] = collectExternalModuleInfo(node, resolver);
+            moduleInfo = moduleInfoMap[id] = collectExternalModuleInfo(node, resolver, compilerOptions);
 
             // Make sure that the name of the 'exports' function does not conflict with
             // existing identifiers.
@@ -82,6 +82,7 @@ namespace ts {
 
             // Add the body of the module.
             const dependencyGroups = collectDependencyGroups(moduleInfo.externalImports);
+            const moduleBodyBlock = createSystemModuleBody(node, dependencyGroups);
             const moduleBodyFunction = createFunctionExpression(
                 /*modifiers*/ undefined,
                 /*asteriskToken*/ undefined,
@@ -92,7 +93,7 @@ namespace ts {
                     createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, contextObject)
                 ],
                 /*type*/ undefined,
-                createSystemModuleBody(node, dependencyGroups)
+                moduleBodyBlock
             );
 
             // Write the call to `System.register`
@@ -115,7 +116,9 @@ namespace ts {
                 ], node.statements)
             );
 
-            setEmitFlags(updated, getEmitFlags(node) & ~EmitFlags.EmitEmitHelpers);
+            if (!(compilerOptions.outFile || compilerOptions.out)) {
+                moveEmitHelpers(updated, moduleBodyBlock, helper => !helper.scoped);
+            }
 
             if (noSubstitution) {
                 noSubstitutionMap[id] = noSubstitution;
@@ -236,6 +239,9 @@ namespace ts {
                 )
             );
 
+            // Visit the synthetic external helpers import declaration if present
+            visitNode(moduleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement, /*optional*/ true);
+
             // Visit the statements of the source file, emitting any transformations into
             // the `executeStatements` array. We do this *before* we fill the `setters` array
             // as we both emit transformations as well as aggregate some data used when creating
@@ -280,9 +286,7 @@ namespace ts {
                 )
             );
 
-            const body = createBlock(statements, /*location*/ undefined, /*multiLine*/ true);
-            setEmitFlags(body, EmitFlags.EmitEmitHelpers);
-            return body;
+            return createBlock(statements, /*location*/ undefined, /*multiLine*/ true);
         }
 
         /**
@@ -394,7 +398,13 @@ namespace ts {
             if (localNames) {
                 condition = createLogicalAnd(
                     condition,
-                    createLogicalNot(createHasOwnProperty(localNames, n))
+                    createLogicalNot(
+                        createCall(
+                            createPropertyAccess(localNames, "hasOwnProperty"),
+                            /*typeArguments*/ undefined,
+                            [n]
+                        )
+                    )
                 );
             }
 
@@ -808,7 +818,14 @@ namespace ts {
         function transformInitializedVariable(node: VariableDeclaration, isExportedDeclaration: boolean): Expression {
             const createAssignment = isExportedDeclaration ? createExportedVariableAssignment : createNonExportedVariableAssignment;
             return isBindingPattern(node.name)
-                ? flattenVariableDestructuringToExpression(node, hoistVariableDeclaration, createAssignment, destructuringVisitor)
+                ? flattenDestructuringAssignment(
+                    node,
+                    destructuringVisitor,
+                    context,
+                    FlattenLevel.All,
+                    /*needsValue*/ false,
+                    createAssignment
+                )
                 : createAssignment(node.name, visitNode(node.initializer, destructuringVisitor, isExpression));
         }
 
@@ -1459,7 +1476,13 @@ namespace ts {
          */
         function visitDestructuringAssignment(node: DestructuringAssignment): VisitResult<Expression> {
             if (hasExportedReferenceInDestructuringTarget(node.left)) {
-                return flattenDestructuringAssignment(context, node, /*needsValue*/ true, hoistVariableDeclaration, destructuringVisitor);
+                return flattenDestructuringAssignment(
+                    node,
+                    destructuringVisitor,
+                    context,
+                    FlattenLevel.All,
+                    /*needsValue*/ true
+                );
             }
 
             return visitEachChild(node, destructuringVisitor, context);
@@ -1599,6 +1622,14 @@ namespace ts {
          * @param node The node to substitute.
          */
         function substituteExpressionIdentifier(node: Identifier): Expression {
+            if (getEmitFlags(node) & EmitFlags.HelperName) {
+                const externalHelpersModuleName = getExternalHelpersModuleName(currentSourceFile);
+                if (externalHelpersModuleName) {
+                    return createPropertyAccess(externalHelpersModuleName, node);
+                }
+                return node;
+            }
+
             // When we see an identifier in an expression position that
             // points to an imported symbol, we should substitute a qualified
             // reference to the imported symbol if one is needed.
