@@ -1449,10 +1449,16 @@ namespace ts {
         }, tags => tags);
     }
 
-    function getJSDocs<T>(node: Node, checkParentVariableStatement: boolean, getDocs: (docs: JSDoc[]) => T[], getTags: (tags: JSDocTag[]) => T[]): T[] {
+    function getJSDocs<T>(node: Node,
+                          checkParentVariableStatement: boolean,
+                          getDocContent: (docs: JSDoc[]) => T[],
+                          getTagContent: (tags: JSDocTag[]) => T[]): T[] {
         // TODO: A lot of this work should be cached, maybe. I guess it's only used in services right now...
+                              // This will be hard because it may need to cache parentvariable versions and nonparent versions
+                              // maybe I should eliminate checkParent first ...
         let result: T[] = undefined;
         // prepend documentation from parent sources
+                              // TODO: Probably always want checkParent=true, right?
         if (checkParentVariableStatement) {
             // Try to recognize this pattern when node is initializer of variable declaration and JSDoc comments are on containing variable statement.
             // /**
@@ -1472,11 +1478,11 @@ namespace ts {
                     isVariableOfVariableDeclarationStatement ? node.parent.parent :
                         undefined;
             if (variableStatementNode) {
-                result = concatenate(result, getJSDocs(variableStatementNode, checkParentVariableStatement, getDocs, getTags));
+                result = concatenate(result, getJSDocs(variableStatementNode, checkParentVariableStatement, getDocContent, getTagContent));
             }
             if (node.kind === SyntaxKind.ModuleDeclaration &&
                 node.parent && node.parent.kind === SyntaxKind.ModuleDeclaration) {
-                result = concatenate(result, getJSDocs(node.parent, checkParentVariableStatement, getDocs, getTags));
+                result = concatenate(result, getJSDocs(node.parent, checkParentVariableStatement, getDocContent, getTagContent));
             }
 
             // Also recognize when the node is the RHS of an assignment expression
@@ -1487,33 +1493,34 @@ namespace ts {
                 (parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken &&
                 parent.parent.kind === SyntaxKind.ExpressionStatement;
             if (isSourceOfAssignmentExpressionStatement) {
-                result = concatenate(result, getJSDocs(parent.parent, checkParentVariableStatement, getDocs, getTags));
+                result = concatenate(result, getJSDocs(parent.parent, checkParentVariableStatement, getDocContent, getTagContent));
             }
 
             const isPropertyAssignmentExpression = parent && parent.kind === SyntaxKind.PropertyAssignment;
             if (isPropertyAssignmentExpression) {
-                result = concatenate(result, getJSDocs(parent, checkParentVariableStatement, getDocs, getTags));
+                result = concatenate(result, getJSDocs(parent, checkParentVariableStatement, getDocContent, getTagContent));
             }
 
             // Pull parameter comments from declaring function as well
             if (node.kind === SyntaxKind.Parameter) {
                 const paramTags = getJSDocParameterTag(node as ParameterDeclaration, checkParentVariableStatement);
                 if (paramTags) {
-                    result = concatenate(result, getTags(paramTags));
+                    result = concatenate(result, getTagContent(paramTags));
                 }
             }
         }
 
         if (isVariableLike(node) && node.initializer) {
-            result = concatenate(result, getJSDocs(node.initializer, /*checkParentVariableStatement*/ false, getDocs, getTags));
+            // TODO: Does this really need to be called for everything?
+            result = concatenate(result, getJSDocs(node.initializer, /*checkParentVariableStatement*/ false, getDocContent, getTagContent));
         }
 
         if (node.jsDocComments) {
             if (result) {
-                result = concatenate(result, getDocs(node.jsDocComments));
+                result = concatenate(result, getDocContent(node.jsDocComments));
             }
             else {
-                return getDocs(node.jsDocComments);
+                return getDocContent(node.jsDocComments);
             }
         }
 
@@ -1521,6 +1528,7 @@ namespace ts {
     }
 
     function getJSDocParameterTag(param: ParameterDeclaration, checkParentVariableStatement: boolean): JSDocTag[] {
+        // TODO: getCorrespondingJSDocParameterTag is basically the same as this, except worse. (and typed, singleton return)
         const func = param.parent as FunctionLikeDeclaration;
         const tags = getJSDocTags(func, checkParentVariableStatement);
         if (!param.name) {
@@ -1545,16 +1553,19 @@ namespace ts {
         }
     }
 
-    export function getJSDocTypeTag(node: Node): JSDocTypeTag {
-        return <JSDocTypeTag>getJSDocTag(node, SyntaxKind.JSDocTypeTag, /*checkParentVariableStatement*/ false);
+    export function getJSDocTypeTag(node: Node, checkParentVariableStatement?: boolean): JSDocTypeTag | JSDocParameterTag {
+        // TODO: Get rid of the second parameter again
+        // TODO: Don't call getJSDocTag twice. Call a version that allows you to retrieve either kind.
+        return getJSDocTag(node, SyntaxKind.JSDocTypeTag, checkParentVariableStatement) as JSDocTypeTag ||
+            node.kind === SyntaxKind.Parameter && firstOrUndefined(getJSDocParameterTag(node as ParameterDeclaration, checkParentVariableStatement)) as JSDocParameterTag;
     }
 
     export function getJSDocReturnTag(node: Node): JSDocReturnTag {
-        return <JSDocReturnTag>getJSDocTag(node, SyntaxKind.JSDocReturnTag, /*checkParentVariableStatement*/ true);
+        return getJSDocTag(node, SyntaxKind.JSDocReturnTag, /*checkParentVariableStatement*/ true) as JSDocReturnTag;
     }
 
     export function getJSDocTemplateTag(node: Node): JSDocTemplateTag {
-        return <JSDocTemplateTag>getJSDocTag(node, SyntaxKind.JSDocTemplateTag, /*checkParentVariableStatement*/ false);
+        return getJSDocTag(node, SyntaxKind.JSDocTemplateTag, /*checkParentVariableStatement*/ false) as JSDocTemplateTag;
     }
 
     export function getCorrespondingJSDocParameterTag(parameter: ParameterDeclaration): JSDocParameterTag {

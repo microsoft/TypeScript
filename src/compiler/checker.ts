@@ -3156,28 +3156,9 @@ namespace ts {
 
         function getJSDocTypeForVariableLikeDeclarationFromJSDocComment(declaration: VariableLikeDeclaration): JSDocType {
             // First, see if this node has an @type annotation on it directly.
-            const typeTag = getJSDocTypeTag(declaration);
+            const typeTag = getJSDocTypeTag(declaration, true);
             if (typeTag && typeTag.typeExpression) {
                 return typeTag.typeExpression.type;
-            }
-
-            if (declaration.kind === SyntaxKind.VariableDeclaration &&
-                declaration.parent.kind === SyntaxKind.VariableDeclarationList &&
-                declaration.parent.parent.kind === SyntaxKind.VariableStatement) {
-
-                // @type annotation might have been on the variable statement, try that instead.
-                const annotation = getJSDocTypeTag(declaration.parent.parent);
-                if (annotation && annotation.typeExpression) {
-                    return annotation.typeExpression.type;
-                }
-            }
-            else if (declaration.kind === SyntaxKind.Parameter) {
-                // If it's a parameter, see if the parent has a jsdoc comment with an @param
-                // annotation.
-                const paramTag = getCorrespondingJSDocParameterTag(<ParameterDeclaration>declaration);
-                if (paramTag && paramTag.typeExpression) {
-                    return paramTag.typeExpression.type;
-                }
             }
 
             return undefined;
@@ -13551,7 +13532,7 @@ namespace ts {
         // the destructured type into the contained binding elements.
         function assignBindingElementTypes(node: VariableLikeDeclaration) {
             if (isBindingPattern(node.name)) {
-                for (const element of (<BindingPattern>node.name).elements) {
+                for (const element of node.name.elements) {
                     if (!isOmittedExpression(element)) {
                         if (element.name.kind === SyntaxKind.Identifier) {
                             getSymbolLinks(getSymbolOfNode(element)).type = getTypeForBindingElement(element);
