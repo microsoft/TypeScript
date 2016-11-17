@@ -3816,6 +3816,11 @@ namespace ts {
     export type Transformer = (context: TransformationContext) => (node: SourceFile) => SourceFile;
 
     export interface TextSpan {
+        /**
+         * 0-indexed position in the file.
+         * 
+         * ie: the first position in the file has start === 0.
+         */
         start: number;
         length: number;
     }
