@@ -19,8 +19,7 @@ namespace ts {
 
         const {
             startLexicalEnvironment,
-            endLexicalEnvironment,
-            hoistVariableDeclaration,
+            endLexicalEnvironment
         } = context;
 
         const compilerOptions = context.getCompilerOptions();
@@ -61,7 +60,7 @@ namespace ts {
             }
 
             currentSourceFile = node;
-            currentModuleInfo = moduleInfoMap[getOriginalNodeId(node)] = collectExternalModuleInfo(node, resolver);
+            currentModuleInfo = moduleInfoMap[getOriginalNodeId(node)] = collectExternalModuleInfo(node, resolver, compilerOptions);
 
             // Perform the transformation.
             const transformModule = transformModuleDelegates[moduleKind] || transformModuleDelegates[ModuleKind.None];
@@ -82,13 +81,14 @@ namespace ts {
 
             const statements: Statement[] = [];
             const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, sourceElementVisitor);
+            append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement, /*optional*/ true));
             addRange(statements, visitNodes(node.statements, sourceElementVisitor, isStatement, statementOffset));
             addRange(statements, endLexicalEnvironment());
             addExportEqualsIfNeeded(statements, /*emitAsReturn*/ false);
 
             const updated = updateSourceFileNode(node, createNodeArray(statements, node.statements));
             if (currentModuleInfo.hasExportStarsToExportValues) {
-                setEmitFlags(updated, EmitFlags.EmitExportStar | getEmitFlags(node));
+                addEmitHelper(updated, exportStarHelper);
             }
 
             return updated;
@@ -111,8 +111,7 @@ namespace ts {
          * @param node The SourceFile node.
          */
         function transformUMDModule(node: SourceFile) {
-            const define = createIdentifier("define");
-            setEmitFlags(define, EmitFlags.UMDDefine);
+            const define = createRawExpression(umdHelper);
             return transformAsynchronousModule(node, define, /*moduleName*/ undefined, /*includeNonAmdDependencies*/ false);
         }
 
@@ -257,6 +256,7 @@ namespace ts {
             const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, sourceElementVisitor);
 
             // Visit each statement of the module body.
+            append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement, /*optional*/ true));
             addRange(statements, visitNodes(node.statements, sourceElementVisitor, isStatement, statementOffset));
 
             // End the lexical environment for the module body
@@ -270,7 +270,7 @@ namespace ts {
             if (currentModuleInfo.hasExportStarsToExportValues) {
                 // If we have any `export * from ...` declarations
                 // we need to inform the emitter to add the __export helper.
-                setEmitFlags(body, EmitFlags.EmitExportStar);
+                addEmitHelper(body, exportStarHelper);
             }
 
             return body;
@@ -757,9 +757,12 @@ namespace ts {
          */
         function transformInitializedVariable(node: VariableDeclaration): Expression {
             if (isBindingPattern(node.name)) {
-                return flattenVariableDestructuringToExpression(
+                return flattenDestructuringAssignment(
                     node,
-                    hoistVariableDeclaration,
+                    /*visitor*/ undefined,
+                    context,
+                    FlattenLevel.All,
+                    /*needsValue*/ false,
                     createExportExpression
                 );
             }
@@ -1186,6 +1189,14 @@ namespace ts {
          * @param node The node to substitute.
          */
         function substituteExpressionIdentifier(node: Identifier): Expression {
+            if (getEmitFlags(node) & EmitFlags.HelperName) {
+                const externalHelpersModuleName = getExternalHelpersModuleName(currentSourceFile);
+                if (externalHelpersModuleName) {
+                    return createPropertyAccess(externalHelpersModuleName, node);
+                }
+                return node;
+            }
+
             if (!isGeneratedIdentifier(node) && !isLocalName(node)) {
                 const exportContainer = resolver.getReferencedExportContainer(node, isExportName(node));
                 if (exportContainer && exportContainer.kind === SyntaxKind.SourceFile) {
@@ -1312,4 +1323,25 @@ namespace ts {
             }
         }
     }
+
+    // emit output for the __export helper function
+    const exportStarHelper: EmitHelper = {
+        name: "typescript:export-star",
+        scoped: true,
+        text: `
+            function __export(m) {
+                for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+            }`
+    };
+
+    // emit output for the UMD helper function.
+    const umdHelper = `
+        (function (dependencies, factory) {
+            if (typeof module === 'object' && typeof module.exports === 'object') {
+                var v = factory(require, exports); if (v !== undefined) module.exports = v;
+            }
+            else if (typeof define === 'function' && define.amd) {
+                define(dependencies, factory);
+            }
+        })`;
 }

@@ -20,9 +20,6 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
         s = arguments[i];
         for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
             t[p] = s[p];
-        if (typeof Object.getOwnPropertySymbols === "function")
-            for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++)
-                t[p[i]] = s[p[i]];
     }
     return t;
 };
@@ -36,14 +33,14 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 let array;
-for (var array_1 of array) {
-    var { x } = array_1, restOf = __rest(array_1, ["x"]);
+for (let _a of array) {
+    let { x } = _a, restOf = __rest(_a, ["x"]);
     [x, restOf];
 }
 let xx;
 let rrestOff;
-for (var array_2 of array) {
-    ({ x: xx } = array_2, rrestOff = __rest(array_2, ["x"]));
+for (let _b of array) {
+    ({ x: xx } = _b, rrestOff = __rest(_b, ["x"]));
     [xx, rrestOff];
 }
 for (const norest of array.map(a => (__assign({}, a, { x: 'a string' })))) {

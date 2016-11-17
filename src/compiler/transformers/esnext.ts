@@ -5,41 +5,55 @@
 namespace ts {
     export function transformESNext(context: TransformationContext) {
         const {
-            hoistVariableDeclaration,
+            resumeLexicalEnvironment,
+            endLexicalEnvironment
         } = context;
-        let currentSourceFile: SourceFile;
         return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
-            currentSourceFile = node;
-            return visitEachChild(node, visitor, context);
+            if (isDeclarationFile(node)) {
+                return node;
+            }
+
+            const visited = visitEachChild(node, visitor, context);
+            addEmitHelpers(visited, context.readEmitHelpers());
+            return visited;
         }
 
         function visitor(node: Node): VisitResult<Node> {
-            if (node.transformFlags & TransformFlags.ESNext) {
-                return visitorWorker(node);
-            }
-            else if (node.transformFlags & TransformFlags.ContainsESNext) {
-                return visitEachChild(node, visitor, context);
-            }
-            else {
-                return node;
-            }
+            return visitorWorker(node, /*noDestructuringValue*/ false);
         }
 
-        function visitorWorker(node: Node): VisitResult<Node> {
+        function visitorNoDestructuringValue(node: Node): VisitResult<Node> {
+            return visitorWorker(node, /*noDestructuringValue*/ true);
+        }
+
+        function visitorWorker(node: Node, noDestructuringValue: boolean): VisitResult<Node> {
+            if ((node.transformFlags & TransformFlags.ContainsESNext) === 0) {
+                return node;
+            }
+
             switch (node.kind) {
                 case SyntaxKind.ObjectLiteralExpression:
                     return visitObjectLiteralExpression(node as ObjectLiteralExpression);
                 case SyntaxKind.BinaryExpression:
-                    return visitBinaryExpression(node as BinaryExpression);
+                    return visitBinaryExpression(node as BinaryExpression, noDestructuringValue);
                 case SyntaxKind.VariableDeclaration:
                     return visitVariableDeclaration(node as VariableDeclaration);
                 case SyntaxKind.ForOfStatement:
                     return visitForOfStatement(node as ForOfStatement);
-                case SyntaxKind.ObjectBindingPattern:
-                case SyntaxKind.ArrayBindingPattern:
-                    return node;
+                case SyntaxKind.ForStatement:
+                    return visitForStatement(node as ForStatement);
+                case SyntaxKind.VoidExpression:
+                    return visitVoidExpression(node as VoidExpression);
+                case SyntaxKind.Constructor:
+                    return visitConstructorDeclaration(node as ConstructorDeclaration);
+                case SyntaxKind.MethodDeclaration:
+                    return visitMethodDeclaration(node as MethodDeclaration);
+                case SyntaxKind.GetAccessor:
+                    return visitGetAccessorDeclaration(node as GetAccessorDeclaration);
+                case SyntaxKind.SetAccessor:
+                    return visitSetAccessorDeclaration(node as SetAccessorDeclaration);
                 case SyntaxKind.FunctionDeclaration:
                     return visitFunctionDeclaration(node as FunctionDeclaration);
                 case SyntaxKind.FunctionExpression:
@@ -48,8 +62,11 @@ namespace ts {
                     return visitArrowFunction(node as ArrowFunction);
                 case SyntaxKind.Parameter:
                     return visitParameter(node as ParameterDeclaration);
+                case SyntaxKind.ExpressionStatement:
+                    return visitExpressionStatement(node as ExpressionStatement);
+                case SyntaxKind.ParenthesizedExpression:
+                    return visitParenthesizedExpression(node as ParenthesizedExpression, noDestructuringValue);
                 default:
-                    Debug.failBadSyntaxKind(node);
                     return visitEachChild(node, visitor, context);
             }
         }
@@ -87,20 +104,27 @@ namespace ts {
         }
 
         function visitObjectLiteralExpression(node: ObjectLiteralExpression): Expression {
-            // spread elements emit like so:
-            // non-spread elements are chunked together into object literals, and then all are passed to __assign:
-            //     { a, ...o, b } => __assign({a}, o, {b});
-            // If the first element is a spread element, then the first argument to __assign is {}:
-            //     { ...o, a, b, ...o2 } => __assign({}, o, {a, b}, o2)
-            if (forEach(node.properties, p => p.kind === SyntaxKind.SpreadAssignment)) {
+            if (node.transformFlags & TransformFlags.ContainsObjectSpread) {
+                // spread elements emit like so:
+                // non-spread elements are chunked together into object literals, and then all are passed to __assign:
+                //     { a, ...o, b } => __assign({a}, o, {b});
+                // If the first element is a spread element, then the first argument to __assign is {}:
+                //     { ...o, a, b, ...o2 } => __assign({}, o, {a, b}, o2)
                 const objects = chunkObjectLiteralElements(node.properties);
                 if (objects.length && objects[0].kind !== SyntaxKind.ObjectLiteralExpression) {
                     objects.unshift(createObjectLiteral());
                 }
-
-                return aggregateTransformFlags(createCall(createIdentifier("__assign"), undefined, objects));
+                return createAssignHelper(context, objects);
             }
             return visitEachChild(node, visitor, context);
+        }
+
+        function visitExpressionStatement(node: ExpressionStatement): ExpressionStatement {
+            return visitEachChild(node, visitorNoDestructuringValue, context);
+        }
+
+        function visitParenthesizedExpression(node: ParenthesizedExpression, noDestructuringValue: boolean): ParenthesizedExpression {
+            return visitEachChild(node, noDestructuringValue ? visitorNoDestructuringValue : visitor, context);
         }
 
         /**
@@ -108,11 +132,23 @@ namespace ts {
          *
          * @param node A BinaryExpression node.
          */
-        function visitBinaryExpression(node: BinaryExpression): Expression {
-            if (isDestructuringAssignment(node) && node.left.transformFlags & TransformFlags.AssertESNext) {
-                return flattenDestructuringAssignment(context, node, /*needsDestructuringValue*/ true, hoistVariableDeclaration, visitor, /*transformRest*/ true);
+        function visitBinaryExpression(node: BinaryExpression, noDestructuringValue: boolean): Expression {
+            if (isDestructuringAssignment(node) && node.left.transformFlags & TransformFlags.ContainsObjectRest) {
+                return flattenDestructuringAssignment(
+                    node,
+                    visitor,
+                    context,
+                    FlattenLevel.ObjectRest,
+                    !noDestructuringValue
+                );
             }
-
+            else if (node.operatorToken.kind === SyntaxKind.CommaToken) {
+                return updateBinary(
+                    node,
+                    visitNode(node.left, visitorNoDestructuringValue, isExpression),
+                    visitNode(node.right, noDestructuringValue ? visitorNoDestructuringValue : visitor, isExpression)
+                );
+            }
             return visitEachChild(node, visitor, context);
         }
 
@@ -123,12 +159,29 @@ namespace ts {
          */
         function visitVariableDeclaration(node: VariableDeclaration): VisitResult<VariableDeclaration> {
             // If we are here it is because the name contains a binding pattern with a rest somewhere in it.
-            if (isBindingPattern(node.name) && node.name.transformFlags & TransformFlags.AssertESNext) {
-                const result = flattenVariableDestructuring(node, /*value*/ undefined, visitor, /*recordTempVariable*/ undefined, /*transformRest*/ true);
-                return result;
+            if (isBindingPattern(node.name) && node.name.transformFlags & TransformFlags.ContainsObjectRest) {
+                return flattenDestructuringBinding(
+                    node,
+                    visitor,
+                    context,
+                    FlattenLevel.ObjectRest
+                );
             }
-
             return visitEachChild(node, visitor, context);
+        }
+
+        function visitForStatement(node: ForStatement): VisitResult<Statement> {
+            return updateFor(
+                node,
+                visitNode(node.initializer, visitorNoDestructuringValue, isForInitializer),
+                visitNode(node.condition, visitor, isExpression),
+                visitNode(node.incrementor, visitor, isExpression),
+                visitNode(node.statement, visitor, isStatement)
+            );
+        }
+
+        function visitVoidExpression(node: VoidExpression) {
+            return visitEachChild(node, visitorNoDestructuringValue, context);
         }
 
         /**
@@ -137,140 +190,223 @@ namespace ts {
          * @param node A ForOfStatement.
          */
         function visitForOfStatement(node: ForOfStatement): VisitResult<Statement> {
-            // The following ESNext code:
-            //
-            //    for (let { x, y, ...rest } of expr) { }
-            //
-            // should be emitted as
-            //
-            //    for (var _a of expr) {
-            //        let { x, y } = _a, rest = __rest(_a, ["x", "y"]);
-            //    }
-            //
-            // where _a is a temp emitted to capture the RHS.
-            // When the left hand side is an expression instead of a let declaration,
-            // the `let` before the `{ x, y }` is not emitted.
-            // When the left hand side is a let/const, the v is renamed if there is
-            // another v in scope.
-            // Note that all assignments to the LHS are emitted in the body, including
-            // all destructuring.
-            // Note also that because an extra statement is needed to assign to the LHS,
-            // for-of bodies are always emitted as blocks.
-
-            // for (<init> of <expression>) <statement>
-            // where <init> is [let] variabledeclarationlist | expression
-            const initializer = node.initializer;
-            if (!isRestBindingPattern(initializer) && !isRestAssignment(initializer)) {
-                return visitEachChild(node, visitor, context);
+            let leadingStatements: Statement[];
+            let temp: Identifier;
+            const initializer = skipParentheses(node.initializer);
+            if (initializer.transformFlags & TransformFlags.ContainsObjectRest) {
+                if (isVariableDeclarationList(initializer)) {
+                    temp = createTempVariable(/*recordTempVariable*/ undefined);
+                    const firstDeclaration = firstOrUndefined(initializer.declarations);
+                    const declarations = flattenDestructuringBinding(
+                        firstDeclaration,
+                        visitor,
+                        context,
+                        FlattenLevel.ObjectRest,
+                        temp,
+                        /*doNotRecordTempVariablesInLine*/ false,
+                        /*skipInitializer*/ true,
+                    );
+                    if (some(declarations)) {
+                        const statement = createVariableStatement(
+                            /*modifiers*/ undefined,
+                            updateVariableDeclarationList(initializer, declarations),
+                            /*location*/ initializer
+                        );
+                        leadingStatements = append(leadingStatements, statement);
+                    }
+                }
+                else if (isAssignmentPattern(initializer)) {
+                    temp = createTempVariable(/*recordTempVariable*/ undefined);
+                    const expression = flattenDestructuringAssignment(
+                        aggregateTransformFlags(createAssignment(initializer, temp, /*location*/ node.initializer)),
+                        visitor,
+                        context,
+                        FlattenLevel.ObjectRest
+                    );
+                    leadingStatements = append(leadingStatements, createStatement(expression, /*location*/ node.initializer));
+                }
             }
-
-            return convertForOf(node, undefined, visitor, noop, context, /*transformRest*/ true);
-        }
-
-        function isRestBindingPattern(initializer: ForInitializer) {
-            if (isVariableDeclarationList(initializer)) {
-                const declaration = firstOrUndefined(initializer.declarations);
-                return declaration && declaration.name &&
-                    declaration.name.kind === SyntaxKind.ObjectBindingPattern &&
-                    !!(declaration.name.transformFlags & TransformFlags.ContainsSpreadExpression);
+            if (temp) {
+                const expression = visitNode(node.expression, visitor, isExpression);
+                const statement = visitNode(node.statement, visitor, isStatement);
+                const block = isBlock(statement)
+                    ? updateBlock(statement, createNodeArray(concatenate(leadingStatements, statement.statements), statement.statements))
+                    : createBlock(append(leadingStatements, statement), statement, /*multiLine*/ true);
+                return updateForOf(
+                    node,
+                    createVariableDeclarationList(
+                        [
+                            createVariableDeclaration(temp, /*type*/ undefined, /*initializer*/ undefined, node.initializer)
+                        ],
+                        node.initializer,
+                        NodeFlags.Let
+                    ),
+                    expression,
+                    block
+                );
             }
-            return false;
-        }
-
-        function isRestAssignment(initializer: ForInitializer) {
-            return initializer.kind === SyntaxKind.ObjectLiteralExpression &&
-                initializer.transformFlags & TransformFlags.ContainsSpreadExpression;
+            return visitEachChild(node, visitor, context);
         }
 
         function visitParameter(node: ParameterDeclaration): ParameterDeclaration {
-            if (isObjectRestParameter(node)) {
+            if (node.transformFlags & TransformFlags.ContainsObjectRest) {
                 // Binding patterns are converted into a generated name and are
                 // evaluated inside the function body.
-                return setOriginalNode(
-                    createParameter(
-                        /*decorators*/ undefined,
-                        /*modifiers*/ undefined,
-                        /*dotDotDotToken*/ undefined,
-                        getGeneratedNameForNode(node),
-                        /*questionToken*/ undefined,
-                        /*type*/ undefined,
-                        node.initializer,
-                        /*location*/ node
-                    ),
-                    /*original*/ node
+                return updateParameter(
+                    node,
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    node.dotDotDotToken,
+                    getGeneratedNameForNode(node),
+                    /*type*/ undefined,
+                    visitNode(node.initializer, visitor, isExpression)
                 );
             }
-            else {
-                return node;
-            }
+            return visitEachChild(node, visitor, context);
         }
 
-        function isObjectRestParameter(node: ParameterDeclaration) {
-            return node.name &&
-                node.name.kind === SyntaxKind.ObjectBindingPattern &&
-                !!(node.name.transformFlags & TransformFlags.ContainsSpreadExpression);
+        function visitConstructorDeclaration(node: ConstructorDeclaration) {
+            return updateConstructor(
+                node,
+                /*decorators*/ undefined,
+                node.modifiers,
+                visitParameterList(node.parameters, visitor, context),
+                transformFunctionBody(node)
+            );
         }
 
-        function visitFunctionDeclaration(node: FunctionDeclaration): FunctionDeclaration {
-            const hasRest = forEach(node.parameters, isObjectRestParameter);
-            const body = hasRest ?
-                transformFunctionBody(node, visitor, currentSourceFile, context, noop, /*convertObjectRest*/ true) as Block :
-                visitEachChild(node.body, visitor, context);
+        function visitGetAccessorDeclaration(node: GetAccessorDeclaration) {
+            return updateGetAccessor(
+                node,
+                /*decorators*/ undefined,
+                node.modifiers,
+                visitNode(node.name, visitor, isPropertyName),
+                visitParameterList(node.parameters, visitor, context),
+                /*type*/ undefined,
+                transformFunctionBody(node)
+            );
+        }
 
-            return setOriginalNode(
-                createFunctionDeclaration(
-                    /*decorators*/ undefined,
-                    node.modifiers,
-                    node.asteriskToken,
-                    node.name,
-                    /*typeParameters*/ undefined,
-                    visitNodes(node.parameters, visitor, isParameter),
-                    /*type*/ undefined,
-                    body,
-                    /*location*/ node
-                ),
-                /*original*/ node);
+        function visitSetAccessorDeclaration(node: SetAccessorDeclaration) {
+            return updateSetAccessor(
+                node,
+                /*decorators*/ undefined,
+                node.modifiers,
+                visitNode(node.name, visitor, isPropertyName),
+                visitParameterList(node.parameters, visitor, context),
+                transformFunctionBody(node)
+            );
+        }
+
+        function visitMethodDeclaration(node: MethodDeclaration) {
+            return updateMethod(
+                node,
+                /*decorators*/ undefined,
+                node.modifiers,
+                visitNode(node.name, visitor, isPropertyName),
+                /*typeParameters*/ undefined,
+                visitParameterList(node.parameters, visitor, context),
+                /*type*/ undefined,
+                transformFunctionBody(node)
+            );
+        }
+
+        function visitFunctionDeclaration(node: FunctionDeclaration) {
+            return updateFunctionDeclaration(
+                node,
+                /*decorators*/ undefined,
+                node.modifiers,
+                node.name,
+                /*typeParameters*/ undefined,
+                visitParameterList(node.parameters, visitor, context),
+                /*type*/ undefined,
+                transformFunctionBody(node)
+            );
         }
 
         function visitArrowFunction(node: ArrowFunction) {
-            const hasRest = forEach(node.parameters, isObjectRestParameter);
-            const body = hasRest ?
-                transformFunctionBody(node, visitor, currentSourceFile, context, noop, /*convertObjectRest*/ true) as Block :
-                visitEachChild(node.body, visitor, context);
-            const func = setOriginalNode(
-                createArrowFunction(
-                    node.modifiers,
-                    /*typeParameters*/ undefined,
-                    visitNodes(node.parameters, visitor, isParameter),
-                    /*type*/ undefined,
-                    node.equalsGreaterThanToken,
-                    body,
-                    /*location*/ node
-                ),
-                /*original*/ node
+            return updateArrowFunction(
+                node,
+                node.modifiers,
+                /*typeParameters*/ undefined,
+                visitParameterList(node.parameters, visitor, context),
+                /*type*/ undefined,
+                transformFunctionBody(node)
             );
-            setEmitFlags(func, EmitFlags.CapturesThis);
-            return func;
         }
 
-        function visitFunctionExpression(node: FunctionExpression): Expression {
-            const hasRest = forEach(node.parameters, isObjectRestParameter);
-            const body = hasRest ?
-                transformFunctionBody(node, visitor, currentSourceFile, context, noop, /*convertObjectRest*/ true) as Block :
-                visitEachChild(node.body, visitor, context);
-            return setOriginalNode(
-                createFunctionExpression(
-                    node.modifiers,
-                    node.asteriskToken,
-                    name,
-                    /*typeParameters*/ undefined,
-                    visitNodes(node.parameters, visitor, isParameter),
-                    /*type*/ undefined,
-                    body,
-                    /*location*/ node
-                ),
-                /*original*/ node
+        function visitFunctionExpression(node: FunctionExpression) {
+            return updateFunctionExpression(
+                node,
+                node.modifiers,
+                node.name,
+                /*typeParameters*/ undefined,
+                visitParameterList(node.parameters, visitor, context),
+                /*type*/ undefined,
+                transformFunctionBody(node)
             );
         }
+
+        function transformFunctionBody(node: FunctionDeclaration | FunctionExpression | ConstructorDeclaration | MethodDeclaration | AccessorDeclaration): FunctionBody;
+        function transformFunctionBody(node: ArrowFunction): ConciseBody;
+        function transformFunctionBody(node: FunctionLikeDeclaration): ConciseBody {
+            resumeLexicalEnvironment();
+            let leadingStatements: Statement[];
+            for (const parameter of node.parameters) {
+                if (parameter.transformFlags & TransformFlags.ContainsObjectRest) {
+                    const temp = getGeneratedNameForNode(parameter);
+                    const declarations = flattenDestructuringBinding(
+                        parameter,
+                        visitor,
+                        context,
+                        FlattenLevel.ObjectRest,
+                        temp,
+                        /*doNotRecordTempVariablesInLine*/ false,
+                        /*skipInitializer*/ true,
+                    );
+                    if (some(declarations)) {
+                        const statement = createVariableStatement(
+                            /*modifiers*/ undefined,
+                            createVariableDeclarationList(
+                                declarations
+                            )
+                        );
+                        setEmitFlags(statement, EmitFlags.CustomPrologue);
+                        leadingStatements = append(leadingStatements, statement);
+                    }
+                }
+            }
+            const body = visitNode(node.body, visitor, isConciseBody);
+            const trailingStatements = endLexicalEnvironment();
+            if (some(leadingStatements) || some(trailingStatements)) {
+                const block = convertToFunctionBody(body, /*multiLine*/ true);
+                return updateBlock(block, createNodeArray(concatenate(concatenate(leadingStatements, block.statements), trailingStatements), block.statements));
+            }
+            return body;
+        }
+    }
+
+    const assignHelper: EmitHelper = {
+        name: "typescript:assign",
+        scoped: false,
+        priority: 1,
+        text: `
+            var __assign = (this && this.__assign) || Object.assign || function(t) {
+                for (var s, i = 1, n = arguments.length; i < n; i++) {
+                    s = arguments[i];
+                    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                        t[p] = s[p];
+                }
+                return t;
+            };`
+    };
+
+    export function createAssignHelper(context: TransformationContext, attributesSegments: Expression[]) {
+        context.requestEmitHelper(assignHelper);
+        return createCall(
+            getHelperName("__assign"),
+            /*typeArguments*/ undefined,
+            attributesSegments
+        );
     }
 }
