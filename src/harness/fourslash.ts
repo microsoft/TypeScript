@@ -2046,6 +2046,34 @@ namespace FourSlash {
             }
         }
 
+        public verifyImportFixAtPosition(expectedTextArray: string[], errorCode?: number) {
+            const ranges = this.getRanges();
+            if (ranges.length == 0) {
+                this.raiseError("At least one range should be specified in the testfile.");
+            }
+
+            const codeFixes = this.getCodeFixes(errorCode);
+
+            if (!codeFixes || codeFixes.length == 0) {
+                this.raiseError("No codefixes returned.");
+            }
+
+            const actualTextArray: string[] = [];
+            const scriptInfo = this.languageServiceAdapterHost.getScriptInfo(codeFixes[0].changes[0].fileName);
+            const originalContent = scriptInfo.content;
+            for (const codeFix of codeFixes) {
+                this.applyEdits(codeFix.changes[0].fileName, codeFix.changes[0].textChanges, /*isFormattingEdit*/ false);
+                actualTextArray.push(this.normalizeNewlines(this.rangeText(ranges[0])));
+                scriptInfo.updateContent(originalContent);
+            }
+            const sortedExpectedArray = ts.map(expectedTextArray, str => this.normalizeNewlines(str)).sort();
+            const sortedActualArray = actualTextArray.sort();
+            if (!ts.arrayIsEqualTo(sortedExpectedArray, sortedActualArray)) {
+                this.raiseError(
+                    `Actual text array doesn't match expected text array. \nActual: \n"${sortedActualArray.join("\n\n")}"\n---\nExpected: \n'${sortedExpectedArray.join("\n\n")}'`);
+            }
+        }
+
         public verifyDocCommentTemplate(expected?: ts.TextInsertion) {
             const name = "verifyDocCommentTemplate";
             const actual = this.languageService.getDocCommentTemplateAtPosition(this.activeFile.fileName, this.currentCaretPosition);
@@ -2077,6 +2105,10 @@ namespace FourSlash {
                 const representation = lineEnding === "\r\n" ? "CRLF" : "LF";
                 return "# - " + representation + lineEnding;
             });
+        }
+
+        private normalizeNewlines(str: string) {
+            return str.replace(/\r?\n/g, "\n");
         }
 
         public verifyBraceCompletionAtPosition(negative: boolean, openingBrace: string) {
@@ -2606,7 +2638,7 @@ ${code}
                                 resetLocalData();
                             }
 
-                            currentFileName = basePath + "/" + value;
+                            currentFileName = ts.isRootedDiskPath(value) ? value : basePath + "/" + value;
                             currentFileOptions[key] = value;
                         }
                         else {
@@ -3301,6 +3333,10 @@ namespace FourSlashInterface {
 
         public codeFixAtPosition(expectedText: string, errorCode?: number): void {
             this.state.verifyCodeFixAtPosition(expectedText, errorCode);
+        }
+
+        public importFixAtPosition(expectedTextArray: string[], errorCode?: number): void {
+            this.state.verifyImportFixAtPosition(expectedTextArray, errorCode);
         }
 
         public navigationBar(json: any) {

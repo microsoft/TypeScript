@@ -3190,5 +3190,17 @@
     "Type '{0}' is not assignable to type '{1}'. Two different types with this name exist, but they are unrelated.": {
         "category": "Error",
         "code": 90010
+    },
+    "Import {0} from {1}": {
+        "category": "Message",
+        "code": 90013
+    },
+    "Change {0} to {1}": {
+        "category": "Message",
+        "code": 90014
+    },
+    "Add {0} to existing import declaration from {1}": {
+        "category": "Message",
+        "code": 90015
     }
 }
