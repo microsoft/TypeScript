@@ -333,7 +333,8 @@ declare namespace ts {
         PartiallyEmittedExpression = 293,
         MergeDeclarationMarker = 294,
         EndOfDeclarationMarker = 295,
-        Count = 296,
+        RawExpression = 296,
+        Count = 297,
         FirstAssignment = 57,
         LastAssignment = 69,
         FirstCompoundAssignment = 58,
@@ -464,14 +465,14 @@ declare namespace ts {
         right: Identifier;
     }
     type EntityName = Identifier | QualifiedName;
-    type PropertyName = Identifier | LiteralExpression | ComputedPropertyName;
-    type DeclarationName = Identifier | LiteralExpression | ComputedPropertyName | BindingPattern;
+    type PropertyName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName;
+    type DeclarationName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName | BindingPattern;
     interface Declaration extends Node {
         _declarationBrand: any;
         name?: DeclarationName;
     }
     interface DeclarationStatement extends Declaration, Statement {
-        name?: Identifier | LiteralExpression;
+        name?: Identifier | StringLiteral | NumericLiteral;
     }
     interface ComputedPropertyName extends Node {
         kind: SyntaxKind.ComputedPropertyName;
@@ -573,18 +574,16 @@ declare namespace ts {
     interface PropertyLikeDeclaration extends Declaration {
         name: PropertyName;
     }
-    interface BindingPattern extends Node {
-        elements: NodeArray<BindingElement | ArrayBindingElement>;
-    }
-    interface ObjectBindingPattern extends BindingPattern {
+    interface ObjectBindingPattern extends Node {
         kind: SyntaxKind.ObjectBindingPattern;
         elements: NodeArray<BindingElement>;
     }
-    type ArrayBindingElement = BindingElement | OmittedExpression;
-    interface ArrayBindingPattern extends BindingPattern {
+    interface ArrayBindingPattern extends Node {
         kind: SyntaxKind.ArrayBindingPattern;
         elements: NodeArray<ArrayBindingElement>;
     }
+    type BindingPattern = ObjectBindingPattern | ArrayBindingPattern;
+    type ArrayBindingElement = BindingElement | OmittedExpression;
     /**
      * Several node kinds share function-like features such as a signature,
      * a name, and a body. These nodes should extend FunctionLikeDeclaration.
@@ -809,17 +808,25 @@ declare namespace ts {
         operatorToken: BinaryOperatorToken;
         right: Expression;
     }
-    interface AssignmentExpression extends BinaryExpression {
+    type AssignmentOperatorToken = Token<AssignmentOperator>;
+    interface AssignmentExpression<TOperator extends AssignmentOperatorToken> extends BinaryExpression {
         left: LeftHandSideExpression;
-        operatorToken: Token<SyntaxKind.EqualsToken>;
+        operatorToken: TOperator;
     }
-    interface ObjectDestructuringAssignment extends AssignmentExpression {
+    interface ObjectDestructuringAssignment extends AssignmentExpression<EqualsToken> {
         left: ObjectLiteralExpression;
     }
-    interface ArrayDestructuringAssignment extends AssignmentExpression {
+    interface ArrayDestructuringAssignment extends AssignmentExpression<EqualsToken> {
         left: ArrayLiteralExpression;
     }
     type DestructuringAssignment = ObjectDestructuringAssignment | ArrayDestructuringAssignment;
+    type BindingOrAssignmentElement = VariableDeclaration | ParameterDeclaration | BindingElement | PropertyAssignment | ShorthandPropertyAssignment | SpreadAssignment | OmittedExpression | SpreadElement | ArrayLiteralExpression | ObjectLiteralExpression | AssignmentExpression<EqualsToken> | Identifier | PropertyAccessExpression | ElementAccessExpression;
+    type BindingOrAssignmentElementRestIndicator = DotDotDotToken | SpreadElement | SpreadAssignment;
+    type BindingOrAssignmentElementTarget = BindingOrAssignmentPattern | Expression;
+    type ObjectBindingOrAssignmentPattern = ObjectBindingPattern | ObjectLiteralExpression;
+    type ArrayBindingOrAssignmentPattern = ArrayBindingPattern | ArrayLiteralExpression;
+    type AssignmentPattern = ObjectLiteralExpression | ArrayLiteralExpression;
+    type BindingOrAssignmentPattern = ObjectBindingOrAssignmentPattern | ArrayBindingOrAssignmentPattern;
     interface ConditionalExpression extends Expression {
         kind: SyntaxKind.ConditionalExpression;
         condition: Expression;
@@ -1180,7 +1187,7 @@ declare namespace ts {
     type ModuleName = Identifier | StringLiteral;
     interface ModuleDeclaration extends DeclarationStatement {
         kind: SyntaxKind.ModuleDeclaration;
-        name: Identifier | LiteralExpression;
+        name: Identifier | StringLiteral;
         body?: ModuleBlock | NamespaceDeclaration | JSDocNamespaceDeclaration | Identifier;
     }
     interface NamespaceDeclaration extends ModuleDeclaration {
@@ -1332,7 +1339,7 @@ declare namespace ts {
     type JSDocTypeReferencingNode = JSDocThisType | JSDocConstructorType | JSDocVariadicType | JSDocOptionalType | JSDocNullableType | JSDocNonNullableType;
     interface JSDocRecordMember extends PropertySignature {
         kind: SyntaxKind.JSDocRecordMember;
-        name: Identifier | LiteralExpression;
+        name: Identifier | StringLiteral | NumericLiteral;
         type?: JSDocType;
     }
     interface JSDoc extends Node {
@@ -1596,6 +1603,7 @@ declare namespace ts {
         getJsxIntrinsicTagNames(): Symbol[];
         isOptionalParameter(node: ParameterDeclaration): boolean;
         getAmbientModules(): Symbol[];
+        tryGetMemberInModuleExports(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
     }
     interface SymbolDisplayBuilder {
         buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
@@ -1962,7 +1970,7 @@ declare namespace ts {
         target?: ScriptTarget;
         traceResolution?: boolean;
         types?: string[];
-        /** Paths used to used to compute primary types search locations */
+        /** Paths used to compute primary types search locations */
         typeRoots?: string[];
         [option: string]: CompilerOptionsValue | undefined;
     }
@@ -2130,6 +2138,10 @@ declare namespace ts {
     }
 }
 declare namespace ts {
+    /** The version of the TypeScript compiler release */
+    const version = "2.1.3";
+}
+declare namespace ts {
     type FileWatcherCallback = (fileName: string, removed?: boolean) => void;
     type DirectoryWatcherCallback = (fileName: string) => void;
     interface WatchedFile {
@@ -2260,7 +2272,7 @@ declare namespace ts {
      */
     function collapseTextChangeRangesAcrossMultipleVersions(changes: TextChangeRange[]): TextChangeRange;
     function getTypeParameterOwner(d: Declaration): Declaration;
-    function isParameterPropertyDeclaration(node: ParameterDeclaration): boolean;
+    function isParameterPropertyDeclaration(node: Node): boolean;
     function getCombinedModifierFlags(node: Node): ModifierFlags;
     function getCombinedNodeFlags(node: Node): NodeFlags;
 }
@@ -2273,6 +2285,7 @@ declare namespace ts {
     function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;
 }
 declare namespace ts {
+    function moduleHasNonRelativeName(moduleName: string): boolean;
     function getEffectiveTypeRoots(options: CompilerOptions, host: {
         directoryExists?: (directoryName: string) => boolean;
         getCurrentDirectory?: () => string;
@@ -2297,8 +2310,6 @@ declare namespace ts {
     function classicNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations;
 }
 declare namespace ts {
-    /** The version of the TypeScript compiler release */
-    const version = "2.2.0";
     function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName?: string): string;
     function resolveTripleslashReference(moduleName: string, containingFile: string): string;
     function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost;
@@ -2393,6 +2404,7 @@ declare namespace ts {
     }
     interface SourceFile {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
+        getLineEndOfPosition(pos: number): number;
         getLineStarts(): number[];
         getPositionOfLineAndCharacter(line: number, character: number): number;
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;

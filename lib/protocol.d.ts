@@ -1400,6 +1400,25 @@ declare namespace ts.server.protocol {
         body?: ConfigFileDiagnosticEventBody;
         event: "configFileDiag";
     }
+    type ProjectLanguageServiceStateEventName = "projectLanguageServiceState";
+    interface ProjectLanguageServiceStateEvent extends Event {
+        event: ProjectLanguageServiceStateEventName;
+        body?: ProjectLanguageServiceStateEventBody;
+    }
+    interface ProjectLanguageServiceStateEventBody {
+        /**
+         * Project name that has changes in the state of language service.
+         * For configured projects this will be the config file path.
+         * For external projects this will be the name of the projects specified when project was open.
+         * For inferred projects this event is not raised.
+         */
+        projectName: string;
+        /**
+         * True if language service state switched from disabled to enabled
+         * and false otherwise.
+         */
+        languageServiceEnabled: boolean;
+    }
     /**
       * Arguments for reload request.
       */
@@ -1634,6 +1653,10 @@ declare namespace ts.server.protocol {
          * true if install request succeeded, otherwise - false
          */
         installSuccess: boolean;
+        /**
+         * version of typings installer
+         */
+        typingsInstallerVersion: string;
     }
     interface NavBarResponse extends Response {
         body?: NavigationBarItem[];

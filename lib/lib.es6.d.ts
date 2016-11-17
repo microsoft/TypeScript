@@ -200,7 +200,7 @@ interface ObjectConstructor {
       * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
       * @param o Object on which to lock the attributes.
       */
-    freeze<T>(o: T): T;
+    freeze<T>(o: T): Readonly<T>;
 
     /**
       * Prevents the addition of new properties to an object.
@@ -1361,6 +1361,34 @@ interface PromiseLike<T> {
 interface ArrayLike<T> {
     readonly length: number;
     readonly [n: number]: T;
+}
+
+/**
+ * Make all properties in T optional
+ */
+type Partial<T> = {
+    [P in keyof T]?: T[P];
+};
+
+/**
+ * Make all properties in T readonly
+ */
+type Readonly<T> = {
+    readonly [P in keyof T]: T[P];
+};
+
+/**
+ * From T pick a set of properties K
+ */
+type Pick<T, K extends keyof T> = {
+    [P in K]: T[P];
+}
+
+/**
+ * Construct a type with a set of properties K of type T
+ */
+type Record<K extends string | number, T> = {
+    [P in K]: T;
 }
 
 /**
@@ -4362,13 +4390,13 @@ interface NumberConstructor {
       * number. Only finite values of the type number, result in true.
       * @param number A numeric value.
       */
-    isFinite(value: any): value is number;
+    isFinite(number: number): boolean;
 
     /**
       * Returns true if the value passed is an integer, false otherwise.
       * @param number A numeric value.
       */
-    isInteger(value: any): value is number;
+    isInteger(number: number): boolean;
 
     /**
       * Returns a Boolean value that indicates whether a value is the reserved value NaN (not a
@@ -4376,13 +4404,13 @@ interface NumberConstructor {
       * to a number. Only values of the type number, that are also NaN, result in true.
       * @param number A numeric value.
       */
-    isNaN(value: any): value is number;
+    isNaN(number: number): boolean;
 
     /**
       * Returns true if the value passed is a safe integer.
       * @param number A numeric value.
       */
-    isSafeInteger(value: any): value is number;
+    isSafeInteger(number: number): boolean;
 
     /**
       * The value of the largest integer n such that n and n + 1 are both exactly representable as
