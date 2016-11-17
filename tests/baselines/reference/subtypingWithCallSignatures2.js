@@ -253,14 +253,14 @@ var r9b = [r9arg2, r9arg1];
 var r10arg1 = function () {
     var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i - 0] = arguments[_i];
+        x[_i] = arguments[_i];
     }
     return x[0];
 };
 var r10arg2 = function () {
     var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i - 0] = arguments[_i];
+        x[_i] = arguments[_i];
     }
     return null;
 };
