@@ -3,10 +3,6 @@
 /// <reference path="core.ts" />
 
 namespace ts {
-    /** The version of the TypeScript compiler release */
-
-    export const version = "2.1.3";
-
     const emptyArray: any[] = [];
 
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string {
@@ -431,13 +427,14 @@ namespace ts {
         return program;
 
         function getCommonSourceDirectory() {
-            if (typeof commonSourceDirectory === "undefined") {
-                if (options.rootDir && checkSourceFilesBelongToPath(files, options.rootDir)) {
+            if (commonSourceDirectory === undefined) {
+                const emittedFiles = filterSourceFilesInDirectory(files, isSourceFileFromExternalLibrary);
+                if (options.rootDir && checkSourceFilesBelongToPath(emittedFiles, options.rootDir)) {
                     // If a rootDir is specified and is valid use it as the commonSourceDirectory
                     commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir, currentDirectory);
                 }
                 else {
-                    commonSourceDirectory = computeCommonSourceDirectory(files);
+                    commonSourceDirectory = computeCommonSourceDirectory(emittedFiles);
                 }
                 if (commonSourceDirectory && commonSourceDirectory[commonSourceDirectory.length - 1] !== directorySeparator) {
                     // Make sure directory path ends with directory separator so this string can directly
@@ -1403,14 +1400,17 @@ namespace ts {
                     // If we already resolved to this file, it must have been a secondary reference. Check file contents
                     // for sameness and possibly issue an error
                     if (previousResolution) {
-                        const otherFileText = host.readFile(resolvedTypeReferenceDirective.resolvedFileName);
-                        if (otherFileText !== getSourceFile(previousResolution.resolvedFileName).text) {
-                            fileProcessingDiagnostics.add(createDiagnostic(refFile, refPos, refEnd,
-                                Diagnostics.Conflicting_definitions_for_0_found_at_1_and_2_Consider_installing_a_specific_version_of_this_library_to_resolve_the_conflict,
-                                typeReferenceDirective,
-                                resolvedTypeReferenceDirective.resolvedFileName,
-                                previousResolution.resolvedFileName
-                            ));
+                        // Don't bother reading the file again if it's the same file.
+                        if (resolvedTypeReferenceDirective.resolvedFileName !== previousResolution.resolvedFileName) {
+                            const otherFileText = host.readFile(resolvedTypeReferenceDirective.resolvedFileName);
+                            if (otherFileText !== getSourceFile(previousResolution.resolvedFileName).text) {
+                                fileProcessingDiagnostics.add(createDiagnostic(refFile, refPos, refEnd,
+                                    Diagnostics.Conflicting_definitions_for_0_found_at_1_and_2_Consider_installing_a_specific_version_of_this_library_to_resolve_the_conflict,
+                                    typeReferenceDirective,
+                                    resolvedTypeReferenceDirective.resolvedFileName,
+                                    previousResolution.resolvedFileName
+                                ));
+                            }
                         }
                         // don't overwrite previous resolution result
                         saveResolution = false;

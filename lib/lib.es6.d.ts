@@ -5471,7 +5471,7 @@ interface PromiseConstructor {
 declare var Promise: PromiseConstructor;
 
 interface ProxyHandler<T> {
-    getPrototypeOf? (target: T): any;
+    getPrototypeOf? (target: T): {} | null;
     setPrototypeOf? (target: T, v: any): boolean;
     isExtensible? (target: T): boolean;
     preventExtensions? (target: T): boolean;
@@ -5484,7 +5484,7 @@ interface ProxyHandler<T> {
     enumerate? (target: T): PropertyKey[];
     ownKeys? (target: T): PropertyKey[];
     apply? (target: T, thisArg: any, argArray?: any): any;
-    construct? (target: T, thisArg: any, argArray?: any): any;
+    construct? (target: T, argArray: any, newTarget?: any): {};
 }
 
 interface ProxyConstructor {
@@ -5492,6 +5492,7 @@ interface ProxyConstructor {
     new <T>(target: T, handler: ProxyHandler<T>): T
 }
 declare var Proxy: ProxyConstructor;
+
 
 declare namespace Reflect {
     function apply(target: Function, thisArgument: any, argumentsList: ArrayLike<any>): any;

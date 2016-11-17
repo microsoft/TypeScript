@@ -67,8 +67,8 @@ C = tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [])
 ], C);
 var o = { a: 1 };
-var y = __assign({}, o);
-var x = __rest(y, []);
+var y = tslib_1.__assign({}, o);
+var x = tslib_1.__rest(y, []);
 //// [script.js]
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
