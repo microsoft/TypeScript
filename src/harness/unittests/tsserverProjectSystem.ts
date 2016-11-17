@@ -1614,6 +1614,7 @@ namespace ts.projectSystem {
                     return;
                 }
                 assert.equal(e.eventName, server.ProjectLanguageServiceStateEvent);
+                assert.equal(e.data.project.getProjectName(), config.path, "project name");
                 lastEvent = <server.ProjectLanguageServiceStateEvent>e;
             });
             session.executeCommand(<protocol.OpenRequest>{
@@ -1628,6 +1629,7 @@ namespace ts.projectSystem {
             assert.isFalse(project.languageServiceEnabled, "Language service enabled");
             assert.isTrue(!!lastEvent, "should receive event");
             assert.equal(lastEvent.data.project, project, "project name");
+            assert.equal(lastEvent.data.project.getProjectName(), config.path, "config path");
             assert.isFalse(lastEvent.data.languageServiceEnabled, "Language service state");
 
             host.reloadFS([f1, f2, configWithExclude]);
