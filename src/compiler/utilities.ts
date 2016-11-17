@@ -1498,16 +1498,14 @@ namespace ts {
 
             // Pull parameter comments from declaring function as well
             if (node.kind === SyntaxKind.Parameter) {
-                result = concatenate(result, getContentFromParam(getJSDocParameterTag(node as ParameterDeclaration)));
+                result = concatenate(result, getContentFromParam(getJSDocParameterTag(node)));
             }
 
             if (isVariableLike(node) && node.initializer) {
                 result = concatenate(result, getOwnJSDocs(node.initializer));
             }
 
-            result = concatenate(result, getOwnJSDocs(node));
-
-            return result;
+            return concatenate(result, getOwnJSDocs(node));
         }
 
         function getOwnJSDocs(node: Node) {
@@ -1517,24 +1515,23 @@ namespace ts {
         }
     }
 
-    function getJSDocParameterTag(param: ParameterDeclaration): JSDocTag[] {
-        // TODO: getCorrespondingJSDocParameterTag is basically the same as this, except worse. (and typed, singleton return)
+    export function getJSDocParameterTag(param: Node): JSDocParameterTag[] {
+        if (!isParameter(param)) {
+            return undefined;
+        }
         const func = param.parent as FunctionLikeDeclaration;
         const tags = getJSDocTags(func);
         if (!param.name) {
             // this is an anonymous jsdoc param from a `function(type1, type2): type3` specification
             const i = func.parameters.indexOf(param);
-            const paramTags = filter(tags, tag => tag.kind === SyntaxKind.JSDocParameterTag);
+            const paramTags = filter(tags, tag => tag.kind === SyntaxKind.JSDocParameterTag) as JSDocParameterTag[];
             if (paramTags && 0 <= i && i < paramTags.length) {
                 return [paramTags[i]];
             }
         }
         else if (param.name.kind === SyntaxKind.Identifier) {
             const name = (param.name as Identifier).text;
-            const paramTags = filter(tags, tag => tag.kind === SyntaxKind.JSDocParameterTag && (tag as JSDocParameterTag).parameterName.text === name);
-            if (paramTags) {
-                return paramTags;
-            }
+            return filter(tags as JSDocParameterTag[], tag => tag.kind === SyntaxKind.JSDocParameterTag && tag.parameterName.text === name);
         }
         else {
             // TODO: it's a destructured parameter, so it should look up an "object type" series of multiple lines
@@ -1544,12 +1541,11 @@ namespace ts {
     }
 
     export function getJSDocType(node: Node): JSDocType {
-        // TODO: If you have to call getparamtag, you really want the first with a typeExpression, not the first one.
         let tag: JSDocTypeTag | JSDocParameterTag = getJSDocTag(node, SyntaxKind.JSDocTypeTag) as JSDocTypeTag;
         if (!tag && node.kind === SyntaxKind.Parameter) {
-            const paramTags = getJSDocParameterTag(node as ParameterDeclaration);
+            const paramTags = getJSDocParameterTag(node);
             if (paramTags) {
-                tag = find(paramTags, tag => !!(tag as JSDocParameterTag).typeExpression) as JSDocParameterTag;
+                tag = find(paramTags, tag => !!tag.typeExpression);
             }
         }
 
@@ -1564,29 +1560,6 @@ namespace ts {
         return getJSDocTag(node, SyntaxKind.JSDocTemplateTag) as JSDocTemplateTag;
     }
 
-    export function getCorrespondingJSDocParameterTag(parameter: ParameterDeclaration): JSDocParameterTag {
-        if (parameter.name && parameter.name.kind === SyntaxKind.Identifier) {
-            // If it's a parameter, see if the parent has a jsdoc comment with an @param
-            // annotation.
-            const parameterName = (<Identifier>parameter.name).text;
-
-            const jsDocTags = getJSDocTags(parameter.parent);
-            if (!jsDocTags) {
-                return undefined;
-            }
-            for (const tag of jsDocTags) {
-                if (tag.kind === SyntaxKind.JSDocParameterTag) {
-                    const parameterTag = <JSDocParameterTag>tag;
-                    if (parameterTag.parameterName.text === parameterName) {
-                        return parameterTag;
-                    }
-                }
-            }
-        }
-
-        return undefined;
-    }
-
     export function hasRestParameter(s: SignatureDeclaration): boolean {
         return isRestParameter(lastOrUndefined(s.parameters));
     }
@@ -1597,13 +1570,10 @@ namespace ts {
 
     export function isRestParameter(node: ParameterDeclaration) {
         if (node && (node.flags & NodeFlags.JavaScriptFile)) {
-            if (node.type && node.type.kind === SyntaxKind.JSDocVariadicType) {
+            if (node.type && node.type.kind === SyntaxKind.JSDocVariadicType ||
+                forEach(getJSDocParameterTag(node),
+                        t => t.typeExpression && t.typeExpression.type.kind === SyntaxKind.JSDocVariadicType)) {
                 return true;
-            }
-
-            const paramTag = getCorrespondingJSDocParameterTag(node);
-            if (paramTag && paramTag.typeExpression) {
-                return paramTag.typeExpression.type.kind === SyntaxKind.JSDocVariadicType;
             }
         }
         return isDeclaredRestParam(node);

@@ -4854,15 +4854,16 @@ namespace ts {
                 if (node.type && node.type.kind === SyntaxKind.JSDocOptionalType) {
                     return true;
                 }
+                const paramTags = getJSDocParameterTag(node);
+                if (paramTags) {
+                    for (const paramTag of paramTags) {
+                        if (paramTag.isBracketed) {
+                            return true;
+                        }
 
-                const paramTag = getCorrespondingJSDocParameterTag(node);
-                if (paramTag) {
-                    if (paramTag.isBracketed) {
-                        return true;
-                    }
-
-                    if (paramTag.typeExpression) {
-                        return paramTag.typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
+                        if (paramTag.typeExpression) {
+                            return paramTag.typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
+                        }
                     }
                 }
             }
