@@ -419,6 +419,11 @@ namespace ts {
     }
 
     export function positionBelongsToNode(candidate: Node, position: number, sourceFile: SourceFile): boolean {
+        if (candidate.kind === SyntaxKind.IfStatement) {
+            const ifStatement = <IfStatement>candidate;
+            return positionBelongsToNode(ifStatement.thenStatement, position, sourceFile) ||
+                (ifStatement.elseStatement && ifStatement.elseStatement.pos >= position && positionBelongsToNode(ifStatement.elseStatement, position, sourceFile));
+        }
         return candidate.end > position || !isCompletedNode(candidate, sourceFile);
     }
 
