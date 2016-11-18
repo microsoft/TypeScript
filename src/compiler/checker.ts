@@ -1099,7 +1099,7 @@ namespace ts {
             const moduleSymbol = resolveExternalModuleName(node, (<ImportDeclaration>node.parent).moduleSpecifier);
 
             if (moduleSymbol) {
-                const exportDefaultSymbol = isShorthandAmbientModuleSymbol(moduleSymbol) ?
+                const exportDefaultSymbol = isUntypedOrShorthandAmbientModuleSymbol(moduleSymbol) ?
                     moduleSymbol :
                     moduleSymbol.exports["export="] ?
                         getPropertyOfType(getTypeOfSymbol(moduleSymbol.exports["export="]), "default") :
@@ -1175,7 +1175,7 @@ namespace ts {
             if (targetSymbol) {
                 const name = specifier.propertyName || specifier.name;
                 if (name.text) {
-                    if (isShorthandAmbientModuleSymbol(moduleSymbol)) {
+                    if (isUntypedOrShorthandAmbientModuleSymbol(moduleSymbol)) {
                         return moduleSymbol;
                     }
 
@@ -1427,15 +1427,19 @@ namespace ts {
                     Debug.assert(!!moduleNotFoundError);
                     const diag = Diagnostics.Invalid_module_name_in_augmentation_Module_0_resolves_to_an_untyped_module_at_1_which_cannot_be_augmented;
                     error(errorNode, diag, moduleName, resolvedModule.resolvedFileName);
+                    return undefined;
                 }
                 else if (compilerOptions.noImplicitAny && moduleNotFoundError) {
                     error(errorNode,
                         Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type,
                         moduleReference,
                         resolvedModule.resolvedFileName);
+                    return undefined;
                 }
-                // Failed imports and untyped modules are both treated in an untyped manner; only difference is whether we give a diagnostic first.
-                return undefined;
+                // Unlike a failed import, an untyped module produces a dummy symbol. This is checked for by `isUntypedOrShorthandAmbientModuleSymbol`.
+                const untypedSymbol = createSymbol(SymbolFlags.ValueModule, `"${moduleName}"`);
+                untypedSymbol.exports = createMap<Symbol>();
+                return untypedSymbol;
             }
 
             if (moduleNotFoundError) {
@@ -3575,7 +3579,7 @@ namespace ts {
         function getTypeOfFuncClassEnumModule(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
             if (!links.type) {
-                if (symbol.flags & SymbolFlags.Module && isShorthandAmbientModuleSymbol(symbol)) {
+                if (symbol.flags & SymbolFlags.Module && isUntypedOrShorthandAmbientModuleSymbol(symbol)) {
                     links.type = anyType;
                 }
                 else {
@@ -19610,7 +19614,7 @@ namespace ts {
 
         function moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean {
             let moduleSymbol = resolveExternalModuleName(moduleReferenceExpression.parent, moduleReferenceExpression);
-            if (!moduleSymbol || isShorthandAmbientModuleSymbol(moduleSymbol)) {
+            if (!moduleSymbol || isUntypedOrShorthandAmbientModuleSymbol(moduleSymbol)) {
                 // If the module is not found or is shorthand, assume that it may export a value.
                 return true;
             }

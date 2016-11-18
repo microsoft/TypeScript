@@ -13,7 +13,7 @@ verify.numberOfErrorsInCurrentFile(0);
 
 goTo.marker("fooModule");
 verify.goToDefinitionIs([]);
-verify.quickInfoIs("");
+verify.quickInfoIs('module "foo"');
 verify.referencesAre([])
 
 goTo.marker("foo");
