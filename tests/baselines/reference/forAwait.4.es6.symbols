@@ -1,0 +1,13 @@
+=== tests/cases/conformance/forAwait/es6/forAwait.4.es6.ts ===
+declare const i: Iterable<number>;
+>i : Symbol(i, Decl(forAwait.4.es6.ts, 0, 13))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+
+async function f() {
+>f : Symbol(f, Decl(forAwait.4.es6.ts, 0, 34))
+
+    for await (const x of i) {
+>x : Symbol(x, Decl(forAwait.4.es6.ts, 2, 20))
+>i : Symbol(i, Decl(forAwait.4.es6.ts, 0, 13))
+    }
+}

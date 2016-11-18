@@ -1,0 +1,13 @@
+=== tests/cases/conformance/asyncGenerators/es6/objectLiteralMethods/asyncGenerators.objectLiteralMethod.13.es6.ts ===
+const x = {
+>x : { f(): AsyncIterableIterator<undefined>; }
+>{    async * f() {        yield * [];    }} : { f(): AsyncIterableIterator<undefined>; }
+
+    async * f() {
+>f : () => AsyncIterableIterator<undefined>
+
+        yield * [];
+>yield * [] : any
+>[] : undefined[]
+    }
+}

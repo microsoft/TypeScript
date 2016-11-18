@@ -1,0 +1,11 @@
+tests/cases/conformance/asyncGenerators/es6/objectLiteralMethods/asyncGenerators.objectLiteralMethod.18.es6.ts(3,16): error TS2304: Cannot find name 'yield'.
+
+
+==== tests/cases/conformance/asyncGenerators/es6/objectLiteralMethods/asyncGenerators.objectLiteralMethod.18.es6.ts (1 errors) ====
+    const x = {
+        async * f() {
+            var x: yield;
+                   ~~~~~
+!!! error TS2304: Cannot find name 'yield'.
+        }
+    }

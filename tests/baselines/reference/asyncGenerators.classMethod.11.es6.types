@@ -1,0 +1,11 @@
+=== tests/cases/conformance/asyncGenerators/es6/classMethods/asyncGenerators.classMethod.11.es6.ts ===
+class C {
+>C : C
+
+    async * f() {
+>f : () => AsyncIterableIterator<any>
+
+        yield;
+>yield : any
+    }
+}

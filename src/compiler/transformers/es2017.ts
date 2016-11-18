@@ -146,7 +146,11 @@ namespace ts {
                 enclosingFunctionFlags & FunctionFlags.Async ?
                     node.asteriskToken ?
                         createAsyncDelegatorHelper(context, expression, expression) :
-                        createArrayLiteral([createLiteral("yield"), expression]) :
+                        createArrayLiteral(
+                            expression ?
+                                [createLiteral("yield"), expression] :
+                                [createLiteral("yield")]
+                        ) :
                     expression
             );
         }

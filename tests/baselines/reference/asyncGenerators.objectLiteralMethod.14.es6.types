@@ -1,0 +1,17 @@
+=== tests/cases/conformance/asyncGenerators/es6/objectLiteralMethods/asyncGenerators.objectLiteralMethod.14.es6.ts ===
+declare const ai: AsyncIterable<number>;
+>ai : AsyncIterable<number>
+>AsyncIterable : AsyncIterable<T>
+
+const x = {
+>x : { f(): AsyncIterableIterator<number>; }
+>{    async * f() {        yield * ai;    }} : { f(): AsyncIterableIterator<number>; }
+
+    async * f() {
+>f : () => AsyncIterableIterator<number>
+
+        yield * ai;
+>yield * ai : any
+>ai : AsyncIterable<number>
+    }
+}

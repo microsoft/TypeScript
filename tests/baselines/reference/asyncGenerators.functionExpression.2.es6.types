@@ -1,0 +1,5 @@
+=== tests/cases/conformance/asyncGenerators/es6/functionExpressions/asyncGenerators.functionExpression.2.es6.ts ===
+const await = async function * () {}
+>await : () => AsyncIterableIterator<any>
+>async function * () {} : () => AsyncIterableIterator<any>
+

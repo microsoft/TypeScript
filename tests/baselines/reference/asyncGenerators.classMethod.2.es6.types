@@ -1,0 +1,7 @@
+=== tests/cases/conformance/asyncGenerators/es6/classMethods/asyncGenerators.classMethod.2.es6.ts ===
+class C {
+>C : C
+
+    async * await() {}
+>await : () => AsyncIterableIterator<any>
+}

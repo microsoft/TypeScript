@@ -1,0 +1,16 @@
+=== tests/cases/conformance/asyncGenerators/es6/classMethods/asyncGenerators.classMethod.14.es6.ts ===
+declare const ai: AsyncIterable<number>;
+>ai : AsyncIterable<number>
+>AsyncIterable : AsyncIterable<T>
+
+class C {
+>C : C
+
+    async * f() {
+>f : () => AsyncIterableIterator<number>
+
+        yield * ai;
+>yield * ai : any
+>ai : AsyncIterable<number>
+    }
+}

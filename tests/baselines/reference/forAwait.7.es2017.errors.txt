@@ -1,7 +1,7 @@
-tests/cases/conformance/es2017/forAwait/forAwait.7.es2017.ts(3,9): error TS1104: A 'for-await-of' statement is only allowed within an async function or async generator.
+tests/cases/conformance/forAwait/es2017/forAwait.7.es2017.ts(3,9): error TS1104: A 'for-await-of' statement is only allowed within an async function or async generator.
 
 
-==== tests/cases/conformance/es2017/forAwait/forAwait.7.es2017.ts (1 errors) ====
+==== tests/cases/conformance/forAwait/es2017/forAwait.7.es2017.ts (1 errors) ====
     declare const ai: AsyncIterable<number>;
     function* f() {
         for await (const x of ai) {

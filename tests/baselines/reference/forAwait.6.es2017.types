@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es2017/forAwait/forAwait.6.es2017.ts ===
+=== tests/cases/conformance/forAwait/es2017/forAwait.6.es2017.ts ===
 declare const i: Iterable<number>;
 >i : Iterable<number>
 >Iterable : Iterable<T>

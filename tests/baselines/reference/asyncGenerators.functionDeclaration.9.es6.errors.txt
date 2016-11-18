@@ -1,0 +1,13 @@
+tests/cases/conformance/asyncGenerators/es6/functionDeclarations/asyncGenerators.functionDeclaration.9.es6.ts(2,22): error TS1003: Identifier expected.
+tests/cases/conformance/asyncGenerators/es6/functionDeclarations/asyncGenerators.functionDeclaration.9.es6.ts(2,30): error TS1005: '=>' expected.
+
+
+==== tests/cases/conformance/asyncGenerators/es6/functionDeclarations/asyncGenerators.functionDeclaration.9.es6.ts (2 errors) ====
+    async function * f() {
+        async function * yield() {
+                         ~~~~~
+!!! error TS1003: Identifier expected.
+                                 ~
+!!! error TS1005: '=>' expected.
+        }
+    }

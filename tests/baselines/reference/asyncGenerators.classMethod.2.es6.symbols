@@ -1,0 +1,7 @@
+=== tests/cases/conformance/asyncGenerators/es6/classMethods/asyncGenerators.classMethod.2.es6.ts ===
+class C {
+>C : Symbol(C, Decl(asyncGenerators.classMethod.2.es6.ts, 0, 0))
+
+    async * await() {}
+>await : Symbol(C.await, Decl(asyncGenerators.classMethod.2.es6.ts, 0, 9))
+}

@@ -1,0 +1,6 @@
+=== tests/cases/conformance/asyncGenerators/es6/functionDeclarations/asyncGenerators.functionDeclaration.15.es6.ts ===
+async function * f() {
+>f : Symbol(f, Decl(asyncGenerators.functionDeclaration.15.es6.ts, 0, 0))
+
+    await 1;
+}
