@@ -1416,7 +1416,7 @@ namespace ts {
             (<JSDocFunctionType>node).parameters[0].type.kind === SyntaxKind.JSDocConstructorType;
     }
 
-    export function getJSDocComments(node: Node): string[] {
+    export function getCommentsFromJSDoc(node: Node): string[] {
         return map(getJSDocs(node), doc => doc.comment);
     }
 
