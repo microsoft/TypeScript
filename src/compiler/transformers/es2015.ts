@@ -862,7 +862,7 @@ namespace ts {
          *                            synthesized `super` call.
          */
         function transformConstructorBody(constructor: ConstructorDeclaration | undefined, node: ClassDeclaration | ClassExpression, extendsClauseElement: ExpressionWithTypeArguments, hasSynthesizedSuper: boolean) {
-            let statements: Statement[] = [];
+            const statements: Statement[] = [];
             resumeLexicalEnvironment();
 
             let statementOffset = -1;

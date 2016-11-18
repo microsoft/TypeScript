@@ -80,7 +80,7 @@ namespace ts {
         function transformCommonJSModule(node: SourceFile) {
             startLexicalEnvironment();
 
-            let statements: Statement[] = [];
+            const statements: Statement[] = [];
             const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, sourceElementVisitor);
             append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement, /*optional*/ true));
             addRange(statements, visitNodes(node.statements, sourceElementVisitor, isStatement, statementOffset));
@@ -255,7 +255,7 @@ namespace ts {
         function transformAsynchronousModuleBody(node: SourceFile) {
             startLexicalEnvironment();
 
-            let statements: Statement[] = [];
+            const statements: Statement[] = [];
             const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, sourceElementVisitor);
 
             // Visit each statement of the module body.

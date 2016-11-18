@@ -2470,7 +2470,7 @@ namespace ts {
             const savedCurrentNamespaceLocalName = currentNamespaceContainerName;
             currentNamespaceContainerName = localName;
 
-            let statements: Statement[] = [];
+            const statements: Statement[] = [];
             startLexicalEnvironment();
             addRange(statements, map(node.members, transformEnumMember));
             addRange(statements, endLexicalEnvironment());
@@ -2753,7 +2753,7 @@ namespace ts {
             currentNamespace = node;
             currentScopeFirstDeclarationsOfName = undefined;
 
-            let statements: Statement[] = [];
+            const statements: Statement[] = [];
             startLexicalEnvironment();
 
             let statementsLocation: TextRange;
