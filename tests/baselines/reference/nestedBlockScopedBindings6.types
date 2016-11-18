@@ -18,10 +18,10 @@ function a0() {
 >x : any
 
         x = x + 2;
->x = x + 2 : number
+>x = x + 2 : any
 >x : any
->x + 2 : number
->x : number
+>x + 2 : any
+>x : any
 >2 : 2
     }
 }
@@ -49,10 +49,10 @@ function a1() {
 >x : any
 
         x = x + 2;
->x = x + 2 : number
+>x = x + 2 : any
 >x : any
->x + 2 : number
->x : number
+>x + 2 : any
+>x : any
 >2 : 2
     }
 }
@@ -76,10 +76,10 @@ function a2() {
 >x : any
 
         x = x + 2;
->x = x + 2 : number
+>x = x + 2 : any
 >x : any
->x + 2 : number
->x : number
+>x + 2 : any
+>x : any
 >2 : 2
 
         () => x;
@@ -111,10 +111,10 @@ function a3() {
 >x : any
 
         x = x + 2;
->x = x + 2 : number
+>x = x + 2 : any
 >x : any
->x + 2 : number
->x : number
+>x + 2 : any
+>x : any
 >2 : 2
 
         () => x;

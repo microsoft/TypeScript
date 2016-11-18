@@ -25,6 +25,6 @@ var rest;
 >{ b, ...rest } = o : { a: string; b: string; x: number; }
 >{ b, ...rest } : any
 >b : any
->rest : undefined
+>rest : any
 >o : { a: string; b: string; x: number; }
 

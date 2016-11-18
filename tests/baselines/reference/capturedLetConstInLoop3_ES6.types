@@ -180,7 +180,7 @@ function foo3(x) {
     use(v);
 >use(v) : any
 >use : (a: any) => any
->v : undefined
+>v : any
 }
 
 function foo4(x) {
@@ -284,8 +284,8 @@ function foo6(x) {
 >y : any
 
         var v = x;
->v : undefined
->x : undefined
+>v : any
+>x : any
 
         (function() { return x + y + v });
 >(function() { return x + y + v }) : () => any
@@ -294,7 +294,7 @@ function foo6(x) {
 >x + y : any
 >x : any
 >y : any
->v : undefined
+>v : any
 
         (() => x + y + v);
 >(() => x + y + v) : () => any
@@ -303,13 +303,13 @@ function foo6(x) {
 >x + y : any
 >x : any
 >y : any
->v : undefined
+>v : any
     }
     
     use(v)
 >use(v) : any
 >use : (a: any) => any
->v : undefined
+>v : any
 }
 
 function foo7(x) {
@@ -322,8 +322,8 @@ function foo7(x) {
 >y : any
 
         var v = x;
->v : undefined
->x : undefined
+>v : any
+>x : any
 
         (function() { return x + y + v });
 >(function() { return x + y + v }) : () => any
@@ -332,7 +332,7 @@ function foo7(x) {
 >x + y : any
 >x : any
 >y : any
->v : undefined
+>v : any
 
         (() => x + y + v);
 >(() => x + y + v) : () => any
@@ -341,7 +341,7 @@ function foo7(x) {
 >x + y : any
 >x : any
 >y : any
->v : undefined
+>v : any
 
     } while (1 === 1);
 >1 === 1 : boolean
@@ -351,7 +351,7 @@ function foo7(x) {
     use(v);
 >use(v) : any
 >use : (a: any) => any
->v : undefined
+>v : any
 }
 
 
@@ -575,7 +575,7 @@ function foo3_c(x) {
     use(v);
 >use(v) : any
 >use : (a: any) => any
->v : undefined
+>v : any
 }
 
 function foo4_c(x) {
