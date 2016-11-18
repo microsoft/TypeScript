@@ -1,0 +1,13 @@
+=== tests/cases/conformance/es2017/forAwait/forAwait.6.es2017.ts ===
+declare const i: Iterable<number>;
+>i : Iterable<number>
+>Iterable : Iterable<T>
+
+async function* f() {
+>f : () => AsyncIterableIterator<any>
+
+    for await (const x of i) {
+>x : number
+>i : Iterable<number>
+    }
+}

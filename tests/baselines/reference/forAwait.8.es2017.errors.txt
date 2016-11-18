@@ -1,0 +1,11 @@
+tests/cases/conformance/es2017/forAwait/forAwait.8.es2017.ts(3,9): error TS1104: A 'for-await-of' statement is only allowed within an async function or async generator.
+
+
+==== tests/cases/conformance/es2017/forAwait/forAwait.8.es2017.ts (1 errors) ====
+    declare const i: Iterable<number>;
+    function* f() {
+        for await (const x of i) {
+            ~~~~~
+!!! error TS1104: A 'for-await-of' statement is only allowed within an async function or async generator.
+        }
+    }
