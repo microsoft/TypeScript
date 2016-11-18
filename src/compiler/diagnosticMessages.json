@@ -1731,7 +1731,7 @@
         "category": "Error",
         "code": 2535
     },
-    "Type '{0}' is not constrained to 'keyof {1}'.": {
+    "Type '{0}' cannot be used to index type '{1}'.": {
         "category": "Error",
         "code": 2536
     },
