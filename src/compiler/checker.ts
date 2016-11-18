@@ -6059,6 +6059,9 @@ namespace ts {
                 type.aliasSymbol = getAliasSymbolForTypeNode(node);
                 type.aliasTypeArguments = getAliasTypeArgumentsForTypeNode(node);
                 links.resolvedType = type;
+                // Eagerly resolve the constraint type which forces an error if the constraint type circularly
+                // references itself through one or more type aliases.
+                getConstraintTypeFromMappedType(type);
             }
             return links.resolvedType;
         }
