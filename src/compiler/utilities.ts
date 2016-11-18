@@ -1427,7 +1427,7 @@ namespace ts {
             for (const doc of docs) {
                 if (doc.kind === SyntaxKind.JSDocParameterTag) {
                     if (doc.kind === kind) {
-                        result.push(doc as JSDocParameterTag);
+                        result.push(doc as JSDocTag);
                     }
                 }
                 else {
@@ -1442,8 +1442,8 @@ namespace ts {
         return node && firstOrUndefined(getJSDocTags(node, kind));
     }
 
-   function getJSDocs(node: Node): (JSDoc | JSDocParameterTag)[] {
-        let cache: (JSDoc | JSDocParameterTag)[] = node.jsDocCache;
+   function getJSDocs(node: Node): (JSDoc | JSDocTag)[] {
+        let cache: (JSDoc | JSDocTag)[] = node.jsDocCache;
         if (!cache) {
             getJSDocsWorker(node);
             node.jsDocCache = cache;
@@ -1491,7 +1491,7 @@ namespace ts {
 
             // Pull parameter comments from declaring function as well
             if (node.kind === SyntaxKind.Parameter) {
-                cache = concatenate(cache, getJSDocParameterTag(node));
+                cache = concatenate(cache, getJSDocParameterTags(node));
             }
 
             if (isVariableLike(node) && node.initializer) {
@@ -1502,7 +1502,7 @@ namespace ts {
         }
     }
 
-    export function getJSDocParameterTag(param: Node): JSDocParameterTag[] {
+    export function getJSDocParameterTags(param: Node): JSDocParameterTag[] {
         if (!isParameter(param)) {
             return undefined;
         }
@@ -1530,7 +1530,7 @@ namespace ts {
     export function getJSDocType(node: Node): JSDocType {
         let tag: JSDocTypeTag | JSDocParameterTag = getFirstJSDocTag(node, SyntaxKind.JSDocTypeTag) as JSDocTypeTag;
         if (!tag && node.kind === SyntaxKind.Parameter) {
-            const paramTags = getJSDocParameterTag(node);
+            const paramTags = getJSDocParameterTags(node);
             if (paramTags) {
                 tag = find(paramTags, tag => !!tag.typeExpression);
             }
@@ -1558,7 +1558,7 @@ namespace ts {
     export function isRestParameter(node: ParameterDeclaration) {
         if (node && (node.flags & NodeFlags.JavaScriptFile)) {
             if (node.type && node.type.kind === SyntaxKind.JSDocVariadicType ||
-                forEach(getJSDocParameterTag(node),
+                forEach(getJSDocParameterTags(node),
                         t => t.typeExpression && t.typeExpression.type.kind === SyntaxKind.JSDocVariadicType)) {
                 return true;
             }

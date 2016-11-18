@@ -4854,7 +4854,7 @@ namespace ts {
                 if (node.type && node.type.kind === SyntaxKind.JSDocOptionalType) {
                     return true;
                 }
-                const paramTags = getJSDocParameterTag(node);
+                const paramTags = getJSDocParameterTags(node);
                 if (paramTags) {
                     for (const paramTag of paramTags) {
                         if (paramTag.isBracketed) {
