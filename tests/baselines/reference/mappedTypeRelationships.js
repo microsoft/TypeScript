@@ -88,6 +88,24 @@ function f41<T>(x: T, y: Readonly<T>) {
     y = x;
 }
 
+type Item = {
+    name: string;
+}
+
+type ItemMap = {
+    [x: string]: Item;
+}
+
+function f50<T extends ItemMap>(obj: T, key: keyof T) {
+    let item: Item = obj[key];
+    return obj[key].name;
+}
+
+function f51<T extends ItemMap, K extends keyof T>(obj: T, key: K) {
+    let item: Item = obj[key];
+    return obj[key].name;
+}
+
 //// [mappedTypeRelationships.js]
 function f1(x, k) {
     return x[k];
@@ -159,6 +177,14 @@ function f41(x, y) {
     x = y;
     y = x;
 }
+function f50(obj, key) {
+    var item = obj[key];
+    return obj[key].name;
+}
+function f51(obj, key) {
+    var item = obj[key];
+    return obj[key].name;
+}
 
 
 //// [mappedTypeRelationships.d.ts]
@@ -180,3 +206,11 @@ declare function f30<T>(x: T, y: Partial<T>): void;
 declare function f31<T>(x: T, y: Partial<T>): void;
 declare function f40<T>(x: T, y: Readonly<T>): void;
 declare function f41<T>(x: T, y: Readonly<T>): void;
+declare type Item = {
+    name: string;
+};
+declare type ItemMap = {
+    [x: string]: Item;
+};
+declare function f50<T extends ItemMap>(obj: T, key: keyof T): string;
+declare function f51<T extends ItemMap, K extends keyof T>(obj: T, key: K): string;

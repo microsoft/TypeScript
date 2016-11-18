@@ -88,3 +88,21 @@ function f41<T>(x: T, y: Readonly<T>) {
     x = y;
     y = x;
 }
+
+type Item = {
+    name: string;
+}
+
+type ItemMap = {
+    [x: string]: Item;
+}
+
+function f50<T extends ItemMap>(obj: T, key: keyof T) {
+    let item: Item = obj[key];
+    return obj[key].name;
+}
+
+function f51<T extends ItemMap, K extends keyof T>(obj: T, key: K) {
+    let item: Item = obj[key];
+    return obj[key].name;
+}
