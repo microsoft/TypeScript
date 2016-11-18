@@ -1,0 +1,4 @@
+=== tests/cases/conformance/asyncGenerators/es5/functionDeclarations/asyncGenerators.functionDeclaration.1.es5.ts ===
+async function * f() {}
+>f : Symbol(f, Decl(asyncGenerators.functionDeclaration.1.es5.ts, 0, 0))
+

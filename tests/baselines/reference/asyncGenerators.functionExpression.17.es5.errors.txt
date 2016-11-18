@@ -1,0 +1,9 @@
+tests/cases/conformance/asyncGenerators/es5/functionExpressions/asyncGenerators.functionExpression.17.es5.ts(2,12): error TS2304: Cannot find name 'await'.
+
+
+==== tests/cases/conformance/asyncGenerators/es5/functionExpressions/asyncGenerators.functionExpression.17.es5.ts (1 errors) ====
+    const f = async function * () {
+        var x: await;
+               ~~~~~
+!!! error TS2304: Cannot find name 'await'.
+    }

@@ -1,0 +1,18 @@
+tests/cases/conformance/asyncGenerators/es5/objectLiteralMethods/asyncGenerators.objectLiteralMethod.10.es5.ts(3,26): error TS1003: Identifier expected.
+tests/cases/conformance/asyncGenerators/es5/objectLiteralMethods/asyncGenerators.objectLiteralMethod.10.es5.ts(3,32): error TS1109: Expression expected.
+tests/cases/conformance/asyncGenerators/es5/objectLiteralMethods/asyncGenerators.objectLiteralMethod.10.es5.ts(3,34): error TS1005: ';' expected.
+
+
+==== tests/cases/conformance/asyncGenerators/es5/objectLiteralMethods/asyncGenerators.objectLiteralMethod.10.es5.ts (3 errors) ====
+    const x = {
+        async * f() {
+            async function * await() {
+                             ~~~~~
+!!! error TS1003: Identifier expected.
+                                   ~
+!!! error TS1109: Expression expected.
+                                     ~
+!!! error TS1005: ';' expected.
+            }
+        }
+    }

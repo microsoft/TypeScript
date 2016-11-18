@@ -1,0 +1,9 @@
+tests/cases/conformance/asyncGenerators/es5/functionExpressions/asyncGenerators.functionExpression.18.es5.ts(2,12): error TS2304: Cannot find name 'yield'.
+
+
+==== tests/cases/conformance/asyncGenerators/es5/functionExpressions/asyncGenerators.functionExpression.18.es5.ts (1 errors) ====
+    const f = async function * () {
+        var x: yield;
+               ~~~~~
+!!! error TS2304: Cannot find name 'yield'.
+    }

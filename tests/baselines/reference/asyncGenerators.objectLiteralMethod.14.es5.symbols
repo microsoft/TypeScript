@@ -1,0 +1,15 @@
+=== tests/cases/conformance/asyncGenerators/es5/objectLiteralMethods/asyncGenerators.objectLiteralMethod.14.es5.ts ===
+declare const ai: AsyncIterable<number>;
+>ai : Symbol(ai, Decl(asyncGenerators.objectLiteralMethod.14.es5.ts, 0, 13))
+>AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2017.asynciterable.d.ts, --, --))
+
+const x = {
+>x : Symbol(x, Decl(asyncGenerators.objectLiteralMethod.14.es5.ts, 1, 5))
+
+    async * f() {
+>f : Symbol(f, Decl(asyncGenerators.objectLiteralMethod.14.es5.ts, 1, 11))
+
+        yield * ai;
+>ai : Symbol(ai, Decl(asyncGenerators.objectLiteralMethod.14.es5.ts, 0, 13))
+    }
+}

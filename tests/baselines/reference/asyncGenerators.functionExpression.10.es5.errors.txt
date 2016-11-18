@@ -1,0 +1,16 @@
+tests/cases/conformance/asyncGenerators/es5/functionExpressions/asyncGenerators.functionExpression.10.es5.ts(2,22): error TS1003: Identifier expected.
+tests/cases/conformance/asyncGenerators/es5/functionExpressions/asyncGenerators.functionExpression.10.es5.ts(2,28): error TS1109: Expression expected.
+tests/cases/conformance/asyncGenerators/es5/functionExpressions/asyncGenerators.functionExpression.10.es5.ts(2,30): error TS1005: ';' expected.
+
+
+==== tests/cases/conformance/asyncGenerators/es5/functionExpressions/asyncGenerators.functionExpression.10.es5.ts (3 errors) ====
+    const f = async function * () {
+        async function * await() {
+                         ~~~~~
+!!! error TS1003: Identifier expected.
+                               ~
+!!! error TS1109: Expression expected.
+                                 ~
+!!! error TS1005: ';' expected.
+        }
+    }

@@ -1,0 +1,18 @@
+tests/cases/conformance/asyncGenerators/es5/objectLiteralMethods/asyncGenerators.objectLiteralMethod.4.es5.ts(2,15): error TS1138: Parameter declaration expected.
+tests/cases/conformance/asyncGenerators/es5/objectLiteralMethods/asyncGenerators.objectLiteralMethod.4.es5.ts(2,20): error TS1005: ':' expected.
+tests/cases/conformance/asyncGenerators/es5/objectLiteralMethods/asyncGenerators.objectLiteralMethod.4.es5.ts(2,22): error TS1136: Property assignment expected.
+tests/cases/conformance/asyncGenerators/es5/objectLiteralMethods/asyncGenerators.objectLiteralMethod.4.es5.ts(3,1): error TS1128: Declaration or statement expected.
+
+
+==== tests/cases/conformance/asyncGenerators/es5/objectLiteralMethods/asyncGenerators.objectLiteralMethod.4.es5.ts (4 errors) ====
+    const x = {
+        async * f(await) {}
+                  ~~~~~
+!!! error TS1138: Parameter declaration expected.
+                       ~
+!!! error TS1005: ':' expected.
+                         ~
+!!! error TS1136: Property assignment expected.
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.

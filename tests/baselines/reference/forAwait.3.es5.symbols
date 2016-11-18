@@ -1,0 +1,13 @@
+=== tests/cases/conformance/forAwait/es5/forAwait.3.es5.ts ===
+declare const ai: AsyncIterable<number>;
+>ai : Symbol(ai, Decl(forAwait.3.es5.ts, 0, 13))
+>AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2017.asynciterable.d.ts, --, --))
+
+async function f() {
+>f : Symbol(f, Decl(forAwait.3.es5.ts, 0, 40))
+
+    for await (const x of ai) {
+>x : Symbol(x, Decl(forAwait.3.es5.ts, 2, 20))
+>ai : Symbol(ai, Decl(forAwait.3.es5.ts, 0, 13))
+    }
+}

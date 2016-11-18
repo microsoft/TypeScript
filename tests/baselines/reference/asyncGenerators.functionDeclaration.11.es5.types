@@ -1,0 +1,7 @@
+=== tests/cases/conformance/asyncGenerators/es5/functionDeclarations/asyncGenerators.functionDeclaration.11.es5.ts ===
+async function * f() {
+>f : () => AsyncIterableIterator<any>
+
+    yield;
+>yield : any
+}

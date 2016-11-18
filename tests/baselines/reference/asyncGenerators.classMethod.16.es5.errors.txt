@@ -1,0 +1,11 @@
+tests/cases/conformance/asyncGenerators/es5/classMethods/asyncGenerators.classMethod.16.es5.ts(3,14): error TS1109: Expression expected.
+
+
+==== tests/cases/conformance/asyncGenerators/es5/classMethods/asyncGenerators.classMethod.16.es5.ts (1 errors) ====
+    class C {
+        async * f() {
+            await;
+                 ~
+!!! error TS1109: Expression expected.
+        }
+    }

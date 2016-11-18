@@ -1,0 +1,13 @@
+=== tests/cases/conformance/asyncGenerators/es5/objectLiteralMethods/asyncGenerators.objectLiteralMethod.12.es5.ts ===
+const x = {
+>x : { f(): AsyncIterableIterator<1>; }
+>{    async * f() {        yield 1;    }} : { f(): AsyncIterableIterator<1>; }
+
+    async * f() {
+>f : () => AsyncIterableIterator<1>
+
+        yield 1;
+>yield 1 : any
+>1 : 1
+    }
+}
