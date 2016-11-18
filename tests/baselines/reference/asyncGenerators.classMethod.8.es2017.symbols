@@ -1,0 +1,12 @@
+=== tests/cases/conformance/asyncGenerators/es2017/classMethods/asyncGenerators.classMethod.8.es2017.ts ===
+class C {
+>C : Symbol(C, Decl(asyncGenerators.classMethod.8.es2017.ts, 0, 0))
+
+    async * f() {
+>f : Symbol(C.f, Decl(asyncGenerators.classMethod.8.es2017.ts, 0, 9))
+
+        async function * g() {
+>g : Symbol(g, Decl(asyncGenerators.classMethod.8.es2017.ts, 1, 17))
+        }
+    }
+}

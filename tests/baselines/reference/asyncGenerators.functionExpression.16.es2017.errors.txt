@@ -1,0 +1,9 @@
+tests/cases/conformance/asyncGenerators/es2017/functionExpressions/asyncGenerators.functionExpression.16.es2017.ts(2,10): error TS1109: Expression expected.
+
+
+==== tests/cases/conformance/asyncGenerators/es2017/functionExpressions/asyncGenerators.functionExpression.16.es2017.ts (1 errors) ====
+    const f = async function * () {
+        await;
+             ~
+!!! error TS1109: Expression expected.
+    }

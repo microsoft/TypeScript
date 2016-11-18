@@ -1,0 +1,10 @@
+=== tests/cases/conformance/asyncGenerators/es2017/functionExpressions/asyncGenerators.functionExpression.14.es2017.ts ===
+const f = async function * () {
+>f : () => any
+>async function * () {    yield * f();} : () => any
+
+    yield * f();
+>yield * f() : any
+>f() : any
+>f : () => any
+}

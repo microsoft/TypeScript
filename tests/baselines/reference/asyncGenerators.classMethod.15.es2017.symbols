@@ -1,0 +1,10 @@
+=== tests/cases/conformance/asyncGenerators/es2017/classMethods/asyncGenerators.classMethod.15.es2017.ts ===
+class C {
+>C : Symbol(C, Decl(asyncGenerators.classMethod.15.es2017.ts, 0, 0))
+
+    async * f() {
+>f : Symbol(C.f, Decl(asyncGenerators.classMethod.15.es2017.ts, 0, 9))
+
+        await 1;
+    }
+}

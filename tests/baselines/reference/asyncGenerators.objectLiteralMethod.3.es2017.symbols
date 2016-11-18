@@ -1,0 +1,7 @@
+=== tests/cases/conformance/asyncGenerators/es2017/objectLiteralMethods/asyncGenerators.objectLiteralMethod.3.es2017.ts ===
+const x = {
+>x : Symbol(x, Decl(asyncGenerators.objectLiteralMethod.3.es2017.ts, 0, 5))
+
+    async * yield() {}
+>yield : Symbol(yield, Decl(asyncGenerators.objectLiteralMethod.3.es2017.ts, 0, 11))
+}

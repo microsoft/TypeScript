@@ -17301,7 +17301,9 @@ namespace ts {
             // Now even though we have extracted the iteratedType, we will have to validate that the type
             // passed in is actually an Iterable.
             if (errorNode && elementType) {
-                checkTypeAssignableTo(asyncIterable, createAsyncIterableType(elementType), errorNode);
+                const asyncIterableType = createAsyncIterableType(elementType);
+                const iterableType = createIterableType(elementType);
+                checkTypeAssignableTo(asyncIterable, getUnionType([asyncIterableType, iterableType], /*subtypeReduction*/ true), errorNode);
             }
 
             return elementType || anyType;

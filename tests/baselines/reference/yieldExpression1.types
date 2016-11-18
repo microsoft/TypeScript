@@ -1,6 +1,6 @@
 === tests/cases/compiler/yieldExpression1.ts ===
 function* foo() {
->foo : () => PseudoIterableIterator<any>
+>foo : () => IterableIterator<any>
 
     yield
 >yield : any

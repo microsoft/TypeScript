@@ -3,5 +3,5 @@ class C {
 >C : C
 
    public * foo() { }
->foo : () => PseudoIterableIterator<any>
+>foo : () => IterableIterator<any>
 }

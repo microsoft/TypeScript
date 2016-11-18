@@ -1,0 +1,6 @@
+=== tests/cases/conformance/asyncGenerators/es2017/functionDeclarations/asyncGenerators.functionDeclaration.13.es2017.ts ===
+async function * f() {
+>f : Symbol(f, Decl(asyncGenerators.functionDeclaration.13.es2017.ts, 0, 0))
+
+    yield * [];
+}

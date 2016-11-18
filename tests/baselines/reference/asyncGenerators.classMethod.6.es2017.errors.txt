@@ -1,0 +1,9 @@
+tests/cases/conformance/asyncGenerators/es2017/classMethods/asyncGenerators.classMethod.6.es2017.ts(2,19): error TS2524: 'await' expressions cannot be used in a parameter initializer.
+
+
+==== tests/cases/conformance/asyncGenerators/es2017/classMethods/asyncGenerators.classMethod.6.es2017.ts (1 errors) ====
+    class C {
+        async * f(a = await 1) {}
+                      ~~~~~~~
+!!! error TS2524: 'await' expressions cannot be used in a parameter initializer.
+    }

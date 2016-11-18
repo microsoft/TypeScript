@@ -1,0 +1,7 @@
+tests/cases/conformance/asyncGenerators/es2017/functionExpressions/asyncGenerators.functionExpression.7.es2017.ts(1,33): error TS2523: 'yield' expressions cannot be used in a parameter initializer.
+
+
+==== tests/cases/conformance/asyncGenerators/es2017/functionExpressions/asyncGenerators.functionExpression.7.es2017.ts (1 errors) ====
+    const f = async function * (a = yield) {}
+                                    ~~~~~
+!!! error TS2523: 'yield' expressions cannot be used in a parameter initializer.

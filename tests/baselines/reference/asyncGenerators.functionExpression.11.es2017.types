@@ -1,0 +1,8 @@
+=== tests/cases/conformance/asyncGenerators/es2017/functionExpressions/asyncGenerators.functionExpression.11.es2017.ts ===
+const f = async function * () {
+>f : () => AsyncIterableIterator<any>
+>async function * () {    yield;} : () => AsyncIterableIterator<any>
+
+    yield;
+>yield : any
+}

@@ -1,0 +1,7 @@
+tests/cases/conformance/asyncGenerators/es2017/functionExpressions/asyncGenerators.functionExpression.6.es2017.ts(1,33): error TS2524: 'await' expressions cannot be used in a parameter initializer.
+
+
+==== tests/cases/conformance/asyncGenerators/es2017/functionExpressions/asyncGenerators.functionExpression.6.es2017.ts (1 errors) ====
+    const f = async function * (a = await 1) {}
+                                    ~~~~~~~
+!!! error TS2524: 'await' expressions cannot be used in a parameter initializer.

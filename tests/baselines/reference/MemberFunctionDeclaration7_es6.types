@@ -3,6 +3,6 @@ class C {
 >C : C
 
    *foo<T>() { }
->foo : <T>() => PseudoIterableIterator<any>
+>foo : <T>() => IterableIterator<any>
 >T : T
 }

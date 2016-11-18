@@ -1,0 +1,10 @@
+tests/cases/conformance/asyncGenerators/es2017/functionExpressions/asyncGenerators.functionExpression.5.es2017.ts(1,29): error TS1138: Parameter declaration expected.
+tests/cases/conformance/asyncGenerators/es2017/functionExpressions/asyncGenerators.functionExpression.5.es2017.ts(1,34): error TS1005: ',' expected.
+
+
+==== tests/cases/conformance/asyncGenerators/es2017/functionExpressions/asyncGenerators.functionExpression.5.es2017.ts (2 errors) ====
+    const f = async function * (yield) {}
+                                ~~~~~
+!!! error TS1138: Parameter declaration expected.
+                                     ~
+!!! error TS1005: ',' expected.

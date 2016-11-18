@@ -1,0 +1,8 @@
+=== tests/cases/conformance/asyncGenerators/es2017/functionExpressions/asyncGenerators.functionExpression.8.es2017.ts ===
+const f = async function * () {
+>f : Symbol(f, Decl(asyncGenerators.functionExpression.8.es2017.ts, 0, 5))
+
+    async function * g() {
+>g : Symbol(g, Decl(asyncGenerators.functionExpression.8.es2017.ts, 0, 31))
+    }
+}

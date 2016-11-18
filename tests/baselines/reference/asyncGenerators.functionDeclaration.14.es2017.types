@@ -1,0 +1,9 @@
+=== tests/cases/conformance/asyncGenerators/es2017/functionDeclarations/asyncGenerators.functionDeclaration.14.es2017.ts ===
+async function * f() {
+>f : () => any
+
+    yield * f();
+>yield * f() : any
+>f() : any
+>f : () => any
+}
