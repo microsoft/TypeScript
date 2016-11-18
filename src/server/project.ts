@@ -229,6 +229,7 @@ namespace ts.server {
         }
 
         constructor(
+            private readonly projectName: string,
             readonly projectKind: ProjectKind,
             readonly projectService: ProjectService,
             private documentRegistry: ts.DocumentRegistry,
@@ -307,7 +308,9 @@ namespace ts.server {
             this.projectService.onUpdateLanguageServiceStateForProject(this, /*languageServiceEnabled*/ false);
         }
 
-        abstract getProjectName(): string;
+        getProjectName() {
+            return this.projectName;
+        }
         abstract getProjectRootPath(): string | undefined;
         abstract getTypingOptions(): TypingOptions;
 
@@ -759,31 +762,27 @@ namespace ts.server {
 
     export class InferredProject extends Project {
 
-        private static NextId = 1;
-
-        /**
-         * Unique name that identifies this particular inferred project
-         */
-        private readonly inferredProjectName: string;
+        private static newName = (() => {
+            let nextId = 1;
+            return () => {
+                const id = nextId;
+                nextId++;
+                return makeInferredProjectName(id);
+            }
+        })();
 
         // Used to keep track of what directories are watched for this project
         directoriesWatchedForTsconfig: string[] = [];
 
         constructor(projectService: ProjectService, documentRegistry: ts.DocumentRegistry, compilerOptions: CompilerOptions) {
-            super(ProjectKind.Inferred,
+            super(InferredProject.newName(),
+                ProjectKind.Inferred,
                 projectService,
                 documentRegistry,
                 /*files*/ undefined,
                 /*languageServiceEnabled*/ true,
                 compilerOptions,
                 /*compileOnSaveEnabled*/ false);
-
-            this.inferredProjectName = makeInferredProjectName(InferredProject.NextId);
-            InferredProject.NextId++;
-        }
-
-        getProjectName() {
-            return this.inferredProjectName;
         }
 
         getProjectRootPath() {
@@ -822,7 +821,7 @@ namespace ts.server {
         /** Used for configured projects which may have multiple open roots */
         openRefCount = 0;
 
-        constructor(readonly configFileName: NormalizedPath,
+        constructor(configFileName: NormalizedPath,
             projectService: ProjectService,
             documentRegistry: ts.DocumentRegistry,
             hasExplicitListOfFiles: boolean,
@@ -830,11 +829,15 @@ namespace ts.server {
             private wildcardDirectories: Map<WatchDirectoryFlags>,
             languageServiceEnabled: boolean,
             public compileOnSaveEnabled: boolean) {
-            super(ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
+            super(configFileName, ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
+        }
+
+        getConfigFilePath() {
+            return this.getProjectName();
         }
 
         getProjectRootPath() {
-            return getDirectoryPath(this.configFileName);
+            return getDirectoryPath(this.getConfigFilePath());
         }
 
         setProjectErrors(projectErrors: Diagnostic[]) {
@@ -849,12 +852,8 @@ namespace ts.server {
             return this.typingOptions;
         }
 
-        getProjectName() {
-            return this.configFileName;
-        }
-
         watchConfigFile(callback: (project: ConfiguredProject) => void) {
-            this.projectFileWatcher = this.projectService.host.watchFile(this.configFileName, _ => callback(this));
+            this.projectFileWatcher = this.projectService.host.watchFile(this.getConfigFilePath(), _ => callback(this));
         }
 
         watchTypeRoots(callback: (project: ConfiguredProject, path: string) => void) {
@@ -872,7 +871,7 @@ namespace ts.server {
                 return;
             }
 
-            const directoryToWatch = getDirectoryPath(this.configFileName);
+            const directoryToWatch = getDirectoryPath(this.getConfigFilePath());
             this.projectService.logger.info(`Add recursive watcher for: ${directoryToWatch}`);
             this.directoryWatcher = this.projectService.host.watchDirectory(directoryToWatch, path => callback(this, path), /*recursive*/ true);
         }
@@ -881,7 +880,7 @@ namespace ts.server {
             if (!this.wildcardDirectories) {
                 return;
             }
-            const configDirectoryPath = getDirectoryPath(this.configFileName);
+            const configDirectoryPath = getDirectoryPath(this.getConfigFilePath());
             this.directoriesWatchedForWildcards = reduceProperties(this.wildcardDirectories, (watchers, flag, directory) => {
                 if (comparePaths(configDirectoryPath, directory, ".", !this.projectService.host.useCaseSensitiveFileNames) !== Comparison.EqualTo) {
                     const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
@@ -941,14 +940,14 @@ namespace ts.server {
 
     export class ExternalProject extends Project {
         private typingOptions: TypingOptions;
-        constructor(readonly externalProjectName: string,
+        constructor(externalProjectName: string,
             projectService: ProjectService,
             documentRegistry: ts.DocumentRegistry,
             compilerOptions: CompilerOptions,
             languageServiceEnabled: boolean,
             public compileOnSaveEnabled: boolean,
             private readonly projectFilePath?: string) {
-            super(ProjectKind.External, projectService, documentRegistry, /*hasExplicitListOfFiles*/ true, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
+            super(externalProjectName, ProjectKind.External, projectService, documentRegistry, /*hasExplicitListOfFiles*/ true, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
         }
 
         getProjectRootPath() {
@@ -958,7 +957,7 @@ namespace ts.server {
             // if the projectFilePath is not given, we make the assumption that the project name
             // is the path of the project file. AS the project name is provided by VS, we need to
             // normalize slashes before using it as a file name.
-            return getDirectoryPath(normalizeSlashes(this.externalProjectName));
+            return getDirectoryPath(normalizeSlashes(this.getProjectName()));
         }
 
         getTypingOptions() {
@@ -991,10 +990,6 @@ namespace ts.server {
                 }
             }
             this.typingOptions = newTypingOptions;
-        }
-
-        getProjectName() {
-            return this.externalProjectName;
         }
     }
 }

@@ -1309,7 +1309,9 @@ namespace ts {
                             createAssignment(
                                 createElementAccess(
                                     expressionName,
-                                    createSubtract(temp, createLiteral(restIndex))
+                                    restIndex === 0
+                                        ? temp
+                                        : createSubtract(temp, createLiteral(restIndex))
                                 ),
                                 createElementAccess(createIdentifier("arguments"), temp)
                             ),

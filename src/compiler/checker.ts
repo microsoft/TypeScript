@@ -106,10 +106,10 @@ namespace ts {
             getEmitResolver,
             getExportsOfModule: getExportsOfModuleAsArray,
             getAmbientModules,
-
             getJsxElementAttributesType,
             getJsxIntrinsicTagNames,
             isOptionalParameter,
+            tryGetMemberInModuleExports,
             tryFindAmbientModuleWithoutAugmentations: moduleName => {
                 // we deliberately exclude augmentations
                 // since we are only interested in declarations of the module itself
@@ -1472,6 +1472,13 @@ namespace ts {
 
         function getExportsOfModuleAsArray(moduleSymbol: Symbol): Symbol[] {
             return symbolsToArray(getExportsOfModule(moduleSymbol));
+        }
+
+        function tryGetMemberInModuleExports(memberName: string, moduleSymbol: Symbol): Symbol | undefined {
+            const symbolTable = getExportsOfModule(moduleSymbol);
+            if (symbolTable) {
+                return symbolTable[memberName];
+            }
         }
 
         function getExportsOfSymbol(symbol: Symbol): SymbolTable {
@@ -14849,7 +14856,7 @@ namespace ts {
         function checkDeclarationInitializer(declaration: VariableLikeDeclaration) {
             const type = checkExpressionCached(declaration.initializer);
             return getCombinedNodeFlags(declaration) & NodeFlags.Const ||
-                getCombinedModifierFlags(declaration) & ModifierFlags.Readonly ||
+                getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration) ||
                 isTypeAssertion(declaration.initializer) ? type : getWidenedLiteralType(type);
         }
 

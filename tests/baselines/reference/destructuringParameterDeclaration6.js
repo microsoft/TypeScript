@@ -40,20 +40,20 @@ while (, )
 function a5() {
     var  = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        [_i - 0] = arguments[_i];
+        [_i] = arguments[_i];
     }
 }
 while () { }
 function a6() {
     var public = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        public[_i - 0] = arguments[_i];
+        public[_i] = arguments[_i];
     }
 }
 function a7() {
     var a = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i - 0] = arguments[_i];
+        a[_i] = arguments[_i];
     }
 }
 a({ "while": 1 });

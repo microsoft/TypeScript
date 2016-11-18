@@ -56,7 +56,7 @@ foo(function (a) { return 110; }, (function (a) { return 111; }), function (a) {
 }, function () {
     var a = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i - 0] = arguments[_i];
+        a[_i] = arguments[_i];
     }
     return 119;
 }, function (a, b) {

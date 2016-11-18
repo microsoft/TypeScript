@@ -55,31 +55,31 @@ var __spread = (this && this.__spread) || function () {
 function a0() {
     var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i - 0] = arguments[_i];
+        x[_i] = arguments[_i];
     }
 } // Error, rest parameter must be array type
 function a1() {
     var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i - 0] = arguments[_i];
+        x[_i] = arguments[_i];
     }
 }
 function a2() {
     var a = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i - 0] = arguments[_i];
+        a[_i] = arguments[_i];
     }
 } // Error, rest parameter must be array type
 function a3() {
     var b = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        b[_i - 0] = arguments[_i];
+        b[_i] = arguments[_i];
     }
 } // Error, can't be optional
 function a4() {
     var b = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        b[_i - 0] = arguments[_i];
+        b[_i] = arguments[_i];
     }
 } // Error, can't have initializer
 function a5(_a) {
@@ -98,7 +98,7 @@ var C = (function () {
     function C() {
         var temp = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            temp[_i - 0] = arguments[_i];
+            temp[_i] = arguments[_i];
         }
         this.temp = temp;
     } // Error, rest parameter can't have properties
@@ -108,7 +108,7 @@ var C = (function () {
 function foo1() {
     var a = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i - 0] = arguments[_i];
+        a[_i] = arguments[_i];
     }
 }
 foo1(1, 2, "string", E1.a, E.b); // Error

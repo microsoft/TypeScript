@@ -2375,6 +2375,8 @@ namespace ts {
         isOptionalParameter(node: ParameterDeclaration): boolean;
         getAmbientModules(): Symbol[];
 
+        tryGetMemberInModuleExports(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
+
         /* @internal */ tryFindAmbientModuleWithoutAugmentations(moduleName: string): Symbol;
 
         // Should not be called directly.  Should only be accessed through the Program instance.
@@ -3203,7 +3205,7 @@ namespace ts {
         target?: ScriptTarget;
         traceResolution?: boolean;
         types?: string[];
-        /** Paths used to used to compute primary types search locations */
+        /** Paths used to compute primary types search locations */
         typeRoots?: string[];
         /*@internal*/ version?: boolean;
         /*@internal*/ watch?: boolean;
