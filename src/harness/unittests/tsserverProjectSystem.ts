@@ -159,11 +159,11 @@ namespace ts.projectSystem {
         }
     };
 
-    export function createSession(host: server.ServerHost, typingsInstaller?: server.ITypingsInstaller, projectServiceEventHandler?: server.ProjectServiceEventHandler) {
+    export function createSession(host: server.ServerHost, typingsInstaller?: server.ITypingsInstaller, projectServiceEventHandler?: server.ProjectServiceEventHandler, cancellationToken?: server.ServerCancellationToken) {
         if (typingsInstaller === undefined) {
             typingsInstaller = new TestTypingsInstaller("/a/data/", /*throttleLimit*/5, host);
         }
-        return new TestSession(host, server.nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ projectServiceEventHandler !== undefined, projectServiceEventHandler);
+        return new TestSession(host, cancellationToken || server.nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ projectServiceEventHandler !== undefined, projectServiceEventHandler);
     }
 
     export interface CreateProjectServiceParameters {
@@ -475,6 +475,10 @@ namespace ts.projectSystem {
 
         runQueuedTimeoutCallbacks() {
             this.timeoutCallbacks.invoke();
+        }
+
+        runQueuedImmediateCallbacks() {
+            this.immediateCallbacks.invoke();
         }
 
         setImmediate(callback: TimeOutCallback, _time: number, ...args: any[]) {
@@ -2584,8 +2588,8 @@ namespace ts.projectSystem {
             });
 
             // verify content
-            const projectServiice = session.getProjectService();
-            const snap1 = projectServiice.getScriptInfo(f1.path).snap();
+            const projectService = session.getProjectService();
+            const snap1 = projectService.getScriptInfo(f1.path).snap();
             assert.equal(snap1.getText(0, snap1.getLength()), tmp.content, "content should be equal to the content of temp file");
 
             // reload from original file file
@@ -2597,7 +2601,7 @@ namespace ts.projectSystem {
             });
 
             // verify content
-            const snap2 = projectServiice.getScriptInfo(f1.path).snap();
+            const snap2 = projectService.getScriptInfo(f1.path).snap();
             assert.equal(snap2.getText(0, snap2.getLength()), f1.content, "content should be equal to the content of original file");
 
         });
@@ -2675,6 +2679,65 @@ namespace ts.projectSystem {
             const service = createProjectService(host);
             service.openExternalProject({ projectFileName: "p", rootFiles: [toExternalFile(f1.path)], options: { importHelpers: true } });
             service.checkNumberOfProjects({ externalProjects: 1 });
+        });
+    });
+
+    describe("cancellationToken", () => {
+        it("is attached to request", () => {
+            const f1 = {
+                path: "/a/b/app.ts",
+                content: "let xyz = 1;"
+            };
+            const host = createServerHost([f1]);
+            let expectedRequestId: number;
+            const cancellationToken: server.ServerCancellationToken = {
+                isCancellationRequested: () => false,
+                setRequest: requestId => {
+                    if (expectedRequestId === undefined) {
+                        assert.isTrue(false, "unexpected call")
+                    }
+                    assert.equal(requestId, expectedRequestId);
+                },
+                resetRequest: noop
+            }
+            const session = createSession(host, /*typingsInstaller*/ undefined, /*projectServiceEventHandler*/ undefined, cancellationToken);
+
+            expectedRequestId = 1;
+            session.executeCommand(<server.protocol.OpenRequest>{
+                seq: 1,
+                type: "request",
+                command: "open",
+                arguments: {
+                    file: f1.path
+                }
+            });
+
+            expectedRequestId = 2;
+            session.executeCommand(<server.protocol.GeterrRequest>{
+                seq: 2,
+                type: "request",
+                command: "geterr",
+                arguments: {
+                    files: [f1.path]
+                }
+            });
+
+            expectedRequestId = 3;
+            session.executeCommand(<server.protocol.OccurrencesRequest>{
+                seq: 3,
+                type: "request",
+                command: "occurrences",
+                arguments: {
+                    file: f1.path,
+                    line: 1,
+                    offset: 6
+                }
+            });
+
+            expectedRequestId = 2;
+            host.runQueuedImmediateCallbacks();
+            expectedRequestId = 2;
+            host.runQueuedImmediateCallbacks();
         });
     });
 }
