@@ -1143,7 +1143,10 @@ namespace ts {
             const prevEnclosingDeclaration = enclosingDeclaration;
             enclosingDeclaration = node;
             emitTypeParameters(node.typeParameters);
-            emitHeritageClause(getInterfaceBaseTypeNodes(node), /*isImplementsList*/ false);
+            const interfaceExtendsTypes = filter(getInterfaceBaseTypeNodes(node), base => isEntityNameExpression(base.expression));
+            if (interfaceExtendsTypes && interfaceExtendsTypes.length) {
+                emitHeritageClause(interfaceExtendsTypes, /*isImplementsList*/ false);
+            }
             write(" {");
             writeLine();
             increaseIndent();
