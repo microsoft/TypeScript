@@ -3110,6 +3110,10 @@ namespace ts {
         let excludeFlags = TransformFlags.NodeExcludes;
 
         switch (kind) {
+            case SyntaxKind.BarGreaterThanToken:
+                transformFlags |= TransformFlags.AssertESNext;
+                break;
+
             case SyntaxKind.AsyncKeyword:
             case SyntaxKind.AwaitExpression:
                 // async/await is ES2017 syntax
@@ -3221,10 +3225,21 @@ namespace ts {
 
             case SyntaxKind.SpreadElement:
                 transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsSpread;
+                if ((<SpreadElement>node).expression.kind === SyntaxKind.OmittedExpression) {
+                    transformFlags |= TransformFlags.AssertESNext;
+                }
                 break;
 
             case SyntaxKind.SpreadAssignment:
                 transformFlags |= TransformFlags.AssertESNext | TransformFlags.ContainsObjectSpread;
+                break;
+
+            case SyntaxKind.PositionalElement:
+                transformFlags |= TransformFlags.AssertESNext;
+                break;
+
+            case SyntaxKind.OperatorExpression:
+                transformFlags |= TransformFlags.AssertESNext;
                 break;
 
             case SyntaxKind.SuperKeyword:

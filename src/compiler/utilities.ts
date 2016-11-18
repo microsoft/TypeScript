@@ -3876,6 +3876,38 @@ namespace ts {
         return node.kind === SyntaxKind.ElementAccessExpression;
     }
 
+    export function isBinaryOperator(operator: SyntaxKind): operator is BinaryOperator {
+        switch (operator) {
+            case SyntaxKind.AsteriskAsteriskToken:
+            case SyntaxKind.AsteriskToken:
+            case SyntaxKind.SlashToken:
+            case SyntaxKind.PercentToken:
+            case SyntaxKind.PlusToken:
+            case SyntaxKind.MinusToken:
+            case SyntaxKind.LessThanLessThanToken:
+            case SyntaxKind.GreaterThanGreaterThanToken:
+            case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
+            case SyntaxKind.LessThanToken:
+            case SyntaxKind.LessThanEqualsToken:
+            case SyntaxKind.GreaterThanToken:
+            case SyntaxKind.GreaterThanGreaterThanEqualsToken:
+            case SyntaxKind.InstanceOfKeyword:
+            case SyntaxKind.InKeyword:
+            case SyntaxKind.EqualsEqualsToken:
+            case SyntaxKind.EqualsEqualsEqualsToken:
+            case SyntaxKind.ExclamationEqualsToken:
+            case SyntaxKind.ExclamationEqualsEqualsToken:
+            case SyntaxKind.AmpersandToken:
+            case SyntaxKind.BarToken:
+            case SyntaxKind.CaretToken:
+            case SyntaxKind.AmpersandAmpersandToken:
+            case SyntaxKind.BarBarToken:
+            case SyntaxKind.BarGreaterThanToken:
+                return true;
+        }
+        return false;
+    }
+
     export function isBinaryExpression(node: Node): node is BinaryExpression {
         return node.kind === SyntaxKind.BinaryExpression;
     }
@@ -3894,8 +3926,21 @@ namespace ts {
             || kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 
-    export function isSpreadExpression(node: Node): node is SpreadElement {
+    export function isSpreadElement(node: Node): node is SpreadElement {
         return node.kind === SyntaxKind.SpreadElement;
+    }
+
+    export function isPositionalSpreadElement(node: Node): node is PositionalSpreadElement {
+        return node.kind === SyntaxKind.SpreadElement
+            && (<SpreadElement>node).expression.kind === SyntaxKind.OmittedExpression;
+    }
+
+    export function isPositionalElement(node: Node): node is PositionalElement {
+        return node.kind === SyntaxKind.PositionalElement;
+    }
+
+    export function isPositionalOrPositionalSpreadElement(node: Node): node is PositionalElement | PositionalSpreadElement {
+        return isPositionalElement(node) || isPositionalSpreadElement(node);
     }
 
     export function isExpressionWithTypeArguments(node: Node): node is ExpressionWithTypeArguments {
@@ -3912,6 +3957,7 @@ namespace ts {
             || kind === SyntaxKind.TaggedTemplateExpression
             || kind === SyntaxKind.ArrayLiteralExpression
             || kind === SyntaxKind.ParenthesizedExpression
+            || kind === SyntaxKind.OperatorExpression
             || kind === SyntaxKind.ObjectLiteralExpression
             || kind === SyntaxKind.ClassExpression
             || kind === SyntaxKind.FunctionExpression
@@ -3955,6 +4001,7 @@ namespace ts {
             || kind === SyntaxKind.ArrowFunction
             || kind === SyntaxKind.BinaryExpression
             || kind === SyntaxKind.SpreadElement
+            || kind === SyntaxKind.PositionalElement
             || kind === SyntaxKind.AsExpression
             || kind === SyntaxKind.OmittedExpression
             || kind === SyntaxKind.RawExpression

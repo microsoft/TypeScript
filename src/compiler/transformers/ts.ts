@@ -892,7 +892,7 @@ namespace ts {
                         createCall(
                             createSuper(),
                             /*typeArguments*/ undefined,
-                            [createSpread(createIdentifier("arguments"))]
+                            [createSpreadElement(createIdentifier("arguments"))]
                         )
                     )
                 );

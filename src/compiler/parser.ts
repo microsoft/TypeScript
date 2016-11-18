@@ -1319,7 +1319,7 @@ namespace ts {
                     return isIdentifier();
                 case ParsingContext.ArgumentExpressions:
                 case ParsingContext.ArrayLiteralMembers:
-                    return token() === SyntaxKind.CommaToken || token() === SyntaxKind.DotDotDotToken || isStartOfExpression();
+                    return token() === SyntaxKind.CommaToken || token() === SyntaxKind.DotDotDotToken || token() === SyntaxKind.QuestionToken || isStartOfExpression();
                 case ParsingContext.Parameters:
                     return isStartOfParameter();
                 case ParsingContext.TypeArguments:
@@ -3361,21 +3361,23 @@ namespace ts {
 
         function getBinaryOperatorPrecedence(): number {
             switch (token()) {
-                case SyntaxKind.BarBarToken:
+                case SyntaxKind.BarGreaterThanToken:
                     return 1;
-                case SyntaxKind.AmpersandAmpersandToken:
+                case SyntaxKind.BarBarToken:
                     return 2;
-                case SyntaxKind.BarToken:
+                case SyntaxKind.AmpersandAmpersandToken:
                     return 3;
-                case SyntaxKind.CaretToken:
+                case SyntaxKind.BarToken:
                     return 4;
-                case SyntaxKind.AmpersandToken:
+                case SyntaxKind.CaretToken:
                     return 5;
+                case SyntaxKind.AmpersandToken:
+                    return 6;
                 case SyntaxKind.EqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsEqualsToken:
-                    return 6;
+                    return 7;
                 case SyntaxKind.LessThanToken:
                 case SyntaxKind.GreaterThanToken:
                 case SyntaxKind.LessThanEqualsToken:
@@ -3383,20 +3385,20 @@ namespace ts {
                 case SyntaxKind.InstanceOfKeyword:
                 case SyntaxKind.InKeyword:
                 case SyntaxKind.AsKeyword:
-                    return 7;
+                    return 8;
                 case SyntaxKind.LessThanLessThanToken:
                 case SyntaxKind.GreaterThanGreaterThanToken:
                 case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
-                    return 8;
+                    return 9;
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.MinusToken:
-                    return 9;
+                    return 10;
                 case SyntaxKind.AsteriskToken:
                 case SyntaxKind.SlashToken:
                 case SyntaxKind.PercentToken:
-                    return 10;
-                case SyntaxKind.AsteriskAsteriskToken:
                     return 11;
+                case SyntaxKind.AsteriskAsteriskToken:
+                    return 12;
             }
 
             // -1 is lower than all other precedences.  Returning it will cause binary expression
@@ -4171,7 +4173,12 @@ namespace ts {
             return parseIdentifier(Diagnostics.Expression_expected);
         }
 
-        function parseParenthesizedExpression(): ParenthesizedExpression {
+        function parseParenthesizedExpression(): PrimaryExpression {
+            const operatorExpression = tryParse(parsePossibleOperatorExpression);
+            if (operatorExpression) {
+                return operatorExpression;
+            }
+
             const node = <ParenthesizedExpression>createNode(SyntaxKind.ParenthesizedExpression);
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = allowInAnd(parseExpression);
@@ -4179,21 +4186,102 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseSpreadElement(): Expression {
+        function parsePossibleOperatorExpression() {
+            const fullStart = scanner.getStartPos();
+            parseExpected(SyntaxKind.OpenParenToken);
+
+            let operator = token();
+            switch (operator) {
+                case SyntaxKind.AsteriskAsteriskToken:
+                case SyntaxKind.AsteriskToken:
+                case SyntaxKind.SlashToken:
+                case SyntaxKind.PercentToken:
+                case SyntaxKind.PlusToken:
+                case SyntaxKind.MinusToken:
+                case SyntaxKind.LessThanLessThanToken:
+                case SyntaxKind.GreaterThanGreaterThanToken:
+                case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
+                case SyntaxKind.LessThanToken:
+                case SyntaxKind.LessThanEqualsToken:
+                case SyntaxKind.GreaterThanToken:
+                case SyntaxKind.GreaterThanGreaterThanEqualsToken:
+                case SyntaxKind.InstanceOfKeyword:
+                case SyntaxKind.InKeyword:
+                case SyntaxKind.EqualsEqualsToken:
+                case SyntaxKind.EqualsEqualsEqualsToken:
+                case SyntaxKind.ExclamationEqualsToken:
+                case SyntaxKind.ExclamationEqualsEqualsToken:
+                case SyntaxKind.AmpersandToken:
+                case SyntaxKind.BarToken:
+                case SyntaxKind.CaretToken:
+                case SyntaxKind.AmpersandAmpersandToken:
+                case SyntaxKind.BarBarToken:
+                case SyntaxKind.ExclamationToken:
+                case SyntaxKind.VoidKeyword:
+                case SyntaxKind.TypeOfKeyword:
+                    nextToken();
+                    if (token() === SyntaxKind.CloseParenToken) {
+                        nextToken();
+                        const node = <OperatorExpression>createNode(SyntaxKind.OperatorExpression, fullStart);
+                        node.operator = operator;
+                        return finishNode(node);
+                    }
+                    return undefined;
+                case SyntaxKind.TildeToken:
+                    nextToken();
+                    if (token() === SyntaxKind.PlusToken) {
+                        nextToken();
+                        operator = SyntaxKind.TildePlusToken;
+                    }
+                    else if (token() === SyntaxKind.MinusToken) {
+                        nextToken();
+                        operator = SyntaxKind.TildeMinusToken;
+                    }
+                    if (token() === SyntaxKind.CloseParenToken) {
+                        nextToken();
+                        const node = <OperatorExpression>createNode(SyntaxKind.OperatorExpression, fullStart);
+                        node.operator = operator;
+                        return finishNode(node);
+                    }
+                    return undefined;
+                default:
+                    return undefined;
+            }
+        }
+
+        function parseSpreadElement(isArgument: boolean): Expression {
             const node = <SpreadElement>createNode(SyntaxKind.SpreadElement);
             parseExpected(SyntaxKind.DotDotDotToken);
-            node.expression = parseAssignmentExpressionOrHigher();
+            node.expression = !isArgument || isStartOfExpression() ?
+                parseAssignmentExpressionOrHigher() :
+                <Expression>createNode(SyntaxKind.OmittedExpression);
             return finishNode(node);
         }
 
-        function parseArgumentOrArrayLiteralElement(): Expression {
-            return token() === SyntaxKind.DotDotDotToken ? parseSpreadElement() :
+        function parsePositionalElement(): Expression {
+            const node = <PositionalElement>createNode(SyntaxKind.PositionalElement);
+            parseExpected(SyntaxKind.QuestionToken);
+            node.literal = token() === SyntaxKind.NumericLiteral ? <NumericLiteral>parseLiteralNode() : undefined;
+            return finishNode(node);
+        }
+
+        function parseArgument() {
+            return parseArgumentOrArrayLiteralElement(/*isArgument*/ true);
+        }
+
+        function parseArrayLiteralElement() {
+            return parseArgumentOrArrayLiteralElement(/*isArgument*/ false);
+        }
+
+        function parseArgumentOrArrayLiteralElement(isArgument: boolean): Expression {
+            return token() === SyntaxKind.DotDotDotToken ? parseSpreadElement(isArgument) :
                 token() === SyntaxKind.CommaToken ? <Expression>createNode(SyntaxKind.OmittedExpression) :
+                isArgument && token() === SyntaxKind.QuestionToken ? parsePositionalElement() :
                     parseAssignmentExpressionOrHigher();
         }
 
         function parseArgumentExpression(): Expression {
-            return doOutsideOfContext(disallowInAndDecoratorContext, parseArgumentOrArrayLiteralElement);
+            return doOutsideOfContext(disallowInAndDecoratorContext, parseArgument);
         }
 
         function parseArrayLiteralExpression(): ArrayLiteralExpression {
@@ -4202,7 +4290,7 @@ namespace ts {
             if (scanner.hasPrecedingLineBreak()) {
                 node.multiLine = true;
             }
-            node.elements = parseDelimitedList(ParsingContext.ArrayLiteralMembers, parseArgumentOrArrayLiteralElement);
+            node.elements = parseDelimitedList(ParsingContext.ArrayLiteralMembers, parseArrayLiteralElement);
             parseExpected(SyntaxKind.CloseBracketToken);
             return finishNode(node);
         }

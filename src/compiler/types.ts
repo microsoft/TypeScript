@@ -62,7 +62,9 @@ namespace ts {
         DotToken,
         DotDotDotToken,
         SemicolonToken,
+        BarGreaterThanToken,
         CommaToken,
+        EqualsGreaterThanToken,
         LessThanToken,
         LessThanSlashToken,
         GreaterThanToken,
@@ -72,7 +74,6 @@ namespace ts {
         ExclamationEqualsToken,
         EqualsEqualsEqualsToken,
         ExclamationEqualsEqualsToken,
-        EqualsGreaterThanToken,
         PlusToken,
         MinusToken,
         AsteriskToken,
@@ -89,6 +90,8 @@ namespace ts {
         CaretToken,
         ExclamationToken,
         TildeToken,
+        TildePlusToken,
+        TildeMinusToken,
         AmpersandAmpersandToken,
         BarBarToken,
         QuestionToken,
@@ -248,11 +251,13 @@ namespace ts {
         TemplateExpression,
         YieldExpression,
         SpreadElement,
+        PositionalElement,
         ClassExpression,
         OmittedExpression,
         ExpressionWithTypeArguments,
         AsExpression,
         NonNullExpression,
+        OperatorExpression,
 
         // Misc
         TemplateSpan,
@@ -1172,6 +1177,7 @@ namespace ts {
     // see: https://tc39.github.io/ecma262/#prod-Expression
     export type BinaryOperator
         = AssignmentOperatorOrHigher
+        | SyntaxKind.BarGreaterThanToken
         | SyntaxKind.CommaToken
         ;
 
@@ -1183,6 +1189,12 @@ namespace ts {
         left: Expression;
         operatorToken: BinaryOperatorToken;
         right: Expression;
+    }
+
+    export type BarGreaterThanToken = Token<SyntaxKind.BarGreaterThanToken>;
+
+    export interface PipelineExpression extends BinaryExpression {
+        operatorToken: BarGreaterThanToken;
     }
 
     export type AssignmentOperatorToken = Token<AssignmentOperator>;
@@ -1332,6 +1344,11 @@ namespace ts {
         expression: Expression;
     }
 
+    export interface OperatorExpression extends PrimaryExpression {
+        kind: SyntaxKind.OperatorExpression;
+        operator: SyntaxKind;
+    }
+
     export interface ArrayLiteralExpression extends PrimaryExpression {
         kind: SyntaxKind.ArrayLiteralExpression;
         elements: NodeArray<Expression>;
@@ -1342,6 +1359,10 @@ namespace ts {
     export interface SpreadElement extends Expression {
         kind: SyntaxKind.SpreadElement;
         expression: Expression;
+    }
+
+    export interface PositionalSpreadElement extends SpreadElement {
+        expression: OmittedExpression;
     }
 
     /**
@@ -1427,7 +1448,12 @@ namespace ts {
         template: TemplateLiteral;
     }
 
-    export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator;
+    export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | PipelineExpression;
+
+    export interface PositionalElement extends Expression {
+        kind: SyntaxKind.PositionalElement;
+        literal?: NumericLiteral;
+    }
 
     export interface AsExpression extends Expression {
         kind: SyntaxKind.AsExpression;
@@ -2688,7 +2714,9 @@ namespace ts {
     }
 
     /* @internal */
-    export interface TransientSymbol extends Symbol, SymbolLinks { }
+    export interface TransientSymbol extends Symbol, SymbolLinks {
+        transientSymbolIsRest?: boolean;
+    }
 
     export type SymbolTable = Map<Symbol>;
 
@@ -2735,6 +2763,7 @@ namespace ts {
         flags?: NodeCheckFlags;           // Set of flags specific to Node
         resolvedType?: Type;              // Cached type of type node
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
+        resolvedPartialSignatures?: Signature[];
         resolvedSymbol?: Symbol;          // Cached name resolution result
         resolvedIndexInfo?: IndexInfo;    // Cached indexing info resolution result
         maybeTypePredicate?: boolean;     // Cached check whether call expression might reference a type predicate
@@ -3021,6 +3050,8 @@ namespace ts {
         typePredicate?: TypePredicate;
         /* @internal */
         instantiations?: Map<Signature>;    // Generic signature instantiation cache
+        /* @internal */
+        isConstruct?: boolean;
     }
 
     export const enum IndexKind {

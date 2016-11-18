@@ -651,7 +651,11 @@ namespace ts {
                 case SyntaxKind.YieldExpression:
                     return emitYieldExpression(<YieldExpression>node);
                 case SyntaxKind.SpreadElement:
-                    return emitSpreadExpression(<SpreadElement>node);
+                    return emitSpreadElement(<SpreadElement>node);
+                case SyntaxKind.PositionalElement:
+                    return emitPositionalElement(<PositionalElement>node);
+                case SyntaxKind.OperatorExpression:
+                    return emitOperatorExpression(<OperatorExpression>node);
                 case SyntaxKind.ClassExpression:
                     return emitClassExpression(<ClassExpression>node);
                 case SyntaxKind.OmittedExpression:
@@ -1222,9 +1226,20 @@ namespace ts {
             emitExpressionWithPrefix(" ", node.expression);
         }
 
-        function emitSpreadExpression(node: SpreadElement) {
+        function emitSpreadElement(node: SpreadElement) {
             write("...");
             emitExpression(node.expression);
+        }
+
+        function emitPositionalElement(node: PositionalElement) {
+            write("?");
+            emitExpression(node.literal);
+        }
+
+        function emitOperatorExpression(node: OperatorExpression) {
+            write("(");
+            writeTokenText(node.operator);
+            write(")");
         }
 
         function emitClassExpression(node: ClassExpression) {

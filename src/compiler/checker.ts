@@ -163,6 +163,7 @@ namespace ts {
         const unknownSignature = createSignature(undefined, undefined, undefined, emptyArray, unknownType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         const resolvingSignature = createSignature(undefined, undefined, undefined, emptyArray, anyType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         const silentNeverSignature = createSignature(undefined, undefined, undefined, emptyArray, silentNeverType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
+        const resolvingPartialSignatures: Signature[] = [];
 
         const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
 
@@ -240,6 +241,7 @@ namespace ts {
         const visitedFlowTypes: FlowType[] = [];
         const potentialThisCollisions: Node[] = [];
         const awaitedTypeStack: number[] = [];
+        const operatorExpressionTypes = createMap<Type>();
 
         const diagnostics = createDiagnosticCollection();
 
@@ -2616,16 +2618,16 @@ namespace ts {
 
             function buildParameterDisplay(p: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 const parameterNode = <ParameterDeclaration>p.valueDeclaration;
-                if (isRestParameter(parameterNode)) {
+                if ((isTransient(p) && p.transientSymbolIsRest) || isRestParameter(parameterNode)) {
                     writePunctuation(writer, SyntaxKind.DotDotDotToken);
                 }
-                if (isBindingPattern(parameterNode.name)) {
+                if (parameterNode && isBindingPattern(parameterNode.name)) {
                     buildBindingPatternDisplay(<BindingPattern>parameterNode.name, writer, enclosingDeclaration, flags, symbolStack);
                 }
                 else {
                     appendSymbolNameOnly(p, writer);
                 }
-                if (isOptionalParameter(parameterNode)) {
+                if (parameterNode && isOptionalParameter(parameterNode)) {
                     writePunctuation(writer, SyntaxKind.QuestionToken);
                 }
                 writePunctuation(writer, SyntaxKind.ColonToken);
@@ -4277,10 +4279,15 @@ namespace ts {
             resolveObjectTypeMembers(type, source, typeParameters, typeArguments);
         }
 
+        function createSignature(isConstruct: boolean, typeParameters: TypeParameter[], thisParameter: Symbol | undefined, parameters: Symbol[],
+            resolvedReturnType: Type, typePredicate: TypePredicate, minArgumentCount: number, hasRestParameter: boolean, hasLiteralTypes: boolean): Signature;
         function createSignature(declaration: SignatureDeclaration, typeParameters: TypeParameter[], thisParameter: Symbol | undefined, parameters: Symbol[],
+            resolvedReturnType: Type, typePredicate: TypePredicate, minArgumentCount: number, hasRestParameter: boolean, hasLiteralTypes: boolean): Signature;
+        function createSignature(declaration: boolean | SignatureDeclaration, typeParameters: TypeParameter[], thisParameter: Symbol | undefined, parameters: Symbol[],
             resolvedReturnType: Type, typePredicate: TypePredicate, minArgumentCount: number, hasRestParameter: boolean, hasLiteralTypes: boolean): Signature {
             const sig = new Signature(checker);
-            sig.declaration = declaration;
+            sig.declaration = typeof declaration === "boolean" ? undefined : declaration;
+            sig.isConstruct = typeof declaration === "boolean" ? declaration : declaration && (declaration.kind === SyntaxKind.Constructor || declaration.kind === SyntaxKind.ConstructSignature);
             sig.typeParameters = typeParameters;
             sig.parameters = parameters;
             sig.thisParameter = thisParameter;
@@ -5174,12 +5181,11 @@ namespace ts {
             // object type literal or interface (using the new keyword). Each way of declaring a constructor
             // will result in a different declaration kind.
             if (!signature.isolatedSignatureType) {
-                const isConstructor = signature.declaration.kind === SyntaxKind.Constructor || signature.declaration.kind === SyntaxKind.ConstructSignature;
                 const type = <ResolvedType>createObjectType(ObjectFlags.Anonymous);
                 type.members = emptySymbols;
                 type.properties = emptyArray;
-                type.callSignatures = !isConstructor ? [signature] : emptyArray;
-                type.constructSignatures = isConstructor ? [signature] : emptyArray;
+                type.callSignatures = !signature.isConstruct ? [signature] : emptyArray;
+                type.constructSignatures = signature.isConstruct ? [signature] : emptyArray;
                 signature.isolatedSignatureType = type;
             }
 
@@ -8117,6 +8123,10 @@ namespace ts {
             return type.symbol && (type.symbol.flags & (SymbolFlags.ObjectLiteral | SymbolFlags.TypeLiteral)) !== 0 &&
                 getSignaturesOfType(type, SignatureKind.Call).length === 0 &&
                 getSignaturesOfType(type, SignatureKind.Construct).length === 0;
+        }
+
+        function isTransient(symbol: Symbol): symbol is TransientSymbol {
+            return (symbol.flags & SymbolFlags.Transient) !== 0;
         }
 
         function createTransientSymbol(source: Symbol, type: Type) {
@@ -12307,6 +12317,11 @@ namespace ts {
                 typeArguments = undefined;
                 argCount = getEffectiveArgumentCount(node, /*args*/ undefined, signature);
             }
+            else if (node.kind === SyntaxKind.BinaryExpression) {
+                typeArguments = undefined;
+                argCount = getEffectiveArgumentCount(node, args, signature);
+                spreadArgIndex = getSpreadArgumentIndex(args);
+            }
             else {
                 const callExpression = <CallExpression | NewExpression>node;
                 if (!callExpression.arguments) {
@@ -12557,6 +12572,23 @@ namespace ts {
                 // the number and types of arguments for a decorator using
                 // `getEffectiveArgumentCount` and `getEffectiveArgumentType` below.
                 return undefined;
+            }
+            else if (node.kind === SyntaxKind.BinaryExpression) {
+                let expression = (<PipelineExpression>node).left;
+                if (expression.kind === SyntaxKind.ParenthesizedExpression) {
+                    // comma expressions are right-deep
+                    args = [];
+                    expression = (<ParenthesizedExpression>expression).expression;
+                    while (expression.kind === SyntaxKind.BinaryExpression &&
+                        (<BinaryExpression>expression).operatorToken.kind === SyntaxKind.CommaToken) {
+                        args.push((<BinaryExpression>expression).left);
+                        expression = (<BinaryExpression>expression).right;
+                    }
+                    args.push(expression);
+                }
+                else {
+                    args = [expression];
+                }
             }
             else {
                 args = (<CallExpression>node).arguments || emptyArray;
@@ -12837,13 +12869,17 @@ namespace ts {
             }
         }
 
-        function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[], headMessage?: DiagnosticMessage): Signature {
+        function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[], partialApplication: false, headMessage?: DiagnosticMessage): Signature;
+        function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[], partialApplication: true, headMessage?: DiagnosticMessage): Signature[];
+        function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[], partialApplication: boolean, headMessage?: DiagnosticMessage): Signature | Signature[];
+        function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[], partialApplication: boolean, headMessage?: DiagnosticMessage): Signature | Signature[] {
             const isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
             const isDecorator = node.kind === SyntaxKind.Decorator;
+            const isPipeline = node.kind === SyntaxKind.BinaryExpression;
 
             let typeArguments: TypeNode[];
 
-            if (!isTaggedTemplate && !isDecorator) {
+            if (!isTaggedTemplate && !isDecorator && !isPipeline) {
                 typeArguments = (<CallExpression>node).typeArguments;
 
                 // We already perform checking on the type arguments on the class declaration itself.
@@ -12857,7 +12893,7 @@ namespace ts {
             reorderCandidates(signatures, candidates);
             if (!candidates.length) {
                 reportError(Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
-                return resolveErrorCall(node);
+                return partialApplication ? [resolveErrorCall(node)] : resolveErrorCall(node);
             }
 
             const args = getEffectiveCallArguments(node);
@@ -12914,7 +12950,7 @@ namespace ts {
             let candidateForArgumentError: Signature;
             let candidateForTypeArgumentError: Signature;
             let resultOfFailedInference: InferenceContext;
-            let result: Signature;
+            let result: Signature | Signature[];
 
             // If we are in signature help, a trailing comma indicates that we intend to provide another argument,
             // so we will only accept overloads with arity at least 1 higher than the current number of provided arguments.
@@ -12934,7 +12970,7 @@ namespace ts {
             if (candidates.length > 1) {
                 result = chooseOverload(candidates, subtypeRelation, signatureHelpTrailingComma);
             }
-            if (!result) {
+            if (!result || partialApplication) {
                 // Reinitialize these pointers for round two
                 candidateForArgumentError = undefined;
                 candidateForTypeArgumentError = undefined;
@@ -12993,12 +13029,12 @@ namespace ts {
                         if (candidate.typeParameters && typeArguments) {
                             candidate = getSignatureInstantiation(candidate, map(typeArguments, getTypeFromTypeNode));
                         }
-                        return candidate;
+                        return partialApplication ? [candidate] : candidate;
                     }
                 }
             }
 
-            return resolveErrorCall(node);
+            return partialApplication ? [resolveErrorCall(node)] : resolveErrorCall(node);
 
             function reportError(message: DiagnosticMessage, arg0?: string, arg1?: string, arg2?: string): void {
                 let errorInfo: DiagnosticMessageChain;
@@ -13010,8 +13046,9 @@ namespace ts {
                 diagnostics.add(createDiagnosticForNodeFromMessageChain(node, errorInfo));
             }
 
-            function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>, signatureHelpTrailingComma = false) {
-                for (const originalCandidate of candidates) {
+            function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>, signatureHelpTrailingComma = false): Signature | Signature[] {
+                let partialCandidates: Signature[];
+                outer: for (const originalCandidate of candidates) {
                     if (!hasCorrectArity(node, args, originalCandidate, signatureHelpTrailingComma)) {
                         continue;
                     }
@@ -13045,6 +13082,10 @@ namespace ts {
                         }
                         const index = excludeArgument ? indexOf(excludeArgument, true) : -1;
                         if (index < 0) {
+                            if (partialApplication) {
+                                partialCandidates = append(partialCandidates, originalCandidate);
+                                continue outer;
+                            }
                             return candidate;
                         }
                         excludeArgument[index] = false;
@@ -13073,12 +13114,14 @@ namespace ts {
                     }
                 }
 
-                return undefined;
+                return partialCandidates;
             }
-
         }
 
-        function resolveCallExpression(node: CallExpression, candidatesOutArray: Signature[]): Signature {
+        function resolveCallExpression(node: CallExpression, partialApplication: false, candidatesOutArray: Signature[]): Signature;
+        function resolveCallExpression(node: CallExpression, partialApplication: true, candidatesOutArray: Signature[]): Signature[];
+        function resolveCallExpression(node: CallExpression, partialApplication: boolean, candidatesOutArray: Signature[]): Signature | Signature[];
+        function resolveCallExpression(node: CallExpression, partialApplication: boolean, candidatesOutArray: Signature[]): Signature | Signature[] {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 const superType = checkSuperExpression(node.expression);
                 if (superType !== unknownType) {
@@ -13087,7 +13130,7 @@ namespace ts {
                     const baseTypeNode = getClassExtendsHeritageClauseElement(getContainingClass(node));
                     if (baseTypeNode) {
                         const baseConstructors = getInstantiatedConstructorsForTypeArguments(superType, baseTypeNode.typeArguments);
-                        return resolveCall(node, baseConstructors, candidatesOutArray);
+                        return resolveCall(node, baseConstructors, candidatesOutArray, partialApplication);
                     }
                 }
                 return resolveUntypedCall(node);
@@ -13134,7 +13177,7 @@ namespace ts {
                 }
                 return resolveErrorCall(node);
             }
-            return resolveCall(node, callSignatures, candidatesOutArray);
+            return resolveCall(node, callSignatures, candidatesOutArray, partialApplication);
         }
 
         /**
@@ -13213,7 +13256,7 @@ namespace ts {
                 if (!isConstructorAccessible(node, constructSignatures[0])) {
                     return resolveErrorCall(node);
                 }
-                return resolveCall(node, constructSignatures, candidatesOutArray);
+                return resolveCall(node, constructSignatures, candidatesOutArray, /*allowPartialApplication*/ false);
             }
 
             // If expressionType's apparent type is an object type with no construct signatures but
@@ -13222,7 +13265,7 @@ namespace ts {
             // operation is Any. It is an error to have a Void this type.
             const callSignatures = getSignaturesOfType(expressionType, SignatureKind.Call);
             if (callSignatures.length) {
-                const signature = resolveCall(node, callSignatures, candidatesOutArray);
+                const signature = resolveCall(node, callSignatures, candidatesOutArray, /*allowPartialApplication*/ false);
                 if (getReturnTypeOfSignature(signature) !== voidType) {
                     error(node, Diagnostics.Only_a_void_function_can_be_called_with_the_new_keyword);
                 }
@@ -13299,7 +13342,7 @@ namespace ts {
                 return resolveErrorCall(node);
             }
 
-            return resolveCall(node, callSignatures, candidatesOutArray);
+            return resolveCall(node, callSignatures, candidatesOutArray, /*partialApplication*/ false);
         }
 
         /**
@@ -13349,19 +13392,44 @@ namespace ts {
                 return resolveErrorCall(node);
             }
 
-            return resolveCall(node, callSignatures, candidatesOutArray, headMessage);
+            return resolveCall(node, callSignatures, candidatesOutArray, /*allowPartialApplication*/ false, headMessage);
         }
 
-        function resolveSignature(node: CallLikeExpression, candidatesOutArray?: Signature[]): Signature {
+        function resolvePipelineExpression(node: PipelineExpression, candidatesOutArray: Signature[]): Signature {
+            const funcType = checkExpression(node.right);
+            const apparentType = getApparentType(funcType);
+            if (apparentType === unknownType) {
+                return resolveErrorCall(node);
+            }
+
+            const callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
+            const constructSignatures = getSignaturesOfType(apparentType, SignatureKind.Construct);
+            if (isUntypedFunctionCall(funcType, apparentType, callSignatures.length, constructSignatures.length)) {
+                return resolveUntypedCall(node);
+            }
+
+            if (!callSignatures.length) {
+                return resolveErrorCall(node);
+            }
+
+            return resolveCall(node, callSignatures, candidatesOutArray, /*partialApplication*/ false);
+        }
+
+        function resolveSignature(node: CallLikeExpression, partialApplication: false, candidatesOutArray?: Signature[]): Signature;
+        function resolveSignature(node: CallLikeExpression, partialApplication: true, candidatesOutArray?: Signature[]): Signature[];
+        function resolveSignature(node: CallLikeExpression, partialApplication: boolean, candidatesOutArray?: Signature[]): Signature | Signature[];
+        function resolveSignature(node: CallLikeExpression, partialApplication: boolean, candidatesOutArray?: Signature[]): Signature | Signature[] {
             switch (node.kind) {
                 case SyntaxKind.CallExpression:
-                    return resolveCallExpression(<CallExpression>node, candidatesOutArray);
+                    return resolveCallExpression(<CallExpression>node, partialApplication, candidatesOutArray);
                 case SyntaxKind.NewExpression:
                     return resolveNewExpression(<NewExpression>node, candidatesOutArray);
                 case SyntaxKind.TaggedTemplateExpression:
                     return resolveTaggedTemplateExpression(<TaggedTemplateExpression>node, candidatesOutArray);
                 case SyntaxKind.Decorator:
                     return resolveDecorator(<Decorator>node, candidatesOutArray);
+                case SyntaxKind.BinaryExpression:
+                    return resolvePipelineExpression(<PipelineExpression>node, candidatesOutArray);
             }
             Debug.fail("Branch in 'resolveSignature' should be unreachable.");
         }
@@ -13379,11 +13447,30 @@ namespace ts {
                 return cached;
             }
             links.resolvedSignature = resolvingSignature;
-            const result = resolveSignature(node, candidatesOutArray);
+            const result = resolveSignature(node, /*allowPartialApplication*/ false, candidatesOutArray);
             // If signature resolution originated in control flow type analysis (for example to compute the
             // assigned type in a flow assignment) we don't cache the result as it may be based on temporary
             // types from the control flow analysis.
             links.resolvedSignature = flowLoopStart === flowLoopCount ? result : cached;
+            return result;
+        }
+
+        function getResolvedPartialSignatures(node: CallLikeExpression, candidatesOutArray?: Signature[]): Signature[] {
+            const links = getNodeLinks(node);
+            // If getResolvedSignature has already been called, we will have cached the resolvedSignature.
+            // However, it is possible that either candidatesOutArray was not passed in the first time,
+            // or that a different candidatesOutArray was passed in. Therefore, we need to redo the work
+            // to correctly fill the candidatesOutArray.
+            const cached = links.resolvedPartialSignatures;
+            if (cached && cached !== resolvingPartialSignatures && !candidatesOutArray) {
+                return cached;
+            }
+            links.resolvedPartialSignatures = resolvingPartialSignatures;
+            const result = resolveSignature(node, /*partialApplication*/ true, candidatesOutArray);
+            // If signature resolution originated in control flow type analysis (for example to compute the
+            // assigned type in a flow assignment) we don't cache the result as it may be based on temporary
+            // types from the control flow analysis.
+            links.resolvedPartialSignatures = flowLoopStart === flowLoopCount ? result : cached;
             return result;
         }
 
@@ -13410,7 +13497,9 @@ namespace ts {
             // Grammar checking; stop grammar-checking if checkGrammarTypeArguments return true
             checkGrammarTypeArguments(node, node.typeArguments) || checkGrammarArguments(node, node.arguments);
 
-            const signature = getResolvedSignature(node);
+            const partialApplication = node.kind === SyntaxKind.CallExpression && forEach(node.arguments, isPositionalOrPositionalSpreadElement);
+            const signatures = partialApplication && getResolvedPartialSignatures(node);
+            const signature = !partialApplication && getResolvedSignature(node);
 
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 return voidType;
@@ -13448,7 +13537,123 @@ namespace ts {
                 return resolveExternalModuleTypeByLiteral(<StringLiteral>node.arguments[0]);
             }
 
-            return getReturnTypeOfSignature(signature);
+            return partialApplication ?
+                getPartialApplicationOfSignatures(node.arguments, signatures) :
+                getReturnTypeOfSignature(signature);
+        }
+
+        function getPartialApplicationOfSignatures(argumentList: Expression[], signatures: Signature[]) {
+            const partialSignatures: Signature[] = [];
+            for (const signature of signatures) {
+                partialSignatures.push(getPartialApplicationOfSignature(argumentList, signature));
+            }
+
+            const partialType = createObjectType(ObjectFlags.Anonymous);
+            (<ResolvedType>partialType).members = emptySymbols;
+            (<ResolvedType>partialType).properties = emptyArray;
+            (<ResolvedType>partialType).callSignatures = partialSignatures;
+            (<ResolvedType>partialType).constructSignatures = emptyArray;
+            return partialType;
+        }
+
+        function getPartialApplicationOfSignature(argumentList: Expression[], signature: Signature) {
+            const uniqueParameterNames = createMap<boolean>();
+            for (const parameter of signature.parameters) {
+                uniqueParameterNames[parameter.name] = true;
+            }
+
+            let positionalParameters: TransientSymbol[];
+            let positionalRestParameter: TransientSymbol;
+            let position = 0;
+            for (let i = 0; i < argumentList.length; i++) {
+                const argument = argumentList[i];
+                // const inRestParameter = signature.hasRestParameter && i >= signature.parameters.length;
+                const parameter = i < signature.parameters.length ? signature.parameters[i] : lastOrUndefined(signature.parameters);
+                if (isPositionalElement(argument)) {
+                    let ordinalPosition: number;
+                    if (argument.literal) {
+                        ordinalPosition = +argument.literal.text;
+                    }
+                    else {
+                        ordinalPosition = position;
+                        position++;
+                    }
+                    if (!positionalParameters) {
+                        positionalParameters = [];
+                    }
+                    const type = getTypeAtPosition(signature, i);
+                    const previousParameter = positionalParameters[ordinalPosition];
+                    if (previousParameter) {
+                        if (previousParameter.name === previousParameter.target.name) {
+                            previousParameter.name = getUniqueName(uniqueParameterNames, `arg${ordinalPosition}`);
+                        }
+                        previousParameter.type = getIntersectionType([previousParameter.type, type]);
+                    }
+                    else if (parameter) {
+                        positionalParameters[ordinalPosition] = createTransientSymbol(parameter, type);
+                    }
+                    else {
+                        // TODO(rbuckton): implicit any error?
+                        const name = getUniqueName(uniqueParameterNames, `arg${ordinalPosition}`);
+                        const newParameter = <TransientSymbol>createSymbol(SymbolFlags.Transient | SymbolFlags.Variable, name);
+                        newParameter.type = type;
+                        positionalParameters[ordinalPosition] = newParameter;
+                    }
+                }
+                else if (isPositionalSpreadElement(argument)) {
+                    const type = getRestTypeOfSignature(signature);
+                    if (positionalRestParameter) {
+                        if (positionalRestParameter.name === positionalRestParameter.target.name) {
+                            positionalRestParameter.name = getUniqueName(uniqueParameterNames, `args`);
+                        }
+                        positionalRestParameter.type = getIntersectionType([positionalRestParameter.type, type]);
+                    }
+                    else if (parameter) {
+                        positionalRestParameter = createTransientSymbol(parameter, type);
+                        positionalRestParameter.transientSymbolIsRest = true;
+                    }
+                    else {
+                        // TODO(rbuckton): implicit any error?
+                        const name = getUniqueName(uniqueParameterNames, `args`);
+                        positionalRestParameter = <TransientSymbol>createSymbol(SymbolFlags.Transient | SymbolFlags.Variable, name);
+                        positionalRestParameter.type = type;
+                        positionalRestParameter.transientSymbolIsRest = true;
+                    }
+                }
+            }
+
+            positionalParameters = append(positionalParameters, positionalRestParameter) || [];
+
+            for (let i = 0; i < positionalParameters.length; i++) {
+                if (!positionalParameters[i]) {
+                    const name = getUniqueName(uniqueParameterNames, `arg${i}`);
+                    positionalParameters[i] = <TransientSymbol>createSymbol(SymbolFlags.Transient | SymbolFlags.Variable, name);
+                    positionalParameters[i].type = anyType;
+                    // TODO(rbuckton): implicit any error
+                }
+            }
+
+            return createSignature(
+                /*declaration*/ undefined,
+                signature.typeParameters,
+                signature.thisParameter,
+                positionalParameters,
+                getReturnTypeOfSignature(signature),
+                signature.typePredicate,
+                position,
+                positionalRestParameter !== undefined,
+                signature.hasLiteralTypes);
+        }
+
+        function getUniqueName(uniqueNames: Map<boolean>, name: string) {
+            let uniqueName = name;
+            let index = 0;
+            while (uniqueNames[uniqueName]) {
+                uniqueName = `${name}_${index}`;
+                index++;
+            }
+            uniqueNames[uniqueName] = true;
+            return uniqueName;
         }
 
         function isCommonJsRequire(node: Node) {
@@ -13959,6 +14164,112 @@ namespace ts {
             }
         }
 
+        function checkOperatorExpression(node: OperatorExpression) {
+            return operatorExpressionTypes[node.operator] || (operatorExpressionTypes[node.operator] = createOperatorExpressionType(node.operator));
+        }
+
+        function createBinaryOperatorType(typeParameters: TypeParameter[], leftType: Type, rightType: Type, returnType: Type) {
+            return getOrCreateTypeFromSignature(createBinaryOperatorSignature(typeParameters, leftType, rightType, returnType));
+        }
+
+        function createBinaryOperatorSignature(typeParameters: TypeParameter[], leftType: Type, rightType: Type, returnType: Type) {
+            const left = <TransientSymbol>createSymbol(SymbolFlags.Transient | SymbolFlags.Variable, "a");
+            left.type = leftType;
+            const right = <TransientSymbol>createSymbol(SymbolFlags.Transient | SymbolFlags.Variable, "b");
+            right.type = rightType;
+            return createSignature(
+                /*isConstruct*/ false,
+                typeParameters,
+                /*thisParameter*/ undefined,
+                [left, right],
+                returnType,
+                /*typePredicate*/ undefined,
+                2,
+                /*hasRestParameter*/ false,
+                /*hasLiteralTypes*/ false
+            );
+        }
+
+        function createUnaryOperatorType(operandType: Type, returnType: Type) {
+            return getOrCreateTypeFromSignature(createUnaryOperatorSignature(operandType, returnType));
+        }
+
+        function createUnaryOperatorSignature(operandType: Type, returnType: Type) {
+            const operand = <TransientSymbol>createSymbol(SymbolFlags.Transient | SymbolFlags.Variable, "a");
+            operand.type = operandType;
+            return createSignature(
+                /*isConstruct*/ false,
+                /*typeParameters*/ undefined,
+                /*thisParameter*/ undefined,
+                [operand],
+                returnType,
+                /*typePredicate*/ undefined,
+                1,
+                /*hasRestParameter*/ false,
+                /*hasLiteralTypes*/ false
+            );
+        }
+
+        function createOperatorExpressionType(operator: SyntaxKind) {
+            switch (operator) {
+                case SyntaxKind.PlusToken:
+                    const signatures = [
+                        createBinaryOperatorSignature(undefined, stringType, stringType, stringType),
+                        createBinaryOperatorSignature(undefined, stringType, numberType, stringType),
+                        createBinaryOperatorSignature(undefined, numberType, stringType, stringType),
+                        createBinaryOperatorSignature(undefined, numberType, numberType, numberType),
+                    ]
+                    const plusType = createObjectType(ObjectFlags.Anonymous);
+                    (<ResolvedType>plusType).members = emptySymbols;
+                    (<ResolvedType>plusType).properties = emptyArray;
+                    (<ResolvedType>plusType).callSignatures = signatures;
+                    (<ResolvedType>plusType).constructSignatures = emptyArray;
+                    return plusType;
+
+                case SyntaxKind.AsteriskToken:
+                case SyntaxKind.AsteriskAsteriskToken:
+                case SyntaxKind.SlashToken:
+                case SyntaxKind.PercentToken:
+                case SyntaxKind.MinusToken:
+                case SyntaxKind.LessThanLessThanToken:
+                case SyntaxKind.GreaterThanGreaterThanToken:
+                case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
+                case SyntaxKind.BarToken:
+                case SyntaxKind.CaretToken:
+                case SyntaxKind.AmpersandToken:
+                    return createBinaryOperatorType(undefined, numberType, numberType, numberType);
+
+                case SyntaxKind.LessThanToken:
+                case SyntaxKind.GreaterThanToken:
+                case SyntaxKind.LessThanEqualsToken:
+                case SyntaxKind.GreaterThanEqualsToken:
+                case SyntaxKind.EqualsEqualsToken:
+                case SyntaxKind.ExclamationEqualsToken:
+                case SyntaxKind.EqualsEqualsEqualsToken:
+                case SyntaxKind.ExclamationEqualsEqualsToken:
+                case SyntaxKind.InstanceOfKeyword:
+                case SyntaxKind.InKeyword:
+                    // TODO: type parameters
+                    return createBinaryOperatorType(undefined, anyType, anyType, booleanType);
+
+                case SyntaxKind.AmpersandAmpersandToken:
+                case SyntaxKind.BarBarToken:
+                    // TODO: type parameters
+                    return createBinaryOperatorType(undefined, anyType, anyType, anyType);
+
+                case SyntaxKind.TildeToken:
+                case SyntaxKind.TildePlusToken:
+                case SyntaxKind.TildeMinusToken:
+                    return createUnaryOperatorType(anyType, numberType);
+                case SyntaxKind.ExclamationToken:
+                    return createUnaryOperatorType(anyType, booleanType);
+                case SyntaxKind.VoidKeyword:
+                    return createUnaryOperatorType(anyType, voidType);
+                case SyntaxKind.TypeOfKeyword:
+                    return createUnaryOperatorType(anyType, stringType);
+            }
+        }
+
         function checkArithmeticOperandType(operand: Node, type: Type, diagnostic: DiagnosticMessage): boolean {
             if (!isTypeAnyOrAllConstituentTypesHaveKind(type, TypeFlags.NumberLike)) {
                 error(operand, diagnostic);
@@ -14413,6 +14724,9 @@ namespace ts {
         }
 
         function checkBinaryExpression(node: BinaryExpression, contextualMapper?: TypeMapper) {
+            if (node.operatorToken.kind === SyntaxKind.BarGreaterThanToken) {
+                return checkPipelineExpression(<PipelineExpression>node);
+            }
             return checkBinaryLikeExpression(node.left, node.operatorToken, node.right, contextualMapper, node);
         }
 
@@ -14421,6 +14735,7 @@ namespace ts {
             if (operator === SyntaxKind.EqualsToken && (left.kind === SyntaxKind.ObjectLiteralExpression || left.kind === SyntaxKind.ArrayLiteralExpression)) {
                 return checkDestructuringAssignment(left, checkExpression(right, contextualMapper), contextualMapper);
             }
+
             let leftType = checkExpression(left, contextualMapper);
             let rightType = checkExpression(right, contextualMapper);
             switch (operator) {
@@ -14623,6 +14938,11 @@ namespace ts {
             function reportOperatorError() {
                 error(errorNode || operatorToken, Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2, tokenToString(operatorToken.kind), typeToString(leftType), typeToString(rightType));
             }
+        }
+
+        function checkPipelineExpression(node: PipelineExpression) {
+            const signature = getResolvedSignature(node);
+            return getReturnTypeOfSignature(signature);
         }
 
         function isYieldExpressionInClass(node: YieldExpression): boolean {
@@ -14890,6 +15210,8 @@ namespace ts {
                     return checkTaggedTemplateExpression(<TaggedTemplateExpression>node);
                 case SyntaxKind.ParenthesizedExpression:
                     return checkExpression((<ParenthesizedExpression>node).expression, contextualMapper);
+                case SyntaxKind.OperatorExpression:
+                    return checkOperatorExpression(<OperatorExpression>node);
                 case SyntaxKind.ClassExpression:
                     return checkClassExpression(<ClassExpression>node);
                 case SyntaxKind.FunctionExpression:

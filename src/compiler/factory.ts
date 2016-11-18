@@ -225,13 +225,12 @@ namespace ts {
     }
 
     // Signature elements
-
-    export function createParameter(decorators: Decorator[], modifiers: Modifier[], dotDotDotToken: DotDotDotToken, name: string | Identifier | BindingPattern, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression, location?: TextRange, flags?: NodeFlags) {
-        const node = <ParameterDeclaration>createNode(SyntaxKind.Parameter, location, flags);
+    export function createParameter(decorators?: Decorator[], modifiers?: Modifier[], dotDotDotToken?: DotDotDotToken, name?: string | Identifier | BindingPattern, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression, location?: TextRange) {
+        const node = <ParameterDeclaration>createNode(SyntaxKind.Parameter, location);
         node.decorators = decorators ? createNodeArray(decorators) : undefined;
         node.modifiers = modifiers ? createNodeArray(modifiers) : undefined;
         node.dotDotDotToken = dotDotDotToken;
-        node.name = typeof name === "string" ? createIdentifier(name) : name;
+        node.name = typeof name === "string" ? createIdentifier(name) : name || createTempVariable(/*recordTempVariable*/ undefined);
         node.questionToken = questionToken;
         node.type = type;
         node.initializer = initializer ? parenthesizeExpressionForList(initializer) : undefined;
@@ -240,7 +239,7 @@ namespace ts {
 
     export function updateParameter(node: ParameterDeclaration, decorators: Decorator[], modifiers: Modifier[], dotDotDotToken: DotDotDotToken, name: BindingName, type: TypeNode, initializer: Expression) {
         if (node.decorators !== decorators || node.modifiers !== modifiers || node.dotDotDotToken !== dotDotDotToken || node.name !== name || node.type !== type || node.initializer !== initializer) {
-            return updateNode(createParameter(decorators, modifiers, dotDotDotToken, name, node.questionToken, type, initializer, /*location*/ node, /*flags*/ node.flags), node);
+            return updateNode(createParameter(decorators, modifiers, dotDotDotToken, name, node.questionToken, type, initializer, /*location*/ node), node);
         }
 
         return node;
@@ -703,7 +702,7 @@ namespace ts {
         return node;
     }
 
-    export function createSpread(expression: Expression, location?: TextRange) {
+    export function createSpreadElement(expression: Expression, location?: TextRange) {
         const node = <SpreadElement>createNode(SyntaxKind.SpreadElement, location);
         node.expression = parenthesizeExpressionForList(expression);
         return node;
@@ -711,7 +710,7 @@ namespace ts {
 
     export function updateSpread(node: SpreadElement, expression: Expression) {
         if (node.expression !== expression) {
-            return updateNode(createSpread(expression, node), node);
+            return updateNode(createSpreadElement(expression, node), node);
         }
         return node;
     }
@@ -1787,7 +1786,7 @@ namespace ts {
         }
     }
 
-    export function createCallBinding(expression: Expression, recordTempVariable: (temp: Identifier) => void, languageVersion?: ScriptTarget, cacheIdentifiers?: boolean): CallBinding {
+    export function createCallBinding(expression: Expression, recordTempVariable: (temp: Identifier) => void, languageVersion?: ScriptTarget, cacheIdentifiers?: boolean, useThisAsDefaultThisArg?: boolean): CallBinding {
         const callee = skipOuterExpressions(expression, OuterExpressionKinds.All);
         let thisArg: Expression;
         let target: LeftHandSideExpression;
@@ -1846,7 +1845,7 @@ namespace ts {
 
                 default: {
                     // for `a()` target is `a` and thisArg is `void 0`
-                    thisArg = createVoidZero();
+                    thisArg = useThisAsDefaultThisArg ? createThis() : createVoidZero();
                     target = parenthesizeForAccess(expression);
                     break;
                 }
@@ -3032,7 +3031,7 @@ namespace ts {
             return bindingElement.right;
         }
 
-        if (isSpreadExpression(bindingElement)) {
+        if (isSpreadElement(bindingElement)) {
             // Recovery consistent with existing emit.
             return getInitializerOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.expression);
         }
@@ -3100,7 +3099,7 @@ namespace ts {
             return getTargetOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.left);
         }
 
-        if (isSpreadExpression(bindingElement)) {
+        if (isSpreadElement(bindingElement)) {
             // `a` in `[...a] = ...`
             return getTargetOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.expression);
         }
@@ -3202,7 +3201,7 @@ namespace ts {
         if (isBindingElement(element)) {
             if (element.dotDotDotToken) {
                 Debug.assertNode(element.name, isIdentifier);
-                return setOriginalNode(createSpread(<Identifier>element.name, element), element);
+                return setOriginalNode(createSpreadElement(<Identifier>element.name, element), element);
             }
             const expression = convertToAssignmentElementTarget(<ObjectBindingPattern | ArrayBindingPattern | Identifier>element.name);
             return element.initializer ? setOriginalNode(createAssignment(expression, element.initializer, element), element) : expression;

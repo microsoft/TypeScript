@@ -2911,7 +2911,7 @@ namespace ts {
 
             if (segments.length === 1) {
                 const firstElement = elements[0];
-                return needsUniqueCopy && isSpreadExpression(firstElement) && firstElement.expression.kind !== SyntaxKind.ArrayLiteralExpression
+                return needsUniqueCopy && isSpreadElement(firstElement) && firstElement.expression.kind !== SyntaxKind.ArrayLiteralExpression
                     ? createArraySlice(segments[0])
                     : segments[0];
             }
@@ -2921,7 +2921,7 @@ namespace ts {
         }
 
         function partitionSpread(node: Expression) {
-            return isSpreadExpression(node)
+            return isSpreadElement(node)
                 ? visitSpanOfSpreads
                 : visitSpanOfNonSpreads;
         }

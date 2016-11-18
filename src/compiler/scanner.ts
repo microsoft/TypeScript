@@ -135,6 +135,7 @@ namespace ts {
         "]": SyntaxKind.CloseBracketToken,
         ".": SyntaxKind.DotToken,
         "...": SyntaxKind.DotDotDotToken,
+        "|>": SyntaxKind.BarGreaterThanToken,
         ";": SyntaxKind.SemicolonToken,
         ",": SyntaxKind.CommaToken,
         "<": SyntaxKind.LessThanToken,
@@ -163,6 +164,8 @@ namespace ts {
         "^": SyntaxKind.CaretToken,
         "!": SyntaxKind.ExclamationToken,
         "~": SyntaxKind.TildeToken,
+        "~+": SyntaxKind.TildePlusToken,
+        "~-": SyntaxKind.TildeMinusToken,
         "&&": SyntaxKind.AmpersandAmpersandToken,
         "||": SyntaxKind.BarBarToken,
         "?": SyntaxKind.QuestionToken,
@@ -1550,6 +1553,9 @@ namespace ts {
                         }
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.BarEqualsToken;
+                        }
+                        if (text.charCodeAt(pos + 1) === CharacterCodes.greaterThan) {
+                            return pos += 2, token = SyntaxKind.BarGreaterThanToken;
                         }
                         pos++;
                         return token = SyntaxKind.BarToken;

@@ -1497,7 +1497,7 @@ namespace ts {
             if (isAssignmentExpression(node)) {
                 return hasExportedReferenceInDestructuringTarget(node.left);
             }
-            else if (isSpreadExpression(node)) {
+            else if (isSpreadElement(node)) {
                 return hasExportedReferenceInDestructuringTarget(node.expression);
             }
             else if (isObjectLiteralExpression(node)) {
