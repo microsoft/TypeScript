@@ -689,10 +689,10 @@ namespace ts {
                         continue;
                     }
 
-                    if (!node.jsDocComments) {
-                        node.jsDocComments = [];
+                    if (!node.jsDoc) {
+                        node.jsDoc = [];
                     }
-                    node.jsDocComments.push(jsDoc);
+                    node.jsDoc.push(jsDoc);
                 }
             }
 
@@ -719,11 +719,11 @@ namespace ts {
                     const saveParent = parent;
                     parent = n;
                     forEachChild(n, visitNode);
-                    if (n.jsDocComments) {
-                        for (const jsDocComment of n.jsDocComments) {
-                            jsDocComment.parent = n;
-                            parent = jsDocComment;
-                            forEachChild(jsDocComment, visitNode);
+                    if (n.jsDoc) {
+                        for (const jsDoc of n.jsDoc) {
+                            jsDoc.parent = n;
+                            parent = jsDoc;
+                            forEachChild(jsDoc, visitNode);
                         }
                     }
                     parent = saveParent;
@@ -6954,8 +6954,8 @@ namespace ts {
                 }
 
                 forEachChild(node, visitNode, visitArray);
-                if (node.jsDocComments) {
-                    for (const jsDocComment of node.jsDocComments) {
+                if (node.jsDoc) {
+                    for (const jsDocComment of node.jsDoc) {
                         forEachChild(jsDocComment, visitNode, visitArray);
                     }
                 }

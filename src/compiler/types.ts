@@ -497,8 +497,8 @@ namespace ts {
         parent?: Node;                                  // Parent node (initialized by binding)
         /* @internal */ original?: Node;                // The original node if this is an updated node.
         /* @internal */ startsOnNewLine?: boolean;      // Whether a synthesized node should start on a new line (used by transforms).
-        /* @internal */ jsDocComments?: JSDoc[];        // JSDoc for the node, if it has any.
-        /* @internal */ jsDocCache?: (JSDoc | JSDocTag)[]; // JSDoc for the node, plus JSDoc and tags retrieved from its parents
+        /* @internal */ jsDoc?: JSDoc[];                // JSDoc that directly precedes this node
+        /* @internal */ jsDocCache?: (JSDoc | JSDocTag)[]; // All JSDoc that applies to the node, including parent docs and @param tags
         /* @internal */ symbol?: Symbol;                // Symbol declared by node (initialized by binding)
         /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
         /* @internal */ nextContainer?: Node;           // Next container in declaration order (initialized by binding)

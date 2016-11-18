@@ -1956,9 +1956,9 @@ namespace ts {
                     break;
                 default:
                     forEachChild(node, walk);
-                    if (node.jsDocComments) {
-                        for (const jsDocComment of node.jsDocComments) {
-                            forEachChild(jsDocComment, walk);
+                    if (node.jsDoc) {
+                        for (const jsDoc of node.jsDoc) {
+                            forEachChild(jsDoc, walk);
                         }
                     }
             }
