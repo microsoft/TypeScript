@@ -45,7 +45,7 @@ namespace ts {
         public end: number;
         public flags: NodeFlags;
         public parent: Node;
-        public jsDocComments: JSDoc[];
+        public jsDoc: JSDoc[];
         public original: Node;
         public transformFlags: TransformFlags;
         private _children: Node[];
@@ -154,8 +154,8 @@ namespace ts {
                     pos = nodes.end;
                 };
                 // jsDocComments need to be the first children
-                if (this.jsDocComments) {
-                    for (const jsDocComment of this.jsDocComments) {
+                if (this.jsDoc) {
+                    for (const jsDocComment of this.jsDoc) {
                         processNode(jsDocComment);
                     }
                 }
