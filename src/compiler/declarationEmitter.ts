@@ -1037,6 +1037,10 @@ namespace ts {
                             diagnosticMessage = Diagnostics.Type_parameter_0_of_exported_function_has_or_is_using_private_name_1;
                             break;
 
+                        case SyntaxKind.TypeAliasDeclaration:
+                            diagnosticMessage = Diagnostics.Type_parameter_0_of_exported_type_alias_has_or_is_using_private_name_1;
+                            break;
+
                         default:
                             Debug.fail("This is unknown parent for type parameter: " + node.parent.kind);
                     }
