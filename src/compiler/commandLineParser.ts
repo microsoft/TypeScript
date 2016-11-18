@@ -951,8 +951,8 @@ namespace ts {
                 errors.push(createCompilerDiagnostic(Diagnostics.Unknown_option_excludes_Did_you_mean_exclude));
             }
             else {
-                // By default, exclude common package folders and the outDir
-                excludeSpecs = ["node_modules", "bower_components", "jspm_packages"];
+                // If no includes were specified, exclude common package folders and the outDir
+                excludeSpecs = includeSpecs ? [] : ["node_modules", "bower_components", "jspm_packages"];
 
                 const outDir = json["compilerOptions"] && json["compilerOptions"]["outDir"];
                 if (outDir) {
