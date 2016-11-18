@@ -5,10 +5,10 @@ var x=null;
 >null : null
 
 var y=3+x;  
->y : number
->3+x : number
+>y : any
+>3+x : any
 >3 : 3
->x : null
+>x : any
 
 var z=3+null; 
 >z : number
