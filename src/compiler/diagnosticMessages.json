@@ -2276,6 +2276,10 @@
         "category": "Error",
         "code": 4082
     },
+    "Type parameter '{0}' of exported type alias has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4083
+    },
     "Conflicting definitions for '{0}' found at '{1}' and '{2}'. Consider installing a specific version of this library to resolve the conflict.": {
         "category": "Message",
         "code": 4090
