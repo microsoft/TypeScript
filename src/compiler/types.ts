@@ -2974,8 +2974,6 @@ namespace ts {
         /* @internal */
         resolvedIndexType: IndexType;
         /* @internal */
-        resolvedIndexedAccessTypes: IndexedAccessType[];
-        /* @internal */
         isThisType?: boolean;
     }
 
@@ -2985,7 +2983,7 @@ namespace ts {
 
     export interface IndexedAccessType extends Type {
         objectType: Type;
-        indexType: TypeParameter;
+        indexType: Type;
     }
 
     export const enum SignatureKind {
