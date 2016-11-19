@@ -275,8 +275,8 @@ namespace ts.server {
             this.installer.send({ projectName: p.getProjectName(), kind: "closeProject" });
         }
 
-        enqueueInstallTypingsRequest(project: Project, typingOptions: TypingOptions, unresolvedImports: SortedReadonlyArray<string>): void {
-            const request = createInstallTypingsRequest(project, typingOptions, unresolvedImports);
+        enqueueInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void {
+            const request = createInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
             if (this.logger.hasLevel(LogLevel.verbose)) {
                 if (this.logger.hasLevel(LogLevel.verbose)) {
                     this.logger.info(`Scheduling throttled operation: ${JSON.stringify(request)}`);

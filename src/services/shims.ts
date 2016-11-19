@@ -1138,7 +1138,7 @@ namespace ts {
                     if (result.error) {
                         return {
                             options: {},
-                            typingOptions: {},
+                            typeAcquisition: {},
                             files: [],
                             raw: {},
                             errors: [realizeDiagnostic(result.error, "\r\n")]
@@ -1150,7 +1150,7 @@ namespace ts {
 
                     return {
                         options: configFile.options,
-                        typingOptions: configFile.typingOptions,
+                        typeAcquisition: configFile.typeAcquisition,
                         files: configFile.fileNames,
                         raw: configFile.raw,
                         errors: realizeDiagnostics(configFile.errors, "\r\n")
@@ -1175,7 +1175,7 @@ namespace ts {
                     toPath(info.projectRootPath, info.projectRootPath, getCanonicalFileName),
                     toPath(info.safeListPath, info.safeListPath, getCanonicalFileName),
                     info.packageNameToTypingLocation,
-                    info.typingOptions,
+                    info.typeAcquisition,
                     info.unresolvedImports);
             });
         }
