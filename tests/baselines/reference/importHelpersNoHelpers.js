@@ -12,6 +12,10 @@ class C {
     }
 }
 
+const o = { a: 1 };
+const y = { ...o };
+const { ...x } = y;
+
 //// [script.ts]
 class A { }
 class B extends A { }
@@ -26,6 +30,7 @@ class C {
 
 //// [tslib.d.ts]
 export {}
+
 
 //// [external.js]
 "use strict";
@@ -61,6 +66,9 @@ C = tslib_1.__decorate([
     dec,
     tslib_1.__metadata("design:paramtypes", [])
 ], C);
+var o = { a: 1 };
+var y = tslib_1.__assign({}, o);
+var x = tslib_1.__rest(y, []);
 //// [script.js]
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];

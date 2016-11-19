@@ -16,7 +16,7 @@ var a2Gc = makeArrayG<any[]>(1, ""); // error
 function makeArrayG() {
     var items = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        items[_i - 0] = arguments[_i];
+        items[_i] = arguments[_i];
     }
     return items;
 }

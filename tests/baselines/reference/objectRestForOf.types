@@ -25,7 +25,7 @@ for ({ x: xx, ...rrestOff } of array ) {
 >{ x: xx, ...rrestOff } : { y: string; x: number; }
 >x : { x: number; y: string; }
 >xx : number
->rrestOff : any
+>rrestOff : { y: string; }
 >array : { x: number; y: string; }[]
 
     [xx, rrestOff];
@@ -43,7 +43,7 @@ for (const norest of array.map(a => ({ ...a, x: 'a string' }))) {
 >a : { x: number; y: string; }
 >({ ...a, x: 'a string' }) : { x: string; y: string; }
 >{ ...a, x: 'a string' } : { x: string; y: string; }
->a : any
+>a : { x: number; y: string; }
 >x : string
 >'a string' : "a string"
 

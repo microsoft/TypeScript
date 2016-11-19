@@ -197,13 +197,9 @@ namespace ts {
                     "/a/b/c/d/node_modules/foo/index.tsx",
                     "/a/b/c/d/node_modules/foo/index.d.ts",
 
-                    "/a/b/c/d/node_modules/@types/foo.ts",
-                    "/a/b/c/d/node_modules/@types/foo.tsx",
                     "/a/b/c/d/node_modules/@types/foo.d.ts",
                     "/a/b/c/d/node_modules/@types/foo/package.json",
 
-                    "/a/b/c/d/node_modules/@types/foo/index.ts",
-                    "/a/b/c/d/node_modules/@types/foo/index.tsx",
                     "/a/b/c/d/node_modules/@types/foo/index.d.ts",
 
                     "/a/b/c/node_modules/foo.ts",
@@ -215,13 +211,9 @@ namespace ts {
                     "/a/b/c/node_modules/foo/index.tsx",
                     "/a/b/c/node_modules/foo/index.d.ts",
 
-                    "/a/b/c/node_modules/@types/foo.ts",
-                    "/a/b/c/node_modules/@types/foo.tsx",
                     "/a/b/c/node_modules/@types/foo.d.ts",
                     "/a/b/c/node_modules/@types/foo/package.json",
 
-                    "/a/b/c/node_modules/@types/foo/index.ts",
-                    "/a/b/c/node_modules/@types/foo/index.tsx",
                     "/a/b/c/node_modules/@types/foo/index.d.ts",
                 ]);
             }
@@ -257,13 +249,9 @@ namespace ts {
                     "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.tsx",
                     "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.d.ts",
 
-                    "/a/node_modules/b/c/node_modules/d/node_modules/@types/foo.ts",
-                    "/a/node_modules/b/c/node_modules/d/node_modules/@types/foo.tsx",
                     "/a/node_modules/b/c/node_modules/d/node_modules/@types/foo.d.ts",
                     "/a/node_modules/b/c/node_modules/d/node_modules/@types/foo/package.json",
 
-                    "/a/node_modules/b/c/node_modules/d/node_modules/@types/foo/index.ts",
-                    "/a/node_modules/b/c/node_modules/d/node_modules/@types/foo/index.tsx",
                     "/a/node_modules/b/c/node_modules/d/node_modules/@types/foo/index.d.ts",
 
                     "/a/node_modules/b/c/node_modules/foo.ts",
@@ -275,13 +263,9 @@ namespace ts {
                     "/a/node_modules/b/c/node_modules/foo/index.tsx",
                     "/a/node_modules/b/c/node_modules/foo/index.d.ts",
 
-                    "/a/node_modules/b/c/node_modules/@types/foo.ts",
-                    "/a/node_modules/b/c/node_modules/@types/foo.tsx",
                     "/a/node_modules/b/c/node_modules/@types/foo.d.ts",
                     "/a/node_modules/b/c/node_modules/@types/foo/package.json",
 
-                    "/a/node_modules/b/c/node_modules/@types/foo/index.ts",
-                    "/a/node_modules/b/c/node_modules/@types/foo/index.tsx",
                     "/a/node_modules/b/c/node_modules/@types/foo/index.d.ts",
 
                     "/a/node_modules/b/node_modules/foo.ts",
@@ -293,13 +277,9 @@ namespace ts {
                     "/a/node_modules/b/node_modules/foo/index.tsx",
                     "/a/node_modules/b/node_modules/foo/index.d.ts",
 
-                    "/a/node_modules/b/node_modules/@types/foo.ts",
-                    "/a/node_modules/b/node_modules/@types/foo.tsx",
                     "/a/node_modules/b/node_modules/@types/foo.d.ts",
                     "/a/node_modules/b/node_modules/@types/foo/package.json",
 
-                    "/a/node_modules/b/node_modules/@types/foo/index.ts",
-                    "/a/node_modules/b/node_modules/@types/foo/index.tsx",
                     "/a/node_modules/b/node_modules/@types/foo/index.d.ts",
 
                     "/a/node_modules/foo.ts",
@@ -709,13 +689,9 @@ import b = require("./moduleB");
                     "/root/folder1/node_modules/file6/index.tsx",
                     "/root/folder1/node_modules/file6/index.d.ts",
 
-                    "/root/folder1/node_modules/@types/file6.ts",
-                    "/root/folder1/node_modules/@types/file6.tsx",
                     "/root/folder1/node_modules/@types/file6.d.ts",
 
                     "/root/folder1/node_modules/@types/file6/package.json",
-                    "/root/folder1/node_modules/@types/file6/index.ts",
-                    "/root/folder1/node_modules/@types/file6/index.tsx",
                     "/root/folder1/node_modules/@types/file6/index.d.ts",
                     // success on /root/node_modules/file6.ts
                 ], /*isExternalLibraryImport*/ true);

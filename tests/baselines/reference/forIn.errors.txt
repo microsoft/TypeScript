@@ -1,24 +1,17 @@
 tests/cases/compiler/forIn.ts(2,10): error TS2404: The left-hand side of a 'for...in' statement cannot use a type annotation.
-tests/cases/compiler/forIn.ts(2,22): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
-tests/cases/compiler/forIn.ts(7,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
-tests/cases/compiler/forIn.ts(18,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
 tests/cases/compiler/forIn.ts(20,4): error TS2304: Cannot find name 'k'.
 
 
-==== tests/cases/compiler/forIn.ts (5 errors) ====
+==== tests/cases/compiler/forIn.ts (2 errors) ====
     var arr = null;
     for (var i:number in arr) { // error
              ~
 !!! error TS2404: The left-hand side of a 'for...in' statement cannot use a type annotation.
-                         ~~~
-!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
         var x1 = arr[i];
         var y1 = arr[i];
     }
     
     for (var j in arr) { // ok
-                  ~~~
-!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
         var x2 = arr[j];
         var y2 = arr[j];
     }
@@ -30,8 +23,6 @@ tests/cases/compiler/forIn.ts(20,4): error TS2304: Cannot find name 'k'.
     }
     
     for (var l in arr) { 
-                  ~~~
-!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
        // error in the body
        k[l] = 1;
        ~

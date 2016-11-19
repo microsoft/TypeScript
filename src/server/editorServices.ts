@@ -10,8 +10,26 @@
 namespace ts.server {
     export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
 
-    export type ProjectServiceEvent =
-        { eventName: "context", data: { project: Project, fileName: NormalizedPath } } | { eventName: "configFileDiag", data: { triggerFile: string, configFileName: string, diagnostics: Diagnostic[] } };
+    export const ContextEvent = "context";
+    export const ConfigFileDiagEvent = "configFileDiag";
+    export const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
+
+    export interface ContextEvent {
+        eventName: typeof ContextEvent;
+        data: { project: Project; fileName: NormalizedPath };
+    }
+
+    export interface ConfigFileDiagEvent {
+        eventName: typeof ConfigFileDiagEvent;
+        data: { triggerFile: string, configFileName: string, diagnostics: Diagnostic[] };
+    }
+
+    export interface ProjectLanguageServiceStateEvent {
+        eventName: typeof ProjectLanguageServiceStateEvent;
+        data: { project: Project, languageServiceEnabled: boolean };
+    }
+
+    export type ProjectServiceEvent = ContextEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent;
 
     export interface ProjectServiceEventHandler {
         (event: ProjectServiceEvent): void;
@@ -284,6 +302,16 @@ namespace ts.server {
             return this.compilerOptionsForInferredProjects;
         }
 
+        onUpdateLanguageServiceStateForProject(project: Project, languageServiceEnabled: boolean) {
+            if (!this.eventHandler) {
+                return;
+            }
+            this.eventHandler(<ProjectLanguageServiceStateEvent>{
+                eventName: ProjectLanguageServiceStateEvent,
+                data: { project, languageServiceEnabled }
+            });
+        }
+
         updateTypingsForProject(response: SetTypings | InvalidateCachedTypings): void {
             const project = this.findProject(response.projectName);
             if (!project) {
@@ -432,7 +460,10 @@ namespace ts.server {
                 }
 
                 for (const openFile of this.openFiles) {
-                    this.eventHandler({ eventName: "context", data: { project: openFile.getDefaultProject(), fileName: openFile.fileName } });
+                    this.eventHandler(<ContextEvent>{
+                        eventName: ContextEvent,
+                        data: { project: openFile.getDefaultProject(), fileName: openFile.fileName }
+                    });
                 }
             }
 
@@ -441,7 +472,7 @@ namespace ts.server {
 
         private onTypeRootFileChanged(project: ConfiguredProject, fileName: string) {
             this.logger.info(`Type root file ${fileName} changed`);
-            this.throttledOperations.schedule(project.configFileName + " * type root", /*delay*/ 250, () => {
+            this.throttledOperations.schedule(project.getConfigFilePath() + " * type root", /*delay*/ 250, () => {
                 project.updateTypes();
                 this.updateConfiguredProject(project); // TODO: Figure out why this is needed (should be redundant?)
                 this.refreshInferredProjects();
@@ -463,13 +494,13 @@ namespace ts.server {
 
             this.logger.info(`Detected source file changes: ${fileName}`);
             this.throttledOperations.schedule(
-                project.configFileName,
+                project.getConfigFilePath(),
                 /*delay*/250,
                 () => this.handleChangeInSourceFileForConfiguredProject(project, fileName));
         }
 
         private handleChangeInSourceFileForConfiguredProject(project: ConfiguredProject, triggerFile: string) {
-            const { projectOptions, configFileErrors } = this.convertConfigFileContentToProjectOptions(project.configFileName);
+            const { projectOptions, configFileErrors } = this.convertConfigFileContentToProjectOptions(project.getConfigFilePath());
             this.reportConfigFileDiagnostics(project.getProjectName(), configFileErrors, triggerFile);
 
             const newRootFiles = projectOptions.files.map((f => this.getCanonicalFileName(f)));
@@ -491,7 +522,7 @@ namespace ts.server {
         }
 
         private onConfigChangedForConfiguredProject(project: ConfiguredProject) {
-            this.logger.info(`Config file changed: ${project.configFileName}`);
+            this.logger.info(`Config file changed: ${project.getConfigFilePath()}`);
             this.updateConfiguredProject(project);
             this.refreshInferredProjects();
         }
@@ -841,8 +872,8 @@ namespace ts.server {
                 return;
             }
 
-            this.eventHandler({
-                eventName: "configFileDiag",
+            this.eventHandler(<ConfigFileDiagEvent>{
+                eventName: ConfigFileDiagEvent,
                 data: { configFileName, diagnostics: diagnostics || [], triggerFile }
             });
         }
@@ -985,13 +1016,13 @@ namespace ts.server {
         }
 
         private updateConfiguredProject(project: ConfiguredProject) {
-            if (!this.host.fileExists(project.configFileName)) {
+            if (!this.host.fileExists(project.getConfigFilePath())) {
                 this.logger.info("Config file deleted");
                 this.removeProject(project);
                 return;
             }
 
-            const { success, projectOptions, configFileErrors } = this.convertConfigFileContentToProjectOptions(project.configFileName);
+            const { success, projectOptions, configFileErrors } = this.convertConfigFileContentToProjectOptions(project.getConfigFilePath());
             if (!success) {
                 // reset project settings to default
                 this.updateNonInferredProject(project, [], fileNamePropertyReader, {}, {}, /*compileOnSave*/false, configFileErrors);
@@ -1020,7 +1051,7 @@ namespace ts.server {
             const useExistingProject = this.useSingleInferredProject && this.inferredProjects.length;
             const project = useExistingProject
                 ? this.inferredProjects[0]
-                : new InferredProject(this, this.documentRegistry, /*languageServiceEnabled*/ true, this.compilerOptionsForInferredProjects);
+                : new InferredProject(this, this.documentRegistry, this.compilerOptionsForInferredProjects);
 
             project.addRoot(root);
 

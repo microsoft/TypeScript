@@ -416,7 +416,9 @@ namespace ts {
                 case SyntaxKind.TypeOperator:
                     return emitTypeOperator(<TypeOperatorNode>type);
                 case SyntaxKind.IndexedAccessType:
-                    return emitPropertyAccessType(<IndexedAccessTypeNode>type);
+                    return emitIndexedAccessType(<IndexedAccessTypeNode>type);
+                case SyntaxKind.MappedType:
+                    return emitMappedType(<MappedTypeNode>type);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                     return emitSignatureDeclarationWithJsDocComments(<FunctionOrConstructorTypeNode>type);
@@ -516,11 +518,37 @@ namespace ts {
                 emitType(type.type);
             }
 
-            function emitPropertyAccessType(node: IndexedAccessTypeNode) {
+            function emitIndexedAccessType(node: IndexedAccessTypeNode) {
                 emitType(node.objectType);
                 write("[");
                 emitType(node.indexType);
                 write("]");
+            }
+
+            function emitMappedType(node: MappedTypeNode) {
+                const prevEnclosingDeclaration = enclosingDeclaration;
+                enclosingDeclaration = node;
+                write("{");
+                writeLine();
+                increaseIndent();
+                if (node.readonlyToken) {
+                    write("readonly ");
+                }
+                write("[");
+                writeEntityName(node.typeParameter.name);
+                write(" in ");
+                emitType(node.typeParameter.constraint);
+                write("]");
+                if (node.questionToken) {
+                    write("?");
+                }
+                write(": ");
+                emitType(node.type);
+                write(";");
+                writeLine();
+                decreaseIndent();
+                write("}");
+                enclosingDeclaration = prevEnclosingDeclaration;
             }
 
             function emitTypeLiteral(type: TypeLiteralNode) {
@@ -1009,6 +1037,10 @@ namespace ts {
                             diagnosticMessage = Diagnostics.Type_parameter_0_of_exported_function_has_or_is_using_private_name_1;
                             break;
 
+                        case SyntaxKind.TypeAliasDeclaration:
+                            diagnosticMessage = Diagnostics.Type_parameter_0_of_exported_type_alias_has_or_is_using_private_name_1;
+                            break;
+
                         default:
                             Debug.fail("This is unknown parent for type parameter: " + node.parent.kind);
                     }
@@ -1115,7 +1147,10 @@ namespace ts {
             const prevEnclosingDeclaration = enclosingDeclaration;
             enclosingDeclaration = node;
             emitTypeParameters(node.typeParameters);
-            emitHeritageClause(getInterfaceBaseTypeNodes(node), /*isImplementsList*/ false);
+            const interfaceExtendsTypes = filter(getInterfaceBaseTypeNodes(node), base => isEntityNameExpression(base.expression));
+            if (interfaceExtendsTypes && interfaceExtendsTypes.length) {
+                emitHeritageClause(interfaceExtendsTypes, /*isImplementsList*/ false);
+            }
             write(" {");
             writeLine();
             increaseIndent();

@@ -11,7 +11,6 @@ namespace ts.server {
 
     export const emptyArray: ReadonlyArray<any> = [];
 
-
     export interface Logger {
         close(): void;
         hasLevel(level: LogLevel): boolean;
@@ -160,70 +159,6 @@ namespace ts.server {
             }
         };
     }
-    function throwLanguageServiceIsDisabledError(): never {
-        throw new Error("LanguageService is disabled");
-    }
-
-    export const nullLanguageService: LanguageService = {
-        cleanupSemanticCache: throwLanguageServiceIsDisabledError,
-        getSyntacticDiagnostics: throwLanguageServiceIsDisabledError,
-        getSemanticDiagnostics: throwLanguageServiceIsDisabledError,
-        getCompilerOptionsDiagnostics: throwLanguageServiceIsDisabledError,
-        getSyntacticClassifications: throwLanguageServiceIsDisabledError,
-        getEncodedSyntacticClassifications: throwLanguageServiceIsDisabledError,
-        getSemanticClassifications: throwLanguageServiceIsDisabledError,
-        getEncodedSemanticClassifications: throwLanguageServiceIsDisabledError,
-        getCompletionsAtPosition:  throwLanguageServiceIsDisabledError,
-        findReferences: throwLanguageServiceIsDisabledError,
-        getCompletionEntryDetails: throwLanguageServiceIsDisabledError,
-        getQuickInfoAtPosition: throwLanguageServiceIsDisabledError,
-        findRenameLocations: throwLanguageServiceIsDisabledError,
-        getNameOrDottedNameSpan: throwLanguageServiceIsDisabledError,
-        getBreakpointStatementAtPosition: throwLanguageServiceIsDisabledError,
-        getBraceMatchingAtPosition: throwLanguageServiceIsDisabledError,
-        getSignatureHelpItems: throwLanguageServiceIsDisabledError,
-        getDefinitionAtPosition: throwLanguageServiceIsDisabledError,
-        getRenameInfo: throwLanguageServiceIsDisabledError,
-        getTypeDefinitionAtPosition: throwLanguageServiceIsDisabledError,
-        getReferencesAtPosition: throwLanguageServiceIsDisabledError,
-        getDocumentHighlights: throwLanguageServiceIsDisabledError,
-        getOccurrencesAtPosition: throwLanguageServiceIsDisabledError,
-        getNavigateToItems: throwLanguageServiceIsDisabledError,
-        getNavigationBarItems: throwLanguageServiceIsDisabledError,
-        getNavigationTree: throwLanguageServiceIsDisabledError,
-        getOutliningSpans: throwLanguageServiceIsDisabledError,
-        getTodoComments: throwLanguageServiceIsDisabledError,
-        getIndentationAtPosition: throwLanguageServiceIsDisabledError,
-        getFormattingEditsForRange: throwLanguageServiceIsDisabledError,
-        getFormattingEditsForDocument: throwLanguageServiceIsDisabledError,
-        getFormattingEditsAfterKeystroke: throwLanguageServiceIsDisabledError,
-        getDocCommentTemplateAtPosition: throwLanguageServiceIsDisabledError,
-        isValidBraceCompletionAtPosition: throwLanguageServiceIsDisabledError,
-        getEmitOutput: throwLanguageServiceIsDisabledError,
-        getProgram: throwLanguageServiceIsDisabledError,
-        getNonBoundSourceFile: throwLanguageServiceIsDisabledError,
-        dispose: throwLanguageServiceIsDisabledError,
-        getCompletionEntrySymbol: throwLanguageServiceIsDisabledError,
-        getImplementationAtPosition: throwLanguageServiceIsDisabledError,
-        getSourceFile: throwLanguageServiceIsDisabledError,
-        getCodeFixesAtPosition: throwLanguageServiceIsDisabledError
-    };
-
-    export interface ServerLanguageServiceHost {
-        setCompilationSettings(options: CompilerOptions): void;
-        setFileExtensionMap(fileExtensionMap: FileExtensionMap): void;
-        notifyFileRemoved(info: ScriptInfo): void;
-        startRecordingFilesWithChangedResolutions(): void;
-        finishRecordingFilesWithChangedResolutions(): Path[];
-    }
-
-    export const nullLanguageServiceHost: ServerLanguageServiceHost = {
-        setCompilationSettings: () => undefined,
-        setFileExtensionMap: () => undefined,
-        notifyFileRemoved: () => undefined,
-        startRecordingFilesWithChangedResolutions: () => undefined,
-        finishRecordingFilesWithChangedResolutions: () => undefined
-    };
 
     export interface ProjectOptions {
         /**
