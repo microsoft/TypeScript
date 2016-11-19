@@ -2339,6 +2339,30 @@ namespace ts.projectSystem {
             projectService.openExternalProject({ rootFiles: toExternalFiles([f1.path, config.path]), options: {}, projectFileName: projectName });
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
         });
+
+        it("types should load from config file path if config exists", () => {
+            const f1 = {
+                path: "/a/b/app.ts",
+                content: "let x = 1"
+            };
+            const config = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({ compilerOptions: { types: ["node"], typeRoots: [] } })
+            };
+            const node = {
+                path: "/a/b/node_modules/@types/node/index.d.ts",
+                content: "declare var process: any"
+            };
+            const cwd = {
+                path: "/a/c"
+            };
+            debugger;
+            const host = createServerHost([f1, config, node, cwd], { currentDirectory: cwd.path });
+            const projectService = createProjectService(host);
+            projectService.openClientFile(f1.path);
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path, node.path]);
+        });
     });
 
     describe("add the missing module file for inferred project", () => {

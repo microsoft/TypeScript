@@ -35,7 +35,7 @@ namespace M {
 ><div x='' {...foo} y='' /> : JSX.Element
 >div : any
 >x : any
->foo : undefined
+>foo : any
 >y : any
 
 	// Quotes

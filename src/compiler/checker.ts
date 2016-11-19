@@ -123,6 +123,7 @@ namespace ts {
         const intersectionTypes = createMap<IntersectionType>();
         const stringLiteralTypes = createMap<LiteralType>();
         const numericLiteralTypes = createMap<LiteralType>();
+        const indexedAccessTypes = createMap<IndexedAccessType>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
 
         const unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
@@ -3227,9 +3228,11 @@ namespace ts {
                 return addOptionality(getTypeFromTypeNode(declaration.type), /*optional*/ declaration.questionToken && includeOptionality);
             }
 
-            if (declaration.kind === SyntaxKind.VariableDeclaration && !isBindingPattern(declaration.name) &&
+            if ((compilerOptions.noImplicitAny || declaration.flags & NodeFlags.JavaScriptFile) &&
+                declaration.kind === SyntaxKind.VariableDeclaration && !isBindingPattern(declaration.name) &&
                 !(getCombinedModifierFlags(declaration) & ModifierFlags.Export) && !isInAmbientContext(declaration)) {
-                // Use control flow tracked 'any' type for non-ambient, non-exported var or let variables with no
+                // If --noImplicitAny is on or the declaration is in a Javascript file,
+                // use control flow tracked 'any' type for non-ambient, non-exported var or let variables with no
                 // initializer or a 'null' or 'undefined' initializer.
                 if (!(getCombinedNodeFlags(declaration) & NodeFlags.Const) && (!declaration.initializer || isNullOrUndefined(declaration.initializer))) {
                     return autoType;
@@ -4662,12 +4665,21 @@ namespace ts {
         }
 
         /**
+         * The apparent type of an indexed access T[K] is the type of T's string index signature, if any.
+         */
+        function getApparentTypeOfIndexedAccess(type: IndexedAccessType) {
+            return getIndexTypeOfType(getApparentType(type.objectType), IndexKind.String) || type;
+        }
+
+        /**
          * For a type parameter, return the base constraint of the type parameter. For the string, number,
          * boolean, and symbol primitive types, return the corresponding object types. Otherwise return the
          * type itself. Note that the apparent type of a union type is the union type itself.
          */
         function getApparentType(type: Type): Type {
-            const t = type.flags & TypeFlags.TypeParameter ? getApparentTypeOfTypeParameter(<TypeParameter>type) : type;
+            const t = type.flags & TypeFlags.TypeParameter ? getApparentTypeOfTypeParameter(<TypeParameter>type) :
+                type.flags & TypeFlags.IndexedAccess ? getApparentTypeOfIndexedAccess(<IndexedAccessType>type) :
+                type;
             return t.flags & TypeFlags.StringLike ? globalStringType :
                 t.flags & TypeFlags.NumberLike ? globalNumberType :
                 t.flags & TypeFlags.BooleanLike ? globalBooleanType :
@@ -5960,6 +5972,7 @@ namespace ts {
 
         function getIndexType(type: Type): Type {
             return type.flags & TypeFlags.TypeParameter ? getIndexTypeForTypeParameter(<TypeParameter>type) :
+                getObjectFlags(type) & ObjectFlags.Mapped ? getConstraintTypeFromMappedType(<MappedType>type) :
                 type.flags & TypeFlags.Any || getIndexInfoOfType(type, IndexKind.String) ? stringOrNumberType :
                 getIndexInfoOfType(type, IndexKind.Number) ? getUnionType([numberType, getLiteralTypeFromPropertyNames(type)]) :
                 getLiteralTypeFromPropertyNames(type);
@@ -5973,16 +5986,11 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function createIndexedAccessType(objectType: Type, indexType: TypeParameter) {
+        function createIndexedAccessType(objectType: Type, indexType: Type) {
             const type = <IndexedAccessType>createType(TypeFlags.IndexedAccess);
             type.objectType = objectType;
             type.indexType = indexType;
             return type;
-        }
-
-        function getIndexedAccessTypeForTypeParameter(objectType: Type, indexType: TypeParameter) {
-            const indexedAccessTypes = indexType.resolvedIndexedAccessTypes || (indexType.resolvedIndexedAccessTypes = []);
-            return indexedAccessTypes[objectType.id] || (indexedAccessTypes[objectType.id] = createIndexedAccessType(objectType, indexType));
         }
 
         function getPropertyTypeForIndexType(objectType: Type, indexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode, cacheSymbol: boolean) {
@@ -6048,13 +6056,41 @@ namespace ts {
             return unknownType;
         }
 
+        function getIndexedAccessForMappedType(type: MappedType, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode) {
+            const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? <ElementAccessExpression>accessNode : undefined;
+            if (accessExpression && isAssignmentTarget(accessExpression) && type.declaration.readonlyToken) {
+                error(accessExpression, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(type));
+                return unknownType;
+            }
+            const mapper = createUnaryTypeMapper(getTypeParameterFromMappedType(type), indexType);
+            const templateMapper = type.mapper ? combineTypeMappers(type.mapper, mapper) : mapper;
+            return addOptionality(instantiateType(getTemplateTypeFromMappedType(type), templateMapper), !!type.declaration.questionToken);
+        }
+
         function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode) {
-            if (indexType.flags & TypeFlags.TypeParameter) {
-                if (accessNode && !isTypeAssignableTo(getConstraintOfTypeParameter(<TypeParameter>indexType) || emptyObjectType, getIndexType(objectType))) {
-                    error(accessNode, Diagnostics.Type_0_is_not_constrained_to_keyof_1, typeToString(indexType), typeToString(objectType));
-                    return unknownType;
+            if (indexType.flags & TypeFlags.TypeParameter ||
+                objectType.flags & TypeFlags.TypeParameter && indexType.flags & TypeFlags.Index ||
+                isGenericMappedType(objectType)) {
+                // If either the object type or the index type are type parameters, or if the object type is a mapped
+                // type with a generic constraint, we are performing a higher-order index access where we cannot
+                // meaningfully access the properties of the object type. In those cases, we first check that the
+                // index type is assignable to 'keyof T' for the object type.
+                if (accessNode) {
+                    const keyType = indexType.flags & TypeFlags.TypeParameter ? getConstraintOfTypeParameter(<TypeParameter>indexType) || emptyObjectType : indexType;
+                    if (!isTypeAssignableTo(keyType, getIndexType(objectType))) {
+                        error(accessNode, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(indexType), typeToString(objectType));
+                        return unknownType;
+                    }
                 }
-                return getIndexedAccessTypeForTypeParameter(objectType, <TypeParameter>indexType);
+                // If the object type is a mapped type { [P in K]: E }, we instantiate E using a mapper that substitutes
+                // the index type for P. For example, for an index access { [P in K]: Box<T[P]> }[X], we construct the
+                // type Box<T[X]>.
+                if (isGenericMappedType(objectType)) {
+                    return getIndexedAccessForMappedType(<MappedType>objectType, indexType, accessNode);
+                }
+                // Otherwise we defer the operation by creating an indexed access type.
+                const id = objectType.id + "," + indexType.id;
+                return indexedAccessTypes[id] || (indexedAccessTypes[id] = createIndexedAccessType(objectType, indexType));
             }
             const apparentType = getApparentType(objectType);
             if (indexType.flags & TypeFlags.Union && !(indexType.flags & TypeFlags.Primitive)) {
@@ -6087,6 +6123,9 @@ namespace ts {
                 type.aliasSymbol = getAliasSymbolForTypeNode(node);
                 type.aliasTypeArguments = getAliasTypeArgumentsForTypeNode(node);
                 links.resolvedType = type;
+                // Eagerly resolve the constraint type which forces an error if the constraint type circularly
+                // references itself through one or more type aliases.
+                getConstraintTypeFromMappedType(type);
             }
             return links.resolvedType;
         }
@@ -7206,12 +7245,24 @@ namespace ts {
                 }
 
                 if (target.flags & TypeFlags.TypeParameter) {
-                    // Given a type parameter K with a constraint keyof T, a type S is
-                    // assignable to K if S is assignable to keyof T.
-                    const constraint = getConstraintOfTypeParameter(<TypeParameter>target);
-                    if (constraint && constraint.flags & TypeFlags.Index) {
-                        if (result = isRelatedTo(source, constraint, reportErrors)) {
-                            return result;
+                    // A source type { [P in keyof T]: X } is related to a target type T if X is related to T[P].
+                    if (getObjectFlags(source) & ObjectFlags.Mapped && getConstraintTypeFromMappedType(<MappedType>source) === getIndexType(target)) {
+                        if (!(<MappedType>source).declaration.questionToken) {
+                            const templateType = getTemplateTypeFromMappedType(<MappedType>source);
+                            const indexedAccessType = getIndexedAccessType(target, getTypeParameterFromMappedType(<MappedType>source));
+                            if (result = isRelatedTo(templateType, indexedAccessType, reportErrors)) {
+                                return result;
+                            }
+                        }
+                    }
+                    else {
+                        // Given a type parameter K with a constraint keyof T, a type S is
+                        // assignable to K if S is assignable to keyof T.
+                        const constraint = getConstraintOfTypeParameter(<TypeParameter>target);
+                        if (constraint && constraint.flags & TypeFlags.Index) {
+                            if (result = isRelatedTo(source, constraint, reportErrors)) {
+                                return result;
+                            }
                         }
                     }
                 }
@@ -7231,22 +7282,41 @@ namespace ts {
                         }
                     }
                 }
+                else if (target.flags & TypeFlags.IndexedAccess) {
+                    // if we have indexed access types with identical index types, see if relationship holds for
+                    // the two object types.
+                    if (source.flags & TypeFlags.IndexedAccess && (<IndexedAccessType>source).indexType === (<IndexedAccessType>target).indexType) {
+                        if (result = isRelatedTo((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType, reportErrors)) {
+                            return result;
+                        }
+                    }
+                }
 
                 if (source.flags & TypeFlags.TypeParameter) {
-                    let constraint = getConstraintOfTypeParameter(<TypeParameter>source);
-
-                    if (!constraint || constraint.flags & TypeFlags.Any) {
-                        constraint = emptyObjectType;
+                    // A source type T is related to a target type { [P in keyof T]: X } if T[P] is related to X.
+                    if (getObjectFlags(target) & ObjectFlags.Mapped && getConstraintTypeFromMappedType(<MappedType>target) === getIndexType(source)) {
+                        const indexedAccessType = getIndexedAccessType(source, getTypeParameterFromMappedType(<MappedType>target));
+                        const templateType = getTemplateTypeFromMappedType(<MappedType>target);
+                        if (result = isRelatedTo(indexedAccessType, templateType, reportErrors)) {
+                            return result;
+                        }
                     }
+                    else {
+                        let constraint = getConstraintOfTypeParameter(<TypeParameter>source);
 
-                    // The constraint may need to be further instantiated with its 'this' type.
-                    constraint = getTypeWithThisArgument(constraint, source);
+                        if (!constraint || constraint.flags & TypeFlags.Any) {
+                            constraint = emptyObjectType;
+                        }
 
-                    // Report constraint errors only if the constraint is not the empty object type
-                    const reportConstraintErrors = reportErrors && constraint !== emptyObjectType;
-                    if (result = isRelatedTo(constraint, target, reportConstraintErrors)) {
-                        errorInfo = saveErrorInfo;
-                        return result;
+                        // The constraint may need to be further instantiated with its 'this' type.
+                        constraint = getTypeWithThisArgument(constraint, source);
+
+                        // Report constraint errors only if the constraint is not the empty object type
+                        const reportConstraintErrors = reportErrors && constraint !== emptyObjectType;
+                        if (result = isRelatedTo(constraint, target, reportConstraintErrors)) {
+                            errorInfo = saveErrorInfo;
+                            return result;
+                        }
                     }
                 }
                 else {
@@ -14277,12 +14347,13 @@ namespace ts {
         function checkObjectLiteralAssignment(node: ObjectLiteralExpression, sourceType: Type): Type {
             const properties = node.properties;
             for (const p of properties) {
-                checkObjectLiteralDestructuringPropertyAssignment(sourceType, p);
+                checkObjectLiteralDestructuringPropertyAssignment(sourceType, p, properties);
             }
             return sourceType;
         }
 
-        function checkObjectLiteralDestructuringPropertyAssignment(objectLiteralType: Type, property: ObjectLiteralElementLike) {
+        /** Note: If property cannot be a SpreadAssignment, then allProperties does not need to be provided */
+        function checkObjectLiteralDestructuringPropertyAssignment(objectLiteralType: Type, property: ObjectLiteralElementLike, allProperties?: ObjectLiteralElementLike[]) {
             if (property.kind === SyntaxKind.PropertyAssignment || property.kind === SyntaxKind.ShorthandPropertyAssignment) {
                 const name = <PropertyName>(<PropertyAssignment>property).name;
                 if (name.kind === SyntaxKind.ComputedPropertyName) {
@@ -14315,7 +14386,14 @@ namespace ts {
                 if (languageVersion < ScriptTarget.ESNext) {
                     checkExternalEmitHelpers(property, ExternalEmitHelpers.Rest);
                 }
-                checkReferenceExpression(property.expression, Diagnostics.The_target_of_an_object_rest_assignment_must_be_a_variable_or_a_property_access);
+                const nonRestNames: PropertyName[] = [];
+                if (allProperties) {
+                    for (let i = 0; i < allProperties.length - 1; i++) {
+                        nonRestNames.push(allProperties[i].name);
+                    }
+                }
+                const type = getRestType(objectLiteralType, nonRestNames, objectLiteralType.symbol);
+                return checkDestructuringAssignment(property.expression, type);
             }
             else {
                 error(property, Diagnostics.Property_assignment_expected);
@@ -14417,7 +14495,10 @@ namespace ts {
 
         function checkReferenceAssignment(target: Expression, sourceType: Type, contextualMapper?: TypeMapper): Type {
             const targetType = checkExpression(target, contextualMapper);
-            if (checkReferenceExpression(target, Diagnostics.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access)) {
+            const error = target.parent.kind === SyntaxKind.SpreadAssignment ?
+                Diagnostics.The_target_of_an_object_rest_assignment_must_be_a_variable_or_a_property_access :
+                Diagnostics.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access;
+            if (checkReferenceExpression(target, error)) {
                 checkTypeAssignableTo(sourceType, targetType, target, /*headMessage*/ undefined);
             }
             return sourceType;
