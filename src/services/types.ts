@@ -126,7 +126,7 @@ namespace ts {
     //
     export interface LanguageServiceHost {
         getCompilationSettings(): CompilerOptions;
-        getMixedContentFileExtensions?(): string[];
+        getFileExtensionMap?(): FileExtensionMap;
         getNewLine?(): string;
         getProjectVersion?(): string;
         getScriptFileNames(): string[];

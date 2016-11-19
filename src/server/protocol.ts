@@ -992,9 +992,9 @@ namespace ts.server.protocol {
         formatOptions?: FormatCodeSettings;
 
         /**
-         * List of host's supported mixed content file extensions
+         * The host's supported file extension mappings
          */
-        mixedContentFileExtensions?: string[];
+        fileExtensionMap?: FileExtensionMap;
     }
 
     /**

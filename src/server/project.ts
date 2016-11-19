@@ -254,7 +254,7 @@ namespace ts.server {
 
             this.lsHost = new LSHost(this.projectService.host, this, this.projectService.cancellationToken);
             this.lsHost.setCompilationSettings(this.compilerOptions);
-            this.lsHost.setMixedContentFileExtensions(this.projectService.hostConfiguration.mixedContentFileExtensions);
+            this.lsHost.setFileExtensionMap(this.projectService.hostConfiguration.fileExtensionMap);
 
             this.languageService = ts.createLanguageService(this.lsHost, this.documentRegistry);
             this.noSemanticFeaturesLanguageService = createNoSemanticFeaturesWrapper(this.languageService);

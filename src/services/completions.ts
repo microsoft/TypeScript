@@ -271,14 +271,14 @@ namespace ts.Completions {
             const span = getDirectoryFragmentTextSpan((<StringLiteral>node).text, node.getStart() + 1);
             let entries: CompletionEntry[];
             if (isPathRelativeToScript(literalValue) || isRootedDiskPath(literalValue)) {
-                const mixedContentFileExtensions = host.getMixedContentFileExtensions ? host.getMixedContentFileExtensions() : [];
+                const fileExtensionMap = host.getFileExtensionMap ? host.getFileExtensionMap() : {};
                 if (compilerOptions.rootDirs) {
                     entries = getCompletionEntriesForDirectoryFragmentWithRootDirs(
-                        compilerOptions.rootDirs, literalValue, scriptDirectory, getSupportedExtensions(compilerOptions, mixedContentFileExtensions), /*includeExtensions*/false, span, scriptPath);
+                        compilerOptions.rootDirs, literalValue, scriptDirectory, getSupportedExtensions(compilerOptions, fileExtensionMap), /*includeExtensions*/false, span, scriptPath);
                 }
                 else {
                     entries = getCompletionEntriesForDirectoryFragment(
-                        literalValue, scriptDirectory, getSupportedExtensions(compilerOptions, mixedContentFileExtensions), /*includeExtensions*/false, span, scriptPath);
+                        literalValue, scriptDirectory, getSupportedExtensions(compilerOptions, fileExtensionMap), /*includeExtensions*/false, span, scriptPath);
                 }
             }
             else {
@@ -412,8 +412,8 @@ namespace ts.Completions {
             let result: CompletionEntry[];
 
             if (baseUrl) {
-                const mixedContentFileExtensions = host.getMixedContentFileExtensions ? host.getMixedContentFileExtensions() : [];
-                const fileExtensions = getSupportedExtensions(compilerOptions, mixedContentFileExtensions);
+                const fileExtensionMap = host.getFileExtensionMap ? host.getFileExtensionMap() : {};
+                const fileExtensions = getSupportedExtensions(compilerOptions, fileExtensionMap);
                 const projectDir = compilerOptions.project || host.getCurrentDirectory();
                 const absolute = isRootedDiskPath(baseUrl) ? baseUrl : combinePaths(projectDir, baseUrl);
                 result = getCompletionEntriesForDirectoryFragment(fragment, normalizePath(absolute), fileExtensions, /*includeExtensions*/false, span);
@@ -590,8 +590,8 @@ namespace ts.Completions {
                 if (kind === "path") {
                     // Give completions for a relative path
                     const span: TextSpan = getDirectoryFragmentTextSpan(toComplete, range.pos + prefix.length);
-                    const mixedContentFileExtensions = host.getMixedContentFileExtensions ? host.getMixedContentFileExtensions() : [];
-                    completionInfo.entries = getCompletionEntriesForDirectoryFragment(toComplete, scriptPath, getSupportedExtensions(compilerOptions, mixedContentFileExtensions), /*includeExtensions*/true, span, sourceFile.path);
+                    const fileExtensionMap = host.getFileExtensionMap ? host.getFileExtensionMap() : {};
+                    completionInfo.entries = getCompletionEntriesForDirectoryFragment(toComplete, scriptPath, getSupportedExtensions(compilerOptions, fileExtensionMap), /*includeExtensions*/true, span, sourceFile.path);
                 }
                 else {
                     // Give completions based on the typings available

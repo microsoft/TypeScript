@@ -1942,8 +1942,16 @@ namespace ts {
     export const supportedJavascriptExtensions = [".js", ".jsx"];
     const allSupportedExtensions = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
 
-    export function getSupportedExtensions(options?: CompilerOptions, mixedContentFileExtensions?: string[]): string[] {
-        return options && options.allowJs ? concatenate(allSupportedExtensions, mixedContentFileExtensions) : supportedTypeScriptExtensions;
+    export function getSupportedExtensions(options?: CompilerOptions, fileExtensionMap?: FileExtensionMap): string[] {
+        let typeScriptHostExtensions: string[] = [];
+        let allHostExtensions: string[] = [];
+        if (fileExtensionMap) {
+            allHostExtensions = concatenate(concatenate(fileExtensionMap.javaScript, fileExtensionMap.typeScript), fileExtensionMap.mixedContent);
+            typeScriptHostExtensions = fileExtensionMap.typeScript;
+        }
+        const allTypeScriptExtensions = concatenate(supportedTypeScriptExtensions, typeScriptHostExtensions);
+        const allExtensions = concatenate(allSupportedExtensions, allHostExtensions);
+        return options && options.allowJs ? allExtensions : allTypeScriptExtensions;
     }
 
     export function hasJavaScriptFileExtension(fileName: string) {
@@ -1954,10 +1962,10 @@ namespace ts {
         return forEach(supportedTypeScriptExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
-    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, mixedContentFileExtensions?: string[]) {
+    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, fileExtensionMap?: FileExtensionMap) {
         if (!fileName) { return false; }
 
-        for (const extension of getSupportedExtensions(compilerOptions, mixedContentFileExtensions)) {
+        for (const extension of getSupportedExtensions(compilerOptions, fileExtensionMap)) {
             if (fileExtensionIs(fileName, extension)) {
                 return true;
             }

@@ -108,7 +108,7 @@ namespace ts.server {
     export interface HostConfiguration {
         formatCodeOptions: FormatCodeSettings;
         hostInfo: string;
-        mixedContentFileExtensions?: string[];
+        fileExtensionMap?: FileExtensionMap;
     }
 
     interface ConfigFileConversionResult {
@@ -133,13 +133,13 @@ namespace ts.server {
     interface FilePropertyReader<T> {
         getFileName(f: T): string;
         getScriptKind(f: T): ScriptKind;
-        hasMixedContent(f: T, mixedContentFileExtensions: string[]): boolean;
+        hasMixedContent(f: T, mixedContentExtensions: string[]): boolean;
     }
 
     const fileNamePropertyReader: FilePropertyReader<string> = {
         getFileName: x => x,
         getScriptKind: _ => undefined,
-        hasMixedContent: (fileName, mixedContentFileExtensions) => forEach(mixedContentFileExtensions, extension => fileExtensionIs(fileName, extension))
+        hasMixedContent: (fileName, mixedContentExtensions) => forEach(mixedContentExtensions, extension => fileExtensionIs(fileName, extension))
     };
 
     const externalFilePropertyReader: FilePropertyReader<protocol.ExternalFile> = {
@@ -284,7 +284,7 @@ namespace ts.server {
             this.hostConfiguration = {
                 formatCodeOptions: getDefaultFormatCodeSettings(this.host),
                 hostInfo: "Unknown host",
-                mixedContentFileExtensions: []
+                fileExtensionMap: {}
             };
 
             this.documentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames, host.getCurrentDirectory());
@@ -488,7 +488,7 @@ namespace ts.server {
             // If a change was made inside "folder/file", node will trigger the callback twice:
             // one with the fileName being "folder/file", and the other one with "folder".
             // We don't respond to the second one.
-            if (fileName && !ts.isSupportedSourceFileName(fileName, project.getCompilerOptions(), this.hostConfiguration.mixedContentFileExtensions)) {
+            if (fileName && !ts.isSupportedSourceFileName(fileName, project.getCompilerOptions(), this.hostConfiguration.fileExtensionMap)) {
                 return;
             }
 
@@ -810,7 +810,7 @@ namespace ts.server {
                 /*existingOptions*/ {},
                 configFilename,
                 /*resolutionStack*/ [],
-                this.hostConfiguration.mixedContentFileExtensions);
+                this.hostConfiguration.fileExtensionMap);
 
             if (parsedCommandLine.errors.length) {
                 errors = concatenate(errors, parsedCommandLine.errors);
@@ -914,7 +914,7 @@ namespace ts.server {
             for (const f of files) {
                 const rootFilename = propertyReader.getFileName(f);
                 const scriptKind = propertyReader.getScriptKind(f);
-                const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.mixedContentFileExtensions);
+                const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.fileExtensionMap.mixedContent);
                 if (this.host.fileExists(rootFilename)) {
                     const info = this.getOrCreateScriptInfoForNormalizedPath(toNormalizedPath(rootFilename), /*openedByClient*/ clientFileName == rootFilename, /*fileContent*/ undefined, scriptKind, hasMixedContent);
                     project.addRoot(info);
@@ -960,7 +960,7 @@ namespace ts.server {
                     rootFilesChanged = true;
                     if (!scriptInfo) {
                         const scriptKind = propertyReader.getScriptKind(f);
-                        const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.mixedContentFileExtensions);
+                        const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.fileExtensionMap.mixedContent);
                         scriptInfo = this.getOrCreateScriptInfoForNormalizedPath(normalizedPath, /*openedByClient*/ false, /*fileContent*/ undefined, scriptKind, hasMixedContent);
                     }
                 }
@@ -1144,9 +1144,9 @@ namespace ts.server {
                     mergeMaps(this.hostConfiguration.formatCodeOptions, convertFormatOptions(args.formatOptions));
                     this.logger.info("Format host information updated");
                 }
-                if (args.mixedContentFileExtensions) {
-                    this.hostConfiguration.mixedContentFileExtensions = args.mixedContentFileExtensions;
-                    this.logger.info("Host mixed content file extensions updated");
+                if (args.fileExtensionMap) {
+                    this.hostConfiguration.fileExtensionMap = args.fileExtensionMap;
+                    this.logger.info("Host file extension mappings updated");
                 }
             }
         }
