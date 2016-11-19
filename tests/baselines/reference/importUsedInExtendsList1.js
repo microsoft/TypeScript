@@ -31,7 +31,7 @@ var foo = require("./importUsedInExtendsList1_require");
 var Sub = (function (_super) {
     __extends(Sub, _super);
     function Sub() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return Sub;
 }(foo.Super));

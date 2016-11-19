@@ -13,7 +13,7 @@ var C = (function () {
         set: function () {
             var v = [];
             for (var _i = 0; _i < arguments.length; _i++) {
-                v[_i - 0] = arguments[_i];
+                v[_i] = arguments[_i];
             }
         },
         enumerable: true,
@@ -23,7 +23,7 @@ var C = (function () {
         set: function () {
             var v2 = [];
             for (var _i = 0; _i < arguments.length; _i++) {
-                v2[_i - 0] = arguments[_i];
+                v2[_i] = arguments[_i];
             }
         },
         enumerable: true,

@@ -25,10 +25,11 @@ var C = (function () {
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        _super.call(this);
-        this.v = 1;
-        this.p = 1;
+        var _this = _super.call(this) || this;
+        _this.v = 1;
+        _this.p = 1;
         C.s = 1;
+        return _this;
     }
     return D;
 }(C));

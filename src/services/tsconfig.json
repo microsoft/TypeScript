@@ -1,4 +1,4 @@
-{
+﻿{
     "compilerOptions": {
         "noImplicitAny": true,
         "noImplicitThis": true,
@@ -9,7 +9,11 @@
         "sourceMap": true,
         "stripInternal": true,
         "noResolve": false,
-        "declaration": true
+        "declaration": true,
+        "target": "es5",
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "types": []
     },
     "files": [
         "../compiler/core.ts",
@@ -25,13 +29,17 @@
         "../compiler/visitor.ts",
         "../compiler/transformers/ts.ts",
         "../compiler/transformers/jsx.ts",
-        "../compiler/transformers/es7.ts",
-        "../compiler/transformers/es6.ts",
+        "../compiler/transformers/esnext.ts",
+        "../compiler/transformers/es2017.ts",
+        "../compiler/transformers/es2016.ts",
+        "../compiler/transformers/es2015.ts",
+        "../compiler/transformers/es5.ts",
+        "../compiler/transformers/generators.ts",
         "../compiler/transformers/generators.ts",
         "../compiler/transformers/destructuring.ts",
         "../compiler/transformers/module/module.ts",
         "../compiler/transformers/module/system.ts",
-        "../compiler/transformers/module/es6.ts",
+        "../compiler/transformers/module/es2015.ts",
         "../compiler/transformer.ts",
         "../compiler/comments.ts",
         "../compiler/sourcemap.ts",
@@ -78,6 +86,8 @@
         "formatting/rulesMap.ts",
         "formatting/rulesProvider.ts",
         "formatting/smartIndenter.ts",
-        "formatting/tokenRange.ts"
+        "formatting/tokenRange.ts",
+        "codeFixes/codeFixProvider.ts",
+        "codeFixes/fixes.ts"
     ]
 }

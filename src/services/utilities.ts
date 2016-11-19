@@ -376,7 +376,7 @@ namespace ts {
                 return true;
             case SyntaxKind.Identifier:
                 // 'this' as a parameter
-                return (node as Identifier).originalKeywordKind === SyntaxKind.ThisKeyword && node.parent.kind === SyntaxKind.Parameter;
+                return identifierIsThisKeyword(node as Identifier) && node.parent.kind === SyntaxKind.Parameter;
             default:
                 return false;
         }
@@ -530,8 +530,8 @@ namespace ts {
             case SyntaxKind.DeleteExpression:
             case SyntaxKind.VoidExpression:
             case SyntaxKind.YieldExpression:
-            case SyntaxKind.SpreadElementExpression:
-                const unaryWordExpression = (<TypeOfExpression | DeleteExpression | VoidExpression | YieldExpression | SpreadElementExpression>n);
+            case SyntaxKind.SpreadElement:
+                const unaryWordExpression = n as (TypeOfExpression | DeleteExpression | VoidExpression | YieldExpression | SpreadElement);
                 return isCompletedNode(unaryWordExpression.expression, sourceFile);
 
             case SyntaxKind.TaggedTemplateExpression:
@@ -750,7 +750,7 @@ namespace ts {
         return find(startNode || sourceFile);
 
         function findRightmostToken(n: Node): Node {
-            if (isToken(n) || n.kind === SyntaxKind.JsxText) {
+            if (isToken(n)) {
                 return n;
             }
 
@@ -761,7 +761,7 @@ namespace ts {
         }
 
         function find(n: Node): Node {
-            if (isToken(n) || n.kind === SyntaxKind.JsxText) {
+            if (isToken(n)) {
                 return n;
             }
 
@@ -1142,8 +1142,8 @@ namespace ts {
             increaseIndent: () => { indent++; },
             decreaseIndent: () => { indent--; },
             clear: resetWriter,
-            trackSymbol: () => { },
-            reportInaccessibleThisError: () => { }
+            trackSymbol: noop,
+            reportInaccessibleThisError: noop
         };
 
         function writeIndent() {
@@ -1179,7 +1179,7 @@ namespace ts {
     }
 
     export function symbolPart(text: string, symbol: Symbol) {
-        return displayPart(text, displayPartKind(symbol), symbol);
+        return displayPart(text, displayPartKind(symbol));
 
         function displayPartKind(symbol: Symbol): SymbolDisplayPartKind {
             const flags = symbol.flags;
@@ -1205,7 +1205,7 @@ namespace ts {
         }
     }
 
-    export function displayPart(text: string, kind: SymbolDisplayPartKind, symbol?: Symbol): SymbolDisplayPart {
+    export function displayPart(text: string, kind: SymbolDisplayPartKind): SymbolDisplayPart {
         return <SymbolDisplayPart>{
             text: text,
             kind: SymbolDisplayPartKind[kind]
@@ -1282,7 +1282,7 @@ namespace ts {
         if (isImportOrExportSpecifierName(location)) {
             return location.getText();
         }
-        else if (isStringOrNumericLiteral(location.kind) &&
+        else if (isStringOrNumericLiteral(location) &&
             location.parent.kind === SyntaxKind.ComputedPropertyName) {
             return (<LiteralExpression>location).text;
         }
@@ -1335,11 +1335,11 @@ namespace ts {
         return ensureScriptKind(fileName, scriptKind);
     }
 
-    export function parseAndReEmitConfigJSONFile(content: string) {
+    export function sanitizeConfigFile(configFileName: string, content: string) {
         const options: TranspileOptions = {
             fileName: "config.js",
             compilerOptions: {
-                target: ScriptTarget.ES6,
+                target: ScriptTarget.ES2015,
                 removeComments: true
             },
             reportDiagnostics: true
@@ -1349,10 +1349,13 @@ namespace ts {
         // also, the emitted result will have "(" in the beginning and ");" in the end. We need to strip these
         // as well
         const trimmedOutput = outputText.trim();
-        const configJsonObject = JSON.parse(trimmedOutput.substring(1, trimmedOutput.length - 2));
         for (const diagnostic of diagnostics) {
             diagnostic.start = diagnostic.start - 1;
         }
-        return { configJsonObject, diagnostics };
+        const {config, error} = parseConfigFileTextToJson(configFileName, trimmedOutput.substring(1, trimmedOutput.length - 2), /*stripComments*/ false);
+        return {
+            configJsonObject: config || {},
+            diagnostics: error ? concatenate(diagnostics, [error]) : diagnostics
+        };
     }
 }

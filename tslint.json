@@ -17,13 +17,14 @@
             "double",
             "avoid-escape"
         ],
-        "semicolon": true,
+        "semicolon": [true, "ignore-bound-class-methods"],
         "whitespace": [true,
             "check-branch",
+            "check-decl",
             "check-operator",
+            "check-module",
             "check-separator",
-            "check-type",
-            "check-module"
+            "check-type"
         ],
         "typedef-whitespace": [true, {
             "call-signature": "nospace",
@@ -40,7 +41,6 @@
         "no-trailing-whitespace": true,
         "no-inferrable-types": true,
         "no-null-keyword": true,
-        "no-unused-variable": true,
         "boolean-trivia": true,
         "type-operator-spacing": true,
         "prefer-const": true,

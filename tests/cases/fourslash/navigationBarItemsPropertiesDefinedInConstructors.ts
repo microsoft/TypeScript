@@ -6,6 +6,43 @@
 ////    }
 ////}
 
+verify.navigationTree({
+    "text": "<global>",
+    "kind": "script",
+    "childItems": [
+        {
+            "text": "List",
+            "kind": "class",
+            "childItems": [
+                {
+                    "text": "constructor",
+                    "kind": "constructor",
+                    "childItems": [
+                        {
+                            "text": "local",
+                            "kind": "var"
+                        }
+                    ]
+                },
+                {
+                    "text": "a",
+                    "kind": "property",
+                    "kindModifiers": "public"
+                },
+                {
+                    "text": "b",
+                    "kind": "property",
+                    "kindModifiers": "private"
+                },
+                {
+                    "text": "c",
+                    "kind": "property"
+                }
+            ]
+        }
+    ]
+});
+
 verify.navigationBar([
     {
         "text": "<global>",

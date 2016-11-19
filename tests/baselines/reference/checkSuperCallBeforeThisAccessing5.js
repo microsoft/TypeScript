@@ -17,7 +17,7 @@ var Based = (function () {
     function Based() {
         var arg = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            arg[_i - 0] = arguments[_i];
+            arg[_i] = arguments[_i];
         }
     }
     return Based;
@@ -25,7 +25,7 @@ var Based = (function () {
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        _super.call(this, this.x);
+        return _super.call(this, this.x) || this;
     }
     return Derived;
 }(Based));

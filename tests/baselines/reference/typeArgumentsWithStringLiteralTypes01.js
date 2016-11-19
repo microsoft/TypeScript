@@ -122,7 +122,7 @@ function fun2(x, y) {
 function fun3() {
     var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i - 0] = arguments[_i];
+        args[_i] = arguments[_i];
     }
     return args[+randBool()];
 }
@@ -229,16 +229,16 @@ declare namespace n1 {
     let e: string;
 }
 declare namespace n2 {
-    let a: string;
+    let a: "Hello";
     let b: any;
-    let c: string;
+    let c: "Hello";
     let d: any;
     let e: any;
 }
 declare namespace n3 {
-    let a: string;
+    let a: "Hello" | "World";
     let b: any;
     let c: any;
     let d: any;
-    let e: string;
+    let e: "Hello" | "World";
 }

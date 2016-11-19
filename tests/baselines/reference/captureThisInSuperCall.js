@@ -22,8 +22,7 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        var _this = this;
-        _super.call(this, { test: function () { return _this.someMethod(); } });
+        return _super.call(this, { test: function () { return _this.someMethod(); } }) || this;
     }
     B.prototype.someMethod = function () { };
     return B;

@@ -33,13 +33,12 @@ var X;
             var M;
             (function (M) {
             })(M = base.M || (base.M = {}));
+            var E;
             (function (E) {
-            })(base.E || (base.E = {}));
-            var E = base.E;
+            })(E = base.E || (base.E = {}));
         })(base = Y.base || (Y.base = {}));
     })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
-var X;
 (function (X) {
     var Y;
     (function (Y) {

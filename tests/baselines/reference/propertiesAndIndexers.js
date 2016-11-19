@@ -65,7 +65,7 @@ var P = (function () {
 var Q = (function (_super) {
     __extends(Q, _super);
     function Q() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return Q;
 }(P));

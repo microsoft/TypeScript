@@ -53,6 +53,7 @@ namespace ts {
         /* @internal */ getNamedDeclarations(): Map<Declaration[]>;
 
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
+        getLineEndOfPosition(pos: number): number;
         getLineStarts(): number[];
         getPositionOfLineAndCharacter(line: number, character: number): number;
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
@@ -97,7 +98,7 @@ namespace ts {
                 return this.text.length;
             }
 
-            public getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange {
+            public getChangeRange(): TextChangeRange {
                 // Text-based snapshots do not support incremental parsing. Return undefined
                 // to signal that to the caller.
                 return undefined;
@@ -147,6 +148,11 @@ namespace ts {
         readDirectory?(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[];
         readFile?(path: string, encoding?: string): string;
         fileExists?(path: string): boolean;
+
+        /*
+         * LS host can optionally implement these methods to support automatic updating when new type libraries are installed
+         */
+        getTypeRootsVersion?(): number;
 
         /*
          * LS host can optionally implement this method if it wants to be completely in charge of module name resolution.
@@ -218,23 +224,26 @@ namespace ts {
         /** @deprecated */
         getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[];
 
-        getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string): NavigateToItem[];
+        getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
+        getNavigationTree(fileName: string): NavigationTree;
 
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[];
-        getIndentationAtPosition(fileName: string, position: number, options: EditorOptions): number;
+        getIndentationAtPosition(fileName: string, position: number, options: EditorOptions | EditorSettings): number;
 
-        getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions): TextChange[];
-        getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[];
-        getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[];
+        getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
+        getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
+        getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
 
         getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion;
 
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
 
-        getEmitOutput(fileName: string): EmitOutput;
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[]): CodeAction[];
+
+        getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
 
         getProgram(): Program;
 
@@ -259,6 +268,12 @@ namespace ts {
         classificationType: string; // ClassificationTypeNames
     }
 
+    /**
+     * Navigation bar interface designed for visual studio's dual-column layout.
+     * This does not form a proper tree.
+     * The navbar is returned as a list of top-level items, each of which has a list of child items.
+     * Child items always have an empty array for their `childItems`.
+     */
     export interface NavigationBarItem {
         text: string;
         kind: string;
@@ -268,6 +283,26 @@ namespace ts {
         indent: number;
         bolded: boolean;
         grayed: boolean;
+    }
+
+    /**
+     * Node in a tree of nested declarations in a file.
+     * The top node is always a script or module node.
+     */
+    export interface NavigationTree {
+        /** Name of the declaration, or a short description, e.g. "<class>". */
+        text: string;
+        /** A ScriptElementKind */
+        kind: string;
+        /** ScriptElementKindModifier separated by commas, e.g. "public,abstract" */
+        kindModifiers: string;
+        /**
+         * Spans of the nodes that generated this declaration.
+         * There will be more than one if this is the result of merging.
+         */
+        spans: TextSpan[];
+        /** Present if non-empty */
+        childItems?: NavigationTree[];
     }
 
     export interface TodoCommentDescriptor {
@@ -284,6 +319,18 @@ namespace ts {
     export class TextChange {
         span: TextSpan;
         newText: string;
+    }
+
+    export interface FileTextChanges {
+        fileName: string;
+        textChanges: TextChange[];
+    }
+
+    export interface CodeAction {
+        /** Description of the code action to display in the UI of the editor */
+        description: string;
+        /** Text changes to apply to each file as part of the code action */
+        changes: FileTextChanges[];
     }
 
     export interface TextInsertion {
@@ -339,6 +386,13 @@ namespace ts {
         containerKind: string;
     }
 
+    export enum IndentStyle {
+        None = 0,
+        Block = 1,
+        Smart = 2,
+    }
+
+    /* @deprecated - consider using EditorSettings instead */
     export interface EditorOptions {
         BaseIndentSize?: number;
         IndentSize: number;
@@ -348,12 +402,16 @@ namespace ts {
         IndentStyle: IndentStyle;
     }
 
-    export enum IndentStyle {
-        None = 0,
-        Block = 1,
-        Smart = 2,
+    export interface EditorSettings {
+        baseIndentSize?: number;
+        indentSize?: number;
+        tabSize?: number;
+        newLineCharacter?: string;
+        convertTabsToSpaces?: boolean;
+        indentStyle?: IndentStyle;
     }
 
+    /* @deprecated - consider using FormatCodeSettings instead */
     export interface FormatCodeOptions extends EditorOptions {
         InsertSpaceAfterCommaDelimiter: boolean;
         InsertSpaceAfterSemicolonInForStatements: boolean;
@@ -368,7 +426,22 @@ namespace ts {
         InsertSpaceAfterTypeAssertion?: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
-        [s: string]: boolean | number | string | undefined;
+    }
+
+    export interface FormatCodeSettings extends EditorSettings {
+        insertSpaceAfterCommaDelimiter?: boolean;
+        insertSpaceAfterSemicolonInForStatements?: boolean;
+        insertSpaceBeforeAndAfterBinaryOperators?: boolean;
+        insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
+        insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
+        insertSpaceAfterTypeAssertion?: boolean;
+        placeOpenBraceOnNewLineForFunctions?: boolean;
+        placeOpenBraceOnNewLineForControlBlocks?: boolean;
     }
 
     export interface DefinitionInfo {
@@ -472,8 +545,13 @@ namespace ts {
     }
 
     export interface CompletionInfo {
+        isGlobalCompletion: boolean;
         isMemberCompletion: boolean;
-        isNewIdentifierLocation: boolean;  // true when the current location also allows for a new identifier
+
+        /**
+         * true when the current location also allows for a new identifier
+         */
+        isNewIdentifierLocation: boolean;
         entries: CompletionEntry[];
     }
 

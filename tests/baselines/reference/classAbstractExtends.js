@@ -31,28 +31,28 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return C;
 }(B));
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return D;
 }(B));
 var E = (function (_super) {
     __extends(E, _super);
     function E() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     E.prototype.bar = function () { };
     return E;

@@ -28,6 +28,14 @@ namespace ts {
             assert.isTrue(arrayIsEqualTo(parsed.fileNames.sort(), expectedFileList.sort()));
         }
 
+         function assertParseFileDiagnostics(jsonText: string, configFileName: string, basePath: string, allFileList: string[], expectedDiagnosticCode: number) {
+            const json = JSON.parse(jsonText);
+            const host: ParseConfigHost = new Utils.MockParseConfigHost(basePath, true, allFileList);
+            const parsed = ts.parseJsonConfigFileContent(json, host, basePath, /*existingOptions*/ undefined, configFileName);
+            assert.isTrue(parsed.errors.length >= 0);
+            assert.isTrue(parsed.errors.filter(e => e.code === expectedDiagnosticCode).length > 0, `Expected error code ${expectedDiagnosticCode} to be in ${JSON.stringify(parsed.errors)}`);
+        }
+
         it("returns empty config for file with only whitespaces", () => {
             assertParseResult("", { config : {} });
             assertParseResult(" ", { config : {} });
@@ -191,7 +199,7 @@ namespace ts {
                 }
                 "files": ["file1.ts"]
             }`;
-            const { configJsonObject, diagnostics } = parseAndReEmitConfigJSONFile(content);
+            const { configJsonObject, diagnostics } = sanitizeConfigFile("config.json", content);
             const expectedResult = {
                 compilerOptions: {
                     allowJs: true,
@@ -201,6 +209,65 @@ namespace ts {
             };
             assert.isTrue(diagnostics.length === 2);
             assert.equal(JSON.stringify(configJsonObject), JSON.stringify(expectedResult));
+        });
+
+        it("generates errors for empty files list", () => {
+            const content = `{
+                "files": []
+            }`;
+            assertParseFileDiagnostics(content,
+                "/apath/tsconfig.json",
+                "tests/cases/unittests",
+                ["/apath/a.ts"],
+                Diagnostics.The_files_list_in_config_file_0_is_empty.code);
+        });
+
+        it("generates errors for directory with no .ts files", () => {
+            const content = `{
+            }`;
+            assertParseFileDiagnostics(content,
+                "/apath/tsconfig.json",
+                "tests/cases/unittests",
+                ["/apath/a.js"],
+                Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code);
+        });
+
+        it("generates errors for empty directory", () => {
+            const content = `{
+                "compilerOptions": {
+                    "allowJs": true
+                }
+            }`;
+            assertParseFileDiagnostics(content,
+                "/apath/tsconfig.json",
+                "tests/cases/unittests",
+                [],
+                Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code);
+        });
+
+        it("generates errors for empty include", () => {
+            const content = `{
+                "include": []
+            }`;
+            assertParseFileDiagnostics(content,
+                "/apath/tsconfig.json",
+                "tests/cases/unittests",
+                ["/apath/a.ts"],
+                Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code);
+        });
+
+        it("generates errors for includes with outDir", () => {
+            const content = `{
+                "compilerOptions": {
+                    "outDir": "./"
+                },
+                "include": ["**/*"]
+            }`;
+            assertParseFileDiagnostics(content,
+                "/apath/tsconfig.json",
+                "tests/cases/unittests",
+                ["/apath/a.ts"],
+                Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code);
         });
     });
 }

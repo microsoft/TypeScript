@@ -80,7 +80,7 @@ if (isNodeList(sourceObj)) {
 
     sourceObj.length;
 >sourceObj.length : number
->sourceObj : NodeList
+>sourceObj : NodeList | HTMLCollection
 >length : number
 }
 
@@ -91,7 +91,7 @@ if (isHTMLCollection(sourceObj)) {
 
     sourceObj.length;
 >sourceObj.length : number
->sourceObj : HTMLCollection
+>sourceObj : NodeList | HTMLCollection
 >length : number
 }
 
@@ -102,11 +102,11 @@ if (isNodeList(sourceObj) || isHTMLCollection(sourceObj)) {
 >sourceObj : NodeList | HTMLCollection | { a: string; }
 >isHTMLCollection(sourceObj) : boolean
 >isHTMLCollection : (sourceObj: any) => sourceObj is HTMLCollection
->sourceObj : HTMLCollection | { a: string; }
+>sourceObj : { a: string; }
 
     sourceObj.length;
 >sourceObj.length : number
->sourceObj : NodeList | HTMLCollection
+>sourceObj : NodeList
 >length : number
 }
 

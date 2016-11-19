@@ -10,6 +10,29 @@
 //// /** @type {/*1*/NumberLike} */
 //// var numberLike;
 
+verify.navigationTree({
+    "text": "<global>",
+    "kind": "script",
+    "childItems": [
+        {
+            "text": "numberLike",
+            "kind": "var"
+        },
+        {
+            "text": "NumberLike",
+            "kind": "type"
+        },
+        {
+            "text": "NumberLike2",
+            "kind": "var"
+        },
+        {
+            "text": "NumberLike2",
+            "kind": "type"
+        }
+    ]
+});
+
 verify.navigationBar([
     {
         "text": "<global>",

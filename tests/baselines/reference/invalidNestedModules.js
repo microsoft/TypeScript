@@ -45,7 +45,6 @@ var A;
         })(C = B.C || (B.C = {}));
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));
-var A;
 (function (A) {
     var B;
     (function (B) {
@@ -69,7 +68,6 @@ var M2;
         X.Point = Point;
     })(X = M2.X || (M2.X = {}));
 })(M2 || (M2 = {}));
-var M2;
 (function (M2) {
     var X;
     (function (X) {

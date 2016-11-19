@@ -31,6 +31,8 @@ var __extends = (this && this.__extends) || function (d, b) {
 var Foo = (function (_super) {
     __extends(Foo, _super);
     function Foo(x, y) {
+        var _this;
+        return _this;
     }
     Foo.prototype.bar1 = function () { };
     return Foo;

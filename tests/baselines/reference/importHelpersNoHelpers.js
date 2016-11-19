@@ -12,6 +12,10 @@ class C {
     }
 }
 
+const o = { a: 1 };
+const y = { ...o };
+const { ...x } = y;
+
 //// [script.ts]
 class A { }
 class B extends A { }
@@ -27,6 +31,7 @@ class C {
 //// [tslib.d.ts]
 export {}
 
+
 //// [external.js]
 "use strict";
 var tslib_1 = require("tslib");
@@ -39,7 +44,7 @@ exports.A = A;
 var B = (function (_super) {
     tslib_1.__extends(B, _super);
     function B() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
@@ -61,6 +66,9 @@ C = tslib_1.__decorate([
     dec,
     tslib_1.__metadata("design:paramtypes", [])
 ], C);
+var o = { a: 1 };
+var y = tslib_1.__assign({}, o);
+var x = tslib_1.__rest(y, []);
 //// [script.js]
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -87,7 +95,7 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return B;
 }(A));

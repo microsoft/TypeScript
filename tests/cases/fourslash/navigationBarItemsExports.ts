@@ -9,6 +9,26 @@
 ////
 ////export * from "a"; // no bindings here
 
+verify.navigationTree({
+    "text": "\"navigationBarItemsExports\"",
+    "kind": "module",
+    "childItems": [
+        {
+            "text": "a",
+            "kind": "alias"
+        },
+        {
+            "text": "B",
+            "kind": "alias"
+        },
+        {
+            "text": "e",
+            "kind": "alias",
+            "kindModifiers": "export"
+        }
+    ]
+});
+
 verify.navigationBar([
     {
         "text": "\"navigationBarItemsExports\"",

@@ -15,7 +15,7 @@ for (var x in fn()) { }
 for (var x in /[a-z]/) { }
 for (var x in new Date()) { }
 
-var c, d, e;
+var c: any, d: any, e: any;
 
 for (var x in c || d) { }
 for (var x in e ? c : d) { }
@@ -126,7 +126,7 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     B.prototype.boz = function () {
         for (var x in this.biz()) { }

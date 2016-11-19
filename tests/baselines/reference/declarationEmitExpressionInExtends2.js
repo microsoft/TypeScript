@@ -29,7 +29,7 @@ function getClass(c) {
 var MyClass = (function (_super) {
     __extends(MyClass, _super);
     function MyClass() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return MyClass;
 }(getClass(2)));

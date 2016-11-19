@@ -45,7 +45,7 @@ var _0_ts_2 = require("./0.ts");
 var C = (function (_super) {
     __extends(C, _super);
     function C(prop) {
-        _super.call(this);
+        return _super.call(this) || this;
     }
     return C;
 }(_0_ts_1.base));

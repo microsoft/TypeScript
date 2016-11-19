@@ -65,7 +65,7 @@ var Class = (function () {
 var SubClass = (function (_super) {
     __extends(SubClass, _super);
     function SubClass() {
-        _super.call(this);
+        return _super.call(this) || this;
     }
     return SubClass;
 }(Class));
@@ -77,7 +77,7 @@ var D = (function () {
 var SubD = (function (_super) {
     __extends(SubD, _super);
     function SubD() {
-        _super.call(this);
+        return _super.call(this) || this;
     }
     return SubD;
 }(D));

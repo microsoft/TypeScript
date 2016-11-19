@@ -318,8 +318,9 @@ var c2 = (function () {
 var c3 = (function (_super) {
     __extends(c3, _super);
     function c3() {
-        _super.call(this, 10);
-        this.p1 = _super.prototype.c2_p1;
+        var _this = _super.call(this, 10) || this;
+        _this.p1 = _super.prototype.c2_p1;
+        return _this;
     }
     /** c3 f1*/
     c3.prototype.f1 = function () {
@@ -362,7 +363,7 @@ c2_i.nc_f1();
 var c4 = (function (_super) {
     __extends(c4, _super);
     function c4() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return c4;
 }(c2));
@@ -404,8 +405,9 @@ var c5 = (function () {
 var c6 = (function (_super) {
     __extends(c6, _super);
     function c6() {
-        _super.call(this);
-        this.d = _super.prototype.b;
+        var _this = _super.call(this) || this;
+        _this.d = _super.prototype.b;
+        return _this;
     }
     return c6;
 }(c5));

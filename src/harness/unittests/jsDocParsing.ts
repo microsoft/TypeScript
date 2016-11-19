@@ -101,7 +101,7 @@ namespace ts {
 
                     Harness.Baseline.runBaseline("JSDocParsing/DocComments.parsesCorrectly." + name + ".json",
                         () => JSON.stringify(comment.jsDoc,
-                            (k, v) => v && v.pos !== undefined ? JSON.parse(Utils.sourceFileToJSON(v)) : v, 4));
+                            (_, v) => v && v.pos !== undefined ? JSON.parse(Utils.sourceFileToJSON(v)) : v, 4));
                 });
             }
 

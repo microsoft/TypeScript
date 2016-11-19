@@ -19,7 +19,6 @@ var A = (function () {
     }
     return A;
 }());
-var A;
 (function (A) {
     A.a = 10;
 })(A || (A = {}));

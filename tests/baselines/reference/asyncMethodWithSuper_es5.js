@@ -61,7 +61,7 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     // async method with only call/get on 'super' does not require a binding
     B.prototype.simple = function () {
@@ -81,8 +81,8 @@ var B = (function (_super) {
     // async method with assignment/destructuring on 'super' requires a binding
     B.prototype.advanced = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var f, a, b, _a, _b;
-            return __generator(this, function (_c) {
+            var f, a, b;
+            return __generator(this, function (_a) {
                 f = function () { };
                 // call with property access
                 _super.prototype.x.call(this);
@@ -95,9 +95,9 @@ var B = (function (_super) {
                 // element access (assign)
                 _super.prototype["x"] = f;
                 // destructuring assign with property access
-                (_a = { f: f }, super.x = _a.f, _a);
+                (_super.prototype.x = { f: f }.f);
                 // destructuring assign with element access
-                (_b = { f: f }, super["x"] = _b.f, _b);
+                (_super.prototype["x"] = { f: f }.f);
                 return [2 /*return*/];
             });
         });

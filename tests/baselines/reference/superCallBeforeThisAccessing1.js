@@ -30,11 +30,12 @@ var Base = (function () {
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        _super.call(this, i);
+        var _this = _super.call(this, i) || this;
         var s = {
-            t: this._t
+            t: _this._t
         };
         var i = Factory.create(s);
+        return _this;
     }
     return D;
 }(Base));
