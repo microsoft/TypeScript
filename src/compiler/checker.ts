@@ -6037,11 +6037,12 @@ namespace ts {
                 const id = objectType.id + "," + indexType.id;
                 return indexedAccessTypes[id] || (indexedAccessTypes[id] = createIndexedAccessType(objectType, indexType));
             }
-            const apparentType = getApparentType(objectType);
-            if (indexType.flags & TypeFlags.Union && !(indexType.flags & TypeFlags.Primitive)) {
+            const apparentObjectType = getApparentType(objectType);
+            const apparentIndexType = indexType.flags & TypeFlags.Index ? stringOrNumberType : indexType;
+            if (apparentIndexType.flags & TypeFlags.Union && !(apparentIndexType.flags & TypeFlags.Primitive)) {
                 const propTypes: Type[] = [];
-                for (const t of (<UnionType>indexType).types) {
-                    const propType = getPropertyTypeForIndexType(apparentType, t, accessNode, /*cacheSymbol*/ false);
+                for (const t of (<UnionType>apparentIndexType).types) {
+                    const propType = getPropertyTypeForIndexType(apparentObjectType, t, accessNode, /*cacheSymbol*/ false);
                     if (propType === unknownType) {
                         return unknownType;
                     }
@@ -6049,7 +6050,7 @@ namespace ts {
                 }
                 return getUnionType(propTypes);
             }
-            return getPropertyTypeForIndexType(apparentType, indexType, accessNode, /*cacheSymbol*/ true);
+            return getPropertyTypeForIndexType(apparentObjectType, apparentIndexType, accessNode, /*cacheSymbol*/ true);
         }
 
         function getTypeFromIndexedAccessTypeNode(node: IndexedAccessTypeNode) {
@@ -7123,7 +7124,10 @@ namespace ts {
 
                 if (source.flags & TypeFlags.Index) {
                     // A keyof T is related to a union type containing both string and number
-                    if (maybeTypeOfKind(target, TypeFlags.String) && maybeTypeOfKind(target, TypeFlags.Number)) {
+                    const related = relation === comparableRelation ?
+                        maybeTypeOfKind(target, TypeFlags.String | TypeFlags.Number) :
+                        maybeTypeOfKind(target, TypeFlags.String) && maybeTypeOfKind(target, TypeFlags.Number);
+                    if (related) {
                         return Ternary.True;
                     }
                 }
@@ -14254,7 +14258,7 @@ namespace ts {
             if (!isTypeAnyOrAllConstituentTypesHaveKind(leftType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol)) {
                 error(left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_type_any_string_number_or_symbol);
             }
-            if (!isTypeAnyOrAllConstituentTypesHaveKind(rightType, TypeFlags.Object | TypeFlags.TypeParameter)) {
+            if (!isTypeAnyOrAllConstituentTypesHaveKind(rightType, TypeFlags.Object | TypeFlags.TypeParameter | TypeFlags.IndexedAccess)) {
                 error(right, Diagnostics.The_right_hand_side_of_an_in_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             return booleanType;
@@ -17148,7 +17152,7 @@ namespace ts {
             const rightType = checkNonNullExpression(node.expression);
             // unknownType is returned i.e. if node.expression is identifier whose name cannot be resolved
             // in this case error about missing name is already reported - do not report extra one
-            if (!isTypeAnyOrAllConstituentTypesHaveKind(rightType, TypeFlags.Object | TypeFlags.TypeParameter)) {
+            if (!isTypeAnyOrAllConstituentTypesHaveKind(rightType, TypeFlags.Object | TypeFlags.TypeParameter | TypeFlags.IndexedAccess)) {
                 error(node.expression, Diagnostics.The_right_hand_side_of_a_for_in_statement_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
 
