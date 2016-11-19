@@ -31,7 +31,7 @@ var Foo = (function () {
 var Bar = (function (_super) {
     __extends(Bar, _super);
     function Bar() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     Bar.prototype[symbol] = function () {
         return _super.prototype[symbol].call(this);

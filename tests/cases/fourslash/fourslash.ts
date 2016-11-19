@@ -136,6 +136,7 @@ declare namespace FourSlashInterface {
         typeDefinitionCountIs(expectedCount: number): void;
         implementationListIsEmpty(): void;
         isValidBraceCompletionAtPosition(openingBrace?: string): void;
+        codeFixAvailable(): void;
     }
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
@@ -193,6 +194,7 @@ declare namespace FourSlashInterface {
         currentSignatureHelpDocCommentIs(docComment: string): void;
         signatureHelpCountIs(expected: number): void;
         signatureHelpArgumentCountIs(expected: number): void;
+        signatureHelpCurrentArgumentListIsVariadic(expected: boolean);
         currentSignatureParameterCountIs(expected: number): void;
         currentSignatureTypeParameterCountIs(expected: number): void;
         currentSignatureHelpIs(expected: string): void;
@@ -208,8 +210,11 @@ declare namespace FourSlashInterface {
         noMatchingBracePositionInCurrentFile(bracePosition: number): void;
         DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean): void;
         noDocCommentTemplate(): void;
+        codeFixAtPosition(expectedText: string, errorCode?: number): void;
+        importFixAtPosition(expectedTextArray: string[], errorCode?: number): void;
 
         navigationBar(json: any): void;
+        navigationTree(json: any): void;
         navigationItemsListCount(count: number, searchValue: string, matchKind?: string, fileName?: string): void;
         navigationItemsListContains(name: string, kind: string, searchValue: string, matchKind: string, fileName?: string, parentName?: string): void;
         occurrencesAtPositionContains(range: Range, isWriteAccess?: boolean): void;

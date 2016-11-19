@@ -19,6 +19,7 @@ namespace ts {
         remove(fileName: Path): void;
 
         forEachValue(f: (key: Path, v: T) => void): void;
+        getKeys(): Path[];
         clear(): void;
     }
 
@@ -44,6 +45,7 @@ namespace ts {
         // Literals
         NumericLiteral,
         StringLiteral,
+        JsxText,
         RegularExpressionLiteral,
         NoSubstitutionTemplateLiteral,
         // Pseudo-literals
@@ -166,6 +168,7 @@ namespace ts {
         DeclareKeyword,
         GetKeyword,
         IsKeyword,
+        KeyOfKeyword,
         ModuleKeyword,
         NamespaceKeyword,
         NeverKeyword,
@@ -214,6 +217,9 @@ namespace ts {
         IntersectionType,
         ParenthesizedType,
         ThisType,
+        TypeOperator,
+        IndexedAccessType,
+        MappedType,
         LiteralType,
         // Binding patterns
         ObjectBindingPattern,
@@ -241,7 +247,7 @@ namespace ts {
         ConditionalExpression,
         TemplateExpression,
         YieldExpression,
-        SpreadElementExpression,
+        SpreadElement,
         ClassExpression,
         OmittedExpression,
         ExpressionWithTypeArguments,
@@ -301,7 +307,6 @@ namespace ts {
         JsxElement,
         JsxSelfClosingElement,
         JsxOpeningElement,
-        JsxText,
         JsxClosingElement,
         JsxAttribute,
         JsxSpreadAttribute,
@@ -316,6 +321,7 @@ namespace ts {
         // Property assignments
         PropertyAssignment,
         ShorthandPropertyAssignment,
+        SpreadAssignment,
 
         // Enum
         EnumMember,
@@ -361,6 +367,9 @@ namespace ts {
         // Transformation nodes
         NotEmittedStatement,
         PartiallyEmittedExpression,
+        MergeDeclarationMarker,
+        EndOfDeclarationMarker,
+        RawExpression,
 
         // Enum value count
         Count,
@@ -412,20 +421,21 @@ namespace ts {
         HasDecorators =      1 << 11, // If the file has decorators (initialized by binding)
         HasParamDecorators = 1 << 12, // If the file has parameter decorators (initialized by binding)
         HasAsyncFunctions =  1 << 13, // If the file has async functions (initialized by binding)
-        HasJsxSpreadAttributes = 1 << 14, // If the file as JSX spread attributes (initialized by binding)
-        DisallowInContext =  1 << 15, // If node was parsed in a context where 'in-expressions' are not allowed
-        YieldContext =       1 << 16, // If node was parsed in the 'yield' context created when parsing a generator
-        DecoratorContext =   1 << 17, // If node was parsed as part of a decorator
-        AwaitContext =       1 << 18, // If node was parsed in the 'await' context created when parsing an async function
-        ThisNodeHasError =   1 << 19, // If the parser encountered an error when parsing the code that created this node
-        JavaScriptFile =     1 << 20, // If node was parsed in a JavaScript
-        ThisNodeOrAnySubNodesHasError = 1 << 21, // If this node or any of its children had an error
-        HasAggregatedChildData = 1 << 22, // If we've computed data from children and cached it in this node
+        HasSpreadAttribute = 1 << 14, // If the file as JSX spread attributes (initialized by binding)
+        HasRestAttribute =   1 << 15, // If the file has object destructure elements
+        DisallowInContext =  1 << 16, // If node was parsed in a context where 'in-expressions' are not allowed
+        YieldContext =       1 << 17, // If node was parsed in the 'yield' context created when parsing a generator
+        DecoratorContext =   1 << 18, // If node was parsed as part of a decorator
+        AwaitContext =       1 << 19, // If node was parsed in the 'await' context created when parsing an async function
+        ThisNodeHasError =   1 << 20, // If the parser encountered an error when parsing the code that created this node
+        JavaScriptFile =     1 << 21, // If node was parsed in a JavaScript
+        ThisNodeOrAnySubNodesHasError = 1 << 22, // If this node or any of its children had an error
+        HasAggregatedChildData = 1 << 23, // If we've computed data from children and cached it in this node
 
         BlockScoped = Let | Const,
 
         ReachabilityCheckFlags = HasImplicitReturn | HasExplicitReturn,
-        EmitHelperFlags = HasClassExtends | HasDecorators | HasParamDecorators | HasAsyncFunctions | HasJsxSpreadAttributes,
+        EmitHelperFlags = HasClassExtends | HasDecorators | HasParamDecorators | HasAsyncFunctions | HasSpreadAttribute | HasRestAttribute,
         ReachabilityAndEmitFlags = ReachabilityCheckFlags | EmitHelperFlags,
 
         // Parsing context flags
@@ -434,8 +444,6 @@ namespace ts {
         // Exclude these flags when parsing a Type
         TypeExcludesFlags = YieldContext | AwaitContext,
     }
-
-    export type ModifiersArray = NodeArray<Modifier>;
 
     export const enum ModifierFlags {
         None =               0,
@@ -450,13 +458,15 @@ namespace ts {
         Async =              1 << 8,  // Property/Method/Function
         Default =            1 << 9,  // Function/Class (export default declaration)
         Const =              1 << 11, // Variable declaration
-
         HasComputedFlags =   1 << 29, // Modifier flags have been computed
 
         AccessibilityModifier = Public | Private | Protected,
         // Accessibility modifiers and 'readonly' can be attached to a parameter in a constructor to make it a property.
         ParameterPropertyModifier = AccessibilityModifier | Readonly,
         NonPublicAccessibilityModifier = Private | Protected,
+
+        TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const,
+        ExportDefault = Export | Default,
     }
 
     export const enum JsxFlags {
@@ -493,31 +503,43 @@ namespace ts {
         /* @internal */ nextContainer?: Node;           // Next container in declaration order (initialized by binding)
         /* @internal */ localSymbol?: Symbol;           // Local symbol declared by node (initialized by binding only for exported nodes)
         /* @internal */ flowNode?: FlowNode;            // Associated FlowNode (initialized by binding)
-        /* @internal */ transformId?: number;           // Associates transient transformation properties with a specific transformation (initialized by transformation).
-        /* @internal */ emitFlags?: NodeEmitFlags;      // Transient emit flags for a synthesized node (initialized by transformation).
-        /* @internal */ sourceMapRange?: TextRange;     // Transient custom sourcemap range for a synthesized node (initialized by transformation).
-        /* @internal */ commentRange?: TextRange;       // Transient custom comment range for a synthesized node (initialized by transformation).
+        /* @internal */ emitNode?: EmitNode;            // Associated EmitNode (initialized by transforms)
     }
 
     export interface NodeArray<T extends Node> extends Array<T>, TextRange {
         hasTrailingComma?: boolean;
+        /* @internal */ transformFlags?: TransformFlags;
     }
 
-    export interface Token extends Node {
-        __tokenTag: any;
+    export interface Token<TKind extends SyntaxKind> extends Node {
+        kind: TKind;
     }
 
-    // @kind(SyntaxKind.AbstractKeyword)
-    // @kind(SyntaxKind.AsyncKeyword)
-    // @kind(SyntaxKind.ConstKeyword)
-    // @kind(SyntaxKind.DeclareKeyword)
-    // @kind(SyntaxKind.DefaultKeyword)
-    // @kind(SyntaxKind.ExportKeyword)
-    // @kind(SyntaxKind.PublicKeyword)
-    // @kind(SyntaxKind.PrivateKeyword)
-    // @kind(SyntaxKind.ProtectedKeyword)
-    // @kind(SyntaxKind.StaticKeyword)
-    export interface Modifier extends Token { }
+    export type DotDotDotToken = Token<SyntaxKind.DotDotDotToken>;
+    export type QuestionToken = Token<SyntaxKind.QuestionToken>;
+    export type ColonToken = Token<SyntaxKind.ColonToken>;
+    export type EqualsToken = Token<SyntaxKind.EqualsToken>;
+    export type AsteriskToken = Token<SyntaxKind.AsteriskToken>;
+    export type EqualsGreaterThanToken = Token<SyntaxKind.EqualsGreaterThanToken>;
+    export type EndOfFileToken = Token<SyntaxKind.EndOfFileToken>;
+    export type AtToken = Token<SyntaxKind.AtToken>;
+    export type ReadonlyToken = Token<SyntaxKind.ReadonlyKeyword>;
+
+    export type Modifier
+        = Token<SyntaxKind.AbstractKeyword>
+        | Token<SyntaxKind.AsyncKeyword>
+        | Token<SyntaxKind.ConstKeyword>
+        | Token<SyntaxKind.DeclareKeyword>
+        | Token<SyntaxKind.DefaultKeyword>
+        | Token<SyntaxKind.ExportKeyword>
+        | Token<SyntaxKind.PublicKeyword>
+        | Token<SyntaxKind.PrivateKeyword>
+        | Token<SyntaxKind.ProtectedKeyword>
+        | Token<SyntaxKind.ReadonlyKeyword>
+        | Token<SyntaxKind.StaticKeyword>
+        ;
+
+    export type ModifiersArray = NodeArray<Modifier>;
 
     /*@internal*/
     export const enum GeneratedIdentifierKind {
@@ -528,12 +550,13 @@ namespace ts {
         Node,   // Unique name based on the node in the 'original' property.
     }
 
-    // @kind(SyntaxKind.Identifier)
     export interface Identifier extends PrimaryExpression {
+        kind: SyntaxKind.Identifier;
         text: string;                                  // Text of identifier (with escapes converted to characters)
         originalKeywordKind?: SyntaxKind;              // Original syntaxKind which get set so that we can report an error later
         /*@internal*/ autoGenerateKind?: GeneratedIdentifierKind; // Specifies whether to auto-generate the text for an identifier.
         /*@internal*/ autoGenerateId?: number;         // Ensures unique generated identifiers get unique names, but clones get the same name.
+        isInJSDocNamespace?: boolean;                  // if the node is a member in a JSDoc namespace
     }
 
     // Transient identifier node (marked by id === -1)
@@ -541,18 +564,25 @@ namespace ts {
         resolvedSymbol: Symbol;
     }
 
-    // @kind(SyntaxKind.QualifiedName)
+    /*@internal*/
+    export interface GeneratedIdentifier extends Identifier {
+        autoGenerateKind: GeneratedIdentifierKind.Auto
+                        | GeneratedIdentifierKind.Loop
+                        | GeneratedIdentifierKind.Unique
+                        | GeneratedIdentifierKind.Node;
+    }
+
     export interface QualifiedName extends Node {
-        // Must have same layout as PropertyAccess
+        kind: SyntaxKind.QualifiedName;
         left: EntityName;
         right: Identifier;
     }
 
     export type EntityName = Identifier | QualifiedName;
 
-    export type PropertyName = Identifier | LiteralExpression | ComputedPropertyName;
+    export type PropertyName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName;
 
-    export type DeclarationName = Identifier | LiteralExpression | ComputedPropertyName | BindingPattern;
+    export type DeclarationName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName | BindingPattern;
 
     export interface Declaration extends Node {
         _declarationBrand: any;
@@ -560,21 +590,21 @@ namespace ts {
     }
 
     export interface DeclarationStatement extends Declaration, Statement {
-        name?: Identifier;
+        name?: Identifier | StringLiteral | NumericLiteral;
     }
 
-    // @kind(SyntaxKind.ComputedPropertyName)
     export interface ComputedPropertyName extends Node {
+        kind: SyntaxKind.ComputedPropertyName;
         expression: Expression;
     }
 
-    // @kind(SyntaxKind.Decorator)
     export interface Decorator extends Node {
+        kind: SyntaxKind.Decorator;
         expression: LeftHandSideExpression;
     }
 
-    // @kind(SyntaxKind.TypeParameter)
     export interface TypeParameterDeclaration extends Declaration {
+        kind: SyntaxKind.TypeParameter;
         name: Identifier;
         constraint?: TypeNode;
 
@@ -589,55 +619,57 @@ namespace ts {
         type?: TypeNode;
     }
 
-    // @kind(SyntaxKind.CallSignature)
-    export interface CallSignatureDeclaration extends SignatureDeclaration, TypeElement { }
+    export interface CallSignatureDeclaration extends SignatureDeclaration, TypeElement {
+        kind: SyntaxKind.CallSignature;
+    }
 
-    // @kind(SyntaxKind.ConstructSignature)
-    export interface ConstructSignatureDeclaration extends SignatureDeclaration, TypeElement { }
+    export interface ConstructSignatureDeclaration extends SignatureDeclaration, TypeElement {
+        kind: SyntaxKind.ConstructSignature;
+    }
 
     export type BindingName = Identifier | BindingPattern;
 
-    // @kind(SyntaxKind.VariableDeclaration)
     export interface VariableDeclaration extends Declaration {
+        kind: SyntaxKind.VariableDeclaration;
         parent?: VariableDeclarationList;
         name: BindingName;                  // Declared variable name
         type?: TypeNode;                    // Optional type annotation
         initializer?: Expression;           // Optional initializer
     }
 
-    // @kind(SyntaxKind.VariableDeclarationList)
     export interface VariableDeclarationList extends Node {
+        kind: SyntaxKind.VariableDeclarationList;
         declarations: NodeArray<VariableDeclaration>;
     }
 
-    // @kind(SyntaxKind.Parameter)
     export interface ParameterDeclaration extends Declaration {
-        dotDotDotToken?: Node;              // Present on rest parameter
+        kind: SyntaxKind.Parameter;
+        dotDotDotToken?: DotDotDotToken;              // Present on rest parameter
         name: BindingName;                  // Declared parameter name
-        questionToken?: Node;               // Present on optional parameter
+        questionToken?: QuestionToken;               // Present on optional parameter
         type?: TypeNode;                    // Optional type annotation
         initializer?: Expression;           // Optional initializer
     }
 
-    // @kind(SyntaxKind.BindingElement)
     export interface BindingElement extends Declaration {
+        kind: SyntaxKind.BindingElement;
         propertyName?: PropertyName;        // Binding property name (in object binding pattern)
-        dotDotDotToken?: Node;              // Present on rest binding element
+        dotDotDotToken?: DotDotDotToken;    // Present on rest element (in object binding pattern)
         name: BindingName;                  // Declared binding element name
         initializer?: Expression;           // Optional initializer
     }
 
-    // @kind(SyntaxKind.PropertySignature)
     export interface PropertySignature extends TypeElement {
+        kind: SyntaxKind.PropertySignature | SyntaxKind.JSDocRecordMember;
         name: PropertyName;                 // Declared property name
-        questionToken?: Node;               // Present on optional property
+        questionToken?: QuestionToken;               // Present on optional property
         type?: TypeNode;                    // Optional type annotation
         initializer?: Expression;           // Optional initializer
     }
 
-    // @kind(SyntaxKind.PropertyDeclaration)
     export interface PropertyDeclaration extends ClassElement {
-        questionToken?: Node;               // Present for use with reporting a grammar error
+        kind: SyntaxKind.PropertyDeclaration;
+        questionToken?: QuestionToken;               // Present for use with reporting a grammar error
         name: PropertyName;
         type?: TypeNode;
         initializer?: Expression;           // Optional initializer
@@ -646,24 +678,30 @@ namespace ts {
     export interface ObjectLiteralElement extends Declaration {
         _objectLiteralBrandBrand: any;
         name?: PropertyName;
-   }
+    }
 
-    // @kind(SyntaxKind.PropertyAssignment)
+    export type ObjectLiteralElementLike = PropertyAssignment | ShorthandPropertyAssignment | MethodDeclaration | AccessorDeclaration | SpreadAssignment;
+
     export interface PropertyAssignment extends ObjectLiteralElement {
-        _propertyAssignmentBrand: any;
+        kind: SyntaxKind.PropertyAssignment;
         name: PropertyName;
-        questionToken?: Node;
+        questionToken?: QuestionToken;
         initializer: Expression;
     }
 
-    // @kind(SyntaxKind.ShorthandPropertyAssignment)
     export interface ShorthandPropertyAssignment extends ObjectLiteralElement {
+        kind: SyntaxKind.ShorthandPropertyAssignment;
         name: Identifier;
-        questionToken?: Node;
+        questionToken?: QuestionToken;
         // used when ObjectLiteralExpression is used in ObjectAssignmentPattern
         // it is grammar error to appear in actual object initializer
-        equalsToken?: Node;
+        equalsToken?: Token<SyntaxKind.EqualsToken>;
         objectAssignmentInitializer?: Expression;
+    }
+
+    export interface SpreadAssignment extends ObjectLiteralElement {
+        kind: SyntaxKind.SpreadAssignment;
+        expression: Expression;
     }
 
     // SyntaxKind.VariableDeclaration
@@ -676,9 +714,9 @@ namespace ts {
     // SyntaxKind.JSDocPropertyTag
     export interface VariableLikeDeclaration extends Declaration {
         propertyName?: PropertyName;
-        dotDotDotToken?: Node;
+        dotDotDotToken?: DotDotDotToken;
         name: DeclarationName;
-        questionToken?: Node;
+        questionToken?: QuestionToken;
         type?: TypeNode;
         initializer?: Expression;
     }
@@ -687,21 +725,19 @@ namespace ts {
         name: PropertyName;
     }
 
-    export interface BindingPattern extends Node {
-        elements: NodeArray<BindingElement | ArrayBindingElement>;
-    }
-
-    // @kind(SyntaxKind.ObjectBindingPattern)
-    export interface ObjectBindingPattern extends BindingPattern {
+    export interface ObjectBindingPattern extends Node {
+        kind: SyntaxKind.ObjectBindingPattern;
         elements: NodeArray<BindingElement>;
     }
 
-    export type ArrayBindingElement = BindingElement | OmittedExpression;
-
-    // @kind(SyntaxKind.ArrayBindingPattern)
-    export interface ArrayBindingPattern extends BindingPattern {
+    export interface ArrayBindingPattern extends Node {
+        kind: SyntaxKind.ArrayBindingPattern;
         elements: NodeArray<ArrayBindingElement>;
     }
+
+    export type BindingPattern = ObjectBindingPattern | ArrayBindingPattern;
+
+    export type ArrayBindingElement = BindingElement | OmittedExpression;
 
     /**
      * Several node kinds share function-like features such as a signature,
@@ -714,19 +750,19 @@ namespace ts {
     export interface FunctionLikeDeclaration extends SignatureDeclaration {
         _functionLikeDeclarationBrand: any;
 
-        asteriskToken?: Node;
-        questionToken?: Node;
+        asteriskToken?: AsteriskToken;
+        questionToken?: QuestionToken;
         body?: Block | Expression;
     }
 
-    // @kind(SyntaxKind.FunctionDeclaration)
     export interface FunctionDeclaration extends FunctionLikeDeclaration, DeclarationStatement {
+        kind: SyntaxKind.FunctionDeclaration;
         name?: Identifier;
         body?: FunctionBody;
     }
 
-    // @kind(SyntaxKind.MethodSignature)
     export interface MethodSignature extends SignatureDeclaration, TypeElement {
+        kind: SyntaxKind.MethodSignature;
         name: PropertyName;
     }
 
@@ -739,126 +775,152 @@ namespace ts {
     // Because of this, it may be necessary to determine what sort of MethodDeclaration you have
     // at later stages of the compiler pipeline.  In that case, you can either check the parent kind
     // of the method, or use helpers like isObjectLiteralMethodDeclaration
-    // @kind(SyntaxKind.MethodDeclaration)
     export interface MethodDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
+        kind: SyntaxKind.MethodDeclaration;
         name: PropertyName;
         body?: FunctionBody;
     }
 
-    // @kind(SyntaxKind.Constructor)
     export interface ConstructorDeclaration extends FunctionLikeDeclaration, ClassElement {
+        kind: SyntaxKind.Constructor;
         body?: FunctionBody;
     }
 
     // For when we encounter a semicolon in a class declaration.  ES6 allows these as class elements.
-    // @kind(SyntaxKind.SemicolonClassElement)
     export interface SemicolonClassElement extends ClassElement {
-        _semicolonClassElementBrand: any;
+        kind: SyntaxKind.SemicolonClassElement;
     }
 
-    // See the comment on MethodDeclaration for the intuition behind AccessorDeclaration being a
+    // See the comment on MethodDeclaration for the intuition behind GetAccessorDeclaration being a
     // ClassElement and an ObjectLiteralElement.
-    export interface AccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
-        _accessorDeclarationBrand: any;
+    export interface GetAccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
+        kind: SyntaxKind.GetAccessor;
         name: PropertyName;
         body: FunctionBody;
     }
 
-    // @kind(SyntaxKind.GetAccessor)
-    export interface GetAccessorDeclaration extends AccessorDeclaration { }
-
-    // @kind(SyntaxKind.SetAccessor)
-    export interface SetAccessorDeclaration extends AccessorDeclaration { }
-
-    // @kind(SyntaxKind.IndexSignature)
-    export interface IndexSignatureDeclaration extends SignatureDeclaration, ClassElement, TypeElement {
-        _indexSignatureDeclarationBrand: any;
+    // See the comment on MethodDeclaration for the intuition behind SetAccessorDeclaration being a
+    // ClassElement and an ObjectLiteralElement.
+    export interface SetAccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
+        kind: SyntaxKind.SetAccessor;
+        name: PropertyName;
+        body: FunctionBody;
     }
 
-    // @kind(SyntaxKind.AnyKeyword)
-    // @kind(SyntaxKind.NumberKeyword)
-    // @kind(SyntaxKind.BooleanKeyword)
-    // @kind(SyntaxKind.StringKeyword)
-    // @kind(SyntaxKind.SymbolKeyword)
-    // @kind(SyntaxKind.VoidKeyword)
+    export type AccessorDeclaration = GetAccessorDeclaration | SetAccessorDeclaration;
+
+    export interface IndexSignatureDeclaration extends SignatureDeclaration, ClassElement, TypeElement {
+        kind: SyntaxKind.IndexSignature;
+    }
+
     export interface TypeNode extends Node {
         _typeNodeBrand: any;
     }
 
-    // @kind(SyntaxKind.ThisType)
+    export interface KeywordTypeNode extends TypeNode {
+        kind: SyntaxKind.AnyKeyword
+            | SyntaxKind.NumberKeyword
+            | SyntaxKind.BooleanKeyword
+            | SyntaxKind.StringKeyword
+            | SyntaxKind.SymbolKeyword
+            | SyntaxKind.VoidKeyword;
+    }
+
     export interface ThisTypeNode extends TypeNode {
-        _thisTypeNodeBrand: any;
+        kind: SyntaxKind.ThisType;
     }
 
     export interface FunctionOrConstructorTypeNode extends TypeNode, SignatureDeclaration {
-        _functionOrConstructorTypeNodeBrand: any;
+        kind: SyntaxKind.FunctionType | SyntaxKind.ConstructorType;
     }
 
-    // @kind(SyntaxKind.FunctionType)
-    export interface FunctionTypeNode extends FunctionOrConstructorTypeNode { }
+    export interface FunctionTypeNode extends FunctionOrConstructorTypeNode {
+        kind: SyntaxKind.FunctionType;
+    }
 
-    // @kind(SyntaxKind.ConstructorType)
-    export interface ConstructorTypeNode extends FunctionOrConstructorTypeNode { }
+    export interface ConstructorTypeNode extends FunctionOrConstructorTypeNode {
+        kind: SyntaxKind.ConstructorType;
+    }
 
-    // @kind(SyntaxKind.TypeReference)
     export interface TypeReferenceNode extends TypeNode {
+        kind: SyntaxKind.TypeReference;
         typeName: EntityName;
         typeArguments?: NodeArray<TypeNode>;
     }
 
-    // @kind(SyntaxKind.TypePredicate)
     export interface TypePredicateNode extends TypeNode {
+        kind: SyntaxKind.TypePredicate;
         parameterName: Identifier | ThisTypeNode;
         type: TypeNode;
     }
 
-    // @kind(SyntaxKind.TypeQuery)
     export interface TypeQueryNode extends TypeNode {
+        kind: SyntaxKind.TypeQuery;
         exprName: EntityName;
     }
 
     // A TypeLiteral is the declaration node for an anonymous symbol.
-    // @kind(SyntaxKind.TypeLiteral)
     export interface TypeLiteralNode extends TypeNode, Declaration {
+        kind: SyntaxKind.TypeLiteral;
         members: NodeArray<TypeElement>;
     }
 
-    // @kind(SyntaxKind.ArrayType)
     export interface ArrayTypeNode extends TypeNode {
+        kind: SyntaxKind.ArrayType;
         elementType: TypeNode;
     }
 
-    // @kind(SyntaxKind.TupleType)
     export interface TupleTypeNode extends TypeNode {
+        kind: SyntaxKind.TupleType;
         elementTypes: NodeArray<TypeNode>;
     }
 
     export interface UnionOrIntersectionTypeNode extends TypeNode {
+        kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType;
         types: NodeArray<TypeNode>;
     }
 
-    // @kind(SyntaxKind.UnionType)
-    export interface UnionTypeNode extends UnionOrIntersectionTypeNode { }
+    export interface UnionTypeNode extends UnionOrIntersectionTypeNode {
+        kind: SyntaxKind.UnionType;
+    }
 
-    // @kind(SyntaxKind.IntersectionType)
-    export interface IntersectionTypeNode extends UnionOrIntersectionTypeNode { }
+    export interface IntersectionTypeNode extends UnionOrIntersectionTypeNode {
+        kind: SyntaxKind.IntersectionType;
+    }
 
-    // @kind(SyntaxKind.ParenthesizedType)
     export interface ParenthesizedTypeNode extends TypeNode {
+        kind: SyntaxKind.ParenthesizedType;
         type: TypeNode;
     }
 
-    // @kind(SyntaxKind.StringLiteralType)
+    export interface TypeOperatorNode extends TypeNode {
+        kind: SyntaxKind.TypeOperator;
+        operator: SyntaxKind.KeyOfKeyword;
+        type: TypeNode;
+    }
+
+    export interface IndexedAccessTypeNode extends TypeNode {
+        kind: SyntaxKind.IndexedAccessType;
+        objectType: TypeNode;
+        indexType: TypeNode;
+    }
+
+    export interface MappedTypeNode extends TypeNode, Declaration {
+        kind: SyntaxKind.MappedType;
+        readonlyToken?: ReadonlyToken;
+        typeParameter: TypeParameterDeclaration;
+        questionToken?: QuestionToken;
+        type?: TypeNode;
+    }
+
     export interface LiteralTypeNode extends TypeNode {
-        _stringLiteralTypeBrand: any;
+        kind: SyntaxKind.LiteralType;
         literal: Expression;
     }
 
-    // @kind(SyntaxKind.StringLiteral)
     export interface StringLiteral extends LiteralExpression {
-        _stringLiteralBrand: any;
-        /* @internal */
-        textSourceNode?: Identifier | StringLiteral; // Allows a StringLiteral to get its text from another node (used by transforms).
+        kind: SyntaxKind.StringLiteral;
+        /* @internal */ textSourceNode?: Identifier | StringLiteral | NumericLiteral; // Allows a StringLiteral to get its text from another node (used by transforms).
     }
 
     // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.
@@ -873,16 +935,15 @@ namespace ts {
         contextualType?: Type;  // Used to temporarily assign a contextual type during overload resolution
     }
 
-    // @kind(SyntaxKind.OmittedExpression)
     export interface OmittedExpression extends Expression {
-        _omittedExpressionBrand: any;
+        kind: SyntaxKind.OmittedExpression;
     }
 
     // Represents an expression that is elided as part of a transformation to emit comments on a
     // not-emitted node. The 'expression' property of a NotEmittedExpression should be emitted.
     // @internal
-    // @kind(SyntaxKind.NotEmittedExpression)
     export interface PartiallyEmittedExpression extends LeftHandSideExpression {
+        kind: SyntaxKind.PartiallyEmittedExpression;
         expression: Expression;
     }
 
@@ -894,20 +955,33 @@ namespace ts {
         _incrementExpressionBrand: any;
     }
 
-    // @kind(SyntaxKind.PrefixUnaryExpression)
+    // see: https://tc39.github.io/ecma262/#prod-UpdateExpression
+    // see: https://tc39.github.io/ecma262/#prod-UnaryExpression
+    export type PrefixUnaryOperator
+        = SyntaxKind.PlusPlusToken
+        | SyntaxKind.MinusMinusToken
+        | SyntaxKind.PlusToken
+        | SyntaxKind.MinusToken
+        | SyntaxKind.TildeToken
+        | SyntaxKind.ExclamationToken
+        ;
+
     export interface PrefixUnaryExpression extends IncrementExpression {
-        operator: SyntaxKind;
+        kind: SyntaxKind.PrefixUnaryExpression;
+        operator: PrefixUnaryOperator;
         operand: UnaryExpression;
     }
 
-    // @kind(SyntaxKind.PostfixUnaryExpression)
-    export interface PostfixUnaryExpression extends IncrementExpression {
-        operand: LeftHandSideExpression;
-        operator: SyntaxKind;
-    }
+    // see: https://tc39.github.io/ecma262/#prod-UpdateExpression
+    export type PostfixUnaryOperator
+        = SyntaxKind.PlusPlusToken
+        | SyntaxKind.MinusMinusToken
+        ;
 
-    export interface PostfixExpression extends UnaryExpression {
-        _postfixExpressionBrand: any;
+    export interface PostfixUnaryExpression extends IncrementExpression {
+        kind: SyntaxKind.PostfixUnaryExpression;
+        operand: LeftHandSideExpression;
+        operator: PostfixUnaryOperator;
     }
 
     export interface LeftHandSideExpression extends IncrementExpression {
@@ -918,73 +992,285 @@ namespace ts {
         _memberExpressionBrand: any;
     }
 
-    // @kind(SyntaxKind.TrueKeyword)
-    // @kind(SyntaxKind.FalseKeyword)
-    // @kind(SyntaxKind.NullKeyword)
-    // @kind(SyntaxKind.ThisKeyword)
-    // @kind(SyntaxKind.SuperKeyword)
     export interface PrimaryExpression extends MemberExpression {
         _primaryExpressionBrand: any;
     }
 
-    // @kind(SyntaxKind.DeleteExpression)
+    export interface NullLiteral extends PrimaryExpression {
+        kind: SyntaxKind.NullKeyword;
+    }
+
+    export interface BooleanLiteral extends PrimaryExpression {
+        kind: SyntaxKind.TrueKeyword | SyntaxKind.FalseKeyword;
+    }
+
+    export interface ThisExpression extends PrimaryExpression {
+        kind: SyntaxKind.ThisKeyword;
+    }
+
+    export interface SuperExpression extends PrimaryExpression {
+        kind: SyntaxKind.SuperKeyword;
+    }
+
     export interface DeleteExpression extends UnaryExpression {
+        kind: SyntaxKind.DeleteExpression;
         expression: UnaryExpression;
     }
 
-    // @kind(SyntaxKind.TypeOfExpression)
     export interface TypeOfExpression extends UnaryExpression {
+        kind: SyntaxKind.TypeOfExpression;
         expression: UnaryExpression;
     }
 
-    // @kind(SyntaxKind.VoidExpression)
     export interface VoidExpression extends UnaryExpression {
+        kind: SyntaxKind.VoidExpression;
         expression: UnaryExpression;
     }
 
-    // @kind(SyntaxKind.AwaitExpression)
     export interface AwaitExpression extends UnaryExpression {
+        kind: SyntaxKind.AwaitExpression;
         expression: UnaryExpression;
     }
 
-    // @kind(SyntaxKind.YieldExpression)
     export interface YieldExpression extends Expression {
-        asteriskToken?: Node;
+        kind: SyntaxKind.YieldExpression;
+        asteriskToken?: AsteriskToken;
         expression?: Expression;
     }
 
-    // @kind(SyntaxKind.BinaryExpression)
+    // see: https://tc39.github.io/ecma262/#prod-ExponentiationExpression
+    export type ExponentiationOperator
+        = SyntaxKind.AsteriskAsteriskToken
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-MultiplicativeOperator
+    export type MultiplicativeOperator
+        = SyntaxKind.AsteriskToken
+        | SyntaxKind.SlashToken
+        | SyntaxKind.PercentToken
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-MultiplicativeExpression
+    export type MultiplicativeOperatorOrHigher
+        = ExponentiationOperator
+        | MultiplicativeOperator
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-AdditiveExpression
+    export type AdditiveOperator
+        = SyntaxKind.PlusToken
+        | SyntaxKind.MinusToken
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-AdditiveExpression
+    export type AdditiveOperatorOrHigher
+        = MultiplicativeOperatorOrHigher
+        | AdditiveOperator
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-ShiftExpression
+    export type ShiftOperator
+        = SyntaxKind.LessThanLessThanToken
+        | SyntaxKind.GreaterThanGreaterThanToken
+        | SyntaxKind.GreaterThanGreaterThanGreaterThanToken
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-ShiftExpression
+    export type ShiftOperatorOrHigher
+        = AdditiveOperatorOrHigher
+        | ShiftOperator
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-RelationalExpression
+    export type RelationalOperator
+        = SyntaxKind.LessThanToken
+        | SyntaxKind.LessThanEqualsToken
+        | SyntaxKind.GreaterThanToken
+        | SyntaxKind.GreaterThanEqualsToken
+        | SyntaxKind.InstanceOfKeyword
+        | SyntaxKind.InKeyword
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-RelationalExpression
+    export type RelationalOperatorOrHigher
+        = ShiftOperatorOrHigher
+        | RelationalOperator
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-EqualityExpression
+    export type EqualityOperator
+        = SyntaxKind.EqualsEqualsToken
+        | SyntaxKind.EqualsEqualsEqualsToken
+        | SyntaxKind.ExclamationEqualsEqualsToken
+        | SyntaxKind.ExclamationEqualsToken
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-EqualityExpression
+    export type EqualityOperatorOrHigher
+        = RelationalOperatorOrHigher
+        | EqualityOperator;
+
+    // see: https://tc39.github.io/ecma262/#prod-BitwiseANDExpression
+    // see: https://tc39.github.io/ecma262/#prod-BitwiseXORExpression
+    // see: https://tc39.github.io/ecma262/#prod-BitwiseORExpression
+    export type BitwiseOperator
+        = SyntaxKind.AmpersandToken
+        | SyntaxKind.BarToken
+        | SyntaxKind.CaretToken
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-BitwiseANDExpression
+    // see: https://tc39.github.io/ecma262/#prod-BitwiseXORExpression
+    // see: https://tc39.github.io/ecma262/#prod-BitwiseORExpression
+    export type BitwiseOperatorOrHigher
+        = EqualityOperatorOrHigher
+        | BitwiseOperator
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-LogicalANDExpression
+    // see: https://tc39.github.io/ecma262/#prod-LogicalORExpression
+    export type LogicalOperator
+        = SyntaxKind.AmpersandAmpersandToken
+        | SyntaxKind.BarBarToken
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-LogicalANDExpression
+    // see: https://tc39.github.io/ecma262/#prod-LogicalORExpression
+    export type LogicalOperatorOrHigher
+        = BitwiseOperatorOrHigher
+        | LogicalOperator
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-AssignmentOperator
+    export type CompoundAssignmentOperator
+        = SyntaxKind.PlusEqualsToken
+        | SyntaxKind.MinusEqualsToken
+        | SyntaxKind.AsteriskAsteriskEqualsToken
+        | SyntaxKind.AsteriskEqualsToken
+        | SyntaxKind.SlashEqualsToken
+        | SyntaxKind.PercentEqualsToken
+        | SyntaxKind.AmpersandEqualsToken
+        | SyntaxKind.BarEqualsToken
+        | SyntaxKind.CaretEqualsToken
+        | SyntaxKind.LessThanLessThanEqualsToken
+        | SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken
+        | SyntaxKind.GreaterThanGreaterThanEqualsToken
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-AssignmentExpression
+    export type AssignmentOperator
+        = SyntaxKind.EqualsToken
+        | CompoundAssignmentOperator
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-AssignmentExpression
+    export type AssignmentOperatorOrHigher
+        = LogicalOperatorOrHigher
+        | AssignmentOperator
+        ;
+
+    // see: https://tc39.github.io/ecma262/#prod-Expression
+    export type BinaryOperator
+        = AssignmentOperatorOrHigher
+        | SyntaxKind.CommaToken
+        ;
+
+    export type BinaryOperatorToken = Token<BinaryOperator>;
+
     // Binary expressions can be declarations if they are 'exports.foo = bar' expressions in JS files
     export interface BinaryExpression extends Expression, Declaration {
+        kind: SyntaxKind.BinaryExpression;
         left: Expression;
-        operatorToken: Node;
+        operatorToken: BinaryOperatorToken;
         right: Expression;
     }
 
-    // @kind(SyntaxKind.ConditionalExpression)
+    export type AssignmentOperatorToken = Token<AssignmentOperator>;
+
+    export interface AssignmentExpression<TOperator extends AssignmentOperatorToken> extends BinaryExpression {
+        left: LeftHandSideExpression;
+        operatorToken: TOperator;
+    }
+
+    export interface ObjectDestructuringAssignment extends AssignmentExpression<EqualsToken> {
+        left: ObjectLiteralExpression;
+    }
+
+    export interface ArrayDestructuringAssignment extends AssignmentExpression<EqualsToken> {
+        left: ArrayLiteralExpression;
+    }
+
+    export type DestructuringAssignment
+        = ObjectDestructuringAssignment
+        | ArrayDestructuringAssignment
+        ;
+
+    export type BindingOrAssignmentElement
+        = VariableDeclaration
+        | ParameterDeclaration
+        | BindingElement
+        | PropertyAssignment // AssignmentProperty
+        | ShorthandPropertyAssignment // AssignmentProperty
+        | SpreadAssignment // AssignmentRestProperty
+        | OmittedExpression // Elision
+        | SpreadElement // AssignmentRestElement
+        | ArrayLiteralExpression // ArrayAssignmentPattern
+        | ObjectLiteralExpression // ObjectAssignmentPattern
+        | AssignmentExpression<EqualsToken> // AssignmentElement
+        | Identifier // DestructuringAssignmentTarget
+        | PropertyAccessExpression // DestructuringAssignmentTarget
+        | ElementAccessExpression // DestructuringAssignmentTarget
+        ;
+
+    export type BindingOrAssignmentElementRestIndicator
+        = DotDotDotToken // from BindingElement
+        | SpreadElement // AssignmentRestElement
+        | SpreadAssignment // AssignmentRestProperty
+        ;
+
+    export type BindingOrAssignmentElementTarget = BindingOrAssignmentPattern | Expression;
+
+    export type ObjectBindingOrAssignmentPattern
+        = ObjectBindingPattern
+        | ObjectLiteralExpression // ObjectAssignmentPattern
+        ;
+
+    export type ArrayBindingOrAssignmentPattern
+        = ArrayBindingPattern
+        | ArrayLiteralExpression // ArrayAssignmentPattern
+        ;
+
+    export type AssignmentPattern = ObjectLiteralExpression | ArrayLiteralExpression;
+
+    export type BindingOrAssignmentPattern = ObjectBindingOrAssignmentPattern | ArrayBindingOrAssignmentPattern;
+
     export interface ConditionalExpression extends Expression {
+        kind: SyntaxKind.ConditionalExpression;
         condition: Expression;
-        questionToken: Node;
+        questionToken: QuestionToken;
         whenTrue: Expression;
-        colonToken: Node;
+        colonToken: ColonToken;
         whenFalse: Expression;
     }
 
     export type FunctionBody = Block;
     export type ConciseBody = FunctionBody | Expression;
 
-    // @kind(SyntaxKind.FunctionExpression)
     export interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclaration {
+        kind: SyntaxKind.FunctionExpression;
         name?: Identifier;
         body: FunctionBody;  // Required, whereas the member inherited from FunctionDeclaration is optional
     }
 
-    // @kind(SyntaxKind.ArrowFunction)
     export interface ArrowFunction extends Expression, FunctionLikeDeclaration {
-        equalsGreaterThanToken: Node;
+        kind: SyntaxKind.ArrowFunction;
+        equalsGreaterThanToken: EqualsGreaterThanToken;
         body: ConciseBody;
     }
 
+    // The text property of a LiteralExpression stores the interpreted value of the literal in text form. For a StringLiteral,
+    // or any literal of a template, this means quotes have been removed and escapes have been converted to actual characters.
+    // For a NumericLiteral, the stored value is the toString() representation of the number. For example 1, 1.00, and 1e0 are all stored as just "1".
     export interface LiteralLikeNode extends Node {
         text: string;
         isUnterminated?: boolean;
@@ -996,62 +1282,81 @@ namespace ts {
     // The text property of a LiteralExpression stores the interpreted value of the literal in text form. For a StringLiteral,
     // or any literal of a template, this means quotes have been removed and escapes have been converted to actual characters.
     // For a NumericLiteral, the stored value is the toString() representation of the number. For example 1, 1.00, and 1e0 are all stored as just "1".
-    // @kind(SyntaxKind.RegularExpressionLiteral)
-    // @kind(SyntaxKind.NoSubstitutionTemplateLiteral)
     export interface LiteralExpression extends LiteralLikeNode, PrimaryExpression {
         _literalExpressionBrand: any;
     }
 
-    // @kind(SyntaxKind.NumericLiteral)
+    export interface RegularExpressionLiteral extends LiteralExpression {
+        kind: SyntaxKind.RegularExpressionLiteral;
+    }
+
+    export interface NoSubstitutionTemplateLiteral extends LiteralExpression {
+        kind: SyntaxKind.NoSubstitutionTemplateLiteral;
+    }
+
     export interface NumericLiteral extends LiteralExpression {
-        _numericLiteralBrand: any;
+        kind: SyntaxKind.NumericLiteral;
         trailingComment?: string;
     }
 
-    // @kind(SyntaxKind.TemplateHead)
-    // @kind(SyntaxKind.TemplateMiddle)
-    // @kind(SyntaxKind.TemplateTail)
-    export interface TemplateLiteralFragment extends LiteralLikeNode {
-        _templateLiteralFragmentBrand: any;
+    export interface TemplateHead extends LiteralLikeNode {
+        kind: SyntaxKind.TemplateHead;
     }
 
-    export type Template = TemplateExpression | LiteralExpression;
+    export interface TemplateMiddle extends LiteralLikeNode {
+        kind: SyntaxKind.TemplateMiddle;
+    }
 
-    // @kind(SyntaxKind.TemplateExpression)
+    export interface TemplateTail extends LiteralLikeNode {
+        kind: SyntaxKind.TemplateTail;
+    }
+
+    export type TemplateLiteral = TemplateExpression | NoSubstitutionTemplateLiteral;
+
     export interface TemplateExpression extends PrimaryExpression {
-        head: TemplateLiteralFragment;
+        kind: SyntaxKind.TemplateExpression;
+        head: TemplateHead;
         templateSpans: NodeArray<TemplateSpan>;
     }
 
     // Each of these corresponds to a substitution expression and a template literal, in that order.
     // The template literal must have kind TemplateMiddleLiteral or TemplateTailLiteral.
-    // @kind(SyntaxKind.TemplateSpan)
     export interface TemplateSpan extends Node {
+        kind: SyntaxKind.TemplateSpan;
         expression: Expression;
-        literal: TemplateLiteralFragment;
+        literal: TemplateMiddle | TemplateTail;
     }
 
-    // @kind(SyntaxKind.ParenthesizedExpression)
     export interface ParenthesizedExpression extends PrimaryExpression {
+        kind: SyntaxKind.ParenthesizedExpression;
         expression: Expression;
     }
 
-    // @kind(SyntaxKind.ArrayLiteralExpression)
     export interface ArrayLiteralExpression extends PrimaryExpression {
+        kind: SyntaxKind.ArrayLiteralExpression;
         elements: NodeArray<Expression>;
         /* @internal */
         multiLine?: boolean;
     }
 
-    // @kind(SyntaxKind.SpreadElementExpression)
-    export interface SpreadElementExpression extends Expression {
+    export interface SpreadElement extends Expression {
+        kind: SyntaxKind.SpreadElement;
         expression: Expression;
     }
 
+    /**
+      * This interface is a base interface for ObjectLiteralExpression and JSXAttributes to extend from. JSXAttributes is similar to
+      * ObjectLiteralExpression in that it contains array of properties; however, JSXAttributes' properties can only be
+      * JSXAttribute or JSXSpreadAttribute. ObjectLiteralExpression, on the other hand, can only have properties of type
+      * ObjectLiteralElement (e.g. PropertyAssignment, ShorthandPropertyAssignment etc.)
+     **/
+    export interface ObjectLiteralExpressionBase<T extends ObjectLiteralElement> extends PrimaryExpression, Declaration {
+        properties: NodeArray<T>;
+    }
+
     // An ObjectLiteralExpression is the declaration node for an anonymous symbol.
-    // @kind(SyntaxKind.ObjectLiteralExpression)
-    export interface ObjectLiteralExpression extends PrimaryExpression, Declaration {
-        properties: NodeArray<ObjectLiteralElement>;
+    export interface ObjectLiteralExpression extends ObjectLiteralExpressionBase<ObjectLiteralElementLike> {
+        kind: SyntaxKind.ObjectLiteralExpression;
         /* @internal */
         multiLine?: boolean;
     }
@@ -1059,69 +1364,93 @@ namespace ts {
     export type EntityNameExpression = Identifier | PropertyAccessEntityNameExpression;
     export type EntityNameOrEntityNameExpression = EntityName | EntityNameExpression;
 
-    // @kind(SyntaxKind.PropertyAccessExpression)
     export interface PropertyAccessExpression extends MemberExpression, Declaration {
+        kind: SyntaxKind.PropertyAccessExpression;
         expression: LeftHandSideExpression;
         name: Identifier;
     }
+
+    export interface SuperPropertyAccessExpression extends PropertyAccessExpression {
+        expression: SuperExpression;
+    }
+
     /** Brand for a PropertyAccessExpression which, like a QualifiedName, consists of a sequence of identifiers separated by dots. */
     export interface PropertyAccessEntityNameExpression extends PropertyAccessExpression {
         _propertyAccessExpressionLikeQualifiedNameBrand?: any;
         expression: EntityNameExpression;
     }
 
-    // @kind(SyntaxKind.ElementAccessExpression)
     export interface ElementAccessExpression extends MemberExpression {
+        kind: SyntaxKind.ElementAccessExpression;
         expression: LeftHandSideExpression;
         argumentExpression?: Expression;
     }
 
-    // @kind(SyntaxKind.CallExpression)
+    export interface SuperElementAccessExpression extends ElementAccessExpression {
+        expression: SuperExpression;
+    }
+
+    // see: https://tc39.github.io/ecma262/#prod-SuperProperty
+    export type SuperProperty
+        = SuperPropertyAccessExpression
+        | SuperElementAccessExpression
+        ;
+
     export interface CallExpression extends LeftHandSideExpression, Declaration {
+        kind: SyntaxKind.CallExpression;
         expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
         arguments: NodeArray<Expression>;
     }
 
-    // @kind(SyntaxKind.ExpressionWithTypeArguments)
+    // see: https://tc39.github.io/ecma262/#prod-SuperCall
+    export interface SuperCall extends CallExpression {
+        expression: SuperExpression;
+    }
+
     export interface ExpressionWithTypeArguments extends TypeNode {
+        kind: SyntaxKind.ExpressionWithTypeArguments;
         expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
     }
 
-    // @kind(SyntaxKind.NewExpression)
-    export interface NewExpression extends CallExpression, PrimaryExpression { }
+    export interface NewExpression extends PrimaryExpression, Declaration {
+        kind: SyntaxKind.NewExpression;
+        expression: LeftHandSideExpression;
+        typeArguments?: NodeArray<TypeNode>;
+        arguments: NodeArray<Expression>;
+    }
 
-    // @kind(SyntaxKind.TaggedTemplateExpression)
     export interface TaggedTemplateExpression extends MemberExpression {
+        kind: SyntaxKind.TaggedTemplateExpression;
         tag: LeftHandSideExpression;
-        template: Template;
+        template: TemplateLiteral;
     }
 
     export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator;
 
-    // @kind(SyntaxKind.AsExpression)
     export interface AsExpression extends Expression {
+        kind: SyntaxKind.AsExpression;
         expression: Expression;
         type: TypeNode;
     }
 
-    // @kind(SyntaxKind.TypeAssertionExpression)
     export interface TypeAssertion extends UnaryExpression {
+        kind: SyntaxKind.TypeAssertionExpression;
         type: TypeNode;
         expression: UnaryExpression;
     }
 
     export type AssertionExpression = TypeAssertion | AsExpression;
 
-    // @kind(SyntaxKind.NonNullExpression)
     export interface NonNullExpression extends LeftHandSideExpression {
+        kind: SyntaxKind.NonNullExpression;
         expression: Expression;
     }
 
     /// A JSX expression of the form <TagName attrs>...</TagName>
-    // @kind(SyntaxKind.JsxElement)
     export interface JsxElement extends PrimaryExpression {
+        kind: SyntaxKind.JsxElement;
         openingElement: JsxOpeningElement;
         children: NodeArray<JsxChild>;
         closingElement: JsxClosingElement;
@@ -1130,17 +1459,17 @@ namespace ts {
     export type JsxTagNameExpression = PrimaryExpression | PropertyAccessExpression;
 
     /// The opening element of a <Tag>...</Tag> JsxElement
-    // @kind(SyntaxKind.JsxOpeningElement)
     export interface JsxOpeningElement extends Expression {
-        _openingElementBrand?: any;
+        kind: SyntaxKind.JsxOpeningElement;
         tagName: JsxTagNameExpression;
         attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>;
     }
 
     /// A JSX expression of the form <TagName attrs />
-    // @kind(SyntaxKind.JsxSelfClosingElement)
-    export interface JsxSelfClosingElement extends PrimaryExpression, JsxOpeningElement {
-        _selfClosingElementBrand?: any;
+    export interface JsxSelfClosingElement extends PrimaryExpression {
+        kind: SyntaxKind.JsxSelfClosingElement;
+        tagName: JsxTagNameExpression;
+        attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>;
     }
 
     /// Either the opening tag in a <Tag>...</Tag> pair, or the lone <Tag /> in a self-closing form
@@ -1148,31 +1477,30 @@ namespace ts {
 
     export type JsxAttributeLike = JsxAttribute | JsxSpreadAttribute;
 
-    // @kind(SyntaxKind.JsxAttribute)
     export interface JsxAttribute extends Node {
+        kind: SyntaxKind.JsxAttribute;
         name: Identifier;
         /// JSX attribute initializers are optional; <X y /> is sugar for <X y={true} />
         initializer?: StringLiteral | JsxExpression;
     }
 
-    // @kind(SyntaxKind.JsxSpreadAttribute)
     export interface JsxSpreadAttribute extends Node {
+        kind: SyntaxKind.JsxSpreadAttribute;
         expression: Expression;
     }
 
-    // @kind(SyntaxKind.JsxClosingElement)
     export interface JsxClosingElement extends Node {
+        kind: SyntaxKind.JsxClosingElement;
         tagName: JsxTagNameExpression;
     }
 
-    // @kind(SyntaxKind.JsxExpression)
     export interface JsxExpression extends Expression {
+        kind: SyntaxKind.JsxExpression;
         expression?: Expression;
     }
 
-    // @kind(SyntaxKind.JsxText)
     export interface JsxText extends Node {
-        _jsxTextExpressionBrand: any;
+        kind: SyntaxKind.JsxText;
     }
 
     export type JsxChild = JsxText | JsxExpression | JsxElement | JsxSelfClosingElement;
@@ -1184,41 +1512,74 @@ namespace ts {
     // Represents a statement that is elided as part of a transformation to emit comments on a
     // not-emitted node.
     // @internal
-    // @kind(SyntaxKind.NotEmittedStatement)
     export interface NotEmittedStatement extends Statement {
+        kind: SyntaxKind.NotEmittedStatement;
     }
 
-    // @kind(SyntaxKind.EmptyStatement)
-    export interface EmptyStatement extends Statement { }
+    /**
+     * Marks the end of transformed declaration to properly emit exports.
+     */
+    /* @internal */
+    export interface EndOfDeclarationMarker extends Statement {
+        kind: SyntaxKind.EndOfDeclarationMarker;
+    }
 
-    // @kind(SyntaxKind.DebuggerStatement)
-    export interface DebuggerStatement extends Statement { }
+    /**
+     * Emits a string of raw text in an expression position. Raw text is never transformed, should
+     * be ES3 compliant, and should have the same precedence as PrimaryExpression.
+     */
+    /* @internal */
+    export interface RawExpression extends PrimaryExpression {
+        kind: SyntaxKind.RawExpression;
+        text: string;
+    }
 
-    // @kind(SyntaxKind.MissingDeclaration)
+    /**
+     * Marks the beginning of a merged transformed declaration.
+     */
+    /* @internal */
+    export interface MergeDeclarationMarker extends Statement {
+        kind: SyntaxKind.MergeDeclarationMarker;
+    }
+
+    export interface EmptyStatement extends Statement {
+        kind: SyntaxKind.EmptyStatement;
+    }
+
+    export interface DebuggerStatement extends Statement {
+        kind: SyntaxKind.DebuggerStatement;
+    }
+
     export interface MissingDeclaration extends DeclarationStatement, ClassElement, ObjectLiteralElement, TypeElement {
+        kind: SyntaxKind.MissingDeclaration;
         name?: Identifier;
     }
 
     export type BlockLike = SourceFile | Block | ModuleBlock | CaseClause;
 
-    // @kind(SyntaxKind.Block)
     export interface Block extends Statement {
+        kind: SyntaxKind.Block;
         statements: NodeArray<Statement>;
         /*@internal*/ multiLine?: boolean;
     }
 
-    // @kind(SyntaxKind.VariableStatement)
     export interface VariableStatement extends Statement {
+        kind: SyntaxKind.VariableStatement;
         declarationList: VariableDeclarationList;
     }
 
-    // @kind(SyntaxKind.ExpressionStatement)
     export interface ExpressionStatement extends Statement {
+        kind: SyntaxKind.ExpressionStatement;
         expression: Expression;
     }
 
-    // @kind(SyntaxKind.IfStatement)
+    /* @internal */
+    export interface PrologueDirective extends ExpressionStatement {
+        expression: StringLiteral;
+    }
+
     export interface IfStatement extends Statement {
+        kind: SyntaxKind.IfStatement;
         expression: Expression;
         thenStatement: Statement;
         elseStatement?: Statement;
@@ -1228,105 +1589,105 @@ namespace ts {
         statement: Statement;
     }
 
-    // @kind(SyntaxKind.DoStatement)
     export interface DoStatement extends IterationStatement {
+        kind: SyntaxKind.DoStatement;
         expression: Expression;
     }
 
-    // @kind(SyntaxKind.WhileStatement)
     export interface WhileStatement extends IterationStatement {
+        kind: SyntaxKind.WhileStatement;
         expression: Expression;
     }
 
     export type ForInitializer = VariableDeclarationList | Expression;
 
-    // @kind(SyntaxKind.ForStatement)
     export interface ForStatement extends IterationStatement {
+        kind: SyntaxKind.ForStatement;
         initializer?: ForInitializer;
         condition?: Expression;
         incrementor?: Expression;
     }
 
-    // @kind(SyntaxKind.ForInStatement)
     export interface ForInStatement extends IterationStatement {
+        kind: SyntaxKind.ForInStatement;
         initializer: ForInitializer;
         expression: Expression;
     }
 
-    // @kind(SyntaxKind.ForOfStatement)
     export interface ForOfStatement extends IterationStatement {
+        kind: SyntaxKind.ForOfStatement;
         initializer: ForInitializer;
         expression: Expression;
     }
 
-    // @kind(SyntaxKind.BreakStatement)
     export interface BreakStatement extends Statement {
+        kind: SyntaxKind.BreakStatement;
         label?: Identifier;
     }
 
-    // @kind(SyntaxKind.ContinueStatement)
     export interface ContinueStatement extends Statement {
+        kind: SyntaxKind.ContinueStatement;
         label?: Identifier;
     }
 
     export type BreakOrContinueStatement = BreakStatement | ContinueStatement;
 
-    // @kind(SyntaxKind.ReturnStatement)
     export interface ReturnStatement extends Statement {
+        kind: SyntaxKind.ReturnStatement;
         expression?: Expression;
     }
 
-    // @kind(SyntaxKind.WithStatement)
     export interface WithStatement extends Statement {
+        kind: SyntaxKind.WithStatement;
         expression: Expression;
         statement: Statement;
     }
 
-    // @kind(SyntaxKind.SwitchStatement)
     export interface SwitchStatement extends Statement {
+        kind: SyntaxKind.SwitchStatement;
         expression: Expression;
         caseBlock: CaseBlock;
         possiblyExhaustive?: boolean;
     }
 
-    // @kind(SyntaxKind.CaseBlock)
     export interface CaseBlock extends Node {
+        kind: SyntaxKind.CaseBlock;
         clauses: NodeArray<CaseOrDefaultClause>;
     }
 
-    // @kind(SyntaxKind.CaseClause)
     export interface CaseClause extends Node {
+        kind: SyntaxKind.CaseClause;
         expression: Expression;
         statements: NodeArray<Statement>;
     }
 
-    // @kind(SyntaxKind.DefaultClause)
     export interface DefaultClause extends Node {
+        kind: SyntaxKind.DefaultClause;
         statements: NodeArray<Statement>;
     }
 
     export type CaseOrDefaultClause = CaseClause | DefaultClause;
 
-    // @kind(SyntaxKind.LabeledStatement)
     export interface LabeledStatement extends Statement {
+        kind: SyntaxKind.LabeledStatement;
         label: Identifier;
         statement: Statement;
     }
 
-    // @kind(SyntaxKind.ThrowStatement)
     export interface ThrowStatement extends Statement {
+        kind: SyntaxKind.ThrowStatement;
         expression: Expression;
     }
 
-    // @kind(SyntaxKind.TryStatement)
     export interface TryStatement extends Statement {
+        kind: SyntaxKind.TryStatement;
         tryBlock: Block;
         catchClause?: CatchClause;
         finallyBlock?: Block;
     }
 
-    // @kind(SyntaxKind.CatchClause)
     export interface CatchClause extends Node {
+        kind: SyntaxKind.CatchClause;
         variableDeclaration: VariableDeclaration;
         block: Block;
     }
@@ -1340,13 +1701,13 @@ namespace ts {
         members: NodeArray<ClassElement>;
     }
 
-    // @kind(SyntaxKind.ClassDeclaration)
     export interface ClassDeclaration extends ClassLikeDeclaration, DeclarationStatement {
+        kind: SyntaxKind.ClassDeclaration;
         name?: Identifier;
     }
 
-    // @kind(SyntaxKind.ClassExpression)
     export interface ClassExpression extends ClassLikeDeclaration, PrimaryExpression {
+        kind: SyntaxKind.ClassExpression;
     }
 
     export interface ClassElement extends Declaration {
@@ -1357,40 +1718,40 @@ namespace ts {
     export interface TypeElement extends Declaration {
         _typeElementBrand: any;
         name?: PropertyName;
-        questionToken?: Node;
+        questionToken?: QuestionToken;
     }
 
-    // @kind(SyntaxKind.InterfaceDeclaration)
     export interface InterfaceDeclaration extends DeclarationStatement {
+        kind: SyntaxKind.InterfaceDeclaration;
         name: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         heritageClauses?: NodeArray<HeritageClause>;
         members: NodeArray<TypeElement>;
     }
 
-    // @kind(SyntaxKind.HeritageClause)
     export interface HeritageClause extends Node {
+        kind: SyntaxKind.HeritageClause;
         token: SyntaxKind;
         types?: NodeArray<ExpressionWithTypeArguments>;
     }
 
-    // @kind(SyntaxKind.TypeAliasDeclaration)
     export interface TypeAliasDeclaration extends DeclarationStatement {
+        kind: SyntaxKind.TypeAliasDeclaration;
         name: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         type: TypeNode;
     }
 
-    // @kind(SyntaxKind.EnumMember)
     export interface EnumMember extends Declaration {
+        kind: SyntaxKind.EnumMember;
         // This does include ComputedPropertyName, but the parser will give an error
         // if it parses a ComputedPropertyName in an EnumMember
         name: PropertyName;
         initializer?: Expression;
     }
 
-    // @kind(SyntaxKind.EnumDeclaration)
     export interface EnumDeclaration extends DeclarationStatement {
+        kind: SyntaxKind.EnumDeclaration;
         name: Identifier;
         members: NodeArray<EnumMember>;
     }
@@ -1399,21 +1760,31 @@ namespace ts {
 
     export type ModuleName = Identifier | StringLiteral;
 
-    // @kind(SyntaxKind.ModuleDeclaration)
     export interface ModuleDeclaration extends DeclarationStatement {
-        name: Identifier | LiteralExpression;
-        body?: ModuleBlock | ModuleDeclaration;
+        kind: SyntaxKind.ModuleDeclaration;
+        name: Identifier | StringLiteral;
+        body?: ModuleBlock | NamespaceDeclaration | JSDocNamespaceDeclaration | Identifier;
     }
 
-    // @kind(SyntaxKind.ModuleBlock)
+    export interface NamespaceDeclaration extends ModuleDeclaration {
+        name: Identifier;
+        body: ModuleBlock | NamespaceDeclaration;
+    }
+
+    export interface JSDocNamespaceDeclaration extends ModuleDeclaration {
+        name: Identifier;
+        body: JSDocNamespaceDeclaration | Identifier;
+    }
+
     export interface ModuleBlock extends Node, Statement {
+        kind: SyntaxKind.ModuleBlock;
         statements: NodeArray<Statement>;
     }
 
     export type ModuleReference = EntityName | ExternalModuleReference;
 
-    // @kind(SyntaxKind.ImportEqualsDeclaration)
     export interface ImportEqualsDeclaration extends DeclarationStatement {
+        kind: SyntaxKind.ImportEqualsDeclaration;
         name: Identifier;
 
         // 'EntityName' for an internal module reference, 'ExternalModuleReference' for an external
@@ -1421,8 +1792,8 @@ namespace ts {
         moduleReference: ModuleReference;
     }
 
-    // @kind(SyntaxKind.ExternalModuleReference)
     export interface ExternalModuleReference extends Node {
+        kind: SyntaxKind.ExternalModuleReference;
         expression?: Expression;
     }
 
@@ -1430,8 +1801,8 @@ namespace ts {
     // import "mod"  => importClause = undefined, moduleSpecifier = "mod"
     // In rest of the cases, module specifier is string literal corresponding to module
     // ImportClause information is shown at its declaration below.
-    // @kind(SyntaxKind.ImportDeclaration)
     export interface ImportDeclaration extends Statement {
+        kind: SyntaxKind.ImportDeclaration;
         importClause?: ImportClause;
         moduleSpecifier: Expression;
     }
@@ -1444,57 +1815,57 @@ namespace ts {
     // import d, * as ns from "mod" => name = d, namedBinding: NamespaceImport = { name: ns }
     // import { a, b as x } from "mod" => name = undefined, namedBinding: NamedImports = { elements: [{ name: a }, { name: x, propertyName: b}]}
     // import d, { a, b as x } from "mod" => name = d, namedBinding: NamedImports = { elements: [{ name: a }, { name: x, propertyName: b}]}
-    // @kind(SyntaxKind.ImportClause)
     export interface ImportClause extends Declaration {
+        kind: SyntaxKind.ImportClause;
         name?: Identifier; // Default binding
         namedBindings?: NamedImportBindings;
     }
 
-    // @kind(SyntaxKind.NamespaceImport)
     export interface NamespaceImport extends Declaration {
+        kind: SyntaxKind.NamespaceImport;
         name: Identifier;
     }
 
-    // @kind(SyntaxKind.NamespaceExportDeclaration)
     export interface NamespaceExportDeclaration extends DeclarationStatement {
+        kind: SyntaxKind.NamespaceExportDeclaration;
         name: Identifier;
         moduleReference: LiteralLikeNode;
     }
 
-    // @kind(SyntaxKind.ExportDeclaration)
     export interface ExportDeclaration extends DeclarationStatement {
+        kind: SyntaxKind.ExportDeclaration;
         exportClause?: NamedExports;
         moduleSpecifier?: Expression;
     }
 
-    // @kind(SyntaxKind.NamedImports)
     export interface NamedImports extends Node {
+        kind: SyntaxKind.NamedImports;
         elements: NodeArray<ImportSpecifier>;
     }
 
-    // @kind(SyntaxKind.NamedExports)
     export interface NamedExports extends Node {
+        kind: SyntaxKind.NamedExports;
         elements: NodeArray<ExportSpecifier>;
     }
 
     export type NamedImportsOrExports = NamedImports | NamedExports;
 
-    // @kind(SyntaxKind.ImportSpecifier)
     export interface ImportSpecifier extends Declaration {
+        kind: SyntaxKind.ImportSpecifier;
         propertyName?: Identifier;  // Name preceding "as" keyword (or undefined when "as" is absent)
         name: Identifier;           // Declared name
     }
 
-    // @kind(SyntaxKind.ExportSpecifier)
     export interface ExportSpecifier extends Declaration {
+        kind: SyntaxKind.ExportSpecifier;
         propertyName?: Identifier;  // Name preceding "as" keyword (or undefined when "as" is absent)
         name: Identifier;           // Declared name
     }
 
     export type ImportOrExportSpecifier = ImportSpecifier | ExportSpecifier;
 
-    // @kind(SyntaxKind.ExportAssignment)
     export interface ExportAssignment extends DeclarationStatement {
+        kind: SyntaxKind.ExportAssignment;
         isExportEquals?: boolean;
         expression: Expression;
     }
@@ -1509,8 +1880,8 @@ namespace ts {
     }
 
     // represents a top level: { type } expression in a JSDoc comment.
-    // @kind(SyntaxKind.JSDocTypeExpression)
     export interface JSDocTypeExpression extends Node {
+        kind: SyntaxKind.JSDocTypeExpression;
         type: JSDocType;
     }
 
@@ -1518,139 +1889,142 @@ namespace ts {
         _jsDocTypeBrand: any;
     }
 
-    // @kind(SyntaxKind.JSDocAllType)
     export interface JSDocAllType extends JSDocType {
-        _JSDocAllTypeBrand: any;
+        kind: SyntaxKind.JSDocAllType;
     }
 
-    // @kind(SyntaxKind.JSDocUnknownType)
     export interface JSDocUnknownType extends JSDocType {
-        _JSDocUnknownTypeBrand: any;
+        kind: SyntaxKind.JSDocUnknownType;
     }
 
-    // @kind(SyntaxKind.JSDocArrayType)
     export interface JSDocArrayType extends JSDocType {
+        kind: SyntaxKind.JSDocArrayType;
         elementType: JSDocType;
     }
 
-    // @kind(SyntaxKind.JSDocUnionType)
     export interface JSDocUnionType extends JSDocType {
+        kind: SyntaxKind.JSDocUnionType;
         types: NodeArray<JSDocType>;
     }
 
-    // @kind(SyntaxKind.JSDocTupleType)
     export interface JSDocTupleType extends JSDocType {
+        kind: SyntaxKind.JSDocTupleType;
         types: NodeArray<JSDocType>;
     }
 
-    // @kind(SyntaxKind.JSDocNonNullableType)
     export interface JSDocNonNullableType extends JSDocType {
+        kind: SyntaxKind.JSDocNonNullableType;
         type: JSDocType;
     }
 
-    // @kind(SyntaxKind.JSDocNullableType)
     export interface JSDocNullableType extends JSDocType {
+        kind: SyntaxKind.JSDocNullableType;
         type: JSDocType;
     }
 
-    // @kind(SyntaxKind.JSDocRecordType)
-    export interface JSDocRecordType extends JSDocType, TypeLiteralNode {
+    export interface JSDocRecordType extends JSDocType {
+        kind: SyntaxKind.JSDocRecordType;
         literal: TypeLiteralNode;
     }
 
-    // @kind(SyntaxKind.JSDocTypeReference)
     export interface JSDocTypeReference extends JSDocType {
+        kind: SyntaxKind.JSDocTypeReference;
         name: EntityName;
         typeArguments: NodeArray<JSDocType>;
     }
 
-    // @kind(SyntaxKind.JSDocOptionalType)
     export interface JSDocOptionalType extends JSDocType {
+        kind: SyntaxKind.JSDocOptionalType;
         type: JSDocType;
     }
 
-    // @kind(SyntaxKind.JSDocFunctionType)
     export interface JSDocFunctionType extends JSDocType, SignatureDeclaration {
+        kind: SyntaxKind.JSDocFunctionType;
         parameters: NodeArray<ParameterDeclaration>;
         type: JSDocType;
     }
 
-    // @kind(SyntaxKind.JSDocVariadicType)
     export interface JSDocVariadicType extends JSDocType {
+        kind: SyntaxKind.JSDocVariadicType;
         type: JSDocType;
     }
 
-    // @kind(SyntaxKind.JSDocConstructorType)
     export interface JSDocConstructorType extends JSDocType {
+        kind: SyntaxKind.JSDocConstructorType;
         type: JSDocType;
     }
 
-    // @kind(SyntaxKind.JSDocThisType)
     export interface JSDocThisType extends JSDocType {
+        kind: SyntaxKind.JSDocThisType;
         type: JSDocType;
     }
 
     export interface JSDocLiteralType extends JSDocType {
+        kind: SyntaxKind.JSDocLiteralType;
         literal: LiteralTypeNode;
     }
 
     export type JSDocTypeReferencingNode = JSDocThisType | JSDocConstructorType | JSDocVariadicType | JSDocOptionalType | JSDocNullableType | JSDocNonNullableType;
 
-    // @kind(SyntaxKind.JSDocRecordMember)
     export interface JSDocRecordMember extends PropertySignature {
-        name: Identifier | LiteralExpression;
+        kind: SyntaxKind.JSDocRecordMember;
+        name: Identifier | StringLiteral | NumericLiteral;
         type?: JSDocType;
     }
 
-    // @kind(SyntaxKind.JSDocComment)
     export interface JSDoc extends Node {
+        kind: SyntaxKind.JSDocComment;
         tags: NodeArray<JSDocTag> | undefined;
         comment: string | undefined;
     }
 
-    // @kind(SyntaxKind.JSDocTag)
     export interface JSDocTag extends Node {
-        atToken: Node;
+        atToken: AtToken;
         tagName: Identifier;
         comment: string | undefined;
     }
 
-    // @kind(SyntaxKind.JSDocTemplateTag)
+    export interface JSDocUnknownTag extends JSDocTag {
+        kind: SyntaxKind.JSDocTag;
+    }
+
     export interface JSDocTemplateTag extends JSDocTag {
+        kind: SyntaxKind.JSDocTemplateTag;
         typeParameters: NodeArray<TypeParameterDeclaration>;
     }
 
-    // @kind(SyntaxKind.JSDocReturnTag)
     export interface JSDocReturnTag extends JSDocTag {
+        kind: SyntaxKind.JSDocReturnTag;
         typeExpression: JSDocTypeExpression;
     }
 
-    // @kind(SyntaxKind.JSDocTypeTag)
     export interface JSDocTypeTag extends JSDocTag {
+        kind: SyntaxKind.JSDocTypeTag;
         typeExpression: JSDocTypeExpression;
     }
 
-    // @kind(SyntaxKind.JSDocTypedefTag)
     export interface JSDocTypedefTag extends JSDocTag, Declaration {
+        kind: SyntaxKind.JSDocTypedefTag;
+        fullName?: JSDocNamespaceDeclaration | Identifier;
         name?: Identifier;
         typeExpression?: JSDocTypeExpression;
         jsDocTypeLiteral?: JSDocTypeLiteral;
     }
 
-    // @kind(SyntaxKind.JSDocPropertyTag)
     export interface JSDocPropertyTag extends JSDocTag, TypeElement {
+        kind: SyntaxKind.JSDocPropertyTag;
         name: Identifier;
         typeExpression: JSDocTypeExpression;
     }
 
-    // @kind(SyntaxKind.JSDocTypeLiteral)
     export interface JSDocTypeLiteral extends JSDocType {
+        kind: SyntaxKind.JSDocTypeLiteral;
         jsDocPropertyTags?: NodeArray<JSDocPropertyTag>;
         jsDocTypeTag?: JSDocTypeTag;
     }
 
-    // @kind(SyntaxKind.JSDocParameterTag)
     export interface JSDocParameterTag extends JSDocTag {
+        kind: SyntaxKind.JSDocParameterTag;
         /** the parameter name, if provided *before* the type (TypeScript-style) */
         preParameterName?: Identifier;
         typeExpression?: JSDocTypeExpression;
@@ -1670,8 +2044,9 @@ namespace ts {
         TrueCondition  = 1 << 5,  // Condition known to be true
         FalseCondition = 1 << 6,  // Condition known to be false
         SwitchClause   = 1 << 7,  // Switch statement clause
-        Referenced     = 1 << 8,  // Referenced as antecedent once
-        Shared         = 1 << 9,  // Referenced as antecedent more than once
+        ArrayMutation  = 1 << 8,  // Potential array mutation
+        Referenced     = 1 << 9,  // Referenced as antecedent once
+        Shared         = 1 << 10, // Referenced as antecedent more than once
         Label = BranchLabel | LoopLabel,
         Condition = TrueCondition | FalseCondition
     }
@@ -1685,7 +2060,7 @@ namespace ts {
     // function, the container property references the function (which in turn has a flowNode
     // property for the containing control flow).
     export interface FlowStart extends FlowNode {
-        container?: FunctionExpression | ArrowFunction;
+        container?: FunctionExpression | ArrowFunction | MethodDeclaration;
     }
 
     // FlowLabel represents a junction with multiple possible preceding control flows.
@@ -1714,6 +2089,13 @@ namespace ts {
         antecedent: FlowNode;
     }
 
+    // FlowArrayMutation represents a node potentially mutates an array, i.e. an
+    // operation of the form 'x.push(value)', 'x.unshift(value)' or 'x[n] = value'.
+    export interface FlowArrayMutation extends FlowNode {
+        node: CallExpression | BinaryExpression;
+        antecedent: FlowNode;
+    }
+
     export type FlowType = Type | IncompleteType;
 
     // Incomplete types occur during control flow analysis of loops. An IncompleteType
@@ -1730,10 +2112,10 @@ namespace ts {
     }
 
     // Source files are declarations when they are external modules.
-    // @kind(SyntaxKind.SourceFile)
     export interface SourceFile extends Declaration {
+        kind: SyntaxKind.SourceFile;
         statements: NodeArray<Statement>;
-        endOfFileToken: Node;
+        endOfFileToken: Token<SyntaxKind.EndOfFileToken>;
 
         fileName: string;
         /* internal */ path: Path;
@@ -1777,6 +2159,9 @@ namespace ts {
         // as well as code diagnostics).
         /* @internal */ parseDiagnostics: Diagnostic[];
 
+        // Stores additional file level diagnostics reported by the program
+        /* @internal */ additionalSyntacticDiagnostics?: Diagnostic[];
+
         // File level diagnostics reported by the binder.
         /* @internal */ bindDiagnostics: Diagnostic[];
 
@@ -1787,13 +2172,12 @@ namespace ts {
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
-        /* @internal */ resolvedModules: Map<ResolvedModule>;
+        /* @internal */ resolvedModules: Map<ResolvedModuleFull>;
         /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         /* @internal */ imports: LiteralExpression[];
         /* @internal */ moduleAugmentations: LiteralExpression[];
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
-        // The synthesized identifier for an imported external helpers module.
-        /* @internal */ externalHelpersModuleName?: Identifier;
+        /* @internal */ ambientModuleNames: string[];
     }
 
     export interface ScriptReferenceHost {
@@ -1852,7 +2236,7 @@ namespace ts {
          * used for writing the JavaScript and declaration files.  Otherwise, the writeFile parameter
          * will be invoked when writing the JavaScript and declaration files.
          */
-        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
+        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean): EmitResult;
 
         getOptionsDiagnostics(cancellationToken?: CancellationToken): Diagnostic[];
         getGlobalDiagnostics(cancellationToken?: CancellationToken): Diagnostic[];
@@ -1870,6 +2254,7 @@ namespace ts {
         // For testing purposes only.  Should not be used by any other consumers (including the
         // language service).
         /* @internal */ getDiagnosticsProducingTypeChecker(): TypeChecker;
+        /* @internal */ dropDiagnosticsProducingTypeChecker(): void;
 
         /* @internal */ getClassifiableNames(): Map<string>;
 
@@ -1880,6 +2265,7 @@ namespace ts {
 
         /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
         /* @internal */ getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective>;
+        /* @internal */ isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         // For testing purposes only.
         /* @internal */ structureIsReused?: boolean;
     }
@@ -1985,6 +2371,10 @@ namespace ts {
         isOptionalParameter(node: ParameterDeclaration): boolean;
         getAmbientModules(): Symbol[];
 
+        tryGetMemberInModuleExports(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
+
+        /* @internal */ tryFindAmbientModuleWithoutAugmentations(moduleName: string): Symbol;
+
         // Should not be called directly.  Should only be accessed through the Program instance.
         /* @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
         /* @internal */ getGlobalDiagnostics(): Diagnostic[];
@@ -2041,6 +2431,7 @@ namespace ts {
         UseFullyQualifiedType           = 0x00000080,  // Write out the fully qualified type name (eg. Module.Type, instead of Type)
         InFirstTypeArgument             = 0x00000100,  // Writing first type argument of the instantiated type
         InTypeAlias                     = 0x00000200,  // Writing type in type alias declaration
+        UseTypeAliasValue               = 0x00000400,  // Serialize the type instead of using type-alias. This is needed when we emit declaration file.
     }
 
     export const enum SymbolFormatFlags {
@@ -2065,6 +2456,12 @@ namespace ts {
         CannotBeNamed
     }
 
+    /* @internal */
+    export const enum SyntheticSymbolKind {
+        UnionOrIntersection,
+        Spread
+    }
+
     export const enum TypePredicateKind {
         This,
         Identifier
@@ -2075,13 +2472,12 @@ namespace ts {
         type: Type;
     }
 
-    // @kind (TypePredicateKind.This)
     export interface ThisTypePredicate extends TypePredicateBase {
-        _thisTypePredicateBrand: any;
+        kind: TypePredicateKind.This;
     }
 
-    // @kind (TypePredicateKind.Identifier)
     export interface IdentifierTypePredicate extends TypePredicateBase {
+        kind: TypePredicateKind.Identifier;
         parameterName: string;
         parameterIndex: number;
     }
@@ -2156,6 +2552,9 @@ namespace ts {
         getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration): SourceFile;
         getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): string[];
         getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[];
+        isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
+        writeLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, writer: SymbolWriter): void;
+        getJsxFactoryEntity(): EntityName;
     }
 
     export const enum SymbolFlags {
@@ -2171,7 +2570,7 @@ namespace ts {
         RegularEnum             = 0x00000100,  // Enum
         ValueModule             = 0x00000200,  // Instantiated module
         NamespaceModule         = 0x00000400,  // Uninstantiated module
-        TypeLiteral             = 0x00000800,  // Type Literal
+        TypeLiteral             = 0x00000800,  // Type Literal or mapped type
         ObjectLiteral           = 0x00001000,  // Object Literal
         Method                  = 0x00002000,  // Method
         Constructor             = 0x00004000,  // Constructor
@@ -2275,8 +2674,11 @@ namespace ts {
         instantiations?: Map<Type>;         // Instantiations of generic type alias (undefined if non-generic)
         mapper?: TypeMapper;                // Type mapper for instantiation alias
         referenced?: boolean;               // True if alias symbol has been referenced as a value
-        containingType?: UnionOrIntersectionType; // Containing union or intersection type for synthetic property
-        hasCommonType?: boolean;            // True if constituents of synthetic property all have same type
+        containingType?: UnionOrIntersectionType;  // Containing union or intersection type for synthetic property
+        leftSpread?: Symbol;                // Left source for synthetic spread property
+        rightSpread?: Symbol;               // Right source for synthetic spread property
+        hasNonUniformType?: boolean;        // True if constituents have non-uniform types
+        isPartial?: boolean;                // True if syntheric property of union type occurs in some but not all constituents
         isDiscriminantProperty?: boolean;   // True if discriminant synthetic property
         resolvedExports?: SymbolTable;      // Resolved exports of module
         exportsChecked?: boolean;           // True if exports of external module have been checked
@@ -2335,6 +2737,7 @@ namespace ts {
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
         resolvedSymbol?: Symbol;          // Cached name resolution result
         resolvedIndexInfo?: IndexInfo;    // Cached indexing info resolution result
+        maybeTypePredicate?: boolean;     // Cached check whether call expression might reference a type predicate
         enumMemberValue?: number;         // Constant value of enum member
         isVisible?: boolean;              // Is this node visible
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
@@ -2361,30 +2764,24 @@ namespace ts {
         Null                    = 1 << 12,
         Never                   = 1 << 13,  // Never type
         TypeParameter           = 1 << 14,  // Type parameter
-        Class                   = 1 << 15,  // Class
-        Interface               = 1 << 16,  // Interface
-        Reference               = 1 << 17,  // Generic type reference
-        Tuple                   = 1 << 18,  // Synthesized generic tuple type
-        Union                   = 1 << 19,  // Union (T | U)
-        Intersection            = 1 << 20,  // Intersection (T & U)
-        Anonymous               = 1 << 21,  // Anonymous
-        Instantiated            = 1 << 22,  // Instantiated anonymous type
+        Object                  = 1 << 15,  // Object type
+        Union                   = 1 << 16,  // Union (T | U)
+        Intersection            = 1 << 17,  // Intersection (T & U)
+        Index                   = 1 << 18,  // keyof T
+        IndexedAccess           = 1 << 19,  // T[K]
         /* @internal */
-        ObjectLiteral           = 1 << 23,  // Originates in an object literal
+        FreshLiteral            = 1 << 20,  // Fresh literal type
         /* @internal */
-        FreshObjectLiteral      = 1 << 24,  // Fresh object literal type
+        ContainsWideningType    = 1 << 21,  // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsWideningType    = 1 << 25,  // Type is or contains undefined or null widening type
+        ContainsObjectLiteral   = 1 << 22,  // Type is or contains object literal type
         /* @internal */
-        ContainsObjectLiteral   = 1 << 26,  // Type is or contains object literal type
-        /* @internal */
-        ContainsAnyFunctionType = 1 << 27,  // Type is or contains object literal type
-        ThisType                = 1 << 28,  // This type
-        ObjectLiteralPatternWithComputedProperties = 1 << 29,  // Object literal type implied by binding pattern has computed properties
+        ContainsAnyFunctionType = 1 << 23,  // Type is or contains object literal type
 
         /* @internal */
         Nullable = Undefined | Null,
         Literal = StringLiteral | NumberLiteral | BooleanLiteral | EnumLiteral,
+        StringOrNumberLiteral = StringLiteral | NumberLiteral,
         /* @internal */
         DefinitelyFalsy = StringLiteral | NumberLiteral | BooleanLiteral | Void | Undefined | Null,
         PossiblyFalsy = DefinitelyFalsy | String | Number | Boolean,
@@ -2396,15 +2793,14 @@ namespace ts {
         NumberLike = Number | NumberLiteral | Enum | EnumLiteral,
         BooleanLike = Boolean | BooleanLiteral,
         EnumLike = Enum | EnumLiteral,
-        ObjectType = Class | Interface | Reference | Tuple | Anonymous,
         UnionOrIntersection = Union | Intersection,
-        StructuredType = ObjectType | Union | Intersection,
-        StructuredOrTypeParameter = StructuredType | TypeParameter,
+        StructuredType = Object | Union | Intersection,
+        StructuredOrTypeParameter = StructuredType | TypeParameter | Index,
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
-        Narrowable = Any | StructuredType | TypeParameter | StringLike | NumberLike | BooleanLike | ESSymbol,
-        NotUnionOrUnit = Any | String | Number | ESSymbol | ObjectType,
+        Narrowable = Any | StructuredType | TypeParameter | Index | IndexedAccess | StringLike | NumberLike | BooleanLike | ESSymbol,
+        NotUnionOrUnit = Any | ESSymbol | Object,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
         /* @internal */
@@ -2426,12 +2822,15 @@ namespace ts {
     /* @internal */
     // Intrinsic types (TypeFlags.Intrinsic)
     export interface IntrinsicType extends Type {
-        intrinsicName: string;  // Name of intrinsic type
+        intrinsicName: string;        // Name of intrinsic type
     }
 
     // String literal types (TypeFlags.StringLiteral)
+    // Numeric literal types (TypeFlags.NumberLiteral)
     export interface LiteralType extends Type {
-        text: string;  // Text of string literal
+        text: string;               // Text of literal
+        freshType?: LiteralType;    // Fresh version of type
+        regularType?: LiteralType;  // Regular version of type
     }
 
     // Enum types (TypeFlags.Enum)
@@ -2441,11 +2840,27 @@ namespace ts {
 
     // Enum types (TypeFlags.EnumLiteral)
     export interface EnumLiteralType extends LiteralType {
-        baseType: EnumType & UnionType;
+        baseType: EnumType & UnionType;  // Base enum type
+    }
+
+    export const enum ObjectFlags {
+        Class            = 1 << 0,  // Class
+        Interface        = 1 << 1,  // Interface
+        Reference        = 1 << 2,  // Generic type reference
+        Tuple            = 1 << 3,  // Synthesized generic tuple type
+        Anonymous        = 1 << 4,  // Anonymous
+        Mapped           = 1 << 5,  // Mapped
+        Instantiated     = 1 << 6,  // Instantiated anonymous or mapped type
+        ObjectLiteral    = 1 << 7,  // Originates in an object literal
+        EvolvingArray    = 1 << 8,  // Evolving array type
+        ObjectLiteralPatternWithComputedProperties = 1 << 9,  // Object literal pattern with computed properties
+        ClassOrInterface = Class | Interface
     }
 
     // Object types (TypeFlags.ObjectType)
-    export interface ObjectType extends Type { }
+    export interface ObjectType extends Type {
+        objectFlags: ObjectFlags;
+    }
 
     // Class and interface types (TypeFlags.Class and TypeFlags.Interface)
     export interface InterfaceType extends ObjectType {
@@ -2498,11 +2913,27 @@ namespace ts {
 
     export interface IntersectionType extends UnionOrIntersectionType { }
 
+    export type StructuredType = ObjectType | UnionType | IntersectionType;
+
     /* @internal */
     // An instantiated anonymous type has a target and a mapper
     export interface AnonymousType extends ObjectType {
         target?: AnonymousType;  // Instantiation target
         mapper?: TypeMapper;     // Instantiation mapper
+    }
+
+    /* @internal */
+    export interface MappedType extends ObjectType {
+        declaration: MappedTypeNode;
+        typeParameter?: TypeParameter;
+        constraintType?: Type;
+        templateType?: Type;
+        mapper?: TypeMapper;  // Instantiation mapper
+    }
+
+    export interface EvolvingArrayType extends ObjectType {
+        elementType: Type;      // Element expressions of evolving array type
+        finalArrayType?: Type;  // Final array type of evolving array type
     }
 
     /* @internal */
@@ -2540,6 +2971,19 @@ namespace ts {
         mapper?: TypeMapper;     // Instantiation mapper
         /* @internal */
         resolvedApparentType: Type;
+        /* @internal */
+        resolvedIndexType: IndexType;
+        /* @internal */
+        isThisType?: boolean;
+    }
+
+    export interface IndexType extends Type {
+        type: TypeParameter;
+    }
+
+    export interface IndexedAccessType extends Type {
+        objectType: Type;
+        indexType: Type;
     }
 
     export const enum SignatureKind {
@@ -2573,6 +3017,8 @@ namespace ts {
         isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
         /* @internal */
         typePredicate?: TypePredicate;
+        /* @internal */
+        instantiations?: Map<Signature>;    // Generic signature instantiation cache
     }
 
     export const enum IndexKind {
@@ -2590,7 +3036,6 @@ namespace ts {
     export interface TypeMapper {
         (t: TypeParameter): Type;
         mappedTypes?: Type[];       // Types mapped by this mapper
-        targetTypes?: Type[];       // Types substituted for mapped types
         instantiations?: Type[];    // Cache of instantiations created using this type mapper.
         context?: InferenceContext; // The inference context this mapper was created from.
                                     // Only inference mappers have this set (in createInferenceMapper).
@@ -2670,11 +3115,7 @@ namespace ts {
         NodeJs   = 2
     }
 
-    export type RootPaths = string[];
-    export type PathSubstitutions = MapLike<string[]>;
-    export type TsConfigOnlyOptions = RootPaths | PathSubstitutions;
-
-    export type CompilerOptionsValue = string | number | boolean | (string | number)[] | TsConfigOnlyOptions;
+    export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]>;
 
     export interface CompilerOptions {
         allowJs?: boolean;
@@ -2682,6 +3123,7 @@ namespace ts {
         allowSyntheticDefaultImports?: boolean;
         allowUnreachableCode?: boolean;
         allowUnusedLabels?: boolean;
+        alwaysStrict?: boolean;
         baseUrl?: string;
         charset?: string;
         /* @internal */ configFilePath?: string;
@@ -2711,6 +3153,7 @@ namespace ts {
         moduleResolution?: ModuleResolutionKind;
         newLine?: NewLineKind;
         noEmit?: boolean;
+        /*@internal*/noEmitForJsFiles?: boolean;
         noEmitHelpers?: boolean;
         noEmitOnError?: boolean;
         noErrorTruncation?: boolean;
@@ -2726,14 +3169,15 @@ namespace ts {
         out?: string;
         outDir?: string;
         outFile?: string;
-        paths?: PathSubstitutions;
+        paths?: MapLike<string[]>;
         preserveConstEnums?: boolean;
         project?: string;
         /* @internal */ pretty?: DiagnosticStyle;
         reactNamespace?: string;
+        jsxFactory?: string;
         removeComments?: boolean;
         rootDir?: string;
-        rootDirs?: RootPaths;
+        rootDirs?: string[];
         skipLibCheck?: boolean;
         skipDefaultLibCheck?: boolean;
         sourceMap?: boolean;
@@ -2746,7 +3190,7 @@ namespace ts {
         target?: ScriptTarget;
         traceResolution?: boolean;
         types?: string[];
-        /** Paths used to used to compute primary types search locations */
+        /** Paths used to compute primary types search locations */
         typeRoots?: string[];
         /*@internal*/ version?: boolean;
         /*@internal*/ watch?: boolean;
@@ -2768,6 +3212,7 @@ namespace ts {
         packageNameToTypingLocation: Map<string>;       // The map of package names to their cached typing locations
         typingOptions: TypingOptions;                   // Used to customize the typing inference process
         compilerOptions: CompilerOptions;               // Used as a source for typing inference
+        unresolvedImports: ReadonlyArray<string>;       // List of unresolved module ids from imports
     }
 
     export enum ModuleKind {
@@ -2776,8 +3221,7 @@ namespace ts {
         AMD = 2,
         UMD = 3,
         System = 4,
-        ES6 = 5,
-        ES2015 = ES6,
+        ES2015 = 5,
     }
 
     export const enum JsxEmit {
@@ -2810,9 +3254,11 @@ namespace ts {
     export const enum ScriptTarget {
         ES3 = 0,
         ES5 = 1,
-        ES6 = 2,
-        ES2015 = ES6,
-        Latest = ES6,
+        ES2015 = 2,
+        ES2016 = 3,
+        ES2017 = 4,
+        ESNext = 5,
+        Latest = ESNext,
     }
 
     export const enum LanguageVariant {
@@ -2826,6 +3272,7 @@ namespace ts {
         Pretty,
     }
 
+    /** Either a parsed command line or a parsed tsconfig.json */
     export interface ParsedCommandLine {
         options: CompilerOptions;
         typingOptions?: TypingOptions;
@@ -2833,6 +3280,7 @@ namespace ts {
         raw?: any;
         errors: Diagnostic[];
         wildcardDirectories?: MapLike<WatchDirectoryFlags>;
+        compileOnSave?: boolean;
     }
 
     export const enum WatchDirectoryFlags {
@@ -3030,10 +3478,18 @@ namespace ts {
         getDirectories?(path: string): string[];
     }
 
+    /**
+     * Represents the result of module resolution.
+     * Module resolution will pick up tsx/jsx/js files even if '--jsx' and '--allowJs' are turned off.
+     * The Program will then filter results based on these flags.
+     *
+     * Prefer to return a `ResolvedModuleFull` so that the file type does not have to be inferred.
+     */
     export interface ResolvedModule {
+        /** Path of the file the module was resolved to. */
         resolvedFileName: string;
-        /*
-         * Denotes if 'resolvedFileName' is isExternalLibraryImport and thus should be proper external module:
+        /**
+         * Denotes if 'resolvedFileName' is isExternalLibraryImport and thus should be a proper external module:
          * - be a .d.ts file
          * - use top level imports\exports
          * - don't use tripleslash references
@@ -3041,8 +3497,29 @@ namespace ts {
         isExternalLibraryImport?: boolean;
     }
 
+    /**
+     * ResolvedModule with an explicitly provided `extension` property.
+     * Prefer this over `ResolvedModule`.
+     */
+    export interface ResolvedModuleFull extends ResolvedModule {
+        /**
+         * Extension of resolvedFileName. This must match what's at the end of resolvedFileName.
+         * This is optional for backwards-compatibility, but will be added if not provided.
+         */
+        extension: Extension;
+    }
+
+    export enum Extension {
+        Ts,
+        Tsx,
+        Dts,
+        Js,
+        Jsx,
+        LastTypeScriptExtension = Dts
+    }
+
     export interface ResolvedModuleWithFailedLookupLocations {
-        resolvedModule: ResolvedModule;
+        resolvedModule: ResolvedModuleFull | undefined;
         failedLookupLocations: string[];
     }
 
@@ -3094,105 +3571,247 @@ namespace ts {
         // - Flags used to indicate that a node or subtree contains syntax that requires transformation.
         TypeScript = 1 << 0,
         ContainsTypeScript = 1 << 1,
-        Jsx = 1 << 2,
-        ContainsJsx = 1 << 3,
-        ES7 = 1 << 4,
-        ContainsES7 = 1 << 5,
-        ES6 = 1 << 6,
-        ContainsES6 = 1 << 7,
-        DestructuringAssignment = 1 << 8,
-        Generator = 1 << 9,
-        ContainsGenerator = 1 << 10,
+        ContainsJsx = 1 << 2,
+        ContainsESNext = 1 << 3,
+        ContainsES2017 = 1 << 4,
+        ContainsES2016 = 1 << 5,
+        ES2015 = 1 << 6,
+        ContainsES2015 = 1 << 7,
+        Generator = 1 << 8,
+        ContainsGenerator = 1 << 9,
+        DestructuringAssignment = 1 << 10,
+        ContainsDestructuringAssignment = 1 << 11,
 
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
-        ContainsDecorators = 1 << 11,
-        ContainsPropertyInitializer = 1 << 12,
-        ContainsLexicalThis = 1 << 13,
-        ContainsCapturedLexicalThis = 1 << 14,
-        ContainsLexicalThisInComputedPropertyName = 1 << 15,
-        ContainsDefaultValueAssignments = 1 << 16,
-        ContainsParameterPropertyAssignments = 1 << 17,
-        ContainsSpreadElementExpression = 1 << 18,
-        ContainsComputedPropertyName = 1 << 19,
-        ContainsBlockScopedBinding = 1 << 20,
-        ContainsBindingPattern = 1 << 21,
-        ContainsYield = 1 << 22,
-        ContainsHoistedDeclarationOrCompletion = 1 << 23,
+        ContainsDecorators = 1 << 12,
+        ContainsPropertyInitializer = 1 << 13,
+        ContainsLexicalThis = 1 << 14,
+        ContainsCapturedLexicalThis = 1 << 15,
+        ContainsLexicalThisInComputedPropertyName = 1 << 16,
+        ContainsDefaultValueAssignments = 1 << 17,
+        ContainsParameterPropertyAssignments = 1 << 18,
+        ContainsSpread = 1 << 19,
+        ContainsObjectSpread = 1 << 20,
+        ContainsRest = ContainsSpread,
+        ContainsObjectRest = ContainsObjectSpread,
+        ContainsComputedPropertyName = 1 << 21,
+        ContainsBlockScopedBinding = 1 << 22,
+        ContainsBindingPattern = 1 << 23,
+        ContainsYield = 1 << 24,
+        ContainsHoistedDeclarationOrCompletion = 1 << 25,
 
         HasComputedFlags = 1 << 29, // Transform flags have been computed.
 
         // Assertions
         // - Bitmasks that are used to assert facts about the syntax of a node and its subtree.
         AssertTypeScript = TypeScript | ContainsTypeScript,
-        AssertJsx = Jsx | ContainsJsx,
-        AssertES7 = ES7 | ContainsES7,
-        AssertES6 = ES6 | ContainsES6,
+        AssertJsx = ContainsJsx,
+        AssertESNext = ContainsESNext,
+        AssertES2017 = ContainsES2017,
+        AssertES2016 = ContainsES2016,
+        AssertES2015 = ES2015 | ContainsES2015,
         AssertGenerator = Generator | ContainsGenerator,
+        AssertDestructuringAssignment = DestructuringAssignment | ContainsDestructuringAssignment,
 
         // Scope Exclusions
         // - Bitmasks that exclude flags from propagating out of a specific context
         //   into the subtree flags of their container.
-        NodeExcludes = TypeScript | Jsx | ES7 | ES6 | DestructuringAssignment | Generator | HasComputedFlags,
-        ArrowFunctionExcludes = NodeExcludes | ContainsDecorators | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion,
-        FunctionExcludes = NodeExcludes | ContainsDecorators | ContainsDefaultValueAssignments | ContainsCapturedLexicalThis | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion,
-        ConstructorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion,
-        MethodOrAccessorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion,
+        NodeExcludes = TypeScript | ES2015 | DestructuringAssignment | Generator | HasComputedFlags,
+        ArrowFunctionExcludes = NodeExcludes | ContainsDecorators | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRest,
+        FunctionExcludes = NodeExcludes | ContainsDecorators | ContainsDefaultValueAssignments | ContainsCapturedLexicalThis | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRest,
+        ConstructorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRest,
+        MethodOrAccessorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRest,
         ClassExcludes = NodeExcludes | ContainsDecorators | ContainsPropertyInitializer | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsComputedPropertyName | ContainsParameterPropertyAssignments | ContainsLexicalThisInComputedPropertyName,
         ModuleExcludes = NodeExcludes | ContainsDecorators | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsHoistedDeclarationOrCompletion,
         TypeExcludes = ~ContainsTypeScript,
-        ObjectLiteralExcludes = NodeExcludes | ContainsDecorators | ContainsComputedPropertyName | ContainsLexicalThisInComputedPropertyName,
-        ArrayLiteralOrCallOrNewExcludes = NodeExcludes | ContainsSpreadElementExpression,
-        VariableDeclarationListExcludes = NodeExcludes | ContainsBindingPattern,
-        ParameterExcludes = NodeExcludes | ContainsBindingPattern,
+        ObjectLiteralExcludes = NodeExcludes | ContainsDecorators | ContainsComputedPropertyName | ContainsLexicalThisInComputedPropertyName | ContainsObjectSpread,
+        ArrayLiteralOrCallOrNewExcludes = NodeExcludes | ContainsSpread,
+        VariableDeclarationListExcludes = NodeExcludes | ContainsBindingPattern | ContainsObjectRest,
+        ParameterExcludes = NodeExcludes,
+        CatchClauseExcludes = NodeExcludes | ContainsObjectRest,
+        BindingPatternExcludes = NodeExcludes | ContainsRest,
 
         // Masks
         // - Additional bitmasks
         TypeScriptClassSyntaxMask = ContainsParameterPropertyAssignments | ContainsPropertyInitializer | ContainsDecorators,
-        ES6FunctionSyntaxMask = ContainsCapturedLexicalThis | ContainsDefaultValueAssignments,
+        ES2015FunctionSyntaxMask = ContainsCapturedLexicalThis | ContainsDefaultValueAssignments,
     }
 
     /* @internal */
-    export const enum NodeEmitFlags {
-        EmitEmitHelpers = 1 << 0,                // Any emit helpers should be written to this node.
-        EmitExportStar = 1 << 1,                 // The export * helper should be written to this node.
-        EmitSuperHelper = 1 << 2,                // Emit the basic _super helper for async methods.
-        EmitAdvancedSuperHelper = 1 << 3,        // Emit the advanced _super helper for async methods.
-        UMDDefine = 1 << 4,                      // This node should be replaced with the UMD define helper.
-        SingleLine = 1 << 5,                     // The contents of this node should be emitted on a single line.
-        AdviseOnEmitNode = 1 << 6,               // The printer should invoke the onEmitNode callback when printing this node.
-        NoSubstitution = 1 << 7,                 // Disables further substitution of an expression.
-        CapturesThis = 1 << 8,                   // The function captures a lexical `this`
-        NoLeadingSourceMap = 1 << 9,             // Do not emit a leading source map location for this node.
-        NoTrailingSourceMap = 1 << 10,           // Do not emit a trailing source map location for this node.
+    export interface EmitNode {
+        annotatedNodes?: Node[];                // Tracks Parse-tree nodes with EmitNodes for eventual cleanup.
+        flags?: EmitFlags;                      // Flags that customize emit
+        commentRange?: TextRange;               // The text range to use when emitting leading or trailing comments
+        sourceMapRange?: TextRange;             // The text range to use when emitting leading or trailing source mappings
+        tokenSourceMapRanges?: Map<TextRange>;  // The text range to use when emitting source mappings for tokens
+        constantValue?: number;                 // The constant value of an expression
+        externalHelpersModuleName?: Identifier; // The local name for an imported helpers module
+        helpers?: EmitHelper[];                 // Emit helpers for the node
+    }
+
+    /* @internal */
+    export const enum EmitFlags {
+        SingleLine = 1 << 0,                     // The contents of this node should be emitted on a single line.
+        AdviseOnEmitNode = 1 << 1,               // The printer should invoke the onEmitNode callback when printing this node.
+        NoSubstitution = 1 << 2,                 // Disables further substitution of an expression.
+        CapturesThis = 1 << 3,                   // The function captures a lexical `this`
+        NoLeadingSourceMap = 1 << 4,             // Do not emit a leading source map location for this node.
+        NoTrailingSourceMap = 1 << 5,            // Do not emit a trailing source map location for this node.
         NoSourceMap = NoLeadingSourceMap | NoTrailingSourceMap, // Do not emit a source map location for this node.
-        NoNestedSourceMaps = 1 << 11,            // Do not emit source map locations for children of this node.
-        NoTokenLeadingSourceMaps = 1 << 12,      // Do not emit leading source map location for token nodes.
-        NoTokenTrailingSourceMaps = 1 << 13,     // Do not emit trailing source map location for token nodes.
+        NoNestedSourceMaps = 1 << 6,             // Do not emit source map locations for children of this node.
+        NoTokenLeadingSourceMaps = 1 << 7,       // Do not emit leading source map location for token nodes.
+        NoTokenTrailingSourceMaps = 1 << 8,      // Do not emit trailing source map location for token nodes.
         NoTokenSourceMaps = NoTokenLeadingSourceMaps | NoTokenTrailingSourceMaps, // Do not emit source map locations for tokens of this node.
-        NoLeadingComments = 1 << 14,             // Do not emit leading comments for this node.
-        NoTrailingComments = 1 << 15,            // Do not emit trailing comments for this node.
+        NoLeadingComments = 1 << 9,              // Do not emit leading comments for this node.
+        NoTrailingComments = 1 << 10,            // Do not emit trailing comments for this node.
         NoComments = NoLeadingComments | NoTrailingComments, // Do not emit comments for this node.
-        NoNestedComments = 1 << 16,
-        ExportName = 1 << 17,                    // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
-        LocalName = 1 << 18,                     // Ensure an export prefix is not added for an identifier that points to an exported declaration.
-        Indented = 1 << 19,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
-        NoIndentation = 1 << 20,                 // Do not indent the node.
-        AsyncFunctionBody = 1 << 21,
-        ReuseTempVariableScope = 1 << 22,        // Reuse the existing temp variable scope during emit.
-        CustomPrologue = 1 << 23,                // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
+        NoNestedComments = 1 << 11,
+        HelperName = 1 << 12,
+        ExportName = 1 << 13,                    // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
+        LocalName = 1 << 14,                     // Ensure an export prefix is not added for an identifier that points to an exported declaration.
+        Indented = 1 << 15,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
+        NoIndentation = 1 << 16,                 // Do not indent the node.
+        AsyncFunctionBody = 1 << 17,
+        ReuseTempVariableScope = 1 << 18,        // Reuse the existing temp variable scope during emit.
+        CustomPrologue = 1 << 19,                // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
+        NoHoisting = 1 << 20,                    // Do not hoist this declaration in --module system
+        HasEndOfDeclarationMarker = 1 << 21,     // Declaration has an associated NotEmittedStatement to mark the end of the declaration
     }
 
-    /** Additional context provided to `visitEachChild` */
     /* @internal */
-    export interface LexicalEnvironment {
+    export interface EmitHelper {
+        readonly name: string;      // A unique name for this helper.
+        readonly scoped: boolean;   // Indicates whether ther helper MUST be emitted in the current scope.
+        readonly text: string;      // ES3-compatible raw script text.
+        readonly priority?: number; // Helpers with a higher priority are emitted earlier than other helpers on the node.
+    }
+
+    /* @internal */
+    export const enum EmitContext {
+        SourceFile,         // Emitting a SourceFile
+        Expression,         // Emitting an Expression
+        IdentifierName,     // Emitting an IdentifierName
+        Unspecified,        // Emitting an otherwise unspecified node
+    }
+
+    /* @internal */
+    export interface EmitHost extends ScriptReferenceHost {
+        getSourceFiles(): SourceFile[];
+
+        /* @internal */
+        isSourceFileFromExternalLibrary(file: SourceFile): boolean;
+
+        getCommonSourceDirectory(): string;
+        getCanonicalFileName(fileName: string): string;
+        getNewLine(): string;
+
+        isEmitBlocked(emitFileName: string): boolean;
+
+        writeFile: WriteFileCallback;
+    }
+
+    /* @internal */
+    export interface TransformationContext {
+        getCompilerOptions(): CompilerOptions;
+        getEmitResolver(): EmitResolver;
+        getEmitHost(): EmitHost;
+
         /** Starts a new lexical environment. */
         startLexicalEnvironment(): void;
 
+        /** Suspends the current lexical environment, usually after visiting a parameter list. */
+        suspendLexicalEnvironment(): void;
+
+        /** Resumes a suspended lexical environment, usually before visiting a function body. */
+        resumeLexicalEnvironment(): void;
+
         /** Ends a lexical environment, returning any declarations. */
         endLexicalEnvironment(): Statement[];
+
+        /**
+         * Hoists a function declaration to the containing scope.
+         */
+        hoistFunctionDeclaration(node: FunctionDeclaration): void;
+
+        /**
+         * Hoists a variable declaration to the containing scope.
+         */
+        hoistVariableDeclaration(node: Identifier): void;
+
+        /**
+         * Records a request for a non-scoped emit helper in the current context.
+         */
+        requestEmitHelper(helper: EmitHelper): void;
+
+        /**
+         * Gets and resets the requested non-scoped emit helpers.
+         */
+        readEmitHelpers(): EmitHelper[] | undefined;
+
+        /**
+         * Enables expression substitutions in the pretty printer for the provided SyntaxKind.
+         */
+        enableSubstitution(kind: SyntaxKind): void;
+
+        /**
+         * Determines whether expression substitutions are enabled for the provided node.
+         */
+        isSubstitutionEnabled(node: Node): boolean;
+
+        /**
+         * Hook used by transformers to substitute expressions just before they
+         * are emitted by the pretty printer.
+         */
+        onSubstituteNode?: (emitContext: EmitContext, node: Node) => Node;
+
+        /**
+         * Enables before/after emit notifications in the pretty printer for the provided
+         * SyntaxKind.
+         */
+        enableEmitNotification(kind: SyntaxKind): void;
+
+        /**
+         * Determines whether before/after emit notifications should be raised in the pretty
+         * printer when it emits a node.
+         */
+        isEmitNotificationEnabled(node: Node): boolean;
+
+        /**
+         * Hook used to allow transformers to capture state before or after
+         * the printer emits a node.
+         */
+        onEmitNode?: (emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void) => void;
     }
 
+    /* @internal */
+    export interface TransformationResult {
+        /**
+         * Gets the transformed source files.
+         */
+        transformed: SourceFile[];
+
+        /**
+         * Emits the substitute for a node, if one is available; otherwise, emits the node.
+         *
+         * @param emitContext The current emit context.
+         * @param node The node to substitute.
+         * @param emitCallback A callback used to emit the node or its substitute.
+         */
+        emitNodeWithSubstitution(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void;
+
+        /**
+         * Emits a node with possible notification.
+         *
+         * @param emitContext The current emit context.
+         * @param node The node to emit.
+         * @param emitCallback A callback used to emit the node.
+         */
+        emitNodeWithNotification(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void;
+    }
+
+    /* @internal */
+    export type Transformer = (context: TransformationContext) => (node: SourceFile) => SourceFile;
 
     export interface TextSpan {
         start: number;

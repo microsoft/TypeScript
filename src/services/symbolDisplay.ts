@@ -114,12 +114,12 @@ namespace ts.SymbolDisplay {
                 }
 
                 // try get the call/construct signature from the type if it matches
-                let callExpression: CallExpression;
+                let callExpression: CallExpression | NewExpression;
                 if (location.kind === SyntaxKind.CallExpression || location.kind === SyntaxKind.NewExpression) {
-                    callExpression = <CallExpression>location;
+                    callExpression = <CallExpression | NewExpression>location;
                 }
                 else if (isCallExpressionTarget(location) || isNewExpressionTarget(location)) {
-                    callExpression = <CallExpression>location.parent;
+                    callExpression = <CallExpression | NewExpression>location.parent;
                 }
 
                 if (callExpression) {
@@ -173,7 +173,7 @@ namespace ts.SymbolDisplay {
                                     displayParts.push(keywordPart(SyntaxKind.NewKeyword));
                                     displayParts.push(spacePart());
                                 }
-                                if (!(type.flags & TypeFlags.Anonymous) && type.symbol) {
+                                if (!(type.flags & TypeFlags.Object && (<ObjectType>type).objectFlags & ObjectFlags.Anonymous) && type.symbol) {
                                     addRange(displayParts, symbolToDisplayParts(typeChecker, type.symbol, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments));
                                 }
                                 addSignatureDisplayParts(signature, allSignatures, TypeFormatFlags.WriteArrowStyleSignature);
@@ -272,11 +272,9 @@ namespace ts.SymbolDisplay {
             displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
             displayParts.push(spacePart());
             addFullSymbolName(symbol);
-            displayParts.push(spacePart());
-            displayParts.push(keywordPart(SyntaxKind.InKeyword));
-            displayParts.push(spacePart());
             if (symbol.parent) {
                 // Class/Interface type parameter
+                addInPrefix();
                 addFullSymbolName(symbol.parent, enclosingDeclaration);
                 writeTypeParametersOfSymbol(symbol.parent, enclosingDeclaration);
             }
@@ -288,6 +286,7 @@ namespace ts.SymbolDisplay {
 
                 if (declaration) {
                     if (isFunctionLikeKind(declaration.kind)) {
+                        addInPrefix();
                         const signature = typeChecker.getSignatureFromDeclaration(<SignatureDeclaration>declaration);
                         if (declaration.kind === SyntaxKind.ConstructSignature) {
                             displayParts.push(keywordPart(SyntaxKind.NewKeyword));
@@ -298,10 +297,11 @@ namespace ts.SymbolDisplay {
                         }
                         addRange(displayParts, signatureToDisplayParts(typeChecker, signature, sourceFile, TypeFormatFlags.WriteTypeArgumentsOfSignature));
                     }
-                    else {
+                    else if (declaration.kind === SyntaxKind.TypeAliasDeclaration) {
                         // Type alias type parameter
                         // For example
                         //      type list<T> = T[];  // Both T will go through same code path
+                        addInPrefix();
                         displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
                         displayParts.push(spacePart());
                         addFullSymbolName(declaration.symbol);
@@ -437,6 +437,12 @@ namespace ts.SymbolDisplay {
             if (displayParts.length) {
                 displayParts.push(lineBreakPart());
             }
+        }
+
+        function addInPrefix() {
+            displayParts.push(spacePart());
+            displayParts.push(keywordPart(SyntaxKind.InKeyword));
+            displayParts.push(spacePart());
         }
 
         function addFullSymbolName(symbol: Symbol, enclosingDeclaration?: Node) {

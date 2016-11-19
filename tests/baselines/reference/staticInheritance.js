@@ -27,9 +27,10 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        _super.apply(this, arguments);
-        this.p1 = doThing(A); // OK
-        this.p2 = doThing(B); // OK
+        var _this = _super.apply(this, arguments) || this;
+        _this.p1 = doThing(A); // OK
+        _this.p2 = doThing(B); // OK
+        return _this;
     }
     return B;
 }(A));

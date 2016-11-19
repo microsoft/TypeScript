@@ -132,7 +132,6 @@ var Sample;
         })(Thing = Actions.Thing || (Actions.Thing = {}));
     })(Actions = Sample.Actions || (Sample.Actions = {}));
 })(Sample || (Sample = {}));
-var Sample;
 (function (Sample) {
     var Thing;
     (function (Thing) {
@@ -165,7 +164,6 @@ var AbstractMode = (function () {
     AbstractMode.prototype.getInitialState = function () { return null; };
     return AbstractMode;
 }());
-var Sample;
 (function (Sample) {
     var Thing;
     (function (Thing) {
@@ -190,7 +188,7 @@ var Sample;
                 var Mode = (function (_super) {
                     __extends(Mode, _super);
                     function Mode() {
-                        _super.apply(this, arguments);
+                        return _super.apply(this, arguments) || this;
                     }
                     // scenario 2
                     Mode.prototype.getInitialState = function () {

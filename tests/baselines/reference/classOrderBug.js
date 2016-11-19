@@ -35,7 +35,7 @@ var baz = (function () {
 var foo = (function (_super) {
     __extends(foo, _super);
     function foo() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return foo;
 }(baz));

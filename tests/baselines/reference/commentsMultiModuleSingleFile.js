@@ -44,7 +44,6 @@ var multiM;
     multiM.d = d;
 })(multiM || (multiM = {}));
 /// this is multi module 2
-var multiM;
 (function (multiM) {
     /** class c comment*/
     var c = (function () {

@@ -163,7 +163,7 @@
         "category": "Error",
         "code": 1054
     },
-    "Type '{0}' is not a valid async function return type.": {
+    "Type '{0}' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.": {
         "category": "Error",
         "code": 1055
     },
@@ -603,10 +603,6 @@
         "category": "Error",
         "code": 1194
     },
-    "Catch clause variable name must be an identifier.": {
-        "category": "Error",
-        "code": 1195
-    },
     "Catch clause variable cannot have a type annotation.": {
         "category": "Error",
         "code": 1196
@@ -818,6 +814,10 @@
     "'{0}' tag cannot be used independently as a top level JSDoc tag.": {
         "category": "Error",
         "code": 1253
+    },
+    "A 'const' initializer in an ambient context must be a string or numeric literal.": {
+        "category": "Error",
+        "code": 1254
     },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
@@ -1071,7 +1071,7 @@
         "category": "Error",
         "code": 2356
     },
-    "The operand of an increment or decrement operator must be a variable, property or indexer.": {
+    "The operand of an increment or decrement operator must be a variable or a property access.": {
         "category": "Error",
         "code": 2357
     },
@@ -1099,7 +1099,7 @@
         "category": "Error",
         "code": 2363
     },
-    "Invalid left-hand side of assignment expression.": {
+    "The left-hand side of an assignment expression must be a variable or a property access.": {
         "category": "Error",
         "code": 2364
     },
@@ -1259,7 +1259,7 @@
         "category": "Error",
         "code": 2405
     },
-    "Invalid left-hand side in 'for...in' statement.": {
+    "The left-hand side of a 'for...in' statement must be a variable or a property access.": {
         "category": "Error",
         "code": 2406
     },
@@ -1275,7 +1275,7 @@
         "category": "Error",
         "code": 2409
     },
-    "All symbols within a 'with' block will be resolved to 'any'.": {
+    "The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.": {
         "category": "Error",
         "code": 2410
     },
@@ -1411,14 +1411,6 @@
         "category": "Error",
         "code": 2448
     },
-    "The operand of an increment or decrement operator cannot be a constant or a read-only property.": {
-        "category": "Error",
-        "code": 2449
-    },
-    "Left-hand side of assignment expression cannot be a constant or a read-only property.": {
-        "category": "Error",
-        "code": 2450
-    },
     "Cannot redeclare block-scoped variable '{0}'.": {
         "category": "Error",
         "code": 2451
@@ -1463,7 +1455,7 @@
         "category": "Error",
         "code": 2461
     },
-    "A rest element must be last in an array destructuring pattern": {
+    "A rest element must be last in a destructuring pattern": {
         "category": "Error",
         "code": 2462
     },
@@ -1551,15 +1543,7 @@
         "category": "Error",
         "code": 2484
     },
-    "The left-hand side of a 'for...of' statement cannot be a constant or a read-only property.": {
-        "category": "Error",
-        "code": 2485
-    },
-    "The left-hand side of a 'for...in' statement cannot be a constant or a read-only property.": {
-        "category": "Error",
-        "code": 2486
-    },
-    "Invalid left-hand side in 'for...of' statement.": {
+    "The left-hand side of a 'for...of' statement must be a variable or a property access.": {
         "category": "Error",
         "code": 2487
     },
@@ -1747,6 +1731,34 @@
         "category": "Error",
         "code": 2535
     },
+    "Type '{0}' cannot be used to index type '{1}'.": {
+        "category": "Error",
+        "code": 2536
+    },
+    "Type '{0}' has no matching index signature for type '{1}'.": {
+        "category": "Error",
+        "code": 2537
+    },
+    "Type '{0}' cannot be used as an index type.": {
+        "category": "Error",
+        "code": 2538
+    },
+    "Cannot assign to '{0}' because it is not a variable.": {
+        "category": "Error",
+        "code": 2539
+    },
+    "Cannot assign to '{0}' because it is a constant or a read-only property.": {
+        "category": "Error",
+        "code": 2540
+    },
+    "The target of an assignment must be a variable or a property access.": {
+        "category": "Error",
+        "code": 2541
+    },
+    "Index signature in type '{0}' only permits reading.": {
+        "category": "Error",
+        "code": 2542
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -1839,6 +1851,10 @@
         "category": "Error",
         "code": 2664
     },
+    "Invalid module name in augmentation. Module '{0}' resolves to an untyped module at '{1}', which cannot be augmented.": {
+        "category": "Error",
+        "code": 2665
+    },
     "Exports and export assignments are not permitted in module augmentations.": {
         "category": "Error",
         "code": 2666
@@ -1919,7 +1935,7 @@
         "category": "Error",
         "code": 2685
     },
-    "Identifier '{0}' must be imported from a module": {
+    "'{0}' refers to a UMD global, but the current file is a module. Consider adding an import instead.": {
         "category": "Error",
         "code": 2686
     },
@@ -1962,6 +1978,22 @@
     "The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?": {
         "category": "Error",
         "code": 2696
+    },
+    "An async function or method must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your `--lib` option.": {
+        "category": "Error",
+        "code": 2697
+    },
+    "Spread types may only be created from object types.": {
+        "category": "Error",
+        "code": 2698
+    },
+    "Rest types may only be created from object types.": {
+        "category": "Error",
+        "code": 2700
+    },
+    "The target of an object rest assignment must be a variable or a property access.": {
+        "category": "Error",
+        "code": 2701
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -2244,6 +2276,10 @@
         "category": "Error",
         "code": 4082
     },
+    "Type parameter '{0}' of exported type alias has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4083
+    },
     "Conflicting definitions for '{0}' found at '{1}' and '{2}'. Consider installing a specific version of this library to resolve the conflict.": {
         "category": "Message",
         "code": 4090
@@ -2360,6 +2396,10 @@
     "Substitutions for pattern '{0}' shouldn't be an empty array.": {
         "category": "Error",
         "code": 5066
+    },
+    "Invalid value for 'jsxFactory'. '{0}' is not a valid identifier or qualified-name.": {
+        "category": "Error",
+        "code": 5067
     },
     "Concatenate and emit output to single file.": {
         "category": "Message",
@@ -2693,7 +2733,7 @@
         "category": "Message",
         "code": 6099
     },
-    "'package.json' does not have 'types' field.": {
+    "'package.json' does not have a 'types' or 'main' field.": {
         "category": "Message",
         "code": 6100
     },
@@ -2841,7 +2881,7 @@
         "category": "Message",
         "code": 6136
     },
-    "No types specified in 'package.json' but 'allowJs' is set, so returning 'main' value of '{0}'": {
+    "No types specified in 'package.json', so returning 'main' value of '{0}'": {
         "category": "Message",
         "code": 6137
     },
@@ -2852,6 +2892,34 @@
     "Import emit helpers from 'tslib'.": {
         "category": "Message",
         "code": 6139
+    },
+    "Auto discovery for typings is enabled in project '{0}'. Running extra resolution pass for module '{1}' using cache location '{2}'.": {
+        "category": "Error",
+        "code": 6140
+    },
+    "Parse in strict mode and emit \"use strict\" for each source file": {
+        "category": "Message",
+        "code": 6141
+    },
+    "Module '{0}' was resolved to '{1}', but '--jsx' is not set.": {
+        "category": "Error",
+        "code": 6142
+    },
+    "Module '{0}' was resolved to '{1}', but '--allowJs' is not set.": {
+        "category": "Error",
+        "code": 6143
+    },
+    "Module '{0}' was resolved as locally declared ambient module in file '{1}'.": {
+        "category": "Message",
+        "code": 6144
+    },
+    "Module '{0}' was resolved as ambient module declared in '{1}' since this file was not modified.": {
+        "category": "Message",
+        "code": 6145
+    },
+    "Specify the JSX factory function to use when targeting 'react' JSX emit, e.g. 'React.createElement' or 'h'.": {
+        "category": "Message",
+        "code": 6146
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -2885,7 +2953,11 @@
         "category": "Error",
         "code": 7015
     },
-    "Index signature of object type implicitly has an 'any' type.": {
+    "Could not find a declaration file for module '{0}'. '{1}' implicitly has an 'any' type.": {
+        "category": "Error",
+        "code": 7016
+    },
+    "Element implicitly has an 'any' type because type '{0}' has no index signature.": {
         "category": "Error",
         "code": 7017
     },
@@ -2948,6 +3020,10 @@
     "Property '{0}' implicitly has type 'any', because its get accessor lacks a return type annotation.": {
         "category": "Error",
         "code": 7033
+    },
+    "Variable '{0}' implicitly has type '{1}' in some locations where its type cannot be determined.": {
+        "category": "Error",
+        "code": 7034
     },
     "You cannot rename this element.": {
         "category": "Error",
@@ -3017,6 +3093,10 @@
         "category": "Error",
         "code": 9003
     },
+    "Language service is disabled.": {
+        "category": "Error",
+        "code": 9004
+    },
     "JSX attributes must only be assigned a non-empty 'expression'.": {
         "category": "Error",
         "code": 17000
@@ -3066,8 +3146,65 @@
         "category": "Error",
         "code": 18000
     },
-    "The path in an 'extends' options must be relative or rooted.": {
+    "A path in an 'extends' option must be relative or rooted, but '{0}' is not.": {
         "category": "Error",
         "code": 18001
+    },
+    "The 'files' list in config file '{0}' is empty.": {
+        "category": "Error",
+        "code": 18002
+    },
+    "No inputs were found in config file '{0}'. Specified 'include' paths were '{1}' and 'exclude' paths were '{2}'.": {
+        "category": "Error",
+        "code": 18003
+    },
+
+    "Add missing 'super()' call.": {
+        "category": "Message",
+        "code": 90001
+    },
+    "Make 'super()' call the first statement in the constructor.": {
+        "category": "Message",
+        "code": 90002
+    },
+    "Change 'extends' to 'implements'": {
+        "category": "Message",
+        "code": 90003
+    },
+    "Remove unused identifiers": {
+        "category": "Message",
+        "code": 90004
+    },
+    "Implement interface on reference": {
+        "category": "Message",
+        "code": 90005
+    },
+    "Implement interface on class": {
+        "category": "Message",
+        "code": 90006
+    },
+    "Implement inherited abstract class": {
+        "category": "Message",
+        "code": 90007
+    },
+    "Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig": {
+        "category": "Error",
+        "code": 90009
+    },
+    "Type '{0}' is not assignable to type '{1}'. Two different types with this name exist, but they are unrelated.": {
+        "category": "Error",
+        "code": 90010
+    },
+    "Import {0} from {1}": {
+        "category": "Message",
+        "code": 90013
+    },
+    "Change {0} to {1}": {
+        "category": "Message",
+        "code": 90014
+    },
+    "Add {0} to existing import declaration from {1}": {
+        "category": "Message",
+        "code": 90015
     }
 }

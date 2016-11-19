@@ -50,7 +50,6 @@ var M;
         E.f = f;
     })(E = M.E || (M.E = {}));
 })(M || (M = {}));
-var M;
 (function (M) {
     var P;
     (function (P) {
@@ -64,15 +63,15 @@ var M;
         var E = (function (_super) {
             __extends(E, _super);
             function E() {
-                _super.apply(this, arguments);
+                return _super.apply(this, arguments) || this;
             }
             return E;
         }(C));
         P.E = E;
+        var D;
         (function (D) {
             D[D["f"] = 0] = "f";
-        })(P.D || (P.D = {}));
-        var D = P.D;
+        })(D = P.D || (P.D = {}));
         P.w = M.D.f; // error, should be typeof M.D.f
         P.x = M.C.f; // error, should be typeof M.C.f
         P.x = M.E.f; // error, should be typeof M.E.f

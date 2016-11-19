@@ -13,7 +13,11 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
+
+
 /// <reference no-default-lib="true"/>
+
+
 /////////////////////////////
 /// ECMAScript APIs
 /////////////////////////////
@@ -259,6 +263,9 @@ interface Function {
       * @param argArray A list of arguments to be passed to the new function.
       */
     bind(this: Function, thisArg: any, ...argArray: any[]): any;
+
+    /** Returns a string representation of a function. */
+    toString(): string;
 
     prototype: any;
     readonly length: number;
@@ -529,8 +536,8 @@ interface NumberConstructor {
 /** An object that represents a number of any kind. All JavaScript numbers are 64-bit floating-point numbers. */
 declare const Number: NumberConstructor;
 
-interface TemplateStringsArray extends Array<string> {
-    readonly raw: string[];
+interface TemplateStringsArray extends ReadonlyArray<string> {
+    readonly raw: ReadonlyArray<string>
 }
 
 interface Math {
@@ -1022,7 +1029,12 @@ interface ReadonlyArray<T> {
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
       */
-    concat(...items: T[]): T[];
+    concat(...items: T[][]): T[];
+    /**
+      * Combines two or more arrays.
+      * @param items Additional items to add to the end of array1.
+      */
+    concat(...items: (T | T[])[]): T[];
     /**
       * Adds all the elements of an array separated by the specified separator string.
       * @param separator A string used to separate one element of an array from the next in the resulting String. If omitted, the array elements are separated with a comma.
@@ -1071,6 +1083,12 @@ interface ReadonlyArray<T> {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
     map<U>(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => U, thisArg?: any): U[];
+    /**
+     * Returns the elements of an array that meet the condition specified in a callback function.
+     * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.
+     * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+     */
+    filter<S extends T>(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => value is S, thisArg?: any): S[];
     /**
       * Returns the elements of an array that meet the condition specified in a callback function.
       * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.
@@ -1124,6 +1142,11 @@ interface Array<T> {
       * Removes the last element from an array and returns it.
       */
     pop(): T | undefined;
+    /**
+      * Combines two or more arrays.
+      * @param items Additional items to add to the end of array1.
+      */
+    concat(...items: T[][]): T[];
     /**
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
@@ -1205,6 +1228,30 @@ interface Array<T> {
       * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
+    map<U>(this: [T, T, T, T, T], callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): [U, U, U, U, U];
+    /**
+      * Calls a defined callback function on each element of an array, and returns an array that contains the results.
+      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
+      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+      */
+    map<U>(this: [T, T, T, T], callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): [U, U, U, U];
+    /**
+      * Calls a defined callback function on each element of an array, and returns an array that contains the results.
+      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
+      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+      */
+    map<U>(this: [T, T, T], callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): [U, U, U];
+    /**
+      * Calls a defined callback function on each element of an array, and returns an array that contains the results.
+      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
+      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+      */
+    map<U>(this: [T, T], callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): [U, U];
+    /**
+      * Calls a defined callback function on each element of an array, and returns an array that contains the results.
+      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
+      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+      */
     map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[];
     /**
       * Returns the elements of an array that meet the condition specified in a callback function.
@@ -1271,13 +1318,44 @@ declare type PromiseConstructorLike = new <T>(executor: (resolve: (value?: T | P
 
 interface PromiseLike<T> {
     /**
-    * Attaches callbacks for the resolution and/or rejection of the Promise.
-    * @param onfulfilled The callback to execute when the Promise is resolved.
-    * @param onrejected The callback to execute when the Promise is rejected.
-    * @returns A Promise for the completion of which ever callback is executed.
-    */
-    then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): PromiseLike<TResult>;
-    then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => void): PromiseLike<TResult>;
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then(
+        onfulfilled?: ((value: T) => T | PromiseLike<T>) | undefined | null,
+        onrejected?: ((reason: any) => T | PromiseLike<T>) | undefined | null): PromiseLike<T>;
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult>(
+        onfulfilled: ((value: T) => T | PromiseLike<T>) | undefined | null,
+        onrejected: (reason: any) => TResult | PromiseLike<TResult>): PromiseLike<T | TResult>;
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult>(
+        onfulfilled: (value: T) => TResult | PromiseLike<TResult>,
+        onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): PromiseLike<TResult>;
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1, TResult2>(
+        onfulfilled: (value: T) => TResult1 | PromiseLike<TResult1>,
+        onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): PromiseLike<TResult1 | TResult2>;
 }
 
 interface ArrayLike<T> {
@@ -1537,7 +1615,7 @@ interface Int8Array {
     find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -1545,7 +1623,7 @@ interface Int8Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -1810,7 +1888,7 @@ interface Uint8Array {
     find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -1818,7 +1896,7 @@ interface Uint8Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2084,7 +2162,7 @@ interface Uint8ClampedArray {
     find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -2092,7 +2170,7 @@ interface Uint8ClampedArray {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2357,7 +2435,7 @@ interface Int16Array {
     find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -2365,7 +2443,7 @@ interface Int16Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2631,7 +2709,7 @@ interface Uint16Array {
     find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -2639,7 +2717,7 @@ interface Uint16Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2904,7 +2982,7 @@ interface Int32Array {
     find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -2912,7 +2990,7 @@ interface Int32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3177,7 +3255,7 @@ interface Uint32Array {
     find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -3185,7 +3263,7 @@ interface Uint32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3450,7 +3528,7 @@ interface Float32Array {
     find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -3458,7 +3536,7 @@ interface Float32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3724,7 +3802,7 @@ interface Float64Array {
     find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -3732,7 +3810,7 @@ interface Float64Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3949,12 +4027,9 @@ declare module Intl {
         resolvedOptions(): ResolvedCollatorOptions;
     }
     var Collator: {
-        new (locales?: string[], options?: CollatorOptions): Collator;
-        new (locale?: string, options?: CollatorOptions): Collator;
-        (locales?: string[], options?: CollatorOptions): Collator;
-        (locale?: string, options?: CollatorOptions): Collator;
-        supportedLocalesOf(locales: string[], options?: CollatorOptions): string[];
-        supportedLocalesOf(locale: string, options?: CollatorOptions): string[];
+        new (locales?: string | string[], options?: CollatorOptions): Collator;
+        (locales?: string | string[], options?: CollatorOptions): Collator;
+        supportedLocalesOf(locales: string | string[], options?: CollatorOptions): string[];
     }
 
     interface NumberFormatOptions {
@@ -3989,12 +4064,9 @@ declare module Intl {
         resolvedOptions(): ResolvedNumberFormatOptions;
     }
     var NumberFormat: {
-        new (locales?: string[], options?: NumberFormatOptions): NumberFormat;
-        new (locale?: string, options?: NumberFormatOptions): NumberFormat;
-        (locales?: string[], options?: NumberFormatOptions): NumberFormat;
-        (locale?: string, options?: NumberFormatOptions): NumberFormat;
-        supportedLocalesOf(locales: string[], options?: NumberFormatOptions): string[];
-        supportedLocalesOf(locale: string, options?: NumberFormatOptions): string[];
+        new (locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
+        (locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
+        supportedLocalesOf(locales: string | string[], options?: NumberFormatOptions): string[];
     }
 
     interface DateTimeFormatOptions {
@@ -4035,91 +4107,54 @@ declare module Intl {
         resolvedOptions(): ResolvedDateTimeFormatOptions;
     }
     var DateTimeFormat: {
-        new (locales?: string[], options?: DateTimeFormatOptions): DateTimeFormat;
-        new (locale?: string, options?: DateTimeFormatOptions): DateTimeFormat;
-        (locales?: string[], options?: DateTimeFormatOptions): DateTimeFormat;
-        (locale?: string, options?: DateTimeFormatOptions): DateTimeFormat;
-        supportedLocalesOf(locales: string[], options?: DateTimeFormatOptions): string[];
-        supportedLocalesOf(locale: string, options?: DateTimeFormatOptions): string[];
+        new (locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
+        (locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
+        supportedLocalesOf(locales: string | string[], options?: DateTimeFormatOptions): string[];
     }
 }
 
 interface String {
     /**
-      * Determines whether two strings are equivalent in the current locale.
+      * Determines whether two strings are equivalent in the current or specified locale.
       * @param that String to compare to target string
-      * @param locales An array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used. This parameter must conform to BCP 47 standards; see the Intl.Collator object for details.
+      * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used. This parameter must conform to BCP 47 standards; see the Intl.Collator object for details.
       * @param options An object that contains one or more properties that specify comparison options. see the Intl.Collator object for details.
       */
-    localeCompare(that: string, locales: string[], options?: Intl.CollatorOptions): number;
-
-    /**
-      * Determines whether two strings are equivalent in the current locale.
-      * @param that String to compare to target string
-      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used. This parameter must conform to BCP 47 standards; see the Intl.Collator object for details.
-      * @param options An object that contains one or more properties that specify comparison options. see the Intl.Collator object for details.
-      */
-    localeCompare(that: string, locale: string, options?: Intl.CollatorOptions): number;
+    localeCompare(that: string, locales?: string | string[], options?: Intl.CollatorOptions): number;
 }
 
 interface Number {
     /**
       * Converts a number to a string by using the current or specified locale.
-      * @param locales An array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+      * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
       * @param options An object that contains one or more properties that specify comparison options.
       */
-    toLocaleString(locales?: string[], options?: Intl.NumberFormatOptions): string;
-
-    /**
-      * Converts a number to a string by using the current or specified locale.
-      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
-      * @param options An object that contains one or more properties that specify comparison options.
-      */
-    toLocaleString(locale?: string, options?: Intl.NumberFormatOptions): string;
+    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
 interface Date {
     /**
       * Converts a date and time to a string by using the current or specified locale.
-      * @param locales An array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+      * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
       * @param options An object that contains one or more properties that specify comparison options.
       */
-    toLocaleString(locales?: string[], options?: Intl.DateTimeFormatOptions): string;
+    toLocaleString(locales?: string | string[], options?: Intl.DateTimeFormatOptions): string;
     /**
       * Converts a date to a string by using the current or specified locale.
-      * @param locales An array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+      * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
       * @param options An object that contains one or more properties that specify comparison options.
       */
-    toLocaleDateString(locales?: string[], options?: Intl.DateTimeFormatOptions): string;
+    toLocaleDateString(locales?: string | string[], options?: Intl.DateTimeFormatOptions): string;
 
     /**
       * Converts a time to a string by using the current or specified locale.
-      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
+      * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
       * @param options An object that contains one or more properties that specify comparison options.
       */
-    toLocaleTimeString(locale?: string[], options?: Intl.DateTimeFormatOptions): string;
-
-    /**
-      * Converts a date and time to a string by using the current or specified locale.
-      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
-      * @param options An object that contains one or more properties that specify comparison options.
-      */
-    toLocaleString(locale?: string, options?: Intl.DateTimeFormatOptions): string;
-
-    /**
-      * Converts a date to a string by using the current or specified locale.
-      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
-      * @param options An object that contains one or more properties that specify comparison options.
-      */
-    toLocaleDateString(locale?: string, options?: Intl.DateTimeFormatOptions): string;
-
-    /**
-      * Converts a time to a string by using the current or specified locale.
-      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
-      * @param options An object that contains one or more properties that specify comparison options.
-      */
-    toLocaleTimeString(locale?: string, options?: Intl.DateTimeFormatOptions): string;
+    toLocaleTimeString(locales?: string | string[], options?: Intl.DateTimeFormatOptions): string;
 }
+
+
 
 /////////////////////////////
 /// IE DOM APIs
@@ -4248,6 +4283,7 @@ interface KeyAlgorithm {
 }
 
 interface KeyboardEventInit extends EventModifierInit {
+    code?: string;
     key?: string;
     location?: number;
     repeat?: boolean;
@@ -5800,6 +5836,7 @@ interface CSSStyleDeclaration {
     writingMode: string | null;
     zIndex: string | null;
     zoom: string | null;
+    resize: string | null;
     getPropertyPriority(propertyName: string): string;
     getPropertyValue(propertyName: string): string;
     item(index: number): string;
@@ -5869,6 +5906,7 @@ declare var CanvasGradient: {
 }
 
 interface CanvasPattern {
+    setTransform(matrix: SVGMatrix): void;
 }
 
 declare var CanvasPattern: {
@@ -6294,7 +6332,7 @@ interface DataTransfer {
     effectAllowed: string;
     readonly files: FileList;
     readonly items: DataTransferItemList;
-    readonly types: DOMStringList;
+    readonly types: string[];
     clearData(format?: string): boolean;
     getData(format: string): string;
     setData(format: string, data: string): boolean;
@@ -6410,7 +6448,7 @@ declare var DeviceRotationRate: {
     new(): DeviceRotationRate;
 }
 
-interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEvent {
+interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEvent, ParentNode {
     /**
       * Sets or gets the URL for the current document. 
       */
@@ -7473,7 +7511,7 @@ declare var Document: {
     new(): Document;
 }
 
-interface DocumentFragment extends Node, NodeSelector {
+interface DocumentFragment extends Node, NodeSelector, ParentNode {
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -7542,7 +7580,7 @@ declare var EXT_texture_filter_anisotropic: {
     readonly TEXTURE_MAX_ANISOTROPY_EXT: number;
 }
 
-interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelector, ChildNode {
+interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelector, ChildNode, ParentNode {
     readonly classList: DOMTokenList;
     className: string;
     readonly clientHeight: number;
@@ -7797,6 +7835,16 @@ interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelec
     getElementsByClassName(classNames: string): NodeListOf<Element>;
     matches(selector: string): boolean;
     closest(selector: string): Element | null;
+    scrollIntoView(arg?: boolean | ScrollIntoViewOptions): void;
+    scroll(options?: ScrollToOptions): void;
+    scroll(x: number, y: number): void;
+    scrollTo(options?: ScrollToOptions): void;
+    scrollTo(x: number, y: number): void;
+    scrollBy(options?: ScrollToOptions): void;
+    scrollBy(x: number, y: number): void;
+    insertAdjacentElement(position: string, insertedElement: Element): Element | null;
+    insertAdjacentHTML(where: string, html: string): void;
+    insertAdjacentText(where: string, text: string): void;
     addEventListener(type: "MSGestureChange", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureDoubleTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureEnd", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
@@ -8568,7 +8616,7 @@ interface HTMLCanvasElement extends HTMLElement {
       * @param type The standard MIME type for the image format to return. If you do not specify this parameter, the default value is a PNG format image.
       */
     toDataURL(type?: string, ...args: any[]): string;
-    toBlob(callback: (result: Blob | null) => void, ... arguments: any[]): void;
+    toBlob(callback: (result: Blob | null) => void, type?: string, ...arguments: any[]): void;
 }
 
 declare var HTMLCanvasElement: {
@@ -8743,11 +8791,7 @@ interface HTMLElement extends Element {
     click(): void;
     dragDrop(): boolean;
     focus(): void;
-    insertAdjacentElement(position: string, insertedElement: Element): Element;
-    insertAdjacentHTML(where: string, html: string): void;
-    insertAdjacentText(where: string, text: string): void;
     msGetInputContext(): MSInputMethodContext;
-    scrollIntoView(top?: boolean): void;
     setActive(): void;
     addEventListener(type: "MSContentZoom", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureChange", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
@@ -10012,6 +10056,7 @@ interface HTMLLinkElement extends HTMLElement, LinkStyle {
       */
     type: string;
     import?: Document;
+    integrity: string;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -10300,7 +10345,7 @@ interface HTMLMediaElement extends HTMLElement {
       */
     canPlayType(type: string): string;
     /**
-      * Fires immediately after the client loads the object.
+      * Resets the audio or video object and loads a new media resource.
       */
     load(): void;
     /**
@@ -10873,6 +10918,7 @@ interface HTMLScriptElement extends HTMLElement {
       * Sets or retrieves the MIME type for the associated scripting engine.
       */
     type: string;
+    integrity: string;
 }
 
 declare var HTMLScriptElement: {
@@ -11649,11 +11695,12 @@ declare var HashChangeEvent: {
 interface History {
     readonly length: number;
     readonly state: any;
-    back(distance?: any): void;
-    forward(distance?: any): void;
-    go(delta?: any): void;
-    pushState(statedata: any, title?: string, url?: string): void;
-    replaceState(statedata: any, title?: string, url?: string): void;
+    scrollRestoration: ScrollRestoration;
+    back(): void;
+    forward(): void;
+    go(delta?: number): void;
+    pushState(data: any, title: string, url?: string | null): void;
+    replaceState(data: any, title: string, url?: string | null): void;
 }
 
 declare var History: {
@@ -11878,6 +11925,7 @@ interface KeyboardEvent extends UIEvent {
     readonly repeat: boolean;
     readonly shiftKey: boolean;
     readonly which: number;
+    readonly code: string;
     getModifierState(keyArg: string): boolean;
     initKeyboardEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, keyArg: string, locationArg: number, modifiersListArg: string, repeat: boolean, locale: string): void;
     readonly DOM_KEY_LOCATION_JOYSTICK: number;
@@ -12713,7 +12761,7 @@ interface MouseEvent extends UIEvent {
     readonly x: number;
     readonly y: number;
     getModifierState(keyArg: string): boolean;
-    initMouseEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, screenXArg: number, screenYArg: number, clientXArg: number, clientYArg: number, ctrlKeyArg: boolean, altKeyArg: boolean, shiftKeyArg: boolean, metaKeyArg: boolean, buttonArg: number, relatedTargetArg: EventTarget): void;
+    initMouseEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, screenXArg: number, screenYArg: number, clientXArg: number, clientYArg: number, ctrlKeyArg: boolean, altKeyArg: boolean, shiftKeyArg: boolean, metaKeyArg: boolean, buttonArg: number, relatedTargetArg: EventTarget | null): void;
 }
 
 declare var MouseEvent: {
@@ -12826,6 +12874,7 @@ interface Navigator extends Object, NavigatorID, NavigatorOnLine, NavigatorConte
     readonly plugins: PluginArray;
     readonly pointerEnabled: boolean;
     readonly webdriver: boolean;
+    readonly hardwareConcurrency: number;
     getGamepads(): Gamepad[];
     javaEnabled(): boolean;
     msLaunchUri(uri: string, successCallback?: MSLaunchUriCallback, noHandlerCallback?: MSLaunchUriCallback): void;
@@ -12843,18 +12892,18 @@ interface Node extends EventTarget {
     readonly attributes: NamedNodeMap;
     readonly baseURI: string | null;
     readonly childNodes: NodeList;
-    readonly firstChild: Node;
-    readonly lastChild: Node;
+    readonly firstChild: Node | null;
+    readonly lastChild: Node | null;
     readonly localName: string | null;
     readonly namespaceURI: string | null;
-    readonly nextSibling: Node;
+    readonly nextSibling: Node | null;
     readonly nodeName: string;
     readonly nodeType: number;
     nodeValue: string | null;
     readonly ownerDocument: Document;
-    readonly parentElement: HTMLElement;
-    readonly parentNode: Node;
-    readonly previousSibling: Node;
+    readonly parentElement: HTMLElement | null;
+    readonly parentNode: Node | null;
+    readonly previousSibling: Node | null;
     textContent: string | null;
     appendChild(newChild: Node): Node;
     cloneNode(deep?: boolean): Node;
@@ -13250,6 +13299,7 @@ interface PerformanceTiming {
     readonly responseStart: number;
     readonly unloadEventEnd: number;
     readonly unloadEventStart: number;
+    readonly secureConnectionStart: number;
     toJSON(): any;
 }
 
@@ -15527,8 +15577,8 @@ declare var StereoPannerNode: {
 interface Storage {
     readonly length: number;
     clear(): void;
-    getItem(key: string): string;
-    key(index: number): string;
+    getItem(key: string): string | null;
+    key(index: number): string | null;
     removeItem(key: string): void;
     setItem(key: string, data: string): void;
     [key: string]: any;
@@ -16963,7 +17013,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     readonly devicePixelRatio: number;
     readonly doNotTrack: string;
     readonly document: Document;
-    event: Event;
+    event: Event | undefined;
     readonly external: External;
     readonly frameElement: Element;
     readonly frames: Window;
@@ -17069,7 +17119,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     onunload: (this: this, ev: Event) => any;
     onvolumechange: (this: this, ev: Event) => any;
     onwaiting: (this: this, ev: Event) => any;
-    readonly opener: Window;
+    opener: any;
     orientation: string | number;
     readonly outerHeight: number;
     readonly outerWidth: number;
@@ -17124,6 +17174,9 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     webkitConvertPointFromNodeToPage(node: Node, pt: WebKitPoint): WebKitPoint;
     webkitConvertPointFromPageToNode(node: Node, pt: WebKitPoint): WebKitPoint;
     webkitRequestAnimationFrame(callback: FrameRequestCallback): number;
+    scroll(options?: ScrollToOptions): void;
+    scrollTo(options?: ScrollToOptions): void;
+    scrollBy(options?: ScrollToOptions): void;
     addEventListener(type: "MSGestureChange", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureDoubleTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureEnd", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
@@ -17220,7 +17273,6 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     addEventListener(type: "waiting", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "wheel", listener: (this: this, ev: WheelEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
-    [index: number]: Window;
 }
 
 declare var Window: {
@@ -17251,7 +17303,7 @@ declare var XMLDocument: {
 }
 
 interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
-    onreadystatechange: (this: this, ev: ProgressEvent) => any;
+    onreadystatechange: (this: this, ev: Event) => any;
     readonly readyState: number;
     readonly response: any;
     readonly responseText: string;
@@ -17263,6 +17315,7 @@ interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
     readonly upload: XMLHttpRequestUpload;
     withCredentials: boolean;
     msCaching?: string;
+    readonly responseURL: string;
     abort(): void;
     getAllResponseHeaders(): string;
     getResponseHeader(header: string): string | null;
@@ -17278,13 +17331,13 @@ interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
     readonly LOADING: number;
     readonly OPENED: number;
     readonly UNSENT: number;
-    addEventListener(type: "abort", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "load", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "error", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "load", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "loadend", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadstart", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+    addEventListener(type: "loadstart", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "progress", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "readystatechange", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "readystatechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "timeout", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
@@ -17625,183 +17678,183 @@ interface NavigatorUserMedia {
 }
 
 interface NodeSelector {
-    querySelector(selectors: "a"): HTMLAnchorElement;
-    querySelector(selectors: "abbr"): HTMLElement;
-    querySelector(selectors: "acronym"): HTMLElement;
-    querySelector(selectors: "address"): HTMLElement;
-    querySelector(selectors: "applet"): HTMLAppletElement;
-    querySelector(selectors: "area"): HTMLAreaElement;
-    querySelector(selectors: "article"): HTMLElement;
-    querySelector(selectors: "aside"): HTMLElement;
-    querySelector(selectors: "audio"): HTMLAudioElement;
-    querySelector(selectors: "b"): HTMLElement;
-    querySelector(selectors: "base"): HTMLBaseElement;
-    querySelector(selectors: "basefont"): HTMLBaseFontElement;
-    querySelector(selectors: "bdo"): HTMLElement;
-    querySelector(selectors: "big"): HTMLElement;
-    querySelector(selectors: "blockquote"): HTMLQuoteElement;
-    querySelector(selectors: "body"): HTMLBodyElement;
-    querySelector(selectors: "br"): HTMLBRElement;
-    querySelector(selectors: "button"): HTMLButtonElement;
-    querySelector(selectors: "canvas"): HTMLCanvasElement;
-    querySelector(selectors: "caption"): HTMLTableCaptionElement;
-    querySelector(selectors: "center"): HTMLElement;
-    querySelector(selectors: "circle"): SVGCircleElement;
-    querySelector(selectors: "cite"): HTMLElement;
-    querySelector(selectors: "clippath"): SVGClipPathElement;
-    querySelector(selectors: "code"): HTMLElement;
-    querySelector(selectors: "col"): HTMLTableColElement;
-    querySelector(selectors: "colgroup"): HTMLTableColElement;
-    querySelector(selectors: "datalist"): HTMLDataListElement;
-    querySelector(selectors: "dd"): HTMLElement;
-    querySelector(selectors: "defs"): SVGDefsElement;
-    querySelector(selectors: "del"): HTMLModElement;
-    querySelector(selectors: "desc"): SVGDescElement;
-    querySelector(selectors: "dfn"): HTMLElement;
-    querySelector(selectors: "dir"): HTMLDirectoryElement;
-    querySelector(selectors: "div"): HTMLDivElement;
-    querySelector(selectors: "dl"): HTMLDListElement;
-    querySelector(selectors: "dt"): HTMLElement;
-    querySelector(selectors: "ellipse"): SVGEllipseElement;
-    querySelector(selectors: "em"): HTMLElement;
-    querySelector(selectors: "embed"): HTMLEmbedElement;
-    querySelector(selectors: "feblend"): SVGFEBlendElement;
-    querySelector(selectors: "fecolormatrix"): SVGFEColorMatrixElement;
-    querySelector(selectors: "fecomponenttransfer"): SVGFEComponentTransferElement;
-    querySelector(selectors: "fecomposite"): SVGFECompositeElement;
-    querySelector(selectors: "feconvolvematrix"): SVGFEConvolveMatrixElement;
-    querySelector(selectors: "fediffuselighting"): SVGFEDiffuseLightingElement;
-    querySelector(selectors: "fedisplacementmap"): SVGFEDisplacementMapElement;
-    querySelector(selectors: "fedistantlight"): SVGFEDistantLightElement;
-    querySelector(selectors: "feflood"): SVGFEFloodElement;
-    querySelector(selectors: "fefunca"): SVGFEFuncAElement;
-    querySelector(selectors: "fefuncb"): SVGFEFuncBElement;
-    querySelector(selectors: "fefuncg"): SVGFEFuncGElement;
-    querySelector(selectors: "fefuncr"): SVGFEFuncRElement;
-    querySelector(selectors: "fegaussianblur"): SVGFEGaussianBlurElement;
-    querySelector(selectors: "feimage"): SVGFEImageElement;
-    querySelector(selectors: "femerge"): SVGFEMergeElement;
-    querySelector(selectors: "femergenode"): SVGFEMergeNodeElement;
-    querySelector(selectors: "femorphology"): SVGFEMorphologyElement;
-    querySelector(selectors: "feoffset"): SVGFEOffsetElement;
-    querySelector(selectors: "fepointlight"): SVGFEPointLightElement;
-    querySelector(selectors: "fespecularlighting"): SVGFESpecularLightingElement;
-    querySelector(selectors: "fespotlight"): SVGFESpotLightElement;
-    querySelector(selectors: "fetile"): SVGFETileElement;
-    querySelector(selectors: "feturbulence"): SVGFETurbulenceElement;
-    querySelector(selectors: "fieldset"): HTMLFieldSetElement;
-    querySelector(selectors: "figcaption"): HTMLElement;
-    querySelector(selectors: "figure"): HTMLElement;
-    querySelector(selectors: "filter"): SVGFilterElement;
-    querySelector(selectors: "font"): HTMLFontElement;
-    querySelector(selectors: "footer"): HTMLElement;
-    querySelector(selectors: "foreignobject"): SVGForeignObjectElement;
-    querySelector(selectors: "form"): HTMLFormElement;
-    querySelector(selectors: "frame"): HTMLFrameElement;
-    querySelector(selectors: "frameset"): HTMLFrameSetElement;
-    querySelector(selectors: "g"): SVGGElement;
-    querySelector(selectors: "h1"): HTMLHeadingElement;
-    querySelector(selectors: "h2"): HTMLHeadingElement;
-    querySelector(selectors: "h3"): HTMLHeadingElement;
-    querySelector(selectors: "h4"): HTMLHeadingElement;
-    querySelector(selectors: "h5"): HTMLHeadingElement;
-    querySelector(selectors: "h6"): HTMLHeadingElement;
-    querySelector(selectors: "head"): HTMLHeadElement;
-    querySelector(selectors: "header"): HTMLElement;
-    querySelector(selectors: "hgroup"): HTMLElement;
-    querySelector(selectors: "hr"): HTMLHRElement;
-    querySelector(selectors: "html"): HTMLHtmlElement;
-    querySelector(selectors: "i"): HTMLElement;
-    querySelector(selectors: "iframe"): HTMLIFrameElement;
-    querySelector(selectors: "image"): SVGImageElement;
-    querySelector(selectors: "img"): HTMLImageElement;
-    querySelector(selectors: "input"): HTMLInputElement;
-    querySelector(selectors: "ins"): HTMLModElement;
-    querySelector(selectors: "isindex"): HTMLUnknownElement;
-    querySelector(selectors: "kbd"): HTMLElement;
-    querySelector(selectors: "keygen"): HTMLElement;
-    querySelector(selectors: "label"): HTMLLabelElement;
-    querySelector(selectors: "legend"): HTMLLegendElement;
-    querySelector(selectors: "li"): HTMLLIElement;
-    querySelector(selectors: "line"): SVGLineElement;
-    querySelector(selectors: "lineargradient"): SVGLinearGradientElement;
-    querySelector(selectors: "link"): HTMLLinkElement;
-    querySelector(selectors: "listing"): HTMLPreElement;
-    querySelector(selectors: "map"): HTMLMapElement;
-    querySelector(selectors: "mark"): HTMLElement;
-    querySelector(selectors: "marker"): SVGMarkerElement;
-    querySelector(selectors: "marquee"): HTMLMarqueeElement;
-    querySelector(selectors: "mask"): SVGMaskElement;
-    querySelector(selectors: "menu"): HTMLMenuElement;
-    querySelector(selectors: "meta"): HTMLMetaElement;
-    querySelector(selectors: "metadata"): SVGMetadataElement;
-    querySelector(selectors: "meter"): HTMLMeterElement;
-    querySelector(selectors: "nav"): HTMLElement;
-    querySelector(selectors: "nextid"): HTMLUnknownElement;
-    querySelector(selectors: "nobr"): HTMLElement;
-    querySelector(selectors: "noframes"): HTMLElement;
-    querySelector(selectors: "noscript"): HTMLElement;
-    querySelector(selectors: "object"): HTMLObjectElement;
-    querySelector(selectors: "ol"): HTMLOListElement;
-    querySelector(selectors: "optgroup"): HTMLOptGroupElement;
-    querySelector(selectors: "option"): HTMLOptionElement;
-    querySelector(selectors: "p"): HTMLParagraphElement;
-    querySelector(selectors: "param"): HTMLParamElement;
-    querySelector(selectors: "path"): SVGPathElement;
-    querySelector(selectors: "pattern"): SVGPatternElement;
-    querySelector(selectors: "picture"): HTMLPictureElement;
-    querySelector(selectors: "plaintext"): HTMLElement;
-    querySelector(selectors: "polygon"): SVGPolygonElement;
-    querySelector(selectors: "polyline"): SVGPolylineElement;
-    querySelector(selectors: "pre"): HTMLPreElement;
-    querySelector(selectors: "progress"): HTMLProgressElement;
-    querySelector(selectors: "q"): HTMLQuoteElement;
-    querySelector(selectors: "radialgradient"): SVGRadialGradientElement;
-    querySelector(selectors: "rect"): SVGRectElement;
-    querySelector(selectors: "rt"): HTMLElement;
-    querySelector(selectors: "ruby"): HTMLElement;
-    querySelector(selectors: "s"): HTMLElement;
-    querySelector(selectors: "samp"): HTMLElement;
-    querySelector(selectors: "script"): HTMLScriptElement;
-    querySelector(selectors: "section"): HTMLElement;
-    querySelector(selectors: "select"): HTMLSelectElement;
-    querySelector(selectors: "small"): HTMLElement;
-    querySelector(selectors: "source"): HTMLSourceElement;
-    querySelector(selectors: "span"): HTMLSpanElement;
-    querySelector(selectors: "stop"): SVGStopElement;
-    querySelector(selectors: "strike"): HTMLElement;
-    querySelector(selectors: "strong"): HTMLElement;
-    querySelector(selectors: "style"): HTMLStyleElement;
-    querySelector(selectors: "sub"): HTMLElement;
-    querySelector(selectors: "sup"): HTMLElement;
-    querySelector(selectors: "svg"): SVGSVGElement;
-    querySelector(selectors: "switch"): SVGSwitchElement;
-    querySelector(selectors: "symbol"): SVGSymbolElement;
-    querySelector(selectors: "table"): HTMLTableElement;
-    querySelector(selectors: "tbody"): HTMLTableSectionElement;
-    querySelector(selectors: "td"): HTMLTableDataCellElement;
-    querySelector(selectors: "template"): HTMLTemplateElement;
-    querySelector(selectors: "text"): SVGTextElement;
-    querySelector(selectors: "textpath"): SVGTextPathElement;
-    querySelector(selectors: "textarea"): HTMLTextAreaElement;
-    querySelector(selectors: "tfoot"): HTMLTableSectionElement;
-    querySelector(selectors: "th"): HTMLTableHeaderCellElement;
-    querySelector(selectors: "thead"): HTMLTableSectionElement;
-    querySelector(selectors: "title"): HTMLTitleElement;
-    querySelector(selectors: "tr"): HTMLTableRowElement;
-    querySelector(selectors: "track"): HTMLTrackElement;
-    querySelector(selectors: "tspan"): SVGTSpanElement;
-    querySelector(selectors: "tt"): HTMLElement;
-    querySelector(selectors: "u"): HTMLElement;
-    querySelector(selectors: "ul"): HTMLUListElement;
-    querySelector(selectors: "use"): SVGUseElement;
-    querySelector(selectors: "var"): HTMLElement;
-    querySelector(selectors: "video"): HTMLVideoElement;
-    querySelector(selectors: "view"): SVGViewElement;
-    querySelector(selectors: "wbr"): HTMLElement;
-    querySelector(selectors: "x-ms-webview"): MSHTMLWebViewElement;
-    querySelector(selectors: "xmp"): HTMLPreElement;
-    querySelector(selectors: string): Element;
+    querySelector(selectors: "a"): HTMLAnchorElement | null;
+    querySelector(selectors: "abbr"): HTMLElement | null;
+    querySelector(selectors: "acronym"): HTMLElement | null;
+    querySelector(selectors: "address"): HTMLElement | null;
+    querySelector(selectors: "applet"): HTMLAppletElement | null;
+    querySelector(selectors: "area"): HTMLAreaElement | null;
+    querySelector(selectors: "article"): HTMLElement | null;
+    querySelector(selectors: "aside"): HTMLElement | null;
+    querySelector(selectors: "audio"): HTMLAudioElement | null;
+    querySelector(selectors: "b"): HTMLElement | null;
+    querySelector(selectors: "base"): HTMLBaseElement | null;
+    querySelector(selectors: "basefont"): HTMLBaseFontElement | null;
+    querySelector(selectors: "bdo"): HTMLElement | null;
+    querySelector(selectors: "big"): HTMLElement | null;
+    querySelector(selectors: "blockquote"): HTMLQuoteElement | null;
+    querySelector(selectors: "body"): HTMLBodyElement | null;
+    querySelector(selectors: "br"): HTMLBRElement | null;
+    querySelector(selectors: "button"): HTMLButtonElement | null;
+    querySelector(selectors: "canvas"): HTMLCanvasElement | null;
+    querySelector(selectors: "caption"): HTMLTableCaptionElement | null;
+    querySelector(selectors: "center"): HTMLElement | null;
+    querySelector(selectors: "circle"): SVGCircleElement | null;
+    querySelector(selectors: "cite"): HTMLElement | null;
+    querySelector(selectors: "clippath"): SVGClipPathElement | null;
+    querySelector(selectors: "code"): HTMLElement | null;
+    querySelector(selectors: "col"): HTMLTableColElement | null;
+    querySelector(selectors: "colgroup"): HTMLTableColElement | null;
+    querySelector(selectors: "datalist"): HTMLDataListElement | null;
+    querySelector(selectors: "dd"): HTMLElement | null;
+    querySelector(selectors: "defs"): SVGDefsElement | null;
+    querySelector(selectors: "del"): HTMLModElement | null;
+    querySelector(selectors: "desc"): SVGDescElement | null;
+    querySelector(selectors: "dfn"): HTMLElement | null;
+    querySelector(selectors: "dir"): HTMLDirectoryElement | null;
+    querySelector(selectors: "div"): HTMLDivElement | null;
+    querySelector(selectors: "dl"): HTMLDListElement | null;
+    querySelector(selectors: "dt"): HTMLElement | null;
+    querySelector(selectors: "ellipse"): SVGEllipseElement | null;
+    querySelector(selectors: "em"): HTMLElement | null;
+    querySelector(selectors: "embed"): HTMLEmbedElement | null;
+    querySelector(selectors: "feblend"): SVGFEBlendElement | null;
+    querySelector(selectors: "fecolormatrix"): SVGFEColorMatrixElement | null;
+    querySelector(selectors: "fecomponenttransfer"): SVGFEComponentTransferElement | null;
+    querySelector(selectors: "fecomposite"): SVGFECompositeElement | null;
+    querySelector(selectors: "feconvolvematrix"): SVGFEConvolveMatrixElement | null;
+    querySelector(selectors: "fediffuselighting"): SVGFEDiffuseLightingElement | null;
+    querySelector(selectors: "fedisplacementmap"): SVGFEDisplacementMapElement | null;
+    querySelector(selectors: "fedistantlight"): SVGFEDistantLightElement | null;
+    querySelector(selectors: "feflood"): SVGFEFloodElement | null;
+    querySelector(selectors: "fefunca"): SVGFEFuncAElement | null;
+    querySelector(selectors: "fefuncb"): SVGFEFuncBElement | null;
+    querySelector(selectors: "fefuncg"): SVGFEFuncGElement | null;
+    querySelector(selectors: "fefuncr"): SVGFEFuncRElement | null;
+    querySelector(selectors: "fegaussianblur"): SVGFEGaussianBlurElement | null;
+    querySelector(selectors: "feimage"): SVGFEImageElement | null;
+    querySelector(selectors: "femerge"): SVGFEMergeElement | null;
+    querySelector(selectors: "femergenode"): SVGFEMergeNodeElement | null;
+    querySelector(selectors: "femorphology"): SVGFEMorphologyElement | null;
+    querySelector(selectors: "feoffset"): SVGFEOffsetElement | null;
+    querySelector(selectors: "fepointlight"): SVGFEPointLightElement | null;
+    querySelector(selectors: "fespecularlighting"): SVGFESpecularLightingElement | null;
+    querySelector(selectors: "fespotlight"): SVGFESpotLightElement | null;
+    querySelector(selectors: "fetile"): SVGFETileElement | null;
+    querySelector(selectors: "feturbulence"): SVGFETurbulenceElement | null;
+    querySelector(selectors: "fieldset"): HTMLFieldSetElement | null;
+    querySelector(selectors: "figcaption"): HTMLElement | null;
+    querySelector(selectors: "figure"): HTMLElement | null;
+    querySelector(selectors: "filter"): SVGFilterElement | null;
+    querySelector(selectors: "font"): HTMLFontElement | null;
+    querySelector(selectors: "footer"): HTMLElement | null;
+    querySelector(selectors: "foreignobject"): SVGForeignObjectElement | null;
+    querySelector(selectors: "form"): HTMLFormElement | null;
+    querySelector(selectors: "frame"): HTMLFrameElement | null;
+    querySelector(selectors: "frameset"): HTMLFrameSetElement | null;
+    querySelector(selectors: "g"): SVGGElement | null;
+    querySelector(selectors: "h1"): HTMLHeadingElement | null;
+    querySelector(selectors: "h2"): HTMLHeadingElement | null;
+    querySelector(selectors: "h3"): HTMLHeadingElement | null;
+    querySelector(selectors: "h4"): HTMLHeadingElement | null;
+    querySelector(selectors: "h5"): HTMLHeadingElement | null;
+    querySelector(selectors: "h6"): HTMLHeadingElement | null;
+    querySelector(selectors: "head"): HTMLHeadElement | null;
+    querySelector(selectors: "header"): HTMLElement | null;
+    querySelector(selectors: "hgroup"): HTMLElement | null;
+    querySelector(selectors: "hr"): HTMLHRElement | null;
+    querySelector(selectors: "html"): HTMLHtmlElement | null;
+    querySelector(selectors: "i"): HTMLElement | null;
+    querySelector(selectors: "iframe"): HTMLIFrameElement | null;
+    querySelector(selectors: "image"): SVGImageElement | null;
+    querySelector(selectors: "img"): HTMLImageElement | null;
+    querySelector(selectors: "input"): HTMLInputElement | null;
+    querySelector(selectors: "ins"): HTMLModElement | null;
+    querySelector(selectors: "isindex"): HTMLUnknownElement | null;
+    querySelector(selectors: "kbd"): HTMLElement | null;
+    querySelector(selectors: "keygen"): HTMLElement | null;
+    querySelector(selectors: "label"): HTMLLabelElement | null;
+    querySelector(selectors: "legend"): HTMLLegendElement | null;
+    querySelector(selectors: "li"): HTMLLIElement | null;
+    querySelector(selectors: "line"): SVGLineElement | null;
+    querySelector(selectors: "lineargradient"): SVGLinearGradientElement | null;
+    querySelector(selectors: "link"): HTMLLinkElement | null;
+    querySelector(selectors: "listing"): HTMLPreElement | null;
+    querySelector(selectors: "map"): HTMLMapElement | null;
+    querySelector(selectors: "mark"): HTMLElement | null;
+    querySelector(selectors: "marker"): SVGMarkerElement | null;
+    querySelector(selectors: "marquee"): HTMLMarqueeElement | null;
+    querySelector(selectors: "mask"): SVGMaskElement | null;
+    querySelector(selectors: "menu"): HTMLMenuElement | null;
+    querySelector(selectors: "meta"): HTMLMetaElement | null;
+    querySelector(selectors: "metadata"): SVGMetadataElement | null;
+    querySelector(selectors: "meter"): HTMLMeterElement | null;
+    querySelector(selectors: "nav"): HTMLElement | null;
+    querySelector(selectors: "nextid"): HTMLUnknownElement | null;
+    querySelector(selectors: "nobr"): HTMLElement | null;
+    querySelector(selectors: "noframes"): HTMLElement | null;
+    querySelector(selectors: "noscript"): HTMLElement | null;
+    querySelector(selectors: "object"): HTMLObjectElement | null;
+    querySelector(selectors: "ol"): HTMLOListElement | null;
+    querySelector(selectors: "optgroup"): HTMLOptGroupElement | null;
+    querySelector(selectors: "option"): HTMLOptionElement | null;
+    querySelector(selectors: "p"): HTMLParagraphElement | null;
+    querySelector(selectors: "param"): HTMLParamElement | null;
+    querySelector(selectors: "path"): SVGPathElement | null;
+    querySelector(selectors: "pattern"): SVGPatternElement | null;
+    querySelector(selectors: "picture"): HTMLPictureElement | null;
+    querySelector(selectors: "plaintext"): HTMLElement | null;
+    querySelector(selectors: "polygon"): SVGPolygonElement | null;
+    querySelector(selectors: "polyline"): SVGPolylineElement | null;
+    querySelector(selectors: "pre"): HTMLPreElement | null;
+    querySelector(selectors: "progress"): HTMLProgressElement | null;
+    querySelector(selectors: "q"): HTMLQuoteElement | null;
+    querySelector(selectors: "radialgradient"): SVGRadialGradientElement | null;
+    querySelector(selectors: "rect"): SVGRectElement | null;
+    querySelector(selectors: "rt"): HTMLElement | null;
+    querySelector(selectors: "ruby"): HTMLElement | null;
+    querySelector(selectors: "s"): HTMLElement | null;
+    querySelector(selectors: "samp"): HTMLElement | null;
+    querySelector(selectors: "script"): HTMLScriptElement | null;
+    querySelector(selectors: "section"): HTMLElement | null;
+    querySelector(selectors: "select"): HTMLSelectElement | null;
+    querySelector(selectors: "small"): HTMLElement | null;
+    querySelector(selectors: "source"): HTMLSourceElement | null;
+    querySelector(selectors: "span"): HTMLSpanElement | null;
+    querySelector(selectors: "stop"): SVGStopElement | null;
+    querySelector(selectors: "strike"): HTMLElement | null;
+    querySelector(selectors: "strong"): HTMLElement | null;
+    querySelector(selectors: "style"): HTMLStyleElement | null;
+    querySelector(selectors: "sub"): HTMLElement | null;
+    querySelector(selectors: "sup"): HTMLElement | null;
+    querySelector(selectors: "svg"): SVGSVGElement | null;
+    querySelector(selectors: "switch"): SVGSwitchElement | null;
+    querySelector(selectors: "symbol"): SVGSymbolElement | null;
+    querySelector(selectors: "table"): HTMLTableElement | null;
+    querySelector(selectors: "tbody"): HTMLTableSectionElement | null;
+    querySelector(selectors: "td"): HTMLTableDataCellElement | null;
+    querySelector(selectors: "template"): HTMLTemplateElement | null;
+    querySelector(selectors: "text"): SVGTextElement | null;
+    querySelector(selectors: "textpath"): SVGTextPathElement | null;
+    querySelector(selectors: "textarea"): HTMLTextAreaElement | null;
+    querySelector(selectors: "tfoot"): HTMLTableSectionElement | null;
+    querySelector(selectors: "th"): HTMLTableHeaderCellElement | null;
+    querySelector(selectors: "thead"): HTMLTableSectionElement | null;
+    querySelector(selectors: "title"): HTMLTitleElement | null;
+    querySelector(selectors: "tr"): HTMLTableRowElement | null;
+    querySelector(selectors: "track"): HTMLTrackElement | null;
+    querySelector(selectors: "tspan"): SVGTSpanElement | null;
+    querySelector(selectors: "tt"): HTMLElement | null;
+    querySelector(selectors: "u"): HTMLElement | null;
+    querySelector(selectors: "ul"): HTMLUListElement | null;
+    querySelector(selectors: "use"): SVGUseElement | null;
+    querySelector(selectors: "var"): HTMLElement | null;
+    querySelector(selectors: "video"): HTMLVideoElement | null;
+    querySelector(selectors: "view"): SVGViewElement | null;
+    querySelector(selectors: "wbr"): HTMLElement | null;
+    querySelector(selectors: "x-ms-webview"): MSHTMLWebViewElement | null;
+    querySelector(selectors: "xmp"): HTMLPreElement | null;
+    querySelector(selectors: string): Element | null;
     querySelectorAll(selectors: "a"): NodeListOf<HTMLAnchorElement>;
     querySelectorAll(selectors: "abbr"): NodeListOf<HTMLElement>;
     querySelectorAll(selectors: "acronym"): NodeListOf<HTMLElement>;
@@ -18151,6 +18204,20 @@ interface ProgressEventInit extends EventInit {
     total?: number;
 }
 
+interface ScrollOptions {
+    behavior?: ScrollBehavior;
+}
+
+interface ScrollToOptions extends ScrollOptions {
+    left?: number;
+    top?: number;
+}
+
+interface ScrollIntoViewOptions extends ScrollOptions {
+    block?: ScrollLogicalPosition;
+    inline?: ScrollLogicalPosition;
+}
+
 interface ClipboardEventInit extends EventInit {
     data?: string;
     dataType?: string;
@@ -18194,7 +18261,7 @@ interface EcdsaParams extends Algorithm {
 }
 
 interface EcKeyGenParams extends Algorithm {
-    typedCurve: string;
+    namedCurve: string;
 }
 
 interface EcKeyAlgorithm extends KeyAlgorithm {
@@ -18330,6 +18397,13 @@ interface JsonWebKey {
     k?: string;
 }
 
+interface ParentNode {
+    readonly children: HTMLCollection;
+    readonly firstElementChild: Element;
+    readonly lastElementChild: Element;
+    readonly childElementCount: number;
+}
+
 declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
 
 interface ErrorEventHandler {
@@ -18388,7 +18462,7 @@ declare var defaultStatus: string;
 declare var devicePixelRatio: number;
 declare var doNotTrack: string;
 declare var document: Document;
-declare var event: Event;
+declare var event: Event | undefined;
 declare var external: External;
 declare var frameElement: Element;
 declare var frames: Window;
@@ -18400,7 +18474,7 @@ declare var location: Location;
 declare var locationbar: BarProp;
 declare var menubar: BarProp;
 declare var msCredentials: MSCredentials;
-declare var name: string;
+declare const name: never;
 declare var navigator: Navigator;
 declare var offscreenBuffering: string | boolean;
 declare var onabort: (this: Window, ev: UIEvent) => any;
@@ -18494,7 +18568,7 @@ declare var ontouchstart: (ev: TouchEvent) => any;
 declare var onunload: (this: Window, ev: Event) => any;
 declare var onvolumechange: (this: Window, ev: Event) => any;
 declare var onwaiting: (this: Window, ev: Event) => any;
-declare var opener: Window;
+declare var opener: any;
 declare var orientation: string | number;
 declare var outerHeight: number;
 declare var outerWidth: number;
@@ -18547,6 +18621,9 @@ declare function webkitCancelAnimationFrame(handle: number): void;
 declare function webkitConvertPointFromNodeToPage(node: Node, pt: WebKitPoint): WebKitPoint;
 declare function webkitConvertPointFromPageToNode(node: Node, pt: WebKitPoint): WebKitPoint;
 declare function webkitRequestAnimationFrame(callback: FrameRequestCallback): number;
+declare function scroll(options?: ScrollToOptions): void;
+declare function scrollTo(options?: ScrollToOptions): void;
+declare function scrollBy(options?: ScrollToOptions): void;
 declare function toString(): string;
 declare function addEventListener(type: string, listener?: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 declare function dispatchEvent(evt: Event): boolean;
@@ -18702,14 +18779,21 @@ type MSOutboundPayload = MSVideoSendPayload | MSAudioSendPayload;
 type RTCIceGatherCandidate = RTCIceCandidate | RTCIceCandidateComplete;
 type RTCTransport = RTCDtlsTransport | RTCSrtpSdesTransport;
 type payloadtype = number;
+type ScrollBehavior = "auto" | "instant" | "smooth";
+type ScrollLogicalPosition = "start" | "center" | "end" | "nearest";
 type IDBValidKey = number | string | Date | IDBArrayKey;
 type BufferSource = ArrayBuffer | ArrayBufferView;
 type MouseWheelEvent = WheelEvent;
+type ScrollRestoration = "auto" | "manual";
+
+
 /////////////////////////////
 /// WorkerGlobalScope APIs 
 /////////////////////////////
 // These are only available in a Web Worker 
 declare function importScripts(...urls: string[]): void;
+
+
 
 
 /////////////////////////////

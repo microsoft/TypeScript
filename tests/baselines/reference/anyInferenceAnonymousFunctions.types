@@ -57,9 +57,9 @@ paired.reduce((b3, b4) => b3.concat({}), []);
 
 paired.map((c1) => c1.count);
 >paired.map((c1) => c1.count) : any[]
->paired.map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
+>paired.map : { <U>(this: [any, any, any, any, any], callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any): [U, U, U, U, U]; <U>(this: [any, any, any, any], callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any): [U, U, U, U]; <U>(this: [any, any, any], callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any): [U, U, U]; <U>(this: [any, any], callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any): [U, U]; <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any): U[]; }
 >paired : any[]
->map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
+>map : { <U>(this: [any, any, any, any, any], callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any): [U, U, U, U, U]; <U>(this: [any, any, any, any], callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any): [U, U, U, U]; <U>(this: [any, any, any], callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any): [U, U, U]; <U>(this: [any, any], callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any): [U, U]; <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any): U[]; }
 >(c1) => c1.count : (c1: any) => any
 >c1 : any
 >c1.count : any
@@ -68,9 +68,9 @@ paired.map((c1) => c1.count);
 
 paired.map(function (c2) { return c2.count; });
 >paired.map(function (c2) { return c2.count; }) : any[]
->paired.map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
+>paired.map : { <U>(this: [any, any, any, any, any], callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any): [U, U, U, U, U]; <U>(this: [any, any, any, any], callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any): [U, U, U, U]; <U>(this: [any, any, any], callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any): [U, U, U]; <U>(this: [any, any], callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any): [U, U]; <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any): U[]; }
 >paired : any[]
->map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
+>map : { <U>(this: [any, any, any, any, any], callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any): [U, U, U, U, U]; <U>(this: [any, any, any, any], callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any): [U, U, U, U]; <U>(this: [any, any, any], callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any): [U, U, U]; <U>(this: [any, any], callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any): [U, U]; <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any): U[]; }
 >function (c2) { return c2.count; } : (c2: any) => any
 >c2 : any
 >c2.count : any

@@ -21,8 +21,8 @@ var C1 = (function () {
     }
     return C1;
 }());
-exports.C1 = C1;
 C1.s1 = true;
+exports.C1 = C1;
 //// [foo_1.js]
 "use strict";
 var foo = require("./foo_0");

@@ -7,6 +7,6 @@
 
 //// [parserModifierOnStatementInBlock4.js]
 {
-    function bar() {
+    export function bar() {
     }
 }

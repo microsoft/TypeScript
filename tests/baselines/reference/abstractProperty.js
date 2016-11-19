@@ -35,9 +35,10 @@ var B = (function () {
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        _super.apply(this, arguments);
-        this.raw = "edge";
-        this.ro = "readonly please";
+        var _this = _super.apply(this, arguments) || this;
+        _this.raw = "edge";
+        _this.ro = "readonly please";
+        return _this;
     }
     Object.defineProperty(C.prototype, "prop", {
         get: function () { return "foo"; },

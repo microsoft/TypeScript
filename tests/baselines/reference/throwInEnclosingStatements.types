@@ -25,7 +25,7 @@ switch (y) {
 >'a' : "a"
 
         throw y;
->y : string
+>y : "a"
 
     default:
         throw y;

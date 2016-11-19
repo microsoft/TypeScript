@@ -41,7 +41,6 @@ define(["require", "exports", "react", "react-router"], function (require, expor
     var M;
     (function (M) {
     })(M || (M = {}));
-    var M;
     (function (M) {
         // Should emit 'M.X' in both opening and closing tags
         var y = <M.X></M.X>;

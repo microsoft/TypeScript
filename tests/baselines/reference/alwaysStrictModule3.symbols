@@ -1,0 +1,6 @@
+=== tests/cases/compiler/alwaysStrictModule3.ts ===
+
+// module ES2015
+export const a = 1;
+>a : Symbol(a, Decl(alwaysStrictModule3.ts, 2, 12))
+

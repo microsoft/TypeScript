@@ -20,7 +20,7 @@ var Base = (function () {
     function Base() {
         var arg = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            arg[_i - 0] = arguments[_i];
+            arg[_i] = arguments[_i];
         }
     }
     return Base;
@@ -28,9 +28,10 @@ var Base = (function () {
 var Super = (function (_super) {
     __extends(Super, _super);
     function Super() {
-        var _this = this;
+        var _this;
         (function () { return _this; }); // No Error
-        _super.call(this);
+        _this = _super.call(this) || this;
+        return _this;
     }
     return Super;
 }(Base));

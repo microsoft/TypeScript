@@ -28,7 +28,7 @@ var TypeScript2;
     var MemberNameArray = (function (_super) {
         __extends(MemberNameArray, _super);
         function MemberNameArray() {
-            _super.apply(this, arguments);
+            return _super.apply(this, arguments) || this;
         }
         return MemberNameArray;
     }(MemberName));

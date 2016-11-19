@@ -76,7 +76,6 @@ var A = (function () {
     }
     return A;
 }());
-var A;
 (function (A) {
     A.Instance = new A();
 })(A || (A = {}));

@@ -1,6 +1,6 @@
 //// [compoundExponentiationAssignmentLHSIsValue.ts]
 // expected error for all the LHS of compound assignments (arithmetic and addition)
-var value;
+var value: any;
 
 // this
 class C {
@@ -139,9 +139,10 @@ _a = Math.pow(['', ''], value), '' = _a[0], '' = _a[1];
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        _super.call(this);
+        var _this = _super.call(this) || this;
         (_a = _super.prototype). = Math.pow(_a., value);
         var _a;
+        return _this;
     }
     Derived.prototype.foo = function () {
         (_a = _super.prototype). = Math.pow(_a., value);

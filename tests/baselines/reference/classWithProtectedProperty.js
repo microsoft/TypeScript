@@ -48,7 +48,7 @@ C.g = function () { return ''; };
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     D.prototype.method = function () {
         // No errors

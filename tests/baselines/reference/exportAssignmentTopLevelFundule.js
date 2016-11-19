@@ -22,7 +22,6 @@ define(["require", "exports"], function (require, exports) {
     function foo() {
         return "test";
     }
-    var foo;
     (function (foo) {
         foo.answer = 42;
     })(foo || (foo = {}));

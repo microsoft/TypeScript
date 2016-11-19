@@ -61,6 +61,10 @@ function createRunner(kind: TestRunnerKind): RunnerBase {
     }
 }
 
+if (Harness.IO.tryEnableSourceMapsForHost && /^development$/i.test(Harness.IO.getEnvironmentVariable("NODE_ENV"))) {
+    Harness.IO.tryEnableSourceMapsForHost();
+}
+
 // users can define tests to run in mytest.config that will override cmd line args, otherwise use cmd line args (test.config), otherwise no options
 
 const mytestconfigFileName = "mytest.config";
@@ -222,5 +226,5 @@ else {
 }
 if (!runUnitTests) {
     // patch `describe` to skip unit tests
-    describe = <any>(function () { });
+    describe = ts.noop as any;
 }

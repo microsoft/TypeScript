@@ -39,7 +39,7 @@ var List = (function () {
 var DerivedList = (function (_super) {
     __extends(DerivedList, _super);
     function DerivedList() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return DerivedList;
 }(List));

@@ -27,7 +27,7 @@ var Base = (function () {
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     C.prototype[(_a = {}, _a[_super.bar.call(this)] = 1, _a)[0]] = function () { };
     return C;

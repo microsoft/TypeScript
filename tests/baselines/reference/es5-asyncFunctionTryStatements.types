@@ -1,5 +1,5 @@
 === tests/cases/compiler/es5-asyncFunctionTryStatements.ts ===
-declare var x, y, z, a, b, c;
+declare var x: any, y: any, z: any, a: any, b: any, c: any;
 >x : any
 >y : any
 >z : any
@@ -10,7 +10,7 @@ declare var x, y, z, a, b, c;
 async function tryCatch0() {
 >tryCatch0 : () => Promise<void>
 
-    var x, y;
+    var x: any, y: any;
 >x : any
 >y : any
 
@@ -29,7 +29,7 @@ async function tryCatch0() {
 async function tryCatch1() {
 >tryCatch1 : () => Promise<void>
 
-    var x, y;
+    var x: any, y: any;
 >x : any
 >y : any
 
@@ -49,7 +49,7 @@ async function tryCatch1() {
 async function tryCatch2() {
 >tryCatch2 : () => Promise<void>
 
-    var x, y;
+    var x: any, y: any;
 >x : any
 >y : any
 
@@ -71,7 +71,7 @@ async function tryCatch3(): Promise<Function> {
 >Promise : Promise<T>
 >Function : Function
 
-    var x, y;
+    var x: any, y: any;
 >x : any
 >y : any
 
@@ -91,7 +91,7 @@ async function tryCatch3(): Promise<Function> {
 async function tryFinally0() {
 >tryFinally0 : () => Promise<void>
 
-    var x, y;
+    var x: any, y: any;
 >x : any
 >y : any
 
@@ -108,7 +108,7 @@ async function tryFinally0() {
 async function tryFinally1() {
 >tryFinally1 : () => Promise<void>
 
-    var x, y;
+    var x: any, y: any;
 >x : any
 >y : any
 
@@ -126,7 +126,7 @@ async function tryFinally1() {
 async function tryFinally2() {
 >tryFinally2 : () => Promise<void>
 
-    var x, y;
+    var x: any, y: any;
 >x : any
 >y : any
 
@@ -144,7 +144,7 @@ async function tryFinally2() {
 async function tryCatchFinally0() {
 >tryCatchFinally0 : () => Promise<void>
 
-    var x, y, z;
+    var x: any, y: any, z: any;
 >x : any
 >y : any
 >z : any
@@ -168,7 +168,7 @@ async function tryCatchFinally0() {
 async function tryCatchFinally1() {
 >tryCatchFinally1 : () => Promise<void>
 
-    var x, y, z;
+    var x: any, y: any, z: any;
 >x : any
 >y : any
 >z : any
@@ -193,7 +193,7 @@ async function tryCatchFinally1() {
 async function tryCatchFinally2() {
 >tryCatchFinally2 : () => Promise<void>
 
-    var x, y, z;
+    var x: any, y: any, z: any;
 >x : any
 >y : any
 >z : any
@@ -218,7 +218,7 @@ async function tryCatchFinally2() {
 async function tryCatchFinally3() {
 >tryCatchFinally3 : () => Promise<void>
 
-    var x, y, z;
+    var x: any, y: any, z: any;
 >x : any
 >y : any
 >z : any

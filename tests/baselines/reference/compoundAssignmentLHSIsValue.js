@@ -1,7 +1,7 @@
 //// [compoundAssignmentLHSIsValue.ts]
 
 // expected error for all the LHS of compound assignments (arithmetic and addition)
-var value;
+var value: any;
 
 // this
 class C {
@@ -197,9 +197,10 @@ value;
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        _super.call(this);
+        var _this = _super.call(this) || this;
         _super.prototype. *= value;
         _super.prototype. += value;
+        return _this;
     }
     Derived.prototype.foo = function () {
         _super.prototype. *= value;

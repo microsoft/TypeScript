@@ -47,11 +47,12 @@ var Derived = (function (_super) {
     __extends(Derived, _super);
     //super call in class constructor of derived type
     function Derived(q) {
-        _super.call(this, '');
-        this.q = q;
+        var _this = _super.call(this, '') || this;
+        _this.q = q;
         //type of super call expression is void
-        var p = _super.call(this, '');
+        var p = _this = _super.call(this, '') || this;
         var p = v();
+        return _this;
     }
     return Derived;
 }(Base));
@@ -63,8 +64,10 @@ var OtherBase = (function () {
 var OtherDerived = (function (_super) {
     __extends(OtherDerived, _super);
     function OtherDerived() {
+        var _this;
         var p = '';
-        _super.call(this);
+        _this = _super.call(this) || this;
+        return _this;
     }
     return OtherDerived;
 }(OtherBase));

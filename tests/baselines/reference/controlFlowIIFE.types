@@ -118,7 +118,7 @@ maybeNumber++;
 
 if (maybeNumber !== undefined) {
 >maybeNumber !== undefined : boolean
->maybeNumber : number | undefined
+>maybeNumber : number
 >undefined : undefined
 
     maybeNumber++;
