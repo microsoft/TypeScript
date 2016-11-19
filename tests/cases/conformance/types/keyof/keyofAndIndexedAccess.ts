@@ -181,6 +181,46 @@ function f40(c: C) {
     let z: Z = c["z"];
 }
 
+function f50<T>(k: keyof T, s: string, n: number) {
+    const x1 = s as keyof T;
+    const x2 = n as keyof T;
+    const x3 = k as string;
+    const x4 = k as number;
+    const x5 = k as string | number;
+}
+
+function f51<T, K extends keyof T>(k: K, s: string, n: number) {
+    const x1 = s as keyof T;
+    const x2 = n as keyof T;
+    const x3 = k as string;
+    const x4 = k as number;
+    const x5 = k as string | number;
+}
+
+function f52<T>(obj: { [x: string]: boolean }, k: keyof T, s: string, n: number) {
+    const x1 = obj[s];
+    const x2 = obj[n];
+    const x3 = obj[k];
+}
+
+function f53<T, K extends keyof T>(obj: { [x: string]: boolean }, k: K, s: string, n: number) {
+    const x1 = obj[s];
+    const x2 = obj[n];
+    const x3 = obj[k];
+}
+
+function f54<T>(obj: T, key: keyof T) {
+    for (let s in obj[key]) {
+    }
+    const b = "foo" in obj[key];
+}
+
+function f55<T, K extends keyof T>(obj: T, key: K) {
+    for (let s in obj[key]) {
+    }
+    const b = "foo" in obj[key];
+}
+
 // Repros from #12011
 
 class Base {
