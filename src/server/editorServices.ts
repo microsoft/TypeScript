@@ -520,8 +520,10 @@ namespace ts.server {
         }
 
         private onConfigChangedForConfiguredProject(project: ConfiguredProject) {
-            this.logger.info(`Config file changed: ${project.getConfigFilePath()}`);
-            this.updateConfiguredProject(project);
+            const configFileName = project.getConfigFilePath();
+            this.logger.info(`Config file changed: ${configFileName}`);
+            const configFileErrors = this.updateConfiguredProject(project);
+            this.reportConfigFileDiagnostics(configFileName, configFileErrors, /*triggerFile*/ configFileName);
             this.refreshInferredProjects();
         }
 
@@ -1015,6 +1017,9 @@ namespace ts.server {
                 return;
             }
 
+            // note: the returned "success" is true does not mean the "configFileErrors" is empty.
+            // because we might have tolerated the errors and kept going. So always return the configFileErrors
+            // regardless the "success" here is true or not.
             const { success, projectOptions, configFileErrors } = this.convertConfigFileContentToProjectOptions(project.getConfigFilePath());
             if (!success) {
                 // reset project settings to default
@@ -1026,7 +1031,7 @@ namespace ts.server {
                 project.setCompilerOptions(projectOptions.compilerOptions);
                 if (!project.languageServiceEnabled) {
                     // language service is already disabled
-                    return;
+                    return configFileErrors;
                 }
                 project.disableLanguageService();
                 project.stopWatchingDirectory();
@@ -1038,6 +1043,7 @@ namespace ts.server {
                 this.watchConfigDirectoryForProject(project, projectOptions);
                 this.updateNonInferredProject(project, projectOptions.files, fileNamePropertyReader, projectOptions.compilerOptions, projectOptions.typingOptions, projectOptions.compileOnSave, configFileErrors);
             }
+            return configFileErrors;
         }
 
         createInferredProjectWithRootFileIfNecessary(root: ScriptInfo) {
