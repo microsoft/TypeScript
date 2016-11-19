@@ -317,7 +317,7 @@ namespace ts.server {
             }
             switch (response.kind) {
                 case ActionSet:
-                    this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typingOptions, response.unresolvedImports, response.typings);
+                    this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typeAcquisition, response.unresolvedImports, response.typings);
                     break;
                 case ActionInvalidate:
                     this.typingsCache.deleteTypingsForProject(response.projectName);
@@ -823,7 +823,7 @@ namespace ts.server {
                 compilerOptions: parsedCommandLine.options,
                 configHasFilesProperty: config["files"] !== undefined,
                 wildcardDirectories: createMap(parsedCommandLine.wildcardDirectories),
-                typingOptions: parsedCommandLine.typingOptions,
+                typeAcquisition: parsedCommandLine.typeAcquisition,
                 compileOnSave: parsedCommandLine.compileOnSave
             };
             return { success: true, projectOptions, configFileErrors: errors };
@@ -847,7 +847,7 @@ namespace ts.server {
             return false;
         }
 
-        private createAndAddExternalProject(projectFileName: string, files: protocol.ExternalFile[], options: protocol.ExternalProjectCompilerOptions, typingOptions: TypingOptions) {
+        private createAndAddExternalProject(projectFileName: string, files: protocol.ExternalFile[], options: protocol.ExternalProjectCompilerOptions, typeAcquisition: TypeAcquisition) {
             const compilerOptions = convertCompilerOptions(options);
             const project = new ExternalProject(
                 projectFileName,
@@ -857,7 +857,7 @@ namespace ts.server {
                 /*languageServiceEnabled*/ !this.exceededTotalSizeLimitForNonTsFiles(compilerOptions, files, externalFilePropertyReader),
                 options.compileOnSave === undefined ? true : options.compileOnSave);
 
-            this.addFilesToProjectAndUpdateGraph(project, files, externalFilePropertyReader, /*clientFileName*/ undefined, typingOptions, /*configFileErrors*/ undefined);
+            this.addFilesToProjectAndUpdateGraph(project, files, externalFilePropertyReader, /*clientFileName*/ undefined, typeAcquisition, /*configFileErrors*/ undefined);
             this.externalProjects.push(project);
             return project;
         }
@@ -885,7 +885,7 @@ namespace ts.server {
                 /*languageServiceEnabled*/ !sizeLimitExceeded,
                 projectOptions.compileOnSave === undefined ? false : projectOptions.compileOnSave);
 
-            this.addFilesToProjectAndUpdateGraph(project, projectOptions.files, fileNamePropertyReader, clientFileName, projectOptions.typingOptions, configFileErrors);
+            this.addFilesToProjectAndUpdateGraph(project, projectOptions.files, fileNamePropertyReader, clientFileName, projectOptions.typeAcquisition, configFileErrors);
 
             project.watchConfigFile(project => this.onConfigChangedForConfiguredProject(project));
             if (!sizeLimitExceeded) {
@@ -904,7 +904,7 @@ namespace ts.server {
             }
         }
 
-        private addFilesToProjectAndUpdateGraph<T>(project: ConfiguredProject | ExternalProject, files: T[], propertyReader: FilePropertyReader<T>, clientFileName: string, typingOptions: TypingOptions, configFileErrors: Diagnostic[]): void {
+        private addFilesToProjectAndUpdateGraph<T>(project: ConfiguredProject | ExternalProject, files: T[], propertyReader: FilePropertyReader<T>, clientFileName: string, typeAcquisition: TypeAcquisition, configFileErrors: Diagnostic[]): void {
             let errors: Diagnostic[];
             for (const f of files) {
                 const rootFilename = propertyReader.getFileName(f);
@@ -919,7 +919,7 @@ namespace ts.server {
                 }
             }
             project.setProjectErrors(concatenate(configFileErrors, errors));
-            project.setTypingOptions(typingOptions);
+            project.setTypeAcquisition(typeAcquisition);
             project.updateGraph();
         }
 
@@ -936,7 +936,7 @@ namespace ts.server {
             };
         }
 
-        private updateNonInferredProject<T>(project: ExternalProject | ConfiguredProject, newUncheckedFiles: T[], propertyReader: FilePropertyReader<T>, newOptions: CompilerOptions, newTypingOptions: TypingOptions, compileOnSave: boolean, configFileErrors: Diagnostic[]) {
+        private updateNonInferredProject<T>(project: ExternalProject | ConfiguredProject, newUncheckedFiles: T[], propertyReader: FilePropertyReader<T>, newOptions: CompilerOptions, newTypeAcquisition: TypeAcquisition, compileOnSave: boolean, configFileErrors: Diagnostic[]) {
             const oldRootScriptInfos = project.getRootScriptInfos();
             const newRootScriptInfos: ScriptInfo[] = [];
             const newRootScriptInfoMap: NormalizedPathMap<ScriptInfo> = createNormalizedPathMap<ScriptInfo>();
@@ -998,7 +998,7 @@ namespace ts.server {
             }
 
             project.setCompilerOptions(newOptions);
-            (<ExternalProject | ConfiguredProject>project).setTypingOptions(newTypingOptions);
+            (<ExternalProject | ConfiguredProject>project).setTypeAcquisition(newTypeAcquisition);
 
             // VS only set the CompileOnSaveEnabled option in the request if the option was changed recently
             // therefore if it is undefined, it should not be updated.
@@ -1041,7 +1041,7 @@ namespace ts.server {
                     project.enableLanguageService();
                 }
                 this.watchConfigDirectoryForProject(project, projectOptions);
-                this.updateNonInferredProject(project, projectOptions.files, fileNamePropertyReader, projectOptions.compilerOptions, projectOptions.typingOptions, projectOptions.compileOnSave, configFileErrors);
+                this.updateNonInferredProject(project, projectOptions.files, fileNamePropertyReader, projectOptions.compilerOptions, projectOptions.typeAcquisition, projectOptions.compileOnSave, configFileErrors);
             }
             return configFileErrors;
         }
@@ -1346,7 +1346,7 @@ namespace ts.server {
             if (externalProject) {
                 if (!tsConfigFiles) {
                     // external project already exists and not config files were added - update the project and return;
-                    this.updateNonInferredProject(externalProject, proj.rootFiles, externalFilePropertyReader, convertCompilerOptions(proj.options), proj.typingOptions, proj.options.compileOnSave, /*configFileErrors*/ undefined);
+                    this.updateNonInferredProject(externalProject, proj.rootFiles, externalFilePropertyReader, convertCompilerOptions(proj.options), proj.typeAcquisition, proj.options.compileOnSave, /*configFileErrors*/ undefined);
                     return;
                 }
                 // some config files were added to external project (that previously were not there)
@@ -1406,7 +1406,7 @@ namespace ts.server {
             else {
                 // no config files - remove the item from the collection
                 delete this.externalProjectToConfiguredProjectMap[proj.projectFileName];
-                this.createAndAddExternalProject(proj.projectFileName, rootFiles, proj.options, proj.typingOptions);
+                this.createAndAddExternalProject(proj.projectFileName, rootFiles, proj.options, proj.typeAcquisition);
             }
             this.refreshInferredProjects();
         }
