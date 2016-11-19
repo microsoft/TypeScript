@@ -2615,6 +2615,7 @@ namespace ts {
         }
 
         function parseUnionOrIntersectionType(kind: SyntaxKind, parseConstituentType: () => TypeNode, operator: SyntaxKind): TypeNode {
+            parseOptional(operator);
             let type = parseConstituentType();
             if (token() === operator) {
                 const types = createNodeArray<TypeNode>([type], type.pos);
