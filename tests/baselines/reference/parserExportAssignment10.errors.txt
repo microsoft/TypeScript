@@ -1,0 +1,11 @@
+tests/cases/conformance/parser/ecmascript5/ExportAssignments/parserExportAssignment10.ts(4,3): error TS1128: Declaration or statement expected.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ExportAssignments/parserExportAssignment10.ts (1 errors) ====
+    export default "123";
+    namespace Foo {
+      var foo;
+      export foo;
+      ~~~~~~
+!!! error TS1128: Declaration or statement expected.
+    }
