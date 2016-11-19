@@ -1,0 +1,144 @@
+===================================================================
+JsFile: ES5For-of35.js
+mapUrl: ES5For-of35.js.map
+sourceRoot: 
+sources: ES5For-of35.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/conformance/statements/for-ofStatements/ES5For-of35.js
+sourceFile:ES5For-of35.ts
+-------------------------------------------------------------------
+>>>var __values = (this && this.__values) || function (o) { return (i = typeof Symbol === "function" && o[Symbol.iterator] || 0) ? i.call(o) : { next: function () { return { done: d = d || i >= o.length, value: d ? void 0 : o[i++] }; } }; var i, d; };
+>>>var __step = (this && this.__step) || function (r) { return !(r.done || (r.done = (r.result = r.iterator.next()).done)); };
+>>>var __close = (this && this.__close) || function (r) { return (m = !(r && r.done) && r.iterator["return"]) && m.call(r.iterator); var m; };
+>>>try {
+>>>    for (var iterator_1 = { iterator: __values([2, 3]) }; __step(iterator_1);) {
+1 >^^^^
+2 >    ^^^
+3 >       ^
+4 >        ^
+5 >         ^^^^
+6 >             ^^^^^^^^^^^^^
+7 >                          ^^
+8 >                            ^^^^^^^^^^
+9 >                                      ^^^^^^^^^
+10>                                               ^
+11>                                                ^
+12>                                                 ^^
+13>                                                   ^
+14>                                                    ^
+15>                                                     ^
+16>                                                      ^^
+17>                                                        ^^
+18>                                                          ^^^^^^^^^^^^^^^^^^
+19>                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >    for
+3 >        
+4 >        (const {x: a = 0, y: b = 1} of 
+5 >         
+6 >             
+7 >                          
+8 >                            
+9 >                                      
+10>                                               [
+11>                                                2
+12>                                                 , 
+13>                                                   3
+14>                                                    ]
+15>                                                     
+16>                                                      
+17>                                                        
+18>                                                          const {x: a = 0, y: b = 1}
+1 >Emitted(5, 5) Source(1, 1) + SourceIndex(0)
+2 >Emitted(5, 8) Source(1, 4) + SourceIndex(0)
+3 >Emitted(5, 9) Source(1, 5) + SourceIndex(0)
+4 >Emitted(5, 10) Source(1, 36) + SourceIndex(0)
+5 >Emitted(5, 14) Source(1, 36) + SourceIndex(0)
+6 >Emitted(5, 27) Source(1, 36) + SourceIndex(0)
+7 >Emitted(5, 29) Source(1, 36) + SourceIndex(0)
+8 >Emitted(5, 39) Source(1, 36) + SourceIndex(0)
+9 >Emitted(5, 48) Source(1, 36) + SourceIndex(0)
+10>Emitted(5, 49) Source(1, 37) + SourceIndex(0)
+11>Emitted(5, 50) Source(1, 38) + SourceIndex(0)
+12>Emitted(5, 52) Source(1, 40) + SourceIndex(0)
+13>Emitted(5, 53) Source(1, 41) + SourceIndex(0)
+14>Emitted(5, 54) Source(1, 42) + SourceIndex(0)
+15>Emitted(5, 55) Source(1, 42) + SourceIndex(0)
+16>Emitted(5, 57) Source(1, 42) + SourceIndex(0)
+17>Emitted(5, 59) Source(1, 6) + SourceIndex(0)
+18>Emitted(5, 77) Source(1, 32) + SourceIndex(0)
+---
+>>>        var _a = iterator_1.result.value, _b = _a.x, a = _b === void 0 ? 0 : _b, _c = _a.y, b = _c === void 0 ? 1 : _c;
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                        ^^
+5 >                                          ^^^^^^^^^
+6 >                                                   ^^
+7 >                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+8 >                                                                               ^^
+9 >                                                                                 ^^^^^^^^^
+10>                                                                                          ^^
+11>                                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+2 >        
+3 >            {x: a = 0, y: b = 1}
+4 >                                        
+5 >                                          x: a = 0
+6 >                                                   
+7 >                                                     x: a = 0
+8 >                                                                               , 
+9 >                                                                                 y: b = 1
+10>                                                                                          
+11>                                                                                            y: b = 1
+1->Emitted(6, 9) Source(1, 12) + SourceIndex(0)
+2 >Emitted(6, 13) Source(1, 12) + SourceIndex(0)
+3 >Emitted(6, 41) Source(1, 32) + SourceIndex(0)
+4 >Emitted(6, 43) Source(1, 13) + SourceIndex(0)
+5 >Emitted(6, 52) Source(1, 21) + SourceIndex(0)
+6 >Emitted(6, 54) Source(1, 13) + SourceIndex(0)
+7 >Emitted(6, 80) Source(1, 21) + SourceIndex(0)
+8 >Emitted(6, 82) Source(1, 23) + SourceIndex(0)
+9 >Emitted(6, 91) Source(1, 31) + SourceIndex(0)
+10>Emitted(6, 93) Source(1, 23) + SourceIndex(0)
+11>Emitted(6, 119) Source(1, 31) + SourceIndex(0)
+---
+>>>        a;
+1 >^^^^^^^^
+2 >        ^
+3 >         ^
+4 >          ^->
+1 >} of [2, 3]) {
+  >    
+2 >        a
+3 >         ;
+1 >Emitted(7, 9) Source(2, 5) + SourceIndex(0)
+2 >Emitted(7, 10) Source(2, 6) + SourceIndex(0)
+3 >Emitted(7, 11) Source(2, 7) + SourceIndex(0)
+---
+>>>        b;
+1->^^^^^^^^
+2 >        ^
+3 >         ^
+1->
+  >    
+2 >        b
+3 >         ;
+1->Emitted(8, 9) Source(3, 5) + SourceIndex(0)
+2 >Emitted(8, 10) Source(3, 6) + SourceIndex(0)
+3 >Emitted(8, 11) Source(3, 7) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^^
+1 >
+  >}
+1 >Emitted(9, 6) Source(4, 2) + SourceIndex(0)
+---
+>>>}
+>>>catch (e_1_1) { e_1 = { error: e_1_1 }; }
+>>>finally {
+>>>    try { __close(iterator_1); } finally { if (e_1) throw e_1.error; }
+>>>}
+>>>var e_1;
+>>>//# sourceMappingURL=ES5For-of35.js.map

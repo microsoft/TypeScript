@@ -1,0 +1,130 @@
+===================================================================
+JsFile: ES5For-of33.js
+mapUrl: ES5For-of33.js.map
+sourceRoot: 
+sources: ES5For-of33.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/conformance/statements/for-ofStatements/ES5For-of33.js
+sourceFile:ES5For-of33.ts
+-------------------------------------------------------------------
+>>>var __values = (this && this.__values) || function (o) { return (i = typeof Symbol === "function" && o[Symbol.iterator] || 0) ? i.call(o) : { next: function () { return { done: d = d || i >= o.length, value: d ? void 0 : o[i++] }; } }; var i, d; };
+>>>var __step = (this && this.__step) || function (r) { return !(r.done || (r.done = (r.result = r.iterator.next()).done)); };
+>>>var __close = (this && this.__close) || function (r) { return (m = !(r && r.done) && r.iterator["return"]) && m.call(r.iterator); var m; };
+>>>try {
+>>>    for (var iterator_1 = { iterator: __values(['a', 'b', 'c']) }; __step(iterator_1);) {
+1 >^^^^
+2 >    ^^^
+3 >       ^
+4 >        ^
+5 >         ^^^^
+6 >             ^^^^^^^^^^^^^
+7 >                          ^^
+8 >                            ^^^^^^^^^^
+9 >                                      ^^^^^^^^^
+10>                                               ^
+11>                                                ^^^
+12>                                                   ^^
+13>                                                     ^^^
+14>                                                        ^^
+15>                                                          ^^^
+16>                                                             ^
+17>                                                              ^
+18>                                                               ^^
+19>                                                                 ^^
+20>                                                                   ^^^^^^^^^^^^^^^^^^
+1 >
+2 >    for
+3 >        
+4 >        (var v of 
+5 >         
+6 >             
+7 >                          
+8 >                            
+9 >                                      
+10>                                               [
+11>                                                'a'
+12>                                                   , 
+13>                                                     'b'
+14>                                                        , 
+15>                                                          'c'
+16>                                                             ]
+17>                                                              
+18>                                                               
+19>                                                                 
+20>                                                                   var v
+1 >Emitted(5, 5) Source(1, 1) + SourceIndex(0)
+2 >Emitted(5, 8) Source(1, 4) + SourceIndex(0)
+3 >Emitted(5, 9) Source(1, 5) + SourceIndex(0)
+4 >Emitted(5, 10) Source(1, 15) + SourceIndex(0)
+5 >Emitted(5, 14) Source(1, 15) + SourceIndex(0)
+6 >Emitted(5, 27) Source(1, 15) + SourceIndex(0)
+7 >Emitted(5, 29) Source(1, 15) + SourceIndex(0)
+8 >Emitted(5, 39) Source(1, 15) + SourceIndex(0)
+9 >Emitted(5, 48) Source(1, 15) + SourceIndex(0)
+10>Emitted(5, 49) Source(1, 16) + SourceIndex(0)
+11>Emitted(5, 52) Source(1, 19) + SourceIndex(0)
+12>Emitted(5, 54) Source(1, 21) + SourceIndex(0)
+13>Emitted(5, 57) Source(1, 24) + SourceIndex(0)
+14>Emitted(5, 59) Source(1, 26) + SourceIndex(0)
+15>Emitted(5, 62) Source(1, 29) + SourceIndex(0)
+16>Emitted(5, 63) Source(1, 30) + SourceIndex(0)
+17>Emitted(5, 64) Source(1, 30) + SourceIndex(0)
+18>Emitted(5, 66) Source(1, 30) + SourceIndex(0)
+19>Emitted(5, 68) Source(1, 6) + SourceIndex(0)
+20>Emitted(5, 86) Source(1, 11) + SourceIndex(0)
+---
+>>>        var v = iterator_1.result.value;
+1 >^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >        var 
+3 >            v
+4 >             
+1 >Emitted(6, 9) Source(1, 6) + SourceIndex(0)
+2 >Emitted(6, 13) Source(1, 10) + SourceIndex(0)
+3 >Emitted(6, 14) Source(1, 11) + SourceIndex(0)
+4 >Emitted(6, 40) Source(1, 11) + SourceIndex(0)
+---
+>>>        console.log(v);
+1 >^^^^^^^^
+2 >        ^^^^^^^
+3 >               ^
+4 >                ^^^
+5 >                   ^
+6 >                    ^
+7 >                     ^
+8 >                      ^
+1 > of ['a', 'b', 'c']) {
+  >    
+2 >        console
+3 >               .
+4 >                log
+5 >                   (
+6 >                    v
+7 >                     )
+8 >                      ;
+1 >Emitted(7, 9) Source(2, 5) + SourceIndex(0)
+2 >Emitted(7, 16) Source(2, 12) + SourceIndex(0)
+3 >Emitted(7, 17) Source(2, 13) + SourceIndex(0)
+4 >Emitted(7, 20) Source(2, 16) + SourceIndex(0)
+5 >Emitted(7, 21) Source(2, 17) + SourceIndex(0)
+6 >Emitted(7, 22) Source(2, 18) + SourceIndex(0)
+7 >Emitted(7, 23) Source(2, 19) + SourceIndex(0)
+8 >Emitted(7, 24) Source(2, 20) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^^
+1 >
+  >}
+1 >Emitted(8, 6) Source(3, 2) + SourceIndex(0)
+---
+>>>}
+>>>catch (e_1_1) { e_1 = { error: e_1_1 }; }
+>>>finally {
+>>>    try { __close(iterator_1); } finally { if (e_1) throw e_1.error; }
+>>>}
+>>>var e_1;
+>>>//# sourceMappingURL=ES5For-of33.js.map
