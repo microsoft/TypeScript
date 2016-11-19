@@ -67,7 +67,7 @@ function arrayLiteral2() {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, y];
                 case 1:
-                    x = __spread.apply(void 0, [(_a.sent()), [z]]);
+                    x = (_a.sent()).concat([z]);
                     return [2 /*return*/];
             }
         });
@@ -75,14 +75,14 @@ function arrayLiteral2() {
 }
 function arrayLiteral3() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var _a, _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
-                    _a = [y];
+                    _b = (_a = y).concat;
                     return [4 /*yield*/, z];
                 case 1:
-                    x = __spread.apply(void 0, _a.concat([[_b.sent()]]));
+                    x = _b.apply(_a, [[_c.sent()]]);
                     return [2 /*return*/];
             }
         });
@@ -94,7 +94,7 @@ function arrayLiteral4() {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, y];
                 case 1:
-                    x = __spread.apply(void 0, [[_a.sent()], z]);
+                    x = [_a.sent()].concat(z);
                     return [2 /*return*/];
             }
         });
@@ -102,14 +102,14 @@ function arrayLiteral4() {
 }
 function arrayLiteral5() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var _a, _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
-                    _a = [[y]];
+                    _b = (_a = [y]).concat;
                     return [4 /*yield*/, z];
                 case 1:
-                    x = __spread.apply(void 0, _a.concat([(_b.sent())]));
+                    x = _b.apply(_a, [(_c.sent())]);
                     return [2 /*return*/];
             }
         });

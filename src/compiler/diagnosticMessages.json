@@ -2553,6 +2553,10 @@
         "category": "Message",
         "code": 6039
     },
+    "MODE": {
+        "category": "Message",
+        "code": 6040
+    },
     "Compilation complete. Watching for file changes.": {
         "category": "Message",
         "code": 6042
@@ -2688,6 +2692,10 @@
     "Specify JSX code generation: 'preserve' or 'react'": {
         "category": "Message",
         "code": 6080
+    },
+    "Specify how to emit for-of, spread, and destructuring in ES5/3: 'array' (arrays only; default) or 'iterable' (support arrays and Symbol.iterator)": {
+        "category": "Message",
+        "code": 6081
     },
     "Only 'amd' and 'system' modules are supported alongside --{0}.": {
         "category": "Error",

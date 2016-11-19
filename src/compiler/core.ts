@@ -1391,6 +1391,10 @@ namespace ts {
             getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
     }
 
+    export function getEmitIterationMode(compilerOptions: CompilerOptions) {
+        return getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 ? IterationMode.Iterable : compilerOptions.iterationMode || IterationMode.Array;
+    }
+
     export function getEmitModuleResolutionKind(compilerOptions: CompilerOptions) {
         let moduleResolution = compilerOptions.moduleResolution;
         if (moduleResolution === undefined) {

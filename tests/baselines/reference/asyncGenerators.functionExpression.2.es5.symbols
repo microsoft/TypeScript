@@ -1,4 +1,0 @@
-=== tests/cases/conformance/asyncGenerators/es5/functionExpressions/asyncGenerators.functionExpression.2.es5.ts ===
-const await = async function * () {}
->await : Symbol(await, Decl(asyncGenerators.functionExpression.2.es5.ts, 0, 5))
-

@@ -20,22 +20,14 @@ if (nameMB == nameMA) {
 }
 
 //// [sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.js]
-var __read = (this && this.__read) || function (o, n) {
-    if (!(m = typeof Symbol === "function" && o[Symbol.iterator])) return o;
-    var m, i = m.call(o), ar = [], r, e;
-    try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
-    catch (error) { e = { error: error }; }
-    finally { try { if (m = !(r && r.done) && i["return"]) m.call(i); } finally { if (e) throw e.error; } }
-    return ar;
-};
 var multiRobotA = ["mower", ["mowing", ""]];
 var multiRobotB = ["trimmer", ["trimming", "edging"]];
-var _a = __read(multiRobotA, 2), skillA = _a[1];
-var _b = __read(multiRobotB, 1), nameMB = _b[0];
-var _c = __read(multiRobotA, 2), nameMA = _c[0], _d = __read(_c[1], 2), primarySkillA = _d[0], secondarySkillA = _d[1];
+var skillA = multiRobotA[1];
+var nameMB = multiRobotB[0];
+var nameMA = multiRobotA[0], _a = multiRobotA[1], primarySkillA = _a[0], secondarySkillA = _a[1];
 var nameMC = ["roomba", ["vaccum", "mopping"]][0];
-var _e = ["roomba", ["vaccum", "mopping"]], nameMC2 = _e[0], _f = __read(_e[1], 2), primarySkillC = _f[0], secondarySkillC = _f[1];
-var _g = __read(multiRobotA), multiRobotAInfo = _g.slice(0);
+var _b = ["roomba", ["vaccum", "mopping"]], nameMC2 = _b[0], _c = _b[1], primarySkillC = _c[0], secondarySkillC = _c[1];
+var multiRobotAInfo = multiRobotA.slice(0);
 if (nameMB == nameMA) {
     console.log(skillA[0] + skillA[1]);
 }

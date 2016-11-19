@@ -926,17 +926,17 @@ namespace ts {
         return node;
     }
 
-    export function createForOf(modifierToken: AwaitKeywordToken | EachKeywordToken, initializer: ForInitializer, expression: Expression, statement: Statement, location?: TextRange) {
+    export function createForOf(modifierToken: AwaitKeywordToken, initializer: ForInitializer, expression: Expression, statement: Statement, location?: TextRange) {
         const node = <ForOfStatement>createNode(SyntaxKind.ForOfStatement, location);
-        node.modifierToken = modifierToken;
+        node.awaitModifier = modifierToken;
         node.initializer = initializer;
         node.expression = expression;
         node.statement = statement;
         return node;
     }
 
-    export function updateForOf(node: ForOfStatement, modifierToken: AwaitKeywordToken | EachKeywordToken, initializer: ForInitializer, expression: Expression, statement: Statement) {
-        if (node.modifierToken !== modifierToken || node.initializer !== initializer || node.expression !== expression || node.statement !== statement) {
+    export function updateForOf(node: ForOfStatement, modifierToken: AwaitKeywordToken, initializer: ForInitializer, expression: Expression, statement: Statement) {
+        if (node.awaitModifier !== modifierToken || node.initializer !== initializer || node.expression !== expression || node.statement !== statement) {
             return updateNode(createForOf(modifierToken, initializer, expression, statement, node), node);
         }
         return node;

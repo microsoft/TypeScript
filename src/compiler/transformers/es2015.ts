@@ -171,6 +171,8 @@ namespace ts {
             hoistVariableDeclaration
         } = context;
 
+        const compilerOptions = context.getCompilerOptions();
+        const iterationMode = getEmitIterationMode(compilerOptions);
         const resolver = context.getEmitResolver();
         const previousOnSubstituteNode = context.onSubstituteNode;
         const previousOnEmitNode = context.onEmitNode;
@@ -1997,7 +1999,7 @@ namespace ts {
          * @param node A ForOfStatement.
          */
         function visitForOfStatement(node: ForOfStatement): VisitResult<Statement> {
-            return convertIterationStatementBodyIfNecessary(node, convertForOfStatement);
+            return convertIterationStatementBodyIfNecessary(node, iterationMode === IterationMode.Array ? convertForOfStatementForArray : convertForOfStatementForIterable);
         }
 
         function convertForOfStatementHead(statements: Statement[], node: ForOfStatement, boundValue: Expression, convertedLoopBodyStatements: Statement[]) {
@@ -2092,12 +2094,8 @@ namespace ts {
             return { bodyLocation, statementsLocation };
         }
 
-        function convertForOfStatement(node: ForOfStatement, outerEnclosingLabeledStatements: LabeledStatement[], convertedLoopBodyStatements: Statement[]): Statement {
+        function convertForOfStatementForIterable(node: ForOfStatement, outerEnclosingLabeledStatements: LabeledStatement[], convertedLoopBodyStatements: Statement[]): Statement {
             const expression = visitNode(node.expression, visitor, isExpression);
-            if (isArrayLiteralExpression(expression)) {
-                return convertForOfStatementForArrayLiteral(node, outerEnclosingLabeledStatements, convertedLoopBodyStatements, expression);
-            }
-
             const iteratorRecord = isIdentifier(node.expression)
                 ? getGeneratedNameForNode(node.expression)
                 : createUniqueName("iterator");
@@ -2161,7 +2159,7 @@ namespace ts {
             return closeIterator(statement, iteratorRecord);
         }
 
-        function convertForOfStatementForArrayLiteral(node: ForOfStatement, outerEnclosingLabeledStatements: LabeledStatement[], convertedLoopBodyStatements: Statement[], expression: Expression): Statement {
+        function convertForOfStatementForArray(node: ForOfStatement, outerEnclosingLabeledStatements: LabeledStatement[], convertedLoopBodyStatements: Statement[]): Statement {
             // The following ES6 code:
             //
             //    for (let v of expr) { }
@@ -2183,6 +2181,7 @@ namespace ts {
             // Note also that because an extra statement is needed to assign to the LHS,
             // for-of bodies are always emitted as blocks.
 
+            const expression = visitNode(node.expression, visitor, isExpression);
             const statements: Statement[] = [];
 
             // In the case where the user wrote an identifier as the RHS, like this:
@@ -2951,7 +2950,7 @@ namespace ts {
          */
         function visitArrayLiteralExpression(node: ArrayLiteralExpression): Expression {
             // We are here because we contain a SpreadElementExpression.
-            return transformAndSpreadElements(node.elements, node.multiLine, /*hasTrailingComma*/ node.elements.hasTrailingComma);
+            return transformAndSpreadElements(node.elements, /*needsUniqueCopy*/ true, node.multiLine, /*hasTrailingComma*/ node.elements.hasTrailingComma);
         }
 
         /**
@@ -2994,7 +2993,7 @@ namespace ts {
                 resultingCall = createFunctionApply(
                     visitNode(target, visitor, isExpression),
                     visitNode(thisArg, visitor, isExpression),
-                    transformAndSpreadElements(node.arguments, /*multiLine*/ false, /*hasTrailingComma*/ false)
+                    transformAndSpreadElements(node.arguments, /*needsUniqueCopy*/ false, /*multiLine*/ false, /*hasTrailingComma*/ false)
                 );
             }
             else {
@@ -3051,7 +3050,7 @@ namespace ts {
                 createFunctionApply(
                     visitNode(target, visitor, isExpression),
                     thisArg,
-                    transformAndSpreadElements(createNodeArray([createVoidZero(), ...node.arguments]), /*multiLine*/ false, /*hasTrailingComma*/ false)
+                    transformAndSpreadElements(createNodeArray([createVoidZero(), ...node.arguments]), /*needsUniqueCopy*/ false, /*multiLine*/ false, /*hasTrailingComma*/ false)
                 ),
                 /*typeArguments*/ undefined,
                 []
@@ -3065,7 +3064,7 @@ namespace ts {
          * @param needsUniqueCopy A value indicating whether to ensure that the result is a fresh array.
          * @param multiLine A value indicating whether the result should be emitted on multiple lines.
          */
-        function transformAndSpreadElements(elements: NodeArray<Expression>, multiLine: boolean, hasTrailingComma: boolean): Expression {
+        function transformAndSpreadElements(elements: NodeArray<Expression>, needsUniqueCopy: boolean, multiLine: boolean, hasTrailingComma: boolean): Expression {
             // [source]
             //      [a, ...b, c]
             //
@@ -3081,17 +3080,30 @@ namespace ts {
                 )
             );
 
-            if (segments.length === 1) {
-                const firstSegment = segments[0];
-                if (isCallExpression(firstSegment)
-                    && isIdentifier(firstSegment.expression)
-                    && (getEmitFlags(firstSegment.expression) & EmitFlags.HelperName)
-                    && firstSegment.expression.text === "___spread") {
-                    return segments[0];
+            if (iterationMode === IterationMode.Iterable) {
+                if (segments.length === 1) {
+                    const firstSegment = segments[0];
+                    if (isCallExpression(firstSegment)
+                        && isIdentifier(firstSegment.expression)
+                        && (getEmitFlags(firstSegment.expression) & EmitFlags.HelperName)
+                        && firstSegment.expression.text === "___spread") {
+                        return segments[0];
+                    }
                 }
-            }
 
-            return createSpreadHelper(context, segments);
+                return createSpreadHelper(context, segments);
+            }
+            else {
+                if (segments.length === 1) {
+                    const firstElement = elements[0];
+                    return needsUniqueCopy && isSpreadExpression(firstElement) && firstElement.expression.kind !== SyntaxKind.ArrayLiteralExpression
+                        ? createArraySlice(segments[0])
+                        : segments[0];
+                }
+
+                // Rewrite using the pattern <segment0>.concat(<segment1>, <segment2>, ...)
+                return createArrayConcat(segments.shift(), segments);
+            }
         }
 
         function partitionSpread(node: Expression) {

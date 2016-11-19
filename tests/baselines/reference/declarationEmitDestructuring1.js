@@ -6,19 +6,11 @@ function baz({a2, b2: {b1, c1}}: { a2: number, b2: { b1: boolean, c1: string } }
 
 
 //// [declarationEmitDestructuring1.js]
-var __read = (this && this.__read) || function (o, n) {
-    if (!(m = typeof Symbol === "function" && o[Symbol.iterator])) return o;
-    var m, i = m.call(o), ar = [], r, e;
-    try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
-    catch (error) { e = { error: error }; }
-    finally { try { if (m = !(r && r.done) && i["return"]) m.call(i); } finally { if (e) throw e.error; } }
-    return ar;
-};
 function foo(_a) {
-    var _b = __read(_a, 3), a = _b[0], b = _b[1], c = _b[2];
+    var a = _a[0], b = _a[1], c = _a[2];
 }
 function far(_a) {
-    var _b = __read(_a, 3), a = _b[0], _c = __read(_b[1], 1), b = _c[0], _d = __read(_b[2], 1), _e = __read(_d[0], 1), c = _e[0];
+    var a = _a[0], b = _a[1][0], c = _a[2][0][0];
 }
 function bar(_a) {
     var a1 = _a.a1, b1 = _a.b1, c1 = _a.c1;

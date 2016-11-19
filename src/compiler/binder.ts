@@ -954,7 +954,7 @@ namespace ts {
             addAntecedent(preLoopLabel, currentFlow);
             currentFlow = preLoopLabel;
             if (node.kind === SyntaxKind.ForOfStatement) {
-                bind(node.modifierToken);
+                bind(node.awaitModifier);
             }
             bind(node.expression);
             addAntecedent(postLoopLabel, currentFlow);
@@ -3125,7 +3125,7 @@ namespace ts {
                 break;
 
             case SyntaxKind.ForOfStatement:
-                if ((<ForOfStatement>node).modifierToken) {
+                if ((<ForOfStatement>node).awaitModifier) {
                     transformFlags |= TransformFlags.AssertES2017;
                 }
 
@@ -3146,17 +3146,10 @@ namespace ts {
 
             case SyntaxKind.ForOfStatement:
                 // This node is either ES2015 syntax or ES2017 syntax (if it is a for-await-of).
-                switch (getForOfModifierKind(<ForOfStatement>node)) {
-                    case SyntaxKind.AwaitKeyword:
-                        transformFlags |= TransformFlags.AssertES2017;
-                        break;
-                    case SyntaxKind.EachKeyword:
-                        transformFlags |= TransformFlags.AssertTypeScript;
-                        break;
-                    default:
-                        transformFlags |= TransformFlags.AssertES2015;
-                        break;
+                if ((<ForOfStatement>node).awaitModifier) {
+                    transformFlags |= TransformFlags.AssertES2017;
                 }
+                transformFlags |= TransformFlags.AssertES2015;
                 break;
 
             case SyntaxKind.YieldExpression:

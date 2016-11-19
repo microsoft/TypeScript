@@ -8,9 +8,6 @@ sources: ES5For-of25.ts
 emittedFile:tests/cases/conformance/statements/for-ofStatements/ES5For-of25.js
 sourceFile:ES5For-of25.ts
 -------------------------------------------------------------------
->>>var __values = (this && this.__values) || function (o) { return (i = typeof Symbol === "function" && o[Symbol.iterator] || 0) ? i.call(o) : { next: function () { return { done: d = d || i >= o.length, value: d ? void 0 : o[i++] }; } }; var i, d; };
->>>var __step = (this && this.__step) || function (r) { return !(r.done || (r.done = (r.result = r.iterator.next()).done)); };
->>>var __close = (this && this.__close) || function (r) { return (m = !(r && r.done) && r.iterator["return"]) && m.call(r.iterator); var m; };
 >>>var a = [1, 2, 3];
 1 >
 2 >^^^^
@@ -24,6 +21,7 @@ sourceFile:ES5For-of25.ts
 10>               ^
 11>                ^
 12>                 ^
+13>                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >var 
 3 >    a
@@ -36,114 +34,99 @@ sourceFile:ES5For-of25.ts
 10>               3
 11>                ]
 12>                 ;
-1 >Emitted(4, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(4, 5) Source(1, 5) + SourceIndex(0)
-3 >Emitted(4, 6) Source(1, 6) + SourceIndex(0)
-4 >Emitted(4, 9) Source(1, 9) + SourceIndex(0)
-5 >Emitted(4, 10) Source(1, 10) + SourceIndex(0)
-6 >Emitted(4, 11) Source(1, 11) + SourceIndex(0)
-7 >Emitted(4, 13) Source(1, 13) + SourceIndex(0)
-8 >Emitted(4, 14) Source(1, 14) + SourceIndex(0)
-9 >Emitted(4, 16) Source(1, 16) + SourceIndex(0)
-10>Emitted(4, 17) Source(1, 17) + SourceIndex(0)
-11>Emitted(4, 18) Source(1, 18) + SourceIndex(0)
-12>Emitted(4, 19) Source(1, 19) + SourceIndex(0)
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
+3 >Emitted(1, 6) Source(1, 6) + SourceIndex(0)
+4 >Emitted(1, 9) Source(1, 9) + SourceIndex(0)
+5 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
+6 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
+7 >Emitted(1, 13) Source(1, 13) + SourceIndex(0)
+8 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
+9 >Emitted(1, 16) Source(1, 16) + SourceIndex(0)
+10>Emitted(1, 17) Source(1, 17) + SourceIndex(0)
+11>Emitted(1, 18) Source(1, 18) + SourceIndex(0)
+12>Emitted(1, 19) Source(1, 19) + SourceIndex(0)
 ---
->>>try {
->>>    for (var a_1 = { iterator: __values(a) }; __step(a_1);) {
-1 >^^^^
-2 >    ^^^
-3 >       ^
-4 >        ^
-5 >         ^^^^
-6 >             ^^^^^^
-7 >                   ^^
-8 >                     ^^^^^^^^^^
-9 >                               ^^^^^^^^^
-10>                                        ^
-11>                                         ^
-12>                                          ^^
-13>                                            ^^
-14>                                              ^^^^^^^^^^^
-1 >
+>>>for (var _i = 0, a_1 = a; _i < a_1.length; _i++) {
+1->
+2 >^^^
+3 >   ^
+4 >    ^
+5 >     ^^^^^^^^^^
+6 >               ^^
+7 >                 ^^^^^^^
+8 >                        ^^
+9 >                          ^^^^^^^^^^^^^^^
+10>                                         ^^
+11>                                           ^^^^
+1->
   >
-2 >    for
-3 >        
-4 >        (var v of 
-5 >         
-6 >             
-7 >                   
-8 >                     
-9 >                               
-10>                                        a
-11>                                         
-12>                                          
-13>                                            
-14>                                              var v
-1 >Emitted(6, 5) Source(2, 1) + SourceIndex(0)
-2 >Emitted(6, 8) Source(2, 4) + SourceIndex(0)
-3 >Emitted(6, 9) Source(2, 5) + SourceIndex(0)
-4 >Emitted(6, 10) Source(2, 15) + SourceIndex(0)
-5 >Emitted(6, 14) Source(2, 15) + SourceIndex(0)
-6 >Emitted(6, 20) Source(2, 15) + SourceIndex(0)
-7 >Emitted(6, 22) Source(2, 15) + SourceIndex(0)
-8 >Emitted(6, 32) Source(2, 15) + SourceIndex(0)
-9 >Emitted(6, 41) Source(2, 15) + SourceIndex(0)
-10>Emitted(6, 42) Source(2, 16) + SourceIndex(0)
-11>Emitted(6, 43) Source(2, 16) + SourceIndex(0)
-12>Emitted(6, 45) Source(2, 16) + SourceIndex(0)
-13>Emitted(6, 47) Source(2, 6) + SourceIndex(0)
-14>Emitted(6, 58) Source(2, 11) + SourceIndex(0)
+2 >for
+3 >    
+4 >    (var v of 
+5 >     a
+6 >               
+7 >                 a
+8 >                        
+9 >                          a
+10>                                         
+11>                                           a
+1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 4) Source(2, 4) + SourceIndex(0)
+3 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+4 >Emitted(2, 6) Source(2, 15) + SourceIndex(0)
+5 >Emitted(2, 16) Source(2, 16) + SourceIndex(0)
+6 >Emitted(2, 18) Source(2, 15) + SourceIndex(0)
+7 >Emitted(2, 25) Source(2, 16) + SourceIndex(0)
+8 >Emitted(2, 27) Source(2, 15) + SourceIndex(0)
+9 >Emitted(2, 42) Source(2, 16) + SourceIndex(0)
+10>Emitted(2, 44) Source(2, 15) + SourceIndex(0)
+11>Emitted(2, 48) Source(2, 16) + SourceIndex(0)
 ---
->>>        var v = a_1.result.value;
-1 >^^^^^^^^
-2 >        ^^^^
-3 >            ^
-4 >             ^^^^^^^^^^^^^^^^^^^
+>>>    var v = a_1[_i];
+1 >^^^^
+2 >    ^^^^
+3 >        ^
+4 >         ^^^^^^^^^^
 1 >
-2 >        var 
-3 >            v
-4 >             
-1 >Emitted(7, 9) Source(2, 6) + SourceIndex(0)
-2 >Emitted(7, 13) Source(2, 10) + SourceIndex(0)
-3 >Emitted(7, 14) Source(2, 11) + SourceIndex(0)
-4 >Emitted(7, 33) Source(2, 11) + SourceIndex(0)
+2 >    var 
+3 >        v
+4 >         
+1 >Emitted(3, 5) Source(2, 6) + SourceIndex(0)
+2 >Emitted(3, 9) Source(2, 10) + SourceIndex(0)
+3 >Emitted(3, 10) Source(2, 11) + SourceIndex(0)
+4 >Emitted(3, 20) Source(2, 11) + SourceIndex(0)
 ---
->>>        v;
-1 >^^^^^^^^
-2 >        ^
-3 >         ^
-4 >          ^->
+>>>    v;
+1 >^^^^
+2 >    ^
+3 >     ^
+4 >      ^->
 1 > of a) {
   >    
-2 >        v
-3 >         ;
-1 >Emitted(8, 9) Source(3, 5) + SourceIndex(0)
-2 >Emitted(8, 10) Source(3, 6) + SourceIndex(0)
-3 >Emitted(8, 11) Source(3, 7) + SourceIndex(0)
+2 >    v
+3 >     ;
+1 >Emitted(4, 5) Source(3, 5) + SourceIndex(0)
+2 >Emitted(4, 6) Source(3, 6) + SourceIndex(0)
+3 >Emitted(4, 7) Source(3, 7) + SourceIndex(0)
 ---
->>>        a;
-1->^^^^^^^^
-2 >        ^
-3 >         ^
+>>>    a;
+1->^^^^
+2 >    ^
+3 >     ^
 1->
   >    
-2 >        a
-3 >         ;
-1->Emitted(9, 9) Source(4, 5) + SourceIndex(0)
-2 >Emitted(9, 10) Source(4, 6) + SourceIndex(0)
-3 >Emitted(9, 11) Source(4, 7) + SourceIndex(0)
+2 >    a
+3 >     ;
+1->Emitted(5, 5) Source(4, 5) + SourceIndex(0)
+2 >Emitted(5, 6) Source(4, 6) + SourceIndex(0)
+3 >Emitted(5, 7) Source(4, 7) + SourceIndex(0)
 ---
->>>    }
-1 >^^^^^
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
-1 >Emitted(10, 6) Source(5, 2) + SourceIndex(0)
+1 >Emitted(6, 2) Source(5, 2) + SourceIndex(0)
 ---
->>>}
->>>catch (e_1_1) { e_1 = { error: e_1_1 }; }
->>>finally {
->>>    try { __close(a_1); } finally { if (e_1) throw e_1.error; }
->>>}
->>>var e_1;
 >>>//# sourceMappingURL=ES5For-of25.js.map

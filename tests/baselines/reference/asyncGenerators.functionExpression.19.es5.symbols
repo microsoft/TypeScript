@@ -1,7 +1,0 @@
-=== tests/cases/conformance/asyncGenerators/es5/functionExpressions/asyncGenerators.functionExpression.19.es5.ts ===
-const f = async function *() {
->f : Symbol(f, Decl(asyncGenerators.functionExpression.19.es5.ts, 0, 5))
-
-    var x = { [yield]: 1 };
->x : Symbol(x, Decl(asyncGenerators.functionExpression.19.es5.ts, 1, 7))
-}

@@ -1,4 +1,0 @@
-=== tests/cases/conformance/asyncGenerators/es5/functionDeclarations/asyncGenerators.functionDeclaration.2.es5.ts ===
-async function * await() {}
->await : () => AsyncIterableIterator<any>
-

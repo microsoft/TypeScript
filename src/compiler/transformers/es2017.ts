@@ -158,7 +158,7 @@ namespace ts {
         function visitLabeledStatement(node: LabeledStatement): VisitResult<Statement> {
             const enclosedStatement = getEnclosedStatement(node);
             if (enclosedStatement.statement.kind === SyntaxKind.ForOfStatement &&
-                (<ForOfStatement>enclosedStatement.statement).modifierToken) {
+                (<ForOfStatement>enclosedStatement.statement).awaitModifier) {
                 return visitForOfStatement(<ForOfStatement>node.statement, enclosedStatement.enclosingLabeledStatements);
             }
 
@@ -166,7 +166,7 @@ namespace ts {
         }
 
         function visitForOfStatement(node: ForOfStatement, enclosingLabeledStatements: LabeledStatement[]): VisitResult<Statement> {
-            if (!node.modifierToken) return visitEachChild(node, visitor, context);
+            if (!node.awaitModifier) return visitEachChild(node, visitor, context);
 
             let bodyLocation: TextRange;
             let statementsLocation: TextRange;
@@ -818,14 +818,10 @@ namespace ts {
 
     function createAsyncValuesHelper(context: TransformationContext, expression: Expression, location?: TextRange) {
         context.requestEmitHelper(asyncValues);
-        const compilerOptions = context.getCompilerOptions();
-        const languageVersion = getEmitScriptTarget(compilerOptions);
         return createCall(
             getHelperName("__asyncValues"),
             /*typeArguments*/ undefined,
-            languageVersion < ScriptTarget.ES2015
-                ? [expression, createLiteral("__iterator__")]
-                : [expression],
+            [expression],
             location
         );
     }
@@ -844,14 +840,10 @@ namespace ts {
 
     function createAsyncDelegatorHelper(context: TransformationContext, expression: Expression, location?: TextRange) {
         context.requestEmitHelper(asyncDelegator);
-        const compilerOptions = context.getCompilerOptions();
-        const languageVersion = getEmitScriptTarget(compilerOptions);
         return createCall(
             getHelperName("__asyncDelegator"),
             /*typeArguments*/ undefined,
-            languageVersion < ScriptTarget.ES2015
-                ? [expression, createLiteral("__iterator__")]
-                : [expression],
+            [expression],
             location
         );
     }

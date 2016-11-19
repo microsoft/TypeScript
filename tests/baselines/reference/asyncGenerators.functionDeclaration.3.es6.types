@@ -1,4 +1,0 @@
-=== tests/cases/conformance/asyncGenerators/es6/functionDeclarations/asyncGenerators.functionDeclaration.3.es6.ts ===
-async function * yield() {}
->yield : () => AsyncIterableIterator<any>
-

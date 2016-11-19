@@ -35,20 +35,12 @@ var o3: [string, number] = y;
 
 
 //// [arityAndOrderCompatibility01.js]
-var __read = (this && this.__read) || function (o, n) {
-    if (!(m = typeof Symbol === "function" && o[Symbol.iterator])) return o;
-    var m, i = m.call(o), ar = [], r, e;
-    try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
-    catch (error) { e = { error: error }; }
-    finally { try { if (m = !(r && r.done) && i["return"]) m.call(i); } finally { if (e) throw e.error; } }
-    return ar;
-};
 var x;
 var y;
 var z;
-var _a = __read(x, 3), a = _a[0], b = _a[1], c = _a[2];
-var _b = __read(y, 3), d = _b[0], e = _b[1], f = _b[2];
-var _c = __read(z, 3), g = _c[0], h = _c[1], i = _c[2];
+var a = x[0], b = x[1], c = x[2];
+var d = y[0], e = y[1], f = y[2];
+var g = z[0], h = z[1], i = z[2];
 var j1 = x;
 var j2 = y;
 var j3 = z;

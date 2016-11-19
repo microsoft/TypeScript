@@ -38,14 +38,6 @@ let [{[foo.toExponential()]: bar7}] = [{bar: "bar"}];
 
 
 //// [computedPropertiesInDestructuring1.js]
-var __read = (this && this.__read) || function (o, n) {
-    if (!(m = typeof Symbol === "function" && o[Symbol.iterator])) return o;
-    var m, i = m.call(o), ar = [], r, e;
-    try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
-    catch (error) { e = { error: error }; }
-    finally { try { if (m = !(r && r.done) && i["return"]) m.call(i); } finally { if (e) throw e.error; } }
-    return ar;
-};
 // destructuring in variable declarations
 var foo = "bar";
 var _a = foo, bar = { bar: "bar" }[_a];
@@ -64,10 +56,10 @@ function f3(_a) {
     var _b = foo2(), x = _a[_b];
 }
 function f4(_a) {
-    var _b = __read(_a, 1), _c = foo, x = _b[0][_c];
+    var _b = foo, x = _a[0][_b];
 }
 function f5(_a) {
-    var _b = __read(_a, 1), _c = foo2(), x = _b[0][_c];
+    var _b = foo2(), x = _a[0][_b];
 }
 // report errors on type errors in computed properties used in destructuring
 var _e = foo(), bar6 = [{ bar: "bar" }][0][_e];

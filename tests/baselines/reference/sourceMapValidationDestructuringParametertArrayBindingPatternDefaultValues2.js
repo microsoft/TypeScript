@@ -30,25 +30,17 @@ foo3(robotA);
 foo3(["roomba", ["vaccum", "mopping"]]);
 
 //// [sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues2.js]
-var __read = (this && this.__read) || function (o, n) {
-    if (!(m = typeof Symbol === "function" && o[Symbol.iterator])) return o;
-    var m, i = m.call(o), ar = [], r, e;
-    try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
-    catch (error) { e = { error: error }; }
-    finally { try { if (m = !(r && r.done) && i["return"]) m.call(i); } finally { if (e) throw e.error; } }
-    return ar;
-};
 var robotA = ["trimmer", ["trimming", "edging"]];
 function foo1(_a) {
-    var _b = __read(_a === void 0 ? ["name", ["skill1", "skill2"]] : _a, 2), _c = _b[1], skillA = _c === void 0 ? ["noSkill", "noSkill"] : _c;
+    var _b = _a === void 0 ? ["name", ["skill1", "skill2"]] : _a, _c = _b[1], skillA = _c === void 0 ? ["noSkill", "noSkill"] : _c;
     console.log(skillA);
 }
 function foo2(_a) {
-    var _b = __read(_a === void 0 ? ["name", ["skill1", "skill2"]] : _a, 1), _c = _b[0], nameMB = _c === void 0 ? "noName" : _c;
+    var _b = (_a === void 0 ? ["name", ["skill1", "skill2"]] : _a)[0], nameMB = _b === void 0 ? "noName" : _b;
     console.log(nameMB);
 }
 function foo3(_a) {
-    var _b = __read(_a, 2), _c = _b[0], nameMA = _c === void 0 ? "noName" : _c, _d = _b[1], _e = __read(_d === void 0 ? ["noSkill", "noSkill"] : _d, 2), _f = _e[0], primarySkillA = _f === void 0 ? "primary" : _f, _g = _e[1], secondarySkillA = _g === void 0 ? "secondary" : _g;
+    var _b = _a[0], nameMA = _b === void 0 ? "noName" : _b, _c = _a[1], _d = _c === void 0 ? ["noSkill", "noSkill"] : _c, _e = _d[0], primarySkillA = _e === void 0 ? "primary" : _e, _f = _d[1], secondarySkillA = _f === void 0 ? "secondary" : _f;
     console.log(nameMA);
 }
 foo1(robotA);

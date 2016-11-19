@@ -1,9 +1,0 @@
-=== tests/cases/conformance/asyncGenerators/es5/functionExpressions/asyncGenerators.functionExpression.13.es5.ts ===
-const f = async function * () {
->f : () => AsyncIterableIterator<undefined>
->async function * () {    yield * [];} : () => AsyncIterableIterator<undefined>
-
-    yield * [];
->yield * [] : any
->[] : undefined[]
-}

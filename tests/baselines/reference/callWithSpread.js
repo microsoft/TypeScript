@@ -64,18 +64,6 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var __read = (this && this.__read) || function (o, n) {
-    if (!(m = typeof Symbol === "function" && o[Symbol.iterator])) return o;
-    var m, i = m.call(o), ar = [], r, e;
-    try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
-    catch (error) { e = { error: error }; }
-    finally { try { if (m = !(r && r.done) && i["return"]) m.call(i); } finally { if (e) throw e.error; } }
-    return ar;
-};
-var __spread = (this && this.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
 function foo(x, y) {
     var z = [];
     for (var _i = 2; _i < arguments.length; _i++) {
@@ -87,24 +75,24 @@ var z;
 var obj;
 var xa;
 foo(1, 2, "abc");
-foo.apply(void 0, __spread([1, 2], a));
-foo.apply(void 0, __spread([1, 2], a, ["abc"]));
+foo.apply(void 0, [1, 2].concat(a));
+foo.apply(void 0, [1, 2].concat(a, ["abc"]));
 obj.foo(1, 2, "abc");
-obj.foo.apply(obj, __spread([1, 2], a));
-obj.foo.apply(obj, __spread([1, 2], a, ["abc"]));
-obj.foo.apply(obj, __spread([1, 2], a)).foo(1, 2, "abc");
-(_a = obj.foo.apply(obj, __spread([1, 2], a))).foo.apply(_a, __spread([1, 2], a));
-(_b = obj.foo.apply(obj, __spread([1, 2], a))).foo.apply(_b, __spread([1, 2], a, ["abc"]));
+obj.foo.apply(obj, [1, 2].concat(a));
+obj.foo.apply(obj, [1, 2].concat(a, ["abc"]));
+obj.foo.apply(obj, [1, 2].concat(a)).foo(1, 2, "abc");
+(_a = obj.foo.apply(obj, [1, 2].concat(a))).foo.apply(_a, [1, 2].concat(a));
+(_b = obj.foo.apply(obj, [1, 2].concat(a))).foo.apply(_b, [1, 2].concat(a, ["abc"]));
 (obj.foo)(1, 2, "abc");
-obj.foo.apply(obj, __spread([1, 2], a));
-obj.foo.apply(obj, __spread([1, 2], a, ["abc"]));
-(obj.foo.apply(obj, __spread([1, 2], a)).foo)(1, 2, "abc");
-(_c = obj.foo.apply(obj, __spread([1, 2], a))).foo.apply(_c, __spread([1, 2], a));
-(_d = obj.foo.apply(obj, __spread([1, 2], a))).foo.apply(_d, __spread([1, 2], a, ["abc"]));
+obj.foo.apply(obj, [1, 2].concat(a));
+obj.foo.apply(obj, [1, 2].concat(a, ["abc"]));
+(obj.foo.apply(obj, [1, 2].concat(a)).foo)(1, 2, "abc");
+(_c = obj.foo.apply(obj, [1, 2].concat(a))).foo.apply(_c, [1, 2].concat(a));
+(_d = obj.foo.apply(obj, [1, 2].concat(a))).foo.apply(_d, [1, 2].concat(a, ["abc"]));
 xa[1].foo(1, 2, "abc");
-(_e = xa[1]).foo.apply(_e, __spread([1, 2], a));
-(_f = xa[1]).foo.apply(_f, __spread([1, 2], a, ["abc"]));
-(_g = xa[1]).foo.apply(_g, __spread([1, 2, "abc"]));
+(_e = xa[1]).foo.apply(_e, [1, 2].concat(a));
+(_f = xa[1]).foo.apply(_f, [1, 2].concat(a, ["abc"]));
+(_g = xa[1]).foo.apply(_g, [1, 2, "abc"]);
 var C = (function () {
     function C(x, y) {
         var z = [];
@@ -112,7 +100,7 @@ var C = (function () {
             z[_i - 2] = arguments[_i];
         }
         this.foo(x, y);
-        this.foo.apply(this, __spread([x, y], z));
+        this.foo.apply(this, [x, y].concat(z));
     }
     C.prototype.foo = function (x, y) {
         var z = [];
@@ -126,12 +114,12 @@ var D = (function (_super) {
     __extends(D, _super);
     function D() {
         var _this = _super.call(this, 1, 2) || this;
-        _this = _super.apply(this, __spread([1, 2], a)) || this;
+        _this = _super.apply(this, [1, 2].concat(a)) || this;
         return _this;
     }
     D.prototype.foo = function () {
         _super.prototype.foo.call(this, 1, 2);
-        _super.prototype.foo.apply(this, __spread([1, 2], a));
+        _super.prototype.foo.apply(this, [1, 2].concat(a));
     };
     return D;
 }(C));

@@ -234,7 +234,7 @@ namespace ts {
                     : createBlock(append(leadingStatements, statement), statement, /*multiLine*/ true);
                 return updateForOf(
                     node,
-                    node.modifierToken,
+                    node.awaitModifier,
                     createVariableDeclarationList(
                         [
                             createVariableDeclaration(temp, /*type*/ undefined, /*initializer*/ undefined, node.initializer)

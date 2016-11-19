@@ -58,7 +58,7 @@ function hoisting() {
         function z() {
             var b0, b1 = 1;
         }
-        var a0, a1, c0, c1, a, b, y_1, c, e_1;
+        var a0, a1, c0, c1, a, b, _i, y_1, c;
         return __generator(this, function (_a) {
             a1 = 1;
             if (true) {
@@ -68,14 +68,8 @@ function hoisting() {
             }
             for (b in y) {
             }
-            try {
-                for (y_1 = { iterator: __values(y) }; __step(y_1);) {
-                    c = y_1.result.value;
-                }
-            }
-            catch (e_1_1) { e_1 = { error: e_1_1 }; }
-            finally {
-                try { __close(y_1); } finally { if (e_1) throw e_1.error; }
+            for (_i = 0, y_1 = y; _i < y_1.length; _i++) {
+                c = y_1[_i];
             }
             return [2 /*return*/];
         });
@@ -86,7 +80,7 @@ function hoistingWithAwait() {
         function z() {
             var b0, b1 = 1;
         }
-        var a0, a1, c0, c1, a, b, y_2, c, e_2;
+        var a0, a1, c0, c1, a, b, _i, y_2, c;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -101,14 +95,8 @@ function hoistingWithAwait() {
                     }
                     for (b in y) {
                     }
-                    try {
-                        for (y_2 = { iterator: __values(y) }; __step(y_2);) {
-                            c = y_2.result.value;
-                        }
-                    }
-                    catch (e_2_1) { e_2 = { error: e_2_1 }; }
-                    finally {
-                        try { __close(y_2); } finally { if (e_2) throw e_2.error; }
+                    for (_i = 0, y_2 = y; _i < y_2.length; _i++) {
+                        c = y_2[_i];
                     }
                     return [2 /*return*/];
             }

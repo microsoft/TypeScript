@@ -30,38 +30,30 @@ catch (/*Test comment ranges*/[/*a*/a]) {
 
 
 //// [destructuringCatch.js]
-var __read = (this && this.__read) || function (o, n) {
-    if (!(m = typeof Symbol === "function" && o[Symbol.iterator])) return o;
-    var m, i = m.call(o), ar = [], r, e;
-    try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
-    catch (error) { e = { error: error }; }
-    finally { try { if (m = !(r && r.done) && i["return"]) m.call(i); } finally { if (e) throw e.error; } }
-    return ar;
-};
 try {
     throw [0, 1];
 }
 catch (_a) {
-    var _b = __read(_a, 2), a = _b[0], b = _b[1];
+    var a = _a[0], b = _a[1];
     a + b;
 }
 try {
     throw { a: 0, b: 1 };
 }
-catch (_c) {
-    var a = _c.a, b = _c.b;
+catch (_b) {
+    var a = _b.a, b = _b.b;
     a + b;
 }
 try {
     throw [{ x: [0], z: 1 }];
 }
-catch (_d) {
-    var _e = __read(_d, 1), _f = _e[0], _g = __read(_f.x, 1), y = _g[0], z = _f.z;
+catch (_c) {
+    var _d = _c[0], y = _d.x[0], z = _d.z;
     y + z;
 }
 // Test of comment ranges. A fix to GH#11755 should update this.
 try {
 }
-catch (_h) {
-    var /*Test comment ranges*/ _j = __read(_h, 1), /*a*/ a = _j[0];
+catch (_e) {
+    var /*a*/ a = _e[0];
 }

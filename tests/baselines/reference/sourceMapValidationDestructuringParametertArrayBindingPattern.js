@@ -34,29 +34,21 @@ foo4(robotA);
 foo4([2, "trimmer", "trimming"]);
 
 //// [sourceMapValidationDestructuringParametertArrayBindingPattern.js]
-var __read = (this && this.__read) || function (o, n) {
-    if (!(m = typeof Symbol === "function" && o[Symbol.iterator])) return o;
-    var m, i = m.call(o), ar = [], r, e;
-    try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
-    catch (error) { e = { error: error }; }
-    finally { try { if (m = !(r && r.done) && i["return"]) m.call(i); } finally { if (e) throw e.error; } }
-    return ar;
-};
 var robotA = [1, "mower", "mowing"];
 function foo1(_a) {
-    var _b = __read(_a, 2), nameA = _b[1];
+    var nameA = _a[1];
     console.log(nameA);
 }
 function foo2(_a) {
-    var _b = __read(_a, 1), numberB = _b[0];
+    var numberB = _a[0];
     console.log(numberB);
 }
 function foo3(_a) {
-    var _b = __read(_a, 3), numberA2 = _b[0], nameA2 = _b[1], skillA2 = _b[2];
+    var numberA2 = _a[0], nameA2 = _a[1], skillA2 = _a[2];
     console.log(nameA2);
 }
 function foo4(_a) {
-    var _b = __read(_a), numberA3 = _b[0], robotAInfo = _b.slice(1);
+    var numberA3 = _a[0], robotAInfo = _a.slice(1);
     console.log(robotAInfo);
 }
 foo1(robotA);

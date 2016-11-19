@@ -240,7 +240,7 @@ namespace ts {
                     visitNode(cbNode, (<ForInStatement>node).expression) ||
                     visitNode(cbNode, (<ForInStatement>node).statement);
             case SyntaxKind.ForOfStatement:
-                return visitNode(cbNode, (<ForOfStatement>node).modifierToken) ||
+                return visitNode(cbNode, (<ForOfStatement>node).awaitModifier) ||
                     visitNode(cbNode, (<ForOfStatement>node).initializer) ||
                     visitNode(cbNode, (<ForOfStatement>node).expression) ||
                     visitNode(cbNode, (<ForOfStatement>node).statement);
@@ -4427,7 +4427,7 @@ namespace ts {
         function parseForOrForInOrForOfStatement(): Statement {
             const pos = getNodePos();
             parseExpected(SyntaxKind.ForKeyword);
-            const modifierToken = parseOptionalToken(SyntaxKind.AwaitKeyword) || parseOptionalToken(SyntaxKind.EachKeyword);
+            const awaitToken = parseOptionalToken(SyntaxKind.AwaitKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
 
             let initializer: VariableDeclarationList | Expression = undefined;
@@ -4440,9 +4440,9 @@ namespace ts {
                 }
             }
             let forOrForInOrForOfStatement: IterationStatement;
-            if (modifierToken ? parseExpected(SyntaxKind.OfKeyword) : parseOptional(SyntaxKind.OfKeyword)) {
+            if (awaitToken ? parseExpected(SyntaxKind.OfKeyword) : parseOptional(SyntaxKind.OfKeyword)) {
                 const forOfStatement = <ForOfStatement>createNode(SyntaxKind.ForOfStatement, pos);
-                forOfStatement.modifierToken = modifierToken;
+                forOfStatement.awaitModifier = awaitToken;
                 forOfStatement.initializer = initializer;
                 forOfStatement.expression = allowInAnd(parseAssignmentExpressionOrHigher);
                 parseExpected(SyntaxKind.CloseParenToken);

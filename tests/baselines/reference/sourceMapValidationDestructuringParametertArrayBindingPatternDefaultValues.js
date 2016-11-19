@@ -34,29 +34,21 @@ foo4(robotA);
 foo4([2, "trimmer", "trimming"]);
 
 //// [sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.js]
-var __read = (this && this.__read) || function (o, n) {
-    if (!(m = typeof Symbol === "function" && o[Symbol.iterator])) return o;
-    var m, i = m.call(o), ar = [], r, e;
-    try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
-    catch (error) { e = { error: error }; }
-    finally { try { if (m = !(r && r.done) && i["return"]) m.call(i); } finally { if (e) throw e.error; } }
-    return ar;
-};
 var robotA = [1, "mower", "mowing"];
 function foo1(_a) {
-    var _b = __read(_a === void 0 ? [-1, "name", "skill"] : _a, 2), _c = _b[1], nameA = _c === void 0 ? "noName" : _c;
+    var _b = _a === void 0 ? [-1, "name", "skill"] : _a, _c = _b[1], nameA = _c === void 0 ? "noName" : _c;
     console.log(nameA);
 }
 function foo2(_a) {
-    var _b = __read(_a === void 0 ? [-1, "name", "skill"] : _a, 1), _c = _b[0], numberB = _c === void 0 ? -1 : _c;
+    var _b = (_a === void 0 ? [-1, "name", "skill"] : _a)[0], numberB = _b === void 0 ? -1 : _b;
     console.log(numberB);
 }
 function foo3(_a) {
-    var _b = __read(_a === void 0 ? [-1, "name", "skill"] : _a, 3), _c = _b[0], numberA2 = _c === void 0 ? -1 : _c, _d = _b[1], nameA2 = _d === void 0 ? "name" : _d, _e = _b[2], skillA2 = _e === void 0 ? "skill" : _e;
+    var _b = _a === void 0 ? [-1, "name", "skill"] : _a, _c = _b[0], numberA2 = _c === void 0 ? -1 : _c, _d = _b[1], nameA2 = _d === void 0 ? "name" : _d, _e = _b[2], skillA2 = _e === void 0 ? "skill" : _e;
     console.log(nameA2);
 }
 function foo4(_a) {
-    var _b = __read(_a === void 0 ? [-1, "name", "skill"] : _a), _c = _b[0], numberA3 = _c === void 0 ? -1 : _c, robotAInfo = _b.slice(1);
+    var _b = _a === void 0 ? [-1, "name", "skill"] : _a, _c = _b[0], numberA3 = _c === void 0 ? -1 : _c, robotAInfo = _b.slice(1);
     console.log(robotAInfo);
 }
 foo1(robotA);

@@ -110,9 +110,6 @@ for ({name, skills: { primary, secondary } } of [{ name: "mower", skills: { prim
 }
 
 //// [sourceMapValidationDestructuringForOfObjectBindingPattern2.js]
-var __values = (this && this.__values) || function (o) { return (i = typeof Symbol === "function" && o[Symbol.iterator] || 0) ? i.call(o) : { next: function () { return { done: d = d || i >= o.length, value: d ? void 0 : o[i++] }; } }; var i, d; };
-var __step = (this && this.__step) || function (r) { return !(r.done || (r.done = (r.result = r.iterator.next()).done)); };
-var __close = (this && this.__close) || function (r) { return (m = !(r && r.done) && r.iterator["return"]) && m.call(r.iterator); var m; };
 var robots = [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }];
 var multiRobots = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
     { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }];
@@ -124,201 +121,105 @@ function getMultiRobots() {
 }
 var nameA, primaryA, secondaryA, i, skillA;
 var name, primary, secondary, skill;
-try {
-    for (var robots_1 = { iterator: __values(robots) }; __step(robots_1);) {
-        nameA = robots_1.result.value.name;
-        console.log(nameA);
-    }
-}
-catch (e_1_1) { e_1 = { error: e_1_1 }; }
-finally {
-    try { __close(robots_1); } finally { if (e_1) throw e_1.error; }
-}
-try {
-    for (var iterator_1 = { iterator: __values(getRobots()) }; __step(iterator_1);) {
-        nameA = iterator_1.result.value.name;
-        console.log(nameA);
-    }
-}
-catch (e_2_1) { e_2 = { error: e_2_1 }; }
-finally {
-    try { __close(iterator_1); } finally { if (e_2) throw e_2.error; }
-}
-for (var _i = 0, _a = [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]; _i < _a.length; _i++) {
-    nameA = _a[_i].name;
+for (var _i = 0, robots_1 = robots; _i < robots_1.length; _i++) {
+    nameA = robots_1[_i].name;
     console.log(nameA);
 }
-try {
-    for (var multiRobots_1 = { iterator: __values(multiRobots) }; __step(multiRobots_1);) {
-        _b = multiRobots_1.result.value.skills, primaryA = _b.primary, secondaryA = _b.secondary;
-        console.log(primaryA);
-    }
-}
-catch (e_3_1) { e_3 = { error: e_3_1 }; }
-finally {
-    try { __close(multiRobots_1); } finally { if (e_3) throw e_3.error; }
-}
-try {
-    for (var iterator_2 = { iterator: __values(getMultiRobots()) }; __step(iterator_2);) {
-        _c = iterator_2.result.value.skills, primaryA = _c.primary, secondaryA = _c.secondary;
-        console.log(primaryA);
-    }
-}
-catch (e_4_1) { e_4 = { error: e_4_1 }; }
-finally {
-    try { __close(iterator_2); } finally { if (e_4) throw e_4.error; }
-}
-for (var _d = 0, _e = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
-    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]; _d < _e.length; _d++) {
-    _f = _e[_d].skills, primaryA = _f.primary, secondaryA = _f.secondary;
-    console.log(primaryA);
-}
-try {
-    for (var robots_2 = { iterator: __values(robots) }; __step(robots_2);) {
-        name = robots_2.result.value.name;
-        console.log(nameA);
-    }
-}
-catch (e_5_1) { e_5 = { error: e_5_1 }; }
-finally {
-    try { __close(robots_2); } finally { if (e_5) throw e_5.error; }
-}
-try {
-    for (var iterator_3 = { iterator: __values(getRobots()) }; __step(iterator_3);) {
-        name = iterator_3.result.value.name;
-        console.log(nameA);
-    }
-}
-catch (e_6_1) { e_6 = { error: e_6_1 }; }
-finally {
-    try { __close(iterator_3); } finally { if (e_6) throw e_6.error; }
-}
-for (var _g = 0, _h = [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]; _g < _h.length; _g++) {
-    name = _h[_g].name;
+for (var _a = 0, _b = getRobots(); _a < _b.length; _a++) {
+    nameA = _b[_a].name;
     console.log(nameA);
 }
-try {
-    for (var multiRobots_2 = { iterator: __values(multiRobots) }; __step(multiRobots_2);) {
-        _j = multiRobots_2.result.value.skills, primary = _j.primary, secondary = _j.secondary;
-        console.log(primaryA);
-    }
+for (var _c = 0, _d = [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]; _c < _d.length; _c++) {
+    nameA = _d[_c].name;
+    console.log(nameA);
 }
-catch (e_7_1) { e_7 = { error: e_7_1 }; }
-finally {
-    try { __close(multiRobots_2); } finally { if (e_7) throw e_7.error; }
-}
-try {
-    for (var iterator_4 = { iterator: __values(getMultiRobots()) }; __step(iterator_4);) {
-        _k = iterator_4.result.value.skills, primary = _k.primary, secondary = _k.secondary;
-        console.log(primaryA);
-    }
-}
-catch (e_8_1) { e_8 = { error: e_8_1 }; }
-finally {
-    try { __close(iterator_4); } finally { if (e_8) throw e_8.error; }
-}
-for (var _l = 0, _m = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
-    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]; _l < _m.length; _l++) {
-    _o = _m[_l].skills, primary = _o.primary, secondary = _o.secondary;
+for (var _e = 0, multiRobots_1 = multiRobots; _e < multiRobots_1.length; _e++) {
+    _f = multiRobots_1[_e].skills, primaryA = _f.primary, secondaryA = _f.secondary;
     console.log(primaryA);
 }
-try {
-    for (var robots_3 = { iterator: __values(robots) }; __step(robots_3);) {
-        _p = robots_3.result.value, nameA = _p.name, skillA = _p.skill;
-        console.log(nameA);
-    }
+for (var _g = 0, _h = getMultiRobots(); _g < _h.length; _g++) {
+    _j = _h[_g].skills, primaryA = _j.primary, secondaryA = _j.secondary;
+    console.log(primaryA);
 }
-catch (e_9_1) { e_9 = { error: e_9_1 }; }
-finally {
-    try { __close(robots_3); } finally { if (e_9) throw e_9.error; }
+for (var _k = 0, _l = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]; _k < _l.length; _k++) {
+    _m = _l[_k].skills, primaryA = _m.primary, secondaryA = _m.secondary;
+    console.log(primaryA);
 }
-try {
-    for (var iterator_5 = { iterator: __values(getRobots()) }; __step(iterator_5);) {
-        _q = iterator_5.result.value, nameA = _q.name, skillA = _q.skill;
-        console.log(nameA);
-    }
+for (var _o = 0, robots_2 = robots; _o < robots_2.length; _o++) {
+    name = robots_2[_o].name;
+    console.log(nameA);
 }
-catch (e_10_1) { e_10 = { error: e_10_1 }; }
-finally {
-    try { __close(iterator_5); } finally { if (e_10) throw e_10.error; }
+for (var _p = 0, _q = getRobots(); _p < _q.length; _p++) {
+    name = _q[_p].name;
+    console.log(nameA);
 }
 for (var _r = 0, _s = [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]; _r < _s.length; _r++) {
-    _t = _s[_r], nameA = _t.name, skillA = _t.skill;
+    name = _s[_r].name;
     console.log(nameA);
 }
-try {
-    for (var multiRobots_3 = { iterator: __values(multiRobots) }; __step(multiRobots_3);) {
-        _u = multiRobots_3.result.value, nameA = _u.name, _v = _u.skills, primaryA = _v.primary, secondaryA = _v.secondary;
-        console.log(nameA);
-    }
+for (var _t = 0, multiRobots_2 = multiRobots; _t < multiRobots_2.length; _t++) {
+    _u = multiRobots_2[_t].skills, primary = _u.primary, secondary = _u.secondary;
+    console.log(primaryA);
 }
-catch (e_11_1) { e_11 = { error: e_11_1 }; }
-finally {
-    try { __close(multiRobots_3); } finally { if (e_11) throw e_11.error; }
-}
-try {
-    for (var iterator_6 = { iterator: __values(getMultiRobots()) }; __step(iterator_6);) {
-        _w = iterator_6.result.value, nameA = _w.name, _x = _w.skills, primaryA = _x.primary, secondaryA = _x.secondary;
-        console.log(nameA);
-    }
-}
-catch (e_12_1) { e_12 = { error: e_12_1 }; }
-finally {
-    try { __close(iterator_6); } finally { if (e_12) throw e_12.error; }
+for (var _v = 0, _w = getMultiRobots(); _v < _w.length; _v++) {
+    _x = _w[_v].skills, primary = _x.primary, secondary = _x.secondary;
+    console.log(primaryA);
 }
 for (var _y = 0, _z = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
     { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]; _y < _z.length; _y++) {
-    _0 = _z[_y], nameA = _0.name, _1 = _0.skills, primaryA = _1.primary, secondaryA = _1.secondary;
+    _0 = _z[_y].skills, primary = _0.primary, secondary = _0.secondary;
+    console.log(primaryA);
+}
+for (var _1 = 0, robots_3 = robots; _1 < robots_3.length; _1++) {
+    _2 = robots_3[_1], nameA = _2.name, skillA = _2.skill;
     console.log(nameA);
 }
-try {
-    for (var robots_4 = { iterator: __values(robots) }; __step(robots_4);) {
-        _2 = robots_4.result.value, name = _2.name, skill = _2.skill;
-        console.log(nameA);
-    }
-}
-catch (e_13_1) { e_13 = { error: e_13_1 }; }
-finally {
-    try { __close(robots_4); } finally { if (e_13) throw e_13.error; }
-}
-try {
-    for (var iterator_7 = { iterator: __values(getRobots()) }; __step(iterator_7);) {
-        _3 = iterator_7.result.value, name = _3.name, skill = _3.skill;
-        console.log(nameA);
-    }
-}
-catch (e_14_1) { e_14 = { error: e_14_1 }; }
-finally {
-    try { __close(iterator_7); } finally { if (e_14) throw e_14.error; }
-}
-for (var _4 = 0, _5 = [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]; _4 < _5.length; _4++) {
-    _6 = _5[_4], name = _6.name, skill = _6.skill;
+for (var _3 = 0, _4 = getRobots(); _3 < _4.length; _3++) {
+    _5 = _4[_3], nameA = _5.name, skillA = _5.skill;
     console.log(nameA);
 }
-try {
-    for (var multiRobots_4 = { iterator: __values(multiRobots) }; __step(multiRobots_4);) {
-        _7 = multiRobots_4.result.value, name = _7.name, _8 = _7.skills, primary = _8.primary, secondary = _8.secondary;
-        console.log(nameA);
-    }
-}
-catch (e_15_1) { e_15 = { error: e_15_1 }; }
-finally {
-    try { __close(multiRobots_4); } finally { if (e_15) throw e_15.error; }
-}
-try {
-    for (var iterator_8 = { iterator: __values(getMultiRobots()) }; __step(iterator_8);) {
-        _9 = iterator_8.result.value, name = _9.name, _10 = _9.skills, primary = _10.primary, secondary = _10.secondary;
-        console.log(nameA);
-    }
-}
-catch (e_16_1) { e_16 = { error: e_16_1 }; }
-finally {
-    try { __close(iterator_8); } finally { if (e_16) throw e_16.error; }
-}
-for (var _11 = 0, _12 = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
-    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]; _11 < _12.length; _11++) {
-    _13 = _12[_11], name = _13.name, _14 = _13.skills, primary = _14.primary, secondary = _14.secondary;
+for (var _6 = 0, _7 = [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]; _6 < _7.length; _6++) {
+    _8 = _7[_6], nameA = _8.name, skillA = _8.skill;
     console.log(nameA);
 }
-var e_1, e_2, _b, e_3, _c, e_4, _f, e_5, e_6, _j, e_7, _k, e_8, _o, _p, e_9, _q, e_10, _t, _u, _v, e_11, _w, _x, e_12, _0, _1, _2, e_13, _3, e_14, _6, _7, _8, e_15, _9, _10, e_16, _13, _14;
+for (var _9 = 0, multiRobots_3 = multiRobots; _9 < multiRobots_3.length; _9++) {
+    _10 = multiRobots_3[_9], nameA = _10.name, _11 = _10.skills, primaryA = _11.primary, secondaryA = _11.secondary;
+    console.log(nameA);
+}
+for (var _12 = 0, _13 = getMultiRobots(); _12 < _13.length; _12++) {
+    _14 = _13[_12], nameA = _14.name, _15 = _14.skills, primaryA = _15.primary, secondaryA = _15.secondary;
+    console.log(nameA);
+}
+for (var _16 = 0, _17 = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]; _16 < _17.length; _16++) {
+    _18 = _17[_16], nameA = _18.name, _19 = _18.skills, primaryA = _19.primary, secondaryA = _19.secondary;
+    console.log(nameA);
+}
+for (var _20 = 0, robots_4 = robots; _20 < robots_4.length; _20++) {
+    _21 = robots_4[_20], name = _21.name, skill = _21.skill;
+    console.log(nameA);
+}
+for (var _22 = 0, _23 = getRobots(); _22 < _23.length; _22++) {
+    _24 = _23[_22], name = _24.name, skill = _24.skill;
+    console.log(nameA);
+}
+for (var _25 = 0, _26 = [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]; _25 < _26.length; _25++) {
+    _27 = _26[_25], name = _27.name, skill = _27.skill;
+    console.log(nameA);
+}
+for (var _28 = 0, multiRobots_4 = multiRobots; _28 < multiRobots_4.length; _28++) {
+    _29 = multiRobots_4[_28], name = _29.name, _30 = _29.skills, primary = _30.primary, secondary = _30.secondary;
+    console.log(nameA);
+}
+for (var _31 = 0, _32 = getMultiRobots(); _31 < _32.length; _31++) {
+    _33 = _32[_31], name = _33.name, _34 = _33.skills, primary = _34.primary, secondary = _34.secondary;
+    console.log(nameA);
+}
+for (var _35 = 0, _36 = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]; _35 < _36.length; _35++) {
+    _37 = _36[_35], name = _37.name, _38 = _37.skills, primary = _38.primary, secondary = _38.secondary;
+    console.log(nameA);
+}
+var _f, _j, _m, _u, _x, _0, _2, _5, _8, _10, _11, _14, _15, _18, _19, _21, _24, _27, _29, _30, _33, _34, _37, _38;
 //# sourceMappingURL=sourceMapValidationDestructuringForOfObjectBindingPattern2.js.map

@@ -989,7 +989,7 @@ namespace ts {
 
             case SyntaxKind.ForOfStatement:
                 return updateForOf(<ForOfStatement>node,
-                    (<ForOfStatement>node).modifierToken,
+                    (<ForOfStatement>node).awaitModifier,
                     visitNode((<ForOfStatement>node).initializer, visitor, isForInitializer),
                     visitNode((<ForOfStatement>node).expression, visitor, isExpression),
                     visitNode((<ForOfStatement>node).statement, visitor, isStatement, /*optional*/ false, liftToBlock));

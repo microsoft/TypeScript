@@ -30,18 +30,6 @@ new X(1,);
 
 
 //// [trailingCommasInFunctionParametersAndArguments.js]
-var __read = (this && this.__read) || function (o, n) {
-    if (!(m = typeof Symbol === "function" && o[Symbol.iterator])) return o;
-    var m, i = m.call(o), ar = [], r, e;
-    try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
-    catch (error) { e = { error: error }; }
-    finally { try { if (m = !(r && r.done) && i["return"]) m.call(i); } finally { if (e) throw e.error; } }
-    return ar;
-};
-var __spread = (this && this.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
 function f1(x) { }
 f1(1);
 function f2() {
@@ -50,7 +38,7 @@ function f2() {
         args[_i] = arguments[_i];
     }
 }
-f2.apply(void 0, __spread([]));
+f2.apply(void 0, []);
 f3(1);
 f3(1, 2);
 // Works for constructors too

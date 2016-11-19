@@ -1,4 +1,0 @@
-=== tests/cases/conformance/asyncGenerators/es2017/functionExpressions/asyncGenerators.functionExpression.3.es2017.ts ===
-const yield = async function * () {}
->yield : Symbol(yield, Decl(asyncGenerators.functionExpression.3.es2017.ts, 0, 5))
-

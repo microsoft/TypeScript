@@ -100,14 +100,6 @@ function tryCatchFn() {
 
 
 //// [arrowFunctionExpressions.js]
-var __read = (this && this.__read) || function (o, n) {
-    if (!(m = typeof Symbol === "function" && o[Symbol.iterator])) return o;
-    var m, i = m.call(o), ar = [], r, e;
-    try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
-    catch (error) { e = { error: error }; }
-    finally { try { if (m = !(r && r.done) && i["return"]) m.call(i); } finally { if (e) throw e.error; } }
-    return ar;
-};
 // ArrowFormalParameters => AssignmentExpression is equivalent to ArrowFormalParameters => { return AssignmentExpression; }
 var a = function (p) { return p.length; };
 var a = function (p) { return p.length; };
@@ -121,19 +113,19 @@ var d = function (n) { return c = n; };
 var d;
 // Binding patterns in arrow functions
 var p1 = function (_a) {
-    var _b = __read(_a, 1), a = _b[0];
+    var a = _a[0];
 };
 var p2 = function (_a) {
-    var _b = __read(_a), a = _b.slice(0);
+    var a = _a.slice(0);
 };
 var p3 = function (_a) {
-    var _b = __read(_a, 2), a = _b[1];
+    var a = _a[1];
 };
 var p4 = function (_a) {
-    var _b = __read(_a), a = _b.slice(1);
+    var a = _a.slice(1);
 };
 var p5 = function (_a) {
-    var _b = __read(_a, 1), _c = _b[0], a = _c === void 0 ? 1 : _c;
+    var _b = _a[0], a = _b === void 0 ? 1 : _b;
 };
 var p6 = function (_a) {
     var a = _a.a;
@@ -148,7 +140,7 @@ var p9 = function (_a) {
     var _b = _a.a, _c = (_b === void 0 ? { b: 1 } : _b).b, b = _c === void 0 ? 1 : _c;
 };
 var p10 = function (_a) {
-    var _b = __read(_a, 1), _c = _b[0], value = _c.value, done = _c.done;
+    var _b = _a[0], value = _b.value, done = _b.done;
 };
 // Arrow function used in class member initializer
 // Arrow function used in class member function

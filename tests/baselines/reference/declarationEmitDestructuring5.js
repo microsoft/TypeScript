@@ -6,28 +6,20 @@ function bar1([z, , , ] = [1, 3, 4, 6, 7]) { }
 function bar2([,,z, , , ]) { }
 
 //// [declarationEmitDestructuring5.js]
-var __read = (this && this.__read) || function (o, n) {
-    if (!(m = typeof Symbol === "function" && o[Symbol.iterator])) return o;
-    var m, i = m.call(o), ar = [], r, e;
-    try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
-    catch (error) { e = { error: error }; }
-    finally { try { if (m = !(r && r.done) && i["return"]) m.call(i); } finally { if (e) throw e.error; } }
-    return ar;
-};
 function baz(_a) {
-    var _b = __read(_a, 3), z = _b[1];
+    var z = _a[1];
 }
 function foo(_a) {
-    var _b = __read(_a, 2), b = _b[1];
+    var b = _a[1];
 }
 function bar(_a) {
-    var _b = __read(_a, 3), z = _b[0];
+    var z = _a[0];
 }
 function bar1(_a) {
-    var _b = __read(_a === void 0 ? [1, 3, 4, 6, 7] : _a, 3), z = _b[0];
+    var _b = _a === void 0 ? [1, 3, 4, 6, 7] : _a, z = _b[0];
 }
 function bar2(_a) {
-    var _b = __read(_a, 5), z = _b[2];
+    var z = _a[2];
 }
 
 

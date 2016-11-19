@@ -166,7 +166,6 @@ namespace ts {
         BooleanKeyword,
         ConstructorKeyword,
         DeclareKeyword,
-        EachKeyword,
         GetKeyword,
         IsKeyword,
         KeyOfKeyword,
@@ -520,7 +519,6 @@ namespace ts {
     export type AtToken = Token<SyntaxKind.AtToken>;
     export type ReadonlyToken = Token<SyntaxKind.ReadonlyKeyword>;
     export type AwaitKeywordToken = Token<SyntaxKind.AwaitKeyword>;
-    export type EachKeywordToken = Token<SyntaxKind.EachKeyword>;
 
     export type Modifier
         = Token<SyntaxKind.AbstractKeyword>
@@ -1619,7 +1617,7 @@ namespace ts {
 
     export interface ForOfStatement extends IterationStatement {
         kind: SyntaxKind.ForOfStatement;
-        modifierToken?: AwaitKeywordToken | EachKeywordToken;
+        awaitModifier?: AwaitKeywordToken;
         initializer: ForInitializer;
         expression: Expression;
     }
@@ -3130,6 +3128,11 @@ namespace ts {
         NodeJs   = 2
     }
 
+    export enum IterationMode {
+        Array,
+        Iterable
+    }
+
     export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]>;
 
     export interface CompilerOptions {
@@ -3151,6 +3154,7 @@ namespace ts {
         emitDecoratorMetadata?: boolean;
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
+        iterationMode?: IterationMode;
         /*@internal*/help?: boolean;
         importHelpers?: boolean;
         /*@internal*/init?: boolean;

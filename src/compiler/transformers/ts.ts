@@ -464,9 +464,6 @@ namespace ts {
                     // TypeScript namespace or external module import.
                     return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
 
-                case SyntaxKind.ForOfStatement:
-                    return visitForOfStatement(<ForOfStatement>node);
-
                 default:
                     Debug.failBadSyntaxKind(node);
                     return visitEachChild(node, visitor, context);
@@ -2219,33 +2216,6 @@ namespace ts {
             setEmitFlags(parameter.name, EmitFlags.NoTrailingSourceMap);
 
             return parameter;
-        }
-
-        function visitForOfStatement(node: ForOfStatement): Statement {
-            if (getForOfModifierKind(node) !== SyntaxKind.EachKeyword) {
-                return visitEachChild(node, visitor, context);
-            }
-
-            const counter = createLoopVariable();
-            const rhsReference = node.expression.kind === SyntaxKind.Identifier
-                ? createUniqueName((<Identifier>node.expression).text)
-                : createTempVariable(/*recordTempVariable*/ undefined);
-            const binding = createForOfBindingStatement(node.initializer, createElementAccess(rhsReference, counter));
-            const newNode = createFor(
-                createVariableDeclarationList([
-                    createVariableDeclaration(counter, /*type*/ undefined, createLiteral(0), /*location*/ moveRangePos(node.expression, -1)),
-                    createVariableDeclaration(rhsReference, /*type*/ undefined, node.expression, /*location*/ node.expression)
-                ]),
-                createLessThan(
-                    counter,
-                    createPropertyAccess(rhsReference, "length"),
-                    /*location*/ node.expression
-                ),
-                createPostfixIncrement(counter, /*location*/ node.expression),
-                insertLeadingStatement(node.statement, binding)
-            );
-
-            return visitNode(newNode, visitor, isStatement);
         }
 
         /**

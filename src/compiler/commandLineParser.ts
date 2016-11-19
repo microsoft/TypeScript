@@ -333,6 +333,15 @@ namespace ts {
             description: Diagnostics.Disallow_inconsistently_cased_references_to_the_same_file
         },
         {
+            name: "iterationMode",
+            type: createMap({
+                "array": IterationMode.Array,
+                "iterable": IterationMode.Iterable
+            }),
+            description: Diagnostics.Specify_how_to_emit_for_of_spread_and_destructuring_in_ES5_Slash3_Colon_array_arrays_only_default_or_iterable_support_arrays_and_Symbol_iterator,
+            paramType: Diagnostics.MODE
+        },
+        {
             name: "baseUrl",
             type: "string",
             isFilePath: true,
@@ -436,6 +445,7 @@ namespace ts {
                     "es2017.object": "lib.es2017.object.d.ts",
                     "es2017.sharedmemory": "lib.es2017.sharedmemory.d.ts",
                     "es2017.string": "lib.es2017.string.d.ts",
+                    "es2017.asynciterable": "lib.es2017.asynciterable.d.ts",
                 }),
             },
             description: Diagnostics.Specify_library_files_to_be_included_in_the_compilation_Colon
