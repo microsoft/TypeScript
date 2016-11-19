@@ -19,9 +19,17 @@ namespace ts.server.typingsInstaller {
         writeLine: noop
     };
 
-    function typingToFileName(cachePath: string, packageName: string, installTypingHost: InstallTypingHost): string {
-        const result = resolveModuleName(packageName, combinePaths(cachePath, "index.d.ts"), { moduleResolution: ModuleResolutionKind.NodeJs }, installTypingHost);
-        return result.resolvedModule && result.resolvedModule.resolvedFileName;
+    function typingToFileName(cachePath: string, packageName: string, installTypingHost: InstallTypingHost, log: Log): string {
+        try {
+            const result = resolveModuleName(packageName, combinePaths(cachePath, "index.d.ts"), { moduleResolution: ModuleResolutionKind.NodeJs }, installTypingHost);
+            return result.resolvedModule && result.resolvedModule.resolvedFileName;
+        }
+        catch (e) {
+            if (log.isEnabled()) {
+                log.writeLine(`Failed to resolve ${packageName} in folder '${cachePath}': ${(<Error>e).message}`);
+            }
+            return undefined;
+        }
     }
 
     export enum PackageNameValidationResult {
@@ -69,7 +77,7 @@ namespace ts.server.typingsInstaller {
         requestId: number;
         args: string[];
         cwd: string;
-        onRequestCompleted: RequestCompletedAction
+        onRequestCompleted: RequestCompletedAction;
     };
 
     export abstract class TypingsInstaller {
@@ -192,8 +200,9 @@ namespace ts.server.typingsInstaller {
                         if (!packageName) {
                             continue;
                         }
-                        const typingFile = typingToFileName(cacheLocation, packageName, this.installTypingHost);
+                        const typingFile = typingToFileName(cacheLocation, packageName, this.installTypingHost, this.log);
                         if (!typingFile) {
+                            this.missingTypingsSet[packageName] = true;
                             continue;
                         }
                         const existingTypingFile = this.packageNameToTypingLocation[packageName];
@@ -218,19 +227,19 @@ namespace ts.server.typingsInstaller {
             this.knownCachesSet[cacheLocation] = true;
         }
 
-        private filterAndMapToScopedName(typingsToInstall: string[]) {
+        private filterTypings(typingsToInstall: string[]) {
             if (typingsToInstall.length === 0) {
                 return typingsToInstall;
             }
             const result: string[] = [];
             for (const typing of typingsToInstall) {
-                if (this.missingTypingsSet[typing]) {
+                if (this.missingTypingsSet[typing] || this.packageNameToTypingLocation[typing]) {
                     continue;
                 }
                 const validationResult = validatePackageName(typing);
                 if (validationResult === PackageNameValidationResult.Ok) {
                     if (typing in this.typesRegistry) {
-                        result.push(`@types/${typing}`);
+                        result.push(typing);
                     }
                     else {
                         if (this.log.isEnabled()) {
@@ -286,7 +295,8 @@ namespace ts.server.typingsInstaller {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Installing typings ${JSON.stringify(typingsToInstall)}`);
             }
-            const scopedTypings = this.filterAndMapToScopedName(typingsToInstall);
+            const filteredTypings = this.filterTypings(typingsToInstall);
+            const scopedTypings = filteredTypings.map(x => `@types/${x}`);
             if (scopedTypings.length === 0) {
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`All typings are known to be missing or invalid - no need to go any further`);
@@ -303,26 +313,31 @@ namespace ts.server.typingsInstaller {
                 if (this.telemetryEnabled) {
                     this.sendResponse(<TypingsInstallEvent>{
                         kind: EventInstall,
-                        packagesToInstall: scopedTypings
+                        packagesToInstall: scopedTypings,
+                        installSuccess: ok,
+                        typingsInstallerVersion: ts.version // qualified explicitly to prevent occasional shadowing
                     });
                 }
 
                 if (!ok) {
+                    if (this.log.isEnabled()) {
+                        this.log.writeLine(`install request failed, marking packages as missing to prevent repeated requests: ${JSON.stringify(filteredTypings)}`);
+                    }
+                    for (const typing of filteredTypings) {
+                        this.missingTypingsSet[typing] = true;
+                    }
                     return;
                 }
 
                 // TODO: watch project directory
                 if (this.log.isEnabled()) {
-                    this.log.writeLine(`Requested to install typings ${JSON.stringify(scopedTypings)}, installed typings ${JSON.stringify(scopedTypings)}`);
+                    this.log.writeLine(`Installed typings ${JSON.stringify(scopedTypings)}`);
                 }
                 const installedTypingFiles: string[] = [];
-                for (const t of scopedTypings) {
-                    const packageName = getBaseFileName(t);
-                    if (!packageName) {
-                        continue;
-                    }
-                    const typingFile = typingToFileName(cachePath, packageName, this.installTypingHost);
+                for (const packageName of filteredTypings) {
+                    const typingFile = typingToFileName(cachePath, packageName, this.installTypingHost, this.log);
                     if (!typingFile) {
+                        this.missingTypingsSet[packageName] = true;
                         continue;
                     }
                     if (!this.packageNameToTypingLocation[packageName]) {
@@ -380,7 +395,7 @@ namespace ts.server.typingsInstaller {
                 compilerOptions: request.compilerOptions,
                 typings,
                 unresolvedImports: request.unresolvedImports,
-                kind: server.ActionSet
+                kind: ActionSet
             };
         }
 

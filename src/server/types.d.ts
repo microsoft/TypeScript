@@ -68,6 +68,8 @@ declare namespace ts.server {
     export interface TypingsInstallEvent extends TypingInstallerResponse {
         readonly packagesToInstall: ReadonlyArray<string>;
         readonly kind: EventInstall;
+        readonly installSuccess: boolean;
+        readonly typingsInstallerVersion: string;
     }
 
     export interface InstallTypingHost extends JsTyping.TypingResolutionHost {

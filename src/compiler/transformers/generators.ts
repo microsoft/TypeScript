@@ -227,7 +227,7 @@ namespace ts {
 
     export function transformGenerators(context: TransformationContext) {
         const {
-            startLexicalEnvironment,
+            resumeLexicalEnvironment,
             endLexicalEnvironment,
             hoistFunctionDeclaration,
             hoistVariableDeclaration,
@@ -291,17 +291,18 @@ namespace ts {
         return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
-            if (isDeclarationFile(node)) {
+            if (isDeclarationFile(node)
+                || (node.transformFlags & TransformFlags.ContainsGenerator) === 0) {
                 return node;
             }
 
-            if (node.transformFlags & TransformFlags.ContainsGenerator) {
-                currentSourceFile = node;
-                node = visitEachChild(node, visitor, context);
-                currentSourceFile = undefined;
-            }
+            currentSourceFile = node;
 
-            return node;
+            const visited = visitEachChild(node, visitor, context);
+            addEmitHelpers(visited, context.readEmitHelpers());
+
+            currentSourceFile = undefined;
+            return visited;
         }
 
         /**
@@ -449,11 +450,11 @@ namespace ts {
                 node = setOriginalNode(
                     createFunctionDeclaration(
                         /*decorators*/ undefined,
-                        /*modifiers*/ undefined,
+                        node.modifiers,
                         /*asteriskToken*/ undefined,
                         node.name,
                         /*typeParameters*/ undefined,
-                        node.parameters,
+                        visitParameterList(node.parameters, visitor, context),
                         /*type*/ undefined,
                         transformGeneratorFunctionBody(node.body),
                         /*location*/ node
@@ -500,7 +501,7 @@ namespace ts {
                         /*asteriskToken*/ undefined,
                         node.name,
                         /*typeParameters*/ undefined,
-                        node.parameters,
+                        visitParameterList(node.parameters, visitor, context),
                         /*type*/ undefined,
                         transformGeneratorFunctionBody(node.body),
                         /*location*/ node
@@ -578,7 +579,7 @@ namespace ts {
             state = createTempVariable(/*recordTempVariable*/ undefined);
 
             // Build the generator
-            startLexicalEnvironment();
+            resumeLexicalEnvironment();
 
             const statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false, visitor);
 
@@ -946,7 +947,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitArrayLiteralExpression(node: ArrayLiteralExpression) {
-            return visitElements(node.elements, node.multiLine);
+            return visitElements(node.elements, /*leadingElement*/ undefined, /*location*/ undefined, node.multiLine);
         }
 
         /**
@@ -956,7 +957,7 @@ namespace ts {
          * @param elements The elements to visit.
          * @param multiLine Whether array literals created should be emitted on multiple lines.
          */
-        function visitElements(elements: NodeArray<Expression>, _multiLine?: boolean) {
+        function visitElements(elements: NodeArray<Expression>, leadingElement?: Expression, location?: TextRange, multiLine?: boolean) {
             // [source]
             //      ar = [1, yield, 2];
             //
@@ -971,18 +972,22 @@ namespace ts {
             const temp = declareLocal();
             let hasAssignedTemp = false;
             if (numInitialElements > 0) {
+                const initialElements = visitNodes(elements, visitor, isExpression, 0, numInitialElements);
                 emitAssignment(temp,
                     createArrayLiteral(
-                        visitNodes(elements, visitor, isExpression, 0, numInitialElements)
+                        leadingElement
+                            ? [leadingElement, ...initialElements]
+                            : initialElements
                     )
                 );
+                leadingElement = undefined;
                 hasAssignedTemp = true;
             }
 
             const expressions = reduceLeft(elements, reduceElement, <Expression[]>[], numInitialElements);
             return hasAssignedTemp
-                ? createArrayConcat(temp, [createArrayLiteral(expressions)])
-                : createArrayLiteral(expressions);
+                ? createArrayConcat(temp, [createArrayLiteral(expressions, /*location*/ undefined, multiLine)])
+                : createArrayLiteral(leadingElement ? [leadingElement, ...expressions] : expressions, location, multiLine);
 
             function reduceElement(expressions: Expression[], element: Expression) {
                 if (containsYield(element) && expressions.length > 0) {
@@ -991,11 +996,16 @@ namespace ts {
                         hasAssignedTemp
                             ? createArrayConcat(
                                 temp,
-                                [createArrayLiteral(expressions)]
+                                [createArrayLiteral(expressions, /*location*/ undefined, multiLine)]
                             )
-                            : createArrayLiteral(expressions)
+                            : createArrayLiteral(
+                                leadingElement ? [leadingElement, ...expressions] : expressions,
+                                /*location*/ undefined,
+                                multiLine
+                            )
                     );
                     hasAssignedTemp = true;
+                    leadingElement = undefined;
                     expressions = [];
                 }
 
@@ -1131,7 +1141,10 @@ namespace ts {
                         createFunctionApply(
                             cacheExpression(visitNode(target, visitor, isExpression)),
                             thisArg,
-                            visitElements(node.arguments)
+                            visitElements(
+                                node.arguments,
+                                /*leadingElement*/ createVoidZero()
+                            )
                         ),
                         /*typeArguments*/ undefined,
                         [],
@@ -2585,28 +2598,24 @@ namespace ts {
             withBlockStack = undefined;
 
             const buildResult = buildStatements();
-            return createCall(
-                createHelperName(currentSourceFile.externalHelpersModuleName, "__generator"),
-                /*typeArguments*/ undefined,
-                [
-                    createThis(),
-                    setEmitFlags(
-                        createFunctionExpression(
-                            /*modifiers*/ undefined,
-                            /*asteriskToken*/ undefined,
-                            /*name*/ undefined,
-                            /*typeParameters*/ undefined,
-                            [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, state)],
-                            /*type*/ undefined,
-                            createBlock(
-                                buildResult,
-                                /*location*/ undefined,
-                                /*multiLine*/ buildResult.length > 0
-                            )
-                        ),
-                        EmitFlags.ReuseTempVariableScope
-                    )
-                ]
+            return createGeneratorHelper(
+                context,
+                setEmitFlags(
+                    createFunctionExpression(
+                        /*modifiers*/ undefined,
+                        /*asteriskToken*/ undefined,
+                        /*name*/ undefined,
+                        /*typeParameters*/ undefined,
+                        [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, state)],
+                        /*type*/ undefined,
+                        createBlock(
+                            buildResult,
+                            /*location*/ undefined,
+                            /*multiLine*/ buildResult.length > 0
+                        )
+                    ),
+                    EmitFlags.ReuseTempVariableScope
+                )
             );
         }
 
@@ -3082,4 +3091,105 @@ namespace ts {
             );
         }
     }
+
+    function createGeneratorHelper(context: TransformationContext, body: FunctionExpression) {
+        context.requestEmitHelper(generatorHelper);
+        return createCall(
+            getHelperName("__generator"),
+            /*typeArguments*/ undefined,
+            [createThis(), body]);
+    }
+
+    // The __generator helper is used by down-level transformations to emulate the runtime
+    // semantics of an ES2015 generator function. When called, this helper returns an
+    // object that implements the Iterator protocol, in that it has `next`, `return`, and
+    // `throw` methods that step through the generator when invoked.
+    //
+    // parameters:
+    //  thisArg  The value to use as the `this` binding for the transformed generator body.
+    //  body     A function that acts as the transformed generator body.
+    //
+    // variables:
+    //  _       Persistent state for the generator that is shared between the helper and the
+    //          generator body. The state object has the following members:
+    //            sent() - A method that returns or throws the current completion value.
+    //            label  - The next point at which to resume evaluation of the generator body.
+    //            trys   - A stack of protected regions (try/catch/finally blocks).
+    //            ops    - A stack of pending instructions when inside of a finally block.
+    //  f       A value indicating whether the generator is executing.
+    //  y       An iterator to delegate for a yield*.
+    //  t       A temporary variable that holds one of the following values (note that these
+    //          cases do not overlap):
+    //          - The completion value when resuming from a `yield` or `yield*`.
+    //          - The error value for a catch block.
+    //          - The current protected region (array of try/catch/finally/end labels).
+    //          - The verb (`next`, `throw`, or `return` method) to delegate to the expression
+    //            of a `yield*`.
+    //          - The result of evaluating the verb delegated to the expression of a `yield*`.
+    //
+    // functions:
+    //  verb(n)     Creates a bound callback to the `step` function for opcode `n`.
+    //  step(op)    Evaluates opcodes in a generator body until execution is suspended or
+    //              completed.
+    //
+    // The __generator helper understands a limited set of instructions:
+    //  0: next(value?)     - Start or resume the generator with the specified value.
+    //  1: throw(error)     - Resume the generator with an exception. If the generator is
+    //                        suspended inside of one or more protected regions, evaluates
+    //                        any intervening finally blocks between the current label and
+    //                        the nearest catch block or function boundary. If uncaught, the
+    //                        exception is thrown to the caller.
+    //  2: return(value?)   - Resume the generator as if with a return. If the generator is
+    //                        suspended inside of one or more protected regions, evaluates any
+    //                        intervening finally blocks.
+    //  3: break(label)     - Jump to the specified label. If the label is outside of the
+    //                        current protected region, evaluates any intervening finally
+    //                        blocks.
+    //  4: yield(value?)    - Yield execution to the caller with an optional value. When
+    //                        resumed, the generator will continue at the next label.
+    //  5: yield*(value)    - Delegates evaluation to the supplied iterator. When
+    //                        delegation completes, the generator will continue at the next
+    //                        label.
+    //  6: catch(error)     - Handles an exception thrown from within the generator body. If
+    //                        the current label is inside of one or more protected regions,
+    //                        evaluates any intervening finally blocks between the current
+    //                        label and the nearest catch block or function boundary. If
+    //                        uncaught, the exception is thrown to the caller.
+    //  7: endfinally       - Ends a finally block, resuming the last instruction prior to
+    //                        entering a finally block.
+    //
+    // For examples of how these are used, see the comments in ./transformers/generators.ts
+    const generatorHelper: EmitHelper = {
+        name: "typescript:generator",
+        scoped: false,
+        priority: 6,
+        text: `
+            var __generator = (this && this.__generator) || function (thisArg, body) {
+                var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t;
+                return { next: verb(0), "throw": verb(1), "return": verb(2) };
+                function verb(n) { return function (v) { return step([n, v]); }; }
+                function step(op) {
+                    if (f) throw new TypeError("Generator is already executing.");
+                    while (_) try {
+                        if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
+                        if (y = 0, t) op = [0, t.value];
+                        switch (op[0]) {
+                            case 0: case 1: t = op; break;
+                            case 4: _.label++; return { value: op[1], done: false };
+                            case 5: _.label++; y = op[1]; op = [0]; continue;
+                            case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                            default:
+                                if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                                if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                                if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                                if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                                if (t[2]) _.ops.pop();
+                                _.trys.pop(); continue;
+                        }
+                        op = body.call(thisArg, _);
+                    } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+                    if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+                }
+            };`
+    };
 }

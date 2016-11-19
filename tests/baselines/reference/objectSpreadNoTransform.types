@@ -12,7 +12,7 @@ const o = { x: 1, ...y };
 >{ x: 1, ...y } : { a: string; b: string; x: number; }
 >x : number
 >1 : 1
->y : any
+>y : { a: string; b: string; }
 
 var b;
 >b : any

@@ -104,7 +104,7 @@ var x9: T9;
 >T9 : T9
 
 type T10 = { x: number };
->T10 : { x: number; }
+>T10 : T10
 >x : number
 
 var x10: { x: number };
@@ -113,17 +113,17 @@ var x10: { x: number };
 
 var x10: T10;
 >x10 : { x: number; }
->T10 : { x: number; }
+>T10 : T10
 
 type T11 = { new(): boolean };
->T11 : new () => boolean
+>T11 : T11
 
 var x11: { new(): boolean };
 >x11 : new () => boolean
 
 var x11: T11;
 >x11 : new () => boolean
->T11 : new () => boolean
+>T11 : T11
 
 interface I13 { x: string };
 >I13 : I13

@@ -42,7 +42,7 @@ class Options {
 }
 
 type Dictionary<T> = { [x: string]: T };
->Dictionary : { [x: string]: T; }
+>Dictionary : Dictionary<T>
 >T : T
 >x : string
 >T : T
@@ -88,7 +88,7 @@ type K11 = keyof Shape[];  // number | "length" | "toString" | ...
 
 type K12 = keyof Dictionary<Shape>;  // string | number
 >K12 : string | number
->Dictionary : { [x: string]: T; }
+>Dictionary : Dictionary<T>
 >Shape : Shape
 
 type K13 = keyof {};  // never
@@ -128,7 +128,7 @@ type K20 = KeyOf<Shape>;  // "name" | "width" | "height" | "visible"
 type K21 = KeyOf<Dictionary<Shape>>;  // string | number
 >K21 : string | number
 >KeyOf : keyof T
->Dictionary : { [x: string]: T; }
+>Dictionary : Dictionary<T>
 >Shape : Shape
 
 type NAME = "name";
@@ -201,17 +201,17 @@ type Q41 = (Shape & Options)["visible"];  // true & "yes" | true & "no" | false 
 
 type Q50 = Dictionary<Shape>["howdy"];  // Shape
 >Q50 : Shape
->Dictionary : { [x: string]: T; }
+>Dictionary : Dictionary<T>
 >Shape : Shape
 
 type Q51 = Dictionary<Shape>[123];  // Shape
 >Q51 : Shape
->Dictionary : { [x: string]: T; }
+>Dictionary : Dictionary<T>
 >Shape : Shape
 
 type Q52 = Dictionary<Shape>[E.B];  // Shape
 >Q52 : Shape
->Dictionary : { [x: string]: T; }
+>Dictionary : Dictionary<T>
 >Shape : Shape
 >E : any
 >B : E.B

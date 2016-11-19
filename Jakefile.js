@@ -303,7 +303,8 @@ var es2016LibrarySourceMap = es2016LibrarySource.map(function (source) {
 
 var es2017LibrarySource = [
     "es2017.object.d.ts",
-    "es2017.sharedmemory.d.ts"
+    "es2017.sharedmemory.d.ts",
+    "es2017.string.d.ts",
 ];
 
 var es2017LibrarySourceMap = es2017LibrarySource.map(function (source) {
@@ -592,7 +593,7 @@ task("generate-diagnostics", [diagnosticInfoMapTs]);
 var configureNightlyJs = path.join(scriptsDirectory, "configureNightly.js");
 var configureNightlyTs = path.join(scriptsDirectory, "configureNightly.ts");
 var packageJson = "package.json";
-var programTs = path.join(compilerDirectory, "program.ts");
+var versionFile = path.join(compilerDirectory, "core.ts");
 
 file(configureNightlyTs);
 
@@ -608,7 +609,7 @@ task("setDebugMode", function () {
 });
 
 task("configure-nightly", [configureNightlyJs], function () {
-    var cmd = host + " " + configureNightlyJs + " " + packageJson + " " + programTs;
+    var cmd = host + " " + configureNightlyJs + " " + packageJson + " " + versionFile;
     console.log(cmd);
     exec(cmd);
 }, { async: true });
@@ -639,7 +640,7 @@ task("importDefinitelyTypedTests", [importDefinitelyTypedTestsJs], function () {
 
 // Local target to build the compiler and services
 var tscFile = path.join(builtLocalDirectory, compilerFilename);
-compileFile(tscFile, compilerSources, [builtLocalDirectory, copyright].concat(compilerSources), [copyright], /*useBuiltCompiler:*/ false);
+compileFile(tscFile, compilerSources, [builtLocalDirectory, copyright].concat(compilerSources), [copyright], /*useBuiltCompiler:*/ false, { noMapRoot: true });
 
 var servicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
 var servicesFileInBrowserTest = path.join(builtLocalDirectory, "typescriptServicesInBrowserTest.js");
