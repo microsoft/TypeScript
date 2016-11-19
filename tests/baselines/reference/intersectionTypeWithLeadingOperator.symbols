@@ -1,0 +1,13 @@
+=== tests/cases/compiler/intersectionTypeWithLeadingOperator.ts ===
+type A = & string;
+>A : Symbol(A, Decl(intersectionTypeWithLeadingOperator.ts, 0, 0))
+
+type B =
+>B : Symbol(B, Decl(intersectionTypeWithLeadingOperator.ts, 0, 18))
+
+  & { foo: string }
+>foo : Symbol(foo, Decl(intersectionTypeWithLeadingOperator.ts, 2, 5))
+
+  & { bar: number };
+>bar : Symbol(bar, Decl(intersectionTypeWithLeadingOperator.ts, 3, 5))
+

@@ -1,0 +1,13 @@
+=== tests/cases/compiler/intersectionTypeWithLeadingOperator.ts ===
+type A = & string;
+>A : string
+
+type B =
+>B : B
+
+  & { foo: string }
+>foo : string
+
+  & { bar: number };
+>bar : number
+
