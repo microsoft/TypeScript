@@ -3,13 +3,13 @@ tests/cases/conformance/parser/ecmascript2017/forAwait/forAwaitInWithDeclIsError
 tests/cases/conformance/parser/ecmascript2017/forAwait/forAwaitInWithExprIsError.ts(1,12): error TS2304: Cannot find name 'x'.
 tests/cases/conformance/parser/ecmascript2017/forAwait/forAwaitInWithExprIsError.ts(1,14): error TS1005: 'of' expected.
 tests/cases/conformance/parser/ecmascript2017/forAwait/forAwaitInWithExprIsError.ts(1,17): error TS2304: Cannot find name 'y'.
-tests/cases/conformance/parser/ecmascript2017/forAwait/inFunctionDeclWithDeclIsError.ts(3,9): error TS1104: A 'for-await-of' statement is only allowed within an async function or async generator.
-tests/cases/conformance/parser/ecmascript2017/forAwait/inFunctionDeclWithExprIsError.ts(3,9): error TS1104: A 'for-await-of' statement is only allowed within an async function or async generator.
-tests/cases/conformance/parser/ecmascript2017/forAwait/inGeneratorWithDeclIsError.ts(3,9): error TS1104: A 'for-await-of' statement is only allowed within an async function or async generator.
-tests/cases/conformance/parser/ecmascript2017/forAwait/inGeneratorWithExprIsError.ts(3,9): error TS1104: A 'for-await-of' statement is only allowed within an async function or async generator.
-tests/cases/conformance/parser/ecmascript2017/forAwait/topLevelWithDeclIsError.ts(1,5): error TS1104: A 'for-await-of' statement is only allowed within an async function or async generator.
+tests/cases/conformance/parser/ecmascript2017/forAwait/inFunctionDeclWithDeclIsError.ts(3,9): error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
+tests/cases/conformance/parser/ecmascript2017/forAwait/inFunctionDeclWithExprIsError.ts(3,9): error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
+tests/cases/conformance/parser/ecmascript2017/forAwait/inGeneratorWithDeclIsError.ts(3,9): error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
+tests/cases/conformance/parser/ecmascript2017/forAwait/inGeneratorWithExprIsError.ts(3,9): error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
+tests/cases/conformance/parser/ecmascript2017/forAwait/topLevelWithDeclIsError.ts(1,5): error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
 tests/cases/conformance/parser/ecmascript2017/forAwait/topLevelWithDeclIsError.ts(1,23): error TS2304: Cannot find name 'y'.
-tests/cases/conformance/parser/ecmascript2017/forAwait/topLevelWithExprIsError.ts(1,5): error TS1104: A 'for-await-of' statement is only allowed within an async function or async generator.
+tests/cases/conformance/parser/ecmascript2017/forAwait/topLevelWithExprIsError.ts(1,5): error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
 tests/cases/conformance/parser/ecmascript2017/forAwait/topLevelWithExprIsError.ts(1,12): error TS2304: Cannot find name 'x'.
 tests/cases/conformance/parser/ecmascript2017/forAwait/topLevelWithExprIsError.ts(1,17): error TS2304: Cannot find name 'y'.
 
@@ -17,14 +17,14 @@ tests/cases/conformance/parser/ecmascript2017/forAwait/topLevelWithExprIsError.t
 ==== tests/cases/conformance/parser/ecmascript2017/forAwait/topLevelWithDeclIsError.ts (2 errors) ====
     for await (const x of y) {
         ~~~~~
-!!! error TS1104: A 'for-await-of' statement is only allowed within an async function or async generator.
+!!! error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
                           ~
 !!! error TS2304: Cannot find name 'y'.
     }
 ==== tests/cases/conformance/parser/ecmascript2017/forAwait/topLevelWithExprIsError.ts (3 errors) ====
     for await (x of y) {
         ~~~~~
-!!! error TS1104: A 'for-await-of' statement is only allowed within an async function or async generator.
+!!! error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
                ~
 !!! error TS2304: Cannot find name 'x'.
                     ~
@@ -51,7 +51,7 @@ tests/cases/conformance/parser/ecmascript2017/forAwait/topLevelWithExprIsError.t
         let y: any;
         for await (const x of y) {
             ~~~~~
-!!! error TS1104: A 'for-await-of' statement is only allowed within an async function or async generator.
+!!! error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
         }
     }
 ==== tests/cases/conformance/parser/ecmascript2017/forAwait/inFunctionDeclWithExprIsError.ts (1 errors) ====
@@ -59,7 +59,7 @@ tests/cases/conformance/parser/ecmascript2017/forAwait/topLevelWithExprIsError.t
         let x: any, y: any;
         for await (x of y) {
             ~~~~~
-!!! error TS1104: A 'for-await-of' statement is only allowed within an async function or async generator.
+!!! error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
         }
     }
 ==== tests/cases/conformance/parser/ecmascript2017/forAwait/inAsyncFunctionWithDeclIsOk.ts (0 errors) ====
@@ -91,7 +91,7 @@ tests/cases/conformance/parser/ecmascript2017/forAwait/topLevelWithExprIsError.t
         let y: any;
         for await (const x of y) {
             ~~~~~
-!!! error TS1104: A 'for-await-of' statement is only allowed within an async function or async generator.
+!!! error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
         }
     }
 ==== tests/cases/conformance/parser/ecmascript2017/forAwait/inGeneratorWithExprIsError.ts (1 errors) ====
@@ -99,6 +99,6 @@ tests/cases/conformance/parser/ecmascript2017/forAwait/topLevelWithExprIsError.t
         let x: any, y: any;
         for await (x of y) {
             ~~~~~
-!!! error TS1104: A 'for-await-of' statement is only allowed within an async function or async generator.
+!!! error TS1103: A 'for-await-of' statement is only allowed within an async function or async generator.
         }
     }

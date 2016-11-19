@@ -1,4 +1,4 @@
-tests/cases/conformance/statements/breakStatements/invalidWhileBreakStatements.ts(4,1): error TS1106: A 'break' statement can only be used within an enclosing iteration or switch statement.
+tests/cases/conformance/statements/breakStatements/invalidWhileBreakStatements.ts(4,1): error TS1105: A 'break' statement can only be used within an enclosing iteration or switch statement.
 tests/cases/conformance/statements/breakStatements/invalidWhileBreakStatements.ts(7,1): error TS7028: Unused label.
 tests/cases/conformance/statements/breakStatements/invalidWhileBreakStatements.ts(8,14): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
 tests/cases/conformance/statements/breakStatements/invalidWhileBreakStatements.ts(11,1): error TS7027: Unreachable code detected.
@@ -14,7 +14,7 @@ tests/cases/conformance/statements/breakStatements/invalidWhileBreakStatements.t
     // naked break not allowed
     break;
     ~~~~~~
-!!! error TS1106: A 'break' statement can only be used within an enclosing iteration or switch statement.
+!!! error TS1105: A 'break' statement can only be used within an enclosing iteration or switch statement.
     
     // non-existent label
     ONE:

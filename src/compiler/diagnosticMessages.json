@@ -293,15 +293,15 @@
     },
     "A 'for-await-of' statement is only allowed within an async function or async generator.": {
         "category": "Error",
-        "code": 1104
+        "code": 1103
     },
     "A 'continue' statement can only be used within an enclosing iteration statement.": {
         "category": "Error",
-        "code": 1105
+        "code": 1104
     },
     "A 'break' statement can only be used within an enclosing iteration or switch statement.": {
         "category": "Error",
-        "code": 1106
+        "code": 1105
     },
     "Jump target cannot cross function boundary.": {
         "category": "Error",
