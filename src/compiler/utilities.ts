@@ -472,15 +472,15 @@ namespace ts {
 
     export function getTextOfPropertyName(name: PropertyName): string {
         switch (name.kind) {
-        case SyntaxKind.Identifier:
-            return (<Identifier>name).text;
-        case SyntaxKind.StringLiteral:
-        case SyntaxKind.NumericLiteral:
-            return (<LiteralExpression>name).text;
-        case SyntaxKind.ComputedPropertyName:
-            if (isStringOrNumericLiteral((<ComputedPropertyName>name).expression)) {
-                return (<LiteralExpression>(<ComputedPropertyName>name).expression).text;
-            }
+            case SyntaxKind.Identifier:
+                return (<Identifier>name).text;
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.NumericLiteral:
+                return (<LiteralExpression>name).text;
+            case SyntaxKind.ComputedPropertyName:
+                if (isStringOrNumericLiteral((<ComputedPropertyName>name).expression)) {
+                    return (<LiteralExpression>(<ComputedPropertyName>name).expression).text;
+                }
         }
 
         return undefined;
@@ -4555,18 +4555,21 @@ namespace ts {
         return flags;
     }
 
-   /**
-     * Checks to see if the locale is in the appropriate format,
-     * and if it is, attempts to set the appropriate language.
-     */
-    export function validateLocaleAndSetLanguage(locale: string, sys: System, errors?: Diagnostic[]): boolean {
+    /**
+      * Checks to see if the locale is in the appropriate format,
+      * and if it is, attempts to set the appropriate language.
+      */
+    export function validateLocaleAndSetLanguage(
+        locale: string,
+        sys: { getExecutingFilePath(): string, resolvePath(path: string): string, fileExists(fileName: string): boolean, readFile(fileName: string): string },
+        errors?: Diagnostic[]) {
         const matchResult = /^([a-z]+)([_\-]([a-z]+))?$/.exec(locale.toLowerCase());
 
         if (!matchResult) {
             if (errors) {
                 errors.push(createCompilerDiagnostic(Diagnostics.Locale_must_be_of_the_form_language_or_language_territory_For_example_0_or_1, "en", "ja-jp"));
             }
-            return false;
+            return;
         }
 
         const language = matchResult[1];
@@ -4574,50 +4577,48 @@ namespace ts {
 
         // First try the entire locale, then fall back to just language if that's all we have.
         // Either ways do not fail, and fallback to the English diagnostic strings.
-        if (!trySetLanguageAndTerritory(language, territory, sys, errors)) {
-            trySetLanguageAndTerritory(language, /*territory*/ undefined, sys, errors);
+        if (!trySetLanguageAndTerritory(language, territory, errors)) {
+            trySetLanguageAndTerritory(language, /*territory*/ undefined, errors);
         }
 
-        return true;
-    }
+        function trySetLanguageAndTerritory(language: string, territory: string, errors?: Diagnostic[]): boolean {
+            const compilerFilePath = normalizePath(sys.getExecutingFilePath());
+            const containingDirectoryPath = getDirectoryPath(compilerFilePath);
 
-    export function trySetLanguageAndTerritory(language: string, territory: string, sys: System, errors?: Diagnostic[]): boolean {
-        const compilerFilePath = normalizePath(sys.getExecutingFilePath());
-        const containingDirectoryPath = getDirectoryPath(compilerFilePath);
+            let filePath = combinePaths(containingDirectoryPath, language);
 
-        let filePath = combinePaths(containingDirectoryPath, language);
-
-        if (territory) {
-            filePath = filePath + "-" + territory;
-        }
-
-        filePath = sys.resolvePath(combinePaths(filePath, "diagnosticMessages.generated.json"));
-
-        if (!sys.fileExists(filePath)) {
-            return false;
-        }
-
-        // TODO: Add codePage support for readFile?
-        let fileContents = "";
-        try {
-            fileContents = sys.readFile(filePath);
-        }
-        catch (e) {
-            if (errors) {
-                errors.push(createCompilerDiagnostic(Diagnostics.Unable_to_open_file_0, filePath));
+            if (territory) {
+                filePath = filePath + "-" + territory;
             }
-            return false;
-        }
-        try {
-            ts.localizedDiagnosticMessages = JSON.parse(fileContents);
-        }
-        catch (e) {
-            if (errors) {
-                errors.push(createCompilerDiagnostic(Diagnostics.Corrupted_locale_file_0, filePath));
-            }
-            return false;
-        }
 
-        return true;
+            filePath = sys.resolvePath(combinePaths(filePath, "diagnosticMessages.generated.json"));
+
+            if (!sys.fileExists(filePath)) {
+                return false;
+            }
+
+            // TODO: Add codePage support for readFile?
+            let fileContents = "";
+            try {
+                fileContents = sys.readFile(filePath);
+            }
+            catch (e) {
+                if (errors) {
+                    errors.push(createCompilerDiagnostic(Diagnostics.Unable_to_open_file_0, filePath));
+                }
+                return false;
+            }
+            try {
+                ts.localizedDiagnosticMessages = JSON.parse(fileContents);
+            }
+            catch (e) {
+                if (errors) {
+                    errors.push(createCompilerDiagnostic(Diagnostics.Corrupted_locale_file_0, filePath));
+                }
+                return false;
+            }
+
+            return true;
+        }
     }
 }

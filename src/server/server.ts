@@ -578,7 +578,7 @@ namespace ts.server {
     }
 
     const localeStr = findArgument("--locale");
-    if (localeStr && validateLocaleAndSetLanguage(localeStr, sys)) {
+    if (localeStr) {
         validateLocaleAndSetLanguage(localeStr, sys);
     }
 
