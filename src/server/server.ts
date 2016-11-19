@@ -578,8 +578,8 @@ namespace ts.server {
     }
 
     const localeStr = findArgument("--locale");
-    if (localeStr && validateLocaleAndSetLanguage(localeStr)) {
-        validateLocaleAndSetLanguage(localeStr);
+    if (localeStr && validateLocaleAndSetLanguage(localeStr, sys)) {
+        validateLocaleAndSetLanguage(localeStr, sys);
     }
 
     const useSingleInferredProject = hasArgument("--useSingleInferredProject");

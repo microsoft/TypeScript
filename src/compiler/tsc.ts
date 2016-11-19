@@ -203,7 +203,7 @@ namespace ts {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"), /* host */ undefined);
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
-            validateLocaleAndSetLanguage(commandLine.options.locale, commandLine.errors);
+            validateLocaleAndSetLanguage(commandLine.options.locale, sys, commandLine.errors);
         }
 
         // If there are any errors due to command line parsing and/or

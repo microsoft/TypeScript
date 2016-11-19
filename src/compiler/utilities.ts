@@ -4559,7 +4559,7 @@ namespace ts {
      * Checks to see if the locale is in the appropriate format,
      * and if it is, attempts to set the appropriate language.
      */
-    export function validateLocaleAndSetLanguage(locale: string, errors?: Diagnostic[]): boolean {
+    export function validateLocaleAndSetLanguage(locale: string, sys: System, errors?: Diagnostic[]): boolean {
         const matchResult = /^([a-z]+)([_\-]([a-z]+))?$/.exec(locale.toLowerCase());
 
         if (!matchResult) {
@@ -4574,14 +4574,14 @@ namespace ts {
 
         // First try the entire locale, then fall back to just language if that's all we have.
         // Either ways do not fail, and fallback to the English diagnostic strings.
-        if (!trySetLanguageAndTerritory(language, territory, errors)) {
-            trySetLanguageAndTerritory(language, undefined, errors);
+        if (!trySetLanguageAndTerritory(language, territory, sys, errors)) {
+            trySetLanguageAndTerritory(language, /*territory*/ undefined, sys, errors);
         }
 
         return true;
     }
 
-    export function trySetLanguageAndTerritory(language: string, territory: string, errors?: Diagnostic[]): boolean {
+    export function trySetLanguageAndTerritory(language: string, territory: string, sys: System, errors?: Diagnostic[]): boolean {
         const compilerFilePath = normalizePath(sys.getExecutingFilePath());
         const containingDirectoryPath = getDirectoryPath(compilerFilePath);
 
