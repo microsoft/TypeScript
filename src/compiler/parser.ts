@@ -2556,6 +2556,8 @@ namespace ts {
                 case SyntaxKind.OpenBraceToken:
                 case SyntaxKind.OpenBracketToken:
                 case SyntaxKind.LessThanToken:
+                case SyntaxKind.BarToken:
+                case SyntaxKind.AmpersandToken:
                 case SyntaxKind.NewKeyword:
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NumericLiteral:
