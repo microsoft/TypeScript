@@ -737,6 +737,188 @@ function f40(c: C) {
 >"z" : "z"
 }
 
+function f50<T>(k: keyof T, s: string, n: number) {
+>f50 : <T>(k: keyof T, s: string, n: number) => void
+>T : T
+>k : keyof T
+>T : T
+>s : string
+>n : number
+
+    const x1 = s as keyof T;
+>x1 : keyof T
+>s as keyof T : keyof T
+>s : string
+>T : T
+
+    const x2 = n as keyof T;
+>x2 : keyof T
+>n as keyof T : keyof T
+>n : number
+>T : T
+
+    const x3 = k as string;
+>x3 : string
+>k as string : string
+>k : keyof T
+
+    const x4 = k as number;
+>x4 : number
+>k as number : number
+>k : keyof T
+
+    const x5 = k as string | number;
+>x5 : string | number
+>k as string | number : string | number
+>k : keyof T
+}
+
+function f51<T, K extends keyof T>(k: K, s: string, n: number) {
+>f51 : <T, K extends keyof T>(k: K, s: string, n: number) => void
+>T : T
+>K : K
+>T : T
+>k : K
+>K : K
+>s : string
+>n : number
+
+    const x1 = s as keyof T;
+>x1 : keyof T
+>s as keyof T : keyof T
+>s : string
+>T : T
+
+    const x2 = n as keyof T;
+>x2 : keyof T
+>n as keyof T : keyof T
+>n : number
+>T : T
+
+    const x3 = k as string;
+>x3 : string
+>k as string : string
+>k : K
+
+    const x4 = k as number;
+>x4 : number
+>k as number : number
+>k : K
+
+    const x5 = k as string | number;
+>x5 : string | number
+>k as string | number : string | number
+>k : K
+}
+
+function f52<T>(obj: { [x: string]: boolean }, k: keyof T, s: string, n: number) {
+>f52 : <T>(obj: { [x: string]: boolean; }, k: keyof T, s: string, n: number) => void
+>T : T
+>obj : { [x: string]: boolean; }
+>x : string
+>k : keyof T
+>T : T
+>s : string
+>n : number
+
+    const x1 = obj[s];
+>x1 : boolean
+>obj[s] : boolean
+>obj : { [x: string]: boolean; }
+>s : string
+
+    const x2 = obj[n];
+>x2 : boolean
+>obj[n] : boolean
+>obj : { [x: string]: boolean; }
+>n : number
+
+    const x3 = obj[k];
+>x3 : boolean
+>obj[k] : boolean
+>obj : { [x: string]: boolean; }
+>k : keyof T
+}
+
+function f53<T, K extends keyof T>(obj: { [x: string]: boolean }, k: K, s: string, n: number) {
+>f53 : <T, K extends keyof T>(obj: { [x: string]: boolean; }, k: K, s: string, n: number) => void
+>T : T
+>K : K
+>T : T
+>obj : { [x: string]: boolean; }
+>x : string
+>k : K
+>K : K
+>s : string
+>n : number
+
+    const x1 = obj[s];
+>x1 : boolean
+>obj[s] : boolean
+>obj : { [x: string]: boolean; }
+>s : string
+
+    const x2 = obj[n];
+>x2 : boolean
+>obj[n] : boolean
+>obj : { [x: string]: boolean; }
+>n : number
+
+    const x3 = obj[k];
+>x3 : { [x: string]: boolean; }[K]
+>obj[k] : { [x: string]: boolean; }[K]
+>obj : { [x: string]: boolean; }
+>k : K
+}
+
+function f54<T>(obj: T, key: keyof T) {
+>f54 : <T>(obj: T, key: keyof T) => void
+>T : T
+>obj : T
+>T : T
+>key : keyof T
+>T : T
+
+    for (let s in obj[key]) {
+>s : string
+>obj[key] : T[keyof T]
+>obj : T
+>key : keyof T
+    }
+    const b = "foo" in obj[key];
+>b : boolean
+>"foo" in obj[key] : boolean
+>"foo" : "foo"
+>obj[key] : T[keyof T]
+>obj : T
+>key : keyof T
+}
+
+function f55<T, K extends keyof T>(obj: T, key: K) {
+>f55 : <T, K extends keyof T>(obj: T, key: K) => void
+>T : T
+>K : K
+>T : T
+>obj : T
+>T : T
+>key : K
+>K : K
+
+    for (let s in obj[key]) {
+>s : string
+>obj[key] : T[K]
+>obj : T
+>key : K
+    }
+    const b = "foo" in obj[key];
+>b : boolean
+>"foo" in obj[key] : boolean
+>"foo" : "foo"
+>obj[key] : T[K]
+>obj : T
+>key : K
+}
+
 // Repros from #12011
 
 class Base {

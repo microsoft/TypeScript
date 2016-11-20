@@ -181,6 +181,46 @@ function f40(c: C) {
     let z: Z = c["z"];
 }
 
+function f50<T>(k: keyof T, s: string, n: number) {
+    const x1 = s as keyof T;
+    const x2 = n as keyof T;
+    const x3 = k as string;
+    const x4 = k as number;
+    const x5 = k as string | number;
+}
+
+function f51<T, K extends keyof T>(k: K, s: string, n: number) {
+    const x1 = s as keyof T;
+    const x2 = n as keyof T;
+    const x3 = k as string;
+    const x4 = k as number;
+    const x5 = k as string | number;
+}
+
+function f52<T>(obj: { [x: string]: boolean }, k: keyof T, s: string, n: number) {
+    const x1 = obj[s];
+    const x2 = obj[n];
+    const x3 = obj[k];
+}
+
+function f53<T, K extends keyof T>(obj: { [x: string]: boolean }, k: K, s: string, n: number) {
+    const x1 = obj[s];
+    const x2 = obj[n];
+    const x3 = obj[k];
+}
+
+function f54<T>(obj: T, key: keyof T) {
+    for (let s in obj[key]) {
+    }
+    const b = "foo" in obj[key];
+}
+
+function f55<T, K extends keyof T>(obj: T, key: K) {
+    for (let s in obj[key]) {
+    }
+    const b = "foo" in obj[key];
+}
+
 // Repros from #12011
 
 class Base {
@@ -329,6 +369,40 @@ function f40(c) {
     var y = c["y"];
     var z = c["z"];
 }
+function f50(k, s, n) {
+    var x1 = s;
+    var x2 = n;
+    var x3 = k;
+    var x4 = k;
+    var x5 = k;
+}
+function f51(k, s, n) {
+    var x1 = s;
+    var x2 = n;
+    var x3 = k;
+    var x4 = k;
+    var x5 = k;
+}
+function f52(obj, k, s, n) {
+    var x1 = obj[s];
+    var x2 = obj[n];
+    var x3 = obj[k];
+}
+function f53(obj, k, s, n) {
+    var x1 = obj[s];
+    var x2 = obj[n];
+    var x3 = obj[k];
+}
+function f54(obj, key) {
+    for (var s in obj[key]) {
+    }
+    var b = "foo" in obj[key];
+}
+function f55(obj, key) {
+    for (var s in obj[key]) {
+    }
+    var b = "foo" in obj[key];
+}
 // Repros from #12011
 var Base = (function () {
     function Base() {
@@ -454,6 +528,16 @@ declare class C {
     private z;
 }
 declare function f40(c: C): void;
+declare function f50<T>(k: keyof T, s: string, n: number): void;
+declare function f51<T, K extends keyof T>(k: K, s: string, n: number): void;
+declare function f52<T>(obj: {
+    [x: string]: boolean;
+}, k: keyof T, s: string, n: number): void;
+declare function f53<T, K extends keyof T>(obj: {
+    [x: string]: boolean;
+}, k: K, s: string, n: number): void;
+declare function f54<T>(obj: T, key: keyof T): void;
+declare function f55<T, K extends keyof T>(obj: T, key: K): void;
 declare class Base {
     get<K extends keyof this>(prop: K): this[K];
     set<K extends keyof this>(prop: K, value: this[K]): void;
