@@ -11,3 +11,6 @@ type B =
   | { type: "DECREMENT" };
 >type : "DECREMENT"
 
+type C = [| 0 | 1, | "foo" | "bar"];
+>C : [0 | 1, "foo" | "bar"]
+

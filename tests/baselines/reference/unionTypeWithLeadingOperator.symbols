@@ -11,3 +11,6 @@ type B =
   | { type: "DECREMENT" };
 >type : Symbol(type, Decl(unionTypeWithLeadingOperator.ts, 3, 5))
 
+type C = [| 0 | 1, | "foo" | "bar"];
+>C : Symbol(C, Decl(unionTypeWithLeadingOperator.ts, 3, 26))
+
