@@ -3156,38 +3156,10 @@ namespace ts {
         }
 
         function getTypeForVariableLikeDeclarationFromJSDocComment(declaration: VariableLikeDeclaration) {
-            const jsDocType = getJSDocTypeForVariableLikeDeclarationFromJSDocComment(declaration);
-            if (jsDocType) {
-                return getTypeFromTypeNode(jsDocType);
+            const jsdocType = getJSDocType(declaration);
+            if (jsdocType) {
+                return getTypeFromTypeNode(jsdocType);
             }
-        }
-
-        function getJSDocTypeForVariableLikeDeclarationFromJSDocComment(declaration: VariableLikeDeclaration): JSDocType {
-            // First, see if this node has an @type annotation on it directly.
-            const typeTag = getJSDocTypeTag(declaration);
-            if (typeTag && typeTag.typeExpression) {
-                return typeTag.typeExpression.type;
-            }
-
-            if (declaration.kind === SyntaxKind.VariableDeclaration &&
-                declaration.parent.kind === SyntaxKind.VariableDeclarationList &&
-                declaration.parent.parent.kind === SyntaxKind.VariableStatement) {
-
-                // @type annotation might have been on the variable statement, try that instead.
-                const annotation = getJSDocTypeTag(declaration.parent.parent);
-                if (annotation && annotation.typeExpression) {
-                    return annotation.typeExpression.type;
-                }
-            }
-            else if (declaration.kind === SyntaxKind.Parameter) {
-                // If it's a parameter, see if the parent has a jsdoc comment with an @param
-                // annotation.
-                const paramTag = getCorrespondingJSDocParameterTag(<ParameterDeclaration>declaration);
-                if (paramTag && paramTag.typeExpression) {
-                    return paramTag.typeExpression.type;
-                }
-            }
-
             return undefined;
         }
 
@@ -3455,9 +3427,9 @@ namespace ts {
                     declaration.kind === SyntaxKind.PropertyAccessExpression && declaration.parent.kind === SyntaxKind.BinaryExpression) {
                     // Use JS Doc type if present on parent expression statement
                     if (declaration.flags & NodeFlags.JavaScriptFile) {
-                        const typeTag = getJSDocTypeTag(declaration.parent);
-                        if (typeTag && typeTag.typeExpression) {
-                            return links.type = getTypeFromTypeNode(typeTag.typeExpression.type);
+                        const jsdocType = getJSDocType(declaration.parent);
+                        if (jsdocType) {
+                            return links.type = getTypeFromTypeNode(jsdocType);
                         }
                     }
                     const declaredTypes = map(symbol.declarations,
@@ -4901,15 +4873,16 @@ namespace ts {
                 if (node.type && node.type.kind === SyntaxKind.JSDocOptionalType) {
                     return true;
                 }
+                const paramTags = getJSDocParameterTags(node);
+                if (paramTags) {
+                    for (const paramTag of paramTags) {
+                        if (paramTag.isBracketed) {
+                            return true;
+                        }
 
-                const paramTag = getCorrespondingJSDocParameterTag(node);
-                if (paramTag) {
-                    if (paramTag.isBracketed) {
-                        return true;
-                    }
-
-                    if (paramTag.typeExpression) {
-                        return paramTag.typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
+                        if (paramTag.typeExpression) {
+                            return paramTag.typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
+                        }
                     }
                 }
             }
@@ -10396,9 +10369,9 @@ namespace ts {
         }
 
         function getTypeForThisExpressionFromJSDoc(node: Node) {
-            const typeTag = getJSDocTypeTag(node);
-            if (typeTag && typeTag.typeExpression && typeTag.typeExpression.type && typeTag.typeExpression.type.kind === SyntaxKind.JSDocFunctionType) {
-                const jsDocFunctionType = <JSDocFunctionType>typeTag.typeExpression.type;
+            const jsdocType = getJSDocType(node);
+            if (jsdocType && jsdocType.kind === SyntaxKind.JSDocFunctionType) {
+                const jsDocFunctionType = <JSDocFunctionType>jsdocType;
                 if (jsDocFunctionType.parameters.length > 0 && jsDocFunctionType.parameters[0].type.kind === SyntaxKind.JSDocThisType) {
                     return getTypeFromTypeNode(jsDocFunctionType.parameters[0].type);
                 }
@@ -13632,7 +13605,7 @@ namespace ts {
         // the destructured type into the contained binding elements.
         function assignBindingElementTypes(node: VariableLikeDeclaration) {
             if (isBindingPattern(node.name)) {
-                for (const element of (<BindingPattern>node.name).elements) {
+                for (const element of node.name.elements) {
                     if (!isOmittedExpression(element)) {
                         if (element.name.kind === SyntaxKind.Identifier) {
                             getSymbolLinks(getSymbolOfNode(element)).type = getTypeForBindingElement(element);
