@@ -886,10 +886,23 @@ namespace ts.formatting {
             else {
                 const tokenStart = sourceFile.getLineAndCharacterOfPosition(pos);
                 const startLinePosition = getStartPositionOfLine(tokenStart.line, sourceFile);
-                if (indentation !== tokenStart.character || indentationIsDifferent(indentationString, startLinePosition)) {
+                if (indentation !== characterToColumn(startLinePosition, tokenStart.character) || indentationIsDifferent(indentationString, startLinePosition)) {
                     recordReplace(startLinePosition, tokenStart.character, indentationString);
                 }
             }
+        }
+
+        function characterToColumn(startLinePosition: number, characterInLine: number): number {
+            let column = 0;
+            for (let i = 0; i < characterInLine; i++) {
+                if (sourceFile.text.charCodeAt(startLinePosition + i) === CharacterCodes.tab) {
+                    column += options.tabSize - column % options.tabSize;
+                }
+                else {
+                    column++;
+                }
+            }
+            return column;
         }
 
         function indentationIsDifferent(indentationString: string, startLinePosition: number): boolean {
