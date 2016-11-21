@@ -211,6 +211,12 @@ function f55<T, K extends keyof T>(obj: T, key: K) {
     const b = "foo" in obj[key];
 }
 
+function f60<T>(source: T, target: T) {
+    for (let k in source) {
+        target[k] = source[k];
+    }
+}
+
 // Repros from #12011
 
 class Base {

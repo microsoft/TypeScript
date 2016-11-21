@@ -211,6 +211,12 @@ function f55<T, K extends keyof T>(obj: T, key: K) {
     const b = "foo" in obj[key];
 }
 
+function f60<T>(source: T, target: T) {
+    for (let k in source) {
+        target[k] = source[k];
+    }
+}
+
 // Repros from #12011
 
 class Base {
@@ -383,6 +389,11 @@ function f55(obj, key) {
     }
     var b = "foo" in obj[key];
 }
+function f60(source, target) {
+    for (var k in source) {
+        target[k] = source[k];
+    }
+}
 // Repros from #12011
 var Base = (function () {
     function Base() {
@@ -518,6 +529,7 @@ declare function f53<T, K extends keyof T>(obj: {
 }, k: K, s: string, n: number): void;
 declare function f54<T>(obj: T, key: keyof T): void;
 declare function f55<T, K extends keyof T>(obj: T, key: K): void;
+declare function f60<T>(source: T, target: T): void;
 declare class Base {
     get<K extends keyof this>(prop: K): this[K];
     set<K extends keyof this>(prop: K, value: this[K]): void;

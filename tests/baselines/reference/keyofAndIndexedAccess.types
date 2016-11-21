@@ -854,6 +854,29 @@ function f55<T, K extends keyof T>(obj: T, key: K) {
 >key : K
 }
 
+function f60<T>(source: T, target: T) {
+>f60 : <T>(source: T, target: T) => void
+>T : T
+>source : T
+>T : T
+>target : T
+>T : T
+
+    for (let k in source) {
+>k : keyof T
+>source : T
+
+        target[k] = source[k];
+>target[k] = source[k] : T[keyof T]
+>target[k] : T[keyof T]
+>target : T
+>k : keyof T
+>source[k] : T[keyof T]
+>source : T
+>k : keyof T
+    }
+}
+
 // Repros from #12011
 
 class Base {

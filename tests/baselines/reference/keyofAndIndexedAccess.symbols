@@ -735,84 +735,104 @@ function f55<T, K extends keyof T>(obj: T, key: K) {
 >key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 206, 42))
 }
 
+function f60<T>(source: T, target: T) {
+>f60 : Symbol(f60, Decl(keyofAndIndexedAccess.ts, 210, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 212, 13))
+>source : Symbol(source, Decl(keyofAndIndexedAccess.ts, 212, 16))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 212, 13))
+>target : Symbol(target, Decl(keyofAndIndexedAccess.ts, 212, 26))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 212, 13))
+
+    for (let k in source) {
+>k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 213, 12))
+>source : Symbol(source, Decl(keyofAndIndexedAccess.ts, 212, 16))
+
+        target[k] = source[k];
+>target : Symbol(target, Decl(keyofAndIndexedAccess.ts, 212, 26))
+>k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 213, 12))
+>source : Symbol(source, Decl(keyofAndIndexedAccess.ts, 212, 16))
+>k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 213, 12))
+    }
+}
+
 // Repros from #12011
 
 class Base {
->Base : Symbol(Base, Decl(keyofAndIndexedAccess.ts, 210, 1))
+>Base : Symbol(Base, Decl(keyofAndIndexedAccess.ts, 216, 1))
 
     get<K extends keyof this>(prop: K) {
->get : Symbol(Base.get, Decl(keyofAndIndexedAccess.ts, 214, 12))
->K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 215, 8))
->prop : Symbol(prop, Decl(keyofAndIndexedAccess.ts, 215, 30))
->K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 215, 8))
+>get : Symbol(Base.get, Decl(keyofAndIndexedAccess.ts, 220, 12))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 221, 8))
+>prop : Symbol(prop, Decl(keyofAndIndexedAccess.ts, 221, 30))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 221, 8))
 
         return this[prop];
->this : Symbol(Base, Decl(keyofAndIndexedAccess.ts, 210, 1))
->prop : Symbol(prop, Decl(keyofAndIndexedAccess.ts, 215, 30))
+>this : Symbol(Base, Decl(keyofAndIndexedAccess.ts, 216, 1))
+>prop : Symbol(prop, Decl(keyofAndIndexedAccess.ts, 221, 30))
     }
     set<K extends keyof this>(prop: K, value: this[K]) {
->set : Symbol(Base.set, Decl(keyofAndIndexedAccess.ts, 217, 5))
->K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 218, 8))
->prop : Symbol(prop, Decl(keyofAndIndexedAccess.ts, 218, 30))
->K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 218, 8))
->value : Symbol(value, Decl(keyofAndIndexedAccess.ts, 218, 38))
->K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 218, 8))
+>set : Symbol(Base.set, Decl(keyofAndIndexedAccess.ts, 223, 5))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 224, 8))
+>prop : Symbol(prop, Decl(keyofAndIndexedAccess.ts, 224, 30))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 224, 8))
+>value : Symbol(value, Decl(keyofAndIndexedAccess.ts, 224, 38))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 224, 8))
 
         this[prop] = value;
->this : Symbol(Base, Decl(keyofAndIndexedAccess.ts, 210, 1))
->prop : Symbol(prop, Decl(keyofAndIndexedAccess.ts, 218, 30))
->value : Symbol(value, Decl(keyofAndIndexedAccess.ts, 218, 38))
+>this : Symbol(Base, Decl(keyofAndIndexedAccess.ts, 216, 1))
+>prop : Symbol(prop, Decl(keyofAndIndexedAccess.ts, 224, 30))
+>value : Symbol(value, Decl(keyofAndIndexedAccess.ts, 224, 38))
     }
 }
 
 class Person extends Base {
->Person : Symbol(Person, Decl(keyofAndIndexedAccess.ts, 221, 1))
->Base : Symbol(Base, Decl(keyofAndIndexedAccess.ts, 210, 1))
+>Person : Symbol(Person, Decl(keyofAndIndexedAccess.ts, 227, 1))
+>Base : Symbol(Base, Decl(keyofAndIndexedAccess.ts, 216, 1))
 
     parts: number;
->parts : Symbol(Person.parts, Decl(keyofAndIndexedAccess.ts, 223, 27))
+>parts : Symbol(Person.parts, Decl(keyofAndIndexedAccess.ts, 229, 27))
 
     constructor(parts: number) {
->parts : Symbol(parts, Decl(keyofAndIndexedAccess.ts, 225, 16))
+>parts : Symbol(parts, Decl(keyofAndIndexedAccess.ts, 231, 16))
 
         super();
->super : Symbol(Base, Decl(keyofAndIndexedAccess.ts, 210, 1))
+>super : Symbol(Base, Decl(keyofAndIndexedAccess.ts, 216, 1))
 
         this.set("parts", parts);
->this.set : Symbol(Base.set, Decl(keyofAndIndexedAccess.ts, 217, 5))
->this : Symbol(Person, Decl(keyofAndIndexedAccess.ts, 221, 1))
->set : Symbol(Base.set, Decl(keyofAndIndexedAccess.ts, 217, 5))
->parts : Symbol(parts, Decl(keyofAndIndexedAccess.ts, 225, 16))
+>this.set : Symbol(Base.set, Decl(keyofAndIndexedAccess.ts, 223, 5))
+>this : Symbol(Person, Decl(keyofAndIndexedAccess.ts, 227, 1))
+>set : Symbol(Base.set, Decl(keyofAndIndexedAccess.ts, 223, 5))
+>parts : Symbol(parts, Decl(keyofAndIndexedAccess.ts, 231, 16))
     }
     getParts() {
->getParts : Symbol(Person.getParts, Decl(keyofAndIndexedAccess.ts, 228, 5))
+>getParts : Symbol(Person.getParts, Decl(keyofAndIndexedAccess.ts, 234, 5))
 
         return this.get("parts")
->this.get : Symbol(Base.get, Decl(keyofAndIndexedAccess.ts, 214, 12))
->this : Symbol(Person, Decl(keyofAndIndexedAccess.ts, 221, 1))
->get : Symbol(Base.get, Decl(keyofAndIndexedAccess.ts, 214, 12))
+>this.get : Symbol(Base.get, Decl(keyofAndIndexedAccess.ts, 220, 12))
+>this : Symbol(Person, Decl(keyofAndIndexedAccess.ts, 227, 1))
+>get : Symbol(Base.get, Decl(keyofAndIndexedAccess.ts, 220, 12))
     }
 }
 
 class OtherPerson {
->OtherPerson : Symbol(OtherPerson, Decl(keyofAndIndexedAccess.ts, 232, 1))
+>OtherPerson : Symbol(OtherPerson, Decl(keyofAndIndexedAccess.ts, 238, 1))
 
     parts: number;
->parts : Symbol(OtherPerson.parts, Decl(keyofAndIndexedAccess.ts, 234, 19))
+>parts : Symbol(OtherPerson.parts, Decl(keyofAndIndexedAccess.ts, 240, 19))
 
     constructor(parts: number) {
->parts : Symbol(parts, Decl(keyofAndIndexedAccess.ts, 236, 16))
+>parts : Symbol(parts, Decl(keyofAndIndexedAccess.ts, 242, 16))
 
         setProperty(this, "parts", parts);
 >setProperty : Symbol(setProperty, Decl(keyofAndIndexedAccess.ts, 79, 1))
->this : Symbol(OtherPerson, Decl(keyofAndIndexedAccess.ts, 232, 1))
->parts : Symbol(parts, Decl(keyofAndIndexedAccess.ts, 236, 16))
+>this : Symbol(OtherPerson, Decl(keyofAndIndexedAccess.ts, 238, 1))
+>parts : Symbol(parts, Decl(keyofAndIndexedAccess.ts, 242, 16))
     }
     getParts() {
->getParts : Symbol(OtherPerson.getParts, Decl(keyofAndIndexedAccess.ts, 238, 5))
+>getParts : Symbol(OtherPerson.getParts, Decl(keyofAndIndexedAccess.ts, 244, 5))
 
         return getProperty(this, "parts")
 >getProperty : Symbol(getProperty, Decl(keyofAndIndexedAccess.ts, 75, 26))
->this : Symbol(OtherPerson, Decl(keyofAndIndexedAccess.ts, 232, 1))
+>this : Symbol(OtherPerson, Decl(keyofAndIndexedAccess.ts, 238, 1))
     }
 }
