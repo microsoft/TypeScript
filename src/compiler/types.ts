@@ -2789,7 +2789,7 @@ namespace ts {
         Intrinsic = Any | String | Number | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never,
         /* @internal */
         Primitive = String | Number | Boolean | Enum | ESSymbol | Void | Undefined | Null | Literal,
-        StringLike = String | StringLiteral,
+        StringLike = String | StringLiteral | Index,
         NumberLike = Number | NumberLiteral | Enum | EnumLiteral,
         BooleanLike = Boolean | BooleanLiteral,
         EnumLike = Enum | EnumLiteral,
