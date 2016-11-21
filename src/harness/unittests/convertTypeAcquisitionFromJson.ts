@@ -4,7 +4,8 @@
 namespace ts {
     describe("convertTypeAcquisitionFromJson", () => {
         function assertTypeAcquisition(json: any, configFileName: string, expectedResult: { typeAcquisition: TypeAcquisition, errors: Diagnostic[] }) {
-            const { options: actualTypeAcquisition, errors: actualErrors } = convertTypeAcquisitionFromJson(json["typeAcquisition"], "/apath/", configFileName);
+            const jsonOptions = json["typeAcquisition"] || json["typingOptions"];
+            const { options: actualTypeAcquisition, errors: actualErrors } = convertTypeAcquisitionFromJson(jsonOptions, "/apath/", configFileName);
             const parsedTypeAcquisition = JSON.stringify(actualTypeAcquisition);
             const expectedTypeAcquisition = JSON.stringify(expectedResult.typeAcquisition);
             assert.equal(parsedTypeAcquisition, expectedTypeAcquisition);
@@ -20,7 +21,29 @@ namespace ts {
         }
 
         // tsconfig.json
-        it("Convert correctly format tsconfig.json to typing-options ", () => {
+        it("Convert deprecated typingOptions.enableAutoDiscovery format tsconfig.json to typeAcquisition ", () => {
+            assertTypeAcquisition(
+                {
+                    "typingOptions":
+                    {
+                        "enableAutoDiscovery": true,
+                        "include": ["0.d.ts", "1.d.ts"],
+                        "exclude": ["0.js", "1.js"]
+                    }
+                },
+                "tsconfig.json",
+                {
+                    typeAcquisition:
+                    {
+                        enable: true,
+                        include: ["0.d.ts", "1.d.ts"],
+                        exclude: ["0.js", "1.js"]
+                    },
+                    errors: <Diagnostic[]>[]
+            });
+        });
+
+        it("Convert correctly format tsconfig.json to typeAcquisition ", () => {
             assertTypeAcquisition(
                 {
                     "typeAcquisition":
@@ -42,7 +65,7 @@ namespace ts {
             });
         });
 
-        it("Convert incorrect format tsconfig.json to typing-options ", () => {
+        it("Convert incorrect format tsconfig.json to typeAcquisition ", () => {
             assertTypeAcquisition(
                 {
                     "typeAcquisition":
@@ -70,7 +93,7 @@ namespace ts {
                 });
         });
 
-        it("Convert default tsconfig.json to typing-options ", () => {
+        it("Convert default tsconfig.json to typeAcquisition ", () => {
             assertTypeAcquisition({}, "tsconfig.json",
                 {
                     typeAcquisition:
@@ -83,7 +106,7 @@ namespace ts {
                 });
         });
 
-        it("Convert tsconfig.json with only enable property to typing-options ", () => {
+        it("Convert tsconfig.json with only enable property to typeAcquisition ", () => {
             assertTypeAcquisition(
                 {
                     "typeAcquisition":
@@ -103,7 +126,7 @@ namespace ts {
         });
 
         // jsconfig.json
-        it("Convert jsconfig.json to typing-options ", () => {
+        it("Convert jsconfig.json to typeAcquisition ", () => {
             assertTypeAcquisition(
                 {
                     "typeAcquisition":
@@ -124,7 +147,7 @@ namespace ts {
                 });
         });
 
-        it("Convert default jsconfig.json to typing-options ", () => {
+        it("Convert default jsconfig.json to typeAcquisition ", () => {
             assertTypeAcquisition({ }, "jsconfig.json",
                 {
                     typeAcquisition:
@@ -137,7 +160,7 @@ namespace ts {
                 });
         });
 
-        it("Convert incorrect format jsconfig.json to typing-options ", () => {
+        it("Convert incorrect format jsconfig.json to typeAcquisition ", () => {
             assertTypeAcquisition(
                 {
                     "typeAcquisition":
@@ -165,7 +188,7 @@ namespace ts {
                 });
         });
 
-        it("Convert jsconfig.json with only enable property to typing-options ", () => {
+        it("Convert jsconfig.json with only enable property to typeAcquisition ", () => {
             assertTypeAcquisition(
                 {
                     "typeAcquisition":

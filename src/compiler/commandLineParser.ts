@@ -464,6 +464,13 @@ namespace ts {
     /* @internal */
     export let typeAcquisitionDeclarations: CommandLineOption[] = [
         {
+            /* @deprecated typingOptions.enableAutoDiscovery
+             * Use typeAcquisition.enable instead.
+             */
+            name: "enableAutoDiscovery",
+            type: "boolean",
+        },
+        {
             name: "enable",
             type: "boolean",
         },
@@ -500,6 +507,15 @@ namespace ts {
     };
 
     let optionNameMapCache: OptionNameMap;
+
+    /* @internal */
+    export function replaceEnableAutoDiscoveryWithEnable(typeAcquisition: TypeAcquisition): void {
+        // Replace deprecated typingOptions.enableAutoDiscovery with typeAcquisition.enable
+        if (typeAcquisition && typeAcquisition.enableAutoDiscovery !== undefined && typeAcquisition.enable === undefined) {
+           typeAcquisition.enable = typeAcquisition.enableAutoDiscovery;
+           delete typeAcquisition.enableAutoDiscovery;
+        }
+    }
 
     /* @internal */
     export function getOptionNameMap(): OptionNameMap {
@@ -843,7 +859,9 @@ namespace ts {
         }
 
         let options: CompilerOptions = convertCompilerOptionsFromJsonWorker(json["compilerOptions"], basePath, errors, configFileName);
-        const typeAcquisition: TypeAcquisition = convertTypeAcquisitionFromJsonWorker(json["typeAcquisition"], basePath, errors, configFileName);
+        // typingOptions has been deprecated. Use typeAcquisition instead.
+        const jsonOptions = json["typeAcquisition"] || json["typingOptions"];
+        const typeAcquisition: TypeAcquisition = convertTypeAcquisitionFromJsonWorker(jsonOptions, basePath, errors, configFileName);
 
         if (json["extends"]) {
             let [include, exclude, files, baseOptions]: [string[], string[], string[], CompilerOptions] = [undefined, undefined, undefined, {}];
@@ -1016,7 +1034,9 @@ namespace ts {
         basePath: string, errors: Diagnostic[], configFileName?: string): TypeAcquisition {
 
         const options: TypeAcquisition = { enable: getBaseFileName(configFileName) === "jsconfig.json", include: [], exclude: [] };
+        replaceEnableAutoDiscoveryWithEnable(jsonOptions);
         convertOptionsFromJson(typeAcquisitionDeclarations, jsonOptions, basePath, options, Diagnostics.Unknown_type_acquisition_option_0, errors);
+
         return options;
     }
 
