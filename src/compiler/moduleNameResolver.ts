@@ -702,13 +702,11 @@ namespace ts {
                 return resolvedFromAnyFile(fromFile);
             }
 
-            if (ts) {
-                //should this be potentially a directory?
-                return tryAddingExtensions(file, Extensions.TypeScript, failedLookupLocations, onlyRecordFailures, state);
+            // Even if extensions is DtsOnly, we can still look up a .ts file as a result of package.json "types"
+            if (extensions === Extensions.DtsOnly) {
+                extensions = Extensions.TypeScript;
             }
-            else {
-                return nodeLoadModuleByRelativeName(extensions, file, failedLookupLocations, onlyRecordFailures, state, /*considerPackageJson*/ false);
-            }
+            return nodeLoadModuleByRelativeName(extensions, file, failedLookupLocations, onlyRecordFailures, state, /*considerPackageJson*/ false);
         }
     }
 
