@@ -577,6 +577,11 @@ namespace ts.server {
         }
     }
 
+    const localeStr = findArgument("--locale");
+    if (localeStr) {
+        validateLocaleAndSetLanguage(localeStr, sys);
+    }
+
     const useSingleInferredProject = hasArgument("--useSingleInferredProject");
     const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
     const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
