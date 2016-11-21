@@ -110,61 +110,45 @@ type T40 = { [P in string]: void };
 >T40 : Symbol(T40, Decl(mappedTypes1.ts, 24, 40))
 >P : Symbol(P, Decl(mappedTypes1.ts, 26, 14))
 
-type T41 = { [P in number]: void };
->T41 : Symbol(T41, Decl(mappedTypes1.ts, 26, 35))
+type T43 = { [P in "a" | "b"]: void };
+>T43 : Symbol(T43, Decl(mappedTypes1.ts, 26, 35))
 >P : Symbol(P, Decl(mappedTypes1.ts, 27, 14))
 
-type T42 = { [P in string | number]: void };
->T42 : Symbol(T42, Decl(mappedTypes1.ts, 27, 35))
+type T44 = { [P in "a" | "b" | "0" | "1"]: void };
+>T44 : Symbol(T44, Decl(mappedTypes1.ts, 27, 38))
 >P : Symbol(P, Decl(mappedTypes1.ts, 28, 14))
 
-type T43 = { [P in "a" | "b" | 0 | 1]: void };
->T43 : Symbol(T43, Decl(mappedTypes1.ts, 28, 44))
+type T47 = { [P in string | "a" | "b" | "0" | "1"]: void };
+>T47 : Symbol(T47, Decl(mappedTypes1.ts, 28, 50))
 >P : Symbol(P, Decl(mappedTypes1.ts, 29, 14))
 
-type T44 = { [P in "a" | "b" | "0" | "1"]: void };
->T44 : Symbol(T44, Decl(mappedTypes1.ts, 29, 46))
->P : Symbol(P, Decl(mappedTypes1.ts, 30, 14))
-
-type T45 = { [P in "a" | "b" | "0" | "1" | 0 | 1]: void };
->T45 : Symbol(T45, Decl(mappedTypes1.ts, 30, 50))
->P : Symbol(P, Decl(mappedTypes1.ts, 31, 14))
-
-type T46 = { [P in number | "a" | "b" | 0 | 1]: void };
->T46 : Symbol(T46, Decl(mappedTypes1.ts, 31, 58))
->P : Symbol(P, Decl(mappedTypes1.ts, 32, 14))
-
-type T47 = { [P in string | number | "a" | "b" | 0 | 1]: void };
->T47 : Symbol(T47, Decl(mappedTypes1.ts, 32, 55))
->P : Symbol(P, Decl(mappedTypes1.ts, 33, 14))
-
 declare function f1<T1>(): { [P in keyof T1]: void };
->f1 : Symbol(f1, Decl(mappedTypes1.ts, 33, 64))
->T1 : Symbol(T1, Decl(mappedTypes1.ts, 35, 20))
->P : Symbol(P, Decl(mappedTypes1.ts, 35, 30))
->T1 : Symbol(T1, Decl(mappedTypes1.ts, 35, 20))
+>f1 : Symbol(f1, Decl(mappedTypes1.ts, 29, 59))
+>T1 : Symbol(T1, Decl(mappedTypes1.ts, 31, 20))
+>P : Symbol(P, Decl(mappedTypes1.ts, 31, 30))
+>T1 : Symbol(T1, Decl(mappedTypes1.ts, 31, 20))
 
 declare function f2<T1 extends string>(): { [P in keyof T1]: void };
->f2 : Symbol(f2, Decl(mappedTypes1.ts, 35, 53))
->T1 : Symbol(T1, Decl(mappedTypes1.ts, 36, 20))
->P : Symbol(P, Decl(mappedTypes1.ts, 36, 45))
->T1 : Symbol(T1, Decl(mappedTypes1.ts, 36, 20))
+>f2 : Symbol(f2, Decl(mappedTypes1.ts, 31, 53))
+>T1 : Symbol(T1, Decl(mappedTypes1.ts, 32, 20))
+>P : Symbol(P, Decl(mappedTypes1.ts, 32, 45))
+>T1 : Symbol(T1, Decl(mappedTypes1.ts, 32, 20))
 
 declare function f3<T1 extends number>(): { [P in keyof T1]: void };
->f3 : Symbol(f3, Decl(mappedTypes1.ts, 36, 68))
->T1 : Symbol(T1, Decl(mappedTypes1.ts, 37, 20))
->P : Symbol(P, Decl(mappedTypes1.ts, 37, 45))
->T1 : Symbol(T1, Decl(mappedTypes1.ts, 37, 20))
+>f3 : Symbol(f3, Decl(mappedTypes1.ts, 32, 68))
+>T1 : Symbol(T1, Decl(mappedTypes1.ts, 33, 20))
+>P : Symbol(P, Decl(mappedTypes1.ts, 33, 45))
+>T1 : Symbol(T1, Decl(mappedTypes1.ts, 33, 20))
 
 let x1 = f1();
->x1 : Symbol(x1, Decl(mappedTypes1.ts, 39, 3))
->f1 : Symbol(f1, Decl(mappedTypes1.ts, 33, 64))
+>x1 : Symbol(x1, Decl(mappedTypes1.ts, 35, 3))
+>f1 : Symbol(f1, Decl(mappedTypes1.ts, 29, 59))
 
 let x2 = f2();
->x2 : Symbol(x2, Decl(mappedTypes1.ts, 40, 3))
->f2 : Symbol(f2, Decl(mappedTypes1.ts, 35, 53))
+>x2 : Symbol(x2, Decl(mappedTypes1.ts, 36, 3))
+>f2 : Symbol(f2, Decl(mappedTypes1.ts, 31, 53))
 
 let x3 = f3();
->x3 : Symbol(x3, Decl(mappedTypes1.ts, 41, 3))
->f3 : Symbol(f3, Decl(mappedTypes1.ts, 36, 68))
+>x3 : Symbol(x3, Decl(mappedTypes1.ts, 37, 3))
+>f3 : Symbol(f3, Decl(mappedTypes1.ts, 32, 68))
 
