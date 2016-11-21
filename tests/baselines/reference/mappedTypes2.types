@@ -126,8 +126,8 @@ declare function pick<T, K extends keyof T>(obj: T, ...keys: K[]): Pick<T, K>;
 >T : T
 >K : K
 
-declare function mapObject<K extends string | number, T, U>(obj: Record<K, T>, f: (x: T) => U): Record<K, U>;
->mapObject : <K extends string | number, T, U>(obj: Record<K, T>, f: (x: T) => U) => Record<K, U>
+declare function mapObject<K extends string, T, U>(obj: Record<K, T>, f: (x: T) => U): Record<K, U>;
+>mapObject : <K extends string, T, U>(obj: Record<K, T>, f: (x: T) => U) => Record<K, U>
 >K : K
 >T : T
 >U : U
@@ -297,7 +297,7 @@ function f4() {
     const lengths = mapObject(rec, s => s.length);  // { foo: number, bar: number, baz: number }
 >lengths : Record<"foo" | "bar" | "baz", number>
 >mapObject(rec, s => s.length) : Record<"foo" | "bar" | "baz", number>
->mapObject : <K extends string | number, T, U>(obj: Record<K, T>, f: (x: T) => U) => Record<K, U>
+>mapObject : <K extends string, T, U>(obj: Record<K, T>, f: (x: T) => U) => Record<K, U>
 >rec : { foo: string; bar: string; baz: string; }
 >s => s.length : (s: string) => number
 >s : string

@@ -95,22 +95,18 @@ function f10(shape: Shape) {
 
 function f11(a: Shape[]) {
     let len = getProperty(a, "length");  // number
-    let shape = getProperty(a, 1000);    // Shape
-    setProperty(a, 1000, getProperty(a, 1001));
+    setProperty(a, "length", len);
 }
 
 function f12(t: [Shape, boolean]) {
     let len = getProperty(t, "length");
-    let s1 = getProperty(t, 0);    // Shape
     let s2 = getProperty(t, "0");  // Shape
-    let b1 = getProperty(t, 1);    // boolean
     let b2 = getProperty(t, "1");  // boolean
-    let x1 = getProperty(t, 2);    // Shape | boolean
 }
 
 function f13(foo: any, bar: any) {
     let x = getProperty(foo, "x");  // any
-    let y = getProperty(foo, 100);  // any
+    let y = getProperty(foo, "100");  // any
     let z = getProperty(foo, bar);  // any
 }
 
@@ -181,20 +177,14 @@ function f40(c: C) {
     let z: Z = c["z"];
 }
 
-function f50<T>(k: keyof T, s: string, n: number) {
+function f50<T>(k: keyof T, s: string) {
     const x1 = s as keyof T;
-    const x2 = n as keyof T;
-    const x3 = k as string;
-    const x4 = k as number;
-    const x5 = k as string | number;
+    const x2 = k as string;
 }
 
-function f51<T, K extends keyof T>(k: K, s: string, n: number) {
+function f51<T, K extends keyof T>(k: K, s: string) {
     const x1 = s as keyof T;
-    const x2 = n as keyof T;
-    const x3 = k as string;
-    const x4 = k as number;
-    const x5 = k as string | number;
+    const x2 = k as string;
 }
 
 function f52<T>(obj: { [x: string]: boolean }, k: keyof T, s: string, n: number) {
@@ -297,20 +287,16 @@ function f10(shape) {
 }
 function f11(a) {
     var len = getProperty(a, "length"); // number
-    var shape = getProperty(a, 1000); // Shape
-    setProperty(a, 1000, getProperty(a, 1001));
+    setProperty(a, "length", len);
 }
 function f12(t) {
     var len = getProperty(t, "length");
-    var s1 = getProperty(t, 0); // Shape
     var s2 = getProperty(t, "0"); // Shape
-    var b1 = getProperty(t, 1); // boolean
     var b2 = getProperty(t, "1"); // boolean
-    var x1 = getProperty(t, 2); // Shape | boolean
 }
 function f13(foo, bar) {
     var x = getProperty(foo, "x"); // any
-    var y = getProperty(foo, 100); // any
+    var y = getProperty(foo, "100"); // any
     var z = getProperty(foo, bar); // any
 }
 var Component = (function () {
@@ -369,19 +355,13 @@ function f40(c) {
     var y = c["y"];
     var z = c["z"];
 }
-function f50(k, s, n) {
+function f50(k, s) {
     var x1 = s;
-    var x2 = n;
-    var x3 = k;
-    var x4 = k;
-    var x5 = k;
+    var x2 = k;
 }
-function f51(k, s, n) {
+function f51(k, s) {
     var x1 = s;
-    var x2 = n;
-    var x3 = k;
-    var x4 = k;
-    var x5 = k;
+    var x2 = k;
 }
 function f52(obj, k, s, n) {
     var x1 = obj[s];
@@ -528,8 +508,8 @@ declare class C {
     private z;
 }
 declare function f40(c: C): void;
-declare function f50<T>(k: keyof T, s: string, n: number): void;
-declare function f51<T, K extends keyof T>(k: K, s: string, n: number): void;
+declare function f50<T>(k: keyof T, s: string): void;
+declare function f51<T, K extends keyof T>(k: K, s: string): void;
 declare function f52<T>(obj: {
     [x: string]: boolean;
 }, k: keyof T, s: string, n: number): void;
