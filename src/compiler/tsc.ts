@@ -252,8 +252,11 @@ namespace ts {
         let cachedConfigFileText: string;                           // Cached configuration file text, used for reparsing (if any)
         let configFileWatcher: FileWatcher;                         // Configuration file watcher
         let directoryWatcher: FileWatcher;                          // Directory watcher to monitor source file addition/removal
+        let directoryWatched: string;                               // Where the directory watcher is looking
+        let typeRootsWatched = createMap<boolean>();                // List of watchers of type roots outside the compilation root
         let cachedProgram: Program;                                 // Program cached from last compilation
         let rootFileNames: string[];                                // Root fileNames for compilation
+        let typeNames: string[];                                    // Type directive names (inferred, or from config file/commandline)
         let compilerOptions: CompilerOptions;                       // Compiler options for compilation
         let compilerHost: CompilerHost;                             // Compiler host
         let hostGetSourceFile: typeof compilerHost.getSourceFile;   // getSourceFile method from default host
@@ -333,25 +336,6 @@ namespace ts {
             return sys.exit(ExitStatus.Success);
         }
 
-        if (isWatchSet(commandLine.options)) {
-            if (!sys.watchFile) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /* host */ undefined);
-                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-            }
-            if (configFileName) {
-                configFileWatcher = sys.watchFile(configFileName, configFileChanged);
-            }
-            if (sys.watchDirectory && configFileName) {
-                const directory = ts.getDirectoryPath(configFileName);
-                directoryWatcher = sys.watchDirectory(
-                    // When the configFileName is just "tsconfig.json", the watched directory should be
-                    // the current directory; if there is a given "project" parameter, then the configFileName
-                    // is an absolute file name.
-                    directory == "" ? "." : directory,
-                    watchedDirectoryChanged, /*recursive*/ true);
-            }
-        }
-
         performCompilation();
 
         function parseConfigFile(): ParsedCommandLine {
@@ -387,28 +371,50 @@ namespace ts {
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 return;
             }
-            if (isWatchSet(configParseResult.options)) {
-                if (!sys.watchFile) {
-                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /* host */ undefined);
-                    sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-                }
-
-                if (!directoryWatcher && sys.watchDirectory && configFileName) {
-                    const directory = ts.getDirectoryPath(configFileName);
-                    directoryWatcher = sys.watchDirectory(
-                        // When the configFileName is just "tsconfig.json", the watched directory should be
-                        // the current directory; if there is a given "project" parameter, then the configFileName
-                        // is an absolute file name.
-                        directory == "" ? "." : directory,
-                        watchedDirectoryChanged, /*recursive*/ true);
-                };
-            }
             return configParseResult;
+        }
+
+        function setWatchers() {
+            // Report error if watch is unavailable in this host
+            if (!sys.watchFile) {
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /* host */ undefined);
+                sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+            }
+
+            // Watch the compilation root if we're not already
+            if (!directoryWatcher && sys.watchDirectory && configFileName) {
+                // When the configFileName is just "tsconfig.json", the watched directory should be
+                // the current directory; if there is a given "project" parameter, then the configFileName
+                // is an absolute file name.
+                const directory = ts.getDirectoryPath(configFileName);
+                directoryWatched = ts.getNormalizedAbsolutePath(directory === "" ? "." : directory, sys.getCurrentDirectory());
+                directoryWatcher = sys.watchDirectory(directoryWatched, watchDirectoryChanged, /*recursive*/ true);
+            }
+
+            // Watch the config file if we're not already
+            if (!configFileWatcher && configFileName) {
+                configFileWatcher = sys.watchFile(configFileName, configFileChanged);
+            }
+
+            // See if we need to watch any new additional type roots from outside the project folder
+            if (sys.watchDirectory) {
+                const alreadyWatched = directoryWatched || '';
+                for (let typesRoot of getEffectiveTypeRoots(compilerOptions, sys) || []) {
+                    const typeRootPath = ts.getNormalizedAbsolutePath(typesRoot, sys.getCurrentDirectory());
+                    if (!(typeRootPath in typeRootsWatched) &&
+                            typeRootPath.substr(0, alreadyWatched.length) !== alreadyWatched &&
+                            sys.directoryExists(typeRootPath)) {
+
+                        // Don't need to be recursive since we're just looking for new top-level folders
+                        sys.watchDirectory(typeRootPath, watchDirectoryChanged, /*recursive*/ false);
+                        typeRootsWatched[typeRootPath] = true;
+                    }
+                }
+            }
         }
 
         // Invoked to perform initial compilation or re-compilation in watch mode
         function performCompilation() {
-
             if (!cachedProgram) {
                 if (configFileName) {
                     const configParseResult = parseConfigFile();
@@ -425,6 +431,7 @@ namespace ts {
 
                 hostFileExists = compilerHost.fileExists;
                 compilerHost.fileExists = cachedFileExists;
+                typeNames = getTypeNames(compilerOptions);
             }
 
             if (compilerOptions.pretty) {
@@ -436,7 +443,10 @@ namespace ts {
 
             const compileResult = compile(rootFileNames, compilerOptions, compilerHost);
 
-            if (!isWatchSet(compilerOptions)) {
+            if (isWatchSet(compilerOptions)) {
+                setWatchers();
+            }
+            else {
                 return sys.exit(compileResult.exitStatus);
             }
 
@@ -504,8 +514,16 @@ namespace ts {
             startTimerForRecompilation();
         }
 
-        function watchedDirectoryChanged(fileName: string) {
-            if (fileName && !ts.isSupportedSourceFileName(fileName, compilerOptions)) {
+        function getTypeNames(options: CompilerOptions) {
+            if (options.types) {
+                return options.types;
+            }
+            const roots = getEffectiveTypeRoots(options, compilerHost) || [];
+            return [].concat(...roots.map(root => compilerHost.getDirectories(root))).sort();
+        }
+
+        function watchDirectoryChanged(fileName: string) {
+            if (fileName && !compilerHost.directoryExists(fileName) && !ts.isSupportedSourceFileName(fileName, compilerOptions)) {
                 return;
             }
 
@@ -523,9 +541,11 @@ namespace ts {
             const parsedCommandLine = parseConfigFile();
             const newFileNames = ts.map(parsedCommandLine.fileNames, compilerHost.getCanonicalFileName);
             const canonicalRootFileNames = ts.map(rootFileNames, compilerHost.getCanonicalFileName);
+            const newTypeNames = getTypeNames(parsedCommandLine.options);
 
             // We check if the project file list has changed. If so, we just throw away the old program and start fresh.
-            if (!arrayIsEqualTo(newFileNames && newFileNames.sort(), canonicalRootFileNames && canonicalRootFileNames.sort())) {
+            if (!arrayIsEqualTo(newFileNames && newFileNames.sort(), canonicalRootFileNames && canonicalRootFileNames.sort()) ||
+                !arrayIsEqualTo(newTypeNames, typeNames)) {
                 setCachedProgram(undefined);
                 startTimerForRecompilation();
             }
