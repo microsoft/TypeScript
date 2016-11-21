@@ -3206,6 +3206,10 @@ namespace ts {
     }
 
     export interface TypeAcquisition {
+        /* @deprecated typingOptions.enableAutoDiscovery
+         * Use typeAcquisition.enable instead.
+         */
+        enableAutoDiscovery?: boolean;
         enable?: boolean;
         include?: string[];
         exclude?: string[];

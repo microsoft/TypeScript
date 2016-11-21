@@ -1365,6 +1365,12 @@ namespace ts.server {
 
         private handlers = createMap<(request: protocol.Request) => { response?: any, responseRequired?: boolean }>({
             [CommandNames.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
+                // Replace deprecated typingOptions with typeAcquisition
+                if (request.arguments.typingOptions && !request.arguments.typeAcquisition) {
+                    replaceEnableAutoDiscoveryWithEnable(request.arguments.typingOptions);
+                    request.arguments.typeAcquisition = request.arguments.typingOptions;
+                    delete request.arguments.typingOptions;
+                }
                 this.projectService.openExternalProject(request.arguments);
                 // TODO: report errors
                 return this.requiredResponse(true);

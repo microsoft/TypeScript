@@ -861,6 +861,10 @@ namespace ts.server.protocol {
          */
         options: ExternalProjectCompilerOptions;
         /**
+         * @deprecated typingOptions. Use typeAcquisition instead
+         */
+        typingOptions?: TypeAcquisition;
+        /**
          * Explicitly specified type acquisition for the project
          */
         typeAcquisition?: TypeAcquisition;
