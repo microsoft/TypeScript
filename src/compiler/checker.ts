@@ -3239,9 +3239,11 @@ namespace ts {
                 return addOptionality(getTypeFromTypeNode(declaration.type), /*optional*/ declaration.questionToken && includeOptionality);
             }
 
-            if (declaration.kind === SyntaxKind.VariableDeclaration && !isBindingPattern(declaration.name) &&
+            if ((compilerOptions.noImplicitAny || declaration.flags & NodeFlags.JavaScriptFile) &&
+                declaration.kind === SyntaxKind.VariableDeclaration && !isBindingPattern(declaration.name) &&
                 !(getCombinedModifierFlags(declaration) & ModifierFlags.Export) && !isInAmbientContext(declaration)) {
-                // Use control flow tracked 'any' type for non-ambient, non-exported var or let variables with no
+                // If --noImplicitAny is on or the declaration is in a Javascript file,
+                // use control flow tracked 'any' type for non-ambient, non-exported var or let variables with no
                 // initializer or a 'null' or 'undefined' initializer.
                 if (!(getCombinedNodeFlags(declaration) & NodeFlags.Const) && (!declaration.initializer || isNullOrUndefined(declaration.initializer))) {
                     return autoType;
@@ -6037,11 +6039,12 @@ namespace ts {
                 const id = objectType.id + "," + indexType.id;
                 return indexedAccessTypes[id] || (indexedAccessTypes[id] = createIndexedAccessType(objectType, indexType));
             }
-            const apparentType = getApparentType(objectType);
-            if (indexType.flags & TypeFlags.Union && !(indexType.flags & TypeFlags.Primitive)) {
+            const apparentObjectType = getApparentType(objectType);
+            const apparentIndexType = indexType.flags & TypeFlags.Index ? stringOrNumberType : indexType;
+            if (apparentIndexType.flags & TypeFlags.Union && !(apparentIndexType.flags & TypeFlags.Primitive)) {
                 const propTypes: Type[] = [];
-                for (const t of (<UnionType>indexType).types) {
-                    const propType = getPropertyTypeForIndexType(apparentType, t, accessNode, /*cacheSymbol*/ false);
+                for (const t of (<UnionType>apparentIndexType).types) {
+                    const propType = getPropertyTypeForIndexType(apparentObjectType, t, accessNode, /*cacheSymbol*/ false);
                     if (propType === unknownType) {
                         return unknownType;
                     }
@@ -6049,7 +6052,7 @@ namespace ts {
                 }
                 return getUnionType(propTypes);
             }
-            return getPropertyTypeForIndexType(apparentType, indexType, accessNode, /*cacheSymbol*/ true);
+            return getPropertyTypeForIndexType(apparentObjectType, apparentIndexType, accessNode, /*cacheSymbol*/ true);
         }
 
         function getTypeFromIndexedAccessTypeNode(node: IndexedAccessTypeNode) {
@@ -7123,7 +7126,10 @@ namespace ts {
 
                 if (source.flags & TypeFlags.Index) {
                     // A keyof T is related to a union type containing both string and number
-                    if (maybeTypeOfKind(target, TypeFlags.String) && maybeTypeOfKind(target, TypeFlags.Number)) {
+                    const related = relation === comparableRelation ?
+                        maybeTypeOfKind(target, TypeFlags.String | TypeFlags.Number) :
+                        maybeTypeOfKind(target, TypeFlags.String) && maybeTypeOfKind(target, TypeFlags.Number);
+                    if (related) {
                         return Ternary.True;
                     }
                 }
@@ -14254,7 +14260,7 @@ namespace ts {
             if (!isTypeAnyOrAllConstituentTypesHaveKind(leftType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol)) {
                 error(left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_type_any_string_number_or_symbol);
             }
-            if (!isTypeAnyOrAllConstituentTypesHaveKind(rightType, TypeFlags.Object | TypeFlags.TypeParameter)) {
+            if (!isTypeAnyOrAllConstituentTypesHaveKind(rightType, TypeFlags.Object | TypeFlags.TypeParameter | TypeFlags.IndexedAccess)) {
                 error(right, Diagnostics.The_right_hand_side_of_an_in_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             return booleanType;
@@ -14263,12 +14269,13 @@ namespace ts {
         function checkObjectLiteralAssignment(node: ObjectLiteralExpression, sourceType: Type): Type {
             const properties = node.properties;
             for (const p of properties) {
-                checkObjectLiteralDestructuringPropertyAssignment(sourceType, p);
+                checkObjectLiteralDestructuringPropertyAssignment(sourceType, p, properties);
             }
             return sourceType;
         }
 
-        function checkObjectLiteralDestructuringPropertyAssignment(objectLiteralType: Type, property: ObjectLiteralElementLike) {
+        /** Note: If property cannot be a SpreadAssignment, then allProperties does not need to be provided */
+        function checkObjectLiteralDestructuringPropertyAssignment(objectLiteralType: Type, property: ObjectLiteralElementLike, allProperties?: ObjectLiteralElementLike[]) {
             if (property.kind === SyntaxKind.PropertyAssignment || property.kind === SyntaxKind.ShorthandPropertyAssignment) {
                 const name = <PropertyName>(<PropertyAssignment>property).name;
                 if (name.kind === SyntaxKind.ComputedPropertyName) {
@@ -14298,7 +14305,14 @@ namespace ts {
                 }
             }
             else if (property.kind === SyntaxKind.SpreadAssignment) {
-                checkReferenceExpression(property.expression, Diagnostics.The_target_of_an_object_rest_assignment_must_be_a_variable_or_a_property_access);
+                const nonRestNames: PropertyName[] = [];
+                if (allProperties) {
+                    for (let i = 0; i < allProperties.length - 1; i++) {
+                        nonRestNames.push(allProperties[i].name);
+                    }
+                }
+                const type = getRestType(objectLiteralType, nonRestNames, objectLiteralType.symbol);
+                return checkDestructuringAssignment(property.expression, type);
             }
             else {
                 error(property, Diagnostics.Property_assignment_expected);
@@ -14396,7 +14410,10 @@ namespace ts {
 
         function checkReferenceAssignment(target: Expression, sourceType: Type, contextualMapper?: TypeMapper): Type {
             const targetType = checkExpression(target, contextualMapper);
-            if (checkReferenceExpression(target, Diagnostics.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access)) {
+            const error = target.parent.kind === SyntaxKind.SpreadAssignment ?
+                Diagnostics.The_target_of_an_object_rest_assignment_must_be_a_variable_or_a_property_access :
+                Diagnostics.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access;
+            if (checkReferenceExpression(target, error)) {
                 checkTypeAssignableTo(sourceType, targetType, target, /*headMessage*/ undefined);
             }
             return sourceType;
@@ -17148,7 +17165,7 @@ namespace ts {
             const rightType = checkNonNullExpression(node.expression);
             // unknownType is returned i.e. if node.expression is identifier whose name cannot be resolved
             // in this case error about missing name is already reported - do not report extra one
-            if (!isTypeAnyOrAllConstituentTypesHaveKind(rightType, TypeFlags.Object | TypeFlags.TypeParameter)) {
+            if (!isTypeAnyOrAllConstituentTypesHaveKind(rightType, TypeFlags.Object | TypeFlags.TypeParameter | TypeFlags.IndexedAccess)) {
                 error(node.expression, Diagnostics.The_right_hand_side_of_a_for_in_statement_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
 
