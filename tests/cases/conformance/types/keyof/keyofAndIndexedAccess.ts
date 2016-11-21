@@ -95,22 +95,18 @@ function f10(shape: Shape) {
 
 function f11(a: Shape[]) {
     let len = getProperty(a, "length");  // number
-    let shape = getProperty(a, 1000);    // Shape
-    setProperty(a, 1000, getProperty(a, 1001));
+    setProperty(a, "length", len);
 }
 
 function f12(t: [Shape, boolean]) {
     let len = getProperty(t, "length");
-    let s1 = getProperty(t, 0);    // Shape
     let s2 = getProperty(t, "0");  // Shape
-    let b1 = getProperty(t, 1);    // boolean
     let b2 = getProperty(t, "1");  // boolean
-    let x1 = getProperty(t, 2);    // Shape | boolean
 }
 
 function f13(foo: any, bar: any) {
     let x = getProperty(foo, "x");  // any
-    let y = getProperty(foo, 100);  // any
+    let y = getProperty(foo, "100");  // any
     let z = getProperty(foo, bar);  // any
 }
 
@@ -181,20 +177,14 @@ function f40(c: C) {
     let z: Z = c["z"];
 }
 
-function f50<T>(k: keyof T, s: string, n: number) {
+function f50<T>(k: keyof T, s: string) {
     const x1 = s as keyof T;
-    const x2 = n as keyof T;
-    const x3 = k as string;
-    const x4 = k as number;
-    const x5 = k as string | number;
+    const x2 = k as string;
 }
 
-function f51<T, K extends keyof T>(k: K, s: string, n: number) {
+function f51<T, K extends keyof T>(k: K, s: string) {
     const x1 = s as keyof T;
-    const x2 = n as keyof T;
-    const x3 = k as string;
-    const x4 = k as number;
-    const x5 = k as string | number;
+    const x2 = k as string;
 }
 
 function f52<T>(obj: { [x: string]: boolean }, k: keyof T, s: string, n: number) {
