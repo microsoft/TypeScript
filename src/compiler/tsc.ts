@@ -43,66 +43,6 @@ namespace ts {
         }
     }
 
-    /**
-     * Checks to see if the locale is in the appropriate format,
-     * and if it is, attempts to set the appropriate language.
-     */
-    function validateLocaleAndSetLanguage(locale: string, errors: Diagnostic[]): boolean {
-        const matchResult = /^([a-z]+)([_\-]([a-z]+))?$/.exec(locale.toLowerCase());
-
-        if (!matchResult) {
-            errors.push(createCompilerDiagnostic(Diagnostics.Locale_must_be_of_the_form_language_or_language_territory_For_example_0_or_1, "en", "ja-jp"));
-            return false;
-        }
-
-        const language = matchResult[1];
-        const territory = matchResult[3];
-
-        // First try the entire locale, then fall back to just language if that's all we have.
-        // Either ways do not fail, and fallback to the English diagnostic strings.
-        if (!trySetLanguageAndTerritory(language, territory, errors)) {
-            trySetLanguageAndTerritory(language, undefined, errors);
-        }
-
-        return true;
-    }
-
-    function trySetLanguageAndTerritory(language: string, territory: string, errors: Diagnostic[]): boolean {
-        const compilerFilePath = normalizePath(sys.getExecutingFilePath());
-        const containingDirectoryPath = getDirectoryPath(compilerFilePath);
-
-        let filePath = combinePaths(containingDirectoryPath, language);
-
-        if (territory) {
-            filePath = filePath + "-" + territory;
-        }
-
-        filePath = sys.resolvePath(combinePaths(filePath, "diagnosticMessages.generated.json"));
-
-        if (!sys.fileExists(filePath)) {
-            return false;
-        }
-
-        // TODO: Add codePage support for readFile?
-        let fileContents = "";
-        try {
-            fileContents = sys.readFile(filePath);
-        }
-        catch (e) {
-            errors.push(createCompilerDiagnostic(Diagnostics.Unable_to_open_file_0, filePath));
-            return false;
-        }
-        try {
-            ts.localizedDiagnosticMessages = JSON.parse(fileContents);
-        }
-        catch (e) {
-            errors.push(createCompilerDiagnostic(Diagnostics.Corrupted_locale_file_0, filePath));
-            return false;
-        }
-
-        return true;
-    }
-
     function countLines(program: Program): number {
         let count = 0;
         forEach(program.getSourceFiles(), file => {
@@ -263,7 +203,7 @@ namespace ts {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"), /* host */ undefined);
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
-            validateLocaleAndSetLanguage(commandLine.options.locale, commandLine.errors);
+            validateLocaleAndSetLanguage(commandLine.options.locale, sys, commandLine.errors);
         }
 
         // If there are any errors due to command line parsing and/or
