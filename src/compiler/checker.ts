@@ -166,6 +166,7 @@ namespace ts {
         const resolvingPartialSignatures: Signature[] = [];
 
         const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
+        const operatorExpressionTypes = createMap<Type>();
 
         const globals = createMap<Symbol>();
         /**
@@ -241,7 +242,6 @@ namespace ts {
         const visitedFlowTypes: FlowType[] = [];
         const potentialThisCollisions: Node[] = [];
         const awaitedTypeStack: number[] = [];
-        const operatorExpressionTypes = createMap<Type>();
 
         const diagnostics = createDiagnosticCollection();
 
@@ -14271,16 +14271,28 @@ namespace ts {
                 case SyntaxKind.EqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:
-                case SyntaxKind.ExclamationEqualsEqualsToken:
-                case SyntaxKind.InstanceOfKeyword:
-                case SyntaxKind.InKeyword:
-                    // TODO: type parameters
-                    return createBinaryOperatorType(undefined, anyType, anyType, booleanType);
+                case SyntaxKind.ExclamationEqualsEqualsToken: {
+                    const type = createTypeParameter("T");
+                    return createBinaryOperatorType([type], type, type, booleanType);
+                }
 
-                case SyntaxKind.AmpersandAmpersandToken:
-                case SyntaxKind.BarBarToken:
-                    // TODO: type parameters
-                    return createBinaryOperatorType(undefined, anyType, anyType, anyType);
+                case SyntaxKind.InstanceOfKeyword:
+                    return createBinaryOperatorType(undefined, anyType, globalFunctionType, booleanType);
+
+                case SyntaxKind.InKeyword:
+                    return createBinaryOperatorType(undefined, getUnionType([stringType, numberType, esSymbolType]), anyType, booleanType);
+
+                case SyntaxKind.AmpersandAmpersandToken: {
+                    const type1 = createTypeParameter("T");
+                    const type2 = createTypeParameter("U");
+                    return createBinaryOperatorType([type1, type2], type1, type2, type2);
+                }
+
+                case SyntaxKind.BarBarToken: {
+                    const type1 = createTypeParameter("T");
+                    const type2 = createTypeParameter("U");
+                    return createBinaryOperatorType([type1, type2], type1, type2, getUnionType([type1, type2]));
+                }
 
                 case SyntaxKind.TildeToken:
                 case SyntaxKind.TildePlusToken:
@@ -14293,6 +14305,15 @@ namespace ts {
                 case SyntaxKind.TypeOfKeyword:
                     return createUnaryOperatorType(anyType, stringType);
             }
+        }
+
+        function createTypeParameter(name: string, constraint?: Type) {
+            const type = <TypeParameter>createType(TypeFlags.TypeParameter);
+            const symbol = <TransientSymbol>createSymbol(SymbolFlags.Transient | SymbolFlags.TypeParameter, name);
+            type.symbol = symbol;
+            type.constraint = constraint || noConstraintType;
+            symbol.declaredType = type;
+            return type;
         }
 
         function checkArithmeticOperandType(operand: Node, type: Type, diagnostic: DiagnosticMessage): boolean {
