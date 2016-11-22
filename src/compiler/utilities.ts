@@ -1539,6 +1539,10 @@ namespace ts {
         return tag && tag.typeExpression && tag.typeExpression.type;
     }
 
+    export function getJSDocAugmentsTag(node: Node): JSDocAugmentsTag {
+        return getFirstJSDocTag(node, SyntaxKind.JSDocAugmentsTag) as JSDocAugmentsTag;
+    }
+
     export function getJSDocReturnTag(node: Node): JSDocReturnTag {
         return getFirstJSDocTag(node, SyntaxKind.JSDocReturnTag) as JSDocReturnTag;
     }
