@@ -54,10 +54,10 @@ const enum E { A, B, C }
 >C : E.C
 
 type K00 = keyof any;  // string | number
->K00 : string | number
+>K00 : string
 
 type K01 = keyof string;  // number | "toString" | "charAt" | ...
->K01 : number | "length" | "toString" | "concat" | "slice" | "indexOf" | "lastIndexOf" | "charAt" | "charCodeAt" | "localeCompare" | "match" | "replace" | "search" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr" | "valueOf"
+>K01 : "length" | "toString" | "concat" | "slice" | "indexOf" | "lastIndexOf" | "charAt" | "charCodeAt" | "localeCompare" | "match" | "replace" | "search" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr" | "valueOf"
 
 type K02 = keyof number;  // "toString" | "toFixed" | "toExponential" | ...
 >K02 : "toString" | "toLocaleString" | "valueOf" | "toFixed" | "toExponential" | "toPrecision"
@@ -83,11 +83,11 @@ type K10 = keyof Shape;  // "name" | "width" | "height" | "visible"
 >Shape : Shape
 
 type K11 = keyof Shape[];  // number | "length" | "toString" | ...
->K11 : number | "length" | "toString" | "toLocaleString" | "push" | "pop" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight"
+>K11 : "length" | "toString" | "toLocaleString" | "push" | "pop" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight"
 >Shape : Shape
 
 type K12 = keyof Dictionary<Shape>;  // string | number
->K12 : string | number
+>K12 : string
 >Dictionary : Dictionary<T>
 >Shape : Shape
 
@@ -103,7 +103,7 @@ type K15 = keyof E;  // "toString" | "toFixed" | "toExponential" | ...
 >E : E
 
 type K16 = keyof [string, number];  // number | "0" | "1" | "length" | "toString" | ...
->K16 : number | "0" | "1" | "length" | "toString" | "toLocaleString" | "push" | "pop" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight"
+>K16 : "0" | "1" | "length" | "toString" | "toLocaleString" | "push" | "pop" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight"
 
 type K17 = keyof (Shape | Item);  // "name"
 >K17 : "name"
@@ -126,7 +126,7 @@ type K20 = KeyOf<Shape>;  // "name" | "width" | "height" | "visible"
 >Shape : Shape
 
 type K21 = KeyOf<Dictionary<Shape>>;  // string | number
->K21 : string | number
+>K21 : string
 >KeyOf : keyof T
 >Dictionary : Dictionary<T>
 >Shape : Shape
@@ -328,22 +328,12 @@ function f11(a: Shape[]) {
 >a : Shape[]
 >"length" : "length"
 
-    let shape = getProperty(a, 1000);    // Shape
->shape : Shape
->getProperty(a, 1000) : Shape
->getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
->a : Shape[]
->1000 : 1000
-
-    setProperty(a, 1000, getProperty(a, 1001));
->setProperty(a, 1000, getProperty(a, 1001)) : void
+    setProperty(a, "length", len);
+>setProperty(a, "length", len) : void
 >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
 >a : Shape[]
->1000 : 1000
->getProperty(a, 1001) : Shape
->getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
->a : Shape[]
->1001 : 1001
+>"length" : "length"
+>len : number
 }
 
 function f12(t: [Shape, boolean]) {
@@ -358,13 +348,6 @@ function f12(t: [Shape, boolean]) {
 >t : [Shape, boolean]
 >"length" : "length"
 
-    let s1 = getProperty(t, 0);    // Shape
->s1 : Shape
->getProperty(t, 0) : Shape
->getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
->t : [Shape, boolean]
->0 : 0
-
     let s2 = getProperty(t, "0");  // Shape
 >s2 : Shape
 >getProperty(t, "0") : Shape
@@ -372,26 +355,12 @@ function f12(t: [Shape, boolean]) {
 >t : [Shape, boolean]
 >"0" : "0"
 
-    let b1 = getProperty(t, 1);    // boolean
->b1 : boolean
->getProperty(t, 1) : boolean
->getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
->t : [Shape, boolean]
->1 : 1
-
     let b2 = getProperty(t, "1");  // boolean
 >b2 : boolean
 >getProperty(t, "1") : boolean
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
 >t : [Shape, boolean]
 >"1" : "1"
-
-    let x1 = getProperty(t, 2);    // Shape | boolean
->x1 : boolean | Shape
->getProperty(t, 2) : boolean | Shape
->getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
->t : [Shape, boolean]
->2 : 2
 }
 
 function f13(foo: any, bar: any) {
@@ -406,12 +375,12 @@ function f13(foo: any, bar: any) {
 >foo : any
 >"x" : "x"
 
-    let y = getProperty(foo, 100);  // any
+    let y = getProperty(foo, "100");  // any
 >y : any
->getProperty(foo, 100) : any
+>getProperty(foo, "100") : any
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
 >foo : any
->100 : 100
+>"100" : "100"
 
     let z = getProperty(foo, bar);  // any
 >z : any
@@ -735,6 +704,177 @@ function f40(c: C) {
 >c["z"] : string
 >c : C
 >"z" : "z"
+}
+
+function f50<T>(k: keyof T, s: string) {
+>f50 : <T>(k: keyof T, s: string) => void
+>T : T
+>k : keyof T
+>T : T
+>s : string
+
+    const x1 = s as keyof T;
+>x1 : keyof T
+>s as keyof T : keyof T
+>s : string
+>T : T
+
+    const x2 = k as string;
+>x2 : string
+>k as string : string
+>k : keyof T
+}
+
+function f51<T, K extends keyof T>(k: K, s: string) {
+>f51 : <T, K extends keyof T>(k: K, s: string) => void
+>T : T
+>K : K
+>T : T
+>k : K
+>K : K
+>s : string
+
+    const x1 = s as keyof T;
+>x1 : keyof T
+>s as keyof T : keyof T
+>s : string
+>T : T
+
+    const x2 = k as string;
+>x2 : string
+>k as string : string
+>k : K
+}
+
+function f52<T>(obj: { [x: string]: boolean }, k: keyof T, s: string, n: number) {
+>f52 : <T>(obj: { [x: string]: boolean; }, k: keyof T, s: string, n: number) => void
+>T : T
+>obj : { [x: string]: boolean; }
+>x : string
+>k : keyof T
+>T : T
+>s : string
+>n : number
+
+    const x1 = obj[s];
+>x1 : boolean
+>obj[s] : boolean
+>obj : { [x: string]: boolean; }
+>s : string
+
+    const x2 = obj[n];
+>x2 : boolean
+>obj[n] : boolean
+>obj : { [x: string]: boolean; }
+>n : number
+
+    const x3 = obj[k];
+>x3 : boolean
+>obj[k] : boolean
+>obj : { [x: string]: boolean; }
+>k : keyof T
+}
+
+function f53<T, K extends keyof T>(obj: { [x: string]: boolean }, k: K, s: string, n: number) {
+>f53 : <T, K extends keyof T>(obj: { [x: string]: boolean; }, k: K, s: string, n: number) => void
+>T : T
+>K : K
+>T : T
+>obj : { [x: string]: boolean; }
+>x : string
+>k : K
+>K : K
+>s : string
+>n : number
+
+    const x1 = obj[s];
+>x1 : boolean
+>obj[s] : boolean
+>obj : { [x: string]: boolean; }
+>s : string
+
+    const x2 = obj[n];
+>x2 : boolean
+>obj[n] : boolean
+>obj : { [x: string]: boolean; }
+>n : number
+
+    const x3 = obj[k];
+>x3 : { [x: string]: boolean; }[K]
+>obj[k] : { [x: string]: boolean; }[K]
+>obj : { [x: string]: boolean; }
+>k : K
+}
+
+function f54<T>(obj: T, key: keyof T) {
+>f54 : <T>(obj: T, key: keyof T) => void
+>T : T
+>obj : T
+>T : T
+>key : keyof T
+>T : T
+
+    for (let s in obj[key]) {
+>s : string
+>obj[key] : T[keyof T]
+>obj : T
+>key : keyof T
+    }
+    const b = "foo" in obj[key];
+>b : boolean
+>"foo" in obj[key] : boolean
+>"foo" : "foo"
+>obj[key] : T[keyof T]
+>obj : T
+>key : keyof T
+}
+
+function f55<T, K extends keyof T>(obj: T, key: K) {
+>f55 : <T, K extends keyof T>(obj: T, key: K) => void
+>T : T
+>K : K
+>T : T
+>obj : T
+>T : T
+>key : K
+>K : K
+
+    for (let s in obj[key]) {
+>s : string
+>obj[key] : T[K]
+>obj : T
+>key : K
+    }
+    const b = "foo" in obj[key];
+>b : boolean
+>"foo" in obj[key] : boolean
+>"foo" : "foo"
+>obj[key] : T[K]
+>obj : T
+>key : K
+}
+
+function f60<T>(source: T, target: T) {
+>f60 : <T>(source: T, target: T) => void
+>T : T
+>source : T
+>T : T
+>target : T
+>T : T
+
+    for (let k in source) {
+>k : keyof T
+>source : T
+
+        target[k] = source[k];
+>target[k] = source[k] : T[keyof T]
+>target[k] : T[keyof T]
+>target : T
+>k : keyof T
+>source[k] : T[keyof T]
+>source : T
+>k : keyof T
+    }
 }
 
 // Repros from #12011

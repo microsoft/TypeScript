@@ -31,6 +31,7 @@ namespace ts.server {
                     os.tmpdir();
                 break;
             case "linux":
+            case "android":
                 basePath = (os.homedir && os.homedir()) ||
                     process.env.HOME ||
                     ((process.env.LOGNAME || process.env.USER) && `/home/${process.env.LOGNAME || process.env.USER}`) ||

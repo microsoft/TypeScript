@@ -126,25 +126,25 @@ declare function pick<T, K extends keyof T>(obj: T, ...keys: K[]): Pick<T, K>;
 >T : Symbol(T, Decl(mappedTypes2.ts, 27, 22))
 >K : Symbol(K, Decl(mappedTypes2.ts, 27, 24))
 
-declare function mapObject<K extends string | number, T, U>(obj: Record<K, T>, f: (x: T) => U): Record<K, U>;
+declare function mapObject<K extends string, T, U>(obj: Record<K, T>, f: (x: T) => U): Record<K, U>;
 >mapObject : Symbol(mapObject, Decl(mappedTypes2.ts, 27, 78))
 >K : Symbol(K, Decl(mappedTypes2.ts, 28, 27))
->T : Symbol(T, Decl(mappedTypes2.ts, 28, 53))
->U : Symbol(U, Decl(mappedTypes2.ts, 28, 56))
->obj : Symbol(obj, Decl(mappedTypes2.ts, 28, 60))
+>T : Symbol(T, Decl(mappedTypes2.ts, 28, 44))
+>U : Symbol(U, Decl(mappedTypes2.ts, 28, 47))
+>obj : Symbol(obj, Decl(mappedTypes2.ts, 28, 51))
 >Record : Symbol(Record, Decl(lib.d.ts, --, --))
 >K : Symbol(K, Decl(mappedTypes2.ts, 28, 27))
->T : Symbol(T, Decl(mappedTypes2.ts, 28, 53))
->f : Symbol(f, Decl(mappedTypes2.ts, 28, 78))
->x : Symbol(x, Decl(mappedTypes2.ts, 28, 83))
->T : Symbol(T, Decl(mappedTypes2.ts, 28, 53))
->U : Symbol(U, Decl(mappedTypes2.ts, 28, 56))
+>T : Symbol(T, Decl(mappedTypes2.ts, 28, 44))
+>f : Symbol(f, Decl(mappedTypes2.ts, 28, 69))
+>x : Symbol(x, Decl(mappedTypes2.ts, 28, 74))
+>T : Symbol(T, Decl(mappedTypes2.ts, 28, 44))
+>U : Symbol(U, Decl(mappedTypes2.ts, 28, 47))
 >Record : Symbol(Record, Decl(lib.d.ts, --, --))
 >K : Symbol(K, Decl(mappedTypes2.ts, 28, 27))
->U : Symbol(U, Decl(mappedTypes2.ts, 28, 56))
+>U : Symbol(U, Decl(mappedTypes2.ts, 28, 47))
 
 declare function proxify<T>(obj: T): Proxify<T>;
->proxify : Symbol(proxify, Decl(mappedTypes2.ts, 28, 109))
+>proxify : Symbol(proxify, Decl(mappedTypes2.ts, 28, 100))
 >T : Symbol(T, Decl(mappedTypes2.ts, 29, 25))
 >obj : Symbol(obj, Decl(mappedTypes2.ts, 29, 28))
 >T : Symbol(T, Decl(mappedTypes2.ts, 29, 25))
@@ -295,7 +295,7 @@ function f5(shape: Shape) {
 
     const p = proxify(shape);
 >p : Symbol(p, Decl(mappedTypes2.ts, 79, 9))
->proxify : Symbol(proxify, Decl(mappedTypes2.ts, 28, 109))
+>proxify : Symbol(proxify, Decl(mappedTypes2.ts, 28, 100))
 >shape : Symbol(shape, Decl(mappedTypes2.ts, 78, 12))
 
     let name = p.name.get();
