@@ -27,7 +27,7 @@ type DeepReadonly<T> = {
 declare function assign<T>(obj: T, props: Partial<T>): void;
 declare function freeze<T>(obj: T): Readonly<T>;
 declare function pick<T, K extends keyof T>(obj: T, ...keys: K[]): Pick<T, K>;
-declare function mapObject<K extends string | number, T, U>(obj: Record<K, T>, f: (x: T) => U): Record<K, U>;
+declare function mapObject<K extends string, T, U>(obj: Record<K, T>, f: (x: T) => U): Record<K, U>;
 declare function proxify<T>(obj: T): Proxify<T>;
 
 interface Shape {
@@ -148,7 +148,7 @@ declare type DeepReadonly<T> = {
 declare function assign<T>(obj: T, props: Partial<T>): void;
 declare function freeze<T>(obj: T): Readonly<T>;
 declare function pick<T, K extends keyof T>(obj: T, ...keys: K[]): Pick<T, K>;
-declare function mapObject<K extends string | number, T, U>(obj: Record<K, T>, f: (x: T) => U): Record<K, U>;
+declare function mapObject<K extends string, T, U>(obj: Record<K, T>, f: (x: T) => U): Record<K, U>;
 declare function proxify<T>(obj: T): Proxify<T>;
 interface Shape {
     name: string;

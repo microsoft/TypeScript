@@ -22,7 +22,7 @@ var d = foo2([], 1);
 function foo1() {
     var stuff = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        stuff[_i - 0] = arguments[_i];
+        stuff[_i] = arguments[_i];
     }
     return undefined;
 }
@@ -31,7 +31,7 @@ var b = foo1([], 1);
 function foo2() {
     var stuff = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        stuff[_i - 0] = arguments[_i];
+        stuff[_i] = arguments[_i];
     }
     return undefined;
 }

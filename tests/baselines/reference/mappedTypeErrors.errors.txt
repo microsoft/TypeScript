@@ -1,29 +1,28 @@
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(20,20): error TS2313: Type parameter 'P' has a circular constraint.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(21,20): error TS2322: Type 'Date' is not assignable to type 'string | number'.
-  Type 'Date' is not assignable to type 'number'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(22,19): error TS2344: Type 'Date' does not satisfy the constraint 'string | number'.
-  Type 'Date' is not assignable to type 'number'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(25,24): error TS2344: Type '"foo"' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(26,24): error TS2344: Type '"name" | "foo"' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(21,20): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(22,20): error TS2322: Type 'Date' is not assignable to type 'string'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(23,19): error TS2344: Type 'Date' does not satisfy the constraint 'string'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(26,24): error TS2344: Type '"foo"' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(27,24): error TS2344: Type '"name" | "foo"' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
   Type '"foo"' is not assignable to type '"name" | "width" | "height" | "visible"'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(28,24): error TS2344: Type '"x" | "y"' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(29,24): error TS2344: Type '"x" | "y"' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
   Type '"x"' is not assignable to type '"name" | "width" | "height" | "visible"'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(30,24): error TS2344: Type 'undefined' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(33,24): error TS2344: Type 'T' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(31,24): error TS2344: Type 'undefined' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(34,24): error TS2344: Type 'T' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
   Type 'T' is not assignable to type '"visible"'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(37,24): error TS2344: Type 'T' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(38,24): error TS2344: Type 'T' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
   Type 'string | number' is not assignable to type '"name" | "width" | "height" | "visible"'.
     Type 'string' is not assignable to type '"name" | "width" | "height" | "visible"'.
       Type 'T' is not assignable to type '"visible"'.
         Type 'string | number' is not assignable to type '"visible"'.
           Type 'string' is not assignable to type '"visible"'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(59,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ [P in keyof T]?: T[P]; }'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(60,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ readonly [P in keyof T]: T[P]; }'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(61,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ readonly [P in keyof T]?: T[P]; }'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(66,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ [P in keyof T]: T[P][]; }'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(60,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ [P in keyof T]?: T[P]; }'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(61,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ readonly [P in keyof T]: T[P]; }'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(62,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ readonly [P in keyof T]?: T[P]; }'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(67,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ [P in keyof T]: T[P][]; }'.
 
 
-==== tests/cases/conformance/types/mapped/mappedTypeErrors.ts (13 errors) ====
+==== tests/cases/conformance/types/mapped/mappedTypeErrors.ts (14 errors) ====
     
     interface Shape {
         name: string;
@@ -46,14 +45,15 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(66,9): error TS2403: Su
     type T00 = { [P in P]: string };  // Error
                        ~
 !!! error TS2313: Type parameter 'P' has a circular constraint.
-    type T01 = { [P in Date]: number };  // Error
+    type T01 = { [P in number]: string };  // Error
+                       ~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+    type T02 = { [P in Date]: number };  // Error
                        ~~~~
-!!! error TS2322: Type 'Date' is not assignable to type 'string | number'.
-!!! error TS2322:   Type 'Date' is not assignable to type 'number'.
-    type T02 = Record<Date, number>;  // Error
+!!! error TS2322: Type 'Date' is not assignable to type 'string'.
+    type T03 = Record<Date, number>;  // Error
                       ~~~~
-!!! error TS2344: Type 'Date' does not satisfy the constraint 'string | number'.
-!!! error TS2344:   Type 'Date' is not assignable to type 'number'.
+!!! error TS2344: Type 'Date' does not satisfy the constraint 'string'.
     
     type T10 = Pick<Shape, "name">;
     type T11 = Pick<Shape, "foo">;  // Error

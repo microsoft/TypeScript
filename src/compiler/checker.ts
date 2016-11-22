@@ -142,7 +142,6 @@ namespace ts {
         const voidType = createIntrinsicType(TypeFlags.Void, "void");
         const neverType = createIntrinsicType(TypeFlags.Never, "never");
         const silentNeverType = createIntrinsicType(TypeFlags.Never, "never");
-        const stringOrNumberType = getUnionType([stringType, numberType]);
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
@@ -3156,38 +3155,10 @@ namespace ts {
         }
 
         function getTypeForVariableLikeDeclarationFromJSDocComment(declaration: VariableLikeDeclaration) {
-            const jsDocType = getJSDocTypeForVariableLikeDeclarationFromJSDocComment(declaration);
-            if (jsDocType) {
-                return getTypeFromTypeNode(jsDocType);
+            const jsdocType = getJSDocType(declaration);
+            if (jsdocType) {
+                return getTypeFromTypeNode(jsdocType);
             }
-        }
-
-        function getJSDocTypeForVariableLikeDeclarationFromJSDocComment(declaration: VariableLikeDeclaration): JSDocType {
-            // First, see if this node has an @type annotation on it directly.
-            const typeTag = getJSDocTypeTag(declaration);
-            if (typeTag && typeTag.typeExpression) {
-                return typeTag.typeExpression.type;
-            }
-
-            if (declaration.kind === SyntaxKind.VariableDeclaration &&
-                declaration.parent.kind === SyntaxKind.VariableDeclarationList &&
-                declaration.parent.parent.kind === SyntaxKind.VariableStatement) {
-
-                // @type annotation might have been on the variable statement, try that instead.
-                const annotation = getJSDocTypeTag(declaration.parent.parent);
-                if (annotation && annotation.typeExpression) {
-                    return annotation.typeExpression.type;
-                }
-            }
-            else if (declaration.kind === SyntaxKind.Parameter) {
-                // If it's a parameter, see if the parent has a jsdoc comment with an @param
-                // annotation.
-                const paramTag = getCorrespondingJSDocParameterTag(<ParameterDeclaration>declaration);
-                if (paramTag && paramTag.typeExpression) {
-                    return paramTag.typeExpression.type;
-                }
-            }
-
             return undefined;
         }
 
@@ -3217,9 +3188,11 @@ namespace ts {
                 }
             }
 
-            // A variable declared in a for..in statement is always of type string
+            // A variable declared in a for..in statement is of type string, or of type keyof T when the
+            // right hand expression is of a type parameter type.
             if (declaration.parent.parent.kind === SyntaxKind.ForInStatement) {
-                return stringType;
+                const indexType = getIndexType(checkNonNullExpression((<ForInStatement>declaration.parent.parent).expression));
+                return indexType.flags & TypeFlags.Index ? indexType : stringType;
             }
 
             if (declaration.parent.parent.kind === SyntaxKind.ForOfStatement) {
@@ -3455,9 +3428,9 @@ namespace ts {
                     declaration.kind === SyntaxKind.PropertyAccessExpression && declaration.parent.kind === SyntaxKind.BinaryExpression) {
                     // Use JS Doc type if present on parent expression statement
                     if (declaration.flags & NodeFlags.JavaScriptFile) {
-                        const typeTag = getJSDocTypeTag(declaration.parent);
-                        if (typeTag && typeTag.typeExpression) {
-                            return links.type = getTypeFromTypeNode(typeTag.typeExpression.type);
+                        const jsdocType = getJSDocType(declaration.parent);
+                        if (jsdocType) {
+                            return links.type = getTypeFromTypeNode(jsdocType);
                         }
                     }
                     const declaredTypes = map(symbol.declarations,
@@ -4688,7 +4661,6 @@ namespace ts {
                 t.flags & TypeFlags.NumberLike ? globalNumberType :
                 t.flags & TypeFlags.BooleanLike ? globalBooleanType :
                 t.flags & TypeFlags.ESSymbol ? getGlobalESSymbolType() :
-                t.flags & TypeFlags.Index ? stringOrNumberType :
                 t;
         }
 
@@ -4901,15 +4873,16 @@ namespace ts {
                 if (node.type && node.type.kind === SyntaxKind.JSDocOptionalType) {
                     return true;
                 }
+                const paramTags = getJSDocParameterTags(node);
+                if (paramTags) {
+                    for (const paramTag of paramTags) {
+                        if (paramTag.isBracketed) {
+                            return true;
+                        }
 
-                const paramTag = getCorrespondingJSDocParameterTag(node);
-                if (paramTag) {
-                    if (paramTag.isBracketed) {
-                        return true;
-                    }
-
-                    if (paramTag.typeExpression) {
-                        return paramTag.typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
+                        if (paramTag.typeExpression) {
+                            return paramTag.typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
+                        }
                     }
                 }
             }
@@ -5920,8 +5893,7 @@ namespace ts {
         function getIndexType(type: Type): Type {
             return type.flags & TypeFlags.TypeParameter ? getIndexTypeForTypeParameter(<TypeParameter>type) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getConstraintTypeFromMappedType(<MappedType>type) :
-                type.flags & TypeFlags.Any || getIndexInfoOfType(type, IndexKind.String) ? stringOrNumberType :
-                getIndexInfoOfType(type, IndexKind.Number) ? getUnionType([numberType, getLiteralTypeFromPropertyNames(type)]) :
+                type.flags & TypeFlags.Any || getIndexInfoOfType(type, IndexKind.String) ? stringType :
                 getLiteralTypeFromPropertyNames(type);
         }
 
@@ -6039,11 +6011,11 @@ namespace ts {
                 const id = objectType.id + "," + indexType.id;
                 return indexedAccessTypes[id] || (indexedAccessTypes[id] = createIndexedAccessType(objectType, indexType));
             }
-            const apparentType = getApparentType(objectType);
+            const apparentObjectType = getApparentType(objectType);
             if (indexType.flags & TypeFlags.Union && !(indexType.flags & TypeFlags.Primitive)) {
                 const propTypes: Type[] = [];
                 for (const t of (<UnionType>indexType).types) {
-                    const propType = getPropertyTypeForIndexType(apparentType, t, accessNode, /*cacheSymbol*/ false);
+                    const propType = getPropertyTypeForIndexType(apparentObjectType, t, accessNode, /*cacheSymbol*/ false);
                     if (propType === unknownType) {
                         return unknownType;
                     }
@@ -6051,7 +6023,7 @@ namespace ts {
                 }
                 return getUnionType(propTypes);
             }
-            return getPropertyTypeForIndexType(apparentType, indexType, accessNode, /*cacheSymbol*/ true);
+            return getPropertyTypeForIndexType(apparentObjectType, indexType, accessNode, /*cacheSymbol*/ true);
         }
 
         function getTypeFromIndexedAccessTypeNode(node: IndexedAccessTypeNode) {
@@ -7122,13 +7094,6 @@ namespace ts {
                 }
 
                 if (isSimpleTypeRelatedTo(source, target, relation, reportErrors ? reportError : undefined)) return Ternary.True;
-
-                if (source.flags & TypeFlags.Index) {
-                    // A keyof T is related to a union type containing both string and number
-                    if (maybeTypeOfKind(target, TypeFlags.String) && maybeTypeOfKind(target, TypeFlags.Number)) {
-                        return Ternary.True;
-                    }
-                }
 
                 if (getObjectFlags(source) & ObjectFlags.ObjectLiteral && source.flags & TypeFlags.FreshLiteral) {
                     if (hasExcessProperties(<FreshObjectLiteralType>source, target, reportErrors)) {
@@ -10392,9 +10357,9 @@ namespace ts {
         }
 
         function getTypeForThisExpressionFromJSDoc(node: Node) {
-            const typeTag = getJSDocTypeTag(node);
-            if (typeTag && typeTag.typeExpression && typeTag.typeExpression.type && typeTag.typeExpression.type.kind === SyntaxKind.JSDocFunctionType) {
-                const jsDocFunctionType = <JSDocFunctionType>typeTag.typeExpression.type;
+            const jsdocType = getJSDocType(node);
+            if (jsdocType && jsdocType.kind === SyntaxKind.JSDocFunctionType) {
+                const jsDocFunctionType = <JSDocFunctionType>jsdocType;
                 if (jsDocFunctionType.parameters.length > 0 && jsDocFunctionType.parameters[0].type.kind === SyntaxKind.JSDocThisType) {
                     return getTypeFromTypeNode(jsDocFunctionType.parameters[0].type);
                 }
@@ -13628,7 +13593,7 @@ namespace ts {
         // the destructured type into the contained binding elements.
         function assignBindingElementTypes(node: VariableLikeDeclaration) {
             if (isBindingPattern(node.name)) {
-                for (const element of (<BindingPattern>node.name).elements) {
+                for (const element of node.name.elements) {
                     if (!isOmittedExpression(element)) {
                         if (element.name.kind === SyntaxKind.Identifier) {
                             getSymbolLinks(getSymbolOfNode(element)).type = getTypeForBindingElement(element);
@@ -14256,7 +14221,7 @@ namespace ts {
             if (!isTypeAnyOrAllConstituentTypesHaveKind(leftType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol)) {
                 error(left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_type_any_string_number_or_symbol);
             }
-            if (!isTypeAnyOrAllConstituentTypesHaveKind(rightType, TypeFlags.Object | TypeFlags.TypeParameter)) {
+            if (!isTypeAnyOrAllConstituentTypesHaveKind(rightType, TypeFlags.Object | TypeFlags.TypeParameter | TypeFlags.IndexedAccess)) {
                 error(right, Diagnostics.The_right_hand_side_of_an_in_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             return booleanType;
@@ -15650,7 +15615,7 @@ namespace ts {
             const type = <MappedType>getTypeFromMappedTypeNode(node);
             const constraintType = getConstraintTypeFromMappedType(type);
             const keyType = constraintType.flags & TypeFlags.TypeParameter ? getApparentTypeOfTypeParameter(<TypeParameter>constraintType) : constraintType;
-            checkTypeAssignableTo(keyType, stringOrNumberType, node.typeParameter.constraint);
+            checkTypeAssignableTo(keyType, stringType, node.typeParameter.constraint);
         }
 
         function isPrivateWithinAmbient(node: Node): boolean {
@@ -17161,7 +17126,7 @@ namespace ts {
             const rightType = checkNonNullExpression(node.expression);
             // unknownType is returned i.e. if node.expression is identifier whose name cannot be resolved
             // in this case error about missing name is already reported - do not report extra one
-            if (!isTypeAnyOrAllConstituentTypesHaveKind(rightType, TypeFlags.Object | TypeFlags.TypeParameter)) {
+            if (!isTypeAnyOrAllConstituentTypesHaveKind(rightType, TypeFlags.Object | TypeFlags.TypeParameter | TypeFlags.IndexedAccess)) {
                 error(node.expression, Diagnostics.The_right_hand_side_of_a_for_in_statement_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
 

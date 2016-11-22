@@ -26,7 +26,7 @@ var z = foo `${1}${2}${3}`;  // any (with error)
 function foo() {
     var stuff = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        stuff[_i - 0] = arguments[_i];
+        stuff[_i] = arguments[_i];
     }
     return undefined;
 }

@@ -1,4 +1,4 @@
-﻿// /* @internal */
+// /* @internal */
 // namespace ts.codefix {
 
 //     type ImportCodeActionKind = "CodeChange" | "InsertingIntoExistingImport" | "NewImport";
@@ -145,7 +145,7 @@
 //                     if (localSymbol && localSymbol.name === name && checkSymbolHasMeaning(localSymbol, currentTokenMeaning)) {
 //                         // check if this symbol is already used
 //                         const symbolId = getUniqueSymbolId(localSymbol);
-//                         symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, /*isDefaultExport*/ true));
+//                         symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, /*isDefault*/ true));
 //                     }
 //                 }
 
@@ -483,7 +483,7 @@
 //                                 const normalizedTypeRoots = map(typeRoots, typeRoot => toPath(typeRoot, /*basePath*/ undefined, getCanonicalFileName));
 //                                 for (const typeRoot of normalizedTypeRoots) {
 //                                     if (startsWith(moduleFileName, typeRoot)) {
-//                                         let relativeFileName = moduleFileName.substring(typeRoot.length + 1);
+//                                         const relativeFileName = moduleFileName.substring(typeRoot.length + 1);
 //                                         return removeExtensionAndIndexPostFix(relativeFileName);
 //                                     }
 //                                 }
