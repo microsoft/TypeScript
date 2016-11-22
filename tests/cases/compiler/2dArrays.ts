@@ -1,4 +1,4 @@
-class Cell {
+class Cells {
 }
 
 class Ship {
