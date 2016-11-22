@@ -930,7 +930,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
     }
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
-        testTimeout = 400000;
+        testTimeout = 800000;
     }
 
     colors = process.env.colors || process.env.color;
