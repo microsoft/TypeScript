@@ -186,7 +186,7 @@ interface ObjectConstructor {
       * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
       * @param o Object on which to lock the attributes.
       */
-    freeze<T, U>(f: (...args: T[]) => U): (...args: T[]) => U;
+    freeze<T>(f: (...args: any[]) => T): (...args: any[]) => T;
 
     /**
       * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.

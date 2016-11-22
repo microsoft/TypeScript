@@ -1,18 +1,18 @@
 //// [objectFreeze.ts]
-class A {
-    constructor(public a1: string) {
-    }
-}
-function foo(x = new A(123)) { //should error, 123 is not string
-}}
+const f = Object.freeze(function foo(a: number, b: string) { return false; });
+f(1, "") === false;
+
+const a = Object.freeze([1, 2, 3]);
+a[0] = 1;
+
+const o = Object.freeze({ a: 1, b: "string" });
+o.b = "another";
+
 
 //// [objectFreeze.js]
-var A = (function () {
-    function A(a1) {
-        this.a1 = a1;
-    }
-    return A;
-}());
-function foo(x) {
-    if (x === void 0) { x = new A(123); }
-}
+var f = Object.freeze(function foo(a, b) { return false; });
+f(1, "") === false;
+var a = Object.freeze([1, 2, 3]);
+a[0] = 1;
+var o = Object.freeze({ a: 1, b: "string" });
+o.b = "another";
