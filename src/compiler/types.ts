@@ -96,6 +96,7 @@ namespace ts {
         BarBarToken,
         QuestionToken,
         ColonToken,
+        ColonColonToken,
         AtToken,
         // Assignments
         EqualsToken,
@@ -233,6 +234,7 @@ namespace ts {
         ObjectLiteralExpression,
         PropertyAccessExpression,
         ElementAccessExpression,
+        BindExpression,
         CallExpression,
         NewExpression,
         TaggedTemplateExpression,
@@ -1416,6 +1418,12 @@ namespace ts {
         = SuperPropertyAccessExpression
         | SuperElementAccessExpression
         ;
+
+    export interface BindExpression extends MemberExpression {
+        kind: SyntaxKind.BindExpression;
+        expression: LeftHandSideExpression;
+        targetExpression: MemberExpression;
+    }
 
     export interface CallExpression extends LeftHandSideExpression, Declaration {
         kind: SyntaxKind.CallExpression;

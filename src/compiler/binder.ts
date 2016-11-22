@@ -3242,6 +3242,10 @@ namespace ts {
                 transformFlags |= TransformFlags.AssertESNext;
                 break;
 
+            case SyntaxKind.BindExpression:
+                transformFlags |= TransformFlags.AssertESNext;
+                break;
+
             case SyntaxKind.SuperKeyword:
                 // This node is ES6 syntax.
                 transformFlags |= TransformFlags.AssertES2015;

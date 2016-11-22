@@ -3947,11 +3947,10 @@ namespace ts {
         return node.kind === SyntaxKind.ExpressionWithTypeArguments;
     }
 
-    function isLeftHandSideExpressionKind(kind: SyntaxKind): boolean {
+    function isMemberExpressionKind(kind: SyntaxKind): boolean {
         return kind === SyntaxKind.PropertyAccessExpression
             || kind === SyntaxKind.ElementAccessExpression
-            || kind === SyntaxKind.NewExpression
-            || kind === SyntaxKind.CallExpression
+            || kind === SyntaxKind.BindExpression
             || kind === SyntaxKind.JsxElement
             || kind === SyntaxKind.JsxSelfClosingElement
             || kind === SyntaxKind.TaggedTemplateExpression
@@ -3974,6 +3973,16 @@ namespace ts {
             || kind === SyntaxKind.SuperKeyword
             || kind === SyntaxKind.NonNullExpression
             || kind === SyntaxKind.RawExpression;
+    }
+
+    export function isMemberExpression(node: Node): node is MemberExpression {
+        return isMemberExpressionKind(skipPartiallyEmittedExpressions(node).kind);
+    }
+
+    function isLeftHandSideExpressionKind(kind: SyntaxKind): boolean {
+        return kind === SyntaxKind.NewExpression
+            || kind === SyntaxKind.CallExpression
+            || isMemberExpressionKind(kind);
     }
 
     export function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression {

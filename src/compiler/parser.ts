@@ -4026,6 +4026,14 @@ namespace ts {
                     continue;
                 }
 
+                if (parseOptional(SyntaxKind.ColonColonToken)) {
+                    const bindExpression = <BindExpression>createNode(SyntaxKind.BindExpression, expression.pos);
+                    bindExpression.expression = expression;
+                    bindExpression.targetExpression = parseMemberExpressionOrHigher();
+                    expression = finishNode(bindExpression);
+                    continue;
+                }
+
                 return <MemberExpression>expression;
             }
         }

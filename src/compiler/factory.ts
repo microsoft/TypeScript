@@ -1624,6 +1624,18 @@ namespace ts {
         );
     }
 
+    export function createFunctionBind(func: Expression, thisArg: Expression, argumentsList: Expression[], location?: TextRange) {
+        return createCall(
+            createPropertyAccess(func, "bind"),
+            /*typeArguments*/ undefined,
+            [
+                thisArg,
+                ...argumentsList
+            ],
+            location
+        );
+    }
+
     export function createFunctionApply(func: Expression, thisArg: Expression, argumentsExpression: Expression, location?: TextRange) {
         return createCall(
             createPropertyAccess(func, "apply"),

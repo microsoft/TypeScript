@@ -616,6 +616,8 @@ namespace ts {
                     return emitPropertyAccessExpression(<PropertyAccessExpression>node);
                 case SyntaxKind.ElementAccessExpression:
                     return emitElementAccessExpression(<ElementAccessExpression>node);
+                case SyntaxKind.BindExpression:
+                    return emitBindExpression(<BindExpression>node);
                 case SyntaxKind.CallExpression:
                     return emitCallExpression(<CallExpression>node);
                 case SyntaxKind.NewExpression:
@@ -1077,6 +1079,12 @@ namespace ts {
             write("[");
             emitExpression(node.argumentExpression);
             write("]");
+        }
+
+        function emitBindExpression(node: BindExpression) {
+            emitExpression(node.expression);
+            write("::");
+            emitExpression(node.targetExpression);
         }
 
         function emitCallExpression(node: CallExpression) {

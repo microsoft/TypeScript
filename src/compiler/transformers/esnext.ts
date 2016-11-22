@@ -71,6 +71,8 @@ namespace ts {
                     return visitCallExpression(node as CallExpression);
                 case SyntaxKind.OperatorExpression:
                     return visitOperatorExpression(node as OperatorExpression);
+                case SyntaxKind.BindExpression:
+                    return visitBindExpression(node as BindExpression);
                 default:
                     return visitEachChild(node, visitor, context);
             }
@@ -488,11 +490,11 @@ namespace ts {
                     positionalParameters,
                     /*type*/ undefined,
                     /*equalsGreaterThanToken*/ createToken(SyntaxKind.EqualsGreaterThanToken),
-                    updateCall(node, expression, /*typeArguments*/ undefined, argumentList),
+                    updateCall(node, expression, /*typeArguments*/ undefined, argumentList || node.arguments),
                     /*location*/ node
                 );
             }
-            return updateCall(node, expression, /*typeArguments*/ undefined, argumentList);
+            return updateCall(node, expression, /*typeArguments*/ undefined, argumentList || node.arguments);
         }
 
         function visitOperatorExpression(node: OperatorExpression) {
@@ -536,6 +538,23 @@ namespace ts {
                 expression,
                 node
             );
+        }
+
+        function visitBindExpression(node: BindExpression) {
+            const thisArg = createTempVariable(context.hoistVariableDeclaration);
+            return inlineExpressions([
+                createAssignment(
+                    thisArg,
+                    visitNode(node.expression, visitor, isExpression),
+                    node.expression
+                ),
+                createFunctionBind(
+                    visitNode(node.targetExpression, visitor, isLeftHandSideExpression),
+                    thisArg,
+                    [],
+                    node
+                )
+            ]);
         }
     }
 
