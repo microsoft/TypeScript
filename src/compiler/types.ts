@@ -349,6 +349,7 @@ namespace ts {
         JSDocThisType,
         JSDocComment,
         JSDocTag,
+        JSDocAugmentsTag,
         JSDocParameterTag,
         JSDocReturnTag,
         JSDocTypeTag,
@@ -1987,6 +1988,11 @@ namespace ts {
 
     export interface JSDocUnknownTag extends JSDocTag {
         kind: SyntaxKind.JSDocTag;
+    }
+
+    export interface JSDocAugmentsTag extends JSDocTag {
+        kind: SyntaxKind.JSDocAugmentsTag;
+        typeExpression: JSDocTypeExpression;
     }
 
     export interface JSDocTemplateTag extends JSDocTag {

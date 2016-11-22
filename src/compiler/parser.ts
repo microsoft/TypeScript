@@ -418,6 +418,8 @@ namespace ts {
                 return visitNode(cbNode, (<JSDocReturnTag>node).typeExpression);
             case SyntaxKind.JSDocTypeTag:
                 return visitNode(cbNode, (<JSDocTypeTag>node).typeExpression);
+            case SyntaxKind.JSDocAugmentsTag:
+                return visitNode(cbNode, (<JSDocAugmentsTag>node).typeExpression);
             case SyntaxKind.JSDocTemplateTag:
                 return visitNodes(cbNodes, (<JSDocTemplateTag>node).typeParameters);
             case SyntaxKind.JSDocTypedefTag:
@@ -6426,6 +6428,9 @@ namespace ts {
                     let tag: JSDocTag;
                     if (tagName) {
                         switch (tagName.text) {
+                            case "augments":
+                                tag = parseAugmentsTag(atToken, tagName);
+                                break;
                             case "param":
                                 tag = parseParamTag(atToken, tagName);
                                 break;
@@ -6638,6 +6643,16 @@ namespace ts {
                     result.atToken = atToken;
                     result.tagName = tagName;
                     result.name = name;
+                    result.typeExpression = typeExpression;
+                    return finishNode(result);
+                }
+
+                function parseAugmentsTag(atToken: AtToken, tagName: Identifier): JSDocAugmentsTag {
+                    const typeExpression = tryParseTypeExpression();
+
+                    const result = <JSDocAugmentsTag>createNode(SyntaxKind.JSDocAugmentsTag, atToken.pos);
+                    result.atToken = atToken;
+                    result.tagName = tagName;
                     result.typeExpression = typeExpression;
                     return finishNode(result);
                 }
