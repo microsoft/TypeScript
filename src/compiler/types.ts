@@ -3051,6 +3051,8 @@ namespace ts {
         /* @internal */
         instantiations?: Map<Signature>;    // Generic signature instantiation cache
         /* @internal */
+        partialInstantiations?: Map<Signature>;
+        /* @internal */
         isConstruct?: boolean;
     }
 

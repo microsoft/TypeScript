@@ -5167,6 +5167,26 @@ namespace ts {
             return instantiateSignature(signature, createTypeMapper(signature.typeParameters, typeArguments), /*eraseTypeParameters*/ true);
         }
 
+        function getPartialSignatureInstantiation(signature: Signature, typeArguments: Type[]): Signature {
+            const instantiations = signature.partialInstantiations || (signature.partialInstantiations = createMap<Signature>());
+            const id = getTypeListId(typeArguments);
+            return instantiations[id] || (instantiations[id] = createPartialSignatureInstantiation(signature, typeArguments));
+        }
+
+        function createPartialSignatureInstantiation(signature: Signature, typeArguments: Type[]): Signature {
+            // Erase only the type parameters that have been satisified by a valid type argument.
+            let eraseTypeParameters: TypeParameter[];
+            if (signature.typeParameters) {
+                eraseTypeParameters = [];
+                for (let i = 0; i < signature.typeParameters.length; i++) {
+                    if (typeArguments[i] !== unknownType && typeArguments[i] !== emptyObjectType) {
+                        eraseTypeParameters.push(signature.typeParameters[i]);
+                    }
+                }
+            }
+            return instantiateSignature(signature, createTypeMapper(signature.typeParameters, typeArguments), eraseTypeParameters);
+        }
+
         function getErasedSignature(signature: Signature): Signature {
             if (!signature.typeParameters) return signature;
             if (!signature.erasedSignatureCache) {
@@ -6407,17 +6427,22 @@ namespace ts {
             }
         }
 
-        function instantiateSignature(signature: Signature, mapper: TypeMapper, eraseTypeParameters?: boolean): Signature {
+        function instantiateSignature(signature: Signature, mapper: TypeMapper, eraseTypeParameters?: boolean | TypeParameter[]): Signature {
             let freshTypeParameters: TypeParameter[];
             let freshTypePredicate: TypePredicate;
-            if (signature.typeParameters && !eraseTypeParameters) {
+            if (signature.typeParameters && eraseTypeParameters !== true) {
                 // First create a fresh set of type parameters, then include a mapping from the old to the
                 // new type parameters in the mapper function. Finally store this mapper in the new type
                 // parameters such that we can use it when instantiating constraints.
-                freshTypeParameters = map(signature.typeParameters, cloneTypeParameter);
-                mapper = combineTypeMappers(createTypeMapper(signature.typeParameters, freshTypeParameters), mapper);
-                for (const tp of freshTypeParameters) {
-                    tp.mapper = mapper;
+                const typeParameters: TypeParameter[] = eraseTypeParameters
+                    ? relativeComplement(eraseTypeParameters, signature.typeParameters, (a, b) => compareValues(a.id, b.id))
+                    : signature.typeParameters;
+                if (some(typeParameters)) {
+                    freshTypeParameters = map(typeParameters, cloneTypeParameter);
+                    mapper = combineTypeMappers(createTypeMapper(typeParameters, freshTypeParameters), mapper);
+                    for (const tp of freshTypeParameters) {
+                        tp.mapper = mapper;
+                    }
                 }
             }
             if (signature.typePredicate) {
@@ -8135,6 +8160,10 @@ namespace ts {
             symbol.parent = source.parent;
             symbol.type = type;
             symbol.target = source;
+            if (source.flags & SymbolFlags.Instantiated) {
+                const links = getSymbolLinks(source);
+                symbol.mapper = links.mapper;
+            }
             if (source.valueDeclaration) {
                 symbol.valueDeclaration = source.valueDeclaration;
             }
@@ -12869,10 +12898,7 @@ namespace ts {
             }
         }
 
-        function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[], partialApplication: false, headMessage?: DiagnosticMessage): Signature;
-        function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[], partialApplication: true, headMessage?: DiagnosticMessage): Signature[];
-        function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[], partialApplication: boolean, headMessage?: DiagnosticMessage): Signature | Signature[];
-        function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[], partialApplication: boolean, headMessage?: DiagnosticMessage): Signature | Signature[] {
+        function resolveCall(node: CallLikeExpression, signatures: Signature[], partialSignaturesOutArray: Signature[], candidatesOutArray: Signature[], headMessage?: DiagnosticMessage): Signature {
             const isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
             const isDecorator = node.kind === SyntaxKind.Decorator;
             const isPipeline = node.kind === SyntaxKind.BinaryExpression;
@@ -12893,7 +12919,7 @@ namespace ts {
             reorderCandidates(signatures, candidates);
             if (!candidates.length) {
                 reportError(Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
-                return partialApplication ? [resolveErrorCall(node)] : resolveErrorCall(node);
+                return resolveErrorCall(node);
             }
 
             const args = getEffectiveCallArguments(node);
@@ -12950,7 +12976,7 @@ namespace ts {
             let candidateForArgumentError: Signature;
             let candidateForTypeArgumentError: Signature;
             let resultOfFailedInference: InferenceContext;
-            let result: Signature | Signature[];
+            let result: Signature;
 
             // If we are in signature help, a trailing comma indicates that we intend to provide another argument,
             // so we will only accept overloads with arity at least 1 higher than the current number of provided arguments.
@@ -12967,17 +12993,17 @@ namespace ts {
             // Whether the call is an error is determined by assignability of the arguments. The subtype pass
             // is just important for choosing the best signature. So in the case where there is only one
             // signature, the subtype pass is useless. So skipping it is an optimization.
-            if (candidates.length > 1) {
-                result = chooseOverload(candidates, subtypeRelation, signatureHelpTrailingComma);
+            if (candidates.length > 1 && !partialSignaturesOutArray) {
+                result = chooseOverload(candidates, subtypeRelation);
             }
-            if (!result || partialApplication) {
+            if (!result) {
                 // Reinitialize these pointers for round two
                 candidateForArgumentError = undefined;
                 candidateForTypeArgumentError = undefined;
                 resultOfFailedInference = undefined;
-                result = chooseOverload(candidates, assignableRelation, signatureHelpTrailingComma);
+                result = chooseOverload(candidates, assignableRelation);
             }
-            if (result) {
+            if (result || some(partialSignaturesOutArray)) {
                 return result;
             }
 
@@ -13029,12 +13055,12 @@ namespace ts {
                         if (candidate.typeParameters && typeArguments) {
                             candidate = getSignatureInstantiation(candidate, map(typeArguments, getTypeFromTypeNode));
                         }
-                        return partialApplication ? [candidate] : candidate;
+                        return candidate;
                     }
                 }
             }
 
-            return partialApplication ? [resolveErrorCall(node)] : resolveErrorCall(node);
+            return resolveErrorCall(node);
 
             function reportError(message: DiagnosticMessage, arg0?: string, arg1?: string, arg2?: string): void {
                 let errorInfo: DiagnosticMessageChain;
@@ -13046,9 +13072,8 @@ namespace ts {
                 diagnostics.add(createDiagnosticForNodeFromMessageChain(node, errorInfo));
             }
 
-            function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>, signatureHelpTrailingComma = false): Signature | Signature[] {
-                let partialCandidates: Signature[];
-                outer: for (const originalCandidate of candidates) {
+            function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>) {
+                nextCandidate: for (const originalCandidate of candidates) {
                     if (!hasCorrectArity(node, args, originalCandidate, signatureHelpTrailingComma)) {
                         continue;
                     }
@@ -13060,9 +13085,9 @@ namespace ts {
                         : undefined;
 
                     while (true) {
+                        let typeArgumentTypes: Type[];
                         candidate = originalCandidate;
                         if (candidate.typeParameters) {
-                            let typeArgumentTypes: Type[];
                             if (typeArguments) {
                                 typeArgumentTypes = map(typeArguments, getTypeFromTypeNode);
                                 typeArgumentsAreValid = checkTypeArguments(candidate, typeArguments, typeArgumentTypes, /*reportErrors*/ false);
@@ -13082,9 +13107,12 @@ namespace ts {
                         }
                         const index = excludeArgument ? indexOf(excludeArgument, true) : -1;
                         if (index < 0) {
-                            if (partialApplication) {
-                                partialCandidates = append(partialCandidates, originalCandidate);
-                                continue outer;
+                            if (partialSignaturesOutArray) {
+                                const partialCandidate = originalCandidate.typeParameters
+                                    ? getPartialSignatureInstantiation(originalCandidate, typeArgumentTypes)
+                                    : originalCandidate;
+                                partialSignaturesOutArray.push(partialCandidate);
+                                continue nextCandidate;
                             }
                             return candidate;
                         }
@@ -13113,15 +13141,11 @@ namespace ts {
                         candidateForArgumentError = originalCandidate;
                     }
                 }
-
-                return partialCandidates;
+                return undefined;
             }
         }
 
-        function resolveCallExpression(node: CallExpression, partialApplication: false, candidatesOutArray: Signature[]): Signature;
-        function resolveCallExpression(node: CallExpression, partialApplication: true, candidatesOutArray: Signature[]): Signature[];
-        function resolveCallExpression(node: CallExpression, partialApplication: boolean, candidatesOutArray: Signature[]): Signature | Signature[];
-        function resolveCallExpression(node: CallExpression, partialApplication: boolean, candidatesOutArray: Signature[]): Signature | Signature[] {
+        function resolveCallExpression(node: CallExpression, partialSignaturesOutArray: Signature[], candidatesOutArray: Signature[]): Signature {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 const superType = checkSuperExpression(node.expression);
                 if (superType !== unknownType) {
@@ -13130,7 +13154,7 @@ namespace ts {
                     const baseTypeNode = getClassExtendsHeritageClauseElement(getContainingClass(node));
                     if (baseTypeNode) {
                         const baseConstructors = getInstantiatedConstructorsForTypeArguments(superType, baseTypeNode.typeArguments);
-                        return resolveCall(node, baseConstructors, candidatesOutArray, partialApplication);
+                        return resolveCall(node, baseConstructors, partialSignaturesOutArray, candidatesOutArray);
                     }
                 }
                 return resolveUntypedCall(node);
@@ -13177,7 +13201,7 @@ namespace ts {
                 }
                 return resolveErrorCall(node);
             }
-            return resolveCall(node, callSignatures, candidatesOutArray, partialApplication);
+            return resolveCall(node, callSignatures, partialSignaturesOutArray, candidatesOutArray);
         }
 
         /**
@@ -13256,7 +13280,7 @@ namespace ts {
                 if (!isConstructorAccessible(node, constructSignatures[0])) {
                     return resolveErrorCall(node);
                 }
-                return resolveCall(node, constructSignatures, candidatesOutArray, /*allowPartialApplication*/ false);
+                return resolveCall(node, constructSignatures, /*partialSignaturesOutArray*/ undefined, candidatesOutArray);
             }
 
             // If expressionType's apparent type is an object type with no construct signatures but
@@ -13265,7 +13289,7 @@ namespace ts {
             // operation is Any. It is an error to have a Void this type.
             const callSignatures = getSignaturesOfType(expressionType, SignatureKind.Call);
             if (callSignatures.length) {
-                const signature = resolveCall(node, callSignatures, candidatesOutArray, /*allowPartialApplication*/ false);
+                const signature = resolveCall(node, callSignatures, /*partialSignaturesOutArray*/ undefined, candidatesOutArray);
                 if (getReturnTypeOfSignature(signature) !== voidType) {
                     error(node, Diagnostics.Only_a_void_function_can_be_called_with_the_new_keyword);
                 }
@@ -13342,7 +13366,7 @@ namespace ts {
                 return resolveErrorCall(node);
             }
 
-            return resolveCall(node, callSignatures, candidatesOutArray, /*partialApplication*/ false);
+            return resolveCall(node, callSignatures, /*partialSignaturesOutArray*/ undefined, candidatesOutArray);
         }
 
         /**
@@ -13392,10 +13416,11 @@ namespace ts {
                 return resolveErrorCall(node);
             }
 
-            return resolveCall(node, callSignatures, candidatesOutArray, /*allowPartialApplication*/ false, headMessage);
+            return resolveCall(node, callSignatures, /*partialSignaturesOutArray*/ undefined, candidatesOutArray, headMessage);
         }
 
         function resolvePipelineExpression(node: PipelineExpression, candidatesOutArray: Signature[]): Signature {
+            (<any>Error).stackTraceLimit = Infinity;
             const funcType = checkExpression(node.right);
             const apparentType = getApparentType(funcType);
             if (apparentType === unknownType) {
@@ -13412,16 +13437,13 @@ namespace ts {
                 return resolveErrorCall(node);
             }
 
-            return resolveCall(node, callSignatures, candidatesOutArray, /*partialApplication*/ false);
+            return resolveCall(node, callSignatures, /*partialSignaturesOutArray*/ undefined, candidatesOutArray);
         }
 
-        function resolveSignature(node: CallLikeExpression, partialApplication: false, candidatesOutArray?: Signature[]): Signature;
-        function resolveSignature(node: CallLikeExpression, partialApplication: true, candidatesOutArray?: Signature[]): Signature[];
-        function resolveSignature(node: CallLikeExpression, partialApplication: boolean, candidatesOutArray?: Signature[]): Signature | Signature[];
-        function resolveSignature(node: CallLikeExpression, partialApplication: boolean, candidatesOutArray?: Signature[]): Signature | Signature[] {
+        function resolveSignature(node: CallLikeExpression, partialSignaturesOutArray: Signature[], candidatesOutArray?: Signature[]): Signature {
             switch (node.kind) {
                 case SyntaxKind.CallExpression:
-                    return resolveCallExpression(<CallExpression>node, partialApplication, candidatesOutArray);
+                    return resolveCallExpression(<CallExpression>node, partialSignaturesOutArray, candidatesOutArray);
                 case SyntaxKind.NewExpression:
                     return resolveNewExpression(<NewExpression>node, candidatesOutArray);
                 case SyntaxKind.TaggedTemplateExpression:
@@ -13447,7 +13469,7 @@ namespace ts {
                 return cached;
             }
             links.resolvedSignature = resolvingSignature;
-            const result = resolveSignature(node, /*allowPartialApplication*/ false, candidatesOutArray);
+            const result = resolveSignature(node, /*partialSignaturesOutArray*/ undefined, candidatesOutArray);
             // If signature resolution originated in control flow type analysis (for example to compute the
             // assigned type in a flow assignment) we don't cache the result as it may be based on temporary
             // types from the control flow analysis.
@@ -13455,23 +13477,24 @@ namespace ts {
             return result;
         }
 
-        function getResolvedPartialSignatures(node: CallLikeExpression, candidatesOutArray?: Signature[]): Signature[] {
+        function getResolvedPartialSignatures(node: CallLikeExpression): Signature[] {
             const links = getNodeLinks(node);
             // If getResolvedSignature has already been called, we will have cached the resolvedSignature.
             // However, it is possible that either candidatesOutArray was not passed in the first time,
             // or that a different candidatesOutArray was passed in. Therefore, we need to redo the work
             // to correctly fill the candidatesOutArray.
             const cached = links.resolvedPartialSignatures;
-            if (cached && cached !== resolvingPartialSignatures && !candidatesOutArray) {
+            if (cached && cached !== resolvingPartialSignatures) {
                 return cached;
             }
             links.resolvedPartialSignatures = resolvingPartialSignatures;
-            const result = resolveSignature(node, /*partialApplication*/ true, candidatesOutArray);
+            const partialSignatures: Signature[] = [];
+            resolveSignature(node, partialSignatures);
             // If signature resolution originated in control flow type analysis (for example to compute the
             // assigned type in a flow assignment) we don't cache the result as it may be based on temporary
             // types from the control flow analysis.
-            links.resolvedPartialSignatures = flowLoopStart === flowLoopCount ? result : cached;
-            return result;
+            links.resolvedPartialSignatures = flowLoopStart === flowLoopCount ? partialSignatures : cached;
+            return partialSignatures;
         }
 
         function getResolvedOrAnySignature(node: CallLikeExpression) {
@@ -13590,6 +13613,8 @@ namespace ts {
                         previousParameter.type = getIntersectionType([previousParameter.type, type]);
                     }
                     else if (parameter) {
+                        const sym = createTransientSymbol(parameter, type);
+                        if (sym)
                         positionalParameters[ordinalPosition] = createTransientSymbol(parameter, type);
                     }
                     else {
