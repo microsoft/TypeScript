@@ -509,12 +509,17 @@ namespace ts {
     let optionNameMapCache: OptionNameMap;
 
     /* @internal */
-    export function replaceEnableAutoDiscoveryWithEnable(typeAcquisition: TypeAcquisition): void {
-        // Replace deprecated typingOptions.enableAutoDiscovery with typeAcquisition.enable
+    export function convertEnableAutoDiscoveryToEnable(typeAcquisition: TypeAcquisition): TypeAcquisition {
+        // Convert deprecated typingOptions.enableAutoDiscovery to typeAcquisition.enable
         if (typeAcquisition && typeAcquisition.enableAutoDiscovery !== undefined && typeAcquisition.enable === undefined) {
-           typeAcquisition.enable = typeAcquisition.enableAutoDiscovery;
-           delete typeAcquisition.enableAutoDiscovery;
+            const result: TypeAcquisition = {
+                enable: typeAcquisition.enableAutoDiscovery,
+                include: typeAcquisition.include || [],
+                exclude: typeAcquisition.exclude || []
+            };
+           return result;
         }
+        return typeAcquisition;
     }
 
     /* @internal */
@@ -859,7 +864,8 @@ namespace ts {
         }
 
         let options: CompilerOptions = convertCompilerOptionsFromJsonWorker(json["compilerOptions"], basePath, errors, configFileName);
-        // typingOptions has been deprecated. Use typeAcquisition instead.
+        // typingOptions has been deprecated and is only supported for backward compatibility purposes.
+        // It should be removed in future releases - use typeAcquisition instead.
         const jsonOptions = json["typeAcquisition"] || json["typingOptions"];
         const typeAcquisition: TypeAcquisition = convertTypeAcquisitionFromJsonWorker(jsonOptions, basePath, errors, configFileName);
 
@@ -1034,8 +1040,8 @@ namespace ts {
         basePath: string, errors: Diagnostic[], configFileName?: string): TypeAcquisition {
 
         const options: TypeAcquisition = { enable: getBaseFileName(configFileName) === "jsconfig.json", include: [], exclude: [] };
-        replaceEnableAutoDiscoveryWithEnable(jsonOptions);
-        convertOptionsFromJson(typeAcquisitionDeclarations, jsonOptions, basePath, options, Diagnostics.Unknown_type_acquisition_option_0, errors);
+        const typeAcquisition = convertEnableAutoDiscoveryToEnable(jsonOptions);
+        convertOptionsFromJson(typeAcquisitionDeclarations, typeAcquisition, basePath, options, Diagnostics.Unknown_type_acquisition_option_0, errors);
 
         return options;
     }
