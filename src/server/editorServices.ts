@@ -1322,6 +1322,12 @@ namespace ts.server {
         }
 
         openExternalProject(proj: protocol.ExternalProject): void {
+            // typingOptions has been deprecated and is only supported for backward compatibility
+            // purposes. It should be removed in future releases - use typeAcquisition instead.
+            if (proj.typingOptions && !proj.typeAcquisition) {
+                const typeAcquisition = convertEnableAutoDiscoveryToEnable(proj.typingOptions);
+                proj.typeAcquisition = typeAcquisition;
+            }
             let tsConfigFiles: NormalizedPath[];
             const rootFiles: protocol.ExternalFile[] = [];
             for (const file of proj.rootFiles) {
