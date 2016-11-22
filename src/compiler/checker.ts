@@ -6472,7 +6472,36 @@ namespace ts {
             return result;
         }
 
-        function instantiateMappedType(type: MappedType, mapper: TypeMapper): MappedType {
+        function instantiateMappedType(type: MappedType, mapper: TypeMapper): Type {
+            // Check if we have an isomorphic mapped type, i.e. a type of the form { [P in keyof T]: X } for some
+            // type parameter T. If so, the mapped type is distributive over a union type and when T is instantiated
+            // to a union type A | B, we produce { [P in keyof A]: X } | { [P in keyof B]: X }. Furthermore, for
+            // isomorphic mapped types we leave primitive types alone. For example, when T is instantiated to a
+            // union type A | undefined, we produce { [P in keyof A]: X } | undefined.
+            const constraintType = getConstraintTypeFromMappedType(type);
+            if (constraintType.flags & TypeFlags.Index) {
+                const typeParameter = (<IndexType>constraintType).type;
+                const mappedTypeParameter = mapper(typeParameter);
+                if (typeParameter !== mappedTypeParameter) {
+                    return mapType(mappedTypeParameter, t => {
+                        if (isMappableType(t)) {
+                            const replacementMapper = createUnaryTypeMapper(typeParameter, t);
+                            const combinedMapper = mapper.mappedTypes && mapper.mappedTypes.length === 1 ? replacementMapper : combineTypeMappers(replacementMapper, mapper);
+                            combinedMapper.mappedTypes = mapper.mappedTypes;
+                            return instantiateMappedObjectType(type, combinedMapper);
+                        }
+                        return t;
+                    });
+                }
+            }
+            return instantiateMappedObjectType(type, mapper);
+        }
+
+        function isMappableType(type: Type) {
+            return type.flags & (TypeFlags.TypeParameter | TypeFlags.Object | TypeFlags.Intersection | TypeFlags.IndexedAccess);
+        }
+
+        function instantiateMappedObjectType(type: MappedType, mapper: TypeMapper): Type {
             const result = <MappedType>createObjectType(ObjectFlags.Mapped | ObjectFlags.Instantiated, type.symbol);
             result.declaration = type.declaration;
             result.mapper = type.mapper ? combineTypeMappers(type.mapper, mapper) : mapper;
@@ -7514,24 +7543,29 @@ namespace ts {
 
             // A type [P in S]: X is related to a type [P in T]: Y if T is related to S and X is related to Y.
             function mappedTypeRelatedTo(source: Type, target: Type, reportErrors: boolean): Ternary {
-                if (isGenericMappedType(source) && isGenericMappedType(target)) {
-                    let result: Ternary;
-                    if (relation === identityRelation) {
-                        const readonlyMatches = !(<MappedType>source).declaration.readonlyToken === !(<MappedType>target).declaration.readonlyToken;
-                        const optionalMatches = !(<MappedType>source).declaration.questionToken === !(<MappedType>target).declaration.questionToken;
-                        if (readonlyMatches && optionalMatches) {
-                            if (result = isRelatedTo(getConstraintTypeFromMappedType(<MappedType>target), getConstraintTypeFromMappedType(<MappedType>source), reportErrors)) {
-                                return result & isRelatedTo(getErasedTemplateTypeFromMappedType(<MappedType>source), getErasedTemplateTypeFromMappedType(<MappedType>target), reportErrors);
+                if (isGenericMappedType(target)) {
+                    if (isGenericMappedType(source)) {
+                        let result: Ternary;
+                        if (relation === identityRelation) {
+                            const readonlyMatches = !(<MappedType>source).declaration.readonlyToken === !(<MappedType>target).declaration.readonlyToken;
+                            const optionalMatches = !(<MappedType>source).declaration.questionToken === !(<MappedType>target).declaration.questionToken;
+                            if (readonlyMatches && optionalMatches) {
+                                if (result = isRelatedTo(getConstraintTypeFromMappedType(<MappedType>target), getConstraintTypeFromMappedType(<MappedType>source), reportErrors)) {
+                                    return result & isRelatedTo(getErasedTemplateTypeFromMappedType(<MappedType>source), getErasedTemplateTypeFromMappedType(<MappedType>target), reportErrors);
+                                }
+                            }
+                        }
+                        else {
+                            if (relation === comparableRelation || !(<MappedType>source).declaration.questionToken || (<MappedType>target).declaration.questionToken) {
+                                if (result = isRelatedTo(getConstraintTypeFromMappedType(<MappedType>target), getConstraintTypeFromMappedType(<MappedType>source), reportErrors)) {
+                                    return result & isRelatedTo(getTemplateTypeFromMappedType(<MappedType>source), getTemplateTypeFromMappedType(<MappedType>target), reportErrors);
+                                }
                             }
                         }
                     }
-                    else {
-                        if (relation === comparableRelation || !(<MappedType>source).declaration.questionToken || (<MappedType>target).declaration.questionToken) {
-                            if (result = isRelatedTo(getConstraintTypeFromMappedType(<MappedType>target), getConstraintTypeFromMappedType(<MappedType>source), reportErrors)) {
-                                return result & isRelatedTo(getTemplateTypeFromMappedType(<MappedType>source), getTemplateTypeFromMappedType(<MappedType>target), reportErrors);
-                            }
-                        }
-                    }
+                }
+                else if (relation !== identityRelation && isEmptyObjectType(resolveStructuredTypeMembers(<ObjectType>target))) {
+                    return Ternary.True;
                 }
                 return Ternary.False;
             }
