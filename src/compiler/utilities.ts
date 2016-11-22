@@ -3950,6 +3950,7 @@ namespace ts {
     function isMemberExpressionKind(kind: SyntaxKind): boolean {
         return kind === SyntaxKind.PropertyAccessExpression
             || kind === SyntaxKind.ElementAccessExpression
+            || kind === SyntaxKind.BindToExpression
             || kind === SyntaxKind.BindExpression
             || kind === SyntaxKind.JsxElement
             || kind === SyntaxKind.JsxSelfClosingElement

@@ -234,7 +234,7 @@ namespace ts {
         ObjectLiteralExpression,
         PropertyAccessExpression,
         ElementAccessExpression,
-        BindExpression,
+        BindToExpression,
         CallExpression,
         NewExpression,
         TaggedTemplateExpression,
@@ -246,6 +246,7 @@ namespace ts {
         TypeOfExpression,
         VoidExpression,
         AwaitExpression,
+        BindExpression,
         PrefixUnaryExpression,
         PostfixUnaryExpression,
         BinaryExpression,
@@ -1419,10 +1420,15 @@ namespace ts {
         | SuperElementAccessExpression
         ;
 
-    export interface BindExpression extends MemberExpression {
-        kind: SyntaxKind.BindExpression;
+    export interface BindToExpression extends MemberExpression {
+        kind: SyntaxKind.BindToExpression;
         expression: LeftHandSideExpression;
         targetExpression: MemberExpression;
+    }
+
+    export interface BindExpression extends PrimaryExpression {
+        kind: SyntaxKind.BindExpression;
+        expression: MemberExpression;
     }
 
     export interface CallExpression extends LeftHandSideExpression, Declaration {
@@ -1456,7 +1462,7 @@ namespace ts {
         template: TemplateLiteral;
     }
 
-    export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | PipelineExpression | BindExpression;
+    export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | PipelineExpression | BindExpression | BindToExpression;
 
     export interface PositionalElement extends Expression {
         kind: SyntaxKind.PositionalElement;

@@ -3243,6 +3243,7 @@ namespace ts {
                 break;
 
             case SyntaxKind.BindExpression:
+            case SyntaxKind.BindToExpression:
                 transformFlags |= TransformFlags.AssertESNext;
                 break;
 

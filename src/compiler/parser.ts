@@ -162,8 +162,10 @@ namespace ts {
                 return visitNode(cbNode, (<ElementAccessExpression>node).expression) ||
                     visitNode(cbNode, (<ElementAccessExpression>node).argumentExpression);
             case SyntaxKind.BindExpression:
-                return visitNode(cbNode, (<BindExpression>node).expression) ||
-                    visitNode(cbNode, (<BindExpression>node).targetExpression);
+                return visitNode(cbNode, (<BindExpression>node).expression);
+            case SyntaxKind.BindToExpression:
+                return visitNode(cbNode, (<BindToExpression>node).expression) ||
+                    visitNode(cbNode, (<BindToExpression>node).targetExpression);
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
                 return visitNode(cbNode, (<CallExpression>node).expression) ||
@@ -2781,6 +2783,7 @@ namespace ts {
                 case SyntaxKind.LessThanToken:
                 case SyntaxKind.AwaitKeyword:
                 case SyntaxKind.YieldKeyword:
+                case SyntaxKind.ColonColonToken:
                     // Yield/await always starts an expression.  Either it is an identifier (in which case
                     // it is definitely an expression).  Or it's a keyword (either because we're in
                     // a generator or async function, or in strict mode (or both)) and it started a yield or await expression.
@@ -3433,6 +3436,13 @@ namespace ts {
             return finishNode(node);
         }
 
+        function parseBindExpression() {
+            const node = <BindExpression>createNode(SyntaxKind.BindExpression);
+            nextToken();
+            node.expression = parseMemberExpressionOrHigher();
+            return finishNode(node);
+        }
+
         function parseDeleteExpression() {
             const node = <DeleteExpression>createNode(SyntaxKind.DeleteExpression);
             nextToken();
@@ -4030,7 +4040,7 @@ namespace ts {
                 }
 
                 if (parseOptional(SyntaxKind.ColonColonToken)) {
-                    const bindExpression = <BindExpression>createNode(SyntaxKind.BindExpression, expression.pos);
+                    const bindExpression = <BindToExpression>createNode(SyntaxKind.BindToExpression, expression.pos);
                     bindExpression.expression = expression;
                     bindExpression.targetExpression = parseMemberExpressionOrHigher();
                     expression = finishNode(bindExpression);
@@ -4179,6 +4189,8 @@ namespace ts {
                     break;
                 case SyntaxKind.TemplateHead:
                     return parseTemplateExpression();
+                case SyntaxKind.ColonColonToken:
+                    return parseBindExpression();
             }
 
             return parseIdentifier(Diagnostics.Expression_expected);
