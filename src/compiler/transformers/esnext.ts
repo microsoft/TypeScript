@@ -5,9 +5,9 @@
 namespace ts {
     export function transformESNext(context: TransformationContext) {
         const {
-            startLexicalEnvironment,
             resumeLexicalEnvironment,
-            endLexicalEnvironment
+            endLexicalEnvironment,
+            hoistVariableDeclaration,
         } = context;
         return transformSourceFile;
 
@@ -441,60 +441,64 @@ namespace ts {
         }
 
         function visitCallExpression(node: CallExpression): Expression {
-            const expression = visitNode(node.expression, visitor, isExpression);
-            let position = 0;
-            let positionalParameters: ParameterDeclaration[];
-            let positionalRestParameter: ParameterDeclaration;
-            let argumentList: Expression[];
-            for (let i = 0; i < node.arguments.length; i++) {
-                const argument = node.arguments[i];
-                let updated: Expression;
-                if (isPositionalElement(argument)) {
-                    if (!positionalParameters) {
-                        positionalParameters = [];
-                    }
-                    if (argument.literal) {
-                        position = +argument.literal.text;
-                    }
-                    const parameter = positionalParameters[position] || (positionalParameters[position] = createParameter());
-                    updated = <Identifier>parameter.name;
-                    position++;
-                }
-                else if (isPositionalSpreadElement(argument)) {
-                    const parameter = positionalRestParameter || (positionalRestParameter = createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, createToken(SyntaxKind.DotDotDotToken)));
-                    updated = createSpreadElement(<Identifier>parameter.name);
-                }
-                else {
-                    updated = visitNode(argument, visitor, isExpression);
-                }
-                if (argumentList || updated !== argument) {
-                    if (!argumentList) {
-                        argumentList = node.arguments.slice(0, i);
-                    }
-                    argumentList.push(updated);
-                }
+            let expression = visitNode(node.expression, visitor, isExpression) as Expression;
+            if (!forEach(node.arguments, isPositionalOrPositionalSpreadElement)) {
+                return updateCall(
+                    node,
+                    expression,
+                    /*typeArguments*/ undefined,
+                    visitNodes(node.arguments, visitor, isExpression));
             }
-            if (positionalParameters || positionalRestParameter) {
-                startLexicalEnvironment();
+            else {
+                const expressionTemp = createTempVariable(hoistVariableDeclaration);
+                const argumentList: Expression[] = [];
+                const pendingExpressions: Expression[] = [createAssignment(expressionTemp, expression)];
+                const positionalParameters: ParameterDeclaration[] = [];
+                let positionalRestParameter: ParameterDeclaration;
+                let position = 0;
+                for (let i = 0; i < node.arguments.length; i++) {
+                    let argument = node.arguments[i];
+                    if (isPositionalElement(argument)) {
+                        if (argument.literal) {
+                            position = +argument.literal.text;
+                        }
+                        const parameter = positionalParameters[position] || (positionalParameters[position] = createParameter());
+                        argument = <Identifier>parameter.name;
+                        position++;
+                    }
+                    else if (isPositionalSpreadElement(argument)) {
+                        const parameter = positionalRestParameter || (positionalRestParameter = createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, createToken(SyntaxKind.DotDotDotToken)));
+                        argument = createSpreadElement(<Identifier>parameter.name);
+                    }
+                    else {
+                        argument = visitNode(argument, visitor, isExpression);
+                        const temp = createTempVariable(hoistVariableDeclaration);
+                        pendingExpressions.push(createAssignment(temp, isSpreadElement(argument) ? argument.expression : argument));
+                        argument = isSpreadElement(argument) ? createSpreadElement(temp) : temp;
+                    }
+                    argumentList.push(argument);
+                }
                 if (positionalRestParameter) {
-                    positionalParameters = append(positionalParameters, positionalRestParameter);
+                    positionalParameters.push(positionalRestParameter);
                 }
                 for (let i = 0; i < positionalParameters.length; i++) {
                     if (!positionalParameters[i]) {
                         positionalParameters[i] = createParameter();
                     }
                 }
-                return createArrowFunction(
-                    /*modifiers*/ undefined,
-                    /*typeParameters*/ undefined,
-                    positionalParameters,
-                    /*type*/ undefined,
-                    /*equalsGreaterThanToken*/ createToken(SyntaxKind.EqualsGreaterThanToken),
-                    updateCall(node, expression, /*typeArguments*/ undefined, argumentList || node.arguments),
-                    /*location*/ node
+                pendingExpressions.push(
+                    createArrowFunction(
+                        /*modifiers*/ undefined,
+                        /*typeParameters*/ undefined,
+                        positionalParameters,
+                        /*type*/ undefined,
+                        /*equalsGreaterThanToken*/ createToken(SyntaxKind.EqualsGreaterThanToken),
+                        updateCall(node, expressionTemp, /*typeArguments*/ undefined, argumentList),
+                        /*location*/ node
+                    )
                 );
+                return inlineExpressions(pendingExpressions);
             }
-            return updateCall(node, expression, /*typeArguments*/ undefined, argumentList || node.arguments);
         }
 
         function visitOperatorExpression(node: OperatorExpression) {
@@ -542,7 +546,7 @@ namespace ts {
 
         function visitBindExpression(node: BindExpression) {
             const thisArg = createTempVariable(context.hoistVariableDeclaration);
-            return inlineExpressions([
+            return createComma(
                 createAssignment(
                     thisArg,
                     visitNode(node.expression, visitor, isExpression),
@@ -554,7 +558,7 @@ namespace ts {
                     [],
                     node
                 )
-            ]);
+            );
         }
     }
 

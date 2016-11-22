@@ -161,6 +161,9 @@ namespace ts {
             case SyntaxKind.ElementAccessExpression:
                 return visitNode(cbNode, (<ElementAccessExpression>node).expression) ||
                     visitNode(cbNode, (<ElementAccessExpression>node).argumentExpression);
+            case SyntaxKind.BindExpression:
+                return visitNode(cbNode, (<BindExpression>node).expression) ||
+                    visitNode(cbNode, (<BindExpression>node).targetExpression);
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
                 return visitNode(cbNode, (<CallExpression>node).expression) ||

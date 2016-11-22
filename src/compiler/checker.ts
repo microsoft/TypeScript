@@ -4304,6 +4304,17 @@ namespace ts {
                 sig.typePredicate, sig.minArgumentCount, sig.hasRestParameter, sig.hasLiteralTypes);
         }
 
+        function getSignatureWithoutThis(sig: Signature) {
+            if (sig.thisParameter) {
+                if (!sig.thisFreeSignatureCache) {
+                    sig.thisFreeSignatureCache = cloneSignature(sig);
+                    sig.thisFreeSignatureCache.thisParameter = undefined;
+                }
+                return sig.thisFreeSignatureCache;
+            }
+            return sig;
+        }
+
         function getDefaultConstructSignatures(classType: InterfaceType): Signature[] {
             const baseConstructorType = getBaseConstructorTypeOfClass(classType);
             const baseSignatures = getSignaturesOfType(baseConstructorType, SignatureKind.Construct);
@@ -5193,6 +5204,25 @@ namespace ts {
                 signature.erasedSignatureCache = instantiateSignature(signature, createTypeEraser(signature.typeParameters), /*eraseTypeParameters*/ true);
             }
             return signature.erasedSignatureCache;
+        }
+
+        function createTypeFromSignatures(signatures: Signature[]): ObjectType {
+            const type = <ResolvedType>createObjectType(ObjectFlags.Anonymous);
+            type.members = emptySymbols;
+            type.properties = emptyArray;
+            let callSignatures: Signature[];
+            let constructSignatures: Signature[];
+            for (const signature of signatures) {
+                if (signature.isConstruct) {
+                    constructSignatures = append(constructSignatures, signature);
+                }
+                else {
+                    callSignatures = append(callSignatures, signature);
+                }
+            }
+            type.callSignatures = callSignatures || emptyArray;
+            type.constructSignatures = constructSignatures || emptyArray;
+            return type;
         }
 
         function getOrCreateTypeFromSignature(signature: Signature): ObjectType {
@@ -12186,6 +12216,12 @@ namespace ts {
             return getIndexedAccessType(objectType, indexType, node);
         }
 
+        function checkBindExpression(node: BindExpression): Type {
+            checkNonNullExpression(node.expression);
+            const signatures = getResolvedPartialSignatures(node);
+            return createTypeFromSignatures(map(signatures, getSignatureWithoutThis));
+        }
+
         function checkThatExpressionIsProperSymbolReference(expression: Expression, expressionType: Type, reportError: boolean): boolean {
             if (expressionType === unknownType) {
                 // There is already an error, so no need to report one.
@@ -12232,7 +12268,7 @@ namespace ts {
             if (node.kind === SyntaxKind.TaggedTemplateExpression) {
                 checkExpression((<TaggedTemplateExpression>node).template);
             }
-            else if (node.kind !== SyntaxKind.Decorator) {
+            else if (node.kind === SyntaxKind.CallExpression || node.kind === SyntaxKind.NewExpression) {
                 forEach((<CallExpression>node).arguments, argument => {
                     checkExpression(argument);
                 });
@@ -12313,7 +12349,6 @@ namespace ts {
             let argCount: number;            // Apparent number of arguments we will have in this call
             let typeArguments: NodeArray<TypeNode>;  // Type arguments (undefined if none)
             let callIsIncomplete: boolean;           // In incomplete call we want to be lenient when we have too few arguments
-            let isDecorator: boolean;
             let spreadArgIndex = -1;
 
             if (node.kind === SyntaxKind.TaggedTemplateExpression) {
@@ -12341,8 +12376,7 @@ namespace ts {
                     callIsIncomplete = !!templateLiteral.isUnterminated;
                 }
             }
-            else if (node.kind === SyntaxKind.Decorator) {
-                isDecorator = true;
+            else if (node.kind === SyntaxKind.Decorator || node.kind === SyntaxKind.BindExpression) {
                 typeArguments = undefined;
                 argCount = getEffectiveArgumentCount(node, /*args*/ undefined, signature);
             }
@@ -12574,6 +12608,9 @@ namespace ts {
                     return (callee as ElementAccessExpression).expression;
                 }
             }
+            else if (node.kind === SyntaxKind.BindExpression) {
+                return node.expression;
+            }
         }
 
         /**
@@ -12596,7 +12633,7 @@ namespace ts {
                     });
                 }
             }
-            else if (node.kind === SyntaxKind.Decorator) {
+            else if (node.kind === SyntaxKind.Decorator || node.kind === SyntaxKind.BindExpression) {
                 // For a decorator, we return undefined as we will determine
                 // the number and types of arguments for a decorator using
                 // `getEffectiveArgumentCount` and `getEffectiveArgumentType` below.
@@ -12674,6 +12711,9 @@ namespace ts {
 
                         return 3;
                 }
+            }
+            else if (node.kind === SyntaxKind.BindExpression) {
+                return signature.minArgumentCount;
             }
             else {
                 return args.length;
@@ -12859,6 +12899,9 @@ namespace ts {
             if (node.kind === SyntaxKind.Decorator) {
                 return getEffectiveDecoratorArgumentType(<Decorator>node, argIndex);
             }
+            else if (node.kind === SyntaxKind.BindExpression) {
+                return unknownType;
+            }
             else if (argIndex === 0 && node.kind === SyntaxKind.TaggedTemplateExpression) {
                 return getGlobalTemplateStringsArrayType();
             }
@@ -12874,6 +12917,7 @@ namespace ts {
         function getEffectiveArgument(node: CallLikeExpression, args: Expression[], argIndex: number) {
             // For a decorator or the first argument of a tagged template expression we return undefined.
             if (node.kind === SyntaxKind.Decorator ||
+                node.kind === SyntaxKind.BindExpression ||
                 (argIndex === 0 && node.kind === SyntaxKind.TaggedTemplateExpression)) {
                 return undefined;
             }
@@ -12902,10 +12946,11 @@ namespace ts {
             const isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
             const isDecorator = node.kind === SyntaxKind.Decorator;
             const isPipeline = node.kind === SyntaxKind.BinaryExpression;
+            const isBind = node.kind === SyntaxKind.BindExpression;
 
             let typeArguments: TypeNode[];
 
-            if (!isTaggedTemplate && !isDecorator && !isPipeline) {
+            if (!isTaggedTemplate && !isDecorator && !isPipeline && !isBind) {
                 typeArguments = (<CallExpression>node).typeArguments;
 
                 // We already perform checking on the type arguments on the class declaration itself.
@@ -12939,7 +12984,7 @@ namespace ts {
             // For a decorator, no arguments are susceptible to contextual typing due to the fact
             // decorators are applied to a declaration by the emitter, and not to an expression.
             let excludeArgument: boolean[];
-            if (!isDecorator) {
+            if (!isDecorator && !isBind) {
                 // We do not need to call `getEffectiveArgumentCount` here as it only
                 // applies when calculating the number of arguments for a decorator.
                 for (let i = isTaggedTemplate ? 1 : 0; i < args.length; i++) {
@@ -13420,7 +13465,6 @@ namespace ts {
         }
 
         function resolvePipelineExpression(node: PipelineExpression, candidatesOutArray: Signature[]): Signature {
-            (<any>Error).stackTraceLimit = Infinity;
             const funcType = checkExpression(node.right);
             const apparentType = getApparentType(funcType);
             if (apparentType === unknownType) {
@@ -13440,6 +13484,26 @@ namespace ts {
             return resolveCall(node, callSignatures, /*partialSignaturesOutArray*/ undefined, candidatesOutArray);
         }
 
+        function resolveBindExpression(node: BindExpression, partialSignaturesOutArray: Signature[], candidatesOutArray?: Signature[]): Signature {
+            const funcType = checkExpression(node.targetExpression);
+            const apparentType = getApparentType(funcType);
+            if (apparentType === unknownType) {
+                return resolveErrorCall(node);
+            }
+
+            const callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
+            const constructSignatures = getSignaturesOfType(apparentType, SignatureKind.Construct);
+            if (isUntypedFunctionCall(funcType, apparentType, callSignatures.length, constructSignatures.length)) {
+                return resolveUntypedCall(node);
+            }
+
+            if (!callSignatures.length) {
+                return resolveErrorCall(node);
+            }
+
+            return resolveCall(node, callSignatures, partialSignaturesOutArray, candidatesOutArray);
+        }
+
         function resolveSignature(node: CallLikeExpression, partialSignaturesOutArray: Signature[], candidatesOutArray?: Signature[]): Signature {
             switch (node.kind) {
                 case SyntaxKind.CallExpression:
@@ -13452,6 +13516,8 @@ namespace ts {
                     return resolveDecorator(<Decorator>node, candidatesOutArray);
                 case SyntaxKind.BinaryExpression:
                     return resolvePipelineExpression(<PipelineExpression>node, candidatesOutArray);
+                case SyntaxKind.BindExpression:
+                    return resolveBindExpression(<BindExpression>node, partialSignaturesOutArray, candidatesOutArray);
             }
             Debug.fail("Branch in 'resolveSignature' should be unreachable.");
         }
@@ -14238,19 +14304,12 @@ namespace ts {
         function createOperatorExpressionType(operator: SyntaxKind) {
             switch (operator) {
                 case SyntaxKind.PlusToken:
-                    const signatures = [
+                    return createTypeFromSignatures([
                         createBinaryOperatorSignature(undefined, stringType, stringType, stringType),
                         createBinaryOperatorSignature(undefined, stringType, numberType, stringType),
                         createBinaryOperatorSignature(undefined, numberType, stringType, stringType),
                         createBinaryOperatorSignature(undefined, numberType, numberType, numberType),
-                    ]
-                    const plusType = createObjectType(ObjectFlags.Anonymous);
-                    (<ResolvedType>plusType).members = emptySymbols;
-                    (<ResolvedType>plusType).properties = emptyArray;
-                    (<ResolvedType>plusType).callSignatures = signatures;
-                    (<ResolvedType>plusType).constructSignatures = emptyArray;
-                    return plusType;
-
+                    ]);
                 case SyntaxKind.AsteriskToken:
                 case SyntaxKind.AsteriskAsteriskToken:
                 case SyntaxKind.SlashToken:
@@ -15249,6 +15308,8 @@ namespace ts {
                     return checkPropertyAccessExpression(<PropertyAccessExpression>node);
                 case SyntaxKind.ElementAccessExpression:
                     return checkIndexedAccess(<ElementAccessExpression>node);
+                case SyntaxKind.BindExpression:
+                    return checkBindExpression(<BindExpression>node);
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
                     return checkCallExpression(<CallExpression>node);

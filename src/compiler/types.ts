@@ -1456,7 +1456,7 @@ namespace ts {
         template: TemplateLiteral;
     }
 
-    export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | PipelineExpression;
+    export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | PipelineExpression | BindExpression;
 
     export interface PositionalElement extends Expression {
         kind: SyntaxKind.PositionalElement;
@@ -3052,6 +3052,8 @@ namespace ts {
         unionSignatures?: Signature[];      // Underlying signatures of a union signature
         /* @internal */
         erasedSignatureCache?: Signature;   // Erased version of signature (deferred)
+        /* @internal */
+        thisFreeSignatureCache?: Signature; // Signature without 'this' parameter.
         /* @internal */
         isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
         /* @internal */
