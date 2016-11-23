@@ -654,16 +654,16 @@ namespace ts {
         if (whenFalse) {
             // second overload
             node.questionToken = <QuestionToken>questionTokenOrWhenTrue;
-            node.whenTrue = whenTrueOrWhenFalse;
+            node.whenTrue = parenthesizeSubexpressionOfConditionalExpression(whenTrueOrWhenFalse);
             node.colonToken = <ColonToken>colonTokenOrLocation;
-            node.whenFalse = whenFalse;
+            node.whenFalse = parenthesizeSubexpressionOfConditionalExpression(whenFalse);
         }
         else {
             // first overload
             node.questionToken = createToken(SyntaxKind.QuestionToken);
-            node.whenTrue = <Expression>questionTokenOrWhenTrue;
+            node.whenTrue = parenthesizeSubexpressionOfConditionalExpression(<Expression>questionTokenOrWhenTrue);
             node.colonToken = createToken(SyntaxKind.ColonToken);
-            node.whenFalse = whenTrueOrWhenFalse;
+            node.whenFalse = parenthesizeSubexpressionOfConditionalExpression(whenTrueOrWhenFalse);
         }
         return node;
     }
@@ -2379,6 +2379,15 @@ namespace ts {
             return createParen(condition);
         }
         return condition;
+    }
+
+    function parenthesizeSubexpressionOfConditionalExpression(e: Expression): Expression {
+        // per ES grammar both 'whenTrue' and 'whenFalse' parts of conditional expression are assignment expressions
+        // so in case when comma expression is introduced as a part of previous transformations
+        // if should be wrapped in parens since comma operator has the lowest precedence
+        return e.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>e).operatorToken.kind === SyntaxKind.CommaToken
+            ? createParen(e)
+            : e;
     }
 
     /**

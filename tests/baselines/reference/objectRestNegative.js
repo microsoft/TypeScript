@@ -1,6 +1,12 @@
 //// [objectRestNegative.ts]
 let o = { a: 1, b: 'no' };
 var { ...mustBeLast, a } = o;
+
+var b: string;
+let notAssignable: { a: string };
+({ b, ...notAssignable } = o);
+
+
 function stillMustBeLast({ ...mustBeLast, a }: { a: number, b: string }): void {
 }
 function generic<T extends { x, y }>(t: T) {
@@ -24,6 +30,9 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 var o = { a: 1, b: 'no' };
 var a = o.a;
+var b;
+var notAssignable;
+(b = o.b, o, notAssignable = __rest(o, ["b"]));
 function stillMustBeLast(_a) {
     var a = _a.a;
 }

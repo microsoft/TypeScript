@@ -199,7 +199,7 @@ namespace RWC {
                     }
                     // Do not include the library in the baselines to avoid noise
                     const baselineFiles = inputFiles.concat(otherFiles).filter(f => !Harness.isDefaultLibraryFile(f.unitName));
-                    const errors = compilerResult.errors.filter(e => !Harness.isDefaultLibraryFile(e.file.fileName));
+                    const errors = compilerResult.errors.filter(e => e.file && !Harness.isDefaultLibraryFile(e.file.fileName));
                     return Harness.Compiler.getErrorBaseline(baselineFiles, errors);
                 }, baselineOpts);
             });

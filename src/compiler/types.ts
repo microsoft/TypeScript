@@ -349,6 +349,7 @@ namespace ts {
         JSDocThisType,
         JSDocComment,
         JSDocTag,
+        JSDocAugmentsTag,
         JSDocParameterTag,
         JSDocReturnTag,
         JSDocTypeTag,
@@ -497,7 +498,8 @@ namespace ts {
         parent?: Node;                                  // Parent node (initialized by binding)
         /* @internal */ original?: Node;                // The original node if this is an updated node.
         /* @internal */ startsOnNewLine?: boolean;      // Whether a synthesized node should start on a new line (used by transforms).
-        /* @internal */ jsDocComments?: JSDoc[];        // JSDoc for the node, if it has any.
+        /* @internal */ jsDoc?: JSDoc[];                // JSDoc that directly precedes this node
+        /* @internal */ jsDocCache?: (JSDoc | JSDocTag)[]; // All JSDoc that applies to the node, including parent docs and @param tags
         /* @internal */ symbol?: Symbol;                // Symbol declared by node (initialized by binding)
         /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
         /* @internal */ nextContainer?: Node;           // Next container in declaration order (initialized by binding)
@@ -1990,6 +1992,11 @@ namespace ts {
         kind: SyntaxKind.JSDocTag;
     }
 
+    export interface JSDocAugmentsTag extends JSDocTag {
+        kind: SyntaxKind.JSDocAugmentsTag;
+        typeExpression: JSDocTypeExpression;
+    }
+
     export interface JSDocTemplateTag extends JSDocTag {
         kind: SyntaxKind.JSDocTemplateTag;
         typeParameters: NodeArray<TypeParameterDeclaration>;
@@ -2791,7 +2798,7 @@ namespace ts {
         Intrinsic = Any | String | Number | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never,
         /* @internal */
         Primitive = String | Number | Boolean | Enum | ESSymbol | Void | Undefined | Null | Literal,
-        StringLike = String | StringLiteral,
+        StringLike = String | StringLiteral | Index,
         NumberLike = Number | NumberLiteral | Enum | EnumLiteral,
         BooleanLike = Boolean | BooleanLiteral,
         EnumLike = Enum | EnumLiteral,
@@ -2976,8 +2983,6 @@ namespace ts {
         /* @internal */
         resolvedIndexType: IndexType;
         /* @internal */
-        resolvedIndexedAccessTypes: IndexedAccessType[];
-        /* @internal */
         isThisType?: boolean;
     }
 
@@ -2987,7 +2992,7 @@ namespace ts {
 
     export interface IndexedAccessType extends Type {
         objectType: Type;
-        indexType: TypeParameter;
+        indexType: Type;
     }
 
     export const enum SignatureKind {
@@ -3202,8 +3207,12 @@ namespace ts {
         [option: string]: CompilerOptionsValue | undefined;
     }
 
-    export interface TypingOptions {
+    export interface TypeAcquisition {
+        /* @deprecated typingOptions.enableAutoDiscovery
+         * Use typeAcquisition.enable instead.
+         */
         enableAutoDiscovery?: boolean;
+        enable?: boolean;
         include?: string[];
         exclude?: string[];
         [option: string]: string[] | boolean | undefined;
@@ -3214,7 +3223,7 @@ namespace ts {
         projectRootPath: string;                        // The path to the project root directory
         safeListPath: string;                           // The path used to retrieve the safe list
         packageNameToTypingLocation: Map<string>;       // The map of package names to their cached typing locations
-        typingOptions: TypingOptions;                   // Used to customize the typing inference process
+        typeAcquisition: TypeAcquisition;               // Used to customize the type acquisition process
         compilerOptions: CompilerOptions;               // Used as a source for typing inference
         unresolvedImports: ReadonlyArray<string>;       // List of unresolved module ids from imports
     }
@@ -3279,7 +3288,7 @@ namespace ts {
     /** Either a parsed command line or a parsed tsconfig.json */
     export interface ParsedCommandLine {
         options: CompilerOptions;
-        typingOptions?: TypingOptions;
+        typeAcquisition?: TypeAcquisition;
         fileNames: string[];
         raw?: any;
         errors: Diagnostic[];

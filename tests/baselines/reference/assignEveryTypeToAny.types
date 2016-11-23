@@ -59,9 +59,9 @@ var e = undefined;
 >undefined : undefined
 
 x = e;
->x = e : undefined
+>x = e : any
 >x : any
->e : undefined
+>e : any
 
 var e2: typeof undefined;
 >e2 : any

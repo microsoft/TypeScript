@@ -89,8 +89,6 @@ namespace ts {
         "c:/dev/g.min.js/.g/g.ts"
     ]);
 
-    const defaultExcludes = ["node_modules", "bower_components", "jspm_packages"];
-
     function assertParsed(actual: ts.ParsedCommandLine, expected: ts.ParsedCommandLine): void {
         assert.deepEqual(actual.fileNames, expected.fileNames);
         assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
@@ -131,6 +129,23 @@ namespace ts {
     }
 
     describe("matchFiles", () => {
+        it("with defaults", () => {
+            const json = {};
+            const expected: ts.ParsedCommandLine = {
+                options: {},
+                errors: [],
+                fileNames: [
+                    "c:/dev/a.ts",
+                    "c:/dev/b.ts"
+                ],
+                wildcardDirectories: {
+                    "c:/dev": ts.WatchDirectoryFlags.Recursive
+                },
+            };
+            const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveCommonFoldersHost, caseInsensitiveBasePath);
+            assertParsed(actual, expected);
+        });
+
         describe("with literal file list", () => {
             it("without exclusions", () => {
                 const json = {
@@ -221,7 +236,7 @@ namespace ts {
                     options: {},
                     errors: [
                         ts.createCompilerDiagnostic(ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
-                            caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(defaultExcludes))
+                            caseInsensitiveTsconfigPath, JSON.stringify(json.include), "[]")
                     ],
                     fileNames: [],
                     wildcardDirectories: {},
@@ -239,7 +254,7 @@ namespace ts {
                     options: {},
                     errors: [
                         ts.createCompilerDiagnostic(ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
-                            caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(defaultExcludes))
+                            caseInsensitiveTsconfigPath, JSON.stringify(json.include), "[]")
                     ],
                     fileNames: [],
                     wildcardDirectories: {},
@@ -353,7 +368,10 @@ namespace ts {
                     errors: [],
                     fileNames: [
                         "c:/dev/a.ts",
-                        "c:/dev/b.ts"
+                        "c:/dev/b.ts",
+                        "c:/dev/bower_components/a.ts",
+                        "c:/dev/jspm_packages/a.ts",
+                        "c:/dev/node_modules/a.ts"
                     ],
                     wildcardDirectories: {},
                 };
@@ -393,8 +411,7 @@ namespace ts {
                         "node_modules/a.ts",
                         "bower_components/a.ts",
                         "jspm_packages/a.ts"
-                    ],
-                    exclude: <string[]>[]
+                    ]
                 };
                 const expected: ts.ParsedCommandLine = {
                     options: {},
@@ -544,7 +561,7 @@ namespace ts {
                     options: {},
                     errors: [
                         ts.createCompilerDiagnostic(ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
-                            caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(defaultExcludes))
+                            caseInsensitiveTsconfigPath, JSON.stringify(json.include), "[]")
                     ],
                     fileNames: [],
                     wildcardDirectories: {
@@ -611,7 +628,10 @@ namespace ts {
                     options: {},
                     errors: [],
                     fileNames: [
-                        "c:/dev/a.ts"
+                        "c:/dev/a.ts",
+                        "c:/dev/bower_components/a.ts",
+                        "c:/dev/jspm_packages/a.ts",
+                        "c:/dev/node_modules/a.ts"
                     ],
                     wildcardDirectories: {
                         "c:/dev": ts.WatchDirectoryFlags.Recursive
@@ -679,7 +699,7 @@ namespace ts {
                     },
                     errors: [
                         ts.createCompilerDiagnostic(ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
-                            caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(defaultExcludes))
+                            caseInsensitiveTsconfigPath, JSON.stringify(json.include), "[]")
                     ],
                     fileNames: [],
                     wildcardDirectories: {
@@ -975,7 +995,7 @@ namespace ts {
                         errors: [
                             createDiagnosticForConfigFile(json, 12, 4, ts.Diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**"),
                             ts.createCompilerDiagnostic(ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
-                                caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(defaultExcludes))
+                                caseInsensitiveTsconfigPath, JSON.stringify(json.include), "[]")
                         ],
                         fileNames: [],
                         wildcardDirectories: {}
@@ -1015,7 +1035,7 @@ namespace ts {
                         errors: [
                             createDiagnosticForConfigFile(json, 12, 11, ts.Diagnostics.File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0, "**/x/**/*"),
                             ts.createCompilerDiagnostic(ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
-                                caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(defaultExcludes))
+                                caseInsensitiveTsconfigPath, JSON.stringify(json.include), "[]")
                         ],
                         fileNames: [],
                         wildcardDirectories: {}
@@ -1062,7 +1082,7 @@ namespace ts {
                         errors: [
                             createDiagnosticForConfigFile(json, 12, 9, ts.Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**/../*"),
                             ts.createCompilerDiagnostic(ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
-                                caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(defaultExcludes))
+                                caseInsensitiveTsconfigPath, JSON.stringify(json.include), "[]")
                         ],
                         fileNames: [],
                         wildcardDirectories: {}
@@ -1081,7 +1101,7 @@ namespace ts {
                         errors: [
                             createDiagnosticForConfigFile(json, 12, 11, ts.Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**/y/../*"),
                             ts.createCompilerDiagnostic(ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
-                                caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(defaultExcludes))
+                                caseInsensitiveTsconfigPath, JSON.stringify(json.include), "[]")
                         ],
                         fileNames: [],
                         wildcardDirectories: {}

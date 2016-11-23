@@ -1367,7 +1367,7 @@ type Pick<T, K extends keyof T> = {
 /**
  * Construct a type with a set of properties K of type T
  */
-type Record<K extends string | number, T> = {
+type Record<K extends string, T> = {
     [P in K]: T;
 }
 
