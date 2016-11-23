@@ -817,6 +817,7 @@ namespace ts.server {
         private directoryWatcher: FileWatcher;
         private directoriesWatchedForWildcards: Map<FileWatcher>;
         private typeRootsWatchers: FileWatcher[];
+        readonly canonicalConfigFilePath: NormalizedPath;
 
         /** Used for configured projects which may have multiple open roots */
         openRefCount = 0;
@@ -830,6 +831,7 @@ namespace ts.server {
             languageServiceEnabled: boolean,
             public compileOnSaveEnabled: boolean) {
             super(configFileName, ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
+            this.canonicalConfigFilePath = asNormalizedPath(projectService.toCanonicalFileName(configFileName));
         }
 
         getConfigFilePath() {
