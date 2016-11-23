@@ -861,9 +861,13 @@ namespace ts.server.protocol {
          */
         options: ExternalProjectCompilerOptions;
         /**
-         * Explicitly specified typing options for the project
+         * @deprecated typingOptions. Use typeAcquisition instead
          */
-        typingOptions?: TypingOptions;
+        typingOptions?: TypeAcquisition;
+        /**
+         * Explicitly specified type acquisition for the project
+         */
+        typeAcquisition?: TypeAcquisition;
     }
 
     export interface CompileOnSaveMixin {
