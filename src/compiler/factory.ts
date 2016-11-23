@@ -1677,16 +1677,10 @@ namespace ts {
 
     function createJsxFactoryExpressionFromEntityName(jsxFactory: EntityName, parent: JsxOpeningLikeElement): Expression {
         if (isQualifiedName(jsxFactory)) {
-            return createPropertyAccess(
-                createJsxFactoryExpressionFromEntityName(
-                    jsxFactory.left,
-                    parent
-                ),
-                setEmitFlags(
-                    getMutableClone(jsxFactory.right),
-                    EmitFlags.NoSourceMap
-                )
-            );
+            const left = createJsxFactoryExpressionFromEntityName(jsxFactory.left, parent);
+            const right = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
+            right.text = jsxFactory.right.text;
+            return createPropertyAccess(left, right);
         }
         else {
             return createReactNamespace(jsxFactory.text, parent);

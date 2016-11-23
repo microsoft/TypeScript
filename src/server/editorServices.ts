@@ -257,7 +257,7 @@ namespace ts.server {
 
         private changedFiles: ScriptInfo[];
 
-        private toCanonicalFileName: (f: string) => string;
+        readonly toCanonicalFileName: (f: string) => string;
 
         public lastDeletedFile: ScriptInfo;
 
@@ -777,7 +777,13 @@ namespace ts.server {
         }
 
         private findConfiguredProjectByProjectName(configFileName: NormalizedPath) {
-            return findProjectByName(configFileName, this.configuredProjects);
+            // make sure that casing of config file name is consistent
+            configFileName = asNormalizedPath(this.toCanonicalFileName(configFileName));
+            for (const proj of this.configuredProjects) {
+                if (proj.canonicalConfigFilePath === configFileName) {
+                    return proj;
+                }
+            }
         }
 
         private findExternalProjectByProjectName(projectFileName: string) {
