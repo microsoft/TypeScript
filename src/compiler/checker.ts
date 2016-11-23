@@ -922,6 +922,7 @@ namespace ts {
                     if (!errorLocation ||
                         !checkAndReportErrorForMissingPrefix(errorLocation, name, nameArg) &&
                         !checkAndReportErrorForExtendingInterface(errorLocation) &&
+                        !checkAndReportErrorForUsingTypeAsNamespace(errorLocation, name, meaning) &&
                         !checkAndReportErrorForUsingTypeAsValue(errorLocation, name, meaning)) {
                         error(errorLocation, nameNotFoundMessage, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg));
                     }
@@ -1030,6 +1031,18 @@ namespace ts {
                 default:
                     return undefined;
             }
+        }
+
+        function checkAndReportErrorForUsingTypeAsNamespace(errorLocation: Node, name: string, meaning: SymbolFlags): boolean {
+            if (meaning === SymbolFlags.Namespace) {
+                const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.Type & ~SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined));
+                if (symbol) {
+                    error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_namespace_here, name);
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         function checkAndReportErrorForUsingTypeAsValue(errorLocation: Node, name: string, meaning: SymbolFlags): boolean {
@@ -8975,7 +8988,7 @@ namespace ts {
 
         function getTypeWithDefault(type: Type, defaultExpression: Expression) {
             if (defaultExpression) {
-                const defaultType = checkExpression(defaultExpression);
+                const defaultType = getTypeOfExpression(defaultExpression);
                 return getUnionType([getTypeWithFacts(type, TypeFacts.NEUndefined), defaultType]);
             }
             return type;
@@ -9002,7 +9015,7 @@ namespace ts {
         function getAssignedTypeOfBinaryExpression(node: BinaryExpression): Type {
             return node.parent.kind === SyntaxKind.ArrayLiteralExpression || node.parent.kind === SyntaxKind.PropertyAssignment ?
                 getTypeWithDefault(getAssignedType(node), node.right) :
-                checkExpression(node.right);
+                getTypeOfExpression(node.right);
         }
 
         function getAssignedTypeOfArrayLiteralElement(node: ArrayLiteralExpression, element: Expression): Type {
@@ -9060,7 +9073,7 @@ namespace ts {
             // from its initializer, we'll already have cached the type. Otherwise we compute it now
             // without caching such that transient types are reflected.
             const links = getNodeLinks(node);
-            return links.resolvedType || checkExpression(node);
+            return links.resolvedType || getTypeOfExpression(node);
         }
 
         function getInitialTypeOfVariableDeclaration(node: VariableDeclaration) {
@@ -9120,7 +9133,7 @@ namespace ts {
 
         function getTypeOfSwitchClause(clause: CaseClause | DefaultClause) {
             if (clause.kind === SyntaxKind.CaseClause) {
-                const caseType = getRegularTypeOfLiteralType(checkExpression((<CaseClause>clause).expression));
+                const caseType = getRegularTypeOfLiteralType(getTypeOfExpression((<CaseClause>clause).expression));
                 return isUnitType(caseType) ? caseType : undefined;
             }
             return neverType;
@@ -9225,7 +9238,7 @@ namespace ts {
         // we defer subtype reduction until the evolving array type is finalized into a manifest
         // array type.
         function addEvolvingArrayElementType(evolvingArrayType: EvolvingArrayType, node: Expression): EvolvingArrayType {
-            const elementType = getBaseTypeOfLiteralType(checkExpression(node));
+            const elementType = getBaseTypeOfLiteralType(getTypeOfExpression(node));
             return isTypeSubsetOf(elementType, evolvingArrayType.elementType) ? evolvingArrayType : getEvolvingArrayType(getUnionType([evolvingArrayType.elementType, elementType]));
         }
 
@@ -9286,7 +9299,7 @@ namespace ts {
                 (<BinaryExpression>parent.parent).operatorToken.kind === SyntaxKind.EqualsToken &&
                 (<BinaryExpression>parent.parent).left === parent &&
                 !isAssignmentTarget(parent.parent) &&
-                isTypeAnyOrAllConstituentTypesHaveKind(checkExpression((<ElementAccessExpression>parent).argumentExpression), TypeFlags.NumberLike | TypeFlags.Undefined);
+                isTypeAnyOrAllConstituentTypesHaveKind(getTypeOfExpression((<ElementAccessExpression>parent).argumentExpression), TypeFlags.NumberLike | TypeFlags.Undefined);
             return isLengthPushOrUnshift || isElementAssignment;
         }
 
@@ -9448,7 +9461,7 @@ namespace ts {
                             }
                         }
                         else {
-                            const indexType = checkExpression((<ElementAccessExpression>(<BinaryExpression>node).left).argumentExpression);
+                            const indexType = getTypeOfExpression((<ElementAccessExpression>(<BinaryExpression>node).left).argumentExpression);
                             if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.NumberLike | TypeFlags.Undefined)) {
                                 evolvedType = addEvolvingArrayElementType(evolvedType, (<BinaryExpression>node).right);
                             }
@@ -9673,7 +9686,7 @@ namespace ts {
                 if (operator === SyntaxKind.ExclamationEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) {
                     assumeTrue = !assumeTrue;
                 }
-                const valueType = checkExpression(value);
+                const valueType = getTypeOfExpression(value);
                 if (valueType.flags & TypeFlags.Nullable) {
                     if (!strictNullChecks) {
                         return type;
@@ -9760,7 +9773,7 @@ namespace ts {
                 }
 
                 // Check that right operand is a function type with a prototype property
-                const rightType = checkExpression(expr.right);
+                const rightType = getTypeOfExpression(expr.right);
                 if (!isTypeSubtypeOf(rightType, globalFunctionType)) {
                     return type;
                 }
@@ -9901,7 +9914,7 @@ namespace ts {
                     location = location.parent;
                 }
                 if (isPartOfExpression(location) && !isAssignmentTarget(location)) {
-                    const type = checkExpression(<Expression>location);
+                    const type = getTypeOfExpression(<Expression>location);
                     if (getExportSymbolOfValueSymbolIfExported(getNodeLinks(location).resolvedSymbol) === symbol) {
                         return type;
                     }
@@ -10769,7 +10782,7 @@ namespace ts {
 
                 // In an assignment expression, the right operand is contextually typed by the type of the left operand.
                 if (node === binaryExpression.right) {
-                    return checkExpression(binaryExpression.left);
+                    return getTypeOfExpression(binaryExpression.left);
                 }
             }
             else if (operator === SyntaxKind.BarBarToken) {
@@ -10777,7 +10790,7 @@ namespace ts {
                 // expression has no contextual type, the right operand is contextually typed by the type of the left operand.
                 let type = getContextualType(binaryExpression);
                 if (!type && node === binaryExpression.right) {
-                    type = checkExpression(binaryExpression.left);
+                    type = getTypeOfExpression(binaryExpression.left);
                 }
                 return type;
             }
@@ -12148,7 +12161,7 @@ namespace ts {
                         if (node.kind === SyntaxKind.ForInStatement &&
                             child === (<ForInStatement>node).statement &&
                             getForInVariableSymbol(<ForInStatement>node) === symbol &&
-                            hasNumericPropertyNames(checkExpression((<ForInStatement>node).expression))) {
+                            hasNumericPropertyNames(getTypeOfExpression((<ForInStatement>node).expression))) {
                             return true;
                         }
                         child = node;
@@ -13784,7 +13797,7 @@ namespace ts {
             if (!node.possiblyExhaustive) {
                 return false;
             }
-            const type = checkExpression(node.expression);
+            const type = getTypeOfExpression(node.expression);
             if (!isLiteralType(type)) {
                 return false;
             }
@@ -14874,6 +14887,24 @@ namespace ts {
             }
 
             return type;
+        }
+
+        // Returns the type of an expression. Unlike checkExpression, this function is simply concerned
+        // with computing the type and may not fully check all contained sub-expressions for errors.
+        function getTypeOfExpression(node: Expression) {
+            // Optimize for the common case of a call to a function with a single non-generic call
+            // signature where we can just fetch the return type without checking the arguments.
+            if (node.kind === SyntaxKind.CallExpression && (<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword) {
+                const funcType = checkNonNullExpression((<CallExpression>node).expression);
+                const signature = getSingleCallSignature(funcType);
+                if (signature && !signature.typeParameters) {
+                    return getReturnTypeOfSignature(signature);
+                }
+            }
+            // Otherwise simply call checkExpression. Ideally, the entire family of checkXXX functions
+            // should have a parameter that indicates whether full error checking is required such that
+            // we can perform the optimizations locally.
+            return checkExpression(node);
         }
 
         // Checks an expression and returns its type. The contextualMapper parameter serves two purposes: When
@@ -18258,7 +18289,7 @@ namespace ts {
                                     }
                                 }
 
-                                enumType = checkExpression(expression);
+                                enumType = getTypeOfExpression(expression);
                                 // allow references to constant members of other enums
                                 if (!(enumType.symbol && (enumType.symbol.flags & SymbolFlags.Enum))) {
                                     return undefined;
@@ -19428,7 +19459,7 @@ namespace ts {
                     // fallthrough
 
                 case SyntaxKind.SuperKeyword:
-                    const type = isPartOfExpression(node) ? checkExpression(<Expression>node) : getTypeFromTypeNode(<TypeNode>node);
+                    const type = isPartOfExpression(node) ? getTypeOfExpression(<Expression>node) : getTypeFromTypeNode(<TypeNode>node);
                     return type.symbol;
 
                 case SyntaxKind.ThisType:
@@ -19458,7 +19489,7 @@ namespace ts {
                 case SyntaxKind.NumericLiteral:
                     // index access
                     if (node.parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>node.parent).argumentExpression === node) {
-                        const objectType = checkExpression((<ElementAccessExpression>node.parent).expression);
+                        const objectType = getTypeOfExpression((<ElementAccessExpression>node.parent).expression);
                         if (objectType === unknownType) return undefined;
                         const apparentType = getApparentType(objectType);
                         if (apparentType === unknownType) return undefined;
@@ -19497,7 +19528,7 @@ namespace ts {
             }
 
             if (isPartOfExpression(node)) {
-                return getTypeOfExpression(<Expression>node);
+                return getRegularTypeOfExpression(<Expression>node);
             }
 
             if (isExpressionWithTypeArgumentsInClassExtendsClause(node)) {
@@ -19559,7 +19590,7 @@ namespace ts {
             // If this is from "for" initializer
             //     for ({a } = elems[0];.....) { }
             if (expr.parent.kind === SyntaxKind.BinaryExpression) {
-                const iteratedType = checkExpression((<BinaryExpression>expr.parent).right);
+                const iteratedType = getTypeOfExpression((<BinaryExpression>expr.parent).right);
                 return checkDestructuringAssignment(expr, iteratedType || unknownType);
             }
             // If this is from nested object binding pattern
@@ -19589,11 +19620,11 @@ namespace ts {
             return typeOfObjectLiteral && getPropertyOfType(typeOfObjectLiteral, location.text);
         }
 
-        function getTypeOfExpression(expr: Expression): Type {
+        function getRegularTypeOfExpression(expr: Expression): Type {
             if (isRightSideOfQualifiedNameOrPropertyAccess(expr)) {
                 expr = <Expression>expr.parent;
             }
-            return getRegularTypeOfLiteralType(checkExpression(expr));
+            return getRegularTypeOfLiteralType(getTypeOfExpression(expr));
         }
 
         /**
@@ -20020,7 +20051,7 @@ namespace ts {
         }
 
         function writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
-            const type = getWidenedType(getTypeOfExpression(expr));
+            const type = getWidenedType(getRegularTypeOfExpression(expr));
             getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
         }
 
