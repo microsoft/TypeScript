@@ -256,7 +256,7 @@ var harnessSources = harnessCoreSources.concat([
     "commandLineParsing.ts",
     "configurationExtension.ts",
     "convertCompilerOptionsFromJson.ts",
-    "convertTypingOptionsFromJson.ts",
+    "convertTypeAcquisitionFromJson.ts",
     "tsserverProjectSystem.ts",
     "compileOnSave.ts",
     "typingsInstaller.ts",
@@ -930,7 +930,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
     }
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
-        testTimeout = 400000;
+        testTimeout = 800000;
     }
 
     colors = process.env.colors || process.env.color;
@@ -1086,12 +1086,10 @@ task("tests-debug", ["setDebugMode", "tests"]);
 // Makes the test results the new baseline
 desc("Makes the most recent test results the new baseline, overwriting the old baseline");
 task("baseline-accept", function () {
-    acceptBaseline("");
+    acceptBaseline(localBaseline, refBaseline);
 });
 
-function acceptBaseline(containerFolder) {
-    var sourceFolder = path.join(localBaseline, containerFolder);
-    var targetFolder = path.join(refBaseline, containerFolder);
+function acceptBaseline(sourceFolder, targetFolder) {
     console.log('Accept baselines from ' + sourceFolder + ' to ' + targetFolder);
     var files = fs.readdirSync(sourceFolder);
     var deleteEnding = '.delete';
@@ -1115,12 +1113,12 @@ function acceptBaseline(containerFolder) {
 
 desc("Makes the most recent rwc test results the new baseline, overwriting the old baseline");
 task("baseline-accept-rwc", function () {
-    acceptBaseline("rwc");
+    acceptBaseline(localRwcBaseline, refRwcBaseline);
 });
 
 desc("Makes the most recent test262 test results the new baseline, overwriting the old baseline");
 task("baseline-accept-test262", function () {
-    acceptBaseline("test262");
+    acceptBaseline(localTest262Baseline, refTest262Baseline);
 });
 
 

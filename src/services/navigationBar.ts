@@ -225,8 +225,8 @@ namespace ts.NavigationBar {
                 break;
 
             default:
-                forEach(node.jsDocComments, jsDocComment => {
-                    forEach(jsDocComment.tags, tag => {
+                forEach(node.jsDoc, jsDoc => {
+                    forEach(jsDoc.tags, tag => {
                         if (tag.kind === SyntaxKind.JSDocTypedefTag) {
                             addLeafNode(tag);
                         }

@@ -3141,7 +3141,7 @@
         "category": "Error",
         "code": 17009
     },
-    "Unknown typing option '{0}'.": {
+    "Unknown type acquisition option '{0}'.": {
         "category": "Error",
         "code": 17010
     },

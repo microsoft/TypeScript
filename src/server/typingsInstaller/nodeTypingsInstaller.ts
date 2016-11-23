@@ -127,7 +127,7 @@ namespace ts.server.typingsInstaller {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`#${requestId} with arguments'${JSON.stringify(args)}'.`);
             }
-            const command = `${this.npmPath} install ${args.join(" ")} --save-dev`;
+            const command = `${this.npmPath} install ${args.join(" ")} --save-dev --user-agent="typesInstaller/${version}"`;
             const start = Date.now();
             let stdout: Buffer;
             let stderr: Buffer;
