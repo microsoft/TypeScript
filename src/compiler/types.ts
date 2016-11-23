@@ -3205,8 +3205,12 @@ namespace ts {
         [option: string]: CompilerOptionsValue | undefined;
     }
 
-    export interface TypingOptions {
+    export interface TypeAcquisition {
+        /* @deprecated typingOptions.enableAutoDiscovery
+         * Use typeAcquisition.enable instead.
+         */
         enableAutoDiscovery?: boolean;
+        enable?: boolean;
         include?: string[];
         exclude?: string[];
         [option: string]: string[] | boolean | undefined;
@@ -3217,7 +3221,7 @@ namespace ts {
         projectRootPath: string;                        // The path to the project root directory
         safeListPath: string;                           // The path used to retrieve the safe list
         packageNameToTypingLocation: Map<string>;       // The map of package names to their cached typing locations
-        typingOptions: TypingOptions;                   // Used to customize the typing inference process
+        typeAcquisition: TypeAcquisition;               // Used to customize the type acquisition process
         compilerOptions: CompilerOptions;               // Used as a source for typing inference
         unresolvedImports: ReadonlyArray<string>;       // List of unresolved module ids from imports
     }
@@ -3282,7 +3286,7 @@ namespace ts {
     /** Either a parsed command line or a parsed tsconfig.json */
     export interface ParsedCommandLine {
         options: CompilerOptions;
-        typingOptions?: TypingOptions;
+        typeAcquisition?: TypeAcquisition;
         fileNames: string[];
         raw?: any;
         errors: Diagnostic[];

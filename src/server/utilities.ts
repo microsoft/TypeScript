@@ -46,12 +46,12 @@ namespace ts.server {
         }
     }
 
-    export function createInstallTypingsRequest(project: Project, typingOptions: TypingOptions, unresolvedImports: SortedReadonlyArray<string>, cachePath?: string): DiscoverTypings {
+    export function createInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, cachePath?: string): DiscoverTypings {
         return {
             projectName: project.getProjectName(),
             fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true),
             compilerOptions: project.getCompilerOptions(),
-            typingOptions,
+            typeAcquisition,
             unresolvedImports,
             projectRootPath: getProjectRootPath(project),
             cachePath,
@@ -171,7 +171,7 @@ namespace ts.server {
         files?: string[];
         wildcardDirectories?: Map<WatchDirectoryFlags>;
         compilerOptions?: CompilerOptions;
-        typingOptions?: TypingOptions;
+        typeAcquisition?: TypeAcquisition;
         compileOnSave?: boolean;
     }
 

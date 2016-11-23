@@ -150,7 +150,7 @@ namespace ts.server.typingsInstaller {
                 req.projectRootPath,
                 this.safeListPath,
                 this.packageNameToTypingLocation,
-                req.typingOptions,
+                req.typeAcquisition,
                 req.unresolvedImports);
 
             if (this.log.isEnabled()) {
@@ -391,7 +391,7 @@ namespace ts.server.typingsInstaller {
         private createSetTypings(request: DiscoverTypings, typings: string[]): SetTypings {
             return {
                 projectName: request.projectName,
-                typingOptions: request.typingOptions,
+                typeAcquisition: request.typeAcquisition,
                 compilerOptions: request.compilerOptions,
                 typings,
                 unresolvedImports: request.unresolvedImports,

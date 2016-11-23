@@ -312,7 +312,7 @@ namespace ts.server {
             return this.projectName;
         }
         abstract getProjectRootPath(): string | undefined;
-        abstract getTypingOptions(): TypingOptions;
+        abstract getTypeAcquisition(): TypeAcquisition;
 
         getSourceFile(path: Path) {
             if (!this.program) {
@@ -802,9 +802,9 @@ namespace ts.server {
             }
         }
 
-        getTypingOptions(): TypingOptions {
+        getTypeAcquisition(): TypeAcquisition {
             return {
-                enableAutoDiscovery: allRootFilesAreJsOrDts(this),
+                enable: allRootFilesAreJsOrDts(this),
                 include: [],
                 exclude: []
             };
@@ -812,7 +812,7 @@ namespace ts.server {
     }
 
     export class ConfiguredProject extends Project {
-        private typingOptions: TypingOptions;
+        private typeAcquisition: TypeAcquisition;
         private projectFileWatcher: FileWatcher;
         private directoryWatcher: FileWatcher;
         private directoriesWatchedForWildcards: Map<FileWatcher>;
@@ -844,12 +844,12 @@ namespace ts.server {
             this.projectErrors = projectErrors;
         }
 
-        setTypingOptions(newTypingOptions: TypingOptions): void {
-            this.typingOptions = newTypingOptions;
+        setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void {
+            this.typeAcquisition = newTypeAcquisition;
         }
 
-        getTypingOptions() {
-            return this.typingOptions;
+        getTypeAcquisition() {
+            return this.typeAcquisition;
         }
 
         watchConfigFile(callback: (project: ConfiguredProject) => void) {
@@ -939,7 +939,7 @@ namespace ts.server {
     }
 
     export class ExternalProject extends Project {
-        private typingOptions: TypingOptions;
+        private typeAcquisition: TypeAcquisition;
         constructor(externalProjectName: string,
             projectService: ProjectService,
             documentRegistry: ts.DocumentRegistry,
@@ -960,36 +960,36 @@ namespace ts.server {
             return getDirectoryPath(normalizeSlashes(this.getProjectName()));
         }
 
-        getTypingOptions() {
-            return this.typingOptions;
+        getTypeAcquisition() {
+            return this.typeAcquisition;
         }
 
         setProjectErrors(projectErrors: Diagnostic[]) {
             this.projectErrors = projectErrors;
         }
 
-        setTypingOptions(newTypingOptions: TypingOptions): void {
-            if (!newTypingOptions) {
+        setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void {
+            if (!newTypeAcquisition) {
                 // set default typings options
-                newTypingOptions = {
-                    enableAutoDiscovery: allRootFilesAreJsOrDts(this),
+                newTypeAcquisition = {
+                    enable: allRootFilesAreJsOrDts(this),
                     include: [],
                     exclude: []
                 };
             }
             else {
-                if (newTypingOptions.enableAutoDiscovery === undefined) {
+                if (newTypeAcquisition.enable === undefined) {
                     // if autoDiscovery was not specified by the caller - set it based on the content of the project
-                    newTypingOptions.enableAutoDiscovery = allRootFilesAreJsOrDts(this);
+                    newTypeAcquisition.enable = allRootFilesAreJsOrDts(this);
                 }
-                if (!newTypingOptions.include) {
-                    newTypingOptions.include = [];
+                if (!newTypeAcquisition.include) {
+                    newTypeAcquisition.include = [];
                 }
-                if (!newTypingOptions.exclude) {
-                    newTypingOptions.exclude = [];
+                if (!newTypeAcquisition.exclude) {
+                    newTypeAcquisition.exclude = [];
                 }
             }
-            this.typingOptions = newTypingOptions;
+            this.typeAcquisition = newTypeAcquisition;
         }
     }
 }
