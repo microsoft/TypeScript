@@ -2,19 +2,20 @@
 /// <reference path="..\..\compiler\commandLineParser.ts" />
 
 namespace ts {
+    type ExpectedResult = { typeAcquisition: TypeAcquisition, errors: Diagnostic[] };
     describe("convertTypeAcquisitionFromJson", () => {
-        function assertTypeAcquisition(json: any, configFileName: string, expectedResult: { typingOptions: TypingOptions, errors: Diagnostic[] }) {
+        function assertTypeAcquisition(json: any, configFileName: string, expectedResult: ExpectedResult) {
             assertTypeAcquisitionWithJson(json, configFileName, expectedResult);
             assertTypeAcquisitionWithJsonNode(json, configFileName, expectedResult);
         }
 
-        function assertTypeAcquisitionWithJson(json: any, configFileName: string, expectedResult: { typingOptions: TypingOptions, errors: Diagnostic[] }) {
-            const jsonOptions = json["typeAcquisition"] || json["typingOptions"];
-            const { options: actualTypeAcquisition, errors: actualErrors } = convertTypeAcquisitionFromJson(jsonOptions, "/apath/", configFileName);
+        function verifyAcquisition(actualTypeAcquisition: TypeAcquisition, expectedResult: ExpectedResult) {
             const parsedTypeAcquisition = JSON.stringify(actualTypeAcquisition);
             const expectedTypeAcquisition = JSON.stringify(expectedResult.typeAcquisition);
             assert.equal(parsedTypeAcquisition, expectedTypeAcquisition);
+        }
 
+        function verifyErrors(actualErrors: Diagnostic[], expectedResult: ExpectedResult, hasLocation?: boolean) {
             const expectedErrors = expectedResult.errors;
             assert.isTrue(expectedResult.errors.length === actualErrors.length, `Expected error: ${JSON.stringify(expectedResult.errors)}. Actual error: ${JSON.stringify(actualErrors)}.`);
             for (let i = 0; i < actualErrors.length; i++) {
@@ -22,32 +23,32 @@ namespace ts {
                 const expectedError = expectedErrors[i];
                 assert.equal(actualError.code, expectedError.code, `Expected error-code: ${JSON.stringify(expectedError.code)}. Actual error-code: ${JSON.stringify(actualError.code)}.`);
                 assert.equal(actualError.category, expectedError.category, `Expected error-category: ${JSON.stringify(expectedError.category)}. Actual error-category: ${JSON.stringify(actualError.category)}.`);
+                if (hasLocation) {
+                    assert(actualError.file);
+                    assert(actualError.start);
+                    assert(actualError.length);
+                }
             }
         }
 
-        function assertTypeAcquisitionWithJsonNode(json: any, configFileName: string, expectedResult: { typingOptions: TypingOptions, errors: Diagnostic[] }) {
+        function assertTypeAcquisitionWithJson(json: any, configFileName: string, expectedResult: ExpectedResult) {
+            const jsonOptions = json["typeAcquisition"] || json["typingOptions"];
+            const { options: actualTypeAcquisition, errors: actualErrors } = convertTypeAcquisitionFromJson(jsonOptions, "/apath/", configFileName);
+            verifyAcquisition(actualTypeAcquisition, expectedResult);
+            verifyErrors(actualErrors, expectedResult);
+        }
+
+        function assertTypeAcquisitionWithJsonNode(json: any, configFileName: string, expectedResult: ExpectedResult) {
             const fileText = JSON.stringify(json);
             const { node, errors } = parseJsonText(configFileName, fileText);
             assert(!errors.length);
             assert(!!node);
             const host: ParseConfigHost = new Utils.MockParseConfigHost("/apath/", true, []);
             const { typeAcquisition: actualTypeAcquisition, errors: actualParseErrors } = parseJsonNodeConfigFileContent(node, host, "/apath/", /*existingOptions*/ undefined, configFileName);
-            const parsedTypeAcquisition = JSON.stringify(actualTypeAcquisition);
-            const expectedTypeAcquisition = JSON.stringify(expectedResult.actualTypeAcquisition);
-            assert.equal(parsedTypeAcquisition, expectedTypeAcquisition);
+            verifyAcquisition(actualTypeAcquisition, expectedResult);
 
             const actualErrors = filter(actualParseErrors, error => error.code !== Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code);
-            const expectedErrors = expectedResult.errors;
-            assert.isTrue(expectedResult.errors.length === actualErrors.length, `Expected error: ${JSON.stringify(expectedResult.errors)}. Actual error: ${JSON.stringify(actualErrors)}.`);
-            for (let i = 0; i < actualErrors.length; i++) {
-                const actualError = actualErrors[i];
-                const expectedError = expectedErrors[i];
-                assert.equal(actualError.code, expectedError.code, `Expected error-code: ${JSON.stringify(expectedError.code)}. Actual error-code: ${JSON.stringify(actualError.code)}.`);
-                assert.equal(actualError.category, expectedError.category, `Expected error-category: ${JSON.stringify(expectedError.category)}. Actual error-category: ${JSON.stringify(actualError.category)}.`);
-                assert(actualError.file);
-                assert(actualError.start);
-                assert(actualError.length);
-            }
+            verifyErrors(actualErrors, expectedResult, /*hasLocation*/ true);
         }
 
         // tsconfig.json

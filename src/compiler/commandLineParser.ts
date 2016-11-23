@@ -759,6 +759,12 @@ namespace ts {
             extraKeyDiagnosticMessage: Diagnostics.Unknown_type_acquisition_option_0
         },
         {
+            name: "typeAcquisition",
+            type: "object",
+            optionDeclarations: typeAcquisitionDeclarations,
+            extraKeyDiagnosticMessage: Diagnostics.Unknown_type_acquisition_option_0
+        },
+        {
             name: "extends",
             type: "string"
         },
@@ -1121,11 +1127,14 @@ namespace ts {
         }
         else {
             options = getDefaultCompilerOptions(configFileName);
-            typeAcquisition = getDefaultTypeAcquisition(configFileName);
+            let typingOptionstypeAcquisition: TypeAcquisition;
             const optionsIterator: JsonConversionNotifier = {
                 onSetOptionKeyValue(optionsObject: string, option: CommandLineOption, value: CompilerOptionsValue) {
-                    Debug.assert(optionsObject === "compilerOptions" || optionsObject === "typingOptions");
-                    const currentOption = optionsObject === "compilerOptions" ? options : typingOptions;
+                    Debug.assert(optionsObject === "compilerOptions" || optionsObject === "typeAcquisition" || optionsObject === "typingOptions");
+                    const currentOption = optionsObject === "compilerOptions" ? options :
+                        optionsObject === "typeAcquisition" ? (typeAcquisition || (typeAcquisition = getDefaultTypeAcquisition(configFileName)) ) :
+                            (typingOptionstypeAcquisition || (typingOptionstypeAcquisition = getDefaultTypeAcquisition(configFileName)));
+
                     currentOption[option.name] = normalizeOptionValue(option, basePath, value);
                 },
                 onRootKeyValue(key: string, propertyName: PropertyName, value: CompilerOptionsValue, node: Expression) {
@@ -1156,6 +1165,20 @@ namespace ts {
                 }
             };
             json = convertToJsonWorker(jsonNode, errors, getTsconfigRootOptionsMap(), optionsIterator);
+            if (!typeAcquisition) {
+                if (typingOptionstypeAcquisition) {
+                    typeAcquisition = (typingOptionstypeAcquisition.enableAutoDiscovery !== undefined) ?
+                        {
+                            enable: typingOptionstypeAcquisition.enableAutoDiscovery,
+                            include: typingOptionstypeAcquisition.include,
+                            exclude: typingOptionstypeAcquisition.exclude
+                        } :
+                        typingOptionstypeAcquisition;
+                }
+                else {
+                    typeAcquisition = getDefaultTypeAcquisition(configFileName);
+                }
+            }
         }
 
         if (json["extends"]) {
