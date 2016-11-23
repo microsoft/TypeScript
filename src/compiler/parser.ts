@@ -926,6 +926,10 @@ namespace ts {
             return currentToken = scanner.reScanTemplateToken();
         }
 
+        function reScanTildeToken(): SyntaxKind {
+            return currentToken = scanner.reScanTildeToken();
+        }
+
         function scanJsxIdentifier(): SyntaxKind {
             return currentToken = scanner.scanJsxIdentifier();
         }
@@ -4251,15 +4255,8 @@ namespace ts {
                     }
                     return undefined;
                 case SyntaxKind.TildeToken:
-                    nextToken();
-                    if (token() === SyntaxKind.PlusToken) {
-                        nextToken();
-                        operator = SyntaxKind.TildePlusToken;
-                    }
-                    else if (token() === SyntaxKind.MinusToken) {
-                        nextToken();
-                        operator = SyntaxKind.TildeMinusToken;
-                    }
+                    operator = reScanTildeToken();
+                    nextToken()
                     if (token() === SyntaxKind.CloseParenToken) {
                         nextToken();
                         const node = <OperatorExpression>createNode(SyntaxKind.OperatorExpression, fullStart);

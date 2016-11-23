@@ -26,6 +26,7 @@ namespace ts {
         reScanGreaterToken(): SyntaxKind;
         reScanSlashToken(): SyntaxKind;
         reScanTemplateToken(): SyntaxKind;
+        reScanTildeToken(): SyntaxKind;
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
         reScanJsxToken(): SyntaxKind;
@@ -821,6 +822,7 @@ namespace ts {
             isUnterminated: () => tokenIsUnterminated,
             reScanGreaterToken,
             reScanSlashToken,
+            reScanTildeToken,
             reScanTemplateToken,
             scanJsxIdentifier,
             scanJsxAttributeValue,
@@ -1642,6 +1644,22 @@ namespace ts {
                 if (text.charCodeAt(pos) === CharacterCodes.equals) {
                     pos++;
                     return token = SyntaxKind.GreaterThanEqualsToken;
+                }
+            }
+            return token;
+        }
+
+        function reScanTildeToken(): SyntaxKind {
+            if (token === SyntaxKind.TildeToken) {
+                if (text.charCodeAt(pos) === CharacterCodes.plus) {
+                    if (text.charCodeAt(pos + 1) === CharacterCodes.closeParen) {
+                        return pos += 1, token = SyntaxKind.TildePlusToken;
+                    }
+                }
+                else if (text.charCodeAt(pos) === CharacterCodes.minus) {
+                    if (text.charCodeAt(pos + 1) === CharacterCodes.closeParen) {
+                        return pos += 1, token = SyntaxKind.TildeMinusToken;
+                    }
                 }
             }
             return token;
