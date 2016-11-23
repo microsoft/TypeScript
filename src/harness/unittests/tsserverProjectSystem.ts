@@ -90,8 +90,8 @@ namespace ts.projectSystem {
             this.projectService.updateTypingsForProject(response);
         }
 
-        enqueueInstallTypingsRequest(project: server.Project, typingOptions: TypingOptions, unresolvedImports: server.SortedReadonlyArray<string>) {
-            const request = server.createInstallTypingsRequest(project, typingOptions, unresolvedImports, this.globalTypingsCacheLocation);
+        enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: server.SortedReadonlyArray<string>) {
+            const request = server.createInstallTypingsRequest(project, typeAcquisition, unresolvedImports, this.globalTypingsCacheLocation);
             this.install(request);
         }
 
@@ -1726,8 +1726,8 @@ namespace ts.projectSystem {
                 options: {}
             });
             projectService.checkNumberOfProjects({ externalProjects: 1 });
-            const typingOptions = projectService.externalProjects[0].getTypingOptions();
-            assert.isTrue(typingOptions.enableAutoDiscovery, "Typing autodiscovery should be enabled");
+            const typeAcquisition = projectService.externalProjects[0].getTypeAcquisition();
+            assert.isTrue(typeAcquisition.enable, "Typine acquisition should be enabled");
         });
     });
 
@@ -2451,6 +2451,43 @@ namespace ts.projectSystem {
             const session = createSession(host, /*typingsInstaller*/ undefined, serverEventManager.handler);
             openFilesForSession([file], session);
             serverEventManager.checkEventCountOfType("configFileDiag", 1);
+        });
+
+        it("are generated when the config file changes", () => {
+            const serverEventManager = new TestServerEventManager();
+            const file = {
+                path: "/a/b/app.ts",
+                content: "let x = 10"
+            };
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {}
+                }`
+            };
+
+            const host = createServerHost([file, configFile]);
+            const session = createSession(host, /*typingsInstaller*/ undefined, serverEventManager.handler);
+            openFilesForSession([file], session);
+            serverEventManager.checkEventCountOfType("configFileDiag", 1);
+
+            configFile.content = `{
+                "compilerOptions": {
+                    "haha": 123
+                }
+            }`;
+            host.reloadFS([file, configFile]);
+            host.triggerFileWatcherCallback(configFile.path);
+            host.runQueuedTimeoutCallbacks();
+            serverEventManager.checkEventCountOfType("configFileDiag", 2);
+
+            configFile.content = `{
+                "compilerOptions": {}
+            }`;
+            host.reloadFS([file, configFile]);
+            host.triggerFileWatcherCallback(configFile.path);
+            host.runQueuedTimeoutCallbacks();
+            serverEventManager.checkEventCountOfType("configFileDiag", 3);
         });
     });
 

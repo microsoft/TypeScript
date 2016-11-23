@@ -26,13 +26,9 @@ type T37 = { [P in keyof symbol]: void };
 type T38 = { [P in keyof never]: void };
 
 type T40 = { [P in string]: void };
-type T41 = { [P in number]: void };
-type T42 = { [P in string | number]: void };
-type T43 = { [P in "a" | "b" | 0 | 1]: void };
+type T43 = { [P in "a" | "b"]: void };
 type T44 = { [P in "a" | "b" | "0" | "1"]: void };
-type T45 = { [P in "a" | "b" | "0" | "1" | 0 | 1]: void };
-type T46 = { [P in number | "a" | "b" | 0 | 1]: void };
-type T47 = { [P in string | number | "a" | "b" | 0 | 1]: void };
+type T47 = { [P in string | "a" | "b" | "0" | "1"]: void };
 
 declare function f1<T1>(): { [P in keyof T1]: void };
 declare function f2<T1 extends string>(): { [P in keyof T1]: void };
@@ -114,26 +110,14 @@ declare type T38 = {
 declare type T40 = {
     [P in string]: void;
 };
-declare type T41 = {
-    [P in number]: void;
-};
-declare type T42 = {
-    [P in string | number]: void;
-};
 declare type T43 = {
-    [P in "a" | "b" | 0 | 1]: void;
+    [P in "a" | "b"]: void;
 };
 declare type T44 = {
     [P in "a" | "b" | "0" | "1"]: void;
 };
-declare type T45 = {
-    [P in "a" | "b" | "0" | "1" | 0 | 1]: void;
-};
-declare type T46 = {
-    [P in number | "a" | "b" | 0 | 1]: void;
-};
 declare type T47 = {
-    [P in string | number | "a" | "b" | 0 | 1]: void;
+    [P in string | "a" | "b" | "0" | "1"]: void;
 };
 declare function f1<T1>(): {
     [P in keyof T1]: void;
@@ -146,7 +130,6 @@ declare function f3<T1 extends number>(): {
 };
 declare let x1: {};
 declare let x2: {
-    [x: number]: void;
     toString: void;
     charAt: void;
     charCodeAt: void;
