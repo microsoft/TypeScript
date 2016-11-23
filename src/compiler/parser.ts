@@ -164,8 +164,8 @@ namespace ts {
             case SyntaxKind.BindExpression:
                 return visitNode(cbNode, (<BindExpression>node).expression);
             case SyntaxKind.BindToExpression:
-                return visitNode(cbNode, (<BindToExpression>node).expression) ||
-                    visitNode(cbNode, (<BindToExpression>node).targetExpression);
+                return visitNode(cbNode, (<BindToExpression>node).targetExpression) ||
+                    visitNode(cbNode, (<BindToExpression>node).expression);
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
                 return visitNode(cbNode, (<CallExpression>node).expression) ||
@@ -4041,8 +4041,8 @@ namespace ts {
 
                 if (parseOptional(SyntaxKind.ColonColonToken)) {
                     const bindExpression = <BindToExpression>createNode(SyntaxKind.BindToExpression, expression.pos);
-                    bindExpression.expression = expression;
-                    bindExpression.targetExpression = parseMemberExpressionOrHigher();
+                    bindExpression.targetExpression = expression;
+                    bindExpression.expression = parseMemberExpressionOrHigher();
                     expression = finishNode(bindExpression);
                     continue;
                 }

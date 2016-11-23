@@ -573,11 +573,11 @@ namespace ts {
             return createComma(
                 createAssignment(
                     thisArg,
-                    visitNode(node.expression, visitor, isExpression),
-                    node.expression
+                    visitNode(node.targetExpression, visitor, isExpression),
+                    node.targetExpression
                 ),
                 createFunctionBind(
-                    visitNode(node.targetExpression, visitor, isLeftHandSideExpression),
+                    visitNode(node.expression, visitor, isLeftHandSideExpression),
                     thisArg,
                     [],
                     node

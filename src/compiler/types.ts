@@ -1422,8 +1422,8 @@ namespace ts {
 
     export interface BindToExpression extends MemberExpression {
         kind: SyntaxKind.BindToExpression;
-        expression: LeftHandSideExpression;
-        targetExpression: MemberExpression;
+        targetExpression: LeftHandSideExpression; // target of binding (`a` in `a::x`)
+        expression: MemberExpression; // expression to bind (`x` in `a::x`)
     }
 
     export interface BindExpression extends PrimaryExpression {

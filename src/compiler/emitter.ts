@@ -1084,9 +1084,9 @@ namespace ts {
         }
 
         function emitBindToExpression(node: BindToExpression) {
-            emitExpression(node.expression);
-            write("::");
             emitExpression(node.targetExpression);
+            write("::");
+            emitExpression(node.expression);
         }
 
         function emitBindExpression(node: BindExpression) {
