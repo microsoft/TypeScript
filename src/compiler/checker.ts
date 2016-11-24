@@ -18756,10 +18756,11 @@ namespace ts {
             if (container.kind === SyntaxKind.ModuleDeclaration && !isAmbientModule(container)) {
                 if (node.isExportEquals) {
                     error(node, Diagnostics.An_export_assignment_cannot_be_used_in_a_namespace);
-                } else {
+                }
+                else {
                     error(node, Diagnostics.A_default_export_can_only_be_used_in_an_ECMAScript_style_module);
                 }
-                
+
                 return;
             }
             // Grammar checking
