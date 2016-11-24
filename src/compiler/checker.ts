@@ -14870,7 +14870,7 @@ namespace ts {
                     }
                     contextualType = apparentType;
                 }
-                return maybeTypeOfKind(contextualType, TypeFlags.Literal);
+                return maybeTypeOfKind(contextualType, (TypeFlags.Literal | TypeFlags.Index));
             }
             return false;
         }
