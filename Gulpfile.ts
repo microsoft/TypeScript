@@ -145,8 +145,8 @@ const librarySourceMap = [
     { target: "lib.dom.iterable.d.ts", sources: ["header.d.ts", "dom.iterable.d.ts"] },
     { target: "lib.webworker.d.ts", sources: ["header.d.ts", "webworker.generated.d.ts"] },
     { target: "lib.scripthost.d.ts", sources: ["header.d.ts", "scripthost.d.ts"] },
-    { target: "lib.streams.d.ts", sources: ["header.d.ts", "streams.d.ts"]},
-    { target: "lib.fetch.d.ts", sources: ["header.d.ts", "fetch.d.ts"]},
+    { target: "lib.streams.d.ts", sources: ["header.d.ts", "streams.d.ts"] },
+    { target: "lib.fetch.d.ts", sources: ["header.d.ts", "fetch.d.ts"] },
 
     // JavaScript library
     { target: "lib.es5.d.ts", sources: ["header.d.ts", "es5.d.ts"] },

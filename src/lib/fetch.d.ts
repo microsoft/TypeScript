@@ -26,7 +26,7 @@ declare class Headers {
     [Symbol.iterator](): IterableIterator<[string, string]>;
 }
 
-declare type BodyInit = Blob | ArrayBufferView | ArrayBuffer | FormData  | URLSearchParams | string;
+declare type BodyInit = Blob | ArrayBufferView | ArrayBuffer | FormData | URLSearchParams | string;
 interface Body {
     readonly bodyUsed: boolean;
     arrayBuffer(): Promise<ArrayBuffer>;
@@ -58,7 +58,7 @@ declare class Request {
     clone(): Request;
 }
 
-interface Request extends Body {}
+interface Request extends Body { }
 interface RequestInit {
     method?: string;
     headers?: HeadersInit;
@@ -100,7 +100,7 @@ declare class Response {
 
     clone(): Response;
 }
-interface Response extends Body {}
+interface Response extends Body { }
 interface ResponseInit {
     status?: number;
     statusText?: string;
