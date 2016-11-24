@@ -28,11 +28,11 @@ namespace ts {
 
         function assertCompilerOptionsWithJsonNode(json: any, configFileName: string, expectedResult: { compilerOptions: CompilerOptions, errors: Diagnostic[] }) {
             const fileText = JSON.stringify(json);
-            const { node, errors } = parseJsonText(configFileName, fileText);
-            assert(!errors.length);
-            assert(!!node);
+            const result = parseJsonText(configFileName, fileText);
+            assert(!result.parseDiagnostics.length);
+            assert(!!result.endOfFileToken);
             const host: ParseConfigHost = new Utils.MockParseConfigHost("/apath/", true, []);
-            const { options: actualCompilerOptions, errors: actualParseErrors } = parseJsonNodeConfigFileContent(node, host, "/apath/", /*existingOptions*/ undefined, configFileName);
+            const { options: actualCompilerOptions, errors: actualParseErrors } = parseJsonSourceFileConfigFileContent(result, host, "/apath/", /*existingOptions*/ undefined, configFileName);
             expectedResult.compilerOptions["configFilePath"] = configFileName;
 
             const parsedCompilerOptions = JSON.stringify(actualCompilerOptions);

@@ -98,8 +98,13 @@ namespace ts {
     function validateMatches(expected: ts.ParsedCommandLine, json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[]) {
         {
             const jsonText = JSON.stringify(json);
-            const {node} = parseJsonText(caseInsensitiveTsconfigPath, jsonText);
-            const actual = ts.parseJsonNodeConfigFileContent(node, host, basePath, existingOptions, configFileName, resolutionStack);
+            const result = parseJsonText(caseInsensitiveTsconfigPath, jsonText);
+            const actual = ts.parseJsonSourceFileConfigFileContent(result, host, basePath, existingOptions, configFileName, resolutionStack);
+            for (const error of expected.errors) {
+                if (error.file) {
+                    error.file = result;
+                }
+            }
             assertParsed(actual, expected);
         }
         {

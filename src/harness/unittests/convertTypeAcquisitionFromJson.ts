@@ -40,11 +40,11 @@ namespace ts {
 
         function assertTypeAcquisitionWithJsonNode(json: any, configFileName: string, expectedResult: ExpectedResult) {
             const fileText = JSON.stringify(json);
-            const { node, errors } = parseJsonText(configFileName, fileText);
-            assert(!errors.length);
-            assert(!!node);
+            const result = parseJsonText(configFileName, fileText);
+            assert(!result.parseDiagnostics.length);
+            assert(!!result.endOfFileToken);
             const host: ParseConfigHost = new Utils.MockParseConfigHost("/apath/", true, []);
-            const { typeAcquisition: actualTypeAcquisition, errors: actualParseErrors } = parseJsonNodeConfigFileContent(node, host, "/apath/", /*existingOptions*/ undefined, configFileName);
+            const { typeAcquisition: actualTypeAcquisition, errors: actualParseErrors } = parseJsonSourceFileConfigFileContent(result, host, "/apath/", /*existingOptions*/ undefined, configFileName);
             verifyAcquisition(actualTypeAcquisition, expectedResult);
 
             const actualErrors = filter(actualParseErrors, error => error.code !== Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code);

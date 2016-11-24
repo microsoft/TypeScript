@@ -462,7 +462,7 @@ namespace ts {
     ];
 
     /* @internal */
-    export let typeAcquisitionDeclarations: CommandLineOption[] = [
+    export const typeAcquisitionDeclarations: CommandLineOption[] = [
         {
             /* @deprecated typingOptions.enableAutoDiscovery
              * Use typeAcquisition.enable instead.
@@ -723,10 +723,10 @@ namespace ts {
       * @param jsonText The text of the config file
       */
     export function parseConfigFileTextToJson(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
-        const { node, errors } = parseJsonText(fileName, jsonText);
+        const jsonSourceFile = parseJsonText(fileName, jsonText);
         return {
-            config: convertToJson(node, errors),
-            error: errors.length ? errors[0] : undefined
+            config: convertToJson(jsonSourceFile, jsonSourceFile.parseDiagnostics),
+            error: jsonSourceFile.parseDiagnostics.length ? jsonSourceFile.parseDiagnostics[0] : undefined
         };
     }
 
@@ -734,13 +734,13 @@ namespace ts {
       * Read tsconfig.json file
       * @param fileName The path to the config file
       */
-    export function readConfigFileToJsonNode(fileName: string, readFile: (path: string) => string): ParsedNodeResults<JsonNode> {
+    export function readConfigFileToJsonSourceFile(fileName: string, readFile: (path: string) => string): JsonSourceFile {
         let text = "";
         try {
             text = readFile(fileName);
         }
         catch (e) {
-            return { errors: [createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, e.message)] };
+            return <JsonSourceFile>{ parseDiagnostics: [createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, e.message)] };
         }
         return parseJsonText(fileName, text);
     }
@@ -819,8 +819,8 @@ namespace ts {
      * @param jsonNode
      * @param errors
      */
-    export function convertToJson(jsonNode: JsonNode, errors: Diagnostic[]): any {
-        return convertToJsonWorker(jsonNode, errors);
+    export function convertToJson(sourceFile: JsonSourceFile, errors: Diagnostic[]): any {
+        return convertToJsonWorker(sourceFile, errors);
     }
 
     /**
@@ -828,17 +828,15 @@ namespace ts {
      * @param jsonNode
      * @param errors
      */
-    function convertToJsonWorker(jsonNode: JsonNode, errors: Diagnostic[], knownRootOptions?: Map<CommandLineOption>, optionsIterator?: JsonConversionNotifier): any {
-        if (!jsonNode) {
+    function convertToJsonWorker(sourceFile: JsonSourceFile, errors: Diagnostic[], knownRootOptions?: Map<CommandLineOption>, optionsIterator?: JsonConversionNotifier): any {
+        if (!sourceFile.jsonObject) {
+            if (sourceFile.endOfFileToken) {
+                return {};
+            }
             return undefined;
         }
 
-        if (jsonNode.kind === SyntaxKind.EndOfFileToken) {
-            return {};
-        }
-
-        const sourceFile = <SourceFile>jsonNode.parent;
-        return convertObjectLiteralExpressionToJson(jsonNode, knownRootOptions);
+        return convertObjectLiteralExpressionToJson(sourceFile.jsonObject, knownRootOptions);
 
         function convertObjectLiteralExpressionToJson(node: ObjectLiteralExpression, options?: Map<CommandLineOption>, extraKeyDiagnosticMessage?: DiagnosticMessage, optionsObject?: string): any {
             const result: any = {};
@@ -1076,7 +1074,7 @@ namespace ts {
       *    file to. e.g. outDir
       */
     export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[]): ParsedCommandLine {
-        return parseJsonConfigFileContentWorker(json, /*jsonNode*/ undefined, host, basePath, existingOptions, configFileName, resolutionStack);
+        return parseJsonConfigFileContentWorker(json, /*sourceFile*/ undefined, host, basePath, existingOptions, configFileName, resolutionStack);
     }
 
     /**
@@ -1086,8 +1084,8 @@ namespace ts {
       * @param basePath A root directory to resolve relative path entries in the config
       *    file to. e.g. outDir
       */
-    export function parseJsonNodeConfigFileContent(jsonNode: JsonNode, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[]): ParsedCommandLine {
-        return parseJsonConfigFileContentWorker(/*json*/ undefined, jsonNode, host, basePath, existingOptions, configFileName, resolutionStack);
+    export function parseJsonSourceFileConfigFileContent(sourceFile: JsonSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[]): ParsedCommandLine {
+        return parseJsonConfigFileContentWorker(/*json*/ undefined, sourceFile, host, basePath, existingOptions, configFileName, resolutionStack);
     }
 
     /**
@@ -1097,8 +1095,8 @@ namespace ts {
       * @param basePath A root directory to resolve relative path entries in the config
       *    file to. e.g. outDir
       */
-    function parseJsonConfigFileContentWorker(json: any, jsonNode: JsonNode, host: ParseConfigHost, basePath: string, existingOptions: CompilerOptions = {}, configFileName?: string, resolutionStack: Path[] = []): ParsedCommandLine {
-        Debug.assert((json === undefined && jsonNode !== undefined) || (json !== undefined && jsonNode === undefined));
+    function parseJsonConfigFileContentWorker(json: any, sourceFile: JsonSourceFile, host: ParseConfigHost, basePath: string, existingOptions: CompilerOptions = {}, configFileName?: string, resolutionStack: Path[] = []): ParsedCommandLine {
+        Debug.assert((json === undefined && sourceFile !== undefined) || (json !== undefined && sourceFile === undefined));
         const errors: Diagnostic[] = [];
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
         const resolvedPath = toPath(configFileName || "", basePath, getCanonicalFileName);
@@ -1107,7 +1105,7 @@ namespace ts {
                 options: {},
                 fileNames: [],
                 typeAcquisition: {},
-                raw: json || convertToJson(jsonNode, errors),
+                raw: json || convertToJson(sourceFile, errors),
                 errors: errors.concat(createCompilerDiagnostic(Diagnostics.Circularity_detected_while_resolving_configuration_Colon_0, [...resolutionStack, resolvedPath].join(" -> "))),
                 wildcardDirectories: {}
             };
@@ -1141,7 +1139,7 @@ namespace ts {
                     switch (key) {
                         case "extends":
                             const extendsDiagnostic = getExtendsConfigPath(<string>value, (message, arg0) =>
-                                createDiagnosticForNodeInSourceFile(<SourceFile>jsonNode.parent, node, message, arg0));
+                                createDiagnosticForNodeInSourceFile(sourceFile, node, message, arg0));
                             if ((<Diagnostic>extendsDiagnostic).messageText) {
                                 errors.push(<Diagnostic>extendsDiagnostic);
                                 hasExtendsError = true;
@@ -1151,11 +1149,11 @@ namespace ts {
                             }
                             return;
                         case "excludes":
-                            errors.push(createDiagnosticForNodeInSourceFile(<SourceFile>jsonNode.parent, propertyName, Diagnostics.Unknown_option_excludes_Did_you_mean_exclude));
+                            errors.push(createDiagnosticForNodeInSourceFile(sourceFile, propertyName, Diagnostics.Unknown_option_excludes_Did_you_mean_exclude));
                             return;
                         case "files":
                             if ((<string[]>value).length === 0) {
-                                errors.push(createDiagnosticForNodeInSourceFile(<SourceFile>jsonNode.parent, node, Diagnostics.The_files_list_in_config_file_0_is_empty, configFileName || "tsconfig.json"));
+                                errors.push(createDiagnosticForNodeInSourceFile(sourceFile, node, Diagnostics.The_files_list_in_config_file_0_is_empty, configFileName || "tsconfig.json"));
                             }
                             return;
                         case "compileOnSave":
@@ -1164,7 +1162,7 @@ namespace ts {
                     }
                 }
             };
-            json = convertToJsonWorker(jsonNode, errors, getTsconfigRootOptionsMap(), optionsIterator);
+            json = convertToJsonWorker(sourceFile, errors, getTsconfigRootOptionsMap(), optionsIterator);
             if (!typeAcquisition) {
                 if (typingOptionstypeAcquisition) {
                     typeAcquisition = (typingOptionstypeAcquisition.enableAutoDiscovery !== undefined) ?
@@ -1244,16 +1242,16 @@ namespace ts {
                 extendedConfigPath = `${extendedConfigPath}.json` as Path;
             }
 
-            const extendedResult = readConfigFileToJsonNode(extendedConfigPath, path => host.readFile(path));
-            if (extendedResult.errors.length) {
-                errors.push(...extendedResult.errors);
+            const extendedResult = readConfigFileToJsonSourceFile(extendedConfigPath, path => host.readFile(path));
+            if (extendedResult.parseDiagnostics.length) {
+                errors.push(...extendedResult.parseDiagnostics);
                 return;
             }
             const extendedDirname = getDirectoryPath(extendedConfigPath);
             const relativeDifference = convertToRelativePath(extendedDirname, basePath, getCanonicalFileName);
             const updatePath: (path: string) => string = path => isRootedDiskPath(path) ? path : combinePaths(relativeDifference, path);
             // Merge configs (copy the resolution stack so it is never reused between branches in potential diamond-problem scenarios)
-            const result = parseJsonNodeConfigFileContent(extendedResult.node, host, extendedDirname, /*existingOptions*/undefined, getBaseFileName(extendedConfigPath), resolutionStack.concat([resolvedPath]));
+            const result = parseJsonSourceFileConfigFileContent(extendedResult, host, extendedDirname, /*existingOptions*/undefined, getBaseFileName(extendedConfigPath), resolutionStack.concat([resolvedPath]));
             errors.push(...result.errors);
             const [include, exclude, files] = map(["include", "exclude", "files"], key => {
                 if (!json[key] && result.raw[key]) {
@@ -1313,7 +1311,7 @@ namespace ts {
                 includeSpecs = ["**/*"];
             }
 
-            const result = matchFileNames(fileNames, includeSpecs, excludeSpecs, basePath, options, host, errors, jsonNode);
+            const result = matchFileNames(fileNames, includeSpecs, excludeSpecs, basePath, options, host, errors, sourceFile);
 
             if (result.fileNames.length === 0 && !hasProperty(json, "files") && resolutionStack.length === 0) {
                 errors.push(
@@ -1328,7 +1326,7 @@ namespace ts {
         }
 
         function createCompilerDiagnosticForJson(message: DiagnosticMessage, arg0?: string, arg1?: string) {
-            if (!jsonNode) {
+            if (!sourceFile) {
                 errors.push(createCompilerDiagnostic(message, arg0, arg1));
             }
         }
@@ -1548,7 +1546,7 @@ namespace ts {
      * @param host The host used to resolve files and directories.
      * @param errors An array for diagnostic reporting.
      */
-    function matchFileNames(fileNames: string[], include: string[], exclude: string[], basePath: string, options: CompilerOptions, host: ParseConfigHost, errors: Diagnostic[], jsonNode: JsonNode): ExpandResult {
+    function matchFileNames(fileNames: string[], include: string[], exclude: string[], basePath: string, options: CompilerOptions, host: ParseConfigHost, errors: Diagnostic[], jsonSourceFile: JsonSourceFile): ExpandResult {
         basePath = normalizePath(basePath);
 
         // The exclude spec list is converted into a regular expression, which allows us to quickly
@@ -1567,11 +1565,11 @@ namespace ts {
         const wildcardFileMap = createMap<string>();
 
         if (include) {
-            include = validateSpecs(include, errors, /*allowTrailingRecursion*/ false, jsonNode, "include");
+            include = validateSpecs(include, errors, /*allowTrailingRecursion*/ false, jsonSourceFile, "include");
         }
 
         if (exclude) {
-            exclude = validateSpecs(exclude, errors, /*allowTrailingRecursion*/ true, jsonNode, "exclude");
+            exclude = validateSpecs(exclude, errors, /*allowTrailingRecursion*/ true, jsonSourceFile, "exclude");
         }
 
         // Wildcard directories (provided as part of a wildcard path) are stored in a
@@ -1627,7 +1625,7 @@ namespace ts {
         };
     }
 
-    function validateSpecs(specs: string[], errors: Diagnostic[], allowTrailingRecursion: boolean, jsonNode: JsonNode, specKey: string) {
+    function validateSpecs(specs: string[], errors: Diagnostic[], allowTrailingRecursion: boolean, jsonSourceFile: JsonSourceFile, specKey: string) {
         const validSpecs: string[] = [];
         for (const spec of specs) {
             if (!allowTrailingRecursion && invalidTrailingRecursionPattern.test(spec)) {
@@ -1647,13 +1645,13 @@ namespace ts {
         return validSpecs;
 
         function createDiagnostic(message: DiagnosticMessage, spec: string): Diagnostic {
-            if (jsonNode && jsonNode.kind === SyntaxKind.ObjectLiteralExpression) {
-                for (const property of jsonNode.properties) {
+            if (jsonSourceFile && jsonSourceFile.jsonObject) {
+                for (const property of jsonSourceFile.jsonObject.properties) {
                     if (property.kind === SyntaxKind.PropertyAssignment && getTextOfPropertyName(property.name) === specKey) {
                         const specsNode = <ArrayLiteralExpression>property.initializer;
                         for (const element of specsNode.elements) {
                             if (element.kind === SyntaxKind.StringLiteral && (<StringLiteral>element).text === spec) {
-                                return createDiagnosticForNodeInSourceFile(<SourceFile>jsonNode.parent, element, message, spec);
+                                return createDiagnosticForNodeInSourceFile(jsonSourceFile, element, message, spec);
                             }
                         }
                     }

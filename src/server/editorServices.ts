@@ -790,18 +790,18 @@ namespace ts.server {
             return findProjectByName(projectFileName, this.externalProjects);
         }
 
-        private getDefaultParsedJsonNode(): EndOfFileToken {
-            return <EndOfFileToken>{ kind: SyntaxKind.EndOfFileToken };
-        }
-
         private convertConfigFileContentToProjectOptions(configFilename: string): ConfigFileConversionResult {
             configFilename = normalizePath(configFilename);
 
             const configFileContent = this.host.readFile(configFilename);
 
-            const { node = this.getDefaultParsedJsonNode(), errors } = parseJsonText(configFilename, configFileContent);
-            const parsedCommandLine = parseJsonNodeConfigFileContent(
-                node,
+            const result = parseJsonText(configFilename, configFileContent);
+            if (!result.endOfFileToken) {
+                result.endOfFileToken = <EndOfFileToken>{ kind: SyntaxKind.EndOfFileToken };
+            }
+            const errors = result.parseDiagnostics;
+            const parsedCommandLine = parseJsonSourceFileConfigFileContent(
+                result,
                 this.host,
                 getDirectoryPath(configFilename),
                 /*existingOptions*/ {},

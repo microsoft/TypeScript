@@ -23,7 +23,7 @@ namespace ts {
             }
             {
                 const parsed = ts.parseJsonText("/apath/tsconfig.json", jsonText);
-                const parsedCommand = ts.parseJsonNodeConfigFileContent(parsed.node, ts.sys, "tests/cases/unittests");
+                const parsedCommand = ts.parseJsonSourceFileConfigFileContent(parsed, ts.sys, "tests/cases/unittests");
                 assert.isTrue(parsedCommand.errors && parsedCommand.errors.length === 1 &&
                     parsedCommand.errors[0].code === ts.Diagnostics.Unknown_option_excludes_Did_you_mean_exclude.code);
             }
@@ -38,7 +38,7 @@ namespace ts {
         function getParsedCommandJsonNode(jsonText: string, configFileName: string, basePath: string, allFileList: string[]) {
             const parsed = ts.parseJsonText(configFileName, jsonText);
             const host: ParseConfigHost = new Utils.MockParseConfigHost(basePath, true, allFileList);
-            return ts.parseJsonNodeConfigFileContent(parsed.node, host, basePath, /*existingOptions*/ undefined, configFileName);
+            return ts.parseJsonSourceFileConfigFileContent(parsed, host, basePath, /*existingOptions*/ undefined, configFileName);
         }
 
         function assertParseFileList(jsonText: string, configFileName: string, basePath: string, allFileList: string[], expectedFileList: string[]) {
@@ -231,8 +231,9 @@ namespace ts {
                 }
                 "files": ["file1.ts"]
             }`;
-            const { node, errors: diagnostics } = parseJsonText("config.json", content);
-            const configJsonObject = convertToJson(node, diagnostics);
+            const result = parseJsonText("config.json", content);
+            const diagnostics = result.parseDiagnostics;
+            const configJsonObject = convertToJson(result, diagnostics);
             const expectedResult = {
                 compilerOptions: {
                     allowJs: true,

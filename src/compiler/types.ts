@@ -527,8 +527,6 @@ namespace ts {
     export type AtToken = Token<SyntaxKind.AtToken>;
     export type ReadonlyToken = Token<SyntaxKind.ReadonlyKeyword>;
 
-    export type JsonNode = ObjectLiteralExpression | EndOfFileToken;
-
     export type Modifier
         = Token<SyntaxKind.AbstractKeyword>
         | Token<SyntaxKind.AsyncKeyword>
@@ -2189,6 +2187,10 @@ namespace ts {
         /* @internal */ ambientModuleNames: string[];
     }
 
+    export interface JsonSourceFile extends SourceFile {
+        jsonObject?: ObjectLiteralExpression;
+    }
+
     export interface ScriptReferenceHost {
         getCompilerOptions(): CompilerOptions;
         getSourceFile(fileName: string): SourceFile;
@@ -3261,7 +3263,8 @@ namespace ts {
         JS = 1,
         JSX = 2,
         TS = 3,
-        TSX = 4
+        TSX = 4,
+        JSON = 5
     }
 
     export const enum ScriptTarget {

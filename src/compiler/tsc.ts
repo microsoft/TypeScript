@@ -307,13 +307,13 @@ namespace ts {
             }
 
             const result = parseJsonText(configFileName, cachedConfigFileText);
-            reportDiagnostics(result.errors, /* compilerHost */ undefined);
-            if (!result.node) {
+            reportDiagnostics(result.parseDiagnostics, /* compilerHost */ undefined);
+            if (!result.endOfFileToken) {
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 return;
             }
             const cwd = sys.getCurrentDirectory();
-            const configParseResult = parseJsonNodeConfigFileContent(result.node, sys, getNormalizedAbsolutePath(getDirectoryPath(configFileName), cwd), commandLine.options, getNormalizedAbsolutePath(configFileName, cwd));
+            const configParseResult = parseJsonSourceFileConfigFileContent(result, sys, getNormalizedAbsolutePath(getDirectoryPath(configFileName), cwd), commandLine.options, getNormalizedAbsolutePath(configFileName, cwd));
             if (configParseResult.errors.length > 0) {
                 reportDiagnostics(configParseResult.errors, /* compilerHost */ undefined);
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);

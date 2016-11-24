@@ -1928,6 +1928,8 @@ namespace ts {
                 return ScriptKind.TS;
             case ".tsx":
                 return ScriptKind.TSX;
+            case ".json":
+                return ScriptKind.JSON;
             default:
                 return ScriptKind.Unknown;
         }

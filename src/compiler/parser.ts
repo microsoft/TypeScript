@@ -450,14 +450,12 @@ namespace ts {
         return Parser.parseIsolatedEntityName(text, languageVersion);
     }
 
-    export type ParsedNodeResults<T extends Node> = { node?: T; errors: Diagnostic[] };
-
     /**
      * Parse json text into SyntaxTree and return node and parse errors if any
      * @param fileName
      * @param sourceText
      */
-    export function parseJsonText(fileName: string, sourceText: string): ParsedNodeResults<JsonNode> {
+    export function parseJsonText(fileName: string, sourceText: string): JsonSourceFile {
         return Parser.parseJsonText(fileName, sourceText);
     }
 
@@ -622,36 +620,34 @@ namespace ts {
             return isInvalid ? entityName : undefined;
         }
 
-        export function parseJsonText(fileName: string, sourceText: string): ParsedNodeResults<JsonNode> {
-            initializeState(sourceText, ScriptTarget.ES2015, /*syntaxCursor*/ undefined, ScriptKind.JS);
+        export function parseJsonText(fileName: string, sourceText: string): JsonSourceFile {
+            initializeState(sourceText, ScriptTarget.ES2015, /*syntaxCursor*/ undefined, ScriptKind.JSON);
             // Set source file so that errors will be reported with this file name
-            sourceFile = <SourceFile>{ kind: SyntaxKind.SourceFile, text: sourceText, fileName };
-            let node: JsonNode;
+            sourceFile = createSourceFile(fileName, ScriptTarget.ES2015, ScriptKind.JSON);
+            const result = <JsonSourceFile>sourceFile;
+
             // Prime the scanner.
             nextToken();
             if (token() === SyntaxKind.EndOfFileToken) {
-                node = <EndOfFileToken>parseTokenNode();
+                sourceFile.endOfFileToken = <EndOfFileToken>parseTokenNode();
             }
             else if (token() === SyntaxKind.OpenBraceToken ||
                 lookAhead(() => token() === SyntaxKind.StringLiteral)) {
-                node = parseObjectLiteralExpression();
-                parseExpected(SyntaxKind.EndOfFileToken, Diagnostics.Unexpected_token);
+                result.jsonObject = parseObjectLiteralExpression();
+                sourceFile.endOfFileToken = parseExpectedToken(SyntaxKind.EndOfFileToken, /*reportAtCurrentPosition*/ false, Diagnostics.Unexpected_token);
             }
             else {
                 parseExpected(SyntaxKind.OpenBraceToken);
             }
 
-            if (node) {
-                node.parent = sourceFile;
-            }
-            const errors = parseDiagnostics;
+            sourceFile.parseDiagnostics = parseDiagnostics;
             clearState();
-            return { node, errors };
+            return result;
         }
 
         function getLanguageVariant(scriptKind: ScriptKind) {
             // .tsx and .jsx files are treated as jsx language variant.
-            return scriptKind === ScriptKind.TSX || scriptKind === ScriptKind.JSX || scriptKind === ScriptKind.JS ? LanguageVariant.JSX : LanguageVariant.Standard;
+            return scriptKind === ScriptKind.TSX || scriptKind === ScriptKind.JSX || scriptKind === ScriptKind.JS  || scriptKind === ScriptKind.JSON ? LanguageVariant.JSX : LanguageVariant.Standard;
         }
 
         function initializeState(_sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, scriptKind: ScriptKind) {
@@ -669,7 +665,7 @@ namespace ts {
             identifierCount = 0;
             nodeCount = 0;
 
-            contextFlags = scriptKind === ScriptKind.JS || scriptKind === ScriptKind.JSX ? NodeFlags.JavaScriptFile : NodeFlags.None;
+            contextFlags = scriptKind === ScriptKind.JS || scriptKind === ScriptKind.JSX || scriptKind === ScriptKind.JSON ? NodeFlags.JavaScriptFile : NodeFlags.None;
             parseErrorBeforeNextFinishedNode = false;
 
             // Initialize and prime the scanner before parsing the source elements.

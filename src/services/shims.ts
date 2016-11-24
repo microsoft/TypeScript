@@ -1135,25 +1135,25 @@ namespace ts {
 
                     const result = parseJsonText(fileName, text);
 
-                    if (!result.node) {
+                    if (!result.endOfFileToken) {
                         return {
                             options: {},
                             typeAcquisition: {},
                             files: [],
                             raw: {},
-                            errors: realizeDiagnostics(result.errors, "\r\n")
+                            errors: realizeDiagnostics(result.parseDiagnostics, "\r\n")
                         };
                     }
 
                     const normalizedFileName = normalizeSlashes(fileName);
-                    const configFile = parseJsonNodeConfigFileContent(result.node, this.host, getDirectoryPath(normalizedFileName), /*existingOptions*/ {}, normalizedFileName);
+                    const configFile = parseJsonSourceFileConfigFileContent(result, this.host, getDirectoryPath(normalizedFileName), /*existingOptions*/ {}, normalizedFileName);
 
                     return {
                         options: configFile.options,
                         typeAcquisition: configFile.typeAcquisition,
                         files: configFile.fileNames,
                         raw: configFile.raw,
-                        errors: realizeDiagnostics(result.errors.concat(configFile.errors), "\r\n")
+                        errors: realizeDiagnostics(result.parseDiagnostics.concat(configFile.errors), "\r\n")
                     };
                 });
         }
