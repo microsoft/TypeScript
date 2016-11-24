@@ -137,6 +137,7 @@ const es2017LibrarySourceMap = es2017LibrarySource.map(function(source) {
 });
 
 const hostsLibrarySources = ["dom.generated.d.ts", "webworker.importscripts.d.ts", "scripthost.d.ts"];
+const es2015HostLibrarySources = ["dom.iterable.d.ts", "streams.d.ts",  "fetch.d.ts"]
 
 const librarySourceMap = [
     // Host library
@@ -144,6 +145,8 @@ const librarySourceMap = [
     { target: "lib.dom.iterable.d.ts", sources: ["header.d.ts", "dom.iterable.d.ts"] },
     { target: "lib.webworker.d.ts", sources: ["header.d.ts", "webworker.generated.d.ts"] },
     { target: "lib.scripthost.d.ts", sources: ["header.d.ts", "scripthost.d.ts"] },
+    { target: "lib.streams.d.ts", sources: ["header.d.ts", "streams.d.ts"]},
+    { target: "lib.fetch.d.ts", sources: ["header.d.ts", "fetch.d.ts"]},
 
     // JavaScript library
     { target: "lib.es5.d.ts", sources: ["header.d.ts", "es5.d.ts"] },
@@ -153,7 +156,7 @@ const librarySourceMap = [
 
     // JavaScript + all host library
     { target: "lib.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(hostsLibrarySources) },
-    { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts") }
+    { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, es2015HostLibrarySources) }
 ].concat(es2015LibrarySourceMap, es2016LibrarySourceMap, es2017LibrarySourceMap);
 
 const libraryTargets = librarySourceMap.map(function(f) {
