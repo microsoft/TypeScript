@@ -9662,6 +9662,7 @@ interface EventTarget {
 declare var EventTarget: {
     prototype: EventTarget;
     new(): EventTarget;
+    value?: any;
 }
 
 interface External {
