@@ -2507,6 +2507,7 @@ namespace ts {
                 case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.UndefinedKeyword:
                 case SyntaxKind.NeverKeyword:
+                case SyntaxKind.ObjectKeyword:
                     // If these are followed by a dot, then parse these out as a dotted type reference instead.
                     const node = tryParse(parseKeywordAndNoDot);
                     return node || parseTypeReference();
@@ -2565,6 +2566,7 @@ namespace ts {
                 case SyntaxKind.NumericLiteral:
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
+                case SyntaxKind.ObjectKeyword:
                     return true;
                 case SyntaxKind.MinusToken:
                     return lookAhead(nextTokenIsNumericLiteral);
@@ -6026,6 +6028,7 @@ namespace ts {
                     case SyntaxKind.NullKeyword:
                     case SyntaxKind.UndefinedKeyword:
                     case SyntaxKind.NeverKeyword:
+                    case SyntaxKind.ObjectKeyword:
                         return parseTokenNode<JSDocType>();
                     case SyntaxKind.StringLiteral:
                     case SyntaxKind.NumericLiteral:
