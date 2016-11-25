@@ -40,7 +40,11 @@ var r6 = f3(x => x, null);
 //// [genericCallWithObjectTypeArgsAndConstraints3.js]
 // Generic call with constraints infering type parameter from object member properties
 var __extends = (this && this.__extends) || function (d, b) {
-    Object.setPrototypeOf(d, b);
+    if (typeof Object.setPrototypeOf === "function") {
+        Object.setPrototypeOf(d, b);
+    } else {
+        d.__proto__ = b;
+    }
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };

@@ -94,7 +94,11 @@ module WithBase {
 //// [assignmentCompatWithObjectMembers4.js]
 // members N and M of types S and T have the same name, same accessibility, same optionality, and N is not assignable M
 var __extends = (this && this.__extends) || function (d, b) {
-    Object.setPrototypeOf(d, b);
+    if (typeof Object.setPrototypeOf === "function") {
+        Object.setPrototypeOf(d, b);
+    } else {
+        d.__proto__ = b;
+    }
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };

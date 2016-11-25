@@ -36,7 +36,11 @@ class B3 extends A3 {
 //// [subtypingWithObjectMembers4.js]
 // subtyping when property names do not match
 var __extends = (this && this.__extends) || function (d, b) {
-    Object.setPrototypeOf(d, b);
+    if (typeof Object.setPrototypeOf === "function") {
+        Object.setPrototypeOf(d, b);
+    } else {
+        d.__proto__ = b;
+    }
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };

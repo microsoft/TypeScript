@@ -39,7 +39,11 @@ var r2: C2 | D1 = isC1(c2Ord1) && c2Ord1; // C2 | D1
 
 //// [typeGuardOfFormIsType.js]
 var __extends = (this && this.__extends) || function (d, b) {
-    Object.setPrototypeOf(d, b);
+    if (typeof Object.setPrototypeOf === "function") {
+        Object.setPrototypeOf(d, b);
+    } else {
+        d.__proto__ = b;
+    }
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };

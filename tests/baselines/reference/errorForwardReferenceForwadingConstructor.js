@@ -13,7 +13,11 @@ class derived extends base { }
 //// [errorForwardReferenceForwadingConstructor.js]
 // Error forward referencing derived class with forwarding constructor
 var __extends = (this && this.__extends) || function (d, b) {
-    Object.setPrototypeOf(d, b);
+    if (typeof Object.setPrototypeOf === "function") {
+        Object.setPrototypeOf(d, b);
+    } else {
+        d.__proto__ = b;
+    }
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
