@@ -1,0 +1,15 @@
+function generic<T>(t: T) {}
+var a = {};
+var b = "42";
+
+generic<object>({});
+generic<object>(a);
+generic<object>(123); // expect error
+generic<object>(b); // expect error
+
+function bound<T extends object>(t: T) {}
+
+bound({});
+bound(a);
+bound(123); // expect error
+bound(b); // expect error
