@@ -3145,6 +3145,7 @@ namespace ts {
             case SyntaxKind.AnyKeyword:
             case SyntaxKind.NumberKeyword:
             case SyntaxKind.NeverKeyword:
+            case SyntaxKind.ObjectKeyword:
             case SyntaxKind.StringKeyword:
             case SyntaxKind.BooleanKeyword:
             case SyntaxKind.SymbolKeyword:
@@ -3343,6 +3344,7 @@ namespace ts {
             case SyntaxKind.NumberKeyword:
             case SyntaxKind.NeverKeyword:
             case SyntaxKind.StringKeyword:
+            case SyntaxKind.ObjectKeyword:
             case SyntaxKind.BooleanKeyword:
             case SyntaxKind.SymbolKeyword:
             case SyntaxKind.VoidKeyword:

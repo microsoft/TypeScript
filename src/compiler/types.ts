@@ -175,6 +175,7 @@ namespace ts {
         ReadonlyKeyword,
         RequireKeyword,
         NumberKeyword,
+        ObjectKeyword,
         SetKeyword,
         StringKeyword,
         SymbolKeyword,
@@ -816,6 +817,7 @@ namespace ts {
     export interface KeywordTypeNode extends TypeNode {
         kind: SyntaxKind.AnyKeyword
             | SyntaxKind.NumberKeyword
+            | SyntaxKind.ObjectKeyword
             | SyntaxKind.BooleanKeyword
             | SyntaxKind.StringKeyword
             | SyntaxKind.SymbolKeyword
@@ -2857,6 +2859,7 @@ namespace ts {
         ObjectLiteral    = 1 << 7,  // Originates in an object literal
         EvolvingArray    = 1 << 8,  // Evolving array type
         ObjectLiteralPatternWithComputedProperties = 1 << 9,  // Object literal pattern with computed properties
+        NonPrimitive        = 1 << 10,  // NonPrimitive object type
         ClassOrInterface = Class | Interface
     }
 
