@@ -1685,11 +1685,10 @@ namespace ts {
             return type;
         }
 
-        function createNonPrimitiveType(): NonPrimitiveType {
-            const type = <NonPrimitiveType>setStructuredTypeMembers(
+        function createNonPrimitiveType(): ResolvedType {
+            const type = setStructuredTypeMembers(
                 createObjectType(ObjectFlags.NonPrimitive, undefined),
                 emptySymbols, emptyArray, emptyArray, undefined, undefined);
-            type.intrinsicName = "object";
             return type;
         }
 
@@ -2320,6 +2319,9 @@ namespace ts {
                     }
                     else if (type.flags & TypeFlags.UnionOrIntersection) {
                         writeUnionOrIntersectionType(<UnionOrIntersectionType>type, nextFlags);
+                    }
+                    else if (getObjectFlags(type) & ObjectFlags.NonPrimitive) {
+                        writer.writeKeyword("object");
                     }
                     else if (getObjectFlags(type) & (ObjectFlags.Anonymous | ObjectFlags.Mapped)) {
                         writeAnonymousType(<ObjectType>type, nextFlags);
@@ -3085,6 +3087,10 @@ namespace ts {
 
         function isTypeNever(type: Type) {
             return type && (type.flags & TypeFlags.Never) !== 0;
+        }
+
+        function isTypeNonPrimitive(type: Type) {
+            return type === nonPrimitiveType;
         }
 
         // Return the type of a binding element parent. We check SymbolLinks first to see if a type has been
@@ -7151,7 +7157,6 @@ namespace ts {
             if (source.flags & TypeFlags.Enum && target.flags & TypeFlags.Enum && isEnumTypeRelatedTo(<EnumType>source, <EnumType>target, errorReporter)) return true;
             if (source.flags & TypeFlags.Undefined && (!strictNullChecks || target.flags & (TypeFlags.Undefined | TypeFlags.Void))) return true;
             if (source.flags & TypeFlags.Null && (!strictNullChecks || target.flags & TypeFlags.Null)) return true;
-            if (source.flags & TypeFlags.Object && (<ObjectType>source).objectFlags & ObjectFlags.NonPrimitive && target.flags & TypeFlags.Primitive) return false;
             if (relation === assignableRelation || relation === comparableRelation) {
                 if (source.flags & TypeFlags.Any) return true;
                 if ((source.flags & TypeFlags.Number | source.flags & TypeFlags.NumberLiteral) && target.flags & TypeFlags.EnumLike) return true;
@@ -7470,7 +7475,7 @@ namespace ts {
                         }
                     }
                 }
-                else {
+                else if (!(source.flags & TypeFlags.Primitive && isTypeNonPrimitive(target))) {
                     if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
                         // We have type references to same target type, see if relationship holds for all type arguments
                         if (result = typeArgumentsRelatedTo(<TypeReference>source, <TypeReference>target, reportErrors)) {
@@ -18085,6 +18090,7 @@ namespace ts {
                 case "string":
                 case "symbol":
                 case "void":
+                case "object":
                     error(name, message, (<Identifier>name).text);
             }
         }
