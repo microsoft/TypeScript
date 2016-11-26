@@ -1,0 +1,187 @@
+=== tests/cases/conformance/parser/esnext/parser.pipeline.esnext.1.ts ===
+// single argument
+declare function f1(x: number): string;
+>f1 : (x: number) => string
+>x : number
+
+1 |> f1;
+>1 |> f1 : string
+>1 : 1
+>f1 : (x: number) => string
+
+1 |> f1(?);
+>1 |> f1(?) : string
+>1 : 1
+>f1(?) : (x: number) => string
+>f1 : (x: number) => string
+
+(1) |> f1;
+>(1) |> f1 : string
+>(1) : 1
+>1 : 1
+>f1 : (x: number) => string
+
+(1) |> f1(?);
+>(1) |> f1(?) : string
+>(1) : 1
+>1 : 1
+>f1(?) : (x: number) => string
+>f1 : (x: number) => string
+
+// multiple argument
+declare function f2(x: number, y: number): string;
+>f2 : (x: number, y: number) => string
+>x : number
+>y : number
+
+(1, 2) |> f2;
+>(1, 2) |> f2 : string
+>(1, 2) : 2
+>1, 2 : 2
+>1 : 1
+>2 : 2
+>f2 : (x: number, y: number) => string
+
+(1, 2) |> f2(?, ?);
+>(1, 2) |> f2(?, ?) : string
+>(1, 2) : 2
+>1, 2 : 2
+>1 : 1
+>2 : 2
+>f2(?, ?) : (x: number, y: number) => string
+>f2 : (x: number, y: number) => string
+
+// multiple steps
+declare function f3(x: string): boolean;
+>f3 : (x: string) => boolean
+>x : string
+
+declare function f4(x: string, y: number): boolean;
+>f4 : (x: string, y: number) => boolean
+>x : string
+>y : number
+
+1 |> f1 |> f3;
+>1 |> f1 |> f3 : boolean
+>1 |> f1 : string
+>1 : 1
+>f1 : (x: number) => string
+>f3 : (x: string) => boolean
+
+1 |> f1(?) |> f3;
+>1 |> f1(?) |> f3 : boolean
+>1 |> f1(?) : string
+>1 : 1
+>f1(?) : (x: number) => string
+>f1 : (x: number) => string
+>f3 : (x: string) => boolean
+
+1 |> f1 |> f3(?);
+>1 |> f1 |> f3(?) : boolean
+>1 |> f1 : string
+>1 : 1
+>f1 : (x: number) => string
+>f3(?) : (x: string) => boolean
+>f3 : (x: string) => boolean
+
+1 |> f1(?) |> f3(?);
+>1 |> f1(?) |> f3(?) : boolean
+>1 |> f1(?) : string
+>1 : 1
+>f1(?) : (x: number) => string
+>f1 : (x: number) => string
+>f3(?) : (x: string) => boolean
+>f3 : (x: string) => boolean
+
+(1 |> f1(?), 2) |> f4;
+>(1 |> f1(?), 2) |> f4 : boolean
+>(1 |> f1(?), 2) : 2
+>1 |> f1(?), 2 : 2
+>1 |> f1(?) : string
+>1 : 1
+>f1(?) : (x: number) => string
+>f1 : (x: number) => string
+>2 : 2
+>f4 : (x: string, y: number) => boolean
+
+// use case
+declare function map<T, U>(source: Iterable<T>, cb: (value: T) => U): Iterable<U>;
+>map : <T, U>(source: Iterable<T>, cb: (value: T) => U) => Iterable<U>
+>T : T
+>U : U
+>source : Iterable<T>
+>Iterable : Iterable<T>
+>T : T
+>cb : (value: T) => U
+>value : T
+>T : T
+>U : U
+>Iterable : Iterable<T>
+>U : U
+
+declare function filter<T>(source: Iterable<T>, cb: (value: T) => boolean): Iterable<T>;
+>filter : <T>(source: Iterable<T>, cb: (value: T) => boolean) => Iterable<T>
+>T : T
+>source : Iterable<T>
+>Iterable : Iterable<T>
+>T : T
+>cb : (value: T) => boolean
+>value : T
+>T : T
+>Iterable : Iterable<T>
+>T : T
+
+declare function reduce<T>(source: Iterable<T>, cb: (memo: T, value: T) => T, initial: T): T;
+>reduce : <T>(source: Iterable<T>, cb: (memo: T, value: T) => T, initial: T) => T
+>T : T
+>source : Iterable<T>
+>Iterable : Iterable<T>
+>T : T
+>cb : (memo: T, value: T) => T
+>memo : T
+>T : T
+>value : T
+>T : T
+>T : T
+>initial : T
+>T : T
+>T : T
+
+[1, 2, 3]
+>[1, 2, 3]    |> map(?, x => x * 2)    |> filter(?, x => x > 2)    |> reduce(?, (x, y) => x + y, 0) : number
+>[1, 2, 3]    |> map(?, x => x * 2)    |> filter(?, x => x > 2) : Iterable<number>
+>[1, 2, 3]    |> map(?, x => x * 2) : Iterable<number>
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+    |> map(?, x => x * 2)
+>map(?, x => x * 2) : <T>(source: Iterable<T>) => Iterable<number>
+>map : <T, U>(source: Iterable<T>, cb: (value: T) => U) => Iterable<U>
+>x => x * 2 : (x: number) => number
+>x : number
+>x * 2 : number
+>x : number
+>2 : 2
+
+    |> filter(?, x => x > 2)
+>filter(?, x => x > 2) : <T>(source: Iterable<T>) => Iterable<T>
+>filter : <T>(source: Iterable<T>, cb: (value: T) => boolean) => Iterable<T>
+>x => x > 2 : (x: number) => boolean
+>x : number
+>x > 2 : boolean
+>x : number
+>2 : 2
+
+    |> reduce(?, (x, y) => x + y, 0);
+>reduce(?, (x, y) => x + y, 0) : (source: Iterable<number>) => number
+>reduce : <T>(source: Iterable<T>, cb: (memo: T, value: T) => T, initial: T) => T
+>(x, y) => x + y : (x: number, y: number) => number
+>x : number
+>y : number
+>x + y : number
+>x : number
+>y : number
+>0 : 0
+

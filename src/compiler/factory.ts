@@ -437,8 +437,8 @@ namespace ts {
         return node;
     }
 
-    export function createElementAccess(expression: Expression, index: number | Expression, location?: TextRange) {
-        const node = <ElementAccessExpression>createNode(SyntaxKind.ElementAccessExpression, location);
+    export function createElementAccess(expression: Expression, index: number | Expression, location?: TextRange, flags?: NodeFlags) {
+        const node = <ElementAccessExpression>createNode(SyntaxKind.ElementAccessExpression, location, flags);
         node.expression = parenthesizeForAccess(expression);
         node.argumentExpression = typeof index === "number" ? createLiteral(index) : index;
         return node;
@@ -446,7 +446,7 @@ namespace ts {
 
     export function updateElementAccess(node: ElementAccessExpression, expression: Expression, argumentExpression: Expression) {
         if (node.expression !== expression || node.argumentExpression !== argumentExpression) {
-            return updateNode(createElementAccess(expression, argumentExpression, node), node);
+            return updateNode(createElementAccess(expression, argumentExpression, /*location*/ node, node.flags), node);
         }
         return node;
     }
@@ -653,16 +653,16 @@ namespace ts {
         if (whenFalse) {
             // second overload
             node.questionToken = <QuestionToken>questionTokenOrWhenTrue;
-            node.whenTrue = whenTrueOrWhenFalse;
+            node.whenTrue = parenthesizeForConditionalResult(whenTrueOrWhenFalse);
             node.colonToken = <ColonToken>colonTokenOrLocation;
-            node.whenFalse = whenFalse;
+            node.whenFalse = parenthesizeForConditionalResult(whenFalse);
         }
         else {
             // first overload
             node.questionToken = createToken(SyntaxKind.QuestionToken);
-            node.whenTrue = <Expression>questionTokenOrWhenTrue;
+            node.whenTrue = parenthesizeForConditionalResult(<Expression>questionTokenOrWhenTrue);
             node.colonToken = createToken(SyntaxKind.ColonToken);
-            node.whenFalse = whenTrueOrWhenFalse;
+            node.whenFalse = parenthesizeForConditionalResult(whenTrueOrWhenFalse);
         }
         return node;
     }
@@ -1561,8 +1561,16 @@ namespace ts {
         return createBinary(left, SyntaxKind.EqualsEqualsEqualsToken, right);
     }
 
+    export function createEquality(left: Expression, right: Expression) {
+        return createBinary(left, SyntaxKind.EqualsEqualsToken, right);
+    }
+
     export function createStrictInequality(left: Expression, right: Expression) {
         return createBinary(left, SyntaxKind.ExclamationEqualsEqualsToken, right);
+    }
+
+    export function createInequality(left: Expression, right: Expression) {
+        return createBinary(left, SyntaxKind.ExclamationEqualsToken, right);
     }
 
     export function createAdd(left: Expression, right: Expression) {
@@ -2390,6 +2398,16 @@ namespace ts {
             return createParen(condition);
         }
         return condition;
+    }
+
+    export function parenthesizeForConditionalResult(expression: Expression) {
+        const conditionalPrecedence = getOperatorPrecedence(SyntaxKind.ConditionalExpression, SyntaxKind.ColonToken);
+        const emittedExpression = skipPartiallyEmittedExpressions(expression);
+        const expressionPrecedence = getExpressionPrecedence(emittedExpression);
+        if (compareValues(expressionPrecedence, conditionalPrecedence) === Comparison.LessThan) {
+            return createParen(expression);
+        }
+        return expression;
     }
 
     /**

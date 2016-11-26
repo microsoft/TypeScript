@@ -865,7 +865,8 @@ namespace ts {
                 else {
                     return node.kind === SyntaxKind.BinaryExpression && (
                         (<BinaryExpression>node).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken ||
-                        (<BinaryExpression>node).operatorToken.kind === SyntaxKind.BarBarToken);
+                        (<BinaryExpression>node).operatorToken.kind === SyntaxKind.BarBarToken ||
+                        (<BinaryExpression>node).operatorToken.kind === SyntaxKind.QuestionQuestionToken);
                 }
             }
         }
@@ -1230,7 +1231,9 @@ namespace ts {
 
         function bindBinaryExpressionFlow(node: BinaryExpression) {
             const operator = node.operatorToken.kind;
-            if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken) {
+            if (operator === SyntaxKind.AmpersandAmpersandToken ||
+                operator === SyntaxKind.BarBarToken ||
+                operator === SyntaxKind.QuestionQuestionToken) {
                 if (isTopLevelLogicalExpression(node)) {
                     const postExpressionLabel = createBranchLabel();
                     bindLogicalExpression(node, postExpressionLabel, postExpressionLabel);
@@ -2546,6 +2549,10 @@ namespace ts {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
+        if (node.flags & NodeFlags.PropagateNull) {
+            transformFlags |= TransformFlags.AssertESNext;
+        }
+
         if (subtreeFlags & TransformFlags.ContainsSpread
             || isSuperOrSuperProperty(expression, expressionKind)) {
             // If the this node contains a SpreadExpression, or is a super call, then it is an ES6
@@ -2576,6 +2583,9 @@ namespace ts {
         let transformFlags = subtreeFlags;
         if (node.typeArguments) {
             transformFlags |= TransformFlags.AssertTypeScript;
+        }
+        if (node.flags & NodeFlags.PropagateNull) {
+            transformFlags |= TransformFlags.AssertESNext;
         }
         if (subtreeFlags & TransformFlags.ContainsSpread) {
             // If the this node contains a SpreadElementExpression then it is an ES6
@@ -2987,6 +2997,9 @@ namespace ts {
         let transformFlags = subtreeFlags;
         const expression = node.expression;
         const expressionKind = expression.kind;
+        if (node.flags & NodeFlags.PropagateNull) {
+            transformFlags |= TransformFlags.AssertESNext;
+        }
 
         // If a PropertyAccessExpression starts with a super keyword, then it is
         // ES6 syntax, and requires a lexical `this` binding.
@@ -3111,6 +3124,7 @@ namespace ts {
 
         switch (kind) {
             case SyntaxKind.BarGreaterThanToken:
+            case SyntaxKind.QuestionQuestionToken:
                 transformFlags |= TransformFlags.AssertESNext;
                 break;
 
@@ -3313,6 +3327,12 @@ namespace ts {
                     transformFlags |= TransformFlags.AssertES2015;
                 }
 
+                break;
+
+            case SyntaxKind.ElementAccessExpression:
+                if (node.flags & NodeFlags.PropagateNull) {
+                    transformFlags |= TransformFlags.AssertESNext;
+                }
                 break;
 
             case SyntaxKind.DoStatement:

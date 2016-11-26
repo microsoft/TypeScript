@@ -1,0 +1,72 @@
+=== tests/cases/conformance/parser/esnext/parser.bindTo.esnext.1.ts ===
+// single argument
+declare function f1(this: number): string;
+>f1 : Symbol(f1, Decl(parser.bindTo.esnext.1.ts, 0, 0))
+>this : Symbol(this, Decl(parser.bindTo.esnext.1.ts, 1, 20))
+
+1 :: f1;
+1 :: f1();
+// multiple steps
+declare function f2(this: string): boolean;
+>f2 : Symbol(f2, Decl(parser.bindTo.esnext.1.ts, 3, 10))
+>this : Symbol(this, Decl(parser.bindTo.esnext.1.ts, 5, 20))
+
+1 :: f1() :: f2();
+// use cases
+declare function map<T, U>(this: Iterable<T>, cb: (value: T) => U): Iterable<U>;
+>map : Symbol(map, Decl(parser.bindTo.esnext.1.ts, 6, 18))
+>T : Symbol(T, Decl(parser.bindTo.esnext.1.ts, 8, 21))
+>U : Symbol(U, Decl(parser.bindTo.esnext.1.ts, 8, 23))
+>this : Symbol(this, Decl(parser.bindTo.esnext.1.ts, 8, 27))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(parser.bindTo.esnext.1.ts, 8, 21))
+>cb : Symbol(cb, Decl(parser.bindTo.esnext.1.ts, 8, 45))
+>value : Symbol(value, Decl(parser.bindTo.esnext.1.ts, 8, 51))
+>T : Symbol(T, Decl(parser.bindTo.esnext.1.ts, 8, 21))
+>U : Symbol(U, Decl(parser.bindTo.esnext.1.ts, 8, 23))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>U : Symbol(U, Decl(parser.bindTo.esnext.1.ts, 8, 23))
+
+declare function filter<T>(this: Iterable<T>, cb: (value: T) => boolean): Iterable<T>;
+>filter : Symbol(filter, Decl(parser.bindTo.esnext.1.ts, 8, 80))
+>T : Symbol(T, Decl(parser.bindTo.esnext.1.ts, 9, 24))
+>this : Symbol(this, Decl(parser.bindTo.esnext.1.ts, 9, 27))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(parser.bindTo.esnext.1.ts, 9, 24))
+>cb : Symbol(cb, Decl(parser.bindTo.esnext.1.ts, 9, 45))
+>value : Symbol(value, Decl(parser.bindTo.esnext.1.ts, 9, 51))
+>T : Symbol(T, Decl(parser.bindTo.esnext.1.ts, 9, 24))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(parser.bindTo.esnext.1.ts, 9, 24))
+
+declare function reduce<T>(this: Iterable<T>, cb: (memo: T, value: T) => T, initial: T): T;
+>reduce : Symbol(reduce, Decl(parser.bindTo.esnext.1.ts, 9, 86))
+>T : Symbol(T, Decl(parser.bindTo.esnext.1.ts, 10, 24))
+>this : Symbol(this, Decl(parser.bindTo.esnext.1.ts, 10, 27))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(parser.bindTo.esnext.1.ts, 10, 24))
+>cb : Symbol(cb, Decl(parser.bindTo.esnext.1.ts, 10, 45))
+>memo : Symbol(memo, Decl(parser.bindTo.esnext.1.ts, 10, 51))
+>T : Symbol(T, Decl(parser.bindTo.esnext.1.ts, 10, 24))
+>value : Symbol(value, Decl(parser.bindTo.esnext.1.ts, 10, 59))
+>T : Symbol(T, Decl(parser.bindTo.esnext.1.ts, 10, 24))
+>T : Symbol(T, Decl(parser.bindTo.esnext.1.ts, 10, 24))
+>initial : Symbol(initial, Decl(parser.bindTo.esnext.1.ts, 10, 75))
+>T : Symbol(T, Decl(parser.bindTo.esnext.1.ts, 10, 24))
+>T : Symbol(T, Decl(parser.bindTo.esnext.1.ts, 10, 24))
+
+[1, 2, 3]
+    :: map(x => x * 2)
+>x : Symbol(x, Decl(parser.bindTo.esnext.1.ts, 12, 11))
+>x : Symbol(x, Decl(parser.bindTo.esnext.1.ts, 12, 11))
+
+    :: filter(x => x > 2)
+>x : Symbol(x, Decl(parser.bindTo.esnext.1.ts, 13, 14))
+>x : Symbol(x, Decl(parser.bindTo.esnext.1.ts, 13, 14))
+
+    :: reduce((x, y) => x + y, 0);
+>x : Symbol(x, Decl(parser.bindTo.esnext.1.ts, 14, 15))
+>y : Symbol(y, Decl(parser.bindTo.esnext.1.ts, 14, 17))
+>x : Symbol(x, Decl(parser.bindTo.esnext.1.ts, 14, 15))
+>y : Symbol(y, Decl(parser.bindTo.esnext.1.ts, 14, 17))
+

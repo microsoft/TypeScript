@@ -1037,12 +1037,13 @@ namespace ts {
         }
 
         function emitPropertyAccessExpression(node: PropertyAccessExpression) {
+            const propagatesNull = node.flags & NodeFlags.PropagateNull;
             let indentBeforeDot = false;
             let indentAfterDot = false;
             if (!(getEmitFlags(node) & EmitFlags.NoIndentation)) {
                 const dotRangeStart = node.expression.end;
-                const dotRangeEnd = skipTrivia(currentText, node.expression.end) + 1;
-                const dotToken = <Node>{ kind: SyntaxKind.DotToken, pos: dotRangeStart, end: dotRangeEnd };
+                const dotRangeEnd = skipTrivia(currentText, node.expression.end) + (propagatesNull ? 2 : 1);
+                const dotToken = <Node>{ kind: propagatesNull ? SyntaxKind.QuestionDotToken : SyntaxKind.DotToken, pos: dotRangeStart, end: dotRangeEnd };
                 indentBeforeDot = needsIndentation(node, node.expression, dotToken);
                 indentAfterDot = needsIndentation(node, dotToken, node.name);
             }
@@ -1050,8 +1051,8 @@ namespace ts {
             emitExpression(node.expression);
             increaseIndentIf(indentBeforeDot);
 
-            const shouldEmitDotDot = !indentBeforeDot && needsDotDotForPropertyAccess(node.expression);
-            write(shouldEmitDotDot ? ".." : ".");
+            const shouldEmitDotDot = !propagatesNull && !indentBeforeDot && needsDotDotForPropertyAccess(node.expression);
+            write(shouldEmitDotDot ? ".." : propagatesNull ? "?." : ".");
 
             increaseIndentIf(indentAfterDot);
             emit(node.name);
@@ -1078,25 +1079,28 @@ namespace ts {
 
         function emitElementAccessExpression(node: ElementAccessExpression) {
             emitExpression(node.expression);
-            write("[");
+            write(node.flags & NodeFlags.PropagateNull ? "?.[" : "[");
             emitExpression(node.argumentExpression);
             write("]");
         }
 
         function emitBindToExpression(node: BindToExpression) {
             emitExpression(node.targetExpression);
-            write("::");
+            write(node.flags & NodeFlags.PropagateNull ? "?::" : "::");
             emitExpression(node.expression);
         }
 
         function emitBindExpression(node: BindExpression) {
-            write("::");
+            write(node.flags & NodeFlags.PropagateNull ? "?::" : "::");
             emitExpression(node.expression);
         }
 
         function emitCallExpression(node: CallExpression) {
             emitExpression(node.expression);
             emitTypeArguments(node, node.typeArguments);
+            if (node.flags & NodeFlags.PropagateNull) {
+                write("?.");
+            }
             emitExpressionList(node, node.arguments, ListFormat.CallExpressionArguments);
         }
 
@@ -1104,6 +1108,9 @@ namespace ts {
             write("new ");
             emitExpression(node.expression);
             emitTypeArguments(node, node.typeArguments);
+            if (node.flags & NodeFlags.PropagateNull) {
+                write("?.");
+            }
             emitExpressionList(node, node.arguments, ListFormat.NewExpressionArguments);
         }
 
@@ -1119,7 +1126,6 @@ namespace ts {
                 emit(node.type);
                 write(">");
             }
-
             emitExpression(node.expression);
         }
 

@@ -209,6 +209,8 @@ namespace ts {
                     visitNode(cbNode, (<ConditionalExpression>node).whenTrue) ||
                     visitNode(cbNode, (<ConditionalExpression>node).colonToken) ||
                     visitNode(cbNode, (<ConditionalExpression>node).whenFalse);
+            case SyntaxKind.PositionalElement:
+                return visitNode(cbNode, (<PositionalElement>node).literal);
             case SyntaxKind.SpreadElement:
                 return visitNode(cbNode, (<SpreadElement>node).expression);
             case SyntaxKind.Block:
@@ -3373,6 +3375,7 @@ namespace ts {
             switch (token()) {
                 case SyntaxKind.BarGreaterThanToken:
                     return 1;
+                case SyntaxKind.QuestionQuestionToken:
                 case SyntaxKind.BarBarToken:
                     return 2;
                 case SyntaxKind.AmpersandAmpersandToken:
@@ -3745,7 +3748,11 @@ namespace ts {
 
         function parseSuperExpression(): MemberExpression {
             const expression = parseTokenNode<PrimaryExpression>();
-            if (token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.DotToken || token() === SyntaxKind.OpenBracketToken) {
+            if (token() === SyntaxKind.OpenParenToken ||
+                token() === SyntaxKind.DotToken ||
+                token() === SyntaxKind.OpenBracketToken ||
+                token() === SyntaxKind.QuestionDotToken ||
+                token() === SyntaxKind.QuestionDotOpenBracketToken) {
                 return expression;
             }
 
@@ -3996,9 +4003,12 @@ namespace ts {
 
         function parseMemberExpressionRest(expression: LeftHandSideExpression): MemberExpression {
             while (true) {
-                const dotToken = parseOptionalToken(SyntaxKind.DotToken);
-                if (dotToken) {
+                if (token() === SyntaxKind.DotToken || token() === SyntaxKind.QuestionDotToken) {
                     const propertyAccess = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
+                    if (token() === SyntaxKind.QuestionDotToken) {
+                        propertyAccess.flags |= NodeFlags.PropagateNull;
+                    }
+                    nextToken();
                     propertyAccess.expression = expression;
                     propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames*/ true);
                     expression = finishNode(propertyAccess);
@@ -4014,8 +4024,12 @@ namespace ts {
                 }
 
                 // when in the [Decorator] context, we do not parse ElementAccess as it could be part of a ComputedPropertyName
-                if (!inDecoratorContext() && parseOptional(SyntaxKind.OpenBracketToken)) {
+                if (!inDecoratorContext() && (token() === SyntaxKind.OpenBracketToken || token() === SyntaxKind.QuestionDotOpenBracketToken)) {
                     const indexedAccess = <ElementAccessExpression>createNode(SyntaxKind.ElementAccessExpression, expression.pos);
+                    if (token() === SyntaxKind.QuestionDotOpenBracketToken) {
+                        indexedAccess.flags |= NodeFlags.PropagateNull;
+                    }
+                    nextToken();
                     indexedAccess.expression = expression;
 
                     // It's not uncommon for a user to write: "new Type[]".
@@ -4043,8 +4057,9 @@ namespace ts {
                     continue;
                 }
 
-                if (parseOptional(SyntaxKind.ColonColonToken)) {
+                if (token() === SyntaxKind.ColonColonToken) {
                     const bindExpression = <BindToExpression>createNode(SyntaxKind.BindToExpression, expression.pos);
+                    nextToken();
                     bindExpression.targetExpression = expression;
                     bindExpression.expression = parseMemberExpressionOrHigher();
                     expression = finishNode(bindExpression);
@@ -4058,37 +4073,35 @@ namespace ts {
         function parseCallExpressionRest(expression: LeftHandSideExpression): LeftHandSideExpression {
             while (true) {
                 expression = parseMemberExpressionRest(expression);
+                let typeArguments: NodeArray<TypeNode>;
                 if (token() === SyntaxKind.LessThanToken) {
                     // See if this is the start of a generic invocation.  If so, consume it and
                     // keep checking for postfix expressions.  Otherwise, it's just a '<' that's
                     // part of an arithmetic expression.  Break out so we consume it higher in the
                     // stack.
-                    const typeArguments = tryParse(parseTypeArgumentsInExpression);
+                    typeArguments = tryParse(parseTypeArgumentsInExpression);
                     if (!typeArguments) {
                         return expression;
                     }
-
-                    const callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
-                    callExpr.expression = expression;
-                    callExpr.typeArguments = typeArguments;
-                    callExpr.arguments = parseArgumentList();
-                    expression = finishNode(callExpr);
-                    continue;
                 }
-                else if (token() === SyntaxKind.OpenParenToken) {
-                    const callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
-                    callExpr.expression = expression;
-                    callExpr.arguments = parseArgumentList();
-                    expression = finishNode(callExpr);
-                    continue;
+                else if (token() !== SyntaxKind.OpenParenToken && token() !== SyntaxKind.QuestionDotOpenParenToken) {
+                    return expression;
                 }
-
-                return expression;
+                const callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
+                if (token() === SyntaxKind.QuestionDotOpenParenToken) {
+                    callExpr.flags |= NodeFlags.PropagateNull;
+                }
+                callExpr.expression = expression;
+                callExpr.typeArguments = typeArguments;
+                callExpr.arguments = parseArgumentList();
+                expression = finishNode(callExpr);
             }
         }
 
         function parseArgumentList() {
-            parseExpected(SyntaxKind.OpenParenToken);
+            if (!parseOptional(SyntaxKind.QuestionDotOpenParenToken)) {
+                parseExpected(SyntaxKind.OpenParenToken);
+            }
             const result = parseDelimitedList(ParsingContext.ArgumentExpressions, parseArgumentExpression);
             parseExpected(SyntaxKind.CloseParenToken);
             return result;
@@ -4115,6 +4128,7 @@ namespace ts {
         function canFollowTypeArgumentsInExpression(): boolean {
             switch (token()) {
                 case SyntaxKind.OpenParenToken:                 // foo<x>(
+                case SyntaxKind.QuestionDotOpenParenToken:      // foo<x>?.(
                 // this case are the only case where this token can legally follow a type argument
                 // list.  So we definitely want to treat this as a type arg list.
 
@@ -4437,7 +4451,10 @@ namespace ts {
             parseExpected(SyntaxKind.NewKeyword);
             node.expression = parseMemberExpressionOrHigher();
             node.typeArguments = tryParse(parseTypeArgumentsInExpression);
-            if (node.typeArguments || token() === SyntaxKind.OpenParenToken) {
+            if (node.typeArguments || token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.QuestionDotOpenParenToken) {
+                if (token() === SyntaxKind.QuestionDotOpenParenToken) {
+                    node.flags |= NodeFlags.PropagateNull;
+                }
                 node.arguments = parseArgumentList();
             }
 

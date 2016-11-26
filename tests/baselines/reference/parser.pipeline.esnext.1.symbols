@@ -1,0 +1,121 @@
+=== tests/cases/conformance/parser/esnext/parser.pipeline.esnext.1.ts ===
+// single argument
+declare function f1(x: number): string;
+>f1 : Symbol(f1, Decl(parser.pipeline.esnext.1.ts, 0, 0))
+>x : Symbol(x, Decl(parser.pipeline.esnext.1.ts, 1, 20))
+
+1 |> f1;
+>f1 : Symbol(f1, Decl(parser.pipeline.esnext.1.ts, 0, 0))
+
+1 |> f1(?);
+>f1 : Symbol(f1, Decl(parser.pipeline.esnext.1.ts, 0, 0))
+
+(1) |> f1;
+>f1 : Symbol(f1, Decl(parser.pipeline.esnext.1.ts, 0, 0))
+
+(1) |> f1(?);
+>f1 : Symbol(f1, Decl(parser.pipeline.esnext.1.ts, 0, 0))
+
+// multiple argument
+declare function f2(x: number, y: number): string;
+>f2 : Symbol(f2, Decl(parser.pipeline.esnext.1.ts, 5, 13))
+>x : Symbol(x, Decl(parser.pipeline.esnext.1.ts, 7, 20))
+>y : Symbol(y, Decl(parser.pipeline.esnext.1.ts, 7, 30))
+
+(1, 2) |> f2;
+>f2 : Symbol(f2, Decl(parser.pipeline.esnext.1.ts, 5, 13))
+
+(1, 2) |> f2(?, ?);
+>f2 : Symbol(f2, Decl(parser.pipeline.esnext.1.ts, 5, 13))
+
+// multiple steps
+declare function f3(x: string): boolean;
+>f3 : Symbol(f3, Decl(parser.pipeline.esnext.1.ts, 9, 19))
+>x : Symbol(x, Decl(parser.pipeline.esnext.1.ts, 11, 20))
+
+declare function f4(x: string, y: number): boolean;
+>f4 : Symbol(f4, Decl(parser.pipeline.esnext.1.ts, 11, 40))
+>x : Symbol(x, Decl(parser.pipeline.esnext.1.ts, 12, 20))
+>y : Symbol(y, Decl(parser.pipeline.esnext.1.ts, 12, 30))
+
+1 |> f1 |> f3;
+>f1 : Symbol(f1, Decl(parser.pipeline.esnext.1.ts, 0, 0))
+>f3 : Symbol(f3, Decl(parser.pipeline.esnext.1.ts, 9, 19))
+
+1 |> f1(?) |> f3;
+>f1 : Symbol(f1, Decl(parser.pipeline.esnext.1.ts, 0, 0))
+>f3 : Symbol(f3, Decl(parser.pipeline.esnext.1.ts, 9, 19))
+
+1 |> f1 |> f3(?);
+>f1 : Symbol(f1, Decl(parser.pipeline.esnext.1.ts, 0, 0))
+>f3 : Symbol(f3, Decl(parser.pipeline.esnext.1.ts, 9, 19))
+
+1 |> f1(?) |> f3(?);
+>f1 : Symbol(f1, Decl(parser.pipeline.esnext.1.ts, 0, 0))
+>f3 : Symbol(f3, Decl(parser.pipeline.esnext.1.ts, 9, 19))
+
+(1 |> f1(?), 2) |> f4;
+>f1 : Symbol(f1, Decl(parser.pipeline.esnext.1.ts, 0, 0))
+>f4 : Symbol(f4, Decl(parser.pipeline.esnext.1.ts, 11, 40))
+
+// use case
+declare function map<T, U>(source: Iterable<T>, cb: (value: T) => U): Iterable<U>;
+>map : Symbol(map, Decl(parser.pipeline.esnext.1.ts, 17, 22))
+>T : Symbol(T, Decl(parser.pipeline.esnext.1.ts, 19, 21))
+>U : Symbol(U, Decl(parser.pipeline.esnext.1.ts, 19, 23))
+>source : Symbol(source, Decl(parser.pipeline.esnext.1.ts, 19, 27))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(parser.pipeline.esnext.1.ts, 19, 21))
+>cb : Symbol(cb, Decl(parser.pipeline.esnext.1.ts, 19, 47))
+>value : Symbol(value, Decl(parser.pipeline.esnext.1.ts, 19, 53))
+>T : Symbol(T, Decl(parser.pipeline.esnext.1.ts, 19, 21))
+>U : Symbol(U, Decl(parser.pipeline.esnext.1.ts, 19, 23))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>U : Symbol(U, Decl(parser.pipeline.esnext.1.ts, 19, 23))
+
+declare function filter<T>(source: Iterable<T>, cb: (value: T) => boolean): Iterable<T>;
+>filter : Symbol(filter, Decl(parser.pipeline.esnext.1.ts, 19, 82))
+>T : Symbol(T, Decl(parser.pipeline.esnext.1.ts, 20, 24))
+>source : Symbol(source, Decl(parser.pipeline.esnext.1.ts, 20, 27))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(parser.pipeline.esnext.1.ts, 20, 24))
+>cb : Symbol(cb, Decl(parser.pipeline.esnext.1.ts, 20, 47))
+>value : Symbol(value, Decl(parser.pipeline.esnext.1.ts, 20, 53))
+>T : Symbol(T, Decl(parser.pipeline.esnext.1.ts, 20, 24))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(parser.pipeline.esnext.1.ts, 20, 24))
+
+declare function reduce<T>(source: Iterable<T>, cb: (memo: T, value: T) => T, initial: T): T;
+>reduce : Symbol(reduce, Decl(parser.pipeline.esnext.1.ts, 20, 88))
+>T : Symbol(T, Decl(parser.pipeline.esnext.1.ts, 21, 24))
+>source : Symbol(source, Decl(parser.pipeline.esnext.1.ts, 21, 27))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(parser.pipeline.esnext.1.ts, 21, 24))
+>cb : Symbol(cb, Decl(parser.pipeline.esnext.1.ts, 21, 47))
+>memo : Symbol(memo, Decl(parser.pipeline.esnext.1.ts, 21, 53))
+>T : Symbol(T, Decl(parser.pipeline.esnext.1.ts, 21, 24))
+>value : Symbol(value, Decl(parser.pipeline.esnext.1.ts, 21, 61))
+>T : Symbol(T, Decl(parser.pipeline.esnext.1.ts, 21, 24))
+>T : Symbol(T, Decl(parser.pipeline.esnext.1.ts, 21, 24))
+>initial : Symbol(initial, Decl(parser.pipeline.esnext.1.ts, 21, 77))
+>T : Symbol(T, Decl(parser.pipeline.esnext.1.ts, 21, 24))
+>T : Symbol(T, Decl(parser.pipeline.esnext.1.ts, 21, 24))
+
+[1, 2, 3]
+    |> map(?, x => x * 2)
+>map : Symbol(map, Decl(parser.pipeline.esnext.1.ts, 17, 22))
+>x : Symbol(x, Decl(parser.pipeline.esnext.1.ts, 23, 13))
+>x : Symbol(x, Decl(parser.pipeline.esnext.1.ts, 23, 13))
+
+    |> filter(?, x => x > 2)
+>filter : Symbol(filter, Decl(parser.pipeline.esnext.1.ts, 19, 82))
+>x : Symbol(x, Decl(parser.pipeline.esnext.1.ts, 24, 16))
+>x : Symbol(x, Decl(parser.pipeline.esnext.1.ts, 24, 16))
+
+    |> reduce(?, (x, y) => x + y, 0);
+>reduce : Symbol(reduce, Decl(parser.pipeline.esnext.1.ts, 20, 88))
+>x : Symbol(x, Decl(parser.pipeline.esnext.1.ts, 25, 18))
+>y : Symbol(y, Decl(parser.pipeline.esnext.1.ts, 25, 20))
+>x : Symbol(x, Decl(parser.pipeline.esnext.1.ts, 25, 18))
+>y : Symbol(y, Decl(parser.pipeline.esnext.1.ts, 25, 20))
+

@@ -2135,36 +2135,40 @@ namespace ts {
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.OmittedExpression:
             case SyntaxKind.RawExpression:
-                return 19;
+            case SyntaxKind.BindExpression:
+                return 20;
 
             case SyntaxKind.TaggedTemplateExpression:
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
-                return 18;
+            case SyntaxKind.BindToExpression:
+                return 19;
 
             case SyntaxKind.NewExpression:
-                return hasArguments ? 18 : 17;
+                return hasArguments ? 19 : 18;
 
             case SyntaxKind.CallExpression:
-                return 17;
+                return 18;
 
             case SyntaxKind.PostfixUnaryExpression:
-                return 16;
+                return 17;
 
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.TypeOfExpression:
             case SyntaxKind.VoidExpression:
             case SyntaxKind.DeleteExpression:
             case SyntaxKind.AwaitExpression:
-                return 15;
+                return 16;
 
             case SyntaxKind.BinaryExpression:
                 switch (operatorKind) {
                     case SyntaxKind.ExclamationToken:
                     case SyntaxKind.TildeToken:
-                        return 15;
+                        return 16;
 
                     case SyntaxKind.AsteriskAsteriskToken:
+                        return 15;
+
                     case SyntaxKind.AsteriskToken:
                     case SyntaxKind.SlashToken:
                     case SyntaxKind.PercentToken:
@@ -2206,6 +2210,7 @@ namespace ts {
                         return 6;
 
                     case SyntaxKind.BarBarToken:
+                    case SyntaxKind.QuestionQuestionToken:
                         return 5;
 
                     case SyntaxKind.EqualsToken:
@@ -2231,11 +2236,12 @@ namespace ts {
                 }
 
             case SyntaxKind.ConditionalExpression:
-                return 4;
+                return operatorKind === SyntaxKind.QuestionToken ? 4 : 3;
 
             case SyntaxKind.YieldExpression:
                 return 2;
 
+            case SyntaxKind.PositionalElement:
             case SyntaxKind.SpreadElement:
                 return 1;
 
@@ -3903,6 +3909,7 @@ namespace ts {
             case SyntaxKind.AmpersandAmpersandToken:
             case SyntaxKind.BarBarToken:
             case SyntaxKind.BarGreaterThanToken:
+            case SyntaxKind.QuestionQuestionToken:
                 return true;
         }
         return false;
@@ -3910,6 +3917,11 @@ namespace ts {
 
     export function isBinaryExpression(node: Node): node is BinaryExpression {
         return node.kind === SyntaxKind.BinaryExpression;
+    }
+
+    export function isCommaExpression(node: Node): node is CommaExpression {
+        return isBinaryExpression(node)
+            && node.operatorToken.kind === SyntaxKind.CommaToken
     }
 
     export function isConditionalExpression(node: Node): node is ConditionalExpression {
@@ -3941,6 +3953,11 @@ namespace ts {
 
     export function isPositionalOrPositionalSpreadElement(node: Node): node is PositionalElement | PositionalSpreadElement {
         return isPositionalElement(node) || isPositionalSpreadElement(node);
+    }
+
+    export function isPartialApplication(node: Node): node is CallExpression {
+        return node.kind === SyntaxKind.CallExpression
+            && forEach((<CallExpression>node).arguments, isPositionalOrPositionalSpreadElement);
     }
 
     export function isExpressionWithTypeArguments(node: Node): node is ExpressionWithTypeArguments {

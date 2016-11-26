@@ -1,0 +1,184 @@
+=== tests/cases/conformance/parser/esnext/parser.partialApplication.esnext.1.ts ===
+declare function f(a: number, b: number, ...c: number[]): void;
+>f : (a: number, b: number, ...c: number[]) => void
+>a : number
+>b : number
+>c : number[]
+
+declare const o: { m(a: number, b: number, ...c: number[]): void; };
+>o : { m(a: number, b: number, ...c: number[]): void; }
+>m : (a: number, b: number, ...c: number[]) => void
+>a : number
+>b : number
+>c : number[]
+
+// positional elements
+f(?, 0);
+>f(?, 0) : (a: number) => void
+>f : (a: number, b: number, ...c: number[]) => void
+>0 : 0
+
+f(0, ?);
+>f(0, ?) : (b: number) => void
+>f : (a: number, b: number, ...c: number[]) => void
+>0 : 0
+
+f(?, ?);
+>f(?, ?) : (a: number, b: number) => void
+>f : (a: number, b: number, ...c: number[]) => void
+
+o.m(?, 0);
+>o.m(?, 0) : (a: number) => void
+>o.m : (a: number, b: number, ...c: number[]) => void
+>o : { m(a: number, b: number, ...c: number[]): void; }
+>m : (a: number, b: number, ...c: number[]) => void
+>0 : 0
+
+o.m(0, ?);
+>o.m(0, ?) : (b: number) => void
+>o.m : (a: number, b: number, ...c: number[]) => void
+>o : { m(a: number, b: number, ...c: number[]): void; }
+>m : (a: number, b: number, ...c: number[]) => void
+>0 : 0
+
+o.m(?, ?);
+>o.m(?, ?) : (a: number, b: number) => void
+>o.m : (a: number, b: number, ...c: number[]) => void
+>o : { m(a: number, b: number, ...c: number[]): void; }
+>m : (a: number, b: number, ...c: number[]) => void
+
+// ordinal positional elements
+f(?0, 0);
+>f(?0, 0) : (a: number) => void
+>f : (a: number, b: number, ...c: number[]) => void
+>0 : 0
+
+f(0, ?0);
+>f(0, ?0) : (b: number) => void
+>f : (a: number, b: number, ...c: number[]) => void
+>0 : 0
+
+f(?0, ?1);
+>f(?0, ?1) : (a: number, b: number) => void
+>f : (a: number, b: number, ...c: number[]) => void
+
+f(?1, ?0);
+>f(?1, ?0) : (b: number, a: number) => void
+>f : (a: number, b: number, ...c: number[]) => void
+
+o.m(?0, 0);
+>o.m(?0, 0) : (a: number) => void
+>o.m : (a: number, b: number, ...c: number[]) => void
+>o : { m(a: number, b: number, ...c: number[]): void; }
+>m : (a: number, b: number, ...c: number[]) => void
+>0 : 0
+
+o.m(0, ?0);
+>o.m(0, ?0) : (b: number) => void
+>o.m : (a: number, b: number, ...c: number[]) => void
+>o : { m(a: number, b: number, ...c: number[]): void; }
+>m : (a: number, b: number, ...c: number[]) => void
+>0 : 0
+
+o.m(?0, ?1);
+>o.m(?0, ?1) : (a: number, b: number) => void
+>o.m : (a: number, b: number, ...c: number[]) => void
+>o : { m(a: number, b: number, ...c: number[]): void; }
+>m : (a: number, b: number, ...c: number[]) => void
+
+o.m(?1, ?0);
+>o.m(?1, ?0) : (b: number, a: number) => void
+>o.m : (a: number, b: number, ...c: number[]) => void
+>o : { m(a: number, b: number, ...c: number[]): void; }
+>m : (a: number, b: number, ...c: number[]) => void
+
+// positional spread element
+f(0, 1, ...);
+>f(0, 1, ...) : (...c: number) => void
+>f : (a: number, b: number, ...c: number[]) => void
+>0 : 0
+>1 : 1
+>... : any
+> : undefined
+
+f(0, 1, ..., 2);
+>f(0, 1, ..., 2) : (...c: number) => void
+>f : (a: number, b: number, ...c: number[]) => void
+>0 : 0
+>1 : 1
+>... : any
+> : undefined
+>2 : 2
+
+o.m(0, 1, ...);
+>o.m(0, 1, ...) : (...c: number) => void
+>o.m : (a: number, b: number, ...c: number[]) => void
+>o : { m(a: number, b: number, ...c: number[]): void; }
+>m : (a: number, b: number, ...c: number[]) => void
+>0 : 0
+>1 : 1
+>... : any
+> : undefined
+
+o.m(0, 1, ..., 2);
+>o.m(0, 1, ..., 2) : (...c: number) => void
+>o.m : (a: number, b: number, ...c: number[]) => void
+>o : { m(a: number, b: number, ...c: number[]): void; }
+>m : (a: number, b: number, ...c: number[]) => void
+>0 : 0
+>1 : 1
+>... : any
+> : undefined
+>2 : 2
+
+// mixed
+f(?, 0, ...);
+>f(?, 0, ...) : (a: number, ...c: number) => void
+>f : (a: number, b: number, ...c: number[]) => void
+>0 : 0
+>... : any
+> : undefined
+
+f(0, ?, ...);
+>f(0, ?, ...) : (b: number, ...c: number) => void
+>f : (a: number, b: number, ...c: number[]) => void
+>0 : 0
+>... : any
+> : undefined
+
+f(0, 1, ..., ?0);
+>f(0, 1, ..., ?0) : (c0: number, ...c: number) => void
+>f : (a: number, b: number, ...c: number[]) => void
+>0 : 0
+>1 : 1
+>... : any
+> : undefined
+
+o.m(?, 0, ...);
+>o.m(?, 0, ...) : (a: number, ...c: number) => void
+>o.m : (a: number, b: number, ...c: number[]) => void
+>o : { m(a: number, b: number, ...c: number[]): void; }
+>m : (a: number, b: number, ...c: number[]) => void
+>0 : 0
+>... : any
+> : undefined
+
+o.m(0, ?, ...);
+>o.m(0, ?, ...) : (b: number, ...c: number) => void
+>o.m : (a: number, b: number, ...c: number[]) => void
+>o : { m(a: number, b: number, ...c: number[]): void; }
+>m : (a: number, b: number, ...c: number[]) => void
+>0 : 0
+>... : any
+> : undefined
+
+o.m(0, 1, ..., ?0);
+>o.m(0, 1, ..., ?0) : (c0: number, ...c: number) => void
+>o.m : (a: number, b: number, ...c: number[]) => void
+>o : { m(a: number, b: number, ...c: number[]): void; }
+>m : (a: number, b: number, ...c: number[]) => void
+>0 : 0
+>1 : 1
+>... : any
+> : undefined
+

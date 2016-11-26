@@ -1,0 +1,114 @@
+=== tests/cases/conformance/parser/esnext/parser.partialApplication.esnext.1.ts ===
+declare function f(a: number, b: number, ...c: number[]): void;
+>f : Symbol(f, Decl(parser.partialApplication.esnext.1.ts, 0, 0))
+>a : Symbol(a, Decl(parser.partialApplication.esnext.1.ts, 0, 19))
+>b : Symbol(b, Decl(parser.partialApplication.esnext.1.ts, 0, 29))
+>c : Symbol(c, Decl(parser.partialApplication.esnext.1.ts, 0, 40))
+
+declare const o: { m(a: number, b: number, ...c: number[]): void; };
+>o : Symbol(o, Decl(parser.partialApplication.esnext.1.ts, 1, 13))
+>m : Symbol(m, Decl(parser.partialApplication.esnext.1.ts, 1, 18))
+>a : Symbol(a, Decl(parser.partialApplication.esnext.1.ts, 1, 21))
+>b : Symbol(b, Decl(parser.partialApplication.esnext.1.ts, 1, 31))
+>c : Symbol(c, Decl(parser.partialApplication.esnext.1.ts, 1, 42))
+
+// positional elements
+f(?, 0);
+>f : Symbol(f, Decl(parser.partialApplication.esnext.1.ts, 0, 0))
+
+f(0, ?);
+>f : Symbol(f, Decl(parser.partialApplication.esnext.1.ts, 0, 0))
+
+f(?, ?);
+>f : Symbol(f, Decl(parser.partialApplication.esnext.1.ts, 0, 0))
+
+o.m(?, 0);
+>o.m : Symbol(m, Decl(parser.partialApplication.esnext.1.ts, 1, 18))
+>o : Symbol(o, Decl(parser.partialApplication.esnext.1.ts, 1, 13))
+>m : Symbol(m, Decl(parser.partialApplication.esnext.1.ts, 1, 18))
+
+o.m(0, ?);
+>o.m : Symbol(m, Decl(parser.partialApplication.esnext.1.ts, 1, 18))
+>o : Symbol(o, Decl(parser.partialApplication.esnext.1.ts, 1, 13))
+>m : Symbol(m, Decl(parser.partialApplication.esnext.1.ts, 1, 18))
+
+o.m(?, ?);
+>o.m : Symbol(m, Decl(parser.partialApplication.esnext.1.ts, 1, 18))
+>o : Symbol(o, Decl(parser.partialApplication.esnext.1.ts, 1, 13))
+>m : Symbol(m, Decl(parser.partialApplication.esnext.1.ts, 1, 18))
+
+// ordinal positional elements
+f(?0, 0);
+>f : Symbol(f, Decl(parser.partialApplication.esnext.1.ts, 0, 0))
+
+f(0, ?0);
+>f : Symbol(f, Decl(parser.partialApplication.esnext.1.ts, 0, 0))
+
+f(?0, ?1);
+>f : Symbol(f, Decl(parser.partialApplication.esnext.1.ts, 0, 0))
+
+f(?1, ?0);
+>f : Symbol(f, Decl(parser.partialApplication.esnext.1.ts, 0, 0))
+
+o.m(?0, 0);
+>o.m : Symbol(m, Decl(parser.partialApplication.esnext.1.ts, 1, 18))
+>o : Symbol(o, Decl(parser.partialApplication.esnext.1.ts, 1, 13))
+>m : Symbol(m, Decl(parser.partialApplication.esnext.1.ts, 1, 18))
+
+o.m(0, ?0);
+>o.m : Symbol(m, Decl(parser.partialApplication.esnext.1.ts, 1, 18))
+>o : Symbol(o, Decl(parser.partialApplication.esnext.1.ts, 1, 13))
+>m : Symbol(m, Decl(parser.partialApplication.esnext.1.ts, 1, 18))
+
+o.m(?0, ?1);
+>o.m : Symbol(m, Decl(parser.partialApplication.esnext.1.ts, 1, 18))
+>o : Symbol(o, Decl(parser.partialApplication.esnext.1.ts, 1, 13))
+>m : Symbol(m, Decl(parser.partialApplication.esnext.1.ts, 1, 18))
+
+o.m(?1, ?0);
+>o.m : Symbol(m, Decl(parser.partialApplication.esnext.1.ts, 1, 18))
+>o : Symbol(o, Decl(parser.partialApplication.esnext.1.ts, 1, 13))
+>m : Symbol(m, Decl(parser.partialApplication.esnext.1.ts, 1, 18))
+
+// positional spread element
+f(0, 1, ...);
+>f : Symbol(f, Decl(parser.partialApplication.esnext.1.ts, 0, 0))
+
+f(0, 1, ..., 2);
+>f : Symbol(f, Decl(parser.partialApplication.esnext.1.ts, 0, 0))
+
+o.m(0, 1, ...);
+>o.m : Symbol(m, Decl(parser.partialApplication.esnext.1.ts, 1, 18))
+>o : Symbol(o, Decl(parser.partialApplication.esnext.1.ts, 1, 13))
+>m : Symbol(m, Decl(parser.partialApplication.esnext.1.ts, 1, 18))
+
+o.m(0, 1, ..., 2);
+>o.m : Symbol(m, Decl(parser.partialApplication.esnext.1.ts, 1, 18))
+>o : Symbol(o, Decl(parser.partialApplication.esnext.1.ts, 1, 13))
+>m : Symbol(m, Decl(parser.partialApplication.esnext.1.ts, 1, 18))
+
+// mixed
+f(?, 0, ...);
+>f : Symbol(f, Decl(parser.partialApplication.esnext.1.ts, 0, 0))
+
+f(0, ?, ...);
+>f : Symbol(f, Decl(parser.partialApplication.esnext.1.ts, 0, 0))
+
+f(0, 1, ..., ?0);
+>f : Symbol(f, Decl(parser.partialApplication.esnext.1.ts, 0, 0))
+
+o.m(?, 0, ...);
+>o.m : Symbol(m, Decl(parser.partialApplication.esnext.1.ts, 1, 18))
+>o : Symbol(o, Decl(parser.partialApplication.esnext.1.ts, 1, 13))
+>m : Symbol(m, Decl(parser.partialApplication.esnext.1.ts, 1, 18))
+
+o.m(0, ?, ...);
+>o.m : Symbol(m, Decl(parser.partialApplication.esnext.1.ts, 1, 18))
+>o : Symbol(o, Decl(parser.partialApplication.esnext.1.ts, 1, 13))
+>m : Symbol(m, Decl(parser.partialApplication.esnext.1.ts, 1, 18))
+
+o.m(0, 1, ..., ?0);
+>o.m : Symbol(m, Decl(parser.partialApplication.esnext.1.ts, 1, 18))
+>o : Symbol(o, Decl(parser.partialApplication.esnext.1.ts, 1, 13))
+>m : Symbol(m, Decl(parser.partialApplication.esnext.1.ts, 1, 18))
+

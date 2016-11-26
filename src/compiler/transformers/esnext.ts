@@ -69,12 +69,18 @@ namespace ts {
                     return visitParenthesizedExpression(node as ParenthesizedExpression, noDestructuringValue);
                 case SyntaxKind.CallExpression:
                     return visitCallExpression(node as CallExpression);
+                case SyntaxKind.NewExpression:
+                    return visitNewExpression(node as NewExpression);
                 case SyntaxKind.OperatorExpression:
                     return visitOperatorExpression(node as OperatorExpression);
                 case SyntaxKind.BindExpression:
                     return visitBindExpression(node as BindExpression);
                 case SyntaxKind.BindToExpression:
                     return visitBindToExpression(node as BindToExpression);
+                case SyntaxKind.PropertyAccessExpression:
+                    return visitPropertyAccess(node as PropertyAccessExpression);
+                case SyntaxKind.ElementAccessExpression:
+                    return visitElementAccess(node as ElementAccessExpression);
                 default:
                     return visitEachChild(node, visitor, context);
             }
@@ -159,28 +165,25 @@ namespace ts {
                         visitNode(node.right, noDestructuringValue ? visitorNoDestructuringValue : visitor, isExpression)
                     );
                 case SyntaxKind.BarGreaterThanToken:
-                    return transformPipelineExpression(node);
+                    return transformPipelineExpression(<PipelineExpression>node);
+                case SyntaxKind.QuestionQuestionToken:
+                    return transformCoalesceExpression(<CoalesceExpression>node);
             }
             return visitEachChild(node, visitor, context);
         }
 
-        function transformPipelineExpression(node: BinaryExpression) {
+        function transformPipelineExpression(node: PipelineExpression) {
             const argumentList: Expression[] = [];
-            let expression = node.left;
-            if (expression.kind === SyntaxKind.ParenthesizedExpression) {
-                // comma expressions are right-deep
-                expression = (<ParenthesizedExpression>expression).expression;
-                while (expression.kind === SyntaxKind.BinaryExpression &&
-                    (<BinaryExpression>expression).operatorToken.kind === SyntaxKind.CommaToken) {
-                    argumentList.push(visitNode((<BinaryExpression>expression).left, visitor, isExpression));
-                    expression = (<BinaryExpression>expression).right;
-                }
+            if (node.left.kind === SyntaxKind.ParenthesizedExpression) {
+                collectPipelineArguments((<ParenthesizedExpression>node.left).expression, argumentList);
             }
-            argumentList.push(visitNode(expression, visitor, isExpression));
+            else {
+                argumentList.push(visitNode(node.left, visitor, isExpression));
+            }
             const func = visitNode(node.right, visitor, isExpression);
             if (func.kind === SyntaxKind.ArrowFunction ||
                 func.kind === SyntaxKind.FunctionExpression) {
-                return createCall(func, /*typeArguments*/ undefined, argumentList);
+                return createCall(func, /*typeArguments*/ undefined, argumentList, node);
             }
             else {
                 const parameterList: ParameterDeclaration[] = [];
@@ -204,7 +207,38 @@ namespace ts {
                         )
                     ),
                     /*typeArguments*/ undefined,
-                    argumentList
+                    argumentList,
+                    node
+                );
+            }
+        }
+
+        function collectPipelineArguments(node: Expression, argumentList: Expression[]) {
+            if (isCommaExpression(node)) {
+                collectPipelineArguments(node.left, argumentList);
+                collectPipelineArguments(node.right, argumentList);
+            }
+            else {
+                argumentList.push(visitNode(node, visitor, isExpression));
+            }
+        }
+
+        function transformCoalesceExpression(node: CoalesceExpression): Expression {
+            const left = visitNode(node.left, visitor, isExpression);
+            const right = visitNode(node.right, visitor, isExpression);
+            if (isIdentifier(left)) {
+                return createConditional(
+                    createInequality(left, createNull()),
+                    left,
+                    right
+                );
+            }
+            else {
+                const temp = createTempVariable(hoistVariableDeclaration);
+                return createConditional(
+                    createInequality(createAssignment(temp, left), createNull()),
+                    temp,
+                    right
                 );
             }
         }
@@ -442,65 +476,181 @@ namespace ts {
             return body;
         }
 
+        function propagateNull<T extends Node>(finishExpression: (node: T, nullableExpression: Expression) => Expression, node: T, nullableExpression: Expression): Expression;
+        function propagateNull<T extends Node, U>(finishExpression: (node: T, nullableExpression: Expression, data: U) => Expression, node: T, nullableExpression: Expression, data: U): Expression;
+        function propagateNull<T extends Node, U>(finishExpression: (node: T, nullableExpression: Expression, data: U) => Expression, node: T, nullableExpression: Expression, data?: U): Expression {
+            if (node.flags & NodeFlags.PropagateNull) {
+                if (isIdentifier(nullableExpression)) {
+                    return createConditional(
+                        createEquality(nullableExpression, createNull()),
+                        nullableExpression,
+                        finishExpression(node, nullableExpression, data),
+                        node
+                    );
+                }
+                else {
+                    const temp = createTempVariable(hoistVariableDeclaration);
+                    return createConditional(
+                        createEquality(
+                            createAssignment(temp, nullableExpression),
+                            createNull()
+                        ),
+                        temp,
+                        finishExpression(node, temp, data),
+                        node
+                    );
+                }
+            }
+            return finishExpression(node, nullableExpression, data);
+        }
+
         function visitCallExpression(node: CallExpression): Expression {
-            let expression = visitNode(node.expression, visitor, isExpression) as Expression;
-            if (!forEach(node.arguments, isPositionalOrPositionalSpreadElement)) {
-                return updateCall(
-                    node,
-                    expression,
-                    /*typeArguments*/ undefined,
-                    visitNodes(node.arguments, visitor, isExpression));
+            return propagateNull(finishCallExpression, node, visitNode(node.expression, visitor, isExpression));
+        }
+
+        function finishCallExpression(node: CallExpression, expression: Expression) {
+            if (forEach(node.arguments, isPositionalOrPositionalSpreadElement)) {
+                return transformPartialCallExpression(node, expression);
             }
-            else {
-                const expressionTemp = createTempVariable(hoistVariableDeclaration);
-                const argumentList: Expression[] = [];
-                const pendingExpressions: Expression[] = [createAssignment(expressionTemp, expression)];
-                const positionalParameters: ParameterDeclaration[] = [];
-                let positionalRestParameter: ParameterDeclaration;
-                let position = 0;
-                for (let i = 0; i < node.arguments.length; i++) {
-                    let argument = node.arguments[i];
-                    if (isPositionalElement(argument)) {
-                        if (argument.literal) {
-                            position = +argument.literal.text;
-                        }
-                        const parameter = positionalParameters[position] || (positionalParameters[position] = createParameter());
-                        argument = <Identifier>parameter.name;
-                        position++;
-                    }
-                    else if (isPositionalSpreadElement(argument)) {
-                        const parameter = positionalRestParameter || (positionalRestParameter = createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, createToken(SyntaxKind.DotDotDotToken)));
-                        argument = createSpreadElement(<Identifier>parameter.name);
-                    }
-                    else {
-                        argument = visitNode(argument, visitor, isExpression);
-                        const temp = createTempVariable(hoistVariableDeclaration);
-                        pendingExpressions.push(createAssignment(temp, isSpreadElement(argument) ? argument.expression : argument));
-                        argument = isSpreadElement(argument) ? createSpreadElement(temp) : temp;
-                    }
-                    argumentList.push(argument);
-                }
-                if (positionalRestParameter) {
-                    positionalParameters.push(positionalRestParameter);
-                }
-                for (let i = 0; i < positionalParameters.length; i++) {
-                    if (!positionalParameters[i]) {
-                        positionalParameters[i] = createParameter();
-                    }
-                }
-                pendingExpressions.push(
-                    createArrowFunction(
-                        /*modifiers*/ undefined,
-                        /*typeParameters*/ undefined,
-                        positionalParameters,
-                        /*type*/ undefined,
-                        /*equalsGreaterThanToken*/ createToken(SyntaxKind.EqualsGreaterThanToken),
-                        updateCall(node, expressionTemp, /*typeArguments*/ undefined, argumentList),
-                        /*location*/ node
-                    )
+            if (node.flags & NodeFlags.PropagateNull) {
+                return setOriginalNode(
+                    createCall(
+                        expression,
+                        /*typeArguments*/ undefined,
+                        visitNodes(node.arguments, visitor, isExpression),
+                        node
+                    ),
+                    node
                 );
-                return inlineExpressions(pendingExpressions);
             }
+            return updateCall(
+                node,
+                expression,
+                /*typeArguments*/ undefined,
+                visitNodes(node.arguments, visitor, isExpression),
+            )
+        }
+
+        function transformPartialCallExpression(node: CallExpression, expression: Expression) {
+            const expressionTemp = createTempVariable(hoistVariableDeclaration);
+            const argumentList: Expression[] = [];
+            const pendingExpressions: Expression[] = [createAssignment(expressionTemp, expression)];
+            const positionalParameters: ParameterDeclaration[] = [];
+            let positionalRestParameter: ParameterDeclaration;
+            let position = 0;
+            for (let i = 0; i < node.arguments.length; i++) {
+                let argument = node.arguments[i];
+                if (isPositionalElement(argument)) {
+                    if (argument.literal) {
+                        position = +argument.literal.text;
+                    }
+                    const parameter = positionalParameters[position] || (positionalParameters[position] = createParameter());
+                    argument = <Identifier>parameter.name;
+                    position++;
+                }
+                else if (isPositionalSpreadElement(argument)) {
+                    const parameter = positionalRestParameter || (positionalRestParameter = createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, createToken(SyntaxKind.DotDotDotToken)));
+                    argument = createSpreadElement(<Identifier>parameter.name);
+                }
+                else {
+                    argument = visitNode(argument, visitor, isExpression);
+                    const temp = createTempVariable(hoistVariableDeclaration);
+                    pendingExpressions.push(createAssignment(temp, isSpreadElement(argument) ? argument.expression : argument));
+                    argument = isSpreadElement(argument) ? createSpreadElement(temp) : temp;
+                }
+                argumentList.push(argument);
+            }
+            if (positionalRestParameter) {
+                positionalParameters.push(positionalRestParameter);
+            }
+            for (let i = 0; i < positionalParameters.length; i++) {
+                if (!positionalParameters[i]) {
+                    positionalParameters[i] = createParameter();
+                }
+            }
+            pendingExpressions.push(
+                createArrowFunction(
+                    /*modifiers*/ undefined,
+                    /*typeParameters*/ undefined,
+                    positionalParameters,
+                    /*type*/ undefined,
+                    /*equalsGreaterThanToken*/ createToken(SyntaxKind.EqualsGreaterThanToken),
+                    setOriginalNode(
+                        createCall(expressionTemp, /*typeArguments*/ undefined, argumentList, node),
+                        node
+                    ),
+                    /*location*/ node
+                )
+            );
+            return inlineExpressions(pendingExpressions);
+        }
+
+        function visitNewExpression(node: NewExpression): Expression {
+            return propagateNull(finishNewExpression, node, visitNode(node.expression, visitor, isExpression));
+        }
+
+        function finishNewExpression(node: NewExpression, expression: Expression) {
+            if (node.flags & NodeFlags.PropagateNull) {
+                return setOriginalNode(
+                    createNew(
+                        expression,
+                        /*typeArguments*/ undefined,
+                        visitNodes(node.arguments, visitor, isExpression),
+                        /*location*/ node
+                    ),
+                    node
+                );
+            }
+            return updateNew(
+                node,
+                expression,
+                /*typeArguments*/ undefined,
+                visitNodes(node.arguments, visitor, isExpression),
+            );
+        }
+
+        function visitPropertyAccess(node: PropertyAccessExpression): Expression {
+            return propagateNull(finishPropertyAccess, node, visitNode(node.expression, visitor, isExpression));
+        }
+
+        function finishPropertyAccess(node: PropertyAccessExpression, expression: Expression) {
+            if (node.flags & NodeFlags.PropagateNull) {
+                return setOriginalNode(
+                    createPropertyAccess(
+                        expression,
+                        node.name,
+                        node
+                    ),
+                    node
+                );
+            }
+            return updatePropertyAccess(
+                node,
+                expression,
+                node.name
+            );
+        }
+
+        function visitElementAccess(node: ElementAccessExpression): Expression {
+            return propagateNull(finishElementAccess, node, visitNode(node.expression, visitor, isExpression));
+        }
+
+        function finishElementAccess(node: ElementAccessExpression, expression: Expression) {
+            if (node.flags & NodeFlags.PropagateNull) {
+                return setOriginalNode(
+                    createElementAccess(
+                        expression,
+                        visitNode(node.argumentExpression, visitor, isExpression),
+                        node
+                    ),
+                    node
+                );
+            }
+            return updateElementAccess(
+                node,
+                expression,
+                visitNode(node.argumentExpression, visitor, isExpression),
+            );
         }
 
         function visitOperatorExpression(node: OperatorExpression) {
@@ -551,37 +701,27 @@ namespace ts {
             if (operand.kind === SyntaxKind.PropertyAccessExpression
                 || operand.kind === SyntaxKind.ElementAccessExpression) {
                 const { target, thisArg } = createCallBinding(operand, hoistVariableDeclaration);
-                return createFunctionBind(
-                    target,
-                    thisArg,
-                    [],
-                    node
-                )
+                return createFunctionBind(target, thisArg, [], node);
             }
             else {
-                return createFunctionBind(
-                    operand,
-                    createNull(),
-                    [],
-                    node
-                );
+                return createFunctionBind(operand, createNull(), [], node);
             }
         }
 
         function visitBindToExpression(node: BindToExpression) {
+            const targetExpression = visitNode(node.targetExpression, visitor, isExpression);
+            const expression = visitNode(node.expression, visitor, isLeftHandSideExpression);
+            if (isIdentifier(targetExpression)) {
+                return createFunctionBind(expression, targetExpression, [], node);
+            }
             const thisArg = createTempVariable(context.hoistVariableDeclaration);
             return createComma(
                 createAssignment(
                     thisArg,
-                    visitNode(node.targetExpression, visitor, isExpression),
+                    targetExpression,
                     node.targetExpression
                 ),
-                createFunctionBind(
-                    visitNode(node.expression, visitor, isLeftHandSideExpression),
-                    thisArg,
-                    [],
-                    node
-                )
+                createFunctionBind(expression, thisArg, [], node)
             );
         }
     }
