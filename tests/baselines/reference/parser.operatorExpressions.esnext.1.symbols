@@ -1,0 +1,45 @@
+=== tests/cases/conformance/parser/esnext/parser.operatorExpressions.esnext.1.ts ===
+// exponentiation
+No type information for this code.(**);
+No type information for this code.// multiplicative
+No type information for this code.(*);
+No type information for this code.(/);
+No type information for this code.(%);
+No type information for this code.// additive
+No type information for this code.(+);
+No type information for this code.(-);
+No type information for this code.// shift
+No type information for this code.(<<);
+No type information for this code.(>>);
+No type information for this code.(>>>);
+No type information for this code.// relational
+No type information for this code.(<);
+No type information for this code.(<=);
+No type information for this code.(>);
+No type information for this code.(>=);
+No type information for this code.(instanceof);
+No type information for this code.(in);
+No type information for this code.// equality
+No type information for this code.(==);
+No type information for this code.(===);
+No type information for this code.(!=);
+No type information for this code.(!==);
+No type information for this code.// bitwise
+No type information for this code.(&);
+No type information for this code.(|);
+No type information for this code.(^);
+No type information for this code.// logical
+No type information for this code.(&&);
+No type information for this code.(||);
+No type information for this code.// unary additive
+No type information for this code.(~+);
+No type information for this code.(~-);
+No type information for this code.// unary bitwise
+No type information for this code.(~);
+No type information for this code.// unary logical
+No type information for this code.(!);
+No type information for this code.// unary other
+No type information for this code.(void);
+No type information for this code.(typeof);
+No type information for this code.
+No type information for this code.

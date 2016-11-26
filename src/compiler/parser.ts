@@ -4231,6 +4231,8 @@ namespace ts {
             const fullStart = scanner.getStartPos();
             parseExpected(SyntaxKind.OpenParenToken);
 
+            reScanTildeToken();
+            reScanGreaterToken();
             let operator = token();
             switch (operator) {
                 case SyntaxKind.AsteriskAsteriskToken:
@@ -4245,7 +4247,7 @@ namespace ts {
                 case SyntaxKind.LessThanToken:
                 case SyntaxKind.LessThanEqualsToken:
                 case SyntaxKind.GreaterThanToken:
-                case SyntaxKind.GreaterThanGreaterThanEqualsToken:
+                case SyntaxKind.GreaterThanEqualsToken:
                 case SyntaxKind.InstanceOfKeyword:
                 case SyntaxKind.InKeyword:
                 case SyntaxKind.EqualsEqualsToken:
@@ -4260,17 +4262,10 @@ namespace ts {
                 case SyntaxKind.ExclamationToken:
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.TypeOfKeyword:
-                    nextToken();
-                    if (token() === SyntaxKind.CloseParenToken) {
-                        nextToken();
-                        const node = <OperatorExpression>createNode(SyntaxKind.OperatorExpression, fullStart);
-                        node.operator = operator;
-                        return finishNode(node);
-                    }
-                    return undefined;
                 case SyntaxKind.TildeToken:
-                    operator = reScanTildeToken();
-                    nextToken()
+                case SyntaxKind.TildePlusToken:
+                case SyntaxKind.TildeMinusToken:
+                    nextToken();
                     if (token() === SyntaxKind.CloseParenToken) {
                         nextToken();
                         const node = <OperatorExpression>createNode(SyntaxKind.OperatorExpression, fullStart);

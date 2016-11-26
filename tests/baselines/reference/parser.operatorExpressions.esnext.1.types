@@ -1,0 +1,103 @@
+=== tests/cases/conformance/parser/esnext/parser.operatorExpressions.esnext.1.ts ===
+// exponentiation
+(**);
+>(**) : (a: number, b: number) => number
+
+// multiplicative
+(*);
+>(*) : (a: number, b: number) => number
+
+(/);
+>(/) : (a: number, b: number) => number
+
+(%);
+>(%) : (a: number, b: number) => number
+
+// additive
+(+);
+>(+) : { (a: string, b: string): string; (a: string, b: number): string; (a: number, b: string): string; (a: number, b: number): number; }
+
+(-);
+>(-) : (a: number, b: number) => number
+
+// shift
+(<<);
+>(<<) : (a: number, b: number) => number
+
+(>>);
+>(>>) : (a: number, b: number) => number
+
+(>>>);
+>(>>>) : (a: number, b: number) => number
+
+// relational
+(<);
+>(<) : <T>(a: T, b: T) => boolean
+
+(<=);
+>(<=) : <T>(a: T, b: T) => boolean
+
+(>);
+>(>) : <T>(a: T, b: T) => boolean
+
+(>=);
+>(>=) : <T>(a: T, b: T) => boolean
+
+(instanceof);
+>(instanceof) : (a: any, b: Function) => boolean
+
+(in);
+>(in) : (a: string | number | symbol, b: any) => boolean
+
+// equality
+(==);
+>(==) : <T>(a: T, b: T) => boolean
+
+(===);
+>(===) : <T>(a: T, b: T) => boolean
+
+(!=);
+>(!=) : <T>(a: T, b: T) => boolean
+
+(!==);
+>(!==) : <T>(a: T, b: T) => boolean
+
+// bitwise
+(&);
+>(&) : (a: number, b: number) => number
+
+(|);
+>(|) : (a: number, b: number) => number
+
+(^);
+>(^) : (a: number, b: number) => number
+
+// logical
+(&&);
+>(&&) : <T, U>(a: T, b: U) => U
+
+(||);
+>(||) : <T, U>(a: T, b: U) => T | U
+
+// unary additive
+(~+);
+>(~+) : (a: any) => number
+
+(~-);
+>(~-) : (a: any) => number
+
+// unary bitwise
+(~);
+>(~) : (a: any) => number
+
+// unary logical
+(!);
+>(!) : (a: any) => boolean
+
+// unary other
+(void);
+>(void) : (a: any) => void
+
+(typeof);
+>(typeof) : (a: any) => string
+
