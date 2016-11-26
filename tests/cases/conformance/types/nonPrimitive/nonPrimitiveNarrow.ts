@@ -16,7 +16,7 @@ if (typeof a === 'number') {
 var b: object | null
 
 if (typeof b === 'object') {
-   b.toString(); // error, object | null
+   b.toString(); // ok, object | null
 } else {
    b.toString(); // error, never
 }

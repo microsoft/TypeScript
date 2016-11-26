@@ -42,3 +42,11 @@ tests/cases/conformance/types/nonPrimitive/nonPrimitiveAssignError.ts(17,1): err
     ~
 !!! error TS2322: Type 'object' is not assignable to type 'string'.
     
+    var numObj: Number = 123;
+    var boolObj: Boolean = true;
+    var strObj: String = "string";
+    
+    a = numObj; // ok
+    a = boolObj; // ok
+    a = strObj; // ok
+    
