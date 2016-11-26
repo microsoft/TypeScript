@@ -3205,7 +3205,7 @@ namespace ts {
             // right hand expression is of a type parameter type.
             if (declaration.parent.parent.kind === SyntaxKind.ForInStatement) {
                 const indexType = getIndexType(checkNonNullExpression((<ForInStatement>declaration.parent.parent).expression));
-                return indexType.flags & TypeFlags.Index ? indexType : stringType;
+                return indexType.flags & (TypeFlags.TypeParameter | TypeFlags.Index) ? indexType : stringType;
             }
 
             if (declaration.parent.parent.kind === SyntaxKind.ForOfStatement) {
@@ -5920,6 +5920,11 @@ namespace ts {
                 getLiteralTypeFromPropertyNames(type);
         }
 
+        function getIndexTypeOrString(type: Type): Type {
+            const indexType = getIndexType(type);
+            return indexType !== neverType ? indexType : stringType;
+        }
+
         function getTypeFromTypeOperatorNode(node: TypeOperatorNode) {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
@@ -6018,8 +6023,7 @@ namespace ts {
                 // meaningfully access the properties of the object type. In those cases, we first check that the
                 // index type is assignable to 'keyof T' for the object type.
                 if (accessNode) {
-                    const keyType = indexType.flags & TypeFlags.TypeParameter ? getConstraintOfTypeParameter(<TypeParameter>indexType) || emptyObjectType : indexType;
-                    if (!isTypeAssignableTo(keyType, getIndexType(objectType))) {
+                    if (!isTypeAssignableTo(indexType, getIndexType(objectType))) {
                         error(accessNode, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(indexType), typeToString(objectType));
                         return unknownType;
                     }
@@ -14275,7 +14279,7 @@ namespace ts {
             // The in operator requires the left operand to be of type Any, the String primitive type, or the Number primitive type,
             // and the right operand to be of type Any, an object type, or a type parameter type.
             // The result is always of the Boolean primitive type.
-            if (!isTypeAnyOrAllConstituentTypesHaveKind(leftType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol)) {
+            if (!(isTypeComparableTo(leftType, stringType) || isTypeOfKind(leftType, TypeFlags.NumberLike | TypeFlags.ESSymbol))) {
                 error(left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_type_any_string_number_or_symbol);
             }
             if (!isTypeAnyOrAllConstituentTypesHaveKind(rightType, TypeFlags.Object | TypeFlags.TypeParameter | TypeFlags.IndexedAccess)) {
@@ -17166,6 +17170,7 @@ namespace ts {
             // Grammar checking
             checkGrammarForInOrForOfStatement(node);
 
+            const rightType = checkNonNullExpression(node.expression);
             // TypeScript 1.0 spec  (April 2014): 5.4
             // In a 'for-in' statement of the form
             // for (let VarDecl in Expr) Statement
@@ -17176,7 +17181,6 @@ namespace ts {
                 if (variable && isBindingPattern(variable.name)) {
                     error(variable.name, Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_a_destructuring_pattern);
                 }
-
                 checkForInOrForOfVariableDeclaration(node);
             }
             else {
@@ -17189,7 +17193,7 @@ namespace ts {
                 if (varExpr.kind === SyntaxKind.ArrayLiteralExpression || varExpr.kind === SyntaxKind.ObjectLiteralExpression) {
                     error(varExpr, Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_a_destructuring_pattern);
                 }
-                else if (!isTypeAnyOrAllConstituentTypesHaveKind(leftType, TypeFlags.StringLike)) {
+                else if (!isTypeAssignableTo(getIndexTypeOrString(rightType), leftType)) {
                     error(varExpr, Diagnostics.The_left_hand_side_of_a_for_in_statement_must_be_of_type_string_or_any);
                 }
                 else {
@@ -17198,7 +17202,6 @@ namespace ts {
                 }
             }
 
-            const rightType = checkNonNullExpression(node.expression);
             // unknownType is returned i.e. if node.expression is identifier whose name cannot be resolved
             // in this case error about missing name is already reported - do not report extra one
             if (!isTypeAnyOrAllConstituentTypesHaveKind(rightType, TypeFlags.Object | TypeFlags.TypeParameter | TypeFlags.IndexedAccess)) {
