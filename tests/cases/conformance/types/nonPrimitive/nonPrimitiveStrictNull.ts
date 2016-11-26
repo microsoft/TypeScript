@@ -47,3 +47,15 @@ if (typeof d === 'undefined') {
 } else {
     d.toString(); // error, object | null
 }
+
+interface Proxy<T extends object> {}
+
+var x: Proxy<number>; // error
+var y: Proxy<null>; // error
+var z: Proxy<undefined>; // error
+
+interface Blah {
+  foo: number;
+}
+
+var u: Proxy<Blah>; // ok

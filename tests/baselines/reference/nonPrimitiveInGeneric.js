@@ -22,6 +22,19 @@ bound2<Object>();
 bound2<number>(); // expect error
 bound2<string>(); // expect error
 
+interface Proxy<T extends object> {}
+
+var x: Proxy<number>; // error
+var y: Proxy<null>; // ok
+var z: Proxy<undefined> ; // ok
+
+
+interface Blah {
+  foo: number;
+}
+
+var u: Proxy<Blah>; // ok
+
 
 //// [nonPrimitiveInGeneric.js]
 function generic(t) { }
@@ -41,3 +54,7 @@ bound2();
 bound2();
 bound2(); // expect error
 bound2(); // expect error
+var x; // error
+var y; // ok
+var z; // ok
+var u; // ok

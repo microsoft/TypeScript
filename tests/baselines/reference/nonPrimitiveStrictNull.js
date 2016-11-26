@@ -48,6 +48,18 @@ if (typeof d === 'undefined') {
     d.toString(); // error, object | null
 }
 
+interface Proxy<T extends object> {}
+
+var x: Proxy<number>; // error
+var y: Proxy<null>; // error
+var z: Proxy<undefined>; // error
+
+interface Blah {
+  foo: number;
+}
+
+var u: Proxy<Blah>; // ok
+
 
 //// [nonPrimitiveStrictNull.js]
 var a;
@@ -91,3 +103,7 @@ if (typeof d === 'undefined') {
 else {
     d.toString(); // error, object | null
 }
+var x; // error
+var y; // error
+var z; // error
+var u; // ok

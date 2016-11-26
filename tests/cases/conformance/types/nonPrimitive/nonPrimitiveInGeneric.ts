@@ -20,3 +20,16 @@ bound2<{}>();
 bound2<Object>();
 bound2<number>(); // expect error
 bound2<string>(); // expect error
+
+interface Proxy<T extends object> {}
+
+var x: Proxy<number>; // error
+var y: Proxy<null>; // ok
+var z: Proxy<undefined> ; // ok
+
+
+interface Blah {
+  foo: number;
+}
+
+var u: Proxy<Blah>; // ok

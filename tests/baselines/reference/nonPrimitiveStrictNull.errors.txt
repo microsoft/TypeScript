@@ -21,9 +21,12 @@ tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(41,5): erro
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(45,5): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(45,7): error TS2339: Property 'toString' does not exist on type 'never'.
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(47,5): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(52,14): error TS2344: Type 'number' does not satisfy the constraint 'object'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(53,14): error TS2344: Type 'null' does not satisfy the constraint 'object'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(54,14): error TS2344: Type 'undefined' does not satisfy the constraint 'object'.
 
 
-==== tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts (19 errors) ====
+==== tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts (22 errors) ====
     
     var a: object
     declare var b: object | null
@@ -114,4 +117,22 @@ tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(47,5): erro
         ~
 !!! error TS2531: Object is possibly 'null'.
     }
+    
+    interface Proxy<T extends object> {}
+    
+    var x: Proxy<number>; // error
+                 ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'object'.
+    var y: Proxy<null>; // error
+                 ~~~~
+!!! error TS2344: Type 'null' does not satisfy the constraint 'object'.
+    var z: Proxy<undefined>; // error
+                 ~~~~~~~~~
+!!! error TS2344: Type 'undefined' does not satisfy the constraint 'object'.
+    
+    interface Blah {
+      foo: number;
+    }
+    
+    var u: Proxy<Blah>; // ok
     
