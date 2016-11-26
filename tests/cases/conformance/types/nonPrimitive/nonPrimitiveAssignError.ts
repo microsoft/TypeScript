@@ -15,3 +15,11 @@ a = s; // expect error
 n = a; // expect error
 b = a; // expect error
 s = a; // expect error
+
+var numObj: Number = 123;
+var boolObj: Boolean = true;
+var strObj: String = "string";
+
+a = numObj; // ok
+a = boolObj; // ok
+a = strObj; // ok

@@ -3089,10 +3089,6 @@ namespace ts {
             return type && (type.flags & TypeFlags.Never) !== 0;
         }
 
-        function isTypeNonPrimitive(type: Type) {
-            return type === nonPrimitiveType;
-        }
-
         // Return the type of a binding element parent. We check SymbolLinks first to see if a type has been
         // assigned by contextual typing.
         function getTypeForBindingElementParent(node: VariableLikeDeclaration) {
@@ -7475,7 +7471,7 @@ namespace ts {
                         }
                     }
                 }
-                else if (!(source.flags & TypeFlags.Primitive && isTypeNonPrimitive(target))) {
+                else if (!(source.flags & TypeFlags.Primitive && target === nonPrimitiveType)) {
                     if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
                         // We have type references to same target type, see if relationship holds for all type arguments
                         if (result = typeArgumentsRelatedTo(<TypeReference>source, <TypeReference>target, reportErrors)) {

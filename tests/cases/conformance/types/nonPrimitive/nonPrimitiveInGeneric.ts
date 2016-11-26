@@ -13,3 +13,10 @@ bound({});
 bound(a);
 bound(123); // expect error
 bound(b); // expect error
+
+function bound2<T extends object>() {}
+
+bound2<{}>();
+bound2<Object>();
+bound2<number>(); // expect error
+bound2<string>(); // expect error
