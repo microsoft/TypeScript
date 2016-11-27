@@ -8668,11 +8668,14 @@ namespace ts {
             function inferFromObjectTypes(source: Type, target: Type) {
                 if (getObjectFlags(target) & ObjectFlags.Mapped) {
                     const constraintType = getConstraintTypeFromMappedType(<MappedType>target);
-                    if (getObjectFlags(source) & ObjectFlags.Mapped) {
-                        // We're inferring from a mapped type to a mapped type, so simply infer from constraint type to
-                        // constraint type and from template type to template type.
-                        inferFromTypes(getConstraintTypeFromMappedType(<MappedType>source), constraintType);
-                        inferFromTypes(getTemplateTypeFromMappedType(<MappedType>source), getTemplateTypeFromMappedType(<MappedType>target));
+                    if (constraintType.flags & TypeFlags.Index) {
+                        // We're inferring from some source type S to an isomorphic mapped type { [P in keyof T]: X },
+                        // where T is a type parameter. Use inferTypeForIsomorphicMappedType to infer a suitable source
+                        // type and then infer from that type to T.
+                        const index = indexOf(typeParameters, (<IndexType>constraintType).type);
+                        if (index >= 0 && !typeInferences[index].isFixed) {
+                            inferFromTypes(inferTypeForIsomorphicMappedType(source, <MappedType>target), typeParameters[index]);
+                        }
                         return;
                     }
                     if (constraintType.flags & TypeFlags.TypeParameter) {
@@ -8682,14 +8685,11 @@ namespace ts {
                         inferFromTypes(getUnionType(map(getPropertiesOfType(source), getTypeOfSymbol)), getTemplateTypeFromMappedType(<MappedType>target));
                         return;
                     }
-                    if (constraintType.flags & TypeFlags.Index) {
-                        // We're inferring from some source type S to an isomorphic mapped type { [P in keyof T]: X },
-                        // where T is a type parameter. Use inferTypeForIsomorphicMappedType to infer a suitable source
-                        // type and then infer from that type to T.
-                        const index = indexOf(typeParameters, (<IndexType>constraintType).type);
-                        if (index >= 0 && !typeInferences[index].isFixed) {
-                            inferFromTypes(inferTypeForIsomorphicMappedType(source, <MappedType>target), typeParameters[index]);
-                        }
+                    if (getObjectFlags(source) & ObjectFlags.Mapped) {
+                        // We're inferring from a mapped type to a mapped type, so simply infer from constraint type to
+                        // constraint type and from template type to template type.
+                        inferFromTypes(getConstraintTypeFromMappedType(<MappedType>source), constraintType);
+                        inferFromTypes(getTemplateTypeFromMappedType(<MappedType>source), getTemplateTypeFromMappedType(<MappedType>target));
                         return;
                     }
                 }
