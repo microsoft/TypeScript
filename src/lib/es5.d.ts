@@ -223,7 +223,7 @@ interface ObjectConstructor {
       * @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
       */
     keys<T>(o: Array<T>): string[];
-    keys<T extends { [key: string]: any }>(o: T): (keyof T & string)[];
+    keys<T extends { [key: string]: any }>(o: T): (keyof T)[];
     keys(o: any): string[];
 }
 

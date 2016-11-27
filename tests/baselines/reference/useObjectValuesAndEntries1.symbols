@@ -17,7 +17,7 @@ for (var x of Object.values(o)) {
 >x : Symbol(x, Decl(useObjectValuesAndEntries1.ts, 3, 8))
 }
 
-var entries = Object.entries(o);  // <-- entries: [('a' & string) | ('b' & string), number][]
+var entries = Object.entries(o);  // <-- entries: ['a' | 'b', number][]
 >entries : Symbol(entries, Decl(useObjectValuesAndEntries1.ts, 7, 3))
 >Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
@@ -30,7 +30,7 @@ var entries1 = Object.entries(1); // <-- entries: [string, any][]
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
 
-var entries2 = Object.entries({a: true, b: 2}) // [('a' & string) | ('b' & string), number | boolean][]
+var entries2 = Object.entries({a: true, b: 2}) // [('a' | 'b'), number | boolean][]
 >entries2 : Symbol(entries2, Decl(useObjectValuesAndEntries1.ts, 9, 3))
 >Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
@@ -38,7 +38,7 @@ var entries2 = Object.entries({a: true, b: 2}) // [('a' & string) | ('b' & strin
 >a : Symbol(a, Decl(useObjectValuesAndEntries1.ts, 9, 31))
 >b : Symbol(b, Decl(useObjectValuesAndEntries1.ts, 9, 39))
 
-var entries3 = Object.entries({}) // [string, any][]
+var entries3 = Object.entries({}) // [never, any][]
 >entries3 : Symbol(entries3, Decl(useObjectValuesAndEntries1.ts, 10, 3))
 >Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
@@ -50,15 +50,14 @@ var entries4 = Object.entries([1, 2, 3, 4]); // [string, number][]
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
 
-// type below should be [string | (string & number), any] NOT [string | number, any]
 var x2: { [index: string]: any } = {1: 2};
->x2 : Symbol(x2, Decl(useObjectValuesAndEntries1.ts, 14, 3))
->index : Symbol(index, Decl(useObjectValuesAndEntries1.ts, 14, 11))
+>x2 : Symbol(x2, Decl(useObjectValuesAndEntries1.ts, 13, 3))
+>index : Symbol(index, Decl(useObjectValuesAndEntries1.ts, 13, 11))
 
-var entries5 = Object.entries(x2);
->entries5 : Symbol(entries5, Decl(useObjectValuesAndEntries1.ts, 15, 3))
+var entries5 = Object.entries(x2); // [string, any][]
+>entries5 : Symbol(entries5, Decl(useObjectValuesAndEntries1.ts, 14, 3))
 >Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
->x2 : Symbol(x2, Decl(useObjectValuesAndEntries1.ts, 14, 3))
+>x2 : Symbol(x2, Decl(useObjectValuesAndEntries1.ts, 13, 3))
 
