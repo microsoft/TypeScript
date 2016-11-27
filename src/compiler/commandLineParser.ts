@@ -462,9 +462,16 @@ namespace ts {
     ];
 
     /* @internal */
-    export let typingOptionDeclarations: CommandLineOption[] = [
+    export let typeAcquisitionDeclarations: CommandLineOption[] = [
         {
+            /* @deprecated typingOptions.enableAutoDiscovery
+             * Use typeAcquisition.enable instead.
+             */
             name: "enableAutoDiscovery",
+            type: "boolean",
+        },
+        {
+            name: "enable",
             type: "boolean",
         },
         {
@@ -500,6 +507,20 @@ namespace ts {
     };
 
     let optionNameMapCache: OptionNameMap;
+
+    /* @internal */
+    export function convertEnableAutoDiscoveryToEnable(typeAcquisition: TypeAcquisition): TypeAcquisition {
+        // Convert deprecated typingOptions.enableAutoDiscovery to typeAcquisition.enable
+        if (typeAcquisition && typeAcquisition.enableAutoDiscovery !== undefined && typeAcquisition.enable === undefined) {
+            const result: TypeAcquisition = {
+                enable: typeAcquisition.enableAutoDiscovery,
+                include: typeAcquisition.include || [],
+                exclude: typeAcquisition.exclude || []
+            };
+           return result;
+        }
+        return typeAcquisition;
+    }
 
     /* @internal */
     export function getOptionNameMap(): OptionNameMap {
@@ -835,7 +856,7 @@ namespace ts {
             return {
                 options: {},
                 fileNames: [],
-                typingOptions: {},
+                typeAcquisition: {},
                 raw: json,
                 errors: [createCompilerDiagnostic(Diagnostics.Circularity_detected_while_resolving_configuration_Colon_0, [...resolutionStack, resolvedPath].join(" -> "))],
                 wildcardDirectories: {}
@@ -843,7 +864,10 @@ namespace ts {
         }
 
         let options: CompilerOptions = convertCompilerOptionsFromJsonWorker(json["compilerOptions"], basePath, errors, configFileName);
-        const typingOptions: TypingOptions = convertTypingOptionsFromJsonWorker(json["typingOptions"], basePath, errors, configFileName);
+        // typingOptions has been deprecated and is only supported for backward compatibility purposes.
+        // It should be removed in future releases - use typeAcquisition instead.
+        const jsonOptions = json["typeAcquisition"] || json["typingOptions"];
+        const typeAcquisition: TypeAcquisition = convertTypeAcquisitionFromJsonWorker(jsonOptions, basePath, errors, configFileName);
 
         if (json["extends"]) {
             let [include, exclude, files, baseOptions]: [string[], string[], string[], CompilerOptions] = [undefined, undefined, undefined, {}];
@@ -874,7 +898,7 @@ namespace ts {
         return {
             options,
             fileNames,
-            typingOptions,
+            typeAcquisition,
             raw: json,
             errors,
             wildcardDirectories,
@@ -884,7 +908,7 @@ namespace ts {
         function tryExtendsName(extendedConfig: string): [string[], string[], string[], CompilerOptions] {
             // If the path isn't a rooted or relative path, don't try to resolve it (we reserve the right to special case module-id like paths in the future)
             if (!(isRootedDiskPath(extendedConfig) || startsWith(normalizeSlashes(extendedConfig), "./") || startsWith(normalizeSlashes(extendedConfig), "../"))) {
-                errors.push(createCompilerDiagnostic(Diagnostics.The_path_in_an_extends_options_must_be_relative_or_rooted));
+                errors.push(createCompilerDiagnostic(Diagnostics.A_path_in_an_extends_option_must_be_relative_or_rooted_but_0_is_not, extendedConfig));
                 return;
             }
             let extendedConfigPath = toPath(extendedConfig, basePath, getCanonicalFileName);
@@ -951,8 +975,8 @@ namespace ts {
                 errors.push(createCompilerDiagnostic(Diagnostics.Unknown_option_excludes_Did_you_mean_exclude));
             }
             else {
-                // By default, exclude common package folders and the outDir
-                excludeSpecs = ["node_modules", "bower_components", "jspm_packages"];
+                // If no includes were specified, exclude common package folders and the outDir
+                excludeSpecs = includeSpecs ? [] : ["node_modules", "bower_components", "jspm_packages"];
 
                 const outDir = json["compilerOptions"] && json["compilerOptions"]["outDir"];
                 if (outDir) {
@@ -996,9 +1020,9 @@ namespace ts {
         return { options, errors };
     }
 
-    export function convertTypingOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): { options: TypingOptions, errors: Diagnostic[] } {
+    export function convertTypeAcquisitionFromJson(jsonOptions: any, basePath: string, configFileName?: string): { options: TypeAcquisition, errors: Diagnostic[] } {
         const errors: Diagnostic[] = [];
-        const options = convertTypingOptionsFromJsonWorker(jsonOptions, basePath, errors, configFileName);
+        const options = convertTypeAcquisitionFromJsonWorker(jsonOptions, basePath, errors, configFileName);
         return { options, errors };
     }
 
@@ -1012,16 +1036,18 @@ namespace ts {
         return options;
     }
 
-    function convertTypingOptionsFromJsonWorker(jsonOptions: any,
-        basePath: string, errors: Diagnostic[], configFileName?: string): TypingOptions {
+    function convertTypeAcquisitionFromJsonWorker(jsonOptions: any,
+        basePath: string, errors: Diagnostic[], configFileName?: string): TypeAcquisition {
 
-        const options: TypingOptions = { enableAutoDiscovery: getBaseFileName(configFileName) === "jsconfig.json", include: [], exclude: [] };
-        convertOptionsFromJson(typingOptionDeclarations, jsonOptions, basePath, options, Diagnostics.Unknown_typing_option_0, errors);
+        const options: TypeAcquisition = { enable: getBaseFileName(configFileName) === "jsconfig.json", include: [], exclude: [] };
+        const typeAcquisition = convertEnableAutoDiscoveryToEnable(jsonOptions);
+        convertOptionsFromJson(typeAcquisitionDeclarations, typeAcquisition, basePath, options, Diagnostics.Unknown_type_acquisition_option_0, errors);
+
         return options;
     }
 
     function convertOptionsFromJson(optionDeclarations: CommandLineOption[], jsonOptions: any, basePath: string,
-        defaultOptions: CompilerOptions | TypingOptions, diagnosticMessage: DiagnosticMessage, errors: Diagnostic[]) {
+        defaultOptions: CompilerOptions | TypeAcquisition, diagnosticMessage: DiagnosticMessage, errors: Diagnostic[]) {
 
         if (!jsonOptions) {
             return;

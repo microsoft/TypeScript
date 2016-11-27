@@ -1,21 +1,5 @@
 //// [mappedTypeErrors.ts]
 
-type Partial<T> = {
-    [P in keyof T]?: T[P];
-};
-
-type Readonly<T> = {
-    readonly [P in keyof T]: T[P];
-};
-
-type Pick<T, K extends keyof T> = {
-    [P in K]: T[P];
-}
-
-type Record<K extends string | number, T> = {
-    [_ in K]: T;
-}
-
 interface Shape {
     name: string;
     width: number;
@@ -32,9 +16,12 @@ interface Point {
     y: number;
 }
 
+// Constraint checking
+
 type T00 = { [P in P]: string };  // Error
-type T01 = { [P in Date]: number };  // Error
-type T02 = Record<Date, number>;  // Error
+type T01 = { [P in number]: string };  // Error
+type T02 = { [P in Date]: number };  // Error
+type T03 = Record<Date, number>;  // Error
 
 type T10 = Pick<Shape, "name">;
 type T11 = Pick<Shape, "foo">;  // Error
@@ -60,6 +47,27 @@ function f4<T extends keyof Named>(x: T) {
     let y: Pick<Shape, T>;
 }
 
+// Type identity checking
+
+function f10<T>() {
+    type K = keyof T;
+    var x: { [P in keyof T]: T[P] };
+    var x: { [Q in keyof T]: T[Q] };
+    var x: { [R in K]: T[R] };
+}
+
+function f11<T>() {
+    var x: { [P in keyof T]: T[P] };
+    var x: { [P in keyof T]?: T[P] };  // Error
+    var x: { readonly [P in keyof T]: T[P] };  // Error
+    var x: { readonly [P in keyof T]?: T[P] };  // Error
+}
+
+function f12<T>() {
+    var x: { [P in keyof T]: T[P] };
+    var x: { [P in keyof T]: T[P][] };  // Error
+}
+
 //// [mappedTypeErrors.js]
 function f1(x) {
     var y; // Error
@@ -73,21 +81,25 @@ function f3(x) {
 function f4(x) {
     var y;
 }
+// Type identity checking
+function f10() {
+    var x;
+    var x;
+    var x;
+}
+function f11() {
+    var x;
+    var x; // Error
+    var x; // Error
+    var x; // Error
+}
+function f12() {
+    var x;
+    var x; // Error
+}
 
 
 //// [mappedTypeErrors.d.ts]
-declare type Partial<T> = {
-    [P in keyof T]?: T[P];
-};
-declare type Readonly<T> = {
-    readonly [P in keyof T]: T[P];
-};
-declare type Pick<T, K extends keyof T> = {
-    [P in K]: T[P];
-};
-declare type Record<K extends string | number, T> = {
-    [_ in K]: T;
-};
 interface Shape {
     name: string;
     width: number;
@@ -105,9 +117,12 @@ declare type T00 = {
     [P in P]: string;
 };
 declare type T01 = {
+    [P in number]: string;
+};
+declare type T02 = {
     [P in Date]: number;
 };
-declare type T02 = Record<Date, number>;
+declare type T03 = Record<Date, number>;
 declare type T10 = Pick<Shape, "name">;
 declare type T11 = Pick<Shape, "foo">;
 declare type T12 = Pick<Shape, "name" | "foo">;
@@ -119,3 +134,6 @@ declare function f1<T>(x: T): void;
 declare function f2<T extends string | number>(x: T): void;
 declare function f3<T extends keyof Shape>(x: T): void;
 declare function f4<T extends keyof Named>(x: T): void;
+declare function f10<T>(): void;
+declare function f11<T>(): void;
+declare function f12<T>(): void;

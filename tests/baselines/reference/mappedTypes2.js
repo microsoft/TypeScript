@@ -1,19 +1,14 @@
 //// [mappedTypes2.ts]
 
-type Partial<T> = {
-    [P in keyof T]?: T[P];
-};
-
-type Readonly<T> = {
-    readonly [P in keyof T]: T[P];
-};
-
-type Pick<T, K extends keyof T> = {
-    [P in K]: T[P];
-}
-
-type Record<K extends string | number, T> = {
-    [_ in K]: T;
+function verifyLibTypes<T, K extends keyof T, U>() {
+    var x1: Partial<T>;
+    var x1: { [P in keyof T]?: T[P] };
+    var x2: Readonly<T>;
+    var x2: { readonly [P in keyof T]: T[P] };
+    var x3: Pick<T, K>;
+    var x3: { [P in K]: T[P] };
+    var x4: Record<K, U>;
+    var x4: { [P in K]: U };
 }
 
 type Proxy<T> = {
@@ -32,28 +27,33 @@ type DeepReadonly<T> = {
 declare function assign<T>(obj: T, props: Partial<T>): void;
 declare function freeze<T>(obj: T): Readonly<T>;
 declare function pick<T, K extends keyof T>(obj: T, ...keys: K[]): Pick<T, K>;
-declare function mapObject<K extends string | number, T, U>(obj: Record<K, T>, f: (x: T) => U): Record<K, U>;
+declare function mapObject<K extends string, T, U>(obj: Record<K, T>, f: (x: T) => U): Record<K, U>;
 declare function proxify<T>(obj: T): Proxify<T>;
+
+interface Point {
+    x: number;
+    y: number;
+}
 
 interface Shape {
     name: string;
     width: number;
     height: number;
-    visible: boolean;
+    location: Point;
 }
 
 interface PartialShape {
     name?: string;
     width?: number;
     height?: number;
-    visible?: boolean;
+    location?: Point;
 }
 
 interface ReadonlyShape {
     readonly name: string;
     readonly width: number;
     readonly height: number;
-    readonly visible: boolean;
+    readonly location: Point;
 }
 
 function f0(s1: Shape, s2: Shape) {
@@ -74,7 +74,7 @@ function f2(shape: Shape) {
 }
 
 function f3(shape: Shape) {
-    const x = pick(shape, "name", "visible");  // { name: string, visible: boolean }
+    const x = pick(shape, "name", "location");  // { name: string, location: Point }
 }
 
 function f4() {
@@ -85,16 +85,26 @@ function f4() {
 function f5(shape: Shape) {
     const p = proxify(shape);
     let name = p.name.get();
-    p.visible.set(false);
+    p.width.set(42);
 }
 
 function f6(shape: DeepReadonly<Shape>) {
-    let name = shape.name;  // DeepReadonly<string>
-    let length = name.length;  // DeepReadonly<number>
-    let toString = length.toString;  // DeepReadonly<(radix?: number) => string>
+    let name = shape.name;  // string
+    let location = shape.location;  // DeepReadonly<Point>
+    let x = location.x;  // number
 }
 
 //// [mappedTypes2.js]
+function verifyLibTypes() {
+    var x1;
+    var x1;
+    var x2;
+    var x2;
+    var x3;
+    var x3;
+    var x4;
+    var x4;
+}
 function f0(s1, s2) {
     assign(s1, { name: "circle" });
     assign(s2, { width: 10, height: 20 });
@@ -110,7 +120,7 @@ function f2(shape) {
     var partial = {};
 }
 function f3(shape) {
-    var x = pick(shape, "name", "visible"); // { name: string, visible: boolean }
+    var x = pick(shape, "name", "location"); // { name: string, location: Point }
 }
 function f4() {
     var rec = { foo: "hello", bar: "world", baz: "bye" };
@@ -119,28 +129,17 @@ function f4() {
 function f5(shape) {
     var p = proxify(shape);
     var name = p.name.get();
-    p.visible.set(false);
+    p.width.set(42);
 }
 function f6(shape) {
-    var name = shape.name; // DeepReadonly<string>
-    var length = name.length; // DeepReadonly<number>
-    var toString = length.toString; // DeepReadonly<(radix?: number) => string>
+    var name = shape.name; // string
+    var location = shape.location; // DeepReadonly<Point>
+    var x = location.x; // number
 }
 
 
 //// [mappedTypes2.d.ts]
-declare type Partial<T> = {
-    [P in keyof T]?: T[P];
-};
-declare type Readonly<T> = {
-    readonly [P in keyof T]: T[P];
-};
-declare type Pick<T, K extends keyof T> = {
-    [P in K]: T[P];
-};
-declare type Record<K extends string | number, T> = {
-    [_ in K]: T;
-};
+declare function verifyLibTypes<T, K extends keyof T, U>(): void;
 declare type Proxy<T> = {
     get(): T;
     set(value: T): void;
@@ -154,25 +153,29 @@ declare type DeepReadonly<T> = {
 declare function assign<T>(obj: T, props: Partial<T>): void;
 declare function freeze<T>(obj: T): Readonly<T>;
 declare function pick<T, K extends keyof T>(obj: T, ...keys: K[]): Pick<T, K>;
-declare function mapObject<K extends string | number, T, U>(obj: Record<K, T>, f: (x: T) => U): Record<K, U>;
+declare function mapObject<K extends string, T, U>(obj: Record<K, T>, f: (x: T) => U): Record<K, U>;
 declare function proxify<T>(obj: T): Proxify<T>;
+interface Point {
+    x: number;
+    y: number;
+}
 interface Shape {
     name: string;
     width: number;
     height: number;
-    visible: boolean;
+    location: Point;
 }
 interface PartialShape {
     name?: string;
     width?: number;
     height?: number;
-    visible?: boolean;
+    location?: Point;
 }
 interface ReadonlyShape {
     readonly name: string;
     readonly width: number;
     readonly height: number;
-    readonly visible: boolean;
+    readonly location: Point;
 }
 declare function f0(s1: Shape, s2: Shape): void;
 declare function f1(shape: Shape): void;

@@ -1,5 +1,5 @@
 // @target: es2015
-let o = { a: 1, b: 'no' }
+var o = { a: 1, b: 'no' }
 var { ...clone } = o;
 var { a, ...justB } = o;
 var { a, b: renamed, ...empty } = o;
@@ -31,3 +31,8 @@ class Removable {
 }
 var removable = new Removable();
 var { removed, ...removableRest } = removable;
+
+let computed = 'b';
+let computed2 = 'a';
+var { [computed]: stillNotGreat, [computed2]: soSo,  ...o } = o;
+({ [computed]: stillNotGreat, [computed2]: soSo, ...o } = o);

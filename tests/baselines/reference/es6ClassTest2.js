@@ -236,7 +236,7 @@ var SplatMonster = (function () {
     function SplatMonster() {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i - 0] = arguments[_i];
+            args[_i] = arguments[_i];
         }
     }
     SplatMonster.prototype.roar = function (name) {

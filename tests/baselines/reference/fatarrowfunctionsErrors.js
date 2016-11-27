@@ -16,7 +16,7 @@ var x4= (...a: any[]) { };
 foo(function () {
     var Far = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        Far[_i - 0] = arguments[_i];
+        Far[_i] = arguments[_i];
     }
     return 0;
 });
@@ -36,6 +36,6 @@ var x3 = function (a) { };
 var x4 = function () {
     var a = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i - 0] = arguments[_i];
+        a[_i] = arguments[_i];
     }
 };
