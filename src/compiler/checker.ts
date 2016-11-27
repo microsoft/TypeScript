@@ -8590,19 +8590,6 @@ namespace ts {
                     }
                 }
                 else {
-                    if (getObjectFlags(target) & ObjectFlags.Mapped) {
-                        const constraintType = getConstraintTypeFromMappedType(<MappedType>target);
-                        if (getObjectFlags(source) & ObjectFlags.Mapped) {
-                            inferFromTypes(getConstraintTypeFromMappedType(<MappedType>source), constraintType);
-                            inferFromTypes(getTemplateTypeFromMappedType(<MappedType>source), getTemplateTypeFromMappedType(<MappedType>target));
-                            return;
-                        }
-                        if (constraintType.flags & TypeFlags.TypeParameter) {
-                            inferFromTypes(getIndexType(source), constraintType);
-                            inferFromTypes(getUnionType(map(getPropertiesOfType(source), getTypeOfSymbol)), getTemplateTypeFromMappedType(<MappedType>target));
-                            return;
-                        }
-                    }
                     source = getApparentType(source);
                     if (source.flags & TypeFlags.Object) {
                         if (isInProcess(source, target)) {
@@ -8623,13 +8610,30 @@ namespace ts {
                         sourceStack[depth] = source;
                         targetStack[depth] = target;
                         depth++;
-                        inferFromProperties(source, target);
-                        inferFromSignatures(source, target, SignatureKind.Call);
-                        inferFromSignatures(source, target, SignatureKind.Construct);
-                        inferFromIndexTypes(source, target);
+                        inferFromObjectTypes(source, target);
                         depth--;
                     }
                 }
+            }
+
+            function inferFromObjectTypes(source: Type, target: Type) {
+                if (getObjectFlags(target) & ObjectFlags.Mapped) {
+                    const constraintType = getConstraintTypeFromMappedType(<MappedType>target);
+                    if (getObjectFlags(source) & ObjectFlags.Mapped) {
+                        inferFromTypes(getConstraintTypeFromMappedType(<MappedType>source), constraintType);
+                        inferFromTypes(getTemplateTypeFromMappedType(<MappedType>source), getTemplateTypeFromMappedType(<MappedType>target));
+                        return;
+                    }
+                    if (constraintType.flags & TypeFlags.TypeParameter) {
+                        inferFromTypes(getIndexType(source), constraintType);
+                        inferFromTypes(getUnionType(map(getPropertiesOfType(source), getTypeOfSymbol)), getTemplateTypeFromMappedType(<MappedType>target));
+                        return;
+                    }
+                }
+                inferFromProperties(source, target);
+                inferFromSignatures(source, target, SignatureKind.Call);
+                inferFromSignatures(source, target, SignatureKind.Construct);
+                inferFromIndexTypes(source, target);
             }
 
             function inferFromProperties(source: Type, target: Type) {
