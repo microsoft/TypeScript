@@ -21,13 +21,17 @@ namespace ts.codefix {
                 return undefined;
             }
 
-            const textChanges: TextChange[] = [{ newText: " implements", span: { start: extendsToken.pos, length: extendsToken.end - extendsToken.pos } }];
+            let changeStart = extendsToken.getStart(sourceFile);
+            let changeEnd = extendsToken.getEnd();
+            const textChanges: TextChange[] = [{ newText: " implements", span: { start: changeStart, length: changeEnd - changeStart } }];
 
             // We replace existing keywords with commas.
             for (let i = 1; i < heritageClauses.length; i++) {
                 const keywordToken = heritageClauses[i].getFirstToken();
                 if (keywordToken) {
-                    textChanges.push({ newText: ",", span: { start: keywordToken.pos, length: keywordToken.end - keywordToken.pos } });
+                    changeStart = keywordToken.getStart(sourceFile);
+                    changeEnd = keywordToken.getEnd();
+                    textChanges.push({ newText: ",", span: { start: changeStart, length: changeEnd - changeStart } });
                 }
             }
 

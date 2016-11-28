@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
 //// interface I {}
-//// [|class C extends I|]{}
+//// [|/* */ class /* */ C /* */ extends /* */ I|]{}
 
-verify.rangeAfterCodeFix("class C implements I");
+verify.rangeAfterCodeFix("/* */ class /* */ C /* */ implements /* */ I");
