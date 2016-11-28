@@ -5637,6 +5637,7 @@ namespace ts {
             containsString?: boolean;
             containsNumber?: boolean;
             containsStringOrNumberLiteral?: boolean;
+            unionIndex?: number;
         }
 
         function binarySearchTypes(types: Type[], type: Type): number {
@@ -5831,6 +5832,9 @@ namespace ts {
                 typeSet.containsAny = true;
             }
             else if (!(type.flags & TypeFlags.Never) && (strictNullChecks || !(type.flags & TypeFlags.Nullable)) && !contains(typeSet, type)) {
+                if (type.flags & TypeFlags.Union && typeSet.unionIndex === undefined) {
+                    typeSet.unionIndex = typeSet.length;
+                }
                 typeSet.push(type);
             }
         }
@@ -5857,15 +5861,6 @@ namespace ts {
             if (types.length === 0) {
                 return emptyObjectType;
             }
-            for (let i = 0; i < types.length; i++) {
-                const type = types[i];
-                if (type.flags & TypeFlags.Union) {
-                    // We are attempting to construct a type of the form X & (A | B) & Y. Transform this into a type of
-                    // the form X & A & Y | X & B & Y and recursively reduce until no union type constituents remain.
-                    return getUnionType(map((<UnionType>type).types, t => getIntersectionType(replaceElement(types, i, t))),
-                        /*subtypeReduction*/ false, aliasSymbol, aliasTypeArguments);
-                }
-            }
             const typeSet = [] as TypeSet;
             addTypesToIntersection(typeSet, types);
             if (typeSet.containsAny) {
@@ -5873,6 +5868,14 @@ namespace ts {
             }
             if (typeSet.length === 1) {
                 return typeSet[0];
+            }
+            const unionIndex = typeSet.unionIndex;
+            if (unionIndex !== undefined) {
+                // We are attempting to construct a type of the form X & (A | B) & Y. Transform this into a type of
+                // the form X & A & Y | X & B & Y and recursively reduce until no union type constituents remain.
+                const unionType = <UnionType>typeSet[unionIndex];
+                return getUnionType(map(unionType.types, t => getIntersectionType(replaceElement(typeSet, unionIndex, t))),
+                    /*subtypeReduction*/ false, aliasSymbol, aliasTypeArguments);
             }
             const id = getTypeListId(typeSet);
             let type = intersectionTypes[id];
