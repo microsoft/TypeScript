@@ -8685,13 +8685,6 @@ namespace ts {
                         inferFromTypes(getUnionType(map(getPropertiesOfType(source), getTypeOfSymbol)), getTemplateTypeFromMappedType(<MappedType>target));
                         return;
                     }
-                    if (getObjectFlags(source) & ObjectFlags.Mapped) {
-                        // We're inferring from a mapped type to a mapped type, so simply infer from constraint type to
-                        // constraint type and from template type to template type.
-                        inferFromTypes(getConstraintTypeFromMappedType(<MappedType>source), constraintType);
-                        inferFromTypes(getTemplateTypeFromMappedType(<MappedType>source), getTemplateTypeFromMappedType(<MappedType>target));
-                        return;
-                    }
                 }
                 inferFromProperties(source, target);
                 inferFromSignatures(source, target, SignatureKind.Call);
