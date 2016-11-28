@@ -4494,7 +4494,6 @@ namespace ts {
         function resolveMappedTypeMembers(type: MappedType) {
             const members: SymbolTable = createMap<Symbol>();
             let stringIndexInfo: IndexInfo;
-            let numberIndexInfo: IndexInfo;
             // Resolve upfront such that recursive references see an empty object type.
             setStructuredTypeMembers(type, emptySymbols, emptyArray, emptyArray, undefined, undefined);
             // In { [P in K]: T }, we refer to P as the type parameter type, K as the constraint type,
@@ -4529,16 +4528,8 @@ namespace ts {
                 else if (t.flags & TypeFlags.String) {
                     stringIndexInfo = createIndexInfo(propType, isReadonly);
                 }
-                else if (t.flags & TypeFlags.Number) {
-                    numberIndexInfo = createIndexInfo(propType, isReadonly);
-                }
             });
-            // If we created both a string and a numeric string index signature, and if the two index
-            // signatures have identical types, discard the redundant numeric index signature.
-            if (stringIndexInfo && numberIndexInfo && isTypeIdenticalTo(stringIndexInfo.type, numberIndexInfo.type)) {
-                numberIndexInfo = undefined;
-            }
-            setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
+            setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, undefined);
         }
 
         function getTypeParameterFromMappedType(type: MappedType) {
