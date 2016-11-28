@@ -180,6 +180,18 @@ interface ObjectConstructor {
       * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
       * @param o Object on which to lock the attributes.
       */
+    freeze<T>(a: T[]): ReadonlyArray<T>;
+
+    /**
+      * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
+      * @param o Object on which to lock the attributes.
+      */
+    freeze<T extends Function>(f: T): T;
+
+    /**
+      * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
+      * @param o Object on which to lock the attributes.
+      */
     freeze<T>(o: T): Readonly<T>;
 
     /**
@@ -1367,7 +1379,7 @@ type Pick<T, K extends keyof T> = {
 /**
  * Construct a type with a set of properties K of type T
  */
-type Record<K extends string | number, T> = {
+type Record<K extends string, T> = {
     [P in K]: T;
 }
 

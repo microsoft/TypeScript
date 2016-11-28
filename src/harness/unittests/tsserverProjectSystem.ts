@@ -90,8 +90,8 @@ namespace ts.projectSystem {
             this.projectService.updateTypingsForProject(response);
         }
 
-        enqueueInstallTypingsRequest(project: server.Project, typingOptions: TypingOptions, unresolvedImports: server.SortedReadonlyArray<string>) {
-            const request = server.createInstallTypingsRequest(project, typingOptions, unresolvedImports, this.globalTypingsCacheLocation);
+        enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: server.SortedReadonlyArray<string>) {
+            const request = server.createInstallTypingsRequest(project, typeAcquisition, unresolvedImports, this.globalTypingsCacheLocation);
             this.install(request);
         }
 
@@ -577,6 +577,35 @@ namespace ts.projectSystem {
             checkFileNames("inferred project", project.getFileNames(), [appFile.path, libFile.path, moduleFile.path]);
             checkWatchedDirectories(host, ["/a/b/c", "/a/b", "/a"]);
         });
+
+        it("can handle tsconfig file name with difference casing", () => {
+            const f1 = {
+                path: "/a/b/app.ts",
+                content: "let x = 1"
+            };
+            const config = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({
+                    include: []
+                })
+            };
+
+            const host = createServerHost([f1, config], { useCaseSensitiveFileNames: false });
+            const service = createProjectService(host);
+            service.openExternalProject(<protocol.ExternalProject>{
+                projectFileName: "/a/b/project.csproj",
+                rootFiles: toExternalFiles([f1.path, combinePaths(getDirectoryPath(config.path).toUpperCase(), getBaseFileName(config.path))]),
+                options: {}
+            });
+            service.checkNumberOfProjects({ configuredProjects: 1 });
+            checkProjectActualFiles(service.configuredProjects[0], []);
+
+            service.openClientFile(f1.path);
+            service.checkNumberOfProjects({ configuredProjects: 1, inferredProjects: 1 });
+
+            checkProjectActualFiles(service.configuredProjects[0], []);
+            checkProjectActualFiles(service.inferredProjects[0], [f1.path]);
+        })
 
         it("create configured project without file list", () => {
             const configFile: FileOrFolder = {
@@ -1614,6 +1643,7 @@ namespace ts.projectSystem {
                     return;
                 }
                 assert.equal(e.eventName, server.ProjectLanguageServiceStateEvent);
+                assert.equal(e.data.project.getProjectName(), config.path, "project name");
                 lastEvent = <server.ProjectLanguageServiceStateEvent>e;
             });
             session.executeCommand(<protocol.OpenRequest>{
@@ -1628,6 +1658,7 @@ namespace ts.projectSystem {
             assert.isFalse(project.languageServiceEnabled, "Language service enabled");
             assert.isTrue(!!lastEvent, "should receive event");
             assert.equal(lastEvent.data.project, project, "project name");
+            assert.equal(lastEvent.data.project.getProjectName(), config.path, "config path");
             assert.isFalse(lastEvent.data.languageServiceEnabled, "Language service state");
 
             host.reloadFS([f1, f2, configWithExclude]);
@@ -1724,8 +1755,8 @@ namespace ts.projectSystem {
                 options: {}
             });
             projectService.checkNumberOfProjects({ externalProjects: 1 });
-            const typingOptions = projectService.externalProjects[0].getTypingOptions();
-            assert.isTrue(typingOptions.enableAutoDiscovery, "Typing autodiscovery should be enabled");
+            const typeAcquisition = projectService.externalProjects[0].getTypeAcquisition();
+            assert.isTrue(typeAcquisition.enable, "Typine acquisition should be enabled");
         });
     });
 
@@ -2337,6 +2368,30 @@ namespace ts.projectSystem {
             projectService.openExternalProject({ rootFiles: toExternalFiles([f1.path, config.path]), options: {}, projectFileName: projectName });
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
         });
+
+        it("types should load from config file path if config exists", () => {
+            const f1 = {
+                path: "/a/b/app.ts",
+                content: "let x = 1"
+            };
+            const config = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({ compilerOptions: { types: ["node"], typeRoots: [] } })
+            };
+            const node = {
+                path: "/a/b/node_modules/@types/node/index.d.ts",
+                content: "declare var process: any"
+            };
+            const cwd = {
+                path: "/a/c"
+            };
+            debugger;
+            const host = createServerHost([f1, config, node, cwd], { currentDirectory: cwd.path });
+            const projectService = createProjectService(host);
+            projectService.openClientFile(f1.path);
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path, node.path]);
+        });
     });
 
     describe("add the missing module file for inferred project", () => {
@@ -2425,6 +2480,43 @@ namespace ts.projectSystem {
             const session = createSession(host, /*typingsInstaller*/ undefined, serverEventManager.handler);
             openFilesForSession([file], session);
             serverEventManager.checkEventCountOfType("configFileDiag", 1);
+        });
+
+        it("are generated when the config file changes", () => {
+            const serverEventManager = new TestServerEventManager();
+            const file = {
+                path: "/a/b/app.ts",
+                content: "let x = 10"
+            };
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {}
+                }`
+            };
+
+            const host = createServerHost([file, configFile]);
+            const session = createSession(host, /*typingsInstaller*/ undefined, serverEventManager.handler);
+            openFilesForSession([file], session);
+            serverEventManager.checkEventCountOfType("configFileDiag", 1);
+
+            configFile.content = `{
+                "compilerOptions": {
+                    "haha": 123
+                }
+            }`;
+            host.reloadFS([file, configFile]);
+            host.triggerFileWatcherCallback(configFile.path);
+            host.runQueuedTimeoutCallbacks();
+            serverEventManager.checkEventCountOfType("configFileDiag", 2);
+
+            configFile.content = `{
+                "compilerOptions": {}
+            }`;
+            host.reloadFS([file, configFile]);
+            host.triggerFileWatcherCallback(configFile.path);
+            host.runQueuedTimeoutCallbacks();
+            serverEventManager.checkEventCountOfType("configFileDiag", 3);
         });
     });
 

@@ -22,7 +22,7 @@ define(["require", "exports", "fs"], function (require, exports, fs) {
     function join() {
         var paths = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            paths[_i - 0] = arguments[_i];
+            paths[_i] = arguments[_i];
         }
     }
     function instrumentFile(covFileDir, covFileName, originalFilePath) {

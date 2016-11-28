@@ -17,7 +17,7 @@ var Foo1 = (function () {
     function Foo1() {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i - 0] = arguments[_i];
+            args[_i] = arguments[_i];
         }
     }
     return Foo1;
@@ -32,7 +32,7 @@ var Foo3 = (function () {
     function Foo3() {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i - 0] = arguments[_i];
+            args[_i] = arguments[_i];
         }
         this.args = args;
     }

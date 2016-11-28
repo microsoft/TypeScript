@@ -1353,13 +1353,13 @@ namespace ts {
             //       __metadata("design:type", Function),
             //       __metadata("design:paramtypes", [Object]),
             //       __metadata("design:returntype", void 0)
-            //   ], C.prototype, "method", undefined);
+            //   ], C.prototype, "method", null);
             //
             // The emit for an accessor is:
             //
             //   __decorate([
             //       dec
-            //   ], C.prototype, "accessor", undefined);
+            //   ], C.prototype, "accessor", null);
             //
             // The emit for a property is:
             //

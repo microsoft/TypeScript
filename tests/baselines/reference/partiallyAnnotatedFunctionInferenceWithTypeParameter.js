@@ -63,7 +63,7 @@ test(function (t1) { });
 test(function () {
     var ts = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        ts[_i - 0] = arguments[_i];
+        ts[_i] = arguments[_i];
     }
 });
 // source function has rest arg

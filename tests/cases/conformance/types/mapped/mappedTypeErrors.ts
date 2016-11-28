@@ -20,8 +20,9 @@ interface Point {
 // Constraint checking
 
 type T00 = { [P in P]: string };  // Error
-type T01 = { [P in Date]: number };  // Error
-type T02 = Record<Date, number>;  // Error
+type T01 = { [P in number]: string };  // Error
+type T02 = { [P in Date]: number };  // Error
+type T03 = Record<Date, number>;  // Error
 
 type T10 = Pick<Shape, "name">;
 type T11 = Pick<Shape, "foo">;  // Error

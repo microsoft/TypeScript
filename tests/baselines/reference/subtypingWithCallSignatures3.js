@@ -170,14 +170,14 @@ var Errors;
     var r4arg = function () {
         var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            x[_i - 0] = arguments[_i];
+            x[_i] = arguments[_i];
         }
         return null;
     };
     var r4arg2 = function () {
         var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            x[_i - 0] = arguments[_i];
+            x[_i] = arguments[_i];
         }
         return null;
     };
