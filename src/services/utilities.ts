@@ -1363,6 +1363,7 @@ namespace ts {
      * Finds members of the resolved type that are missing in the class pointed to by class decl
      * and generates source code for the missing members.
      * @param possiblyMissingSymbols The collection of symbols to filter and then get insertions for.
+     * @returns undefined iff there is no insertion available.
      */
     export function getMissingMembersInsertion(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: Symbol[], checker: TypeChecker, newlineChar: string): string {
         const classMembers = classDeclaration.symbol.members;
@@ -1373,7 +1374,7 @@ namespace ts {
         for (const symbol of missingMembers) {
             insertion = insertion.concat(getInsertionForMemberSymbol(symbol, classDeclaration, checker, newlineChar));
         }
-        return insertion;
+        return insertion.length > 0 ? insertion : undefined;
     }
 
     function getInsertionForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker, newlineChar: string): string {

@@ -27,7 +27,10 @@ namespace ts.codefix {
                 const nonPrivateMembers = implementedTypeSymbols.filter(symbolRefersToNonPrivateMember);
 
                 const insertion = getMissingMembersInsertion(classDecl, nonPrivateMembers, checker, context.newLineCharacter);
-                pushAction(result, insertion, getLocaleSpecificMessage(Diagnostics.Implement_interface_on_class));
+                const message = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Implement_interface_0), [implementedTypeNode.getText()]);
+                if (insertion) {
+                    pushAction(result, insertion, message);
+                }
             }
 
             return result;
@@ -39,19 +42,17 @@ namespace ts.codefix {
             }
 
             function pushAction(result: CodeAction[], insertion: string, description: string): void {
-                if (insertion && insertion.length) {
-                    const newAction: CodeAction = {
-                        description: description,
-                        changes: [{
-                            fileName: sourceFile.fileName,
-                            textChanges: [{
-                                span: { start: startPos, length: 0 },
-                                newText: insertion
-                            }]
+                const newAction: CodeAction = {
+                    description: description,
+                    changes: [{
+                        fileName: sourceFile.fileName,
+                        textChanges: [{
+                            span: { start: startPos, length: 0 },
+                            newText: insertion
                         }]
-                    };
-                    result.push(newAction);
-                }
+                    }]
+                };
+                result.push(newAction);
             }
         }
     });
