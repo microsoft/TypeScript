@@ -88,11 +88,14 @@
         "formatting/smartIndenter.ts",
         "formatting/tokenRange.ts",
         "codeFixProvider.ts",
-        "codeFixes/fixes.ts",
-        "codeFixes/fixExtendsInterfaceBecomesImplements.ts",
-        "codeFixes/fixClassIncorrectlyImplementsInterface.ts",
-        "codeFixes/fixClassDoesntImplementInheritedAbstractMember.ts",
-        "codeFixes/fixClassSuperMustPrecedeThisAccess.ts",
-        "codeFixes/fixConstructorForDerivedNeedSuperCall.ts"
+        "codefixes/fixExtendsInterfaceBecomesImplements.ts",
+        "codefixes/fixClassIncorrectlyImplementsInterface.ts",
+        "codefixes/fixClassDoesntImplementInheritedAbstractMember.ts",
+        "codefixes/fixClassSuperMustPrecedeThisAccess.ts",
+        "codefixes/fixConstructorForDerivedNeedSuperCall.ts",
+        "codefixes/fixes.ts",
+        "codefixes/helpers.ts",
+        "codefixes/importFixes.ts",
+        "codefixes/unusedIdentifierFixes.ts"
     ]
 }

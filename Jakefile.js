@@ -176,6 +176,9 @@ var servicesSources = [
     "codefixes/fixClassDoesntImplementInheritedAbstractMember.ts",
     "codefixes/fixClassSuperMustPrecedeThisAccess.ts",
     "codefixes/fixConstructorForDerivedNeedSuperCall.ts",
+    "codefixes/helpers.ts",
+    "codefixes/importFixes.ts",
+    "codefixes/unusedIdentifierFixes.ts"
 ].map(function (f) {
     return path.join(servicesDirectory, f);
 }));
