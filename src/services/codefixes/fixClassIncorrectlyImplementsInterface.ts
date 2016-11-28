@@ -16,21 +16,27 @@ namespace ts.codefix {
             const startPos: number = classDecl.members.pos;
 
             const implementedTypeNodes = getClassImplementsHeritageClauseElements(classDecl);
-            const implementedTypes = implementedTypeNodes.map(checker.getTypeFromTypeReference);
-            const implementedTypeSymbols = implementedTypes.map(checker.getPropertiesOfType);
 
             const result: CodeAction[] = [];
 
-            for (const symbols of implementedTypeSymbols) {
-                const symbolMap = createMap<Symbol>();
-                for (const symbol of symbols) {
-                    symbolMap[symbol.getName()] = symbol;
-                }
-                const insertion = getMissingMembersInsertion(classDecl, filterNonPrivate(symbolMap), checker, context.newLineCharacter);
+            for (const implementedTypeNode of implementedTypeNodes) {
+                const implementedType = checker.getTypeFromTypeReference(implementedTypeNode);
+                // Note that this is ultimately derived from a map indexed by symbol names,
+                // so duplicates cannot occur.
+                const implementedTypeSymbols = checker.getPropertiesOfType(implementedType);
+                const nonPrivateMembers = implementedTypeSymbols.filter(symbolRefersToNonPrivateMember);
+
+                const insertion = getMissingMembersInsertion(classDecl, nonPrivateMembers, checker, context.newLineCharacter);
                 pushAction(result, insertion, getLocaleSpecificMessage(Diagnostics.Implement_interface_on_class));
             }
 
             return result;
+
+            function symbolRefersToNonPrivateMember(symbol: Symbol): boolean {
+                const decls = symbol.getDeclarations();
+                Debug.assert(!!(decls && decls.length > 0));
+                return !(getModifierFlags(decls[0]) & ModifierFlags.Private);
+            }
 
             function pushAction(result: CodeAction[], insertion: string, description: string): void {
                 if (insertion && insertion.length) {

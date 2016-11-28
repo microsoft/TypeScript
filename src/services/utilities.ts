@@ -1362,51 +1362,16 @@ namespace ts {
     /**
      * Finds members of the resolved type that are missing in the class pointed to by class decl
      * and generates source code for the missing members.
-     * @param possiblyMissingSymbols The collection of symbols to filter.
+     * @param possiblyMissingSymbols The collection of symbols to filter and then get insertions for.
      */
-    export function getMissingMembersInsertion(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: Map<Symbol>, checker: TypeChecker, newlineChar: string): string {
-        const missingMembers = filterMissingMembers(possiblyMissingSymbols, classDeclaration.symbol.members);
-        return getInsertionsForMembers(missingMembers, classDeclaration, checker, newlineChar);
-    }
+    export function getMissingMembersInsertion(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: Symbol[], checker: TypeChecker, newlineChar: string): string {
+        const classMembers = classDeclaration.symbol.members;
+        const missingMembers = possiblyMissingSymbols.filter(symbol => !(symbol.getName() in classMembers));
 
-    /**
-     * Finds the symbols in source but not target, generating a new map with the differences.
-     */
-    function filterMissingMembers(sourceSymbols: Map<Symbol>, targetSymbols: Map<Symbol>): Map<Symbol> {
-        const result: Map<Symbol> = createMap<Symbol>();
-        for (const sourceName in sourceSymbols) {
-            if (!(sourceName in targetSymbols)) {
-                result[sourceName] = sourceSymbols[sourceName];
-            }
-        }
-        return result;
-    }
-
-    function filterSymbolMapByDeclaration(symbolMap: Map<Symbol>, pred: (decl: Declaration) => boolean): Map<Symbol> {
-        const result = createMap<Symbol>();
-        for (const key in symbolMap) {
-            const declaration = symbolMap[key].getDeclarations();
-            Debug.assert(!!(declaration && declaration.length));
-            if (pred(declaration[0])) {
-                result[key] = symbolMap[key];
-            }
-        }
-        return result;
-    }
-
-    export function filterAbstractAndNonPrivate(symbolMap: Map<Symbol>) {
-        return filterSymbolMapByDeclaration(symbolMap, decl => !(getModifierFlags(decl) & ModifierFlags.Private) && !!(getModifierFlags(decl) & ModifierFlags.Abstract));
-    }
-
-    export function filterNonPrivate(symbolMap: Map<Symbol>) {
-        return filterSymbolMapByDeclaration(symbolMap, decl => !(getModifierFlags(decl) & ModifierFlags.Private));
-    }
-
-    function getInsertionsForMembers(symbolMap: MapLike<Symbol>, enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker, newlineChar: string): string {
         let insertion = "";
 
-        for (const symbolName in symbolMap) {
-            insertion = insertion.concat(getInsertionForMemberSymbol(symbolMap[symbolName], enclosingDeclaration, checker, newlineChar));
+        for (const symbol of missingMembers) {
+            insertion = insertion.concat(getInsertionForMemberSymbol(symbol, classDeclaration, checker, newlineChar));
         }
         return insertion;
     }

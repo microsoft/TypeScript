@@ -13,14 +13,12 @@ namespace ts.codefix {
                 const startPos = classDecl.members.pos;
 
                 const InstantiatedExtendsType = <InterfaceType>checker.getTypeFromTypeReference(getClassExtendsHeritageClauseElement(classDecl));
+                // Note that this is ultimately derived from a map indexed by symbol names,
+                // so duplicates cannot occur.
                 const extendsSymbols = checker.getPropertiesOfType(InstantiatedExtendsType);
-                let extendsAbstractSymbolsMap = createMap<Symbol>();
-                for (const symbol of extendsSymbols) {
-                    extendsAbstractSymbolsMap[symbol.getName()] = symbol;
-                }
-                extendsAbstractSymbolsMap = filterAbstractAndNonPrivate(extendsAbstractSymbolsMap);
+                const abstractAndNonPrivateExtendsSymbols = extendsSymbols.filter(symbolPointsToNonPrivateAndAbstractMember);
 
-                const insertion = getMissingMembersInsertion(classDecl, extendsAbstractSymbolsMap, checker, context.newLineCharacter);
+                const insertion = getMissingMembersInsertion(classDecl, abstractAndNonPrivateExtendsSymbols, checker, context.newLineCharacter);
 
                 if (insertion.length > 0) {
                     return [{
@@ -37,6 +35,13 @@ namespace ts.codefix {
             }
 
             return undefined;
+
+            function symbolPointsToNonPrivateAndAbstractMember(symbol: Symbol): boolean {
+                const decls = symbol.getDeclarations();
+                Debug.assert(!!(decls && decls.length > 0));
+                const flags = getModifierFlags(decls[0]);
+                return !(flags & ModifierFlags.Private) && !!(flags & ModifierFlags.Abstract);
+            }
         }
     });
 }
