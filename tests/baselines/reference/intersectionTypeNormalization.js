@@ -60,6 +60,51 @@ function getValueAsString(value: IntersectionFail): string {
     return value.str;
 }
 
+// Repro from #12535
+
+namespace enums {
+    export const enum A {
+        a1,
+        a2,
+        a3,
+       // ... elements omitted for the sake of clarity
+        a75,
+        a76,
+        a77,
+    }
+    export const enum B {
+        b1,
+        b2,
+       // ... elements omitted for the sake of clarity
+        b86,
+        b87,
+    }
+    export const enum C {
+        c1,
+        c2,
+       // ... elements omitted for the sake of clarity
+        c210,
+        c211,
+    }
+    export type Genre = A | B | C;
+}
+
+type Foo = {
+    genreId: enums.Genre;
+};
+
+type Bar = {
+    genreId: enums.Genre;
+};
+
+type FooBar = Foo & Bar;
+
+function foo(so: any) {
+    const val = so as FooBar;
+    const isGenre = val.genreId;
+    return isGenre;
+}
+
 //// [intersectionTypeNormalization.js]
 var x;
 var x;
@@ -76,4 +121,9 @@ function getValueAsString(value) {
         return '' + value.num;
     }
     return value.str;
+}
+function foo(so) {
+    var val = so;
+    var isGenre = val.genreId;
+    return isGenre;
 }
