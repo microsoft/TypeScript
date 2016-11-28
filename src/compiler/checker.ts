@@ -13850,7 +13850,7 @@ namespace ts {
             if (!switchTypes.length) {
                 return false;
             }
-            return eachTypeContainedIn(type, switchTypes);
+            return eachTypeContainedIn(mapType(type, getRegularTypeOfLiteralType), switchTypes);
         }
 
         function functionHasImplicitReturn(func: FunctionLikeDeclaration) {
