@@ -358,6 +358,10 @@ namespace ts.server.protocol {
         code: number;
     }
 
+    export interface DiagnosticWithLinePositionAndFileName extends DiagnosticWithLinePosition {
+        fileName: string;
+    }
+
     /**
       * Response message for "projectInfo" request
       */
@@ -960,7 +964,7 @@ namespace ts.server.protocol {
         /**
          * List of errors in project
          */
-        projectErrors: DiagnosticWithLinePosition[];
+        projectErrors: DiagnosticWithLinePositionAndFileName[];
     }
 
     /**
@@ -1786,6 +1790,13 @@ namespace ts.server.protocol {
         code?: number;
     }
 
+    export interface DiagnosticWithFileName extends Diagnostic {
+        /**
+          * Name of the file the diagnostic is in
+          */
+        fileName: string;
+    }
+
     export interface DiagnosticEventBody {
         /**
           * The file for which diagnostic information is reported.
@@ -1820,7 +1831,7 @@ namespace ts.server.protocol {
         /**
          * An arry of diagnostic information items for the found config file.
          */
-        diagnostics: Diagnostic[];
+        diagnostics: DiagnosticWithFileName[];
     }
 
     /**

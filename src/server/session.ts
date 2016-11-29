@@ -60,11 +60,17 @@ namespace ts.server {
         };
     }
 
-    function formatConfigFileDiag(diag: ts.Diagnostic): protocol.Diagnostic {
+    function convertToILineInfo(lineAndCharacter: LineAndCharacter): ILineInfo {
+        return { line: lineAndCharacter.line + 1, offset: lineAndCharacter.character + 1 };
+    }
+
+    function formatConfigFileDiag(diag: ts.Diagnostic): protocol.DiagnosticWithFileName {
         return {
-            start: undefined,
-            end: undefined,
-            text: ts.flattenDiagnosticMessageText(diag.messageText, "\n")
+            start: diag.file && convertToILineInfo(getLineAndCharacterOfPosition(diag.file, diag.start)),
+            end: diag.file && convertToILineInfo(getLineAndCharacterOfPosition(diag.file, diag.start + diag.length)),
+            text: ts.flattenDiagnosticMessageText(diag.messageText, "\n"),
+            code: diag.code,
+            fileName: diag.file && diag.file.fileName
         };
     }
 
@@ -191,6 +197,31 @@ namespace ts.server {
 
         const len = byteLength(json, "utf8");
         return `Content-Length: ${1 + len}\r\n\r\n${json}${newLine}`;
+    }
+
+    /**
+     * Should Remap project Files with ts diagnostics if
+     * - there are project errors
+     * - options contain configFile - so we can remove it from options before serializing
+     * @param p project files with ts diagnostics
+     */
+    function shouldRemapProjectFilesWithTSDiagnostics(p: ProjectFilesWithTSDiagnostics) {
+        return (p.projectErrors && !!p.projectErrors.length) ||
+            (p.info && !!p.info.options.configFile);
+    }
+
+    /**
+     * Get the compiler options without configFile key
+     * @param options
+     */
+    function getCompilerOptionsWithoutConfigFile(options: CompilerOptions) {
+        const result: CompilerOptions = {};
+        for (const option in options) {
+            if (option !== "configFile") {
+                result[option] = options[option];
+            }
+        }
+        return result;
     }
 
     export class Session implements EventSender {
@@ -410,7 +441,20 @@ namespace ts.server {
 
         private getCompilerOptionsDiagnostics(args: protocol.CompilerOptionsDiagnosticsRequestArgs) {
             const project = this.getProject(args.projectFileName);
-            return this.convertToDiagnosticsWithLinePosition(project.getLanguageService().getCompilerOptionsDiagnostics(), /*scriptInfo*/ undefined);
+            return this.convertToCompilerOptionsDiagnosticsWithLinePosition(project.getLanguageService().getCompilerOptionsDiagnostics());
+        }
+
+        private convertToCompilerOptionsDiagnosticsWithLinePosition(diagnostics: Diagnostic[]) {
+            return diagnostics.map(d => <protocol.DiagnosticWithLinePositionAndFileName>{
+                message: flattenDiagnosticMessageText(d.messageText, this.host.newLine),
+                start: d.start,
+                length: d.length,
+                category: DiagnosticCategory[d.category].toLowerCase(),
+                code: d.code,
+                startLocation: d.file && convertToILineInfo(getLineAndCharacterOfPosition(d.file, d.start)),
+                endLocation: d.file && convertToILineInfo(getLineAndCharacterOfPosition(d.file, d.start + d.length)),
+                fileName: d.file && d.file.fileName
+            });
         }
 
         private convertToDiagnosticsWithLinePosition(diagnostics: Diagnostic[], scriptInfo: ScriptInfo) {
@@ -1408,19 +1452,33 @@ namespace ts.server {
             },
             [CommandNames.SynchronizeProjectList]: (request: protocol.SynchronizeProjectListRequest) => {
                 const result = this.projectService.synchronizeProjectList(request.arguments.knownProjects);
-                if (!result.some(p => p.projectErrors && p.projectErrors.length !== 0)) {
+                if (!result.some(shouldRemapProjectFilesWithTSDiagnostics)) {
                     return this.requiredResponse(result);
                 }
                 const converted = map(result, p => {
-                    if (!p.projectErrors || p.projectErrors.length === 0) {
-                        return p;
+                    if (shouldRemapProjectFilesWithTSDiagnostics(p)) {
+                        const projectErrors = p.projectErrors && p.projectErrors.length ?
+                            this.convertToCompilerOptionsDiagnosticsWithLinePosition(p.projectErrors) :
+                            p.projectErrors;
+
+                        const info = p.info && !!p.info.options.configFile ?
+                            {
+                                projectName: p.info.projectName,
+                                isInferred: p.info.isInferred,
+                                version: p.info.version,
+                                options: getCompilerOptionsWithoutConfigFile(p.info.options),
+                                languageServiceDisabled: p.info.languageServiceDisabled
+                            } : p.info;
+
+                        return {
+                            info,
+                            changes: p.changes,
+                            files: p.files,
+                            projectErrors
+                        };
                     }
-                    return {
-                        info: p.info,
-                        changes: p.changes,
-                        files: p.files,
-                        projectErrors: this.convertToDiagnosticsWithLinePosition(p.projectErrors, /*scriptInfo*/ undefined)
-                    };
+
+                    return p;
                 });
                 return this.requiredResponse(converted);
             },
