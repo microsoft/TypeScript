@@ -21239,6 +21239,9 @@ namespace ts {
             else if (accessor.body === undefined && !(getModifierFlags(accessor) & ModifierFlags.Abstract)) {
                 return grammarErrorAtPos(getSourceFileOfNode(accessor), accessor.end - 1, ";".length, Diagnostics._0_expected, "{");
             }
+            else if (accessor.body && getModifierFlags(accessor) & ModifierFlags.Abstract) {
+                return grammarErrorOnNode(accessor, Diagnostics.An_abstract_accessor_cannot_have_an_implementation);
+            }
             else if (accessor.typeParameters) {
                 return grammarErrorOnNode(accessor.name, Diagnostics.An_accessor_cannot_have_type_parameters);
             }
