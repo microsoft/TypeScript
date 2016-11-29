@@ -1,0 +1,148 @@
+=== tests/cases/conformance/types/mapped/mappedTypeModifiers.ts ===
+
+type T = { a: number, b: string };
+>T : T
+>a : number
+>b : string
+
+type U = { a: number | undefined, b: string | undefined };
+>U : U
+>a : number | undefined
+>b : string | undefined
+
+type P = { a?: number, b?: string };
+>P : P
+>a : number | undefined
+>b : string | undefined
+
+type R = { readonly a: number, readonly b: string };
+>R : R
+>a : number
+>b : string
+
+type PR = { readonly a?: number, readonly b?: string };
+>PR : PR
+>a : number | undefined
+>b : string | undefined
+
+// Validate they all have the same keys
+var v00: "a" | "b";
+>v00 : "a" | "b"
+
+var v00: keyof T;
+>v00 : "a" | "b"
+>T : T
+
+var v00: keyof U;
+>v00 : "a" | "b"
+>U : U
+
+var v00: keyof P;
+>v00 : "a" | "b"
+>P : P
+
+var v00: keyof R;
+>v00 : "a" | "b"
+>R : R
+
+var v00: keyof PR;
+>v00 : "a" | "b"
+>PR : PR
+
+// Validate that non-isomorphic mapped types strip modifiers
+var v01: T;
+>v01 : T
+>T : T
+
+var v01: Pick<R, keyof T>;
+>v01 : T
+>Pick : Pick<T, K>
+>R : R
+>T : T
+
+var v01: Pick<Readonly<T>, keyof T>;
+>v01 : T
+>Pick : Pick<T, K>
+>Readonly : Readonly<T>
+>T : T
+>T : T
+
+// Validate that non-isomorphic mapped types strip modifiers
+var v02: U;
+>v02 : U
+>U : U
+
+var v02: Pick<P, keyof T>;
+>v02 : U
+>Pick : Pick<T, K>
+>P : P
+>T : T
+
+var v02: Pick<PR, keyof T>;
+>v02 : U
+>Pick : Pick<T, K>
+>PR : PR
+>T : T
+
+var v02: Pick<Partial<T>, keyof T>;
+>v02 : U
+>Pick : Pick<T, K>
+>Partial : Partial<T>
+>T : T
+>T : T
+
+var v02: Pick<Partial<Readonly<T>>, keyof T>;
+>v02 : U
+>Pick : Pick<T, K>
+>Partial : Partial<T>
+>Readonly : Readonly<T>
+>T : T
+>T : T
+
+// Validate that isomorphic mapped types preserve optional modifier
+var v03: P;
+>v03 : P
+>P : P
+
+var v03: Partial<T>;
+>v03 : P
+>Partial : Partial<T>
+>T : T
+
+// Validate that isomorphic mapped types preserve readonly modifier
+var v04: R;
+>v04 : R
+>R : R
+
+var v04: Readonly<T>;
+>v04 : R
+>Readonly : Readonly<T>
+>T : T
+
+// Validate that isomorphic mapped types preserve both partial and readonly modifiers
+var v05: PR;
+>v05 : PR
+>PR : PR
+
+var v05: Partial<R>;
+>v05 : PR
+>Partial : Partial<T>
+>R : R
+
+var v05: Readonly<P>;
+>v05 : PR
+>Readonly : Readonly<T>
+>P : P
+
+var v05: Partial<Readonly<T>>;
+>v05 : PR
+>Partial : Partial<T>
+>Readonly : Readonly<T>
+>T : T
+
+var v05: Readonly<Partial<T>>;
+>v05 : PR
+>Readonly : Readonly<T>
+>Partial : Partial<T>
+>T : T
+

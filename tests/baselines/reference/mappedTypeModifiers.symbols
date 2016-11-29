@@ -1,0 +1,148 @@
+=== tests/cases/conformance/types/mapped/mappedTypeModifiers.ts ===
+
+type T = { a: number, b: string };
+>T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
+>a : Symbol(a, Decl(mappedTypeModifiers.ts, 1, 10))
+>b : Symbol(b, Decl(mappedTypeModifiers.ts, 1, 21))
+
+type U = { a: number | undefined, b: string | undefined };
+>U : Symbol(U, Decl(mappedTypeModifiers.ts, 1, 34))
+>a : Symbol(a, Decl(mappedTypeModifiers.ts, 2, 10))
+>b : Symbol(b, Decl(mappedTypeModifiers.ts, 2, 33))
+
+type P = { a?: number, b?: string };
+>P : Symbol(P, Decl(mappedTypeModifiers.ts, 2, 58))
+>a : Symbol(a, Decl(mappedTypeModifiers.ts, 3, 10))
+>b : Symbol(b, Decl(mappedTypeModifiers.ts, 3, 22))
+
+type R = { readonly a: number, readonly b: string };
+>R : Symbol(R, Decl(mappedTypeModifiers.ts, 3, 36))
+>a : Symbol(a, Decl(mappedTypeModifiers.ts, 4, 10))
+>b : Symbol(b, Decl(mappedTypeModifiers.ts, 4, 30))
+
+type PR = { readonly a?: number, readonly b?: string };
+>PR : Symbol(PR, Decl(mappedTypeModifiers.ts, 4, 52))
+>a : Symbol(a, Decl(mappedTypeModifiers.ts, 5, 11))
+>b : Symbol(b, Decl(mappedTypeModifiers.ts, 5, 32))
+
+// Validate they all have the same keys
+var v00: "a" | "b";
+>v00 : Symbol(v00, Decl(mappedTypeModifiers.ts, 8, 3), Decl(mappedTypeModifiers.ts, 9, 3), Decl(mappedTypeModifiers.ts, 10, 3), Decl(mappedTypeModifiers.ts, 11, 3), Decl(mappedTypeModifiers.ts, 12, 3), Decl(mappedTypeModifiers.ts, 13, 3))
+
+var v00: keyof T;
+>v00 : Symbol(v00, Decl(mappedTypeModifiers.ts, 8, 3), Decl(mappedTypeModifiers.ts, 9, 3), Decl(mappedTypeModifiers.ts, 10, 3), Decl(mappedTypeModifiers.ts, 11, 3), Decl(mappedTypeModifiers.ts, 12, 3), Decl(mappedTypeModifiers.ts, 13, 3))
+>T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
+
+var v00: keyof U;
+>v00 : Symbol(v00, Decl(mappedTypeModifiers.ts, 8, 3), Decl(mappedTypeModifiers.ts, 9, 3), Decl(mappedTypeModifiers.ts, 10, 3), Decl(mappedTypeModifiers.ts, 11, 3), Decl(mappedTypeModifiers.ts, 12, 3), Decl(mappedTypeModifiers.ts, 13, 3))
+>U : Symbol(U, Decl(mappedTypeModifiers.ts, 1, 34))
+
+var v00: keyof P;
+>v00 : Symbol(v00, Decl(mappedTypeModifiers.ts, 8, 3), Decl(mappedTypeModifiers.ts, 9, 3), Decl(mappedTypeModifiers.ts, 10, 3), Decl(mappedTypeModifiers.ts, 11, 3), Decl(mappedTypeModifiers.ts, 12, 3), Decl(mappedTypeModifiers.ts, 13, 3))
+>P : Symbol(P, Decl(mappedTypeModifiers.ts, 2, 58))
+
+var v00: keyof R;
+>v00 : Symbol(v00, Decl(mappedTypeModifiers.ts, 8, 3), Decl(mappedTypeModifiers.ts, 9, 3), Decl(mappedTypeModifiers.ts, 10, 3), Decl(mappedTypeModifiers.ts, 11, 3), Decl(mappedTypeModifiers.ts, 12, 3), Decl(mappedTypeModifiers.ts, 13, 3))
+>R : Symbol(R, Decl(mappedTypeModifiers.ts, 3, 36))
+
+var v00: keyof PR;
+>v00 : Symbol(v00, Decl(mappedTypeModifiers.ts, 8, 3), Decl(mappedTypeModifiers.ts, 9, 3), Decl(mappedTypeModifiers.ts, 10, 3), Decl(mappedTypeModifiers.ts, 11, 3), Decl(mappedTypeModifiers.ts, 12, 3), Decl(mappedTypeModifiers.ts, 13, 3))
+>PR : Symbol(PR, Decl(mappedTypeModifiers.ts, 4, 52))
+
+// Validate that non-isomorphic mapped types strip modifiers
+var v01: T;
+>v01 : Symbol(v01, Decl(mappedTypeModifiers.ts, 16, 3), Decl(mappedTypeModifiers.ts, 17, 3), Decl(mappedTypeModifiers.ts, 18, 3))
+>T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
+
+var v01: Pick<R, keyof T>;
+>v01 : Symbol(v01, Decl(mappedTypeModifiers.ts, 16, 3), Decl(mappedTypeModifiers.ts, 17, 3), Decl(mappedTypeModifiers.ts, 18, 3))
+>Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>R : Symbol(R, Decl(mappedTypeModifiers.ts, 3, 36))
+>T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
+
+var v01: Pick<Readonly<T>, keyof T>;
+>v01 : Symbol(v01, Decl(mappedTypeModifiers.ts, 16, 3), Decl(mappedTypeModifiers.ts, 17, 3), Decl(mappedTypeModifiers.ts, 18, 3))
+>Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
+
+// Validate that non-isomorphic mapped types strip modifiers
+var v02: U;
+>v02 : Symbol(v02, Decl(mappedTypeModifiers.ts, 21, 3), Decl(mappedTypeModifiers.ts, 22, 3), Decl(mappedTypeModifiers.ts, 23, 3), Decl(mappedTypeModifiers.ts, 24, 3), Decl(mappedTypeModifiers.ts, 25, 3))
+>U : Symbol(U, Decl(mappedTypeModifiers.ts, 1, 34))
+
+var v02: Pick<P, keyof T>;
+>v02 : Symbol(v02, Decl(mappedTypeModifiers.ts, 21, 3), Decl(mappedTypeModifiers.ts, 22, 3), Decl(mappedTypeModifiers.ts, 23, 3), Decl(mappedTypeModifiers.ts, 24, 3), Decl(mappedTypeModifiers.ts, 25, 3))
+>Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>P : Symbol(P, Decl(mappedTypeModifiers.ts, 2, 58))
+>T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
+
+var v02: Pick<PR, keyof T>;
+>v02 : Symbol(v02, Decl(mappedTypeModifiers.ts, 21, 3), Decl(mappedTypeModifiers.ts, 22, 3), Decl(mappedTypeModifiers.ts, 23, 3), Decl(mappedTypeModifiers.ts, 24, 3), Decl(mappedTypeModifiers.ts, 25, 3))
+>Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>PR : Symbol(PR, Decl(mappedTypeModifiers.ts, 4, 52))
+>T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
+
+var v02: Pick<Partial<T>, keyof T>;
+>v02 : Symbol(v02, Decl(mappedTypeModifiers.ts, 21, 3), Decl(mappedTypeModifiers.ts, 22, 3), Decl(mappedTypeModifiers.ts, 23, 3), Decl(mappedTypeModifiers.ts, 24, 3), Decl(mappedTypeModifiers.ts, 25, 3))
+>Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
+
+var v02: Pick<Partial<Readonly<T>>, keyof T>;
+>v02 : Symbol(v02, Decl(mappedTypeModifiers.ts, 21, 3), Decl(mappedTypeModifiers.ts, 22, 3), Decl(mappedTypeModifiers.ts, 23, 3), Decl(mappedTypeModifiers.ts, 24, 3), Decl(mappedTypeModifiers.ts, 25, 3))
+>Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
+
+// Validate that isomorphic mapped types preserve optional modifier
+var v03: P;
+>v03 : Symbol(v03, Decl(mappedTypeModifiers.ts, 28, 3), Decl(mappedTypeModifiers.ts, 29, 3))
+>P : Symbol(P, Decl(mappedTypeModifiers.ts, 2, 58))
+
+var v03: Partial<T>;
+>v03 : Symbol(v03, Decl(mappedTypeModifiers.ts, 28, 3), Decl(mappedTypeModifiers.ts, 29, 3))
+>Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
+
+// Validate that isomorphic mapped types preserve readonly modifier
+var v04: R;
+>v04 : Symbol(v04, Decl(mappedTypeModifiers.ts, 32, 3), Decl(mappedTypeModifiers.ts, 33, 3))
+>R : Symbol(R, Decl(mappedTypeModifiers.ts, 3, 36))
+
+var v04: Readonly<T>;
+>v04 : Symbol(v04, Decl(mappedTypeModifiers.ts, 32, 3), Decl(mappedTypeModifiers.ts, 33, 3))
+>Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
+
+// Validate that isomorphic mapped types preserve both partial and readonly modifiers
+var v05: PR;
+>v05 : Symbol(v05, Decl(mappedTypeModifiers.ts, 36, 3), Decl(mappedTypeModifiers.ts, 37, 3), Decl(mappedTypeModifiers.ts, 38, 3), Decl(mappedTypeModifiers.ts, 39, 3), Decl(mappedTypeModifiers.ts, 40, 3))
+>PR : Symbol(PR, Decl(mappedTypeModifiers.ts, 4, 52))
+
+var v05: Partial<R>;
+>v05 : Symbol(v05, Decl(mappedTypeModifiers.ts, 36, 3), Decl(mappedTypeModifiers.ts, 37, 3), Decl(mappedTypeModifiers.ts, 38, 3), Decl(mappedTypeModifiers.ts, 39, 3), Decl(mappedTypeModifiers.ts, 40, 3))
+>Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>R : Symbol(R, Decl(mappedTypeModifiers.ts, 3, 36))
+
+var v05: Readonly<P>;
+>v05 : Symbol(v05, Decl(mappedTypeModifiers.ts, 36, 3), Decl(mappedTypeModifiers.ts, 37, 3), Decl(mappedTypeModifiers.ts, 38, 3), Decl(mappedTypeModifiers.ts, 39, 3), Decl(mappedTypeModifiers.ts, 40, 3))
+>Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>P : Symbol(P, Decl(mappedTypeModifiers.ts, 2, 58))
+
+var v05: Partial<Readonly<T>>;
+>v05 : Symbol(v05, Decl(mappedTypeModifiers.ts, 36, 3), Decl(mappedTypeModifiers.ts, 37, 3), Decl(mappedTypeModifiers.ts, 38, 3), Decl(mappedTypeModifiers.ts, 39, 3), Decl(mappedTypeModifiers.ts, 40, 3))
+>Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
+
+var v05: Readonly<Partial<T>>;
+>v05 : Symbol(v05, Decl(mappedTypeModifiers.ts, 36, 3), Decl(mappedTypeModifiers.ts, 37, 3), Decl(mappedTypeModifiers.ts, 38, 3), Decl(mappedTypeModifiers.ts, 39, 3), Decl(mappedTypeModifiers.ts, 40, 3))
+>Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
+
