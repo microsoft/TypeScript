@@ -47,16 +47,22 @@ type Dictionary<T> = { [x: string]: T };
 >x : string
 >T : T
 
+type NumericallyIndexed<T> = { [x: number]: T };
+>NumericallyIndexed : NumericallyIndexed<T>
+>T : T
+>x : number
+>T : T
+
 const enum E { A, B, C }
 >E : E
 >A : E.A
 >B : E.B
 >C : E.C
 
-type K00 = keyof any;  // string | number
+type K00 = keyof any;  // string
 >K00 : string
 
-type K01 = keyof string;  // number | "toString" | "charAt" | ...
+type K01 = keyof string;  // "toString" | "charAt" | ...
 >K01 : "length" | "toString" | "concat" | "slice" | "indexOf" | "lastIndexOf" | "charAt" | "charCodeAt" | "localeCompare" | "match" | "replace" | "search" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr" | "valueOf"
 
 type K02 = keyof number;  // "toString" | "toFixed" | "toExponential" | ...
@@ -82,11 +88,11 @@ type K10 = keyof Shape;  // "name" | "width" | "height" | "visible"
 >K10 : "name" | "width" | "height" | "visible"
 >Shape : Shape
 
-type K11 = keyof Shape[];  // number | "length" | "toString" | ...
+type K11 = keyof Shape[];  // "length" | "toString" | ...
 >K11 : "length" | "toString" | "toLocaleString" | "push" | "pop" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight"
 >Shape : Shape
 
-type K12 = keyof Dictionary<Shape>;  // string | number
+type K12 = keyof Dictionary<Shape>;  // string
 >K12 : string
 >Dictionary : Dictionary<T>
 >Shape : Shape
@@ -102,7 +108,7 @@ type K15 = keyof E;  // "toString" | "toFixed" | "toExponential" | ...
 >K15 : "toString" | "toLocaleString" | "valueOf" | "toFixed" | "toExponential" | "toPrecision"
 >E : E
 
-type K16 = keyof [string, number];  // number | "0" | "1" | "length" | "toString" | ...
+type K16 = keyof [string, number];  // "0" | "1" | "length" | "toString" | ...
 >K16 : "0" | "1" | "length" | "toString" | "toLocaleString" | "push" | "pop" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight"
 
 type K17 = keyof (Shape | Item);  // "name"
@@ -115,6 +121,11 @@ type K18 = keyof (Shape & Item);  // "name" | "width" | "height" | "visible" | "
 >Shape : Shape
 >Item : Item
 
+type K19 = keyof NumericallyIndexed<Shape> // never
+>K19 : never
+>NumericallyIndexed : NumericallyIndexed<T>
+>Shape : Shape
+
 type KeyOf<T> = keyof T;
 >KeyOf : keyof T
 >T : T
@@ -125,7 +136,7 @@ type K20 = KeyOf<Shape>;  // "name" | "width" | "height" | "visible"
 >KeyOf : keyof T
 >Shape : Shape
 
-type K21 = KeyOf<Dictionary<Shape>>;  // string | number
+type K21 = KeyOf<Dictionary<Shape>>;  // string
 >K21 : string
 >KeyOf : keyof T
 >Dictionary : Dictionary<T>
@@ -970,3 +981,4 @@ class OtherPerson {
 >"parts" : "parts"
     }
 }
+

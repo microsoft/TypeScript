@@ -21,11 +21,12 @@ class Options {
 }
 
 type Dictionary<T> = { [x: string]: T };
+type NumericallyIndexed<T> = { [x: number]: T };
 
 const enum E { A, B, C }
 
-type K00 = keyof any;  // string | number
-type K01 = keyof string;  // number | "toString" | "charAt" | ...
+type K00 = keyof any;  // string
+type K01 = keyof string;  // "toString" | "charAt" | ...
 type K02 = keyof number;  // "toString" | "toFixed" | "toExponential" | ...
 type K03 = keyof boolean;  // "valueOf"
 type K04 = keyof void;  // never
@@ -34,19 +35,20 @@ type K06 = keyof null;  // never
 type K07 = keyof never;  // never
 
 type K10 = keyof Shape;  // "name" | "width" | "height" | "visible"
-type K11 = keyof Shape[];  // number | "length" | "toString" | ...
-type K12 = keyof Dictionary<Shape>;  // string | number
+type K11 = keyof Shape[];  // "length" | "toString" | ...
+type K12 = keyof Dictionary<Shape>;  // string
 type K13 = keyof {};  // never
 type K14 = keyof Object;  // "constructor" | "toString" | ...
 type K15 = keyof E;  // "toString" | "toFixed" | "toExponential" | ...
-type K16 = keyof [string, number];  // number | "0" | "1" | "length" | "toString" | ...
+type K16 = keyof [string, number];  // "0" | "1" | "length" | "toString" | ...
 type K17 = keyof (Shape | Item);  // "name"
 type K18 = keyof (Shape & Item);  // "name" | "width" | "height" | "visible" | "price"
+type K19 = keyof NumericallyIndexed<Shape> // never
 
 type KeyOf<T> = keyof T;
 
 type K20 = KeyOf<Shape>;  // "name" | "width" | "height" | "visible"
-type K21 = KeyOf<Dictionary<Shape>>;  // string | number
+type K21 = KeyOf<Dictionary<Shape>>;  // string
 
 type NAME = "name";
 type WIDTH_OR_HEIGHT = "width" | "height";
