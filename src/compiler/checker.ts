@@ -3099,6 +3099,15 @@ namespace ts {
                         error(declaration, Diagnostics.Rest_types_may_only_be_created_from_object_types);
                         return unknownType;
                     }
+                    const parent = pattern.parent as VariableLikeDeclaration;
+                        if (parent.kind === SyntaxKind.Parameter &&
+                            !parent.type &&
+                            !parent.initializer &&
+                            !getContextuallyTypedParameterType(parent as ParameterDeclaration)) {
+                            // if this type came from examining the structure of the pattern --
+                            // there was no other information -- then it is not sufficient to determine the rest type, so just return any
+                        return anyType;
+                    }
                     const literalMembers: PropertyName[] = [];
                     for (const element of pattern.elements) {
                         if (!(element as BindingElement).dotDotDotToken) {
