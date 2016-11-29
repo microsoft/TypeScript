@@ -1,3 +1,5 @@
+// @target: es5
+
 abstract class A {
    abstract get a();
    abstract get aa() { return 1; } // error
