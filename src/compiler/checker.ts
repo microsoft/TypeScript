@@ -6119,7 +6119,7 @@ namespace ts {
                     return getUnionType(map(types, t => getSpreadType(t, right, isFromObjectLiteral)));
                 }
                 else {
-                    left = emptyObjectType
+                    left = emptyObjectType;
                 }
             }
             else if (left.flags & TypeFlags.Nullable) {
@@ -6132,7 +6132,7 @@ namespace ts {
                     return getUnionType(map(types, t => getSpreadType(left, t, isFromObjectLiteral)));
                 }
                 else {
-                    right = emptyObjectType
+                    right = emptyObjectType;
                 }
             }
             else if (right.flags & TypeFlags.Nullable) {
