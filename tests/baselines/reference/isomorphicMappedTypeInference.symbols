@@ -1,0 +1,334 @@
+=== tests/cases/conformance/types/mapped/isomorphicMappedTypeInference.ts ===
+
+type Box<T> = {
+>Box : Symbol(Box, Decl(isomorphicMappedTypeInference.ts, 0, 0))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 1, 9))
+
+    value: T;
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 1, 15))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 1, 9))
+}
+
+type Boxified<T> = {
+>Boxified : Symbol(Boxified, Decl(isomorphicMappedTypeInference.ts, 3, 1))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 5, 14))
+
+    [P in keyof T]: Box<T[P]>;
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 6, 5))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 5, 14))
+>Box : Symbol(Box, Decl(isomorphicMappedTypeInference.ts, 0, 0))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 5, 14))
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 6, 5))
+}
+
+function box<T>(x: T): Box<T> {
+>box : Symbol(box, Decl(isomorphicMappedTypeInference.ts, 7, 1))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 9, 13))
+>x : Symbol(x, Decl(isomorphicMappedTypeInference.ts, 9, 16))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 9, 13))
+>Box : Symbol(Box, Decl(isomorphicMappedTypeInference.ts, 0, 0))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 9, 13))
+
+    return { value: x };
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 10, 12))
+>x : Symbol(x, Decl(isomorphicMappedTypeInference.ts, 9, 16))
+}
+
+function unbox<T>(x: Box<T>): T {
+>unbox : Symbol(unbox, Decl(isomorphicMappedTypeInference.ts, 11, 1))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 13, 15))
+>x : Symbol(x, Decl(isomorphicMappedTypeInference.ts, 13, 18))
+>Box : Symbol(Box, Decl(isomorphicMappedTypeInference.ts, 0, 0))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 13, 15))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 13, 15))
+
+    return x.value;
+>x.value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 1, 15))
+>x : Symbol(x, Decl(isomorphicMappedTypeInference.ts, 13, 18))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 1, 15))
+}
+
+function boxify<T>(obj: T): Boxified<T> {
+>boxify : Symbol(boxify, Decl(isomorphicMappedTypeInference.ts, 15, 1))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 17, 16))
+>obj : Symbol(obj, Decl(isomorphicMappedTypeInference.ts, 17, 19))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 17, 16))
+>Boxified : Symbol(Boxified, Decl(isomorphicMappedTypeInference.ts, 3, 1))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 17, 16))
+
+    let result = {} as Boxified<T>;
+>result : Symbol(result, Decl(isomorphicMappedTypeInference.ts, 18, 7))
+>Boxified : Symbol(Boxified, Decl(isomorphicMappedTypeInference.ts, 3, 1))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 17, 16))
+
+    for (let k in obj) {
+>k : Symbol(k, Decl(isomorphicMappedTypeInference.ts, 19, 12))
+>obj : Symbol(obj, Decl(isomorphicMappedTypeInference.ts, 17, 19))
+
+        result[k] = box(obj[k]);
+>result : Symbol(result, Decl(isomorphicMappedTypeInference.ts, 18, 7))
+>k : Symbol(k, Decl(isomorphicMappedTypeInference.ts, 19, 12))
+>box : Symbol(box, Decl(isomorphicMappedTypeInference.ts, 7, 1))
+>obj : Symbol(obj, Decl(isomorphicMappedTypeInference.ts, 17, 19))
+>k : Symbol(k, Decl(isomorphicMappedTypeInference.ts, 19, 12))
+    }
+    return result;
+>result : Symbol(result, Decl(isomorphicMappedTypeInference.ts, 18, 7))
+}
+
+function unboxify<T>(obj: Boxified<T>): T {
+>unboxify : Symbol(unboxify, Decl(isomorphicMappedTypeInference.ts, 23, 1))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 25, 18))
+>obj : Symbol(obj, Decl(isomorphicMappedTypeInference.ts, 25, 21))
+>Boxified : Symbol(Boxified, Decl(isomorphicMappedTypeInference.ts, 3, 1))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 25, 18))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 25, 18))
+
+    let result = {} as T;
+>result : Symbol(result, Decl(isomorphicMappedTypeInference.ts, 26, 7))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 25, 18))
+
+    for (let k in obj) {
+>k : Symbol(k, Decl(isomorphicMappedTypeInference.ts, 27, 12))
+>obj : Symbol(obj, Decl(isomorphicMappedTypeInference.ts, 25, 21))
+
+        result[k] = unbox(obj[k]);
+>result : Symbol(result, Decl(isomorphicMappedTypeInference.ts, 26, 7))
+>k : Symbol(k, Decl(isomorphicMappedTypeInference.ts, 27, 12))
+>unbox : Symbol(unbox, Decl(isomorphicMappedTypeInference.ts, 11, 1))
+>obj : Symbol(obj, Decl(isomorphicMappedTypeInference.ts, 25, 21))
+>k : Symbol(k, Decl(isomorphicMappedTypeInference.ts, 27, 12))
+    }
+    return result;
+>result : Symbol(result, Decl(isomorphicMappedTypeInference.ts, 26, 7))
+}
+
+function assignBoxified<T>(obj: Boxified<T>, values: T) {
+>assignBoxified : Symbol(assignBoxified, Decl(isomorphicMappedTypeInference.ts, 31, 1))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 33, 24))
+>obj : Symbol(obj, Decl(isomorphicMappedTypeInference.ts, 33, 27))
+>Boxified : Symbol(Boxified, Decl(isomorphicMappedTypeInference.ts, 3, 1))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 33, 24))
+>values : Symbol(values, Decl(isomorphicMappedTypeInference.ts, 33, 44))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 33, 24))
+
+    for (let k in values) {
+>k : Symbol(k, Decl(isomorphicMappedTypeInference.ts, 34, 12))
+>values : Symbol(values, Decl(isomorphicMappedTypeInference.ts, 33, 44))
+
+        obj[k].value = values[k];
+>obj[k].value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 1, 15))
+>obj : Symbol(obj, Decl(isomorphicMappedTypeInference.ts, 33, 27))
+>k : Symbol(k, Decl(isomorphicMappedTypeInference.ts, 34, 12))
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 1, 15))
+>values : Symbol(values, Decl(isomorphicMappedTypeInference.ts, 33, 44))
+>k : Symbol(k, Decl(isomorphicMappedTypeInference.ts, 34, 12))
+    }
+}
+
+function f1() {
+>f1 : Symbol(f1, Decl(isomorphicMappedTypeInference.ts, 37, 1))
+
+    let v = {
+>v : Symbol(v, Decl(isomorphicMappedTypeInference.ts, 40, 7))
+
+        a: 42,
+>a : Symbol(a, Decl(isomorphicMappedTypeInference.ts, 40, 13))
+
+        b: "hello",
+>b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 41, 14))
+
+        c: true
+>c : Symbol(c, Decl(isomorphicMappedTypeInference.ts, 42, 19))
+
+    };
+    let b = boxify(v);
+>b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 45, 7))
+>boxify : Symbol(boxify, Decl(isomorphicMappedTypeInference.ts, 15, 1))
+>v : Symbol(v, Decl(isomorphicMappedTypeInference.ts, 40, 7))
+
+    let x: number = b.a.value;
+>x : Symbol(x, Decl(isomorphicMappedTypeInference.ts, 46, 7))
+>b.a.value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 1, 15))
+>b.a : Symbol(a)
+>b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 45, 7))
+>a : Symbol(a)
+>value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 1, 15))
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(isomorphicMappedTypeInference.ts, 47, 1))
+
+    let b = {
+>b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 50, 7))
+
+        a: box(42),
+>a : Symbol(a, Decl(isomorphicMappedTypeInference.ts, 50, 13))
+>box : Symbol(box, Decl(isomorphicMappedTypeInference.ts, 7, 1))
+
+        b: box("hello"),
+>b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 51, 19))
+>box : Symbol(box, Decl(isomorphicMappedTypeInference.ts, 7, 1))
+
+        c: box(true)
+>c : Symbol(c, Decl(isomorphicMappedTypeInference.ts, 52, 24))
+>box : Symbol(box, Decl(isomorphicMappedTypeInference.ts, 7, 1))
+
+    };
+    let v = unboxify(b);
+>v : Symbol(v, Decl(isomorphicMappedTypeInference.ts, 55, 7))
+>unboxify : Symbol(unboxify, Decl(isomorphicMappedTypeInference.ts, 23, 1))
+>b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 50, 7))
+
+    let x: number = v.a;
+>x : Symbol(x, Decl(isomorphicMappedTypeInference.ts, 56, 7))
+>v.a : Symbol(a, Decl(isomorphicMappedTypeInference.ts, 50, 13))
+>v : Symbol(v, Decl(isomorphicMappedTypeInference.ts, 55, 7))
+>a : Symbol(a, Decl(isomorphicMappedTypeInference.ts, 50, 13))
+}
+
+function f3() {
+>f3 : Symbol(f3, Decl(isomorphicMappedTypeInference.ts, 57, 1))
+
+    let b = {
+>b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 60, 7))
+
+        a: box(42),
+>a : Symbol(a, Decl(isomorphicMappedTypeInference.ts, 60, 13))
+>box : Symbol(box, Decl(isomorphicMappedTypeInference.ts, 7, 1))
+
+        b: box("hello"),
+>b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 61, 19))
+>box : Symbol(box, Decl(isomorphicMappedTypeInference.ts, 7, 1))
+
+        c: box(true)
+>c : Symbol(c, Decl(isomorphicMappedTypeInference.ts, 62, 24))
+>box : Symbol(box, Decl(isomorphicMappedTypeInference.ts, 7, 1))
+
+    };
+    assignBoxified(b, { c: false });
+>assignBoxified : Symbol(assignBoxified, Decl(isomorphicMappedTypeInference.ts, 31, 1))
+>b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 60, 7))
+>c : Symbol(c, Decl(isomorphicMappedTypeInference.ts, 65, 23))
+}
+
+function f4() {
+>f4 : Symbol(f4, Decl(isomorphicMappedTypeInference.ts, 66, 1))
+
+    let b = {
+>b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 69, 7))
+
+        a: box(42),
+>a : Symbol(a, Decl(isomorphicMappedTypeInference.ts, 69, 13))
+>box : Symbol(box, Decl(isomorphicMappedTypeInference.ts, 7, 1))
+
+        b: box("hello"),
+>b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 70, 19))
+>box : Symbol(box, Decl(isomorphicMappedTypeInference.ts, 7, 1))
+
+        c: box(true)
+>c : Symbol(c, Decl(isomorphicMappedTypeInference.ts, 71, 24))
+>box : Symbol(box, Decl(isomorphicMappedTypeInference.ts, 7, 1))
+
+    };
+    b = boxify(unboxify(b));
+>b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 69, 7))
+>boxify : Symbol(boxify, Decl(isomorphicMappedTypeInference.ts, 15, 1))
+>unboxify : Symbol(unboxify, Decl(isomorphicMappedTypeInference.ts, 23, 1))
+>b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 69, 7))
+
+    b = unboxify(boxify(b));
+>b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 69, 7))
+>unboxify : Symbol(unboxify, Decl(isomorphicMappedTypeInference.ts, 23, 1))
+>boxify : Symbol(boxify, Decl(isomorphicMappedTypeInference.ts, 15, 1))
+>b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 69, 7))
+}
+
+function makeRecord<T, K extends string>(obj: { [P in K]: T }) {
+>makeRecord : Symbol(makeRecord, Decl(isomorphicMappedTypeInference.ts, 76, 1))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 78, 20))
+>K : Symbol(K, Decl(isomorphicMappedTypeInference.ts, 78, 22))
+>obj : Symbol(obj, Decl(isomorphicMappedTypeInference.ts, 78, 41))
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 78, 49))
+>K : Symbol(K, Decl(isomorphicMappedTypeInference.ts, 78, 22))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 78, 20))
+
+    return obj;
+>obj : Symbol(obj, Decl(isomorphicMappedTypeInference.ts, 78, 41))
+}
+
+function f5(s: string) {
+>f5 : Symbol(f5, Decl(isomorphicMappedTypeInference.ts, 80, 1))
+>s : Symbol(s, Decl(isomorphicMappedTypeInference.ts, 82, 12))
+
+    let b = makeRecord({
+>b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 83, 7))
+>makeRecord : Symbol(makeRecord, Decl(isomorphicMappedTypeInference.ts, 76, 1))
+
+        a: box(42),
+>a : Symbol(a, Decl(isomorphicMappedTypeInference.ts, 83, 24))
+>box : Symbol(box, Decl(isomorphicMappedTypeInference.ts, 7, 1))
+
+        b: box("hello"),
+>b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 84, 19))
+>box : Symbol(box, Decl(isomorphicMappedTypeInference.ts, 7, 1))
+
+        c: box(true)
+>c : Symbol(c, Decl(isomorphicMappedTypeInference.ts, 85, 24))
+>box : Symbol(box, Decl(isomorphicMappedTypeInference.ts, 7, 1))
+
+    });
+    let v = unboxify(b);
+>v : Symbol(v, Decl(isomorphicMappedTypeInference.ts, 88, 7))
+>unboxify : Symbol(unboxify, Decl(isomorphicMappedTypeInference.ts, 23, 1))
+>b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 83, 7))
+
+    let x: string | number | boolean = v.a;
+>x : Symbol(x, Decl(isomorphicMappedTypeInference.ts, 89, 7))
+>v.a : Symbol(a)
+>v : Symbol(v, Decl(isomorphicMappedTypeInference.ts, 88, 7))
+>a : Symbol(a)
+}
+
+function makeDictionary<T>(obj: { [x: string]: T }) {
+>makeDictionary : Symbol(makeDictionary, Decl(isomorphicMappedTypeInference.ts, 90, 1))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 92, 24))
+>obj : Symbol(obj, Decl(isomorphicMappedTypeInference.ts, 92, 27))
+>x : Symbol(x, Decl(isomorphicMappedTypeInference.ts, 92, 35))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 92, 24))
+
+    return obj;
+>obj : Symbol(obj, Decl(isomorphicMappedTypeInference.ts, 92, 27))
+}
+
+function f6(s: string) {
+>f6 : Symbol(f6, Decl(isomorphicMappedTypeInference.ts, 94, 1))
+>s : Symbol(s, Decl(isomorphicMappedTypeInference.ts, 96, 12))
+
+    let b = makeDictionary({
+>b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 97, 7))
+>makeDictionary : Symbol(makeDictionary, Decl(isomorphicMappedTypeInference.ts, 90, 1))
+
+        a: box(42),
+>a : Symbol(a, Decl(isomorphicMappedTypeInference.ts, 97, 28))
+>box : Symbol(box, Decl(isomorphicMappedTypeInference.ts, 7, 1))
+
+        b: box("hello"),
+>b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 98, 19))
+>box : Symbol(box, Decl(isomorphicMappedTypeInference.ts, 7, 1))
+
+        c: box(true)
+>c : Symbol(c, Decl(isomorphicMappedTypeInference.ts, 99, 24))
+>box : Symbol(box, Decl(isomorphicMappedTypeInference.ts, 7, 1))
+
+    });
+    let v = unboxify(b);
+>v : Symbol(v, Decl(isomorphicMappedTypeInference.ts, 102, 7))
+>unboxify : Symbol(unboxify, Decl(isomorphicMappedTypeInference.ts, 23, 1))
+>b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 97, 7))
+
+    let x: string | number | boolean = v[s];
+>x : Symbol(x, Decl(isomorphicMappedTypeInference.ts, 103, 7))
+>v : Symbol(v, Decl(isomorphicMappedTypeInference.ts, 102, 7))
+>s : Symbol(s, Decl(isomorphicMappedTypeInference.ts, 96, 12))
+}
