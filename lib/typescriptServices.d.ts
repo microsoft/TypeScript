@@ -317,24 +317,25 @@ declare namespace ts {
         JSDocThisType = 277,
         JSDocComment = 278,
         JSDocTag = 279,
-        JSDocParameterTag = 280,
-        JSDocReturnTag = 281,
-        JSDocTypeTag = 282,
-        JSDocTemplateTag = 283,
-        JSDocTypedefTag = 284,
-        JSDocPropertyTag = 285,
-        JSDocTypeLiteral = 286,
-        JSDocLiteralType = 287,
-        JSDocNullKeyword = 288,
-        JSDocUndefinedKeyword = 289,
-        JSDocNeverKeyword = 290,
-        SyntaxList = 291,
-        NotEmittedStatement = 292,
-        PartiallyEmittedExpression = 293,
-        MergeDeclarationMarker = 294,
-        EndOfDeclarationMarker = 295,
-        RawExpression = 296,
-        Count = 297,
+        JSDocAugmentsTag = 280,
+        JSDocParameterTag = 281,
+        JSDocReturnTag = 282,
+        JSDocTypeTag = 283,
+        JSDocTemplateTag = 284,
+        JSDocTypedefTag = 285,
+        JSDocPropertyTag = 286,
+        JSDocTypeLiteral = 287,
+        JSDocLiteralType = 288,
+        JSDocNullKeyword = 289,
+        JSDocUndefinedKeyword = 290,
+        JSDocNeverKeyword = 291,
+        SyntaxList = 292,
+        NotEmittedStatement = 293,
+        PartiallyEmittedExpression = 294,
+        MergeDeclarationMarker = 295,
+        EndOfDeclarationMarker = 296,
+        RawExpression = 297,
+        Count = 298,
         FirstAssignment = 57,
         LastAssignment = 69,
         FirstCompoundAssignment = 58,
@@ -361,9 +362,9 @@ declare namespace ts {
         LastBinaryOperator = 69,
         FirstNode = 141,
         FirstJSDocNode = 262,
-        LastJSDocNode = 287,
+        LastJSDocNode = 288,
         FirstJSDocTagNode = 278,
-        LastJSDocTagNode = 290,
+        LastJSDocTagNode = 291,
     }
     enum NodeFlags {
         None = 0,
@@ -1355,6 +1356,10 @@ declare namespace ts {
     interface JSDocUnknownTag extends JSDocTag {
         kind: SyntaxKind.JSDocTag;
     }
+    interface JSDocAugmentsTag extends JSDocTag {
+        kind: SyntaxKind.JSDocAugmentsTag;
+        typeExpression: JSDocTypeExpression;
+    }
     interface JSDocTemplateTag extends JSDocTag {
         kind: SyntaxKind.JSDocTemplateTag;
         typeParameters: NodeArray<TypeParameterDeclaration>;
@@ -1769,7 +1774,7 @@ declare namespace ts {
         Literal = 480,
         StringOrNumberLiteral = 96,
         PossiblyFalsy = 7406,
-        StringLike = 34,
+        StringLike = 262178,
         NumberLike = 340,
         BooleanLike = 136,
         EnumLike = 272,
@@ -1853,7 +1858,7 @@ declare namespace ts {
     }
     interface IndexedAccessType extends Type {
         objectType: Type;
-        indexType: TypeParameter;
+        indexType: Type;
     }
     enum SignatureKind {
         Call = 0,
@@ -1974,8 +1979,9 @@ declare namespace ts {
         typeRoots?: string[];
         [option: string]: CompilerOptionsValue | undefined;
     }
-    interface TypingOptions {
+    interface TypeAcquisition {
         enableAutoDiscovery?: boolean;
+        enable?: boolean;
         include?: string[];
         exclude?: string[];
         [option: string]: string[] | boolean | undefined;
@@ -1985,7 +1991,7 @@ declare namespace ts {
         projectRootPath: string;
         safeListPath: string;
         packageNameToTypingLocation: Map<string>;
-        typingOptions: TypingOptions;
+        typeAcquisition: TypeAcquisition;
         compilerOptions: CompilerOptions;
         unresolvedImports: ReadonlyArray<string>;
     }
@@ -2033,7 +2039,7 @@ declare namespace ts {
     /** Either a parsed command line or a parsed tsconfig.json */
     interface ParsedCommandLine {
         options: CompilerOptions;
-        typingOptions?: TypingOptions;
+        typeAcquisition?: TypeAcquisition;
         fileNames: string[];
         raw?: any;
         errors: Diagnostic[];
@@ -2275,6 +2281,16 @@ declare namespace ts {
     function isParameterPropertyDeclaration(node: Node): boolean;
     function getCombinedModifierFlags(node: Node): ModifierFlags;
     function getCombinedNodeFlags(node: Node): NodeFlags;
+    /**
+      * Checks to see if the locale is in the appropriate format,
+      * and if it is, attempts to set the appropriate language.
+      */
+    function validateLocaleAndSetLanguage(locale: string, sys: {
+        getExecutingFilePath(): string;
+        resolvePath(path: string): string;
+        fileExists(fileName: string): boolean;
+        readFile(fileName: string): string;
+    }, errors?: Diagnostic[]): void;
 }
 declare namespace ts {
     function createNode(kind: SyntaxKind, pos?: number, end?: number): Node;
@@ -2354,8 +2370,8 @@ declare namespace ts {
         options: CompilerOptions;
         errors: Diagnostic[];
     };
-    function convertTypingOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): {
-        options: TypingOptions;
+    function convertTypeAcquisitionFromJson(jsonOptions: any, basePath: string, configFileName?: string): {
+        options: TypeAcquisition;
         errors: Diagnostic[];
     };
 }
