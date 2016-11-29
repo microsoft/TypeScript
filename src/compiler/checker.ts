@@ -3054,7 +3054,10 @@ namespace ts {
         }
 
         function getRestType(source: Type, properties: PropertyName[], symbol: Symbol): Type {
-            Debug.assert(!!(source.flags & TypeFlags.Object), "Rest types only support object types right now.");
+            if (source.flags & TypeFlags.Union) {
+                return getUnionType(map((<UnionType>source).types, t => getRestType(t, properties, symbol)));
+            }
+
             const members = createMap<Symbol>();
             const names = createMap<true>();
             for (const name of properties) {
@@ -3095,7 +3098,7 @@ namespace ts {
             let type: Type;
             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
                 if (declaration.dotDotDotToken) {
-                    if (!(parentType.flags & TypeFlags.Object)) {
+                    if (isInvalidValidSpreadType(parentType)) {
                         error(declaration, Diagnostics.Rest_types_may_only_be_created_from_object_types);
                         return unknownType;
                     }
@@ -6102,11 +6105,19 @@ namespace ts {
          * this function should be called in a left folding style, with left = previous result of getSpreadType
          * and right = the new element to be spread.
          */
-        function getSpreadType(left: Type, right: Type, isFromObjectLiteral: boolean): ResolvedType | IntrinsicType {
-            Debug.assert(!!(left.flags & (TypeFlags.Object | TypeFlags.Any)) && !!(right.flags & (TypeFlags.Object | TypeFlags.Any)), "Only object types may be spread.");
+        function getSpreadType(left: Type, right: Type, isFromObjectLiteral: boolean): Type  {
             if (left.flags & TypeFlags.Any || right.flags & TypeFlags.Any) {
                 return anyType;
             }
+
+            if (left.flags & TypeFlags.Union) {
+                return getUnionType(map((<UnionType>left).types, t => getSpreadType(t, right, isFromObjectLiteral)));
+            }
+
+            if (right.flags & TypeFlags.Union) {
+                return getUnionType(map((<UnionType>right).types, t => getSpreadType(left, t, isFromObjectLiteral)));
+            }
+
             const members = createMap<Symbol>();
             const skippedPrivateMembers = createMap<boolean>();
             let stringIndexInfo: IndexInfo;
@@ -11438,7 +11449,7 @@ namespace ts {
                         typeFlags = 0;
                     }
                     const type = checkExpression((memberDecl as SpreadAssignment).expression);
-                    if (!(type.flags & (TypeFlags.Object | TypeFlags.Any))) {
+                    if (!(type.flags & TypeFlags.Any) && isInvalidValidSpreadType(type)) {
                         error(memberDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
                         return unknownType;
                     }
@@ -11515,6 +11526,16 @@ namespace ts {
                 return result;
             }
        }
+
+        function isInvalidValidSpreadType(type: Type): boolean {
+            if (type.flags & TypeFlags.Object) {
+                return isGenericMappedType(type);
+            }
+            else if (type.flags & TypeFlags.UnionOrIntersection) {
+                return forEach((<UnionOrIntersectionType>type).types, isInvalidValidSpreadType);
+            }
+            return true;
+        }
 
         function checkJsxSelfClosingElement(node: JsxSelfClosingElement) {
             checkJsxOpeningLikeElement(node);
