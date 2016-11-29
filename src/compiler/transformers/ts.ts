@@ -1662,6 +1662,8 @@ namespace ts {
 
             switch (node.kind) {
                 case SyntaxKind.VoidKeyword:
+                case SyntaxKind.UndefinedKeyword:
+                case SyntaxKind.NullKeyword:
                     return createVoidZero();
 
                 case SyntaxKind.ParenthesizedType:
@@ -1715,27 +1717,35 @@ namespace ts {
                 case SyntaxKind.UnionType:
                     {
                         const unionOrIntersection = <UnionOrIntersectionTypeNode>node;
-                        let serializedUnion: Identifier;
+                        let serializedUnion: Identifier | VoidExpression;
                         for (const typeNode of unionOrIntersection.types) {
-                            const serializedIndividual = serializeTypeNode(typeNode) as Identifier;
-                            // Non identifier
-                            if (serializedIndividual.kind !== SyntaxKind.Identifier) {
+                            const serializedIndividual = serializeTypeNode(typeNode);
+
+                            if (isIdentifier(serializedIndividual)) {
+                                // One of the individual is global object, return immediately
+                                if (serializedIndividual.text === "Object") {
+                                    return serializedIndividual;
+                                }
+
+                                // Different types
+                                if (serializedUnion && isIdentifier(serializedUnion) && serializedUnion.text !== serializedIndividual.text) {
+                                    serializedUnion = undefined;
+                                    break;
+                                }
+
+                                serializedUnion = serializedIndividual;
+                            }
+                            else if (isVoidExpression(serializedIndividual)) {
+                                // If we dont have any other type already set, set the initial type
+                                if (!serializedUnion) {
+                                    serializedUnion = serializedIndividual;
+                                }
+                            }
+                            else {
+                                // Non identifier and undefined/null
                                 serializedUnion = undefined;
                                 break;
                             }
-
-                            // One of the individual is global object, return immediately
-                            if (serializedIndividual.text === "Object") {
-                                return serializedIndividual;
-                            }
-
-                            // Different types
-                            if (serializedUnion && serializedUnion.text !== serializedIndividual.text) {
-                                serializedUnion = undefined;
-                                break;
-                            }
-
-                            serializedUnion = serializedIndividual;
                         }
 
                         // If we were able to find common type
@@ -1751,6 +1761,7 @@ namespace ts {
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.ThisType:
+                case SyntaxKind.NeverKeyword:
                     break;
 
                 default:
