@@ -3098,7 +3098,7 @@ namespace ts {
             let type: Type;
             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
                 if (declaration.dotDotDotToken) {
-                    if (isInvalidValidSpreadType(parentType)) {
+                    if (isInvalidSpreadType(parentType)) {
                         error(declaration, Diagnostics.Rest_types_may_only_be_created_from_object_types);
                         return unknownType;
                     }
@@ -11449,7 +11449,7 @@ namespace ts {
                         typeFlags = 0;
                     }
                     const type = checkExpression((memberDecl as SpreadAssignment).expression);
-                    if (!(type.flags & TypeFlags.Any) && isInvalidValidSpreadType(type)) {
+                    if (!(type.flags & TypeFlags.Any) && isInvalidSpreadType(type)) {
                         error(memberDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
                         return unknownType;
                     }
@@ -11527,12 +11527,12 @@ namespace ts {
             }
        }
 
-        function isInvalidValidSpreadType(type: Type): boolean {
+        function isInvalidSpreadType(type: Type): boolean {
             if (type.flags & TypeFlags.Object) {
                 return isGenericMappedType(type);
             }
             else if (type.flags & TypeFlags.UnionOrIntersection) {
-                return forEach((<UnionOrIntersectionType>type).types, isInvalidValidSpreadType);
+                return forEach((<UnionOrIntersectionType>type).types, isInvalidSpreadType);
             }
             return true;
         }
