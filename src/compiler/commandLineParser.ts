@@ -1026,7 +1026,7 @@ namespace ts {
                         case "project":
                             break;
                         default:
-                            const value = options[name];
+                            const value = <CompilerOptionsValue>options[name];
                             const optionDefinition = optionsNameMap.get(name.toLowerCase());
                             if (optionDefinition) {
                                 const customTypeMap = getCustomTypeMapOfCommandLineOption(optionDefinition);
@@ -1193,6 +1193,7 @@ namespace ts {
 
         options = extend(existingOptions, options);
         options.configFilePath = configFileName;
+        options.configFile = sourceFile;
 
         const { fileNames, wildcardDirectories } = getFileNames(errors);
 
@@ -1639,17 +1640,15 @@ namespace ts {
 
         function createDiagnostic(message: DiagnosticMessage, spec: string): Diagnostic {
             if (jsonSourceFile && jsonSourceFile.jsonObject) {
-                for (const property of jsonSourceFile.jsonObject.properties) {
-                    if (property.kind === SyntaxKind.PropertyAssignment && getTextOfPropertyName(property.name) === specKey) {
-                        const specsNode = <ArrayLiteralExpression>property.initializer;
-                        for (const element of specsNode.elements) {
+                for (const property of getPropertyAssignment(jsonSourceFile.jsonObject, specKey)) {
+                    if (isArrayLiteralExpression(property.initializer)) {
+                        for (const element of property.initializer.elements) {
                             if (element.kind === SyntaxKind.StringLiteral && (<StringLiteral>element).text === spec) {
                                 return createDiagnosticForNodeInSourceFile(jsonSourceFile, element, message, spec);
                             }
                         }
                     }
                 }
-
             }
             return createCompilerDiagnostic(message, spec);
         }

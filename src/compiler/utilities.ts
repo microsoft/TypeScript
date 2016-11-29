@@ -948,6 +948,15 @@ namespace ts {
         return predicate && predicate.kind === TypePredicateKind.This;
     }
 
+    export function getPropertyAssignment(objectLiteral: ObjectLiteralExpression, key: string, key2?: string) {
+        return <PropertyAssignment[]>filter(objectLiteral.properties, property => {
+            if (property.kind === SyntaxKind.PropertyAssignment) {
+                const propName = getTextOfPropertyName(property.name);
+                return key === propName || (key2 && key2 === propName);
+            }
+        });
+    }
+
     export function getContainingFunction(node: Node): FunctionLikeDeclaration {
         while (true) {
             node = node.parent;

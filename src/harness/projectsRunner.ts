@@ -24,6 +24,7 @@ interface BatchCompileProjectTestCaseEmittedFile extends Harness.Compiler.Genera
 }
 
 interface CompileProjectFilesResult {
+    configFileSourceFiles: ts.SourceFile[];
     moduleKind: ts.ModuleKind;
     program?: ts.Program;
     compilerOptions?: ts.CompilerOptions;
@@ -125,7 +126,8 @@ class ProjectRunner extends RunnerBase {
             return Harness.IO.resolvePath(testCase.projectRoot);
         }
 
-        function compileProjectFiles(moduleKind: ts.ModuleKind, getInputFiles: () => string[],
+        function compileProjectFiles(moduleKind: ts.ModuleKind, configFileSourceFiles: ts.SourceFile[],
+            getInputFiles: () => string[],
             getSourceFileTextImpl: (fileName: string) => string,
             writeFile: (fileName: string, data: string, writeByteOrderMark: boolean) => void,
             compilerOptions: ts.CompilerOptions): CompileProjectFilesResult {
@@ -149,6 +151,7 @@ class ProjectRunner extends RunnerBase {
             }
 
             return {
+                configFileSourceFiles,
                 moduleKind,
                 program,
                 errors,
@@ -197,6 +200,7 @@ class ProjectRunner extends RunnerBase {
             const outputFiles: BatchCompileProjectTestCaseEmittedFile[] = [];
             let inputFiles = testCase.inputFiles;
             let compilerOptions = createCompilerOptions();
+            const configFileSourceFiles: ts.SourceFile[] = [];
 
             let configFileName: string;
             if (compilerOptions.project) {
@@ -211,6 +215,7 @@ class ProjectRunner extends RunnerBase {
             let errors: ts.Diagnostic[];
             if (configFileName) {
                 const result = ts.readConfigFileToJsonSourceFile(configFileName, getSourceFileText);
+                configFileSourceFiles.push(result);
                 const configParseHost: ts.ParseConfigHost = {
                     useCaseSensitiveFileNames: Harness.IO.useCaseSensitiveFileNames(),
                     fileExists,
@@ -220,6 +225,7 @@ class ProjectRunner extends RunnerBase {
                 const configParseResult = ts.parseJsonSourceFileConfigFileContent(result, configParseHost, ts.getDirectoryPath(configFileName), compilerOptions);
                 if (configParseResult.errors.length > 0) {
                     return {
+                        configFileSourceFiles,
                         moduleKind,
                         errors: result.parseDiagnostics.concat(configParseResult.errors)
                     };
@@ -229,8 +235,9 @@ class ProjectRunner extends RunnerBase {
                 errors = result.parseDiagnostics;
             }
 
-            const projectCompilerResult = compileProjectFiles(moduleKind, () => inputFiles, getSourceFileText, writeFile, compilerOptions);
+            const projectCompilerResult = compileProjectFiles(moduleKind, configFileSourceFiles, () => inputFiles, getSourceFileText, writeFile, compilerOptions);
             return {
+                configFileSourceFiles,
                 moduleKind,
                 program: projectCompilerResult.program,
                 compilerOptions,
@@ -397,7 +404,7 @@ class ProjectRunner extends RunnerBase {
             });
 
             // Dont allow config files since we are compiling existing source options
-            return compileProjectFiles(compilerResult.moduleKind, getInputFiles, getSourceFileText, writeFile, compilerResult.compilerOptions);
+            return compileProjectFiles(compilerResult.moduleKind, compilerResult.configFileSourceFiles, getInputFiles, getSourceFileText, writeFile, compilerResult.compilerOptions);
 
             function findOutputDtsFile(fileName: string) {
                 return ts.forEach(compilerResult.outputFiles, outputFile => outputFile.emittedFileName === fileName ? outputFile : undefined);
@@ -423,16 +430,16 @@ class ProjectRunner extends RunnerBase {
         }
 
         function getErrorsBaseline(compilerResult: CompileProjectFilesResult) {
-            const inputFiles = compilerResult.program ? ts.map(ts.filter(compilerResult.program.getSourceFiles(),
-                sourceFile => !Harness.isDefaultLibraryFile(sourceFile.fileName)),
-                sourceFile => {
-                    return {
-                        unitName: ts.isRootedDiskPath(sourceFile.fileName) ?
-                            RunnerBase.removeFullPaths(sourceFile.fileName) :
-                            sourceFile.fileName,
-                        content: sourceFile.text
-                    };
-                }) : [];
+            const inputFiles = ts.map(compilerResult.configFileSourceFiles.concat(
+                compilerResult.program ?
+                    ts.filter(compilerResult.program.getSourceFiles(), sourceFile => !Harness.isDefaultLibraryFile(sourceFile.fileName)) :
+                    []),
+                sourceFile => <Harness.Compiler.TestFile>{
+                    unitName: ts.isRootedDiskPath(sourceFile.fileName) ?
+                        RunnerBase.removeFullPaths(sourceFile.fileName) :
+                        sourceFile.fileName,
+                    content: sourceFile.text
+                });
 
             return Harness.Compiler.getErrorBaseline(inputFiles, compilerResult.errors);
         }

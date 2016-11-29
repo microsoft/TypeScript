@@ -1047,8 +1047,12 @@ namespace ts {
         return false;
     }
 
-    export function compareDataObjects(dst: any, src: any): boolean {
+    export function compareDataObjects(dst: any, src: any, ignoreKey?: string): boolean {
         for (const e in dst) {
+            if (ignoreKey && ignoreKey === e) {
+                continue;
+            }
+
             if (typeof dst[e] === "object") {
                 if (!compareDataObjects(dst[e], src[e])) {
                     return false;

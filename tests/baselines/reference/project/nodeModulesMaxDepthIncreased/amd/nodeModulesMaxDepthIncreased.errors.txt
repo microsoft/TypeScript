@@ -1,6 +1,14 @@
 maxDepthIncreased/root.ts(7,1): error TS2322: Type '"10"' is not assignable to type 'number'.
 
 
+==== maxDepthIncreased/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": { 
+        "allowJs": true,
+        "maxNodeModuleJsDepth": 3
+      }
+    }
+    
 ==== index.js (0 errors) ====
     exports.person = {
         "name": "John Doe",

@@ -34,6 +34,7 @@ namespace ts {
             const host: ParseConfigHost = new Utils.MockParseConfigHost("/apath/", true, []);
             const { options: actualCompilerOptions, errors: actualParseErrors } = parseJsonSourceFileConfigFileContent(result, host, "/apath/", /*existingOptions*/ undefined, configFileName);
             expectedResult.compilerOptions["configFilePath"] = configFileName;
+            expectedResult.compilerOptions.configFile = result;
 
             const parsedCompilerOptions = JSON.stringify(actualCompilerOptions);
             const expectedCompilerOptions = JSON.stringify(expectedResult.compilerOptions);

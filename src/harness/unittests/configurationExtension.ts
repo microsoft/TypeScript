@@ -119,23 +119,25 @@ namespace ts {
             function getParseCommandLineJsonSourceFile(entry: string) {
                 const jsonSourceFile = ts.readConfigFileToJsonSourceFile(entry, name => host.readFile(name));
                 assert(jsonSourceFile.endOfFileToken && !jsonSourceFile.parseDiagnostics.length, flattenDiagnosticMessageText(jsonSourceFile.parseDiagnostics[0] && jsonSourceFile.parseDiagnostics[0].messageText, "\n"));
-                return ts.parseJsonSourceFileConfigFileContent(jsonSourceFile, host, basePath, {}, entry);
+                return {
+                    jsonSourceFile,
+                    parsed: ts.parseJsonSourceFileConfigFileContent(jsonSourceFile, host, basePath, {}, entry)
+                };
             }
 
             function testSuccess(name: string, entry: string, expected: CompilerOptions, expectedFiles: string[]) {
+                expected.configFilePath = entry;
                 it(name, () => {
                     const parsed = getParseCommandLine(entry);
                     assert(!parsed.errors.length, flattenDiagnosticMessageText(parsed.errors[0] && parsed.errors[0].messageText, "\n"));
-                    expected.configFilePath = entry;
-                    assert.deepEqual(parsed.options, expected);
+                    assert.deepEqual(parsed.options, ts.extend(expected, <CompilerOptions>{ configFile: undefined }));
                     assert.deepEqual(parsed.fileNames, expectedFiles);
                 });
 
-                it(name + "with jsonSourceFile", () => {
-                    const parsed = getParseCommandLineJsonSourceFile(entry);
+                it(name + " with jsonSourceFile", () => {
+                    const { parsed, jsonSourceFile } = getParseCommandLineJsonSourceFile(entry);
                     assert(!parsed.errors.length, flattenDiagnosticMessageText(parsed.errors[0] && parsed.errors[0].messageText, "\n"));
-                    expected.configFilePath = entry;
-                    assert.deepEqual(parsed.options, expected);
+                    assert.deepEqual(parsed.options, ts.extend(expected, <CompilerOptions>{ configFile: jsonSourceFile }));
                     assert.deepEqual(parsed.fileNames, expectedFiles);
                 });
             }
@@ -146,8 +148,8 @@ namespace ts {
                     verifyDiagnostics(parsed.errors, expectedDiagnostics);
                 });
 
-                it(name + "with jsonSourceFile", () => {
-                    const parsed = getParseCommandLineJsonSourceFile(entry);
+                it(name + " with jsonSourceFile", () => {
+                    const { parsed } = getParseCommandLineJsonSourceFile(entry);
                     verifyDiagnostics(parsed.errors, expectedDiagnostics);
                 });
             }

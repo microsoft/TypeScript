@@ -3198,6 +3198,7 @@
         baseUrl?: string;
         charset?: string;
         /* @internal */ configFilePath?: string;
+        /* @internal */ configFile?: JsonSourceFile;
         declaration?: boolean;
         declarationDir?: string;
         /* @internal */ diagnostics?: boolean;
@@ -3266,7 +3267,7 @@
         /*@internal*/ version?: boolean;
         /*@internal*/ watch?: boolean;
 
-        [option: string]: CompilerOptionsValue | undefined;
+        [option: string]: CompilerOptionsValue | JsonSourceFile | undefined;
     }
 
     export interface TypeAcquisition {

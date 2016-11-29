@@ -30,6 +30,7 @@ namespace RWC {
         describe("Testing a RWC project: " + jsonPath, () => {
             let inputFiles: Harness.Compiler.TestFile[] = [];
             let otherFiles: Harness.Compiler.TestFile[] = [];
+            let tsconfigFiles: Harness.Compiler.TestFile[] = [];
             let compilerResult: Harness.Compiler.CompilerResult;
             let compilerOptions: ts.CompilerOptions;
             const baselineOpts: Harness.Baseline.BaselineOptions = {
@@ -44,6 +45,7 @@ namespace RWC {
                 // Therefore we have to clean out large objects after the test is done.
                 inputFiles = [];
                 otherFiles = [];
+                tsconfigFiles = [];
                 compilerResult = undefined;
                 compilerOptions = undefined;
                 currentDirectory = undefined;
@@ -74,6 +76,7 @@ namespace RWC {
                     const tsconfigFile = ts.forEach(ioLog.filesRead, f => isTsConfigFile(f) ? f : undefined);
                     if (tsconfigFile) {
                         const tsconfigFileContents = getHarnessCompilerInputUnit(tsconfigFile.path);
+                        tsconfigFiles.push({ unitName: tsconfigFile.path, content: tsconfigFileContents.content });
                         const parsedTsconfigFileContents = ts.parseJsonText(tsconfigFile.path, tsconfigFileContents.content);
                         const configParseHost: ts.ParseConfigHost = {
                             useCaseSensitiveFileNames: Harness.IO.useCaseSensitiveFileNames(),
@@ -198,8 +201,8 @@ namespace RWC {
                         return null;
                     }
                     // Do not include the library in the baselines to avoid noise
-                    const baselineFiles = inputFiles.concat(otherFiles).filter(f => !Harness.isDefaultLibraryFile(f.unitName));
-                    const errors = compilerResult.errors.filter(e => e.file && !Harness.isDefaultLibraryFile(e.file.fileName));
+                    const baselineFiles = tsconfigFiles.concat(inputFiles, otherFiles).filter(f => !Harness.isDefaultLibraryFile(f.unitName));
+                    const errors = compilerResult.errors.filter(e => !e.file || !Harness.isDefaultLibraryFile(e.file.fileName));
                     return Harness.Compiler.getErrorBaseline(baselineFiles, errors);
                 }, baselineOpts);
             });
@@ -218,7 +221,7 @@ namespace RWC {
 
                         return Harness.Compiler.minimalDiagnosticsToString(declFileCompilationResult.declResult.errors) +
                             Harness.IO.newLine() + Harness.IO.newLine() +
-                            Harness.Compiler.getErrorBaseline(declFileCompilationResult.declInputFiles.concat(declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.errors);
+                            Harness.Compiler.getErrorBaseline(tsconfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.errors);
                     }, baselineOpts);
                 }
             });

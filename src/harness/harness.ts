@@ -1614,7 +1614,7 @@ namespace Harness {
             }
         }
 
-        export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: CompilerResult, toBeCompiled: Harness.Compiler.TestFile[], otherFiles: Harness.Compiler.TestFile[], harnessSettings: Harness.TestCaseParser.CompilerSettings) {
+        export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: CompilerResult, tsConfigFiles: Harness.Compiler.TestFile[], toBeCompiled: Harness.Compiler.TestFile[], otherFiles: Harness.Compiler.TestFile[], harnessSettings: Harness.TestCaseParser.CompilerSettings) {
             if (!options.noEmit && result.files.length === 0 && result.errors.length === 0) {
                 throw new Error("Expected at least one js file to be emitted or at least one error to be created.");
             }
@@ -1650,7 +1650,7 @@ namespace Harness {
                 if (declFileCompilationResult && declFileCompilationResult.declResult.errors.length) {
                     jsCode += "\r\n\r\n//// [DtsFileErrors]\r\n";
                     jsCode += "\r\n\r\n";
-                    jsCode += Harness.Compiler.getErrorBaseline(declFileCompilationResult.declInputFiles.concat(declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.errors);
+                    jsCode += Harness.Compiler.getErrorBaseline(tsConfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.errors);
                 }
 
                 if (jsCode.length > 0) {
@@ -1801,7 +1801,12 @@ namespace Harness {
         }
 
         /** Given a test file containing // @FileName directives, return an array of named units of code to be added to an existing compiler instance */
-        export function makeUnitsFromTest(code: string, fileName: string, rootDir?: string): { settings: CompilerSettings; testUnitData: TestUnitData[]; tsConfig: ts.ParsedCommandLine } {
+        export function makeUnitsFromTest(code: string, fileName: string, rootDir?: string): {
+            settings: CompilerSettings;
+            testUnitData: TestUnitData[];
+            tsConfig: ts.ParsedCommandLine;
+            tsConfigFileUnitData: TestUnitData;
+        } {
             const settings = extractCompilerSettings(code);
 
             // List of all the subfiles we've parsed out
@@ -1887,6 +1892,7 @@ namespace Harness {
 
             // check if project has tsconfig.json in the list of files
             let tsConfig: ts.ParsedCommandLine;
+            let tsConfigFileUnitData: TestUnitData;
             for (let i = 0; i < testUnitData.length; i++) {
                 const data = testUnitData[i];
                 if (ts.getBaseFileName(data.name).toLowerCase() === "tsconfig.json") {
@@ -1898,6 +1904,7 @@ namespace Harness {
                     }
                     tsConfig = ts.parseJsonSourceFileConfigFileContent(configJson, parseConfigHost, baseDir);
                     tsConfig.options.configFilePath = data.name;
+                    tsConfigFileUnitData = data;
 
                     // delete entry from the list
                     ts.orderedRemoveItemAt(testUnitData, i);
@@ -1905,7 +1912,7 @@ namespace Harness {
                     break;
                 }
             }
-            return { settings, testUnitData, tsConfig };
+            return { settings, testUnitData, tsConfig, tsConfigFileUnitData };
         }
     }
 
