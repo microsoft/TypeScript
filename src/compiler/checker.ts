@@ -3098,7 +3098,7 @@ namespace ts {
             let type: Type;
             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
                 if (declaration.dotDotDotToken) {
-                    if (isInvalidSpreadType(parentType)) {
+                    if (!isValidSpreadType(parentType)) {
                         error(declaration, Diagnostics.Rest_types_may_only_be_created_from_object_types);
                         return unknownType;
                     }
@@ -11449,7 +11449,7 @@ namespace ts {
                         typeFlags = 0;
                     }
                     const type = checkExpression((memberDecl as SpreadAssignment).expression);
-                    if (!(type.flags & TypeFlags.Any) && isInvalidSpreadType(type)) {
+                    if (!isValidSpreadType(type)) {
                         error(memberDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
                         return unknownType;
                     }
@@ -11527,14 +11527,21 @@ namespace ts {
             }
        }
 
-        function isInvalidSpreadType(type: Type): boolean {
+        function isValidSpreadType(type: Type): boolean {
+            if (type.flags & TypeFlags.Any) {
+                return true;
+            }
             if (type.flags & TypeFlags.Object) {
-                return isGenericMappedType(type);
+                return !isGenericMappedType(type);
             }
             else if (type.flags & TypeFlags.UnionOrIntersection) {
-                return forEach((<UnionOrIntersectionType>type).types, isInvalidSpreadType);
+                for (const t of (<UnionOrIntersectionType>type).types) {
+                    if (!isValidSpreadType(t)) {
+                        return false;
+                    }
+                }
             }
-            return true;
+            return false;
         }
 
         function checkJsxSelfClosingElement(node: JsxSelfClosingElement) {
