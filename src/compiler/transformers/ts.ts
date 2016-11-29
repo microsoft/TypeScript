@@ -1637,6 +1637,8 @@ namespace ts {
             return createVoidZero();
         }
 
+        type SerializedTypeNode = SerializedEntityNameAsExpression | VoidExpression | ConditionalExpression;
+
         /**
          * Serializes a type node for use with decorator type metadata.
          *
@@ -1655,7 +1657,7 @@ namespace ts {
          *
          * @param node The type node to serialize.
          */
-        function serializeTypeNode(node: TypeNode): Expression {
+        function serializeTypeNode(node: TypeNode): SerializedTypeNode {
             if (node === undefined) {
                 return createIdentifier("Object");
             }
@@ -1664,6 +1666,7 @@ namespace ts {
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.UndefinedKeyword:
                 case SyntaxKind.NullKeyword:
+                case SyntaxKind.NeverKeyword:
                     return createVoidZero();
 
                 case SyntaxKind.ParenthesizedType:
@@ -1715,45 +1718,8 @@ namespace ts {
 
                 case SyntaxKind.IntersectionType:
                 case SyntaxKind.UnionType:
-                    {
-                        const unionOrIntersection = <UnionOrIntersectionTypeNode>node;
-                        let serializedUnion: Identifier | VoidExpression;
-                        for (const typeNode of unionOrIntersection.types) {
-                            const serializedIndividual = serializeTypeNode(typeNode);
+                    return serializeUnionOrIntersectionType(<UnionOrIntersectionTypeNode>node);
 
-                            if (isIdentifier(serializedIndividual)) {
-                                // One of the individual is global object, return immediately
-                                if (serializedIndividual.text === "Object") {
-                                    return serializedIndividual;
-                                }
-
-                                // Different types
-                                if (serializedUnion && isIdentifier(serializedUnion) && serializedUnion.text !== serializedIndividual.text) {
-                                    serializedUnion = undefined;
-                                    break;
-                                }
-
-                                serializedUnion = serializedIndividual;
-                            }
-                            else if (isVoidExpression(serializedIndividual)) {
-                                // If we dont have any other type already set, set the initial type
-                                if (!serializedUnion) {
-                                    serializedUnion = serializedIndividual;
-                                }
-                            }
-                            else {
-                                // Non identifier and undefined/null
-                                serializedUnion = undefined;
-                                break;
-                            }
-                        }
-
-                        // If we were able to find common type
-                        if (serializedUnion) {
-                            return serializedUnion;
-                        }
-                    }
-                    // Fallthrough
                 case SyntaxKind.TypeQuery:
                 case SyntaxKind.TypeOperator:
                 case SyntaxKind.IndexedAccessType:
@@ -1761,7 +1727,6 @@ namespace ts {
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.ThisType:
-                case SyntaxKind.NeverKeyword:
                     break;
 
                 default:
@@ -1772,13 +1737,48 @@ namespace ts {
             return createIdentifier("Object");
         }
 
+        function serializeUnionOrIntersectionType(node: UnionOrIntersectionTypeNode): SerializedTypeNode {
+            let serializedUnion: SerializedTypeNode;
+            for (const typeNode of node.types) {
+                const serializedIndividual = serializeTypeNode(typeNode);
+
+                if (isVoidExpression(serializedIndividual)) {
+                    // If we dont have any other type already set, set the initial type
+                    if (!serializedUnion) {
+                        serializedUnion = serializedIndividual;
+                    }
+                }
+                else if (isIdentifier(serializedIndividual) && serializedIndividual.text === "Object") {
+                    // One of the individual is global object, return immediately
+                    return serializedIndividual;
+                }
+                // If there exists union that is not void 0 expression, check if the the common type is identifier.
+                // anything more complex and we will just default to Object
+                else if (serializedUnion && !isVoidExpression(serializedUnion)) {
+                    // Different types
+                    if (!isIdentifier(serializedUnion) ||
+                        !isIdentifier(serializedIndividual) ||
+                        serializedUnion.text !== serializedIndividual.text) {
+                        return createIdentifier("Object");
+                    }
+                }
+                else {
+                    // Initialize the union type
+                    serializedUnion = serializedIndividual;
+                }
+            }
+
+            // If we were able to find common type, use it
+            return serializedUnion;
+        }
+
         /**
          * Serializes a TypeReferenceNode to an appropriate JS constructor value for use with
          * decorator type metadata.
          *
          * @param node The type reference node.
          */
-        function serializeTypeReferenceNode(node: TypeReferenceNode) {
+        function serializeTypeReferenceNode(node: TypeReferenceNode): SerializedTypeNode {
             switch (resolver.getTypeReferenceSerializationKind(node.typeName, currentScope)) {
                 case TypeReferenceSerializationKind.Unknown:
                     const serialized = serializeEntityNameAsExpression(node.typeName, /*useFallback*/ true);
@@ -1826,6 +1826,7 @@ namespace ts {
             }
         }
 
+        type SerializedEntityNameAsExpression = Identifier | BinaryExpression | PropertyAccessExpression;
         /**
          * Serializes an entity name as an expression for decorator type metadata.
          *
@@ -1833,7 +1834,7 @@ namespace ts {
          * @param useFallback A value indicating whether to use logical operators to test for the
          *                    entity name at runtime.
          */
-        function serializeEntityNameAsExpression(node: EntityName, useFallback: boolean): Expression {
+        function serializeEntityNameAsExpression(node: EntityName, useFallback: boolean): SerializedEntityNameAsExpression {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     // Create a clone of the name with a new parent, and treat it as if it were
@@ -1866,8 +1867,8 @@ namespace ts {
          * @param useFallback A value indicating whether to use logical operators to test for the
          *                    qualified name at runtime.
          */
-        function serializeQualifiedNameAsExpression(node: QualifiedName, useFallback: boolean): Expression {
-            let left: Expression;
+        function serializeQualifiedNameAsExpression(node: QualifiedName, useFallback: boolean): PropertyAccessExpression {
+            let left: SerializedEntityNameAsExpression;
             if (node.left.kind === SyntaxKind.Identifier) {
                 left = serializeEntityNameAsExpression(node.left, useFallback);
             }
@@ -1892,7 +1893,7 @@ namespace ts {
          * Gets an expression that points to the global "Symbol" constructor at runtime if it is
          * available.
          */
-        function getGlobalSymbolNameWithFallback(): Expression {
+        function getGlobalSymbolNameWithFallback(): ConditionalExpression {
             return createConditional(
                 createTypeCheck(createIdentifier("Symbol"), "function"),
                 createIdentifier("Symbol"),

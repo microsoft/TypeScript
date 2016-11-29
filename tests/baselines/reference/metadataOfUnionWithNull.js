@@ -25,6 +25,21 @@ class B {
 
     @PropDeco
     d: undefined | null;
+
+    @PropDeco
+    e: symbol | null;
+
+    @PropDeco
+    f: symbol | A;
+
+    @PropDeco
+    g: A | null;
+
+    @PropDeco
+    h: null | B;
+
+    @PropDeco
+    j: null | symbol;
 }
 
 //// [metadataOfUnionWithNull.js]
@@ -54,7 +69,7 @@ __decorate([
 ], B.prototype, "x");
 __decorate([
     PropDeco,
-    __metadata("design:type", Object)
+    __metadata("design:type", Boolean)
 ], B.prototype, "y");
 __decorate([
     PropDeco,
@@ -66,7 +81,7 @@ __decorate([
 ], B.prototype, "a");
 __decorate([
     PropDeco,
-    __metadata("design:type", Object)
+    __metadata("design:type", void 0)
 ], B.prototype, "b");
 __decorate([
     PropDeco,
@@ -76,3 +91,23 @@ __decorate([
     PropDeco,
     __metadata("design:type", void 0)
 ], B.prototype, "d");
+__decorate([
+    PropDeco,
+    __metadata("design:type", typeof Symbol === "function" ? Symbol : Object)
+], B.prototype, "e");
+__decorate([
+    PropDeco,
+    __metadata("design:type", Object)
+], B.prototype, "f");
+__decorate([
+    PropDeco,
+    __metadata("design:type", A)
+], B.prototype, "g");
+__decorate([
+    PropDeco,
+    __metadata("design:type", B)
+], B.prototype, "h");
+__decorate([
+    PropDeco,
+    __metadata("design:type", typeof Symbol === "function" ? Symbol : Object)
+], B.prototype, "j");

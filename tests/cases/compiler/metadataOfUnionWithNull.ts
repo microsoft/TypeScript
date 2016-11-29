@@ -26,4 +26,19 @@ class B {
 
     @PropDeco
     d: undefined | null;
+
+    @PropDeco
+    e: symbol | null;
+
+    @PropDeco
+    f: symbol | A;
+
+    @PropDeco
+    g: A | null;
+
+    @PropDeco
+    h: null | B;
+
+    @PropDeco
+    j: null | symbol;
 }

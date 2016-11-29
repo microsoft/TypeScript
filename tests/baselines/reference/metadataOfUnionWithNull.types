@@ -57,4 +57,41 @@ class B {
     d: undefined | null;
 >d : null
 >null : null
+
+    @PropDeco
+>PropDeco : (target: Object, propKey: string | symbol) => void
+
+    e: symbol | null;
+>e : symbol
+>null : null
+
+    @PropDeco
+>PropDeco : (target: Object, propKey: string | symbol) => void
+
+    f: symbol | A;
+>f : symbol | A
+>A : A
+
+    @PropDeco
+>PropDeco : (target: Object, propKey: string | symbol) => void
+
+    g: A | null;
+>g : A
+>A : A
+>null : null
+
+    @PropDeco
+>PropDeco : (target: Object, propKey: string | symbol) => void
+
+    h: null | B;
+>h : B
+>null : null
+>B : B
+
+    @PropDeco
+>PropDeco : (target: Object, propKey: string | symbol) => void
+
+    j: null | symbol;
+>j : symbol
+>null : null
 }
