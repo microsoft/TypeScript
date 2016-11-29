@@ -70,13 +70,12 @@ namespace ts.server.typingsInstaller {
         private readonly npmPath: string;
         readonly typesRegistry: Map<void>;
 
-        constructor(globalTypingsCacheLocation: string, throttleLimit: number, telemetryEnabled: boolean, log: Log) {
+        constructor(globalTypingsCacheLocation: string, throttleLimit: number, log: Log) {
             super(
                 sys,
                 globalTypingsCacheLocation,
                 toPath("typingSafeList.json", __dirname, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
                 throttleLimit,
-                telemetryEnabled,
                 log);
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Process id: ${process.pid}`);
@@ -113,7 +112,7 @@ namespace ts.server.typingsInstaller {
             });
         }
 
-        protected sendResponse(response: SetTypings | InvalidateCachedTypings) {
+        protected sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes) {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Sending response: ${JSON.stringify(response)}`);
             }
@@ -149,7 +148,6 @@ namespace ts.server.typingsInstaller {
 
     const logFilePath = findArgument(server.Arguments.LogFile);
     const globalTypingsCacheLocation = findArgument(server.Arguments.GlobalCacheLocation);
-    const telemetryEnabled = hasArgument(server.Arguments.EnableTelemetry);
 
     const log = new FileLog(logFilePath);
     if (log.isEnabled()) {
@@ -163,6 +161,6 @@ namespace ts.server.typingsInstaller {
         }
         process.exit(0);
     });
-    const installer = new NodeTypingsInstaller(globalTypingsCacheLocation, /*throttleLimit*/5, telemetryEnabled, log);
+    const installer = new NodeTypingsInstaller(globalTypingsCacheLocation, /*throttleLimit*/5, log);
     installer.listen();
 }
