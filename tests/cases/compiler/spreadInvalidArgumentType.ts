@@ -47,8 +47,8 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
     var o12 = { ...num };  // Error
     var o13 = { ...str };  // Error
 
-    var o14 = { ...u };  // Error
-    var o15 = { ...n };  // Error
+    var o14 = { ...u };  // OK
+    var o15 = { ...n };  // OK
 
     var o16 = { ...a };  // OK
 

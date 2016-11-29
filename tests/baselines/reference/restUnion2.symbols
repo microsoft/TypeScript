@@ -1,0 +1,52 @@
+=== tests/cases/compiler/restUnion2.ts ===
+
+declare const undefinedUnion: { n: number } | undefined;
+>undefinedUnion : Symbol(undefinedUnion, Decl(restUnion2.ts, 1, 13))
+>n : Symbol(n, Decl(restUnion2.ts, 1, 31))
+
+var rest2: { n: number };
+>rest2 : Symbol(rest2, Decl(restUnion2.ts, 2, 3), Decl(restUnion2.ts, 3, 5))
+>n : Symbol(n, Decl(restUnion2.ts, 2, 12))
+
+var {...rest2 } = undefinedUnion;
+>rest2 : Symbol(rest2, Decl(restUnion2.ts, 2, 3), Decl(restUnion2.ts, 3, 5))
+>undefinedUnion : Symbol(undefinedUnion, Decl(restUnion2.ts, 1, 13))
+
+
+declare const nullUnion: { n: number } | null;
+>nullUnion : Symbol(nullUnion, Decl(restUnion2.ts, 6, 13))
+>n : Symbol(n, Decl(restUnion2.ts, 6, 26))
+
+var rest3: { n: number };
+>rest3 : Symbol(rest3, Decl(restUnion2.ts, 7, 3), Decl(restUnion2.ts, 8, 5))
+>n : Symbol(n, Decl(restUnion2.ts, 7, 12))
+
+var {...rest3 } = nullUnion;
+>rest3 : Symbol(rest3, Decl(restUnion2.ts, 7, 3), Decl(restUnion2.ts, 8, 5))
+>nullUnion : Symbol(nullUnion, Decl(restUnion2.ts, 6, 13))
+
+
+declare const nullAndUndefinedUnion: null | undefined;
+>nullAndUndefinedUnion : Symbol(nullAndUndefinedUnion, Decl(restUnion2.ts, 11, 13))
+
+var rest4: { };
+>rest4 : Symbol(rest4, Decl(restUnion2.ts, 12, 3), Decl(restUnion2.ts, 13, 5))
+
+var {...rest4 } = nullAndUndefinedUnion;
+>rest4 : Symbol(rest4, Decl(restUnion2.ts, 12, 3), Decl(restUnion2.ts, 13, 5))
+>nullAndUndefinedUnion : Symbol(nullAndUndefinedUnion, Decl(restUnion2.ts, 11, 13))
+
+declare const unionWithIntersection: ({ n: number } & { s: string }) & undefined | null;
+>unionWithIntersection : Symbol(unionWithIntersection, Decl(restUnion2.ts, 15, 13))
+>n : Symbol(n, Decl(restUnion2.ts, 15, 39))
+>s : Symbol(s, Decl(restUnion2.ts, 15, 55))
+
+var rest5: { n: number, s: string };
+>rest5 : Symbol(rest5, Decl(restUnion2.ts, 16, 3), Decl(restUnion2.ts, 17, 5))
+>n : Symbol(n, Decl(restUnion2.ts, 16, 12))
+>s : Symbol(s, Decl(restUnion2.ts, 16, 23))
+
+var {...rest5 } = unionWithIntersection;
+>rest5 : Symbol(rest5, Decl(restUnion2.ts, 16, 3), Decl(restUnion2.ts, 17, 5))
+>unionWithIntersection : Symbol(unionWithIntersection, Decl(restUnion2.ts, 15, 13))
+

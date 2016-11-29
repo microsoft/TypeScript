@@ -3055,7 +3055,10 @@ namespace ts {
 
         function getRestType(source: Type, properties: PropertyName[], symbol: Symbol): Type {
             if (source.flags & TypeFlags.Union) {
-                return getUnionType(map((<UnionType>source).types, t => getRestType(t, properties, symbol)));
+                const types = filter((<UnionType>source).types, t => !(t.flags & TypeFlags.Nullable));
+                if (types.length) {
+                    return getUnionType(map(types, t => getRestType(t, properties, symbol)));
+                }
             }
 
             const members = createMap<Symbol>();
@@ -6111,11 +6114,29 @@ namespace ts {
             }
 
             if (left.flags & TypeFlags.Union) {
-                return getUnionType(map((<UnionType>left).types, t => getSpreadType(t, right, isFromObjectLiteral)));
+                const types = filter((<UnionType>left).types, t => !(t.flags & TypeFlags.Nullable));
+                if (types.length) {
+                    return getUnionType(map(types, t => getSpreadType(t, right, isFromObjectLiteral)));
+                }
+                else {
+                    left = emptyObjectType
+                }
+            }
+            else if (left.flags & TypeFlags.Nullable) {
+                left = emptyObjectType;
             }
 
             if (right.flags & TypeFlags.Union) {
-                return getUnionType(map((<UnionType>right).types, t => getSpreadType(left, t, isFromObjectLiteral)));
+                const types = filter((<UnionType>right).types, t => !(t.flags & TypeFlags.Nullable));
+                if (types.length) {
+                    return getUnionType(map(types, t => getSpreadType(left, t, isFromObjectLiteral)));
+                }
+                else {
+                    right = emptyObjectType
+                }
+            }
+            else if (right.flags & TypeFlags.Nullable) {
+                right = emptyObjectType;
             }
 
             const members = createMap<Symbol>();
@@ -11528,7 +11549,7 @@ namespace ts {
        }
 
         function isValidSpreadType(type: Type): boolean {
-            if (type.flags & TypeFlags.Any) {
+            if (type.flags & (TypeFlags.Any | TypeFlags.Null | TypeFlags.Undefined)) {
                 return true;
             }
             if (type.flags & TypeFlags.Object) {
@@ -11540,6 +11561,7 @@ namespace ts {
                         return false;
                     }
                 }
+                return true;
             }
             return false;
         }

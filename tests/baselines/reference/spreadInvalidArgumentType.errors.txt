@@ -9,14 +9,12 @@ tests/cases/compiler/spreadInvalidArgumentType.ts(44,17): error TS2698: Spread t
 tests/cases/compiler/spreadInvalidArgumentType.ts(45,17): error TS2698: Spread types may only be created from object types.
 tests/cases/compiler/spreadInvalidArgumentType.ts(47,17): error TS2698: Spread types may only be created from object types.
 tests/cases/compiler/spreadInvalidArgumentType.ts(48,17): error TS2698: Spread types may only be created from object types.
-tests/cases/compiler/spreadInvalidArgumentType.ts(50,17): error TS2698: Spread types may only be created from object types.
-tests/cases/compiler/spreadInvalidArgumentType.ts(51,17): error TS2698: Spread types may only be created from object types.
 tests/cases/compiler/spreadInvalidArgumentType.ts(55,17): error TS2698: Spread types may only be created from object types.
 tests/cases/compiler/spreadInvalidArgumentType.ts(56,17): error TS2698: Spread types may only be created from object types.
 tests/cases/compiler/spreadInvalidArgumentType.ts(58,17): error TS2698: Spread types may only be created from object types.
 
 
-==== tests/cases/compiler/spreadInvalidArgumentType.ts (16 errors) ====
+==== tests/cases/compiler/spreadInvalidArgumentType.ts (14 errors) ====
     enum E { v1, v2 };
     
     function f<T extends { b: string }>(p1: T, p2: T[]) {
@@ -88,12 +86,8 @@ tests/cases/compiler/spreadInvalidArgumentType.ts(58,17): error TS2698: Spread t
                     ~~~~~~
 !!! error TS2698: Spread types may only be created from object types.
     
-        var o14 = { ...u };  // Error
-                    ~~~~
-!!! error TS2698: Spread types may only be created from object types.
-        var o15 = { ...n };  // Error
-                    ~~~~
-!!! error TS2698: Spread types may only be created from object types.
+        var o14 = { ...u };  // OK
+        var o15 = { ...n };  // OK
     
         var o16 = { ...a };  // OK
     

@@ -7,8 +7,6 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(25,1): error TS2322
   Property 's' is missing in type '{ b: boolean; }'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(28,36): error TS2300: Duplicate identifier 'b'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(28,53): error TS2300: Duplicate identifier 'b'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(32,20): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(33,24): error TS2698: Spread types may only be created from object types.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(34,19): error TS2698: Spread types may only be created from object types.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(35,19): error TS2698: Spread types may only be created from object types.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(37,20): error TS2698: Spread types may only be created from object types.
@@ -20,7 +18,7 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(58,14): error TS269
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(61,14): error TS2698: Spread types may only be created from object types.
 
 
-==== tests/cases/conformance/types/spread/objectSpreadNegative.ts (17 errors) ====
+==== tests/cases/conformance/types/spread/objectSpreadNegative.ts (15 errors) ====
     let o = { a: 1, b: 'no' }
     
     /// private propagates
@@ -68,11 +66,7 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(61,14): error TS269
     
     // null, undefined and primitives are not allowed
     let spreadNull = { ...null };
-                       ~~~~~~~
-!!! error TS2698: Spread types may only be created from object types.
     let spreadUndefind = { ...undefined };
-                           ~~~~~~~~~~~~
-!!! error TS2698: Spread types may only be created from object types.
     let spreadNum = { ...12 };
                       ~~~~~
 !!! error TS2698: Spread types may only be created from object types.

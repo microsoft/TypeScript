@@ -48,8 +48,8 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
     var {...r12} = num;  // Error
     var {...r13} = str;  // Error
 
-    var {...r14} = u;  // Error
-    var {...r15} = n;  // Error
+    var {...r14} = u;  // OK
+    var {...r15} = n;  // OK
 
     var {...r16} = a;  // OK
 
@@ -106,8 +106,8 @@ function f(p1, p2) {
     var r11 = __rest(intersection_premitive, []); // Error, intersection with generic type parameter
     var r12 = __rest(num, []); // Error
     var r13 = __rest(str, []); // Error
-    var r14 = __rest(u, []); // Error
-    var r15 = __rest(n, []); // Error
+    var r14 = __rest(u, []); // OK
+    var r15 = __rest(n, []); // OK
     var r16 = __rest(a, []); // OK
     var r17 = __rest(literal_string, []); // Error
     var r18 = __rest(literal_number, []); // Error
