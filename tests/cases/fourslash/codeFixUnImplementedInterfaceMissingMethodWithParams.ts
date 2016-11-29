@@ -9,6 +9,6 @@
 
 verify.rangeAfterCodeFix(`
 f(x: number,y: string){
-    throw new Error('Method not Implemented');
+    throw new Error('Method not implemented.');
 }
 `);

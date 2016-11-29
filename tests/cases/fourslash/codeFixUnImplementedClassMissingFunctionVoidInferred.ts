@@ -8,6 +8,6 @@
 
 verify.rangeAfterCodeFix(`
 f(): void{
-    throw new Error('Method not Implemented');
+    throw new Error('Method not implemented.');
 }
 `);

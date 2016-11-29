@@ -13,6 +13,6 @@
 //// |]}
 
 verify.rangeAfterCodeFix(`f1(): string{
-    throw new Error('Method not Implemented');
+    throw new Error('Method not implemented.');
 }
 `);

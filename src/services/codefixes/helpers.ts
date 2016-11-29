@@ -50,7 +50,7 @@ namespace ts.codefix {
     }
 
     function getMethodBodyStub(newLineChar: string) {
-        return `{${newLineChar}throw new Error('Method not Implemented');${newLineChar}}${newLineChar}`;
+        return `{${newLineChar}throw new Error('Method not implemented.');${newLineChar}}${newLineChar}`;
     }
 
     function getVisibilityPrefix(flags: ModifierFlags): string {
