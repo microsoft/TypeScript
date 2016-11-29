@@ -851,6 +851,10 @@
         "category": "Error",
         "code": 1317
     },
+    "An abstract accessor cannot have an implementation.": {
+        "category": "Error",
+        "code": 1318
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
