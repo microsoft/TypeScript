@@ -105,6 +105,21 @@ function f6(s: string) {
     let x: string | number | boolean = v[s];
 }
 
+declare function validate<T>(obj: { [P in keyof T]?: T[P] }): T;
+declare function clone<T>(obj: { readonly [P in keyof T]: T[P] }): T;
+declare function validateAndClone<T>(obj: { readonly [P in keyof T]?: T[P] }): T;
+
+type Foo = {
+    a?: number;
+    readonly b: string;
+}
+
+function f10(foo: Foo) {
+    let x = validate(foo);  // { a: number, readonly b: string }
+    let y = clone(foo);  // { a?: number, b: string }
+    let z = validateAndClone(foo);  // { a: number, b: string }
+}
+
 //// [isomorphicMappedTypeInference.js]
 function box(x) {
     return { value: x };
@@ -190,6 +205,11 @@ function f6(s) {
     var v = unboxify(b);
     var x = v[s];
 }
+function f10(foo) {
+    var x = validate(foo); // { a: number, readonly b: string }
+    var y = clone(foo); // { a?: number, b: string }
+    var z = validateAndClone(foo); // { a: number, b: string }
+}
 
 
 //// [isomorphicMappedTypeInference.d.ts]
@@ -220,3 +240,17 @@ declare function makeDictionary<T>(obj: {
     [x: string]: T;
 };
 declare function f6(s: string): void;
+declare function validate<T>(obj: {
+    [P in keyof T]?: T[P];
+}): T;
+declare function clone<T>(obj: {
+    readonly [P in keyof T]: T[P];
+}): T;
+declare function validateAndClone<T>(obj: {
+    readonly [P in keyof T]?: T[P];
+}): T;
+declare type Foo = {
+    a?: number;
+    readonly b: string;
+};
+declare function f10(foo: Foo): void;
