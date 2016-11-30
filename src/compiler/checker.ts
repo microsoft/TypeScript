@@ -3106,6 +3106,12 @@ namespace ts {
                         }
                     }
                     type = getRestType(parentType, literalMembers, declaration.symbol);
+                    if (getPropertiesOfObjectType(type).length === 0 && getIndexTypeOfType(type, IndexKind.String) === anyType) {
+                        if (compilerOptions.noImplicitAny) {
+                            reportImplicitAnyError(declaration, anyType);
+                        }
+                        return anyType;
+                    }
                 }
                 else {
                     // Use explicitly specified property name ({ p: xxx } form), or otherwise the implied name ({ p } form)
