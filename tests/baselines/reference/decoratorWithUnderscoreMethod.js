@@ -34,4 +34,4 @@ var A = (function () {
 }());
 __decorate([
     dec()
-], A.prototype, "___foo");
+], A.prototype, "__foo");
