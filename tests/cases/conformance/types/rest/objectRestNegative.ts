@@ -1,3 +1,4 @@
+// @noImplicitAny: true
 let o = { a: 1, b: 'no' };
 var { ...mustBeLast, a } = o;
 
@@ -15,3 +16,5 @@ function generic<T extends { x, y }>(t: T) {
 
 let rest: { b: string }
 ({a, ...rest.b + rest.b} = o);
+
+var noContextualType = ({ aNumber = 12, ...implicitlyAny }) => aNumber + implicitlyAny.anythingGoes;
