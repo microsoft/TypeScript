@@ -248,9 +248,7 @@ namespace ts.server {
                 this.compilerOptions.allowNonTsExtensions = true;
             }
 
-            if (this.projectKind === ProjectKind.Inferred || this.projectKind === ProjectKind.External) {
-                this.compilerOptions.noEmitForJsFiles = true;
-            }
+            this.setInternalCompilerOptionsForEmittingJsFiles();
 
             this.lsHost = new LSHost(this.projectService.host, this, this.projectService.cancellationToken);
             this.lsHost.setCompilationSettings(this.compilerOptions);
@@ -264,6 +262,12 @@ namespace ts.server {
 
             this.builder = createBuilder(this);
             this.markAsDirty();
+        }
+
+        setInternalCompilerOptionsForEmittingJsFiles() {
+            if (this.projectKind === ProjectKind.Inferred || this.projectKind === ProjectKind.External) {
+                this.compilerOptions.noEmitForJsFiles = true;
+            }
         }
 
         getProjectErrors() {
@@ -636,10 +640,8 @@ namespace ts.server {
                     this.cachedUnresolvedImportsPerFile.clear();
                     this.lastCachedUnresolvedImportsList = undefined;
                 }
-                if (this.projectKind === ProjectKind.Inferred || this.projectKind === ProjectKind.Configured) {
-                    compilerOptions.noEmitForJsFiles = true;
-                }
                 this.compilerOptions = compilerOptions;
+                this.setInternalCompilerOptionsForEmittingJsFiles();
                 this.lsHost.setCompilationSettings(compilerOptions);
 
                 this.markAsDirty();
