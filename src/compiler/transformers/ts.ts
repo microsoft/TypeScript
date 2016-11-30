@@ -1905,7 +1905,7 @@ namespace ts {
                     : (<ComputedPropertyName>name).expression;
             }
             else if (isIdentifier(name)) {
-                return createLiteral(name.text);
+                return createLiteral(unescapeIdentifier(name.text));
             }
             else {
                 return getSynthesizedClone(name);
