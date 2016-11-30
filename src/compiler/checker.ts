@@ -3054,11 +3054,13 @@ namespace ts {
         }
 
         function getRestType(source: Type, properties: PropertyName[], symbol: Symbol): Type {
+            source = filterType(source, t => !(t.flags & TypeFlags.Nullable));
+            if (source.flags & TypeFlags.Never) {
+                return emptyObjectType;
+            }
+
             if (source.flags & TypeFlags.Union) {
-                const types = filterNulableTypes(<UnionType>source);
-                if (types.length) {
-                    return getUnionType(map(types, t => getRestType(t, properties, symbol)));
-                }
+                return mapType(source, t => getRestType(t, properties, symbol));
             }
 
             const members = createMap<Symbol>();
@@ -6103,10 +6105,6 @@ namespace ts {
             return symbol ? getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol) : undefined;
         }
 
-        function filterNulableTypes(union: UnionType): Type[] {
-            return filter(union.types, t => !(t.flags & TypeFlags.Nullable));
-        }
-
         /**
          * Since the source of spread types are object literals, which are not binary,
          * this function should be called in a left folding style, with left = previous result of getSpreadType
@@ -6116,31 +6114,19 @@ namespace ts {
             if (left.flags & TypeFlags.Any || right.flags & TypeFlags.Any) {
                 return anyType;
             }
-
+            left = filterType(left, t => !(t.flags & TypeFlags.Nullable));
+            if (left.flags & TypeFlags.Never) {
+                return right;
+            }
+            right = filterType(right, t => !(t.flags & TypeFlags.Nullable));
+            if (right.flags & TypeFlags.Never) {
+                return left;
+            }
             if (left.flags & TypeFlags.Union) {
-                const types = filterNulableTypes(<UnionType>left);
-                if (types.length) {
-                    return getUnionType(map(types, t => getSpreadType(t, right, isFromObjectLiteral)));
-                }
-                else {
-                    left = emptyObjectType;
-                }
+                return mapType(left, t => getSpreadType(t, right, isFromObjectLiteral));
             }
-            else if (left.flags & TypeFlags.Nullable) {
-                left = emptyObjectType;
-            }
-
             if (right.flags & TypeFlags.Union) {
-                const types = filterNulableTypes(<UnionType>right);
-                if (types.length) {
-                    return getUnionType(map(types, t => getSpreadType(left, t, isFromObjectLiteral)));
-                }
-                else {
-                    right = emptyObjectType;
-                }
-            }
-            else if (right.flags & TypeFlags.Nullable) {
-                right = emptyObjectType;
+                return mapType(right, t => getSpreadType(left, t, isFromObjectLiteral));
             }
 
             const members = createMap<Symbol>();
