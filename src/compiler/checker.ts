@@ -4532,7 +4532,7 @@ namespace ts {
                     const isomorphicProp = isomorphicType && getPropertyOfType(isomorphicType, propName);
                     const isOptional = templateOptional || !!(isomorphicProp && isomorphicProp.flags & SymbolFlags.Optional);
                     const prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | (isOptional ? SymbolFlags.Optional : 0), propName);
-                    prop.type = addOptionality(propType, isOptional);
+                    prop.type = propType;
                     prop.isReadonly = templateReadonly || isomorphicProp && isReadonlySymbol(isomorphicProp);
                     members[propName] = prop;
                 }
@@ -4556,7 +4556,7 @@ namespace ts {
         function getTemplateTypeFromMappedType(type: MappedType) {
             return type.templateType ||
                 (type.templateType = type.declaration.type ?
-                    instantiateType(getTypeFromTypeNode(type.declaration.type), type.mapper || identityMapper) :
+                    instantiateType(addOptionality(getTypeFromTypeNode(type.declaration.type), !!type.declaration.questionToken), type.mapper || identityMapper) :
                     unknownType);
         }
 
@@ -6021,7 +6021,7 @@ namespace ts {
             }
             const mapper = createUnaryTypeMapper(getTypeParameterFromMappedType(type), indexType);
             const templateMapper = type.mapper ? combineTypeMappers(type.mapper, mapper) : mapper;
-            return addOptionality(instantiateType(getTemplateTypeFromMappedType(type), templateMapper), !!type.declaration.questionToken);
+            return instantiateType(getTemplateTypeFromMappedType(type), templateMapper);
         }
 
         function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode) {
@@ -8484,16 +8484,18 @@ namespace ts {
             const typeInferences = createTypeInferencesObject();
             const typeInferencesArray = [typeInferences];
             const templateType = getTemplateTypeFromMappedType(target);
+            const readonlyMask = target.declaration.readonlyToken ? false : true;
+            const optionalMask = target.declaration.questionToken ? 0 : SymbolFlags.Optional;
             const properties = getPropertiesOfType(source);
             const members = createSymbolTable(properties);
             let hasInferredTypes = false;
             for (const prop of properties) {
                 const inferredPropType = inferTargetType(getTypeOfSymbol(prop));
                 if (inferredPropType) {
-                    const inferredProp = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | prop.flags & SymbolFlags.Optional, prop.name);
+                    const inferredProp = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | prop.flags & optionalMask, prop.name);
                     inferredProp.declarations = prop.declarations;
                     inferredProp.type = inferredPropType;
-                    inferredProp.isReadonly = isReadonlySymbol(prop);
+                    inferredProp.isReadonly = readonlyMask && isReadonlySymbol(prop);
                     members[prop.name] = inferredProp;
                     hasInferredTypes = true;
                 }
@@ -8502,7 +8504,7 @@ namespace ts {
             if (indexInfo) {
                 const inferredIndexType = inferTargetType(indexInfo.type);
                 if (inferredIndexType) {
-                    indexInfo = createIndexInfo(inferredIndexType, indexInfo.isReadonly);
+                    indexInfo = createIndexInfo(inferredIndexType, readonlyMask && indexInfo.isReadonly);
                     hasInferredTypes = true;
                 }
             }
