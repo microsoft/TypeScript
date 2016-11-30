@@ -1662,6 +1662,34 @@ declare namespace ts.server.protocol {
          */
         typingsInstallerVersion: string;
     }
+    type BeginInstallTypesEventName = "beginInstallTypes";
+    type EndInstallTypesEventName = "endInstallTypes";
+    interface BeginInstallTypesEvent extends Event {
+        event: BeginInstallTypesEventName;
+        body: BeginInstallTypesEventBody;
+    }
+    interface EndInstallTypesEvent extends Event {
+        event: EndInstallTypesEventName;
+        body: EndInstallTypesEventBody;
+    }
+    interface InstallTypesEventBody {
+        /**
+         * correlation id to match begin and end events
+         */
+        eventId: number;
+        /**
+         * list of packages to install
+         */
+        packages: ReadonlyArray<string>;
+    }
+    interface BeginInstallTypesEventBody extends InstallTypesEventBody {
+    }
+    interface EndInstallTypesEventBody extends InstallTypesEventBody {
+        /**
+         * true if installation succeeded, otherwise false
+         */
+        success: boolean;
+    }
     interface NavBarResponse extends Response {
         body?: NavigationBarItem[];
     }

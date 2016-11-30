@@ -718,6 +718,25 @@ declare namespace ts.server.protocol {
         installSuccess: boolean;
         typingsInstallerVersion: string;
     }
+    type BeginInstallTypesEventName = "beginInstallTypes";
+    type EndInstallTypesEventName = "endInstallTypes";
+    interface BeginInstallTypesEvent extends Event {
+        event: BeginInstallTypesEventName;
+        body: BeginInstallTypesEventBody;
+    }
+    interface EndInstallTypesEvent extends Event {
+        event: EndInstallTypesEventName;
+        body: EndInstallTypesEventBody;
+    }
+    interface InstallTypesEventBody {
+        eventId: number;
+        packages: ReadonlyArray<string>;
+    }
+    interface BeginInstallTypesEventBody extends InstallTypesEventBody {
+    }
+    interface EndInstallTypesEventBody extends InstallTypesEventBody {
+        success: boolean;
+    }
     interface NavBarResponse extends Response {
         body?: NavigationBarItem[];
     }
@@ -5075,6 +5094,12 @@ declare namespace ts {
             key: string;
             message: string;
         };
+        An_abstract_accessor_cannot_have_an_implementation: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
         Duplicate_identifier_0: {
             code: number;
             category: DiagnosticCategory;
@@ -8731,7 +8756,8 @@ declare namespace ts.JsTyping {
 declare namespace ts.server {
     const ActionSet: ActionSet;
     const ActionInvalidate: ActionInvalidate;
-    const EventInstall: EventInstall;
+    const EventBeginInstallTypes: EventBeginInstallTypes;
+    const EventEndInstallTypes: EventEndInstallTypes;
     namespace Arguments {
         const GlobalCacheLocation = "--globalTypingsCacheLocation";
         const LogFile = "--logFile";
