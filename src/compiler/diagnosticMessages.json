@@ -851,13 +851,17 @@
         "category": "Error",
         "code": 1317
     },
-    "String literal with double quotes expected.": {
+    "An abstract accessor cannot have an implementation.": {
         "category": "Error",
         "code": 1318
     },
-    "String, number, object, array, true, false or null expected.": {
+    "String literal with double quotes expected.": {
         "category": "Error",
         "code": 1319
+    },
+    "String, number, object, array, true, false or null expected.": {
+        "category": "Error",
+        "code": 1320
     },
     "Duplicate identifier '{0}'.": {
         "category": "Error",

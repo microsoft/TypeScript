@@ -140,15 +140,26 @@ declare function f3<T1 extends number>(): { [P in keyof T1]: void };
 >P : Symbol(P, Decl(mappedTypes1.ts, 33, 45))
 >T1 : Symbol(T1, Decl(mappedTypes1.ts, 33, 20))
 
+declare function f4<T1 extends Number>(): { [P in keyof T1]: void };
+>f4 : Symbol(f4, Decl(mappedTypes1.ts, 33, 68))
+>T1 : Symbol(T1, Decl(mappedTypes1.ts, 34, 20))
+>Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>P : Symbol(P, Decl(mappedTypes1.ts, 34, 45))
+>T1 : Symbol(T1, Decl(mappedTypes1.ts, 34, 20))
+
 let x1 = f1();
->x1 : Symbol(x1, Decl(mappedTypes1.ts, 35, 3))
+>x1 : Symbol(x1, Decl(mappedTypes1.ts, 36, 3))
 >f1 : Symbol(f1, Decl(mappedTypes1.ts, 29, 59))
 
 let x2 = f2();
->x2 : Symbol(x2, Decl(mappedTypes1.ts, 36, 3))
+>x2 : Symbol(x2, Decl(mappedTypes1.ts, 37, 3))
 >f2 : Symbol(f2, Decl(mappedTypes1.ts, 31, 53))
 
 let x3 = f3();
->x3 : Symbol(x3, Decl(mappedTypes1.ts, 37, 3))
+>x3 : Symbol(x3, Decl(mappedTypes1.ts, 38, 3))
 >f3 : Symbol(f3, Decl(mappedTypes1.ts, 32, 68))
+
+let x4 = f4();
+>x4 : Symbol(x4, Decl(mappedTypes1.ts, 39, 3))
+>f4 : Symbol(f4, Decl(mappedTypes1.ts, 33, 68))
 
