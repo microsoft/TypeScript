@@ -2738,7 +2738,7 @@ namespace ts.projectSystem {
             const diagsAfterUpdate = session.executeCommand(<server.protocol.CompilerOptionsDiagnosticsRequest>{
                 type: "request",
                 command: server.CommandNames.CompilerOptionsDiagnosticsFull,
-                seq: 3,
+                seq: 4,
                 arguments: { projectFileName: projectName }
             }).response;
             assert.isTrue(diagsAfterUpdate.length === 0);
@@ -2783,7 +2783,7 @@ namespace ts.projectSystem {
             const diagsAfterUpdate = session.executeCommand(<server.protocol.CompilerOptionsDiagnosticsRequest>{
                 type: "request",
                 command: server.CommandNames.CompilerOptionsDiagnosticsFull,
-                seq: 3,
+                seq: 4,
                 arguments: { projectFileName }
             }).response;
             assert.isTrue(diagsAfterUpdate.length === 0);
