@@ -112,7 +112,10 @@ namespace ts.codefix {
     }
 
     registerCodeFix({
-        errorCodes: [Diagnostics.Cannot_find_name_0.code, Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code],
+        errorCodes: [
+            Diagnostics.Cannot_find_name_0.code,
+            Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code
+        ],
         getCodeActions: (context: CodeFixContext) => {
             const sourceFile = context.sourceFile;
             const checker = context.program.getTypeChecker();
