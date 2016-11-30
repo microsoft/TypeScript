@@ -851,6 +851,10 @@
         "category": "Error",
         "code": 1317
     },
+    "An abstract accessor cannot have an implementation.": {
+        "category": "Error",
+        "code": 1318
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -1739,7 +1743,7 @@
         "category": "Error",
         "code": 2535
     },
-    "Type '{0}' is not constrained to 'keyof {1}'.": {
+    "Type '{0}' cannot be used to index type '{1}'.": {
         "category": "Error",
         "code": 2536
     },
@@ -2002,6 +2006,10 @@
     "The target of an object rest assignment must be a variable or a property access.": {
         "category": "Error",
         "code": 2701
+    },
+    "'{0}' only refers to a type, but is being used as a namespace here.": {
+        "category": "Error",
+        "code": 2702
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -2283,6 +2291,10 @@
     "Default export of the module has or is using private name '{0}'.": {
         "category": "Error",
         "code": 4082
+    },
+    "Type parameter '{0}' of exported type alias has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4083
     },
     "Conflicting definitions for '{0}' found at '{1}' and '{2}'. Consider installing a specific version of this library to resolve the conflict.": {
         "category": "Message",
@@ -3141,7 +3153,7 @@
         "category": "Error",
         "code": 17009
     },
-    "Unknown typing option '{0}'.": {
+    "Unknown type acquisition option '{0}'.": {
         "category": "Error",
         "code": 17010
     },
@@ -3150,7 +3162,7 @@
         "category": "Error",
         "code": 18000
     },
-    "The path in an 'extends' options must be relative or rooted.": {
+    "A path in an 'extends' option must be relative or rooted, but '{0}' is not.": {
         "category": "Error",
         "code": 18001
     },
@@ -3198,5 +3210,17 @@
     "Type '{0}' is not assignable to type '{1}'. Two different types with this name exist, but they are unrelated.": {
         "category": "Error",
         "code": 90010
+    },
+    "Import {0} from {1}": {
+        "category": "Message",
+        "code": 90013
+    },
+    "Change {0} to {1}": {
+        "category": "Message",
+        "code": 90014
+    },
+    "Add {0} to existing import declaration from {1}": {
+        "category": "Message",
+        "code": 90015
     }
 }

@@ -12,7 +12,7 @@ const o = { x: 1, ...y };
 var b;
 >b : Symbol(b, Decl(objectSpreadNoTransform.ts, 2, 3))
 
-var rest;
+var rest: any;
 >rest : Symbol(rest, Decl(objectSpreadNoTransform.ts, 3, 3))
 
 ({ b, ...rest } = o);

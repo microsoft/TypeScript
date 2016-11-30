@@ -29,9 +29,7 @@ spread = b; // error, missing 's'
 let duplicated = { b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' }
 let duplicatedSpread = { ...o, ...o }
 
-// null, undefined and primitives are not allowed
-let spreadNull = { ...null };
-let spreadUndefind = { ...undefined };
+// primitives are not allowed
 let spreadNum = { ...12 };
 let spreadSum = { ...1 + 1 };
 spreadSum.toFixed(); // error, no methods from number
@@ -77,9 +75,6 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
         s = arguments[i];
         for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
             t[p] = s[p];
-        if (typeof Object.getOwnPropertySymbols === "function")
-            for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++)
-                t[p[i]] = s[p[i]];
     }
     return t;
 };
@@ -111,9 +106,7 @@ spread = b; // error, missing 's'
 // literal repeats are not allowed, but spread repeats are fine
 var duplicated = __assign({ b: 'bad' }, o, { b: 'bad' }, o2, { b: 'bad' });
 var duplicatedSpread = __assign({}, o, o);
-// null, undefined and primitives are not allowed
-var spreadNull = __assign({}, null);
-var spreadUndefind = __assign({}, undefined);
+// primitives are not allowed
 var spreadNum = __assign({}, 12);
 var spreadSum = __assign({}, 1 + 1);
 spreadSum.toFixed(); // error, no methods from number

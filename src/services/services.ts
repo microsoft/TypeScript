@@ -1,4 +1,4 @@
-/// <reference path="..\compiler\program.ts"/>
+﻿/// <reference path="..\compiler\program.ts"/>
 /// <reference path="..\compiler\commandLineParser.ts"/>
 
 /// <reference path='types.ts' />
@@ -45,7 +45,7 @@ namespace ts {
         public end: number;
         public flags: NodeFlags;
         public parent: Node;
-        public jsDocComments: JSDoc[];
+        public jsDoc: JSDoc[];
         public original: Node;
         public transformFlags: TransformFlags;
         private _children: Node[];
@@ -154,8 +154,8 @@ namespace ts {
                     pos = nodes.end;
                 };
                 // jsDocComments need to be the first children
-                if (this.jsDocComments) {
-                    for (const jsDocComment of this.jsDocComments) {
+                if (this.jsDoc) {
+                    for (const jsDocComment of this.jsDoc) {
                         processNode(jsDocComment);
                     }
                 }
@@ -490,6 +490,23 @@ namespace ts {
 
         public getPositionOfLineAndCharacter(line: number, character: number): number {
             return ts.getPositionOfLineAndCharacter(this, line, character);
+        }
+
+        public getLineEndOfPosition(pos: number): number {
+            const { line } = this.getLineAndCharacterOfPosition(pos);
+            const lineStarts = this.getLineStarts();
+
+            let lastCharPos: number;
+            if (line + 1 >= lineStarts.length) {
+                lastCharPos = this.getEnd();
+            }
+            if (!lastCharPos) {
+                lastCharPos = lineStarts[line + 1] - 1;
+            }
+
+            const fullText = this.getFullText();
+            // if the new line is "\r\n", we should return the last non-new-line-character position
+            return fullText[lastCharPos] === "\n" && fullText[lastCharPos - 1] === "\r" ? lastCharPos - 1 : lastCharPos;
         }
 
         public getNamedDeclarations(): Map<Declaration[]> {
@@ -1676,7 +1693,9 @@ namespace ts {
                     sourceFile: sourceFile,
                     span: span,
                     program: program,
-                    newLineCharacter: newLineChar
+                    newLineCharacter: newLineChar,
+                    host: host,
+                    cancellationToken: cancellationToken
                 };
 
                 const fixes = codefix.getFixes(context);
@@ -1956,9 +1975,9 @@ namespace ts {
                     break;
                 default:
                     forEachChild(node, walk);
-                    if (node.jsDocComments) {
-                        for (const jsDocComment of node.jsDocComments) {
-                            forEachChild(jsDocComment, walk);
+                    if (node.jsDoc) {
+                        for (const jsDoc of node.jsDoc) {
+                            forEachChild(jsDoc, walk);
                         }
                     }
             }
