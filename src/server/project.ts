@@ -636,6 +636,9 @@ namespace ts.server {
                     this.cachedUnresolvedImportsPerFile.clear();
                     this.lastCachedUnresolvedImportsList = undefined;
                 }
+                if (this.projectKind === ProjectKind.Inferred || this.projectKind === ProjectKind.Configured) {
+                    compilerOptions.noEmitForJsFiles = true;
+                }
                 this.compilerOptions = compilerOptions;
                 this.lsHost.setCompilationSettings(compilerOptions);
 
