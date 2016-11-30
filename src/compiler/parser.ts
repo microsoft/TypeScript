@@ -453,6 +453,10 @@ namespace ts {
 
     export function isExternalModule(file: SourceFile): boolean {
         return file.externalModuleIndicator !== undefined;
+    }    
+
+    export function isCommonJsModule(file: SourceFile): boolean {
+        return file.commonJsModuleIndicator !== undefined;
     }
 
     // Produces a new SourceFile for the 'newText' provided. The 'textChangeRange' parameter
