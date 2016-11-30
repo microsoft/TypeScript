@@ -3099,15 +3099,6 @@ namespace ts {
                         error(declaration, Diagnostics.Rest_types_may_only_be_created_from_object_types);
                         return unknownType;
                     }
-                    const parent = pattern.parent as VariableLikeDeclaration;
-                        if (parent.kind === SyntaxKind.Parameter &&
-                            !parent.type &&
-                            !parent.initializer &&
-                            !getContextuallyTypedParameterType(parent as ParameterDeclaration)) {
-                            // if this type came from examining the structure of the pattern --
-                            // there was no other information -- then it is not sufficient to determine the rest type, so just return any
-                        return anyType;
-                    }
                     const literalMembers: PropertyName[] = [];
                     for (const element of pattern.elements) {
                         if (!(element as BindingElement).dotDotDotToken) {
@@ -3318,12 +3309,17 @@ namespace ts {
         // Return the type implied by an object binding pattern
         function getTypeFromObjectBindingPattern(pattern: ObjectBindingPattern, includePatternInType: boolean, reportErrors: boolean): Type {
             const members = createMap<Symbol>();
+            let stringIndexInfo: IndexInfo;
             let hasComputedProperties = false;
             forEach(pattern.elements, e => {
                 const name = e.propertyName || <Identifier>e.name;
-                if (isComputedNonLiteralName(name) || e.dotDotDotToken) {
-                    // do not include computed properties or rests in the implied type
+                if (isComputedNonLiteralName(name)) {
+                    // do not include computed properties in the implied type
                     hasComputedProperties = true;
+                    return;
+                }
+                if (e.dotDotDotToken) {
+                    stringIndexInfo = createIndexInfo(anyType, /*isReadonly*/ false);
                     return;
                 }
 
@@ -3334,7 +3330,7 @@ namespace ts {
                 symbol.bindingElement = e;
                 members[symbol.name] = symbol;
             });
-            const result = createAnonymousType(undefined, members, emptyArray, emptyArray, undefined, undefined);
+            const result = createAnonymousType(undefined, members, emptyArray, emptyArray, stringIndexInfo, undefined);
             if (includePatternInType) {
                 result.pattern = pattern;
             }
@@ -11422,7 +11418,8 @@ namespace ts {
                         if (impliedProp) {
                             prop.flags |= impliedProp.flags & SymbolFlags.Optional;
                         }
-                        else if (!compilerOptions.suppressExcessPropertyErrors) {
+
+                        else if (!compilerOptions.suppressExcessPropertyErrors && !getIndexInfoOfType(contextualType, IndexKind.String)) {
                             error(memberDecl.name, Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
                                 symbolToString(member), typeToString(contextualType));
                         }
