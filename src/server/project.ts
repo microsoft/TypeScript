@@ -264,7 +264,7 @@ namespace ts.server {
             this.markAsDirty();
         }
 
-        setInternalCompilerOptionsForEmittingJsFiles() {
+        private setInternalCompilerOptionsForEmittingJsFiles() {
             if (this.projectKind === ProjectKind.Inferred || this.projectKind === ProjectKind.External) {
                 this.compilerOptions.noEmitForJsFiles = true;
             }
