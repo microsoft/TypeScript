@@ -11539,21 +11539,9 @@ namespace ts {
        }
 
         function isValidSpreadType(type: Type): boolean {
-            if (type.flags & (TypeFlags.Any | TypeFlags.Null | TypeFlags.Undefined)) {
-                return true;
-            }
-            if (type.flags & TypeFlags.Object) {
-                return !isGenericMappedType(type);
-            }
-            else if (type.flags & TypeFlags.UnionOrIntersection) {
-                for (const t of (<UnionOrIntersectionType>type).types) {
-                    if (!isValidSpreadType(t)) {
-                        return false;
-                    }
-                }
-                return true;
-            }
-            return false;
+            return !!(type.flags & (TypeFlags.Any | TypeFlags.Null | TypeFlags.Undefined) ||
+                type.flags & TypeFlags.Object && !isGenericMappedType(type) ||
+                type.flags & TypeFlags.UnionOrIntersection && !forEach((<UnionOrIntersectionType>type).types, t => !isValidSpreadType(t)));
         }
 
         function checkJsxSelfClosingElement(node: JsxSelfClosingElement) {
