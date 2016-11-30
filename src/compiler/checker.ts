@@ -4497,12 +4497,14 @@ namespace ts {
             // Resolve upfront such that recursive references see an empty object type.
             setStructuredTypeMembers(type, emptySymbols, emptyArray, emptyArray, undefined, undefined);
             // In { [P in K]: T }, we refer to P as the type parameter type, K as the constraint type,
-            // and T as the template type.
+            // and T as the template type. If K is of the form 'keyof S', the mapped type and S are
+            // isomorphic and we copy property modifiers from corresponding properties in S.
             const typeParameter = getTypeParameterFromMappedType(type);
             const constraintType = getConstraintTypeFromMappedType(type);
+            const isomorphicType = getIsomorphicTypeFromMappedType(type);
             const templateType = getTemplateTypeFromMappedType(type);
-            const isReadonly = !!type.declaration.readonlyToken;
-            const isOptional = !!type.declaration.questionToken;
+            const templateReadonly = !!type.declaration.readonlyToken;
+            const templateOptional = !!type.declaration.questionToken;
             // First, if the constraint type is a type parameter, obtain the base constraint. Then,
             // if the key type is a 'keyof X', obtain 'keyof C' where C is the base constraint of X.
             // Finally, iterate over the constituents of the resulting iteration type.
@@ -4515,18 +4517,19 @@ namespace ts {
                 const iterationMapper = createUnaryTypeMapper(typeParameter, t);
                 const templateMapper = type.mapper ? combineTypeMappers(type.mapper, iterationMapper) : iterationMapper;
                 const propType = instantiateType(templateType, templateMapper);
-                // If the current iteration type constituent is a literal type, create a property.
-                // Otherwise, for type string create a string index signature and for type number
-                // create a numeric index signature.
-                if (t.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral | TypeFlags.EnumLiteral)) {
+                // If the current iteration type constituent is a string literal type, create a property.
+                // Otherwise, for type string create a string index signature.
+                if (t.flags & TypeFlags.StringLiteral) {
                     const propName = (<LiteralType>t).text;
+                    const isomorphicProp = isomorphicType && getPropertyOfType(isomorphicType, propName);
+                    const isOptional = templateOptional || !!(isomorphicProp && isomorphicProp.flags & SymbolFlags.Optional);
                     const prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | (isOptional ? SymbolFlags.Optional : 0), propName);
                     prop.type = addOptionality(propType, isOptional);
-                    prop.isReadonly = isReadonly;
+                    prop.isReadonly = templateReadonly || isomorphicProp && isReadonlySymbol(isomorphicProp);
                     members[propName] = prop;
                 }
                 else if (t.flags & TypeFlags.String) {
-                    stringIndexInfo = createIndexInfo(propType, isReadonly);
+                    stringIndexInfo = createIndexInfo(propType, templateReadonly);
                 }
             });
             setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, undefined);
@@ -4547,6 +4550,11 @@ namespace ts {
                 (type.templateType = type.declaration.type ?
                     instantiateType(getTypeFromTypeNode(type.declaration.type), type.mapper || identityMapper) :
                     unknownType);
+        }
+
+        function getIsomorphicTypeFromMappedType(type: MappedType) {
+            const constraint = getConstraintDeclaration(getTypeParameterFromMappedType(type));
+            return constraint.kind === SyntaxKind.TypeOperator ? instantiateType(getTypeFromTypeNode((<TypeOperatorNode>constraint).type), type.mapper || identityMapper) : undefined;
         }
 
         function getErasedTemplateTypeFromMappedType(type: MappedType) {
@@ -21238,6 +21246,9 @@ namespace ts {
             }
             else if (accessor.body === undefined && !(getModifierFlags(accessor) & ModifierFlags.Abstract)) {
                 return grammarErrorAtPos(getSourceFileOfNode(accessor), accessor.end - 1, ";".length, Diagnostics._0_expected, "{");
+            }
+            else if (accessor.body && getModifierFlags(accessor) & ModifierFlags.Abstract) {
+                return grammarErrorOnNode(accessor, Diagnostics.An_abstract_accessor_cannot_have_an_implementation);
             }
             else if (accessor.typeParameters) {
                 return grammarErrorOnNode(accessor.name, Diagnostics.An_accessor_cannot_have_type_parameters);
