@@ -3055,7 +3055,7 @@ namespace ts {
 
         function getRestType(source: Type, properties: PropertyName[], symbol: Symbol): Type {
             if (source.flags & TypeFlags.Union) {
-                const types = filter((<UnionType>source).types, t => !(t.flags & TypeFlags.Nullable));
+                const types = filterNulableTypes(<UnionType>source);
                 if (types.length) {
                     return getUnionType(map(types, t => getRestType(t, properties, symbol)));
                 }
@@ -6103,6 +6103,10 @@ namespace ts {
             return symbol ? getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol) : undefined;
         }
 
+        function filterNulableTypes(union: UnionType): Type[] {
+            return filter(union.types, t => !(t.flags & TypeFlags.Nullable));
+        }
+
         /**
          * Since the source of spread types are object literals, which are not binary,
          * this function should be called in a left folding style, with left = previous result of getSpreadType
@@ -6114,7 +6118,7 @@ namespace ts {
             }
 
             if (left.flags & TypeFlags.Union) {
-                const types = filter((<UnionType>left).types, t => !(t.flags & TypeFlags.Nullable));
+                const types = filterNulableTypes(<UnionType>left);
                 if (types.length) {
                     return getUnionType(map(types, t => getSpreadType(t, right, isFromObjectLiteral)));
                 }
@@ -6127,7 +6131,7 @@ namespace ts {
             }
 
             if (right.flags & TypeFlags.Union) {
-                const types = filter((<UnionType>right).types, t => !(t.flags & TypeFlags.Nullable));
+                const types = filterNulableTypes(<UnionType>right);
                 if (types.length) {
                     return getUnionType(map(types, t => getSpreadType(left, t, isFromObjectLiteral)));
                 }
