@@ -855,6 +855,10 @@
         "category": "Error",
         "code": 1317
     },
+    "An abstract accessor cannot have an implementation.": {
+        "category": "Error",
+        "code": 1318
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -2027,6 +2031,10 @@
         "category": "Error",
         "code": 2701
     },
+    "'{0}' only refers to a type, but is being used as a namespace here.": {
+        "category": "Error",
+        "code": 2702
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3177,7 +3185,7 @@
         "category": "Error",
         "code": 17009
     },
-    "Unknown typing option '{0}'.": {
+    "Unknown type acquisition option '{0}'.": {
         "category": "Error",
         "code": 17010
     },

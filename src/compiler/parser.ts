@@ -419,6 +419,8 @@ namespace ts {
                 return visitNode(cbNode, (<JSDocReturnTag>node).typeExpression);
             case SyntaxKind.JSDocTypeTag:
                 return visitNode(cbNode, (<JSDocTypeTag>node).typeExpression);
+            case SyntaxKind.JSDocAugmentsTag:
+                return visitNode(cbNode, (<JSDocAugmentsTag>node).typeExpression);
             case SyntaxKind.JSDocTemplateTag:
                 return visitNodes(cbNodes, (<JSDocTemplateTag>node).typeParameters);
             case SyntaxKind.JSDocTypedefTag:
@@ -682,7 +684,7 @@ namespace ts {
 
 
         function addJSDocComment<T extends Node>(node: T): T {
-            const comments = getJsDocCommentsFromText(node, sourceFile.text);
+            const comments = getJSDocCommentRanges(node, sourceFile.text);
             if (comments) {
                 for (const comment of comments) {
                     const jsDoc = JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos);
@@ -690,10 +692,10 @@ namespace ts {
                         continue;
                     }
 
-                    if (!node.jsDocComments) {
-                        node.jsDocComments = [];
+                    if (!node.jsDoc) {
+                        node.jsDoc = [];
                     }
-                    node.jsDocComments.push(jsDoc);
+                    node.jsDoc.push(jsDoc);
                 }
             }
 
@@ -720,11 +722,11 @@ namespace ts {
                     const saveParent = parent;
                     parent = n;
                     forEachChild(n, visitNode);
-                    if (n.jsDocComments) {
-                        for (const jsDocComment of n.jsDocComments) {
-                            jsDocComment.parent = n;
-                            parent = jsDocComment;
-                            forEachChild(jsDocComment, visitNode);
+                    if (n.jsDoc) {
+                        for (const jsDoc of n.jsDoc) {
+                            jsDoc.parent = n;
+                            parent = jsDoc;
+                            forEachChild(jsDoc, visitNode);
                         }
                     }
                     parent = saveParent;
@@ -2557,6 +2559,8 @@ namespace ts {
                 case SyntaxKind.OpenBraceToken:
                 case SyntaxKind.OpenBracketToken:
                 case SyntaxKind.LessThanToken:
+                case SyntaxKind.BarToken:
+                case SyntaxKind.AmpersandToken:
                 case SyntaxKind.NewKeyword:
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NumericLiteral:
@@ -2616,6 +2620,7 @@ namespace ts {
         }
 
         function parseUnionOrIntersectionType(kind: SyntaxKind, parseConstituentType: () => TypeNode, operator: SyntaxKind): TypeNode {
+            parseOptional(operator);
             let type = parseConstituentType();
             if (token() === operator) {
                 const types = createNodeArray<TypeNode>([type], type.pos);
@@ -6429,6 +6434,9 @@ namespace ts {
                     let tag: JSDocTag;
                     if (tagName) {
                         switch (tagName.text) {
+                            case "augments":
+                                tag = parseAugmentsTag(atToken, tagName);
+                                break;
                             case "param":
                                 tag = parseParamTag(atToken, tagName);
                                 break;
@@ -6641,6 +6649,16 @@ namespace ts {
                     result.atToken = atToken;
                     result.tagName = tagName;
                     result.name = name;
+                    result.typeExpression = typeExpression;
+                    return finishNode(result);
+                }
+
+                function parseAugmentsTag(atToken: AtToken, tagName: Identifier): JSDocAugmentsTag {
+                    const typeExpression = tryParseTypeExpression();
+
+                    const result = <JSDocAugmentsTag>createNode(SyntaxKind.JSDocAugmentsTag, atToken.pos);
+                    result.atToken = atToken;
+                    result.tagName = tagName;
                     result.typeExpression = typeExpression;
                     return finishNode(result);
                 }
@@ -6957,8 +6975,8 @@ namespace ts {
                 }
 
                 forEachChild(node, visitNode, visitArray);
-                if (node.jsDocComments) {
-                    for (const jsDocComment of node.jsDocComments) {
+                if (node.jsDoc) {
+                    for (const jsDocComment of node.jsDoc) {
                         forEachChild(jsDocComment, visitNode, visitArray);
                     }
                 }

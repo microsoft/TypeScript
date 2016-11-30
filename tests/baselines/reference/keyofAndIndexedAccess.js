@@ -21,11 +21,12 @@ class Options {
 }
 
 type Dictionary<T> = { [x: string]: T };
+type NumericallyIndexed<T> = { [x: number]: T };
 
 const enum E { A, B, C }
 
-type K00 = keyof any;  // string | number
-type K01 = keyof string;  // number | "toString" | "charAt" | ...
+type K00 = keyof any;  // string
+type K01 = keyof string;  // "toString" | "charAt" | ...
 type K02 = keyof number;  // "toString" | "toFixed" | "toExponential" | ...
 type K03 = keyof boolean;  // "valueOf"
 type K04 = keyof void;  // never
@@ -34,19 +35,20 @@ type K06 = keyof null;  // never
 type K07 = keyof never;  // never
 
 type K10 = keyof Shape;  // "name" | "width" | "height" | "visible"
-type K11 = keyof Shape[];  // number | "length" | "toString" | ...
-type K12 = keyof Dictionary<Shape>;  // string | number
+type K11 = keyof Shape[];  // "length" | "toString" | ...
+type K12 = keyof Dictionary<Shape>;  // string
 type K13 = keyof {};  // never
 type K14 = keyof Object;  // "constructor" | "toString" | ...
 type K15 = keyof E;  // "toString" | "toFixed" | "toExponential" | ...
-type K16 = keyof [string, number];  // number | "0" | "1" | "length" | "toString" | ...
+type K16 = keyof [string, number];  // "0" | "1" | "length" | "toString" | ...
 type K17 = keyof (Shape | Item);  // "name"
 type K18 = keyof (Shape & Item);  // "name" | "width" | "height" | "visible" | "price"
+type K19 = keyof NumericallyIndexed<Shape> // never
 
 type KeyOf<T> = keyof T;
 
 type K20 = KeyOf<Shape>;  // "name" | "width" | "height" | "visible"
-type K21 = KeyOf<Dictionary<Shape>>;  // string | number
+type K21 = KeyOf<Dictionary<Shape>>;  // string
 
 type NAME = "name";
 type WIDTH_OR_HEIGHT = "width" | "height";
@@ -95,22 +97,18 @@ function f10(shape: Shape) {
 
 function f11(a: Shape[]) {
     let len = getProperty(a, "length");  // number
-    let shape = getProperty(a, 1000);    // Shape
-    setProperty(a, 1000, getProperty(a, 1001));
+    setProperty(a, "length", len);
 }
 
 function f12(t: [Shape, boolean]) {
     let len = getProperty(t, "length");
-    let s1 = getProperty(t, 0);    // Shape
     let s2 = getProperty(t, "0");  // Shape
-    let b1 = getProperty(t, 1);    // boolean
     let b2 = getProperty(t, "1");  // boolean
-    let x1 = getProperty(t, 2);    // Shape | boolean
 }
 
 function f13(foo: any, bar: any) {
     let x = getProperty(foo, "x");  // any
-    let y = getProperty(foo, 100);  // any
+    let y = getProperty(foo, "100");  // any
     let z = getProperty(foo, bar);  // any
 }
 
@@ -181,6 +179,46 @@ function f40(c: C) {
     let z: Z = c["z"];
 }
 
+function f50<T>(k: keyof T, s: string) {
+    const x1 = s as keyof T;
+    const x2 = k as string;
+}
+
+function f51<T, K extends keyof T>(k: K, s: string) {
+    const x1 = s as keyof T;
+    const x2 = k as string;
+}
+
+function f52<T>(obj: { [x: string]: boolean }, k: keyof T, s: string, n: number) {
+    const x1 = obj[s];
+    const x2 = obj[n];
+    const x3 = obj[k];
+}
+
+function f53<T, K extends keyof T>(obj: { [x: string]: boolean }, k: K, s: string, n: number) {
+    const x1 = obj[s];
+    const x2 = obj[n];
+    const x3 = obj[k];
+}
+
+function f54<T>(obj: T, key: keyof T) {
+    for (let s in obj[key]) {
+    }
+    const b = "foo" in obj[key];
+}
+
+function f55<T, K extends keyof T>(obj: T, key: K) {
+    for (let s in obj[key]) {
+    }
+    const b = "foo" in obj[key];
+}
+
+function f60<T>(source: T, target: T) {
+    for (let k in source) {
+        target[k] = source[k];
+    }
+}
+
 // Repros from #12011
 
 class Base {
@@ -212,6 +250,7 @@ class OtherPerson {
         return getProperty(this, "parts")
     }
 }
+
 
 //// [keyofAndIndexedAccess.js]
 var __extends = (this && this.__extends) || function (d, b) {
@@ -257,20 +296,16 @@ function f10(shape) {
 }
 function f11(a) {
     var len = getProperty(a, "length"); // number
-    var shape = getProperty(a, 1000); // Shape
-    setProperty(a, 1000, getProperty(a, 1001));
+    setProperty(a, "length", len);
 }
 function f12(t) {
     var len = getProperty(t, "length");
-    var s1 = getProperty(t, 0); // Shape
     var s2 = getProperty(t, "0"); // Shape
-    var b1 = getProperty(t, 1); // boolean
     var b2 = getProperty(t, "1"); // boolean
-    var x1 = getProperty(t, 2); // Shape | boolean
 }
 function f13(foo, bar) {
     var x = getProperty(foo, "x"); // any
-    var y = getProperty(foo, 100); // any
+    var y = getProperty(foo, "100"); // any
     var z = getProperty(foo, bar); // any
 }
 var Component = (function () {
@@ -329,6 +364,39 @@ function f40(c) {
     var y = c["y"];
     var z = c["z"];
 }
+function f50(k, s) {
+    var x1 = s;
+    var x2 = k;
+}
+function f51(k, s) {
+    var x1 = s;
+    var x2 = k;
+}
+function f52(obj, k, s, n) {
+    var x1 = obj[s];
+    var x2 = obj[n];
+    var x3 = obj[k];
+}
+function f53(obj, k, s, n) {
+    var x1 = obj[s];
+    var x2 = obj[n];
+    var x3 = obj[k];
+}
+function f54(obj, key) {
+    for (var s in obj[key]) {
+    }
+    var b = "foo" in obj[key];
+}
+function f55(obj, key) {
+    for (var s in obj[key]) {
+    }
+    var b = "foo" in obj[key];
+}
+function f60(source, target) {
+    for (var k in source) {
+        target[k] = source[k];
+    }
+}
 // Repros from #12011
 var Base = (function () {
     function Base() {
@@ -384,6 +452,9 @@ declare class Options {
 declare type Dictionary<T> = {
     [x: string]: T;
 };
+declare type NumericallyIndexed<T> = {
+    [x: number]: T;
+};
 declare const enum E {
     A = 0,
     B = 1,
@@ -406,6 +477,7 @@ declare type K15 = keyof E;
 declare type K16 = keyof [string, number];
 declare type K17 = keyof (Shape | Item);
 declare type K18 = keyof (Shape & Item);
+declare type K19 = keyof NumericallyIndexed<Shape>;
 declare type KeyOf<T> = keyof T;
 declare type K20 = KeyOf<Shape>;
 declare type K21 = KeyOf<Dictionary<Shape>>;
@@ -454,6 +526,17 @@ declare class C {
     private z;
 }
 declare function f40(c: C): void;
+declare function f50<T>(k: keyof T, s: string): void;
+declare function f51<T, K extends keyof T>(k: K, s: string): void;
+declare function f52<T>(obj: {
+    [x: string]: boolean;
+}, k: keyof T, s: string, n: number): void;
+declare function f53<T, K extends keyof T>(obj: {
+    [x: string]: boolean;
+}, k: K, s: string, n: number): void;
+declare function f54<T>(obj: T, key: keyof T): void;
+declare function f55<T, K extends keyof T>(obj: T, key: K): void;
+declare function f60<T>(source: T, target: T): void;
 declare class Base {
     get<K extends keyof this>(prop: K): this[K];
     set<K extends keyof this>(prop: K, value: this[K]): void;

@@ -52,7 +52,7 @@ namespace ts.codefix {
                         // than another existing one. For example, you may have new imports from "./foo/bar"
                         // and "bar", when the new one is "bar/bar2" and the current one is "./foo/bar". The new
                         // one and the current one are not comparable (one relative path and one absolute path),
-                        // but the new one is worse than the other one, so should not add to the list.  
+                        // but the new one is worse than the other one, so should not add to the list.
                         updatedNewImports.push(existingAction);
                         break;
                     case ModuleSpecifierComparison.Worse:
@@ -145,7 +145,7 @@ namespace ts.codefix {
                     if (localSymbol && localSymbol.name === name && checkSymbolHasMeaning(localSymbol, currentTokenMeaning)) {
                         // check if this symbol is already used
                         const symbolId = getUniqueSymbolId(localSymbol);
-                        symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, /*isDefaultExport*/ true));
+                        symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, /*isDefault*/ true));
                     }
                 }
 
@@ -483,7 +483,7 @@ namespace ts.codefix {
                                 const normalizedTypeRoots = map(typeRoots, typeRoot => toPath(typeRoot, /*basePath*/ undefined, getCanonicalFileName));
                                 for (const typeRoot of normalizedTypeRoots) {
                                     if (startsWith(moduleFileName, typeRoot)) {
-                                        let relativeFileName = moduleFileName.substring(typeRoot.length + 1);
+                                        const relativeFileName = moduleFileName.substring(typeRoot.length + 1);
                                         return removeExtensionAndIndexPostFix(relativeFileName);
                                     }
                                 }

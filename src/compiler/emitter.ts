@@ -143,7 +143,7 @@ namespace ts {
 
             // Write the source map
             if (compilerOptions.sourceMap && !compilerOptions.inlineSourceMap) {
-                writeFile(host, emitterDiagnostics, sourceMapFilePath, sourceMap.getText(),  /*writeByteOrderMark*/ false);
+                writeFile(host, emitterDiagnostics, sourceMapFilePath, sourceMap.getText(),  /*writeByteOrderMark*/ false, sourceFiles);
             }
 
             // Record source map data for the test harness.
@@ -152,7 +152,7 @@ namespace ts {
             }
 
             // Write the output file
-            writeFile(host, emitterDiagnostics, jsFilePath, writer.getText(), compilerOptions.emitBOM);
+            writeFile(host, emitterDiagnostics, jsFilePath, writer.getText(), compilerOptions.emitBOM, sourceFiles);
 
             // Reset state
             sourceMap.reset();
