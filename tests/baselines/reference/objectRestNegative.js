@@ -17,7 +17,7 @@ function generic<T extends { x, y }>(t: T) {
 let rest: { b: string }
 ({a, ...rest.b + rest.b} = o);
 
-var noContextualType = ({ aNumber = 12, ...implicitlyAny }) => aNumber + implicitlyAny.anythingGoes;
+var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes;
 
 
 //// [objectRestNegative.js]
@@ -45,6 +45,6 @@ function generic(t) {
 var rest;
 (a = o.a, o, rest.b + rest.b = __rest(o, ["a"]));
 var noContextualType = function (_a) {
-    var _b = _a.aNumber, aNumber = _b === void 0 ? 12 : _b, implicitlyAny = __rest(_a, ["aNumber"]);
-    return aNumber + implicitlyAny.anythingGoes;
+    var _b = _a.aNumber, aNumber = _b === void 0 ? 12 : _b, notEmptyObject = __rest(_a, ["aNumber"]);
+    return aNumber + notEmptyObject.anythingGoes;
 };

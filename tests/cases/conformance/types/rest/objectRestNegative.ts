@@ -17,4 +17,4 @@ function generic<T extends { x, y }>(t: T) {
 let rest: { b: string }
 ({a, ...rest.b + rest.b} = o);
 
-var noContextualType = ({ aNumber = 12, ...implicitlyAny }) => aNumber + implicitlyAny.anythingGoes;
+var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes;
