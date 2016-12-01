@@ -1625,6 +1625,12 @@ namespace ts {
                             Diagnostics.Parameter_0_of_call_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
                             Diagnostics.Parameter_0_of_call_signature_from_exported_interface_has_or_is_using_private_name_1;
 
+                    case SyntaxKind.IndexSignature:
+                        // Interfaces cannot have parameter types that cannot be named
+                        return symbolAccessibilityResult.errorModuleName ?
+                            Diagnostics.Parameter_0_of_index_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Parameter_0_of_index_signature_from_exported_interface_has_or_is_using_private_name_1;
+
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:
                         if (hasModifier(node.parent, ModifierFlags.Static)) {
