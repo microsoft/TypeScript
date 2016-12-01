@@ -38,6 +38,8 @@ namespace ts {
         // is because diagnostics can be quite expensive, and we want to allow hosts to bail out if
         // they no longer need the information (for example, if the user started editing again).
         let cancellationToken: CancellationToken;
+        let requestedExternalEmitHelpers: ExternalEmitHelpers;
+        let externalHelpersModule: Symbol;
 
         const Symbol = objectAllocator.getSymbolConstructor();
         const Type = objectAllocator.getTypeConstructor();
@@ -3054,7 +3056,15 @@ namespace ts {
         }
 
         function getRestType(source: Type, properties: PropertyName[], symbol: Symbol): Type {
-            Debug.assert(!!(source.flags & TypeFlags.Object), "Rest types only support object types right now.");
+            source = filterType(source, t => !(t.flags & TypeFlags.Nullable));
+            if (source.flags & TypeFlags.Never) {
+                return emptyObjectType;
+            }
+
+            if (source.flags & TypeFlags.Union) {
+                return mapType(source, t => getRestType(t, properties, symbol));
+            }
+
             const members = createMap<Symbol>();
             const names = createMap<true>();
             for (const name of properties) {
@@ -3095,7 +3105,7 @@ namespace ts {
             let type: Type;
             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
                 if (declaration.dotDotDotToken) {
-                    if (!(parentType.flags & TypeFlags.Object)) {
+                    if (!isValidSpreadType(parentType)) {
                         error(declaration, Diagnostics.Rest_types_may_only_be_created_from_object_types);
                         return unknownType;
                     }
@@ -3309,12 +3319,17 @@ namespace ts {
         // Return the type implied by an object binding pattern
         function getTypeFromObjectBindingPattern(pattern: ObjectBindingPattern, includePatternInType: boolean, reportErrors: boolean): Type {
             const members = createMap<Symbol>();
+            let stringIndexInfo: IndexInfo;
             let hasComputedProperties = false;
             forEach(pattern.elements, e => {
                 const name = e.propertyName || <Identifier>e.name;
-                if (isComputedNonLiteralName(name) || e.dotDotDotToken) {
-                    // do not include computed properties or rests in the implied type
+                if (isComputedNonLiteralName(name)) {
+                    // do not include computed properties in the implied type
                     hasComputedProperties = true;
+                    return;
+                }
+                if (e.dotDotDotToken) {
+                    stringIndexInfo = createIndexInfo(anyType, /*isReadonly*/ false);
                     return;
                 }
 
@@ -3325,7 +3340,7 @@ namespace ts {
                 symbol.bindingElement = e;
                 members[symbol.name] = symbol;
             });
-            const result = createAnonymousType(undefined, members, emptyArray, emptyArray, undefined, undefined);
+            const result = createAnonymousType(undefined, members, emptyArray, emptyArray, stringIndexInfo, undefined);
             if (includePatternInType) {
                 result.pattern = pattern;
             }
@@ -4524,7 +4539,7 @@ namespace ts {
                     const isomorphicProp = isomorphicType && getPropertyOfType(isomorphicType, propName);
                     const isOptional = templateOptional || !!(isomorphicProp && isomorphicProp.flags & SymbolFlags.Optional);
                     const prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | (isOptional ? SymbolFlags.Optional : 0), propName);
-                    prop.type = addOptionality(propType, isOptional);
+                    prop.type = propType;
                     prop.isReadonly = templateReadonly || isomorphicProp && isReadonlySymbol(isomorphicProp);
                     members[propName] = prop;
                 }
@@ -4548,7 +4563,7 @@ namespace ts {
         function getTemplateTypeFromMappedType(type: MappedType) {
             return type.templateType ||
                 (type.templateType = type.declaration.type ?
-                    instantiateType(getTypeFromTypeNode(type.declaration.type), type.mapper || identityMapper) :
+                    instantiateType(addOptionality(getTypeFromTypeNode(type.declaration.type), !!type.declaration.questionToken), type.mapper || identityMapper) :
                     unknownType);
         }
 
@@ -6013,7 +6028,7 @@ namespace ts {
             }
             const mapper = createUnaryTypeMapper(getTypeParameterFromMappedType(type), indexType);
             const templateMapper = type.mapper ? combineTypeMappers(type.mapper, mapper) : mapper;
-            return addOptionality(instantiateType(getTemplateTypeFromMappedType(type), templateMapper), !!type.declaration.questionToken);
+            return instantiateType(getTemplateTypeFromMappedType(type), templateMapper);
         }
 
         function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode) {
@@ -6110,11 +6125,25 @@ namespace ts {
          * this function should be called in a left folding style, with left = previous result of getSpreadType
          * and right = the new element to be spread.
          */
-        function getSpreadType(left: Type, right: Type, isFromObjectLiteral: boolean): ResolvedType | IntrinsicType {
-            Debug.assert(!!(left.flags & (TypeFlags.Object | TypeFlags.Any)) && !!(right.flags & (TypeFlags.Object | TypeFlags.Any)), "Only object types may be spread.");
+        function getSpreadType(left: Type, right: Type, isFromObjectLiteral: boolean): Type  {
             if (left.flags & TypeFlags.Any || right.flags & TypeFlags.Any) {
                 return anyType;
             }
+            left = filterType(left, t => !(t.flags & TypeFlags.Nullable));
+            if (left.flags & TypeFlags.Never) {
+                return right;
+            }
+            right = filterType(right, t => !(t.flags & TypeFlags.Nullable));
+            if (right.flags & TypeFlags.Never) {
+                return left;
+            }
+            if (left.flags & TypeFlags.Union) {
+                return mapType(left, t => getSpreadType(t, right, isFromObjectLiteral));
+            }
+            if (right.flags & TypeFlags.Union) {
+                return mapType(right, t => getSpreadType(left, t, isFromObjectLiteral));
+            }
+
             const members = createMap<Symbol>();
             const skippedPrivateMembers = createMap<boolean>();
             let stringIndexInfo: IndexInfo;
@@ -8462,16 +8491,18 @@ namespace ts {
             const typeInferences = createTypeInferencesObject();
             const typeInferencesArray = [typeInferences];
             const templateType = getTemplateTypeFromMappedType(target);
+            const readonlyMask = target.declaration.readonlyToken ? false : true;
+            const optionalMask = target.declaration.questionToken ? 0 : SymbolFlags.Optional;
             const properties = getPropertiesOfType(source);
             const members = createSymbolTable(properties);
             let hasInferredTypes = false;
             for (const prop of properties) {
                 const inferredPropType = inferTargetType(getTypeOfSymbol(prop));
                 if (inferredPropType) {
-                    const inferredProp = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | prop.flags & SymbolFlags.Optional, prop.name);
+                    const inferredProp = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | prop.flags & optionalMask, prop.name);
                     inferredProp.declarations = prop.declarations;
                     inferredProp.type = inferredPropType;
-                    inferredProp.isReadonly = isReadonlySymbol(prop);
+                    inferredProp.isReadonly = readonlyMask && isReadonlySymbol(prop);
                     members[prop.name] = inferredProp;
                     hasInferredTypes = true;
                 }
@@ -8480,7 +8511,7 @@ namespace ts {
             if (indexInfo) {
                 const inferredIndexType = inferTargetType(indexInfo.type);
                 if (inferredIndexType) {
-                    indexInfo = createIndexInfo(inferredIndexType, indexInfo.isReadonly);
+                    indexInfo = createIndexInfo(inferredIndexType, readonlyMask && indexInfo.isReadonly);
                     hasInferredTypes = true;
                 }
             }
@@ -11421,7 +11452,8 @@ namespace ts {
                         if (impliedProp) {
                             prop.flags |= impliedProp.flags & SymbolFlags.Optional;
                         }
-                        else if (!compilerOptions.suppressExcessPropertyErrors) {
+
+                        else if (!compilerOptions.suppressExcessPropertyErrors && !getIndexInfoOfType(contextualType, IndexKind.String)) {
                             error(memberDecl.name, Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
                                 symbolToString(member), typeToString(contextualType));
                         }
@@ -11437,6 +11469,9 @@ namespace ts {
                     member = prop;
                 }
                 else if (memberDecl.kind === SyntaxKind.SpreadAssignment) {
+                    if (languageVersion < ScriptTarget.ESNext) {
+                        checkExternalEmitHelpers(memberDecl, ExternalEmitHelpers.Assign);
+                    }
                     if (propertiesArray.length > 0) {
                         spread = getSpreadType(spread, createObjectLiteralType(), /*isFromObjectLiteral*/ true);
                         propertiesArray = [];
@@ -11446,7 +11481,7 @@ namespace ts {
                         typeFlags = 0;
                     }
                     const type = checkExpression((memberDecl as SpreadAssignment).expression);
-                    if (!(type.flags & (TypeFlags.Object | TypeFlags.Any))) {
+                    if (!isValidSpreadType(type)) {
                         error(memberDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
                         return unknownType;
                     }
@@ -11523,6 +11558,12 @@ namespace ts {
                 return result;
             }
        }
+
+        function isValidSpreadType(type: Type): boolean {
+            return !!(type.flags & (TypeFlags.Any | TypeFlags.Null | TypeFlags.Undefined) ||
+                type.flags & TypeFlags.Object && !isGenericMappedType(type) ||
+                type.flags & TypeFlags.UnionOrIntersection && !forEach((<UnionOrIntersectionType>type).types, t => !isValidSpreadType(t)));
+        }
 
         function checkJsxSelfClosingElement(node: JsxSelfClosingElement) {
             checkJsxOpeningLikeElement(node);
@@ -11624,6 +11665,9 @@ namespace ts {
         }
 
         function checkJsxSpreadAttribute(node: JsxSpreadAttribute, elementAttributesType: Type, nameTable: Map<boolean>) {
+            if (compilerOptions.jsx === JsxEmit.React) {
+                checkExternalEmitHelpers(node, ExternalEmitHelpers.Assign);
+            }
             const type = checkExpression(node.expression);
             const props = getPropertiesOfType(type);
             for (const prop of props) {
@@ -14389,6 +14433,9 @@ namespace ts {
                 }
             }
             else if (property.kind === SyntaxKind.SpreadAssignment) {
+                if (languageVersion < ScriptTarget.ESNext) {
+                    checkExternalEmitHelpers(property, ExternalEmitHelpers.Rest);
+                }
                 const nonRestNames: PropertyName[] = [];
                 if (allProperties) {
                     for (let i = 0; i < allProperties.length - 1; i++) {
@@ -15299,6 +15346,13 @@ namespace ts {
                 node.kind === SyntaxKind.CallSignature || node.kind === SyntaxKind.Constructor ||
                 node.kind === SyntaxKind.ConstructSignature) {
                 checkGrammarFunctionLikeDeclaration(<FunctionLikeDeclaration>node);
+            }
+
+            if (isAsyncFunctionLike(node) && languageVersion < ScriptTarget.ES2017) {
+                checkExternalEmitHelpers(node, ExternalEmitHelpers.Awaiter);
+                if (languageVersion < ScriptTarget.ES2015) {
+                    checkExternalEmitHelpers(node, ExternalEmitHelpers.Generator);
+                }
             }
 
             checkTypeParameters(node.typeParameters);
@@ -16436,7 +16490,15 @@ namespace ts {
                 error(node, Diagnostics.Experimental_support_for_decorators_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalDecorators_option_to_remove_this_warning);
             }
 
+            const firstDecorator = node.decorators[0];
+            checkExternalEmitHelpers(firstDecorator, ExternalEmitHelpers.Decorate);
+            if (node.kind === SyntaxKind.Parameter) {
+                checkExternalEmitHelpers(firstDecorator, ExternalEmitHelpers.Param);
+            }
+
             if (compilerOptions.emitDecoratorMetadata) {
+                checkExternalEmitHelpers(firstDecorator, ExternalEmitHelpers.Metadata);
+
                 // we only need to perform these checks if we are emitting serialized type metadata for the target of a decorator.
                 switch (node.kind) {
                     case SyntaxKind.ClassDeclaration:
@@ -16823,7 +16885,7 @@ namespace ts {
         }
 
         function checkCollisionWithGlobalPromiseInGeneratedCode(node: Node, name: Identifier): void {
-            if (!needCollisionCheckForIdentifier(node, name, "Promise")) {
+            if (languageVersion >= ScriptTarget.ES2017 || !needCollisionCheckForIdentifier(node, name, "Promise")) {
                 return;
             }
 
@@ -17000,6 +17062,9 @@ namespace ts {
             }
 
             if (node.kind === SyntaxKind.BindingElement) {
+                if (node.parent.kind === SyntaxKind.ObjectBindingPattern && languageVersion < ScriptTarget.ESNext) {
+                    checkExternalEmitHelpers(node, ExternalEmitHelpers.Rest);
+                }
                 // check computed properties inside property names of binding elements
                 if (node.propertyName && node.propertyName.kind === SyntaxKind.ComputedPropertyName) {
                     checkComputedPropertyName(<ComputedPropertyName>node.propertyName);
@@ -17917,6 +17982,10 @@ namespace ts {
 
             const baseTypeNode = getClassExtendsHeritageClauseElement(node);
             if (baseTypeNode) {
+                if (languageVersion < ScriptTarget.ES2015) {
+                    checkExternalEmitHelpers(baseTypeNode.parent, ExternalEmitHelpers.Extends);
+                }
+
                 const baseTypes = getBaseTypes(type);
                 if (baseTypes.length && produceDiagnostics) {
                     const baseType = baseTypes[0];
@@ -20357,8 +20426,6 @@ namespace ts {
 
             // Initialize global symbol table
             let augmentations: LiteralExpression[][];
-            let requestedExternalEmitHelpers: NodeFlags = 0;
-            let firstFileRequestingExternalHelpers: SourceFile;
             for (const file of host.getSourceFiles()) {
                 if (!isExternalOrCommonJsModule(file)) {
                     mergeSymbolTable(globals, file.locals);
@@ -20375,15 +20442,6 @@ namespace ts {
                     for (const id in source) {
                         if (!(id in globals)) {
                             globals[id] = source[id];
-                        }
-                    }
-                }
-                if ((compilerOptions.isolatedModules || isExternalModule(file)) && !file.isDeclarationFile) {
-                    const fileRequestedExternalEmitHelpers = file.flags & NodeFlags.EmitHelperFlags;
-                    if (fileRequestedExternalEmitHelpers) {
-                        requestedExternalEmitHelpers |= fileRequestedExternalEmitHelpers;
-                        if (firstFileRequestingExternalHelpers === undefined) {
-                            firstFileRequestingExternalHelpers = file;
                         }
                     }
                 }
@@ -20452,56 +20510,50 @@ namespace ts {
             const symbol = getGlobalSymbol("ReadonlyArray", SymbolFlags.Type, /*diagnostic*/ undefined);
             globalReadonlyArrayType = symbol && <GenericType>getTypeOfGlobalSymbol(symbol, /*arity*/ 1);
             anyReadonlyArrayType = globalReadonlyArrayType ? createTypeFromGenericGlobalType(globalReadonlyArrayType, [anyType]) : anyArrayType;
+        }
 
-            // If we have specified that we are importing helpers, we should report global
-            // errors if we cannot resolve the helpers external module, or if it does not have
-            // the necessary helpers exported.
-            if (compilerOptions.importHelpers && firstFileRequestingExternalHelpers) {
-                // Find the first reference to the helpers module.
-                const helpersModule = resolveExternalModule(
-                    firstFileRequestingExternalHelpers,
-                    externalHelpersModuleNameText,
-                    Diagnostics.Cannot_find_module_0,
-                    /*errorNode*/ undefined);
-
-                // If we found the module, report errors if it does not have the necessary exports.
-                if (helpersModule) {
-                    const exports = helpersModule.exports;
-                    if (requestedExternalEmitHelpers & NodeFlags.HasClassExtends && languageVersion < ScriptTarget.ES2015) {
-                        verifyHelperSymbol(exports, "__extends", SymbolFlags.Value);
-                    }
-                    if (requestedExternalEmitHelpers & NodeFlags.HasSpreadAttribute &&
-                        (languageVersion < ScriptTarget.ESNext || compilerOptions.jsx === JsxEmit.React)) {
-                        verifyHelperSymbol(exports, "__assign", SymbolFlags.Value);
-                    }
-                    if (languageVersion < ScriptTarget.ESNext && requestedExternalEmitHelpers & NodeFlags.HasRestAttribute) {
-                        verifyHelperSymbol(exports, "__rest", SymbolFlags.Value);
-                    }
-                    if (requestedExternalEmitHelpers & NodeFlags.HasDecorators) {
-                        verifyHelperSymbol(exports, "__decorate", SymbolFlags.Value);
-                        if (compilerOptions.emitDecoratorMetadata) {
-                            verifyHelperSymbol(exports, "__metadata", SymbolFlags.Value);
+        function checkExternalEmitHelpers(location: Node, helpers: ExternalEmitHelpers) {
+            if ((requestedExternalEmitHelpers & helpers) !== helpers && compilerOptions.importHelpers) {
+                const sourceFile = getSourceFileOfNode(location);
+                if (isEffectiveExternalModule(sourceFile, compilerOptions)) {
+                    const helpersModule = resolveHelpersModule(sourceFile, location);
+                    if (helpersModule !== unknownSymbol) {
+                        const uncheckedHelpers = helpers & ~requestedExternalEmitHelpers;
+                        for (let helper = ExternalEmitHelpers.FirstEmitHelper; helper <= ExternalEmitHelpers.LastEmitHelper; helper <<= 1) {
+                            if (uncheckedHelpers & helper) {
+                                const name = getHelperName(helper);
+                                const symbol = getSymbol(helpersModule.exports, escapeIdentifier(name), SymbolFlags.Value);
+                                if (!symbol) {
+                                    error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_but_module_0_has_no_exported_member_1, externalHelpersModuleNameText, name);
+                                }
+                            }
                         }
                     }
-                    if (requestedExternalEmitHelpers & NodeFlags.HasParamDecorators) {
-                        verifyHelperSymbol(exports, "__param", SymbolFlags.Value);
-                    }
-                    if (requestedExternalEmitHelpers & NodeFlags.HasAsyncFunctions) {
-                        verifyHelperSymbol(exports, "__awaiter", SymbolFlags.Value);
-                        if (languageVersion < ScriptTarget.ES2015) {
-                            verifyHelperSymbol(exports, "__generator", SymbolFlags.Value);
-                        }
-                    }
+                    requestedExternalEmitHelpers |= helpers;
                 }
             }
         }
 
-        function verifyHelperSymbol(symbols: SymbolTable, name: string, meaning: SymbolFlags) {
-            const symbol = getSymbol(symbols, escapeIdentifier(name), meaning);
-            if (!symbol) {
-                error(/*location*/ undefined, Diagnostics.Module_0_has_no_exported_member_1, externalHelpersModuleNameText, name);
+        function getHelperName(helper: ExternalEmitHelpers) {
+            switch (helper) {
+                case ExternalEmitHelpers.Extends: return "__extends";
+                case ExternalEmitHelpers.Assign: return "__assign";
+                case ExternalEmitHelpers.Rest: return "__rest";
+                case ExternalEmitHelpers.Decorate: return "__decorate";
+                case ExternalEmitHelpers.Metadata: return "__metadata";
+                case ExternalEmitHelpers.Param: return "__param";
+                case ExternalEmitHelpers.Awaiter: return "__awaiter";
+                case ExternalEmitHelpers.Generator: return "__generator";
             }
         }
+
+        function resolveHelpersModule(node: SourceFile, errorNode: Node) {
+            if (!externalHelpersModule) {
+                externalHelpersModule = resolveExternalModule(node, externalHelpersModuleNameText, Diagnostics.This_syntax_requires_an_imported_helper_but_module_0_cannot_be_found, errorNode) || unknownSymbol;
+            }
+            return externalHelpersModule;
+        }
+
 
         function createInstantiatedPromiseLikeType(): ObjectType {
             const promiseLikeType = getGlobalPromiseLikeType();
