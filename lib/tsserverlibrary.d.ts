@@ -1230,26 +1230,20 @@ declare namespace ts {
         HasImplicitReturn = 128,
         HasExplicitReturn = 256,
         GlobalAugmentation = 512,
-        HasClassExtends = 1024,
-        HasDecorators = 2048,
-        HasParamDecorators = 4096,
-        HasAsyncFunctions = 8192,
-        HasSpreadAttribute = 16384,
-        HasRestAttribute = 32768,
-        DisallowInContext = 65536,
-        YieldContext = 131072,
-        DecoratorContext = 262144,
-        AwaitContext = 524288,
-        ThisNodeHasError = 1048576,
-        JavaScriptFile = 2097152,
-        ThisNodeOrAnySubNodesHasError = 4194304,
-        HasAggregatedChildData = 8388608,
+        HasAsyncFunctions = 1024,
+        DisallowInContext = 2048,
+        YieldContext = 4096,
+        DecoratorContext = 8192,
+        AwaitContext = 16384,
+        ThisNodeHasError = 32768,
+        JavaScriptFile = 65536,
+        ThisNodeOrAnySubNodesHasError = 131072,
+        HasAggregatedChildData = 262144,
         BlockScoped = 3,
         ReachabilityCheckFlags = 384,
-        EmitHelperFlags = 64512,
-        ReachabilityAndEmitFlags = 64896,
-        ContextFlags = 3080192,
-        TypeExcludesFlags = 655360,
+        ReachabilityAndEmitFlags = 1408,
+        ContextFlags = 96256,
+        TypeExcludesFlags = 20480,
     }
     const enum ModifierFlags {
         None = 0,
@@ -3491,6 +3485,18 @@ declare namespace ts {
         readonly text: string;
         readonly priority?: number;
     }
+    const enum ExternalEmitHelpers {
+        Extends = 1,
+        Assign = 2,
+        Rest = 4,
+        Decorate = 8,
+        Metadata = 16,
+        Param = 32,
+        Awaiter = 64,
+        Generator = 128,
+        FirstEmitHelper = 1,
+        LastEmitHelper = 128,
+    }
     const enum EmitContext {
         SourceFile = 0,
         Expression = 1,
@@ -3563,7 +3569,7 @@ declare namespace ts.performance {
     function disable(): void;
 }
 declare namespace ts {
-    const version = "2.1.3";
+    const version = "2.1.4";
 }
 declare namespace ts {
     const enum Ternary {
@@ -5358,6 +5364,12 @@ declare namespace ts {
             key: string;
             message: string;
         };
+        This_syntax_requires_an_imported_helper_named_1_but_module_0_has_no_exported_member_1: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
         Type_0_does_not_satisfy_the_constraint_1: {
             code: number;
             category: DiagnosticCategory;
@@ -5413,6 +5425,12 @@ declare namespace ts {
             message: string;
         };
         Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
+        This_syntax_requires_an_imported_helper_but_module_0_cannot_be_found: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -7254,6 +7272,18 @@ declare namespace ts {
             key: string;
             message: string;
         };
+        Parameter_0_of_index_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
+        Parameter_0_of_index_signature_from_exported_interface_has_or_is_using_private_name_1: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
         The_current_host_does_not_support_the_0_option: {
             code: number;
             category: DiagnosticCategory;
@@ -8913,6 +8943,7 @@ declare namespace ts {
     function isBlockScopedContainerTopLevel(node: Node): boolean;
     function isGlobalScopeAugmentation(module: ModuleDeclaration): boolean;
     function isExternalModuleAugmentation(node: Node): boolean;
+    function isEffectiveExternalModule(node: SourceFile, compilerOptions: CompilerOptions): boolean;
     function isBlockScope(node: Node, parentNode: Node): boolean;
     function getEnclosingBlockScopeContainer(node: Node): Node;
     function declarationNameToString(name: DeclarationName): string;
@@ -11106,6 +11137,7 @@ declare namespace ts.server {
         isJsOnlyProject(): boolean;
         getCachedUnresolvedImportsPerFile_TestOnly(): UnresolvedImportsMap;
         constructor(projectName: string, projectKind: ProjectKind, projectService: ProjectService, documentRegistry: ts.DocumentRegistry, hasExplicitListOfFiles: boolean, languageServiceEnabled: boolean, compilerOptions: CompilerOptions, compileOnSaveEnabled: boolean);
+        private setInternalCompilerOptionsForEmittingJsFiles();
         getProjectErrors(): Diagnostic[];
         getLanguageService(ensureSynchronized?: boolean): LanguageService;
         getCompileOnSaveAffectedFileList(scriptInfo: ScriptInfo): string[];

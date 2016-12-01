@@ -378,26 +378,20 @@ declare namespace ts {
         HasImplicitReturn = 128,
         HasExplicitReturn = 256,
         GlobalAugmentation = 512,
-        HasClassExtends = 1024,
-        HasDecorators = 2048,
-        HasParamDecorators = 4096,
-        HasAsyncFunctions = 8192,
-        HasSpreadAttribute = 16384,
-        HasRestAttribute = 32768,
-        DisallowInContext = 65536,
-        YieldContext = 131072,
-        DecoratorContext = 262144,
-        AwaitContext = 524288,
-        ThisNodeHasError = 1048576,
-        JavaScriptFile = 2097152,
-        ThisNodeOrAnySubNodesHasError = 4194304,
-        HasAggregatedChildData = 8388608,
+        HasAsyncFunctions = 1024,
+        DisallowInContext = 2048,
+        YieldContext = 4096,
+        DecoratorContext = 8192,
+        AwaitContext = 16384,
+        ThisNodeHasError = 32768,
+        JavaScriptFile = 65536,
+        ThisNodeOrAnySubNodesHasError = 131072,
+        HasAggregatedChildData = 262144,
         BlockScoped = 3,
         ReachabilityCheckFlags = 384,
-        EmitHelperFlags = 64512,
-        ReachabilityAndEmitFlags = 64896,
-        ContextFlags = 3080192,
-        TypeExcludesFlags = 655360,
+        ReachabilityAndEmitFlags = 1408,
+        ContextFlags = 96256,
+        TypeExcludesFlags = 20480,
     }
     enum ModifierFlags {
         None = 0,
@@ -2145,7 +2139,7 @@ declare namespace ts {
 }
 declare namespace ts {
     /** The version of the TypeScript compiler release */
-    const version = "2.1.3";
+    const version = "2.1.4";
 }
 declare namespace ts {
     type FileWatcherCallback = (fileName: string, removed?: boolean) => void;
