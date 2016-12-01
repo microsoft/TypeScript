@@ -2300,6 +2300,14 @@
         "category": "Message",
         "code": 4090
     },
+    "Parameter '{0}' of index signature from exported interface has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4091
+    },
+    "Parameter '{0}' of index signature from exported interface has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4092
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
