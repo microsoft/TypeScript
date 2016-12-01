@@ -1,0 +1,42 @@
+=== tests/cases/compiler/decoratorWithUnderscoreMethod.ts ===
+
+declare var console : { log(arg: string): void };
+>console : Symbol(console, Decl(decoratorWithUnderscoreMethod.ts, 1, 11))
+>log : Symbol(log, Decl(decoratorWithUnderscoreMethod.ts, 1, 23))
+>arg : Symbol(arg, Decl(decoratorWithUnderscoreMethod.ts, 1, 28))
+
+function dec(): Function {
+>dec : Symbol(dec, Decl(decoratorWithUnderscoreMethod.ts, 1, 49))
+>Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+    return function (target: any, propKey: string, descr: PropertyDescriptor): void {
+>target : Symbol(target, Decl(decoratorWithUnderscoreMethod.ts, 3, 21))
+>propKey : Symbol(propKey, Decl(decoratorWithUnderscoreMethod.ts, 3, 33))
+>descr : Symbol(descr, Decl(decoratorWithUnderscoreMethod.ts, 3, 50))
+>PropertyDescriptor : Symbol(PropertyDescriptor, Decl(lib.d.ts, --, --))
+
+        console.log(target[propKey]);
+>console.log : Symbol(log, Decl(decoratorWithUnderscoreMethod.ts, 1, 23))
+>console : Symbol(console, Decl(decoratorWithUnderscoreMethod.ts, 1, 11))
+>log : Symbol(log, Decl(decoratorWithUnderscoreMethod.ts, 1, 23))
+>target : Symbol(target, Decl(decoratorWithUnderscoreMethod.ts, 3, 21))
+>propKey : Symbol(propKey, Decl(decoratorWithUnderscoreMethod.ts, 3, 33))
+
+        //logs undefined
+        //propKey has three underscores as prefix, but the method has only two underscores
+    };
+}
+
+class A {
+>A : Symbol(A, Decl(decoratorWithUnderscoreMethod.ts, 8, 1))
+
+    @dec()
+>dec : Symbol(dec, Decl(decoratorWithUnderscoreMethod.ts, 1, 49))
+
+    private __foo(bar: string): void {
+>__foo : Symbol(A.__foo, Decl(decoratorWithUnderscoreMethod.ts, 10, 9))
+>bar : Symbol(bar, Decl(decoratorWithUnderscoreMethod.ts, 12, 18))
+
+        // do something with bar
+    }
+}
