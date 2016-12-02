@@ -826,7 +826,7 @@ function f54<T>(obj: T, key: keyof T) {
 >T : T
 
     for (let s in obj[key]) {
->s : string
+>s : keyof T[keyof T]
 >obj[key] : T[keyof T]
 >obj : T
 >key : keyof T
@@ -851,7 +851,7 @@ function f55<T, K extends keyof T>(obj: T, key: K) {
 >K : K
 
     for (let s in obj[key]) {
->s : string
+>s : keyof T[K]
 >obj[key] : T[K]
 >obj : T
 >key : K
