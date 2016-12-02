@@ -982,3 +982,223 @@ class OtherPerson {
     }
 }
 
+// Modified repro from #12544
+
+function path<T, K1 extends keyof T>(obj: T, key1: K1): T[K1];
+>path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>T : T
+>K1 : K1
+>T : T
+>obj : T
+>T : T
+>key1 : K1
+>K1 : K1
+>T : T
+>K1 : K1
+
+function path<T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2];
+>path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>T : T
+>K1 : K1
+>T : T
+>K2 : K2
+>T : T
+>K1 : K1
+>obj : T
+>T : T
+>key1 : K1
+>K1 : K1
+>key2 : K2
+>K2 : K2
+>T : T
+>K1 : K1
+>K2 : K2
+
+function path<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3];
+>path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>T : T
+>K1 : K1
+>T : T
+>K2 : K2
+>T : T
+>K1 : K1
+>K3 : K3
+>T : T
+>K1 : K1
+>K2 : K2
+>obj : T
+>T : T
+>key1 : K1
+>K1 : K1
+>key2 : K2
+>K2 : K2
+>key3 : K3
+>K3 : K3
+>T : T
+>K1 : K1
+>K2 : K2
+>K3 : K3
+
+function path(obj: any, ...keys: (string | number)[]): any;
+>path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>obj : any
+>keys : (string | number)[]
+
+function path(obj: any, ...keys: (string | number)[]): any {
+>path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>obj : any
+>keys : (string | number)[]
+
+    let result = obj;
+>result : any
+>obj : any
+
+    for (let k of keys) {
+>k : string | number
+>keys : (string | number)[]
+
+        result = result[k];
+>result = result[k] : any
+>result : any
+>result[k] : any
+>result : any
+>k : string | number
+    }
+    return result;
+>result : any
+}
+
+type Thing = {
+>Thing : Thing
+
+    a: { x: number, y: string },
+>a : { x: number; y: string; }
+>x : number
+>y : string
+
+    b: boolean
+>b : boolean
+
+};
+
+
+function f1(thing: Thing) {
+>f1 : (thing: Thing) => void
+>thing : Thing
+>Thing : Thing
+
+    let x1 = path(thing, 'a');  // { x: number, y: string }
+>x1 : { x: number; y: string; }
+>path(thing, 'a') : { x: number; y: string; }
+>path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>thing : Thing
+>'a' : "a"
+
+    let x2 = path(thing, 'a', 'y');  // string
+>x2 : string
+>path(thing, 'a', 'y') : string
+>path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>thing : Thing
+>'a' : "a"
+>'y' : "y"
+
+    let x3 = path(thing, 'b');  // boolean
+>x3 : boolean
+>path(thing, 'b') : boolean
+>path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>thing : Thing
+>'b' : "b"
+
+    let x4 = path(thing, ...['a', 'x']);  // any
+>x4 : any
+>path(thing, ...['a', 'x']) : any
+>path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>thing : Thing
+>...['a', 'x'] : string
+>['a', 'x'] : string[]
+>'a' : "a"
+>'x' : "x"
+}
+
+// Repro from comment in #12114
+
+const assignTo2 = <T, K1 extends keyof T, K2 extends keyof T[K1]>(object: T, key1: K1, key2: K2) =>
+>assignTo2 : <T, K1 extends keyof T, K2 extends keyof T[K1]>(object: T, key1: K1, key2: K2) => (value: T[K1][K2]) => T[K1][K2]
+><T, K1 extends keyof T, K2 extends keyof T[K1]>(object: T, key1: K1, key2: K2) =>    (value: T[K1][K2]) => object[key1][key2] = value : <T, K1 extends keyof T, K2 extends keyof T[K1]>(object: T, key1: K1, key2: K2) => (value: T[K1][K2]) => T[K1][K2]
+>T : T
+>K1 : K1
+>T : T
+>K2 : K2
+>T : T
+>K1 : K1
+>object : T
+>T : T
+>key1 : K1
+>K1 : K1
+>key2 : K2
+>K2 : K2
+
+    (value: T[K1][K2]) => object[key1][key2] = value;
+>(value: T[K1][K2]) => object[key1][key2] = value : (value: T[K1][K2]) => T[K1][K2]
+>value : T[K1][K2]
+>T : T
+>K1 : K1
+>K2 : K2
+>object[key1][key2] = value : T[K1][K2]
+>object[key1][key2] : T[K1][K2]
+>object[key1] : T[K1]
+>object : T
+>key1 : K1
+>key2 : K2
+>value : T[K1][K2]
+
+// Modified repro from #12573
+
+declare function one<T>(handler: (t: T) => void): T
+>one : <T>(handler: (t: T) => void) => T
+>T : T
+>handler : (t: T) => void
+>t : T
+>T : T
+>T : T
+
+var empty = one(() => {}) // inferred as {}, expected
+>empty : {}
+>one(() => {}) : {}
+>one : <T>(handler: (t: T) => void) => T
+>() => {} : () => void
+
+type Handlers<T> = { [K in keyof T]: (t: T[K]) => void }
+>Handlers : Handlers<T>
+>T : T
+>K : K
+>T : T
+>t : T[K]
+>T : T
+>K : K
+
+declare function on<T>(handlerHash: Handlers<T>): T
+>on : <T>(handlerHash: Handlers<T>) => T
+>T : T
+>handlerHash : Handlers<T>
+>Handlers : Handlers<T>
+>T : T
+>T : T
+
+var hashOfEmpty1 = on({ test: () => {} });  // {}
+>hashOfEmpty1 : {}
+>on({ test: () => {} }) : {}
+>on : <T>(handlerHash: Handlers<T>) => T
+>{ test: () => {} } : { test: () => void; }
+>test : () => void
+>() => {} : () => void
+
+var hashOfEmpty2 = on({ test: (x: boolean) => {} });  // { test: boolean }
+>hashOfEmpty2 : { test: boolean; }
+>on({ test: (x: boolean) => {} }) : { test: boolean; }
+>on : <T>(handlerHash: Handlers<T>) => T
+>{ test: (x: boolean) => {} } : { test: (x: boolean) => void; }
+>test : (x: boolean) => void
+>(x: boolean) => {} : (x: boolean) => void
+>x : boolean
+
