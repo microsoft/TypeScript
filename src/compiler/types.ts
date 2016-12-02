@@ -2797,6 +2797,7 @@ namespace ts {
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
         StructuredOrTypeParameter = StructuredType | TypeParameter | Index,
+        TypeVariable = TypeParameter | IndexedAccess,
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
@@ -2907,7 +2908,7 @@ namespace ts {
         /* @internal */
         resolvedProperties: SymbolTable;  // Cache of resolved properties
         /* @internal */
-        couldContainTypeParameters: boolean;
+        couldContainTypeVariables: boolean;
     }
 
     export interface UnionType extends UnionOrIntersectionType { }
@@ -2963,8 +2964,13 @@ namespace ts {
         iteratorElementType?: Type;
     }
 
+    export interface TypeVariable extends Type {
+        /* @internal */
+        resolvedIndexType: IndexType;
+    }
+
     // Type parameters (TypeFlags.TypeParameter)
-    export interface TypeParameter extends Type {
+    export interface TypeParameter extends TypeVariable {
         constraint: Type;        // Constraint
         /* @internal */
         target?: TypeParameter;  // Instantiation target
@@ -2973,18 +2979,19 @@ namespace ts {
         /* @internal */
         resolvedApparentType: Type;
         /* @internal */
-        resolvedIndexType: IndexType;
-        /* @internal */
         isThisType?: boolean;
     }
 
-    export interface IndexType extends Type {
-        type: TypeParameter;
-    }
-
-    export interface IndexedAccessType extends Type {
+    // Indexed access types (TypeFlags.IndexedAccess)
+    // Possible forms are T[xxx], xxx[T], or xxx[keyof T], where T is a type variable
+    export interface IndexedAccessType extends TypeVariable {
         objectType: Type;
         indexType: Type;
+    }
+
+    // keyof T types (TypeFlags.Index)
+    export interface IndexType extends Type {
+        type: TypeVariable;
     }
 
     export const enum SignatureKind {

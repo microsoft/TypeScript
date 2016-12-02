@@ -4513,10 +4513,10 @@ namespace ts {
             setStructuredTypeMembers(type, emptySymbols, emptyArray, emptyArray, undefined, undefined);
             // In { [P in K]: T }, we refer to P as the type parameter type, K as the constraint type,
             // and T as the template type. If K is of the form 'keyof S', the mapped type and S are
-            // isomorphic and we copy property modifiers from corresponding properties in S.
+            // homomorphic and we copy property modifiers from corresponding properties in S.
             const typeParameter = getTypeParameterFromMappedType(type);
             const constraintType = getConstraintTypeFromMappedType(type);
-            const isomorphicType = getIsomorphicTypeFromMappedType(type);
+            const homomorphicType = getHomomorphicTypeFromMappedType(type);
             const templateType = getTemplateTypeFromMappedType(type);
             const templateReadonly = !!type.declaration.readonlyToken;
             const templateOptional = !!type.declaration.questionToken;
@@ -4536,11 +4536,11 @@ namespace ts {
                 // Otherwise, for type string create a string index signature.
                 if (t.flags & TypeFlags.StringLiteral) {
                     const propName = (<LiteralType>t).text;
-                    const isomorphicProp = isomorphicType && getPropertyOfType(isomorphicType, propName);
-                    const isOptional = templateOptional || !!(isomorphicProp && isomorphicProp.flags & SymbolFlags.Optional);
+                    const homomorphicProp = homomorphicType && getPropertyOfType(homomorphicType, propName);
+                    const isOptional = templateOptional || !!(homomorphicProp && homomorphicProp.flags & SymbolFlags.Optional);
                     const prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | (isOptional ? SymbolFlags.Optional : 0), propName);
                     prop.type = propType;
-                    prop.isReadonly = templateReadonly || isomorphicProp && isReadonlySymbol(isomorphicProp);
+                    prop.isReadonly = templateReadonly || homomorphicProp && isReadonlySymbol(homomorphicProp);
                     members[propName] = prop;
                 }
                 else if (t.flags & TypeFlags.String) {
@@ -4567,7 +4567,7 @@ namespace ts {
                     unknownType);
         }
 
-        function getIsomorphicTypeFromMappedType(type: MappedType) {
+        function getHomomorphicTypeFromMappedType(type: MappedType) {
             const constraint = getConstraintDeclaration(getTypeParameterFromMappedType(type));
             return constraint.kind === SyntaxKind.TypeOperator ? instantiateType(getTypeFromTypeNode((<TypeOperatorNode>constraint).type), type.mapper || identityMapper) : undefined;
         }
@@ -5912,7 +5912,7 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getIndexTypeForTypeParameter(type: TypeParameter) {
+        function getIndexTypeForTypeVariable(type: TypeVariable) {
             if (!type.resolvedIndexType) {
                 type.resolvedIndexType = <IndexType>createType(TypeFlags.Index);
                 type.resolvedIndexType.type = type;
@@ -5931,7 +5931,7 @@ namespace ts {
         }
 
         function getIndexType(type: Type): Type {
-            return type.flags & TypeFlags.TypeParameter ? getIndexTypeForTypeParameter(<TypeParameter>type) :
+            return type.flags & TypeFlags.TypeVariable ? getIndexTypeForTypeVariable(<TypeVariable>type) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getConstraintTypeFromMappedType(<MappedType>type) :
                 type.flags & TypeFlags.Any || getIndexInfoOfType(type, IndexKind.String) ? stringType :
                 getLiteralTypeFromPropertyNames(type);
@@ -6032,13 +6032,14 @@ namespace ts {
         }
 
         function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode) {
-            if (indexType.flags & TypeFlags.TypeParameter ||
-                objectType.flags & TypeFlags.TypeParameter && indexType.flags & TypeFlags.Index ||
+            if (indexType.flags & TypeFlags.TypeVariable ||
+                objectType.flags & TypeFlags.TypeVariable && indexType.flags & TypeFlags.Index ||
                 isGenericMappedType(objectType)) {
-                // If either the object type or the index type are type parameters, or if the object type is a mapped
-                // type with a generic constraint, we are performing a higher-order index access where we cannot
-                // meaningfully access the properties of the object type. In those cases, we first check that the
-                // index type is assignable to 'keyof T' for the object type.
+                // If the object type is a type variable (a type parameter or another indexed access type), if the
+                // index type is a type variable or an index type, or if the object type is a mapped type with a
+                // generic constraint, we are performing a higher-order index access where we cannot meaningfully
+                // access the properties of the object type. In those cases, we first check that the index type is
+                // assignable to 'keyof T' for the object type.
                 if (accessNode) {
                     if (!isTypeAssignableTo(indexType, getIndexType(objectType))) {
                         error(accessNode, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(indexType), typeToString(objectType));
@@ -6531,19 +6532,19 @@ namespace ts {
         }
 
         function instantiateMappedType(type: MappedType, mapper: TypeMapper): Type {
-            // Check if we have an isomorphic mapped type, i.e. a type of the form { [P in keyof T]: X } for some
-            // type parameter T. If so, the mapped type is distributive over a union type and when T is instantiated
+            // Check if we have a homomorphic mapped type, i.e. a type of the form { [P in keyof T]: X } for some
+            // type variable T. If so, the mapped type is distributive over a union type and when T is instantiated
             // to a union type A | B, we produce { [P in keyof A]: X } | { [P in keyof B]: X }. Furthermore, for
-            // isomorphic mapped types we leave primitive types alone. For example, when T is instantiated to a
+            // homomorphic mapped types we leave primitive types alone. For example, when T is instantiated to a
             // union type A | undefined, we produce { [P in keyof A]: X } | undefined.
             const constraintType = getConstraintTypeFromMappedType(type);
             if (constraintType.flags & TypeFlags.Index) {
-                const typeParameter = (<IndexType>constraintType).type;
-                const mappedTypeParameter = mapper(typeParameter);
-                if (typeParameter !== mappedTypeParameter) {
-                    return mapType(mappedTypeParameter, t => {
+                const typeVariable = <TypeParameter>(<IndexType>constraintType).type;
+                const mappedTypeVariable = instantiateType(typeVariable, mapper);
+                if (typeVariable !== mappedTypeVariable) {
+                    return mapType(mappedTypeVariable, t => {
                         if (isMappableType(t)) {
-                            const replacementMapper = createUnaryTypeMapper(typeParameter, t);
+                            const replacementMapper = createUnaryTypeMapper(typeVariable, t);
                             const combinedMapper = mapper.mappedTypes && mapper.mappedTypes.length === 1 ? replacementMapper : combineTypeMappers(replacementMapper, mapper);
                             combinedMapper.mappedTypes = mapper.mappedTypes;
                             return instantiateMappedObjectType(type, combinedMapper);
@@ -7274,10 +7275,12 @@ namespace ts {
                     }
                     // Given a type parameter T with a constraint C, a type S is assignable to
                     // keyof T if S is assignable to keyof C.
-                    const constraint = getConstraintOfTypeParameter((<IndexType>target).type);
-                    if (constraint) {
-                        if (result = isRelatedTo(source, getIndexType(constraint), reportErrors)) {
-                            return result;
+                    if ((<IndexType>target).type.flags & TypeFlags.TypeParameter) {
+                        const constraint = getConstraintOfTypeParameter(<TypeParameter>(<IndexType>target).type);
+                        if (constraint) {
+                            if (result = isRelatedTo(source, getIndexType(constraint), reportErrors)) {
+                                return result;
+                            }
                         }
                     }
                 }
@@ -8458,69 +8461,68 @@ namespace ts {
         // Return true if the given type could possibly reference a type parameter for which
         // we perform type inference (i.e. a type parameter of a generic function). We cache
         // results for union and intersection types for performance reasons.
-        function couldContainTypeParameters(type: Type): boolean {
+        function couldContainTypeVariables(type: Type): boolean {
             const objectFlags = getObjectFlags(type);
-            return !!(type.flags & (TypeFlags.TypeParameter | TypeFlags.IndexedAccess) ||
-                objectFlags & ObjectFlags.Reference && forEach((<TypeReference>type).typeArguments, couldContainTypeParameters) ||
+            return !!(type.flags & TypeFlags.TypeVariable ||
+                objectFlags & ObjectFlags.Reference && forEach((<TypeReference>type).typeArguments, couldContainTypeVariables) ||
                 objectFlags & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Method | SymbolFlags.TypeLiteral | SymbolFlags.Class) ||
                 objectFlags & ObjectFlags.Mapped ||
-                type.flags & TypeFlags.UnionOrIntersection && couldUnionOrIntersectionContainTypeParameters(<UnionOrIntersectionType>type));
+                type.flags & TypeFlags.UnionOrIntersection && couldUnionOrIntersectionContainTypeVariables(<UnionOrIntersectionType>type));
         }
 
-        function couldUnionOrIntersectionContainTypeParameters(type: UnionOrIntersectionType): boolean {
-            if (type.couldContainTypeParameters === undefined) {
-                type.couldContainTypeParameters = forEach(type.types, couldContainTypeParameters);
+        function couldUnionOrIntersectionContainTypeVariables(type: UnionOrIntersectionType): boolean {
+            if (type.couldContainTypeVariables === undefined) {
+                type.couldContainTypeVariables = forEach(type.types, couldContainTypeVariables);
             }
-            return type.couldContainTypeParameters;
+            return type.couldContainTypeVariables;
         }
 
         function isTypeParameterAtTopLevel(type: Type, typeParameter: TypeParameter): boolean {
             return type === typeParameter || type.flags & TypeFlags.UnionOrIntersection && forEach((<UnionOrIntersectionType>type).types, t => isTypeParameterAtTopLevel(t, typeParameter));
         }
 
-        // Infer a suitable input type for an isomorphic mapped type { [P in keyof T]: X }. We construct
+        // Infer a suitable input type for a homomorphic mapped type { [P in keyof T]: X }. We construct
         // an object type with the same set of properties as the source type, where the type of each
-        // property is computed by inferring from the source property type to X for a synthetic type
-        // parameter T[P] (i.e. we treat the type T[P] as the type parameter we're inferring for).
-        function inferTypeForIsomorphicMappedType(source: Type, target: MappedType): Type {
-            if (!isMappableType(source)) {
-                return source;
+        // property is computed by inferring from the source property type to X for the type
+        // variable T[P] (i.e. we treat the type T[P] as the type variable we're inferring for).
+        function inferTypeForHomomorphicMappedType(source: Type, target: MappedType): Type {
+            const properties = getPropertiesOfType(source);
+            let indexInfo = getIndexInfoOfType(source, IndexKind.String);
+            if (properties.length === 0 && !indexInfo) {
+                return undefined;
             }
-            const typeParameter = getIndexedAccessType((<IndexType>getConstraintTypeFromMappedType(target)).type, getTypeParameterFromMappedType(target));
-            const typeParameterArray = [typeParameter];
+            const typeVariable = <TypeVariable>getIndexedAccessType((<IndexType>getConstraintTypeFromMappedType(target)).type, getTypeParameterFromMappedType(target));
+            const typeVariableArray = [typeVariable];
             const typeInferences = createTypeInferencesObject();
             const typeInferencesArray = [typeInferences];
             const templateType = getTemplateTypeFromMappedType(target);
             const readonlyMask = target.declaration.readonlyToken ? false : true;
             const optionalMask = target.declaration.questionToken ? 0 : SymbolFlags.Optional;
-            const properties = getPropertiesOfType(source);
             const members = createSymbolTable(properties);
-            let hasInferredTypes = false;
             for (const prop of properties) {
                 const inferredPropType = inferTargetType(getTypeOfSymbol(prop));
-                if (inferredPropType) {
-                    const inferredProp = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | prop.flags & optionalMask, prop.name);
-                    inferredProp.declarations = prop.declarations;
-                    inferredProp.type = inferredPropType;
-                    inferredProp.isReadonly = readonlyMask && isReadonlySymbol(prop);
-                    members[prop.name] = inferredProp;
-                    hasInferredTypes = true;
+                if (!inferredPropType) {
+                    return undefined;
                 }
+                const inferredProp = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | prop.flags & optionalMask, prop.name);
+                inferredProp.declarations = prop.declarations;
+                inferredProp.type = inferredPropType;
+                inferredProp.isReadonly = readonlyMask && isReadonlySymbol(prop);
+                members[prop.name] = inferredProp;
             }
-            let indexInfo = getIndexInfoOfType(source, IndexKind.String);
             if (indexInfo) {
                 const inferredIndexType = inferTargetType(indexInfo.type);
-                if (inferredIndexType) {
-                    indexInfo = createIndexInfo(inferredIndexType, readonlyMask && indexInfo.isReadonly);
-                    hasInferredTypes = true;
+                if (!inferredIndexType) {
+                    return undefined;
                 }
+                indexInfo = createIndexInfo(inferredIndexType, readonlyMask && indexInfo.isReadonly);
             }
-            return hasInferredTypes ? createAnonymousType(undefined, members, emptyArray, emptyArray, indexInfo, undefined) : source;
+            return createAnonymousType(undefined, members, emptyArray, emptyArray, indexInfo, undefined);
 
             function inferTargetType(sourceType: Type): Type {
                 typeInferences.primary = undefined;
                 typeInferences.secondary = undefined;
-                inferTypes(typeParameterArray, typeInferencesArray, sourceType, templateType);
+                inferTypes(typeVariableArray, typeInferencesArray, sourceType, templateType);
                 const inferences = typeInferences.primary || typeInferences.secondary;
                 return inferences && getUnionType(inferences, /*subtypeReduction*/ true);
             }
@@ -8530,7 +8532,7 @@ namespace ts {
             inferTypes(context.signature.typeParameters, context.inferences, originalSource, originalTarget);
         }
 
-        function inferTypes(typeParameters: Type[], typeInferences: TypeInferences[], originalSource: Type, originalTarget: Type) {
+        function inferTypes(typeVariables: TypeVariable[], typeInferences: TypeInferences[], originalSource: Type, originalTarget: Type) {
             let sourceStack: Type[];
             let targetStack: Type[];
             let depth = 0;
@@ -8548,7 +8550,7 @@ namespace ts {
             }
 
             function inferFromTypes(source: Type, target: Type) {
-                if (!couldContainTypeParameters(target)) {
+                if (!couldContainTypeVariables(target)) {
                     return;
                 }
                 if (source.aliasSymbol && source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol) {
@@ -8598,7 +8600,7 @@ namespace ts {
                         target = removeTypesFromUnionOrIntersection(<UnionOrIntersectionType>target, matchingTypes);
                     }
                 }
-                if (target.flags & (TypeFlags.TypeParameter | TypeFlags.IndexedAccess)) {
+                if (target.flags & TypeFlags.TypeVariable) {
                     // If target is a type parameter, make an inference, unless the source type contains
                     // the anyFunctionType (the wildcard type that's used to avoid contextually typing functions).
                     // Because the anyFunctionType is internal, it should not be exposed to the user by adding
@@ -8608,8 +8610,8 @@ namespace ts {
                     if (source.flags & TypeFlags.ContainsAnyFunctionType) {
                         return;
                     }
-                    for (let i = 0; i < typeParameters.length; i++) {
-                        if (target === typeParameters[i]) {
+                    for (let i = 0; i < typeVariables.length; i++) {
+                        if (target === typeVariables[i]) {
                             const inferences = typeInferences[i];
                             if (!inferences.isFixed) {
                                 // Any inferences that are made to a type parameter in a union type are inferior
@@ -8643,24 +8645,24 @@ namespace ts {
                 }
                 else if (target.flags & TypeFlags.UnionOrIntersection) {
                     const targetTypes = (<UnionOrIntersectionType>target).types;
-                    let typeParameterCount = 0;
-                    let typeParameter: TypeParameter;
-                    // First infer to each type in union or intersection that isn't a type parameter
+                    let typeVariableCount = 0;
+                    let typeVariable: TypeVariable;
+                    // First infer to each type in union or intersection that isn't a type variable
                     for (const t of targetTypes) {
-                        if (t.flags & TypeFlags.TypeParameter && contains(typeParameters, t)) {
-                            typeParameter = <TypeParameter>t;
-                            typeParameterCount++;
+                        if (t.flags & TypeFlags.TypeVariable && contains(typeVariables, t)) {
+                            typeVariable = <TypeVariable>t;
+                            typeVariableCount++;
                         }
                         else {
                             inferFromTypes(source, t);
                         }
                     }
-                    // Next, if target containings a single naked type parameter, make a secondary inference to that type
-                    // parameter. This gives meaningful results for union types in co-variant positions and intersection
+                    // Next, if target containings a single naked type variable, make a secondary inference to that type
+                    // variable. This gives meaningful results for union types in co-variant positions and intersection
                     // types in contra-variant positions (such as callback parameters).
-                    if (typeParameterCount === 1) {
+                    if (typeVariableCount === 1) {
                         inferiority++;
-                        inferFromTypes(source, typeParameter);
+                        inferFromTypes(source, typeVariable);
                         inferiority--;
                     }
                 }
@@ -8702,12 +8704,15 @@ namespace ts {
                 if (getObjectFlags(target) & ObjectFlags.Mapped) {
                     const constraintType = getConstraintTypeFromMappedType(<MappedType>target);
                     if (constraintType.flags & TypeFlags.Index) {
-                        // We're inferring from some source type S to an isomorphic mapped type { [P in keyof T]: X },
-                        // where T is a type parameter. Use inferTypeForIsomorphicMappedType to infer a suitable source
+                        // We're inferring from some source type S to a homomorphic mapped type { [P in keyof T]: X },
+                        // where T is a type variable. Use inferTypeForHomomorphicMappedType to infer a suitable source
                         // type and then infer from that type to T.
-                        const index = indexOf(typeParameters, (<IndexType>constraintType).type);
+                        const index = indexOf(typeVariables, (<IndexType>constraintType).type);
                         if (index >= 0 && !typeInferences[index].isFixed) {
-                            inferFromTypes(inferTypeForIsomorphicMappedType(source, <MappedType>target), typeParameters[index]);
+                            const inferredType = inferTypeForHomomorphicMappedType(source, <MappedType>target);
+                            if (inferredType) {
+                                inferFromTypes(inferredType, typeVariables[index]);
+                            }
                         }
                         return;
                     }
@@ -14388,7 +14393,7 @@ namespace ts {
             if (!(isTypeComparableTo(leftType, stringType) || isTypeOfKind(leftType, TypeFlags.NumberLike | TypeFlags.ESSymbol))) {
                 error(left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_type_any_string_number_or_symbol);
             }
-            if (!isTypeAnyOrAllConstituentTypesHaveKind(rightType, TypeFlags.Object | TypeFlags.TypeParameter | TypeFlags.IndexedAccess)) {
+            if (!isTypeAnyOrAllConstituentTypesHaveKind(rightType, TypeFlags.Object | TypeFlags.TypeVariable)) {
                 error(right, Diagnostics.The_right_hand_side_of_an_in_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             return booleanType;
@@ -17331,7 +17336,7 @@ namespace ts {
 
             // unknownType is returned i.e. if node.expression is identifier whose name cannot be resolved
             // in this case error about missing name is already reported - do not report extra one
-            if (!isTypeAnyOrAllConstituentTypesHaveKind(rightType, TypeFlags.Object | TypeFlags.TypeParameter | TypeFlags.IndexedAccess)) {
+            if (!isTypeAnyOrAllConstituentTypesHaveKind(rightType, TypeFlags.Object | TypeFlags.TypeVariable)) {
                 error(node.expression, Diagnostics.The_right_hand_side_of_a_for_in_statement_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
 
