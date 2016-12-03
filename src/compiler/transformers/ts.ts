@@ -345,6 +345,7 @@ namespace ts {
 
                 case SyntaxKind.PropertyDeclaration:
                     // TypeScript property declarations are elided.
+                    return undefined;
 
                 case SyntaxKind.Constructor:
                     return visitConstructor(<ConstructorDeclaration>node);
