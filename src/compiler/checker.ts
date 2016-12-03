@@ -8706,12 +8706,15 @@ namespace ts {
                     if (constraintType.flags & TypeFlags.Index) {
                         // We're inferring from some source type S to a homomorphic mapped type { [P in keyof T]: X },
                         // where T is a type variable. Use inferTypeForHomomorphicMappedType to infer a suitable source
-                        // type and then infer from that type to T.
+                        // type and then make a secondary inference from that type to T. We make a secondary inference
+                        // such that direct inferences to T get priority over inferences to Partial<T>, for example.
                         const index = indexOf(typeVariables, (<IndexType>constraintType).type);
                         if (index >= 0 && !typeInferences[index].isFixed) {
                             const inferredType = inferTypeForHomomorphicMappedType(source, <MappedType>target);
                             if (inferredType) {
+                                inferiority++;
                                 inferFromTypes(inferredType, typeVariables[index]);
+                                inferiority--;
                             }
                         }
                         return;
