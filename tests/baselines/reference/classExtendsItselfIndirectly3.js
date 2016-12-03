@@ -19,12 +19,12 @@ class D2<T> extends C2<T> { bar: T; }
 class E2<T> extends D2<T> { baz: T; }
 
 //// [classExtendsItselfIndirectly_file1.js]
+var __extendStatics = (this && this.__extendStatics) ||
+    Object.setPrototypeOf ||
+    ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+    function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
 var __extends = (this && this.__extends) || function (d, b) {
-    if (typeof Object.setPrototypeOf === "function") {
-        Object.setPrototypeOf(d, b);
-    } else {
-        d.__proto__ = b;
-    }
+    __extendStatics(d, b);
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
@@ -36,12 +36,12 @@ var C = (function (_super) {
     return C;
 }(E)); // error
 //// [classExtendsItselfIndirectly_file2.js]
+var __extendStatics = (this && this.__extendStatics) ||
+    Object.setPrototypeOf ||
+    ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+    function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
 var __extends = (this && this.__extends) || function (d, b) {
-    if (typeof Object.setPrototypeOf === "function") {
-        Object.setPrototypeOf(d, b);
-    } else {
-        d.__proto__ = b;
-    }
+    __extendStatics(d, b);
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
@@ -53,12 +53,12 @@ var D = (function (_super) {
     return D;
 }(C));
 //// [classExtendsItselfIndirectly_file3.js]
+var __extendStatics = (this && this.__extendStatics) ||
+    Object.setPrototypeOf ||
+    ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+    function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
 var __extends = (this && this.__extends) || function (d, b) {
-    if (typeof Object.setPrototypeOf === "function") {
-        Object.setPrototypeOf(d, b);
-    } else {
-        d.__proto__ = b;
-    }
+    __extendStatics(d, b);
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
@@ -70,12 +70,12 @@ var E = (function (_super) {
     return E;
 }(D));
 //// [classExtendsItselfIndirectly_file4.js]
+var __extendStatics = (this && this.__extendStatics) ||
+    Object.setPrototypeOf ||
+    ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+    function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
 var __extends = (this && this.__extends) || function (d, b) {
-    if (typeof Object.setPrototypeOf === "function") {
-        Object.setPrototypeOf(d, b);
-    } else {
-        d.__proto__ = b;
-    }
+    __extendStatics(d, b);
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
@@ -87,12 +87,12 @@ var C2 = (function (_super) {
     return C2;
 }(E2)); // error
 //// [classExtendsItselfIndirectly_file5.js]
+var __extendStatics = (this && this.__extendStatics) ||
+    Object.setPrototypeOf ||
+    ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+    function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
 var __extends = (this && this.__extends) || function (d, b) {
-    if (typeof Object.setPrototypeOf === "function") {
-        Object.setPrototypeOf(d, b);
-    } else {
-        d.__proto__ = b;
-    }
+    __extendStatics(d, b);
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
@@ -104,12 +104,12 @@ var D2 = (function (_super) {
     return D2;
 }(C2));
 //// [classExtendsItselfIndirectly_file6.js]
+var __extendStatics = (this && this.__extendStatics) ||
+    Object.setPrototypeOf ||
+    ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+    function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
 var __extends = (this && this.__extends) || function (d, b) {
-    if (typeof Object.setPrototypeOf === "function") {
-        Object.setPrototypeOf(d, b);
-    } else {
-        d.__proto__ = b;
-    }
+    __extendStatics(d, b);
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };

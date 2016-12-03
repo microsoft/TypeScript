@@ -26,12 +26,12 @@ var c3: C3<T2>;
 <C4>c3; // Should fail (private x originates in the same declaration, but different types)
 
 //// [objectTypesIdentityWithPrivates3.js]
+var __extendStatics = (this && this.__extendStatics) ||
+    Object.setPrototypeOf ||
+    ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+    function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
 var __extends = (this && this.__extends) || function (d, b) {
-    if (typeof Object.setPrototypeOf === "function") {
-        Object.setPrototypeOf(d, b);
-    } else {
-        d.__proto__ = b;
-    }
+    __extendStatics(d, b);
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
