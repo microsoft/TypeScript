@@ -33,15 +33,18 @@ type T47 = { [P in string | "a" | "b" | "0" | "1"]: void };
 declare function f1<T1>(): { [P in keyof T1]: void };
 declare function f2<T1 extends string>(): { [P in keyof T1]: void };
 declare function f3<T1 extends number>(): { [P in keyof T1]: void };
+declare function f4<T1 extends Number>(): { [P in keyof T1]: void };
 
 let x1 = f1();
 let x2 = f2();
 let x3 = f3();
+let x4 = f4();
 
 //// [mappedTypes1.js]
 var x1 = f1();
 var x2 = f2();
 var x3 = f3();
+var x4 = f4();
 
 
 //// [mappedTypes1.d.ts]
@@ -128,31 +131,13 @@ declare function f2<T1 extends string>(): {
 declare function f3<T1 extends number>(): {
     [P in keyof T1]: void;
 };
-declare let x1: {};
-declare let x2: {
-    toString: void;
-    charAt: void;
-    charCodeAt: void;
-    concat: void;
-    indexOf: void;
-    lastIndexOf: void;
-    localeCompare: void;
-    match: void;
-    replace: void;
-    search: void;
-    slice: void;
-    split: void;
-    substring: void;
-    toLowerCase: void;
-    toLocaleLowerCase: void;
-    toUpperCase: void;
-    toLocaleUpperCase: void;
-    trim: void;
-    length: void;
-    substr: void;
-    valueOf: void;
+declare function f4<T1 extends Number>(): {
+    [P in keyof T1]: void;
 };
-declare let x3: {
+declare let x1: {};
+declare let x2: string;
+declare let x3: number;
+declare let x4: {
     toString: void;
     valueOf: void;
     toFixed: void;

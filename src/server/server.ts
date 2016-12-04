@@ -198,7 +198,7 @@ namespace ts.server {
         private socket: NodeSocket;
         private projectService: ProjectService;
         private throttledOperations: ThrottledOperations;
-        private telemetrySender: EventSender;
+        private eventSender: EventSender;
 
         constructor(
             private readonly telemetryEnabled: boolean,
@@ -231,7 +231,7 @@ namespace ts.server {
         }
 
         setTelemetrySender(telemetrySender: EventSender) {
-            this.telemetrySender = telemetrySender;
+            this.eventSender = telemetrySender;
         }
 
         attach(projectService: ProjectService) {
@@ -291,12 +291,30 @@ namespace ts.server {
             });
         }
 
-        private handleMessage(response: SetTypings | InvalidateCachedTypings | TypingsInstallEvent) {
+        private handleMessage(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes) {
             if (this.logger.hasLevel(LogLevel.verbose)) {
                 this.logger.info(`Received response: ${JSON.stringify(response)}`);
             }
-            if (response.kind === EventInstall) {
-                if (this.telemetrySender) {
+
+            if (response.kind === EventBeginInstallTypes) {
+                if (!this.eventSender) {
+                    return;
+                }
+                const body: protocol.BeginInstallTypesEventBody = {
+                    eventId: response.eventId,
+                    packages: response.packagesToInstall,
+                };
+                const eventName: protocol.BeginInstallTypesEventName = "beginInstallTypes";
+                this.eventSender.event(body, eventName);
+
+                return;
+            }
+
+            if (response.kind === EventEndInstallTypes) {
+                if (!this.eventSender) {
+                    return;
+                }
+                if (this.telemetryEnabled) {
                     const body: protocol.TypingsInstalledTelemetryEventBody = {
                         telemetryEventName: "typingsInstalled",
                         payload: {
@@ -306,10 +324,19 @@ namespace ts.server {
                         }
                     };
                     const eventName: protocol.TelemetryEventName = "telemetry";
-                    this.telemetrySender.event(body, eventName);
+                    this.eventSender.event(body, eventName);
                 }
+
+                const body: protocol.EndInstallTypesEventBody = {
+                    eventId: response.eventId,
+                    packages: response.packagesToInstall,
+                    success: response.installSuccess,
+                };
+                const eventName: protocol.EndInstallTypesEventName = "endInstallTypes";
+                this.eventSender.event(body, eventName);
                 return;
             }
+
             this.projectService.updateTypingsForProject(response);
             if (response.kind == ActionSet && this.socket) {
                 this.sendEvent(0, "setTypings", response);

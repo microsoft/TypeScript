@@ -51,9 +51,8 @@ namespace ts.projectSystem {
             throttleLimit: number,
             installTypingHost: server.ServerHost,
             readonly typesRegistry = createMap<void>(),
-            telemetryEnabled?: boolean,
             log?: TI.Log) {
-            super(installTypingHost, globalTypingsCacheLocation, safeList.path, throttleLimit, telemetryEnabled, log);
+            super(installTypingHost, globalTypingsCacheLocation, safeList.path, throttleLimit, log);
         }
 
         safeFileList = safeList.path;
@@ -577,6 +576,35 @@ namespace ts.projectSystem {
             checkFileNames("inferred project", project.getFileNames(), [appFile.path, libFile.path, moduleFile.path]);
             checkWatchedDirectories(host, ["/a/b/c", "/a/b", "/a"]);
         });
+
+        it("can handle tsconfig file name with difference casing", () => {
+            const f1 = {
+                path: "/a/b/app.ts",
+                content: "let x = 1"
+            };
+            const config = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({
+                    include: []
+                })
+            };
+
+            const host = createServerHost([f1, config], { useCaseSensitiveFileNames: false });
+            const service = createProjectService(host);
+            service.openExternalProject(<protocol.ExternalProject>{
+                projectFileName: "/a/b/project.csproj",
+                rootFiles: toExternalFiles([f1.path, combinePaths(getDirectoryPath(config.path).toUpperCase(), getBaseFileName(config.path))]),
+                options: {}
+            });
+            service.checkNumberOfProjects({ configuredProjects: 1 });
+            checkProjectActualFiles(service.configuredProjects[0], []);
+
+            service.openClientFile(f1.path);
+            service.checkNumberOfProjects({ configuredProjects: 1, inferredProjects: 1 });
+
+            checkProjectActualFiles(service.configuredProjects[0], []);
+            checkProjectActualFiles(service.inferredProjects[0], [f1.path]);
+        })
 
         it("create configured project without file list", () => {
             const configFile: FileOrFolder = {
@@ -2700,6 +2728,65 @@ namespace ts.projectSystem {
                 arguments: { projectFileName: projectName }
             }).response;
             assert.isTrue(diags.length === 0);
+
+            session.executeCommand(<server.protocol.SetCompilerOptionsForInferredProjectsRequest>{
+                type: "request",
+                command: server.CommandNames.CompilerOptionsForInferredProjects,
+                seq: 3,
+                arguments: { options: { module: ModuleKind.CommonJS } }
+            });
+            const diagsAfterUpdate = session.executeCommand(<server.protocol.CompilerOptionsDiagnosticsRequest>{
+                type: "request",
+                command: server.CommandNames.CompilerOptionsDiagnosticsFull,
+                seq: 4,
+                arguments: { projectFileName: projectName }
+            }).response;
+            assert.isTrue(diagsAfterUpdate.length === 0);
+        });
+
+        it("for external project", () => {
+            const f1 = {
+                path: "/a/b/f1.js",
+                content: "function test1() { }"
+            };
+            const host = createServerHost([f1, libFile]);
+            const session = createSession(host);
+            const projectService = session.getProjectService();
+            const projectFileName = "/a/b/project.csproj";
+            const externalFiles = toExternalFiles([f1.path]);
+            projectService.openExternalProject(<protocol.ExternalProject>{
+                projectFileName,
+                rootFiles: externalFiles,
+                options: {}
+            });
+
+            checkNumberOfProjects(projectService, { externalProjects: 1 });
+
+            const diags = session.executeCommand(<server.protocol.CompilerOptionsDiagnosticsRequest>{
+                type: "request",
+                command: server.CommandNames.CompilerOptionsDiagnosticsFull,
+                seq: 2,
+                arguments: { projectFileName }
+            }).response;
+            assert.isTrue(diags.length === 0);
+
+            session.executeCommand(<server.protocol.OpenExternalProjectRequest>{
+                type: "request",
+                command: server.CommandNames.OpenExternalProject,
+                seq: 3,
+                arguments: {
+                    projectFileName,
+                    rootFiles: externalFiles,
+                    options: { module: ModuleKind.CommonJS }
+                }
+            });
+            const diagsAfterUpdate = session.executeCommand(<server.protocol.CompilerOptionsDiagnosticsRequest>{
+                type: "request",
+                command: server.CommandNames.CompilerOptionsDiagnosticsFull,
+                seq: 4,
+                arguments: { projectFileName }
+            }).response;
+            assert.isTrue(diagsAfterUpdate.length === 0);
         });
     });
 

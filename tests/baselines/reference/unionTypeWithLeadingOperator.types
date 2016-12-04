@@ -1,0 +1,16 @@
+=== tests/cases/compiler/unionTypeWithLeadingOperator.ts ===
+type A = | string;
+>A : string
+
+type B =
+>B : B
+
+  | { type: "INCREMENT" }
+>type : "INCREMENT"
+
+  | { type: "DECREMENT" };
+>type : "DECREMENT"
+
+type C = [| 0 | 1, | "foo" | "bar"];
+>C : [0 | 1, "foo" | "bar"]
+
