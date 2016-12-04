@@ -4523,7 +4523,7 @@ namespace ts {
             // First, if the constraint type is a type parameter, obtain the base constraint. Then,
             // if the key type is a 'keyof X', obtain 'keyof C' where C is the base constraint of X.
             // Finally, iterate over the constituents of the resulting iteration type.
-            const keyType = constraintType.flags & TypeFlags.TypeParameter ? getApparentType(constraintType) : constraintType;
+            const keyType = constraintType.flags & TypeFlags.TypeVariable ? getApparentType(constraintType) : constraintType;
             const iterationType = keyType.flags & TypeFlags.Index ? getIndexType(getApparentType((<IndexType>keyType).type)) : keyType;
             forEachType(iterationType, t => {
                 // Create a mapper from T to the current iteration type constituent. Then, if the
@@ -4579,7 +4579,7 @@ namespace ts {
         function isGenericMappedType(type: Type) {
             if (getObjectFlags(type) & ObjectFlags.Mapped) {
                 const constraintType = getConstraintTypeFromMappedType(<MappedType>type);
-                return !!(constraintType.flags & (TypeFlags.TypeParameter | TypeFlags.Index));
+                return maybeTypeOfKind(constraintType, TypeFlags.TypeVariable | TypeFlags.Index);
             }
             return false;
         }
@@ -5912,7 +5912,7 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getIndexTypeForTypeVariable(type: TypeVariable) {
+        function getIndexTypeForGenericType(type: TypeVariable | UnionOrIntersectionType) {
             if (!type.resolvedIndexType) {
                 type.resolvedIndexType = <IndexType>createType(TypeFlags.Index);
                 type.resolvedIndexType.type = type;
@@ -5931,7 +5931,7 @@ namespace ts {
         }
 
         function getIndexType(type: Type): Type {
-            return type.flags & TypeFlags.TypeVariable ? getIndexTypeForTypeVariable(<TypeVariable>type) :
+            return maybeTypeOfKind(type, TypeFlags.TypeVariable) ? getIndexTypeForGenericType(<TypeVariable | UnionOrIntersectionType>type) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getConstraintTypeFromMappedType(<MappedType>type) :
                 type.flags & TypeFlags.Any || getIndexInfoOfType(type, IndexKind.String) ? stringType :
                 getLiteralTypeFromPropertyNames(type);
@@ -6032,14 +6032,11 @@ namespace ts {
         }
 
         function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode) {
-            if (indexType.flags & TypeFlags.TypeVariable ||
-                objectType.flags & TypeFlags.TypeVariable && indexType.flags & TypeFlags.Index ||
-                isGenericMappedType(objectType)) {
-                // If the object type is a type variable (a type parameter or another indexed access type), if the
-                // index type is a type variable or an index type, or if the object type is a mapped type with a
-                // generic constraint, we are performing a higher-order index access where we cannot meaningfully
-                // access the properties of the object type. In those cases, we first check that the index type is
-                // assignable to 'keyof T' for the object type.
+            if (maybeTypeOfKind(indexType, TypeFlags.TypeVariable | TypeFlags.Index) || isGenericMappedType(objectType)) {
+                // If the index type is generic or if the object type is a mapped type with a generic constraint,
+                // we are performing a higher-order index access where we cannot meaningfully access the properties
+                // of the object type. In those cases, we first check that the index type is assignable to 'keyof T'
+                // for the object type.
                 if (accessNode) {
                     if (!isTypeAssignableTo(indexType, getIndexType(objectType))) {
                         error(accessNode, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(indexType), typeToString(objectType));
@@ -6539,7 +6536,7 @@ namespace ts {
             // union type A | undefined, we produce { [P in keyof A]: X } | undefined.
             const constraintType = getConstraintTypeFromMappedType(type);
             if (constraintType.flags & TypeFlags.Index) {
-                const typeVariable = <TypeParameter>(<IndexType>constraintType).type;
+                const typeVariable = (<IndexType>constraintType).type;
                 const mappedTypeVariable = instantiateType(typeVariable, mapper);
                 if (typeVariable !== mappedTypeVariable) {
                     return mapType(mappedTypeVariable, t => {

@@ -1,3 +1,4 @@
+// @strictNullChecks: true
 // @declaration: true
 
 class Shape {
@@ -219,6 +220,36 @@ function f60<T>(source: T, target: T) {
     }
 }
 
+function f70(func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) {
+    func<{ a: any, b: any }, { a: any, c: any }>('a', 'a');
+    func<{ a: any, b: any }, { a: any, c: any }>('a', 'b');
+    func<{ a: any, b: any }, { a: any, c: any }>('a', 'c');
+}
+
+function f71(func: <T, U>(x: T, y: U) => Partial<T & U>) {
+    let x = func({ a: 1, b: "hello" }, { c: true });
+    x.a;  // number | undefined
+    x.b;  // string | undefined
+    x.c;  // boolean | undefined
+}
+
+function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]) {
+    let a = func({ a: 1, b: "hello" }, { c: true }, 'a');  // number
+    let b = func({ a: 1, b: "hello" }, { c: true }, 'b');  // string
+    let c = func({ a: 1, b: "hello" }, { c: true }, 'c');  // boolean
+}
+
+function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]) {
+    let a = func({ a: 1, b: "hello" }, { c: true }, 'a');  // number
+    let b = func({ a: 1, b: "hello" }, { c: true }, 'b');  // string
+    let c = func({ a: 1, b: "hello" }, { c: true }, 'c');  // boolean
+}
+
+function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]) {
+    let a = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'a');  // number
+    let b = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b');  // string | boolean
+}
+
 // Repros from #12011
 
 class Base {
@@ -292,3 +323,35 @@ type Handlers<T> = { [K in keyof T]: (t: T[K]) => void }
 declare function on<T>(handlerHash: Handlers<T>): T
 var hashOfEmpty1 = on({ test: () => {} });  // {}
 var hashOfEmpty2 = on({ test: (x: boolean) => {} });  // { test: boolean }
+
+// Repro from #12624
+
+interface Options1<Data, Computed> {
+    data?: Data
+    computed?: Computed;
+}
+
+declare class Component1<Data, Computed> {
+    constructor(options: Options1<Data, Computed>);
+    get<K extends keyof (Data & Computed)>(key: K): (Data & Computed)[K];
+}
+
+let c1 = new Component1({
+    data: {
+        hello: ""
+    }
+});
+
+c1.get("hello");
+
+// Repro from #12625
+
+interface Options2<Data, Computed> {
+    data?: Data
+    computed?: Computed;
+}
+
+declare class Component2<Data, Computed> {
+    constructor(options: Options2<Data, Computed>);
+    get<K extends keyof Data | keyof Computed>(key: K): (Data & Computed)[K];
+}
