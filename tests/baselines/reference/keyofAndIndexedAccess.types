@@ -1560,3 +1560,30 @@ declare class Component2<Data, Computed> {
 >Computed : Computed
 >K : K
 }
+
+// Repro from #12641
+
+interface R {
+>R : R
+
+    p: number;
+>p : number
+}
+
+function f<K extends keyof R>(p: K) {
+>f : <K extends "p">(p: K) => void
+>K : K
+>R : R
+>p : K
+>K : K
+
+    let a: any;
+>a : any
+
+    a[p].add;  // any
+>a[p].add : any
+>a[p] : any
+>a : any
+>p : K
+>add : any
+}
