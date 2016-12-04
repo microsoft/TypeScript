@@ -2908,6 +2908,8 @@ namespace ts {
         /* @internal */
         resolvedProperties: SymbolTable;  // Cache of resolved properties
         /* @internal */
+        resolvedIndexType: IndexType;
+        /* @internal */
         couldContainTypeVariables: boolean;
     }
 
@@ -2991,7 +2993,7 @@ namespace ts {
 
     // keyof T types (TypeFlags.Index)
     export interface IndexType extends Type {
-        type: TypeVariable;
+        type: TypeVariable | UnionOrIntersectionType;
     }
 
     export const enum SignatureKind {
