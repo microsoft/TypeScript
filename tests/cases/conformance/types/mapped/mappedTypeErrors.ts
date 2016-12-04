@@ -68,3 +68,20 @@ function f12<T>() {
     var x: { [P in keyof T]: T[P] };
     var x: { [P in keyof T]: T[P][] };  // Error
 }
+
+// Check that inferences to mapped types are secondary
+
+declare function objAndReadonly<T>(primary: T, secondary: Readonly<T>): T;
+declare function objAndPartial<T>(primary: T, secondary: Partial<T>): T;
+
+function f20() {
+    let x1 = objAndReadonly({ x: 0, y: 0 }, { x: 1 });  // Error
+    let x2 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1 });
+    let x3 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 });  // Error
+}
+
+function f21() {
+    let x1 = objAndPartial({ x: 0, y: 0 }, { x: 1 });
+    let x2 = objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1 });
+    let x3 = objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 });  // Error
+}
