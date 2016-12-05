@@ -33,7 +33,7 @@ namespace ts.server {
             case "darwin":
             case "linux":
             case "android": {
-                const cacheLocation = getNonWindowsCacheLocation(process.platform === "darwin" ? "Users" : "home");
+                const cacheLocation = getNonWindowsCacheLocation(process.platform === "darwin");
                 return combinePaths(cacheLocation, "typescript");
             }
             default:
@@ -42,15 +42,19 @@ namespace ts.server {
         }
     }
 
-    function getNonWindowsCacheLocation(usersDir: string) {
+    function getNonWindowsCacheLocation(platformIsDarwin: boolean) {
         if (process.env.XDG_CACHE_HOME) {
             return process.env.XDG_CACHE_HOME;
         }
+        const usersDir = platformIsDarwin ? "Users" : "home"
         const homePath = (os.homedir && os.homedir()) ||
             process.env.HOME ||
             ((process.env.LOGNAME || process.env.USER) && `/${usersDir}/${process.env.LOGNAME || process.env.USER}`) ||
             os.tmpdir();
-        return combinePaths(normalizeSlashes(homePath), ".cache");
+        const cacheFolder = platformIsDarwin
+            ? "Library/Caches"
+            : ".cache"
+        return combinePaths(normalizeSlashes(homePath), cacheFolder);
     }
 
     interface NodeChildProcess {
