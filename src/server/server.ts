@@ -20,34 +20,37 @@ namespace ts.server {
     } = require("os");
 
     function getGlobalTypingsCacheLocation() {
-        let basePath: string;
         switch (process.platform) {
-            case "win32":
-                basePath = process.env.LOCALAPPDATA ||
+            case "win32": {
+                const basePath = process.env.LOCALAPPDATA ||
                     process.env.APPDATA ||
                     (os.homedir && os.homedir()) ||
                     process.env.USERPROFILE ||
                     (process.env.HOMEDRIVE && process.env.HOMEPATH && normalizeSlashes(process.env.HOMEDRIVE + process.env.HOMEPATH)) ||
                     os.tmpdir();
-                break;
-            case "linux":
-            case "android":
-                basePath = (os.homedir && os.homedir()) ||
-                    process.env.HOME ||
-                    ((process.env.LOGNAME || process.env.USER) && `/home/${process.env.LOGNAME || process.env.USER}`) ||
-                    os.tmpdir();
-                break;
+                return combinePaths(normalizeSlashes(basePath), "Microsoft/TypeScript");
+            }
             case "darwin":
-                const homeDir = (os.homedir && os.homedir()) ||
-                        process.env.HOME ||
-                        ((process.env.LOGNAME || process.env.USER) && `/Users/${process.env.LOGNAME || process.env.USER}`) ||
-                        os.tmpdir();
-                basePath = combinePaths(homeDir, "Library/Application Support/");
-                break;
+            case "linux":
+            case "android": {
+                const cacheLocation = getNonWindowsCacheLocation(process.platform === "darwin" ? "Users" : "home");
+                return combinePaths(cacheLocation, "typescript");
+            }
+            default:
+                Debug.fail(`unsupported platform '${process.platform}'`);
+                return;
         }
+    }
 
-        Debug.assert(basePath !== undefined);
-        return combinePaths(normalizeSlashes(basePath), "Microsoft/TypeScript");
+    function getNonWindowsCacheLocation(usersDir: string) {
+        if (process.env.XDG_CACHE_HOME) {
+            return process.env.XDG_CACHE_HOME;
+        }
+        const homePath = (os.homedir && os.homedir()) ||
+            process.env.HOME ||
+            ((process.env.LOGNAME || process.env.USER) && `/${usersDir}/${process.env.LOGNAME || process.env.USER}`) ||
+            os.tmpdir();
+        return combinePaths(normalizeSlashes(homePath), ".cache");
     }
 
     interface NodeChildProcess {
