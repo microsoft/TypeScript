@@ -6033,6 +6033,9 @@ namespace ts {
 
         function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode) {
             if (maybeTypeOfKind(indexType, TypeFlags.TypeVariable | TypeFlags.Index) || isGenericMappedType(objectType)) {
+                if (objectType.flags & TypeFlags.Any) {
+                    return objectType;
+                }
                 // If the index type is generic or if the object type is a mapped type with a generic constraint,
                 // we are performing a higher-order index access where we cannot meaningfully access the properties
                 // of the object type. In those cases, we first check that the index type is assignable to 'keyof T'

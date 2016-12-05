@@ -1320,3 +1320,27 @@ declare class Component2<Data, Computed> {
 >Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 351, 30))
 >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 353, 8))
 }
+
+// Repro from #12641
+
+interface R {
+>R : Symbol(R, Decl(keyofAndIndexedAccess.ts, 354, 1))
+
+    p: number;
+>p : Symbol(R.p, Decl(keyofAndIndexedAccess.ts, 358, 13))
+}
+
+function f<K extends keyof R>(p: K) {
+>f : Symbol(f, Decl(keyofAndIndexedAccess.ts, 360, 1))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 362, 11))
+>R : Symbol(R, Decl(keyofAndIndexedAccess.ts, 354, 1))
+>p : Symbol(p, Decl(keyofAndIndexedAccess.ts, 362, 30))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 362, 11))
+
+    let a: any;
+>a : Symbol(a, Decl(keyofAndIndexedAccess.ts, 363, 7))
+
+    a[p].add;  // any
+>a : Symbol(a, Decl(keyofAndIndexedAccess.ts, 363, 7))
+>p : Symbol(p, Decl(keyofAndIndexedAccess.ts, 362, 30))
+}
