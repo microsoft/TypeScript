@@ -1,0 +1,22 @@
+/node_modules/@types/lib-extender/index.d.ts(2,16): error TS2300: Duplicate identifier '"lib"'.
+/node_modules/lib/index.d.ts(1,13): error TS2300: Duplicate identifier '"lib"'.
+/node_modules/lib/index.d.ts(2,19): error TS2300: Duplicate identifier '"lib"'.
+
+
+==== /node_modules/lib/index.d.ts (2 errors) ====
+    declare var lib: () => void;
+                ~~~
+!!! error TS2300: Duplicate identifier '"lib"'.
+    declare namespace lib {}
+                      ~~~
+!!! error TS2300: Duplicate identifier '"lib"'.
+    export = lib;
+    
+==== /node_modules/@types/lib-extender/index.d.ts (1 errors) ====
+    import * as lib from "lib";
+    declare module "lib" {
+                   ~~~~~
+!!! error TS2300: Duplicate identifier '"lib"'.
+        export function fn(): void;
+    }
+    
