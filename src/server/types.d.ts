@@ -43,10 +43,11 @@ declare namespace ts.server {
 
     export type ActionSet = "action::set";
     export type ActionInvalidate = "action::invalidate";
-    export type EventInstall = "event::install";
+    export type EventBeginInstallTypes = "event::beginInstallTypes";
+    export type EventEndInstallTypes = "event::endInstallTypes";
 
     export interface TypingInstallerResponse {
-        readonly kind: ActionSet | ActionInvalidate | EventInstall;
+        readonly kind: ActionSet | ActionInvalidate | EventBeginInstallTypes | EventEndInstallTypes;
     }
 
     export interface ProjectResponse extends TypingInstallerResponse {
@@ -65,11 +66,20 @@ declare namespace ts.server {
         readonly kind: ActionInvalidate;
     }
 
-    export interface TypingsInstallEvent extends TypingInstallerResponse {
-        readonly packagesToInstall: ReadonlyArray<string>;
-        readonly kind: EventInstall;
-        readonly installSuccess: boolean;
+    export interface InstallTypes extends ProjectResponse {
+        readonly kind: EventBeginInstallTypes | EventEndInstallTypes;
+        readonly eventId: number;
         readonly typingsInstallerVersion: string;
+        readonly packagesToInstall: ReadonlyArray<string>;
+    }
+
+    export interface BeginInstallTypes extends InstallTypes {
+        readonly kind: EventBeginInstallTypes;
+    }
+
+    export interface EndInstallTypes extends InstallTypes {
+        readonly kind: EventEndInstallTypes;
+        readonly installSuccess: boolean;
     }
 
     export interface InstallTypingHost extends JsTyping.TypingResolutionHost {

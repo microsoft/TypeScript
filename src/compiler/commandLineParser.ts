@@ -272,7 +272,7 @@ namespace ts {
                 "es2017": ScriptTarget.ES2017,
                 "esnext": ScriptTarget.ESNext,
             }),
-            description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES2015,
+            description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_or_ESNEXT,
             paramType: Diagnostics.VERSION,
         },
         {
