@@ -393,3 +393,97 @@ function f10(foo: Foo) {
 >validateAndClone : Symbol(validateAndClone, Decl(isomorphicMappedTypeInference.ts, 107, 69))
 >foo : Symbol(foo, Decl(isomorphicMappedTypeInference.ts, 115, 13))
 }
+
+// Repro from #12606
+
+type Func<T> = (...args: any[]) => T;
+>Func : Symbol(Func, Decl(isomorphicMappedTypeInference.ts, 119, 1))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 123, 10))
+>args : Symbol(args, Decl(isomorphicMappedTypeInference.ts, 123, 16))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 123, 10))
+
+type Spec<T> = {
+>Spec : Symbol(Spec, Decl(isomorphicMappedTypeInference.ts, 123, 37))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 124, 10))
+
+    [P in keyof T]: Func<T[P]> | Spec<T[P]> ;
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 125, 5))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 124, 10))
+>Func : Symbol(Func, Decl(isomorphicMappedTypeInference.ts, 119, 1))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 124, 10))
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 125, 5))
+>Spec : Symbol(Spec, Decl(isomorphicMappedTypeInference.ts, 123, 37))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 124, 10))
+>P : Symbol(P, Decl(isomorphicMappedTypeInference.ts, 125, 5))
+
+};
+
+/**
+ * Given a spec object recursively mapping properties to functions, creates a function
+ * producing an object of the same structure, by mapping each property to the result
+ * of calling its associated function with the supplied arguments.
+ */
+declare function applySpec<T>(obj: Spec<T>): (...args: any[]) => T;
+>applySpec : Symbol(applySpec, Decl(isomorphicMappedTypeInference.ts, 126, 2))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 133, 27))
+>obj : Symbol(obj, Decl(isomorphicMappedTypeInference.ts, 133, 30))
+>Spec : Symbol(Spec, Decl(isomorphicMappedTypeInference.ts, 123, 37))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 133, 27))
+>args : Symbol(args, Decl(isomorphicMappedTypeInference.ts, 133, 46))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 133, 27))
+
+// Infers g1: (...args: any[]) => { sum: number, nested: { mul: string } }
+var g1 = applySpec({
+>g1 : Symbol(g1, Decl(isomorphicMappedTypeInference.ts, 136, 3))
+>applySpec : Symbol(applySpec, Decl(isomorphicMappedTypeInference.ts, 126, 2))
+
+    sum: (a: any) => 3,
+>sum : Symbol(sum, Decl(isomorphicMappedTypeInference.ts, 136, 20))
+>a : Symbol(a, Decl(isomorphicMappedTypeInference.ts, 137, 10))
+
+    nested: {
+>nested : Symbol(nested, Decl(isomorphicMappedTypeInference.ts, 137, 23))
+
+        mul: (b: any) => "n"
+>mul : Symbol(mul, Decl(isomorphicMappedTypeInference.ts, 138, 13))
+>b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 139, 14))
+    }
+});
+
+// Infers g2: (...args: any[]) => { foo: { bar: { baz: boolean } } }
+var g2 = applySpec({ foo: { bar: { baz: (x: any) => true } } });
+>g2 : Symbol(g2, Decl(isomorphicMappedTypeInference.ts, 144, 3))
+>applySpec : Symbol(applySpec, Decl(isomorphicMappedTypeInference.ts, 126, 2))
+>foo : Symbol(foo, Decl(isomorphicMappedTypeInference.ts, 144, 20))
+>bar : Symbol(bar, Decl(isomorphicMappedTypeInference.ts, 144, 27))
+>baz : Symbol(baz, Decl(isomorphicMappedTypeInference.ts, 144, 34))
+>x : Symbol(x, Decl(isomorphicMappedTypeInference.ts, 144, 41))
+
+// Repro from #12633
+
+const foo = <T>(object: T, partial: Partial<T>) => object;
+>foo : Symbol(foo, Decl(isomorphicMappedTypeInference.ts, 148, 5))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 148, 13))
+>object : Symbol(object, Decl(isomorphicMappedTypeInference.ts, 148, 16))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 148, 13))
+>partial : Symbol(partial, Decl(isomorphicMappedTypeInference.ts, 148, 26))
+>Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 148, 13))
+>object : Symbol(object, Decl(isomorphicMappedTypeInference.ts, 148, 16))
+
+let o = {a: 5, b: 7};
+>o : Symbol(o, Decl(isomorphicMappedTypeInference.ts, 149, 3))
+>a : Symbol(a, Decl(isomorphicMappedTypeInference.ts, 149, 9))
+>b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 149, 14))
+
+foo(o, {b: 9});
+>foo : Symbol(foo, Decl(isomorphicMappedTypeInference.ts, 148, 5))
+>o : Symbol(o, Decl(isomorphicMappedTypeInference.ts, 149, 3))
+>b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 150, 8))
+
+o = foo(o, {b: 9});
+>o : Symbol(o, Decl(isomorphicMappedTypeInference.ts, 149, 3))
+>foo : Symbol(foo, Decl(isomorphicMappedTypeInference.ts, 148, 5))
+>o : Symbol(o, Decl(isomorphicMappedTypeInference.ts, 149, 3))
+>b : Symbol(b, Decl(isomorphicMappedTypeInference.ts, 151, 12))
+
