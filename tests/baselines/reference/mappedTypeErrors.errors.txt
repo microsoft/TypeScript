@@ -16,13 +16,19 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(38,24): error TS2344: T
       Type 'T' is not assignable to type '"visible"'.
         Type 'string | number' is not assignable to type '"visible"'.
           Type 'string' is not assignable to type '"visible"'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(60,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ [P in keyof T]?: T[P]; }'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(60,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ [P in keyof T]?: T[P] | undefined; }'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(61,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ readonly [P in keyof T]: T[P]; }'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(62,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ readonly [P in keyof T]?: T[P]; }'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(62,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ readonly [P in keyof T]?: T[P] | undefined; }'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(67,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ [P in keyof T]: T[P][]; }'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(76,45): error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type 'Readonly<{ x: number; y: number; }>'.
+  Property 'y' is missing in type '{ x: number; }'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(78,59): error TS2345: Argument of type '{ x: number; y: number; z: number; }' is not assignable to parameter of type 'Readonly<{ x: number; y: number; }>'.
+  Object literal may only specify known properties, and 'z' does not exist in type 'Readonly<{ x: number; y: number; }>'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(84,58): error TS2345: Argument of type '{ x: number; y: number; z: number; }' is not assignable to parameter of type 'Partial<{ x: number; y: number; }>'.
+  Object literal may only specify known properties, and 'z' does not exist in type 'Partial<{ x: number; y: number; }>'.
 
 
-==== tests/cases/conformance/types/mapped/mappedTypeErrors.ts (14 errors) ====
+==== tests/cases/conformance/types/mapped/mappedTypeErrors.ts (17 errors) ====
     
     interface Shape {
         name: string;
@@ -112,13 +118,13 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(67,9): error TS2403: Su
         var x: { [P in keyof T]: T[P] };
         var x: { [P in keyof T]?: T[P] };  // Error
             ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ [P in keyof T]?: T[P]; }'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ [P in keyof T]?: T[P] | undefined; }'.
         var x: { readonly [P in keyof T]: T[P] };  // Error
             ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ readonly [P in keyof T]: T[P]; }'.
         var x: { readonly [P in keyof T]?: T[P] };  // Error
             ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ readonly [P in keyof T]?: T[P]; }'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ readonly [P in keyof T]?: T[P] | undefined; }'.
     }
     
     function f12<T>() {
@@ -126,4 +132,30 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(67,9): error TS2403: Su
         var x: { [P in keyof T]: T[P][] };  // Error
             ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ [P in keyof T]: T[P][]; }'.
+    }
+    
+    // Check that inferences to mapped types are secondary
+    
+    declare function objAndReadonly<T>(primary: T, secondary: Readonly<T>): T;
+    declare function objAndPartial<T>(primary: T, secondary: Partial<T>): T;
+    
+    function f20() {
+        let x1 = objAndReadonly({ x: 0, y: 0 }, { x: 1 });  // Error
+                                                ~~~~~~~~
+!!! error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type 'Readonly<{ x: number; y: number; }>'.
+!!! error TS2345:   Property 'y' is missing in type '{ x: number; }'.
+        let x2 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1 });
+        let x3 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 });  // Error
+                                                              ~~~~
+!!! error TS2345: Argument of type '{ x: number; y: number; z: number; }' is not assignable to parameter of type 'Readonly<{ x: number; y: number; }>'.
+!!! error TS2345:   Object literal may only specify known properties, and 'z' does not exist in type 'Readonly<{ x: number; y: number; }>'.
+    }
+    
+    function f21() {
+        let x1 = objAndPartial({ x: 0, y: 0 }, { x: 1 });
+        let x2 = objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1 });
+        let x3 = objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 });  // Error
+                                                             ~~~~
+!!! error TS2345: Argument of type '{ x: number; y: number; z: number; }' is not assignable to parameter of type 'Partial<{ x: number; y: number; }>'.
+!!! error TS2345:   Object literal may only specify known properties, and 'z' does not exist in type 'Partial<{ x: number; y: number; }>'.
     }

@@ -17,13 +17,15 @@ function generic<T extends { x, y }>(t: T) {
 let rest: { b: string }
 ({a, ...rest.b + rest.b} = o);
 
+var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes;
+
 
 //// [objectRestNegative.js]
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
         t[p] = s[p];
-    if (typeof Object.getOwnPropertySymbols === "function")
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
         for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
             t[p[i]] = s[p[i]];
     return t;
@@ -42,3 +44,7 @@ function generic(t) {
 }
 var rest;
 (a = o.a, o, rest.b + rest.b = __rest(o, ["a"]));
+var noContextualType = function (_a) {
+    var _b = _a.aNumber, aNumber = _b === void 0 ? 12 : _b, notEmptyObject = __rest(_a, ["aNumber"]);
+    return aNumber + notEmptyObject.anythingGoes;
+};
