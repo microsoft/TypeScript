@@ -28,8 +28,9 @@ namespace ts.codefix {
         }
         const node = declarations[0];
         const visibility = getVisibilityPrefix(getModifierFlags(node));
-        let getOrSetPrefix: string = undefined;
         switch (node.kind) {
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
             case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyDeclaration:
                 const typeString = checker.typeToString(type, enclosingDeclaration, TypeFormatFlags.None);
@@ -45,19 +46,13 @@ namespace ts.codefix {
                 const sigString = checker.signatureToString(signatures[0], enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
 
                 return `${visibility}${name}${sigString}${getMethodBodyStub(newlineChar)}`;
-            case SyntaxKind.GetAccessor:
-                getOrSetPrefix = "get";
-            case SyntaxKind.SetAccessor:
-                getOrSetPrefix = getOrSetPrefix ? getOrSetPrefix : "set";
-
-                throw new Error('Not implemented, getter and setter.');
             case SyntaxKind.ComputedPropertyName:
                 if (hasDynamicName(node)) {
                     return "";
                 }
-                throw new Error('Not implemented, computed property name.');
+                throw new Error("Not implemented, computed property name.");
             case SyntaxKind.IndexSignature:
-                throw new Error('Not implemented.');
+                throw new Error("Not implemented.");
 
             default:
                 return "";
