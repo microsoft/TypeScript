@@ -12223,6 +12223,10 @@ namespace ts {
             }
             const prop = getPropertyOfType(apparentType, right.text);
             if (!prop) {
+                const stringIndexType = getIndexTypeOfType(apparentType, IndexKind.String);
+                if (stringIndexType) {
+                    return stringIndexType;
+                }
                 if (right.text && !checkAndReportErrorForExtendingInterface(node)) {
                     reportNonexistentProperty(right, type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType ? apparentType : type);
                 }
