@@ -18,7 +18,7 @@ namespace ts {
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
         /**
-         * @pollingInterval - this parameter is used in polling-based watchers and ignored in watchers that 
+         * @pollingInterval - this parameter is used in polling-based watchers and ignored in watchers that
          * use native OS file watching
          */
         watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
@@ -248,18 +248,18 @@ namespace ts {
 
                 function reduceDirWatcherRefCountForFile(fileName: string) {
                     const dirName = getDirectoryPath(fileName);
-                    const watcher = dirWatchers[dirName];
+                    const watcher = dirWatchers.get(dirName);
                     if (watcher) {
                         watcher.referenceCount -= 1;
                         if (watcher.referenceCount <= 0) {
                             watcher.close();
-                            delete dirWatchers[dirName];
+                            dirWatchers.delete(dirName);
                         }
                     }
                 }
 
                 function addDirWatcher(dirPath: string): void {
-                    let watcher = dirWatchers[dirPath];
+                    let watcher = dirWatchers.get(dirPath);
                     if (watcher) {
                         watcher.referenceCount += 1;
                         return;
@@ -270,7 +270,7 @@ namespace ts {
                         (eventName: string, relativeFileName: string) => fileEventHandler(eventName, relativeFileName, dirPath)
                     );
                     watcher.referenceCount = 1;
-                    dirWatchers[dirPath] = watcher;
+                    dirWatchers.set(dirPath, watcher);
                     return;
                 }
 
@@ -300,9 +300,12 @@ namespace ts {
                         ? undefined
                         : ts.getNormalizedAbsolutePath(relativeFileName, baseDirPath);
                     // Some applications save a working file via rename operations
-                    if ((eventName === "change" || eventName === "rename") && fileWatcherCallbacks[fileName]) {
-                        for (const fileCallback of fileWatcherCallbacks[fileName]) {
-                            fileCallback(fileName);
+                    if ((eventName === "change" || eventName === "rename")) {
+                        const callbacks = fileWatcherCallbacks.get(fileName);
+                        if (callbacks) {
+                            for (const fileCallback of callbacks) {
+                                fileCallback(fileName);
+                            }
                         }
                     }
                 }

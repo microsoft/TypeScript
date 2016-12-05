@@ -122,7 +122,7 @@ namespace ts {
             trace: s => trace.push(s),
             getTrace: () => trace,
             getSourceFile(fileName): SourceFile {
-                return files[fileName];
+                return files.get(fileName);
             },
             getDefaultLibFileName(): string {
                 return "lib.d.ts";
@@ -143,9 +143,10 @@ namespace ts {
             getNewLine(): string {
                 return sys ? sys.newLine : newLine;
             },
-            fileExists: fileName => fileName in files,
+            fileExists: fileName => files.has(fileName),
             readFile: fileName => {
-                return fileName in files ? files[fileName].text : undefined;
+                const file = files.get(fileName);
+                return file && file.text;
             },
         };
     }
@@ -188,7 +189,7 @@ namespace ts {
         }
         else {
             assert.isTrue(cache !== undefined, `expected ${caption} to be set`);
-            assert.isTrue(equalOwnProperties(expectedContent, cache, entryChecker), `contents of ${caption} did not match the expected contents.`);
+            assert.isTrue(mapsAreEqual(expectedContent, cache, entryChecker), `contents of ${caption} did not match the expected contents.`);
         }
     }
 

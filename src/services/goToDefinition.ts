@@ -14,7 +14,7 @@ namespace ts.GoToDefinition {
         // Type reference directives
         const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
         if (typeReferenceDirective) {
-            const referenceFile = program.getResolvedTypeReferenceDirectives()[typeReferenceDirective.fileName];
+            const referenceFile = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName);
             if (referenceFile && referenceFile.resolvedFileName) {
                 return [getDefinitionInfoForFileReference(typeReferenceDirective.fileName, referenceFile.resolvedFileName)];
             }

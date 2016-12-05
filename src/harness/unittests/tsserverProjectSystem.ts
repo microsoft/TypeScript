@@ -243,10 +243,16 @@ namespace ts.projectSystem {
     }
 
     export function checkMapKeys(caption: string, map: Map<any>, expectedKeys: string[]) {
-        assert.equal(reduceProperties(map, count => count + 1, 0), expectedKeys.length, `${caption}: incorrect size of map`);
+        assert.equal(mapSize(map), expectedKeys.length, `${caption}: incorrect size of map`);
         for (const name of expectedKeys) {
-            assert.isTrue(name in map, `${caption} is expected to contain ${name}, actual keys: ${Object.keys(map)}`);
+            assert.isTrue(map.has(name), `${caption} is expected to contain ${name}, actual keys: ${keysOfMap(map)}`);
         }
+    }
+
+    function mapSize<T>(map: Map<T>): number {
+        let size = 0;
+        map.forEach(() => { size++; });
+        return size;
     }
 
     export function checkFileNames(caption: string, actualFileNames: string[], expectedFileNames: string[]) {
@@ -291,38 +297,30 @@ namespace ts.projectSystem {
     }
 
     export class Callbacks {
-        private map: { [n: number]: TimeOutCallback } = {};
+        private map = createMap<TimeOutCallback>();
         private nextId = 1;
 
         register(cb: (...args: any[]) => void, args: any[]) {
             const timeoutId = this.nextId;
             this.nextId++;
-            this.map[timeoutId] = cb.bind(undefined, ...args);
+            this.map.set(timeoutId, cb.bind(undefined, ...args));
             return timeoutId;
         }
         unregister(id: any) {
             if (typeof id === "number") {
-                delete this.map[id];
+                this.map.delete(id);
             }
         }
 
         count() {
-            let n = 0;
-            for (const _ in this.map) {
-                // TODO: GH#11734
-                _;
-                n++;
-            }
-            return n;
+            return mapSize(this.map);
         }
 
         invoke() {
-            for (const id in this.map) {
-                if (hasProperty(this.map, id)) {
-                    this.map[id]();
-                }
-            }
-            this.map = {};
+            this.map.forEach(cb => {
+                cb();
+            });
+            this.map.clear();
         }
     }
 
@@ -439,7 +437,7 @@ namespace ts.projectSystem {
 
         triggerDirectoryWatcherCallback(directoryName: string, fileName: string): void {
             const path = this.toPath(directoryName);
-            const callbacks = this.watchedDirectories[path];
+            const callbacks = this.watchedDirectories.get(path);
             if (callbacks) {
                 for (const callback of callbacks) {
                     callback.cb(fileName);
@@ -449,7 +447,7 @@ namespace ts.projectSystem {
 
         triggerFileWatcherCallback(fileName: string, removed?: boolean): void {
             const path = this.toPath(fileName);
-            const callbacks = this.watchedFiles[path];
+            const callbacks = this.watchedFiles.get(path);
             if (callbacks) {
                 for (const callback of callbacks) {
                     callback(path, removed);

@@ -14,7 +14,7 @@ namespace ts.projectSystem {
     function createTypesRegistry(...list: string[]): Map<void> {
         const map = createMap<void>();
         for (const l of list) {
-            map[l] = undefined;
+            map.set(l, undefined);
         }
         return map;
     }

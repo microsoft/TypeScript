@@ -20,21 +20,21 @@ namespace ts {
 
         export function registerCodeFix(action: CodeFix) {
             forEach(action.errorCodes, error => {
-                let fixes = codeFixes[error];
+                let fixes = codeFixes.get(error);
                 if (!fixes) {
                     fixes = [];
-                    codeFixes[error] = fixes;
+                    codeFixes.set(error, fixes);
                 }
                 fixes.push(action);
             });
         }
 
         export function getSupportedErrorCodes() {
-            return Object.keys(codeFixes);
+            return keysOfMap(codeFixes);
         }
 
         export function getFixes(context: CodeFixContext): CodeAction[] {
-            const fixes = codeFixes[context.errorCode];
+            const fixes = codeFixes.get(context.errorCode);
             let allActions: CodeAction[] = [];
 
             forEach(fixes, f => {

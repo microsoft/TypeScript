@@ -918,10 +918,9 @@ namespace Harness {
                 return undefined;
             }
 
-            if (!libFileNameSourceFileMap[fileName]) {
-                libFileNameSourceFileMap[fileName] = createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName), ts.ScriptTarget.Latest);
-            }
-            return libFileNameSourceFileMap[fileName];
+            const sourceFile = libFileNameSourceFileMap.get(fileName);
+            return sourceFile || ts.set(libFileNameSourceFileMap, fileName,
+                createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName), ts.ScriptTarget.Latest));
         }
 
         export function getDefaultLibFileName(options: ts.CompilerOptions): string {
@@ -1103,10 +1102,10 @@ namespace Harness {
                 optionsIndex = ts.createMap<ts.CommandLineOption>();
                 const optionDeclarations = harnessOptionDeclarations.concat(ts.optionDeclarations);
                 for (const option of optionDeclarations) {
-                    optionsIndex[option.name.toLowerCase()] = option;
+                    optionsIndex.set(option.name.toLowerCase(), option);
                 }
             }
-            return optionsIndex[name.toLowerCase()];
+            return optionsIndex.get(name.toLowerCase());
         }
 
         export function setCompilerOptionsFromHarnessSetting(settings: Harness.TestCaseParser.CompilerSettings, options: ts.CompilerOptions & HarnessOptions): void {
@@ -1466,7 +1465,7 @@ namespace Harness {
             const fullResults = ts.createMap<TypeWriterResult[]>();
 
             for (const sourceFile of allFiles) {
-                fullResults[sourceFile.unitName] = fullWalker.getTypeAndSymbols(sourceFile.unitName);
+                fullResults.set(sourceFile.unitName, fullWalker.getTypeAndSymbols(sourceFile.unitName));
             }
 
             // Produce baselines.  The first gives the types for all expressions.
@@ -1519,7 +1518,7 @@ namespace Harness {
 
                 allFiles.forEach(file => {
                     const codeLines = file.content.split("\n");
-                    typeWriterResults[file.unitName].forEach(result => {
+                    typeWriterResults.get(file.unitName).forEach(result => {
                         if (isSymbolBaseline && !result.symbol) {
                             return;
                         }

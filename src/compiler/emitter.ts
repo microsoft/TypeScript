@@ -2031,11 +2031,11 @@ namespace ts {
                         // Skip the helper if it can be bundled but hasn't already been emitted and we
                         // are emitting a bundled module.
                         if (shouldBundle) {
-                            if (bundledHelpers[helper.name]) {
+                            if (bundledHelpers.get(helper.name)) {
                                 continue;
                             }
 
-                            bundledHelpers[helper.name] = true;
+                            bundledHelpers.set(helper.name, true);
                         }
                     }
                     else if (isBundle) {
@@ -2487,15 +2487,16 @@ namespace ts {
 
         function isUniqueName(name: string): boolean {
             return !resolver.hasGlobalName(name) &&
-                !hasProperty(currentFileIdentifiers, name) &&
-                !hasProperty(generatedNameSet, name);
+                !currentFileIdentifiers.has(name) &&
+                !generatedNameSet.has(name);
         }
 
         function isUniqueLocalName(name: string, container: Node): boolean {
             for (let node = container; isNodeDescendantOf(node, container); node = node.nextContainer) {
-                if (node.locals && hasProperty(node.locals, name)) {
+                if (node.locals) {
+                    const local = node.locals.get(name);
                     // We conservatively include alias symbols to cover cases where they're emitted as locals
-                    if (node.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias)) {
+                    if (local && local.flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias)) {
                         return false;
                     }
                 }
@@ -2544,7 +2545,7 @@ namespace ts {
             while (true) {
                 const generatedName = baseName + i;
                 if (isUniqueName(generatedName)) {
-                    return generatedNameSet[generatedName] = generatedName;
+                    return set(generatedNameSet, generatedName, generatedName);
                 }
                 i++;
             }

@@ -67,11 +67,11 @@ namespace ts {
     const gutterSeparator = " ";
     const resetEscapeSequence = "\u001b[0m";
     const ellipsis = "...";
-    const categoryFormatMap = createMap<string>({
-        [DiagnosticCategory.Warning]: yellowForegroundEscapeSequence,
-        [DiagnosticCategory.Error]: redForegroundEscapeSequence,
-        [DiagnosticCategory.Message]: blueForegroundEscapeSequence,
-    });
+    const categoryFormatMap = createMapFromPairs<string>(
+        [DiagnosticCategory.Warning, yellowForegroundEscapeSequence],
+        [DiagnosticCategory.Error, redForegroundEscapeSequence],
+        [DiagnosticCategory.Message, blueForegroundEscapeSequence],
+    );
 
     function formatAndReset(text: string, formatStyle: string) {
         return formatStyle + text + resetEscapeSequence;
@@ -139,7 +139,7 @@ namespace ts {
             output += `${ relativeFileName }(${ firstLine + 1 },${ firstLineChar + 1 }): `;
         }
 
-        const categoryColor = categoryFormatMap[diagnostic.category];
+        const categoryColor = categoryFormatMap.get(diagnostic.category);
         const category = DiagnosticCategory[diagnostic.category].toLowerCase();
         output += `${ formatAndReset(category, categoryColor) } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }`;
         output += sys.newLine + sys.newLine;
@@ -378,9 +378,8 @@ namespace ts {
         }
 
         function cachedFileExists(fileName: string): boolean {
-            return fileName in cachedExistingFiles
-                ? cachedExistingFiles[fileName]
-                : cachedExistingFiles[fileName] = hostFileExists(fileName);
+            const fileExists = cachedExistingFiles.get(fileName);
+            return fileExists !== undefined ? fileExists : set(cachedExistingFiles, fileName, hostFileExists(fileName));
         }
 
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void) {
@@ -674,13 +673,9 @@ namespace ts {
 
             if (option.name === "lib") {
                 description = getDiagnosticText(option.description);
-                const options: string[] = [];
                 const element = (<CommandLineOptionOfListType>option).element;
                 const typeMap = <Map<number | string>>element.type;
-                for (const key in typeMap) {
-                    options.push(`'${key}'`);
-                }
-                optionsDescriptionMap[description] = options;
+                optionsDescriptionMap.set(description, keysOfMap(typeMap).map(key => `'${key}'`));
             }
             else {
                 description = getDiagnosticText(option.description);
@@ -702,7 +697,7 @@ namespace ts {
         for (let i = 0; i < usageColumn.length; i++) {
             const usage = usageColumn[i];
             const description = descriptionColumn[i];
-            const kindsList = optionsDescriptionMap[description];
+            const kindsList = optionsDescriptionMap.get(description);
             output.push(usage + makePadding(marginLength - usage.length + 2) + description + sys.newLine);
 
             if (kindsList) {

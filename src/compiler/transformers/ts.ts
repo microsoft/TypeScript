@@ -752,7 +752,7 @@ namespace ts {
                 if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference) {
                     // record an alias as the class name is not in scope for statics.
                     enableSubstitutionForClassAliases();
-                    classAliases[getOriginalNodeId(node)] = getSynthesizedClone(temp);
+                    classAliases.set(getOriginalNodeId(node), getSynthesizedClone(temp));
                 }
 
                 // To preserve the behavior of the old emitter, we explicitly indent
@@ -1420,7 +1420,7 @@ namespace ts {
                 return undefined;
             }
 
-            const classAlias = classAliases && classAliases[getOriginalNodeId(node)];
+            const classAlias = classAliases && classAliases.get(getOriginalNodeId(node));
             const localName = getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
             const decorate = createDecorateHelper(context, decoratorExpressions, localName);
             const expression = createAssignment(localName, classAlias ? createAssignment(classAlias, decorate) : decorate);
@@ -2530,8 +2530,8 @@ namespace ts {
                     currentScopeFirstDeclarationsOfName = createMap<Node>();
                 }
 
-                if (!(name in currentScopeFirstDeclarationsOfName)) {
-                    currentScopeFirstDeclarationsOfName[name] = node;
+                if (!currentScopeFirstDeclarationsOfName.has(name)) {
+                    currentScopeFirstDeclarationsOfName.set(name, node);
                 }
             }
         }
@@ -2544,7 +2544,7 @@ namespace ts {
             if (currentScopeFirstDeclarationsOfName) {
                 const name = node.symbol && node.symbol.name;
                 if (name) {
-                    return currentScopeFirstDeclarationsOfName[name] === node;
+                    return currentScopeFirstDeclarationsOfName.get(name) === node;
                 }
             }
 
@@ -3085,7 +3085,7 @@ namespace ts {
             if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference) {
                 enableSubstitutionForClassAliases();
                 const classAlias = createUniqueName(node.name && !isGeneratedIdentifier(node.name) ? node.name.text : "default");
-                classAliases[getOriginalNodeId(node)] = classAlias;
+                classAliases.set(getOriginalNodeId(node), classAlias);
                 hoistVariableDeclaration(classAlias);
                 return classAlias;
             }
@@ -3230,7 +3230,7 @@ namespace ts {
                     // constructor references in static property initializers.
                     const declaration = resolver.getReferencedValueDeclaration(node);
                     if (declaration) {
-                        const classAlias = classAliases[declaration.id];
+                        const classAlias = classAliases.get(declaration.id);
                         if (classAlias) {
                             const clone = getSynthesizedClone(classAlias);
                             setSourceMapRange(clone, node);

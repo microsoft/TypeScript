@@ -532,7 +532,7 @@ namespace ts {
             }
 
             function getDeclarations(name: string) {
-                return result[name] || (result[name] = []);
+                return result.get(name) || set(result, name, []);
             }
 
             function getDeclarationName(declaration: Declaration) {
@@ -1956,9 +1956,11 @@ namespace ts {
 
         function walk(node: Node) {
             switch (node.kind) {
-                case SyntaxKind.Identifier:
-                    nameTable[(<Identifier>node).text] = nameTable[(<Identifier>node).text] === undefined ? node.pos : -1;
+                case SyntaxKind.Identifier: {
+                    const text = (<Identifier>node).text;
+                    nameTable.set(text, nameTable.get(text) === undefined ? node.pos : -1);
                     break;
+                }
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NumericLiteral:
                     // We want to store any numbers/strings if they were a name that could be
@@ -1970,7 +1972,8 @@ namespace ts {
                         isArgumentOfElementAccessExpression(node) ||
                         isLiteralComputedPropertyDeclarationName(node)) {
 
-                        nameTable[(<LiteralExpression>node).text] = nameTable[(<LiteralExpression>node).text] === undefined ? node.pos : -1;
+                        const text = (<LiteralExpression>node).text;
+                        nameTable.set(text, nameTable.get(text) === undefined ? node.pos : -1);
                     }
                     break;
                 default:

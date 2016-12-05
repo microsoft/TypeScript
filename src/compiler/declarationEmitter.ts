@@ -156,9 +156,9 @@ namespace ts {
         });
 
         if (usedTypeDirectiveReferences) {
-            for (const directive in usedTypeDirectiveReferences) {
+            forEachKeyInMap(usedTypeDirectiveReferences, directive => {
                 referencesOutput += `/// <reference types="${directive}" />${newLine}`;
-            }
+            });
         }
 
         return {
@@ -271,8 +271,8 @@ namespace ts {
                 usedTypeDirectiveReferences = createMap<string>();
             }
             for (const directive of typeReferenceDirectives) {
-                if (!(directive in usedTypeDirectiveReferences)) {
-                    usedTypeDirectiveReferences[directive] = directive;
+                if (!usedTypeDirectiveReferences.has(directive)) {
+                    usedTypeDirectiveReferences.set(directive, directive);
                 }
             }
         }
@@ -581,14 +581,14 @@ namespace ts {
         // do not need to keep track of created temp names.
         function getExportDefaultTempVariableName(): string {
             const baseName = "_default";
-            if (!(baseName in currentIdentifiers)) {
+            if (!currentIdentifiers.has(baseName)) {
                 return baseName;
             }
             let count = 0;
             while (true) {
                 count++;
                 const name = baseName + "_" + count;
-                if (!(name in currentIdentifiers)) {
+                if (!currentIdentifiers.has(name)) {
                     return name;
                 }
             }

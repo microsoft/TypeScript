@@ -1,11 +1,25 @@
 namespace ts {
-
+    /**
+     * Type of objects whose values are all of the same type.
+     * The `in` and `for-in` operators can *not* be safely used,
+     * since `Object.prototype` may be modified by outside code.
+     */
     export interface MapLike<T> {
         [index: string]: T;
     }
 
-    export interface Map<T> extends MapLike<T> {
-        __mapBrand: any;
+    /** It's allowed to get/set into a map with numbers. However, when iterating, you may get strings back due to the shim being an ordinary object (which only allows string keys). */
+    export type MapKey = string | number;
+
+    /** Minimal ES6 Map interface. */
+    export interface Map<T> {
+        get(key: MapKey): T;
+        has(key: MapKey): boolean;
+        set(key: MapKey, value: T): this;
+        delete(key: MapKey): boolean;
+        clear(): void;
+        /** `key` may *not* be a string if it was set with a number and we are not using the shim. */
+        forEach(action: (value: T, key: string) => void): void;
     }
 
     // branded string type used to store absolute, normalized and canonicalized paths

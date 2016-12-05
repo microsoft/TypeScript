@@ -362,7 +362,7 @@ namespace ts {
 
             const emitNode = node && node.emitNode;
             const emitFlags = emitNode && emitNode.flags;
-            const range = emitNode && emitNode.tokenSourceMapRanges && emitNode.tokenSourceMapRanges[token];
+            const range = emitNode && emitNode.tokenSourceMapRanges && emitNode.tokenSourceMapRanges.get(token);
 
             tokenPos = skipTrivia(currentSourceText, range ? range.pos : tokenPos);
             if ((emitFlags & EmitFlags.NoTokenLeadingSourceMaps) === 0 && tokenPos >= 0) {

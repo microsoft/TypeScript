@@ -557,7 +557,7 @@ namespace ts {
                     // Only bother calling into the typechecker if this is an identifier that
                     // could possibly resolve to a type name.  This makes classification run
                     // in a third of the time it would normally take.
-                    if (classifiableNames[identifier.text]) {
+                    if (classifiableNames.get(identifier.text)) {
                         const symbol = typeChecker.getSymbolAtLocation(node);
                         if (symbol) {
                             const type = classifySymbol(symbol, getMeaningFromLocation(node));

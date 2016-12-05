@@ -21,18 +21,19 @@ namespace ts.codefix {
                 return;
             }
 
-            if (!this.symbolIdToActionMap[symbolId]) {
-                this.symbolIdToActionMap[symbolId] = [newAction];
+            const actions = this.symbolIdToActionMap.get(symbolId);
+            if (!actions) {
+                this.symbolIdToActionMap.set(symbolId, [newAction]);
                 return;
             }
 
             if (newAction.kind === "CodeChange") {
-                this.symbolIdToActionMap[symbolId].push(newAction);
+                actions.push(newAction);
                 return;
             }
 
             const updatedNewImports: ImportCodeAction[] = [];
-            for (const existingAction of this.symbolIdToActionMap[symbolId]) {
+            for (const existingAction of this.symbolIdToActionMap.get(symbolId)) {
                 if (existingAction.kind === "CodeChange") {
                     // only import actions should compare
                     updatedNewImports.push(existingAction);
@@ -62,7 +63,7 @@ namespace ts.codefix {
             }
             // if we reach here, it means the new one is better or equal to all of the existing ones.
             updatedNewImports.push(newAction);
-            this.symbolIdToActionMap[symbolId] = updatedNewImports;
+            this.symbolIdToActionMap.set(symbolId, updatedNewImports);
         }
 
         addActions(symbolId: number, newActions: ImportCodeAction[]) {
@@ -73,9 +74,9 @@ namespace ts.codefix {
 
         getAllActions() {
             let result: ImportCodeAction[] = [];
-            for (const symbolId in this.symbolIdToActionMap) {
-                result = concatenate(result, this.symbolIdToActionMap[symbolId]);
-            }
+            this.symbolIdToActionMap.forEach(actions => {
+                result = concatenate(result, actions);
+            });
             return result;
         }
 
@@ -162,8 +163,9 @@ namespace ts.codefix {
             function getImportDeclarations(moduleSymbol: Symbol) {
                 const moduleSymbolId = getUniqueSymbolId(moduleSymbol);
 
-                if (cachedImportDeclarations[moduleSymbolId]) {
-                    return cachedImportDeclarations[moduleSymbolId];
+                const cached = cachedImportDeclarations.get(moduleSymbolId);
+                if (cached) {
+                    return cached;
                 }
 
                 const existingDeclarations: (ImportDeclaration | ImportEqualsDeclaration)[] = [];
@@ -173,7 +175,7 @@ namespace ts.codefix {
                         existingDeclarations.push(getImportDeclaration(importModuleSpecifier));
                     }
                 }
-                cachedImportDeclarations[moduleSymbolId] = existingDeclarations;
+                cachedImportDeclarations.set(moduleSymbolId, existingDeclarations);
                 return existingDeclarations;
 
                 function getImportDeclaration(moduleSpecifier: LiteralExpression) {

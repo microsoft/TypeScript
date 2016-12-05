@@ -96,7 +96,7 @@ namespace FourSlash {
     });
 
     export function escapeXmlAttributeValue(s: string) {
-        return s.replace(/[&<>"'\/]/g, ch => entityMap[ch]);
+        return s.replace(/[&<>"'\/]/g, ch => entityMap.get(ch));
     }
 
     // Name of testcase metadata including ts.CompilerOptions properties that will be used by globalOptions
@@ -222,7 +222,7 @@ namespace FourSlash {
             }
 
             function tryAdd(path: string) {
-                const inputFile = inputFiles[path];
+                const inputFile = inputFiles.get(path);
                 if (inputFile && !Harness.isDefaultLibraryFile(path)) {
                     languageServiceAdapterHost.addScript(path, inputFile, /*isRootFile*/ true);
                     return true;
@@ -256,7 +256,7 @@ namespace FourSlash {
 
             ts.forEach(testData.files, file => {
                 // Create map between fileName and its content for easily looking up when resolveReference flag is specified
-                this.inputFiles[file.fileName] = file.content;
+                this.inputFiles.set(file.fileName, file.content);
 
                 if (ts.getBaseFileName(file.fileName).toLowerCase() === "tsconfig.json") {
                     const configJson = ts.parseConfigFileTextToJson(file.fileName, file.content);
@@ -322,11 +322,11 @@ namespace FourSlash {
             }
             else {
                 // resolveReference file-option is not specified then do not resolve any files and include all inputFiles
-                for (const fileName in this.inputFiles) {
+                this.inputFiles.forEach((file, fileName) => {
                     if (!Harness.isDefaultLibraryFile(fileName)) {
-                        this.languageServiceAdapterHost.addScript(fileName, this.inputFiles[fileName], /*isRootFile*/ true);
+                        this.languageServiceAdapterHost.addScript(fileName, file, /*isRootFile*/ true);
                     }
-                }
+                });
                 this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName,
                     Harness.Compiler.getDefaultLibrarySourceFile().text, /*isRootFile*/ false);
             }
@@ -659,11 +659,12 @@ namespace FourSlash {
             const completions = this.getCompletionListAtCaret();
             const uniqueItems = ts.createMap<string>();
             for (const item of completions.entries) {
-                if (!(item.name in uniqueItems)) {
-                    uniqueItems[item.name] = item.kind;
+                const uniqueItem = uniqueItems.get(item.name);
+                if (!uniqueItem) {
+                    uniqueItems.set(item.name, item.kind);
                 }
                 else {
-                    assert.equal(item.kind, uniqueItems[item.name], `Items should have the same kind, got ${item.kind} and ${uniqueItems[item.name]}`);
+                    assert.equal(item.kind, uniqueItem, `Items should have the same kind, got ${item.kind} and ${uniqueItem}`);
                 }
             }
         }
@@ -831,7 +832,7 @@ namespace FourSlash {
         }
 
         public verifyRangesWithSameTextReferenceEachOther() {
-            ts.forEachProperty(this.rangesByText(), ranges => this.verifyRangesReferenceEachOther(ranges));
+            this.rangesByText().forEach(ranges => this.verifyRangesReferenceEachOther(ranges));
         }
 
         public verifyDisplayPartsOfReferencedSymbol(expected: ts.SymbolDisplayPart[]) {
@@ -903,7 +904,8 @@ namespace FourSlash {
         }
 
         public verifyQuickInfos(namesAndTexts: { [name: string]: string | [string, string] }) {
-            ts.forEachProperty(ts.createMap(namesAndTexts), (text, name) => {
+            for (const name in namesAndTexts) if (ts.hasProperty(namesAndTexts, name)) {
+                const text = namesAndTexts[name];
                 if (text instanceof Array) {
                     assert(text.length === 2);
                     const [expectedText, expectedDocumentation] = text;
@@ -912,7 +914,7 @@ namespace FourSlash {
                 else {
                     this.verifyQuickInfoAt(name, text);
                 }
-            });
+            }
         }
 
         public verifyQuickInfoString(expectedText: string, expectedDocumentation?: string) {
@@ -2087,7 +2089,7 @@ namespace FourSlash {
                 "<": ts.CharacterCodes.lessThan
             });
 
-            const charCode = openBraceMap[openingBrace];
+            const charCode = openBraceMap.get(openingBrace);
 
             if (!charCode) {
                 this.raiseError(`Invalid openingBrace '${openingBrace}' specified.`);

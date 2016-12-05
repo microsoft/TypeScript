@@ -36,7 +36,7 @@ namespace ts {
             for (const f of files) {
                 let name = getDirectoryPath(f.name);
                 while (true) {
-                    directories[name] = name;
+                    directories.set(name, name);
                     const baseName = getDirectoryPath(name);
                     if (baseName === name) {
                         break;
@@ -46,20 +46,19 @@ namespace ts {
             }
             return {
                 readFile,
-                directoryExists: path => {
-                    return path in directories;
-                },
+                directoryExists: path => directories.has(path),
                 fileExists: path => {
-                    assert.isTrue(getDirectoryPath(path) in directories, `'fileExists' '${path}' request in non-existing directory`);
-                    return path in map;
+                    assert.isTrue(directories.has(getDirectoryPath(path)), `'fileExists' '${path}' request in non-existing directory`);
+                    return map.has(path);
                 }
             };
         }
         else {
-            return { readFile, fileExists: path => path in map, };
+            return { readFile, fileExists: path => map.has(path) };
         }
         function readFile(path: string): string {
-            return path in map ? map[path].content : undefined;
+            const file = map.get(path);
+            return file && file.content;
         }
     }
 
@@ -300,7 +299,8 @@ namespace ts {
             const host: CompilerHost = {
                 getSourceFile: (fileName: string, languageVersion: ScriptTarget) => {
                     const path = normalizePath(combinePaths(currentDirectory, fileName));
-                    return path in files ? createSourceFile(fileName, files[path], languageVersion) : undefined;
+                    const file = files.get(path);
+                    return file && createSourceFile(fileName, file, languageVersion);
                 },
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile: notImplemented,
@@ -311,7 +311,7 @@ namespace ts {
                 useCaseSensitiveFileNames: () => false,
                 fileExists: fileName => {
                     const path = normalizePath(combinePaths(currentDirectory, fileName));
-                    return path in files;
+                    return files.has(path);
                 },
                 readFile: notImplemented
             };
@@ -371,7 +371,11 @@ export = C;
         function test(files: Map<string>, options: CompilerOptions, currentDirectory: string, useCaseSensitiveFileNames: boolean, rootFiles: string[], diagnosticCodes: number[]): void {
             const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
             if (!useCaseSensitiveFileNames) {
-                files = reduceProperties(files, (files, file, fileName) => (files[getCanonicalFileName(fileName)] = file, files), createMap<string>());
+                const oldFiles = files;
+                files = createMap<string>();
+                oldFiles.forEach((file, fileName) => {
+                    files.set(getCanonicalFileName(fileName), file);
+                });
             }
 
             const host: CompilerHost = {
@@ -380,7 +384,8 @@ export = C;
                         return library;
                     }
                     const path = getCanonicalFileName(normalizePath(combinePaths(currentDirectory, fileName)));
-                    return path in files ? createSourceFile(fileName, files[path], languageVersion) : undefined;
+                    const file = files.get(path);
+                    return file && createSourceFile(fileName, file, languageVersion);
                 },
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile: notImplemented,
@@ -391,7 +396,7 @@ export = C;
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
                 fileExists: fileName => {
                     const path = getCanonicalFileName(normalizePath(combinePaths(currentDirectory, fileName)));
-                    return path in files;
+                    return files.has(path);
                 },
                 readFile: notImplemented
             };
@@ -1020,8 +1025,8 @@ import b = require("./moduleB");
             const names = map(files, f => f.name);
             const sourceFiles = arrayToMap(map(files, f => createSourceFile(f.name, f.content, ScriptTarget.ES2015)), f => f.fileName);
             const compilerHost: CompilerHost = {
-                fileExists : fileName => fileName in sourceFiles,
-                getSourceFile: fileName => sourceFiles[fileName],
+                fileExists : fileName => sourceFiles.has(fileName),
+                getSourceFile: fileName => sourceFiles.get(fileName),
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile: notImplemented,
                 getCurrentDirectory: () => "/",
@@ -1029,7 +1034,10 @@ import b = require("./moduleB");
                 getCanonicalFileName: f => f.toLowerCase(),
                 getNewLine: () => "\r\n",
                 useCaseSensitiveFileNames: () => false,
-                readFile: fileName => fileName in sourceFiles ? sourceFiles[fileName].text : undefined
+                readFile: fileName => {
+                    const file = sourceFiles.get(fileName);
+                    return file && file.text;
+                }
             };
             const program1 = createProgram(names, {}, compilerHost);
             const diagnostics1 = program1.getFileProcessingDiagnostics().getDiagnostics();

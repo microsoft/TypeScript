@@ -64,14 +64,14 @@ namespace ts.Completions {
             const entries: CompletionEntry[] = [];
 
             const nameTable = getNameTable(sourceFile);
-            for (const name in nameTable) {
+            nameTable.forEach((namePosition, name) => {
                 // Skip identifiers produced only from the current location
-                if (nameTable[name] === position) {
-                    continue;
+                if (namePosition === position) {
+                    return;
                 }
 
-                if (!uniqueNames[name]) {
-                    uniqueNames[name] = name;
+                if (!uniqueNames.get(name)) {
+                    uniqueNames.set(name, name);
                     const displayName = getCompletionEntryDisplayName(unescapeIdentifier(name), compilerOptions.target, /*performCharacterChecks*/ true);
                     if (displayName) {
                         const entry = {
@@ -83,7 +83,7 @@ namespace ts.Completions {
                         entries.push(entry);
                     }
                 }
-            }
+            });
 
             return entries;
         }
@@ -122,9 +122,9 @@ namespace ts.Completions {
                     const entry = createCompletionEntry(symbol, location, performCharacterChecks);
                     if (entry) {
                         const id = escapeIdentifier(entry.name);
-                        if (!uniqueNames[id]) {
+                        if (!uniqueNames.get(id)) {
                             entries.push(entry);
-                            uniqueNames[id] = id;
+                            uniqueNames.set(id, id);
                         }
                     }
                 }
@@ -373,14 +373,14 @@ namespace ts.Completions {
 
                         const foundFileName = includeExtensions ? getBaseFileName(filePath) : removeFileExtension(getBaseFileName(filePath));
 
-                        if (!foundFiles[foundFileName]) {
-                            foundFiles[foundFileName] = true;
+                        if (!foundFiles.get(foundFileName)) {
+                            foundFiles.set(foundFileName, true);
                         }
                     }
 
-                    for (const foundFile in foundFiles) {
+                    forEachKeyInMap(foundFiles, foundFile => {
                         result.push(createCompletionEntryForModule(foundFile, ScriptElementKind.scriptElement, span));
-                    }
+                    });
                 }
 
                 // If possible, get folder completion as well
@@ -1563,14 +1563,14 @@ namespace ts.Completions {
                 }
 
                 const name = element.propertyName || element.name;
-                existingImportsOrExports[name.text] = true;
+                existingImportsOrExports.set(name.text, true);
             }
 
-            if (!someProperties(existingImportsOrExports)) {
+            if (mapIsEmpty(existingImportsOrExports)) {
                 return filter(exportsOfModule, e => e.name !== "default");
             }
 
-            return filter(exportsOfModule, e => e.name !== "default" && !existingImportsOrExports[e.name]);
+            return filter(exportsOfModule, e => e.name !== "default" && !existingImportsOrExports.get(e.name));
         }
 
         /**
@@ -1616,10 +1616,10 @@ namespace ts.Completions {
                     existingName = (<Identifier>m.name).text;
                 }
 
-                existingMemberNames[existingName] = true;
+                existingMemberNames.set(existingName, true);
             }
 
-            return filter(contextualMemberSymbols, m => !existingMemberNames[m.name]);
+            return filter(contextualMemberSymbols, m => !existingMemberNames.get(m.name));
         }
 
         /**
@@ -1637,11 +1637,11 @@ namespace ts.Completions {
                 }
 
                 if (attr.kind === SyntaxKind.JsxAttribute) {
-                    seenNames[(<JsxAttribute>attr).name.text] = true;
+                    seenNames.set((<JsxAttribute>attr).name.text, true);
                 }
             }
 
-            return filter(symbols, a => !seenNames[a.name]);
+            return filter(symbols, a => !seenNames.get(a.name));
         }
     }
 

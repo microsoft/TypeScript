@@ -4,7 +4,7 @@
 namespace ts.formatting {
     export class Rules {
         public getRuleName(rule: Rule) {
-            const o: ts.Map<any> = <any>this;
+            const o: ts.MapLike<any> = <any>this;
             for (const name in o) {
                 if (o[name] === rule) {
                     return name;

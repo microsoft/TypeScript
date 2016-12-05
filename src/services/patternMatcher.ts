@@ -188,11 +188,7 @@ namespace ts {
         }
 
         function getWordSpans(word: string): TextSpan[] {
-            if (!(word in stringToWordSpans)) {
-                stringToWordSpans[word] = breakIntoWordSpans(word);
-            }
-
-            return stringToWordSpans[word];
+            return stringToWordSpans.get(word) || set(stringToWordSpans, word, breakIntoWordSpans(word));
         }
 
         function matchTextChunk(candidate: string, chunk: TextChunk, punctuationStripped: boolean): PatternMatch {

@@ -2643,7 +2643,7 @@ namespace ts {
 
     function mergeTokenSourceMapRanges(sourceRanges: Map<TextRange>, destRanges: Map<TextRange>) {
         if (!destRanges) destRanges = createMap<TextRange>();
-        copyProperties(sourceRanges, destRanges);
+        copyMapEntries(sourceRanges, destRanges);
         return destRanges;
     }
 
@@ -2745,7 +2745,7 @@ namespace ts {
     export function getTokenSourceMapRange(node: Node, token: SyntaxKind) {
         const emitNode = node.emitNode;
         const tokenSourceMapRanges = emitNode && emitNode.tokenSourceMapRanges;
-        return tokenSourceMapRanges && tokenSourceMapRanges[token];
+        return tokenSourceMapRanges && tokenSourceMapRanges.get(token);
     }
 
     /**
@@ -2758,7 +2758,7 @@ namespace ts {
     export function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange) {
         const emitNode = getOrCreateEmitNode(node);
         const tokenSourceMapRanges = emitNode.tokenSourceMapRanges || (emitNode.tokenSourceMapRanges = createMap<TextRange>());
-        tokenSourceMapRanges[token] = range;
+        tokenSourceMapRanges.set(token, range);
         return node;
     }
 
@@ -2969,10 +2969,8 @@ namespace ts {
      * Here we check if alternative name was provided for a given moduleName and return it if possible.
      */
     function tryRenameExternalModule(moduleName: LiteralExpression, sourceFile: SourceFile) {
-        if (sourceFile.renamedDependencies && hasProperty(sourceFile.renamedDependencies, moduleName.text)) {
-            return createLiteral(sourceFile.renamedDependencies[moduleName.text]);
-        }
-        return undefined;
+        const rename = sourceFile.renamedDependencies && sourceFile.renamedDependencies.get(moduleName.text);
+        return rename && createLiteral(rename);
     }
 
     /**
@@ -3332,7 +3330,7 @@ namespace ts {
                     else {
                         // export { x, y }
                         for (const specifier of (<ExportDeclaration>node).exportClause.elements) {
-                            if (!uniqueExports[specifier.name.text]) {
+                            if (!uniqueExports.get(specifier.name.text)) {
                                 const name = specifier.propertyName || specifier.name;
                                 multiMapAdd(exportSpecifiers, name.text, specifier);
 
@@ -3343,7 +3341,7 @@ namespace ts {
                                     multiMapAdd(exportedBindings, getOriginalNodeId(decl), specifier.name);
                                 }
 
-                                uniqueExports[specifier.name.text] = true;
+                                uniqueExports.set(specifier.name.text, true);
                                 exportedNames = append(exportedNames, specifier.name);
                             }
                         }
@@ -3377,9 +3375,9 @@ namespace ts {
                         else {
                             // export function x() { }
                             const name = (<FunctionDeclaration>node).name;
-                            if (!uniqueExports[name.text]) {
+                            if (!uniqueExports.get(name.text)) {
                                 multiMapAdd(exportedBindings, getOriginalNodeId(node), name);
-                                uniqueExports[name.text] = true;
+                                uniqueExports.set(name.text, true);
                                 exportedNames = append(exportedNames, name);
                             }
                         }
@@ -3398,9 +3396,9 @@ namespace ts {
                         else {
                             // export class x { }
                             const name = (<ClassDeclaration>node).name;
-                            if (!uniqueExports[name.text]) {
+                            if (!uniqueExports.get(name.text)) {
                                 multiMapAdd(exportedBindings, getOriginalNodeId(node), name);
-                                uniqueExports[name.text] = true;
+                                uniqueExports.set(name.text, true);
                                 exportedNames = append(exportedNames, name);
                             }
                         }
@@ -3421,8 +3419,8 @@ namespace ts {
             }
         }
         else if (!isGeneratedIdentifier(decl.name)) {
-            if (!uniqueExports[decl.name.text]) {
-                uniqueExports[decl.name.text] = true;
+            if (!uniqueExports.get(decl.name.text)) {
+                uniqueExports.set(decl.name.text, true);
                 exportedNames = append(exportedNames, decl.name);
             }
         }

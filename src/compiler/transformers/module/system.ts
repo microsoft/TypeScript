@@ -73,11 +73,11 @@ namespace ts {
             // see comment to 'substitutePostfixUnaryExpression' for more details
 
             // Collect information about the external module and dependency groups.
-            moduleInfo = moduleInfoMap[id] = collectExternalModuleInfo(node, resolver, compilerOptions);
+            moduleInfo = set(moduleInfoMap, id, collectExternalModuleInfo(node, resolver, compilerOptions));
 
             // Make sure that the name of the 'exports' function does not conflict with
             // existing identifiers.
-            exportFunction = exportFunctionsMap[id] = createUniqueName("exports");
+            exportFunction = set(exportFunctionsMap, id, createUniqueName("exports"));
             contextObject = createUniqueName("context");
 
             // Add the body of the module.
@@ -121,7 +121,7 @@ namespace ts {
             }
 
             if (noSubstitution) {
-                noSubstitutionMap[id] = noSubstitution;
+                noSubstitutionMap.set(id, noSubstitution);
                 noSubstitution = undefined;
             }
 
@@ -147,13 +147,13 @@ namespace ts {
                 const externalImport = externalImports[i];
                 const externalModuleName = getExternalModuleNameLiteral(externalImport, currentSourceFile, host, resolver, compilerOptions);
                 const text = externalModuleName.text;
-                if (hasProperty(groupIndices, text)) {
+                const groupIndex = groupIndices.get(text);
+                if (groupIndex !== undefined) {
                     // deduplicate/group entries in dependency list by the dependency name
-                    const groupIndex = groupIndices[text];
                     dependencyGroups[groupIndex].externalImports.push(externalImport);
                 }
                 else {
-                    groupIndices[text] = dependencyGroups.length;
+                    groupIndices.set(text, dependencyGroups.length);
                     dependencyGroups.push({
                         name: externalModuleName,
                         externalImports: [externalImport]
@@ -305,7 +305,7 @@ namespace ts {
             // this set is used to filter names brought by star expors.
 
             // local names set should only be added if we have anything exported
-            if (!moduleInfo.exportedNames && isEmpty(moduleInfo.exportSpecifiers)) {
+            if (!moduleInfo.exportedNames && mapIsEmpty(moduleInfo.exportSpecifiers)) {
                 // no exported declarations (export var ...) or export specifiers (export {x})
                 // check if we have any non star export declarations.
                 let hasExportDeclarationWithExportClause = false;
@@ -608,7 +608,7 @@ namespace ts {
             if (hasAssociatedEndOfDeclarationMarker(node)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
                 const id = getOriginalNodeId(node);
-                deferredExports[id] = appendExportsOfImportDeclaration(deferredExports[id], node);
+                deferredExports.set(id, appendExportsOfImportDeclaration(deferredExports.get(id), node));
             }
             else {
                 statements = appendExportsOfImportDeclaration(statements, node);
@@ -631,7 +631,7 @@ namespace ts {
             if (hasAssociatedEndOfDeclarationMarker(node)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
                 const id = getOriginalNodeId(node);
-                deferredExports[id] = appendExportsOfImportEqualsDeclaration(deferredExports[id], node);
+                deferredExports.set(id, appendExportsOfImportEqualsDeclaration(deferredExports.get(id), node));
             }
             else {
                 statements = appendExportsOfImportEqualsDeclaration(statements, node);
@@ -656,7 +656,7 @@ namespace ts {
             if (original && hasAssociatedEndOfDeclarationMarker(original)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
                 const id = getOriginalNodeId(node);
-                deferredExports[id] = appendExportStatement(deferredExports[id], createIdentifier("default"), expression, /*allowComments*/ true);
+                deferredExports.set(id, appendExportStatement(deferredExports.get(id), createIdentifier("default"), expression, /*allowComments*/ true));
             }
             else {
                 return createExportStatement(createIdentifier("default"), expression, /*allowComments*/ true);
@@ -688,7 +688,7 @@ namespace ts {
             if (hasAssociatedEndOfDeclarationMarker(node)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
                 const id = getOriginalNodeId(node);
-                deferredExports[id] = appendExportsOfHoistedDeclaration(deferredExports[id], node);
+                deferredExports.set(id, appendExportsOfHoistedDeclaration(deferredExports.get(id), node));
             }
             else {
                 hoistedStatements = appendExportsOfHoistedDeclaration(hoistedStatements, node);
@@ -730,7 +730,7 @@ namespace ts {
             if (hasAssociatedEndOfDeclarationMarker(node)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
                 const id = getOriginalNodeId(node);
-                deferredExports[id] = appendExportsOfHoistedDeclaration(deferredExports[id], node);
+                deferredExports.set(id, appendExportsOfHoistedDeclaration(deferredExports.get(id), node));
             }
             else {
                 statements = appendExportsOfHoistedDeclaration(statements, node);
@@ -770,7 +770,7 @@ namespace ts {
             if (isMarkedDeclaration) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
                 const id = getOriginalNodeId(node);
-                deferredExports[id] = appendExportsOfVariableStatement(deferredExports[id], node, isExportedDeclaration);
+                deferredExports.set(id, appendExportsOfVariableStatement(deferredExports.get(id), node, isExportedDeclaration));
             }
             else {
                 statements = appendExportsOfVariableStatement(statements, node, /*exportSelf*/ false);
@@ -883,7 +883,7 @@ namespace ts {
             if (hasAssociatedEndOfDeclarationMarker(node) && node.original.kind === SyntaxKind.VariableStatement) {
                 const id = getOriginalNodeId(node);
                 const isExportedDeclaration = hasModifier(node.original, ModifierFlags.Export);
-                deferredExports[id] = appendExportsOfVariableStatement(deferredExports[id], <VariableStatement>node.original, isExportedDeclaration);
+                deferredExports.set(id, appendExportsOfVariableStatement(deferredExports.get(id), <VariableStatement>node.original, isExportedDeclaration));
             }
 
             return node;
@@ -909,9 +909,9 @@ namespace ts {
             // end of the transformed declaration. We use this marker to emit any deferred exports
             // of the declaration.
             const id = getOriginalNodeId(node);
-            const statements = deferredExports[id];
+            const statements = deferredExports.get(id);
             if (statements) {
-                delete deferredExports[id];
+                deferredExports.delete(id);
                 return append(statements, node);
             }
 
@@ -1080,7 +1080,7 @@ namespace ts {
             }
 
             const name = getDeclarationName(decl);
-            const exportSpecifiers = moduleInfo.exportSpecifiers[name.text];
+            const exportSpecifiers = moduleInfo.exportSpecifiers.get(name.text);
             if (exportSpecifiers) {
                 for (const exportSpecifier of exportSpecifiers) {
                     if (exportSpecifier.name.text !== excludeName) {
@@ -1554,12 +1554,12 @@ namespace ts {
             if (node.kind === SyntaxKind.SourceFile) {
                 const id = getOriginalNodeId(node);
                 currentSourceFile = <SourceFile>node;
-                moduleInfo = moduleInfoMap[id];
-                exportFunction = exportFunctionsMap[id];
-                noSubstitution = noSubstitutionMap[id];
+                moduleInfo = moduleInfoMap.get(id);
+                exportFunction = exportFunctionsMap.get(id);
+                noSubstitution = noSubstitutionMap.get(id);
 
                 if (noSubstitution) {
-                    delete noSubstitutionMap[id];
+                    noSubstitutionMap.delete(id);
                 }
 
                 previousOnEmitNode(emitContext, node, emitCallback);
@@ -1756,7 +1756,7 @@ namespace ts {
                         exportedNames = append(exportedNames, getDeclarationName(valueDeclaration));
                     }
 
-                    exportedNames = addRange(exportedNames, moduleInfo && moduleInfo.exportedBindings[getOriginalNodeId(valueDeclaration)]);
+                    exportedNames = addRange(exportedNames, moduleInfo && moduleInfo.exportedBindings.get(getOriginalNodeId(valueDeclaration)));
                 }
             }
 
@@ -1770,7 +1770,7 @@ namespace ts {
          */
         function preventSubstitution<T extends Node>(node: T): T {
             if (noSubstitution === undefined) noSubstitution = createMap<boolean>();
-            noSubstitution[getNodeId(node)] = true;
+            noSubstitution.set(getNodeId(node), true);
             return node;
         }
 
@@ -1780,7 +1780,7 @@ namespace ts {
          * @param node The node to test.
          */
         function isSubstitutionPrevented(node: Node) {
-            return noSubstitution && node.id && noSubstitution[node.id];
+            return noSubstitution && node.id && noSubstitution.get(node.id);
         }
     }
 }

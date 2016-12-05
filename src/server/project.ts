@@ -495,9 +495,9 @@ namespace ts.server {
             }
             let unresolvedImports: string[];
             if (file.resolvedModules) {
-                for (const name in file.resolvedModules) {
+                file.resolvedModules.forEach((resolvedModule, name) => {
                     // pick unresolved non-relative names
-                    if (!file.resolvedModules[name] && !isExternalModuleNameRelative(name)) {
+                    if (!resolvedModule && !isExternalModuleNameRelative(name)) {
                         // for non-scoped names extract part up-to the first slash
                         // for scoped names - extract up to the second slash
                         let trimmed = name.trim();
@@ -511,7 +511,7 @@ namespace ts.server {
                         (unresolvedImports || (unresolvedImports = [])).push(trimmed);
                         result.push(trimmed);
                     }
-                }
+                });
             }
             this.cachedUnresolvedImportsPerFile.set(file.path, unresolvedImports || emptyArray);
         }
@@ -537,7 +537,7 @@ namespace ts.server {
             }
 
             // 1. no changes in structure, no changes in unresolved imports - do nothing
-            // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files 
+            // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files
             // (can reuse cached imports for files that were not changed)
             // 3. new files were added/removed, but compilation settings stays the same - collect unresolved imports for all new/modified files
             // (can reuse cached imports for files that were not changed)
@@ -679,16 +679,16 @@ namespace ts.server {
 
                 const added: string[] = [];
                 const removed: string[] = [];
-                for (const id in currentFiles) {
-                    if (!hasProperty(lastReportedFileNames, id)) {
+                forEachKeyInMap(currentFiles, id => {
+                    if (!lastReportedFileNames.has(id)) {
                         added.push(id);
                     }
-                }
-                for (const id in lastReportedFileNames) {
-                    if (!hasProperty(currentFiles, id)) {
+                });
+                forEachKeyInMap(lastReportedFileNames, id => {
+                    if (!currentFiles.has(id)) {
                         removed.push(id);
                     }
-                }
+                });
                 this.lastReportedFileNames = currentFiles;
                 this.lastReportedVersion = this.projectStructureVersion;
                 return { info, changes: { added, removed }, projectErrors: this.projectErrors };
@@ -722,7 +722,7 @@ namespace ts.server {
                     if (symbol && symbol.declarations && symbol.declarations[0]) {
                         const declarationSourceFile = symbol.declarations[0].getSourceFile();
                         if (declarationSourceFile) {
-                            referencedFiles[declarationSourceFile.path] = true;
+                            referencedFiles.set(declarationSourceFile.path, true);
                         }
                     }
                 }
@@ -734,25 +734,24 @@ namespace ts.server {
             if (sourceFile.referencedFiles && sourceFile.referencedFiles.length > 0) {
                 for (const referencedFile of sourceFile.referencedFiles) {
                     const referencedPath = toPath(referencedFile.fileName, currentDirectory, getCanonicalFileName);
-                    referencedFiles[referencedPath] = true;
+                    referencedFiles.set(referencedPath, true);
                 }
             }
 
             // Handle type reference directives
             if (sourceFile.resolvedTypeReferenceDirectiveNames) {
-                for (const typeName in sourceFile.resolvedTypeReferenceDirectiveNames) {
-                    const resolvedTypeReferenceDirective = sourceFile.resolvedTypeReferenceDirectiveNames[typeName];
+                sourceFile.resolvedTypeReferenceDirectiveNames.forEach((resolvedTypeReferenceDirective) => {
                     if (!resolvedTypeReferenceDirective) {
-                        continue;
+                        return;
                     }
 
                     const fileName = resolvedTypeReferenceDirective.resolvedFileName;
                     const typeFilePath = toPath(fileName, currentDirectory, getCanonicalFileName);
-                    referencedFiles[typeFilePath] = true;
-                }
+                    referencedFiles.set(typeFilePath, true);
+                })
             }
 
-            const allFileNames = map(Object.keys(referencedFiles), key => <Path>key);
+            const allFileNames = keysOfMap(referencedFiles) as Path[];
             return filter(allFileNames, file => this.projectService.host.fileExists(file));
         }
 
@@ -888,18 +887,19 @@ namespace ts.server {
                 return;
             }
             const configDirectoryPath = getDirectoryPath(this.getConfigFilePath());
-            this.directoriesWatchedForWildcards = reduceProperties(this.wildcardDirectories, (watchers, flag, directory) => {
+
+            this.directoriesWatchedForWildcards = createMap<FileWatcher>();
+            this.wildcardDirectories.forEach((flag, directory) => {
                 if (comparePaths(configDirectoryPath, directory, ".", !this.projectService.host.useCaseSensitiveFileNames) !== Comparison.EqualTo) {
                     const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
                     this.projectService.logger.info(`Add ${recursive ? "recursive " : ""}watcher for: ${directory}`);
-                    watchers[directory] = this.projectService.host.watchDirectory(
+                    this.directoriesWatchedForWildcards.set(directory, this.projectService.host.watchDirectory(
                         directory,
                         path => callback(this, path),
                         recursive
-                    );
+                    ));
                 }
-                return watchers;
-            }, <Map<FileWatcher>>{});
+            });
         }
 
         stopWatchingDirectory() {
@@ -923,9 +923,9 @@ namespace ts.server {
                 this.typeRootsWatchers = undefined;
             }
 
-            for (const id in this.directoriesWatchedForWildcards) {
-                this.directoriesWatchedForWildcards[id].close();
-            }
+            this.directoriesWatchedForWildcards.forEach(watcher => {
+                watcher.close();
+            });
             this.directoriesWatchedForWildcards = undefined;
 
             this.stopWatchingDirectory();
