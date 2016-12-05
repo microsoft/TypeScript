@@ -2820,6 +2820,7 @@ declare namespace ts {
         UnionOrIntersection = 196608,
         StructuredType = 229376,
         StructuredOrTypeParameter = 507904,
+        TypeVariable = 540672,
         Narrowable = 1033215,
         NotUnionOrUnit = 33281,
         RequiresWidening = 6291456,
@@ -2889,7 +2890,8 @@ declare namespace ts {
     interface UnionOrIntersectionType extends Type {
         types: Type[];
         resolvedProperties: SymbolTable;
-        couldContainTypeParameters: boolean;
+        resolvedIndexType: IndexType;
+        couldContainTypeVariables: boolean;
     }
     interface UnionType extends UnionOrIntersectionType {
     }
@@ -2926,20 +2928,22 @@ declare namespace ts {
         iterableElementType?: Type;
         iteratorElementType?: Type;
     }
-    interface TypeParameter extends Type {
+    interface TypeVariable extends Type {
+        resolvedIndexType: IndexType;
+    }
+    interface TypeParameter extends TypeVariable {
         constraint: Type;
         target?: TypeParameter;
         mapper?: TypeMapper;
         resolvedApparentType: Type;
-        resolvedIndexType: IndexType;
         isThisType?: boolean;
     }
-    interface IndexType extends Type {
-        type: TypeParameter;
-    }
-    interface IndexedAccessType extends Type {
+    interface IndexedAccessType extends TypeVariable {
         objectType: Type;
         indexType: Type;
+    }
+    interface IndexType extends Type {
+        type: TypeVariable | UnionOrIntersectionType;
     }
     const enum SignatureKind {
         Call = 0,
@@ -7530,7 +7534,7 @@ declare namespace ts {
             key: string;
             message: string;
         };
-        Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES2015: {
+        Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_or_ESNEXT: {
             code: number;
             category: DiagnosticCategory;
             key: string;
