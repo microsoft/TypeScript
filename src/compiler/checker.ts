@@ -2982,22 +2982,6 @@ namespace ts {
             return symbol && getSymbolLinks(symbol).type || getTypeForVariableLikeDeclaration(node, /*includeOptionality*/ false);
         }
 
-        function getTextOfPropertyName(name: PropertyName): string {
-            switch (name.kind) {
-                case SyntaxKind.Identifier:
-                    return (<Identifier>name).text;
-                case SyntaxKind.StringLiteral:
-                case SyntaxKind.NumericLiteral:
-                    return (<LiteralExpression>name).text;
-                case SyntaxKind.ComputedPropertyName:
-                    if (isStringOrNumericLiteral((<ComputedPropertyName>name).expression.kind)) {
-                        return (<LiteralExpression>(<ComputedPropertyName>name).expression).text;
-                    }
-            }
-
-            return undefined;
-        }
-
         function isComputedNonLiteralName(name: PropertyName): boolean {
             return name.kind === SyntaxKind.ComputedPropertyName && !isStringOrNumericLiteral((<ComputedPropertyName>name).expression.kind);
         }
@@ -11160,7 +11144,7 @@ namespace ts {
             attributesTable = createMap<Symbol>();
             if (attributesArray) {
                 forEach(attributesArray, (attr) => {
-                    if (!filter || (filter && filter(attr))) {
+                    if (!filter || filter(attr)) {
                         attributesTable[attr.name] = attr;
                     }
                 });
@@ -11199,7 +11183,7 @@ namespace ts {
          */
         function checkJsxAttributesAssignableToTagnameAttributes(openingLikeElement: JsxOpeningLikeElement) {
             // The function involves following steps:
-            //      1. Figure out expected attributes type expected by resolving tag-name of the JSX opening-like element, tagetAttributesType.
+            //      1. Figure out expected attributes type expected by resolving tag-name of the JSX opening-like element, targetAttributesType.
             //         During these steps, we will try to resolve the tag-name as intrinsic name, stateless function, stateful component (in the order)
             //      2. Solved Jsx attributes type given by users, sourceAttributesType, which is by resolving "attributes" property of the JSX opening-like element.
             //      3. Check if the two are assignable to each other
@@ -11213,7 +11197,7 @@ namespace ts {
             // i.e <div attr1={10} attr2="string" />
             //     attr1 and attr2 are treated as JSXAttributes attached in the JsxOpeningLikeElement as "attributes". They resolved to be sourceAttributesType.
             const sourceAttributesType = createJsxAttributesTypeFromAttributesProperty(openingLikeElement,
-                (attribute: Symbol) => {
+                attribute => {
                     return isUnhyphenatedJsxName(attribute.name) || !!(getPropertyOfType(targetAttributesType, attribute.name));
                 });
 

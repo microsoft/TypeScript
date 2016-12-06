@@ -1981,18 +1981,6 @@ namespace ts {
         return false;
     }
 
-    function getNameFromObjectLiteralElement(node: ObjectLiteralElement) {
-        if (node.name.kind === SyntaxKind.ComputedPropertyName) {
-            const nameExpression = (<ComputedPropertyName>node.name).expression;
-            // treat computed property names where expression is string/numeric literal as just string/numeric literal
-            if (isStringOrNumericLiteral(nameExpression.kind)) {
-                return (<LiteralExpression>nameExpression).text;
-            }
-            return undefined;
-        }
-        return (<Identifier | LiteralExpression>node.name).text;
-    }
-
     /**
      * Returns the containing object literal property declaration given a possible name node, e.g. "a" in x = { "a": 1 }
      */
@@ -2017,14 +2005,10 @@ namespace ts {
     export function getPropertySymbolsFromContextualType(typeChecker: TypeChecker, node: ObjectLiteralElement): Symbol[] {
         const objectLiteral = <ObjectLiteralExpression | JsxAttributes>node.parent;
         const contextualType = typeChecker.getContextualType(objectLiteral);
-        const name = getNameFromObjectLiteralElement(node);
+        const name = getTextOfPropertyName(node.name);
         if (name && contextualType) {
             const result: Symbol[] = [];
             const symbol = contextualType.getProperty(name);
-            if (symbol) {
-                result.push(symbol);
-            }
-
             if (contextualType.flags & TypeFlags.Union) {
                 forEach((<UnionType>contextualType).types, t => {
                     const symbol = t.getProperty(name);
@@ -2032,8 +2016,13 @@ namespace ts {
                         result.push(symbol);
                     }
                 });
+                return result;
             }
-            return result;
+
+            if (symbol) {
+                result.push(symbol);
+                return result;
+            }
         }
         return undefined;
     }

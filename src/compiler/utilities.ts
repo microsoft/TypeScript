@@ -4623,4 +4623,20 @@ namespace ts {
 
         return flags;
     }
+
+    export function getTextOfPropertyName(name: PropertyName): string {
+            switch (name.kind) {
+                case SyntaxKind.Identifier:
+                    return (<Identifier>name).text;
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NumericLiteral:
+                    return (<LiteralExpression>name).text;
+                case SyntaxKind.ComputedPropertyName:
+                    if (isStringOrNumericLiteral((<ComputedPropertyName>name).expression.kind)) {
+                        return (<LiteralExpression>(<ComputedPropertyName>name).expression).text;
+                    }
+            }
+
+            return undefined;
+        }
 }
