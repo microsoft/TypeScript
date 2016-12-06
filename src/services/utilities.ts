@@ -1137,6 +1137,7 @@ namespace ts {
             writeSpace: text => writeKind(text, SymbolDisplayPartKind.space),
             writeStringLiteral: text => writeKind(text, SymbolDisplayPartKind.stringLiteral),
             writeParameter: text => writeKind(text, SymbolDisplayPartKind.parameterName),
+            writeProperty: text => writeKind(text, SymbolDisplayPartKind.propertyName),
             writeSymbol,
             writeLine,
             increaseIndent: () => { indent++; },
