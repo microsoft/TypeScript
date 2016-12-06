@@ -10405,7 +10405,7 @@ namespace ts {
             return baseConstructorType === nullWideningType;
         }
 
-        function checkThisBeforeSuper(node: Node, container: Node) {
+        function checkThisBeforeSuper(node: Node, container: Node, diagnosticMessage: DiagnosticMessage) {
             const containingClassDecl = <ClassDeclaration>container.parent;
             const baseTypeNode = getClassExtendsHeritageClauseElement(containingClassDecl);
 
@@ -10423,7 +10423,7 @@ namespace ts {
                 // "this" is not accessed as a parameter of the super-call.
                 if (!superCall || superCall.end > node.pos) {
                     // In ES6, super inside constructor of class-declaration has to precede "this" accessing
-                    error(node, Diagnostics.super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class);
+                    error(node, diagnosticMessage);
                 }
             }
         }
@@ -10435,7 +10435,7 @@ namespace ts {
             let needToCaptureLexicalThis = false;
 
             if (container.kind === SyntaxKind.Constructor) {
-                checkThisBeforeSuper(node, container);
+                checkThisBeforeSuper(node, container, Diagnostics.super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class);
             }
 
             // Now skip arrow functions to get the "real" owner of 'this'.
@@ -10584,7 +10584,7 @@ namespace ts {
             }
 
             if (!isCallExpression && container.kind === SyntaxKind.Constructor) {
-                checkThisBeforeSuper(node, container);
+                checkThisBeforeSuper(node, container, Diagnostics.super_must_be_called_before_accessing_a_property_of_super_in_the_constructor_of_a_derived_class);
             }
 
             if ((getModifierFlags(container) & ModifierFlags.Static) || isCallExpression) {

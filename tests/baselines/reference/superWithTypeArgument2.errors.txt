@@ -1,5 +1,5 @@
 tests/cases/compiler/superWithTypeArgument2.ts(6,5): error TS2377: Constructors for derived classes must contain a 'super' call.
-tests/cases/compiler/superWithTypeArgument2.ts(7,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+tests/cases/compiler/superWithTypeArgument2.ts(7,9): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
 tests/cases/compiler/superWithTypeArgument2.ts(7,14): error TS1034: 'super' must be followed by an argument list or member access.
 
 
@@ -14,7 +14,7 @@ tests/cases/compiler/superWithTypeArgument2.ts(7,14): error TS1034: 'super' must
             super<T>(x);
     ~~~~~~~~~~~~~~~~~~~~
             ~~~~~
-!!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+!!! error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
                  ~
 !!! error TS1034: 'super' must be followed by an argument list or member access.
         }
