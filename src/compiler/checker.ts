@@ -638,10 +638,23 @@ namespace ts {
 
             if (declaration.pos <= usage.pos) {
                 // declaration is before usage
-                // still might be illegal if usage is in the initializer of the variable declaration
-                return declaration.kind !== SyntaxKind.VariableDeclaration ||
-                    !isImmediatelyUsedInInitializerOfBlockScopedVariable(<VariableDeclaration>declaration, usage);
+                if (declaration.kind === SyntaxKind.BindingElement) {
+                    // still might be illegal if declaration and usage are both binding elements (eg var [a = b, b = b] = [1, 2])
+                    const errorBindingElement = getAncestor(usage, SyntaxKind.BindingElement) as BindingElement;
+                    if (errorBindingElement) {
+                        return getAncestorBindingPattern(errorBindingElement) !== getAncestorBindingPattern(declaration) ||
+                            declaration.pos < errorBindingElement.pos;
+                    }
+                    // or it might be illegal if usage happens before parent variable is declared (eg var [a] = a)
+                    return isBlockScopedNameDeclaredBeforeUse(getAncestor(declaration, SyntaxKind.VariableDeclaration) as Declaration, usage);
+                }
+                else if (declaration.kind === SyntaxKind.VariableDeclaration) {
+                    // still might be illegal if usage is in the initializer of the variable declaration (eg var a = a)
+                    return !isImmediatelyUsedInInitializerOfBlockScopedVariable(declaration as VariableDeclaration, usage);
+                }
+                return true;
             }
+
 
             // declaration is after usage
             // can be legal if usage is deferred (i.e. inside function or in initializer of instance property)
@@ -698,6 +711,16 @@ namespace ts {
                     current = current.parent;
                 }
                 return false;
+            }
+
+            function getAncestorBindingPattern(node: Node): BindingPattern {
+                while (node) {
+                    if (isBindingPattern(node)) {
+                        return node;
+                    }
+                    node = node.parent;
+                }
+                return undefined;
             }
         }
 
@@ -1065,7 +1088,7 @@ namespace ts {
 
             Debug.assert(declaration !== undefined, "Block-scoped variable declaration is undefined");
 
-            if (!isInAmbientContext(declaration) && !isBlockScopedNameDeclaredBeforeUse(<Declaration>getAncestor(declaration, SyntaxKind.VariableDeclaration), errorLocation)) {
+            if (!isInAmbientContext(declaration) && !isBlockScopedNameDeclaredBeforeUse(declaration, errorLocation)) {
                 error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationNameToString(declaration.name));
             }
         }
