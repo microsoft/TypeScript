@@ -2968,6 +2968,8 @@ namespace ts {
 
     export interface TypeVariable extends Type {
         /* @internal */
+        resolvedApparentType: Type;
+        /* @internal */
         resolvedIndexType: IndexType;
     }
 
@@ -2978,8 +2980,6 @@ namespace ts {
         target?: TypeParameter;  // Instantiation target
         /* @internal */
         mapper?: TypeMapper;     // Instantiation mapper
-        /* @internal */
-        resolvedApparentType: Type;
         /* @internal */
         isThisType?: boolean;
     }
