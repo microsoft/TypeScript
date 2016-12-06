@@ -17041,7 +17041,8 @@ namespace ts {
                     // so we need to do a bit of extra work to check if reference is legal
                     const enclosingContainer = getEnclosingBlockScopeContainer(symbol.valueDeclaration);
                     if (enclosingContainer === func) {
-                        if (symbol.valueDeclaration.kind === SyntaxKind.Parameter) {
+                        if (symbol.valueDeclaration.kind === SyntaxKind.Parameter ||
+                           symbol.valueDeclaration.kind === SyntaxKind.BindingElement) {
                             // it is ok to reference parameter in initializer if either
                             // - parameter is located strictly on the left of current parameter declaration
                             if (symbol.valueDeclaration.pos < node.pos) {
