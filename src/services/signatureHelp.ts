@@ -168,7 +168,8 @@ namespace ts.SignatureHelp {
     export const enum ArgumentListKind {
         TypeArguments,
         CallArguments,
-        TaggedTemplateArguments
+        TaggedTemplateArguments,
+        JSXAttributesArguments
     }
 
     export interface ArgumentListInfo {
@@ -264,18 +265,18 @@ namespace ts.SignatureHelp {
         if (node.parent.kind === SyntaxKind.CallExpression || node.parent.kind === SyntaxKind.NewExpression) {
             const callExpression = <CallExpression>node.parent;
             // There are 3 cases to handle:
-            //   1. The token introduces a list, and should begin a sig help session
+            //   1. The token introduces a list, and should begin a signature help session
             //   2. The token is either not associated with a list, or ends a list, so the session should end
-            //   3. The token is buried inside a list, and should give sig help
+            //   3. The token is buried inside a list, and should give signature help
             //
             // The following are examples of each:
             //
             //    Case 1:
-            //          foo<#T, U>(#a, b)    -> The token introduces a list, and should begin a sig help session
+            //          foo<#T, U>(#a, b)    -> The token introduces a list, and should begin a signature help session
             //    Case 2:
             //          fo#o<T, U>#(a, b)#   -> The token is either not associated with a list, or ends a list, so the session should end
             //    Case 3:
-            //          foo<T#, U#>(a#, #b#) -> The token is buried inside a list, and should give sig help
+            //          foo<T#, U#>(a#, #b#) -> The token is buried inside a list, and should give signature help
             // Find out if 'node' is an argument, a type argument, or neither
             if (node.kind === SyntaxKind.LessThanToken ||
                 node.kind === SyntaxKind.OpenParenToken) {
@@ -295,7 +296,7 @@ namespace ts.SignatureHelp {
 
             // findListItemInfo can return undefined if we are not in parent's argument list
             // or type argument list. This includes cases where the cursor is:
-            //   - To the right of the closing paren, non-substitution template, or template tail.
+            //   - To the right of the closing parenthesis, non-substitution template, or template tail.
             //   - Between the type arguments and the arguments (greater than token)
             //   - On the target of the call (parent.func)
             //   - On the 'new' keyword in a 'new' expression
@@ -352,6 +353,22 @@ namespace ts.SignatureHelp {
 
             return getArgumentListInfoForTemplate(tagExpression, argumentIndex, sourceFile);
         }
+        else if (node.parent && isJsxOpeningLikeElement(node.parent)) {
+            // Provide a signature help for JSX opening element or JSX self-closing element.
+            // This is not guarantee that JSX tag-name is resolved into stateless function component. (that is done in "getSignatureHelpItems")
+            // i.e
+            //      export function MainButton(props: ButtonProps, context: any): JSX.Element { ... }
+            //      <MainButton /*signatureHelp*/
+            const attributeSpanStart = node.parent.attributes.getFullStart();
+            const attributeSpanEnd = skipTrivia(sourceFile.text, node.parent.attributes.getEnd(), /*stopAfterLineBreak*/ false);
+            return {
+                kind: ArgumentListKind.JSXAttributesArguments,
+                invocation: node.parent,
+                argumentsSpan: createTextSpan(attributeSpanStart, attributeSpanEnd - attributeSpanStart),
+                argumentIndex: 0,
+                argumentCount: 1
+            };
+        }
 
         return undefined;
     }
@@ -392,7 +409,7 @@ namespace ts.SignatureHelp {
         //
         // Note: this subtlety only applies to the last comma.  If you had "Foo(a,,"  then
         // we'll have:  'a' '<comma>' '<missing>'
-        // That will give us 2 non-commas.  We then add one for the last comma, givin us an
+        // That will give us 2 non-commas.  We then add one for the last comma, giving us an
         // arg count of 3.
         const listChildren = argumentsList.getChildren();
 
@@ -435,7 +452,6 @@ namespace ts.SignatureHelp {
             : (<TemplateExpression>tagExpression.template).templateSpans.length + 1;
 
         Debug.assert(argumentIndex === 0 || argumentIndex < argumentCount, `argumentCount < argumentIndex, ${argumentCount} < ${argumentIndex}`);
-
         return {
             kind: ArgumentListKind.TaggedTemplateArguments,
             invocation: tagExpression,

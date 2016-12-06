@@ -1000,7 +1000,7 @@ namespace ts.FindAllReferences {
             // to get a contextual type for it, and add the property symbol from the contextual
             // type to the search set
             if (containingObjectLiteralElement) {
-                forEach(getPropertySymbolsFromContextualType(containingObjectLiteralElement), contextualSymbol => {
+                forEach(getPropertySymbolsFromContextualType(typeChecker, containingObjectLiteralElement), contextualSymbol => {
                     addRange(result, typeChecker.getRootSymbols(contextualSymbol));
                 });
 
@@ -1130,7 +1130,7 @@ namespace ts.FindAllReferences {
             // compare to our searchSymbol
             const containingObjectLiteralElement = getContainingObjectLiteralElement(referenceLocation);
             if (containingObjectLiteralElement) {
-                const contextualSymbol = forEach(getPropertySymbolsFromContextualType(containingObjectLiteralElement), contextualSymbol => {
+                const contextualSymbol = forEach(getPropertySymbolsFromContextualType(typeChecker, containingObjectLiteralElement), contextualSymbol => {
                     return forEach(typeChecker.getRootSymbols(contextualSymbol), s => searchSymbols.indexOf(s) >= 0 ? s : undefined);
                 });
 
@@ -1182,42 +1182,6 @@ namespace ts.FindAllReferences {
 
                 return undefined;
             });
-        }
-
-        function getNameFromObjectLiteralElement(node: ObjectLiteralElement) {
-            if (node.name.kind === SyntaxKind.ComputedPropertyName) {
-                const nameExpression = (<ComputedPropertyName>node.name).expression;
-                // treat computed property names where expression is string/numeric literal as just string/numeric literal
-                if (isStringOrNumericLiteral(nameExpression.kind)) {
-                    return (<LiteralExpression>nameExpression).text;
-                }
-                return undefined;
-            }
-            return (<Identifier | LiteralExpression>node.name).text;
-        }
-
-        function getPropertySymbolsFromContextualType(node: ObjectLiteralElement): Symbol[] {
-            const objectLiteral = <ObjectLiteralExpression>node.parent;
-            const contextualType = typeChecker.getContextualType(objectLiteral);
-            const name = getNameFromObjectLiteralElement(node);
-            if (name && contextualType) {
-                const result: Symbol[] = [];
-                const symbol = contextualType.getProperty(name);
-                if (symbol) {
-                    result.push(symbol);
-                }
-
-                if (contextualType.flags & TypeFlags.Union) {
-                    forEach((<UnionType>contextualType).types, t => {
-                        const symbol = t.getProperty(name);
-                        if (symbol) {
-                            result.push(symbol);
-                        }
-                    });
-                }
-                return result;
-            }
-            return undefined;
         }
 
         /** Given an initial searchMeaning, extracted from a location, widen the search scope based on the declarations
@@ -1359,35 +1323,6 @@ namespace ts.FindAllReferences {
             }
             forEachDescendantOfKind(child, kind, action);
         });
-    }
-
-    /**
-     * Returns the containing object literal property declaration given a possible name node, e.g. "a" in x = { "a": 1 }
-     */
-    function getContainingObjectLiteralElement(node: Node): ObjectLiteralElement {
-        switch (node.kind) {
-            case SyntaxKind.StringLiteral:
-            case SyntaxKind.NumericLiteral:
-                if (node.parent.kind === SyntaxKind.ComputedPropertyName) {
-                    return isObjectLiteralPropertyDeclaration(node.parent.parent) ? node.parent.parent : undefined;
-                }
-            // intential fall through
-            case SyntaxKind.Identifier:
-                return isObjectLiteralPropertyDeclaration(node.parent) && node.parent.name === node ? node.parent : undefined;
-        }
-        return undefined;
-    }
-
-    function isObjectLiteralPropertyDeclaration(node: Node): node is ObjectLiteralElement  {
-        switch (node.kind) {
-            case SyntaxKind.PropertyAssignment:
-            case SyntaxKind.ShorthandPropertyAssignment:
-            case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
-                return true;
-        }
-        return false;
     }
 
     /** Get `C` given `N` if `N` is in the position `class C extends N` or `class C extends foo.N` where `N` is an identifier. */

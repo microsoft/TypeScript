@@ -87,6 +87,39 @@ namespace ts.GoToDefinition {
                 declaration => createDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName));
         }
 
+        if (isJsxOpeningLikeElement(node.parent)) {
+            // For JSX opening-like element, the tag can be resolved either as stateful component (e.g class) or stateless function component.
+            // Because if it is a stateless function component with an error while trying to resolve the signature, we don't want to return all
+            // possible overloads but just the first one.
+            // For example:
+            //      /*firstSource*/declare function MainButton(buttonProps: ButtonProps): JSX.Element;
+            //      /*secondSource*/declare function MainButton(linkProps: LinkProps): JSX.Element;
+            //      /*thirdSource*/declare function MainButton(props: ButtonProps | LinkProps): JSX.Element;
+            //      let opt = <Main/*firstTarget*/Button />;  // We get undefined for resolved signature indicating an error, then just return the first declaration
+            const {symbolName, symbolKind, containerName}  = getSymbolInfo(typeChecker, symbol, node);
+            return [createDefinitionInfo(symbol.valueDeclaration, symbolKind, symbolName, containerName)];
+        }
+
+        // If the current location we want to find its definition is in an object literal, try to get the contextual type for the
+        // object literal, lookup the property symbol in the contextual type, and use this for goto-definition.
+        // For example
+        //      interface Props{
+        //          /*first*/prop1: number
+        //          prop2: boolean
+        //      }
+        //      function Foo(arg: Props) {}
+        //      Foo( { pr/*1*/op1: 10, prop2: true })
+        const element = getContainingObjectLiteralElement(node);
+        if (element) {
+            if (typeChecker.getContextualType(element.parent as Expression)) {
+                const result: DefinitionInfo[] = [];
+                const propertySymbols = getPropertySymbolsFromContextualType(typeChecker, element);
+                for (const propertySymbol of propertySymbols) {
+                    result.push(...getDefinitionFromSymbol(typeChecker, propertySymbol, node));
+                }
+                return result;
+            }
+        }
         return getDefinitionFromSymbol(typeChecker, symbol, node);
     }
 
@@ -251,6 +284,11 @@ namespace ts.GoToDefinition {
 
     function tryGetSignatureDeclaration(typeChecker: TypeChecker, node: Node): SignatureDeclaration | undefined {
         const callLike = getAncestorCallLikeExpression(node);
-        return callLike && typeChecker.getResolvedSignature(callLike).declaration;
+        if (callLike) {
+            const resolvedSignature = typeChecker.getResolvedSignature(callLike);
+            // We have to check that resolvedSignature is not undefined because in the case of JSX opening-like element,
+            // it may not be a stateless function component which then will cause getResolvedSignature to return undefined.
+            return resolvedSignature && resolvedSignature.declaration;
+        }
     }
 }
