@@ -271,14 +271,13 @@ namespace ts.Completions {
             const span = getDirectoryFragmentTextSpan((<StringLiteral>node).text, node.getStart() + 1);
             let entries: CompletionEntry[];
             if (isPathRelativeToScript(literalValue) || isRootedDiskPath(literalValue)) {
-                const fileExtensionMap = host.getFileExtensionMap ? host.getFileExtensionMap() : {};
                 if (compilerOptions.rootDirs) {
                     entries = getCompletionEntriesForDirectoryFragmentWithRootDirs(
-                        compilerOptions.rootDirs, literalValue, scriptDirectory, getSupportedExtensions(compilerOptions, fileExtensionMap), /*includeExtensions*/false, span, scriptPath);
+                        compilerOptions.rootDirs, literalValue, scriptDirectory, getSupportedExtensions(compilerOptions), /*includeExtensions*/false, span, scriptPath);
                 }
                 else {
                     entries = getCompletionEntriesForDirectoryFragment(
-                        literalValue, scriptDirectory, getSupportedExtensions(compilerOptions, fileExtensionMap), /*includeExtensions*/false, span, scriptPath);
+                        literalValue, scriptDirectory, getSupportedExtensions(compilerOptions), /*includeExtensions*/false, span, scriptPath);
                 }
             }
             else {
@@ -412,8 +411,7 @@ namespace ts.Completions {
             let result: CompletionEntry[];
 
             if (baseUrl) {
-                const fileExtensionMap = host.getFileExtensionMap ? host.getFileExtensionMap() : {};
-                const fileExtensions = getSupportedExtensions(compilerOptions, fileExtensionMap);
+                const fileExtensions = getSupportedExtensions(compilerOptions);
                 const projectDir = compilerOptions.project || host.getCurrentDirectory();
                 const absolute = isRootedDiskPath(baseUrl) ? baseUrl : combinePaths(projectDir, baseUrl);
                 result = getCompletionEntriesForDirectoryFragment(fragment, normalizePath(absolute), fileExtensions, /*includeExtensions*/false, span);
@@ -590,8 +588,7 @@ namespace ts.Completions {
                 if (kind === "path") {
                     // Give completions for a relative path
                     const span: TextSpan = getDirectoryFragmentTextSpan(toComplete, range.pos + prefix.length);
-                    const fileExtensionMap = host.getFileExtensionMap ? host.getFileExtensionMap() : {};
-                    completionInfo.entries = getCompletionEntriesForDirectoryFragment(toComplete, scriptPath, getSupportedExtensions(compilerOptions, fileExtensionMap), /*includeExtensions*/true, span, sourceFile.path);
+                    completionInfo.entries = getCompletionEntriesForDirectoryFragment(toComplete, scriptPath, getSupportedExtensions(compilerOptions), /*includeExtensions*/true, span, sourceFile.path);
                 }
                 else {
                     // Give completions based on the typings available
