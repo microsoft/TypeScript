@@ -88,6 +88,7 @@ namespace ts {
             getReturnTypeOfSignature,
             getNonNullableType,
             getSymbolsInScope,
+            createSymbol,
             getSymbolAtLocation,
             getShorthandAssignmentValueSymbol,
             getExportSpecifierLocalTargetSymbol,

@@ -1,18 +1,18 @@
 /// <reference path='fourslash.ts' />
 
-//// interface I {
-////     method(a: number, b: string): boolean;
+//// class A {
+////     method(a: any, b: string): boolean;
 ////     method(a: string, b: number): Function;
 ////     method(a: string): Function;
-//// }
+////     method(a: string | number, b?: string | number): boolean | Function { return true; }
 ////
-//// class C implements I {[| |]}
+//// class C implements A {[| |]}
 
 verify.rangeAfterCodeFix(`
-    method(a: number, b: string): boolean;
+    method(a: any, b: string): boolean;
     method(a: string, b: number): Function;
     method(a: string): Function;
-    method(arg0: any, arg1?: any) {
+    method(a: string | number, b?: string | number): boolean | Function {
         throw new Error('Method not implemented.');
     }
 `);
