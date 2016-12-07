@@ -1329,7 +1329,7 @@ namespace ts.server {
 
         openExternalProjects(projects: protocol.ExternalProject[]): void {
             // record project list before the update
-            const projectsToClose =  arrayToMap(this.externalProjects, p => p.getProjectName(), _ => true);
+            const projectsToClose = arrayToMap(this.externalProjects, p => p.getProjectName(), _ => true);
             for (const externalProjectName in this.externalProjectToConfiguredProjectMap) {
                 projectsToClose[externalProjectName] = true;
             }
