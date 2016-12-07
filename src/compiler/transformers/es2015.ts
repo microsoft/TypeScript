@@ -2837,7 +2837,6 @@ namespace ts {
                 //      _super.call(this, a)
                 //      _super.m.call(this, a)
                 //      _super.prototype.m.call(this, a)
-
                 resultingCall = createFunctionCall(
                     visitNode(target, visitor, isExpression),
                     visitNode(thisArg, visitor, isExpression),

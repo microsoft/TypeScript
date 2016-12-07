@@ -194,6 +194,7 @@ namespace ts {
             writer.writeSpace = writer.write;
             writer.writeStringLiteral = writer.writeLiteral;
             writer.writeParameter = writer.write;
+            writer.writeProperty = writer.write;
             writer.writeSymbol = writer.write;
             setWriter(writer);
         }
@@ -371,7 +372,7 @@ namespace ts {
 
         function writeJsDocComments(declaration: Node) {
             if (declaration) {
-                const jsDocComments = getJsDocCommentsFromText(declaration, currentText);
+                const jsDocComments = getJSDocCommentRanges(declaration, currentText);
                 emitNewLineBeforeLeadingComments(currentLineMap, writer, declaration, jsDocComments);
                 // jsDoc comments are emitted at /*leading comment1 */space/*leading comment*/space
                 emitComments(currentText, currentLineMap, writer, jsDocComments, /*leadingSeparator*/ false, /*trailingSeparator*/ true, newLine, writeCommentRange);
@@ -1624,6 +1625,12 @@ namespace ts {
                         return symbolAccessibilityResult.errorModuleName ?
                             Diagnostics.Parameter_0_of_call_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
                             Diagnostics.Parameter_0_of_call_signature_from_exported_interface_has_or_is_using_private_name_1;
+
+                    case SyntaxKind.IndexSignature:
+                        // Interfaces cannot have parameter types that cannot be named
+                        return symbolAccessibilityResult.errorModuleName ?
+                            Diagnostics.Parameter_0_of_index_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Parameter_0_of_index_signature_from_exported_interface_has_or_is_using_private_name_1;
 
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:

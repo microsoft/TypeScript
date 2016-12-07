@@ -1365,14 +1365,12 @@ namespace ts.server {
 
         private handlers = createMap<(request: protocol.Request) => { response?: any, responseRequired?: boolean }>({
             [CommandNames.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
-                this.projectService.openExternalProject(request.arguments);
+                this.projectService.openExternalProject(request.arguments, /*suppressRefreshOfInferredProjects*/ false);
                 // TODO: report errors
                 return this.requiredResponse(true);
             },
             [CommandNames.OpenExternalProjects]: (request: protocol.OpenExternalProjectsRequest) => {
-                for (const proj of request.arguments.projects) {
-                    this.projectService.openExternalProject(proj);
-                }
+                this.projectService.openExternalProjects(request.arguments.projects);
                 // TODO: report errors
                 return this.requiredResponse(true);
             },

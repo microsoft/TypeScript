@@ -951,10 +951,10 @@ namespace ts {
         }
 
         if (node) {
-            if (node.jsDocComments) {
-                for (const jsDocComment of node.jsDocComments) {
-                    if (jsDocComment.tags) {
-                        for (const tag of jsDocComment.tags) {
+            if (node.jsDoc) {
+                for (const jsDoc of node.jsDoc) {
+                    if (jsDoc.tags) {
+                        for (const tag of jsDoc.tags) {
                             if (tag.pos <= position && position <= tag.end) {
                                 return tag;
                             }
@@ -1137,6 +1137,7 @@ namespace ts {
             writeSpace: text => writeKind(text, SymbolDisplayPartKind.space),
             writeStringLiteral: text => writeKind(text, SymbolDisplayPartKind.stringLiteral),
             writeParameter: text => writeKind(text, SymbolDisplayPartKind.parameterName),
+            writeProperty: text => writeKind(text, SymbolDisplayPartKind.propertyName),
             writeSymbol,
             writeLine,
             increaseIndent: () => { indent++; },

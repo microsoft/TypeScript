@@ -51,9 +51,8 @@ namespace ts.projectSystem {
             throttleLimit: number,
             installTypingHost: server.ServerHost,
             readonly typesRegistry = createMap<void>(),
-            telemetryEnabled?: boolean,
             log?: TI.Log) {
-            super(installTypingHost, globalTypingsCacheLocation, safeList.path, throttleLimit, telemetryEnabled, log);
+            super(installTypingHost, globalTypingsCacheLocation, safeList.path, throttleLimit, log);
         }
 
         safeFileList = safeList.path;
@@ -90,8 +89,8 @@ namespace ts.projectSystem {
             this.projectService.updateTypingsForProject(response);
         }
 
-        enqueueInstallTypingsRequest(project: server.Project, typingOptions: TypingOptions, unresolvedImports: server.SortedReadonlyArray<string>) {
-            const request = server.createInstallTypingsRequest(project, typingOptions, unresolvedImports, this.globalTypingsCacheLocation);
+        enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: server.SortedReadonlyArray<string>) {
+            const request = server.createInstallTypingsRequest(project, typeAcquisition, unresolvedImports, this.globalTypingsCacheLocation);
             this.install(request);
         }
 
@@ -578,6 +577,35 @@ namespace ts.projectSystem {
             checkWatchedDirectories(host, ["/a/b/c", "/a/b", "/a"]);
         });
 
+        it("can handle tsconfig file name with difference casing", () => {
+            const f1 = {
+                path: "/a/b/app.ts",
+                content: "let x = 1"
+            };
+            const config = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({
+                    include: []
+                })
+            };
+
+            const host = createServerHost([f1, config], { useCaseSensitiveFileNames: false });
+            const service = createProjectService(host);
+            service.openExternalProject(<protocol.ExternalProject>{
+                projectFileName: "/a/b/project.csproj",
+                rootFiles: toExternalFiles([f1.path, combinePaths(getDirectoryPath(config.path).toUpperCase(), getBaseFileName(config.path))]),
+                options: {}
+            });
+            service.checkNumberOfProjects({ configuredProjects: 1 });
+            checkProjectActualFiles(service.configuredProjects[0], []);
+
+            service.openClientFile(f1.path);
+            service.checkNumberOfProjects({ configuredProjects: 1, inferredProjects: 1 });
+
+            checkProjectActualFiles(service.configuredProjects[0], []);
+            checkProjectActualFiles(service.inferredProjects[0], [f1.path]);
+        })
+
         it("create configured project without file list", () => {
             const configFile: FileOrFolder = {
                 path: "/a/b/tsconfig.json",
@@ -697,6 +725,66 @@ namespace ts.projectSystem {
             const project = projectService.configuredProjects[0];
             checkProjectRootFiles(project, [commonFile1.path]);
             checkNumberOfInferredProjects(projectService, 1);
+        });
+
+        it("remove not-listed external projects", () => {
+            const f1 = {
+                path: "/a/app.ts",
+                content: "let x = 1"
+            };
+            const f2 = {
+                path: "/b/app.ts",
+                content: "let x = 1"
+            };
+            const f3 = {
+                path: "/c/app.ts",
+                content: "let x = 1"
+            };
+            const makeProject = (f:  FileOrFolder) => ({ projectFileName: f.path + ".csproj", rootFiles: [toExternalFile(f.path)], options: {} });
+            const p1 = makeProject(f1);
+            const p2 = makeProject(f2);
+            const p3 = makeProject(f3);
+
+            const host = createServerHost([f1, f2, f3]);
+            const session = createSession(host);
+
+            session.executeCommand(<protocol.OpenExternalProjectsRequest>{
+                seq: 1,
+                type: "request",
+                command: "openExternalProjects",
+                arguments: { projects: [p1, p2] }
+            });
+
+            const projectService = session.getProjectService();
+            checkNumberOfProjects(projectService, { externalProjects: 2 });
+            assert.equal(projectService.externalProjects[0].getProjectName(), p1.projectFileName);
+            assert.equal(projectService.externalProjects[1].getProjectName(), p2.projectFileName);
+
+            session.executeCommand(<protocol.OpenExternalProjectsRequest>{
+                seq: 2,
+                type: "request",
+                command: "openExternalProjects",
+                arguments: { projects: [p1, p3] }
+            });
+            checkNumberOfProjects(projectService, { externalProjects: 2 });
+            assert.equal(projectService.externalProjects[0].getProjectName(), p1.projectFileName);
+            assert.equal(projectService.externalProjects[1].getProjectName(), p3.projectFileName);
+
+            session.executeCommand(<protocol.OpenExternalProjectsRequest>{
+                seq: 3,
+                type: "request",
+                command: "openExternalProjects",
+                arguments: { projects: [] }
+            });
+            checkNumberOfProjects(projectService, { externalProjects: 0 });
+
+            session.executeCommand(<protocol.OpenExternalProjectsRequest>{
+                seq: 3,
+                type: "request",
+                command: "openExternalProjects",
+                arguments: { projects: [p2] }
+            });
+            assert.equal(projectService.externalProjects[0].getProjectName(), p2.projectFileName);
         });
 
         it("handle recreated files correctly", () => {
@@ -1786,8 +1874,8 @@ namespace ts.projectSystem {
                 options: {}
             });
             projectService.checkNumberOfProjects({ externalProjects: 1 });
-            const typingOptions = projectService.externalProjects[0].getTypingOptions();
-            assert.isTrue(typingOptions.enableAutoDiscovery, "Typing autodiscovery should be enabled");
+            const typeAcquisition = projectService.externalProjects[0].getTypeAcquisition();
+            assert.isTrue(typeAcquisition.enable, "Typine acquisition should be enabled");
         });
     });
 
@@ -2512,6 +2600,43 @@ namespace ts.projectSystem {
             openFilesForSession([file], session);
             serverEventManager.checkEventCountOfType("configFileDiag", 1);
         });
+
+        it("are generated when the config file changes", () => {
+            const serverEventManager = new TestServerEventManager();
+            const file = {
+                path: "/a/b/app.ts",
+                content: "let x = 10"
+            };
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {}
+                }`
+            };
+
+            const host = createServerHost([file, configFile]);
+            const session = createSession(host, /*typingsInstaller*/ undefined, serverEventManager.handler);
+            openFilesForSession([file], session);
+            serverEventManager.checkEventCountOfType("configFileDiag", 1);
+
+            configFile.content = `{
+                "compilerOptions": {
+                    "haha": 123
+                }
+            }`;
+            host.reloadFS([file, configFile]);
+            host.triggerFileWatcherCallback(configFile.path);
+            host.runQueuedTimeoutCallbacks();
+            serverEventManager.checkEventCountOfType("configFileDiag", 2);
+
+            configFile.content = `{
+                "compilerOptions": {}
+            }`;
+            host.reloadFS([file, configFile]);
+            host.triggerFileWatcherCallback(configFile.path);
+            host.runQueuedTimeoutCallbacks();
+            serverEventManager.checkEventCountOfType("configFileDiag", 3);
+        });
     });
 
     describe("skipLibCheck", () => {
@@ -2723,6 +2848,65 @@ namespace ts.projectSystem {
                 arguments: { projectFileName: projectName }
             }).response;
             assert.isTrue(diags.length === 0);
+
+            session.executeCommand(<server.protocol.SetCompilerOptionsForInferredProjectsRequest>{
+                type: "request",
+                command: server.CommandNames.CompilerOptionsForInferredProjects,
+                seq: 3,
+                arguments: { options: { module: ModuleKind.CommonJS } }
+            });
+            const diagsAfterUpdate = session.executeCommand(<server.protocol.CompilerOptionsDiagnosticsRequest>{
+                type: "request",
+                command: server.CommandNames.CompilerOptionsDiagnosticsFull,
+                seq: 4,
+                arguments: { projectFileName: projectName }
+            }).response;
+            assert.isTrue(diagsAfterUpdate.length === 0);
+        });
+
+        it("for external project", () => {
+            const f1 = {
+                path: "/a/b/f1.js",
+                content: "function test1() { }"
+            };
+            const host = createServerHost([f1, libFile]);
+            const session = createSession(host);
+            const projectService = session.getProjectService();
+            const projectFileName = "/a/b/project.csproj";
+            const externalFiles = toExternalFiles([f1.path]);
+            projectService.openExternalProject(<protocol.ExternalProject>{
+                projectFileName,
+                rootFiles: externalFiles,
+                options: {}
+            });
+
+            checkNumberOfProjects(projectService, { externalProjects: 1 });
+
+            const diags = session.executeCommand(<server.protocol.CompilerOptionsDiagnosticsRequest>{
+                type: "request",
+                command: server.CommandNames.CompilerOptionsDiagnosticsFull,
+                seq: 2,
+                arguments: { projectFileName }
+            }).response;
+            assert.isTrue(diags.length === 0);
+
+            session.executeCommand(<server.protocol.OpenExternalProjectRequest>{
+                type: "request",
+                command: server.CommandNames.OpenExternalProject,
+                seq: 3,
+                arguments: {
+                    projectFileName,
+                    rootFiles: externalFiles,
+                    options: { module: ModuleKind.CommonJS }
+                }
+            });
+            const diagsAfterUpdate = session.executeCommand(<server.protocol.CompilerOptionsDiagnosticsRequest>{
+                type: "request",
+                command: server.CommandNames.CompilerOptionsDiagnosticsFull,
+                seq: 4,
+                arguments: { projectFileName }
+            }).response;
+            assert.isTrue(diagsAfterUpdate.length === 0);
         });
     });
 

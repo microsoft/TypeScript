@@ -108,7 +108,7 @@
         "./unittests/commandLineParsing.ts",
         "./unittests/configurationExtension.ts",
         "./unittests/convertCompilerOptionsFromJson.ts",
-        "./unittests/convertTypingOptionsFromJson.ts",
+        "./unittests/convertTypeAcquisitionFromJson.ts",
         "./unittests/tsserverProjectSystem.ts",
         "./unittests/matchFiles.ts",
         "./unittests/initializeTSConfig.ts",

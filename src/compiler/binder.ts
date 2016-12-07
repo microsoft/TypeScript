@@ -518,7 +518,6 @@ namespace ts {
                 hasExplicitReturn = false;
                 bindChildren(node);
                 // Reset all reachability check related flags on node (for incremental scenarios)
-                // Reset all emit helper flags on node (for incremental scenarios)
                 node.flags &= ~NodeFlags.ReachabilityAndEmitFlags;
                 if (!(currentFlow.flags & FlowFlags.Unreachable) && containerFlags & ContainerFlags.IsFunctionLike && nodeIsPresent((<FunctionLikeDeclaration>node).body)) {
                     node.flags |= NodeFlags.HasImplicitReturn;
@@ -599,8 +598,8 @@ namespace ts {
             // Binding of JsDocComment should be done before the current block scope container changes.
             // because the scope of JsDocComment should not be affected by whether the current node is a
             // container or not.
-            if (isInJavaScriptFile(node) && node.jsDocComments) {
-                forEach(node.jsDocComments, bind);
+            if (isInJavaScriptFile(node) && node.jsDoc) {
+                forEach(node.jsDoc, bind);
             }
             if (checkUnreachable(node)) {
                 bindEachChild(node);
@@ -1950,9 +1949,6 @@ namespace ts {
                     return bindParameter(<ParameterDeclaration>node);
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.BindingElement:
-                    if ((node as BindingElement).dotDotDotToken && node.parent.kind === SyntaxKind.ObjectBindingPattern) {
-                        emitFlags |= NodeFlags.HasRestAttribute;
-                    }
                     return bindVariableDeclarationOrBindingElement(<VariableDeclaration | BindingElement>node);
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
@@ -1980,7 +1976,6 @@ namespace ts {
                         }
                         root = root.parent;
                     }
-                    emitFlags |= hasRest ? NodeFlags.HasRestAttribute : NodeFlags.HasSpreadAttribute;
                     return;
 
                 case SyntaxKind.CallSignature:
@@ -2236,15 +2231,6 @@ namespace ts {
         }
 
         function bindClassLikeDeclaration(node: ClassLikeDeclaration) {
-            if (!isDeclarationFile(file) && !isInAmbientContext(node)) {
-                if (getClassExtendsHeritageClauseElement(node) !== undefined) {
-                    emitFlags |= NodeFlags.HasClassExtends;
-                }
-                if (nodeIsDecorated(node)) {
-                    emitFlags |= NodeFlags.HasDecorators;
-                }
-            }
-
             if (node.kind === SyntaxKind.ClassDeclaration) {
                 bindBlockScopedDeclaration(node, SymbolFlags.Class, SymbolFlags.ClassExcludes);
             }
@@ -2314,12 +2300,6 @@ namespace ts {
         }
 
         function bindParameter(node: ParameterDeclaration) {
-            if (!isDeclarationFile(file) &&
-                !isInAmbientContext(node) &&
-                nodeIsDecorated(node)) {
-                emitFlags |= (NodeFlags.HasDecorators | NodeFlags.HasParamDecorators);
-            }
-
             if (inStrictMode) {
                 // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a
                 // strict mode FunctionLikeDeclaration or FunctionExpression(13.1)
@@ -2376,9 +2356,6 @@ namespace ts {
             if (!isDeclarationFile(file) && !isInAmbientContext(node)) {
                 if (isAsyncFunctionLike(node)) {
                     emitFlags |= NodeFlags.HasAsyncFunctions;
-                }
-                if (nodeIsDecorated(node)) {
-                    emitFlags |= NodeFlags.HasDecorators;
                 }
             }
 
