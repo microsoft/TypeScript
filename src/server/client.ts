@@ -216,8 +216,10 @@ namespace ts.server {
                     if (entry.replacementSpan !== undefined) {
                         const { name, kind, kindModifiers, sortText, replacementSpan} = entry;
 
-                        const convertedSpan = createTextSpanFromBounds(this.lineOffsetToPosition(fileName, replacementSpan.start),
-                            this.lineOffsetToPosition(fileName, replacementSpan.end));
+                        const startBound = this.lineOffsetToPosition(fileName, replacementSpan.start)
+                        const endBound = this.lineOffsetToPosition(fileName, replacementSpan.end)
+
+                        const convertedSpan = createTextSpanFromBounds(startBound, endBound);
                         return { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan };
                     }
 

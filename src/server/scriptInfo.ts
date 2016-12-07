@@ -185,13 +185,23 @@ namespace ts.server {
         }
 
         /**
-         * @param line 1-based index
-         * @param offset 1-based index
+         * @param position 0-based position index
+         * @return ILineInfo with 1-based indexing for line numbers and offsets.
          */
-        positionToLineOffset(position: number): ILineInfo {
+        positionToOneIndexedLineOffset(position: number): ILineInfo {
             const index = this.snap().index;
             const lineOffset = index.charOffsetToLineNumberAndPos(position);
             return { line: lineOffset.line, offset: lineOffset.offset + 1 };
+        }
+
+        /**
+         * @param position 0-based position index
+         * @return ILineInfo with 0-based indexing for line numbers and offsets.
+         */
+        positionToZeroIndexedLineOffset(position: number): ILineInfo {
+            const index = this.snap().index;
+            const lineOffset = index.charOffsetToLineNumberAndPos(position);
+            return { line: lineOffset.line - 1, offset: lineOffset.offset };
         }
     }
 }
