@@ -549,14 +549,7 @@ namespace ts {
 
     /* @internal */
     export function parseCustomTypeOption(opt: CommandLineOptionOfCustomType, value: string, errors: Diagnostic[]) {
-        const key = trimString((value || "")).toLowerCase();
-        const map = opt.type;
-        if (key in map) {
-            return map[key];
-        }
-        else {
-            errors.push(createCompilerDiagnosticForInvalidCustomType(opt));
-        }
+        return convertJsonOptionOfCustomType(opt, trimString(value || ""), errors);
     }
 
     /* @internal */
