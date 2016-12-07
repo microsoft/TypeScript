@@ -14,10 +14,10 @@
 ////}
 
 goTo.marker('1');
-verify.memberListContains("x");
+verify.completionListContains("x");
 
 goTo.marker('2');
-verify.memberListContains("y");
+verify.completionListContains("y");
 
 goTo.marker('3');
-verify.memberListContains("z");
+verify.completionListContains("z");

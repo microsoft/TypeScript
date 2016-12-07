@@ -22,11 +22,11 @@ verify.completionListContains("Colors", "enum Colors", "Enum of colors");
 verify.quickInfoIs("enum Colors", "Enum of colors");
 
 goTo.marker('6');
-verify.memberListContains("Cornflower", "(enum member) Colors.Cornflower = 0", "Fancy name for 'blue'");
-verify.memberListContains("FancyPink", "(enum member) Colors.FancyPink = 1", "Fancy name for 'pink'");
+verify.completionListContains("Cornflower", "(enum member) Colors.Cornflower = 0", "Fancy name for 'blue'");
+verify.completionListContains("FancyPink", "(enum member) Colors.FancyPink = 1", "Fancy name for 'pink'");
 verify.quickInfoIs("(enum member) Colors.Cornflower = 0", "Fancy name for 'blue'");
 
 goTo.marker('7');
-verify.memberListContains("Cornflower", "(enum member) Colors.Cornflower = 0", "Fancy name for 'blue'");
-verify.memberListContains("FancyPink", "(enum member) Colors.FancyPink = 1", "Fancy name for 'pink'");
+verify.completionListContains("Cornflower", "(enum member) Colors.Cornflower = 0", "Fancy name for 'blue'");
+verify.completionListContains("FancyPink", "(enum member) Colors.FancyPink = 1", "Fancy name for 'pink'");
 verify.quickInfoIs("(enum member) Colors.FancyPink = 1", "Fancy name for 'pink'");
