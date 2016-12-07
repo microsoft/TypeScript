@@ -1754,6 +1754,19 @@ namespace ts {
 
     // Utilities
 
+    export function restoreEnclosingLabels(node: Statement, enclosingLabeledStatements: LabeledStatement[]) {
+        if (enclosingLabeledStatements) {
+            for (const labeledStatement of enclosingLabeledStatements) {
+                node = updateLabel(
+                    labeledStatement,
+                    labeledStatement.label,
+                    node
+                );
+            }
+        }
+        return node;
+    }
+
     export interface CallBinding {
         target: LeftHandSideExpression;
         thisArg: Expression;
