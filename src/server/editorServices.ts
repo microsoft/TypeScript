@@ -254,11 +254,11 @@ namespace ts.server {
         private readonly directoryWatchers: DirectoryWatchers;
         private readonly throttledOperations: ThrottledOperations;
 
+        private readonly hostConfiguration: HostConfiguration;
+
         private changedFiles: ScriptInfo[];
 
         readonly toCanonicalFileName: (f: string) => string;
-
-        public readonly hostConfiguration: HostConfiguration;
 
         public lastDeletedFile: ScriptInfo;
 

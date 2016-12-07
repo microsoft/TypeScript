@@ -296,6 +296,9 @@ namespace ts.server {
         }
 
         enableLanguageService() {
+            if (this.languageServiceEnabled) {
+                return;
+            }
             this.languageServiceEnabled = true;
             this.projectService.onUpdateLanguageServiceStateForProject(this, /*languageServiceEnabled*/ true);
         }
