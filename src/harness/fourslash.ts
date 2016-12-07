@@ -961,7 +961,9 @@ namespace FourSlash {
 
         public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: { start: number; length: number; },
             displayParts: ts.SymbolDisplayPart[],
-            documentation: ts.SymbolDisplayPart[]) {
+            documentation: ts.SymbolDisplayPart[],
+            tags: ts.JSDocTagInfo[]
+            ) {
 
             const actualQuickInfo = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             assert.equal(actualQuickInfo.kind, kind, this.messageAtLastKnownMarker("QuickInfo kind"));
@@ -969,6 +971,11 @@ namespace FourSlash {
             assert.equal(JSON.stringify(actualQuickInfo.textSpan), JSON.stringify(textSpan), this.messageAtLastKnownMarker("QuickInfo textSpan"));
             assert.equal(TestState.getDisplayPartsJson(actualQuickInfo.displayParts), TestState.getDisplayPartsJson(displayParts), this.messageAtLastKnownMarker("QuickInfo displayParts"));
             assert.equal(TestState.getDisplayPartsJson(actualQuickInfo.documentation), TestState.getDisplayPartsJson(documentation), this.messageAtLastKnownMarker("QuickInfo documentation"));
+            assert.equal(actualQuickInfo.tags.length, tags.length, this.messageAtLastKnownMarker("QuickInfo tags"));
+            ts.zipWith(tags, actualQuickInfo.tags, (expectedTag, actualTag) => {
+                assert.equal(expectedTag.name, actualTag.name);
+                assert.equal(expectedTag.text, actualTag.text, this.messageAtLastKnownMarker("QuickInfo tag " + actualTag.name));
+            });
         }
 
         public verifyRenameLocations(findInStrings: boolean, findInComments: boolean, ranges?: Range[]) {
@@ -3414,8 +3421,8 @@ namespace FourSlashInterface {
         }
 
         public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: { start: number; length: number; },
-            displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[]) {
-            this.state.verifyQuickInfoDisplayParts(kind, kindModifiers, textSpan, displayParts, documentation);
+            displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: ts.JSDocTagInfo[]) {
+            this.state.verifyQuickInfoDisplayParts(kind, kindModifiers, textSpan, displayParts, documentation, tags);
         }
 
         public getSyntacticDiagnostics(expected: string) {

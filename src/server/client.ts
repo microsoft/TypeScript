@@ -176,7 +176,8 @@ namespace ts.server {
                 kindModifiers: response.body.kindModifiers,
                 textSpan: ts.createTextSpanFromBounds(start, end),
                 displayParts: [{ kind: "text", text: response.body.displayString }],
-                documentation: [{ kind: "text", text: response.body.documentation }]
+                documentation: [{ kind: "text", text: response.body.documentation }],
+                tags: response.body.tags
             };
         }
 

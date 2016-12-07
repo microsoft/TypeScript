@@ -1,163 +1,39 @@
 [
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
-      "position": 21
+      "fileName": "/tests/cases/fourslash/jsDocTags.ts",
+      "position": 898
     },
     "quickInfo": {
-      "kind": "method",
-      "kindModifiers": "public",
+      "kind": "constructor",
+      "kindModifiers": "",
       "textSpan": {
-        "start": 21,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        },
-        {
-          "text": "[",
-          "kind": "punctuation"
-        },
-        {
-          "text": "1",
-          "kind": "methodName"
-        },
-        {
-          "text": "]",
-          "kind": "punctuation"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "documentation": [],
-      "tags": []
-    }
-  },
-  {
-    "marker": {
-      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
-      "position": 41
-    },
-    "quickInfo": {
-      "kind": "method",
-      "kindModifiers": "private",
-      "textSpan": {
-        "start": 41,
-        "length": 8
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "Infinity",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "documentation": [],
-      "tags": []
-    }
-  },
-  {
-    "marker": {
-      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
-      "position": 70
-    },
-    "quickInfo": {
-      "kind": "method",
-      "kindModifiers": "protected",
-      "textSpan": {
-        "start": 70,
+        "start": 898,
         "length": 3
       },
       "displayParts": [
         {
+          "text": "constructor",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Foo",
+          "kind": "className"
+        },
+        {
           "text": "(",
           "kind": "punctuation"
         },
         {
-          "text": "method",
-          "kind": "text"
+          "text": "value",
+          "kind": "parameterName"
         },
         {
-          "text": ")",
+          "text": ":",
           "kind": "punctuation"
         },
         {
@@ -165,20 +41,8 @@
           "kind": "space"
         },
         {
-          "text": "C",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "NaN",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
+          "text": "number",
+          "kind": "keyword"
         },
         {
           "text": ")",
@@ -193,25 +57,75 @@
           "kind": "space"
         },
         {
-          "text": "void",
-          "kind": "keyword"
+          "text": "Foo",
+          "kind": "className"
         }
       ],
-      "documentation": [],
-      "tags": []
+      "documentation": [
+        {
+          "text": "This is the constructor.",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "myjsdoctag",
+          "text": "this is a comment"
+        }
+      ]
     }
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
-      "position": 91
+      "fileName": "/tests/cases/fourslash/jsDocTags.ts",
+      "position": 906
+    },
+    "quickInfo": {
+      "kind": "class",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 906,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Foo",
+          "kind": "className"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "This is class Foo.",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "mytag",
+          "text": "comment1 comment2"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/jsDocTags.ts",
+      "position": 910
     },
     "quickInfo": {
       "kind": "method",
       "kindModifiers": "static",
       "textSpan": {
-        "start": 91,
-        "length": 19
+        "start": 910,
+        "length": 7
       },
       "displayParts": [
         {
@@ -231,217 +145,7 @@
           "kind": "space"
         },
         {
-          "text": "C",
-          "kind": "className"
-        },
-        {
-          "text": "[",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"stringLiteralName\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": "]",
-          "kind": "punctuation"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "documentation": [],
-      "tags": []
-    }
-  },
-  {
-    "marker": {
-      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
-      "position": 145
-    },
-    "quickInfo": {
-      "kind": "method",
-      "kindModifiers": "public",
-      "textSpan": {
-        "start": 145,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        },
-        {
-          "text": "[",
-          "kind": "punctuation"
-        },
-        {
-          "text": "1",
-          "kind": "methodName"
-        },
-        {
-          "text": "]",
-          "kind": "punctuation"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "documentation": [],
-      "tags": []
-    }
-  },
-  {
-    "marker": {
-      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
-      "position": 164
-    },
-    "quickInfo": {
-      "kind": "method",
-      "kindModifiers": "public",
-      "textSpan": {
-        "start": 164,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        },
-        {
-          "text": "[",
-          "kind": "punctuation"
-        },
-        {
-          "text": "1",
-          "kind": "methodName"
-        },
-        {
-          "text": "]",
-          "kind": "punctuation"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "documentation": [],
-      "tags": []
-    }
-  },
-  {
-    "marker": {
-      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
-      "position": 185
-    },
-    "quickInfo": {
-      "kind": "method",
-      "kindModifiers": "private",
-      "textSpan": {
-        "start": 185,
-        "length": 8
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
+          "text": "Foo",
           "kind": "className"
         },
         {
@@ -449,7 +153,7 @@
           "kind": "punctuation"
         },
         {
-          "text": "Infinity",
+          "text": "method1",
           "kind": "methodName"
         },
         {
@@ -473,21 +177,31 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "tags": []
+      "documentation": [
+        {
+          "text": "method1 documentation",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "mytag",
+          "text": "comment1 comment2"
+        }
+      ]
     }
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
-      "position": 210
+      "fileName": "/tests/cases/fourslash/jsDocTags.ts",
+      "position": 925
     },
     "quickInfo": {
       "kind": "method",
-      "kindModifiers": "private",
+      "kindModifiers": "",
       "textSpan": {
-        "start": 210,
-        "length": 10
+        "start": 925,
+        "length": 7
       },
       "displayParts": [
         {
@@ -507,7 +221,7 @@
           "kind": "space"
         },
         {
-          "text": "C",
+          "text": "Foo",
           "kind": "className"
         },
         {
@@ -515,7 +229,7 @@
           "kind": "punctuation"
         },
         {
-          "text": "Infinity",
+          "text": "method2",
           "kind": "methodName"
         },
         {
@@ -540,20 +254,25 @@
         }
       ],
       "documentation": [],
-      "tags": []
+      "tags": [
+        {
+          "name": "mytag",
+          "text": ""
+        }
+      ]
     }
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
-      "position": 238
+      "fileName": "/tests/cases/fourslash/jsDocTags.ts",
+      "position": 940
     },
     "quickInfo": {
       "kind": "method",
-      "kindModifiers": "protected",
+      "kindModifiers": "",
       "textSpan": {
-        "start": 238,
-        "length": 3
+        "start": 940,
+        "length": 7
       },
       "displayParts": [
         {
@@ -573,7 +292,7 @@
           "kind": "space"
         },
         {
-          "text": "C",
+          "text": "Foo",
           "kind": "className"
         },
         {
@@ -581,7 +300,298 @@
           "kind": "punctuation"
         },
         {
-          "text": "NaN",
+          "text": "method3",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/jsDocTags.ts",
+      "position": 955
+    },
+    "quickInfo": {
+      "kind": "method",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 955,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Foo",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method4",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "mytag",
+          "text": ""
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/jsDocTags.ts",
+      "position": 970
+    },
+    "quickInfo": {
+      "kind": "property",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 970,
+        "length": 9
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Foo",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property1",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "mytag",
+          "text": "comment1 comment2"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/jsDocTags.ts",
+      "position": 985
+    },
+    "quickInfo": {
+      "kind": "property",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 985,
+        "length": 9
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Foo",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property2",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "mytag1",
+          "text": "some comments\nsome more comments about mytag1"
+        },
+        {
+          "name": "mytag2",
+          "text": "here all the comments are on a new line"
+        },
+        {
+          "name": "mytag3",
+          "text": ""
+        },
+        {
+          "name": "mytag",
+          "text": ""
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/jsDocTags.ts",
+      "position": 1000
+    },
+    "quickInfo": {
+      "kind": "method",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 1000,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Foo",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method5",
           "kind": "methodName"
         },
         {
@@ -606,77 +616,12 @@
         }
       ],
       "documentation": [],
-      "tags": []
-    }
-  },
-  {
-    "marker": {
-      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
-      "position": 255
-    },
-    "quickInfo": {
-      "kind": "method",
-      "kindModifiers": "static",
-      "textSpan": {
-        "start": 255,
-        "length": 17
-      },
-      "displayParts": [
+      "tags": [
         {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        },
-        {
-          "text": "[",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"stringLiteralName\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": "]",
-          "kind": "punctuation"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
+          "name": "mytag",
+          "text": ""
         }
-      ],
-      "documentation": [],
-      "tags": []
+      ]
     }
   }
 ]

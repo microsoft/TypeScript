@@ -1295,6 +1295,11 @@ namespace ts.server.protocol {
           * Documentation associated with symbol.
           */
         documentation: string;
+
+        /**
+         * JSDoc tags associated with symbol.
+         */
+        tags: JSDocTagInfo[]
     }
 
     /**

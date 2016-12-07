@@ -1442,7 +1442,7 @@ namespace ts {
         return node && firstOrUndefined(getJSDocTags(node, kind));
     }
 
-   function getJSDocs(node: Node): (JSDoc | JSDocTag)[] {
+   export function getJSDocs(node: Node): (JSDoc | JSDocTag)[] {
         let cache: (JSDoc | JSDocTag)[] = node.jsDocCache;
         if (!cache) {
             getJSDocsWorker(node);

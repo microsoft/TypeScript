@@ -21,6 +21,7 @@ namespace ts {
         getName(): string;
         getDeclarations(): Declaration[];
         getDocumentationComment(): SymbolDisplayPart[];
+        getJsDocTags(): JSDocTagInfo[];
     }
 
     export interface Type {
@@ -43,6 +44,7 @@ namespace ts {
         getParameters(): Symbol[];
         getReturnType(): Type;
         getDocumentationComment(): SymbolDisplayPart[];
+        getJsDocTags(): JSDocTagInfo[];
     }
 
     export interface SourceFile {
@@ -492,12 +494,18 @@ namespace ts {
         kind: string;
     }
 
+    export interface JSDocTagInfo {
+        name: string;
+        text?: string;
+    }
+
     export interface QuickInfo {
         kind: string;
         kindModifiers: string;
         textSpan: TextSpan;
         displayParts: SymbolDisplayPart[];
         documentation: SymbolDisplayPart[];
+        tags: JSDocTagInfo[];
     }
 
     export interface RenameInfo {
