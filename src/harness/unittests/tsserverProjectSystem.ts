@@ -727,6 +727,66 @@ namespace ts.projectSystem {
             checkNumberOfInferredProjects(projectService, 1);
         });
 
+        it("remove not-listed external projects", () => {
+            const f1 = {
+                path: "/a/app.ts",
+                content: "let x = 1"
+            };
+            const f2 = {
+                path: "/b/app.ts",
+                content: "let x = 1"
+            };
+            const f3 = {
+                path: "/c/app.ts",
+                content: "let x = 1"
+            };
+            const makeProject = (f:  FileOrFolder) => ({ projectFileName: f.path + ".csproj", rootFiles: [toExternalFile(f.path)], options: {} });
+            const p1 = makeProject(f1);
+            const p2 = makeProject(f2);
+            const p3 = makeProject(f3);
+
+            const host = createServerHost([f1, f2, f3]);
+            const session = createSession(host);
+
+            session.executeCommand(<protocol.OpenExternalProjectsRequest>{
+                seq: 1,
+                type: "request",
+                command: "openExternalProjects",
+                arguments: { projects: [p1, p2] }
+            });
+
+            const projectService = session.getProjectService();
+            checkNumberOfProjects(projectService, { externalProjects: 2 });
+            assert.equal(projectService.externalProjects[0].getProjectName(), p1.projectFileName);
+            assert.equal(projectService.externalProjects[1].getProjectName(), p2.projectFileName);
+
+            session.executeCommand(<protocol.OpenExternalProjectsRequest>{
+                seq: 2,
+                type: "request",
+                command: "openExternalProjects",
+                arguments: { projects: [p1, p3] }
+            });
+            checkNumberOfProjects(projectService, { externalProjects: 2 });
+            assert.equal(projectService.externalProjects[0].getProjectName(), p1.projectFileName);
+            assert.equal(projectService.externalProjects[1].getProjectName(), p3.projectFileName);
+
+            session.executeCommand(<protocol.OpenExternalProjectsRequest>{
+                seq: 3,
+                type: "request",
+                command: "openExternalProjects",
+                arguments: { projects: [] }
+            });
+            checkNumberOfProjects(projectService, { externalProjects: 0 });
+
+            session.executeCommand(<protocol.OpenExternalProjectsRequest>{
+                seq: 3,
+                type: "request",
+                command: "openExternalProjects",
+                arguments: { projects: [p2] }
+            });
+            assert.equal(projectService.externalProjects[0].getProjectName(), p2.projectFileName);
+        });
+
         it("handle recreated files correctly", () => {
             const configFile: FileOrFolder = {
                 path: "/a/b/tsconfig.json",
