@@ -46,9 +46,9 @@ goTo.marker('4');
 verify.completionListContains("m1", "namespace m1", "Namespace comment");
 
 goTo.marker('5');
-verify.memberListContains("b", "var m1.b: number", "b's comment");
-verify.memberListContains("fooExport", "function m1.fooExport(): number", "exported function");
-verify.memberListContains("m2", "namespace m1.m2");
+verify.completionListContains("b", "var m1.b: number", "b's comment");
+verify.completionListContains("fooExport", "function m1.fooExport(): number", "exported function");
+verify.completionListContains("m2", "namespace m1.m2");
 
 goTo.marker('6');
 verify.currentSignatureHelpDocCommentIs("exported function");
@@ -57,8 +57,8 @@ verify.quickInfoAt("6q", "function m1.fooExport(): number", "exported function")
 verify.quickInfoAt("7", "var myvar: m1.m2.c");
 
 goTo.marker('8');
-verify.memberListContains("c", "constructor m1.m2.c(): m1.m2.c", "");
-verify.memberListContains("i", "var m1.m2.i: m1.m2.c", "i");
+verify.completionListContains("c", "constructor m1.m2.c(): m1.m2.c", "");
+verify.completionListContains("i", "var m1.m2.i: m1.m2.c", "i");
 
 goTo.file("commentsExternalModules_file1.ts");
 verify.quickInfoAt("9", 'import extMod = require("./commentsExternalModules_file0")', "This is on import declaration");
@@ -67,12 +67,12 @@ goTo.marker('10');
 verify.completionListContains("extMod", 'import extMod = require("./commentsExternalModules_file0")', "This is on import declaration");
 
 goTo.marker('11');
-verify.memberListContains("m1", "namespace extMod.m1");
+verify.completionListContains("m1", "namespace extMod.m1");
 
 goTo.marker('12');
-verify.memberListContains("b", "var extMod.m1.b: number", "b's comment");
-verify.memberListContains("fooExport", "function extMod.m1.fooExport(): number", "exported function");
-verify.memberListContains("m2", "namespace extMod.m1.m2");
+verify.completionListContains("b", "var extMod.m1.b: number", "b's comment");
+verify.completionListContains("fooExport", "function extMod.m1.fooExport(): number", "exported function");
+verify.completionListContains("m2", "namespace extMod.m1.m2");
 
 goTo.marker('13');
 verify.currentSignatureHelpDocCommentIs("exported function");
@@ -81,5 +81,5 @@ verify.quickInfoAt("13q", "function extMod.m1.fooExport(): number", "exported fu
 verify.quickInfoAt("14", "var newVar: extMod.m1.m2.c");
 
 goTo.marker('15');
-verify.memberListContains("c", "constructor extMod.m1.m2.c(): extMod.m1.m2.c", "");
-verify.memberListContains("i", "var extMod.m1.m2.i: extMod.m1.m2.c", "i");
+verify.completionListContains("c", "constructor extMod.m1.m2.c(): extMod.m1.m2.c", "");
+verify.completionListContains("i", "var extMod.m1.m2.i: extMod.m1.m2.c", "i");

@@ -6,8 +6,8 @@
 ////}
 
 goTo.marker();
-verify.memberListContains("charAt");
-verify.memberListContains("charCodeAt");
-verify.memberListContains("length");
-verify.memberListContains("concat");
-verify.not.memberListContains("toFixed");
+verify.completionListContains("charAt");
+verify.completionListContains("charCodeAt");
+verify.completionListContains("length");
+verify.completionListContains("concat");
+verify.not.completionListContains("toFixed");

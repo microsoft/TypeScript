@@ -9,14 +9,14 @@
 ////}
 
 goTo.marker('1');
-verify.memberListContains('next');
-verify.memberListContains('prev');
-verify.memberListContains('pushEntry');
+verify.completionListContains('next');
+verify.completionListContains('prev');
+verify.completionListContains('pushEntry');
 edit.insert('next.');
-verify.memberListContains('next');
-verify.memberListContains('prev');
-verify.memberListContains('pushEntry');
+verify.completionListContains('next');
+verify.completionListContains('prev');
+verify.completionListContains('pushEntry');
 edit.insert('prev.');
-verify.memberListContains('next');
-verify.memberListContains('prev');
-verify.memberListContains('pushEntry');
+verify.completionListContains('next');
+verify.completionListContains('prev');
+verify.completionListContains('pushEntry');
