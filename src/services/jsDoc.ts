@@ -52,7 +52,7 @@ namespace ts.JsDoc {
         // from Array<T> - Array<string> and Array<number>
         const documentationComment = <SymbolDisplayPart[]>[];
         forEachUnique(declarations, declaration => {
-            const comments = getJSDocComments(declaration, /*checkParentVariableStatement*/ true);
+            const comments = getCommentsFromJSDoc(declaration);
             if (!comments) {
                 return;
             }

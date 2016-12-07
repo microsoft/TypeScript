@@ -57,21 +57,21 @@ let eleven = (o => o.a(11))({ a: function(n) { return n; } });
 (function () {
     var numbers = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        numbers[_i - 0] = arguments[_i];
+        numbers[_i] = arguments[_i];
     }
     return numbers.every(function (n) { return n > 0; });
 })(5, 6, 7);
 (function () {
     var mixed = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        mixed[_i - 0] = arguments[_i];
+        mixed[_i] = arguments[_i];
     }
     return mixed.every(function (n) { return !!n; });
 })(5, 'oops', 'oh no');
 (function () {
     var noNumbers = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        noNumbers[_i - 0] = arguments[_i];
+        noNumbers[_i] = arguments[_i];
     }
     return noNumbers.some(function (n) { return n > 0; });
 })();

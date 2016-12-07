@@ -32,7 +32,7 @@ abstract class RunnerBase {
     /** Replaces instances of full paths with fileNames only */
     static removeFullPaths(path: string) {
         // If its a full path (starts with "C:" or "/") replace with just the filename
-        let fixedPath = /^(\w:|\/)/.test(path) ? Harness.Path.getFileName(path) : path;
+        let fixedPath = /^(\w:|\/)/.test(path) ? ts.getBaseFileName(path) : path;
 
         // when running in the browser the 'full path' is the host name, shows up in error baselines
         const localHost = /http:\/localhost:\d+/g;

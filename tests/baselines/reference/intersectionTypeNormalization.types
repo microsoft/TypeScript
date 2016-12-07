@@ -189,7 +189,7 @@ var z: Z4;
 // Repro from #9919
 
 type ToString = {
->ToString : { toString(): string; }
+>ToString : ToString
 
     toString(): string;
 >toString : () => string
@@ -207,18 +207,18 @@ type BoxedValue = { kind: 'int',    num: number }
 type IntersectionFail = BoxedValue & ToString
 >IntersectionFail : IntersectionFail
 >BoxedValue : BoxedValue
->ToString : { toString(): string; }
+>ToString : ToString
 
 type IntersectionInline = { kind: 'int',    num: number } & ToString
 >IntersectionInline : IntersectionInline
 >kind : "int"
 >num : number
->ToString : { toString(): string; }
+>ToString : ToString
 
                         | { kind: 'string', str: string } & ToString
 >kind : "string"
 >str : string
->ToString : { toString(): string; }
+>ToString : ToString
 
 function getValueAsString(value: IntersectionFail): string {
 >getValueAsString : (value: IntersectionFail) => string
@@ -236,11 +236,122 @@ function getValueAsString(value: IntersectionFail): string {
 >'' + value.num : string
 >'' : ""
 >value.num : number
->value : { kind: "int"; num: number; } & { toString(): string; }
+>value : { kind: "int"; num: number; } & ToString
 >num : number
     }
     return value.str;
 >value.str : string
->value : { kind: "string"; str: string; } & { toString(): string; }
+>value : { kind: "string"; str: string; } & ToString
 >str : string
+}
+
+// Repro from #12535
+
+namespace enums {
+>enums : typeof enums
+
+    export const enum A {
+>A : A
+
+        a1,
+>a1 : A.a1
+
+        a2,
+>a2 : A.a2
+
+        a3,
+>a3 : A.a3
+
+       // ... elements omitted for the sake of clarity
+        a75,
+>a75 : A.a75
+
+        a76,
+>a76 : A.a76
+
+        a77,
+>a77 : A.a77
+    }
+    export const enum B {
+>B : B
+
+        b1,
+>b1 : B.b1
+
+        b2,
+>b2 : B.b2
+
+       // ... elements omitted for the sake of clarity
+        b86,
+>b86 : B.b86
+
+        b87,
+>b87 : B.b87
+    }
+    export const enum C {
+>C : C
+
+        c1,
+>c1 : C.c1
+
+        c2,
+>c2 : C.c2
+
+       // ... elements omitted for the sake of clarity
+        c210,
+>c210 : C.c210
+
+        c211,
+>c211 : C.c211
+    }
+    export type Genre = A | B | C;
+>Genre : Genre
+>A : A
+>B : B
+>C : C
+}
+
+type Foo = {
+>Foo : Foo
+
+    genreId: enums.Genre;
+>genreId : enums.Genre
+>enums : any
+>Genre : enums.Genre
+
+};
+
+type Bar = {
+>Bar : Bar
+
+    genreId: enums.Genre;
+>genreId : enums.Genre
+>enums : any
+>Genre : enums.Genre
+
+};
+
+type FooBar = Foo & Bar;
+>FooBar : FooBar
+>Foo : Foo
+>Bar : Bar
+
+function foo(so: any) {
+>foo : (so: any) => enums.Genre
+>so : any
+
+    const val = so as FooBar;
+>val : FooBar
+>so as FooBar : FooBar
+>so : any
+>FooBar : FooBar
+
+    const isGenre = val.genreId;
+>isGenre : enums.Genre
+>val.genreId : enums.Genre
+>val : FooBar
+>genreId : enums.Genre
+
+    return isGenre;
+>isGenre : enums.Genre
 }

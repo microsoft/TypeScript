@@ -1,0 +1,33 @@
+=== tests/cases/conformance/types/mapped/recursiveMappedTypes.ts ===
+
+// Recursive mapped types simply appear empty
+
+type Recurse = {
+>Recurse : Recurse
+
+    [K in keyof Recurse]: Recurse[K]
+>K : K
+>Recurse : Recurse
+>Recurse : Recurse
+>K : K
+}
+
+type Recurse1 = {
+>Recurse1 : Recurse1
+
+    [K in keyof Recurse2]: Recurse2[K]
+>K : K
+>Recurse2 : Recurse2
+>Recurse2 : Recurse2
+>K : K
+}
+
+type Recurse2 = {
+>Recurse2 : Recurse2
+
+    [K in keyof Recurse1]: Recurse1[K]
+>K : K
+>Recurse1 : Recurse1
+>Recurse1 : Recurse1
+>K : K
+}

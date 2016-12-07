@@ -2,7 +2,7 @@
 
 namespace ts.server {
     export interface ITypingsInstaller {
-        enqueueInstallTypingsRequest(p: Project, typingOptions: TypingOptions, unresolvedImports: SortedReadonlyArray<string>): void;
+        enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void;
         attach(projectService: ProjectService): void;
         onProjectClosed(p: Project): void;
         readonly globalTypingsCacheLocation: string;
@@ -16,7 +16,7 @@ namespace ts.server {
     };
 
     class TypingsCacheEntry {
-        readonly typingOptions: TypingOptions;
+        readonly typeAcquisition: TypeAcquisition;
         readonly compilerOptions: CompilerOptions;
         readonly typings: SortedReadonlyArray<string>;
         readonly unresolvedImports: SortedReadonlyArray<string>;
@@ -52,8 +52,8 @@ namespace ts.server {
         return unique === 0;
     }
 
-    function typingOptionsChanged(opt1: TypingOptions, opt2: TypingOptions): boolean {
-        return opt1.enableAutoDiscovery !== opt2.enableAutoDiscovery ||
+    function typeAcquisitionChanged(opt1: TypeAcquisition, opt2: TypeAcquisition): boolean {
+        return opt1.enable !== opt2.enable ||
             !setIsEqualTo(opt1.include, opt2.include) ||
             !setIsEqualTo(opt1.exclude, opt2.exclude);
     }
@@ -77,9 +77,9 @@ namespace ts.server {
         }
 
         getTypingsForProject(project: Project, unresolvedImports: SortedReadonlyArray<string>, forceRefresh: boolean): SortedReadonlyArray<string> {
-            const typingOptions = project.getTypingOptions();
+            const typeAcquisition = project.getTypeAcquisition();
 
-            if (!typingOptions || !typingOptions.enableAutoDiscovery) {
+            if (!typeAcquisition || !typeAcquisition.enable) {
                 return <any>emptyArray;
             }
 
@@ -87,28 +87,28 @@ namespace ts.server {
             const result: SortedReadonlyArray<string> = entry ? entry.typings : <any>emptyArray;
             if (forceRefresh ||
                 !entry ||
-                typingOptionsChanged(typingOptions, entry.typingOptions) ||
+                typeAcquisitionChanged(typeAcquisition, entry.typeAcquisition) ||
                 compilerOptionsChanged(project.getCompilerOptions(), entry.compilerOptions) ||
                 unresolvedImportsChanged(unresolvedImports, entry.unresolvedImports)) {
                 // Note: entry is now poisoned since it does not really contain typings for a given combination of compiler options\typings options.
                 // instead it acts as a placeholder to prevent issuing multiple requests
                 this.perProjectCache[project.getProjectName()] = {
                     compilerOptions: project.getCompilerOptions(),
-                    typingOptions,
+                    typeAcquisition,
                     typings: result,
                     unresolvedImports,
                     poisoned: true
                 };
                 // something has been changed, issue a request to update typings
-                this.installer.enqueueInstallTypingsRequest(project, typingOptions, unresolvedImports);
+                this.installer.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
             }
             return result;
         }
 
-        updateTypingsForProject(projectName: string, compilerOptions: CompilerOptions, typingOptions: TypingOptions, unresolvedImports: SortedReadonlyArray<string>, newTypings: string[]) {
+        updateTypingsForProject(projectName: string, compilerOptions: CompilerOptions, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, newTypings: string[]) {
             this.perProjectCache[projectName] = {
                 compilerOptions,
-                typingOptions,
+                typeAcquisition,
                 typings: toSortedReadonlyArray(newTypings),
                 unresolvedImports,
                 poisoned: false
