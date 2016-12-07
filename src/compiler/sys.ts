@@ -330,6 +330,16 @@ namespace ts {
                 if (!fileExists(fileName)) {
                     return undefined;
                 }
+
+                if (_encoding) {
+                    try {
+                        const fileContent = _fs.readFileSync(fileName, _encoding);
+                        return fileContent;
+                    }
+                    catch (e) {
+                        // The given encoding is not supported. Fallback to use our own logic to determine encoding.
+                    }
+                }
                 const buffer = _fs.readFileSync(fileName);
                 let len = buffer.length;
                 if (len >= 2 && buffer[0] === 0xFE && buffer[1] === 0xFF) {
