@@ -2989,6 +2989,7 @@ namespace ts {
     export interface IndexedAccessType extends TypeVariable {
         objectType: Type;
         indexType: Type;
+        constraint?: Type;
     }
 
     // keyof T types (TypeFlags.Index)
