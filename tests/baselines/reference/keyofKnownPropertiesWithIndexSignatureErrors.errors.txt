@@ -1,0 +1,49 @@
+tests/cases/conformance/types/keyof/keyofKnownPropertiesWithIndexSignatureErrors.ts(8,3): error TS2339: Property 'other' does not exist on type 'Partial<Foo>'.
+tests/cases/conformance/types/keyof/keyofKnownPropertiesWithIndexSignatureErrors.ts(12,3): error TS2339: Property 'other' does not exist on type 'Pick<Foo, string | "prop">'.
+tests/cases/conformance/types/keyof/keyofKnownPropertiesWithIndexSignatureErrors.ts(17,5): error TS2322: Type '{ a: string; }' is not assignable to type 'T2'.
+  Types of property 'a' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/types/keyof/keyofKnownPropertiesWithIndexSignatureErrors.ts(18,5): error TS2322: Type '{ a: string; }' is not assignable to type 'Partial<T2>'.
+  Types of property 'a' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/types/keyof/keyofKnownPropertiesWithIndexSignatureErrors.ts(19,5): error TS2322: Type '{ a: string; }' is not assignable to type '{ [x: string]: any; a?: number; }'.
+  Types of property 'a' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/types/keyof/keyofKnownPropertiesWithIndexSignatureErrors.ts (5 errors) ====
+    interface Foo {
+        prop: number;
+        [x: string]: number;
+    }
+    
+    var x: Partial<Foo>;
+    x.prop; // ok
+    x.other; // Error unknown property other
+      ~~~~~
+!!! error TS2339: Property 'other' does not exist on type 'Partial<Foo>'.
+    
+    var y: Pick<Foo, keyof Foo>;
+    y.prop; // ok
+    y.other; // Error unknown property other
+      ~~~~~
+!!! error TS2339: Property 'other' does not exist on type 'Pick<Foo, string | "prop">'.
+    
+    
+    type T2 = { a?: number, [key: string]: any };
+    
+    let o2: T2 = { a: 'no' }; // error: Type '{ a: string; }' is not assignable to type 'T2'
+        ~~
+!!! error TS2322: Type '{ a: string; }' is not assignable to type 'T2'.
+!!! error TS2322:   Types of property 'a' are incompatible.
+!!! error TS2322:     Type 'string' is not assignable to type 'number'.
+    let p2: Partial<T2> = { a: 'no' }; // error
+        ~~
+!!! error TS2322: Type '{ a: string; }' is not assignable to type 'Partial<T2>'.
+!!! error TS2322:   Types of property 'a' are incompatible.
+!!! error TS2322:     Type 'string' is not assignable to type 'number'.
+    let p3: { [P in keyof T2]: T2[P]} = { a: 'no' }; // error
+        ~~
+!!! error TS2322: Type '{ a: string; }' is not assignable to type '{ [x: string]: any; a?: number; }'.
+!!! error TS2322:   Types of property 'a' are incompatible.
+!!! error TS2322:     Type 'string' is not assignable to type 'number'.

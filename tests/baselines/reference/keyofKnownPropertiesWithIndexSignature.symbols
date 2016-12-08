@@ -1,0 +1,51 @@
+=== tests/cases/conformance/types/keyof/keyofKnownPropertiesWithIndexSignature.ts ===
+
+interface Foo {
+>Foo : Symbol(Foo, Decl(keyofKnownPropertiesWithIndexSignature.ts, 0, 0))
+
+    prop: number;
+>prop : Symbol(Foo.prop, Decl(keyofKnownPropertiesWithIndexSignature.ts, 1, 15))
+
+    [x: string]: number;
+>x : Symbol(x, Decl(keyofKnownPropertiesWithIndexSignature.ts, 3, 5))
+}
+
+type t = keyof Foo; // string | "prop"
+>t : Symbol(t, Decl(keyofKnownPropertiesWithIndexSignature.ts, 4, 1))
+>Foo : Symbol(Foo, Decl(keyofKnownPropertiesWithIndexSignature.ts, 0, 0))
+
+var x: Partial<Foo>;
+>x : Symbol(x, Decl(keyofKnownPropertiesWithIndexSignature.ts, 8, 3))
+>Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Foo : Symbol(Foo, Decl(keyofKnownPropertiesWithIndexSignature.ts, 0, 0))
+
+x.prop; // ok
+>x.prop : Symbol(prop)
+>x : Symbol(x, Decl(keyofKnownPropertiesWithIndexSignature.ts, 8, 3))
+>prop : Symbol(prop)
+
+x["other"].toFixed();
+>x["other"].toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(keyofKnownPropertiesWithIndexSignature.ts, 8, 3))
+>toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+
+var y: Pick<Foo, keyof Foo>;
+>y : Symbol(y, Decl(keyofKnownPropertiesWithIndexSignature.ts, 12, 3))
+>Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Foo : Symbol(Foo, Decl(keyofKnownPropertiesWithIndexSignature.ts, 0, 0))
+>Foo : Symbol(Foo, Decl(keyofKnownPropertiesWithIndexSignature.ts, 0, 0))
+
+y.prop; // ok
+>y.prop : Symbol(prop)
+>y : Symbol(y, Decl(keyofKnownPropertiesWithIndexSignature.ts, 12, 3))
+>prop : Symbol(prop)
+
+y["other"].toFixed();
+>y["other"].toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>y : Symbol(y, Decl(keyofKnownPropertiesWithIndexSignature.ts, 12, 3))
+>toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+
+
+
+
+
