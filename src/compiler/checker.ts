@@ -5783,7 +5783,7 @@ namespace ts {
         // expression constructs such as array literals and the || and ?: operators). Named types can
         // circularly reference themselves and therefore cannot be subtype reduced during their declaration.
         // For example, "type Item = string | (() => Item" is a named type that circularly references itself.
-        function getUnionType(types: Type[], subtypeReduction?: boolean, aliasSymbol?: Symbol, aliasTypeArguments?: Type[], keepLiteralTypes?:boolean): Type {
+        function getUnionType(types: Type[], subtypeReduction?: boolean, aliasSymbol?: Symbol, aliasTypeArguments?: Type[], keepLiteralTypes?: boolean): Type {
             if (types.length === 0) {
                 return neverType;
             }
@@ -5934,7 +5934,7 @@ namespace ts {
             return maybeTypeOfKind(type, TypeFlags.TypeVariable) ? getIndexTypeForGenericType(<TypeVariable | UnionOrIntersectionType>type) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getConstraintTypeFromMappedType(<MappedType>type) :
                 type.flags & TypeFlags.Any ? stringType :
-                getIndexInfoOfType(type, IndexKind.String) ? getUnionType([stringType, getLiteralTypeFromPropertyNames(type)], /*subtypeReduction*/ false, undefined, undefined, true) :
+                getIndexInfoOfType(type, IndexKind.String) ? getUnionType([stringType, getLiteralTypeFromPropertyNames(type)], /*subtypeReduction*/ false, undefined, undefined, /*keepLiteralTypes*/ true) :
                 getLiteralTypeFromPropertyNames(type);
         }
 
