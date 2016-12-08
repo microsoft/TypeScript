@@ -7,10 +7,10 @@
 ////}/*editDeclaration*/
 
 goTo.marker("requestCompletion");
-verify.memberListContains("foo");
+verify.completionListContains("foo");
 
 goTo.marker("memberCompletion");
-verify.memberListContains("toExponential");
+verify.completionListContains("toExponential");
 
 // Now change the decl by adding a semicolon
 goTo.marker("editDeclaration");
@@ -18,7 +18,7 @@ edit.insert(";");
 
 // foo should still be there
 goTo.marker("requestCompletion");
-verify.memberListContains("foo");
+verify.completionListContains("foo");
 
 goTo.marker("memberCompletion");
-verify.memberListContains("toExponential");
+verify.completionListContains("toExponential");

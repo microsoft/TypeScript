@@ -6,6 +6,6 @@
 ////var x = Foo./**/
 
 goTo.marker();
-verify.memberListContains("X");
-verify.memberListContains("Y");
-verify.memberListCount(2);
+verify.completionListContains("X");
+verify.completionListContains("Y");
+verify.completionListCount(2);

@@ -402,6 +402,17 @@ declare class Component2<Data, Computed> {
     get<K extends keyof Data | keyof Computed>(key: K): (Data & Computed)[K];
 }
 
+// Repro from #12641
+
+interface R {
+    p: number;
+}
+
+function f<K extends keyof R>(p: K) {
+    let a: any;
+    a[p].add;  // any
+}
+
 // Repro from #12651
 
 type MethodDescriptor = {
@@ -697,6 +708,10 @@ var c1 = new Component1({
     }
 });
 c1.get("hello");
+function f(p) {
+    var a;
+    a[p].add; // any
+}
 var result = dispatchMethod("someMethod", ["hello", 35]);
 
 
@@ -889,6 +904,10 @@ declare class Component2<Data, Computed> {
     constructor(options: Options2<Data, Computed>);
     get<K extends keyof Data | keyof Computed>(key: K): (Data & Computed)[K];
 }
+interface R {
+    p: number;
+}
+declare function f<K extends keyof R>(p: K): void;
 declare type MethodDescriptor = {
     name: string;
     args: any[];

@@ -52,37 +52,37 @@
 //// d.dogAge./*dogAge*/;
 
 goTo.marker('numberLike');
-verify.memberListContains('charAt');
-verify.memberListContains('toExponential');
+verify.completionListContains('charAt');
+verify.completionListContains('toExponential');
 
 goTo.marker('person');
-verify.memberListContains('personName');
-verify.memberListContains('personAge');
+verify.completionListContains('personName');
+verify.completionListContains('personAge');
 goTo.marker('personName');
-verify.memberListContains('charAt');
+verify.completionListContains('charAt');
 goTo.marker('personAge');
-verify.memberListContains('toExponential');
+verify.completionListContains('toExponential');
 
 goTo.marker('animal');
-verify.memberListContains('animalName');
-verify.memberListContains('animalAge');
+verify.completionListContains('animalName');
+verify.completionListContains('animalAge');
 goTo.marker('animalName');
-verify.memberListContains('charAt');
+verify.completionListContains('charAt');
 goTo.marker('animalAge');
-verify.memberListContains('toExponential');
+verify.completionListContains('toExponential');
 
 goTo.marker('dog');
-verify.memberListContains('dogName');
-verify.memberListContains('dogAge');
+verify.completionListContains('dogName');
+verify.completionListContains('dogAge');
 goTo.marker('dogName');
-verify.memberListContains('charAt');
+verify.completionListContains('charAt');
 goTo.marker('dogAge');
-verify.memberListContains('toExponential');
+verify.completionListContains('toExponential');
 
 goTo.marker('cat');
-verify.memberListContains('catName');
-verify.memberListContains('catAge');
+verify.completionListContains('catName');
+verify.completionListContains('catAge');
 goTo.marker('catName');
-verify.memberListContains('charAt');
+verify.completionListContains('charAt');
 goTo.marker('catAge');
-verify.memberListContains('toExponential');
+verify.completionListContains('toExponential');

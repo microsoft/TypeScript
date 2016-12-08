@@ -1327,7 +1327,28 @@ namespace ts.server {
             }
         }
 
-        openExternalProject(proj: protocol.ExternalProject): void {
+        openExternalProjects(projects: protocol.ExternalProject[]): void {
+            // record project list before the update
+            const projectsToClose = arrayToMap(this.externalProjects, p => p.getProjectName(), _ => true);
+            for (const externalProjectName in this.externalProjectToConfiguredProjectMap) {
+                projectsToClose[externalProjectName] = true;
+            }
+
+            for (const externalProject of projects) {
+                this.openExternalProject(externalProject, /*suppressRefreshOfInferredProjects*/ true);
+                // delete project that is present in input list
+                delete projectsToClose[externalProject.projectFileName];
+            }
+
+            // close projects that were missing in the input list
+            for (const externalProjectName in projectsToClose) {
+                this.closeExternalProject(externalProjectName, /*suppressRefresh*/ true)
+            }
+
+            this.refreshInferredProjects();
+        }
+
+        openExternalProject(proj: protocol.ExternalProject, suppressRefreshOfInferredProjects = false): void {
             // typingOptions has been deprecated and is only supported for backward compatibility
             // purposes. It should be removed in future releases - use typeAcquisition instead.
             if (proj.typingOptions && !proj.typeAcquisition) {
@@ -1420,7 +1441,9 @@ namespace ts.server {
                 delete this.externalProjectToConfiguredProjectMap[proj.projectFileName];
                 this.createAndAddExternalProject(proj.projectFileName, rootFiles, proj.options, proj.typeAcquisition);
             }
-            this.refreshInferredProjects();
+            if (!suppressRefreshOfInferredProjects) {
+                this.refreshInferredProjects();
+            }
         }
     }
 }

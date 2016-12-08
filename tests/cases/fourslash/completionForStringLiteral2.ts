@@ -12,9 +12,9 @@
 goTo.marker('1');
 verify.completionListContains("foo");
 verify.completionListAllowsNewIdentifier();
-verify.memberListCount(3);
+verify.completionListCount(3);
 
 goTo.marker('2');
 verify.completionListContains("some other name");
 verify.completionListAllowsNewIdentifier();
-verify.memberListCount(3);
+verify.completionListCount(3);

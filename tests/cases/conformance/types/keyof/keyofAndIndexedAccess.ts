@@ -403,6 +403,17 @@ declare class Component2<Data, Computed> {
     get<K extends keyof Data | keyof Computed>(key: K): (Data & Computed)[K];
 }
 
+// Repro from #12641
+
+interface R {
+    p: number;
+}
+
+function f<K extends keyof R>(p: K) {
+    let a: any;
+    a[p].add;  // any
+}
+
 // Repro from #12651
 
 type MethodDescriptor = {
