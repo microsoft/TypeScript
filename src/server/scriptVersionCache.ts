@@ -438,8 +438,9 @@ namespace ts.server {
             }
         }
         getChangeRange(oldSnapshot: ts.IScriptSnapshot): ts.TextChangeRange {
-            const oldSnap = <LineIndexSnapshot>oldSnapshot;
-            return this.getTextChangeRangeSinceVersion(oldSnap.version);
+            if (oldSnapshot instanceof LineIndexSnapshot) {
+                return this.getTextChangeRangeSinceVersion(oldSnapshot.version);
+            }
         }
     }
 
