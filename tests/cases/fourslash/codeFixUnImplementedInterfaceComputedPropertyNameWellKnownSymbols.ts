@@ -5,7 +5,7 @@
 //// interface I<Species> {
 ////     [Symbol.hasInstance](o: any): boolean;
 ////     [Symbol.isConcatSpreadable]: boolean;
-////     [Symbol.iterator](): Iterator<this>;
+////     [Symbol.iterator](): any;
 ////     [Symbol.match]: boolean;
 ////     [Symbol.replace](...args);
 ////     [Symbol.search](str: string): number;
@@ -19,7 +19,6 @@
 //// }
 ////
 //// class C implements I<number> {[|  |]}
-
 
 verify.rangeAfterCodeFix(`
     [Symbol.hasInstance](o: any): boolean {
