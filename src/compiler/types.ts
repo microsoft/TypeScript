@@ -11,7 +11,7 @@ namespace ts {
     /** It's allowed to get/set into a map with numbers. However, when iterating, you may get strings back due to the shim being an ordinary object (which only allows string keys). */
     export type MapKey = string | number;
 
-    /** Minimal ES6 Map interface. */
+    /** Minimal ES6 Map interface. Does not include iterators as those are hard to shim performantly. */
     export interface Map<T> {
         get(key: MapKey): T;
         has(key: MapKey): boolean;
