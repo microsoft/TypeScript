@@ -1,5 +1,5 @@
-tests/cases/compiler/unusedLocalsAndObjectSpread.ts(7,12): error TS6133: 'a' is declared but never used.
-tests/cases/compiler/unusedLocalsAndObjectSpread.ts(14,15): error TS6133: '_' is declared but never used.
+tests/cases/compiler/unusedLocalsAndObjectSpread.ts(21,18): error TS6133: 'bar' is declared but never used.
+tests/cases/compiler/unusedLocalsAndObjectSpread.ts(28,21): error TS6133: 'bar' is declared but never used.
 
 
 ==== tests/cases/compiler/unusedLocalsAndObjectSpread.ts (2 errors) ====
@@ -10,8 +10,6 @@ tests/cases/compiler/unusedLocalsAndObjectSpread.ts(14,15): error TS6133: '_' is
         const foo = { a: 1, b: 2 };
         // 'a' is declared but never used
         const {a, ...bar} = foo;
-               ~
-!!! error TS6133: 'a' is declared but never used.
         console.log(bar);
     }
     
@@ -19,9 +17,24 @@ tests/cases/compiler/unusedLocalsAndObjectSpread.ts(14,15): error TS6133: '_' is
         const foo = { a: 1, b: 2 };
         // '_' is declared but never used
         const {a: _, ...bar} = foo;
-                  ~
-!!! error TS6133: '_' is declared but never used.
         console.log(bar);
     }
     
+    function three() {
+        const foo = { a: 1, b: 2 };
+        // 'a' is declared but never used
+        const {a, ...bar} = foo; // bar should be unused
+                     ~~~
+!!! error TS6133: 'bar' is declared but never used.
+        //console.log(bar);
+    }
+    
+    function four() {
+        const foo = { a: 1, b: 2 };
+        // '_' is declared but never used
+        const {a: _, ...bar} = foo; // bar should be unused
+                        ~~~
+!!! error TS6133: 'bar' is declared but never used.
+        //console.log(bar);
+    }
     

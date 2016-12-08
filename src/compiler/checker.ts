@@ -16702,6 +16702,14 @@ namespace ts {
             }
         }
 
+        function isRemovedPropertyFromObjectSpread(node: Node) {
+            if (isBindingElement(node) && isObjectBindingPattern(node.parent)) {
+                const lastElement = lastOrUndefined(node.parent.elements);
+                return lastElement !== node && !!lastElement.dotDotDotToken;
+            }
+            return false;
+        }
+
         function errorUnusedLocal(node: Node, name: string) {
             if (isIdentifierThatStartsWithUnderScore(node)) {
                 const declaration = getRootDeclaration(node.parent);
@@ -16711,7 +16719,10 @@ namespace ts {
                     return;
                 }
             }
-            error(node, Diagnostics._0_is_declared_but_never_used, name);
+
+            if (!isRemovedPropertyFromObjectSpread(node.kind === SyntaxKind.Identifier ? node.parent : node)) {
+                error(node, Diagnostics._0_is_declared_but_never_used, name);
+            }
         }
 
         function parameterNameStartsWithUnderscore(parameterName: DeclarationName) {
