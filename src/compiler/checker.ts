@@ -13475,13 +13475,14 @@ namespace ts {
                 const containingClass = getContainingClass(node);
                 if (containingClass) {
                     const containingType = getTypeOfNode(containingClass);
-                    const baseTypes = getBaseTypes(<InterfaceType>containingType);
-                    if (baseTypes.length) {
+                    let baseTypes = getBaseTypes(containingType as InterfaceType);
+                    while (baseTypes.length) {
                         const baseType = baseTypes[0];
                         if (modifiers & ModifierFlags.Protected &&
                             baseType.symbol === declaration.parent.symbol) {
                             return true;
                         }
+                        baseTypes = getBaseTypes(baseType as InterfaceType);
                     }
                 }
                 if (modifiers & ModifierFlags.Private) {
@@ -16207,7 +16208,7 @@ namespace ts {
                 return undefined;
             }
 
-            const onfulfilledParameterType = getTypeWithFacts(getUnionType(map(thenSignatures, getTypeOfFirstParameterOfSignature)), TypeFacts.NEUndefined);
+            const onfulfilledParameterType = getTypeWithFacts(getUnionType(map(thenSignatures, getTypeOfFirstParameterOfSignature)), TypeFacts.NEUndefinedOrNull);
             if (isTypeAny(onfulfilledParameterType)) {
                 return undefined;
             }

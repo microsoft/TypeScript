@@ -25,21 +25,21 @@
 
 // Only public properties are visible outside the class
 goTo.marker("1");
-verify.not.memberListContains('privateMethod');
-verify.not.memberListContains('privateProperty');
-verify.not.memberListContains('protectedMethod');
-verify.not.memberListContains('protectedProperty');
-verify.memberListContains('publicMethod');
-verify.memberListContains('publicProperty');
-verify.not.memberListContains('protectedOverriddenMethod');
-verify.not.memberListContains('protectedOverriddenProperty');
+verify.not.completionListContains('privateMethod');
+verify.not.completionListContains('privateProperty');
+verify.not.completionListContains('protectedMethod');
+verify.not.completionListContains('protectedProperty');
+verify.completionListContains('publicMethod');
+verify.completionListContains('publicProperty');
+verify.not.completionListContains('protectedOverriddenMethod');
+verify.not.completionListContains('protectedOverriddenProperty');
 
 goTo.marker("2");
-verify.not.memberListContains('privateMethod');
-verify.not.memberListContains('privateProperty');
-verify.not.memberListContains('protectedMethod');
-verify.not.memberListContains('protectedProperty');
-verify.memberListContains('publicMethod');
-verify.memberListContains('publicProperty');
-verify.not.memberListContains('protectedOverriddenMethod');
-verify.not.memberListContains('protectedOverriddenProperty');
+verify.not.completionListContains('privateMethod');
+verify.not.completionListContains('privateProperty');
+verify.not.completionListContains('protectedMethod');
+verify.not.completionListContains('protectedProperty');
+verify.completionListContains('publicMethod');
+verify.completionListContains('publicProperty');
+verify.not.completionListContains('protectedOverriddenMethod');
+verify.not.completionListContains('protectedOverriddenProperty');
