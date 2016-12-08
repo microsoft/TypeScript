@@ -88,7 +88,7 @@ var c2 = (function () {
     function c2() {
         var restParameters = [];
         for (var _a = 0; _a < arguments.length; _a++) {
-            restParameters[_a - 0] = arguments[_a];
+            restParameters[_a] = arguments[_a];
         }
         var _i = 10; // no error
     }

@@ -66,3 +66,14 @@ function f10(shape: Shape) {
     setProperty(shape, "size", 10);  // Error
     setProperty(shape, cond ? "name" : "size", 10);  // Error
 }
+
+function f20<T, U>(k1: keyof (T | U), k2: keyof (T & U), o1: T | U, o2: T & U) {
+    o1[k1];
+    o1[k2];   // Error
+    o2[k1];
+    o2[k2];
+    o1 = o2;
+    o2 = o1;  // Error
+    k1 = k2;  // Error
+    k2 = k1;
+}

@@ -1,3 +1,4 @@
+// @strictNullChecks: true
 // @declaration: true
 
 class Shape {
@@ -21,11 +22,12 @@ class Options {
 }
 
 type Dictionary<T> = { [x: string]: T };
+type NumericallyIndexed<T> = { [x: number]: T };
 
 const enum E { A, B, C }
 
-type K00 = keyof any;  // string | number
-type K01 = keyof string;  // number | "toString" | "charAt" | ...
+type K00 = keyof any;  // string
+type K01 = keyof string;  // "toString" | "charAt" | ...
 type K02 = keyof number;  // "toString" | "toFixed" | "toExponential" | ...
 type K03 = keyof boolean;  // "valueOf"
 type K04 = keyof void;  // never
@@ -34,19 +36,20 @@ type K06 = keyof null;  // never
 type K07 = keyof never;  // never
 
 type K10 = keyof Shape;  // "name" | "width" | "height" | "visible"
-type K11 = keyof Shape[];  // number | "length" | "toString" | ...
-type K12 = keyof Dictionary<Shape>;  // string | number
+type K11 = keyof Shape[];  // "length" | "toString" | ...
+type K12 = keyof Dictionary<Shape>;  // string
 type K13 = keyof {};  // never
 type K14 = keyof Object;  // "constructor" | "toString" | ...
 type K15 = keyof E;  // "toString" | "toFixed" | "toExponential" | ...
-type K16 = keyof [string, number];  // number | "0" | "1" | "length" | "toString" | ...
+type K16 = keyof [string, number];  // "0" | "1" | "length" | "toString" | ...
 type K17 = keyof (Shape | Item);  // "name"
 type K18 = keyof (Shape & Item);  // "name" | "width" | "height" | "visible" | "price"
+type K19 = keyof NumericallyIndexed<Shape> // never
 
 type KeyOf<T> = keyof T;
 
 type K20 = KeyOf<Shape>;  // "name" | "width" | "height" | "visible"
-type K21 = KeyOf<Dictionary<Shape>>;  // string | number
+type K21 = KeyOf<Dictionary<Shape>>;  // string
 
 type NAME = "name";
 type WIDTH_OR_HEIGHT = "width" | "height";
@@ -95,22 +98,18 @@ function f10(shape: Shape) {
 
 function f11(a: Shape[]) {
     let len = getProperty(a, "length");  // number
-    let shape = getProperty(a, 1000);    // Shape
-    setProperty(a, 1000, getProperty(a, 1001));
+    setProperty(a, "length", len);
 }
 
 function f12(t: [Shape, boolean]) {
     let len = getProperty(t, "length");
-    let s1 = getProperty(t, 0);    // Shape
     let s2 = getProperty(t, "0");  // Shape
-    let b1 = getProperty(t, 1);    // boolean
     let b2 = getProperty(t, "1");  // boolean
-    let x1 = getProperty(t, 2);    // Shape | boolean
 }
 
 function f13(foo: any, bar: any) {
     let x = getProperty(foo, "x");  // any
-    let y = getProperty(foo, 100);  // any
+    let y = getProperty(foo, "100");  // any
     let z = getProperty(foo, bar);  // any
 }
 
@@ -181,6 +180,76 @@ function f40(c: C) {
     let z: Z = c["z"];
 }
 
+function f50<T>(k: keyof T, s: string) {
+    const x1 = s as keyof T;
+    const x2 = k as string;
+}
+
+function f51<T, K extends keyof T>(k: K, s: string) {
+    const x1 = s as keyof T;
+    const x2 = k as string;
+}
+
+function f52<T>(obj: { [x: string]: boolean }, k: keyof T, s: string, n: number) {
+    const x1 = obj[s];
+    const x2 = obj[n];
+    const x3 = obj[k];
+}
+
+function f53<T, K extends keyof T>(obj: { [x: string]: boolean }, k: K, s: string, n: number) {
+    const x1 = obj[s];
+    const x2 = obj[n];
+    const x3 = obj[k];
+}
+
+function f54<T>(obj: T, key: keyof T) {
+    for (let s in obj[key]) {
+    }
+    const b = "foo" in obj[key];
+}
+
+function f55<T, K extends keyof T>(obj: T, key: K) {
+    for (let s in obj[key]) {
+    }
+    const b = "foo" in obj[key];
+}
+
+function f60<T>(source: T, target: T) {
+    for (let k in source) {
+        target[k] = source[k];
+    }
+}
+
+function f70(func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) {
+    func<{ a: any, b: any }, { a: any, c: any }>('a', 'a');
+    func<{ a: any, b: any }, { a: any, c: any }>('a', 'b');
+    func<{ a: any, b: any }, { a: any, c: any }>('a', 'c');
+}
+
+function f71(func: <T, U>(x: T, y: U) => Partial<T & U>) {
+    let x = func({ a: 1, b: "hello" }, { c: true });
+    x.a;  // number | undefined
+    x.b;  // string | undefined
+    x.c;  // boolean | undefined
+}
+
+function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]) {
+    let a = func({ a: 1, b: "hello" }, { c: true }, 'a');  // number
+    let b = func({ a: 1, b: "hello" }, { c: true }, 'b');  // string
+    let c = func({ a: 1, b: "hello" }, { c: true }, 'c');  // boolean
+}
+
+function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]) {
+    let a = func({ a: 1, b: "hello" }, { c: true }, 'a');  // number
+    let b = func({ a: 1, b: "hello" }, { c: true }, 'b');  // string
+    let c = func({ a: 1, b: "hello" }, { c: true }, 'c');  // boolean
+}
+
+function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]) {
+    let a = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'a');  // number
+    let b = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b');  // string | boolean
+}
+
 // Repros from #12011
 
 class Base {
@@ -211,4 +280,89 @@ class OtherPerson {
     getParts() {
         return getProperty(this, "parts")
     }
+}
+
+// Modified repro from #12544
+
+function path<T, K1 extends keyof T>(obj: T, key1: K1): T[K1];
+function path<T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2];
+function path<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3];
+function path(obj: any, ...keys: (string | number)[]): any;
+function path(obj: any, ...keys: (string | number)[]): any {
+    let result = obj;
+    for (let k of keys) {
+        result = result[k];
+    }
+    return result;
+}
+
+type Thing = {
+    a: { x: number, y: string },
+    b: boolean
+};
+
+
+function f1(thing: Thing) {
+    let x1 = path(thing, 'a');  // { x: number, y: string }
+    let x2 = path(thing, 'a', 'y');  // string
+    let x3 = path(thing, 'b');  // boolean
+    let x4 = path(thing, ...['a', 'x']);  // any
+}
+
+// Repro from comment in #12114
+
+const assignTo2 = <T, K1 extends keyof T, K2 extends keyof T[K1]>(object: T, key1: K1, key2: K2) =>
+    (value: T[K1][K2]) => object[key1][key2] = value;
+
+// Modified repro from #12573
+
+declare function one<T>(handler: (t: T) => void): T
+var empty = one(() => {}) // inferred as {}, expected
+
+type Handlers<T> = { [K in keyof T]: (t: T[K]) => void }
+declare function on<T>(handlerHash: Handlers<T>): T
+var hashOfEmpty1 = on({ test: () => {} });  // {}
+var hashOfEmpty2 = on({ test: (x: boolean) => {} });  // { test: boolean }
+
+// Repro from #12624
+
+interface Options1<Data, Computed> {
+    data?: Data
+    computed?: Computed;
+}
+
+declare class Component1<Data, Computed> {
+    constructor(options: Options1<Data, Computed>);
+    get<K extends keyof (Data & Computed)>(key: K): (Data & Computed)[K];
+}
+
+let c1 = new Component1({
+    data: {
+        hello: ""
+    }
+});
+
+c1.get("hello");
+
+// Repro from #12625
+
+interface Options2<Data, Computed> {
+    data?: Data
+    computed?: Computed;
+}
+
+declare class Component2<Data, Computed> {
+    constructor(options: Options2<Data, Computed>);
+    get<K extends keyof Data | keyof Computed>(key: K): (Data & Computed)[K];
+}
+
+// Repro from #12641
+
+interface R {
+    p: number;
+}
+
+function f<K extends keyof R>(p: K) {
+    let a: any;
+    a[p].add;  // any
 }

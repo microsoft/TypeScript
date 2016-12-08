@@ -3,9 +3,9 @@
 /// <reference path="scriptInfo.ts" />
 
 namespace ts.server {
-    export class LSHost implements ts.LanguageServiceHost, ModuleResolutionHost, ServerLanguageServiceHost {
+    export class LSHost implements ts.LanguageServiceHost, ModuleResolutionHost {
         private compilationSettings: ts.CompilerOptions;
-        private readonly resolvedModuleNames= createFileMap<Map<ResolvedModuleWithFailedLookupLocations>>();
+        private readonly resolvedModuleNames = createFileMap<Map<ResolvedModuleWithFailedLookupLocations>>();
         private readonly resolvedTypeReferenceDirectives = createFileMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
         private readonly getCanonicalFileName: (fileName: string) => string;
 
@@ -13,6 +13,7 @@ namespace ts.server {
 
         private readonly resolveModuleName: typeof resolveModuleName;
         readonly trace: (s: string) => void;
+        readonly realpath?: (path: string) => string;
 
         constructor(private readonly host: ServerHost, private readonly project: Project, private readonly cancellationToken: HostCancellationToken) {
             this.getCanonicalFileName = ts.createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
@@ -22,7 +23,7 @@ namespace ts.server {
             }
 
             this.resolveModuleName = (moduleName, containingFile, compilerOptions, host) => {
-                const globalCache = this.project.getTypingOptions().enableAutoDiscovery
+                const globalCache = this.project.getTypeAcquisition().enable
                     ? this.project.projectService.typingsInstaller.globalTypingsCacheLocation
                     : undefined;
                 const primaryResult = resolveModuleName(moduleName, containingFile, compilerOptions, host);
@@ -39,6 +40,10 @@ namespace ts.server {
                 }
                 return primaryResult;
             };
+
+            if (this.host.realpath) {
+                this.realpath = path => this.host.realpath(path);
+            }
         }
 
         public startRecordingFilesWithChangedResolutions() {

@@ -861,9 +861,13 @@ namespace ts.server.protocol {
          */
         options: ExternalProjectCompilerOptions;
         /**
-         * Explicitly specified typing options for the project
+         * @deprecated typingOptions. Use typeAcquisition instead
          */
-        typingOptions?: TypingOptions;
+        typingOptions?: TypeAcquisition;
+        /**
+         * Explicitly specified type acquisition for the project
+         */
+        typeAcquisition?: TypeAcquisition;
     }
 
     export interface CompileOnSaveMixin {
@@ -1814,6 +1818,27 @@ namespace ts.server.protocol {
         event: "configFileDiag";
     }
 
+    export type ProjectLanguageServiceStateEventName = "projectLanguageServiceState";
+    export interface ProjectLanguageServiceStateEvent extends Event {
+        event: ProjectLanguageServiceStateEventName;
+        body?: ProjectLanguageServiceStateEventBody;
+    }
+
+    export interface ProjectLanguageServiceStateEventBody {
+        /**
+         * Project name that has changes in the state of language service.
+         * For configured projects this will be the config file path.
+         * For external projects this will be the name of the projects specified when project was open.
+         * For inferred projects this event is not raised.
+         */
+        projectName: string;
+        /**
+         * True if language service state switched from disabled to enabled
+         * and false otherwise.
+         */
+        languageServiceEnabled: boolean;
+    }
+
     /**
       * Arguments for reload request.
       */
@@ -2055,6 +2080,75 @@ namespace ts.server.protocol {
         kindModifiers: string;
         spans: TextSpan[];
         childItems?: NavigationTree[];
+    }
+
+    export type TelemetryEventName = "telemetry";
+
+    export interface TelemetryEvent extends Event {
+        event: TelemetryEventName;
+        body: TelemetryEventBody;
+    }
+
+    export interface TelemetryEventBody {
+        telemetryEventName: string;
+        payload: any;
+    }
+
+    export type TypingsInstalledTelemetryEventName = "typingsInstalled";
+
+    export interface TypingsInstalledTelemetryEventBody extends TelemetryEventBody {
+        telemetryEventName: TypingsInstalledTelemetryEventName;
+        payload: TypingsInstalledTelemetryEventPayload;
+    }
+
+    export interface TypingsInstalledTelemetryEventPayload {
+        /**
+         * Comma separated list of installed typing packages
+         */
+        installedPackages: string;
+        /**
+         * true if install request succeeded, otherwise - false
+         */
+        installSuccess: boolean;
+
+        /**
+         * version of typings installer
+         */
+        typingsInstallerVersion: string;
+    }
+
+    export type BeginInstallTypesEventName = "beginInstallTypes";
+    export type EndInstallTypesEventName = "endInstallTypes";
+
+    export interface BeginInstallTypesEvent extends Event {
+        event: BeginInstallTypesEventName;
+        body: BeginInstallTypesEventBody;
+    }
+
+    export interface EndInstallTypesEvent extends Event {
+        event: EndInstallTypesEventName;
+        body: EndInstallTypesEventBody;
+    }
+
+    export interface InstallTypesEventBody {
+        /**
+         * correlation id to match begin and end events
+         */
+        eventId: number;
+        /**
+         * list of packages to install
+         */
+        packages: ReadonlyArray<string>;
+    }
+
+    export interface BeginInstallTypesEventBody extends InstallTypesEventBody {
+    }
+
+    export interface EndInstallTypesEventBody extends InstallTypesEventBody {
+        /**
+         * true if installation succeeded, otherwise false
+         */
+        success: boolean;
     }
 
     export interface NavBarResponse extends Response {
