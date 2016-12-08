@@ -166,7 +166,7 @@ namespace ts.JsDoc {
         const lineStart = sourceFile.getLineStarts()[posLineAndChar.line];
 
         const indentationStr = sourceFile.text.substr(lineStart, posLineAndChar.character);
-        const isJavaScriptFile = hasJavaScriptFileExtension(sourceFile.fileName); // JSX or JS file
+        const isJavaScriptFile = hasJavaScriptFileExtension(sourceFile.fileName);
 
         let docParams = "";
         for (let i = 0, numParams = parameters.length; i < numParams; i++) {
