@@ -68,7 +68,6 @@ namespace ts {
     interface ES6Map<T> extends Map<T> {
         readonly size: number;
         entries(): Iterator<[string, T]>;
-        keys(): Iterator<string>;
     }
 
     /** ES6 Iterator type. */
@@ -80,9 +79,7 @@ namespace ts {
     interface ShimMap<T> extends Map<T> {
         isEmpty(): boolean;
         forEachInMap<U>(callback: (value: T, key: string) => U | undefined): U | undefined;
-        forEachKey<U>(callback: (key: string) => U | undefined): U | undefined;
         some(predicate: (value: T, key: string) => boolean): boolean;
-        someKey(predicate: (key: string) => boolean): boolean;
     }
 
     // The global Map object. This may not be available, so we must test for it.
@@ -130,16 +127,12 @@ namespace ts {
             }
 
             isEmpty(): boolean {
-                return !this.someKey(() => true);
+                return !this.some(() => true);
             }
 
             forEachInMap<U>(callback: (value: T, key: string) => U | undefined): U | undefined {
-                return this.forEachKey(key => callback(this.data[key], key));
-            }
-
-            forEachKey<U>(callback: (key: string) => U | undefined): U | undefined {
                 for (const key in this.data) {
-                    const result = callback(key);
+                    const result = callback(this.data[key], key);
                     if (result !== undefined) {
                         return result;
                     }
@@ -147,12 +140,8 @@ namespace ts {
             }
 
             some(predicate: (value: T, key: string) => boolean): boolean {
-                return this.someKey(key => predicate(this.data[key], key));
-            }
-
-            someKey(predicate: (key: string) => boolean): boolean {
                 for (const key in this.data) {
-                    if (predicate(key)) {
+                    if (predicate(this.data[key], key)) {
                         return true;
                     }
                 }
@@ -939,17 +928,9 @@ namespace ts {
         : <T, U>(map: ShimMap<T>, callback: (value: T, key: string) => U | undefined) => map.forEachInMap(callback);
 
     /** `forEachInMap` for just keys. */
-    export const forEachKeyInMap: <T>(map: Map<{}>, callback: (key: string) => T | undefined) => T | undefined = usingNativeMaps
-        ? <T>(map: ES6Map<T>, callback: (key: string) => T | undefined) => {
-            const iterator = map.keys();
-            while (true) {
-                const { value: key, done } = iterator.next();
-                if (done) return undefined;
-                const result = callback(key);
-                if (result !== undefined) return result;
-            }
-        }
-        : <T>(map: ShimMap<T>, callback: (key: string) => T | undefined) => map.forEachKey(callback);
+    export function forEachKeyInMap<T>(map: Map<{}>, callback: (key: string) => T | undefined): T | undefined {
+        return forEachInMap(map, (_, key) => callback(key));
+    }
 
     /** Whether `predicate` is true for some entry in the map. */
     export const someInMap: <T>(map: Map<T>, predicate: (value: T, key: string) => boolean) => boolean = usingNativeMaps
@@ -964,17 +945,10 @@ namespace ts {
         }
         : <T>(map: ShimMap<T>, predicate: (value: T, key: string) => boolean) => map.some(predicate);
 
-    /** Whether `predicate` is true for some key in the map. */
-    export const someKeyInMap: (map: Map<{}>, predicate: (key: string) => boolean) => boolean = usingNativeMaps
-        ? (map: ES6Map<{}>, predicate: (key: string) => boolean) => {
-            const iterator = map.keys();
-            while (true) {
-                const { value: key, done } = iterator.next();
-                if (done) return false;
-                if (predicate(key)) return true;
-            }
-        }
-        : (map: ShimMap<{}>, predicate: (key: string) => boolean) => map.someKey(predicate);
+    /** `someInMap` for just keys. */
+    export function someKeyInMap(map: Map<{}>, predicate: (key: string) => boolean): boolean {
+        return someInMap(map, (_, key) => predicate(key));
+    }
 
     /** Copy entries from `source` to `target`. */
     export function copyMapEntries<T>(source: Map<T>, target: Map<T>): void {
