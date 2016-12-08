@@ -583,6 +583,7 @@ namespace ts {
         kindModifiers: string;   // see ScriptElementKindModifier, comma separated
         displayParts: SymbolDisplayPart[];
         documentation: SymbolDisplayPart[];
+        tags: JSDocTagInfo[];
     }
 
     export interface OutliningSpan {

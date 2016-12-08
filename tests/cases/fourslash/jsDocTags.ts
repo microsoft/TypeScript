@@ -44,6 +44,10 @@
 ////     method4(foo: string): number { return 3; }
 ////     /** @mytag */
 ////     method5() {}
+////     /** method documentation
+////      *  @mytag a JSDoc tag
+////      */
+////     newMethod() {}
 //// }
 //// var foo = new /*1*/Foo(/*10*/4);
 //// /*2*/Foo./*3*/method1(/*11*/);
@@ -53,6 +57,7 @@
 //// foo./*7*/property1;
 //// foo./*8*/property2;
 //// foo./*9*/method5();
+//// foo.newMet/*14*/
 
 verify.baselineQuickInfo();
 
@@ -65,3 +70,6 @@ goTo.marker("12");
 verify.currentSignatureHelpTagsAre([{name: "mytag", text:""}])
 goTo.marker("13");
 verify.currentSignatureHelpTagsAre([])
+
+goTo.marker('14');
+verify.completionEntryDetailIs("newMethod", "(method) Foo.newMethod(): void", "method documentation", "method", [{name: "mytag", text: "a JSDoc tag"}]);

@@ -1530,6 +1530,11 @@ namespace ts.server.protocol {
           * Documentation strings for the symbol.
           */
         documentation: SymbolDisplayPart[];
+
+        /**
+          * JSDoc tags for the symbol.
+          */
+        tags: JSDocTagInfo[];
     }
 
     export interface CompletionsResponse extends Response {

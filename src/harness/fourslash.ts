@@ -801,7 +801,7 @@ namespace FourSlash {
             }
         }
 
-        public verifyCompletionEntryDetails(entryName: string, expectedText: string, expectedDocumentation?: string, kind?: string) {
+        public verifyCompletionEntryDetails(entryName: string, expectedText: string, expectedDocumentation?: string, kind?: string, tags?: ts.JSDocTagInfo[]) {
             const details = this.getCompletionEntryDetails(entryName);
 
             assert(details, "no completion entry available");
@@ -814,6 +814,14 @@ namespace FourSlash {
 
             if (kind !== undefined) {
                 assert.equal(details.kind, kind, this.assertionMessageAtLastKnownMarker("completion entry kind"));
+            }
+
+            if (tags !== undefined) {
+                assert.equal(details.tags.length, tags.length, this.messageAtLastKnownMarker("QuickInfo tags"));
+                ts.zipWith(tags, details.tags, (expectedTag, actualTag) => {
+                    assert.equal(expectedTag.name, actualTag.name);
+                    assert.equal(expectedTag.text, actualTag.text, this.messageAtLastKnownMarker("QuickInfo tag " + actualTag.name));
+                });
             }
         }
 
@@ -3404,8 +3412,8 @@ namespace FourSlashInterface {
             this.state.verifyDocumentHighlightsAtPositionListCount(expectedCount, fileNamesToSearch);
         }
 
-        public completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string) {
-            this.state.verifyCompletionEntryDetails(entryName, text, documentation, kind);
+        public completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string, tags?: ts.JSDocTagInfo[]) {
+            this.state.verifyCompletionEntryDetails(entryName, text, documentation, kind, tags);
         }
 
         /**

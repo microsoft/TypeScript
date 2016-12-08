@@ -2,13 +2,13 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
-      "position": 898
+      "position": 981
     },
     "quickInfo": {
       "kind": "constructor",
       "kindModifiers": "",
       "textSpan": {
-        "start": 898,
+        "start": 981,
         "length": 3
       },
       "displayParts": [
@@ -78,19 +78,19 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
-      "position": 902
+      "position": 985
     }
   },
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
-      "position": 906
+      "position": 989
     },
     "quickInfo": {
       "kind": "class",
       "kindModifiers": "",
       "textSpan": {
-        "start": 906,
+        "start": 989,
         "length": 3
       },
       "displayParts": [
@@ -124,13 +124,13 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
-      "position": 910
+      "position": 993
     },
     "quickInfo": {
       "kind": "method",
       "kindModifiers": "static",
       "textSpan": {
-        "start": 910,
+        "start": 993,
         "length": 7
       },
       "displayParts": [
@@ -200,19 +200,19 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
-      "position": 918
+      "position": 1001
     }
   },
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
-      "position": 925
+      "position": 1008
     },
     "quickInfo": {
       "kind": "method",
       "kindModifiers": "",
       "textSpan": {
-        "start": 925,
+        "start": 1008,
         "length": 7
       },
       "displayParts": [
@@ -277,19 +277,19 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
-      "position": 933
+      "position": 1016
     }
   },
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
-      "position": 940
+      "position": 1023
     },
     "quickInfo": {
       "kind": "method",
       "kindModifiers": "",
       "textSpan": {
-        "start": 940,
+        "start": 1023,
         "length": 7
       },
       "displayParts": [
@@ -349,19 +349,19 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
-      "position": 948
+      "position": 1031
     }
   },
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
-      "position": 955
+      "position": 1038
     },
     "quickInfo": {
       "kind": "method",
       "kindModifiers": "",
       "textSpan": {
-        "start": 955,
+        "start": 1038,
         "length": 7
       },
       "displayParts": [
@@ -442,13 +442,13 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
-      "position": 970
+      "position": 1053
     },
     "quickInfo": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
-        "start": 970,
+        "start": 1053,
         "length": 9
       },
       "displayParts": [
@@ -505,13 +505,13 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
-      "position": 985
+      "position": 1068
     },
     "quickInfo": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
-        "start": 985,
+        "start": 1068,
         "length": 9
       },
       "displayParts": [
@@ -580,13 +580,13 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
-      "position": 1000
+      "position": 1083
     },
     "quickInfo": {
       "kind": "method",
       "kindModifiers": "",
       "textSpan": {
-        "start": 1000,
+        "start": 1083,
         "length": 7
       },
       "displayParts": [
@@ -644,6 +644,26 @@
         {
           "name": "mytag",
           "text": ""
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/jsDocTags.ts",
+      "position": 1104
+    },
+    "quickInfo": {
+      "kind": "",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 1098,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "any",
+          "kind": "keyword"
         }
       ]
     }
