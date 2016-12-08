@@ -1600,6 +1600,11 @@ namespace ts.server.protocol {
          * The signature's documentation
          */
         documentation: SymbolDisplayPart[];
+
+        /**
+         * The signature's JSDoc tags
+         */
+        tags: JSDocTagInfo[];
     }
 
     /**

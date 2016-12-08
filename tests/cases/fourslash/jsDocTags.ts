@@ -45,42 +45,23 @@
 ////     /** @mytag */
 ////     method5() {}
 //// }
-//// var foo = new /*1*/Foo(4);
-//// /*2*/Foo./*3*/method1();
-//// foo./*4*/method2();
-//// foo./*5*/method3();
+//// var foo = new /*1*/Foo(/*10*/4);
+//// /*2*/Foo./*3*/method1(/*11*/);
+//// foo./*4*/method2(/*12*/);
+//// foo./*5*/method3(/*13*/);
 //// foo./*6*/method4();
 //// foo./*7*/property1;
 //// foo./*8*/property2;
 //// foo./*9*/method5();
 
-goTo.marker("1");
-verify.baselineQuickInfo();
-goTo.marker("2");
-verify.baselineQuickInfo();
-goTo.marker("3");
-verify.baselineQuickInfo();
-goTo.marker("4");
-verify.baselineQuickInfo();
-goTo.marker("5");
-verify.baselineQuickInfo();
-goTo.marker("6");
-verify.baselineQuickInfo();
-goTo.marker("7");
-verify.baselineQuickInfo();
-goTo.marker("8");
-verify.baselineQuickInfo();
-goTo.marker("9");
 verify.baselineQuickInfo();
 
-// /** 
-//  * @param foo
-//  * Does 
-//  * stuff!
-//  * @returns void
-//  */
-// function example(foo) {
 
-// }
-
-// example("asdf");
+goTo.marker("10");
+verify.currentSignatureHelpTagsAre([{name: "myjsdoctag", text:"this is a comment"}])
+goTo.marker("11");
+verify.currentSignatureHelpTagsAre([{name: "mytag", text:"comment1 comment2"}])
+goTo.marker("12");
+verify.currentSignatureHelpTagsAre([{name: "mytag", text:""}])
+goTo.marker("13");
+verify.currentSignatureHelpTagsAre([])

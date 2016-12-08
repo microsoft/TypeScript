@@ -1069,6 +1069,16 @@ namespace FourSlash {
             assert.equal(ts.displayPartsToString(actualDocComment), docComment, this.assertionMessageAtLastKnownMarker("current signature help doc comment"));
         }
 
+        public verifyCurrentSignatureHelpTags(tags: ts.JSDocTagInfo[]) {
+            const actualTags = this.getActiveSignatureHelpItem().tags;
+
+            assert.equal(actualTags.length, tags.length, this.assertionMessageAtLastKnownMarker("signature help tags"));
+            ts.zipWith(tags, actualTags, (expectedTag, actualTag) => {
+                assert.equal(expectedTag.name, actualTag.name);
+                assert.equal(expectedTag.text, actualTag.text, this.assertionMessageAtLastKnownMarker("signature help tag " + actualTag.name));
+            });
+        }
+
         public verifySignatureHelpCount(expected: number) {
             const help = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition);
             const actual = help && help.items ? help.items.length : 0;
@@ -3268,6 +3278,10 @@ namespace FourSlashInterface {
 
         public currentSignatureHelpDocCommentIs(docComment: string) {
             this.state.verifyCurrentSignatureHelpDocComment(docComment);
+        }
+
+        public currentSignatureHelpTagsAre(tags: ts.JSDocTagInfo[]) {
+            this.state.verifyCurrentSignatureHelpTags(tags);
         }
 
         public signatureHelpCountIs(expected: number) {

@@ -78,6 +78,12 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
+      "position": 902
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/jsDocTags.ts",
       "position": 906
     },
     "quickInfo": {
@@ -194,6 +200,12 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
+      "position": 918
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/jsDocTags.ts",
       "position": 925
     },
     "quickInfo": {
@@ -265,6 +277,12 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
+      "position": 933
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/jsDocTags.ts",
       "position": 940
     },
     "quickInfo": {
@@ -326,6 +344,12 @@
       ],
       "documentation": [],
       "tags": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/jsDocTags.ts",
+      "position": 948
     }
   },
   {

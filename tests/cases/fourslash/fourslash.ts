@@ -192,6 +192,7 @@ declare namespace FourSlashInterface {
         currentParameterSpanIs(parameter: string): void;
         currentParameterHelpArgumentDocCommentIs(docComment: string): void;
         currentSignatureHelpDocCommentIs(docComment: string): void;
+        currentSignatureHelpTagsAre(tags: ts.JSDocTagInfo[]): void;
         signatureHelpCountIs(expected: number): void;
         signatureHelpArgumentCountIs(expected: number): void;
         signatureHelpCurrentArgumentListIsVariadic(expected: boolean);
