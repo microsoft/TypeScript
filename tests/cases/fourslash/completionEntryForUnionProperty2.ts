@@ -15,6 +15,6 @@
 ////x.commonProperty./**/
 
 goTo.marker();
-verify.memberListContains("toString", "(method) toString(): string");
-verify.memberListContains("valueOf", "(method) valueOf(): string | number");
-verify.memberListCount(2);
+verify.completionListContains("toString", "(method) toString(): string");
+verify.completionListContains("valueOf", "(method) valueOf(): string | number");
+verify.completionListCount(2);
