@@ -20,15 +20,17 @@ namespace ts.codefix {
     }
 
     function getInsertionForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker, newlineChar: string): string {
-        const name = symbol.getName();
+        // const name = symbol.getName();
         const type = checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration);
         const declarations = symbol.getDeclarations();
         if (!(declarations && declarations.length)) {
             return "";
         }
-        const node = declarations[0];
-        const visibility = getVisibilityPrefix(getModifierFlags(node));
-        switch (node.kind) {
+
+        const declaration = declarations[0] as Declaration;
+        const name = declaration.name.getText();
+        const visibility = getVisibilityPrefix(getModifierFlags(declaration));
+        switch (declaration.kind) {
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
             case SyntaxKind.PropertySignature:
@@ -68,14 +70,15 @@ namespace ts.codefix {
                     bodySig = checker.getSignatureFromDeclaration(declarations[declarations.length - 1] as SignatureDeclaration);
                 }
                 else {
-                    bodySig = createBodyDeclarationSignatureWithAnyTypes(declarations as SignatureDeclaration[], signatures, enclosingDeclaration, checker);
+                    Debug.assert(declarations.length === signatures.length);
+                    bodySig = createBodySignatureWithAnyTypes(signatures, enclosingDeclaration, checker);
                 }
                 const sigString = checker.signatureToString(bodySig, enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
                 result += `${visibility}${name}${sigString}${getMethodBodyStub(newlineChar)}`;
 
                 return result;
             case SyntaxKind.ComputedPropertyName:
-                if (hasDynamicName(node)) {
+                if (hasDynamicName(declaration)) {
                     return "";
                 }
                 throw new Error("Not implemented, computed property name.");
@@ -87,22 +90,25 @@ namespace ts.codefix {
         }
     }
 
-    function createBodyDeclarationSignatureWithAnyTypes(signatureDecls: SignatureDeclaration[], signatures: Signature[], enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker): Signature {
-        Debug.assert(signatureDecls.length === signatures.length);
+    function createBodySignatureWithAnyTypes(signatures: Signature[], enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker): Signature {
 
         const newSignatureDeclaration = createNode(SyntaxKind.CallSignature) as SignatureDeclaration;
         newSignatureDeclaration.parent = enclosingDeclaration;
-        newSignatureDeclaration.name = signatureDecls[0].name;
+        newSignatureDeclaration.name = signatures[0].getDeclaration().name;
 
-        let maxArgs = -1, maxArgsIndex = 0;
+        let maxArgs = -1;
         let minArgumentCount = signatures[0].minArgumentCount;
         let hasRestParameter = false;
+        let allMaxArgsAreRest = true;
         for (let i = 0; i < signatures.length; i++) {
             const sig = signatures[i];
             minArgumentCount = Math.min(sig.minArgumentCount, minArgumentCount);
             if (sig.parameters.length > maxArgs) {
                 maxArgs = sig.parameters.length;
-                maxArgsIndex = i;
+                allMaxArgsAreRest = sig.hasRestParameter;
+            }
+            else if (sig.parameters.length === maxArgs) {
+                allMaxArgsAreRest = allMaxArgsAreRest && sig.hasRestParameter;
             }
             hasRestParameter = hasRestParameter || sig.hasRestParameter;
         }
@@ -120,10 +126,6 @@ namespace ts.codefix {
         if (hasRestParameter) {
             lastParameter.dotDotDotToken = createToken(SyntaxKind.DotDotDotToken);
 
-            let allMaxArgsAreRest = true;
-            for (const sig of signatures) {
-                allMaxArgsAreRest = allMaxArgsAreRest && sig.parameters[maxArgs - 1] && sig.hasRestParameter;
-            }
             if (!allMaxArgsAreRest) {
                 const newParameter = createParameterDeclaration(maxArgs - 1, minArgumentCount, newSignatureDeclaration);
                 newSignatureDeclaration.parameters.push(newParameter);
@@ -137,13 +139,13 @@ namespace ts.codefix {
 
         return checker.getSignatureFromDeclaration(newSignatureDeclaration);
 
-        function createParameterDeclaration(index: number, minArgCount: number, enclosingSignature: SignatureDeclaration): ParameterDeclaration {
+        function createParameterDeclaration(index: number, minArgCount: number, enclosingSignatureDeclaration: SignatureDeclaration): ParameterDeclaration {
             const newParameter = createNode(SyntaxKind.Parameter) as ParameterDeclaration;
             newParameter.symbol = checker.createSymbol(SymbolFlags.FunctionScopedVariable, "arg" + index);
             newParameter.symbol.valueDeclaration = newParameter;
             newParameter.symbol.declarations = [newParameter];
             newParameter.type = anyTypeNode;
-            newParameter.parent = enclosingSignature;
+            newParameter.parent = enclosingSignatureDeclaration;
             if (index >= minArgCount) {
                 newParameter.questionToken = optionalToken;
             }

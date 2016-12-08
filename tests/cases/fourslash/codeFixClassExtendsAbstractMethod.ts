@@ -12,7 +12,7 @@ verify.rangeAfterCodeFix(`
     f(a: number, b: string): boolean;
     f(a: string, b: number): Function;
     f(a: string): Function;
-    f(arg0: any, arg1? any) {
-        throw new Error("Method not implemented");
+    f(arg0: any, arg1?: any) {
+        throw new Error('Method not implemented.');
     }
 `);
