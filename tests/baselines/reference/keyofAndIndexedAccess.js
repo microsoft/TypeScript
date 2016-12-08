@@ -219,6 +219,36 @@ function f60<T>(source: T, target: T) {
     }
 }
 
+function f70(func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) {
+    func<{ a: any, b: any }, { a: any, c: any }>('a', 'a');
+    func<{ a: any, b: any }, { a: any, c: any }>('a', 'b');
+    func<{ a: any, b: any }, { a: any, c: any }>('a', 'c');
+}
+
+function f71(func: <T, U>(x: T, y: U) => Partial<T & U>) {
+    let x = func({ a: 1, b: "hello" }, { c: true });
+    x.a;  // number | undefined
+    x.b;  // string | undefined
+    x.c;  // boolean | undefined
+}
+
+function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]) {
+    let a = func({ a: 1, b: "hello" }, { c: true }, 'a');  // number
+    let b = func({ a: 1, b: "hello" }, { c: true }, 'b');  // string
+    let c = func({ a: 1, b: "hello" }, { c: true }, 'c');  // boolean
+}
+
+function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]) {
+    let a = func({ a: 1, b: "hello" }, { c: true }, 'a');  // number
+    let b = func({ a: 1, b: "hello" }, { c: true }, 'b');  // string
+    let c = func({ a: 1, b: "hello" }, { c: true }, 'c');  // boolean
+}
+
+function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]) {
+    let a = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'a');  // number
+    let b = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b');  // string | boolean
+}
+
 // Repros from #12011
 
 class Base {
@@ -292,6 +322,49 @@ type Handlers<T> = { [K in keyof T]: (t: T[K]) => void }
 declare function on<T>(handlerHash: Handlers<T>): T
 var hashOfEmpty1 = on({ test: () => {} });  // {}
 var hashOfEmpty2 = on({ test: (x: boolean) => {} });  // { test: boolean }
+
+// Repro from #12624
+
+interface Options1<Data, Computed> {
+    data?: Data
+    computed?: Computed;
+}
+
+declare class Component1<Data, Computed> {
+    constructor(options: Options1<Data, Computed>);
+    get<K extends keyof (Data & Computed)>(key: K): (Data & Computed)[K];
+}
+
+let c1 = new Component1({
+    data: {
+        hello: ""
+    }
+});
+
+c1.get("hello");
+
+// Repro from #12625
+
+interface Options2<Data, Computed> {
+    data?: Data
+    computed?: Computed;
+}
+
+declare class Component2<Data, Computed> {
+    constructor(options: Options2<Data, Computed>);
+    get<K extends keyof Data | keyof Computed>(key: K): (Data & Computed)[K];
+}
+
+// Repro from #12641
+
+interface R {
+    p: number;
+}
+
+function f<K extends keyof R>(p: K) {
+    let a: any;
+    a[p].add;  // any
+}
 
 //// [keyofAndIndexedAccess.js]
 var __extendStatics = (this && this.__extendStatics) ||
@@ -442,6 +515,31 @@ function f60(source, target) {
         target[k] = source[k];
     }
 }
+function f70(func) {
+    func('a', 'a');
+    func('a', 'b');
+    func('a', 'c');
+}
+function f71(func) {
+    var x = func({ a: 1, b: "hello" }, { c: true });
+    x.a; // number | undefined
+    x.b; // string | undefined
+    x.c; // boolean | undefined
+}
+function f72(func) {
+    var a = func({ a: 1, b: "hello" }, { c: true }, 'a'); // number
+    var b = func({ a: 1, b: "hello" }, { c: true }, 'b'); // string
+    var c = func({ a: 1, b: "hello" }, { c: true }, 'c'); // boolean
+}
+function f73(func) {
+    var a = func({ a: 1, b: "hello" }, { c: true }, 'a'); // number
+    var b = func({ a: 1, b: "hello" }, { c: true }, 'b'); // string
+    var c = func({ a: 1, b: "hello" }, { c: true }, 'c'); // boolean
+}
+function f74(func) {
+    var a = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'a'); // number
+    var b = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b'); // string | boolean
+}
 // Repros from #12011
 var Base = (function () {
     function Base() {
@@ -500,6 +598,16 @@ var assignTo2 = function (object, key1, key2) {
 var empty = one(function () { }); // inferred as {}, expected
 var hashOfEmpty1 = on({ test: function () { } }); // {}
 var hashOfEmpty2 = on({ test: function (x) { } }); // { test: boolean }
+var c1 = new Component1({
+    data: {
+        hello: ""
+    }
+});
+c1.get("hello");
+function f(p) {
+    var a;
+    a[p].add; // any
+}
 
 
 //// [keyofAndIndexedAccess.d.ts]
@@ -607,6 +715,11 @@ declare function f53<T, K extends keyof T>(obj: {
 declare function f54<T>(obj: T, key: keyof T): void;
 declare function f55<T, K extends keyof T>(obj: T, key: K): void;
 declare function f60<T>(source: T, target: T): void;
+declare function f70(func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void): void;
+declare function f71(func: <T, U>(x: T, y: U) => Partial<T & U>): void;
+declare function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]): void;
+declare function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]): void;
+declare function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]): void;
 declare class Base {
     get<K extends keyof this>(prop: K): this[K];
     set<K extends keyof this>(prop: K, value: this[K]): void;
@@ -644,3 +757,26 @@ declare var hashOfEmpty1: {};
 declare var hashOfEmpty2: {
     test: boolean;
 };
+interface Options1<Data, Computed> {
+    data?: Data;
+    computed?: Computed;
+}
+declare class Component1<Data, Computed> {
+    constructor(options: Options1<Data, Computed>);
+    get<K extends keyof (Data & Computed)>(key: K): (Data & Computed)[K];
+}
+declare let c1: Component1<{
+    hello: string;
+}, {}>;
+interface Options2<Data, Computed> {
+    data?: Data;
+    computed?: Computed;
+}
+declare class Component2<Data, Computed> {
+    constructor(options: Options2<Data, Computed>);
+    get<K extends keyof Data | keyof Computed>(key: K): (Data & Computed)[K];
+}
+interface R {
+    p: number;
+}
+declare function f<K extends keyof R>(p: K): void;

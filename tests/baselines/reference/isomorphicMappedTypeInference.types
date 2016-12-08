@@ -546,3 +546,42 @@ var g2 = applySpec({ foo: { bar: { baz: (x: any) => true } } });
 >x : any
 >true : true
 
+// Repro from #12633
+
+const foo = <T>(object: T, partial: Partial<T>) => object;
+>foo : <T>(object: T, partial: Partial<T>) => T
+><T>(object: T, partial: Partial<T>) => object : <T>(object: T, partial: Partial<T>) => T
+>T : T
+>object : T
+>T : T
+>partial : Partial<T>
+>Partial : Partial<T>
+>T : T
+>object : T
+
+let o = {a: 5, b: 7};
+>o : { a: number; b: number; }
+>{a: 5, b: 7} : { a: number; b: number; }
+>a : number
+>5 : 5
+>b : number
+>7 : 7
+
+foo(o, {b: 9});
+>foo(o, {b: 9}) : { a: number; b: number; }
+>foo : <T>(object: T, partial: Partial<T>) => T
+>o : { a: number; b: number; }
+>{b: 9} : { b: number; }
+>b : number
+>9 : 9
+
+o = foo(o, {b: 9});
+>o = foo(o, {b: 9}) : { a: number; b: number; }
+>o : { a: number; b: number; }
+>foo(o, {b: 9}) : { a: number; b: number; }
+>foo : <T>(object: T, partial: Partial<T>) => T
+>o : { a: number; b: number; }
+>{b: 9} : { b: number; }
+>b : number
+>9 : 9
+

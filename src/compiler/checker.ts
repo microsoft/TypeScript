@@ -2673,7 +2673,7 @@ namespace ts {
                 }
                 Debug.assert(bindingElement.kind === SyntaxKind.BindingElement);
                 if (bindingElement.propertyName) {
-                    writer.writeSymbol(getTextOfNode(bindingElement.propertyName), bindingElement.symbol);
+                    writer.writeProperty(getTextOfNode(bindingElement.propertyName));
                     writePunctuation(writer, SyntaxKind.ColonToken);
                     writeSpace(writer);
                 }
@@ -4523,7 +4523,7 @@ namespace ts {
             // First, if the constraint type is a type parameter, obtain the base constraint. Then,
             // if the key type is a 'keyof X', obtain 'keyof C' where C is the base constraint of X.
             // Finally, iterate over the constituents of the resulting iteration type.
-            const keyType = constraintType.flags & TypeFlags.TypeParameter ? getApparentType(constraintType) : constraintType;
+            const keyType = constraintType.flags & TypeFlags.TypeVariable ? getApparentType(constraintType) : constraintType;
             const iterationType = keyType.flags & TypeFlags.Index ? getIndexType(getApparentType((<IndexType>keyType).type)) : keyType;
             forEachType(iterationType, t => {
                 // Create a mapper from T to the current iteration type constituent. Then, if the
@@ -4579,7 +4579,7 @@ namespace ts {
         function isGenericMappedType(type: Type) {
             if (getObjectFlags(type) & ObjectFlags.Mapped) {
                 const constraintType = getConstraintTypeFromMappedType(<MappedType>type);
-                return !!(constraintType.flags & (TypeFlags.TypeParameter | TypeFlags.Index));
+                return maybeTypeOfKind(constraintType, TypeFlags.TypeVariable | TypeFlags.Index);
             }
             return false;
         }
@@ -5912,7 +5912,7 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getIndexTypeForTypeVariable(type: TypeVariable) {
+        function getIndexTypeForGenericType(type: TypeVariable | UnionOrIntersectionType) {
             if (!type.resolvedIndexType) {
                 type.resolvedIndexType = <IndexType>createType(TypeFlags.Index);
                 type.resolvedIndexType.type = type;
@@ -5931,7 +5931,7 @@ namespace ts {
         }
 
         function getIndexType(type: Type): Type {
-            return type.flags & TypeFlags.TypeVariable ? getIndexTypeForTypeVariable(<TypeVariable>type) :
+            return maybeTypeOfKind(type, TypeFlags.TypeVariable) ? getIndexTypeForGenericType(<TypeVariable | UnionOrIntersectionType>type) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getConstraintTypeFromMappedType(<MappedType>type) :
                 type.flags & TypeFlags.Any || getIndexInfoOfType(type, IndexKind.String) ? stringType :
                 getLiteralTypeFromPropertyNames(type);
@@ -6032,14 +6032,14 @@ namespace ts {
         }
 
         function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode) {
-            if (indexType.flags & TypeFlags.TypeVariable ||
-                objectType.flags & TypeFlags.TypeVariable && indexType.flags & TypeFlags.Index ||
-                isGenericMappedType(objectType)) {
-                // If the object type is a type variable (a type parameter or another indexed access type), if the
-                // index type is a type variable or an index type, or if the object type is a mapped type with a
-                // generic constraint, we are performing a higher-order index access where we cannot meaningfully
-                // access the properties of the object type. In those cases, we first check that the index type is
-                // assignable to 'keyof T' for the object type.
+            if (maybeTypeOfKind(indexType, TypeFlags.TypeVariable | TypeFlags.Index) || isGenericMappedType(objectType)) {
+                if (objectType.flags & TypeFlags.Any) {
+                    return objectType;
+                }
+                // If the index type is generic or if the object type is a mapped type with a generic constraint,
+                // we are performing a higher-order index access where we cannot meaningfully access the properties
+                // of the object type. In those cases, we first check that the index type is assignable to 'keyof T'
+                // for the object type.
                 if (accessNode) {
                     if (!isTypeAssignableTo(indexType, getIndexType(objectType))) {
                         error(accessNode, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(indexType), typeToString(objectType));
@@ -6539,7 +6539,7 @@ namespace ts {
             // union type A | undefined, we produce { [P in keyof A]: X } | undefined.
             const constraintType = getConstraintTypeFromMappedType(type);
             if (constraintType.flags & TypeFlags.Index) {
-                const typeVariable = <TypeParameter>(<IndexType>constraintType).type;
+                const typeVariable = (<IndexType>constraintType).type;
                 const mappedTypeVariable = instantiateType(typeVariable, mapper);
                 if (typeVariable !== mappedTypeVariable) {
                     return mapType(mappedTypeVariable, t => {
@@ -8706,12 +8706,15 @@ namespace ts {
                     if (constraintType.flags & TypeFlags.Index) {
                         // We're inferring from some source type S to a homomorphic mapped type { [P in keyof T]: X },
                         // where T is a type variable. Use inferTypeForHomomorphicMappedType to infer a suitable source
-                        // type and then infer from that type to T.
+                        // type and then make a secondary inference from that type to T. We make a secondary inference
+                        // such that direct inferences to T get priority over inferences to Partial<T>, for example.
                         const index = indexOf(typeVariables, (<IndexType>constraintType).type);
                         if (index >= 0 && !typeInferences[index].isFixed) {
                             const inferredType = inferTypeForHomomorphicMappedType(source, <MappedType>target);
                             if (inferredType) {
+                                inferiority++;
                                 inferFromTypes(inferredType, typeVariables[index]);
+                                inferiority--;
                             }
                         }
                         return;
@@ -10402,6 +10405,29 @@ namespace ts {
             return baseConstructorType === nullWideningType;
         }
 
+        function checkThisBeforeSuper(node: Node, container: Node, diagnosticMessage: DiagnosticMessage) {
+            const containingClassDecl = <ClassDeclaration>container.parent;
+            const baseTypeNode = getClassExtendsHeritageClauseElement(containingClassDecl);
+
+            // If a containing class does not have extends clause or the class extends null
+            // skip checking whether super statement is called before "this" accessing.
+            if (baseTypeNode && !classDeclarationExtendsNull(containingClassDecl)) {
+                const superCall = getSuperCallInConstructor(<ConstructorDeclaration>container);
+
+                // We should give an error in the following cases:
+                //      - No super-call
+                //      - "this" is accessing before super-call.
+                //          i.e super(this)
+                //              this.x; super();
+                // We want to make sure that super-call is done before accessing "this" so that
+                // "this" is not accessed as a parameter of the super-call.
+                if (!superCall || superCall.end > node.pos) {
+                    // In ES6, super inside constructor of class-declaration has to precede "this" accessing
+                    error(node, diagnosticMessage);
+                }
+            }
+        }
+
         function checkThisExpression(node: Node): Type {
             // Stop at the first arrow function so that we can
             // tell whether 'this' needs to be captured.
@@ -10409,26 +10435,7 @@ namespace ts {
             let needToCaptureLexicalThis = false;
 
             if (container.kind === SyntaxKind.Constructor) {
-                const containingClassDecl = <ClassDeclaration>container.parent;
-                const baseTypeNode = getClassExtendsHeritageClauseElement(containingClassDecl);
-
-                // If a containing class does not have extends clause or the class extends null
-                // skip checking whether super statement is called before "this" accessing.
-                if (baseTypeNode && !classDeclarationExtendsNull(containingClassDecl)) {
-                    const superCall = getSuperCallInConstructor(<ConstructorDeclaration>container);
-
-                    // We should give an error in the following cases:
-                    //      - No super-call
-                    //      - "this" is accessing before super-call.
-                    //          i.e super(this)
-                    //              this.x; super();
-                    // We want to make sure that super-call is done before accessing "this" so that
-                    // "this" is not accessed as a parameter of the super-call.
-                    if (!superCall || superCall.end > node.pos) {
-                        // In ES6, super inside constructor of class-declaration has to precede "this" accessing
-                        error(node, Diagnostics.super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class);
-                    }
-                }
+                checkThisBeforeSuper(node, container, Diagnostics.super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class);
             }
 
             // Now skip arrow functions to get the "real" owner of 'this'.
@@ -10574,6 +10581,10 @@ namespace ts {
                     error(node, Diagnostics.super_property_access_is_permitted_only_in_a_constructor_member_function_or_member_accessor_of_a_derived_class);
                 }
                 return unknownType;
+            }
+
+            if (!isCallExpression && container.kind === SyntaxKind.Constructor) {
+                checkThisBeforeSuper(node, container, Diagnostics.super_must_be_called_before_accessing_a_property_of_super_in_the_constructor_of_a_derived_class);
             }
 
             if ((getModifierFlags(container) & ModifierFlags.Static) || isCallExpression) {
@@ -16196,7 +16207,7 @@ namespace ts {
                 return undefined;
             }
 
-            const onfulfilledParameterType = getTypeWithFacts(getUnionType(map(thenSignatures, getTypeOfFirstParameterOfSignature)), TypeFacts.NEUndefined);
+            const onfulfilledParameterType = getTypeWithFacts(getUnionType(map(thenSignatures, getTypeOfFirstParameterOfSignature)), TypeFacts.NEUndefinedOrNull);
             if (isTypeAny(onfulfilledParameterType)) {
                 return undefined;
             }

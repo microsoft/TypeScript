@@ -2407,6 +2407,7 @@ namespace ts {
         writeSpace(text: string): void;
         writeStringLiteral(text: string): void;
         writeParameter(text: string): void;
+        writeProperty(text: string): void;
         writeSymbol(text: string, symbol: Symbol): void;
         writeLine(): void;
         increaseIndent(): void;
@@ -2908,6 +2909,8 @@ namespace ts {
         /* @internal */
         resolvedProperties: SymbolTable;  // Cache of resolved properties
         /* @internal */
+        resolvedIndexType: IndexType;
+        /* @internal */
         couldContainTypeVariables: boolean;
     }
 
@@ -2991,7 +2994,7 @@ namespace ts {
 
     // keyof T types (TypeFlags.Index)
     export interface IndexType extends Type {
-        type: TypeVariable;
+        type: TypeVariable | UnionOrIntersectionType;
     }
 
     export const enum SignatureKind {

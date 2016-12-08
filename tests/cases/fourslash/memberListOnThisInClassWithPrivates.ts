@@ -8,6 +8,6 @@
 ////}
 
 goTo.marker();
-verify.memberListContains('privMeth', '(method) C1.privMeth(): void');
-verify.memberListContains('pubMeth', '(method) C1.pubMeth(): void');
-verify.memberListContains('pubProp', '(property) C1.pubProp: number');
+verify.completionListContains('privMeth', '(method) C1.privMeth(): void');
+verify.completionListContains('pubMeth', '(method) C1.pubMeth(): void');
+verify.completionListContains('pubProp', '(property) C1.pubProp: number');
