@@ -20,6 +20,7 @@ namespace ts {
         clear(): void;
         /** `key` may *not* be a string if it was set with a number and we are not using the shim. */
         forEach(action: (value: T, key: string) => void): void;
+        readonly size: number;
     }
 
     // branded string type used to store absolute, normalized and canonicalized paths

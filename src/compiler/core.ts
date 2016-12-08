@@ -66,7 +66,6 @@ namespace ts {
 
     /** Methods on native maps but not on shim maps. Only used in this file. */
     interface ES6Map<T> extends Map<T> {
-        readonly size: number;
         entries(): Iterator<[string, T]>;
     }
 
@@ -128,6 +127,14 @@ namespace ts {
 
             isEmpty(): boolean {
                 return !this.some(() => true);
+            }
+
+            get size(): number {
+                let size = 0;
+                for (const _ in this.data) {
+                    size++;
+                }
+                return size;
             }
 
             forEachInMap<U>(callback: (value: T, key: string) => U | undefined): U | undefined {
@@ -986,20 +993,6 @@ namespace ts {
             if (!hasOwnProperty.call(left, key)) return false;
         }
         return true;
-    }
-
-    /** True if the maps have the same keys and values. */
-    export function mapsAreEqual<T>(left: Map<T>, right: Map<T>, valuesAreEqual?: (left: T, right: T) => boolean): boolean {
-        if (left === right) return true;
-        if (!left || !right) return false;
-        const someInLeftHasNoMatch = someInMap(left, (leftValue, leftKey) => {
-            if (!right.has(leftKey)) return true;
-            const rightValue = right.get(leftKey);
-            return !(valuesAreEqual ? valuesAreEqual(leftValue, rightValue) : leftValue === rightValue);
-        });
-        if (someInLeftHasNoMatch) return false;
-        const someInRightHasNoMatch = someKeyInMap(right, rightKey => !left.has(rightKey));
-        return !someInRightHasNoMatch;
     }
 
     /**

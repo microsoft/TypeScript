@@ -193,6 +193,20 @@ namespace ts {
         }
     }
 
+    /** True if the maps have the same keys and values. */
+    function mapsAreEqual<T>(left: Map<T>, right: Map<T>, valuesAreEqual?: (left: T, right: T) => boolean): boolean {
+        if (left === right) return true;
+        if (!left || !right) return false;
+        const someInLeftHasNoMatch = someInMap(left, (leftValue, leftKey) => {
+            if (!right.has(leftKey)) return true;
+            const rightValue = right.get(leftKey);
+            return !(valuesAreEqual ? valuesAreEqual(leftValue, rightValue) : leftValue === rightValue);
+        });
+        if (someInLeftHasNoMatch) return false;
+        const someInRightHasNoMatch = someKeyInMap(right, rightKey => !left.has(rightKey));
+        return !someInRightHasNoMatch;
+    }
+
     function checkResolvedModulesCache(program: Program, fileName: string, expectedContent: Map<ResolvedModule>): void {
         checkCache("resolved modules", program, fileName, expectedContent, f => f.resolvedModules, checkResolvedModule);
     }

@@ -243,16 +243,10 @@ namespace ts.projectSystem {
     }
 
     export function checkMapKeys(caption: string, map: Map<any>, expectedKeys: string[]) {
-        assert.equal(mapSize(map), expectedKeys.length, `${caption}: incorrect size of map`);
+        assert.equal(map.size, expectedKeys.length, `${caption}: incorrect size of map`);
         for (const name of expectedKeys) {
             assert.isTrue(map.has(name), `${caption} is expected to contain ${name}, actual keys: ${keysOfMap(map)}`);
         }
-    }
-
-    function mapSize<T>(map: Map<T>): number {
-        let size = 0;
-        map.forEach(() => { size++; });
-        return size;
     }
 
     export function checkFileNames(caption: string, actualFileNames: string[], expectedFileNames: string[]) {
@@ -313,7 +307,7 @@ namespace ts.projectSystem {
         }
 
         count() {
-            return mapSize(this.map);
+            return this.map.size;
         }
 
         invoke() {
