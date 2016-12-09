@@ -3,7 +3,7 @@
 
 namespace ts {
     /** The version of the TypeScript compiler release */
-    export const version = "2.1.4";
+    export const version = "2.1.5";
 }
 
 /* @internal */
@@ -1201,7 +1201,7 @@ namespace ts {
         if (b === undefined) return Comparison.GreaterThan;
         if (ignoreCase) {
             if (collator && String.prototype.localeCompare) {
-                // accent means a ≠ b, a ≠ á, a = A
+                // accent means a ? b, a ? a´, a = A
                 const result = a.localeCompare(b, /*locales*/ undefined, { usage: "sort", sensitivity: "accent" });
                 return result < 0 ? Comparison.LessThan : result > 0 ? Comparison.GreaterThan : Comparison.EqualTo;
             }
