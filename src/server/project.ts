@@ -212,7 +212,6 @@ namespace ts.server {
          */
         private projectStateVersion = 0;
 
-
         private typingFiles: SortedReadonlyArray<string>;
 
         protected projectErrors: Diagnostic[];

@@ -28,9 +28,9 @@ namespace ts.server {
             this.switchToScriptVersionCache(newText);
         }
 
-        public useText() {
+        public useText(newText?: string) {
             this.svc = undefined;
-            this.reloadFromFile();
+            this.setText(newText);
         }
 
         public edit(start: number, end: number, newText: string) {
@@ -198,7 +198,8 @@ namespace ts.server {
 
         public close() {
             this.isOpen = false;
-            this.textStorage.useText();
+            this.textStorage.useText(this.hasMixedContent ? "" : undefined);
+            this.markContainingProjectsAsDirty();
         }
 
         public getSnapshot() {
