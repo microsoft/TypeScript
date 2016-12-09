@@ -121,13 +121,11 @@ declare namespace FourSlashInterface {
         private negative;
         not: verifyNegatable;
         constructor(negative?: boolean);
-        memberListContains(symbol: string, text?: string, documenation?: string, kind?: string): void;
-        memberListCount(expectedCount: number): void;
+        completionListCount(expectedCount: number): void;
         completionListContains(symbol: string, text?: string, documentation?: string, kind?: string, spanIndex?: number): void;
         completionListItemsCountIsGreaterThan(count: number): void;
         completionListIsEmpty(): void;
         completionListAllowsNewIdentifier(): void;
-        memberListIsEmpty(): void;
         signatureHelpPresent(): void;
         errorExistsBetweenMarkers(startMarker: string, endMarker: string): void;
         errorExistsAfterMarker(markerName?: string): void;
@@ -279,7 +277,6 @@ declare namespace FourSlashInterface {
         printCurrentFileStateWithoutCaret(): void;
         printCurrentQuickInfo(): void;
         printCurrentSignatureHelp(): void;
-        printMemberListMembers(): void;
         printCompletionListMembers(): void;
         printBreakpointLocation(pos: number): void;
         printBreakpointAtCurrentLocation(): void;

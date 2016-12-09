@@ -1635,7 +1635,7 @@ namespace ts.projectSystem {
             const project = projectService.externalProjects[0];
 
             const scriptInfo = project.getScriptInfo(file1.path);
-            const snap = scriptInfo.snap();
+            const snap = scriptInfo.getSnapshot();
             const actualText = snap.getText(0, snap.getLength());
             assert.equal(actualText, "", `expected content to be empty string, got "${actualText}"`);
 
@@ -1648,7 +1648,7 @@ namespace ts.projectSystem {
             projectService.closeClientFile(file1.path);
 
             const scriptInfo2 = project.getScriptInfo(file1.path);
-            const snap2 = scriptInfo2.snap();
+            const snap2 = scriptInfo2.getSnapshot();
             const actualText2 = snap2.getText(0, snap.getLength());
             assert.equal(actualText2, "", `expected content to be empty string, got "${actualText2}"`);
         });
@@ -2346,13 +2346,13 @@ namespace ts.projectSystem {
             p.updateGraph();
 
             const scriptInfo = p.getScriptInfo(f.path);
-            checkSnapLength(scriptInfo.snap(), f.content.length);
+            checkSnapLength(scriptInfo.getSnapshot(), f.content.length);
 
             // open project and replace its content with empty string
             projectService.openClientFile(f.path, "");
-            checkSnapLength(scriptInfo.snap(), 0);
+            checkSnapLength(scriptInfo.getSnapshot(), 0);
         });
-        function checkSnapLength(snap: server.LineIndexSnapshot, expectedLength: number) {
+        function checkSnapLength(snap: IScriptSnapshot, expectedLength: number) {
             assert.equal(snap.getLength(), expectedLength, "Incorrect snapshot size");
         }
     });
@@ -2505,7 +2505,6 @@ namespace ts.projectSystem {
             const cwd = {
                 path: "/a/c"
             };
-            debugger;
             const host = createServerHost([f1, config, node, cwd], { currentDirectory: cwd.path });
             const projectService = createProjectService(host);
             projectService.openClientFile(f1.path);
@@ -2776,7 +2775,7 @@ namespace ts.projectSystem {
 
             // verify content
             const projectServiice = session.getProjectService();
-            const snap1 = projectServiice.getScriptInfo(f1.path).snap();
+            const snap1 = projectServiice.getScriptInfo(f1.path).getSnapshot();
             assert.equal(snap1.getText(0, snap1.getLength()), tmp.content, "content should be equal to the content of temp file");
 
             // reload from original file file
@@ -2788,7 +2787,7 @@ namespace ts.projectSystem {
             });
 
             // verify content
-            const snap2 = projectServiice.getScriptInfo(f1.path).snap();
+            const snap2 = projectServiice.getScriptInfo(f1.path).getSnapshot();
             assert.equal(snap2.getText(0, snap2.getLength()), f1.content, "content should be equal to the content of original file");
 
         });

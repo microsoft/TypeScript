@@ -1223,11 +1223,12 @@ namespace ts {
             }
 
             const { firstAccessor, secondAccessor, setAccessor } = getAllAccessorDeclarations(node.members, accessor);
-            if (accessor !== firstAccessor) {
+            const firstAccessorWithDecorators = firstAccessor.decorators ? firstAccessor : secondAccessor && secondAccessor.decorators ? secondAccessor : undefined;
+            if (!firstAccessorWithDecorators || accessor !== firstAccessorWithDecorators) {
                 return undefined;
             }
 
-            const decorators = firstAccessor.decorators || (secondAccessor && secondAccessor.decorators);
+            const decorators = firstAccessorWithDecorators.decorators;
             const parameters = getDecoratorsOfParameters(setAccessor);
             if (!decorators && !parameters) {
                 return undefined;

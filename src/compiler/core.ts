@@ -864,24 +864,6 @@ namespace ts {
     }
 
     /**
-     * Reduce the properties defined on a map-like (but not from its prototype chain).
-     *
-     * NOTE: This is intended for use with MapLike<T> objects. For Map<T> objects, use
-     *       reduceProperties instead as it offers better performance.
-     *
-     * @param map The map-like to reduce
-     * @param callback An aggregation function that is called for each entry in the map
-     * @param initial The initial value for the reduction.
-     */
-    export function reduceOwnProperties<T, U>(map: MapLike<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U): U {
-        let result = initial;
-        for (const key in map) if (hasOwnProperty.call(map, key)) {
-            result = callback(result, map[key], String(key));
-        }
-        return result;
-    }
-
-    /**
      * Performs a shallow equality comparison of the contents of two map-likes.
      *
      * @param left A map-like whose properties should be compared.
