@@ -12,7 +12,7 @@ namespace ts.codefix {
                 const classDecl = <ClassDeclaration>token.parent;
                 const startPos = classDecl.members.pos;
 
-                const InstantiatedExtendsType = <InterfaceType>checker.getTypeFromTypeReference(getClassExtendsHeritageClauseElement(classDecl));
+                const InstantiatedExtendsType = checker.getTypeFromTypeReference(getClassExtendsHeritageClauseElement(classDecl)) as InterfaceType;
                 // Note that this is ultimately derived from a map indexed by symbol names,
                 // so duplicates cannot occur.
                 const extendsSymbols = checker.getPropertiesOfType(InstantiatedExtendsType);
