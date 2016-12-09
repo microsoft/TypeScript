@@ -114,18 +114,29 @@ namespace ts.codefix {
 
         newSignatureDeclaration.parameters = createNodeArray<ParameterDeclaration>();
         for (let i = 0; i < maxArgs - 1; i++) {
-            const newParameter = createParameterDeclaration(i, minArgumentCount, newSignatureDeclaration);
+            const newParameter = createParameterDeclaration(i, minArgumentCount, anyTypeNode, newSignatureDeclaration);
             newSignatureDeclaration.parameters.push(newParameter);
         }
 
-        const lastParameter = createParameterDeclaration(maxArgs - 1, minArgumentCount, newSignatureDeclaration);
+        let lastParameter: ParameterDeclaration;
         if (hasRestParameter) {
-            lastParameter.dotDotDotToken = createToken(SyntaxKind.DotDotDotToken);
+
+            const anyArrayTypeNode = createNode(SyntaxKind.ArrayType) as ArrayTypeNode;
+            anyArrayTypeNode.elementType = anyTypeNode;
 
             if (!allMaxArgsAreRest) {
-                const newParameter = createParameterDeclaration(maxArgs - 1, minArgumentCount, newSignatureDeclaration);
+                const newParameter = createParameterDeclaration(maxArgs - 1, minArgumentCount, anyTypeNode, newSignatureDeclaration);
                 newSignatureDeclaration.parameters.push(newParameter);
+                lastParameter = createParameterDeclaration(maxArgs, minArgumentCount, anyArrayTypeNode, newSignatureDeclaration);
             }
+            else {
+                lastParameter = createParameterDeclaration(maxArgs - 1, minArgumentCount, anyArrayTypeNode, newSignatureDeclaration);
+            }
+
+            lastParameter.dotDotDotToken = createToken(SyntaxKind.DotDotDotToken);
+        }
+        else {
+            lastParameter = createParameterDeclaration(maxArgs - 1, minArgumentCount, anyTypeNode, newSignatureDeclaration);
         }
 
         newSignatureDeclaration.parameters.push(lastParameter);
@@ -135,12 +146,12 @@ namespace ts.codefix {
 
         return checker.getSignatureFromDeclaration(newSignatureDeclaration);
 
-        function createParameterDeclaration(index: number, minArgCount: number, enclosingSignatureDeclaration: SignatureDeclaration): ParameterDeclaration {
+        function createParameterDeclaration(index: number, minArgCount: number, typeNode: TypeNode, enclosingSignatureDeclaration: SignatureDeclaration): ParameterDeclaration {
             const newParameter = createNode(SyntaxKind.Parameter) as ParameterDeclaration;
             newParameter.symbol = checker.createSymbol(SymbolFlags.FunctionScopedVariable, "arg" + index);
             newParameter.symbol.valueDeclaration = newParameter;
             newParameter.symbol.declarations = [newParameter];
-            newParameter.type = anyTypeNode;
+            newParameter.type = typeNode;
             newParameter.parent = enclosingSignatureDeclaration;
             if (index >= minArgCount) {
                 newParameter.questionToken = optionalToken;
