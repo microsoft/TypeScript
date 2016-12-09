@@ -140,7 +140,6 @@ namespace ts.projectSystem {
     export interface TestServerHostCreationParameters {
         useCaseSensitiveFileNames?: boolean;
         executingFilePath?: string;
-        libFile?: FileOrFolder;
         currentDirectory?: string;
     }
 
@@ -1144,6 +1143,69 @@ namespace ts.projectSystem {
             projectService.closeClientFile(file1.path);
             checkNumberOfProjects(projectService, {});
         });
+
+        it("reload regular file after closing", () => {
+            const f1 = {
+                path: "/a/b/app.ts",
+                content: "x."
+            };
+            const f2 = {
+                path: "/a/b/lib.ts",
+                content: "let x: number;"
+            };
+
+            const host = createServerHost([f1, f2, libFile]);
+            const service = createProjectService(host);
+            service.openExternalProject({ projectFileName: "/a/b/project", rootFiles: toExternalFiles([f1.path, f2.path]), options: {} })
+
+            service.openClientFile(f1.path);
+            service.openClientFile(f2.path, "let x: string");
+
+            service.checkNumberOfProjects({ externalProjects: 1 });
+            checkProjectActualFiles(service.externalProjects[0], [f1.path, f2.path, libFile.path]);
+
+            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2);
+            // should contain completions for string
+            assert.isTrue(completions1.entries.some(e => e.name === "charAt"), "should contain 'charAt'");
+            assert.isFalse(completions1.entries.some(e => e.name === "toExponential"), "should not contain 'toExponential'");
+
+            service.closeClientFile(f2.path);
+            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2);
+            // should contain completions for string
+            assert.isFalse(completions2.entries.some(e => e.name === "charAt"), "should not contain 'charAt'");
+            assert.isTrue(completions2.entries.some(e => e.name === "toExponential"), "should contain 'toExponential'");
+        });
+
+        it("clear mixed content file after closing", () => {
+            const f1 = {
+                path: "/a/b/app.ts",
+                content: " "
+            };
+            const f2 = {
+                path: "/a/b/lib.html",
+                content: "<html/>"
+            };
+
+            const host = createServerHost([f1, f2, libFile]);
+            const service = createProjectService(host);
+            service.openExternalProject({ projectFileName: "/a/b/project", rootFiles: [{ fileName: f1.path }, { fileName: f2.path, hasMixedContent: true }], options: {} })
+
+            service.openClientFile(f1.path);
+            service.openClientFile(f2.path, "let somelongname: string");
+
+            service.checkNumberOfProjects({ externalProjects: 1 });
+            checkProjectActualFiles(service.externalProjects[0], [f1.path, f2.path, libFile.path]);
+
+            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0);
+            assert.isTrue(completions1.entries.some(e => e.name === "somelongname"), "should contain 'somelongname'");
+
+            service.closeClientFile(f2.path);
+            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0);
+            assert.isFalse(completions2.entries.some(e => e.name === "somelongname"), "should not contain 'somelongname'");
+            const sf2 = service.externalProjects[0].getLanguageService().getProgram().getSourceFile(f2.path);
+            assert.equal(sf2.text, "");
+        });
+
 
         it("external project with included config file opened after configured project", () => {
             const file1 = {
