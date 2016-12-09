@@ -92,54 +92,36 @@ namespace ts.codefix {
         newSignatureDeclaration.parent = enclosingDeclaration;
         newSignatureDeclaration.name = signatures[0].getDeclaration().name;
 
-        let maxArgs = -1;
+        let maxNonRestArgs = -1;
         let minArgumentCount = signatures[0].minArgumentCount;
         let hasRestParameter = false;
-        let allMaxArgsAreRest = true;
         for (let i = 0; i < signatures.length; i++) {
             const sig = signatures[i];
             minArgumentCount = Math.min(sig.minArgumentCount, minArgumentCount);
-            if (sig.parameters.length > maxArgs) {
-                maxArgs = sig.parameters.length;
-                allMaxArgsAreRest = sig.hasRestParameter;
-            }
-            else if (sig.parameters.length === maxArgs) {
-                allMaxArgsAreRest = allMaxArgsAreRest && sig.hasRestParameter;
-            }
             hasRestParameter = hasRestParameter || sig.hasRestParameter;
+            const nonRestLength = sig.parameters.length - (sig.hasRestParameter ? 1 : 0);
+            if (nonRestLength > maxNonRestArgs) {
+                maxNonRestArgs = nonRestLength;
+            }
         }
 
         const anyTypeNode: TypeNode = createNode(SyntaxKind.AnyKeyword) as TypeNode;
         const optionalToken = createToken(SyntaxKind.QuestionToken);
 
         newSignatureDeclaration.parameters = createNodeArray<ParameterDeclaration>();
-        for (let i = 0; i < maxArgs - 1; i++) {
+        for (let i = 0; i < maxNonRestArgs; i++) {
             const newParameter = createParameterDeclaration(i, minArgumentCount, anyTypeNode, newSignatureDeclaration);
             newSignatureDeclaration.parameters.push(newParameter);
         }
 
-        let lastParameter: ParameterDeclaration;
         if (hasRestParameter) {
-
             const anyArrayTypeNode = createNode(SyntaxKind.ArrayType) as ArrayTypeNode;
             anyArrayTypeNode.elementType = anyTypeNode;
 
-            if (!allMaxArgsAreRest) {
-                const newParameter = createParameterDeclaration(maxArgs - 1, minArgumentCount, anyTypeNode, newSignatureDeclaration);
-                newSignatureDeclaration.parameters.push(newParameter);
-                lastParameter = createParameterDeclaration(maxArgs, minArgumentCount, anyArrayTypeNode, newSignatureDeclaration);
-            }
-            else {
-                lastParameter = createParameterDeclaration(maxArgs - 1, minArgumentCount, anyArrayTypeNode, newSignatureDeclaration);
-            }
-
-            lastParameter.dotDotDotToken = createToken(SyntaxKind.DotDotDotToken);
+            const restParameter = createParameterDeclaration(maxNonRestArgs, minArgumentCount, anyArrayTypeNode, newSignatureDeclaration);
+            restParameter.dotDotDotToken = createToken(SyntaxKind.DotDotDotToken);
+            newSignatureDeclaration.parameters.push(restParameter);
         }
-        else {
-            lastParameter = createParameterDeclaration(maxArgs - 1, minArgumentCount, anyTypeNode, newSignatureDeclaration);
-        }
-
-        newSignatureDeclaration.parameters.push(lastParameter);
 
         newSignatureDeclaration.type = anyTypeNode;
         newSignatureDeclaration.type.parent = newSignatureDeclaration;
