@@ -3086,7 +3086,7 @@ namespace ts {
         ThisProperty
     }
 
-    export interface FileExtensionMapItem {
+    export interface FileExtensionInfo {
         extension: string;
         scriptKind: ScriptKind;
         isMixedContent: boolean;

@@ -1,4 +1,4 @@
-﻿/**
+/**
   * Declaration module describing the TypeScript Server protocol
   */
 namespace ts.server.protocol {
@@ -996,9 +996,9 @@ namespace ts.server.protocol {
         formatOptions?: FormatCodeSettings;
 
         /**
-         * The host's supported file extension mappings
+         * The host's additional supported file extensions
          */
-        fileExtensionMap?: FileExtensionMapItem[];
+        extraFileExtensions?: FileExtensionInfo[];
     }
 
     /**

@@ -1552,8 +1552,8 @@ namespace ts.projectSystem {
             checkProjectActualFiles(projectService.configuredProjects[0], [file1.path]);
 
             // Specify .html extension as mixed content
-            const fileExtensionMap = [{ extension: ".html", scriptKind: ScriptKind.JS, isMixedContent: true }];
-            const configureHostRequest = makeSessionRequest<protocol.ConfigureRequestArguments>(CommandNames.Configure, { fileExtensionMap });
+            const extraFileExtensions = [{ extension: ".html", scriptKind: ScriptKind.JS, isMixedContent: true }];
+            const configureHostRequest = makeSessionRequest<protocol.ConfigureRequestArguments>(CommandNames.Configure, { extraFileExtensions });
             session.executeCommand(configureHostRequest).response;
 
              // HTML file still not included in the project as it is closed
