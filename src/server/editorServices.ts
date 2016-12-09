@@ -424,7 +424,7 @@ namespace ts.server {
                 this.handleDeletedFile(info);
             }
             else {
-                if (info && (!info.isOpen)) {
+                if (info && (!info.isScriptOpen())) {
                     // file has been changed which might affect the set of referenced files in projects that include 
                     // this file and set of inferred projects
                     info.reloadFromFile();
@@ -440,7 +440,7 @@ namespace ts.server {
 
             // TODO: handle isOpen = true case
 
-            if (!info.isOpen) {
+            if (!info.isScriptOpen()) {
                 this.filenameToScriptInfo.remove(info.path);
                 this.lastDeletedFile = info;
 
@@ -634,10 +634,9 @@ namespace ts.server {
             // Closing file should trigger re-reading the file content from disk. This is
             // because the user may chose to discard the buffer content before saving
             // to the disk, and the server's version of the file can be out of sync.
-            info.reloadFromFile();
+            info.close();
 
             removeItemFromSet(this.openFiles, info);
-            info.isOpen = false;
 
             // collect all projects that should be removed
             let projectsToRemove: Project[];
@@ -989,7 +988,7 @@ namespace ts.server {
                 }
                 if (toAdd) {
                     for (const f of toAdd) {
-                        if (f.isOpen && isRootFileInInferredProject(f)) {
+                        if (f.isScriptOpen() && isRootFileInInferredProject(f)) {
                             // if file is already root in some inferred project 
                             // - remove the file from that project and delete the project if necessary
                             const inferredProject = f.containingProjects[0];
@@ -1089,32 +1088,31 @@ namespace ts.server {
         getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean) {
             let info = this.getScriptInfoForNormalizedPath(fileName);
             if (!info) {
-                let content: string;
-                if (this.host.fileExists(fileName)) {
-                    // by default pick whatever content was supplied as the argument
-                    // if argument was not given - then for mixed content files assume that its content is empty string
-                    content = fileContent || (hasMixedContent ? "" : this.host.readFile(fileName));
-                }
-                if (!content) {
-                    if (openedByClient) {
-                        content = "";
-                    }
-                }
-                if (content !== undefined) {
-                    info = new ScriptInfo(this.host, fileName, content, scriptKind, openedByClient, hasMixedContent);
-                    // do not watch files with mixed content - server doesn't know how to interpret it
+                if (openedByClient || this.host.fileExists(fileName)) {
+                    info = new ScriptInfo(this.host, fileName, scriptKind, hasMixedContent);
+
                     this.filenameToScriptInfo.set(info.path, info);
-                    if (!info.isOpen && !hasMixedContent) {
-                        info.setWatcher(this.host.watchFile(fileName, _ => this.onSourceFileChanged(fileName)));
+
+                    if (openedByClient) {
+                        if (fileContent === undefined) {
+                            // if file is opened by client and its content is not specified - use file text
+                            fileContent = this.host.readFile(fileName) || "";
+                        }
+                    }
+                    else {
+                        // do not watch files with mixed content - server doesn't know how to interpret it
+                        if (!hasMixedContent) {
+                            info.setWatcher(this.host.watchFile(fileName, _ => this.onSourceFileChanged(fileName)));
+                        }
                     }
                 }
             }
             if (info) {
-                if (fileContent !== undefined) {
-                    info.reload(fileContent);
+                if (openedByClient && !info.isScriptOpen()) {
+                    info.open(fileContent);
                 }
-                if (openedByClient) {
-                    info.isOpen = true;
+                else if (fileContent !== undefined) {
+                    info.reload(fileContent);
                 }
             }
             return info;
@@ -1230,7 +1228,6 @@ namespace ts.server {
             const info = this.getScriptInfoForNormalizedPath(toNormalizedPath(uncheckedFileName));
             if (info) {
                 this.closeOpenFile(info);
-                info.isOpen = false;
             }
             this.printProjects();
         }
@@ -1255,7 +1252,7 @@ namespace ts.server {
             if (openFiles) {
                 for (const file of openFiles) {
                     const scriptInfo = this.getScriptInfo(file.fileName);
-                    Debug.assert(!scriptInfo || !scriptInfo.isOpen);
+                    Debug.assert(!scriptInfo || !scriptInfo.isScriptOpen());
                     const normalizedPath = scriptInfo ? scriptInfo.fileName : toNormalizedPath(file.fileName);
                     this.openClientFileWithNormalizedPath(normalizedPath, file.content, tryConvertScriptKindName(file.scriptKind), file.hasMixedContent);
                 }

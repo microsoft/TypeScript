@@ -448,7 +448,7 @@ namespace ts.server {
 
         containsFile(filename: NormalizedPath, requireOpen?: boolean) {
             const info = this.projectService.getScriptInfoForNormalizedPath(filename);
-            if (info && (info.isOpen || !requireOpen)) {
+            if (info && (info.isScriptOpen() || !requireOpen)) {
                 return this.containsScriptInfo(info);
             }
         }
