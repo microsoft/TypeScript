@@ -675,10 +675,12 @@ namespace ts.server {
                 isInferred: this.projectKind === ProjectKind.Inferred,
                 options: this.getCompilerOptions()
             };
+            const updatedFileNames = this.updatedFileNames;
+            this.updatedFileNames = undefined;
             // check if requested version is the same that we have reported last time
             if (this.lastReportedFileNames && lastKnownVersion === this.lastReportedVersion) {
-                // if current structure version is the same - return info witout any changes
-                if (this.projectStructureVersion == this.lastReportedVersion && !this.updatedFileNames) {
+                // if current structure version is the same - return info without any changes
+                if (this.projectStructureVersion == this.lastReportedVersion && !updatedFileNames) {
                     return { info, projectErrors: this.projectErrors };
                 }
                 // compute and return the difference
@@ -687,7 +689,7 @@ namespace ts.server {
 
                 const added: string[] = [];
                 const removed: string[] = [];
-                const updated: string[] = getOwnKeys(this.updatedFileNames);
+                const updated: string[] = getOwnKeys(updatedFileNames);
                 for (const id in currentFiles) {
                     if (!hasProperty(lastReportedFileNames, id)) {
                         added.push(id);
@@ -700,7 +702,6 @@ namespace ts.server {
                 }
                 this.lastReportedFileNames = currentFiles;
                 this.lastReportedVersion = this.projectStructureVersion;
-                this.updatedFileNames = undefined;
                 return { info, changes: { added, removed, updated }, projectErrors: this.projectErrors };
             }
             else {
