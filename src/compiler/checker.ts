@@ -2037,7 +2037,7 @@ namespace ts {
             return result;
         }
 
-        function indexSignatureToString(info: IndexInfo, kind: SyntaxKind, enclosingDeclaration?: Node): string {
+        function indexSignatureToString(info: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node): string {
             const writer = getSingleLineStringWriter();
             getSymbolDisplayBuilder().buildIndexSignatureDisplay(info, writer, kind, enclosingDeclaration);
             const result = writer.string();
@@ -2557,8 +2557,8 @@ namespace ts {
                         writePunctuation(writer, SyntaxKind.SemicolonToken);
                         writer.writeLine();
                     }
-                    buildIndexSignatureDisplay(resolved.stringIndexInfo, writer, SyntaxKind.StringKeyword, enclosingDeclaration, globalFlags, symbolStack);
-                    buildIndexSignatureDisplay(resolved.numberIndexInfo, writer, SyntaxKind.NumberKeyword, enclosingDeclaration, globalFlags, symbolStack);
+                    buildIndexSignatureDisplay(resolved.stringIndexInfo, writer, IndexKind.String, enclosingDeclaration, globalFlags, symbolStack);
+                    buildIndexSignatureDisplay(resolved.numberIndexInfo, writer, IndexKind.Number, enclosingDeclaration, globalFlags, symbolStack);
                     for (const p of resolved.properties) {
                         const t = getTypeOfSymbol(p);
                         if (p.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(t).length) {
@@ -2791,10 +2791,7 @@ namespace ts {
                 buildReturnTypeDisplay(signature, writer, enclosingDeclaration, flags, symbolStack);
             }
 
-            /**
-             * @param keyword The keyword for the type of IndexSignature. Must be one of SyntaxKind.NumberKeyword or SyntaxKind.StringKeyword.
-             */
-            function buildIndexSignatureDisplay(info: IndexInfo, writer: SymbolWriter, keyword: SyntaxKind, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, symbolStack?: Symbol[]) {
+            function buildIndexSignatureDisplay(info: IndexInfo, writer: SymbolWriter, kind: IndexKind, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 if (info) {
                     if (info.isReadonly) {
                         writeKeyword(writer, SyntaxKind.ReadonlyKeyword);
@@ -2804,7 +2801,15 @@ namespace ts {
                     writer.writeParameter(info.declaration ? declarationNameToString(info.declaration.parameters[0].name) : "x");
                     writePunctuation(writer, SyntaxKind.ColonToken);
                     writeSpace(writer);
-                    writeKeyword(writer, keyword);
+                    switch (kind) {
+                        case IndexKind.Number:
+                            writeKeyword(writer, SyntaxKind.NumberKeyword);
+                            break;
+                        case IndexKind.String:
+                            writeKeyword(writer, SyntaxKind.StringKeyword);
+                            break;
+                    }
+
                     writePunctuation(writer, SyntaxKind.CloseBracketToken);
                     writePunctuation(writer, SyntaxKind.ColonToken);
                     writeSpace(writer);

@@ -22,29 +22,16 @@ namespace ts.codefix {
             const hasStringIndexSignature = !!checker.getIndexTypeOfType(classType, IndexKind.String);
 
             for (const implementedTypeNode of implementedTypeNodes) {
-                const implementedType = checker.getTypeFromTypeReference(implementedTypeNode) as InterfaceTypeWithDeclaredMembers;
+                const implementedType = checker.getTypeFromTypeReference(implementedTypeNode) as InterfaceType;
                 // Note that this is ultimately derived from a map indexed by symbol names,
                 // so duplicates cannot occur.
                 const implementedTypeSymbols = checker.getPropertiesOfType(implementedType);
                 const nonPrivateMembers = implementedTypeSymbols.filter(symbolRefersToNonPrivateMember);
 
-                let insertion = "";
-
-                if (!hasNumericIndexSignature) {
-                    const typeNumericIndexInfo = checker.getIndexInfoOfType(implementedType, IndexKind.Number);
-                    if (typeNumericIndexInfo) {
-                        insertion = checker.indexSignatureToString(typeNumericIndexInfo, SyntaxKind.NumberKeyword, classDecl);
-                    }
-                }
-
-                if (!hasStringIndexSignature) {
-                    const typeStringIndexInfo = checker.getIndexInfoOfType(implementedType, IndexKind.String);
-                    if (typeStringIndexInfo) {
-                        insertion += checker.indexSignatureToString(typeStringIndexInfo, SyntaxKind.StringKeyword, classDecl);
-                    }
-                }
-
+                let insertion = getMissingIndexSignatureInsertion(implementedType, IndexKind.Number, classDecl, hasNumericIndexSignature);
+                insertion += getMissingIndexSignatureInsertion(implementedType, IndexKind.String, classDecl, hasStringIndexSignature);
                 insertion += getMissingMembersInsertion(classDecl, nonPrivateMembers, checker, context.newLineCharacter);
+
                 const message = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Implement_interface_0), [implementedTypeNode.getText()]);
                 if (insertion) {
                     pushAction(result, insertion, message);
@@ -52,6 +39,16 @@ namespace ts.codefix {
             }
 
             return result;
+
+            function getMissingIndexSignatureInsertion(type: InterfaceType, kind: IndexKind, enclosingDeclaration: ClassLikeDeclaration, hasIndexSigOfKind: boolean) {
+                if (!hasIndexSigOfKind) {
+                    const IndexInfoOfKind = checker.getIndexInfoOfType(type, kind);
+                    if (IndexInfoOfKind) {
+                        return checker.indexSignatureToString(IndexInfoOfKind, kind, enclosingDeclaration);
+                    }
+                }
+                return "";
+            }
 
             function symbolRefersToNonPrivateMember(symbol: Symbol): boolean {
                 const decls = symbol.getDeclarations();
