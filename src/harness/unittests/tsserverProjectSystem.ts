@@ -727,6 +727,66 @@ namespace ts.projectSystem {
             checkNumberOfInferredProjects(projectService, 1);
         });
 
+        it("remove not-listed external projects", () => {
+            const f1 = {
+                path: "/a/app.ts",
+                content: "let x = 1"
+            };
+            const f2 = {
+                path: "/b/app.ts",
+                content: "let x = 1"
+            };
+            const f3 = {
+                path: "/c/app.ts",
+                content: "let x = 1"
+            };
+            const makeProject = (f:  FileOrFolder) => ({ projectFileName: f.path + ".csproj", rootFiles: [toExternalFile(f.path)], options: {} });
+            const p1 = makeProject(f1);
+            const p2 = makeProject(f2);
+            const p3 = makeProject(f3);
+
+            const host = createServerHost([f1, f2, f3]);
+            const session = createSession(host);
+
+            session.executeCommand(<protocol.OpenExternalProjectsRequest>{
+                seq: 1,
+                type: "request",
+                command: "openExternalProjects",
+                arguments: { projects: [p1, p2] }
+            });
+
+            const projectService = session.getProjectService();
+            checkNumberOfProjects(projectService, { externalProjects: 2 });
+            assert.equal(projectService.externalProjects[0].getProjectName(), p1.projectFileName);
+            assert.equal(projectService.externalProjects[1].getProjectName(), p2.projectFileName);
+
+            session.executeCommand(<protocol.OpenExternalProjectsRequest>{
+                seq: 2,
+                type: "request",
+                command: "openExternalProjects",
+                arguments: { projects: [p1, p3] }
+            });
+            checkNumberOfProjects(projectService, { externalProjects: 2 });
+            assert.equal(projectService.externalProjects[0].getProjectName(), p1.projectFileName);
+            assert.equal(projectService.externalProjects[1].getProjectName(), p3.projectFileName);
+
+            session.executeCommand(<protocol.OpenExternalProjectsRequest>{
+                seq: 3,
+                type: "request",
+                command: "openExternalProjects",
+                arguments: { projects: [] }
+            });
+            checkNumberOfProjects(projectService, { externalProjects: 0 });
+
+            session.executeCommand(<protocol.OpenExternalProjectsRequest>{
+                seq: 3,
+                type: "request",
+                command: "openExternalProjects",
+                arguments: { projects: [p2] }
+            });
+            assert.equal(projectService.externalProjects[0].getProjectName(), p2.projectFileName);
+        });
+
         it("handle recreated files correctly", () => {
             const configFile: FileOrFolder = {
                 path: "/a/b/tsconfig.json",
@@ -1514,7 +1574,7 @@ namespace ts.projectSystem {
             const project = projectService.externalProjects[0];
 
             const scriptInfo = project.getScriptInfo(file1.path);
-            const snap = scriptInfo.snap();
+            const snap = scriptInfo.getSnapshot();
             const actualText = snap.getText(0, snap.getLength());
             assert.equal(actualText, "", `expected content to be empty string, got "${actualText}"`);
 
@@ -1527,7 +1587,7 @@ namespace ts.projectSystem {
             projectService.closeClientFile(file1.path);
 
             const scriptInfo2 = project.getScriptInfo(file1.path);
-            const snap2 = scriptInfo2.snap();
+            const snap2 = scriptInfo2.getSnapshot();
             const actualText2 = snap2.getText(0, snap.getLength());
             assert.equal(actualText2, "", `expected content to be empty string, got "${actualText2}"`);
         });
@@ -2225,13 +2285,13 @@ namespace ts.projectSystem {
             p.updateGraph();
 
             const scriptInfo = p.getScriptInfo(f.path);
-            checkSnapLength(scriptInfo.snap(), f.content.length);
+            checkSnapLength(scriptInfo.getSnapshot(), f.content.length);
 
             // open project and replace its content with empty string
             projectService.openClientFile(f.path, "");
-            checkSnapLength(scriptInfo.snap(), 0);
+            checkSnapLength(scriptInfo.getSnapshot(), 0);
         });
-        function checkSnapLength(snap: server.LineIndexSnapshot, expectedLength: number) {
+        function checkSnapLength(snap: IScriptSnapshot, expectedLength: number) {
             assert.equal(snap.getLength(), expectedLength, "Incorrect snapshot size");
         }
     });
@@ -2384,7 +2444,6 @@ namespace ts.projectSystem {
             const cwd = {
                 path: "/a/c"
             };
-            debugger;
             const host = createServerHost([f1, config, node, cwd], { currentDirectory: cwd.path });
             const projectService = createProjectService(host);
             projectService.openClientFile(f1.path);
@@ -2655,7 +2714,7 @@ namespace ts.projectSystem {
 
             // verify content
             const projectServiice = session.getProjectService();
-            const snap1 = projectServiice.getScriptInfo(f1.path).snap();
+            const snap1 = projectServiice.getScriptInfo(f1.path).getSnapshot();
             assert.equal(snap1.getText(0, snap1.getLength()), tmp.content, "content should be equal to the content of temp file");
 
             // reload from original file file
@@ -2667,7 +2726,7 @@ namespace ts.projectSystem {
             });
 
             // verify content
-            const snap2 = projectServiice.getScriptInfo(f1.path).snap();
+            const snap2 = projectServiice.getScriptInfo(f1.path).getSnapshot();
             assert.equal(snap2.getText(0, snap2.getLength()), f1.content, "content should be equal to the content of original file");
 
         });

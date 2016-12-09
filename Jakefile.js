@@ -262,6 +262,7 @@ var harnessSources = harnessCoreSources.concat([
     "convertToBase64.ts",
     "transpile.ts",
     "reuseProgramStructure.ts",
+    "textStorage.ts",
     "cachingInServerLSHost.ts",
     "moduleResolution.ts",
     "tsconfigParsing.ts",

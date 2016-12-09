@@ -615,23 +615,13 @@ namespace FourSlash {
             });
         }
 
-        public verifyMemberListContains(symbol: string, text?: string, documentation?: string, kind?: string) {
-            const members = this.getMemberListAtCaret();
-            if (members) {
-                this.assertItemInCompletionList(members.entries, symbol, text, documentation, kind);
-            }
-            else {
-                this.raiseError("Expected a member list, but none was provided");
-            }
-        }
-
-        public verifyMemberListCount(expectedCount: number, negative: boolean) {
+        public verifyCompletionListCount(expectedCount: number, negative: boolean) {
             if (expectedCount === 0 && negative) {
-                this.verifyMemberListIsEmpty(/*negative*/ false);
+                this.verifyCompletionListIsEmpty(/*negative*/ false);
                 return;
             }
 
-            const members = this.getMemberListAtCaret();
+            const members = this.getCompletionListAtCaret();
 
             if (members) {
                 const match = members.entries.length === expectedCount;
@@ -642,13 +632,6 @@ namespace FourSlash {
             }
             else if (expectedCount) {
                 this.raiseError("Member list count was 0. Expected " + expectedCount);
-            }
-        }
-
-        public verifyMemberListDoesNotContain(symbol: string) {
-            const members = this.getMemberListAtCaret();
-            if (members && members.entries.filter(e => e.name === symbol).length !== 0) {
-                this.raiseError(`Member list did contain ${symbol}`);
             }
         }
 
@@ -690,16 +673,6 @@ namespace FourSlash {
                 else {
                     assert.equal(item.kind, uniqueItems[item.name], `Items should have the same kind, got ${item.kind} and ${uniqueItems[item.name]}`);
                 }
-            }
-        }
-
-        public verifyMemberListIsEmpty(negative: boolean) {
-            const members = this.getMemberListAtCaret();
-            if ((!members || members.entries.length === 0) && negative) {
-                this.raiseError("Member list is empty at Caret");
-            }
-            else if ((members && members.entries.length !== 0) && !negative) {
-                this.raiseError(`Member list is not empty at Caret:\nMember List contains: ${stringify(members.entries.map(e => e.name))}`);
             }
         }
 
@@ -898,10 +871,6 @@ namespace FourSlash {
 
             const missingItem = { fileName, start, end, isWriteAccess, isDefinition };
             this.raiseError(`verifyReferencesAtPositionListContains failed - could not find the item: ${stringify(missingItem)} in the returned list: (${stringify(references)})`);
-        }
-
-        private getMemberListAtCaret() {
-            return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition);
         }
 
         private getCompletionListAtCaret() {
@@ -1359,11 +1328,6 @@ namespace FourSlash {
         public printCurrentSignatureHelp() {
             const sigHelp = this.getActiveSignatureHelpItem();
             Harness.IO.log(stringify(sigHelp));
-        }
-
-        public printMemberListMembers() {
-            const members = this.getMemberListAtCaret();
-            this.printMembersOrCompletions(members);
         }
 
         public printCompletionListMembers() {
@@ -3109,19 +3073,8 @@ namespace FourSlashInterface {
             }
         }
 
-        // Verifies the member list contains the specified symbol. The
-        // member list is brought up if necessary
-        public memberListContains(symbol: string, text?: string, documentation?: string, kind?: string) {
-            if (this.negative) {
-                this.state.verifyMemberListDoesNotContain(symbol);
-            }
-            else {
-                this.state.verifyMemberListContains(symbol, text, documentation, kind);
-            }
-        }
-
-        public memberListCount(expectedCount: number) {
-            this.state.verifyMemberListCount(expectedCount, this.negative);
+        public completionListCount(expectedCount: number) {
+            this.state.verifyCompletionListCount(expectedCount, this.negative);
         }
 
         // Verifies the completion list contains the specified symbol. The
@@ -3155,10 +3108,6 @@ namespace FourSlashInterface {
 
         public completionListAllowsNewIdentifier() {
             this.state.verifyCompletionListAllowsNewIdentifier(this.negative);
-        }
-
-        public memberListIsEmpty() {
-            this.state.verifyMemberListIsEmpty(this.negative);
         }
 
         public signatureHelpPresent() {
@@ -3560,10 +3509,6 @@ namespace FourSlashInterface {
 
         public printCurrentSignatureHelp() {
             this.state.printCurrentSignatureHelp();
-        }
-
-        public printMemberListMembers() {
-            this.state.printMemberListMembers();
         }
 
         public printCompletionListMembers() {

@@ -80,12 +80,12 @@ verify.quickInfos({
 
 goTo.marker('8');
 verify.quickInfoIs("(property) i2.x: number", "this is x");
-verify.memberListContains("x", "(property) i2.x: number", "this is x");
-verify.memberListContains("foo", "(property) i2.foo: (b: number) => string", "this is foo");
-verify.memberListContains("nc_x", "(property) i2.nc_x: number", "");
-verify.memberListContains("nc_foo", "(property) i2.nc_foo: (b: number) => string", "");
-verify.memberListContains("fnfoo", "(method) i2.fnfoo(b: number): string", "this is fnfoo");
-verify.memberListContains("nc_fnfoo", "(method) i2.nc_fnfoo(b: number): string", "");
+verify.completionListContains("x", "(property) i2.x: number", "this is x");
+verify.completionListContains("foo", "(property) i2.foo: (b: number) => string", "this is foo");
+verify.completionListContains("nc_x", "(property) i2.nc_x: number", "");
+verify.completionListContains("nc_foo", "(property) i2.nc_foo: (b: number) => string", "");
+verify.completionListContains("fnfoo", "(method) i2.fnfoo(b: number): string", "this is fnfoo");
+verify.completionListContains("nc_fnfoo", "(method) i2.nc_fnfoo(b: number): string", "");
 
 verify.quickInfos({
     9: "var i2_i_foo: (b: number) => string",
@@ -199,12 +199,12 @@ verify.completionListContains("i3_i", "var i3_i: i3", "");
 
 goTo.marker('41');
 verify.quickInfoIs("(method) i3.f(a: number): string", "Function i3 f");
-verify.memberListContains("f", "(method) i3.f(a: number): string", "Function i3 f");
-verify.memberListContains("l", "(property) i3.l: (b: number) => string", "");
-verify.memberListContains("x", "(property) i3.x: number", "Comment i3 x");
-verify.memberListContains("nc_f", "(method) i3.nc_f(a: number): string", "");
-verify.memberListContains("nc_l", "(property) i3.nc_l: (b: number) => string", "");
-verify.memberListContains("nc_x", "(property) i3.nc_x: number", "");
+verify.completionListContains("f", "(method) i3.f(a: number): string", "Function i3 f");
+verify.completionListContains("l", "(property) i3.l: (b: number) => string", "");
+verify.completionListContains("x", "(property) i3.x: number", "Comment i3 x");
+verify.completionListContains("nc_f", "(method) i3.nc_f(a: number): string", "");
+verify.completionListContains("nc_l", "(property) i3.nc_l: (b: number) => string", "");
+verify.completionListContains("nc_x", "(property) i3.nc_x: number", "");
 
 goTo.marker('42');
 verify.currentSignatureHelpDocCommentIs("Function i3 f");
