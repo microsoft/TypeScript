@@ -6,7 +6,7 @@
 ////     [1](): string;
 ////     [2]: boolean;
 //// }
-
+////
 //// class C implements I {[|  |]}
 
 verify.rangeAfterCodeFix(`

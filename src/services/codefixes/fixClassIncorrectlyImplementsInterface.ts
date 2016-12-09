@@ -14,19 +14,37 @@ namespace ts.codefix {
             }
 
             const startPos: number = classDecl.members.pos;
-
+            const classType = checker.getTypeAtLocation(classDecl);
             const implementedTypeNodes = getClassImplementsHeritageClauseElements(classDecl);
-
             const result: CodeAction[] = [];
 
+            const hasNumericIndexSignature = !!checker.getIndexTypeOfType(classType, IndexKind.Number);
+            const hasStringIndexSignature = !!checker.getIndexTypeOfType(classType, IndexKind.String);
+
             for (const implementedTypeNode of implementedTypeNodes) {
-                const implementedType = checker.getTypeFromTypeReference(implementedTypeNode);
+                const implementedType = checker.getTypeFromTypeReference(implementedTypeNode) as InterfaceTypeWithDeclaredMembers;
                 // Note that this is ultimately derived from a map indexed by symbol names,
                 // so duplicates cannot occur.
                 const implementedTypeSymbols = checker.getPropertiesOfType(implementedType);
                 const nonPrivateMembers = implementedTypeSymbols.filter(symbolRefersToNonPrivateMember);
 
-                const insertion = getMissingMembersInsertion(classDecl, nonPrivateMembers, checker, context.newLineCharacter);
+                let insertion = "";
+
+                if (!hasNumericIndexSignature) {
+                    const typeNumericIndexInfo = implementedType.declaredNumberIndexInfo;
+                    if (typeNumericIndexInfo) {
+                        insertion = checker.indexSignatureToString(typeNumericIndexInfo, SyntaxKind.NumberKeyword, classDecl);
+                    }
+                }
+
+                if (!hasStringIndexSignature) {
+                    const typeStringIndexInfo = implementedType.declaredStringIndexInfo;
+                    if (typeStringIndexInfo) {
+                        insertion += checker.indexSignatureToString(typeStringIndexInfo, SyntaxKind.StringKeyword, classDecl);
+                    }
+                }
+
+                insertion += getMissingMembersInsertion(classDecl, nonPrivateMembers, checker, context.newLineCharacter);
                 const message = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Implement_interface_0), [implementedTypeNode.getText()]);
                 if (insertion) {
                     pushAction(result, insertion, message);

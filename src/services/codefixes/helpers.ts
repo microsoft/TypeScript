@@ -5,7 +5,7 @@ namespace ts.codefix {
      * Finds members of the resolved type that are missing in the class pointed to by class decl
      * and generates source code for the missing members.
      * @param possiblyMissingSymbols The collection of symbols to filter and then get insertions for.
-     * @returns undefined iff there is no insertion available.
+     * @returns Empty string iff there are no member insertions.
      */
     export function getMissingMembersInsertion(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: Symbol[], checker: TypeChecker, newlineChar: string): string {
         const classMembers = classDeclaration.symbol.members;
@@ -16,9 +16,12 @@ namespace ts.codefix {
         for (const symbol of missingMembers) {
             insertion = insertion.concat(getInsertionForMemberSymbol(symbol, classDeclaration, checker, newlineChar));
         }
-        return insertion.length > 0 ? insertion : undefined;
+        return insertion;
     }
 
+    /**
+     * @returns Empty string iff there we can't figure out a representation for `symbol` in `enclosingDeclaration`.
+     */
     function getInsertionForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker, newlineChar: string): string {
         // const name = symbol.getName();
         const type = checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration);
@@ -28,8 +31,9 @@ namespace ts.codefix {
         }
 
         const declaration = declarations[0] as Declaration;
-        const name = declaration.name.getText();
+        const name = declaration.name ? declaration.name.getText() : undefined;
         const visibility = getVisibilityPrefix(getModifierFlags(declaration));
+
         switch (declaration.kind) {
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
@@ -77,14 +81,6 @@ namespace ts.codefix {
                 result += `${visibility}${name}${sigString}${getMethodBodyStub(newlineChar)}`;
 
                 return result;
-            case SyntaxKind.ComputedPropertyName:
-                if (hasDynamicName(declaration)) {
-                    return "";
-                }
-                throw new Error("Not implemented, computed property name.");
-            case SyntaxKind.IndexSignature:
-                throw new Error("Not implemented.");
-
             default:
                 return "";
         }
