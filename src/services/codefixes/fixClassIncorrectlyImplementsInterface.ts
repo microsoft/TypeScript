@@ -31,14 +31,14 @@ namespace ts.codefix {
                 let insertion = "";
 
                 if (!hasNumericIndexSignature) {
-                    const typeNumericIndexInfo = implementedType.declaredNumberIndexInfo;
+                    const typeNumericIndexInfo = checker.getIndexInfoOfType(implementedType, IndexKind.Number);
                     if (typeNumericIndexInfo) {
                         insertion = checker.indexSignatureToString(typeNumericIndexInfo, SyntaxKind.NumberKeyword, classDecl);
                     }
                 }
 
                 if (!hasStringIndexSignature) {
-                    const typeStringIndexInfo = implementedType.declaredStringIndexInfo;
+                    const typeStringIndexInfo = checker.getIndexInfoOfType(implementedType, IndexKind.String);
                     if (typeStringIndexInfo) {
                         insertion += checker.indexSignatureToString(typeStringIndexInfo, SyntaxKind.StringKeyword, classDecl);
                     }

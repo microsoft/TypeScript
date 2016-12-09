@@ -79,6 +79,7 @@ namespace ts {
             getDeclaredTypeOfSymbol,
             getPropertiesOfType,
             getPropertyOfType,
+            getIndexInfoOfType,
             getSignaturesOfType,
             getIndexTypeOfType,
             getBaseTypes,
