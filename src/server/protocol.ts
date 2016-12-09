@@ -904,6 +904,11 @@ namespace ts.server.protocol {
          * Current set of compiler options for project
          */
         options: ts.CompilerOptions;
+
+        /**
+         * true if project language service is disabled
+         */
+        languageServiceDisabled: boolean;
     }
 
     /**
