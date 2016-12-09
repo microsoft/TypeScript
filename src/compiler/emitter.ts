@@ -660,6 +660,8 @@ namespace ts {
                     return emitAsExpression(<AsExpression>node);
                 case SyntaxKind.NonNullExpression:
                     return emitNonNullExpression(<NonNullExpression>node);
+                case SyntaxKind.MetaProperty:
+                    return emitMetaProperty(<MetaProperty>node);
 
                 // JSX
                 case SyntaxKind.JsxElement:
@@ -1247,6 +1249,12 @@ namespace ts {
         function emitNonNullExpression(node: NonNullExpression) {
             emitExpression(node.expression);
             write("!");
+        }
+
+        function emitMetaProperty(node: MetaProperty) {
+            writeToken(node.keywordToken, node.pos);
+            write(".");
+            emit(node.name);
         }
 
         //
@@ -2571,6 +2579,13 @@ namespace ts {
             return makeUniqueName("class");
         }
 
+        function generateNameForMethodOrAccessor(node: MethodDeclaration | AccessorDeclaration) {
+            if (isIdentifier(node.name)) {
+                return generateNameForNodeCached(node.name);
+            }
+            return makeTempVariableName(TempFlags.Auto);
+        }
+
         /**
          * Generates a unique name from a node.
          *
@@ -2592,6 +2607,10 @@ namespace ts {
                     return generateNameForExportDefault();
                 case SyntaxKind.ClassExpression:
                     return generateNameForClassExpression();
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    return generateNameForMethodOrAccessor(<MethodDeclaration | AccessorDeclaration>node);
                 default:
                     return makeTempVariableName(TempFlags.Auto);
             }
@@ -2642,6 +2661,11 @@ namespace ts {
             return node;
         }
 
+        function generateNameForNodeCached(node: Node) {
+            const nodeId = getNodeId(node);
+            return nodeIdToGeneratedName[nodeId] || (nodeIdToGeneratedName[nodeId] = unescapeIdentifier(generateNameForNode(node)));
+        }
+
         /**
          * Gets the generated identifier text from a generated identifier.
          *
@@ -2652,8 +2676,7 @@ namespace ts {
                 // Generated names generate unique names based on their original node
                 // and are cached based on that node's id
                 const node = getNodeForGeneratedName(name);
-                const nodeId = getNodeId(node);
-                return nodeIdToGeneratedName[nodeId] || (nodeIdToGeneratedName[nodeId] = unescapeIdentifier(generateNameForNode(node)));
+                return generateNameForNodeCached(node);
             }
             else {
                 // Auto, Loop, and Unique names are cached based on their unique

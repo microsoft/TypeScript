@@ -1771,6 +1771,14 @@
         "category": "Error",
         "code": 2542
     },
+    "Duplicate identifier '_newTarget'. Compiler uses variable declaration '_newTarget' to capture 'new.target' meta-property reference.": {
+        "category": "Error",
+        "code": 2543
+    },
+    "Expression resolves to variable declaration '_newTarget' that compiler uses to capture 'new.target' meta-property reference.": {
+        "category": "Error",
+        "code": 2544
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -3168,6 +3176,14 @@
     "'super' must be called before accessing a property of 'super' in the constructor of a derived class.": {
         "category": "Error",
         "code": 17011
+    },
+    "'{0}' is not a valid meta-property for keyword '{1}'. Did you mean '{0}'?": {
+        "category": "Error",
+        "code": 17012
+    },
+    "Meta-property '{0}' is only allowed in the body of a function declaration, function expression, or constructor.": {
+        "category": "Error",
+        "code": 17013
     },
 
     "Circularity detected while resolving configuration: {0}": {

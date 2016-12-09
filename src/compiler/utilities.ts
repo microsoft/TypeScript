@@ -996,6 +996,20 @@ namespace ts {
         }
     }
 
+    export function getNewTargetContainer(node: Node) {
+        const container = getThisContainer(node, /*includeArrowFunctions*/ false);
+        if (container) {
+            switch (container.kind) {
+                case SyntaxKind.Constructor:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                    return container;
+            }
+        }
+
+        return undefined;
+    }
+
     /**
       * Given an super call/property node, returns the closest node where
       * - a super call/property access is legal in the node and not legal in the parent node the node.
@@ -1203,6 +1217,7 @@ namespace ts {
             case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.YieldExpression:
             case SyntaxKind.AwaitExpression:
+            case SyntaxKind.MetaProperty:
                 return true;
             case SyntaxKind.QualifiedName:
                 while (node.parent.kind === SyntaxKind.QualifiedName) {
@@ -3892,6 +3907,7 @@ namespace ts {
             || kind === SyntaxKind.TrueKeyword
             || kind === SyntaxKind.SuperKeyword
             || kind === SyntaxKind.NonNullExpression
+            || kind === SyntaxKind.MetaProperty
             || kind === SyntaxKind.RawExpression;
     }
 

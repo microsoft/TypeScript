@@ -568,11 +568,32 @@ namespace ts {
      * is created if `value` was appended.
      * @param value The value to append to the array. If `value` is `undefined`, nothing is
      * appended.
+     * @param copyOnWrite Indicates whether to return a fresh array rather than modify the
+     * existing array.
      */
-    export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined {
+    export function append<T>(to: T[] | undefined, value: T | undefined, copyOnWrite?: boolean): T[] | undefined {
         if (value === undefined) return to;
         if (to === undefined) return [value];
+        if (copyOnWrite) return [...to, value];
         to.push(value);
+        return to;
+    }
+
+    /**
+     * Prepends a value to an array, returning the array.
+     *
+     * @param to The array to which `value` is to be prepended. If `to` is `undefined`, a new array
+     * is created if `value` was prepended.
+     * @param value The value to prepend to the array. If `value` is `undefined`, nothing is
+     * prepended.
+     * @param copyOnWrite Indicates whether to return a fresh array rather than modify the
+     * existing array.
+     */
+    export function prepend<T>(to: T[] | undefined, value: T | undefined, copyOnWrite?: boolean): T[] | undefined {
+        if (value === undefined) return to;
+        if (to === undefined) return [value];
+        if (copyOnWrite) return [value, ...to];
+        to.unshift(value);
         return to;
     }
 
@@ -583,11 +604,45 @@ namespace ts {
      * is created if `value` was appended.
      * @param from The values to append to the array. If `from` is `undefined`, nothing is
      * appended. If an element of `from` is `undefined`, that element is not appended.
+     * @param copyOnWrite Indicates whether to return a fresh array rather than modify the
+     * existing array.
      */
-    export function addRange<T>(to: T[] | undefined, from: T[] | undefined): T[] | undefined {
+    export function addRange<T>(to: T[] | undefined, from: T[] | undefined, copyOnWrite?: boolean): T[] | undefined {
         if (from === undefined) return to;
-        for (const v of from) {
-            to = append(to, v);
+        from = filter(from, isDefined);
+        if (to === undefined) return from;
+        if (from.length > 0) {
+            if (copyOnWrite) {
+                return [...to, ...from];
+            }
+            for (const v of from) {
+                to.push(v);
+            }
+        }
+        return to;
+    }
+
+    /**
+     * Appends a range of value to an array, returning the array.
+     *
+     * @param to The array to which `value` is to be appended. If `to` is `undefined`, a new array
+     * is created if `value` was appended.
+     * @param from The values to append to the array. If `from` is `undefined`, nothing is
+     * appended. If an element of `from` is `undefined`, that element is not appended.
+     * @param copyOnWrite Indicates whether to return a fresh array rather than modify the
+     * existing array.
+     */
+    export function prependRange<T>(to: T[] | undefined, from: T[] | undefined, copyOnWrite?: boolean): T[] | undefined {
+        if (from === undefined) return to;
+        from = filter(from, isDefined);
+        if (to === undefined) return from;
+        if (from.length > 0) {
+            if (copyOnWrite) {
+                return [...from, ...to];
+            }
+            for (let i = from.length - 1; i >= 0; i--) {
+                to.unshift(from[i]);
+            }
         }
         return to;
     }

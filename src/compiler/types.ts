@@ -253,6 +253,7 @@ namespace ts {
         ExpressionWithTypeArguments,
         AsExpression,
         NonNullExpression,
+        MetaProperty,
 
         // Misc
         TemplateSpan,
@@ -1442,6 +1443,14 @@ namespace ts {
     export interface NonNullExpression extends LeftHandSideExpression {
         kind: SyntaxKind.NonNullExpression;
         expression: Expression;
+    }
+
+    // NOTE: MetaProperty is really a MemberExpression, but we consider it a PrimaryExpression
+    //       for the same reasons we treat NewExpression as a PrimaryExpression.
+    export interface MetaProperty extends PrimaryExpression {
+        kind: SyntaxKind.MetaProperty;
+        keywordToken: SyntaxKind;
+        name: Identifier;
     }
 
     /// A JSX expression of the form <TagName attrs>...</TagName>
@@ -2713,6 +2722,7 @@ namespace ts {
         TypeChecked                         = 0x00000001,  // Node has been type checked
         LexicalThis                         = 0x00000002,  // Lexical 'this' reference
         CaptureThis                         = 0x00000004,  // Lexical 'this' used in body
+        CaptureNewTarget                    = 0x00000008,  // Lexical 'new.target' used in body
         SuperInstance                       = 0x00000100,  // Instance 'super' reference
         SuperStatic                         = 0x00000200,  // Static 'super' reference
         ContextChecked                      = 0x00000400,  // Contextual types have been assigned
