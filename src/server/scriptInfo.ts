@@ -28,8 +28,6 @@ namespace ts.server {
                 : getScriptKindFromFileName(fileName);
         }
 
-        public hasChanges = false;
-
         getFormatCodeSettings() {
             return this.formatCodeSettings;
         }
@@ -89,6 +87,12 @@ namespace ts.server {
                 return Errors.ThrowNoProject();
             }
             return this.containingProjects[0];
+        }
+
+        registerFileUpdate(): void {
+            for (const p of this.containingProjects) {
+                p.registerFileUpdate(this.path);
+            }
         }
 
         setFormatOptions(formatSettings: FormatCodeSettings): void {

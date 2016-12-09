@@ -841,7 +841,7 @@ namespace ts {
       * @param basePath A root directory to resolve relative path entries in the config
       *    file to. e.g. outDir
       */
-    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions: CompilerOptions = {}, configFileName?: string, resolutionStack: Path[] = [], fileExtensionMap: FileExtensionMap = {}): ParsedCommandLine {
+    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions: CompilerOptions = {}, configFileName?: string, resolutionStack: Path[] = [], fileExtensionMap: FileExtensionMapItem[] = []): ParsedCommandLine {
         const errors: Diagnostic[] = [];
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
         const resolvedPath = toPath(configFileName || "", basePath, getCanonicalFileName);
@@ -1185,7 +1185,7 @@ namespace ts {
      * @param host The host used to resolve files and directories.
      * @param errors An array for diagnostic reporting.
      */
-    function matchFileNames(fileNames: string[], include: string[], exclude: string[], basePath: string, options: CompilerOptions, host: ParseConfigHost, errors: Diagnostic[], fileExtensionMap: FileExtensionMap): ExpandResult {
+    function matchFileNames(fileNames: string[], include: string[], exclude: string[], basePath: string, options: CompilerOptions, host: ParseConfigHost, errors: Diagnostic[], fileExtensionMap: FileExtensionMapItem[]): ExpandResult {
         basePath = normalizePath(basePath);
 
         // The exclude spec list is converted into a regular expression, which allows us to quickly

@@ -188,6 +188,10 @@ namespace ts.server {
 
         builder: Builder;
         /**
+         * Set of files names that were updated since the last call to getChangesSinceVersion.
+         */
+        private updatedFileNames: Map<string>;
+        /**
          * Set of files that was returned from the last call to getChangesSinceVersion.
          */
         private lastReportedFileNames: Map<string>;
@@ -207,6 +211,7 @@ namespace ts.server {
          * This property is different from projectStructureVersion since in most cases edits don't affect set of files in the project
          */
         private projectStateVersion = 0;
+
 
         private typingFiles: SortedReadonlyArray<string>;
 
@@ -480,6 +485,10 @@ namespace ts.server {
             this.markAsDirty();
         }
 
+        registerFileUpdate(fileName: string) {
+            (this.updatedFileNames || (this.updatedFileNames = createMap<string>()))[fileName] = fileName;
+        }
+
         markAsDirty() {
             this.projectStateVersion++;
         }
@@ -562,10 +571,6 @@ namespace ts.server {
             return !hasChanges;
         }
 
-        private hasChangedFiles() {
-            return this.rootFiles && forEach(this.rootFiles, info => info.hasChanges);
-        }
-
         private setTypings(typings: SortedReadonlyArray<string>): boolean {
             if (arrayIsEqualTo(this.typingFiles, typings)) {
                 return false;
@@ -579,7 +584,7 @@ namespace ts.server {
             const oldProgram = this.program;
             this.program = this.languageService.getProgram();
 
-            let hasChanges = this.hasChangedFiles();
+            let hasChanges = false;
             // bump up the version if
             // - oldProgram is not set - this is a first time updateGraph is called
             // - newProgram is different from the old program and structure of the old program was not reused.
@@ -674,7 +679,7 @@ namespace ts.server {
             // check if requested version is the same that we have reported last time
             if (this.lastReportedFileNames && lastKnownVersion === this.lastReportedVersion) {
                 // if current structure version is the same - return info witout any changes
-                if (this.projectStructureVersion == this.lastReportedVersion) {
+                if (this.projectStructureVersion == this.lastReportedVersion && !this.updatedFileNames) {
                     return { info, projectErrors: this.projectErrors };
                 }
                 // compute and return the difference
@@ -683,7 +688,7 @@ namespace ts.server {
 
                 const added: string[] = [];
                 const removed: string[] = [];
-                const updated = this.rootFiles.filter(info => info.hasChanges).map(info => info.fileName);
+                const updated: string[] = getOwnKeys(this.updatedFileNames);
                 for (const id in currentFiles) {
                     if (!hasProperty(lastReportedFileNames, id)) {
                         added.push(id);
@@ -694,11 +699,9 @@ namespace ts.server {
                         removed.push(id);
                     }
                 }
-                for (const root of this.rootFiles) {
-                    root.hasChanges = false;
-                }
                 this.lastReportedFileNames = currentFiles;
                 this.lastReportedVersion = this.projectStructureVersion;
+                this.updatedFileNames = undefined;
                 return { info, changes: { added, removed, updated }, projectErrors: this.projectErrors };
             }
             else {

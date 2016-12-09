@@ -3086,10 +3086,10 @@ namespace ts {
         ThisProperty
     }
 
-    export interface FileExtensionMap {
-        javaScript?: string[];
-        typeScript?: string[];
-        mixedContent?: string[];
+    export interface FileExtensionMapItem {
+        extension: string;
+        scriptKind: ScriptKind;
+        isMixedContent: boolean;
     }
 
     export interface DiagnosticMessage {

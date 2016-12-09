@@ -108,7 +108,7 @@ namespace ts.server {
     export interface HostConfiguration {
         formatCodeOptions: FormatCodeSettings;
         hostInfo: string;
-        fileExtensionMap?: FileExtensionMap;
+        fileExtensionMap?: FileExtensionMapItem[];
     }
 
     interface ConfigFileConversionResult {
@@ -133,13 +133,16 @@ namespace ts.server {
     interface FilePropertyReader<T> {
         getFileName(f: T): string;
         getScriptKind(f: T): ScriptKind;
-        hasMixedContent(f: T, mixedContentExtensions: string[]): boolean;
+        hasMixedContent(f: T, fileExtensionMap: FileExtensionMapItem[]): boolean;
     }
 
     const fileNamePropertyReader: FilePropertyReader<string> = {
         getFileName: x => x,
         getScriptKind: _ => undefined,
-        hasMixedContent: (fileName, mixedContentExtensions) => forEach(mixedContentExtensions, extension => fileExtensionIs(fileName, extension))
+        hasMixedContent: (fileName, fileExtensionMap) => {
+            const mixedContentExtensions = ts.map(ts.filter(fileExtensionMap, item => item.isMixedContent), item => item.extension);
+            return forEach(mixedContentExtensions, extension => fileExtensionIs(fileName, extension))
+        }
     };
 
     const externalFilePropertyReader: FilePropertyReader<protocol.ExternalFile> = {
@@ -284,7 +287,7 @@ namespace ts.server {
             this.hostConfiguration = {
                 formatCodeOptions: getDefaultFormatCodeSettings(this.host),
                 hostInfo: "Unknown host",
-                fileExtensionMap: {}
+                fileExtensionMap: []
             };
 
             this.documentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames, host.getCurrentDirectory());
@@ -646,7 +649,7 @@ namespace ts.server {
             for (const p of info.containingProjects) {
                 if (p.projectKind === ProjectKind.Configured) {
                     if (info.hasMixedContent) {
-                        info.hasChanges = true;
+                        info.registerFileUpdate();
                     }
                     // last open file in configured project - close it
                     if ((<ConfiguredProject>p).deleteOpenRef() === 0) {
@@ -922,7 +925,7 @@ namespace ts.server {
             for (const f of files) {
                 const rootFilename = propertyReader.getFileName(f);
                 const scriptKind = propertyReader.getScriptKind(f);
-                const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.fileExtensionMap.mixedContent);
+                const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.fileExtensionMap);
                 if (this.host.fileExists(rootFilename)) {
                     const info = this.getOrCreateScriptInfoForNormalizedPath(toNormalizedPath(rootFilename), /*openedByClient*/ clientFileName == rootFilename, /*fileContent*/ undefined, scriptKind, hasMixedContent);
                     project.addRoot(info);
@@ -968,7 +971,7 @@ namespace ts.server {
                     rootFilesChanged = true;
                     if (!scriptInfo) {
                         const scriptKind = propertyReader.getScriptKind(f);
-                        const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.fileExtensionMap.mixedContent);
+                        const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.fileExtensionMap);
                         scriptInfo = this.getOrCreateScriptInfoForNormalizedPath(normalizedPath, /*openedByClient*/ false, /*fileContent*/ undefined, scriptKind, hasMixedContent);
                     }
                 }
@@ -1123,7 +1126,7 @@ namespace ts.server {
                 if (openedByClient) {
                     info.isOpen = true;
                     if (hasMixedContent) {
-                        info.hasChanges = true;
+                        info.registerFileUpdate();
                     }
                 }
             }
@@ -1225,12 +1228,12 @@ namespace ts.server {
         }
 
         openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean): OpenConfiguredProjectResult {
-            const info = this.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ true, fileContent, scriptKind, hasMixedContent);
             const { configFileName = undefined, configFileErrors = undefined }: OpenConfiguredProjectResult = this.findContainingExternalProject(fileName)
                 ? {}
                 : this.openOrUpdateConfiguredProjectForFile(fileName);
 
             // at this point if file is the part of some configured/external project then this project should be created
+            const info = this.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ true, fileContent, scriptKind, hasMixedContent);
             this.assignScriptInfoToInferredProjectIfNecessary(info, /*addToListOfOpenFiles*/ true);
             this.printProjects();
             return { configFileName, configFileErrors };

@@ -1942,12 +1942,12 @@ namespace ts {
     export const supportedJavascriptExtensions = [".js", ".jsx"];
     const allSupportedExtensions = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
 
-    export function getSupportedExtensions(options?: CompilerOptions, fileExtensionMap?: FileExtensionMap): string[] {
+    export function getSupportedExtensions(options?: CompilerOptions, fileExtensionMap?: FileExtensionMapItem[]): string[] {
         let typeScriptHostExtensions: string[] = [];
         let allHostExtensions: string[] = [];
         if (fileExtensionMap) {
-            allHostExtensions = concatenate(concatenate(fileExtensionMap.javaScript, fileExtensionMap.typeScript), fileExtensionMap.mixedContent);
-            typeScriptHostExtensions = fileExtensionMap.typeScript;
+            allHostExtensions = ts.map(fileExtensionMap, item => item.extension);
+            typeScriptHostExtensions = ts.map(ts.filter(fileExtensionMap, item => item.scriptKind === ScriptKind.TS), item => item.extension);
         }
         const allTypeScriptExtensions = concatenate(supportedTypeScriptExtensions, typeScriptHostExtensions);
         const allExtensions = concatenate(allSupportedExtensions, allHostExtensions);
@@ -1962,7 +1962,7 @@ namespace ts {
         return forEach(supportedTypeScriptExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
-    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, fileExtensionMap?: FileExtensionMap) {
+    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, fileExtensionMap?: FileExtensionMapItem[]) {
         if (!fileName) { return false; }
 
         for (const extension of getSupportedExtensions(compilerOptions, fileExtensionMap)) {

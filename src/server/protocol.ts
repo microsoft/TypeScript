@@ -998,7 +998,7 @@ namespace ts.server.protocol {
         /**
          * The host's supported file extension mappings
          */
-        fileExtensionMap?: FileExtensionMap;
+        fileExtensionMap?: FileExtensionMapItem[];
     }
 
     /**
