@@ -1925,15 +1925,17 @@ namespace ts {
     const allSupportedExtensions = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
 
     export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: FileExtensionInfo[]): string[] {
-        let typeScriptHostExtensions: string[] = [];
-        let allHostExtensions: string[] = [];
-        if (extraFileExtensions) {
-            allHostExtensions = ts.map(extraFileExtensions, item => item.extension);
-            typeScriptHostExtensions = ts.map(ts.filter(extraFileExtensions, item => item.scriptKind === ScriptKind.TS), item => item.extension);
+        const needAllExtensions = options && options.allowJs;
+        if (!extraFileExtensions || extraFileExtensions.length === 0) {
+            return needAllExtensions ? allSupportedExtensions : supportedTypeScriptExtensions;
         }
-        const allTypeScriptExtensions = concatenate(supportedTypeScriptExtensions, typeScriptHostExtensions);
-        const allExtensions = concatenate(allSupportedExtensions, allHostExtensions);
-        return options && options.allowJs ? allExtensions : allTypeScriptExtensions;
+        const extensions = (needAllExtensions ? allSupportedExtensions : supportedTypeScriptExtensions).slice(0);
+        for (const extInfo of extraFileExtensions) {
+            if (needAllExtensions || extInfo.scriptKind === ScriptKind.TS) {
+                extensions.push(extInfo.extension);
+            }
+        }
+        return extensions;
     }
 
     export function hasJavaScriptFileExtension(fileName: string) {
