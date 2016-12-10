@@ -2969,6 +2969,8 @@ namespace ts {
 
     export interface TypeVariable extends Type {
         /* @internal */
+        resolvedApparentType: Type;
+        /* @internal */
         resolvedIndexType: IndexType;
     }
 
@@ -2980,8 +2982,6 @@ namespace ts {
         /* @internal */
         mapper?: TypeMapper;     // Instantiation mapper
         /* @internal */
-        resolvedApparentType: Type;
-        /* @internal */
         isThisType?: boolean;
     }
 
@@ -2990,6 +2990,7 @@ namespace ts {
     export interface IndexedAccessType extends TypeVariable {
         objectType: Type;
         indexType: Type;
+        constraint?: Type;
     }
 
     // keyof T types (TypeFlags.Index)
