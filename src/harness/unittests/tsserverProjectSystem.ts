@@ -1591,6 +1591,67 @@ namespace ts.projectSystem {
             checkProjectActualFiles(projectService.inferredProjects[1], [file2.path]);
         });
 
+        it("tsconfig script block support", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: ` `
+            };
+            const file2 = {
+                path: "/a/b/f2.html",
+                content: `var hello = "hello";`
+            };
+            const config = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({ compilerOptions: { allowJs: true } })
+            };
+            const host = createServerHost([file1, file2, config]);
+            const session = createSession(host);
+            openFilesForSession([file1], session);
+            const projectService = session.getProjectService();
+
+            // HTML file will not be included in any projects yet
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path]);
+
+            // Specify .html extension as mixed content
+            const extraFileExtensions = [{ extension: ".html", scriptKind: ScriptKind.JS, isMixedContent: true }];
+            const configureHostRequest = makeSessionRequest<protocol.ConfigureRequestArguments>(CommandNames.Configure, { extraFileExtensions });
+            session.executeCommand(configureHostRequest).response;
+
+             // HTML file still not included in the project as it is closed
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path]);
+
+            // Open HTML file
+            projectService.applyChangesInOpenFiles(
+                /*openFiles*/[{ fileName: file2.path, hasMixedContent: true, scriptKind: ScriptKind.JS, content: `var hello = "hello";` }],
+                /*changedFiles*/undefined,
+                /*closedFiles*/undefined);
+
+            // Now HTML file is included in the project
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, file2.path]);
+
+            // Check identifiers defined in HTML content are available in .ts file
+            const project = projectService.configuredProjects[0];
+            let completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 1);
+            assert(completions && completions.entries[0].name === "hello", `expected entry hello to be in completion list`);
+
+            // Close HTML file
+            projectService.applyChangesInOpenFiles(
+                /*openFiles*/undefined,
+                /*changedFiles*/undefined,
+                /*closedFiles*/[file2.path]);
+
+            // HTML file is still included in project
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, file2.path]);
+
+            // Check identifiers defined in HTML content are not available in .ts file
+            completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 5);
+            assert(completions && completions.entries[0].name !== "hello", `unexpected hello entry in completion list`);
+        });
+
         it("project structure update is deferred if files are not added\removed", () => {
             const file1 = {
                 path: "/a/b/f1.ts",

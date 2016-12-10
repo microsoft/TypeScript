@@ -108,6 +108,7 @@ namespace ts.server {
     export interface HostConfiguration {
         formatCodeOptions: FormatCodeSettings;
         hostInfo: string;
+        extraFileExtensions?: FileExtensionInfo[];
     }
 
     interface ConfigFileConversionResult {
@@ -132,13 +133,16 @@ namespace ts.server {
     interface FilePropertyReader<T> {
         getFileName(f: T): string;
         getScriptKind(f: T): ScriptKind;
-        hasMixedContent(f: T): boolean;
+        hasMixedContent(f: T, extraFileExtensions: FileExtensionInfo[]): boolean;
     }
 
     const fileNamePropertyReader: FilePropertyReader<string> = {
         getFileName: x => x,
         getScriptKind: _ => undefined,
-        hasMixedContent: _ => false
+        hasMixedContent: (fileName, extraFileExtensions) => {
+            const mixedContentExtensions = ts.map(ts.filter(extraFileExtensions, item => item.isMixedContent), item => item.extension);
+            return forEach(mixedContentExtensions, extension => fileExtensionIs(fileName, extension))
+        }
     };
 
     const externalFilePropertyReader: FilePropertyReader<protocol.ExternalFile> = {
@@ -282,7 +286,8 @@ namespace ts.server {
 
             this.hostConfiguration = {
                 formatCodeOptions: getDefaultFormatCodeSettings(this.host),
-                hostInfo: "Unknown host"
+                hostInfo: "Unknown host",
+                extraFileExtensions: []
             };
 
             this.documentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames, host.getCurrentDirectory());
@@ -486,7 +491,7 @@ namespace ts.server {
             // If a change was made inside "folder/file", node will trigger the callback twice:
             // one with the fileName being "folder/file", and the other one with "folder".
             // We don't respond to the second one.
-            if (fileName && !ts.isSupportedSourceFileName(fileName, project.getCompilerOptions())) {
+            if (fileName && !ts.isSupportedSourceFileName(fileName, project.getCompilerOptions(), this.hostConfiguration.extraFileExtensions)) {
                 return;
             }
 
@@ -642,6 +647,9 @@ namespace ts.server {
             let projectsToRemove: Project[];
             for (const p of info.containingProjects) {
                 if (p.projectKind === ProjectKind.Configured) {
+                    if (info.hasMixedContent) {
+                        info.registerFileUpdate();
+                    }
                     // last open file in configured project - close it
                     if ((<ConfiguredProject>p).deleteOpenRef() === 0) {
                         (projectsToRemove || (projectsToRemove = [])).push(p);
@@ -810,7 +818,9 @@ namespace ts.server {
                 this.host,
                 getDirectoryPath(configFilename),
                 /*existingOptions*/ {},
-                configFilename);
+                configFilename,
+                /*resolutionStack*/ [],
+                this.hostConfiguration.extraFileExtensions);
 
             if (parsedCommandLine.errors.length) {
                 errors = concatenate(errors, parsedCommandLine.errors);
@@ -914,7 +924,7 @@ namespace ts.server {
             for (const f of files) {
                 const rootFilename = propertyReader.getFileName(f);
                 const scriptKind = propertyReader.getScriptKind(f);
-                const hasMixedContent = propertyReader.hasMixedContent(f);
+                const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.extraFileExtensions);
                 if (this.host.fileExists(rootFilename)) {
                     const info = this.getOrCreateScriptInfoForNormalizedPath(toNormalizedPath(rootFilename), /*openedByClient*/ clientFileName == rootFilename, /*fileContent*/ undefined, scriptKind, hasMixedContent);
                     project.addRoot(info);
@@ -960,7 +970,7 @@ namespace ts.server {
                     rootFilesChanged = true;
                     if (!scriptInfo) {
                         const scriptKind = propertyReader.getScriptKind(f);
-                        const hasMixedContent = propertyReader.hasMixedContent(f);
+                        const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.extraFileExtensions);
                         scriptInfo = this.getOrCreateScriptInfoForNormalizedPath(normalizedPath, /*openedByClient*/ false, /*fileContent*/ undefined, scriptKind, hasMixedContent);
                     }
                 }
@@ -1110,6 +1120,9 @@ namespace ts.server {
             if (info) {
                 if (openedByClient && !info.isScriptOpen()) {
                     info.open(fileContent);
+                    if (hasMixedContent) {
+                        info.registerFileUpdate();
+                    }
                 }
                 else if (fileContent !== undefined) {
                     info.reload(fileContent);
@@ -1143,6 +1156,10 @@ namespace ts.server {
                 if (args.formatOptions) {
                     mergeMaps(this.hostConfiguration.formatCodeOptions, convertFormatOptions(args.formatOptions));
                     this.logger.info("Format host information updated");
+                }
+                if (args.extraFileExtensions) {
+                    this.hostConfiguration.extraFileExtensions = args.extraFileExtensions;
+                    this.logger.info("Host file extension mappings updated");
                 }
             }
         }

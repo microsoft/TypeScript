@@ -3086,6 +3086,12 @@ namespace ts {
         ThisProperty
     }
 
+    export interface FileExtensionInfo {
+        extension: string;
+        scriptKind: ScriptKind;
+        isMixedContent: boolean;
+    }
+
     export interface DiagnosticMessage {
         key: string;
         category: DiagnosticCategory;
