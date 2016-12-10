@@ -188,7 +188,7 @@ namespace ts {
         }
 
         function getWordSpans(word: string): TextSpan[] {
-            if (!hasProperty(stringToWordSpans, word)) {
+            if (!(word in stringToWordSpans)) {
                 stringToWordSpans[word] = breakIntoWordSpans(word);
             }
 

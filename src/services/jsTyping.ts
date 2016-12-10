@@ -58,12 +58,7 @@ namespace ts.JsTyping {
 
         if (!safeList) {
             const result = readConfigFile(safeListPath, (path: string) => host.readFile(path));
-            if (result.config) {
-                safeList = result.config;
-            }
-            else {
-                safeList = createMap<string>();
-            };
+            safeList = createMap<string>(result.config);
         }
 
         const filesToWatch: string[] = [];
@@ -93,7 +88,7 @@ namespace ts.JsTyping {
 
         // Add the cached typing locations for inferred typings that are already installed
         for (const name in packageNameToTypingLocation) {
-            if (hasProperty(inferredTypings, name) && !inferredTypings[name]) {
+            if (name in inferredTypings && !inferredTypings[name]) {
                 inferredTypings[name] = packageNameToTypingLocation[name];
             }
         }
@@ -124,7 +119,7 @@ namespace ts.JsTyping {
             }
 
             for (const typing of typingNames) {
-                if (!hasProperty(inferredTypings, typing)) {
+                if (!(typing in inferredTypings)) {
                     inferredTypings[typing] = undefined;
                 }
             }
@@ -139,16 +134,16 @@ namespace ts.JsTyping {
                 const jsonConfig: PackageJson = result.config;
                 filesToWatch.push(jsonPath);
                 if (jsonConfig.dependencies) {
-                    mergeTypings(getKeys(jsonConfig.dependencies));
+                    mergeTypings(getOwnKeys(jsonConfig.dependencies));
                 }
                 if (jsonConfig.devDependencies) {
-                    mergeTypings(getKeys(jsonConfig.devDependencies));
+                    mergeTypings(getOwnKeys(jsonConfig.devDependencies));
                 }
                 if (jsonConfig.optionalDependencies) {
-                    mergeTypings(getKeys(jsonConfig.optionalDependencies));
+                    mergeTypings(getOwnKeys(jsonConfig.optionalDependencies));
                 }
                 if (jsonConfig.peerDependencies) {
-                    mergeTypings(getKeys(jsonConfig.peerDependencies));
+                    mergeTypings(getOwnKeys(jsonConfig.peerDependencies));
                 }
             }
         }
@@ -167,7 +162,7 @@ namespace ts.JsTyping {
                 mergeTypings(cleanedTypingNames);
             }
             else {
-                mergeTypings(filter(cleanedTypingNames, f => hasProperty(safeList, f)));
+                mergeTypings(filter(cleanedTypingNames, f => f in safeList));
             }
 
             const hasJsxFile = forEach(fileNames, f => scriptKindIs(f, /*LanguageServiceHost*/ undefined, ScriptKind.JSX));

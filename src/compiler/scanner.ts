@@ -55,7 +55,7 @@ namespace ts {
         tryScan<T>(callback: () => T): T;
     }
 
-    const textToToken: MapLike<SyntaxKind> = {
+    const textToToken = createMap({
         "abstract": SyntaxKind.AbstractKeyword,
         "any": SyntaxKind.AnyKeyword,
         "as": SyntaxKind.AsKeyword,
@@ -179,7 +179,7 @@ namespace ts {
         "|=": SyntaxKind.BarEqualsToken,
         "^=": SyntaxKind.CaretEqualsToken,
         "@": SyntaxKind.AtToken,
-    };
+    });
 
     /*
         As per ECMAScript Language Specification 3th Edition, Section 7.6: Identifiers
@@ -271,12 +271,10 @@ namespace ts {
             lookupInUnicodeMap(code, unicodeES3IdentifierPart);
     }
 
-    function makeReverseMap(source: MapLike<number>): string[] {
+    function makeReverseMap(source: Map<number>): string[] {
         const result: string[] = [];
         for (const name in source) {
-            if (source.hasOwnProperty(name)) {
-                result[source[name]] = name;
-            }
+            result[source[name]] = name;
         }
         return result;
     }

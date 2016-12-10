@@ -87,25 +87,6 @@ namespace ts {
         return node.end - node.pos;
     }
 
-    export function mapIsEqualTo<T>(map1: MapLike<T>, map2: MapLike<T>): boolean {
-        if (!map1 || !map2) {
-            return map1 === map2;
-        }
-        return containsAll(map1, map2) && containsAll(map2, map1);
-    }
-
-    function containsAll<T>(map: MapLike<T>, other: MapLike<T>): boolean {
-        for (const key in map) {
-            if (!hasProperty(map, key)) {
-                continue;
-            }
-            if (!hasProperty(other, key) || map[key] !== other[key]) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     export function arrayIsEqualTo<T>(array1: T[], array2: T[], equaler?: (a: T, b: T) => boolean): boolean {
         if (!array1 || !array2) {
             return array1 === array2;
@@ -318,6 +299,10 @@ namespace ts {
 
     export function isJSDocNode(node: Node) {
         return node.kind >= SyntaxKind.FirstJSDocNode && node.kind <= SyntaxKind.LastJSDocNode;
+    }
+
+    export function isJSDocTag(node: Node) {
+        return node.kind >= SyntaxKind.FirstJSDocTagNode && node.kind <= SyntaxKind.LastJSDocTagNode;
     }
 
     export function getNonDecoratorTokenPosOfNode(node: Node, sourceFile?: SourceFile): number {
@@ -2059,7 +2044,7 @@ namespace ts {
     // the map below must be updated. Note that this regexp *does not* include the 'delete' character.
     // There is no reason for this other than that JSON.stringify does not handle it either.
     const escapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
-    const escapedCharsMap: MapLike<string> = {
+    const escapedCharsMap = createMap({
         "\0": "\\0",
         "\t": "\\t",
         "\v": "\\v",
@@ -2072,7 +2057,7 @@ namespace ts {
         "\u2028": "\\u2028", // lineSeparator
         "\u2029": "\\u2029", // paragraphSeparator
         "\u0085": "\\u0085"  // nextLine
-    };
+    });
 
 
     /**
@@ -2713,6 +2698,11 @@ namespace ts {
         return forEach(supportedTypeScriptExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
+    /** Return ".ts", ".d.ts", or ".tsx", if that is the extension. */
+    export function tryExtractTypeScriptExtension(fileName: string): string | undefined {
+        return find(supportedTypescriptExtensionsForExtractExtension, extension => fileExtensionIs(fileName, extension));
+    }
+
     /**
      * Replace each instance of non-ascii characters by one, two, three, or four escape sequences
      * representing the UTF-8 encoding of the character, and return the expanded char code list.
@@ -2792,7 +2782,7 @@ namespace ts {
     }
 
     function stringifyObject(value: any) {
-        return `{${reduceProperties(value, stringifyProperty, "")}}`;
+        return `{${reduceOwnProperties(value, stringifyProperty, "")}}`;
     }
 
     function stringifyProperty(memo: string, value: any, key: string) {

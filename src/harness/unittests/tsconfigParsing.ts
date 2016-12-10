@@ -181,5 +181,26 @@ namespace ts {
                 ["/d.ts", "/folder/e.ts"]
             );
         });
+
+        it("parse and re-emit tsconfig.json file with diagnostics", () => {
+            const content = `{
+                "compilerOptions": {
+                    "allowJs": true
+                    // Some comments
+                    "outDir": "bin"
+                }
+                "files": ["file1.ts"]
+            }`;
+            const { configJsonObject, diagnostics } = parseAndReEmitConfigJSONFile(content);
+            const expectedResult = {
+                compilerOptions: {
+                    allowJs: true,
+                    outDir: "bin"
+                },
+                files: ["file1.ts"]
+            };
+            assert.isTrue(diagnostics.length === 2);
+            assert.equal(JSON.stringify(configJsonObject), JSON.stringify(expectedResult));
+        });
     });
 }

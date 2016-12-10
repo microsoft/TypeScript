@@ -4,7 +4,7 @@ tests/cases/compiler/staticInstanceResolution5_1.ts(6,16): error TS2304: Cannot 
 
 
 ==== tests/cases/compiler/staticInstanceResolution5_1.ts (3 errors) ====
-    import WinJS = require('staticInstanceResolution5_0.ts');
+    import WinJS = require('staticInstanceResolution5_0');
     
     // these 3 should be errors
     var x = (w1: WinJS) => { };

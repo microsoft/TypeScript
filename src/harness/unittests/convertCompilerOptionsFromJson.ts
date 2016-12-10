@@ -403,6 +403,7 @@ namespace ts {
                 {
                     compilerOptions: <CompilerOptions>{
                         allowJs: true,
+                        maxNodeModuleJsDepth: 2,
                         module: ModuleKind.CommonJS,
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
@@ -429,6 +430,7 @@ namespace ts {
                 {
                     compilerOptions: <CompilerOptions>{
                         allowJs: false,
+                        maxNodeModuleJsDepth: 2,
                         module: ModuleKind.CommonJS,
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
@@ -450,7 +452,8 @@ namespace ts {
                 {
                     compilerOptions:
                     {
-                        allowJs: true
+                        allowJs: true,
+                        maxNodeModuleJsDepth: 2
                     },
                     errors: [{
                         file: undefined,
@@ -469,7 +472,8 @@ namespace ts {
                 {
                     compilerOptions:
                     {
-                        allowJs: true
+                        allowJs: true,
+                        maxNodeModuleJsDepth: 2
                     },
                     errors: <Diagnostic[]>[]
                 }

@@ -8,10 +8,6 @@ export default 0;
 //// [b.ts]
 import a from './a';
 
-// Matching extension
-//// [c.ts]
-import a from './a.ts';
-
 // '.js' extension: stripped and replaced with '.ts'
 //// [d.ts]
 import a from './a.js';
@@ -35,9 +31,6 @@ exports.__esModule = true;
 exports["default"] = 0;
 // No extension: '.ts' added 
 //// [b.js]
-"use strict";
-// Matching extension 
-//// [c.js]
 "use strict";
 // '.js' extension: stripped and replaced with '.ts' 
 //// [d.js]

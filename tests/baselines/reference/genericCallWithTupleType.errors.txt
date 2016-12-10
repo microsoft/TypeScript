@@ -6,11 +6,9 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTup
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(14,1): error TS2322: Type '{ a: string; }' is not assignable to type 'string | number'.
   Type '{ a: string; }' is not assignable to type 'number'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(22,1): error TS2322: Type '[number, string]' is not assignable to type '[string, number]'.
-  Types of property '0' are incompatible.
-    Type 'number' is not assignable to type 'string'.
+  Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(23,1): error TS2322: Type '[{}, {}]' is not assignable to type '[string, number]'.
-  Types of property '0' are incompatible.
-    Type '{}' is not assignable to type 'string'.
+  Type '{}' is not assignable to type 'string'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(24,1): error TS2322: Type '[{}]' is not assignable to type '[{}, {}]'.
   Property '1' is missing in type '[{}]'.
 
@@ -49,13 +47,11 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTup
     i1.tuple1 = [5, "foo"];
     ~~~~~~~~~
 !!! error TS2322: Type '[number, string]' is not assignable to type '[string, number]'.
-!!! error TS2322:   Types of property '0' are incompatible.
-!!! error TS2322:     Type 'number' is not assignable to type 'string'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
     i1.tuple1 = [{}, {}];
     ~~~~~~~~~
 !!! error TS2322: Type '[{}, {}]' is not assignable to type '[string, number]'.
-!!! error TS2322:   Types of property '0' are incompatible.
-!!! error TS2322:     Type '{}' is not assignable to type 'string'.
+!!! error TS2322:   Type '{}' is not assignable to type 'string'.
     i2.tuple1 = [{}];
     ~~~~~~~~~
 !!! error TS2322: Type '[{}]' is not assignable to type '[{}, {}]'.
