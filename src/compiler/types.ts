@@ -2933,6 +2933,7 @@ namespace ts {
         typeParameter?: TypeParameter;
         constraintType?: Type;
         templateType?: Type;
+        modifiersType?: Type;
         mapper?: TypeMapper;  // Instantiation mapper
     }
 
