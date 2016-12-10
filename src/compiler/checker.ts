@@ -4512,12 +4512,11 @@ namespace ts {
             // Resolve upfront such that recursive references see an empty object type.
             setStructuredTypeMembers(type, emptySymbols, emptyArray, emptyArray, undefined, undefined);
             // In { [P in K]: T }, we refer to P as the type parameter type, K as the constraint type,
-            // and T as the template type. If K is of the form 'keyof S', the mapped type and S are
-            // homomorphic and we copy property modifiers from corresponding properties in S.
+            // and T as the template type.
             const typeParameter = getTypeParameterFromMappedType(type);
             const constraintType = getConstraintTypeFromMappedType(type);
-            const homomorphicType = getHomomorphicTypeFromMappedType(type);
             const templateType = getTemplateTypeFromMappedType(type);
+            const modifiersType = getModifiersTypeFromMappedType(type);
             const templateReadonly = !!type.declaration.readonlyToken;
             const templateOptional = !!type.declaration.questionToken;
             // First, if the constraint type is a type parameter, obtain the base constraint. Then,
@@ -4536,11 +4535,11 @@ namespace ts {
                 // Otherwise, for type string create a string index signature.
                 if (t.flags & TypeFlags.StringLiteral) {
                     const propName = (<LiteralType>t).text;
-                    const homomorphicProp = homomorphicType && getPropertyOfType(homomorphicType, propName);
-                    const isOptional = templateOptional || !!(homomorphicProp && homomorphicProp.flags & SymbolFlags.Optional);
+                    const modifiersProp = getPropertyOfType(modifiersType, propName);
+                    const isOptional = templateOptional || !!(modifiersProp && modifiersProp.flags & SymbolFlags.Optional);
                     const prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | (isOptional ? SymbolFlags.Optional : 0), propName);
                     prop.type = propType;
-                    prop.isReadonly = templateReadonly || homomorphicProp && isReadonlySymbol(homomorphicProp);
+                    prop.isReadonly = templateReadonly || modifiersProp && isReadonlySymbol(modifiersProp);
                     members[propName] = prop;
                 }
                 else if (t.flags & TypeFlags.String) {
@@ -4567,9 +4566,16 @@ namespace ts {
                     unknownType);
         }
 
-        function getHomomorphicTypeFromMappedType(type: MappedType) {
-            const constraint = getConstraintDeclaration(getTypeParameterFromMappedType(type));
-            return constraint.kind === SyntaxKind.TypeOperator ? instantiateType(getTypeFromTypeNode((<TypeOperatorNode>constraint).type), type.mapper || identityMapper) : undefined;
+        function getModifiersTypeFromMappedType(type: MappedType) {
+            if (!type.modifiersType) {
+                // If the mapped type was declared as { [P in keyof T]: X } or as { [P in K]: X }, where
+                // K is constrained to 'K extends keyof T', then we will copy property modifiers from T.
+                const declaredType = <MappedType>getTypeFromMappedTypeNode(type.declaration);
+                const constraint = getConstraintTypeFromMappedType(declaredType);
+                const extendedConstraint = constraint.flags & TypeFlags.TypeParameter ? getConstraintOfTypeParameter(<TypeParameter>constraint) : constraint;
+                type.modifiersType = extendedConstraint.flags & TypeFlags.Index ? instantiateType((<IndexType>extendedConstraint).type, type.mapper || identityMapper) : emptyObjectType;
+            }
+            return type.modifiersType;
         }
 
         function getErasedTemplateTypeFromMappedType(type: MappedType) {
