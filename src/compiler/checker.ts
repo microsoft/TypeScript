@@ -1783,6 +1783,14 @@ namespace ts {
                                 return [symbolFromSymbolTable];
                             }
 
+                            // If this is a "default" alias, use what it aliases instead.
+                            if (symbolFromSymbolTable.flags & SymbolFlags.Alias &&
+                                symbolFromSymbolTable.name === "default" &&
+                                symbolFromSymbolTable.declarations.length &&
+                                symbolFromSymbolTable.declarations[0].kind === SyntaxKind.ExportAssignment) {
+                                symbolFromSymbolTable = resolveAlias(symbolFromSymbolTable);
+                            }
+
                             // Look in the exported members, if we can find accessibleSymbolChain, symbol is accessible using this chain
                             // but only if the symbolFromSymbolTable can be qualified
                             const accessibleSymbolsFromExports = resolvedImportedSymbol.exports ? getAccessibleSymbolChainFromSymbolTable(resolvedImportedSymbol.exports) : undefined;
@@ -2890,7 +2898,7 @@ namespace ts {
 
                     // Export assignments do not create name bindings outside the module
                     case SyntaxKind.ExportAssignment:
-                        return false;
+                        return !(node as ExportAssignment).isExportEquals;
 
                     default:
                         return false;
