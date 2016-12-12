@@ -3,7 +3,7 @@
 //// interface I {
 ////     x: number;
 ////     y: number;
-////     z: number;
+////     z: number & { __iBrand: any };
 //// }
 ////
 //// class C implements I {[|   |]
@@ -12,5 +12,5 @@
 //// }
 
 verify.rangeAfterCodeFix(`
-z: number;
+z: number & { __iBrand: any; };
 `);
