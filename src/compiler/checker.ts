@@ -7211,6 +7211,25 @@ namespace ts {
                 }
             }
 
+            function isUnionOrIntersectionTypeWithoutNullableConstituents(type: Type): boolean {
+                if (!(type.flags & TypeFlags.UnionOrIntersection)) {
+                    return false;
+                }
+                // at this point we know that this is union or intersection type possibly with nullable constituents.
+                // check if we still will have compound type if we ignore nullable components.
+                let seenNonNullable = false;
+                for (const t of (<UnionOrIntersectionType>type).types) {
+                    if (t.flags & TypeFlags.Nullable) {
+                        continue;
+                    }
+                    if (seenNonNullable) {
+                        return true;
+                    }
+                    seenNonNullable = true;
+                }
+                return false;
+            }
+
             // Compare two types and return
             // Ternary.True if they are related with no assumptions,
             // Ternary.Maybe if they are related with assumptions of other relationships, or
@@ -7243,7 +7262,7 @@ namespace ts {
                     // and intersection types are further deconstructed on the target side, we don't want to
                     // make the check again (as it might fail for a partial target type). Therefore we obtain
                     // the regular source type and proceed with that.
-                    if (target.flags & TypeFlags.UnionOrIntersection) {
+                    if (isUnionOrIntersectionTypeWithoutNullableConstituents(target)) {
                         source = getRegularTypeOfObjectLiteral(source);
                     }
                 }
