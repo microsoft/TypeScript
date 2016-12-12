@@ -70,6 +70,28 @@ namespace ts.JsDoc {
         return documentationComment;
     }
 
+    export function getJsDocTagsFromDeclarations(declarations: Declaration[]) {
+        // Only collect doc comments from duplicate declarations once.
+        const tags: JSDocTagInfo[] = [];
+        forEachUnique(declarations, declaration => {
+            const jsDocs = getJSDocs(declaration);
+            if (!jsDocs) {
+                return;
+            }
+            for (const doc of jsDocs) {
+                const tagsForDoc = (doc as JSDoc).tags;
+                if (tagsForDoc) {
+                    tags.push(...tagsForDoc.filter(tag => tag.kind === SyntaxKind.JSDocTag).map(jsDocTag => {
+                        return {
+                            name: jsDocTag.tagName.text,
+                            text: jsDocTag.comment
+                        }; }));
+                }
+            }
+        });
+        return tags;
+    }
+
     /**
      * Iterates through 'array' by index and performs the callback on each element of array until the callback
      * returns a truthy value, then returns that value.
