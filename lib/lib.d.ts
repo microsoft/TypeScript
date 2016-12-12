@@ -5927,6 +5927,7 @@ interface CanvasRenderingContext2D extends Object, CanvasPathMethods {
     miterLimit: number;
     msFillRule: string;
     msImageSmoothingEnabled: boolean;
+    imageSmoothingEnabled: boolean;
     shadowBlur: number;
     shadowColor: string;
     shadowOffsetX: number;
