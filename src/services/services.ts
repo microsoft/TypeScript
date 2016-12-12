@@ -1355,7 +1355,7 @@ namespace ts {
                 textSpan: createTextSpan(node.getStart(), node.getWidth()),
                 displayParts: displayPartsDocumentationsAndKind.displayParts,
                 documentation: displayPartsDocumentationsAndKind.documentation,
-                tags: displayPartsDocumentationsAndKind.jsDocTags
+                tags: displayPartsDocumentationsAndKind.tags
             };
         }
 

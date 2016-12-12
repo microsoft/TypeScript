@@ -89,7 +89,7 @@ namespace ts.SymbolDisplay {
 
         const displayParts: SymbolDisplayPart[] = [];
         let documentation: SymbolDisplayPart[];
-        let jsDocTags: JSDocTagInfo[];
+        let tags: JSDocTagInfo[];
         const symbolFlags = symbol.flags;
         let symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, symbolFlags, location);
         let hasAddedSymbolInfo: boolean;
@@ -408,7 +408,7 @@ namespace ts.SymbolDisplay {
 
         if (!documentation) {
             documentation = symbol.getDocumentationComment();
-            jsDocTags = symbol.getJsDocTags();
+            tags = symbol.getJsDocTags();
             if (documentation.length === 0 && symbol.flags & SymbolFlags.Property) {
                 // For some special property access expressions like `experts.foo = foo` or `module.exports.foo = foo`
                 // there documentation comments might be attached to the right hand side symbol of their declarations.
@@ -425,7 +425,7 @@ namespace ts.SymbolDisplay {
                         }
 
                         documentation = rhsSymbol.getDocumentationComment();
-                        jsDocTags = rhsSymbol.getJsDocTags();
+                        tags = rhsSymbol.getJsDocTags();
                         if (documentation.length > 0) {
                             break;
                         }
@@ -434,7 +434,7 @@ namespace ts.SymbolDisplay {
             }
         }
 
-        return { displayParts, documentation, symbolKind, jsDocTags };
+        return { displayParts, documentation, symbolKind, tags };
 
         function addNewLineIfDisplayPartsExist() {
             if (displayParts.length) {
@@ -492,7 +492,7 @@ namespace ts.SymbolDisplay {
                 displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
             }
             documentation = signature.getDocumentationComment();
-            jsDocTags = signature.getJsDocTags();
+            tags = signature.getJsDocTags();
         }
 
         function writeTypeParametersOfSymbol(symbol: Symbol, enclosingDeclaration: Node) {

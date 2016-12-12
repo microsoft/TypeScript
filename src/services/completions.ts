@@ -759,14 +759,14 @@ namespace ts.Completions {
             const symbol = forEach(symbols, s => getCompletionEntryDisplayNameForSymbol(typeChecker, s, compilerOptions.target, /*performCharacterChecks*/ false, location) === entryName ? s : undefined);
 
             if (symbol) {
-                const { displayParts, documentation, symbolKind, jsDocTags } = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, location, location, SemanticMeaning.All);
+                const { displayParts, documentation, symbolKind, tags } = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, location, location, SemanticMeaning.All);
                 return {
                     name: entryName,
                     kindModifiers: SymbolDisplay.getSymbolModifiers(symbol),
                     kind: symbolKind,
                     displayParts,
                     documentation,
-                    tags: jsDocTags
+                    tags
                 };
             }
         }

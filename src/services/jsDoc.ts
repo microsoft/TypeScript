@@ -76,19 +76,14 @@ namespace ts.JsDoc {
             if (!jsDocs) {
                 return;
             }
-            const jsDocTags: JSDocTag[] = [];
-            jsDocs.forEach(doc => {
+            for (const doc of jsDocs) {
                 const tagsForDoc = (doc as JSDoc).tags;
                 if (tagsForDoc) {
-                    jsDocTags.push(...tagsForDoc.filter(tag => tag.kind === SyntaxKind.JSDocTag));
-                }
-            });
-            if (!jsDocTags) {
-                return;
-            }
-            for (const tag of jsDocTags) {
-                if (tag) {
-                    tags.push({ name: tag.tagName.text, text: tag.comment });
+                    tags.push(...tagsForDoc.filter(tag => tag.kind === SyntaxKind.JSDocTag).map(jsDocTag => { 
+                        return { 
+                            name: jsDocTag.tagName.text, 
+                            text: jsDocTag.comment 
+                        } }));
                 }
             }
         });

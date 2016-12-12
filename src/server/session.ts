@@ -853,11 +853,7 @@ namespace ts.server {
             if (simplifiedResult) {
                 const displayString = ts.displayPartsToString(quickInfo.displayParts);
                 const docString = ts.displayPartsToString(quickInfo.documentation);
-                let tags: ts.JSDocTagInfo[] = [];
-                if (quickInfo.tags) {
-                    tags = quickInfo.tags;
-                }
-
+                
                 return {
                     kind: quickInfo.kind,
                     kindModifiers: quickInfo.kindModifiers,
@@ -865,7 +861,7 @@ namespace ts.server {
                     end: scriptInfo.positionToLineOffset(ts.textSpanEnd(quickInfo.textSpan)),
                     displayString: displayString,
                     documentation: docString,
-                    tags: tags
+                    tags: quickInfo.tags || []
                 };
             }
             else {
