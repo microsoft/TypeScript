@@ -2948,6 +2948,7 @@ namespace ts {
         typeParameter?: TypeParameter;
         constraintType?: Type;
         templateType?: Type;
+        modifiersType?: Type;
         mapper?: TypeMapper;  // Instantiation mapper
     }
 
@@ -2984,6 +2985,8 @@ namespace ts {
 
     export interface TypeVariable extends Type {
         /* @internal */
+        resolvedApparentType: Type;
+        /* @internal */
         resolvedIndexType: IndexType;
     }
 
@@ -2995,8 +2998,6 @@ namespace ts {
         /* @internal */
         mapper?: TypeMapper;     // Instantiation mapper
         /* @internal */
-        resolvedApparentType: Type;
-        /* @internal */
         isThisType?: boolean;
     }
 
@@ -3005,6 +3006,7 @@ namespace ts {
     export interface IndexedAccessType extends TypeVariable {
         objectType: Type;
         indexType: Type;
+        constraint?: Type;
     }
 
     // keyof T types (TypeFlags.Index)
@@ -3099,6 +3101,12 @@ namespace ts {
         PrototypeProperty,
         /// this.name = expr
         ThisProperty
+    }
+
+    export interface FileExtensionInfo {
+        extension: string;
+        scriptKind: ScriptKind;
+        isMixedContent: boolean;
     }
 
     export interface DiagnosticMessage {

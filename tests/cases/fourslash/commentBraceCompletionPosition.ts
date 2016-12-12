@@ -14,10 +14,10 @@
 //// }
 
 goTo.marker('1');
-verify.not.isValidBraceCompletionAtPosition('(');
+verify.isValidBraceCompletionAtPosition('(');
 
 goTo.marker('2');
-verify.not.isValidBraceCompletionAtPosition('(');
+verify.isValidBraceCompletionAtPosition('(');
 
 goTo.marker('3');
-verify.not.isValidBraceCompletionAtPosition('(');
+verify.isValidBraceCompletionAtPosition('(');

@@ -91,7 +91,9 @@ namespace ts {
             }
 
             public getText(start: number, end: number): string {
-                return this.text.substring(start, end);
+                return start === 0 && end === this.text.length
+                    ? this.text
+                    : this.text.substring(start, end);
             }
 
             public getLength(): number {

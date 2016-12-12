@@ -1,4 +1,4 @@
-﻿/// <reference path="..\services\services.ts" />
+/// <reference path="..\services\services.ts" />
 /// <reference path="utilities.ts"/>
 /// <reference path="scriptInfo.ts"/>
 /// <reference path="lsHost.ts"/>
@@ -187,6 +187,10 @@ namespace ts.server {
         public languageServiceEnabled = true;
 
         builder: Builder;
+        /**
+         * Set of files names that were updated since the last call to getChangesSinceVersion.
+         */
+        private updatedFileNames: Map<string>;
         /**
          * Set of files that was returned from the last call to getChangesSinceVersion.
          */
@@ -448,7 +452,7 @@ namespace ts.server {
 
         containsFile(filename: NormalizedPath, requireOpen?: boolean) {
             const info = this.projectService.getScriptInfoForNormalizedPath(filename);
-            if (info && (info.isOpen || !requireOpen)) {
+            if (info && (info.isScriptOpen() || !requireOpen)) {
                 return this.containsScriptInfo(info);
             }
         }
@@ -478,6 +482,10 @@ namespace ts.server {
             }
 
             this.markAsDirty();
+        }
+
+        registerFileUpdate(fileName: string) {
+            (this.updatedFileNames || (this.updatedFileNames = createMap<string>())).set(fileName, fileName);
         }
 
         markAsDirty() {
@@ -667,10 +675,12 @@ namespace ts.server {
                 isInferred: this.projectKind === ProjectKind.Inferred,
                 options: this.getCompilerOptions()
             };
+            const updatedFileNames = this.updatedFileNames;
+            this.updatedFileNames = undefined;
             // check if requested version is the same that we have reported last time
             if (this.lastReportedFileNames && lastKnownVersion === this.lastReportedVersion) {
-                // if current structure version is the same - return info witout any changes
-                if (this.projectStructureVersion == this.lastReportedVersion) {
+                // if current structure version is the same - return info without any changes
+                if (this.projectStructureVersion == this.lastReportedVersion && !updatedFileNames) {
                     return { info, projectErrors: this.projectErrors };
                 }
                 // compute and return the difference
@@ -679,6 +689,8 @@ namespace ts.server {
 
                 const added: string[] = [];
                 const removed: string[] = [];
+                const updated: string[] = keysOfMap(updatedFileNames);
+
                 forEachKeyInMap(currentFiles, id => {
                     if (!lastReportedFileNames.has(id)) {
                         added.push(id);
@@ -691,7 +703,7 @@ namespace ts.server {
                 });
                 this.lastReportedFileNames = currentFiles;
                 this.lastReportedVersion = this.projectStructureVersion;
-                return { info, changes: { added, removed }, projectErrors: this.projectErrors };
+                return { info, changes: { added, removed, updated }, projectErrors: this.projectErrors };
             }
             else {
                 // unknown version - return everything

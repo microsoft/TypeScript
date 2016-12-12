@@ -1,4 +1,4 @@
-﻿/// <reference path="types.d.ts" />
+/// <reference path="types.d.ts" />
 /// <reference path="shared.ts" />
 
 namespace ts.server {
