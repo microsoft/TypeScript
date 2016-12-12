@@ -277,9 +277,13 @@ namespace ts {
         const resolutions: T[] = [];
         const cache = createMap<T>();
         for (const name of names) {
-            const result = cache.has(name)
-                ? cache.get(name)
-                : set(cache, name, loader(name, containingFile));
+            let result: T;
+            if (cache.has(name)) {
+                result = cache.get(name);
+            }
+            else {
+                cache.set(name, result = loader(name, containingFile));
+            }
             resolutions.push(result);
         }
         return resolutions;

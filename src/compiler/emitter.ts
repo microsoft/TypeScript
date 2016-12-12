@@ -2545,7 +2545,8 @@ namespace ts {
             while (true) {
                 const generatedName = baseName + i;
                 if (isUniqueName(generatedName)) {
-                    return set(generatedNameSet, generatedName, generatedName);
+                    generatedNameSet.set(generatedName, generatedName);
+                    return generatedName;
                 }
                 i++;
             }

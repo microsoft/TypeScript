@@ -1131,7 +1131,11 @@ namespace ts {
 
         function internIdentifier(text: string): string {
             text = escapeIdentifier(text);
-            return identifiers.get(text) || set(identifiers, text, text);
+            let identifier = identifiers.get(text);
+            if (identifier === undefined) {
+                identifiers.set(text, identifier = text);
+            }
+            return identifier;
         }
 
         // An identifier that starts with two underscores has an extra underscore character prepended to it to avoid issues

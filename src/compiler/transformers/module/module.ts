@@ -60,7 +60,8 @@ namespace ts {
             }
 
             currentSourceFile = node;
-            currentModuleInfo = set(moduleInfoMap, getOriginalNodeId(node), collectExternalModuleInfo(node, resolver, compilerOptions));
+            currentModuleInfo = collectExternalModuleInfo(node, resolver, compilerOptions);
+            moduleInfoMap.set(getOriginalNodeId(node), currentModuleInfo);
 
             // Perform the transformation.
             const transformModule = transformModuleDelegates.get(moduleKind) || transformModuleDelegates.get(ModuleKind.None);

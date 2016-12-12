@@ -3323,7 +3323,9 @@ namespace ts {
 
             for (const name in syntaxKindEnum) {
                 if (syntaxKindEnum[name] === kind) {
-                    return set(syntaxKindCache, kind, kind.toString() + " (" + name + ")");
+                    const result = `${kind} (${name})`;
+                    syntaxKindCache.set(kind, result);
+                    return result;
                 }
             }
         }

@@ -349,7 +349,10 @@ namespace ts {
                 // Otherwise, we'll be merging into a compatible existing symbol (for example when
                 // you have multiple 'vars' with the same name in the same container).  In this case
                 // just add this node into the declarations list of the symbol.
-                symbol = symbolTable.get(name) || set(symbolTable, name, createSymbol(SymbolFlags.None, name));
+                symbol = symbolTable.get(name);
+                if (!symbol) {
+                    symbolTable.set(name, symbol = createSymbol(SymbolFlags.None, name));
+                }
 
                 if (name && (includes & SymbolFlags.Classifiable)) {
                     classifiableNames.set(name, name);
@@ -359,7 +362,7 @@ namespace ts {
                     if (symbol.isReplaceableByMethod) {
                         // Javascript constructor-declared symbols can be discarded in favor of
                         // prototype symbols like methods.
-                        symbol = set(symbolTable, name, createSymbol(SymbolFlags.None, name));
+                        symbolTable.set(name, symbol = createSymbol(SymbolFlags.None, name));
                     }
                     else {
                         if (node.name) {

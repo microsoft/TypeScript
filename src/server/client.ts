@@ -34,7 +34,8 @@ namespace ts.server {
             let lineMap = this.lineMaps.get(fileName);
             if (!lineMap) {
                 const scriptSnapshot = this.host.getScriptSnapshot(fileName);
-                lineMap = set(this.lineMaps, fileName, ts.computeLineStarts(scriptSnapshot.getText(0, scriptSnapshot.getLength())));
+                lineMap = ts.computeLineStarts(scriptSnapshot.getText(0, scriptSnapshot.getLength()));
+                this.lineMaps.set(fileName, lineMap);
             }
             return lineMap;
         }

@@ -532,7 +532,11 @@ namespace ts {
             }
 
             function getDeclarations(name: string) {
-                return result.get(name) || set(result, name, []);
+                let declarations = result.get(name);
+                if (!declarations) {
+                    result.set(name, declarations = []);
+                }
+                return declarations;
             }
 
             function getDeclarationName(declaration: Declaration) {

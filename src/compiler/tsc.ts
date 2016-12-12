@@ -378,8 +378,11 @@ namespace ts {
         }
 
         function cachedFileExists(fileName: string): boolean {
-            const fileExists = cachedExistingFiles.get(fileName);
-            return fileExists !== undefined ? fileExists : set(cachedExistingFiles, fileName, hostFileExists(fileName));
+            let fileExists = cachedExistingFiles.get(fileName);
+            if (fileExists === undefined) {
+                cachedExistingFiles.set(fileName, fileExists = hostFileExists(fileName));
+            }
+            return fileExists;
         }
 
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void) {

@@ -156,15 +156,6 @@ namespace ts {
         }
     }
 
-    /**
-     * Unlike `map.set(key, value)`, this returns the value, making it useful as an expression.
-     * Prefer `map.set(key, value)` for statements.
-     */
-    export function set<T>(map: Map<T>, key: MapKey, value: T): T {
-        map.set(key, value);
-        return value;
-    }
-
     export function createFileMap<T>(keyMapper?: (key: string) => string): FileMap<T> {
         const files = createMap<T>();
         return {
@@ -1050,14 +1041,14 @@ namespace ts {
      * Creates the array if it does not already exist.
      */
     export function multiMapAdd<V>(map: Map<V[]>, key: string | number, value: V): V[] {
-        const values = map.get(key);
+        let values = map.get(key);
         if (values) {
             values.push(value);
-            return values;
         }
         else {
-            return set(map, key, [value]);
+            map.set(key, values = [value]);
         }
+        return values;
     }
 
     /**

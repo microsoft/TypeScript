@@ -73,11 +73,13 @@ namespace ts {
             // see comment to 'substitutePostfixUnaryExpression' for more details
 
             // Collect information about the external module and dependency groups.
-            moduleInfo = set(moduleInfoMap, id, collectExternalModuleInfo(node, resolver, compilerOptions));
+            moduleInfo = collectExternalModuleInfo(node, resolver, compilerOptions);
+            moduleInfoMap.set(id, moduleInfo);
 
             // Make sure that the name of the 'exports' function does not conflict with
             // existing identifiers.
-            exportFunction = set(exportFunctionsMap, id, createUniqueName("exports"));
+            exportFunction = createUniqueName("exports");
+            exportFunctionsMap.set(id, exportFunction);
             contextObject = createUniqueName("context");
 
             // Add the body of the module.

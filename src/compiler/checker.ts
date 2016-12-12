@@ -4062,7 +4062,8 @@ namespace ts {
                                 const memberSymbol = getSymbolOfNode(member);
                                 const value = getEnumMemberValue(member);
                                 if (!memberTypes.has(value)) {
-                                    const memberType = set(memberTypes, value, createEnumLiteralType(memberSymbol, enumType, "" + value));
+                                    const memberType = createEnumLiteralType(memberSymbol, enumType, "" + value);
+                                    memberTypes.set(value, memberType);
                                     memberTypeList.push(memberType);
                                 }
                             }
@@ -5192,7 +5193,11 @@ namespace ts {
         function getSignatureInstantiation(signature: Signature, typeArguments: Type[]): Signature {
             const instantiations = signature.instantiations || (signature.instantiations = createMap<Signature>());
             const id = getTypeListId(typeArguments);
-            return instantiations.get(id) || set(instantiations, id, createSignatureInstantiation(signature, typeArguments));
+            let instantiation = instantiations.get(id);
+            if (!instantiation) {
+                instantiations.set(id, instantiation = createSignatureInstantiation(signature, typeArguments));
+            }
+            return instantiation;
         }
 
         function createSignatureInstantiation(signature: Signature, typeArguments: Type[]): Signature {
@@ -5348,7 +5353,8 @@ namespace ts {
             const id = getTypeListId(typeArguments);
             let type = target.instantiations.get(id);
             if (!type) {
-                type = set(target.instantiations, id, <TypeReference>createObjectType(ObjectFlags.Reference, target.symbol));
+                type = <TypeReference>createObjectType(ObjectFlags.Reference, target.symbol);
+                target.instantiations.set(id, type);
                 type.flags |= typeArguments ? getPropagatingFlagsOfTypes(typeArguments, /*excludeKinds*/ 0) : 0;
                 type.target = target;
                 type.typeArguments = typeArguments;
@@ -5395,7 +5401,11 @@ namespace ts {
             const links = getSymbolLinks(symbol);
             const typeParameters = links.typeParameters;
             const id = getTypeListId(typeArguments);
-            return links.instantiations.get(id) || set(links.instantiations, id, instantiateTypeNoAlias(type, createTypeMapper(typeParameters, typeArguments)));
+            let instantiation = links.instantiations.get(id);
+            if (!instantiation) {
+                links.instantiations.set(id, instantiation = instantiateTypeNoAlias(type, createTypeMapper(typeParameters, typeArguments)));
+            }
+            return instantiation;
         }
 
         // Get type from reference to type alias. When a type alias is generic, the declared type of the type alias may include
@@ -5844,7 +5854,8 @@ namespace ts {
             let type = unionTypes.get(id);
             if (!type) {
                 const propagatedFlags = getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
-                type = set(unionTypes, id, <UnionType>createType(TypeFlags.Union | propagatedFlags));
+                type = <UnionType>createType(TypeFlags.Union | propagatedFlags);
+                unionTypes.set(id, type);
                 type.types = types;
                 type.aliasSymbol = aliasSymbol;
                 type.aliasTypeArguments = aliasTypeArguments;
@@ -5918,7 +5929,8 @@ namespace ts {
             let type = intersectionTypes.get(id);
             if (!type) {
                 const propagatedFlags = getPropagatingFlagsOfTypes(typeSet, /*excludeKinds*/ TypeFlags.Nullable);
-                type = set(intersectionTypes, id, <IntersectionType>createType(TypeFlags.Intersection | propagatedFlags));
+                type = <IntersectionType>createType(TypeFlags.Intersection | propagatedFlags);
+                intersectionTypes.set(id, type);
                 type.types = typeSet;
                 type.aliasSymbol = aliasSymbol;
                 type.aliasTypeArguments = aliasTypeArguments;
@@ -6100,7 +6112,11 @@ namespace ts {
                 }
                 // Otherwise we defer the operation by creating an indexed access type.
                 const id = objectType.id + "," + indexType.id;
-                return indexedAccessTypes.get(id) || set(indexedAccessTypes, id, createIndexedAccessType(objectType, indexType));
+                let type = indexedAccessTypes.get(id);
+                if (!type) {
+                    indexedAccessTypes.set(id, type = createIndexedAccessType(objectType, indexType));
+                }
+                return type;
             }
             // In the following we resolve T[K] to the type of the property in T selected by K.
             const apparentObjectType = getApparentType(objectType);
@@ -6268,7 +6284,11 @@ namespace ts {
 
         function getLiteralTypeForText(flags: TypeFlags, text: string) {
             const map = flags & TypeFlags.StringLiteral ? stringLiteralTypes : numericLiteralTypes;
-            return map.get(text) || set(map, text, createLiteralType(flags, text));
+            let type = map.get(text);
+            if (!type) {
+                map.set(text, type = createLiteralType(flags, text));
+            }
+            return type;
         }
 
         function getTypeFromLiteralTypeNode(node: LiteralTypeNode): Type {
@@ -7060,7 +7080,8 @@ namespace ts {
             if (source.symbol.name !== target.symbol.name ||
                 !(source.symbol.flags & SymbolFlags.RegularEnum) || !(target.symbol.flags & SymbolFlags.RegularEnum) ||
                 (source.flags & TypeFlags.Union) !== (target.flags & TypeFlags.Union)) {
-                return set(enumRelation, id, false);
+                enumRelation.set(id, false);
+                return false;
             }
             const targetEnumType = getTypeOfSymbol(target.symbol);
             for (const property of getPropertiesOfType(getTypeOfSymbol(source.symbol))) {
@@ -7071,11 +7092,13 @@ namespace ts {
                             errorReporter(Diagnostics.Property_0_is_missing_in_type_1, property.name,
                                 typeToString(target, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType));
                         }
-                        return set(enumRelation, id, false);
+                        enumRelation.set(id, false);
+                        return false;
                     }
                 }
             }
-            return set(enumRelation, id, true);
+            enumRelation.set(id, true);
+            return true;
         }
 
         function isSimpleTypeRelatedTo(source: Type, target: Type, relation: Map<RelationComparisonResult>, errorReporter?: ErrorReporter) {
@@ -9815,7 +9838,8 @@ namespace ts {
                 if (isIncomplete(firstAntecedentType)) {
                     return createFlowType(result, /*incomplete*/ true);
                 }
-                return set(cache, key, result);
+                cache.set(key, result);
+                return result;
             }
 
             function isMatchingReferenceDiscriminant(expr: Expression) {
@@ -11771,9 +11795,9 @@ namespace ts {
         }
 
         function getJsxType(name: string) {
-            const jsxType = jsxTypes.get(name);
+            let jsxType = jsxTypes.get(name);
             if (jsxType === undefined) {
-                return set(jsxTypes, name, getExportedTypeFromNamespace(JsxNames.JSX, name) || unknownType);
+                jsxTypes.set(name, jsxType = getExportedTypeFromNamespace(JsxNames.JSX, name) || unknownType);
             }
             return jsxType;
         }
