@@ -466,9 +466,7 @@ namespace ts {
                     // other kinds of value declarations take precedence over modules
                     target.valueDeclaration = source.valueDeclaration;
                 }
-                forEach(source.declarations, node => {
-                    target.declarations.push(node);
-                });
+                addRange(target.declarations, source.declarations);
                 if (source.members) {
                     if (!target.members) target.members = createMap<Symbol>();
                     mergeSymbolTable(target.members, source.members);
@@ -1100,7 +1098,7 @@ namespace ts {
         }
 
         function getDeclarationOfAliasSymbol(symbol: Symbol): Declaration | undefined {
-            return forEach(symbol.declarations, d => isAliasSymbolDeclaration(d) ? d : undefined);
+            return find<Declaration>(symbol.declarations, isAliasSymbolDeclaration);
         }
 
         function getTargetOfImportEqualsDeclaration(node: ImportEqualsDeclaration): Symbol {
