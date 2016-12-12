@@ -19,4 +19,4 @@
 
 
 goTo.marker();
-verify.memberListContains("charAt");
+verify.completionListContains("charAt");

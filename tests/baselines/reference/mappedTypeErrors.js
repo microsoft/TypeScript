@@ -85,6 +85,47 @@ function f21() {
     let x3 = objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 });  // Error
 }
 
+// Verify use of Pick<T, K> for setState functions (#12793)
+
+interface Foo {
+    a: string;
+    b?: number;
+}
+
+function setState<T, K extends keyof T>(obj: T, props: Pick<T, K>) {
+    for (let k in props) {
+        obj[k] = props[k];
+    }
+}
+
+let foo: Foo = { a: "hello", b: 42 };
+setState(foo, { a: "test", b: 43 })
+setState(foo, { a: "hi" });
+setState(foo, { b: undefined });
+setState(foo, { });
+setState(foo, foo);
+setState(foo, { a: undefined });  // Error
+setState(foo, { c: true });  // Error
+
+class C<T> {
+    state: T;
+    setState<K extends keyof T>(props: Pick<T, K>) {
+        for (let k in props) {
+            this.state[k] = props[k];
+        }
+    }
+}
+
+let c = new C<Foo>();
+c.setState({ a: "test", b: 43 });
+c.setState({ a: "hi" });
+c.setState({ b: undefined });
+c.setState({ });
+c.setState(foo);
+c.setState({ a: undefined });  // Error
+c.setState({ c: true });  // Error
+
+
 //// [mappedTypeErrors.js]
 function f1(x) {
     var y; // Error
@@ -124,6 +165,37 @@ function f21() {
     var x2 = objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1 });
     var x3 = objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 }); // Error
 }
+function setState(obj, props) {
+    for (var k in props) {
+        obj[k] = props[k];
+    }
+}
+var foo = { a: "hello", b: 42 };
+setState(foo, { a: "test", b: 43 });
+setState(foo, { a: "hi" });
+setState(foo, { b: undefined });
+setState(foo, {});
+setState(foo, foo);
+setState(foo, { a: undefined }); // Error
+setState(foo, { c: true }); // Error
+var C = (function () {
+    function C() {
+    }
+    C.prototype.setState = function (props) {
+        for (var k in props) {
+            this.state[k] = props[k];
+        }
+    };
+    return C;
+}());
+var c = new C();
+c.setState({ a: "test", b: 43 });
+c.setState({ a: "hi" });
+c.setState({ b: undefined });
+c.setState({});
+c.setState(foo);
+c.setState({ a: undefined }); // Error
+c.setState({ c: true }); // Error
 
 
 //// [mappedTypeErrors.d.ts]
@@ -168,3 +240,14 @@ declare function objAndReadonly<T>(primary: T, secondary: Readonly<T>): T;
 declare function objAndPartial<T>(primary: T, secondary: Partial<T>): T;
 declare function f20(): void;
 declare function f21(): void;
+interface Foo {
+    a: string;
+    b?: number;
+}
+declare function setState<T, K extends keyof T>(obj: T, props: Pick<T, K>): void;
+declare let foo: Foo;
+declare class C<T> {
+    state: T;
+    setState<K extends keyof T>(props: Pick<T, K>): void;
+}
+declare let c: C<Foo>;

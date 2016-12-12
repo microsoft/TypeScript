@@ -14,21 +14,21 @@
 ////}
 
 goTo.marker("S");
-verify.memberListIsEmpty();
+verify.completionListIsEmpty();
 
 goTo.marker("T");
-verify.memberListContains("x", "(property) IFoo.x: number");
-verify.memberListContains("y", "(property) IFoo.y: string");
-verify.memberListCount(2);
+verify.completionListContains("x", "(property) IFoo.x: number");
+verify.completionListContains("y", "(property) IFoo.y: string");
+verify.completionListCount(2);
 
 goTo.marker("U");
-verify.memberListContains("toString", "(method) Object.toString(): string");
-verify.memberListCount(7); // constructor, toString, toLocaleString, valueOf, hasOwnProperty, isPrototypeOf, propertyIsEnumerable
+verify.completionListContains("toString", "(method) Object.toString(): string");
+verify.completionListCount(7); // constructor, toString, toLocaleString, valueOf, hasOwnProperty, isPrototypeOf, propertyIsEnumerable
 
 goTo.marker("V");
-verify.memberListContains("x", "(property) IFoo.x: number");
-verify.memberListContains("y", "(property) IFoo.y: string");
-verify.memberListCount(2);
+verify.completionListContains("x", "(property) IFoo.x: number");
+verify.completionListContains("y", "(property) IFoo.y: string");
+verify.completionListCount(2);
 
 
 

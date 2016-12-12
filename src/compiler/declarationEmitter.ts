@@ -194,6 +194,7 @@ namespace ts {
             writer.writeSpace = writer.write;
             writer.writeStringLiteral = writer.writeLiteral;
             writer.writeParameter = writer.write;
+            writer.writeProperty = writer.write;
             writer.writeSymbol = writer.write;
             setWriter(writer);
         }
