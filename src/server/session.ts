@@ -853,7 +853,7 @@ namespace ts.server {
             if (simplifiedResult) {
                 const displayString = ts.displayPartsToString(quickInfo.displayParts);
                 const docString = ts.displayPartsToString(quickInfo.documentation);
-                
+
                 return {
                     kind: quickInfo.kind,
                     kindModifiers: quickInfo.kindModifiers,

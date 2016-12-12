@@ -79,10 +79,10 @@ namespace ts.JsDoc {
             for (const doc of jsDocs) {
                 const tagsForDoc = (doc as JSDoc).tags;
                 if (tagsForDoc) {
-                    tags.push(...tagsForDoc.filter(tag => tag.kind === SyntaxKind.JSDocTag).map(jsDocTag => { 
-                        return { 
-                            name: jsDocTag.tagName.text, 
-                            text: jsDocTag.comment 
+                    tags.push(...tagsForDoc.filter(tag => tag.kind === SyntaxKind.JSDocTag).map(jsDocTag => {
+                        return {
+                            name: jsDocTag.tagName.text,
+                            text: jsDocTag.comment
                         } }));
                 }
             }
