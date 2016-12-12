@@ -801,7 +801,7 @@ namespace FourSlash {
             }
         }
 
-        public verifyCompletionEntryDetails(entryName: string, expectedText: string, expectedDocumentation?: string, kind?: string) {
+        public verifyCompletionEntryDetails(entryName: string, expectedText: string, expectedDocumentation?: string, kind?: string, tags?: ts.JSDocTagInfo[]) {
             const details = this.getCompletionEntryDetails(entryName);
 
             assert(details, "no completion entry available");
@@ -814,6 +814,14 @@ namespace FourSlash {
 
             if (kind !== undefined) {
                 assert.equal(details.kind, kind, this.assertionMessageAtLastKnownMarker("completion entry kind"));
+            }
+
+            if (tags !== undefined) {
+                assert.equal(details.tags.length, tags.length, this.messageAtLastKnownMarker("QuickInfo tags"));
+                ts.zipWith(tags, details.tags, (expectedTag, actualTag) => {
+                    assert.equal(expectedTag.name, actualTag.name);
+                    assert.equal(expectedTag.text, actualTag.text, this.messageAtLastKnownMarker("QuickInfo tag " + actualTag.name));
+                });
             }
         }
 
@@ -961,7 +969,9 @@ namespace FourSlash {
 
         public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: { start: number; length: number; },
             displayParts: ts.SymbolDisplayPart[],
-            documentation: ts.SymbolDisplayPart[]) {
+            documentation: ts.SymbolDisplayPart[],
+            tags: ts.JSDocTagInfo[]
+            ) {
 
             const actualQuickInfo = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             assert.equal(actualQuickInfo.kind, kind, this.messageAtLastKnownMarker("QuickInfo kind"));
@@ -969,6 +979,11 @@ namespace FourSlash {
             assert.equal(JSON.stringify(actualQuickInfo.textSpan), JSON.stringify(textSpan), this.messageAtLastKnownMarker("QuickInfo textSpan"));
             assert.equal(TestState.getDisplayPartsJson(actualQuickInfo.displayParts), TestState.getDisplayPartsJson(displayParts), this.messageAtLastKnownMarker("QuickInfo displayParts"));
             assert.equal(TestState.getDisplayPartsJson(actualQuickInfo.documentation), TestState.getDisplayPartsJson(documentation), this.messageAtLastKnownMarker("QuickInfo documentation"));
+            assert.equal(actualQuickInfo.tags.length, tags.length, this.messageAtLastKnownMarker("QuickInfo tags"));
+            ts.zipWith(tags, actualQuickInfo.tags, (expectedTag, actualTag) => {
+                assert.equal(expectedTag.name, actualTag.name);
+                assert.equal(expectedTag.text, actualTag.text, this.messageAtLastKnownMarker("QuickInfo tag " + actualTag.name));
+            });
         }
 
         public verifyRenameLocations(findInStrings: boolean, findInComments: boolean, ranges?: Range[]) {
@@ -1060,6 +1075,16 @@ namespace FourSlash {
         public verifyCurrentSignatureHelpDocComment(docComment: string) {
             const actualDocComment = this.getActiveSignatureHelpItem().documentation;
             assert.equal(ts.displayPartsToString(actualDocComment), docComment, this.assertionMessageAtLastKnownMarker("current signature help doc comment"));
+        }
+
+        public verifyCurrentSignatureHelpTags(tags: ts.JSDocTagInfo[]) {
+            const actualTags = this.getActiveSignatureHelpItem().tags;
+
+            assert.equal(actualTags.length, tags.length, this.assertionMessageAtLastKnownMarker("signature help tags"));
+            ts.zipWith(tags, actualTags, (expectedTag, actualTag) => {
+                assert.equal(expectedTag.name, actualTag.name);
+                assert.equal(expectedTag.text, actualTag.text, this.assertionMessageAtLastKnownMarker("signature help tag " + actualTag.name));
+            });
         }
 
         public verifySignatureHelpCount(expected: number) {
@@ -3263,6 +3288,10 @@ namespace FourSlashInterface {
             this.state.verifyCurrentSignatureHelpDocComment(docComment);
         }
 
+        public currentSignatureHelpTagsAre(tags: ts.JSDocTagInfo[]) {
+            this.state.verifyCurrentSignatureHelpTags(tags);
+        }
+
         public signatureHelpCountIs(expected: number) {
             this.state.verifySignatureHelpCount(expected);
         }
@@ -3383,8 +3412,8 @@ namespace FourSlashInterface {
             this.state.verifyDocumentHighlightsAtPositionListCount(expectedCount, fileNamesToSearch);
         }
 
-        public completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string) {
-            this.state.verifyCompletionEntryDetails(entryName, text, documentation, kind);
+        public completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string, tags?: ts.JSDocTagInfo[]) {
+            this.state.verifyCompletionEntryDetails(entryName, text, documentation, kind, tags);
         }
 
         /**
@@ -3414,8 +3443,8 @@ namespace FourSlashInterface {
         }
 
         public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: { start: number; length: number; },
-            displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[]) {
-            this.state.verifyQuickInfoDisplayParts(kind, kindModifiers, textSpan, displayParts, documentation);
+            displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: ts.JSDocTagInfo[]) {
+            this.state.verifyQuickInfoDisplayParts(kind, kindModifiers, textSpan, displayParts, documentation, tags);
         }
 
         public getSyntacticDiagnostics(expected: string) {

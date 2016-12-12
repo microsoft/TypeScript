@@ -590,7 +590,8 @@ namespace ts.SignatureHelp {
                 suffixDisplayParts,
                 separatorDisplayParts: [punctuationPart(SyntaxKind.CommaToken), spacePart()],
                 parameters: signatureHelpParameters,
-                documentation: candidateSignature.getDocumentationComment()
+                documentation: candidateSignature.getDocumentationComment(),
+                tags: candidateSignature.getJsDocTags()
             };
         });
 
