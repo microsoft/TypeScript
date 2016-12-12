@@ -28,9 +28,9 @@ namespace ts.server {
             this.switchToScriptVersionCache(newText);
         }
 
-        public useText() {
+        public useText(newText?: string) {
             this.svc = undefined;
-            this.reloadFromFile();
+            this.setText(newText);
         }
 
         public edit(start: number, end: number, newText: string) {
@@ -170,7 +170,6 @@ namespace ts.server {
 
         private isOpen: boolean;
 
-        // TODO: allow to update hasMixedContent from the outside
         constructor(
             private readonly host: ServerHost,
             readonly fileName: NormalizedPath,
@@ -199,7 +198,8 @@ namespace ts.server {
 
         public close() {
             this.isOpen = false;
-            this.textStorage.useText();
+            this.textStorage.useText(this.hasMixedContent ? "" : undefined);
+            this.markContainingProjectsAsDirty();
         }
 
         public getSnapshot() {
@@ -265,6 +265,12 @@ namespace ts.server {
                 return Errors.ThrowNoProject();
             }
             return this.containingProjects[0];
+        }
+
+        registerFileUpdate(): void {
+            for (const p of this.containingProjects) {
+                p.registerFileUpdate(this.path);
+            }
         }
 
         setFormatOptions(formatSettings: FormatCodeSettings): void {

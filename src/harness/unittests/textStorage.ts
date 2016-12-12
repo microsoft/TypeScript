@@ -16,7 +16,6 @@ namespace ts.textStorage {
 
         it("text based storage should be have exactly the same as script version cache", () => {
 
-            debugger
             const host = ts.projectSystem.createServerHost([f]);
 
             const ts1 = new server.TextStorage(host, server.asNormalizedPath(f.path));
