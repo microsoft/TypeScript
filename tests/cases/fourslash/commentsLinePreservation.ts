@@ -108,6 +108,7 @@
 ////     /** 
 ////       * This is firstLine
 //// This is second Line
+//// [1]: third * line
 //// @param param1 first Line text
 //// second line text
 //// */
@@ -145,6 +146,6 @@ verify.quickInfos({
     l: ["function l(param1: string): void", "This is firstLine\nThis is second Line"],
     9: ["(parameter) param1: string", "first Line text\nblank line that shouldnt be shown when starting this \nsecond time information about the param again"],
 
-    m: ["function m(param1: string): void", "This is firstLine\nThis is second Line"],
+    m: ["function m(param1: string): void", "This is firstLine\nThis is second Line\n[1]: third * line"],
     10: ["(parameter) param1: string", "first Line text\nsecond line text"]
 });
