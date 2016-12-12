@@ -93,6 +93,7 @@ namespace ts.codefix {
         newSignatureDeclaration.name = signatures[0].getDeclaration().name;
 
         let maxNonRestArgs = -1;
+        let maxArgsIndex = 0;
         let minArgumentCount = signatures[0].minArgumentCount;
         let hasRestParameter = false;
         for (let i = 0; i < signatures.length; i++) {
@@ -102,8 +103,10 @@ namespace ts.codefix {
             const nonRestLength = sig.parameters.length - (sig.hasRestParameter ? 1 : 0);
             if (nonRestLength > maxNonRestArgs) {
                 maxNonRestArgs = nonRestLength;
+                maxArgsIndex = i;
             }
         }
+        const maxArgsParameterSymbolNames = signatures[maxArgsIndex].getParameters().map(symbol => symbol.getName());
 
         const anyTypeNode: TypeNode = createNode(SyntaxKind.AnyKeyword) as TypeNode;
         const optionalToken = createToken(SyntaxKind.QuestionToken);
@@ -130,7 +133,7 @@ namespace ts.codefix {
 
         function createParameterDeclaration(index: number, minArgCount: number, typeNode: TypeNode, enclosingSignatureDeclaration: SignatureDeclaration): ParameterDeclaration {
             const newParameter = createNode(SyntaxKind.Parameter) as ParameterDeclaration;
-            newParameter.symbol = checker.createSymbol(SymbolFlags.FunctionScopedVariable, "arg" + index);
+            newParameter.symbol = checker.createSymbol(SymbolFlags.FunctionScopedVariable, maxArgsParameterSymbolNames[index] || "rest");
             newParameter.symbol.valueDeclaration = newParameter;
             newParameter.symbol.declarations = [newParameter];
             newParameter.type = typeNode;

@@ -44,7 +44,7 @@ verify.rangeAfterCodeFix(`
     [Symbol.toPrimitive](hint: "number"): number;
     [Symbol.toPrimitive](hint: "default"): number;
     [Symbol.toPrimitive](hint: "string"): string;
-    [Symbol.toPrimitive](arg0: any) {
+    [Symbol.toPrimitive](hint: any) {
         throw new Error('Method not implemented.');
     }
     [Symbol.toStringTag]: string;

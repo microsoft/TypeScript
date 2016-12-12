@@ -20,7 +20,7 @@ namespace ts.codefix {
 
                 const insertion = getMissingMembersInsertion(classDecl, abstractAndNonPrivateExtendsSymbols, checker, context.newLineCharacter);
 
-                if (insertion) {
+                if (insertion.length) {
                     return [{
                         description: getLocaleSpecificMessage(Diagnostics.Implement_inherited_abstract_class),
                         changes: [{
