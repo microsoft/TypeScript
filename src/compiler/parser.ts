@@ -6360,7 +6360,8 @@ namespace ts {
                                 const whitespace = scanner.getTokenText();
                                 if (state === JSDocState.SavingComments) {
                                     comments.push(whitespace);
-                                } else if (margin !== undefined && indent + whitespace.length > margin) {
+                                }
+                                else if (margin !== undefined && indent + whitespace.length > margin) {
                                     comments.push(whitespace.slice(margin - indent - 1));
                                 }
                                 indent += whitespace.length;
