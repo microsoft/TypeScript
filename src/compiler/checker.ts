@@ -4590,12 +4590,22 @@ namespace ts {
 
         function getModifiersTypeFromMappedType(type: MappedType) {
             if (!type.modifiersType) {
-                // If the mapped type was declared as { [P in keyof T]: X } or as { [P in K]: X }, where
-                // K is constrained to 'K extends keyof T', then we will copy property modifiers from T.
-                const declaredType = <MappedType>getTypeFromMappedTypeNode(type.declaration);
-                const constraint = getConstraintTypeFromMappedType(declaredType);
-                const extendedConstraint = constraint.flags & TypeFlags.TypeParameter ? getConstraintOfTypeParameter(<TypeParameter>constraint) : constraint;
-                type.modifiersType = extendedConstraint.flags & TypeFlags.Index ? instantiateType((<IndexType>extendedConstraint).type, type.mapper || identityMapper) : emptyObjectType;
+                const constraintDeclaration = type.declaration.typeParameter.constraint;
+                if (constraintDeclaration.kind === SyntaxKind.TypeOperator) {
+                    // If the constraint declaration is a 'keyof T' node, the modifiers type is T. We check
+                    // AST nodes here because, when T is a non-generic type, the logic below eagerly resolves
+                    // 'keyof T' to a literal union type and we can't recover T from that type.
+                    type.modifiersType = instantiateType(getTypeFromTypeNode((<TypeOperatorNode>constraintDeclaration).type), type.mapper || identityMapper);
+                }
+                else {
+                    // Otherwise, get the declared constraint type, and if the constraint type is a type parameter,
+                    // get the constraint of that type parameter. If the resulting type is an indexed type 'keyof T',
+                    // the modifiers type is T. Otherwise, the modifiers type is {}.
+                    const declaredType = <MappedType>getTypeFromMappedTypeNode(type.declaration);
+                    const constraint = getConstraintTypeFromMappedType(declaredType);
+                    const extendedConstraint = constraint.flags & TypeFlags.TypeParameter ? getConstraintOfTypeParameter(<TypeParameter>constraint) : constraint;
+                    type.modifiersType = extendedConstraint.flags & TypeFlags.Index ? instantiateType((<IndexType>extendedConstraint).type, type.mapper || identityMapper) : emptyObjectType;
+                }
             }
             return type.modifiersType;
         }
