@@ -26,10 +26,9 @@ namespace ts {
     // More efficient to create a collator once and use its `compare` than to call `a.localeCompare(b)` many times.
     export const collator: { compare(a: string, b: string): number } = typeof Intl === "object" && typeof Intl.Collator === "function" ? new Intl.Collator() : undefined;
 
-    const createObject = Object.create;
     /** Create a MapLike with good performance. Prefer this over a literal `{}`. */
     export function createMapLike<T>(): MapLike<T> {
-        const map = createObject(null); // tslint:disable-line:no-null-keyword
+        const map = Object.create(null); // tslint:disable-line:no-null-keyword
 
         // Using 'delete' on an object causes V8 to put the object in dictionary mode.
         // This disables creation of hidden classes, which are expensive when an object is
