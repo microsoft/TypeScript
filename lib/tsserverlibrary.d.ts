@@ -330,10 +330,12 @@ declare namespace ts.server.protocol {
         isInferred: boolean;
         version: number;
         options: ts.CompilerOptions;
+        languageServiceDisabled: boolean;
     }
     interface ProjectChanges {
         added: string[];
         removed: string[];
+        updated: string[];
     }
     interface ProjectFiles {
         info?: ProjectVersionInfo;
@@ -351,6 +353,7 @@ declare namespace ts.server.protocol {
         hostInfo?: string;
         file?: string;
         formatOptions?: FormatCodeSettings;
+        extraFileExtensions?: FileExtensionInfo[];
     }
     interface ConfigureRequest extends Request {
         command: CommandTypes.Configure;
@@ -448,6 +451,7 @@ declare namespace ts.server.protocol {
         end: Location;
         displayString: string;
         documentation: string;
+        tags: JSDocTagInfo[];
     }
     interface QuickInfoResponse extends Response {
         body?: QuickInfoResponseBody;
@@ -520,6 +524,7 @@ declare namespace ts.server.protocol {
         kindModifiers: string;
         displayParts: SymbolDisplayPart[];
         documentation: SymbolDisplayPart[];
+        tags: JSDocTagInfo[];
     }
     interface CompletionsResponse extends Response {
         body?: CompletionEntry[];
@@ -540,6 +545,7 @@ declare namespace ts.server.protocol {
         separatorDisplayParts: SymbolDisplayPart[];
         parameters: SignatureHelpParameter[];
         documentation: SymbolDisplayPart[];
+        tags: JSDocTagInfo[];
     }
     interface SignatureHelpItems {
         items: SignatureHelpItem[];
@@ -2517,6 +2523,7 @@ declare namespace ts {
         writeSpace(text: string): void;
         writeStringLiteral(text: string): void;
         writeParameter(text: string): void;
+        writeProperty(text: string): void;
         writeSymbol(text: string, symbol: Symbol): void;
         writeLine(): void;
         increaseIndent(): void;
@@ -2907,6 +2914,7 @@ declare namespace ts {
         typeParameter?: TypeParameter;
         constraintType?: Type;
         templateType?: Type;
+        modifiersType?: Type;
         mapper?: TypeMapper;
     }
     interface EvolvingArrayType extends ObjectType {
@@ -2929,18 +2937,19 @@ declare namespace ts {
         iteratorElementType?: Type;
     }
     interface TypeVariable extends Type {
+        resolvedApparentType: Type;
         resolvedIndexType: IndexType;
     }
     interface TypeParameter extends TypeVariable {
         constraint: Type;
         target?: TypeParameter;
         mapper?: TypeMapper;
-        resolvedApparentType: Type;
         isThisType?: boolean;
     }
     interface IndexedAccessType extends TypeVariable {
         objectType: Type;
         indexType: Type;
+        constraint?: Type;
     }
     interface IndexType extends Type {
         type: TypeVariable | UnionOrIntersectionType;
@@ -3001,6 +3010,11 @@ declare namespace ts {
         ModuleExports = 2,
         PrototypeProperty = 3,
         ThisProperty = 4,
+    }
+    interface FileExtensionInfo {
+        extension: string;
+        scriptKind: ScriptKind;
+        isMixedContent: boolean;
     }
     interface DiagnosticMessage {
         key: string;
@@ -3573,7 +3587,7 @@ declare namespace ts.performance {
     function disable(): void;
 }
 declare namespace ts {
-    const version = "2.1.4";
+    const version = "2.1.5";
 }
 declare namespace ts {
     const enum Ternary {
@@ -3645,7 +3659,6 @@ declare namespace ts {
     function assign<T1 extends MapLike<{}>, T2>(t: T1, arg1: T2): T1 & T2;
     function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]): any;
     function reduceProperties<T, U>(map: Map<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U): U;
-    function reduceOwnProperties<T, U>(map: MapLike<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U): U;
     function equalOwnProperties<T>(left: MapLike<T>, right: MapLike<T>, equalityComparer?: (left: T, right: T) => boolean): boolean;
     function arrayToMap<T>(array: T[], makeKey: (value: T) => string): Map<T>;
     function arrayToMap<T, U>(array: T[], makeKey: (value: T) => string, makeValue: (value: T) => U): Map<U>;
@@ -3724,10 +3737,10 @@ declare namespace ts {
     const supportedTypeScriptExtensions: string[];
     const supportedTypescriptExtensionsForExtractExtension: string[];
     const supportedJavascriptExtensions: string[];
-    function getSupportedExtensions(options?: CompilerOptions): string[];
+    function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: FileExtensionInfo[]): string[];
     function hasJavaScriptFileExtension(fileName: string): boolean;
     function hasTypeScriptFileExtension(fileName: string): boolean;
-    function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions): boolean;
+    function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, extraFileExtensions?: FileExtensionInfo[]): boolean;
     const enum ExtensionPriority {
         TypeScriptFiles = 0,
         DeclarationAndJavaScriptFiles = 2,
@@ -8572,6 +8585,12 @@ declare namespace ts {
             key: string;
             message: string;
         };
+        super_must_be_called_before_accessing_a_property_of_super_in_the_constructor_of_a_derived_class: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
         Circularity_detected_while_resolving_configuration_Colon_0: {
             code: number;
             category: DiagnosticCategory;
@@ -8762,7 +8781,7 @@ declare namespace ts {
     function generateTSConfig(options: CompilerOptions, fileNames: string[]): {
         compilerOptions: Map<CompilerOptionsValue>;
     };
-    function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[]): ParsedCommandLine;
+    function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: FileExtensionInfo[]): ParsedCommandLine;
     function convertCompileOnSaveOptionFromJson(jsonOption: any, basePath: string, errors: Diagnostic[]): boolean;
     function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): {
         options: CompilerOptions;
@@ -8974,6 +8993,7 @@ declare namespace ts {
     function isPartOfTypeNode(node: Node): boolean;
     function forEachReturnStatement<T>(body: Block, visitor: (stmt: ReturnStatement) => T): T;
     function forEachYieldExpression(body: Block, visitor: (expr: YieldExpression) => void): void;
+    function getRestParameterElementType(node: TypeNode): TypeNode;
     function isVariableLike(node: Node): node is VariableLikeDeclaration;
     function isAccessor(node: Node): node is AccessorDeclaration;
     function isClassLike(node: Node): node is ClassLikeDeclaration;
@@ -9017,6 +9037,7 @@ declare namespace ts {
     function hasQuestionToken(node: Node): boolean;
     function isJSDocConstructSignature(node: Node): boolean;
     function getCommentsFromJSDoc(node: Node): string[];
+    function getJSDocs(node: Node): (JSDoc | JSDocTag)[];
     function getJSDocParameterTags(param: Node): JSDocParameterTag[];
     function getJSDocType(node: Node): JSDocType;
     function getJSDocAugmentsTag(node: Node): JSDocAugmentsTag;
@@ -9159,7 +9180,6 @@ declare namespace ts {
     function isEmptyObjectLiteralOrArrayLiteral(expression: Node): boolean;
     function getLocalSymbolForExportDefault(symbol: Symbol): Symbol;
     function tryExtractTypeScriptExtension(fileName: string): string | undefined;
-    const stringify: (value: any) => string;
     function convertToBase64(input: string): string;
     function getNewLineCharacter(options: CompilerOptions): string;
     function isSimpleExpression(node: Expression): boolean;
@@ -9792,6 +9812,7 @@ declare namespace ts {
         getName(): string;
         getDeclarations(): Declaration[];
         getDocumentationComment(): SymbolDisplayPart[];
+        getJsDocTags(): JSDocTagInfo[];
     }
     interface Type {
         getFlags(): TypeFlags;
@@ -9812,6 +9833,7 @@ declare namespace ts {
         getParameters(): Symbol[];
         getReturnType(): Type;
         getDocumentationComment(): SymbolDisplayPart[];
+        getJsDocTags(): JSDocTagInfo[];
     }
     interface SourceFile {
         version: string;
@@ -10096,12 +10118,17 @@ declare namespace ts {
         text: string;
         kind: string;
     }
+    interface JSDocTagInfo {
+        name: string;
+        text?: string;
+    }
     interface QuickInfo {
         kind: string;
         kindModifiers: string;
         textSpan: TextSpan;
         displayParts: SymbolDisplayPart[];
         documentation: SymbolDisplayPart[];
+        tags: JSDocTagInfo[];
     }
     interface RenameInfo {
         canRename: boolean;
@@ -10125,6 +10152,7 @@ declare namespace ts {
         separatorDisplayParts: SymbolDisplayPart[];
         parameters: SignatureHelpParameter[];
         documentation: SymbolDisplayPart[];
+        tags: JSDocTagInfo[];
     }
     interface SignatureHelpItems {
         items: SignatureHelpItem[];
@@ -10152,6 +10180,7 @@ declare namespace ts {
         kindModifiers: string;
         displayParts: SymbolDisplayPart[];
         documentation: SymbolDisplayPart[];
+        tags: JSDocTagInfo[];
     }
     interface OutliningSpan {
         textSpan: TextSpan;
@@ -10451,6 +10480,7 @@ declare namespace ts.GoToImplementation {
 }
 declare namespace ts.JsDoc {
     function getJsDocCommentsFromDeclarations(declarations: Declaration[]): SymbolDisplayPart[];
+    function getJsDocTagsFromDeclarations(declarations: Declaration[]): JSDocTagInfo[];
     function getAllJsDocCompletionEntries(): CompletionEntry[];
     function getDocCommentTemplateAtPosition(newLine: string, sourceFile: SourceFile, position: number): TextInsertion;
 }
@@ -10515,6 +10545,7 @@ declare namespace ts.SymbolDisplay {
         displayParts: SymbolDisplayPart[];
         documentation: SymbolDisplayPart[];
         symbolKind: string;
+        tags: JSDocTagInfo[];
     };
 }
 declare namespace ts {
@@ -10979,24 +11010,57 @@ declare namespace ts {
     function getDefaultLibFilePath(options: CompilerOptions): string;
 }
 declare namespace ts.server {
+    class TextStorage {
+        private readonly host;
+        private readonly fileName;
+        private svc;
+        private svcVersion;
+        private text;
+        private lineMap;
+        private textVersion;
+        constructor(host: ServerHost, fileName: NormalizedPath);
+        getVersion(): string;
+        hasScriptVersionCache(): boolean;
+        useScriptVersionCache(newText?: string): void;
+        useText(newText?: string): void;
+        edit(start: number, end: number, newText: string): void;
+        reload(text: string): void;
+        reloadFromFile(tempFileName?: string): void;
+        getSnapshot(): IScriptSnapshot;
+        getLineInfo(line: number): ILineInfo;
+        lineToTextSpan(line: number): TextSpan;
+        lineOffsetToPosition(line: number, offset: number): number;
+        positionToLineOffset(position: number): ILineInfo;
+        private getFileText(tempFileName?);
+        private ensureNoScriptVersionCache();
+        private switchToScriptVersionCache(newText?);
+        private getOrLoadText();
+        private getLineMap();
+        private setText(newText);
+    }
     class ScriptInfo {
         private readonly host;
         readonly fileName: NormalizedPath;
         readonly scriptKind: ScriptKind;
-        isOpen: boolean;
         hasMixedContent: boolean;
         readonly containingProjects: Project[];
         private formatCodeSettings;
         readonly path: Path;
         private fileWatcher;
-        private svc;
-        constructor(host: ServerHost, fileName: NormalizedPath, content: string, scriptKind: ScriptKind, isOpen?: boolean, hasMixedContent?: boolean);
+        private textStorage;
+        private isOpen;
+        constructor(host: ServerHost, fileName: NormalizedPath, scriptKind: ScriptKind, hasMixedContent?: boolean);
+        isScriptOpen(): boolean;
+        open(newText: string): void;
+        close(): void;
+        getSnapshot(): IScriptSnapshot;
         getFormatCodeSettings(): FormatCodeSettings;
         attachToProject(project: Project): boolean;
         isAttached(project: Project): boolean;
         detachFromProject(project: Project): void;
         detachAllProjects(): void;
         getDefaultProject(): Project;
+        registerFileUpdate(): void;
         setFormatOptions(formatSettings: FormatCodeSettings): void;
         setWatcher(watcher: FileWatcher): void;
         stopWatcher(): void;
@@ -11004,7 +11068,6 @@ declare namespace ts.server {
         reload(script: string): void;
         saveTo(fileName: string): void;
         reloadFromFile(tempFileName?: NormalizedPath): void;
-        snap(): LineIndexSnapshot;
         getLineInfo(line: number): ILineInfo;
         editContent(start: number, end: number, newText: string): void;
         markContainingProjectsAsDirty(): void;
@@ -11089,6 +11152,7 @@ declare namespace ts.server {
         getFilesAffectedBy(scriptInfo: ScriptInfo): string[];
         onProjectUpdateGraph(): void;
         emitFile(scriptInfo: ScriptInfo, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): boolean;
+        clear(): void;
     }
     function createBuilder(project: Project): Builder;
 }
@@ -11112,7 +11176,6 @@ declare namespace ts.server {
         get(path: Path): ReadonlyArray<string>;
         set(path: Path, value: ReadonlyArray<string>): void;
     }
-    function createNoSemanticFeaturesWrapper(realLanguageService: LanguageService): LanguageService;
     abstract class Project {
         private readonly projectName;
         readonly projectKind: ProjectKind;
@@ -11127,9 +11190,9 @@ declare namespace ts.server {
         private cachedUnresolvedImportsPerFile;
         private lastCachedUnresolvedImportsList;
         private readonly languageService;
-        private readonly noSemanticFeaturesLanguageService;
         languageServiceEnabled: boolean;
         builder: Builder;
+        private updatedFileNames;
         private lastReportedFileNames;
         private lastReportedVersion;
         private projectStructureVersion;
@@ -11168,6 +11231,7 @@ declare namespace ts.server {
         isRoot(info: ScriptInfo): boolean;
         addRoot(info: ScriptInfo): void;
         removeFile(info: ScriptInfo, detachFromProject?: boolean): void;
+        registerFileUpdate(fileName: string): void;
         markAsDirty(): void;
         private extractUnresolvedImportsFromSourceFile(file, result);
         updateGraph(): boolean;
@@ -11267,9 +11331,10 @@ declare namespace ts.server {
     interface HostConfiguration {
         formatCodeOptions: FormatCodeSettings;
         hostInfo: string;
+        extraFileExtensions?: FileExtensionInfo[];
     }
     interface OpenConfiguredProjectResult {
-        configFileName?: string;
+        configFileName?: NormalizedPath;
         configFileErrors?: Diagnostic[];
     }
     class ProjectService {
@@ -11353,7 +11418,8 @@ declare namespace ts.server {
         applyChangesInOpenFiles(openFiles: protocol.ExternalFile[], changedFiles: protocol.ChangedOpenFile[], closedFiles: string[]): void;
         private closeConfiguredProject(configFile);
         closeExternalProject(uncheckedFileName: string, suppressRefresh?: boolean): void;
-        openExternalProject(proj: protocol.ExternalProject): void;
+        openExternalProjects(projects: protocol.ExternalProject[]): void;
+        openExternalProject(proj: protocol.ExternalProject, suppressRefreshOfInferredProjects?: boolean): void;
     }
 }
 declare namespace ts.server {

@@ -711,6 +711,10 @@ declare namespace ts.server.protocol {
          * List of removed files
          */
         removed: string[];
+        /**
+         * List of updated files
+         */
+        updated: string[];
     }
     /**
       * Information found in a configure request.
@@ -729,6 +733,10 @@ declare namespace ts.server.protocol {
          * The format options to use during formatting and other code editing features.
          */
         formatOptions?: FormatCodeSettings;
+        /**
+         * The host's additional supported file extensions
+         */
+        extraFileExtensions?: FileExtensionInfo[];
     }
     /**
       *  Configure request; value of command field is "configure".  Specifies
@@ -957,6 +965,10 @@ declare namespace ts.server.protocol {
           * Documentation associated with symbol.
           */
         documentation: string;
+        /**
+         * JSDoc tags associated with symbol.
+         */
+        tags: JSDocTagInfo[];
     }
     /**
       * Quickinfo response message.
@@ -1158,6 +1170,10 @@ declare namespace ts.server.protocol {
           * Documentation strings for the symbol.
           */
         documentation: SymbolDisplayPart[];
+        /**
+          * JSDoc tags for the symbol.
+          */
+        tags: JSDocTagInfo[];
     }
     interface CompletionsResponse extends Response {
         body?: CompletionEntry[];
@@ -1214,6 +1230,10 @@ declare namespace ts.server.protocol {
          * The signature's documentation
          */
         documentation: SymbolDisplayPart[];
+        /**
+         * The signature's JSDoc tags
+         */
+        tags: JSDocTagInfo[];
     }
     /**
      * Signature help items found in the response of a signature help request.
@@ -1844,6 +1864,17 @@ declare namespace ts.server.protocol {
         include?: string[];
         exclude?: string[];
         [option: string]: string[] | boolean | undefined;
+    }
+
+    interface FileExtensionInfo {
+        extension: string;
+        scriptKind: ScriptKind;
+        isMixedContent: boolean;
+    }
+
+    interface JSDocTagInfo {
+        name: string;
+        text?: string;
     }
 
     interface MapLike<T> {
