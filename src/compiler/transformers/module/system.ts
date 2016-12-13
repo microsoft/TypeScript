@@ -101,20 +101,21 @@ namespace ts {
             // So the helper will be emit at the correct position instead of at the top of the source-file
             const moduleName = tryGetModuleNameFromFile(node, host, compilerOptions);
             const dependencies = createArrayLiteral(map(dependencyGroups, dependencyGroup => dependencyGroup.name));
-            const updated = updateSourceFileNode(
-                node,
-                createNodeArray([
-                    createStatement(
-                        createCall(
-                            createPropertyAccess(createIdentifier("System"), "register"),
+            const updated = setEmitFlags(
+                updateSourceFileNode(
+                    node,
+                    createNodeArray([
+                        createStatement(
+                            createCall(
+                                createPropertyAccess(createIdentifier("System"), "register"),
                             /*typeArguments*/ undefined,
-                            moduleName
-                                ? [moduleName, dependencies, moduleBodyFunction]
-                                : [dependencies, moduleBodyFunction]
+                                moduleName
+                                    ? [moduleName, dependencies, moduleBodyFunction]
+                                    : [dependencies, moduleBodyFunction]
+                            )
                         )
-                    )
-                ], node.statements)
-            );
+                    ], node.statements)
+                ), EmitFlags.NoTrailingComments);
 
             if (!(compilerOptions.outFile || compilerOptions.out)) {
                 moveEmitHelpers(updated, moduleBodyBlock, helper => !helper.scoped);
