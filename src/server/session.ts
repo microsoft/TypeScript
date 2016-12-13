@@ -1028,6 +1028,9 @@ namespace ts.server {
             if (!project) {
                 Errors.ThrowNoProject();
             }
+            if (!project.languageServiceEnabled) {
+                return false;
+            }
             const scriptInfo = project.getScriptInfo(file);
             return project.builder.emitFile(scriptInfo, (path, data, writeByteOrderMark) => this.host.writeFile(path, data, writeByteOrderMark));
         }

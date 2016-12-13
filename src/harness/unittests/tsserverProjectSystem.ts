@@ -1238,6 +1238,7 @@ namespace ts.projectSystem {
             projectService.closeExternalProject(externalProjectName);
             checkNumberOfProjects(projectService, { configuredProjects: 0 });
         });
+
         it("external project with included config file opened after configured project and then closed", () => {
             const file1 = {
                 path: "/a/b/f1.ts",
@@ -1795,6 +1796,49 @@ namespace ts.projectSystem {
 
             projectService.closeClientFile(file1.path);
             checkNumberOfProjects(projectService, { configuredProjects: 0 });
+        });
+
+        it("language service disabled state is updated in external projects", () => {
+            debugger
+            const f1 = {
+                path: "/a/app.js",
+                content: "var x = 1"
+            };
+            const f2 = {
+                path: "/a/largefile.js",
+                content: ""
+            };
+            const host = createServerHost([f1, f2]);
+            const originalGetFileSize = host.getFileSize;
+            host.getFileSize = (filePath: string) =>
+                filePath === f2.path ? server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
+
+            const service = createProjectService(host);
+            const projectFileName = "/a/proj.csproj";
+
+            service.openExternalProject({
+                projectFileName,
+                rootFiles: toExternalFiles([f1.path, f2.path]),
+                options: {}
+            });
+            service.checkNumberOfProjects({ externalProjects: 1 });
+            assert.isFalse(service.externalProjects[0].languageServiceEnabled, "language service should be disabled - 1");
+
+            service.openExternalProject({
+                projectFileName,
+                rootFiles: toExternalFiles([f1.path]),
+                options: {}
+            });
+            service.checkNumberOfProjects({ externalProjects: 1 });
+            assert.isTrue(service.externalProjects[0].languageServiceEnabled, "language service should be enabled");
+
+            service.openExternalProject({
+                projectFileName,
+                rootFiles: toExternalFiles([f1.path, f2.path]),
+                options: {}
+            });
+            service.checkNumberOfProjects({ externalProjects: 1 });
+            assert.isFalse(service.externalProjects[0].languageServiceEnabled, "language service should be disabled - 2");
         });
 
         it("language service disabled events are triggered", () => {
