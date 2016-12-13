@@ -1223,11 +1223,12 @@ namespace ts {
             }
 
             const { firstAccessor, secondAccessor, setAccessor } = getAllAccessorDeclarations(node.members, accessor);
-            if (accessor !== firstAccessor) {
+            const firstAccessorWithDecorators = firstAccessor.decorators ? firstAccessor : secondAccessor && secondAccessor.decorators ? secondAccessor : undefined;
+            if (!firstAccessorWithDecorators || accessor !== firstAccessorWithDecorators) {
                 return undefined;
             }
 
-            const decorators = firstAccessor.decorators || (secondAccessor && secondAccessor.decorators);
+            const decorators = firstAccessorWithDecorators.decorators;
             const parameters = getDecoratorsOfParameters(setAccessor);
             if (!decorators && !parameters) {
                 return undefined;
@@ -1276,7 +1277,7 @@ namespace ts {
          * @param node The declaration node.
          * @param allDecorators An object containing all of the decorators for the declaration.
          */
-        function transformAllDecoratorsOfDeclaration(node: Declaration, allDecorators: AllDecorators) {
+        function transformAllDecoratorsOfDeclaration(node: Declaration, container: ClassLikeDeclaration, allDecorators: AllDecorators) {
             if (!allDecorators) {
                 return undefined;
             }
@@ -1284,7 +1285,7 @@ namespace ts {
             const decoratorExpressions: Expression[] = [];
             addRange(decoratorExpressions, map(allDecorators.decorators, transformDecorator));
             addRange(decoratorExpressions, flatMap(allDecorators.parameters, transformDecoratorsOfParameter));
-            addTypeMetadata(node, decoratorExpressions);
+            addTypeMetadata(node, container, decoratorExpressions);
             return decoratorExpressions;
         }
 
@@ -1333,7 +1334,7 @@ namespace ts {
          */
         function generateClassElementDecorationExpression(node: ClassExpression | ClassDeclaration, member: ClassElement) {
             const allDecorators = getAllDecoratorsOfClassElement(node, member);
-            const decoratorExpressions = transformAllDecoratorsOfDeclaration(member, allDecorators);
+            const decoratorExpressions = transformAllDecoratorsOfDeclaration(member, node, allDecorators);
             if (!decoratorExpressions) {
                 return undefined;
             }
@@ -1414,7 +1415,7 @@ namespace ts {
          */
         function generateConstructorDecorationExpression(node: ClassExpression | ClassDeclaration) {
             const allDecorators = getAllDecoratorsOfConstructor(node);
-            const decoratorExpressions = transformAllDecoratorsOfDeclaration(node, allDecorators);
+            const decoratorExpressions = transformAllDecoratorsOfDeclaration(node, node, allDecorators);
             if (!decoratorExpressions) {
                 return undefined;
             }
@@ -1467,22 +1468,22 @@ namespace ts {
          * @param node The declaration node.
          * @param decoratorExpressions The destination array to which to add new decorator expressions.
          */
-        function addTypeMetadata(node: Declaration, decoratorExpressions: Expression[]) {
+        function addTypeMetadata(node: Declaration, container: ClassLikeDeclaration, decoratorExpressions: Expression[]) {
             if (USE_NEW_TYPE_METADATA_FORMAT) {
-                addNewTypeMetadata(node, decoratorExpressions);
+                addNewTypeMetadata(node, container, decoratorExpressions);
             }
             else {
-                addOldTypeMetadata(node, decoratorExpressions);
+                addOldTypeMetadata(node, container, decoratorExpressions);
             }
         }
 
-        function addOldTypeMetadata(node: Declaration, decoratorExpressions: Expression[]) {
+        function addOldTypeMetadata(node: Declaration, container: ClassLikeDeclaration, decoratorExpressions: Expression[]) {
             if (compilerOptions.emitDecoratorMetadata) {
                 if (shouldAddTypeMetadata(node)) {
                     decoratorExpressions.push(createMetadataHelper(context, "design:type", serializeTypeOfNode(node)));
                 }
                 if (shouldAddParamTypesMetadata(node)) {
-                    decoratorExpressions.push(createMetadataHelper(context, "design:paramtypes", serializeParameterTypesOfNode(node)));
+                    decoratorExpressions.push(createMetadataHelper(context, "design:paramtypes", serializeParameterTypesOfNode(node, container)));
                 }
                 if (shouldAddReturnTypeMetadata(node)) {
                     decoratorExpressions.push(createMetadataHelper(context, "design:returntype", serializeReturnTypeOfNode(node)));
@@ -1490,14 +1491,14 @@ namespace ts {
             }
         }
 
-        function addNewTypeMetadata(node: Declaration, decoratorExpressions: Expression[]) {
+        function addNewTypeMetadata(node: Declaration, container: ClassLikeDeclaration, decoratorExpressions: Expression[]) {
             if (compilerOptions.emitDecoratorMetadata) {
                 let properties: ObjectLiteralElementLike[];
                 if (shouldAddTypeMetadata(node)) {
                     (properties || (properties = [])).push(createPropertyAssignment("type", createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, createToken(SyntaxKind.EqualsGreaterThanToken), serializeTypeOfNode(node))));
                 }
                 if (shouldAddParamTypesMetadata(node)) {
-                    (properties || (properties = [])).push(createPropertyAssignment("paramTypes", createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, createToken(SyntaxKind.EqualsGreaterThanToken), serializeParameterTypesOfNode(node))));
+                    (properties || (properties = [])).push(createPropertyAssignment("paramTypes", createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, createToken(SyntaxKind.EqualsGreaterThanToken), serializeParameterTypesOfNode(node, container))));
                 }
                 if (shouldAddReturnTypeMetadata(node)) {
                     (properties || (properties = [])).push(createPropertyAssignment("returnType", createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, createToken(SyntaxKind.EqualsGreaterThanToken), serializeReturnTypeOfNode(node))));
@@ -1542,12 +1543,16 @@ namespace ts {
          * @param node The node to test.
          */
         function shouldAddParamTypesMetadata(node: Declaration): boolean {
-            const kind = node.kind;
-            return kind === SyntaxKind.ClassDeclaration
-                || kind === SyntaxKind.ClassExpression
-                || kind === SyntaxKind.MethodDeclaration
-                || kind === SyntaxKind.GetAccessor
-                || kind === SyntaxKind.SetAccessor;
+            switch (node.kind) {
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ClassExpression:
+                    return getFirstConstructorWithBody(<ClassLikeDeclaration>node) !== undefined;
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    return true;
+            }
+            return false;
         }
 
         /**
@@ -1595,7 +1600,7 @@ namespace ts {
          *
          * @param node The node that should have its parameter types serialized.
          */
-        function serializeParameterTypesOfNode(node: Node): Expression {
+        function serializeParameterTypesOfNode(node: Node, container: ClassLikeDeclaration): Expression {
             const valueDeclaration =
                 isClassLike(node)
                     ? getFirstConstructorWithBody(node)
@@ -1605,7 +1610,7 @@ namespace ts {
 
             const expressions: Expression[] = [];
             if (valueDeclaration) {
-                const parameters = valueDeclaration.parameters;
+                const parameters = getParametersOfDecoratedDeclaration(valueDeclaration, container);
                 const numParameters = parameters.length;
                 for (let i = 0; i < numParameters; i++) {
                     const parameter = parameters[i];
@@ -1622,6 +1627,16 @@ namespace ts {
             }
 
             return createArrayLiteral(expressions);
+        }
+
+        function getParametersOfDecoratedDeclaration(node: FunctionLikeDeclaration, container: ClassLikeDeclaration) {
+            if (container && node.kind === SyntaxKind.GetAccessor) {
+                const { setAccessor } = getAllAccessorDeclarations(container.members, <AccessorDeclaration>node);
+                if (setAccessor) {
+                    return setAccessor.parameters;
+                }
+            }
+            return node.parameters;
         }
 
         /**

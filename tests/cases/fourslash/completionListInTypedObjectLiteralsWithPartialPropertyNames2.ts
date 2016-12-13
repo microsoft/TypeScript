@@ -9,6 +9,6 @@
 ////};
 
 goTo.marker();
-verify.memberListContains("x1");
-verify.memberListContains("y1");
-verify.memberListCount(2);
+verify.completionListContains("x1");
+verify.completionListContains("y1");
+verify.completionListCount(2);

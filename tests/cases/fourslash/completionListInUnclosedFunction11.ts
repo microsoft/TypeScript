@@ -9,4 +9,4 @@
 
 goTo.marker("1");
 
-verify.memberListContains("MyType");
+verify.completionListContains("MyType");
