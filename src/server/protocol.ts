@@ -1,4 +1,4 @@
-﻿/**
+/**
   * Declaration module describing the TypeScript Server protocol
   */
 namespace ts.server.protocol {
@@ -918,6 +918,10 @@ namespace ts.server.protocol {
          * List of removed files
          */
         removed: string[];
+        /**
+         * List of updated files
+         */
+        updated: string[];
     }
 
     /**
@@ -990,6 +994,11 @@ namespace ts.server.protocol {
          * The format options to use during formatting and other code editing features.
          */
         formatOptions?: FormatCodeSettings;
+
+        /**
+         * The host's additional supported file extensions
+         */
+        extraFileExtensions?: FileExtensionInfo[];
     }
 
     /**

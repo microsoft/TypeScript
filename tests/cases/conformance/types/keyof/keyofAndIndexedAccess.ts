@@ -250,6 +250,53 @@ function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[
     let b = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b');  // string | boolean
 }
 
+function f80<T extends { a: { x: any } }>(obj: T) {
+    let a1 = obj.a;  // { x: any }
+    let a2 = obj['a'];  // { x: any }
+    let a3 = obj['a'] as T['a'];  // T["a"]
+    let x1 = obj.a.x;  // any
+    let x2 = obj['a']['x'];  // any
+    let x3 = obj['a']['x'] as T['a']['x'];  // T["a"]["x"]
+}
+
+function f81<T extends { a: { x: any } }>(obj: T) {
+    return obj['a']['x'] as T['a']['x'];
+}
+
+function f82() {
+    let x1 = f81({ a: { x: "hello" } });  // string
+    let x2 = f81({ a: { x: 42 } });  // number
+}
+
+function f83<T extends { [x: string]: { x: any } }, K extends keyof T>(obj: T, key: K) {
+    return obj[key]['x'] as T[K]['x'];
+}
+
+function f84() {
+    let x1 = f83({ foo: { x: "hello" } }, "foo");  // string
+    let x2 = f83({ bar: { x: 42 } }, "bar");  // number
+}
+
+class C1 {
+    x: number;
+    get<K extends keyof this>(key: K) {
+        return this[key];
+    }
+    set<K extends keyof this>(key: K, value: this[K]) {
+        this[key] = value;
+    }
+    foo() {
+        let x1 = this.x;  // number
+        let x2 = this["x"];  // number
+        let x3 = this.get("x");  // this["x"]
+        let x4 = getProperty(this, "x"); // this["x"]
+        this.x = 42;
+        this["x"] = 42;
+        this.set("x", 42);
+        setProperty(this, "x", 42);
+    }
+}
+
 // Repros from #12011
 
 class Base {
@@ -366,3 +413,21 @@ function f<K extends keyof R>(p: K) {
     let a: any;
     a[p].add;  // any
 }
+
+// Repro from #12651
+
+type MethodDescriptor = {
+	name: string;
+	args: any[];
+	returnValue: any;
+}
+
+declare function dispatchMethod<M extends MethodDescriptor>(name: M['name'], args: M['args']): M['returnValue'];
+
+type SomeMethodDescriptor = {
+	name: "someMethod";
+	args: [string, number];
+	returnValue: string[];
+}
+
+let result = dispatchMethod<SomeMethodDescriptor>("someMethod", ["hello", 35]);

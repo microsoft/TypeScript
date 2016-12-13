@@ -25,10 +25,10 @@
 
 
 goTo.marker('1');
-verify.memberListContains("toFixed", /*displayText:*/ undefined, /*documentation*/ undefined, "method");
+verify.completionListContains("toFixed", /*displayText:*/ undefined, /*documentation*/ undefined, "method");
 
 goTo.marker('2');
-verify.memberListContains("toFixed", /*displayText:*/ undefined, /*documentation*/ undefined, "method");
+verify.completionListContains("toFixed", /*displayText:*/ undefined, /*documentation*/ undefined, "method");
 
 goTo.marker('3');
-verify.memberListContains("toFixed", /*displayText:*/ undefined, /*documentation*/ undefined, "method");
+verify.completionListContains("toFixed", /*displayText:*/ undefined, /*documentation*/ undefined, "method");

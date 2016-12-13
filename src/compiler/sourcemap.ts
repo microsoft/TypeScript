@@ -427,7 +427,7 @@ namespace ts {
 
             encodeLastRecordedSourceMapSpan();
 
-            return stringify({
+            return JSON.stringify({
                 version: 3,
                 file: sourceMapData.sourceMapFile,
                 sourceRoot: sourceMapData.sourceMapSourceRoot,

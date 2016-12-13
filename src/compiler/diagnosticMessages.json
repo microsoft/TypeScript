@@ -3165,6 +3165,10 @@
         "category": "Error",
         "code": 17010
     },
+    "'super' must be called before accessing a property of 'super' in the constructor of a derived class.": {
+        "category": "Error",
+        "code": 17011
+    },
 
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",
