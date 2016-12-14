@@ -19710,6 +19710,9 @@ namespace ts {
                 // This is a declaration, call getSymbolOfNode
                 return getSymbolOfNode(node.parent);
             }
+            else if (node.kind === SyntaxKind.ClassKeyword && node.parent.kind === SyntaxKind.ClassExpression) {
+                return getSymbolOfNode(node.parent);
+            }
             else if (isLiteralComputedPropertyDeclarationName(node)) {
                 return getSymbolOfNode(node.parent.parent);
             }
