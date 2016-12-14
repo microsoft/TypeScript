@@ -108,35 +108,27 @@ namespace ts.codefix {
         }
         const maxArgsParameterSymbolNames = signatures[maxArgsIndex].getParameters().map(symbol => symbol.getName());
 
-        const anyTypeNode: TypeNode = createNode(SyntaxKind.AnyKeyword) as TypeNode;
         const optionalToken = createToken(SyntaxKind.QuestionToken);
 
         newSignatureDeclaration.parameters = createNodeArray<ParameterDeclaration>();
         for (let i = 0; i < maxNonRestArgs; i++) {
-            const newParameter = createParameterDeclaration(i, minArgumentCount, anyTypeNode, newSignatureDeclaration);
+            const newParameter = createParameterDeclarationWithoutType(i, minArgumentCount, newSignatureDeclaration);
             newSignatureDeclaration.parameters.push(newParameter);
         }
 
         if (hasRestParameter) {
-            const anyArrayTypeNode = createNode(SyntaxKind.ArrayType) as ArrayTypeNode;
-            anyArrayTypeNode.elementType = anyTypeNode;
-
-            const restParameter = createParameterDeclaration(maxNonRestArgs, minArgumentCount, anyArrayTypeNode, newSignatureDeclaration);
+            const restParameter = createParameterDeclarationWithoutType(maxNonRestArgs, minArgumentCount, newSignatureDeclaration);
             restParameter.dotDotDotToken = createToken(SyntaxKind.DotDotDotToken);
             newSignatureDeclaration.parameters.push(restParameter);
         }
 
-        newSignatureDeclaration.type = anyTypeNode;
-        newSignatureDeclaration.type.parent = newSignatureDeclaration;
-
         return checker.getSignatureFromDeclaration(newSignatureDeclaration);
 
-        function createParameterDeclaration(index: number, minArgCount: number, typeNode: TypeNode, enclosingSignatureDeclaration: SignatureDeclaration): ParameterDeclaration {
+        function createParameterDeclarationWithoutType(index: number, minArgCount: number, enclosingSignatureDeclaration: SignatureDeclaration): ParameterDeclaration {
             const newParameter = createNode(SyntaxKind.Parameter) as ParameterDeclaration;
             newParameter.symbol = checker.createSymbol(SymbolFlags.FunctionScopedVariable, maxArgsParameterSymbolNames[index] || "rest");
             newParameter.symbol.valueDeclaration = newParameter;
             newParameter.symbol.declarations = [newParameter];
-            newParameter.type = typeNode;
             newParameter.parent = enclosingSignatureDeclaration;
             if (index >= minArgCount) {
                 newParameter.questionToken = optionalToken;
