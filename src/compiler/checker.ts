@@ -4536,15 +4536,27 @@ namespace ts {
             const typeParameter = getTypeParameterFromMappedType(type);
             const constraintType = getConstraintTypeFromMappedType(type);
             const templateType = getTemplateTypeFromMappedType(type);
-            const modifiersType = getModifiersTypeFromMappedType(type);
+            const modifiersType = getApparentType(getModifiersTypeFromMappedType(type));
             const templateReadonly = !!type.declaration.readonlyToken;
             const templateOptional = !!type.declaration.questionToken;
-            // First, if the constraint type is a type parameter, obtain the base constraint. Then,
-            // if the key type is a 'keyof X', obtain 'keyof C' where C is the base constraint of X.
-            // Finally, iterate over the constituents of the resulting iteration type.
-            const keyType = constraintType.flags & TypeFlags.TypeVariable ? getApparentType(constraintType) : constraintType;
-            const iterationType = keyType.flags & TypeFlags.Index ? getIndexType(getApparentType((<IndexType>keyType).type)) : keyType;
-            forEachType(iterationType, t => {
+            if (type.declaration.typeParameter.constraint.kind === SyntaxKind.TypeOperator) {
+                // We have a { [P in keyof T]: X }
+                forEachType(getLiteralTypeFromPropertyNames(modifiersType), addMemberForKeyType);
+                if (getIndexInfoOfType(modifiersType, IndexKind.String)) {
+                    addMemberForKeyType(stringType);
+                }
+            }
+            else {
+                // First, if the constraint type is a type parameter, obtain the base constraint. Then,
+                // if the key type is a 'keyof X', obtain 'keyof C' where C is the base constraint of X.
+                // Finally, iterate over the constituents of the resulting iteration type.
+                const keyType = constraintType.flags & TypeFlags.TypeVariable ? getApparentType(constraintType) : constraintType;
+                const iterationType = keyType.flags & TypeFlags.Index ? getIndexType(getApparentType((<IndexType>keyType).type)) : keyType;
+                forEachType(iterationType, addMemberForKeyType);
+            }
+            setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, undefined);
+
+            function addMemberForKeyType(t: Type) {
                 // Create a mapper from T to the current iteration type constituent. Then, if the
                 // mapped type is itself an instantiated type, combine the iteration mapper with the
                 // instantiation mapper.
@@ -4565,8 +4577,7 @@ namespace ts {
                 else if (t.flags & TypeFlags.String) {
                     stringIndexInfo = createIndexInfo(propType, templateReadonly);
                 }
-            });
-            setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, undefined);
+            }
         }
 
         function getTypeParameterFromMappedType(type: MappedType) {

@@ -353,3 +353,95 @@ var b04: Pick<BPR, keyof BPR>;
 >BPR : BPR
 >BPR : BPR
 
+type Foo = { prop: number, [x: string]: number };
+>Foo : Foo
+>prop : number
+>x : string
+
+function f1(x: Partial<Foo>) {
+>f1 : (x: Partial<Foo>) => void
+>x : Partial<Foo>
+>Partial : Partial<T>
+>Foo : Foo
+
+    x.prop; // ok
+>x.prop : number | undefined
+>x : Partial<Foo>
+>prop : number | undefined
+
+    (x["other"] || 0).toFixed();
+>(x["other"] || 0).toFixed() : string
+>(x["other"] || 0).toFixed : (fractionDigits?: number | undefined) => string
+>(x["other"] || 0) : number
+>x["other"] || 0 : number
+>x["other"] : number | undefined
+>x : Partial<Foo>
+>"other" : "other"
+>0 : 0
+>toFixed : (fractionDigits?: number | undefined) => string
+}
+
+function f2(x: Readonly<Foo>) {
+>f2 : (x: Readonly<Foo>) => void
+>x : Readonly<Foo>
+>Readonly : Readonly<T>
+>Foo : Foo
+
+    x.prop; // ok
+>x.prop : number
+>x : Readonly<Foo>
+>prop : number
+
+    x["other"].toFixed();
+>x["other"].toFixed() : string
+>x["other"].toFixed : (fractionDigits?: number | undefined) => string
+>x["other"] : number
+>x : Readonly<Foo>
+>"other" : "other"
+>toFixed : (fractionDigits?: number | undefined) => string
+}
+
+function f3(x: Boxified<Foo>) {
+>f3 : (x: Boxified<Foo>) => void
+>x : Boxified<Foo>
+>Boxified : Boxified<T>
+>Foo : Foo
+
+    x.prop; // ok
+>x.prop : { x: number; }
+>x : Boxified<Foo>
+>prop : { x: number; }
+
+    x["other"].x.toFixed();
+>x["other"].x.toFixed() : string
+>x["other"].x.toFixed : (fractionDigits?: number | undefined) => string
+>x["other"].x : number
+>x["other"] : { x: number; }
+>x : Boxified<Foo>
+>"other" : "other"
+>x : number
+>toFixed : (fractionDigits?: number | undefined) => string
+}
+
+function f4(x: { [P in keyof Foo]: Foo[P] }) {
+>f4 : (x: { [x: string]: number; prop: number; }) => void
+>x : { [x: string]: number; prop: number; }
+>P : P
+>Foo : Foo
+>Foo : Foo
+>P : P
+
+    x.prop; // ok
+>x.prop : number
+>x : { [x: string]: number; prop: number; }
+>prop : number
+
+    x["other"].toFixed();
+>x["other"].toFixed() : string
+>x["other"].toFixed : (fractionDigits?: number | undefined) => string
+>x["other"] : number
+>x : { [x: string]: number; prop: number; }
+>"other" : "other"
+>toFixed : (fractionDigits?: number | undefined) => string
+}
+

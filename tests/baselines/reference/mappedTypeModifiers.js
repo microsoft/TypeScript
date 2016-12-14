@@ -76,6 +76,29 @@ var b04: Readonly<Partial<B>>;
 var b04: { [P in keyof BPR]: BPR[P] }
 var b04: Pick<BPR, keyof BPR>;
 
+type Foo = { prop: number, [x: string]: number };
+
+function f1(x: Partial<Foo>) {
+    x.prop; // ok
+    (x["other"] || 0).toFixed();
+}
+
+function f2(x: Readonly<Foo>) {
+    x.prop; // ok
+    x["other"].toFixed();
+}
+
+function f3(x: Boxified<Foo>) {
+    x.prop; // ok
+    x["other"].x.toFixed();
+}
+
+function f4(x: { [P in keyof Foo]: Foo[P] }) {
+    x.prop; // ok
+    x["other"].toFixed();
+}
+
+
 //// [mappedTypeModifiers.js]
 var v00;
 var v00;
@@ -131,3 +154,19 @@ var b04;
 var b04;
 var b04;
 var b04;
+function f1(x) {
+    x.prop; // ok
+    (x["other"] || 0).toFixed();
+}
+function f2(x) {
+    x.prop; // ok
+    x["other"].toFixed();
+}
+function f3(x) {
+    x.prop; // ok
+    x["other"].x.toFixed();
+}
+function f4(x) {
+    x.prop; // ok
+    x["other"].toFixed();
+}
