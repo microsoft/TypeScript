@@ -1799,7 +1799,6 @@ namespace ts.projectSystem {
         });
 
         it("language service disabled state is updated in external projects", () => {
-            debugger
             const f1 = {
                 path: "/a/app.js",
                 content: "var x = 1"
@@ -1939,6 +1938,31 @@ namespace ts.projectSystem {
             const options = projectService.getFormatCodeOptions();
             const edits = project.getLanguageService().getFormattingEditsForDocument(f1.path, options);
             assert.deepEqual(edits, [{ span: createTextSpan(/*start*/ 7, /*length*/ 3), newText: " " }]);
+        });
+
+        it("snapshot from different caches are incompatible", () => {
+            const f1 = {
+                path: "/a/b/app.ts",
+                content: "let x = 1;"
+            };
+            const host = createServerHost([f1]);
+            const projectFileName = "/a/b/proj.csproj";
+            const projectService = createProjectService(host);
+            projectService.openExternalProject({
+                projectFileName,
+                rootFiles: [toExternalFile(f1.path)],
+                options: {}
+            })
+            projectService.openClientFile(f1.path, "let x = 1;\nlet y = 2;");
+
+            projectService.checkNumberOfProjects({ externalProjects: 1 });
+            projectService.externalProjects[0].getLanguageService(/*ensureSynchronized*/false).getNavigationBarItems(f1.path);
+            projectService.closeClientFile(f1.path);
+
+            projectService.openClientFile(f1.path);
+            projectService.checkNumberOfProjects({ externalProjects: 1 });
+            const navbar = projectService.externalProjects[0].getLanguageService(/*ensureSynchronized*/false).getNavigationBarItems(f1.path);
+            assert.equal(navbar[0].spans[0].length, f1.content.length);
         });
     });
 
