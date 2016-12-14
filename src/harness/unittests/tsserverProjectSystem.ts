@@ -1945,7 +1945,6 @@ namespace ts.projectSystem {
                 path: "/a/b/app.ts",
                 content: "let x = 1;"
             };
-            debugger
             const host = createServerHost([f1]);
             const projectFileName = "/a/b/proj.csproj";
             const projectService = createProjectService(host);
