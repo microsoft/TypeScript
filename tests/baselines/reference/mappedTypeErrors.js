@@ -125,6 +125,11 @@ c.setState(foo);
 c.setState({ a: undefined });  // Error
 c.setState({ c: true });  // Error
 
+type T2 = { a?: number, [key: string]: any };
+
+let x1: T2 = { a: 'no' };  // Error
+let x2: Partial<T2> = { a: 'no' }; // Error
+let x3: { [P in keyof T2]: T2[P]} = { a: 'no' };  // Error
 
 //// [mappedTypeErrors.js]
 function f1(x) {
@@ -196,6 +201,9 @@ c.setState({});
 c.setState(foo);
 c.setState({ a: undefined }); // Error
 c.setState({ c: true }); // Error
+var x1 = { a: 'no' }; // Error
+var x2 = { a: 'no' }; // Error
+var x3 = { a: 'no' }; // Error
 
 
 //// [mappedTypeErrors.d.ts]
@@ -251,3 +259,12 @@ declare class C<T> {
     setState<K extends keyof T>(props: Pick<T, K>): void;
 }
 declare let c: C<Foo>;
+declare type T2 = {
+    a?: number;
+    [key: string]: any;
+};
+declare let x1: T2;
+declare let x2: Partial<T2>;
+declare let x3: {
+    [P in keyof T2]: T2[P];
+};
