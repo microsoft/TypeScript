@@ -472,9 +472,7 @@ namespace ts {
                     // other kinds of value declarations take precedence over modules
                     target.valueDeclaration = source.valueDeclaration;
                 }
-                forEach(source.declarations, node => {
-                    target.declarations.push(node);
-                });
+                addRange(target.declarations, source.declarations);
                 if (source.members) {
                     if (!target.members) target.members = createMap<Symbol>();
                     mergeSymbolTable(target.members, source.members);
@@ -1106,7 +1104,7 @@ namespace ts {
         }
 
         function getDeclarationOfAliasSymbol(symbol: Symbol): Declaration | undefined {
-            return forEach(symbol.declarations, d => isAliasSymbolDeclaration(d) ? d : undefined);
+            return find<Declaration>(symbol.declarations, isAliasSymbolDeclaration);
         }
 
         function getTargetOfImportEqualsDeclaration(node: ImportEqualsDeclaration): Symbol {
@@ -1447,9 +1445,8 @@ namespace ts {
              // May be an untyped module. If so, ignore resolutionDiagnostic.
             if (!isRelative && resolvedModule && !extensionIsTypeScript(resolvedModule.extension)) {
                 if (isForAugmentation) {
-                    Debug.assert(!!moduleNotFoundError);
                     const diag = Diagnostics.Invalid_module_name_in_augmentation_Module_0_resolves_to_an_untyped_module_at_1_which_cannot_be_augmented;
-                    error(errorNode, diag, moduleName, resolvedModule.resolvedFileName);
+                    error(errorNode, diag, moduleReference, resolvedModule.resolvedFileName);
                 }
                 else if (compilerOptions.noImplicitAny && moduleNotFoundError) {
                     error(errorNode,
@@ -1750,7 +1747,19 @@ namespace ts {
         }
 
         function getAccessibleSymbolChain(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, useOnlyExternalAliasing: boolean): Symbol[] {
-            function getAccessibleSymbolChainFromSymbolTable(symbols: SymbolTable): Symbol[] {
+            function getAccessibleSymbolChainFromSymbolTable(symbols: SymbolTable) {
+                return getAccessibleSymbolChainFromSymbolTableWorker(symbols, []);
+            }
+
+            function getAccessibleSymbolChainFromSymbolTableWorker(symbols: SymbolTable, visitedSymbolTables: SymbolTable[]): Symbol[] {
+                if (contains(visitedSymbolTables, symbols)) {
+                    return undefined;
+                }
+                visitedSymbolTables.push(symbols);
+                const result = trySymbolTable(symbols);
+                visitedSymbolTables.pop();
+                return result;
+
                 function canQualifySymbol(symbolFromSymbolTable: Symbol, meaning: SymbolFlags) {
                     // If the symbol is equivalent and doesn't need further qualification, this symbol is accessible
                     if (!needsQualification(symbolFromSymbolTable, enclosingDeclaration, meaning)) {
@@ -1772,34 +1781,36 @@ namespace ts {
                     }
                 }
 
-                // If symbol is directly available by its name in the symbol table
-                if (isAccessible(symbols[symbol.name])) {
-                    return [symbol];
-                }
+                function trySymbolTable(symbols: SymbolTable) {
+                    // If symbol is directly available by its name in the symbol table
+                    if (isAccessible(symbols[symbol.name])) {
+                        return [symbol];
+                    }
 
-                // Check if symbol is any of the alias
-                return forEachProperty(symbols, symbolFromSymbolTable => {
-                    if (symbolFromSymbolTable.flags & SymbolFlags.Alias
-                        && symbolFromSymbolTable.name !== "export="
-                        && !getDeclarationOfKind(symbolFromSymbolTable, SyntaxKind.ExportSpecifier)) {
-                        if (!useOnlyExternalAliasing || // We can use any type of alias to get the name
-                            // Is this external alias, then use it to name
-                            ts.forEach(symbolFromSymbolTable.declarations, isExternalModuleImportEqualsDeclaration)) {
+                    // Check if symbol is any of the alias
+                    return forEachProperty(symbols, symbolFromSymbolTable => {
+                        if (symbolFromSymbolTable.flags & SymbolFlags.Alias
+                            && symbolFromSymbolTable.name !== "export="
+                            && !getDeclarationOfKind(symbolFromSymbolTable, SyntaxKind.ExportSpecifier)) {
+                            if (!useOnlyExternalAliasing || // We can use any type of alias to get the name
+                                // Is this external alias, then use it to name
+                                ts.forEach(symbolFromSymbolTable.declarations, isExternalModuleImportEqualsDeclaration)) {
 
-                            const resolvedImportedSymbol = resolveAlias(symbolFromSymbolTable);
-                            if (isAccessible(symbolFromSymbolTable, resolveAlias(symbolFromSymbolTable))) {
-                                return [symbolFromSymbolTable];
-                            }
+                                const resolvedImportedSymbol = resolveAlias(symbolFromSymbolTable);
+                                if (isAccessible(symbolFromSymbolTable, resolveAlias(symbolFromSymbolTable))) {
+                                    return [symbolFromSymbolTable];
+                                }
 
-                            // Look in the exported members, if we can find accessibleSymbolChain, symbol is accessible using this chain
-                            // but only if the symbolFromSymbolTable can be qualified
-                            const accessibleSymbolsFromExports = resolvedImportedSymbol.exports ? getAccessibleSymbolChainFromSymbolTable(resolvedImportedSymbol.exports) : undefined;
-                            if (accessibleSymbolsFromExports && canQualifySymbol(symbolFromSymbolTable, getQualifiedLeftMeaning(meaning))) {
-                                return [symbolFromSymbolTable].concat(accessibleSymbolsFromExports);
+                                // Look in the exported members, if we can find accessibleSymbolChain, symbol is accessible using this chain
+                                // but only if the symbolFromSymbolTable can be qualified
+                                const accessibleSymbolsFromExports = resolvedImportedSymbol.exports ? getAccessibleSymbolChainFromSymbolTableWorker(resolvedImportedSymbol.exports, visitedSymbolTables) : undefined;
+                                if (accessibleSymbolsFromExports && canQualifySymbol(symbolFromSymbolTable, getQualifiedLeftMeaning(meaning))) {
+                                    return [symbolFromSymbolTable].concat(accessibleSymbolsFromExports);
+                                }
                             }
                         }
-                    }
-                });
+                    });
+                }
             }
 
             if (symbol) {
@@ -4603,12 +4614,22 @@ namespace ts {
 
         function getModifiersTypeFromMappedType(type: MappedType) {
             if (!type.modifiersType) {
-                // If the mapped type was declared as { [P in keyof T]: X } or as { [P in K]: X }, where
-                // K is constrained to 'K extends keyof T', then we will copy property modifiers from T.
-                const declaredType = <MappedType>getTypeFromMappedTypeNode(type.declaration);
-                const constraint = getConstraintTypeFromMappedType(declaredType);
-                const extendedConstraint = constraint.flags & TypeFlags.TypeParameter ? getConstraintOfTypeParameter(<TypeParameter>constraint) : constraint;
-                type.modifiersType = extendedConstraint.flags & TypeFlags.Index ? instantiateType((<IndexType>extendedConstraint).type, type.mapper || identityMapper) : emptyObjectType;
+                const constraintDeclaration = type.declaration.typeParameter.constraint;
+                if (constraintDeclaration.kind === SyntaxKind.TypeOperator) {
+                    // If the constraint declaration is a 'keyof T' node, the modifiers type is T. We check
+                    // AST nodes here because, when T is a non-generic type, the logic below eagerly resolves
+                    // 'keyof T' to a literal union type and we can't recover T from that type.
+                    type.modifiersType = instantiateType(getTypeFromTypeNode((<TypeOperatorNode>constraintDeclaration).type), type.mapper || identityMapper);
+                }
+                else {
+                    // Otherwise, get the declared constraint type, and if the constraint type is a type parameter,
+                    // get the constraint of that type parameter. If the resulting type is an indexed type 'keyof T',
+                    // the modifiers type is T. Otherwise, the modifiers type is {}.
+                    const declaredType = <MappedType>getTypeFromMappedTypeNode(type.declaration);
+                    const constraint = getConstraintTypeFromMappedType(declaredType);
+                    const extendedConstraint = constraint.flags & TypeFlags.TypeParameter ? getConstraintOfTypeParameter(<TypeParameter>constraint) : constraint;
+                    type.modifiersType = extendedConstraint.flags & TypeFlags.Index ? instantiateType((<IndexType>extendedConstraint).type, type.mapper || identityMapper) : emptyObjectType;
+                }
             }
             return type.modifiersType;
         }
@@ -7224,6 +7245,25 @@ namespace ts {
                 }
             }
 
+            function isUnionOrIntersectionTypeWithoutNullableConstituents(type: Type): boolean {
+                if (!(type.flags & TypeFlags.UnionOrIntersection)) {
+                    return false;
+                }
+                // at this point we know that this is union or intersection type possibly with nullable constituents.
+                // check if we still will have compound type if we ignore nullable components.
+                let seenNonNullable = false;
+                for (const t of (<UnionOrIntersectionType>type).types) {
+                    if (t.flags & TypeFlags.Nullable) {
+                        continue;
+                    }
+                    if (seenNonNullable) {
+                        return true;
+                    }
+                    seenNonNullable = true;
+                }
+                return false;
+            }
+
             /**
              * Compare two types and return
              * * Ternary.True if they are related with no assumptions,
@@ -7258,7 +7298,7 @@ namespace ts {
                     // and intersection types are further deconstructed on the target side, we don't want to
                     // make the check again (as it might fail for a partial target type). Therefore we obtain
                     // the regular source type and proceed with that.
-                    if (target.flags & TypeFlags.UnionOrIntersection) {
+                    if (isUnionOrIntersectionTypeWithoutNullableConstituents(target)) {
                         source = getRegularTypeOfObjectLiteral(source);
                     }
                 }
@@ -11334,13 +11374,7 @@ namespace ts {
         }
 
         function checkSpreadExpression(node: SpreadElement, contextualMapper?: TypeMapper): Type {
-            // It is usually not safe to call checkExpressionCached if we can be contextually typing.
-            // You can tell that we are contextually typing because of the contextualMapper parameter.
-            // While it is true that a spread element can have a contextual type, it does not do anything
-            // with this type. It is neither affected by it, nor does it propagate it to its operand.
-            // So the fact that contextualMapper is passed is not important, because the operand of a spread
-            // element is not contextually typed.
-            const arrayOrIterableType = checkExpressionCached(node.expression, contextualMapper);
+            const arrayOrIterableType = checkExpression(node.expression, contextualMapper);
             return checkIteratedTypeOrElementType(arrayOrIterableType, node.expression, /*allowStringInput*/ false);
         }
 
@@ -11630,8 +11664,11 @@ namespace ts {
                 if (propertiesArray.length > 0) {
                     spread = getSpreadType(spread, createObjectLiteralType(), /*isFromObjectLiteral*/ true);
                 }
-                spread.flags |= propagatedFlags;
-                spread.symbol = node.symbol;
+                if (spread.flags & TypeFlags.Object) {
+                    // only set the symbol and flags if this is a (fresh) object type
+                    spread.flags |= propagatedFlags;
+                    spread.symbol = node.symbol;
+                }
                 return spread;
             }
 
@@ -16573,6 +16610,10 @@ namespace ts {
             }
         }
 
+        function getParameterTypeNodeForDecoratorCheck(node: ParameterDeclaration): TypeNode {
+            return node.dotDotDotToken ? getRestParameterElementType(node.type) : node.type;
+        }
+
         /** Check the decorators of a node */
         function checkDecorators(node: Node): void {
             if (!node.decorators) {
@@ -16604,7 +16645,7 @@ namespace ts {
                         const constructor = getFirstConstructorWithBody(<ClassDeclaration>node);
                         if (constructor) {
                             for (const parameter of constructor.parameters) {
-                                markTypeNodeAsReferenced(parameter.type);
+                                markTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(parameter));
                             }
                         }
                         break;
@@ -16613,15 +16654,17 @@ namespace ts {
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                         for (const parameter of (<FunctionLikeDeclaration>node).parameters) {
-                            markTypeNodeAsReferenced(parameter.type);
+                            markTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(parameter));
                         }
 
                         markTypeNodeAsReferenced((<FunctionLikeDeclaration>node).type);
                         break;
 
                     case SyntaxKind.PropertyDeclaration:
+                        markTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(<ParameterDeclaration>node));
+                        break;
                     case SyntaxKind.Parameter:
-                        markTypeNodeAsReferenced((<PropertyDeclaration | ParameterDeclaration>node).type);
+                        markTypeNodeAsReferenced((<PropertyDeclaration>node).type);
                         break;
                 }
             }
@@ -18092,7 +18135,7 @@ namespace ts {
 
             const baseTypeNode = getClassExtendsHeritageClauseElement(node);
             if (baseTypeNode) {
-                if (languageVersion < ScriptTarget.ES2015) {
+                if (languageVersion < ScriptTarget.ES2015 && !isInAmbientContext(node)) {
                     checkExternalEmitHelpers(baseTypeNode.parent, ExternalEmitHelpers.Extends);
                 }
 

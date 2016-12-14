@@ -30,6 +30,7 @@ goTo.marker('1');
 verify.completionListContains("constructor");
 verify.completionListContains("param");
 verify.completionListContains("type");
+verify.completionListContains("method");
 
 goTo.marker('2');
 verify.completionListContains("constructor");
