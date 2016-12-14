@@ -592,9 +592,8 @@ namespace ts {
                             else {
                                 declarations.push(functionDeclaration);
                             }
-
-                            forEachChild(node, visit);
                         }
+                        forEachChild(node, visit);
                         break;
 
                     case SyntaxKind.ClassDeclaration:
