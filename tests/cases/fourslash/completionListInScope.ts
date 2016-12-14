@@ -61,44 +61,44 @@
 
 
 goTo.marker("valueReference");
-verify.memberListContains("localVariable");
-verify.memberListContains("exportedVaribale");
+verify.completionListContains("localVariable");
+verify.completionListContains("exportedVaribale");
 
-verify.memberListContains("localFunction");
-verify.memberListContains("exportedFunction");
+verify.completionListContains("localFunction");
+verify.completionListContains("exportedFunction");
 
-verify.memberListContains("localClass");
-verify.memberListContains("exportedClass");
+verify.completionListContains("localClass");
+verify.completionListContains("exportedClass");
 
-verify.memberListContains("localModule");
-verify.memberListContains("exportedModule");
+verify.completionListContains("localModule");
+verify.completionListContains("exportedModule");
 
-verify.memberListContains("exportedVaribale2");
-verify.memberListContains("exportedFunction2");
-verify.memberListContains("exportedClass2");
-verify.memberListContains("exportedModule2");
+verify.completionListContains("exportedVaribale2");
+verify.completionListContains("exportedFunction2");
+verify.completionListContains("exportedClass2");
+verify.completionListContains("exportedModule2");
 
 goTo.marker("typeReference");
-verify.memberListContains("localInterface");
-verify.memberListContains("exportedInterface");
+verify.completionListContains("localInterface");
+verify.completionListContains("exportedInterface");
 
-verify.memberListContains("localClass");
-verify.memberListContains("exportedClass");
+verify.completionListContains("localClass");
+verify.completionListContains("exportedClass");
 
-verify.memberListContains("localModule");
-verify.memberListContains("exportedModule");
+verify.completionListContains("localModule");
+verify.completionListContains("exportedModule");
 
-verify.memberListContains("exportedClass2");
-verify.memberListContains("exportedModule2");
+verify.completionListContains("exportedClass2");
+verify.completionListContains("exportedModule2");
 
 goTo.marker("insideMethod");
-verify.not.memberListContains("property");
-verify.not.memberListContains("testMethod");
-verify.not.memberListContains("staticMethod");
+verify.not.completionListContains("property");
+verify.not.completionListContains("testMethod");
+verify.not.completionListContains("staticMethod");
 
-verify.memberListContains("globalVar");
-verify.memberListContains("globalFunction");
+verify.completionListContains("globalVar");
+verify.completionListContains("globalFunction");
 
-verify.memberListContains("param");
-verify.memberListContains("localVar");
-verify.memberListContains("localFunction");
+verify.completionListContains("param");
+verify.completionListContains("localVar");
+verify.completionListContains("localFunction");
