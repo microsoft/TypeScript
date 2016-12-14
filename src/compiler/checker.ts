@@ -3245,7 +3245,9 @@ namespace ts {
 
             // Use type from type annotation if one is present
             if (declaration.type) {
-                return addOptionality(getTypeFromTypeNode(declaration.type), /*optional*/ declaration.questionToken && includeOptionality);
+                const isOptional = declaration.questionToken ||
+                    (declaration.initializer && declaration.kind === SyntaxKind.Parameter && !(getModifierFlags(declaration) & ModifierFlags.ParameterPropertyModifier));
+                return addOptionality(getTypeFromTypeNode(declaration.type), /*optional*/ isOptional && includeOptionality);
             }
 
             if ((compilerOptions.noImplicitAny || declaration.flags & NodeFlags.JavaScriptFile) &&
@@ -9042,8 +9044,8 @@ namespace ts {
             switch (source.kind) {
                 case SyntaxKind.Identifier:
                     return target.kind === SyntaxKind.Identifier && getResolvedSymbol(<Identifier>source) === getResolvedSymbol(<Identifier>target) ||
-                        (target.kind === SyntaxKind.VariableDeclaration || target.kind === SyntaxKind.BindingElement) &&
-                        getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(<Identifier>source)) === getSymbolOfNode(target);
+                    (target.kind === SyntaxKind.VariableDeclaration || target.kind === SyntaxKind.BindingElement) && getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(<Identifier>source)) === getSymbolOfNode(target) ||
+                    target.kind === SyntaxKind.Parameter && getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(source as Identifier)) === getSymbolOfNode(target);
                 case SyntaxKind.ThisKeyword:
                     return target.kind === SyntaxKind.ThisKeyword;
                 case SyntaxKind.PropertyAccessExpression:
@@ -9314,7 +9316,7 @@ namespace ts {
             return links.resolvedType || getTypeOfExpression(node);
         }
 
-        function getInitialTypeOfVariableDeclaration(node: VariableDeclaration) {
+        function getInitialTypeOfVariableDeclaration(node: VariableDeclaration | ParameterDeclaration) {
             if (node.initializer) {
                 return getTypeOfInitializer(node.initializer);
             }
@@ -9327,15 +9329,15 @@ namespace ts {
             return unknownType;
         }
 
-        function getInitialType(node: VariableDeclaration | BindingElement) {
-            return node.kind === SyntaxKind.VariableDeclaration ?
-                getInitialTypeOfVariableDeclaration(<VariableDeclaration>node) :
+        function getInitialType(node: VariableDeclaration | BindingElement | ParameterDeclaration) {
+            return node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.Parameter ?
+                getInitialTypeOfVariableDeclaration(<VariableDeclaration | ParameterDeclaration>node) :
                 getInitialTypeOfBindingElement(<BindingElement>node);
         }
 
         function getInitialOrAssignedType(node: VariableDeclaration | BindingElement | Expression) {
-            return node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement ?
-                getInitialType(<VariableDeclaration | BindingElement>node) :
+            return node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement || node.kind === SyntaxKind.Parameter ?
+                getInitialType(<VariableDeclaration | BindingElement | ParameterDeclaration>node) :
                 getAssignedType(<Expression>node);
         }
 

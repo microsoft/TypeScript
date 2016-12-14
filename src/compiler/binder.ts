@@ -810,7 +810,7 @@ namespace ts {
             };
         }
 
-        function createFlowAssignment(antecedent: FlowNode, node: Expression | VariableDeclaration | BindingElement): FlowNode {
+        function createFlowAssignment(antecedent: FlowNode, node: Expression | VariableDeclaration | BindingElement | ParameterDeclaration): FlowNode {
             setFlowNodeReferenced(antecedent);
             return <FlowAssignment>{
                 flags: FlowFlags.Assignment,
@@ -2311,6 +2311,9 @@ namespace ts {
             }
             else {
                 declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes);
+                if (node.initializer) {
+                    currentFlow = createFlowAssignment(currentFlow, node);
+                }
             }
 
             // If this is a property-parameter, then also declare the property symbol into the

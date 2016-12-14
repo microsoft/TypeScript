@@ -319,12 +319,12 @@ namespace ts {
             }
         }
 
-        function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, type: TypeNode, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic) {
+            function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, type: TypeNode, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic, addUndefined?: boolean) {
             writer.getSymbolAccessibilityDiagnostic = getSymbolAccessibilityDiagnostic;
             write(": ");
             if (type) {
                 // Write the type
-                emitType(type);
+                emitType(type, addUndefined);
             }
             else {
                 errorNameNode = declaration.name;
@@ -384,7 +384,7 @@ namespace ts {
             emitType(type);
         }
 
-        function emitType(type: TypeNode | Identifier | QualifiedName) {
+        function emitType(type: TypeNode | Identifier | QualifiedName, addUndefined?: boolean) {
             switch (type.kind) {
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.StringKeyword:
@@ -1593,7 +1593,7 @@ namespace ts {
                 emitTypeOfVariableDeclarationFromTypeLiteral(node);
             }
             else if (!hasModifier(node.parent, ModifierFlags.Private)) {
-                writeTypeOfDeclaration(node, node.type, getParameterDeclarationTypeVisibilityError);
+                writeTypeOfDeclaration(node, node.type, getParameterDeclarationTypeVisibilityError, !!node.initializer && !(getModifierFlags(node) & ModifierFlags.ParameterPropertyModifier));
             }
 
             function getParameterDeclarationTypeVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {
