@@ -23,6 +23,7 @@ namespace ts.JsDoc {
         "lends",
         "link",
         "memberOf",
+        "method",
         "name",
         "namespace",
         "param",
