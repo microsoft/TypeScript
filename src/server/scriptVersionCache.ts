@@ -398,7 +398,7 @@ namespace ts.server {
         index: LineIndex;
         changesSincePreviousVersion: TextChange[] = [];
 
-        constructor(public version: number, public cache: ScriptVersionCache) {
+        constructor(readonly version: number, readonly cache: ScriptVersionCache) {
         }
 
         getText(rangeStart: number, rangeEnd: number) {
@@ -438,7 +438,7 @@ namespace ts.server {
             }
         }
         getChangeRange(oldSnapshot: ts.IScriptSnapshot): ts.TextChangeRange {
-            if (oldSnapshot instanceof LineIndexSnapshot) {
+            if (oldSnapshot instanceof LineIndexSnapshot && this.cache === oldSnapshot.cache) {
                 return this.getTextChangeRangeSinceVersion(oldSnapshot.version);
             }
         }
