@@ -21,17 +21,10 @@ function foo3(x = "string", b: number) {
     x.length; // ok, should be narrowed to string
 }
 
-function foo4(x: string | undefined, b: number) {
-   x.length; // error, Object is possibly 'undefined'
-}
-
 foo1(undefined, 1);
 foo2(undefined, 1);
 foo3(undefined, 1);
-foo4(undefined, 1);
 
 
-// all four functions should have `x: string| undefined` in their type
 // .d.ts should have `T | undefined` for all of them
-// foo2 to have x be initialized on the first line
 // need to remove special-case code to allow calling foo1(undefined) for x: string = "string"
