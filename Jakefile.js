@@ -353,19 +353,16 @@ function prependFile(prefixFile, destinationFile) {
 // concatenate a list of sourceFiles to a destinationFile
 function concatenateFiles(destinationFile, sourceFiles) {
     var temp = "temptemp";
-    // Copy the first file to temp
-    if (!fs.existsSync(sourceFiles[0])) {
-        fail(sourceFiles[0] + " does not exist!");
-    }
-    jake.cpR(sourceFiles[0], temp, { silent: true });
     // append all files in sequence
-    for (var i = 1; i < sourceFiles.length; i++) {
+    var text = "";
+    for (var i = 0; i < sourceFiles.length; i++) {
         if (!fs.existsSync(sourceFiles[i])) {
             fail(sourceFiles[i] + " does not exist!");
         }
-        fs.appendFileSync(temp, "\n\n");
-        fs.appendFileSync(temp, fs.readFileSync(sourceFiles[i]));
+        if (i > 0) { text += "\n\n"; }
+        text += fs.readFileSync(sourceFiles[i]).toString().replace(/\r?\n/g, "\n");
     }
+    fs.writeFileSync(temp, text);
     // Move the file to the final destination
     fs.renameSync(temp, destinationFile);
 }
