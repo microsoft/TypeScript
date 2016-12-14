@@ -2353,7 +2353,6 @@ namespace ts {
         getTypeAtLocation(node: Node): Type;
         getTypeFromTypeReference(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference): Type;
         signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): string;
-        indexSignatureToString(info: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node): string;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
         createSymbol(flags: SymbolFlags, name: string): Symbol;

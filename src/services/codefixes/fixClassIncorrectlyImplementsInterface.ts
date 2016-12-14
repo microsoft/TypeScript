@@ -29,7 +29,7 @@ namespace ts.codefix {
             // Note that this is ultimately derived from a map indexed by symbol names,
             // so duplicates cannot occur.
             const implementedTypeSymbols = checker.getPropertiesOfType(implementedType);
-            const nonPrivateMembers = implementedTypeSymbols.filter(symbolRefersToNonPrivateMember);
+            const nonPrivateMembers = implementedTypeSymbols.filter(symbol => !(getModifierFlags(symbol.valueDeclaration) & ModifierFlags.Private));
 
             let insertion = getMissingIndexSignatureInsertion(implementedType, IndexKind.Number, classDecl, hasNumericIndexSignature);
             insertion += getMissingIndexSignatureInsertion(implementedType, IndexKind.String, classDecl, hasStringIndexSignature);
@@ -47,16 +47,15 @@ namespace ts.codefix {
             if (!hasIndexSigOfKind) {
                 const IndexInfoOfKind = checker.getIndexInfoOfType(type, kind);
                 if (IndexInfoOfKind) {
-                    return checker.indexSignatureToString(IndexInfoOfKind, kind, enclosingDeclaration);
+                    const writer = getSingleLineStringWriter();
+                    checker.getSymbolDisplayBuilder().buildIndexSignatureDisplay(IndexInfoOfKind, writer, kind, enclosingDeclaration);
+                    const result = writer.string();
+                    releaseStringWriter(writer);
+
+                    return result;
                 }
             }
             return "";
-        }
-
-        function symbolRefersToNonPrivateMember(symbol: Symbol): boolean {
-            const decls = symbol.getDeclarations();
-            Debug.assert(!!(decls && decls.length > 0));
-            return !(getModifierFlags(decls[0]) & ModifierFlags.Private);
         }
 
         function pushAction(result: CodeAction[], insertion: string, description: string): void {

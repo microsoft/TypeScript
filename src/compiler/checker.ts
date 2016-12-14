@@ -96,7 +96,6 @@ namespace ts {
             getTypeAtLocation: getTypeOfNode,
             getPropertySymbolOfDestructuringAssignment,
             signatureToString,
-            indexSignatureToString,
             typeToString,
             getSymbolDisplayBuilder,
             symbolToString,
@@ -2031,15 +2030,6 @@ namespace ts {
         function signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): string {
             const writer = getSingleLineStringWriter();
             getSymbolDisplayBuilder().buildSignatureDisplay(signature, writer, enclosingDeclaration, flags, kind);
-            const result = writer.string();
-            releaseStringWriter(writer);
-
-            return result;
-        }
-
-        function indexSignatureToString(info: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node): string {
-            const writer = getSingleLineStringWriter();
-            getSymbolDisplayBuilder().buildIndexSignatureDisplay(info, writer, kind, enclosingDeclaration);
             const result = writer.string();
             releaseStringWriter(writer);
 
