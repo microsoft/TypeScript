@@ -1027,8 +1027,8 @@ namespace ts {
             // Return the result if we have an immediate super() call on the last statement,
             // but only if the constructor itself doesn't use 'this' elsewhere.
             if (superCallExpression
-            && statementOffset === ctorStatements.length - 1
-            && !(ctor.transformFlags & (TransformFlags.ContainsLexicalThis | TransformFlags.ContainsCapturedLexicalThis))) {
+                && statementOffset === ctorStatements.length - 1
+                && !(ctor.transformFlags & (TransformFlags.ContainsLexicalThis | TransformFlags.ContainsCapturedLexicalThis))) {
                 const returnStatement = createReturn(superCallExpression);
 
                 if (superCallExpression.kind !== SyntaxKind.BinaryExpression
