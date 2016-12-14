@@ -3,7 +3,8 @@
 namespace ts.server {
     export const ActionSet: ActionSet = "action::set";
     export const ActionInvalidate: ActionInvalidate = "action::invalidate";
-    export const EventInstall: EventInstall = "event::install";
+    export const EventBeginInstallTypes: EventBeginInstallTypes = "event::beginInstallTypes";
+    export const EventEndInstallTypes: EventEndInstallTypes = "event::endInstallTypes";
 
     export namespace Arguments {
         export const GlobalCacheLocation = "--globalTypingsCacheLocation";

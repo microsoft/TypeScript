@@ -1,0 +1,31 @@
+tests/cases/compiler/nestedFreshLiteral.ts(12,21): error TS2322: Type '{ nested: { prop: { colour: string; }; }; }' is not assignable to type 'NestedCSSProps'.
+  Types of property 'nested' are incompatible.
+    Type '{ prop: { colour: string; }; }' is not assignable to type 'NestedSelector | undefined'.
+      Type '{ prop: { colour: string; }; }' is not assignable to type 'NestedSelector'.
+        Types of property 'prop' are incompatible.
+          Type '{ colour: string; }' is not assignable to type 'CSSProps'.
+            Object literal may only specify known properties, and 'colour' does not exist in type 'CSSProps'.
+
+
+==== tests/cases/compiler/nestedFreshLiteral.ts (1 errors) ====
+    interface CSSProps  {
+      color?: string
+    }
+    interface NestedCSSProps {
+      nested?: NestedSelector
+    }
+    interface NestedSelector  {
+      prop: CSSProps;
+    }
+    
+    let stylen: NestedCSSProps = {
+      nested: { prop: { colour: 'red' } }
+                        ~~~~~~~~~~~~~
+!!! error TS2322: Type '{ nested: { prop: { colour: string; }; }; }' is not assignable to type 'NestedCSSProps'.
+!!! error TS2322:   Types of property 'nested' are incompatible.
+!!! error TS2322:     Type '{ prop: { colour: string; }; }' is not assignable to type 'NestedSelector | undefined'.
+!!! error TS2322:       Type '{ prop: { colour: string; }; }' is not assignable to type 'NestedSelector'.
+!!! error TS2322:         Types of property 'prop' are incompatible.
+!!! error TS2322:           Type '{ colour: string; }' is not assignable to type 'CSSProps'.
+!!! error TS2322:             Object literal may only specify known properties, and 'colour' does not exist in type 'CSSProps'.
+    }

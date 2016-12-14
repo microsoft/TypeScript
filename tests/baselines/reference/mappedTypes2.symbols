@@ -151,190 +151,203 @@ declare function proxify<T>(obj: T): Proxify<T>;
 >Proxify : Symbol(Proxify, Decl(mappedTypes2.ts, 15, 1))
 >T : Symbol(T, Decl(mappedTypes2.ts, 29, 25))
 
+interface Point {
+>Point : Symbol(Point, Decl(mappedTypes2.ts, 29, 48))
+
+    x: number;
+>x : Symbol(Point.x, Decl(mappedTypes2.ts, 31, 17))
+
+    y: number;
+>y : Symbol(Point.y, Decl(mappedTypes2.ts, 32, 14))
+}
+
 interface Shape {
->Shape : Symbol(Shape, Decl(mappedTypes2.ts, 29, 48))
+>Shape : Symbol(Shape, Decl(mappedTypes2.ts, 34, 1))
 
     name: string;
->name : Symbol(Shape.name, Decl(mappedTypes2.ts, 31, 17))
+>name : Symbol(Shape.name, Decl(mappedTypes2.ts, 36, 17))
 
     width: number;
->width : Symbol(Shape.width, Decl(mappedTypes2.ts, 32, 17))
+>width : Symbol(Shape.width, Decl(mappedTypes2.ts, 37, 17))
 
     height: number;
->height : Symbol(Shape.height, Decl(mappedTypes2.ts, 33, 18))
+>height : Symbol(Shape.height, Decl(mappedTypes2.ts, 38, 18))
 
-    visible: boolean;
->visible : Symbol(Shape.visible, Decl(mappedTypes2.ts, 34, 19))
+    location: Point;
+>location : Symbol(Shape.location, Decl(mappedTypes2.ts, 39, 19))
+>Point : Symbol(Point, Decl(mappedTypes2.ts, 29, 48))
 }
 
 interface PartialShape {
->PartialShape : Symbol(PartialShape, Decl(mappedTypes2.ts, 36, 1))
+>PartialShape : Symbol(PartialShape, Decl(mappedTypes2.ts, 41, 1))
 
     name?: string;
->name : Symbol(PartialShape.name, Decl(mappedTypes2.ts, 38, 24))
+>name : Symbol(PartialShape.name, Decl(mappedTypes2.ts, 43, 24))
 
     width?: number;
->width : Symbol(PartialShape.width, Decl(mappedTypes2.ts, 39, 18))
+>width : Symbol(PartialShape.width, Decl(mappedTypes2.ts, 44, 18))
 
     height?: number;
->height : Symbol(PartialShape.height, Decl(mappedTypes2.ts, 40, 19))
+>height : Symbol(PartialShape.height, Decl(mappedTypes2.ts, 45, 19))
 
-    visible?: boolean;
->visible : Symbol(PartialShape.visible, Decl(mappedTypes2.ts, 41, 20))
+    location?: Point;
+>location : Symbol(PartialShape.location, Decl(mappedTypes2.ts, 46, 20))
+>Point : Symbol(Point, Decl(mappedTypes2.ts, 29, 48))
 }
 
 interface ReadonlyShape {
->ReadonlyShape : Symbol(ReadonlyShape, Decl(mappedTypes2.ts, 43, 1))
+>ReadonlyShape : Symbol(ReadonlyShape, Decl(mappedTypes2.ts, 48, 1))
 
     readonly name: string;
->name : Symbol(ReadonlyShape.name, Decl(mappedTypes2.ts, 45, 25))
+>name : Symbol(ReadonlyShape.name, Decl(mappedTypes2.ts, 50, 25))
 
     readonly width: number;
->width : Symbol(ReadonlyShape.width, Decl(mappedTypes2.ts, 46, 26))
+>width : Symbol(ReadonlyShape.width, Decl(mappedTypes2.ts, 51, 26))
 
     readonly height: number;
->height : Symbol(ReadonlyShape.height, Decl(mappedTypes2.ts, 47, 27))
+>height : Symbol(ReadonlyShape.height, Decl(mappedTypes2.ts, 52, 27))
 
-    readonly visible: boolean;
->visible : Symbol(ReadonlyShape.visible, Decl(mappedTypes2.ts, 48, 28))
+    readonly location: Point;
+>location : Symbol(ReadonlyShape.location, Decl(mappedTypes2.ts, 53, 28))
+>Point : Symbol(Point, Decl(mappedTypes2.ts, 29, 48))
 }
 
 function f0(s1: Shape, s2: Shape) {
->f0 : Symbol(f0, Decl(mappedTypes2.ts, 50, 1))
->s1 : Symbol(s1, Decl(mappedTypes2.ts, 52, 12))
->Shape : Symbol(Shape, Decl(mappedTypes2.ts, 29, 48))
->s2 : Symbol(s2, Decl(mappedTypes2.ts, 52, 22))
->Shape : Symbol(Shape, Decl(mappedTypes2.ts, 29, 48))
+>f0 : Symbol(f0, Decl(mappedTypes2.ts, 55, 1))
+>s1 : Symbol(s1, Decl(mappedTypes2.ts, 57, 12))
+>Shape : Symbol(Shape, Decl(mappedTypes2.ts, 34, 1))
+>s2 : Symbol(s2, Decl(mappedTypes2.ts, 57, 22))
+>Shape : Symbol(Shape, Decl(mappedTypes2.ts, 34, 1))
 
     assign(s1, { name: "circle" });
 >assign : Symbol(assign, Decl(mappedTypes2.ts, 23, 2))
->s1 : Symbol(s1, Decl(mappedTypes2.ts, 52, 12))
->name : Symbol(name, Decl(mappedTypes2.ts, 53, 16))
+>s1 : Symbol(s1, Decl(mappedTypes2.ts, 57, 12))
+>name : Symbol(name, Decl(mappedTypes2.ts, 58, 16))
 
     assign(s2, { width: 10, height: 20 });
 >assign : Symbol(assign, Decl(mappedTypes2.ts, 23, 2))
->s2 : Symbol(s2, Decl(mappedTypes2.ts, 52, 22))
->width : Symbol(width, Decl(mappedTypes2.ts, 54, 16))
->height : Symbol(height, Decl(mappedTypes2.ts, 54, 27))
+>s2 : Symbol(s2, Decl(mappedTypes2.ts, 57, 22))
+>width : Symbol(width, Decl(mappedTypes2.ts, 59, 16))
+>height : Symbol(height, Decl(mappedTypes2.ts, 59, 27))
 }
 
 function f1(shape: Shape) {
->f1 : Symbol(f1, Decl(mappedTypes2.ts, 55, 1))
->shape : Symbol(shape, Decl(mappedTypes2.ts, 57, 12))
->Shape : Symbol(Shape, Decl(mappedTypes2.ts, 29, 48))
+>f1 : Symbol(f1, Decl(mappedTypes2.ts, 60, 1))
+>shape : Symbol(shape, Decl(mappedTypes2.ts, 62, 12))
+>Shape : Symbol(Shape, Decl(mappedTypes2.ts, 34, 1))
 
     var frozen: ReadonlyShape;
->frozen : Symbol(frozen, Decl(mappedTypes2.ts, 58, 7), Decl(mappedTypes2.ts, 59, 7), Decl(mappedTypes2.ts, 60, 7))
->ReadonlyShape : Symbol(ReadonlyShape, Decl(mappedTypes2.ts, 43, 1))
+>frozen : Symbol(frozen, Decl(mappedTypes2.ts, 63, 7), Decl(mappedTypes2.ts, 64, 7), Decl(mappedTypes2.ts, 65, 7))
+>ReadonlyShape : Symbol(ReadonlyShape, Decl(mappedTypes2.ts, 48, 1))
 
     var frozen: Readonly<Shape>;
->frozen : Symbol(frozen, Decl(mappedTypes2.ts, 58, 7), Decl(mappedTypes2.ts, 59, 7), Decl(mappedTypes2.ts, 60, 7))
+>frozen : Symbol(frozen, Decl(mappedTypes2.ts, 63, 7), Decl(mappedTypes2.ts, 64, 7), Decl(mappedTypes2.ts, 65, 7))
 >Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
->Shape : Symbol(Shape, Decl(mappedTypes2.ts, 29, 48))
+>Shape : Symbol(Shape, Decl(mappedTypes2.ts, 34, 1))
 
     var frozen = freeze(shape);
->frozen : Symbol(frozen, Decl(mappedTypes2.ts, 58, 7), Decl(mappedTypes2.ts, 59, 7), Decl(mappedTypes2.ts, 60, 7))
+>frozen : Symbol(frozen, Decl(mappedTypes2.ts, 63, 7), Decl(mappedTypes2.ts, 64, 7), Decl(mappedTypes2.ts, 65, 7))
 >freeze : Symbol(freeze, Decl(mappedTypes2.ts, 25, 60))
->shape : Symbol(shape, Decl(mappedTypes2.ts, 57, 12))
+>shape : Symbol(shape, Decl(mappedTypes2.ts, 62, 12))
 }
 
 function f2(shape: Shape) {
->f2 : Symbol(f2, Decl(mappedTypes2.ts, 61, 1))
->shape : Symbol(shape, Decl(mappedTypes2.ts, 63, 12))
->Shape : Symbol(Shape, Decl(mappedTypes2.ts, 29, 48))
+>f2 : Symbol(f2, Decl(mappedTypes2.ts, 66, 1))
+>shape : Symbol(shape, Decl(mappedTypes2.ts, 68, 12))
+>Shape : Symbol(Shape, Decl(mappedTypes2.ts, 34, 1))
 
     var partial: PartialShape;
->partial : Symbol(partial, Decl(mappedTypes2.ts, 64, 7), Decl(mappedTypes2.ts, 65, 7), Decl(mappedTypes2.ts, 66, 7))
->PartialShape : Symbol(PartialShape, Decl(mappedTypes2.ts, 36, 1))
+>partial : Symbol(partial, Decl(mappedTypes2.ts, 69, 7), Decl(mappedTypes2.ts, 70, 7), Decl(mappedTypes2.ts, 71, 7))
+>PartialShape : Symbol(PartialShape, Decl(mappedTypes2.ts, 41, 1))
 
     var partial: Partial<Shape>;
->partial : Symbol(partial, Decl(mappedTypes2.ts, 64, 7), Decl(mappedTypes2.ts, 65, 7), Decl(mappedTypes2.ts, 66, 7))
+>partial : Symbol(partial, Decl(mappedTypes2.ts, 69, 7), Decl(mappedTypes2.ts, 70, 7), Decl(mappedTypes2.ts, 71, 7))
 >Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
->Shape : Symbol(Shape, Decl(mappedTypes2.ts, 29, 48))
+>Shape : Symbol(Shape, Decl(mappedTypes2.ts, 34, 1))
 
     var partial: Partial<Shape> = {};
->partial : Symbol(partial, Decl(mappedTypes2.ts, 64, 7), Decl(mappedTypes2.ts, 65, 7), Decl(mappedTypes2.ts, 66, 7))
+>partial : Symbol(partial, Decl(mappedTypes2.ts, 69, 7), Decl(mappedTypes2.ts, 70, 7), Decl(mappedTypes2.ts, 71, 7))
 >Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
->Shape : Symbol(Shape, Decl(mappedTypes2.ts, 29, 48))
+>Shape : Symbol(Shape, Decl(mappedTypes2.ts, 34, 1))
 }
 
 function f3(shape: Shape) {
->f3 : Symbol(f3, Decl(mappedTypes2.ts, 67, 1))
->shape : Symbol(shape, Decl(mappedTypes2.ts, 69, 12))
->Shape : Symbol(Shape, Decl(mappedTypes2.ts, 29, 48))
+>f3 : Symbol(f3, Decl(mappedTypes2.ts, 72, 1))
+>shape : Symbol(shape, Decl(mappedTypes2.ts, 74, 12))
+>Shape : Symbol(Shape, Decl(mappedTypes2.ts, 34, 1))
 
-    const x = pick(shape, "name", "visible");  // { name: string, visible: boolean }
->x : Symbol(x, Decl(mappedTypes2.ts, 70, 9))
+    const x = pick(shape, "name", "location");  // { name: string, location: Point }
+>x : Symbol(x, Decl(mappedTypes2.ts, 75, 9))
 >pick : Symbol(pick, Decl(mappedTypes2.ts, 26, 48))
->shape : Symbol(shape, Decl(mappedTypes2.ts, 69, 12))
+>shape : Symbol(shape, Decl(mappedTypes2.ts, 74, 12))
 }
 
 function f4() {
->f4 : Symbol(f4, Decl(mappedTypes2.ts, 71, 1))
+>f4 : Symbol(f4, Decl(mappedTypes2.ts, 76, 1))
 
     const rec = { foo: "hello", bar: "world", baz: "bye" };
->rec : Symbol(rec, Decl(mappedTypes2.ts, 74, 9))
->foo : Symbol(foo, Decl(mappedTypes2.ts, 74, 17))
->bar : Symbol(bar, Decl(mappedTypes2.ts, 74, 31))
->baz : Symbol(baz, Decl(mappedTypes2.ts, 74, 45))
+>rec : Symbol(rec, Decl(mappedTypes2.ts, 79, 9))
+>foo : Symbol(foo, Decl(mappedTypes2.ts, 79, 17))
+>bar : Symbol(bar, Decl(mappedTypes2.ts, 79, 31))
+>baz : Symbol(baz, Decl(mappedTypes2.ts, 79, 45))
 
     const lengths = mapObject(rec, s => s.length);  // { foo: number, bar: number, baz: number }
->lengths : Symbol(lengths, Decl(mappedTypes2.ts, 75, 9))
+>lengths : Symbol(lengths, Decl(mappedTypes2.ts, 80, 9))
 >mapObject : Symbol(mapObject, Decl(mappedTypes2.ts, 27, 78))
->rec : Symbol(rec, Decl(mappedTypes2.ts, 74, 9))
->s : Symbol(s, Decl(mappedTypes2.ts, 75, 34))
+>rec : Symbol(rec, Decl(mappedTypes2.ts, 79, 9))
+>s : Symbol(s, Decl(mappedTypes2.ts, 80, 34))
 >s.length : Symbol(String.length, Decl(lib.d.ts, --, --))
->s : Symbol(s, Decl(mappedTypes2.ts, 75, 34))
+>s : Symbol(s, Decl(mappedTypes2.ts, 80, 34))
 >length : Symbol(String.length, Decl(lib.d.ts, --, --))
 }
 
 function f5(shape: Shape) {
->f5 : Symbol(f5, Decl(mappedTypes2.ts, 76, 1))
->shape : Symbol(shape, Decl(mappedTypes2.ts, 78, 12))
->Shape : Symbol(Shape, Decl(mappedTypes2.ts, 29, 48))
+>f5 : Symbol(f5, Decl(mappedTypes2.ts, 81, 1))
+>shape : Symbol(shape, Decl(mappedTypes2.ts, 83, 12))
+>Shape : Symbol(Shape, Decl(mappedTypes2.ts, 34, 1))
 
     const p = proxify(shape);
->p : Symbol(p, Decl(mappedTypes2.ts, 79, 9))
+>p : Symbol(p, Decl(mappedTypes2.ts, 84, 9))
 >proxify : Symbol(proxify, Decl(mappedTypes2.ts, 28, 100))
->shape : Symbol(shape, Decl(mappedTypes2.ts, 78, 12))
+>shape : Symbol(shape, Decl(mappedTypes2.ts, 83, 12))
 
     let name = p.name.get();
->name : Symbol(name, Decl(mappedTypes2.ts, 80, 7))
+>name : Symbol(name, Decl(mappedTypes2.ts, 85, 7))
 >p.name.get : Symbol(get, Decl(mappedTypes2.ts, 12, 17))
 >p.name : Symbol(name)
->p : Symbol(p, Decl(mappedTypes2.ts, 79, 9))
+>p : Symbol(p, Decl(mappedTypes2.ts, 84, 9))
 >name : Symbol(name)
 >get : Symbol(get, Decl(mappedTypes2.ts, 12, 17))
 
-    p.visible.set(false);
->p.visible.set : Symbol(set, Decl(mappedTypes2.ts, 13, 13))
->p.visible : Symbol(visible)
->p : Symbol(p, Decl(mappedTypes2.ts, 79, 9))
->visible : Symbol(visible)
+    p.width.set(42);
+>p.width.set : Symbol(set, Decl(mappedTypes2.ts, 13, 13))
+>p.width : Symbol(width)
+>p : Symbol(p, Decl(mappedTypes2.ts, 84, 9))
+>width : Symbol(width)
 >set : Symbol(set, Decl(mappedTypes2.ts, 13, 13))
 }
 
 function f6(shape: DeepReadonly<Shape>) {
->f6 : Symbol(f6, Decl(mappedTypes2.ts, 82, 1))
->shape : Symbol(shape, Decl(mappedTypes2.ts, 84, 12))
+>f6 : Symbol(f6, Decl(mappedTypes2.ts, 87, 1))
+>shape : Symbol(shape, Decl(mappedTypes2.ts, 89, 12))
 >DeepReadonly : Symbol(DeepReadonly, Decl(mappedTypes2.ts, 19, 1))
->Shape : Symbol(Shape, Decl(mappedTypes2.ts, 29, 48))
+>Shape : Symbol(Shape, Decl(mappedTypes2.ts, 34, 1))
 
-    let name = shape.name;  // DeepReadonly<string>
->name : Symbol(name, Decl(mappedTypes2.ts, 85, 7))
+    let name = shape.name;  // string
+>name : Symbol(name, Decl(mappedTypes2.ts, 90, 7))
 >shape.name : Symbol(name)
->shape : Symbol(shape, Decl(mappedTypes2.ts, 84, 12))
+>shape : Symbol(shape, Decl(mappedTypes2.ts, 89, 12))
 >name : Symbol(name)
 
-    let length = name.length;  // DeepReadonly<number>
->length : Symbol(length, Decl(mappedTypes2.ts, 86, 7))
->name.length : Symbol(length)
->name : Symbol(name, Decl(mappedTypes2.ts, 85, 7))
->length : Symbol(length)
+    let location = shape.location;  // DeepReadonly<Point>
+>location : Symbol(location, Decl(mappedTypes2.ts, 91, 7))
+>shape.location : Symbol(location)
+>shape : Symbol(shape, Decl(mappedTypes2.ts, 89, 12))
+>location : Symbol(location)
 
-    let toString = length.toString;  // DeepReadonly<(radix?: number) => string>
->toString : Symbol(toString, Decl(mappedTypes2.ts, 87, 7))
->length.toString : Symbol(toString)
->length : Symbol(length, Decl(mappedTypes2.ts, 86, 7))
->toString : Symbol(toString)
+    let x = location.x;  // number
+>x : Symbol(x, Decl(mappedTypes2.ts, 92, 7))
+>location.x : Symbol(x)
+>location : Symbol(location, Decl(mappedTypes2.ts, 91, 7))
+>x : Symbol(x)
 }

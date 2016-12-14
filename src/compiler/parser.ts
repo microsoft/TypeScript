@@ -2558,6 +2558,8 @@ namespace ts {
                 case SyntaxKind.OpenBraceToken:
                 case SyntaxKind.OpenBracketToken:
                 case SyntaxKind.LessThanToken:
+                case SyntaxKind.BarToken:
+                case SyntaxKind.AmpersandToken:
                 case SyntaxKind.NewKeyword:
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NumericLiteral:
@@ -2617,6 +2619,7 @@ namespace ts {
         }
 
         function parseUnionOrIntersectionType(kind: SyntaxKind, parseConstituentType: () => TypeNode, operator: SyntaxKind): TypeNode {
+            parseOptional(operator);
             let type = parseConstituentType();
             if (token() === operator) {
                 const types = createNodeArray<TypeNode>([type], type.pos);
@@ -6334,7 +6337,7 @@ namespace ts {
                                 break;
                             case SyntaxKind.AsteriskToken:
                                 const asterisk = scanner.getTokenText();
-                                if (state === JSDocState.SawAsterisk) {
+                                if (state === JSDocState.SawAsterisk || state === JSDocState.SavingComments) {
                                     // If we've already seen an asterisk, then we can no longer parse a tag on this line
                                     state = JSDocState.SavingComments;
                                     pushComment(asterisk);
@@ -6355,7 +6358,10 @@ namespace ts {
                             case SyntaxKind.WhitespaceTrivia:
                                 // only collect whitespace if we're already saving comments or have just crossed the comment indent margin
                                 const whitespace = scanner.getTokenText();
-                                if (state === JSDocState.SavingComments || margin !== undefined && indent + whitespace.length > margin) {
+                                if (state === JSDocState.SavingComments) {
+                                    comments.push(whitespace);
+                                }
+                                else if (margin !== undefined && indent + whitespace.length > margin) {
                                     comments.push(whitespace.slice(margin - indent - 1));
                                 }
                                 indent += whitespace.length;
@@ -6363,6 +6369,8 @@ namespace ts {
                             case SyntaxKind.EndOfFileToken:
                                 break;
                             default:
+                                // anything other than whitespace or asterisk at the beginning of the line starts the comment text
+                                state = JSDocState.SavingComments;
                                 pushComment(scanner.getTokenText());
                                 break;
                         }
