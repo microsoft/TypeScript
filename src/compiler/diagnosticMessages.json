@@ -3203,10 +3203,6 @@
         "category": "Message",
         "code": 90004
     },
-    "Implement interface on reference": {
-        "category": "Message",
-        "code": 90005
-    },
     "Implement interface '{0}'.": {
         "category": "Message",
         "code": 90006

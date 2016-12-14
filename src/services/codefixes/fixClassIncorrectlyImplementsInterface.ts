@@ -25,7 +25,7 @@ namespace ts.codefix {
 
         const result: CodeAction[] = [];
         for (const implementedTypeNode of implementedTypeNodes) {
-            const implementedType = checker.getTypeFromTypeReference(implementedTypeNode) as InterfaceType;
+            const implementedType = checker.getTypeFromTypeNode(implementedTypeNode) as InterfaceType;
             // Note that this is ultimately derived from a map indexed by symbol names,
             // so duplicates cannot occur.
             const implementedTypeSymbols = checker.getPropertiesOfType(implementedType);

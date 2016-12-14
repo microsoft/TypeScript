@@ -83,13 +83,10 @@ namespace ts {
             getSignaturesOfType,
             getIndexTypeOfType,
             getBaseTypes,
-            getUnionType,
-            getIntersectionType,
-            getTypeFromTypeReference,
+            getTypeFromTypeNode,
             getReturnTypeOfSignature,
             getNonNullableType,
             getSymbolsInScope,
-            createSymbol,
             getSymbolAtLocation,
             getShorthandAssignmentValueSymbol,
             getExportSpecifierLocalTargetSymbol,
@@ -19741,9 +19738,6 @@ namespace ts {
 
             if (isDeclarationName(node)) {
                 // This is a declaration, call getSymbolOfNode
-                return getSymbolOfNode(node.parent);
-            }
-            else if (node.kind === SyntaxKind.ClassKeyword && node.parent.kind === SyntaxKind.ClassExpression) {
                 return getSymbolOfNode(node.parent);
             }
             else if (isLiteralComputedPropertyDeclarationName(node)) {

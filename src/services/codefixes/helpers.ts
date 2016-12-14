@@ -87,7 +87,6 @@ namespace ts.codefix {
     }
 
     function createBodySignatureWithAnyTypes(signatures: Signature[], enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker): Signature {
-
         const newSignatureDeclaration = createNode(SyntaxKind.CallSignature) as SignatureDeclaration;
         newSignatureDeclaration.parent = enclosingDeclaration;
         newSignatureDeclaration.name = signatures[0].getDeclaration().name;
@@ -126,7 +125,8 @@ namespace ts.codefix {
 
         function createParameterDeclarationWithoutType(index: number, minArgCount: number, enclosingSignatureDeclaration: SignatureDeclaration): ParameterDeclaration {
             const newParameter = createNode(SyntaxKind.Parameter) as ParameterDeclaration;
-            newParameter.symbol = checker.createSymbol(SymbolFlags.FunctionScopedVariable, maxArgsParameterSymbolNames[index] || "rest");
+
+            newParameter.symbol = new SymbolConstructor(SymbolFlags.FunctionScopedVariable, maxArgsParameterSymbolNames[index] || "rest");
             newParameter.symbol.valueDeclaration = newParameter;
             newParameter.symbol.declarations = [newParameter];
             newParameter.parent = enclosingSignatureDeclaration;
@@ -151,4 +151,6 @@ namespace ts.codefix {
         }
         return "";
     }
+
+    const SymbolConstructor = objectAllocator.getSymbolConstructor();
 }
