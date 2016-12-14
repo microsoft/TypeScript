@@ -21,6 +21,6 @@ verify.completionListContains('y');
 verify.not.completionListContains('invisible');
 
 edit.insert('x.');
-verify.memberListContains('a', undefined, undefined, 'property');
+verify.completionListContains('a', undefined, undefined, 'property');
 edit.insert('a.');
-verify.memberListContains('toFixed', undefined, undefined, 'method');
+verify.completionListContains('toFixed', undefined, undefined, 'method');

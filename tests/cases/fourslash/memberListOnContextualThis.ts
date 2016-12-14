@@ -8,5 +8,5 @@
 goTo.marker('1');
 verify.quickInfoIs("this: A");
 goTo.marker('2');
-verify.memberListContains('a', '(property) A.a: string');
+verify.completionListContains('a', '(property) A.a: string');
 

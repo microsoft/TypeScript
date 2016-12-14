@@ -145,6 +145,13 @@ var g1 = applySpec({
 // Infers g2: (...args: any[]) => { foo: { bar: { baz: boolean } } }
 var g2 = applySpec({ foo: { bar: { baz: (x: any) => true } } });
 
+// Repro from #12633
+
+const foo = <T>(object: T, partial: Partial<T>) => object;
+let o = {a: 5, b: 7};
+foo(o, {b: 9});
+o = foo(o, {b: 9});
+
 //// [isomorphicMappedTypeInference.js]
 function box(x) {
     return { value: x };
@@ -244,6 +251,11 @@ var g1 = applySpec({
 });
 // Infers g2: (...args: any[]) => { foo: { bar: { baz: boolean } } }
 var g2 = applySpec({ foo: { bar: { baz: function (x) { return true; } } } });
+// Repro from #12633
+var foo = function (object, partial) { return object; };
+var o = { a: 5, b: 7 };
+foo(o, { b: 9 });
+o = foo(o, { b: 9 });
 
 
 //// [isomorphicMappedTypeInference.d.ts]
@@ -310,4 +322,9 @@ declare var g2: (...args: any[]) => {
             baz: boolean;
         };
     };
+};
+declare const foo: <T>(object: T, partial: Partial<T>) => T;
+declare let o: {
+    a: number;
+    b: number;
 };
