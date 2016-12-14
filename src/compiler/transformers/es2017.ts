@@ -458,7 +458,12 @@ namespace ts {
     }
 
     function createAwaiterHelper(context: TransformationContext, hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression, body: Block) {
-        context.requestEmitHelper(awaiterHelper);
+        if (getEmitScriptTarget(context.getCompilerOptions()) < ScriptTarget.ES2015) {
+            context.requestEmitHelper(awaiterHelper);
+        }
+        else {
+            context.requestEmitHelper(awaiterHelperES2015);
+        }
         const generatorFunc = createFunctionExpression(
             /*modifiers*/ undefined,
             createToken(SyntaxKind.AsteriskToken),
@@ -497,6 +502,21 @@ namespace ts {
                     step((generator = generator.apply(thisArg, _arguments)).next());
                 });
             };`
+    };
+
+    const awaiterHelperES2015: EmitHelper = {
+        name: "typescript:awaiterES2015",
+        scoped: false,
+        priority: 5,
+        text: `
+            const __awaiter = (this && this.__awaiter) || ((thisArg, _arguments, P, generator) => {
+                return new (P || (P = Promise))((resolve, reject) => {
+                    const fulfilled = value => { try { step(generator.next(value)); } catch (e) { reject(e); } }
+                    const rejected = value => { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+                    const step = result => { result.done ? resolve(result.value) : new P(resolve => { resolve(result.value); }).then(fulfilled, rejected); }
+                    step((generator = generator.apply(thisArg, _arguments)).next());
+                });
+            });`
     };
 
     const asyncSuperHelper: EmitHelper = {

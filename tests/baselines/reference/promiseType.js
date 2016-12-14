@@ -156,14 +156,14 @@ const p84 = p.then(() => Promise.reject(1), () => Promise.resolve(1));
 const p85 = p.then(() => Promise.reject(1), () => Promise.reject(1));
 
 //// [promiseType.js]
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+const __awaiter = (this && this.__awaiter) || ((thisArg, _arguments, P, generator) => {
+    return new (P || (P = Promise))((resolve, reject) => {
+        const fulfilled = value => { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        const rejected = value => { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        const step = result => { result.done ? resolve(result.value) : new P(resolve => { resolve(result.value); }).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments)).next());
     });
-};
+});
 const a = p.then();
 const b = p.then(b => 1);
 const c = p.then(b => 1, e => 'error');
