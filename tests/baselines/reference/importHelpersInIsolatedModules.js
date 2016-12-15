@@ -64,8 +64,7 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:returntype", void 0)
 ], C.prototype, "method", null);
 C = tslib_1.__decorate([
-    dec,
-    tslib_1.__metadata("design:paramtypes", [])
+    dec
 ], C);
 //// [script.js]
 "use strict";
@@ -96,6 +95,5 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:returntype", void 0)
 ], C.prototype, "method", null);
 C = tslib_1.__decorate([
-    dec,
-    tslib_1.__metadata("design:paramtypes", [])
+    dec
 ], C);

@@ -147,8 +147,7 @@ namespace ts {
                     "c:/dev": ts.WatchDirectoryFlags.Recursive
                 },
             };
-            const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveCommonFoldersHost, caseInsensitiveBasePath);
-            assertParsed(actual, expected);
+            validateMatches(expected, json, caseInsensitiveCommonFoldersHost, caseInsensitiveBasePath);
         });
 
         describe("with literal file list", () => {

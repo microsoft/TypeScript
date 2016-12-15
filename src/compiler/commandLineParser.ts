@@ -272,7 +272,7 @@ namespace ts {
                 "es2017": ScriptTarget.ES2017,
                 "esnext": ScriptTarget.ESNext,
             }),
-            description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES2015,
+            description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_or_ESNEXT,
             paramType: Diagnostics.VERSION,
         },
         {
@@ -553,14 +553,7 @@ namespace ts {
 
     /* @internal */
     export function parseCustomTypeOption(opt: CommandLineOptionOfCustomType, value: string, errors: Diagnostic[]) {
-        const key = trimString((value || "")).toLowerCase();
-        const map = opt.type;
-        if (key in map) {
-            return map[key];
-        }
-        else {
-            errors.push(createCompilerDiagnosticForInvalidCustomType(opt));
-        }
+        return convertJsonOptionOfCustomType(opt, trimString(value || ""), errors);
     }
 
     /* @internal */
@@ -583,7 +576,6 @@ namespace ts {
         }
     }
 
-    /* @internal */
     export function parseCommandLine(commandLine: string[], readFile?: (path: string) => string): ParsedCommandLine {
         const options: CompilerOptions = {};
         const fileNames: string[] = [];
@@ -1073,8 +1065,8 @@ namespace ts {
       * @param basePath A root directory to resolve relative path entries in the config
       *    file to. e.g. outDir
       */
-    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[]): ParsedCommandLine {
-        return parseJsonConfigFileContentWorker(json, /*sourceFile*/ undefined, host, basePath, existingOptions, configFileName, resolutionStack);
+    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: FileExtensionInfo[]): ParsedCommandLine {
+        return parseJsonConfigFileContentWorker(json, /*sourceFile*/ undefined, host, basePath, existingOptions, configFileName, resolutionStack, extraFileExtensions);
     }
 
     /**
@@ -1084,8 +1076,8 @@ namespace ts {
       * @param basePath A root directory to resolve relative path entries in the config
       *    file to. e.g. outDir
       */
-    export function parseJsonSourceFileConfigFileContent(sourceFile: JsonSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[]): ParsedCommandLine {
-        return parseJsonConfigFileContentWorker(/*json*/ undefined, sourceFile, host, basePath, existingOptions, configFileName, resolutionStack);
+    export function parseJsonSourceFileConfigFileContent(sourceFile: JsonSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: FileExtensionInfo[]): ParsedCommandLine {
+        return parseJsonConfigFileContentWorker(/*json*/ undefined, sourceFile, host, basePath, existingOptions, configFileName, resolutionStack, extraFileExtensions);
     }
 
     /**
@@ -1095,7 +1087,7 @@ namespace ts {
       * @param basePath A root directory to resolve relative path entries in the config
       *    file to. e.g. outDir
       */
-    function parseJsonConfigFileContentWorker(json: any, sourceFile: JsonSourceFile, host: ParseConfigHost, basePath: string, existingOptions: CompilerOptions = {}, configFileName?: string, resolutionStack: Path[] = []): ParsedCommandLine {
+    function parseJsonConfigFileContentWorker(json: any, sourceFile: JsonSourceFile, host: ParseConfigHost, basePath: string, existingOptions: CompilerOptions = {}, configFileName?: string, resolutionStack: Path[] = [], extraFileExtensions: FileExtensionInfo[] = []): ParsedCommandLine {
         Debug.assert((json === undefined && sourceFile !== undefined) || (json !== undefined && sourceFile === undefined));
         const errors: Diagnostic[] = [];
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
@@ -1311,7 +1303,7 @@ namespace ts {
                 includeSpecs = ["**/*"];
             }
 
-            const result = matchFileNames(fileNames, includeSpecs, excludeSpecs, basePath, options, host, errors, sourceFile);
+            const result = matchFileNames(fileNames, includeSpecs, excludeSpecs, basePath, options, host, errors, extraFileExtensions, sourceFile);
 
             if (result.fileNames.length === 0 && !hasProperty(json, "files") && resolutionStack.length === 0) {
                 errors.push(
@@ -1546,7 +1538,7 @@ namespace ts {
      * @param host The host used to resolve files and directories.
      * @param errors An array for diagnostic reporting.
      */
-    function matchFileNames(fileNames: string[], include: string[], exclude: string[], basePath: string, options: CompilerOptions, host: ParseConfigHost, errors: Diagnostic[], jsonSourceFile: JsonSourceFile): ExpandResult {
+    function matchFileNames(fileNames: string[], include: string[], exclude: string[], basePath: string, options: CompilerOptions, host: ParseConfigHost, errors: Diagnostic[], extraFileExtensions: FileExtensionInfo[], jsonSourceFile: JsonSourceFile): ExpandResult {
         basePath = normalizePath(basePath);
 
         // The exclude spec list is converted into a regular expression, which allows us to quickly
@@ -1580,7 +1572,7 @@ namespace ts {
 
         // Rather than requery this for each file and filespec, we query the supported extensions
         // once and store it on the expansion context.
-        const supportedExtensions = getSupportedExtensions(options);
+        const supportedExtensions = getSupportedExtensions(options, extraFileExtensions);
 
         // Literal files are always included verbatim. An "include" or "exclude" specification cannot
         // remove a literal file.

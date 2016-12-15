@@ -1035,6 +1035,10 @@
         "category": "Error",
         "code": 2342
     },
+    "This syntax requires an imported helper named '{1}', but module '{0}' has no exported member '{1}'.": {
+        "category": "Error",
+        "code": 2343
+    },
     "Type '{0}' does not satisfy the constraint '{1}'.": {
         "category": "Error",
         "code": 2344
@@ -1074,6 +1078,10 @@
     "Object literal may only specify known properties, and '{0}' does not exist in type '{1}'.": {
         "category": "Error",
         "code": 2353
+    },
+    "This syntax requires an imported helper but module '{0}' cannot be found.": {
+        "category": "Error",
+        "code": 2354
     },
     "A function whose declared type is neither 'void' nor 'any' must return a value.": {
         "category": "Error",
@@ -2300,6 +2308,14 @@
         "category": "Message",
         "code": 4090
     },
+    "Parameter '{0}' of index signature from exported interface has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4091
+    },
+    "Parameter '{0}' of index signature from exported interface has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4092
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
@@ -2465,7 +2481,7 @@
         "category": "Message",
         "code": 6012
     },
-    "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES2015'": {
+    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'": {
         "category": "Message",
         "code": 6015
     },
@@ -3156,6 +3172,10 @@
     "Unknown type acquisition option '{0}'.": {
         "category": "Error",
         "code": 17010
+    },
+    "'super' must be called before accessing a property of 'super' in the constructor of a derived class.": {
+        "category": "Error",
+        "code": 17011
     },
 
     "Circularity detected while resolving configuration: {0}": {

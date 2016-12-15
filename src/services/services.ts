@@ -592,9 +592,8 @@ namespace ts {
                             else {
                                 declarations.push(functionDeclaration);
                             }
-
-                            forEachChild(node, visit);
                         }
+                        forEachChild(node, visit);
                         break;
 
                     case SyntaxKind.ClassDeclaration:
@@ -1725,7 +1724,7 @@ namespace ts {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
             // Check if in a context where we don't want to perform any insertion
-            if (isInString(sourceFile, position) || isInComment(sourceFile, position)) {
+            if (isInString(sourceFile, position)) {
                 return false;
             }
 

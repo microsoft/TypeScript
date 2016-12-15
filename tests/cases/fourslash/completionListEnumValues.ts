@@ -15,18 +15,18 @@
 
 goTo.marker("enumVariable");
 // Should only have the enum's own members, and nothing else
-verify.memberListContains("Red");
-verify.memberListContains("Green");
-verify.memberListCount(2);
+verify.completionListContains("Red");
+verify.completionListContains("Green");
+verify.completionListCount(2);
 
 
 goTo.marker("variableOfEnumType");
 // Should have number members, and not enum members
-verify.memberListContains("toString");
-verify.not.memberListContains("Red");
+verify.completionListContains("toString");
+verify.not.completionListContains("Red");
 
 
 goTo.marker("callOfEnumReturnType");
 // Should have number members, and not enum members
-verify.memberListContains("toString");
-verify.not.memberListContains("Red");
+verify.completionListContains("toString");
+verify.not.completionListContains("Red");

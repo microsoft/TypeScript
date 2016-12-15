@@ -1,3 +1,4 @@
+// @strictNullChecks: true
 // @declaration: true
 
 class Shape {
@@ -219,6 +220,83 @@ function f60<T>(source: T, target: T) {
     }
 }
 
+function f70(func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) {
+    func<{ a: any, b: any }, { a: any, c: any }>('a', 'a');
+    func<{ a: any, b: any }, { a: any, c: any }>('a', 'b');
+    func<{ a: any, b: any }, { a: any, c: any }>('a', 'c');
+}
+
+function f71(func: <T, U>(x: T, y: U) => Partial<T & U>) {
+    let x = func({ a: 1, b: "hello" }, { c: true });
+    x.a;  // number | undefined
+    x.b;  // string | undefined
+    x.c;  // boolean | undefined
+}
+
+function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]) {
+    let a = func({ a: 1, b: "hello" }, { c: true }, 'a');  // number
+    let b = func({ a: 1, b: "hello" }, { c: true }, 'b');  // string
+    let c = func({ a: 1, b: "hello" }, { c: true }, 'c');  // boolean
+}
+
+function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]) {
+    let a = func({ a: 1, b: "hello" }, { c: true }, 'a');  // number
+    let b = func({ a: 1, b: "hello" }, { c: true }, 'b');  // string
+    let c = func({ a: 1, b: "hello" }, { c: true }, 'c');  // boolean
+}
+
+function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]) {
+    let a = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'a');  // number
+    let b = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b');  // string | boolean
+}
+
+function f80<T extends { a: { x: any } }>(obj: T) {
+    let a1 = obj.a;  // { x: any }
+    let a2 = obj['a'];  // { x: any }
+    let a3 = obj['a'] as T['a'];  // T["a"]
+    let x1 = obj.a.x;  // any
+    let x2 = obj['a']['x'];  // any
+    let x3 = obj['a']['x'] as T['a']['x'];  // T["a"]["x"]
+}
+
+function f81<T extends { a: { x: any } }>(obj: T) {
+    return obj['a']['x'] as T['a']['x'];
+}
+
+function f82() {
+    let x1 = f81({ a: { x: "hello" } });  // string
+    let x2 = f81({ a: { x: 42 } });  // number
+}
+
+function f83<T extends { [x: string]: { x: any } }, K extends keyof T>(obj: T, key: K) {
+    return obj[key]['x'] as T[K]['x'];
+}
+
+function f84() {
+    let x1 = f83({ foo: { x: "hello" } }, "foo");  // string
+    let x2 = f83({ bar: { x: 42 } }, "bar");  // number
+}
+
+class C1 {
+    x: number;
+    get<K extends keyof this>(key: K) {
+        return this[key];
+    }
+    set<K extends keyof this>(key: K, value: this[K]) {
+        this[key] = value;
+    }
+    foo() {
+        let x1 = this.x;  // number
+        let x2 = this["x"];  // number
+        let x3 = this.get("x");  // this["x"]
+        let x4 = getProperty(this, "x"); // this["x"]
+        this.x = 42;
+        this["x"] = 42;
+        this.set("x", 42);
+        setProperty(this, "x", 42);
+    }
+}
+
 // Repros from #12011
 
 class Base {
@@ -250,3 +328,106 @@ class OtherPerson {
         return getProperty(this, "parts")
     }
 }
+
+// Modified repro from #12544
+
+function path<T, K1 extends keyof T>(obj: T, key1: K1): T[K1];
+function path<T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2];
+function path<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3];
+function path(obj: any, ...keys: (string | number)[]): any;
+function path(obj: any, ...keys: (string | number)[]): any {
+    let result = obj;
+    for (let k of keys) {
+        result = result[k];
+    }
+    return result;
+}
+
+type Thing = {
+    a: { x: number, y: string },
+    b: boolean
+};
+
+
+function f1(thing: Thing) {
+    let x1 = path(thing, 'a');  // { x: number, y: string }
+    let x2 = path(thing, 'a', 'y');  // string
+    let x3 = path(thing, 'b');  // boolean
+    let x4 = path(thing, ...['a', 'x']);  // any
+}
+
+// Repro from comment in #12114
+
+const assignTo2 = <T, K1 extends keyof T, K2 extends keyof T[K1]>(object: T, key1: K1, key2: K2) =>
+    (value: T[K1][K2]) => object[key1][key2] = value;
+
+// Modified repro from #12573
+
+declare function one<T>(handler: (t: T) => void): T
+var empty = one(() => {}) // inferred as {}, expected
+
+type Handlers<T> = { [K in keyof T]: (t: T[K]) => void }
+declare function on<T>(handlerHash: Handlers<T>): T
+var hashOfEmpty1 = on({ test: () => {} });  // {}
+var hashOfEmpty2 = on({ test: (x: boolean) => {} });  // { test: boolean }
+
+// Repro from #12624
+
+interface Options1<Data, Computed> {
+    data?: Data
+    computed?: Computed;
+}
+
+declare class Component1<Data, Computed> {
+    constructor(options: Options1<Data, Computed>);
+    get<K extends keyof (Data & Computed)>(key: K): (Data & Computed)[K];
+}
+
+let c1 = new Component1({
+    data: {
+        hello: ""
+    }
+});
+
+c1.get("hello");
+
+// Repro from #12625
+
+interface Options2<Data, Computed> {
+    data?: Data
+    computed?: Computed;
+}
+
+declare class Component2<Data, Computed> {
+    constructor(options: Options2<Data, Computed>);
+    get<K extends keyof Data | keyof Computed>(key: K): (Data & Computed)[K];
+}
+
+// Repro from #12641
+
+interface R {
+    p: number;
+}
+
+function f<K extends keyof R>(p: K) {
+    let a: any;
+    a[p].add;  // any
+}
+
+// Repro from #12651
+
+type MethodDescriptor = {
+	name: string;
+	args: any[];
+	returnValue: any;
+}
+
+declare function dispatchMethod<M extends MethodDescriptor>(name: M['name'], args: M['args']): M['returnValue'];
+
+type SomeMethodDescriptor = {
+	name: "someMethod";
+	args: [string, number];
+	returnValue: string[];
+}
+
+let result = dispatchMethod<SomeMethodDescriptor>("someMethod", ["hello", 35]);

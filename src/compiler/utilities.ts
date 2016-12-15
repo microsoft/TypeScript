@@ -43,6 +43,7 @@ namespace ts {
                 writeSpace: writeText,
                 writeStringLiteral: writeText,
                 writeParameter: writeText,
+                writeProperty: writeText,
                 writeSymbol: writeText,
 
                 // Completely ignore indentation for string writers.  And map newlines to
@@ -423,6 +424,10 @@ namespace ts {
         return false;
     }
 
+    export function isEffectiveExternalModule(node: SourceFile, compilerOptions: CompilerOptions) {
+        return isExternalModule(node) || compilerOptions.isolatedModules;
+    }
+
     export function isBlockScope(node: Node, parentNode: Node) {
         switch (node.kind) {
             case SyntaxKind.SourceFile:
@@ -798,6 +803,23 @@ namespace ts {
         }
     }
 
+    /**
+     * Gets the most likely element type for a TypeNode. This is not an exhaustive test
+     * as it assumes a rest argument can only be an array type (either T[], or Array<T>).
+     *
+     * @param node The type node.
+     */
+    export function getRestParameterElementType(node: TypeNode) {
+        if (node && node.kind === SyntaxKind.ArrayType) {
+            return (<ArrayTypeNode>node).elementType;
+        }
+        else if (node && node.kind === SyntaxKind.TypeReference) {
+            return singleOrUndefined((<TypeReferenceNode>node).typeArguments);
+        }
+        else {
+            return undefined;
+        }
+    }
 
     export function isVariableLike(node: Node): node is VariableLikeDeclaration {
         if (node) {
@@ -3171,55 +3193,6 @@ namespace ts {
         }
 
         return output;
-    }
-
-    /**
-     * Serialize an object graph into a JSON string. This is intended only for use on an acyclic graph
-     * as the fallback implementation does not check for circular references by default.
-     */
-    export const stringify: (value: any) => string = typeof JSON !== "undefined" && JSON.stringify
-        ? JSON.stringify
-        : stringifyFallback;
-
-    /**
-     * Serialize an object graph into a JSON string.
-     */
-    function stringifyFallback(value: any): string {
-        // JSON.stringify returns `undefined` here, instead of the string "undefined".
-        return value === undefined ? undefined : stringifyValue(value);
-    }
-
-    function stringifyValue(value: any): string {
-        return typeof value === "string" ? `"${escapeString(value)}"`
-            : typeof value === "number" ? isFinite(value) ? String(value) : "null"
-                : typeof value === "boolean" ? value ? "true" : "false"
-                    : typeof value === "object" && value ? isArray(value) ? cycleCheck(stringifyArray, value) : cycleCheck(stringifyObject, value)
-                        : /*fallback*/ "null";
-    }
-
-    function cycleCheck(cb: (value: any) => string, value: any) {
-        Debug.assert(!value.hasOwnProperty("__cycle"), "Converting circular structure to JSON");
-        value.__cycle = true;
-        const result = cb(value);
-        delete value.__cycle;
-        return result;
-    }
-
-    function stringifyArray(value: any) {
-        return `[${reduceLeft(value, stringifyElement, "")}]`;
-    }
-
-    function stringifyElement(memo: string, value: any) {
-        return (memo ? memo + "," : memo) + stringifyValue(value);
-    }
-
-    function stringifyObject(value: any) {
-        return `{${reduceOwnProperties(value, stringifyProperty, "")}}`;
-    }
-
-    function stringifyProperty(memo: string, value: any, key: string) {
-        return value === undefined || typeof value === "function" || key === "__cycle" ? memo
-            : (memo ? memo + "," : memo) + `"${escapeString(key)}":${stringifyValue(value)}`;
     }
 
     const base64Digits = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
