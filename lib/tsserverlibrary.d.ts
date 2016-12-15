@@ -11658,8 +11658,8 @@ declare namespace ts.server {
         static fromString(host: ServerHost, script: string): ScriptVersionCache;
     }
     class LineIndexSnapshot implements ts.IScriptSnapshot {
-        version: number;
-        cache: ScriptVersionCache;
+        readonly version: number;
+        readonly cache: ScriptVersionCache;
         index: LineIndex;
         changesSincePreviousVersion: TextChange[];
         constructor(version: number, cache: ScriptVersionCache);
