@@ -1,3 +1,2 @@
 *.js linguist-language=TypeScript
 * -text
-lib/* eol=lf
