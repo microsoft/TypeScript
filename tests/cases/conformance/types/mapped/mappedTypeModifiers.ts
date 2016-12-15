@@ -1,4 +1,5 @@
 // @strictNullChecks: true
+// @noimplicitany: true
 
 type T = { a: number, b: string };
 type TP = { a?: number, b?: string };
@@ -75,3 +76,25 @@ var b04: Partial<Readonly<B>>;
 var b04: Readonly<Partial<B>>;
 var b04: { [P in keyof BPR]: BPR[P] }
 var b04: Pick<BPR, keyof BPR>;
+
+type Foo = { prop: number, [x: string]: number };
+
+function f1(x: Partial<Foo>) {
+    x.prop; // ok
+    (x["other"] || 0).toFixed();
+}
+
+function f2(x: Readonly<Foo>) {
+    x.prop; // ok
+    x["other"].toFixed();
+}
+
+function f3(x: Boxified<Foo>) {
+    x.prop; // ok
+    x["other"].x.toFixed();
+}
+
+function f4(x: { [P in keyof Foo]: Foo[P] }) {
+    x.prop; // ok
+    x["other"].toFixed();
+}

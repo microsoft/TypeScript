@@ -125,3 +125,9 @@ c.setState({ });
 c.setState(foo);
 c.setState({ a: undefined });  // Error
 c.setState({ c: true });  // Error
+
+type T2 = { a?: number, [key: string]: any };
+
+let x1: T2 = { a: 'no' };  // Error
+let x2: Partial<T2> = { a: 'no' }; // Error
+let x3: { [P in keyof T2]: T2[P]} = { a: 'no' };  // Error
