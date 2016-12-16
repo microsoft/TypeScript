@@ -637,7 +637,7 @@ namespace ts.formatting {
                 }
 
                 const effectiveParentStartLine = child.kind === SyntaxKind.Decorator ? childStartLine : undecoratedParentStartLine;
-                const childIndentation = computeIndentation(child, childStartLine, childIndentationAmount, node, parentDynamicIndentation, effectiveParentStartLine);
+                const childIndentation = computeIndentation(child, childStartLine, childIndentationAmount, parent, parentDynamicIndentation, effectiveParentStartLine);
 
                 processNode(child, childContextNode, childStartLine, undecoratedChildStartLine, childIndentation.indentation, childIndentation.delta);
 
