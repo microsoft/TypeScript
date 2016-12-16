@@ -319,12 +319,12 @@ namespace ts {
             }
         }
 
-            function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, type: TypeNode, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic, addUndefined?: boolean) {
+            function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, type: TypeNode, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic) {
             writer.getSymbolAccessibilityDiagnostic = getSymbolAccessibilityDiagnostic;
             write(": ");
             if (type) {
                 // Write the type
-                emitType(type, addUndefined);
+                emitType(type);
             }
             else {
                 errorNameNode = declaration.name;
@@ -384,7 +384,7 @@ namespace ts {
             emitType(type);
         }
 
-        function emitType(type: TypeNode | Identifier | QualifiedName, addUndefined?: boolean) {
+        function emitType(type: TypeNode | Identifier | QualifiedName) {
             switch (type.kind) {
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.StringKeyword:
@@ -1593,7 +1593,10 @@ namespace ts {
                 emitTypeOfVariableDeclarationFromTypeLiteral(node);
             }
             else if (!hasModifier(node.parent, ModifierFlags.Private)) {
-                writeTypeOfDeclaration(node, node.type, getParameterDeclarationTypeVisibilityError, !!node.initializer && !(getModifierFlags(node) & ModifierFlags.ParameterPropertyModifier));
+                // use the checker's type, not the declared type, for an initialized parameter (that isn't a parameter property)
+                const isInitializedParameter = node.initializer && !(getModifierFlags(node) & ModifierFlags.ParameterPropertyModifier);
+                const typeNode = isInitializedParameter ? undefined : node.type;
+                writeTypeOfDeclaration(node, typeNode, getParameterDeclarationTypeVisibilityError);
             }
 
             function getParameterDeclarationTypeVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {
