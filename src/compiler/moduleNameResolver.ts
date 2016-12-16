@@ -684,12 +684,17 @@ namespace ts {
                 // A package.json "typings" may specify an exact filename, or may choose to omit an extension.
                 const fromFile = tryFile(typesFile, failedLookupLocations, onlyRecordFailures, state);
                 if (fromFile) {
-                    // Note: this would allow a package.json to specify a ".js" file as typings. Maybe that should be forbidden.
                     return resolvedFromAnyFile(fromFile);
                 }
-                const x = tryAddingExtensions(typesFile, Extensions.TypeScript, failedLookupLocations, onlyRecordFailures, state);
-                if (x) {
-                    return x;
+                // Attempt with ts extension
+                const xTs = tryAddingExtensions(typesFile, Extensions.TypeScript, failedLookupLocations, onlyRecordFailures, state);
+                if (xTs) {
+                    return xTs;
+                }
+                // Attempt with js extension
+                const xJs = tryAddingExtensions(typesFile, Extensions.JavaScript, failedLookupLocations, onlyRecordFailures, state);
+                if (xJs) {
+                    return xJs;
                 }
             }
             else {

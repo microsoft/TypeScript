@@ -158,6 +158,7 @@ namespace ts {
             /* tslint:enable no-null-keyword */
             testTypingsIgnored(undefined);
         });
+
         it("module name as directory - load index.d.ts", () => {
             test(/*hasDirectoryExists*/ false);
             test(/*hasDirectoryExists*/ true);
@@ -176,6 +177,33 @@ namespace ts {
                 ]);
             }
         });
+
+        it("module name as directory - load js from 'main'", () => {
+            test(/*hasDirectoryExists*/ false);
+            test(/*hasDirectoryExists*/ true);
+
+            function test(hasDirectoryExists: boolean) {
+                const containingFile = { name: "/a/b.ts" };
+                const packageJson = { name: "/a/c/package.json", content: JSON.stringify({ main: "d/e" }) };
+                const indexFile = { name: "/a/c/d/e.js" };
+                const resolution = nodeModuleNameResolver("./c", containingFile.name, {}, createModuleResolutionHost(hasDirectoryExists, containingFile, packageJson, indexFile));
+                checkResolvedModuleWithFailedLookupLocations(resolution, createResolvedModule(indexFile.name), [
+                       "/a/c.ts",
+                       "/a/c.tsx",
+                       "/a/c.d.ts",
+                       "/a/c/index.ts",
+                       "/a/c/index.tsx",
+                       "/a/c/index.d.ts",
+                       "/a/c.js",
+                       "/a/c.jsx",
+                       "/a/c/d/e",
+                       "/a/c/d/e.ts",
+                       "/a/c/d/e.tsx",
+                       "/a/c/d/e.d.ts",
+                ]);
+            }
+        });
+
     });
 
     describe("Node module resolution - non-relative paths", () => {
