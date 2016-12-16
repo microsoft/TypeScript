@@ -63,7 +63,7 @@ namespace ts {
          * @param node The node to substitute.
          */
         function onSubstituteNode(emitContext: EmitContext, node: Node) {
-            if (node.id && noSubstitution[node.id]) {
+            if (node.id && noSubstitution && noSubstitution[node.id]) {
                 return previousOnSubstituteNode(emitContext, node);
             }
 
