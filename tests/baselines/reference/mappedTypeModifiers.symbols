@@ -353,3 +353,80 @@ var b04: Pick<BPR, keyof BPR>;
 >BPR : Symbol(BPR, Decl(mappedTypeModifiers.ts, 42, 67))
 >BPR : Symbol(BPR, Decl(mappedTypeModifiers.ts, 42, 67))
 
+type Foo = { prop: number, [x: string]: number };
+>Foo : Symbol(Foo, Decl(mappedTypeModifiers.ts, 75, 30))
+>prop : Symbol(prop, Decl(mappedTypeModifiers.ts, 77, 12))
+>x : Symbol(x, Decl(mappedTypeModifiers.ts, 77, 28))
+
+function f1(x: Partial<Foo>) {
+>f1 : Symbol(f1, Decl(mappedTypeModifiers.ts, 77, 49))
+>x : Symbol(x, Decl(mappedTypeModifiers.ts, 79, 12))
+>Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Foo : Symbol(Foo, Decl(mappedTypeModifiers.ts, 75, 30))
+
+    x.prop; // ok
+>x.prop : Symbol(prop)
+>x : Symbol(x, Decl(mappedTypeModifiers.ts, 79, 12))
+>prop : Symbol(prop)
+
+    (x["other"] || 0).toFixed();
+>(x["other"] || 0).toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(mappedTypeModifiers.ts, 79, 12))
+>toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+}
+
+function f2(x: Readonly<Foo>) {
+>f2 : Symbol(f2, Decl(mappedTypeModifiers.ts, 82, 1))
+>x : Symbol(x, Decl(mappedTypeModifiers.ts, 84, 12))
+>Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Foo : Symbol(Foo, Decl(mappedTypeModifiers.ts, 75, 30))
+
+    x.prop; // ok
+>x.prop : Symbol(prop)
+>x : Symbol(x, Decl(mappedTypeModifiers.ts, 84, 12))
+>prop : Symbol(prop)
+
+    x["other"].toFixed();
+>x["other"].toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(mappedTypeModifiers.ts, 84, 12))
+>toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+}
+
+function f3(x: Boxified<Foo>) {
+>f3 : Symbol(f3, Decl(mappedTypeModifiers.ts, 87, 1))
+>x : Symbol(x, Decl(mappedTypeModifiers.ts, 89, 12))
+>Boxified : Symbol(Boxified, Decl(mappedTypeModifiers.ts, 36, 28))
+>Foo : Symbol(Foo, Decl(mappedTypeModifiers.ts, 75, 30))
+
+    x.prop; // ok
+>x.prop : Symbol(prop)
+>x : Symbol(x, Decl(mappedTypeModifiers.ts, 89, 12))
+>prop : Symbol(prop)
+
+    x["other"].x.toFixed();
+>x["other"].x.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>x["other"].x : Symbol(x, Decl(mappedTypeModifiers.ts, 38, 38))
+>x : Symbol(x, Decl(mappedTypeModifiers.ts, 89, 12))
+>x : Symbol(x, Decl(mappedTypeModifiers.ts, 38, 38))
+>toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+}
+
+function f4(x: { [P in keyof Foo]: Foo[P] }) {
+>f4 : Symbol(f4, Decl(mappedTypeModifiers.ts, 92, 1))
+>x : Symbol(x, Decl(mappedTypeModifiers.ts, 94, 12))
+>P : Symbol(P, Decl(mappedTypeModifiers.ts, 94, 18))
+>Foo : Symbol(Foo, Decl(mappedTypeModifiers.ts, 75, 30))
+>Foo : Symbol(Foo, Decl(mappedTypeModifiers.ts, 75, 30))
+>P : Symbol(P, Decl(mappedTypeModifiers.ts, 94, 18))
+
+    x.prop; // ok
+>x.prop : Symbol(prop)
+>x : Symbol(x, Decl(mappedTypeModifiers.ts, 94, 12))
+>prop : Symbol(prop)
+
+    x["other"].toFixed();
+>x["other"].toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(mappedTypeModifiers.ts, 94, 12))
+>toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+}
+

@@ -1024,8 +1024,11 @@ namespace ts {
                 }
             }
 
-            // Return the result if we have an immediate super() call on the last statement.
-            if (superCallExpression && statementOffset === ctorStatements.length - 1) {
+            // Return the result if we have an immediate super() call on the last statement,
+            // but only if the constructor itself doesn't use 'this' elsewhere.
+            if (superCallExpression
+                && statementOffset === ctorStatements.length - 1
+                && !(ctor.transformFlags & (TransformFlags.ContainsLexicalThis | TransformFlags.ContainsCapturedLexicalThis))) {
                 const returnStatement = createReturn(superCallExpression);
 
                 if (superCallExpression.kind !== SyntaxKind.BinaryExpression
@@ -2287,7 +2290,7 @@ namespace ts {
             }
 
             startLexicalEnvironment();
-            let loopBody = visitNode(node.statement, visitor, isStatement);
+            let loopBody = visitNode(node.statement, visitor, isStatement, /*optional*/ false, liftToBlock);
             const lexicalEnvironment = endLexicalEnvironment();
 
             const currentState = convertedLoopState;
@@ -2302,7 +2305,10 @@ namespace ts {
                 loopBody = createBlock(statements, /*location*/ undefined, /*multiline*/ true);
             }
 
-            if (!isBlock(loopBody)) {
+            if (isBlock(loopBody)) {
+                loopBody.multiLine = true;
+            }
+            else {
                 loopBody = createBlock([loopBody], /*location*/ undefined, /*multiline*/ true);
             }
 

@@ -466,9 +466,7 @@ namespace ts {
                     // other kinds of value declarations take precedence over modules
                     target.valueDeclaration = source.valueDeclaration;
                 }
-                forEach(source.declarations, node => {
-                    target.declarations.push(node);
-                });
+                addRange(target.declarations, source.declarations);
                 if (source.members) {
                     if (!target.members) target.members = createMap<Symbol>();
                     mergeSymbolTable(target.members, source.members);
@@ -1100,7 +1098,7 @@ namespace ts {
         }
 
         function getDeclarationOfAliasSymbol(symbol: Symbol): Declaration | undefined {
-            return forEach(symbol.declarations, d => isAliasSymbolDeclaration(d) ? d : undefined);
+            return find<Declaration>(symbol.declarations, isAliasSymbolDeclaration);
         }
 
         function getTargetOfImportEqualsDeclaration(node: ImportEqualsDeclaration): Symbol {
@@ -4543,15 +4541,27 @@ namespace ts {
             const typeParameter = getTypeParameterFromMappedType(type);
             const constraintType = getConstraintTypeFromMappedType(type);
             const templateType = getTemplateTypeFromMappedType(type);
-            const modifiersType = getModifiersTypeFromMappedType(type);
+            const modifiersType = getApparentType(getModifiersTypeFromMappedType(type));
             const templateReadonly = !!type.declaration.readonlyToken;
             const templateOptional = !!type.declaration.questionToken;
-            // First, if the constraint type is a type parameter, obtain the base constraint. Then,
-            // if the key type is a 'keyof X', obtain 'keyof C' where C is the base constraint of X.
-            // Finally, iterate over the constituents of the resulting iteration type.
-            const keyType = constraintType.flags & TypeFlags.TypeVariable ? getApparentType(constraintType) : constraintType;
-            const iterationType = keyType.flags & TypeFlags.Index ? getIndexType(getApparentType((<IndexType>keyType).type)) : keyType;
-            forEachType(iterationType, t => {
+            if (type.declaration.typeParameter.constraint.kind === SyntaxKind.TypeOperator) {
+                // We have a { [P in keyof T]: X }
+                forEachType(getLiteralTypeFromPropertyNames(modifiersType), addMemberForKeyType);
+                if (getIndexInfoOfType(modifiersType, IndexKind.String)) {
+                    addMemberForKeyType(stringType);
+                }
+            }
+            else {
+                // First, if the constraint type is a type parameter, obtain the base constraint. Then,
+                // if the key type is a 'keyof X', obtain 'keyof C' where C is the base constraint of X.
+                // Finally, iterate over the constituents of the resulting iteration type.
+                const keyType = constraintType.flags & TypeFlags.TypeVariable ? getApparentType(constraintType) : constraintType;
+                const iterationType = keyType.flags & TypeFlags.Index ? getIndexType(getApparentType((<IndexType>keyType).type)) : keyType;
+                forEachType(iterationType, addMemberForKeyType);
+            }
+            setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, undefined);
+
+            function addMemberForKeyType(t: Type) {
                 // Create a mapper from T to the current iteration type constituent. Then, if the
                 // mapped type is itself an instantiated type, combine the iteration mapper with the
                 // instantiation mapper.
@@ -4572,8 +4582,7 @@ namespace ts {
                 else if (t.flags & TypeFlags.String) {
                     stringIndexInfo = createIndexInfo(propType, templateReadonly);
                 }
-            });
-            setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, undefined);
+            }
         }
 
         function getTypeParameterFromMappedType(type: MappedType) {
@@ -11643,8 +11652,11 @@ namespace ts {
                 if (propertiesArray.length > 0) {
                     spread = getSpreadType(spread, createObjectLiteralType(), /*isFromObjectLiteral*/ true);
                 }
-                spread.flags |= propagatedFlags;
-                spread.symbol = node.symbol;
+                if (spread.flags & TypeFlags.Object) {
+                    // only set the symbol and flags if this is a (fresh) object type
+                    spread.flags |= propagatedFlags;
+                    spread.symbol = node.symbol;
+                }
                 return spread;
             }
 
@@ -16586,6 +16598,10 @@ namespace ts {
             }
         }
 
+        function getParameterTypeNodeForDecoratorCheck(node: ParameterDeclaration): TypeNode {
+            return node.dotDotDotToken ? getRestParameterElementType(node.type) : node.type;
+        }
+
         /** Check the decorators of a node */
         function checkDecorators(node: Node): void {
             if (!node.decorators) {
@@ -16617,7 +16633,7 @@ namespace ts {
                         const constructor = getFirstConstructorWithBody(<ClassDeclaration>node);
                         if (constructor) {
                             for (const parameter of constructor.parameters) {
-                                markTypeNodeAsReferenced(parameter.type);
+                                markTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(parameter));
                             }
                         }
                         break;
@@ -16626,15 +16642,17 @@ namespace ts {
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                         for (const parameter of (<FunctionLikeDeclaration>node).parameters) {
-                            markTypeNodeAsReferenced(parameter.type);
+                            markTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(parameter));
                         }
 
                         markTypeNodeAsReferenced((<FunctionLikeDeclaration>node).type);
                         break;
 
                     case SyntaxKind.PropertyDeclaration:
+                        markTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(<ParameterDeclaration>node));
+                        break;
                     case SyntaxKind.Parameter:
-                        markTypeNodeAsReferenced((<PropertyDeclaration | ParameterDeclaration>node).type);
+                        markTypeNodeAsReferenced((<PropertyDeclaration>node).type);
                         break;
                 }
             }
