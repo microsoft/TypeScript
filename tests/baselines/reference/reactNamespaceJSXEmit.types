@@ -37,5 +37,5 @@ declare var x: any;
 >Bar : any
 >x : any
 >y : any
->2 : number
+>2 : 2
 

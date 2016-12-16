@@ -1,5 +1,5 @@
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(2,7): error TS2300: Duplicate identifier 'A'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(15,12): error TS2322: Type 'string' is not assignable to type 'boolean'.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(15,12): error TS2322: Type '""' is not assignable to type 'boolean'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(18,55): error TS2304: Cannot find name 'x'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(18,57): error TS1144: '{' or ';' expected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(18,57): error TS2304: Cannot find name 'is'.
@@ -47,7 +47,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(98,22)
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(98,25): error TS1005: ';' expected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(98,27): error TS1005: ';' expected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(104,25): error TS1228: A type predicate is only allowed in return type position for functions and methods.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(105,16): error TS2322: Type 'boolean' is not assignable to type 'D'.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(105,16): error TS2322: Type 'true' is not assignable to type 'D'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(105,16): error TS2409: Return type of constructor signature must be assignable to the instance type of the class
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(107,20): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(110,20): error TS1228: A type predicate is only allowed in return type position for functions and methods.
@@ -83,7 +83,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(137,39
     function hasANonBooleanReturnStatement(x): x is A {
         return '';
                ~~
-!!! error TS2322: Type 'string' is not assignable to type 'boolean'.
+!!! error TS2322: Type '""' is not assignable to type 'boolean'.
     }
     
     function hasTypeGuardTypeInsideTypeGuardType(x): x is x is A {
@@ -259,7 +259,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(137,39
 !!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
             return true;
                    ~~~~
-!!! error TS2322: Type 'boolean' is not assignable to type 'D'.
+!!! error TS2322: Type 'true' is not assignable to type 'D'.
                    ~~~~
 !!! error TS2409: Return type of constructor signature must be assignable to the instance type of the class
         }

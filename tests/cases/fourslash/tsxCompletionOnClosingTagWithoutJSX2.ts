@@ -6,9 +6,9 @@
 ////    </ /*1*/>
 
 goTo.marker("1");
-verify.memberListCount(1);
+verify.completionListCount(1);
 verify.completionListContains('div');
 
 goTo.marker("2");
-verify.memberListCount(1);
+verify.completionListCount(1);
 verify.completionListContains('h1')

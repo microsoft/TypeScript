@@ -33,7 +33,7 @@ exports.v3 = true;
 var v2 = [1, 2, 3]; // Module scope. Should not appear in global scope
 //// [file4.js]
 "use strict";
-var file3 = require('./file3');
+var file3 = require("./file3");
 var t1 = v1;
 var t2 = v2;
 var t3 = file3.v3;

@@ -158,60 +158,66 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
 ---
 >>>var _a = robotA.skills, primaryA = _a.primary, secondaryA = _a.secondary;
 1 >
-2 >^^^^^^^^^^^^^^^^^^^^^^
-3 >                      ^^
-4 >                        ^^^^^^^^^^^^^^^^^^^^^
-5 >                                             ^^
-6 >                                               ^^^^^^^^^^^^^^^^^^^^^^^^^
-7 >                                                                        ^
-8 >                                                                         ^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^
+3 >    ^^^^^^^^^^^^^^^^^^
+4 >                      ^^
+5 >                        ^^^^^^^^^^^^^^^^^^^^^
+6 >                                             ^^
+7 >                                               ^^^^^^^^^^^^^^^^^^^^^^^^^
+8 >                                                                        ^
+9 >                                                                         ^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
   >var { 
-2 >skills: { primary: primaryA, secondary: secondaryA }
-3 >                      
-4 >                        primary: primaryA
-5 >                                             , 
-6 >                                               secondary: secondaryA
-7 >                                                                         } } = robotA;
+2 >
+3 >    skills: { primary: primaryA, secondary: secondaryA }
+4 >                      
+5 >                        primary: primaryA
+6 >                                             , 
+7 >                                               secondary: secondaryA
+8 >                                                                         } } = robotA;
 1 >Emitted(3, 1) Source(14, 7) + SourceIndex(0)
-2 >Emitted(3, 23) Source(14, 59) + SourceIndex(0)
-3 >Emitted(3, 25) Source(14, 17) + SourceIndex(0)
-4 >Emitted(3, 46) Source(14, 34) + SourceIndex(0)
-5 >Emitted(3, 48) Source(14, 36) + SourceIndex(0)
-6 >Emitted(3, 73) Source(14, 57) + SourceIndex(0)
-7 >Emitted(3, 74) Source(14, 71) + SourceIndex(0)
+2 >Emitted(3, 5) Source(14, 7) + SourceIndex(0)
+3 >Emitted(3, 23) Source(14, 59) + SourceIndex(0)
+4 >Emitted(3, 25) Source(14, 17) + SourceIndex(0)
+5 >Emitted(3, 46) Source(14, 34) + SourceIndex(0)
+6 >Emitted(3, 48) Source(14, 36) + SourceIndex(0)
+7 >Emitted(3, 73) Source(14, 57) + SourceIndex(0)
+8 >Emitted(3, 74) Source(14, 71) + SourceIndex(0)
 ---
 >>>var nameB = robotB.name, _b = robotB.skills, primaryB = _b.primary, secondaryB = _b.secondary;
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^
-3 >                       ^^
-4 >                         ^^^^^^^^^^^^^^^^^^
-5 >                                           ^^
-6 >                                             ^^^^^^^^^^^^^^^^^^^^^
-7 >                                                                  ^^
-8 >                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^
-9 >                                                                                             ^
-10>                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^
+3 >    ^^^^^^^^^^^^^^^^^^^
+4 >                       ^^
+5 >                         ^^^^^^^^^^^^^^^^^^
+6 >                                           ^^
+7 >                                             ^^^^^^^^^^^^^^^^^^^^^
+8 >                                                                  ^^
+9 >                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+10>                                                                                             ^
+11>                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >var { 
-2 >name: nameB
-3 >                       , 
-4 >                         skills: { primary: primaryB, secondary: secondaryB }
-5 >                                           
-6 >                                             primary: primaryB
-7 >                                                                  , 
-8 >                                                                    secondary: secondaryB
-9 >                                                                                              } } = robotB;
+2 >
+3 >    name: nameB
+4 >                       , 
+5 >                         skills: { primary: primaryB, secondary: secondaryB }
+6 >                                           
+7 >                                             primary: primaryB
+8 >                                                                  , 
+9 >                                                                    secondary: secondaryB
+10>                                                                                              } } = robotB;
 1->Emitted(4, 1) Source(15, 7) + SourceIndex(0)
-2 >Emitted(4, 24) Source(15, 18) + SourceIndex(0)
-3 >Emitted(4, 26) Source(15, 20) + SourceIndex(0)
-4 >Emitted(4, 44) Source(15, 72) + SourceIndex(0)
-5 >Emitted(4, 46) Source(15, 30) + SourceIndex(0)
-6 >Emitted(4, 67) Source(15, 47) + SourceIndex(0)
-7 >Emitted(4, 69) Source(15, 49) + SourceIndex(0)
-8 >Emitted(4, 94) Source(15, 70) + SourceIndex(0)
-9 >Emitted(4, 95) Source(15, 84) + SourceIndex(0)
+2 >Emitted(4, 5) Source(15, 7) + SourceIndex(0)
+3 >Emitted(4, 24) Source(15, 18) + SourceIndex(0)
+4 >Emitted(4, 26) Source(15, 20) + SourceIndex(0)
+5 >Emitted(4, 44) Source(15, 72) + SourceIndex(0)
+6 >Emitted(4, 46) Source(15, 30) + SourceIndex(0)
+7 >Emitted(4, 67) Source(15, 47) + SourceIndex(0)
+8 >Emitted(4, 69) Source(15, 49) + SourceIndex(0)
+9 >Emitted(4, 94) Source(15, 70) + SourceIndex(0)
+10>Emitted(4, 95) Source(15, 84) + SourceIndex(0)
 ---
 >>>var _c = { name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } }, nameC = _c.name, _d = _c.skills, primaryB = _d.primary, secondaryB = _d.secondary;
 1->
@@ -227,9 +233,9 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
 11>                                                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^
 12>                                                                                                                                                                          ^
 1->
-  >
+  >var 
 2 >
-3 >    var { name: nameC, skills: { primary: primaryB, secondary: secondaryB } } = { name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } }
+3 >    { name: nameC, skills: { primary: primaryB, secondary: secondaryB } } = { name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } }
 4 >                                                                                       
 5 >                                                                                         name: nameC
 6 >                                                                                                        , 
@@ -239,8 +245,8 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
 10>                                                                                                                                               , 
 11>                                                                                                                                                 secondary: secondaryB
 12>                                                                                                                                                                           } } = { name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } };
-1->Emitted(5, 1) Source(16, 1) + SourceIndex(0)
-2 >Emitted(5, 5) Source(16, 1) + SourceIndex(0)
+1->Emitted(5, 1) Source(16, 5) + SourceIndex(0)
+2 >Emitted(5, 5) Source(16, 5) + SourceIndex(0)
 3 >Emitted(5, 88) Source(16, 155) + SourceIndex(0)
 4 >Emitted(5, 90) Source(16, 7) + SourceIndex(0)
 5 >Emitted(5, 105) Source(16, 18) + SourceIndex(0)

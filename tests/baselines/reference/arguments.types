@@ -6,5 +6,5 @@ function f() {
 >x : any
 >arguments[12] : any
 >arguments : IArguments
->12 : number
+>12 : 12
 }

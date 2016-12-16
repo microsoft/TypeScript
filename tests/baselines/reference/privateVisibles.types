@@ -4,7 +4,7 @@ class Foo {
 
 	private pvar = 0;
 >pvar : number
->0 : number
+>0 : 0
 
 	constructor() {
 	    var n = this.pvar;

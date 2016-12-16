@@ -9,7 +9,7 @@ class c1 {
 
         var _i = 10; // no error
 >_i : number
->10 : number
+>10 : 10
     }
 }
 class c1NoError {
@@ -20,7 +20,7 @@ class c1NoError {
 
         var _i = 10; // no error
 >_i : number
->10 : number
+>10 : 10
     }
 }
 
@@ -32,7 +32,7 @@ class c2 {
 
         var _i = 10; // no error
 >_i : number
->10 : number
+>10 : 10
     }
 }
 class c2NoError {
@@ -41,7 +41,7 @@ class c2NoError {
     constructor() {
         var _i = 10; // no error
 >_i : number
->10 : number
+>10 : 10
     }
 }
 
@@ -54,7 +54,7 @@ class c3 {
 
         var _i = 10; // no error
 >_i : number
->10 : number
+>10 : 10
     }
 }
 class c3NoError {
@@ -65,7 +65,7 @@ class c3NoError {
 
         var _i = 10; // no error
 >_i : number
->10 : number
+>10 : 10
     }
 }
 

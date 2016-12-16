@@ -14,16 +14,4 @@
 ////class fooCls implements /*remoteInterfaceReference*/remoteInterface { }
 ////var fooVar = /*remoteModuleReference*/remoteModule.foo;
 
-var markerList = [
-    "remoteVariable",
-    "remoteFunction",
-    "remoteClass",
-    "remoteInterface",
-    "remoteModule",
-];
-
-markerList.forEach((marker) => {
-    goTo.marker(marker + 'Reference');
-    goTo.definition();
-    verify.caretAtMarker(marker + 'Definition');
-});
+verify.goToDefinitionForMarkers("remoteVariable", "remoteFunction", "remoteClass", "remoteInterface", "remoteModule");

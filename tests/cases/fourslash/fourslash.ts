@@ -83,6 +83,7 @@ declare namespace FourSlashInterface {
         InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
         InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: boolean;
         InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: boolean;
+        InsertSpaceAfterTypeAssertion: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
         [s: string]: boolean | number | string | undefined;
@@ -99,6 +100,7 @@ declare namespace FourSlashInterface {
     }
     class test_ {
         markers(): Marker[];
+        markerNames(): string[];
         marker(name?: string): Marker;
         ranges(): Range[];
         rangesByText(): { [text: string]: Range[] };
@@ -108,8 +110,8 @@ declare namespace FourSlashInterface {
         marker(name?: string): void;
         bof(): void;
         eof(): void;
-        definition(definitionIndex?: number): void;
         type(definitionIndex?: number): void;
+        implementation(): void;
         position(position: number, fileIndex?: number): any;
         position(position: number, fileName?: string): any;
         file(index: number, content?: string, scriptKindName?: string): any;
@@ -119,24 +121,20 @@ declare namespace FourSlashInterface {
         private negative;
         not: verifyNegatable;
         constructor(negative?: boolean);
-        memberListContains(symbol: string, text?: string, documenation?: string, kind?: string): void;
-        memberListCount(expectedCount: number): void;
-        completionListContains(symbol: string, text?: string, documentation?: string, kind?: string): void;
+        completionListCount(expectedCount: number): void;
+        completionListContains(symbol: string, text?: string, documentation?: string, kind?: string, spanIndex?: number): void;
         completionListItemsCountIsGreaterThan(count: number): void;
         completionListIsEmpty(): void;
         completionListAllowsNewIdentifier(): void;
-        memberListIsEmpty(): void;
         signatureHelpPresent(): void;
         errorExistsBetweenMarkers(startMarker: string, endMarker: string): void;
         errorExistsAfterMarker(markerName?: string): void;
         errorExistsBeforeMarker(markerName?: string): void;
-        quickInfoIs(expectedText?: string, expectedDocumentation?: string): void;
         quickInfoExists(): void;
-        definitionCountIs(expectedCount: number): void;
         typeDefinitionCountIs(expectedCount: number): void;
-        definitionLocationExists(): void;
-        verifyDefinitionsName(name: string, containerName: string): void;
+        implementationListIsEmpty(): void;
         isValidBraceCompletionAtPosition(openingBrace?: string): void;
+        codeFixAvailable(): void;
     }
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
@@ -152,6 +150,21 @@ declare namespace FourSlashInterface {
         eval(expr: string, value: any): void;
         currentLineContentIs(text: string): void;
         currentFileContentIs(text: string): void;
+        /** Verifies that goToDefinition at the current position would take you to `endMarker`. */
+        goToDefinitionIs(endMarkers: string | string[]): void;
+        goToDefinitionName(name: string, containerName: string): void;
+        /**
+         * `verify.goToDefinition("a", "b");` verifies that go-to-definition at marker "a" takes you to marker "b".
+         * `verify.goToDefinition(["a", "aa"], "b");` verifies that markers "a" and "aa" have the same definition "b".
+         * `verify.goToDefinition("a", ["b", "bb"]);` verifies that "a" has multiple definitions available.
+         */
+        goToDefinition(startMarkerNames: string | string[], endMarkerNames: string | string[]): void;
+        /** Performs `goToDefinition` for each pair. */
+        goToDefinition(startsAndEnds: [string | string[], string | string[]][]): void;
+        /** Performs `goToDefinition` on each key and value. */
+        goToDefinition(startsAndEnds: { [startMarkerName: string]: string | string[] }): void;
+        /** Verifies goToDefinition for each `${markerName}Reference` -> `${markerName}Definition` */
+        goToDefinitionForMarkers(...markerNames: string[]): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
         /**
@@ -171,6 +184,7 @@ declare namespace FourSlashInterface {
          * If `ranges` is omitted, this is `test.ranges()`.
          */
         rangesReferenceEachOther(ranges?: Range[]): void;
+        findReferencesDefinitionDisplayPartsAtCaretAre(expected: ts.SymbolDisplayPart[]): void;
         rangesWithSameTextReferenceEachOther(): void;
         currentParameterHelpArgumentNameIs(name: string): void;
         currentParameterSpanIs(parameter: string): void;
@@ -178,6 +192,7 @@ declare namespace FourSlashInterface {
         currentSignatureHelpDocCommentIs(docComment: string): void;
         signatureHelpCountIs(expected: number): void;
         signatureHelpArgumentCountIs(expected: number): void;
+        signatureHelpCurrentArgumentListIsVariadic(expected: boolean);
         currentSignatureParameterCountIs(expected: number): void;
         currentSignatureTypeParameterCountIs(expected: number): void;
         currentSignatureHelpIs(expected: string): void;
@@ -185,6 +200,7 @@ declare namespace FourSlashInterface {
         baselineCurrentFileBreakpointLocations(): void;
         baselineCurrentFileNameOrDottedNameSpans(): void;
         baselineGetEmitOutput(): void;
+        baselineQuickInfo(): void;
         nameOrDottedNameSpanTextIs(text: string): void;
         outliningSpansInCurrentFile(spans: TextSpan[]): void;
         todoCommentsInCurrentFile(descriptors: string[]): void;
@@ -192,9 +208,12 @@ declare namespace FourSlashInterface {
         noMatchingBracePositionInCurrentFile(bracePosition: number): void;
         DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean): void;
         noDocCommentTemplate(): void;
+        codeFixAtPosition(expectedText: string, errorCode?: number): void;
+        importFixAtPosition(expectedTextArray: string[], errorCode?: number): void;
 
         navigationBar(json: any): void;
-        navigationItemsListCount(count: number, searchValue: string, matchKind?: string): void;
+        navigationTree(json: any): void;
+        navigationItemsListCount(count: number, searchValue: string, matchKind?: string, fileName?: string): void;
         navigationItemsListContains(name: string, kind: string, searchValue: string, matchKind: string, fileName?: string, parentName?: string): void;
         occurrencesAtPositionContains(range: Range, isWriteAccess?: boolean): void;
         occurrencesAtPositionCount(expectedCount: number): void;
@@ -219,6 +238,16 @@ declare namespace FourSlashInterface {
         renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string): void;
         renameInfoFailed(message?: string): void;
         renameLocations(findInStrings: boolean, findInComments: boolean, ranges?: Range[]): void;
+
+        /** Verify the quick info available at the current marker. */
+        quickInfoIs(expectedText: string, expectedDocumentation?: string): void;
+        /** Goto a marker and call `quickInfoIs`. */
+        quickInfoAt(markerName: string, expectedText?: string, expectedDocumentation?: string): void;
+        /**
+         * Call `quickInfoAt` for each pair in the object.
+         * (If the value is an array, it is [expectedText, expectedDocumentation].)
+         */
+        quickInfos(namesAndTexts: { [name: string]: string | [string, string] }): void;
         verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: {
             start: number;
             length: number;
@@ -226,6 +255,7 @@ declare namespace FourSlashInterface {
         getSyntacticDiagnostics(expected: string): void;
         getSemanticDiagnostics(expected: string): void;
         ProjectInfo(expected: string[]): void;
+        allRangesAppearInImplementationList(markerName: string): void;
     }
     class edit {
         backspace(count?: number): void;
@@ -247,7 +277,6 @@ declare namespace FourSlashInterface {
         printCurrentFileStateWithoutCaret(): void;
         printCurrentQuickInfo(): void;
         printCurrentSignatureHelp(): void;
-        printMemberListMembers(): void;
         printCompletionListMembers(): void;
         printBreakpointLocation(pos: number): void;
         printBreakpointAtCurrentLocation(): void;

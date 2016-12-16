@@ -5,18 +5,28 @@
         "removeComments": true,
         "preserveConstEnums": true,
         "pretty": true,
-        "out": "../../built/local/tsserver.js",
+        "outFile": "../../built/local/tsserver.js",
         "sourceMap": true,
         "stripInternal": true,
         "types": [
             "node"
-        ]
+        ],
+        "target": "es5",
+        "noUnusedLocals": true,
+        "noUnusedParameters": true
     },
     "files": [
         "../services/shims.ts",
         "../services/utilities.ts",
+        "shared.ts",
+        "utilities.ts",
+        "scriptVersionCache.ts",
+        "scriptInfo.ts",
+        "lsHost.ts",
+        "typingsCache.ts",
+        "project.ts",
         "editorServices.ts",
-        "protocol.d.ts",
+        "protocol.ts",
         "session.ts",
         "server.ts"
     ]

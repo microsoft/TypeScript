@@ -1,3 +1,4 @@
+// @allowJs: true
 // @noImplicitReferences: true
 // @traceResolution: true
 // @currentDirectory: /

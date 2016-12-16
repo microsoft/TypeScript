@@ -22,7 +22,6 @@ var enumdule;
     enumdule[enumdule["Red"] = 0] = "Red";
     enumdule[enumdule["Blue"] = 1] = "Blue";
 })(enumdule || (enumdule = {}));
-var enumdule;
 (function (enumdule) {
     var Point = (function () {
         function Point(x, y) {

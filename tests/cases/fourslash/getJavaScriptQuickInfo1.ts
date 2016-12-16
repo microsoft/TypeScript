@@ -5,5 +5,4 @@
 /////** @type {function(new:string,number)} */
 ////var /**/v;
 
-goTo.marker();
-verify.quickInfoIs('var v: new (p1: number) => string');
+verify.quickInfoAt("", "var v: new (arg1: number) => string", undefined);

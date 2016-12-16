@@ -31,7 +31,7 @@ define(["require", "exports"], function (require, exports) {
     var List = (function (_super) {
         __extends(List, _super);
         function List() {
-            _super.apply(this, arguments);
+            return _super.apply(this, arguments) || this;
         }
         List.prototype.Bar = function () { };
         return List;
@@ -46,7 +46,7 @@ define(["require", "exports"], function (require, exports) {
     var ListItem = (function (_super) {
         __extends(ListItem, _super);
         function ListItem() {
-            _super.apply(this, arguments);
+            return _super.apply(this, arguments) || this;
         }
         return ListItem;
     }(CollectionItem));

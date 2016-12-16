@@ -17,7 +17,7 @@ WorkspacePrototype['__proto__'] = EntityPrototype;
 >WorkspacePrototype['__proto__'] = EntityPrototype : any
 >WorkspacePrototype['__proto__'] : any
 >WorkspacePrototype : { serialize: () => any; }
->'__proto__' : string
+>'__proto__' : "___proto__"
 >EntityPrototype : any
 
 var o = {
@@ -25,14 +25,14 @@ var o = {
 >{    "__proto__": 0} : { "__proto__": number; }
 
     "__proto__": 0
->0 : number
+>0 : 0
 
 };
 class C {
 >C : C
 
     "__proto__" = 0;
->0 : number
+>0 : 0
 }
 === tests/cases/compiler/protoAsIndexInIndexExpression_0.ts ===
 export var x;

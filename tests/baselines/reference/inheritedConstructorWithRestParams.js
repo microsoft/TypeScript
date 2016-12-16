@@ -24,7 +24,7 @@ var Base = (function () {
     function Base() {
         var a = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            a[_i - 0] = arguments[_i];
+            a[_i] = arguments[_i];
         }
     }
     return Base;
@@ -32,7 +32,7 @@ var Base = (function () {
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return Derived;
 }(Base));

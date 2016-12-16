@@ -8,6 +8,7 @@
 ==== /types/lib/index.d.ts (0 errors) ====
     
     
+    
     interface Lib { x }
     
 ==== /mod1.ts (1 errors) ====

@@ -5,7 +5,7 @@ tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(5,6): error 
 tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(6,1): error TS2304: Cannot find name 'type'.
 tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(6,6): error TS1005: ';' expected.
 tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(6,11): error TS1109: Expression expected.
-tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(6,13): error TS2304: Cannot find name 'I'.
+tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(6,13): error TS2693: 'I' only refers to a type, but is being used as a value here.
 
 
 ==== tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts (8 errors) ====
@@ -30,4 +30,4 @@ tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(6,13): error
               ~
 !!! error TS1109: Expression expected.
                 ~
-!!! error TS2304: Cannot find name 'I'.
+!!! error TS2693: 'I' only refers to a type, but is being used as a value here.

@@ -1,6 +1,6 @@
 //// [callWithSpread.ts]
 interface X {
-    foo(x: number, y: number, ...z: string[]);
+    foo(x: number, y: number, ...z: string[]): X;
 }
 
 function foo(x: number, y: number, ...z: string[]) {
@@ -19,9 +19,17 @@ obj.foo(1, 2, "abc");
 obj.foo(1, 2, ...a);
 obj.foo(1, 2, ...a, "abc");
 
+obj.foo(1, 2, ...a).foo(1, 2, "abc");
+obj.foo(1, 2, ...a).foo(1, 2, ...a);
+obj.foo(1, 2, ...a).foo(1, 2, ...a, "abc");
+
 (obj.foo)(1, 2, "abc");
 (obj.foo)(1, 2, ...a);
 (obj.foo)(1, 2, ...a, "abc");
+
+((obj.foo)(1, 2, ...a).foo)(1, 2, "abc");
+((obj.foo)(1, 2, ...a).foo)(1, 2, ...a);
+((obj.foo)(1, 2, ...a).foo)(1, 2, ...a, "abc");
 
 xa[1].foo(1, 2, "abc");
 xa[1].foo(1, 2, ...a);
@@ -72,13 +80,19 @@ foo.apply(void 0, [1, 2].concat(a, ["abc"]));
 obj.foo(1, 2, "abc");
 obj.foo.apply(obj, [1, 2].concat(a));
 obj.foo.apply(obj, [1, 2].concat(a, ["abc"]));
+obj.foo.apply(obj, [1, 2].concat(a)).foo(1, 2, "abc");
+(_a = obj.foo.apply(obj, [1, 2].concat(a))).foo.apply(_a, [1, 2].concat(a));
+(_b = obj.foo.apply(obj, [1, 2].concat(a))).foo.apply(_b, [1, 2].concat(a, ["abc"]));
 (obj.foo)(1, 2, "abc");
 obj.foo.apply(obj, [1, 2].concat(a));
 obj.foo.apply(obj, [1, 2].concat(a, ["abc"]));
+(obj.foo.apply(obj, [1, 2].concat(a)).foo)(1, 2, "abc");
+(_c = obj.foo.apply(obj, [1, 2].concat(a))).foo.apply(_c, [1, 2].concat(a));
+(_d = obj.foo.apply(obj, [1, 2].concat(a))).foo.apply(_d, [1, 2].concat(a, ["abc"]));
 xa[1].foo(1, 2, "abc");
-(_a = xa[1]).foo.apply(_a, [1, 2].concat(a));
-(_b = xa[1]).foo.apply(_b, [1, 2].concat(a, ["abc"]));
-(_c = xa[1]).foo.apply(_c, [1, 2, "abc"]);
+(_e = xa[1]).foo.apply(_e, [1, 2].concat(a));
+(_f = xa[1]).foo.apply(_f, [1, 2].concat(a, ["abc"]));
+(_g = xa[1]).foo.apply(_g, [1, 2, "abc"]);
 var C = (function () {
     function C(x, y) {
         var z = [];
@@ -99,8 +113,9 @@ var C = (function () {
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        _super.call(this, 1, 2);
-        _super.apply(this, [1, 2].concat(a));
+        var _this = _super.call(this, 1, 2) || this;
+        _this = _super.apply(this, [1, 2].concat(a)) || this;
+        return _this;
     }
     D.prototype.foo = function () {
         _super.prototype.foo.call(this, 1, 2);
@@ -108,4 +123,4 @@ var D = (function (_super) {
     };
     return D;
 }(C));
-var _a, _b, _c;
+var _a, _b, _c, _d, _e, _f, _g;

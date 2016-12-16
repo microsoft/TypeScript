@@ -32,26 +32,26 @@ var b = { foo: '' };
 >b : { foo: string; }
 >{ foo: '' } : { foo: string; }
 >foo : string
->'' : string
+>'' : ""
 
 var c = { foo: '', bar: 3 };
 >c : { foo: string; bar: number; }
 >{ foo: '', bar: 3 } : { foo: string; bar: number; }
 >foo : string
->'' : string
+>'' : ""
 >bar : number
->3 : number
+>3 : 3
 
 var d = { foo: '', bar: 3, baz: () => '' };
 >d : { foo: string; bar: number; baz: () => string; }
 >{ foo: '', bar: 3, baz: () => '' } : { foo: string; bar: number; baz: () => string; }
 >foo : string
->'' : string
+>'' : ""
 >bar : number
->3 : number
+>3 : 3
 >baz : () => string
 >() => '' : () => string
->'' : string
+>'' : ""
 
 var i: I;
 >i : I

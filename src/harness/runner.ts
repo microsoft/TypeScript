@@ -61,6 +61,10 @@ function createRunner(kind: TestRunnerKind): RunnerBase {
     }
 }
 
+if (Harness.IO.tryEnableSourceMapsForHost && /^development$/i.test(Harness.IO.getEnvironmentVariable("NODE_ENV"))) {
+    Harness.IO.tryEnableSourceMapsForHost();
+}
+
 // users can define tests to run in mytest.config that will override cmd line args, otherwise use cmd line args (test.config), otherwise no options
 
 const mytestconfigFileName = "mytest.config";
@@ -82,6 +86,7 @@ interface TestConfig {
     light?: boolean;
     taskConfigsFolder?: string;
     workerCount?: number;
+    stackTraceLimit?: number | "full";
     tasks?: TaskSet[];
     test?: string[];
     runUnitTests?: boolean;
@@ -114,6 +119,13 @@ if (testConfigContent !== "") {
             }
             runners.push(runner);
         }
+    }
+
+    if (testConfig.stackTraceLimit === "full") {
+        (<any>Error).stackTraceLimit = Infinity;
+    }
+    else if ((+testConfig.stackTraceLimit | 0) > 0) {
+        (<any>Error).stackTraceLimit = testConfig.stackTraceLimit;
     }
 
     if (testConfig.test && testConfig.test.length > 0) {
@@ -214,5 +226,5 @@ else {
 }
 if (!runUnitTests) {
     // patch `describe` to skip unit tests
-    describe = <any>(function () { });
+    describe = ts.noop as any;
 }

@@ -42,7 +42,7 @@ function getFalsyPrimitive(x: PrimitiveName): number | string | boolean {
 >"string" : "string"
 
         return "";
->"" : string
+>"" : ""
     }
     if (x === "number") {
 >x === "number" : boolean
@@ -50,7 +50,7 @@ function getFalsyPrimitive(x: PrimitiveName): number | string | boolean {
 >"number" : "number"
 
         return 0;
->0 : number
+>0 : 0
     }
     if (x === "boolean") {
 >x === "boolean" : boolean
@@ -58,12 +58,12 @@ function getFalsyPrimitive(x: PrimitiveName): number | string | boolean {
 >"boolean" : "boolean"
 
         return false;
->false : boolean
+>false : false
     }
 
     // Should be unreachable.
     throw "Invalid value";
->"Invalid value" : string
+>"Invalid value" : "Invalid value"
 }
 
 namespace Consts1 {

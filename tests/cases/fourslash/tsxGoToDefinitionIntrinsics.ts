@@ -15,15 +15,8 @@
 //// var y = <s/*ss*/pan />;
 //// var z = <div na/*ps*/me='hello' />;
 
-goTo.marker('ds');
-goTo.definition();
-verify.caretAtMarker('dt');
-
-goTo.marker('ss');
-goTo.definition();
-verify.caretAtMarker('st');
-
-goTo.marker('ps');
-goTo.definition();
-verify.caretAtMarker('pt');
-
+verify.goToDefinition({
+    ds: "dt",
+    ss: "st",
+    ps: "pt"
+});

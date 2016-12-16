@@ -1,5 +1,5 @@
 tests/cases/compiler/functionCall13.ts(4,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/functionCall13.ts(5,5): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+tests/cases/compiler/functionCall13.ts(5,5): error TS2345: Argument of type '1' is not assignable to parameter of type 'string'.
 
 
 ==== tests/cases/compiler/functionCall13.ts (2 errors) ====
@@ -11,6 +11,6 @@ tests/cases/compiler/functionCall13.ts(5,5): error TS2345: Argument of type 'num
 !!! error TS2346: Supplied parameters do not match any signature of call target.
     foo(1, 'bar');
         ~
-!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type '1' is not assignable to parameter of type 'string'.
     foo('foo', 1, 3);
     

@@ -9,7 +9,7 @@ var r = foo(1); // void since there's a body
 >r : void
 >foo(1) : void
 >foo : (x: any) => void
->1 : number
+>1 : 1
 
 interface I {
 >I : I

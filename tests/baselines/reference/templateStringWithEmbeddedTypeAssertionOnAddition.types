@@ -5,6 +5,6 @@ var x = `abc${ <any>(10 + 10) }def`;
 ><any>(10 + 10) : any
 >(10 + 10) : number
 >10 + 10 : number
->10 : number
->10 : number
+>10 : 10
+>10 : 10
 

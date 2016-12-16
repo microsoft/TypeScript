@@ -37,11 +37,11 @@ var TypeScript2;
     ;
     ;
     ;
+    var PullSymbolVisibility;
     (function (PullSymbolVisibility) {
         PullSymbolVisibility[PullSymbolVisibility["Private"] = 0] = "Private";
         PullSymbolVisibility[PullSymbolVisibility["Public"] = 1] = "Public";
-    })(TypeScript2.PullSymbolVisibility || (TypeScript2.PullSymbolVisibility = {}));
-    var PullSymbolVisibility = TypeScript2.PullSymbolVisibility;
+    })(PullSymbolVisibility = TypeScript2.PullSymbolVisibility || (TypeScript2.PullSymbolVisibility = {}));
     var PullSymbol = (function () {
         function PullSymbol(name, declKind) {
         }
@@ -57,7 +57,7 @@ var TypeScript2;
     var PullTypeSymbol = (function (_super) {
         __extends(PullTypeSymbol, _super);
         function PullTypeSymbol() {
-            _super.apply(this, arguments);
+            return _super.apply(this, arguments) || this;
         }
         return PullTypeSymbol;
     }(PullSymbol));

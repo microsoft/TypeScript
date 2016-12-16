@@ -8,7 +8,7 @@ class C {
 >hasInstance : symbol
 
         return "";
->"" : string
+>"" : ""
     }
     get [Symbol.toPrimitive]() {
 >Symbol.toPrimitive : symbol
@@ -16,6 +16,6 @@ class C {
 >toPrimitive : symbol
 
         return "";
->"" : string
+>"" : ""
     }
 }

@@ -75,17 +75,10 @@ sourceFile:es6-sourcemap-amd.ts
 2 >Emitted(6, 6) Source(12, 6) + SourceIndex(0)
 ---
 >>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
-  >
-2 >}
-1 >Emitted(7, 1) Source(13, 1) + SourceIndex(0)
-2 >Emitted(7, 2) Source(13, 2) + SourceIndex(0)
+  >}
+1 >Emitted(7, 2) Source(13, 2) + SourceIndex(0)
 ---
->>>//# sourceMappingURL=es6-sourcemap-amd.js.map1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->
-1->Emitted(8, 1) Source(13, 2) + SourceIndex(0)
----
+>>>//# sourceMappingURL=es6-sourcemap-amd.js.map

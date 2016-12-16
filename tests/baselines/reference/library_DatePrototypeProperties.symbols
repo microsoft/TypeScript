@@ -30,25 +30,25 @@ Date.prototype.toTimeString();
 >toTimeString : Symbol(Date.toTimeString, Decl(lib.d.ts, --, --))
 
 Date.prototype.toLocaleString();
->Date.prototype.toLocaleString : Symbol(Date.toLocaleString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date.prototype.toLocaleString : Symbol(Date.toLocaleString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Date.prototype : Symbol(DateConstructor.prototype, Decl(lib.d.ts, --, --))
 >Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >prototype : Symbol(DateConstructor.prototype, Decl(lib.d.ts, --, --))
->toLocaleString : Symbol(Date.toLocaleString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>toLocaleString : Symbol(Date.toLocaleString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 Date.prototype.toLocaleDateString();
->Date.prototype.toLocaleDateString : Symbol(Date.toLocaleDateString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date.prototype.toLocaleDateString : Symbol(Date.toLocaleDateString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Date.prototype : Symbol(DateConstructor.prototype, Decl(lib.d.ts, --, --))
 >Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >prototype : Symbol(DateConstructor.prototype, Decl(lib.d.ts, --, --))
->toLocaleDateString : Symbol(Date.toLocaleDateString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>toLocaleDateString : Symbol(Date.toLocaleDateString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 Date.prototype.toLocaleTimeString();
->Date.prototype.toLocaleTimeString : Symbol(Date.toLocaleTimeString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date.prototype.toLocaleTimeString : Symbol(Date.toLocaleTimeString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Date.prototype : Symbol(DateConstructor.prototype, Decl(lib.d.ts, --, --))
 >Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >prototype : Symbol(DateConstructor.prototype, Decl(lib.d.ts, --, --))
->toLocaleTimeString : Symbol(Date.toLocaleTimeString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>toLocaleTimeString : Symbol(Date.toLocaleTimeString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 Date.prototype.valueOf();
 >Date.prototype.valueOf : Symbol(Date.valueOf, Decl(lib.d.ts, --, --))

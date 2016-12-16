@@ -2,4 +2,4 @@
 var v = function * yield() { }
 
 //// [FunctionDeclaration12_es6.js]
-var v = , yield = function () { };
+var v = function* () { }, yield = function () { };

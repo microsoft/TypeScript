@@ -1,5 +1,5 @@
 tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(2,14): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(3,16): error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
+tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(3,16): error TS2345: Argument of type '1' is not assignable to parameter of type 'T'.
 tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(4,14): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(8,15): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(9,15): error TS2346: Supplied parameters do not match any signature of call target.
@@ -15,7 +15,7 @@ tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(14,15
 !!! error TS2346: Supplied parameters do not match any signature of call target.
         var r2 = f(1);
                    ~
-!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
+!!! error TS2345: Argument of type '1' is not assignable to parameter of type 'T'.
         var r3 = f<any>(null);
                  ~~~~~~~~~~~~
 !!! error TS2346: Supplied parameters do not match any signature of call target.

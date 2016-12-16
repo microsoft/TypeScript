@@ -5,8 +5,8 @@ async function bar() {
 
     !await 42; // OK
 >!await 42 : boolean
->await 42 : number
->42 : number
+>await 42 : 42
+>42 : 42
 }
 
 async function bar1() {
@@ -14,8 +14,8 @@ async function bar1() {
 
     +await 42; // OK
 >+await 42 : number
->await 42 : number
->42 : number
+>await 42 : 42
+>42 : 42
 }
 
 async function bar3() {
@@ -23,8 +23,8 @@ async function bar3() {
 
     -await 42; // OK
 >-await 42 : number
->await 42 : number
->42 : number
+>await 42 : 42
+>42 : 42
 }
 
 async function bar4() {
@@ -32,6 +32,6 @@ async function bar4() {
 
     ~await 42; // OK
 >~await 42 : number
->await 42 : number
->42 : number
+>await 42 : 42
+>42 : 42
 }

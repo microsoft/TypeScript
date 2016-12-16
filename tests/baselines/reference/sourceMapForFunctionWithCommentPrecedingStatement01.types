@@ -5,5 +5,5 @@ function P() {
     // Test this
     var a = 1;
 >a : number
->1 : number
+>1 : 1
 }

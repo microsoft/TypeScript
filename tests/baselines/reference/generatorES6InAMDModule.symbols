@@ -1,0 +1,6 @@
+=== tests/cases/compiler/generatorES6InAMDModule.ts ===
+export function* foo() {
+>foo : Symbol(foo, Decl(generatorES6InAMDModule.ts, 0, 0))
+
+    yield
+}

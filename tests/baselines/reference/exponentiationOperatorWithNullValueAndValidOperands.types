@@ -6,10 +6,10 @@ enum E {
 >E : E
 
     a,
->a : E
+>a : E.a
 
     b
->b : E
+>b : E.b
 }
 
 var a: any;
@@ -35,15 +35,15 @@ var r3 = null ** 1;
 >r3 : number
 >null ** 1 : number
 >null : null
->1 : number
+>1 : 1
 
 var r4 = null ** E.a;
 >r4 : number
 >null ** E.a : number
 >null : null
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 
 var r5 = a ** null;
 >r5 : number
@@ -60,14 +60,14 @@ var r6 = b ** null;
 var r7 = 0 ** null;
 >r7 : number
 >0 ** null : number
->0 : number
+>0 : 0
 >null : null
 
 var r8 = E.b ** null;
 >r8 : number
 >E.b ** null : number
->E.b : E
+>E.b : E.b
 >E : typeof E
->b : E
+>b : E.b
 >null : null
 

@@ -38,7 +38,7 @@ function attr(nameOrMap: any, value?: string): any {
     else {
         // handle string case
         return "s";
->"s" : string
+>"s" : "s"
     }
 }
 

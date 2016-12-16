@@ -5,7 +5,7 @@ function foo1() {
     // Single line comment
 
     return 42;
->42 : number
+>42 : 42
 }
 
 function foo2() {
@@ -18,7 +18,7 @@ function foo2() {
     */
 
     return 42;
->42 : number
+>42 : 42
 }
 
 function foo3() {
@@ -28,7 +28,7 @@ function foo3() {
 
 
     return 42;
->42 : number
+>42 : 42
 }
 
 function foo4() {
@@ -40,7 +40,7 @@ function foo4() {
     */
 
     return 42;
->42 : number
+>42 : 42
 }
 
 

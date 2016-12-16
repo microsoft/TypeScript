@@ -61,9 +61,9 @@ fold(
 
     [1, 2, 3],
 >[1, 2, 3] : number[]
->1 : number
->2 : number
->3 : number
+>1 : 1
+>2 : 2
+>3 : 3
 
     [] as [string, string][],
 >[] as [string, string][] : [string, string][]
@@ -81,8 +81,8 @@ fold(
 
         ["", ""]
 >["", ""] : [string, string]
->"" : string
->"" : string
+>"" : ""
+>"" : ""
 
     )
 );

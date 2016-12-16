@@ -11,9 +11,9 @@ class Point {
 >Point : Point
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
->0 : number
+>0 : 0
 >y : number
->0 : number
+>0 : 0
 }
 
 module Point {
@@ -21,7 +21,7 @@ module Point {
 
     var Origin = ""; // not an error, since not exported
 >Origin : string
->"" : string
+>"" : ""
 }
 
 
@@ -40,9 +40,9 @@ module A {
 >Point : Point
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
->0 : number
+>0 : 0
 >y : number
->0 : number
+>0 : 0
     }
 
     export module Point {
@@ -50,6 +50,6 @@ module A {
 
         var Origin = ""; // not an error since not exported
 >Origin : string
->"" : string
+>"" : ""
     }
 }

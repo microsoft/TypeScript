@@ -16,5 +16,5 @@ List.prototype.add("abc"); // Valid because T is instantiated to any
 >List : typeof List
 >prototype : List<any>
 >add : (item: any) => void
->"abc" : string
+>"abc" : "abc"
 

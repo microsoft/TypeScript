@@ -4,14 +4,14 @@ module M {
 
     export var x = 3;
 >x : number
->3 : number
+>3 : 3
 
     module m1 {
 >m1 : typeof m1
 
         var M = 10;
 >M : number
->10 : number
+>10 : 10
 
         var p = x;
 >p : number

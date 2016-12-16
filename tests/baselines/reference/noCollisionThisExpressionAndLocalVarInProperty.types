@@ -14,7 +14,7 @@ class class1 {
 
             var _this = 2;
 >_this : number
->2 : number
+>2 : 2
 
             return callback(_this);
 >callback(_this) : any
@@ -30,7 +30,7 @@ class class2 {
     constructor() {
         var _this = 2;
 >_this : number
->2 : number
+>2 : 2
     }
     public prop1 = {
 >prop1 : { doStuff: (callback: any) => () => any; }
@@ -45,7 +45,7 @@ class class2 {
             return callback(10);
 >callback(10) : any
 >callback : any
->10 : number
+>10 : 10
         }
     }
 }

@@ -21,9 +21,9 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern7
 10>                                                                   ^
 11>                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-  >
+  >var 
 2 >
-3 >    var [x = 20, j] = [1, 2]
+3 >    [x = 20, j] = [1, 2]
 4 >               
 5 >                 x = 20
 6 >                           
@@ -31,8 +31,8 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern7
 8 >                                                        , 
 9 >                                                          j
 10>                                                                   ] = [1, 2];
-1 >Emitted(1, 1) Source(2, 1) + SourceIndex(0)
-2 >Emitted(1, 5) Source(2, 1) + SourceIndex(0)
+1 >Emitted(1, 1) Source(2, 5) + SourceIndex(0)
+2 >Emitted(1, 5) Source(2, 5) + SourceIndex(0)
 3 >Emitted(1, 16) Source(2, 25) + SourceIndex(0)
 4 >Emitted(1, 18) Source(2, 6) + SourceIndex(0)
 5 >Emitted(1, 28) Source(2, 12) + SourceIndex(0)

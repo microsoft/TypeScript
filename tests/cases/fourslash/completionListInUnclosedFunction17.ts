@@ -9,15 +9,15 @@
 
 goTo.marker("1");
 
-verify.memberListContains("foo");
-verify.memberListContains("x");
-verify.memberListContains("y");
-verify.memberListContains("z");
+verify.completionListContains("foo");
+verify.completionListContains("x");
+verify.completionListContains("y");
+verify.completionListContains("z");
 
-verify.memberListContains("bar");
-verify.memberListContains("a");
-verify.memberListContains("b");
-verify.memberListContains("c");
+verify.completionListContains("bar");
+verify.completionListContains("a");
+verify.completionListContains("b");
+verify.completionListContains("c");
 
-verify.memberListContains("v");
-verify.memberListContains("p");
+verify.completionListContains("v");
+verify.completionListContains("p");

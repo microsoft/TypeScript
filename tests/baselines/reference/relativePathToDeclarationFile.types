@@ -27,7 +27,7 @@ if(foo.M2.x){
 >M2 : typeof other.M2
 >x : string
 >charCodeAt : (index: number) => number
->0 : number
+>0 : 0
 }
 
 === tests/cases/conformance/externalModules/test/foo.d.ts ===

@@ -1,0 +1,80 @@
+=== tests/cases/compiler/es5-asyncFunctionArrayLiterals.ts ===
+declare var x, y, z, a;
+>x : Symbol(x, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 17))
+>a : Symbol(a, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 20))
+
+async function arrayLiteral0() {
+>arrayLiteral0 : Symbol(arrayLiteral0, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 23))
+
+    x = [await y, z];
+>x : Symbol(x, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 17))
+}
+
+async function arrayLiteral1() {
+>arrayLiteral1 : Symbol(arrayLiteral1, Decl(es5-asyncFunctionArrayLiterals.ts, 4, 1))
+
+    x = [y, await z];
+>x : Symbol(x, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 17))
+}
+
+async function arrayLiteral2() {
+>arrayLiteral2 : Symbol(arrayLiteral2, Decl(es5-asyncFunctionArrayLiterals.ts, 8, 1))
+
+    x = [...(await y), z];
+>x : Symbol(x, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 17))
+}
+
+async function arrayLiteral3() {
+>arrayLiteral3 : Symbol(arrayLiteral3, Decl(es5-asyncFunctionArrayLiterals.ts, 12, 1))
+
+    x = [...y, await z];
+>x : Symbol(x, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 17))
+}
+
+async function arrayLiteral4() {
+>arrayLiteral4 : Symbol(arrayLiteral4, Decl(es5-asyncFunctionArrayLiterals.ts, 16, 1))
+
+    x = [await y, ...z];
+>x : Symbol(x, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 17))
+}
+
+async function arrayLiteral5() {
+>arrayLiteral5 : Symbol(arrayLiteral5, Decl(es5-asyncFunctionArrayLiterals.ts, 20, 1))
+
+    x = [y, ...(await z)];
+>x : Symbol(x, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 17))
+}
+
+async function arrayLiteral6() {
+>arrayLiteral6 : Symbol(arrayLiteral6, Decl(es5-asyncFunctionArrayLiterals.ts, 24, 1))
+
+    x = [y, await z, a];
+>x : Symbol(x, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 17))
+>a : Symbol(a, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 20))
+}
+
+async function arrayLiteral7() {
+>arrayLiteral7 : Symbol(arrayLiteral7, Decl(es5-asyncFunctionArrayLiterals.ts, 28, 1))
+
+    x = [await y, z, await a];
+>x : Symbol(x, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 17))
+>a : Symbol(a, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 20))
+}

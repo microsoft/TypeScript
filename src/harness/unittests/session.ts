@@ -10,36 +10,48 @@ namespace ts.server {
         useCaseSensitiveFileNames: true,
         write(s): void { lastWrittenToHost = s; },
         readFile(): string { return void 0; },
-        writeFile(): void {},
+        writeFile: noop,
         resolvePath(): string { return void 0; },
         fileExists: () => false,
         directoryExists: () => false,
         getDirectories: () => [],
-        createDirectory(): void {},
+        createDirectory: noop,
         getExecutingFilePath(): string { return void 0; },
         getCurrentDirectory(): string { return void 0; },
+        getEnvironmentVariable(): string { return ""; },
         readDirectory(): string[] { return []; },
-        exit(): void { },
-        setTimeout(callback, ms, ...args) { return 0; },
-        clearTimeout(timeoutId) { }
+        exit: noop,
+        setTimeout() { return 0; },
+        clearTimeout: noop,
+        setImmediate: () => 0,
+        clearImmediate: noop,
+        createHash: s => s
     };
+    const nullCancellationToken: HostCancellationToken = { isCancellationRequested: () => false };
     const mockLogger: Logger = {
-        close(): void {},
-        isVerbose(): boolean { return false; },
+        close: noop,
+        hasLevel(): boolean { return false; },
         loggingEnabled(): boolean { return false; },
-        perftrc(s: string): void {},
-        info(s: string): void {},
-        startGroup(): void {},
-        endGroup(): void {},
-        msg(s: string, type?: string): void {},
+        perftrc: noop,
+        info: noop,
+        startGroup: noop,
+        endGroup: noop,
+        msg: noop,
+        getLogFileName: (): string => undefined
     };
 
+    class TestSession extends Session {
+        getProjectService() {
+            return this.projectService;
+        }
+    }
+
     describe("the Session class", () => {
-        let session: Session;
+        let session: TestSession;
         let lastSent: protocol.Message;
 
         beforeEach(() => {
-            session = new Session(mockHost, Utils.byteLength, process.hrtime, mockLogger);
+            session = new TestSession(mockHost, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined, Utils.byteLength, process.hrtime, mockLogger, /*canUseEvents*/ true);
             session.send = (msg: protocol.Message) => {
                 lastSent = msg;
             };
@@ -50,7 +62,7 @@ namespace ts.server {
                 const req: protocol.FileRequest = {
                     command: CommandNames.Open,
                     seq: 0,
-                    type: "command",
+                    type: "request",
                     arguments: {
                         file: undefined
                     }
@@ -62,7 +74,7 @@ namespace ts.server {
                 const req: protocol.Request = {
                     command: "foobar",
                     seq: 0,
-                    type: "command"
+                    type: "request"
                 };
 
                 session.executeCommand(req);
@@ -80,7 +92,7 @@ namespace ts.server {
                 const req: protocol.ConfigureRequest = {
                     command: CommandNames.Configure,
                     seq: 0,
-                    type: "command",
+                    type: "request",
                     arguments: {
                         hostInfo: "unit test",
                         formatOptions: {
@@ -101,6 +113,48 @@ namespace ts.server {
                     body: undefined
                 });
             });
+            it ("should handle literal types in request", () => {
+                const configureRequest: protocol.ConfigureRequest = {
+                    command: CommandNames.Configure,
+                    seq: 0,
+                    type: "request",
+                    arguments: {
+                        formatOptions: {
+                            indentStyle: "Block"
+                        }
+                    }
+                };
+
+                session.onMessage(JSON.stringify(configureRequest));
+
+                assert.equal(session.getProjectService().getFormatCodeOptions().indentStyle, IndentStyle.Block);
+
+                const setOptionsRequest: protocol.SetCompilerOptionsForInferredProjectsRequest = {
+                    command: CommandNames.CompilerOptionsForInferredProjects,
+                    seq: 1,
+                    type: "request",
+                    arguments: {
+                        options: {
+                            module: "System",
+                            target: "ES5",
+                            jsx: "React",
+                            newLine: "Lf",
+                            moduleResolution: "Node"
+                        }
+                    }
+                };
+                session.onMessage(JSON.stringify(setOptionsRequest));
+                assert.deepEqual(
+                    session.getProjectService().getCompilerOptionsForInferredProjects(),
+                    <CompilerOptions>{
+                        module: ModuleKind.System,
+                        target: ScriptTarget.ES5,
+                        jsx: JsxEmit.React,
+                        newLine: NewLineKind.LineFeed,
+                        moduleResolution: ModuleResolutionKind.NodeJs,
+                        allowNonTsExtensions: true // injected by tsserver
+                    });
+            });
         });
 
         describe("onMessage", () => {
@@ -113,7 +167,7 @@ namespace ts.server {
                     const req: protocol.Request = {
                         command: name,
                         seq: i,
-                        type: "command"
+                        type: "request"
                     };
                     i++;
                     session.onMessage(JSON.stringify(req));
@@ -146,7 +200,7 @@ namespace ts.server {
                 const req: protocol.ConfigureRequest = {
                     command: CommandNames.Configure,
                     seq: 0,
-                    type: "command",
+                    type: "request",
                     arguments: {
                         hostInfo: "unit test",
                         formatOptions: {
@@ -170,7 +224,7 @@ namespace ts.server {
 
         describe("send", () => {
             it("is an overrideable handle which sends protocol messages over the wire", () => {
-                const msg = { seq: 0, type: "none" };
+                const msg: server.protocol.Request = { seq: 0, type: "request", command: "" };
                 const strmsg = JSON.stringify(msg);
                 const len = 1 + Utils.byteLength(strmsg, "utf8");
                 const resultMsg = `Content-Length: ${len}\r\n\r\n${strmsg}\n`;
@@ -193,12 +247,12 @@ namespace ts.server {
                     responseRequired: true
                 };
 
-                session.addProtocolHandler(command, (req) => result);
+                session.addProtocolHandler(command, () => result);
 
                 expect(session.executeCommand({
                     command,
                     seq: 0,
-                    type: "command"
+                    type: "request"
                 })).to.deep.equal(result);
             });
             it("throws when a duplicate handler is passed", () => {
@@ -211,9 +265,9 @@ namespace ts.server {
                 };
                 const command = "newhandle";
 
-                session.addProtocolHandler(command, (req) => resp);
+                session.addProtocolHandler(command, () => resp);
 
-                expect(() => session.addProtocolHandler(command, (req) => resp))
+                expect(() => session.addProtocolHandler(command, () => resp))
                 .to.throw(`Protocol handler already exists for command "${command}"`);
             });
         });
@@ -264,7 +318,7 @@ namespace ts.server {
             lastSent: protocol.Message;
             customHandler = "testhandler";
             constructor() {
-                super(mockHost, Utils.byteLength, process.hrtime, mockLogger);
+                super(mockHost, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined, Utils.byteLength, process.hrtime, mockLogger, /*canUseEvents*/ true);
                 this.addProtocolHandler(this.customHandler, () => {
                     return { response: undefined, responseRequired: true };
                 });
@@ -299,7 +353,7 @@ namespace ts.server {
 
             expect(session.executeCommand({
                 seq: 0,
-                type: "command",
+                type: "request",
                 command: session.customHandler
             })).to.deep.equal({
                 response: undefined,
@@ -322,7 +376,7 @@ namespace ts.server {
         class InProcSession extends Session {
             private queue: protocol.Request[] = [];
             constructor(private client: InProcClient) {
-                super(mockHost, Utils.byteLength, process.hrtime, mockLogger);
+                super(mockHost, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined, Utils.byteLength, process.hrtime, mockLogger, /*canUseEvents*/ true);
                 this.addProtocolHandler("echo", (req: protocol.Request) => ({
                     response: req.arguments,
                     responseRequired: true
@@ -400,7 +454,7 @@ namespace ts.server {
                 this.seq++;
                 this.server.enqueue({
                     seq: this.seq,
-                    type: "command",
+                    type: "request",
                     command,
                     arguments: args
                 });

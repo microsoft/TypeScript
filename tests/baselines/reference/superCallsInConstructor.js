@@ -41,15 +41,17 @@ var Base = (function () {
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
+        var _this;
         with (new C()) {
             foo();
-            _super.call(this);
+            _this = _super.call(this) || this;
             bar();
         }
         try { }
         catch (e) {
-            _super.call(this);
+            _this = _super.call(this) || this;
         }
+        return _this;
     }
     return Derived;
 }(Base));

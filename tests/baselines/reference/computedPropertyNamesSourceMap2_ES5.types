@@ -4,14 +4,14 @@ var v = {
 >{    ["hello"]() {        debugger;	},    get ["goodbye"]() {		return 0;	}} : { ["hello"](): void; readonly ["goodbye"]: number; }
 
     ["hello"]() {
->"hello" : string
+>"hello" : "hello"
 
         debugger;
 	},
     get ["goodbye"]() {
->"goodbye" : string
+>"goodbye" : "goodbye"
 
 		return 0;
->0 : number
+>0 : 0
 	}
 }

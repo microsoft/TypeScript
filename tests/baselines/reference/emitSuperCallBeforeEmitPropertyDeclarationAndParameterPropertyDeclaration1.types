@@ -4,7 +4,7 @@ class A {
 
     blub = 6;
 >blub : number
->6 : number
+>6 : 6
 }
 
 
@@ -14,16 +14,16 @@ class B extends A {
 
     blah = 2;
 >blah : number
->2 : number
+>2 : 2
 
     constructor(public x: number) {
 >x : number
 
         "use strict";
->"use strict" : string
+>"use strict" : "use strict"
 
         'someStringForEgngInject';
->'someStringForEgngInject' : string
+>'someStringForEgngInject' : "someStringForEgngInject"
 
         super()
 >super() : void

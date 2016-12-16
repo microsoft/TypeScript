@@ -18,6 +18,6 @@ class C implements I {
 >toPrimitive : symbol
 
         return true;
->true : boolean
+>true : true
     }
 }

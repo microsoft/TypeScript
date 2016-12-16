@@ -187,21 +187,21 @@ var Base = (function () {
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return Derived;
 }(Base));
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return Derived2;
 }(Derived));
 var OtherDerived = (function (_super) {
     __extends(OtherDerived, _super);
     function OtherDerived() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return OtherDerived;
 }(Base));
@@ -253,14 +253,14 @@ var r9b = [r9arg2, r9arg1];
 var r10arg1 = function () {
     var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i - 0] = arguments[_i];
+        x[_i] = arguments[_i];
     }
     return x[0];
 };
 var r10arg2 = function () {
     var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i - 0] = arguments[_i];
+        x[_i] = arguments[_i];
     }
     return null;
 };

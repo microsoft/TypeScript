@@ -17,7 +17,7 @@ class C {
 
     // Computed properties
     static [""]() { return new Foo }
->"" : string
+>"" : ""
 >new Foo : Foo
 >Foo : typeof Foo
 }

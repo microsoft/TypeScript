@@ -35,40 +35,40 @@
 
 // Module m
 goTo.marker("1");
-verify.memberListContains("I");
-verify.memberListContains("C");
-verify.memberListContains("E");
-verify.memberListContains("N");
-verify.memberListContains("V");
-verify.memberListContains("F");
-verify.memberListContains("A");
+verify.completionListContains("I");
+verify.completionListContains("C");
+verify.completionListContains("E");
+verify.completionListContains("N");
+verify.completionListContains("V");
+verify.completionListContains("F");
+verify.completionListContains("A");
 
 // Class C
 goTo.marker("2");
-verify.memberListContains("property");
+verify.completionListContains("property");
 
 // Enum E
 goTo.marker("3");
-verify.memberListContains("value");
+verify.completionListContains("value");
 
 // Module N
 goTo.marker("4");
-verify.memberListContains("v");
+verify.completionListContains("v");
 
 // var V
 goTo.marker("5");
-verify.memberListContains("toFixed");
+verify.completionListContains("toFixed");
 
 // function F
 goTo.marker("6");
-verify.memberListContains("call");
+verify.completionListContains("call");
 
 // alias a
 goTo.marker("7");
-verify.memberListContains("I");
-verify.memberListContains("C");
-verify.memberListContains("E");
-verify.memberListContains("N");
-verify.memberListContains("V");
-verify.memberListContains("F");
-verify.memberListContains("A");
+verify.completionListContains("I");
+verify.completionListContains("C");
+verify.completionListContains("E");
+verify.completionListContains("N");
+verify.completionListContains("V");
+verify.completionListContains("F");
+verify.completionListContains("A");

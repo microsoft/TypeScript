@@ -9,16 +9,11 @@
 
 // @Filename: goToDefinitionPartialImplementation_2.ts
 ////module A {
-////    export interface IA {
+////    /*Part2Definition*/export interface IA {
 ////        x: number;
 ////    }
 ////
 ////    var x: /*Part2Use*/IA;
 ////}
 
-// this line triggers a semantic/syntactic error check, remove line when 788570 is fixed
-edit.insert('');
-
-goTo.marker('Part2Use');
-goTo.definition();
-verify.caretAtMarker('Part1Definition');
+verify.goToDefinition("Part2Use", ["Part1Definition", "Part2Definition"]);

@@ -13,4 +13,4 @@
 ////var y = DefaultExportedFunction();
 
 goTo.marker();
-verify.renameInfoSucceeded("DefaultExportedFunction", '"tests/cases/fourslash/foo".DefaultExportedFunction');
+verify.renameInfoSucceeded("DefaultExportedFunction", '"/tests/cases/fourslash/foo".DefaultExportedFunction');

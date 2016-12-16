@@ -72,11 +72,12 @@ var C = (function () {
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        _super.apply(this, arguments);
-        this.self1 = this;
-        this.self2 = this.self;
-        this.self3 = this.foo();
-        this.d = new D();
+        var _this = _super.apply(this, arguments) || this;
+        _this.self1 = _this;
+        _this.self2 = _this.self;
+        _this.self3 = _this.foo();
+        _this.d = new D();
+        return _this;
     }
     D.prototype.bar = function () {
         this.self = this.self1;

@@ -1,0 +1,37 @@
+{
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 29,
+    "tags": {
+        "0": {
+            "kind": "JSDocReturnTag",
+            "pos": 8,
+            "end": 24,
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 8,
+                "end": 9
+            },
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 9,
+                "end": 15,
+                "text": "return"
+            },
+            "typeExpression": {
+                "kind": "JSDocTypeExpression",
+                "pos": 16,
+                "end": 24,
+                "type": {
+                    "kind": "NumberKeyword",
+                    "pos": 17,
+                    "end": 23
+                }
+            },
+            "comment": ""
+        },
+        "length": 1,
+        "pos": 8,
+        "end": 24
+    }
+}

@@ -38,7 +38,7 @@ async function f() {
 >await_d : Symbol(await_d, Decl(awaitUnion_es6.ts, 9, 4))
 >d : Symbol(d, Decl(awaitUnion_es6.ts, 3, 11))
 
-	let await_e = await e; 
+	let await_e = await e;
 >await_e : Symbol(await_e, Decl(awaitUnion_es6.ts, 10, 4))
 >e : Symbol(e, Decl(awaitUnion_es6.ts, 4, 11))
 }

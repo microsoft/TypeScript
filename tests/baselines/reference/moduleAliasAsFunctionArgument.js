@@ -19,7 +19,7 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
 });
 //// [moduleAliasAsFunctionArgument_1.js]
-define(["require", "exports", 'moduleAliasAsFunctionArgument_0'], function (require, exports, a) {
+define(["require", "exports", "moduleAliasAsFunctionArgument_0"], function (require, exports, a) {
     "use strict";
     function fn(arg) {
     }

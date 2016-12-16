@@ -23,7 +23,7 @@ var a = (function () {
 var b = (function (_super) {
     __extends(b, _super);
     function b() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     b.prototype.x = function () {
         return "20";

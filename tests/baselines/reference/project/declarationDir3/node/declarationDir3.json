@@ -16,8 +16,5 @@
         "a.ts",
         "subfolder/c.ts"
     ],
-    "emittedFiles": [
-        "out.js",
-        "out.d.ts"
-    ]
+    "emittedFiles": []
 }

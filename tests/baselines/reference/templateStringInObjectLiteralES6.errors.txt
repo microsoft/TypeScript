@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/templates/templateStringInObjectLiteralES6.ts(1,9): error TS2349: Cannot invoke an expression whose type lacks a call signature.
+tests/cases/conformance/es6/templates/templateStringInObjectLiteralES6.ts(1,9): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{ a: string; }' has no compatible call signatures.
 tests/cases/conformance/es6/templates/templateStringInObjectLiteralES6.ts(3,5): error TS1136: Property assignment expected.
 tests/cases/conformance/es6/templates/templateStringInObjectLiteralES6.ts(3,8): error TS1005: ',' expected.
 tests/cases/conformance/es6/templates/templateStringInObjectLiteralES6.ts(3,10): error TS1134: Variable declaration expected.
@@ -12,7 +12,7 @@ tests/cases/conformance/es6/templates/templateStringInObjectLiteralES6.ts(4,1): 
     ~~~~~~~~~~~~~~~~~~~~~~~~
         `b`: 321
     ~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{ a: string; }' has no compatible call signatures.
         ~~~
 !!! error TS1136: Property assignment expected.
            ~

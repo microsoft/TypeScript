@@ -7,10 +7,10 @@ var n = { w: null, x: '', y: () => { }, z: 32 };
 >w : null
 >null : null
 >x : string
->'' : string
+>'' : ""
 >y : () => void
 >() => { } : () => void
 >z : number
->32 : number
+>32 : 32
 
 

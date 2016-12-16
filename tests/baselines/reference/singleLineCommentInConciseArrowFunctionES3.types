@@ -7,5 +7,5 @@ function test() {
 
         // some comments here;
         123;
->123 : number
+>123 : 123
 }

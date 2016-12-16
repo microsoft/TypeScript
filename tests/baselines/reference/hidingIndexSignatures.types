@@ -21,7 +21,7 @@ var b: B;
 b[""]; // Should be number
 >b[""] : number
 >b : B
->"" : string
+>"" : ""
 
 var a: A;
 >a : A
@@ -30,5 +30,5 @@ var a: A;
 a[""]; // Should be {}
 >a[""] : {}
 >a : A
->"" : string
+>"" : ""
 

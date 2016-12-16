@@ -15,6 +15,4 @@
 ////    };
 ////}
 
-
-goTo.marker();
-verify.quickInfoIs("(parameter) value: number");
+verify.quickInfoAt("", "(parameter) value: number");

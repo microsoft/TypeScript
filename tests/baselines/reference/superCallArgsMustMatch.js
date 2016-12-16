@@ -40,10 +40,12 @@ var T5 = (function () {
 var T6 = (function (_super) {
     __extends(T6, _super);
     function T6() {
+        var _this = 
         // Should error; base constructor has type T for first arg,
         // which is instantiated with 'number' in the extends clause
-        _super.call(this, "hi");
-        var x = this.foo;
+        _super.call(this, "hi") || this;
+        var x = _this.foo;
+        return _this;
     }
     return T6;
 }(T5));

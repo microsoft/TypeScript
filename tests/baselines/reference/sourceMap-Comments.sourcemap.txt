@@ -90,24 +90,18 @@ sourceFile:sourceMap-Comments.ts
 1->^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^
-4 >                    ^^
-5 >                      ^
-6 >                       ^^^^^^^^^^^->
+4 >                    ^^^^^^^^^^^^^^->
 1->
 2 >    
 3 >               tools
-4 >                     
-5 >                      {
 1->Emitted(4, 5) Source(1, 12) + SourceIndex(0)
 2 >Emitted(4, 16) Source(1, 12) + SourceIndex(0)
 3 >Emitted(4, 21) Source(1, 17) + SourceIndex(0)
-4 >Emitted(4, 23) Source(1, 18) + SourceIndex(0)
-5 >Emitted(4, 24) Source(1, 19) + SourceIndex(0)
 ---
 >>>        var Test = (function () {
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^->
-1->
+1-> {
   >    
 1->Emitted(5, 9) Source(2, 5) + SourceIndex(0)
 ---

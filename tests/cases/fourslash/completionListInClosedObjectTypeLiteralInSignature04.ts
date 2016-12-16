@@ -9,8 +9,8 @@
 
 goTo.marker("1");
 
-verify.not.memberListContains("I");
-verify.not.memberListContains("TString");
-verify.not.memberListContains("TNumber");
-verify.not.memberListContains("foo");
-verify.not.memberListContains("obj");
+verify.not.completionListContains("I");
+verify.not.completionListContains("TString");
+verify.not.completionListContains("TNumber");
+verify.not.completionListContains("foo");
+verify.not.completionListContains("obj");

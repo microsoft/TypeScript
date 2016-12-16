@@ -26,12 +26,13 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var React = require('react');
+var React = require("react");
 var Text = (function (_super) {
     __extends(Text, _super);
     function Text() {
-        _super.apply(this, arguments);
-        this._tagName = 'div';
+        var _this = _super.apply(this, arguments) || this;
+        _this._tagName = 'div';
+        return _this;
     }
     Text.prototype.render = function () {
         return (<this._tagName> Hello world </this._tagName>);

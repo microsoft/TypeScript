@@ -14,10 +14,7 @@
 //// var x = <My/*c*/Class />;
 //// var y = <MyClass f/*p*/oo= 'hello' />;
 
-goTo.marker('c');
-goTo.definition();
-verify.caretAtMarker('ct');
-
-goTo.marker('p');
-goTo.definition();
-verify.caretAtMarker('pt');
+verify.goToDefinition({
+    c: "ct",
+    p: "pt"
+});

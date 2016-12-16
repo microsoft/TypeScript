@@ -42,13 +42,13 @@ var C = (function () {
     }
     C.prototype.c = function () { return ''; };
     C.f = function () { return ''; };
-    C.g = function () { return ''; };
     return C;
 }());
+C.g = function () { return ''; };
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     D.prototype.method = function () {
         // No errors

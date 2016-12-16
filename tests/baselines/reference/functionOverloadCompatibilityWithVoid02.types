@@ -8,5 +8,5 @@ function f(x: string): number {
 >x : string
 
     return 0;
->0 : number
+>0 : 0
 } 

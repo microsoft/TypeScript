@@ -19,7 +19,7 @@ var thing = { oops: 100 };
 >thing : { oops: number; }
 >{ oops: 100 } : { oops: number; }
 >oops : number
->100 : number
+>100 : 100
 
 var a3 = <div id={thing} />
 >a3 : any
@@ -62,7 +62,7 @@ var b1 = <MyClass reqd={true} />;
 ><MyClass reqd={true} /> : any
 >MyClass : typeof MyClass
 >reqd : any
->true : boolean
+>true : true
 
 // Mistyped attribute member
 // sample.tsx(23,22): error TS2322: Type '{ x: number; y: string; }' is not assignable to type '{ x: number; y: number; }'.
@@ -75,8 +75,8 @@ var b2 = <MyClass pt={{x: 4, y: 'oops'}} />;
 >pt : any
 >{x: 4, y: 'oops'} : { x: number; y: string; }
 >x : number
->4 : number
+>4 : 4
 >y : string
->'oops' : string
+>'oops' : "oops"
 
 

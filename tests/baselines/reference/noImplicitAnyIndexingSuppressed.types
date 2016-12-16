@@ -12,7 +12,7 @@ var strRepresentation1 = MyEmusEnum[0]
 >strRepresentation1 : string
 >MyEmusEnum[0] : string
 >MyEmusEnum : typeof MyEmusEnum
->0 : number
+>0 : 0
 
 // Should be okay; should be a string.
 var strRepresentation2 = MyEmusEnum[MyEmusEnum.emu]
@@ -28,14 +28,14 @@ var strRepresentation3 = MyEmusEnum["monehh"];
 >strRepresentation3 : any
 >MyEmusEnum["monehh"] : any
 >MyEmusEnum : typeof MyEmusEnum
->"monehh" : string
+>"monehh" : "monehh"
 
 // Should be okay; should be a MyEmusEnum
 var strRepresentation4 = MyEmusEnum["emu"];
 >strRepresentation4 : MyEmusEnum
 >MyEmusEnum["emu"] : MyEmusEnum
 >MyEmusEnum : typeof MyEmusEnum
->"emu" : string
+>"emu" : "emu"
 
 
 // Should be okay, as we suppress implicit 'any' property access checks
@@ -43,18 +43,18 @@ var x = {}["hi"];
 >x : any
 >{}["hi"] : any
 >{} : {}
->"hi" : string
+>"hi" : "hi"
 
 // Should be okay, as we suppress implicit 'any' property access checks
 var y = {}[10];
 >y : any
 >{}[10] : any
 >{} : {}
->10 : number
+>10 : 10
 
 var hi: any = "hi";
 >hi : any
->"hi" : string
+>"hi" : "hi"
 
 var emptyObj = {};
 >emptyObj : {}
@@ -90,13 +90,13 @@ var m: MyMap<number> = {
 >{    "0": 0,    "1": 1,    "2": 2,    "Okay that's enough for today.": NaN} : { "0": number; "1": number; "2": number; "Okay that's enough for today.": number; }
 
     "0": 0,
->0 : number
+>0 : 0
 
     "1": 1,
->1 : number
+>1 : 1
 
     "2": 2,
->2 : number
+>2 : 2
 
     "Okay that's enough for today.": NaN
 >NaN : number

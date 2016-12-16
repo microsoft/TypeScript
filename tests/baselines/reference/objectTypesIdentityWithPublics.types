@@ -39,7 +39,7 @@ var b = { foo: '' };
 >b : { foo: string; }
 >{ foo: '' } : { foo: string; }
 >foo : string
->'' : string
+>'' : ""
 
 function foo1(x: A);
 >foo1 : { (x: A): any; (x: A): any; }

@@ -32,49 +32,49 @@ var A = (function () {
     function A() {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i - 0] = arguments[_i];
+            args[_i] = arguments[_i];
         }
     }
     A.prototype.method = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i - 0] = arguments[_i];
+            args[_i] = arguments[_i];
         }
     };
-    __decorate([
-        MyMethodDecorator, 
-        __metadata('design:type', Function), 
-        __metadata('design:paramtypes', [Object]), 
-        __metadata('design:returntype', void 0)
-    ], A.prototype, "method", null);
-    A = __decorate([
-        MyClassDecorator, 
-        __metadata('design:paramtypes', [Object])
-    ], A);
     return A;
 }());
+__decorate([
+    MyMethodDecorator,
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], A.prototype, "method", null);
+A = __decorate([
+    MyClassDecorator,
+    __metadata("design:paramtypes", [Object])
+], A);
 var B = (function () {
     function B() {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i - 0] = arguments[_i];
+            args[_i] = arguments[_i];
         }
     }
     B.prototype.method = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i - 0] = arguments[_i];
+            args[_i] = arguments[_i];
         }
     };
-    __decorate([
-        MyMethodDecorator, 
-        __metadata('design:type', Function), 
-        __metadata('design:paramtypes', [String]), 
-        __metadata('design:returntype', void 0)
-    ], B.prototype, "method", null);
-    B = __decorate([
-        MyClassDecorator, 
-        __metadata('design:paramtypes', [Number])
-    ], B);
     return B;
 }());
+__decorate([
+    MyMethodDecorator,
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], B.prototype, "method", null);
+B = __decorate([
+    MyClassDecorator,
+    __metadata("design:paramtypes", [Number])
+], B);

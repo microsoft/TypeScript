@@ -178,7 +178,7 @@ class ProjectRunner extends RunnerBase {
             function createCompilerHost(): ts.CompilerHost {
                 return {
                     getSourceFile,
-                    getDefaultLibFileName: options => Harness.Compiler.defaultLibFileName,
+                    getDefaultLibFileName: () => Harness.Compiler.defaultLibFileName,
                     writeFile,
                     getCurrentDirectory,
                     getCanonicalFileName: Harness.Compiler.getCanonicalFileName,
@@ -222,6 +222,7 @@ class ProjectRunner extends RunnerBase {
                     useCaseSensitiveFileNames: Harness.IO.useCaseSensitiveFileNames(),
                     fileExists,
                     readDirectory,
+                    readFile
                 };
                 const configParseResult = ts.parseJsonConfigFileContent(configObject, configParseHost, ts.getDirectoryPath(configFileName), compilerOptions);
                 if (configParseResult.errors.length > 0) {
@@ -290,6 +291,10 @@ class ProjectRunner extends RunnerBase {
 
             function fileExists(fileName: string): boolean {
                 return Harness.IO.fileExists(getFileNameInTheProjectTest(fileName));
+            }
+
+            function readFile(fileName: string): string {
+                return Harness.IO.readFile(getFileNameInTheProjectTest(fileName));
             }
 
             function getSourceFileText(fileName: string): string {
@@ -416,7 +421,7 @@ class ProjectRunner extends RunnerBase {
                 return undefined;
             }
 
-            function writeFile(fileName: string, data: string, writeByteOrderMark: boolean) {
+            function writeFile() {
             }
         }
 
@@ -473,7 +478,6 @@ class ProjectRunner extends RunnerBase {
                         }
                     });
 
-
                     it("Baseline of emitted result (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
                         if (testCase.baselineCheck) {
                             const errs: Error[] = [];
@@ -500,18 +504,16 @@ class ProjectRunner extends RunnerBase {
                         }
                     });
 
-
-                    it("SourceMapRecord for (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
-                        if (compilerResult.sourceMapData) {
-                            Harness.Baseline.runBaseline(getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".sourcemap.txt", () => {
-                                return Harness.SourceMapRecorder.getSourceMapRecord(compilerResult.sourceMapData, compilerResult.program,
-                                    ts.filter(compilerResult.outputFiles, outputFile => Harness.Compiler.isJS(outputFile.emittedFileName)));
-                            });
-                        }
-                    });
+                    // it("SourceMapRecord for (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
+                    //     if (compilerResult.sourceMapData) {
+                    //         Harness.Baseline.runBaseline(getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".sourcemap.txt", () => {
+                    //             return Harness.SourceMapRecorder.getSourceMapRecord(compilerResult.sourceMapData, compilerResult.program,
+                    //                 ts.filter(compilerResult.outputFiles, outputFile => Harness.Compiler.isJS(outputFile.emittedFileName)));
+                    //         });
+                    //     }
+                    // });
 
                     // Verify that all the generated .d.ts files compile
-
                     it("Errors in generated Dts files for (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
                         if (!compilerResult.errors.length && testCase.declaration) {
                             const dTsCompileResult = compileCompileDTsFiles(compilerResult);

@@ -1,0 +1,51 @@
+tests/cases/compiler/external.ts(2,16): error TS2343: This syntax requires an imported helper named '__extends', but module 'tslib' has no exported member '__extends'.
+tests/cases/compiler/external.ts(6,1): error TS2343: This syntax requires an imported helper named '__decorate', but module 'tslib' has no exported member '__decorate'.
+tests/cases/compiler/external.ts(6,1): error TS2343: This syntax requires an imported helper named '__metadata', but module 'tslib' has no exported member '__metadata'.
+tests/cases/compiler/external.ts(8,12): error TS2343: This syntax requires an imported helper named '__param', but module 'tslib' has no exported member '__param'.
+tests/cases/compiler/external.ts(13,13): error TS2343: This syntax requires an imported helper named '__assign', but module 'tslib' has no exported member '__assign'.
+tests/cases/compiler/external.ts(14,12): error TS2343: This syntax requires an imported helper named '__rest', but module 'tslib' has no exported member '__rest'.
+
+
+==== tests/cases/compiler/external.ts (6 errors) ====
+    export class A { }
+    export class B extends A { }
+                   ~~~~~~~~~
+!!! error TS2343: This syntax requires an imported helper named '__extends', but module 'tslib' has no exported member '__extends'.
+    
+    declare var dec: any;
+    
+    @dec
+    ~~~~
+!!! error TS2343: This syntax requires an imported helper named '__decorate', but module 'tslib' has no exported member '__decorate'.
+    ~~~~
+!!! error TS2343: This syntax requires an imported helper named '__metadata', but module 'tslib' has no exported member '__metadata'.
+    class C {
+        method(@dec x: number) {
+               ~~~~
+!!! error TS2343: This syntax requires an imported helper named '__param', but module 'tslib' has no exported member '__param'.
+        }
+    }
+    
+    const o = { a: 1 };
+    const y = { ...o };
+                ~~~~
+!!! error TS2343: This syntax requires an imported helper named '__assign', but module 'tslib' has no exported member '__assign'.
+    const { ...x } = y;
+               ~
+!!! error TS2343: This syntax requires an imported helper named '__rest', but module 'tslib' has no exported member '__rest'.
+    
+==== tests/cases/compiler/script.ts (0 errors) ====
+    class A { }
+    class B extends A { }
+    
+    declare var dec: any;
+    
+    @dec
+    class C {
+        method(@dec x: number) {
+        }
+    }
+    
+==== tests/cases/compiler/tslib.d.ts (0 errors) ====
+    export {}
+    

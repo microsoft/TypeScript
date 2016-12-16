@@ -296,7 +296,7 @@ var Base1 = (function () {
 var Derived1 = (function (_super) {
     __extends(Derived1, _super);
     function Derived1() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return Derived1;
 }(Base1));
@@ -310,7 +310,7 @@ var Base2 = (function () {
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return Derived2;
 }(Base2));
@@ -333,18 +333,19 @@ var ThisConstructor = (function () {
     return ThisConstructor;
 }());
 var thisConstructorType;
-function notFirst(a, this) { return this.n; }
+function notFirst(a) { return this.n; }
 ///// parse errors /////
 function modifiers(, C) {
     if ( === void 0) {  = this; }
     return this.n;
 }
-function restParam(, C) { return this.n; }
+function restParam(C) { return this.n; }
 function optional(C) { return this.n; }
 function decorated(, C) {
     if ( === void 0) {  = this; }
     return this.n;
 }
+function initializer() { }
 new C();
 number;
 {

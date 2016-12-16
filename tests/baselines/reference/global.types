@@ -15,13 +15,13 @@ module M {
 
 var x=10;
 >x : number
->10 : number
+>10 : 10
 
 M.f(3);
 >M.f(3) : number
 >M.f : (y: number) => number
 >M : typeof M
 >f : (y: number) => number
->3 : number
+>3 : 3
 
 

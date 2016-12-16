@@ -14,14 +14,14 @@ class SomeBaseClass {
 >func : () => string
 
         return '';
->'' : string
+>'' : ""
     }
 
     static func() {
 >func : () => number
 
         return 3;
->3 : number
+>3 : 3
     }
 
     returnThis() {

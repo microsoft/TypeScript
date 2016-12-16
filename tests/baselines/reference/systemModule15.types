@@ -25,9 +25,9 @@ use(moduleB.moduleC);
 use(moduleB.moduleCStar);
 >use(moduleB.moduleCStar) : void
 >use : (v: any) => void
->moduleB.moduleCStar : typeof 
+>moduleB.moduleCStar : typeof "tests/cases/compiler/file3"
 >moduleB : typeof moduleB
->moduleCStar : typeof 
+>moduleCStar : typeof "tests/cases/compiler/file3"
 
 === tests/cases/compiler/file2.ts ===
 
@@ -58,7 +58,7 @@ export {
 
 export var value = "youpi";
 >value : string
->"youpi" : string
+>"youpi" : "youpi"
 
 export default value;
 >value : string
@@ -67,5 +67,5 @@ export default value;
 
 export var value2 = "v";
 >value2 : string
->"v" : string
+>"v" : "v"
 

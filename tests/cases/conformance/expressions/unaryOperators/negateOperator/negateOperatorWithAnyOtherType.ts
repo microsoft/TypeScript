@@ -1,7 +1,7 @@
 // - operator on any type
 
 var ANY: any;
-var ANY1;
+var ANY1: any;
 var ANY2: any[] = ["", ""];
 var obj: () => {}
 var obj1 = { x: "", y: () => { }};
@@ -12,7 +12,7 @@ function foo(): any {
 }
 class A {
     public a: any;
-    static foo() {
+    static foo(): any {
         var a;
         return a;
     }

@@ -1,0 +1,36 @@
+{
+    "kind": "JSDocRecordType",
+    "pos": 1,
+    "end": 16,
+    "literal": {
+        "kind": "TypeLiteral",
+        "pos": 1,
+        "end": 16,
+        "members": {
+            "0": {
+                "kind": "MethodSignature",
+                "pos": 2,
+                "end": 15,
+                "name": {
+                    "kind": "Identifier",
+                    "pos": 2,
+                    "end": 5,
+                    "text": "foo"
+                },
+                "parameters": {
+                    "length": 0,
+                    "pos": 6,
+                    "end": 6
+                },
+                "type": {
+                    "kind": "NumberKeyword",
+                    "pos": 8,
+                    "end": 15
+                }
+            },
+            "length": 1,
+            "pos": 2,
+            "end": 15
+        }
+    }
+}

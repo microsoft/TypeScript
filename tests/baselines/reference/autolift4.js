@@ -37,14 +37,15 @@ var Point = (function () {
     Point.prototype.getDist = function () {
         return Math.sqrt(this.x * this.x + this.y * this.y);
     };
-    Point.origin = new Point(0, 0);
     return Point;
 }());
+Point.origin = new Point(0, 0);
 var Point3D = (function (_super) {
     __extends(Point3D, _super);
     function Point3D(x, y, z, m) {
-        _super.call(this, x, y);
-        this.z = z;
+        var _this = _super.call(this, x, y) || this;
+        _this.z = z;
+        return _this;
     }
     Point3D.prototype.getDist = function () {
         return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.m);

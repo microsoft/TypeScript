@@ -4,9 +4,9 @@
 
 enum E { a, b, c }
 >E : E
->a : E
->b : E
->c : E
+>a : E.a
+>b : E.b
+>c : E.c
 
 var a1: any;
 >a1 : any
@@ -364,7 +364,7 @@ var rf5 = a5 && a6;
 >a6 : E
 
 var rf6 = a6 && a6;
->rf6 : E.b | E.c
+>rf6 : E
 >a6 && a6 : E.b | E.c
 >a6 : E
 >a6 : E.b | E.c

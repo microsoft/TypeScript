@@ -2,8 +2,8 @@ language: node_js
 
 node_js:
   - 'stable'
+  - '6'
   - '4'
-  - '0.10'
 
 sudo: false
 
@@ -12,18 +12,11 @@ env:
 
 matrix:
   fast_finish: true
-  include:
-  - os: osx
-    node_js: stable
-    osx_image: xcode7.3
-    env: workerCount=2
-  allow_failures:
-  - os: osx
 
 branches:
   only:
   - master
-  - transforms
+  - release-2.1
 
 install:
   - npm uninstall typescript

@@ -17,7 +17,7 @@ tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenc
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(23,21): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(29,18): error TS2304: Cannot find name 'M'.
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(30,24): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(31,24): error TS2305: Module 'M' has no exported member 'C'.
+tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(31,24): error TS2694: Namespace 'M' has no exported member 'C'.
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(33,22): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(34,22): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(36,10): error TS2304: Cannot find name 'C'.
@@ -95,7 +95,7 @@ tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenc
 !!! error TS2314: Generic type 'E<T>' requires 1 type argument(s).
     interface I2 extends M.C { }
                            ~
-!!! error TS2305: Module 'M' has no exported member 'C'.
+!!! error TS2694: Namespace 'M' has no exported member 'C'.
     
     function h<T extends I>(x: T) { }
                          ~

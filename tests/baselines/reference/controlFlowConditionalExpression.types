@@ -6,14 +6,14 @@ let cond: boolean;
 >cond : boolean
 
 cond ? x = "" : x = 3;
->cond ? x = "" : x = 3 : string | number
+>cond ? x = "" : x = 3 : "" | 3
 >cond : boolean
->x = "" : string
+>x = "" : ""
 >x : string | number | boolean
->"" : string
->x = 3 : number
+>"" : ""
+>x = 3 : 3
 >x : string | number | boolean
->3 : number
+>3 : 3
 
 x; // string | number
 >x : string | number

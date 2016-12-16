@@ -4,7 +4,7 @@ class abstract {
 
     foo() { return 1; }
 >foo : () => number
->1 : number
+>1 : 1
 }
 
 new abstract;

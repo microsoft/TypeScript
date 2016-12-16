@@ -49,7 +49,7 @@ function forEach<A>(list: A[], f: (a: A, n?: number) => void ): void {
 
     for (var i = 0; i < list.length; ++i) {
 >i : number
->0 : number
+>0 : 0
 >i < list.length : boolean
 >i : number
 >list.length : number

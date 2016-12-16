@@ -23,7 +23,7 @@ module c {
 >bVal : number
 >b(10) : number
 >b : (x: number) => number
->10 : number
+>10 : 10
 
     export var bVal2 = b;
 >bVal2 : (x: number) => number

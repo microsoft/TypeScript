@@ -62,7 +62,7 @@ let render = (ctrl, model) =>
 >style : any
 >{display:(model.todos && model.todos.length) ? "block" : "none"} : { display: string; }
 >display : string
->(model.todos && model.todos.length) ? "block" : "none" : string
+>(model.todos && model.todos.length) ? "block" : "none" : "block" | "none"
 >(model.todos && model.todos.length) : any
 >model.todos && model.todos.length : any
 >model.todos : any
@@ -73,8 +73,8 @@ let render = (ctrl, model) =>
 >model : any
 >todos : any
 >length : any
->"block" : string
->"none" : string
+>"block" : "block"
+>"none" : "none"
 
             <input class="toggle-all" type="checkbox" onChange={ctrl.toggleAll.bind(ctrl)}/>
 ><input class="toggle-all" type="checkbox" onChange={ctrl.toggleAll.bind(ctrl)}/> : any
@@ -111,7 +111,7 @@ let render = (ctrl, model) =>
 >class : any
 >{todo: true, completed: todo.completed, editing: todo == model.editedTodo} : { todo: boolean; completed: any; editing: boolean; }
 >todo : boolean
->true : boolean
+>true : true
 >completed : any
 >todo.completed : any
 >todo : any

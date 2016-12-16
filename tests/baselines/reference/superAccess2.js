@@ -41,13 +41,13 @@ var Q = (function (_super) {
     __extends(Q, _super);
     // Super is not allowed in constructor args
     function Q(z, zz, zzz) {
-        var _this = this;
-        if (z === void 0) { z = _super.prototype.; }
-        if (zz === void 0) { zz = _super.prototype.; }
-        if (zzz === void 0) { zzz = function () { return _super.prototype.; }; }
-        _super.call(this);
-        this.z = z;
-        this.xx = _super.prototype.;
+        if (z === void 0) { z = _super.; }
+        if (zz === void 0) { zz = _super.; }
+        if (zzz === void 0) { zzz = function () { return _super.; }; }
+        var _this = _super.call(this) || this;
+        _this.z = z;
+        _this.xx = _super.prototype.;
+        return _this;
     }
     Q.prototype.foo = function (zz) {
         if (zz === void 0) { zz = _super.prototype.; }
@@ -59,6 +59,6 @@ var Q = (function (_super) {
         _super.x.call(this); // error
         _super.y.call(this);
     };
-    Q.yy = _super.; // error for static initializer accessing super
     return Q;
 }(P));
+Q.yy = _super.; // error for static initializer accessing super

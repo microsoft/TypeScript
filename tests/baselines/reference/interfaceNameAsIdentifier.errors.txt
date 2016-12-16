@@ -1,4 +1,4 @@
-tests/cases/compiler/interfaceNameAsIdentifier.ts(4,1): error TS2304: Cannot find name 'C'.
+tests/cases/compiler/interfaceNameAsIdentifier.ts(4,1): error TS2693: 'C' only refers to a type, but is being used as a value here.
 tests/cases/compiler/interfaceNameAsIdentifier.ts(12,1): error TS2304: Cannot find name 'm2'.
 
 
@@ -8,7 +8,7 @@ tests/cases/compiler/interfaceNameAsIdentifier.ts(12,1): error TS2304: Cannot fi
     }
     C();
     ~
-!!! error TS2304: Cannot find name 'C'.
+!!! error TS2693: 'C' only refers to a type, but is being used as a value here.
     
     module m2 {
         export interface C {

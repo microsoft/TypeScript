@@ -34,6 +34,6 @@ g = f
 g(1, "")
 >g(1, "") : void
 >g : <T, S>(x: T, y: S) => void
->1 : number
->"" : string
+>1 : 1
+>"" : ""
 

@@ -45,7 +45,7 @@ var obj2: ObjType = ({ x: x => (x, undefined), y: y => (y, undefined) });
 function fun() {
     var rest = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        rest[_i - 0] = arguments[_i];
+        rest[_i] = arguments[_i];
     }
     return undefined;
 }

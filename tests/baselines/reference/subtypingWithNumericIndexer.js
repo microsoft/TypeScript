@@ -54,14 +54,14 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
 var B2 = (function (_super) {
     __extends(B2, _super);
     function B2() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return B2;
 }(A));
@@ -75,28 +75,28 @@ var Generics;
     var B = (function (_super) {
         __extends(B, _super);
         function B() {
-            _super.apply(this, arguments);
+            return _super.apply(this, arguments) || this;
         }
         return B;
     }(A));
     var B2 = (function (_super) {
         __extends(B2, _super);
         function B2() {
-            _super.apply(this, arguments);
+            return _super.apply(this, arguments) || this;
         }
         return B2;
     }(A));
     var B3 = (function (_super) {
         __extends(B3, _super);
         function B3() {
-            _super.apply(this, arguments);
+            return _super.apply(this, arguments) || this;
         }
         return B3;
     }(A));
     var B4 = (function (_super) {
         __extends(B4, _super);
         function B4() {
-            _super.apply(this, arguments);
+            return _super.apply(this, arguments) || this;
         }
         return B4;
     }(A));

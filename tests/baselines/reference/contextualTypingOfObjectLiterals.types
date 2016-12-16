@@ -7,7 +7,7 @@ var obj2 = {x: ""};
 >obj2 : { x: string; }
 >{x: ""} : { x: string; }
 >x : string
->"" : string
+>"" : ""
 
 obj1 = {}; // Ok
 >obj1 = {} : {}

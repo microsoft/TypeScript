@@ -2,7 +2,7 @@
 
 var a = 10;
 >a : number
->10 : number
+>10 : 10
 
 export default a;
 >a : number

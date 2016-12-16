@@ -2,14 +2,14 @@
 
 // used in a declaration
 type handler1 = () => void;
->handler1 : handler1
+>handler1 : () => void
 
 export interface I1 {
 >I1 : I1
 
     getHandler: handler1;
->getHandler : handler1
->handler1 : handler1
+>getHandler : () => void
+>handler1 : () => void
 }
 
 // exported
@@ -18,12 +18,12 @@ export type handler2 = () => void;
 
 // used in extends clause
 type handler3 = () => void;
->handler3 : handler3
+>handler3 : () => void
 
 export interface I3<T extends handler3> {
 >I3 : I3<T>
 >T : T
->handler3 : handler3
+>handler3 : () => void
 
     getHandler: T;
 >getHandler : T
@@ -32,32 +32,32 @@ export interface I3<T extends handler3> {
 
 // used in another type alias declaration
 type handler4 = () => void;
->handler4 : handler4
+>handler4 : () => void
 
 type handler5 = handler4 | (()=>number);
->handler5 : handler5
->handler4 : handler4
+>handler5 : (() => void) | (() => number)
+>handler4 : () => void
 
 var x: handler5;
->x : handler5
->handler5 : handler5
+>x : (() => void) | (() => number)
+>handler5 : (() => void) | (() => number)
 
 x();
 >x() : number | void
->x : handler5
+>x : (() => void) | (() => number)
 
 // used as type argument
 type handler6 = () => void;
->handler6 : handler6
+>handler6 : () => void
 
 var y: Array<handler6>;
->y : handler6[]
+>y : (() => void)[]
 >Array : T[]
->handler6 : handler6
+>handler6 : () => void
 
 y[0]();
 >y[0]() : void
->y[0] : handler6
->y : handler6[]
->0 : number
+>y[0] : () => void
+>y : (() => void)[]
+>0 : 0
     

@@ -10,8 +10,7 @@
 //// /// <reference path="0.d.ts" />
 //// /*1*/myLib.doThing();
 
-goTo.marker("0");
-verify.quickInfoIs("export namespace myLib");
-
-goTo.marker("1");
-verify.quickInfoIs("export namespace myLib");
+verify.quickInfos({
+    0: "export namespace myLib",
+    1: "export namespace myLib"
+});

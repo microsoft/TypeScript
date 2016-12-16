@@ -9,5 +9,5 @@ module M {
 >x : string
 >E[0] : string
 >E : typeof E
->0 : number
+>0 : 0
 }

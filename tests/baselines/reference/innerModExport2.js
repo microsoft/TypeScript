@@ -28,10 +28,9 @@ var Outer;
     module;
     {
         var non_export_var = 0;
-        Outer.export_var = 1;
+        export var export_var = 1;
         function NonExportFunc() { return 0; }
-        function ExportFunc() { return 0; }
-        Outer.ExportFunc = ExportFunc;
+        export function ExportFunc() { return 0; }
     }
     var export_var;
     Outer.outer_var_export = 0;

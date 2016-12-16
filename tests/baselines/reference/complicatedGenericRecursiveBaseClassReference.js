@@ -14,7 +14,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 var S18 = (function (_super) {
     __extends(S18, _super);
     function S18() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return S18;
 }(S18));

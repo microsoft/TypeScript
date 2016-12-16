@@ -70,7 +70,7 @@ var v1 = ([a, b, c]) => "hello";
 >a : any
 >b : any
 >c : any
->"hello" : string
+>"hello" : "hello"
 
 var v2: ([a, b, c]) => string;
 >v2 : ([a, b, c]: [any, any, any]) => string

@@ -48,7 +48,7 @@ function tempTag1<T>(...rest: any[]): T {
 // and it is an error to invoke an any-typed value with type arguments,
 // so this test will error.
 tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ 10 }`;
->tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ 10 }` : number
+>tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ 10 }` : 10
 >tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: FuncType, x: T): T; <T>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T): T; }
 >`${ x => { x<number>(undefined); return x; }                   }${ 10 }` : string
 >x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
@@ -57,10 +57,10 @@ tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ 10 }
 >x : <T>(p: T) => T
 >undefined : undefined
 >x : <T>(p: T) => T
->10 : number
+>10 : 10
 
 tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ y => { y<number>(undefined); return y; }                  }${ 10 }`;
->tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ y => { y<number>(undefined); return y; }                  }${ 10 }` : number
+>tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ y => { y<number>(undefined); return y; }                  }${ 10 }` : 10
 >tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: FuncType, x: T): T; <T>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T): T; }
 >`${ x => { x<number>(undefined); return x; }                   }${ y => { y<number>(undefined); return y; }                  }${ 10 }` : string
 >x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
@@ -75,7 +75,7 @@ tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ y =>
 >y : <T>(p: T) => T
 >undefined : undefined
 >y : <T>(p: T) => T
->10 : number
+>10 : 10
 
 tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ (y: <T>(p: T) => T) => { y<number>(undefined); return y } }${ undefined }`;
 >tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ (y: <T>(p: T) => T) => { y<number>(undefined); return y } }${ undefined }` : any

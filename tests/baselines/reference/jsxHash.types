@@ -3,21 +3,21 @@ var t02 = <a>{0}#</a>;
 >t02 : any
 ><a>{0}#</a> : any
 >a : any
->0 : number
+>0 : 0
 >a : any
 
 var t03 = <a>#{0}</a>;
 >t03 : any
 ><a>#{0}</a> : any
 >a : any
->0 : number
+>0 : 0
 >a : any
 
 var t04 = <a>#{0}#</a>;
 >t04 : any
 ><a>#{0}#</a> : any
 >a : any
->0 : number
+>0 : 0
 >a : any
 
 var t05 = <a>#<i></i></a>;

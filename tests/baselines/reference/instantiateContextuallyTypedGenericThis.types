@@ -42,12 +42,12 @@ $.each(lines, function(dit) {
 >dit.charAt : (pos: number) => string
 >dit : string
 >charAt : (pos: number) => string
->0 : number
+>0 : 0
 >this.charAt(1) : string
 >this.charAt : (pos: number) => string
 >this : string
 >charAt : (pos: number) => string
->1 : number
+>1 : 1
 
 });
 

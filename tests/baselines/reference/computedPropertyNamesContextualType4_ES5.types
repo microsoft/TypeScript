@@ -16,13 +16,13 @@ var o: I = {
 
     [""+"foo"]: "",
 >""+"foo" : string
->"" : string
->"foo" : string
->"" : string
+>"" : ""
+>"foo" : "foo"
+>"" : ""
 
     [""+"bar"]: 0
 >""+"bar" : string
->"" : string
->"bar" : string
->0 : number
+>"" : ""
+>"bar" : "bar"
+>0 : 0
 }

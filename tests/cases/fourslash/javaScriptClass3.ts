@@ -15,10 +15,7 @@
 //// x.alpha/*src1*/;
 //// x.beta/*src2*/;
 
-goTo.marker('src1');
-goTo.definition();
-verify.caretAtMarker('dst1');
-
-goTo.marker('src2');
-goTo.definition();
-verify.caretAtMarker('dst2');
+verify.goToDefinition({
+    src1: "dst1",
+    src2: "dst2"
+});

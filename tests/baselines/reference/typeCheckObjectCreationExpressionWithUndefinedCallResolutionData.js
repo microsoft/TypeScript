@@ -20,7 +20,7 @@ function foo() {
 exports.foo = foo;
 //// [file2.js]
 "use strict";
-var f = require('./file1');
+var f = require("./file1");
 f.foo();
 
 

@@ -6,15 +6,15 @@ module OuterMod {
 
 	export function someExportedOuterFunc() { return -1; }
 >someExportedOuterFunc : () => number
->-1 : number
->1 : number
+>-1 : -1
+>1 : 1
 
 	export module OuterInnerMod {
 >OuterInnerMod : typeof OuterInnerMod
 
 		export function someExportedOuterInnerFunc() { return "foo"; }
 >someExportedOuterInnerFunc : () => string
->"foo" : string
+>"foo" : "foo"
 	}
 }
 
@@ -31,26 +31,26 @@ module M {
 
 		export function someExportedInnerFunc() { return -2; }
 >someExportedInnerFunc : () => number
->-2 : number
->2 : number
+>-2 : -2
+>2 : 2
 	}
 
 	export enum E {
 >E : E
 
 		A,
->A : E
+>A : E.A
 
 		B,
->B : E
+>B : E.B
 
 		C,
->C : E
+>C : E.C
 	}
 
 	export var x = 5;
 >x : number
->5 : number
+>5 : 5
 
 	export declare var exported_var;
 >exported_var : any
@@ -72,7 +72,7 @@ module M {
 	 class B {public b = 0;}
 >B : B
 >b : number
->0 : number
+>0 : 0
 
 	 export class C implements I {
 >C : C
@@ -101,30 +101,30 @@ module M {
 
 		public someMethod() { return 0; }
 >someMethod : () => number
->0 : number
+>0 : 0
 
 		public someProp = 1;
 >someProp : number
->1 : number
+>1 : 1
 
 		constructor() {
 		    function someInnerFunc() { return 2; }
 >someInnerFunc : () => number
->2 : number
+>2 : 2
 
             var someInnerVar = 3;
 >someInnerVar : number
->3 : number
+>3 : 3
 		}
 	}
 
 	var someModuleVar = 4;
 >someModuleVar : number
->4 : number
+>4 : 4
 
 	function someModuleFunction() { return 5;}
 >someModuleFunction : () => number
->5 : number
+>5 : 5
 }
 
 module M {
@@ -136,11 +136,11 @@ module M {
 
 	export var meb = M.E.B;
 >meb : E
->M.E.B : E
+>M.E.B : E.B
 >M.E : typeof E
 >M : typeof M
 >E : typeof E
->B : E
+>B : E.B
 }
 
 var cprime : M.I = <M.I>null;
@@ -167,11 +167,11 @@ var z = M.x;
 
 var alpha = M.E.A;
 >alpha : M.E
->M.E.A : M.E
+>M.E.A : M.E.A
 >M.E : typeof M.E
 >M : typeof M
 >E : typeof M.E
->A : M.E
+>A : M.E.A
 
 var omega = M.exported_var;
 >omega : any

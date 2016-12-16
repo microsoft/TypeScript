@@ -99,7 +99,7 @@ var b = { new<T extends U, U extends RegExp>(x: T, y: U) { return ''; } }; // no
 >T : T
 >y : U
 >U : U
->'' : string
+>'' : ""
 
 function foo1b(x: B<Array<number>, Array<number>>);
 >foo1b : { (x: B<number[], number[]>): any; (x: B<number[], number[]>): any; }

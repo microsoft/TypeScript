@@ -14,7 +14,7 @@ fn((a, b) => true);
 >(a, b) => true : (a: any, b: any) => boolean
 >a : any
 >b : any
->true : boolean
+>true : true
 
 fn(function (a, b) { return true; })
 >fn(function (a, b) { return true; }) : void
@@ -22,6 +22,6 @@ fn(function (a, b) { return true; })
 >function (a, b) { return true; } : (a: any, b: any) => boolean
 >a : any
 >b : any
->true : boolean
+>true : true
 
 
