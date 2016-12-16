@@ -253,18 +253,15 @@ class ProjectRunner extends RunnerBase {
                     moduleResolution: ts.ModuleResolutionKind.Classic, // currently all tests use classic module resolution kind, this will change in the future
                 };
                 // Set the values specified using json
-                const optionNameMap: ts.Map<ts.CommandLineOption> = {};
-                ts.forEach(ts.optionDeclarations, option => {
-                    optionNameMap[option.name] = option;
-                });
+                const optionNameMap = ts.arrayToMap(ts.optionDeclarations, option => option.name);
                 for (const name in testCase) {
-                    if (name !== "mapRoot" && name !== "sourceRoot" && ts.hasProperty(optionNameMap, name)) {
+                    if (name !== "mapRoot" && name !== "sourceRoot" && name in optionNameMap) {
                         const option = optionNameMap[name];
                         const optType = option.type;
                         let value = <any>testCase[name];
                         if (typeof optType !== "string") {
                             const key = value.toLowerCase();
-                            if (ts.hasProperty(optType, key)) {
+                            if (key in optType) {
                                 value = optType[key];
                             }
                         }
@@ -328,7 +325,7 @@ class ProjectRunner extends RunnerBase {
 
                 if (Harness.Compiler.isJS(fileName)) {
                     // Make sure if there is URl we have it cleaned up
-                    const indexOfSourceMapUrl = data.lastIndexOf("//# sourceMappingURL=");
+                    const indexOfSourceMapUrl = data.lastIndexOf(`//# ${"sourceMappingURL"}=`); // This line can be seen as a sourceMappingURL comment
                     if (indexOfSourceMapUrl !== -1) {
                         data = data.substring(0, indexOfSourceMapUrl + 21) + cleanProjectUrl(data.substring(indexOfSourceMapUrl + 21));
                     }
@@ -462,7 +459,7 @@ class ProjectRunner extends RunnerBase {
                     });
 
                     it("Resolution information of (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
-                        Harness.Baseline.runBaseline("Resolution information of (" + moduleNameToString(compilerResult.moduleKind) + "): " + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".json", () => {
+                        Harness.Baseline.runBaseline(getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".json", () => {
                             return JSON.stringify(getCompilerResolutionInfo(), undefined, "    ");
                         });
                     });
@@ -470,7 +467,7 @@ class ProjectRunner extends RunnerBase {
 
                     it("Errors for (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
                         if (compilerResult.errors.length) {
-                            Harness.Baseline.runBaseline("Errors for (" + moduleNameToString(compilerResult.moduleKind) + "): " + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".errors.txt", () => {
+                            Harness.Baseline.runBaseline(getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".errors.txt", () => {
                                 return getErrorsBaseline(compilerResult);
                             });
                         }
@@ -479,24 +476,34 @@ class ProjectRunner extends RunnerBase {
 
                     it("Baseline of emitted result (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
                         if (testCase.baselineCheck) {
+                            const errs: Error[] = [];
                             ts.forEach(compilerResult.outputFiles, outputFile => {
-
-                                Harness.Baseline.runBaseline("Baseline of emitted result (" + moduleNameToString(compilerResult.moduleKind) + "): " + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + outputFile.fileName, () => {
-                                    try {
-                                        return Harness.IO.readFile(getProjectOutputFolder(outputFile.fileName, compilerResult.moduleKind));
-                                    }
-                                    catch (e) {
-                                        return undefined;
-                                    }
-                                });
+                                // There may be multiple files with different baselines. Run all and report at the end, else
+                                // it stops copying the remaining emitted files from 'local/projectOutput' to 'local/project'.
+                                try {
+                                    Harness.Baseline.runBaseline(getBaselineFolder(compilerResult.moduleKind) + outputFile.fileName, () => {
+                                        try {
+                                            return Harness.IO.readFile(getProjectOutputFolder(outputFile.fileName, compilerResult.moduleKind));
+                                        }
+                                        catch (e) {
+                                            return undefined;
+                                        }
+                                    });
+                                }
+                                catch (e) {
+                                    errs.push(e);
+                                }
                             });
+                            if (errs.length) {
+                                throw Error(errs.join("\n     "));
+                            }
                         }
                     });
 
 
                     it("SourceMapRecord for (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
                         if (compilerResult.sourceMapData) {
-                            Harness.Baseline.runBaseline("SourceMapRecord for (" + moduleNameToString(compilerResult.moduleKind) + "): " + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".sourcemap.txt", () => {
+                            Harness.Baseline.runBaseline(getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".sourcemap.txt", () => {
                                 return Harness.SourceMapRecorder.getSourceMapRecord(compilerResult.sourceMapData, compilerResult.program,
                                     ts.filter(compilerResult.outputFiles, outputFile => Harness.Compiler.isJS(outputFile.emittedFileName)));
                             });
@@ -509,7 +516,7 @@ class ProjectRunner extends RunnerBase {
                         if (!compilerResult.errors.length && testCase.declaration) {
                             const dTsCompileResult = compileCompileDTsFiles(compilerResult);
                             if (dTsCompileResult && dTsCompileResult.errors.length) {
-                                Harness.Baseline.runBaseline("Errors in generated Dts files for (" + moduleNameToString(compilerResult.moduleKind) + "): " + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".dts.errors.txt", () => {
+                                Harness.Baseline.runBaseline(getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".dts.errors.txt", () => {
                                     return getErrorsBaseline(dTsCompileResult);
                                 });
                             }

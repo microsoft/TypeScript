@@ -1,4 +1,6 @@
 /// <reference path="types.ts"/>
+/// <reference path="performance.ts" />
+
 
 /* @internal */
 namespace ts {
@@ -17,8 +19,28 @@ namespace ts {
         True = -1
     }
 
+    const createObject = Object.create;
+
+    export function createMap<T>(template?: MapLike<T>): Map<T> {
+        const map: Map<T> = createObject(null); // tslint:disable-line:no-null-keyword
+
+        // Using 'delete' on an object causes V8 to put the object in dictionary mode.
+        // This disables creation of hidden classes, which are expensive when an object is
+        // constantly changing shape.
+        map["__"] = undefined;
+        delete map["__"];
+
+        // Copies keys/values from template. Note that for..in will not throw if
+        // template is undefined, and instead will just exit the loop.
+        for (const key in template) if (hasOwnProperty.call(template, key)) {
+            map[key] = template[key];
+        }
+
+        return map;
+    }
+
     export function createFileMap<T>(keyMapper?: (key: string) => string): FileMap<T> {
-        let files: Map<T> = {};
+        let files = createMap<T>();
         return {
             get,
             set,
@@ -44,7 +66,7 @@ namespace ts {
         }
 
         function contains(path: Path) {
-            return hasProperty(files, toKey(path));
+            return toKey(path) in files;
         }
 
         function remove(path: Path) {
@@ -53,7 +75,7 @@ namespace ts {
         }
 
         function clear() {
-            files = {};
+            files = createMap<T>();
         }
 
         function toKey(path: Path): string {
@@ -79,7 +101,7 @@ namespace ts {
      * returns a truthy value, then returns that value.
      * If no such value is found, the callback is applied to each element of array and undefined is returned.
      */
-    export function forEach<T, U>(array: T[], callback: (element: T, index: number) => U): U {
+    export function forEach<T, U>(array: T[] | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
         if (array) {
             for (let i = 0, len = array.length; i < len; i++) {
                 const result = callback(array[i], i);
@@ -91,10 +113,35 @@ namespace ts {
         return undefined;
     }
 
-    export function contains<T>(array: T[], value: T, areEqual?: (a: T, b: T) => boolean): boolean {
+    /** Works like Array.prototype.find, returning `undefined` if no element satisfying the predicate is found. */
+    export function find<T>(array: T[], predicate: (element: T, index: number) => boolean): T | undefined {
+        for (let i = 0, len = array.length; i < len; i++) {
+            const value = array[i];
+            if (predicate(value, i)) {
+                return value;
+            }
+        }
+        return undefined;
+    }
+
+    /**
+     * Returns the first truthy result of `callback`, or else fails.
+     * This is like `forEach`, but never returns undefined.
+     */
+    export function findMap<T, U>(array: T[], callback: (element: T, index: number) => U | undefined): U {
+        for (let i = 0, len = array.length; i < len; i++) {
+            const result = callback(array[i], i);
+            if (result) {
+                return result;
+            }
+        }
+        Debug.fail();
+    }
+
+    export function contains<T>(array: T[], value: T): boolean {
         if (array) {
             for (const v of array) {
-                if (areEqual ? areEqual(v, value) : v === value) {
+                if (v === value) {
                     return true;
                 }
             }
@@ -134,17 +181,44 @@ namespace ts {
         return count;
     }
 
+    /**
+     * Filters an array by a predicate function. Returns the same array instance if the predicate is
+     * true for all elements, otherwise returns a new array instance containing the filtered subset.
+     */
     export function filter<T>(array: T[], f: (x: T) => boolean): T[] {
-        let result: T[];
         if (array) {
-            result = [];
-            for (const item of array) {
-                if (f(item)) {
-                    result.push(item);
+            const len = array.length;
+            let i = 0;
+            while (i < len && f(array[i])) i++;
+            if (i < len) {
+                const result = array.slice(0, i);
+                i++;
+                while (i < len) {
+                    const item = array[i];
+                    if (f(item)) {
+                        result.push(item);
+                    }
+                    i++;
                 }
+                return result;
             }
         }
-        return result;
+        return array;
+    }
+
+    export function removeWhere<T>(array: T[], f: (x: T) => boolean): boolean {
+        let outIndex = 0;
+        for (const item of array) {
+            if (!f(item)) {
+                array[outIndex] = item;
+                outIndex++;
+            }
+        }
+        if (outIndex !== array.length) {
+            array.length = outIndex;
+            return true;
+        }
+        return false;
     }
 
     export function filterMutate<T>(array: T[], f: (x: T) => boolean): void {
@@ -180,10 +254,13 @@ namespace ts {
         let result: T[];
         if (array) {
             result = [];
-            for (const item of array) {
-                if (!contains(result, item, areEqual)) {
-                    result.push(item);
+            loop: for (const item of array) {
+                for (const res of result) {
+                    if (areEqual ? areEqual(res, item) : res === item) {
+                        continue loop;
+                    }
                 }
+                result.push(item);
             }
         }
         return result;
@@ -306,76 +383,140 @@ namespace ts {
 
     const hasOwnProperty = Object.prototype.hasOwnProperty;
 
-    export function hasProperty<T>(map: Map<T>, key: string): boolean {
+    /**
+     * Indicates whether a map-like contains an own property with the specified key.
+     *
+     * NOTE: This is intended for use only with MapLike<T> objects. For Map<T> objects, use
+     *       the 'in' operator.
+     *
+     * @param map A map-like.
+     * @param key A property key.
+     */
+    export function hasProperty<T>(map: MapLike<T>, key: string): boolean {
         return hasOwnProperty.call(map, key);
     }
 
-    export function getKeys<T>(map: Map<T>): string[] {
+    /**
+     * Gets the value of an owned property in a map-like.
+     *
+     * NOTE: This is intended for use only with MapLike<T> objects. For Map<T> objects, use
+     *       an indexer.
+     *
+     * @param map A map-like.
+     * @param key A property key.
+     */
+    export function getProperty<T>(map: MapLike<T>, key: string): T | undefined {
+        return hasOwnProperty.call(map, key) ? map[key] : undefined;
+    }
+
+    /**
+     * Gets the owned, enumerable property keys of a map-like.
+     *
+     * NOTE: This is intended for use with MapLike<T> objects. For Map<T> objects, use
+     *       Object.keys instead as it offers better performance.
+     *
+     * @param map A map-like.
+     */
+    export function getOwnKeys<T>(map: MapLike<T>): string[] {
         const keys: string[] = [];
-        for (const key in map) {
+        for (const key in map) if (hasOwnProperty.call(map, key)) {
             keys.push(key);
         }
         return keys;
     }
 
-    export function getProperty<T>(map: Map<T>, key: string): T {
-        return hasOwnProperty.call(map, key) ? map[key] : undefined;
+    /**
+     * Enumerates the properties of a Map<T>, invoking a callback and returning the first truthy result.
+     *
+     * @param map A map for which properties should be enumerated.
+     * @param callback A callback to invoke for each property.
+     */
+    export function forEachProperty<T, U>(map: Map<T>, callback: (value: T, key: string) => U): U {
+        let result: U;
+        for (const key in map) {
+            if (result = callback(map[key], key)) break;
+        }
+        return result;
     }
 
-    export function isEmpty<T>(map: Map<T>) {
-        for (const id in map) {
-            if (hasProperty(map, id)) {
-                return false;
-            }
+    /**
+     * Returns true if a Map<T> has some matching property.
+     *
+     * @param map A map whose properties should be tested.
+     * @param predicate An optional callback used to test each property.
+     */
+    export function someProperties<T>(map: Map<T>, predicate?: (value: T, key: string) => boolean) {
+        for (const key in map) {
+            if (!predicate || predicate(map[key], key)) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Performs a shallow copy of the properties from a source Map<T> to a target MapLike<T>
+     *
+     * @param source A map from which properties should be copied.
+     * @param target A map to which properties should be copied.
+     */
+    export function copyProperties<T>(source: Map<T>, target: MapLike<T>): void {
+        for (const key in source) {
+            target[key] = source[key];
+        }
+    }
+
+    /**
+     * Reduce the properties of a map.
+     *
+     * NOTE: This is intended for use with Map<T> objects. For MapLike<T> objects, use
+     *       reduceOwnProperties instead as it offers better runtime safety.
+     *
+     * @param map The map to reduce
+     * @param callback An aggregation function that is called for each entry in the map
+     * @param initial The initial value for the reduction.
+     */
+    export function reduceProperties<T, U>(map: Map<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U): U {
+        let result = initial;
+        for (const key in map) {
+            result = callback(result, map[key], String(key));
+        }
+        return result;
+    }
+
+    /**
+     * Reduce the properties defined on a map-like (but not from its prototype chain).
+     *
+     * NOTE: This is intended for use with MapLike<T> objects. For Map<T> objects, use
+     *       reduceProperties instead as it offers better performance.
+     *
+     * @param map The map-like to reduce
+     * @param callback An aggregation function that is called for each entry in the map
+     * @param initial The initial value for the reduction.
+     */
+    export function reduceOwnProperties<T, U>(map: MapLike<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U): U {
+        let result = initial;
+        for (const key in map) if (hasOwnProperty.call(map, key)) {
+            result = callback(result, map[key], String(key));
+        }
+        return result;
+    }
+
+    /**
+     * Performs a shallow equality comparison of the contents of two map-likes.
+     *
+     * @param left A map-like whose properties should be compared.
+     * @param right A map-like whose properties should be compared.
+     */
+    export function equalOwnProperties<T>(left: MapLike<T>, right: MapLike<T>, equalityComparer?: (left: T, right: T) => boolean) {
+        if (left === right) return true;
+        if (!left || !right) return false;
+        for (const key in left) if (hasOwnProperty.call(left, key)) {
+            if (!hasOwnProperty.call(right, key) === undefined) return false;
+            if (equalityComparer ? !equalityComparer(left[key], right[key]) : left[key] !== right[key]) return false;
+        }
+        for (const key in right) if (hasOwnProperty.call(right, key)) {
+            if (!hasOwnProperty.call(left, key)) return false;
         }
         return true;
-    }
-
-    export function clone<T>(object: T): T {
-        const result: any = {};
-        for (const id in object) {
-            result[id] = (<any>object)[id];
-        }
-        return <T>result;
-    }
-
-    export function extend<T1 extends Map<{}>, T2 extends Map<{}>>(first: T1 , second: T2): T1 & T2 {
-        const result: T1 & T2 = <any>{};
-        for (const id in first) {
-            (result as any)[id] = first[id];
-        }
-        for (const id in second) {
-            if (!hasProperty(result, id)) {
-                (result as any)[id] = second[id];
-            }
-        }
-        return result;
-    }
-
-    export function forEachValue<T, U>(map: Map<T>, callback: (value: T) => U): U {
-        let result: U;
-        for (const id in map) {
-            if (result = callback(map[id])) break;
-        }
-        return result;
-    }
-
-    export function forEachKey<T, U>(map: Map<T>, callback: (key: string) => U): U {
-        let result: U;
-        for (const id in map) {
-            if (result = callback(id)) break;
-        }
-        return result;
-    }
-
-    export function lookUp<T>(map: Map<T>, key: string): T {
-        return hasProperty(map, key) ? map[key] : undefined;
-    }
-
-    export function copyMap<T>(source: Map<T>, target: Map<T>): void {
-        for (const p in source) {
-            target[p] = source[p];
-        }
     }
 
     /**
@@ -388,33 +529,40 @@ namespace ts {
      * the same key with the given 'makeKey' function, then the element with the higher
      * index in the array will be the one associated with the produced key.
      */
-    export function arrayToMap<T>(array: T[], makeKey: (value: T) => string): Map<T> {
-        const result: Map<T> = {};
-
-        forEach(array, value => {
-            result[makeKey(value)] = value;
-        });
-
+    export function arrayToMap<T>(array: T[], makeKey: (value: T) => string): Map<T>;
+    export function arrayToMap<T, U>(array: T[], makeKey: (value: T) => string, makeValue: (value: T) => U): Map<U>;
+    export function arrayToMap<T, U>(array: T[], makeKey: (value: T) => string, makeValue?: (value: T) => U): Map<T | U> {
+        const result = createMap<T | U>();
+        for (const value of array) {
+            result[makeKey(value)] = makeValue ? makeValue(value) : value;
+        }
         return result;
     }
 
-    /**
-     * Reduce the properties of a map.
-     *
-     * @param map The map to reduce
-     * @param callback An aggregation function that is called for each entry in the map
-     * @param initial The initial value for the reduction.
-     */
-    export function reduceProperties<T, U>(map: Map<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U): U {
-        let result = initial;
-        if (map) {
-            for (const key in map) {
-                if (hasProperty(map, key)) {
-                    result = callback(result, map[key], String(key));
-                }
+    export function cloneMap<T>(map: Map<T>) {
+        const clone = createMap<T>();
+        copyProperties(map, clone);
+        return clone;
+    }
+
+    export function clone<T>(object: T): T {
+        const result: any = {};
+        for (const id in object) {
+            if (hasOwnProperty.call(object, id)) {
+                result[id] = (<any>object)[id];
             }
         }
+        return result;
+    }
 
+    export function extend<T1, T2>(first: T1 , second: T2): T1 & T2 {
+        const result: T1 & T2 = <any>{};
+        for (const id in second) if (hasOwnProperty.call(second, id)) {
+            (result as any)[id] = (second as any)[id];
+        }
+        for (const id in first) if (hasOwnProperty.call(first, id)) {
+            (result as any)[id] = (first as any)[id];
+        }
         return result;
     }
 
@@ -445,9 +593,7 @@ namespace ts {
     export let localizedDiagnosticMessages: Map<string> = undefined;
 
     export function getLocaleSpecificMessage(message: DiagnosticMessage) {
-        return localizedDiagnosticMessages && localizedDiagnosticMessages[message.key]
-            ? localizedDiagnosticMessages[message.key]
-            : message.message;
+        return localizedDiagnosticMessages && localizedDiagnosticMessages[message.key] || message.message;
     }
 
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: any[]): Diagnostic;
@@ -899,10 +1045,19 @@ namespace ts {
         return true;
     }
 
+    /* @internal */
+    export function startsWith(str: string, prefix: string): boolean {
+        return str.lastIndexOf(prefix, 0) === 0;
+    }
+
+    /* @internal */
+    export function endsWith(str: string, suffix: string): boolean {
+        const expectedPos = str.length - suffix.length;
+        return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
+    }
+
     export function fileExtensionIs(path: string, extension: string): boolean {
-        const pathLen = path.length;
-        const extLen = extension.length;
-        return pathLen > extLen && path.substr(pathLen - extLen, extLen) === extension;
+        return path.length > extension.length && endsWith(path, extension);
     }
 
     export function fileExtensionIsAny(path: string, extensions: string[]): boolean {
@@ -915,17 +1070,34 @@ namespace ts {
         return false;
     }
 
-
     // Reserved characters, forces escaping of any non-word (or digit), non-whitespace character.
     // It may be inefficient (we could just match (/[-[\]{}()*+?.,\\^$|#\s]/g), but this is future
     // proof.
     const reservedCharacterPattern = /[^\w\s\/]/g;
     const wildcardCharCodes = [CharacterCodes.asterisk, CharacterCodes.question];
 
+    /**
+     * Matches any single directory segment unless it is the last segment and a .min.js file
+     * Breakdown:
+     *  [^./]                   # matches everything up to the first . character (excluding directory seperators)
+     *  (\\.(?!min\\.js$))?     # matches . characters but not if they are part of the .min.js file extension
+     */
+    const singleAsteriskRegexFragmentFiles = "([^./]|(\\.(?!min\\.js$))?)*";
+    const singleAsteriskRegexFragmentOther = "[^/]*";
+
     export function getRegularExpressionForWildcard(specs: string[], basePath: string, usage: "files" | "directories" | "exclude") {
         if (specs === undefined || specs.length === 0) {
             return undefined;
         }
+
+        const replaceWildcardCharacter =  usage === "files" ? replaceWildCardCharacterFiles : replaceWildCardCharacterOther;
+        const singleAsteriskRegexFragment = usage === "files" ? singleAsteriskRegexFragmentFiles : singleAsteriskRegexFragmentOther;
+
+        /**
+         * Regex for the ** wildcard. Matches any number of subdirectories. When used for including
+         * files or directories, does not match subdirectories that start with a . character
+         */
+        const doubleAsteriskRegexFragment = usage === "exclude" ? "(/.+?)?" : "(/[^/.][^/]*)*?";
 
         let pattern = "";
         let hasWrittenSubpattern = false;
@@ -947,13 +1119,13 @@ namespace ts {
             components[0] = removeTrailingDirectorySeparator(components[0]);
 
             let optionalCount = 0;
-            for (const component of components) {
+            for (let component of components) {
                 if (component === "**") {
                     if (hasRecursiveDirectoryWildcard) {
                         continue spec;
                     }
 
-                    subpattern += "(/.+?)?";
+                    subpattern += doubleAsteriskRegexFragment;
                     hasRecursiveDirectoryWildcard = true;
                     hasWrittenComponent = true;
                 }
@@ -965,6 +1137,20 @@ namespace ts {
 
                     if (hasWrittenComponent) {
                         subpattern += directorySeparator;
+                    }
+
+                    if (usage !== "exclude") {
+                        // The * and ? wildcards should not match directories or files that start with . if they
+                        // appear first in a component. Dotted directories and files can be included explicitly
+                        // like so: **/.*/.*
+                        if (component.charCodeAt(0) === CharacterCodes.asterisk) {
+                            subpattern += "([^./]" + singleAsteriskRegexFragment + ")?";
+                            component = component.substr(1);
+                        }
+                        else if (component.charCodeAt(0) === CharacterCodes.question) {
+                            subpattern += "[^./]";
+                            component = component.substr(1);
+                        }
                     }
 
                     subpattern += component.replace(reservedCharacterPattern, replaceWildcardCharacter);
@@ -992,8 +1178,16 @@ namespace ts {
         return "^(" + pattern + (usage === "exclude" ? ")($|/)" : ")$");
     }
 
-    function replaceWildcardCharacter(match: string) {
-        return match === "*" ? "[^/]*" : match === "?" ? "[^/]" : "\\" + match;
+    function replaceWildCardCharacterFiles(match: string) {
+        return replaceWildcardCharacter(match, singleAsteriskRegexFragmentFiles);
+    }
+
+    function replaceWildCardCharacterOther(match: string) {
+        return replaceWildcardCharacter(match, singleAsteriskRegexFragmentOther);
+    }
+
+    function replaceWildcardCharacter(match: string, singleAsteriskRegexFragment: string) {
+        return match === "*" ? singleAsteriskRegexFragment : match === "?" ? "[^/]" : "\\" + match;
     }
 
     export interface FileSystemEntries {
@@ -1072,15 +1266,17 @@ namespace ts {
             // Storage for literal base paths amongst the include patterns.
             const includeBasePaths: string[] = [];
             for (const include of includes) {
-                if (isRootedDiskPath(include)) {
-                    const wildcardOffset = indexOfAnyCharCode(include, wildcardCharCodes);
-                    const includeBasePath = wildcardOffset < 0
-                        ? removeTrailingDirectorySeparator(getDirectoryPath(include))
-                        : include.substring(0, include.lastIndexOf(directorySeparator, wildcardOffset));
+                // We also need to check the relative paths by converting them to absolute and normalizing
+                // in case they escape the base path (e.g "..\somedirectory")
+                const absolute: string = isRootedDiskPath(include) ? include : normalizePath(combinePaths(path, include));
 
-                    // Append the literal and canonical candidate base paths.
-                    includeBasePaths.push(includeBasePath);
-                }
+                const wildcardOffset = indexOfAnyCharCode(absolute, wildcardCharCodes);
+                const includeBasePath = wildcardOffset < 0
+                    ? removeTrailingDirectorySeparator(getDirectoryPath(absolute))
+                    : absolute.substring(0, absolute.lastIndexOf(directorySeparator, wildcardOffset));
+
+                // Append the literal and canonical candidate base paths.
+                includeBasePaths.push(includeBasePath);
             }
 
             // Sort the offsets array using either the literal or canonical path representations.
@@ -1133,6 +1329,8 @@ namespace ts {
      *  List of supported extensions in order of file resolution precedence.
      */
     export const supportedTypeScriptExtensions = [".ts", ".tsx", ".d.ts"];
+    /** Must have ".d.ts" first because if ".ts" goes first, that will be detected as the extension instead of ".d.ts". */
+    export const supportedTypescriptExtensionsForExtractExtension = [".d.ts", ".ts", ".tsx"];
     export const supportedJavascriptExtensions = [".js", ".jsx"];
     const allSupportedExtensions  = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
 
@@ -1215,8 +1413,12 @@ namespace ts {
         return path;
     }
 
-    export function tryRemoveExtension(path: string, extension: string): string {
-        return fileExtensionIs(path, extension) ? path.substring(0, path.length - extension.length) : undefined;
+    export function tryRemoveExtension(path: string, extension: string): string | undefined {
+        return fileExtensionIs(path, extension) ? removeExtension(path, extension) : undefined;
+    }
+
+    export function removeExtension(path: string, extension: string): string {
+        return path.substring(0, path.length - extension.length);
     }
 
     export function isJsxOrTsxExtension(ext: string): boolean {
@@ -1229,26 +1431,28 @@ namespace ts {
 
     export interface ObjectAllocator {
         getNodeConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Node;
+        getTokenConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Token;
+        getIdentifierConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Token;
         getSourceFileConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => SourceFile;
         getSymbolConstructor(): new (flags: SymbolFlags, name: string) => Symbol;
         getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
         getSignatureConstructor(): new (checker: TypeChecker) => Signature;
     }
 
-    function Symbol(flags: SymbolFlags, name: string) {
+    function Symbol(this: Symbol, flags: SymbolFlags, name: string) {
         this.flags = flags;
         this.name = name;
         this.declarations = undefined;
     }
 
-    function Type(checker: TypeChecker, flags: TypeFlags) {
+    function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
         this.flags = flags;
     }
 
     function Signature(checker: TypeChecker) {
     }
 
-    function Node(kind: SyntaxKind, pos: number, end: number) {
+    function Node(this: Node, kind: SyntaxKind, pos: number, end: number) {
         this.kind = kind;
         this.pos = pos;
         this.end = end;
@@ -1258,6 +1462,8 @@ namespace ts {
 
     export let objectAllocator: ObjectAllocator = {
         getNodeConstructor: () => <any>Node,
+        getTokenConstructor: () => <any>Node,
+        getIdentifierConstructor: () => <any>Node,
         getSourceFileConstructor: () => <any>Node,
         getSymbolConstructor: () => <any>Symbol,
         getTypeConstructor: () => <any>Type,

@@ -21,7 +21,7 @@
 verify.navigationBar([
     {
         "text": "<global>",
-        "kind": "module",
+        "kind": "script",
         "childItems": [
             {
                 "text": "Class",
@@ -73,7 +73,7 @@ verify.navigationBar([
         "childItems": [
             {
                 "text": "LocalEnumMemberInConstructor",
-                "kind": "property"
+                "kind": "const"
             }
         ],
         "indent": 3
@@ -113,7 +113,7 @@ verify.navigationBar([
         "childItems": [
             {
                 "text": "LocalEnumMemberInMethod",
-                "kind": "property"
+                "kind": "const"
             }
         ],
         "indent": 3

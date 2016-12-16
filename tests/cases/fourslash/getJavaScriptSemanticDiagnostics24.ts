@@ -13,4 +13,4 @@
 //// x.canVote/**/;
 
 goTo.marker();
-verify.quickInfoIs('(property) Person.canVote: boolean | number');
+verify.quickInfoIs('(property) Person.canVote: number | boolean');

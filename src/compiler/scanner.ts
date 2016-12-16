@@ -31,6 +31,7 @@ namespace ts {
         scanJsxToken(): SyntaxKind;
         scanJSDocToken(): SyntaxKind;
         scan(): SyntaxKind;
+        getText(): string;
         // Sets the text for the scanner to scan.  An optional subrange starting point and length
         // can be provided to have the scanner only scan a portion of the text.
         setText(text: string, start?: number, length?: number): void;
@@ -54,7 +55,7 @@ namespace ts {
         tryScan<T>(callback: () => T): T;
     }
 
-    const textToToken: Map<SyntaxKind> = {
+    const textToToken = createMap({
         "abstract": SyntaxKind.AbstractKeyword,
         "any": SyntaxKind.AnyKeyword,
         "as": SyntaxKind.AsKeyword,
@@ -178,7 +179,7 @@ namespace ts {
         "|=": SyntaxKind.BarEqualsToken,
         "^=": SyntaxKind.CaretEqualsToken,
         "@": SyntaxKind.AtToken,
-    };
+    });
 
     /*
         As per ECMAScript Language Specification 3th Edition, Section 7.6: Identifiers
@@ -273,9 +274,7 @@ namespace ts {
     function makeReverseMap(source: Map<number>): string[] {
         const result: string[] = [];
         for (const name in source) {
-            if (source.hasOwnProperty(name)) {
-                result[source[name]] = name;
-            }
+            result[source[name]] = name;
         }
         return result;
     }
@@ -365,6 +364,11 @@ namespace ts {
     const hasOwnProperty = Object.prototype.hasOwnProperty;
 
     export function isWhiteSpace(ch: number): boolean {
+        return isWhiteSpaceSingleLine(ch) || isLineBreak(ch);
+    }
+
+    /** Does not include line breaks. For that, see isWhiteSpaceLike. */
+    export function isWhiteSpaceSingleLine(ch: number): boolean {
         // Note: nextLine is in the Zs space, and should be considered to be a whitespace.
         // It is explicitly not a line-break as it isn't in the exact set specified by EcmaScript.
         return ch === CharacterCodes.space ||
@@ -505,7 +509,7 @@ namespace ts {
                       break;
 
                   default:
-                      if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch) || isLineBreak(ch))) {
+                      if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch))) {
                           pos++;
                           continue;
                       }
@@ -658,7 +662,7 @@ namespace ts {
                     }
                     break;
                 default:
-                    if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch) || isLineBreak(ch))) {
+                    if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch))) {
                         if (result && result.length && isLineBreak(ch)) {
                             lastOrUndefined(result).hasTrailingNewLine = true;
                         }
@@ -763,6 +767,7 @@ namespace ts {
             scanJsxToken,
             scanJSDocToken,
             scan,
+            getText,
             setText,
             setScriptTarget,
             setLanguageVariant,
@@ -1202,7 +1207,7 @@ namespace ts {
                             continue;
                         }
                         else {
-                            while (pos < end && isWhiteSpace(text.charCodeAt(pos))) {
+                            while (pos < end && isWhiteSpaceSingleLine(text.charCodeAt(pos))) {
                                 pos++;
                             }
                             return token = SyntaxKind.WhitespaceTrivia;
@@ -1520,7 +1525,7 @@ namespace ts {
                             }
                             return token = getIdentifierToken();
                         }
-                        else if (isWhiteSpace(ch)) {
+                        else if (isWhiteSpaceSingleLine(ch)) {
                             pos++;
                             continue;
                         }
@@ -1689,7 +1694,7 @@ namespace ts {
             let ch = text.charCodeAt(pos);
             while (pos < end) {
                 ch = text.charCodeAt(pos);
-                if (isWhiteSpace(ch)) {
+                if (isWhiteSpaceSingleLine(ch)) {
                     pos++;
                 }
                 else {
@@ -1787,6 +1792,10 @@ namespace ts {
 
         function tryScan<T>(callback: () => T): T {
             return speculationHelper(callback, /*isLookahead*/ false);
+        }
+
+        function getText(): string {
+            return text;
         }
 
         function setText(newText: string, start: number, length: number) {

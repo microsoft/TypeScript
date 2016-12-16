@@ -2,6 +2,7 @@
   "compilerOptions": { 
     "allowJs": true,
     "declaration": false,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "maxNodeModuleJsDepth": 2
   }
 }

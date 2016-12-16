@@ -7,7 +7,7 @@ if(foo.answer === 42){
 >foo.answer : number
 >foo : typeof foo
 >answer : number
->42 : number
+>42 : 42
 
 	var x = foo();
 >x : string

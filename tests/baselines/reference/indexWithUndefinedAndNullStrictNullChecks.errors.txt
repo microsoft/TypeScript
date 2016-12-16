@@ -1,0 +1,40 @@
+tests/cases/compiler/indexWithUndefinedAndNullStrictNullChecks.ts(9,19): error TS2454: Variable 'n' is used before being assigned.
+tests/cases/compiler/indexWithUndefinedAndNullStrictNullChecks.ts(9,19): error TS2342: An index expression argument must be of type 'string', 'number', 'symbol', or 'any'.
+tests/cases/compiler/indexWithUndefinedAndNullStrictNullChecks.ts(10,7): error TS2454: Variable 'n' is used before being assigned.
+tests/cases/compiler/indexWithUndefinedAndNullStrictNullChecks.ts(10,7): error TS2342: An index expression argument must be of type 'string', 'number', 'symbol', or 'any'.
+tests/cases/compiler/indexWithUndefinedAndNullStrictNullChecks.ts(11,19): error TS2454: Variable 's' is used before being assigned.
+tests/cases/compiler/indexWithUndefinedAndNullStrictNullChecks.ts(11,19): error TS2342: An index expression argument must be of type 'string', 'number', 'symbol', or 'any'.
+tests/cases/compiler/indexWithUndefinedAndNullStrictNullChecks.ts(12,7): error TS2454: Variable 's' is used before being assigned.
+tests/cases/compiler/indexWithUndefinedAndNullStrictNullChecks.ts(12,7): error TS2342: An index expression argument must be of type 'string', 'number', 'symbol', or 'any'.
+
+
+==== tests/cases/compiler/indexWithUndefinedAndNullStrictNullChecks.ts (8 errors) ====
+    interface N {
+        [n: number]: string;
+    }
+    interface S {
+        [s: string]: number;
+    }
+    let n: N;
+    let s: S;
+    let str: string = n[undefined];
+                      ~
+!!! error TS2454: Variable 'n' is used before being assigned.
+                      ~~~~~~~~~~~~
+!!! error TS2342: An index expression argument must be of type 'string', 'number', 'symbol', or 'any'.
+    str = n[null];
+          ~
+!!! error TS2454: Variable 'n' is used before being assigned.
+          ~~~~~~~
+!!! error TS2342: An index expression argument must be of type 'string', 'number', 'symbol', or 'any'.
+    let num: number = s[undefined];
+                      ~
+!!! error TS2454: Variable 's' is used before being assigned.
+                      ~~~~~~~~~~~~
+!!! error TS2342: An index expression argument must be of type 'string', 'number', 'symbol', or 'any'.
+    num = s[null];
+          ~
+!!! error TS2454: Variable 's' is used before being assigned.
+          ~~~~~~~
+!!! error TS2342: An index expression argument must be of type 'string', 'number', 'symbol', or 'any'.
+    

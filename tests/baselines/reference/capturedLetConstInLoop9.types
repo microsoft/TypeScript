@@ -42,7 +42,7 @@ for (let x = 0; x < 1; ++x) {
 >x : any
 
         case 1:
->1 : number
+>1 : 1
 
             let x;
 >x : any
@@ -57,8 +57,8 @@ for (let x = 0; x < 1; ++x) {
     
     while (1 == 1) {
 >1 == 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
         let x;
 >x : any
@@ -100,7 +100,7 @@ function foo() {
         if (a === 1) {
 >a === 1 : boolean
 >a : any
->1 : number
+>1 : 1
 
             break;
         }
@@ -108,7 +108,7 @@ function foo() {
         if (a === 2) {
 >a === 2 : boolean
 >a : any
->2 : number
+>2 : 2
 
             break l0;
 >l0 : any
@@ -132,7 +132,7 @@ function foo() {
             if (b === 1) {
 >b === 1 : boolean
 >b : any
->1 : number
+>1 : 1
 
                 break;
             }
@@ -141,7 +141,7 @@ function foo() {
             if (b === 2) {
 >b === 2 : boolean
 >b : any
->2 : number
+>2 : 2
 
                 break l0;
 >l0 : any
@@ -153,7 +153,7 @@ function foo() {
             if (b === 3) {
 >b === 3 : boolean
 >b : any
->3 : number
+>3 : 3
 
                 break l1;
 >l1 : any
@@ -183,7 +183,7 @@ function foo() {
             if (b === 1) {
 >b === 1 : boolean
 >b : any
->1 : number
+>1 : 1
 
                 break;
             }
@@ -191,7 +191,7 @@ function foo() {
             if (b === 2) {
 >b === 2 : boolean
 >b : any
->2 : number
+>2 : 2
 
                 break l0;
 >l0 : any
@@ -242,22 +242,22 @@ function foo2() {
         if (x === 1) {
 >x === 1 : boolean
 >x : any
->1 : number
+>1 : 1
 
             break;
         }
         else if (x === 2) {
 >x === 2 : boolean
 >x : any
->2 : number
+>2 : 2
 
             continue;
         }
         
         while (1 === 1) {
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
             if (x) {
 >x : any
@@ -273,10 +273,10 @@ function foo2() {
 >x : any
 
             case 1: break;
->1 : number
+>1 : 1
 
             case 2: continue;
->2 : number
+>2 : 2
         }
         
         for (let y of []) {
@@ -287,10 +287,10 @@ function foo2() {
 >y : any
 
                 case 1: break;
->1 : number
+>1 : 1
 
                 case 2: continue;
->2 : number
+>2 : 2
             }
         }
     }

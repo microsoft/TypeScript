@@ -1,8 +1,11 @@
+tests/cases/conformance/es6/Symbols/symbolProperty33.ts(1,18): error TS2690: A class must be declared after its base class.
 tests/cases/conformance/es6/Symbols/symbolProperty33.ts(7,6): error TS1023: An index signature parameter type must be 'string' or 'number'.
 
 
-==== tests/cases/conformance/es6/Symbols/symbolProperty33.ts (1 errors) ====
+==== tests/cases/conformance/es6/Symbols/symbolProperty33.ts (2 errors) ====
     class C1 extends C2 {
+                     ~~
+!!! error TS2690: A class must be declared after its base class.
         [Symbol.toStringTag]() {
             return { x: "" };
         }

@@ -53,7 +53,7 @@ let nameA: string, numberB: number, nameB: string, skillB: string;
 >skillB : string
 
 let robotAInfo: (number | string)[];
->robotAInfo : (number | string)[]
+>robotAInfo : (string | number)[]
 
 let multiSkillB: [string, string], nameMB: string, primarySkillB: string, secondarySkillB: string;
 >multiSkillB : [string, string]
@@ -222,27 +222,27 @@ let multiRobotAInfo: (string | [string, string])[];
 
 [numberB, ...robotAInfo] = robotB;
 >[numberB, ...robotAInfo] = robotB : [number, string, string]
->[numberB, ...robotAInfo] : (number | string)[]
+>[numberB, ...robotAInfo] : (string | number)[]
 >numberB : number
->...robotAInfo : number | string
->robotAInfo : (number | string)[]
+>...robotAInfo : string | number
+>robotAInfo : (string | number)[]
 >robotB : [number, string, string]
 
 [numberB, ...robotAInfo] = getRobotB();
 >[numberB, ...robotAInfo] = getRobotB() : [number, string, string]
->[numberB, ...robotAInfo] : (number | string)[]
+>[numberB, ...robotAInfo] : (string | number)[]
 >numberB : number
->...robotAInfo : number | string
->robotAInfo : (number | string)[]
+>...robotAInfo : string | number
+>robotAInfo : (string | number)[]
 >getRobotB() : [number, string, string]
 >getRobotB : () => [number, string, string]
 
 [numberB, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"];
 >[numberB, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"] : [number, string, string]
->[numberB, ...robotAInfo] : (number | string)[]
+>[numberB, ...robotAInfo] : (string | number)[]
 >numberB : number
->...robotAInfo : number | string
->robotAInfo : (number | string)[]
+>...robotAInfo : string | number
+>robotAInfo : (string | number)[]
 ><Robot>[2, "trimmer", "trimming"] : [number, string, string]
 >Robot : [number, string, string]
 >[2, "trimmer", "trimming"] : [number, string, string]

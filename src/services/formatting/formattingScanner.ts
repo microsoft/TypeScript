@@ -17,6 +17,7 @@ namespace ts.formatting {
         readTokenInfo(n: Node): TokenInfo;
         getCurrentLeadingTrivia(): TextRangeWithKind[];
         lastTrailingTriviaWasNewLine(): boolean;
+        skipToEndOf(node: Node): void;
         close(): void;
     }
 
@@ -25,7 +26,8 @@ namespace ts.formatting {
         RescanGreaterThanToken,
         RescanSlashToken,
         RescanTemplateToken,
-        RescanJsxIdentifier
+        RescanJsxIdentifier,
+        RescanJsxText,
     }
 
     export function getFormattingScanner(sourceFile: SourceFile, startPos: number, endPos: number): FormattingScanner {
@@ -36,12 +38,12 @@ namespace ts.formatting {
         scanner.setTextPos(startPos);
 
         let wasNewLine = true;
-        let leadingTrivia: TextRangeWithKind[];
-        let trailingTrivia: TextRangeWithKind[];
+        let leadingTrivia: TextRangeWithKind[] | undefined;
+        let trailingTrivia: TextRangeWithKind[] | undefined;
 
         let savedPos: number;
-        let lastScanAction: ScanAction;
-        let lastTokenInfo: TokenInfo;
+        let lastScanAction: ScanAction | undefined;
+        let lastTokenInfo: TokenInfo | undefined;
 
         return {
             advance,
@@ -49,6 +51,7 @@ namespace ts.formatting {
             isOnToken,
             getCurrentLeadingTrivia: () => leadingTrivia,
             lastTrailingTriviaWasNewLine: () => wasNewLine,
+            skipToEndOf,
             close: () => {
                 Debug.assert(scanner !== undefined);
 
@@ -138,6 +141,10 @@ namespace ts.formatting {
             return false;
         }
 
+        function shouldRescanJsxText(node: Node): boolean {
+            return node && node.kind === SyntaxKind.JsxText;
+        }
+
         function shouldRescanSlashToken(container: Node): boolean {
             return container.kind === SyntaxKind.RegularExpressionLiteral;
         }
@@ -174,6 +181,8 @@ namespace ts.formatting {
                         ? ScanAction.RescanTemplateToken
                         : shouldRescanJsxIdentifier(n)
                             ? ScanAction.RescanJsxIdentifier
+                            : shouldRescanJsxText(n)
+                            ? ScanAction.RescanJsxText
                             : ScanAction.Scan;
 
             if (lastTokenInfo && expectedScanAction === lastScanAction) {
@@ -212,6 +221,10 @@ namespace ts.formatting {
             else if (expectedScanAction === ScanAction.RescanJsxIdentifier && currentToken === SyntaxKind.Identifier) {
                 currentToken = scanner.scanJsxIdentifier();
                 lastScanAction = ScanAction.RescanJsxIdentifier;
+            }
+            else if (expectedScanAction === ScanAction.RescanJsxText) {
+                currentToken = scanner.reScanJsxToken();
+                lastScanAction = ScanAction.RescanJsxText;
             }
             else {
                 lastScanAction = ScanAction.Scan;
@@ -277,6 +290,16 @@ namespace ts.formatting {
                 tokenInfo.token.kind = container.kind;
             }
             return tokenInfo;
+        }
+
+        function skipToEndOf(node: Node): void {
+            scanner.setTextPos(node.end);
+            savedPos = scanner.getStartPos();
+            lastScanAction = undefined;
+            lastTokenInfo = undefined;
+            wasNewLine = false;
+            leadingTrivia = undefined;
+            trailingTrivia = undefined;
         }
     }
 }

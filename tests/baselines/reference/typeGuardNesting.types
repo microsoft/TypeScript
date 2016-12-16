@@ -9,13 +9,13 @@ if ((typeof strOrBool === 'boolean' && !strOrBool) || typeof strOrBool === 'stri
 >typeof strOrBool === 'boolean' : boolean
 >typeof strOrBool : string
 >strOrBool : string | boolean
->'boolean' : string
+>'boolean' : "boolean"
 >!strOrBool : boolean
 >strOrBool : boolean
 >typeof strOrBool === 'string' : boolean
 >typeof strOrBool : string
->strOrBool : string | boolean
->'string' : string
+>strOrBool : string | true
+>'string' : "string"
 
 	let label: string = (typeof strOrBool === 'string') ? strOrBool : "string";
 >label : string
@@ -23,8 +23,8 @@ if ((typeof strOrBool === 'boolean' && !strOrBool) || typeof strOrBool === 'stri
 >(typeof strOrBool === 'string') : boolean
 >typeof strOrBool === 'string' : boolean
 >typeof strOrBool : string
->strOrBool : boolean | string
->'string' : string
+>strOrBool : string | boolean
+>'string' : "string"
 >strOrBool : string
 >"string" : string
 
@@ -35,7 +35,7 @@ if ((typeof strOrBool === 'boolean' && !strOrBool) || typeof strOrBool === 'stri
 >typeof strOrBool === 'boolean' : boolean
 >typeof strOrBool : string
 >strOrBool : string | boolean
->'boolean' : string
+>'boolean' : "boolean"
 >strOrBool : boolean
 >false : boolean
 
@@ -45,8 +45,8 @@ if ((typeof strOrBool === 'boolean' && !strOrBool) || typeof strOrBool === 'stri
 >(typeof strOrBool !== 'boolean') : boolean
 >typeof strOrBool !== 'boolean' : boolean
 >typeof strOrBool : string
->strOrBool : boolean | string
->'boolean' : string
+>strOrBool : string | boolean
+>'boolean' : "boolean"
 >strOrBool : string
 >"string" : string
 
@@ -57,7 +57,7 @@ if ((typeof strOrBool === 'boolean' && !strOrBool) || typeof strOrBool === 'stri
 >typeof strOrBool !== 'string' : boolean
 >typeof strOrBool : string
 >strOrBool : string | boolean
->'string' : string
+>'string' : "string"
 >strOrBool : boolean
 >false : boolean
 }
@@ -68,14 +68,14 @@ if ((typeof strOrBool !== 'string' && !strOrBool) || typeof strOrBool !== 'boole
 >typeof strOrBool !== 'string' && !strOrBool : boolean
 >typeof strOrBool !== 'string' : boolean
 >typeof strOrBool : string
->strOrBool : boolean | string
->'string' : string
+>strOrBool : string | boolean
+>'string' : "string"
 >!strOrBool : boolean
 >strOrBool : boolean
 >typeof strOrBool !== 'boolean' : boolean
 >typeof strOrBool : string
->strOrBool : string | boolean
->'boolean' : string
+>strOrBool : string | true
+>'boolean' : "boolean"
 
 	let label: string = (typeof strOrBool === 'string') ? strOrBool : "string";
 >label : string
@@ -83,8 +83,8 @@ if ((typeof strOrBool !== 'string' && !strOrBool) || typeof strOrBool !== 'boole
 >(typeof strOrBool === 'string') : boolean
 >typeof strOrBool === 'string' : boolean
 >typeof strOrBool : string
->strOrBool : boolean | string
->'string' : string
+>strOrBool : string | boolean
+>'string' : "string"
 >strOrBool : string
 >"string" : string
 
@@ -95,7 +95,7 @@ if ((typeof strOrBool !== 'string' && !strOrBool) || typeof strOrBool !== 'boole
 >typeof strOrBool === 'boolean' : boolean
 >typeof strOrBool : string
 >strOrBool : string | boolean
->'boolean' : string
+>'boolean' : "boolean"
 >strOrBool : boolean
 >false : boolean
 
@@ -105,8 +105,8 @@ if ((typeof strOrBool !== 'string' && !strOrBool) || typeof strOrBool !== 'boole
 >(typeof strOrBool !== 'boolean') : boolean
 >typeof strOrBool !== 'boolean' : boolean
 >typeof strOrBool : string
->strOrBool : boolean | string
->'boolean' : string
+>strOrBool : string | boolean
+>'boolean' : "boolean"
 >strOrBool : string
 >"string" : string
 
@@ -117,7 +117,7 @@ if ((typeof strOrBool !== 'string' && !strOrBool) || typeof strOrBool !== 'boole
 >typeof strOrBool !== 'string' : boolean
 >typeof strOrBool : string
 >strOrBool : string | boolean
->'string' : string
+>'string' : "string"
 >strOrBool : boolean
 >false : boolean
 }

@@ -1755,6 +1755,10 @@
         "category": "Error",
         "code": 2534
     },
+    "Enum type '{0}' has members with initializers that are not literals.": {
+        "category": "Error",
+        "code": 2535
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -1942,6 +1946,18 @@
     "Cannot extend an interface '{0}'. Did you mean 'implements'?": {
         "category": "Error",
         "code": 2689
+    },
+    "A class must be declared after its base class.": {
+        "category": "Error",
+        "code": 2690
+    },
+    "An import path cannot end with a '{0}' extension. Consider importing '{1}' instead.": {
+        "category": "Error",
+        "code": 2691
+    },
+    "'{0}' is a primitive, but '{1}' is a wrapper object. Prefer using '{0}' when possible.": {
+        "category": "Error",
+        "code": 2692
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -2223,7 +2239,7 @@
         "category": "Error",
         "code": 4082
     },
-    "Conflicting library definitions for '{0}' found at '{1}' and '{2}'. Copy the correct file to the 'typings' folder to resolve this conflict.": {
+    "Conflicting definitions for '{0}' found at '{1}' and '{2}'. Consider installing a specific version of this library to resolve the conflict.": {
         "category": "Message",
         "code": 4090
     },
@@ -2331,6 +2347,14 @@
     "Substitution '{0}' for pattern '{1}' has incorrect type, expected 'string', got '{2}'.": {
         "category": "Error",
         "code": 5064
+    },
+    "File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '{0}'.": {
+        "category": "Error",
+        "code": 5065
+    },
+    "Substitutions for pattern '{0}' shouldn't be an empty array.": {
+        "category": "Error",
+        "code": 5066
     },
     "Concatenate and emit output to single file.": {
         "category": "Message",
@@ -2796,11 +2820,11 @@
         "category": "Error",
         "code": 6133
     },
-    "Report Errors on Unused Locals.": {
+    "Report errors on unused locals.": {
         "category": "Message",
         "code": 6134
     },
-    "Report Errors on Unused Parameters.": {
+    "Report errors on unused parameters.": {
         "category": "Message",
         "code": 6135
     },
@@ -2811,6 +2835,10 @@
     "No types specified in 'package.json' but 'allowJs' is set, so returning 'main' value of '{0}'": {
         "category": "Message",
         "code": 6137
+    },
+    "Property '{0}' is declared but never used.": {
+        "category": "Error",
+        "code": 6138
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

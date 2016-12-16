@@ -114,4 +114,4 @@ verifyTypeParameter("U", getFunctionDisplay("foo2", /*instance*/ undefined, stri
 verifyParameter("a", "U", stringTypeDisplay);
 
 // Call
-verifyFunctionDisplay("foo2", stringTypeDisplay);
+verifyFunctionDisplay("foo2", [{ text: "\"hello\"", kind: "stringLiteral" }]);

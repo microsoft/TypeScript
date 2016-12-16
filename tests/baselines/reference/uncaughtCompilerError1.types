@@ -19,7 +19,7 @@ function f() {
 >lineTokens : any
 >index : any
 >trim : any
->'=' : string
+>'=' : "="
 >index > 0 : boolean
 >index : any
 >0 : number
@@ -27,7 +27,7 @@ function f() {
 >token.type : any
 >token : any
 >type : any
->'' : string
+>'' : ""
 >tokens[index - 1].type === 'attribute.name.html' : boolean
 >tokens[index - 1].type : any
 >tokens[index - 1] : any
@@ -36,7 +36,7 @@ function f() {
 >index : any
 >1 : number
 >type : any
->'attribute.name.html' : string
+>'attribute.name.html' : "attribute.name.html"
 
         if (index === (tokens.length - 1)) {
 >index === (tokens.length - 1) : boolean
@@ -65,7 +65,7 @@ function f() {
 >index : any
 >1 : number
 >type : any
->'attribute.value.html' : string
+>'attribute.value.html' : "attribute.value.html"
 >tokens[index + 1].type !== '' : boolean
 >tokens[index + 1].type : any
 >tokens[index + 1] : any
@@ -74,7 +74,7 @@ function f() {
 >index : any
 >1 : number
 >type : any
->'' : string
+>'' : ""
 
             return { appendText: '\"\"', advanceCount: 1 };
 >{ appendText: '\"\"', advanceCount: 1 } : { appendText: string; advanceCount: number; }

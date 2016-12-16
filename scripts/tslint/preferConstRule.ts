@@ -1,7 +1,6 @@
 import * as Lint from "tslint/lib/lint";
 import * as ts from "typescript";
 
-
 export class Rule extends Lint.Rules.AbstractRule {
     public static FAILURE_STRING_FACTORY = (identifier: string) => `Identifier '${identifier}' never appears on the LHS of an assignment - use const instead of let for its declaration.`;
 
@@ -64,7 +63,7 @@ interface DeclarationUsages {
 }
 
 class PreferConstWalker extends Lint.RuleWalker {
-    private inScopeLetDeclarations: ts.Map<DeclarationUsages>[] = [];
+    private inScopeLetDeclarations: ts.MapLike<DeclarationUsages>[] = [];
     private errors: Lint.RuleFailure[] = [];
     private markAssignment(identifier: ts.Identifier) {
         const name = identifier.text;
@@ -172,7 +171,7 @@ class PreferConstWalker extends Lint.RuleWalker {
     }
 
     private visitAnyForStatement(node: ts.ForOfStatement | ts.ForInStatement) {
-        const names: ts.Map<DeclarationUsages> = {};
+        const names: ts.MapLike<DeclarationUsages> = {};
         if (isLet(node.initializer)) {
             if (node.initializer.kind === ts.SyntaxKind.VariableDeclarationList) {
                 this.collectLetIdentifiers(node.initializer as ts.VariableDeclarationList, names);
@@ -194,7 +193,7 @@ class PreferConstWalker extends Lint.RuleWalker {
     }
 
     visitBlock(node: ts.Block) {
-        const names: ts.Map<DeclarationUsages> = {};
+        const names: ts.MapLike<DeclarationUsages> = {};
         for (const statement of node.statements) {
             if (statement.kind === ts.SyntaxKind.VariableStatement) {
                 this.collectLetIdentifiers((statement as ts.VariableStatement).declarationList, names);
@@ -205,7 +204,7 @@ class PreferConstWalker extends Lint.RuleWalker {
         this.popDeclarations();
     }
 
-    private collectLetIdentifiers(list: ts.VariableDeclarationList, ret: ts.Map<DeclarationUsages>) {
+    private collectLetIdentifiers(list: ts.VariableDeclarationList, ret: ts.MapLike<DeclarationUsages>) {
         for (const node of list.declarations) {
             if (isLet(node) && !isExported(node)) {
                 this.collectNameIdentifiers(node, node.name, ret);
@@ -213,7 +212,7 @@ class PreferConstWalker extends Lint.RuleWalker {
         }
     }
 
-    private collectNameIdentifiers(declaration: ts.VariableDeclaration, node: ts.Identifier | ts.BindingPattern, table: ts.Map<DeclarationUsages>) {
+    private collectNameIdentifiers(declaration: ts.VariableDeclaration, node: ts.Identifier | ts.BindingPattern, table: ts.MapLike<DeclarationUsages>) {
         if (node.kind === ts.SyntaxKind.Identifier) {
             table[(node as ts.Identifier).text] = { declaration, usages: 0 };
         }
@@ -222,7 +221,7 @@ class PreferConstWalker extends Lint.RuleWalker {
         }
     }
 
-    private collectBindingPatternIdentifiers(value: ts.VariableDeclaration, pattern: ts.BindingPattern, table: ts.Map<DeclarationUsages>) {
+    private collectBindingPatternIdentifiers(value: ts.VariableDeclaration, pattern: ts.BindingPattern, table: ts.MapLike<DeclarationUsages>) {
         for (const element of pattern.elements) {
             this.collectNameIdentifiers(value, element.name, table);
         }

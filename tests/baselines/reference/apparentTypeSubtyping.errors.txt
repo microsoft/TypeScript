@@ -1,6 +1,7 @@
 tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSubtyping.ts(9,7): error TS2415: Class 'Derived<U>' incorrectly extends base class 'Base<string>'.
   Types of property 'x' are incompatible.
     Type 'String' is not assignable to type 'string'.
+      'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
 
 
 ==== tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSubtyping.ts (1 errors) ====
@@ -17,6 +18,7 @@ tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSubtypi
 !!! error TS2415: Class 'Derived<U>' incorrectly extends base class 'Base<string>'.
 !!! error TS2415:   Types of property 'x' are incompatible.
 !!! error TS2415:     Type 'String' is not assignable to type 'string'.
+!!! error TS2415:       'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
         x: String;
     }
     

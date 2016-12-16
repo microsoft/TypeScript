@@ -90,28 +90,28 @@ xyz.x.c = "hello";
 >"hello" : string
 
 type F1 = (x: string) => string;
->F1 : (x: string) => string
+>F1 : F1
 >x : string
 
 type F2 = (x: number) => number;
->F2 : (x: number) => number
+>F2 : F2
 >x : number
 
 var f: F1 & F2;
->f : ((x: string) => string) & ((x: number) => number)
->F1 : (x: string) => string
->F2 : (x: number) => number
+>f : F1 & F2
+>F1 : F1
+>F2 : F2
 
 var s = f("hello");
 >s : string
 >f("hello") : string
->f : ((x: string) => string) & ((x: number) => number)
+>f : F1 & F2
 >"hello" : string
 
 var n = f(42);
 >n : number
 >f(42) : number
->f : ((x: string) => string) & ((x: number) => number)
+>f : F1 & F2
 >42 : number
 
 interface D {

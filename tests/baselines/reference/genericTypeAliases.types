@@ -1,18 +1,18 @@
 === tests/cases/conformance/types/typeAliases/genericTypeAliases.ts ===
 type Tree<T> = T | { left: Tree<T>, right: Tree<T> };
->Tree : T | { left: T | any; right: T | any; }
+>Tree : Tree<T>
 >T : T
 >T : T
->left : T | { left: T | any; right: T | any; }
->Tree : T | { left: T | any; right: T | any; }
+>left : Tree<T>
+>Tree : Tree<T>
 >T : T
->right : T | { left: T | any; right: T | any; }
->Tree : T | { left: T | any; right: T | any; }
+>right : Tree<T>
+>Tree : Tree<T>
 >T : T
 
 var tree: Tree<number> = {
->tree : number | { left: number | any; right: number | any; }
->Tree : T | { left: T | any; right: T | any; }
+>tree : Tree<number>
+>Tree : Tree<T>
 >{    left: {        left: 0,        right: {            left: 1,            right: 2        },    },    right: 3} : { left: { left: number; right: { left: number; right: number; }; }; right: number; }
 
     left: {
@@ -44,76 +44,76 @@ var tree: Tree<number> = {
 };
 
 type Lazy<T> = T | (() => T);
->Lazy : T | (() => T)
+>Lazy : Lazy<T>
 >T : T
 >T : T
 >T : T
 
 var ls: Lazy<string>;
->ls : string | (() => string)
->Lazy : T | (() => T)
+>ls : Lazy<string>
+>Lazy : Lazy<T>
 
 ls = "eager";
 >ls = "eager" : string
->ls : string | (() => string)
+>ls : Lazy<string>
 >"eager" : string
 
 ls = () => "lazy";
 >ls = () => "lazy" : () => string
->ls : string | (() => string)
+>ls : Lazy<string>
 >() => "lazy" : () => string
 >"lazy" : string
 
 type Foo<T> = T | { x: Foo<T> };
->Foo : T | { x: T | any; }
+>Foo : Foo<T>
 >T : T
 >T : T
->x : T | { x: T | any; }
->Foo : T | { x: T | any; }
+>x : Foo<T>
+>Foo : Foo<T>
 >T : T
 
 type Bar<U> = U | { x: Bar<U> };
->Bar : U | { x: U | any; }
+>Bar : Bar<U>
 >U : U
 >U : U
->x : U | { x: U | any; }
->Bar : U | { x: U | any; }
+>x : Bar<U>
+>Bar : Bar<U>
 >U : U
 
 // Deeply instantiated generics
 var x: Foo<string>;
->x : string | { x: string | any; }
->Foo : T | { x: T | any; }
+>x : Foo<string>
+>Foo : Foo<T>
 
 var y: Bar<string>;
->y : string | { x: string | any; }
->Bar : U | { x: U | any; }
+>y : Bar<string>
+>Bar : Bar<U>
 
 x = y;
->x = y : string | { x: string | any; }
->x : string | { x: string | any; }
->y : string | { x: string | any; }
+>x = y : Bar<string>
+>x : Foo<string>
+>y : Bar<string>
 
 y = x;
->y = x : string | { x: string | any; }
->y : string | { x: string | any; }
->x : string | { x: string | any; }
+>y = x : Foo<string>
+>y : Bar<string>
+>x : Foo<string>
 
 x = "string";
 >x = "string" : string
->x : string | { x: string | any; }
+>x : Foo<string>
 >"string" : string
 
 x = { x: "hello" };
 >x = { x: "hello" } : { x: string; }
->x : string | { x: string | any; }
+>x : Foo<string>
 >{ x: "hello" } : { x: string; }
 >x : string
 >"hello" : string
 
 x = { x: { x: "world" } };
 >x = { x: { x: "world" } } : { x: { x: string; }; }
->x : string | { x: string | any; }
+>x : Foo<string>
 >{ x: { x: "world" } } : { x: { x: string; }; }
 >x : { x: string; }
 >{ x: "world" } : { x: string; }
@@ -121,24 +121,24 @@ x = { x: { x: "world" } };
 >"world" : string
 
 var z: Foo<number>;
->z : number | { x: number | any; }
->Foo : T | { x: T | any; }
+>z : Foo<number>
+>Foo : Foo<T>
 
 z = 42;
 >z = 42 : number
->z : number | { x: number | any; }
+>z : Foo<number>
 >42 : number
 
 z = { x: 42 };
 >z = { x: 42 } : { x: number; }
->z : number | { x: number | any; }
+>z : Foo<number>
 >{ x: 42 } : { x: number; }
 >x : number
 >42 : number
 
 z = { x: { x: 42 } };
 >z = { x: { x: 42 } } : { x: { x: number; }; }
->z : number | { x: number | any; }
+>z : Foo<number>
 >{ x: { x: 42 } } : { x: { x: number; }; }
 >x : { x: number; }
 >{ x: 42 } : { x: number; }
@@ -215,60 +215,60 @@ p.tag = "test";
 >"test" : string
 
 function f<A>() {
->f : <A>() => A[] | { x: A[] | any; }
+>f : <A>() => Foo<A[]>
 >A : A
 
     type Foo<T> = T | { x: Foo<T> };
->Foo : T | { x: T | any; }
+>Foo : Foo<T>
 >T : T
 >T : T
->x : T | { x: T | any; }
->Foo : T | { x: T | any; }
+>x : Foo<T>
+>Foo : Foo<T>
 >T : T
 
     var x: Foo<A[]>;
->x : A[] | { x: A[] | any; }
->Foo : T | { x: T | any; }
+>x : Foo<A[]>
+>Foo : Foo<T>
 >A : A
 
     return x;
->x : A[] | { x: A[] | any; }
+>x : Foo<A[]>
 }
 
 function g<B>() {
->g : <B>() => B[] | { x: B[] | any; }
+>g : <B>() => Bar<B[]>
 >B : B
 
     type Bar<U> = U | { x: Bar<U> };
->Bar : U | { x: U | any; }
+>Bar : Bar<U>
 >U : U
 >U : U
->x : U | { x: U | any; }
->Bar : U | { x: U | any; }
+>x : Bar<U>
+>Bar : Bar<U>
 >U : U
 
     var x: Bar<B[]>;
->x : B[] | { x: B[] | any; }
->Bar : U | { x: U | any; }
+>x : Bar<B[]>
+>Bar : Bar<U>
 >B : B
 
     return x;
->x : B[] | { x: B[] | any; }
+>x : Bar<B[]>
 }
 
 // Deeply instantiated generics
 var a = f<string>();
->a : string[] | { x: string[] | any; }
->f<string>() : string[] | { x: string[] | any; }
->f : <A>() => A[] | { x: A[] | any; }
+>a : Foo<string>
+>f<string>() : Foo<string>
+>f : <A>() => Foo<A[]>
 
 var b = g<string>();
->b : string[] | { x: string[] | any; }
->g<string>() : string[] | { x: string[] | any; }
->g : <B>() => B[] | { x: B[] | any; }
+>b : Bar<string>
+>g<string>() : Bar<string>
+>g : <B>() => Bar<B[]>
 
 a = b;
->a = b : string[] | { x: string[] | any; }
->a : string[] | { x: string[] | any; }
->b : string[] | { x: string[] | any; }
+>a = b : Bar<string>
+>a : Foo<string>
+>b : Bar<string>
 

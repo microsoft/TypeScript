@@ -41,7 +41,7 @@
 verify.navigationBar([
     {
         "text": "<global>",
-        "kind": "module",
+        "kind": "script",
         "childItems": [
             {
                 "text": "dist",
@@ -154,15 +154,15 @@ verify.navigationBar([
         "childItems": [
             {
                 "text": "value1",
-                "kind": "property"
+                "kind": "const"
             },
             {
                 "text": "value2",
-                "kind": "property"
+                "kind": "const"
             },
             {
                 "text": "value3",
-                "kind": "property"
+                "kind": "const"
             }
         ],
         "indent": 2

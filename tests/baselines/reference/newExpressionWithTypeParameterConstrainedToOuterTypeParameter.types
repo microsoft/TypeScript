@@ -15,8 +15,8 @@ var i: I<string>;
 >I : I<T>
 
 var y = new i(""); // y should be string
->y : string
->new i("") : string
+>y : ""
+>new i("") : ""
 >i : I<string>
->"" : string
+>"" : ""
 

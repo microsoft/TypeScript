@@ -325,7 +325,7 @@ class AnotherClass { private x }
 var f7: (x: number) => string | number = x => { // should be (x: number) => number | string
 >f7 : (x: number) => string | number
 >x : number
->x => { // should be (x: number) => number | string    if (x < 0) { return x; }    return x.toString();} : (x: number) => number | string
+>x => { // should be (x: number) => number | string    if (x < 0) { return x; }    return x.toString();} : (x: number) => string | number
 >x : number
 
     if (x < 0) { return x; }

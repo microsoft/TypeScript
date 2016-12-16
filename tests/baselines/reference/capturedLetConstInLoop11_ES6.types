@@ -21,7 +21,7 @@ function foo() {
 >a : number
 
             case 0: return () => a;
->0 : number
+>0 : 0
 >() => a : () => number
 >a : number
         }

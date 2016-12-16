@@ -29,8 +29,8 @@ var e: Ellement;
 
 (c || e).dummy;
 >(c || e).dummy : any
->(c || e) : Contextual | Ellement
->c || e : Contextual | Ellement
+>(c || e) : Contextual
+>c || e : Contextual
 >c : Contextual
 >e : Ellement
 >dummy : any

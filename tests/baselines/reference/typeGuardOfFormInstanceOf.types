@@ -60,7 +60,7 @@ num = ctor1 instanceof C2 && ctor1.p2; // C2
 >num : number
 >ctor1 instanceof C2 && ctor1.p2 : number
 >ctor1 instanceof C2 : boolean
->ctor1 : C2 | C1
+>ctor1 : C1 | C2
 >C2 : typeof C2
 >ctor1.p2 : number
 >ctor1 : C2
@@ -109,7 +109,7 @@ num = ctor2 instanceof D1 && ctor2.p3; // D1
 >num : number
 >ctor2 instanceof D1 && ctor2.p3 : number
 >ctor2 instanceof D1 : boolean
->ctor2 : D1 | C2
+>ctor2 : C2 | D1
 >D1 : typeof D1
 >ctor2.p3 : number
 >ctor2 : D1
@@ -127,7 +127,7 @@ str = ctor2 instanceof D1 && ctor2.p1; // D1
 >p1 : string
 
 var r2: D1 | C2 = ctor2 instanceof C1 && ctor2; // C2 | D1
->r2 : D1 | C2
+>r2 : C2 | D1
 >D1 : D1
 >C2 : C2
 >ctor2 instanceof C1 && ctor2 : D1
@@ -192,19 +192,19 @@ else {
 }
 
 var ctor5: C1 | D1 | C2;
->ctor5 : C1 | D1 | C2
+>ctor5 : C1 | C2 | D1
 >C1 : C1
 >D1 : D1
 >C2 : C2
 
 if (ctor5 instanceof C1) {
 >ctor5 instanceof C1 : boolean
->ctor5 : C1 | D1 | C2
+>ctor5 : C1 | C2 | D1
 >C1 : typeof C1
 
     ctor5.p1; // C1
 >ctor5.p1 : string
->ctor5 : C1
+>ctor5 : C1 | D1
 >p1 : string
 }
 else {

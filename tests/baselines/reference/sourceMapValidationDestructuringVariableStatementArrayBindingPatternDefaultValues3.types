@@ -53,7 +53,7 @@ let nameA: string, numberB: number, nameB: string, skillB: string;
 >skillB : string
 
 let robotAInfo: (number | string)[];
->robotAInfo : (number | string)[]
+>robotAInfo : (string | number)[]
 
 let multiSkillB: string[], nameMB: string, primarySkillB: string, secondarySkillB: string;
 >multiSkillB : string[]
@@ -296,36 +296,36 @@ let multiRobotAInfo: (string | string[])[];
 
 [numberB = -1, ...robotAInfo] = robotB;
 >[numberB = -1, ...robotAInfo] = robotB : [number, string, string]
->[numberB = -1, ...robotAInfo] : (number | string)[]
+>[numberB = -1, ...robotAInfo] : (string | number)[]
 >numberB = -1 : number
 >numberB : number
 >-1 : number
 >1 : number
->...robotAInfo : number | string
->robotAInfo : (number | string)[]
+>...robotAInfo : string | number
+>robotAInfo : (string | number)[]
 >robotB : [number, string, string]
 
 [numberB = -1, ...robotAInfo] = getRobotB();
 >[numberB = -1, ...robotAInfo] = getRobotB() : [number, string, string]
->[numberB = -1, ...robotAInfo] : (number | string)[]
+>[numberB = -1, ...robotAInfo] : (string | number)[]
 >numberB = -1 : number
 >numberB : number
 >-1 : number
 >1 : number
->...robotAInfo : number | string
->robotAInfo : (number | string)[]
+>...robotAInfo : string | number
+>robotAInfo : (string | number)[]
 >getRobotB() : [number, string, string]
 >getRobotB : () => [number, string, string]
 
 [numberB = -1, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"];
 >[numberB = -1, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"] : [number, string, string]
->[numberB = -1, ...robotAInfo] : (number | string)[]
+>[numberB = -1, ...robotAInfo] : (string | number)[]
 >numberB = -1 : number
 >numberB : number
 >-1 : number
 >1 : number
->...robotAInfo : number | string
->robotAInfo : (number | string)[]
+>...robotAInfo : string | number
+>robotAInfo : (string | number)[]
 ><Robot>[2, "trimmer", "trimming"] : [number, string, string]
 >Robot : [number, string, string]
 >[2, "trimmer", "trimming"] : [number, string, string]

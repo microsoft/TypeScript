@@ -58,10 +58,10 @@ declare function simple(arg: SimpleInterface): void;
 extend1({
 >extend1({    init() {        this // this: IndexedWithThis because of contextual typing.        // this.mine        this.willDestroy    },    mine: 12,    foo() {        this.url; // this: any because 'foo' matches the string indexer        this.willDestroy;    }}) : void
 >extend1 : (args: IndexedWithThis) => void
->{    init() {        this // this: IndexedWithThis because of contextual typing.        // this.mine        this.willDestroy    },    mine: 12,    foo() {        this.url; // this: any because 'foo' matches the string indexer        this.willDestroy;    }} : { init(): void; mine: number; foo(): void; }
+>{    init() {        this // this: IndexedWithThis because of contextual typing.        // this.mine        this.willDestroy    },    mine: 12,    foo() {        this.url; // this: any because 'foo' matches the string indexer        this.willDestroy;    }} : { init(this: IndexedWithThis): void; mine: number; foo(this: any): void; }
 
     init() {
->init : () => void
+>init : (this: IndexedWithThis) => void
 
         this // this: IndexedWithThis because of contextual typing.
 >this : IndexedWithThis
@@ -78,7 +78,7 @@ extend1({
 >12 : number
 
     foo() {
->foo : () => void
+>foo : (this: any) => void
 
         this.url; // this: any because 'foo' matches the string indexer
 >this.url : any

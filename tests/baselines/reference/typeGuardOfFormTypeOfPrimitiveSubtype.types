@@ -10,7 +10,7 @@ if (typeof a === "number") {
 >typeof a === "number" : boolean
 >typeof a : string
 >a : {}
->"number" : string
+>"number" : "number"
 
     let c: number = a;
 >c : number
@@ -20,7 +20,7 @@ if (typeof a === "string") {
 >typeof a === "string" : boolean
 >typeof a : string
 >a : {}
->"string" : string
+>"string" : "string"
 
     let c: string = a;
 >c : string
@@ -30,7 +30,7 @@ if (typeof a === "boolean") {
 >typeof a === "boolean" : boolean
 >typeof a : string
 >a : {}
->"boolean" : string
+>"boolean" : "boolean"
 
     let c: boolean = a;
 >c : boolean
@@ -41,7 +41,7 @@ if (typeof b === "number") {
 >typeof b === "number" : boolean
 >typeof b : string
 >b : { toString(): string; }
->"number" : string
+>"number" : "number"
 
     let c: number = b;
 >c : number
@@ -51,7 +51,7 @@ if (typeof b === "string") {
 >typeof b === "string" : boolean
 >typeof b : string
 >b : { toString(): string; }
->"string" : string
+>"string" : "string"
 
     let c: string = b;
 >c : string
@@ -61,7 +61,7 @@ if (typeof b === "boolean") {
 >typeof b === "boolean" : boolean
 >typeof b : string
 >b : { toString(): string; }
->"boolean" : string
+>"boolean" : "boolean"
 
     let c: boolean = b;
 >c : boolean

@@ -94,14 +94,14 @@ var x8: T8;
 >T8 : string | boolean
 
 type T9 = () => string;
->T9 : () => string
+>T9 : T9
 
 var x9: () => string;
 >x9 : () => string
 
 var x9: T9;
 >x9 : () => string
->T9 : () => string
+>T9 : T9
 
 type T10 = { x: number };
 >T10 : { x: number; }

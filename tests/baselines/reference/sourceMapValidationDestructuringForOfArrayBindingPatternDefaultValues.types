@@ -409,7 +409,7 @@ for (let [numberA3 = -1, ...robotAInfo] of robots) {
 >numberA3 : number
 >-1 : number
 >1 : number
->robotAInfo : (number | string)[]
+>robotAInfo : (string | number)[]
 >robots : [number, string, string][]
 
     console.log(numberA3);
@@ -423,7 +423,7 @@ for (let [numberA3 = -1, ...robotAInfo] of getRobots()) {
 >numberA3 : number
 >-1 : number
 >1 : number
->robotAInfo : (number | string)[]
+>robotAInfo : (string | number)[]
 >getRobots() : [number, string, string][]
 >getRobots : () => [number, string, string][]
 
@@ -438,7 +438,7 @@ for (let [numberA3 = -1, ...robotAInfo] of [robotA, robotB]) {
 >numberA3 : number
 >-1 : number
 >1 : number
->robotAInfo : (number | string)[]
+>robotAInfo : (string | number)[]
 >[robotA, robotB] : [number, string, string][]
 >robotA : [number, string, string]
 >robotB : [number, string, string]

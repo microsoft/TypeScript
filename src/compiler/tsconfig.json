@@ -1,8 +1,10 @@
 {
     "compilerOptions": {
         "noImplicitAny": true,
+        "noImplicitThis": true,
         "removeComments": true,
         "preserveConstEnums": true,
+        "pretty": true,
         "outFile": "../../built/local/tsc.js",
         "sourceMap": true,
         "declaration": true,
@@ -10,6 +12,7 @@
     },
     "files": [
         "core.ts",
+        "performance.ts",
         "sys.ts",
         "types.ts",
         "scanner.ts",

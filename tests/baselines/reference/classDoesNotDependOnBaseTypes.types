@@ -1,24 +1,24 @@
 === tests/cases/conformance/types/typeAliases/classDoesNotDependOnBaseTypes.ts ===
 var x: StringTree;
->x : string | StringTreeCollection
->StringTree : string | StringTreeCollection
+>x : StringTree
+>StringTree : StringTree
 
 if (typeof x !== "string") {
 >typeof x !== "string" : boolean
 >typeof x : string
->x : string | StringTreeCollection
->"string" : string
+>x : StringTree
+>"string" : "string"
 
     x[0] = "";
 >x[0] = "" : string
->x[0] : string | StringTreeCollection
+>x[0] : StringTree
 >x : StringTreeCollection
 >0 : number
 >"" : string
 
     x[0] = new StringTreeCollection;
 >x[0] = new StringTreeCollection : StringTreeCollection
->x[0] : string | StringTreeCollection
+>x[0] : StringTree
 >x : StringTreeCollection
 >0 : number
 >new StringTreeCollection : StringTreeCollection
@@ -26,7 +26,7 @@ if (typeof x !== "string") {
 }
 
 type StringTree = string | StringTreeCollection;
->StringTree : string | StringTreeCollection
+>StringTree : StringTree
 >StringTreeCollection : StringTreeCollection
 
 class StringTreeCollectionBase {
@@ -34,7 +34,7 @@ class StringTreeCollectionBase {
 
     [n: number]: StringTree;
 >n : number
->StringTree : string | StringTreeCollection
+>StringTree : StringTree
 }
 
 class StringTreeCollection extends StringTreeCollectionBase { }

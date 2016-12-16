@@ -109,7 +109,7 @@ function f4() {
 >x : string | number | null
 >getStringOrNumberOrNull() : string | number | null
 >getStringOrNumberOrNull : () => string | number | null
->"number" : string
+>"number" : "number"
 
         x;
 >x : number

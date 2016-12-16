@@ -42,7 +42,7 @@ namespace ts.formatting {
                 let current = position;
                 while (current > 0) {
                     const char = sourceFile.text.charCodeAt(current);
-                    if (!isWhiteSpace(char) && !isLineBreak(char)) {
+                    if (!isWhiteSpace(char)) {
                         break;
                     }
                     current--;
@@ -418,7 +418,7 @@ namespace ts.formatting {
             let column = 0;
             for (let pos = startPos; pos < endPos; pos++) {
                 const ch = sourceFile.text.charCodeAt(pos);
-                if (!isWhiteSpace(ch)) {
+                if (!isWhiteSpaceSingleLine(ch)) {
                     break;
                 }
 

@@ -33,5 +33,5 @@ export interface Thing { n: typeof x }
 >x : number
 
 export as namespace Foo;
->Foo : any
+>Foo : typeof Foo
 

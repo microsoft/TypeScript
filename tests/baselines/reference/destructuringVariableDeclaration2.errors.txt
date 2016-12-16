@@ -2,12 +2,9 @@ tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts(3
   Types of property 'a1' are incompatible.
     Type 'boolean' is not assignable to type 'number'.
 tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts(4,5): error TS2322: Type '[number, [[boolean]], boolean]' is not assignable to type '[number, [[string]], boolean]'.
-  Types of property '1' are incompatible.
-    Type '[[boolean]]' is not assignable to type '[[string]]'.
-      Types of property '0' are incompatible.
-        Type '[boolean]' is not assignable to type '[string]'.
-          Types of property '0' are incompatible.
-            Type 'boolean' is not assignable to type 'string'.
+  Type '[[boolean]]' is not assignable to type '[[string]]'.
+    Type '[boolean]' is not assignable to type '[string]'.
+      Type 'boolean' is not assignable to type 'string'.
 tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts(9,25): error TS2322: Type '{ t1: boolean; t2: string; }' is not assignable to type '{ t1: boolean; t2: number; }'.
   Types of property 't2' are incompatible.
     Type 'string' is not assignable to type 'number'.
@@ -28,12 +25,9 @@ tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts(1
     var [a3, [[a4]], a5]: [number, [[string]], boolean] = [1, [[false]], true];  // Error
         ~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '[number, [[boolean]], boolean]' is not assignable to type '[number, [[string]], boolean]'.
-!!! error TS2322:   Types of property '1' are incompatible.
-!!! error TS2322:     Type '[[boolean]]' is not assignable to type '[[string]]'.
-!!! error TS2322:       Types of property '0' are incompatible.
-!!! error TS2322:         Type '[boolean]' is not assignable to type '[string]'.
-!!! error TS2322:           Types of property '0' are incompatible.
-!!! error TS2322:             Type 'boolean' is not assignable to type 'string'.
+!!! error TS2322:   Type '[[boolean]]' is not assignable to type '[[string]]'.
+!!! error TS2322:     Type '[boolean]' is not assignable to type '[string]'.
+!!! error TS2322:       Type 'boolean' is not assignable to type 'string'.
     
     // The type T associated with a destructuring variable declaration is determined as follows:
     //      Otherwise, if the declaration includes an initializer expression, T is the type of that initializer expression.

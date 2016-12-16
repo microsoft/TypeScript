@@ -1,11 +1,13 @@
 tests/cases/compiler/privacyClassExtendsClauseDeclFile_GlobalFile.ts(16,67): error TS4020: Extends clause of exported class 'publicClassExtendingPrivateClassInModule' has or is using private name 'privateClassInPublicModule'.
 tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts(17,67): error TS4020: Extends clause of exported class 'publicClassExtendingPrivateClassInModule' has or is using private name 'privateClassInPublicModule'.
+tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts(20,63): error TS2690: A class must be declared after its base class.
 tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts(22,69): error TS4020: Extends clause of exported class 'publicClassExtendingFromPrivateModuleClass' has or is using private name 'privateModule'.
+tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts(22,69): error TS2690: A class must be declared after its base class.
 tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts(64,55): error TS4020: Extends clause of exported class 'publicClassExtendingPrivateClass' has or is using private name 'privateClass'.
 tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts(69,65): error TS4020: Extends clause of exported class 'publicClassExtendingFromPrivateModuleClass' has or is using private name 'privateModule'.
 
 
-==== tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts (4 errors) ====
+==== tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts (6 errors) ====
     
     export module publicModule {
         export class publicClassInPublicModule {
@@ -28,10 +30,14 @@ tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts(69,65):
         }
     
         class privateClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
+                                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2690: A class must be declared after its base class.
         }
         export class publicClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule { // Should error
                                                                         ~~~~~~~~~~~~~
 !!! error TS4020: Extends clause of exported class 'publicClassExtendingFromPrivateModuleClass' has or is using private name 'privateModule'.
+                                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2690: A class must be declared after its base class.
         }
     }
     

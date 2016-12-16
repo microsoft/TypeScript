@@ -2,6 +2,7 @@
 // @declaration: true
 // @typeRoots: /types
 // @traceResolution: true
+// @currentDirectory: /
 
 // @filename: /types/lib/index.d.ts
 

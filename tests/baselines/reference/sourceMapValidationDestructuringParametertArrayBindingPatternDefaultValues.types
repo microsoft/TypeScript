@@ -86,7 +86,7 @@ function foo4([numberA3 = -1, ...robotAInfo]: Robot = [-1, "name", "skill"]) {
 >numberA3 : number
 >-1 : number
 >1 : number
->robotAInfo : (number | string)[]
+>robotAInfo : (string | number)[]
 >Robot : [number, string, string]
 >[-1, "name", "skill"] : [number, string, string]
 >-1 : number
@@ -99,7 +99,7 @@ function foo4([numberA3 = -1, ...robotAInfo]: Robot = [-1, "name", "skill"]) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->robotAInfo : (number | string)[]
+>robotAInfo : (string | number)[]
 }
 
 foo1(robotA);

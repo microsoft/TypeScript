@@ -2,6 +2,7 @@
 // @traceResolution: true
 // @declaration: true
 // @typeRoots: /types
+// @currentDirectory: /
 
 // @filename: /ref.d.ts
 export interface $ { x }

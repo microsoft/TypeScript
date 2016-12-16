@@ -27,6 +27,6 @@ function a() {
 >toExponential : (fractionDigits?: number) => string
     }
     x; // string | boolean
->x : boolean | string
+>x : string | boolean
 }
 

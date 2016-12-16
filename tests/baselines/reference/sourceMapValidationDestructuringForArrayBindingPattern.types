@@ -429,7 +429,7 @@ for (let [nameMA, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "
 
 for (let [numberA3, ...robotAInfo] = robotA, i = 0; i < 1; i++) {
 >numberA3 : number
->robotAInfo : (number | string)[]
+>robotAInfo : (string | number)[]
 >robotA : [number, string, string]
 >i : number
 >0 : number
@@ -448,7 +448,7 @@ for (let [numberA3, ...robotAInfo] = robotA, i = 0; i < 1; i++) {
 }
 for (let [numberA3, ...robotAInfo] = getRobot(), i = 0; i < 1; i++) {
 >numberA3 : number
->robotAInfo : (number | string)[]
+>robotAInfo : (string | number)[]
 >getRobot() : [number, string, string]
 >getRobot : () => [number, string, string]
 >i : number
@@ -467,9 +467,9 @@ for (let [numberA3, ...robotAInfo] = getRobot(), i = 0; i < 1; i++) {
 >numberA3 : number
 }
 for (let [numberA3, ...robotAInfo] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
->numberA3 : number | string
->robotAInfo : (number | string)[]
->[2, "trimmer", "trimming"] : (number | string)[]
+>numberA3 : string | number
+>robotAInfo : (string | number)[]
+>[2, "trimmer", "trimming"] : (string | number)[]
 >2 : number
 >"trimmer" : string
 >"trimming" : string
@@ -486,7 +486,7 @@ for (let [numberA3, ...robotAInfo] = [2, "trimmer", "trimming"], i = 0; i < 1; i
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->numberA3 : number | string
+>numberA3 : string | number
 }
 for (let [...multiRobotAInfo] = multiRobotA, i = 0; i < 1; i++) {
 >multiRobotAInfo : (string | [string, string])[]

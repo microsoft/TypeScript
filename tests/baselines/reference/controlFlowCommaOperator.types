@@ -19,7 +19,7 @@ function f(x: string | number | boolean) {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string | number | boolean
->"string" : string
+>"string" : "string"
 
         x; // string
 >x : string
@@ -38,7 +38,7 @@ function f(x: string | number | boolean) {
 >typeof x === "number" : boolean
 >typeof x : string
 >x : number | boolean
->"number" : string
+>"number" : "number"
 
         x; // number
 >x : number
@@ -66,6 +66,6 @@ function f(x: string | number | boolean) {
 >y : string
 
     z; // number | boolean
->z : boolean | number
+>z : number | boolean
 }
 

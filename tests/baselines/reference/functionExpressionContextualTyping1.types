@@ -116,7 +116,7 @@ var b4: (n: E) => string = (number = 1) => { return "hello"; };
 >E : E
 >(number = 1) => { return "hello"; } : (number?: E) => string
 >number : E
->1 : number
+>1 : 1
 >"hello" : string
 
 var b5: (n: {}) => string = (number = "string") => { return "hello"; };

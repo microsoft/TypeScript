@@ -103,8 +103,8 @@ function foo2(x) {
 
     while (1 === 1) {
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
         let a = arguments.length;
 >a : number
@@ -158,8 +158,8 @@ function foo3(x) {
 
     } while (1 === 1)
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 }
 
 function foo4(x) {
@@ -249,8 +249,8 @@ function foo6(x) {
 
     while (1 === 1) {
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
         let x, y;
 >x : any
@@ -317,8 +317,8 @@ function foo7(x) {
 
     } while (1 === 1)
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 }
 
 
@@ -464,8 +464,8 @@ function foo2_c(x) {
 
     while (1 === 1) {
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
         const a = arguments.length;
 >a : number
@@ -520,8 +520,8 @@ function foo3_c(x) {
 
     } while (1 === 1)
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 }
 
 function foo4_c(x) {
@@ -607,8 +607,8 @@ function foo6_c(x) {
 
     while (1 === 1) {
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
         const x = 1, y =1 ;
 >x : number
@@ -679,8 +679,8 @@ function foo7_c(x) {
 
     } while (1 === 1)
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 }
 
 

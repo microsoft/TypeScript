@@ -15,8 +15,8 @@ let abcOrXyz: "ABC" | "XYZ" = abc || xyz;
 >xyz : "XYZ"
 
 let abcOrXyzOrNumber: "ABC" | "XYZ" | number = abcOrXyz || 100;
->abcOrXyzOrNumber : "ABC" | "XYZ" | number
->abcOrXyz || 100 : "ABC" | "XYZ" | number
+>abcOrXyzOrNumber : number | "ABC" | "XYZ"
+>abcOrXyz || 100 : number | "ABC" | "XYZ"
 >abcOrXyz : "ABC" | "XYZ"
 >100 : number
 
@@ -95,47 +95,47 @@ let l = -abcOrXyz;
 let m = abcOrXyzOrNumber + "";
 >m : string
 >abcOrXyzOrNumber + "" : string
->abcOrXyzOrNumber : "ABC" | "XYZ" | number
+>abcOrXyzOrNumber : number | "ABC" | "XYZ"
 >"" : string
 
 let n = "" + abcOrXyzOrNumber;
 >n : string
 >"" + abcOrXyzOrNumber : string
 >"" : string
->abcOrXyzOrNumber : "ABC" | "XYZ" | number
+>abcOrXyzOrNumber : number | "ABC" | "XYZ"
 
 let o = abcOrXyzOrNumber + abcOrXyz;
 >o : string
 >abcOrXyzOrNumber + abcOrXyz : string
->abcOrXyzOrNumber : "ABC" | "XYZ" | number
+>abcOrXyzOrNumber : number | "ABC" | "XYZ"
 >abcOrXyz : "ABC" | "XYZ"
 
 let p = abcOrXyz + abcOrXyzOrNumber;
 >p : string
 >abcOrXyz + abcOrXyzOrNumber : string
 >abcOrXyz : "ABC" | "XYZ"
->abcOrXyzOrNumber : "ABC" | "XYZ" | number
+>abcOrXyzOrNumber : number | "ABC" | "XYZ"
 
 let q = !abcOrXyzOrNumber;
 >q : boolean
 >!abcOrXyzOrNumber : boolean
->abcOrXyzOrNumber : "ABC" | "XYZ" | number
+>abcOrXyzOrNumber : number | "ABC" | "XYZ"
 
 let r = ~abcOrXyzOrNumber;
 >r : number
 >~abcOrXyzOrNumber : number
->abcOrXyzOrNumber : "ABC" | "XYZ" | number
+>abcOrXyzOrNumber : number | "ABC" | "XYZ"
 
 let s = abcOrXyzOrNumber < abcOrXyzOrNumber;
 >s : boolean
 >abcOrXyzOrNumber < abcOrXyzOrNumber : boolean
->abcOrXyzOrNumber : "ABC" | "XYZ" | number
->abcOrXyzOrNumber : "ABC" | "XYZ" | number
+>abcOrXyzOrNumber : number | "ABC" | "XYZ"
+>abcOrXyzOrNumber : number | "ABC" | "XYZ"
 
 let t = abcOrXyzOrNumber >= abcOrXyz;
 >t : boolean
 >abcOrXyzOrNumber >= abcOrXyz : boolean
->abcOrXyzOrNumber : "ABC" | "XYZ" | number
+>abcOrXyzOrNumber : number | "ABC" | "XYZ"
 >abcOrXyz : "ABC" | "XYZ"
 
 let u = abc === abcOrXyz;
@@ -148,5 +148,5 @@ let v = abcOrXyz === abcOrXyzOrNumber;
 >v : boolean
 >abcOrXyz === abcOrXyzOrNumber : boolean
 >abcOrXyz : "ABC" | "XYZ"
->abcOrXyzOrNumber : "ABC" | "XYZ" | number
+>abcOrXyzOrNumber : number | "ABC" | "XYZ"
 

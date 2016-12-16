@@ -25,7 +25,7 @@ var func: () => void;
 
 if ("string" === typeof strOrNum) {
 >"string" === typeof strOrNum : boolean
->"string" : string
+>"string" : "string"
 >typeof strOrNum : string
 >strOrNum : string | number
 
@@ -42,7 +42,7 @@ else {
 }
 if ("function" === typeof strOrFunc) {
 >"function" === typeof strOrFunc : boolean
->"function" : string
+>"function" : "function"
 >typeof strOrFunc : string
 >strOrFunc : string | (() => void)
 
@@ -59,7 +59,7 @@ else {
 }
 if ("number" === typeof numOrBool) {
 >"number" === typeof numOrBool : boolean
->"number" : string
+>"number" : "number"
 >typeof numOrBool : string
 >numOrBool : number | boolean
 
@@ -76,7 +76,7 @@ else {
 }
 if ("boolean" === typeof strOrBool) {
 >"boolean" === typeof strOrBool : boolean
->"boolean" : string
+>"boolean" : "boolean"
 >typeof strOrBool : string
 >strOrBool : string | boolean
 

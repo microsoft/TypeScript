@@ -7,11 +7,6 @@ No type information for this code.=== /src/b.ts ===
 import a from './a';
 >a : number
 
-// Matching extension
-=== /src/c.ts ===
-import a from './a.ts';
->a : number
-
 // '.js' extension: stripped and replaced with '.ts'
 === /src/d.ts ===
 import a from './a.js';

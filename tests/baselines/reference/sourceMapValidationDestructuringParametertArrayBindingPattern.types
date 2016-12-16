@@ -62,7 +62,7 @@ function foo3([numberA2, nameA2, skillA2]: Robot) {
 function foo4([numberA3, ...robotAInfo]: Robot) {
 >foo4 : ([numberA3, ...robotAInfo]: [number, string, string]) => void
 >numberA3 : number
->robotAInfo : (number | string)[]
+>robotAInfo : (string | number)[]
 >Robot : [number, string, string]
 
     console.log(robotAInfo);
@@ -70,7 +70,7 @@ function foo4([numberA3, ...robotAInfo]: Robot) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->robotAInfo : (number | string)[]
+>robotAInfo : (string | number)[]
 }
 
 foo1(robotA);

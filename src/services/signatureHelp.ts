@@ -237,7 +237,7 @@ namespace ts.SignatureHelp {
         const typeChecker = program.getTypeChecker();
         for (const sourceFile of program.getSourceFiles()) {
             const nameToDeclarations = sourceFile.getNamedDeclarations();
-            const declarations = getProperty(nameToDeclarations, name.text);
+            const declarations = nameToDeclarations[name.text];
 
             if (declarations) {
                 for (const declaration of declarations) {

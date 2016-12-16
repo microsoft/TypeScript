@@ -17,14 +17,14 @@ for (let x of []) {
     if (x == 1) {
 >x == 1 : boolean
 >x : any
->1 : number
+>1 : 1
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
 >x : any
->2 : number
+>2 : 2
 
         continue;
     }
@@ -47,14 +47,14 @@ for (let x in []) {
     if (x == "1") {
 >x == "1" : boolean
 >x : string
->"1" : string
+>"1" : "1"
 
         break;
     }
     if (x == "2") {
 >x == "2" : boolean
 >x : string
->"2" : string
+>"2" : "2"
 
         continue;
     }
@@ -83,14 +83,14 @@ for (let x = 0; x < 1; ++x) {
     if (x == 1) {
 >x == 1 : boolean
 >x : number
->1 : number
+>1 : 1
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
 >x : number
->2 : number
+>2 : 2
 
         continue;
     }
@@ -98,8 +98,8 @@ for (let x = 0; x < 1; ++x) {
 
 while (1 === 1) {
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
     let x;
 >x : any
@@ -117,14 +117,14 @@ while (1 === 1) {
     if (x == 1) {
 >x == 1 : boolean
 >x : any
->1 : number
+>1 : 1
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
 >x : any
->2 : number
+>2 : 2
 
         continue;
     }
@@ -147,21 +147,21 @@ do {
     if (x == 1) {
 >x == 1 : boolean
 >x : any
->1 : number
+>1 : 1
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
 >x : any
->2 : number
+>2 : 2
 
         continue;
     }
 } while (1 === 1)
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
 for (let y = 0; y < 1; ++y) {
 >y : number
@@ -189,14 +189,14 @@ for (let y = 0; y < 1; ++y) {
     if (x == 1) {
 >x == 1 : boolean
 >x : number
->1 : number
+>1 : 1
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
 >x : number
->2 : number
+>2 : 2
 
         continue;
     }
@@ -230,14 +230,14 @@ for (let x = 0, y = 1; x < 1; ++x) {
     if (x == 1) {
 >x == 1 : boolean
 >x : number
->1 : number
+>1 : 1
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
 >x : number
->2 : number
+>2 : 2
 
         continue;
     }
@@ -245,8 +245,8 @@ for (let x = 0, y = 1; x < 1; ++x) {
 
 while (1 === 1) {
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
     let x, y;
 >x : any
@@ -269,14 +269,14 @@ while (1 === 1) {
     if (x == 1) {
 >x == 1 : boolean
 >x : any
->1 : number
+>1 : 1
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
 >x : any
->2 : number
+>2 : 2
 
         continue;
     }
@@ -304,21 +304,21 @@ do {
     if (x == 1) {
 >x == 1 : boolean
 >x : any
->1 : number
+>1 : 1
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
 >x : any
->2 : number
+>2 : 2
 
         continue;
     }
 } while (1 === 1)
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
 for (let y = 0; y < 1; ++y) {
 >y : number
@@ -350,14 +350,14 @@ for (let y = 0; y < 1; ++y) {
     if (x == 1) {
 >x == 1 : boolean
 >x : number
->1 : number
+>1 : 1
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
 >x : number
->2 : number
+>2 : 2
 
         continue;
     }
@@ -382,14 +382,14 @@ for (const x of []) {
     if (x == 1) {
 >x == 1 : boolean
 >x : any
->1 : number
+>1 : 1
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
 >x : any
->2 : number
+>2 : 2
 
         continue;
     }
@@ -412,14 +412,14 @@ for (const x in []) {
     if (x == "1") {
 >x == "1" : boolean
 >x : string
->"1" : string
+>"1" : "1"
 
         break;
     }
     if (x == "2") {
 >x == "2" : boolean
 >x : string
->"2" : string
+>"2" : "2"
 
         continue;
     }
@@ -446,14 +446,14 @@ for (const x = 0; x < 1;) {
     if (x == 1) {
 >x == 1 : boolean
 >x : number
->1 : number
+>1 : 1
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
 >x : number
->2 : number
+>2 : 2
 
         continue;
     }
@@ -461,8 +461,8 @@ for (const x = 0; x < 1;) {
 
 while (1 === 1) {
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
     const x = 1;
 >x : number
@@ -481,14 +481,14 @@ while (1 === 1) {
     if (x == 1) {
 >x == 1 : boolean
 >x : number
->1 : number
+>1 : 1
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
 >x : number
->2 : number
+>2 : 2
 
         continue;
     }
@@ -512,21 +512,21 @@ do {
     if (x == 1) {
 >x == 1 : boolean
 >x : number
->1 : number
+>1 : 1
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
 >x : number
->2 : number
+>2 : 2
 
         continue;
     }
 } while (1 === 1)
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
 for (const y = 0; y < 1;) {
 >y : number
@@ -552,14 +552,14 @@ for (const y = 0; y < 1;) {
     if (x == 1) {
 >x == 1 : boolean
 >x : number
->1 : number
+>1 : 1
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
 >x : number
->2 : number
+>2 : 2
 
         continue;
     }
@@ -591,14 +591,14 @@ for (const x = 0, y = 1; x < 1;) {
     if (x == 1) {
 >x == 1 : boolean
 >x : number
->1 : number
+>1 : 1
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
 >x : number
->2 : number
+>2 : 2
 
         continue;
     }
@@ -606,8 +606,8 @@ for (const x = 0, y = 1; x < 1;) {
 
 while (1 === 1) {
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
     const x = 1, y = 1;
 >x : number
@@ -632,14 +632,14 @@ while (1 === 1) {
     if (x == 1) {
 >x == 1 : boolean
 >x : number
->1 : number
+>1 : 1
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
 >x : number
->2 : number
+>2 : 2
 
         continue;
     }
@@ -669,21 +669,21 @@ do {
     if (x == 1) {
 >x == 1 : boolean
 >x : number
->1 : number
+>1 : 1
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
 >x : number
->2 : number
+>2 : 2
 
         continue;
     }
 } while (1 === 1)
 >1 === 1 : boolean
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
 for (const y = 0; y < 1;) {
 >y : number
@@ -713,14 +713,14 @@ for (const y = 0; y < 1;) {
     if (x == 1) {
 >x == 1 : boolean
 >x : number
->1 : number
+>1 : 1
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
 >x : number
->2 : number
+>2 : 2
 
         continue;
     }

@@ -69,7 +69,7 @@ function checkForUniqueCodes(messages: string[], diagnosticTable: InputDiagnosti
 }
 
 function buildUniqueNameMap(names: string[]): ts.Map<string> {
-    var nameMap: ts.Map<string> = {};
+    var nameMap = ts.createMap<string>();
 
     var uniqueNames = NameGenerator.ensureUniqueness(names, /* isCaseSensitive */ false, /* isFixed */ undefined);
 

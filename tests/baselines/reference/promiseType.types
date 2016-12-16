@@ -21,8 +21,8 @@ const b = p.then(b => 1);
 >1 : number
 
 const c = p.then(b => 1, e => 'error');
->c : Promise<number | string>
->p.then(b => 1, e => 'error') : Promise<number | string>
+>c : Promise<string | number>
+>p.then(b => 1, e => 'error') : Promise<string | number>
 >p.then : { <TResult1, TResult2>(onfulfilled: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<boolean>; }
 >p : Promise<boolean>
 >then : { <TResult1, TResult2>(onfulfilled: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: boolean) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<boolean>; }
@@ -78,8 +78,8 @@ const f = p.then(b => 1, e => Promise.reject(Error()));
 >Error : ErrorConstructor
 
 const g = p.catch(e => 'error');
->g : Promise<boolean | string>
->p.catch(e => 'error') : Promise<boolean | string>
+>g : Promise<string | boolean>
+>p.catch(e => 'error') : Promise<string | boolean>
 >p.catch : { <TResult>(onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<boolean | TResult>; (onrejected: (reason: any) => boolean | PromiseLike<boolean>): Promise<boolean>; }
 >p : Promise<boolean>
 >catch : { <TResult>(onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<boolean | TResult>; (onrejected: (reason: any) => boolean | PromiseLike<boolean>): Promise<boolean>; }

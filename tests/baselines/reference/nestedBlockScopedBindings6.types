@@ -146,7 +146,7 @@ function a4() {
 >1 : number
 
         case 1:
->1 : number
+>1 : 1
 
             let x;
 >x : any
@@ -175,7 +175,7 @@ function a5() {
 >1 : number
 
         case 1:
->1 : number
+>1 : 1
 
             let x;
 >x : any
@@ -207,7 +207,7 @@ function a6() {
 >1 : number
 
         case 1:
->1 : number
+>1 : 1
 
             let x;
 >x : any
@@ -239,7 +239,7 @@ function a7() {
 >1 : number
 
         case 1:
->1 : number
+>1 : 1
 
             let x;
 >x : any

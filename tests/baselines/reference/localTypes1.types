@@ -37,15 +37,15 @@ function f1() {
 >C : typeof C
 
     a[0].x = E.B;
->a[0].x = E.B : E
+>a[0].x = E.B : E.B
 >a[0].x : E
 >a[0] : I
 >a : I[]
 >0 : number
 >x : E
->E.B : E
+>E.B : E.B
 >E : typeof E
->B : E
+>B : E.B
 
     return a;
 >a : I[]
@@ -91,15 +91,15 @@ function f2() {
 >C : typeof C
 
         a[0].x = E.B;
->a[0].x = E.B : E
+>a[0].x = E.B : E.B
 >a[0].x : E
 >a[0] : I
 >a : I[]
 >0 : number
 >x : E
->E.B : E
+>E.B : E.B
 >E : typeof E
->B : E
+>B : E.B
 
         return a;
 >a : I[]
@@ -153,15 +153,15 @@ function f3(b: boolean) {
 >C : typeof C
 
             a[0].x = E.B;
->a[0].x = E.B : E
+>a[0].x = E.B : E.B
 >a[0].x : E
 >a[0] : I
 >a : I[]
 >0 : number
 >x : E
->E.B : E
+>E.B : E.B
 >E : typeof E
->B : E
+>B : E.B
 
             return a;
 >a : I[]
@@ -193,15 +193,15 @@ function f3(b: boolean) {
 >A : typeof A
 
             c[0].x = E.B;
->c[0].x = E.B : E
+>c[0].x = E.B : E.B
 >c[0].x : E
 >c[0] : J
 >c : J[]
 >0 : number
 >x : E
->E.B : E
+>E.B : E.B
 >E : typeof E
->B : E
+>B : E.B
 
             return c;
 >c : J[]

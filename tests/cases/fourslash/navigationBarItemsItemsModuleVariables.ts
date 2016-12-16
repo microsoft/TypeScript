@@ -23,7 +23,7 @@ goTo.marker("file1");
 verify.navigationBar([
     {
         "text": "<global>",
-        "kind": "module",
+        "kind": "script",
         "childItems": [
             {
                 "text": "Module1",
@@ -49,7 +49,7 @@ goTo.marker("file2");
 verify.navigationBar([
     {
         "text": "<global>",
-        "kind": "module",
+        "kind": "script",
         "childItems": [
             {
                 "text": "Module1.SubModule",

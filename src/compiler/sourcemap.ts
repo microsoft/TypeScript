@@ -46,6 +46,7 @@ namespace ts {
 
     export function createSourceMapWriter(host: EmitHost, writer: EmitTextWriter): SourceMapWriter {
         const compilerOptions = host.getCompilerOptions();
+        const extendedDiagnostics = compilerOptions.extendedDiagnostics;
         let currentSourceFile: SourceFile;
         let sourceMapDir: string; // The directory in which sourcemap will be
         let stopOverridingSpan = false;
@@ -240,6 +241,10 @@ namespace ts {
                 return;
             }
 
+            if (extendedDiagnostics) {
+                performance.mark("beforeSourcemap");
+            }
+
             const sourceLinePos = getLineAndCharacterOfPosition(currentSourceFile, pos);
 
             // Convert the location to be one-based.
@@ -279,6 +284,11 @@ namespace ts {
             }
 
             updateLastEncodedAndRecordedSpans();
+
+            if (extendedDiagnostics) {
+                performance.mark("afterSourcemap");
+                performance.measure("Source Map", "beforeSourcemap", "afterSourcemap");
+            }
         }
 
         function getStartPos(range: TextRange) {

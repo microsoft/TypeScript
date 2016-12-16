@@ -434,8 +434,7 @@ namespace ts {
 
     export function isInString(sourceFile: SourceFile, position: number): boolean {
         const previousToken = findPrecedingToken(position, sourceFile);
-        if (previousToken &&
-            (previousToken.kind === SyntaxKind.StringLiteral || previousToken.kind === SyntaxKind.StringLiteralType)) {
+        if (previousToken && previousToken.kind === SyntaxKind.StringLiteral) {
             const start = previousToken.getStart();
             const end = previousToken.getEnd();
 
@@ -633,7 +632,6 @@ namespace ts {
 
     export function isStringOrRegularExpressionOrTemplateLiteral(kind: SyntaxKind): boolean {
         if (kind === SyntaxKind.StringLiteral
-            || kind === SyntaxKind.StringLiteralType
             || kind === SyntaxKind.RegularExpressionLiteral
             || isTemplateLiteralKind(kind)) {
             return true;
@@ -922,9 +920,30 @@ namespace ts {
         if (host && host.getScriptKind) {
             scriptKind = host.getScriptKind(fileName);
         }
-        if (!scriptKind || scriptKind === ScriptKind.Unknown) {
+        if (!scriptKind) {
             scriptKind = getScriptKindFromFileName(fileName);
         }
         return ensureScriptKind(fileName, scriptKind);
+    }
+
+    export function parseAndReEmitConfigJSONFile(content: string) {
+        const options: TranspileOptions = {
+            fileName: "config.js",
+            compilerOptions: {
+                target: ScriptTarget.ES6,
+                removeComments: true
+            },
+            reportDiagnostics: true
+        };
+        const { outputText, diagnostics } = ts.transpileModule("(" + content + ")", options);
+        // Becasue the content was wrapped in "()", the start position of diagnostics needs to be subtract by 1
+        // also, the emitted result will have "(" in the beginning and ");" in the end. We need to strip these
+        // as well
+        const trimmedOutput = outputText.trim();
+        const configJsonObject = JSON.parse(trimmedOutput.substring(1, trimmedOutput.length - 2));
+        for (const diagnostic of diagnostics) {
+            diagnostic.start = diagnostic.start - 1;
+        }
+        return { configJsonObject, diagnostics };
     }
 }

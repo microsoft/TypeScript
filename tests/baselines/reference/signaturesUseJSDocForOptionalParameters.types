@@ -26,27 +26,27 @@ MyClass.prototype.optionalParam = function(required, notRequired) {
 >notRequired : string
 
     return this;
->this : { prop: null; optionalParam: (required: string, notRequired?: string) => { prop: null; optionalParam: any; }; }
+>this : { prop: null; optionalParam: (required: string, notRequired?: string) => typeof MyClass; }
 
 };
 let pInst = new MyClass();
->pInst : { prop: null; optionalParam: (required: string, notRequired?: string) => { prop: null; optionalParam: any; }; }
->new MyClass() : { prop: null; optionalParam: (required: string, notRequired?: string) => { prop: null; optionalParam: any; }; }
+>pInst : { prop: null; optionalParam: (required: string, notRequired?: string) => typeof MyClass; }
+>new MyClass() : { prop: null; optionalParam: (required: string, notRequired?: string) => typeof MyClass; }
 >MyClass : () => void
 
 let c1 = pInst.optionalParam('hello')
->c1 : { prop: null; optionalParam: (required: string, notRequired?: string) => { prop: null; optionalParam: any; }; }
->pInst.optionalParam('hello') : { prop: null; optionalParam: (required: string, notRequired?: string) => { prop: null; optionalParam: any; }; }
+>c1 : { prop: null; optionalParam: (required: string, notRequired?: string) => typeof MyClass; }
+>pInst.optionalParam('hello') : { prop: null; optionalParam: (required: string, notRequired?: string) => typeof MyClass; }
 >pInst.optionalParam : (required: string, notRequired?: string) => { prop: null; optionalParam: any; }
->pInst : { prop: null; optionalParam: (required: string, notRequired?: string) => { prop: null; optionalParam: any; }; }
+>pInst : { prop: null; optionalParam: (required: string, notRequired?: string) => typeof MyClass; }
 >optionalParam : (required: string, notRequired?: string) => { prop: null; optionalParam: any; }
 >'hello' : string
 
 let c2 = pInst.optionalParam('hello', null)
->c2 : { prop: null; optionalParam: (required: string, notRequired?: string) => { prop: null; optionalParam: any; }; }
->pInst.optionalParam('hello', null) : { prop: null; optionalParam: (required: string, notRequired?: string) => { prop: null; optionalParam: any; }; }
+>c2 : { prop: null; optionalParam: (required: string, notRequired?: string) => typeof MyClass; }
+>pInst.optionalParam('hello', null) : { prop: null; optionalParam: (required: string, notRequired?: string) => typeof MyClass; }
 >pInst.optionalParam : (required: string, notRequired?: string) => { prop: null; optionalParam: any; }
->pInst : { prop: null; optionalParam: (required: string, notRequired?: string) => { prop: null; optionalParam: any; }; }
+>pInst : { prop: null; optionalParam: (required: string, notRequired?: string) => typeof MyClass; }
 >optionalParam : (required: string, notRequired?: string) => { prop: null; optionalParam: any; }
 >'hello' : string
 >null : null
