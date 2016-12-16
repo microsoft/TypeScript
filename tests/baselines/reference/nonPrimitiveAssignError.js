@@ -4,6 +4,8 @@ var y = {foo: "bar"};
 var a: object;
 x = a;
 y = a; // expect error
+a = x;
+a = y;
 
 var n = 123;
 var b = true;
@@ -32,6 +34,8 @@ var y = { foo: "bar" };
 var a;
 x = a;
 y = a; // expect error
+a = x;
+a = y;
 var n = 123;
 var b = true;
 var s = "fooo";

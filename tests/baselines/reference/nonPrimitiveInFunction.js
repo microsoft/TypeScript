@@ -1,4 +1,4 @@
-//// [nonPriimitiveInFunction.ts]
+//// [nonPrimitiveInFunction.ts]
 function takeObject(o: object) {}
 function returnObject(): object {
     return {};
@@ -19,7 +19,7 @@ function returnError(): object {
 }
 
 
-//// [nonPriimitiveInFunction.js]
+//// [nonPrimitiveInFunction.js]
 function takeObject(o) { }
 function returnObject() {
     return {};
