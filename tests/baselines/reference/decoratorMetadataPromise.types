@@ -19,7 +19,7 @@ class A {
     async bar(): Promise<number> { return 0; }
 >bar : () => Promise<number>
 >Promise : Promise<T>
->0 : number
+>0 : 0
 
     @decorator
 >decorator : MethodDecorator

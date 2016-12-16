@@ -27,35 +27,25 @@
 ////
 ////var e = a.map(x => x./*13*/
 
-goTo.marker('1');
-verify.quickInfoIs('var b: number[]');
-goTo.marker('2');
-verify.quickInfoIs('(parameter) x: string');
+verify.quickInfos({
+    1: "var b: number[]",
+    2: "(parameter) x: string",
 
-goTo.marker('3');
-verify.quickInfoIs('var c: number[]');
-goTo.marker('4');
-verify.quickInfoIs('(parameter) x: string');
+    3: "var c: number[]",
+    4: "(parameter) x: string",
 
-goTo.marker('5');
-verify.quickInfoIs('var d: number[]');
-goTo.marker('6');
-verify.quickInfoIs('(parameter) x: string');
+    5: "var d: number[]",
+    6: "(parameter) x: string",
 
-goTo.marker('7');
-verify.quickInfoIs('var bb: any[]');
-goTo.marker('8');
-verify.quickInfoIs('(parameter) x: any');
+    7: "var bb: any[]",
+    8: "(parameter) x: any",
 
-goTo.marker('9');
-verify.quickInfoIs('var cc: any[]');
-goTo.marker('10');
-verify.quickInfoIs('(parameter) x: any');
+    9: "var cc: any[]",
+    10: "(parameter) x: any",
 
-goTo.marker('11');
-verify.quickInfoIs('var dd: any[]');
-goTo.marker('12');
-verify.quickInfoIs('(parameter) x: any');
+    11: "var dd: any[]",
+    12: "(parameter) x: any"
+});
 
 goTo.marker('13');
 verify.completionListContains('length');

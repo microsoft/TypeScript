@@ -10,8 +10,8 @@ function foo([x, ...y] = [1, "string", true]) { }
 >x : string | number | boolean
 >y : (string | number | boolean)[]
 >[1, "string", true] : (string | number | boolean)[]
->1 : number
->"string" : string
->true : boolean
+>1 : 1
+>"string" : "string"
+>true : true
 
 

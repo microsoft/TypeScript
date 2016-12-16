@@ -9,14 +9,14 @@ declare function use(n: number): void;
 >function () {  'use strict'  for (let i = 0; i < 9; ++i) {    (() => use(++i))();  }} : () => void
 
   'use strict'
->'use strict' : string
+>'use strict' : "use strict"
 
   for (let i = 0; i < 9; ++i) {
 >i : number
->0 : number
+>0 : 0
 >i < 9 : boolean
 >i : number
->9 : number
+>9 : 9
 >++i : number
 >i : number
 

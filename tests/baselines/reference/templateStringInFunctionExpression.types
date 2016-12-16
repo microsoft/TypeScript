@@ -6,10 +6,10 @@ var x = function y() {
 
     `abc${ 0 }def`
 >`abc${ 0 }def` : string
->0 : number
+>0 : 0
 
     return `abc${ 0 }def`;
 >`abc${ 0 }def` : string
->0 : number
+>0 : 0
 
 };

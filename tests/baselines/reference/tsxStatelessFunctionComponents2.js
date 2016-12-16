@@ -45,14 +45,14 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var React = require('react');
+var React = require("react");
 function Greet(x) {
     return <div>Hello, {x}</div>;
 }
 var BigGreeter = (function (_super) {
     __extends(BigGreeter, _super);
     function BigGreeter() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     BigGreeter.prototype.render = function () {
         return <div></div>;

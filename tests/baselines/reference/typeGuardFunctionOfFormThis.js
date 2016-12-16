@@ -161,7 +161,7 @@ var RoyalGuard = (function () {
 var LeadGuard = (function (_super) {
     __extends(LeadGuard, _super);
     function LeadGuard() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     LeadGuard.prototype.lead = function () { };
     ;
@@ -170,7 +170,7 @@ var LeadGuard = (function (_super) {
 var FollowerGuard = (function (_super) {
     __extends(FollowerGuard, _super);
     function FollowerGuard() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     FollowerGuard.prototype.follow = function () { };
     ;
@@ -224,7 +224,7 @@ var ArrowGuard = (function () {
 var ArrowElite = (function (_super) {
     __extends(ArrowElite, _super);
     function ArrowElite() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     ArrowElite.prototype.defend = function () { };
     return ArrowElite;
@@ -232,7 +232,7 @@ var ArrowElite = (function (_super) {
 var ArrowMedic = (function (_super) {
     __extends(ArrowMedic, _super);
     function ArrowMedic() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     ArrowMedic.prototype.heal = function () { };
     return ArrowMedic;
@@ -266,7 +266,7 @@ var MimicGuard = (function () {
 var MimicLeader = (function (_super) {
     __extends(MimicLeader, _super);
     function MimicLeader() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     MimicLeader.prototype.lead = function () { };
     return MimicLeader;
@@ -274,7 +274,7 @@ var MimicLeader = (function (_super) {
 var MimicFollower = (function (_super) {
     __extends(MimicFollower, _super);
     function MimicFollower() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     MimicFollower.prototype.follow = function () { };
     return MimicFollower;

@@ -20,11 +20,11 @@ var MyClass = (function () {
     }
     MyClass.prototype.doSomething = function () {
     };
-    __decorate([
-        decorator, 
-        __metadata('design:type', Function), 
-        __metadata('design:paramtypes', []), 
-        __metadata('design:returntype', void 0)
-    ], MyClass.prototype, "doSomething", null);
     return MyClass;
 }());
+__decorate([
+    decorator,
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], MyClass.prototype, "doSomething", null);

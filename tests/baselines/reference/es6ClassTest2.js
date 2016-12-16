@@ -236,7 +236,7 @@ var SplatMonster = (function () {
     function SplatMonster() {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i - 0] = arguments[_i];
+            args[_i] = arguments[_i];
         }
     }
     SplatMonster.prototype.roar = function (name) {
@@ -267,7 +267,7 @@ var SuperParent = (function () {
 var SuperChild = (function (_super) {
     __extends(SuperChild, _super);
     function SuperChild() {
-        _super.call(this, 1);
+        return _super.call(this, 1) || this;
     }
     SuperChild.prototype.b = function () {
         _super.prototype.b.call(this, 'str');
@@ -283,9 +283,9 @@ var Statics = (function () {
     Statics.baz = function () {
         return "";
     };
-    Statics.foo = 1;
     return Statics;
 }());
+Statics.foo = 1;
 var stat = new Statics();
 var ImplementsInterface = (function () {
     function ImplementsInterface() {
@@ -314,7 +314,7 @@ var BaseClassWithConstructor = (function () {
 var ChildClassWithoutConstructor = (function (_super) {
     __extends(ChildClassWithoutConstructor, _super);
     function ChildClassWithoutConstructor() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return ChildClassWithoutConstructor;
 }(BaseClassWithConstructor));

@@ -3,7 +3,7 @@
 >`head${ // single line comment10}middle${/* Multi- * line * comment */ 20 // closing comment}tail` : string
 
 10
->10 : number
+>10 : 10
 }
 middle${
 /* Multi-
@@ -11,7 +11,7 @@ middle${
  * comment
  */
  20
->20 : number
+>20 : 20
 
  // closing comment
 }

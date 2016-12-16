@@ -26,13 +26,11 @@ verify.navigationItemsListContains("foo", "const", "foo", "exact");
 
 goTo.marker("foo_value");
 verify.quickInfoIs("const foo: number");
-goTo.definition();
-verify.caretAtMarker("foo_value_declaration");
+verify.goToDefinitionIs("foo_value_declaration");
 
 goTo.marker("foo_type");
 verify.quickInfoIs("import foo = require(\"foo_module\")");
-goTo.definition();
-verify.caretAtMarker("foo_type_declaration");
+verify.goToDefinitionIs("foo_type_declaration");
 
 
 // Above tested for global const and imported interface. Now test with global interface and imported const.
@@ -58,10 +56,8 @@ verify.navigationItemsListContains("bar", "interface", "bar", "exact");
 
 goTo.marker("bar_value");
 verify.quickInfoIs("import bar = require(\"bar_module\")");
-goTo.definition();
-verify.caretAtMarker("bar_value_declaration");
+verify.goToDefinitionIs("bar_value_declaration");
 
 goTo.marker("bar_type");
 verify.quickInfoIs("interface bar");
-goTo.definition();
-verify.caretAtMarker("bar_type_declaration");
+verify.goToDefinitionIs("bar_type_declaration");

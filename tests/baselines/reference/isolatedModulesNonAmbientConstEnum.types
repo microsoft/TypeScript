@@ -3,7 +3,7 @@
 const enum E { X = 100 };
 >E : E
 >X : E
->100 : number
+>100 : 100
 
 var e = E.X;
 >e : E

@@ -23,20 +23,7 @@
 ////    x;
 ////}
 
-
-goTo.marker('alias1Type');
-goTo.definition();
-verify.caretAtMarker('alias1Definition');
-
-goTo.marker('alias2Type');
-goTo.definition();
-verify.caretAtMarker('alias2Definition');
-
-
-goTo.marker('alias1Value');
-goTo.definition();
-verify.caretAtMarker('alias1Definition');
-
-goTo.marker('alias2Value');
-goTo.definition();
-verify.caretAtMarker('alias2Definition');
+verify.goToDefinition([
+    [["alias1Type", "alias1Value"], "alias1Definition"],
+    [["alias2Type", "alias2Value"], "alias2Definition"]
+]);

@@ -4,7 +4,7 @@ module Midori
 >Midori : typeof Midori
 {
     if (false) {
->false : boolean
+>false : false
 
         function Foo(src)
 >Foo : (src: any) => void

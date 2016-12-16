@@ -128,7 +128,7 @@ var EmptyTypes;
     var derived = (function (_super) {
         __extends(derived, _super);
         function derived() {
-            _super.apply(this, arguments);
+            return _super.apply(this, arguments) || this;
         }
         return derived;
     }(base));
@@ -187,7 +187,7 @@ var NonEmptyTypes;
     var derived = (function (_super) {
         __extends(derived, _super);
         function derived() {
-            _super.apply(this, arguments);
+            return _super.apply(this, arguments) || this;
         }
         return derived;
     }(base));

@@ -1,0 +1,110 @@
+=== tests/cases/compiler/typePredicateStructuralMatch.ts ===
+// Repro from #12235
+
+getResults1([]);
+>getResults1([]) : Result[]
+>getResults1 : (value: Result[] | { data: Result[]; }) => Result[]
+>[] : undefined[]
+
+getResults1({data: []});
+>getResults1({data: []}) : Result[]
+>getResults1 : (value: Result[] | { data: Result[]; }) => Result[]
+>{data: []} : { data: undefined[]; }
+>data : undefined[]
+>[] : undefined[]
+
+getResults2([]);
+>getResults2([]) : Result[]
+>getResults2 : (value: Result[] | { data: Result[]; }) => Result[]
+>[] : undefined[]
+
+getResults2({data: []});
+>getResults2({data: []}) : Result[]
+>getResults2 : (value: Result[] | { data: Result[]; }) => Result[]
+>{data: []} : { data: undefined[]; }
+>data : undefined[]
+>[] : undefined[]
+
+type Result = { value: string };
+>Result : Result
+>value : string
+
+type Results = Result[];
+>Results : Result[]
+>Result : Result
+
+function isResponseInData<T>(value: T | { data: T}): value is { data: T } {
+>isResponseInData : <T>(value: T | { data: T; }) => value is { data: T; }
+>T : T
+>value : T | { data: T; }
+>T : T
+>data : T
+>T : T
+>value : any
+>data : T
+>T : T
+
+    return value.hasOwnProperty('data');
+>value.hasOwnProperty('data') : boolean
+>value.hasOwnProperty : (v: string) => boolean
+>value : T | { data: T; }
+>hasOwnProperty : (v: string) => boolean
+>'data' : "data"
+}
+
+function getResults1(value: Results | { data: Results }): Results {
+>getResults1 : (value: Result[] | { data: Result[]; }) => Result[]
+>value : Result[] | { data: Result[]; }
+>Results : Result[]
+>data : Result[]
+>Results : Result[]
+>Results : Result[]
+
+    return isResponseInData(value) ? value.data : value;
+>isResponseInData(value) ? value.data : value : Result[]
+>isResponseInData(value) : boolean
+>isResponseInData : <T>(value: T | { data: T; }) => value is { data: T; }
+>value : Result[] | { data: Result[]; }
+>value.data : Result[]
+>value : { data: Result[]; }
+>data : Result[]
+>value : Result[]
+}
+
+function isPlainResponse<T>(value: T | { data: T}): value is T {
+>isPlainResponse : <T>(value: T | { data: T; }) => value is T
+>T : T
+>value : T | { data: T; }
+>T : T
+>data : T
+>T : T
+>value : any
+>T : T
+
+    return !value.hasOwnProperty('data');
+>!value.hasOwnProperty('data') : boolean
+>value.hasOwnProperty('data') : boolean
+>value.hasOwnProperty : (v: string) => boolean
+>value : T | { data: T; }
+>hasOwnProperty : (v: string) => boolean
+>'data' : "data"
+}
+
+function getResults2(value: Results | { data: Results }): Results {
+>getResults2 : (value: Result[] | { data: Result[]; }) => Result[]
+>value : Result[] | { data: Result[]; }
+>Results : Result[]
+>data : Result[]
+>Results : Result[]
+>Results : Result[]
+
+    return isPlainResponse(value) ? value : value.data;
+>isPlainResponse(value) ? value : value.data : Result[]
+>isPlainResponse(value) : boolean
+>isPlainResponse : <T>(value: T | { data: T; }) => value is T
+>value : Result[] | { data: Result[]; }
+>value : Result[]
+>value.data : Result[]
+>value : { data: Result[]; }
+>data : Result[]
+}

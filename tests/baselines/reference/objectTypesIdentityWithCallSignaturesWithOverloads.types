@@ -110,7 +110,7 @@ var b = {
 >foo : (x: any) => any
 >x : any
 ><any>'' : any
->'' : string
+>'' : ""
 
 };
 

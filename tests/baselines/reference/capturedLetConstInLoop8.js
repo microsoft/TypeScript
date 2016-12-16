@@ -129,8 +129,8 @@ function foo_c() {
 //// [capturedLetConstInLoop8.js]
 function foo() {
     l0: for (var z = 0; z < 1; ++z) {
-        var _loop_1 = function(x) {
-            var _loop_2 = function(y) {
+        var _loop_1 = function (x) {
+            var _loop_2 = function (y) {
                 (function () { return x + y; });
                 (function () { return x + y; });
                 if (y == 1) {
@@ -163,9 +163,11 @@ function foo() {
             };
             ll1: for (var y = 0; y < 1; ++y) {
                 var state_1 = _loop_2(y);
-                if (typeof state_1 === "object") return state_1;
-                if (state_1 === "break") break;
-                switch(state_1) {
+                if (typeof state_1 === "object")
+                    return state_1;
+                if (state_1 === "break")
+                    break;
+                switch (state_1) {
                     case "break-l1": return state_1;
                     case "break-ll1": break ll1;
                     case "continue-l0": return state_1;
@@ -197,9 +199,11 @@ function foo() {
         };
         l1: for (var x = 0; x < 1; ++x) {
             var state_2 = _loop_1(x);
-            if (typeof state_2 === "object") return state_2.value;
-            if (state_2 === "break") break;
-            switch(state_2) {
+            if (typeof state_2 === "object")
+                return state_2.value;
+            if (state_2 === "break")
+                break;
+            switch (state_2) {
                 case "break-l1": break l1;
                 case "continue-l0": continue l0;
                 case "continue-l1": continue l1;
@@ -209,8 +213,8 @@ function foo() {
 }
 function foo_c() {
     l0: for (var z = 0; z < 1;) {
-        var _loop_3 = function(x) {
-            var _loop_4 = function(y) {
+        var _loop_3 = function (x) {
+            var _loop_4 = function (y) {
                 (function () { return x + y; });
                 (function () { return x + y; });
                 if (y == 1) {
@@ -243,9 +247,11 @@ function foo_c() {
             };
             ll1: for (var y = 0; y < 1;) {
                 var state_3 = _loop_4(y);
-                if (typeof state_3 === "object") return state_3;
-                if (state_3 === "break") break;
-                switch(state_3) {
+                if (typeof state_3 === "object")
+                    return state_3;
+                if (state_3 === "break")
+                    break;
+                switch (state_3) {
                     case "break-l1": return state_3;
                     case "break-ll1": break ll1;
                     case "continue-l0": return state_3;
@@ -277,9 +283,11 @@ function foo_c() {
         };
         l1: for (var x = 0; x < 1;) {
             var state_4 = _loop_3(x);
-            if (typeof state_4 === "object") return state_4.value;
-            if (state_4 === "break") break;
-            switch(state_4) {
+            if (typeof state_4 === "object")
+                return state_4.value;
+            if (state_4 === "break")
+                break;
+            switch (state_4) {
                 case "break-l1": break l1;
                 case "continue-l0": continue l0;
                 case "continue-l1": continue l1;

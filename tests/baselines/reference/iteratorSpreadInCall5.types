@@ -29,7 +29,7 @@ class SymbolIterator {
 
             done: false
 >done : boolean
->false : boolean
+>false : false
 
         };
     }
@@ -55,11 +55,11 @@ class StringIterator {
 
             value: "",
 >value : string
->"" : string
+>"" : ""
 
             done: false
 >done : boolean
->false : boolean
+>false : false
 
         };
     }

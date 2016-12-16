@@ -75,51 +75,51 @@ condString ? exprString1 : exprBoolean1; // union
 //Cond is a string type literal
 "" ? exprAny1 : exprAny2;
 >"" ? exprAny1 : exprAny2 : any
->"" : string
+>"" : ""
 >exprAny1 : any
 >exprAny2 : any
 
 "string" ? exprBoolean1 : exprBoolean2;
 >"string" ? exprBoolean1 : exprBoolean2 : boolean
->"string" : string
+>"string" : "string"
 >exprBoolean1 : boolean
 >exprBoolean2 : boolean
 
 'c' ? exprNumber1 : exprNumber2;
 >'c' ? exprNumber1 : exprNumber2 : number
->'c' : string
+>'c' : "c"
 >exprNumber1 : number
 >exprNumber2 : number
 
 'string' ? exprString1 : exprString2;
 >'string' ? exprString1 : exprString2 : string
->'string' : string
+>'string' : "string"
 >exprString1 : string
 >exprString2 : string
 
 "  " ? exprIsObject1 : exprIsObject2;
 >"  " ? exprIsObject1 : exprIsObject2 : Object
->"  " : string
+>"  " : "  "
 >exprIsObject1 : Object
 >exprIsObject2 : Object
 
 "hello " ? exprString1 : exprBoolean1; // union
 >"hello " ? exprString1 : exprBoolean1 : string | boolean
->"hello " : string
+>"hello " : "hello "
 >exprString1 : string
 >exprBoolean1 : boolean
 
 //Cond is a string type expression
 function foo() { return "string" };
 >foo : () => string
->"string" : string
+>"string" : "string"
 
 var array = ["1", "2", "3"];
 >array : string[]
 >["1", "2", "3"] : string[]
->"1" : string
->"2" : string
->"3" : string
+>"1" : "1"
+>"2" : "2"
+>"3" : "3"
 
 typeof condString ? exprAny1 : exprAny2;
 >typeof condString ? exprAny1 : exprAny2 : any
@@ -140,7 +140,7 @@ condString + "string" ? exprNumber1 : exprNumber2;
 >condString + "string" ? exprNumber1 : exprNumber2 : number
 >condString + "string" : string
 >condString : string
->"string" : string
+>"string" : "string"
 >exprNumber1 : number
 >exprNumber2 : number
 
@@ -155,7 +155,7 @@ array[1] ? exprIsObject1 : exprIsObject2;
 >array[1] ? exprIsObject1 : exprIsObject2 : Object
 >array[1] : string
 >array : string[]
->1 : number
+>1 : 1
 >exprIsObject1 : Object
 >exprIsObject2 : Object
 
@@ -212,42 +212,42 @@ var resultIsStringOrBoolean1 = condString ? exprString1 : exprBoolean1; // union
 var resultIsAny2 = "" ? exprAny1 : exprAny2;
 >resultIsAny2 : any
 >"" ? exprAny1 : exprAny2 : any
->"" : string
+>"" : ""
 >exprAny1 : any
 >exprAny2 : any
 
 var resultIsBoolean2 = "string" ? exprBoolean1 : exprBoolean2;
 >resultIsBoolean2 : boolean
 >"string" ? exprBoolean1 : exprBoolean2 : boolean
->"string" : string
+>"string" : "string"
 >exprBoolean1 : boolean
 >exprBoolean2 : boolean
 
 var resultIsNumber2 = 'c' ? exprNumber1 : exprNumber2;
 >resultIsNumber2 : number
 >'c' ? exprNumber1 : exprNumber2 : number
->'c' : string
+>'c' : "c"
 >exprNumber1 : number
 >exprNumber2 : number
 
 var resultIsString2 = 'string' ? exprString1 : exprString2;
 >resultIsString2 : string
 >'string' ? exprString1 : exprString2 : string
->'string' : string
+>'string' : "string"
 >exprString1 : string
 >exprString2 : string
 
 var resultIsObject2 = "  " ? exprIsObject1 : exprIsObject2;
 >resultIsObject2 : Object
 >"  " ? exprIsObject1 : exprIsObject2 : Object
->"  " : string
+>"  " : "  "
 >exprIsObject1 : Object
 >exprIsObject2 : Object
 
 var resultIsStringOrBoolean2 = "hello" ? exprString1 : exprBoolean1; // union
 >resultIsStringOrBoolean2 : string | boolean
 >"hello" ? exprString1 : exprBoolean1 : string | boolean
->"hello" : string
+>"hello" : "hello"
 >exprString1 : string
 >exprBoolean1 : boolean
 
@@ -273,7 +273,7 @@ var resultIsNumber3 = condString + "string" ? exprNumber1 : exprNumber2;
 >condString + "string" ? exprNumber1 : exprNumber2 : number
 >condString + "string" : string
 >condString : string
->"string" : string
+>"string" : "string"
 >exprNumber1 : number
 >exprNumber2 : number
 
@@ -290,7 +290,7 @@ var resultIsObject3 = array[1] ? exprIsObject1 : exprIsObject2;
 >array[1] ? exprIsObject1 : exprIsObject2 : Object
 >array[1] : string
 >array : string[]
->1 : number
+>1 : 1
 >exprIsObject1 : Object
 >exprIsObject2 : Object
 

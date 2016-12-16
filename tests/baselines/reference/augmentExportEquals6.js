@@ -36,7 +36,6 @@ define(["require", "exports"], function (require, exports) {
         }
         return foo;
     }());
-    var foo;
     (function (foo) {
         var A = (function () {
             function A() {

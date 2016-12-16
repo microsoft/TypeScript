@@ -26,7 +26,7 @@ if ((typeof strOrBool === 'boolean' && !strOrBool) || typeof strOrBool === 'stri
 >strOrBool : string | boolean
 >'string' : "string"
 >strOrBool : string
->"string" : string
+>"string" : "string"
 
 	let bool: boolean = (typeof strOrBool === 'boolean') ? strOrBool : false;
 >bool : boolean
@@ -37,7 +37,7 @@ if ((typeof strOrBool === 'boolean' && !strOrBool) || typeof strOrBool === 'stri
 >strOrBool : string | boolean
 >'boolean' : "boolean"
 >strOrBool : boolean
->false : boolean
+>false : false
 
 	let label2: string = (typeof strOrBool !== 'boolean') ? strOrBool : "string";
 >label2 : string
@@ -48,7 +48,7 @@ if ((typeof strOrBool === 'boolean' && !strOrBool) || typeof strOrBool === 'stri
 >strOrBool : string | boolean
 >'boolean' : "boolean"
 >strOrBool : string
->"string" : string
+>"string" : "string"
 
 	let bool2: boolean = (typeof strOrBool !== 'string') ? strOrBool : false;
 >bool2 : boolean
@@ -59,7 +59,7 @@ if ((typeof strOrBool === 'boolean' && !strOrBool) || typeof strOrBool === 'stri
 >strOrBool : string | boolean
 >'string' : "string"
 >strOrBool : boolean
->false : boolean
+>false : false
 }
 
 if ((typeof strOrBool !== 'string' && !strOrBool) || typeof strOrBool !== 'boolean') {
@@ -86,7 +86,7 @@ if ((typeof strOrBool !== 'string' && !strOrBool) || typeof strOrBool !== 'boole
 >strOrBool : string | boolean
 >'string' : "string"
 >strOrBool : string
->"string" : string
+>"string" : "string"
 
 	let bool: boolean = (typeof strOrBool === 'boolean') ? strOrBool : false;
 >bool : boolean
@@ -97,7 +97,7 @@ if ((typeof strOrBool !== 'string' && !strOrBool) || typeof strOrBool !== 'boole
 >strOrBool : string | boolean
 >'boolean' : "boolean"
 >strOrBool : boolean
->false : boolean
+>false : false
 
 	let label2: string = (typeof strOrBool !== 'boolean') ? strOrBool : "string";
 >label2 : string
@@ -108,7 +108,7 @@ if ((typeof strOrBool !== 'string' && !strOrBool) || typeof strOrBool !== 'boole
 >strOrBool : string | boolean
 >'boolean' : "boolean"
 >strOrBool : string
->"string" : string
+>"string" : "string"
 
 	let bool2: boolean = (typeof strOrBool !== 'string') ? strOrBool : false;
 >bool2 : boolean
@@ -119,6 +119,6 @@ if ((typeof strOrBool !== 'string' && !strOrBool) || typeof strOrBool !== 'boole
 >strOrBool : string | boolean
 >'string' : "string"
 >strOrBool : boolean
->false : boolean
+>false : false
 }
 

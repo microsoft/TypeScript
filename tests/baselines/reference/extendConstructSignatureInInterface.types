@@ -21,5 +21,5 @@ var e: E = new E(1);
 >E : E
 >new E(1) : E
 >E : typeof E
->1 : number
+>1 : 1
 

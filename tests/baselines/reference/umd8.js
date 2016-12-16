@@ -5,17 +5,25 @@
 declare class Thing {
 	foo(): number;
 }
+declare namespace Thing {
+	interface SubThing { }
+}
 export = Thing;
 export as namespace Foo;
 
 //// [a.ts]
 /// <reference path="foo.d.ts" />
-let y: Foo;
-y.foo();
+import * as ff from './foo';
 
+let y: Foo; // OK in type position
+y.foo();
+let z: Foo.SubThing; // OK in ns position
+let x: any = Foo; // Not OK in value position
 
 
 //// [a.js]
-/// <reference path="foo.d.ts" />
-var y;
+"use strict";
+var y; // OK in type position
 y.foo();
+var z; // OK in ns position
+var x = Foo; // Not OK in value position

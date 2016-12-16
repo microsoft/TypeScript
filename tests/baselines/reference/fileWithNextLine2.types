@@ -3,5 +3,5 @@
 // it should be treated like a space
 var v =0;
 >v : number
->0 : number
+>0 : 0
 

@@ -1,0 +1,25 @@
+{
+    "kind": "JSDocTupleType",
+    "pos": 1,
+    "end": 24,
+    "types": {
+        "0": {
+            "kind": "NumberKeyword",
+            "pos": 2,
+            "end": 8
+        },
+        "1": {
+            "kind": "StringKeyword",
+            "pos": 9,
+            "end": 15
+        },
+        "2": {
+            "kind": "BooleanKeyword",
+            "pos": 16,
+            "end": 23
+        },
+        "length": 3,
+        "pos": 2,
+        "end": 23
+    }
+}

@@ -11,9 +11,9 @@ export enum Animals {
 >Animals : Animals
 
 	Cat,
->Cat : Animals
+>Cat : Animals.Cat
 
 	Dog
->Dog : Animals
+>Dog : Animals.Dog
 
 };

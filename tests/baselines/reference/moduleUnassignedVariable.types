@@ -4,7 +4,7 @@ module Bar {
 
     export var a = 1;
 >a : number
->1 : number
+>1 : 1
 
     function fooA() { return a; } // Correct: return Bar.a
 >fooA : () => number

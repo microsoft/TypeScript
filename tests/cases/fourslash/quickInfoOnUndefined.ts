@@ -8,8 +8,7 @@
 ////};
 ////x./*2*/undefined = 30;
 
-goTo.marker('1');
-verify.quickInfoIs('var undefined');
-
-goTo.marker('2');
-verify.quickInfoIs('(property) undefined: number');
+verify.quickInfos({
+    1: "var undefined",
+    2: "(property) undefined: number"
+});

@@ -1,3 +1,5 @@
+// @allowUnreachableCode: true
+
 // ~ operator on boolean type
 var BOOLEAN: boolean;
 

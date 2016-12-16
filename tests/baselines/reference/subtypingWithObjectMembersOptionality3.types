@@ -71,7 +71,7 @@ var b: { Foo2: Derived; }
 var r = true ? a : b; // ok
 >r : { Foo?: Base; }
 >true ? a : b : { Foo?: Base; }
->true : boolean
+>true : true
 >a : { Foo?: Base; }
 >b : { Foo2: Derived; }
 

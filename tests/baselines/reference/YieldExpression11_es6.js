@@ -9,7 +9,7 @@ class C {
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function () {
+    C.prototype.foo = function* () {
         yield (foo);
     };
     return C;

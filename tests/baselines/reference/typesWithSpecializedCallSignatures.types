@@ -143,5 +143,5 @@ var r3: Base = c.foo('hm');
 >c.foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
 >c : C
 >foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
->'hm' : string
+>'hm' : "hm"
 

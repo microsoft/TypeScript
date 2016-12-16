@@ -1,16 +1,16 @@
 === tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck33.ts ===
 function* g() {
->g : () => IterableIterator<number>
+>g : () => IterableIterator<0>
 
     yield 0;
 >yield 0 : any
->0 : number
+>0 : 0
 
     function* g2() {
->g2 : () => IterableIterator<string>
+>g2 : () => IterableIterator<"">
 
         yield "";
 >yield "" : any
->"" : string
+>"" : ""
     }
 }

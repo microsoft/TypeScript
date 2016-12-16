@@ -2,7 +2,7 @@
 
 export var x = "x";
 >x : string
->"x" : string
+>"x" : "x"
 
 === tests/cases/compiler/t2.ts ===
 export { x } from

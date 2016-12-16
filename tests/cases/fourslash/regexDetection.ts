@@ -6,7 +6,8 @@ goTo.marker("1");
 verify.not.quickInfoExists();
 
 goTo.marker("2");
-verify.not.quickInfoIs('RegExp');
+verify.quickInfoIs("const Math: Math",
+    "An intrinsic object that provides basic mathematics functionality and constants. ");
 
 goTo.marker("3");
 verify.not.quickInfoExists();

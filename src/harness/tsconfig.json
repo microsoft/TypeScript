@@ -10,7 +10,10 @@
         "stripInternal": true,
         "types": [
             "node", "mocha", "chai"
-        ]
+        ],
+        "target": "es5",
+        "noUnusedLocals": true,
+        "noUnusedParameters": true
     },
     "files": [
         "../compiler/core.ts",
@@ -22,6 +25,23 @@
         "../compiler/utilities.ts",
         "../compiler/binder.ts",
         "../compiler/checker.ts",
+        "../compiler/factory.ts",
+        "../compiler/visitor.ts",
+        "../compiler/transformers/ts.ts",
+        "../compiler/transformers/jsx.ts",
+        "../compiler/transformers/esnext.ts",
+        "../compiler/transformers/es2017.ts",
+        "../compiler/transformers/es2016.ts",
+        "../compiler/transformers/es2015.ts",
+        "../compiler/transformers/es5.ts",
+        "../compiler/transformers/generators.ts",
+        "../compiler/transformers/es5.ts",
+        "../compiler/transformers/destructuring.ts",
+        "../compiler/transformers/module/module.ts",
+        "../compiler/transformers/module/system.ts",
+        "../compiler/transformers/module/es2015.ts",
+        "../compiler/transformer.ts",
+        "../compiler/comments.ts",
         "../compiler/sourcemap.ts",
         "../compiler/declarationEmitter.ts",
         "../compiler/emitter.ts",
@@ -86,10 +106,14 @@
         "./unittests/moduleResolution.ts",
         "./unittests/tsconfigParsing.ts",
         "./unittests/commandLineParsing.ts",
+        "./unittests/configurationExtension.ts",
         "./unittests/convertCompilerOptionsFromJson.ts",
-        "./unittests/convertTypingOptionsFromJson.ts",
+        "./unittests/convertTypeAcquisitionFromJson.ts",
         "./unittests/tsserverProjectSystem.ts",
         "./unittests/matchFiles.ts",
-        "./unittests/initializeTSConfig.ts"
+        "./unittests/initializeTSConfig.ts",
+        "./unittests/compileOnSave.ts",
+        "./unittests/typingsInstaller.ts",
+        "./unittests/projectErrors.ts"
     ]
 }

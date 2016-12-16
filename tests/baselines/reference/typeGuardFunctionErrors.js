@@ -164,7 +164,7 @@ var B = (function () {
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return C;
 }(A));
@@ -264,7 +264,7 @@ C;
 function b4() {
     var a = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i - 0] = arguments[_i];
+        a[_i] = arguments[_i];
     }
     return true;
 }

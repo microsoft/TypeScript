@@ -15,7 +15,7 @@ class C<T> {
 >x['toString']() : string
 >x['toString'] : () => string
 >x : T
->'toString' : string
+>'toString' : "toString"
 
         return a + x.toString();
 >a + x.toString() : string
@@ -64,7 +64,7 @@ var r2b = i.foo['toString']();
 >i.foo : number
 >i : I<number>
 >foo : number
->'toString' : string
+>'toString' : "toString"
 
 var a: {
 >a : <T>() => T
@@ -87,7 +87,7 @@ var r3b: string = a()['toString']();
 >a()['toString'] : () => string
 >a() : {}
 >a : <T>() => T
->'toString' : string
+>'toString' : "toString"
 
 var b = {
 >b : { foo: <T>(x: T) => string; }
@@ -105,7 +105,7 @@ var b = {
 >x['toString']() : string
 >x['toString'] : () => string
 >x : T
->'toString' : string
+>'toString' : "toString"
 
         return a + x.toString();
 >a + x.toString() : string
@@ -123,5 +123,5 @@ var r4 = b.foo(1);
 >b.foo : <T>(x: T) => string
 >b : { foo: <T>(x: T) => string; }
 >foo : <T>(x: T) => string
->1 : number
+>1 : 1
 

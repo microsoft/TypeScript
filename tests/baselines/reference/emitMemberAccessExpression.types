@@ -16,12 +16,12 @@ module Microsoft.PeopleAtWork.Model {
 === tests/cases/compiler/emitMemberAccessExpression_file1.ts ===
 /// <reference path="emitMemberAccessExpression_file3.ts" />
 "use strict";
->"use strict" : string
+>"use strict" : "use strict"
 
 === tests/cases/compiler/emitMemberAccessExpression_file2.ts ===
 /// <reference path="emitMemberAccessExpression_file3.ts" />
 "use strict";
->"use strict" : string
+>"use strict" : "use strict"
 
 module Microsoft.PeopleAtWork.Model {
 >Microsoft : typeof Microsoft

@@ -127,7 +127,7 @@ class MyView extends View {
 >this : this
 >model : any
 >get : any
->"data" : string
+>"data" : "data"
 
         var allSeries: ISeries[][] = _.pluck(data, "series");
 >allSeries : ISeries[][]
@@ -137,7 +137,7 @@ class MyView extends View {
 >_ : typeof _
 >pluck : <T extends {}>(list: _.Collection<T>, propertyName: string) => any[]
 >data : IData[]
->"series" : string
+>"series" : "series"
 
         return _.map(allSeries, _.first);
 >_.map(allSeries, _.first) : ISeries[]

@@ -12,6 +12,6 @@ export function x(){
 >x : () => boolean
 
 	return true;
->true : boolean
+>true : true
 }
 

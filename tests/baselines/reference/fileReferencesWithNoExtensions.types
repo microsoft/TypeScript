@@ -17,7 +17,7 @@ var c = cc;  // Check that c.ts has precedence over c.d.ts
 === tests/cases/compiler/a.ts ===
 var aa = 1;
 >aa : number
->1 : number
+>1 : 1
 
 === tests/cases/compiler/b.d.ts ===
 declare var bb: number;
@@ -26,7 +26,7 @@ declare var bb: number;
 === tests/cases/compiler/c.ts ===
 var cc = 1;
 >cc : number
->1 : number
+>1 : 1
 
 === tests/cases/compiler/c.d.ts ===
 declare var xx: number;

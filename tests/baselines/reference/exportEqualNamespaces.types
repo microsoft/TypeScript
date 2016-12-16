@@ -21,7 +21,7 @@ interface server {
  
 var x = 5;
 >x : number
->5 : number
+>5 : 5
 
 var server = new Date();
 >server : Date

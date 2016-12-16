@@ -3,5 +3,5 @@
 >(class { static x = 0; }) : typeof (Anonymous class)
 >class { static x = 0; } : typeof (Anonymous class)
 >x : number
->0 : number
+>0 : 0
 

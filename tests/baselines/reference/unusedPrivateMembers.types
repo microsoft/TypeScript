@@ -28,7 +28,7 @@ class Test2 {
 
     private p = 0;
 >p : number
->0 : number
+>0 : 0
 
     public test() {
 >test : () => void
@@ -52,7 +52,7 @@ class Test3 {
 >x : number
 
         return 0;
->0 : number
+>0 : 0
     }
 
     public test() {

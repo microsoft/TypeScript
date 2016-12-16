@@ -14,7 +14,7 @@ if (typeof x !== "string") {
 >x.push : (...items: StringTree[]) => number
 >x : StringTreeArray
 >push : (...items: StringTree[]) => number
->"" : string
+>"" : ""
 
     x.push([""]);
 >x.push([""]) : number
@@ -22,7 +22,7 @@ if (typeof x !== "string") {
 >x : StringTreeArray
 >push : (...items: StringTree[]) => number
 >[""] : string[]
->"" : string
+>"" : ""
 }
 
 type StringTree = string | StringTreeArray;

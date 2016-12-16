@@ -15,16 +15,15 @@
 ////fo/*referenceInGlobalScope*/o;
 
 goTo.marker("globalScope");
-verify.memberListContains("foo");
+verify.completionListContains("foo");
 
 goTo.marker("insideFunctionDeclaration");
-verify.memberListContains("foo");
+verify.completionListContains("foo");
 
 goTo.marker("insideFunctionExpression");
-verify.memberListContains("foo");
+verify.completionListContains("foo");
 
-goTo.marker("referenceInsideFunctionExpression");
-verify.quickInfoIs("(local function) foo(): number");
-
-goTo.marker("referenceInGlobalScope");
-verify.quickInfoIs("function foo(a: number): string");
+verify.quickInfos({
+    referenceInsideFunctionExpression: "(local function) foo(): number",
+    referenceInGlobalScope: "function foo(a: number): string"
+});

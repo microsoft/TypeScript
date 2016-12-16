@@ -6,6 +6,30 @@
 ////}
 ////export var x: number;
 
+verify.navigationTree({
+    "text": "\"file\"",
+    "kind": "module",
+    "childItems": [
+        {
+            "text": "Bar",
+            "kind": "class",
+            "kindModifiers": "export",
+            "childItems": [
+                {
+                    "text": "s",
+                    "kind": "property",
+                    "kindModifiers": "public"
+                }
+            ]
+        },
+        {
+            "text": "x",
+            "kind": "var",
+            "kindModifiers": "export"
+        }
+    ]
+});
+
 verify.navigationBar([
     {
         "text": "\"file\"",

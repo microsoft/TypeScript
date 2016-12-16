@@ -3,9 +3,9 @@
 
 enum E { a, b, c }
 >E : E
->a : E
->b : E
->c : E
+>a : E.a
+>b : E.b
+>c : E.c
 
 var a: any;
 >a : any
@@ -44,7 +44,7 @@ var r4 = undefined + 1;
 >r4 : number
 >undefined + 1 : number
 >undefined : undefined
->1 : number
+>1 : 1
 
 var r5 = undefined + c;
 >r5 : number
@@ -56,17 +56,17 @@ var r6 = undefined + E.a;
 >r6 : number
 >undefined + E.a : number
 >undefined : undefined
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 
 var r7 = undefined + E['a'];
 >r7 : number
 >undefined + E['a'] : number
 >undefined : undefined
->E['a'] : E
+>E['a'] : E.a
 >E : typeof E
->'a' : string
+>'a' : "a"
 
 var r8 = b + undefined;
 >r8 : number
@@ -77,7 +77,7 @@ var r8 = b + undefined;
 var r9 = 1 + undefined;
 >r9 : number
 >1 + undefined : number
->1 : number
+>1 : 1
 >undefined : undefined
 
 var r10 = c + undefined
@@ -89,17 +89,17 @@ var r10 = c + undefined
 var r11 = E.a + undefined;
 >r11 : number
 >E.a + undefined : number
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 >undefined : undefined
 
 var r12 = E['a'] + undefined;
 >r12 : number
 >E['a'] + undefined : number
->E['a'] : E
+>E['a'] : E.a
 >E : typeof E
->'a' : string
+>'a' : "a"
 >undefined : undefined
 
 // undefined + string
@@ -113,7 +113,7 @@ var r14 = undefined + '';
 >r14 : string
 >undefined + '' : string
 >undefined : undefined
->'' : string
+>'' : ""
 
 var r15 = d + undefined;
 >r15 : string
@@ -124,6 +124,6 @@ var r15 = d + undefined;
 var r16 = '' + undefined;
 >r16 : string
 >'' + undefined : string
->'' : string
+>'' : ""
 >undefined : undefined
 

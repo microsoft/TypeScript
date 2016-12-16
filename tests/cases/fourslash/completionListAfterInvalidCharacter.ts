@@ -8,4 +8,4 @@
 ////testModule./**/
 
 goTo.marker();
-verify.memberListContains("foo");
+verify.completionListContains("foo");

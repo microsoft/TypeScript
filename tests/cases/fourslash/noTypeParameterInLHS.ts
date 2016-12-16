@@ -5,7 +5,7 @@
 ////var /*1*/i: I<any>;
 ////var /*2*/c: C<I>;
 
-goTo.marker('1');
-verify.quickInfoIs('var i: I<any>');
-goTo.marker('2');
-verify.quickInfoIs('var c: C<any>');
+verify.quickInfos({
+    1: "var i: I<any>",
+    2: "var c: C<any>"
+});

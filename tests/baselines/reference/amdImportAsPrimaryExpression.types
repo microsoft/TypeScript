@@ -19,8 +19,8 @@ export enum E1 {
 >E1 : E1
 
 	A,B,C
->A : E1
->B : E1
->C : E1
+>A : E1.A
+>B : E1.B
+>C : E1.C
 }
 

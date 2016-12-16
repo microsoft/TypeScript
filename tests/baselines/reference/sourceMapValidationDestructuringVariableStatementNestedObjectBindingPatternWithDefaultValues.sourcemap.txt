@@ -159,123 +159,129 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
 ---
 >>>var _a = robotA.skills, _b = _a === void 0 ? { primary: "noSkill", secondary: "noSkill" } : _a, _c = _b.primary, primaryA = _c === void 0 ? "noSkill" : _c, _d = _b.secondary, secondaryA = _d === void 0 ? "noSkill" : _d;
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^^
-3 >                      ^^
-4 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                                                              ^^
-6 >                                                                                                ^^^^^^^^^^^^^^^
-7 >                                                                                                               ^^
-8 >                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-9 >                                                                                                                                                          ^^
-10>                                                                                                                                                            ^^^^^^^^^^^^^^^^^
-11>                                                                                                                                                                             ^^
-12>                                                                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-13>                                                                                                                                                                                                                          ^
-14>                                                                                                                                                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^
+3 >    ^^^^^^^^^^^^^^^^^^
+4 >                      ^^
+5 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6 >                                                                                              ^^
+7 >                                                                                                ^^^^^^^^^^^^^^^
+8 >                                                                                                               ^^
+9 >                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+10>                                                                                                                                                          ^^
+11>                                                                                                                                                            ^^^^^^^^^^^^^^^^^
+12>                                                                                                                                                                             ^^
+13>                                                                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+14>                                                                                                                                                                                                                          ^
+15>                                                                                                                                                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >var {
   >    
-2 >skills: {
-  >        primary: primaryA = "noSkill",
-  >        secondary: secondaryA = "noSkill"
-  >    } = { primary: "noSkill", secondary: "noSkill" }
-3 >                      
-4 >                        skills: {
+2 >
+3 >    skills: {
+  >            primary: primaryA = "noSkill",
+  >            secondary: secondaryA = "noSkill"
+  >        } = { primary: "noSkill", secondary: "noSkill" }
+4 >                      
+5 >                        skills: {
   >                                primary: primaryA = "noSkill",
   >                                secondary: secondaryA = "noSkill"
   >                            } = { primary: "noSkill", secondary: "noSkill" }
-5 >                                                                                              
-6 >                                                                                                primary: primaryA = "noSkill"
-7 >                                                                                                               
-8 >                                                                                                                 primary: primaryA = "noSkill"
-9 >                                                                                                                                                          ,
+6 >                                                                                              
+7 >                                                                                                primary: primaryA = "noSkill"
+8 >                                                                                                               
+9 >                                                                                                                 primary: primaryA = "noSkill"
+10>                                                                                                                                                          ,
   >                                                                                                                                                                  
-10>                                                                                                                                                            secondary: secondaryA = "noSkill"
-11>                                                                                                                                                                             
-12>                                                                                                                                                                               secondary: secondaryA = "noSkill"
-13>                                                                                                                                                                                                                          
+11>                                                                                                                                                            secondary: secondaryA = "noSkill"
+12>                                                                                                                                                                             
+13>                                                                                                                                                                               secondary: secondaryA = "noSkill"
+14>                                                                                                                                                                                                                          
   >                                                                                                                                                                                                                              } = { primary: "noSkill", secondary: "noSkill" }
   >                                                                                                                                                                                                                          } = robotA;
 1->Emitted(3, 1) Source(15, 5) + SourceIndex(0)
-2 >Emitted(3, 23) Source(18, 53) + SourceIndex(0)
-3 >Emitted(3, 25) Source(15, 5) + SourceIndex(0)
-4 >Emitted(3, 95) Source(18, 53) + SourceIndex(0)
-5 >Emitted(3, 97) Source(16, 9) + SourceIndex(0)
-6 >Emitted(3, 112) Source(16, 38) + SourceIndex(0)
-7 >Emitted(3, 114) Source(16, 9) + SourceIndex(0)
-8 >Emitted(3, 155) Source(16, 38) + SourceIndex(0)
-9 >Emitted(3, 157) Source(17, 9) + SourceIndex(0)
-10>Emitted(3, 174) Source(17, 42) + SourceIndex(0)
-11>Emitted(3, 176) Source(17, 9) + SourceIndex(0)
-12>Emitted(3, 219) Source(17, 42) + SourceIndex(0)
-13>Emitted(3, 220) Source(19, 12) + SourceIndex(0)
+2 >Emitted(3, 5) Source(15, 5) + SourceIndex(0)
+3 >Emitted(3, 23) Source(18, 53) + SourceIndex(0)
+4 >Emitted(3, 25) Source(15, 5) + SourceIndex(0)
+5 >Emitted(3, 95) Source(18, 53) + SourceIndex(0)
+6 >Emitted(3, 97) Source(16, 9) + SourceIndex(0)
+7 >Emitted(3, 112) Source(16, 38) + SourceIndex(0)
+8 >Emitted(3, 114) Source(16, 9) + SourceIndex(0)
+9 >Emitted(3, 155) Source(16, 38) + SourceIndex(0)
+10>Emitted(3, 157) Source(17, 9) + SourceIndex(0)
+11>Emitted(3, 174) Source(17, 42) + SourceIndex(0)
+12>Emitted(3, 176) Source(17, 9) + SourceIndex(0)
+13>Emitted(3, 219) Source(17, 42) + SourceIndex(0)
+14>Emitted(3, 220) Source(19, 12) + SourceIndex(0)
 ---
 >>>var _e = robotB.name, nameB = _e === void 0 ? "noNameSpecified" : _e, _f = robotB.skills, _g = _f === void 0 ? { primary: "noSkill", secondary: "noSkill" } : _f, _h = _g.primary, primaryB = _h === void 0 ? "noSkill" : _h, _j = _g.secondary, secondaryB = _j === void 0 ? "noSkill" : _j;
 1->
-2 >^^^^^^^^^^^^^^^^^^^^
-3 >                    ^^
-4 >                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                                    ^^
-6 >                                                                      ^^^^^^^^^^^^^^^^^^
-7 >                                                                                        ^^
-8 >                                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-9 >                                                                                                                                                                ^^
-10>                                                                                                                                                                  ^^^^^^^^^^^^^^^
-11>                                                                                                                                                                                 ^^
-12>                                                                                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-13>                                                                                                                                                                                                                            ^^
-14>                                                                                                                                                                                                                              ^^^^^^^^^^^^^^^^^
-15>                                                                                                                                                                                                                                               ^^
-16>                                                                                                                                                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-17>                                                                                                                                                                                                                                                                                            ^
-18>                                                                                                                                                                                                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^
+3 >    ^^^^^^^^^^^^^^^^
+4 >                    ^^
+5 >                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6 >                                                                    ^^
+7 >                                                                      ^^^^^^^^^^^^^^^^^^
+8 >                                                                                        ^^
+9 >                                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+10>                                                                                                                                                                ^^
+11>                                                                                                                                                                  ^^^^^^^^^^^^^^^
+12>                                                                                                                                                                                 ^^
+13>                                                                                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+14>                                                                                                                                                                                                                            ^^
+15>                                                                                                                                                                                                                              ^^^^^^^^^^^^^^^^^
+16>                                                                                                                                                                                                                                               ^^
+17>                                                                                                                                                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+18>                                                                                                                                                                                                                                                                                            ^
+19>                                                                                                                                                                                                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >var {
   >    
-2 >name: nameB = "noNameSpecified"
-3 >                    
-4 >                      name: nameB = "noNameSpecified"
-5 >                                                                    ,
+2 >
+3 >    name: nameB = "noNameSpecified"
+4 >                    
+5 >                      name: nameB = "noNameSpecified"
+6 >                                                                    ,
   >                                                                        
-6 >                                                                      skills: {
+7 >                                                                      skills: {
   >                                                                              primary: primaryB = "noSkill",
   >                                                                              secondary: secondaryB = "noSkill"
   >                                                                          } = { primary: "noSkill", secondary: "noSkill" }
-7 >                                                                                        
-8 >                                                                                          skills: {
+8 >                                                                                        
+9 >                                                                                          skills: {
   >                                                                                                  primary: primaryB = "noSkill",
   >                                                                                                  secondary: secondaryB = "noSkill"
   >                                                                                              } = { primary: "noSkill", secondary: "noSkill" }
-9 >                                                                                                                                                                
-10>                                                                                                                                                                  primary: primaryB = "noSkill"
-11>                                                                                                                                                                                 
-12>                                                                                                                                                                                   primary: primaryB = "noSkill"
-13>                                                                                                                                                                                                                            ,
+10>                                                                                                                                                                
+11>                                                                                                                                                                  primary: primaryB = "noSkill"
+12>                                                                                                                                                                                 
+13>                                                                                                                                                                                   primary: primaryB = "noSkill"
+14>                                                                                                                                                                                                                            ,
   >                                                                                                                                                                                                                                    
-14>                                                                                                                                                                                                                              secondary: secondaryB = "noSkill"
-15>                                                                                                                                                                                                                                               
-16>                                                                                                                                                                                                                                                 secondary: secondaryB = "noSkill"
-17>                                                                                                                                                                                                                                                                                            
+15>                                                                                                                                                                                                                              secondary: secondaryB = "noSkill"
+16>                                                                                                                                                                                                                                               
+17>                                                                                                                                                                                                                                                 secondary: secondaryB = "noSkill"
+18>                                                                                                                                                                                                                                                                                            
   >                                                                                                                                                                                                                                                                                                } = { primary: "noSkill", secondary: "noSkill" }
   >                                                                                                                                                                                                                                                                                            } = robotB;
 1->Emitted(4, 1) Source(21, 5) + SourceIndex(0)
-2 >Emitted(4, 21) Source(21, 36) + SourceIndex(0)
-3 >Emitted(4, 23) Source(21, 5) + SourceIndex(0)
-4 >Emitted(4, 69) Source(21, 36) + SourceIndex(0)
-5 >Emitted(4, 71) Source(22, 5) + SourceIndex(0)
-6 >Emitted(4, 89) Source(25, 53) + SourceIndex(0)
-7 >Emitted(4, 91) Source(22, 5) + SourceIndex(0)
-8 >Emitted(4, 161) Source(25, 53) + SourceIndex(0)
-9 >Emitted(4, 163) Source(23, 9) + SourceIndex(0)
-10>Emitted(4, 178) Source(23, 38) + SourceIndex(0)
-11>Emitted(4, 180) Source(23, 9) + SourceIndex(0)
-12>Emitted(4, 221) Source(23, 38) + SourceIndex(0)
-13>Emitted(4, 223) Source(24, 9) + SourceIndex(0)
-14>Emitted(4, 240) Source(24, 42) + SourceIndex(0)
-15>Emitted(4, 242) Source(24, 9) + SourceIndex(0)
-16>Emitted(4, 285) Source(24, 42) + SourceIndex(0)
-17>Emitted(4, 286) Source(26, 12) + SourceIndex(0)
+2 >Emitted(4, 5) Source(21, 5) + SourceIndex(0)
+3 >Emitted(4, 21) Source(21, 36) + SourceIndex(0)
+4 >Emitted(4, 23) Source(21, 5) + SourceIndex(0)
+5 >Emitted(4, 69) Source(21, 36) + SourceIndex(0)
+6 >Emitted(4, 71) Source(22, 5) + SourceIndex(0)
+7 >Emitted(4, 89) Source(25, 53) + SourceIndex(0)
+8 >Emitted(4, 91) Source(22, 5) + SourceIndex(0)
+9 >Emitted(4, 161) Source(25, 53) + SourceIndex(0)
+10>Emitted(4, 163) Source(23, 9) + SourceIndex(0)
+11>Emitted(4, 178) Source(23, 38) + SourceIndex(0)
+12>Emitted(4, 180) Source(23, 9) + SourceIndex(0)
+13>Emitted(4, 221) Source(23, 38) + SourceIndex(0)
+14>Emitted(4, 223) Source(24, 9) + SourceIndex(0)
+15>Emitted(4, 240) Source(24, 42) + SourceIndex(0)
+16>Emitted(4, 242) Source(24, 9) + SourceIndex(0)
+17>Emitted(4, 285) Source(24, 42) + SourceIndex(0)
+18>Emitted(4, 286) Source(26, 12) + SourceIndex(0)
 ---
 >>>var _k = { name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } }, _l = _k.name, nameC = _l === void 0 ? "noNameSpecified" : _l, _m = _k.skills, _o = _m === void 0 ? { primary: "noSkill", secondary: "noSkill" } : _m, _p = _o.primary, primaryB = _p === void 0 ? "noSkill" : _p, _q = _o.secondary, secondaryB = _q === void 0 ? "noSkill" : _q;
 1->
@@ -299,9 +305,9 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
 19>                                                                                                                                                                                                                                                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 20>                                                                                                                                                                                                                                                                                                                                                                         ^
 1->
-  >
+  >var 
 2 >
-3 >    var {
+3 >    {
   >        name: nameC = "noNameSpecified",
   >        skills: {
   >            primary: primaryB = "noSkill",
@@ -335,8 +341,8 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
 20>                                                                                                                                                                                                                                                                                                                                                                         
   >                                                                                                                                                                                                                                                                                                                                                                             } = { primary: "noSkill", secondary: "noSkill" }
   >                                                                                                                                                                                                                                                                                                                                                                         } = <Robot>{ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } };
-1->Emitted(5, 1) Source(27, 1) + SourceIndex(0)
-2 >Emitted(5, 5) Source(27, 1) + SourceIndex(0)
+1->Emitted(5, 1) Source(27, 5) + SourceIndex(0)
+2 >Emitted(5, 5) Source(27, 5) + SourceIndex(0)
 3 >Emitted(5, 88) Source(33, 90) + SourceIndex(0)
 4 >Emitted(5, 90) Source(28, 5) + SourceIndex(0)
 5 >Emitted(5, 102) Source(28, 36) + SourceIndex(0)

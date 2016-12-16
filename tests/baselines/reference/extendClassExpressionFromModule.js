@@ -26,12 +26,12 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var foo1 = require('./foo1');
+var foo1 = require("./foo1");
 var x = foo1;
 var y = (function (_super) {
     __extends(y, _super);
     function y() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return y;
 }(x));

@@ -11,6 +11,7 @@
 ==== /types/lib/index.d.ts (0 errors) ====
     
     
+    
     interface Lib { x }
     
 ==== /main.ts (1 errors) ====

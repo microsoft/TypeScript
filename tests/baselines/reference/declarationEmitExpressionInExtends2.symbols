@@ -1,0 +1,30 @@
+=== tests/cases/compiler/declarationEmitExpressionInExtends2.ts ===
+
+class C<T, U> {
+>C : Symbol(C, Decl(declarationEmitExpressionInExtends2.ts, 0, 0))
+>T : Symbol(T, Decl(declarationEmitExpressionInExtends2.ts, 1, 8))
+>U : Symbol(U, Decl(declarationEmitExpressionInExtends2.ts, 1, 10))
+
+    x: T;
+>x : Symbol(C.x, Decl(declarationEmitExpressionInExtends2.ts, 1, 15))
+>T : Symbol(T, Decl(declarationEmitExpressionInExtends2.ts, 1, 8))
+
+    y: U;
+>y : Symbol(C.y, Decl(declarationEmitExpressionInExtends2.ts, 2, 9))
+>U : Symbol(U, Decl(declarationEmitExpressionInExtends2.ts, 1, 10))
+}
+
+function getClass<T>(c: T) {
+>getClass : Symbol(getClass, Decl(declarationEmitExpressionInExtends2.ts, 4, 1))
+>T : Symbol(T, Decl(declarationEmitExpressionInExtends2.ts, 6, 18))
+>c : Symbol(c, Decl(declarationEmitExpressionInExtends2.ts, 6, 21))
+>T : Symbol(T, Decl(declarationEmitExpressionInExtends2.ts, 6, 18))
+
+    return C;
+>C : Symbol(C, Decl(declarationEmitExpressionInExtends2.ts, 0, 0))
+}
+
+class MyClass extends getClass(2) <string, number> {
+>MyClass : Symbol(MyClass, Decl(declarationEmitExpressionInExtends2.ts, 8, 1))
+>getClass : Symbol(getClass, Decl(declarationEmitExpressionInExtends2.ts, 4, 1))
+}

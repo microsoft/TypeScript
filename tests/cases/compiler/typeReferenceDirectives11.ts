@@ -4,6 +4,7 @@
 // @traceResolution: true
 // @types: lib
 // @out: output.js
+
 // @currentDirectory: /
 
 // @filename: /types/lib/index.d.ts

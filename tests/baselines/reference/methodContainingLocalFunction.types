@@ -129,7 +129,7 @@ enum E {
 >localFunction : () => void
 
         return 0;
->0 : number
+>0 : 0
 
     })()
 }

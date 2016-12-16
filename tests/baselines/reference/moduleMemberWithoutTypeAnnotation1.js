@@ -61,7 +61,6 @@ var TypeScript;
         }());
     })(Parser = TypeScript.Parser || (TypeScript.Parser = {}));
 })(TypeScript || (TypeScript = {}));
-var TypeScript;
 (function (TypeScript) {
     ;
     ;
@@ -81,7 +80,6 @@ var TypeScript;
     }());
     TypeScript.PositionedToken = PositionedToken;
 })(TypeScript || (TypeScript = {}));
-var TypeScript;
 (function (TypeScript) {
     var SyntaxNode = (function () {
         function SyntaxNode() {
@@ -98,7 +96,6 @@ var TypeScript;
     }());
     TypeScript.SyntaxNode = SyntaxNode;
 })(TypeScript || (TypeScript = {}));
-var TypeScript;
 (function (TypeScript) {
     var Syntax;
     (function (Syntax) {

@@ -155,7 +155,7 @@ var b = { foo<T extends U, U extends Two>(x: T, y: U) { return ''; } };
 >T : T
 >y : U
 >U : U
->'' : string
+>'' : ""
 
 function foo1(x: A);
 >foo1 : { (x: A): any; (x: A): any; }

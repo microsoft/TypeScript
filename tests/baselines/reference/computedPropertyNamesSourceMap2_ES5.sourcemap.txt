@@ -12,34 +12,28 @@ sourceFile:computedPropertyNamesSourceMap2_ES5.ts
 1 >
 2 >^^^^
 3 >    ^
-4 >     ^^^
-5 >        ^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >var 
 3 >    v
-4 >      = 
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
 2 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
 3 >Emitted(1, 6) Source(1, 6) + SourceIndex(0)
-4 >Emitted(1, 9) Source(1, 9) + SourceIndex(0)
 ---
 >>>    _a["hello"] = function () {
 1->^^^^
 2 >    ^^^
 3 >       ^^^^^^^
-4 >              ^
-5 >               ^^^
-1->{
+4 >              ^^^^
+1-> = {
   >    
 2 >    [
 3 >       "hello"
-4 >              ]
-5 >               
+4 >              
 1->Emitted(2, 5) Source(2, 5) + SourceIndex(0)
 2 >Emitted(2, 8) Source(2, 6) + SourceIndex(0)
 3 >Emitted(2, 15) Source(2, 13) + SourceIndex(0)
-4 >Emitted(2, 16) Source(2, 14) + SourceIndex(0)
-5 >Emitted(2, 19) Source(2, 5) + SourceIndex(0)
+4 >Emitted(2, 19) Source(2, 5) + SourceIndex(0)
 ---
 >>>        debugger;
 1 >^^^^^^^^
@@ -64,16 +58,13 @@ sourceFile:computedPropertyNamesSourceMap2_ES5.ts
 2 >Emitted(4, 6) Source(4, 3) + SourceIndex(0)
 ---
 >>>    Object.defineProperty(_a, "goodbye", {
-1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                              ^^^^^^^^^
+1->^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >                          ^^^^^^^^^^^^^
 1->,
-  >    
-2 >    get [
-3 >                              "goodbye"]
-1->Emitted(5, 5) Source(5, 5) + SourceIndex(0)
-2 >Emitted(5, 31) Source(5, 10) + SourceIndex(0)
-3 >Emitted(5, 40) Source(5, 20) + SourceIndex(0)
+  >    get 
+2 >                          ["goodbye"]
+1->Emitted(5, 27) Source(5, 9) + SourceIndex(0)
+2 >Emitted(5, 40) Source(5, 20) + SourceIndex(0)
 ---
 >>>        get: function () {
 1 >^^^^^^^^^^^^^
@@ -112,21 +103,14 @@ sourceFile:computedPropertyNamesSourceMap2_ES5.ts
 >>>        enumerable: true,
 >>>        configurable: true
 >>>    }),
-1->^^^^^^
-2 >      ^->
-1->
-1->Emitted(11, 7) Source(7, 3) + SourceIndex(0)
----
->>>    _a
->>>);
-1->^
-2 > ^
-3 >  ^^^^^^->
+>>>    _a);
+1->^^^^^^^
+2 >       ^
 1->
   >}
-2 > 
-1->Emitted(13, 2) Source(8, 2) + SourceIndex(0)
-2 >Emitted(13, 3) Source(8, 2) + SourceIndex(0)
+2 >       
+1->Emitted(12, 8) Source(8, 2) + SourceIndex(0)
+2 >Emitted(12, 9) Source(8, 2) + SourceIndex(0)
 ---
 >>>var _a;
 >>>//# sourceMappingURL=computedPropertyNamesSourceMap2_ES5.js.map

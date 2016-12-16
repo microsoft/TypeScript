@@ -33,7 +33,7 @@ var T = (function () {
     T.prototype.m = function () {
         var p3 = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            p3[_i - 0] = arguments[_i];
+            p3[_i] = arguments[_i];
         }
     };
     return T;

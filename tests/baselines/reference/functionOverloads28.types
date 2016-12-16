@@ -9,7 +9,7 @@ function foo(bar:string):number;
 function foo(bar?:any):any{ return '' }
 >foo : { (): string; (bar: string): number; }
 >bar : any
->'' : string
+>'' : ""
 
 var t:any; var x = foo(t);
 >t : any

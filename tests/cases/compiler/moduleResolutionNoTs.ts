@@ -1,3 +1,4 @@
+// @jsx: Preserve
 // @filename: x.ts
 export default 0;
 

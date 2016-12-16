@@ -14,10 +14,6 @@
 ////    }
 ////}
 
-// this line triggers a semantic/syntactic error check, remove line when 788570 is fixed
-edit.insert('');
-
-
 goTo.marker('1');
 verify.completionListContains('f');
 verify.completionListContains('foo');
@@ -26,14 +22,12 @@ edit.insert('foo(1);');
 goTo.marker('2');
 verify.completionListContains('x');
 
-goTo.marker('3');
-verify.quickInfoIs('(local var) r: C<number>');
+verify.quickInfoAt("3", "(local var) r: C<number>");
 
 goTo.marker('4');
 verify.completionListContains('x');
 edit.insert('x;');
 
-goTo.marker('5');
-verify.quickInfoIs('(local var) r2: number');
+verify.quickInfoAt("5", "(local var) r2: number");
 
 verify.numberOfErrorsInCurrentFile(0);

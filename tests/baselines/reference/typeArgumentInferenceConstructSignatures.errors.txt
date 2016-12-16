@@ -1,4 +1,4 @@
-tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(25,35): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(25,35): error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(51,19): error TS2304: Cannot find name 'Window'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(61,39): error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
   Types of parameters 'x' and 'x' are incompatible.
@@ -10,7 +10,7 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstruct
   Types of parameters 'n' and 'b' are incompatible.
     Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(106,15): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-  Type argument candidate 'string' is not a valid type argument because it is not a supertype of candidate 'number'.
+  Type argument candidate '""' is not a valid type argument because it is not a supertype of candidate '0'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(118,9): error TS2304: Cannot find name 'Window'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(120,51): error TS2304: Cannot find name 'window'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(120,69): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
@@ -48,7 +48,7 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstruct
     new someGenerics1(3, 4);
     new someGenerics1<string, number>(3, 4); // Error
                                       ~
-!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
     new someGenerics1<number, {}>(3, 4);
     
     // Generic call with argument of function type whose parameter is of type parameter type
@@ -146,7 +146,7 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstruct
     var a9a = new someGenerics9('', 0, []);
                   ~~~~~~~~~~~~~
 !!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-!!! error TS2453:   Type argument candidate 'string' is not a valid type argument because it is not a supertype of candidate 'number'.
+!!! error TS2453:   Type argument candidate '""' is not a valid type argument because it is not a supertype of candidate '0'.
     var a9a: {};
     var a9b = new someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
     var a9b: { a?: number; b?: string; };

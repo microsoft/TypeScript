@@ -4,9 +4,9 @@ var o = { a: 1, b: 2 };
 >o : { a: number; b: number; }
 >{ a: 1, b: 2 } : { a: number; b: number; }
 >a : number
->1 : number
+>1 : 1
 >b : number
->2 : number
+>2 : 2
 
 for (var x of Object.values(o)) {
 >x : number
@@ -21,7 +21,7 @@ for (var x of Object.values(o)) {
 >x : number
 }
 
-var entries = Object.entries(o);
+var entries = Object.entries(o);  // <-- entries: ['a' | 'b', number][]
 >entries : [string, number][]
 >Object.entries(o) : [string, number][]
 >Object.entries : { <T>(o: { [s: string]: T; }): [string, T][]; (o: any): [string, any][]; }
@@ -35,5 +35,25 @@ var entries1 = Object.entries(1); // <-- entries: [string, any][]
 >Object.entries : { <T>(o: { [s: string]: T; }): [string, T][]; (o: any): [string, any][]; }
 >Object : ObjectConstructor
 >entries : { <T>(o: { [s: string]: T; }): [string, T][]; (o: any): [string, any][]; }
->1 : number
+>1 : 1
+
+var entries2 = Object.entries({a: true, b: 2}) // ['a' | 'b', number | boolean][]
+>entries2 : [string, number | boolean][]
+>Object.entries({a: true, b: 2}) : [string, number | boolean][]
+>Object.entries : { <T>(o: { [s: string]: T; }): [string, T][]; (o: any): [string, any][]; }
+>Object : ObjectConstructor
+>entries : { <T>(o: { [s: string]: T; }): [string, T][]; (o: any): [string, any][]; }
+>{a: true, b: 2} : { a: true; b: 2; }
+>a : boolean
+>true : true
+>b : number
+>2 : 2
+
+var entries3 = Object.entries({}) // [never, any][]
+>entries3 : [string, {}][]
+>Object.entries({}) : [string, {}][]
+>Object.entries : { <T>(o: { [s: string]: T; }): [string, T][]; (o: any): [string, any][]; }
+>Object : ObjectConstructor
+>entries : { <T>(o: { [s: string]: T; }): [string, T][]; (o: any): [string, any][]; }
+>{} : {}
 

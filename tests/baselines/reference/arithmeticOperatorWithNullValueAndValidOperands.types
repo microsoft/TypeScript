@@ -6,10 +6,10 @@ enum E {
 >E : E
 
     a,
->a : E
+>a : E.a
 
     b
->b : E
+>b : E.b
 }
 
 var a: any;
@@ -35,15 +35,15 @@ var ra3 = null * 1;
 >ra3 : number
 >null * 1 : number
 >null : null
->1 : number
+>1 : 1
 
 var ra4 = null * E.a;
 >ra4 : number
 >null * E.a : number
 >null : null
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 
 var ra5 = a * null;
 >ra5 : number
@@ -60,15 +60,15 @@ var ra6 = b * null;
 var ra7 = 0 * null;
 >ra7 : number
 >0 * null : number
->0 : number
+>0 : 0
 >null : null
 
 var ra8 = E.b * null;
 >ra8 : number
 >E.b * null : number
->E.b : E
+>E.b : E.b
 >E : typeof E
->b : E
+>b : E.b
 >null : null
 
 // operator /
@@ -88,15 +88,15 @@ var rb3 = null / 1;
 >rb3 : number
 >null / 1 : number
 >null : null
->1 : number
+>1 : 1
 
 var rb4 = null / E.a;
 >rb4 : number
 >null / E.a : number
 >null : null
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 
 var rb5 = a / null;
 >rb5 : number
@@ -113,15 +113,15 @@ var rb6 = b / null;
 var rb7 = 0 / null;
 >rb7 : number
 >0 / null : number
->0 : number
+>0 : 0
 >null : null
 
 var rb8 = E.b / null;
 >rb8 : number
 >E.b / null : number
->E.b : E
+>E.b : E.b
 >E : typeof E
->b : E
+>b : E.b
 >null : null
 
 // operator %
@@ -141,15 +141,15 @@ var rc3 = null % 1;
 >rc3 : number
 >null % 1 : number
 >null : null
->1 : number
+>1 : 1
 
 var rc4 = null % E.a;
 >rc4 : number
 >null % E.a : number
 >null : null
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 
 var rc5 = a % null;
 >rc5 : number
@@ -166,15 +166,15 @@ var rc6 = b % null;
 var rc7 = 0 % null;
 >rc7 : number
 >0 % null : number
->0 : number
+>0 : 0
 >null : null
 
 var rc8 = E.b % null;
 >rc8 : number
 >E.b % null : number
->E.b : E
+>E.b : E.b
 >E : typeof E
->b : E
+>b : E.b
 >null : null
 
 // operator -
@@ -194,15 +194,15 @@ var rd3 = null - 1;
 >rd3 : number
 >null - 1 : number
 >null : null
->1 : number
+>1 : 1
 
 var rd4 = null - E.a;
 >rd4 : number
 >null - E.a : number
 >null : null
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 
 var rd5 = a - null;
 >rd5 : number
@@ -219,15 +219,15 @@ var rd6 = b - null;
 var rd7 = 0 - null;
 >rd7 : number
 >0 - null : number
->0 : number
+>0 : 0
 >null : null
 
 var rd8 = E.b - null;
 >rd8 : number
 >E.b - null : number
->E.b : E
+>E.b : E.b
 >E : typeof E
->b : E
+>b : E.b
 >null : null
 
 // operator <<
@@ -247,15 +247,15 @@ var re3 = null << 1;
 >re3 : number
 >null << 1 : number
 >null : null
->1 : number
+>1 : 1
 
 var re4 = null << E.a;
 >re4 : number
 >null << E.a : number
 >null : null
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 
 var re5 = a << null;
 >re5 : number
@@ -272,15 +272,15 @@ var re6 = b << null;
 var re7 = 0 << null;
 >re7 : number
 >0 << null : number
->0 : number
+>0 : 0
 >null : null
 
 var re8 = E.b << null;
 >re8 : number
 >E.b << null : number
->E.b : E
+>E.b : E.b
 >E : typeof E
->b : E
+>b : E.b
 >null : null
 
 // operator >>
@@ -300,15 +300,15 @@ var rf3 = null >> 1;
 >rf3 : number
 >null >> 1 : number
 >null : null
->1 : number
+>1 : 1
 
 var rf4 = null >> E.a;
 >rf4 : number
 >null >> E.a : number
 >null : null
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 
 var rf5 = a >> null;
 >rf5 : number
@@ -325,15 +325,15 @@ var rf6 = b >> null;
 var rf7 = 0 >> null;
 >rf7 : number
 >0 >> null : number
->0 : number
+>0 : 0
 >null : null
 
 var rf8 = E.b >> null;
 >rf8 : number
 >E.b >> null : number
->E.b : E
+>E.b : E.b
 >E : typeof E
->b : E
+>b : E.b
 >null : null
 
 // operator >>>
@@ -353,15 +353,15 @@ var rg3 = null >>> 1;
 >rg3 : number
 >null >>> 1 : number
 >null : null
->1 : number
+>1 : 1
 
 var rg4 = null >>> E.a;
 >rg4 : number
 >null >>> E.a : number
 >null : null
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 
 var rg5 = a >>> null;
 >rg5 : number
@@ -378,15 +378,15 @@ var rg6 = b >>> null;
 var rg7 = 0 >>> null;
 >rg7 : number
 >0 >>> null : number
->0 : number
+>0 : 0
 >null : null
 
 var rg8 = E.b >>> null;
 >rg8 : number
 >E.b >>> null : number
->E.b : E
+>E.b : E.b
 >E : typeof E
->b : E
+>b : E.b
 >null : null
 
 // operator &
@@ -406,15 +406,15 @@ var rh3 = null & 1;
 >rh3 : number
 >null & 1 : number
 >null : null
->1 : number
+>1 : 1
 
 var rh4 = null & E.a;
 >rh4 : number
 >null & E.a : number
 >null : null
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 
 var rh5 = a & null;
 >rh5 : number
@@ -431,15 +431,15 @@ var rh6 = b & null;
 var rh7 = 0 & null;
 >rh7 : number
 >0 & null : number
->0 : number
+>0 : 0
 >null : null
 
 var rh8 = E.b & null;
 >rh8 : number
 >E.b & null : number
->E.b : E
+>E.b : E.b
 >E : typeof E
->b : E
+>b : E.b
 >null : null
 
 // operator ^
@@ -459,15 +459,15 @@ var ri3 = null ^ 1;
 >ri3 : number
 >null ^ 1 : number
 >null : null
->1 : number
+>1 : 1
 
 var ri4 = null ^ E.a;
 >ri4 : number
 >null ^ E.a : number
 >null : null
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 
 var ri5 = a ^ null;
 >ri5 : number
@@ -484,15 +484,15 @@ var ri6 = b ^ null;
 var ri7 = 0 ^ null;
 >ri7 : number
 >0 ^ null : number
->0 : number
+>0 : 0
 >null : null
 
 var ri8 = E.b ^ null;
 >ri8 : number
 >E.b ^ null : number
->E.b : E
+>E.b : E.b
 >E : typeof E
->b : E
+>b : E.b
 >null : null
 
 // operator |
@@ -512,15 +512,15 @@ var rj3 = null | 1;
 >rj3 : number
 >null | 1 : number
 >null : null
->1 : number
+>1 : 1
 
 var rj4 = null | E.a;
 >rj4 : number
 >null | E.a : number
 >null : null
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 
 var rj5 = a | null;
 >rj5 : number
@@ -537,14 +537,14 @@ var rj6 = b | null;
 var rj7 = 0 | null;
 >rj7 : number
 >0 | null : number
->0 : number
+>0 : 0
 >null : null
 
 var rj8 = E.b | null;
 >rj8 : number
 >E.b | null : number
->E.b : E
+>E.b : E.b
 >E : typeof E
->b : E
+>b : E.b
 >null : null
 

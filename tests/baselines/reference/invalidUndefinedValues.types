@@ -4,19 +4,19 @@ var x: typeof undefined;
 >undefined : undefined
 
 x = 1;
->x = 1 : number
+>x = 1 : 1
 >x : any
->1 : number
+>1 : 1
 
 x = '';
->x = '' : string
+>x = '' : ""
 >x : any
->'' : string
+>'' : ""
 
 x = true;
->x = true : boolean
+>x = true : true
 >x : any
->true : boolean
+>true : true
 
 var a: void;
 >a : void
@@ -65,7 +65,7 @@ x = c;
 module M { export var x = 1; }
 >M : typeof M
 >x : number
->1 : number
+>1 : 1
 
 x = M;
 >x = M : typeof M

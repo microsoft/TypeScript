@@ -11,7 +11,7 @@ var a2 = undefined;
 var a3 = void 0;
 >a3 : undefined
 >void 0 : undefined
->0 : number
+>0 : 0
 
 var b1 = [];
 >b1 : never[]

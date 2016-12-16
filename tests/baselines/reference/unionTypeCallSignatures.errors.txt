@@ -1,28 +1,28 @@
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(9,43): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(10,29): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(15,29): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(9,43): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(10,29): error TS2345: Argument of type 'true' is not assignable to parameter of type 'string'.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(15,29): error TS2345: Argument of type 'true' is not assignable to parameter of type 'string'.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(16,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(19,1): error TS2349: Cannot invoke an expression whose type lacks a call signature.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(20,1): error TS2349: Cannot invoke an expression whose type lacks a call signature.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(21,1): error TS2349: Cannot invoke an expression whose type lacks a call signature.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(19,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: number) => number) | ((a: string) => Date)' has no compatible call signatures.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(20,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: number) => number) | ((a: string) => Date)' has no compatible call signatures.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(21,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: number) => number) | ((a: string) => Date)' has no compatible call signatures.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(24,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(26,36): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(29,1): error TS2349: Cannot invoke an expression whose type lacks a call signature.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(30,1): error TS2349: Cannot invoke an expression whose type lacks a call signature.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(31,1): error TS2349: Cannot invoke an expression whose type lacks a call signature.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(36,49): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(26,36): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(29,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: string) => string) | ((a: string, b: number) => number)' has no compatible call signatures.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(30,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: string) => string) | ((a: string, b: number) => number)' has no compatible call signatures.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(31,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: string) => string) | ((a: string, b: number) => number)' has no compatible call signatures.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(36,49): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(37,12): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(40,12): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(42,49): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(42,49): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(43,12): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(47,12): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(48,12): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(49,12): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(55,45): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(55,45): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(56,12): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(59,12): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(61,12): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(62,45): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(62,45): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(63,12): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(67,12): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(68,12): error TS2346: Supplied parameters do not match any signature of call target.
@@ -42,17 +42,17 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(73,12): error TS2
     numOrDate = unionOfDifferentReturnType(10);
     strOrBoolean = unionOfDifferentReturnType("hello"); // error 
                                               ~~~~~~~
-!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
     unionOfDifferentReturnType1(true); // error in type of parameter
                                 ~~~~
-!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'true' is not assignable to parameter of type 'string'.
     
     var unionOfDifferentReturnType1: { (a: number): number; (a: string): string; } | { (a: number): Date; (a: string): boolean; };
     numOrDate = unionOfDifferentReturnType1(10);
     strOrBoolean = unionOfDifferentReturnType1("hello");
     unionOfDifferentReturnType1(true); // error in type of parameter
                                 ~~~~
-!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'true' is not assignable to parameter of type 'string'.
     unionOfDifferentReturnType1(); // error missing parameter
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2346: Supplied parameters do not match any signature of call target.
@@ -60,13 +60,13 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(73,12): error TS2
     var unionOfDifferentParameterTypes: { (a: number): number; } | { (a: string): Date; };
     unionOfDifferentParameterTypes(10);// error - no call signatures
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: number) => number) | ((a: string) => Date)' has no compatible call signatures.
     unionOfDifferentParameterTypes("hello");// error - no call signatures
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: number) => number) | ((a: string) => Date)' has no compatible call signatures.
     unionOfDifferentParameterTypes();// error - no call signatures
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: number) => number) | ((a: string) => Date)' has no compatible call signatures.
     
     var unionOfDifferentNumberOfSignatures: { (a: number): number; } | { (a: number): Date; (a: string): boolean; };
     unionOfDifferentNumberOfSignatures(); // error - no call signatures
@@ -75,25 +75,25 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(73,12): error TS2
     unionOfDifferentNumberOfSignatures(10); // error - no call signatures
     unionOfDifferentNumberOfSignatures("hello"); // error - no call signatures
                                        ~~~~~~~
-!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
     
     var unionWithDifferentParameterCount: { (a: string): string; } | { (a: string, b: number): number; } ;
     unionWithDifferentParameterCount();// no  call signature
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: string) => string) | ((a: string, b: number) => number)' has no compatible call signatures.
     unionWithDifferentParameterCount("hello");// no  call signature
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: string) => string) | ((a: string, b: number) => number)' has no compatible call signatures.
     unionWithDifferentParameterCount("hello", 10);// no  call signature
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: string) => string) | ((a: string, b: number) => number)' has no compatible call signatures.
     
     var unionWithOptionalParameter1: { (a: string, b?: number): string; } | { (a: string, b?: number): number; };
     strOrNum = unionWithOptionalParameter1('hello');
     strOrNum = unionWithOptionalParameter1('hello', 10);
     strOrNum = unionWithOptionalParameter1('hello', "hello"); // error in parameter type
                                                     ~~~~~~~
-!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
     strOrNum = unionWithOptionalParameter1(); // error
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2346: Supplied parameters do not match any signature of call target.
@@ -105,7 +105,7 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(73,12): error TS2
     strOrNum = unionWithOptionalParameter2('hello', 10); // error no call signature
     strOrNum = unionWithOptionalParameter2('hello', "hello"); // error no call signature
                                                     ~~~~~~~
-!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
     strOrNum = unionWithOptionalParameter2(); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2346: Supplied parameters do not match any signature of call target.
@@ -128,7 +128,7 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(73,12): error TS2
     strOrNum = unionWithRestParameter1('hello', 10, 11);
     strOrNum = unionWithRestParameter1('hello', "hello"); // error in parameter type
                                                 ~~~~~~~
-!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
     strOrNum = unionWithRestParameter1(); // error
                ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2346: Supplied parameters do not match any signature of call target.
@@ -143,7 +143,7 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(73,12): error TS2
 !!! error TS2346: Supplied parameters do not match any signature of call target.
     strOrNum = unionWithRestParameter2('hello', "hello"); // error no call signature
                                                 ~~~~~~~
-!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
     strOrNum = unionWithRestParameter2(); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2346: Supplied parameters do not match any signature of call target.

@@ -32,7 +32,7 @@ var EventBase = (function () {
 var StringEvent = (function (_super) {
     __extends(StringEvent, _super);
     function StringEvent() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     StringEvent.prototype.add = function (listener) {
         _super.prototype.add.call(this, listener);

@@ -30,13 +30,12 @@ var Base = (function () {
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     C.prototype.foo = function () {
         var obj = (_a = {},
             _a[_super.prototype.bar.call(this)] = function () { },
-            _a
-        );
+            _a);
         return 0;
         var _a;
     };

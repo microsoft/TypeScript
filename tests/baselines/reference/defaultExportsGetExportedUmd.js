@@ -8,14 +8,14 @@ export default function foo() {}
 
 
 //// [a.js]
-(function (factory) {
+(function (dependencies, factory) {
     if (typeof module === 'object' && typeof module.exports === 'object') {
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define(["require", "exports"], factory);
+        define(dependencies, factory);
     }
-})(function (require, exports) {
+})(["require", "exports"], function (require, exports) {
     "use strict";
     class Foo {
     }
@@ -23,14 +23,14 @@ export default function foo() {}
     exports.default = Foo;
 });
 //// [b.js]
-(function (factory) {
+(function (dependencies, factory) {
     if (typeof module === 'object' && typeof module.exports === 'object') {
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define(["require", "exports"], factory);
+        define(dependencies, factory);
     }
-})(function (require, exports) {
+})(["require", "exports"], function (require, exports) {
     "use strict";
     function foo() { }
     Object.defineProperty(exports, "__esModule", { value: true });

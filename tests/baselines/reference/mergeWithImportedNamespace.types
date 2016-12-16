@@ -2,7 +2,7 @@
 export namespace N { export var x = 1; }
 >N : typeof N
 >x : number
->1 : number
+>1 : 1
 
 === tests/cases/compiler/f2.ts ===
 import {N} from "./f1";

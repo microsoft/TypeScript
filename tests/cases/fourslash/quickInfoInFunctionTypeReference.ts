@@ -4,11 +4,7 @@
 ////}
 ////var x = <{ (fn: (va/*2*/riable2: string) => void, a: string): void; }> () => { };
 
-// this line triggers a semantic/syntactic error check, remove line when 788570 is fixed
-edit.insert('');
-
-goTo.marker("1");
-verify.quickInfoIs("(parameter) variable1: string", undefined);
-
-goTo.marker("2");
-verify.quickInfoIs("(parameter) variable2: string", undefined);
+verify.quickInfos({
+    1: "(parameter) variable1: string",
+    2: "(parameter) variable2: string"
+});

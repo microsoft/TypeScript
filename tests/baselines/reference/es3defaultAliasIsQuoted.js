@@ -19,9 +19,9 @@ assert(Foo.CONSTANT === "Foo");
 var Foo = (function () {
     function Foo() {
     }
-    Foo.CONSTANT = "Foo";
     return Foo;
 }());
+Foo.CONSTANT = "Foo";
 exports.Foo = Foo;
 function assert(value) {
     if (!value)

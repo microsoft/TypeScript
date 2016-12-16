@@ -13,8 +13,12 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
+
+
 /// <reference no-default-lib="true"/>
-/// <reference path="lib.dom.generated.d.ts" />
+
+
+/// <reference path="lib.dom.d.ts" />
 
 interface DOMTokenList {
     [Symbol.iterator](): IterableIterator<string>;

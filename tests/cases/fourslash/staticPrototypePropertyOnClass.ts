@@ -19,11 +19,9 @@
 ////c3./*3*/prototype;
 ////c4./*4*/prototype;
 
-goTo.marker('1');
-verify.quickInfoIs("(property) c1.prototype: c1");
-goTo.marker('2');
-verify.quickInfoIs("(property) c2<T>.prototype: c2<any>");
-goTo.marker('3');
-verify.quickInfoIs("(property) c3.prototype: c3");
-goTo.marker('4');
-verify.quickInfoIs("(property) c4.prototype: c4");
+verify.quickInfos({
+    1: "(property) c1.prototype: c1",
+    2: "(property) c2<T>.prototype: c2<any>",
+    3: "(property) c3.prototype: c3",
+    4: "(property) c4.prototype: c4"
+});

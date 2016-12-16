@@ -14,7 +14,7 @@ var fra2: (v:any)=>number = function() { return function () { return 0; } }() //
 >function() { return function () { return 0; } }() : () => number
 >function() { return function () { return 0; } } : () => () => number
 >function () { return 0; } : () => number
->0 : number
+>0 : 0
 
 var fra3: (v:any)=>string = function() { return function() { return function(v) {return v;};}(); }() // should work
 >fra3 : (v: any) => string

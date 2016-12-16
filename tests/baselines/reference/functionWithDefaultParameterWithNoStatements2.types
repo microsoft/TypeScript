@@ -2,5 +2,5 @@
 function foo(x = 0) {
 >foo : (x?: number) => void
 >x : number
->0 : number
+>0 : 0
 }

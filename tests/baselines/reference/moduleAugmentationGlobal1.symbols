@@ -10,7 +10,7 @@ import {A} from "./f1";
 
 // change the shape of Array<T>
 declare global {
->global : Symbol(, Decl(f2.ts, 0, 23))
+>global : Symbol(global, Decl(f2.ts, 0, 23))
 
     interface Array<T> {
 >Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(f2.ts, 3, 16))

@@ -2,10 +2,10 @@
 
 declare module "file1" {
     class foo {}
->foo : Symbol(, Decl(file1.d.ts, 1, 24), Decl(file1.d.ts, 2, 16), Decl(file2.ts, 2, 8))
+>foo : Symbol(foo, Decl(file1.d.ts, 1, 24), Decl(file1.d.ts, 2, 16), Decl(file2.ts, 2, 8))
 
     namespace foo {
->foo : Symbol(, Decl(file1.d.ts, 1, 24), Decl(file1.d.ts, 2, 16), Decl(file2.ts, 2, 8))
+>foo : Symbol(foo, Decl(file1.d.ts, 1, 24), Decl(file1.d.ts, 2, 16), Decl(file2.ts, 2, 8))
 
         export var v: number;
 >v : Symbol(v, Decl(file1.d.ts, 4, 18))

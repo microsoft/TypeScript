@@ -17,22 +17,22 @@ function f(x: number, y: number, z: number) {
 f(1, 2, 3);   // no error
 >f(1, 2, 3) : any[]
 >f : (x: number, y: number, z: number) => any[]
->1 : number
->2 : number
->3 : number
+>1 : 1
+>2 : 2
+>3 : 3
 
 let a = ['c', 'd'];
 >a : string[]
 >['c', 'd'] : string[]
->'c' : string
->'d' : string
+>'c' : "c"
+>'d' : "d"
 
 a[Symbol.isConcatSpreadable] = false;
->a[Symbol.isConcatSpreadable] = false : boolean
+>a[Symbol.isConcatSpreadable] = false : false
 >a[Symbol.isConcatSpreadable] : any
 >a : string[]
 >Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
 >isConcatSpreadable : symbol
->false : boolean
+>false : false
 

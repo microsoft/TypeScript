@@ -13,7 +13,11 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
+
+
 /// <reference no-default-lib="true"/>
+
+
 /// <reference path="lib.es2015.symbol.d.ts" />
 
 interface SymbolConstructor {
@@ -77,6 +81,26 @@ interface ArrayConstructor {
       * @param iterable An iterable object to convert to an array.
       */
     from<T>(iterable: Iterable<T>): Array<T>;
+}
+
+interface ReadonlyArray<T> {
+    /** Iterator */
+    [Symbol.iterator](): IterableIterator<T>;
+
+    /** 
+      * Returns an array of key, value pairs for every entry in the array
+      */
+    entries(): IterableIterator<[number, T]>;
+
+    /** 
+      * Returns an list of keys in the array
+      */
+    keys(): IterableIterator<number>;
+
+    /** 
+      * Returns an list of values in the array
+      */
+    values(): IterableIterator<T>;
 }
 
 interface IArguments {

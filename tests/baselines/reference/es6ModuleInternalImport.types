@@ -4,7 +4,7 @@ export module m {
 
     export var a = 10;
 >a : number
->10 : number
+>10 : 10
 }
 export import a1 = m.a;
 >a1 : number

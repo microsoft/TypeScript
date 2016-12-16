@@ -2,5 +2,5 @@
 
 // Test
 if (true) {
->true : boolean
+>true : true
 }

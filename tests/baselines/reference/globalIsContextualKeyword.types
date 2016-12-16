@@ -4,7 +4,7 @@ function a() {
 
     let global = 1;
 >global : number
->1 : number
+>1 : 1
 }
 function b() {
 >b : () => void
@@ -28,5 +28,5 @@ let obj = {
 
     global: "123"
 >global : string
->"123" : string
+>"123" : "123"
 }

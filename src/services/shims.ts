@@ -16,7 +16,7 @@
 /// <reference path='services.ts' />
 
 /* @internal */
-let debugObjectHost = new Function("return this")();
+let debugObjectHost = (function (this: any) { return this; })();
 
 // We need to use 'null' to interface with the managed side.
 /* tslint:disable:no-null-keyword */
@@ -67,6 +67,11 @@ namespace ts {
         getProjectVersion?(): string;
         useCaseSensitiveFileNames?(): boolean;
 
+        getTypeRootsVersion?(): number;
+        readDirectory(rootDir: string, extension: string, basePaths?: string, excludeEx?: string, includeFileEx?: string, includeDirEx?: string, depth?: number): string;
+        readFile(path: string, encoding?: string): string;
+        fileExists(path: string): boolean;
+
         getModuleResolutionsForFile?(fileName: string): string;
         getTypeReferenceDirectiveResolutionsForFile?(fileName: string): string;
         directoryExists(directoryName: string): boolean;
@@ -114,13 +119,13 @@ namespace ts {
     }
 
     export interface Shim {
-        dispose(dummy: any): void;
+        dispose(_dummy: any): void;
     }
 
     export interface LanguageServiceShim extends Shim {
         languageService: LanguageService;
 
-        dispose(dummy: any): void;
+        dispose(_dummy: any): void;
 
         refresh(throwOnError: boolean): void;
 
@@ -175,6 +180,12 @@ namespace ts {
 
         /**
          * Returns a JSON-encoded value of the type:
+         * { fileName: string; textSpan: { start: number; length: number}; }[]
+         */
+        getImplementationAtPosition(fileName: string, position: number): string;
+
+        /**
+         * Returns a JSON-encoded value of the type:
          * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean, isDefinition?: boolean }[]
          */
         getReferencesAtPosition(fileName: string, position: number): string;
@@ -205,13 +216,16 @@ namespace ts {
          * Returns a JSON-encoded value of the type:
          * { name: string; kind: string; kindModifiers: string; containerName: string; containerKind: string; matchKind: string; fileName: string; textSpan: { start: number; length: number}; } [] = [];
          */
-        getNavigateToItems(searchValue: string, maxResultCount?: number): string;
+        getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string): string;
 
         /**
          * Returns a JSON-encoded value of the type:
          * { text: string; kind: string; kindModifiers: string; bolded: boolean; grayed: boolean; indent: number; spans: { start: number; length: number; }[]; childItems: <recursive use of this type>[] } [] = [];
          */
         getNavigationBarItems(fileName: string): string;
+
+        /** Returns a JSON-encoded value of the type ts.NavigationTree. */
+        getNavigationTree(fileName: string): string;
 
         /**
          * Returns a JSON-encoded value of the type:
@@ -302,7 +316,7 @@ namespace ts {
         private loggingEnabled = false;
         private tracingEnabled = false;
 
-        public resolveModuleNames: (moduleName: string[], containingFile: string) => ResolvedModule[];
+        public resolveModuleNames: (moduleName: string[], containingFile: string) => ResolvedModuleFull[];
         public resolveTypeReferenceDirectives: (typeDirectiveNames: string[], containingFile: string) => ResolvedTypeReferenceDirective[];
         public directoryExists: (directoryName: string) => boolean;
 
@@ -314,7 +328,7 @@ namespace ts {
                     const resolutionsInFile = <MapLike<string>>JSON.parse(this.shimHost.getModuleResolutionsForFile(containingFile));
                     return map(moduleNames, name => {
                         const result = getProperty(resolutionsInFile, name);
-                        return result ? { resolvedFileName: result } : undefined;
+                        return result ? { resolvedFileName: result, extension: extensionFromPath(result), isExternalLibraryImport: false } : undefined;
                     });
                 };
             }
@@ -352,6 +366,13 @@ namespace ts {
             }
 
             return this.shimHost.getProjectVersion();
+        }
+
+        public getTypeRootsVersion(): number {
+            if (!this.shimHost.getTypeRootsVersion) {
+                return 0;
+            }
+            return this.shimHost.getTypeRootsVersion();
         }
 
         public useCaseSensitiveFileNames(): boolean {
@@ -421,6 +442,28 @@ namespace ts {
         public getDefaultLibFileName(options: CompilerOptions): string {
             return this.shimHost.getDefaultLibFileName(JSON.stringify(options));
         }
+
+        public readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[], depth?: number): string[] {
+            const pattern = getFileMatcherPatterns(path, exclude, include,
+                this.shimHost.useCaseSensitiveFileNames(), this.shimHost.getCurrentDirectory());
+            return JSON.parse(this.shimHost.readDirectory(
+                path,
+                JSON.stringify(extensions),
+                JSON.stringify(pattern.basePaths),
+                pattern.excludePattern,
+                pattern.includeFilePattern,
+                pattern.includeDirectoryPattern,
+                depth
+            ));
+        }
+
+        public readFile(path: string, encoding?: string): string {
+            return this.shimHost.readFile(path, encoding);
+        }
+
+        public fileExists(path: string): boolean {
+            return this.shimHost.fileExists(path);
+        }
     }
 
     /** A cancellation that throttles calls to the host */
@@ -466,7 +509,7 @@ namespace ts {
             // Wrap the API changes for 2.0 release. This try/catch
             // should be removed once TypeScript 2.0 has shipped.
             try {
-                const pattern = getFileMatcherPatterns(rootDir, extensions, exclude, include,
+                const pattern = getFileMatcherPatterns(rootDir, exclude, include,
                     this.shimHost.useCaseSensitiveFileNames(), this.shimHost.getCurrentDirectory());
                 return JSON.parse(this.shimHost.readDirectory(
                     rootDir,
@@ -557,7 +600,7 @@ namespace ts {
         constructor(private factory: ShimFactory) {
             factory.registerShim(this);
         }
-        public dispose(dummy: any): void {
+        public dispose(_dummy: any): void {
             this.factory.unregisterShim(this);
         }
     }
@@ -772,6 +815,19 @@ namespace ts {
             );
         }
 
+        /// GOTO Implementation
+
+        /**
+         * Computes the implementation location of the symbol
+         * at the requested position.
+         */
+        public getImplementationAtPosition(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                `getImplementationAtPosition('${fileName}', ${position})`,
+                () => this.languageService.getImplementationAtPosition(fileName, position)
+            );
+        }
+
         public getRenameInfo(fileName: string, position: number): string {
             return this.forwardJSONCall(
                 `getRenameInfo('${fileName}', ${position})`,
@@ -904,10 +960,10 @@ namespace ts {
         /// NAVIGATE TO
 
         /** Return a list of symbols that are interesting to navigate to */
-        public getNavigateToItems(searchValue: string, maxResultCount?: number): string {
+        public getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string): string {
             return this.forwardJSONCall(
-                `getNavigateToItems('${searchValue}', ${maxResultCount})`,
-                () => this.languageService.getNavigateToItems(searchValue, maxResultCount)
+                `getNavigateToItems('${searchValue}', ${maxResultCount}, ${fileName})`,
+                () => this.languageService.getNavigateToItems(searchValue, maxResultCount, fileName)
             );
         }
 
@@ -915,6 +971,13 @@ namespace ts {
             return this.forwardJSONCall(
                 `getNavigationBarItems('${fileName}')`,
                 () => this.languageService.getNavigationBarItems(fileName)
+            );
+        }
+
+        public getNavigationTree(fileName: string): string {
+            return this.forwardJSONCall(
+                `getNavigationTree('${fileName}')`,
+                () => this.languageService.getNavigationTree(fileName)
             );
         }
 
@@ -997,8 +1060,15 @@ namespace ts {
             return this.forwardJSONCall(`resolveModuleName('${fileName}')`, () => {
                 const compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
                 const result = resolveModuleName(moduleName, normalizeSlashes(fileName), compilerOptions, this.host);
+                const resolvedFileName = result.resolvedModule ? result.resolvedModule.resolvedFileName : undefined;
+                if (resolvedFileName && !compilerOptions.allowJs && fileExtensionIs(resolvedFileName, ".js")) {
+                    return {
+                        resolvedFileName: undefined,
+                        failedLookupLocations: []
+                    };
+                }
                 return {
-                    resolvedFileName: result.resolvedModule ? result.resolvedModule.resolvedFileName : undefined,
+                    resolvedFileName,
                     failedLookupLocations: result.failedLookupLocations
                 };
             });
@@ -1068,7 +1138,7 @@ namespace ts {
                     if (result.error) {
                         return {
                             options: {},
-                            typingOptions: {},
+                            typeAcquisition: {},
                             files: [],
                             raw: {},
                             errors: [realizeDiagnostic(result.error, "\r\n")]
@@ -1080,7 +1150,7 @@ namespace ts {
 
                     return {
                         options: configFile.options,
-                        typingOptions: configFile.typingOptions,
+                        typeAcquisition: configFile.typeAcquisition,
                         files: configFile.fileNames,
                         raw: configFile.raw,
                         errors: realizeDiagnostics(configFile.errors, "\r\n")
@@ -1105,8 +1175,8 @@ namespace ts {
                     toPath(info.projectRootPath, info.projectRootPath, getCanonicalFileName),
                     toPath(info.safeListPath, info.safeListPath, getCanonicalFileName),
                     info.packageNameToTypingLocation,
-                    info.typingOptions,
-                    info.compilerOptions);
+                    info.typeAcquisition,
+                    info.unresolvedImports);
             });
         }
     }
@@ -1198,11 +1268,8 @@ namespace TypeScript.Services {
     export const TypeScriptServicesFactory = ts.TypeScriptServicesFactory;
 }
 
-/* tslint:disable:no-unused-variable */
 // 'toolsVersion' gets consumed by the managed side, so it's not unused.
 // TODO: it should be moved into a namespace though.
 
 /* @internal */
-const toolsVersion = "2.1";
-
-/* tslint:enable:no-unused-variable */
+const toolsVersion = "2.2";

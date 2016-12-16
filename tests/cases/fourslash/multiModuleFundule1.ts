@@ -17,15 +17,13 @@ goTo.marker('1');
 verify.completionListContains('C');
 edit.insert('C.x);');
 
-goTo.marker('2');
-verify.quickInfoIs('var r: void');
+verify.quickInfoAt("2", "var r: void");
 
 goTo.marker('3');
 verify.completionListContains('C');
 edit.insert('C.x);');
 
-goTo.marker('4');
-verify.quickInfoIs('var r2: any');
+verify.quickInfoAt("4", "var r2: any");
 
 goTo.marker('5');
 verify.completionListContains('x');

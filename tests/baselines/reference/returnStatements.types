@@ -2,11 +2,11 @@
 // all the following should be valid
 function fn1(): number { return 1; }
 >fn1 : () => number
->1 : number
+>1 : 1
 
 function fn2(): string { return ''; }
 >fn2 : () => string
->'' : string
+>'' : ""
 
 function fn3(): void { return undefined; }
 >fn3 : () => void
@@ -17,14 +17,14 @@ function fn4(): void { return; }
 
 function fn5(): boolean { return true; }
 >fn5 : () => boolean
->true : boolean
+>true : true
 
 function fn6(): Date { return new Date(12); }
 >fn6 : () => Date
 >Date : Date
 >new Date(12) : Date
 >Date : DateConstructor
->12 : number
+>12 : 12
 
 function fn7(): any { return null; }
 >fn7 : () => any
@@ -59,7 +59,7 @@ function fn10(): I { return { id: 12 }; }
 >I : I
 >{ id: 12 } : { id: number; }
 >id : number
->12 : number
+>12 : 12
 
 function fn11(): I { return new C(); }
 >fn11 : () => I

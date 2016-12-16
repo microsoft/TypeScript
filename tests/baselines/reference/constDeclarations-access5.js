@@ -54,7 +54,7 @@ define(["require", "exports"], function (require, exports) {
     exports.x = 0;
 });
 //// [constDeclarations_access_2.js]
-define(["require", "exports", 'constDeclarations_access_1'], function (require, exports, m) {
+define(["require", "exports", "constDeclarations_access_1"], function (require, exports, m) {
     "use strict";
     // Errors
     m.x = 1;

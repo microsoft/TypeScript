@@ -79,6 +79,7 @@ namespace RWC {
                             useCaseSensitiveFileNames: Harness.IO.useCaseSensitiveFileNames(),
                             fileExists: Harness.IO.fileExists,
                             readDirectory: Harness.IO.readDirectory,
+                            readFile: Harness.IO.readFile
                         };
                         const configParseResult = ts.parseJsonConfigFileContent(parsedTsconfigFileContents.config, configParseHost, ts.getDirectoryPath(tsconfigFile.path));
                         fileNames = configParseResult.fileNames;
@@ -198,7 +199,7 @@ namespace RWC {
                     }
                     // Do not include the library in the baselines to avoid noise
                     const baselineFiles = inputFiles.concat(otherFiles).filter(f => !Harness.isDefaultLibraryFile(f.unitName));
-                    const errors = compilerResult.errors.filter(e => !Harness.isDefaultLibraryFile(e.file.fileName));
+                    const errors = compilerResult.errors.filter(e => e.file && !Harness.isDefaultLibraryFile(e.file.fileName));
                     return Harness.Compiler.getErrorBaseline(baselineFiles, errors);
                 }, baselineOpts);
             });
@@ -223,7 +224,8 @@ namespace RWC {
             });
 
             it("has the expected types", () => {
-                Harness.Compiler.doTypeAndSymbolBaseline(`${baseName}.types`, compilerResult, inputFiles
+                // We don't need to pass the extension here because "doTypeAndSymbolBaseline" will append appropriate extension of ".types" or ".symbols"
+                Harness.Compiler.doTypeAndSymbolBaseline(baseName, compilerResult, inputFiles
                     .concat(otherFiles)
                     .filter(file => !!compilerResult.program.getSourceFile(file.unitName))
                     .filter(e => !Harness.isDefaultLibraryFile(e.unitName)), baselineOpts);

@@ -5,7 +5,7 @@ var symbol = Symbol.for('myThing');
 >Symbol.for : (key: string) => symbol
 >Symbol : SymbolConstructor
 >for : (key: string) => symbol
->'myThing' : string
+>'myThing' : "myThing"
 
 class Foo {
 >Foo : Foo
@@ -14,7 +14,7 @@ class Foo {
 >symbol : symbol
 
         return 0;
->0 : number
+>0 : 0
     }
 }
 

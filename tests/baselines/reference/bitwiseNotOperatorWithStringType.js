@@ -1,4 +1,5 @@
 //// [bitwiseNotOperatorWithStringType.ts]
+
 // ~ operator on string type
 var STRING: string;
 var STRING1: string[] = ["", "abc"];

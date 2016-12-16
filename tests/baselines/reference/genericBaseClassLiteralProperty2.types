@@ -38,7 +38,7 @@ class DataView2 extends BaseCollection2<CollectionItem2> {
 >this._itemsByKey : { [key: string]: CollectionItem2; }
 >this : this
 >_itemsByKey : { [key: string]: CollectionItem2; }
->'dummy' : string
+>'dummy' : "dummy"
 >item : CollectionItem2
     }
 }

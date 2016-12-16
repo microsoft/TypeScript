@@ -6,7 +6,7 @@ var foo = [
     { name: 'bar' },
 >{ name: 'bar' } : { name: string; }
 >name : string
->'bar' : string
+>'bar' : "bar"
 
     { name: null },
 >{ name: null } : { name: null; }
@@ -16,7 +16,7 @@ var foo = [
     { name: 'baz' }
 >{ name: 'baz' } : { name: string; }
 >name : string
->'baz' : string
+>'baz' : "baz"
 
 ]
 

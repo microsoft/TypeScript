@@ -7,20 +7,20 @@ var v = {
 >f : (a: any) => number
 >a => 0 : (a: any) => number
 >a : any
->0 : number
+>0 : 0
 
     g: (a => 0) /*t2*/,
 >g : (a: any) => number
 >(a => 0) : (a: any) => number
 >a => 0 : (a: any) => number
 >a : any
->0 : number
+>0 : 0
 
     h: (a => 0 /*t3*/)
 >h : (a: any) => number
 >(a => 0 /*t3*/) : (a: any) => number
 >a => 0 : (a: any) => number
 >a : any
->0 : number
+>0 : 0
 }
 

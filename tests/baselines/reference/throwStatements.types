@@ -40,7 +40,7 @@ class D<T>{
 function F(x: string): number { return 42; }
 >F : (x: string) => number
 >x : string
->42 : number
+>42 : 42
 
 module M {
 >M : typeof M
@@ -63,14 +63,14 @@ module M {
 
 var aNumber = 9.9;
 >aNumber : number
->9.9 : number
+>9.9 : 9.9
 
 throw aNumber;
 >aNumber : number
 
 var aString = 'this is a string';
 >aString : string
->'this is a string' : string
+>'this is a string' : "this is a string"
 
 throw aString;
 >aString : string
@@ -79,7 +79,7 @@ var aDate = new Date(12);
 >aDate : Date
 >new Date(12) : Date
 >Date : DateConstructor
->12 : number
+>12 : 12
 
 throw aDate;
 >aDate : Date
@@ -135,7 +135,7 @@ var anObjectLiteral = { id: 12 };
 >anObjectLiteral : { id: number; }
 >{ id: 12 } : { id: number; }
 >id : number
->12 : number
+>12 : 12
 
 throw anObjectLiteral;
 >anObjectLiteral : { id: number; }
@@ -150,13 +150,13 @@ throw aFunction;
 throw aFunction('');
 >aFunction('') : number
 >aFunction : (x: string) => number
->'' : string
+>'' : ""
 
 var aLambda = (x) => 2;
 >aLambda : (x: any) => number
 >(x) => 2 : (x: any) => number
 >x : any
->2 : number
+>2 : 2
 
 throw aLambda;
 >aLambda : (x: any) => number
@@ -164,7 +164,7 @@ throw aLambda;
 throw aLambda(1);
 >aLambda(1) : number
 >aLambda : (x: any) => number
->1 : number
+>1 : 1
 
 var aModule = M;
 >aModule : typeof M
@@ -205,10 +205,10 @@ throw x;
 
 // literals
 throw 0.0;
->0.0 : number
+>0.0 : 0
 
 throw false;
->false : boolean
+>false : false
 
 throw null;
 >null : null
@@ -217,34 +217,34 @@ throw undefined;
 >undefined : undefined
 
 throw 'a string';
->'a string' : string
+>'a string' : "a string"
 
 throw function () { return 'a string' };
 >function () { return 'a string' } : () => string
->'a string' : string
+>'a string' : "a string"
 
 throw <T>(x:T) => 42;
 ><T>(x:T) => 42 : <T>(x: T) => number
 >T : T
 >x : T
 >T : T
->42 : number
+>42 : 42
 
 throw { x: 12, y: 13 };
 >{ x: 12, y: 13 } : { x: number; y: number; }
 >x : number
->12 : number
+>12 : 12
 >y : number
->13 : number
+>13 : 13
 
 throw [];
 >[] : undefined[]
 
 throw ['a', ['b']];
 >['a', ['b']] : (string | string[])[]
->'a' : string
+>'a' : "a"
 >['b'] : string[]
->'b' : string
+>'b' : "b"
 
 throw /[a-z]/;
 >/[a-z]/ : RegExp

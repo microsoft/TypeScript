@@ -1,4 +1,4 @@
-tests/cases/conformance/types/specifyingTypes/typeQueries/typeofTypeParameter.ts(3,19): error TS2304: Cannot find name 'T'.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeofTypeParameter.ts(3,19): error TS2693: 'T' only refers to a type, but is being used as a value here.
 
 
 ==== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofTypeParameter.ts (1 errors) ====
@@ -6,6 +6,6 @@ tests/cases/conformance/types/specifyingTypes/typeQueries/typeofTypeParameter.ts
         var a: typeof x;
         var y: typeof T;
                       ~
-!!! error TS2304: Cannot find name 'T'.
+!!! error TS2693: 'T' only refers to a type, but is being used as a value here.
         return a;
     }

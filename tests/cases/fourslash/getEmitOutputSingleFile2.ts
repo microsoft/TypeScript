@@ -4,7 +4,7 @@
 // @module: CommonJS
 // @declaration: true
 // @out: declSingleFile.js
-// @outDir: tests/cases/fourslash/
+// @outDir: /tests/cases/fourslash/
 
 // @Filename: inputFile1.ts
 //// var x: number = 5;
