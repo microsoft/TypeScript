@@ -2290,7 +2290,7 @@ namespace ts {
             }
 
             startLexicalEnvironment();
-            let loopBody = visitNode(node.statement, visitor, isStatement);
+            let loopBody = visitNode(node.statement, visitor, isStatement, /*optional*/ false, liftToBlock);
             const lexicalEnvironment = endLexicalEnvironment();
 
             const currentState = convertedLoopState;
@@ -2305,7 +2305,10 @@ namespace ts {
                 loopBody = createBlock(statements, /*location*/ undefined, /*multiline*/ true);
             }
 
-            if (!isBlock(loopBody)) {
+            if (isBlock(loopBody)) {
+                loopBody.multiLine = true;
+            }
+            else {
                 loopBody = createBlock([loopBody], /*location*/ undefined, /*multiline*/ true);
             }
 
