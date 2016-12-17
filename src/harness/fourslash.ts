@@ -3524,11 +3524,11 @@ namespace FourSlashInterface {
             this.state.formatOnType(this.state.getMarkerByName(posMarker).position, key);
         }
 
-        public setOption(name: string, value: number): void;
-        public setOption(name: string, value: string): void;
-        public setOption(name: string, value: boolean): void;
-        public setOption(name: string, value: any): void {
-            (<any>this.state.formatCodeSettings)[name] = value;
+        public setOption(name: keyof ts.FormatCodeSettings, value: number): void;
+        public setOption(name: keyof ts.FormatCodeSettings, value: string): void;
+        public setOption(name: keyof ts.FormatCodeSettings, value: boolean): void;
+        public setOption(name: keyof ts.FormatCodeSettings, value: any): void {
+            this.state.formatCodeSettings[name] = value;
         }
 
         public getOption(name: keyof ts.FormatCodeSettings) {
