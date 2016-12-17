@@ -90,6 +90,7 @@ namespace ts.server {
             insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
             insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
             insertSpaceBeforeFunctionParenthesis: false,
+            indentInsideTernaryOperator: false,
             placeOpenBraceOnNewLineForFunctions: false,
             placeOpenBraceOnNewLineForControlBlocks: false,
         };

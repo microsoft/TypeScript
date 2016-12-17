@@ -303,7 +303,7 @@ namespace ts.formatting {
                 break;
             }
 
-            if (SmartIndenter.shouldIndentChildNode(n, child)) {
+            if (SmartIndenter.shouldIndentChildNode(n, options, child)) {
                 return options.indentSize;
             }
 
@@ -443,7 +443,7 @@ namespace ts.formatting {
             effectiveParentStartLine: number): Indentation {
 
             let indentation = inheritedIndentation;
-            let delta = SmartIndenter.shouldIndentChildNode(node) ? options.indentSize : 0;
+            let delta = SmartIndenter.shouldIndentChildNode(node, options) ? options.indentSize : 0;
 
             if (effectiveParentStartLine === startLine) {
                 // if node is located on the same line with the parent
@@ -547,7 +547,7 @@ namespace ts.formatting {
                 getIndentation: () => indentation,
                 getDelta: child => getEffectiveDelta(delta, child),
                 recomputeIndentation: lineAdded => {
-                    if (node.parent && SmartIndenter.shouldIndentChildNode(node.parent, node)) {
+                    if (node.parent && SmartIndenter.shouldIndentChildNode(node.parent, options, node)) {
                         if (lineAdded) {
                             indentation += options.indentSize;
                         }
@@ -555,7 +555,7 @@ namespace ts.formatting {
                             indentation -= options.indentSize;
                         }
 
-                        if (SmartIndenter.shouldIndentChildNode(node)) {
+                        if (SmartIndenter.shouldIndentChildNode(node, options)) {
                             delta = options.indentSize;
                         }
                         else {
@@ -567,7 +567,7 @@ namespace ts.formatting {
 
             function getEffectiveDelta(delta: number, child: TextRangeWithKind) {
                 // Delta value should be zero when the node explicitly prevents indentation of the child node
-                return SmartIndenter.nodeWillIndentChild(node, child, /*indentByDefault*/ true) ? delta : 0;
+                return SmartIndenter.nodeWillIndentChild(node, child, /*indentByDefault*/ true, options) ? delta : 0;
             }
         }
 

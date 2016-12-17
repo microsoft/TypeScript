@@ -20,7 +20,7 @@ namespace ts.formatting {
          * when inserting some text after open brace we would like to get the value of indentation as if newline was already there.
          * However by default indentation at position | will be 0 so 'assumeNewLineBeforeCloseBrace' allows to override this behavior,
          */
-        export function getIndentation(position: number, sourceFile: SourceFile, options: EditorSettings, assumeNewLineBeforeCloseBrace = false): number {
+        export function getIndentation(position: number, sourceFile: SourceFile, options: FormatCodeSettings, assumeNewLineBeforeCloseBrace = false): number {
             if (position > sourceFile.text.length) {
                 return getBaseIndentation(options); // past EOF
             }
@@ -80,7 +80,7 @@ namespace ts.formatting {
             let indentationDelta: number;
 
             while (current) {
-                if (positionBelongsToNode(current, position, sourceFile) && shouldIndentChildNode(current, previous)) {
+                if (positionBelongsToNode(current, position, sourceFile) && shouldIndentChildNode(current, options, previous)) {
                     currentStart = getStartLineAndCharacterForNode(current, sourceFile);
 
                     const nextTokenKind = nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken, current, lineAtPosition, sourceFile);
@@ -131,7 +131,7 @@ namespace ts.formatting {
             ignoreActualIndentationRange: TextRange,
             indentationDelta: number,
             sourceFile: SourceFile,
-            options: EditorSettings): number {
+            options: FormatCodeSettings): number {
 
             let parent: Node = current.parent;
             let parentStart: LineAndCharacter;
@@ -170,7 +170,7 @@ namespace ts.formatting {
                 }
 
                 // increase indentation if parent node wants its content to be indented and parent and child nodes don't start on the same line
-                if (shouldIndentChildNode(parent, current) && !parentAndChildShareLine) {
+                if (shouldIndentChildNode(parent, options, current) && !parentAndChildShareLine) {
                     indentationDelta += options.indentSize;
                 }
 
@@ -487,7 +487,7 @@ namespace ts.formatting {
         }
 
         /* @internal */
-        export function nodeWillIndentChild(parent: TextRangeWithKind, child: TextRangeWithKind, indentByDefault: boolean) {
+        export function nodeWillIndentChild(parent: TextRangeWithKind, child: TextRangeWithKind, indentByDefault: boolean, options: FormatCodeSettings) {
             const childKind = child ? child.kind : SyntaxKind.Unknown;
             switch (parent.kind) {
                 case SyntaxKind.DoStatement:
@@ -512,7 +512,7 @@ namespace ts.formatting {
                 case SyntaxKind.JsxElement:
                     return childKind !== SyntaxKind.JsxClosingElement;
                 case SyntaxKind.ConditionalExpression:
-                    return (parent as ConditionalExpression).whenFalse !== child;
+                    return options.indentInsideTernaryOperator || (parent as ConditionalExpression).whenFalse !== child;
             }
             // No explicit rule for given nodes so the result will follow the default value argument
             return indentByDefault;
@@ -521,8 +521,8 @@ namespace ts.formatting {
         /*
         Function returns true when the parent node should indent the given child by an explicit rule
         */
-        export function shouldIndentChildNode(parent: TextRangeWithKind, child?: TextRangeWithKind): boolean {
-            return nodeContentIsAlwaysIndented(parent.kind) || nodeWillIndentChild(parent, child, /*indentByDefault*/ false);
+        export function shouldIndentChildNode(parent: TextRangeWithKind, options: FormatCodeSettings, child?: TextRangeWithKind): boolean {
+            return nodeContentIsAlwaysIndented(parent.kind) || nodeWillIndentChild(parent, child, /*indentByDefault*/ false, options);
         }
     }
 }
