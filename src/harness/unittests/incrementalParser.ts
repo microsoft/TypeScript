@@ -28,7 +28,8 @@ namespace ts {
         const diagnostics2 = file2.parseDiagnostics;
 
         assert.equal(diagnostics1.length, diagnostics2.length, "diagnostics1.length !== diagnostics2.length");
-        for (let i = 0, n = diagnostics1.length; i < n; i++) {
+        const n = diagnostics1.length;
+        for (let i = 0; i < n; i++) {
             const d1 = diagnostics1[i];
             const d2 = diagnostics2[i];
 

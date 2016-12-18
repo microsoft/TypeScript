@@ -76,7 +76,8 @@ namespace ts.JsDoc {
      */
     function forEachUnique<T, U>(array: T[], callback: (element: T, index: number) => U): U {
         if (array) {
-            for (let i = 0, len = array.length; i < len; i++) {
+            const len = array.length;
+            for (let i = 0; i < len; i++) {
                 if (indexOf(array, array[i]) === i) {
                     const result = callback(array[i], i);
                     if (result) {
@@ -170,7 +171,8 @@ namespace ts.JsDoc {
         const isJavaScriptFile = hasJavaScriptFileExtension(sourceFile.fileName);
 
         let docParams = "";
-        for (let i = 0, numParams = parameters.length; i < numParams; i++) {
+        const numParams = parameters.length;
+        for (let i = 0; i < numParams; i++) {
             const currentName = parameters[i].name;
             const paramName = currentName.kind === SyntaxKind.Identifier ?
                 (<Identifier>currentName).text :

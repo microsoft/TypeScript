@@ -409,7 +409,8 @@ namespace ts.server {
     function parseLoggingEnvironmentString(logEnvStr: string): LogOptions {
         const logEnv: LogOptions = { logToFile: true };
         const args = logEnvStr.split(" ");
-        for (let i = 0, len = args.length; i < (len - 1); i += 2) {
+        const len = args.length;
+        for (let i = 0; i < (len - 1); i += 2) {
             const option = args[i];
             const value = args[i + 1];
             if (option && value) {

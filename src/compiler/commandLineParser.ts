@@ -620,7 +620,7 @@ namespace ts {
                                     break;
                                 case "boolean":
                                     // boolean flag has optional value true, false, others
-                                    let optValue = args[i];
+                                    const optValue = args[i];
                                     options[opt.name] = optValue !== "false";
                                     // consume next argument as boolean flag value
                                     if (optValue === "false" || optValue === "true") {
@@ -778,7 +778,7 @@ namespace ts {
                             break;
                         default:
                             const value = options[name];
-                            let optionDefinition = optionsNameMap[name.toLowerCase()];
+                            const optionDefinition = optionsNameMap[name.toLowerCase()];
                             if (optionDefinition) {
                                 const customTypeMap = getCustomTypeMapOfCommandLineOption(optionDefinition);
                                 if (!customTypeMap) {

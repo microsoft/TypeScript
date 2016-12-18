@@ -1678,8 +1678,8 @@ namespace ts {
                         // Method declarations are not necessarily reusable.  An object-literal
                         // may have a method calls "constructor(...)" and we must reparse that
                         // into an actual .ConstructorDeclaration.
-                        let methodDeclaration = <MethodDeclaration>node;
-                        let nameIsConstructor = methodDeclaration.name.kind === SyntaxKind.Identifier &&
+                        const methodDeclaration = <MethodDeclaration>node;
+                        const nameIsConstructor = methodDeclaration.name.kind === SyntaxKind.Identifier &&
                             (<Identifier>methodDeclaration.name).originalKeywordKind === SyntaxKind.ConstructorKeyword;
 
                         return !nameIsConstructor;
@@ -7404,7 +7404,8 @@ namespace ts {
                     if (position >= array.pos && position < array.end) {
                         // position was in this array.  Search through this array to see if we find a
                         // viable element.
-                        for (let i = 0, n = array.length; i < n; i++) {
+                        const n = array.length;
+                        for (let i = 0; i < n; i++) {
                             const child = array[i];
                             if (child) {
                                 if (child.pos === position) {

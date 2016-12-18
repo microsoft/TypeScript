@@ -1239,7 +1239,8 @@ namespace ts {
         }
 
         public unregisterShim(shim: Shim): void {
-            for (let i = 0, n = this._shims.length; i < n; i++) {
+            const n = this._shims.length;
+            for (let i = 0; i < n; i++) {
                 if (this._shims[i] === shim) {
                     delete this._shims[i];
                     return;

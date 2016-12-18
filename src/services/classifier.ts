@@ -71,7 +71,8 @@ namespace ts {
             const dense = classifications.spans;
             let lastEnd = 0;
 
-            for (let i = 0, n = dense.length; i < n; i += 3) {
+            const n = dense.length;
+            for (let i = 0; i < n; i += 3) {
                 const start = dense[i];
                 const length = dense[i + 1];
                 const type = <ClassificationType>dense[i + 2];
@@ -605,7 +606,9 @@ namespace ts {
         Debug.assert(classifications.spans.length % 3 === 0);
         const dense = classifications.spans;
         const result: ClassifiedSpan[] = [];
-        for (let i = 0, n = dense.length; i < n; i += 3) {
+
+        const n = dense.length;
+        for (let i = 0; i < n; i += 3) {
             result.push({
                 textSpan: createTextSpan(dense[i], dense[i + 1]),
                 classificationType: getClassificationTypeName(dense[i + 2])
@@ -972,9 +975,7 @@ namespace ts {
             if (decodedTextSpanIntersectsWith(spanStart, spanLength, element.pos, element.getFullWidth())) {
                 checkForClassificationCancellation(cancellationToken, element.kind);
 
-                const children = element.getChildren(sourceFile);
-                for (let i = 0, n = children.length; i < n; i++) {
-                    const child = children[i];
+                for (const child of element.getChildren(sourceFile)) {
                     if (!tryClassifyNode(child)) {
                         // Recurse into our child nodes.
                         processElement(child);

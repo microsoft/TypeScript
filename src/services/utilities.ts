@@ -675,8 +675,7 @@ namespace ts {
             }
 
             // find the child that contains 'position'
-            for (let i = 0, n = current.getChildCount(sourceFile); i < n; i++) {
-                const child = current.getChildAt(i);
+            for (const child of current.getChildren()) {
                 // all jsDocComment nodes were already visited
                 if (isJSDocNode(child)) {
                     continue;
@@ -766,7 +765,8 @@ namespace ts {
             }
 
             const children = n.getChildren();
-            for (let i = 0, len = children.length; i < len; i++) {
+            const len = children.length;
+            for (let i = 0; i < len; i++) {
                 const child = children[i];
                 // condition 'position < child.end' checks if child node end after the position
                 // in the example below this condition will be false for 'aaaa' and 'bbbb' and true for 'ccc'
