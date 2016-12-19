@@ -2781,6 +2781,7 @@ namespace ts {
         ContainsObjectLiteral   = 1 << 22,  // Type is or contains object literal type
         /* @internal */
         ContainsAnyFunctionType = 1 << 23,  // Type is or contains object literal type
+        NonPrimitive            = 1 << 24,  // intrinsic object type
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -2790,7 +2791,7 @@ namespace ts {
         DefinitelyFalsy = StringLiteral | NumberLiteral | BooleanLiteral | Void | Undefined | Null,
         PossiblyFalsy = DefinitelyFalsy | String | Number | Boolean,
         /* @internal */
-        Intrinsic = Any | String | Number | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never,
+        Intrinsic = Any | String | Number | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
         /* @internal */
         Primitive = String | Number | Boolean | Enum | ESSymbol | Void | Undefined | Null | Literal,
         StringLike = String | StringLiteral | Index,
@@ -2798,14 +2799,14 @@ namespace ts {
         BooleanLike = Boolean | BooleanLiteral,
         EnumLike = Enum | EnumLiteral,
         UnionOrIntersection = Union | Intersection,
-        StructuredType = Object | Union | Intersection,
+        StructuredType = Object | Union | Intersection | NonPrimitive,
         StructuredOrTypeParameter = StructuredType | TypeParameter | Index,
         TypeVariable = TypeParameter | IndexedAccess,
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
         Narrowable = Any | StructuredType | TypeParameter | Index | IndexedAccess | StringLike | NumberLike | BooleanLike | ESSymbol,
-        NotUnionOrUnit = Any | ESSymbol | Object,
+        NotUnionOrUnit = Any | ESSymbol | Object | NonPrimitive,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
         /* @internal */

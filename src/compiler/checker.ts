@@ -144,9 +144,9 @@ namespace ts {
         const voidType = createIntrinsicType(TypeFlags.Void, "void");
         const neverType = createIntrinsicType(TypeFlags.Never, "never");
         const silentNeverType = createIntrinsicType(TypeFlags.Never, "never");
+        const nonPrimitiveType = createIntrinsicType(TypeFlags.NonPrimitive, "object");
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
-        const nonPrimitiveType = createNonPrimitiveType();
 
         const emptyTypeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral | SymbolFlags.Transient, "__type");
         emptyTypeLiteralSymbol.members = createMap<Symbol>();
@@ -1685,13 +1685,6 @@ namespace ts {
             return type;
         }
 
-        function createNonPrimitiveType(): ResolvedType {
-            const type = setStructuredTypeMembers(
-                createObjectType(ObjectFlags.NonPrimitive, undefined),
-                emptySymbols, emptyArray, emptyArray, undefined, undefined);
-            return type;
-        }
-
         function createObjectType(objectFlags: ObjectFlags, symbol?: Symbol): ObjectType {
             const type = <ObjectType>createType(TypeFlags.Object);
             type.objectFlags = objectFlags;
@@ -2319,9 +2312,6 @@ namespace ts {
                     }
                     else if (type.flags & TypeFlags.UnionOrIntersection) {
                         writeUnionOrIntersectionType(<UnionOrIntersectionType>type, nextFlags);
-                    }
-                    else if (getObjectFlags(type) & ObjectFlags.NonPrimitive) {
-                        writer.writeKeyword("object");
                     }
                     else if (getObjectFlags(type) & (ObjectFlags.Anonymous | ObjectFlags.Mapped)) {
                         writeAnonymousType(<ObjectType>type, nextFlags);
@@ -4771,6 +4761,7 @@ namespace ts {
                 t.flags & TypeFlags.NumberLike ? globalNumberType :
                 t.flags & TypeFlags.BooleanLike ? globalBooleanType :
                 t.flags & TypeFlags.ESSymbol ? getGlobalESSymbolType() :
+                t.flags & TypeFlags.NonPrimitive ? globalObjectType :
                 t;
         }
 
@@ -7153,6 +7144,8 @@ namespace ts {
             if (source.flags & TypeFlags.Enum && target.flags & TypeFlags.Enum && isEnumTypeRelatedTo(<EnumType>source, <EnumType>target, errorReporter)) return true;
             if (source.flags & TypeFlags.Undefined && (!strictNullChecks || target.flags & (TypeFlags.Undefined | TypeFlags.Void))) return true;
             if (source.flags & TypeFlags.Null && (!strictNullChecks || target.flags & TypeFlags.Null)) return true;
+            if (source.flags & TypeFlags.Object && target === nonPrimitiveType) return true;
+            if (source.flags & TypeFlags.Primitive && target === nonPrimitiveType) return false;
             if (relation === assignableRelation || relation === comparableRelation) {
                 if (source.flags & TypeFlags.Any) return true;
                 if ((source.flags & TypeFlags.Number | source.flags & TypeFlags.NumberLiteral) && target.flags & TypeFlags.EnumLike) return true;
@@ -7471,7 +7464,7 @@ namespace ts {
                         }
                     }
                 }
-                else if (!(source.flags & TypeFlags.Primitive && target === nonPrimitiveType)) {
+                else {
                     if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
                         // We have type references to same target type, see if relationship holds for all type arguments
                         if (result = typeArgumentsRelatedTo(<TypeReference>source, <TypeReference>target, reportErrors)) {
@@ -9224,6 +9217,9 @@ namespace ts {
         }
 
         function getTypeFacts(type: Type): TypeFacts {
+            if (type === nonPrimitiveType) {
+                return strictNullChecks ? TypeFacts.ObjectStrictFacts : TypeFacts.ObjectFacts;
+            }
             const flags = type.flags;
             if (flags & TypeFlags.String) {
                 return strictNullChecks ? TypeFacts.StringStrictFacts : TypeFacts.StringFacts;
