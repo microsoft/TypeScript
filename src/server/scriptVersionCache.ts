@@ -113,8 +113,7 @@ namespace ts.server {
                 if (len > 1) {
                     let insertedNodes = <LineCollection[]>new Array(len - 1);
                     let startNode = <LineCollection>leafNode;
-                    const n = lines.length
-                    for (let i = 1; i < n; i++) {
+                    for (let i = 1; i < lines.length; i++) {
                         insertedNodes[i - 1] = new LineLeaf(lines[i]);
                     }
                     let pathIndex = this.startPath.length - 2;
@@ -470,8 +469,7 @@ namespace ts.server {
         load(lines: string[]) {
             if (lines.length > 0) {
                 const leaves: LineLeaf[] = [];
-                const len = lines.length;
-                for (let i = 0; i < len; i++) {
+                for (let i = 0; i < lines.length; i++) {
                     leaves[i] = new LineLeaf(lines[i]);
                 }
                 this.root = LineIndex.buildTreeFromBottom(leaves);

@@ -766,8 +766,7 @@ namespace ts {
             return false;
         }
 
-        const n = name.length;
-        for (let i = 1; i < n; i++) {
+        for (let i = 1; i < name.length; i++) {
             if (!isIdentifierPart(name.charCodeAt(i), languageVersion)) {
                 return false;
             }

@@ -765,8 +765,7 @@ namespace ts {
             }
 
             const children = n.getChildren();
-            const len = children.length;
-            for (let i = 0; i < len; i++) {
+            for (let i = 0; i < children.length; i++) {
                 const child = children[i];
                 // condition 'position < child.end' checks if child node end after the position
                 // in the example below this condition will be false for 'aaaa' and 'bbbb' and true for 'ccc'

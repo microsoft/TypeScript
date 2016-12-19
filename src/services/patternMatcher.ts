@@ -528,8 +528,7 @@ namespace ts {
 
     // Assumes 'value' is already lowercase.
     function startsWithIgnoringCase(string: string, value: string, start: number): boolean {
-        const n = value.length;
-        for (let i = 0; i < n; i++) {
+        for (let i = 0; i < value.length; i++) {
             const ch1 = toLowerCase(string.charCodeAt(i + start));
             const ch2 = value.charCodeAt(i);
 
@@ -615,8 +614,7 @@ namespace ts {
         const result: TextSpan[] = [];
 
         let wordStart = 0;
-        const n = identifier.length;
-        for (let i = 1; i < n; i++) {
+        for (let i = 1; i < identifier.length; i++) {
             const lastIsDigit = isDigit(identifier.charCodeAt(i - 1));
             const currentIsDigit = isDigit(identifier.charCodeAt(i));
 

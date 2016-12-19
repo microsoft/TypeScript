@@ -1793,8 +1793,7 @@ namespace ts {
                     }
 
                     let descriptor: TodoCommentDescriptor = undefined;
-                    const n = descriptors.length;
-                    for (let i = 0; i < n; i++) {
+                    for (let i = 0; i < descriptors.length; i++) {
                         if (matchArray[i + firstDescriptorCaptureIndex]) {
                             descriptor = descriptors[i];
                         }

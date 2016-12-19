@@ -5019,8 +5019,7 @@ namespace ts {
                 // If this is a JSDoc construct signature, then skip the first parameter in the
                 // parameter list.  The first parameter represents the return type of the construct
                 // signature.
-                const n = declaration.parameters.length;
-                for (let i = isJSConstructSignature ? 1 : 0; i < n; i++) {
+                for (let i = isJSConstructSignature ? 1 : 0; i < declaration.parameters.length; i++) {
                     const param = declaration.parameters[i];
 
                     let paramSymbol = param.symbol;
@@ -5119,8 +5118,7 @@ namespace ts {
         function getSignaturesOfSymbol(symbol: Symbol): Signature[] {
             if (!symbol) return emptyArray;
             const result: Signature[] = [];
-            const len = symbol.declarations.length;
-            for (let i = 0; i < len; i++) {
+            for (let i = 0; i < symbol.declarations.length; i++) {
                 const node = symbol.declarations[i];
                 switch (node.kind) {
                     case SyntaxKind.FunctionType:
@@ -7913,8 +7911,7 @@ namespace ts {
                     return Ternary.False;
                 }
                 let result = Ternary.True;
-                const len = sourceSignatures.length;
-                for (let i = 0; i < len; i++) {
+                for (let i = 0; i < sourceSignatures.length; i++) {
                     const related = compareSignaturesIdentical(sourceSignatures[i], targetSignatures[i], /*partialMatch*/ false, /*ignoreThisTypes*/ false, /*ignoreReturnTypes*/ false, isRelatedTo);
                     if (!related) {
                         return Ternary.False;
@@ -18047,8 +18044,7 @@ namespace ts {
         /** Check each type parameter and check that type parameters have no duplicate type parameter declarations */
         function checkTypeParameters(typeParameterDeclarations: TypeParameterDeclaration[]) {
             if (typeParameterDeclarations) {
-                const n = typeParameterDeclarations.length;
-                for (let i = 0; i < n; i++) {
+                for (let i = 0; i < typeParameterDeclarations.length; i++) {
                     const node = typeParameterDeclarations[i];
                     checkTypeParameter(node);
 
@@ -18328,8 +18324,7 @@ namespace ts {
             // TypeScript 1.0 spec (April 2014):
             // When a generic interface has multiple declarations,  all declarations must have identical type parameter
             // lists, i.e. identical type parameter names with identical constraints in identical order.
-            const len = list1.length;
-            for (let i = 0; i < len; i++) {
+            for (let i = 0; i < list1.length; i++) {
                 const tp1 = list1[i];
                 const tp2 = list2[i];
                 if (tp1.name.text !== tp2.name.text) {

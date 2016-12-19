@@ -7404,8 +7404,7 @@ namespace ts {
                     if (position >= array.pos && position < array.end) {
                         // position was in this array.  Search through this array to see if we find a
                         // viable element.
-                        const n = array.length;
-                        for (let i = 0; i < n; i++) {
+                        for (let i = 0; i < array.length; i++) {
                             const child = array[i];
                             if (child) {
                                 if (child.pos === position) {

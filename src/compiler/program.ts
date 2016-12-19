@@ -696,8 +696,7 @@ namespace ts {
             }
 
             // update fileName -> file mapping
-            const len = newSourceFiles.length;
-            for (let i = 0; i < len; i++) {
+            for (let i = 0; i < newSourceFiles.length; i++) {
                 filesByName.set(filePaths[i], newSourceFiles[i]);
             }
 

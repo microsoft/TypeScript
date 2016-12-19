@@ -71,8 +71,7 @@ namespace ts {
             const dense = classifications.spans;
             let lastEnd = 0;
 
-            const n = dense.length;
-            for (let i = 0; i < n; i += 3) {
+            for (let i = 0; i < dense.length; i += 3) {
                 const start = dense[i];
                 const length = dense[i + 1];
                 const type = <ClassificationType>dense[i + 2];
@@ -607,8 +606,7 @@ namespace ts {
         const dense = classifications.spans;
         const result: ClassifiedSpan[] = [];
 
-        const n = dense.length;
-        for (let i = 0; i < n; i += 3) {
+        for (let i = 0; i < dense.length; i += 3) {
             result.push({
                 textSpan: createTextSpan(dense[i], dense[i + 1]),
                 classificationType: getClassificationTypeName(dense[i + 2])

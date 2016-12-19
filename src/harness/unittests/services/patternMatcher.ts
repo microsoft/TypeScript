@@ -502,8 +502,7 @@ describe("PatternMatcher", function () {
     function assertArrayEquals<T>(array1: T[], array2: T[]) {
         assert.equal(array1.length, array2.length);
 
-        const n = array1.length;
-        for (let i = 0; i < n; i++) {
+        for (let i = 0; i < array1.length; i++) {
             assert.equal(array1[i], array2[i]);
         }
     }

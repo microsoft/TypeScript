@@ -344,8 +344,7 @@ namespace Utils {
 
         assert.equal(array1.length, array2.length, "array1.length !== array2.length");
 
-        const n = array1.length;
-        for (let i = 0; i < n; i++) {
+        for (let i = 0; i < array1.length; i++) {
             const d1 = array1[i];
             const d2 = array2[i];
 
@@ -401,8 +400,7 @@ namespace Utils {
         assert.equal(array1.end, array2.end, "array1.end !== array2.end");
         assert.equal(array1.length, array2.length, "array1.length !== array2.length");
 
-        const n = array1.length;
-        for (let i = 0; i < n; i++) {
+        for (let i = 0; i < array1.length; i++) {
             assertStructuralEquals(array1[i], array2[i]);
         }
     }
