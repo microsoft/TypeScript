@@ -47,11 +47,6 @@ namespace ts {
         return resolved.path;
     }
 
-    /** Create Resolved from a file with unknown extension. */
-    function resolvedFromAnyFile(path: string): Resolved | undefined {
-        return { path, extension: extensionFromPath(path) };
-    }
-
     /** Adds `isExernalLibraryImport` to a Resolved to get a ResolvedModule. */
     function resolvedModuleFromResolved({ path, extension }: Resolved, isExternalLibraryImport: boolean): ResolvedModuleFull {
         return { resolvedFileName: path, extension, isExternalLibraryImport };
@@ -71,7 +66,8 @@ namespace ts {
         traceEnabled: boolean;
     }
 
-    function tryReadTypesSection(extensions: Extensions, packageJsonPath: string, baseDirectory: string, state: ModuleResolutionState): string {
+    /** Reads from "main" or "types"/"typings" depending on `extensions`. */
+    function tryReadPackageJsonMainOrTypes(extensions: Extensions, packageJsonPath: string, baseDirectory: string, state: ModuleResolutionState): string {
         const jsonContent = readJson(packageJsonPath, state.host);
 
         switch (extensions) {
@@ -678,18 +674,21 @@ namespace ts {
             if (state.traceEnabled) {
                 trace(state.host, Diagnostics.Found_package_json_at_0, packageJsonPath);
             }
-            const typesFile = tryReadTypesSection(extensions, packageJsonPath, candidate, state);
-            if (typesFile) {
-                const onlyRecordFailures = !directoryProbablyExists(getDirectoryPath(typesFile), state.host);
+            const mainOrTypesFile = tryReadPackageJsonMainOrTypes(extensions, packageJsonPath, candidate, state);
+            if (mainOrTypesFile) {
+                const onlyRecordFailures = !directoryProbablyExists(getDirectoryPath(mainOrTypesFile), state.host);
                 // A package.json "typings" may specify an exact filename, or may choose to omit an extension.
-                const fromFile = tryFile(typesFile, failedLookupLocations, onlyRecordFailures, state);
-                if (fromFile) {
-                    // Note: this would allow a package.json to specify a ".js" file as typings. Maybe that should be forbidden.
-                    return resolvedFromAnyFile(fromFile);
+                const fromExactFile = tryFile(mainOrTypesFile, failedLookupLocations, onlyRecordFailures, state);
+                if (fromExactFile) {
+                    const resolved = fromExactFile && resolvedFromSuspiciousFile(extensions, fromExactFile);
+                    if (resolved) {
+                        return resolved;
+                    }
+                    trace(state.host, Diagnostics.File_0_has_an_unsupported_extension_so_skipping_it, fromExactFile);
                 }
-                const x = tryAddingExtensions(typesFile, Extensions.TypeScript, failedLookupLocations, onlyRecordFailures, state);
-                if (x) {
-                    return x;
+                const resolved = tryAddingExtensions(mainOrTypesFile, Extensions.TypeScript, failedLookupLocations, onlyRecordFailures, state);
+                if (resolved) {
+                    return resolved;
                 }
             }
             else {
@@ -707,6 +706,24 @@ namespace ts {
         }
 
         return loadModuleFromFile(extensions, combinePaths(candidate, "index"), failedLookupLocations, !directoryExists, state);
+    }
+
+    /** Resolve from an arbitrarily specified file. Return `undefined` if it has an unsupported extension. */
+    function resolvedFromSuspiciousFile(extensions: Extensions, path: string): Resolved | undefined {
+        const extension = tryGetExtensionFromPath(path);
+        return extension !== undefined && extensionIsOk(extensions, extension) ? { path, extension } : undefined;
+    }
+
+    /** True if `extension` is one of the supported `extensions`. */
+    function extensionIsOk(extensions: Extensions, extension: Extension): boolean {
+        switch (extensions) {
+            case Extensions.JavaScript:
+                return extension === Extension.Js || extension === Extension.Jsx;
+            case Extensions.TypeScript:
+                return extension === Extension.Ts || extension === Extension.Tsx || extension === Extension.Dts;
+            case Extensions.DtsOnly:
+                return extension === Extension.Dts;
+        }
     }
 
     function pathToPackageJson(directory: string): string {
