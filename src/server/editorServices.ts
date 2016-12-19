@@ -108,6 +108,7 @@ namespace ts.server {
     export interface HostConfiguration {
         formatCodeOptions: FormatCodeSettings;
         hostInfo: string;
+        extraFileExtensions?: FileExtensionInfo[];
     }
 
     interface ConfigFileConversionResult {
@@ -125,20 +126,23 @@ namespace ts.server {
     }
 
     export interface OpenConfiguredProjectResult {
-        configFileName?: string;
+        configFileName?: NormalizedPath;
         configFileErrors?: Diagnostic[];
     }
 
     interface FilePropertyReader<T> {
         getFileName(f: T): string;
         getScriptKind(f: T): ScriptKind;
-        hasMixedContent(f: T): boolean;
+        hasMixedContent(f: T, extraFileExtensions: FileExtensionInfo[]): boolean;
     }
 
     const fileNamePropertyReader: FilePropertyReader<string> = {
         getFileName: x => x,
         getScriptKind: _ => undefined,
-        hasMixedContent: _ => false
+        hasMixedContent: (fileName, extraFileExtensions) => {
+            const mixedContentExtensions = ts.map(ts.filter(extraFileExtensions, item => item.isMixedContent), item => item.extension);
+            return forEach(mixedContentExtensions, extension => fileExtensionIs(fileName, extension))
+        }
     };
 
     const externalFilePropertyReader: FilePropertyReader<protocol.ExternalFile> = {
@@ -282,7 +286,8 @@ namespace ts.server {
 
             this.hostConfiguration = {
                 formatCodeOptions: getDefaultFormatCodeSettings(this.host),
-                hostInfo: "Unknown host"
+                hostInfo: "Unknown host",
+                extraFileExtensions: []
             };
 
             this.documentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames, host.getCurrentDirectory());
@@ -424,7 +429,7 @@ namespace ts.server {
                 this.handleDeletedFile(info);
             }
             else {
-                if (info && (!info.isOpen)) {
+                if (info && (!info.isScriptOpen())) {
                     // file has been changed which might affect the set of referenced files in projects that include 
                     // this file and set of inferred projects
                     info.reloadFromFile();
@@ -440,7 +445,7 @@ namespace ts.server {
 
             // TODO: handle isOpen = true case
 
-            if (!info.isOpen) {
+            if (!info.isScriptOpen()) {
                 this.filenameToScriptInfo.remove(info.path);
                 this.lastDeletedFile = info;
 
@@ -486,7 +491,7 @@ namespace ts.server {
             // If a change was made inside "folder/file", node will trigger the callback twice:
             // one with the fileName being "folder/file", and the other one with "folder".
             // We don't respond to the second one.
-            if (fileName && !ts.isSupportedSourceFileName(fileName, project.getCompilerOptions())) {
+            if (fileName && !ts.isSupportedSourceFileName(fileName, project.getCompilerOptions(), this.hostConfiguration.extraFileExtensions)) {
                 return;
             }
 
@@ -634,15 +639,17 @@ namespace ts.server {
             // Closing file should trigger re-reading the file content from disk. This is
             // because the user may chose to discard the buffer content before saving
             // to the disk, and the server's version of the file can be out of sync.
-            info.reloadFromFile();
+            info.close();
 
             removeItemFromSet(this.openFiles, info);
-            info.isOpen = false;
 
             // collect all projects that should be removed
             let projectsToRemove: Project[];
             for (const p of info.containingProjects) {
                 if (p.projectKind === ProjectKind.Configured) {
+                    if (info.hasMixedContent) {
+                        info.registerFileUpdate();
+                    }
                     // last open file in configured project - close it
                     if ((<ConfiguredProject>p).deleteOpenRef() === 0) {
                         (projectsToRemove || (projectsToRemove = [])).push(p);
@@ -651,6 +658,13 @@ namespace ts.server {
                 else if (p.projectKind === ProjectKind.Inferred && p.isRoot(info)) {
                     // open file in inferred project
                     (projectsToRemove || (projectsToRemove = [])).push(p);
+                }
+
+                if (!p.languageServiceEnabled) {
+                    // if project language service is disabled then we create a program only for open files.
+                    // this means that project should be marked as dirty to force rebuilding of the program
+                    // on the next request
+                    p.markAsDirty();
                 }
             }
             if (projectsToRemove) {
@@ -811,7 +825,9 @@ namespace ts.server {
                 this.host,
                 getDirectoryPath(configFilename),
                 /*existingOptions*/ {},
-                configFilename);
+                configFilename,
+                /*resolutionStack*/ [],
+                this.hostConfiguration.extraFileExtensions);
 
             if (parsedCommandLine.errors.length) {
                 errors = concatenate(errors, parsedCommandLine.errors);
@@ -915,7 +931,7 @@ namespace ts.server {
             for (const f of files) {
                 const rootFilename = propertyReader.getFileName(f);
                 const scriptKind = propertyReader.getScriptKind(f);
-                const hasMixedContent = propertyReader.hasMixedContent(f);
+                const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.extraFileExtensions);
                 if (this.host.fileExists(rootFilename)) {
                     const info = this.getOrCreateScriptInfoForNormalizedPath(toNormalizedPath(rootFilename), /*openedByClient*/ clientFileName == rootFilename, /*fileContent*/ undefined, scriptKind, hasMixedContent);
                     project.addRoot(info);
@@ -961,7 +977,7 @@ namespace ts.server {
                     rootFilesChanged = true;
                     if (!scriptInfo) {
                         const scriptKind = propertyReader.getScriptKind(f);
-                        const hasMixedContent = propertyReader.hasMixedContent(f);
+                        const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.extraFileExtensions);
                         scriptInfo = this.getOrCreateScriptInfoForNormalizedPath(normalizedPath, /*openedByClient*/ false, /*fileContent*/ undefined, scriptKind, hasMixedContent);
                     }
                 }
@@ -989,7 +1005,7 @@ namespace ts.server {
                 }
                 if (toAdd) {
                     for (const f of toAdd) {
-                        if (f.isOpen && isRootFileInInferredProject(f)) {
+                        if (f.isScriptOpen() && isRootFileInInferredProject(f)) {
                             // if file is already root in some inferred project 
                             // - remove the file from that project and delete the project if necessary
                             const inferredProject = f.containingProjects[0];
@@ -1043,9 +1059,7 @@ namespace ts.server {
                 project.stopWatchingDirectory();
             }
             else {
-                if (!project.languageServiceEnabled) {
-                    project.enableLanguageService();
-                }
+                project.enableLanguageService();
                 this.watchConfigDirectoryForProject(project, projectOptions);
                 this.updateNonInferredProject(project, projectOptions.files, fileNamePropertyReader, projectOptions.compilerOptions, projectOptions.typeAcquisition, projectOptions.compileOnSave, configFileErrors);
             }
@@ -1089,32 +1103,34 @@ namespace ts.server {
         getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean) {
             let info = this.getScriptInfoForNormalizedPath(fileName);
             if (!info) {
-                let content: string;
-                if (this.host.fileExists(fileName)) {
-                    // by default pick whatever content was supplied as the argument
-                    // if argument was not given - then for mixed content files assume that its content is empty string
-                    content = fileContent || (hasMixedContent ? "" : this.host.readFile(fileName));
-                }
-                if (!content) {
-                    if (openedByClient) {
-                        content = "";
-                    }
-                }
-                if (content !== undefined) {
-                    info = new ScriptInfo(this.host, fileName, content, scriptKind, openedByClient, hasMixedContent);
-                    // do not watch files with mixed content - server doesn't know how to interpret it
+                if (openedByClient || this.host.fileExists(fileName)) {
+                    info = new ScriptInfo(this.host, fileName, scriptKind, hasMixedContent);
+
                     this.filenameToScriptInfo.set(info.path, info);
-                    if (!info.isOpen && !hasMixedContent) {
-                        info.setWatcher(this.host.watchFile(fileName, _ => this.onSourceFileChanged(fileName)));
+
+                    if (openedByClient) {
+                        if (fileContent === undefined) {
+                            // if file is opened by client and its content is not specified - use file text
+                            fileContent = this.host.readFile(fileName) || "";
+                        }
+                    }
+                    else {
+                        // do not watch files with mixed content - server doesn't know how to interpret it
+                        if (!hasMixedContent) {
+                            info.setWatcher(this.host.watchFile(fileName, _ => this.onSourceFileChanged(fileName)));
+                        }
                     }
                 }
             }
             if (info) {
-                if (fileContent !== undefined) {
-                    info.reload(fileContent);
+                if (openedByClient && !info.isScriptOpen()) {
+                    info.open(fileContent);
+                    if (hasMixedContent) {
+                        info.registerFileUpdate();
+                    }
                 }
-                if (openedByClient) {
-                    info.isOpen = true;
+                else if (fileContent !== undefined) {
+                    info.reload(fileContent);
                 }
             }
             return info;
@@ -1145,6 +1161,10 @@ namespace ts.server {
                 if (args.formatOptions) {
                     mergeMaps(this.hostConfiguration.formatCodeOptions, convertFormatOptions(args.formatOptions));
                     this.logger.info("Format host information updated");
+                }
+                if (args.extraFileExtensions) {
+                    this.hostConfiguration.extraFileExtensions = args.extraFileExtensions;
+                    this.logger.info("Host file extension mappings updated");
                 }
             }
         }
@@ -1211,9 +1231,22 @@ namespace ts.server {
         }
 
         openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean): OpenConfiguredProjectResult {
-            const { configFileName = undefined, configFileErrors = undefined }: OpenConfiguredProjectResult = this.findContainingExternalProject(fileName)
-                ? {}
-                : this.openOrUpdateConfiguredProjectForFile(fileName);
+            let configFileName: NormalizedPath;
+            let configFileErrors: Diagnostic[];
+
+            let project: ConfiguredProject | ExternalProject = this.findContainingExternalProject(fileName);
+            if (!project) {
+                ({ configFileName, configFileErrors } = this.openOrUpdateConfiguredProjectForFile(fileName));
+                if (configFileName) {
+                    project = this.findConfiguredProjectByProjectName(configFileName);
+                }
+            }
+            if (project && !project.languageServiceEnabled) {
+                // if project language service is disabled then we create a program only for open files.
+                // this means that project should be marked as dirty to force rebuilding of the program
+                // on the next request
+                project.markAsDirty();
+            }
 
             // at this point if file is the part of some configured/external project then this project should be created
             const info = this.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ true, fileContent, scriptKind, hasMixedContent);
@@ -1230,7 +1263,6 @@ namespace ts.server {
             const info = this.getScriptInfoForNormalizedPath(toNormalizedPath(uncheckedFileName));
             if (info) {
                 this.closeOpenFile(info);
-                info.isOpen = false;
             }
             this.printProjects();
         }
@@ -1255,7 +1287,7 @@ namespace ts.server {
             if (openFiles) {
                 for (const file of openFiles) {
                     const scriptInfo = this.getScriptInfo(file.fileName);
-                    Debug.assert(!scriptInfo || !scriptInfo.isOpen);
+                    Debug.assert(!scriptInfo || !scriptInfo.isScriptOpen());
                     const normalizedPath = scriptInfo ? scriptInfo.fileName : toNormalizedPath(file.fileName);
                     this.openClientFileWithNormalizedPath(normalizedPath, file.content, tryConvertScriptKindName(file.scriptKind), file.hasMixedContent);
                 }
@@ -1327,7 +1359,28 @@ namespace ts.server {
             }
         }
 
-        openExternalProject(proj: protocol.ExternalProject): void {
+        openExternalProjects(projects: protocol.ExternalProject[]): void {
+            // record project list before the update
+            const projectsToClose = arrayToMap(this.externalProjects, p => p.getProjectName(), _ => true);
+            for (const externalProjectName in this.externalProjectToConfiguredProjectMap) {
+                projectsToClose[externalProjectName] = true;
+            }
+
+            for (const externalProject of projects) {
+                this.openExternalProject(externalProject, /*suppressRefreshOfInferredProjects*/ true);
+                // delete project that is present in input list
+                delete projectsToClose[externalProject.projectFileName];
+            }
+
+            // close projects that were missing in the input list
+            for (const externalProjectName in projectsToClose) {
+                this.closeExternalProject(externalProjectName, /*suppressRefresh*/ true)
+            }
+
+            this.refreshInferredProjects();
+        }
+
+        openExternalProject(proj: protocol.ExternalProject, suppressRefreshOfInferredProjects = false): void {
             // typingOptions has been deprecated and is only supported for backward compatibility
             // purposes. It should be removed in future releases - use typeAcquisition instead.
             if (proj.typingOptions && !proj.typeAcquisition) {
@@ -1357,8 +1410,15 @@ namespace ts.server {
             let exisingConfigFiles: string[];
             if (externalProject) {
                 if (!tsConfigFiles) {
+                    const compilerOptions = convertCompilerOptions(proj.options);
+                    if (this.exceededTotalSizeLimitForNonTsFiles(compilerOptions, proj.rootFiles, externalFilePropertyReader)) {
+                        externalProject.disableLanguageService();
+                    }
+                    else {
+                        externalProject.enableLanguageService();
+                    }
                     // external project already exists and not config files were added - update the project and return;
-                    this.updateNonInferredProject(externalProject, proj.rootFiles, externalFilePropertyReader, convertCompilerOptions(proj.options), proj.typeAcquisition, proj.options.compileOnSave, /*configFileErrors*/ undefined);
+                    this.updateNonInferredProject(externalProject, proj.rootFiles, externalFilePropertyReader, compilerOptions, proj.typeAcquisition, proj.options.compileOnSave, /*configFileErrors*/ undefined);
                     return;
                 }
                 // some config files were added to external project (that previously were not there)
@@ -1420,7 +1480,9 @@ namespace ts.server {
                 delete this.externalProjectToConfiguredProjectMap[proj.projectFileName];
                 this.createAndAddExternalProject(proj.projectFileName, rootFiles, proj.options, proj.typeAcquisition);
             }
-            this.refreshInferredProjects();
+            if (!suppressRefreshOfInferredProjects) {
+                this.refreshInferredProjects();
+            }
         }
     }
 }

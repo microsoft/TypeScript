@@ -626,8 +626,8 @@ function f33<S extends Shape, K extends keyof S>(shape: S, key: K) {
 >K : K
 
     let name = getProperty(shape, "name");
->name : string
->getProperty(shape, "name") : string
+>name : S["name"]
+>getProperty(shape, "name") : S["name"]
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
 >shape : S
 >"name" : "name"
@@ -1146,6 +1146,245 @@ function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[
 >'b' : "b"
 }
 
+function f80<T extends { a: { x: any } }>(obj: T) {
+>f80 : <T extends { a: { x: any; }; }>(obj: T) => void
+>T : T
+>a : { x: any; }
+>x : any
+>obj : T
+>T : T
+
+    let a1 = obj.a;  // { x: any }
+>a1 : { x: any; }
+>obj.a : { x: any; }
+>obj : T
+>a : { x: any; }
+
+    let a2 = obj['a'];  // { x: any }
+>a2 : { x: any; }
+>obj['a'] : { x: any; }
+>obj : T
+>'a' : "a"
+
+    let a3 = obj['a'] as T['a'];  // T["a"]
+>a3 : T["a"]
+>obj['a'] as T['a'] : T["a"]
+>obj['a'] : { x: any; }
+>obj : T
+>'a' : "a"
+>T : T
+
+    let x1 = obj.a.x;  // any
+>x1 : any
+>obj.a.x : any
+>obj.a : { x: any; }
+>obj : T
+>a : { x: any; }
+>x : any
+
+    let x2 = obj['a']['x'];  // any
+>x2 : any
+>obj['a']['x'] : any
+>obj['a'] : { x: any; }
+>obj : T
+>'a' : "a"
+>'x' : "x"
+
+    let x3 = obj['a']['x'] as T['a']['x'];  // T["a"]["x"]
+>x3 : T["a"]["x"]
+>obj['a']['x'] as T['a']['x'] : T["a"]["x"]
+>obj['a']['x'] : any
+>obj['a'] : { x: any; }
+>obj : T
+>'a' : "a"
+>'x' : "x"
+>T : T
+}
+
+function f81<T extends { a: { x: any } }>(obj: T) {
+>f81 : <T extends { a: { x: any; }; }>(obj: T) => T["a"]["x"]
+>T : T
+>a : { x: any; }
+>x : any
+>obj : T
+>T : T
+
+    return obj['a']['x'] as T['a']['x'];
+>obj['a']['x'] as T['a']['x'] : T["a"]["x"]
+>obj['a']['x'] : any
+>obj['a'] : { x: any; }
+>obj : T
+>'a' : "a"
+>'x' : "x"
+>T : T
+}
+
+function f82() {
+>f82 : () => void
+
+    let x1 = f81({ a: { x: "hello" } });  // string
+>x1 : string
+>f81({ a: { x: "hello" } }) : string
+>f81 : <T extends { a: { x: any; }; }>(obj: T) => T["a"]["x"]
+>{ a: { x: "hello" } } : { a: { x: string; }; }
+>a : { x: string; }
+>{ x: "hello" } : { x: string; }
+>x : string
+>"hello" : "hello"
+
+    let x2 = f81({ a: { x: 42 } });  // number
+>x2 : number
+>f81({ a: { x: 42 } }) : number
+>f81 : <T extends { a: { x: any; }; }>(obj: T) => T["a"]["x"]
+>{ a: { x: 42 } } : { a: { x: number; }; }
+>a : { x: number; }
+>{ x: 42 } : { x: number; }
+>x : number
+>42 : 42
+}
+
+function f83<T extends { [x: string]: { x: any } }, K extends keyof T>(obj: T, key: K) {
+>f83 : <T extends { [x: string]: { x: any; }; }, K extends keyof T>(obj: T, key: K) => T[K]["x"]
+>T : T
+>x : string
+>x : any
+>K : K
+>T : T
+>obj : T
+>T : T
+>key : K
+>K : K
+
+    return obj[key]['x'] as T[K]['x'];
+>obj[key]['x'] as T[K]['x'] : T[K]["x"]
+>obj[key]['x'] : any
+>obj[key] : T[K]
+>obj : T
+>key : K
+>'x' : "x"
+>T : T
+>K : K
+}
+
+function f84() {
+>f84 : () => void
+
+    let x1 = f83({ foo: { x: "hello" } }, "foo");  // string
+>x1 : string
+>f83({ foo: { x: "hello" } }, "foo") : string
+>f83 : <T extends { [x: string]: { x: any; }; }, K extends keyof T>(obj: T, key: K) => T[K]["x"]
+>{ foo: { x: "hello" } } : { foo: { x: string; }; }
+>foo : { x: string; }
+>{ x: "hello" } : { x: string; }
+>x : string
+>"hello" : "hello"
+>"foo" : "foo"
+
+    let x2 = f83({ bar: { x: 42 } }, "bar");  // number
+>x2 : number
+>f83({ bar: { x: 42 } }, "bar") : number
+>f83 : <T extends { [x: string]: { x: any; }; }, K extends keyof T>(obj: T, key: K) => T[K]["x"]
+>{ bar: { x: 42 } } : { bar: { x: number; }; }
+>bar : { x: number; }
+>{ x: 42 } : { x: number; }
+>x : number
+>42 : 42
+>"bar" : "bar"
+}
+
+class C1 {
+>C1 : C1
+
+    x: number;
+>x : number
+
+    get<K extends keyof this>(key: K) {
+>get : <K extends keyof this>(key: K) => this[K]
+>K : K
+>key : K
+>K : K
+
+        return this[key];
+>this[key] : this[K]
+>this : this
+>key : K
+    }
+    set<K extends keyof this>(key: K, value: this[K]) {
+>set : <K extends keyof this>(key: K, value: this[K]) => void
+>K : K
+>key : K
+>K : K
+>value : this[K]
+>K : K
+
+        this[key] = value;
+>this[key] = value : this[K]
+>this[key] : this[K]
+>this : this
+>key : K
+>value : this[K]
+    }
+    foo() {
+>foo : () => void
+
+        let x1 = this.x;  // number
+>x1 : number
+>this.x : number
+>this : this
+>x : number
+
+        let x2 = this["x"];  // number
+>x2 : number
+>this["x"] : number
+>this : this
+>"x" : "x"
+
+        let x3 = this.get("x");  // this["x"]
+>x3 : this["x"]
+>this.get("x") : this["x"]
+>this.get : <K extends keyof this>(key: K) => this[K]
+>this : this
+>get : <K extends keyof this>(key: K) => this[K]
+>"x" : "x"
+
+        let x4 = getProperty(this, "x"); // this["x"]
+>x4 : this["x"]
+>getProperty(this, "x") : this["x"]
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>this : this
+>"x" : "x"
+
+        this.x = 42;
+>this.x = 42 : 42
+>this.x : number
+>this : this
+>x : number
+>42 : 42
+
+        this["x"] = 42;
+>this["x"] = 42 : 42
+>this["x"] : number
+>this : this
+>"x" : "x"
+>42 : 42
+
+        this.set("x", 42);
+>this.set("x", 42) : void
+>this.set : <K extends keyof this>(key: K, value: this[K]) => void
+>this : this
+>set : <K extends keyof this>(key: K, value: this[K]) => void
+>"x" : "x"
+>42 : 42
+
+        setProperty(this, "x", 42);
+>setProperty(this, "x", 42) : void
+>setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
+>this : this
+>"x" : "x"
+>42 : 42
+    }
+}
+
 // Repros from #12011
 
 class Base {
@@ -1202,10 +1441,10 @@ class Person extends Base {
 >parts : number
     }
     getParts() {
->getParts : () => number
+>getParts : () => this["parts"]
 
         return this.get("parts")
->this.get("parts") : number
+>this.get("parts") : this["parts"]
 >this.get : <K extends keyof this>(prop: K) => this[K]
 >this : this
 >get : <K extends keyof this>(prop: K) => this[K]
@@ -1230,10 +1469,10 @@ class OtherPerson {
 >parts : number
     }
     getParts() {
->getParts : () => number
+>getParts : () => this["parts"]
 
         return getProperty(this, "parts")
->getProperty(this, "parts") : number
+>getProperty(this, "parts") : this["parts"]
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
 >this : this
 >"parts" : "parts"
@@ -1587,3 +1826,52 @@ function f<K extends keyof R>(p: K) {
 >p : K
 >add : any
 }
+
+// Repro from #12651
+
+type MethodDescriptor = {
+>MethodDescriptor : MethodDescriptor
+
+	name: string;
+>name : string
+
+	args: any[];
+>args : any[]
+
+	returnValue: any;
+>returnValue : any
+}
+
+declare function dispatchMethod<M extends MethodDescriptor>(name: M['name'], args: M['args']): M['returnValue'];
+>dispatchMethod : <M extends MethodDescriptor>(name: M["name"], args: M["args"]) => M["returnValue"]
+>M : M
+>MethodDescriptor : MethodDescriptor
+>name : M["name"]
+>M : M
+>args : M["args"]
+>M : M
+>M : M
+
+type SomeMethodDescriptor = {
+>SomeMethodDescriptor : SomeMethodDescriptor
+
+	name: "someMethod";
+>name : "someMethod"
+
+	args: [string, number];
+>args : [string, number]
+
+	returnValue: string[];
+>returnValue : string[]
+}
+
+let result = dispatchMethod<SomeMethodDescriptor>("someMethod", ["hello", 35]);
+>result : string[]
+>dispatchMethod<SomeMethodDescriptor>("someMethod", ["hello", 35]) : string[]
+>dispatchMethod : <M extends MethodDescriptor>(name: M["name"], args: M["args"]) => M["returnValue"]
+>SomeMethodDescriptor : SomeMethodDescriptor
+>"someMethod" : "someMethod"
+>["hello", 35] : [string, number]
+>"hello" : "hello"
+>35 : 35
+
