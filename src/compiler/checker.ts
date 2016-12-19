@@ -21848,8 +21848,13 @@ namespace ts {
 
         function checkGrammarNumericLiteral(node: NumericLiteral): boolean {
             // Grammar checking
-            if (node.isOctalLiteral && languageVersion >= ScriptTarget.ES5) {
-                return grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher);
+            if (node.isOctalLiteral) {
+                if (languageVersion >= ScriptTarget.ES5) {
+                    return grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher_Use_the_syntax_0o_0, node.text);
+                }
+                if (isChildOfLiteralType(node)) {
+                    return grammarErrorOnNode(node, Diagnostics.Octal_literal_types_must_use_ES2015_syntax_Use_the_syntax_0o_0, node.text);
+                }
             }
         }
 

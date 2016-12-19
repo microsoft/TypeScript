@@ -227,7 +227,7 @@
         "category": "Error",
         "code": 1084
     },
-    "Octal literals are not available when targeting ECMAScript 5 and higher.": {
+    "Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '0o{0}'.": {
         "category": "Error",
         "code": 1085
     },
@@ -3238,5 +3238,9 @@
     "Add {0} to existing import declaration from {1}": {
         "category": "Message",
         "code": 90015
+    },
+    "Octal literal types must use ES2015 syntax. Use the syntax '0o{0}'.": {
+        "category": "Error",
+        "code": 8017
     }
 }
