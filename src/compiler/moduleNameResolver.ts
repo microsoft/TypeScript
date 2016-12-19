@@ -293,33 +293,69 @@ namespace ts {
         return result;
     }
 
-    export function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
+    /**
+     * Cached module resolutions per containing directory.
+     * This assumes that any module id will have the same resolution for sibling files located in the same folder.
+     */
+    export interface ModuleResolutionCache {
+        getOrCreateCacheForDirectory(directoryName: string): Map<ResolvedModuleWithFailedLookupLocations>;
+    }
+
+    export function createModuleResolutionCache(currentDirectory: string, getCanonicalFileName: (s: string) => string) {
+        const map = createFileMap<Map<ResolvedModuleWithFailedLookupLocations>>();
+
+        return { getOrCreateCacheForDirectory };
+
+        function getOrCreateCacheForDirectory(directoryName: string) {
+            const path = toPath(directoryName, currentDirectory, getCanonicalFileName);
+            let perFolderCache = map.get(path);
+            if (!perFolderCache) {
+                perFolderCache = createMap<ResolvedModuleWithFailedLookupLocations>();
+                map.set(path, perFolderCache);
+            }
+            return perFolderCache;
+        }
+    }
+
+    export function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache): ResolvedModuleWithFailedLookupLocations {
         const traceEnabled = isTraceEnabled(compilerOptions, host);
         if (traceEnabled) {
             trace(host, Diagnostics.Resolving_module_0_from_1, moduleName, containingFile);
         }
+        let perFolderCache = cache && cache.getOrCreateCacheForDirectory(getDirectoryPath(containingFile));
+        let result = perFolderCache && perFolderCache[moduleName];
 
-        let moduleResolution = compilerOptions.moduleResolution;
-        if (moduleResolution === undefined) {
-            moduleResolution = getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS ? ModuleResolutionKind.NodeJs : ModuleResolutionKind.Classic;
+        if (result) {
             if (traceEnabled) {
-                trace(host, Diagnostics.Module_resolution_kind_is_not_specified_using_0, ModuleResolutionKind[moduleResolution]);
+                trace(host, Diagnostics.Resolution_for_module_0_was_found_in_cache, moduleName);
             }
         }
         else {
-            if (traceEnabled) {
-                trace(host, Diagnostics.Explicitly_specified_module_resolution_kind_Colon_0, ModuleResolutionKind[moduleResolution]);
+            let moduleResolution = compilerOptions.moduleResolution;
+            if (moduleResolution === undefined) {
+                moduleResolution = getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS ? ModuleResolutionKind.NodeJs : ModuleResolutionKind.Classic;
+                if (traceEnabled) {
+                    trace(host, Diagnostics.Module_resolution_kind_is_not_specified_using_0, ModuleResolutionKind[moduleResolution]);
+                }
             }
-        }
+            else {
+                if (traceEnabled) {
+                    trace(host, Diagnostics.Explicitly_specified_module_resolution_kind_Colon_0, ModuleResolutionKind[moduleResolution]);
+                }
+            }
 
-        let result: ResolvedModuleWithFailedLookupLocations;
-        switch (moduleResolution) {
-            case ModuleResolutionKind.NodeJs:
-                result = nodeModuleNameResolver(moduleName, containingFile, compilerOptions, host);
-                break;
-            case ModuleResolutionKind.Classic:
-                result = classicNameResolver(moduleName, containingFile, compilerOptions, host);
-                break;
+            switch (moduleResolution) {
+                case ModuleResolutionKind.NodeJs:
+                    result = nodeModuleNameResolver(moduleName, containingFile, compilerOptions, host);
+                    break;
+                case ModuleResolutionKind.Classic:
+                    result = classicNameResolver(moduleName, containingFile, compilerOptions, host);
+                    break;
+            }
+
+            if (perFolderCache) {
+                perFolderCache[moduleName] = result;
+            }
         }
 
         if (traceEnabled) {

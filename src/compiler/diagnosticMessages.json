@@ -2945,6 +2945,10 @@
         "category": "Message",
         "code": 6146
     },
+    "Resolution for module '{0}' was found in cache": {
+        "category": "Message",
+        "code": 6147
+    },    
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
