@@ -1029,8 +1029,11 @@ namespace ts {
                 }
             }
 
-            // Return the result if we have an immediate super() call on the last statement.
-            if (superCallExpression && statementOffset === ctorStatements.length - 1) {
+            // Return the result if we have an immediate super() call on the last statement,
+            // but only if the constructor itself doesn't use 'this' elsewhere.
+            if (superCallExpression
+                && statementOffset === ctorStatements.length - 1
+                && !(ctor.transformFlags & (TransformFlags.ContainsLexicalThis | TransformFlags.ContainsCapturedLexicalThis))) {
                 const returnStatement = createReturn(superCallExpression);
 
                 if (superCallExpression.kind !== SyntaxKind.BinaryExpression
@@ -2455,18 +2458,26 @@ namespace ts {
                 }
             }
 
-            let loopBody = visitNode(node.statement, visitor, isStatement);
+            startLexicalEnvironment();
+            let loopBody = visitNode(node.statement, visitor, isStatement, /*optional*/ false, liftToBlock);
+            const lexicalEnvironment = endLexicalEnvironment();
 
             const currentState = convertedLoopState;
             convertedLoopState = outerConvertedLoopState;
 
-            if (loopOutParameters.length) {
+            if (loopOutParameters.length || lexicalEnvironment) {
                 const statements = isBlock(loopBody) ? (<Block>loopBody).statements.slice() : [loopBody];
-                copyOutParameters(loopOutParameters, CopyDirection.ToOutParameter, statements);
+                if (loopOutParameters.length) {
+                    copyOutParameters(loopOutParameters, CopyDirection.ToOutParameter, statements);
+                }
+                addRange(statements, lexicalEnvironment)
                 loopBody = createBlock(statements, /*location*/ undefined, /*multiline*/ true);
             }
 
-            if (!isBlock(loopBody)) {
+            if (isBlock(loopBody)) {
+                loopBody.multiLine = true;
+            }
+            else {
                 loopBody = createBlock([loopBody], /*location*/ undefined, /*multiline*/ true);
             }
 
@@ -3006,7 +3017,6 @@ namespace ts {
                 //      _super.call(this, a)
                 //      _super.m.call(this, a)
                 //      _super.prototype.m.call(this, a)
-
                 resultingCall = createFunctionCall(
                     visitNode(target, visitor, isExpression),
                     visitNode(thisArg, visitor, isExpression),

@@ -1,0 +1,5 @@
+=== tests/cases/compiler/systemModuleTrailingComments.ts ===
+export const test = "TEST";
+>test : Symbol(test, Decl(systemModuleTrailingComments.ts, 0, 12))
+
+//some comment

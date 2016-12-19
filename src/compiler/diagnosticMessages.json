@@ -2324,6 +2324,14 @@
         "category": "Message",
         "code": 4090
     },
+    "Parameter '{0}' of index signature from exported interface has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4091
+    },
+    "Parameter '{0}' of index signature from exported interface has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4092
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
@@ -2489,7 +2497,7 @@
         "category": "Message",
         "code": 6012
     },
-    "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES2015'": {
+    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'": {
         "category": "Message",
         "code": 6015
     },
@@ -3188,6 +3196,10 @@
     "Unknown type acquisition option '{0}'.": {
         "category": "Error",
         "code": 17010
+    },
+    "'super' must be called before accessing a property of 'super' in the constructor of a derived class.": {
+        "category": "Error",
+        "code": 17011
     },
 
     "Circularity detected while resolving configuration: {0}": {

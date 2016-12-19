@@ -30,12 +30,12 @@ verify.quickInfos({
 });
 
 goTo.marker('6');
-verify.memberListContains("m1", "namespace extMod.m1");
+verify.completionListContains("m1", "namespace extMod.m1");
 
 goTo.marker('7');
-verify.memberListContains("b", "var extMod.m1.b: number", "b's comment");
-verify.memberListContains("fooExport", "function extMod.m1.fooExport(): number", "exported function");
-verify.memberListContains("m2", "namespace extMod.m1.m2");
+verify.completionListContains("b", "var extMod.m1.b: number", "b's comment");
+verify.completionListContains("fooExport", "function extMod.m1.fooExport(): number", "exported function");
+verify.completionListContains("m2", "namespace extMod.m1.m2");
 
 goTo.marker('8');
 verify.currentSignatureHelpDocCommentIs("exported function");
@@ -45,5 +45,5 @@ verify.quickInfos({
 });
 
 goTo.marker('10');
-verify.memberListContains("c", "constructor extMod.m1.m2.c(): extMod.m1.m2.c", "");
-verify.memberListContains("i", "var extMod.m1.m2.i: extMod.m1.m2.c", "i");
+verify.completionListContains("c", "constructor extMod.m1.m2.c(): extMod.m1.m2.c", "");
+verify.completionListContains("i", "var extMod.m1.m2.i: extMod.m1.m2.c", "i");

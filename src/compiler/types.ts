@@ -2415,6 +2415,7 @@ namespace ts {
         writeSpace(text: string): void;
         writeStringLiteral(text: string): void;
         writeParameter(text: string): void;
+        writeProperty(text: string): void;
         writeSymbol(text: string, symbol: Symbol): void;
         writeLine(): void;
         increaseIndent(): void;
@@ -2805,6 +2806,7 @@ namespace ts {
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
         StructuredOrTypeParameter = StructuredType | TypeParameter | Index,
+        TypeVariable = TypeParameter | IndexedAccess,
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
@@ -2915,7 +2917,9 @@ namespace ts {
         /* @internal */
         resolvedProperties: SymbolTable;  // Cache of resolved properties
         /* @internal */
-        couldContainTypeParameters: boolean;
+        resolvedIndexType: IndexType;
+        /* @internal */
+        couldContainTypeVariables: boolean;
     }
 
     export interface UnionType extends UnionOrIntersectionType { }
@@ -2937,6 +2941,7 @@ namespace ts {
         typeParameter?: TypeParameter;
         constraintType?: Type;
         templateType?: Type;
+        modifiersType?: Type;
         mapper?: TypeMapper;  // Instantiation mapper
     }
 
@@ -2980,28 +2985,35 @@ namespace ts {
         awaitedTypeOfType?: Type;
     }
 
+    export interface TypeVariable extends Type {
+        /* @internal */
+        resolvedApparentType: Type;
+        /* @internal */
+        resolvedIndexType: IndexType;
+    }
+
     // Type parameters (TypeFlags.TypeParameter)
-    export interface TypeParameter extends Type {
+    export interface TypeParameter extends TypeVariable {
         constraint: Type;        // Constraint
         /* @internal */
         target?: TypeParameter;  // Instantiation target
         /* @internal */
         mapper?: TypeMapper;     // Instantiation mapper
         /* @internal */
-        resolvedApparentType: Type;
-        /* @internal */
-        resolvedIndexType: IndexType;
-        /* @internal */
         isThisType?: boolean;
     }
 
-    export interface IndexType extends Type {
-        type: TypeParameter;
-    }
-
-    export interface IndexedAccessType extends Type {
+    // Indexed access types (TypeFlags.IndexedAccess)
+    // Possible forms are T[xxx], xxx[T], or xxx[keyof T], where T is a type variable
+    export interface IndexedAccessType extends TypeVariable {
         objectType: Type;
         indexType: Type;
+        constraint?: Type;
+    }
+
+    // keyof T types (TypeFlags.Index)
+    export interface IndexType extends Type {
+        type: TypeVariable | UnionOrIntersectionType;
     }
 
     export const enum SignatureKind {
@@ -3091,6 +3103,12 @@ namespace ts {
         PrototypeProperty,
         /// this.name = expr
         ThisProperty
+    }
+
+    export interface FileExtensionInfo {
+        extension: string;
+        scriptKind: ScriptKind;
+        isMixedContent: boolean;
     }
 
     export interface DiagnosticMessage {

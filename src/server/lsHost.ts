@@ -169,7 +169,7 @@ namespace ts.server {
         getScriptSnapshot(filename: string): ts.IScriptSnapshot {
             const scriptInfo = this.project.getScriptInfoLSHost(filename);
             if (scriptInfo) {
-                return scriptInfo.snap();
+                return scriptInfo.getSnapshot();
             }
         }
 

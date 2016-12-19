@@ -16,12 +16,12 @@
 //// var x1; x1./*3*/;
 
 goTo.marker("1");
-verify.memberListContains('charAt');
-verify.memberListContains('toExponential');
+verify.completionListContains('charAt');
+verify.completionListContains('toExponential');
 
 goTo.marker("2");
-verify.memberListContains('age');
+verify.completionListContains('age');
 
 goTo.marker("3");
-verify.memberListContains('charAt');
-verify.memberListContains('toExponential');
+verify.completionListContains('charAt');
+verify.completionListContains('toExponential');

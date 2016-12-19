@@ -1,0 +1,7 @@
+=== tests/cases/compiler/explicitAnyAfterSpreadNoImplicitAnyError.ts ===
+({ a: [], ...(null as any) });
+>a : Symbol(a, Decl(explicitAnyAfterSpreadNoImplicitAnyError.ts, 0, 2))
+
+let x: any;
+>x : Symbol(x, Decl(explicitAnyAfterSpreadNoImplicitAnyError.ts, 1, 3))
+

@@ -1,0 +1,57 @@
+tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(3,5): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
+tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(7,5): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
+tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(15,5): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
+tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(19,5): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
+tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(23,5): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
+tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(27,5): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
+tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(28,5): error TS2502: 'y' is referenced directly or indirectly in its own type annotation.
+tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(29,5): error TS2502: 'z' is referenced directly or indirectly in its own type annotation.
+
+
+==== tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts (8 errors) ====
+    
+    type T1 = {
+        x: T1["x"];  // Error
+        ~~~~~~~~~~~
+!!! error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
+    };
+    
+    type T2<K extends "x" | "y"> = {
+        x: T2<K>[K];  // Error
+        ~~~~~~~~~~~~
+!!! error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
+        y: number;
+    }
+    
+    declare let x2: T2<"x">;
+    let x2x = x2.x;
+    
+    interface T3<T extends T3<T>> {
+        x: T["x"];  // Error
+        ~~~~~~~~~~
+!!! error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
+    }
+    
+    interface T4<T extends T4<T>> {
+        x: T4<T>["x"];  // Error
+        ~~~~~~~~~~~~~~
+!!! error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
+    }
+    
+    class C1 {
+        x: C1["x"];  // Error
+        ~~~~~~~~~~~
+!!! error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
+    }
+    
+    class C2 {
+        x: this["y"];  // Error
+        ~~~~~~~~~~~~~
+!!! error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
+        y: this["z"];  // Error
+        ~~~~~~~~~~~~~
+!!! error TS2502: 'y' is referenced directly or indirectly in its own type annotation.
+        z: this["x"];  // Error
+        ~~~~~~~~~~~~~
+!!! error TS2502: 'z' is referenced directly or indirectly in its own type annotation.
+    }

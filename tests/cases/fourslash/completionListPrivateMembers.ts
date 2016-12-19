@@ -13,5 +13,5 @@
 
 
 goTo.marker();
-verify.memberListContains("y");
-verify.not.memberListContains("x");
+verify.completionListContains("y");
+verify.not.completionListContains("x");
