@@ -8,4 +8,4 @@
 
 goTo.marker();
 // Error recovery for unclosed string literals
-verify.memberListContains('x');
+verify.completionListContains('x');

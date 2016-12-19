@@ -20,5 +20,5 @@ verify.quickInfos({
     3: "var r2: string"
 });
 goTo.marker('4');
-verify.memberListContains('foo');
+verify.completionListContains('foo');
 verify.numberOfErrorsInCurrentFile(0);

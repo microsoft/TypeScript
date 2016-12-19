@@ -32,32 +32,32 @@
 
 // Same class, everything is visible
 goTo.marker("1");
-verify.memberListContains('privateMethod');
-verify.memberListContains('privateProperty');
-verify.memberListContains('protectedMethod');
-verify.memberListContains('protectedProperty');
-verify.memberListContains('publicMethod');
-verify.memberListContains('publicProperty');
-verify.memberListContains('protectedOverriddenMethod');
-verify.memberListContains('protectedOverriddenProperty');
+verify.completionListContains('privateMethod');
+verify.completionListContains('privateProperty');
+verify.completionListContains('protectedMethod');
+verify.completionListContains('protectedProperty');
+verify.completionListContains('publicMethod');
+verify.completionListContains('publicProperty');
+verify.completionListContains('protectedOverriddenMethod');
+verify.completionListContains('protectedOverriddenProperty');
 
 goTo.marker("2");
-verify.memberListContains('privateMethod');
-verify.memberListContains('privateProperty');
-verify.memberListContains('protectedMethod');
-verify.memberListContains('protectedProperty');
-verify.memberListContains('publicMethod');
-verify.memberListContains('publicProperty');
-verify.memberListContains('protectedOverriddenMethod');
-verify.memberListContains('protectedOverriddenProperty');
+verify.completionListContains('privateMethod');
+verify.completionListContains('privateProperty');
+verify.completionListContains('protectedMethod');
+verify.completionListContains('protectedProperty');
+verify.completionListContains('publicMethod');
+verify.completionListContains('publicProperty');
+verify.completionListContains('protectedOverriddenMethod');
+verify.completionListContains('protectedOverriddenProperty');
 
 // Can not access protected properties overridden in subclass
 goTo.marker("3");
-verify.memberListContains('privateMethod');
-verify.memberListContains('privateProperty');
-verify.memberListContains('protectedMethod');
-verify.memberListContains('protectedProperty');
-verify.memberListContains('publicMethod');
-verify.memberListContains('publicProperty');
-verify.not.memberListContains('protectedOverriddenMethod');
-verify.not.memberListContains('protectedOverriddenProperty');
+verify.completionListContains('privateMethod');
+verify.completionListContains('privateProperty');
+verify.completionListContains('protectedMethod');
+verify.completionListContains('protectedProperty');
+verify.completionListContains('publicMethod');
+verify.completionListContains('publicProperty');
+verify.not.completionListContains('protectedOverriddenMethod');
+verify.not.completionListContains('protectedOverriddenProperty');

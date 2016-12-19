@@ -951,396 +951,628 @@ function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[
 >b : Symbol(b, Decl(keyofAndIndexedAccess.ts, 247, 46))
 }
 
+function f80<T extends { a: { x: any } }>(obj: T) {
+>f80 : Symbol(f80, Decl(keyofAndIndexedAccess.ts, 248, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 250, 13))
+>a : Symbol(a, Decl(keyofAndIndexedAccess.ts, 250, 24))
+>x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 250, 29))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 250, 42))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 250, 13))
+
+    let a1 = obj.a;  // { x: any }
+>a1 : Symbol(a1, Decl(keyofAndIndexedAccess.ts, 251, 7))
+>obj.a : Symbol(a, Decl(keyofAndIndexedAccess.ts, 250, 24))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 250, 42))
+>a : Symbol(a, Decl(keyofAndIndexedAccess.ts, 250, 24))
+
+    let a2 = obj['a'];  // { x: any }
+>a2 : Symbol(a2, Decl(keyofAndIndexedAccess.ts, 252, 7))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 250, 42))
+>'a' : Symbol(a, Decl(keyofAndIndexedAccess.ts, 250, 24))
+
+    let a3 = obj['a'] as T['a'];  // T["a"]
+>a3 : Symbol(a3, Decl(keyofAndIndexedAccess.ts, 253, 7))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 250, 42))
+>'a' : Symbol(a, Decl(keyofAndIndexedAccess.ts, 250, 24))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 250, 13))
+
+    let x1 = obj.a.x;  // any
+>x1 : Symbol(x1, Decl(keyofAndIndexedAccess.ts, 254, 7))
+>obj.a.x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 250, 29))
+>obj.a : Symbol(a, Decl(keyofAndIndexedAccess.ts, 250, 24))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 250, 42))
+>a : Symbol(a, Decl(keyofAndIndexedAccess.ts, 250, 24))
+>x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 250, 29))
+
+    let x2 = obj['a']['x'];  // any
+>x2 : Symbol(x2, Decl(keyofAndIndexedAccess.ts, 255, 7))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 250, 42))
+>'a' : Symbol(a, Decl(keyofAndIndexedAccess.ts, 250, 24))
+>'x' : Symbol(x, Decl(keyofAndIndexedAccess.ts, 250, 29))
+
+    let x3 = obj['a']['x'] as T['a']['x'];  // T["a"]["x"]
+>x3 : Symbol(x3, Decl(keyofAndIndexedAccess.ts, 256, 7))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 250, 42))
+>'a' : Symbol(a, Decl(keyofAndIndexedAccess.ts, 250, 24))
+>'x' : Symbol(x, Decl(keyofAndIndexedAccess.ts, 250, 29))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 250, 13))
+}
+
+function f81<T extends { a: { x: any } }>(obj: T) {
+>f81 : Symbol(f81, Decl(keyofAndIndexedAccess.ts, 257, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 259, 13))
+>a : Symbol(a, Decl(keyofAndIndexedAccess.ts, 259, 24))
+>x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 259, 29))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 259, 42))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 259, 13))
+
+    return obj['a']['x'] as T['a']['x'];
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 259, 42))
+>'a' : Symbol(a, Decl(keyofAndIndexedAccess.ts, 259, 24))
+>'x' : Symbol(x, Decl(keyofAndIndexedAccess.ts, 259, 29))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 259, 13))
+}
+
+function f82() {
+>f82 : Symbol(f82, Decl(keyofAndIndexedAccess.ts, 261, 1))
+
+    let x1 = f81({ a: { x: "hello" } });  // string
+>x1 : Symbol(x1, Decl(keyofAndIndexedAccess.ts, 264, 7))
+>f81 : Symbol(f81, Decl(keyofAndIndexedAccess.ts, 257, 1))
+>a : Symbol(a, Decl(keyofAndIndexedAccess.ts, 264, 18))
+>x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 264, 23))
+
+    let x2 = f81({ a: { x: 42 } });  // number
+>x2 : Symbol(x2, Decl(keyofAndIndexedAccess.ts, 265, 7))
+>f81 : Symbol(f81, Decl(keyofAndIndexedAccess.ts, 257, 1))
+>a : Symbol(a, Decl(keyofAndIndexedAccess.ts, 265, 18))
+>x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 265, 23))
+}
+
+function f83<T extends { [x: string]: { x: any } }, K extends keyof T>(obj: T, key: K) {
+>f83 : Symbol(f83, Decl(keyofAndIndexedAccess.ts, 266, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 268, 13))
+>x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 268, 26))
+>x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 268, 39))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 268, 51))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 268, 13))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 268, 71))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 268, 13))
+>key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 268, 78))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 268, 51))
+
+    return obj[key]['x'] as T[K]['x'];
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 268, 71))
+>key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 268, 78))
+>'x' : Symbol(x, Decl(keyofAndIndexedAccess.ts, 268, 39))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 268, 13))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 268, 51))
+}
+
+function f84() {
+>f84 : Symbol(f84, Decl(keyofAndIndexedAccess.ts, 270, 1))
+
+    let x1 = f83({ foo: { x: "hello" } }, "foo");  // string
+>x1 : Symbol(x1, Decl(keyofAndIndexedAccess.ts, 273, 7))
+>f83 : Symbol(f83, Decl(keyofAndIndexedAccess.ts, 266, 1))
+>foo : Symbol(foo, Decl(keyofAndIndexedAccess.ts, 273, 18))
+>x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 273, 25))
+
+    let x2 = f83({ bar: { x: 42 } }, "bar");  // number
+>x2 : Symbol(x2, Decl(keyofAndIndexedAccess.ts, 274, 7))
+>f83 : Symbol(f83, Decl(keyofAndIndexedAccess.ts, 266, 1))
+>bar : Symbol(bar, Decl(keyofAndIndexedAccess.ts, 274, 18))
+>x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 274, 25))
+}
+
+class C1 {
+>C1 : Symbol(C1, Decl(keyofAndIndexedAccess.ts, 275, 1))
+
+    x: number;
+>x : Symbol(C1.x, Decl(keyofAndIndexedAccess.ts, 277, 10))
+
+    get<K extends keyof this>(key: K) {
+>get : Symbol(C1.get, Decl(keyofAndIndexedAccess.ts, 278, 14))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 279, 8))
+>key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 279, 30))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 279, 8))
+
+        return this[key];
+>this : Symbol(C1, Decl(keyofAndIndexedAccess.ts, 275, 1))
+>key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 279, 30))
+    }
+    set<K extends keyof this>(key: K, value: this[K]) {
+>set : Symbol(C1.set, Decl(keyofAndIndexedAccess.ts, 281, 5))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 282, 8))
+>key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 282, 30))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 282, 8))
+>value : Symbol(value, Decl(keyofAndIndexedAccess.ts, 282, 37))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 282, 8))
+
+        this[key] = value;
+>this : Symbol(C1, Decl(keyofAndIndexedAccess.ts, 275, 1))
+>key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 282, 30))
+>value : Symbol(value, Decl(keyofAndIndexedAccess.ts, 282, 37))
+    }
+    foo() {
+>foo : Symbol(C1.foo, Decl(keyofAndIndexedAccess.ts, 284, 5))
+
+        let x1 = this.x;  // number
+>x1 : Symbol(x1, Decl(keyofAndIndexedAccess.ts, 286, 11))
+>this.x : Symbol(C1.x, Decl(keyofAndIndexedAccess.ts, 277, 10))
+>this : Symbol(C1, Decl(keyofAndIndexedAccess.ts, 275, 1))
+>x : Symbol(C1.x, Decl(keyofAndIndexedAccess.ts, 277, 10))
+
+        let x2 = this["x"];  // number
+>x2 : Symbol(x2, Decl(keyofAndIndexedAccess.ts, 287, 11))
+>this : Symbol(C1, Decl(keyofAndIndexedAccess.ts, 275, 1))
+>"x" : Symbol(C1.x, Decl(keyofAndIndexedAccess.ts, 277, 10))
+
+        let x3 = this.get("x");  // this["x"]
+>x3 : Symbol(x3, Decl(keyofAndIndexedAccess.ts, 288, 11))
+>this.get : Symbol(C1.get, Decl(keyofAndIndexedAccess.ts, 278, 14))
+>this : Symbol(C1, Decl(keyofAndIndexedAccess.ts, 275, 1))
+>get : Symbol(C1.get, Decl(keyofAndIndexedAccess.ts, 278, 14))
+
+        let x4 = getProperty(this, "x"); // this["x"]
+>x4 : Symbol(x4, Decl(keyofAndIndexedAccess.ts, 289, 11))
+>getProperty : Symbol(getProperty, Decl(keyofAndIndexedAccess.ts, 77, 26))
+>this : Symbol(C1, Decl(keyofAndIndexedAccess.ts, 275, 1))
+
+        this.x = 42;
+>this.x : Symbol(C1.x, Decl(keyofAndIndexedAccess.ts, 277, 10))
+>this : Symbol(C1, Decl(keyofAndIndexedAccess.ts, 275, 1))
+>x : Symbol(C1.x, Decl(keyofAndIndexedAccess.ts, 277, 10))
+
+        this["x"] = 42;
+>this : Symbol(C1, Decl(keyofAndIndexedAccess.ts, 275, 1))
+>"x" : Symbol(C1.x, Decl(keyofAndIndexedAccess.ts, 277, 10))
+
+        this.set("x", 42);
+>this.set : Symbol(C1.set, Decl(keyofAndIndexedAccess.ts, 281, 5))
+>this : Symbol(C1, Decl(keyofAndIndexedAccess.ts, 275, 1))
+>set : Symbol(C1.set, Decl(keyofAndIndexedAccess.ts, 281, 5))
+
+        setProperty(this, "x", 42);
+>setProperty : Symbol(setProperty, Decl(keyofAndIndexedAccess.ts, 81, 1))
+>this : Symbol(C1, Decl(keyofAndIndexedAccess.ts, 275, 1))
+    }
+}
+
 // Repros from #12011
 
 class Base {
->Base : Symbol(Base, Decl(keyofAndIndexedAccess.ts, 248, 1))
+>Base : Symbol(Base, Decl(keyofAndIndexedAccess.ts, 295, 1))
 
     get<K extends keyof this>(prop: K) {
->get : Symbol(Base.get, Decl(keyofAndIndexedAccess.ts, 252, 12))
->K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 253, 8))
->prop : Symbol(prop, Decl(keyofAndIndexedAccess.ts, 253, 30))
->K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 253, 8))
+>get : Symbol(Base.get, Decl(keyofAndIndexedAccess.ts, 299, 12))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 300, 8))
+>prop : Symbol(prop, Decl(keyofAndIndexedAccess.ts, 300, 30))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 300, 8))
 
         return this[prop];
->this : Symbol(Base, Decl(keyofAndIndexedAccess.ts, 248, 1))
->prop : Symbol(prop, Decl(keyofAndIndexedAccess.ts, 253, 30))
+>this : Symbol(Base, Decl(keyofAndIndexedAccess.ts, 295, 1))
+>prop : Symbol(prop, Decl(keyofAndIndexedAccess.ts, 300, 30))
     }
     set<K extends keyof this>(prop: K, value: this[K]) {
->set : Symbol(Base.set, Decl(keyofAndIndexedAccess.ts, 255, 5))
->K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 256, 8))
->prop : Symbol(prop, Decl(keyofAndIndexedAccess.ts, 256, 30))
->K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 256, 8))
->value : Symbol(value, Decl(keyofAndIndexedAccess.ts, 256, 38))
->K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 256, 8))
+>set : Symbol(Base.set, Decl(keyofAndIndexedAccess.ts, 302, 5))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 303, 8))
+>prop : Symbol(prop, Decl(keyofAndIndexedAccess.ts, 303, 30))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 303, 8))
+>value : Symbol(value, Decl(keyofAndIndexedAccess.ts, 303, 38))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 303, 8))
 
         this[prop] = value;
->this : Symbol(Base, Decl(keyofAndIndexedAccess.ts, 248, 1))
->prop : Symbol(prop, Decl(keyofAndIndexedAccess.ts, 256, 30))
->value : Symbol(value, Decl(keyofAndIndexedAccess.ts, 256, 38))
+>this : Symbol(Base, Decl(keyofAndIndexedAccess.ts, 295, 1))
+>prop : Symbol(prop, Decl(keyofAndIndexedAccess.ts, 303, 30))
+>value : Symbol(value, Decl(keyofAndIndexedAccess.ts, 303, 38))
     }
 }
 
 class Person extends Base {
->Person : Symbol(Person, Decl(keyofAndIndexedAccess.ts, 259, 1))
->Base : Symbol(Base, Decl(keyofAndIndexedAccess.ts, 248, 1))
+>Person : Symbol(Person, Decl(keyofAndIndexedAccess.ts, 306, 1))
+>Base : Symbol(Base, Decl(keyofAndIndexedAccess.ts, 295, 1))
 
     parts: number;
->parts : Symbol(Person.parts, Decl(keyofAndIndexedAccess.ts, 261, 27))
+>parts : Symbol(Person.parts, Decl(keyofAndIndexedAccess.ts, 308, 27))
 
     constructor(parts: number) {
->parts : Symbol(parts, Decl(keyofAndIndexedAccess.ts, 263, 16))
+>parts : Symbol(parts, Decl(keyofAndIndexedAccess.ts, 310, 16))
 
         super();
->super : Symbol(Base, Decl(keyofAndIndexedAccess.ts, 248, 1))
+>super : Symbol(Base, Decl(keyofAndIndexedAccess.ts, 295, 1))
 
         this.set("parts", parts);
->this.set : Symbol(Base.set, Decl(keyofAndIndexedAccess.ts, 255, 5))
->this : Symbol(Person, Decl(keyofAndIndexedAccess.ts, 259, 1))
->set : Symbol(Base.set, Decl(keyofAndIndexedAccess.ts, 255, 5))
->parts : Symbol(parts, Decl(keyofAndIndexedAccess.ts, 263, 16))
+>this.set : Symbol(Base.set, Decl(keyofAndIndexedAccess.ts, 302, 5))
+>this : Symbol(Person, Decl(keyofAndIndexedAccess.ts, 306, 1))
+>set : Symbol(Base.set, Decl(keyofAndIndexedAccess.ts, 302, 5))
+>parts : Symbol(parts, Decl(keyofAndIndexedAccess.ts, 310, 16))
     }
     getParts() {
->getParts : Symbol(Person.getParts, Decl(keyofAndIndexedAccess.ts, 266, 5))
+>getParts : Symbol(Person.getParts, Decl(keyofAndIndexedAccess.ts, 313, 5))
 
         return this.get("parts")
->this.get : Symbol(Base.get, Decl(keyofAndIndexedAccess.ts, 252, 12))
->this : Symbol(Person, Decl(keyofAndIndexedAccess.ts, 259, 1))
->get : Symbol(Base.get, Decl(keyofAndIndexedAccess.ts, 252, 12))
+>this.get : Symbol(Base.get, Decl(keyofAndIndexedAccess.ts, 299, 12))
+>this : Symbol(Person, Decl(keyofAndIndexedAccess.ts, 306, 1))
+>get : Symbol(Base.get, Decl(keyofAndIndexedAccess.ts, 299, 12))
     }
 }
 
 class OtherPerson {
->OtherPerson : Symbol(OtherPerson, Decl(keyofAndIndexedAccess.ts, 270, 1))
+>OtherPerson : Symbol(OtherPerson, Decl(keyofAndIndexedAccess.ts, 317, 1))
 
     parts: number;
->parts : Symbol(OtherPerson.parts, Decl(keyofAndIndexedAccess.ts, 272, 19))
+>parts : Symbol(OtherPerson.parts, Decl(keyofAndIndexedAccess.ts, 319, 19))
 
     constructor(parts: number) {
->parts : Symbol(parts, Decl(keyofAndIndexedAccess.ts, 274, 16))
+>parts : Symbol(parts, Decl(keyofAndIndexedAccess.ts, 321, 16))
 
         setProperty(this, "parts", parts);
 >setProperty : Symbol(setProperty, Decl(keyofAndIndexedAccess.ts, 81, 1))
->this : Symbol(OtherPerson, Decl(keyofAndIndexedAccess.ts, 270, 1))
->parts : Symbol(parts, Decl(keyofAndIndexedAccess.ts, 274, 16))
+>this : Symbol(OtherPerson, Decl(keyofAndIndexedAccess.ts, 317, 1))
+>parts : Symbol(parts, Decl(keyofAndIndexedAccess.ts, 321, 16))
     }
     getParts() {
->getParts : Symbol(OtherPerson.getParts, Decl(keyofAndIndexedAccess.ts, 276, 5))
+>getParts : Symbol(OtherPerson.getParts, Decl(keyofAndIndexedAccess.ts, 323, 5))
 
         return getProperty(this, "parts")
 >getProperty : Symbol(getProperty, Decl(keyofAndIndexedAccess.ts, 77, 26))
->this : Symbol(OtherPerson, Decl(keyofAndIndexedAccess.ts, 270, 1))
+>this : Symbol(OtherPerson, Decl(keyofAndIndexedAccess.ts, 317, 1))
     }
 }
 
 // Modified repro from #12544
 
 function path<T, K1 extends keyof T>(obj: T, key1: K1): T[K1];
->path : Symbol(path, Decl(keyofAndIndexedAccess.ts, 280, 1), Decl(keyofAndIndexedAccess.ts, 284, 62), Decl(keyofAndIndexedAccess.ts, 285, 100), Decl(keyofAndIndexedAccess.ts, 286, 142), Decl(keyofAndIndexedAccess.ts, 287, 59))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 284, 14))
->K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 284, 16))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 284, 14))
->obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 284, 37))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 284, 14))
->key1 : Symbol(key1, Decl(keyofAndIndexedAccess.ts, 284, 44))
->K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 284, 16))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 284, 14))
->K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 284, 16))
+>path : Symbol(path, Decl(keyofAndIndexedAccess.ts, 327, 1), Decl(keyofAndIndexedAccess.ts, 331, 62), Decl(keyofAndIndexedAccess.ts, 332, 100), Decl(keyofAndIndexedAccess.ts, 333, 142), Decl(keyofAndIndexedAccess.ts, 334, 59))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 331, 14))
+>K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 331, 16))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 331, 14))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 331, 37))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 331, 14))
+>key1 : Symbol(key1, Decl(keyofAndIndexedAccess.ts, 331, 44))
+>K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 331, 16))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 331, 14))
+>K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 331, 16))
 
 function path<T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2];
->path : Symbol(path, Decl(keyofAndIndexedAccess.ts, 280, 1), Decl(keyofAndIndexedAccess.ts, 284, 62), Decl(keyofAndIndexedAccess.ts, 285, 100), Decl(keyofAndIndexedAccess.ts, 286, 142), Decl(keyofAndIndexedAccess.ts, 287, 59))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 285, 14))
->K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 285, 16))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 285, 14))
->K2 : Symbol(K2, Decl(keyofAndIndexedAccess.ts, 285, 36))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 285, 14))
->K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 285, 16))
->obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 285, 61))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 285, 14))
->key1 : Symbol(key1, Decl(keyofAndIndexedAccess.ts, 285, 68))
->K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 285, 16))
->key2 : Symbol(key2, Decl(keyofAndIndexedAccess.ts, 285, 78))
->K2 : Symbol(K2, Decl(keyofAndIndexedAccess.ts, 285, 36))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 285, 14))
->K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 285, 16))
->K2 : Symbol(K2, Decl(keyofAndIndexedAccess.ts, 285, 36))
+>path : Symbol(path, Decl(keyofAndIndexedAccess.ts, 327, 1), Decl(keyofAndIndexedAccess.ts, 331, 62), Decl(keyofAndIndexedAccess.ts, 332, 100), Decl(keyofAndIndexedAccess.ts, 333, 142), Decl(keyofAndIndexedAccess.ts, 334, 59))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 332, 14))
+>K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 332, 16))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 332, 14))
+>K2 : Symbol(K2, Decl(keyofAndIndexedAccess.ts, 332, 36))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 332, 14))
+>K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 332, 16))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 332, 61))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 332, 14))
+>key1 : Symbol(key1, Decl(keyofAndIndexedAccess.ts, 332, 68))
+>K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 332, 16))
+>key2 : Symbol(key2, Decl(keyofAndIndexedAccess.ts, 332, 78))
+>K2 : Symbol(K2, Decl(keyofAndIndexedAccess.ts, 332, 36))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 332, 14))
+>K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 332, 16))
+>K2 : Symbol(K2, Decl(keyofAndIndexedAccess.ts, 332, 36))
 
 function path<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3];
->path : Symbol(path, Decl(keyofAndIndexedAccess.ts, 280, 1), Decl(keyofAndIndexedAccess.ts, 284, 62), Decl(keyofAndIndexedAccess.ts, 285, 100), Decl(keyofAndIndexedAccess.ts, 286, 142), Decl(keyofAndIndexedAccess.ts, 287, 59))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 286, 14))
->K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 286, 16))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 286, 14))
->K2 : Symbol(K2, Decl(keyofAndIndexedAccess.ts, 286, 36))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 286, 14))
->K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 286, 16))
->K3 : Symbol(K3, Decl(keyofAndIndexedAccess.ts, 286, 60))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 286, 14))
->K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 286, 16))
->K2 : Symbol(K2, Decl(keyofAndIndexedAccess.ts, 286, 36))
->obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 286, 89))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 286, 14))
->key1 : Symbol(key1, Decl(keyofAndIndexedAccess.ts, 286, 96))
->K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 286, 16))
->key2 : Symbol(key2, Decl(keyofAndIndexedAccess.ts, 286, 106))
->K2 : Symbol(K2, Decl(keyofAndIndexedAccess.ts, 286, 36))
->key3 : Symbol(key3, Decl(keyofAndIndexedAccess.ts, 286, 116))
->K3 : Symbol(K3, Decl(keyofAndIndexedAccess.ts, 286, 60))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 286, 14))
->K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 286, 16))
->K2 : Symbol(K2, Decl(keyofAndIndexedAccess.ts, 286, 36))
->K3 : Symbol(K3, Decl(keyofAndIndexedAccess.ts, 286, 60))
+>path : Symbol(path, Decl(keyofAndIndexedAccess.ts, 327, 1), Decl(keyofAndIndexedAccess.ts, 331, 62), Decl(keyofAndIndexedAccess.ts, 332, 100), Decl(keyofAndIndexedAccess.ts, 333, 142), Decl(keyofAndIndexedAccess.ts, 334, 59))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 333, 14))
+>K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 333, 16))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 333, 14))
+>K2 : Symbol(K2, Decl(keyofAndIndexedAccess.ts, 333, 36))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 333, 14))
+>K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 333, 16))
+>K3 : Symbol(K3, Decl(keyofAndIndexedAccess.ts, 333, 60))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 333, 14))
+>K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 333, 16))
+>K2 : Symbol(K2, Decl(keyofAndIndexedAccess.ts, 333, 36))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 333, 89))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 333, 14))
+>key1 : Symbol(key1, Decl(keyofAndIndexedAccess.ts, 333, 96))
+>K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 333, 16))
+>key2 : Symbol(key2, Decl(keyofAndIndexedAccess.ts, 333, 106))
+>K2 : Symbol(K2, Decl(keyofAndIndexedAccess.ts, 333, 36))
+>key3 : Symbol(key3, Decl(keyofAndIndexedAccess.ts, 333, 116))
+>K3 : Symbol(K3, Decl(keyofAndIndexedAccess.ts, 333, 60))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 333, 14))
+>K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 333, 16))
+>K2 : Symbol(K2, Decl(keyofAndIndexedAccess.ts, 333, 36))
+>K3 : Symbol(K3, Decl(keyofAndIndexedAccess.ts, 333, 60))
 
 function path(obj: any, ...keys: (string | number)[]): any;
->path : Symbol(path, Decl(keyofAndIndexedAccess.ts, 280, 1), Decl(keyofAndIndexedAccess.ts, 284, 62), Decl(keyofAndIndexedAccess.ts, 285, 100), Decl(keyofAndIndexedAccess.ts, 286, 142), Decl(keyofAndIndexedAccess.ts, 287, 59))
->obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 287, 14))
->keys : Symbol(keys, Decl(keyofAndIndexedAccess.ts, 287, 23))
+>path : Symbol(path, Decl(keyofAndIndexedAccess.ts, 327, 1), Decl(keyofAndIndexedAccess.ts, 331, 62), Decl(keyofAndIndexedAccess.ts, 332, 100), Decl(keyofAndIndexedAccess.ts, 333, 142), Decl(keyofAndIndexedAccess.ts, 334, 59))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 334, 14))
+>keys : Symbol(keys, Decl(keyofAndIndexedAccess.ts, 334, 23))
 
 function path(obj: any, ...keys: (string | number)[]): any {
->path : Symbol(path, Decl(keyofAndIndexedAccess.ts, 280, 1), Decl(keyofAndIndexedAccess.ts, 284, 62), Decl(keyofAndIndexedAccess.ts, 285, 100), Decl(keyofAndIndexedAccess.ts, 286, 142), Decl(keyofAndIndexedAccess.ts, 287, 59))
->obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 288, 14))
->keys : Symbol(keys, Decl(keyofAndIndexedAccess.ts, 288, 23))
+>path : Symbol(path, Decl(keyofAndIndexedAccess.ts, 327, 1), Decl(keyofAndIndexedAccess.ts, 331, 62), Decl(keyofAndIndexedAccess.ts, 332, 100), Decl(keyofAndIndexedAccess.ts, 333, 142), Decl(keyofAndIndexedAccess.ts, 334, 59))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 335, 14))
+>keys : Symbol(keys, Decl(keyofAndIndexedAccess.ts, 335, 23))
 
     let result = obj;
->result : Symbol(result, Decl(keyofAndIndexedAccess.ts, 289, 7))
->obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 288, 14))
+>result : Symbol(result, Decl(keyofAndIndexedAccess.ts, 336, 7))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 335, 14))
 
     for (let k of keys) {
->k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 290, 12))
->keys : Symbol(keys, Decl(keyofAndIndexedAccess.ts, 288, 23))
+>k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 337, 12))
+>keys : Symbol(keys, Decl(keyofAndIndexedAccess.ts, 335, 23))
 
         result = result[k];
->result : Symbol(result, Decl(keyofAndIndexedAccess.ts, 289, 7))
->result : Symbol(result, Decl(keyofAndIndexedAccess.ts, 289, 7))
->k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 290, 12))
+>result : Symbol(result, Decl(keyofAndIndexedAccess.ts, 336, 7))
+>result : Symbol(result, Decl(keyofAndIndexedAccess.ts, 336, 7))
+>k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 337, 12))
     }
     return result;
->result : Symbol(result, Decl(keyofAndIndexedAccess.ts, 289, 7))
+>result : Symbol(result, Decl(keyofAndIndexedAccess.ts, 336, 7))
 }
 
 type Thing = {
->Thing : Symbol(Thing, Decl(keyofAndIndexedAccess.ts, 294, 1))
+>Thing : Symbol(Thing, Decl(keyofAndIndexedAccess.ts, 341, 1))
 
     a: { x: number, y: string },
->a : Symbol(a, Decl(keyofAndIndexedAccess.ts, 296, 14))
->x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 297, 8))
->y : Symbol(y, Decl(keyofAndIndexedAccess.ts, 297, 19))
+>a : Symbol(a, Decl(keyofAndIndexedAccess.ts, 343, 14))
+>x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 344, 8))
+>y : Symbol(y, Decl(keyofAndIndexedAccess.ts, 344, 19))
 
     b: boolean
->b : Symbol(b, Decl(keyofAndIndexedAccess.ts, 297, 32))
+>b : Symbol(b, Decl(keyofAndIndexedAccess.ts, 344, 32))
 
 };
 
 
 function f1(thing: Thing) {
->f1 : Symbol(f1, Decl(keyofAndIndexedAccess.ts, 299, 2))
->thing : Symbol(thing, Decl(keyofAndIndexedAccess.ts, 302, 12))
->Thing : Symbol(Thing, Decl(keyofAndIndexedAccess.ts, 294, 1))
+>f1 : Symbol(f1, Decl(keyofAndIndexedAccess.ts, 346, 2))
+>thing : Symbol(thing, Decl(keyofAndIndexedAccess.ts, 349, 12))
+>Thing : Symbol(Thing, Decl(keyofAndIndexedAccess.ts, 341, 1))
 
     let x1 = path(thing, 'a');  // { x: number, y: string }
->x1 : Symbol(x1, Decl(keyofAndIndexedAccess.ts, 303, 7))
->path : Symbol(path, Decl(keyofAndIndexedAccess.ts, 280, 1), Decl(keyofAndIndexedAccess.ts, 284, 62), Decl(keyofAndIndexedAccess.ts, 285, 100), Decl(keyofAndIndexedAccess.ts, 286, 142), Decl(keyofAndIndexedAccess.ts, 287, 59))
->thing : Symbol(thing, Decl(keyofAndIndexedAccess.ts, 302, 12))
+>x1 : Symbol(x1, Decl(keyofAndIndexedAccess.ts, 350, 7))
+>path : Symbol(path, Decl(keyofAndIndexedAccess.ts, 327, 1), Decl(keyofAndIndexedAccess.ts, 331, 62), Decl(keyofAndIndexedAccess.ts, 332, 100), Decl(keyofAndIndexedAccess.ts, 333, 142), Decl(keyofAndIndexedAccess.ts, 334, 59))
+>thing : Symbol(thing, Decl(keyofAndIndexedAccess.ts, 349, 12))
 
     let x2 = path(thing, 'a', 'y');  // string
->x2 : Symbol(x2, Decl(keyofAndIndexedAccess.ts, 304, 7))
->path : Symbol(path, Decl(keyofAndIndexedAccess.ts, 280, 1), Decl(keyofAndIndexedAccess.ts, 284, 62), Decl(keyofAndIndexedAccess.ts, 285, 100), Decl(keyofAndIndexedAccess.ts, 286, 142), Decl(keyofAndIndexedAccess.ts, 287, 59))
->thing : Symbol(thing, Decl(keyofAndIndexedAccess.ts, 302, 12))
+>x2 : Symbol(x2, Decl(keyofAndIndexedAccess.ts, 351, 7))
+>path : Symbol(path, Decl(keyofAndIndexedAccess.ts, 327, 1), Decl(keyofAndIndexedAccess.ts, 331, 62), Decl(keyofAndIndexedAccess.ts, 332, 100), Decl(keyofAndIndexedAccess.ts, 333, 142), Decl(keyofAndIndexedAccess.ts, 334, 59))
+>thing : Symbol(thing, Decl(keyofAndIndexedAccess.ts, 349, 12))
 
     let x3 = path(thing, 'b');  // boolean
->x3 : Symbol(x3, Decl(keyofAndIndexedAccess.ts, 305, 7))
->path : Symbol(path, Decl(keyofAndIndexedAccess.ts, 280, 1), Decl(keyofAndIndexedAccess.ts, 284, 62), Decl(keyofAndIndexedAccess.ts, 285, 100), Decl(keyofAndIndexedAccess.ts, 286, 142), Decl(keyofAndIndexedAccess.ts, 287, 59))
->thing : Symbol(thing, Decl(keyofAndIndexedAccess.ts, 302, 12))
+>x3 : Symbol(x3, Decl(keyofAndIndexedAccess.ts, 352, 7))
+>path : Symbol(path, Decl(keyofAndIndexedAccess.ts, 327, 1), Decl(keyofAndIndexedAccess.ts, 331, 62), Decl(keyofAndIndexedAccess.ts, 332, 100), Decl(keyofAndIndexedAccess.ts, 333, 142), Decl(keyofAndIndexedAccess.ts, 334, 59))
+>thing : Symbol(thing, Decl(keyofAndIndexedAccess.ts, 349, 12))
 
     let x4 = path(thing, ...['a', 'x']);  // any
->x4 : Symbol(x4, Decl(keyofAndIndexedAccess.ts, 306, 7))
->path : Symbol(path, Decl(keyofAndIndexedAccess.ts, 280, 1), Decl(keyofAndIndexedAccess.ts, 284, 62), Decl(keyofAndIndexedAccess.ts, 285, 100), Decl(keyofAndIndexedAccess.ts, 286, 142), Decl(keyofAndIndexedAccess.ts, 287, 59))
->thing : Symbol(thing, Decl(keyofAndIndexedAccess.ts, 302, 12))
+>x4 : Symbol(x4, Decl(keyofAndIndexedAccess.ts, 353, 7))
+>path : Symbol(path, Decl(keyofAndIndexedAccess.ts, 327, 1), Decl(keyofAndIndexedAccess.ts, 331, 62), Decl(keyofAndIndexedAccess.ts, 332, 100), Decl(keyofAndIndexedAccess.ts, 333, 142), Decl(keyofAndIndexedAccess.ts, 334, 59))
+>thing : Symbol(thing, Decl(keyofAndIndexedAccess.ts, 349, 12))
 }
 
 // Repro from comment in #12114
 
 const assignTo2 = <T, K1 extends keyof T, K2 extends keyof T[K1]>(object: T, key1: K1, key2: K2) =>
->assignTo2 : Symbol(assignTo2, Decl(keyofAndIndexedAccess.ts, 311, 5))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 311, 19))
->K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 311, 21))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 311, 19))
->K2 : Symbol(K2, Decl(keyofAndIndexedAccess.ts, 311, 41))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 311, 19))
->K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 311, 21))
->object : Symbol(object, Decl(keyofAndIndexedAccess.ts, 311, 66))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 311, 19))
->key1 : Symbol(key1, Decl(keyofAndIndexedAccess.ts, 311, 76))
->K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 311, 21))
->key2 : Symbol(key2, Decl(keyofAndIndexedAccess.ts, 311, 86))
->K2 : Symbol(K2, Decl(keyofAndIndexedAccess.ts, 311, 41))
+>assignTo2 : Symbol(assignTo2, Decl(keyofAndIndexedAccess.ts, 358, 5))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 358, 19))
+>K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 358, 21))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 358, 19))
+>K2 : Symbol(K2, Decl(keyofAndIndexedAccess.ts, 358, 41))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 358, 19))
+>K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 358, 21))
+>object : Symbol(object, Decl(keyofAndIndexedAccess.ts, 358, 66))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 358, 19))
+>key1 : Symbol(key1, Decl(keyofAndIndexedAccess.ts, 358, 76))
+>K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 358, 21))
+>key2 : Symbol(key2, Decl(keyofAndIndexedAccess.ts, 358, 86))
+>K2 : Symbol(K2, Decl(keyofAndIndexedAccess.ts, 358, 41))
 
     (value: T[K1][K2]) => object[key1][key2] = value;
->value : Symbol(value, Decl(keyofAndIndexedAccess.ts, 312, 5))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 311, 19))
->K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 311, 21))
->K2 : Symbol(K2, Decl(keyofAndIndexedAccess.ts, 311, 41))
->object : Symbol(object, Decl(keyofAndIndexedAccess.ts, 311, 66))
->key1 : Symbol(key1, Decl(keyofAndIndexedAccess.ts, 311, 76))
->key2 : Symbol(key2, Decl(keyofAndIndexedAccess.ts, 311, 86))
->value : Symbol(value, Decl(keyofAndIndexedAccess.ts, 312, 5))
+>value : Symbol(value, Decl(keyofAndIndexedAccess.ts, 359, 5))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 358, 19))
+>K1 : Symbol(K1, Decl(keyofAndIndexedAccess.ts, 358, 21))
+>K2 : Symbol(K2, Decl(keyofAndIndexedAccess.ts, 358, 41))
+>object : Symbol(object, Decl(keyofAndIndexedAccess.ts, 358, 66))
+>key1 : Symbol(key1, Decl(keyofAndIndexedAccess.ts, 358, 76))
+>key2 : Symbol(key2, Decl(keyofAndIndexedAccess.ts, 358, 86))
+>value : Symbol(value, Decl(keyofAndIndexedAccess.ts, 359, 5))
 
 // Modified repro from #12573
 
 declare function one<T>(handler: (t: T) => void): T
->one : Symbol(one, Decl(keyofAndIndexedAccess.ts, 312, 53))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 316, 21))
->handler : Symbol(handler, Decl(keyofAndIndexedAccess.ts, 316, 24))
->t : Symbol(t, Decl(keyofAndIndexedAccess.ts, 316, 34))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 316, 21))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 316, 21))
+>one : Symbol(one, Decl(keyofAndIndexedAccess.ts, 359, 53))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 363, 21))
+>handler : Symbol(handler, Decl(keyofAndIndexedAccess.ts, 363, 24))
+>t : Symbol(t, Decl(keyofAndIndexedAccess.ts, 363, 34))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 363, 21))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 363, 21))
 
 var empty = one(() => {}) // inferred as {}, expected
->empty : Symbol(empty, Decl(keyofAndIndexedAccess.ts, 317, 3))
->one : Symbol(one, Decl(keyofAndIndexedAccess.ts, 312, 53))
+>empty : Symbol(empty, Decl(keyofAndIndexedAccess.ts, 364, 3))
+>one : Symbol(one, Decl(keyofAndIndexedAccess.ts, 359, 53))
 
 type Handlers<T> = { [K in keyof T]: (t: T[K]) => void }
->Handlers : Symbol(Handlers, Decl(keyofAndIndexedAccess.ts, 317, 25))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 319, 14))
->K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 319, 22))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 319, 14))
->t : Symbol(t, Decl(keyofAndIndexedAccess.ts, 319, 38))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 319, 14))
->K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 319, 22))
+>Handlers : Symbol(Handlers, Decl(keyofAndIndexedAccess.ts, 364, 25))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 366, 14))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 366, 22))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 366, 14))
+>t : Symbol(t, Decl(keyofAndIndexedAccess.ts, 366, 38))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 366, 14))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 366, 22))
 
 declare function on<T>(handlerHash: Handlers<T>): T
->on : Symbol(on, Decl(keyofAndIndexedAccess.ts, 319, 56))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 320, 20))
->handlerHash : Symbol(handlerHash, Decl(keyofAndIndexedAccess.ts, 320, 23))
->Handlers : Symbol(Handlers, Decl(keyofAndIndexedAccess.ts, 317, 25))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 320, 20))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 320, 20))
+>on : Symbol(on, Decl(keyofAndIndexedAccess.ts, 366, 56))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 367, 20))
+>handlerHash : Symbol(handlerHash, Decl(keyofAndIndexedAccess.ts, 367, 23))
+>Handlers : Symbol(Handlers, Decl(keyofAndIndexedAccess.ts, 364, 25))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 367, 20))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 367, 20))
 
 var hashOfEmpty1 = on({ test: () => {} });  // {}
->hashOfEmpty1 : Symbol(hashOfEmpty1, Decl(keyofAndIndexedAccess.ts, 321, 3))
->on : Symbol(on, Decl(keyofAndIndexedAccess.ts, 319, 56))
->test : Symbol(test, Decl(keyofAndIndexedAccess.ts, 321, 23))
+>hashOfEmpty1 : Symbol(hashOfEmpty1, Decl(keyofAndIndexedAccess.ts, 368, 3))
+>on : Symbol(on, Decl(keyofAndIndexedAccess.ts, 366, 56))
+>test : Symbol(test, Decl(keyofAndIndexedAccess.ts, 368, 23))
 
 var hashOfEmpty2 = on({ test: (x: boolean) => {} });  // { test: boolean }
->hashOfEmpty2 : Symbol(hashOfEmpty2, Decl(keyofAndIndexedAccess.ts, 322, 3))
->on : Symbol(on, Decl(keyofAndIndexedAccess.ts, 319, 56))
->test : Symbol(test, Decl(keyofAndIndexedAccess.ts, 322, 23))
->x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 322, 31))
+>hashOfEmpty2 : Symbol(hashOfEmpty2, Decl(keyofAndIndexedAccess.ts, 369, 3))
+>on : Symbol(on, Decl(keyofAndIndexedAccess.ts, 366, 56))
+>test : Symbol(test, Decl(keyofAndIndexedAccess.ts, 369, 23))
+>x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 369, 31))
 
 // Repro from #12624
 
 interface Options1<Data, Computed> {
->Options1 : Symbol(Options1, Decl(keyofAndIndexedAccess.ts, 322, 52))
->Data : Symbol(Data, Decl(keyofAndIndexedAccess.ts, 326, 19))
->Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 326, 24))
+>Options1 : Symbol(Options1, Decl(keyofAndIndexedAccess.ts, 369, 52))
+>Data : Symbol(Data, Decl(keyofAndIndexedAccess.ts, 373, 19))
+>Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 373, 24))
 
     data?: Data
->data : Symbol(Options1.data, Decl(keyofAndIndexedAccess.ts, 326, 36))
->Data : Symbol(Data, Decl(keyofAndIndexedAccess.ts, 326, 19))
+>data : Symbol(Options1.data, Decl(keyofAndIndexedAccess.ts, 373, 36))
+>Data : Symbol(Data, Decl(keyofAndIndexedAccess.ts, 373, 19))
 
     computed?: Computed;
->computed : Symbol(Options1.computed, Decl(keyofAndIndexedAccess.ts, 327, 15))
->Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 326, 24))
+>computed : Symbol(Options1.computed, Decl(keyofAndIndexedAccess.ts, 374, 15))
+>Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 373, 24))
 }
 
 declare class Component1<Data, Computed> {
->Component1 : Symbol(Component1, Decl(keyofAndIndexedAccess.ts, 329, 1))
->Data : Symbol(Data, Decl(keyofAndIndexedAccess.ts, 331, 25))
->Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 331, 30))
+>Component1 : Symbol(Component1, Decl(keyofAndIndexedAccess.ts, 376, 1))
+>Data : Symbol(Data, Decl(keyofAndIndexedAccess.ts, 378, 25))
+>Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 378, 30))
 
     constructor(options: Options1<Data, Computed>);
->options : Symbol(options, Decl(keyofAndIndexedAccess.ts, 332, 16))
->Options1 : Symbol(Options1, Decl(keyofAndIndexedAccess.ts, 322, 52))
->Data : Symbol(Data, Decl(keyofAndIndexedAccess.ts, 331, 25))
->Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 331, 30))
+>options : Symbol(options, Decl(keyofAndIndexedAccess.ts, 379, 16))
+>Options1 : Symbol(Options1, Decl(keyofAndIndexedAccess.ts, 369, 52))
+>Data : Symbol(Data, Decl(keyofAndIndexedAccess.ts, 378, 25))
+>Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 378, 30))
 
     get<K extends keyof (Data & Computed)>(key: K): (Data & Computed)[K];
->get : Symbol(Component1.get, Decl(keyofAndIndexedAccess.ts, 332, 51))
->K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 333, 8))
->Data : Symbol(Data, Decl(keyofAndIndexedAccess.ts, 331, 25))
->Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 331, 30))
->key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 333, 43))
->K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 333, 8))
->Data : Symbol(Data, Decl(keyofAndIndexedAccess.ts, 331, 25))
->Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 331, 30))
->K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 333, 8))
+>get : Symbol(Component1.get, Decl(keyofAndIndexedAccess.ts, 379, 51))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 380, 8))
+>Data : Symbol(Data, Decl(keyofAndIndexedAccess.ts, 378, 25))
+>Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 378, 30))
+>key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 380, 43))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 380, 8))
+>Data : Symbol(Data, Decl(keyofAndIndexedAccess.ts, 378, 25))
+>Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 378, 30))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 380, 8))
 }
 
 let c1 = new Component1({
->c1 : Symbol(c1, Decl(keyofAndIndexedAccess.ts, 336, 3))
->Component1 : Symbol(Component1, Decl(keyofAndIndexedAccess.ts, 329, 1))
+>c1 : Symbol(c1, Decl(keyofAndIndexedAccess.ts, 383, 3))
+>Component1 : Symbol(Component1, Decl(keyofAndIndexedAccess.ts, 376, 1))
 
     data: {
->data : Symbol(data, Decl(keyofAndIndexedAccess.ts, 336, 25))
+>data : Symbol(data, Decl(keyofAndIndexedAccess.ts, 383, 25))
 
         hello: ""
->hello : Symbol(hello, Decl(keyofAndIndexedAccess.ts, 337, 11))
+>hello : Symbol(hello, Decl(keyofAndIndexedAccess.ts, 384, 11))
     }
 });
 
 c1.get("hello");
->c1.get : Symbol(Component1.get, Decl(keyofAndIndexedAccess.ts, 332, 51))
->c1 : Symbol(c1, Decl(keyofAndIndexedAccess.ts, 336, 3))
->get : Symbol(Component1.get, Decl(keyofAndIndexedAccess.ts, 332, 51))
+>c1.get : Symbol(Component1.get, Decl(keyofAndIndexedAccess.ts, 379, 51))
+>c1 : Symbol(c1, Decl(keyofAndIndexedAccess.ts, 383, 3))
+>get : Symbol(Component1.get, Decl(keyofAndIndexedAccess.ts, 379, 51))
 
 // Repro from #12625
 
 interface Options2<Data, Computed> {
->Options2 : Symbol(Options2, Decl(keyofAndIndexedAccess.ts, 342, 16))
->Data : Symbol(Data, Decl(keyofAndIndexedAccess.ts, 346, 19))
->Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 346, 24))
+>Options2 : Symbol(Options2, Decl(keyofAndIndexedAccess.ts, 389, 16))
+>Data : Symbol(Data, Decl(keyofAndIndexedAccess.ts, 393, 19))
+>Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 393, 24))
 
     data?: Data
->data : Symbol(Options2.data, Decl(keyofAndIndexedAccess.ts, 346, 36))
->Data : Symbol(Data, Decl(keyofAndIndexedAccess.ts, 346, 19))
+>data : Symbol(Options2.data, Decl(keyofAndIndexedAccess.ts, 393, 36))
+>Data : Symbol(Data, Decl(keyofAndIndexedAccess.ts, 393, 19))
 
     computed?: Computed;
->computed : Symbol(Options2.computed, Decl(keyofAndIndexedAccess.ts, 347, 15))
->Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 346, 24))
+>computed : Symbol(Options2.computed, Decl(keyofAndIndexedAccess.ts, 394, 15))
+>Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 393, 24))
 }
 
 declare class Component2<Data, Computed> {
->Component2 : Symbol(Component2, Decl(keyofAndIndexedAccess.ts, 349, 1))
->Data : Symbol(Data, Decl(keyofAndIndexedAccess.ts, 351, 25))
->Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 351, 30))
+>Component2 : Symbol(Component2, Decl(keyofAndIndexedAccess.ts, 396, 1))
+>Data : Symbol(Data, Decl(keyofAndIndexedAccess.ts, 398, 25))
+>Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 398, 30))
 
     constructor(options: Options2<Data, Computed>);
->options : Symbol(options, Decl(keyofAndIndexedAccess.ts, 352, 16))
->Options2 : Symbol(Options2, Decl(keyofAndIndexedAccess.ts, 342, 16))
->Data : Symbol(Data, Decl(keyofAndIndexedAccess.ts, 351, 25))
->Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 351, 30))
+>options : Symbol(options, Decl(keyofAndIndexedAccess.ts, 399, 16))
+>Options2 : Symbol(Options2, Decl(keyofAndIndexedAccess.ts, 389, 16))
+>Data : Symbol(Data, Decl(keyofAndIndexedAccess.ts, 398, 25))
+>Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 398, 30))
 
     get<K extends keyof Data | keyof Computed>(key: K): (Data & Computed)[K];
->get : Symbol(Component2.get, Decl(keyofAndIndexedAccess.ts, 352, 51))
->K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 353, 8))
->Data : Symbol(Data, Decl(keyofAndIndexedAccess.ts, 351, 25))
->Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 351, 30))
->key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 353, 47))
->K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 353, 8))
->Data : Symbol(Data, Decl(keyofAndIndexedAccess.ts, 351, 25))
->Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 351, 30))
->K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 353, 8))
+>get : Symbol(Component2.get, Decl(keyofAndIndexedAccess.ts, 399, 51))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 400, 8))
+>Data : Symbol(Data, Decl(keyofAndIndexedAccess.ts, 398, 25))
+>Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 398, 30))
+>key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 400, 47))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 400, 8))
+>Data : Symbol(Data, Decl(keyofAndIndexedAccess.ts, 398, 25))
+>Computed : Symbol(Computed, Decl(keyofAndIndexedAccess.ts, 398, 30))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 400, 8))
 }
 
 // Repro from #12641
 
 interface R {
->R : Symbol(R, Decl(keyofAndIndexedAccess.ts, 354, 1))
+>R : Symbol(R, Decl(keyofAndIndexedAccess.ts, 401, 1))
 
     p: number;
->p : Symbol(R.p, Decl(keyofAndIndexedAccess.ts, 358, 13))
+>p : Symbol(R.p, Decl(keyofAndIndexedAccess.ts, 405, 13))
 }
 
 function f<K extends keyof R>(p: K) {
->f : Symbol(f, Decl(keyofAndIndexedAccess.ts, 360, 1))
->K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 362, 11))
->R : Symbol(R, Decl(keyofAndIndexedAccess.ts, 354, 1))
->p : Symbol(p, Decl(keyofAndIndexedAccess.ts, 362, 30))
->K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 362, 11))
+>f : Symbol(f, Decl(keyofAndIndexedAccess.ts, 407, 1))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 409, 11))
+>R : Symbol(R, Decl(keyofAndIndexedAccess.ts, 401, 1))
+>p : Symbol(p, Decl(keyofAndIndexedAccess.ts, 409, 30))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 409, 11))
 
     let a: any;
->a : Symbol(a, Decl(keyofAndIndexedAccess.ts, 363, 7))
+>a : Symbol(a, Decl(keyofAndIndexedAccess.ts, 410, 7))
 
     a[p].add;  // any
->a : Symbol(a, Decl(keyofAndIndexedAccess.ts, 363, 7))
->p : Symbol(p, Decl(keyofAndIndexedAccess.ts, 362, 30))
+>a : Symbol(a, Decl(keyofAndIndexedAccess.ts, 410, 7))
+>p : Symbol(p, Decl(keyofAndIndexedAccess.ts, 409, 30))
 }
+
+// Repro from #12651
+
+type MethodDescriptor = {
+>MethodDescriptor : Symbol(MethodDescriptor, Decl(keyofAndIndexedAccess.ts, 412, 1))
+
+	name: string;
+>name : Symbol(name, Decl(keyofAndIndexedAccess.ts, 416, 25))
+
+	args: any[];
+>args : Symbol(args, Decl(keyofAndIndexedAccess.ts, 417, 14))
+
+	returnValue: any;
+>returnValue : Symbol(returnValue, Decl(keyofAndIndexedAccess.ts, 418, 13))
+}
+
+declare function dispatchMethod<M extends MethodDescriptor>(name: M['name'], args: M['args']): M['returnValue'];
+>dispatchMethod : Symbol(dispatchMethod, Decl(keyofAndIndexedAccess.ts, 420, 1))
+>M : Symbol(M, Decl(keyofAndIndexedAccess.ts, 422, 32))
+>MethodDescriptor : Symbol(MethodDescriptor, Decl(keyofAndIndexedAccess.ts, 412, 1))
+>name : Symbol(name, Decl(keyofAndIndexedAccess.ts, 422, 60))
+>M : Symbol(M, Decl(keyofAndIndexedAccess.ts, 422, 32))
+>args : Symbol(args, Decl(keyofAndIndexedAccess.ts, 422, 76))
+>M : Symbol(M, Decl(keyofAndIndexedAccess.ts, 422, 32))
+>M : Symbol(M, Decl(keyofAndIndexedAccess.ts, 422, 32))
+
+type SomeMethodDescriptor = {
+>SomeMethodDescriptor : Symbol(SomeMethodDescriptor, Decl(keyofAndIndexedAccess.ts, 422, 112))
+
+	name: "someMethod";
+>name : Symbol(name, Decl(keyofAndIndexedAccess.ts, 424, 29))
+
+	args: [string, number];
+>args : Symbol(args, Decl(keyofAndIndexedAccess.ts, 425, 20))
+
+	returnValue: string[];
+>returnValue : Symbol(returnValue, Decl(keyofAndIndexedAccess.ts, 426, 24))
+}
+
+let result = dispatchMethod<SomeMethodDescriptor>("someMethod", ["hello", 35]);
+>result : Symbol(result, Decl(keyofAndIndexedAccess.ts, 430, 3))
+>dispatchMethod : Symbol(dispatchMethod, Decl(keyofAndIndexedAccess.ts, 420, 1))
+>SomeMethodDescriptor : Symbol(SomeMethodDescriptor, Decl(keyofAndIndexedAccess.ts, 422, 112))
+
