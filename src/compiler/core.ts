@@ -568,8 +568,6 @@ namespace ts {
      * is created if `value` was appended.
      * @param value The value to append to the array. If `value` is `undefined`, nothing is
      * appended.
-     * @param copyOnWrite Indicates whether to return a fresh array rather than modify the
-     * existing array.
      */
     export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined {
         if (value === undefined) return to;
