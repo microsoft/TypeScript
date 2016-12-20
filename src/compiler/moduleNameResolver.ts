@@ -680,7 +680,7 @@ namespace ts {
                 // A package.json "typings" may specify an exact filename, or may choose to omit an extension.
                 const fromExactFile = tryFile(mainOrTypesFile, failedLookupLocations, onlyRecordFailures, state);
                 if (fromExactFile) {
-                    const resolved = fromExactFile && resolvedFromSuspiciousFile(extensions, fromExactFile);
+                    const resolved = fromExactFile && resolvedIfExtensionMatches(extensions, fromExactFile);
                     if (resolved) {
                         return resolved;
                     }
@@ -709,7 +709,7 @@ namespace ts {
     }
 
     /** Resolve from an arbitrarily specified file. Return `undefined` if it has an unsupported extension. */
-    function resolvedFromSuspiciousFile(extensions: Extensions, path: string): Resolved | undefined {
+    function resolvedIfExtensionMatches(extensions: Extensions, path: string): Resolved | undefined {
         const extension = tryGetExtensionFromPath(path);
         return extension !== undefined && extensionIsOk(extensions, extension) ? { path, extension } : undefined;
     }
