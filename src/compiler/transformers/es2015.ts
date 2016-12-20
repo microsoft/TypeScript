@@ -164,9 +164,14 @@ namespace ts {
 
     type LoopConverter = (node: IterationStatement, outermostLabeledStatement: LabeledStatement, convertedLoopBodyStatements: Statement[]) => Statement;
 
-    // Facts we track as we descend the tree
-    const enum AncestorFacts {
+    // Facts we track as we traverse the tree
+    const enum HierarchyFacts {
         None = 0,
+
+        //
+        // Ancestor facts
+        //
+
         Function = 1 << 0,                      // Enclosed in a non-arrow function
         ArrowFunction = 1 << 1,                 // Enclosed in an arrow function
         AsyncFunctionBody = 1 << 2,             // Enclosed in an async function body
@@ -180,6 +185,14 @@ namespace ts {
         ForStatement = 1 << 10,                 // Enclosing block-scoped container is a ForStatement
         ForInOrForOfStatement = 1 << 11,        // Enclosing block-scoped container is a ForInStatement or ForOfStatement
         ConstructorWithCapturedSuper = 1 << 12, // Enclosed in a constructor that captures 'this' for use with 'super'
+        ComputedPropertyName = 1 << 13,         // Enclosed in a computed property name
+        // NOTE: do not add more ancestor flags without also updating AncestorFactsMask below.
+
+        //
+        // Ancestor masks
+        //
+
+        AncestorFactsMask = (ComputedPropertyName << 1) - 1,
 
         // We are always in *some* kind of block scope, but only specific block-scope containers are
         // top-level or Blocks.
@@ -192,11 +205,14 @@ namespace ts {
 
         // Functions, methods, and accessors are both new lexical scopes and new block scopes.
         FunctionIncludes = Function | TopLevel,
-        FunctionExcludes = BlockScopeExcludes & ~TopLevel | ArrowFunction | AsyncFunctionBody | CapturesThis | NonStaticClassElement | ConstructorWithCapturedSuper,
+        FunctionExcludes = BlockScopeExcludes & ~TopLevel | ArrowFunction | AsyncFunctionBody | CapturesThis | NonStaticClassElement | ConstructorWithCapturedSuper | ComputedPropertyName,
+
+        AsyncFunctionBodyIncludes = FunctionIncludes | AsyncFunctionBody,
+        AsyncFunctionBodyExcludes = FunctionExcludes & ~NonStaticClassElement,
 
         // Arrow functions are lexically scoped to their container, but are new block scopes.
         ArrowFunctionIncludes = ArrowFunction | TopLevel,
-        ArrowFunctionExcludes = BlockScopeExcludes & ~TopLevel | ConstructorWithCapturedSuper,
+        ArrowFunctionExcludes = BlockScopeExcludes & ~TopLevel | ConstructorWithCapturedSuper | ComputedPropertyName,
 
         // Constructors are both new lexical scopes and new block scopes. Constructors are also
         // always considered non-static members of a class.
@@ -221,6 +237,25 @@ namespace ts {
         // Blocks (other than function bodies) are new block scopes.
         BlockIncludes = Block,
         BlockExcludes = BlockScopeExcludes & ~Block,
+
+        IterationStatementBlockIncludes = IterationStatementBlock,
+        IterationStatementBlockExcludes = BlockScopeExcludes,
+
+        // Computed property names track subtree flags differently than their containing members.
+        ComputedPropertyNameIncludes = ComputedPropertyName,
+        ComputedPropertyNameExcludes = None,
+
+        //
+        // Subtree facts
+        //
+
+        // NOTE: To be added in a later PR
+
+        //
+        // Subtree masks
+        //
+
+        SubtreeFactsMask = ~AncestorFactsMask,
     }
 
     export function transformES2015(context: TransformationContext) {
@@ -239,7 +274,7 @@ namespace ts {
 
         let currentSourceFile: SourceFile;
         let currentText: string;
-        let ancestorFacts: AncestorFacts;
+        let hierarchyFacts: HierarchyFacts;
 
         /**
          * Used to track if we are emitting body of the converted loop
@@ -268,49 +303,34 @@ namespace ts {
 
             currentSourceFile = undefined;
             currentText = undefined;
-            ancestorFacts = AncestorFacts.None;
+            hierarchyFacts = HierarchyFacts.None;
             return visited;
         }
 
-        function setAncestorFacts(excludeFacts: AncestorFacts, includeFacts: AncestorFacts, node?: Node, container?: Node) {
-            if (node) {
-                switch (node.kind) {
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                        if (container && isClassLike(container) && !hasModifier(node, ModifierFlags.Static)) {
-                            includeFacts |= AncestorFacts.NonStaticClassElement;
-                        }
-                        break;
+        /**
+         * Sets the `HierarchyFacts` for this node prior to visiting this node's subtree, returning the facts set prior to modification.
+         * @param excludeFacts The existing `HierarchyFacts` to reset before visiting the subtree.
+         * @param includeFacts The new `HierarchyFacts` to set before visiting the subtree.
+         **/
+        function enterSubtree(excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts) {
+            const ancestorFacts = hierarchyFacts;
+            hierarchyFacts = (hierarchyFacts & ~excludeFacts | includeFacts) & HierarchyFacts.AncestorFactsMask;
+            return ancestorFacts;
+        }
 
-                    case SyntaxKind.FunctionExpression:
-                        const emitFlags = getEmitFlags(node);
-                        if (emitFlags & EmitFlags.CapturesThis) {
-                            includeFacts |= AncestorFacts.CapturesThis;
-                        }
-                        if (emitFlags & EmitFlags.AsyncFunctionBody) {
-                            excludeFacts &= ~AncestorFacts.NonStaticClassElement;
-                            includeFacts |= AncestorFacts.AsyncFunctionBody;
-                        }
-                        break;
-                    case SyntaxKind.FunctionDeclaration:
-                        if (getEmitFlags(node) & EmitFlags.CapturesThis) {
-                            includeFacts |= AncestorFacts.CapturesThis;
-                        }
-                        break;
-                    case SyntaxKind.Block:
-                        if (ancestorFacts & AncestorFacts.IterationStatement) {
-                            includeFacts = includeFacts & ~AncestorFacts.Block | AncestorFacts.IterationStatementBlock;
-                            excludeFacts |= AncestorFacts.Block;
-                        }
-                        break;
-                }
-            }
-            ancestorFacts = ancestorFacts & ~excludeFacts | includeFacts;
+        /**
+         * Restores the `HierarchyFacts` for this node's ancestor after visiting this node's
+         * subtree, propagating specific facts from the subtree.
+         * @param ancestorFacts The `HierarchyFacts` of the ancestor to restore after visiting the subtree.
+         * @param excludeFacts The existing `HierarchyFacts` of the subtree that should not be propagated.
+         * @param includeFacts The new `HierarchyFacts` of the subtree that should be propagated.
+         **/
+        function exitSubtree(ancestorFacts: HierarchyFacts, excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts) {
+            hierarchyFacts = (hierarchyFacts & ~excludeFacts | includeFacts) & HierarchyFacts.SubtreeFactsMask | ancestorFacts;
         }
 
         function isReturnVoidStatementInConstructorWithCapturedSuper(node: Node): boolean {
-            return ancestorFacts & AncestorFacts.ConstructorWithCapturedSuper
+            return hierarchyFacts & HierarchyFacts.ConstructorWithCapturedSuper
                 && node.kind === SyntaxKind.ReturnStatement
                 && !(<ReturnStatement>node).expression;
         }
@@ -318,7 +338,7 @@ namespace ts {
         function shouldVisitNode(node: Node): boolean {
             return (node.transformFlags & TransformFlags.ContainsES2015) !== 0
                 || convertedLoopState !== undefined
-                || (ancestorFacts & AncestorFacts.ConstructorWithCapturedSuper && isStatement(node))
+                || (hierarchyFacts & HierarchyFacts.ConstructorWithCapturedSuper && isStatement(node))
                 || (isIterationStatement(node, /*lookInLabeledStatements*/ false) && shouldConvertIterationStatementBody(node));
         }
 
@@ -479,15 +499,14 @@ namespace ts {
         }
 
         function visitSourceFile(node: SourceFile): SourceFile {
-            const savedAncestorFacts = ancestorFacts;
-            setAncestorFacts(AncestorFacts.SourceFileExcludes, AncestorFacts.SourceFileIncludes);
+            const ancestorFacts = enterSubtree(HierarchyFacts.SourceFileExcludes, HierarchyFacts.SourceFileIncludes);
             const statements: Statement[] = [];
             startLexicalEnvironment();
             const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ false, visitor);
             addCaptureThisForNodeIfNeeded(statements, node);
             addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
             addRange(statements, endLexicalEnvironment());
-            ancestorFacts = savedAncestorFacts;
+            exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
             return updateSourceFileNode(
                 node,
                 createNodeArray(statements, node.statements)
@@ -507,10 +526,9 @@ namespace ts {
         }
 
         function visitCaseBlock(node: CaseBlock): CaseBlock {
-            const savedAncestorFacts = ancestorFacts;
-            setAncestorFacts(AncestorFacts.BlockScopeExcludes, AncestorFacts.BlockScopeIncludes);
+            const ancestorFacts = enterSubtree(HierarchyFacts.BlockScopeExcludes, HierarchyFacts.BlockScopeIncludes);
             const updated = visitEachChild(node, visitor, context);
-            ancestorFacts = savedAncestorFacts;
+            exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
             return updated;
         }
 
@@ -545,7 +563,7 @@ namespace ts {
 
         function visitThisKeyword(node: Node): Node {
             if (convertedLoopState) {
-                if (ancestorFacts & AncestorFacts.ArrowFunction) {
+                if (hierarchyFacts & HierarchyFacts.ArrowFunction) {
                     // if the enclosing function is an ArrowFunction is then we use the captured 'this' keyword.
                     convertedLoopState.containsLexicalThis = true;
                     return node;
@@ -826,12 +844,9 @@ namespace ts {
          * @param extendsClauseElement The expression for the class `extends` clause.
          */
         function addConstructor(statements: Statement[], node: ClassExpression | ClassDeclaration, extendsClauseElement: ExpressionWithTypeArguments): void {
-            const savedAncestorFacts = ancestorFacts;
             const savedConvertedLoopState = convertedLoopState;
-
-            setAncestorFacts(AncestorFacts.ConstructorExcludes, AncestorFacts.ConstructorIncludes);
             convertedLoopState = undefined;
-
+            const ancestorFacts = enterSubtree(HierarchyFacts.ConstructorExcludes, HierarchyFacts.ConstructorIncludes);
             const constructor = getFirstConstructorWithBody(node);
             const hasSynthesizedSuper = hasSynthesizedDefaultSuperCall(constructor, extendsClauseElement !== undefined);
             const constructorFunction =
@@ -852,8 +867,7 @@ namespace ts {
             }
 
             statements.push(constructorFunction);
-
-            ancestorFacts = savedAncestorFacts;
+            exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
             convertedLoopState = savedConvertedLoopState;
         }
 
@@ -915,7 +929,7 @@ namespace ts {
 
             if (constructor) {
                 if (superCaptureStatus === SuperCaptureResult.ReplaceSuperCapture) {
-                    ancestorFacts |= AncestorFacts.ConstructorWithCapturedSuper;
+                    hierarchyFacts |= HierarchyFacts.ConstructorWithCapturedSuper;
                 }
 
                 addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, /*start*/ statementOffset));
@@ -1431,6 +1445,7 @@ namespace ts {
          * @param member The MethodDeclaration node.
          */
         function transformClassMethodDeclarationToStatement(receiver: LeftHandSideExpression, member: MethodDeclaration, container: Node) {
+            const ancestorFacts = enterSubtree(HierarchyFacts.None, HierarchyFacts.None);
             const commentRange = getCommentRange(member);
             const sourceMapRange = getSourceMapRange(member);
             const memberName = createMemberAccessForPropertyName(receiver, visitNode(member.name, visitor, isPropertyName), /*location*/ member.name);
@@ -1450,6 +1465,8 @@ namespace ts {
             // No source map should be emitted for this statement to align with the
             // old emitter.
             setEmitFlags(statement, EmitFlags.NoSourceMap);
+
+            exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
             return statement;
         }
 
@@ -1479,6 +1496,8 @@ namespace ts {
          * @param receiver The receiver for the member.
          */
         function transformAccessorsToExpression(receiver: LeftHandSideExpression, { firstAccessor, getAccessor, setAccessor }: AllAccessorDeclarations, container: Node, startsOnNewLine: boolean): Expression {
+            const ancestorFacts = enterSubtree(HierarchyFacts.None, HierarchyFacts.None);
+
             // To align with source maps in the old emitter, the receiver and property name
             // arguments are both mapped contiguously to the accessor name.
             const target = getMutableClone(receiver);
@@ -1525,6 +1544,8 @@ namespace ts {
             if (startsOnNewLine) {
                 call.startsOnNewLine = true;
             }
+
+            exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
             return call;
         }
 
@@ -1537,13 +1558,9 @@ namespace ts {
             if (node.transformFlags & TransformFlags.ContainsLexicalThis) {
                 enableSubstitutionsForCapturedThis();
             }
-
-            const savedAncestorFacts = ancestorFacts;
             const savedConvertedLoopState = convertedLoopState;
-
-            setAncestorFacts(AncestorFacts.ArrowFunctionExcludes, AncestorFacts.ArrowFunctionIncludes);
             convertedLoopState = undefined;
-
+            const ancestorFacts = enterSubtree(HierarchyFacts.ArrowFunctionExcludes, HierarchyFacts.ArrowFunctionIncludes);
             const func = createFunctionExpression(
                 /*modifiers*/ undefined,
                 /*asteriskToken*/ undefined,
@@ -1554,10 +1571,9 @@ namespace ts {
                 transformFunctionBody(node),
                 node
             );
-
             setOriginalNode(func, node);
             setEmitFlags(func, EmitFlags.CapturesThis);
-            ancestorFacts = savedAncestorFacts;
+            exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
             convertedLoopState = savedConvertedLoopState;
             return func;
         }
@@ -1568,12 +1584,11 @@ namespace ts {
          * @param node a FunctionExpression node.
          */
         function visitFunctionExpression(node: FunctionExpression): Expression {
-            const savedAncestorFacts = ancestorFacts;
+            const ancestorFacts = getEmitFlags(node) & EmitFlags.AsyncFunctionBody
+                ? enterSubtree(HierarchyFacts.AsyncFunctionBodyExcludes, HierarchyFacts.AsyncFunctionBodyIncludes)
+                : enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes);
             const savedConvertedLoopState = convertedLoopState;
-
-            setAncestorFacts(AncestorFacts.FunctionExcludes, AncestorFacts.FunctionIncludes, node);
             convertedLoopState = undefined;
-
             const updated = updateFunctionExpression(
                 node,
                 /*modifiers*/ undefined,
@@ -1585,8 +1600,7 @@ namespace ts {
                     ? transformFunctionBody(node)
                     : visitFunctionBody(node.body, functionBodyVisitor, context)
             );
-
-            ancestorFacts = savedAncestorFacts;
+            exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
             convertedLoopState = savedConvertedLoopState;
             return updated;
         }
@@ -1597,12 +1611,9 @@ namespace ts {
          * @param node a FunctionDeclaration node.
          */
         function visitFunctionDeclaration(node: FunctionDeclaration): FunctionDeclaration {
-            const savedAncestorFacts = ancestorFacts;
             const savedConvertedLoopState = convertedLoopState;
-
-            setAncestorFacts(AncestorFacts.FunctionExcludes, AncestorFacts.FunctionIncludes, node);
             convertedLoopState = undefined;
-
+            const ancestorFacts = enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes);
             const updated = updateFunctionDeclaration(
                 node,
                 /*decorators*/ undefined,
@@ -1616,7 +1627,7 @@ namespace ts {
                     : visitFunctionBody(node.body, functionBodyVisitor, context)
             );
 
-            ancestorFacts = savedAncestorFacts;
+            exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
             convertedLoopState = savedConvertedLoopState;
             return updated;
         }
@@ -1629,12 +1640,11 @@ namespace ts {
          * @param name The name of the new FunctionExpression.
          */
         function transformFunctionLikeToExpression(node: FunctionLikeDeclaration, location: TextRange, name: Identifier, container: Node): FunctionExpression {
-            const savedAncestorFacts = ancestorFacts;
             const savedConvertedLoopState = convertedLoopState;
-
-            setAncestorFacts(AncestorFacts.FunctionExcludes, AncestorFacts.FunctionIncludes, node, container);
             convertedLoopState = undefined;
-
+            const ancestorFacts = container && isClassLike(container) && !hasModifier(node, ModifierFlags.Static)
+                ? enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes | HierarchyFacts.NonStaticClassElement)
+                : enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes);
             const expression = setOriginalNode(
                 createFunctionExpression(
                     /*modifiers*/ undefined,
@@ -1648,8 +1658,7 @@ namespace ts {
                 ),
                 /*original*/ node
             );
-
-            ancestorFacts = savedAncestorFacts;
+            exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
             convertedLoopState = savedConvertedLoopState;
             return expression;
         }
@@ -1745,16 +1754,16 @@ namespace ts {
         }
 
         function visitBlock(node: Block, isFunctionBody: boolean): Block {
-            if (!isFunctionBody) {
-                const savedAncestorFacts = ancestorFacts;
-                setAncestorFacts(AncestorFacts.BlockExcludes, AncestorFacts.BlockIncludes, node);
-                const updated = visitEachChild(node, visitor, context);
-                ancestorFacts = savedAncestorFacts;
-                return updated;
+            if (isFunctionBody) {
+                // A function body is not a block scope.
+                return visitEachChild(node, visitor, context);
             }
-
-            // A function body is not a block scope.
-            return visitEachChild(node, visitor, context);
+            const ancestorFacts = hierarchyFacts & HierarchyFacts.IterationStatement
+                ? enterSubtree(HierarchyFacts.IterationStatementBlockExcludes, HierarchyFacts.IterationStatementBlockIncludes)
+                : enterSubtree(HierarchyFacts.BlockExcludes, HierarchyFacts.BlockIncludes);
+            const updated = visitEachChild(node, visitor, context);
+            exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
+            return updated;
         }
 
         /**
@@ -1814,13 +1823,9 @@ namespace ts {
         }
 
         function visitVariableStatement(node: VariableStatement): Statement {
-            const savedAncestorFacts = ancestorFacts;
-            if (hasModifier(node, ModifierFlags.Export)) {
-                ancestorFacts |= AncestorFacts.ExportedVariableStatement;
-            }
-
+            const ancestorFacts = enterSubtree(HierarchyFacts.None, hasModifier(node, ModifierFlags.Export) ? HierarchyFacts.ExportedVariableStatement : HierarchyFacts.None);
             let updated: Statement;
-            if (convertedLoopState && (getCombinedNodeFlags(node.declarationList) & NodeFlags.BlockScoped) == 0) {
+            if (convertedLoopState && (node.declarationList.flags & NodeFlags.BlockScoped) === 0) {
                 // we are inside a converted loop - hoist variable declarations
                 let assignments: Expression[];
                 for (const decl of node.declarationList.declarations) {
@@ -1853,7 +1858,7 @@ namespace ts {
                 updated = visitEachChild(node, visitor, context);
             }
 
-            ancestorFacts = savedAncestorFacts;
+            exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
             return updated;
         }
 
@@ -1942,18 +1947,18 @@ namespace ts {
             const isCapturedInFunction = flags & NodeCheckFlags.CapturedBlockScopedBinding;
             const isDeclaredInLoop = flags & NodeCheckFlags.BlockScopedBindingInLoop;
             const emittedAsTopLevel =
-                (ancestorFacts & AncestorFacts.TopLevel) !== 0
+                (hierarchyFacts & HierarchyFacts.TopLevel) !== 0
                 || (isCapturedInFunction
                     && isDeclaredInLoop
-                    && (ancestorFacts & AncestorFacts.IterationStatementBlock) !== 0);
+                    && (hierarchyFacts & HierarchyFacts.IterationStatementBlock) !== 0);
 
             const emitExplicitInitializer =
                 !emittedAsTopLevel
-                && (ancestorFacts & AncestorFacts.ForInOrForOfStatement) === 0
+                && (hierarchyFacts & HierarchyFacts.ForInOrForOfStatement) === 0
                 && (!resolver.isDeclarationWithCollidingName(node)
                     || (isDeclaredInLoop
                         && !isCapturedInFunction
-                        && (ancestorFacts & (AncestorFacts.ForStatement | AncestorFacts.ForInOrForOfStatement)) === 0));
+                        && (hierarchyFacts & (HierarchyFacts.ForStatement | HierarchyFacts.ForInOrForOfStatement)) === 0));
 
             return emitExplicitInitializer;
         }
@@ -1987,9 +1992,7 @@ namespace ts {
          * @param node A VariableDeclaration node.
          */
         function visitVariableDeclaration(node: VariableDeclaration): VisitResult<VariableDeclaration> {
-            const savedAncestorFacts = ancestorFacts;
-            ancestorFacts &= ~AncestorFacts.ExportedVariableStatement;
-
+            const ancestorFacts = enterSubtree(HierarchyFacts.ExportedVariableStatement, HierarchyFacts.None);
             let updated: VisitResult<VariableDeclaration>;
             if (isBindingPattern(node.name)) {
                 updated = flattenDestructuringBinding(
@@ -1998,91 +2001,70 @@ namespace ts {
                     context,
                     FlattenLevel.All,
                     /*value*/ undefined,
-                    (savedAncestorFacts & AncestorFacts.ExportedVariableStatement) !== 0
+                    (ancestorFacts & HierarchyFacts.ExportedVariableStatement) !== 0
                 );
             }
             else {
                 updated = visitEachChild(node, visitor, context);
             }
 
-            ancestorFacts = savedAncestorFacts;
+            exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
             return updated;
         }
 
-        function visitLabeledStatement(node: LabeledStatement): VisitResult<Statement> {
-            const statement = unwrapInnermostStatmentOfLabel(node);
-            return isIterationStatement(statement, /*lookInLabeledStatements*/ false) && shouldConvertIterationStatementBody(statement)
-                ? visitIterationStatement(statement, /*outermostLabeledStatement*/ node)
-                : restoreEnclosingLabel(visitNode(statement, visitor, isStatement), node);
+        function recordLabel(node: LabeledStatement) {
+            convertedLoopState.labels[node.label.text] = node.label.text;
         }
 
-        function unwrapInnermostStatmentOfLabel(node: LabeledStatement) {
+        function resetLabel(node: LabeledStatement) {
+            convertedLoopState.labels[node.label.text] = undefined;
+        }
+
+        function visitLabeledStatement(node: LabeledStatement): VisitResult<Statement> {
             if (convertedLoopState && !convertedLoopState.labels) {
                 convertedLoopState.labels = createMap<string>();
             }
-            while (true) {
-                if (convertedLoopState) {
-                    convertedLoopState.labels[node.label.text] = node.label.text;
-                }
-                if (node.statement.kind !== SyntaxKind.LabeledStatement) {
-                    return node.statement;
-                }
-                node = <LabeledStatement>node.statement;
-            }
+            const statement = unwrapInnermostStatmentOfLabel(node, convertedLoopState && recordLabel);
+            return isIterationStatement(statement, /*lookInLabeledStatements*/ false) && shouldConvertIterationStatementBody(statement)
+                ? visitIterationStatement(statement, /*outermostLabeledStatement*/ node)
+                : restoreEnclosingLabel(visitNode(statement, visitor, isStatement), node, convertedLoopState && resetLabel);
         }
 
-        function restoreEnclosingLabel(node: Statement, outermostLabeledStatement: LabeledStatement): Statement {
-            if (!outermostLabeledStatement) {
-                return node;
-            }
-            if (convertedLoopState) {
-                convertedLoopState.labels[outermostLabeledStatement.label.text] = undefined;
-            }
-            return updateLabel(
-                outermostLabeledStatement,
-                outermostLabeledStatement.label,
-                outermostLabeledStatement.statement.kind === SyntaxKind.LabeledStatement
-                    ? restoreEnclosingLabel(node, <LabeledStatement>outermostLabeledStatement.statement)
-                    : node
-            );
-        }
-
-        function visitIterationStatementWithFacts(excludeFacts: AncestorFacts, includeFacts: AncestorFacts, node: IterationStatement, outermostLabeledStatement: LabeledStatement, convert?: LoopConverter) {
-            const savedAncestorFacts = ancestorFacts;
-            setAncestorFacts(excludeFacts, includeFacts, node);
+        function visitIterationStatementWithFacts(excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts, node: IterationStatement, outermostLabeledStatement: LabeledStatement, convert?: LoopConverter) {
+            const ancestorFacts = enterSubtree(excludeFacts, includeFacts);
             const updated = convertIterationStatementBodyIfNecessary(node, outermostLabeledStatement, convert);
-            ancestorFacts = savedAncestorFacts;
+            exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
             return updated;
         }
 
         function visitDoOrWhileStatement(node: DoStatement | WhileStatement, outermostLabeledStatement: LabeledStatement) {
             return visitIterationStatementWithFacts(
-                AncestorFacts.DoOrWhileStatementExcludes,
-                AncestorFacts.DoOrWhileStatementIncludes,
+                HierarchyFacts.DoOrWhileStatementExcludes,
+                HierarchyFacts.DoOrWhileStatementIncludes,
                 node,
                 outermostLabeledStatement);
         }
 
         function visitForStatement(node: ForStatement, outermostLabeledStatement: LabeledStatement) {
             return visitIterationStatementWithFacts(
-                AncestorFacts.ForStatementExcludes,
-                AncestorFacts.ForStatementIncludes,
+                HierarchyFacts.ForStatementExcludes,
+                HierarchyFacts.ForStatementIncludes,
                 node,
                 outermostLabeledStatement);
         }
 
         function visitForInStatement(node: ForInStatement, outermostLabeledStatement: LabeledStatement) {
             return visitIterationStatementWithFacts(
-                AncestorFacts.ForInOrForOfStatementExcludes,
-                AncestorFacts.ForInOrForOfStatementIncludes,
+                HierarchyFacts.ForInOrForOfStatementExcludes,
+                HierarchyFacts.ForInOrForOfStatementIncludes,
                 node,
                 outermostLabeledStatement);
         }
 
         function visitForOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement): VisitResult<Statement> {
             return visitIterationStatementWithFacts(
-                AncestorFacts.ForInOrForOfStatementExcludes,
-                AncestorFacts.ForInOrForOfStatementIncludes,
+                HierarchyFacts.ForInOrForOfStatementExcludes,
+                HierarchyFacts.ForInOrForOfStatementIncludes,
                 node,
                 outermostLabeledStatement,
                 convertForOfToFor);
@@ -2255,7 +2237,7 @@ namespace ts {
 
             // Disable trailing source maps for the OpenParenToken to align source map emit with the old emitter.
             setEmitFlags(forStatement, EmitFlags.NoTokenTrailingSourceMaps);
-            return restoreEnclosingLabel(forStatement, outermostLabeledStatement);
+            return restoreEnclosingLabel(forStatement, outermostLabeledStatement, convertedLoopState && resetLabel);
         }
 
         function visitIterationStatement(node: IterationStatement, outermostLabeledStatement: LabeledStatement) {
@@ -2288,7 +2270,7 @@ namespace ts {
             let numInitialPropertiesWithoutYield = numProperties;
             for (let i = 0; i < numProperties; i++) {
                 const property = properties[i];
-                if ((property.transformFlags & TransformFlags.ContainsYield && ancestorFacts & AncestorFacts.AsyncFunctionBody)
+                if ((property.transformFlags & TransformFlags.ContainsYield && hierarchyFacts & HierarchyFacts.AsyncFunctionBody)
                     && i < numInitialPropertiesWithoutYield) {
                     numInitialPropertiesWithoutYield = i;
                 }
@@ -2377,7 +2359,7 @@ namespace ts {
 
                 const result = convert
                     ? convert(node, outermostLabeledStatement, /*convertedLoopBodyStatements*/ undefined)
-                    : restoreEnclosingLabel(visitEachChild(node, visitor, context), outermostLabeledStatement);
+                    : restoreEnclosingLabel(visitEachChild(node, visitor, context), outermostLabeledStatement, convertedLoopState && resetLabel);
 
                 if (convertedLoopState) {
                     convertedLoopState.allowedNonLabeledJumps = saveAllowedNonLabeledJumps;
@@ -2453,7 +2435,7 @@ namespace ts {
             }
 
             const isAsyncBlockContainingAwait =
-                ancestorFacts & AncestorFacts.AsyncFunctionBody
+                hierarchyFacts & HierarchyFacts.AsyncFunctionBody
                 && (node.statement.transformFlags & TransformFlags.ContainsYield) !== 0;
 
             let loopBodyFlags: EmitFlags = 0;
@@ -2592,7 +2574,7 @@ namespace ts {
                 // reset and re-aggregate the transform flags
                 clone.transformFlags = 0;
                 aggregateTransformFlags(clone);
-                loop = restoreEnclosingLabel(clone, outermostLabeledStatement);
+                loop = restoreEnclosingLabel(clone, outermostLabeledStatement, convertedLoopState && resetLabel);
             }
 
             statements.push(loop);
@@ -2839,6 +2821,7 @@ namespace ts {
          * @param receiver The receiver for the assignment.
          */
         function transformObjectLiteralMethodDeclarationToExpression(method: MethodDeclaration, receiver: Expression, container: Node, startsOnNewLine: boolean) {
+            const ancestorFacts = enterSubtree(HierarchyFacts.None, HierarchyFacts.None);
             const expression = createAssignment(
                 createMemberAccessForPropertyName(
                     receiver,
@@ -2850,12 +2833,12 @@ namespace ts {
             if (startsOnNewLine) {
                 expression.startsOnNewLine = true;
             }
+            exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
             return expression;
         }
 
         function visitCatchClause(node: CatchClause): CatchClause {
-            const savedAncestorFacts = ancestorFacts;
-            setAncestorFacts(AncestorFacts.BlockScopeExcludes, AncestorFacts.BlockScopeIncludes);
+            const ancestorFacts = enterSubtree(HierarchyFacts.BlockScopeExcludes, HierarchyFacts.BlockScopeIncludes);
             let updated: CatchClause;
             if (isBindingPattern(node.variableDeclaration.name)) {
                 const temp = createTempVariable(undefined);
@@ -2874,7 +2857,8 @@ namespace ts {
             else {
                 updated = visitEachChild(node, visitor, context);
             }
-            ancestorFacts = savedAncestorFacts;
+
+            exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
             return updated;
         }
 
@@ -2909,15 +2893,12 @@ namespace ts {
          * @param node An AccessorDeclaration node.
          */
         function visitAccessorDeclaration(node: AccessorDeclaration): AccessorDeclaration {
-            const savedAncestorFacts = ancestorFacts;
+            Debug.assert(!isComputedPropertyName(node.name));
             const savedConvertedLoopState = convertedLoopState;
-
-            setAncestorFacts(AncestorFacts.FunctionExcludes, AncestorFacts.FunctionIncludes, node);
             convertedLoopState = undefined;
-
+            const ancestorFacts = enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes);
             const updated = visitEachChild(node, visitor, context);
-
-            ancestorFacts = savedAncestorFacts;
+            exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
             convertedLoopState = savedConvertedLoopState;
             return updated;
         }
@@ -2936,7 +2917,10 @@ namespace ts {
         }
 
         function visitComputedPropertyName(node: ComputedPropertyName) {
-            return visitEachChild(node, visitor, context);
+            const ancestorFacts = enterSubtree(HierarchyFacts.ComputedPropertyNameExcludes, HierarchyFacts.ComputedPropertyNameIncludes);
+            const updated = visitEachChild(node, visitor, context);
+            exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
+            return updated;
         }
 
         /**
@@ -3308,7 +3292,7 @@ namespace ts {
          * Visits the `super` keyword
          */
         function visitSuperKeyword(isExpressionOfCall: boolean): LeftHandSideExpression {
-            return ancestorFacts & AncestorFacts.NonStaticClassElement
+            return hierarchyFacts & HierarchyFacts.NonStaticClassElement
                 && !isExpressionOfCall
                     ? createPropertyAccess(createIdentifier("_super"), "prototype")
                     : createIdentifier("_super");
@@ -3322,10 +3306,13 @@ namespace ts {
         function onEmitNode(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void) {
             if (enabledSubstitutions & ES2015SubstitutionFlags.CapturedThis && isFunctionLike(node)) {
                 // If we are tracking a captured `this`, keep track of the enclosing function.
-                const savedAncestorFacts = ancestorFacts;
-                setAncestorFacts(AncestorFacts.FunctionExcludes, AncestorFacts.FunctionIncludes, node);
+                const ancestorFacts = enterSubtree(
+                    HierarchyFacts.FunctionExcludes,
+                    getEmitFlags(node) & EmitFlags.CapturesThis
+                        ? HierarchyFacts.FunctionIncludes | HierarchyFacts.CapturesThis
+                        : HierarchyFacts.FunctionIncludes);
                 previousOnEmitNode(emitContext, node, emitCallback);
-                ancestorFacts = savedAncestorFacts;
+                exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
                 return;
             }
             previousOnEmitNode(emitContext, node, emitCallback);
@@ -3456,7 +3443,7 @@ namespace ts {
          */
         function substituteThisKeyword(node: PrimaryExpression): PrimaryExpression {
             if (enabledSubstitutions & ES2015SubstitutionFlags.CapturedThis
-                && ancestorFacts & AncestorFacts.CapturesThis) {
+                && hierarchyFacts & HierarchyFacts.CapturesThis) {
                 return createIdentifier("_this", /*location*/ node);
             }
             return node;
