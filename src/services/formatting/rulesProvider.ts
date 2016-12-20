@@ -128,6 +128,13 @@ namespace ts.formatting {
                 rules.push(this.globalRules.NoSpaceAfterBinaryOperator);
             }
 
+            if (options.insertSpaceBeforeFunctionParenthesis) {
+                rules.push(this.globalRules.SpaceBeforeOpenParenInFuncDecl);
+            }
+            else {
+                rules.push(this.globalRules.NoSpaceBeforeOpenParenInFuncDecl);
+            }
+
             if (options.placeOpenBraceOnNewLineForControlBlocks) {
                 rules.push(this.globalRules.NewLineBeforeOpenBraceInControl);
             }
