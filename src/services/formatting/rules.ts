@@ -113,6 +113,7 @@ namespace ts.formatting {
         // TypeScript-specific rules
 
         // Treat constructor as an identifier in a function declaration, and remove spaces between constructor and following left parentheses
+        public SpaceAfterConstructor: Rule;
         public NoSpaceAfterConstructor: Rule;
 
         // Use of module as a function call. e.g.: import m2 = module("m2");
@@ -354,6 +355,7 @@ namespace ts.formatting {
             // TypeScript-specific higher priority rules
 
             // Treat constructor as an identifier in a function declaration, and remove spaces between constructor and following left parentheses
+            this.SpaceAfterConstructor = new Rule(RuleDescriptor.create1(SyntaxKind.ConstructorKeyword, SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext), RuleAction.Space));
             this.NoSpaceAfterConstructor = new Rule(RuleDescriptor.create1(SyntaxKind.ConstructorKeyword, SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext), RuleAction.Delete));
 
             // Use of module as a function call. e.g.: import m2 = module("m2");
@@ -439,7 +441,7 @@ namespace ts.formatting {
                 this.NoSpaceBeforeEqualInJsxAttribute, this.NoSpaceAfterEqualInJsxAttribute,
 
                 // TypeScript-specific rules
-                this.NoSpaceAfterConstructor, this.NoSpaceAfterModuleImport,
+                this.NoSpaceAfterModuleImport,
                 this.SpaceAfterCertainTypeScriptKeywords, this.SpaceBeforeCertainTypeScriptKeywords,
                 this.SpaceAfterModuleName,
                 this.SpaceBeforeArrow, this.SpaceAfterArrow,

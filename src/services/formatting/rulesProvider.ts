@@ -38,6 +38,13 @@ namespace ts.formatting {
         private createActiveRules(options: ts.FormatCodeSettings): Rule[] {
             let rules = this.globalRules.HighPriorityCommonRules.slice(0);
 
+            if (options.insertSpaceAfterConstructor) {
+                rules.push(this.globalRules.SpaceAfterConstructor);
+            }
+            else {
+                rules.push(this.globalRules.NoSpaceAfterConstructor);
+            }
+
             if (options.insertSpaceAfterCommaDelimiter) {
                 rules.push(this.globalRules.SpaceAfterComma);
             }

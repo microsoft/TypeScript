@@ -78,6 +78,7 @@ namespace ts.server {
             newLineCharacter: host.newLine || "\n",
             convertTabsToSpaces: true,
             indentStyle: ts.IndentStyle.Smart,
+            insertSpaceAfterConstructor: false,
             insertSpaceAfterCommaDelimiter: true,
             insertSpaceAfterSemicolonInForStatements: true,
             insertSpaceBeforeAndAfterBinaryOperators: true,
