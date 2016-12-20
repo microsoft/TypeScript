@@ -156,16 +156,16 @@ namespace ts {
         }
 
         function visitLabeledStatement(node: LabeledStatement): VisitResult<Statement> {
-            const enclosedStatement = getEnclosedStatement(node);
-            if (enclosedStatement.statement.kind === SyntaxKind.ForOfStatement &&
-                (<ForOfStatement>enclosedStatement.statement).awaitModifier) {
-                return visitForOfStatement(<ForOfStatement>node.statement, enclosedStatement.enclosingLabeledStatements);
+            const statement = unwrapInnermostStatmentOfLabel(node);
+            if (statement.kind === SyntaxKind.ForOfStatement &&
+                (<ForOfStatement>statement).awaitModifier) {
+                return visitForOfStatement(<ForOfStatement>statement, node);
             }
 
-            return restoreEnclosingLabels(visitEachChild(node, visitor, context), enclosedStatement.enclosingLabeledStatements);
+            return restoreEnclosingLabel(visitEachChild(node, visitor, context), node);
         }
 
-        function visitForOfStatement(node: ForOfStatement, enclosingLabeledStatements: LabeledStatement[]): VisitResult<Statement> {
+        function visitForOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement): VisitResult<Statement> {
             if (!node.awaitModifier) return visitEachChild(node, visitor, context);
 
             let bodyLocation: TextRange;
@@ -247,7 +247,7 @@ namespace ts {
                 EmitFlags.NoTokenTrailingSourceMaps
             );
 
-            outerStatement = restoreEnclosingLabels(outerStatement, enclosingLabeledStatements);
+            outerStatement = restoreEnclosingLabel(outerStatement, outermostLabeledStatement);
             return closeAsyncIterator(outerStatement, iteratorRecord);
         }
 

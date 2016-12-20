@@ -900,19 +900,17 @@ namespace ts {
         return false;
     }
 
-    export function getEnclosedStatement(node: LabeledStatement): { statement: Statement; enclosingLabeledStatements: LabeledStatement[]; } {
-        switch (node.statement.kind) {
-            case SyntaxKind.LabeledStatement:
-                const result = getEnclosedStatement(<LabeledStatement>node.statement);
-                if (result) {
-                    result.enclosingLabeledStatements.push(node);
-                }
-                return result;
-            default:
-                return { statement: <IterationStatement>node.statement, enclosingLabeledStatements: [node] };
+    export function unwrapInnermostStatmentOfLabel(node: LabeledStatement, beforeUnwrapLabelCallback?: (node: LabeledStatement) => void) {
+        while (true) {
+            if (beforeUnwrapLabelCallback) {
+                beforeUnwrapLabelCallback(node);
+            }
+            if (node.statement.kind !== SyntaxKind.LabeledStatement) {
+                return node.statement;
+            }
+            node = <LabeledStatement>node.statement;
         }
     }
-
 
     export function isFunctionBlock(node: Node) {
         return node && node.kind === SyntaxKind.Block && isFunctionLike(node.parent);

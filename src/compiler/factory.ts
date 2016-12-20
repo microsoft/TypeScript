@@ -1862,19 +1862,6 @@ namespace ts {
 
     // Utilities
 
-    export function restoreEnclosingLabels(node: Statement, enclosingLabeledStatements: LabeledStatement[]) {
-        if (enclosingLabeledStatements) {
-            for (const labeledStatement of enclosingLabeledStatements) {
-                node = updateLabel(
-                    labeledStatement,
-                    labeledStatement.label,
-                    node
-                );
-            }
-        }
-        return node;
-    }
-
     export function createForOfBindingStatement(node: ForInitializer, boundValue: Expression): Statement {
         if (isVariableDeclarationList(node)) {
             const firstDeclaration = firstOrUndefined(node.declarations);
@@ -1904,6 +1891,23 @@ namespace ts {
         else {
             return createBlock(createNodeArray([dest, source]), /*location*/ undefined, /*multiLine*/ true);
         }
+    }
+
+    export function restoreEnclosingLabel(node: Statement, outermostLabeledStatement: LabeledStatement, afterRestoreLabelCallback?: (node: LabeledStatement) => void): Statement {
+        if (!outermostLabeledStatement) {
+            return node;
+        }
+        const updated = updateLabel(
+            outermostLabeledStatement,
+            outermostLabeledStatement.label,
+            outermostLabeledStatement.statement.kind === SyntaxKind.LabeledStatement
+                ? restoreEnclosingLabel(node, <LabeledStatement>outermostLabeledStatement.statement)
+                : node
+        );
+        if (afterRestoreLabelCallback) {
+            afterRestoreLabelCallback(outermostLabeledStatement);
+        }
+        return updated;
     }
 
     export interface CallBinding {
