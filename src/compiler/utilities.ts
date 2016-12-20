@@ -742,6 +742,11 @@ namespace ts {
         return false;
     }
 
+    export function isMinusPrefixUnaryExpression(node: Node): boolean {
+        return node.kind === SyntaxKind.PrefixUnaryExpression &&
+            (node as PrefixUnaryExpression).operator === SyntaxKind.MinusToken;
+    }
+
     // Warning: This has the same semantics as the forEach family of functions,
     //          in that traversal terminates in the event that 'visitor' supplies a truthy value.
     export function forEachReturnStatement<T>(body: Block, visitor: (stmt: ReturnStatement) => T): T {
