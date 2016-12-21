@@ -728,6 +728,9 @@ namespace ts {
                 }
 
                 if (extensions === Extensions.JavaScript) {
+                    // A package.json "main" may specify an exact filename, or may choose to omit an extension.
+                    // We tried the ts extensions erlier, now try the js extensions.
+                    // tryReadPackageJsonMainOrTypes returns main  iff extensions is Extensions.JavaScript.
                     const resolved = tryAddingExtensions(mainOrTypesFile, Extensions.JavaScript, failedLookupLocations, onlyRecordFailures, state);
                     if (resolved) {
                         return resolved;
