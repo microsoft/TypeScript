@@ -318,7 +318,7 @@ namespace ts {
         if (traceEnabled) {
             trace(host, Diagnostics.Resolving_module_0_from_1, moduleName, containingFile);
         }
-        let perFolderCache = cache && cache.getOrCreateCacheForDirectory(getDirectoryPath(containingFile));
+        const perFolderCache = cache && cache.getOrCreateCacheForDirectory(getDirectoryPath(containingFile));
         let result = perFolderCache && perFolderCache[moduleName];
 
         if (result) {
