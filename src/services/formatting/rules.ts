@@ -705,11 +705,18 @@ namespace ts.formatting {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.Block:
                 case SyntaxKind.CatchClause:
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.SwitchStatement:
                     return true;
+                case SyntaxKind.Block: {
+                    const blockParent = context.currentTokenParent.parent;
+                    if (blockParent.kind !== SyntaxKind.ArrowFunction &&
+                        blockParent.kind !== SyntaxKind.FunctionExpression)
+                    {
+                        return true;
+                    }
+                }
             }
             return false;
         }
