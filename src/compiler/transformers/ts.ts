@@ -1555,12 +1555,15 @@ namespace ts {
             return false;
         }
 
+        type SerializedEntityNameAsExpression = Identifier | BinaryExpression | PropertyAccessExpression;
+        type SerializedTypeNode = SerializedEntityNameAsExpression | VoidExpression | ConditionalExpression;
+
         /**
          * Serializes the type of a node for use with decorator type metadata.
          *
          * @param node The node that should have its type serialized.
          */
-        function serializeTypeOfNode(node: Node): Expression {
+        function serializeTypeOfNode(node: Node): SerializedTypeNode {
             switch (node.kind) {
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.Parameter:
@@ -1582,7 +1585,7 @@ namespace ts {
          *
          * @param node The node that should have its parameter types serialized.
          */
-        function serializeParameterTypesOfNode(node: Node, container: ClassLikeDeclaration): Expression {
+        function serializeParameterTypesOfNode(node: Node, container: ClassLikeDeclaration): ArrayLiteralExpression {
             const valueDeclaration =
                 isClassLike(node)
                     ? getFirstConstructorWithBody(node)
@@ -1590,7 +1593,7 @@ namespace ts {
                         ? node
                         : undefined;
 
-            const expressions: Expression[] = [];
+            const expressions: SerializedTypeNode[] = [];
             if (valueDeclaration) {
                 const parameters = getParametersOfDecoratedDeclaration(valueDeclaration, container);
                 const numParameters = parameters.length;
@@ -1626,7 +1629,7 @@ namespace ts {
          *
          * @param node The node that should have its return type serialized.
          */
-        function serializeReturnTypeOfNode(node: Node): Expression {
+        function serializeReturnTypeOfNode(node: Node): SerializedTypeNode {
             if (isFunctionLike(node) && node.type) {
                 return serializeTypeNode(node.type);
             }
@@ -1636,8 +1639,6 @@ namespace ts {
 
             return createVoidZero();
         }
-
-        type SerializedTypeNode = SerializedEntityNameAsExpression | VoidExpression | ConditionalExpression;
 
         /**
          * Serializes a type node for use with decorator type metadata.
@@ -1826,7 +1827,6 @@ namespace ts {
             }
         }
 
-        type SerializedEntityNameAsExpression = Identifier | BinaryExpression | PropertyAccessExpression;
         /**
          * Serializes an entity name as an expression for decorator type metadata.
          *
