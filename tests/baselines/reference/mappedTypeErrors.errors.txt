@@ -45,9 +45,11 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(130,5): error TS2322: T
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(131,5): error TS2322: Type '{ a: string; }' is not assignable to type '{ [x: string]: any; a?: number | undefined; }'.
   Types of property 'a' are incompatible.
     Type 'string' is not assignable to type 'number | undefined'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(137,16): error TS2322: Type '{}' is not assignable to type 'string'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(137,21): error TS2536: Type 'P' cannot be used to index type 'T'.
 
 
-==== tests/cases/conformance/types/mapped/mappedTypeErrors.ts (24 errors) ====
+==== tests/cases/conformance/types/mapped/mappedTypeErrors.ts (26 errors) ====
     
     interface Shape {
         name: string;
@@ -250,3 +252,21 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(131,5): error TS2322: T
 !!! error TS2322: Type '{ a: string; }' is not assignable to type '{ [x: string]: any; a?: number | undefined; }'.
 !!! error TS2322:   Types of property 'a' are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type 'number | undefined'.
+    
+    // Repro from #13044
+    
+    type Foo2<T, F extends keyof T> = {
+        pf: {[P in F]?: T[P]},
+        pt: {[P in T]?: T[P]}, // note: should be in keyof T
+                   ~
+!!! error TS2322: Type '{}' is not assignable to type 'string'.
+                        ~~~~
+!!! error TS2536: Type 'P' cannot be used to index type 'T'.
+    };
+    type O = {x: number, y: boolean};
+    let o: O = {x: 5, y: false};
+    let f: Foo2<O, 'x'> = {
+        pf: {x: 7},
+        pt: {x: 7, y: false},
+    };
+    
