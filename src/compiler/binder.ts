@@ -810,10 +810,19 @@ namespace ts {
             };
         }
 
-        function createFlowAssignment(antecedent: FlowNode, node: Expression | VariableDeclaration | BindingElement | ParameterDeclaration): FlowNode {
+        function createFlowAssignment(antecedent: FlowNode, node: Expression | VariableDeclaration | BindingElement): FlowNode {
             setFlowNodeReferenced(antecedent);
             return <FlowAssignment>{
                 flags: FlowFlags.Assignment,
+                antecedent,
+                node
+            };
+        }
+
+        function createFlowInitializedParameter(antecedent: FlowNode, node: ParameterDeclaration): FlowNode {
+            setFlowNodeReferenced(antecedent);
+            return <FlowInitializedParameter>{
+                flags: FlowFlags.InitializedParameter,
                 antecedent,
                 node
             };
@@ -2312,7 +2321,7 @@ namespace ts {
             else {
                 declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes);
                 if (node.initializer) {
-                    currentFlow = createFlowAssignment(currentFlow, node);
+                    currentFlow = createFlowInitializedParameter(currentFlow, node);
                 }
             }
 

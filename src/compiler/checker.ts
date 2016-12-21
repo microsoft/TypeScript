@@ -9060,8 +9060,8 @@ namespace ts {
             switch (source.kind) {
                 case SyntaxKind.Identifier:
                     return target.kind === SyntaxKind.Identifier && getResolvedSymbol(<Identifier>source) === getResolvedSymbol(<Identifier>target) ||
-                    (target.kind === SyntaxKind.VariableDeclaration || target.kind === SyntaxKind.BindingElement) && getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(<Identifier>source)) === getSymbolOfNode(target) ||
-                    target.kind === SyntaxKind.Parameter && getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(source as Identifier)) === getSymbolOfNode(target);
+                    (target.kind === SyntaxKind.VariableDeclaration || target.kind === SyntaxKind.BindingElement || target.kind === SyntaxKind.Parameter) &&
+                    getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(source as Identifier)) === getSymbolOfNode(target);
                 case SyntaxKind.ThisKeyword:
                     return target.kind === SyntaxKind.ThisKeyword;
                 case SyntaxKind.PropertyAccessExpression:
@@ -9153,6 +9153,13 @@ namespace ts {
                 }
             }
             return false;
+        }
+
+        function getInitializedParameterReducedType(declaredType: UnionType, assignedType: Type) {
+            if (declaredType === assignedType || getFalsyFlags(assignedType) & TypeFlags.Undefined) {
+                return declaredType;
+            }
+            return getTypeWithFacts(declaredType, TypeFacts.NEUndefined);
         }
 
         // Remove those constituent types of declaredType to which no constituent type of assignedType is assignable.
@@ -9351,7 +9358,7 @@ namespace ts {
                 getInitialTypeOfBindingElement(<BindingElement>node);
         }
 
-        function getInitialOrAssignedType(node: VariableDeclaration | BindingElement | Expression) {
+        function getInitialOrAssignedType(node: VariableDeclaration | BindingElement | Expression | ParameterDeclaration) {
             return node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement || node.kind === SyntaxKind.Parameter ?
                 getInitialType(<VariableDeclaration | BindingElement | ParameterDeclaration>node) :
                 getAssignedType(<Expression>node);
@@ -9622,6 +9629,13 @@ namespace ts {
                             continue;
                         }
                     }
+                    else if (flow.flags & FlowFlags.InitializedParameter) {
+                        type = getTypeAtFlowInitializedParameter(flow as FlowInitializedParameter);
+                        if (!type) {
+                            flow = (flow as FlowInitializedParameter).antecedent;
+                            continue;
+                        }
+                    }
                     else if (flow.flags & FlowFlags.Condition) {
                         type = getTypeAtFlowCondition(<FlowCondition>flow);
                     }
@@ -9667,6 +9681,20 @@ namespace ts {
                     }
                     return type;
                 }
+            }
+
+            function getTypeAtFlowInitializedParameter(flow: FlowInitializedParameter) {
+                const node = flow.node;
+                // Parameter initializers don't really narrow the declared type except to remove undefined.
+                // If the initializer includes undefined in the type, it doesn't even remove undefined.
+                if (isMatchingReference(reference, node)) {
+                    if (declaredType.flags & TypeFlags.Union) {
+                        return getInitializedParameterReducedType(<UnionType>declaredType, getInitialOrAssignedType(node));
+                    }
+                    return declaredType;
+                }
+
+                return undefined;
             }
 
             function getTypeAtFlowAssignment(flow: FlowAssignment) {
