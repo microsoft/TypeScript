@@ -1,4 +1,4 @@
-/// <reference path="..\harness.ts" />
+﻿/// <reference path="..\harness.ts" />
 
 namespace ts {
     export function checkResolvedModule(expected: ResolvedModuleFull, actual: ResolvedModuleFull): boolean {
@@ -408,7 +408,7 @@ export = C;
                 "/a/b/c.ts": `/// <reference path="d.ts"/>`,
                 "/a/b/d.ts": "var x"
             });
-            test(files, { module: ts.ModuleKind.AMD },  "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "/a/b/d.ts"], []);
+            test(files, { module: ts.ModuleKind.AMD }, "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "/a/b/d.ts"], []);
         });
 
         it("should fail when two files used in program differ only in casing (tripleslash references)", () => {
@@ -416,7 +416,7 @@ export = C;
                 "/a/b/c.ts": `/// <reference path="D.ts"/>`,
                 "/a/b/d.ts": "var x"
             });
-            test(files, { module: ts.ModuleKind.AMD, forceConsistentCasingInFileNames: true },  "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "d.ts"], [1149]);
+            test(files, { module: ts.ModuleKind.AMD, forceConsistentCasingInFileNames: true }, "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "d.ts"], [1149]);
         });
 
         it("should fail when two files used in program differ only in casing (imports)", () => {
@@ -424,7 +424,7 @@ export = C;
                 "/a/b/c.ts": `import {x} from "D"`,
                 "/a/b/d.ts": "export var x"
             });
-            test(files, { module: ts.ModuleKind.AMD, forceConsistentCasingInFileNames: true },  "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "d.ts"], [1149]);
+            test(files, { module: ts.ModuleKind.AMD, forceConsistentCasingInFileNames: true }, "/a/b", /*useCaseSensitiveFileNames*/ false, ["c.ts", "d.ts"], [1149]);
         });
 
         it("should fail when two files used in program differ only in casing (imports, relative module names)", () => {
@@ -432,7 +432,7 @@ export = C;
                 "moduleA.ts": `import {x} from "./ModuleB"`,
                 "moduleB.ts": "export var x"
             });
-            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },  "", /*useCaseSensitiveFileNames*/ false, ["moduleA.ts", "moduleB.ts"], [1149]);
+            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "", /*useCaseSensitiveFileNames*/ false, ["moduleA.ts", "moduleB.ts"], [1149]);
         });
 
         it("should fail when two files exist on disk that differs only in casing", () => {
@@ -441,7 +441,7 @@ export = C;
                 "/a/b/D.ts": "export var x",
                 "/a/b/d.ts": "export var y"
             });
-            test(files, { module: ts.ModuleKind.AMD },  "/a/b", /*useCaseSensitiveFileNames*/ true, ["c.ts", "d.ts"], [1149]);
+            test(files, { module: ts.ModuleKind.AMD }, "/a/b", /*useCaseSensitiveFileNames*/ true, ["c.ts", "d.ts"], [1149]);
         });
 
         it("should fail when module name in 'require' calls has inconsistent casing", () => {
@@ -450,7 +450,7 @@ export = C;
                 "moduleB.ts": `import a = require("./moduleC")`,
                 "moduleC.ts": "export var x"
             });
-            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },  "", /*useCaseSensitiveFileNames*/ false, ["moduleA.ts", "moduleB.ts", "moduleC.ts"], [1149, 1149]);
+            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "", /*useCaseSensitiveFileNames*/ false, ["moduleA.ts", "moduleB.ts", "moduleC.ts"], [1149, 1149]);
         });
 
         it("should fail when module names in 'require' calls has inconsistent casing and current directory has uppercase chars", () => {
@@ -463,7 +463,7 @@ import a = require("./moduleA");
 import b = require("./moduleB");
                 `
             });
-            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },  "/a/B/c", /*useCaseSensitiveFileNames*/ false, ["moduleD.ts"], [1149]);
+            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "/a/B/c", /*useCaseSensitiveFileNames*/ false, ["moduleD.ts"], [1149]);
         });
         it("should not fail when module names in 'require' calls has consistent casing and current directory has uppercase chars", () => {
             const files = createMap({
@@ -475,7 +475,7 @@ import a = require("./moduleA");
 import b = require("./moduleB");
                 `
             });
-            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },  "/a/B/c", /*useCaseSensitiveFileNames*/ false, ["moduleD.ts"], []);
+            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "/a/B/c", /*useCaseSensitiveFileNames*/ false, ["moduleD.ts"], []);
         });
     });
 
@@ -490,7 +490,7 @@ import b = require("./moduleB");
                 const file2: File = { name: "/root/folder2/file2.ts" };
                 const file3: File = { name: "/root/folder2/file3.ts" };
                 const host = createModuleResolutionHost(hasDirectoryExists, file1, file2, file3);
-                for (const moduleResolution of [ ModuleResolutionKind.NodeJs, ModuleResolutionKind.Classic ]) {
+                for (const moduleResolution of [ModuleResolutionKind.NodeJs, ModuleResolutionKind.Classic]) {
                     const options: CompilerOptions = { moduleResolution, baseUrl: "/root" };
                     {
                         const result = resolveModuleName("folder2/file2", file1.name, options, host);
@@ -703,7 +703,7 @@ import b = require("./moduleB");
             }
         });
 
-        it ("classic + baseUrl + path mappings", () => {
+        it("classic + baseUrl + path mappings", () => {
             // classic mode does not use directoryExists
             test(/*hasDirectoryExists*/ false);
 
@@ -762,7 +762,7 @@ import b = require("./moduleB");
             }
         });
 
-        it ("node + rootDirs", () => {
+        it("node + rootDirs", () => {
             test(/*hasDirectoryExists*/ false);
             test(/*hasDirectoryExists*/ true);
 
@@ -835,7 +835,7 @@ import b = require("./moduleB");
             }
         });
 
-        it ("classic + rootDirs", () => {
+        it("classic + rootDirs", () => {
             test(/*hasDirectoryExists*/ false);
 
             function test(hasDirectoryExists: boolean) {
@@ -889,7 +889,7 @@ import b = require("./moduleB");
             }
         });
 
-        it ("nested node module", () => {
+        it("nested node module", () => {
             test(/*hasDirectoryExists*/ false);
             test(/*hasDirectoryExists*/ true);
 
@@ -902,9 +902,9 @@ import b = require("./moduleB");
                     moduleResolution: ModuleResolutionKind.NodeJs,
                     baseUrl: "/root",
                     paths: {
-                        "libs/guid": [ "src/libs/guid" ]
+                        "libs/guid": ["src/libs/guid"]
                     }
-                 };
+                };
                 const result = resolveModuleName("libs/guid", app.name, options, host);
                 checkResolvedModuleWithFailedLookupLocations(result, createResolvedModule(libsTypings.name), [
                     // first try to load module as file
@@ -1020,7 +1020,7 @@ import b = require("./moduleB");
             const names = map(files, f => f.name);
             const sourceFiles = arrayToMap(map(files, f => createSourceFile(f.name, f.content, ScriptTarget.ES2015)), f => f.fileName);
             const compilerHost: CompilerHost = {
-                fileExists : fileName => fileName in sourceFiles,
+                fileExists: fileName => fileName in sourceFiles,
                 getSourceFile: fileName => sourceFiles[fileName],
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile: notImplemented,
@@ -1042,7 +1042,7 @@ import b = require("./moduleB");
             assert.equal(diagnostics1[0].messageText, diagnostics2[0].messageText, "expected one diagnostic");
         });
 
-        it ("Modules in the same .d.ts file are preferred to external files", () => {
+        it("Modules in the same .d.ts file are preferred to external files", () => {
             const f = {
                 name: "/a/b/c/c/app.d.ts",
                 content: `
@@ -1056,7 +1056,7 @@ import b = require("./moduleB");
             };
             const file = createSourceFile(f.name, f.content, ScriptTarget.ES2015);
             const compilerHost: CompilerHost = {
-                fileExists : fileName => fileName === file.fileName,
+                fileExists: fileName => fileName === file.fileName,
                 getSourceFile: fileName => fileName === file.fileName ? file : undefined,
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile: notImplemented,
@@ -1074,7 +1074,7 @@ import b = require("./moduleB");
             createProgram([f.name], {}, compilerHost);
         });
 
-        it ("Modules in .ts file are not checked in the same file", () => {
+        it("Modules in .ts file are not checked in the same file", () => {
             const f = {
                 name: "/a/b/c/c/app.ts",
                 content: `
@@ -1088,7 +1088,7 @@ import b = require("./moduleB");
             };
             const file = createSourceFile(f.name, f.content, ScriptTarget.ES2015);
             const compilerHost: CompilerHost = {
-                fileExists : fileName => fileName === file.fileName,
+                fileExists: fileName => fileName === file.fileName,
                 getSourceFile: fileName => fileName === file.fileName ? file : undefined,
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile: notImplemented,
@@ -1104,6 +1104,32 @@ import b = require("./moduleB");
                 }
             };
             createProgram([f.name], {}, compilerHost);
+        });
+
+        it("Module name as directory - load js from 'main'", () => {
+            test(/*hasDirectoryExists*/ false);
+            test(/*hasDirectoryExists*/ true);
+
+            function test(hasDirectoryExists: boolean) {
+                const containingFile = { name: "/a/b.ts" };
+                const packageJson = { name: "/a/c/package.json", content: JSON.stringify({ main: "d/e" }) };
+                const indexFile = { name: "/a/c/d/e.js" };
+                const resolution = nodeModuleNameResolver("./c", containingFile.name, {}, createModuleResolutionHost(hasDirectoryExists, containingFile, packageJson, indexFile));
+                checkResolvedModuleWithFailedLookupLocations(resolution, createResolvedModule(indexFile.name), [
+                    "/a/c.ts",
+                    "/a/c.tsx",
+                    "/a/c.d.ts",
+                    "/a/c/index.ts",
+                    "/a/c/index.tsx",
+                    "/a/c/index.d.ts",
+                    "/a/c.js",
+                    "/a/c.jsx",
+                    "/a/c/d/e",
+                    "/a/c/d/e.ts",
+                    "/a/c/d/e.tsx",
+                    "/a/c/d/e.d.ts",
+                ]);
+            }
         });
     });
 }

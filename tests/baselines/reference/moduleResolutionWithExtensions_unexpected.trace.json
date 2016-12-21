@@ -23,6 +23,8 @@
     "File '/node_modules/normalize.css/normalize.css.ts' does not exist.",
     "File '/node_modules/normalize.css/normalize.css.tsx' does not exist.",
     "File '/node_modules/normalize.css/normalize.css.d.ts' does not exist.",
+    "File '/node_modules/normalize.css/normalize.css.js' does not exist.",
+    "File '/node_modules/normalize.css/normalize.css.jsx' does not exist.",
     "File '/node_modules/normalize.css/index.js' does not exist.",
     "File '/node_modules/normalize.css/index.jsx' does not exist.",
     "======== Module name 'normalize.css' was not resolved. ========"

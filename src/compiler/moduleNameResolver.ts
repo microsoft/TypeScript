@@ -1,4 +1,4 @@
-/// <reference path="core.ts" />
+﻿/// <reference path="core.ts" />
 /// <reference path="diagnosticInformationMap.generated.ts" />
 
 namespace ts {
@@ -725,6 +725,13 @@ namespace ts {
                 const resolved = tryAddingExtensions(mainOrTypesFile, Extensions.TypeScript, failedLookupLocations, onlyRecordFailures, state);
                 if (resolved) {
                     return resolved;
+                }
+
+                if (extensions === Extensions.JavaScript) {
+                    const resolved = tryAddingExtensions(mainOrTypesFile, Extensions.JavaScript, failedLookupLocations, onlyRecordFailures, state);
+                    if (resolved) {
+                        return resolved;
+                    }
                 }
             }
             else {
