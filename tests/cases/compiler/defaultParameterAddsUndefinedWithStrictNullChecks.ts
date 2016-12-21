@@ -21,9 +21,24 @@ function foo3(x = "string", b: number) {
     x.length; // ok, should be narrowed to string
 }
 
+// .d.ts should have `T | undefined` for foo1, foo2, foo3
 foo1(undefined, 1);
 foo2(undefined, 1);
 foo3(undefined, 1);
 
 
-// .d.ts should have `T | undefined` for foo1, foo2, foo3
+function removeUndefinedButNotFalse(x = true) {
+    if (x === false) {
+        return x;
+    }
+}
+
+declare const cond: boolean;
+function removeNothing(y = cond ? true : undefined) {
+    if (y !== undefined) {
+        if (y === false) {
+            return y;
+        }
+    }
+    return true;
+}

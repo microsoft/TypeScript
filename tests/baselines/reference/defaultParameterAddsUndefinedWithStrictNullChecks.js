@@ -20,12 +20,27 @@ function foo3(x = "string", b: number) {
     x.length; // ok, should be narrowed to string
 }
 
+// .d.ts should have `T | undefined` for foo1, foo2, foo3
 foo1(undefined, 1);
 foo2(undefined, 1);
 foo3(undefined, 1);
 
 
-// .d.ts should have `T | undefined` for foo1, foo2, foo3
+function removeUndefinedButNotFalse(x = true) {
+    if (x === false) {
+        return x;
+    }
+}
+
+declare const cond: boolean;
+function removeNothing(y = cond ? true : undefined) {
+    if (y !== undefined) {
+        if (y === false) {
+            return y;
+        }
+    }
+    return true;
+}
 
 
 //// [defaultParameterAddsUndefinedWithStrictNullChecks.js]
@@ -51,10 +66,25 @@ function foo3(x, b) {
     if (x === void 0) { x = "string"; }
     x.length; // ok, should be narrowed to string
 }
+// .d.ts should have `T | undefined` for foo1, foo2, foo3
 foo1(undefined, 1);
 foo2(undefined, 1);
 foo3(undefined, 1);
-// .d.ts should have `T | undefined` for foo1, foo2, foo3
+function removeUndefinedButNotFalse(x) {
+    if (x === void 0) { x = true; }
+    if (x === false) {
+        return x;
+    }
+}
+function removeNothing(y) {
+    if (y === void 0) { y = cond ? true : undefined; }
+    if (y !== undefined) {
+        if (y === false) {
+            return y;
+        }
+    }
+    return true;
+}
 
 
 //// [defaultParameterAddsUndefinedWithStrictNullChecks.d.ts]
@@ -64,3 +94,6 @@ declare let total: number;
 declare function foo1(x: string | undefined, b: number): void;
 declare function foo2(x: string | undefined, b: number): void;
 declare function foo3(x: string | undefined, b: number): void;
+declare function removeUndefinedButNotFalse(x?: boolean | undefined): false | undefined;
+declare const cond: boolean;
+declare function removeNothing(y?: boolean | undefined): boolean;

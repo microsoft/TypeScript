@@ -96,6 +96,7 @@ function foo3(x = "string", b: number) {
 >length : number
 }
 
+// .d.ts should have `T | undefined` for foo1, foo2, foo3
 foo1(undefined, 1);
 >foo1(undefined, 1) : void
 >foo1 : (x: string | undefined, b: number) => void
@@ -115,5 +116,47 @@ foo3(undefined, 1);
 >1 : 1
 
 
-// .d.ts should have `T | undefined` for foo1, foo2, foo3
+function removeUndefinedButNotFalse(x = true) {
+>removeUndefinedButNotFalse : (x?: boolean | undefined) => false | undefined
+>x : boolean | undefined
+>true : true
+
+    if (x === false) {
+>x === false : boolean
+>x : boolean
+>false : false
+
+        return x;
+>x : false
+    }
+}
+
+declare const cond: boolean;
+>cond : boolean
+
+function removeNothing(y = cond ? true : undefined) {
+>removeNothing : (y?: boolean | undefined) => boolean
+>y : boolean | undefined
+>cond ? true : undefined : true | undefined
+>cond : boolean
+>true : true
+>undefined : undefined
+
+    if (y !== undefined) {
+>y !== undefined : boolean
+>y : boolean | undefined
+>undefined : undefined
+
+        if (y === false) {
+>y === false : boolean
+>y : boolean
+>false : false
+
+            return y;
+>y : false
+        }
+    }
+    return true;
+>true : true
+}
 

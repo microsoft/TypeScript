@@ -68,6 +68,7 @@ function foo3(x = "string", b: number) {
 >length : Symbol(String.length, Decl(lib.d.ts, --, --))
 }
 
+// .d.ts should have `T | undefined` for foo1, foo2, foo3
 foo1(undefined, 1);
 >foo1 : Symbol(foo1, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 7, 36))
 >undefined : Symbol(undefined)
@@ -81,5 +82,38 @@ foo3(undefined, 1);
 >undefined : Symbol(undefined)
 
 
-// .d.ts should have `T | undefined` for foo1, foo2, foo3
+function removeUndefinedButNotFalse(x = true) {
+>removeUndefinedButNotFalse : Symbol(removeUndefinedButNotFalse, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 24, 19))
+>x : Symbol(x, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 27, 36))
+
+    if (x === false) {
+>x : Symbol(x, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 27, 36))
+
+        return x;
+>x : Symbol(x, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 27, 36))
+    }
+}
+
+declare const cond: boolean;
+>cond : Symbol(cond, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 33, 13))
+
+function removeNothing(y = cond ? true : undefined) {
+>removeNothing : Symbol(removeNothing, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 33, 28))
+>y : Symbol(y, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 34, 23))
+>cond : Symbol(cond, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 33, 13))
+>undefined : Symbol(undefined)
+
+    if (y !== undefined) {
+>y : Symbol(y, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 34, 23))
+>undefined : Symbol(undefined)
+
+        if (y === false) {
+>y : Symbol(y, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 34, 23))
+
+            return y;
+>y : Symbol(y, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 34, 23))
+        }
+    }
+    return true;
+}
 
