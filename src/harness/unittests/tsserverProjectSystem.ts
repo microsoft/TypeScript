@@ -1840,6 +1840,41 @@ namespace ts.projectSystem {
             assert.isFalse(service.externalProjects[0].languageServiceEnabled, "language service should be disabled - 2");
         });
 
+        it("files are properly detached when language service is disabled", () => {
+            const f1 = {
+                path: "/a/app.js",
+                content: "var x = 1"
+            };
+            const f2 = {
+                path: "/a/largefile.js",
+                content: ""
+            };
+            const f3 = {
+                path: "/a/lib.js",
+                content: "var x = 1"
+            };
+            const config = {
+                path: "/a/tsconfig.json",
+                content: JSON.stringify({ compilerOptions: { allowJs: true } })
+            };
+            const host = createServerHost([f1, f2, f3, config]);
+            const originalGetFileSize = host.getFileSize;
+            host.getFileSize = (filePath: string) =>
+                filePath === f2.path ? server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
+
+            const projectService = createProjectService(host);
+            projectService.openClientFile(f1.path);
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+
+            projectService.closeClientFile(f1.path);
+            projectService.checkNumberOfProjects({});
+
+            for (const f of [f2, f3]) {
+                const scriptInfo = projectService.getScriptInfoForNormalizedPath(server.toNormalizedPath(f.path));
+                assert.equal(scriptInfo.containingProjects.length, 0, `expect 0 containing projects for '${f.path}'`)
+            }
+        });
+
         it("language service disabled events are triggered", () => {
             const f1 = {
                 path: "/a/app.js",
