@@ -712,8 +712,8 @@ namespace ts.formatting {
                 case SyntaxKind.Block: {
                     const blockParent = context.currentTokenParent.parent;
                     if (blockParent.kind !== SyntaxKind.ArrowFunction &&
-                        blockParent.kind !== SyntaxKind.FunctionExpression)
-                    {
+                        blockParent.kind !== SyntaxKind.FunctionExpression
+                    ) {
                         return true;
                     }
                 }
