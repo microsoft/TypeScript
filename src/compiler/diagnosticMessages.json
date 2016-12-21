@@ -227,7 +227,7 @@
         "category": "Error",
         "code": 1084
     },
-    "Octal literals are not available when targeting ECMAScript 5 and higher.": {
+    "Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '0o{0}'.": {
         "category": "Error",
         "code": 1085
     },
@@ -2693,6 +2693,10 @@
         "category": "Message",
         "code": 6080
     },
+    "File '{0}' has an unsupported extension, so skipping it.": {
+        "category": "Message",
+        "code": 6081
+    },
     "Only 'amd' and 'system' modules are supported alongside --{0}.": {
         "category": "Error",
         "code": 6082
@@ -2953,6 +2957,10 @@
         "category": "Message",
         "code": 6146
     },
+    "Resolution for module '{0}' was found in cache": {
+        "category": "Message",
+        "code": 6147
+    },    
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -3242,5 +3250,9 @@
     "Add {0} to existing import declaration from {1}": {
         "category": "Message",
         "code": 90015
+    },
+    "Octal literal types must use ES2015 syntax. Use the syntax '0o{0}'.": {
+        "category": "Error",
+        "code": 8017
     }
 }

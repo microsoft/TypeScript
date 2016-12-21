@@ -4618,8 +4618,8 @@ namespace ts {
                     // the modifiers type is T. Otherwise, the modifiers type is {}.
                     const declaredType = <MappedType>getTypeFromMappedTypeNode(type.declaration);
                     const constraint = getConstraintTypeFromMappedType(declaredType);
-                    const extendedConstraint = constraint.flags & TypeFlags.TypeParameter ? getConstraintOfTypeParameter(<TypeParameter>constraint) : constraint;
-                    type.modifiersType = extendedConstraint.flags & TypeFlags.Index ? instantiateType((<IndexType>extendedConstraint).type, type.mapper || identityMapper) : emptyObjectType;
+                    const extendedConstraint = constraint && constraint.flags & TypeFlags.TypeParameter ? getConstraintOfTypeParameter(<TypeParameter>constraint) : constraint;
+                    type.modifiersType = extendedConstraint && extendedConstraint.flags & TypeFlags.Index ? instantiateType((<IndexType>extendedConstraint).type, type.mapper || identityMapper) : emptyObjectType;
                 }
             }
             return type.modifiersType;
@@ -6651,7 +6651,7 @@ namespace ts {
             // Starting with the parent of the symbol's declaration, check if the mapper maps any of
             // the type parameters introduced by enclosing declarations. We just pick the first
             // declaration since multiple declarations will all have the same parent anyway.
-            let node = symbol.declarations[0].parent;
+            let node: Node = symbol.declarations[0];
             while (node) {
                 switch (node.kind) {
                     case SyntaxKind.FunctionType:
@@ -6671,7 +6671,7 @@ namespace ts {
                     case SyntaxKind.ClassExpression:
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.TypeAliasDeclaration:
-                        const declaration = <DeclarationWithTypeParameters>node;
+                        const declaration = node as DeclarationWithTypeParameters;
                         if (declaration.typeParameters) {
                             for (const d of declaration.typeParameters) {
                                 if (contains(mappedTypes, getDeclaredTypeOfTypeParameter(getSymbolOfNode(d)))) {
@@ -6682,6 +6682,14 @@ namespace ts {
                         if (isClassLike(node) || node.kind === SyntaxKind.InterfaceDeclaration) {
                             const thisType = getDeclaredTypeOfClassOrInterface(getSymbolOfNode(node)).thisType;
                             if (thisType && contains(mappedTypes, thisType)) {
+                                return true;
+                            }
+                        }
+                        break;
+                    case SyntaxKind.JSDocFunctionType:
+                        const func = node as JSDocFunctionType;
+                        for (const p of func.parameters) {
+                            if (contains(mappedTypes, getTypeOfNode(p))) {
                                 return true;
                             }
                         }
@@ -7736,8 +7744,11 @@ namespace ts {
                         }
                     }
                 }
-                else if (relation !== identityRelation && isEmptyObjectType(resolveStructuredTypeMembers(<ObjectType>target))) {
-                    return Ternary.True;
+                else if (relation !== identityRelation) {
+                    const resolved = resolveStructuredTypeMembers(<ObjectType>target);
+                    if (isEmptyObjectType(resolved) || resolved.stringIndexInfo && resolved.stringIndexInfo.type.flags & TypeFlags.Any) {
+                        return Ternary.True;
+                    }
                 }
                 return Ternary.False;
             }
@@ -21851,8 +21862,13 @@ namespace ts {
 
         function checkGrammarNumericLiteral(node: NumericLiteral): boolean {
             // Grammar checking
-            if (node.isOctalLiteral && languageVersion >= ScriptTarget.ES5) {
-                return grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher);
+            if (node.isOctalLiteral) {
+                if (languageVersion >= ScriptTarget.ES5) {
+                    return grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher_Use_the_syntax_0o_0, node.text);
+                }
+                if (isChildOfLiteralType(node)) {
+                    return grammarErrorOnNode(node, Diagnostics.Octal_literal_types_must_use_ES2015_syntax_Use_the_syntax_0o_0, node.text);
+                }
             }
         }
 
