@@ -341,6 +341,7 @@ namespace FourSlash {
                 insertSpaceAfterCommaDelimiter: true,
                 insertSpaceAfterSemicolonInForStatements: true,
                 insertSpaceBeforeAndAfterBinaryOperators: true,
+                insertSpaceAfterConstructor: false,
                 insertSpaceAfterKeywordsInControlFlowStatements: true,
                 insertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
                 insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,

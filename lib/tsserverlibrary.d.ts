@@ -767,12 +767,14 @@ declare namespace ts.server.protocol {
         insertSpaceAfterCommaDelimiter?: boolean;
         insertSpaceAfterSemicolonInForStatements?: boolean;
         insertSpaceBeforeAndAfterBinaryOperators?: boolean;
+        insertSpaceAfterConstructor?: boolean;
         insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
         insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
+        insertSpaceBeforeFunctionParenthesis?: boolean;
         placeOpenBraceOnNewLineForFunctions?: boolean;
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
     }
@@ -4181,7 +4183,7 @@ declare namespace ts {
             key: string;
             message: string;
         };
-        Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher: {
+        Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher_Use_the_syntax_0o_0: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -7865,6 +7867,12 @@ declare namespace ts {
             key: string;
             message: string;
         };
+        File_0_has_an_unsupported_extension_so_skipping_it: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
         Only_amd_and_system_modules_are_supported_alongside_0: {
             code: number;
             category: DiagnosticCategory;
@@ -8250,6 +8258,12 @@ declare namespace ts {
             message: string;
         };
         Specify_the_JSX_factory_function_to_use_when_targeting_react_JSX_emit_e_g_React_createElement_or_h: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
+        Resolution_for_module_0_was_found_in_cache: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -8687,6 +8701,12 @@ declare namespace ts {
             key: string;
             message: string;
         };
+        Octal_literal_types_must_use_ES2015_syntax_Use_the_syntax_0o_0: {
+            code: number;
+            category: DiagnosticCategory;
+            key: string;
+            message: string;
+        };
     };
 }
 declare namespace ts {
@@ -8907,7 +8927,13 @@ declare namespace ts {
     }): string[] | undefined;
     function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string | undefined, options: CompilerOptions, host: ModuleResolutionHost): ResolvedTypeReferenceDirectiveWithFailedLookupLocations;
     function getAutomaticTypeDirectiveNames(options: CompilerOptions, host: ModuleResolutionHost): string[];
-    function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations;
+    interface ModuleResolutionCache {
+        getOrCreateCacheForDirectory(directoryName: string): Map<ResolvedModuleWithFailedLookupLocations>;
+    }
+    function createModuleResolutionCache(currentDirectory: string, getCanonicalFileName: (s: string) => string): {
+        getOrCreateCacheForDirectory: (directoryName: string) => Map<ResolvedModuleWithFailedLookupLocations>;
+    };
+    function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache): ResolvedModuleWithFailedLookupLocations;
     function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations;
     function directoryProbablyExists(directoryName: string, host: {
         directoryExists?: (directoryName: string) => boolean;
@@ -8991,6 +9017,7 @@ declare namespace ts {
     let fullTripleSlashReferenceTypeReferenceDirectiveRegEx: RegExp;
     let fullTripleSlashAMDReferencePathRegEx: RegExp;
     function isPartOfTypeNode(node: Node): boolean;
+    function isChildOfLiteralType(node: Node): boolean;
     function forEachReturnStatement<T>(body: Block, visitor: (stmt: ReturnStatement) => T): T;
     function forEachYieldExpression(body: Block, visitor: (expr: YieldExpression) => void): void;
     function getRestParameterElementType(node: TypeNode): TypeNode;
@@ -10049,6 +10076,7 @@ declare namespace ts {
         InsertSpaceAfterCommaDelimiter: boolean;
         InsertSpaceAfterSemicolonInForStatements: boolean;
         InsertSpaceBeforeAndAfterBinaryOperators: boolean;
+        InsertSpaceAfterConstructor?: boolean;
         InsertSpaceAfterKeywordsInControlFlowStatements: boolean;
         InsertSpaceAfterFunctionKeywordForAnonymousFunctions: boolean;
         InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
@@ -10057,6 +10085,7 @@ declare namespace ts {
         InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: boolean;
         InsertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
         InsertSpaceAfterTypeAssertion?: boolean;
+        InsertSpaceBeforeFunctionParenthesis?: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
     }
@@ -10064,6 +10093,7 @@ declare namespace ts {
         insertSpaceAfterCommaDelimiter?: boolean;
         insertSpaceAfterSemicolonInForStatements?: boolean;
         insertSpaceBeforeAndAfterBinaryOperators?: boolean;
+        insertSpaceAfterConstructor?: boolean;
         insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
         insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
@@ -10072,6 +10102,7 @@ declare namespace ts {
         insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
         insertSpaceAfterTypeAssertion?: boolean;
+        insertSpaceBeforeFunctionParenthesis?: boolean;
         placeOpenBraceOnNewLineForFunctions?: boolean;
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
     }
@@ -10710,6 +10741,7 @@ declare namespace ts.formatting {
         SpaceAfterLetConstInVariableDeclaration: Rule;
         NoSpaceBeforeOpenParenInFuncCall: Rule;
         SpaceAfterFunctionInFuncDecl: Rule;
+        SpaceBeforeOpenParenInFuncDecl: Rule;
         NoSpaceBeforeOpenParenInFuncDecl: Rule;
         SpaceAfterVoidOperator: Rule;
         NoSpaceBetweenReturnAndSemicolon: Rule;
@@ -10718,6 +10750,7 @@ declare namespace ts.formatting {
         SpaceAfterGetSetInMember: Rule;
         SpaceBeforeBinaryKeywordOperator: Rule;
         SpaceAfterBinaryKeywordOperator: Rule;
+        SpaceAfterConstructor: Rule;
         NoSpaceAfterConstructor: Rule;
         NoSpaceAfterModuleImport: Rule;
         SpaceAfterCertainTypeScriptKeywords: Rule;

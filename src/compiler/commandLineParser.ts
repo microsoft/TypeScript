@@ -572,7 +572,6 @@ namespace ts {
         }
     }
 
-    /* @internal */
     export function parseCommandLine(commandLine: string[], readFile?: (path: string) => string): ParsedCommandLine {
         const options: CompilerOptions = {};
         const fileNames: string[] = [];
