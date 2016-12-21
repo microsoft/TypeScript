@@ -488,14 +488,16 @@ namespace ts.formatting {
                         // open and close brace, 'else' and 'while' (in do statement) tokens has indentation of the parent
                         case SyntaxKind.OpenBraceToken:
                         case SyntaxKind.CloseBraceToken:
-                        case SyntaxKind.OpenBracketToken:
-                        case SyntaxKind.CloseBracketToken:
                         case SyntaxKind.OpenParenToken:
                         case SyntaxKind.CloseParenToken:
                         case SyntaxKind.ElseKeyword:
                         case SyntaxKind.WhileKeyword:
                         case SyntaxKind.AtToken:
                             return indentation;
+                        case SyntaxKind.OpenBracketToken:
+                        case SyntaxKind.CloseBracketToken:
+                            return (container.kind === SyntaxKind.MappedType) ?
+                                indentation + getEffectiveDelta(delta, container) : indentation;
                         default:
                             // if token line equals to the line of containing node (this is a first token in the node) - use node indentation
                             return nodeStartLine !== line ? indentation + getEffectiveDelta(delta, container) : indentation;
