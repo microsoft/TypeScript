@@ -25,8 +25,7 @@ foo2(undefined, 1);
 foo3(undefined, 1);
 
 
-// .d.ts should have `T | undefined` for all of them
-// need to remove special-case code to allow calling foo1(undefined) for x: string = "string"
+// .d.ts should have `T | undefined` for foo1, foo2, foo3
 
 
 //// [defaultParameterAddsUndefinedWithStrictNullChecks.js]
@@ -55,8 +54,7 @@ function foo3(x, b) {
 foo1(undefined, 1);
 foo2(undefined, 1);
 foo3(undefined, 1);
-// .d.ts should have `T | undefined` for all of them
-// need to remove special-case code to allow calling foo1(undefined) for x: string = "string"
+// .d.ts should have `T | undefined` for foo1, foo2, foo3
 
 
 //// [defaultParameterAddsUndefinedWithStrictNullChecks.d.ts]

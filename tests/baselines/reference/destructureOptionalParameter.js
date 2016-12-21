@@ -40,7 +40,7 @@ declare function f1({a, b}?: {
 declare function f2({a, b}?: {
     a: number;
     b: number;
-}): void;
+} | undefined): void;
 interface Type {
     t: void;
 }
