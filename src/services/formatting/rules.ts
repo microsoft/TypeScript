@@ -829,6 +829,7 @@ namespace ts.formatting {
             switch (parent.kind) {
                 case SyntaxKind.TypeReference:
                 case SyntaxKind.TypeAssertionExpression:
+                case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.InterfaceDeclaration:
