@@ -38,7 +38,7 @@ var MyModule;
     }());
     __decorate([
         inject,
-        __metadata("design:type", Object)
+        __metadata("design:type", Leg)
     ], Person.prototype, "leftLeg", void 0);
     MyModule.Person = Person;
 })(MyModule || (MyModule = {}));

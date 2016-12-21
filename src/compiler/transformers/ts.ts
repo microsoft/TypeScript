@@ -2731,7 +2731,7 @@ namespace ts {
             let blockLocation: TextRange;
             const body = node.body;
             if (body.kind === SyntaxKind.ModuleBlock) {
-                addRange(statements, visitNodes((<ModuleBlock>body).statements, namespaceElementVisitor, isStatement));
+                saveStateAndInvoke(body, body => addRange(statements, visitNodes((<ModuleBlock>body).statements, namespaceElementVisitor, isStatement)));
                 statementsLocation = (<ModuleBlock>body).statements;
                 blockLocation = body;
             }
