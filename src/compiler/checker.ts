@@ -21865,7 +21865,7 @@ namespace ts {
                     diagnosticMessage = Diagnostics.Octal_literal_types_must_use_ES2015_syntax_Use_the_syntax_0;
                 }
                 if (diagnosticMessage) {
-                    const withMinus = isMinusPrefixUnaryExpression(node.parent);
+                    const withMinus = isPrefixUnaryExpression(node.parent) && node.parent.operator === SyntaxKind.MinusToken;
                     const literal = `${withMinus ? "-" : ""}0o${node.text}`;
                     return grammarErrorOnNode(withMinus ? node.parent : node, diagnosticMessage, literal);
                 }

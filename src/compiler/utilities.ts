@@ -742,9 +742,8 @@ namespace ts {
         return false;
     }
 
-    export function isMinusPrefixUnaryExpression(node: Node): boolean {
-        return node.kind === SyntaxKind.PrefixUnaryExpression &&
-            (node as PrefixUnaryExpression).operator === SyntaxKind.MinusToken;
+    export function isPrefixUnaryExpression(node: Node): node is PrefixUnaryExpression {
+        return node.kind === SyntaxKind.PrefixUnaryExpression;
     }
 
     // Warning: This has the same semantics as the forEach family of functions,
