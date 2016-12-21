@@ -87,6 +87,7 @@ namespace ts.formatting {
         public SpaceAfterLetConstInVariableDeclaration: Rule;
         public NoSpaceBeforeOpenParenInFuncCall: Rule;
         public SpaceAfterFunctionInFuncDecl: Rule;
+        public SpaceBeforeOpenParenInFuncDecl: Rule;
         public NoSpaceBeforeOpenParenInFuncDecl: Rule;
         public SpaceAfterVoidOperator: Rule;
 
@@ -112,6 +113,7 @@ namespace ts.formatting {
         // TypeScript-specific rules
 
         // Treat constructor as an identifier in a function declaration, and remove spaces between constructor and following left parentheses
+        public SpaceAfterConstructor: Rule;
         public NoSpaceAfterConstructor: Rule;
 
         // Use of module as a function call. e.g.: import m2 = module("m2");
@@ -329,6 +331,7 @@ namespace ts.formatting {
             this.SpaceAfterLetConstInVariableDeclaration = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.LetKeyword, SyntaxKind.ConstKeyword]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.IsStartOfVariableDeclarationList), RuleAction.Space));
             this.NoSpaceBeforeOpenParenInFuncCall = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.IsFunctionCallOrNewContext, Rules.IsPreviousTokenNotComma), RuleAction.Delete));
             this.SpaceAfterFunctionInFuncDecl = new Rule(RuleDescriptor.create3(SyntaxKind.FunctionKeyword, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsFunctionDeclContext), RuleAction.Space));
+            this.SpaceBeforeOpenParenInFuncDecl = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.IsFunctionDeclContext), RuleAction.Space));
             this.NoSpaceBeforeOpenParenInFuncDecl = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.IsFunctionDeclContext), RuleAction.Delete));
             this.SpaceAfterVoidOperator = new Rule(RuleDescriptor.create3(SyntaxKind.VoidKeyword, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.IsVoidOpContext), RuleAction.Space));
 
@@ -352,6 +355,7 @@ namespace ts.formatting {
             // TypeScript-specific higher priority rules
 
             // Treat constructor as an identifier in a function declaration, and remove spaces between constructor and following left parentheses
+            this.SpaceAfterConstructor = new Rule(RuleDescriptor.create1(SyntaxKind.ConstructorKeyword, SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext), RuleAction.Space));
             this.NoSpaceAfterConstructor = new Rule(RuleDescriptor.create1(SyntaxKind.ConstructorKeyword, SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext), RuleAction.Delete));
 
             // Use of module as a function call. e.g.: import m2 = module("m2");
@@ -437,7 +441,7 @@ namespace ts.formatting {
                 this.NoSpaceBeforeEqualInJsxAttribute, this.NoSpaceAfterEqualInJsxAttribute,
 
                 // TypeScript-specific rules
-                this.NoSpaceAfterConstructor, this.NoSpaceAfterModuleImport,
+                this.NoSpaceAfterModuleImport,
                 this.SpaceAfterCertainTypeScriptKeywords, this.SpaceBeforeCertainTypeScriptKeywords,
                 this.SpaceAfterModuleName,
                 this.SpaceBeforeArrow, this.SpaceAfterArrow,
@@ -462,7 +466,6 @@ namespace ts.formatting {
                 this.NoSpaceBeforeOpenBracket,
                 this.NoSpaceAfterCloseBracket,
                 this.SpaceAfterSemicolon,
-                this.NoSpaceBeforeOpenParenInFuncDecl,
                 this.SpaceBetweenStatements, this.SpaceAfterTryFinally
             ];
 
