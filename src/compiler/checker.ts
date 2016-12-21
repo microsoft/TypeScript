@@ -3098,7 +3098,8 @@ namespace ts {
         /** Return the inferred type for a binding element */
         function getTypeForBindingElement(declaration: BindingElement): Type {
             const pattern = <BindingPattern>declaration.parent;
-            const parentType = getTypeForBindingElementParent(<VariableLikeDeclaration>pattern.parent);
+            let parentType = getTypeForBindingElementParent(<VariableLikeDeclaration>pattern.parent);
+
             // If parent has the unknown (error) type, then so does this binding element
             if (parentType === unknownType) {
                 return unknownType;
@@ -3111,6 +3112,12 @@ namespace ts {
                     return checkDeclarationInitializer(declaration);
                 }
                 return parentType;
+            }
+            // In strict null checking mode, a default value of a binding pattern adds undefined,
+            // which should be removed to get the type of the elements
+            const func = getContainingFunction(declaration);
+            if (strictNullChecks && func && !func.body && getFalsyFlags(parentType) & TypeFlags.Undefined) {
+                parentType = getTypeWithFacts(parentType, TypeFacts.NEUndefined);
             }
 
             let type: Type;
