@@ -1,5 +1,5 @@
 tests/cases/compiler/oldStyleOctalLiteralTypes.ts(1,8): error TS8017: Octal literal types must use ES2015 syntax. Use the syntax '0o10'.
-tests/cases/compiler/oldStyleOctalLiteralTypes.ts(2,9): error TS8017: Octal literal types must use ES2015 syntax. Use the syntax '0o20'.
+tests/cases/compiler/oldStyleOctalLiteralTypes.ts(2,8): error TS8017: Octal literal types must use ES2015 syntax. Use the syntax '-0o20'.
 
 
 ==== tests/cases/compiler/oldStyleOctalLiteralTypes.ts (2 errors) ====
@@ -7,6 +7,6 @@ tests/cases/compiler/oldStyleOctalLiteralTypes.ts(2,9): error TS8017: Octal lite
            ~~~
 !!! error TS8017: Octal literal types must use ES2015 syntax. Use the syntax '0o10'.
     let y: -020;
-            ~~~
-!!! error TS8017: Octal literal types must use ES2015 syntax. Use the syntax '0o20'.
+           ~~~~
+!!! error TS8017: Octal literal types must use ES2015 syntax. Use the syntax '-0o20'.
     
