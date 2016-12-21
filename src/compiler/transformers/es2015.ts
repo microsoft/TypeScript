@@ -569,7 +569,7 @@ namespace ts {
         function visitThisKeyword(node: Node): Node {
             if (convertedLoopState) {
                 if (hierarchyFacts & HierarchyFacts.ArrowFunction) {
-                    // if the enclosing function is an ArrowFunction is then we use the captured 'this' keyword.
+                    // if the enclosing function is an ArrowFunction then we use the captured 'this' keyword.
                     convertedLoopState.containsLexicalThis = true;
                     return node;
                 }
@@ -1444,6 +1444,10 @@ namespace ts {
                             ),
                             createVoidZero()
                         );
+                        break;
+
+                    default:
+                        Debug.failBadSyntaxKind(node);
                         break;
                 }
 
