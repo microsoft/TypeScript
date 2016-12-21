@@ -22,6 +22,7 @@
     "File '/node_modules/foo.js' does not exist.",
     "File '/node_modules/foo.jsx' does not exist.",
     "Found 'package.json' at '/node_modules/foo/package.json'.",
+    "'package.json' has 'types' field 'foo.js' that references '/node_modules/foo/foo.js'.",
     "'package.json' does not have a 'types' or 'main' field.",
     "File '/node_modules/foo/index.js' does not exist.",
     "File '/node_modules/foo/index.jsx' does not exist.",
