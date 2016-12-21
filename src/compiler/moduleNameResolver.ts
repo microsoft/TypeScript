@@ -67,13 +67,23 @@ namespace ts {
     }
 
     /** Reads from "main" or "types"/"typings" depending on `extensions`. */
-    function tryReadPackageJsonMainAndTypes(packageJsonPath: string, baseDirectory: string, state: ModuleResolutionState): {types: string, main: string} {
+    function tryReadPackageJsonMainOrTypes(extensions: Extensions, packageJsonPath: string, baseDirectory: string, state: ModuleResolutionState): string {
         const jsonContent = readJson(packageJsonPath, state.host);
 
-        return {
-            types: tryReadFromField("typings") || tryReadFromField("types"),
-            main: tryReadFromField("main")
-        };
+        switch (extensions) {
+            case Extensions.DtsOnly:
+            case Extensions.TypeScript:
+                return tryReadFromField("typings") || tryReadFromField("types");
+
+            case Extensions.JavaScript:
+                if (typeof jsonContent.main === "string") {
+                    if (state.traceEnabled) {
+                        trace(state.host, Diagnostics.No_types_specified_in_package_json_so_returning_main_value_of_0, jsonContent.main);
+                    }
+                    return normalizePath(combinePaths(baseDirectory, jsonContent.main));
+                }
+                return undefined;
+        }
 
         function tryReadFromField(fieldName: string) {
             if (hasProperty(jsonContent, fieldName)) {
@@ -700,21 +710,7 @@ namespace ts {
             if (state.traceEnabled) {
                 trace(state.host, Diagnostics.Found_package_json_at_0, packageJsonPath);
             }
-
-            const {types, main} = tryReadPackageJsonMainAndTypes(packageJsonPath, candidate, state);
-            let mainOrTypesFile;
-            if (extensions === Extensions.DtsOnly || extensions === Extensions.TypeScript) {
-                mainOrTypesFile = types;
-            }
-            else if (extensions === Extensions.JavaScript) {
-                mainOrTypesFile = main;
-                if (main) {
-                    if (state.traceEnabled) {
-                        trace(state.host, Diagnostics.No_types_specified_in_package_json_so_returning_main_value_of_0, main);
-                    }
-                }
-            }
-
+            const mainOrTypesFile = tryReadPackageJsonMainOrTypes(extensions, packageJsonPath, candidate, state);
             if (mainOrTypesFile) {
                 const onlyRecordFailures = !directoryProbablyExists(getDirectoryPath(mainOrTypesFile), state.host);
                 // A package.json "typings" may specify an exact filename, or may choose to omit an extension.
@@ -731,10 +727,8 @@ namespace ts {
                     return resolved;
                 }
 
-                // A package.json "main" may specify an exact filename, or may choose to omit an extension.
-                // We tried the ts extensions erlier, now try the js extensions
-                if (main && extensions === Extensions.JavaScript) {
-                    const resolved = tryAddingExtensions(main, Extensions.JavaScript, failedLookupLocations, onlyRecordFailures, state);
+                if (extensions === Extensions.JavaScript) {
+                    const resolved = tryAddingExtensions(mainOrTypesFile, Extensions.JavaScript, failedLookupLocations, onlyRecordFailures, state);
                     if (resolved) {
                         return resolved;
                     }
