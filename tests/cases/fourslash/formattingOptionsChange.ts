@@ -15,6 +15,8 @@
 ////}
 /////*insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces*/{          var t = 1}; var  {a,b  }    = {   a: 'sw',  b:'r'   };function f(  {  a, b}) { }
 
+const defaultFormatOption = format.copyFormatOptions();
+
 runTest("insertSpaceAfterCommaDelimiter", "[1, 2, 3];[72,];", "[1,2,3];[72,];");
 runTest("insertSpaceAfterSemicolonInForStatements", "for (i = 0; i; i++);", "for (i = 0;i;i++);");
 runTest("insertSpaceBeforeAndAfterBinaryOperators", "1 + 2 - 3", "1+2-3");
@@ -25,10 +27,9 @@ runTest("insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets", "[ 1 ];[];[];
 runTest("insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces", "`${ 1 }`; `${ 1 }`", "`${1}`; `${1}`");
 runTest("insertSpaceAfterTypeAssertion", "const bar = <Bar> Thing.getFoo();", "const bar = <Bar>Thing.getFoo();");
 runTest("placeOpenBraceOnNewLineForFunctions", "class foo", "class foo {");
-runTest("placeOpenBraceOnNewLineForControlBlocks", "if ( true )", "if ( true ) {");
+runTest("placeOpenBraceOnNewLineForControlBlocks", "if (true)", "if (true) {");
 runTest("insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces", "{ var t = 1 }; var { a, b } = { a: 'sw', b: 'r' }; function f({ a, b }) { }", "{var t = 1}; var {a, b} = {a: 'sw', b: 'r'}; function f({a, b}) {}");
 
-const defaultFormatOption = format.copyFormatOptions();
 function runTest(propertyName: string, expectedStringWhenTrue: string, expectedStringWhenFalse: string) {
     // Go to the correct file
     goTo.marker(propertyName);
