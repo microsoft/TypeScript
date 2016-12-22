@@ -13,7 +13,7 @@
 ////}
 /////*PlaceOpenBraceOnNewLineForControlBlocks*/if (true)   {
 ////}
-/////*InsertSpaceAfterOpeningAndBeforeClosingNonemptyBraces*/{          var t = 1}; var  {a,b  }    = {   a: 'sw',  b:'r'   };
+/////*InsertSpaceAfterOpeningAndBeforeClosingNonemptyBraces*/{          var t = 1}; var  {a,b  }    = {   a: 'sw',  b:'r'   };function f(  {  a, b}) { }
 
 runTest("InsertSpaceAfterCommaDelimiter", "[1, 2, 3];[72,];", "[1,2,3];[72,];");
 runTest("InsertSpaceAfterSemicolonInForStatements", "for (i = 0; i; i++);", "for (i = 0;i;i++);");
@@ -26,9 +26,9 @@ runTest("InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces", "`${ 1 }`
 runTest("InsertSpaceAfterTypeAssertion", "const bar = <Bar> Thing.getFoo();", "const bar = <Bar>Thing.getFoo();");
 runTest("PlaceOpenBraceOnNewLineForFunctions", "class foo", "class foo {");
 runTest("PlaceOpenBraceOnNewLineForControlBlocks", "if ( true )", "if ( true ) {");
-runTest("InsertSpaceAfterOpeningAndBeforeClosingNonemptyBraces", "{ var t = 1 }; var { a, b } = { a: 'sw', b: 'r' };", "{var t = 1}; var {a, b} = {a: 'sw', b: 'r'};");
+runTest("InsertSpaceAfterOpeningAndBeforeClosingNonemptyBraces", "{ var t = 1 }; var { a, b } = { a: 'sw', b: 'r' }; function f({ a, b }) { }", "{var t = 1}; var {a, b} = {a: 'sw', b: 'r'}; function f({a, b}) {}");
 
-
+const defaultFormatOption = format.copyFormatOptions();
 function runTest(propertyName: string, expectedStringWhenTrue: string, expectedStringWhenFalse: string) {
     // Go to the correct file
     goTo.marker(propertyName);
@@ -52,4 +52,6 @@ function runTest(propertyName: string, expectedStringWhenTrue: string, expectedS
     // Verify
     goTo.marker(propertyName);
     verify.currentLineContentIs(expectedStringWhenTrue);
+
+    format.setOption(propertyName, defaultFormatOption[propertyName])
 }

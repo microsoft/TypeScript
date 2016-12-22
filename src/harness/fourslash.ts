@@ -3530,6 +3530,10 @@ namespace FourSlashInterface {
         public setOption(name: string, value: any): void {
             (<any>this.state.formatCodeSettings)[name] = value;
         }
+
+        public getOption(name: keyof ts.FormatCodeSettings) {
+            return this.state.formatCodeSettings[name];
+        }
     }
 
     export class Cancellation {
