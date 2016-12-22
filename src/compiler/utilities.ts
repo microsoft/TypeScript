@@ -732,6 +732,20 @@ namespace ts {
         return false;
     }
 
+    export function isChildOfLiteralType(node: Node): boolean {
+        while (node) {
+            if (node.kind === SyntaxKind.LiteralType) {
+                return true;
+            }
+            node = node.parent;
+        }
+        return false;
+    }
+
+    export function isPrefixUnaryExpression(node: Node): node is PrefixUnaryExpression {
+        return node.kind === SyntaxKind.PrefixUnaryExpression;
+    }
+
     // Warning: This has the same semantics as the forEach family of functions,
     //          in that traversal terminates in the event that 'visitor' supplies a truthy value.
     export function forEachReturnStatement<T>(body: Block, visitor: (stmt: ReturnStatement) => T): T {
@@ -3579,6 +3593,10 @@ namespace ts {
 
     export function isIdentifier(node: Node): node is Identifier {
         return node.kind === SyntaxKind.Identifier;
+    }
+
+    export function isVoidExpression(node: Node): node is VoidExpression {
+        return node.kind === SyntaxKind.VoidExpression;
     }
 
     export function isGeneratedIdentifier(node: Node): node is GeneratedIdentifier {

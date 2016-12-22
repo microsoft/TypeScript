@@ -87,6 +87,7 @@ namespace ts.formatting {
         public SpaceAfterLetConstInVariableDeclaration: Rule;
         public NoSpaceBeforeOpenParenInFuncCall: Rule;
         public SpaceAfterFunctionInFuncDecl: Rule;
+        public SpaceBeforeOpenParenInFuncDecl: Rule;
         public NoSpaceBeforeOpenParenInFuncDecl: Rule;
         public SpaceAfterVoidOperator: Rule;
 
@@ -112,6 +113,7 @@ namespace ts.formatting {
         // TypeScript-specific rules
 
         // Treat constructor as an identifier in a function declaration, and remove spaces between constructor and following left parentheses
+        public SpaceAfterConstructor: Rule;
         public NoSpaceAfterConstructor: Rule;
 
         // Use of module as a function call. e.g.: import m2 = module("m2");
@@ -329,6 +331,7 @@ namespace ts.formatting {
             this.SpaceAfterLetConstInVariableDeclaration = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.LetKeyword, SyntaxKind.ConstKeyword]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.IsStartOfVariableDeclarationList), RuleAction.Space));
             this.NoSpaceBeforeOpenParenInFuncCall = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.IsFunctionCallOrNewContext, Rules.IsPreviousTokenNotComma), RuleAction.Delete));
             this.SpaceAfterFunctionInFuncDecl = new Rule(RuleDescriptor.create3(SyntaxKind.FunctionKeyword, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsFunctionDeclContext), RuleAction.Space));
+            this.SpaceBeforeOpenParenInFuncDecl = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.IsFunctionDeclContext), RuleAction.Space));
             this.NoSpaceBeforeOpenParenInFuncDecl = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.IsFunctionDeclContext), RuleAction.Delete));
             this.SpaceAfterVoidOperator = new Rule(RuleDescriptor.create3(SyntaxKind.VoidKeyword, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.IsVoidOpContext), RuleAction.Space));
 
@@ -352,13 +355,14 @@ namespace ts.formatting {
             // TypeScript-specific higher priority rules
 
             // Treat constructor as an identifier in a function declaration, and remove spaces between constructor and following left parentheses
+            this.SpaceAfterConstructor = new Rule(RuleDescriptor.create1(SyntaxKind.ConstructorKeyword, SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext), RuleAction.Space));
             this.NoSpaceAfterConstructor = new Rule(RuleDescriptor.create1(SyntaxKind.ConstructorKeyword, SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext), RuleAction.Delete));
 
             // Use of module as a function call. e.g.: import m2 = module("m2");
             this.NoSpaceAfterModuleImport = new Rule(RuleDescriptor.create2(Shared.TokenRange.FromTokens([SyntaxKind.ModuleKeyword, SyntaxKind.RequireKeyword]), SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext), RuleAction.Delete));
 
             // Add a space around certain TypeScript keywords
-            this.SpaceAfterCertainTypeScriptKeywords = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.AbstractKeyword, SyntaxKind.ClassKeyword, SyntaxKind.DeclareKeyword, SyntaxKind.DefaultKeyword, SyntaxKind.EnumKeyword, SyntaxKind.ExportKeyword, SyntaxKind.ExtendsKeyword, SyntaxKind.GetKeyword, SyntaxKind.ImplementsKeyword, SyntaxKind.ImportKeyword, SyntaxKind.InterfaceKeyword, SyntaxKind.ModuleKeyword, SyntaxKind.NamespaceKeyword, SyntaxKind.PrivateKeyword, SyntaxKind.PublicKeyword, SyntaxKind.ProtectedKeyword, SyntaxKind.SetKeyword, SyntaxKind.StaticKeyword, SyntaxKind.TypeKeyword, SyntaxKind.FromKeyword]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext), RuleAction.Space));
+            this.SpaceAfterCertainTypeScriptKeywords = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.AbstractKeyword, SyntaxKind.ClassKeyword, SyntaxKind.DeclareKeyword, SyntaxKind.DefaultKeyword, SyntaxKind.EnumKeyword, SyntaxKind.ExportKeyword, SyntaxKind.ExtendsKeyword, SyntaxKind.GetKeyword, SyntaxKind.ImplementsKeyword, SyntaxKind.ImportKeyword, SyntaxKind.InterfaceKeyword, SyntaxKind.ModuleKeyword, SyntaxKind.NamespaceKeyword, SyntaxKind.PrivateKeyword, SyntaxKind.PublicKeyword, SyntaxKind.ProtectedKeyword, SyntaxKind.ReadonlyKeyword, SyntaxKind.SetKeyword, SyntaxKind.StaticKeyword, SyntaxKind.TypeKeyword, SyntaxKind.FromKeyword, SyntaxKind.KeyOfKeyword]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext), RuleAction.Space));
             this.SpaceBeforeCertainTypeScriptKeywords = new Rule(RuleDescriptor.create4(Shared.TokenRange.Any, Shared.TokenRange.FromTokens([SyntaxKind.ExtendsKeyword, SyntaxKind.ImplementsKeyword, SyntaxKind.FromKeyword])), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext), RuleAction.Space));
 
             // Treat string literals in module names as identifiers, and add a space between the literal and the opening Brace braces, e.g.: module "m2" {
@@ -437,7 +441,7 @@ namespace ts.formatting {
                 this.NoSpaceBeforeEqualInJsxAttribute, this.NoSpaceAfterEqualInJsxAttribute,
 
                 // TypeScript-specific rules
-                this.NoSpaceAfterConstructor, this.NoSpaceAfterModuleImport,
+                this.NoSpaceAfterModuleImport,
                 this.SpaceAfterCertainTypeScriptKeywords, this.SpaceBeforeCertainTypeScriptKeywords,
                 this.SpaceAfterModuleName,
                 this.SpaceBeforeArrow, this.SpaceAfterArrow,
@@ -462,7 +466,6 @@ namespace ts.formatting {
                 this.NoSpaceBeforeOpenBracket,
                 this.NoSpaceAfterCloseBracket,
                 this.SpaceAfterSemicolon,
-                this.NoSpaceBeforeOpenParenInFuncDecl,
                 this.SpaceBetweenStatements, this.SpaceAfterTryFinally
             ];
 
@@ -575,6 +578,8 @@ namespace ts.formatting {
                     return context.currentTokenSpan.kind === SyntaxKind.EqualsToken || context.nextTokenSpan.kind === SyntaxKind.EqualsToken;
                 // "in" keyword in for (let x in []) { }
                 case SyntaxKind.ForInStatement:
+                // "in" keyword in [P in keyof T]: T[P]
+                case SyntaxKind.TypeParameter:
                     return context.currentTokenSpan.kind === SyntaxKind.InKeyword || context.nextTokenSpan.kind === SyntaxKind.InKeyword;
                 // Technically, "of" is not a binary operator, but format it the same way as "in"
                 case SyntaxKind.ForOfStatement:
@@ -836,6 +841,7 @@ namespace ts.formatting {
             switch (parent.kind) {
                 case SyntaxKind.TypeReference:
                 case SyntaxKind.TypeAssertionExpression:
+                case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.InterfaceDeclaration:

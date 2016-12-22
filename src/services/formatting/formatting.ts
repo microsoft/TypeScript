@@ -488,8 +488,6 @@ namespace ts.formatting {
                         // open and close brace, 'else' and 'while' (in do statement) tokens has indentation of the parent
                         case SyntaxKind.OpenBraceToken:
                         case SyntaxKind.CloseBraceToken:
-                        case SyntaxKind.OpenBracketToken:
-                        case SyntaxKind.CloseBracketToken:
                         case SyntaxKind.OpenParenToken:
                         case SyntaxKind.CloseParenToken:
                         case SyntaxKind.ElseKeyword:
@@ -502,6 +500,13 @@ namespace ts.formatting {
                                 container.kind === SyntaxKind.JsxClosingElement ||
                                 container.kind === SyntaxKind.JsxSelfClosingElement
                             ) {
+                                return indentation;
+                            }
+                            break;
+                        }
+                        case SyntaxKind.OpenBracketToken:
+                        case SyntaxKind.CloseBracketToken: {
+                            if (container.kind !== SyntaxKind.MappedType) {
                                 return indentation;
                             }
                             break;

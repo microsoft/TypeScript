@@ -325,6 +325,7 @@ namespace ts {
         // Map storing if there is emit blocking diagnostics for given input
         const hasEmitBlockingDiagnostics = createFileMap<boolean>(getCanonicalFileName);
 
+        let moduleResolutionCache: ModuleResolutionCache;
         let resolveModuleNamesWorker: (moduleNames: string[], containingFile: string) => ResolvedModuleFull[];
         if (host.resolveModuleNames) {
             resolveModuleNamesWorker = (moduleNames, containingFile) => host.resolveModuleNames(moduleNames, containingFile).map(resolved => {
@@ -338,7 +339,8 @@ namespace ts {
             });
         }
         else {
-            const loader = (moduleName: string, containingFile: string) => resolveModuleName(moduleName, containingFile, options, host).resolvedModule;
+            moduleResolutionCache = createModuleResolutionCache(currentDirectory, x => host.getCanonicalFileName(x));
+            const loader = (moduleName: string, containingFile: string) => resolveModuleName(moduleName, containingFile, options, host, moduleResolutionCache).resolvedModule;
             resolveModuleNamesWorker = (moduleNames, containingFile) => loadWithLocalCache(moduleNames, containingFile, loader);
         }
 
@@ -390,6 +392,9 @@ namespace ts {
                 }
             }
         }
+
+        // unconditionally set moduleResolutionCache to undefined to avoid unnecessary leaks
+        moduleResolutionCache = undefined;
 
         // unconditionally set oldProgram to undefined to prevent it from being captured in closure
         oldProgram = undefined;
