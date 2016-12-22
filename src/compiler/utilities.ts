@@ -732,9 +732,9 @@ namespace ts {
         return false;
     }
 
-    export function isChildOfLiteralType(node: Node): boolean {
+    export function isChildOfNodeWithKind(node: Node, kind: SyntaxKind): boolean {
         while (node) {
-            if (node.kind === SyntaxKind.LiteralType) {
+            if (node.kind === kind) {
                 return true;
             }
             node = node.parent;
