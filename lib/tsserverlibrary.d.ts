@@ -4183,7 +4183,7 @@ declare namespace ts {
             key: string;
             message: string;
         };
-        Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher_Use_the_syntax_0o_0: {
+        Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher_Use_the_syntax_0: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -8701,7 +8701,7 @@ declare namespace ts {
             key: string;
             message: string;
         };
-        Octal_literal_types_must_use_ES2015_syntax_Use_the_syntax_0o_0: {
+        Octal_literal_types_must_use_ES2015_syntax_Use_the_syntax_0: {
             code: number;
             category: DiagnosticCategory;
             key: string;
@@ -8927,18 +8927,23 @@ declare namespace ts {
     }): string[] | undefined;
     function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string | undefined, options: CompilerOptions, host: ModuleResolutionHost): ResolvedTypeReferenceDirectiveWithFailedLookupLocations;
     function getAutomaticTypeDirectiveNames(options: CompilerOptions, host: ModuleResolutionHost): string[];
-    interface ModuleResolutionCache {
+    interface ModuleResolutionCache extends NonRelativeModuleNameResolutionCache {
         getOrCreateCacheForDirectory(directoryName: string): Map<ResolvedModuleWithFailedLookupLocations>;
     }
-    function createModuleResolutionCache(currentDirectory: string, getCanonicalFileName: (s: string) => string): {
-        getOrCreateCacheForDirectory: (directoryName: string) => Map<ResolvedModuleWithFailedLookupLocations>;
-    };
+    interface NonRelativeModuleNameResolutionCache {
+        getOrCreateCacheForModuleName(nonRelativeModuleName: string): PerModuleNameCache;
+    }
+    interface PerModuleNameCache {
+        get(directory: string): ResolvedModuleWithFailedLookupLocations;
+        set(directory: string, result: ResolvedModuleWithFailedLookupLocations): void;
+    }
+    function createModuleResolutionCache(currentDirectory: string, getCanonicalFileName: (s: string) => string): ModuleResolutionCache;
     function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache): ResolvedModuleWithFailedLookupLocations;
-    function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations;
+    function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache): ResolvedModuleWithFailedLookupLocations;
     function directoryProbablyExists(directoryName: string, host: {
         directoryExists?: (directoryName: string) => boolean;
     }): boolean;
-    function classicNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations;
+    function classicNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: NonRelativeModuleNameResolutionCache): ResolvedModuleWithFailedLookupLocations;
     function loadModuleFromGlobalCache(moduleName: string, projectName: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, globalCache: string): ResolvedModuleWithFailedLookupLocations;
 }
 declare namespace ts {
@@ -9018,6 +9023,7 @@ declare namespace ts {
     let fullTripleSlashAMDReferencePathRegEx: RegExp;
     function isPartOfTypeNode(node: Node): boolean;
     function isChildOfLiteralType(node: Node): boolean;
+    function isPrefixUnaryExpression(node: Node): node is PrefixUnaryExpression;
     function forEachReturnStatement<T>(body: Block, visitor: (stmt: ReturnStatement) => T): T;
     function forEachYieldExpression(body: Block, visitor: (expr: YieldExpression) => void): void;
     function getRestParameterElementType(node: TypeNode): TypeNode;
@@ -9241,6 +9247,7 @@ declare namespace ts {
     function isTemplateHead(node: Node): node is TemplateHead;
     function isTemplateMiddleOrTemplateTail(node: Node): node is TemplateMiddle | TemplateTail;
     function isIdentifier(node: Node): node is Identifier;
+    function isVoidExpression(node: Node): node is VoidExpression;
     function isGeneratedIdentifier(node: Node): node is GeneratedIdentifier;
     function isModifier(node: Node): node is Modifier;
     function isQualifiedName(node: Node): node is QualifiedName;
