@@ -1317,15 +1317,16 @@ namespace ts {
         return node;
     }
 
-    export function createJsxExpression(expression: Expression, location?: TextRange) {
+    export function createJsxExpression(expression: Expression, dotDotDotToken: Token<SyntaxKind.DotDotDotToken>, location?: TextRange) {
         const node = <JsxExpression>createNode(SyntaxKind.JsxExpression, location);
+        node.dotDotDotToken = dotDotDotToken;
         node.expression = expression;
         return node;
     }
 
     export function updateJsxExpression(node: JsxExpression, expression: Expression) {
         if (node.expression !== expression) {
-            return updateNode(createJsxExpression(expression, node), node);
+            return updateNode(createJsxExpression(expression, node.dotDotDotToken, node), node);
         }
         return node;
     }

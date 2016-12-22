@@ -1854,6 +1854,9 @@ namespace ts {
         function emitJsxExpression(node: JsxExpression) {
             if (node.expression) {
                 write("{");
+                if (node.dotDotDotToken) {
+                    write("...");
+                }
                 emitExpression(node.expression);
                 write("}");
             }

@@ -1811,6 +1811,10 @@
         "category": "Error",
         "code": 2608
     },
+    "JSX spread child must be an array type.": {
+        "category": "Error",
+        "code": 2609
+    },
     "Cannot emit namespaced JSX elements in React": {
         "category": "Error",
         "code": 2650
