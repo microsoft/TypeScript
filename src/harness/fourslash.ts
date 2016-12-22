@@ -479,7 +479,7 @@ namespace FourSlash {
                 endPos = endMarker.position;
             }
 
-            errors.forEach(function(error: ts.Diagnostic) {
+            errors.forEach(function (error: ts.Diagnostic) {
                 if (predicate(error.start, error.start + error.length, startPos, endPos)) {
                     exists = true;
                 }
@@ -496,7 +496,7 @@ namespace FourSlash {
                 Harness.IO.log("Unexpected error(s) found.  Error list is:");
             }
 
-            errors.forEach(function(error: ts.Diagnostic) {
+            errors.forEach(function (error: ts.Diagnostic) {
                 Harness.IO.log("  minChar: " + error.start +
                     ", limChar: " + (error.start + error.length) +
                     ", message: " + ts.flattenDiagnosticMessageText(error.messageText, Harness.IO.newLine()) + "\n");
@@ -3523,7 +3523,7 @@ namespace FourSlashInterface {
         public onType(posMarker: string, key: string) {
             this.state.formatOnType(this.state.getMarkerByName(posMarker).position, key);
         }
-        
+
         public setOption(name: keyof ts.FormatCodeSettings, value: number | string | boolean): void {
             this.state.formatCodeSettings[name] = value;
         }
