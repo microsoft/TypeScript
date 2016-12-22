@@ -494,14 +494,26 @@ namespace ts.formatting {
                         case SyntaxKind.WhileKeyword:
                         case SyntaxKind.AtToken:
                             return indentation;
+                        case SyntaxKind.SlashToken:
+                        case SyntaxKind.GreaterThanToken: {
+                            if (container.kind === SyntaxKind.JsxOpeningElement ||
+                                container.kind === SyntaxKind.JsxClosingElement ||
+                                container.kind === SyntaxKind.JsxSelfClosingElement
+                            ) {
+                                return indentation;
+                            }
+                            break;
+                        }
                         case SyntaxKind.OpenBracketToken:
-                        case SyntaxKind.CloseBracketToken:
-                            return (container.kind === SyntaxKind.MappedType) ?
-                                indentation + getEffectiveDelta(delta, container) : indentation;
-                        default:
-                            // if token line equals to the line of containing node (this is a first token in the node) - use node indentation
-                            return nodeStartLine !== line ? indentation + getEffectiveDelta(delta, container) : indentation;
+                        case SyntaxKind.CloseBracketToken: {
+                            if (container.kind !== SyntaxKind.MappedType) {
+                                return indentation;
+                            }
+                            break;
+                        }
                     }
+                    // if token line equals to the line of containing node (this is a first token in the node) - use node indentation
+                    return nodeStartLine !== line ? indentation + getEffectiveDelta(delta, container) : indentation;
                 },
                 getIndentation: () => indentation,
                 getDelta: child => getEffectiveDelta(delta, child),
