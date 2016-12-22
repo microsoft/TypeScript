@@ -227,7 +227,7 @@
         "category": "Error",
         "code": 1084
     },
-    "Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '0o{0}'.": {
+    "Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '{0}'.": {
         "category": "Error",
         "code": 1085
     },
@@ -2952,7 +2952,7 @@
     "Resolution for module '{0}' was found in cache": {
         "category": "Message",
         "code": 6147
-    },    
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -3243,7 +3243,7 @@
         "category": "Message",
         "code": 90015
     },
-    "Octal literal types must use ES2015 syntax. Use the syntax '0o{0}'.": {
+    "Octal literal types must use ES2015 syntax. Use the syntax '{0}'.": {
         "category": "Error",
         "code": 8017
     }
