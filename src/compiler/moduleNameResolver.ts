@@ -818,7 +818,9 @@ namespace ts {
                     if (resolved) {
                         return resolved;
                     }
-                    trace(state.host, Diagnostics.File_0_has_an_unsupported_extension_so_skipping_it, fromExactFile);
+                    if (state.traceEnabled) {
+                        trace(state.host, Diagnostics.File_0_has_an_unsupported_extension_so_skipping_it, fromExactFile);
+                    }
                 }
                 const resolved = tryAddingExtensions(mainOrTypesFile, Extensions.TypeScript, failedLookupLocations, onlyRecordFailures, state);
                 if (resolved) {
