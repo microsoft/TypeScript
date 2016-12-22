@@ -855,6 +855,10 @@
         "category": "Error",
         "code": 1318
     },
+    "A default export can only be used in an ECMAScript-style module.": {
+        "category": "Error",
+        "code": 1319
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300

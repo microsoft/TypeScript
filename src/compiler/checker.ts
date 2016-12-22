@@ -19107,7 +19107,13 @@ namespace ts {
 
             const container = node.parent.kind === SyntaxKind.SourceFile ? <SourceFile>node.parent : <ModuleDeclaration>node.parent.parent;
             if (container.kind === SyntaxKind.ModuleDeclaration && !isAmbientModule(container)) {
-                error(node, Diagnostics.An_export_assignment_cannot_be_used_in_a_namespace);
+                if (node.isExportEquals) {
+                    error(node, Diagnostics.An_export_assignment_cannot_be_used_in_a_namespace);
+                }
+                else {
+                    error(node, Diagnostics.A_default_export_can_only_be_used_in_an_ECMAScript_style_module);
+                }
+
                 return;
             }
             // Grammar checking
