@@ -1,4 +1,4 @@
-/// <reference path="core.ts" />
+﻿/// <reference path="core.ts" />
 /// <reference path="diagnosticInformationMap.generated.ts" />
 
 namespace ts {
@@ -76,13 +76,7 @@ namespace ts {
                 return tryReadFromField("typings") || tryReadFromField("types");
 
             case Extensions.JavaScript:
-                if (typeof jsonContent.main === "string") {
-                    if (state.traceEnabled) {
-                        trace(state.host, Diagnostics.No_types_specified_in_package_json_so_returning_main_value_of_0, jsonContent.main);
-                    }
-                    return normalizePath(combinePaths(baseDirectory, jsonContent.main));
-                }
-                return undefined;
+                return tryReadFromField("main");
         }
 
         function tryReadFromField(fieldName: string) {
@@ -829,6 +823,16 @@ namespace ts {
                 const resolved = tryAddingExtensions(mainOrTypesFile, Extensions.TypeScript, failedLookupLocations, onlyRecordFailures, state);
                 if (resolved) {
                     return resolved;
+                }
+
+                if (extensions === Extensions.JavaScript) {
+                    // A package.json "main" may specify an exact filename, or may choose to omit an extension.
+                    // We tried the ts extensions erlier, now try the js extensions.
+                    // tryReadPackageJsonMainOrTypes returns main  iff extensions is Extensions.JavaScript.
+                    const resolved = tryAddingExtensions(mainOrTypesFile, Extensions.JavaScript, failedLookupLocations, onlyRecordFailures, state);
+                    if (resolved) {
+                        return resolved;
+                    }
                 }
             }
             else {

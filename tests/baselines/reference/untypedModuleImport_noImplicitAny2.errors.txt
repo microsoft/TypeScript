@@ -1,0 +1,18 @@
+/a.ts(1,22): error TS7016: Could not find a declaration file for module 'foo'. '/node_modules/foo/lib/foo.js' implicitly has an 'any' type.
+
+
+==== /a.ts (1 errors) ====
+    import * as foo from "foo";
+                         ~~~~~
+!!! error TS7016: Could not find a declaration file for module 'foo'. '/node_modules/foo/lib/foo.js' implicitly has an 'any' type.
+    
+==== /node_modules/foo/lib/foo.js (0 errors) ====
+    // This tests that `--noImplicitAny` disables untyped modules.
+    
+    This file is not processed.
+    
+==== /node_modules/foo/package.json (0 errors) ====
+    {
+        "main": "lib/foo"
+    }
+    
