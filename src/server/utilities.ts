@@ -86,6 +86,7 @@ namespace ts.server {
             insertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
             insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
             insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
+            insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: true,
             insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
             insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
             insertSpaceBeforeFunctionParenthesis: false,
