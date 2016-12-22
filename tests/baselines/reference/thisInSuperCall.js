@@ -36,7 +36,8 @@ var Base = (function () {
 var Foo = (function (_super) {
     __extends(Foo, _super);
     function Foo() {
-        return _super.call(this, _this) || this;
+        var _this = _super.call(this, _this) || this;
+        return _this;
     }
     return Foo;
 }(Base));

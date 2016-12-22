@@ -7,6 +7,6 @@
 
 goTo.eof();
 edit.insert('t.');
-verify.memberListContains('x');
-verify.memberListContains('y');
-verify.not.memberListContains('z');
+verify.completionListContains('x');
+verify.completionListContains('y');
+verify.not.completionListContains('z');

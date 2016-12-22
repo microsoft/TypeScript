@@ -8,7 +8,6 @@
 ////[|foo|]();
 
 goTo.file("a.ts");
-debug.printErrorList();
 verify.numberOfErrorsInCurrentFile(0);
 
 goTo.marker("fooModule");

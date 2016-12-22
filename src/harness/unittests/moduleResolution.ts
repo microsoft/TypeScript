@@ -197,13 +197,9 @@ namespace ts {
                     "/a/b/c/d/node_modules/foo/index.tsx",
                     "/a/b/c/d/node_modules/foo/index.d.ts",
 
-                    "/a/b/c/d/node_modules/@types/foo.ts",
-                    "/a/b/c/d/node_modules/@types/foo.tsx",
                     "/a/b/c/d/node_modules/@types/foo.d.ts",
                     "/a/b/c/d/node_modules/@types/foo/package.json",
 
-                    "/a/b/c/d/node_modules/@types/foo/index.ts",
-                    "/a/b/c/d/node_modules/@types/foo/index.tsx",
                     "/a/b/c/d/node_modules/@types/foo/index.d.ts",
 
                     "/a/b/c/node_modules/foo.ts",
@@ -215,13 +211,9 @@ namespace ts {
                     "/a/b/c/node_modules/foo/index.tsx",
                     "/a/b/c/node_modules/foo/index.d.ts",
 
-                    "/a/b/c/node_modules/@types/foo.ts",
-                    "/a/b/c/node_modules/@types/foo.tsx",
                     "/a/b/c/node_modules/@types/foo.d.ts",
                     "/a/b/c/node_modules/@types/foo/package.json",
 
-                    "/a/b/c/node_modules/@types/foo/index.ts",
-                    "/a/b/c/node_modules/@types/foo/index.tsx",
                     "/a/b/c/node_modules/@types/foo/index.d.ts",
                 ]);
             }
@@ -257,13 +249,9 @@ namespace ts {
                     "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.tsx",
                     "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.d.ts",
 
-                    "/a/node_modules/b/c/node_modules/d/node_modules/@types/foo.ts",
-                    "/a/node_modules/b/c/node_modules/d/node_modules/@types/foo.tsx",
                     "/a/node_modules/b/c/node_modules/d/node_modules/@types/foo.d.ts",
                     "/a/node_modules/b/c/node_modules/d/node_modules/@types/foo/package.json",
 
-                    "/a/node_modules/b/c/node_modules/d/node_modules/@types/foo/index.ts",
-                    "/a/node_modules/b/c/node_modules/d/node_modules/@types/foo/index.tsx",
                     "/a/node_modules/b/c/node_modules/d/node_modules/@types/foo/index.d.ts",
 
                     "/a/node_modules/b/c/node_modules/foo.ts",
@@ -275,13 +263,9 @@ namespace ts {
                     "/a/node_modules/b/c/node_modules/foo/index.tsx",
                     "/a/node_modules/b/c/node_modules/foo/index.d.ts",
 
-                    "/a/node_modules/b/c/node_modules/@types/foo.ts",
-                    "/a/node_modules/b/c/node_modules/@types/foo.tsx",
                     "/a/node_modules/b/c/node_modules/@types/foo.d.ts",
                     "/a/node_modules/b/c/node_modules/@types/foo/package.json",
 
-                    "/a/node_modules/b/c/node_modules/@types/foo/index.ts",
-                    "/a/node_modules/b/c/node_modules/@types/foo/index.tsx",
                     "/a/node_modules/b/c/node_modules/@types/foo/index.d.ts",
 
                     "/a/node_modules/b/node_modules/foo.ts",
@@ -293,13 +277,9 @@ namespace ts {
                     "/a/node_modules/b/node_modules/foo/index.tsx",
                     "/a/node_modules/b/node_modules/foo/index.d.ts",
 
-                    "/a/node_modules/b/node_modules/@types/foo.ts",
-                    "/a/node_modules/b/node_modules/@types/foo.tsx",
                     "/a/node_modules/b/node_modules/@types/foo.d.ts",
                     "/a/node_modules/b/node_modules/@types/foo/package.json",
 
-                    "/a/node_modules/b/node_modules/@types/foo/index.ts",
-                    "/a/node_modules/b/node_modules/@types/foo/index.tsx",
                     "/a/node_modules/b/node_modules/@types/foo/index.d.ts",
 
                     "/a/node_modules/foo.ts",
@@ -709,13 +689,9 @@ import b = require("./moduleB");
                     "/root/folder1/node_modules/file6/index.tsx",
                     "/root/folder1/node_modules/file6/index.d.ts",
 
-                    "/root/folder1/node_modules/@types/file6.ts",
-                    "/root/folder1/node_modules/@types/file6.tsx",
                     "/root/folder1/node_modules/@types/file6.d.ts",
 
                     "/root/folder1/node_modules/@types/file6/package.json",
-                    "/root/folder1/node_modules/@types/file6/index.ts",
-                    "/root/folder1/node_modules/@types/file6/index.tsx",
                     "/root/folder1/node_modules/@types/file6/index.d.ts",
                     // success on /root/node_modules/file6.ts
                 ], /*isExternalLibraryImport*/ true);
@@ -1064,6 +1040,70 @@ import b = require("./moduleB");
             const diagnostics2 = program1.getFileProcessingDiagnostics().getDiagnostics();
             assert.equal(diagnostics2.length, 1, "expected one diagnostic");
             assert.equal(diagnostics1[0].messageText, diagnostics2[0].messageText, "expected one diagnostic");
+        });
+
+        it ("Modules in the same .d.ts file are preferred to external files", () => {
+            const f = {
+                name: "/a/b/c/c/app.d.ts",
+                content: `
+                declare module "fs" {
+                    export interface Stat { id: number }
+                }
+                declare module "fs-client" {
+                    import { Stat } from "fs";
+                    export function foo(): Stat;
+                }`
+            };
+            const file = createSourceFile(f.name, f.content, ScriptTarget.ES2015);
+            const compilerHost: CompilerHost = {
+                fileExists : fileName => fileName === file.fileName,
+                getSourceFile: fileName => fileName === file.fileName ? file : undefined,
+                getDefaultLibFileName: () => "lib.d.ts",
+                writeFile: notImplemented,
+                getCurrentDirectory: () => "/",
+                getDirectories: () => [],
+                getCanonicalFileName: f => f.toLowerCase(),
+                getNewLine: () => "\r\n",
+                useCaseSensitiveFileNames: () => false,
+                readFile: fileName => fileName === file.fileName ? file.text : undefined,
+                resolveModuleNames() {
+                    assert(false, "resolveModuleNames should not be called");
+                    return undefined;
+                }
+            };
+            createProgram([f.name], {}, compilerHost);
+        });
+
+        it ("Modules in .ts file are not checked in the same file", () => {
+            const f = {
+                name: "/a/b/c/c/app.ts",
+                content: `
+                declare module "fs" {
+                    export interface Stat { id: number }
+                }
+                declare module "fs-client" {
+                    import { Stat } from "fs";
+                    export function foo(): Stat;
+                }`
+            };
+            const file = createSourceFile(f.name, f.content, ScriptTarget.ES2015);
+            const compilerHost: CompilerHost = {
+                fileExists : fileName => fileName === file.fileName,
+                getSourceFile: fileName => fileName === file.fileName ? file : undefined,
+                getDefaultLibFileName: () => "lib.d.ts",
+                writeFile: notImplemented,
+                getCurrentDirectory: () => "/",
+                getDirectories: () => [],
+                getCanonicalFileName: f => f.toLowerCase(),
+                getNewLine: () => "\r\n",
+                useCaseSensitiveFileNames: () => false,
+                readFile: fileName => fileName === file.fileName ? file.text : undefined,
+                resolveModuleNames(moduleNames: string[], _containingFile: string) {
+                    assert.deepEqual(moduleNames, ["fs"]);
+                    return [undefined];
+                }
+            };
+            createProgram([f.name], {}, compilerHost);
         });
     });
 }

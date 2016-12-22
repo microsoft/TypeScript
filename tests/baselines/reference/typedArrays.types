@@ -1,7 +1,7 @@
 === tests/cases/compiler/typedArrays.ts ===
 
 function CreateTypedArrayTypes() {
->CreateTypedArrayTypes : () => (Int8ArrayConstructor | Uint8ArrayConstructor | Int16ArrayConstructor | Uint16ArrayConstructor | Int32ArrayConstructor | Uint32ArrayConstructor | Float32ArrayConstructor | Float64ArrayConstructor | Uint8ClampedArrayConstructor)[]
+>CreateTypedArrayTypes : () => any[]
 
     var typedArrays = [];
 >typedArrays : any[]
@@ -71,11 +71,11 @@ function CreateTypedArrayTypes() {
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
 
     return typedArrays;
->typedArrays : (Int8ArrayConstructor | Uint8ArrayConstructor | Int16ArrayConstructor | Uint16ArrayConstructor | Int32ArrayConstructor | Uint32ArrayConstructor | Float32ArrayConstructor | Float64ArrayConstructor | Uint8ClampedArrayConstructor)[]
+>typedArrays : any[]
 }
 
 function CreateTypedArrayInstancesFromLength(obj: number) {
->CreateTypedArrayInstancesFromLength : (obj: number) => (Int8Array | Uint8Array | Uint8ClampedArray | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array)[]
+>CreateTypedArrayInstancesFromLength : (obj: number) => any[]
 >obj : number
 
     var typedArrays = [];
@@ -164,11 +164,11 @@ function CreateTypedArrayInstancesFromLength(obj: number) {
 >obj : number
 
     return typedArrays;
->typedArrays : (Int8Array | Uint8Array | Uint8ClampedArray | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array)[]
+>typedArrays : any[]
 }
 
 function CreateTypedArrayInstancesFromArray(obj: number[]) {
->CreateTypedArrayInstancesFromArray : (obj: number[]) => (Int8Array | Uint8Array | Uint8ClampedArray | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array)[]
+>CreateTypedArrayInstancesFromArray : (obj: number[]) => any[]
 >obj : number[]
 
     var typedArrays = [];
@@ -257,11 +257,11 @@ function CreateTypedArrayInstancesFromArray(obj: number[]) {
 >obj : number[]
 
     return typedArrays;
->typedArrays : (Int8Array | Uint8Array | Uint8ClampedArray | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array)[]
+>typedArrays : any[]
 }
 
 function CreateIntegerTypedArraysFromArray2(obj:number[]) {
->CreateIntegerTypedArraysFromArray2 : (obj: number[]) => (Int8Array | Uint8Array | Uint8ClampedArray | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array)[]
+>CreateIntegerTypedArraysFromArray2 : (obj: number[]) => any[]
 >obj : number[]
 
     var typedArrays = [];
@@ -368,11 +368,11 @@ function CreateIntegerTypedArraysFromArray2(obj:number[]) {
 >obj : number[]
 
     return typedArrays;
->typedArrays : (Int8Array | Uint8Array | Uint8ClampedArray | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array)[]
+>typedArrays : any[]
 }
 
 function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
->CreateIntegerTypedArraysFromArrayLike : (obj: ArrayLike<number>) => (Int8Array | Uint8Array | Uint8ClampedArray | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array)[]
+>CreateIntegerTypedArraysFromArrayLike : (obj: ArrayLike<number>) => any[]
 >obj : ArrayLike<number>
 >ArrayLike : ArrayLike<T>
 
@@ -480,11 +480,11 @@ function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
 >obj : ArrayLike<number>
 
     return typedArrays;
->typedArrays : (Int8Array | Uint8Array | Uint8ClampedArray | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array)[]
+>typedArrays : any[]
 }
 
 function CreateTypedArraysOf(obj) {
->CreateTypedArraysOf : (obj: any) => (Int8Array | Uint8Array | Uint8ClampedArray | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array)[]
+>CreateTypedArraysOf : (obj: any) => any[]
 >obj : any
 
     var typedArrays = [];
@@ -600,11 +600,11 @@ function CreateTypedArraysOf(obj) {
 >obj : any
 
     return typedArrays;
->typedArrays : (Int8Array | Uint8Array | Uint8ClampedArray | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array)[]
+>typedArrays : any[]
 }
 
 function CreateTypedArraysOf2() {
->CreateTypedArraysOf2 : () => (Int8Array | Uint8Array | Uint8ClampedArray | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array)[]
+>CreateTypedArraysOf2 : () => any[]
 
     var typedArrays = [];
 >typedArrays : any[]
@@ -737,11 +737,11 @@ function CreateTypedArraysOf2() {
 >4 : 4
 
     return typedArrays;
->typedArrays : (Int8Array | Uint8Array | Uint8ClampedArray | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array)[]
+>typedArrays : any[]
 }
 
 function CreateTypedArraysFromMapFn(obj:ArrayLike<number>, mapFn: (n:number, v:number)=> number) {
->CreateTypedArraysFromMapFn : (obj: ArrayLike<number>, mapFn: (n: number, v: number) => number) => (Int8Array | Uint8Array | Uint8ClampedArray | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array)[]
+>CreateTypedArraysFromMapFn : (obj: ArrayLike<number>, mapFn: (n: number, v: number) => number) => any[]
 >obj : ArrayLike<number>
 >ArrayLike : ArrayLike<T>
 >mapFn : (n: number, v: number) => number
@@ -861,11 +861,11 @@ function CreateTypedArraysFromMapFn(obj:ArrayLike<number>, mapFn: (n:number, v:n
 >mapFn : (n: number, v: number) => number
 
     return typedArrays;
->typedArrays : (Int8Array | Uint8Array | Uint8ClampedArray | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array)[]
+>typedArrays : any[]
 }
 
 function CreateTypedArraysFromThisObj(obj:ArrayLike<number>, mapFn: (n:number, v:number)=> number, thisArg: {}) {
->CreateTypedArraysFromThisObj : (obj: ArrayLike<number>, mapFn: (n: number, v: number) => number, thisArg: {}) => (Int8Array | Uint8Array | Uint8ClampedArray | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array)[]
+>CreateTypedArraysFromThisObj : (obj: ArrayLike<number>, mapFn: (n: number, v: number) => number, thisArg: {}) => any[]
 >obj : ArrayLike<number>
 >ArrayLike : ArrayLike<T>
 >mapFn : (n: number, v: number) => number
@@ -995,5 +995,5 @@ function CreateTypedArraysFromThisObj(obj:ArrayLike<number>, mapFn: (n:number, v
 >thisArg : {}
 
     return typedArrays;
->typedArrays : (Int8Array | Uint8Array | Uint8ClampedArray | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array)[]
+>typedArrays : any[]
 }

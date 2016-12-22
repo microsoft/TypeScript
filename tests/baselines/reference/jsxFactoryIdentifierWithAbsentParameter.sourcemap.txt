@@ -1,0 +1,81 @@
+===================================================================
+JsFile: test.js
+mapUrl: test.js.map
+sourceRoot: 
+sources: test.tsx
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/test.js
+sourceFile:test.tsx
+-------------------------------------------------------------------
+>>>"use strict";
+>>>class AppComponent {
+1 >
+2 >^^^^^^^^^^^^^^^->
+1 >
+  >declare module JSX {
+  >    interface IntrinsicElements {
+  >        [s: string]: any;
+  >    }
+  >}
+  >
+  >
+1 >Emitted(2, 1) Source(8, 1) + SourceIndex(0)
+---
+>>>    render() {
+1->^^^^
+2 >    ^^^^^^
+3 >          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->export class AppComponent {
+  >    
+2 >    render
+1->Emitted(3, 5) Source(9, 5) + SourceIndex(0)
+2 >Emitted(3, 11) Source(9, 11) + SourceIndex(0)
+---
+>>>        return createElement("div", null);
+1->^^^^^^^^
+2 >        ^^^^^^
+3 >              ^
+4 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+5 >                                         ^
+1->() {
+  >        
+2 >        return
+3 >               
+4 >               <div />
+5 >                                         ;
+1->Emitted(4, 9) Source(10, 9) + SourceIndex(0)
+2 >Emitted(4, 15) Source(10, 15) + SourceIndex(0)
+3 >Emitted(4, 16) Source(10, 16) + SourceIndex(0)
+4 >Emitted(4, 42) Source(10, 23) + SourceIndex(0)
+5 >Emitted(4, 43) Source(10, 24) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+1 >
+  >    
+2 >    }
+1 >Emitted(5, 5) Source(11, 5) + SourceIndex(0)
+2 >Emitted(5, 6) Source(11, 6) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(6, 2) Source(12, 2) + SourceIndex(0)
+---
+>>>exports.AppComponent = AppComponent;
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+2 >export class AppComponent {
+  >    render() {
+  >        return <div />;
+  >    }
+  >}
+1->Emitted(7, 1) Source(8, 1) + SourceIndex(0)
+2 >Emitted(7, 37) Source(12, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=test.js.map

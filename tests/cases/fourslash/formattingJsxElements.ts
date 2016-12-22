@@ -82,6 +82,9 @@
 ////        <div/>/*multilineOpeningElementChild*/
 ////    </div>/*multilineClosingElement*/
 ////</div>
+////
+////<Router routes={() => {}}/*jsxExpressionSpaces3*/
+/////>;/*jsxDanglingSelfClosingToken*/
 
 format.document();
 goTo.marker("autoformat");
@@ -169,3 +172,8 @@ goTo.marker("multilineOpeningElementChild");
 verify.currentLineContentIs('        <div />');
 goTo.marker("multilineClosingElement");
 verify.currentLineContentIs('    </div>');
+
+goTo.marker("jsxExpressionSpaces3");
+verify.currentLineContentIs("<Router routes={() => { }}");
+goTo.marker("jsxDanglingSelfClosingToken");
+verify.currentLineContentIs("/>;");

@@ -17,7 +17,7 @@
             "double",
             "avoid-escape"
         ],
-        "semicolon": true,
+        "semicolon": [true, "ignore-bound-class-methods"],
         "whitespace": [true,
             "check-branch",
             "check-decl",
@@ -41,7 +41,6 @@
         "no-trailing-whitespace": true,
         "no-inferrable-types": true,
         "no-null-keyword": true,
-        "no-unused-variable": true,
         "boolean-trivia": true,
         "type-operator-spacing": true,
         "prefer-const": true,
