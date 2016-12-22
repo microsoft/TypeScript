@@ -102,8 +102,7 @@ function forOfStatement1() {
                     _a = _b.sent();
                     _b.label = 2;
                 case 2:
-                    if (!(_i < _a.length))
-                        return [3 /*break*/, 4];
+                    if (!(_i < _a.length)) return [3 /*break*/, 4];
                     x = _a[_i];
                     z;
                     _b.label = 3;
@@ -124,8 +123,7 @@ function forOfStatement2() {
                     _i = 0, y_2 = y;
                     _a.label = 1;
                 case 1:
-                    if (!(_i < y_2.length))
-                        return [3 /*break*/, 4];
+                    if (!(_i < y_2.length)) return [3 /*break*/, 4];
                     x = y_2[_i];
                     return [4 /*yield*/, z];
                 case 2:
@@ -148,8 +146,7 @@ function forOfStatement3() {
                     _i = 0, y_3 = y;
                     _a.label = 1;
                 case 1:
-                    if (!(_i < y_3.length))
-                        return [3 /*break*/, 4];
+                    if (!(_i < y_3.length)) return [3 /*break*/, 4];
                     return [4 /*yield*/, x];
                 case 2:
                     (_a.sent()).a = y_3[_i];
@@ -175,8 +172,7 @@ function forOfStatement4() {
                     _a = _b.sent();
                     _b.label = 2;
                 case 2:
-                    if (!(_i < _a.length))
-                        return [3 /*break*/, 4];
+                    if (!(_i < _a.length)) return [3 /*break*/, 4];
                     x.a = _a[_i];
                     z;
                     _b.label = 3;
@@ -197,8 +193,7 @@ function forOfStatement5() {
                     _i = 0, y_4 = y;
                     _a.label = 1;
                 case 1:
-                    if (!(_i < y_4.length))
-                        return [3 /*break*/, 4];
+                    if (!(_i < y_4.length)) return [3 /*break*/, 4];
                     x.a = y_4[_i];
                     return [4 /*yield*/, z];
                 case 2:
@@ -236,8 +231,7 @@ function forOfStatement7() {
                     _a = _b.sent();
                     _b.label = 2;
                 case 2:
-                    if (!(_i < _a.length))
-                        return [3 /*break*/, 4];
+                    if (!(_i < _a.length)) return [3 /*break*/, 4];
                     c = _a[_i];
                     z;
                     _b.label = 3;
@@ -258,8 +252,7 @@ function forOfStatement8() {
                     _i = 0, y_6 = y;
                     _a.label = 1;
                 case 1:
-                    if (!(_i < y_6.length))
-                        return [3 /*break*/, 4];
+                    if (!(_i < y_6.length)) return [3 /*break*/, 4];
                     d = y_6[_i];
                     return [4 /*yield*/, z];
                 case 2:
@@ -285,8 +278,7 @@ function forOfStatement9() {
                     _a = _b.sent();
                     _b.label = 2;
                 case 2:
-                    if (!(_i < _a.length))
-                        return [3 /*break*/, 4];
+                    if (!(_i < _a.length)) return [3 /*break*/, 4];
                     x = _a[_i][0];
                     z;
                     _b.label = 3;
@@ -307,8 +299,7 @@ function forOfStatement10() {
                     _i = 0, y_7 = y;
                     _a.label = 1;
                 case 1:
-                    if (!(_i < y_7.length))
-                        return [3 /*break*/, 4];
+                    if (!(_i < y_7.length)) return [3 /*break*/, 4];
                     x = y_7[_i][0];
                     return [4 /*yield*/, z];
                 case 2:
@@ -331,11 +322,9 @@ function forOfStatement11() {
                     _i = 0, y_8 = y;
                     _c.label = 1;
                 case 1:
-                    if (!(_i < y_8.length))
-                        return [3 /*break*/, 6];
+                    if (!(_i < y_8.length)) return [3 /*break*/, 6];
                     _b = y_8[_i][0];
-                    if (!(_b === void 0))
-                        return [3 /*break*/, 3];
+                    if (!(_b === void 0)) return [3 /*break*/, 3];
                     return [4 /*yield*/, a];
                 case 2:
                     _a = _c.sent();
@@ -367,8 +356,7 @@ function forOfStatement12() {
                     _a = _c.sent();
                     _c.label = 2;
                 case 2:
-                    if (!(_i < _a.length))
-                        return [3 /*break*/, 4];
+                    if (!(_i < _a.length)) return [3 /*break*/, 4];
                     _b = _a[_i][0], x = _b === void 0 ? a : _b;
                     z;
                     _c.label = 3;
@@ -389,8 +377,7 @@ function forOfStatement13() {
                     _i = 0, y_9 = y;
                     _b.label = 1;
                 case 1:
-                    if (!(_i < y_9.length))
-                        return [3 /*break*/, 4];
+                    if (!(_i < y_9.length)) return [3 /*break*/, 4];
                     _a = y_9[_i][0], x = _a === void 0 ? a : _a;
                     return [4 /*yield*/, z];
                 case 2:
@@ -416,8 +403,7 @@ function forOfStatement14() {
                     _a = _b.sent();
                     _b.label = 2;
                 case 2:
-                    if (!(_i < _a.length))
-                        return [3 /*break*/, 4];
+                    if (!(_i < _a.length)) return [3 /*break*/, 4];
                     x = _a[_i].x;
                     z;
                     _b.label = 3;
@@ -438,8 +424,7 @@ function forOfStatement15() {
                     _i = 0, y_10 = y;
                     _a.label = 1;
                 case 1:
-                    if (!(_i < y_10.length))
-                        return [3 /*break*/, 4];
+                    if (!(_i < y_10.length)) return [3 /*break*/, 4];
                     x = y_10[_i].x;
                     return [4 /*yield*/, z];
                 case 2:
@@ -462,11 +447,9 @@ function forOfStatement16() {
                     _i = 0, y_11 = y;
                     _c.label = 1;
                 case 1:
-                    if (!(_i < y_11.length))
-                        return [3 /*break*/, 6];
+                    if (!(_i < y_11.length)) return [3 /*break*/, 6];
                     _b = y_11[_i].x;
-                    if (!(_b === void 0))
-                        return [3 /*break*/, 3];
+                    if (!(_b === void 0)) return [3 /*break*/, 3];
                     return [4 /*yield*/, a];
                 case 2:
                     _a = _c.sent();
@@ -498,8 +481,7 @@ function forOfStatement17() {
                     _a = _c.sent();
                     _c.label = 2;
                 case 2:
-                    if (!(_i < _a.length))
-                        return [3 /*break*/, 4];
+                    if (!(_i < _a.length)) return [3 /*break*/, 4];
                     _b = _a[_i].x, x = _b === void 0 ? a : _b;
                     z;
                     _c.label = 3;
@@ -520,8 +502,7 @@ function forOfStatement18() {
                     _i = 0, y_12 = y;
                     _b.label = 1;
                 case 1:
-                    if (!(_i < y_12.length))
-                        return [3 /*break*/, 4];
+                    if (!(_i < y_12.length)) return [3 /*break*/, 4];
                     _a = y_12[_i].x, x = _a === void 0 ? a : _a;
                     return [4 /*yield*/, z];
                 case 2:
