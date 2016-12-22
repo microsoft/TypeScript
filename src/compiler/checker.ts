@@ -3074,10 +3074,6 @@ namespace ts {
             return type && (type.flags & TypeFlags.Any) !== 0;
         }
 
-        function isTypeNever(type: Type) {
-            return type && (type.flags & TypeFlags.Never) !== 0;
-        }
-
         // Return the type of a binding element parent. We check SymbolLinks first to see if a type has been
         // assigned by contextual typing.
         function getTypeForBindingElementParent(node: VariableLikeDeclaration) {
@@ -16285,9 +16281,18 @@ namespace ts {
             }
         }
 
-        function checkNonThenableType(type: Type, location?: Node, message?: DiagnosticMessage) {
+        function isTypeOrConstraintAnyOrNever(type: Type) {
+            while (type.flags & TypeFlags.TypeVariable) {
+                const constraint = getConstraintOfTypeVariable(<TypeVariable>type);
+                if (!constraint) break;
+                type = getWidenedType(constraint);
+            }
+            return (type.flags & (TypeFlags.Any | TypeFlags.Never)) !== 0;
+        }
+
+        function checkNonThenableType(type: Type, location?: Node, message?: DiagnosticMessage): Type {
             type = getWidenedType(type);
-            if (!isTypeAny(type) && !isTypeNever(type) && isTypeAssignableTo(type, getGlobalThenableType())) {
+            if (!isTypeOrConstraintAnyOrNever(type) && isTypeAssignableTo(type, getGlobalThenableType())) {
                 if (location) {
                     if (!message) {
                         message = Diagnostics.Operand_for_await_does_not_have_a_valid_callable_then_member;
