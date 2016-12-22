@@ -165,7 +165,7 @@ namespace Harness.LanguageService {
             throw new Error("No script with name '" + fileName + "'");
         }
 
-        public openFile(fileName: string, content?: string, scriptKindName?: string): void {
+        public openFile(_fileName: string, _content?: string, _scriptKindName?: string): void {
         }
 
         /**
@@ -198,7 +198,7 @@ namespace Harness.LanguageService {
             const script = this.getScriptInfo(fileName);
             return script ? new ScriptSnapshot(script) : undefined;
         }
-        getScriptKind(fileName: string): ts.ScriptKind { return ts.ScriptKind.Unknown; }
+        getScriptKind(): ts.ScriptKind { return ts.ScriptKind.Unknown; }
         getScriptVersion(fileName: string): string {
             const script = this.getScriptInfo(fileName);
             return script ? script.version.toString() : undefined;
@@ -214,7 +214,7 @@ namespace Harness.LanguageService {
             this.getCurrentDirectory(),
             (p) => this.virtualFileSystem.getAccessibleFileSystemEntries(p));
         }
-        readFile(path: string, encoding?: string): string {
+        readFile(path: string): string {
             const snapshot = this.getScriptSnapshot(path);
             return snapshot.getText(0, snapshot.getLength());
         }
@@ -223,9 +223,9 @@ namespace Harness.LanguageService {
         }
 
 
-        log(s: string): void { }
-        trace(s: string): void { }
-        error(s: string): void { }
+        log(_: string): void { }
+        trace(_: string): void { }
+        error(_: string): void { }
     }
 
     export class NativeLanguageServiceAdapter implements LanguageServiceAdapter {
@@ -308,19 +308,15 @@ namespace Harness.LanguageService {
             const nativeScriptSnapshot = this.nativeHost.getScriptSnapshot(fileName);
             return nativeScriptSnapshot && new ScriptSnapshotProxy(nativeScriptSnapshot);
         }
-        getScriptKind(fileName: string): ts.ScriptKind { return this.nativeHost.getScriptKind(fileName); }
+        getScriptKind(): ts.ScriptKind { return this.nativeHost.getScriptKind(); }
         getScriptVersion(fileName: string): string { return this.nativeHost.getScriptVersion(fileName); }
         getLocalizedDiagnosticMessages(): string { return JSON.stringify({}); }
 
-        readDirectory(rootDir: string, extension: string): string {
-            throw new Error("NYI");
+        readDirectory(_rootDir: string, _extension: string): string {
+            return ts.notImplemented();
         }
-        readDirectoryNames(path: string): string {
-            throw new Error("Not implemented.");
-        }
-        readFileNames(path: string): string {
-            throw new Error("Not implemented.");
-        }
+        readDirectoryNames = ts.notImplemented;
+        readFileNames = ts.notImplemented;
         fileExists(fileName: string) { return this.getScriptInfo(fileName) !== undefined; }
         readFile(fileName: string) {
             const snapshot = this.nativeHost.getScriptSnapshot(fileName);
@@ -329,7 +325,7 @@ namespace Harness.LanguageService {
         log(s: string): void { this.nativeHost.log(s); }
         trace(s: string): void { this.nativeHost.trace(s); }
         error(s: string): void { this.nativeHost.error(s); }
-        directoryExists(directoryName: string): boolean {
+        directoryExists(): boolean {
             // for tests pessimistically assume that directory always exists
             return true;
         }
@@ -338,8 +334,8 @@ namespace Harness.LanguageService {
     class ClassifierShimProxy implements ts.Classifier {
         constructor(private shim: ts.ClassifierShim) {
         }
-        getEncodedLexicalClassifications(text: string, lexState: ts.EndOfLineState, classifyKeywordsInGenerics?: boolean): ts.Classifications {
-            throw new Error("NYI");
+        getEncodedLexicalClassifications(_text: string, _lexState: ts.EndOfLineState, _classifyKeywordsInGenerics?: boolean): ts.Classifications {
+            return ts.notImplemented();
         }
         getClassificationsForLine(text: string, lexState: ts.EndOfLineState, classifyKeywordsInGenerics?: boolean): ts.ClassificationResult {
             const result = this.shim.getClassificationsForLine(text, lexState, classifyKeywordsInGenerics).split("\n");
@@ -411,7 +407,7 @@ namespace Harness.LanguageService {
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): ts.CompletionEntryDetails {
             return unwrapJSONCallResult(this.shim.getCompletionEntryDetails(fileName, position, entryName));
         }
-        getCompletionEntrySymbol(fileName: string, position: number, entryName: string): ts.Symbol {
+        getCompletionEntrySymbol(): ts.Symbol {
             throw new Error("getCompletionEntrySymbol not implemented across the shim layer.");
         }
         getQuickInfoAtPosition(fileName: string, position: number): ts.QuickInfo {
@@ -490,7 +486,7 @@ namespace Harness.LanguageService {
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
             return unwrapJSONCallResult(this.shim.isValidBraceCompletionAtPosition(fileName, position, openingBrace));
         }
-        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[]): ts.CodeAction[] {
+        getCodeFixesAtPosition(): ts.CodeAction[] {
             throw new Error("Not supported on the shim.");
         }
         getEmitOutput(fileName: string): ts.EmitOutput {
@@ -499,10 +495,10 @@ namespace Harness.LanguageService {
         getProgram(): ts.Program {
             throw new Error("Program can not be marshaled across the shim layer.");
         }
-        getNonBoundSourceFile(fileName: string): ts.SourceFile {
+        getNonBoundSourceFile(): ts.SourceFile {
             throw new Error("SourceFile can not be marshaled across the shim layer.");
         }
-        getSourceFile(fileName: string): ts.SourceFile {
+        getSourceFile(): ts.SourceFile {
             throw new Error("SourceFile can not be marshaled across the shim layer.");
         }
         dispose(): void { this.shim.dispose({}); }
@@ -572,11 +568,11 @@ namespace Harness.LanguageService {
             super(cancellationToken, settings);
         }
 
-        onMessage(message: string): void {
+        onMessage(): void {
 
         }
 
-        writeMessage(message: string): void {
+        writeMessage(): void {
 
         }
 
@@ -604,11 +600,11 @@ namespace Harness.LanguageService {
             this.newLine = this.host.getNewLine();
         }
 
-        onMessage(message: string): void {
+        onMessage(): void {
 
         }
 
-        writeMessage(message: string): void {
+        writeMessage(_message: string): void {
         }
 
         write(message: string): void {
@@ -624,7 +620,7 @@ namespace Harness.LanguageService {
             return snapshot && snapshot.getText(0, snapshot.getLength());
         }
 
-        writeFile(name: string, text: string, writeByteOrderMark: boolean): void {
+        writeFile(): void {
         }
 
         resolvePath(path: string): string {
@@ -635,7 +631,7 @@ namespace Harness.LanguageService {
             return !!this.host.getScriptSnapshot(path);
         }
 
-        directoryExists(path: string): boolean {
+        directoryExists(): boolean {
             // for tests assume that directory exists
             return true;
         }
@@ -644,18 +640,18 @@ namespace Harness.LanguageService {
             return "";
         }
 
-        exit(exitCode: number): void {
+        exit(): void {
         }
 
-        createDirectory(directoryName: string): void {
-            throw new Error("Not Implemented Yet.");
+        createDirectory(_directoryName: string): void {
+            return ts.notImplemented();
         }
 
         getCurrentDirectory(): string {
             return this.host.getCurrentDirectory();
         }
 
-        getDirectories(path: string): string[] {
+        getDirectories(): string[] {
             return [];
         }
 
@@ -663,16 +659,16 @@ namespace Harness.LanguageService {
             return ts.sys.getEnvironmentVariable(name);
         }
 
-        readDirectory(path: string, extension?: string[], exclude?: string[], include?: string[]): string[] {
-            throw new Error("Not implemented Yet.");
+        readDirectory(_path: string, _extension?: string[], _exclude?: string[], _include?: string[]): string[] {
+            return ts.notImplemented();
         }
 
-        watchFile(fileName: string, callback: (fileName: string) => void): ts.FileWatcher {
-            return { close() { } };
+        watchFile(): ts.FileWatcher {
+            return { close: ts.noop };
         }
 
-        watchDirectory(path: string, callback: (path: string) => void, recursive?: boolean): ts.FileWatcher {
-            return { close() { } };
+        watchDirectory(): ts.FileWatcher {
+            return { close: ts.noop };
         }
 
         close(): void {
@@ -717,12 +713,16 @@ namespace Harness.LanguageService {
             clearTimeout(timeoutId);
         }
 
-        setImmediate(callback: (...args: any[]) => void, ms: number, ...args: any[]): any {
+        setImmediate(callback: (...args: any[]) => void, _ms: number, ...args: any[]): any {
             return setImmediate(callback, args);
         }
 
         clearImmediate(timeoutId: any): void {
             clearImmediate(timeoutId);
+        }
+
+        createHash(s: string) {
+            return s;
         }
     }
 
@@ -760,6 +760,6 @@ namespace Harness.LanguageService {
         getHost() { return this.host; }
         getLanguageService(): ts.LanguageService { return this.client; }
         getClassifier(): ts.Classifier { throw new Error("getClassifier is not available using the server interface."); }
-        getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo { throw new Error("getPreProcessedFileInfo is not available using the server interface."); }
+        getPreProcessedFileInfo(): ts.PreProcessedFileInfo { throw new Error("getPreProcessedFileInfo is not available using the server interface."); }
     }
 }

@@ -128,7 +128,7 @@ function dir(dirPath: string, spec?: string, options?: any) {
 // fs.rmdirSync won't delete directories with files in it
 function deleteFolderRecursive(dirPath: string) {
     if (fs.existsSync(dirPath)) {
-        fs.readdirSync(dirPath).forEach((file, index) => {
+        fs.readdirSync(dirPath).forEach((file) => {
             const curPath = path.join(path, file);
             if (fs.statSync(curPath).isDirectory()) { // recurse
                 deleteFolderRecursive(curPath);
@@ -141,7 +141,7 @@ function deleteFolderRecursive(dirPath: string) {
     }
 };
 
-function writeFile(path: string, data: any, opts: { recursive: boolean }) {
+function writeFile(path: string, data: any) {
     ensureDirectoriesExist(getDirectoryPath(path));
     fs.writeFileSync(path, data);
 }
@@ -208,7 +208,7 @@ enum RequestType {
     Unknown
 }
 
-function getRequestOperation(req: http.ServerRequest, filename: string) {
+function getRequestOperation(req: http.ServerRequest) {
     if (req.method === "GET" && req.url.indexOf("?") === -1) {
         if (req.url.indexOf(".") !== -1) return RequestType.GetFile;
         else return RequestType.GetDir;
@@ -258,7 +258,7 @@ function handleRequestOperation(req: http.ServerRequest, res: http.ServerRespons
             break;
         case RequestType.WriteFile:
             processPost(req, res, (data) => {
-                writeFile(reqPath, data, { recursive: true });
+                writeFile(reqPath, data);
             });
             send(ResponseCode.Success, res, undefined);
             break;
@@ -306,7 +306,7 @@ http.createServer((req: http.ServerRequest, res: http.ServerResponse) => {
     log(`${req.method} ${req.url}`);
     const uri = url.parse(req.url).pathname;
     const reqPath = path.join(process.cwd(), uri);
-    const operation = getRequestOperation(req, reqPath);
+    const operation = getRequestOperation(req);
     handleRequestOperation(req, res, operation, reqPath);
 }).listen(port);
 

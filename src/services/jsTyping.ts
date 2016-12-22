@@ -31,13 +31,24 @@ namespace ts.JsTyping {
 
     const EmptySafeList: Map<string> = createMap<string>();
 
+    /* @internal */
+    export const nodeCoreModuleList: ReadonlyArray<string> = [
+        "buffer", "querystring", "events", "http", "cluster",
+        "zlib", "os", "https", "punycode", "repl", "readline",
+        "vm", "child_process", "url", "dns", "net",
+        "dgram", "fs", "path", "string_decoder", "tls",
+        "crypto", "stream", "util", "assert", "tty", "domain",
+        "constants", "process", "v8", "timers", "console"];
+
+    const nodeCoreModules = arrayToMap(<string[]>nodeCoreModuleList, x => x);
+
     /**
      * @param host is the object providing I/O related operations.
      * @param fileNames are the file names that belong to the same project
      * @param projectRootPath is the path to the project root directory
      * @param safeListPath is the path used to retrieve the safe list
      * @param packageNameToTypingLocation is the map of package names to their cached typing locations
-     * @param typingOptions are used to customize the typing inference process
+     * @param typeAcquisition is used to customize the typing acquisition process
      * @param compilerOptions are used as a source for typing inference
      */
     export function discoverTypings(
@@ -46,14 +57,14 @@ namespace ts.JsTyping {
         projectRootPath: Path,
         safeListPath: Path,
         packageNameToTypingLocation: Map<string>,
-        typingOptions: TypingOptions,
-        compilerOptions: CompilerOptions):
+        typeAcquisition: TypeAcquisition,
+        unresolvedImports: ReadonlyArray<string>):
         { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
 
         // A typing name to typing file path mapping
         const inferredTypings = createMap<string>();
 
-        if (!typingOptions || !typingOptions.enableAutoDiscovery) {
+        if (!typeAcquisition || !typeAcquisition.enable) {
             return { cachedTypingPaths: [], newTypingNames: [], filesToWatch: [] };
         }
 
@@ -73,11 +84,11 @@ namespace ts.JsTyping {
         let searchDirs: string[] = [];
         let exclude: string[] = [];
 
-        mergeTypings(typingOptions.include);
-        exclude = typingOptions.exclude || [];
+        mergeTypings(typeAcquisition.include);
+        exclude = typeAcquisition.exclude || [];
 
         const possibleSearchDirs = map(fileNames, getDirectoryPath);
-        if (projectRootPath !== undefined) {
+        if (projectRootPath) {
             possibleSearchDirs.push(projectRootPath);
         }
         searchDirs = deduplicate(possibleSearchDirs);
@@ -93,6 +104,15 @@ namespace ts.JsTyping {
         }
         getTypingNamesFromSourceFileNames(fileNames);
 
+        // add typings for unresolved imports
+        if (unresolvedImports) {
+            for (const moduleId of unresolvedImports) {
+                const typingName = moduleId in nodeCoreModules ? "node" : moduleId;
+                if (!(typingName in inferredTypings)) {
+                    inferredTypings[typingName] = undefined;
+                }
+            }
+        }
         // Add the cached typing locations for inferred typings that are already installed
         for (const name in packageNameToTypingLocation) {
             if (name in inferredTypings && !inferredTypings[name]) {
@@ -136,10 +156,12 @@ namespace ts.JsTyping {
          * Get the typing info from common package manager json files like package.json or bower.json
          */
         function getTypingNamesFromJson(jsonPath: string, filesToWatch: string[]) {
+            if (host.fileExists(jsonPath)) {
+                filesToWatch.push(jsonPath);
+            }
             const result = readConfigFile(jsonPath, (path: string) => host.readFile(path));
             if (result.config) {
                 const jsonConfig: PackageJson = result.config;
-                filesToWatch.push(jsonPath);
                 if (jsonConfig.dependencies) {
                     mergeTypings(getOwnKeys(jsonConfig.dependencies));
                 }

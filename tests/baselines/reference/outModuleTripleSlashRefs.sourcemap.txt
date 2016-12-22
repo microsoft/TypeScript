@@ -138,11 +138,9 @@ sourceFile:tests/cases/compiler/ref/a.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^
 1->
-2 >    export class A {
-  >    	member: typeof GlobalFoo;
-  >    }
-1->Emitted(20, 5) Source(3, 1) + SourceIndex(1)
-2 >Emitted(20, 19) Source(5, 2) + SourceIndex(1)
+2 >    A
+1->Emitted(20, 5) Source(3, 14) + SourceIndex(1)
+2 >Emitted(20, 19) Source(3, 15) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:all.js
@@ -215,9 +213,9 @@ sourceFile:tests/cases/compiler/b.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^
 1->
-2 >    export class B extends A { }
-1->Emitted(31, 5) Source(2, 1) + SourceIndex(2)
-2 >Emitted(31, 19) Source(2, 29) + SourceIndex(2)
+2 >    B
+1->Emitted(31, 5) Source(2, 14) + SourceIndex(2)
+2 >Emitted(31, 19) Source(2, 15) + SourceIndex(2)
 ---
 >>>});
 >>>//# sourceMappingURL=all.js.map

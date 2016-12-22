@@ -90,6 +90,7 @@ namespace ts {
         "instanceof": SyntaxKind.InstanceOfKeyword,
         "interface": SyntaxKind.InterfaceKeyword,
         "is": SyntaxKind.IsKeyword,
+        "keyof": SyntaxKind.KeyOfKeyword,
         "let": SyntaxKind.LetKeyword,
         "module": SyntaxKind.ModuleKeyword,
         "namespace": SyntaxKind.NamespaceKeyword,
@@ -723,7 +724,7 @@ namespace ts {
         return iterateCommentRanges(/*reduce*/ true, text, pos, /*trailing*/ true, cb, state, initial);
     }
 
-    function appendCommentRange(pos: number, end: number, kind: SyntaxKind, hasTrailingNewLine: boolean, state: any, comments: CommentRange[]) {
+    function appendCommentRange(pos: number, end: number, kind: SyntaxKind, hasTrailingNewLine: boolean, _state: any, comments: CommentRange[]) {
         if (!comments) {
             comments = [];
         }
@@ -1190,7 +1191,7 @@ namespace ts {
         }
 
         function scanBinaryOrOctalDigits(base: number): number {
-            Debug.assert(base !== 2 || base !== 8, "Expected either base 2 or base 8");
+            Debug.assert(base === 2 || base === 8, "Expected either base 2 or base 8");
 
             let value = 0;
             // For counting number of digits; Valid binaryIntegerLiteral must have at least one binary digit following B or b.
@@ -1799,6 +1800,9 @@ namespace ts {
                 case CharacterCodes.comma:
                     pos++;
                     return token = SyntaxKind.CommaToken;
+                case CharacterCodes.dot:
+                    pos++;
+                    return token = SyntaxKind.DotToken;
             }
 
             if (isIdentifierStart(ch, ScriptTarget.Latest)) {

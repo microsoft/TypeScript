@@ -53,6 +53,7 @@ namespace ts {
         /* @internal */ getNamedDeclarations(): Map<Declaration[]>;
 
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
+        getLineEndOfPosition(pos: number): number;
         getLineStarts(): number[];
         getPositionOfLineAndCharacter(line: number, character: number): number;
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
@@ -90,14 +91,16 @@ namespace ts {
             }
 
             public getText(start: number, end: number): string {
-                return this.text.substring(start, end);
+                return start === 0 && end === this.text.length
+                    ? this.text
+                    : this.text.substring(start, end);
             }
 
             public getLength(): number {
                 return this.text.length;
             }
 
-            public getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange {
+            public getChangeRange(): TextChangeRange {
                 // Text-based snapshots do not support incremental parsing. Return undefined
                 // to signal that to the caller.
                 return undefined;
@@ -403,11 +406,11 @@ namespace ts {
 
     export interface EditorSettings {
         baseIndentSize?: number;
-        indentSize: number;
-        tabSize: number;
-        newLineCharacter: string;
-        convertTabsToSpaces: boolean;
-        indentStyle: IndentStyle;
+        indentSize?: number;
+        tabSize?: number;
+        newLineCharacter?: string;
+        convertTabsToSpaces?: boolean;
+        indentStyle?: IndentStyle;
     }
 
     /* @deprecated - consider using FormatCodeSettings instead */
@@ -415,6 +418,7 @@ namespace ts {
         InsertSpaceAfterCommaDelimiter: boolean;
         InsertSpaceAfterSemicolonInForStatements: boolean;
         InsertSpaceBeforeAndAfterBinaryOperators: boolean;
+        InsertSpaceAfterConstructor?: boolean;
         InsertSpaceAfterKeywordsInControlFlowStatements: boolean;
         InsertSpaceAfterFunctionKeywordForAnonymousFunctions: boolean;
         InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
@@ -423,24 +427,27 @@ namespace ts {
         InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: boolean;
         InsertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
         InsertSpaceAfterTypeAssertion?: boolean;
+        InsertSpaceBeforeFunctionParenthesis?: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
     }
 
     export interface FormatCodeSettings extends EditorSettings {
-        insertSpaceAfterCommaDelimiter: boolean;
-        insertSpaceAfterSemicolonInForStatements: boolean;
-        insertSpaceBeforeAndAfterBinaryOperators: boolean;
-        insertSpaceAfterKeywordsInControlFlowStatements: boolean;
-        insertSpaceAfterFunctionKeywordForAnonymousFunctions: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: boolean;
+        insertSpaceAfterCommaDelimiter?: boolean;
+        insertSpaceAfterSemicolonInForStatements?: boolean;
+        insertSpaceBeforeAndAfterBinaryOperators?: boolean;
+        insertSpaceAfterConstructor?: boolean;
+        insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
+        insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces?: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
         insertSpaceAfterTypeAssertion?: boolean;
-        placeOpenBraceOnNewLineForFunctions: boolean;
-        placeOpenBraceOnNewLineForControlBlocks: boolean;
+        insertSpaceBeforeFunctionParenthesis?: boolean;
+        placeOpenBraceOnNewLineForFunctions?: boolean;
+        placeOpenBraceOnNewLineForControlBlocks?: boolean;
     }
 
     export interface DefinitionInfo {

@@ -1,0 +1,55 @@
+=== tests/cases/compiler/narrowedConstInMethod.ts ===
+
+function f() {
+>f : () => { bar(): number; } | undefined
+
+    const x: string | null = <any>{};
+>x : string | null
+>null : null
+><any>{} : any
+>{} : {}
+
+    if (x !== null) {
+>x !== null : boolean
+>x : string | null
+>null : null
+
+        return {
+>{            bar() { return x.length; }  // Error: possibly null x        } : { bar(): number; }
+
+            bar() { return x.length; }  // Error: possibly null x
+>bar : () => number
+>x.length : number
+>x : string
+>length : number
+
+        };
+    }
+}
+
+function f2() {
+>f2 : () => typeof (Anonymous class) | undefined
+
+    const x: string | null = <any>{};
+>x : string | null
+>null : null
+><any>{} : any
+>{} : {}
+
+    if (x !== null) {
+>x !== null : boolean
+>x : string | null
+>null : null
+
+        return class {
+>class {            bar() { return x.length; }  // Error: possibly null x        } : typeof (Anonymous class)
+
+            bar() { return x.length; }  // Error: possibly null x
+>bar : () => number
+>x.length : number
+>x : string
+>length : number
+
+        };
+    }
+}

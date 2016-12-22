@@ -171,7 +171,6 @@ var C = (function (_super) {
 function hasANonBooleanReturnStatement(x) {
     return '';
 }
-function hasTypeGuardTypeInsideTypeGuardType(x) { }
 is;
 A;
 {
@@ -232,7 +231,6 @@ function b2(a, A) {
     if (a === void 0) { a = is; }
 }
 ;
-function b3() { }
 is;
 A;
 {
@@ -266,7 +264,7 @@ C;
 function b4() {
     var a = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i - 0] = arguments[_i];
+        a[_i] = arguments[_i];
     }
     return true;
 }

@@ -13,7 +13,11 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
+
+
 /// <reference no-default-lib="true"/>
+
+
 /////////////////////////////
 /// ECMAScript APIs
 /////////////////////////////
@@ -196,7 +200,19 @@ interface ObjectConstructor {
       * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
       * @param o Object on which to lock the attributes.
       */
-    freeze<T>(o: T): T;
+    freeze<T>(a: T[]): ReadonlyArray<T>;
+
+    /**
+      * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
+      * @param o Object on which to lock the attributes.
+      */
+    freeze<T extends Function>(f: T): T;
+
+    /**
+      * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
+      * @param o Object on which to lock the attributes.
+      */
+    freeze<T>(o: T): Readonly<T>;
 
     /**
       * Prevents the addition of new properties to an object.
@@ -259,6 +275,9 @@ interface Function {
       * @param argArray A list of arguments to be passed to the new function.
       */
     bind(this: Function, thisArg: any, ...argArray: any[]): any;
+
+    /** Returns a string representation of a function. */
+    toString(): string;
 
     prototype: any;
     readonly length: number;
@@ -1221,6 +1240,30 @@ interface Array<T> {
       * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
+    map<U>(this: [T, T, T, T, T], callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): [U, U, U, U, U];
+    /**
+      * Calls a defined callback function on each element of an array, and returns an array that contains the results.
+      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
+      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+      */
+    map<U>(this: [T, T, T, T], callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): [U, U, U, U];
+    /**
+      * Calls a defined callback function on each element of an array, and returns an array that contains the results.
+      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
+      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+      */
+    map<U>(this: [T, T, T], callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): [U, U, U];
+    /**
+      * Calls a defined callback function on each element of an array, and returns an array that contains the results.
+      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
+      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+      */
+    map<U>(this: [T, T], callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): [U, U];
+    /**
+      * Calls a defined callback function on each element of an array, and returns an array that contains the results.
+      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
+      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+      */
     map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[];
     /**
       * Returns the elements of an array that meet the condition specified in a callback function.
@@ -1330,6 +1373,34 @@ interface PromiseLike<T> {
 interface ArrayLike<T> {
     readonly length: number;
     readonly [n: number]: T;
+}
+
+/**
+ * Make all properties in T optional
+ */
+type Partial<T> = {
+    [P in keyof T]?: T[P];
+};
+
+/**
+ * Make all properties in T readonly
+ */
+type Readonly<T> = {
+    readonly [P in keyof T]: T[P];
+};
+
+/**
+ * From T pick a set of properties K
+ */
+type Pick<T, K extends keyof T> = {
+    [P in K]: T[P];
+}
+
+/**
+ * Construct a type with a set of properties K of type T
+ */
+type Record<K extends string, T> = {
+    [P in K]: T;
 }
 
 /**

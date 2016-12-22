@@ -1,19 +1,9 @@
 ﻿/// <reference path="..\compiler\commandLineParser.ts" />
 /// <reference path="..\services\services.ts" />
-/// <reference path="protocol.d.ts" />
 /// <reference path="session.ts" />
 /// <reference types="node" />
 
 namespace ts.server {
-
-    interface Hash {
-        update(data: any, input_encoding?: string): Hash;
-        digest(encoding: string): any;
-    }
-
-    const crypto: {
-        createHash(algorithm: string): Hash
-    } = require("crypto");
 
     export function shouldEmitFile(scriptInfo: ScriptInfo) {
         return !scriptInfo.hasMixedContent;
@@ -50,9 +40,7 @@ namespace ts.server {
         }
 
         private computeHash(text: string): string {
-            return crypto.createHash("md5")
-                .update(text)
-                .digest("base64");
+            return this.project.projectService.host.createHash(text);
         }
 
         private getSourceFile(): SourceFile {
@@ -87,17 +75,32 @@ namespace ts.server {
         getFilesAffectedBy(scriptInfo: ScriptInfo): string[];
         onProjectUpdateGraph(): void;
         emitFile(scriptInfo: ScriptInfo, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): boolean;
+        clear(): void;
     }
 
     abstract class AbstractBuilder<T extends BuilderFileInfo> implements Builder {
 
-        private fileInfos = createFileMap<T>();
+        /**
+         * stores set of files from the project.
+         * NOTE: this field is created on demand and should not be accessed directly.
+         * Use 'getFileInfos' instead.
+         */
+        private fileInfos_doNotAccessDirectly: FileMap<T>;
 
         constructor(public readonly project: Project, private ctor: { new (scriptInfo: ScriptInfo, project: Project): T }) {
         }
 
+        private getFileInfos() {
+            return this.fileInfos_doNotAccessDirectly || (this.fileInfos_doNotAccessDirectly = createFileMap<T>());
+        }
+
+        public clear() {
+            // drop the existing list - it will be re-created as necessary
+            this.fileInfos_doNotAccessDirectly = undefined;
+        }
+
         protected getFileInfo(path: Path): T {
-            return this.fileInfos.get(path);
+            return this.getFileInfos().get(path);
         }
 
         protected getOrCreateFileInfo(path: Path): T {
@@ -111,19 +114,19 @@ namespace ts.server {
         }
 
         protected getFileInfoPaths(): Path[] {
-            return this.fileInfos.getKeys();
+            return this.getFileInfos().getKeys();
         }
 
         protected setFileInfo(path: Path, info: T) {
-            this.fileInfos.set(path, info);
+            this.getFileInfos().set(path, info);
         }
 
         protected removeFileInfo(path: Path) {
-            this.fileInfos.remove(path);
+            this.getFileInfos().remove(path);
         }
 
         protected forEachFileInfo(action: (fileInfo: T) => any) {
-            this.fileInfos.forEachValue((path: Path, value: T) => action(value));
+            this.getFileInfos().forEachValue((_path, value) => action(value));
         }
 
         abstract getFilesAffectedBy(scriptInfo: ScriptInfo): string[];
@@ -242,6 +245,11 @@ namespace ts.server {
         }
 
         private projectVersionForDependencyGraph: string;
+
+        public clear() {
+            this.projectVersionForDependencyGraph = undefined;
+            super.clear();
+        }
 
         private getReferencedFileInfos(fileInfo: ModuleBuilderFileInfo): ModuleBuilderFileInfo[] {
             if (!fileInfo.isExternalModuleOrHasOnlyAmbientExternalModules()) {

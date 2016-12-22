@@ -21,4 +21,4 @@ verify.completionListContains("any");
 verify.completionListContains("$");
 
 // Nothing else should show up
-verify.memberListCount(4);
+verify.completionListCount(4);

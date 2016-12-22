@@ -57,8 +57,7 @@ function fn1() {
                     i = 0;
                     _a.label = 1;
                 case 1:
-                    if (!(i < 1))
-                        return [3 /*break*/, 4];
+                    if (!(i < 1)) return [3 /*break*/, 4];
                     return [5 /*yield**/, _loop_1(i)];
                 case 2:
                     _a.sent();
@@ -92,8 +91,7 @@ function fn2() {
                     i = 0;
                     _a.label = 1;
                 case 1:
-                    if (!(i < 1))
-                        return [3 /*break*/, 4];
+                    if (!(i < 1)) return [3 /*break*/, 4];
                     return [5 /*yield**/, _loop_2(i)];
                 case 2:
                     state_1 = _a.sent();
@@ -129,8 +127,7 @@ function fn3() {
                     i = 0;
                     _a.label = 1;
                 case 1:
-                    if (!(i < 1))
-                        return [3 /*break*/, 4];
+                    if (!(i < 1)) return [3 /*break*/, 4];
                     return [5 /*yield**/, _loop_3(i)];
                 case 2:
                     _a.sent();
@@ -164,8 +161,7 @@ function fn4() {
                     i = 0;
                     _a.label = 1;
                 case 1:
-                    if (!(i < 1))
-                        return [3 /*break*/, 4];
+                    if (!(i < 1)) return [3 /*break*/, 4];
                     return [5 /*yield**/, _loop_4(i)];
                 case 2:
                     state_2 = _a.sent();

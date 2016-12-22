@@ -19,26 +19,26 @@
 ////f./*5*/
 
 goTo.marker("1");
-verify.memberListContains("y");
-verify.memberListContains("x");
-verify.not.memberListContains("z");
+verify.completionListContains("y");
+verify.completionListContains("x");
+verify.not.completionListContains("z");
 
 goTo.marker("2");
-verify.memberListContains("y");
-verify.memberListContains("x");
-verify.memberListContains("z");
+verify.completionListContains("y");
+verify.completionListContains("x");
+verify.completionListContains("z");
 
 goTo.marker("3");
-verify.memberListContains("y");
-verify.memberListContains("x");
-verify.not.memberListContains("z");
+verify.completionListContains("y");
+verify.completionListContains("x");
+verify.not.completionListContains("z");
 
 goTo.marker("4");
-verify.memberListContains("y");
-verify.memberListContains("x");
-verify.memberListContains("z");
+verify.completionListContains("y");
+verify.completionListContains("x");
+verify.completionListContains("z");
 
 goTo.marker("5");
-verify.not.memberListContains("x");
-verify.not.memberListContains("y");
-verify.not.memberListContains("z");
+verify.not.completionListContains("x");
+verify.not.completionListContains("y");
+verify.not.completionListContains("z");

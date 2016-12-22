@@ -8,6 +8,15 @@ namespace ts.projectSystem {
     interface InstallerParams {
         globalTypingsCacheLocation?: string;
         throttleLimit?: number;
+        typesRegistry?: Map<void>;
+    }
+
+    function createTypesRegistry(...list: string[]): Map<void> {
+        const map = createMap<void>();
+        for (const l of list) {
+            map[l] = undefined;
+        }
+        return map;
     }
 
     class Installer extends TestTypingsInstaller {
@@ -16,36 +25,26 @@ namespace ts.projectSystem {
                 (p && p.globalTypingsCacheLocation) || "/a/data",
                 (p && p.throttleLimit) || 5,
                 host,
+                (p && p.typesRegistry),
                 log);
         }
 
-        installAll(expectedView: typeof TI.NpmViewRequest[], expectedInstall: typeof TI.NpmInstallRequest[]) {
-            this.checkPendingCommands(expectedView);
-            this.executePendingCommands();
-            this.checkPendingCommands(expectedInstall);
+        installAll(expectedCount: number) {
+            this.checkPendingCommands(expectedCount);
             this.executePendingCommands();
         }
     }
 
-    describe("typingsInstaller", () => {
-        function executeCommand(self: Installer, host: TestServerHost, installedTypings: string[], typingFiles: FileOrFolder[], requestKind: TI.RequestKind, cb: TI.RequestCompletedAction): void {
-            switch (requestKind) {
-                case TI.NpmInstallRequest:
-                    self.addPostExecAction(requestKind, installedTypings, (err, stdout, stderr) => {
-                        for (const file of typingFiles) {
-                            host.createFileOrFolder(file, /*createParentDirectory*/ true);
-                        }
-                        cb(err, stdout, stderr);
-                    });
-                    break;
-                case TI.NpmViewRequest:
-                    self.addPostExecAction(requestKind, installedTypings, cb);
-                    break;
-                default:
-                    assert.isTrue(false, `unexpected request kind ${requestKind}`);
-                    break;
+    function executeCommand(self: Installer, host: TestServerHost, installedTypings: string[] | string, typingFiles: FileOrFolder[], cb: TI.RequestCompletedAction): void {
+        self.addPostExecAction(installedTypings, success => {
+            for (const file of typingFiles) {
+                host.createFileOrFolder(file, /*createParentDirectory*/ true);
             }
-        }
+            cb(success);
+        });
+    }
+
+    describe("typingsInstaller", () => {
         it("configured projects (typings installed) 1", () => {
             const file1 = {
                 path: "/a/b/app.js",
@@ -57,8 +56,8 @@ namespace ts.projectSystem {
                     compilerOptions: {
                         allowJs: true
                     },
-                    typingOptions: {
-                        enableAutoDiscovery: true
+                    typeAcquisition: {
+                        enable: true
                     }
                 })
             };
@@ -79,12 +78,12 @@ namespace ts.projectSystem {
             const host = createServerHost([file1, tsconfig, packageJson]);
             const installer = new (class extends Installer {
                 constructor() {
-                    super(host);
+                    super(host, { typesRegistry: createTypesRegistry("jquery") });
                 }
-                runCommand(requestKind: TI.RequestKind, requestId: number, command: string, cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
                     const installedTypings = ["@types/jquery"];
                     const typingFiles = [jquery];
-                    executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
+                    executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
             })();
 
@@ -95,7 +94,7 @@ namespace ts.projectSystem {
             const p = projectService.configuredProjects[0];
             checkProjectActualFiles(p, [file1.path]);
 
-            installer.installAll([TI.NpmViewRequest], [TI.NpmInstallRequest]);
+            installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             checkProjectActualFiles(p, [file1.path, jquery.path]);
@@ -123,12 +122,12 @@ namespace ts.projectSystem {
             const host = createServerHost([file1, packageJson]);
             const installer = new (class extends Installer {
                 constructor() {
-                    super(host);
+                    super(host, { typesRegistry: createTypesRegistry("jquery") });
                 }
-                runCommand(requestKind: TI.RequestKind, requestId: number, command: string, cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
                     const installedTypings = ["@types/jquery"];
                     const typingFiles = [jquery];
-                    executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
+                    executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
             })();
 
@@ -139,13 +138,13 @@ namespace ts.projectSystem {
             const p = projectService.inferredProjects[0];
             checkProjectActualFiles(p, [file1.path]);
 
-            installer.installAll([TI.NpmViewRequest], [TI.NpmInstallRequest]);
+            installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             checkProjectActualFiles(p, [file1.path, jquery.path]);
         });
 
-        it("external project - no typing options, no .d.ts/js files", () => {
+        it("external project - no type acquisition, no .d.ts/js files", () => {
             const file1 = {
                 path: "/a/b/app.ts",
                 content: ""
@@ -167,13 +166,13 @@ namespace ts.projectSystem {
                 options: {},
                 rootFiles: [toExternalFile(file1.path)]
             });
-            installer.checkPendingCommands([]);
+            installer.checkPendingCommands(/*expectedCount*/ 0);
             // by default auto discovery will kick in if project contain only .js/.d.ts files
             // in this case project contain only ts files - no auto discovery
             projectService.checkNumberOfProjects({ externalProjects: 1 });
         });
 
-        it("external project - no autoDiscovery in typing options, no .d.ts/js files", () => {
+        it("external project - no auto in typing acquisition, no .d.ts/js files", () => {
             const file1 = {
                 path: "/a/b/app.ts",
                 content: ""
@@ -181,7 +180,7 @@ namespace ts.projectSystem {
             const host = createServerHost([file1]);
             const installer = new (class extends Installer {
                 constructor() {
-                    super(host);
+                    super(host, { typesRegistry: createTypesRegistry("jquery") });
                 }
                 enqueueInstallTypingsRequest() {
                     assert(false, "auto discovery should not be enabled");
@@ -194,11 +193,11 @@ namespace ts.projectSystem {
                 projectFileName,
                 options: {},
                 rootFiles: [toExternalFile(file1.path)],
-                typingOptions: { include: ["jquery"] }
+                typeAcquisition: { include: ["jquery"] }
             });
-            installer.checkPendingCommands([]);
+            installer.checkPendingCommands(/*expectedCount*/ 0);
             // by default auto discovery will kick in if project contain only .js/.d.ts files
-            // in this case project contain only ts files - no auto discovery even if typing options is set
+            // in this case project contain only ts files - no auto discovery even if type acquisition is set
             projectService.checkNumberOfProjects({ externalProjects: 1 });
         });
 
@@ -215,16 +214,16 @@ namespace ts.projectSystem {
             let enqueueIsCalled = false;
             const installer = new (class extends Installer {
                 constructor() {
-                    super(host);
+                    super(host, { typesRegistry: createTypesRegistry("jquery") });
                 }
-                enqueueInstallTypingsRequest(project: server.Project, typingOptions: TypingOptions) {
+                enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: server.SortedReadonlyArray<string>) {
                     enqueueIsCalled = true;
-                    super.enqueueInstallTypingsRequest(project, typingOptions);
+                    super.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
                 }
-                runCommand(requestKind: TI.RequestKind, requestId: number, command: string, cwd: string, cb: TI.RequestCompletedAction): void {
-                    const installedTypings = ["@types/jquery"];
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
+                    const installedTypings = ["@types/node"];
                     const typingFiles = [jquery];
-                    executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
+                    executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
             })();
 
@@ -234,17 +233,17 @@ namespace ts.projectSystem {
                 projectFileName,
                 options: {},
                 rootFiles: [toExternalFile(file1.path)],
-                typingOptions: { enableAutoDiscovery: true, include: ["node"] }
+                typeAcquisition: { enable: true, include: ["jquery"] }
             });
 
             assert.isTrue(enqueueIsCalled, "expected enqueueIsCalled to be true");
-            installer.installAll([TI.NpmViewRequest], [TI.NpmInstallRequest]);
+            installer.installAll(/*expectedCount*/ 1);
 
-            // autoDiscovery is set in typing options - use it even if project contains only .ts files
+            // auto is set in type acquisition - use it even if project contains only .ts files
             projectService.checkNumberOfProjects({ externalProjects: 1 });
         });
 
-        it("external project - no typing options, with only js, jsx, d.ts files", () => {
+        it("external project - no type acquisition, with only js, jsx, d.ts files", () => {
             // Tests:
             // 1. react typings are installed for .jsx
             // 2. loose files names are matched against safe list for typings if
@@ -273,12 +272,12 @@ namespace ts.projectSystem {
             const host = createServerHost([file1, file2, file3]);
             const installer = new (class extends Installer {
                 constructor() {
-                    super(host);
+                    super(host, { typesRegistry: createTypesRegistry("lodash", "react") });
                 }
-                runCommand(requestKind: TI.RequestKind, requestId: number, command: string, cwd: string, cb: TI.RequestCompletedAction): void {
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
                     const installedTypings = ["@types/lodash", "@types/react"];
                     const typingFiles = [lodash, react];
-                    executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
+                    executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
             })();
 
@@ -288,20 +287,20 @@ namespace ts.projectSystem {
                 projectFileName,
                 options: { allowJS: true, moduleResolution: ModuleResolutionKind.NodeJs },
                 rootFiles: [toExternalFile(file1.path), toExternalFile(file2.path), toExternalFile(file3.path)],
-                typingOptions: {}
+                typeAcquisition: {}
             });
 
             const p = projectService.externalProjects[0];
             projectService.checkNumberOfProjects({ externalProjects: 1 });
             checkProjectActualFiles(p, [file1.path, file2.path, file3.path]);
 
-            installer.installAll([TI.NpmViewRequest, TI.NpmViewRequest], [TI.NpmInstallRequest], );
+            installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { externalProjects: 1 });
             checkProjectActualFiles(p, [file1.path, file2.path, file3.path, lodash.path, react.path]);
         });
 
-        it("external project - no typing options, with js & ts files", () => {
+        it("external project - no type acquisition, with js & ts files", () => {
             // Tests:
             // 1. No typings are included for JS projects when the project contains ts files
             const file1 = {
@@ -317,16 +316,16 @@ namespace ts.projectSystem {
             let enqueueIsCalled = false;
             const installer = new (class extends Installer {
                 constructor() {
-                    super(host);
+                    super(host, { typesRegistry: createTypesRegistry("jquery") });
                 }
-                enqueueInstallTypingsRequest(project: server.Project, typingOptions: TypingOptions) {
+                enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: server.SortedReadonlyArray<string>) {
                     enqueueIsCalled = true;
-                    super.enqueueInstallTypingsRequest(project, typingOptions);
+                    super.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
                 }
-                runCommand(requestKind: TI.RequestKind, requestId: number, command: string, cwd: string, cb: TI.RequestCompletedAction): void {
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
                     const installedTypings: string[] = [];
                     const typingFiles: FileOrFolder[] = [];
-                    executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
+                    executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
             })();
 
@@ -336,24 +335,24 @@ namespace ts.projectSystem {
                 projectFileName,
                 options: { allowJS: true, moduleResolution: ModuleResolutionKind.NodeJs },
                 rootFiles: [toExternalFile(file1.path), toExternalFile(file2.path)],
-                typingOptions: {}
+                typeAcquisition: {}
             });
 
             const p = projectService.externalProjects[0];
             projectService.checkNumberOfProjects({ externalProjects: 1 });
             checkProjectActualFiles(p, [file1.path, file2.path]);
 
-            installer.checkPendingCommands([]);
+            installer.checkPendingCommands(/*expectedCount*/ 0);
 
             checkNumberOfProjects(projectService, { externalProjects: 1 });
             checkProjectActualFiles(p, [file1.path, file2.path]);
         });
 
-        it("external project - with typing options, with only js, d.ts files", () => {
+        it("external project - with type acquisition, with only js, d.ts files", () => {
             // Tests:
-            // 1. Safelist matching, typing options includes/excludes and package.json typings are all acquired
-            // 2. Types for safelist matches are not included when they also appear in the typing option exclude list
-            // 3. Multiple includes and excludes are respected in typing options
+            // 1. Safelist matching, type acquisition includes/excludes and package.json typings are all acquired
+            // 2. Types for safelist matches are not included when they also appear in the type acquisition exclude list
+            // 3. Multiple includes and excludes are respected in type acquisition
             const file1 = {
                 path: "/a/b/lodash.js",
                 content: ""
@@ -396,12 +395,12 @@ namespace ts.projectSystem {
             const host = createServerHost([file1, file2, file3, packageJson]);
             const installer = new (class extends Installer {
                 constructor() {
-                    super(host);
+                    super(host, { typesRegistry: createTypesRegistry("jquery", "commander", "moment", "express") });
                 }
-                runCommand(requestKind: TI.RequestKind, requestId: number, command: string, cwd: string, cb: TI.RequestCompletedAction): void {
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
                     const installedTypings = ["@types/commander", "@types/express", "@types/jquery", "@types/moment"];
                     const typingFiles = [commander, express, jquery, moment];
-                    executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
+                    executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
             })();
 
@@ -411,17 +410,14 @@ namespace ts.projectSystem {
                 projectFileName,
                 options: { allowJS: true, moduleResolution: ModuleResolutionKind.NodeJs },
                 rootFiles: [toExternalFile(file1.path), toExternalFile(file2.path), toExternalFile(file3.path)],
-                typingOptions: { include: ["jquery", "moment"], exclude: ["lodash"] }
+                typeAcquisition: { include: ["jquery", "moment"], exclude: ["lodash"] }
             });
 
             const p = projectService.externalProjects[0];
             projectService.checkNumberOfProjects({ externalProjects: 1 });
             checkProjectActualFiles(p, [file1.path, file2.path, file3.path]);
 
-            installer.installAll(
-                [TI.NpmViewRequest, TI.NpmViewRequest, TI.NpmViewRequest, TI.NpmViewRequest],
-                [TI.NpmInstallRequest]
-            );
+            installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { externalProjects: 1 });
             checkProjectActualFiles(p, [file1.path, file2.path, file3.path, commander.path, express.path, jquery.path, moment.path]);
@@ -475,11 +471,11 @@ namespace ts.projectSystem {
             const host = createServerHost([lodashJs, commanderJs, file3, packageJson]);
             const installer = new (class extends Installer {
                 constructor() {
-                    super(host, { throttleLimit: 3 });
+                    super(host, { throttleLimit: 3, typesRegistry: createTypesRegistry("commander", "express", "jquery", "moment", "lodash") });
                 }
-                runCommand(requestKind: TI.RequestKind, requestId: number, command: string, cwd: string, cb: TI.RequestCompletedAction): void {
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
                     const installedTypings = ["@types/commander", "@types/express", "@types/jquery", "@types/moment", "@types/lodash"];
-                    executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
+                    executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
             })();
 
@@ -489,24 +485,13 @@ namespace ts.projectSystem {
                 projectFileName,
                 options: { allowJS: true, moduleResolution: ModuleResolutionKind.NodeJs },
                 rootFiles: [toExternalFile(lodashJs.path), toExternalFile(commanderJs.path), toExternalFile(file3.path)],
-                typingOptions: { include: ["jquery", "moment"] }
+                typeAcquisition: { include: ["jquery", "moment"] }
             });
 
             const p = projectService.externalProjects[0];
             projectService.checkNumberOfProjects({ externalProjects: 1 });
             checkProjectActualFiles(p, [lodashJs.path, commanderJs.path, file3.path]);
-            // expected 3 view requests in the queue
-            installer.checkPendingCommands([TI.NpmViewRequest, TI.NpmViewRequest, TI.NpmViewRequest]);
-            assert.equal(installer.pendingRunRequests.length, 2, "expected 2 pending requests");
-
-            // push view requests
-            installer.executePendingCommands();
-            // expected 2 remaining view requests in the queue
-            installer.checkPendingCommands([TI.NpmViewRequest, TI.NpmViewRequest]);
-            // push view requests
-            installer.executePendingCommands();
-            // expected one install request
-            installer.checkPendingCommands([TI.NpmInstallRequest]);
+            installer.checkPendingCommands(/*expectedCount*/ 1);
             installer.executePendingCommands();
             // expected all typings file to exist
             for (const f of typingFiles) {
@@ -565,22 +550,17 @@ namespace ts.projectSystem {
             const host = createServerHost([lodashJs, commanderJs, file3]);
             const installer = new (class extends Installer {
                 constructor() {
-                    super(host, { throttleLimit: 3 });
+                    super(host, { throttleLimit: 1, typesRegistry: createTypesRegistry("commander", "jquery", "lodash", "cordova", "gulp", "grunt") });
                 }
-                runCommand(requestKind: TI.RequestKind, requestId: number, command: string, cwd: string, cb: TI.RequestCompletedAction): void {
-                    if (requestKind === TI.NpmInstallRequest) {
-                        let typingFiles: (FileOrFolder & { typings: string}) [] = [];
-                        if (command.indexOf("commander") >= 0) {
-                            typingFiles = [commander, jquery, lodash, cordova];
-                        }
-                        else {
-                            typingFiles = [grunt, gulp];
-                        }
-                        executeCommand(this, host, typingFiles.map(f => f.typings), typingFiles, requestKind, cb);
+                installWorker(_requestId: number, args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
+                    let typingFiles: (FileOrFolder & { typings: string })[] = [];
+                    if (args.indexOf("@types/commander") >= 0) {
+                        typingFiles = [commander, jquery, lodash, cordova];
                     }
                     else {
-                        executeCommand(this, host, [], [], requestKind, cb);
+                        typingFiles = [grunt, gulp];
                     }
+                    executeCommand(this, host, typingFiles.map(f => f.typings), typingFiles, cb);
                 }
             })();
 
@@ -591,11 +571,11 @@ namespace ts.projectSystem {
                 projectFileName: projectFileName1,
                 options: { allowJS: true, moduleResolution: ModuleResolutionKind.NodeJs },
                 rootFiles: [toExternalFile(lodashJs.path), toExternalFile(commanderJs.path), toExternalFile(file3.path)],
-                typingOptions: { include: ["jquery", "cordova" ] }
+                typeAcquisition: { include: ["jquery", "cordova"] }
             });
 
-            installer.checkPendingCommands([TI.NpmViewRequest, TI.NpmViewRequest, TI.NpmViewRequest]);
-            assert.equal(installer.pendingRunRequests.length, 1, "expect one throttled request");
+            installer.checkPendingCommands(/*expectedCount*/ 1);
+            assert.equal(installer.pendingRunRequests.length, 0, "expect no throttled requests");
 
             // Create project #2 with 2 typings
             const projectFileName2 = "/a/app/test2.csproj";
@@ -603,9 +583,9 @@ namespace ts.projectSystem {
                 projectFileName: projectFileName2,
                 options: { allowJS: true, moduleResolution: ModuleResolutionKind.NodeJs },
                 rootFiles: [toExternalFile(file3.path)],
-                typingOptions: { include: ["grunt", "gulp"] }
+                typeAcquisition: { include: ["grunt", "gulp"] }
             });
-            assert.equal(installer.pendingRunRequests.length, 3, "expect three throttled request");
+            assert.equal(installer.pendingRunRequests.length, 1, "expect one throttled request");
 
             const p1 = projectService.externalProjects[0];
             const p2 = projectService.externalProjects[1];
@@ -613,20 +593,16 @@ namespace ts.projectSystem {
             checkProjectActualFiles(p1, [lodashJs.path, commanderJs.path, file3.path]);
             checkProjectActualFiles(p2, [file3.path]);
 
-
             installer.executePendingCommands();
-            // expected one view request from the first project and two - from the second one
-            installer.checkPendingCommands([TI.NpmViewRequest, TI.NpmViewRequest, TI.NpmViewRequest]);
+
+            // expected one install request from the second project
+            installer.checkPendingCommands(/*expectedCount*/ 1);
             assert.equal(installer.pendingRunRequests.length, 0, "expected no throttled requests");
 
             installer.executePendingCommands();
 
-            // should be two install requests from both projects
-            installer.checkPendingCommands([TI.NpmInstallRequest, TI.NpmInstallRequest]);
-            installer.executePendingCommands();
-
             checkProjectActualFiles(p1, [lodashJs.path, commanderJs.path, file3.path, commander.path, jquery.path, lodash.path, cordova.path]);
-            checkProjectActualFiles(p2, [file3.path, grunt.path, gulp.path ]);
+            checkProjectActualFiles(p2, [file3.path, grunt.path, gulp.path]);
         });
 
         it("configured projects discover from node_modules", () => {
@@ -653,12 +629,12 @@ namespace ts.projectSystem {
             const host = createServerHost([app, jsconfig, jquery, jqueryPackage]);
             const installer = new (class extends Installer {
                 constructor() {
-                    super(host, { globalTypingsCacheLocation: "/tmp" });
+                    super(host, { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("jquery") });
                 }
-                runCommand(requestKind: TI.RequestKind, requestId: number, command: string, cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
                     const installedTypings = ["@types/jquery"];
                     const typingFiles = [jqueryDTS];
-                    executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
+                    executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
             })();
 
@@ -669,7 +645,7 @@ namespace ts.projectSystem {
             const p = projectService.configuredProjects[0];
             checkProjectActualFiles(p, [app.path]);
 
-            installer.installAll([TI.NpmViewRequest], [TI.NpmInstallRequest]);
+            installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             checkProjectActualFiles(p, [app.path, jqueryDTS.path]);
@@ -687,10 +663,10 @@ namespace ts.projectSystem {
             const bowerJson = {
                 path: "/bower.json",
                 content: JSON.stringify({
-                        "dependencies": {
-                            "jquery": "^3.1.0"
-                        }
-                    })
+                    "dependencies": {
+                        "jquery": "^3.1.0"
+                    }
+                })
             };
             const jqueryDTS = {
                 path: "/tmp/node_modules/@types/jquery/index.d.ts",
@@ -699,12 +675,12 @@ namespace ts.projectSystem {
             const host = createServerHost([app, jsconfig, bowerJson]);
             const installer = new (class extends Installer {
                 constructor() {
-                    super(host, { globalTypingsCacheLocation: "/tmp" });
+                    super(host, { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("jquery") });
                 }
-                runCommand(requestKind: TI.RequestKind, requestId: number, command: string, cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
                     const installedTypings = ["@types/jquery"];
                     const typingFiles = [jqueryDTS];
-                    executeCommand(this, host, installedTypings, typingFiles, requestKind, cb);
+                    executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
             })();
 
@@ -715,31 +691,197 @@ namespace ts.projectSystem {
             const p = projectService.configuredProjects[0];
             checkProjectActualFiles(p, [app.path]);
 
-            installer.installAll([TI.NpmViewRequest], [TI.NpmInstallRequest]);
+            installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             checkProjectActualFiles(p, [app.path, jqueryDTS.path]);
         });
+
+        it("Malformed package.json should be watched", () => {
+            const f = {
+                path: "/a/b/app.js",
+                content: "var x = 1"
+            };
+            const brokenPackageJson = {
+                path: "/a/b/package.json",
+                content: `{ "dependencies": { "co } }`
+            };
+            const fixedPackageJson = {
+                path: brokenPackageJson.path,
+                content: `{ "dependencies": { "commander": "0.0.2" } }`
+            };
+            const cachePath = "/a/cache/";
+            const commander = {
+                path: cachePath + "node_modules/@types/commander/index.d.ts",
+                content: "export let x: number"
+            };
+            const host = createServerHost([f, brokenPackageJson]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
+                }
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                    const installedTypings = ["@types/commander"];
+                    const typingFiles = [commander];
+                    executeCommand(this, host, installedTypings, typingFiles, cb);
+                }
+            })();
+            const service = createProjectService(host, { typingsInstaller: installer });
+            service.openClientFile(f.path);
+
+            installer.checkPendingCommands(/*expectedCount*/ 0);
+
+            host.reloadFS([f, fixedPackageJson]);
+            host.triggerFileWatcherCallback(fixedPackageJson.path, /*removed*/ false);
+            // expected install request
+            installer.installAll(/*expectedCount*/ 1);
+
+            service.checkNumberOfProjects({ inferredProjects: 1 });
+            checkProjectActualFiles(service.inferredProjects[0], [f.path, commander.path]);
+        });
+
+        it("should install typings for unresolved imports", () => {
+            const file = {
+                path: "/a/b/app.js",
+                content: `
+                import * as fs from "fs";
+                import * as commander from "commander";`
+            };
+            const cachePath = "/a/cache";
+            const node = {
+                path: cachePath + "/node_modules/@types/node/index.d.ts",
+                content: "export let x: number"
+            };
+            const commander = {
+                path: cachePath + "/node_modules/@types/commander/index.d.ts",
+                content: "export let y: string"
+            };
+            const host = createServerHost([file]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("node", "commander") });
+                }
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                    const installedTypings = ["@types/node", "@types/commander"];
+                    const typingFiles = [node, commander];
+                    executeCommand(this, host, installedTypings, typingFiles, cb);
+                }
+            })();
+            const service = createProjectService(host, { typingsInstaller: installer });
+            service.openClientFile(file.path);
+
+            service.checkNumberOfProjects({ inferredProjects: 1 });
+            checkProjectActualFiles(service.inferredProjects[0], [file.path]);
+
+            installer.installAll(/*expectedCount*/1);
+
+            assert.isTrue(host.fileExists(node.path), "typings for 'node' should be created");
+            assert.isTrue(host.fileExists(commander.path), "typings for 'commander' should be created");
+
+            checkProjectActualFiles(service.inferredProjects[0], [file.path, node.path, commander.path]);
+        });
+
+        it("should pick typing names from non-relative unresolved imports", () => {
+            const f1 = {
+                path: "/a/b/app.js",
+                content: `
+                import * as a from "foo/a/a";
+                import * as b from "foo/a/b";
+                import * as c from "foo/a/c";
+                import * as d from "@bar/router/";
+                import * as e from "@bar/common/shared";
+                import * as e from "@bar/common/apps";
+                import * as f from "./lib"
+                `
+            };
+
+            const host = createServerHost([f1]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("foo") });
+                }
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                    executeCommand(this, host, ["foo"], [], cb);
+                }
+            })();
+            const projectService = createProjectService(host, { typingsInstaller: installer });
+            projectService.openClientFile(f1.path);
+            projectService.checkNumberOfProjects({ inferredProjects: 1 });
+
+            const proj = projectService.inferredProjects[0];
+            proj.updateGraph();
+
+            assert.deepEqual(
+                proj.getCachedUnresolvedImportsPerFile_TestOnly().get(<Path>f1.path),
+                ["foo", "foo", "foo", "@bar/router", "@bar/common", "@bar/common"]
+            );
+
+            installer.installAll(/*expectedCount*/ 1);
+        });
+
+        it("cached unresolved typings are not recomputed if program structure did not change", () => {
+            const host = createServerHost([]);
+            const session = createSession(host);
+            const f = {
+                path: "/a/app.js",
+                content: `
+                import * as fs from "fs";
+                import * as cmd from "commander
+                `
+            };
+            session.executeCommand(<server.protocol.OpenRequest>{
+                seq: 1,
+                type: "request",
+                command: "open",
+                arguments: {
+                    file: f.path,
+                    fileContent: f.content
+                }
+            });
+            const projectService = session.getProjectService();
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            const proj = projectService.inferredProjects[0];
+            const version1 = proj.getCachedUnresolvedImportsPerFile_TestOnly().getVersion();
+
+            // make a change that should not affect the structure of the program
+            session.executeCommand(<server.protocol.ChangeRequest>{
+                seq: 2,
+                type: "request",
+                command: "change",
+                arguments: {
+                    file: f.path,
+                    insertString: "\nlet x = 1;",
+                    line: 2,
+                    offset: 0,
+                    endLine: 2,
+                    endOffset: 0
+                }
+            });
+            host.checkTimeoutQueueLength(1);
+            host.runQueuedTimeoutCallbacks();
+            const version2 = proj.getCachedUnresolvedImportsPerFile_TestOnly().getVersion();
+            assert.equal(version1, version2, "set of unresolved imports should not change");
+        });
     });
 
     describe("Validate package name:", () => {
-        it ("name cannot be too long", () => {
+        it("name cannot be too long", () => {
             let packageName = "a";
             for (let i = 0; i < 8; i++) {
                 packageName += packageName;
             }
             assert.equal(TI.validatePackageName(packageName), TI.PackageNameValidationResult.NameTooLong);
         });
-        it ("name cannot start with dot", () => {
+        it("name cannot start with dot", () => {
             assert.equal(TI.validatePackageName(".foo"), TI.PackageNameValidationResult.NameStartsWithDot);
         });
-        it ("name cannot start with underscore", () => {
+        it("name cannot start with underscore", () => {
             assert.equal(TI.validatePackageName("_foo"), TI.PackageNameValidationResult.NameStartsWithUnderscore);
         });
-        it ("scoped packages not supported", () => {
+        it("scoped packages not supported", () => {
             assert.equal(TI.validatePackageName("@scope/bar"), TI.PackageNameValidationResult.ScopedPackagesNotSupported);
         });
-        it ("non URI safe characters are not supported", () => {
+        it("non URI safe characters are not supported", () => {
             assert.equal(TI.validatePackageName("  scope  "), TI.PackageNameValidationResult.NameContainsNonURISafeCharacters);
             assert.equal(TI.validatePackageName("; say ‘Hello from TypeScript!’ #"), TI.PackageNameValidationResult.NameContainsNonURISafeCharacters);
             assert.equal(TI.validatePackageName("a/b/c"), TI.PackageNameValidationResult.NameContainsNonURISafeCharacters);
@@ -747,7 +889,7 @@ namespace ts.projectSystem {
     });
 
     describe("Invalid package names", () => {
-        it ("should not be installed", () => {
+        it("should not be installed", () => {
             const f1 = {
                 path: "/a/b/app.js",
                 content: "let x = 1"
@@ -766,15 +908,193 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: "/tmp" }, { isEnabled: () => true, writeLine: msg => messages.push(msg) });
                 }
-                runCommand(requestKind: TI.RequestKind, requestId: number, command: string, cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                installWorker(_requestId: number, _args: string[], _cwd: string, _cb: server.typingsInstaller.RequestCompletedAction) {
                     assert(false, "runCommand should not be invoked");
                 }
             })();
             const projectService = createProjectService(host, { typingsInstaller: installer });
             projectService.openClientFile(f1.path);
 
-            installer.checkPendingCommands([]);
+            installer.checkPendingCommands(/*expectedCount*/ 0);
             assert.isTrue(messages.indexOf("Package name '; say ‘Hello from TypeScript!’ #' contains non URI safe characters") > 0, "should find package with invalid name");
+        });
+    });
+
+    describe("discover typings", () => {
+        it("should return node for core modules", () => {
+            const f = {
+                path: "/a/b/app.js",
+                content: ""
+            };
+            const host = createServerHost([f]);
+            const cache = createMap<string>();
+            for (const name of JsTyping.nodeCoreModuleList) {
+                const result = JsTyping.discoverTypings(host, [f.path], getDirectoryPath(<Path>f.path), /*safeListPath*/ undefined, cache, { enable: true }, [name, "somename"]);
+                assert.deepEqual(result.newTypingNames.sort(), ["node", "somename"]);
+            }
+        });
+
+        it("should use cached locaitons", () => {
+            const f = {
+                path: "/a/b/app.js",
+                content: ""
+            };
+            const node = {
+                path: "/a/b/node.d.ts",
+                content: ""
+            };
+            const host = createServerHost([f, node]);
+            const cache = createMap<string>({ "node": node.path });
+            const result = JsTyping.discoverTypings(host, [f.path], getDirectoryPath(<Path>f.path), /*safeListPath*/ undefined, cache, { enable: true }, ["fs", "bar"]);
+            assert.deepEqual(result.cachedTypingPaths, [node.path]);
+            assert.deepEqual(result.newTypingNames, ["bar"]);
+        });
+    });
+
+    describe("telemetry events", () => {
+        it ("should be received", () => {
+            const f1 = {
+                path: "/a/app.js",
+                content: ""
+            };
+            const package = {
+                path: "/a/package.json",
+                content: JSON.stringify({ dependencies: { "commander": "1.0.0" } })
+            };
+            const cachePath = "/a/cache/";
+            const commander = {
+                path: cachePath + "node_modules/@types/commander/index.d.ts",
+                content: "export let x: number"
+            };
+            const host = createServerHost([f1, package]);
+            let seenTelemetryEvent = false;
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
+                }
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                    const installedTypings = ["@types/commander"];
+                    const typingFiles = [commander];
+                    executeCommand(this, host, installedTypings, typingFiles, cb);
+                }
+                sendResponse(response: server.SetTypings | server.InvalidateCachedTypings | server.BeginInstallTypes | server.EndInstallTypes) {
+                    if (response.kind === server.EventBeginInstallTypes) {
+                        return;
+                    }
+                    if (response.kind === server.EventEndInstallTypes) {
+                        assert.deepEqual(response.packagesToInstall, ["@types/commander"]);
+                        seenTelemetryEvent = true;
+                        return;
+                    }
+                    super.sendResponse(response);
+                }
+            })();
+            const projectService = createProjectService(host, { typingsInstaller: installer });
+            projectService.openClientFile(f1.path);
+
+            installer.installAll(/*expectedCount*/ 1);
+
+            assert.isTrue(seenTelemetryEvent);
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            checkProjectActualFiles(projectService.inferredProjects[0], [f1.path, commander.path]);
+        });
+    });
+
+    describe("progress notifications", () => {
+        it ("should be sent for success", () => {
+            const f1 = {
+                path: "/a/app.js",
+                content: ""
+            };
+            const package = {
+                path: "/a/package.json",
+                content: JSON.stringify({ dependencies: { "commander": "1.0.0" } })
+            };
+            const cachePath = "/a/cache/";
+            const commander = {
+                path: cachePath + "node_modules/@types/commander/index.d.ts",
+                content: "export let x: number"
+            };
+            const host = createServerHost([f1, package]);
+            let beginEvent: server.BeginInstallTypes;
+            let endEvent: server.EndInstallTypes;
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
+                }
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                    const installedTypings = ["@types/commander"];
+                    const typingFiles = [commander];
+                    executeCommand(this, host, installedTypings, typingFiles, cb);
+                }
+                sendResponse(response: server.SetTypings | server.InvalidateCachedTypings | server.BeginInstallTypes | server.EndInstallTypes) {
+                    if (response.kind === server.EventBeginInstallTypes) {
+                        beginEvent = response;
+                        return;
+                    }
+                    if (response.kind === server.EventEndInstallTypes) {
+                        endEvent = response;
+                        return;
+                    }
+                    super.sendResponse(response);
+                }
+            })();
+            const projectService = createProjectService(host, { typingsInstaller: installer });
+            projectService.openClientFile(f1.path);
+
+            installer.installAll(/*expectedCount*/ 1);
+
+            assert.isTrue(!!beginEvent);
+            assert.isTrue(!!endEvent);
+            assert.isTrue(beginEvent.eventId === endEvent.eventId);
+            assert.isTrue(endEvent.installSuccess);
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            checkProjectActualFiles(projectService.inferredProjects[0], [f1.path, commander.path]);
+        });
+
+        it ("should be sent for error", () => {
+            const f1 = {
+                path: "/a/app.js",
+                content: ""
+            };
+            const package = {
+                path: "/a/package.json",
+                content: JSON.stringify({ dependencies: { "commander": "1.0.0" } })
+            };
+            const cachePath = "/a/cache/";
+            const host = createServerHost([f1, package]);
+            let beginEvent: server.BeginInstallTypes;
+            let endEvent: server.EndInstallTypes;
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
+                }
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                    executeCommand(this, host, "", [], cb);
+                }
+                sendResponse(response: server.SetTypings | server.InvalidateCachedTypings | server.BeginInstallTypes | server.EndInstallTypes) {
+                    if (response.kind === server.EventBeginInstallTypes) {
+                        beginEvent = response;
+                        return;
+                    }
+                    if (response.kind === server.EventEndInstallTypes) {
+                        endEvent = response;
+                        return;
+                    }
+                    super.sendResponse(response);
+                }
+            })();
+            const projectService = createProjectService(host, { typingsInstaller: installer });
+            projectService.openClientFile(f1.path);
+
+            installer.installAll(/*expectedCount*/ 1);
+
+            assert.isTrue(!!beginEvent);
+            assert.isTrue(!!endEvent);
+            assert.isTrue(beginEvent.eventId === endEvent.eventId);
+            assert.isFalse(endEvent.installSuccess);
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            checkProjectActualFiles(projectService.inferredProjects[0], [f1.path]);
         });
     });
 }

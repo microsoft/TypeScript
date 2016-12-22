@@ -119,13 +119,13 @@ namespace ts {
     }
 
     export interface Shim {
-        dispose(dummy: any): void;
+        dispose(_dummy: any): void;
     }
 
     export interface LanguageServiceShim extends Shim {
         languageService: LanguageService;
 
-        dispose(dummy: any): void;
+        dispose(_dummy: any): void;
 
         refresh(throwOnError: boolean): void;
 
@@ -316,7 +316,7 @@ namespace ts {
         private loggingEnabled = false;
         private tracingEnabled = false;
 
-        public resolveModuleNames: (moduleName: string[], containingFile: string) => ResolvedModule[];
+        public resolveModuleNames: (moduleName: string[], containingFile: string) => ResolvedModuleFull[];
         public resolveTypeReferenceDirectives: (typeDirectiveNames: string[], containingFile: string) => ResolvedTypeReferenceDirective[];
         public directoryExists: (directoryName: string) => boolean;
 
@@ -328,7 +328,7 @@ namespace ts {
                     const resolutionsInFile = <MapLike<string>>JSON.parse(this.shimHost.getModuleResolutionsForFile(containingFile));
                     return map(moduleNames, name => {
                         const result = getProperty(resolutionsInFile, name);
-                        return result ? { resolvedFileName: result } : undefined;
+                        return result ? { resolvedFileName: result, extension: extensionFromPath(result), isExternalLibraryImport: false } : undefined;
                     });
                 };
             }
@@ -444,7 +444,7 @@ namespace ts {
         }
 
         public readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[], depth?: number): string[] {
-            const pattern = getFileMatcherPatterns(path, extensions, exclude, include,
+            const pattern = getFileMatcherPatterns(path, exclude, include,
                 this.shimHost.useCaseSensitiveFileNames(), this.shimHost.getCurrentDirectory());
             return JSON.parse(this.shimHost.readDirectory(
                 path,
@@ -509,7 +509,7 @@ namespace ts {
             // Wrap the API changes for 2.0 release. This try/catch
             // should be removed once TypeScript 2.0 has shipped.
             try {
-                const pattern = getFileMatcherPatterns(rootDir, extensions, exclude, include,
+                const pattern = getFileMatcherPatterns(rootDir, exclude, include,
                     this.shimHost.useCaseSensitiveFileNames(), this.shimHost.getCurrentDirectory());
                 return JSON.parse(this.shimHost.readDirectory(
                     rootDir,
@@ -600,7 +600,7 @@ namespace ts {
         constructor(private factory: ShimFactory) {
             factory.registerShim(this);
         }
-        public dispose(dummy: any): void {
+        public dispose(_dummy: any): void {
             this.factory.unregisterShim(this);
         }
     }
@@ -1060,8 +1060,15 @@ namespace ts {
             return this.forwardJSONCall(`resolveModuleName('${fileName}')`, () => {
                 const compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
                 const result = resolveModuleName(moduleName, normalizeSlashes(fileName), compilerOptions, this.host);
+                const resolvedFileName = result.resolvedModule ? result.resolvedModule.resolvedFileName : undefined;
+                if (resolvedFileName && !compilerOptions.allowJs && fileExtensionIs(resolvedFileName, ".js")) {
+                    return {
+                        resolvedFileName: undefined,
+                        failedLookupLocations: []
+                    };
+                }
                 return {
-                    resolvedFileName: result.resolvedModule ? result.resolvedModule.resolvedFileName : undefined,
+                    resolvedFileName,
                     failedLookupLocations: result.failedLookupLocations
                 };
             });
@@ -1131,7 +1138,7 @@ namespace ts {
                     if (result.error) {
                         return {
                             options: {},
-                            typingOptions: {},
+                            typeAcquisition: {},
                             files: [],
                             raw: {},
                             errors: [realizeDiagnostic(result.error, "\r\n")]
@@ -1143,7 +1150,7 @@ namespace ts {
 
                     return {
                         options: configFile.options,
-                        typingOptions: configFile.typingOptions,
+                        typeAcquisition: configFile.typeAcquisition,
                         files: configFile.fileNames,
                         raw: configFile.raw,
                         errors: realizeDiagnostics(configFile.errors, "\r\n")
@@ -1168,8 +1175,8 @@ namespace ts {
                     toPath(info.projectRootPath, info.projectRootPath, getCanonicalFileName),
                     toPath(info.safeListPath, info.safeListPath, getCanonicalFileName),
                     info.packageNameToTypingLocation,
-                    info.typingOptions,
-                    info.compilerOptions);
+                    info.typeAcquisition,
+                    info.unresolvedImports);
             });
         }
     }
@@ -1261,11 +1268,8 @@ namespace TypeScript.Services {
     export const TypeScriptServicesFactory = ts.TypeScriptServicesFactory;
 }
 
-/* tslint:disable:no-unused-variable */
 // 'toolsVersion' gets consumed by the managed side, so it's not unused.
 // TODO: it should be moved into a namespace though.
 
 /* @internal */
-const toolsVersion = "2.1";
-
-/* tslint:enable:no-unused-variable */
+const toolsVersion = "2.2";

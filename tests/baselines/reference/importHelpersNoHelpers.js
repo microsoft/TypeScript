@@ -12,6 +12,10 @@ class C {
     }
 }
 
+const o = { a: 1 };
+const y = { ...o };
+const { ...x } = y;
+
 //// [script.ts]
 class A { }
 class B extends A { }
@@ -26,6 +30,7 @@ class C {
 
 //// [tslib.d.ts]
 export {}
+
 
 //// [external.js]
 "use strict";
@@ -58,9 +63,11 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:returntype", void 0)
 ], C.prototype, "method", null);
 C = tslib_1.__decorate([
-    dec,
-    tslib_1.__metadata("design:paramtypes", [])
+    dec
 ], C);
+var o = { a: 1 };
+var y = tslib_1.__assign({}, o);
+var x = tslib_1.__rest(y, []);
 //// [script.js]
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -105,6 +112,5 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], C.prototype, "method", null);
 C = __decorate([
-    dec,
-    __metadata("design:paramtypes", [])
+    dec
 ], C);

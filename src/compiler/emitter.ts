@@ -14,180 +14,12 @@ namespace ts {
     }
 
     const id = (s: SourceFile) => s;
-    const nullTransformers: Transformer[] = [ctx => id];
+    const nullTransformers: Transformer[] = [_ => id];
 
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean): EmitResult {
         const delimiters = createDelimiterMap();
         const brackets = createBracketsMap();
-
-        // emit output for the __extends helper function
-        const extendsHelper = `
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};`;
-
-        // Emit output for the __assign helper function.
-        // This is typically used for JSX spread attributes,
-        // and can be used for object literal spread properties.
-        const assignHelper = `
-var __assign = (this && this.__assign) || Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-            t[p] = s[p];
-    }
-    return t;
-};`;
-
-        // emit output for the __decorate helper function
-        const decorateHelper = `
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};`;
-
-        // emit output for the __metadata helper function
-        const metadataHelper = `
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};`;
-
-        // emit output for the __param helper function
-        const paramHelper = `
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};`;
-
-        // emit output for the __awaiter helper function
-        const awaiterHelper = `
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments)).next());
-    });
-};`;
-
-        // The __generator helper is used by down-level transformations to emulate the runtime
-        // semantics of an ES2015 generator function. When called, this helper returns an
-        // object that implements the Iterator protocol, in that it has `next`, `return`, and
-        // `throw` methods that step through the generator when invoked.
-        //
-        // parameters:
-        //  thisArg  The value to use as the `this` binding for the transformed generator body.
-        //  body     A function that acts as the transformed generator body.
-        //
-        // variables:
-        //  _       Persistent state for the generator that is shared between the helper and the
-        //          generator body. The state object has the following members:
-        //            sent() - A method that returns or throws the current completion value.
-        //            label  - The next point at which to resume evaluation of the generator body.
-        //            trys   - A stack of protected regions (try/catch/finally blocks).
-        //            ops    - A stack of pending instructions when inside of a finally block.
-        //  f       A value indicating whether the generator is executing.
-        //  y       An iterator to delegate for a yield*.
-        //  t       A temporary variable that holds one of the following values (note that these
-        //          cases do not overlap):
-        //          - The completion value when resuming from a `yield` or `yield*`.
-        //          - The error value for a catch block.
-        //          - The current protected region (array of try/catch/finally/end labels).
-        //          - The verb (`next`, `throw`, or `return` method) to delegate to the expression
-        //            of a `yield*`.
-        //          - The result of evaluating the verb delegated to the expression of a `yield*`.
-        //
-        // functions:
-        //  verb(n)     Creates a bound callback to the `step` function for opcode `n`.
-        //  step(op)    Evaluates opcodes in a generator body until execution is suspended or
-        //              completed.
-        //
-        // The __generator helper understands a limited set of instructions:
-        //  0: next(value?)     - Start or resume the generator with the specified value.
-        //  1: throw(error)     - Resume the generator with an exception. If the generator is
-        //                        suspended inside of one or more protected regions, evaluates
-        //                        any intervening finally blocks between the current label and
-        //                        the nearest catch block or function boundary. If uncaught, the
-        //                        exception is thrown to the caller.
-        //  2: return(value?)   - Resume the generator as if with a return. If the generator is
-        //                        suspended inside of one or more protected regions, evaluates any
-        //                        intervening finally blocks.
-        //  3: break(label)     - Jump to the specified label. If the label is outside of the
-        //                        current protected region, evaluates any intervening finally
-        //                        blocks.
-        //  4: yield(value?)    - Yield execution to the caller with an optional value. When
-        //                        resumed, the generator will continue at the next label.
-        //  5: yield*(value)    - Delegates evaluation to the supplied iterator. When
-        //                        delegation completes, the generator will continue at the next
-        //                        label.
-        //  6: catch(error)     - Handles an exception thrown from within the generator body. If
-        //                        the current label is inside of one or more protected regions,
-        //                        evaluates any intervening finally blocks between the current
-        //                        label and the nearest catch block or function boundary. If
-        //                        uncaught, the exception is thrown to the caller.
-        //  7: endfinally       - Ends a finally block, resuming the last instruction prior to
-        //                        entering a finally block.
-        //
-        // For examples of how these are used, see the comments in ./transformers/generators.ts
-        const generatorHelper = `
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t;
-    return { next: verb(0), "throw": verb(1), "return": verb(2) };
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [0, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};`;
-
-        // emit output for the __export helper function
-        const exportStarHelper = `
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}`;
-
-        // emit output for the UMD helper function.
-        const umdHelper = `
-(function (dependencies, factory) {
-    if (typeof module === 'object' && typeof module.exports === 'object') {
-        var v = factory(require, exports); if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === 'function' && define.amd) {
-        define(dependencies, factory);
-    }
-})`;
-
-        const superHelper = `
-const _super = name => super[name];`;
-
-        const advancedSuperHelper = `
-const _super = (function (geti, seti) {
-    const cache = Object.create(null);
-    return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
-})(name => super[name], (name, value) => super[name] = value);`;
-
         const compilerOptions = host.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
@@ -224,11 +56,7 @@ const _super = (function (geti, seti) {
         let currentSourceFile: SourceFile;
         let currentText: string;
         let currentFileIdentifiers: Map<string>;
-        let extendsEmitted: boolean;
-        let assignEmitted: boolean;
-        let decorateEmitted: boolean;
-        let paramEmitted: boolean;
-        let awaiterEmitted: boolean;
+        let bundledHelpers: Map<boolean>;
         let isOwnFileEmit: boolean;
         let emitSkipped = false;
 
@@ -293,12 +121,13 @@ const _super = (function (geti, seti) {
             nodeIdToGeneratedName = [];
             autoGeneratedIdToGeneratedName = [];
             generatedNameSet = createMap<string>();
+            bundledHelpers = isBundledEmit ? createMap<boolean>() : undefined;
             isOwnFileEmit = !isBundledEmit;
 
             // Emit helpers from all the files
             if (isBundledEmit && moduleKind) {
                 for (const sourceFile of sourceFiles) {
-                    emitEmitHelpers(sourceFile);
+                    emitHelpers(sourceFile, /*isBundle*/ true);
                 }
             }
 
@@ -314,7 +143,7 @@ const _super = (function (geti, seti) {
 
             // Write the source map
             if (compilerOptions.sourceMap && !compilerOptions.inlineSourceMap) {
-                writeFile(host, emitterDiagnostics, sourceMapFilePath, sourceMap.getText(),  /*writeByteOrderMark*/ false);
+                writeFile(host, emitterDiagnostics, sourceMapFilePath, sourceMap.getText(),  /*writeByteOrderMark*/ false, sourceFiles);
             }
 
             // Record source map data for the test harness.
@@ -323,7 +152,7 @@ const _super = (function (geti, seti) {
             }
 
             // Write the output file
-            writeFile(host, emitterDiagnostics, jsFilePath, writer.getText(), compilerOptions.emitBOM);
+            writeFile(host, emitterDiagnostics, jsFilePath, writer.getText(), compilerOptions.emitBOM, sourceFiles);
 
             // Reset state
             sourceMap.reset();
@@ -333,11 +162,6 @@ const _super = (function (geti, seti) {
             tempFlags = TempFlags.Auto;
             currentSourceFile = undefined;
             currentText = undefined;
-            extendsEmitted = false;
-            assignEmitted = false;
-            decorateEmitted = false;
-            paramEmitted = false;
-            awaiterEmitted = false;
             isOwnFileEmit = false;
         }
 
@@ -504,15 +328,29 @@ const _super = (function (geti, seti) {
 
                 // Contextual keywords
                 case SyntaxKind.AbstractKeyword:
+                case SyntaxKind.AsKeyword:
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.AsyncKeyword:
+                case SyntaxKind.AwaitKeyword:
                 case SyntaxKind.BooleanKeyword:
+                case SyntaxKind.ConstructorKeyword:
                 case SyntaxKind.DeclareKeyword:
-                case SyntaxKind.NumberKeyword:
+                case SyntaxKind.GetKeyword:
+                case SyntaxKind.IsKeyword:
+                case SyntaxKind.ModuleKeyword:
+                case SyntaxKind.NamespaceKeyword:
+                case SyntaxKind.NeverKeyword:
                 case SyntaxKind.ReadonlyKeyword:
+                case SyntaxKind.RequireKeyword:
+                case SyntaxKind.NumberKeyword:
+                case SyntaxKind.SetKeyword:
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.SymbolKeyword:
+                case SyntaxKind.TypeKeyword:
+                case SyntaxKind.UndefinedKeyword:
+                case SyntaxKind.FromKeyword:
                 case SyntaxKind.GlobalKeyword:
+                case SyntaxKind.OfKeyword:
                     writeTokenText(kind);
                     return;
 
@@ -579,7 +417,13 @@ const _super = (function (geti, seti) {
                 case SyntaxKind.ExpressionWithTypeArguments:
                     return emitExpressionWithTypeArguments(<ExpressionWithTypeArguments>node);
                 case SyntaxKind.ThisType:
-                    return emitThisType(<ThisTypeNode>node);
+                    return emitThisType();
+                case SyntaxKind.TypeOperator:
+                    return emitTypeOperator(<TypeOperatorNode>node);
+                case SyntaxKind.IndexedAccessType:
+                    return emitIndexedAccessType(<IndexedAccessTypeNode>node);
+                case SyntaxKind.MappedType:
+                    return emitMappedType(<MappedTypeNode>node);
                 case SyntaxKind.LiteralType:
                     return emitLiteralType(<LiteralTypeNode>node);
 
@@ -595,7 +439,7 @@ const _super = (function (geti, seti) {
                 case SyntaxKind.TemplateSpan:
                     return emitTemplateSpan(<TemplateSpan>node);
                 case SyntaxKind.SemicolonClassElement:
-                    return emitSemicolonClassElement(<SemicolonClassElement>node);
+                    return emitSemicolonClassElement();
 
                 // Statements
                 case SyntaxKind.Block:
@@ -603,7 +447,7 @@ const _super = (function (geti, seti) {
                 case SyntaxKind.VariableStatement:
                     return emitVariableStatement(<VariableStatement>node);
                 case SyntaxKind.EmptyStatement:
-                    return emitEmptyStatement(<EmptyStatement>node);
+                    return emitEmptyStatement();
                 case SyntaxKind.ExpressionStatement:
                     return emitExpressionStatement(<ExpressionStatement>node);
                 case SyntaxKind.IfStatement:
@@ -714,6 +558,8 @@ const _super = (function (geti, seti) {
                     return emitPropertyAssignment(<PropertyAssignment>node);
                 case SyntaxKind.ShorthandPropertyAssignment:
                     return emitShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
+                case SyntaxKind.SpreadAssignment:
+                    return emitSpreadAssignment(node as SpreadAssignment);
 
                 // Enum
                 case SyntaxKind.EnumMember:
@@ -804,8 +650,8 @@ const _super = (function (geti, seti) {
                     return emitTemplateExpression(<TemplateExpression>node);
                 case SyntaxKind.YieldExpression:
                     return emitYieldExpression(<YieldExpression>node);
-                case SyntaxKind.SpreadElementExpression:
-                    return emitSpreadElementExpression(<SpreadElementExpression>node);
+                case SyntaxKind.SpreadElement:
+                    return emitSpreadExpression(<SpreadElement>node);
                 case SyntaxKind.ClassExpression:
                     return emitClassExpression(<ClassExpression>node);
                 case SyntaxKind.OmittedExpression:
@@ -824,6 +670,8 @@ const _super = (function (geti, seti) {
                 // Transformation nodes
                 case SyntaxKind.PartiallyEmittedExpression:
                     return emitPartiallyEmittedExpression(<PartiallyEmittedExpression>node);
+                case SyntaxKind.RawExpression:
+                    return writeLines((<RawExpression>node).text);
             }
         }
 
@@ -861,12 +709,7 @@ const _super = (function (geti, seti) {
         //
 
         function emitIdentifier(node: Identifier) {
-            if (getEmitFlags(node) & EmitFlags.UMDDefine) {
-                writeLines(umdHelper);
-            }
-            else {
-                write(getTextOfNode(node, /*includeTrivia*/ false));
-            }
+            write(getTextOfNode(node, /*includeTrivia*/ false));
         }
 
         //
@@ -1000,7 +843,7 @@ const _super = (function (geti, seti) {
             write(";");
         }
 
-        function emitSemicolonClassElement(node: SemicolonClassElement) {
+        function emitSemicolonClassElement() {
             write(";");
         }
 
@@ -1070,8 +913,44 @@ const _super = (function (geti, seti) {
             write(")");
         }
 
-        function emitThisType(node: ThisTypeNode) {
+        function emitThisType() {
             write("this");
+        }
+
+        function emitTypeOperator(node: TypeOperatorNode) {
+            writeTokenText(node.operator);
+            write(" ");
+            emit(node.type);
+        }
+
+        function emitIndexedAccessType(node: IndexedAccessTypeNode) {
+            emit(node.objectType);
+            write("[");
+            emit(node.indexType);
+            write("]");
+        }
+
+        function emitMappedType(node: MappedTypeNode) {
+            write("{");
+            writeLine();
+            increaseIndent();
+            if (node.readonlyToken) {
+                write("readonly ");
+            }
+            write("[");
+            emit(node.typeParameter.name);
+            write(" in ");
+            emit(node.typeParameter.constraint);
+            write("]");
+            if (node.questionToken) {
+                write("?");
+            }
+            write(": ");
+            emit(node.type);
+            write(";");
+            writeLine();
+            decreaseIndent();
+            write("}");
         }
 
         function emitLiteralType(node: LiteralTypeNode) {
@@ -1198,12 +1077,14 @@ const _super = (function (geti, seti) {
 
         function emitCallExpression(node: CallExpression) {
             emitExpression(node.expression);
+            emitTypeArguments(node, node.typeArguments);
             emitExpressionList(node, node.arguments, ListFormat.CallExpressionArguments);
         }
 
         function emitNewExpression(node: NewExpression) {
             write("new ");
             emitExpression(node.expression);
+            emitTypeArguments(node, node.typeArguments);
             emitExpressionList(node, node.arguments, ListFormat.NewExpressionArguments);
         }
 
@@ -1341,7 +1222,7 @@ const _super = (function (geti, seti) {
             emitExpressionWithPrefix(" ", node.expression);
         }
 
-        function emitSpreadElementExpression(node: SpreadElementExpression) {
+        function emitSpreadExpression(node: SpreadElement) {
             write("...");
             emitExpression(node.expression);
         }
@@ -1381,7 +1262,7 @@ const _super = (function (geti, seti) {
         // Statements
         //
 
-        function emitBlock(node: Block, format?: ListFormat) {
+        function emitBlock(node: Block) {
             if (isSingleLineEmptyBlock(node)) {
                 writeToken(SyntaxKind.OpenBraceToken, node.pos, /*contextNode*/ node);
                 write(" ");
@@ -1409,7 +1290,7 @@ const _super = (function (geti, seti) {
             write(";");
         }
 
-        function emitEmptyStatement(node: EmptyStatement) {
+        function emitEmptyStatement() {
             write(";");
         }
 
@@ -1424,28 +1305,28 @@ const _super = (function (geti, seti) {
             writeToken(SyntaxKind.OpenParenToken, openParenPos, node);
             emitExpression(node.expression);
             writeToken(SyntaxKind.CloseParenToken, node.expression.end, node);
-            emitEmbeddedStatement(node.thenStatement);
+            emitEmbeddedStatement(node, node.thenStatement);
             if (node.elseStatement) {
-                writeLine();
+                writeLineOrSpace(node);
                 writeToken(SyntaxKind.ElseKeyword, node.thenStatement.end, node);
                 if (node.elseStatement.kind === SyntaxKind.IfStatement) {
                     write(" ");
                     emit(node.elseStatement);
                 }
                 else {
-                    emitEmbeddedStatement(node.elseStatement);
+                    emitEmbeddedStatement(node, node.elseStatement);
                 }
             }
         }
 
         function emitDoStatement(node: DoStatement) {
             write("do");
-            emitEmbeddedStatement(node.statement);
+            emitEmbeddedStatement(node, node.statement);
             if (isBlock(node.statement)) {
                 write(" ");
             }
             else {
-                writeLine();
+                writeLineOrSpace(node);
             }
 
             write("while (");
@@ -1457,7 +1338,7 @@ const _super = (function (geti, seti) {
             write("while (");
             emitExpression(node.expression);
             write(")");
-            emitEmbeddedStatement(node.statement);
+            emitEmbeddedStatement(node, node.statement);
         }
 
         function emitForStatement(node: ForStatement) {
@@ -1470,7 +1351,7 @@ const _super = (function (geti, seti) {
             write(";");
             emitExpressionWithPrefix(" ", node.incrementor);
             write(")");
-            emitEmbeddedStatement(node.statement);
+            emitEmbeddedStatement(node, node.statement);
         }
 
         function emitForInStatement(node: ForInStatement) {
@@ -1481,7 +1362,7 @@ const _super = (function (geti, seti) {
             write(" in ");
             emitExpression(node.expression);
             writeToken(SyntaxKind.CloseParenToken, node.expression.end);
-            emitEmbeddedStatement(node.statement);
+            emitEmbeddedStatement(node, node.statement);
         }
 
         function emitForOfStatement(node: ForOfStatement) {
@@ -1492,7 +1373,7 @@ const _super = (function (geti, seti) {
             write(" of ");
             emitExpression(node.expression);
             writeToken(SyntaxKind.CloseParenToken, node.expression.end);
-            emitEmbeddedStatement(node.statement);
+            emitEmbeddedStatement(node, node.statement);
         }
 
         function emitForBinding(node: VariableDeclarationList | Expression) {
@@ -1528,7 +1409,7 @@ const _super = (function (geti, seti) {
             write("with (");
             emitExpression(node.expression);
             write(")");
-            emitEmbeddedStatement(node.statement);
+            emitEmbeddedStatement(node, node.statement);
         }
 
         function emitSwitchStatement(node: SwitchStatement) {
@@ -1556,9 +1437,12 @@ const _super = (function (geti, seti) {
         function emitTryStatement(node: TryStatement) {
             write("try ");
             emit(node.tryBlock);
-            emit(node.catchClause);
+            if (node.catchClause) {
+                writeLineOrSpace(node);
+                emit(node.catchClause);
+            }
             if (node.finallyBlock) {
-                writeLine();
+                writeLineOrSpace(node);
                 write("finally ");
                 emit(node.finallyBlock);
             }
@@ -1575,6 +1459,7 @@ const _super = (function (geti, seti) {
 
         function emitVariableDeclaration(node: VariableDeclaration) {
             emit(node.name);
+            emitWithPrefix(": ", node.type);
             emitExpressionWithPrefix(" = ", node.initializer);
         }
 
@@ -1606,13 +1491,13 @@ const _super = (function (geti, seti) {
 
                     if (getEmitFlags(node) & EmitFlags.ReuseTempVariableScope) {
                         emitSignatureHead(node);
-                        emitBlockFunctionBody(node, body);
+                        emitBlockFunctionBody(body);
                     }
                     else {
                         const savedTempFlags = tempFlags;
                         tempFlags = 0;
                         emitSignatureHead(node);
-                        emitBlockFunctionBody(node, body);
+                        emitBlockFunctionBody(body);
                         tempFlags = savedTempFlags;
                     }
 
@@ -1639,7 +1524,7 @@ const _super = (function (geti, seti) {
             emitWithPrefix(": ", node.type);
         }
 
-        function shouldEmitBlockFunctionBodyOnSingleLine(parentNode: Node, body: Block) {
+        function shouldEmitBlockFunctionBodyOnSingleLine(body: Block) {
             // We must emit a function body as a single-line body in the following case:
             // * The body has NodeEmitFlags.SingleLine specified.
 
@@ -1677,12 +1562,12 @@ const _super = (function (geti, seti) {
             return true;
         }
 
-        function emitBlockFunctionBody(parentNode: Node, body: Block) {
+        function emitBlockFunctionBody(body: Block) {
             write(" {");
             increaseIndent();
 
             emitBodyWithDetachedComments(body, body.statements,
-                shouldEmitBlockFunctionBodyOnSingleLine(parentNode, body)
+                shouldEmitBlockFunctionBodyOnSingleLine(body)
                     ? emitBlockFunctionBodyOnSingleLine
                     : emitBlockFunctionBodyWorker);
 
@@ -2071,6 +1956,13 @@ const _super = (function (geti, seti) {
             }
         }
 
+        function emitSpreadAssignment(node: SpreadAssignment) {
+            if (node.expression) {
+                write("...");
+                emitExpression(node.expression);
+            }
+        }
+
         //
         // Enum
         //
@@ -2127,82 +2019,39 @@ const _super = (function (geti, seti) {
             return statements.length;
         }
 
-        function emitHelpers(node: Node) {
-            const emitFlags = getEmitFlags(node);
-            let helpersEmitted = false;
-            if (emitFlags & EmitFlags.EmitEmitHelpers) {
-                helpersEmitted = emitEmitHelpers(currentSourceFile);
-            }
-
-            if (emitFlags & EmitFlags.EmitExportStar) {
-                writeLines(exportStarHelper);
-                helpersEmitted = true;
-            }
-
-            if (emitFlags & EmitFlags.EmitSuperHelper) {
-                writeLines(superHelper);
-                helpersEmitted = true;
-            }
-
-            if (emitFlags & EmitFlags.EmitAdvancedSuperHelper) {
-                writeLines(advancedSuperHelper);
-                helpersEmitted = true;
-            }
-
-            return helpersEmitted;
-        }
-
-        function emitEmitHelpers(node: SourceFile) {
-            // Only emit helpers if the user did not say otherwise.
-            if (compilerOptions.noEmitHelpers) {
-                return false;
-            }
-
-            // Don't emit helpers if we can import them.
-            if (compilerOptions.importHelpers
-                && (isExternalModule(node) || compilerOptions.isolatedModules)) {
-                return false;
-            }
+        function emitHelpers(node: Node, isBundle?: boolean) {
+            const sourceFile = isSourceFile(node) ? node : currentSourceFile;
+            const shouldSkip = compilerOptions.noEmitHelpers || (sourceFile && getExternalHelpersModuleName(sourceFile) !== undefined);
+            const shouldBundle = isSourceFile(node) && !isOwnFileEmit;
 
             let helpersEmitted = false;
+            const helpers = getEmitHelpers(node);
+            if (helpers) {
+                for (const helper of stableSort(helpers, compareEmitHelpers)) {
+                    if (!helper.scoped) {
+                        // Skip the helper if it can be skipped and the noEmitHelpers compiler
+                        // option is set, or if it can be imported and the importHelpers compiler
+                        // option is set.
+                        if (shouldSkip) continue;
 
-            // Only Emit __extends function when target ES5.
-            // For target ES6 and above, we can emit classDeclaration as is.
-            if ((languageVersion < ScriptTarget.ES6) && (!extendsEmitted && node.flags & NodeFlags.HasClassExtends)) {
-                writeLines(extendsHelper);
-                extendsEmitted = true;
-                helpersEmitted = true;
-            }
+                        // Skip the helper if it can be bundled but hasn't already been emitted and we
+                        // are emitting a bundled module.
+                        if (shouldBundle) {
+                            if (bundledHelpers[helper.name]) {
+                                continue;
+                            }
 
-            if (compilerOptions.jsx !== JsxEmit.Preserve && !assignEmitted && (node.flags & NodeFlags.HasJsxSpreadAttributes)) {
-                writeLines(assignHelper);
-                assignEmitted = true;
-            }
+                            bundledHelpers[helper.name] = true;
+                        }
+                    }
+                    else if (isBundle) {
+                        // Skip the helper if it is scoped and we are emitting bundled helpers
+                        continue;
+                    }
 
-            if (!decorateEmitted && node.flags & NodeFlags.HasDecorators) {
-                writeLines(decorateHelper);
-                if (compilerOptions.emitDecoratorMetadata) {
-                    writeLines(metadataHelper);
+                    writeLines(helper.text);
+                    helpersEmitted = true;
                 }
-
-                decorateEmitted = true;
-                helpersEmitted = true;
-            }
-
-            if (!paramEmitted && node.flags & NodeFlags.HasParamDecorators) {
-                writeLines(paramHelper);
-                paramEmitted = true;
-                helpersEmitted = true;
-            }
-
-            if (!awaiterEmitted && node.flags & NodeFlags.HasAsyncFunctions) {
-                writeLines(awaiterHelper);
-                if (languageVersion < ScriptTarget.ES6) {
-                    writeLines(generatorHelper);
-                }
-
-                awaiterEmitted = true;
-                helpersEmitted = true;
             }
 
             if (helpersEmitted) {
@@ -2213,9 +2062,10 @@ const _super = (function (geti, seti) {
         }
 
         function writeLines(text: string): void {
-            const lines = text.split(/\r\n|\r|\n/g);
+            const lines = text.split(/\r\n?|\n/g);
+            const indentation = guessIndentation(lines);
             for (let i = 0; i < lines.length; i++) {
-                const line = lines[i];
+                const line = indentation ? lines[i].slice(indentation) : lines[i];
                 if (line.length) {
                     if (i > 0) {
                         writeLine();
@@ -2223,6 +2073,21 @@ const _super = (function (geti, seti) {
                     write(line);
                 }
             }
+        }
+
+        function guessIndentation(lines: string[]) {
+            let indentation: number;
+            for (const line of lines) {
+                for (let i = 0; i < line.length && (indentation === undefined || i < indentation); i++) {
+                    if (!isWhiteSpace(line.charCodeAt(i))) {
+                        if (indentation === undefined || i < indentation) {
+                            indentation = i;
+                            break;
+                        }
+                    }
+                }
+            }
+            return indentation;
         }
 
         //
@@ -2266,8 +2131,8 @@ const _super = (function (geti, seti) {
             }
         }
 
-        function emitEmbeddedStatement(node: Statement) {
-            if (isBlock(node)) {
+        function emitEmbeddedStatement(parent: Node, node: Statement) {
+            if (isBlock(node) || getEmitFlags(parent) & EmitFlags.SingleLine) {
                 write(" ");
                 emit(node);
             }
@@ -2429,6 +2294,15 @@ const _super = (function (geti, seti) {
 
             if (format & ListFormat.BracketsMask) {
                 write(getClosingBracket(format));
+            }
+        }
+
+        function writeLineOrSpace(node: Node) {
+            if (getEmitFlags(node) & EmitFlags.SingleLine) {
+                write(" ");
+            }
+            else {
+                writeLine();
             }
         }
 

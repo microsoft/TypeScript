@@ -225,8 +225,8 @@ namespace ts.NavigationBar {
                 break;
 
             default:
-                forEach(node.jsDocComments, jsDocComment => {
-                    forEach(jsDocComment.tags, tag => {
+                forEach(node.jsDoc, jsDoc => {
+                    forEach(jsDoc.tags, tag => {
                         if (tag.kind === SyntaxKind.JSDocTypedefTag) {
                             addLeafNode(tag);
                         }
@@ -330,10 +330,8 @@ namespace ts.NavigationBar {
         }
     }
 
-    // More efficient to create a collator once and use its `compare` than to call `a.localeCompare(b)` many times.
-    const collator: { compare(a: string, b: string): number } = typeof Intl === "object" && typeof Intl.Collator === "function" ? new Intl.Collator() : undefined;
     // Intl is missing in Safari, and node 0.10 treats "a" as greater than "B".
-    const localeCompareIsCorrect = collator && collator.compare("a", "B") < 0;
+    const localeCompareIsCorrect = ts.collator && ts.collator.compare("a", "B") < 0;
     const localeCompareFix: (a: string, b: string) => number = localeCompareIsCorrect ? collator.compare : function(a, b) {
         // This isn't perfect, but it passes all of our tests.
         for (let i = 0; i < Math.min(a.length, b.length); i++) {
@@ -344,7 +342,7 @@ namespace ts.NavigationBar {
             if (chA === "'" && chB === "\"") {
                 return -1;
             }
-            const cmp = chA.toLocaleLowerCase().localeCompare(chB.toLocaleLowerCase());
+            const cmp = ts.compareStrings(chA.toLocaleLowerCase(), chB.toLocaleLowerCase());
             if (cmp !== 0) {
                 return cmp;
             }
@@ -405,6 +403,9 @@ namespace ts.NavigationBar {
                 if (getModifierFlags(node) & ModifierFlags.Default) {
                     return "default";
                 }
+                // We may get a string with newlines or other whitespace in the case of an object dereference
+                // (eg: "app\n.onactivated"), so we should remove the whitespace for readabiltiy in the
+                // navigation bar.
                 return getFunctionOrClassName(<ArrowFunction | FunctionExpression | ClassExpression>node);
             case SyntaxKind.Constructor:
                 return "constructor";
@@ -604,7 +605,7 @@ namespace ts.NavigationBar {
         // See if it is of the form "<expr> = function(){...}". If so, use the text from the left-hand side.
         else if (node.parent.kind === SyntaxKind.BinaryExpression &&
             (node.parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
-            return nodeText((node.parent as BinaryExpression).left);
+            return nodeText((node.parent as BinaryExpression).left).replace(whiteSpaceRegex, "");
         }
         // See if it is a property assignment, and if so use the property name
         else if (node.parent.kind === SyntaxKind.PropertyAssignment && (node.parent as PropertyAssignment).name) {
@@ -622,4 +623,19 @@ namespace ts.NavigationBar {
     function isFunctionOrClassExpression(node: Node): boolean {
         return node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction || node.kind === SyntaxKind.ClassExpression;
     }
+
+    /**
+     * Matches all whitespace characters in a string. Eg:
+     * 
+     * "app.
+     * 
+     * onactivated"
+     * 
+     * matches because of the newline, whereas
+     * 
+     * "app.onactivated"
+     * 
+     * does not match.
+     */
+    const whiteSpaceRegex = /\s+/g;
 }

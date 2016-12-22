@@ -28,7 +28,7 @@ var A = (function () {
 function Choice() {
     var v_args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        v_args[_i - 0] = arguments[_i];
+        v_args[_i] = arguments[_i];
     }
     return new A();
 }
