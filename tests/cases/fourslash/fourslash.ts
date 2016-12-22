@@ -294,10 +294,7 @@ declare namespace FourSlashInterface {
         setFormatOptions(options: FormatCodeOptions): any;
         selection(startMarker: string, endMarker: string): void;
         onType(posMarker: string, key: string): void;
-        setOption(name: string, value: number): void;
-        setOption(name: string, value: string): void;
-        setOption(name: string, value: boolean): void;
-        getOption(name: string): number|string|boolean;
+        setOption(name: string, value: number | string | boolean): void;
     }
     class cancellation {
         resetCancelled(): void;
