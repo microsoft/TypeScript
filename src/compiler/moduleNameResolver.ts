@@ -76,13 +76,7 @@ namespace ts {
                 return tryReadFromField("typings") || tryReadFromField("types");
 
             case Extensions.JavaScript:
-                if (typeof jsonContent.main === "string") {
-                    if (state.traceEnabled) {
-                        trace(state.host, Diagnostics.No_types_specified_in_package_json_so_returning_main_value_of_0, jsonContent.main);
-                    }
-                    return normalizePath(combinePaths(baseDirectory, jsonContent.main));
-                }
-                return undefined;
+                return tryReadFromField("main");
         }
 
         function tryReadFromField(fieldName: string) {
