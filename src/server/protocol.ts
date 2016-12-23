@@ -1309,6 +1309,11 @@ namespace ts.server.protocol {
           * Documentation associated with symbol.
           */
         documentation: string;
+
+        /**
+         * JSDoc tags associated with symbol.
+         */
+        tags: JSDocTagInfo[]
     }
 
     /**
@@ -1539,6 +1544,11 @@ namespace ts.server.protocol {
           * Documentation strings for the symbol.
           */
         documentation: SymbolDisplayPart[];
+
+        /**
+          * JSDoc tags for the symbol.
+          */
+        tags: JSDocTagInfo[];
     }
 
     export interface CompletionsResponse extends Response {
@@ -1609,6 +1619,11 @@ namespace ts.server.protocol {
          * The signature's documentation
          */
         documentation: SymbolDisplayPart[];
+
+        /**
+         * The signature's JSDoc tags
+         */
+        tags: JSDocTagInfo[];
     }
 
     /**

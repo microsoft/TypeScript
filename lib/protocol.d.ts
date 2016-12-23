@@ -965,6 +965,10 @@ declare namespace ts.server.protocol {
           * Documentation associated with symbol.
           */
         documentation: string;
+        /**
+         * JSDoc tags associated with symbol.
+         */
+        tags: JSDocTagInfo[];
     }
     /**
       * Quickinfo response message.
@@ -1166,6 +1170,10 @@ declare namespace ts.server.protocol {
           * Documentation strings for the symbol.
           */
         documentation: SymbolDisplayPart[];
+        /**
+          * JSDoc tags for the symbol.
+          */
+        tags: JSDocTagInfo[];
     }
     interface CompletionsResponse extends Response {
         body?: CompletionEntry[];
@@ -1222,6 +1230,10 @@ declare namespace ts.server.protocol {
          * The signature's documentation
          */
         documentation: SymbolDisplayPart[];
+        /**
+         * The signature's JSDoc tags
+         */
+        tags: JSDocTagInfo[];
     }
     /**
      * Signature help items found in the response of a signature help request.
@@ -1722,12 +1734,14 @@ declare namespace ts.server.protocol {
         insertSpaceAfterCommaDelimiter?: boolean;
         insertSpaceAfterSemicolonInForStatements?: boolean;
         insertSpaceBeforeAndAfterBinaryOperators?: boolean;
+        insertSpaceAfterConstructor?: boolean;
         insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
         insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
+        insertSpaceBeforeFunctionParenthesis?: boolean;
         placeOpenBraceOnNewLineForFunctions?: boolean;
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
     }
@@ -1858,6 +1872,11 @@ declare namespace ts.server.protocol {
         extension: string;
         scriptKind: ScriptKind;
         isMixedContent: boolean;
+    }
+
+    interface JSDocTagInfo {
+        name: string;
+        text?: string;
     }
 
     interface MapLike<T> {
