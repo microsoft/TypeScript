@@ -3544,6 +3544,7 @@ namespace ts {
 
     export interface ResolvedModuleWithFailedLookupLocations {
         resolvedModule: ResolvedModuleFull | undefined;
+        /* @internal */
         failedLookupLocations: string[];
     }
 
