@@ -48,7 +48,7 @@ namespace ts.JsTyping {
      * @param projectRootPath is the path to the project root directory
      * @param safeListPath is the path used to retrieve the safe list
      * @param packageNameToTypingLocation is the map of package names to their cached typing locations
-     * @param typingOptions are used to customize the typing inference process
+     * @param typeAcquisition is used to customize the typing acquisition process
      * @param compilerOptions are used as a source for typing inference
      */
     export function discoverTypings(
@@ -57,14 +57,14 @@ namespace ts.JsTyping {
         projectRootPath: Path,
         safeListPath: Path,
         packageNameToTypingLocation: Map<string>,
-        typingOptions: TypingOptions,
+        typeAcquisition: TypeAcquisition,
         unresolvedImports: ReadonlyArray<string>):
         { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
 
         // A typing name to typing file path mapping
         const inferredTypings = createMap<string>();
 
-        if (!typingOptions || !typingOptions.enableAutoDiscovery) {
+        if (!typeAcquisition || !typeAcquisition.enable) {
             return { cachedTypingPaths: [], newTypingNames: [], filesToWatch: [] };
         }
 
@@ -84,8 +84,8 @@ namespace ts.JsTyping {
         let searchDirs: string[] = [];
         let exclude: string[] = [];
 
-        mergeTypings(typingOptions.include);
-        exclude = typingOptions.exclude || [];
+        mergeTypings(typeAcquisition.include);
+        exclude = typeAcquisition.exclude || [];
 
         const possibleSearchDirs = map(fileNames, getDirectoryPath);
         if (projectRootPath) {

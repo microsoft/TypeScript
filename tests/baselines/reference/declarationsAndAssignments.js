@@ -300,8 +300,8 @@ function f18() {
     var a;
     var b;
     var aa;
-    (_a = { a: a, b: b }, a = _a.a, b = _a.b, _a);
-    (_b = { b: b, a: a }, a = _b.a, b = _b.b, _b);
+    (_a = { a: a, b: b }, a = _a.a, b = _a.b);
+    (_b = { b: b, a: a }, a = _b.a, b = _b.b);
     _c = [a, b], aa[0] = _c[0], b = _c[1];
     _d = [b, a], a = _d[0], b = _d[1]; // Error
     _e = [2, "def"], _f = _e[0], a = _f === void 0 ? 1 : _f, _g = _e[1], b = _g === void 0 ? "abc" : _g;
@@ -311,7 +311,7 @@ function f19() {
     var a, b;
     _a = [1, 2], a = _a[0], b = _a[1];
     _b = [b, a], a = _b[0], b = _b[1];
-    (_c = { b: b, a: a }, a = _c.a, b = _c.b, _c);
+    (_c = { b: b, a: a }, a = _c.a, b = _c.b);
     _d = [[2, 3]][0], _e = _d === void 0 ? [1, 2] : _d, a = _e[0], b = _e[1];
     var x = (_f = [1, 2], a = _f[0], b = _f[1], _f);
     var _a, _b, _c, _d, _e, _f;

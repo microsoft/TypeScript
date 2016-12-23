@@ -1,0 +1,44 @@
+=== tests/cases/compiler/restUnion.ts ===
+var union: { a: number, c: boolean } | { a: string, b: string };
+>union : Symbol(union, Decl(restUnion.ts, 0, 3))
+>a : Symbol(a, Decl(restUnion.ts, 0, 12))
+>c : Symbol(c, Decl(restUnion.ts, 0, 23))
+>a : Symbol(a, Decl(restUnion.ts, 0, 40))
+>b : Symbol(b, Decl(restUnion.ts, 0, 51))
+
+var rest1: { c: boolean } | { b: string };
+>rest1 : Symbol(rest1, Decl(restUnion.ts, 2, 3), Decl(restUnion.ts, 3, 7))
+>c : Symbol(c, Decl(restUnion.ts, 2, 12))
+>b : Symbol(b, Decl(restUnion.ts, 2, 29))
+
+var {a, ...rest1 } = union;
+>a : Symbol(a, Decl(restUnion.ts, 3, 5))
+>rest1 : Symbol(rest1, Decl(restUnion.ts, 2, 3), Decl(restUnion.ts, 3, 7))
+>union : Symbol(union, Decl(restUnion.ts, 0, 3))
+
+
+var undefinedUnion: { n: number } | undefined;
+>undefinedUnion : Symbol(undefinedUnion, Decl(restUnion.ts, 6, 3))
+>n : Symbol(n, Decl(restUnion.ts, 6, 21))
+
+var rest2: {};
+>rest2 : Symbol(rest2, Decl(restUnion.ts, 7, 3), Decl(restUnion.ts, 8, 7))
+
+var {n, ...rest2 } = undefinedUnion;
+>n : Symbol(n, Decl(restUnion.ts, 8, 5), Decl(restUnion.ts, 13, 5))
+>rest2 : Symbol(rest2, Decl(restUnion.ts, 7, 3), Decl(restUnion.ts, 8, 7))
+>undefinedUnion : Symbol(undefinedUnion, Decl(restUnion.ts, 6, 3))
+
+
+var nullUnion: { n: number } | null;
+>nullUnion : Symbol(nullUnion, Decl(restUnion.ts, 11, 3))
+>n : Symbol(n, Decl(restUnion.ts, 11, 16))
+
+var rest3: {};
+>rest3 : Symbol(rest3, Decl(restUnion.ts, 12, 3), Decl(restUnion.ts, 13, 7))
+
+var {n, ...rest3 } = nullUnion;
+>n : Symbol(n, Decl(restUnion.ts, 8, 5), Decl(restUnion.ts, 13, 5))
+>rest3 : Symbol(rest3, Decl(restUnion.ts, 12, 3), Decl(restUnion.ts, 13, 7))
+>nullUnion : Symbol(nullUnion, Decl(restUnion.ts, 11, 3))
+

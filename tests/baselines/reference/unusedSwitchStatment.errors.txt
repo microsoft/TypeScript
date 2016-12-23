@@ -4,10 +4,9 @@ tests/cases/compiler/unusedSwitchStatment.ts(7,15): error TS6133: 'c' is declare
 tests/cases/compiler/unusedSwitchStatment.ts(10,13): error TS6133: 'z' is declared but never used.
 tests/cases/compiler/unusedSwitchStatment.ts(15,10): error TS2678: Type '0' is not comparable to type '2'.
 tests/cases/compiler/unusedSwitchStatment.ts(17,10): error TS2678: Type '1' is not comparable to type '2'.
-tests/cases/compiler/unusedSwitchStatment.ts(18,9): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
 
 
-==== tests/cases/compiler/unusedSwitchStatment.ts (7 errors) ====
+==== tests/cases/compiler/unusedSwitchStatment.ts (6 errors) ====
     
     switch (1) {
         case 0:
@@ -38,6 +37,4 @@ tests/cases/compiler/unusedSwitchStatment.ts(18,9): error TS2356: An arithmetic 
              ~
 !!! error TS2678: Type '1' is not comparable to type '2'.
             x++;
-            ~
-!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     }

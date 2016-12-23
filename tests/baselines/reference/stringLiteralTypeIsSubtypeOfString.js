@@ -120,7 +120,7 @@ var C = (function () {
     C.prototype.concat = function () {
         var strings = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            strings[_i - 0] = arguments[_i];
+            strings[_i] = arguments[_i];
         }
         return null;
     };

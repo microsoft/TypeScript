@@ -9,9 +9,9 @@
 ////f./*2*/
 
 goTo.marker("1");
-verify.memberListContains("y");
-verify.memberListContains("x");
+verify.completionListContains("y");
+verify.completionListContains("x");
 
 goTo.marker("2");
-verify.not.memberListContains("x");
-verify.not.memberListContains("y");
+verify.not.completionListContains("x");
+verify.not.completionListContains("y");

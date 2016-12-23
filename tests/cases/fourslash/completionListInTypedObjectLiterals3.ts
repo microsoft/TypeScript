@@ -7,7 +7,7 @@
 ////aaa.x = { /*10*/
 
 goTo.marker("10");
-verify.memberListContains("a");
-verify.memberListCount(1);
+verify.completionListContains("a");
+verify.completionListCount(1);
 
 

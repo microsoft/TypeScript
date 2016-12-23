@@ -22,9 +22,9 @@
 goTo.marker('0');
 verify.completionListContains("jspm");
 verify.completionListAllowsNewIdentifier();
-verify.memberListCount(1);
+verify.completionListCount(1);
 
 goTo.marker('1');
 verify.completionListContains("jspm:dev");
 verify.completionListAllowsNewIdentifier();
-verify.memberListCount(4);
+verify.completionListCount(4);

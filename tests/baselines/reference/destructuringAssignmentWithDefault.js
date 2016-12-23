@@ -7,5 +7,5 @@ let x = 0;
 //// [destructuringAssignmentWithDefault.js]
 var a = {};
 var x = 0;
-(_a = a.x, x = _a === void 0 ? 1 : _a, a);
+(_a = a.x, x = _a === void 0 ? 1 : _a);
 var _a;

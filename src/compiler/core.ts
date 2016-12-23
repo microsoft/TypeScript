@@ -1,6 +1,11 @@
 ﻿/// <reference path="types.ts"/>
 /// <reference path="performance.ts" />
 
+namespace ts {
+    /** The version of the TypeScript compiler release */
+    export const version = "2.2.0";
+}
+
 /* @internal */
 namespace ts {
     /**
@@ -566,7 +571,7 @@ namespace ts {
      */
     export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined {
         if (value === undefined) return to;
-        if (to === undefined) to = [];
+        if (to === undefined) return [value];
         to.push(value);
         return to;
     }
@@ -585,6 +590,16 @@ namespace ts {
             to = append(to, v);
         }
         return to;
+    }
+
+    /**
+     * Stable sort of an array. Elements equal to each other maintain their relative position in the array.
+     */
+    export function stableSort<T>(array: T[], comparer: (x: T, y: T) => Comparison = compareValues) {
+        return array
+            .map((_, i) => i) // create array of indices
+            .sort((x, y) => comparer(array[x], array[y]) || compareValues(x, y)) // sort indices by value then position
+            .map(i => array[i]); // get sorted array
     }
 
     export function rangeEquals<T>(array1: T[], array2: T[], pos: number, end: number) {
@@ -811,6 +826,13 @@ namespace ts {
         }
     }
 
+    export function appendProperty<T>(map: Map<T>, key: string | number, value: T): Map<T> {
+        if (key === undefined || value === undefined) return map;
+        if (map === undefined) map = createMap<T>();
+        map[key] = value;
+        return map;
+    }
+
     export function assign<T1 extends MapLike<{}>, T2, T3>(t: T1, arg1: T2, arg2: T3): T1 & T2 & T3;
     export function assign<T1 extends MapLike<{}>, T2>(t: T1, arg1: T2): T1 & T2;
     export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]): any;
@@ -836,24 +858,6 @@ namespace ts {
     export function reduceProperties<T, U>(map: Map<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U): U {
         let result = initial;
         for (const key in map) {
-            result = callback(result, map[key], String(key));
-        }
-        return result;
-    }
-
-    /**
-     * Reduce the properties defined on a map-like (but not from its prototype chain).
-     *
-     * NOTE: This is intended for use with MapLike<T> objects. For Map<T> objects, use
-     *       reduceProperties instead as it offers better performance.
-     *
-     * @param map The map-like to reduce
-     * @param callback An aggregation function that is called for each entry in the map
-     * @param initial The initial value for the reduction.
-     */
-    export function reduceOwnProperties<T, U>(map: MapLike<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U): U {
-        let result = initial;
-        for (const key in map) if (hasOwnProperty.call(map, key)) {
             result = callback(result, map[key], String(key));
         }
         return result;
@@ -1367,6 +1371,14 @@ namespace ts {
         return typeof compilerOptions.module === "number" ?
             compilerOptions.module :
             getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
+    }
+
+    export function getEmitModuleResolutionKind(compilerOptions: CompilerOptions) {
+        let moduleResolution = compilerOptions.moduleResolution;
+        if (moduleResolution === undefined) {
+            moduleResolution = getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS ? ModuleResolutionKind.NodeJs : ModuleResolutionKind.Classic;
+        }
+        return moduleResolution;
     }
 
     /* @internal */
@@ -1912,8 +1924,18 @@ namespace ts {
     export const supportedJavascriptExtensions = [".js", ".jsx"];
     const allSupportedExtensions = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
 
-    export function getSupportedExtensions(options?: CompilerOptions): string[] {
-        return options && options.allowJs ? allSupportedExtensions : supportedTypeScriptExtensions;
+    export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: FileExtensionInfo[]): string[] {
+        const needAllExtensions = options && options.allowJs;
+        if (!extraFileExtensions || extraFileExtensions.length === 0) {
+            return needAllExtensions ? allSupportedExtensions : supportedTypeScriptExtensions;
+        }
+        const extensions = (needAllExtensions ? allSupportedExtensions : supportedTypeScriptExtensions).slice(0);
+        for (const extInfo of extraFileExtensions) {
+            if (needAllExtensions || extInfo.scriptKind === ScriptKind.TS) {
+                extensions.push(extInfo.extension);
+            }
+        }
+        return extensions;
     }
 
     export function hasJavaScriptFileExtension(fileName: string) {
@@ -1924,10 +1946,10 @@ namespace ts {
         return forEach(supportedTypeScriptExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
-    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions) {
+    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, extraFileExtensions?: FileExtensionInfo[]) {
         if (!fileName) { return false; }
 
-        for (const extension of getSupportedExtensions(compilerOptions)) {
+        for (const extension of getSupportedExtensions(compilerOptions, extraFileExtensions)) {
             if (fileExtensionIs(fileName, extension)) {
                 return true;
             }
@@ -2087,6 +2109,17 @@ namespace ts {
     }
 
     /** Remove an item from an array, moving everything to its right one space left. */
+    export function orderedRemoveItem<T>(array: T[], item: T): boolean {
+        for (let i = 0; i < array.length; i++) {
+            if (array[i] === item) {
+                orderedRemoveItemAt(array, i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Remove an item by index from an array, moving everything to its right one space left. */
     export function orderedRemoveItemAt<T>(array: T[], index: number): void {
         // This seems to be faster than either `array.splice(i, 1)` or `array.copyWithin(i, i+ 1)`.
         for (let i = index; i < array.length - 1; i++) {
@@ -2210,6 +2243,13 @@ namespace ts {
      * Path must have a valid extension.
      */
     export function extensionFromPath(path: string): Extension {
+        const ext = tryGetExtensionFromPath(path);
+        if (ext !== undefined) {
+            return ext;
+        }
+        Debug.fail(`File ${path} has unknown extension.`);
+    }
+    export function tryGetExtensionFromPath(path: string): Extension | undefined {
         if (fileExtensionIs(path, ".d.ts")) {
             return Extension.Dts;
         }
@@ -2225,7 +2265,5 @@ namespace ts {
         if (fileExtensionIs(path, ".jsx")) {
             return Extension.Jsx;
         }
-        Debug.fail(`File ${path} has unknown extension.`);
-        return Extension.Js;
     }
 }
