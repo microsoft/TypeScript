@@ -1755,6 +1755,23 @@ namespace ts {
 
     // Utilities
 
+    export function restoreEnclosingLabel(node: Statement, outermostLabeledStatement: LabeledStatement, afterRestoreLabelCallback?: (node: LabeledStatement) => void): Statement {
+        if (!outermostLabeledStatement) {
+            return node;
+        }
+        const updated = updateLabel(
+            outermostLabeledStatement,
+            outermostLabeledStatement.label,
+            outermostLabeledStatement.statement.kind === SyntaxKind.LabeledStatement
+                ? restoreEnclosingLabel(node, <LabeledStatement>outermostLabeledStatement.statement)
+                : node
+        );
+        if (afterRestoreLabelCallback) {
+            afterRestoreLabelCallback(outermostLabeledStatement);
+        }
+        return updated;
+    }
+
     export interface CallBinding {
         target: LeftHandSideExpression;
         thisArg: Expression;

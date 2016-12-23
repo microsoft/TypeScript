@@ -40,7 +40,7 @@ var C1 = (function (_super) {
 var C2 = (function (_super) {
     __extends(C2, _super);
     function C2() {
-        var _this = _super.call(this, _super.x.call(_this)) || this;
+        var _this = _super.call(this, _super.prototype.x.call(_this)) || this;
         return _this;
     }
     return C2;
