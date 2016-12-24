@@ -7,13 +7,13 @@
 /////*5*/var foo = bar!;
 
 format.document();
-goTo.marker('1');
+goTo.marker("1");
 verify.currentLineContentIs("'bar'!;");
-goTo.marker('2');
+goTo.marker("2");
 verify.currentLineContentIs("('bar')!;");
-goTo.marker('3');
+goTo.marker("3");
 verify.currentLineContentIs("'bar'[1]!;");
-goTo.marker('4');
+goTo.marker("4");
 verify.currentLineContentIs("var bar = 'bar'.foo!;");
-goTo.marker('5');
+goTo.marker("5");
 verify.currentLineContentIs("var foo = bar!;");
