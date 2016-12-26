@@ -40,7 +40,8 @@ namespace ts {
                 return;
             }
 
-            for (let i = 0, n = Math.min(commonPathComponents.length, sourcePathComponents.length); i < n; i++) {
+            const n = Math.min(commonPathComponents.length, sourcePathComponents.length);
+            for (let i = 0; i < n; i++) {
                 if (getCanonicalFileName(commonPathComponents[i]) !== getCanonicalFileName(sourcePathComponents[i])) {
                     if (i === 0) {
                         // Failed to find any common path component
@@ -700,7 +701,7 @@ namespace ts {
             }
 
             // update fileName -> file mapping
-            for (let i = 0, len = newSourceFiles.length; i < len; i++) {
+            for (let i = 0; i < newSourceFiles.length; i++) {
                 filesByName.set(filePaths[i], newSourceFiles[i]);
             }
 
@@ -957,7 +958,7 @@ namespace ts {
                             }
                             break;
                         case SyntaxKind.HeritageClause:
-                            let heritageClause = <HeritageClause>node;
+                            const heritageClause = <HeritageClause>node;
                             if (heritageClause.token === SyntaxKind.ImplementsKeyword) {
                                 diagnostics.push(createDiagnosticForNode(node, Diagnostics.implements_clauses_can_only_be_used_in_a_ts_file));
                                 return;
@@ -976,7 +977,7 @@ namespace ts {
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics.enum_declarations_can_only_be_used_in_a_ts_file));
                             return;
                         case SyntaxKind.TypeAssertionExpression:
-                            let typeAssertionExpression = <TypeAssertion>node;
+                            const typeAssertionExpression = <TypeAssertion>node;
                             diagnostics.push(createDiagnosticForNode(typeAssertionExpression.type, Diagnostics.type_assertion_expressions_can_only_be_used_in_a_ts_file));
                             return;
                     }
@@ -1175,7 +1176,7 @@ namespace ts {
                     case SyntaxKind.ImportDeclaration:
                     case SyntaxKind.ImportEqualsDeclaration:
                     case SyntaxKind.ExportDeclaration:
-                        let moduleNameExpr = getExternalModuleName(node);
+                        const moduleNameExpr = getExternalModuleName(node);
                         if (!moduleNameExpr || moduleNameExpr.kind !== SyntaxKind.StringLiteral) {
                             break;
                         }
