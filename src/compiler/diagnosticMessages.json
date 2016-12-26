@@ -2019,6 +2019,14 @@
         "category": "Error",
         "code": 2702
     },
+    "The operand of a delete operator must be a property reference": {
+        "category": "Error",
+        "code": 2703
+    },
+    "The operand of a delete operator cannot be a read-only property": {
+        "category": "Error",
+        "code": 2704
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
