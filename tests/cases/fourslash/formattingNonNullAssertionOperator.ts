@@ -1,10 +1,10 @@
 /// <reference path='fourslash.ts' />
 
-/////*1*/'bar'!;
-/////*2*/('bar')!;
-/////*3*/'bar'[1]!;
-/////*4*/var bar = 'bar'.foo!;
-/////*5*/var foo = bar!;
+/////*1*/ 'bar' ! ;
+/////*2*/ ( 'bar' ) ! ;
+/////*3*/ 'bar' [ 1 ] ! ;
+/////*4*/ var  bar  =  'bar' . foo ! ;
+/////*5*/ var  foo  =  bar ! ;
 
 format.document();
 goTo.marker("1");
