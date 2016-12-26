@@ -245,6 +245,9 @@ namespace ts.formatting {
         public NoSpaceAfterTypeAssertion: Rule;
         public SpaceAfterTypeAssertion: Rule;
 
+        // No space before non-null assertion operator
+        public NoSpaceBeforeNonNullAssertionOperator: Rule;
+
         constructor() {
             ///
             /// Common Rules
@@ -410,6 +413,9 @@ namespace ts.formatting {
             this.NoSpaceBeforeEqualInJsxAttribute = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.EqualsToken), RuleOperation.create2(new RuleOperationContext(Rules.IsJsxAttributeContext, Rules.IsNonJsxSameLineTokenContext), RuleAction.Delete));
             this.NoSpaceAfterEqualInJsxAttribute = new Rule(RuleDescriptor.create3(SyntaxKind.EqualsToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsJsxAttributeContext, Rules.IsNonJsxSameLineTokenContext), RuleAction.Delete));
 
+            // No space before non-null assertion operator
+            this.NoSpaceBeforeNonNullAssertionOperator = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.ExclamationToken), RuleOperation.create2(new RuleOperationContext(Rules.IsNonJsxSameLineTokenContext, Rules.IsNonNullAssertionContext), RuleAction.Delete));
+
             // These rules are higher in priority than user-configurable rules.
             this.HighPriorityCommonRules = [
                 this.IgnoreBeforeComment, this.IgnoreAfterLineComment,
@@ -456,6 +462,7 @@ namespace ts.formatting {
                 this.SpaceBeforeAt,
                 this.NoSpaceAfterAt,
                 this.SpaceAfterDecorator,
+                this.NoSpaceBeforeNonNullAssertionOperator
             ];
 
             // These rules are lower in priority than user-configurable rules.
@@ -881,6 +888,10 @@ namespace ts.formatting {
 
         static IsYieldOrYieldStarWithOperand(context: FormattingContext): boolean {
             return context.contextNode.kind === SyntaxKind.YieldExpression && (<YieldExpression>context.contextNode).expression !== undefined;
+        }
+
+        static IsNonNullAssertionContext(context: FormattingContext): boolean {
+            return context.contextNode.kind === SyntaxKind.NonNullExpression;
         }
     }
 }
