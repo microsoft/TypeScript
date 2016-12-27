@@ -40,7 +40,7 @@
     "======== Resolving module 'foo' from '/a/b/lib.ts'. ========",
     "Explicitly specified module resolution kind: 'NodeJs'.",
     "Loading module 'foo' from 'node_modules' folder.",
-    "Resolution for module 'foo' was found in cache",
+    "Resolution for module 'foo' was found in cache.",
     "Resolving real path for '/a/b/node_modules/foo.d.ts', result '/a/b/node_modules/foo.d.ts'",
     "======== Module name 'foo' was successfully resolved to '/a/b/node_modules/foo.d.ts'. ========"
 ]

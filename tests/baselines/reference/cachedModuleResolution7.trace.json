@@ -87,6 +87,6 @@
     "File '/a/b/c/d/node_modules/@types/foo.d.ts' does not exist.",
     "File '/a/b/c/d/node_modules/@types/foo/package.json' does not exist.",
     "File '/a/b/c/d/node_modules/@types/foo/index.d.ts' does not exist.",
-    "Resolution for module 'foo' was found in cache",
+    "Resolution for module 'foo' was found in cache.",
     "======== Module name 'foo' was not resolved. ========"
 ]

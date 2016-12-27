@@ -2965,7 +2965,7 @@
         "category": "Message",
         "code": 6146
     },
-    "Resolution for module '{0}' was found in cache": {
+    "Resolution for module '{0}' was found in cache.": {
         "category": "Message",
         "code": 6147
     },

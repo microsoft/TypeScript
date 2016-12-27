@@ -42,6 +42,6 @@
     "File '/a/b/c/d/foo.ts' does not exist.",
     "File '/a/b/c/d/foo.tsx' does not exist.",
     "File '/a/b/c/d/foo.d.ts' does not exist.",
-    "Resolution for module 'foo' was found in cache",
+    "Resolution for module 'foo' was found in cache.",
     "======== Module name 'foo' was not resolved. ========"
 ]
