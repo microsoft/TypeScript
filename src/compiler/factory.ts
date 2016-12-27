@@ -1529,19 +1529,6 @@ namespace ts {
         return node;
     }
 
-    /**
-     * Creates a node that emits a string of raw text in an expression position. Raw text is never
-     * transformed, should be ES3 compliant, and should have the same precedence as
-     * PrimaryExpression.
-     *
-     * @param text The raw text of the node.
-     */
-    export function createRawExpression(text: string) {
-        const node = <RawExpression>createNode(SyntaxKind.RawExpression);
-        node.text = text;
-        return node;
-    }
-
     // Compound nodes
 
     export function createComma(left: Expression, right: Expression) {
