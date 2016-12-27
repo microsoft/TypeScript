@@ -30,7 +30,7 @@ namespace ts {
         }
 
         export function getSupportedErrorCodes() {
-            return keysOfSparseArray(codeFixes);
+            return Object.keys(codeFixes);
         }
 
         export function getFixes(context: CodeFixContext): CodeAction[] {

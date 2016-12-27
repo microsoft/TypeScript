@@ -15,16 +15,23 @@
         [key: number]: T;
     }
 
-    /** Minimal ES6 Map interface. Does not include iterators as those are hard to shim performantly. */
+    /** ES6 Map interface. */
     export interface Map<T> {
         get(key: string): T;
         has(key: string): boolean;
         set(key: string, value: T): this;
         delete(key: string): boolean;
         clear(): void;
-        /** `key` may *not* be a string if it was set with a number and we are not using the shim. */
         forEach(action: (value: T, key: string) => void): void;
         readonly size: number;
+        keys(): Iterator<string>;
+        values(): Iterator<T>;
+        entries(): Iterator<[string, T]>;
+    }
+
+    /** ES6 Iterator type. */
+    export interface Iterator<T> {
+        next(): { value: T, done: false } | { value: never, done: true };
     }
 
     // branded string type used to store absolute, normalized and canonicalized paths

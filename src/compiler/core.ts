@@ -54,40 +54,48 @@ namespace ts {
         return map;
     }
 
-    /** Methods on native maps but not on shim maps. Only used in this file. */
-    interface ES6Map<T> extends Map<T> {
-        entries(): Iterator<[string, T]>;
-    }
-
-    /** ES6 Iterator type. */
-    interface Iterator<T> {
-        next(): { value: T, done: false } | { value: never, done: true };
-    }
-
-    /** Shim maps support certain methods directly. For native maps we use a function. */
-    interface ShimMap<T> extends Map<T> {
-        isEmpty(): boolean;
-        forEachInMap<U>(callback: (value: T, key: string) => U | undefined): U | undefined;
-        some(predicate: (value: T, key: string) => boolean): boolean;
-    }
-
     // The global Map object. This may not be available, so we must test for it.
     declare const Map: { new<T>(): Map<T> } | undefined;
     // Internet Explorer's Map doesn't support iteration, so don't use it.
     // tslint:disable-next-line:no-in-operator
-    const usingNativeMaps = typeof Map !== "undefined" && "entries" in Map.prototype;
-    const MapCtr = usingNativeMaps ? Map : shimMap();
+    const MapCtr = typeof Map !== "undefined" && "entries" in Map.prototype ? Map : shimMap();
 
     // Keep the class inside a function so it doesn't get compiled if it's not used.
     function shimMap(): { new<T>(): Map<T> } {
-        return class<T> implements ShimMap<T> {
+
+        class MapIterator<T, U extends (string | T | [string, T])> {
+            private data: MapLike<T>;
+            private keys: string[];
+            private index = 0;
+            private selector: (data: MapLike<T>, key: string) => U;
+            constructor(data: MapLike<T>, selector: (data: MapLike<T>, key: string) => U) {
+                this.data = data;
+                this.selector = selector;
+                this.keys = Object.keys(data);
+            }
+
+            public next(): { value: U, done: false } | { value: never, done: true } {
+                const index = this.index;
+                if (index < this.keys.length) {
+                    this.index++;
+                    return { value: this.selector(this.data, this.keys[index]), done: false };
+                }
+                return { value: undefined as never, done: true }
+            }
+        }
+
+        return class<T> implements Map<T> {
             private data = createMapLike<T>();
+            public size = 0;
 
             get(key: string): T {
                 return this.data[key];
             }
 
             set(key: string, value: T): this {
+                if (!this.has(key)) {
+                    this.size++;
+                }
                 this.data[key] = value;
                 return this;
             }
@@ -98,51 +106,35 @@ namespace ts {
             }
 
             delete(key: string): boolean {
-                const had = this.has(key);
-                if (had) {
+                if (this.has(key)) {
+                    this.size--;
                     delete this.data[key];
+                    return true;
                 }
-                return had;
+                return false;
             }
 
             clear(): void {
                 this.data = createMapLike<T>();
+                this.size = 0;
+            }
+
+            keys() {
+                return new MapIterator(this.data, (_data, key) => key);
+            }
+
+            values() {
+                return new MapIterator(this.data, (data, key) => data[key]);
+            }
+
+            entries() {
+                return new MapIterator(this.data, (data, key) => [key, data[key]]);
             }
 
             forEach(action: (value: T, key: string) => void): void {
                 for (const key in this.data) {
                     action(this.data[key], key);
                 }
-            }
-
-            isEmpty(): boolean {
-                return !this.some(() => true);
-            }
-
-            get size(): number {
-                let size = 0;
-                for (const _ in this.data) {
-                    size++;
-                }
-                return size;
-            }
-
-            forEachInMap<U>(callback: (value: T, key: string) => U | undefined): U | undefined {
-                for (const key in this.data) {
-                    const result = callback(this.data[key], key);
-                    if (result !== undefined) {
-                        return result;
-                    }
-                }
-            }
-
-            some(predicate: (value: T, key: string) => boolean): boolean {
-                for (const key in this.data) {
-                    if (predicate(this.data[key], key)) {
-                        return true;
-                    }
-                }
-                return false;
             }
         }
     }
@@ -877,65 +869,76 @@ namespace ts {
         return keys;
     }
 
+    function arrayFrom<T>(iterator: Iterator<T>): T[] {
+        const result: T[] = [];
+        for (let { value, done } = iterator.next(); !done; { value, done } = iterator.next()) {
+            result.push(value);
+        }
+        return result;
+    }
+
     /**
      * Array of every key in a map.
      * May not actually return string[] if numbers were put into the map.
      */
     export function keysOfMap(map: Map<{}>): string[] {
-        const keys: string[] = [];
-        forEachKeyInMap(map, key => {
-            keys.push(key);
-        });
-        return keys;
+        return arrayFrom(map.keys());
     }
 
     /** Array of every value in a map. */
     export function valuesOfMap<T>(map: Map<T>): T[] {
-        const values: T[] = [];
-        map.forEach(value => {
-            values.push(value);
-        });
-        return values;
+        return arrayFrom(map.values());
     }
 
     /**
      * Calls `callback` for each entry in the map, returning the first defined result.
      * Use `map.forEach` instead for normal iteration.
      */
-    export const forEachInMap: <T, U>(map: Map<T>, callback: (value: T, key: string) => U | undefined) => U | undefined = usingNativeMaps
-        ? <T, U>(map: ES6Map<T>, callback: (value: T, key: string) => U | undefined) => {
-            const iterator = map.entries();
-            while (true) {
-                const { value: pair, done } = iterator.next();
-                if (done) return undefined;
-                const [key, value] = pair;
-                const result = callback(value, key);
-                if (result !== undefined) return result;
+    export function forEachInMap<T, U>(map: Map<T>, callback: (value: T, key: string) => U | undefined): U | undefined {
+        const iterator = map.entries();
+        for (let { value: pair, done } = iterator.next(); !done; { value: pair, done } = iterator.next()) {
+            const [key, value] = pair;
+            const result = callback(value, key);
+            if (result !== undefined) {
+                return result;
             }
         }
-        : <T, U>(map: ShimMap<T>, callback: (value: T, key: string) => U | undefined) => map.forEachInMap(callback);
+        return undefined;
+    }
 
     /** `forEachInMap` for just keys. */
     export function forEachKeyInMap<T>(map: Map<{}>, callback: (key: string) => T | undefined): T | undefined {
-        return forEachInMap(map, (_, key) => callback(key));
+        const iterator = map.keys();
+        for (let { value: key, done } = iterator.next(); !done; { value: key, done } = iterator.next()) {
+            const result = callback(key);
+            if (result !== undefined) {
+                return result;
+            }
+        }
+        return undefined;
     }
 
     /** Whether `predicate` is true for some entry in the map. */
-    export const someInMap: <T>(map: Map<T>, predicate: (value: T, key: string) => boolean) => boolean = usingNativeMaps
-        ? <T>(map: ES6Map<T>, predicate: (value: T, key: string) => boolean) => {
-            const iterator = map.entries();
-            while (true) {
-                const { value: pair, done } = iterator.next();
-                if (done) return false;
-                const [key, value] = pair;
-                if (predicate(value, key)) return true;
+    export function someInMap<T>(map: Map<T>, predicate: (value: T, key: string) => boolean): boolean {
+        const iterator = map.entries();
+        for (let { value: pair, done } = iterator.next(); !done; { value: pair, done } = iterator.next()) {
+            const [key, value] = pair;
+            if (predicate(value, key)) {
+                return true;
             }
         }
-        : <T>(map: ShimMap<T>, predicate: (value: T, key: string) => boolean) => map.some(predicate);
+        return false;
+    }
 
     /** `someInMap` for just keys. */
     export function someKeyInMap(map: Map<{}>, predicate: (key: string) => boolean): boolean {
-        return someInMap(map, (_, key) => predicate(key));
+        const iterator = map.keys();
+        for (let { value: key, done } = iterator.next(); !done; { value: key, done } = iterator.next()) {
+            if (predicate(key)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** Copy entries from `source` to `target`. */
@@ -995,10 +998,6 @@ namespace ts {
         }
         return result;
     }
-
-    export const mapIsEmpty: (map: Map<{}>) => boolean = usingNativeMaps
-        ? (map: ES6Map<{}>) => map.size === 0
-        : (map: ShimMap<{}>) => map.isEmpty();
 
     export function cloneMap<T>(map: Map<T>) {
         const clone = createMap<T>();
