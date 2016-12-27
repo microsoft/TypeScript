@@ -1,4 +1,4 @@
-﻿/// <reference path="sys.ts" />
+/// <reference path="sys.ts" />
 
 /* @internal */
 namespace ts {
@@ -550,7 +550,7 @@ namespace ts {
         let errorNode = node;
         switch (node.kind) {
             case SyntaxKind.SourceFile:
-                let pos = skipTrivia(sourceFile.text, 0, /*stopAfterLineBreak*/ false);
+                const pos = skipTrivia(sourceFile.text, 0, /*stopAfterLineBreak*/ false);
                 if (pos === sourceFile.text.length) {
                     // file is empty - return span for the beginning of the file
                     return createTextSpan(0, 0);
@@ -682,7 +682,7 @@ namespace ts {
             case SyntaxKind.QualifiedName:
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ThisKeyword:
-                let parent = node.parent;
+                const parent = node.parent;
                 if (parent.kind === SyntaxKind.TypeQuery) {
                     return false;
                 }
@@ -732,6 +732,20 @@ namespace ts {
         return false;
     }
 
+    export function isChildOfNodeWithKind(node: Node, kind: SyntaxKind): boolean {
+        while (node) {
+            if (node.kind === kind) {
+                return true;
+            }
+            node = node.parent;
+        }
+        return false;
+    }
+
+    export function isPrefixUnaryExpression(node: Node): node is PrefixUnaryExpression {
+        return node.kind === SyntaxKind.PrefixUnaryExpression;
+    }
+
     // Warning: This has the same semantics as the forEach family of functions,
     //          in that traversal terminates in the event that 'visitor' supplies a truthy value.
     export function forEachReturnStatement<T>(body: Block, visitor: (stmt: ReturnStatement) => T): T {
@@ -770,7 +784,7 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.YieldExpression:
                     visitor(<YieldExpression>node);
-                    let operand = (<YieldExpression>node).expression;
+                    const operand = (<YieldExpression>node).expression;
                     if (operand) {
                         traverse(operand);
                     }
@@ -803,6 +817,23 @@ namespace ts {
         }
     }
 
+    /**
+     * Gets the most likely element type for a TypeNode. This is not an exhaustive test
+     * as it assumes a rest argument can only be an array type (either T[], or Array<T>).
+     *
+     * @param node The type node.
+     */
+    export function getRestParameterElementType(node: TypeNode) {
+        if (node && node.kind === SyntaxKind.ArrayType) {
+            return (<ArrayTypeNode>node).elementType;
+        }
+        else if (node && node.kind === SyntaxKind.TypeReference) {
+            return singleOrUndefined((<TypeReferenceNode>node).typeArguments);
+        }
+        else {
+            return undefined;
+        }
+    }
 
     export function isVariableLike(node: Node): node is VariableLikeDeclaration {
         if (node) {
@@ -883,6 +914,17 @@ namespace ts {
         return false;
     }
 
+    export function unwrapInnermostStatmentOfLabel(node: LabeledStatement, beforeUnwrapLabelCallback?: (node: LabeledStatement) => void) {
+        while (true) {
+            if (beforeUnwrapLabelCallback) {
+                beforeUnwrapLabelCallback(node);
+            }
+            if (node.statement.kind !== SyntaxKind.LabeledStatement) {
+                return node.statement;
+            }
+            node = <LabeledStatement>node.statement;
+        }
+    }
 
     export function isFunctionBlock(node: Node) {
         return node && node.kind === SyntaxKind.Block && isFunctionLike(node.parent);
@@ -1205,7 +1247,7 @@ namespace ts {
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.StringLiteral:
             case SyntaxKind.ThisKeyword:
-                let parent = node.parent;
+                const parent = node.parent;
                 switch (parent.kind) {
                     case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.Parameter:
@@ -1227,13 +1269,13 @@ namespace ts {
                     case SyntaxKind.SwitchStatement:
                         return (<ExpressionStatement>parent).expression === node;
                     case SyntaxKind.ForStatement:
-                        let forStatement = <ForStatement>parent;
+                        const forStatement = <ForStatement>parent;
                         return (forStatement.initializer === node && forStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
                             forStatement.condition === node ||
                             forStatement.incrementor === node;
                     case SyntaxKind.ForInStatement:
                     case SyntaxKind.ForOfStatement:
-                        let forInStatement = <ForInStatement | ForOfStatement>parent;
+                        const forInStatement = <ForInStatement | ForOfStatement>parent;
                         return (forInStatement.initializer === node && forInStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
                             forInStatement.expression === node;
                     case SyntaxKind.TypeAssertionExpression:
@@ -1624,6 +1666,18 @@ namespace ts {
     // an assignment target. Examples include 'a = xxx', '{ p: a } = xxx', '[{ p: a}] = xxx'.
     export function isAssignmentTarget(node: Node): boolean {
         return getAssignmentTargetKind(node) !== AssignmentKind.None;
+    }
+
+    // a node is delete target iff. it is PropertyAccessExpression/ElementAccessExpression with parentheses skipped
+    export function isDeleteTarget(node: Node): boolean {
+        if (node.kind !== SyntaxKind.PropertyAccessExpression && node.kind !== SyntaxKind.ElementAccessExpression) {
+            return false;
+        }
+        node = node.parent;
+        while (node && node.kind === SyntaxKind.ParenthesizedExpression) {
+            node = node.parent;
+        }
+        return node && node.kind === SyntaxKind.DeleteExpression;
     }
 
     export function isNodeDescendantOf(node: Node, ancestor: Node): boolean {
@@ -3559,6 +3613,10 @@ namespace ts {
 
     export function isIdentifier(node: Node): node is Identifier {
         return node.kind === SyntaxKind.Identifier;
+    }
+
+    export function isVoidExpression(node: Node): node is VoidExpression {
+        return node.kind === SyntaxKind.VoidExpression;
     }
 
     export function isGeneratedIdentifier(node: Node): node is GeneratedIdentifier {

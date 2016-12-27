@@ -5,7 +5,7 @@ import jobs.generation.Utilities;
 def project = GithubProject
 def branch = GithubBranchName
 
-def nodeVersions = ['stable', '4']
+def nodeVersions = ['stable', '6', '4']
 
 nodeVersions.each { nodeVer ->
 

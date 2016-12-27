@@ -80,11 +80,18 @@ var v02: Partial<T>;
 >Partial : Partial<T>
 >T : T
 
-var v02: Pick<TP, keyof T>;
+var v02: { [P in keyof TP]: TP[P] }
+>v02 : TP
+>P : P
+>TP : TP
+>TP : TP
+>P : P
+
+var v02: Pick<TP, keyof TP>;
 >v02 : TP
 >Pick : Pick<T, K>
 >TP : TP
->T : T
+>TP : TP
 
 var v03: TR;
 >v03 : TR
@@ -102,11 +109,18 @@ var v03: Readonly<T>;
 >Readonly : Readonly<T>
 >T : T
 
-var v03: Pick<TR, keyof T>;
+var v03: { [P in keyof TR]: TR[P] }
+>v03 : TR
+>P : P
+>TR : TR
+>TR : TR
+>P : P
+
+var v03: Pick<TR, keyof TR>;
 >v03 : TR
 >Pick : Pick<T, K>
 >TR : TR
->T : T
+>TR : TR
 
 var v04: TPR;
 >v04 : TPR
@@ -140,6 +154,13 @@ var v04: Readonly<Partial<T>>;
 >Readonly : Readonly<T>
 >Partial : Partial<T>
 >T : T
+
+var v04: { [P in keyof TPR]: TPR[P] }
+>v04 : TPR
+>P : P
+>TPR : TPR
+>TPR : TPR
+>P : P
 
 var v04: Pick<TPR, keyof T>;
 >v04 : TPR
@@ -244,11 +265,18 @@ var b02: Partial<B>;
 >Partial : Partial<T>
 >B : B
 
-var b02: Pick<BP, keyof B>;
+var b02: { [P in keyof BP]: BP[P] }
+>b02 : BP
+>P : P
+>BP : BP
+>BP : BP
+>P : P
+
+var b02: Pick<BP, keyof BP>;
 >b02 : BP
 >Pick : Pick<T, K>
 >BP : BP
->B : B
+>BP : BP
 
 var b03: BR;
 >b03 : BR
@@ -266,11 +294,18 @@ var b03: Readonly<B>;
 >Readonly : Readonly<T>
 >B : B
 
-var b03: Pick<BR, keyof B>;
+var b03: { [P in keyof BR]: BR[P] }
+>b03 : BR
+>P : P
+>BR : BR
+>BR : BR
+>P : P
+
+var b03: Pick<BR, keyof BR>;
 >b03 : BR
 >Pick : Pick<T, K>
 >BR : BR
->B : B
+>BR : BR
 
 var b04: BPR;
 >b04 : BPR
@@ -305,9 +340,108 @@ var b04: Readonly<Partial<B>>;
 >Partial : Partial<T>
 >B : B
 
-var b04: Pick<BPR, keyof B>;
+var b04: { [P in keyof BPR]: BPR[P] }
+>b04 : BPR
+>P : P
+>BPR : BPR
+>BPR : BPR
+>P : P
+
+var b04: Pick<BPR, keyof BPR>;
 >b04 : BPR
 >Pick : Pick<T, K>
 >BPR : BPR
->B : B
+>BPR : BPR
+
+type Foo = { prop: number, [x: string]: number };
+>Foo : Foo
+>prop : number
+>x : string
+
+function f1(x: Partial<Foo>) {
+>f1 : (x: Partial<Foo>) => void
+>x : Partial<Foo>
+>Partial : Partial<T>
+>Foo : Foo
+
+    x.prop; // ok
+>x.prop : number | undefined
+>x : Partial<Foo>
+>prop : number | undefined
+
+    (x["other"] || 0).toFixed();
+>(x["other"] || 0).toFixed() : string
+>(x["other"] || 0).toFixed : (fractionDigits?: number | undefined) => string
+>(x["other"] || 0) : number
+>x["other"] || 0 : number
+>x["other"] : number | undefined
+>x : Partial<Foo>
+>"other" : "other"
+>0 : 0
+>toFixed : (fractionDigits?: number | undefined) => string
+}
+
+function f2(x: Readonly<Foo>) {
+>f2 : (x: Readonly<Foo>) => void
+>x : Readonly<Foo>
+>Readonly : Readonly<T>
+>Foo : Foo
+
+    x.prop; // ok
+>x.prop : number
+>x : Readonly<Foo>
+>prop : number
+
+    x["other"].toFixed();
+>x["other"].toFixed() : string
+>x["other"].toFixed : (fractionDigits?: number | undefined) => string
+>x["other"] : number
+>x : Readonly<Foo>
+>"other" : "other"
+>toFixed : (fractionDigits?: number | undefined) => string
+}
+
+function f3(x: Boxified<Foo>) {
+>f3 : (x: Boxified<Foo>) => void
+>x : Boxified<Foo>
+>Boxified : Boxified<T>
+>Foo : Foo
+
+    x.prop; // ok
+>x.prop : { x: number; }
+>x : Boxified<Foo>
+>prop : { x: number; }
+
+    x["other"].x.toFixed();
+>x["other"].x.toFixed() : string
+>x["other"].x.toFixed : (fractionDigits?: number | undefined) => string
+>x["other"].x : number
+>x["other"] : { x: number; }
+>x : Boxified<Foo>
+>"other" : "other"
+>x : number
+>toFixed : (fractionDigits?: number | undefined) => string
+}
+
+function f4(x: { [P in keyof Foo]: Foo[P] }) {
+>f4 : (x: { [x: string]: number; prop: number; }) => void
+>x : { [x: string]: number; prop: number; }
+>P : P
+>Foo : Foo
+>Foo : Foo
+>P : P
+
+    x.prop; // ok
+>x.prop : number
+>x : { [x: string]: number; prop: number; }
+>prop : number
+
+    x["other"].toFixed();
+>x["other"].toFixed() : string
+>x["other"].toFixed : (fractionDigits?: number | undefined) => string
+>x["other"] : number
+>x : { [x: string]: number; prop: number; }
+>"other" : "other"
+>toFixed : (fractionDigits?: number | undefined) => string
+}
 

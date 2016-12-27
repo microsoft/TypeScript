@@ -1,4 +1,5 @@
 // @strictNullChecks: true
+// @noimplicitany: true
 
 type T = { a: number, b: string };
 type TP = { a?: number, b?: string };
@@ -19,12 +20,14 @@ var v01: Pick<Pick<T, keyof T>, keyof T>;
 var v02: TP;
 var v02: { [P in keyof T]?: T[P] };
 var v02: Partial<T>;
-var v02: Pick<TP, keyof T>;
+var v02: { [P in keyof TP]: TP[P] }
+var v02: Pick<TP, keyof TP>;
 
 var v03: TR;
 var v03: { readonly [P in keyof T]: T[P] };
 var v03: Readonly<T>;
-var v03: Pick<TR, keyof T>;
+var v03: { [P in keyof TR]: TR[P] }
+var v03: Pick<TR, keyof TR>;
 
 var v04: TPR;
 var v04: { readonly [P in keyof T]?: T[P] };
@@ -32,6 +35,7 @@ var v04: Partial<TR>;
 var v04: Readonly<TP>;
 var v04: Partial<Readonly<T>>;
 var v04: Readonly<Partial<T>>;
+var v04: { [P in keyof TPR]: TPR[P] }
 var v04: Pick<TPR, keyof T>;
 
 type Boxified<T> = { [P in keyof T]: { x: T[P] } };
@@ -55,12 +59,14 @@ var b01: Pick<Pick<B, keyof B>, keyof B>;
 var b02: BP;
 var b02: { [P in keyof B]?: B[P] };
 var b02: Partial<B>;
-var b02: Pick<BP, keyof B>;
+var b02: { [P in keyof BP]: BP[P] }
+var b02: Pick<BP, keyof BP>;
 
 var b03: BR;
 var b03: { readonly [P in keyof B]: B[P] };
 var b03: Readonly<B>;
-var b03: Pick<BR, keyof B>;
+var b03: { [P in keyof BR]: BR[P] }
+var b03: Pick<BR, keyof BR>;
 
 var b04: BPR;
 var b04: { readonly [P in keyof B]?: B[P] };
@@ -68,4 +74,27 @@ var b04: Partial<BR>;
 var b04: Readonly<BP>;
 var b04: Partial<Readonly<B>>;
 var b04: Readonly<Partial<B>>;
-var b04: Pick<BPR, keyof B>;
+var b04: { [P in keyof BPR]: BPR[P] }
+var b04: Pick<BPR, keyof BPR>;
+
+type Foo = { prop: number, [x: string]: number };
+
+function f1(x: Partial<Foo>) {
+    x.prop; // ok
+    (x["other"] || 0).toFixed();
+}
+
+function f2(x: Readonly<Foo>) {
+    x.prop; // ok
+    x["other"].toFixed();
+}
+
+function f3(x: Boxified<Foo>) {
+    x.prop; // ok
+    x["other"].x.toFixed();
+}
+
+function f4(x: { [P in keyof Foo]: Foo[P] }) {
+    x.prop; // ok
+    x["other"].toFixed();
+}

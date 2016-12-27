@@ -141,6 +141,7 @@ namespace ts.projectSystem {
         useCaseSensitiveFileNames?: boolean;
         executingFilePath?: string;
         currentDirectory?: string;
+        newLine?: string;
     }
 
     export function createServerHost(fileOrFolderList: FileOrFolder[], params?: TestServerHostCreationParameters): TestServerHost {
@@ -151,7 +152,8 @@ namespace ts.projectSystem {
             params.useCaseSensitiveFileNames !== undefined ? params.useCaseSensitiveFileNames : false,
             params.executingFilePath || getExecutingFilePathFromLibFile(),
             params.currentDirectory || "/",
-            fileOrFolderList);
+            fileOrFolderList,
+            params.newLine);
         return host;
     }
 
@@ -325,7 +327,6 @@ namespace ts.projectSystem {
 
     export class TestServerHost implements server.ServerHost {
         args: string[] = [];
-        newLine: "\n";
 
         private fs: ts.FileMap<FSEntry>;
         private getCanonicalFileName: (s: string) => string;
@@ -338,7 +339,7 @@ namespace ts.projectSystem {
 
         private filesOrFolders: FileOrFolder[];
 
-        constructor(public useCaseSensitiveFileNames: boolean, private executingFilePath: string, private currentDirectory: string, fileOrFolderList: FileOrFolder[]) {
+        constructor(public useCaseSensitiveFileNames: boolean, private executingFilePath: string, private currentDirectory: string, fileOrFolderList: FileOrFolder[], public readonly newLine = "\n") {
             this.getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
             this.toPath = s => toPath(s, currentDirectory, this.getCanonicalFileName);
 
@@ -1234,6 +1235,7 @@ namespace ts.projectSystem {
             projectService.closeExternalProject(externalProjectName);
             checkNumberOfProjects(projectService, { configuredProjects: 0 });
         });
+
         it("external project with included config file opened after configured project and then closed", () => {
             const file1 = {
                 path: "/a/b/f1.ts",
@@ -1793,6 +1795,83 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 0 });
         });
 
+        it("language service disabled state is updated in external projects", () => {
+            const f1 = {
+                path: "/a/app.js",
+                content: "var x = 1"
+            };
+            const f2 = {
+                path: "/a/largefile.js",
+                content: ""
+            };
+            const host = createServerHost([f1, f2]);
+            const originalGetFileSize = host.getFileSize;
+            host.getFileSize = (filePath: string) =>
+                filePath === f2.path ? server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
+
+            const service = createProjectService(host);
+            const projectFileName = "/a/proj.csproj";
+
+            service.openExternalProject({
+                projectFileName,
+                rootFiles: toExternalFiles([f1.path, f2.path]),
+                options: {}
+            });
+            service.checkNumberOfProjects({ externalProjects: 1 });
+            assert.isFalse(service.externalProjects[0].languageServiceEnabled, "language service should be disabled - 1");
+
+            service.openExternalProject({
+                projectFileName,
+                rootFiles: toExternalFiles([f1.path]),
+                options: {}
+            });
+            service.checkNumberOfProjects({ externalProjects: 1 });
+            assert.isTrue(service.externalProjects[0].languageServiceEnabled, "language service should be enabled");
+
+            service.openExternalProject({
+                projectFileName,
+                rootFiles: toExternalFiles([f1.path, f2.path]),
+                options: {}
+            });
+            service.checkNumberOfProjects({ externalProjects: 1 });
+            assert.isFalse(service.externalProjects[0].languageServiceEnabled, "language service should be disabled - 2");
+        });
+
+        it("files are properly detached when language service is disabled", () => {
+            const f1 = {
+                path: "/a/app.js",
+                content: "var x = 1"
+            };
+            const f2 = {
+                path: "/a/largefile.js",
+                content: ""
+            };
+            const f3 = {
+                path: "/a/lib.js",
+                content: "var x = 1"
+            };
+            const config = {
+                path: "/a/tsconfig.json",
+                content: JSON.stringify({ compilerOptions: { allowJs: true } })
+            };
+            const host = createServerHost([f1, f2, f3, config]);
+            const originalGetFileSize = host.getFileSize;
+            host.getFileSize = (filePath: string) =>
+                filePath === f2.path ? server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
+
+            const projectService = createProjectService(host);
+            projectService.openClientFile(f1.path);
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+
+            projectService.closeClientFile(f1.path);
+            projectService.checkNumberOfProjects({});
+
+            for (const f of [f2, f3]) {
+                const scriptInfo = projectService.getScriptInfoForNormalizedPath(server.toNormalizedPath(f.path));
+                assert.equal(scriptInfo.containingProjects.length, 0, `expect 0 containing projects for '${f.path}'`)
+            }
+        });
+
         it("language service disabled events are triggered", () => {
             const f1 = {
                 path: "/a/app.js",
@@ -1891,6 +1970,31 @@ namespace ts.projectSystem {
             const options = projectService.getFormatCodeOptions();
             const edits = project.getLanguageService().getFormattingEditsForDocument(f1.path, options);
             assert.deepEqual(edits, [{ span: createTextSpan(/*start*/ 7, /*length*/ 3), newText: " " }]);
+        });
+
+        it("snapshot from different caches are incompatible", () => {
+            const f1 = {
+                path: "/a/b/app.ts",
+                content: "let x = 1;"
+            };
+            const host = createServerHost([f1]);
+            const projectFileName = "/a/b/proj.csproj";
+            const projectService = createProjectService(host);
+            projectService.openExternalProject({
+                projectFileName,
+                rootFiles: [toExternalFile(f1.path)],
+                options: {}
+            })
+            projectService.openClientFile(f1.path, "let x = 1;\nlet y = 2;");
+
+            projectService.checkNumberOfProjects({ externalProjects: 1 });
+            projectService.externalProjects[0].getLanguageService(/*ensureSynchronized*/false).getNavigationBarItems(f1.path);
+            projectService.closeClientFile(f1.path);
+
+            projectService.openClientFile(f1.path);
+            projectService.checkNumberOfProjects({ externalProjects: 1 });
+            const navbar = projectService.externalProjects[0].getLanguageService(/*ensureSynchronized*/false).getNavigationBarItems(f1.path);
+            assert.equal(navbar[0].spans[0].length, f1.content.length);
         });
     });
 

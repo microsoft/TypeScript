@@ -1317,15 +1317,16 @@ namespace ts {
         return node;
     }
 
-    export function createJsxExpression(expression: Expression, location?: TextRange) {
+    export function createJsxExpression(expression: Expression, dotDotDotToken: Token<SyntaxKind.DotDotDotToken>, location?: TextRange) {
         const node = <JsxExpression>createNode(SyntaxKind.JsxExpression, location);
+        node.dotDotDotToken = dotDotDotToken;
         node.expression = expression;
         return node;
     }
 
     export function updateJsxExpression(node: JsxExpression, expression: Expression) {
         if (node.expression !== expression) {
-            return updateNode(createJsxExpression(expression, node), node);
+            return updateNode(createJsxExpression(expression, node.dotDotDotToken, node), node);
         }
         return node;
     }
@@ -1753,6 +1754,23 @@ namespace ts {
     }
 
     // Utilities
+
+    export function restoreEnclosingLabel(node: Statement, outermostLabeledStatement: LabeledStatement, afterRestoreLabelCallback?: (node: LabeledStatement) => void): Statement {
+        if (!outermostLabeledStatement) {
+            return node;
+        }
+        const updated = updateLabel(
+            outermostLabeledStatement,
+            outermostLabeledStatement.label,
+            outermostLabeledStatement.statement.kind === SyntaxKind.LabeledStatement
+                ? restoreEnclosingLabel(node, <LabeledStatement>outermostLabeledStatement.statement)
+                : node
+        );
+        if (afterRestoreLabelCallback) {
+            afterRestoreLabelCallback(outermostLabeledStatement);
+        }
+        return updated;
+    }
 
     export interface CallBinding {
         target: LeftHandSideExpression;

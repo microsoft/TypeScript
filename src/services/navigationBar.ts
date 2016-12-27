@@ -146,7 +146,7 @@ namespace ts.NavigationBar {
                 break;
 
             case SyntaxKind.ImportClause:
-                let importClause = <ImportClause>node;
+                const importClause = <ImportClause>node;
                 // Handle default import case e.g.:
                 //    import d from "mod";
                 if (importClause.name) {

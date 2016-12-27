@@ -572,7 +572,6 @@ namespace ts {
         }
     }
 
-    /* @internal */
     export function parseCommandLine(commandLine: string[], readFile?: (path: string) => string): ParsedCommandLine {
         const options: CompilerOptions = {};
         const fileNames: string[] = [];
@@ -621,7 +620,7 @@ namespace ts {
                                     break;
                                 case "boolean":
                                     // boolean flag has optional value true, false, others
-                                    let optValue = args[i];
+                                    const optValue = args[i];
                                     options[opt.name] = optValue !== "false";
                                     // consume next argument as boolean flag value
                                     if (optValue === "false" || optValue === "true") {
@@ -778,7 +777,7 @@ namespace ts {
                             break;
                         default:
                             const value = options[name];
-                            let optionDefinition = optionsNameMap.get(name.toLowerCase());
+                            const optionDefinition = optionsNameMap.get(name.toLowerCase());
                             if (optionDefinition) {
                                 const customTypeMap = getCustomTypeMapOfCommandLineOption(optionDefinition);
                                 if (!customTypeMap) {
@@ -842,6 +841,7 @@ namespace ts {
       */
     export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions: CompilerOptions = {}, configFileName?: string, resolutionStack: Path[] = [], extraFileExtensions: FileExtensionInfo[] = []): ParsedCommandLine {
         const errors: Diagnostic[] = [];
+        basePath = normalizeSlashes(basePath);
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
         const resolvedPath = toPath(configFileName || "", basePath, getCanonicalFileName);
         if (resolutionStack.indexOf(resolvedPath) >= 0) {

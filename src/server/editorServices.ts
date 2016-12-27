@@ -125,7 +125,7 @@ namespace ts.server {
     }
 
     export interface OpenConfiguredProjectResult {
-        configFileName?: string;
+        configFileName?: NormalizedPath;
         configFileErrors?: Diagnostic[];
     }
 
@@ -659,6 +659,13 @@ namespace ts.server {
                     // open file in inferred project
                     (projectsToRemove || (projectsToRemove = [])).push(p);
                 }
+
+                if (!p.languageServiceEnabled) {
+                    // if project language service is disabled then we create a program only for open files.
+                    // this means that project should be marked as dirty to force rebuilding of the program
+                    // on the next request
+                    p.markAsDirty();
+                }
             }
             if (projectsToRemove) {
                 for (const project of projectsToRemove) {
@@ -1052,9 +1059,7 @@ namespace ts.server {
                 project.stopWatchingDirectory();
             }
             else {
-                if (!project.languageServiceEnabled) {
-                    project.enableLanguageService();
-                }
+                project.enableLanguageService();
                 this.watchConfigDirectoryForProject(project, projectOptions);
                 this.updateNonInferredProject(project, projectOptions.files, fileNamePropertyReader, projectOptions.compilerOptions, projectOptions.typeAcquisition, projectOptions.compileOnSave, configFileErrors);
             }
@@ -1226,9 +1231,22 @@ namespace ts.server {
         }
 
         openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean): OpenConfiguredProjectResult {
-            const { configFileName = undefined, configFileErrors = undefined }: OpenConfiguredProjectResult = this.findContainingExternalProject(fileName)
-                ? {}
-                : this.openOrUpdateConfiguredProjectForFile(fileName);
+            let configFileName: NormalizedPath;
+            let configFileErrors: Diagnostic[];
+
+            let project: ConfiguredProject | ExternalProject = this.findContainingExternalProject(fileName);
+            if (!project) {
+                ({ configFileName, configFileErrors } = this.openOrUpdateConfiguredProjectForFile(fileName));
+                if (configFileName) {
+                    project = this.findConfiguredProjectByProjectName(configFileName);
+                }
+            }
+            if (project && !project.languageServiceEnabled) {
+                // if project language service is disabled then we create a program only for open files.
+                // this means that project should be marked as dirty to force rebuilding of the program
+                // on the next request
+                project.markAsDirty();
+            }
 
             // at this point if file is the part of some configured/external project then this project should be created
             const info = this.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ true, fileContent, scriptKind, hasMixedContent);
@@ -1392,8 +1410,15 @@ namespace ts.server {
             let exisingConfigFiles: string[];
             if (externalProject) {
                 if (!tsConfigFiles) {
+                    const compilerOptions = convertCompilerOptions(proj.options);
+                    if (this.exceededTotalSizeLimitForNonTsFiles(compilerOptions, proj.rootFiles, externalFilePropertyReader)) {
+                        externalProject.disableLanguageService();
+                    }
+                    else {
+                        externalProject.enableLanguageService();
+                    }
                     // external project already exists and not config files were added - update the project and return;
-                    this.updateNonInferredProject(externalProject, proj.rootFiles, externalFilePropertyReader, convertCompilerOptions(proj.options), proj.typeAcquisition, proj.options.compileOnSave, /*configFileErrors*/ undefined);
+                    this.updateNonInferredProject(externalProject, proj.rootFiles, externalFilePropertyReader, compilerOptions, proj.typeAcquisition, proj.options.compileOnSave, /*configFileErrors*/ undefined);
                     return;
                 }
                 // some config files were added to external project (that previously were not there)

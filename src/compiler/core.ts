@@ -207,7 +207,7 @@ namespace ts {
      */
     export function forEach<T, U>(array: T[] | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
         if (array) {
-            for (let i = 0, len = array.length; i < len; i++) {
+            for (let i = 0; i < array.length; i++) {
                 const result = callback(array[i], i);
                 if (result) {
                     return result;
@@ -231,7 +231,7 @@ namespace ts {
      */
     export function every<T>(array: T[], callback: (element: T, index: number) => boolean): boolean {
         if (array) {
-            for (let i = 0, len = array.length; i < len; i++) {
+            for (let i = 0; i < array.length; i++) {
                 if (!callback(array[i], i)) {
                     return false;
                 }
@@ -243,7 +243,7 @@ namespace ts {
 
     /** Works like Array.prototype.find, returning `undefined` if no element satisfying the predicate is found. */
     export function find<T>(array: T[], predicate: (element: T, index: number) => boolean): T | undefined {
-        for (let i = 0, len = array.length; i < len; i++) {
+        for (let i = 0; i < array.length; i++) {
             const value = array[i];
             if (predicate(value, i)) {
                 return value;
@@ -257,7 +257,7 @@ namespace ts {
      * This is like `forEach`, but never returns undefined.
      */
     export function findMap<T, U>(array: T[], callback: (element: T, index: number) => U | undefined): U {
-        for (let i = 0, len = array.length; i < len; i++) {
+        for (let i = 0; i < array.length; i++) {
             const result = callback(array[i], i);
             if (result) {
                 return result;
@@ -279,7 +279,7 @@ namespace ts {
 
     export function indexOf<T>(array: T[], value: T): number {
         if (array) {
-            for (let i = 0, len = array.length; i < len; i++) {
+            for (let i = 0; i < array.length; i++) {
                 if (array[i] === value) {
                     return i;
                 }
@@ -289,7 +289,7 @@ namespace ts {
     }
 
     export function indexOfAnyCharCode(text: string, charCodes: number[], start?: number): number {
-        for (let i = start || 0, len = text.length; i < len; i++) {
+        for (let i = start || 0; i < text.length; i++) {
             if (contains(charCodes, text.charCodeAt(i))) {
                 return i;
             }

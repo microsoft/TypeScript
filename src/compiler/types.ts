@@ -1518,6 +1518,7 @@
 
     export interface JsxExpression extends Expression {
         kind: SyntaxKind.JsxExpression;
+        dotDotDotToken?: Token<SyntaxKind.DotDotDotToken>;
         expression?: Expression;
     }
 
@@ -3569,6 +3570,7 @@
 
     export interface ResolvedModuleWithFailedLookupLocations {
         resolvedModule: ResolvedModuleFull | undefined;
+        /* @internal */
         failedLookupLocations: string[];
     }
 

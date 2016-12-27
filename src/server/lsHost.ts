@@ -136,6 +136,10 @@ namespace ts.server {
             }
         }
 
+        getNewLine() {
+            return this.host.newLine;
+        }
+
         getProjectVersion() {
             return this.project.getProjectVersion();
         }

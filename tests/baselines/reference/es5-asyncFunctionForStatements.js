@@ -49,8 +49,7 @@ function forStatement1() {
                     _a.sent();
                     _a.label = 2;
                 case 2:
-                    if (!y)
-                        return [3 /*break*/, 4];
+                    if (!y) return [3 /*break*/, 4];
                     a;
                     _a.label = 3;
                 case 3:
@@ -70,8 +69,7 @@ function forStatement2() {
                     _a.label = 1;
                 case 1: return [4 /*yield*/, y];
                 case 2:
-                    if (!_a.sent())
-                        return [3 /*break*/, 4];
+                    if (!_a.sent()) return [3 /*break*/, 4];
                     a;
                     _a.label = 3;
                 case 3:
@@ -90,8 +88,7 @@ function forStatement3() {
                     x;
                     _a.label = 1;
                 case 1:
-                    if (!y)
-                        return [3 /*break*/, 4];
+                    if (!y) return [3 /*break*/, 4];
                     a;
                     _a.label = 2;
                 case 2: return [4 /*yield*/, z];
@@ -111,8 +108,7 @@ function forStatement4() {
                     x;
                     _a.label = 1;
                 case 1:
-                    if (!y)
-                        return [3 /*break*/, 4];
+                    if (!y) return [3 /*break*/, 4];
                     return [4 /*yield*/, a];
                 case 2:
                     _a.sent();

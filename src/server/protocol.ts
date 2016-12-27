@@ -904,6 +904,11 @@ namespace ts.server.protocol {
          * Current set of compiler options for project
          */
         options: ts.CompilerOptions;
+
+        /**
+         * true if project language service is disabled
+         */
+        languageServiceDisabled: boolean;
     }
 
     /**
@@ -2189,12 +2194,14 @@ namespace ts.server.protocol {
         insertSpaceAfterCommaDelimiter?: boolean;
         insertSpaceAfterSemicolonInForStatements?: boolean;
         insertSpaceBeforeAndAfterBinaryOperators?: boolean;
+        insertSpaceAfterConstructor?: boolean;
         insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
         insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
+        insertSpaceBeforeFunctionParenthesis?: boolean;
         placeOpenBraceOnNewLineForFunctions?: boolean;
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
     }

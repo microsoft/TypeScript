@@ -125,3 +125,22 @@ c.setState({ });
 c.setState(foo);
 c.setState({ a: undefined });  // Error
 c.setState({ c: true });  // Error
+
+type T2 = { a?: number, [key: string]: any };
+
+let x1: T2 = { a: 'no' };  // Error
+let x2: Partial<T2> = { a: 'no' }; // Error
+let x3: { [P in keyof T2]: T2[P]} = { a: 'no' };  // Error
+
+// Repro from #13044
+
+type Foo2<T, F extends keyof T> = {
+    pf: {[P in F]?: T[P]},
+    pt: {[P in T]?: T[P]}, // note: should be in keyof T
+};
+type O = {x: number, y: boolean};
+let o: O = {x: 5, y: false};
+let f: Foo2<O, 'x'> = {
+    pf: {x: 7},
+    pt: {x: 7, y: false},
+};

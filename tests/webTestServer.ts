@@ -48,7 +48,7 @@ function log(msg: string) {
 }
 
 
-let directorySeparator = "/";
+const directorySeparator = "/";
 
 function getRootLength(path: string): number {
     if (path.charAt(0) === directorySeparator) {

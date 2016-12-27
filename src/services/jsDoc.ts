@@ -23,6 +23,7 @@ namespace ts.JsDoc {
         "lends",
         "link",
         "memberOf",
+        "method",
         "name",
         "namespace",
         "param",
@@ -75,7 +76,7 @@ namespace ts.JsDoc {
      */
     function forEachUnique<T, U>(array: T[], callback: (element: T, index: number) => U): U {
         if (array) {
-            for (let i = 0, len = array.length; i < len; i++) {
+            for (let i = 0; i < array.length; i++) {
                 if (indexOf(array, array[i]) === i) {
                     const result = callback(array[i], i);
                     if (result) {
@@ -169,7 +170,7 @@ namespace ts.JsDoc {
         const isJavaScriptFile = hasJavaScriptFileExtension(sourceFile.fileName);
 
         let docParams = "";
-        for (let i = 0, numParams = parameters.length; i < numParams; i++) {
+        for (let i = 0; i < parameters.length; i++) {
             const currentName = parameters[i].name;
             const paramName = currentName.kind === SyntaxKind.Identifier ?
                 (<Identifier>currentName).text :
