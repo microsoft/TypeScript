@@ -3311,12 +3311,12 @@ namespace ts {
         return false;
     }
 
-    const syntaxKindCache = createMap<string>();
+    const syntaxKindCache = sparseArray<string>();
 
     export function formatSyntaxKind(kind: SyntaxKind): string {
         const syntaxKindEnum = (<any>ts).SyntaxKind;
         if (syntaxKindEnum) {
-            const cached = syntaxKindCache.get(kind);
+            const cached = syntaxKindCache[kind];
             if (cached !== undefined) {
                 return cached;
             }
@@ -3324,7 +3324,7 @@ namespace ts {
             for (const name in syntaxKindEnum) {
                 if (syntaxKindEnum[name] === kind) {
                     const result = `${kind} (${name})`;
-                    syntaxKindCache.set(kind, result);
+                    syntaxKindCache[kind] = result;
                     return result;
                 }
             }

@@ -1,4 +1,4 @@
-/// <reference path="..\harness.ts" />
+﻿/// <reference path="..\harness.ts" />
 /// <reference path="../../server/typingsInstaller/typingsInstaller.ts" />
 
 namespace ts.projectSystem {
@@ -290,30 +290,34 @@ namespace ts.projectSystem {
     }
 
     export class Callbacks {
-        private map = createMap<TimeOutCallback>();
+        private map = sparseArray<TimeOutCallback>();
         private nextId = 1;
 
         register(cb: (...args: any[]) => void, args: any[]) {
             const timeoutId = this.nextId;
             this.nextId++;
-            this.map.set(timeoutId, cb.bind(undefined, ...args));
+            this.map[timeoutId] = cb.bind(undefined, ...args);
             return timeoutId;
         }
         unregister(id: any) {
             if (typeof id === "number") {
-                this.map.delete(id);
+                delete this.map[id];
             }
         }
 
         count() {
-            return this.map.size;
+            let n = 0;
+            for (const _ in this.map) {
+                n++;
+            }
+            return n;
         }
 
         invoke() {
-            this.map.forEach(cb => {
-                cb();
-            });
-            this.map.clear();
+            for (const key in this.map) {
+                this.map[key]();
+            }
+            this.map = sparseArray<TimeOutCallback>();
         }
     }
 

@@ -39,6 +39,8 @@ namespace ts {
         return map;
     }
 
+    export const sparseArray: <T>() => SparseArray<T> = createMapLike;
+
     /** Create a new map. If a template object is provided, the map will copy entries from it. */
     export function createMap<T>(template?: MapLike<T>): Map<T> {
         const map: Map<T> = new MapCtr<T>();
@@ -47,17 +49,6 @@ namespace ts {
         // template is undefined, and instead will just exit the loop.
         for (const key in template) if (hasOwnProperty.call(template, key)) {
             map.set(key, template[key]);
-        }
-
-        return map;
-    }
-
-    /** Create a map from [key, value] pairs. This avoids casting keys to strings. */
-    export function createMapFromPairs<T>(...pairs: [number, T][]): Map<T> {
-        const map: Map<T> = new MapCtr<T>();
-
-        for (const [key, value] of pairs) {
-            map.set(key, value);
         }
 
         return map;
@@ -92,21 +83,21 @@ namespace ts {
         return class<T> implements ShimMap<T> {
             private data = createMapLike<T>();
 
-            get(key: MapKey): T {
+            get(key: string): T {
                 return this.data[key];
             }
 
-            set(key: MapKey, value: T): this {
+            set(key: string, value: T): this {
                 this.data[key] = value;
                 return this;
             }
 
-            has(key: MapKey): boolean {
+            has(key: string): boolean {
                 // tslint:disable-next-line:no-in-operator
                 return key in this.data;
             }
 
-            delete(key: MapKey): boolean {
+            delete(key: string): boolean {
                 const had = this.has(key);
                 if (had) {
                     delete this.data[key];
@@ -890,7 +881,7 @@ namespace ts {
      * Array of every key in a map.
      * May not actually return string[] if numbers were put into the map.
      */
-    export function keysOfMap<T>(map: Map<T>): string[] {
+    export function keysOfMap(map: Map<{}>): string[] {
         const keys: string[] = [];
         forEachKeyInMap(map, key => {
             keys.push(key);
@@ -1040,13 +1031,24 @@ namespace ts {
      * Adds the value to an array of values associated with the key, and returns the array.
      * Creates the array if it does not already exist.
      */
-    export function multiMapAdd<V>(map: Map<V[]>, key: string | number, value: V): V[] {
+    export function multiMapAdd<V>(map: Map<V[]>, key: string, value: V): V[] {
         let values = map.get(key);
         if (values) {
             values.push(value);
         }
         else {
             map.set(key, values = [value]);
+        }
+        return values;
+    }
+
+    export function multiMapSparseArrayAdd<V>(map: SparseArray<V[]>, key: number, value: V): V[] {
+        let values = map[key];
+        if (values) {
+            values.push(value);
+        }
+        else {
+            map[key] = values = [value];
         }
         return values;
     }

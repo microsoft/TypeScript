@@ -16,25 +16,25 @@ namespace ts {
     }
 
     export namespace codefix {
-        const codeFixes = createMap<CodeFix[]>();
+        const codeFixes = sparseArray<CodeFix[]>();
 
         export function registerCodeFix(action: CodeFix) {
             forEach(action.errorCodes, error => {
-                let fixes = codeFixes.get(error);
+                let fixes = codeFixes[error];
                 if (!fixes) {
                     fixes = [];
-                    codeFixes.set(error, fixes);
+                    codeFixes[error] = fixes;
                 }
                 fixes.push(action);
             });
         }
 
         export function getSupportedErrorCodes() {
-            return keysOfMap(codeFixes);
+            return keysOfSparseArray(codeFixes);
         }
 
         export function getFixes(context: CodeFixContext): CodeAction[] {
-            const fixes = codeFixes.get(context.errorCode);
+            const fixes = codeFixes[context.errorCode];
             let allActions: CodeAction[] = [];
 
             forEach(fixes, f => {

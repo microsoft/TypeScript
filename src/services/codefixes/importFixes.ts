@@ -14,16 +14,16 @@ namespace ts.codefix {
     }
 
     class ImportCodeActionMap {
-        private symbolIdToActionMap = createMap<ImportCodeAction[]>();
+        private symbolIdToActionMap = sparseArray<ImportCodeAction[]>();
 
         addAction(symbolId: number, newAction: ImportCodeAction) {
             if (!newAction) {
                 return;
             }
 
-            const actions = this.symbolIdToActionMap.get(symbolId);
+            const actions = this.symbolIdToActionMap[symbolId];
             if (!actions) {
-                this.symbolIdToActionMap.set(symbolId, [newAction]);
+                this.symbolIdToActionMap[symbolId] = [newAction];
                 return;
             }
 
@@ -33,7 +33,7 @@ namespace ts.codefix {
             }
 
             const updatedNewImports: ImportCodeAction[] = [];
-            for (const existingAction of this.symbolIdToActionMap.get(symbolId)) {
+            for (const existingAction of this.symbolIdToActionMap[symbolId]) {
                 if (existingAction.kind === "CodeChange") {
                     // only import actions should compare
                     updatedNewImports.push(existingAction);
@@ -63,7 +63,7 @@ namespace ts.codefix {
             }
             // if we reach here, it means the new one is better or equal to all of the existing ones.
             updatedNewImports.push(newAction);
-            this.symbolIdToActionMap.set(symbolId, updatedNewImports);
+            this.symbolIdToActionMap[symbolId] = updatedNewImports;
         }
 
         addActions(symbolId: number, newActions: ImportCodeAction[]) {
@@ -74,9 +74,9 @@ namespace ts.codefix {
 
         getAllActions() {
             let result: ImportCodeAction[] = [];
-            this.symbolIdToActionMap.forEach(actions => {
-                result = concatenate(result, actions);
-            });
+            for (const key in this.symbolIdToActionMap) {
+                result = concatenate(result, this.symbolIdToActionMap[key])
+            }
             return result;
         }
 
@@ -125,7 +125,7 @@ namespace ts.codefix {
             const symbolIdActionMap = new ImportCodeActionMap();
 
             // this is a module id -> module import declaration map
-            const cachedImportDeclarations = createMap<(ImportDeclaration | ImportEqualsDeclaration)[]>();
+            const cachedImportDeclarations = sparseArray<(ImportDeclaration | ImportEqualsDeclaration)[]>();
             let cachedNewImportInsertPosition: number;
 
             const allPotentialModules = checker.getAmbientModules();
@@ -163,7 +163,7 @@ namespace ts.codefix {
             function getImportDeclarations(moduleSymbol: Symbol) {
                 const moduleSymbolId = getUniqueSymbolId(moduleSymbol);
 
-                const cached = cachedImportDeclarations.get(moduleSymbolId);
+                const cached = cachedImportDeclarations[moduleSymbolId];
                 if (cached) {
                     return cached;
                 }
@@ -175,7 +175,7 @@ namespace ts.codefix {
                         existingDeclarations.push(getImportDeclaration(importModuleSpecifier));
                     }
                 }
-                cachedImportDeclarations.set(moduleSymbolId, existingDeclarations);
+                cachedImportDeclarations[moduleSymbolId] = existingDeclarations;
                 return existingDeclarations;
 
                 function getImportDeclaration(moduleSpecifier: LiteralExpression) {

@@ -1,4 +1,4 @@
-/// <reference path="..\harness.ts" />
+﻿/// <reference path="..\harness.ts" />
 
 const expect: typeof _chai.expect = _chai.expect;
 
@@ -416,16 +416,16 @@ namespace ts.server {
         class InProcClient {
             private server: InProcSession;
             private seq = 0;
-            private callbacks = createMap<(resp: protocol.Response) => void>();
+            private callbacks = sparseArray<(resp: protocol.Response) => void>();
             private eventHandlers = createMap<(args: any) => void>();
 
             handle(msg: protocol.Message): void {
                 if (msg.type === "response") {
                     const response = <protocol.Response>msg;
-                    const handler = this.callbacks.get(response.request_seq);
+                    const handler = this.callbacks[response.request_seq];
                     if (handler) {
                         handler(response);
-                        this.callbacks.delete(response.request_seq);
+                        delete this.callbacks[response.request_seq];
                     }
                 }
                 else if (msg.type === "event") {
@@ -460,7 +460,7 @@ namespace ts.server {
                     command,
                     arguments: args
                 });
-                this.callbacks.set(this.seq, callback);
+                this.callbacks[this.seq] = callback;
             }
         };
 

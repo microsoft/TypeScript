@@ -1,4 +1,4 @@
-/// <reference path="core.ts"/>
+﻿/// <reference path="core.ts"/>
 /// <reference path="utilities.ts"/>
 
 /* @internal */
@@ -2641,9 +2641,11 @@ namespace ts {
         return destEmitNode;
     }
 
-    function mergeTokenSourceMapRanges(sourceRanges: Map<TextRange>, destRanges: Map<TextRange>) {
-        if (!destRanges) destRanges = createMap<TextRange>();
-        copyMapEntries(sourceRanges, destRanges);
+    function mergeTokenSourceMapRanges(sourceRanges: SparseArray<TextRange>, destRanges: SparseArray<TextRange>) {
+        if (!destRanges) destRanges = [];
+        for (const key in sourceRanges) {
+            destRanges[key] = sourceRanges[key];
+        }
         return destRanges;
     }
 
@@ -2745,7 +2747,7 @@ namespace ts {
     export function getTokenSourceMapRange(node: Node, token: SyntaxKind) {
         const emitNode = node.emitNode;
         const tokenSourceMapRanges = emitNode && emitNode.tokenSourceMapRanges;
-        return tokenSourceMapRanges && tokenSourceMapRanges.get(token);
+        return tokenSourceMapRanges && tokenSourceMapRanges[token];
     }
 
     /**
@@ -2757,8 +2759,8 @@ namespace ts {
      */
     export function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange) {
         const emitNode = getOrCreateEmitNode(node);
-        const tokenSourceMapRanges = emitNode.tokenSourceMapRanges || (emitNode.tokenSourceMapRanges = createMap<TextRange>());
-        tokenSourceMapRanges.set(token, range);
+        const tokenSourceMapRanges = emitNode.tokenSourceMapRanges || (emitNode.tokenSourceMapRanges = []);
+        tokenSourceMapRanges[token] = range;
         return node;
     }
 
@@ -3270,7 +3272,7 @@ namespace ts {
         externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[]; // imports of other external modules
         externalHelpersImportDeclaration: ImportDeclaration | undefined; // import of external helpers
         exportSpecifiers: Map<ExportSpecifier[]>; // export specifiers by name
-        exportedBindings: Map<Identifier[]>; // exported names of local declarations
+        exportedBindings: SparseArray<Identifier[]>; // exported names of local declarations
         exportedNames: Identifier[]; // all exported names local to module
         exportEquals: ExportAssignment | undefined; // an export= declaration if one was present
         hasExportStarsToExportValues: boolean; // whether this module contains export*
@@ -3279,7 +3281,7 @@ namespace ts {
     export function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver, compilerOptions: CompilerOptions): ExternalModuleInfo {
         const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
         const exportSpecifiers = createMap<ExportSpecifier[]>();
-        const exportedBindings = createMap<Identifier[]>();
+        const exportedBindings = sparseArray<Identifier[]>();
         const uniqueExports = createMap<boolean>();
         let exportedNames: Identifier[];
         let hasExportDefault = false;
@@ -3338,7 +3340,7 @@ namespace ts {
                                     || resolver.getReferencedValueDeclaration(name);
 
                                 if (decl) {
-                                    multiMapAdd(exportedBindings, getOriginalNodeId(decl), specifier.name);
+                                    multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(decl), specifier.name);
                                 }
 
                                 uniqueExports.set(specifier.name.text, true);
@@ -3368,7 +3370,7 @@ namespace ts {
                         if (hasModifier(node, ModifierFlags.Default)) {
                             // export default function() { }
                             if (!hasExportDefault) {
-                                multiMapAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<FunctionDeclaration>node));
+                                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<FunctionDeclaration>node));
                                 hasExportDefault = true;
                             }
                         }
@@ -3376,7 +3378,7 @@ namespace ts {
                             // export function x() { }
                             const name = (<FunctionDeclaration>node).name;
                             if (!uniqueExports.get(name.text)) {
-                                multiMapAdd(exportedBindings, getOriginalNodeId(node), name);
+                                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
                                 uniqueExports.set(name.text, true);
                                 exportedNames = append(exportedNames, name);
                             }
@@ -3389,7 +3391,7 @@ namespace ts {
                         if (hasModifier(node, ModifierFlags.Default)) {
                             // export default class { }
                             if (!hasExportDefault) {
-                                multiMapAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<ClassDeclaration>node));
+                                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<ClassDeclaration>node));
                                 hasExportDefault = true;
                             }
                         }
@@ -3397,7 +3399,7 @@ namespace ts {
                             // export class x { }
                             const name = (<ClassDeclaration>node).name;
                             if (!uniqueExports.get(name.text)) {
-                                multiMapAdd(exportedBindings, getOriginalNodeId(node), name);
+                                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
                                 uniqueExports.set(name.text, true);
                                 exportedNames = append(exportedNames, name);
                             }

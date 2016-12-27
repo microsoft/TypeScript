@@ -1,4 +1,4 @@
-namespace ts {
+﻿namespace ts {
     /**
      * Type of objects whose values are all of the same type.
      * The `in` and `for-in` operators can *not* be safely used,
@@ -8,15 +8,19 @@ namespace ts {
         [index: string]: T;
     }
 
-    /** It's allowed to get/set into a map with numbers. However, when iterating, you may get strings back due to the shim being an ordinary object (which only allows string keys). */
-    export type MapKey = string | number;
+    /**
+     * Like MapLike, but keys must be numbers.
+     */
+    export interface SparseArray<T> {
+        [key: number]: T;
+    }
 
     /** Minimal ES6 Map interface. Does not include iterators as those are hard to shim performantly. */
     export interface Map<T> {
-        get(key: MapKey): T;
-        has(key: MapKey): boolean;
-        set(key: MapKey, value: T): this;
-        delete(key: MapKey): boolean;
+        get(key: string): T;
+        has(key: string): boolean;
+        set(key: string, value: T): this;
+        delete(key: string): boolean;
         clear(): void;
         /** `key` may *not* be a string if it was set with a number and we are not using the shim. */
         forEach(action: (value: T, key: string) => void): void;
@@ -2853,7 +2857,7 @@ namespace ts {
 
     // Enum types (TypeFlags.Enum)
     export interface EnumType extends Type {
-        memberTypes: Map<EnumLiteralType>;
+        memberTypes: SparseArray<EnumLiteralType>;
     }
 
     // Enum types (TypeFlags.EnumLiteral)
@@ -3682,7 +3686,7 @@ namespace ts {
         flags?: EmitFlags;                      // Flags that customize emit
         commentRange?: TextRange;               // The text range to use when emitting leading or trailing comments
         sourceMapRange?: TextRange;             // The text range to use when emitting leading or trailing source mappings
-        tokenSourceMapRanges?: Map<TextRange>;  // The text range to use when emitting source mappings for tokens
+        tokenSourceMapRanges?: SparseArray<TextRange>;  // The text range to use when emitting source mappings for tokens
         constantValue?: number;                 // The constant value of an expression
         externalHelpersModuleName?: Identifier; // The local name for an imported helpers module
         helpers?: EmitHelper[];                 // Emit helpers for the node

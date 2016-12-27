@@ -1,4 +1,4 @@
-/// <reference path="../factory.ts" />
+﻿/// <reference path="../factory.ts" />
 /// <reference path="../visitor.ts" />
 
 // Transforms generator functions into a compatible ES5 representation with similar runtime
@@ -217,13 +217,15 @@ namespace ts {
         Endfinally = 7,
     }
 
-    const instructionNames = createMapFromPairs<string>(
-        [Instruction.Return, "return"],
-        [Instruction.Break, "break"],
-        [Instruction.Yield, "yield"],
-        [Instruction.YieldStar, "yield*"],
-        [Instruction.Endfinally, "endfinally"],
-    );
+    function getInstructionName(instruction: Instruction): string {
+        switch (instruction) {
+            case Instruction.Return: return "return";
+            case Instruction.Break: return "break";
+            case Instruction.Yield: return "yield";
+            case Instruction.YieldStar: return "yield*";
+            case Instruction.Endfinally: return "endfinally";
+        }
+    }
 
     export function transformGenerators(context: TransformationContext) {
         const {
@@ -241,7 +243,7 @@ namespace ts {
 
         let currentSourceFile: SourceFile;
         let renamedCatchVariables: Map<boolean>;
-        let renamedCatchVariableDeclarations: Map<Identifier>;
+        let renamedCatchVariableDeclarations: SparseArray<Identifier>;
 
         let inGeneratorFunctionBody: boolean;
         let inStatementContainingYield: boolean;
@@ -1926,7 +1928,7 @@ namespace ts {
                 if (isIdentifier(original) && original.parent) {
                     const declaration = resolver.getReferencedValueDeclaration(original);
                     if (declaration) {
-                        const name = renamedCatchVariableDeclarations.get(getOriginalNodeId(declaration));
+                        const name = renamedCatchVariableDeclarations[getOriginalNodeId(declaration)];
                         if (name) {
                             const clone = getMutableClone(name);
                             setSourceMapRange(clone, node);
@@ -2092,12 +2094,12 @@ namespace ts {
 
             if (!renamedCatchVariables) {
                 renamedCatchVariables = createMap<boolean>();
-                renamedCatchVariableDeclarations = createMap<Identifier>();
+                renamedCatchVariableDeclarations = sparseArray<Identifier>();
                 context.enableSubstitution(SyntaxKind.Identifier);
             }
 
             renamedCatchVariables.set(text, true);
-            renamedCatchVariableDeclarations.set(getOriginalNodeId(variable), name);
+            renamedCatchVariableDeclarations[getOriginalNodeId(variable)] = name;
 
             const exception = <ExceptionBlock>peekBlock();
             Debug.assert(exception.state < ExceptionBlockState.Catch);
@@ -2401,7 +2403,7 @@ namespace ts {
          */
         function createInstruction(instruction: Instruction): NumericLiteral {
             const literal = createLiteral(instruction);
-            literal.trailingComment = instructionNames.get(instruction);
+            literal.trailingComment = getInstructionName(instruction);
             return literal;
         }
 
