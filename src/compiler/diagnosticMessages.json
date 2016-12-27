@@ -2757,7 +2757,7 @@
         "category": "Message",
         "code": 6094
     },
-    "Loading module as file / folder, candidate module location '{0}'.": {
+    "Loading module as file / folder, candidate module location '{0}', target file type '{1}'.": {
         "category": "Message",
         "code": 6095
     },
@@ -2769,7 +2769,7 @@
         "category": "Message",
         "code": 6097
     },
-    "Loading module '{0}' from 'node_modules' folder.": {
+    "Loading module '{0}' from 'node_modules' folder, target file type '{1}'.": {
         "category": "Message",
         "code": 6098
     },
@@ -2968,6 +2968,10 @@
     "Resolution for module '{0}' was found in cache.": {
         "category": "Message",
         "code": 6147
+    },
+    "Directory '{0}' does not exist, skipping all lookups in it.": {
+        "category": "Message",
+        "code": 6148
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
