@@ -26,8 +26,8 @@ namespace ts {
     // More efficient to create a collator once and use its `compare` than to call `a.localeCompare(b)` many times.
     export const collator: { compare(a: string, b: string): number } = typeof Intl === "object" && typeof Intl.Collator === "function" ? new Intl.Collator() : undefined;
 
-    /** Create a MapLike with good performance. Prefer this over a literal `{}`. */
-    export function createMapLike<T>(): MapLike<T> {
+    /** Create a MapLike with good performance. */
+    function createDictionaryObject<T>(): MapLike<T> {
         const map = Object.create(null); // tslint:disable-line:no-null-keyword
 
         // Using 'delete' on an object causes V8 to put the object in dictionary mode.
@@ -39,7 +39,7 @@ namespace ts {
         return map;
     }
 
-    export const sparseArray: <T>() => SparseArray<T> = createMapLike;
+    export const sparseArray: <T>() => SparseArray<T> = createDictionaryObject;
 
     /** Create a new map. If a template object is provided, the map will copy entries from it. */
     export function createMap<T>(template?: MapLike<T>): Map<T> {
@@ -85,7 +85,7 @@ namespace ts {
         }
 
         return class<T> implements Map<T> {
-            private data = createMapLike<T>();
+            private data = createDictionaryObject<T>();
             public size = 0;
 
             get(key: string): T {
@@ -115,7 +115,7 @@ namespace ts {
             }
 
             clear(): void {
-                this.data = createMapLike<T>();
+                this.data = createDictionaryObject<T>();
                 this.size = 0;
             }
 

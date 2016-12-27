@@ -762,7 +762,7 @@ namespace ts {
         }
 
         function serializeCompilerOptions(options: CompilerOptions): MapLike<CompilerOptionsValue> {
-            const result = createMapLike<CompilerOptionsValue>();
+            const result: ts.MapLike<CompilerOptionsValue> = {};
             const optionsNameMap = getOptionNameMap().optionNameMap;
 
             for (const name in options) {
@@ -1302,7 +1302,7 @@ namespace ts {
         //  /a/b/a?z    - Watch /a/b directly to catch any new file matching a?z
         const rawExcludeRegex = getRegularExpressionForWildcard(exclude, path, "exclude");
         const excludeRegex = rawExcludeRegex && new RegExp(rawExcludeRegex, useCaseSensitiveFileNames ? "" : "i");
-        const wildcardDirectories = createMapLike<WatchDirectoryFlags>();
+        const wildcardDirectories: ts.MapLike<WatchDirectoryFlags> = {};
         if (include !== undefined) {
             const recursiveKeys: string[] = [];
             for (const file of include) {
@@ -1325,7 +1325,7 @@ namespace ts {
             }
 
             // Remove any subpaths under an existing recursively watched directory.
-            for (const key in wildcardDirectories) {
+            for (const key in wildcardDirectories) if (hasProperty(wildcardDirectories, key)) {
                 for (const recursiveKey of recursiveKeys) {
                     if (key !== recursiveKey && containsPath(recursiveKey, key, path, !useCaseSensitiveFileNames)) {
                         delete wildcardDirectories[key];
