@@ -27,6 +27,10 @@ namespace ts {
         return symbol.id;
     }
 
+    interface VariableLikeDeclarationTypeInfo {
+        typeWithoutOptionality?: Type;
+    }
+
     export function createTypeChecker(host: TypeCheckerHost, produceDiagnostics: boolean): TypeChecker {
         // Cancellation that controls whether or not we can cancel in the middle of type checking.
         // In general cancelling is *not* safe for the type checker.  We might be in the middle of
@@ -3078,11 +3082,24 @@ namespace ts {
             return type && (type.flags & TypeFlags.Never) !== 0;
         }
 
+        function getTypeWithoutOptionalityOfVariableLikeDeclarartion(node: VariableLikeDeclaration): Type {
+            const symbol = getSymbolOfNode(node);
+            const symbolLinks = symbol && getSymbolLinks(symbol);
+            // Only if the optionality is important(currently if node is binding pattern), it is cached
+            // in othercases type itself is the type needed
+            return symbolLinks && (symbolLinks.typeWithoutOptionality || symbolLinks.type);
+        }
+
         // Return the type of a binding element parent. We check SymbolLinks first to see if a type has been
         // assigned by contextual typing.
         function getTypeForBindingElementParent(node: VariableLikeDeclaration) {
-            const symbol = getSymbolOfNode(node);
-            return symbol && getSymbolLinks(symbol).type || getTypeForVariableLikeDeclaration(node, /*includeOptionality*/ false);
+            let type = getTypeWithoutOptionalityOfVariableLikeDeclarartion(node);
+            if (!type) {
+                const variableLikeDeclarationTypeInfo: VariableLikeDeclarationTypeInfo = {};
+                const variableDeclarationType = getTypeForVariableLikeDeclaration(node, variableLikeDeclarationTypeInfo);
+                type = variableLikeDeclarationTypeInfo.typeWithoutOptionality || variableDeclarationType;
+            }
+            return type;
         }
 
         function isComputedNonLiteralName(name: PropertyName): boolean {
@@ -3229,12 +3246,25 @@ namespace ts {
             return expr.kind === SyntaxKind.ArrayLiteralExpression && (<ArrayLiteralExpression>expr).elements.length === 0;
         }
 
-        function addOptionality(type: Type, optional: boolean): Type {
-            return strictNullChecks && optional ? includeFalsyTypes(type, TypeFlags.Undefined) : type;
+        function createVariableLikeDeclarationTypeInfo(declaration: VariableLikeDeclaration): VariableLikeDeclarationTypeInfo {
+            if (strictNullChecks && declaration.questionToken && isBindingPattern(declaration.name)) {
+                return <VariableLikeDeclarationTypeInfo>{};
+            }
+        }
+
+        function addOptionality(type: Type, declaration: VariableLikeDeclaration, variableLikeDeclarationTypeInfo?: VariableLikeDeclarationTypeInfo): Type {
+            if (strictNullChecks && declaration.questionToken) {
+                // Store the type without including optionality only if it could be used later
+                if (variableLikeDeclarationTypeInfo && isBindingPattern(declaration.name)) {
+                    variableLikeDeclarationTypeInfo.typeWithoutOptionality = type;
+                }
+                type = includeFalsyTypes(type, TypeFlags.Undefined);
+            }
+            return type;
         }
 
         // Return the inferred type for a variable, parameter, or property declaration
-        function getTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration, includeOptionality: boolean): Type {
+        function getTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration, variableLikeDeclarationTypeInfo?: VariableLikeDeclarationTypeInfo): Type {
             if (declaration.flags & NodeFlags.JavaScriptFile) {
                 // If this is a variable in a JavaScript file, then use the JSDoc type (if it has
                 // one as its type), otherwise fallback to the below standard TS codepaths to
@@ -3266,7 +3296,7 @@ namespace ts {
 
             // Use type from type annotation if one is present
             if (declaration.type) {
-                return addOptionality(getTypeFromTypeNode(declaration.type), /*optional*/ declaration.questionToken && includeOptionality);
+                return addOptionality(getTypeFromTypeNode(declaration.type), declaration, variableLikeDeclarationTypeInfo);
             }
 
             if ((compilerOptions.noImplicitAny || declaration.flags & NodeFlags.JavaScriptFile) &&
@@ -3310,14 +3340,14 @@ namespace ts {
                     type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
                 }
                 if (type) {
-                    return addOptionality(type, /*optional*/ declaration.questionToken && includeOptionality);
+                    return addOptionality(type, declaration, variableLikeDeclarationTypeInfo);
                 }
             }
 
             // Use the type of the initializer expression if one is present
             if (declaration.initializer) {
                 const type = checkDeclarationInitializer(declaration);
-                return addOptionality(type, /*optional*/ declaration.questionToken && includeOptionality);
+                return addOptionality(type, declaration, variableLikeDeclarationTypeInfo);
             }
 
             // If it is a short-hand property assignment, use the type of the identifier
@@ -3423,8 +3453,8 @@ namespace ts {
         // Here, the array literal [1, "one"] is contextually typed by the type [any, string], which is the implied type of the
         // binding pattern [x, s = ""]. Because the contextual type is a tuple type, the resulting type of [1, "one"] is the
         // tuple type [number, string]. Thus, the type inferred for 'x' is number and the type inferred for 's' is string.
-        function getWidenedTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration, reportErrors?: boolean): Type {
-            let type = getTypeForVariableLikeDeclaration(declaration, /*includeOptionality*/ true);
+        function getWidenedTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration, reportErrors?: boolean, variableLikeDeclarationTypeInfo?: VariableLikeDeclarationTypeInfo): Type {
+            let type = getTypeForVariableLikeDeclaration(declaration, variableLikeDeclarationTypeInfo);
             if (type) {
                 if (reportErrors) {
                     reportErrorsFromWidening(declaration, type);
@@ -3480,7 +3510,7 @@ namespace ts {
                     return unknownType;
                 }
 
-                let type: Type;
+                let type: Type, widenedType: Type, variableLikeDeclarationTypeInfo: VariableLikeDeclarationTypeInfo;
                 // Handle certain special assignment kinds, which happen to union across multiple declarations:
                 // * module.exports = expr
                 // * exports.p = expr
@@ -3502,13 +3532,19 @@ namespace ts {
                     type = getUnionType(declaredTypes, /*subtypeReduction*/ true);
                 }
                 else {
-                    type = getWidenedTypeForVariableLikeDeclaration(<VariableLikeDeclaration>declaration, /*reportErrors*/ true);
+                    variableLikeDeclarationTypeInfo = createVariableLikeDeclarationTypeInfo(<VariableLikeDeclaration>declaration);
+                    widenedType = type = getWidenedTypeForVariableLikeDeclaration(<VariableLikeDeclaration>declaration, /*reportErrors*/ true, variableLikeDeclarationTypeInfo);
                 }
 
                 if (!popTypeResolution()) {
                     type = reportCircularityError(symbol);
                 }
                 links.type = type;
+                // If the type returned from widened type is used (instead of anyType because of recursion)
+                // Store the typeWithoutOptionality too
+                if (variableLikeDeclarationTypeInfo && variableLikeDeclarationTypeInfo.typeWithoutOptionality && type === widenedType) {
+                    links.typeWithoutOptionality = variableLikeDeclarationTypeInfo.typeWithoutOptionality;
+                }
             }
             return links.type;
         }
@@ -19920,7 +19956,7 @@ namespace ts {
             }
 
             if (isBindingPattern(node)) {
-                return getTypeForVariableLikeDeclaration(<VariableLikeDeclaration>node.parent, /*includeOptionality*/ true);
+                return getTypeForVariableLikeDeclaration(<VariableLikeDeclaration>node.parent);
             }
 
             if (isInRightSideOfImportOrExportAssignment(<Identifier>node)) {
