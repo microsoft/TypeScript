@@ -141,6 +141,7 @@ namespace ts.projectSystem {
         useCaseSensitiveFileNames?: boolean;
         executingFilePath?: string;
         currentDirectory?: string;
+        newLine?: string;
     }
 
     export function createServerHost(fileOrFolderList: FileOrFolder[], params?: TestServerHostCreationParameters): TestServerHost {
@@ -151,7 +152,8 @@ namespace ts.projectSystem {
             params.useCaseSensitiveFileNames !== undefined ? params.useCaseSensitiveFileNames : false,
             params.executingFilePath || getExecutingFilePathFromLibFile(),
             params.currentDirectory || "/",
-            fileOrFolderList);
+            fileOrFolderList,
+            params.newLine);
         return host;
     }
 
@@ -329,7 +331,6 @@ namespace ts.projectSystem {
 
     export class TestServerHost implements server.ServerHost {
         args: string[] = [];
-        newLine: "\n";
 
         private fs: ts.FileMap<FSEntry>;
         private getCanonicalFileName: (s: string) => string;
@@ -342,7 +343,7 @@ namespace ts.projectSystem {
 
         private filesOrFolders: FileOrFolder[];
 
-        constructor(public useCaseSensitiveFileNames: boolean, private executingFilePath: string, private currentDirectory: string, fileOrFolderList: FileOrFolder[]) {
+        constructor(public useCaseSensitiveFileNames: boolean, private executingFilePath: string, private currentDirectory: string, fileOrFolderList: FileOrFolder[], public readonly newLine = "\n") {
             this.getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
             this.toPath = s => toPath(s, currentDirectory, this.getCanonicalFileName);
 
