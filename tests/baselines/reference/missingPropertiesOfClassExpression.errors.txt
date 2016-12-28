@@ -1,11 +1,8 @@
-tests/cases/compiler/missingPropertiesOfClassExpression.ts(1,22): error TS2690: A class must be declared after its base class.
 tests/cases/compiler/missingPropertiesOfClassExpression.ts(1,52): error TS2339: Property 'y' does not exist on type '(Anonymous class)'.
 
 
-==== tests/cases/compiler/missingPropertiesOfClassExpression.ts (2 errors) ====
+==== tests/cases/compiler/missingPropertiesOfClassExpression.ts (1 errors) ====
     class George extends class { reset() { return this.y; } } {
-                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2690: A class must be declared after its base class.
                                                        ~
 !!! error TS2339: Property 'y' does not exist on type '(Anonymous class)'.
         constructor() {

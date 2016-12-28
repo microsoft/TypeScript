@@ -1,4 +1,4 @@
-/// <reference path="..\compiler\program.ts"/>
+﻿/// <reference path="..\compiler\program.ts"/>
 /// <reference path="..\compiler\commandLineParser.ts"/>
 
 /// <reference path='types.ts' />
@@ -45,10 +45,9 @@ namespace ts {
         public end: number;
         public flags: NodeFlags;
         public parent: Node;
-        public jsDocComments: JSDoc[];
+        public jsDoc: JSDoc[];
         public original: Node;
         public transformFlags: TransformFlags;
-        public excludeTransformFlags: TransformFlags;
         private _children: Node[];
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
@@ -56,7 +55,6 @@ namespace ts {
             this.end = end;
             this.flags = NodeFlags.None;
             this.transformFlags = undefined;
-            this.excludeTransformFlags = undefined;
             this.parent = undefined;
             this.kind = kind;
         }
@@ -156,8 +154,8 @@ namespace ts {
                     pos = nodes.end;
                 };
                 // jsDocComments need to be the first children
-                if (this.jsDocComments) {
-                    for (const jsDocComment of this.jsDocComments) {
+                if (this.jsDoc) {
+                    for (const jsDocComment of this.jsDoc) {
                         processNode(jsDocComment);
                     }
                 }
@@ -264,23 +262,23 @@ namespace ts {
             return (sourceFile || this.getSourceFile()).text.substring(this.getStart(), this.getEnd());
         }
 
-        public getChildCount(sourceFile?: SourceFile): number {
+        public getChildCount(): number {
             return 0;
         }
 
-        public getChildAt(index: number, sourceFile?: SourceFile): Node {
+        public getChildAt(): Node {
             return undefined;
         }
 
-        public getChildren(sourceFile?: SourceFile): Node[] {
+        public getChildren(): Node[] {
             return emptyArray;
         }
 
-        public getFirstToken(sourceFile?: SourceFile): Node {
+        public getFirstToken(): Node {
             return undefined;
         }
 
-        public getLastToken(sourceFile?: SourceFile): Node {
+        public getLastToken(): Node {
             return undefined;
         }
     }
@@ -313,7 +311,7 @@ namespace ts {
 
         getDocumentationComment(): SymbolDisplayPart[] {
             if (this.documentationComment === undefined) {
-                this.documentationComment = JsDoc.getJsDocCommentsFromDeclarations(this.declarations, this.name, !(this.flags & SymbolFlags.Property));
+                this.documentationComment = JsDoc.getJsDocCommentsFromDeclarations(this.declarations);
             }
 
             return this.documentationComment;
@@ -338,7 +336,7 @@ namespace ts {
         _incrementExpressionBrand: any;
         _unaryExpressionBrand: any;
         _expressionBrand: any;
-        constructor(kind: SyntaxKind.Identifier, pos: number, end: number) {
+        constructor(_kind: SyntaxKind.Identifier, pos: number, end: number) {
             super(pos, end);
         }
     }
@@ -347,6 +345,7 @@ namespace ts {
     class TypeObject implements Type {
         checker: TypeChecker;
         flags: TypeFlags;
+        objectFlags?: ObjectFlags;
         id: number;
         symbol: Symbol;
         constructor(checker: TypeChecker, flags: TypeFlags) {
@@ -381,7 +380,7 @@ namespace ts {
             return this.checker.getIndexTypeOfType(this, IndexKind.Number);
         }
         getBaseTypes(): ObjectType[] {
-            return this.flags & (TypeFlags.Class | TypeFlags.Interface)
+            return this.flags & TypeFlags.Object && this.objectFlags & (ObjectFlags.Class | ObjectFlags.Interface)
                 ? this.checker.getBaseTypes(<InterfaceType><Type>this)
                 : undefined;
         }
@@ -423,10 +422,7 @@ namespace ts {
 
         getDocumentationComment(): SymbolDisplayPart[] {
             if (this.documentationComment === undefined) {
-                this.documentationComment = this.declaration ? JsDoc.getJsDocCommentsFromDeclarations(
-                    [this.declaration],
-                    /*name*/ undefined,
-                    /*canUseParsedParamTagComments*/ false) : [];
+                this.documentationComment = this.declaration ? JsDoc.getJsDocCommentsFromDeclarations([this.declaration]) : [];
             }
 
             return this.documentationComment;
@@ -469,11 +465,12 @@ namespace ts {
         public languageVariant: LanguageVariant;
         public identifiers: Map<string>;
         public nameTable: Map<number>;
-        public resolvedModules: Map<ResolvedModule>;
+        public resolvedModules: Map<ResolvedModuleFull>;
         public resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         public imports: LiteralExpression[];
         public moduleAugmentations: LiteralExpression[];
         private namedDeclarations: Map<Declaration[]>;
+        public ambientModuleNames: string[];
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
             super(kind, pos, end);
@@ -493,6 +490,23 @@ namespace ts {
 
         public getPositionOfLineAndCharacter(line: number, character: number): number {
             return ts.getPositionOfLineAndCharacter(this, line, character);
+        }
+
+        public getLineEndOfPosition(pos: number): number {
+            const { line } = this.getLineAndCharacterOfPosition(pos);
+            const lineStarts = this.getLineStarts();
+
+            let lastCharPos: number;
+            if (line + 1 >= lineStarts.length) {
+                lastCharPos = this.getEnd();
+            }
+            if (!lastCharPos) {
+                lastCharPos = lineStarts[line + 1] - 1;
+            }
+
+            const fullText = this.getFullText();
+            // if the new line is "\r\n", we should return the last non-new-line-character position
+            return fullText[lastCharPos] === "\n" && fullText[lastCharPos - 1] === "\r" ? lastCharPos - 1 : lastCharPos;
         }
 
         public getNamedDeclarations(): Map<Declaration[]> {
@@ -578,9 +592,8 @@ namespace ts {
                             else {
                                 declarations.push(functionDeclaration);
                             }
-
-                            forEachChild(node, visit);
                         }
+                        forEachChild(node, visit);
                         break;
 
                     case SyntaxKind.ClassDeclaration:
@@ -802,7 +815,7 @@ namespace ts {
         public getRootFileNames(): string[] {
             const fileNames: string[] = [];
 
-            this.fileNameToEntry.forEachValue((path, value) => {
+            this.fileNameToEntry.forEachValue((_path, value) => {
                 if (value) {
                     fileNames.push(value.hostFileName);
                 }
@@ -1054,7 +1067,7 @@ namespace ts {
                 useCaseSensitiveFileNames: () => useCaseSensitivefileNames,
                 getNewLine: () => getNewLineOrDefaultFromHost(host),
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
-                writeFile: (fileName, data, writeByteOrderMark) => { },
+                writeFile: noop,
                 getCurrentDirectory: () => currentDirectory,
                 fileExists: (fileName): boolean => {
                     // stub missing host functionality
@@ -1208,7 +1221,7 @@ namespace ts {
         }
 
         function cleanupSemanticCache(): void {
-            // TODO: Should we jettison the program (or it's type checker) here?
+            program = undefined;
         }
 
         function dispose(): void {
@@ -1458,7 +1471,7 @@ namespace ts {
             return getNonBoundSourceFile(fileName);
         }
 
-        function getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan {
+        function getNameOrDottedNameSpan(fileName: string, startPos: number, _endPos: number): TextSpan {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
             // Get node at the location
@@ -1679,7 +1692,9 @@ namespace ts {
                     sourceFile: sourceFile,
                     span: span,
                     program: program,
-                    newLineCharacter: newLineChar
+                    newLineCharacter: newLineChar,
+                    host: host,
+                    cancellationToken: cancellationToken
                 };
 
                 const fixes = codefix.getFixes(context);
@@ -1709,7 +1724,7 @@ namespace ts {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
             // Check if in a context where we don't want to perform any insertion
-            if (isInString(sourceFile, position) || isInComment(sourceFile, position)) {
+            if (isInString(sourceFile, position)) {
                 return false;
             }
 
@@ -1778,7 +1793,7 @@ namespace ts {
                     }
 
                     let descriptor: TodoCommentDescriptor = undefined;
-                    for (let i = 0, n = descriptors.length; i < n; i++) {
+                    for (let i = 0; i < descriptors.length; i++) {
                         if (matchArray[i + firstDescriptorCaptureIndex]) {
                             descriptor = descriptors[i];
                         }
@@ -1959,9 +1974,9 @@ namespace ts {
                     break;
                 default:
                     forEachChild(node, walk);
-                    if (node.jsDocComments) {
-                        for (const jsDocComment of node.jsDocComments) {
-                            forEachChild(jsDocComment, walk);
+                    if (node.jsDoc) {
+                        for (const jsDoc of node.jsDoc) {
+                            forEachChild(jsDoc, walk);
                         }
                     }
             }

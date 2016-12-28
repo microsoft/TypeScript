@@ -1,3 +1,5 @@
+/// <reference path='../compiler/utilities.ts' />
+
 /* @internal */
 namespace ts.Completions {
     export function getCompletionsAtPosition(host: LanguageServiceHost, typeChecker: TypeChecker, log: (message: string) => void, compilerOptions: CompilerOptions, sourceFile: SourceFile, position: number): CompletionInfo {
@@ -177,7 +179,7 @@ namespace ts.Completions {
                     // Get string literal completions from specialized signatures of the target
                     // i.e. declare function f(a: 'A');
                     // f("/*completion position*/")
-                    return getStringLiteralCompletionEntriesFromCallExpression(argumentInfo, node);
+                    return getStringLiteralCompletionEntriesFromCallExpression(argumentInfo);
                 }
 
                 // Get completion for string literal from string literal type
@@ -197,7 +199,7 @@ namespace ts.Completions {
             }
         }
 
-        function getStringLiteralCompletionEntriesFromCallExpression(argumentInfo: SignatureHelp.ArgumentListInfo, location: Node) {
+        function getStringLiteralCompletionEntriesFromCallExpression(argumentInfo: SignatureHelp.ArgumentListInfo) {
             const candidates: Signature[] = [];
             const entries: CompletionEntry[] = [];
 
@@ -359,7 +361,7 @@ namespace ts.Completions {
                     /**
                      * Multiple file entries might map to the same truncated name once we remove extensions
                      * (happens iff includeExtensions === false)so we use a set-like data structure. Eg:
-                     * 
+                     *
                      * both foo.ts and foo.tsx become foo
                      */
                     const foundFiles = createMap<boolean>();
@@ -615,7 +617,7 @@ namespace ts.Completions {
 
                 if (typeRoots) {
                     for (const root of typeRoots) {
-                        getCompletionEntriesFromDirectories(host, options, root, span, result);
+                        getCompletionEntriesFromDirectories(host, root, span, result);
                     }
                 }
             }
@@ -624,14 +626,14 @@ namespace ts.Completions {
                 // Also get all @types typings installed in visible node_modules directories
                 for (const packageJson of findPackageJsons(scriptPath)) {
                     const typesDir = combinePaths(getDirectoryPath(packageJson), "node_modules/@types");
-                    getCompletionEntriesFromDirectories(host, options, typesDir, span, result);
+                    getCompletionEntriesFromDirectories(host, typesDir, span, result);
                 }
             }
 
             return result;
         }
 
-        function getCompletionEntriesFromDirectories(host: LanguageServiceHost, options: CompilerOptions, directory: string, span: TextSpan, result: CompletionEntry[]) {
+        function getCompletionEntriesFromDirectories(host: LanguageServiceHost, directory: string, span: TextSpan, result: CompletionEntry[]) {
             if (host.getDirectories && tryDirectoryExists(host, directory)) {
                 const directories = tryGetDirectories(host, directory);
                 if (directories) {
@@ -951,7 +953,6 @@ namespace ts.Completions {
             if (!tryGetGlobalSymbols()) {
                 return undefined;
             }
-            isGlobalCompletion = true;
         }
 
         log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
@@ -1030,7 +1031,6 @@ namespace ts.Completions {
                 if ((jsxContainer.kind === SyntaxKind.JsxSelfClosingElement) || (jsxContainer.kind === SyntaxKind.JsxOpeningElement)) {
                     // Cursor is inside a JSX self-closing element or opening element
                     attrsType = typeChecker.getJsxElementAttributesType(<JsxOpeningLikeElement>jsxContainer);
-                    isGlobalCompletion = false;
 
                     if (attrsType) {
                         symbols = filterJsxAttributes(typeChecker.getPropertiesOfType(attrsType), (<JsxOpeningLikeElement>jsxContainer).attributes);
@@ -1038,7 +1038,6 @@ namespace ts.Completions {
                         isNewIdentifierLocation = false;
                         return true;
                     }
-
                 }
             }
 
@@ -1079,6 +1078,13 @@ namespace ts.Completions {
                 position;
 
             const scopeNode = getScopeNode(contextToken, adjustedPosition, sourceFile) || sourceFile;
+            if (scopeNode) {
+                isGlobalCompletion =
+                    scopeNode.kind === SyntaxKind.SourceFile ||
+                    scopeNode.kind === SyntaxKind.TemplateExpression ||
+                    scopeNode.kind === SyntaxKind.JsxExpression ||
+                    isStatement(scopeNode);
+            }
 
             /// TODO filter meaning based on the current context
             const symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
@@ -1584,7 +1590,9 @@ namespace ts.Completions {
                 if (m.kind !== SyntaxKind.PropertyAssignment &&
                     m.kind !== SyntaxKind.ShorthandPropertyAssignment &&
                     m.kind !== SyntaxKind.BindingElement &&
-                    m.kind !== SyntaxKind.MethodDeclaration) {
+                    m.kind !== SyntaxKind.MethodDeclaration &&
+                    m.kind !== SyntaxKind.GetAccessor &&
+                    m.kind !== SyntaxKind.SetAccessor) {
                     continue;
                 }
 
@@ -1702,11 +1710,11 @@ namespace ts.Completions {
      * to determine if the caret is currently within the string literal and capture the literal fragment
      * for completions.
      * For example, this matches
-     * 
+     *
      * /// <reference path="fragment
-     * 
+     *
      * but not
-     *  
+     *
      * /// <reference path="fragment"
      */
     const tripleSlashDirectiveFragmentRegex = /^(\/\/\/\s*<reference\s+(path|types)\s*=\s*(?:'|"))([^\3"]*)$/;

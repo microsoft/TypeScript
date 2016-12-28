@@ -156,6 +156,9 @@ namespace ts {
 
             if (!skipTrailingComments) {
                 emitLeadingComments(detachedRange.end, /*isEmittedNode*/ true);
+                if (hasWrittenComment && !writer.isAtStartOfLine()) {
+                    writer.writeLine();
+                }
             }
 
             if (extendedDiagnostics) {
@@ -188,7 +191,7 @@ namespace ts {
             }
         }
 
-        function emitLeadingComment(commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) {
+        function emitLeadingComment(commentPos: number, commentEnd: number, _kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) {
             if (!hasWrittenComment) {
                 emitNewLineBeforeLeadingCommentOfPosition(currentLineMap, writer, rangePos, commentPos);
                 hasWrittenComment = true;
@@ -211,7 +214,7 @@ namespace ts {
             forEachTrailingCommentToEmit(pos, emitTrailingComment);
         }
 
-        function emitTrailingComment(commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean) {
+        function emitTrailingComment(commentPos: number, commentEnd: number, _kind: SyntaxKind, hasTrailingNewLine: boolean) {
             // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment2*/
             if (!writer.isAtStartOfLine()) {
                 writer.write(" ");
@@ -242,7 +245,7 @@ namespace ts {
             }
         }
 
-        function emitTrailingCommentOfPosition(commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean) {
+        function emitTrailingCommentOfPosition(commentPos: number, commentEnd: number, _kind: SyntaxKind, hasTrailingNewLine: boolean) {
             // trailing comments of a position are emitted at /*trailing comment1 */space/*trailing comment*/space
 
             emitPos(commentPos);

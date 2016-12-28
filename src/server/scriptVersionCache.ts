@@ -41,7 +41,7 @@ namespace ts.server {
     class BaseLineIndexWalker implements ILineIndexWalker {
         goSubtree = true;
         done = false;
-        leaf(rangeStart: number, rangeLength: number, ll: LineLeaf) {
+        leaf(_rangeStart: number, _rangeLength: number, _ll: LineLeaf) {
         }
     }
 
@@ -113,7 +113,7 @@ namespace ts.server {
                 if (len > 1) {
                     let insertedNodes = <LineCollection[]>new Array(len - 1);
                     let startNode = <LineCollection>leafNode;
-                    for (let i = 1, len = lines.length; i < len; i++) {
+                    for (let i = 1; i < lines.length; i++) {
                         insertedNodes[i - 1] = new LineLeaf(lines[i]);
                     }
                     let pathIndex = this.startPath.length - 2;
@@ -150,7 +150,7 @@ namespace ts.server {
             return this.lineIndex;
         }
 
-        post(relativeStart: number, relativeLength: number, lineCollection: LineCollection, parent: LineCollection, nodeType: CharRangeSection): LineCollection {
+        post(_relativeStart: number, _relativeLength: number, lineCollection: LineCollection): LineCollection {
             // have visited the path for start of range, now looking for end
             // if range is on single line, we will never make this state transition
             if (lineCollection === this.lineCollectionAtBranch) {
@@ -161,7 +161,7 @@ namespace ts.server {
             return undefined;
         }
 
-        pre(relativeStart: number, relativeLength: number, lineCollection: LineCollection, parent: LineCollection, nodeType: CharRangeSection) {
+        pre(_relativeStart: number, _relativeLength: number, lineCollection: LineCollection, _parent: LineCollection, nodeType: CharRangeSection) {
             // currentNode corresponds to parent, but in the new tree
             const currentNode = this.stack[this.stack.length - 1];
 
@@ -341,8 +341,7 @@ namespace ts.server {
             let snap = this.versions[this.currentVersionToIndex()];
             if (this.changes.length > 0) {
                 let snapIndex = snap.index;
-                for (let i = 0, len = this.changes.length; i < len; i++) {
-                    const change = this.changes[i];
+                for (const change of this.changes) {
                     snapIndex = snapIndex.edit(change.pos, change.deleteLen, change.insertedText);
                 }
                 snap = new LineIndexSnapshot(this.currentVersion + 1, this);
@@ -366,8 +365,7 @@ namespace ts.server {
                     const textChangeRanges: ts.TextChangeRange[] = [];
                     for (let i = oldVersion + 1; i <= newVersion; i++) {
                         const snap = this.versions[this.versionToIndex(i)];
-                        for (let j = 0, len = snap.changesSincePreviousVersion.length; j < len; j++) {
-                            const textChange = snap.changesSincePreviousVersion[j];
+                        for (const textChange of snap.changesSincePreviousVersion) {
                             textChangeRanges[textChangeRanges.length] = textChange.getTextChangeRange();
                         }
                     }
@@ -398,7 +396,7 @@ namespace ts.server {
         index: LineIndex;
         changesSincePreviousVersion: TextChange[] = [];
 
-        constructor(public version: number, public cache: ScriptVersionCache) {
+        constructor(readonly version: number, readonly cache: ScriptVersionCache) {
         }
 
         getText(rangeStart: number, rangeEnd: number) {
@@ -414,7 +412,7 @@ namespace ts.server {
             const starts: number[] = [-1];
             let count = 1;
             let pos = 0;
-            this.index.every((ll, s, len) => {
+            this.index.every(ll => {
                 starts[count] = pos;
                 count++;
                 pos += ll.text.length;
@@ -438,8 +436,9 @@ namespace ts.server {
             }
         }
         getChangeRange(oldSnapshot: ts.IScriptSnapshot): ts.TextChangeRange {
-            const oldSnap = <LineIndexSnapshot>oldSnapshot;
-            return this.getTextChangeRangeSinceVersion(oldSnap.version);
+            if (oldSnapshot instanceof LineIndexSnapshot && this.cache === oldSnapshot.cache) {
+                return this.getTextChangeRangeSinceVersion(oldSnapshot.version);
+            }
         }
     }
 
@@ -470,7 +469,7 @@ namespace ts.server {
         load(lines: string[]) {
             if (lines.length > 0) {
                 const leaves: LineLeaf[] = [];
-                for (let i = 0, len = lines.length; i < len; i++) {
+                for (let i = 0; i < lines.length; i++) {
                     leaves[i] = new LineLeaf(lines[i]);
                 }
                 this.root = LineIndex.buildTreeFromBottom(leaves);
@@ -642,8 +641,7 @@ namespace ts.server {
         updateCounts() {
             this.totalChars = 0;
             this.totalLines = 0;
-            for (let i = 0, len = this.children.length; i < len; i++) {
-                const child = this.children[i];
+            for (const child of this.children) {
                 this.totalChars += child.charCount();
                 this.totalLines += child.lineCount();
             }

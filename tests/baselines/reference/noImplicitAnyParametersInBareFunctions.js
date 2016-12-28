@@ -59,7 +59,7 @@ function f5(x, y, z) { }
 function f6() {
     var r = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        r[_i - 0] = arguments[_i];
+        r[_i] = arguments[_i];
     }
 }
 // Implicit-'any'/'any[]' errors for x, r.
@@ -82,7 +82,7 @@ var f12 = function (x, y, z) { return ""; };
 var f13 = function () {
     var r = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        r[_i - 0] = arguments[_i];
+        r[_i] = arguments[_i];
     }
     return "";
 };

@@ -70,13 +70,16 @@ var compilerSources = [
     "visitor.ts",
     "transformers/destructuring.ts",
     "transformers/ts.ts",
-    "transformers/module/es6.ts",
+    "transformers/jsx.ts",
+    "transformers/esnext.ts",
+    "transformers/es2017.ts",
+    "transformers/es2016.ts",
+    "transformers/es2015.ts",
+    "transformers/generators.ts",
+    "transformers/es5.ts",
+    "transformers/module/es2015.ts",
     "transformers/module/system.ts",
     "transformers/module/module.ts",
-    "transformers/jsx.ts",
-    "transformers/es7.ts",
-    "transformers/generators.ts",
-    "transformers/es6.ts",
     "transformer.ts",
     "sourcemap.ts",
     "comments.ts",
@@ -104,13 +107,16 @@ var servicesSources = [
     "visitor.ts",
     "transformers/destructuring.ts",
     "transformers/ts.ts",
-    "transformers/module/es6.ts",
+    "transformers/jsx.ts",
+    "transformers/esnext.ts",
+    "transformers/es2017.ts",
+    "transformers/es2016.ts",
+    "transformers/es2015.ts",
+    "transformers/generators.ts",
+    "transformers/es5.ts",
+    "transformers/module/es2015.ts",
     "transformers/module/system.ts",
     "transformers/module/module.ts",
-    "transformers/jsx.ts",
-    "transformers/es7.ts",
-    "transformers/generators.ts",
-    "transformers/es6.ts",
     "transformer.ts",
     "sourcemap.ts",
     "comments.ts",
@@ -167,6 +173,7 @@ var servicesSources = [
 
 var serverCoreSources = [
     "types.d.ts",
+    "shared.ts",
     "utilities.ts",
     "scriptVersionCache.ts",
     "typingsCache.ts",
@@ -189,6 +196,7 @@ var cancellationTokenSources = [
 
 var typingsInstallerSources = [
     "../types.d.ts",
+    "../shared.ts",
     "typingsInstaller.ts",
     "nodeTypingsInstaller.ts"
 ].map(function (f) {
@@ -242,13 +250,14 @@ var harnessSources = harnessCoreSources.concat([
     "convertToBase64.ts",
     "transpile.ts",
     "reuseProgramStructure.ts",
+    "textStorage.ts",
     "cachingInServerLSHost.ts",
     "moduleResolution.ts",
     "tsconfigParsing.ts",
     "commandLineParsing.ts",
     "configurationExtension.ts",
     "convertCompilerOptionsFromJson.ts",
-    "convertTypingOptionsFromJson.ts",
+    "convertTypeAcquisitionFromJson.ts",
     "tsserverProjectSystem.ts",
     "compileOnSave.ts",
     "typingsInstaller.ts",
@@ -295,7 +304,8 @@ var es2016LibrarySourceMap = es2016LibrarySource.map(function (source) {
 
 var es2017LibrarySource = [
     "es2017.object.d.ts",
-    "es2017.sharedmemory.d.ts"
+    "es2017.sharedmemory.d.ts",
+    "es2017.string.d.ts",
 ];
 
 var es2017LibrarySourceMap = es2017LibrarySource.map(function (source) {
@@ -343,18 +353,16 @@ function prependFile(prefixFile, destinationFile) {
 // concatenate a list of sourceFiles to a destinationFile
 function concatenateFiles(destinationFile, sourceFiles) {
     var temp = "temptemp";
-    // Copy the first file to temp
-    if (!fs.existsSync(sourceFiles[0])) {
-        fail(sourceFiles[0] + " does not exist!");
-    }
-    jake.cpR(sourceFiles[0], temp, { silent: true });
     // append all files in sequence
-    for (var i = 1; i < sourceFiles.length; i++) {
+    var text = "";
+    for (var i = 0; i < sourceFiles.length; i++) {
         if (!fs.existsSync(sourceFiles[i])) {
             fail(sourceFiles[i] + " does not exist!");
         }
-        fs.appendFileSync(temp, fs.readFileSync(sourceFiles[i]));
+        if (i > 0) { text += "\n\n"; }
+        text += fs.readFileSync(sourceFiles[i]).toString().replace(/\r?\n/g, "\n");
     }
+    fs.writeFileSync(temp, text);
     // Move the file to the final destination
     fs.renameSync(temp, destinationFile);
 }
@@ -442,6 +450,8 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         if (opts.stripInternal) {
             options += " --stripInternal";
         }
+
+        options += " --target es5 --noUnusedLocals --noUnusedParameters";
 
         var cmd = host + " " + compilerPath + " " + options + " ";
         cmd = cmd + sources.join(" ");
@@ -581,7 +591,7 @@ task("generate-diagnostics", [diagnosticInfoMapTs]);
 var configureNightlyJs = path.join(scriptsDirectory, "configureNightly.js");
 var configureNightlyTs = path.join(scriptsDirectory, "configureNightly.ts");
 var packageJson = "package.json";
-var programTs = path.join(compilerDirectory, "program.ts");
+var versionFile = path.join(compilerDirectory, "core.ts");
 
 file(configureNightlyTs);
 
@@ -597,7 +607,7 @@ task("setDebugMode", function () {
 });
 
 task("configure-nightly", [configureNightlyJs], function () {
-    var cmd = host + " " + configureNightlyJs + " " + packageJson + " " + programTs;
+    var cmd = host + " " + configureNightlyJs + " " + packageJson + " " + versionFile;
     console.log(cmd);
     exec(cmd);
 }, { async: true });
@@ -628,7 +638,7 @@ task("importDefinitelyTypedTests", [importDefinitelyTypedTestsJs], function () {
 
 // Local target to build the compiler and services
 var tscFile = path.join(builtLocalDirectory, compilerFilename);
-compileFile(tscFile, compilerSources, [builtLocalDirectory, copyright].concat(compilerSources), [copyright], /*useBuiltCompiler:*/ false);
+compileFile(tscFile, compilerSources, [builtLocalDirectory, copyright].concat(compilerSources), [copyright], /*useBuiltCompiler:*/ false, { noMapRoot: true });
 
 var servicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
 var servicesFileInBrowserTest = path.join(builtLocalDirectory, "typescriptServicesInBrowserTest.js");
@@ -918,7 +928,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
     }
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
-        testTimeout = 400000;
+        testTimeout = 800000;
     }
 
     colors = process.env.colors || process.env.color;
@@ -1074,12 +1084,10 @@ task("tests-debug", ["setDebugMode", "tests"]);
 // Makes the test results the new baseline
 desc("Makes the most recent test results the new baseline, overwriting the old baseline");
 task("baseline-accept", function () {
-    acceptBaseline("");
+    acceptBaseline(localBaseline, refBaseline);
 });
 
-function acceptBaseline(containerFolder) {
-    var sourceFolder = path.join(localBaseline, containerFolder);
-    var targetFolder = path.join(refBaseline, containerFolder);
+function acceptBaseline(sourceFolder, targetFolder) {
     console.log('Accept baselines from ' + sourceFolder + ' to ' + targetFolder);
     var files = fs.readdirSync(sourceFolder);
     var deleteEnding = '.delete';
@@ -1103,12 +1111,12 @@ function acceptBaseline(containerFolder) {
 
 desc("Makes the most recent rwc test results the new baseline, overwriting the old baseline");
 task("baseline-accept-rwc", function () {
-    acceptBaseline("rwc");
+    acceptBaseline(localRwcBaseline, refRwcBaseline);
 });
 
 desc("Makes the most recent test262 test results the new baseline, overwriting the old baseline");
 task("baseline-accept-test262", function () {
-    acceptBaseline("test262");
+    acceptBaseline(localTest262Baseline, refTest262Baseline);
 });
 
 
@@ -1171,7 +1179,6 @@ task("update-sublime", ["local", serverFile], function () {
 var tslintRuleDir = "scripts/tslint";
 var tslintRules = [
     "nextLineRule",
-    "preferConstRule",
     "booleanTriviaRule",
     "typeOperatorSpacingRule",
     "noInOperatorRule",

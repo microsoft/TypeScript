@@ -90,6 +90,7 @@ namespace ts {
         "instanceof": SyntaxKind.InstanceOfKeyword,
         "interface": SyntaxKind.InterfaceKeyword,
         "is": SyntaxKind.IsKeyword,
+        "keyof": SyntaxKind.KeyOfKeyword,
         "let": SyntaxKind.LetKeyword,
         "module": SyntaxKind.ModuleKeyword,
         "namespace": SyntaxKind.NamespaceKeyword,
@@ -530,7 +531,7 @@ namespace ts {
             const ch = text.charCodeAt(pos);
 
             if ((pos + mergeConflictMarkerLength) < text.length) {
-                for (let i = 0, n = mergeConflictMarkerLength; i < n; i++) {
+                for (let i = 0; i < mergeConflictMarkerLength; i++) {
                     if (text.charCodeAt(pos + i) !== ch) {
                         return false;
                     }
@@ -642,7 +643,7 @@ namespace ts {
                     pos++;
                     continue;
                 case CharacterCodes.slash:
-                    let nextChar = text.charCodeAt(pos + 1);
+                    const nextChar = text.charCodeAt(pos + 1);
                     let hasTrailingNewLine = false;
                     if (nextChar === CharacterCodes.slash || nextChar === CharacterCodes.asterisk) {
                         const kind = nextChar === CharacterCodes.slash ? SyntaxKind.SingleLineCommentTrivia : SyntaxKind.MultiLineCommentTrivia;
@@ -723,7 +724,7 @@ namespace ts {
         return iterateCommentRanges(/*reduce*/ true, text, pos, /*trailing*/ true, cb, state, initial);
     }
 
-    function appendCommentRange(pos: number, end: number, kind: SyntaxKind, hasTrailingNewLine: boolean, state: any, comments: CommentRange[]) {
+    function appendCommentRange(pos: number, end: number, kind: SyntaxKind, hasTrailingNewLine: boolean, _state: any, comments: CommentRange[]) {
         if (!comments) {
             comments = [];
         }
@@ -765,7 +766,7 @@ namespace ts {
             return false;
         }
 
-        for (let i = 1, n = name.length; i < n; i++) {
+        for (let i = 1; i < name.length; i++) {
             if (!isIdentifierPart(name.charCodeAt(i), languageVersion)) {
                 return false;
             }
@@ -1190,7 +1191,7 @@ namespace ts {
         }
 
         function scanBinaryOrOctalDigits(base: number): number {
-            Debug.assert(base !== 2 || base !== 8, "Expected either base 2 or base 8");
+            Debug.assert(base === 2 || base === 8, "Expected either base 2 or base 8");
 
             let value = 0;
             // For counting number of digits; Valid binaryIntegerLiteral must have at least one binary digit following B or b.
@@ -1562,7 +1563,7 @@ namespace ts {
                         pos++;
                         return token = SyntaxKind.AtToken;
                     case CharacterCodes.backslash:
-                        let cookedChar = peekUnicodeEscape();
+                        const cookedChar = peekUnicodeEscape();
                         if (cookedChar >= 0 && isIdentifierStart(cookedChar, languageVersion)) {
                             pos += 6;
                             tokenValue = String.fromCharCode(cookedChar) + scanIdentifierParts();
@@ -1799,6 +1800,9 @@ namespace ts {
                 case CharacterCodes.comma:
                     pos++;
                     return token = SyntaxKind.CommaToken;
+                case CharacterCodes.dot:
+                    pos++;
+                    return token = SyntaxKind.DotToken;
             }
 
             if (isIdentifierStart(ch, ScriptTarget.Latest)) {

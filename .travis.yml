@@ -2,6 +2,7 @@ language: node_js
 
 node_js:
   - 'stable'
+  - '6'
   - '4'
 
 sudo: false
@@ -15,7 +16,7 @@ matrix:
 branches:
   only:
   - master
-  - release-2.0
+  - release-2.1
 
 install:
   - npm uninstall typescript

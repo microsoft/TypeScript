@@ -13,7 +13,11 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
+
+
 /// <reference no-default-lib="true"/>
+
+
 declare type PropertyKey = string | number | symbol;
 
 interface Array<T> {
@@ -217,7 +221,7 @@ interface NumberConstructor {
 
     /**
       * Returns true if passed value is finite.
-      * Unlike the global isFininte, Number.isFinite doesn't forcibly convert the parameter to a
+      * Unlike the global isFinite, Number.isFinite doesn't forcibly convert the parameter to a
       * number. Only finite values of the type number, result in true.
       * @param number A numeric value.
       */

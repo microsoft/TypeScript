@@ -1,0 +1,27 @@
+=== tests/cases/compiler/mappedTypeInferenceCircularity.ts ===
+// Repro from #12511
+
+type HTML = { [K in 'div']: Block<HTML> };
+>HTML : HTML
+>K : K
+>Block : Block<P>
+>HTML : HTML
+
+type Block<P> = <T>(func: HTML) => {};
+>Block : Block<P>
+>P : P
+>T : T
+>func : HTML
+>HTML : HTML
+
+declare var h: HTML;
+>h : HTML
+>HTML : HTML
+
+h.div(h);
+>h.div(h) : {}
+>h.div : Block<HTML>
+>h : HTML
+>div : Block<HTML>
+>h : HTML
+

@@ -10,11 +10,15 @@
         "stripInternal": true,
         "types": [
             "node"
-        ]
+        ],
+        "target": "es5",
+        "noUnusedLocals": true,
+        "noUnusedParameters": true
     },
     "files": [
         "../services/shims.ts",
         "../services/utilities.ts",
+        "shared.ts",
         "utilities.ts",
         "scriptVersionCache.ts",
         "scriptInfo.ts",

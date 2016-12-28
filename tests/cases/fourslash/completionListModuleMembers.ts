@@ -22,35 +22,35 @@
 ////interface TestInterface implements Module./*TypeReferenceInImplementsList*/ { }
 
 goTo.marker("ValueReference");
-verify.memberListContains("exportedVariable");
-verify.memberListContains("exportedFunction");
-verify.memberListContains("exportedClass");
-verify.memberListContains("exportedModule");
+verify.completionListContains("exportedVariable");
+verify.completionListContains("exportedFunction");
+verify.completionListContains("exportedClass");
+verify.completionListContains("exportedModule");
 // No inner declarations
-verify.not.memberListContains("innerVariable");
-verify.not.memberListContains("innerClass");
+verify.not.completionListContains("innerVariable");
+verify.not.completionListContains("innerClass");
 // Include type declarations
-verify.memberListContains("exportedInterface");
+verify.completionListContains("exportedInterface");
 
 goTo.marker("TypeReference");
-verify.memberListContains("exportedClass");
-verify.memberListContains("exportedModule");
-verify.memberListContains("exportedInterface");
+verify.completionListContains("exportedClass");
+verify.completionListContains("exportedModule");
+verify.completionListContains("exportedInterface");
 // Include value completions
-verify.memberListContains("exportedVariable");
+verify.completionListContains("exportedVariable");
 
 goTo.marker("TypeReferenceInExtendsList");
-verify.memberListContains("exportedClass");
-verify.memberListContains("exportedModule");
-verify.memberListContains("exportedInterface");
+verify.completionListContains("exportedClass");
+verify.completionListContains("exportedModule");
+verify.completionListContains("exportedInterface");
 // Include value completions
-verify.memberListContains("exportedVariable");
+verify.completionListContains("exportedVariable");
 
 
 goTo.marker("TypeReferenceInImplementsList");
-verify.memberListContains("exportedClass");
-verify.memberListContains("exportedModule");
-verify.memberListContains("exportedInterface");
+verify.completionListContains("exportedClass");
+verify.completionListContains("exportedModule");
+verify.completionListContains("exportedInterface");
 // Include value completions
-verify.memberListContains("exportedVariable");
+verify.completionListContains("exportedVariable");
 

@@ -1,0 +1,15 @@
+tests/cases/compiler/extendPrivateConstructorClass.ts(7,17): error TS2675: Cannot extend a class 'abc.XYZ'. Class constructor is marked as private.
+
+
+==== tests/cases/compiler/extendPrivateConstructorClass.ts (1 errors) ====
+    declare namespace abc {
+        class XYZ {
+            private constructor();
+        }
+    }
+    
+    class C extends abc.XYZ {
+                    ~~~~~~~
+!!! error TS2675: Cannot extend a class 'abc.XYZ'. Class constructor is marked as private.
+    }
+    

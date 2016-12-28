@@ -530,8 +530,8 @@ namespace ts {
             case SyntaxKind.DeleteExpression:
             case SyntaxKind.VoidExpression:
             case SyntaxKind.YieldExpression:
-            case SyntaxKind.SpreadElementExpression:
-                const unaryWordExpression = (<TypeOfExpression | DeleteExpression | VoidExpression | YieldExpression | SpreadElementExpression>n);
+            case SyntaxKind.SpreadElement:
+                const unaryWordExpression = n as (TypeOfExpression | DeleteExpression | VoidExpression | YieldExpression | SpreadElement);
                 return isCompletedNode(unaryWordExpression.expression, sourceFile);
 
             case SyntaxKind.TaggedTemplateExpression:
@@ -675,8 +675,7 @@ namespace ts {
             }
 
             // find the child that contains 'position'
-            for (let i = 0, n = current.getChildCount(sourceFile); i < n; i++) {
-                const child = current.getChildAt(i);
+            for (const child of current.getChildren()) {
                 // all jsDocComment nodes were already visited
                 if (isJSDocNode(child)) {
                     continue;
@@ -750,7 +749,7 @@ namespace ts {
         return find(startNode || sourceFile);
 
         function findRightmostToken(n: Node): Node {
-            if (isToken(n) || n.kind === SyntaxKind.JsxText) {
+            if (isToken(n)) {
                 return n;
             }
 
@@ -761,12 +760,12 @@ namespace ts {
         }
 
         function find(n: Node): Node {
-            if (isToken(n) || n.kind === SyntaxKind.JsxText) {
+            if (isToken(n)) {
                 return n;
             }
 
             const children = n.getChildren();
-            for (let i = 0, len = children.length; i < len; i++) {
+            for (let i = 0; i < children.length; i++) {
                 const child = children[i];
                 // condition 'position < child.end' checks if child node end after the position
                 // in the example below this condition will be false for 'aaaa' and 'bbbb' and true for 'ccc'
@@ -951,10 +950,10 @@ namespace ts {
         }
 
         if (node) {
-            if (node.jsDocComments) {
-                for (const jsDocComment of node.jsDocComments) {
-                    if (jsDocComment.tags) {
-                        for (const tag of jsDocComment.tags) {
+            if (node.jsDoc) {
+                for (const jsDoc of node.jsDoc) {
+                    if (jsDoc.tags) {
+                        for (const tag of jsDoc.tags) {
                             if (tag.pos <= position && position <= tag.end) {
                                 return tag;
                             }
@@ -1137,13 +1136,14 @@ namespace ts {
             writeSpace: text => writeKind(text, SymbolDisplayPartKind.space),
             writeStringLiteral: text => writeKind(text, SymbolDisplayPartKind.stringLiteral),
             writeParameter: text => writeKind(text, SymbolDisplayPartKind.parameterName),
+            writeProperty: text => writeKind(text, SymbolDisplayPartKind.propertyName),
             writeSymbol,
             writeLine,
             increaseIndent: () => { indent++; },
             decreaseIndent: () => { indent--; },
             clear: resetWriter,
-            trackSymbol: () => { },
-            reportInaccessibleThisError: () => { }
+            trackSymbol: noop,
+            reportInaccessibleThisError: noop
         };
 
         function writeIndent() {
@@ -1179,7 +1179,7 @@ namespace ts {
     }
 
     export function symbolPart(text: string, symbol: Symbol) {
-        return displayPart(text, displayPartKind(symbol), symbol);
+        return displayPart(text, displayPartKind(symbol));
 
         function displayPartKind(symbol: Symbol): SymbolDisplayPartKind {
             const flags = symbol.flags;
@@ -1205,7 +1205,7 @@ namespace ts {
         }
     }
 
-    export function displayPart(text: string, kind: SymbolDisplayPartKind, symbol?: Symbol): SymbolDisplayPart {
+    export function displayPart(text: string, kind: SymbolDisplayPartKind): SymbolDisplayPart {
         return <SymbolDisplayPart>{
             text: text,
             kind: SymbolDisplayPartKind[kind]
@@ -1282,7 +1282,7 @@ namespace ts {
         if (isImportOrExportSpecifierName(location)) {
             return location.getText();
         }
-        else if (isStringOrNumericLiteral(location.kind) &&
+        else if (isStringOrNumericLiteral(location) &&
             location.parent.kind === SyntaxKind.ComputedPropertyName) {
             return (<LiteralExpression>location).text;
         }
@@ -1339,7 +1339,7 @@ namespace ts {
         const options: TranspileOptions = {
             fileName: "config.js",
             compilerOptions: {
-                target: ScriptTarget.ES6,
+                target: ScriptTarget.ES2015,
                 removeComments: true
             },
             reportDiagnostics: true

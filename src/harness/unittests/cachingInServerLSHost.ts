@@ -21,65 +21,43 @@ namespace ts {
             args: <string[]>[],
             newLine: "\r\n",
             useCaseSensitiveFileNames: false,
-            write: (s: string) => {
-            },
-            readFile: (path: string, encoding?: string): string => {
-                return path in fileMap ? fileMap[path].content : undefined;
-            },
-            writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => {
-                throw new Error("NYI");
-            },
-            resolvePath: (path: string): string => {
-                throw new Error("NYI");
-            },
-            fileExists: (path: string): boolean => {
-                return path in fileMap;
-            },
-            directoryExists: (path: string): boolean => {
-                return existingDirectories[path] || false;
-            },
-            createDirectory: (path: string) => {
-            },
-            getExecutingFilePath: (): string => {
-                return "";
-            },
-            getCurrentDirectory: (): string => {
-                return "";
-            },
-            getDirectories: (path: string) => [],
-            getEnvironmentVariable: (name: string) => "",
-            readDirectory: (path: string, extension?: string[], exclude?: string[], include?: string[]): string[] => {
-                throw new Error("NYI");
-            },
-            exit: (exitCode?: number) => {
-            },
-            watchFile: (path, callback) => {
-                return {
-                    close: () => { }
-                };
-            },
-            watchDirectory: (path, callback, recursive?) => {
-                return {
-                    close: () => { }
-                };
-            },
+            write: noop,
+            readFile: path => path in fileMap ? fileMap[path].content : undefined,
+            writeFile: notImplemented,
+            resolvePath: notImplemented,
+            fileExists: path => path in fileMap,
+            directoryExists: path => existingDirectories[path] || false,
+            createDirectory: noop,
+            getExecutingFilePath: () => "",
+            getCurrentDirectory: () => "",
+            getDirectories: () => [],
+            getEnvironmentVariable: () => "",
+            readDirectory: notImplemented,
+            exit: noop,
+            watchFile: () => ({
+                close: noop
+            }),
+            watchDirectory: () => ({
+                close: noop
+            }),
             setTimeout,
             clearTimeout,
-            setImmediate,
-            clearImmediate
+            setImmediate: typeof setImmediate !== "undefined" ? setImmediate : action => setTimeout(action, 0),
+            clearImmediate: typeof clearImmediate !== "undefined" ? clearImmediate : clearTimeout,
+            createHash: s => s
         };
     }
 
     function createProject(rootFile: string, serverHost: server.ServerHost): { project: server.Project, rootScriptInfo: server.ScriptInfo } {
         const logger: server.Logger = {
-            close() { },
+            close: noop,
             hasLevel: () => false,
             loggingEnabled: () => false,
-            perftrc: (s: string) => { },
-            info: (s: string) => { },
-            startGroup: () => { },
-            endGroup: () => { },
-            msg: (s: string, type?: string) => { },
+            perftrc: noop,
+            info: noop,
+            startGroup: noop,
+            endGroup: noop,
+            msg: noop,
             getLogFileName: (): string => undefined
         };
 
@@ -116,10 +94,7 @@ namespace ts {
             const originalFileExists = serverHost.fileExists;
             {
                 // patch fileExists to make sure that disk is not touched
-                serverHost.fileExists = (fileName): boolean => {
-                    assert.isTrue(false, "fileExists should not be called");
-                    return false;
-                };
+                serverHost.fileExists = notImplemented;
 
                 const newContent = `import {x} from "f1"
                 var x: string = 1;`;
