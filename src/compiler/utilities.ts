@@ -2141,7 +2141,6 @@ namespace ts {
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.OmittedExpression:
-            case SyntaxKind.RawExpression:
                 return 19;
 
             case SyntaxKind.TaggedTemplateExpression:
@@ -2365,13 +2364,11 @@ namespace ts {
      * Note that this doesn't actually wrap the input in double quotes.
      */
     export function escapeString(s: string): string {
-        s = escapedCharsRegExp.test(s) ? s.replace(escapedCharsRegExp, getReplacement) : s;
+        return s.replace(escapedCharsRegExp, getReplacement);
+    }
 
-        return s;
-
-        function getReplacement(c: string) {
-            return escapedCharsMap[c] || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
-        }
+    function getReplacement(c: string) {
+        return escapedCharsMap[c] || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
     }
 
     export function isIntrinsicJsxName(name: string) {
@@ -3888,8 +3885,7 @@ namespace ts {
             || kind === SyntaxKind.ThisKeyword
             || kind === SyntaxKind.TrueKeyword
             || kind === SyntaxKind.SuperKeyword
-            || kind === SyntaxKind.NonNullExpression
-            || kind === SyntaxKind.RawExpression;
+            || kind === SyntaxKind.NonNullExpression;
     }
 
     export function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression {
@@ -3919,7 +3915,6 @@ namespace ts {
             || kind === SyntaxKind.SpreadElement
             || kind === SyntaxKind.AsExpression
             || kind === SyntaxKind.OmittedExpression
-            || kind === SyntaxKind.RawExpression
             || isUnaryExpressionKind(kind);
     }
 
