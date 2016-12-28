@@ -989,43 +989,43 @@ namespace ts {
         return result;
     }
 
-    /**
-     * Adds the value to an array of values associated with the key, and returns the array.
-     * Creates the array if it does not already exist.
-     */
-    export function multiMapAdd<V>(map: Map<V[]>, key: string, value: V): V[] {
-        let values = map.get(key);
+    export interface MultiMap<T> extends Map<T[]> {
+        /**
+         * Adds the value to an array of values associated with the key, and returns the array.
+         * Creates the array if it does not already exist.
+         */
+        add(key: string, value: T): T[];
+        /**
+         * Removes a value from an array of values associated with the key.
+         * Does not preserve the order of those values.
+         * Does nothing if `key` is not in `map`, or `value` is not in `map[key]`.
+         */
+        remove(key: string, value: T): void;
+    }
+
+    export function createMultiMap<T>(): MultiMap<T> {
+        const map = createMap<T[]>() as MultiMap<T>;
+        map.add = multiMapAdd;
+        map.remove = multiMapRemove;
+        return map;
+    }
+    function multiMapAdd<T>(this: MultiMap<T>, key: string, value: T) {
+        let values = this.get(key);
         if (values) {
             values.push(value);
         }
         else {
-            map.set(key, values = [value]);
+            this.set(key, values = [value]);
         }
         return values;
-    }
 
-    export function multiMapSparseArrayAdd<V>(map: SparseArray<V[]>, key: number, value: V): V[] {
-        let values = map[key];
-        if (values) {
-            values.push(value);
-        }
-        else {
-            map[key] = values = [value];
-        }
-        return values;
     }
-
-    /**
-     * Removes a value from an array of values associated with the key.
-     * Does not preserve the order of those values.
-     * Does nothing if `key` is not in `map`, or `value` is not in `map[key]`.
-     */
-    export function multiMapRemove<V>(map: Map<V[]>, key: string, value: V): void {
-        const values = map.get(key);
+    function multiMapRemove<T>(this: MultiMap<T>, key: string, value: T) {
+        const values = this.get(key);
         if (values) {
             unorderedRemoveItem(values, value);
             if (!values.length) {
-                map.delete(key);
+                this.delete(key);
             }
         }
     }

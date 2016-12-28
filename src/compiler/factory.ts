@@ -3298,7 +3298,7 @@ namespace ts {
 
     export function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver, compilerOptions: CompilerOptions): ExternalModuleInfo {
         const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
-        const exportSpecifiers = createMap<ExportSpecifier[]>();
+        const exportSpecifiers = createMultiMap<ExportSpecifier>();
         const exportedBindings: SparseArray<Identifier[]> = [];
         const uniqueExports = createMap<boolean>();
         let exportedNames: Identifier[];
@@ -3352,7 +3352,7 @@ namespace ts {
                         for (const specifier of (<ExportDeclaration>node).exportClause.elements) {
                             if (!uniqueExports.get(specifier.name.text)) {
                                 const name = specifier.propertyName || specifier.name;
-                                multiMapAdd(exportSpecifiers, name.text, specifier);
+                                exportSpecifiers.add(name.text, specifier);
 
                                 const decl = resolver.getReferencedImportDeclaration(name)
                                     || resolver.getReferencedValueDeclaration(name);
@@ -3445,5 +3445,17 @@ namespace ts {
             }
         }
         return exportedNames;
+    }
+
+    /** Use a sparse array as a multi-map. */
+    function multiMapSparseArrayAdd<V>(map: SparseArray<V[]>, key: number, value: V): V[] {
+        let values = map[key];
+        if (values) {
+            values.push(value);
+        }
+        else {
+            map[key] = values = [value];
+        }
+        return values;
     }
 }

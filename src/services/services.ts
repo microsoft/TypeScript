@@ -518,7 +518,7 @@ namespace ts {
         }
 
         private computeNamedDeclarations(): Map<Declaration[]> {
-            const result = createMap<Declaration[]>();
+            const result = createMultiMap<Declaration>();
 
             forEachChild(this, visit);
 
@@ -527,7 +527,7 @@ namespace ts {
             function addDeclaration(declaration: Declaration) {
                 const name = getDeclarationName(declaration);
                 if (name) {
-                    multiMapAdd(result, name, declaration);
+                    result.add(name, declaration);
                 }
             }
 

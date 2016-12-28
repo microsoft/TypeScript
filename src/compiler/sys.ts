@@ -1,4 +1,4 @@
-/// <reference path="core.ts"/>
+﻿/// <reference path="core.ts"/>
 
 namespace ts {
     export type FileWatcherCallback = (fileName: string, removed?: boolean) => void;
@@ -243,7 +243,7 @@ namespace ts {
             function createWatchedFileSet() {
                 const dirWatchers = createMap<DirectoryWatcher>();
                 // One file can have multiple watchers
-                const fileWatcherCallbacks = createMap<FileWatcherCallback[]>();
+                const fileWatcherCallbacks = createMultiMap<FileWatcherCallback>();
                 return { addFile, removeFile };
 
                 function reduceDirWatcherRefCountForFile(fileName: string) {
@@ -275,7 +275,7 @@ namespace ts {
                 }
 
                 function addFileWatcherCallback(filePath: string, callback: FileWatcherCallback): void {
-                    multiMapAdd(fileWatcherCallbacks, filePath, callback);
+                    fileWatcherCallbacks.add(filePath, callback);
                 }
 
                 function addFile(fileName: string, callback: FileWatcherCallback): WatchedFile {
@@ -291,7 +291,7 @@ namespace ts {
                 }
 
                 function removeFileWatcherCallback(filePath: string, callback: FileWatcherCallback) {
-                    multiMapRemove(fileWatcherCallbacks, filePath, callback);
+                    fileWatcherCallbacks.remove(filePath, callback);
                 }
 
                 function fileEventHandler(eventName: string, relativeFileName: string, baseDirPath: string) {

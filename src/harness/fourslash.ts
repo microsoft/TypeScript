@@ -1760,10 +1760,10 @@ namespace FourSlash {
         }
 
         public rangesByText(): ts.Map<Range[]> {
-            const result = ts.createMap<Range[]>();
+            const result = ts.createMultiMap<Range>();
             for (const range of this.getRanges()) {
                 const text = this.rangeText(range);
-                ts.multiMapAdd(result, text, range);
+                result.add(text, range);
             }
             return result;
         }

@@ -334,8 +334,8 @@ namespace ts.projectSystem {
         private timeoutCallbacks = new Callbacks();
         private immediateCallbacks = new Callbacks();
 
-        readonly watchedDirectories = createMap<{ cb: DirectoryWatcherCallback, recursive: boolean }[]>();
-        readonly watchedFiles = createMap<FileWatcherCallback[]>();
+        readonly watchedDirectories = createMultiMap<{ cb: DirectoryWatcherCallback, recursive: boolean }>();
+        readonly watchedFiles = createMultiMap<FileWatcherCallback>();
 
         private filesOrFolders: FileOrFolder[];
 
@@ -421,11 +421,11 @@ namespace ts.projectSystem {
         watchDirectory(directoryName: string, callback: DirectoryWatcherCallback, recursive: boolean): DirectoryWatcher {
             const path = this.toPath(directoryName);
             const cbWithRecursive = { cb: callback, recursive };
-            multiMapAdd(this.watchedDirectories, path, cbWithRecursive);
+            this.watchedDirectories.add(path, cbWithRecursive);
             return {
                 referenceCount: 0,
                 directoryName,
-                close: () => multiMapRemove(this.watchedDirectories, path, cbWithRecursive)
+                close: () => this.watchedDirectories.remove(path, cbWithRecursive)
             };
         }
 
@@ -455,8 +455,8 @@ namespace ts.projectSystem {
 
         watchFile(fileName: string, callback: FileWatcherCallback) {
             const path = this.toPath(fileName);
-            multiMapAdd(this.watchedFiles, path, callback);
-            return { close: () => multiMapRemove(this.watchedFiles, path, callback) };
+            this.watchedFiles.add(path, callback);
+            return { close: () => this.watchedFiles.remove(path, callback) };
         }
 
         // TOOD: record and invoke callbacks to simulate timer events
