@@ -2646,7 +2646,7 @@ namespace ts {
         return destEmitNode;
     }
 
-    function mergeTokenSourceMapRanges(sourceRanges: SparseArray<TextRange>, destRanges: SparseArray<TextRange>) {
+    function mergeTokenSourceMapRanges(sourceRanges: TextRange[], destRanges: TextRange[]) {
         if (!destRanges) destRanges = [];
         for (const key in sourceRanges) {
             destRanges[key] = sourceRanges[key];
@@ -3277,7 +3277,7 @@ namespace ts {
         externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[]; // imports of other external modules
         externalHelpersImportDeclaration: ImportDeclaration | undefined; // import of external helpers
         exportSpecifiers: Map<ExportSpecifier[]>; // export specifiers by name
-        exportedBindings: SparseArray<Identifier[]>; // exported names of local declarations
+        exportedBindings: Identifier[][]; // exported names of local declarations
         exportedNames: Identifier[]; // all exported names local to module
         exportEquals: ExportAssignment | undefined; // an export= declaration if one was present
         hasExportStarsToExportValues: boolean; // whether this module contains export*
@@ -3286,7 +3286,7 @@ namespace ts {
     export function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver, compilerOptions: CompilerOptions): ExternalModuleInfo {
         const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
         const exportSpecifiers = createMultiMap<ExportSpecifier>();
-        const exportedBindings: SparseArray<Identifier[]> = [];
+        const exportedBindings: Identifier[][] = [];
         const uniqueExports = createMap<boolean>();
         let exportedNames: Identifier[];
         let hasExportDefault = false;
@@ -3435,7 +3435,7 @@ namespace ts {
     }
 
     /** Use a sparse array as a multi-map. */
-    function multiMapSparseArrayAdd<V>(map: SparseArray<V[]>, key: number, value: V): V[] {
+    function multiMapSparseArrayAdd<V>(map: V[][], key: number, value: V): V[] {
         let values = map[key];
         if (values) {
             values.push(value);

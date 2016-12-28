@@ -28,10 +28,10 @@ namespace ts {
         context.enableSubstitution(SyntaxKind.PostfixUnaryExpression); // Substitutes updates to exported symbols.
         context.enableEmitNotification(SyntaxKind.SourceFile); // Restore state when substituting nodes in a file.
 
-        const moduleInfoMap: SparseArray<ExternalModuleInfo> = []; // The ExternalModuleInfo for each file.
-        const deferredExports: SparseArray<Statement[]> = []; // Exports to defer until an EndOfDeclarationMarker is found.
-        const exportFunctionsMap: SparseArray<Identifier> = []; // The export function associated with a source file.
-        const noSubstitutionMap: SparseArray<SparseArray<boolean>> = []; // Set of nodes for which substitution rules should be ignored for each file.
+        const moduleInfoMap: ExternalModuleInfo[] = []; // The ExternalModuleInfo for each file.
+        const deferredExports: Statement[][] = []; // Exports to defer until an EndOfDeclarationMarker is found.
+        const exportFunctionsMap: Identifier[] = []; // The export function associated with a source file.
+        const noSubstitutionMap: boolean[][] = []; // Set of nodes for which substitution rules should be ignored for each file.
 
         let currentSourceFile: SourceFile; // The current file.
         let moduleInfo: ExternalModuleInfo; // ExternalModuleInfo for the current file.
@@ -39,7 +39,7 @@ namespace ts {
         let contextObject: Identifier; // The context object for the current file.
         let hoistedStatements: Statement[];
         let enclosingBlockScopedContainer: Node;
-        let noSubstitution: SparseArray<boolean>; // Set of nodes for which substitution rules should be ignored.
+        let noSubstitution: boolean[]; // Set of nodes for which substitution rules should be ignored.
 
         return transformSourceFile;
 

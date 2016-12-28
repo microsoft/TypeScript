@@ -3362,7 +3362,7 @@ namespace ts {
         return false;
     }
 
-    const syntaxKindCache: SparseArray<string> = [];
+    const syntaxKindCache: string[] = [];
 
     export function formatSyntaxKind(kind: SyntaxKind): string {
         const syntaxKindEnum = (<any>ts).SyntaxKind;

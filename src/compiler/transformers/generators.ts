@@ -243,7 +243,7 @@ namespace ts {
 
         let currentSourceFile: SourceFile;
         let renamedCatchVariables: Map<boolean>;
-        let renamedCatchVariableDeclarations: SparseArray<Identifier>;
+        let renamedCatchVariableDeclarations: Identifier[];
 
         let inGeneratorFunctionBody: boolean;
         let inStatementContainingYield: boolean;

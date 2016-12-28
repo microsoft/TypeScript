@@ -8,13 +8,6 @@
         [index: string]: T;
     }
 
-    /**
-     * Like MapLike, but keys must be numbers.
-     */
-    export interface SparseArray<T> {
-        [key: number]: T;
-    }
-
     /** ES6 Map interface. */
     export interface Map<T> {
         get(key: string): T;
@@ -2854,7 +2847,7 @@
 
     // Enum types (TypeFlags.Enum)
     export interface EnumType extends Type {
-        memberTypes: SparseArray<EnumLiteralType>;
+        memberTypes: EnumLiteralType[];
     }
 
     // Enum types (TypeFlags.EnumLiteral)
@@ -3684,7 +3677,7 @@
         flags?: EmitFlags;                      // Flags that customize emit
         commentRange?: TextRange;               // The text range to use when emitting leading or trailing comments
         sourceMapRange?: TextRange;             // The text range to use when emitting leading or trailing source mappings
-        tokenSourceMapRanges?: SparseArray<TextRange>;  // The text range to use when emitting source mappings for tokens
+        tokenSourceMapRanges?: TextRange[];  // The text range to use when emitting source mappings for tokens
         constantValue?: number;                 // The constant value of an expression
         externalHelpersModuleName?: Identifier; // The local name for an imported helpers module
         helpers?: EmitHelper[];                 // Emit helpers for the node
