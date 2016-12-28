@@ -1,4 +1,4 @@
-namespace ts {
+﻿namespace ts {
     export interface TranspileOptions {
         compilerOptions?: CompilerOptions;
         fileName?: string;
@@ -126,7 +126,7 @@ namespace ts {
     function fixupCompilerOptions(options: CompilerOptions, diagnostics: Diagnostic[]): CompilerOptions {
         // Lazily create this value to fix module loading errors.
         commandLineOptionsStringToEnum = commandLineOptionsStringToEnum || <CommandLineOptionOfCustomType[]>filter(optionDeclarations, o =>
-            typeof o.type === "object" && !forEachInMap(o.type, v => typeof v !== "number"));
+            typeof o.type === "object" && !forEachEntry(o.type, v => typeof v !== "number"));
 
         options = clone(options);
 
@@ -142,7 +142,7 @@ namespace ts {
                 options[opt.name] = parseCustomTypeOption(opt, value, diagnostics);
             }
             else {
-                if (!someInMap(opt.type, v => v === value)) {
+                if (!forEachEntry(opt.type, v => v === value)) {
                     // Supplied value isn't a valid enum value.
                     diagnostics.push(createCompilerDiagnosticForInvalidCustomType(opt));
                 }

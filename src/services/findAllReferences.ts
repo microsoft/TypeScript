@@ -1,4 +1,4 @@
-/* @internal */
+﻿/* @internal */
 namespace ts.FindAllReferences {
     export function findReferencedSymbols(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFiles: SourceFile[], sourceFile: SourceFile, position: number, findInStrings: boolean, findInComments: boolean): ReferencedSymbol[] {
         const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
@@ -508,7 +508,7 @@ namespace ts.FindAllReferences {
                     result.push(ctrKeyword);
                 }
 
-                forEachInMap(classSymbol.exports, member => {
+                classSymbol.exports.forEach(member => {
                     const decl = member.valueDeclaration;
                     if (decl && decl.kind === SyntaxKind.MethodDeclaration) {
                         const body = (<MethodDeclaration>decl).body;

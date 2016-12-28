@@ -1,4 +1,4 @@
-/// <reference path="..\harness.ts" />
+﻿/// <reference path="..\harness.ts" />
 /// <reference path="..\..\harness\harnessLanguageService.ts" />
 
 namespace ts {
@@ -197,13 +197,13 @@ namespace ts {
     function mapsAreEqual<T>(left: Map<T>, right: Map<T>, valuesAreEqual?: (left: T, right: T) => boolean): boolean {
         if (left === right) return true;
         if (!left || !right) return false;
-        const someInLeftHasNoMatch = someInMap(left, (leftValue, leftKey) => {
+        const someInLeftHasNoMatch = forEachEntry(left, (leftValue, leftKey) => {
             if (!right.has(leftKey)) return true;
             const rightValue = right.get(leftKey);
             return !(valuesAreEqual ? valuesAreEqual(leftValue, rightValue) : leftValue === rightValue);
         });
         if (someInLeftHasNoMatch) return false;
-        const someInRightHasNoMatch = someKeyInMap(right, rightKey => !left.has(rightKey));
+        const someInRightHasNoMatch = forEachKey(right, rightKey => !left.has(rightKey));
         return !someInRightHasNoMatch;
     }
 

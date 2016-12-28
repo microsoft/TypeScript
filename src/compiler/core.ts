@@ -877,15 +877,15 @@ namespace ts {
     }
 
     /**
-     * Calls `callback` for each entry in the map, returning the first defined result.
+     * Calls `callback` for each entry in the map, returning the first truthy result.
      * Use `map.forEach` instead for normal iteration.
      */
-    export function forEachInMap<T, U>(map: Map<T>, callback: (value: T, key: string) => U | undefined): U | undefined {
+    export function forEachEntry<T, U>(map: Map<T>, callback: (value: T, key: string) => U | undefined): U | undefined {
         const iterator = map.entries();
         for (let { value: pair, done } = iterator.next(); !done; { value: pair, done } = iterator.next()) {
             const [key, value] = pair;
             const result = callback(value, key);
-            if (result !== undefined) {
+            if (result) {
                 return result;
             }
         }
@@ -893,42 +893,19 @@ namespace ts {
     }
 
     /** `forEachInMap` for just keys. */
-    export function forEachKeyInMap<T>(map: Map<{}>, callback: (key: string) => T | undefined): T | undefined {
+    export function forEachKey<T>(map: Map<{}>, callback: (key: string) => T | undefined): T | undefined {
         const iterator = map.keys();
         for (let { value: key, done } = iterator.next(); !done; { value: key, done } = iterator.next()) {
             const result = callback(key);
-            if (result !== undefined) {
+            if (result) {
                 return result;
             }
         }
         return undefined;
     }
 
-    /** Whether `predicate` is true for some entry in the map. */
-    export function someInMap<T>(map: Map<T>, predicate: (value: T, key: string) => boolean): boolean {
-        const iterator = map.entries();
-        for (let { value: pair, done } = iterator.next(); !done; { value: pair, done } = iterator.next()) {
-            const [key, value] = pair;
-            if (predicate(value, key)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /** `someInMap` for just keys. */
-    export function someKeyInMap(map: Map<{}>, predicate: (key: string) => boolean): boolean {
-        const iterator = map.keys();
-        for (let { value: key, done } = iterator.next(); !done; { value: key, done } = iterator.next()) {
-            if (predicate(key)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     /** Copy entries from `source` to `target`. */
-    export function copyMapEntries<T>(source: Map<T>, target: Map<T>): void {
+    export function copyEntries<T>(source: Map<T>, target: Map<T>): void {
         source.forEach((value, key) => {
             target.set(key, value);
         });
@@ -987,7 +964,7 @@ namespace ts {
 
     export function cloneMap<T>(map: Map<T>) {
         const clone = createMap<T>();
-        copyMapEntries(map, clone);
+        copyEntries(map, clone);
         return clone;
     }
 

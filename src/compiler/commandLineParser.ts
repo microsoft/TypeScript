@@ -753,7 +753,7 @@ namespace ts {
 
         function getNameOfCompilerOptionValue(value: CompilerOptionsValue, customTypeMap: Map<string | number>): string | undefined {
             // There is a typeMap associated with this command-line option so use it to map value back to its name
-            return forEachInMap(customTypeMap, (mapValue, key) => {
+            return forEachEntry(customTypeMap, (mapValue, key) => {
                 if (mapValue === value) {
                     return key;
                 }

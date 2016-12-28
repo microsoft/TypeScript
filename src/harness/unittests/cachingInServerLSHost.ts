@@ -1,4 +1,4 @@
-/// <reference path="..\harness.ts" />
+﻿/// <reference path="..\harness.ts" />
 
 namespace ts {
     interface File {
@@ -8,7 +8,7 @@ namespace ts {
 
     function createDefaultServerHost(fileMap: Map<File>): server.ServerHost {
         const existingDirectories = createMap<boolean>();
-        forEachKeyInMap(fileMap, name => {
+        forEachKey(fileMap, name => {
             let dir = getDirectoryPath(name);
             let previous: string;
             do {

@@ -1,4 +1,4 @@
-/* @internal */
+﻿/* @internal */
 namespace ts.NavigateTo {
     type RawNavigateToItem = { name: string; fileName: string; matchKind: PatternMatchKind; isCaseSensitive: boolean; declaration: Declaration };
 
@@ -14,7 +14,7 @@ namespace ts.NavigateTo {
                 continue;
             }
 
-            forEachInMap(sourceFile.getNamedDeclarations(), (declarations, name) => {
+            forEachEntry(sourceFile.getNamedDeclarations(), (declarations, name) => {
                 if (declarations) {
                     // First do a quick check to see if the name of the declaration matches the
                     // last portion of the (possibly) dotted name they're searching for.

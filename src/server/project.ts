@@ -619,12 +619,12 @@ namespace ts.server {
                 const removed: string[] = [];
                 const updated: string[] = arrayFrom(updatedFileNames.keys());
 
-                forEachKeyInMap(currentFiles, id => {
+                forEachKey(currentFiles, id => {
                     if (!lastReportedFileNames.has(id)) {
                         added.push(id);
                     }
                 });
-                forEachKeyInMap(lastReportedFileNames, id => {
+                forEachKey(lastReportedFileNames, id => {
                     if (!currentFiles.has(id)) {
                         removed.push(id);
                     }

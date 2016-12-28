@@ -1373,7 +1373,7 @@ namespace ts.server {
             }
 
             // close projects that were missing in the input list
-            forEachKeyInMap(projectsToClose, externalProjectName => {
+            forEachKey(projectsToClose, externalProjectName => {
                 this.closeExternalProject(externalProjectName, /*suppressRefresh*/ true)
             });
 

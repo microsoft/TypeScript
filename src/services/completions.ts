@@ -1,4 +1,4 @@
-/// <reference path='../compiler/utilities.ts' />
+﻿/// <reference path='../compiler/utilities.ts' />
 
 /* @internal */
 namespace ts.Completions {
@@ -378,7 +378,7 @@ namespace ts.Completions {
                         }
                     }
 
-                    forEachKeyInMap(foundFiles, foundFile => {
+                    forEachKey(foundFiles, foundFile => {
                         result.push(createCompletionEntryForModule(foundFile, ScriptElementKind.scriptElement, span));
                     });
                 }

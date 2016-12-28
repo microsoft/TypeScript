@@ -156,7 +156,7 @@ namespace ts {
         });
 
         if (usedTypeDirectiveReferences) {
-            forEachKeyInMap(usedTypeDirectiveReferences, directive => {
+            forEachKey(usedTypeDirectiveReferences, directive => {
                 referencesOutput += `/// <reference types="${directive}" />${newLine}`;
             });
         }

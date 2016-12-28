@@ -464,7 +464,7 @@ namespace ts {
                 classifiableNames = createMap<string>();
 
                 for (const sourceFile of files) {
-                    copyMapEntries(sourceFile.classifiableNames, classifiableNames);
+                    copyEntries(sourceFile.classifiableNames, classifiableNames);
                 }
             }
 
