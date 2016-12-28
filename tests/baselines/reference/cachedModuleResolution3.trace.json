@@ -16,6 +16,6 @@
     "======== Module name 'foo' was successfully resolved to '/a/b/foo.d.ts'. ========",
     "======== Resolving module 'foo' from '/a/b/c/lib.ts'. ========",
     "Explicitly specified module resolution kind: 'Classic'.",
-    "Resolution for module 'foo' was found in cache",
+    "Resolution for module 'foo' was found in cache.",
     "======== Module name 'foo' was successfully resolved to '/a/b/foo.d.ts'. ========"
 ]

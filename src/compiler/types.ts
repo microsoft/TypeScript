@@ -396,7 +396,6 @@
         PartiallyEmittedExpression,
         MergeDeclarationMarker,
         EndOfDeclarationMarker,
-        RawExpression,
 
         // Enum value count
         Count,
@@ -1545,16 +1544,6 @@
     /* @internal */
     export interface EndOfDeclarationMarker extends Statement {
         kind: SyntaxKind.EndOfDeclarationMarker;
-    }
-
-    /**
-     * Emits a string of raw text in an expression position. Raw text is never transformed, should
-     * be ES3 compliant, and should have the same precedence as PrimaryExpression.
-     */
-    /* @internal */
-    export interface RawExpression extends PrimaryExpression {
-        kind: SyntaxKind.RawExpression;
-        text: string;
     }
 
     /**

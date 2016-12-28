@@ -670,8 +670,6 @@ namespace ts {
                 // Transformation nodes
                 case SyntaxKind.PartiallyEmittedExpression:
                     return emitPartiallyEmittedExpression(<PartiallyEmittedExpression>node);
-                case SyntaxKind.RawExpression:
-                    return writeLines((<RawExpression>node).text);
             }
         }
 
