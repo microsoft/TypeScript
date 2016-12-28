@@ -371,7 +371,6 @@ namespace ts {
         PartiallyEmittedExpression,
         MergeDeclarationMarker,
         EndOfDeclarationMarker,
-        RawExpression,
 
         // Enum value count
         Count,
@@ -1501,6 +1500,7 @@ namespace ts {
 
     export interface JsxExpression extends Expression {
         kind: SyntaxKind.JsxExpression;
+        dotDotDotToken?: Token<SyntaxKind.DotDotDotToken>;
         expression?: Expression;
     }
 
@@ -1527,16 +1527,6 @@ namespace ts {
     /* @internal */
     export interface EndOfDeclarationMarker extends Statement {
         kind: SyntaxKind.EndOfDeclarationMarker;
-    }
-
-    /**
-     * Emits a string of raw text in an expression position. Raw text is never transformed, should
-     * be ES3 compliant, and should have the same precedence as PrimaryExpression.
-     */
-    /* @internal */
-    export interface RawExpression extends PrimaryExpression {
-        kind: SyntaxKind.RawExpression;
-        text: string;
     }
 
     /**
@@ -3553,6 +3543,7 @@ namespace ts {
 
     export interface ResolvedModuleWithFailedLookupLocations {
         resolvedModule: ResolvedModuleFull | undefined;
+        /* @internal */
         failedLookupLocations: string[];
     }
 

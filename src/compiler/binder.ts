@@ -283,8 +283,8 @@ namespace ts {
                     // Parameters with names are handled at the top of this function.  Parameters
                     // without names can only come from JSDocFunctionTypes.
                     Debug.assert(node.parent.kind === SyntaxKind.JSDocFunctionType);
-                    let functionType = <JSDocFunctionType>node.parent;
-                    let index = indexOf(functionType.parameters, node);
+                    const functionType = <JSDocFunctionType>node.parent;
+                    const index = indexOf(functionType.parameters, node);
                     return "arg" + index;
                 case SyntaxKind.JSDocTypedefTag:
                     const parentNode = node.parent && node.parent.parent;

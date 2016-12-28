@@ -467,6 +467,36 @@ namespace ts.projectSystem {
     });
 
     describe("EmitFile test", () => {
+        it("should respect line endings", () => {
+            test("\n");
+            test("\r\n");
+
+            function test(newLine: string) {
+                const lines = ["var x = 1;", "var y = 2;"];
+                const path = "/a/app";
+                const f = {
+                    path: path + ".ts",
+                    content: lines.join(newLine)
+                };
+                const host = createServerHost([f], { newLine });
+                const session = createSession(host);
+                session.executeCommand(<server.protocol.OpenRequest>{
+                    seq: 1,
+                    type: "request",
+                    command: "open",
+                    arguments: { file: f.path }
+                });
+                session.executeCommand(<server.protocol.CompileOnSaveEmitFileRequest>{
+                    seq: 2,
+                    type: "request",
+                    command: "compileOnSaveEmitFile",
+                    arguments: { file: f.path }
+                });
+                const emitOutput = host.readFile(path + ".js");
+                assert.equal(emitOutput, f.content + newLine, "content of emit output should be identical with the input + newline");
+            }
+        })
+
         it("should emit specified file", () => {
             const file1 = {
                 path: "/a/b/f1.ts",
@@ -480,7 +510,7 @@ namespace ts.projectSystem {
                 path: "/a/b/tsconfig.json",
                 content: `{}`
             };
-            const host = createServerHost([file1, file2, configFile, libFile]);
+            const host = createServerHost([file1, file2, configFile, libFile], { newLine: "\r\n" });
             const typingsInstaller = createTestTypingsInstaller(host);
             const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
 

@@ -85,7 +85,7 @@ namespace Utils {
                 eval(fileContents);
                 break;
             case ExecutionEnvironment.Node:
-                let vm = require("vm");
+                const vm = require("vm");
                 if (nodeContext) {
                     vm.runInNewContext(fileContents, nodeContext, fileName);
                 }
@@ -175,9 +175,9 @@ namespace Utils {
                     assert.isFalse(array.end > node.end, "array.end > node.end");
                     assert.isFalse(array.pos < currentPos, "array.pos < currentPos");
 
-                    for (let i = 0, n = array.length; i < n; i++) {
-                        assert.isFalse(array[i].pos < currentPos, "array[i].pos < currentPos");
-                        currentPos = array[i].end;
+                    for (const item of array) {
+                        assert.isFalse(item.pos < currentPos, "array[i].pos < currentPos");
+                        currentPos = item.end;
                     }
 
                     currentPos = array.end;
@@ -344,7 +344,7 @@ namespace Utils {
 
         assert.equal(array1.length, array2.length, "array1.length !== array2.length");
 
-        for (let i = 0, n = array1.length; i < n; i++) {
+        for (let i = 0; i < array1.length; i++) {
             const d1 = array1[i];
             const d2 = array2[i];
 
@@ -400,7 +400,7 @@ namespace Utils {
         assert.equal(array1.end, array2.end, "array1.end !== array2.end");
         assert.equal(array1.length, array2.length, "array1.length !== array2.length");
 
-        for (let i = 0, n = array1.length; i < n; i++) {
+        for (let i = 0; i < array1.length; i++) {
             assertStructuralEquals(array1[i], array2[i]);
         }
     }

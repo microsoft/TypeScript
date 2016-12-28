@@ -1317,15 +1317,16 @@ namespace ts {
         return node;
     }
 
-    export function createJsxExpression(expression: Expression, location?: TextRange) {
+    export function createJsxExpression(expression: Expression, dotDotDotToken: Token<SyntaxKind.DotDotDotToken>, location?: TextRange) {
         const node = <JsxExpression>createNode(SyntaxKind.JsxExpression, location);
+        node.dotDotDotToken = dotDotDotToken;
         node.expression = expression;
         return node;
     }
 
     export function updateJsxExpression(node: JsxExpression, expression: Expression) {
         if (node.expression !== expression) {
-            return updateNode(createJsxExpression(expression, node), node);
+            return updateNode(createJsxExpression(expression, node.dotDotDotToken, node), node);
         }
         return node;
     }
@@ -1526,19 +1527,6 @@ namespace ts {
         if (node.expression !== expression) {
             return updateNode(createPartiallyEmittedExpression(expression, node.original, node), node);
         }
-        return node;
-    }
-
-    /**
-     * Creates a node that emits a string of raw text in an expression position. Raw text is never
-     * transformed, should be ES3 compliant, and should have the same precedence as
-     * PrimaryExpression.
-     *
-     * @param text The raw text of the node.
-     */
-    export function createRawExpression(text: string) {
-        const node = <RawExpression>createNode(SyntaxKind.RawExpression);
-        node.text = text;
         return node;
     }
 

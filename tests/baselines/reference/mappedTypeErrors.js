@@ -131,6 +131,20 @@ let x1: T2 = { a: 'no' };  // Error
 let x2: Partial<T2> = { a: 'no' }; // Error
 let x3: { [P in keyof T2]: T2[P]} = { a: 'no' };  // Error
 
+// Repro from #13044
+
+type Foo2<T, F extends keyof T> = {
+    pf: {[P in F]?: T[P]},
+    pt: {[P in T]?: T[P]}, // note: should be in keyof T
+};
+type O = {x: number, y: boolean};
+let o: O = {x: 5, y: false};
+let f: Foo2<O, 'x'> = {
+    pf: {x: 7},
+    pt: {x: 7, y: false},
+};
+
+
 //// [mappedTypeErrors.js]
 function f1(x) {
     var y; // Error
@@ -204,6 +218,11 @@ c.setState({ c: true }); // Error
 var x1 = { a: 'no' }; // Error
 var x2 = { a: 'no' }; // Error
 var x3 = { a: 'no' }; // Error
+var o = { x: 5, y: false };
+var f = {
+    pf: { x: 7 },
+    pt: { x: 7, y: false }
+};
 
 
 //// [mappedTypeErrors.d.ts]
@@ -268,3 +287,17 @@ declare let x2: Partial<T2>;
 declare let x3: {
     [P in keyof T2]: T2[P];
 };
+declare type Foo2<T, F extends keyof T> = {
+    pf: {
+        [P in F]?: T[P];
+    };
+    pt: {
+        [P in T]?: T[P];
+    };
+};
+declare type O = {
+    x: number;
+    y: boolean;
+};
+declare let o: O;
+declare let f: Foo2<O, 'x'>;
