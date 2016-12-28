@@ -1,4 +1,4 @@
-/// <reference path="sys.ts"/>
+﻿/// <reference path="sys.ts"/>
 /// <reference path="types.ts"/>
 /// <reference path="core.ts"/>
 /// <reference path="diagnosticInformationMap.generated.ts"/>
@@ -543,7 +543,7 @@ namespace ts {
 
     /* @internal */
     export function createCompilerDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType): Diagnostic {
-        const namesOfType = keysOfMap(opt.type).map(key => `'${key}'`).join(", ");
+        const namesOfType = arrayFrom(opt.type.keys()).map(key => `'${key}'`).join(", ");
         return createCompilerDiagnostic(Diagnostics.Argument_for_0_option_must_be_Colon_1, `--${opt.name}`, namesOfType);
     }
 
@@ -1255,8 +1255,8 @@ namespace ts {
             }
         }
 
-        const literalFiles = valuesOfMap(literalFileMap);
-        const wildcardFiles = valuesOfMap(wildcardFileMap);
+        const literalFiles = arrayFrom(literalFileMap.values());
+        const wildcardFiles = arrayFrom(wildcardFileMap.values());
         wildcardFiles.sort(host.useCaseSensitiveFileNames ? compareStrings : compareStringsCaseInsensitive);
         return {
             fileNames: literalFiles.concat(wildcardFiles),

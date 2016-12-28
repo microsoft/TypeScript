@@ -680,7 +680,7 @@ namespace ts {
                 description = getDiagnosticText(option.description);
                 const element = (<CommandLineOptionOfListType>option).element;
                 const typeMap = <Map<number | string>>element.type;
-                optionsDescriptionMap.set(description, keysOfMap(typeMap).map(key => `'${key}'`));
+                optionsDescriptionMap.set(description, arrayFrom(typeMap.keys()).map(key => `'${key}'`));
             }
             else {
                 description = getDiagnosticText(option.description);

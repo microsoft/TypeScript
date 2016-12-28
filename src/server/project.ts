@@ -1,4 +1,4 @@
-/// <reference path="..\services\services.ts" />
+﻿/// <reference path="..\services\services.ts" />
 /// <reference path="utilities.ts"/>
 /// <reference path="scriptInfo.ts"/>
 /// <reference path="lsHost.ts"/>
@@ -617,7 +617,7 @@ namespace ts.server {
 
                 const added: string[] = [];
                 const removed: string[] = [];
-                const updated: string[] = keysOfMap(updatedFileNames);
+                const updated: string[] = arrayFrom(updatedFileNames.keys());
 
                 forEachKeyInMap(currentFiles, id => {
                     if (!lastReportedFileNames.has(id)) {
@@ -691,7 +691,7 @@ namespace ts.server {
                 })
             }
 
-            const allFileNames = keysOfMap(referencedFiles) as Path[];
+            const allFileNames = arrayFrom(referencedFiles.keys()) as Path[];
             return filter(allFileNames, file => this.projectService.host.fileExists(file));
         }
 

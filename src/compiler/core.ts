@@ -156,7 +156,7 @@ namespace ts {
         }
 
         function getKeys() {
-            return keysOfMap(files) as Path[];
+            return arrayFrom(files.keys()) as Path[];
         }
 
         // path should already be well-formed so it does not need to be normalized
@@ -867,25 +867,13 @@ namespace ts {
         return keys;
     }
 
-    function arrayFrom<T>(iterator: Iterator<T>): T[] {
+    /** Shims `Array.from`. */
+    export function arrayFrom<T>(iterator: Iterator<T>): T[] {
         const result: T[] = [];
         for (let { value, done } = iterator.next(); !done; { value, done } = iterator.next()) {
             result.push(value);
         }
         return result;
-    }
-
-    /**
-     * Array of every key in a map.
-     * May not actually return string[] if numbers were put into the map.
-     */
-    export function keysOfMap(map: Map<{}>): string[] {
-        return arrayFrom(map.keys());
-    }
-
-    /** Array of every value in a map. */
-    export function valuesOfMap<T>(map: Map<T>): T[] {
-        return arrayFrom(map.values());
     }
 
     /**

@@ -1,4 +1,4 @@
-namespace ts {
+﻿namespace ts {
     /**
       * The document registry represents a store of SourceFile objects that can be shared between
       * multiple LanguageService instances. A LanguageService instance holds on the SourceFile (AST)
@@ -121,7 +121,7 @@ namespace ts {
         }
 
         function reportStats() {
-            const bucketInfoArray = keysOfMap(buckets).filter(name => name && name.charAt(0) === "_").map(name => {
+            const bucketInfoArray = arrayFrom(buckets.keys()).filter(name => name && name.charAt(0) === "_").map(name => {
                 const entries = buckets.get(name);
                 const sourceFiles: { name: string; refCount: number; references: string[]; }[] = [];
                 entries.forEachValue((key, entry) => {
