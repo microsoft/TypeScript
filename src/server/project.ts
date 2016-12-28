@@ -169,13 +169,6 @@ namespace ts.server {
                 this.compilerOptions.allowNonTsExtensions = true;
             }
 
-            if (this.projectKind === ProjectKind.Inferred) {
-                // Add default compiler options for inferred projects here
-                if (this.compilerOptions.maxNodeModuleJsDepth === undefined) {
-                    this.compilerOptions.maxNodeModuleJsDepth = 2;
-                }
-            }
-
             this.setInternalCompilerOptionsForEmittingJsFiles();
 
             this.lsHost = new LSHost(this.projectService.host, this, this.projectService.cancellationToken);

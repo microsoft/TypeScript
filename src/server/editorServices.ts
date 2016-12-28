@@ -1079,6 +1079,12 @@ namespace ts.server {
                 project,
                 fileName => this.onConfigFileAddedForInferredProject(fileName));
 
+            if (root.scriptKind === ScriptKind.JS || root.scriptKind === ScriptKind.JSX) {
+                const options = project.getCompilerOptions();
+                options.maxNodeModuleJsDepth = 2;
+                project.setCompilerOptions(options);
+            }
+
             project.updateGraph();
 
             if (!useExistingProject) {
