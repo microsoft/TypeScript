@@ -566,9 +566,6 @@ namespace ts.server {
 
         setCompilerOptions(compilerOptions: CompilerOptions) {
             if (compilerOptions) {
-                if (this.projectKind === ProjectKind.Inferred) {
-                    compilerOptions.allowJs = true;
-                }
                 compilerOptions.allowNonTsExtensions = true;
                 if (changesAffectModuleResolution(this.compilerOptions, compilerOptions)) {
                     // reset cached unresolved imports if changes in compiler options affected module resolution
@@ -714,6 +711,26 @@ namespace ts.server {
                 return makeInferredProjectName(id);
             }
         })();
+
+        private _isJsInferredProject = false;
+        set isJsInferredProject(newValue: boolean) {
+            if (newValue && !this._isJsInferredProject) {
+                this.setCompilerOptions(this.getCompilerOptions());
+            }
+            this._isJsInferredProject = newValue;
+        }
+
+        setCompilerOptions(newOptions: CompilerOptions) {
+            if (!newOptions) {
+                return;
+            }
+
+            if (this._isJsInferredProject && typeof newOptions.maxNodeModuleJsDepth !== "number") {
+                newOptions.maxNodeModuleJsDepth = 2;
+            }
+            newOptions.allowJs = true;
+            super.setCompilerOptions(newOptions);
+        }
 
         // Used to keep track of what directories are watched for this project
         directoriesWatchedForTsconfig: string[] = [];

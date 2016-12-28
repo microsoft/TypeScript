@@ -1072,18 +1072,16 @@ namespace ts.server {
                 ? this.inferredProjects[0]
                 : new InferredProject(this, this.documentRegistry, this.compilerOptionsForInferredProjects);
 
+            if (root.scriptKind === ScriptKind.JS || root.scriptKind === ScriptKind.JSX) {
+                project.isJsInferredProject = true;
+            }
+
             project.addRoot(root);
 
             this.directoryWatchers.startWatchingContainingDirectoriesForFile(
                 root.fileName,
                 project,
                 fileName => this.onConfigFileAddedForInferredProject(fileName));
-
-            if (root.scriptKind === ScriptKind.JS || root.scriptKind === ScriptKind.JSX) {
-                const options = project.getCompilerOptions();
-                options.maxNodeModuleJsDepth = 2;
-                project.setCompilerOptions(options);
-            }
 
             project.updateGraph();
 

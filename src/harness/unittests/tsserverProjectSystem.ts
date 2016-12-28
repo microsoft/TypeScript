@@ -3068,9 +3068,11 @@ namespace ts.projectSystem {
             projectService.openClientFile(file1.path);
 
             const project = projectService.inferredProjects[0];
-            const sourceFile = project.getSourceFile(<Path>file1.path);
-            assert.isTrue("test" in sourceFile.resolvedModules);
-            assert.equal((<ResolvedModule>sourceFile.resolvedModules["test"]).resolvedFileName, moduleFile.path);
+            const sourceFileForFile1 = project.getSourceFile(<Path>file1.path);
+            const sourceFileForModuleFile = project.getSourceFile(<Path>moduleFile.path);
+
+            assert.isNotNull(sourceFileForFile1);
+            assert.isNotNull(sourceFileForModuleFile);
         });
     });
 
