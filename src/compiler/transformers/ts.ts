@@ -3125,7 +3125,7 @@ namespace ts {
                 context.enableSubstitution(SyntaxKind.Identifier);
 
                 // Keep track of class aliases.
-                classAliases = sparseArray<Identifier>();
+                classAliases = [];
             }
         }
 

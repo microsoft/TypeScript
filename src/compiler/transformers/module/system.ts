@@ -28,10 +28,10 @@ namespace ts {
         context.enableSubstitution(SyntaxKind.PostfixUnaryExpression); // Substitutes updates to exported symbols.
         context.enableEmitNotification(SyntaxKind.SourceFile); // Restore state when substituting nodes in a file.
 
-        const moduleInfoMap = sparseArray<ExternalModuleInfo>(); // The ExternalModuleInfo for each file.
-        const deferredExports = sparseArray<Statement[]>(); // Exports to defer until an EndOfDeclarationMarker is found.
-        const exportFunctionsMap = sparseArray<Identifier>(); // The export function associated with a source file.
-        const noSubstitutionMap = sparseArray<SparseArray<boolean>>(); // Set of nodes for which substitution rules should be ignored for each file.
+        const moduleInfoMap: SparseArray<ExternalModuleInfo> = []; // The ExternalModuleInfo for each file.
+        const deferredExports: SparseArray<Statement[]> = []; // Exports to defer until an EndOfDeclarationMarker is found.
+        const exportFunctionsMap: SparseArray<Identifier> = []; // The export function associated with a source file.
+        const noSubstitutionMap: SparseArray<SparseArray<boolean>> = []; // Set of nodes for which substitution rules should be ignored for each file.
 
         let currentSourceFile: SourceFile; // The current file.
         let moduleInfo: ExternalModuleInfo; // ExternalModuleInfo for the current file.
@@ -1771,7 +1771,7 @@ namespace ts {
          * @param node The node which should not be substituted.
          */
         function preventSubstitution<T extends Node>(node: T): T {
-            if (noSubstitution === undefined) noSubstitution = sparseArray<boolean>();
+            if (noSubstitution === undefined) noSubstitution = [];
             noSubstitution[getNodeId(node)] = true;
             return node;
         }

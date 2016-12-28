@@ -1,4 +1,4 @@
-/// <reference path="sys.ts" />
+﻿/// <reference path="sys.ts" />
 
 /* @internal */
 namespace ts {
@@ -3365,7 +3365,7 @@ namespace ts {
         return false;
     }
 
-    const syntaxKindCache = sparseArray<string>();
+    const syntaxKindCache: SparseArray<string> = [];
 
     export function formatSyntaxKind(kind: SyntaxKind): string {
         const syntaxKindEnum = (<any>ts).SyntaxKind;

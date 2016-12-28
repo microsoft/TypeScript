@@ -14,7 +14,7 @@ namespace ts.codefix {
     }
 
     class ImportCodeActionMap {
-        private symbolIdToActionMap = sparseArray<ImportCodeAction[]>();
+        private symbolIdToActionMap: SparseArray<ImportCodeAction[]> = [];
 
         addAction(symbolId: number, newAction: ImportCodeAction) {
             if (!newAction) {
@@ -125,7 +125,7 @@ namespace ts.codefix {
             const symbolIdActionMap = new ImportCodeActionMap();
 
             // this is a module id -> module import declaration map
-            const cachedImportDeclarations = sparseArray<(ImportDeclaration | ImportEqualsDeclaration)[]>();
+            const cachedImportDeclarations: SparseArray<(ImportDeclaration | ImportEqualsDeclaration)[]> = [];
             let cachedNewImportInsertPosition: number;
 
             const allPotentialModules = checker.getAmbientModules();

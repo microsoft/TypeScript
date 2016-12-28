@@ -39,8 +39,6 @@ namespace ts {
         return map;
     }
 
-    export const sparseArray: <T>() => SparseArray<T> = createDictionaryObject;
-
     /** Create a new map. If a template object is provided, the map will copy entries from it. */
     export function createMap<T>(template?: MapLike<T>): Map<T> {
         const map: Map<T> = new MapCtr<T>();

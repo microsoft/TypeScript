@@ -3299,7 +3299,7 @@ namespace ts {
     export function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver, compilerOptions: CompilerOptions): ExternalModuleInfo {
         const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
         const exportSpecifiers = createMap<ExportSpecifier[]>();
-        const exportedBindings = sparseArray<Identifier[]>();
+        const exportedBindings: SparseArray<Identifier[]> = [];
         const uniqueExports = createMap<boolean>();
         let exportedNames: Identifier[];
         let hasExportDefault = false;

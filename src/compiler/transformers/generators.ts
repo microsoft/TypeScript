@@ -2096,7 +2096,7 @@ namespace ts {
 
             if (!renamedCatchVariables) {
                 renamedCatchVariables = createMap<boolean>();
-                renamedCatchVariableDeclarations = sparseArray<Identifier>();
+                renamedCatchVariableDeclarations = [];
                 context.enableSubstitution(SyntaxKind.Identifier);
             }
 

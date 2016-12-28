@@ -416,7 +416,7 @@ namespace ts.server {
         class InProcClient {
             private server: InProcSession;
             private seq = 0;
-            private callbacks = sparseArray<(resp: protocol.Response) => void>();
+            private callbacks: SparseArray<(resp: protocol.Response) => void> = [];
             private eventHandlers = createMap<(args: any) => void>();
 
             handle(msg: protocol.Message): void {

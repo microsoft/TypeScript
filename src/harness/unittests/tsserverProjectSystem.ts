@@ -292,7 +292,7 @@ namespace ts.projectSystem {
     }
 
     export class Callbacks {
-        private map = sparseArray<TimeOutCallback>();
+        private map: SparseArray<TimeOutCallback> = [];
         private nextId = 1;
 
         register(cb: (...args: any[]) => void, args: any[]) {
@@ -319,7 +319,7 @@ namespace ts.projectSystem {
             for (const key in this.map) {
                 this.map[key]();
             }
-            this.map = sparseArray<TimeOutCallback>();
+            this.map = [];
         }
     }
 

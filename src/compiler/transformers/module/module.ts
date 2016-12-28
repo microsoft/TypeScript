@@ -39,8 +39,8 @@ namespace ts {
         context.enableSubstitution(SyntaxKind.ShorthandPropertyAssignment); // Substitutes shorthand property assignments for imported/exported symbols.
         context.enableEmitNotification(SyntaxKind.SourceFile); // Restore state when substituting nodes in a file.
 
-        const moduleInfoMap = sparseArray<ExternalModuleInfo>(); // The ExternalModuleInfo for each file.
-        const deferredExports = sparseArray<Statement[]>(); // Exports to defer until an EndOfDeclarationMarker is found.
+        const moduleInfoMap: SparseArray<ExternalModuleInfo> = []; // The ExternalModuleInfo for each file.
+        const deferredExports: SparseArray<Statement[]> = []; // Exports to defer until an EndOfDeclarationMarker is found.
 
         let currentSourceFile: SourceFile; // The current file.
         let currentModuleInfo: ExternalModuleInfo; // The ExternalModuleInfo for the current file.
@@ -1105,7 +1105,7 @@ namespace ts {
             if (node.kind === SyntaxKind.SourceFile) {
                 currentSourceFile = <SourceFile>node;
                 currentModuleInfo = moduleInfoMap[getOriginalNodeId(currentSourceFile)];
-                noSubstitution = sparseArray<boolean>();
+                noSubstitution = [];
 
                 previousOnEmitNode(emitContext, node, emitCallback);
 
