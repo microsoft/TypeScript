@@ -3104,6 +3104,7 @@ namespace ts {
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.AsExpression:
             case SyntaxKind.NonNullExpression:
+            case SyntaxKind.OverrideKeyword:
             case SyntaxKind.ReadonlyKeyword:
                 // These nodes are TypeScript syntax.
                 transformFlags |= TransformFlags.AssertTypeScript;

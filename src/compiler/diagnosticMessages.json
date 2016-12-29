@@ -3279,6 +3279,10 @@
         "category": "Message",
         "code": 90015
     },
+    "Member function {0} was marked 'override', but no matching definition was found in the superclass chain ({1})": {
+        "category": "Error",
+        "code": 90030
+    },
     "Octal literal types must use ES2015 syntax. Use the syntax '{0}'.": {
         "category": "Error",
         "code": 8017

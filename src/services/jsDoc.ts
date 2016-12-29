@@ -30,6 +30,7 @@ namespace ts.JsDoc {
         "private",
         "property",
         "public",
+        "override",
         "requires",
         "returns",
         "see",

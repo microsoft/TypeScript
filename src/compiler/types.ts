@@ -155,6 +155,7 @@ namespace ts {
         PrivateKeyword,
         ProtectedKeyword,
         PublicKeyword,
+        OverrideKeyword,
         StaticKeyword,
         YieldKeyword,
         // Contextual keywords
@@ -453,6 +454,7 @@ namespace ts {
         Abstract =           1 << 7,  // Class/Method/ConstructSignature
         Async =              1 << 8,  // Property/Method/Function
         Default =            1 << 9,  // Function/Class (export default declaration)
+        Override =           1 << 10, // Property/Method
         Const =              1 << 11, // Variable declaration
         HasComputedFlags =   1 << 29, // Modifier flags have been computed
 
@@ -461,7 +463,7 @@ namespace ts {
         ParameterPropertyModifier = AccessibilityModifier | Readonly,
         NonPublicAccessibilityModifier = Private | Protected,
 
-        TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const,
+        TypeScriptModifier = Ambient | Public | Private | Protected | Override | Readonly | Abstract | Const,
         ExportDefault = Export | Default,
     }
 
@@ -532,6 +534,7 @@ namespace ts {
         | Token<SyntaxKind.PublicKeyword>
         | Token<SyntaxKind.PrivateKeyword>
         | Token<SyntaxKind.ProtectedKeyword>
+        | Token<SyntaxKind.OverrideKeyword>
         | Token<SyntaxKind.ReadonlyKeyword>
         | Token<SyntaxKind.StaticKeyword>
         ;

@@ -99,6 +99,7 @@ namespace ts {
         "null": SyntaxKind.NullKeyword,
         "number": SyntaxKind.NumberKeyword,
         "object": SyntaxKind.ObjectKeyword,
+        "override": SyntaxKind.OverrideKeyword,
         "package": SyntaxKind.PackageKeyword,
         "private": SyntaxKind.PrivateKeyword,
         "protected": SyntaxKind.ProtectedKeyword,

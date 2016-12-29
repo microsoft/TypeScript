@@ -145,6 +145,11 @@ namespace ts {
             description: Diagnostics.Raise_error_on_expressions_and_declarations_with_an_implied_any_type,
         },
         {
+            name: "noImplicitOverride",
+            type: "boolean",
+            description: Diagnostics.Member_function_0_was_marked_override_but_no_matching_definition_was_found_in_the_superclass_chain_1,
+        },
+        {
             name: "noImplicitThis",
             type: "boolean",
             description: Diagnostics.Raise_error_on_this_expressions_with_an_implied_any_type,

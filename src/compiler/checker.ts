@@ -15770,6 +15770,21 @@ namespace ts {
             if (getModifierFlags(node) & ModifierFlags.Abstract && node.body) {
                 error(node, Diagnostics.Method_0_cannot_have_an_implementation_because_it_is_marked_abstract, declarationNameToString(node.name));
             }
+
+            // Is this the correct time to make assertions against the inheritance chain?
+            // Have all other methods been resolved?  Probably need to record that an override exists
+            // and perform the actual resolution later.
+            if (getModifierFlags(node) & ModifierFlags.Override) {
+              checkOverrideMethodDeclaration(node);
+            }
+        }
+
+        function checkOverrideMethodDeclaration(node: MethodDeclaration) {
+          forEachEnclosingClass(node, enclosingClass => {
+            // TODO: save the methodDeclaration node here in a cache and
+            // perform the actual assertion later.
+            console.log(`override method ${node.symbol.name} is enclosed by class ${enclosingClass.symbol.name}`);
+          });
         }
 
         function checkConstructorDeclaration(node: ConstructorDeclaration) {
@@ -20938,6 +20953,9 @@ namespace ts {
                         else if (flags & ModifierFlags.Async) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "async");
                         }
+                        else if (flags & ModifierFlags.Override) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "override");
+                        }
                         else if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_or_namespace_element, text);
                         }
@@ -20970,6 +20988,9 @@ namespace ts {
                         }
                         else if (flags & ModifierFlags.Abstract) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "abstract");
+                        }
+                        else if (flags & ModifierFlags.Override) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "override");
                         }
                         flags |= ModifierFlags.Static;
                         lastStatic = modifier;
@@ -21067,6 +21088,25 @@ namespace ts {
                         flags |= ModifierFlags.Async;
                         lastAsync = modifier;
                         break;
+
+                case SyntaxKind.OverrideKeyword:
+                  if (flags & ModifierFlags.Override) {
+                    return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "override");
+                  }
+                  else if (flags & ModifierFlags.Static) {
+                    return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "override");
+                  }
+                  else if (flags & ModifierFlags.Private) {
+                    return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "private", "override");
+                  }
+                  else if (flags & ModifierFlags.Abstract) {
+                    return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "abstract", "override");
+                  }
+                  else if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
+                    return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_or_namespace_element, "override");
+                  }
+                  flags |= ModifierFlags.Override;
+                  break;
                 }
             }
 
@@ -21079,6 +21119,9 @@ namespace ts {
                 }
                 else if (flags & ModifierFlags.Async) {
                     return grammarErrorOnNode(lastAsync, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "async");
+                }
+                else if (flags & ModifierFlags.Override) {
+                    return grammarErrorOnNode(lastReadonly, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "override");
                 }
                 else if (flags & ModifierFlags.Readonly) {
                     return grammarErrorOnNode(lastReadonly, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "readonly");

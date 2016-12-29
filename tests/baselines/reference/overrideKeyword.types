@@ -1,0 +1,19 @@
+=== tests/cases/compiler/overrideKeyword.ts ===
+class Base {
+>Base : Base
+
+    public toString() { return "base"; };
+>toString : () => string
+>"base" : "base"
+}
+
+class Derived extends Base {
+>Derived : Derived
+>Base : Base
+
+    /** @override */
+    public override toString() { return "derived"; };
+>toString : () => string
+>"derived" : "derived"
+}
+
