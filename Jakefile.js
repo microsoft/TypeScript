@@ -1179,7 +1179,6 @@ task("update-sublime", ["local", serverFile], function () {
 var tslintRuleDir = "scripts/tslint";
 var tslintRules = [
     "nextLineRule",
-    "preferConstRule",
     "booleanTriviaRule",
     "typeOperatorSpacingRule",
     "noInOperatorRule",

@@ -253,6 +253,7 @@ namespace ts {
         ExpressionWithTypeArguments,
         AsExpression,
         NonNullExpression,
+        MetaProperty,
 
         // Misc
         TemplateSpan,
@@ -370,7 +371,6 @@ namespace ts {
         PartiallyEmittedExpression,
         MergeDeclarationMarker,
         EndOfDeclarationMarker,
-        RawExpression,
 
         // Enum value count
         Count,
@@ -1444,6 +1444,14 @@ namespace ts {
         expression: Expression;
     }
 
+    // NOTE: MetaProperty is really a MemberExpression, but we consider it a PrimaryExpression
+    //       for the same reasons we treat NewExpression as a PrimaryExpression.
+    export interface MetaProperty extends PrimaryExpression {
+        kind: SyntaxKind.MetaProperty;
+        keywordToken: SyntaxKind;
+        name: Identifier;
+    }
+
     /// A JSX expression of the form <TagName attrs>...</TagName>
     export interface JsxElement extends PrimaryExpression {
         kind: SyntaxKind.JsxElement;
@@ -1492,6 +1500,7 @@ namespace ts {
 
     export interface JsxExpression extends Expression {
         kind: SyntaxKind.JsxExpression;
+        dotDotDotToken?: Token<SyntaxKind.DotDotDotToken>;
         expression?: Expression;
     }
 
@@ -1518,16 +1527,6 @@ namespace ts {
     /* @internal */
     export interface EndOfDeclarationMarker extends Statement {
         kind: SyntaxKind.EndOfDeclarationMarker;
-    }
-
-    /**
-     * Emits a string of raw text in an expression position. Raw text is never transformed, should
-     * be ES3 compliant, and should have the same precedence as PrimaryExpression.
-     */
-    /* @internal */
-    export interface RawExpression extends PrimaryExpression {
-        kind: SyntaxKind.RawExpression;
-        text: string;
     }
 
     /**
@@ -2713,6 +2712,7 @@ namespace ts {
         TypeChecked                         = 0x00000001,  // Node has been type checked
         LexicalThis                         = 0x00000002,  // Lexical 'this' reference
         CaptureThis                         = 0x00000004,  // Lexical 'this' used in body
+        CaptureNewTarget                    = 0x00000008,  // Lexical 'new.target' used in body
         SuperInstance                       = 0x00000100,  // Instance 'super' reference
         SuperStatic                         = 0x00000200,  // Static 'super' reference
         ContextChecked                      = 0x00000400,  // Contextual types have been assigned
@@ -3543,6 +3543,7 @@ namespace ts {
 
     export interface ResolvedModuleWithFailedLookupLocations {
         resolvedModule: ResolvedModuleFull | undefined;
+        /* @internal */
         failedLookupLocations: string[];
     }
 

@@ -27,8 +27,7 @@ System.register(["foo", "bar"], function (exports_1, context_1) {
     function exportStar_1(m) {
         var exports = {};
         for (var n in m) {
-            if (n !== "default" && !exportedNames_1.hasOwnProperty(n))
-                exports[n] = m[n];
+            if (n !== "default" && !exportedNames_1.hasOwnProperty(n)) exports[n] = m[n];
         }
         exports_1(exports);
     }

@@ -198,6 +198,8 @@ namespace ts {
                     visitNode(cbNode, (<AsExpression>node).type);
             case SyntaxKind.NonNullExpression:
                 return visitNode(cbNode, (<NonNullExpression>node).expression);
+            case SyntaxKind.MetaProperty:
+                return visitNode(cbNode, (<MetaProperty>node).name);
             case SyntaxKind.ConditionalExpression:
                 return visitNode(cbNode, (<ConditionalExpression>node).condition) ||
                     visitNode(cbNode, (<ConditionalExpression>node).questionToken) ||
@@ -373,7 +375,8 @@ namespace ts {
             case SyntaxKind.JsxSpreadAttribute:
                 return visitNode(cbNode, (<JsxSpreadAttribute>node).expression);
             case SyntaxKind.JsxExpression:
-                return visitNode(cbNode, (<JsxExpression>node).expression);
+                return visitNode(cbNode, (node as JsxExpression).dotDotDotToken) ||
+                    visitNode(cbNode, (node as JsxExpression).expression);
             case SyntaxKind.JsxClosingElement:
                 return visitNode(cbNode, (<JsxClosingElement>node).tagName);
 
@@ -1678,8 +1681,8 @@ namespace ts {
                         // Method declarations are not necessarily reusable.  An object-literal
                         // may have a method calls "constructor(...)" and we must reparse that
                         // into an actual .ConstructorDeclaration.
-                        let methodDeclaration = <MethodDeclaration>node;
-                        let nameIsConstructor = methodDeclaration.name.kind === SyntaxKind.Identifier &&
+                        const methodDeclaration = <MethodDeclaration>node;
+                        const nameIsConstructor = methodDeclaration.name.kind === SyntaxKind.Identifier &&
                             (<Identifier>methodDeclaration.name).originalKeywordKind === SyntaxKind.ConstructorKeyword;
 
                         return !nameIsConstructor;
@@ -3914,6 +3917,7 @@ namespace ts {
 
             parseExpected(SyntaxKind.OpenBraceToken);
             if (token() !== SyntaxKind.CloseBraceToken) {
+                node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
                 node.expression = parseAssignmentExpressionOrHigher();
             }
             if (inExpressionContext) {
@@ -4329,15 +4333,22 @@ namespace ts {
             return isIdentifier() ? parseIdentifier() : undefined;
         }
 
-        function parseNewExpression(): NewExpression {
-            const node = <NewExpression>createNode(SyntaxKind.NewExpression);
+        function parseNewExpression(): NewExpression | MetaProperty {
+            const fullStart = scanner.getStartPos();
             parseExpected(SyntaxKind.NewKeyword);
+            if (parseOptional(SyntaxKind.DotToken)) {
+                const node = <MetaProperty>createNode(SyntaxKind.MetaProperty, fullStart);
+                node.keywordToken = SyntaxKind.NewKeyword;
+                node.name = parseIdentifierName();
+                return finishNode(node);
+            }
+
+            const node = <NewExpression>createNode(SyntaxKind.NewExpression, fullStart);
             node.expression = parseMemberExpressionOrHigher();
             node.typeArguments = tryParse(parseTypeArgumentsInExpression);
             if (node.typeArguments || token() === SyntaxKind.OpenParenToken) {
                 node.arguments = parseArgumentList();
             }
-
             return finishNode(node);
         }
 
@@ -7404,7 +7415,7 @@ namespace ts {
                     if (position >= array.pos && position < array.end) {
                         // position was in this array.  Search through this array to see if we find a
                         // viable element.
-                        for (let i = 0, n = array.length; i < n; i++) {
+                        for (let i = 0; i < array.length; i++) {
                             const child = array[i];
                             if (child) {
                                 if (child.pos === position) {
