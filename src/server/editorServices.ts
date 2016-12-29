@@ -1073,7 +1073,7 @@ namespace ts.server {
                 : new InferredProject(this, this.documentRegistry, this.compilerOptionsForInferredProjects);
 
             if (root.scriptKind === ScriptKind.JS || root.scriptKind === ScriptKind.JSX) {
-                project.isJsInferredProject = true;
+                project.setAsJsInferredProject();
             }
 
             project.addRoot(root);

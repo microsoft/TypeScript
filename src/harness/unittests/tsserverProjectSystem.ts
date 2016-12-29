@@ -3067,12 +3067,15 @@ namespace ts.projectSystem {
             const projectService = createProjectService(host);
             projectService.openClientFile(file1.path);
 
-            const project = projectService.inferredProjects[0];
-            const sourceFileForFile1 = project.getSourceFile(<Path>file1.path);
-            const sourceFileForModuleFile = project.getSourceFile(<Path>moduleFile.path);
+            let project = projectService.inferredProjects[0];
+            let options = project.getCompilerOptions();
+            assert.isTrue(options.maxNodeModuleJsDepth === 2);
 
-            assert.isNotNull(sourceFileForFile1);
-            assert.isNotNull(sourceFileForModuleFile);
+            // Assert the option sticks 
+            projectService.setCompilerOptionsForInferredProjects({ target: ScriptTarget.ES2016 });
+            project = projectService.inferredProjects[0];
+            options = project.getCompilerOptions();
+            assert.isTrue(options.maxNodeModuleJsDepth === 2);
         });
     });
 

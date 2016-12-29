@@ -713,14 +713,14 @@ namespace ts.server {
         })();
 
         private _isJsInferredProject = false;
-        set isJsInferredProject(newValue: boolean) {
-            if (newValue && !this._isJsInferredProject) {
-                this.setCompilerOptions(this.getCompilerOptions());
-            }
-            this._isJsInferredProject = newValue;
+
+        setAsJsInferredProject() {
+            this._isJsInferredProject = true;
+            this.setCompilerOptions();
         }
 
-        setCompilerOptions(newOptions: CompilerOptions) {
+        setCompilerOptions(newOptions?: CompilerOptions) {
+            newOptions = newOptions ? newOptions : this.getCompilerOptions();
             if (!newOptions) {
                 return;
             }
