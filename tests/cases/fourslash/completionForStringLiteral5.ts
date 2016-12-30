@@ -11,5 +11,5 @@
 goTo.marker('1');
 verify.completionListContains("foo");
 verify.completionListContains("bar");
-verify.memberListCount(2);
+verify.completionListCount(2);
 
