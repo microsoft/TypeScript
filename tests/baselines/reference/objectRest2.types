@@ -1,0 +1,45 @@
+=== tests/cases/conformance/types/rest/objectRest2.ts ===
+// test for #12203
+declare function connectionFromArray(objects: number, args: any): {};
+>connectionFromArray : (objects: number, args: any) => {}
+>objects : number
+>args : any
+
+function rootConnection(name: string) {
+>rootConnection : (name: string) => { resolve: (context: any, args: any) => Promise<{}>; }
+>name : string
+
+  return {
+>{    resolve: async (context, args) => {        const { objects } = await { objects: 12 };      return {        ...connectionFromArray(objects, args)      };    }  } : { resolve: (context: any, args: any) => Promise<{}>; }
+
+    resolve: async (context, args) => {
+>resolve : (context: any, args: any) => Promise<{}>
+>async (context, args) => {        const { objects } = await { objects: 12 };      return {        ...connectionFromArray(objects, args)      };    } : (context: any, args: any) => Promise<{}>
+>context : any
+>args : any
+
+        const { objects } = await { objects: 12 };
+>objects : number
+>await { objects: 12 } : { objects: number; }
+>{ objects: 12 } : { objects: number; }
+>objects : number
+>12 : 12
+
+      return {
+>{        ...connectionFromArray(objects, args)      } : {}
+
+        ...connectionFromArray(objects, args)
+>connectionFromArray(objects, args) : {}
+>connectionFromArray : (objects: number, args: any) => {}
+>objects : number
+>args : any
+
+      };
+    }
+  };
+}
+rootConnection('test');
+>rootConnection('test') : { resolve: (context: any, args: any) => Promise<{}>; }
+>rootConnection : (name: string) => { resolve: (context: any, args: any) => Promise<{}>; }
+>'test' : "test"
+

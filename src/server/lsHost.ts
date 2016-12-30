@@ -3,9 +3,9 @@
 /// <reference path="scriptInfo.ts" />
 
 namespace ts.server {
-    export class LSHost implements ts.LanguageServiceHost, ModuleResolutionHost, ServerLanguageServiceHost {
+    export class LSHost implements ts.LanguageServiceHost, ModuleResolutionHost {
         private compilationSettings: ts.CompilerOptions;
-        private readonly resolvedModuleNames= createFileMap<Map<ResolvedModuleWithFailedLookupLocations>>();
+        private readonly resolvedModuleNames = createFileMap<Map<ResolvedModuleWithFailedLookupLocations>>();
         private readonly resolvedTypeReferenceDirectives = createFileMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
         private readonly getCanonicalFileName: (fileName: string) => string;
 
@@ -23,7 +23,7 @@ namespace ts.server {
             }
 
             this.resolveModuleName = (moduleName, containingFile, compilerOptions, host) => {
-                const globalCache = this.project.getTypingOptions().enableAutoDiscovery
+                const globalCache = this.project.getTypeAcquisition().enable
                     ? this.project.projectService.typingsInstaller.globalTypingsCacheLocation
                     : undefined;
                 const primaryResult = resolveModuleName(moduleName, containingFile, compilerOptions, host);
@@ -135,6 +135,10 @@ namespace ts.server {
             }
         }
 
+        getNewLine() {
+            return this.host.newLine;
+        }
+
         getProjectVersion() {
             return this.project.getProjectVersion();
         }
@@ -169,7 +173,7 @@ namespace ts.server {
         getScriptSnapshot(filename: string): ts.IScriptSnapshot {
             const scriptInfo = this.project.getScriptInfoLSHost(filename);
             if (scriptInfo) {
-                return scriptInfo.snap();
+                return scriptInfo.getSnapshot();
             }
         }
 

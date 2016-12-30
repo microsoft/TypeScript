@@ -18,9 +18,9 @@
 goTo.marker('0');
 verify.completionListContains("jspm");
 verify.completionListAllowsNewIdentifier();
-verify.memberListCount(1);
+verify.completionListCount(1);
 
 goTo.marker('1');
 verify.completionListContains("jspm:browser");
 verify.completionListAllowsNewIdentifier();
-verify.memberListCount(2);
+verify.completionListCount(2);

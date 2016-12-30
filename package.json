@@ -2,7 +2,7 @@
     "name": "typescript",
     "author": "Microsoft Corp.",
     "homepage": "http://typescriptlang.org/",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "license": "Apache-2.0",
     "description": "TypeScript is a language for application scale JavaScript development",
     "keywords": [
@@ -26,7 +26,7 @@
         "tsserver": "./bin/tsserver"
     },
     "engines": {
-        "node": ">=0.8.0"
+        "node": ">=4.2.0"
     },
     "devDependencies": {
         "@types/browserify": "latest",
@@ -75,8 +75,7 @@
         "through2": "latest",
         "travis-fold": "latest",
         "ts-node": "latest",
-        "tsd": "latest",
-        "tslint": "4.0.0-dev.0",
+        "tslint": "next",
         "typescript": "next"
     },
     "scripts": {

@@ -1,0 +1,13 @@
+tests/cases/compiler/es3-oldStyleOctalLiteralInEnums.ts(2,7): error TS8018: Octal literals are not allowed in enums members initializer. Use the syntax '-0o1'.
+tests/cases/compiler/es3-oldStyleOctalLiteralInEnums.ts(3,7): error TS8018: Octal literals are not allowed in enums members initializer. Use the syntax '0o2'.
+
+
+==== tests/cases/compiler/es3-oldStyleOctalLiteralInEnums.ts (2 errors) ====
+    enum E {
+      x = -01,
+          ~~~
+!!! error TS8018: Octal literals are not allowed in enums members initializer. Use the syntax '-0o1'.
+      y = 02,
+          ~~
+!!! error TS8018: Octal literals are not allowed in enums members initializer. Use the syntax '0o2'.
+    }

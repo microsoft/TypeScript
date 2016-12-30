@@ -1,0 +1,125 @@
+=== tests/cases/conformance/types/keyof/keyofAndForIn.ts ===
+
+// Repro from #12513
+
+function f1<K extends string, T>(obj: { [P in K]: T }, k: K) {
+>f1 : Symbol(f1, Decl(keyofAndForIn.ts, 0, 0))
+>K : Symbol(K, Decl(keyofAndForIn.ts, 3, 12))
+>T : Symbol(T, Decl(keyofAndForIn.ts, 3, 29))
+>obj : Symbol(obj, Decl(keyofAndForIn.ts, 3, 33))
+>P : Symbol(P, Decl(keyofAndForIn.ts, 3, 41))
+>K : Symbol(K, Decl(keyofAndForIn.ts, 3, 12))
+>T : Symbol(T, Decl(keyofAndForIn.ts, 3, 29))
+>k : Symbol(k, Decl(keyofAndForIn.ts, 3, 54))
+>K : Symbol(K, Decl(keyofAndForIn.ts, 3, 12))
+
+    const b = k in obj;
+>b : Symbol(b, Decl(keyofAndForIn.ts, 4, 9))
+>k : Symbol(k, Decl(keyofAndForIn.ts, 3, 54))
+>obj : Symbol(obj, Decl(keyofAndForIn.ts, 3, 33))
+
+    let k1: K;
+>k1 : Symbol(k1, Decl(keyofAndForIn.ts, 5, 7))
+>K : Symbol(K, Decl(keyofAndForIn.ts, 3, 12))
+
+    for (k1 in obj) {
+>k1 : Symbol(k1, Decl(keyofAndForIn.ts, 5, 7))
+>obj : Symbol(obj, Decl(keyofAndForIn.ts, 3, 33))
+
+        let x1 = obj[k1];
+>x1 : Symbol(x1, Decl(keyofAndForIn.ts, 7, 11))
+>obj : Symbol(obj, Decl(keyofAndForIn.ts, 3, 33))
+>k1 : Symbol(k1, Decl(keyofAndForIn.ts, 5, 7))
+    }
+    for (let k2 in obj) {
+>k2 : Symbol(k2, Decl(keyofAndForIn.ts, 9, 12))
+>obj : Symbol(obj, Decl(keyofAndForIn.ts, 3, 33))
+
+        let x2 = obj[k2];
+>x2 : Symbol(x2, Decl(keyofAndForIn.ts, 10, 11))
+>obj : Symbol(obj, Decl(keyofAndForIn.ts, 3, 33))
+>k2 : Symbol(k2, Decl(keyofAndForIn.ts, 9, 12))
+    }
+}
+
+function f2<T>(obj: { [P in keyof T]: T[P] }, k: keyof T) {
+>f2 : Symbol(f2, Decl(keyofAndForIn.ts, 12, 1))
+>T : Symbol(T, Decl(keyofAndForIn.ts, 14, 12))
+>obj : Symbol(obj, Decl(keyofAndForIn.ts, 14, 15))
+>P : Symbol(P, Decl(keyofAndForIn.ts, 14, 23))
+>T : Symbol(T, Decl(keyofAndForIn.ts, 14, 12))
+>T : Symbol(T, Decl(keyofAndForIn.ts, 14, 12))
+>P : Symbol(P, Decl(keyofAndForIn.ts, 14, 23))
+>k : Symbol(k, Decl(keyofAndForIn.ts, 14, 45))
+>T : Symbol(T, Decl(keyofAndForIn.ts, 14, 12))
+
+    const b = k in obj;
+>b : Symbol(b, Decl(keyofAndForIn.ts, 15, 9))
+>k : Symbol(k, Decl(keyofAndForIn.ts, 14, 45))
+>obj : Symbol(obj, Decl(keyofAndForIn.ts, 14, 15))
+
+    let k1: keyof T;
+>k1 : Symbol(k1, Decl(keyofAndForIn.ts, 16, 7))
+>T : Symbol(T, Decl(keyofAndForIn.ts, 14, 12))
+
+    for (k1 in obj) {
+>k1 : Symbol(k1, Decl(keyofAndForIn.ts, 16, 7))
+>obj : Symbol(obj, Decl(keyofAndForIn.ts, 14, 15))
+
+        let x1 = obj[k1];
+>x1 : Symbol(x1, Decl(keyofAndForIn.ts, 18, 11))
+>obj : Symbol(obj, Decl(keyofAndForIn.ts, 14, 15))
+>k1 : Symbol(k1, Decl(keyofAndForIn.ts, 16, 7))
+    }
+    for (let k2 in obj) {
+>k2 : Symbol(k2, Decl(keyofAndForIn.ts, 20, 12))
+>obj : Symbol(obj, Decl(keyofAndForIn.ts, 14, 15))
+
+        let x2 = obj[k2];
+>x2 : Symbol(x2, Decl(keyofAndForIn.ts, 21, 11))
+>obj : Symbol(obj, Decl(keyofAndForIn.ts, 14, 15))
+>k2 : Symbol(k2, Decl(keyofAndForIn.ts, 20, 12))
+    }
+}
+
+function f3<T, K extends keyof T>(obj: { [P in K]: T[P] }, k: K) {
+>f3 : Symbol(f3, Decl(keyofAndForIn.ts, 23, 1))
+>T : Symbol(T, Decl(keyofAndForIn.ts, 25, 12))
+>K : Symbol(K, Decl(keyofAndForIn.ts, 25, 14))
+>T : Symbol(T, Decl(keyofAndForIn.ts, 25, 12))
+>obj : Symbol(obj, Decl(keyofAndForIn.ts, 25, 34))
+>P : Symbol(P, Decl(keyofAndForIn.ts, 25, 42))
+>K : Symbol(K, Decl(keyofAndForIn.ts, 25, 14))
+>T : Symbol(T, Decl(keyofAndForIn.ts, 25, 12))
+>P : Symbol(P, Decl(keyofAndForIn.ts, 25, 42))
+>k : Symbol(k, Decl(keyofAndForIn.ts, 25, 58))
+>K : Symbol(K, Decl(keyofAndForIn.ts, 25, 14))
+
+    const b = k in obj;
+>b : Symbol(b, Decl(keyofAndForIn.ts, 26, 9))
+>k : Symbol(k, Decl(keyofAndForIn.ts, 25, 58))
+>obj : Symbol(obj, Decl(keyofAndForIn.ts, 25, 34))
+
+    let k1: K;
+>k1 : Symbol(k1, Decl(keyofAndForIn.ts, 27, 7))
+>K : Symbol(K, Decl(keyofAndForIn.ts, 25, 14))
+
+    for (k1 in obj) {
+>k1 : Symbol(k1, Decl(keyofAndForIn.ts, 27, 7))
+>obj : Symbol(obj, Decl(keyofAndForIn.ts, 25, 34))
+
+        let x1 = obj[k1];
+>x1 : Symbol(x1, Decl(keyofAndForIn.ts, 29, 11))
+>obj : Symbol(obj, Decl(keyofAndForIn.ts, 25, 34))
+>k1 : Symbol(k1, Decl(keyofAndForIn.ts, 27, 7))
+    }
+    for (let k2 in obj) {
+>k2 : Symbol(k2, Decl(keyofAndForIn.ts, 31, 12))
+>obj : Symbol(obj, Decl(keyofAndForIn.ts, 25, 34))
+
+        let x2 = obj[k2];
+>x2 : Symbol(x2, Decl(keyofAndForIn.ts, 32, 11))
+>obj : Symbol(obj, Decl(keyofAndForIn.ts, 25, 34))
+>k2 : Symbol(k2, Decl(keyofAndForIn.ts, 31, 12))
+    }
+}

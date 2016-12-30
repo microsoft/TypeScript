@@ -341,6 +341,7 @@ namespace FourSlash {
                 insertSpaceAfterCommaDelimiter: true,
                 insertSpaceAfterSemicolonInForStatements: true,
                 insertSpaceBeforeAndAfterBinaryOperators: true,
+                insertSpaceAfterConstructor: false,
                 insertSpaceAfterKeywordsInControlFlowStatements: true,
                 insertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
                 insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
@@ -478,7 +479,7 @@ namespace FourSlash {
                 endPos = endMarker.position;
             }
 
-            errors.forEach(function(error: ts.Diagnostic) {
+            errors.forEach(function (error: ts.Diagnostic) {
                 if (predicate(error.start, error.start + error.length, startPos, endPos)) {
                     exists = true;
                 }
@@ -495,7 +496,7 @@ namespace FourSlash {
                 Harness.IO.log("Unexpected error(s) found.  Error list is:");
             }
 
-            errors.forEach(function(error: ts.Diagnostic) {
+            errors.forEach(function (error: ts.Diagnostic) {
                 Harness.IO.log("  minChar: " + error.start +
                     ", limChar: " + (error.start + error.length) +
                     ", message: " + ts.flattenDiagnosticMessageText(error.messageText, Harness.IO.newLine()) + "\n");
@@ -607,23 +608,13 @@ namespace FourSlash {
             });
         }
 
-        public verifyMemberListContains(symbol: string, text?: string, documentation?: string, kind?: string) {
-            const members = this.getMemberListAtCaret();
-            if (members) {
-                this.assertItemInCompletionList(members.entries, symbol, text, documentation, kind);
-            }
-            else {
-                this.raiseError("Expected a member list, but none was provided");
-            }
-        }
-
-        public verifyMemberListCount(expectedCount: number, negative: boolean) {
+        public verifyCompletionListCount(expectedCount: number, negative: boolean) {
             if (expectedCount === 0 && negative) {
-                this.verifyMemberListIsEmpty(/*negative*/ false);
+                this.verifyCompletionListIsEmpty(/*negative*/ false);
                 return;
             }
 
-            const members = this.getMemberListAtCaret();
+            const members = this.getCompletionListAtCaret();
 
             if (members) {
                 const match = members.entries.length === expectedCount;
@@ -634,13 +625,6 @@ namespace FourSlash {
             }
             else if (expectedCount) {
                 this.raiseError("Member list count was 0. Expected " + expectedCount);
-            }
-        }
-
-        public verifyMemberListDoesNotContain(symbol: string) {
-            const members = this.getMemberListAtCaret();
-            if (members && members.entries.filter(e => e.name === symbol).length !== 0) {
-                this.raiseError(`Member list did contain ${symbol}`);
             }
         }
 
@@ -682,16 +666,6 @@ namespace FourSlash {
                 else {
                     assert.equal(item.kind, uniqueItems[item.name], `Items should have the same kind, got ${item.kind} and ${uniqueItems[item.name]}`);
                 }
-            }
-        }
-
-        public verifyMemberListIsEmpty(negative: boolean) {
-            const members = this.getMemberListAtCaret();
-            if ((!members || members.entries.length === 0) && negative) {
-                this.raiseError("Member list is empty at Caret");
-            }
-            else if ((members && members.entries.length !== 0) && !negative) {
-                this.raiseError(`Member list is not empty at Caret:\nMember List contains: ${stringify(members.entries.map(e => e.name))}`);
             }
         }
 
@@ -890,10 +864,6 @@ namespace FourSlash {
 
             const missingItem = { fileName, start, end, isWriteAccess, isDefinition };
             this.raiseError(`verifyReferencesAtPositionListContains failed - could not find the item: ${stringify(missingItem)} in the returned list: (${stringify(references)})`);
-        }
-
-        private getMemberListAtCaret() {
-            return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition);
         }
 
         private getCompletionListAtCaret() {
@@ -1351,11 +1321,6 @@ namespace FourSlash {
         public printCurrentSignatureHelp() {
             const sigHelp = this.getActiveSignatureHelpItem();
             Harness.IO.log(stringify(sigHelp));
-        }
-
-        public printMemberListMembers() {
-            const members = this.getMemberListAtCaret();
-            this.printMembersOrCompletions(members);
         }
 
         public printCompletionListMembers() {
@@ -2013,13 +1978,13 @@ namespace FourSlash {
                 this.raiseError("Errors expected.");
             }
 
-            if (diagnostics.length > 1 && errorCode !== undefined) {
+            if (diagnostics.length > 1 && errorCode === undefined) {
                 this.raiseError("When there's more than one error, you must specify the errror to fix.");
             }
 
             const diagnostic = !errorCode ? diagnostics[0] : ts.find(diagnostics, d => d.code == errorCode);
 
-            return this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.length, [diagnostic.code]);
+            return this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.start + diagnostic.length, [diagnostic.code]);
         }
 
         public verifyCodeFixAtPosition(expectedText: string, errorCode?: number) {
@@ -2043,6 +2008,34 @@ namespace FourSlash {
 
             if (this.removeWhitespace(actualText) !== this.removeWhitespace(expectedText)) {
                 this.raiseError(`Actual text doesn't match expected text. Actual: '${actualText}' Expected: '${expectedText}'`);
+            }
+        }
+
+        public verifyImportFixAtPosition(expectedTextArray: string[], errorCode?: number) {
+            const ranges = this.getRanges();
+            if (ranges.length == 0) {
+                this.raiseError("At least one range should be specified in the testfile.");
+            }
+
+            const codeFixes = this.getCodeFixes(errorCode);
+
+            if (!codeFixes || codeFixes.length == 0) {
+                this.raiseError("No codefixes returned.");
+            }
+
+            const actualTextArray: string[] = [];
+            const scriptInfo = this.languageServiceAdapterHost.getScriptInfo(codeFixes[0].changes[0].fileName);
+            const originalContent = scriptInfo.content;
+            for (const codeFix of codeFixes) {
+                this.applyEdits(codeFix.changes[0].fileName, codeFix.changes[0].textChanges, /*isFormattingEdit*/ false);
+                actualTextArray.push(this.normalizeNewlines(this.rangeText(ranges[0])));
+                scriptInfo.updateContent(originalContent);
+            }
+            const sortedExpectedArray = ts.map(expectedTextArray, str => this.normalizeNewlines(str)).sort();
+            const sortedActualArray = actualTextArray.sort();
+            if (!ts.arrayIsEqualTo(sortedExpectedArray, sortedActualArray)) {
+                this.raiseError(
+                    `Actual text array doesn't match expected text array. \nActual: \n"${sortedActualArray.join("\n\n")}"\n---\nExpected: \n'${sortedExpectedArray.join("\n\n")}'`);
             }
         }
 
@@ -2077,6 +2070,10 @@ namespace FourSlash {
                 const representation = lineEnding === "\r\n" ? "CRLF" : "LF";
                 return "# - " + representation + lineEnding;
             });
+        }
+
+        private normalizeNewlines(str: string) {
+            return str.replace(/\r?\n/g, "\n");
         }
 
         public verifyBraceCompletionAtPosition(negative: boolean, openingBrace: string) {
@@ -2606,7 +2603,7 @@ ${code}
                                 resetLocalData();
                             }
 
-                            currentFileName = basePath + "/" + value;
+                            currentFileName = ts.isRootedDiskPath(value) ? value : basePath + "/" + value;
                             currentFileOptions[key] = value;
                         }
                         else {
@@ -3029,19 +3026,8 @@ namespace FourSlashInterface {
             }
         }
 
-        // Verifies the member list contains the specified symbol. The
-        // member list is brought up if necessary
-        public memberListContains(symbol: string, text?: string, documentation?: string, kind?: string) {
-            if (this.negative) {
-                this.state.verifyMemberListDoesNotContain(symbol);
-            }
-            else {
-                this.state.verifyMemberListContains(symbol, text, documentation, kind);
-            }
-        }
-
-        public memberListCount(expectedCount: number) {
-            this.state.verifyMemberListCount(expectedCount, this.negative);
+        public completionListCount(expectedCount: number) {
+            this.state.verifyCompletionListCount(expectedCount, this.negative);
         }
 
         // Verifies the completion list contains the specified symbol. The
@@ -3075,10 +3061,6 @@ namespace FourSlashInterface {
 
         public completionListAllowsNewIdentifier() {
             this.state.verifyCompletionListAllowsNewIdentifier(this.negative);
-        }
-
-        public memberListIsEmpty() {
-            this.state.verifyMemberListIsEmpty(this.negative);
         }
 
         public signatureHelpPresent() {
@@ -3303,6 +3285,10 @@ namespace FourSlashInterface {
             this.state.verifyCodeFixAtPosition(expectedText, errorCode);
         }
 
+        public importFixAtPosition(expectedTextArray: string[], errorCode?: number): void {
+            this.state.verifyImportFixAtPosition(expectedTextArray, errorCode);
+        }
+
         public navigationBar(json: any) {
             this.state.verifyNavigationBar(json);
         }
@@ -3478,10 +3464,6 @@ namespace FourSlashInterface {
             this.state.printCurrentSignatureHelp();
         }
 
-        public printMemberListMembers() {
-            this.state.printMemberListMembers();
-        }
-
         public printCompletionListMembers() {
             this.state.printCompletionListMembers();
         }
@@ -3542,11 +3524,8 @@ namespace FourSlashInterface {
             this.state.formatOnType(this.state.getMarkerByName(posMarker).position, key);
         }
 
-        public setOption(name: string, value: number): void;
-        public setOption(name: string, value: string): void;
-        public setOption(name: string, value: boolean): void;
-        public setOption(name: string, value: any): void {
-            (<any>this.state.formatCodeSettings)[name] = value;
+        public setOption(name: keyof ts.FormatCodeSettings, value: number | string | boolean): void {
+            this.state.formatCodeSettings[name] = value;
         }
     }
 

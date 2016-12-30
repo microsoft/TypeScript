@@ -8,7 +8,7 @@ import { IEventSourcedEntity } from "./bar";
 >IEventSourcedEntity : any
 
 export type DomainEntityConstructor<TEntity extends IEventSourcedEntity> = { new(): TEntity; };
->DomainEntityConstructor : new () => TEntity
+>DomainEntityConstructor : DomainEntityConstructor<TEntity>
 >TEntity : TEntity
 >IEventSourcedEntity : IEventSourcedEntity
 >TEntity : TEntity

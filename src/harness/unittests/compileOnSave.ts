@@ -467,6 +467,36 @@ namespace ts.projectSystem {
     });
 
     describe("EmitFile test", () => {
+        it("should respect line endings", () => {
+            test("\n");
+            test("\r\n");
+
+            function test(newLine: string) {
+                const lines = ["var x = 1;", "var y = 2;"];
+                const path = "/a/app";
+                const f = {
+                    path: path + ".ts",
+                    content: lines.join(newLine)
+                };
+                const host = createServerHost([f], { newLine });
+                const session = createSession(host);
+                session.executeCommand(<server.protocol.OpenRequest>{
+                    seq: 1,
+                    type: "request",
+                    command: "open",
+                    arguments: { file: f.path }
+                });
+                session.executeCommand(<server.protocol.CompileOnSaveEmitFileRequest>{
+                    seq: 2,
+                    type: "request",
+                    command: "compileOnSaveEmitFile",
+                    arguments: { file: f.path }
+                });
+                const emitOutput = host.readFile(path + ".js");
+                assert.equal(emitOutput, f.content + newLine, "content of emit output should be identical with the input + newline");
+            }
+        })
+
         it("should emit specified file", () => {
             const file1 = {
                 path: "/a/b/f1.ts",
@@ -480,7 +510,7 @@ namespace ts.projectSystem {
                 path: "/a/b/tsconfig.json",
                 content: `{}`
             };
-            const host = createServerHost([file1, file2, configFile, libFile]);
+            const host = createServerHost([file1, file2, configFile, libFile], { newLine: "\r\n" });
             const typingsInstaller = createTestTypingsInstaller(host);
             const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
 
@@ -491,6 +521,46 @@ namespace ts.projectSystem {
             const expectedEmittedFileName = "/a/b/f1.js";
             assert.isTrue(host.fileExists(expectedEmittedFileName));
             assert.equal(host.readFile(expectedEmittedFileName), `"use strict";\r\nfunction Foo() { return 10; }\r\nexports.Foo = Foo;\r\n`);
+        });
+
+        it("shoud not emit js files in external projects", () => {
+            const file1 = {
+                path: "/a/b/file1.ts",
+                content: "consonle.log('file1');"
+            };
+            // file2 has errors. The emitting should not be blocked.
+            const file2 = {
+                path: "/a/b/file2.js",
+                content: "console.log'file2');"
+            };
+            const file3 = {
+                path: "/a/b/file3.js",
+                content: "console.log('file3');"
+            };
+            const externalProjectName = "externalproject";
+            const host = createServerHost([file1, file2, file3, libFile]);
+            const session = createSession(host);
+            const projectService = session.getProjectService();
+
+            projectService.openExternalProject({
+                rootFiles: toExternalFiles([file1.path, file2.path]),
+                options: {
+                    allowJs: true,
+                    outFile: "dist.js",
+                    compileOnSave: true
+                },
+                projectFileName: externalProjectName
+            });
+
+            const emitRequest = makeSessionRequest<server.protocol.CompileOnSaveEmitFileRequestArgs>(CommandNames.CompileOnSaveEmitFile, { file: file1.path });
+            session.executeCommand(emitRequest);
+
+            const expectedOutFileName = "/a/b/dist.js";
+            assert.isTrue(host.fileExists(expectedOutFileName));
+            const outFileContent = host.readFile(expectedOutFileName);
+            assert.isTrue(outFileContent.indexOf(file1.content) !== -1);
+            assert.isTrue(outFileContent.indexOf(file2.content) === -1);
+            assert.isTrue(outFileContent.indexOf(file3.content) === -1);
         });
     });
 }

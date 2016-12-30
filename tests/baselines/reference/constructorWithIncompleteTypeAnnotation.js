@@ -297,7 +297,7 @@ var TypeScriptAllInOne;
         Program.Main = function () {
             var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
-                args[_i - 0] = arguments[_i];
+                args[_i] = arguments[_i];
             }
             try {
                 var bfs = new BasicFeatures();

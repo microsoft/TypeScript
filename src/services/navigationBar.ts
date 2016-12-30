@@ -146,7 +146,7 @@ namespace ts.NavigationBar {
                 break;
 
             case SyntaxKind.ImportClause:
-                let importClause = <ImportClause>node;
+                const importClause = <ImportClause>node;
                 // Handle default import case e.g.:
                 //    import d from "mod";
                 if (importClause.name) {
@@ -225,8 +225,8 @@ namespace ts.NavigationBar {
                 break;
 
             default:
-                forEach(node.jsDocComments, jsDocComment => {
-                    forEach(jsDocComment.tags, tag => {
+                forEach(node.jsDoc, jsDoc => {
+                    forEach(jsDoc.tags, tag => {
                         if (tag.kind === SyntaxKind.JSDocTypedefTag) {
                             addLeafNode(tag);
                         }

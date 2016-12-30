@@ -11,7 +11,8 @@
         "stripInternal": true,
         "target": "es5",
         "noUnusedLocals": true,
-        "noUnusedParameters": true
+        "noUnusedParameters": true,
+        "types": [ ]
     },
     "files": [
         "core.ts",
@@ -27,6 +28,7 @@
         "visitor.ts",
         "transformers/ts.ts",
         "transformers/jsx.ts",
+        "transformers/esnext.ts",
         "transformers/es2017.ts",
         "transformers/es2016.ts",
         "transformers/es2015.ts",

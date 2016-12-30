@@ -1,0 +1,29 @@
+tests/cases/conformance/async/es6/await_unaryExpression_es6_1.ts(7,12): error TS2703: The operand of a delete operator must be a property reference
+tests/cases/conformance/async/es6/await_unaryExpression_es6_1.ts(11,12): error TS2703: The operand of a delete operator must be a property reference
+
+
+==== tests/cases/conformance/async/es6/await_unaryExpression_es6_1.ts (2 errors) ====
+    
+    async function bar() {
+        !await 42; // OK
+    }
+    
+    async function bar1() {
+        delete await 42; // OK
+               ~~~~~~~~
+!!! error TS2703: The operand of a delete operator must be a property reference
+    }
+    
+    async function bar2() {
+        delete await 42; // OK
+               ~~~~~~~~
+!!! error TS2703: The operand of a delete operator must be a property reference
+    }
+    
+    async function bar3() {
+        void await 42;
+    }
+    
+    async function bar4() {
+        +await 42;
+    }
