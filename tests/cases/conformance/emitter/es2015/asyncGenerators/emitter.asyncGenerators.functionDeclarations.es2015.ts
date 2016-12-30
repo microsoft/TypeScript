@@ -1,5 +1,5 @@
 // @target: es2015
-// @lib: es2017
+// @lib: esnext
 // @filename: F1.ts
 async function * f1() {
 }

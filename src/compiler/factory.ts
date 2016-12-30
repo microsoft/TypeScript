@@ -1866,9 +1866,8 @@ namespace ts {
             );
         }
         else {
-            const expression = node;
-            const updatedExpression = createAssignment(expression, boundValue, /*location*/ expression);
-            return createStatement(updatedExpression, /*location*/ expression);
+            const updatedExpression = createAssignment(node, boundValue, /*location*/ node);
+            return createStatement(updatedExpression, /*location*/ node);
         }
     }
 

@@ -2149,6 +2149,20 @@ namespace ts {
                 : restoreEnclosingLabel(visitNode(statement, visitor, isStatement), node, convertedLoopState && resetLabel);
         }
 
+        function visitIterationStatement(node: IterationStatement, outermostLabeledStatement: LabeledStatement) {
+            switch (node.kind) {
+                case SyntaxKind.DoStatement:
+                case SyntaxKind.WhileStatement:
+                    return visitDoOrWhileStatement(<DoStatement | WhileStatement>node, outermostLabeledStatement);
+                case SyntaxKind.ForStatement:
+                    return visitForStatement(<ForStatement>node, outermostLabeledStatement);
+                case SyntaxKind.ForInStatement:
+                    return visitForInStatement(<ForInStatement>node, outermostLabeledStatement);
+                case SyntaxKind.ForOfStatement:
+                    return visitForOfStatement(<ForOfStatement>node, outermostLabeledStatement);
+            }
+        }
+
         function visitIterationStatementWithFacts(excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts, node: IterationStatement, outermostLabeledStatement: LabeledStatement, convert?: LoopConverter) {
             const ancestorFacts = enterSubtree(excludeFacts, includeFacts);
             const updated = convertIterationStatementBodyIfNecessary(node, outermostLabeledStatement, convert);
@@ -2486,20 +2500,6 @@ namespace ts {
                     )
                 ])
             );
-        }
-
-        function visitIterationStatement(node: IterationStatement, outermostLabeledStatement: LabeledStatement) {
-            switch (node.kind) {
-                case SyntaxKind.DoStatement:
-                case SyntaxKind.WhileStatement:
-                    return visitDoOrWhileStatement(<DoStatement | WhileStatement>node, outermostLabeledStatement);
-                case SyntaxKind.ForStatement:
-                    return visitForStatement(<ForStatement>node, outermostLabeledStatement);
-                case SyntaxKind.ForInStatement:
-                    return visitForInStatement(<ForInStatement>node, outermostLabeledStatement);
-                case SyntaxKind.ForOfStatement:
-                    return visitForOfStatement(<ForOfStatement>node, outermostLabeledStatement);
-            }
         }
 
         /**

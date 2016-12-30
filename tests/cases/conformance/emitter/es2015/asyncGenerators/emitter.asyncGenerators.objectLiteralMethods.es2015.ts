@@ -1,5 +1,5 @@
 // @target: es2015
-// @lib: es2017
+// @lib: esnext
 // @filename: O1.ts
 const o1 = {
     async * f() {

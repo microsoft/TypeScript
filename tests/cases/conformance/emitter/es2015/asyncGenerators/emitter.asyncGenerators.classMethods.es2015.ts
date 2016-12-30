@@ -1,5 +1,5 @@
 // @target: es2015
-// @lib: es2017
+// @lib: esnext
 // @filename: C1.ts
 class C1 {
     async * f() {

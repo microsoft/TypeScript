@@ -2791,7 +2791,7 @@ namespace ts {
 
         // An async method declaration is ES2017 syntax.
         if (hasModifier(node, ModifierFlags.Async)) {
-            transformFlags |= TransformFlags.AssertES2017;
+            transformFlags |= node.asteriskToken ? TransformFlags.AssertESNext : TransformFlags.AssertES2017;
         }
 
         // Currently, we only support generators that were originally async function bodies.
@@ -2861,7 +2861,7 @@ namespace ts {
 
             // An async function declaration is ES2017 syntax.
             if (modifierFlags & ModifierFlags.Async) {
-                transformFlags |= TransformFlags.AssertES2017;
+                transformFlags |= node.asteriskToken ? TransformFlags.AssertESNext : TransformFlags.AssertES2017;
             }
 
             // function declarations with object rest destructuring are ES Next syntax
@@ -2903,7 +2903,7 @@ namespace ts {
 
         // An async function expression is ES2017 syntax.
         if (hasModifier(node, ModifierFlags.Async)) {
-            transformFlags |= TransformFlags.AssertES2017;
+            transformFlags |= node.asteriskToken ? TransformFlags.AssertESNext : TransformFlags.AssertES2017;
         }
 
         // function expressions with object rest destructuring are ES Next syntax
@@ -3092,8 +3092,8 @@ namespace ts {
         switch (kind) {
             case SyntaxKind.AsyncKeyword:
             case SyntaxKind.AwaitExpression:
-                // async/await is ES2017 syntax
-                transformFlags |= TransformFlags.AssertES2017;
+                // async/await is ES2017 syntax, but may be ESNext syntax (for async generators)
+                transformFlags |= TransformFlags.AssertESNext | TransformFlags.AssertES2017;
                 break;
 
             case SyntaxKind.PublicKeyword:
@@ -3124,14 +3124,6 @@ namespace ts {
                 transformFlags |= TransformFlags.AssertJsx;
                 break;
 
-            case SyntaxKind.ForOfStatement:
-                if ((<ForOfStatement>node).awaitModifier) {
-                    transformFlags |= TransformFlags.AssertES2017;
-                }
-
-                transformFlags |= TransformFlags.AssertES2015;
-                break;
-
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.TemplateHead:
             case SyntaxKind.TemplateMiddle:
@@ -3148,7 +3140,7 @@ namespace ts {
             case SyntaxKind.ForOfStatement:
                 // This node is either ES2015 syntax or ES2017 syntax (if it is a for-await-of).
                 if ((<ForOfStatement>node).awaitModifier) {
-                    transformFlags |= TransformFlags.AssertES2017;
+                    transformFlags |= TransformFlags.AssertESNext;
                 }
                 transformFlags |= TransformFlags.AssertES2015;
                 break;
@@ -3156,7 +3148,7 @@ namespace ts {
             case SyntaxKind.YieldExpression:
                 // This node is either ES2015 syntax (in a generator) or ES2017 syntax (in an async
                 // generator).
-                transformFlags |= TransformFlags.AssertES2017 | TransformFlags.AssertES2015 | TransformFlags.ContainsYield;
+                transformFlags |= TransformFlags.AssertESNext | TransformFlags.AssertES2015 | TransformFlags.ContainsYield;
                 break;
 
             case SyntaxKind.AnyKeyword:
