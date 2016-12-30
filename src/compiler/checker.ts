@@ -2142,24 +2142,25 @@ namespace ts {
             return type.flags & TypeFlags.StringLiteral ? `"${escapeString((<LiteralType>type).text)}"` : (<LiteralType>type).text;
         }
 
-        function getSymbolDisplayBuilder(): SymbolDisplayBuilder {
 
-            function getNameOfSymbol(symbol: Symbol): string {
-                if (symbol.declarations && symbol.declarations.length) {
-                    const declaration = symbol.declarations[0];
-                    if (declaration.name) {
-                        return declarationNameToString(declaration.name);
-                    }
-                    switch (declaration.kind) {
-                        case SyntaxKind.ClassExpression:
-                            return "(Anonymous class)";
-                        case SyntaxKind.FunctionExpression:
-                        case SyntaxKind.ArrowFunction:
-                            return "(Anonymous function)";
-                    }
+        function getNameOfSymbol(symbol: Symbol): string {
+            if (symbol.declarations && symbol.declarations.length) {
+                const declaration = symbol.declarations[0];
+                if (declaration.name) {
+                    return declarationNameToString(declaration.name);
                 }
-                return symbol.name;
+                switch (declaration.kind) {
+                    case SyntaxKind.ClassExpression:
+                        return "(Anonymous class)";
+                    case SyntaxKind.FunctionExpression:
+                    case SyntaxKind.ArrowFunction:
+                        return "(Anonymous function)";
+                }
             }
+            return symbol.name;
+        }
+
+        function getSymbolDisplayBuilder(): SymbolDisplayBuilder {
 
             /**
              * Writes only the name of the symbol out to the writer. Uses the original source text
@@ -15647,20 +15648,27 @@ namespace ts {
             }
         }
 
-        // Static members may conflict with non-configurable non-writable built-in Function object properties 
-        // see https://github.com/microsoft/typescript/issues/442.
+        /** 
+         * Static members being set on a constructor function may conflict with built-in Function 
+         * object properties. Esp. in ECMAScript 5 there are non-configurable and non-writable 
+         * built-in properties. This check issues a transpile error when a class has a static 
+         * member with the same name as a non-writable built-in property.
+         * 
+         * @see http://www.ecma-international.org/ecma-262/5.1/#sec-15.3.3
+         * @see http://www.ecma-international.org/ecma-262/5.1/#sec-15.3.5
+         * @see http://www.ecma-international.org/ecma-262/6.0/#sec-properties-of-the-function-constructor
+         * @see http://www.ecma-international.org/ecma-262/6.0/#sec-function-instances
+         */
         function checkClassForStaticPropertyNameConflicts(node: ClassLikeDeclaration) {
             const message = Diagnostics.Static_property_0_conflicts_with_built_in_property_Function_0_of_constructor_function_1;
-            const className = getSymbolOfNode(node).name;
+            const className = getNameOfSymbol(getSymbolOfNode(node));
             for (const member of node.members) {
-                const isStatic = forEach(member.modifiers, (m: Modifier) => m.kind  === SyntaxKind.StaticKeyword);
+                const isStatic = getModifierFlags(member) & ModifierFlags.Static;
                 const isMethod = member.kind === SyntaxKind.MethodDeclaration;
                 const memberNameNode = member.name;
                 if (isStatic && memberNameNode) {
                     const memberName = getPropertyNameForPropertyNameNode(memberNameNode);
                     if (languageVersion <= ScriptTarget.ES5) {  // ES3, ES5
-                        // see also http://www.ecma-international.org/ecma-262/5.1/#sec-15.3.3
-                        // see also http://www.ecma-international.org/ecma-262/5.1/#sec-15.3.5
                         if (memberName === "prototype" ||
                             memberName === "name" ||
                             memberName === "length" ||
@@ -15671,8 +15679,6 @@ namespace ts {
                         }
                     }
                     else { // ES6+
-                        // see also http://www.ecma-international.org/ecma-262/6.0/#sec-properties-of-the-function-constructor
-                        // see also http://www.ecma-international.org/ecma-262/6.0/#sec-function-instances
                         if (memberName === "prototype") {
                             error(memberNameNode, message, memberName, className);
                         }
