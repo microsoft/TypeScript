@@ -1072,10 +1072,6 @@ namespace ts.server {
                 ? this.inferredProjects[0]
                 : new InferredProject(this, this.documentRegistry, this.compilerOptionsForInferredProjects);
 
-            if (root.scriptKind === ScriptKind.JS || root.scriptKind === ScriptKind.JSX) {
-                project.setAsJsInferredProject();
-            }
-
             project.addRoot(root);
 
             this.directoryWatchers.startWatchingContainingDirectoriesForFile(
