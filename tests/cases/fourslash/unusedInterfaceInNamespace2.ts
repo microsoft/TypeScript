@@ -8,5 +8,5 @@
 ////    } |]
 ////}
 
-verify.codeFixAtPosition(`export interface interface2 {
+verify.rangeAfterCodeFix(`export interface interface2 {
 }`);

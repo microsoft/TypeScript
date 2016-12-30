@@ -79,9 +79,11 @@ namespace ts {
             getDeclaredTypeOfSymbol,
             getPropertiesOfType,
             getPropertyOfType,
+            getIndexInfoOfType,
             getSignaturesOfType,
             getIndexTypeOfType,
             getBaseTypes,
+            getTypeFromTypeNode,
             getReturnTypeOfSignature,
             getNonNullableType,
             getSymbolsInScope,
@@ -90,6 +92,7 @@ namespace ts {
             getExportSpecifierLocalTargetSymbol,
             getTypeAtLocation: getTypeOfNode,
             getPropertySymbolOfDestructuringAssignment,
+            signatureToString,
             typeToString,
             getSymbolDisplayBuilder,
             symbolToString,
@@ -1369,7 +1372,9 @@ namespace ts {
             return symbol.parent ? getFullyQualifiedName(symbol.parent) + "." + symbolToString(symbol) : symbolToString(symbol);
         }
 
-        // Resolves a qualified name and any involved aliases
+        /**
+         * Resolves a qualified name and any involved aliases.
+         */
         function resolveEntityName(name: EntityNameOrEntityNameExpression, meaning: SymbolFlags, ignoreErrors?: boolean, dontResolveAlias?: boolean, location?: Node): Symbol | undefined {
             if (nodeIsMissing(name)) {
                 return undefined;
@@ -2110,7 +2115,7 @@ namespace ts {
             return result || types;
         }
 
-        function visibilityToString(flags: ModifierFlags) {
+        function visibilityToString(flags: ModifierFlags): string | undefined {
             if (flags === ModifierFlags.Private) {
                 return "private";
             }
@@ -2488,26 +2493,6 @@ namespace ts {
                     buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Value, SymbolFormatFlags.None, typeFormatFlags);
                 }
 
-                function writeIndexSignature(info: IndexInfo, keyword: SyntaxKind) {
-                    if (info) {
-                        if (info.isReadonly) {
-                            writeKeyword(writer, SyntaxKind.ReadonlyKeyword);
-                            writeSpace(writer);
-                        }
-                        writePunctuation(writer, SyntaxKind.OpenBracketToken);
-                        writer.writeParameter(info.declaration ? declarationNameToString(info.declaration.parameters[0].name) : "x");
-                        writePunctuation(writer, SyntaxKind.ColonToken);
-                        writeSpace(writer);
-                        writeKeyword(writer, keyword);
-                        writePunctuation(writer, SyntaxKind.CloseBracketToken);
-                        writePunctuation(writer, SyntaxKind.ColonToken);
-                        writeSpace(writer);
-                        writeType(info.type, TypeFormatFlags.None);
-                        writePunctuation(writer, SyntaxKind.SemicolonToken);
-                        writer.writeLine();
-                    }
-                }
-
                 function writePropertyWithModifiers(prop: Symbol) {
                     if (isReadonlySymbol(prop)) {
                         writeKeyword(writer, SyntaxKind.ReadonlyKeyword);
@@ -2595,8 +2580,8 @@ namespace ts {
                         writePunctuation(writer, SyntaxKind.SemicolonToken);
                         writer.writeLine();
                     }
-                    writeIndexSignature(resolved.stringIndexInfo, SyntaxKind.StringKeyword);
-                    writeIndexSignature(resolved.numberIndexInfo, SyntaxKind.NumberKeyword);
+                    buildIndexSignatureDisplay(resolved.stringIndexInfo, writer, IndexKind.String, enclosingDeclaration, globalFlags, symbolStack);
+                    buildIndexSignatureDisplay(resolved.numberIndexInfo, writer, IndexKind.Number, enclosingDeclaration, globalFlags, symbolStack);
                     for (const p of resolved.properties) {
                         const t = getTypeOfSymbol(p);
                         if (p.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(t).length) {
@@ -2787,6 +2772,11 @@ namespace ts {
             }
 
             function buildReturnTypeDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
+                const returnType = getReturnTypeOfSignature(signature);
+                if (flags & TypeFormatFlags.SuppressAnyReturnType && isTypeAny(returnType)) {
+                    return;
+                }
+
                 if (flags & TypeFormatFlags.WriteArrowStyleSignature) {
                     writeSpace(writer);
                     writePunctuation(writer, SyntaxKind.EqualsGreaterThanToken);
@@ -2800,7 +2790,6 @@ namespace ts {
                     buildTypePredicateDisplay(signature.typePredicate, writer, enclosingDeclaration, flags, symbolStack);
                 }
                 else {
-                    const returnType = getReturnTypeOfSignature(signature);
                     buildTypeDisplay(returnType, writer, enclosingDeclaration, flags, symbolStack);
                 }
             }
@@ -2825,6 +2814,34 @@ namespace ts {
                 buildReturnTypeDisplay(signature, writer, enclosingDeclaration, flags, symbolStack);
             }
 
+            function buildIndexSignatureDisplay(info: IndexInfo, writer: SymbolWriter, kind: IndexKind, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, symbolStack?: Symbol[]) {
+                if (info) {
+                    if (info.isReadonly) {
+                        writeKeyword(writer, SyntaxKind.ReadonlyKeyword);
+                        writeSpace(writer);
+                    }
+                    writePunctuation(writer, SyntaxKind.OpenBracketToken);
+                    writer.writeParameter(info.declaration ? declarationNameToString(info.declaration.parameters[0].name) : "x");
+                    writePunctuation(writer, SyntaxKind.ColonToken);
+                    writeSpace(writer);
+                    switch (kind) {
+                        case IndexKind.Number:
+                            writeKeyword(writer, SyntaxKind.NumberKeyword);
+                            break;
+                        case IndexKind.String:
+                            writeKeyword(writer, SyntaxKind.StringKeyword);
+                            break;
+                    }
+
+                    writePunctuation(writer, SyntaxKind.CloseBracketToken);
+                    writePunctuation(writer, SyntaxKind.ColonToken);
+                    writeSpace(writer);
+                    buildTypeDisplay(info.type, writer, enclosingDeclaration, globalFlags, symbolStack);
+                    writePunctuation(writer, SyntaxKind.SemicolonToken);
+                    writer.writeLine();
+                }
+            }
+
             return _displayBuilder || (_displayBuilder = {
                 buildSymbolDisplay,
                 buildTypeDisplay,
@@ -2835,6 +2852,7 @@ namespace ts {
                 buildDisplayForTypeParametersAndDelimiters,
                 buildTypeParameterDisplayFromSymbol,
                 buildSignatureDisplay,
+                buildIndexSignatureDisplay,
                 buildReturnTypeDisplay
             });
         }
@@ -3786,11 +3804,13 @@ namespace ts {
             return signatures;
         }
 
-        // The base constructor of a class can resolve to
-        // undefinedType if the class has no extends clause,
-        // unknownType if an error occurred during resolution of the extends expression,
-        // nullType if the extends expression is the null value, or
-        // an object type with at least one construct signature.
+        /**
+         * The base constructor of a class can resolve to
+         * * undefinedType if the class has no extends clause,
+         * * unknownType if an error occurred during resolution of the extends expression,
+         * * nullType if the extends expression is the null value, or
+         * * an object type with at least one construct signature.
+         */
         function getBaseConstructorTypeOfClass(type: InterfaceType): Type {
             if (!type.resolvedBaseConstructorType) {
                 const baseTypeNode = getBaseTypeNodeOfClass(type);
@@ -4271,7 +4291,7 @@ namespace ts {
             return <InterfaceTypeWithDeclaredMembers>type;
         }
 
-        function getTypeWithThisArgument(type: Type, thisArgument?: Type) {
+        function getTypeWithThisArgument(type: Type, thisArgument?: Type): Type {
             if (getObjectFlags(type) & ObjectFlags.Reference) {
                 return createTypeReference((<TypeReference>type).target,
                     concatenate((<TypeReference>type).typeArguments, [thisArgument || (<TypeReference>type).target.thisType]));
@@ -4497,6 +4517,9 @@ namespace ts {
             setStructuredTypeMembers(type, emptySymbols, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
         }
 
+        /**
+         * Converts an AnonymousType to a ResolvedType.
+         */
         function resolveAnonymousTypeMembers(type: AnonymousType) {
             const symbol = type.symbol;
             if (type.target) {
@@ -7278,10 +7301,12 @@ namespace ts {
                 return false;
             }
 
-            // Compare two types and return
-            // Ternary.True if they are related with no assumptions,
-            // Ternary.Maybe if they are related with assumptions of other relationships, or
-            // Ternary.False if they are not related.
+            /**
+             * Compare two types and return
+             * * Ternary.True if they are related with no assumptions,
+             * * Ternary.Maybe if they are related with assumptions of other relationships, or
+             * * Ternary.False if they are not related.
+             */
             function isRelatedTo(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage): Ternary {
                 let result: Ternary;
                 if (source.flags & TypeFlags.StringOrNumberLiteral && source.flags & TypeFlags.FreshLiteral) {

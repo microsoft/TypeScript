@@ -9,7 +9,7 @@
 ////    x;|]
 //// }
 
-verify.codeFixAtPosition(`let x = 10;
+verify.rangeAfterCodeFix(`let x = 10;
    {
    }
    x;`);

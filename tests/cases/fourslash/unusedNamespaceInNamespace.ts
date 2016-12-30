@@ -6,7 +6,7 @@
 ////     }
 //// }|]
 
-verify.codeFixAtPosition(`
+verify.rangeAfterCodeFix(`
 namespace A {
 }
 `);

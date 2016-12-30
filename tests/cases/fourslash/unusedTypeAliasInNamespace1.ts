@@ -6,6 +6,6 @@
 ////         export type nw = "No" | "Way"; 
 //// } |]
 
-verify.codeFixAtPosition(`namespace greeter {
+verify.rangeAfterCodeFix(`namespace greeter {
     export type nw = "No" | "Way";
 }`);
