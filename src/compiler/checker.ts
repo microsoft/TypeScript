@@ -114,7 +114,8 @@ namespace ts {
                 // we deliberately exclude augmentations
                 // since we are only interested in declarations of the module itself
                 return tryFindAmbientModule(moduleName, /*withAugmentations*/ false);
-            }
+            },
+            getApparentType
         };
 
         const tupleTypes: GenericType[] = [];
