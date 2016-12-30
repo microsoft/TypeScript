@@ -169,8 +169,7 @@ function binaryLogicalAnd1() {
             switch (_b.label) {
                 case 0:
                     _a = x;
-                    if (!_a)
-                        return [3 /*break*/, 2];
+                    if (!_a) return [3 /*break*/, 2];
                     return [4 /*yield*/, y];
                 case 1:
                     _a = (_b.sent());

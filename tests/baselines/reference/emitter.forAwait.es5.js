@@ -75,8 +75,7 @@ function f1() {
                     _b.label = 1;
                 case 1: return [4 /*yield*/, __asyncStep(y_1)];
                 case 2:
-                    if (!_b.sent())
-                        return [3 /*break*/, 4];
+                    if (!_b.sent()) return [3 /*break*/, 4];
                     x = y_1.result.value;
                     _b.label = 3;
                 case 3: return [3 /*break*/, 1];
@@ -150,8 +149,7 @@ function f2() {
                     _b.label = 1;
                 case 1: return [4 /*yield*/, __asyncStep(y_1)];
                 case 2:
-                    if (!_b.sent())
-                        return [3 /*break*/, 4];
+                    if (!_b.sent()) return [3 /*break*/, 4];
                     x = y_1.result.value;
                     _b.label = 3;
                 case 3: return [3 /*break*/, 1];
@@ -229,8 +227,7 @@ function f3() {
                     _b.label = 1;
                 case 1: return [4 /*yield*/, ["await", __asyncStep(y_1)]];
                 case 2:
-                    if (!_b.sent())
-                        return [3 /*break*/, 4];
+                    if (!_b.sent()) return [3 /*break*/, 4];
                     x = y_1.result.value;
                     _b.label = 3;
                 case 3: return [3 /*break*/, 1];
@@ -308,8 +305,7 @@ function f4() {
                     _b.label = 1;
                 case 1: return [4 /*yield*/, ["await", __asyncStep(y_1)]];
                 case 2:
-                    if (!_b.sent())
-                        return [3 /*break*/, 4];
+                    if (!_b.sent()) return [3 /*break*/, 4];
                     x = y_1.result.value;
                     _b.label = 3;
                 case 3: return [3 /*break*/, 1];

@@ -141,6 +141,7 @@ namespace ts.projectSystem {
         useCaseSensitiveFileNames?: boolean;
         executingFilePath?: string;
         currentDirectory?: string;
+        newLine?: string;
     }
 
     export function createServerHost(fileOrFolderList: FileOrFolder[], params?: TestServerHostCreationParameters): TestServerHost {
@@ -151,7 +152,8 @@ namespace ts.projectSystem {
             params.useCaseSensitiveFileNames !== undefined ? params.useCaseSensitiveFileNames : false,
             params.executingFilePath || getExecutingFilePathFromLibFile(),
             params.currentDirectory || "/",
-            fileOrFolderList);
+            fileOrFolderList,
+            params.newLine);
         return host;
     }
 
@@ -329,7 +331,6 @@ namespace ts.projectSystem {
 
     export class TestServerHost implements server.ServerHost {
         args: string[] = [];
-        newLine: "\n";
 
         private fs: ts.FileMap<FSEntry>;
         private getCanonicalFileName: (s: string) => string;
@@ -342,7 +343,7 @@ namespace ts.projectSystem {
 
         private filesOrFolders: FileOrFolder[];
 
-        constructor(public useCaseSensitiveFileNames: boolean, private executingFilePath: string, private currentDirectory: string, fileOrFolderList: FileOrFolder[]) {
+        constructor(public useCaseSensitiveFileNames: boolean, private executingFilePath: string, private currentDirectory: string, fileOrFolderList: FileOrFolder[], public readonly newLine = "\n") {
             this.getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
             this.toPath = s => toPath(s, currentDirectory, this.getCanonicalFileName);
 
@@ -1840,6 +1841,41 @@ namespace ts.projectSystem {
             assert.isFalse(service.externalProjects[0].languageServiceEnabled, "language service should be disabled - 2");
         });
 
+        it("files are properly detached when language service is disabled", () => {
+            const f1 = {
+                path: "/a/app.js",
+                content: "var x = 1"
+            };
+            const f2 = {
+                path: "/a/largefile.js",
+                content: ""
+            };
+            const f3 = {
+                path: "/a/lib.js",
+                content: "var x = 1"
+            };
+            const config = {
+                path: "/a/tsconfig.json",
+                content: JSON.stringify({ compilerOptions: { allowJs: true } })
+            };
+            const host = createServerHost([f1, f2, f3, config]);
+            const originalGetFileSize = host.getFileSize;
+            host.getFileSize = (filePath: string) =>
+                filePath === f2.path ? server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
+
+            const projectService = createProjectService(host);
+            projectService.openClientFile(f1.path);
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+
+            projectService.closeClientFile(f1.path);
+            projectService.checkNumberOfProjects({});
+
+            for (const f of [f2, f3]) {
+                const scriptInfo = projectService.getScriptInfoForNormalizedPath(server.toNormalizedPath(f.path));
+                assert.equal(scriptInfo.containingProjects.length, 0, `expect 0 containing projects for '${f.path}'`)
+            }
+        });
+
         it("language service disabled events are triggered", () => {
             const f1 = {
                 path: "/a/app.js",
@@ -2033,58 +2069,17 @@ namespace ts.projectSystem {
             assert.deepEqual(resolutionTrace, [
                 "======== Resolving module 'lib' from '/a/b/app.js'. ========",
                 "Module resolution kind is not specified, using 'NodeJs'.",
-                "Loading module 'lib' from 'node_modules' folder.",
-                "File '/a/b/node_modules/lib.ts' does not exist.",
-                "File '/a/b/node_modules/lib.tsx' does not exist.",
-                "File '/a/b/node_modules/lib.d.ts' does not exist.",
-                "File '/a/b/node_modules/lib/package.json' does not exist.",
-                "File '/a/b/node_modules/lib/index.ts' does not exist.",
-                "File '/a/b/node_modules/lib/index.tsx' does not exist.",
-                "File '/a/b/node_modules/lib/index.d.ts' does not exist.",
-                "File '/a/b/node_modules/@types/lib.d.ts' does not exist.",
-                "File '/a/b/node_modules/@types/lib/package.json' does not exist.",
-                "File '/a/b/node_modules/@types/lib/index.d.ts' does not exist.",
-                "File '/a/node_modules/lib.ts' does not exist.",
-                "File '/a/node_modules/lib.tsx' does not exist.",
-                "File '/a/node_modules/lib.d.ts' does not exist.",
-                "File '/a/node_modules/lib/package.json' does not exist.",
-                "File '/a/node_modules/lib/index.ts' does not exist.",
-                "File '/a/node_modules/lib/index.tsx' does not exist.",
-                "File '/a/node_modules/lib/index.d.ts' does not exist.",
-                "File '/a/node_modules/@types/lib.d.ts' does not exist.",
-                "File '/a/node_modules/@types/lib/package.json' does not exist.",
-                "File '/a/node_modules/@types/lib/index.d.ts' does not exist.",
-                "File '/node_modules/lib.ts' does not exist.",
-                "File '/node_modules/lib.tsx' does not exist.",
-                "File '/node_modules/lib.d.ts' does not exist.",
-                "File '/node_modules/lib/package.json' does not exist.",
-                "File '/node_modules/lib/index.ts' does not exist.",
-                "File '/node_modules/lib/index.tsx' does not exist.",
-                "File '/node_modules/lib/index.d.ts' does not exist.",
-                "File '/node_modules/@types/lib.d.ts' does not exist.",
-                "File '/node_modules/@types/lib/package.json' does not exist.",
-                "File '/node_modules/@types/lib/index.d.ts' does not exist.",
-                "Loading module 'lib' from 'node_modules' folder.",
-                "File '/a/b/node_modules/lib.js' does not exist.",
-                "File '/a/b/node_modules/lib.jsx' does not exist.",
-                "File '/a/b/node_modules/lib/package.json' does not exist.",
-                "File '/a/b/node_modules/lib/index.js' does not exist.",
-                "File '/a/b/node_modules/lib/index.jsx' does not exist.",
-                "File '/a/node_modules/lib.js' does not exist.",
-                "File '/a/node_modules/lib.jsx' does not exist.",
-                "File '/a/node_modules/lib/package.json' does not exist.",
-                "File '/a/node_modules/lib/index.js' does not exist.",
-                "File '/a/node_modules/lib/index.jsx' does not exist.",
-                "File '/node_modules/lib.js' does not exist.",
-                "File '/node_modules/lib.jsx' does not exist.",
-                "File '/node_modules/lib/package.json' does not exist.",
-                "File '/node_modules/lib/index.js' does not exist.",
-                "File '/node_modules/lib/index.jsx' does not exist.",
+                "Loading module 'lib' from 'node_modules' folder, target file type 'TypeScript'.",
+                "Directory '/a/b/node_modules' does not exist, skipping all lookups in it.",
+                "Directory '/a/node_modules' does not exist, skipping all lookups in it.",
+                "Directory '/node_modules' does not exist, skipping all lookups in it.",
+                "Loading module 'lib' from 'node_modules' folder, target file type 'JavaScript'.",
+                "Directory '/a/b/node_modules' does not exist, skipping all lookups in it.",
+                "Directory '/a/node_modules' does not exist, skipping all lookups in it.",
+                "Directory '/node_modules' does not exist, skipping all lookups in it.",
                 "======== Module name 'lib' was not resolved. ========",
                 `Auto discovery for typings is enabled in project '${proj.getProjectName()}'. Running extra resolution pass for module 'lib' using cache location '/a/cache'.`,
                 "File '/a/cache/node_modules/lib.d.ts' does not exist.",
-                "File '/a/cache/node_modules/lib/package.json' does not exist.",
-                "File '/a/cache/node_modules/lib/index.d.ts' does not exist.",
                 "File '/a/cache/node_modules/@types/lib.d.ts' does not exist.",
                 "File '/a/cache/node_modules/@types/lib/package.json' does not exist.",
                 "File '/a/cache/node_modules/@types/lib/index.d.ts' exist - use it as a name resolution result.",

@@ -227,7 +227,7 @@
         "category": "Error",
         "code": 1084
     },
-    "Octal literals are not available when targeting ECMAScript 5 and higher.": {
+    "Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '{0}'.": {
         "category": "Error",
         "code": 1085
     },
@@ -858,6 +858,10 @@
     "An abstract accessor cannot have an implementation.": {
         "category": "Error",
         "code": 1318
+    },
+    "A default export can only be used in an ECMAScript-style module.": {
+        "category": "Error",
+        "code": 1319
     },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1783,17 +1787,25 @@
         "category": "Error",
         "code": 2542
     },
-    "The type returned by the 'next()' method of an async iterator must be a promise for a type with a 'value' property.": {
+    "Duplicate identifier '_newTarget'. Compiler uses variable declaration '_newTarget' to capture 'new.target' meta-property reference.": {
         "category": "Error",
         "code": 2543
     },
-    "Type '{0}' is not an array type or does not have a '[Symbol.iterator]()' method that returns an iterator.": {
+    "Expression resolves to variable declaration '_newTarget' that compiler uses to capture 'new.target' meta-property reference.": {
         "category": "Error",
         "code": 2544
     },
-    "Type '{0}' is not an array type or a string type or does not have a '[Symbol.iterator]()' method that returns an iterator.": {
+    "The type returned by the 'next()' method of an async iterator must be a promise for a type with a 'value' property.": {
         "category": "Error",
         "code": 2545
+    },
+    "Type '{0}' is not an array type or does not have a '[Symbol.iterator]()' method that returns an iterator.": {
+        "category": "Error",
+        "code": 2546
+    },
+    "Type '{0}' is not an array type or a string type or does not have a '[Symbol.iterator]()' method that returns an iterator.": {
+        "category": "Error",
+        "code": 2547
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
@@ -1830,6 +1842,10 @@
     "The global type 'JSX.{0}' may not have more than one property": {
         "category": "Error",
         "code": 2608
+    },
+    "JSX spread child must be an array type.": {
+        "category": "Error",
+        "code": 2609
     },
     "Cannot emit namespaced JSX elements in React": {
         "category": "Error",
@@ -2034,6 +2050,14 @@
     "'{0}' only refers to a type, but is being used as a namespace here.": {
         "category": "Error",
         "code": 2702
+    },
+    "The operand of a delete operator must be a property reference": {
+        "category": "Error",
+        "code": 2703
+    },
+    "The operand of a delete operator cannot be a read-only property": {
+        "category": "Error",
+        "code": 2704
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -2713,7 +2737,7 @@
         "category": "Message",
         "code": 6080
     },
-    "Specify how to emit for-of, spread, and destructuring in ES5/3: 'array' (arrays only; default) or 'iterable' (support arrays and Symbol.iterator)": {
+    "File '{0}' has an unsupported extension, so skipping it.": {
         "category": "Message",
         "code": 6081
     },
@@ -2769,7 +2793,7 @@
         "category": "Message",
         "code": 6094
     },
-    "Loading module as file / folder, candidate module location '{0}'.": {
+    "Loading module as file / folder, candidate module location '{0}', target file type '{1}'.": {
         "category": "Message",
         "code": 6095
     },
@@ -2781,7 +2805,7 @@
         "category": "Message",
         "code": 6097
     },
-    "Loading module '{0}' from 'node_modules' folder.": {
+    "Loading module '{0}' from 'node_modules' folder, target file type '{1}'.": {
         "category": "Message",
         "code": 6098
     },
@@ -2976,6 +3000,18 @@
     "Specify the JSX factory function to use when targeting 'react' JSX emit, e.g. 'React.createElement' or 'h'.": {
         "category": "Message",
         "code": 6146
+    },
+    "Resolution for module '{0}' was found in cache.": {
+        "category": "Message",
+        "code": 6147
+    },
+    "Directory '{0}' does not exist, skipping all lookups in it.": {
+        "category": "Message",
+        "code": 6148
+    },
+    "Specify how to emit for-of, spread, and destructuring in ES5/3: 'array' (arrays only; default) or 'iterable' (support arrays and Symbol.iterator)": {
+        "category": "Message",
+        "code": 6149
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -3201,6 +3237,14 @@
         "category": "Error",
         "code": 17011
     },
+    "'{0}' is not a valid meta-property for keyword '{1}'. Did you mean '{0}'?": {
+        "category": "Error",
+        "code": 17012
+    },
+    "Meta-property '{0}' is only allowed in the body of a function declaration, function expression, or constructor.": {
+        "category": "Error",
+        "code": 17013
+    },
 
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",
@@ -3266,5 +3310,13 @@
     "Add {0} to existing import declaration from {1}": {
         "category": "Message",
         "code": 90015
+    },
+    "Octal literal types must use ES2015 syntax. Use the syntax '{0}'.": {
+        "category": "Error",
+        "code": 8017
+    },
+    "Octal literals are not allowed in enums members initializer. Use the syntax '{0}'.": {
+        "category": "Error",
+        "code": 8018
     }
 }
