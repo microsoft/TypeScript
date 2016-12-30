@@ -1,5 +1,5 @@
 //@sourcemap: true
-//@iterationMode: iterable
+//@downlevelIteration: true
 function foo() {
     return { x: 0 };
 }

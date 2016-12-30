@@ -2597,10 +2597,6 @@
         "category": "Message",
         "code": 6039
     },
-    "MODE": {
-        "category": "Message",
-        "code": 6040
-    },
     "Compilation complete. Watching for file changes.": {
         "category": "Message",
         "code": 6042
@@ -3009,7 +3005,7 @@
         "category": "Message",
         "code": 6148
     },
-    "Specify how to emit for-of, spread, and destructuring in ES5/3: 'array' (arrays only; default) or 'iterable' (support arrays and Symbol.iterator)": {
+    "Use full down-level iteration for iterables and arrays for 'for-of', spread, and destructuring in ES5/3.": {
         "category": "Message",
         "code": 6149
     },

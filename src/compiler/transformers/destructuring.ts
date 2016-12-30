@@ -6,7 +6,7 @@ namespace ts {
     interface FlattenContext {
         context: TransformationContext;
         level: FlattenLevel;
-        iterationMode: IterationMode;
+        downlevelIteration: boolean;
         hoistTempVariables: boolean;
         emitExpression: (value: Expression) => void;
         emitBindingOrAssignment: (target: BindingOrAssignmentElementTarget, value: Expression, location: TextRange, original: Node) => void;
@@ -58,7 +58,7 @@ namespace ts {
         const flattenContext: FlattenContext = {
             context,
             level,
-            iterationMode: getEmitIterationMode(context.getCompilerOptions()),
+            downlevelIteration: context.getCompilerOptions().downlevelIteration,
             hoistTempVariables: true,
             emitExpression,
             emitBindingOrAssignment,
@@ -145,7 +145,7 @@ namespace ts {
         const flattenContext: FlattenContext = {
             context,
             level,
-            iterationMode: getEmitIterationMode(context.getCompilerOptions()),
+            downlevelIteration: context.getCompilerOptions().downlevelIteration,
             hoistTempVariables,
             emitExpression,
             emitBindingOrAssignment,
@@ -311,7 +311,7 @@ namespace ts {
     function flattenArrayBindingOrAssignmentPattern(flattenContext: FlattenContext, parent: BindingOrAssignmentElement, pattern: ArrayBindingOrAssignmentPattern, value: Expression, location: TextRange) {
         const elements = getElementsOfBindingOrAssignmentPattern(pattern);
         const numElements = elements.length;
-        if (flattenContext.level < FlattenLevel.ObjectRest && flattenContext.iterationMode === IterationMode.Iterable) {
+        if (flattenContext.level < FlattenLevel.ObjectRest && flattenContext.downlevelIteration) {
             // Read the elements of the iterable into an array
             value = ensureIdentifier(
                 flattenContext,

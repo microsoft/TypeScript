@@ -333,13 +333,9 @@ namespace ts {
             description: Diagnostics.Disallow_inconsistently_cased_references_to_the_same_file
         },
         {
-            name: "iterationMode",
-            type: createMap({
-                "array": IterationMode.Array,
-                "iterable": IterationMode.Iterable
-            }),
-            description: Diagnostics.Specify_how_to_emit_for_of_spread_and_destructuring_in_ES5_Slash3_Colon_array_arrays_only_default_or_iterable_support_arrays_and_Symbol_iterator,
-            paramType: Diagnostics.MODE
+            name: "downlevelIteration",
+            type: "boolean",
+            description: Diagnostics.Use_full_down_level_iteration_for_iterables_and_arrays_for_for_of_spread_and_destructuring_in_ES5_Slash3
         },
         {
             name: "baseUrl",

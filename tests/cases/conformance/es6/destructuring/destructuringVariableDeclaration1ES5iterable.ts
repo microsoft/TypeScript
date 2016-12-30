@@ -1,4 +1,4 @@
-﻿// @iterationMode: iterable
+﻿// @downlevelIteration: true
 // The type T associated with a destructuring variable declaration is determined as follows:
 //      If the declaration includes a type annotation, T is that type.
 var {a1, a2}: { a1: number, a2: string } = { a1: 10, a2: "world" }

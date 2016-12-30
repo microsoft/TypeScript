@@ -270,7 +270,6 @@ namespace ts {
         } = context;
 
         const compilerOptions = context.getCompilerOptions();
-        const iterationMode = getEmitIterationMode(compilerOptions);
         const resolver = context.getEmitResolver();
         const previousOnSubstituteNode = context.onSubstituteNode;
         const previousOnEmitNode = context.onEmitNode;
@@ -2200,7 +2199,7 @@ namespace ts {
                 HierarchyFacts.ForInOrForOfStatementIncludes,
                 node,
                 outermostLabeledStatement,
-                iterationMode === IterationMode.Array ? convertForOfStatementForArray : convertForOfStatementForIterable);
+                compilerOptions.downlevelIteration ? convertForOfStatementForIterable : convertForOfStatementForArray);
         }
 
         function convertForOfStatementHead(statements: Statement[], node: ForOfStatement, boundValue: Expression, convertedLoopBodyStatements: Statement[]) {
@@ -3330,7 +3329,7 @@ namespace ts {
                 )
             );
 
-            if (iterationMode === IterationMode.Iterable) {
+            if (compilerOptions.downlevelIteration) {
                 if (segments.length === 1) {
                     const firstSegment = segments[0];
                     if (isCallExpression(firstSegment)

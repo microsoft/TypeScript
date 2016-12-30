@@ -3151,11 +3151,6 @@ namespace ts {
         NodeJs   = 2
     }
 
-    export enum IterationMode {
-        Array,
-        Iterable
-    }
-
     export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]>;
 
     export interface CompilerOptions {
@@ -3173,11 +3168,11 @@ namespace ts {
         /* @internal */ diagnostics?: boolean;
         /* @internal */ extendedDiagnostics?: boolean;
         disableSizeLimit?: boolean;
+        downlevelIteration?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
-        iterationMode?: IterationMode;
         /*@internal*/help?: boolean;
         importHelpers?: boolean;
         /*@internal*/init?: boolean;

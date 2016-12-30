@@ -1,4 +1,4 @@
-﻿// @iterationMode: iterable
+﻿// @downlevelIteration: true
 /* AssignmentPattern:
  *      ObjectAssignmentPattern
  *      ArrayAssignmentPattern

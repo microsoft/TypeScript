@@ -53,7 +53,6 @@ namespace ts {
 
         const compilerOptions = host.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
-        const iterationMode = getEmitIterationMode(compilerOptions);
         const modulekind = getEmitModuleKind(compilerOptions);
         const noUnusedIdentifiers = !!compilerOptions.noUnusedLocals || !!compilerOptions.noUnusedParameters;
         const allowSyntheticDefaultImports = typeof compilerOptions.allowSyntheticDefaultImports !== "undefined" ? compilerOptions.allowSyntheticDefaultImports : modulekind === ModuleKind.System;
@@ -11444,7 +11443,7 @@ namespace ts {
         }
 
         function checkSpreadExpression(node: SpreadElement, contextualMapper?: TypeMapper): Type {
-            if (languageVersion < ScriptTarget.ES2015 && iterationMode === IterationMode.Iterable) {
+            if (languageVersion < ScriptTarget.ES2015 && compilerOptions.downlevelIteration) {
                 checkExternalEmitHelpers(node, ExternalEmitHelpers.SpreadIncludes);
             }
 
@@ -14713,7 +14712,7 @@ namespace ts {
         }
 
         function checkArrayLiteralAssignment(node: ArrayLiteralExpression, sourceType: Type, contextualMapper?: TypeMapper): Type {
-            if (languageVersion < ScriptTarget.ES2015 && iterationMode === IterationMode.Iterable) {
+            if (languageVersion < ScriptTarget.ES2015 && compilerOptions.downlevelIteration) {
                 checkExternalEmitHelpers(node, ExternalEmitHelpers.Read);
             }
 
@@ -15148,7 +15147,7 @@ namespace ts {
                             checkExternalEmitHelpers(node, ExternalEmitHelpers.AsyncDelegator);
                         }
                     }
-                    else if (languageVersion < ScriptTarget.ES2015 && iterationMode === IterationMode.Iterable) {
+                    else if (languageVersion < ScriptTarget.ES2015 && compilerOptions.downlevelIteration) {
                         checkExternalEmitHelpers(node, ExternalEmitHelpers.Values);
                     }
                 }
@@ -17440,7 +17439,7 @@ namespace ts {
 
             // For a binding pattern, check contained binding elements
             if (isBindingPattern(node.name)) {
-                if (node.name.kind === SyntaxKind.ArrayBindingPattern && languageVersion < ScriptTarget.ES2015 && iterationMode === IterationMode.Iterable) {
+                if (node.name.kind === SyntaxKind.ArrayBindingPattern && languageVersion < ScriptTarget.ES2015 && compilerOptions.downlevelIteration) {
                     checkExternalEmitHelpers(node, ExternalEmitHelpers.Read);
                 }
 
@@ -17622,7 +17621,7 @@ namespace ts {
                         checkExternalEmitHelpers(node, ExternalEmitHelpers.ForAwaitOfIncludes);
                     }
                 }
-                else if (languageVersion < ScriptTarget.ES2015 && compilerOptions.iterationMode === IterationMode.Iterable) {
+                else if (languageVersion < ScriptTarget.ES2015 && compilerOptions.downlevelIteration) {
                     checkExternalEmitHelpers(node, ExternalEmitHelpers.ForOfIncludes);
                 }
             }
@@ -18061,7 +18060,7 @@ namespace ts {
          *   2. Some constituent is a string and target is less than ES5 (because in ES3 string is not indexable).
          */
         function getIteratedTypeOfIterableOrElementTypeOfArrayOrString(arrayOrStringType: Type, errorNode: Node, checkAssignability: boolean): Type {
-            const iteratedType = iterationMode === IterationMode.Iterable && getIteratedTypeOfIterable(arrayOrStringType, /*errorNode*/ undefined);
+            const iteratedType = compilerOptions.downlevelIteration && getIteratedTypeOfIterable(arrayOrStringType, /*errorNode*/ undefined);
             if (iteratedType) {
                 if (checkAssignability && errorNode) {
                     checkTypeAssignableTo(arrayOrStringType, createIterableType(iteratedType), errorNode);
@@ -18108,10 +18107,10 @@ namespace ts {
                         // But if the input was just number, we want to say that number is not an array type
                         // or a string type.
                         const diagnostic = hasStringConstituent
-                            ? iterationMode === IterationMode.Iterable
+                            ? compilerOptions.downlevelIteration
                                 ? Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator
                                 : Diagnostics.Type_0_is_not_an_array_type
-                            : iterationMode === IterationMode.Iterable
+                            : compilerOptions.downlevelIteration
                                 ? Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator
                                 : Diagnostics.Type_0_is_not_an_array_type_or_a_string_type;
                         error(errorNode, diagnostic, typeToString(arrayType));
@@ -18134,7 +18133,7 @@ namespace ts {
         }
 
         function getIteratedTypeOfIterableOrElementTypeOfArray(inputType: Type, errorNode: Node, checkAssignability: boolean): Type {
-            const iteratedType = iterationMode === IterationMode.Iterable && getIteratedTypeOfIterable(inputType, /*errorNode*/ undefined);
+            const iteratedType = compilerOptions.downlevelIteration && getIteratedTypeOfIterable(inputType, /*errorNode*/ undefined);
             if (iteratedType) {
                 if (checkAssignability && errorNode) {
                     checkTypeAssignableTo(inputType, createIterableType(iteratedType), errorNode);
@@ -18145,7 +18144,7 @@ namespace ts {
                 return getIndexTypeOfType(inputType, IndexKind.Number);
             }
             if (errorNode) {
-                const diagnostic = iterationMode === IterationMode.Iterable
+                const diagnostic = compilerOptions.downlevelIteration
                     ? Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator
                     : Diagnostics.Type_0_is_not_an_array_type;
                 error(errorNode, diagnostic, typeToString(inputType));

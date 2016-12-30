@@ -1,6 +1,6 @@
 // @target: es5
 // @declaration: true
-// @iterationMode: iterable
+// @downlevelIteration: true
 
 var a: any;
 let x, y, z, a1, a2, a3;

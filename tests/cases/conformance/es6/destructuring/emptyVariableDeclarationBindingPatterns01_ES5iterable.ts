@@ -1,5 +1,5 @@
 // @target: es5
-// @iterationMode: iterable
+// @downlevelIteration: true
 
 (function () {
     var a: any;

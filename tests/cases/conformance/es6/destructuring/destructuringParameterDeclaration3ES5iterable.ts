@@ -1,5 +1,5 @@
 ﻿// @target: es5
-// @iterationMode: iterable
+// @downlevelIteration: true
 
 // If the parameter is a rest parameter, the parameter type is any[]
 // A type annotation for a rest parameter must denote an array type.
