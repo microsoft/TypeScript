@@ -60,6 +60,18 @@ type DeepReadonlyFoo = {
 var x1: DeepReadonly<Foo>;
 var x1: DeepReadonlyFoo;
 
+// Repro from #13232
+
+type Z = { a: number };
+type Clone<T> = {
+  [P in keyof (T & {})]: T[P];
+};
+type M = Clone<Z>; // M should be { a: number }
+
+var z1: Z;
+var z1: Clone<Z>;
+
+
 //// [mappedTypes4.js]
 function boxify(obj) {
     if (typeof obj === "object") {
@@ -76,6 +88,8 @@ function f1(x) {
 }
 var x1;
 var x1;
+var z1;
+var z1;
 
 
 //// [mappedTypes4.d.ts]
@@ -127,3 +141,12 @@ declare type DeepReadonlyFoo = {
 };
 declare var x1: DeepReadonly<Foo>;
 declare var x1: DeepReadonlyFoo;
+declare type Z = {
+    a: number;
+};
+declare type Clone<T> = {
+    [P in keyof (T & {})]: T[P];
+};
+declare type M = Clone<Z>;
+declare var z1: Z;
+declare var z1: Clone<Z>;
