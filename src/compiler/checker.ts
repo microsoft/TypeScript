@@ -6652,17 +6652,19 @@ namespace ts {
             const constraintType = getConstraintTypeFromMappedType(type);
             if (constraintType.flags & TypeFlags.Index) {
                 const typeVariable = (<IndexType>constraintType).type;
-                const mappedTypeVariable = instantiateType(typeVariable, mapper);
-                if (typeVariable !== mappedTypeVariable) {
-                    return mapType(mappedTypeVariable, t => {
-                        if (isMappableType(t)) {
-                            const replacementMapper = createUnaryTypeMapper(typeVariable, t);
-                            const combinedMapper = mapper.mappedTypes && mapper.mappedTypes.length === 1 ? replacementMapper : combineTypeMappers(replacementMapper, mapper);
-                            combinedMapper.mappedTypes = mapper.mappedTypes;
-                            return instantiateMappedObjectType(type, combinedMapper);
-                        }
-                        return t;
-                    });
+                if (typeVariable.flags & TypeFlags.TypeParameter) {
+                    const mappedTypeVariable = instantiateType(typeVariable, mapper);
+                    if (typeVariable !== mappedTypeVariable) {
+                        return mapType(mappedTypeVariable, t => {
+                            if (isMappableType(t)) {
+                                const replacementMapper = createUnaryTypeMapper(typeVariable, t);
+                                const combinedMapper = mapper.mappedTypes && mapper.mappedTypes.length === 1 ? replacementMapper : combineTypeMappers(replacementMapper, mapper);
+                                combinedMapper.mappedTypes = mapper.mappedTypes;
+                                return instantiateMappedObjectType(type, combinedMapper);
+                            }
+                            return t;
+                        });
+                    }
                 }
             }
             return instantiateMappedObjectType(type, mapper);
