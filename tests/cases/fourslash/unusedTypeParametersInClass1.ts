@@ -4,4 +4,4 @@
 ////[|class greeter<T> |] {
 ////}
 
-verify.codeFixAtPosition("class greeter");
+verify.rangeAfterCodeFix("class greeter");

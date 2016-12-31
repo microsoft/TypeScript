@@ -77,14 +77,14 @@ var obj = {
         }
     },
     method: function () {
-        _super.prototype.method.call(this);
+        _super.method.call(this);
     },
     get prop() {
-        _super.prototype.method.call(this);
+        _super.method.call(this);
         return 10;
     },
     set prop(value) {
-        _super.prototype.method.call(this);
+        _super.method.call(this);
     },
     p1: function () {
         _super.method.call(this);
@@ -115,14 +115,14 @@ var B = (function (_super) {
                 }
             },
             method: function () {
-                _super.prototype.method.call(this);
+                _super.method.call(this);
             },
             get prop() {
-                _super.prototype.method.call(this);
+                _super.method.call(this);
                 return 10;
             },
             set prop(value) {
-                _super.prototype.method.call(this);
+                _super.method.call(this);
             },
             p1: function () {
                 _super.method.call(this);

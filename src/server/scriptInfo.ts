@@ -2,6 +2,161 @@
 
 namespace ts.server {
 
+    /* @internal */
+    export class TextStorage {
+        private svc: ScriptVersionCache | undefined;
+        private svcVersion = 0;
+
+        private text: string;
+        private lineMap: number[];
+        private textVersion = 0;
+
+        constructor(private readonly host: ServerHost, private readonly fileName: NormalizedPath) {
+        }
+
+        public getVersion() {
+            return this.svc
+                ? `SVC-${this.svcVersion}-${this.svc.getSnapshot().version}`
+                : `Text-${this.textVersion}`;
+        }
+
+        public hasScriptVersionCache() {
+            return this.svc !== undefined;
+        }
+
+        public useScriptVersionCache(newText?: string) {
+            this.switchToScriptVersionCache(newText);
+        }
+
+        public useText(newText?: string) {
+            this.svc = undefined;
+            this.setText(newText);
+        }
+
+        public edit(start: number, end: number, newText: string) {
+            this.switchToScriptVersionCache().edit(start, end - start, newText);
+        }
+
+        public reload(text: string) {
+            if (this.svc) {
+                this.svc.reload(text);
+            }
+            else {
+                this.setText(text);
+            }
+        }
+
+        public reloadFromFile(tempFileName?: string) {
+            if (this.svc || (tempFileName !== this.fileName)) {
+                this.reload(this.getFileText(tempFileName))
+            }
+            else {
+                this.setText(undefined);
+            }
+        }
+
+        public getSnapshot(): IScriptSnapshot {
+            return this.svc
+                ? this.svc.getSnapshot()
+                : ScriptSnapshot.fromString(this.getOrLoadText());
+        }
+
+        public getLineInfo(line: number) {
+            return this.switchToScriptVersionCache().getSnapshot().index.lineNumberToInfo(line);
+        }
+        /**
+         *  @param line 0 based index
+         */
+        lineToTextSpan(line: number) {
+            if (!this.svc) {
+                const lineMap = this.getLineMap();
+                const start = lineMap[line]; // -1 since line is 1-based
+                const end = line + 1 < lineMap.length ? lineMap[line + 1] : this.text.length;
+                return ts.createTextSpanFromBounds(start, end);
+            }
+            const index = this.svc.getSnapshot().index;
+            const lineInfo = index.lineNumberToInfo(line + 1);
+            let len: number;
+            if (lineInfo.leaf) {
+                len = lineInfo.leaf.text.length;
+            }
+            else {
+                const nextLineInfo = index.lineNumberToInfo(line + 2);
+                len = nextLineInfo.offset - lineInfo.offset;
+            }
+            return ts.createTextSpan(lineInfo.offset, len);
+        }
+
+        /**
+         * @param line 1 based index
+         * @param offset 1 based index
+         */
+        lineOffsetToPosition(line: number, offset: number): number {
+            if (!this.svc) {
+                return computePositionOfLineAndCharacter(this.getLineMap(), line - 1, offset - 1);
+            }
+            const index = this.svc.getSnapshot().index;
+
+            const lineInfo = index.lineNumberToInfo(line);
+            // TODO: assert this offset is actually on the line
+            return (lineInfo.offset + offset - 1);
+        }
+
+        /**
+         * @param line 1-based index
+         * @param offset 1-based index
+         */
+        positionToLineOffset(position: number): ILineInfo {
+            if (!this.svc) {
+                const { line, character } = computeLineAndCharacterOfPosition(this.getLineMap(), position);
+                return { line: line + 1, offset: character + 1 };
+            }
+            const index = this.svc.getSnapshot().index;
+            const lineOffset = index.charOffsetToLineNumberAndPos(position);
+            return { line: lineOffset.line, offset: lineOffset.offset + 1 };
+        }
+
+        private getFileText(tempFileName?: string) {
+            return this.host.readFile(tempFileName || this.fileName) || "";
+        }
+
+        private ensureNoScriptVersionCache() {
+            Debug.assert(!this.svc, "ScriptVersionCache should not be set");
+        }
+
+        private switchToScriptVersionCache(newText?: string): ScriptVersionCache {
+            if (!this.svc) {
+                this.svc = ScriptVersionCache.fromString(this.host, newText !== undefined ? newText : this.getOrLoadText());
+                this.svcVersion++;
+                this.text = undefined;
+            }
+            return this.svc;
+        }
+
+        private getOrLoadText() {
+            this.ensureNoScriptVersionCache();
+            if (this.text === undefined) {
+                this.setText(this.getFileText());
+            }
+            return this.text;
+        }
+
+        private getLineMap() {
+            this.ensureNoScriptVersionCache();
+            return this.lineMap || (this.lineMap = computeLineStarts(this.getOrLoadText()));
+        }
+
+        private setText(newText: string) {
+            this.ensureNoScriptVersionCache();
+            if (newText === undefined || this.text !== newText) {
+                this.text = newText;
+                this.lineMap = undefined;
+                this.textVersion++;
+            }
+        }
+    }
+
+
     export class ScriptInfo {
         /**
          * All projects that include this file
@@ -11,22 +166,44 @@ namespace ts.server {
         readonly path: Path;
 
         private fileWatcher: FileWatcher;
-        private svc: ScriptVersionCache;
+        private textStorage: TextStorage;
 
-        // TODO: allow to update hasMixedContent from the outside
+        private isOpen: boolean;
+
         constructor(
             private readonly host: ServerHost,
             readonly fileName: NormalizedPath,
-            content: string,
             readonly scriptKind: ScriptKind,
-            public isOpen = false,
             public hasMixedContent = false) {
 
             this.path = toPath(fileName, host.getCurrentDirectory(), createGetCanonicalFileName(host.useCaseSensitiveFileNames));
-            this.svc = ScriptVersionCache.fromString(host, content);
+            this.textStorage = new TextStorage(host, fileName);
+            if (hasMixedContent) {
+                this.textStorage.reload("");
+            }
             this.scriptKind = scriptKind
                 ? scriptKind
                 : getScriptKindFromFileName(fileName);
+        }
+
+        public isScriptOpen() {
+            return this.isOpen;
+        }
+
+        public open(newText: string) {
+            this.isOpen = true;
+            this.textStorage.useScriptVersionCache(newText);
+            this.markContainingProjectsAsDirty();
+        }
+
+        public close() {
+            this.isOpen = false;
+            this.textStorage.useText(this.hasMixedContent ? "" : undefined);
+            this.markContainingProjectsAsDirty();
+        }
+
+        public getSnapshot() {
+            return this.textStorage.getSnapshot();
         }
 
         getFormatCodeSettings() {
@@ -90,6 +267,12 @@ namespace ts.server {
             return this.containingProjects[0];
         }
 
+        registerFileUpdate(): void {
+            for (const p of this.containingProjects) {
+                p.registerFileUpdate(this.path);
+            }
+        }
+
         setFormatOptions(formatSettings: FormatCodeSettings): void {
             if (formatSettings) {
                 if (!this.formatCodeSettings) {
@@ -112,16 +295,16 @@ namespace ts.server {
         }
 
         getLatestVersion() {
-            return this.svc.latestVersion().toString();
+            return this.textStorage.getVersion();
         }
 
         reload(script: string) {
-            this.svc.reload(script);
+            this.textStorage.reload(script);
             this.markContainingProjectsAsDirty();
         }
 
         saveTo(fileName: string) {
-            const snap = this.snap();
+            const snap = this.textStorage.getSnapshot();
             this.host.writeFile(fileName, snap.getText(0, snap.getLength()));
         }
 
@@ -130,22 +313,17 @@ namespace ts.server {
                 this.reload("");
             }
             else {
-                this.svc.reloadFromFile(tempFileName || this.fileName);
+                this.textStorage.reloadFromFile(tempFileName);
                 this.markContainingProjectsAsDirty();
             }
         }
 
-        snap() {
-            return this.svc.getSnapshot();
-        }
-
         getLineInfo(line: number) {
-            const snap = this.snap();
-            return snap.index.lineNumberToInfo(line);
+            return this.textStorage.getLineInfo(line);
         }
 
         editContent(start: number, end: number, newText: string): void {
-            this.svc.edit(start, end - start, newText);
+            this.textStorage.edit(start, end, newText);
             this.markContainingProjectsAsDirty();
         }
 
@@ -159,17 +337,7 @@ namespace ts.server {
          *  @param line 1 based index
          */
         lineToTextSpan(line: number) {
-            const index = this.snap().index;
-            const lineInfo = index.lineNumberToInfo(line + 1);
-            let len: number;
-            if (lineInfo.leaf) {
-                len = lineInfo.leaf.text.length;
-            }
-            else {
-                const nextLineInfo = index.lineNumberToInfo(line + 2);
-                len = nextLineInfo.offset - lineInfo.offset;
-            }
-            return ts.createTextSpan(lineInfo.offset, len);
+            return this.textStorage.lineToTextSpan(line);
         }
 
         /**
@@ -177,11 +345,7 @@ namespace ts.server {
          * @param offset 1 based index
          */
         lineOffsetToPosition(line: number, offset: number): number {
-            const index = this.snap().index;
-
-            const lineInfo = index.lineNumberToInfo(line);
-            // TODO: assert this offset is actually on the line
-            return (lineInfo.offset + offset - 1);
+            return this.textStorage.lineOffsetToPosition(line, offset);
         }
 
         /**
@@ -189,9 +353,7 @@ namespace ts.server {
          * @param offset 1-based index
          */
         positionToLineOffset(position: number): ILineInfo {
-            const index = this.snap().index;
-            const lineOffset = index.charOffsetToLineNumberAndPos(position);
-            return { line: lineOffset.line, offset: lineOffset.offset + 1 };
+            return this.textStorage.positionToLineOffset(position);
         }
     }
 }

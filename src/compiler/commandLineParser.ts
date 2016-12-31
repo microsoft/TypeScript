@@ -572,7 +572,6 @@ namespace ts {
         }
     }
 
-    /* @internal */
     export function parseCommandLine(commandLine: string[], readFile?: (path: string) => string): ParsedCommandLine {
         const options: CompilerOptions = {};
         const fileNames: string[] = [];
@@ -621,7 +620,7 @@ namespace ts {
                                     break;
                                 case "boolean":
                                     // boolean flag has optional value true, false, others
-                                    let optValue = args[i];
+                                    const optValue = args[i];
                                     options[opt.name] = optValue !== "false";
                                     // consume next argument as boolean flag value
                                     if (optValue === "false" || optValue === "true") {
@@ -779,7 +778,7 @@ namespace ts {
                             break;
                         default:
                             const value = options[name];
-                            let optionDefinition = optionsNameMap[name.toLowerCase()];
+                            const optionDefinition = optionsNameMap[name.toLowerCase()];
                             if (optionDefinition) {
                                 const customTypeMap = getCustomTypeMapOfCommandLineOption(optionDefinition);
                                 if (!customTypeMap) {
@@ -841,8 +840,9 @@ namespace ts {
       * @param basePath A root directory to resolve relative path entries in the config
       *    file to. e.g. outDir
       */
-    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions: CompilerOptions = {}, configFileName?: string, resolutionStack: Path[] = []): ParsedCommandLine {
+    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions: CompilerOptions = {}, configFileName?: string, resolutionStack: Path[] = [], extraFileExtensions: FileExtensionInfo[] = []): ParsedCommandLine {
         const errors: Diagnostic[] = [];
+        basePath = normalizeSlashes(basePath);
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
         const resolvedPath = toPath(configFileName || "", basePath, getCanonicalFileName);
         if (resolutionStack.indexOf(resolvedPath) >= 0) {
@@ -981,7 +981,7 @@ namespace ts {
                 includeSpecs = ["**/*"];
             }
 
-            const result = matchFileNames(fileNames, includeSpecs, excludeSpecs, basePath, options, host, errors);
+            const result = matchFileNames(fileNames, includeSpecs, excludeSpecs, basePath, options, host, errors, extraFileExtensions);
 
             if (result.fileNames.length === 0 && !hasProperty(json, "files") && resolutionStack.length === 0) {
                 errors.push(
@@ -1185,7 +1185,7 @@ namespace ts {
      * @param host The host used to resolve files and directories.
      * @param errors An array for diagnostic reporting.
      */
-    function matchFileNames(fileNames: string[], include: string[], exclude: string[], basePath: string, options: CompilerOptions, host: ParseConfigHost, errors: Diagnostic[]): ExpandResult {
+    function matchFileNames(fileNames: string[], include: string[], exclude: string[], basePath: string, options: CompilerOptions, host: ParseConfigHost, errors: Diagnostic[], extraFileExtensions: FileExtensionInfo[]): ExpandResult {
         basePath = normalizePath(basePath);
 
         // The exclude spec list is converted into a regular expression, which allows us to quickly
@@ -1219,7 +1219,7 @@ namespace ts {
 
         // Rather than requery this for each file and filespec, we query the supported extensions
         // once and store it on the expansion context.
-        const supportedExtensions = getSupportedExtensions(options);
+        const supportedExtensions = getSupportedExtensions(options, extraFileExtensions);
 
         // Literal files are always included verbatim. An "include" or "exclude" specification cannot
         // remove a literal file.

@@ -63,8 +63,7 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:returntype", void 0)
 ], C.prototype, "method", null);
 C = tslib_1.__decorate([
-    dec,
-    tslib_1.__metadata("design:paramtypes", [])
+    dec
 ], C);
 var o = { a: 1 };
 var y = tslib_1.__assign({}, o);
@@ -118,6 +117,5 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], C.prototype, "method", null);
 C = __decorate([
-    dec,
-    __metadata("design:paramtypes", [])
+    dec
 ], C);

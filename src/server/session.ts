@@ -709,7 +709,7 @@ namespace ts.server {
                 const displayString = ts.displayPartsToString(nameInfo.displayParts);
                 const nameSpan = nameInfo.textSpan;
                 const nameColStart = scriptInfo.positionToLineOffset(nameSpan.start).offset;
-                const nameText = scriptInfo.snap().getText(nameSpan.start, ts.textSpanEnd(nameSpan));
+                const nameText = scriptInfo.getSnapshot().getText(nameSpan.start, ts.textSpanEnd(nameSpan));
                 const refs = combineProjectOutput<protocol.ReferencesResponseItem>(
                     projects,
                     (project: Project) => {
@@ -722,7 +722,7 @@ namespace ts.server {
                             const refScriptInfo = project.getScriptInfo(ref.fileName);
                             const start = refScriptInfo.positionToLineOffset(ref.textSpan.start);
                             const refLineSpan = refScriptInfo.lineToTextSpan(start.line - 1);
-                            const lineText = refScriptInfo.snap().getText(refLineSpan.start, ts.textSpanEnd(refLineSpan)).replace(/\r|\n/g, "");
+                            const lineText = refScriptInfo.getSnapshot().getText(refLineSpan.start, ts.textSpanEnd(refLineSpan)).replace(/\r|\n/g, "");
                             return {
                                 file: ref.fileName,
                                 start: start,
@@ -1026,6 +1026,9 @@ namespace ts.server {
             if (!project) {
                 Errors.ThrowNoProject();
             }
+            if (!project.languageServiceEnabled) {
+                return false;
+            }
             const scriptInfo = project.getScriptInfo(file);
             return project.builder.emitFile(scriptInfo, (path, data, writeByteOrderMark) => this.host.writeFile(path, data, writeByteOrderMark));
         }
@@ -1326,7 +1329,7 @@ namespace ts.server {
                     highPriorityFiles.push(fileNameInProject);
                 else {
                     const info = this.projectService.getScriptInfo(fileNameInProject);
-                    if (!info.isOpen) {
+                    if (!info.isScriptOpen()) {
                         if (fileNameInProject.indexOf(".d.ts") > 0)
                             veryLowPriorityFiles.push(fileNameInProject);
                         else

@@ -38,6 +38,13 @@ namespace ts.formatting {
         private createActiveRules(options: ts.FormatCodeSettings): Rule[] {
             let rules = this.globalRules.HighPriorityCommonRules.slice(0);
 
+            if (options.insertSpaceAfterConstructor) {
+                rules.push(this.globalRules.SpaceAfterConstructor);
+            }
+            else {
+                rules.push(this.globalRules.NoSpaceAfterConstructor);
+            }
+
             if (options.insertSpaceAfterCommaDelimiter) {
                 rules.push(this.globalRules.SpaceAfterComma);
             }
@@ -126,6 +133,13 @@ namespace ts.formatting {
             else {
                 rules.push(this.globalRules.NoSpaceBeforeBinaryOperator);
                 rules.push(this.globalRules.NoSpaceAfterBinaryOperator);
+            }
+
+            if (options.insertSpaceBeforeFunctionParenthesis) {
+                rules.push(this.globalRules.SpaceBeforeOpenParenInFuncDecl);
+            }
+            else {
+                rules.push(this.globalRules.NoSpaceBeforeOpenParenInFuncDecl);
             }
 
             if (options.placeOpenBraceOnNewLineForControlBlocks) {

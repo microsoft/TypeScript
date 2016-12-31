@@ -12,7 +12,7 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(13,21)
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(14,19): error TS2300: Duplicate identifier '0'.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(15,19): error TS2300: Duplicate identifier '0'.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(16,19): error TS2300: Duplicate identifier '0x0'.
-tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(17,19): error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(17,19): error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '0o0'.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(17,19): error TS2300: Duplicate identifier '000'.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(18,23): error TS2300: Duplicate identifier '1e2'.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(19,22): error TS2300: Duplicate identifier '3.2e1'.
@@ -125,7 +125,7 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(45,55)
 !!! error TS2300: Duplicate identifier '0x0'.
     var e14 = { 0: 0, 000: 0 };
                       ~~~
-!!! error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher.
+!!! error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '0o0'.
                       ~~~
 !!! error TS2300: Duplicate identifier '000'.
     var e15 = { "100": 0, 1e2: 0 };

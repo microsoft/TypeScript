@@ -119,7 +119,7 @@ namespace ts {
      */
     export function forEach<T, U>(array: T[] | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
         if (array) {
-            for (let i = 0, len = array.length; i < len; i++) {
+            for (let i = 0; i < array.length; i++) {
                 const result = callback(array[i], i);
                 if (result) {
                     return result;
@@ -143,7 +143,7 @@ namespace ts {
      */
     export function every<T>(array: T[], callback: (element: T, index: number) => boolean): boolean {
         if (array) {
-            for (let i = 0, len = array.length; i < len; i++) {
+            for (let i = 0; i < array.length; i++) {
                 if (!callback(array[i], i)) {
                     return false;
                 }
@@ -155,7 +155,7 @@ namespace ts {
 
     /** Works like Array.prototype.find, returning `undefined` if no element satisfying the predicate is found. */
     export function find<T>(array: T[], predicate: (element: T, index: number) => boolean): T | undefined {
-        for (let i = 0, len = array.length; i < len; i++) {
+        for (let i = 0; i < array.length; i++) {
             const value = array[i];
             if (predicate(value, i)) {
                 return value;
@@ -169,7 +169,7 @@ namespace ts {
      * This is like `forEach`, but never returns undefined.
      */
     export function findMap<T, U>(array: T[], callback: (element: T, index: number) => U | undefined): U {
-        for (let i = 0, len = array.length; i < len; i++) {
+        for (let i = 0; i < array.length; i++) {
             const result = callback(array[i], i);
             if (result) {
                 return result;
@@ -191,7 +191,7 @@ namespace ts {
 
     export function indexOf<T>(array: T[], value: T): number {
         if (array) {
-            for (let i = 0, len = array.length; i < len; i++) {
+            for (let i = 0; i < array.length; i++) {
                 if (array[i] === value) {
                     return i;
                 }
@@ -201,7 +201,7 @@ namespace ts {
     }
 
     export function indexOfAnyCharCode(text: string, charCodes: number[], start?: number): number {
-        for (let i = start || 0, len = text.length; i < len; i++) {
+        for (let i = start || 0; i < text.length; i++) {
             if (contains(charCodes, text.charCodeAt(i))) {
                 return i;
             }
@@ -864,24 +864,6 @@ namespace ts {
     }
 
     /**
-     * Reduce the properties defined on a map-like (but not from its prototype chain).
-     *
-     * NOTE: This is intended for use with MapLike<T> objects. For Map<T> objects, use
-     *       reduceProperties instead as it offers better performance.
-     *
-     * @param map The map-like to reduce
-     * @param callback An aggregation function that is called for each entry in the map
-     * @param initial The initial value for the reduction.
-     */
-    export function reduceOwnProperties<T, U>(map: MapLike<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U): U {
-        let result = initial;
-        for (const key in map) if (hasOwnProperty.call(map, key)) {
-            result = callback(result, map[key], String(key));
-        }
-        return result;
-    }
-
-    /**
      * Performs a shallow equality comparison of the contents of two map-likes.
      *
      * @param left A map-like whose properties should be compared.
@@ -1078,7 +1060,7 @@ namespace ts {
         }
     }
 
-    function formatStringFromArgs(text: string, args: { [index: number]: string; }, baseIndex?: number): string {
+    export function formatStringFromArgs(text: string, args: { [index: number]: string; }, baseIndex?: number): string {
         baseIndex = baseIndex || 0;
 
         return text.replace(/{(\d+)}/g, (_match, index?) => args[+index + baseIndex]);
@@ -1942,8 +1924,18 @@ namespace ts {
     export const supportedJavascriptExtensions = [".js", ".jsx"];
     const allSupportedExtensions = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
 
-    export function getSupportedExtensions(options?: CompilerOptions): string[] {
-        return options && options.allowJs ? allSupportedExtensions : supportedTypeScriptExtensions;
+    export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: FileExtensionInfo[]): string[] {
+        const needAllExtensions = options && options.allowJs;
+        if (!extraFileExtensions || extraFileExtensions.length === 0) {
+            return needAllExtensions ? allSupportedExtensions : supportedTypeScriptExtensions;
+        }
+        const extensions = (needAllExtensions ? allSupportedExtensions : supportedTypeScriptExtensions).slice(0);
+        for (const extInfo of extraFileExtensions) {
+            if (needAllExtensions || extInfo.scriptKind === ScriptKind.TS) {
+                extensions.push(extInfo.extension);
+            }
+        }
+        return extensions;
     }
 
     export function hasJavaScriptFileExtension(fileName: string) {
@@ -1954,10 +1946,10 @@ namespace ts {
         return forEach(supportedTypeScriptExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
-    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions) {
+    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, extraFileExtensions?: FileExtensionInfo[]) {
         if (!fileName) { return false; }
 
-        for (const extension of getSupportedExtensions(compilerOptions)) {
+        for (const extension of getSupportedExtensions(compilerOptions, extraFileExtensions)) {
             if (fileExtensionIs(fileName, extension)) {
                 return true;
             }

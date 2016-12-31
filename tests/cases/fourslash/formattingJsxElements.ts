@@ -72,6 +72,8 @@
 ////<span>)   </span>;/*closingParenInJsxElement2*/
 ////<Router        routes      =        { 3 }   /      >;/*jsxExpressionSpaces*/
 ////<Router routes={                (3)    } />;/*jsxExpressionSpaces2*/
+////<Router routes={() => {}}/*jsxExpressionSpaces3*/
+/////>;/*jsxDanglingSelfClosingToken*/
 
 format.document();
 goTo.marker("autoformat");
@@ -120,8 +122,7 @@ goTo.marker("expressionIndent");
 verify.indentationIs(12);
 
 goTo.marker("danglingBracketAutoformat")
-// TODO: verify.currentLineContentIs("    >");
-verify.currentLineContentIs("        >");
+verify.currentLineContentIs("    >");
 goTo.marker("closingTagAutoformat");
 verify.currentLineContentIs("    </div>");
 
@@ -146,3 +147,7 @@ goTo.marker("jsxExpressionSpaces");
 verify.currentLineContentIs("<Router routes={3} />;");
 goTo.marker("jsxExpressionSpaces2");
 verify.currentLineContentIs("<Router routes={(3)} />;");
+goTo.marker("jsxExpressionSpaces3");
+verify.currentLineContentIs("<Router routes={() => { }}");
+goTo.marker("jsxDanglingSelfClosingToken");
+verify.currentLineContentIs("/>;");

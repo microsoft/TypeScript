@@ -6,4 +6,4 @@
 ////    z++;
 ////}
 
-verify.codeFixAtPosition("function greeter(x,z)");
+verify.rangeAfterCodeFix("function greeter(x,z)");
