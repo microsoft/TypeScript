@@ -1,16 +1,20 @@
 {
     "compilerOptions": {
         "noImplicitAny": true,
+        "noImplicitThis": true,
         "removeComments": true,
         "preserveConstEnums": true,
+        "pretty": true,
         "outFile": "../../built/local/tsserverlibrary.js",
         "sourceMap": true,
         "stripInternal": true,
-        "declaration": true,
-        "types": [],
+        "types": [
+            "node"
+        ],
         "target": "es5",
         "noUnusedLocals": true,
-        "noUnusedParameters": true
+        "noUnusedParameters": true,
+        "declaration": true
     },
     "files": [
         "../services/shims.ts",
@@ -19,11 +23,11 @@
         "utilities.ts",
         "scriptVersionCache.ts",
         "scriptInfo.ts",
-        "lshost.ts",
+        "lsHost.ts",
         "typingsCache.ts",
         "project.ts",
         "editorServices.ts",
-        "protocol.d.ts",
+        "protocol.ts",
         "session.ts"
     ]
 }

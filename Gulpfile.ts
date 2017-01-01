@@ -472,6 +472,9 @@ gulp.task(tsserverLibraryFile, false, [servicesFile], (done) => {
             .pipe(sourcemaps.write("."))
             .pipe(gulp.dest(".")),
         dts.pipe(prependCopyright())
+            .pipe(insert.transform((content) => {
+                return content + "\r\nexport = ts;";
+            }))
             .pipe(gulp.dest("."))
     ]);
 });
