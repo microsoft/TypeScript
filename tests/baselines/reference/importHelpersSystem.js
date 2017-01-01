@@ -5,6 +5,7 @@ export class A { }
 
 //// [b.ts]
 import { A } from "./a";
+export * from "./a";
 export class B extends A { }
 
 //// [tslib.d.ts]
@@ -38,6 +39,16 @@ System.register(["tslib", "./a"], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var tslib_1, a_1, B;
+    var exportedNames_1 = {
+        "B": true
+    };
+    function exportStar_1(m) {
+        var exports = {};
+        for (var n in m) {
+            if (n !== "default" && !exportedNames_1.hasOwnProperty(n)) exports[n] = m[n];
+        }
+        exports_1(exports);
+    }
     return {
         setters: [
             function (tslib_1_1) {
@@ -45,6 +56,7 @@ System.register(["tslib", "./a"], function (exports_1, context_1) {
             },
             function (a_1_1) {
                 a_1 = a_1_1;
+                exportStar_1(a_1_1);
             }
         ],
         execute: function () {

@@ -19160,6 +19160,10 @@ namespace ts {
                     if (moduleSymbol && hasExportAssignmentSymbol(moduleSymbol)) {
                         error(node.moduleSpecifier, Diagnostics.Module_0_uses_export_and_cannot_be_used_with_export_Asterisk, symbolToString(moduleSymbol));
                     }
+
+                    if (modulekind !== ModuleKind.System && modulekind !== ModuleKind.ES2015) {
+                        checkExternalEmitHelpers(node, ExternalEmitHelpers.ExportStar);
+                    }
                 }
             }
         }
@@ -20788,7 +20792,7 @@ namespace ts {
         function checkExternalEmitHelpers(location: Node, helpers: ExternalEmitHelpers) {
             if ((requestedExternalEmitHelpers & helpers) !== helpers && compilerOptions.importHelpers) {
                 const sourceFile = getSourceFileOfNode(location);
-                if (isEffectiveExternalModule(sourceFile, compilerOptions)) {
+                if (!isDeclarationFile(sourceFile) && isEffectiveExternalModule(sourceFile, compilerOptions)) {
                     const helpersModule = resolveHelpersModule(sourceFile, location);
                     if (helpersModule !== unknownSymbol) {
                         const uncheckedHelpers = helpers & ~requestedExternalEmitHelpers;
@@ -20817,6 +20821,8 @@ namespace ts {
                 case ExternalEmitHelpers.Param: return "__param";
                 case ExternalEmitHelpers.Awaiter: return "__awaiter";
                 case ExternalEmitHelpers.Generator: return "__generator";
+                case ExternalEmitHelpers.ExportStar: return "__exportStar";
+                default: Debug.fail("Unrecognized helper");
             }
         }
 

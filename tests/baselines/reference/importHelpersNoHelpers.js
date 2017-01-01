@@ -1,6 +1,7 @@
 //// [tests/cases/compiler/importHelpersNoHelpers.ts] ////
 
 //// [external.ts]
+export * from "./other";
 export class A { }
 export class B extends A { }
 
@@ -15,6 +16,9 @@ class C {
 const o = { a: 1 };
 const y = { ...o };
 const { ...x } = y;
+
+//// [other.ts]
+export const x = 1;
 
 //// [script.ts]
 class A { }
@@ -32,9 +36,13 @@ class C {
 export {}
 
 
+//// [other.js]
+"use strict";
+exports.x = 1;
 //// [external.js]
 "use strict";
 var tslib_1 = require("tslib");
+tslib_1.__exportStar(require("./other"), exports);
 var A = (function () {
     function A() {
     }

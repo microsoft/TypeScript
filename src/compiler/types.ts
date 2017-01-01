@@ -3733,9 +3733,10 @@ namespace ts {
         Param = 1 << 5,             // __param (used by TypeScript decorators transformation)
         Awaiter = 1 << 6,           // __awaiter (used by ES2017 async functions transformation)
         Generator = 1 << 7,         // __generator (used by ES2015 generator transformation)
+        ExportStar = 1 << 8,        // __exportStar (used by CommonJS/AMD/UMD module transformation)
 
         FirstEmitHelper = Extends,
-        LastEmitHelper = Generator
+        LastEmitHelper = ExportStar
     }
 
     /* @internal */
