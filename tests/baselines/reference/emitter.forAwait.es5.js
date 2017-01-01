@@ -61,40 +61,49 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __asyncStep = (this && this.__asyncStep) || function (r) { return !r.done && Promise.resolve(r.iterator.next()).then(function (_) { return !(r.done = (r.result = _).done); }); };
-var __asyncValues = (this && this.__asyncIterator) || function (o) { return (m = o[Symbol.asyncIterator]) ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator](); var m; };
-var __close = (this && this.__close) || function (r) { return (m = !(r && r.done) && r.iterator["return"]) && m.call(r.iterator); var m; };
+var __asyncValues = (this && this.__asyncIterator) || function (o) {
+    var m = o[Symbol.asyncIterator];
+    if (m) return m.call(o);
+    return typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
+};
 function f1() {
     return __awaiter(this, void 0, void 0, function () {
-        var y, y_1, x, _a, e_1;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var y, y_1, y_1_1, x, _a, e_1, _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
-                    _b.trys.push([0, 5, 6, 10]);
-                    y_1 = { iterator: __asyncValues(y) };
-                    _b.label = 1;
-                case 1: return [4 /*yield*/, __asyncStep(y_1)];
+                    _c.trys.push([0, 6, 7, 12]);
+                    y_1 = __asyncValues(y);
+                    return [4 /*yield*/, ["await", y_1.next()]];
+                case 1:
+                    y_1_1 = _c.sent();
+                    _c.label = 2;
                 case 2:
-                    if (!_b.sent()) return [3 /*break*/, 4];
-                    x = y_1.result.value;
-                    _b.label = 3;
-                case 3: return [3 /*break*/, 1];
-                case 4: return [3 /*break*/, 10];
-                case 5:
-                    _a = _b.sent();
-                    e_1 = { error: e_1_1 };
-                    return [3 /*break*/, 10];
+                    if (!!y_1_1.done) return [3 /*break*/, 5];
+                    x = y_1_1.value;
+                    _c.label = 3;
+                case 3: return [4 /*yield*/, ["await", y_1.next()]];
+                case 4:
+                    y_1_1 = _c.sent();
+                    return [3 /*break*/, 2];
+                case 5: return [3 /*break*/, 12];
                 case 6:
-                    _b.trys.push([6, , 8, 9]);
-                    return [4 /*yield*/, __close(y_1)];
+                    _a = _c.sent();
+                    e_1 = { error: e_1_1 };
+                    return [3 /*break*/, 12];
                 case 7:
-                    _b.sent();
-                    return [3 /*break*/, 9];
+                    _c.trys.push([7, , 10, 11]);
+                    if (!(y_1_1 && !y_1_1.done && (_b = y_1.return))) return [3 /*break*/, 9];
+                    return [4 /*yield*/, ["await", _b.call(y_1)]];
                 case 8:
+                    _c.sent();
+                    _c.label = 9;
+                case 9: return [3 /*break*/, 11];
+                case 10:
                     if (e_1) throw e_1.error;
                     return [7 /*endfinally*/];
-                case 9: return [7 /*endfinally*/];
-                case 10: return [2 /*return*/];
+                case 11: return [7 /*endfinally*/];
+                case 12: return [2 /*return*/];
             }
         });
     });
@@ -135,40 +144,49 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __asyncStep = (this && this.__asyncStep) || function (r) { return !r.done && Promise.resolve(r.iterator.next()).then(function (_) { return !(r.done = (r.result = _).done); }); };
-var __asyncValues = (this && this.__asyncIterator) || function (o) { return (m = o[Symbol.asyncIterator]) ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator](); var m; };
-var __close = (this && this.__close) || function (r) { return (m = !(r && r.done) && r.iterator["return"]) && m.call(r.iterator); var m; };
+var __asyncValues = (this && this.__asyncIterator) || function (o) {
+    var m = o[Symbol.asyncIterator];
+    if (m) return m.call(o);
+    return typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
+};
 function f2() {
     return __awaiter(this, void 0, void 0, function () {
-        var x, y, y_1, _a, e_1;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var x, y, y_1, y_1_1, _a, e_1, _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
-                    _b.trys.push([0, 5, 6, 10]);
-                    y_1 = { iterator: __asyncValues(y) };
-                    _b.label = 1;
-                case 1: return [4 /*yield*/, __asyncStep(y_1)];
+                    _c.trys.push([0, 6, 7, 12]);
+                    y_1 = __asyncValues(y);
+                    return [4 /*yield*/, ["await", y_1.next()]];
+                case 1:
+                    y_1_1 = _c.sent();
+                    _c.label = 2;
                 case 2:
-                    if (!_b.sent()) return [3 /*break*/, 4];
-                    x = y_1.result.value;
-                    _b.label = 3;
-                case 3: return [3 /*break*/, 1];
-                case 4: return [3 /*break*/, 10];
-                case 5:
-                    _a = _b.sent();
-                    e_1 = { error: e_1_1 };
-                    return [3 /*break*/, 10];
+                    if (!!y_1_1.done) return [3 /*break*/, 5];
+                    x = y_1_1.value;
+                    _c.label = 3;
+                case 3: return [4 /*yield*/, ["await", y_1.next()]];
+                case 4:
+                    y_1_1 = _c.sent();
+                    return [3 /*break*/, 2];
+                case 5: return [3 /*break*/, 12];
                 case 6:
-                    _b.trys.push([6, , 8, 9]);
-                    return [4 /*yield*/, __close(y_1)];
+                    _a = _c.sent();
+                    e_1 = { error: e_1_1 };
+                    return [3 /*break*/, 12];
                 case 7:
-                    _b.sent();
-                    return [3 /*break*/, 9];
+                    _c.trys.push([7, , 10, 11]);
+                    if (!(y_1_1 && !y_1_1.done && (_b = y_1.return))) return [3 /*break*/, 9];
+                    return [4 /*yield*/, ["await", _b.call(y_1)]];
                 case 8:
+                    _c.sent();
+                    _c.label = 9;
+                case 9: return [3 /*break*/, 11];
+                case 10:
                     if (e_1) throw e_1.error;
                     return [7 /*endfinally*/];
-                case 9: return [7 /*endfinally*/];
-                case 10: return [2 /*return*/];
+                case 11: return [7 /*endfinally*/];
+                case 12: return [2 /*return*/];
             }
         });
     });
@@ -201,9 +219,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __asyncStep = (this && this.__asyncStep) || function (r) { return !r.done && Promise.resolve(r.iterator.next()).then(function (_) { return !(r.done = (r.result = _).done); }); };
-var __asyncValues = (this && this.__asyncIterator) || function (o) { return (m = o[Symbol.asyncIterator]) ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator](); var m; };
-var __close = (this && this.__close) || function (r) { return (m = !(r && r.done) && r.iterator["return"]) && m.call(r.iterator); var m; };
+var __asyncValues = (this && this.__asyncIterator) || function (o) {
+    var m = o[Symbol.asyncIterator];
+    if (m) return m.call(o);
+    return typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
+};
 var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
     var g = generator.apply(thisArg, _arguments || []), q = [], c, i;
     return i = { next: verb("next"), "throw": verb("throw"), "return": verb("return") }, i[Symbol.asyncIterator] = function () { return this; }, i;
@@ -218,35 +238,42 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 };
 function f3() {
     return __asyncGenerator(this, arguments, function f3_1() {
-        var y, y_1, x, _a, e_1;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var y, y_1, y_1_1, x, _a, e_1, _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
-                    _b.trys.push([0, 5, 6, 10]);
-                    y_1 = { iterator: __asyncValues(y) };
-                    _b.label = 1;
-                case 1: return [4 /*yield*/, ["await", __asyncStep(y_1)]];
+                    _c.trys.push([0, 6, 7, 12]);
+                    y_1 = __asyncValues(y);
+                    return [4 /*yield*/, ["await", y_1.next()]];
+                case 1:
+                    y_1_1 = _c.sent();
+                    _c.label = 2;
                 case 2:
-                    if (!_b.sent()) return [3 /*break*/, 4];
-                    x = y_1.result.value;
-                    _b.label = 3;
-                case 3: return [3 /*break*/, 1];
-                case 4: return [3 /*break*/, 10];
-                case 5:
-                    _a = _b.sent();
-                    e_1 = { error: e_1_1 };
-                    return [3 /*break*/, 10];
+                    if (!!y_1_1.done) return [3 /*break*/, 5];
+                    x = y_1_1.value;
+                    _c.label = 3;
+                case 3: return [4 /*yield*/, ["await", y_1.next()]];
+                case 4:
+                    y_1_1 = _c.sent();
+                    return [3 /*break*/, 2];
+                case 5: return [3 /*break*/, 12];
                 case 6:
-                    _b.trys.push([6, , 8, 9]);
-                    return [4 /*yield*/, ["await", __close(y_1)]];
+                    _a = _c.sent();
+                    e_1 = { error: e_1_1 };
+                    return [3 /*break*/, 12];
                 case 7:
-                    _b.sent();
-                    return [3 /*break*/, 9];
+                    _c.trys.push([7, , 10, 11]);
+                    if (!(y_1_1 && !y_1_1.done && (_b = y_1.return))) return [3 /*break*/, 9];
+                    return [4 /*yield*/, ["await", _b.call(y_1)]];
                 case 8:
+                    _c.sent();
+                    _c.label = 9;
+                case 9: return [3 /*break*/, 11];
+                case 10:
                     if (e_1) throw e_1.error;
                     return [7 /*endfinally*/];
-                case 9: return [7 /*endfinally*/];
-                case 10: return [2 /*return*/];
+                case 11: return [7 /*endfinally*/];
+                case 12: return [2 /*return*/];
             }
         });
     });
@@ -279,9 +306,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __asyncStep = (this && this.__asyncStep) || function (r) { return !r.done && Promise.resolve(r.iterator.next()).then(function (_) { return !(r.done = (r.result = _).done); }); };
-var __asyncValues = (this && this.__asyncIterator) || function (o) { return (m = o[Symbol.asyncIterator]) ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator](); var m; };
-var __close = (this && this.__close) || function (r) { return (m = !(r && r.done) && r.iterator["return"]) && m.call(r.iterator); var m; };
+var __asyncValues = (this && this.__asyncIterator) || function (o) {
+    var m = o[Symbol.asyncIterator];
+    if (m) return m.call(o);
+    return typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
+};
 var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
     var g = generator.apply(thisArg, _arguments || []), q = [], c, i;
     return i = { next: verb("next"), "throw": verb("throw"), "return": verb("return") }, i[Symbol.asyncIterator] = function () { return this; }, i;
@@ -296,35 +325,42 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 };
 function f4() {
     return __asyncGenerator(this, arguments, function f4_1() {
-        var x, y, y_1, _a, e_1;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var x, y, y_1, y_1_1, _a, e_1, _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
-                    _b.trys.push([0, 5, 6, 10]);
-                    y_1 = { iterator: __asyncValues(y) };
-                    _b.label = 1;
-                case 1: return [4 /*yield*/, ["await", __asyncStep(y_1)]];
+                    _c.trys.push([0, 6, 7, 12]);
+                    y_1 = __asyncValues(y);
+                    return [4 /*yield*/, ["await", y_1.next()]];
+                case 1:
+                    y_1_1 = _c.sent();
+                    _c.label = 2;
                 case 2:
-                    if (!_b.sent()) return [3 /*break*/, 4];
-                    x = y_1.result.value;
-                    _b.label = 3;
-                case 3: return [3 /*break*/, 1];
-                case 4: return [3 /*break*/, 10];
-                case 5:
-                    _a = _b.sent();
-                    e_1 = { error: e_1_1 };
-                    return [3 /*break*/, 10];
+                    if (!!y_1_1.done) return [3 /*break*/, 5];
+                    x = y_1_1.value;
+                    _c.label = 3;
+                case 3: return [4 /*yield*/, ["await", y_1.next()]];
+                case 4:
+                    y_1_1 = _c.sent();
+                    return [3 /*break*/, 2];
+                case 5: return [3 /*break*/, 12];
                 case 6:
-                    _b.trys.push([6, , 8, 9]);
-                    return [4 /*yield*/, ["await", __close(y_1)]];
+                    _a = _c.sent();
+                    e_1 = { error: e_1_1 };
+                    return [3 /*break*/, 12];
                 case 7:
-                    _b.sent();
-                    return [3 /*break*/, 9];
+                    _c.trys.push([7, , 10, 11]);
+                    if (!(y_1_1 && !y_1_1.done && (_b = y_1.return))) return [3 /*break*/, 9];
+                    return [4 /*yield*/, ["await", _b.call(y_1)]];
                 case 8:
+                    _c.sent();
+                    _c.label = 9;
+                case 9: return [3 /*break*/, 11];
+                case 10:
                     if (e_1) throw e_1.error;
                     return [7 /*endfinally*/];
-                case 9: return [7 /*endfinally*/];
-                case 10: return [2 /*return*/];
+                case 11: return [7 /*endfinally*/];
+                case 12: return [2 /*return*/];
             }
         });
     });

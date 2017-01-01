@@ -51,16 +51,31 @@
 
 //// [emptyVariableDeclarationBindingPatterns01_ES5iterable.js]
 var __read = (this && this.__read) || function (o, n) {
-    if (!(m = typeof Symbol === "function" && o[Symbol.iterator])) return o;
-    var m, i = m.call(o), ar = [], r, e;
-    try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
     catch (error) { e = { error: error }; }
-    finally { try { if (m = !(r && r.done) && i["return"]) m.call(i); } finally { if (e) throw e.error; } }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
     return ar;
 };
-var __values = (this && this.__values) || function (o) { return (i = typeof Symbol === "function" && o[Symbol.iterator] || 0) ? i.call(o) : { next: function () { return { done: d = d || i >= o.length, value: d ? void 0 : o[i++] }; } }; var i, d; };
-var __step = (this && this.__step) || function (r) { return !(r.done || (r.done = (r.result = r.iterator.next()).done)); };
-var __close = (this && this.__close) || function (r) { return (m = !(r && r.done) && r.iterator["return"]) && m.call(r.iterator); var m; };
+var __values = (this && this.__values) || function (o) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+    if (m) return m.call(o);
+    return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+};
 (function () {
     var a;
     var _a = a;
@@ -92,58 +107,76 @@ var __close = (this && this.__close) || function (r) { return (m = !(r && r.done
 (function () {
     var ns = [];
     try {
-        for (var ns_1 = { iterator: __values(ns) }; __step(ns_1);) {
-            var _a = ns_1.result.value;
+        for (var ns_1 = __values(ns), ns_1_1 = ns_1.next(); !ns_1_1.done; ns_1_1 = ns_1.next()) {
+            var _a = ns_1_1.value;
         }
     }
     catch (e_1_1) { e_1 = { error: e_1_1 }; }
     finally {
-        try { __close(ns_1); } finally { if (e_1) throw e_1.error; }
+        try {
+            if (ns_1_1 && !ns_1_1.done && (_b = ns_1.return)) _b.call(ns_1);
+        }
+        finally { if (e_1) throw e_1.error; }
     }
     try {
-        for (var ns_2 = { iterator: __values(ns) }; __step(ns_2);) {
-            var _b = ns_2.result.value;
+        for (var ns_2 = __values(ns), ns_2_1 = ns_2.next(); !ns_2_1.done; ns_2_1 = ns_2.next()) {
+            var _c = ns_2_1.value;
         }
     }
     catch (e_2_1) { e_2 = { error: e_2_1 }; }
     finally {
-        try { __close(ns_2); } finally { if (e_2) throw e_2.error; }
+        try {
+            if (ns_2_1 && !ns_2_1.done && (_d = ns_2.return)) _d.call(ns_2);
+        }
+        finally { if (e_2) throw e_2.error; }
     }
     try {
-        for (var ns_3 = { iterator: __values(ns) }; __step(ns_3);) {
-            var _c = ns_3.result.value;
+        for (var ns_3 = __values(ns), ns_3_1 = ns_3.next(); !ns_3_1.done; ns_3_1 = ns_3.next()) {
+            var _e = ns_3_1.value;
         }
     }
     catch (e_3_1) { e_3 = { error: e_3_1 }; }
     finally {
-        try { __close(ns_3); } finally { if (e_3) throw e_3.error; }
+        try {
+            if (ns_3_1 && !ns_3_1.done && (_f = ns_3.return)) _f.call(ns_3);
+        }
+        finally { if (e_3) throw e_3.error; }
     }
     try {
-        for (var ns_4 = { iterator: __values(ns) }; __step(ns_4);) {
-            var _d = __read(ns_4.result.value, 0);
+        for (var ns_4 = __values(ns), ns_4_1 = ns_4.next(); !ns_4_1.done; ns_4_1 = ns_4.next()) {
+            var _g = __read(ns_4_1.value, 0);
         }
     }
     catch (e_4_1) { e_4 = { error: e_4_1 }; }
     finally {
-        try { __close(ns_4); } finally { if (e_4) throw e_4.error; }
+        try {
+            if (ns_4_1 && !ns_4_1.done && (_h = ns_4.return)) _h.call(ns_4);
+        }
+        finally { if (e_4) throw e_4.error; }
     }
     try {
-        for (var ns_5 = { iterator: __values(ns) }; __step(ns_5);) {
-            var _e = __read(ns_5.result.value, 0);
+        for (var ns_5 = __values(ns), ns_5_1 = ns_5.next(); !ns_5_1.done; ns_5_1 = ns_5.next()) {
+            var _j = __read(ns_5_1.value, 0);
         }
     }
     catch (e_5_1) { e_5 = { error: e_5_1 }; }
     finally {
-        try { __close(ns_5); } finally { if (e_5) throw e_5.error; }
+        try {
+            if (ns_5_1 && !ns_5_1.done && (_k = ns_5.return)) _k.call(ns_5);
+        }
+        finally { if (e_5) throw e_5.error; }
     }
     try {
-        for (var ns_6 = { iterator: __values(ns) }; __step(ns_6);) {
-            var _f = __read(ns_6.result.value, 0);
+        for (var ns_6 = __values(ns), ns_6_1 = ns_6.next(); !ns_6_1.done; ns_6_1 = ns_6.next()) {
+            var _l = __read(ns_6_1.value, 0);
         }
     }
     catch (e_6_1) { e_6 = { error: e_6_1 }; }
     finally {
-        try { __close(ns_6); } finally { if (e_6) throw e_6.error; }
+        try {
+            if (ns_6_1 && !ns_6_1.done && (_m = ns_6.return)) _m.call(ns_6);
+        }
+        finally { if (e_6) throw e_6.error; }
     }
-    var e_1, e_2, e_3, e_4, e_5, e_6;
+    var e_1, _b, e_2, _d, e_3, _f, e_4, _h, e_5, _k, e_6, _m;
 })();

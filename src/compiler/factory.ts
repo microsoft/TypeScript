@@ -1750,7 +1750,16 @@ namespace ts {
         name: "typescript:values",
         scoped: false,
         text: `
-            var __values = (this && this.__values) || function (o) { return (i = typeof Symbol === "function" && o[Symbol.iterator] || 0) ? i.call(o) : { next: function () { return { done: d = d || i >= o.length, value: d ? void 0 : o[i++] }; } }; var i, d; };
+            var __values = (this && this.__values) || function (o) {
+                var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+                if (m) return m.call(o);
+                return {
+                    next: function () {
+                        if (o && i >= o.length) o = void 0;
+                        return { value: o && o[i++], done: !o };
+                    }
+                };
+            };
         `
     };
 
@@ -1764,52 +1773,24 @@ namespace ts {
         );
     }
 
-    const stepHelper: EmitHelper = {
-        name: "typescript:step",
-        scoped: false,
-        text: `
-            var __step = (this && this.__step) || function (r) { return !(r.done || (r.done = (r.result = r.iterator.next()).done)); };
-        `
-    };
-
-    export function createStepHelper(context: TransformationContext, iteratorRecord: Expression, location?: TextRange) {
-        context.requestEmitHelper(stepHelper);
-        return createCall(
-            getHelperName("__step"),
-            /*typeArguments*/ undefined,
-            [iteratorRecord],
-            location
-        );
-    }
-
-    const closeHelper: EmitHelper = {
-        name: "typescript:close",
-        scoped: false,
-        text: `
-            var __close = (this && this.__close) || function (r) { return (m = !(r && r.done) && r.iterator["return"]) && m.call(r.iterator); var m; };
-        `
-    };
-
-    export function createCloseHelper(context: TransformationContext, iteratorRecord: Expression, location?: TextRange) {
-        context.requestEmitHelper(closeHelper);
-        return createCall(
-            getHelperName("__close"),
-            /*typeArguments*/ undefined,
-            [iteratorRecord],
-            location
-        );
-    }
-
     const readHelper: EmitHelper = {
         name: "typescript:read",
         scoped: false,
         text: `
             var __read = (this && this.__read) || function (o, n) {
-                if (!(m = typeof Symbol === "function" && o[Symbol.iterator])) return o;
-                var m, i = m.call(o), ar = [], r, e;
-                try { while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value); }
+                var m = typeof Symbol === "function" && o[Symbol.iterator];
+                if (!m) return o;
+                var i = m.call(o), r, ar = [], e;
+                try {
+                    while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+                }
                 catch (error) { e = { error: error }; }
-                finally { try { if (m = !(r && r.done) && i["return"]) m.call(i); } finally { if (e) throw e.error; } }
+                finally {
+                    try {
+                        if (r && !r.done && (m = i["return"])) m.call(i);
+                    }
+                    finally { if (e) throw e.error; }
+                }
                 return ar;
             };
         `

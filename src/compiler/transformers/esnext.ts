@@ -312,18 +312,8 @@ namespace ts {
             return node;
         }
 
-        function transformForAwaitOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement) {
-            const iteratorRecord = isIdentifier(node.expression)
-                ? getGeneratedNameForNode(node.expression)
-                : createUniqueName("iterator");
-            const expression = visitNode(node.expression, visitor, isExpression);
-            const binding = createForOfBindingStatement(
-                node.initializer,
-                createPropertyAccess(
-                    createPropertyAccess(iteratorRecord, "result"),
-                    "value"
-                )
-            );
+        function convertForOfStatementHead(node: ForOfStatement, boundValue: Expression) {
+            const binding = createForOfBindingStatement(node.initializer, boundValue);
 
             let bodyLocation: TextRange;
             let statementsLocation: TextRange;
@@ -338,79 +328,58 @@ namespace ts {
                 statements.push(statement);
             }
 
-            const step = createAsyncStepHelper(
-                context,
-                iteratorRecord,
-                node.initializer
+            return setEmitFlags(
+                createBlock(
+                    createNodeArray(statements, statementsLocation),
+                    bodyLocation,
+                    /*multiLine*/ true
+                ),
+                EmitFlags.NoSourceMap | EmitFlags.NoTokenSourceMaps
             );
+        }
+
+        function transformForAwaitOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement) {
+            const expression = visitNode(node.expression, visitor, isExpression);
+            const iterator = isIdentifier(expression) ? getGeneratedNameForNode(expression) : createTempVariable(/*recordTempVariable*/ undefined);
+            const result = isIdentifier(expression) ? getGeneratedNameForNode(iterator) : createTempVariable(/*recordTempVariable*/ undefined);
+            const errorRecord = createUniqueName("e");
+            const catchVariable = getGeneratedNameForNode(errorRecord);
+            const returnMethod = createTempVariable(/*recordTempVariable*/ undefined);
+            const values = createAsyncValuesHelper(context, expression, /*location*/ node.expression);
+            const next = createYield(
+                /*asteriskToken*/ undefined,
+                createArrayLiteral([
+                    createLiteral("await"),
+                    createCall(createPropertyAccess(iterator, "next" ), /*typeArguments*/ undefined, [])
+                ])
+            );
+
+            hoistVariableDeclaration(errorRecord);
+            hoistVariableDeclaration(returnMethod);
 
             const forStatement = setEmitFlags(
                 createFor(
-                    createVariableDeclarationList(
-                        [
-                            createVariableDeclaration(
-                                iteratorRecord,
-                                /*type*/ undefined,
-                                createObjectLiteral(
-                                    [
-                                        createPropertyAssignment(
-                                            "iterator",
-                                            createAsyncValuesHelper(
-                                                context,
-                                                expression,
-                                                node.expression
-                                            ),
-                                            node.expression
-                                        )
-                                    ],
-                                    node.expression
-                                ),
-                                node.expression
-                            )
-                        ],
-                        node.expression
+                    /*initializer*/ setEmitFlags(
+                        createVariableDeclarationList([
+                            createVariableDeclaration(iterator, /*type*/ undefined, values, node.expression),
+                            createVariableDeclaration(result, /*type*/ undefined, next)
+                        ], /*location*/ node.expression),
+                        EmitFlags.NoHoisting
                     ),
-                    /*condition*/ createYield(
-                        /*asteriskToken*/ undefined,
-                        enclosingFunctionFlags & FunctionFlags.Generator ?
-                            createArrayLiteral([createLiteral("await"), step]) :
-                            step,
-                        node.initializer
-                    ),
-                    /*incrementor*/ undefined,
-                    setEmitFlags(
-                        createBlock(
-                            createNodeArray(statements, statementsLocation),
-                            bodyLocation,
-                            /*multiLine*/ true
-                        ),
-                        EmitFlags.NoSourceMap | EmitFlags.NoTokenSourceMaps
-                    ),
+                    /*condition*/ createLogicalNot(createPropertyAccess(result, "done")),
+                    /*incrementor*/ createAssignment(result, next),
+                    /*statement*/ convertForOfStatementHead(node, createPropertyAccess(result, "value")),
                     /*location*/ node
                 ),
                 EmitFlags.NoTokenTrailingSourceMaps
             );
 
-            return closeAsyncIterator(
-                restoreEnclosingLabel(
-                    forStatement,
-                    outermostLabeledStatement
-                ),
-                iteratorRecord
-            );
-        }
-
-        function closeAsyncIterator(statement: Statement, iteratorRecord: Expression) {
-            const errorRecord = createUniqueName("e");
-            hoistVariableDeclaration(errorRecord);
-            const catchVariable = getGeneratedNameForNode(errorRecord);
-            const close = createCloseHelper(
-                context,
-                iteratorRecord
-            );
             return createTry(
                 createBlock([
-                    statement
+                    restoreEnclosingLabel(
+                        forStatement,
+                        outermostLabeledStatement
+                    )
                 ]),
                 createCatchClause(catchVariable,
                     setEmitFlags(
@@ -419,10 +388,7 @@ namespace ts {
                                 createAssignment(
                                     errorRecord,
                                     createObjectLiteral([
-                                        createPropertyAssignment(
-                                            "error",
-                                            catchVariable
-                                        )
+                                        createPropertyAssignment("error", catchVariable)
                                     ])
                                 )
                             )
@@ -431,41 +397,50 @@ namespace ts {
                     )
                 ),
                 createBlock([
-                    setEmitFlags(
-                        createTry(
+                    createTry(
+                        /*tryBlock*/ createBlock([
                             setEmitFlags(
-                                createBlock([
+                                createIf(
+                                    createLogicalAnd(
+                                        createLogicalAnd(
+                                            result,
+                                            createLogicalNot(
+                                                createPropertyAccess(result, "done")
+                                            )
+                                        ),
+                                        createAssignment(
+                                            returnMethod,
+                                            createPropertyAccess(iterator, "return")
+                                        )
+                                    ),
                                     createStatement(
                                         createYield(
                                             /*asteriskToken*/ undefined,
-                                            enclosingFunctionFlags & FunctionFlags.Generator ?
-                                                createArrayLiteral([createLiteral("await"), close]) :
-                                                close
+                                            createArrayLiteral([
+                                                createLiteral("await"),
+                                                createFunctionCall(returnMethod, iterator, [])
+                                            ])
                                         )
                                     )
-                                ]),
-                                EmitFlags.SingleLine
-                            ),
-                            undefined,
-                            setEmitFlags(
-                                createBlock([
-                                    setEmitFlags(
-                                        createIf(
-                                            errorRecord,
-                                            createThrow(
-                                                createPropertyAccess(
-                                                    errorRecord,
-                                                    "error"
-                                                )
-                                            )
-                                        ),
-                                        EmitFlags.SingleLine
-                                    )
-                                ]),
+                                ),
                                 EmitFlags.SingleLine
                             )
-                        ),
-                        EmitFlags.SingleLine
+                        ]),
+                        /*catchClause*/ undefined,
+                        /*finallyBlock*/ setEmitFlags(
+                            createBlock([
+                                setEmitFlags(
+                                    createIf(
+                                        errorRecord,
+                                        createThrow(
+                                            createPropertyAccess(errorRecord, "error")
+                                        )
+                                    ),
+                                    EmitFlags.SingleLine
+                                )
+                            ]),
+                            EmitFlags.SingleLine
+                        )
                     )
                 ])
             );
@@ -907,7 +882,11 @@ namespace ts {
         name: "typescript:asyncValues",
         scoped: false,
         text: `
-            var __asyncValues = (this && this.__asyncIterator) || function (o) { return (m = o[Symbol.asyncIterator]) ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator](); var m; };
+            var __asyncValues = (this && this.__asyncIterator) || function (o) {
+                var m = o[Symbol.asyncIterator];
+                if (m) return m.call(o);
+                return typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
+            };
         `
     };
 
@@ -939,24 +918,6 @@ namespace ts {
             getHelperName("__asyncDelegator"),
             /*typeArguments*/ undefined,
             [expression],
-            location
-        );
-    }
-
-    const asyncStep: EmitHelper = {
-        name: "typescript:asyncStep",
-        scoped: false,
-        text: `
-            var __asyncStep = (this && this.__asyncStep) || function (r) { return !r.done && Promise.resolve(r.iterator.next()).then(function (_) { return !(r.done = (r.result = _).done); }); };
-        `
-    };
-
-    function createAsyncStepHelper(context: TransformationContext, iteratorRecord: Expression, location?: TextRange) {
-        context.requestEmitHelper(asyncStep);
-        return createCall(
-            getHelperName("__asyncStep"),
-            /*typeArguments*/ undefined,
-            [iteratorRecord],
             location
         );
     }

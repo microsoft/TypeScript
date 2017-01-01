@@ -2202,7 +2202,8 @@ namespace ts {
                 compilerOptions.downlevelIteration ? convertForOfStatementForIterable : convertForOfStatementForArray);
         }
 
-        function convertForOfStatementHead(statements: Statement[], node: ForOfStatement, boundValue: Expression, convertedLoopBodyStatements: Statement[]) {
+        function convertForOfStatementHead(node: ForOfStatement, boundValue: Expression, convertedLoopBodyStatements: Statement[]) {
+            const statements: Statement[] = [];
             if (isVariableDeclarationList(node.initializer)) {
                 if (node.initializer.flags & NodeFlags.BlockScoped) {
                     enableSubstitutionsForBlockScopedBindings();
@@ -2291,72 +2292,16 @@ namespace ts {
                 }
             }
 
-            return { bodyLocation, statementsLocation };
-        }
-
-        function convertForOfStatementForIterable(node: ForOfStatement, outermostLabeledStatement: LabeledStatement, convertedLoopBodyStatements: Statement[]): Statement {
-            const expression = visitNode(node.expression, visitor, isExpression);
-            const iteratorRecord = isIdentifier(node.expression)
-                ? getGeneratedNameForNode(node.expression)
-                : createUniqueName("iterator");
-
-            const statements: Statement[] = [];
-            const { bodyLocation, statementsLocation } = convertForOfStatementHead(
-                statements,
-                node,
-                createPropertyAccess(
-                    createPropertyAccess(iteratorRecord, "result"),
-                    "value"
+            // The old emitter does not emit source maps for the block.
+            // We add the location to preserve comments.
+            return setEmitFlags(
+                createBlock(
+                    createNodeArray(statements, /*location*/ statementsLocation),
+                    /*location*/ bodyLocation,
+                    /*multiLine*/ true
                 ),
-                convertedLoopBodyStatements);
-
-            let statement: Statement = setEmitFlags(
-                createFor(
-                    createVariableDeclarationList(
-                        [
-                            createVariableDeclaration(
-                                iteratorRecord,
-                                /*type*/ undefined,
-                                createObjectLiteral(
-                                    [
-                                        createPropertyAssignment(
-                                            "iterator",
-                                            createValuesHelper(
-                                                context,
-                                                expression,
-                                                node.expression
-                                            ),
-                                            node.expression
-                                        )
-                                    ],
-                                    node.expression
-                                ),
-                                node.expression
-                            )
-                        ],
-                        node.expression
-                    ),
-                    /*condition*/ createStepHelper(
-                        context,
-                        iteratorRecord,
-                        node.initializer
-                    ),
-                    /*incrementor*/ undefined,
-                    setEmitFlags(
-                        createBlock(
-                            createNodeArray(statements, statementsLocation),
-                            bodyLocation,
-                            /*multiLine*/ true
-                        ),
-                        EmitFlags.NoSourceMap | EmitFlags.NoTokenSourceMaps
-                    ),
-                    /*location*/ node
-                ),
-                EmitFlags.NoTokenTrailingSourceMaps
+                EmitFlags.NoSourceMap | EmitFlags.NoTokenSourceMaps
             );
-
-            statement = restoreEnclosingLabel(statement, outermostLabeledStatement);
-            return closeIterator(statement, iteratorRecord);
         }
 
         function convertForOfStatementForArray(node: ForOfStatement, outermostLabeledStatement: LabeledStatement, convertedLoopBodyStatements: Statement[]): Statement {
@@ -2382,7 +2327,6 @@ namespace ts {
             // for-of bodies are always emitted as blocks.
 
             const expression = visitNode(node.expression, visitor, isExpression);
-            const statements: Statement[] = [];
 
             // In the case where the user wrote an identifier as the RHS, like this:
             //
@@ -2390,43 +2334,30 @@ namespace ts {
             //
             // we don't want to emit a temporary variable for the RHS, just use it directly.
             const counter = createLoopVariable();
-            const rhsReference = expression.kind === SyntaxKind.Identifier
-                ? createUniqueName((<Identifier>expression).text)
-                : createTempVariable(/*recordTempVariable*/ undefined);
-
-            const { bodyLocation, statementsLocation } = convertForOfStatementHead(
-                statements,
-                node,
-                createElementAccess(rhsReference, counter),
-                convertedLoopBodyStatements);
+            const rhsReference = isIdentifier(expression) ? getGeneratedNameForNode(expression) : createTempVariable(/*recordTempVariable*/ undefined);
 
             // The old emitter does not emit source maps for the expression
             setEmitFlags(expression, EmitFlags.NoSourceMap | getEmitFlags(expression));
 
-            // The old emitter does not emit source maps for the block.
-            // We add the location to preserve comments.
-            const body = createBlock(
-                createNodeArray(statements, /*location*/ statementsLocation),
-                /*location*/ bodyLocation
-            );
-
-            setEmitFlags(body, EmitFlags.NoSourceMap | EmitFlags.NoTokenSourceMaps);
-
             const forStatement = createFor(
-                setEmitFlags(
+                /*initializer*/ setEmitFlags(
                     createVariableDeclarationList([
                         createVariableDeclaration(counter, /*type*/ undefined, createLiteral(0), /*location*/ moveRangePos(node.expression, -1)),
                         createVariableDeclaration(rhsReference, /*type*/ undefined, expression, /*location*/ node.expression)
                     ], /*location*/ node.expression),
                     EmitFlags.NoHoisting
                 ),
-                createLessThan(
+                /*condition*/ createLessThan(
                     counter,
                     createPropertyAccess(rhsReference, "length"),
                     /*location*/ node.expression
                 ),
-                createPostfixIncrement(counter, /*location*/ node.expression),
-                body,
+                /*incrementor*/ createPostfixIncrement(counter, /*location*/ node.expression),
+                /*statement*/ convertForOfStatementHead(
+                    node,
+                    createElementAccess(rhsReference, counter),
+                    convertedLoopBodyStatements
+                ),
                 /*location*/ node
             );
 
@@ -2435,14 +2366,47 @@ namespace ts {
             return restoreEnclosingLabel(forStatement, outermostLabeledStatement, convertedLoopState && resetLabel);
         }
 
-        function closeIterator(statement: Statement, iteratorRecord: Expression) {
+        function convertForOfStatementForIterable(node: ForOfStatement, outermostLabeledStatement: LabeledStatement, convertedLoopBodyStatements: Statement[]): Statement {
+            const expression = visitNode(node.expression, visitor, isExpression);
+            const iterator = isIdentifier(expression) ? getGeneratedNameForNode(expression) : createTempVariable(/*recordTempVariable*/ undefined);
+            const result = isIdentifier(expression) ? getGeneratedNameForNode(iterator) : createTempVariable(/*recordTempVariable*/ undefined);
             const errorRecord = createUniqueName("e");
-            hoistVariableDeclaration(errorRecord);
             const catchVariable = getGeneratedNameForNode(errorRecord);
+            const returnMethod = createTempVariable(/*recordTempVariable*/ undefined);
+            const values = createValuesHelper(context, expression, node.expression);
+            const next = createCall(createPropertyAccess(iterator, "next" ), /*typeArguments*/ undefined, []);
+
+            hoistVariableDeclaration(errorRecord);
+            hoistVariableDeclaration(returnMethod);
+
+            const forStatement = setEmitFlags(
+                createFor(
+                    /*initializer*/ setEmitFlags(
+                        createVariableDeclarationList([
+                            createVariableDeclaration(iterator, /*type*/ undefined, values, /*location*/ node.expression),
+                            createVariableDeclaration(result, /*type*/ undefined, next)
+                        ], /*location*/ node.expression),
+                        EmitFlags.NoHoisting
+                    ),
+                    /*condition*/ createLogicalNot(createPropertyAccess(result, "done")),
+                    /*incrementor*/ createAssignment(result, next),
+                    /*statement*/ convertForOfStatementHead(
+                        node,
+                        createPropertyAccess(result, "value"),
+                        convertedLoopBodyStatements
+                    ),
+                    /*location*/ node
+                ),
+                EmitFlags.NoTokenTrailingSourceMaps
+            );
 
             return createTry(
                 createBlock([
-                    statement
+                    restoreEnclosingLabel(
+                        forStatement,
+                        outermostLabeledStatement,
+                        convertedLoopState && resetLabel
+                    )
                 ]),
                 createCatchClause(catchVariable,
                     setEmitFlags(
@@ -2451,10 +2415,7 @@ namespace ts {
                                 createAssignment(
                                     errorRecord,
                                     createObjectLiteral([
-                                        createPropertyAssignment(
-                                            "error",
-                                            catchVariable
-                                        )
+                                        createPropertyAssignment("error", catchVariable)
                                     ])
                                 )
                             )
@@ -2463,39 +2424,44 @@ namespace ts {
                     )
                 ),
                 createBlock([
-                    setEmitFlags(
-                        createTry(
+                    createTry(
+                        /*tryBlock*/ createBlock([
                             setEmitFlags(
-                                createBlock([
-                                    createStatement(
-                                        createCloseHelper(
-                                            context,
-                                            iteratorRecord
-                                        )
-                                    )
-                                ]),
-                                EmitFlags.SingleLine
-                            ),
-                            undefined,
-                            setEmitFlags(
-                                createBlock([
-                                    setEmitFlags(
-                                        createIf(
-                                            errorRecord,
-                                            createThrow(
-                                                createPropertyAccess(
-                                                    errorRecord,
-                                                    "error"
-                                                )
+                                createIf(
+                                    createLogicalAnd(
+                                        createLogicalAnd(
+                                            result,
+                                            createLogicalNot(
+                                                createPropertyAccess(result, "done")
                                             )
                                         ),
-                                        EmitFlags.SingleLine
+                                        createAssignment(
+                                            returnMethod,
+                                            createPropertyAccess(iterator, "return")
+                                        )
+                                    ),
+                                    createStatement(
+                                        createFunctionCall(returnMethod, iterator, [])
                                     )
-                                ]),
+                                ),
                                 EmitFlags.SingleLine
-                            )
-                        ),
-                        EmitFlags.SingleLine
+                            ),
+                        ]),
+                        /*catchClause*/ undefined,
+                        /*finallyBlock*/ setEmitFlags(
+                            createBlock([
+                                setEmitFlags(
+                                    createIf(
+                                        errorRecord,
+                                        createThrow(
+                                            createPropertyAccess(errorRecord, "error")
+                                        )
+                                    ),
+                                    EmitFlags.SingleLine
+                                )
+                            ]),
+                            EmitFlags.SingleLine
+                        )
                     )
                 ])
             );
