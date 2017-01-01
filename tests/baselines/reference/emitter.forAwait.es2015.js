@@ -36,8 +36,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 var __asyncValues = (this && this.__asyncIterator) || function (o) {
     var m = o[Symbol.asyncIterator];
-    if (m) return m.call(o);
-    return typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
+    return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
 };
 function f1() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -68,8 +67,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 var __asyncValues = (this && this.__asyncIterator) || function (o) {
     var m = o[Symbol.asyncIterator];
-    if (m) return m.call(o);
-    return typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
+    return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
 };
 function f2() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -92,8 +90,7 @@ function f2() {
 //// [file3.js]
 var __asyncValues = (this && this.__asyncIterator) || function (o) {
     var m = o[Symbol.asyncIterator];
-    if (m) return m.call(o);
-    return typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
+    return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
 };
 var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
     var g = generator.apply(thisArg, _arguments || []), q = [], c, i;
@@ -128,8 +125,7 @@ function f3() {
 //// [file4.js]
 var __asyncValues = (this && this.__asyncIterator) || function (o) {
     var m = o[Symbol.asyncIterator];
-    if (m) return m.call(o);
-    return typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
+    return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
 };
 var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
     var g = generator.apply(thisArg, _arguments || []), q = [], c, i;

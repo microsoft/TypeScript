@@ -858,7 +858,8 @@ namespace ts {
                 function fulfill(value) { resume("next", value); }
                 function reject(value) { resume("throw", value); }
                 function settle(f, v) { c = void 0, f(v), next(); }
-            };`
+            };
+        `
     };
 
     function createAsyncGeneratorHelper(context: TransformationContext, generatorFunc: FunctionExpression) {
@@ -878,28 +879,6 @@ namespace ts {
         );
     }
 
-    const asyncValues: EmitHelper = {
-        name: "typescript:asyncValues",
-        scoped: false,
-        text: `
-            var __asyncValues = (this && this.__asyncIterator) || function (o) {
-                var m = o[Symbol.asyncIterator];
-                if (m) return m.call(o);
-                return typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
-            };
-        `
-    };
-
-    function createAsyncValuesHelper(context: TransformationContext, expression: Expression, location?: TextRange) {
-        context.requestEmitHelper(asyncValues);
-        return createCall(
-            getHelperName("__asyncValues"),
-            /*typeArguments*/ undefined,
-            [expression],
-            location
-        );
-    }
-
     const asyncDelegator: EmitHelper = {
         name: "typescript:asyncDelegator",
         scoped: false,
@@ -916,6 +895,27 @@ namespace ts {
         context.requestEmitHelper(asyncDelegator);
         return createCall(
             getHelperName("__asyncDelegator"),
+            /*typeArguments*/ undefined,
+            [expression],
+            location
+        );
+    }
+
+    const asyncValues: EmitHelper = {
+        name: "typescript:asyncValues",
+        scoped: false,
+        text: `
+            var __asyncValues = (this && this.__asyncIterator) || function (o) {
+                var m = o[Symbol.asyncIterator];
+                return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
+            };
+        `
+    };
+
+    function createAsyncValuesHelper(context: TransformationContext, expression: Expression, location?: TextRange) {
+        context.requestEmitHelper(asyncValues);
+        return createCall(
+            getHelperName("__asyncValues"),
             /*typeArguments*/ undefined,
             [expression],
             location

@@ -3744,20 +3744,17 @@ namespace ts {
         Awaiter = 1 << 6,           // __awaiter (used by ES2017 async functions transformation)
         Generator = 1 << 7,         // __generator (used by ES2015 generator transformation)
         Values = 1 << 8,            // __values (used by ES2015 for..of and yield* transformations)
-        Step = 1 << 9,              // __step (used by ES2015 for..of transformation)
-        Close = 1 << 10,            // __close (used by ES2015 for..of transformation)
-        Read = 1 << 11,             // __read (used by ES2015 iterator destructuring transformation)
-        Spread = 1 << 12,           // __spread (used by ES2015 array spread and argument list spread transformations)
-        AsyncGenerator = 1 << 13,   // __asyncGenerator (used by ES2017 async generator transformation)
-        AsyncValues = 1 << 14,      // __asyncValues (used by ES2017 for..await..of transformation)
-        AsyncStep = 1 << 15,        // __asyncStep (used by ES2017 for..await..of transformation)
-        AsyncDelegator = 1 << 16,   // __asyncDelegator (used by ES2017 async generator yield* transformation)
+        Read = 1 << 9,             // __read (used by ES2015 iterator destructuring transformation)
+        Spread = 1 << 10,           // __spread (used by ES2015 array spread and argument list spread transformations)
+        AsyncGenerator = 1 << 11,   // __asyncGenerator (used by ES2017 async generator transformation)
+        AsyncDelegator = 1 << 12,   // __asyncDelegator (used by ES2017 async generator yield* transformation)
+        AsyncValues = 1 << 13,      // __asyncValues (used by ES2017 for..await..of transformation)
 
         // Helpers included by ES2015 for..of
-        ForOfIncludes = Values | Step | Close,
+        ForOfIncludes = Values,
 
         // Helpers included by ES2017 for..await..of
-        ForAwaitOfIncludes = AsyncValues | AsyncStep | Close,
+        ForAwaitOfIncludes = AsyncValues,
 
         // Helpers included by ES2015 spread
         SpreadIncludes = Read | Spread,

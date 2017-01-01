@@ -21059,7 +21059,7 @@ namespace ts {
         function checkExternalEmitHelpers(location: Node, helpers: ExternalEmitHelpers) {
             if ((requestedExternalEmitHelpers & helpers) !== helpers && compilerOptions.importHelpers) {
                 const sourceFile = getSourceFileOfNode(location);
-                if (isEffectiveExternalModule(sourceFile, compilerOptions)) {
+                if (!isDeclarationFile(sourceFile) && isEffectiveExternalModule(sourceFile, compilerOptions)) {
                     const helpersModule = resolveHelpersModule(sourceFile, location);
                     if (helpersModule !== unknownSymbol) {
                         const uncheckedHelpers = helpers & ~requestedExternalEmitHelpers;
@@ -21089,10 +21089,12 @@ namespace ts {
                 case ExternalEmitHelpers.Awaiter: return "__awaiter";
                 case ExternalEmitHelpers.Generator: return "__generator";
                 case ExternalEmitHelpers.Values: return "__values";
-                case ExternalEmitHelpers.Step: return "__step";
-                case ExternalEmitHelpers.Close: return "__close";
                 case ExternalEmitHelpers.Read: return "__read";
                 case ExternalEmitHelpers.Spread: return "__spread";
+                case ExternalEmitHelpers.AsyncGenerator: return "__asyncGenerator";
+                case ExternalEmitHelpers.AsyncDelegator: return "__asyncDelegator";
+                case ExternalEmitHelpers.AsyncValues: return "__asyncValues";
+                default: Debug.fail("Unrecognized helper.");
             }
         }
 
