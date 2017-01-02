@@ -2,12 +2,11 @@
     "compilerOptions": {
         "noImplicitAny": true,
         "noImplicitThis": true,
-        "removeComments": true,
+        "removeComments": false,
         "preserveConstEnums": true,
         "pretty": true,
         "outFile": "../../built/local/tsserverlibrary.js",
         "sourceMap": true,
-        "stripInternal": true,
         "types": [
             "node"
         ],
@@ -17,17 +16,18 @@
         "declaration": true
     },
     "files": [
-        "../services/shims.ts",
-        "../services/utilities.ts",
-        "shared.ts",
-        "utilities.ts",
-        "scriptVersionCache.ts",
-        "scriptInfo.ts",
-        "lsHost.ts",
-        "typingsCache.ts",
-        "project.ts",
         "editorServices.ts",
-        "protocol.ts",
-        "session.ts"
+        "lsHost.ts",
+        "project.ts",
+        "protocol.d.ts",
+        "scriptInfo.ts",
+        "scriptVersionCache.ts",
+        "session.ts",
+        "shared.ts",
+        "types.ts",
+        "typingsCache.ts",
+        "utilities.ts",
+        "../services/shims.ts",
+        "../services/utilities.ts"
     ]
 }

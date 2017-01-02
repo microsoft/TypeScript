@@ -184,17 +184,17 @@ var servicesSources = [
 }));
 
 var baseServerCoreSources = [
-    "types.ts",
-    "shared.ts",
-    "utilities.ts",
-    "scriptVersionCache.ts",
-    "typingsCache.ts",
-    "scriptInfo.ts",
+    "editorServices.ts",
     "lsHost.ts",
     "project.ts",
-    "editorServices.ts",
     "protocol.ts",
+    "scriptInfo.ts",
+    "scriptVersionCache.ts",
     "session.ts",
+    "shared.ts",
+    "types.ts",
+    "typingsCache.ts",
+    "utilities.ts",
 ].map(function (f) {
     return path.join(serverDirectory, f);
 });

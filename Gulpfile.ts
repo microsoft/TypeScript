@@ -471,7 +471,7 @@ gulp.task(tsserverLibraryFile, false, [servicesFile], (done) => {
         js.pipe(prependCopyright())
             .pipe(sourcemaps.write("."))
             .pipe(gulp.dest(".")),
-        dts.pipe(prependCopyright())
+        dts.pipe(prependCopyright(/*outputCopyright*/true))
             .pipe(insert.transform((content) => {
                 return content + "\r\nexport = ts;";
             }))
