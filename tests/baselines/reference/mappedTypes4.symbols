@@ -196,3 +196,34 @@ var x1: DeepReadonlyFoo;
 >x1 : Symbol(x1, Decl(mappedTypes4.ts, 58, 3), Decl(mappedTypes4.ts, 59, 3))
 >DeepReadonlyFoo : Symbol(DeepReadonlyFoo, Decl(mappedTypes4.ts, 50, 2))
 
+// Repro from #13232
+
+type Z = { a: number };
+>Z : Symbol(Z, Decl(mappedTypes4.ts, 59, 24))
+>a : Symbol(a, Decl(mappedTypes4.ts, 63, 10))
+
+type Clone<T> = {
+>Clone : Symbol(Clone, Decl(mappedTypes4.ts, 63, 23))
+>T : Symbol(T, Decl(mappedTypes4.ts, 64, 11))
+
+  [P in keyof (T & {})]: T[P];
+>P : Symbol(P, Decl(mappedTypes4.ts, 65, 3))
+>T : Symbol(T, Decl(mappedTypes4.ts, 64, 11))
+>T : Symbol(T, Decl(mappedTypes4.ts, 64, 11))
+>P : Symbol(P, Decl(mappedTypes4.ts, 65, 3))
+
+};
+type M = Clone<Z>; // M should be { a: number }
+>M : Symbol(M, Decl(mappedTypes4.ts, 66, 2))
+>Clone : Symbol(Clone, Decl(mappedTypes4.ts, 63, 23))
+>Z : Symbol(Z, Decl(mappedTypes4.ts, 59, 24))
+
+var z1: Z;
+>z1 : Symbol(z1, Decl(mappedTypes4.ts, 69, 3), Decl(mappedTypes4.ts, 70, 3))
+>Z : Symbol(Z, Decl(mappedTypes4.ts, 59, 24))
+
+var z1: Clone<Z>;
+>z1 : Symbol(z1, Decl(mappedTypes4.ts, 69, 3), Decl(mappedTypes4.ts, 70, 3))
+>Clone : Symbol(Clone, Decl(mappedTypes4.ts, 63, 23))
+>Z : Symbol(Z, Decl(mappedTypes4.ts, 59, 24))
+

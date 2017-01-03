@@ -6,4 +6,4 @@
 //// }
 //// [|var y: new <T,U>(a:T)=>void;|]
 
-verify.codeFixAtPosition("var y: new <T>(a:T)=>void;");
+verify.rangeAfterCodeFix("var y: new <T>(a:T)=>void;");

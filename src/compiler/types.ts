@@ -640,9 +640,9 @@ namespace ts {
 
     export interface ParameterDeclaration extends Declaration {
         kind: SyntaxKind.Parameter;
-        dotDotDotToken?: DotDotDotToken;              // Present on rest parameter
+        dotDotDotToken?: DotDotDotToken;    // Present on rest parameter
         name: BindingName;                  // Declared parameter name
-        questionToken?: QuestionToken;               // Present on optional parameter
+        questionToken?: QuestionToken;      // Present on optional parameter
         type?: TypeNode;                    // Optional type annotation
         initializer?: Expression;           // Optional initializer
     }
@@ -658,14 +658,14 @@ namespace ts {
     export interface PropertySignature extends TypeElement {
         kind: SyntaxKind.PropertySignature | SyntaxKind.JSDocRecordMember;
         name: PropertyName;                 // Declared property name
-        questionToken?: QuestionToken;               // Present on optional property
+        questionToken?: QuestionToken;      // Present on optional property
         type?: TypeNode;                    // Optional type annotation
         initializer?: Expression;           // Optional initializer
     }
 
     export interface PropertyDeclaration extends ClassElement {
         kind: SyntaxKind.PropertyDeclaration;
-        questionToken?: QuestionToken;               // Present for use with reporting a grammar error
+        questionToken?: QuestionToken;      // Present for use with reporting a grammar error
         name: PropertyName;
         type?: TypeNode;
         initializer?: Expression;           // Optional initializer
@@ -2334,6 +2334,7 @@ namespace ts {
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
         getPropertyOfType(type: Type, propertyName: string): Symbol;
+        getIndexInfoOfType(type: Type, kind: IndexKind): IndexInfo;
         getSignaturesOfType(type: Type, kind: SignatureKind): Signature[];
         getIndexTypeOfType(type: Type, kind: IndexKind): Type;
         getBaseTypes(type: InterfaceType): ObjectType[];
@@ -2347,6 +2348,8 @@ namespace ts {
         getExportSpecifierLocalTargetSymbol(location: ExportSpecifier): Symbol;
         getPropertySymbolOfDestructuringAssignment(location: Identifier): Symbol;
         getTypeAtLocation(node: Node): Type;
+        getTypeFromTypeNode(node: TypeNode): Type;
+        signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): string;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
         getSymbolDisplayBuilder(): SymbolDisplayBuilder;
@@ -2372,6 +2375,7 @@ namespace ts {
         getAmbientModules(): Symbol[];
 
         tryGetMemberInModuleExports(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
+        getApparentType(type: Type): Type;
 
         /* @internal */ tryFindAmbientModuleWithoutAugmentations(moduleName: string): Symbol;
 
@@ -2390,6 +2394,7 @@ namespace ts {
         buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildSymbolDisplay(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): void;
         buildSignatureDisplay(signatures: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): void;
+        buildIndexSignatureDisplay(info: IndexInfo, writer: SymbolWriter, kind: IndexKind, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, symbolStack?: Symbol[]): void;
         buildParameterDisplay(parameter: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildTypeParameterDisplay(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildTypePredicateDisplay(predicate: TypePredicate, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
@@ -2433,6 +2438,7 @@ namespace ts {
         InFirstTypeArgument             = 0x00000100,  // Writing first type argument of the instantiated type
         InTypeAlias                     = 0x00000200,  // Writing type in type alias declaration
         UseTypeAliasValue               = 0x00000400,  // Serialize the type instead of using type-alias. This is needed when we emit declaration file.
+        SuppressAnyReturnType            = 0x00000800,  // If the return type is any-like, don't offer a return type.
     }
 
     export const enum SymbolFormatFlags {
@@ -2865,7 +2871,7 @@ namespace ts {
         objectFlags: ObjectFlags;
     }
 
-    // Class and interface types (TypeFlags.Class and TypeFlags.Interface)
+    /** Class and interface types (TypeFlags.Class and TypeFlags.Interface). */
     export interface InterfaceType extends ObjectType {
         typeParameters: TypeParameter[];           // Type parameters (undefined if non-generic)
         outerTypeParameters: TypeParameter[];      // Outer type parameters (undefined if none)
@@ -2885,14 +2891,16 @@ namespace ts {
         declaredNumberIndexInfo: IndexInfo;        // Declared numeric indexing info
     }
 
-    // Type references (TypeFlags.Reference). When a class or interface has type parameters or
-    // a "this" type, references to the class or interface are made using type references. The
-    // typeArguments property specifies the types to substitute for the type parameters of the
-    // class or interface and optionally includes an extra element that specifies the type to
-    // substitute for "this" in the resulting instantiation. When no extra argument is present,
-    // the type reference itself is substituted for "this". The typeArguments property is undefined
-    // if the class or interface has no type parameters and the reference isn't specifying an
-    // explicit "this" argument.
+    /**
+     * Type references (TypeFlags.Reference). When a class or interface has type parameters or
+     * a "this" type, references to the class or interface are made using type references. The
+     * typeArguments property specifies the types to substitute for the type parameters of the
+     * class or interface and optionally includes an extra element that specifies the type to
+     * substitute for "this" in the resulting instantiation. When no extra argument is present,
+     * the type reference itself is substituted for "this". The typeArguments property is undefined
+     * if the class or interface has no type parameters and the reference isn't specifying an
+     * explicit "this" argument.
+     */
     export interface TypeReference extends ObjectType {
         target: GenericType;    // Type reference target
         typeArguments: Type[];  // Type reference type arguments (undefined if none)

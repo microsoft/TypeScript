@@ -3243,23 +3243,19 @@
         "category": "Message",
         "code": 90002
     },
-    "Change 'extends' to 'implements'": {
+    "Change 'extends' to 'implements'.": {
         "category": "Message",
         "code": 90003
     },
-    "Remove unused identifiers": {
+    "Remove unused identifiers.": {
         "category": "Message",
         "code": 90004
     },
-    "Implement interface on reference": {
-        "category": "Message",
-        "code": 90005
-    },
-    "Implement interface on class": {
+    "Implement interface '{0}'.": {
         "category": "Message",
         "code": 90006
     },
-    "Implement inherited abstract class": {
+    "Implement inherited abstract class.": {
         "category": "Message",
         "code": 90007
     },

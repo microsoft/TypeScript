@@ -5,6 +5,6 @@
 ////     const x: string = "x";
 //// } |]
 
-verify.codeFixAtPosition(`function f1 () {
+verify.rangeAfterCodeFix(`function f1 () {
 }`);
 

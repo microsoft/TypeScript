@@ -7,4 +7,4 @@
 ////     [|new <T, U, K>(a: T): A<U>;|]
 //// }
 
-verify.codeFixAtPosition("new <T, U>(a: T): A<U>;");
+verify.rangeAfterCodeFix("new <T, U>(a: T): A<U>;");
