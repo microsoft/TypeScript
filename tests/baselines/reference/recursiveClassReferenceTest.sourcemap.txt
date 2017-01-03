@@ -1623,11 +1623,11 @@ sourceFile:recursiveClassReferenceTest.ts
 ---
 >>>                    function Mode() {
 1 >^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 1 >Emitted(90, 21) Source(91, 2) + SourceIndex(0)
 ---
->>>                        return _super.apply(this, arguments) || this;
+>>>                        return _super !== null && _super.apply(this, arguments) || this;
 >>>                    }
 1->^^^^^^^^^^^^^^^^^^^^
 2 >                    ^

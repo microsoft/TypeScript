@@ -44,7 +44,7 @@ var C = (function () {
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        var _this = _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.x = 2;
         _this.y = 3;
         return _this;
@@ -57,7 +57,7 @@ var D = (function (_super) {
 var D2 = (function (_super) {
     __extends(D2, _super);
     function D2() {
-        var _this = _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.x = "";
         return _this;
     }

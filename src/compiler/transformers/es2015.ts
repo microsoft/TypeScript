@@ -1091,7 +1091,7 @@ namespace ts {
             }
 
             // Perform the capture.
-            captureThisForNode(statements, ctor, superCallExpression, firstStatement);
+            captureThisForNode(statements, ctor, superCallExpression || createActualThis(), firstStatement);
 
             // If we're actually replacing the original statement, we need to signal this to the caller.
             if (superCallExpression) {
@@ -1101,15 +1101,25 @@ namespace ts {
             return SuperCaptureResult.NoReplacement;
         }
 
+        function createActualThis() {
+            return setEmitFlags(createThis(), EmitFlags.NoSubstitution);
+        }
+
         function createDefaultSuperCallOrThis() {
-            const actualThis = createThis();
-            setEmitFlags(actualThis, EmitFlags.NoSubstitution);
-            const superCall = createFunctionApply(
-                createIdentifier("_super"),
-                actualThis,
-                createIdentifier("arguments"),
+            return createLogicalOr(
+                createLogicalAnd(
+                    createStrictInequality(
+                        createIdentifier("_super"),
+                        createNull()
+                    ),
+                    createFunctionApply(
+                        createIdentifier("_super"),
+                        createActualThis(),
+                        createIdentifier("arguments"),
+                    )
+                ),
+                createActualThis()
             );
-            return createLogicalOr(superCall, actualThis);
         }
 
         /**

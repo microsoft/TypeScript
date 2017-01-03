@@ -19,7 +19,7 @@ var m2;
     var class1 = (function (_super) {
         __extends(class1, _super);
         function class1() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return class1;
     }(m2.mExported.me.class1));
@@ -32,7 +32,7 @@ var m2;
     var class2 = (function (_super) {
         __extends(class2, _super);
         function class2() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return class2;
     }(m2.mExported.me.class1));
@@ -45,7 +45,7 @@ var m2;
     var class3 = (function (_super) {
         __extends(class3, _super);
         function class3() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return class3;
     }(mNonExported.mne.class1));
@@ -58,7 +58,7 @@ var m2;
     var class4 = (function (_super) {
         __extends(class4, _super);
         function class4() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return class4;
     }(mNonExported.mne.class1));

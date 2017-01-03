@@ -32,7 +32,7 @@ var __extends = (this && this.__extends) || (function () {
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
 }(E)); // error
@@ -50,7 +50,7 @@ var __extends = (this && this.__extends) || (function () {
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return D;
 }(C));
@@ -68,7 +68,7 @@ var __extends = (this && this.__extends) || (function () {
 var E = (function (_super) {
     __extends(E, _super);
     function E() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return E;
 }(D));
@@ -86,7 +86,7 @@ var __extends = (this && this.__extends) || (function () {
 var C2 = (function (_super) {
     __extends(C2, _super);
     function C2() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C2;
 }(E2)); // error
@@ -104,7 +104,7 @@ var __extends = (this && this.__extends) || (function () {
 var D2 = (function (_super) {
     __extends(D2, _super);
     function D2() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return D2;
 }(C2));
@@ -122,7 +122,7 @@ var __extends = (this && this.__extends) || (function () {
 var E2 = (function (_super) {
     __extends(E2, _super);
     function E2() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return E2;
 }(D2));

@@ -75,7 +75,7 @@ function getExportedClass(c) {
 var MyClass = (function (_super) {
     __extends(MyClass, _super);
     function MyClass() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return MyClass;
 }(getLocalClass(undefined)));
@@ -83,7 +83,7 @@ exports.MyClass = MyClass;
 var MyClass2 = (function (_super) {
     __extends(MyClass2, _super);
     function MyClass2() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return MyClass2;
 }(getExportedClass(undefined)));
@@ -91,7 +91,7 @@ exports.MyClass2 = MyClass2;
 var MyClass3 = (function (_super) {
     __extends(MyClass3, _super);
     function MyClass3() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return MyClass3;
 }(getExportedClass(undefined)));
@@ -99,7 +99,7 @@ exports.MyClass3 = MyClass3;
 var MyClass4 = (function (_super) {
     __extends(MyClass4, _super);
     function MyClass4() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return MyClass4;
 }(getExportedClass(undefined)));

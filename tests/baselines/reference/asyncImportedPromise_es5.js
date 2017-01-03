@@ -24,7 +24,7 @@ var __extends = (this && this.__extends) || (function () {
 var Task = (function (_super) {
     __extends(Task, _super);
     function Task() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return Task;
 }(Promise));

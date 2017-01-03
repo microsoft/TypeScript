@@ -47,7 +47,7 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
@@ -60,7 +60,7 @@ var F = (function () {
 var G = (function (_super) {
     __extends(G, _super);
     function G() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return G;
 }(F));
@@ -73,7 +73,7 @@ var H = (function () {
 var I = (function (_super) {
     __extends(I, _super);
     function I() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return I;
 }(H));
@@ -86,7 +86,7 @@ var J = (function () {
 var K = (function (_super) {
     __extends(K, _super);
     function K() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return K;
 }(J));
