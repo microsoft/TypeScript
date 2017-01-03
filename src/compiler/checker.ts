@@ -15610,7 +15610,7 @@ namespace ts {
                     }
                 }
                 else {
-                    const isStatic = forEach(member.modifiers, m => m.kind === SyntaxKind.StaticKeyword);
+                    const isStatic = getModifierFlags(member) & ModifierFlags.Static;
                     const names = isStatic ? staticNames : instanceNames;
 
                     const memberName = member.name && getPropertyNameForPropertyNameNode(member.name);
