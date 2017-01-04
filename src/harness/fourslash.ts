@@ -262,23 +262,12 @@ namespace FourSlash {
             // Initialize the language service with all the scripts
             let startResolveFileRef: FourSlashFile;
 
+            let configFileName: string;
             ts.forEach(testData.files, file => {
                 // Create map between fileName and its content for easily looking up when resolveReference flag is specified
                 this.inputFiles[file.fileName] = file.content;
-
                 if (ts.getBaseFileName(file.fileName).toLowerCase() === "tsconfig.json") {
-                    const configJson = ts.parseConfigFileTextToJson(file.fileName, file.content);
-                    assert.isTrue(configJson.config !== undefined);
-
-                    // Extend our existing compiler options so that we can also support tsconfig only options
-                    if (configJson.config.compilerOptions) {
-                        const baseDirectory = ts.normalizePath(ts.getDirectoryPath(file.fileName));
-                        const tsConfig = ts.convertCompilerOptionsFromJson(configJson.config.compilerOptions, baseDirectory, file.fileName);
-
-                        if (!tsConfig.errors || !tsConfig.errors.length) {
-                            compilationOptions = ts.extend(compilationOptions, tsConfig.options);
-                        }
-                    }
+                    configFileName = file.fileName;
                 }
 
                 if (!startResolveFileRef && file.fileOptions[metadataOptionNames.resolveReference] === "true") {
@@ -289,6 +278,21 @@ namespace FourSlash {
                     throw new Error("There exists a Fourslash file which has resolveReference flag specified; remove duplicated resolveReference flag");
                 }
             });
+
+            if (configFileName) {
+                const baseDir = ts.normalizePath(ts.getDirectoryPath(configFileName));
+                const host = new Utils.MockParseConfigHost(baseDir, /*ignoreCase*/ false, this.inputFiles);
+
+                const configJsonObj = ts.parseConfigFileTextToJson(configFileName, this.inputFiles[configFileName]);
+                assert.isTrue(configJsonObj.config !== undefined);
+
+                const { options, errors } = ts.parseJsonConfigFileContent(configJsonObj.config, host, baseDir);
+
+                // Extend our existing compiler options so that we can also support tsconfig only options
+                if (!errors || errors.length === 0) {
+                    compilationOptions = ts.extend(compilationOptions, options);
+                }
+            }
 
 
             if (compilationOptions.typeRoots) {

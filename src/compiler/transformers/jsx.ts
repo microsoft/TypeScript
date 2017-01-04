@@ -150,6 +150,9 @@ namespace ts {
                 return decoded ? createLiteral(decoded, /*location*/ node) : node;
             }
             else if (node.kind === SyntaxKind.JsxExpression) {
+                if (node.expression === undefined) {
+                    return createLiteral(true);
+                }
                 return visitJsxExpression(<JsxExpression>node);
             }
             else {

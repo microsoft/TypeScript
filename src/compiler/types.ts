@@ -1550,7 +1550,7 @@ namespace ts {
         name?: Identifier;
     }
 
-    export type BlockLike = SourceFile | Block | ModuleBlock | CaseClause;
+    export type BlockLike = SourceFile | Block | ModuleBlock | CaseOrDefaultClause;
 
     export interface Block extends Statement {
         kind: SyntaxKind.Block;
