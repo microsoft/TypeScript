@@ -719,13 +719,16 @@ compileFile(
     [builtLocalDirectory, copyright, builtLocalCompiler].concat(languageServiceLibrarySources).concat(libraryTargets),
     /*prefixes*/[copyright],
     /*useBuiltCompiler*/ true,
-    { noOutFile: false, generateDeclarations: true },
-            /*callback*/ function () {
-
+    { noOutFile: false, generateDeclarations: true, stripInternal: true },
+    /*callback*/ function () {
         prependFile(copyright, tsserverLibraryDefinitionFile);
 
-        // Appending 'export = ts;' at the end of the server library file to turn it into an external module
-        var tsserverLibraryDefinitionFileContents = fs.readFileSync(tsserverLibraryDefinitionFile).toString() + "\r\nexport = ts;";
+        // Appending exports at the end of the server library
+        var tsserverLibraryDefinitionFileContents =
+            fs.readFileSync(tsserverLibraryDefinitionFile).toString() + 
+            "\r\nexport = ts;" +
+            "\r\nexport as namespace ts;";
+
         fs.writeFileSync(tsserverLibraryDefinitionFile, tsserverLibraryDefinitionFileContents);
     });
 

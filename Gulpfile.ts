@@ -473,7 +473,7 @@ gulp.task(tsserverLibraryFile, false, [servicesFile], (done) => {
             .pipe(gulp.dest(".")),
         dts.pipe(prependCopyright(/*outputCopyright*/true))
             .pipe(insert.transform((content) => {
-                return content + "\r\nexport = ts;";
+                return content + "\r\nexport = ts;\r\nexport as namespace ts;";
             }))
             .pipe(gulp.dest("."))
     ]);
