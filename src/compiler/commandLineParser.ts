@@ -147,7 +147,7 @@ namespace ts {
         {
             name: "noImplicitOverride",
             type: "boolean",
-            description: Diagnostics.Member_function_0_was_marked_override_but_no_matching_definition_was_found_in_the_superclass_chain_1,
+            description: Diagnostics.Raise_an_error_when_inherited_Slashoverridden_class_members_are_not_explicitly_marked_override,
         },
         {
             name: "noImplicitThis",

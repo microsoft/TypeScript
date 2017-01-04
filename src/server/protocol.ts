@@ -417,7 +417,7 @@ namespace ts.server.protocol {
         startOffset: number;
 
         /**
-         * Position (can be specified instead of line/offset pair) 
+         * Position (can be specified instead of line/offset pair)
          */
         /* @internal */
         startPosition?: number;
@@ -433,7 +433,7 @@ namespace ts.server.protocol {
         endOffset: number;
 
         /**
-         * Position (can be specified instead of line/offset pair) 
+         * Position (can be specified instead of line/offset pair)
          */
         /* @internal */
         endPosition?: number;
@@ -445,7 +445,7 @@ namespace ts.server.protocol {
     }
 
     /**
-     * Response for GetCodeFixes request. 
+     * Response for GetCodeFixes request.
      */
     export interface GetCodeFixesResponse extends Response {
         body?: CodeAction[];
@@ -2237,6 +2237,7 @@ namespace ts.server.protocol {
         noErrorTruncation?: boolean;
         noFallthroughCasesInSwitch?: boolean;
         noImplicitAny?: boolean;
+        noImplicitOverride?: boolean;
         noImplicitReturns?: boolean;
         noImplicitThis?: boolean;
         noUnusedLocals?: boolean;

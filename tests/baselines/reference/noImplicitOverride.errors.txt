@@ -1,0 +1,83 @@
+tests/cases/compiler/noImplicitOverride.ts(10,5): error TS90033: Class member 'toString' must be marked 'override' when noImplicitOverride is enabled (inherited from Object)
+tests/cases/compiler/noImplicitOverride.ts(11,5): error TS90033: Class member 'hasOwnProperty' must be marked 'override' when noImplicitOverride is enabled (inherited from Object)
+tests/cases/compiler/noImplicitOverride.ts(17,5): error TS90033: Class member 'toString' must be marked 'override' when noImplicitOverride is enabled (masks Object.toString)
+tests/cases/compiler/noImplicitOverride.ts(18,5): error TS90033: Class member 'hasOwnProperty' must be marked 'override' when noImplicitOverride is enabled (masks Object.hasOwnProperty)
+tests/cases/compiler/noImplicitOverride.ts(24,5): error TS90033: Class member 'hasOwnProperty' must be marked 'override' when noImplicitOverride is enabled (masks Object.hasOwnProperty).  The override declaration ((prop: string) => number) also has a different type signature than the original ((v: string) => boolean)
+tests/cases/compiler/noImplicitOverride.ts(30,12): error TS90033: Class member 'userId' must be marked 'override' when noImplicitOverride is enabled (inherited from Base)
+tests/cases/compiler/noImplicitOverride.ts(34,9): error TS90033: Class member 'name' must be marked 'override' when noImplicitOverride is enabled (inherited from Base)
+tests/cases/compiler/noImplicitOverride.ts(42,5): error TS1070: 'override' modifier cannot appear on a type member.
+tests/cases/compiler/noImplicitOverride.ts(51,29): error TS90033: Class member 'userId' must be marked 'override' when noImplicitOverride is enabled (inherited from Base)
+
+
+==== tests/cases/compiler/noImplicitOverride.ts (9 errors) ====
+    
+    class Base {
+        get name(): string {
+            return 'Base';
+        }
+        public userId: number = 1;
+    }
+    
+    class RejectWhenOverrideMissingOnInheritedMethod extends Object {
+        toString(): string { return 'foo'; };
+        ~~~~~~~~
+!!! error TS90033: Class member 'toString' must be marked 'override' when noImplicitOverride is enabled (inherited from Object)
+        hasOwnProperty(prop: string): boolean {
+        ~~~~~~~~~~~~~~
+!!! error TS90033: Class member 'hasOwnProperty' must be marked 'override' when noImplicitOverride is enabled (inherited from Object)
+            return super.hasOwnProperty(prop);
+        }
+    }
+    
+    class RejectWhenOverrideMissingOnMethodThatMasksObjectTypeMember {
+        toString(): string { return 'foo'; };
+        ~~~~~~~~
+!!! error TS90033: Class member 'toString' must be marked 'override' when noImplicitOverride is enabled (masks Object.toString)
+        hasOwnProperty(prop: string): boolean {
+        ~~~~~~~~~~~~~~
+!!! error TS90033: Class member 'hasOwnProperty' must be marked 'override' when noImplicitOverride is enabled (masks Object.hasOwnProperty)
+            return false;
+        }
+    }
+    
+    class RejectWhenOverrideTypeMismatchOnMethodThatMasksObjectTypeMember {
+        hasOwnProperty(prop: string): number {
+        ~~~~~~~~~~~~~~
+!!! error TS90033: Class member 'hasOwnProperty' must be marked 'override' when noImplicitOverride is enabled (masks Object.hasOwnProperty).  The override declaration ((prop: string) => number) also has a different type signature than the original ((v: string) => boolean)
+            return -1;
+        }
+    }
+    
+    class RejectWhenOverrideMissingOnInheritedProperty extends Base {
+        public userId = 2;
+               ~~~~~~
+!!! error TS90033: Class member 'userId' must be marked 'override' when noImplicitOverride is enabled (inherited from Base)
+    }
+    
+    class RejectWhenOverrideMissingOnInheritedAccessor extends Base {
+        get name(): string { return 'foo'; };
+            ~~~~
+!!! error TS90033: Class member 'name' must be marked 'override' when noImplicitOverride is enabled (inherited from Base)
+    }
+    
+    interface Shape {
+        getWidth(): number;
+    }
+    
+    interface RejectWhenOverrideOnAbstractDeclaration_Line extends Shape {
+        override getWidth(): number;
+        ~~~~~~~~
+!!! error TS1070: 'override' modifier cannot appear on a type member.
+    }
+    
+    interface AcceptWhenOverrideNotOnAbstractDeclaration_Line extends Shape {
+        // abstract members don't need to be declared override
+        getWidth(): number;
+    }
+    
+    class FIXME_AcceptWhenOverrideSpecifiedByJSDocAnnotation extends Base {
+        /** @override */ public userId: number = 2;
+                                ~~~~~~
+!!! error TS90033: Class member 'userId' must be marked 'override' when noImplicitOverride is enabled (inherited from Base)
+    }
+    

@@ -341,6 +341,10 @@ var x = 0;`, {
             options: { compilerOptions: { noImplicitAny: true }, fileName: "input.js", reportDiagnostics: true }
         });
 
+        transpilesCorrectly("Supports setting 'noImplicitOverride'", "x;", {
+            options: { compilerOptions: { noImplicitOverride: true }, fileName: "input.js", reportDiagnostics: true }
+        });
+
         transpilesCorrectly("Supports setting 'noImplicitReturns'", "x;", {
             options: { compilerOptions: { noImplicitReturns: true }, fileName: "input.js", reportDiagnostics: true }
         });

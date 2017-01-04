@@ -717,6 +717,9 @@ namespace ts {
         }
 
         function emitClassMemberDeclarationFlags(flags: ModifierFlags) {
+            if (flags & ModifierFlags.Override) {
+                write("override ");
+            }
             if (flags & ModifierFlags.Private) {
                 write("private ");
             }

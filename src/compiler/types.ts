@@ -155,7 +155,6 @@ namespace ts {
         PrivateKeyword,
         ProtectedKeyword,
         PublicKeyword,
-        OverrideKeyword,
         StaticKeyword,
         YieldKeyword,
         // Contextual keywords
@@ -184,6 +183,7 @@ namespace ts {
         UndefinedKeyword,
         FromKeyword,
         GlobalKeyword,
+        OverrideKeyword,
         OfKeyword, // LastKeyword and LastToken
 
         // Parse tree nodes
@@ -3195,6 +3195,7 @@ namespace ts {
         noErrorTruncation?: boolean;
         noFallthroughCasesInSwitch?: boolean;
         noImplicitAny?: boolean;
+        noImplicitOverride?: boolean;
         noImplicitReturns?: boolean;
         noImplicitThis?: boolean;
         noUnusedLocals?: boolean;

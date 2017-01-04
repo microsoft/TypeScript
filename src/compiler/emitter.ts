@@ -324,7 +324,6 @@ namespace ts {
                 case SyntaxKind.PrivateKeyword:
                 case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.PublicKeyword:
-                case SyntaxKind.OverrideKeyword:
                 case SyntaxKind.StaticKeyword:
 
                 // Contextual keywords
@@ -341,6 +340,7 @@ namespace ts {
                 case SyntaxKind.ModuleKeyword:
                 case SyntaxKind.NamespaceKeyword:
                 case SyntaxKind.NeverKeyword:
+                case SyntaxKind.OverrideKeyword:
                 case SyntaxKind.ReadonlyKeyword:
                 case SyntaxKind.RequireKeyword:
                 case SyntaxKind.NumberKeyword:

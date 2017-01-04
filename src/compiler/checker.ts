@@ -15756,6 +15756,10 @@ namespace ts {
             checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarProperty(node) || checkGrammarComputedPropertyName(node.name);
 
             checkVariableLikeDeclaration(node);
+
+            if (getModifierFlags(node) & ModifierFlags.Override) {
+                checkOverrideDeclaration(node);
+            }
         }
 
         function checkMethodDeclaration(node: MethodDeclaration) {
@@ -15771,20 +15775,15 @@ namespace ts {
                 error(node, Diagnostics.Method_0_cannot_have_an_implementation_because_it_is_marked_abstract, declarationNameToString(node.name));
             }
 
-            // Is this the correct time to make assertions against the inheritance chain?
-            // Have all other methods been resolved?  Probably need to record that an override exists
-            // and perform the actual resolution later.
             if (getModifierFlags(node) & ModifierFlags.Override) {
-              checkOverrideMethodDeclaration(node);
+                checkOverrideDeclaration(node);
             }
         }
 
-        function checkOverrideMethodDeclaration(node: MethodDeclaration) {
-          forEachEnclosingClass(node, enclosingClass => {
-            // TODO: save the methodDeclaration node here in a cache and
-            // perform the actual assertion later.
-            console.log(`override method ${node.symbol.name} is enclosed by class ${enclosingClass.symbol.name}`);
-          });
+        function checkOverrideDeclaration(node: MethodDeclaration | PropertyDeclaration | AccessorDeclaration) {
+            if (node.questionToken) {
+                error(node, Diagnostics.override_modifier_cannot_be_used_with_an_optional_property_declaration);
+            }
         }
 
         function checkConstructorDeclaration(node: ConstructorDeclaration) {
@@ -15899,6 +15898,11 @@ namespace ts {
                 checkGrammarFunctionLikeDeclaration(node) || checkGrammarAccessor(node) || checkGrammarComputedPropertyName(node.name);
 
                 checkDecorators(node);
+
+                if (getModifierFlags(node) & ModifierFlags.Override) {
+                    checkOverrideDeclaration(node);
+                }
+
                 checkSignatureDeclaration(node);
                 if (node.kind === SyntaxKind.GetAccessor) {
                     if (!isInAmbientContext(node) && nodeIsPresent(node.body) && (node.flags & NodeFlags.HasImplicitReturn)) {
@@ -15925,6 +15929,9 @@ namespace ts {
                         if (hasModifier(node, ModifierFlags.Abstract) !== hasModifier(otherAccessor, ModifierFlags.Abstract)) {
                             error(node.name, Diagnostics.Accessors_must_both_be_abstract_or_non_abstract);
                         }
+                        if (hasModifier(node, ModifierFlags.Override) !== hasModifier(otherAccessor, ModifierFlags.Override)) {
+                            error(node.name, Diagnostics.Accessors_must_both_be_override_or_non_override);
+                        }
 
                         // TypeScript 1.0 spec (April 2014): 4.5
                         // If both accessors include type annotations, the specified types must be identical.
@@ -15944,6 +15951,7 @@ namespace ts {
             else {
                 checkNodeDeferred(node);
             }
+
         }
 
         function checkAccessorDeclarationTypesIdentical(first: AccessorDeclaration, second: AccessorDeclaration, getAnnotatedType: (a: AccessorDeclaration) => Type, message: DiagnosticMessage) {
@@ -16118,6 +16126,9 @@ namespace ts {
                         }
                         else if (deviation & ModifierFlags.Abstract) {
                             error(o.name, Diagnostics.Overload_signatures_must_all_be_abstract_or_non_abstract);
+                        }
+                        else if (deviation & ModifierFlags.Override) {
+                            error(o.name, Diagnostics.Overload_signatures_must_all_be_override_or_non_override);
                         }
                     });
                 }
@@ -18318,6 +18329,13 @@ namespace ts {
                     checkKindsOfPropertyMemberOverrides(type, baseType);
                 }
             }
+            else {
+                const properties = createMap<Symbol>();
+                for (const prop of getPropertiesOfObjectType(type)) {
+                    properties[prop.name] = prop;
+                }
+                checkImplicitPropertyMemberOverrides(type, properties);
+            }
 
             const implementedTypeNodes = getClassImplementsHeritageClauseElements(node);
             if (implementedTypeNodes) {
@@ -18370,6 +18388,44 @@ namespace ts {
             return forEach(symbol.declarations, d => isClassLike(d) ? d : undefined);
         }
 
+        function checkImplicitPropertyMemberOverrides(type: InterfaceType, propertiesToCheck: Map<Symbol>): void {
+            // If the class does not explicitly declare 'extends Object',
+            // declarations that mask 'Object' members ('toString()', 'hasOwnProperty()', etc...)
+            // are considered here.
+            const objectType = getSymbol(globals, "Object", SymbolFlags.Type);
+            if (!objectType) {
+                return;
+            }
+            for (const name in propertiesToCheck) {
+                const derived = getTargetSymbol(propertiesToCheck[name]);
+                const derivedDeclarationFlags = getDeclarationModifierFlagsFromSymbol(derived);
+                const found = objectType.members[name];
+                if (found) {
+                    if (compilerOptions.noImplicitOverride) {
+                        const foundSymbol = getTargetSymbol(found);
+                        let detail = "masks Object." + symbolToString(found);
+                        // assert that the type of the derived
+                        // property matches that of the base property.
+                        if (!isPropertyIdenticalTo(derived, foundSymbol)) {
+                            detail += ").  The override declaration ("
+                                + typeToString(getTypeOfSymbol(derived))
+                                + ") also has a different type signature than the original ("
+                                + typeToString(getTypeOfSymbol(foundSymbol));
+                        }
+                        error(derived.valueDeclaration.name, Diagnostics.Class_member_0_must_be_marked_override_when_noImplicitOverride_is_enabled_1,
+                              symbolToString(derived), detail);
+                    }
+                }
+                // No matching property found on the object type.  It
+                // is an error for the derived property to falsely
+                // claim 'override'.
+                else if (derivedDeclarationFlags & ModifierFlags.Override) {
+                    error(derived.valueDeclaration.name, Diagnostics.Class_member_0_was_marked_override_but_no_matching_definition_was_found_in_any_supertype_of_1,
+                          symbolToString(derived), typeToString(type));
+                }
+            }
+        }
+
         function checkKindsOfPropertyMemberOverrides(type: InterfaceType, baseType: ObjectType): void {
 
             // TypeScript 1.0 spec (April 2014): 8.2.3
@@ -18387,9 +18443,17 @@ namespace ts {
             // derived class instance member variables and accessors, but not by other kinds of members.
 
             // NOTE: assignability is checked in checkClassDeclaration
+
+            // Track which symbols in the derived class have not been seen.
+            const onlyInDerived = createMap<Symbol>();
+            for (const prop of getPropertiesOfObjectType(type)) {
+                onlyInDerived[prop.name] = prop;
+            }
+
             const baseProperties = getPropertiesOfObjectType(baseType);
             for (const baseProperty of baseProperties) {
                 const base = getTargetSymbol(baseProperty);
+                delete onlyInDerived[base.name];
 
                 if (base.flags & SymbolFlags.Prototype) {
                     continue;
@@ -18422,6 +18486,7 @@ namespace ts {
                                     typeToString(type), symbolToString(baseProperty), typeToString(baseType));
                             }
                         }
+
                     }
                     else {
                         // derived overrides base.
@@ -18438,6 +18503,16 @@ namespace ts {
 
                         if ((base.flags & derived.flags & SymbolFlags.Method) || ((base.flags & SymbolFlags.PropertyOrAccessor) && (derived.flags & SymbolFlags.PropertyOrAccessor))) {
                             // method is overridden with method or property/accessor is overridden with property/accessor - correct case
+
+                            // Before accepting the correct case, ensure 'override' is marked if --noImplicitOverride is true.
+                            // Abstract members are an exception as override checks are suspended until the implementation solidifies.
+                            if (compilerOptions.noImplicitOverride
+                                && !(derivedDeclarationFlags & ModifierFlags.Abstract)
+                                && !(derivedDeclarationFlags & ModifierFlags.Override)) {
+                                error(derived.valueDeclaration.name, Diagnostics.Class_member_0_must_be_marked_override_when_noImplicitOverride_is_enabled_1,
+                                      symbolToString(derived), "inherited from " + typeToString(baseType));
+                            }
+
                             continue;
                         }
 
@@ -18465,6 +18540,8 @@ namespace ts {
                     }
                 }
             }
+
+            checkImplicitPropertyMemberOverrides(type, onlyInDerived);
         }
 
         function isAccessor(kind: SyntaxKind): boolean {
@@ -21075,38 +21152,38 @@ namespace ts {
                         flags |= ModifierFlags.Abstract;
                         break;
 
-                    case SyntaxKind.AsyncKeyword:
-                        if (flags & ModifierFlags.Async) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "async");
-                        }
-                        else if (flags & ModifierFlags.Ambient || isInAmbientContext(node.parent)) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "async");
-                        }
-                        else if (node.kind === SyntaxKind.Parameter) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "async");
-                        }
-                        flags |= ModifierFlags.Async;
-                        lastAsync = modifier;
-                        break;
+                   case SyntaxKind.OverrideKeyword:
+                       if (flags & ModifierFlags.Override) {
+                           return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "override");
+                       }
+                       else if (flags & ModifierFlags.Static) {
+                           return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "override");
+                       }
+                       else if (flags & ModifierFlags.Private) {
+                           return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "private", "override");
+                       }
+                       else if (flags & ModifierFlags.Abstract) {
+                           return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "abstract", "override");
+                       }
+                       else if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
+                           return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_or_namespace_element, "override");
+                       }
+                       flags |= ModifierFlags.Override;
+                       break;
 
-                case SyntaxKind.OverrideKeyword:
-                  if (flags & ModifierFlags.Override) {
-                    return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "override");
-                  }
-                  else if (flags & ModifierFlags.Static) {
-                    return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "override");
-                  }
-                  else if (flags & ModifierFlags.Private) {
-                    return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "private", "override");
-                  }
-                  else if (flags & ModifierFlags.Abstract) {
-                    return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "abstract", "override");
-                  }
-                  else if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
-                    return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_or_namespace_element, "override");
-                  }
-                  flags |= ModifierFlags.Override;
-                  break;
+                   case SyntaxKind.AsyncKeyword:
+                       if (flags & ModifierFlags.Async) {
+                           return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "async");
+                       }
+                       else if (flags & ModifierFlags.Ambient || isInAmbientContext(node.parent)) {
+                           return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "async");
+                       }
+                       else if (node.kind === SyntaxKind.Parameter) {
+                           return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "async");
+                       }
+                       flags |= ModifierFlags.Async;
+                       lastAsync = modifier;
+                       break;
                 }
             }
 

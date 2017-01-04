@@ -1,0 +1,147 @@
+tests/cases/compiler/overrideKeyword.ts(4,12): error TS90033: Class member 'toString' must be marked 'override' when noImplicitOverride is enabled (masks Object.toString)
+tests/cases/compiler/overrideKeyword.ts(14,5): error TS90033: Class member 'toStringAbstract' must be marked 'override' when noImplicitOverride is enabled (inherited from AbstractBase)
+tests/cases/compiler/overrideKeyword.ts(25,5): error TS90034: override modifier cannot be used with an optional property declaration
+tests/cases/compiler/overrideKeyword.ts(29,14): error TS1243: 'abstract' modifier cannot be used with 'override' modifier.
+tests/cases/compiler/overrideKeyword.ts(33,14): error TS1243: 'static' modifier cannot be used with 'override' modifier.
+tests/cases/compiler/overrideKeyword.ts(36,7): error TS2415: Class 'RejectWhenAttemptToOverridePrivateMethod' incorrectly extends base class 'Base'.
+  Types have separate declarations of a private property 'toStringPrivate'.
+tests/cases/compiler/overrideKeyword.ts(37,13): error TS1243: 'private' modifier cannot be used with 'override' modifier.
+tests/cases/compiler/overrideKeyword.ts(41,21): error TS1030: 'override' modifier already seen.
+tests/cases/compiler/overrideKeyword.ts(45,14): error TS1029: 'public' modifier must precede 'override' modifier.
+tests/cases/compiler/overrideKeyword.ts(49,21): error TS90032: Class member 'iDontExist' was marked 'override', but no matching definition was found in any supertype of 'RejectWhenOverrideMarkedOnNonInheritedMember'
+tests/cases/compiler/overrideKeyword.ts(52,7): error TS2415: Class 'RejectWhenOverrideHasMismatchedType' incorrectly extends base class 'Base'.
+  Types of property 'getMeaningOfLife' are incompatible.
+    Type '() => string' is not assignable to type '() => number'.
+      Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/overrideKeyword.ts(57,18): error TS2699: Accessors must both be override or non-override.
+tests/cases/compiler/overrideKeyword.ts(60,9): error TS2699: Accessors must both be override or non-override.
+tests/cases/compiler/overrideKeyword.ts(67,14): error TS90033: Class member 'hasOwnProperty' must be marked 'override' when noImplicitOverride is enabled (masks Object.hasOwnProperty)
+tests/cases/compiler/overrideKeyword.ts(71,12): error TS90033: Class member 'getMeaningOfLife' must be marked 'override' when noImplicitOverride is enabled (inherited from Base)
+tests/cases/compiler/overrideKeyword.ts(75,14): error TS90033: Class member 'propertyIsEnumerable' must be marked 'override' when noImplicitOverride is enabled (masks Object.propertyIsEnumerable)
+
+
+==== tests/cases/compiler/overrideKeyword.ts (16 errors) ====
+    
+    abstract class AbstractBase {
+        static toStringStatic(): string { return 'static member'; }
+        public toString(): string { return 'instance member'; };
+               ~~~~~~~~
+!!! error TS90033: Class member 'toString' must be marked 'override' when noImplicitOverride is enabled (masks Object.toString)
+        abstract toStringAbstract(): string;
+        private toStringPrivate(): string { return 'private member'; }
+        getMeaningOfLife(): number { return 42; }
+        public wasDisposed?: boolean;
+    }
+    
+    class Base extends AbstractBase {
+        private name_: string;
+    
+        toStringAbstract(): string { return 'implementation of abstract member'; };
+        ~~~~~~~~~~~~~~~~
+!!! error TS90033: Class member 'toStringAbstract' must be marked 'override' when noImplicitOverride is enabled (inherited from AbstractBase)
+    
+        get name() {
+            return this.name_;
+        }
+    
+        set name(name: string) {
+            this.name_ = name;
+        }
+    
+        // override cannot be used with optional property.
+        public override wasDisposed?: boolean;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS90034: override modifier cannot be used with an optional property declaration
+    }
+    
+    abstract class RejectWhenAttemptToOverrideAbstractMethod extends AbstractBase {
+        abstract override toStringAbstract(): string;
+                 ~~~~~~~~
+!!! error TS1243: 'abstract' modifier cannot be used with 'override' modifier.
+    }
+    
+    class RejectWhenAttemptToOverrideStaticMethod extends Base {
+        override static toStringStatic() { return ''; };
+                 ~~~~~~
+!!! error TS1243: 'static' modifier cannot be used with 'override' modifier.
+    }
+    
+    class RejectWhenAttemptToOverridePrivateMethod extends Base {
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2415: Class 'RejectWhenAttemptToOverridePrivateMethod' incorrectly extends base class 'Base'.
+!!! error TS2415:   Types have separate declarations of a private property 'toStringPrivate'.
+        private override toStringPrivate() { return ''; };
+                ~~~~~~~~
+!!! error TS1243: 'private' modifier cannot be used with 'override' modifier.
+    }
+    
+    class RejectWhenOverrideIsRepeated extends Base {
+        public override override toString() { return ''; };
+                        ~~~~~~~~
+!!! error TS1030: 'override' modifier already seen.
+    }
+    
+    class RejectWhenOverridePrecedesAccessModifier extends Base {
+        override public toString() { return ''; };
+                 ~~~~~~
+!!! error TS1029: 'public' modifier must precede 'override' modifier.
+    }
+    
+    class RejectWhenOverrideMarkedOnNonInheritedMember extends Base {
+        public override iDontExist() { return ''; };
+                        ~~~~~~~~~~
+!!! error TS90032: Class member 'iDontExist' was marked 'override', but no matching definition was found in any supertype of 'RejectWhenOverrideMarkedOnNonInheritedMember'
+    }
+    
+    class RejectWhenOverrideHasMismatchedType extends Base {
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2415: Class 'RejectWhenOverrideHasMismatchedType' incorrectly extends base class 'Base'.
+!!! error TS2415:   Types of property 'getMeaningOfLife' are incompatible.
+!!! error TS2415:     Type '() => string' is not assignable to type '() => number'.
+!!! error TS2415:       Type 'string' is not assignable to type 'number'.
+        override getMeaningOfLife(): string { return 'forty-two'; };
+    }
+    
+    class RejectWhenAccessorNotBothOverride extends Base {
+        override get name() {
+                     ~~~~
+!!! error TS2699: Accessors must both be override or non-override.
+            return 'hardcoded value';
+        }
+        set name(n: string) {
+            ~~~~
+!!! error TS2699: Accessors must both be override or non-override.
+        }
+    }
+    
+    /* @mhegazy: is this an appropriate test for consecutive declarations? */
+    class RejectWhenOverrideDeclarationsAreNotConsecutive extends Base {
+    
+        override hasOwnProperty(prop: string): boolean {
+                 ~~~~~~~~~~~~~~
+!!! error TS90033: Class member 'hasOwnProperty' must be marked 'override' when noImplicitOverride is enabled (masks Object.hasOwnProperty)
+            return super.hasOwnProperty(prop);
+        }
+    
+        public getMeaningOfLife(): number {
+               ~~~~~~~~~~~~~~~~
+!!! error TS90033: Class member 'getMeaningOfLife' must be marked 'override' when noImplicitOverride is enabled (inherited from Base)
+            return 42;
+        }
+    
+        override propertyIsEnumerable(prop: string): boolean {
+                 ~~~~~~~~~~~~~~~~~~~~
+!!! error TS90033: Class member 'propertyIsEnumerable' must be marked 'override' when noImplicitOverride is enabled (masks Object.propertyIsEnumerable)
+            return super.propertyIsEnumerable(prop);
+        }
+    
+    }
+    
+    class AcceptWhenOverrideFollowsAccessModifier extends Base {
+        public override toString() { return ''; };
+    }
+    
+    class AcceptWhenOverrideMemberExistsOnNonImmediateSuperclass extends Base {
+        public override getMeaningOfLife(): number { return 12; };
+    }
+    

@@ -1683,6 +1683,10 @@
         "category": "Error",
         "code": 2518
     },
+    "Overload signatures must all be override or non-override.": {
+        "category": "Error",
+        "code": 2519
+    },
     "Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.": {
         "category": "Error",
         "code": 2520
@@ -2014,6 +2018,10 @@
     "Spread types may only be created from object types.": {
         "category": "Error",
         "code": 2698
+    },
+    "Accessors must both be override or non-override.": {
+        "category": "Error",
+        "code": 2699
     },
     "Rest types may only be created from object types.": {
         "category": "Error",
@@ -3279,9 +3287,25 @@
         "category": "Message",
         "code": 90015
     },
-    "Member function {0} was marked 'override', but no matching definition was found in the superclass chain ({1})": {
+    "Raise an error when inherited/overridden class members are not explicitly marked 'override'": {
         "category": "Error",
         "code": 90030
+    },
+    "Class member '{0}' was marked 'override', but no matching definition was found in any supertype of '{1}'": {
+        "category": "Error",
+        "code": 90032
+    },
+    "Class member '{0}' must be marked 'override' when noImplicitOverride is enabled ({1})": {
+        "category": "Error",
+        "code": 90033
+    },
+    "override modifier cannot be used with an optional property declaration": {
+        "category": "Error",
+        "code": 90034
+    },
+    "All declarations of an override method must be consecutive.": {
+        "category": "Error",
+        "code": 90035
     },
     "Octal literal types must use ES2015 syntax. Use the syntax '{0}'.": {
         "category": "Error",
