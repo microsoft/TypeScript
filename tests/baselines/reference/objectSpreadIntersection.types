@@ -24,8 +24,8 @@ function iteratedUnionIntersection<T, U, V>(t: T, u: U, v: V): void {
     let result = { ...tu, ...uv, id: 'foo' };
 >result : { ...T; ...U & V; id: string; } | { ...U; ...U & V; id: string; }
 >{ ...tu, ...uv, id: 'foo' } : { ...T; ...U & V; id: string; } | { ...U; ...U & V; id: string; }
->tu : any
->uv : any
+>tu : T | U
+>uv : U & V
 >id : string
 >'foo' : "foo"
 
@@ -68,8 +68,8 @@ let b12: B1 & B2;
 let result = { ...a12, ...b12 };
 >result : { b: number & string; a: number & string; }
 >{ ...a12, ...b12 } : { b: number & string; a: number & string; }
->a12 : any
->b12 : any
+>a12 : A1 & A2
+>b12 : B1 & B2
 
 let sn: number & string = result.a;
 >sn : number & string
@@ -113,7 +113,7 @@ function tripleIntersection<T, U, V>(t: T, u: U, v: V): void {
     let result = { ...tuv, id: 'bar' };
 >result : { ...T & U & V; id: string; }
 >{ ...tuv, id: 'bar' } : { ...T & U & V; id: string; }
->tuv : any
+>tuv : T & U & V
 >id : string
 >'bar' : "bar"
 
@@ -150,8 +150,8 @@ function iteratedDoubleIntersection<T, U, V>(t: T, u: U, v: V): void {
     let result = { ...tu, ...uv, id: 'baz' };
 >result : { ...T & U; ...U & V; id: string; }
 >{ ...tu, ...uv, id: 'baz' } : { ...T & U; ...U & V; id: string; }
->tu : any
->uv : any
+>tu : T & U
+>uv : U & V
 >id : string
 >'baz' : "baz"
 
@@ -189,8 +189,8 @@ function iteratedIntersectionUnion<T, U, V>(t: T, u: U, v: V): void {
     let result = { ...tu, ...uv, id: 'qux' };
 >result : { ...T & U; ...U; id: string; } | { ...T & U; ...V; id: string; }
 >{ ...tu, ...uv, id: 'qux' } : { ...T & U; ...U; id: string; } | { ...T & U; ...V; id: string; }
->tu : any
->uv : any
+>tu : T & U
+>uv : U | V
 >id : string
 >'qux' : "qux"
 
@@ -203,5 +203,4 @@ function iteratedIntersectionUnion<T, U, V>(t: T, u: U, v: V): void {
 >id : string
 >result : { ...T & U; ...U; id: string; } | { ...T & U; ...V; id: string; }
 }
-
 

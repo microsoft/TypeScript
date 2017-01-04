@@ -16,7 +16,7 @@ let a12: A1 | A2;
 let result = { ...a12 };
 >result : { a: number; } | { a: string; }
 >{ ...a12 } : { a: number; } | { a: string; }
->a12 : any
+>a12 : A1 | A2
 
 let sn: number | string = result.a;
 >sn : string | number
@@ -51,7 +51,7 @@ function tripleUnion<T, U, V>(t: T, u: U, v: V): void {
     let result = { ...tuv, id: 'foo' };
 >result : { ...T; id: string; } | { ...U; id: string; } | { ...V; id: string; }
 >{ ...tuv, id: 'foo' } : { ...T; id: string; } | { ...U; id: string; } | { ...V; id: string; }
->tuv : any
+>tuv : T | U | V
 >id : string
 >'foo' : "foo"
 
@@ -98,8 +98,8 @@ function iteratedDoubleUnion<T, U, V>(t: T, u: U, v: V): void {
     let result = { ...tu, ...uv, id: 'bar' };
 >result : { ...U; id: string; } | { ...T; ...U; id: string; } | { ...T; ...V; id: string; } | { ...U; ...V; id: string; }
 >{ ...tu, ...uv, id: 'bar' } : { ...U; id: string; } | { ...T; ...U; id: string; } | { ...T; ...V; id: string; } | { ...U; ...V; id: string; }
->tu : any
->uv : any
+>tu : T | U
+>uv : U | V
 >id : string
 >'bar' : "bar"
 
@@ -126,6 +126,4 @@ function iteratedDoubleUnion<T, U, V>(t: T, u: U, v: V): void {
 >id : string
 >result : { ...U; id: string; } | { ...T; ...U; id: string; } | { ...T; ...V; id: string; } | { ...U; ...V; id: string; }
 }
-
-
 

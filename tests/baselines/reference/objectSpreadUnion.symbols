@@ -15,6 +15,7 @@ let a12: A1 | A2;
 
 let result = { ...a12 };
 >result : Symbol(result, Decl(objectSpreadUnion.ts, 4, 3))
+>a12 : Symbol(a12, Decl(objectSpreadUnion.ts, 3, 3))
 
 let sn: number | string = result.a;
 >sn : Symbol(sn, Decl(objectSpreadUnion.ts, 5, 3))
@@ -48,6 +49,7 @@ function tripleUnion<T, U, V>(t: T, u: U, v: V): void {
 
     let result = { ...tuv, id: 'foo' };
 >result : Symbol(result, Decl(objectSpreadUnion.ts, 10, 7))
+>tuv : Symbol(tuv, Decl(objectSpreadUnion.ts, 9, 7))
 >id : Symbol(id, Decl(objectSpreadUnion.ts, 10, 26))
 
     let expected: { ...T, id: string } | { ...U, id: string } | { ...V, id: string } = result;
@@ -92,6 +94,8 @@ function iteratedDoubleUnion<T, U, V>(t: T, u: U, v: V): void {
 
     let result = { ...tu, ...uv, id: 'bar' };
 >result : Symbol(result, Decl(objectSpreadUnion.ts, 17, 7))
+>tu : Symbol(tu, Decl(objectSpreadUnion.ts, 15, 7))
+>uv : Symbol(uv, Decl(objectSpreadUnion.ts, 16, 7))
 >id : Symbol(id, Decl(objectSpreadUnion.ts, 17, 32))
 
     let expected: { ...T, ...U, id: string } | { ...T, ...V, id: string } | { ...U, id: string } | { ...U, ...V, id: string };
@@ -117,6 +121,4 @@ function iteratedDoubleUnion<T, U, V>(t: T, u: U, v: V): void {
 >id : Symbol(id, Decl(objectSpreadUnion.ts, 19, 45))
 >result : Symbol(result, Decl(objectSpreadUnion.ts, 17, 7))
 }
-
-
 

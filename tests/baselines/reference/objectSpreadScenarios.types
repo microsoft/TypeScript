@@ -19,8 +19,8 @@ function override<U>(initial: U, override: U): { ...U, ...U } {
 
     return { ...initial, ...override };
 >{ ...initial, ...override } : { ...U }
->initial : any
->override : any
+>initial : U
+>override : U
 }
 function update<U>(this: { u: { ...U } }, override: U): void {
 >update : <U>(this: { u: { ...U }; }, override: U) => void
@@ -40,7 +40,7 @@ function update<U>(this: { u: { ...U } }, override: U): void {
 >this.u : { ...U }
 >this : { u: { ...U }; }
 >u : { ...U }
->override : any
+>override : U
 }
 function mixin<T, U>(one: T, two: U): { ...T, ...U } {
 >mixin : <T, U>(one: T, two: U) => { ...T; ...U }
@@ -55,8 +55,8 @@ function mixin<T, U>(one: T, two: U): { ...T, ...U } {
 
     return { ...one, ...two };
 >{ ...one, ...two } : { ...T; ...U }
->one : any
->two : any
+>one : T
+>two : U
 }
 let a1: A1 = { a: true };
 >a1 : A1

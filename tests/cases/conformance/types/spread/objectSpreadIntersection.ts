@@ -1,4 +1,3 @@
-//// [objectSpreadIntersection.ts]
 function iteratedUnionIntersection<T, U, V>(t: T, u: U, v: V): void {
     let tu: T | U;
     let uv: U & V;
@@ -33,44 +32,4 @@ function iteratedIntersectionUnion<T, U, V>(t: T, u: U, v: V): void {
     let uv: U | V;
     let result = { ...tu, ...uv, id: 'qux' };
     let assignable: { ...(T & U), ...(U | V), id: string } = result;
-}
-
-
-//// [objectSpreadIntersection.js]
-var __assign = (this && this.__assign) || Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-            t[p] = s[p];
-    }
-    return t;
-};
-function iteratedUnionIntersection(t, u, v) {
-    var tu;
-    var uv;
-    var result = __assign({}, tu, uv, { id: 'foo' });
-    var assignable = result;
-}
-var a12;
-var b12;
-var result = __assign({}, a12, b12);
-var sn = result.a;
-sn = result.b;
-var assignable = result;
-function tripleIntersection(t, u, v) {
-    var tuv;
-    var result = __assign({}, tuv, { id: 'bar' });
-    var assignable = result;
-}
-function iteratedDoubleIntersection(t, u, v) {
-    var tu;
-    var uv;
-    var result = __assign({}, tu, uv, { id: 'baz' });
-    var assignable = result;
-}
-function iteratedIntersectionUnion(t, u, v) {
-    var tu;
-    var uv;
-    var result = __assign({}, tu, uv, { id: 'qux' });
-    var assignable = result;
 }

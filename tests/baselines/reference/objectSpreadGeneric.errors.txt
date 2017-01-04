@@ -1,0 +1,148 @@
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(9,5): error TS2322: Type '{ ...U }' is not assignable to type 'U'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(10,11): error TS2322: Type '{ ...T; ...U; ...V }' is not assignable to type '{ ...V; ...U; ...T }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(11,11): error TS2322: Type '{ ...T; ...U; ...V }' is not assignable to type '{ ...U; ...T; ...V }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(12,11): error TS2322: Type '{ ...T; ...U; ...V }' is not assignable to type '{ ...U; ...V }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(13,11): error TS2322: Type '{ ...T; ...U; ...V }' is not assignable to type '{ ...T; ...V }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(14,11): error TS2322: Type '{ ...T; ...U; ...V }' is not assignable to type '{ ...T; ...U }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(16,11): error TS90010: Type '{ first: string; ...T; ...U }' is not assignable to type '{ first: string; ...T; ...U }'. Two different types with this name exist, but they are unrelated.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(19,11): error TS2322: Type '{}' is not assignable to type '{ ...T; ...U }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(26,11): error TS2322: Type '{ sn?: boolean; ...T; sn?: string | number; }' is not assignable to type '{ ...T; sn?: string | number | boolean; }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(32,11): error TS90010: Type '{ first: string; ...T; second: string; ...U; third: string; }' is not assignable to type '{ first: string; ...T; second: string; ...U; third: string; }'. Two different types with this name exist, but they are unrelated.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(34,15): error TS2322: Type '{ first: string; ...T; second: string; ...U; third: string; }' is not assignable to type '{ first: string; second: string; ...T; third: string; }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(36,15): error TS90010: Type '{ first: string; ...T; second: string; ...U; third: string; secondsecond: string; }' is not assignable to type '{ first: string; ...T; second: string; ...U; third: string; secondsecond: string; }'. Two different types with this name exist, but they are unrelated.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(38,15): error TS2322: Type '{ first: string; ...T; second: string; ...U; third: string; secondsecond: string; }' is not assignable to type '{ first: string; second: string; secondsecond: string; third: string; ...T; ...U }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(42,11): error TS2322: Type '{ firrrrrrst: string; ...T; second: string; ...U; third: string; }' is not assignable to type '{ first: string; ...T; second: string; ...U; third: string; }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(44,15): error TS2322: Type '{ first: string; ...T; ssssssssecond: string; ...U; third: string; }' is not assignable to type '{ first: string; ...T; second: string; ...U; third: string; }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(46,15): error TS2322: Type '{ first: string; ...T; second: string; ...U; thirrrrrrrd: string; }' is not assignable to type '{ first: string; ...T; second: string; ...U; third: string; }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(57,5): error TS2322: Type '{ ...keyof U }' is not assignable to type '{ ...keyof T }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(58,5): error TS2322: Type '{ ...keyof T }' is not assignable to type '{ ...keyof U }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(61,5): error TS2322: Type '{ ...K }' is not assignable to type '{ ...keyof T }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(62,5): error TS2322: Type '{ ...keyof T }' is not assignable to type '{ ...K }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(63,5): error TS2322: Type '{ ...J }' is not assignable to type '{ ...keyof U }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(64,5): error TS2322: Type '{ ...keyof U }' is not assignable to type '{ ...J }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(70,5): error TS2322: Type '{ ...U[J] }' is not assignable to type '{ ...T[K] }'.
+tests/cases/conformance/types/spread/objectSpreadGeneric.ts(71,5): error TS2322: Type '{ ...T[K] }' is not assignable to type '{ ...U[J] }'.
+
+
+==== tests/cases/conformance/types/spread/objectSpreadGeneric.ts (24 errors) ====
+    function f<T, U, V>(t: T, u: U, v: V): void {
+        let o: { ...T, ...U, ...V };
+        let uus: { ...U, ...U};
+        let us: { ...U };
+        const same: { ...T, ...U, ...V } = o; // ok
+        uus = us; // ok, multiple spreads are equivalent to a single one
+        us = uus; // ok, multiple spreads are equivalent to a single one
+        us = u;   // ok, type has at least all the properties of the spread
+        u = us;   // error, might be missing a ton of stuff
+        ~
+!!! error TS2322: Type '{ ...U }' is not assignable to type 'U'.
+        const reversed: { ...V, ...U, ...T } = o; // error, reversed
+              ~~~~~~~~
+!!! error TS2322: Type '{ ...T; ...U; ...V }' is not assignable to type '{ ...V; ...U; ...T }'.
+        const reversed2: { ...U, ...T, ...V } = o; // error, U and T are still reversed
+              ~~~~~~~~~
+!!! error TS2322: Type '{ ...T; ...U; ...V }' is not assignable to type '{ ...U; ...T; ...V }'.
+        const missingT: { ...U, ...V } = o; // error, missing T
+              ~~~~~~~~
+!!! error TS2322: Type '{ ...T; ...U; ...V }' is not assignable to type '{ ...U; ...V }'.
+        const missingU: { ...T, ...V } = o; // error, missing U
+              ~~~~~~~~
+!!! error TS2322: Type '{ ...T; ...U; ...V }' is not assignable to type '{ ...T; ...V }'.
+        const missingV: { ...T, ...U } = o; // error, missing V
+              ~~~~~~~~
+!!! error TS2322: Type '{ ...T; ...U; ...V }' is not assignable to type '{ ...T; ...U }'.
+        const atEnd: { ...T, ...U, second: string } = { ...t, ...u, second: 'foo' }; // ok
+        const atBeginning: { first: string, ...T, ...U, } = { first: 'foo', ...t, ...u }; // error, not assignable
+              ~~~~~~~~~~~
+!!! error TS90010: Type '{ first: string; ...T; ...U }' is not assignable to type '{ first: string; ...T; ...U }'. Two different types with this name exist, but they are unrelated.
+    
+        const emptyTarget: { } = { ...t, ...u } // ok
+        const emptySource: { ...T, ...U } = { }; // error, {} is not assignable to U (or T)
+              ~~~~~~~~~~~
+!!! error TS2322: Type '{}' is not assignable to type '{ ...T; ...U }'.
+    
+        // error, { sn?: boolean } ...T ... { sn?: number | string } is not assignable to
+        //        T ... { sn?: number | string | boolean }
+        let optionalNumber: { sn?: number };
+        let optionalString: { sn?: string };
+        let optionalBoolean: { sn?: boolean };
+        const unionCutoff: { ...T, sn?: number | string | boolean } =
+              ~~~~~~~~~~~
+!!! error TS2322: Type '{ sn?: boolean; ...T; sn?: string | number; }' is not assignable to type '{ ...T; sn?: string | number | boolean; }'.
+            { ...optionalBoolean, ...t, ...optionalString, ...optionalNumber }
+        unionCutoff.sn; // ok
+        const optionalCutoff = { ...t, ...optionalNumber }; // ok
+        optionalCutoff.sn; // ok
+    
+        const interspersed: { first: string, ...T, second: string, ...U, third: string } =
+              ~~~~~~~~~~~~
+!!! error TS90010: Type '{ first: string; ...T; second: string; ...U; third: string; }' is not assignable to type '{ first: string; ...T; second: string; ...U; third: string; }'. Two different types with this name exist, but they are unrelated.
+            { first: '1', ...t, second: '2', ...u, third: '3' }; // error, not assignable
+            const interspersedMissingU: { first: string, second: string, ...T, third: string } =
+                  ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ first: string; ...T; second: string; ...U; third: string; }' is not assignable to type '{ first: string; second: string; ...T; third: string; }'.
+            { first: '1', ...t, second: '2', ...u, third: '3' }; // error, 'U' is missing
+            const interspersedOrder1: { first: string, ...T, second: string, ...U, third: string, secondsecond: string } =
+                  ~~~~~~~~~~~~~~~~~~
+!!! error TS90010: Type '{ first: string; ...T; second: string; ...U; third: string; secondsecond: string; }' is not assignable to type '{ first: string; ...T; second: string; ...U; third: string; secondsecond: string; }'. Two different types with this name exist, but they are unrelated.
+            { first: '1', ...t, second: '2', ...u, third: '3', secondsecond: 'false' }; // error, not assignable
+            const interspersedOrder2: { first: string, second: string, secondsecond: string, third: string, ...T, ...U } =
+                  ~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ first: string; ...T; second: string; ...U; third: string; secondsecond: string; }' is not assignable to type '{ first: string; second: string; secondsecond: string; third: string; ...T; ...U }'.
+            { first: '1', ...t, second: '2', ...u, third: '3', secondsecond: 'false' }; // error, not assignable
+    
+    
+        const mismatchFirst: { first: string, ...T, second: string, ...U, third: string } =
+              ~~~~~~~~~~~~~
+!!! error TS2322: Type '{ firrrrrrst: string; ...T; second: string; ...U; third: string; }' is not assignable to type '{ first: string; ...T; second: string; ...U; third: string; }'.
+            { firrrrrrst: '1', ...t, second: '2', ...u, third: '3' }; // error, not assignable
+            const mismatchSecond: { first: string, ...T, second: string, ...U, third: string } =
+                  ~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ first: string; ...T; ssssssssecond: string; ...U; third: string; }' is not assignable to type '{ first: string; ...T; second: string; ...U; third: string; }'.
+            { first: '1', ...t, ssssssssecond: '2', ...u, third: '3' }; // error, not assignable
+            const mismatchLast: { first: string, ...T, second: string, ...U, third: string } =
+                  ~~~~~~~~~~~~
+!!! error TS2322: Type '{ first: string; ...T; second: string; ...U; thirrrrrrrd: string; }' is not assignable to type '{ first: string; ...T; second: string; ...U; third: string; }'.
+            { first: '1', ...t, second: '2', ...u, thirrrrrrrd: '3' }; // error, not assignable
+    }
+    
+    function indexAccessedTest<T, K extends keyof T, U, J extends keyof U>(t: T, u: U, key1: K, key2: J) {
+        let k1: { ...keyof T };
+        let k2: { ...keyof U };
+        let k3: { ...K };
+        let k4: { ...J };
+        k1 = k1; // ok
+        k2 = k2; // ok
+        k1 = k2; // error
+        ~~
+!!! error TS2322: Type '{ ...keyof U }' is not assignable to type '{ ...keyof T }'.
+        k2 = k1; // error
+        ~~
+!!! error TS2322: Type '{ ...keyof T }' is not assignable to type '{ ...keyof U }'.
+        k3 = k3; // ok
+        k4 = k4; // ok
+        k1 = k3; // error
+        ~~
+!!! error TS2322: Type '{ ...K }' is not assignable to type '{ ...keyof T }'.
+        k3 = k1; // error
+        ~~
+!!! error TS2322: Type '{ ...keyof T }' is not assignable to type '{ ...K }'.
+        k2 = k4; // error
+        ~~
+!!! error TS2322: Type '{ ...J }' is not assignable to type '{ ...keyof U }'.
+        k4 = k2; // error
+        ~~
+!!! error TS2322: Type '{ ...keyof U }' is not assignable to type '{ ...J }'.
+    
+        let i1: { ...T[K] };
+        let i2: { ...U[J] };
+        i1 = i1; // ok
+        i2 = i2; // ok
+        i1 = i2; // error
+        ~~
+!!! error TS2322: Type '{ ...U[J] }' is not assignable to type '{ ...T[K] }'.
+        i2 = i1; // error
+        ~~
+!!! error TS2322: Type '{ ...T[K] }' is not assignable to type '{ ...U[J] }'.
+    }
+    

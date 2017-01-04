@@ -68,8 +68,8 @@ function generic<W, X, Y>(w: W, x: X, y: Y) {
 >infer({ ...w, ...x, a: y, b: "different type" }) : { t: {}; u: {}; v: {}; }
 >infer : <T, U, V>(tuv: { ...T; ...U; a: V; }) => { t: T; u: U; v: V; }
 >{ ...w, ...x, a: y, b: "different type" } : { ...W; ...X; a: Y; b: string; }
->w : any
->x : any
+>w : W
+>x : X
 >a : Y
 >y : Y
 >b : string
@@ -89,8 +89,8 @@ let i1 = infer({ ...b, ...c, a: 12 });
 >infer({ ...b, ...c, a: 12 }) : { t: {}; u: {}; v: {}; }
 >infer : <T, U, V>(tuv: { ...T; ...U; a: V; }) => { t: T; u: U; v: V; }
 >{ ...b, ...c, a: 12 } : { a: number; c: number; b: number; }
->b : any
->c : any
+>b : { b: number; }
+>c : { c: number; }
 >a : number
 >12 : 12
 
@@ -100,8 +100,8 @@ let i2 = infer2({ ...b, ...c, a: 12 });
 >infer2({ ...b, ...c, a: 12 }) : { t: {}; u: {}; v: {}; }
 >infer2 : <T, U, V>(utv: { ...U; a: V; ...T }) => { t: T; u: U; v: V; }
 >{ ...b, ...c, a: 12 } : { a: number; c: number; b: number; }
->b : any
->c : any
+>b : { b: number; }
+>c : { c: number; }
 >a : number
 >12 : 12
 

@@ -2,9 +2,7 @@
 
 ////interface A1 { [|a|]: number };
 ////interface A2 { [|a|]?: number };
-////let a1: A1;
-////let a2: A2;
-////let a12 = { ...a1, ...a2 };
+////let a12: { ...A1, ...A2 };
 ////a12.[|a|];
 const ranges = test.ranges();
 verify.assertHasRanges(ranges);

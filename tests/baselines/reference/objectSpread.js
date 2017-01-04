@@ -35,7 +35,9 @@ let getter: { a: number, c: number } =
     { ...op, c: 7 }
 getter.a = 12;
 
-// functions result in { }
+// null, undefined and functions result in { }
+let spreadNull = { ...null };
+let spreadUndefined = { ...undefined };
 let spreadFunc = { ...(function () { }) };
 
 // any results in any
@@ -79,6 +81,23 @@ let computedAfter: { a: number, b: string, "at the end": number } =
 let a = 12;
 let shortCutted: { a: number, b: string } = { ...o, a }
 
+// generics
+function f<T, U>(t: T, u: U): { ...T, ...U, id: string } {
+    return { ...t, ...u, id: 'id' };
+}
+
+let exclusive: { id: string, a: number, b: string, c: string, d: boolean } =
+    f({ a: 1, b: 'yes' }, { c: 'no', d: false })
+let overlap: { id: string, a: number, b: string } =
+    f({ a: 1 }, { a: 2, b: 'extra' })
+let overlapConflict: { id:string, a: string } =
+    f({ a: 1 }, { a: 'mismatch' })
+let overwriteId: { id: string, a: number, c: number, d: string } =
+    f({ a: 1, id: true }, { c: 1, d: 'no' })
+
+class D { m() { }; q = 2; }
+let classesAreWrong: { id: string, ...C, ...D } =
+    f(new C(), new D())
 
 
 //// [objectSpread.js]
@@ -111,7 +130,9 @@ var propertyNested = { a: __assign({}, o) };
 var op = { get a() { return 6; } };
 var getter = __assign({}, op, { c: 7 });
 getter.a = 12;
-// functions result in { }
+// null, undefined and functions result in { }
+var spreadNull = __assign({}, null);
+var spreadUndefined = __assign({}, undefined);
 var spreadFunc = __assign({}, (function () { }));
 // any results in any
 var anything;
@@ -148,4 +169,21 @@ var computedAfter = __assign({}, o, (_c = { b: 'yeah' }, _c['at the end'] = 14, 
 // shortcut syntax
 var a = 12;
 var shortCutted = __assign({}, o, { a: a });
+// generics
+function f(t, u) {
+    return __assign({}, t, u, { id: 'id' });
+}
+var exclusive = f({ a: 1, b: 'yes' }, { c: 'no', d: false });
+var overlap = f({ a: 1 }, { a: 2, b: 'extra' });
+var overlapConflict = f({ a: 1 }, { a: 'mismatch' });
+var overwriteId = f({ a: 1, id: true }, { c: 1, d: 'no' });
+var D = (function () {
+    function D() {
+        this.q = 2;
+    }
+    D.prototype.m = function () { };
+    ;
+    return D;
+}());
+var classesAreWrong = f(new C(), new D());
 var _a, _b, _c;
