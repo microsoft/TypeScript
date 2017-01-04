@@ -323,6 +323,7 @@ namespace ts {
         PropertyAssignment,
         ShorthandPropertyAssignment,
         SpreadAssignment,
+        SpreadTypeAssignment,
 
         // Enum
         EnumMember,
@@ -661,6 +662,11 @@ namespace ts {
         questionToken?: QuestionToken;      // Present on optional property
         type?: TypeNode;                    // Optional type annotation
         initializer?: Expression;           // Optional initializer
+    }
+
+    export interface SpreadTypeAssignment extends TypeElement {
+        kind: SyntaxKind.SpreadTypeAssignment;
+        type: TypeNode;
     }
 
     export interface PropertyDeclaration extends ClassElement {
@@ -2594,7 +2600,7 @@ namespace ts {
         Merged                  = 0x02000000,  // Merged symbol (created during program binding)
         Transient               = 0x04000000,  // Transient symbol (created during type check)
         Prototype               = 0x08000000,  // Prototype property (no source representation)
-        SyntheticProperty       = 0x10000000,  // Property in union or intersection type
+        SyntheticProperty       = 0x10000000,  // Property in union, intersection or spread type
         Optional                = 0x20000000,  // Optional property
         ExportStar              = 0x40000000,  // Export * declaration
 
@@ -2785,6 +2791,7 @@ namespace ts {
         ContainsObjectLiteral   = 1 << 22,  // Type is or contains object literal type
         /* @internal */
         ContainsAnyFunctionType = 1 << 23,  // Type is or contains object literal type
+        Spread                  = 1 << 24,  // Spread type
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -2802,13 +2809,13 @@ namespace ts {
         BooleanLike = Boolean | BooleanLiteral,
         EnumLike = Enum | EnumLiteral,
         UnionOrIntersection = Union | Intersection,
-        StructuredType = Object | Union | Intersection,
+        StructuredType = Object | Union | Intersection | Spread,
         StructuredOrTypeParameter = StructuredType | TypeParameter | Index,
         TypeVariable = TypeParameter | IndexedAccess,
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
-        Narrowable = Any | StructuredType | TypeParameter | Index | IndexedAccess | StringLike | NumberLike | BooleanLike | ESSymbol,
+        Narrowable = Any | StructuredType | TypeParameter | Index | IndexedAccess | StringLike | NumberLike | BooleanLike | ESSymbol | Spread,
         NotUnionOrUnit = Any | ESSymbol | Object,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
@@ -2929,6 +2936,13 @@ namespace ts {
     export type StructuredType = ObjectType | UnionType | IntersectionType;
 
     /* @internal */
+    export interface SpreadType extends Type {
+        left: SpreadType | ResolvedType;
+        // Note: probably should just make this to be Type now
+        right: TypeParameter | IntersectionType | IndexType | IndexedAccessType | ResolvedType;
+    }
+
+    /* @internal */
     // An instantiated anonymous type has a target and a mapper
     export interface AnonymousType extends ObjectType {
         target?: AnonymousType;  // Instantiation target
@@ -2951,7 +2965,7 @@ namespace ts {
     }
 
     /* @internal */
-    // Resolved object, union, or intersection type
+    // Resolved object, spread, union, or intersection type
     export interface ResolvedType extends ObjectType, UnionOrIntersectionType {
         members: SymbolTable;              // Properties by name
         properties: Symbol[];              // Properties

@@ -76,6 +76,8 @@ namespace ts {
                     visitNode(cbNode, (<ShorthandPropertyAssignment>node).objectAssignmentInitializer);
             case SyntaxKind.SpreadAssignment:
                 return visitNode(cbNode, (<SpreadAssignment>node).expression);
+            case SyntaxKind.SpreadTypeAssignment:
+                return visitNode(cbNode, (node as SpreadTypeAssignment).type);
             case SyntaxKind.Parameter:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
@@ -2375,6 +2377,9 @@ namespace ts {
             if (token() === SyntaxKind.OpenBracketToken) {
                 return true;
             }
+            if (token() === SyntaxKind.DotDotDotToken) {
+                return true;
+            }
             // Try to get the first property-like token following all modifiers
             if (isLiteralPropertyName()) {
                 idToken = token();
@@ -2394,11 +2399,17 @@ namespace ts {
         }
 
         function parseTypeMember(): TypeElement {
-            if (token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.LessThanToken) {
-                return parseSignatureMember(SyntaxKind.CallSignature);
-            }
-            if (token() === SyntaxKind.NewKeyword && lookAhead(isStartOfConstructSignature)) {
-                return parseSignatureMember(SyntaxKind.ConstructSignature);
+            switch (token()) {
+                case SyntaxKind.OpenParenToken:
+                case SyntaxKind.LessThanToken:
+                    return parseSignatureMember(SyntaxKind.CallSignature);
+                case SyntaxKind.NewKeyword:
+                    if (lookAhead(isStartOfConstructSignature)) {
+                        return parseSignatureMember(SyntaxKind.ConstructSignature);
+                    }
+                    break;
+                case SyntaxKind.DotDotDotToken:
+                    return parseSpreadTypeAssignment();
             }
             const fullStart = getNodePos();
             const modifiers = parseModifiers();
@@ -2406,6 +2417,14 @@ namespace ts {
                 return parseIndexSignatureDeclaration(fullStart, /*decorators*/ undefined, modifiers);
             }
             return parsePropertyOrMethodSignature(fullStart, modifiers);
+        }
+
+        function parseSpreadTypeAssignment() {
+            const element = createNode(SyntaxKind.SpreadTypeAssignment, scanner.getStartPos()) as SpreadTypeAssignment;
+            parseTokenNode<Node>(); // parse `...`
+            element.type = parseType();
+            parseTypeMemberSemicolon();
+            return finishNode(element);
         }
 
         function isStartOfConstructSignature() {
