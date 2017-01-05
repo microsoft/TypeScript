@@ -70,7 +70,6 @@ var C5 = (function (_super) {
 var C5a = (function (_super) {
     __extends(C5a, _super);
     function C5a() {
-        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C5a;
 }(null));
