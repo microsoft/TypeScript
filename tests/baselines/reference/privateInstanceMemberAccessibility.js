@@ -27,7 +27,7 @@ var Base = (function () {
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        var _this = _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.x = _super.prototype.foo; // error
         _this.z = _super.prototype.foo; // error
         return _this;

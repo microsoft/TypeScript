@@ -92,11 +92,11 @@ sourceFile:tests/cases/compiler/b.ts
 ---
 >>>        function B() {
 1 >^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 1 >Emitted(19, 9) Source(2, 1) + SourceIndex(1)
 ---
->>>            return _super.apply(this, arguments) || this;
+>>>            return _super !== null && _super.apply(this, arguments) || this;
 >>>        }
 1->^^^^^^^^
 2 >        ^

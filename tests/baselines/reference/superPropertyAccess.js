@@ -61,7 +61,7 @@ var MyBase = (function () {
 var MyDerived = (function (_super) {
     __extends(MyDerived, _super);
     function MyDerived() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     MyDerived.prototype.foo = function () {
         _super.prototype.m1.call(this, "hi"); // Should be allowed, method on base prototype

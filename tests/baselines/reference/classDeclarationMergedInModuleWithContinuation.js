@@ -33,7 +33,7 @@ var M;
     var O = (function (_super) {
         __extends(O, _super);
         function O() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return O;
     }(M.N));

@@ -33,7 +33,7 @@ var A = (function () {
 var C2 = (function (_super) {
     __extends(C2, _super);
     function C2() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C2;
 }(A));

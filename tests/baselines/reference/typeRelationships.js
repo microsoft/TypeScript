@@ -72,7 +72,7 @@ var C = (function () {
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        var _this = _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.self1 = _this;
         _this.self2 = _this.self;
         _this.self3 = _this.foo();

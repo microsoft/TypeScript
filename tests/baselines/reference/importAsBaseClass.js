@@ -30,7 +30,7 @@ var Greeter = require("./importAsBaseClass_0");
 var Hello = (function (_super) {
     __extends(Hello, _super);
     function Hello() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return Hello;
 }(Greeter));

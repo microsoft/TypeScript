@@ -42,7 +42,7 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     B.prototype.bar = function () { _super.prototype.foo.call(this); };
     B.prototype.baz = function () { return this.foo; };
@@ -51,7 +51,7 @@ var B = (function (_super) {
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     C.prototype.foo = function () { return 2; };
     C.prototype.qux = function () { return _super.prototype.foo.call(this) || _super.prototype.foo; }; // 2 errors, foo is abstract
@@ -68,7 +68,7 @@ var AA = (function () {
 var BB = (function (_super) {
     __extends(BB, _super);
     function BB() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return BB;
 }(AA));

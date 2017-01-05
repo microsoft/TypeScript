@@ -55,14 +55,14 @@ var g = function f(x) { var y; return y; };
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return D;
 }(I));
 var D2 = (function (_super) {
     __extends(D2, _super);
     function D2() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return D2;
 }(M.C));

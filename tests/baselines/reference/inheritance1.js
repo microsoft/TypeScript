@@ -75,7 +75,7 @@ var Control = (function () {
 var Button = (function (_super) {
     __extends(Button, _super);
     function Button() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     Button.prototype.select = function () { };
     return Button;
@@ -83,7 +83,7 @@ var Button = (function (_super) {
 var TextBox = (function (_super) {
     __extends(TextBox, _super);
     function TextBox() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     TextBox.prototype.select = function () { };
     return TextBox;
@@ -91,14 +91,14 @@ var TextBox = (function (_super) {
 var ImageBase = (function (_super) {
     __extends(ImageBase, _super);
     function ImageBase() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return ImageBase;
 }(Control));
 var Image1 = (function (_super) {
     __extends(Image1, _super);
     function Image1() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return Image1;
 }(Control));

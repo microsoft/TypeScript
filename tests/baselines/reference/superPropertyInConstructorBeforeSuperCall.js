@@ -30,7 +30,7 @@ var B = (function () {
 var C1 = (function (_super) {
     __extends(C1, _super);
     function C1() {
-        var _this;
+        var _this = this;
         _super.prototype.x.call(_this);
         _this = _super.call(this) || this;
         return _this;

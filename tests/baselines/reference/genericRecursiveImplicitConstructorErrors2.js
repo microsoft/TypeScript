@@ -57,7 +57,7 @@ var TypeScript2;
     var PullTypeSymbol = (function (_super) {
         __extends(PullTypeSymbol, _super);
         function PullTypeSymbol() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return PullTypeSymbol;
     }(PullSymbol));

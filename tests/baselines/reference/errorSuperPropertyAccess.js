@@ -247,7 +247,7 @@ var SomeDerived2 = (function (_super) {
 var SomeDerived3 = (function (_super) {
     __extends(SomeDerived3, _super);
     function SomeDerived3() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     SomeDerived3.fn = function () {
         _super.publicStaticMember = 3;

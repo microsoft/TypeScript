@@ -61,7 +61,7 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     B.prototype.g = function () {
         var t1 = this.x;
@@ -93,7 +93,7 @@ var B = (function (_super) {
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
 }(A));

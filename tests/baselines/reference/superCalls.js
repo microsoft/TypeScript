@@ -64,7 +64,7 @@ var OtherBase = (function () {
 var OtherDerived = (function (_super) {
     __extends(OtherDerived, _super);
     function OtherDerived() {
-        var _this;
+        var _this = this;
         var p = '';
         _this = _super.call(this) || this;
         return _this;

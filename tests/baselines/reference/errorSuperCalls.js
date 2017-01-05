@@ -132,7 +132,7 @@ var Derived = (function (_super) {
     __extends(Derived, _super);
     //super call with type arguments 
     function Derived() {
-        var _this;
+        var _this = this;
         _super.prototype..call(_this);
         _this = _super.call(this) || this;
         return _this;
@@ -147,7 +147,7 @@ var OtherBase = (function () {
 var OtherDerived = (function (_super) {
     __extends(OtherDerived, _super);
     function OtherDerived() {
-        var _this = _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         //super call in class member initializer of derived type
         _this.t = _this = _super.call(this) || this;
         return _this;

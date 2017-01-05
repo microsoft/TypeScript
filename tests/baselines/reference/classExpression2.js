@@ -16,7 +16,7 @@ var D = (function () {
 var v = (function (_super) {
     __extends(C, _super);
     function C() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
 }(D));

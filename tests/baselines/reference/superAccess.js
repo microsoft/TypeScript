@@ -30,7 +30,7 @@ MyBase.S1 = 5;
 var MyDerived = (function (_super) {
     __extends(MyDerived, _super);
     function MyDerived() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     MyDerived.prototype.foo = function () {
         var l3 = _super.prototype.S1; // Expected => Error: Only public instance methods of the base class are accessible via the 'super' keyword

@@ -28,7 +28,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 var A = (function (_super) {
     __extends(A, _super);
     function A() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     A.prototype.foo = function () { this.bar(); };
     return A;

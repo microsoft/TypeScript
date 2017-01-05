@@ -91,7 +91,7 @@ exports.g = C.F5();
 var h = (function (_super) {
     __extends(h, _super);
     function h() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return h;
 }(C.A));

@@ -29,7 +29,7 @@ var Based = (function () {
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        var _this;
+        var _this = this;
         var innver = (function () {
             function innver() {
                 this.y = true;

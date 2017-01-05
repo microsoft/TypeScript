@@ -31,7 +31,7 @@ var Base = (function () {
 var Subclass = (function (_super) {
     __extends(Subclass, _super);
     function Subclass() {
-        var _this = _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.instance1_1 = new Base(); // allowed
         _this.instance1_2 = new Subclass(); // allowed
         return _this;
@@ -41,7 +41,7 @@ var Subclass = (function (_super) {
 var SubclassOfSubclass = (function (_super) {
     __extends(SubclassOfSubclass, _super);
     function SubclassOfSubclass() {
-        var _this = _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.instance2_1 = new Base(); // allowed
         _this.instance2_2 = new Subclass(); // allowed
         _this.instance2_3 = new SubclassOfSubclass(); // allowed

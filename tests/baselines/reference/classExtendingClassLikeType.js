@@ -68,7 +68,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 var D0 = (function (_super) {
     __extends(D0, _super);
     function D0() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return D0;
 }(Base));
@@ -107,7 +107,7 @@ var D3 = (function (_super) {
 var D4 = (function (_super) {
     __extends(D4, _super);
     function D4() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return D4;
 }(getBase()));
@@ -115,7 +115,7 @@ var D4 = (function (_super) {
 var D5 = (function (_super) {
     __extends(D5, _super);
     function D5() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return D5;
 }(getBadBase()));

@@ -23,7 +23,7 @@ var Foo = (function () {
 var Foo2 = (function (_super) {
     __extends(Foo2, _super);
     function Foo2() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     Foo2.prototype.x = function () {
         var lambda = function (_super) {

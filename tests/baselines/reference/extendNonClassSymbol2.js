@@ -18,7 +18,7 @@ var x = new Foo(); // legal, considered a constructor function
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
 }(Foo)); // error, could not find symbol Foo

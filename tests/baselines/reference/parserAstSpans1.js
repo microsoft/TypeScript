@@ -363,7 +363,7 @@ c2_i.nc_f1();
 var c4 = (function (_super) {
     __extends(c4, _super);
     function c4() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return c4;
 }(c2));

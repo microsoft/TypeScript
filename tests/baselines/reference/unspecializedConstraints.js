@@ -169,7 +169,7 @@ var ts;
     var Type = (function (_super) {
         __extends(Type, _super);
         function Type() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         Type.prototype.equals = function (that) {
             if (this === that)

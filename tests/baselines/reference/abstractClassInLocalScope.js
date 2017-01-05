@@ -22,7 +22,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     var B = (function (_super) {
         __extends(B, _super);
         function B() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return B;
     }(A));

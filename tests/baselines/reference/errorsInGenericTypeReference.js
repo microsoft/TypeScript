@@ -135,7 +135,7 @@ var testClass6 = (function () {
 var testClass7 = (function (_super) {
     __extends(testClass7, _super);
     function testClass7() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return testClass7;
 }(Foo)); // error: could not find symbol V

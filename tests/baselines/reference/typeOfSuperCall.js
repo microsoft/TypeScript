@@ -22,7 +22,7 @@ var C = (function () {
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        var _this;
+        var _this = this;
         var x = _this = _super.call(this) || this;
         return _this;
     }

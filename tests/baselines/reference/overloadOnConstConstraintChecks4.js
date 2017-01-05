@@ -27,7 +27,7 @@ var Z = (function () {
 var A = (function (_super) {
     __extends(A, _super);
     function A() {
-        var _this = _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.x = 1;
         return _this;
     }
@@ -36,14 +36,14 @@ var A = (function (_super) {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     C.prototype.foo = function () { };
     return C;

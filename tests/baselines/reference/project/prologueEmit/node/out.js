@@ -18,7 +18,7 @@ var m;
     var child = (function (_super) {
         __extends(child, _super);
         function child() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return child;
     }(base));

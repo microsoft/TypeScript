@@ -63,7 +63,7 @@ var M;
         var E = (function (_super) {
             __extends(E, _super);
             function E() {
-                return _super.apply(this, arguments) || this;
+                return _super !== null && _super.apply(this, arguments) || this;
             }
             return E;
         }(C));

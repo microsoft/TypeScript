@@ -37,7 +37,7 @@ var a = (function () {
 var b = (function (_super) {
     __extends(b, _super);
     function b() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     b.x = function () {
         return "20";

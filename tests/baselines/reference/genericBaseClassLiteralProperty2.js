@@ -35,7 +35,7 @@ var BaseCollection2 = (function () {
 var DataView2 = (function (_super) {
     __extends(DataView2, _super);
     function DataView2() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     DataView2.prototype.fillItems = function (item) {
         this._itemsByKey['dummy'] = item;

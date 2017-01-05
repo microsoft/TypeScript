@@ -28,7 +28,7 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        var _this;
+        var _this = this;
         if (true) {
             _this = _super.call(this, 'a1', 'b1') || this;
         }

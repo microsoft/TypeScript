@@ -63,7 +63,7 @@ var Base = (function () {
 var Derived1 = (function (_super) {
     __extends(Derived1, _super);
     function Derived1() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     Derived1.staticMethod1 = function () {
         Base.x; // OK, accessed within a class derived from their declaring class
@@ -76,7 +76,7 @@ var Derived1 = (function (_super) {
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     Derived2.staticMethod2 = function () {
         Base.x; // OK, accessed within a class derived from their declaring class
@@ -89,7 +89,7 @@ var Derived2 = (function (_super) {
 var Derived3 = (function (_super) {
     __extends(Derived3, _super);
     function Derived3() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     Derived3.staticMethod3 = function () {
         Base.x; // OK, accessed within a class derived from their declaring class

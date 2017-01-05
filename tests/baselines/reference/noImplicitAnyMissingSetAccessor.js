@@ -25,7 +25,7 @@ var Parent = (function () {
 var Child = (function (_super) {
     __extends(Child, _super);
     function Child() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     Object.defineProperty(Child.prototype, "message", {
         get: function () {

@@ -51,7 +51,7 @@ var Backbone = require("./extendingClassFromAliasAndUsageInIndexer_backbone");
 var VisualizationModel = (function (_super) {
     __extends(VisualizationModel, _super);
     function VisualizationModel() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return VisualizationModel;
 }(Backbone.Model));
@@ -67,7 +67,7 @@ var Backbone = require("./extendingClassFromAliasAndUsageInIndexer_backbone");
 var VisualizationModel = (function (_super) {
     __extends(VisualizationModel, _super);
     function VisualizationModel() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return VisualizationModel;
 }(Backbone.Model));

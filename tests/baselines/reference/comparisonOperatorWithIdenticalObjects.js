@@ -227,14 +227,14 @@ var Base = (function () {
 var A2 = (function (_super) {
     __extends(A2, _super);
     function A2() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return A2;
 }(Base));
 var B2 = (function (_super) {
     __extends(B2, _super);
     function B2() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return B2;
 }(Base));

@@ -882,7 +882,10 @@ namespace ts {
 
             }
 
-            const superCaptureStatus = declareOrCaptureOrReturnThisForConstructorIfNeeded(statements, constructor, !!extendsClauseElement, hasSynthesizedSuper, statementOffset);
+            // determine whether the class is known syntactically to be a derived class (e.g. a
+            // class that extends a value that is not syntactically known to be `null`).
+            const isDerivedClass = extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword;
+            const superCaptureStatus = declareOrCaptureOrReturnThisForConstructorIfNeeded(statements, constructor, isDerivedClass, hasSynthesizedSuper, statementOffset);
 
             // The last statement expression was replaced. Skip it.
             if (superCaptureStatus === SuperCaptureResult.ReplaceSuperCapture || superCaptureStatus === SuperCaptureResult.ReplaceWithReturn) {
@@ -899,7 +902,7 @@ namespace ts {
 
             // Return `_this` unless we're sure enough that it would be pointless to add a return statement.
             // If there's a constructor that we can tell returns in enough places, then we *do not* want to add a return.
-            if (extendsClauseElement
+            if (isDerivedClass
                 && superCaptureStatus !== SuperCaptureResult.ReplaceWithReturn
                 && !(constructor && isSufficientlyCoveredByReturnStatements(constructor.body))) {
                 statements.push(
@@ -963,11 +966,11 @@ namespace ts {
         function declareOrCaptureOrReturnThisForConstructorIfNeeded(
                     statements: Statement[],
                     ctor: ConstructorDeclaration | undefined,
-                    hasExtendsClause: boolean,
+                    isDerivedClass: boolean,
                     hasSynthesizedSuper: boolean,
                     statementOffset: number) {
             // If this isn't a derived class, just capture 'this' for arrow functions if necessary.
-            if (!hasExtendsClause) {
+            if (!isDerivedClass) {
                 if (ctor) {
                     addCaptureThisForNodeIfNeeded(statements, ctor);
                 }
@@ -1047,7 +1050,7 @@ namespace ts {
             }
 
             // Perform the capture.
-            captureThisForNode(statements, ctor, superCallExpression, firstStatement);
+            captureThisForNode(statements, ctor, superCallExpression || createActualThis(), firstStatement);
 
             // If we're actually replacing the original statement, we need to signal this to the caller.
             if (superCallExpression) {
@@ -1057,15 +1060,25 @@ namespace ts {
             return SuperCaptureResult.NoReplacement;
         }
 
+        function createActualThis() {
+            return setEmitFlags(createThis(), EmitFlags.NoSubstitution);
+        }
+
         function createDefaultSuperCallOrThis() {
-            const actualThis = createThis();
-            setEmitFlags(actualThis, EmitFlags.NoSubstitution);
-            const superCall = createFunctionApply(
-                createIdentifier("_super"),
-                actualThis,
-                createIdentifier("arguments"),
+            return createLogicalOr(
+                createLogicalAnd(
+                    createStrictInequality(
+                        createIdentifier("_super"),
+                        createNull()
+                    ),
+                    createFunctionApply(
+                        createIdentifier("_super"),
+                        createActualThis(),
+                        createIdentifier("arguments")
+                    )
+                ),
+                createActualThis()
             );
-            return createLogicalOr(superCall, actualThis);
         }
 
         /**

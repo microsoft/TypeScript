@@ -145,14 +145,14 @@ var C = (function () {
 var PA = (function (_super) {
     __extends(PA, _super);
     function PA() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return PA;
 }(A));
 var PB = (function (_super) {
     __extends(PB, _super);
     function PB() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return PB;
 }(B));

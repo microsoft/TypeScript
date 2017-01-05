@@ -39,28 +39,28 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
 }(A)); // error -- inherits abstract methods
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return D;
 }(A)); // error -- inherits abstract methods
 var E = (function (_super) {
     __extends(E, _super);
     function E() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     E.prototype.foo = function () { return this.t; };
     return E;
@@ -68,7 +68,7 @@ var E = (function (_super) {
 var F = (function (_super) {
     __extends(F, _super);
     function F() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     F.prototype.bar = function (t) { };
     return F;
@@ -76,7 +76,7 @@ var F = (function (_super) {
 var G = (function (_super) {
     __extends(G, _super);
     function G() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     G.prototype.foo = function () { return this.t; };
     G.prototype.bar = function (t) { };

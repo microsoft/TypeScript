@@ -52,7 +52,7 @@ function Greet(x) {
 var BigGreeter = (function (_super) {
     __extends(BigGreeter, _super);
     function BigGreeter() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     BigGreeter.prototype.render = function () {
         return <div></div>;

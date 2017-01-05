@@ -74,7 +74,7 @@ var SomeBase = (function () {
 var SomeDerived = (function (_super) {
     __extends(SomeDerived, _super);
     function SomeDerived() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return SomeDerived;
 }(SomeBase));

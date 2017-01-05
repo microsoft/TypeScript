@@ -56,14 +56,14 @@ var Base = (function () {
 var Derived1 = (function (_super) {
     __extends(Derived1, _super);
     function Derived1() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived1;
 }(Base));
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived2;
 }(Base));

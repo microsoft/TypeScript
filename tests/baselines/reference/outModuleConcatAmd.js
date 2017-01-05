@@ -28,7 +28,7 @@ define("b", ["require", "exports", "ref/a"], function (require, exports, a_1) {
     var B = (function (_super) {
         __extends(B, _super);
         function B() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return B;
     }(a_1.A));

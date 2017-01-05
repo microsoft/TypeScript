@@ -27,49 +27,49 @@ function foo() {
 var C1 = (function (_super) {
     __extends(C1, _super);
     function C1() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C1;
 }(undefined));
 var C2 = (function (_super) {
     __extends(C2, _super);
     function C2() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C2;
 }(true));
 var C3 = (function (_super) {
     __extends(C3, _super);
     function C3() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C3;
 }(false));
 var C4 = (function (_super) {
     __extends(C4, _super);
     function C4() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C4;
 }(42));
 var C5 = (function (_super) {
     __extends(C5, _super);
     function C5() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C5;
 }("hello"));
 var C6 = (function (_super) {
     __extends(C6, _super);
     function C6() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C6;
 }(x));
 var C7 = (function (_super) {
     __extends(C7, _super);
     function C7() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C7;
 }(foo));

@@ -33,21 +33,21 @@ function getSomething() {
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
 }(getSomething()));
 var C2 = (function (_super) {
     __extends(C2, _super);
     function C2() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C2;
 }(SomeUndefinedFunction()));
 var C3 = (function (_super) {
     __extends(C3, _super);
     function C3() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C3;
 }(SomeUndefinedFunction));

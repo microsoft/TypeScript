@@ -38,7 +38,7 @@ var Foo = (function () {
 var b = (function (_super) {
     __extends(b, _super);
     function b() {
-        var _this = _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.prop2 = {
             doStuff: function () {
                 var _super = 10; // Should be error 

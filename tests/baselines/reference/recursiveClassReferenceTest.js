@@ -188,7 +188,7 @@ var AbstractMode = (function () {
                 var Mode = (function (_super) {
                     __extends(Mode, _super);
                     function Mode() {
-                        return _super.apply(this, arguments) || this;
+                        return _super !== null && _super.apply(this, arguments) || this;
                     }
                     // scenario 2
                     Mode.prototype.getInitialState = function () {

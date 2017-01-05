@@ -314,7 +314,7 @@ var BaseClassWithConstructor = (function () {
 var ChildClassWithoutConstructor = (function (_super) {
     __extends(ChildClassWithoutConstructor, _super);
     function ChildClassWithoutConstructor() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return ChildClassWithoutConstructor;
 }(BaseClassWithConstructor));

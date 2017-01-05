@@ -43,7 +43,7 @@ var User = (function () {
 var RegisteredUser = (function (_super) {
     __extends(RegisteredUser, _super);
     function RegisteredUser() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     RegisteredUser.prototype.f = function () {
         (function () {

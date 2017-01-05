@@ -57,7 +57,7 @@ var B = (function () {
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        var _this = _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.ro = "readonly please";
         return _this;
     }
@@ -78,7 +78,7 @@ var WrongTypeProperty = (function () {
 var WrongTypePropertyImpl = (function (_super) {
     __extends(WrongTypePropertyImpl, _super);
     function WrongTypePropertyImpl() {
-        var _this = _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.num = "nope, wrong";
         return _this;
     }
@@ -92,7 +92,7 @@ var WrongTypeAccessor = (function () {
 var WrongTypeAccessorImpl = (function (_super) {
     __extends(WrongTypeAccessorImpl, _super);
     function WrongTypeAccessorImpl() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     Object.defineProperty(WrongTypeAccessorImpl.prototype, "num", {
         get: function () { return "nope, wrong"; },
@@ -104,7 +104,7 @@ var WrongTypeAccessorImpl = (function (_super) {
 var WrongTypeAccessorImpl2 = (function (_super) {
     __extends(WrongTypeAccessorImpl2, _super);
     function WrongTypeAccessorImpl2() {
-        var _this = _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.num = "nope, wrong";
         return _this;
     }
