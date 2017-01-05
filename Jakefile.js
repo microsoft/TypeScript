@@ -184,6 +184,7 @@ var servicesSources = [
 }));
 
 var baseServerCoreSources = [
+	"builder.ts",
     "editorServices.ts",
     "lsHost.ts",
     "project.ts",
