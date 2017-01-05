@@ -35,11 +35,16 @@ class Baad extends Good {
 
 
 //// [inheritance.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var B1 = (function () {
     function B1() {
     }
@@ -53,14 +58,14 @@ var B2 = (function () {
 var D1 = (function (_super) {
     __extends(D1, _super);
     function D1() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return D1;
 }(B1));
 var D2 = (function (_super) {
     __extends(D2, _super);
     function D2() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return D2;
 }(B2));
@@ -72,7 +77,7 @@ var N = (function () {
 var ND = (function (_super) {
     __extends(ND, _super);
     function ND() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return ND;
 }(N));
@@ -86,7 +91,7 @@ var Good = (function () {
 var Baad = (function (_super) {
     __extends(Baad, _super);
     function Baad() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     Baad.prototype.f = function () { return 0; };
     Baad.prototype.g = function (n) { return 0; };

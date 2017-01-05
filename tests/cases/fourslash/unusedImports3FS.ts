@@ -20,5 +20,5 @@
 ////
 //// }
 
-verify.codeFixAtPosition(`import {test, test2} from "./file1"`);
+verify.rangeAfterCodeFix(`import {test, test2} from "./file1"`);
 

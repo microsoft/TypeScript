@@ -5,4 +5,4 @@
 ////    [|constructor(public p1: string, public p2: boolean, private p3: any, p5)|] { p5; }
 //// }
 
-verify.codeFixAtPosition("constructor(public p1: string, public p2: boolean, p5)");
+verify.rangeAfterCodeFix("constructor(public p1: string, public p2: boolean, p5)");

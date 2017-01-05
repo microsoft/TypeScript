@@ -660,6 +660,8 @@ namespace ts {
                     return emitAsExpression(<AsExpression>node);
                 case SyntaxKind.NonNullExpression:
                     return emitNonNullExpression(<NonNullExpression>node);
+                case SyntaxKind.MetaProperty:
+                    return emitMetaProperty(<MetaProperty>node);
 
                 // JSX
                 case SyntaxKind.JsxElement:
@@ -670,8 +672,6 @@ namespace ts {
                 // Transformation nodes
                 case SyntaxKind.PartiallyEmittedExpression:
                     return emitPartiallyEmittedExpression(<PartiallyEmittedExpression>node);
-                case SyntaxKind.RawExpression:
-                    return writeLines((<RawExpression>node).text);
             }
         }
 
@@ -1249,6 +1249,12 @@ namespace ts {
             write("!");
         }
 
+        function emitMetaProperty(node: MetaProperty) {
+            writeToken(node.keywordToken, node.pos);
+            write(".");
+            emit(node.name);
+        }
+
         //
         // Misc
         //
@@ -1305,28 +1311,28 @@ namespace ts {
             writeToken(SyntaxKind.OpenParenToken, openParenPos, node);
             emitExpression(node.expression);
             writeToken(SyntaxKind.CloseParenToken, node.expression.end, node);
-            emitEmbeddedStatement(node.thenStatement);
+            emitEmbeddedStatement(node, node.thenStatement);
             if (node.elseStatement) {
-                writeLine();
+                writeLineOrSpace(node);
                 writeToken(SyntaxKind.ElseKeyword, node.thenStatement.end, node);
                 if (node.elseStatement.kind === SyntaxKind.IfStatement) {
                     write(" ");
                     emit(node.elseStatement);
                 }
                 else {
-                    emitEmbeddedStatement(node.elseStatement);
+                    emitEmbeddedStatement(node, node.elseStatement);
                 }
             }
         }
 
         function emitDoStatement(node: DoStatement) {
             write("do");
-            emitEmbeddedStatement(node.statement);
+            emitEmbeddedStatement(node, node.statement);
             if (isBlock(node.statement)) {
                 write(" ");
             }
             else {
-                writeLine();
+                writeLineOrSpace(node);
             }
 
             write("while (");
@@ -1338,7 +1344,7 @@ namespace ts {
             write("while (");
             emitExpression(node.expression);
             write(")");
-            emitEmbeddedStatement(node.statement);
+            emitEmbeddedStatement(node, node.statement);
         }
 
         function emitForStatement(node: ForStatement) {
@@ -1351,7 +1357,7 @@ namespace ts {
             write(";");
             emitExpressionWithPrefix(" ", node.incrementor);
             write(")");
-            emitEmbeddedStatement(node.statement);
+            emitEmbeddedStatement(node, node.statement);
         }
 
         function emitForInStatement(node: ForInStatement) {
@@ -1362,7 +1368,7 @@ namespace ts {
             write(" in ");
             emitExpression(node.expression);
             writeToken(SyntaxKind.CloseParenToken, node.expression.end);
-            emitEmbeddedStatement(node.statement);
+            emitEmbeddedStatement(node, node.statement);
         }
 
         function emitForOfStatement(node: ForOfStatement) {
@@ -1373,7 +1379,7 @@ namespace ts {
             write(" of ");
             emitExpression(node.expression);
             writeToken(SyntaxKind.CloseParenToken, node.expression.end);
-            emitEmbeddedStatement(node.statement);
+            emitEmbeddedStatement(node, node.statement);
         }
 
         function emitForBinding(node: VariableDeclarationList | Expression) {
@@ -1409,7 +1415,7 @@ namespace ts {
             write("with (");
             emitExpression(node.expression);
             write(")");
-            emitEmbeddedStatement(node.statement);
+            emitEmbeddedStatement(node, node.statement);
         }
 
         function emitSwitchStatement(node: SwitchStatement) {
@@ -1437,9 +1443,12 @@ namespace ts {
         function emitTryStatement(node: TryStatement) {
             write("try ");
             emit(node.tryBlock);
-            emit(node.catchClause);
+            if (node.catchClause) {
+                writeLineOrSpace(node);
+                emit(node.catchClause);
+            }
             if (node.finallyBlock) {
-                writeLine();
+                writeLineOrSpace(node);
                 write("finally ");
                 emit(node.finallyBlock);
             }
@@ -1851,6 +1860,9 @@ namespace ts {
         function emitJsxExpression(node: JsxExpression) {
             if (node.expression) {
                 write("{");
+                if (node.dotDotDotToken) {
+                    write("...");
+                }
                 emitExpression(node.expression);
                 write("}");
             }
@@ -2125,8 +2137,8 @@ namespace ts {
             }
         }
 
-        function emitEmbeddedStatement(node: Statement) {
-            if (isBlock(node)) {
+        function emitEmbeddedStatement(parent: Node, node: Statement) {
+            if (isBlock(node) || getEmitFlags(parent) & EmitFlags.SingleLine) {
                 write(" ");
                 emit(node);
             }
@@ -2288,6 +2300,15 @@ namespace ts {
 
             if (format & ListFormat.BracketsMask) {
                 write(getClosingBracket(format));
+            }
+        }
+
+        function writeLineOrSpace(node: Node) {
+            if (getEmitFlags(node) & EmitFlags.SingleLine) {
+                write(" ");
+            }
+            else {
+                writeLine();
             }
         }
 
@@ -2571,6 +2592,13 @@ namespace ts {
             return makeUniqueName("class");
         }
 
+        function generateNameForMethodOrAccessor(node: MethodDeclaration | AccessorDeclaration) {
+            if (isIdentifier(node.name)) {
+                return generateNameForNodeCached(node.name);
+            }
+            return makeTempVariableName(TempFlags.Auto);
+        }
+
         /**
          * Generates a unique name from a node.
          *
@@ -2592,6 +2620,10 @@ namespace ts {
                     return generateNameForExportDefault();
                 case SyntaxKind.ClassExpression:
                     return generateNameForClassExpression();
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    return generateNameForMethodOrAccessor(<MethodDeclaration | AccessorDeclaration>node);
                 default:
                     return makeTempVariableName(TempFlags.Auto);
             }
@@ -2642,6 +2674,11 @@ namespace ts {
             return node;
         }
 
+        function generateNameForNodeCached(node: Node) {
+            const nodeId = getNodeId(node);
+            return nodeIdToGeneratedName[nodeId] || (nodeIdToGeneratedName[nodeId] = unescapeIdentifier(generateNameForNode(node)));
+        }
+
         /**
          * Gets the generated identifier text from a generated identifier.
          *
@@ -2652,8 +2689,7 @@ namespace ts {
                 // Generated names generate unique names based on their original node
                 // and are cached based on that node's id
                 const node = getNodeForGeneratedName(name);
-                const nodeId = getNodeId(node);
-                return nodeIdToGeneratedName[nodeId] || (nodeIdToGeneratedName[nodeId] = unescapeIdentifier(generateNameForNode(node)));
+                return generateNameForNodeCached(node);
             }
             else {
                 // Auto, Loop, and Unique names are cached based on their unique

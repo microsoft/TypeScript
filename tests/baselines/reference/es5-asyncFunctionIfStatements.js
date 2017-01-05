@@ -36,8 +36,7 @@ function ifStatement2() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!x)
-                        return [3 /*break*/, 2];
+                    if (!x) return [3 /*break*/, 2];
                     return [4 /*yield*/, y];
                 case 1:
                     _a.sent();
@@ -55,8 +54,7 @@ function ifStatement3() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!x)
-                        return [3 /*break*/, 1];
+                    if (!x) return [3 /*break*/, 1];
                     y;
                     return [3 /*break*/, 3];
                 case 1: return [4 /*yield*/, z];

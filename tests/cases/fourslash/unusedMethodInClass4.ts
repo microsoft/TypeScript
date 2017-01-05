@@ -8,5 +8,5 @@
 ////    } |]
 ////}
 
-verify.codeFixAtPosition(`public function2(){
+verify.rangeAfterCodeFix(`public function2(){
 }`);

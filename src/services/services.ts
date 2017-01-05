@@ -24,7 +24,7 @@
 /// <reference path='transpile.ts' />
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='formatting\smartIndenter.ts' />
-/// <reference path='codefixes\codeFixProvider.ts' />
+/// <reference path='codeFixProvider.ts' />
 /// <reference path='codefixes\fixes.ts' />
 
 namespace ts {
@@ -1793,7 +1793,7 @@ namespace ts {
                     }
 
                     let descriptor: TodoCommentDescriptor = undefined;
-                    for (let i = 0, n = descriptors.length; i < n; i++) {
+                    for (let i = 0; i < descriptors.length; i++) {
                         if (matchArray[i + firstDescriptorCaptureIndex]) {
                             descriptor = descriptors[i];
                         }

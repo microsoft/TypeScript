@@ -257,8 +257,9 @@ namespace ts.server {
                     info.detachFromProject(this);
                 }
             }
-            else {
-                // release all root files
+            if (!this.program || !this.languageServiceEnabled) {
+                // release all root files either if there is no program or language service is disabled.
+                // in the latter case set of root files can be larger than the set of files in program.
                 for (const root of this.rootFiles) {
                     root.detachFromProject(this);
                 }

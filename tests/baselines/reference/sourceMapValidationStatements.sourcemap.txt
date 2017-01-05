@@ -525,9 +525,9 @@ sourceFile:sourceMapValidationStatements.ts
 3 >     ^^^^^^^^^^^->
 1 >
   >    
-2 >    } 
+2 >    }
 1 >Emitted(30, 5) Source(29, 5) + SourceIndex(0)
-2 >Emitted(30, 6) Source(29, 7) + SourceIndex(0)
+2 >Emitted(30, 6) Source(29, 6) + SourceIndex(0)
 ---
 >>>    catch (e) {
 1->^^^^
@@ -539,7 +539,7 @@ sourceFile:sourceMapValidationStatements.ts
 7 >             ^
 8 >              ^
 9 >               ^^^^^^^^^^^->
-1->
+1-> 
 2 >    catch
 3 >          
 4 >          (
@@ -727,9 +727,9 @@ sourceFile:sourceMapValidationStatements.ts
 3 >     ^^^^^^^^^^^^->
 1 >
   >    
-2 >    } 
+2 >    }
 1 >Emitted(41, 5) Source(38, 5) + SourceIndex(0)
-2 >Emitted(41, 6) Source(38, 7) + SourceIndex(0)
+2 >Emitted(41, 6) Source(38, 6) + SourceIndex(0)
 ---
 >>>    catch (e1) {
 1->^^^^
@@ -741,7 +741,7 @@ sourceFile:sourceMapValidationStatements.ts
 7 >              ^
 8 >               ^
 9 >                ^^^^->
-1->
+1-> 
 2 >    catch
 3 >          
 4 >          (

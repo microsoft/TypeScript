@@ -675,8 +675,7 @@ namespace ts {
             }
 
             // find the child that contains 'position'
-            for (let i = 0, n = current.getChildCount(sourceFile); i < n; i++) {
-                const child = current.getChildAt(i);
+            for (const child of current.getChildren()) {
                 // all jsDocComment nodes were already visited
                 if (isJSDocNode(child)) {
                     continue;
@@ -766,7 +765,7 @@ namespace ts {
             }
 
             const children = n.getChildren();
-            for (let i = 0, len = children.length; i < len; i++) {
+            for (let i = 0; i < children.length; i++) {
                 const child = children[i];
                 // condition 'position < child.end' checks if child node end after the position
                 // in the example below this condition will be false for 'aaaa' and 'bbbb' and true for 'ccc'
@@ -1358,5 +1357,10 @@ namespace ts {
             configJsonObject: config || {},
             diagnostics: error ? concatenate(diagnostics, [error]) : diagnostics
         };
+    }
+
+    export function getOpenBraceEnd(constructor: ConstructorDeclaration, sourceFile: SourceFile) {
+        // First token is the open curly, this is where we want to put the 'super' call.
+        return constructor.body.getFirstToken(sourceFile).getEnd();
     }
 }

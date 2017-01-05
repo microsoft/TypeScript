@@ -112,7 +112,10 @@ namespace ts.codefix {
     }
 
     registerCodeFix({
-        errorCodes: [Diagnostics.Cannot_find_name_0.code],
+        errorCodes: [
+            Diagnostics.Cannot_find_name_0.code,
+            Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code
+        ],
         getCodeActions: (context: CodeFixContext) => {
             const sourceFile = context.sourceFile;
             const checker = context.program.getTypeChecker();
@@ -127,6 +130,12 @@ namespace ts.codefix {
             const cachedImportDeclarations = createMap<(ImportDeclaration | ImportEqualsDeclaration)[]>();
             let cachedNewImportInsertPosition: number;
 
+            const currentTokenMeaning = getMeaningFromLocation(token);
+            if (context.errorCode === Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code) {
+                const symbol = checker.getAliasedSymbol(checker.getSymbolAtLocation(token));
+                return getCodeActionForImport(symbol, /*isDefault*/ false, /*isNamespaceImport*/ true);
+            }
+
             const allPotentialModules = checker.getAmbientModules();
             for (const otherSourceFile of allSourceFiles) {
                 if (otherSourceFile !== sourceFile && isExternalOrCommonJsModule(otherSourceFile)) {
@@ -134,7 +143,6 @@ namespace ts.codefix {
                 }
             }
 
-            const currentTokenMeaning = getMeaningFromLocation(token);
             for (const moduleSymbol of allPotentialModules) {
                 context.cancellationToken.throwIfCancellationRequested();
 
@@ -203,7 +211,7 @@ namespace ts.codefix {
                 return declarations ? some(symbol.declarations, decl => !!(getMeaningFromDeclaration(decl) & meaning)) : false;
             }
 
-            function getCodeActionForImport(moduleSymbol: Symbol, isDefault?: boolean): ImportCodeAction[] {
+            function getCodeActionForImport(moduleSymbol: Symbol, isDefault?: boolean, isNamespaceImport?: boolean): ImportCodeAction[] {
                 const existingDeclarations = getImportDeclarations(moduleSymbol);
                 if (existingDeclarations.length > 0) {
                     // With an existing import statement, there are more than one actions the user can do.
@@ -212,8 +220,6 @@ namespace ts.codefix {
                 else {
                     return [getCodeActionForNewImport()];
                 }
-
-
 
                 function getCodeActionsForExistingImport(declarations: (ImportDeclaration | ImportEqualsDeclaration)[]): ImportCodeAction[] {
                     const actions: ImportCodeAction[] = [];
@@ -262,7 +268,7 @@ namespace ts.codefix {
                         actions.push(getCodeActionForNamespaceImport(namespaceImportDeclaration));
                     }
 
-                    if (namedImportDeclaration && namedImportDeclaration.importClause &&
+                    if (!isNamespaceImport && namedImportDeclaration && namedImportDeclaration.importClause &&
                         (namedImportDeclaration.importClause.name || namedImportDeclaration.importClause.namedBindings)) {
                         /**
                          * If the existing import declaration already has a named import list, just
@@ -386,7 +392,9 @@ namespace ts.codefix {
                     const moduleSpecifierWithoutQuotes = stripQuotes(moduleSpecifier || getModuleSpecifierForNewImport());
                     const importStatementText = isDefault
                         ? `import ${name} from "${moduleSpecifierWithoutQuotes}"`
-                        : `import { ${name} } from "${moduleSpecifierWithoutQuotes}"`;
+                        : isNamespaceImport
+                            ? `import * as ${name} from "${moduleSpecifierWithoutQuotes}"`
+                            : `import { ${name} } from "${moduleSpecifierWithoutQuotes}"`;
 
                     // if this file doesn't have any import statements, insert an import statement and then insert a new line
                     // between the only import statement and user code. Otherwise just insert the statement because chances
@@ -435,6 +443,7 @@ namespace ts.codefix {
                                 return undefined;
                             }
 
+                            const relativeNameWithIndex = removeFileExtension(relativeName);
                             relativeName = removeExtensionAndIndexPostFix(relativeName);
 
                             if (options.paths) {
@@ -454,7 +463,7 @@ namespace ts.codefix {
                                                 return key.replace("\*", matchedStar);
                                             }
                                         }
-                                        else if (pattern === relativeName) {
+                                        else if (pattern === relativeName || pattern === relativeNameWithIndex) {
                                             return key;
                                         }
                                     }

@@ -9,4 +9,4 @@
 ////    }
 ////}
 
-verify.codeFixAtPosition(`let a = "dummy entry", b;`);
+verify.rangeAfterCodeFix(`let a = "dummy entry", b;`);
