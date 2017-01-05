@@ -19,7 +19,7 @@ var __extends = (this && this.__extends) || (function () {
 var S18 = (function (_super) {
     __extends(S18, _super);
     function S18() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return S18;
 }(S18));

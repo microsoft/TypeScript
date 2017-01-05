@@ -67,7 +67,7 @@ var Doing = (function () {
 var Other = (function (_super) {
     __extends(Other, _super);
     function Other() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     // in static method
     Other.staticMethod = function () {

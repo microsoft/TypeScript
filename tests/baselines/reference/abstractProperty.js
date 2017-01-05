@@ -40,7 +40,7 @@ var B = (function () {
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        var _this = _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.raw = "edge";
         _this.ro = "readonly please";
         return _this;

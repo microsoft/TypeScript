@@ -141,7 +141,7 @@ var a = (function () {
 var b = (function (_super) {
     __extends(b, _super);
     function b() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return b;
 }(a));
@@ -166,7 +166,7 @@ var m2;
         var c = (function (_super) {
             __extends(c, _super);
             function c() {
-                return _super.apply(this, arguments) || this;
+                return _super !== null && _super.apply(this, arguments) || this;
             }
             return c;
         }(b));
@@ -182,7 +182,7 @@ var m2;
 var c = (function (_super) {
     __extends(c, _super);
     function c() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return c;
 }(m1.b));

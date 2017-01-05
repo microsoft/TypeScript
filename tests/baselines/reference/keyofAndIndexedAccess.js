@@ -450,7 +450,7 @@ var Shape = (function () {
 var TaggedShape = (function (_super) {
     __extends(TaggedShape, _super);
     function TaggedShape() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return TaggedShape;
 }(Shape));
