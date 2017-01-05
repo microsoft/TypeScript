@@ -88,7 +88,7 @@ function removeNothing(y) {
 
 
 //// [defaultParameterAddsUndefinedWithStrictNullChecks.d.ts]
-declare function f(addUndefined1?: string | undefined, addUndefined2?: number): number;
+declare function f(addUndefined1?: string | undefined, addUndefined2?: number | undefined): number;
 declare function g(addUndefined: string | undefined, addDefined: number): number;
 declare let total: number;
 declare function foo1(x: string | undefined, b: number): void;

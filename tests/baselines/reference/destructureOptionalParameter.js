@@ -36,7 +36,7 @@ function f2(_a) {
 declare function f1({a, b}?: {
     a: number;
     b: string;
-}): void;
+} | undefined): void;
 declare function f2({a, b}?: {
     a: number;
     b: number;
@@ -49,11 +49,11 @@ interface QueryMetadata {
 }
 interface QueryMetadataFactory {
     (selector: Type | string, {descendants, read}?: {
-        descendants?: boolean;
+        descendants?: boolean | undefined;
         read?: any;
-    }): ParameterDecorator;
+    } | undefined): ParameterDecorator;
     new (selector: Type | string, {descendants, read}?: {
-        descendants?: boolean;
+        descendants?: boolean | undefined;
         read?: any;
-    }): QueryMetadata;
+    } | undefined): QueryMetadata;
 }

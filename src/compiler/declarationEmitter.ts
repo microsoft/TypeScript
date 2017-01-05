@@ -1593,9 +1593,11 @@ namespace ts {
                 emitTypeOfVariableDeclarationFromTypeLiteral(node);
             }
             else if (!hasModifier(node.parent, ModifierFlags.Private)) {
-                // use the checker's type, not the declared type, for an initialized parameter (that isn't a parameter property)
-                const isInitializedParameter = node.initializer && !(getModifierFlags(node) & ModifierFlags.ParameterPropertyModifier);
-                const typeNode = isInitializedParameter ? undefined : node.type;
+                // use the checker's type, not the declared type,
+                // for optional parameters and initialized ones that aren't a parameter property
+                const typeShouldAddUndefined = resolver.isOptionalParameter(node) ||
+                    node.initializer && !(getModifierFlags(node) & ModifierFlags.ParameterPropertyModifier);
+                const typeNode = typeShouldAddUndefined ? undefined : node.type;
                 writeTypeOfDeclaration(node, typeNode, getParameterDeclarationTypeVisibilityError);
             }
 
