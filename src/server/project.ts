@@ -58,6 +58,7 @@ namespace ts.server {
         return counts.ts === 0 && counts.tsx === 0;
     }
 
+    /* @internal */
     export interface ProjectFilesWithTSDiagnostics extends protocol.ProjectFiles {
         projectErrors: Diagnostic[];
     }
@@ -593,6 +594,7 @@ namespace ts.server {
             return false;
         }
 
+        /* @internal */
         getChangesSinceVersion(lastKnownVersion?: number): ProjectFilesWithTSDiagnostics {
             this.updateGraph();
 

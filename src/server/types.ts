@@ -82,6 +82,7 @@ declare namespace ts.server {
         readonly installSuccess: boolean;
     }
 
+    /* @internal */
     export interface InstallTypingHost extends JsTyping.TypingResolutionHost {
         writeFile(path: string, content: string): void;
         createDirectory(path: string): void;
