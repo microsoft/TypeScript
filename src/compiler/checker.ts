@@ -148,6 +148,7 @@ namespace ts {
         const voidType = createIntrinsicType(TypeFlags.Void, "void");
         const neverType = createIntrinsicType(TypeFlags.Never, "never");
         const silentNeverType = createIntrinsicType(TypeFlags.Never, "never");
+        const nonPrimitiveType = createIntrinsicType(TypeFlags.NonPrimitive, "object");
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
@@ -4196,6 +4197,7 @@ namespace ts {
                 case SyntaxKind.NumberKeyword:
                 case SyntaxKind.BooleanKeyword:
                 case SyntaxKind.SymbolKeyword:
+                case SyntaxKind.ObjectKeyword:
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.UndefinedKeyword:
                 case SyntaxKind.NullKeyword:
@@ -4780,6 +4782,7 @@ namespace ts {
                 t.flags & TypeFlags.NumberLike ? globalNumberType :
                 t.flags & TypeFlags.BooleanLike ? globalBooleanType :
                 t.flags & TypeFlags.ESSymbol ? getGlobalESSymbolType() :
+                t.flags & TypeFlags.NonPrimitive ? globalObjectType :
                 t;
         }
 
@@ -6405,6 +6408,8 @@ namespace ts {
                     return nullType;
                 case SyntaxKind.NeverKeyword:
                     return neverType;
+                case SyntaxKind.ObjectKeyword:
+                    return nonPrimitiveType;
                 case SyntaxKind.JSDocNullKeyword:
                     return nullType;
                 case SyntaxKind.JSDocUndefinedKeyword:
@@ -7162,6 +7167,8 @@ namespace ts {
             if (source.flags & TypeFlags.Enum && target.flags & TypeFlags.Enum && isEnumTypeRelatedTo(<EnumType>source, <EnumType>target, errorReporter)) return true;
             if (source.flags & TypeFlags.Undefined && (!strictNullChecks || target.flags & (TypeFlags.Undefined | TypeFlags.Void))) return true;
             if (source.flags & TypeFlags.Null && (!strictNullChecks || target.flags & TypeFlags.Null)) return true;
+            if (source.flags & TypeFlags.Object && target === nonPrimitiveType) return true;
+            if (source.flags & TypeFlags.Primitive && target === nonPrimitiveType) return false;
             if (relation === assignableRelation || relation === comparableRelation) {
                 if (source.flags & TypeFlags.Any) return true;
                 if ((source.flags & TypeFlags.Number | source.flags & TypeFlags.NumberLiteral) && target.flags & TypeFlags.EnumLike) return true;
@@ -9235,6 +9242,9 @@ namespace ts {
         }
 
         function getTypeFacts(type: Type): TypeFacts {
+            if (type === nonPrimitiveType) {
+                return strictNullChecks ? TypeFacts.ObjectStrictFacts : TypeFacts.ObjectFacts;
+            }
             const flags = type.flags;
             if (flags & TypeFlags.String) {
                 return strictNullChecks ? TypeFacts.StringStrictFacts : TypeFacts.StringFacts;
@@ -18159,6 +18169,7 @@ namespace ts {
                 case "string":
                 case "symbol":
                 case "void":
+                case "object":
                     error(name, message, (<Identifier>name).text);
             }
         }

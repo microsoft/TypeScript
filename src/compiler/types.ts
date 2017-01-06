@@ -175,6 +175,7 @@ namespace ts {
         ReadonlyKeyword,
         RequireKeyword,
         NumberKeyword,
+        ObjectKeyword,
         SetKeyword,
         StringKeyword,
         SymbolKeyword,
@@ -816,6 +817,7 @@ namespace ts {
     export interface KeywordTypeNode extends TypeNode {
         kind: SyntaxKind.AnyKeyword
             | SyntaxKind.NumberKeyword
+            | SyntaxKind.ObjectKeyword
             | SyntaxKind.BooleanKeyword
             | SyntaxKind.StringKeyword
             | SyntaxKind.SymbolKeyword
@@ -2785,6 +2787,7 @@ namespace ts {
         ContainsObjectLiteral   = 1 << 22,  // Type is or contains object literal type
         /* @internal */
         ContainsAnyFunctionType = 1 << 23,  // Type is or contains object literal type
+        NonPrimitive            = 1 << 24,  // intrinsic object type
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -2794,7 +2797,7 @@ namespace ts {
         DefinitelyFalsy = StringLiteral | NumberLiteral | BooleanLiteral | Void | Undefined | Null,
         PossiblyFalsy = DefinitelyFalsy | String | Number | Boolean,
         /* @internal */
-        Intrinsic = Any | String | Number | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never,
+        Intrinsic = Any | String | Number | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
         /* @internal */
         Primitive = String | Number | Boolean | Enum | ESSymbol | Void | Undefined | Null | Literal,
         StringLike = String | StringLiteral | Index,
@@ -2808,8 +2811,8 @@ namespace ts {
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
-        Narrowable = Any | StructuredType | TypeParameter | Index | IndexedAccess | StringLike | NumberLike | BooleanLike | ESSymbol,
-        NotUnionOrUnit = Any | ESSymbol | Object,
+        Narrowable = Any | StructuredType | TypeParameter | Index | IndexedAccess | StringLike | NumberLike | BooleanLike | ESSymbol | NonPrimitive,
+        NotUnionOrUnit = Any | ESSymbol | Object | NonPrimitive,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
         /* @internal */
@@ -2863,6 +2866,7 @@ namespace ts {
         ObjectLiteral    = 1 << 7,  // Originates in an object literal
         EvolvingArray    = 1 << 8,  // Evolving array type
         ObjectLiteralPatternWithComputedProperties = 1 << 9,  // Object literal pattern with computed properties
+        NonPrimitive        = 1 << 10,  // NonPrimitive object type
         ClassOrInterface = Class | Interface
     }
 
