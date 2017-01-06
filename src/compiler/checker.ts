@@ -3706,6 +3706,13 @@ namespace ts {
             return unknownType;
         }
 
+        function isReferenceToType(type: Type, target: Type) {
+            return type !== undefined
+                && target !== undefined
+                && (getObjectFlags(type) & ObjectFlags.Reference) !== 0
+                && (<TypeReference>type).target === target;
+        }
+
         function getTargetType(type: Type): Type {
             return getObjectFlags(type) & ObjectFlags.Reference ? (<TypeReference>type).target : type;
         }
@@ -11017,22 +11024,14 @@ namespace ts {
             return undefined;
         }
 
-        function getContextualTypeForReturnExpression(node: Expression): Type {
+        function getContextualTypeForReturnExpression(node: Expression): Type | undefined {
             const func = getContainingFunction(node);
-
-            if (isAsyncFunctionLike(func)) {
-                const contextualReturnType = getContextualReturnType(func);
-                if (contextualReturnType) {
-                    return getPromisedType(contextualReturnType);
-                }
-
-                return undefined;
-            }
-
             if (func && !func.asteriskToken) {
-                return getContextualReturnType(func);
+                const contextualReturnType = getContextualReturnType(func);
+                return isAsyncFunctionLike(func)
+                    ? contextualReturnType && getAwaitedTypeOfPromise(contextualReturnType)
+                    : contextualReturnType;
             }
-
             return undefined;
         }
 
@@ -13939,6 +13938,10 @@ namespace ts {
                 pos < signature.parameters.length ? getTypeOfParameter(signature.parameters[pos]) : anyType;
         }
 
+        function getTypeOfFirstParameterOfSignature(signature: Signature) {
+            return signature.parameters.length > 0 ? getTypeAtPosition(signature, 0) : neverType;
+        }
+
         function assignContextualParameterTypes(signature: Signature, context: Signature, mapper: TypeMapper) {
             const len = signature.parameters.length - (signature.hasRestParameter ? 1 : 0);
             if (isInferentialContext(mapper)) {
@@ -14049,7 +14052,7 @@ namespace ts {
             const globalPromiseType = getGlobalPromiseType();
             if (globalPromiseType !== emptyGenericType) {
                 // if the promised type is itself a promise, get the underlying type; otherwise, fallback to the promised type
-                promisedType = getAwaitedType(promisedType);
+                promisedType = getAwaitedType(promisedType) || emptyObjectType;
                 return createTypeReference(<GenericType>globalPromiseType, [promisedType]);
             }
 
@@ -14081,7 +14084,7 @@ namespace ts {
                     // Promise/A+ compatible implementation will always assimilate any foreign promise, so the
                     // return type of the body should be unwrapped to its awaited type, which we will wrap in
                     // the native Promise<T> type later in this function.
-                    type = checkAwaitedType(type, func, Diagnostics.Return_expression_in_async_function_does_not_have_a_valid_callable_then_member);
+                    type = checkAwaitedType(type, /*errorNode*/ func);
                 }
             }
             else {
@@ -14195,7 +14198,7 @@ namespace ts {
                         // Promise/A+ compatible implementation will always assimilate any foreign promise, so the
                         // return type of the body should be unwrapped to its awaited type, which should be wrapped in
                         // the native Promise<T> type by the caller.
-                        type = checkAwaitedType(type, func, Diagnostics.Return_expression_in_async_function_does_not_have_a_valid_callable_then_member);
+                        type = checkAwaitedType(type, /*errorNode*/ func);
                     }
                     if (type.flags & TypeFlags.Never) {
                         hasReturnOfTypeNever = true;
@@ -14368,7 +14371,7 @@ namespace ts {
                     const exprType = checkExpression(<Expression>node.body);
                     if (returnOrPromisedType) {
                         if (isAsync) {
-                            const awaitedType = checkAwaitedType(exprType, node.body, Diagnostics.Expression_body_for_async_arrow_function_does_not_have_a_valid_callable_then_member);
+                            const awaitedType = checkAwaitedType(exprType, /*errorNode*/ node.body);
                             checkTypeAssignableTo(awaitedType, returnOrPromisedType, node.body);
                         }
                         else {
@@ -16382,22 +16385,30 @@ namespace ts {
             }
         }
 
-        function checkNonThenableType(type: Type, location?: Node, message?: DiagnosticMessage): Type {
-            type = getWidenedType(type);
-            const apparentType = getApparentType(type);
-            if ((apparentType.flags & (TypeFlags.Any | TypeFlags.Never)) === 0 && isTypeAssignableTo(type, getGlobalThenableType())) {
-                if (location) {
-                    if (!message) {
-                        message = Diagnostics.Operand_for_await_does_not_have_a_valid_callable_then_member;
-                    }
+        function getAwaitedTypeOfPromise(type: Type, errorNode?: Node): Type | undefined {
+            const promisedType = getPromisedTypeOfPromise(type, errorNode);
+            return promisedType && getAwaitedType(promisedType, errorNode);
+        }
 
-                    error(location, message);
-                }
+        /**
+         * Determines whether a type has a callable 'then' method.
+         */
+        function isThenableType(type: Type) {
+            //
+            //  {
+            //      then( // thenFunction
+            //      ): any;
+            //  }
+            //
 
-                return unknownType;
+            // TODO(rbuckton): Verify whether we need to call getApparentType. See checkNonThenableType in master
+            const thenFunction = getTypeOfPropertyOfType(type, "then");
+            const thenSignatures = thenFunction ? getSignaturesOfType(thenFunction, SignatureKind.Call) : emptyArray;
+            if (thenSignatures.length > 0) {
+                return true;
             }
 
-            return type;
+            return false;
         }
 
         /**
@@ -16405,7 +16416,7 @@ namespace ts {
           * @param type The type of the promise.
           * @remarks The "promised type" of a type is the type of the "value" parameter of the "onfulfilled" callback.
           */
-        function getPromisedType(promise: Type): Type {
+        function getPromisedTypeOfPromise(promise: Type, errorNode?: Node): Type {
             //
             //  { // promise
             //      then( // thenFunction
@@ -16420,25 +16431,25 @@ namespace ts {
                 return undefined;
             }
 
-            if (getObjectFlags(promise) & ObjectFlags.Reference) {
-                if ((<GenericType>promise).target === tryGetGlobalPromiseType()
-                    || (<GenericType>promise).target === getGlobalPromiseLikeType()) {
-                    return (<GenericType>promise).typeArguments[0];
-                }
+            const typeAsPromise = <PromiseOrAwaitableType>promise;
+            if (typeAsPromise.promisedTypeOfPromise) {
+                return typeAsPromise.promisedTypeOfPromise;
             }
 
-            const globalPromiseLikeType = getInstantiatedGlobalPromiseLikeType();
-            if (globalPromiseLikeType === emptyObjectType || !isTypeAssignableTo(promise, globalPromiseLikeType)) {
-                return undefined;
+            if (isReferenceToType(promise, getGlobalPromiseType())) {
+                return typeAsPromise.promisedTypeOfPromise = (<GenericType>promise).typeArguments[0];
             }
 
             const thenFunction = getTypeOfPropertyOfType(promise, "then");
-            if (!thenFunction || isTypeAny(thenFunction)) {
+            if (isTypeAny(thenFunction)) {
                 return undefined;
             }
 
-            const thenSignatures = getSignaturesOfType(thenFunction, SignatureKind.Call);
+            const thenSignatures = thenFunction ? getSignaturesOfType(thenFunction, SignatureKind.Call) : emptyArray;
             if (thenSignatures.length === 0) {
+                if (errorNode) {
+                    error(errorNode, Diagnostics.A_promise_must_have_a_then_method);
+                }
                 return undefined;
             }
 
@@ -16449,14 +16460,23 @@ namespace ts {
 
             const onfulfilledParameterSignatures = getSignaturesOfType(onfulfilledParameterType, SignatureKind.Call);
             if (onfulfilledParameterSignatures.length === 0) {
+                if (errorNode) {
+                    error(errorNode, Diagnostics.The_first_parameter_of_the_then_method_of_a_promise_must_be_a_callback);
+                }
                 return undefined;
             }
 
-            return getUnionType(map(onfulfilledParameterSignatures, getTypeOfFirstParameterOfSignature), /*subtypeReduction*/ true);
+            return typeAsPromise.promisedTypeOfPromise = getUnionType(map(onfulfilledParameterSignatures, getTypeOfFirstParameterOfSignature), /*subtypeReduction*/ true);
         }
 
-        function getTypeOfFirstParameterOfSignature(signature: Signature) {
-            return signature.parameters.length > 0 ? getTypeAtPosition(signature, 0) : neverType;
+        function getCallableType(type: Type): Type {
+            if (some(getSignaturesOfType(type, SignatureKind.Call))) {
+                return type;
+            }
+            if (type.flags & TypeFlags.Union) {
+                return getUnionType(map((<UnionType>type).types, getCallableType), /*subtypeReduction*/ true);
+            }
+            return neverType;
         }
 
         /**
@@ -16466,96 +16486,111 @@ namespace ts {
           * Promise-like type; otherwise, it is the type of the expression. This is used to reflect
           * The runtime behavior of the `await` keyword.
           */
-        function getAwaitedType(type: Type) {
-            return checkAwaitedType(type, /*location*/ undefined, /*message*/ undefined);
+        function checkAwaitedType(type: Type, errorNode: Node): Type {
+            return getAwaitedType(type, errorNode) || unknownType;
         }
 
-        function checkAwaitedType(type: Type, location?: Node, message?: DiagnosticMessage) {
-            return checkAwaitedTypeWorker(type);
-
-            function checkAwaitedTypeWorker(type: Type): Type {
-                if (type.flags & TypeFlags.Union) {
-                    const types: Type[] = [];
-                    for (const constituentType of (<UnionType>type).types) {
-                        types.push(checkAwaitedTypeWorker(constituentType));
-                    }
-
-                    return getUnionType(types, /*subtypeReduction*/ true);
-                }
-                else {
-                    const promisedType = getPromisedType(type);
-                    if (promisedType === undefined) {
-                        // The type was not a PromiseLike, so it could not be unwrapped any further.
-                        // As long as the type does not have a callable "then" property, it is
-                        // safe to return the type; otherwise, an error will have been reported in
-                        // the call to checkNonThenableType and we will return unknownType.
-                        //
-                        // An example of a non-promise "thenable" might be:
-                        //
-                        //  await { then(): void {} }
-                        //
-                        // The "thenable" does not match the minimal definition for a PromiseLike. When
-                        // a Promise/A+-compatible or ES6 promise tries to adopt this value, the promise
-                        // will never settle. We treat this as an error to help flag an early indicator
-                        // of a runtime problem. If the user wants to return this value from an async
-                        // function, they would need to wrap it in some other value. If they want it to
-                        // be treated as a promise, they can cast to <any>.
-                        return checkNonThenableType(type, location, message);
-                    }
-                    else {
-                        if (type.id === promisedType.id || indexOf(awaitedTypeStack, promisedType.id) >= 0) {
-                            // We have a bad actor in the form of a promise whose promised type is
-                            // the same promise type, or a mutually recursive promise. Return the
-                            // unknown type as we cannot guess the shape. If this were the actual
-                            // case in the JavaScript, this Promise would never resolve.
-                            //
-                            // An example of a bad actor with a singly-recursive promise type might
-                            // be:
-                            //
-                            //  interface BadPromise {
-                            //      then(
-                            //          onfulfilled: (value: BadPromise) => any,
-                            //          onrejected: (error: any) => any): BadPromise;
-                            //  }
-                            //
-                            // The above interface will pass the PromiseLike check, and return a
-                            // promised type of `BadPromise`. Since this is a self reference, we
-                            // don't want to keep recursing ad infinitum.
-                            //
-                            // An example of a bad actor in the form of a mutually-recursive
-                            // promise type might be:
-                            //
-                            //  interface BadPromiseA {
-                            //      then(
-                            //          onfulfilled: (value: BadPromiseB) => any,
-                            //          onrejected: (error: any) => any): BadPromiseB;
-                            //  }
-                            //
-                            //  interface BadPromiseB {
-                            //      then(
-                            //          onfulfilled: (value: BadPromiseA) => any,
-                            //          onrejected: (error: any) => any): BadPromiseA;
-                            //  }
-                            //
-                            if (location) {
-                                error(
-                                    location,
-                                    Diagnostics._0_is_referenced_directly_or_indirectly_in_the_fulfillment_callback_of_its_own_then_method,
-                                    symbolToString(type.symbol));
-                            }
-
-                            return unknownType;
-                        }
-
-                        // Keep track of the type we're about to unwrap to avoid bad recursive promise types.
-                        // See the comments above for more information.
-                        awaitedTypeStack.push(type.id);
-                        const awaitedType = checkAwaitedTypeWorker(promisedType);
-                        awaitedTypeStack.pop();
-                        return awaitedType;
-                    }
-                }
+        function getAwaitedType(type: Type, errorNode?: Node): Type | undefined {
+            const typeAsAwaitable = <PromiseOrAwaitableType>type;
+            if (typeAsAwaitable.awaitedTypeOfType) {
+                return typeAsAwaitable.awaitedTypeOfType;
             }
+
+            if (isTypeAny(type)) {
+                return typeAsAwaitable.awaitedTypeOfType = type;
+            }
+
+            if (type.flags & TypeFlags.Union) {
+                let types: Type[];
+                for (const constituentType of (<UnionType>type).types) {
+                    types = append(types, getAwaitedType(constituentType, errorNode));
+                }
+
+                if (!types) {
+                    return undefined;
+                }
+
+                return typeAsAwaitable.awaitedTypeOfType = getUnionType(types, /*subtypeReduction*/ true);
+            }
+
+            const promisedType = getPromisedTypeOfPromise(type);
+            if (promisedType) {
+                if (type.id === promisedType.id || indexOf(awaitedTypeStack, promisedType.id) >= 0) {
+                    // Verify that we don't have a bad actor in the form of a promise whose
+                    // promised type is the same as the promise type, or a mutually recursive
+                    // promise. If so, we returnundefined as we cannot guess the shape. If this
+                    // were the actual case in the JavaScript, this Promise would never resolve.
+                    //
+                    // An example of a bad actor with a singly-recursive promise type might
+                    // be:
+                    //
+                    //  interface BadPromise {
+                    //      then(
+                    //          onfulfilled: (value: BadPromise) => any,
+                    //          onrejected: (error: any) => any): BadPromise;
+                    //  }
+                    // The above interface will pass the PromiseLike check, and return a
+                    // promised type of `BadPromise`. Since this is a self reference, we
+                    // don't want to keep recursing ad infinitum.
+                    //
+                    // An example of a bad actor in the form of a mutually-recursive
+                    // promise type might be:
+                    //
+                    //  interface BadPromiseA {
+                    //      then(
+                    //          onfulfilled: (value: BadPromiseB) => any,
+                    //          onrejected: (error: any) => any): BadPromiseB;
+                    //  }
+                    //
+                    //  interface BadPromiseB {
+                    //      then(
+                    //          onfulfilled: (value: BadPromiseA) => any,
+                    //          onrejected: (error: any) => any): BadPromiseA;
+                    //  }
+                    //
+                    if (errorNode) {
+                        error(errorNode, Diagnostics.Type_is_referenced_directly_or_indirectly_in_the_fulfillment_callback_of_its_own_then_method);
+                    }
+                    return undefined;
+                }
+
+                // Keep track of the type we're about to unwrap to avoid bad recursive promise types.
+                // See the comments above for more information.
+                awaitedTypeStack.push(type.id);
+                const awaitedType = getAwaitedType(promisedType, errorNode);
+                awaitedTypeStack.pop();
+
+                if (!awaitedType) {
+                    return undefined;
+                }
+
+                return typeAsAwaitable.awaitedTypeOfType = awaitedType;
+            }
+
+            // The type was not a promise, so it could not be unwrapped any further.
+            // As long as the type does not have a callable "then" property, it is
+            // safe to return the type; otherwise, an error will be reported in
+            // the call to getNonThenableType and we will return undefined.
+            //
+            // An example of a non-promise "thenable" might be:
+            //
+            //  await { then(): void {} }
+            //
+            // The "thenable" does not match the minimal definition for a promise. When
+            // a Promise/A+-compatible or ES6 promise tries to adopt this value, the promise
+            // will never settle. We treat this as an error to help flag an early indicator
+            // of a runtime problem. If the user wants to return this value from an async
+            // function, they would need to wrap it in some other value. If they want it to
+            // be treated as a promise, they can cast to <any>.
+            const widenedType = getWidenedType(type);
+            if (isThenableType(widenedType)) {
+                if (errorNode) {
+                    error(errorNode, Diagnostics.Type_used_as_operand_to_await_or_the_return_type_of_an_async_function_must_not_contain_a_callable_then_member_if_it_is_not_a_promise);
+                }
+                return undefined;
+            }
+
+            return typeAsAwaitable.awaitedTypeOfType = widenedType;
         }
 
         /**
@@ -16656,7 +16691,7 @@ namespace ts {
             }
 
             // Get and return the awaited type of the return type.
-            return checkAwaitedType(returnType, node, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
+            return checkAwaitedType(returnType, node);
         }
 
         /** Check a decorator */
@@ -17900,7 +17935,7 @@ namespace ts {
         }
 
         function isUnwrappedReturnTypeVoidOrAny(func: FunctionLikeDeclaration, returnType: Type): boolean {
-            const unwrappedReturnType = isAsyncFunctionLike(func) ? getPromisedType(returnType) : returnType;
+            const unwrappedReturnType = isAsyncFunctionLike(func) ? getPromisedTypeOfPromise(returnType) : returnType;
             return unwrappedReturnType && maybeTypeOfKind(unwrappedReturnType, TypeFlags.Void | TypeFlags.Any);
         }
 
@@ -17940,8 +17975,8 @@ namespace ts {
                     }
                     else if (func.type || isGetAccessorWithAnnotatedSetAccessor(func)) {
                         if (isAsyncFunctionLike(func)) {
-                            const promisedType = getPromisedType(returnType);
-                            const awaitedType = checkAwaitedType(exprType, node.expression || node, Diagnostics.Return_expression_in_async_function_does_not_have_a_valid_callable_then_member);
+                            const promisedType = getPromisedTypeOfPromise(returnType);
+                            const awaitedType = checkAwaitedType(exprType, node.expression || node);
                             if (promisedType) {
                                 // If the function has a return type, but promisedType is
                                 // undefined, an error will be reported in checkAsyncFunctionReturnType
