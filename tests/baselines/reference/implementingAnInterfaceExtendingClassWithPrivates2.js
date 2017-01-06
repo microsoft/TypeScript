@@ -86,11 +86,16 @@ module M2 {
 }
 
 //// [implementingAnInterfaceExtendingClassWithPrivates2.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var Foo = (function () {
     function Foo() {
     }
@@ -99,21 +104,21 @@ var Foo = (function () {
 var Bar = (function (_super) {
     __extends(Bar, _super);
     function Bar() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return Bar;
 }(Foo));
 var Bar2 = (function (_super) {
     __extends(Bar2, _super);
     function Bar2() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return Bar2;
 }(Foo));
 var Bar3 = (function (_super) {
     __extends(Bar3, _super);
     function Bar3() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return Bar3;
 }(Foo));
@@ -128,28 +133,28 @@ var M;
     var Baz = (function (_super) {
         __extends(Baz, _super);
         function Baz() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return Baz;
     }(Foo));
     var Bar = (function (_super) {
         __extends(Bar, _super);
         function Bar() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return Bar;
     }(Foo));
     var Bar2 = (function (_super) {
         __extends(Bar2, _super);
         function Bar2() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return Bar2;
     }(Foo));
     var Bar3 = (function (_super) {
         __extends(Bar3, _super);
         function Bar3() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return Bar3;
     }(Foo));
@@ -165,14 +170,14 @@ var M2;
     var Baz = (function (_super) {
         __extends(Baz, _super);
         function Baz() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return Baz;
     }(Foo));
     var Bar = (function (_super) {
         __extends(Bar, _super);
         function Bar() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return Bar;
     }(Foo));
@@ -183,14 +188,14 @@ var M2;
     var Bar2 = (function (_super) {
         __extends(Bar2, _super);
         function Bar2() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return Bar2;
     }(Foo));
     var Bar3 = (function (_super) {
         __extends(Bar3, _super);
         function Bar3() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return Bar3;
     }(Foo));

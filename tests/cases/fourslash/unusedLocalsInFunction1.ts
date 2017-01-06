@@ -5,6 +5,6 @@
 ////    var x = 0;
 ////} |]
 
-verify.codeFixAtPosition(`
+verify.rangeAfterCodeFix(`
 function greeter() {
 }`);

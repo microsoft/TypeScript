@@ -445,6 +445,7 @@ namespace ts.codefix {
                                 return undefined;
                             }
 
+                            const relativeNameWithIndex = removeFileExtension(relativeName);
                             relativeName = removeExtensionAndIndexPostFix(relativeName);
 
                             if (options.paths) {
@@ -464,7 +465,7 @@ namespace ts.codefix {
                                                 return key.replace("\*", matchedStar);
                                             }
                                         }
-                                        else if (pattern === relativeName) {
+                                        else if (pattern === relativeName || pattern === relativeNameWithIndex) {
                                             return key;
                                         }
                                     }

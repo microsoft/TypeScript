@@ -293,6 +293,7 @@ namespace ts.server {
             this.documentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames, host.getCurrentDirectory());
         }
 
+        /* @internal */
         getChangedFiles_TestOnly() {
             return this.changedFiles;
         }
@@ -1274,6 +1275,7 @@ namespace ts.server {
             }
         }
 
+        /* @internal */
         synchronizeProjectList(knownProjects: protocol.ProjectVersionInfo[]): ProjectFilesWithTSDiagnostics[] {
             const files: ProjectFilesWithTSDiagnostics[] = [];
             this.collectChanges(knownProjects, this.externalProjects, files);
@@ -1282,6 +1284,7 @@ namespace ts.server {
             return files;
         }
 
+        /* @internal */
         applyChangesInOpenFiles(openFiles: protocol.ExternalFile[], changedFiles: protocol.ChangedOpenFile[], closedFiles: string[]): void {
             const recordChangedFiles = changedFiles && !openFiles && !closedFiles;
             if (openFiles) {
@@ -1362,9 +1365,9 @@ namespace ts.server {
         openExternalProjects(projects: protocol.ExternalProject[]): void {
             // record project list before the update
             const projectsToClose = arrayToMap(this.externalProjects, p => p.getProjectName(), _ => true);
-            for (const externalProjectName in this.externalProjectToConfiguredProjectMap) {
+            forEachKey(this.externalProjectToConfiguredProjectMap, externalProjectName => {
                 projectsToClose.set(externalProjectName, true);
-            }
+            });
 
             for (const externalProject of projects) {
                 this.openExternalProject(externalProject, /*suppressRefreshOfInferredProjects*/ true);

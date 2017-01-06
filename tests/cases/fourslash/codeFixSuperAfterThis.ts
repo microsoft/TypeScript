@@ -10,4 +10,4 @@
 ////    }
 ////}
 
-verify.codeFixAtPosition("super(); this.a = 12;");
+verify.rangeAfterCodeFix("super(); this.a = 12;");

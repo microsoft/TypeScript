@@ -5,4 +5,4 @@
 ////    [|private greeting: string;|]
 ////}
 
-verify.codeFixAtPosition("");
+verify.rangeAfterCodeFix("");

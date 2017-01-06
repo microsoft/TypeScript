@@ -1,4 +1,4 @@
-/// <reference path="types.d.ts" />
+/// <reference path="types.ts" />
 
 namespace ts.server {
     export const ActionSet: ActionSet = "action::set";

@@ -244,6 +244,9 @@ namespace ts.Completions {
         }
 
         function addStringLiteralCompletionsFromType(type: Type, result: CompletionEntry[]): void {
+            if (type && type.flags & TypeFlags.TypeParameter) {
+                type = typeChecker.getApparentType(type);
+            }
             if (!type) {
                 return;
             }

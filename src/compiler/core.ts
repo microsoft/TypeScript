@@ -506,17 +506,16 @@ namespace ts {
         return result;
     }
 
-    export function mapObject<T, U>(object: MapLike<T>, f: (key: string, x: T) => [string, U]): MapLike<U> {
-        let result: MapLike<U>;
-        if (object) {
-            result = {};
-            for (const v of getOwnKeys(object)) {
-                const [key, value]: [string, U] = f(v, object[v]) || [undefined, undefined];
-                if (key !== undefined) {
-                    result[key] = value;
-                }
-            }
+    export function mapValues<T, U>(map: Map<T>, f: (key: string, value: T) => [string, U]): Map<U> {
+        if (!map) {
+            return undefined;
         }
+
+        const result = createMap<U>();
+        map.forEach((value, key) => {
+            const [newKey, newValue] = f(key, value);
+            result.set(newKey, newValue);
+        });
         return result;
     }
 
@@ -1122,7 +1121,7 @@ namespace ts {
         }
     }
 
-    function formatStringFromArgs(text: string, args: { [index: number]: string; }, baseIndex?: number): string {
+    export function formatStringFromArgs(text: string, args: { [index: number]: string; }, baseIndex?: number): string {
         baseIndex = baseIndex || 0;
 
         return text.replace(/{(\d+)}/g, (_match, index?) => args[+index + baseIndex]);

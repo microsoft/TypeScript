@@ -13,4 +13,4 @@
 //// export default function test2() {
 //// }
 
-verify.codeFixAtPosition('');
+verify.rangeAfterCodeFix('');
