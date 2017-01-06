@@ -2976,6 +2976,13 @@ namespace ts {
         iteratorElementType?: Type;
     }
 
+    /* @internal */
+    export interface PromiseOrAwaitableType extends ObjectType, UnionType {
+        promiseTypeOfPromiseConstructor?: Type;
+        promisedTypeOfPromise?: Type;
+        awaitedTypeOfType?: Type;
+    }
+
     export interface TypeVariable extends Type {
         /* @internal */
         resolvedApparentType: Type;

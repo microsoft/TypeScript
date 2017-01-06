@@ -175,15 +175,15 @@
         "category": "Error",
         "code": 1057
     },
-    "Operand for 'await' does not have a valid callable 'then' member.": {
+    "Type used as operand to 'await' or the return type of an async function must not contain a callable 'then' member if it is not a promise.": {
         "category": "Error",
         "code": 1058
     },
-    "Return expression in async function does not have a valid callable 'then' member.": {
+    "A promise must have a 'then' method.": {
         "category": "Error",
         "code": 1059
     },
-    "Expression body for async arrow function does not have a valid callable 'then' member.": {
+    "The first parameter of the 'then' method of a promise must be a callback.": {
         "category": "Error",
         "code": 1060
     },
@@ -191,7 +191,7 @@
         "category": "Error",
         "code": 1061
     },
-    "{0} is referenced directly or indirectly in the fulfillment callback of its own 'then' method.": {
+    "Type is referenced directly or indirectly in the fulfillment callback of its own 'then' method.": {
         "category": "Error",
         "code": 1062
     },
