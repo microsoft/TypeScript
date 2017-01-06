@@ -89,7 +89,7 @@ namespace ts {
     });
 
     const caseInsensitiveBasePath = "c:/dev/";
-    const caseInsensitiveHost = new Utils.MockParseConfigHost(caseInsensitiveBasePath, /*useCaseSensitiveFileNames*/ false, mapValues(testContents, (key, content) => [`c:${key}`, content]));
+    const caseInsensitiveHost = new Utils.MockParseConfigHost(caseInsensitiveBasePath, /*useCaseSensitiveFileNames*/ false, mapEntries(testContents, (key, content) => [`c:${key}`, content]));
 
     const caseSensitiveBasePath = "/dev/";
     const caseSensitiveHost = new Utils.MockParseConfigHost(caseSensitiveBasePath, /*useCaseSensitiveFileNames*/ true, testContents);

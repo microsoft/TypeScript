@@ -506,7 +506,7 @@ namespace ts {
         return result;
     }
 
-    export function mapValues<T, U>(map: Map<T>, f: (key: string, value: T) => [string, U]): Map<U> {
+    export function mapEntries<T, U>(map: Map<T>, f: (key: string, value: T) => [string, U]): Map<U> {
         if (!map) {
             return undefined;
         }
