@@ -13,7 +13,7 @@ declare let x2: T2<"x">;
 let x2x = x2.x;
 
 interface T3<T extends T3<T>> {
-    x: T["x"];  // Error
+    x: T["x"];
 }
 
 interface T4<T extends T4<T>> {
@@ -25,9 +25,9 @@ class C1 {
 }
 
 class C2 {
-    x: this["y"];  // Error
-    y: this["z"];  // Error
-    z: this["x"];  // Error
+    x: this["y"];
+    y: this["z"];
+    z: this["x"];
 }
 
 //// [circularIndexedAccessErrors.js]
