@@ -29,3 +29,12 @@ class C2 {
     y: this["z"];
     z: this["x"];
 }
+
+// Repro from #12627
+
+interface Foo {
+    hello: boolean;
+}
+
+function foo<T extends Foo | T["hello"]>() {
+}

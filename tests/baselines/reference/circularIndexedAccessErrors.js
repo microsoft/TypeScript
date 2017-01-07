@@ -30,6 +30,16 @@ class C2 {
     z: this["x"];
 }
 
+// Repro from #12627
+
+interface Foo {
+    hello: boolean;
+}
+
+function foo<T extends Foo | T["hello"]>() {
+}
+
+
 //// [circularIndexedAccessErrors.js]
 var x2x = x2.x;
 var C1 = (function () {
@@ -42,6 +52,8 @@ var C2 = (function () {
     }
     return C2;
 }());
+function foo() {
+}
 
 
 //// [circularIndexedAccessErrors.d.ts]
@@ -68,3 +80,7 @@ declare class C2 {
     y: this["z"];
     z: this["x"];
 }
+interface Foo {
+    hello: boolean;
+}
+declare function foo<T extends Foo | T["hello"]>(): void;
