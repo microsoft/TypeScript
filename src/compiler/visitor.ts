@@ -1156,6 +1156,10 @@ namespace ts {
                 return updateHeritageClause(<HeritageClause>node,
                     visitNodes((<HeritageClause>node).types, visitor, isExpressionWithTypeArguments));
 
+            case SyntaxKind.PromisesClause:
+                return updatePromisesClause(<PromisesClause>node,
+                    visitNode((<PromisesClause>node).type, visitor, isTypeNode));
+
             case SyntaxKind.CatchClause:
                 return updateCatchClause(<CatchClause>node,
                     visitNode((<CatchClause>node).variableDeclaration, visitor, isVariableDeclaration),

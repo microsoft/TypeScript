@@ -256,6 +256,8 @@ namespace ts {
                     return "__index";
                 case SyntaxKind.ExportDeclaration:
                     return "__export";
+                case SyntaxKind.PromisesClause:
+                    return "__promises";
                 case SyntaxKind.ExportAssignment:
                     return (<ExportAssignment>node).isExportEquals ? "export=" : "default";
                 case SyntaxKind.BinaryExpression:
@@ -1944,6 +1946,7 @@ namespace ts {
                 case SyntaxKind.TypePredicate:
                     return checkTypePredicate(node as TypePredicateNode);
                 case SyntaxKind.TypeParameter:
+                case SyntaxKind.PromisesClause:
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
                 case SyntaxKind.Parameter:
                     return bindParameter(<ParameterDeclaration>node);
@@ -2710,7 +2713,6 @@ namespace ts {
                 break;
 
             case SyntaxKind.ImplementsKeyword:
-            case SyntaxKind.PromisesKeyword:
                 // An `implements` HeritageClause is TypeScript syntax.
                 transformFlags |= TransformFlags.AssertTypeScript;
                 break;
@@ -3106,6 +3108,7 @@ namespace ts {
             case SyntaxKind.AsExpression:
             case SyntaxKind.NonNullExpression:
             case SyntaxKind.ReadonlyKeyword:
+            case SyntaxKind.PromisesClause:
                 // These nodes are TypeScript syntax.
                 transformFlags |= TransformFlags.AssertTypeScript;
                 break;

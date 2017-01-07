@@ -1333,7 +1333,7 @@ namespace ts {
 
     // Clauses
 
-    export function createHeritageClause(token: SyntaxKind.ExtendsKeyword | SyntaxKind.ImplementsKeyword | SyntaxKind.PromisesKeyword, types: ExpressionWithTypeArguments[], location?: TextRange) {
+    export function createHeritageClause(token: SyntaxKind.ExtendsKeyword | SyntaxKind.ImplementsKeyword, types: ExpressionWithTypeArguments[], location?: TextRange) {
         const node = <HeritageClause>createNode(SyntaxKind.HeritageClause, location);
         node.token = token;
         node.types = createNodeArray(types);
@@ -1343,6 +1343,19 @@ namespace ts {
     export function updateHeritageClause(node: HeritageClause, types: ExpressionWithTypeArguments[]) {
         if (node.types !== types) {
             return updateNode(createHeritageClause(node.token, types, node), node);
+        }
+        return node;
+    }
+
+    export function createPromisesClause(type: TypeNode, location?: TextRange) {
+        const node = <PromisesClause>createNode(SyntaxKind.PromisesClause, location);
+        node.type = type;
+        return node;
+    }
+
+    export function updatePromisesClause(node: PromisesClause, type: TypeNode) {
+        if (node.type !== type) {
+            return updateNode(createPromisesClause(type, node), node);
         }
         return node;
     }

@@ -284,13 +284,15 @@ namespace ts {
                     visitNode(cbNode, (<ClassLikeDeclaration>node).name) ||
                     visitNodes(cbNodes, (<ClassLikeDeclaration>node).typeParameters) ||
                     visitNodes(cbNodes, (<ClassLikeDeclaration>node).heritageClauses) ||
+                    visitNode(cbNode, (<ClassLikeDeclaration>node).promisesClause) ||
                     visitNodes(cbNodes, (<ClassLikeDeclaration>node).members);
             case SyntaxKind.InterfaceDeclaration:
                 return visitNodes(cbNodes, node.decorators) ||
                     visitNodes(cbNodes, node.modifiers) ||
                     visitNode(cbNode, (<InterfaceDeclaration>node).name) ||
                     visitNodes(cbNodes, (<InterfaceDeclaration>node).typeParameters) ||
-                    visitNodes(cbNodes, (<ClassDeclaration>node).heritageClauses) ||
+                    visitNodes(cbNodes, (<InterfaceDeclaration>node).heritageClauses) ||
+                    visitNode(cbNode, (<InterfaceDeclaration>node).promisesClause) ||
                     visitNodes(cbNodes, (<InterfaceDeclaration>node).members);
             case SyntaxKind.TypeAliasDeclaration:
                 return visitNodes(cbNodes, node.decorators) ||
@@ -353,6 +355,8 @@ namespace ts {
                 return visitNode(cbNode, (<ComputedPropertyName>node).expression);
             case SyntaxKind.HeritageClause:
                 return visitNodes(cbNodes, (<HeritageClause>node).types);
+            case SyntaxKind.PromisesClause:
+                return visitNode(cbNode, (<PromisesClause>node).type);
             case SyntaxKind.ExpressionWithTypeArguments:
                 return visitNode(cbNode, (<ExpressionWithTypeArguments>node).expression) ||
                     visitNodes(cbNodes, (<ExpressionWithTypeArguments>node).typeArguments);
@@ -5371,6 +5375,7 @@ namespace ts {
             node.name = parseNameOfClassDeclarationOrExpression();
             node.typeParameters = parseTypeParameters();
             node.heritageClauses = parseHeritageClauses();
+            node.promisesClause = parsePromisesClause();
 
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
                 // ClassTail[Yield,Await] : (Modified) See 14.5
@@ -5413,7 +5418,7 @@ namespace ts {
 
         function parseHeritageClause() {
             const keyword = token();
-            if (keyword === SyntaxKind.ExtendsKeyword || keyword === SyntaxKind.ImplementsKeyword || keyword === SyntaxKind.PromisesKeyword) {
+            if (keyword === SyntaxKind.ExtendsKeyword || keyword === SyntaxKind.ImplementsKeyword) {
                 const node = <HeritageClause>createNode(SyntaxKind.HeritageClause);
                 node.token = keyword;
                 nextToken();
@@ -5438,10 +5443,19 @@ namespace ts {
             switch (token()) {
                 case SyntaxKind.ExtendsKeyword:
                 case SyntaxKind.ImplementsKeyword:
-                case SyntaxKind.PromisesKeyword:
                     return true;
             }
             return false;
+        }
+
+        function parsePromisesClause(): PromisesClause {
+            if (token() === SyntaxKind.PromisesKeyword) {
+                const node = <PromisesClause>createNode(SyntaxKind.PromisesClause);
+                nextToken();
+                node.type = parseType();
+                return finishNode(node);
+            }
+            return undefined;
         }
 
         function parseClassMembers() {
@@ -5456,6 +5470,7 @@ namespace ts {
             node.name = parseIdentifier();
             node.typeParameters = parseTypeParameters();
             node.heritageClauses = parseHeritageClauses();
+            node.promisesClause = parsePromisesClause();
             node.members = parseObjectTypeMembers();
             return addJSDocComment(finishNode(node));
         }

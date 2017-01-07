@@ -1723,19 +1723,20 @@ namespace ts {
             return result || emptyArray;
         }
 
-        function setStructuredTypeMembers(type: StructuredType, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], stringIndexInfo: IndexInfo, numberIndexInfo: IndexInfo): ResolvedType {
+        function setStructuredTypeMembers(type: StructuredType, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], stringIndexInfo: IndexInfo, numberIndexInfo: IndexInfo, promisesClause: Symbol | undefined): ResolvedType {
             (<ResolvedType>type).members = members;
             (<ResolvedType>type).properties = getNamedMembers(members);
             (<ResolvedType>type).callSignatures = callSignatures;
             (<ResolvedType>type).constructSignatures = constructSignatures;
             if (stringIndexInfo) (<ResolvedType>type).stringIndexInfo = stringIndexInfo;
             if (numberIndexInfo) (<ResolvedType>type).numberIndexInfo = numberIndexInfo;
+            if (promisesClause) (<ResolvedType>type).promisesClause = promisesClause;
             return <ResolvedType>type;
         }
 
         function createAnonymousType(symbol: Symbol, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], stringIndexInfo: IndexInfo, numberIndexInfo: IndexInfo): ResolvedType {
             return setStructuredTypeMembers(createObjectType(ObjectFlags.Anonymous, symbol),
-                members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
+                members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo, /*promisesClause*/ undefined);
         }
 
         function forEachSymbolTableInScope<T>(enclosingDeclaration: Node, callback: (symbolTable: SymbolTable) => T): T {
@@ -3702,7 +3703,15 @@ namespace ts {
             if (symbol.flags & SymbolFlags.Alias) {
                 return getTypeOfAlias(symbol);
             }
+            if (symbol.flags & SymbolFlags.TypeParameter && symbol.name === "__promises") {
+                return getTypeOfPromisesClause(symbol);
+            }
             return unknownType;
+        }
+
+        function getTypeOfPromisesClause(symbol: Symbol): Type {
+            const declaration = <PromisesClause | undefined>getDeclarationOfKind(symbol, SyntaxKind.PromisesClause);
+            return declaration ? getTypeFromTypeNode(declaration.type) : unknownType;
         }
 
         function isReferenceToType(type: Type, target: Type) {
@@ -4294,6 +4303,7 @@ namespace ts {
                 (<InterfaceTypeWithDeclaredMembers>type).declaredConstructSignatures = getSignaturesOfSymbol(symbol.members["__new"]);
                 (<InterfaceTypeWithDeclaredMembers>type).declaredStringIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.String);
                 (<InterfaceTypeWithDeclaredMembers>type).declaredNumberIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.Number);
+                (<InterfaceTypeWithDeclaredMembers>type).declaredPromisesClause = symbol.members["__promises"];
             }
             return <InterfaceTypeWithDeclaredMembers>type;
         }
@@ -4313,6 +4323,7 @@ namespace ts {
             let constructSignatures: Signature[];
             let stringIndexInfo: IndexInfo;
             let numberIndexInfo: IndexInfo;
+            let promisesClause: Symbol;
             if (rangeEquals(typeParameters, typeArguments, 0, typeParameters.length)) {
                 mapper = identityMapper;
                 members = source.symbol ? source.symbol.members : createSymbolTable(source.declaredProperties);
@@ -4320,6 +4331,7 @@ namespace ts {
                 constructSignatures = source.declaredConstructSignatures;
                 stringIndexInfo = source.declaredStringIndexInfo;
                 numberIndexInfo = source.declaredNumberIndexInfo;
+                promisesClause = source.declaredPromisesClause;
             }
             else {
                 mapper = createTypeMapper(typeParameters, typeArguments);
@@ -4328,6 +4340,7 @@ namespace ts {
                 constructSignatures = instantiateSignatures(source.declaredConstructSignatures, mapper);
                 stringIndexInfo = instantiateIndexInfo(source.declaredStringIndexInfo, mapper);
                 numberIndexInfo = instantiateIndexInfo(source.declaredNumberIndexInfo, mapper);
+                promisesClause = source.declaredPromisesClause && instantiateSymbol(source.declaredPromisesClause, mapper);
             }
             const baseTypes = getBaseTypes(source);
             if (baseTypes.length) {
@@ -4342,9 +4355,10 @@ namespace ts {
                     constructSignatures = concatenate(constructSignatures, getSignaturesOfType(instantiatedBaseType, SignatureKind.Construct));
                     stringIndexInfo = stringIndexInfo || getIndexInfoOfType(instantiatedBaseType, IndexKind.String);
                     numberIndexInfo = numberIndexInfo || getIndexInfoOfType(instantiatedBaseType, IndexKind.Number);
+                    promisesClause = promisesClause || getPromisesClauseOfType(instantiatedBaseType);
                 }
             }
-            setStructuredTypeMembers(type, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
+            setStructuredTypeMembers(type, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo, promisesClause);
         }
 
         function resolveClassOrInterfaceMembers(type: InterfaceType): void {
@@ -4491,7 +4505,7 @@ namespace ts {
             const constructSignatures = getUnionSignatures(type.types, SignatureKind.Construct);
             const stringIndexInfo = getUnionIndexInfo(type.types, IndexKind.String);
             const numberIndexInfo = getUnionIndexInfo(type.types, IndexKind.Number);
-            setStructuredTypeMembers(type, emptySymbols, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
+            setStructuredTypeMembers(type, emptySymbols, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo, /*promisesClause*/ undefined);
         }
 
         function intersectTypes(type1: Type, type2: Type): Type {
@@ -4521,7 +4535,7 @@ namespace ts {
                 stringIndexInfo = intersectIndexInfos(stringIndexInfo, getIndexInfoOfType(t, IndexKind.String));
                 numberIndexInfo = intersectIndexInfos(numberIndexInfo, getIndexInfoOfType(t, IndexKind.Number));
             }
-            setStructuredTypeMembers(type, emptySymbols, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
+            setStructuredTypeMembers(type, emptySymbols, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo, /*promisesClause*/ undefined);
         }
 
         /**
@@ -4535,7 +4549,9 @@ namespace ts {
                 const constructSignatures = instantiateSignatures(getSignaturesOfType(type.target, SignatureKind.Construct), type.mapper);
                 const stringIndexInfo = instantiateIndexInfo(getIndexInfoOfType(type.target, IndexKind.String), type.mapper);
                 const numberIndexInfo = instantiateIndexInfo(getIndexInfoOfType(type.target, IndexKind.Number), type.mapper);
-                setStructuredTypeMembers(type, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
+                const promisesClause = getPromisesClauseOfType(type.target);
+                const instantiatedPromisesClause = promisesClause && instantiateSymbol(promisesClause, type.mapper);
+                setStructuredTypeMembers(type, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo, instantiatedPromisesClause);
             }
             else if (symbol.flags & SymbolFlags.TypeLiteral) {
                 const members = symbol.members;
@@ -4543,7 +4559,8 @@ namespace ts {
                 const constructSignatures = getSignaturesOfSymbol(members["__new"]);
                 const stringIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.String);
                 const numberIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.Number);
-                setStructuredTypeMembers(type, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
+                const promisesClause = members["__promises"];
+                setStructuredTypeMembers(type, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo, promisesClause);
             }
             else {
                 // Combinations of function, class, enum and module
@@ -4565,7 +4582,7 @@ namespace ts {
                     }
                 }
                 const numberIndexInfo = symbol.flags & SymbolFlags.Enum ? enumNumberIndexInfo : undefined;
-                setStructuredTypeMembers(type, members, emptyArray, constructSignatures, undefined, numberIndexInfo);
+                setStructuredTypeMembers(type, members, emptyArray, constructSignatures, undefined, numberIndexInfo, /*promisesClause*/ undefined);
                 // We resolve the members before computing the signatures because a signature may use
                 // typeof with a qualified name expression that circularly references the type we are
                 // in the process of resolving (see issue #6072). The temporarily empty signature list
@@ -4581,7 +4598,7 @@ namespace ts {
             const members: SymbolTable = createMap<Symbol>();
             let stringIndexInfo: IndexInfo;
             // Resolve upfront such that recursive references see an empty object type.
-            setStructuredTypeMembers(type, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+            setStructuredTypeMembers(type, emptySymbols, emptyArray, emptyArray, undefined, undefined, undefined);
             // In { [P in K]: T }, we refer to P as the type parameter type, K as the constraint type,
             // and T as the template type.
             const typeParameter = getTypeParameterFromMappedType(type);
@@ -4605,7 +4622,7 @@ namespace ts {
                 const iterationType = keyType.flags & TypeFlags.Index ? getIndexType(getApparentType((<IndexType>keyType).type)) : keyType;
                 forEachType(iterationType, addMemberForKeyType);
             }
-            setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, undefined);
+            setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, undefined, undefined);
 
             function addMemberForKeyType(t: Type) {
                 // Create a mapper from T to the current iteration type constituent. Then, if the
@@ -4958,6 +4975,17 @@ namespace ts {
                 }
             }
             return undefined;
+        }
+
+        function getPromisesClauseOfStructuredType(type: Type): Symbol | undefined {
+            if (type.flags & TypeFlags.StructuredType) {
+                const resolved = resolveStructuredTypeMembers(<ObjectType>type);
+                return resolved.promisesClause;
+            }
+        }
+
+        function getPromisesClauseOfType(type: Type): Symbol | undefined {
+            return getPromisesClauseOfStructuredType(getApparentType(type));
         }
 
         function getTypeParametersFromJSDocTemplate(declaration: SignatureDeclaration): TypeParameter[] {
@@ -7740,7 +7768,7 @@ namespace ts {
                     result = mappedTypeRelatedTo(source, target, reportErrors);
                 }
                 else {
-                    result = promisesRelatedTo(source, target, reportErrors);
+                    result = promisesClausesRelatedTo(source, target, reportErrors);
                     if (result) {
                         result = propertiesRelatedTo(source, target, reportErrors);
                         if (result) {
@@ -7805,8 +7833,20 @@ namespace ts {
                 return Ternary.False;
             }
 
-            function promisesRelatedTo(_source: Type, _target: Type, _reportErrors: boolean): Ternary {
-                return Ternary.Maybe;
+            function promisesClausesRelatedTo(source: Type, target: Type, reportErrors: boolean): Ternary {
+                // const sourceClause = getPromisesClauseOfType(source);
+                const sourceClause = resolveStructuredTypeMembers(<ObjectType>source).promisesClause;
+                const sourceType = sourceClause && getTypeOfSymbol(sourceClause);
+                // const targetClause = getPromisesClauseOfType(target);
+                const targetClause = resolveStructuredTypeMembers(<ObjectType>target).promisesClause;
+                const targetType = targetClause && getTypeOfSymbol(targetClause);
+                if (!sourceType && !targetType) {
+                    return Ternary.Maybe;
+                }
+                if (!sourceType || !targetType) {
+                    return Ternary.False;
+                }
+                return isRelatedTo(sourceType, targetType, reportErrors);
             }
 
             function propertiesRelatedTo(source: Type, target: Type, reportErrors: boolean): Ternary {
@@ -16356,6 +16396,22 @@ namespace ts {
             }
         }
 
+        // function getPromisesClauseConstraint(type: Type): Type | undefined {
+        //     if (isTypeAny(type) || !type.symbol) {
+        //         return undefined;
+        //     }
+
+        //     const typeAsPromise = <PromiseOrAwaitableType>type;
+        //     if (typeAsPromise.promisesClauseConstraintType) {
+        //         return typeAsPromise.promisesClauseConstraintType;
+        //     }
+
+        //     for (const decl of type.symbol.declarations) {
+        //         if (decl.kind === SyntaxKind.ClassDeclaration || decl.kind === SyntaxKind)
+        //     }
+
+        // }
+
         function getAwaitedTypeOfPromise(type: Type, errorNode?: Node): Type | undefined {
             const promisedType = getPromisedTypeOfPromise(type, errorNode);
             return promisedType && getAwaitedType(promisedType, errorNode);
@@ -18224,11 +18280,12 @@ namespace ts {
         }
 
         /** Check that type parameter lists are identical across multiple declarations */
-        function checkTypeParameterListsIdentical(node: ClassLikeDeclaration | InterfaceDeclaration, symbol: Symbol) {
+        function checkTypeParameterListsAndPromisesTypesIdentical(node: ClassLikeDeclaration | InterfaceDeclaration, symbol: Symbol) {
             if (symbol.declarations.length === 1) {
                 return;
             }
             let firstDecl: ClassLikeDeclaration | InterfaceDeclaration;
+            let firstPromisesType: Type;
             for (const declaration of symbol.declarations) {
                 if (declaration.kind === SyntaxKind.ClassDeclaration || declaration.kind === SyntaxKind.InterfaceDeclaration) {
                     if (!firstDecl) {
@@ -18237,25 +18294,14 @@ namespace ts {
                     else if (!areTypeParametersIdentical(firstDecl.typeParameters, node.typeParameters)) {
                         error(node.name, Diagnostics.All_declarations_of_0_must_have_identical_type_parameters, node.name.text);
                     }
-                }
-            }
-        }
 
-        function checkPromisesTypesIdentical(node: ClassLikeDeclaration | InterfaceDeclaration, symbol: Symbol) {
-            if (symbol.declarations.length === 1) {
-                return;
-            }
-            let firstPromisesType: Type;
-            for (const declaration of symbol.declarations) {
-                if (declaration.kind === SyntaxKind.ClassDeclaration || declaration.kind === SyntaxKind.InterfaceDeclaration) {
+                    const promisesClause = (<ClassLikeDeclaration | InterfaceDeclaration>declaration).promisesClause;
+                    const promisesType = promisesClause && getTypeFromTypeNode(promisesClause.type);
                     if (!firstPromisesType) {
-                        const firstPromisesTypeNode = getPromisesHeritageClauseElement(<ClassLikeDeclaration | InterfaceDeclaration>declaration);
-                        firstPromisesType = firstPromisesTypeNode && getTypeFromTypeNode(firstPromisesTypeNode);
+                        firstPromisesType = promisesType;
                     }
                     else {
-                        const promisesTypeNode = getPromisesHeritageClauseElement(<ClassLikeDeclaration | InterfaceDeclaration>declaration);
-                        const promisesType = promisesTypeNode && getTypeFromTypeNode(promisesTypeNode);
-                        if (promisesTypeNode && !isTypeIdenticalTo(firstPromisesType, promisesType)) {
+                        if (promisesType && !isTypeIdenticalTo(firstPromisesType, promisesType)) {
                             error(node.name, Diagnostics.Any_declarations_of_0_that_promise_a_type_must_promise_the_same_type, node.name.text);
                         }
                     }
@@ -18300,8 +18346,7 @@ namespace ts {
             const type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
             const typeWithThis = getTypeWithThisArgument(type);
             const staticType = <ObjectType>getTypeOfSymbol(symbol);
-            checkTypeParameterListsIdentical(node, symbol);
-            checkPromisesTypesIdentical(node, symbol);
+            checkTypeParameterListsAndPromisesTypesIdentical(node, symbol);
             checkClassForDuplicateDeclarations(node);
 
             const baseTypeNode = getClassExtendsHeritageClauseElement(node);
@@ -18372,14 +18417,10 @@ namespace ts {
                 }
             }
 
-            const promisesTypeNode = getPromisesHeritageClauseElement(node);
-            if (promisesTypeNode) {
-                if (!isEntityNameExpression(promisesTypeNode.expression)) {
-                    error(promisesTypeNode.expression, Diagnostics.A_class_or_interface_can_only_promise_an_identifier_Slashqualified_name_with_optional_type_arguments);
-                }
-                checkTypeReferenceNode(promisesTypeNode);
+            const promisesClause = node.promisesClause;
+            if (promisesClause) {
                 if (produceDiagnostics) {
-                    const t = getTypeFromTypeNode(promisesTypeNode);
+                    const t = getTypeFromTypeNode(promisesClause.type);
                     if (t !== unknownType) {
                         const promisedType = getPromisedTypeOfPromise(type);
                         if (!promisedType) {
@@ -18591,22 +18632,14 @@ namespace ts {
             // Grammar checking
             checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarInterfaceDeclaration(node);
 
-            const promisesTypeNode = getPromisesHeritageClauseElement(node);
-            if (promisesTypeNode) {
-                if (!isEntityNameExpression(promisesTypeNode.expression)) {
-                    error(promisesTypeNode.expression, Diagnostics.A_class_or_interface_can_only_promise_an_identifier_Slashqualified_name_with_optional_type_arguments);
-                }
-                checkTypeReferenceNode(promisesTypeNode);
-            }
-
+            const promisesClause = node.promisesClause;
             checkTypeParameters(node.typeParameters);
             if (produceDiagnostics) {
                 checkTypeNameIsReserved(node.name, Diagnostics.Interface_name_cannot_be_0);
 
                 checkExportsOnMergedDeclarations(node);
                 const symbol = getSymbolOfNode(node);
-                checkTypeParameterListsIdentical(node, symbol);
-                checkPromisesTypesIdentical(node, symbol);
+                checkTypeParameterListsAndPromisesTypesIdentical(node, symbol);
 
                 // Only check this symbol once
                 const firstInterfaceDecl = <InterfaceDeclaration>getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration);
@@ -18621,8 +18654,8 @@ namespace ts {
                         checkIndexConstraints(type);
                     }
 
-                    if (promisesTypeNode) {
-                        const promisesType = getTypeFromTypeNode(promisesTypeNode);
+                    if (promisesClause) {
+                        const promisesType = getTypeFromTypeNode(promisesClause.type);
                         if (promisesType !== unknownType) {
                             const promisedType = getPromisedTypeOfPromise(type);
                             if (!promisedType) {
@@ -21415,7 +21448,6 @@ namespace ts {
         function checkGrammarClassDeclarationHeritageClauses(node: ClassLikeDeclaration) {
             let seenExtendsClause = false;
             let seenImplementsClause = false;
-            let seenPromisesClause = false;
 
             if (!checkGrammarDecorators(node) && !checkGrammarModifiers(node) && node.heritageClauses) {
                 for (const heritageClause of node.heritageClauses) {
@@ -21427,9 +21459,6 @@ namespace ts {
                             if (seenImplementsClause) {
                                 return grammarErrorOnFirstToken(heritageClause, Diagnostics._0_clause_must_precede_0_clause, "extends", "implements");
                             }
-                            if (seenPromisesClause) {
-                                return grammarErrorOnFirstToken(heritageClause, Diagnostics._0_clause_must_precede_0_clause, "extends", "promises");
-                            }
                             if (heritageClause.types.length > 1) {
                                 return grammarErrorOnFirstToken(heritageClause.types[1], Diagnostics.Classes_can_only_extend_a_single_class);
                             }
@@ -21440,20 +21469,7 @@ namespace ts {
                             if (seenImplementsClause) {
                                 return grammarErrorOnFirstToken(heritageClause, Diagnostics._0_clause_already_seen, "implements");
                             }
-                            if (seenPromisesClause) {
-                                return grammarErrorOnFirstToken(heritageClause, Diagnostics._0_clause_must_precede_0_clause, "implements", "promises");
-                            }
                             seenImplementsClause = true;
-                            break;
-
-                        case SyntaxKind.PromisesKeyword:
-                            if (seenPromisesClause) {
-                                return grammarErrorOnFirstToken(heritageClause, Diagnostics._0_clause_already_seen, "promises");
-                            }
-                            if (heritageClause.types.length > 1) {
-                                return grammarErrorOnFirstToken(heritageClause.types[1], Diagnostics.Classes_and_interfaces_can_only_promise_a_single_type);
-                            }
-                            seenPromisesClause = true;
                             break;
                     }
 
@@ -21465,7 +21481,6 @@ namespace ts {
 
         function checkGrammarInterfaceDeclaration(node: InterfaceDeclaration) {
             let seenExtendsClause = false;
-            let seenPromisesClause = false;
 
             if (node.heritageClauses) {
                 for (const heritageClause of node.heritageClauses) {
@@ -21474,22 +21489,10 @@ namespace ts {
                             if (seenExtendsClause) {
                                 return grammarErrorOnFirstToken(heritageClause, Diagnostics._0_clause_already_seen, "extends");
                             }
-                            if (seenPromisesClause) {
-                                return grammarErrorOnFirstToken(heritageClause, Diagnostics._0_clause_must_precede_0_clause, "extends", "promises");
-                            }
                             seenExtendsClause = true;
                             break;
                         case SyntaxKind.ImplementsKeyword:
                             return grammarErrorOnFirstToken(heritageClause, Diagnostics.Interface_declaration_cannot_have_implements_clause);
-                        case SyntaxKind.PromisesKeyword:
-                            if (seenPromisesClause) {
-                                return grammarErrorOnFirstToken(heritageClause, Diagnostics._0_clause_already_seen, "promises");
-                            }
-                            if (heritageClause.types.length > 1) {
-                                return grammarErrorOnFirstToken(heritageClause.types[1], Diagnostics.Classes_and_interfaces_can_only_promise_a_single_type);
-                            }
-                            seenPromisesClause = true;
-                            break;
                     }
 
                     // Grammar checking heritageClause inside class declaration

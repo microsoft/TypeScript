@@ -318,6 +318,7 @@ namespace ts {
         CaseClause,
         DefaultClause,
         HeritageClause,
+        PromisesClause,
         CatchClause,
 
         // Property assignments
@@ -1694,6 +1695,7 @@ namespace ts {
         name?: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         heritageClauses?: NodeArray<HeritageClause>;
+        promisesClause?: PromisesClause;
         members: NodeArray<ClassElement>;
     }
 
@@ -1722,13 +1724,19 @@ namespace ts {
         name: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         heritageClauses?: NodeArray<HeritageClause>;
+        promisesClause?: PromisesClause;
         members: NodeArray<TypeElement>;
     }
 
     export interface HeritageClause extends Node {
         kind: SyntaxKind.HeritageClause;
-        token: SyntaxKind.ExtendsKeyword | SyntaxKind.ImplementsKeyword | SyntaxKind.PromisesKeyword;
+        token: SyntaxKind.ExtendsKeyword | SyntaxKind.ImplementsKeyword;
         types?: NodeArray<ExpressionWithTypeArguments>;
+    }
+
+    export interface PromisesClause extends Declaration {
+        kind: SyntaxKind.PromisesClause;
+        type: TypeNode;
     }
 
     export interface TypeAliasDeclaration extends DeclarationStatement {
@@ -2890,6 +2898,7 @@ namespace ts {
         declaredConstructSignatures: Signature[];  // Declared construct signatures
         declaredStringIndexInfo: IndexInfo;        // Declared string indexing info
         declaredNumberIndexInfo: IndexInfo;        // Declared numeric indexing info
+        declaredPromisesClause?: Symbol;           // Declared promises clause
     }
 
     /**
@@ -2960,6 +2969,7 @@ namespace ts {
         constructSignatures: Signature[];  // Construct signatures of type
         stringIndexInfo?: IndexInfo;       // String indexing info
         numberIndexInfo?: IndexInfo;       // Numeric indexing info
+        promisesClause?: Symbol;           // Promises clause
     }
 
     /* @internal */
@@ -2982,6 +2992,7 @@ namespace ts {
         promiseTypeOfPromiseConstructor?: Type;
         promisedTypeOfPromise?: Type;
         awaitedTypeOfType?: Type;
+        promisesClauseConstraintType?: Type;
     }
 
     export interface TypeVariable extends Type {
