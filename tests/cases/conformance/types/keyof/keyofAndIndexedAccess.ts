@@ -297,6 +297,30 @@ class C1 {
     }
 }
 
+type S2 = {
+    a: string;
+    b: string;
+};
+
+function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K], x4: T[K]) {
+    x1 = x2;
+    x1 = x3;
+    x1 = x4;
+    x2 = x1;
+    x2 = x3;
+    x2 = x4;
+    x3 = x1;
+    x3 = x2;
+    x3 = x4;
+    x4 = x1;
+    x4 = x2;
+    x4 = x3;
+    x1.length;
+    x2.length;
+    x3.length;
+    x4.length;
+}
+
 // Repros from #12011
 
 class Base {
@@ -431,3 +455,12 @@ type SomeMethodDescriptor = {
 }
 
 let result = dispatchMethod<SomeMethodDescriptor>("someMethod", ["hello", 35]);
+
+// Repro from #13073
+
+type KeyTypes = "a" | "b"
+let MyThingy: { [key in KeyTypes]: string[] };
+
+function addToMyThingy<S extends KeyTypes>(key: S) {
+    MyThingy[key].push("a");
+}
