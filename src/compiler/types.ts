@@ -3312,6 +3312,7 @@
         alwaysStrict?: boolean;  // Always combine with strict property
         baseUrl?: string;
         charset?: string;
+        checkJsFiles?: boolean;
         /* @internal */ configFilePath?: string;
         declaration?: boolean;
         declarationDir?: string;

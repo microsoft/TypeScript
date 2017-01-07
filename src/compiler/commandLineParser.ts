@@ -481,6 +481,12 @@ namespace ts {
                 name: "plugin",
                 type: "object"
             }
+        },
+        {
+            name: "checkJsFiles",
+            type: "boolean",
+            experimental: true,
+            description: Diagnostics.Report_errors_in_js_files
         }
     ];
 
