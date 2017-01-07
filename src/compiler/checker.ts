@@ -164,6 +164,7 @@ namespace ts {
         anyFunctionType.flags |= TypeFlags.ContainsAnyFunctionType;
 
         const noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        const circularConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
         const anySignature = createSignature(undefined, undefined, undefined, emptyArray, anyType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         const unknownSignature = createSignature(undefined, undefined, undefined, emptyArray, unknownType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
@@ -4135,9 +4136,6 @@ namespace ts {
             if (!links.declaredType) {
                 const type = <TypeParameter>createType(TypeFlags.TypeParameter);
                 type.symbol = symbol;
-                if (!(<TypeParameterDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeParameter)).constraint) {
-                    type.constraint = noConstraintType;
-                }
                 links.declaredType = type;
             }
             return <TypeParameter>links.declaredType;
@@ -4754,19 +4752,79 @@ namespace ts {
                 getPropertiesOfObjectType(type);
         }
 
+        function getConstraintOfTypeVariable(type: TypeVariable): Type {
+            return type.flags & TypeFlags.TypeParameter ? getConstraintOfTypeParameter(<TypeParameter>type) : getBaseConstraintOfTypeVariable(type);
+        }
+
+        function getConstraintOfTypeParameter(typeParameter: TypeParameter): Type {
+            return hasNonCircularBaseConstraint(typeParameter) ? getConstraintFromTypeParameter(typeParameter) : undefined;
+        }
+
+        function getBaseConstraintOfTypeVariable(type: TypeVariable): Type {
+            const constraint = getResolvedBaseConstraint(type);
+            return constraint !== noConstraintType && constraint !== circularConstraintType ? constraint : undefined;
+        }
+
+        function hasNonCircularBaseConstraint(type: TypeVariable): boolean {
+            return getResolvedBaseConstraint(type) !== circularConstraintType;
+        }
+
         /**
-         * The apparent type of a type parameter is the base constraint instantiated with the type parameter
-         * as the type argument for the 'this' type.
+         * Return the resolved base constraint of a type variable. The noConstraintType singleton is returned if the
+         * type variable has no constraint, and the circularConstraintType singleton is returned if the constraint
+         * circularly references the type variable.
          */
-        function getApparentTypeOfTypeVariable(type: TypeVariable) {
+        function getResolvedBaseConstraint(type: TypeVariable): Type {
+            let typeStack: Type[];
+            let circular: boolean;
             if (!type.resolvedApparentType) {
-                let constraintType = getConstraintOfTypeVariable(type);
-                while (constraintType && constraintType.flags & TypeFlags.TypeParameter) {
-                    constraintType = getConstraintOfTypeVariable(<TypeVariable>constraintType);
-                }
-                type.resolvedApparentType = getTypeWithThisArgument(constraintType || emptyObjectType, type);
+                typeStack = [];
+                const constraint = getBaseConstraint(type);
+                type.resolvedApparentType = circular ? circularConstraintType : getTypeWithThisArgument(constraint || noConstraintType, type);
             }
             return type.resolvedApparentType;
+
+            function getBaseConstraint(t: Type): Type {
+                if (contains(typeStack, t)) {
+                    circular = true;
+                    return undefined;
+                }
+                typeStack.push(t);
+                const result = computeBaseConstraint(t);
+                typeStack.pop();
+                return result;
+            }
+
+            function computeBaseConstraint(t: Type): Type {
+                if (t.flags & TypeFlags.TypeParameter) {
+                    const constraint = getConstraintFromTypeParameter(<TypeParameter>t);
+                    return (<TypeParameter>t).isThisType ? constraint :
+                        constraint ? getBaseConstraint(constraint) : undefined;
+                }
+                if (t.flags & TypeFlags.UnionOrIntersection) {
+                    const types = (<UnionOrIntersectionType>t).types;
+                    const baseTypes: Type[] = [];
+                    for (const type of types) {
+                        const baseType = getBaseConstraint(type);
+                        if (baseType) {
+                            baseTypes.push(baseType);
+                        }
+                    }
+                    return t.flags & TypeFlags.Union && baseTypes.length === types.length ? getUnionType(baseTypes) :
+                        t.flags & TypeFlags.Intersection && baseTypes.length ? getIntersectionType(baseTypes) :
+                        undefined;
+                }
+                if (t.flags & TypeFlags.Index) {
+                    return stringType;
+                }
+                if (t.flags & TypeFlags.IndexedAccess) {
+                    const baseObjectType = getBaseConstraint((<IndexedAccessType>t).objectType);
+                    const baseIndexType = getBaseConstraint((<IndexedAccessType>t).indexType);
+                    const baseIndexedAccess = baseObjectType && baseIndexType ? getIndexedAccessType(baseObjectType, baseIndexType) : undefined;
+                    return baseIndexedAccess && baseIndexedAccess !== unknownType ? getBaseConstraint(baseIndexedAccess) : undefined;
+                }
+                return t;
+            }
         }
 
         /**
@@ -4775,7 +4833,7 @@ namespace ts {
          * type itself. Note that the apparent type of a union type is the union type itself.
          */
         function getApparentType(type: Type): Type {
-            const t = type.flags & TypeFlags.TypeVariable ? getApparentTypeOfTypeVariable(<TypeVariable>type) : type;
+            const t = type.flags & TypeFlags.TypeVariable ? getBaseConstraintOfTypeVariable(<TypeVariable>type) || emptyObjectType : type;
             return t.flags & TypeFlags.StringLike ? globalStringType :
                 t.flags & TypeFlags.NumberLike ? globalNumberType :
                 t.flags & TypeFlags.BooleanLike ? globalBooleanType :
@@ -5329,20 +5387,7 @@ namespace ts {
             return (<TypeParameterDeclaration>getDeclarationOfKind(type.symbol, SyntaxKind.TypeParameter)).constraint;
         }
 
-        function hasConstraintReferenceTo(type: Type, target: TypeParameter): boolean {
-            let checked: Type[];
-            while (type && type.flags & TypeFlags.TypeParameter && !((type as TypeParameter).isThisType) && !contains(checked, type)) {
-                if (type === target) {
-                    return true;
-                }
-                (checked || (checked = [])).push(type);
-                const constraintDeclaration = getConstraintDeclaration(<TypeParameter>type);
-                type = constraintDeclaration && getTypeFromTypeNode(constraintDeclaration);
-            }
-            return false;
-        }
-
-        function getConstraintOfTypeParameter(typeParameter: TypeParameter): Type {
+        function getConstraintFromTypeParameter(typeParameter: TypeParameter): Type {
             if (!typeParameter.constraint) {
                 if (typeParameter.target) {
                     const targetConstraint = getConstraintOfTypeParameter(typeParameter.target);
@@ -5350,21 +5395,10 @@ namespace ts {
                 }
                 else {
                     const constraintDeclaration = getConstraintDeclaration(typeParameter);
-                    let constraint = getTypeFromTypeNode(constraintDeclaration);
-                    if (hasConstraintReferenceTo(constraint, typeParameter)) {
-                        error(constraintDeclaration, Diagnostics.Type_parameter_0_has_a_circular_constraint, typeToString(typeParameter));
-                        constraint = unknownType;
-                    }
-                    typeParameter.constraint = constraint;
+                    typeParameter.constraint = constraintDeclaration ? getTypeFromTypeNode(constraintDeclaration) : noConstraintType;
                 }
             }
             return typeParameter.constraint === noConstraintType ? undefined : typeParameter.constraint;
-        }
-
-        function getConstraintOfTypeVariable(type: TypeVariable): Type {
-            return type.flags & TypeFlags.TypeParameter ? getConstraintOfTypeParameter(<TypeParameter>type) :
-                type.flags & TypeFlags.IndexedAccess ? (<IndexedAccessType>type).constraint :
-                undefined;
         }
 
         function getParentSymbolOfTypeParameter(typeParameter: TypeParameter): Symbol {
@@ -6042,24 +6076,6 @@ namespace ts {
             const type = <IndexedAccessType>createType(TypeFlags.IndexedAccess);
             type.objectType = objectType;
             type.indexType = indexType;
-            // We eagerly compute the constraint of the indexed access type such that circularity
-            // errors are immediately caught and reported. For example, class C { x: this["x"] }
-            // becomes an error only when the constraint is eagerly computed.
-            if (type.objectType.flags & TypeFlags.StructuredType) {
-                // The constraint of T[K], where T is an object, union, or intersection type,
-                // is the type of the string index signature of T, if any.
-                type.constraint = getIndexTypeOfType(type.objectType, IndexKind.String);
-            }
-            else if (type.objectType.flags & TypeFlags.TypeVariable) {
-                // The constraint of T[K], where T is a type variable, is A[K], where A is the
-                // apparent type of T.
-                const apparentType = getApparentTypeOfTypeVariable(<TypeVariable>type.objectType);
-                if (apparentType !== emptyObjectType) {
-                    type.constraint = isTypeOfKind((<IndexedAccessType>type).indexType, TypeFlags.StringLike) ?
-                        getIndexedAccessType(apparentType, (<IndexedAccessType>type).indexType) :
-                        getIndexTypeOfType(apparentType, IndexKind.String);
-                }
-            }
             return type;
         }
 
@@ -6149,13 +6165,6 @@ namespace ts {
                 isGenericMappedType(objectType)) {
                 if (objectType.flags & TypeFlags.Any) {
                     return objectType;
-                }
-                // We first check that the index type is assignable to 'keyof T' for the object type.
-                if (accessNode) {
-                    if (!isTypeAssignableTo(indexType, getIndexType(objectType))) {
-                        error(accessNode, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(indexType), typeToString(objectType));
-                        return unknownType;
-                    }
                 }
                 // If the object type is a mapped type { [P in K]: E }, we instantiate E using a mapper that substitutes
                 // the index type for P. For example, for an index access { [P in K]: Box<T[P]> }[X], we construct the
@@ -7436,8 +7445,9 @@ namespace ts {
                     }
                     // A type S is related to a type T[K] if S is related to A[K], where K is string-like and
                     // A is the apparent type of S.
-                    if ((<IndexedAccessType>target).constraint) {
-                        if (result = isRelatedTo(source, (<IndexedAccessType>target).constraint, reportErrors)) {
+                    const constraint = getBaseConstraintOfTypeVariable(<IndexedAccessType>target);
+                    if (constraint) {
+                        if (result = isRelatedTo(source, constraint, reportErrors)) {
                             errorInfo = saveErrorInfo;
                             return result;
                         }
@@ -7475,8 +7485,9 @@ namespace ts {
                 else if (source.flags & TypeFlags.IndexedAccess) {
                     // A type S[K] is related to a type T if A[K] is related to T, where K is string-like and
                     // A is the apparent type of S.
-                    if ((<IndexedAccessType>source).constraint) {
-                        if (result = isRelatedTo((<IndexedAccessType>source).constraint, target, reportErrors)) {
+                    const constraint = getBaseConstraintOfTypeVariable(<IndexedAccessType>source);
+                    if (constraint) {
+                        if (result = isRelatedTo(constraint, target, reportErrors)) {
                             errorInfo = saveErrorInfo;
                             return result;
                         }
@@ -12528,7 +12539,7 @@ namespace ts {
                 return unknownType;
             }
 
-            return getIndexedAccessType(objectType, indexType, node);
+            return checkIndexedAccessIndexType(getIndexedAccessType(objectType, indexType, node), node);
         }
 
         function checkThatExpressionIsProperSymbolReference(expression: Expression, expressionType: Type, reportError: boolean): boolean {
@@ -15186,14 +15197,14 @@ namespace ts {
         function isLiteralContextualType(contextualType: Type) {
             if (contextualType) {
                 if (contextualType.flags & TypeFlags.TypeVariable) {
-                    const apparentType = getApparentTypeOfTypeVariable(<TypeVariable>contextualType);
+                    const constraint = getBaseConstraintOfTypeVariable(<TypeVariable>contextualType) || emptyObjectType;
                     // If the type parameter is constrained to the base primitive type we're checking for,
                     // consider this a literal context. For example, given a type parameter 'T extends string',
                     // this causes us to infer string literal types for T.
-                    if (apparentType.flags & (TypeFlags.String | TypeFlags.Number | TypeFlags.Boolean | TypeFlags.Enum)) {
+                    if (constraint.flags & (TypeFlags.String | TypeFlags.Number | TypeFlags.Boolean | TypeFlags.Enum)) {
                         return true;
                     }
-                    contextualType = apparentType;
+                    contextualType = constraint;
                 }
                 return maybeTypeOfKind(contextualType, (TypeFlags.Literal | TypeFlags.Index));
             }
@@ -15391,6 +15402,10 @@ namespace ts {
             }
 
             checkSourceElement(node.constraint);
+            const typeParameter = getDeclaredTypeOfTypeParameter(getSymbolOfNode(node));
+            if (!hasNonCircularBaseConstraint(typeParameter)) {
+                error(node.constraint, Diagnostics.Type_parameter_0_has_a_circular_constraint, typeToString(typeParameter));
+            }
             getConstraintOfTypeParameter(getDeclaredTypeOfTypeParameter(getSymbolOfNode(node)));
             if (produceDiagnostics) {
                 checkTypeNameIsReserved(node.name, Diagnostics.Type_parameter_name_cannot_be_0);
@@ -16014,8 +16029,20 @@ namespace ts {
             forEach(node.types, checkSourceElement);
         }
 
+        function checkIndexedAccessIndexType(type: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode) {
+            if (type.flags & TypeFlags.IndexedAccess) {
+                // Check that the index type is assignable to 'keyof T' for the object type.
+                const objectType = (<IndexedAccessType>type).objectType;
+                const indexType = (<IndexedAccessType>type).indexType;
+                if (!isTypeAssignableTo(indexType, getIndexType(objectType))) {
+                    error(accessNode, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(indexType), typeToString(objectType));
+                }
+            }
+            return type;
+        }
+
         function checkIndexedAccessType(node: IndexedAccessTypeNode) {
-            getTypeFromIndexedAccessTypeNode(node);
+            checkIndexedAccessIndexType(getTypeFromIndexedAccessTypeNode(node), node);
         }
 
         function checkMappedType(node: MappedTypeNode) {
@@ -16023,8 +16050,7 @@ namespace ts {
             checkSourceElement(node.type);
             const type = <MappedType>getTypeFromMappedTypeNode(node);
             const constraintType = getConstraintTypeFromMappedType(type);
-            const keyType = constraintType.flags & TypeFlags.TypeVariable ? getApparentTypeOfTypeVariable(<TypeVariable>constraintType) : constraintType;
-            checkTypeAssignableTo(keyType, stringType, node.typeParameter.constraint);
+            checkTypeAssignableTo(constraintType, stringType, node.typeParameter.constraint);
         }
 
         function isPrivateWithinAmbient(node: Node): boolean {
