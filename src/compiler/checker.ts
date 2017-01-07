@@ -21457,7 +21457,7 @@ namespace ts {
                                 return grammarErrorOnFirstToken(heritageClause, Diagnostics._0_clause_already_seen, "extends");
                             }
                             if (seenImplementsClause) {
-                                return grammarErrorOnFirstToken(heritageClause, Diagnostics._0_clause_must_precede_0_clause, "extends", "implements");
+                                return grammarErrorOnFirstToken(heritageClause, Diagnostics._0_clause_must_precede_1_clause, "extends", "implements");
                             }
                             if (heritageClause.types.length > 1) {
                                 return grammarErrorOnFirstToken(heritageClause.types[1], Diagnostics.Classes_can_only_extend_a_single_class);

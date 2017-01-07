@@ -726,7 +726,7 @@ compileFile(
 
         // Appending exports at the end of the server library
         var tsserverLibraryDefinitionFileContents =
-            fs.readFileSync(tsserverLibraryDefinitionFile).toString() + 
+            fs.readFileSync(tsserverLibraryDefinitionFile).toString() +
             "\r\nexport = ts;" +
             "\r\nexport as namespace ts;";
 
@@ -851,24 +851,36 @@ var refTest262Baseline = path.join(internalTests, "baselines/test262/reference")
 desc("Builds the test infrastructure using the built compiler");
 task("tests", ["local", run].concat(libraryTargets));
 
-function exec(cmd, completeHandler, errorHandler) {
+function exec(cmd, completeHandler, errorHandler, opts) {
+    var stdio = opts && opts.stdio || {};
+    if (typeof stdio === "string") stdio = { stdout: stdio, stderr: stdio };
+    if (!stdio.stdout) stdio.stdout = "inherit";
+    if (!stdio.stderr) stdio.stderr = "inherit";
+    var stdout = "";
+    var stderr = "";
     var ex = jake.createExec([cmd], { windowsVerbatimArguments: true });
     // Add listeners for output and error
     ex.addListener("stdout", function (output) {
-        process.stdout.write(output);
+        stdout += output;
+        if (stdio.stdout === "inherit") {
+            process.stdout.write(output);
+        }
     });
     ex.addListener("stderr", function (error) {
-        process.stderr.write(error);
+        stderr += error;
+        if (stdio.stderr === "inherit") {
+            process.stderr.write(error);
+        }
     });
     ex.addListener("cmdEnd", function () {
         if (completeHandler) {
-            completeHandler();
+            completeHandler(stdout, stderr);
         }
         complete();
     });
     ex.addListener("error", function (e, status) {
         if (errorHandler) {
-            errorHandler(e, status);
+            errorHandler(e, status, stdout, stderr);
         } else {
             fail("Process exited with code " + status);
         }
@@ -1070,27 +1082,61 @@ task("runtests-browser", ["tests", "browserify", builtLocalDirectory, servicesFi
     exec(cmd);
 }, { async: true });
 
-function getDiffTool() {
+function getDiffTool(cb) {
     var program = process.env['DIFF'];
-    if (!program) {
+    if (program) return cb(program);
+    return exec("git config diff.tool", onGetDiffTool, onError, { stdio: "redirect" });
+
+    function onGetDiffTool(stdout) {
+        if (stdout) stdout = stdout.trim();
+        if (stdout) return exec("git config difftool." + stdout + ".cmd", onGetDifftoolCmd, onError, { stdio: "redirect" });
+        return onError();
+    }
+
+    function onGetDifftoolCmd(stdout) {
+        if (stdout) stdout = stdout.trim();
+        if (stdout) return cb(stdout.trim());
+        return onError();
+    }
+
+    function onError() {
         fail("Add the 'DIFF' environment variable to the path of the program you want to use.");
     }
-    return program;
+}
+
+function formatDiffTool(toolPath, leftPath, rightPath) {
+    return /\$(local|remote)/i.test(toolPath)
+        ? toolPath.replace(/(\$local)|(\$remote)/gi, function (_, left, right) { return left ? leftPath : rightPath; })
+        : '"' + toolPath + '" "' + leftPath + '" "' + rightPath + '"';
+}
+
+function parseCommand(text) {
+    var re = /"([^"]*)"|[^"\s]+/g, args = [], m;
+    while (m = re.exec(text)) args.push(m[1] || m[0]);
+    return { cmd: args.shift(), args: args };
 }
 
 // Baseline Diff
 desc("Diffs the compiler baselines using the diff tool specified by the 'DIFF' environment variable");
 task('diff', function () {
-    var cmd = '"' + getDiffTool() + '" ' + refBaseline + ' ' + localBaseline;
-    console.log(cmd);
-    exec(cmd);
+    getDiffTool(function (tool) {
+        var cmd = formatDiffTool(tool, refBaseline, localBaseline);
+        console.log(cmd);
+        var opts = parseCommand(cmd);
+        child_process.spawn(opts.cmd, opts.args, { detached: true }).unref();
+        complete();
+    });
 }, { async: true });
 
 desc("Diffs the RWC baselines using the diff tool specified by the 'DIFF' environment variable");
 task('diff-rwc', function () {
-    var cmd = '"' + getDiffTool() + '" ' + refRwcBaseline + ' ' + localRwcBaseline;
-    console.log(cmd);
-    exec(cmd);
+    getDiffTool(function (tool) {
+        var cmd = formatDiffTool(tool, refRwcBaseline, localRwcBaseline);
+        console.log(cmd);
+        var opts = parseCommand(cmd);
+        child_process.spawn(opts.cmd, opts.args, { detached: true }).unref();
+        complete();
+    });
 }, { async: true });
 
 desc("Builds the test sources and automation in debug mode");

@@ -515,7 +515,7 @@
         "category": "Error",
         "code": 1172
     },
-    "'{0}' clause must precede '{0}' clause.": {
+    "'{0}' clause must precede '{1}' clause.": {
         "category": "Error",
         "code": 1173
     },

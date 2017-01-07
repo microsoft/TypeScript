@@ -1,4 +1,4 @@
-tests/cases/compiler/implementsClauseAlreadySeen.ts(4,22): error TS1175: 'implements' clause already seen.
+tests/cases/compiler/implementsClauseAlreadySeen.ts(4,22): error TS1172: 'implements' clause already seen.
 
 
 ==== tests/cases/compiler/implementsClauseAlreadySeen.ts (1 errors) ====
@@ -7,6 +7,6 @@ tests/cases/compiler/implementsClauseAlreadySeen.ts(4,22): error TS1175: 'implem
     }
     class D implements C implements C {
                          ~~~~~~~~~~
-!!! error TS1175: 'implements' clause already seen.
+!!! error TS1172: 'implements' clause already seen.
         baz() { }
     }
