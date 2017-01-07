@@ -7740,15 +7740,18 @@ namespace ts {
                     result = mappedTypeRelatedTo(source, target, reportErrors);
                 }
                 else {
-                    result = propertiesRelatedTo(source, target, reportErrors);
+                    result = promisesRelatedTo(source, target, reportErrors);
                     if (result) {
-                        result &= signaturesRelatedTo(source, target, SignatureKind.Call, reportErrors);
+                        result = propertiesRelatedTo(source, target, reportErrors);
                         if (result) {
-                            result &= signaturesRelatedTo(source, target, SignatureKind.Construct, reportErrors);
+                            result &= signaturesRelatedTo(source, target, SignatureKind.Call, reportErrors);
                             if (result) {
-                                result &= indexTypesRelatedTo(source, originalSource, target, IndexKind.String, reportErrors);
+                                result &= signaturesRelatedTo(source, target, SignatureKind.Construct, reportErrors);
                                 if (result) {
-                                    result &= indexTypesRelatedTo(source, originalSource, target, IndexKind.Number, reportErrors);
+                                    result &= indexTypesRelatedTo(source, originalSource, target, IndexKind.String, reportErrors);
+                                    if (result) {
+                                        result &= indexTypesRelatedTo(source, originalSource, target, IndexKind.Number, reportErrors);
+                                    }
                                 }
                             }
                         }
@@ -7800,6 +7803,10 @@ namespace ts {
                     }
                 }
                 return Ternary.False;
+            }
+
+            function promisesRelatedTo(_source: Type, _target: Type, _reportErrors: boolean): Ternary {
+                return Ternary.Maybe;
             }
 
             function propertiesRelatedTo(source: Type, target: Type, reportErrors: boolean): Ternary {
@@ -18234,6 +18241,28 @@ namespace ts {
             }
         }
 
+        function checkPromisesTypesIdentical(node: ClassLikeDeclaration | InterfaceDeclaration, symbol: Symbol) {
+            if (symbol.declarations.length === 1) {
+                return;
+            }
+            let firstPromisesType: Type;
+            for (const declaration of symbol.declarations) {
+                if (declaration.kind === SyntaxKind.ClassDeclaration || declaration.kind === SyntaxKind.InterfaceDeclaration) {
+                    if (!firstPromisesType) {
+                        const firstPromisesTypeNode = getPromisesHeritageClauseElement(<ClassLikeDeclaration | InterfaceDeclaration>declaration);
+                        firstPromisesType = firstPromisesTypeNode && getTypeFromTypeNode(firstPromisesTypeNode);
+                    }
+                    else {
+                        const promisesTypeNode = getPromisesHeritageClauseElement(<ClassLikeDeclaration | InterfaceDeclaration>declaration);
+                        const promisesType = promisesTypeNode && getTypeFromTypeNode(promisesTypeNode);
+                        if (promisesTypeNode && !isTypeIdenticalTo(firstPromisesType, promisesType)) {
+                            error(node.name, Diagnostics.Any_declarations_of_0_that_promise_a_type_must_promise_the_same_type, node.name.text);
+                        }
+                    }
+                }
+            }
+        }
+
         function checkClassExpression(node: ClassExpression): Type {
             checkClassLikeDeclaration(node);
             checkNodeDeferred(node);
@@ -18272,6 +18301,7 @@ namespace ts {
             const typeWithThis = getTypeWithThisArgument(type);
             const staticType = <ObjectType>getTypeOfSymbol(symbol);
             checkTypeParameterListsIdentical(node, symbol);
+            checkPromisesTypesIdentical(node, symbol);
             checkClassForDuplicateDeclarations(node);
 
             const baseTypeNode = getClassExtendsHeritageClauseElement(node);
@@ -18337,6 +18367,26 @@ namespace ts {
                             else {
                                 error(typeRefNode, Diagnostics.A_class_may_only_implement_another_class_or_interface);
                             }
+                        }
+                    }
+                }
+            }
+
+            const promisesTypeNode = getPromisesHeritageClauseElement(node);
+            if (promisesTypeNode) {
+                if (!isEntityNameExpression(promisesTypeNode.expression)) {
+                    error(promisesTypeNode.expression, Diagnostics.A_class_or_interface_can_only_promise_an_identifier_Slashqualified_name_with_optional_type_arguments);
+                }
+                checkTypeReferenceNode(promisesTypeNode);
+                if (produceDiagnostics) {
+                    const t = getTypeFromTypeNode(promisesTypeNode);
+                    if (t !== unknownType) {
+                        const promisedType = getPromisedTypeOfPromise(type);
+                        if (!promisedType) {
+                            error(node.name || node, Diagnostics.Class_or_interface_0_incorrectly_promises_type_1_A_compatible_then_signature_could_not_be_found, typeToString(type), typeToString(t));
+                        }
+                        else {
+                            checkTypeAssignableTo(t, promisedType, node.name || node, Diagnostics.Class_or_interface_promises_type_0_which_is_not_compatible_with_the_type_1_used_by_the_fulfillment_callbacks_of_its_then_members);
                         }
                     }
                 }
@@ -18541,6 +18591,14 @@ namespace ts {
             // Grammar checking
             checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarInterfaceDeclaration(node);
 
+            const promisesTypeNode = getPromisesHeritageClauseElement(node);
+            if (promisesTypeNode) {
+                if (!isEntityNameExpression(promisesTypeNode.expression)) {
+                    error(promisesTypeNode.expression, Diagnostics.A_class_or_interface_can_only_promise_an_identifier_Slashqualified_name_with_optional_type_arguments);
+                }
+                checkTypeReferenceNode(promisesTypeNode);
+            }
+
             checkTypeParameters(node.typeParameters);
             if (produceDiagnostics) {
                 checkTypeNameIsReserved(node.name, Diagnostics.Interface_name_cannot_be_0);
@@ -18548,6 +18606,7 @@ namespace ts {
                 checkExportsOnMergedDeclarations(node);
                 const symbol = getSymbolOfNode(node);
                 checkTypeParameterListsIdentical(node, symbol);
+                checkPromisesTypesIdentical(node, symbol);
 
                 // Only check this symbol once
                 const firstInterfaceDecl = <InterfaceDeclaration>getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration);
@@ -18560,6 +18619,19 @@ namespace ts {
                             checkTypeAssignableTo(typeWithThis, getTypeWithThisArgument(baseType, type.thisType), node.name, Diagnostics.Interface_0_incorrectly_extends_interface_1);
                         }
                         checkIndexConstraints(type);
+                    }
+
+                    if (promisesTypeNode) {
+                        const promisesType = getTypeFromTypeNode(promisesTypeNode);
+                        if (promisesType !== unknownType) {
+                            const promisedType = getPromisedTypeOfPromise(type);
+                            if (!promisedType) {
+                                error(node.name || node, Diagnostics.Class_or_interface_0_incorrectly_promises_type_1_A_compatible_then_signature_could_not_be_found, typeToString(type), typeToString(promisesType));
+                            }
+                            else {
+                                checkTypeAssignableTo(promisesType, promisedType, node.name || node, Diagnostics.Class_or_interface_promises_type_0_which_is_not_compatible_with_the_type_1_used_by_the_fulfillment_callbacks_of_its_then_members);
+                            }
+                        }
                     }
                 }
                 checkObjectTypeForDuplicateDeclarations(node);
@@ -21343,31 +21415,46 @@ namespace ts {
         function checkGrammarClassDeclarationHeritageClauses(node: ClassLikeDeclaration) {
             let seenExtendsClause = false;
             let seenImplementsClause = false;
+            let seenPromisesClause = false;
 
             if (!checkGrammarDecorators(node) && !checkGrammarModifiers(node) && node.heritageClauses) {
                 for (const heritageClause of node.heritageClauses) {
-                    if (heritageClause.token === SyntaxKind.ExtendsKeyword) {
-                        if (seenExtendsClause) {
-                            return grammarErrorOnFirstToken(heritageClause, Diagnostics.extends_clause_already_seen);
-                        }
+                    switch (heritageClause.token) {
+                        case SyntaxKind.ExtendsKeyword:
+                            if (seenExtendsClause) {
+                                return grammarErrorOnFirstToken(heritageClause, Diagnostics._0_clause_already_seen, "extends");
+                            }
+                            if (seenImplementsClause) {
+                                return grammarErrorOnFirstToken(heritageClause, Diagnostics._0_clause_must_precede_0_clause, "extends", "implements");
+                            }
+                            if (seenPromisesClause) {
+                                return grammarErrorOnFirstToken(heritageClause, Diagnostics._0_clause_must_precede_0_clause, "extends", "promises");
+                            }
+                            if (heritageClause.types.length > 1) {
+                                return grammarErrorOnFirstToken(heritageClause.types[1], Diagnostics.Classes_can_only_extend_a_single_class);
+                            }
+                            seenExtendsClause = true;
+                            break;
 
-                        if (seenImplementsClause) {
-                            return grammarErrorOnFirstToken(heritageClause, Diagnostics.extends_clause_must_precede_implements_clause);
-                        }
+                        case SyntaxKind.ImplementsKeyword:
+                            if (seenImplementsClause) {
+                                return grammarErrorOnFirstToken(heritageClause, Diagnostics._0_clause_already_seen, "implements");
+                            }
+                            if (seenPromisesClause) {
+                                return grammarErrorOnFirstToken(heritageClause, Diagnostics._0_clause_must_precede_0_clause, "implements", "promises");
+                            }
+                            seenImplementsClause = true;
+                            break;
 
-                        if (heritageClause.types.length > 1) {
-                            return grammarErrorOnFirstToken(heritageClause.types[1], Diagnostics.Classes_can_only_extend_a_single_class);
-                        }
-
-                        seenExtendsClause = true;
-                    }
-                    else {
-                        Debug.assert(heritageClause.token === SyntaxKind.ImplementsKeyword);
-                        if (seenImplementsClause) {
-                            return grammarErrorOnFirstToken(heritageClause, Diagnostics.implements_clause_already_seen);
-                        }
-
-                        seenImplementsClause = true;
+                        case SyntaxKind.PromisesKeyword:
+                            if (seenPromisesClause) {
+                                return grammarErrorOnFirstToken(heritageClause, Diagnostics._0_clause_already_seen, "promises");
+                            }
+                            if (heritageClause.types.length > 1) {
+                                return grammarErrorOnFirstToken(heritageClause.types[1], Diagnostics.Classes_and_interfaces_can_only_promise_a_single_type);
+                            }
+                            seenPromisesClause = true;
+                            break;
                     }
 
                     // Grammar checking heritageClause inside class declaration
@@ -21378,19 +21465,31 @@ namespace ts {
 
         function checkGrammarInterfaceDeclaration(node: InterfaceDeclaration) {
             let seenExtendsClause = false;
+            let seenPromisesClause = false;
 
             if (node.heritageClauses) {
                 for (const heritageClause of node.heritageClauses) {
-                    if (heritageClause.token === SyntaxKind.ExtendsKeyword) {
-                        if (seenExtendsClause) {
-                            return grammarErrorOnFirstToken(heritageClause, Diagnostics.extends_clause_already_seen);
-                        }
-
-                        seenExtendsClause = true;
-                    }
-                    else {
-                        Debug.assert(heritageClause.token === SyntaxKind.ImplementsKeyword);
-                        return grammarErrorOnFirstToken(heritageClause, Diagnostics.Interface_declaration_cannot_have_implements_clause);
+                    switch (heritageClause.token) {
+                        case SyntaxKind.ExtendsKeyword:
+                            if (seenExtendsClause) {
+                                return grammarErrorOnFirstToken(heritageClause, Diagnostics._0_clause_already_seen, "extends");
+                            }
+                            if (seenPromisesClause) {
+                                return grammarErrorOnFirstToken(heritageClause, Diagnostics._0_clause_must_precede_0_clause, "extends", "promises");
+                            }
+                            seenExtendsClause = true;
+                            break;
+                        case SyntaxKind.ImplementsKeyword:
+                            return grammarErrorOnFirstToken(heritageClause, Diagnostics.Interface_declaration_cannot_have_implements_clause);
+                        case SyntaxKind.PromisesKeyword:
+                            if (seenPromisesClause) {
+                                return grammarErrorOnFirstToken(heritageClause, Diagnostics._0_clause_already_seen, "promises");
+                            }
+                            if (heritageClause.types.length > 1) {
+                                return grammarErrorOnFirstToken(heritageClause.types[1], Diagnostics.Classes_and_interfaces_can_only_promise_a_single_type);
+                            }
+                            seenPromisesClause = true;
+                            break;
                     }
 
                     // Grammar checking heritageClause inside class declaration

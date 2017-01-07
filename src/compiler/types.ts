@@ -172,6 +172,7 @@ namespace ts {
         ModuleKeyword,
         NamespaceKeyword,
         NeverKeyword,
+        PromisesKeyword,
         ReadonlyKeyword,
         RequireKeyword,
         NumberKeyword,
@@ -1726,7 +1727,7 @@ namespace ts {
 
     export interface HeritageClause extends Node {
         kind: SyntaxKind.HeritageClause;
-        token: SyntaxKind;
+        token: SyntaxKind.ExtendsKeyword | SyntaxKind.ImplementsKeyword | SyntaxKind.PromisesKeyword;
         types?: NodeArray<ExpressionWithTypeArguments>;
     }
 

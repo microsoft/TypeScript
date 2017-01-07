@@ -1333,7 +1333,7 @@ namespace ts {
 
     // Clauses
 
-    export function createHeritageClause(token: SyntaxKind, types: ExpressionWithTypeArguments[], location?: TextRange) {
+    export function createHeritageClause(token: SyntaxKind.ExtendsKeyword | SyntaxKind.ImplementsKeyword | SyntaxKind.PromisesKeyword, types: ExpressionWithTypeArguments[], location?: TextRange) {
         const node = <HeritageClause>createNode(SyntaxKind.HeritageClause, location);
         node.token = token;
         node.types = createNodeArray(types);

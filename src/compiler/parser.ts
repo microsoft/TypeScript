@@ -5412,9 +5412,10 @@ namespace ts {
         }
 
         function parseHeritageClause() {
-            if (token() === SyntaxKind.ExtendsKeyword || token() === SyntaxKind.ImplementsKeyword) {
+            const keyword = token();
+            if (keyword === SyntaxKind.ExtendsKeyword || keyword === SyntaxKind.ImplementsKeyword || keyword === SyntaxKind.PromisesKeyword) {
                 const node = <HeritageClause>createNode(SyntaxKind.HeritageClause);
-                node.token = token();
+                node.token = keyword;
                 nextToken();
                 node.types = parseDelimitedList(ParsingContext.HeritageClauseElement, parseExpressionWithTypeArguments);
                 return finishNode(node);
@@ -5434,7 +5435,13 @@ namespace ts {
         }
 
         function isHeritageClause(): boolean {
-            return token() === SyntaxKind.ExtendsKeyword || token() === SyntaxKind.ImplementsKeyword;
+            switch (token()) {
+                case SyntaxKind.ExtendsKeyword:
+                case SyntaxKind.ImplementsKeyword:
+                case SyntaxKind.PromisesKeyword:
+                    return true;
+            }
+            return false;
         }
 
         function parseClassMembers() {

@@ -1806,6 +1806,11 @@ namespace ts {
         return heritageClause ? heritageClause.types : undefined;
     }
 
+    export function getPromisesHeritageClauseElement(node: ClassLikeDeclaration | InterfaceDeclaration) {
+        const heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.PromisesKeyword);
+        return heritageClause && heritageClause.types.length > 0 ? heritageClause.types[0] : undefined;
+    }
+
     export function getInterfaceBaseTypeNodes(node: InterfaceDeclaration) {
         const heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ExtendsKeyword);
         return heritageClause ? heritageClause.types : undefined;

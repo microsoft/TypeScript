@@ -511,11 +511,11 @@
         "category": "Error",
         "code": 1171
     },
-    "'extends' clause already seen.": {
+    "'{0}' clause already seen.": {
         "category": "Error",
         "code": 1172
     },
-    "'extends' clause must precede 'implements' clause.": {
+    "'{0}' clause must precede '{0}' clause.": {
         "category": "Error",
         "code": 1173
     },
@@ -523,7 +523,7 @@
         "category": "Error",
         "code": 1174
     },
-    "'implements' clause already seen.": {
+    "Classes and interfaces can only promise a single type.": {
         "category": "Error",
         "code": 1175
     },
@@ -1323,6 +1323,10 @@
         "category": "Error",
         "code": 2420
     },
+    "Class or interface '{0}' incorrectly promises type '{1}'. A compatible 'then()' signature could not be found.": {
+        "category": "Error",
+        "code": 2421
+    },
     "A class may only implement another class or interface.": {
         "category": "Error",
         "code": 2422
@@ -1350,6 +1354,10 @@
     "All declarations of '{0}' must have identical type parameters.": {
         "category": "Error",
         "code": 2428
+    },
+    "Class or interface promises type '{0}' which is not compatible with the type '{1}' used by the fulfillment callbacks of its 'then()' members.": {
+        "category": "Error",
+        "code": 2429
     },
     "Interface '{0}' incorrectly extends interface '{1}'.": {
         "category": "Error",
@@ -1426,6 +1434,10 @@
     "Block-scoped variable '{0}' used before its declaration.": {
         "category": "Error",
         "code": 2448
+    },
+    "Any declarations of '{0}' that promise a type must promise the same type.": {
+        "category": "Error",
+        "code": 2449
     },
     "Cannot redeclare block-scoped variable '{0}'.": {
         "category": "Error",
@@ -1626,6 +1638,10 @@
     "Cannot find namespace '{0}'.": {
         "category": "Error",
         "code": 2503
+    },
+    "A class or interface can only promise an identifier/qualified-name with optional type arguments.": {
+        "category": "Error",
+        "code": 2504
     },
     "A generator cannot have a 'void' type annotation.": {
         "category": "Error",
