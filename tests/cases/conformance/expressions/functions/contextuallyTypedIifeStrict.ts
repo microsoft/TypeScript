@@ -1,3 +1,4 @@
+// @strictNullChecks: true
 // arrow
 (jake => { })("build");
 // function expression
