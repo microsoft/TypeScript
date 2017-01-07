@@ -907,7 +907,8 @@ namespace ts {
                 // For JavaScript files, we don't want to report semantic errors.
                 // Instead, we'll report errors for using TypeScript-only constructs from within a
                 // JavaScript file when we get syntactic diagnostics for the file.
-                const checkDiagnostics = !options.checkJsFiles && isSourceFileJavaScript(sourceFile) ? [] : typeChecker.getDiagnostics(sourceFile, cancellationToken);
+                const includeCheckDiagnostics = options.checkJsFiles || sourceFile.hasCheckDirective || !isSourceFileJavaScript(sourceFile);
+                const checkDiagnostics = includeCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : [];
                 const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
                 const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
 

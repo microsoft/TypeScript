@@ -473,6 +473,7 @@ namespace ts {
         public moduleAugmentations: LiteralExpression[];
         private namedDeclarations: Map<Declaration[]>;
         public ambientModuleNames: string[];
+        public hasCheckDirective: boolean;
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
             super(kind, pos, end);
