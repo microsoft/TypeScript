@@ -1,5 +1,5 @@
 interface ProxyHandler<T> {
-    getPrototypeOf? (target: T): {} | null;
+    getPrototypeOf? (target: T): object | null;
     setPrototypeOf? (target: T, v: any): boolean;
     isExtensible? (target: T): boolean;
     preventExtensions? (target: T): boolean;
@@ -12,7 +12,7 @@ interface ProxyHandler<T> {
     enumerate? (target: T): PropertyKey[];
     ownKeys? (target: T): PropertyKey[];
     apply? (target: T, thisArg: any, argArray?: any): any;
-    construct? (target: T, argArray: any, newTarget?: any): {};
+    construct? (target: T, argArray: any, newTarget?: any): object
 }
 
 interface ProxyConstructor {
