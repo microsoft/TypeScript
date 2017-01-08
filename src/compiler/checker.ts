@@ -4606,7 +4606,7 @@ namespace ts {
                 // Create a mapper from T to the current iteration type constituent. Then, if the
                 // mapped type is itself an instantiated type, combine the iteration mapper with the
                 // instantiation mapper.
-                const iterationMapper = createUnaryTypeMapper(typeParameter, t);
+                const iterationMapper = createTypeMapper([typeParameter], [t]);
                 const templateMapper = type.mapper ? combineTypeMappers(type.mapper, iterationMapper) : iterationMapper;
                 const propType = instantiateType(templateType, templateMapper);
                 // If the current iteration type constituent is a string literal type, create a property.
@@ -4666,7 +4666,7 @@ namespace ts {
         }
 
         function getErasedTemplateTypeFromMappedType(type: MappedType) {
-            return instantiateType(getTemplateTypeFromMappedType(type), createUnaryTypeMapper(getTypeParameterFromMappedType(type), anyType));
+            return instantiateType(getTemplateTypeFromMappedType(type), createTypeEraser([getTypeParameterFromMappedType(type)]));
         }
 
         function isGenericMappedType(type: Type) {
@@ -6135,7 +6135,7 @@ namespace ts {
                 error(accessExpression, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(type));
                 return unknownType;
             }
-            const mapper = createUnaryTypeMapper(getTypeParameterFromMappedType(type), indexType);
+            const mapper = createTypeMapper([getTypeParameterFromMappedType(type)], [indexType]);
             const templateMapper = type.mapper ? combineTypeMappers(type.mapper, mapper) : mapper;
             return instantiateType(getTemplateTypeFromMappedType(type), templateMapper);
         }
@@ -6502,16 +6502,16 @@ namespace ts {
             return <T>instantiations[type.id] || (instantiations[type.id] = instantiator(type, mapper));
         }
 
-        function createUnaryTypeMapper(source: Type, target: Type): TypeMapper {
-            return t => t === source ? target : t;
+        function makeUnaryTypeMapper(source: Type, target: Type) {
+            return (t: Type) => t === source ? target : t;
         }
 
-        function createBinaryTypeMapper(source1: Type, target1: Type, source2: Type, target2: Type): TypeMapper {
-            return t => t === source1 ? target1 : t === source2 ? target2 : t;
+        function makeBinaryTypeMapper(source1: Type, target1: Type, source2: Type, target2: Type) {
+            return (t: Type) => t === source1 ? target1 : t === source2 ? target2 : t;
         }
 
-        function createArrayTypeMapper(sources: Type[], targets: Type[]): TypeMapper {
-            return t => {
+        function makeArrayTypeMapper(sources: Type[], targets: Type[]) {
+            return (t: Type) => {
                 for (let i = 0; i < sources.length; i++) {
                     if (t === sources[i]) {
                         return targets ? targets[i] : anyType;
@@ -6522,11 +6522,9 @@ namespace ts {
         }
 
         function createTypeMapper(sources: Type[], targets: Type[]): TypeMapper {
-            const count = sources.length;
-            const mapper: TypeMapper =
-                count == 1 ? createUnaryTypeMapper(sources[0], targets ? targets[0] : anyType) :
-                    count == 2 ? createBinaryTypeMapper(sources[0], targets ? targets[0] : anyType, sources[1], targets ? targets[1] : anyType) :
-                        createArrayTypeMapper(sources, targets);
+            const mapper: TypeMapper = sources.length === 1 ? makeUnaryTypeMapper(sources[0], targets ? targets[0] : anyType) :
+                sources.length === 2 ? makeBinaryTypeMapper(sources[0], targets ? targets[0] : anyType, sources[1], targets ? targets[1] : anyType) :
+                makeArrayTypeMapper(sources, targets);
             mapper.mappedTypes = sources;
             return mapper;
         }
@@ -6560,7 +6558,7 @@ namespace ts {
 
         function combineTypeMappers(mapper1: TypeMapper, mapper2: TypeMapper): TypeMapper {
             const mapper: TypeMapper = t => instantiateType(mapper1(t), mapper2);
-            mapper.mappedTypes = mapper1.mappedTypes;
+            mapper.mappedTypes = concatenate(mapper1.mappedTypes, mapper2.mappedTypes);
             return mapper;
         }
 
@@ -6662,7 +6660,7 @@ namespace ts {
                     if (typeVariable !== mappedTypeVariable) {
                         return mapType(mappedTypeVariable, t => {
                             if (isMappableType(t)) {
-                                const replacementMapper = createUnaryTypeMapper(typeVariable, t);
+                                const replacementMapper = createTypeMapper([typeVariable], [t]);
                                 const combinedMapper = mapper.mappedTypes && mapper.mappedTypes.length === 1 ? replacementMapper : combineTypeMappers(replacementMapper, mapper);
                                 combinedMapper.mappedTypes = mapper.mappedTypes;
                                 return instantiateMappedObjectType(type, combinedMapper);
