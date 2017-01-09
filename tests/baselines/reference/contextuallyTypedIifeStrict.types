@@ -1,4 +1,4 @@
-=== tests/cases/conformance/expressions/functions/contextuallyTypedIife.ts ===
+=== tests/cases/conformance/expressions/functions/contextuallyTypedIifeStrict.ts ===
 // arrow
 (jake => { })("build");
 >(jake => { })("build") : void
@@ -70,32 +70,32 @@
 // optional parameters
 ((j?) => j + 1)(12);
 >((j?) => j + 1)(12) : number
->((j?) => j + 1) : (j?: number) => number
->(j?) => j + 1 : (j?: number) => number
->j : number
+>((j?) => j + 1) : (j?: number | undefined) => number
+>(j?) => j + 1 : (j?: number | undefined) => number
+>j : number | undefined
 >j + 1 : number
->j : number
+>j : number | undefined
 >1 : 1
 >12 : 12
 
 ((k?) => k + 1)();
->((k?) => k + 1)() : any
->((k?) => k + 1) : (k?: any) => any
->(k?) => k + 1 : (k?: any) => any
->k : any
->k + 1 : any
->k : any
+>((k?) => k + 1)() : number
+>((k?) => k + 1) : (k?: undefined) => number
+>(k?) => k + 1 : (k?: undefined) => number
+>k : undefined
+>k + 1 : number
+>k : undefined
 >1 : 1
 
 ((l, o?) => l + o)(12); // o should be any
->((l, o?) => l + o)(12) : any
->((l, o?) => l + o) : (l: number, o?: any) => any
->(l, o?) => l + o : (l: number, o?: any) => any
+>((l, o?) => l + o)(12) : number
+>((l, o?) => l + o) : (l: number, o?: undefined) => number
+>(l, o?) => l + o : (l: number, o?: undefined) => number
 >l : number
->o : any
->l + o : any
+>o : undefined
+>l + o : number
 >l : number
->o : any
+>o : undefined
 >12 : 12
 
 // rest parameters
@@ -158,7 +158,7 @@
 >rest : number[]
 >first ? [] : rest.map(n => n > 0) : boolean[]
 >first : number
->[] : undefined[]
+>[] : never[]
 >rest.map(n => n > 0) : boolean[]
 >rest.map : { <U>(this: [number, number, number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U, U, U]; <U>(this: [number, number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U, U]; <U>(this: [number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U]; <U>(this: [number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U]; <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): U[]; }
 >rest : number[]
@@ -253,19 +253,19 @@ let eleven = (o => o.a(11))({ a: function(n) { return n; } });
 // missing arguments
 (function(x, undefined) { return x; })(42);
 >(function(x, undefined) { return x; })(42) : number
->(function(x, undefined) { return x; }) : (x: number, undefined: any) => number
->function(x, undefined) { return x; } : (x: number, undefined: any) => number
+>(function(x, undefined) { return x; }) : (x: number, undefined: undefined) => number
+>function(x, undefined) { return x; } : (x: number, undefined: undefined) => number
 >x : number
->undefined : any
+>undefined : undefined
 >x : number
 >42 : 42
 
 ((x, y, z) => 42)();
 >((x, y, z) => 42)() : number
->((x, y, z) => 42) : (x: any, y: any, z: any) => number
->(x, y, z) => 42 : (x: any, y: any, z: any) => number
->x : any
->y : any
->z : any
+>((x, y, z) => 42) : (x: undefined, y: undefined, z: undefined) => number
+>(x, y, z) => 42 : (x: undefined, y: undefined, z: undefined) => number
+>x : undefined
+>y : undefined
+>z : undefined
 >42 : 42
 
