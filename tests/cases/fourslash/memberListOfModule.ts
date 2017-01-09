@@ -14,6 +14,6 @@
 ////var x: Foo./**/
 
 goTo.marker();
-verify.memberListCount(2);
-verify.memberListContains('Bar');
-verify.memberListContains('Blah');
+verify.completionListCount(2);
+verify.completionListContains('Bar');
+verify.completionListContains('Blah');

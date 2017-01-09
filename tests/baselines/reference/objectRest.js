@@ -37,13 +37,15 @@ let computed2 = 'a';
 var { [computed]: stillNotGreat, [computed2]: soSo,  ...o } = o;
 ({ [computed]: stillNotGreat, [computed2]: soSo, ...o } = o);
 
+var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject['anythingGoes'];
+
 
 //// [objectRest.js]
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
         t[p] = s[p];
-    if (typeof Object.getOwnPropertySymbols === "function")
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
         for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
             t[p[i]] = s[p[i]];
     return t;
@@ -76,4 +78,8 @@ let computed = 'b';
 let computed2 = 'a';
 var _g = computed, stillNotGreat = o[_g], _h = computed2, soSo = o[_h], o = __rest(o, [typeof _g === "symbol" ? _g : _g + "", typeof _h === "symbol" ? _h : _h + ""]);
 (_j = computed, stillNotGreat = o[_j], _k = computed2, soSo = o[_k], o = __rest(o, [typeof _j === "symbol" ? _j : _j + "", typeof _k === "symbol" ? _k : _k + ""]));
+var noContextualType = (_a) => {
+    var { aNumber = 12 } = _a, notEmptyObject = __rest(_a, ["aNumber"]);
+    return aNumber + notEmptyObject['anythingGoes'];
+};
 var _d, _f, _j, _k;

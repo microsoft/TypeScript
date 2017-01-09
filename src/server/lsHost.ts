@@ -135,6 +135,10 @@ namespace ts.server {
             }
         }
 
+        getNewLine() {
+            return this.host.newLine;
+        }
+
         getProjectVersion() {
             return this.project.getProjectVersion();
         }
@@ -169,7 +173,7 @@ namespace ts.server {
         getScriptSnapshot(filename: string): ts.IScriptSnapshot {
             const scriptInfo = this.project.getScriptInfoLSHost(filename);
             if (scriptInfo) {
-                return scriptInfo.snap();
+                return scriptInfo.getSnapshot();
             }
         }
 

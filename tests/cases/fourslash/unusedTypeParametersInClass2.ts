@@ -5,4 +5,4 @@
 ////    public a: X;
 ////}
 
-verify.codeFixAtPosition("class greeter<X>");
+verify.rangeAfterCodeFix("class greeter<X>");

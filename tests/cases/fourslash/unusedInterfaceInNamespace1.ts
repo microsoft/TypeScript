@@ -6,6 +6,6 @@
 ////    }
 ////} |]
 
-verify.codeFixAtPosition(`
+verify.rangeAfterCodeFix(`
 namespace greeter {
 }`);

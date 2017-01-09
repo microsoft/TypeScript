@@ -10,7 +10,7 @@
 ////    }|]
 ////}
 
-verify.codeFixAtPosition(`
+verify.rangeAfterCodeFix(`
     constructor() {
         var used = "dummy";
         used = used + "second part";

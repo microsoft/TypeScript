@@ -16,7 +16,7 @@
 ////    }
 ////} |]
 
-verify.codeFixAtPosition(`namespace Validation {
+verify.rangeAfterCodeFix(`namespace Validation {
     class c1 {
 
     }

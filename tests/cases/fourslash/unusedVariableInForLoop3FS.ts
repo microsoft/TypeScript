@@ -7,4 +7,4 @@
 ////     }
 //// }
 
-verify.codeFixAtPosition("for(var i = 0, k=0; ;i++,k++)");
+verify.rangeAfterCodeFix("for(var i = 0, k=0; ;i++,k++)");

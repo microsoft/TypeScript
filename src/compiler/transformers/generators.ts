@@ -938,7 +938,7 @@ namespace ts {
             }
 
             markLabel(resumeLabel);
-            return createGeneratorResume();
+            return createGeneratorResume(/*location*/ node);
         }
 
         /**
@@ -1234,7 +1234,9 @@ namespace ts {
 
         function transformAndEmitVariableDeclarationList(node: VariableDeclarationList): VariableDeclarationList {
             for (const variable of node.declarations) {
-                hoistVariableDeclaration(<Identifier>variable.name);
+                const name = getSynthesizedClone(<Identifier>variable.name);
+                setCommentRange(name, variable.name);
+                hoistVariableDeclaration(name);
             }
 
             const variables = getInitializedVariables(node);
@@ -1287,7 +1289,7 @@ namespace ts {
                 if (containsYield(node.thenStatement) || containsYield(node.elseStatement)) {
                     const endLabel = defineLabel();
                     const elseLabel = node.elseStatement ? defineLabel() : undefined;
-                    emitBreakWhenFalse(node.elseStatement ? elseLabel : endLabel, visitNode(node.expression, visitor, isExpression));
+                    emitBreakWhenFalse(node.elseStatement ? elseLabel : endLabel, visitNode(node.expression, visitor, isExpression), /*location*/ node.expression);
                     transformAndEmitEmbeddedStatement(node.thenStatement);
                     if (node.elseStatement) {
                         emitBreak(endLabel);
@@ -2965,12 +2967,15 @@ namespace ts {
             lastOperationWasAbrupt = true;
             lastOperationWasCompletion = true;
             writeStatement(
-                createReturn(
-                    createArrayLiteral(expression
-                        ? [createInstruction(Instruction.Return), expression]
-                        : [createInstruction(Instruction.Return)]
+                setEmitFlags(
+                    createReturn(
+                        createArrayLiteral(expression
+                            ? [createInstruction(Instruction.Return), expression]
+                            : [createInstruction(Instruction.Return)]
+                        ),
+                        operationLocation
                     ),
-                    operationLocation
+                    EmitFlags.NoTokenSourceMaps
                 )
             );
         }
@@ -2984,12 +2989,15 @@ namespace ts {
         function writeBreak(label: Label, operationLocation: TextRange): void {
             lastOperationWasAbrupt = true;
             writeStatement(
-                createReturn(
-                    createArrayLiteral([
-                        createInstruction(Instruction.Break),
-                        createLabel(label)
-                    ]),
-                    operationLocation
+                setEmitFlags(
+                    createReturn(
+                        createArrayLiteral([
+                            createInstruction(Instruction.Break),
+                            createLabel(label)
+                        ]),
+                        operationLocation
+                    ),
+                    EmitFlags.NoTokenSourceMaps
                 )
             );
         }
@@ -3003,15 +3011,21 @@ namespace ts {
          */
         function writeBreakWhenTrue(label: Label, condition: Expression, operationLocation: TextRange): void {
             writeStatement(
-                createIf(
-                    condition,
-                    createReturn(
-                        createArrayLiteral([
-                            createInstruction(Instruction.Break),
-                            createLabel(label)
-                        ]),
-                        operationLocation
-                    )
+                setEmitFlags(
+                    createIf(
+                        condition,
+                        setEmitFlags(
+                            createReturn(
+                                createArrayLiteral([
+                                    createInstruction(Instruction.Break),
+                                    createLabel(label)
+                                ]),
+                                operationLocation
+                            ),
+                            EmitFlags.NoTokenSourceMaps
+                        )
+                    ),
+                    EmitFlags.SingleLine
                 )
             );
         }
@@ -3025,15 +3039,21 @@ namespace ts {
          */
         function writeBreakWhenFalse(label: Label, condition: Expression, operationLocation: TextRange): void {
             writeStatement(
-                createIf(
-                    createLogicalNot(condition),
-                    createReturn(
-                        createArrayLiteral([
-                            createInstruction(Instruction.Break),
-                            createLabel(label)
-                        ]),
-                        operationLocation
-                    )
+                setEmitFlags(
+                    createIf(
+                        createLogicalNot(condition),
+                        setEmitFlags(
+                            createReturn(
+                                createArrayLiteral([
+                                    createInstruction(Instruction.Break),
+                                    createLabel(label)
+                                ]),
+                                operationLocation
+                            ),
+                            EmitFlags.NoTokenSourceMaps
+                        )
+                    ),
+                    EmitFlags.SingleLine
                 )
             );
         }
@@ -3047,13 +3067,16 @@ namespace ts {
         function writeYield(expression: Expression, operationLocation: TextRange): void {
             lastOperationWasAbrupt = true;
             writeStatement(
-                createReturn(
-                    createArrayLiteral(
-                        expression
-                            ? [createInstruction(Instruction.Yield), expression]
-                            : [createInstruction(Instruction.Yield)]
+                setEmitFlags(
+                    createReturn(
+                        createArrayLiteral(
+                            expression
+                                ? [createInstruction(Instruction.Yield), expression]
+                                : [createInstruction(Instruction.Yield)]
+                        ),
+                        operationLocation
                     ),
-                    operationLocation
+                    EmitFlags.NoTokenSourceMaps
                 )
             );
         }
@@ -3067,12 +3090,15 @@ namespace ts {
         function writeYieldStar(expression: Expression, operationLocation: TextRange): void {
             lastOperationWasAbrupt = true;
             writeStatement(
-                createReturn(
-                    createArrayLiteral([
-                        createInstruction(Instruction.YieldStar),
-                        expression
-                    ]),
-                    operationLocation
+                setEmitFlags(
+                    createReturn(
+                        createArrayLiteral([
+                            createInstruction(Instruction.YieldStar),
+                            expression
+                        ]),
+                        operationLocation
+                    ),
+                    EmitFlags.NoTokenSourceMaps
                 )
             );
         }

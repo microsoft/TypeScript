@@ -6,4 +6,4 @@
 ////    private greeting: string;|]
 ////}
 
-verify.codeFixAtPosition("public greeting1;");
+verify.rangeAfterCodeFix("public greeting1;");

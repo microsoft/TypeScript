@@ -5,4 +5,4 @@
 ////    private X = function() {};
 ////|]}
 
-verify.codeFixAtPosition("");
+verify.rangeAfterCodeFix("");

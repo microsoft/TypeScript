@@ -16,7 +16,7 @@
         "noUnusedParameters": true
     },
     "files": [
-        "../types.d.ts",
+        "../types.ts",
         "../shared.ts",
         "typingsInstaller.ts",
         "nodeTypingsInstaller.ts"

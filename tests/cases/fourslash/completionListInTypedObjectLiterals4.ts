@@ -10,7 +10,7 @@
 ////};
 
 goTo.marker("15");
-verify.not.memberListContains("x1");
-verify.memberListContains("y1");
-verify.memberListCount(1);
+verify.not.completionListContains("x1");
+verify.completionListContains("y1");
+verify.completionListCount(1);
 

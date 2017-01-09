@@ -5,4 +5,4 @@
 ////    [|let a = "dummy entry";|]
 ////}
 
-verify.codeFixAtPosition("");
+verify.rangeAfterCodeFix("");

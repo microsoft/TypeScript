@@ -20,13 +20,12 @@ namespace ts.projectSystem {
     }
 
     class Installer extends TestTypingsInstaller {
-        constructor(host: server.ServerHost, p?: InstallerParams, telemetryEnabled?: boolean, log?: TI.Log) {
+        constructor(host: server.ServerHost, p?: InstallerParams, log?: TI.Log) {
             super(
                 (p && p.globalTypingsCacheLocation) || "/a/data",
                 (p && p.throttleLimit) || 5,
                 host,
                 (p && p.typesRegistry),
-                telemetryEnabled,
                 log);
         }
 
@@ -36,7 +35,7 @@ namespace ts.projectSystem {
         }
     }
 
-    function executeCommand(self: Installer, host: TestServerHost, installedTypings: string[], typingFiles: FileOrFolder[], cb: TI.RequestCompletedAction): void {
+    function executeCommand(self: Installer, host: TestServerHost, installedTypings: string[] | string, typingFiles: FileOrFolder[], cb: TI.RequestCompletedAction): void {
         self.addPostExecAction(installedTypings, success => {
             for (const file of typingFiles) {
                 host.createFileOrFolder(file, /*createParentDirectory*/ true);
@@ -907,7 +906,7 @@ namespace ts.projectSystem {
             const host = createServerHost([f1, packageJson]);
             const installer = new (class extends Installer {
                 constructor() {
-                    super(host, { globalTypingsCacheLocation: "/tmp" }, /*telemetryEnabled*/ false, { isEnabled: () => true, writeLine: msg => messages.push(msg) });
+                    super(host, { globalTypingsCacheLocation: "/tmp" }, { isEnabled: () => true, writeLine: msg => messages.push(msg) });
                 }
                 installWorker(_requestId: number, _args: string[], _cwd: string, _cb: server.typingsInstaller.RequestCompletedAction) {
                     assert(false, "runCommand should not be invoked");
@@ -971,15 +970,18 @@ namespace ts.projectSystem {
             let seenTelemetryEvent = false;
             const installer = new (class extends Installer {
                 constructor() {
-                    super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") }, /*telemetryEnabled*/ true);
+                    super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
                 }
                 installWorker(_requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
                     const installedTypings = ["@types/commander"];
                     const typingFiles = [commander];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
-                sendResponse(response: server.SetTypings | server.InvalidateCachedTypings | server.TypingsInstallEvent) {
-                    if (response.kind === server.EventInstall) {
+                sendResponse(response: server.SetTypings | server.InvalidateCachedTypings | server.BeginInstallTypes | server.EndInstallTypes) {
+                    if (response.kind === server.EventBeginInstallTypes) {
+                        return;
+                    }
+                    if (response.kind === server.EventEndInstallTypes) {
                         assert.deepEqual(response.packagesToInstall, ["@types/commander"]);
                         seenTelemetryEvent = true;
                         return;
@@ -995,6 +997,104 @@ namespace ts.projectSystem {
             assert.isTrue(seenTelemetryEvent);
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             checkProjectActualFiles(projectService.inferredProjects[0], [f1.path, commander.path]);
+        });
+    });
+
+    describe("progress notifications", () => {
+        it ("should be sent for success", () => {
+            const f1 = {
+                path: "/a/app.js",
+                content: ""
+            };
+            const package = {
+                path: "/a/package.json",
+                content: JSON.stringify({ dependencies: { "commander": "1.0.0" } })
+            };
+            const cachePath = "/a/cache/";
+            const commander = {
+                path: cachePath + "node_modules/@types/commander/index.d.ts",
+                content: "export let x: number"
+            };
+            const host = createServerHost([f1, package]);
+            let beginEvent: server.BeginInstallTypes;
+            let endEvent: server.EndInstallTypes;
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
+                }
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                    const installedTypings = ["@types/commander"];
+                    const typingFiles = [commander];
+                    executeCommand(this, host, installedTypings, typingFiles, cb);
+                }
+                sendResponse(response: server.SetTypings | server.InvalidateCachedTypings | server.BeginInstallTypes | server.EndInstallTypes) {
+                    if (response.kind === server.EventBeginInstallTypes) {
+                        beginEvent = response;
+                        return;
+                    }
+                    if (response.kind === server.EventEndInstallTypes) {
+                        endEvent = response;
+                        return;
+                    }
+                    super.sendResponse(response);
+                }
+            })();
+            const projectService = createProjectService(host, { typingsInstaller: installer });
+            projectService.openClientFile(f1.path);
+
+            installer.installAll(/*expectedCount*/ 1);
+
+            assert.isTrue(!!beginEvent);
+            assert.isTrue(!!endEvent);
+            assert.isTrue(beginEvent.eventId === endEvent.eventId);
+            assert.isTrue(endEvent.installSuccess);
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            checkProjectActualFiles(projectService.inferredProjects[0], [f1.path, commander.path]);
+        });
+
+        it ("should be sent for error", () => {
+            const f1 = {
+                path: "/a/app.js",
+                content: ""
+            };
+            const package = {
+                path: "/a/package.json",
+                content: JSON.stringify({ dependencies: { "commander": "1.0.0" } })
+            };
+            const cachePath = "/a/cache/";
+            const host = createServerHost([f1, package]);
+            let beginEvent: server.BeginInstallTypes;
+            let endEvent: server.EndInstallTypes;
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
+                }
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                    executeCommand(this, host, "", [], cb);
+                }
+                sendResponse(response: server.SetTypings | server.InvalidateCachedTypings | server.BeginInstallTypes | server.EndInstallTypes) {
+                    if (response.kind === server.EventBeginInstallTypes) {
+                        beginEvent = response;
+                        return;
+                    }
+                    if (response.kind === server.EventEndInstallTypes) {
+                        endEvent = response;
+                        return;
+                    }
+                    super.sendResponse(response);
+                }
+            })();
+            const projectService = createProjectService(host, { typingsInstaller: installer });
+            projectService.openClientFile(f1.path);
+
+            installer.installAll(/*expectedCount*/ 1);
+
+            assert.isTrue(!!beginEvent);
+            assert.isTrue(!!endEvent);
+            assert.isTrue(beginEvent.eventId === endEvent.eventId);
+            assert.isFalse(endEvent.installSuccess);
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            checkProjectActualFiles(projectService.inferredProjects[0], [f1.path]);
         });
     });
 }

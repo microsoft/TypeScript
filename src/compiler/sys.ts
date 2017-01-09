@@ -160,7 +160,7 @@ namespace ts {
 
             function getNames(collection: any): string[] {
                 const result: string[] = [];
-                for (let e = new Enumerator(collection); !e.atEnd(); e.moveNext()) {
+                for (const e = new Enumerator(collection); !e.atEnd(); e.moveNext()) {
                     result.push(e.item().Name);
                 }
                 return result.sort();

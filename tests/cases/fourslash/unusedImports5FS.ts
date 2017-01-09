@@ -21,4 +21,4 @@
 ////
 //// }
 
-verify.codeFixAtPosition(`import {Calculator, test} from "./file1"`);
+verify.rangeAfterCodeFix(`import {Calculator, test} from "./file1"`);

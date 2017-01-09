@@ -17,4 +17,4 @@
 ////
 //// }
 
-verify.codeFixAtPosition("");
+verify.rangeAfterCodeFix("");
