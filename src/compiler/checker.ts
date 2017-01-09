@@ -6558,6 +6558,12 @@ namespace ts {
             return mapper;
         }
 
+        function createReplacementMapper(source: Type, target: Type, baseMapper: TypeMapper) {
+            const mapper: TypeMapper = t => t === source ? target : baseMapper(t);
+            mapper.mappedTypes = baseMapper.mappedTypes;
+            return mapper;
+        }
+
         function cloneTypeParameter(typeParameter: TypeParameter): TypeParameter {
             const result = <TypeParameter>createType(TypeFlags.TypeParameter);
             result.symbol = typeParameter.symbol;
@@ -6656,10 +6662,7 @@ namespace ts {
                     if (typeVariable !== mappedTypeVariable) {
                         return mapType(mappedTypeVariable, t => {
                             if (isMappableType(t)) {
-                                const replacementMapper = createTypeMapper([typeVariable], [t]);
-                                const combinedMapper = mapper.mappedTypes && mapper.mappedTypes.length === 1 ? replacementMapper : combineTypeMappers(replacementMapper, mapper);
-                                combinedMapper.mappedTypes = mapper.mappedTypes;
-                                return instantiateMappedObjectType(type, combinedMapper);
+                                return instantiateMappedObjectType(type, createReplacementMapper(typeVariable, t, mapper));
                             }
                             return t;
                         });
