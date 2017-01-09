@@ -4318,10 +4318,6 @@ namespace ts {
         return createTextSpan(start, end - start);
     }
 
-    export function createTextSpanFromNode(node: Node, sourceFile?: SourceFile): TextSpan {
-        return createTextSpanFromBounds(node.getStart(sourceFile), node.getEnd());
-    }
-
     export function textChangeRangeNewSpan(range: TextChangeRange) {
         return createTextSpan(range.span.start, range.newLength);
     }
