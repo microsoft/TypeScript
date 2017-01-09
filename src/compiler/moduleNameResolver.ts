@@ -421,7 +421,7 @@ namespace ts {
             trace(host, Diagnostics.Resolving_module_0_from_1, moduleName, containingFile);
         }
         const containingDirectory = getDirectoryPath(containingFile);
-        let perFolderCache = cache && cache.getOrCreateCacheForDirectory(containingDirectory);
+        const perFolderCache = cache && cache.getOrCreateCacheForDirectory(containingDirectory);
         let result = perFolderCache && perFolderCache[moduleName];
 
         if (result) {
