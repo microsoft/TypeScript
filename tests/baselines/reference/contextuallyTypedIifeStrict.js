@@ -1,4 +1,4 @@
-//// [contextuallyTypedIife.ts]
+//// [contextuallyTypedIifeStrict.ts]
 // arrow
 (jake => { })("build");
 // function expression
@@ -33,7 +33,7 @@ let eleven = (o => o.a(11))({ a: function(n) { return n; } });
 ((x, y, z) => 42)();
 
 
-//// [contextuallyTypedIife.js]
+//// [contextuallyTypedIifeStrict.js]
 // arrow
 (function (jake) { })("build");
 // function expression

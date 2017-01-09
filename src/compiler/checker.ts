@@ -4606,7 +4606,7 @@ namespace ts {
                 // Create a mapper from T to the current iteration type constituent. Then, if the
                 // mapped type is itself an instantiated type, combine the iteration mapper with the
                 // instantiation mapper.
-                const iterationMapper = createUnaryTypeMapper(typeParameter, t);
+                const iterationMapper = createTypeMapper([typeParameter], [t]);
                 const templateMapper = type.mapper ? combineTypeMappers(type.mapper, iterationMapper) : iterationMapper;
                 const propType = instantiateType(templateType, templateMapper);
                 // If the current iteration type constituent is a string literal type, create a property.
@@ -4666,7 +4666,7 @@ namespace ts {
         }
 
         function getErasedTemplateTypeFromMappedType(type: MappedType) {
-            return instantiateType(getTemplateTypeFromMappedType(type), createUnaryTypeMapper(getTypeParameterFromMappedType(type), anyType));
+            return instantiateType(getTemplateTypeFromMappedType(type), createTypeEraser([getTypeParameterFromMappedType(type)]));
         }
 
         function isGenericMappedType(type: Type) {
@@ -5058,9 +5058,10 @@ namespace ts {
             if (!links.resolvedSignature) {
                 const parameters: Symbol[] = [];
                 let hasLiteralTypes = false;
-                let minArgumentCount = -1;
+                let minArgumentCount = 0;
                 let thisParameter: Symbol = undefined;
                 let hasThisParameter: boolean;
+                const iife = getImmediatelyInvokedFunctionExpression(declaration);
                 const isJSConstructSignature = isJSDocConstructSignature(declaration);
 
                 // If this is a JSDoc construct signature, then skip the first parameter in the
@@ -5087,14 +5088,12 @@ namespace ts {
                         hasLiteralTypes = true;
                     }
 
-                    if (param.initializer || param.questionToken || param.dotDotDotToken || isJSDocOptionalParameter(param)) {
-                        if (minArgumentCount < 0) {
-                            minArgumentCount = i - (hasThisParameter ? 1 : 0);
-                        }
-                    }
-                    else {
-                        // If we see any required parameters, it means the prior ones were not in fact optional.
-                        minArgumentCount = -1;
+                    // Record a new minimum argument count if this is not an optional parameter
+                    const isOptionalParameter = param.initializer || param.questionToken || param.dotDotDotToken ||
+                        iife && parameters.length > iife.arguments.length && !param.type ||
+                        isJSDocOptionalParameter(param);
+                    if (!isOptionalParameter) {
+                        minArgumentCount = parameters.length;
                     }
                 }
 
@@ -5107,13 +5106,6 @@ namespace ts {
                     if (other) {
                         thisParameter = getAnnotatedAccessorThisParameter(other);
                     }
-                }
-
-                if (minArgumentCount < 0) {
-                    minArgumentCount = declaration.parameters.length - (hasThisParameter ? 1 : 0);
-                }
-                if (isJSConstructSignature) {
-                    minArgumentCount--;
                 }
 
                 const classType = declaration.kind === SyntaxKind.Constructor ?
@@ -6135,7 +6127,7 @@ namespace ts {
                 error(accessExpression, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(type));
                 return unknownType;
             }
-            const mapper = createUnaryTypeMapper(getTypeParameterFromMappedType(type), indexType);
+            const mapper = createTypeMapper([getTypeParameterFromMappedType(type)], [indexType]);
             const templateMapper = type.mapper ? combineTypeMappers(type.mapper, mapper) : mapper;
             return instantiateType(getTemplateTypeFromMappedType(type), templateMapper);
         }
@@ -6241,7 +6233,7 @@ namespace ts {
          * this function should be called in a left folding style, with left = previous result of getSpreadType
          * and right = the new element to be spread.
          */
-        function getSpreadType(left: Type, right: Type, isFromObjectLiteral: boolean): Type  {
+        function getSpreadType(left: Type, right: Type): Type  {
             if (left.flags & TypeFlags.Any || right.flags & TypeFlags.Any) {
                 return anyType;
             }
@@ -6254,10 +6246,10 @@ namespace ts {
                 return left;
             }
             if (left.flags & TypeFlags.Union) {
-                return mapType(left, t => getSpreadType(t, right, isFromObjectLiteral));
+                return mapType(left, t => getSpreadType(t, right));
             }
             if (right.flags & TypeFlags.Union) {
-                return mapType(right, t => getSpreadType(left, t, isFromObjectLiteral));
+                return mapType(right, t => getSpreadType(left, t));
             }
 
             const members = createMap<Symbol>();
@@ -6276,18 +6268,18 @@ namespace ts {
 
             for (const rightProp of getPropertiesOfType(right)) {
                 // we approximate own properties as non-methods plus methods that are inside the object literal
-                const isOwnProperty = !(rightProp.flags & SymbolFlags.Method) || isFromObjectLiteral;
                 const isSetterWithoutGetter = rightProp.flags & SymbolFlags.SetAccessor && !(rightProp.flags & SymbolFlags.GetAccessor);
                 if (getDeclarationModifierFlagsFromSymbol(rightProp) & (ModifierFlags.Private | ModifierFlags.Protected)) {
                     skippedPrivateMembers[rightProp.name] = true;
                 }
-                else if (isOwnProperty && !isSetterWithoutGetter) {
+                else if (!isClassMethod(rightProp) && !isSetterWithoutGetter) {
                     members[rightProp.name] = rightProp;
                 }
             }
             for (const leftProp of getPropertiesOfType(left)) {
                 if (leftProp.flags & SymbolFlags.SetAccessor && !(leftProp.flags & SymbolFlags.GetAccessor)
-                    || leftProp.name in skippedPrivateMembers) {
+                    || leftProp.name in skippedPrivateMembers
+                    || isClassMethod(leftProp)) {
                     continue;
                 }
                 if (leftProp.name in members) {
@@ -6310,6 +6302,10 @@ namespace ts {
                 }
             }
             return createAnonymousType(undefined, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
+        }
+
+        function isClassMethod(prop: Symbol) {
+            return prop.flags & SymbolFlags.Method && find(prop.declarations, decl => isClassLike(decl.parent));
         }
 
         function createLiteralType(flags: TypeFlags, text: string) {
@@ -6502,16 +6498,16 @@ namespace ts {
             return <T>instantiations[type.id] || (instantiations[type.id] = instantiator(type, mapper));
         }
 
-        function createUnaryTypeMapper(source: Type, target: Type): TypeMapper {
-            return t => t === source ? target : t;
+        function makeUnaryTypeMapper(source: Type, target: Type) {
+            return (t: Type) => t === source ? target : t;
         }
 
-        function createBinaryTypeMapper(source1: Type, target1: Type, source2: Type, target2: Type): TypeMapper {
-            return t => t === source1 ? target1 : t === source2 ? target2 : t;
+        function makeBinaryTypeMapper(source1: Type, target1: Type, source2: Type, target2: Type) {
+            return (t: Type) => t === source1 ? target1 : t === source2 ? target2 : t;
         }
 
-        function createArrayTypeMapper(sources: Type[], targets: Type[]): TypeMapper {
-            return t => {
+        function makeArrayTypeMapper(sources: Type[], targets: Type[]) {
+            return (t: Type) => {
                 for (let i = 0; i < sources.length; i++) {
                     if (t === sources[i]) {
                         return targets ? targets[i] : anyType;
@@ -6522,11 +6518,9 @@ namespace ts {
         }
 
         function createTypeMapper(sources: Type[], targets: Type[]): TypeMapper {
-            const count = sources.length;
-            const mapper: TypeMapper =
-                count == 1 ? createUnaryTypeMapper(sources[0], targets ? targets[0] : anyType) :
-                    count == 2 ? createBinaryTypeMapper(sources[0], targets ? targets[0] : anyType, sources[1], targets ? targets[1] : anyType) :
-                        createArrayTypeMapper(sources, targets);
+            const mapper: TypeMapper = sources.length === 1 ? makeUnaryTypeMapper(sources[0], targets ? targets[0] : anyType) :
+                sources.length === 2 ? makeBinaryTypeMapper(sources[0], targets ? targets[0] : anyType, sources[1], targets ? targets[1] : anyType) :
+                makeArrayTypeMapper(sources, targets);
             mapper.mappedTypes = sources;
             return mapper;
         }
@@ -6560,7 +6554,7 @@ namespace ts {
 
         function combineTypeMappers(mapper1: TypeMapper, mapper2: TypeMapper): TypeMapper {
             const mapper: TypeMapper = t => instantiateType(mapper1(t), mapper2);
-            mapper.mappedTypes = mapper1.mappedTypes;
+            mapper.mappedTypes = concatenate(mapper1.mappedTypes, mapper2.mappedTypes);
             return mapper;
         }
 
@@ -10936,23 +10930,23 @@ namespace ts {
             const func = parameter.parent;
             if (isContextSensitiveFunctionOrObjectLiteralMethod(func)) {
                 const iife = getImmediatelyInvokedFunctionExpression(func);
-                if (iife) {
+                if (iife && iife.arguments) {
                     const indexOfParameter = indexOf(func.parameters, parameter);
-                    if (iife.arguments && indexOfParameter < iife.arguments.length) {
-                        if (parameter.dotDotDotToken) {
-                            const restTypes: Type[] = [];
-                            for (let i = indexOfParameter; i < iife.arguments.length; i++) {
-                                restTypes.push(getWidenedLiteralType(checkExpression(iife.arguments[i])));
-                            }
-                            return createArrayType(getUnionType(restTypes));
+                    if (parameter.dotDotDotToken) {
+                        const restTypes: Type[] = [];
+                        for (let i = indexOfParameter; i < iife.arguments.length; i++) {
+                            restTypes.push(getWidenedLiteralType(checkExpression(iife.arguments[i])));
                         }
-                        const links = getNodeLinks(iife);
-                        const cached = links.resolvedSignature;
-                        links.resolvedSignature = anySignature;
-                        const type = getWidenedLiteralType(checkExpression(iife.arguments[indexOfParameter]));
-                        links.resolvedSignature = cached;
-                        return type;
+                        return restTypes.length ? createArrayType(getUnionType(restTypes)) : undefined;
                     }
+                    const links = getNodeLinks(iife);
+                    const cached = links.resolvedSignature;
+                    links.resolvedSignature = anySignature;
+                    const type = indexOfParameter < iife.arguments.length ?
+                        getWidenedLiteralType(checkExpression(iife.arguments[indexOfParameter])) :
+                        parameter.initializer ? undefined : undefinedWideningType;
+                    links.resolvedSignature = cached;
+                    return type;
                 }
                 const contextualSignature = getContextualSignature(func);
                 if (contextualSignature) {
@@ -11661,7 +11655,7 @@ namespace ts {
                         checkExternalEmitHelpers(memberDecl, ExternalEmitHelpers.Assign);
                     }
                     if (propertiesArray.length > 0) {
-                        spread = getSpreadType(spread, createObjectLiteralType(), /*isFromObjectLiteral*/ true);
+                        spread = getSpreadType(spread, createObjectLiteralType());
                         propertiesArray = [];
                         propertiesTable = createMap<Symbol>();
                         hasComputedStringProperty = false;
@@ -11673,7 +11667,7 @@ namespace ts {
                         error(memberDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
                         return unknownType;
                     }
-                    spread = getSpreadType(spread, type, /*isFromObjectLiteral*/ false);
+                    spread = getSpreadType(spread, type);
                     offset = i + 1;
                     continue;
                 }
@@ -11718,7 +11712,7 @@ namespace ts {
 
             if (spread !== emptyObjectType) {
                 if (propertiesArray.length > 0) {
-                    spread = getSpreadType(spread, createObjectLiteralType(), /*isFromObjectLiteral*/ true);
+                    spread = getSpreadType(spread, createObjectLiteralType());
                 }
                 if (spread.flags & TypeFlags.Object) {
                     // only set the symbol and flags if this is a (fresh) object type
