@@ -3,7 +3,7 @@
 ////function f(/*fnDecl*/this: number) {
 ////    return /*fnUse*/this;
 ////}
-/////*cls*/class C {
+////class /*cls*/C {
 ////    constructor() { return /*clsUse*/this; }
 ////    get self(/*getterDecl*/this: number) { return /*getterUse*/this; }
 ////}

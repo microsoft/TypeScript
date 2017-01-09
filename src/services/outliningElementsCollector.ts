@@ -8,7 +8,7 @@ namespace ts.OutliningElementsCollector {
             if (hintSpanNode && startElement && endElement) {
                 const span: OutliningSpan = {
                     textSpan: createTextSpanFromBounds(startElement.pos, endElement.end),
-                    hintSpan: createTextSpanFromBounds(hintSpanNode.getStart(), hintSpanNode.end),
+                    hintSpan: createTextSpanFromNode(hintSpanNode, sourceFile),
                     bannerText: collapseText,
                     autoCollapse: autoCollapse
                 };
@@ -135,7 +135,7 @@ namespace ts.OutliningElementsCollector {
 
                         // Block was a standalone block.  In this case we want to only collapse
                         // the span of the block, independent of any parent span.
-                        const span = createTextSpanFromBounds(n.getStart(), n.end);
+                        const span = createTextSpanFromNode(n);
                         elements.push({
                             textSpan: span,
                             hintSpan: span,

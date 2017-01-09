@@ -3,10 +3,10 @@
 ////class clsInOverload {
 ////    static fnOverload();
 ////    static /*staticFunctionOverload*/fnOverload(foo: string);
-////    /*staticFunctionOverloadDefinition*/static fnOverload(foo: any) { }
+////    static /*staticFunctionOverloadDefinition*/fnOverload(foo: any) { }
 ////    public /*functionOverload*/fnOverload(): any;
 ////    public fnOverload(foo: string);
-////    /*functionOverloadDefinition*/public fnOverload(foo: any) { return "foo" }
+////    public /*functionOverloadDefinition*/fnOverload(foo: any) { return "foo" }
 ////
 ////    constructor() { }
 ////}

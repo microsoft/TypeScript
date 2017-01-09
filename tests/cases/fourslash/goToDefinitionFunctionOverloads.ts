@@ -1,8 +1,8 @@
 /// <reference path='fourslash.ts' />
 
-/////*functionOverload1*/function /*functionOverload*/functionOverload(value: number);
-/////*functionOverload2*/function functionOverload(value: string);
-/////*functionOverloadDefinition*/function functionOverload() {}
+////function /*functionOverload1*/functionOverload(value: number);
+////function /*functionOverload2*/functionOverload(value: string);
+////function /*functionOverloadDefinition*/functionOverload() {}
 ////
 /////*functionOverloadReference1*/functionOverload(123);
 /////*functionOverloadReference2*/functionOverload("123");
@@ -12,5 +12,5 @@ verify.goToDefinition({
     functionOverloadReference1: "functionOverload1",
     functionOverloadReference2: "functionOverload2",
     brokenOverload: "functionOverload1",
-    functionOverload: "functionOverloadDefinition"
+    functionOverload1: "functionOverloadDefinition"
 });

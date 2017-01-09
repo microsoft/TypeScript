@@ -6,7 +6,7 @@
 ////     interface IntrinsicElements { }
 ////     interface ElementAttributesProperty { props; }
 //// }
-//// /*ct*/class MyClass {
+//// class /*ct*/MyClass {
 ////     props: {
 ////         /*pt*/foo: string;
 ////     }

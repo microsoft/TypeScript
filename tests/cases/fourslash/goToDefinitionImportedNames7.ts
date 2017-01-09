@@ -5,7 +5,7 @@
 
 
 // @Filename: a.ts
-/////*classDefinition*/class Class {
+////class /*classDefinition*/Class {
 ////    private f;
 ////}
 ////export default Class;
