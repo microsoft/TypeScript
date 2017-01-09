@@ -1,15 +1,15 @@
 /// <reference path='fourslash.ts' />
 
-/////*definition0*/class C {
+////class /*definition0*/C {
 ////    p;
 ////}
 ////
-/////*definition1*/interface I {
+////interface /*definition1*/I {
 ////    x;
 ////}
 ////
 ////module M {
-////    /*definition2*/export interface I {
+////    export interface /*definition2*/I {
 ////        y;
 ////    }
 ////}
@@ -18,14 +18,4 @@
 ////
 /////*reference*/x;
 
-goTo.marker('reference');
-goTo.type(0);
-verify.caretAtMarker('definition0');
-
-goTo.marker('reference');
-goTo.type(1);
-verify.caretAtMarker('definition1');
-
-goTo.marker('reference');
-goTo.type(2);
-verify.caretAtMarker('definition2');
+verify.goToType("reference", ["definition0", "definition1", "definition2"]);

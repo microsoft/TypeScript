@@ -3,8 +3,8 @@
 
 ////async function f() {}
 ////
-/////*defDecString*/function dec(target: any, propertyKey: string): void;
-/////*defDecSymbol*/function dec(target: any, propertyKey: symbol): void;
+////function /*defDecString*/dec(target: any, propertyKey: string): void;
+////function /*defDecSymbol*/dec(target: any, propertyKey: symbol): void;
 ////function dec(target: any, propertyKey: string | symbol) {}
 ////
 ////declare const s: symbol;

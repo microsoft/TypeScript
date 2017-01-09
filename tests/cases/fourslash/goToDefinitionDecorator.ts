@@ -9,10 +9,10 @@
 
 
 // @Filename: a.ts
-/////*decoratorDefinition*/function decorator(target) {
+////function /*decoratorDefinition*/decorator(target) {
 ////    return target;
 ////}
-/////*decoratorFactoryDefinition*/function decoratorFactory(...args) {
+////function /*decoratorFactoryDefinition*/decoratorFactory(...args) {
 ////    return target => target;
 ////}
 
