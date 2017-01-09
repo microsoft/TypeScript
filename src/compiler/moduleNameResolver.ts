@@ -357,7 +357,7 @@ namespace ts {
              * Then it computes the set of parent folders for 'directory' that should have the same module resolution result
              * and for every parent folder in set it adds entry: parent -> module resolution. .
              * Lets say we first directory name: /a/b/c/d/e and resolution result is: /a/b/bar.ts.
-             * Set of parent folders that should have the same result will be: 
+             * Set of parent folders that should have the same result will be:
              * [
              *     /a/b/c/d, /a/b/c, /a/b
              * ]
@@ -391,7 +391,7 @@ namespace ts {
                     }
                 }
             }
-            
+
             function getCommonPrefix(directory: Path, resolution: string) {
                 if (resolution === undefined) {
                     return undefined;
@@ -421,7 +421,7 @@ namespace ts {
             trace(host, Diagnostics.Resolving_module_0_from_1, moduleName, containingFile);
         }
         const containingDirectory = getDirectoryPath(containingFile);
-        let perFolderCache = cache && cache.getOrCreateCacheForDirectory(containingDirectory);
+        const perFolderCache = cache && cache.getOrCreateCacheForDirectory(containingDirectory);
         let result = perFolderCache && perFolderCache[moduleName];
 
         if (result) {
@@ -1022,7 +1022,7 @@ namespace ts {
 
     /**
      * Represents result of search. Normally when searching among several alternatives we treat value `undefined` as indicator
-     * that search fails and we should try another option. 
+     * that search fails and we should try another option.
      * However this does not allow us to represent final result that should be used instead of further searching (i.e. a final result that was found in cache).
      * SearchResult is used to deal with this issue, its values represents following outcomes:
      * - undefined - not found, continue searching
@@ -1030,7 +1030,7 @@ namespace ts {
      * - { value: <some-value> } - found - stop searching
      */
     type SearchResult<T> = { value: T | undefined } | undefined;
-    
+
     /**
      * Wraps value to SearchResult.
      * @returns undefined if value is undefined or { value } otherwise
