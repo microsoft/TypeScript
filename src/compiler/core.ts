@@ -164,6 +164,16 @@ namespace ts {
         return undefined;
     }
 
+    /** Works like Array.prototype.findIndex, returning `-1` if no element satisfying the predicate is found. */
+    export function findIndex<T>(array: T[], predicate: (element: T, index: number) => boolean): number {
+        for (let i = 0; i < array.length; i++) {
+            if (predicate(array[i], i)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     /**
      * Returns the first truthy result of `callback`, or else fails.
      * This is like `forEach`, but never returns undefined.
@@ -1810,67 +1820,42 @@ namespace ts {
         // If there are no "includes", then just put everything in results[0].
         const results: string[][] = includeFileRegexes ? includeFileRegexes.map(() => []) : [[]];
 
+        const comparer = useCaseSensitiveFileNames ? compareStrings : compareStringsCaseInsensitive;
         for (const basePath of patterns.basePaths) {
-            forEachFileInRecursiveDirectories(basePath, combinePaths(currentDirectory, basePath), { useCaseSensitiveFileNames, getFileSystemEntries, includeDirectory, visitFile });
+            visitDirectory(basePath, combinePaths(currentDirectory, basePath));
         }
 
         return flatten(results);
 
-        function includeDirectory(absoluteDirectoryName: string): boolean {
-            return (!includeDirectoryRegex || includeDirectoryRegex.test(absoluteDirectoryName)) &&
-                (!excludeRegex || !excludeRegex.test(absoluteDirectoryName));
-        }
+        function visitDirectory(path: string, absolutePath: string) {
+            let { files, directories } = getFileSystemEntries(path);
+            files = files.slice().sort(comparer);
+            directories = directories.slice().sort(comparer);
 
-        function visitFile(fileName: string, absoluteFileName: string): void {
-            if (extensions && !fileExtensionIsAny(fileName, extensions) ||
-                excludeRegex && excludeRegex.test(absoluteFileName)) {
-                return;
-            }
-
-            if (!includeFileRegexes) {
-                results[0].push(fileName);
-            }
-            else {
-                for (let i = 0; i < includeFileRegexes.length; i++) {
-                    if (includeFileRegexes[i].test(absoluteFileName)) {
-                        results[i].push(fileName);
-                        // Only include a file once.
-                        break;
+            for (const current of files) {
+                const name = combinePaths(path, current);
+                const absoluteName = combinePaths(absolutePath, current);
+                if (extensions && !fileExtensionIsAny(name, extensions)) continue;
+                if (excludeRegex && excludeRegex.test(absoluteName)) continue;
+                if (!includeFileRegexes) {
+                    results[0].push(name);
+                }
+                else {
+                    const includeIndex = findIndex(includeFileRegexes, re => re.test(absoluteName));
+                    if (includeIndex !== -1) {
+                        results[includeIndex].push(name);
                     }
                 }
             }
-        }
-    }
 
-    interface RecursiveDirectoryVisitor {
-        useCaseSensitiveFileNames: boolean;
-        getFileSystemEntries: (path: string) => FileSystemEntries;
-        includeDirectory: (absoluteDirectoryName: string) => boolean;
-        visitFile: (fileName: string, absoluteFileName: string) => void;
-    }
-
-    function forEachFileInRecursiveDirectories(start: string, absoluteStart: string, visitor: RecursiveDirectoryVisitor): void {
-        visitDirectory(start, absoluteStart);
-
-        function visitDirectory(path: string, absolutePath: string) {
-            let { files, directories } = visitor.getFileSystemEntries(path);
-            files = sorted(files);
-            directories = sorted(directories);
-
-            for (const file of files) {
-                visitor.visitFile(combinePaths(path, file), combinePaths(absolutePath, file));
-            }
-
-            for (const dir of directories) {
-                const absoluteName = combinePaths(absolutePath, dir);
-                if (visitor.includeDirectory(absoluteName)) {
-                    visitDirectory(combinePaths(path, dir), absoluteName);
+            for (const current of directories) {
+                const name = combinePaths(path, current);
+                const absoluteName = combinePaths(absolutePath, current);
+                if ((!includeDirectoryRegex || includeDirectoryRegex.test(absoluteName)) &&
+                    (!excludeRegex || !excludeRegex.test(absoluteName))) {
+                    visitDirectory(name, absoluteName);
                 }
             }
-        }
-
-        function sorted(names: string[]): string[] {
-            return names.slice().sort(visitor.useCaseSensitiveFileNames ? compareStrings : compareStringsCaseInsensitive);
         }
     }
 
