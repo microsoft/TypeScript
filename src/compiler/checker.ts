@@ -7206,7 +7206,7 @@ namespace ts {
                     return related === RelationComparisonResult.Succeeded;
                 }
             }
-            if (source.flags & TypeFlags.StructuredOrTypeParameter || target.flags & TypeFlags.StructuredOrTypeParameter) {
+            if (source.flags & TypeFlags.StructuredOrTypeVariable || target.flags & TypeFlags.StructuredOrTypeVariable) {
                 return checkTypeRelatedTo(source, target, relation, undefined, undefined, undefined);
             }
             return false;

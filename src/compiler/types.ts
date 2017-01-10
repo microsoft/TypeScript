@@ -2803,7 +2803,7 @@ namespace ts {
         EnumLike = Enum | EnumLiteral,
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
-        StructuredOrTypeParameter = StructuredType | TypeParameter | Index,
+        StructuredOrTypeVariable = StructuredType | TypeParameter | Index | IndexedAccess,
         TypeVariable = TypeParameter | IndexedAccess,
 
         // 'Narrowable' types are types where narrowing actually narrows.
