@@ -391,7 +391,7 @@ namespace ts {
                     }
                 }
             }
-            
+
             function getCommonPrefix(directory: Path, resolution: string) {
                 if (resolution === undefined) {
                     return undefined;
@@ -421,7 +421,7 @@ namespace ts {
             trace(host, Diagnostics.Resolving_module_0_from_1, moduleName, containingFile);
         }
         const containingDirectory = getDirectoryPath(containingFile);
-        let perFolderCache = cache && cache.getOrCreateCacheForDirectory(containingDirectory);
+        const perFolderCache = cache && cache.getOrCreateCacheForDirectory(containingDirectory);
         let result = perFolderCache && perFolderCache[moduleName];
 
         if (result) {
@@ -1030,7 +1030,7 @@ namespace ts {
      * - { value: <some-value> } - found - stop searching
      */
     type SearchResult<T> = { value: T | undefined } | undefined;
-    
+
     /**
      * Wraps value to SearchResult.
      * @returns undefined if value is undefined or { value } otherwise
