@@ -296,6 +296,30 @@ class C1 {
     }
 }
 
+type S2 = {
+    a: string;
+    b: string;
+};
+
+function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K], x4: T[K]) {
+    x1 = x2;
+    x1 = x3;
+    x1 = x4;
+    x2 = x1;
+    x2 = x3;
+    x2 = x4;
+    x3 = x1;
+    x3 = x2;
+    x3 = x4;
+    x4 = x1;
+    x4 = x2;
+    x4 = x3;
+    x1.length;
+    x2.length;
+    x3.length;
+    x4.length;
+}
+
 // Repros from #12011
 
 class Base {
@@ -430,6 +454,43 @@ type SomeMethodDescriptor = {
 }
 
 let result = dispatchMethod<SomeMethodDescriptor>("someMethod", ["hello", 35]);
+
+// Repro from #13073
+
+type KeyTypes = "a" | "b"
+let MyThingy: { [key in KeyTypes]: string[] };
+
+function addToMyThingy<S extends KeyTypes>(key: S) {
+    MyThingy[key].push("a");
+}
+
+// Repro from #13285
+
+function updateIds<T extends Record<K, string>, K extends string>(
+    obj: T,
+    idFields: K[],
+    idMapping: { [oldId: string]: string }
+): Record<K, string> {
+    for (const idField of idFields) {
+        const newId = idMapping[obj[idField]];
+        if (newId) {
+            obj[idField] = newId;
+        }
+    }
+    return obj;
+}
+
+// Repro from #13285
+
+function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
+    obj: T,
+    key: K,
+    stringMap: { [oldId: string]: string }
+) {
+    var x = obj[key];
+    stringMap[x]; // Should be OK.
+}
+
 
 //// [keyofAndIndexedAccess.js]
 var __extends = (this && this.__extends) || (function () {
@@ -649,6 +710,24 @@ var C1 = (function () {
     };
     return C1;
 }());
+function f90(x1, x2, x3, x4) {
+    x1 = x2;
+    x1 = x3;
+    x1 = x4;
+    x2 = x1;
+    x2 = x3;
+    x2 = x4;
+    x3 = x1;
+    x3 = x2;
+    x3 = x4;
+    x4 = x1;
+    x4 = x2;
+    x4 = x3;
+    x1.length;
+    x2.length;
+    x3.length;
+    x4.length;
+}
 // Repros from #12011
 var Base = (function () {
     function Base() {
@@ -718,6 +797,26 @@ function f(p) {
     a[p].add; // any
 }
 var result = dispatchMethod("someMethod", ["hello", 35]);
+var MyThingy;
+function addToMyThingy(key) {
+    MyThingy[key].push("a");
+}
+// Repro from #13285
+function updateIds(obj, idFields, idMapping) {
+    for (var _i = 0, idFields_1 = idFields; _i < idFields_1.length; _i++) {
+        var idField = idFields_1[_i];
+        var newId = idMapping[obj[idField]];
+        if (newId) {
+            obj[idField] = newId;
+        }
+    }
+    return obj;
+}
+// Repro from #13285
+function updateIds2(obj, key, stringMap) {
+    var x = obj[key];
+    stringMap[x]; // Should be OK.
+}
 
 
 //// [keyofAndIndexedAccess.d.ts]
@@ -853,6 +952,11 @@ declare class C1 {
     set<K extends keyof this>(key: K, value: this[K]): void;
     foo(): void;
 }
+declare type S2 = {
+    a: string;
+    b: string;
+};
+declare function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K], x4: T[K]): void;
 declare class Base {
     get<K extends keyof this>(prop: K): this[K];
     set<K extends keyof this>(prop: K, value: this[K]): void;
@@ -925,3 +1029,16 @@ declare type SomeMethodDescriptor = {
     returnValue: string[];
 };
 declare let result: string[];
+declare type KeyTypes = "a" | "b";
+declare let MyThingy: {
+    [key in KeyTypes]: string[];
+};
+declare function addToMyThingy<S extends KeyTypes>(key: S): void;
+declare function updateIds<T extends Record<K, string>, K extends string>(obj: T, idFields: K[], idMapping: {
+    [oldId: string]: string;
+}): Record<K, string>;
+declare function updateIds2<T extends {
+    [x: string]: string;
+}, K extends keyof T>(obj: T, key: K, stringMap: {
+    [oldId: string]: string;
+}): void;
