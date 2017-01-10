@@ -212,8 +212,8 @@ namespace ts {
             shortName: "p",
             type: "string",
             isFilePath: true,
-            description: Diagnostics.Compile_the_project_in_the_given_directory_using_tsconfig_json_or_the_specified_config_file,
-            paramType: Diagnostics.DIRECTORY_OR_FILE
+            description: Diagnostics.Compile_the_project_given_the_path_to_its_configuration_file_or_to_a_folder_with_a_tsconfig_json,
+            paramType: Diagnostics.FILE_OR_DIRECTORY
         },
         {
             name: "removeComments",

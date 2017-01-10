@@ -2513,7 +2513,7 @@
         "category": "Message",
         "code": 6019
     },
-    "Compile the project in the given directory, using 'tsconfig.json' or the specified config file.": {
+    "Compile the project given the path to its configuration file, or to a folder with a 'tsconfig.json'": {
         "category": "Message",
         "code": 6020
     },
@@ -2573,7 +2573,7 @@
         "category": "Message",
         "code": 6039
     },
-    "DIRECTORY_OR_FILE": {
+    "FILE OR DIRECTORY": {
         "category": "Message",
         "code": 6040
     },
