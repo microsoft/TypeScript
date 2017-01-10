@@ -464,3 +464,30 @@ let MyThingy: { [key in KeyTypes]: string[] };
 function addToMyThingy<S extends KeyTypes>(key: S) {
     MyThingy[key].push("a");
 }
+
+// Repro from #13285
+
+function updateIds<T extends Record<K, string>, K extends string>(
+    obj: T,
+    idFields: K[],
+    idMapping: { [oldId: string]: string }
+): Record<K, string> {
+    for (const idField of idFields) {
+        const newId = idMapping[obj[idField]];
+        if (newId) {
+            obj[idField] = newId;
+        }
+    }
+    return obj;
+}
+
+// Repro from #13285
+
+function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
+    obj: T,
+    key: K,
+    stringMap: { [oldId: string]: string }
+) {
+    var x = obj[key];
+    stringMap[x]; // Should be OK.
+}

@@ -464,6 +464,33 @@ function addToMyThingy<S extends KeyTypes>(key: S) {
     MyThingy[key].push("a");
 }
 
+// Repro from #13285
+
+function updateIds<T extends Record<K, string>, K extends string>(
+    obj: T,
+    idFields: K[],
+    idMapping: { [oldId: string]: string }
+): Record<K, string> {
+    for (const idField of idFields) {
+        const newId = idMapping[obj[idField]];
+        if (newId) {
+            obj[idField] = newId;
+        }
+    }
+    return obj;
+}
+
+// Repro from #13285
+
+function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
+    obj: T,
+    key: K,
+    stringMap: { [oldId: string]: string }
+) {
+    var x = obj[key];
+    stringMap[x]; // Should be OK.
+}
+
 
 //// [keyofAndIndexedAccess.js]
 var __extends = (this && this.__extends) || function (d, b) {
@@ -769,6 +796,22 @@ var MyThingy;
 function addToMyThingy(key) {
     MyThingy[key].push("a");
 }
+// Repro from #13285
+function updateIds(obj, idFields, idMapping) {
+    for (var _i = 0, idFields_1 = idFields; _i < idFields_1.length; _i++) {
+        var idField = idFields_1[_i];
+        var newId = idMapping[obj[idField]];
+        if (newId) {
+            obj[idField] = newId;
+        }
+    }
+    return obj;
+}
+// Repro from #13285
+function updateIds2(obj, key, stringMap) {
+    var x = obj[key];
+    stringMap[x]; // Should be OK.
+}
 
 
 //// [keyofAndIndexedAccess.d.ts]
@@ -986,3 +1029,11 @@ declare let MyThingy: {
     [key in KeyTypes]: string[];
 };
 declare function addToMyThingy<S extends KeyTypes>(key: S): void;
+declare function updateIds<T extends Record<K, string>, K extends string>(obj: T, idFields: K[], idMapping: {
+    [oldId: string]: string;
+}): Record<K, string>;
+declare function updateIds2<T extends {
+    [x: string]: string;
+}, K extends keyof T>(obj: T, key: K, stringMap: {
+    [oldId: string]: string;
+}): void;

@@ -2013,3 +2013,89 @@ function addToMyThingy<S extends KeyTypes>(key: S) {
 >"a" : "a"
 }
 
+// Repro from #13285
+
+function updateIds<T extends Record<K, string>, K extends string>(
+>updateIds : <T extends Record<K, string>, K extends string>(obj: T, idFields: K[], idMapping: { [oldId: string]: string; }) => Record<K, string>
+>T : T
+>Record : Record<K, T>
+>K : K
+>K : K
+
+    obj: T,
+>obj : T
+>T : T
+
+    idFields: K[],
+>idFields : K[]
+>K : K
+
+    idMapping: { [oldId: string]: string }
+>idMapping : { [oldId: string]: string; }
+>oldId : string
+
+): Record<K, string> {
+>Record : Record<K, T>
+>K : K
+
+    for (const idField of idFields) {
+>idField : K
+>idFields : K[]
+
+        const newId = idMapping[obj[idField]];
+>newId : { [oldId: string]: string; }[T[K]]
+>idMapping[obj[idField]] : { [oldId: string]: string; }[T[K]]
+>idMapping : { [oldId: string]: string; }
+>obj[idField] : T[K]
+>obj : T
+>idField : K
+
+        if (newId) {
+>newId : { [oldId: string]: string; }[T[K]]
+
+            obj[idField] = newId;
+>obj[idField] = newId : { [oldId: string]: string; }[T[K]]
+>obj[idField] : T[K]
+>obj : T
+>idField : K
+>newId : { [oldId: string]: string; }[T[K]]
+        }
+    }
+    return obj;
+>obj : T
+}
+
+// Repro from #13285
+
+function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
+>updateIds2 : <T extends { [x: string]: string; }, K extends keyof T>(obj: T, key: K, stringMap: { [oldId: string]: string; }) => void
+>T : T
+>x : string
+>K : K
+>T : T
+
+    obj: T,
+>obj : T
+>T : T
+
+    key: K,
+>key : K
+>K : K
+
+    stringMap: { [oldId: string]: string }
+>stringMap : { [oldId: string]: string; }
+>oldId : string
+
+) {
+    var x = obj[key];
+>x : T[K]
+>obj[key] : T[K]
+>obj : T
+>key : K
+
+    stringMap[x]; // Should be OK.
+>stringMap[x] : { [oldId: string]: string; }[T[K]]
+>stringMap : { [oldId: string]: string; }
+>x : T[K]
+}
+
