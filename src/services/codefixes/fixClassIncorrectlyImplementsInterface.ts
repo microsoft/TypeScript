@@ -31,9 +31,9 @@ namespace ts.codefix {
             const implementedTypeSymbols = checker.getPropertiesOfType(implementedType);
             const nonPrivateMembers = implementedTypeSymbols.filter(symbol => !(getModifierFlags(symbol.valueDeclaration) & ModifierFlags.Private));
 
-            let insertion = getMissingIndexSignatureInsertion(implementedType, IndexKind.Number, classDecl, hasNumericIndexSignature);
-            insertion += getMissingIndexSignatureInsertion(implementedType, IndexKind.String, classDecl, hasStringIndexSignature);
-            insertion += getMissingMembersInsertion(classDecl, nonPrivateMembers, checker, context.newLineCharacter);
+            let insertion = getMissingIndexSignatureInsertion(implementedType, IndexKind.Number, classDecl, hasNumericIndexSignature, context.formatInfo.newLineAndIndentationStr);
+            insertion += getMissingIndexSignatureInsertion(implementedType, IndexKind.String, classDecl, hasStringIndexSignature, context.formatInfo.newLineAndIndentationStr);
+            insertion += getMissingMembersInsertion(classDecl, nonPrivateMembers, checker, context.formatInfo);
 
             const message = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Implement_interface_0), [implementedTypeNode.getText()]);
             if (insertion) {
@@ -43,13 +43,13 @@ namespace ts.codefix {
 
         return result;
 
-        function getMissingIndexSignatureInsertion(type: InterfaceType, kind: IndexKind, enclosingDeclaration: ClassLikeDeclaration, hasIndexSigOfKind: boolean) {
+        function getMissingIndexSignatureInsertion(type: InterfaceType, kind: IndexKind, enclosingDeclaration: ClassLikeDeclaration, hasIndexSigOfKind: boolean, newLineAndIndentation: string) {
             if (!hasIndexSigOfKind) {
                 const IndexInfoOfKind = checker.getIndexInfoOfType(type, kind);
                 if (IndexInfoOfKind) {
                     const writer = getSingleLineStringWriter();
                     checker.getSymbolDisplayBuilder().buildIndexSignatureDisplay(IndexInfoOfKind, writer, kind, enclosingDeclaration);
-                    const result = writer.string();
+                    const result = newLineAndIndentation + writer.string();
                     releaseStringWriter(writer);
 
                     return result;

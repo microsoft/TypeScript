@@ -2042,7 +2042,7 @@ namespace FourSlash {
                     continue;
                 }
 
-                const newActions = this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.length, [diagnostic.code]);
+                const newActions = this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.length, [diagnostic.code], this.copyFormatOptions());
                 if (newActions && newActions.length) {
                     actions = actions ? actions.concat(newActions) : newActions;
                 }

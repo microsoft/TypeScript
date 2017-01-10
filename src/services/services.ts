@@ -1676,25 +1676,29 @@ namespace ts {
             return [];
         }
 
-        function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[]): CodeAction[] {
+        function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], editorSettings: EditorSettings): CodeAction[] {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const span = { start, length: end - start };
             const newLineChar = getNewLineOrDefaultFromHost(host);
+            if (!editorSettings.newLineCharacter) {
+                editorSettings.newLineCharacter = newLineChar;
+            }
 
             let allFixes: CodeAction[] = [];
 
             forEach(errorCodes, error => {
                 cancellationToken.throwIfCancellationRequested();
 
-                const context = {
+                const context: CodeFixContext = {
                     errorCode: error,
                     sourceFile: sourceFile,
                     span: span,
                     program: program,
                     newLineCharacter: newLineChar,
                     host: host,
-                    cancellationToken: cancellationToken
+                    cancellationToken: cancellationToken,
+                    formatInfo: new CodeFixFormatInfo(editorSettings, ts.formatting.SmartIndenter.getIndentation(span.start, sourceFile, editorSettings))
                 };
 
                 const fixes = codefix.getFixes(context);

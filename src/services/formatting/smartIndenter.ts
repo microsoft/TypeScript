@@ -8,6 +8,9 @@ namespace ts.formatting {
             Unknown = -1
         }
 
+        /**
+         * @returns Indentation in units of columns shifted.
+         */
         export function getIndentation(position: number, sourceFile: SourceFile, options: EditorSettings): number {
             if (position > sourceFile.text.length) {
                 return getBaseIndentation(options); // past EOF

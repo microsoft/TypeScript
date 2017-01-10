@@ -442,6 +442,12 @@ namespace ts.server.protocol {
           * Errorcodes we want to get the fixes for.
           */
         errorCodes?: number[];
+
+        /**
+         * An optional set of settings to be used when computing indentation.
+         * If argument is omitted - then it will use settings for file that were previously set via 'configure' request or global settings.
+         */
+        options?: EditorSettings;
     }
 
     /**
