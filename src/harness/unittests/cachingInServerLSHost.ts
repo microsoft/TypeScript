@@ -86,7 +86,7 @@ namespace ts {
                 content: `foo()`
             };
 
-            const serverHost = createDefaultServerHost(createMap({ [root.name]: root, [imported.name]: imported }));
+            const serverHost = createDefaultServerHost(createMapFromTemplate({ [root.name]: root, [imported.name]: imported }));
             const { project, rootScriptInfo } = createProject(root.name, serverHost);
 
             // ensure that imported file was found
@@ -170,7 +170,7 @@ namespace ts {
                 content: `export var y = 1`
             };
 
-            const fileMap = createMap({ [root.name]: root });
+            const fileMap = createMapFromTemplate({ [root.name]: root });
             const serverHost = createDefaultServerHost(fileMap);
             const originalFileExists = serverHost.fileExists;
 

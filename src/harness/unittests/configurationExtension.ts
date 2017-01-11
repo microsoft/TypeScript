@@ -2,7 +2,7 @@
 /// <reference path="..\virtualFileSystem.ts" />
 
 namespace ts {
-    const testContents = createMap({
+    const testContents = createMapFromTemplate({
         "/dev/tsconfig.json": `{
   "extends": "./configs/base",
   "files": [

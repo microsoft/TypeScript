@@ -51,7 +51,7 @@ namespace ts.server {
     }
 
     const compilerOptionConverters = prepareConvertersForEnumLikeCompilerOptions(optionDeclarations);
-    const indentStyle = createMap({
+    const indentStyle = createMapFromTemplate({
         "none": IndentStyle.None,
         "block": IndentStyle.Block,
         "smart": IndentStyle.Smart

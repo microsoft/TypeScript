@@ -90,7 +90,7 @@ namespace FourSlash {
 
     export import IndentStyle = ts.IndentStyle;
 
-    const entityMap = ts.createMap({
+    const entityMap = ts.createMapFromTemplate({
         "&": "&amp;",
         "\"": "&quot;",
         "'": "&#39;",

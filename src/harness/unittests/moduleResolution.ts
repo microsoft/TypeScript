@@ -331,7 +331,7 @@ namespace ts {
         }
 
         it("should find all modules", () => {
-            const files = createMap({
+            const files = createMapFromTemplate({
                 "/a/b/c/first/shared.ts": `
 class A {}
 export = A`,
@@ -350,7 +350,7 @@ export = C;
         });
 
         it("should find modules in node_modules", () => {
-            const files = createMap({
+            const files = createMapFromTemplate({
                 "/parent/node_modules/mod/index.d.ts": "export var x",
                 "/parent/app/myapp.ts": `import {x} from "mod"`
             });
@@ -358,7 +358,7 @@ export = C;
         });
 
         it("should find file referenced via absolute and relative names", () => {
-            const files = createMap({
+            const files = createMapFromTemplate({
                 "/a/b/c.ts": `/// <reference path="b.ts"/>`,
                 "/a/b/b.ts": "var x"
             });
@@ -409,7 +409,7 @@ export = C;
         }
 
         it("should succeed when the same file is referenced using absolute and relative names", () => {
-            const files = createMap({
+            const files = createMapFromTemplate({
                 "/a/b/c.ts": `/// <reference path="d.ts"/>`,
                 "/a/b/d.ts": "var x"
             });
@@ -417,7 +417,7 @@ export = C;
         });
 
         it("should fail when two files used in program differ only in casing (tripleslash references)", () => {
-            const files = createMap({
+            const files = createMapFromTemplate({
                 "/a/b/c.ts": `/// <reference path="D.ts"/>`,
                 "/a/b/d.ts": "var x"
             });
@@ -425,7 +425,7 @@ export = C;
         });
 
         it("should fail when two files used in program differ only in casing (imports)", () => {
-            const files = createMap({
+            const files = createMapFromTemplate({
                 "/a/b/c.ts": `import {x} from "D"`,
                 "/a/b/d.ts": "export var x"
             });
@@ -433,7 +433,7 @@ export = C;
         });
 
         it("should fail when two files used in program differ only in casing (imports, relative module names)", () => {
-            const files = createMap({
+            const files = createMapFromTemplate({
                 "moduleA.ts": `import {x} from "./ModuleB"`,
                 "moduleB.ts": "export var x"
             });
@@ -441,7 +441,7 @@ export = C;
         });
 
         it("should fail when two files exist on disk that differs only in casing", () => {
-            const files = createMap({
+            const files = createMapFromTemplate({
                 "/a/b/c.ts": `import {x} from "D"`,
                 "/a/b/D.ts": "export var x",
                 "/a/b/d.ts": "export var y"
@@ -450,7 +450,7 @@ export = C;
         });
 
         it("should fail when module name in 'require' calls has inconsistent casing", () => {
-            const files = createMap({
+            const files = createMapFromTemplate({
                 "moduleA.ts": `import a = require("./ModuleC")`,
                 "moduleB.ts": `import a = require("./moduleC")`,
                 "moduleC.ts": "export var x"
@@ -459,7 +459,7 @@ export = C;
         });
 
         it("should fail when module names in 'require' calls has inconsistent casing and current directory has uppercase chars", () => {
-            const files = createMap({
+            const files = createMapFromTemplate({
                 "/a/B/c/moduleA.ts": `import a = require("./ModuleC")`,
                 "/a/B/c/moduleB.ts": `import a = require("./moduleC")`,
                 "/a/B/c/moduleC.ts": "export var x",
@@ -471,7 +471,7 @@ import b = require("./moduleB");
             test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },  "/a/B/c", /*useCaseSensitiveFileNames*/ false, ["moduleD.ts"], [1149]);
         });
         it("should not fail when module names in 'require' calls has consistent casing and current directory has uppercase chars", () => {
-            const files = createMap({
+            const files = createMapFromTemplate({
                 "/a/B/c/moduleA.ts": `import a = require("./moduleC")`,
                 "/a/B/c/moduleB.ts": `import a = require("./moduleC")`,
                 "/a/B/c/moduleC.ts": "export var x",

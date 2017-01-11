@@ -63,7 +63,7 @@
         }
 
         if (transpileOptions.renamedDependencies) {
-            sourceFile.renamedDependencies = createMap(transpileOptions.renamedDependencies);
+            sourceFile.renamedDependencies = createMapFromTemplate(transpileOptions.renamedDependencies);
         }
 
         const newLine = getNewLineCharacter(options);

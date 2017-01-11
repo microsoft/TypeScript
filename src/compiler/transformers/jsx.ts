@@ -286,7 +286,7 @@ namespace ts {
         }
     }
 
-    const entities = createMap<number>({
+    const entities = createMapFromTemplate<number>({
         "quot": 0x0022,
         "amp": 0x0026,
         "apos": 0x0027,

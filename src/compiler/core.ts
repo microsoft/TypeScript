@@ -40,7 +40,12 @@ namespace ts {
     }
 
     /** Create a new map. If a template object is provided, the map will copy entries from it. */
-    export function createMap<T>(template?: MapLike<T>): Map<T> {
+    export function createMap<T>(): Map<T> {
+        return new MapCtr<T>();
+    }
+
+    //!!!
+    export function createMapFromTemplate<T>(template?: MapLike<T>): Map<T> {
         const map: Map<T> = new MapCtr<T>();
 
         // Copies keys/values from template. Note that for..in will not throw if

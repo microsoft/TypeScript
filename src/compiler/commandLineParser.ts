@@ -65,7 +65,7 @@ namespace ts {
         },
         {
             name: "jsx",
-            type: createMap({
+            type: createMapFromTemplate({
                 "preserve": JsxEmit.Preserve,
                 "react": JsxEmit.React
             }),
@@ -100,7 +100,7 @@ namespace ts {
         {
             name: "module",
             shortName: "m",
-            type: createMap({
+            type: createMapFromTemplate({
                 "none": ModuleKind.None,
                 "commonjs": ModuleKind.CommonJS,
                 "amd": ModuleKind.AMD,
@@ -114,7 +114,7 @@ namespace ts {
         },
         {
             name: "newLine",
-            type: createMap({
+            type: createMapFromTemplate({
                 "crlf": NewLineKind.CarriageReturnLineFeed,
                 "lf": NewLineKind.LineFeed
             }),
@@ -263,7 +263,7 @@ namespace ts {
         {
             name: "target",
             shortName: "t",
-            type: createMap({
+            type: createMapFromTemplate({
                 "es3": ScriptTarget.ES3,
                 "es5": ScriptTarget.ES5,
                 "es6": ScriptTarget.ES2015,
@@ -300,7 +300,7 @@ namespace ts {
         },
         {
             name: "moduleResolution",
-            type: createMap({
+            type: createMapFromTemplate({
                 "node": ModuleResolutionKind.NodeJs,
                 "classic": ModuleResolutionKind.Classic,
             }),
@@ -409,7 +409,7 @@ namespace ts {
             type: "list",
             element: {
                 name: "lib",
-                type: createMap({
+                type: createMapFromTemplate({
                     // JavaScript only
                     "es5": "lib.es5.d.ts",
                     "es6": "lib.es2015.d.ts",

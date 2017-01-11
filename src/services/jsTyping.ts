@@ -76,7 +76,7 @@ namespace ts.JsTyping {
 
         if (!safeList) {
             const result = readConfigFile(safeListPath, (path: string) => host.readFile(path));
-            safeList = result.config ? createMap<string>(result.config) : EmptySafeList;
+            safeList = result.config ? createMapFromTemplate<string>(result.config) : EmptySafeList;
         }
 
         const filesToWatch: string[] = [];
