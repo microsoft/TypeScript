@@ -1322,6 +1322,12 @@ namespace ts.Completions {
             const moduleSpecifierSymbol = typeChecker.getSymbolAtLocation(importOrExportDeclaration.moduleSpecifier);
             if (moduleSpecifierSymbol) {
                 exports = typeChecker.getExportsOfModule(moduleSpecifierSymbol);
+                const exportEquals = typeChecker.resolveExternalModuleSymbol(moduleSpecifierSymbol);
+                if (exportEquals !== moduleSpecifierSymbol) {
+                    // Location doesn't matter so long as it's not an identifier.
+                    const exportEqualsType = typeChecker.getTypeOfSymbolAtLocation(exportEquals, moduleSpecifier);
+                    exports = ts.concatenate(exports, typeChecker.getPropertiesOfType(exportEqualsType));
+                }
             }
 
             symbols = exports ? filterNamedImportOrExportCompletionItems(exports, namedImportsOrExports.elements) : emptyArray;

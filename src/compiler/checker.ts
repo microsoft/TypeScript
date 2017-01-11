@@ -108,6 +108,7 @@ namespace ts {
             getAliasedSymbol: resolveAlias,
             getEmitResolver,
             getExportsOfModule: getExportsOfModuleAsArray,
+            resolveExternalModuleSymbol,
             getAmbientModules,
             getJsxElementAttributesType,
             getJsxIntrinsicTagNames,
