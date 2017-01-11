@@ -1112,6 +1112,10 @@ namespace ts {
             return !tripleSlashDirectivePrefixRegex.test(commentText);
         }
     }
+
+    export function createTextSpanFromNode(node: Node, sourceFile?: SourceFile): TextSpan {
+        return createTextSpanFromBounds(node.getStart(sourceFile), node.getEnd());
+    }
 }
 
 // Display-part writer helpers

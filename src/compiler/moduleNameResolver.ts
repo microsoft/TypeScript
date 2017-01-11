@@ -15,7 +15,7 @@ namespace ts {
     }
 
     /** Array that is only intended to be pushed to, never read. */
-    interface Push<T> {
+    export interface Push<T> {
         push(value: T): void;
     }
 
@@ -358,7 +358,7 @@ namespace ts {
              * Then it computes the set of parent folders for 'directory' that should have the same module resolution result
              * and for every parent folder in set it adds entry: parent -> module resolution. .
              * Lets say we first directory name: /a/b/c/d/e and resolution result is: /a/b/bar.ts.
-             * Set of parent folders that should have the same result will be: 
+             * Set of parent folders that should have the same result will be:
              * [
              *     /a/b/c/d, /a/b/c, /a/b
              * ]
@@ -1023,7 +1023,7 @@ namespace ts {
 
     /**
      * Represents result of search. Normally when searching among several alternatives we treat value `undefined` as indicator
-     * that search fails and we should try another option. 
+     * that search fails and we should try another option.
      * However this does not allow us to represent final result that should be used instead of further searching (i.e. a final result that was found in cache).
      * SearchResult is used to deal with this issue, its values represents following outcomes:
      * - undefined - not found, continue searching

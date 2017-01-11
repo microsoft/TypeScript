@@ -120,7 +120,6 @@ declare namespace FourSlashInterface {
         marker(name?: string): void;
         bof(): void;
         eof(): void;
-        type(definitionIndex?: number): void;
         implementation(): void;
         position(position: number, fileIndex?: number): any;
         position(position: number, fileName?: string): any;
@@ -175,6 +174,8 @@ declare namespace FourSlashInterface {
         goToDefinition(startsAndEnds: { [startMarkerName: string]: string | string[] }): void;
         /** Verifies goToDefinition for each `${markerName}Reference` -> `${markerName}Definition` */
         goToDefinitionForMarkers(...markerNames: string[]): void;
+        goToType(startsAndEnds: { [startMarkerName: string]: string | string[] }): void;
+        goToType(startMarkerNames: string | string[], endMarkerNames: string | string[]): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
         /**

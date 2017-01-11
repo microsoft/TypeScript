@@ -1,9 +1,9 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: b.ts
-/////*alias1Definition*/import alias1 = require("fileb");
+////import /*alias1Definition*/alias1 = require("fileb");
 ////module Module {
-////    /*alias2Definition*/export import alias2 = alias1;
+////    export import /*alias2Definition*/alias2 = alias1;
 ////}
 ////
 ////// Type position

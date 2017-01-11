@@ -325,7 +325,7 @@ namespace ts.FindAllReferences {
                 fileName: targetLabel.getSourceFile().fileName,
                 kind: ScriptElementKind.label,
                 name: labelName,
-                textSpan: createTextSpanFromBounds(targetLabel.getStart(), targetLabel.getEnd()),
+                textSpan: createTextSpanFromNode(targetLabel, sourceFile),
                 displayParts: [displayPart(labelName, SymbolDisplayPartKind.text)]
             };
 
@@ -872,7 +872,7 @@ namespace ts.FindAllReferences {
                     fileName: node.getSourceFile().fileName,
                     kind: ScriptElementKind.variableElement,
                     name: "this",
-                    textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd()),
+                    textSpan: createTextSpanFromNode(node),
                     displayParts
                 },
                 references: references
@@ -943,7 +943,7 @@ namespace ts.FindAllReferences {
                     fileName: node.getSourceFile().fileName,
                     kind: ScriptElementKind.variableElement,
                     name: type.text,
-                    textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd()),
+                    textSpan: createTextSpanFromNode(node),
                     displayParts: [displayPart(getTextOfNode(node), SymbolDisplayPartKind.stringLiteral)]
                 },
                 references: references

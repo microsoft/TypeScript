@@ -45,7 +45,7 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(130,5): error TS2322: T
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(131,5): error TS2322: Type '{ a: string; }' is not assignable to type '{ [x: string]: any; a?: number | undefined; }'.
   Types of property 'a' are incompatible.
     Type 'string' is not assignable to type 'number | undefined'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(137,16): error TS2322: Type '{}' is not assignable to type 'string'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(137,16): error TS2322: Type 'T' is not assignable to type 'string'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(137,21): error TS2536: Type 'P' cannot be used to index type 'T'.
 
 
@@ -259,7 +259,7 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(137,21): error TS2536: 
         pf: {[P in F]?: T[P]},
         pt: {[P in T]?: T[P]}, // note: should be in keyof T
                    ~
-!!! error TS2322: Type '{}' is not assignable to type 'string'.
+!!! error TS2322: Type 'T' is not assignable to type 'string'.
                         ~~~~
 !!! error TS2536: Type 'P' cannot be used to index type 'T'.
     };

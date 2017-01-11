@@ -591,7 +591,7 @@ namespace ts.NavigationBar {
     function getNodeSpan(node: Node): TextSpan {
         return node.kind === SyntaxKind.SourceFile
             ? createTextSpanFromBounds(node.getFullStart(), node.getEnd())
-            : createTextSpanFromBounds(node.getStart(curSourceFile), node.getEnd());
+            : createTextSpanFromNode(node, curSourceFile);
     }
 
     function getFunctionOrClassName(node: FunctionExpression | FunctionDeclaration | ArrowFunction | ClassLikeDeclaration): string {

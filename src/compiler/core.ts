@@ -126,7 +126,7 @@ namespace ts {
             }
 
             entries() {
-                return new MapIterator(this.data, (data, key) => [key, data[key]]);
+                return new MapIterator(this.data, (data, key) => [key, data[key]] as [string, T]);
             }
 
             forEach(action: (value: T, key: string) => void): void {

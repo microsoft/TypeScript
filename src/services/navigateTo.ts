@@ -197,7 +197,7 @@ namespace ts.NavigateTo {
                 matchKind: PatternMatchKind[rawItem.matchKind],
                 isCaseSensitive: rawItem.isCaseSensitive,
                 fileName: rawItem.fileName,
-                textSpan: createTextSpanFromBounds(declaration.getStart(), declaration.getEnd()),
+                textSpan: createTextSpanFromNode(declaration),
                 // TODO(jfreeman): What should be the containerName when the container has a computed name?
                 containerName: container && container.name ? (<Identifier>container.name).text : "",
                 containerKind: container && container.name ? getNodeKind(container) : ""
