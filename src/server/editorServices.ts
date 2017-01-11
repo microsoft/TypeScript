@@ -845,7 +845,7 @@ namespace ts.server {
                 files: parsedCommandLine.fileNames,
                 compilerOptions: parsedCommandLine.options,
                 configHasFilesProperty: config["files"] !== undefined,
-                wildcardDirectories: createMap(parsedCommandLine.wildcardDirectories),
+                wildcardDirectories: createMapFromTemplate(parsedCommandLine.wildcardDirectories),
                 typeAcquisition: parsedCommandLine.typeAcquisition,
                 compileOnSave: parsedCommandLine.compileOnSave
             };

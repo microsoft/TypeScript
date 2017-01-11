@@ -2141,7 +2141,7 @@ namespace FourSlash {
 
         public verifyBraceCompletionAtPosition(negative: boolean, openingBrace: string) {
 
-            const openBraceMap = ts.createMap<ts.CharacterCodes>({
+            const openBraceMap = ts.createMapFromTemplate<ts.CharacterCodes>({
                 "(": ts.CharacterCodes.openParen,
                 "{": ts.CharacterCodes.openBrace,
                 "[": ts.CharacterCodes.openBracket,

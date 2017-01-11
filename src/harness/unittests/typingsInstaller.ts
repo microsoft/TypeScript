@@ -944,7 +944,7 @@ namespace ts.projectSystem {
                 content: ""
             };
             const host = createServerHost([f, node]);
-            const cache = createMap<string>({ "node": node.path });
+            const cache = createMapFromTemplate<string>({ "node": node.path });
             const result = JsTyping.discoverTypings(host, [f.path], getDirectoryPath(<Path>f.path), /*safeListPath*/ undefined, cache, { enable: true }, ["fs", "bar"]);
             assert.deepEqual(result.cachedTypingPaths, [node.path]);
             assert.deepEqual(result.newTypingNames, ["bar"]);

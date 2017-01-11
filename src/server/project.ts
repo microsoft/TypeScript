@@ -396,7 +396,9 @@ namespace ts.server {
         }
 
         removeFile(info: ScriptInfo, detachFromProject = true) {
-            this.removeRootFileIfNecessary(info);
+            if (this.isRoot(info)) {
+                this.removeRoot(info);
+            }
             this.lsHost.notifyFileRemoved(info);
             this.cachedUnresolvedImportsPerFile.remove(info.path);
 
@@ -567,9 +569,6 @@ namespace ts.server {
 
         setCompilerOptions(compilerOptions: CompilerOptions) {
             if (compilerOptions) {
-                if (this.projectKind === ProjectKind.Inferred) {
-                    compilerOptions.allowJs = true;
-                }
                 compilerOptions.allowNonTsExtensions = true;
                 if (changesAffectModuleResolution(this.compilerOptions, compilerOptions)) {
                     // reset cached unresolved imports if changes in compiler options affected module resolution
@@ -698,11 +697,9 @@ namespace ts.server {
         }
 
         // remove a root file from project
-        private removeRootFileIfNecessary(info: ScriptInfo): void {
-            if (this.isRoot(info)) {
-                remove(this.rootFiles, info);
-                this.rootFilesMap.remove(info.path);
-            }
+        protected removeRoot(info: ScriptInfo): void {
+            remove(this.rootFiles, info);
+            this.rootFilesMap.remove(info.path);
         }
     }
 
@@ -717,6 +714,32 @@ namespace ts.server {
             }
         })();
 
+        private _isJsInferredProject = false;
+
+        toggleJsInferredProject(isJsInferredProject: boolean) {
+            if (isJsInferredProject !== this._isJsInferredProject) {
+                this._isJsInferredProject = isJsInferredProject;
+                this.setCompilerOptions();
+            }
+        }
+
+        setCompilerOptions(options?: CompilerOptions) {
+            // Avoid manipulating the given options directly
+            const newOptions = options ? clone(options) : this.getCompilerOptions();
+            if (!newOptions) {
+                return;
+            }
+
+            if (this._isJsInferredProject && typeof newOptions.maxNodeModuleJsDepth !== "number") {
+                newOptions.maxNodeModuleJsDepth = 2;
+            }
+            else if (!this._isJsInferredProject) {
+                newOptions.maxNodeModuleJsDepth = undefined;
+            }
+            newOptions.allowJs = true;
+            super.setCompilerOptions(newOptions);
+        }
+
         // Used to keep track of what directories are watched for this project
         directoriesWatchedForTsconfig: string[] = [];
 
@@ -729,6 +752,22 @@ namespace ts.server {
                 /*languageServiceEnabled*/ true,
                 compilerOptions,
                 /*compileOnSaveEnabled*/ false);
+        }
+
+        addRoot(info: ScriptInfo) {
+            if (!this._isJsInferredProject && info.isJavaScript()) {
+                this.toggleJsInferredProject(/*isJsInferredProject*/ true);
+            }
+            super.addRoot(info);
+        }
+
+        removeRoot(info: ScriptInfo) {
+            if (this._isJsInferredProject && info.isJavaScript()) {
+                if (filter(this.getRootScriptInfos(), info => info.isJavaScript()).length === 0) {
+                    this.toggleJsInferredProject(/*isJsInferredProject*/ false);
+                }
+            }
+            super.removeRoot(info);
         }
 
         getProjectRootPath() {

@@ -3135,9 +3135,8 @@ namespace ts {
             for (const prop of getPropertiesOfType(source)) {
                 const inNamesToRemove = names.has(prop.name);
                 const isPrivate = getDeclarationModifierFlagsFromSymbol(prop) & (ModifierFlags.Private | ModifierFlags.Protected);
-                const isMethod = prop.flags & SymbolFlags.Method;
                 const isSetOnlyAccessor = prop.flags & SymbolFlags.SetAccessor && !(prop.flags & SymbolFlags.GetAccessor);
-                if (!inNamesToRemove && !isPrivate && !isMethod && !isSetOnlyAccessor) {
+                if (!inNamesToRemove && !isPrivate && !isClassMethod(prop) && !isSetOnlyAccessor) {
                     members.set(prop.name, prop);
                 }
             }

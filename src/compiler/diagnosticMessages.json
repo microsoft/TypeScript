@@ -3247,7 +3247,7 @@
         "category": "Message",
         "code": 90003
     },
-    "Remove unused identifiers.": {
+    "Remove declaration for: {0}": {
         "category": "Message",
         "code": 90004
     },
