@@ -212,8 +212,8 @@ namespace ts {
             shortName: "p",
             type: "string",
             isFilePath: true,
-            description: Diagnostics.Compile_the_project_in_the_given_directory,
-            paramType: Diagnostics.DIRECTORY
+            description: Diagnostics.Compile_the_project_given_the_path_to_its_configuration_file_or_to_a_folder_with_a_tsconfig_json,
+            paramType: Diagnostics.FILE_OR_DIRECTORY
         },
         {
             name: "removeComments",
@@ -517,7 +517,7 @@ namespace ts {
                 include: typeAcquisition.include || [],
                 exclude: typeAcquisition.exclude || []
             };
-           return result;
+            return result;
         }
         return typeAcquisition;
     }

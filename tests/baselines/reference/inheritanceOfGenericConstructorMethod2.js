@@ -45,7 +45,7 @@ var N;
     var D1 = (function (_super) {
         __extends(D1, _super);
         function D1() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return D1;
     }(M.C1));
@@ -53,7 +53,7 @@ var N;
     var D2 = (function (_super) {
         __extends(D2, _super);
         function D2() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return D2;
     }(M.C2));

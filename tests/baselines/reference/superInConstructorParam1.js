@@ -33,7 +33,7 @@ var C = (function (_super) {
     __extends(C, _super);
     function C(a) {
         if (a === void 0) { a = _super.prototype.foo.call(_this); }
-        var _this;
+        var _this = this;
         return _this;
     }
     return C;

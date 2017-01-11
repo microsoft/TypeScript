@@ -1,14 +1,12 @@
 tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(3,5): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
 tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(7,5): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
-tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(15,5): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
 tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(19,5): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
 tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(23,5): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
-tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(27,5): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
-tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(28,5): error TS2502: 'y' is referenced directly or indirectly in its own type annotation.
-tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(29,5): error TS2502: 'z' is referenced directly or indirectly in its own type annotation.
+tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(38,24): error TS2313: Type parameter 'T' has a circular constraint.
+tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(38,30): error TS2536: Type '"hello"' cannot be used to index type 'T'.
 
 
-==== tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts (8 errors) ====
+==== tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts (6 errors) ====
     
     type T1 = {
         x: T1["x"];  // Error
@@ -27,9 +25,7 @@ tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(29,5): error 
     let x2x = x2.x;
     
     interface T3<T extends T3<T>> {
-        x: T["x"];  // Error
-        ~~~~~~~~~~
-!!! error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
+        x: T["x"];
     }
     
     interface T4<T extends T4<T>> {
@@ -45,13 +41,21 @@ tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(29,5): error 
     }
     
     class C2 {
-        x: this["y"];  // Error
-        ~~~~~~~~~~~~~
-!!! error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
-        y: this["z"];  // Error
-        ~~~~~~~~~~~~~
-!!! error TS2502: 'y' is referenced directly or indirectly in its own type annotation.
-        z: this["x"];  // Error
-        ~~~~~~~~~~~~~
-!!! error TS2502: 'z' is referenced directly or indirectly in its own type annotation.
+        x: this["y"];
+        y: this["z"];
+        z: this["x"];
     }
+    
+    // Repro from #12627
+    
+    interface Foo {
+        hello: boolean;
+    }
+    
+    function foo<T extends Foo | T["hello"]>() {
+                           ~~~~~~~~~~~~~~~~
+!!! error TS2313: Type parameter 'T' has a circular constraint.
+                                 ~~~~~~~~~~
+!!! error TS2536: Type '"hello"' cannot be used to index type 'T'.
+    }
+    

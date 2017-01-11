@@ -47,9 +47,9 @@ namespace FourSlash {
         /**
          * Inserted in source files by surrounding desired text
          * in a range with `[|` and `|]`. For example,
-         * 
+         *
          * [|text in range|]
-         * 
+         *
          * is a range with `text in range` "selected".
          */
         ranges: Range[];
@@ -262,23 +262,12 @@ namespace FourSlash {
             // Initialize the language service with all the scripts
             let startResolveFileRef: FourSlashFile;
 
+            let configFileName: string;
             ts.forEach(testData.files, file => {
                 // Create map between fileName and its content for easily looking up when resolveReference flag is specified
                 this.inputFiles[file.fileName] = file.content;
-
                 if (ts.getBaseFileName(file.fileName).toLowerCase() === "tsconfig.json") {
-                    const configJson = ts.parseConfigFileTextToJson(file.fileName, file.content);
-                    assert.isTrue(configJson.config !== undefined);
-
-                    // Extend our existing compiler options so that we can also support tsconfig only options
-                    if (configJson.config.compilerOptions) {
-                        const baseDirectory = ts.normalizePath(ts.getDirectoryPath(file.fileName));
-                        const tsConfig = ts.convertCompilerOptionsFromJson(configJson.config.compilerOptions, baseDirectory, file.fileName);
-
-                        if (!tsConfig.errors || !tsConfig.errors.length) {
-                            compilationOptions = ts.extend(compilationOptions, tsConfig.options);
-                        }
-                    }
+                    configFileName = file.fileName;
                 }
 
                 if (!startResolveFileRef && file.fileOptions[metadataOptionNames.resolveReference] === "true") {
@@ -289,6 +278,21 @@ namespace FourSlash {
                     throw new Error("There exists a Fourslash file which has resolveReference flag specified; remove duplicated resolveReference flag");
                 }
             });
+
+            if (configFileName) {
+                const baseDir = ts.normalizePath(ts.getDirectoryPath(configFileName));
+                const host = new Utils.MockParseConfigHost(baseDir, /*ignoreCase*/ false, this.inputFiles);
+
+                const configJsonObj = ts.parseConfigFileTextToJson(configFileName, this.inputFiles[configFileName]);
+                assert.isTrue(configJsonObj.config !== undefined);
+
+                const { options, errors } = ts.parseJsonConfigFileContent(configJsonObj.config, host, baseDir);
+
+                // Extend our existing compiler options so that we can also support tsconfig only options
+                if (!errors || errors.length === 0) {
+                    compilationOptions = ts.extend(compilationOptions, options);
+                }
+            }
 
 
             if (compilationOptions.typeRoots) {
@@ -536,53 +540,66 @@ namespace FourSlash {
         }
 
         public verifyGoToDefinitionIs(endMarker: string | string[]) {
-            this.verifyGoToDefinitionWorker(endMarker instanceof Array ? endMarker : [endMarker]);
+            this.verifyGoToXWorker(endMarker instanceof Array ? endMarker : [endMarker], () => this.getGoToDefinition());
         }
 
         public verifyGoToDefinition(arg0: any, endMarkerNames?: string | string[]) {
+            this.verifyGoToX(arg0, endMarkerNames, () => this.getGoToDefinition());
+        }
+
+        private getGoToDefinition(): ts.DefinitionInfo[] {
+            return this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition)
+        }
+
+        public verifyGoToType(arg0: any, endMarkerNames?: string | string[]) {
+            this.verifyGoToX(arg0, endMarkerNames, () =>
+                this.languageService.getTypeDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition));
+        }
+
+        private verifyGoToX(arg0: any, endMarkerNames: string | string[] | undefined, getDefs: () => ts.DefinitionInfo[] | undefined) {
             if (endMarkerNames) {
-                this.verifyGoToDefinitionPlain(arg0, endMarkerNames);
+                this.verifyGoToXPlain(arg0, endMarkerNames, getDefs);
             }
             else if (arg0 instanceof Array) {
                 const pairs: [string | string[], string | string[]][] = arg0;
                 for (const [start, end] of pairs) {
-                    this.verifyGoToDefinitionPlain(start, end);
+                    this.verifyGoToXPlain(start, end, getDefs);
                 }
             }
             else {
                 const obj: { [startMarkerName: string]: string | string[] } = arg0;
                 for (const startMarkerName in obj) {
                     if (ts.hasProperty(obj, startMarkerName)) {
-                        this.verifyGoToDefinitionPlain(startMarkerName, obj[startMarkerName]);
+                        this.verifyGoToXPlain(startMarkerName, obj[startMarkerName], getDefs);
                     }
                 }
             }
         }
 
-        private verifyGoToDefinitionPlain(startMarkerNames: string | string[], endMarkerNames: string | string[]) {
+        private verifyGoToXPlain(startMarkerNames: string | string[], endMarkerNames: string | string[], getDefs: () => ts.DefinitionInfo[] | undefined) {
             if (startMarkerNames instanceof Array) {
                 for (const start of startMarkerNames) {
-                    this.verifyGoToDefinitionSingle(start, endMarkerNames);
+                    this.verifyGoToXSingle(start, endMarkerNames, getDefs);
                 }
             }
             else {
-                this.verifyGoToDefinitionSingle(startMarkerNames, endMarkerNames);
+                this.verifyGoToXSingle(startMarkerNames, endMarkerNames, getDefs);
             }
         }
 
         public verifyGoToDefinitionForMarkers(markerNames: string[]) {
             for (const markerName of markerNames) {
-                this.verifyGoToDefinitionSingle(`${markerName}Reference`, `${markerName}Definition`);
+                this.verifyGoToXSingle(`${markerName}Reference`, `${markerName}Definition`, () => this.getGoToDefinition());
             }
         }
 
-        private verifyGoToDefinitionSingle(startMarkerName: string, endMarkerNames: string | string[]) {
+        private verifyGoToXSingle(startMarkerName: string, endMarkerNames: string | string[], getDefs: () => ts.DefinitionInfo[] | undefined) {
             this.goToMarker(startMarkerName);
-            this.verifyGoToDefinitionWorker(endMarkerNames instanceof Array ? endMarkerNames : [endMarkerNames]);
+            this.verifyGoToXWorker(endMarkerNames instanceof Array ? endMarkerNames : [endMarkerNames], getDefs);
         }
 
-        private verifyGoToDefinitionWorker(endMarkers: string[]) {
-            const definitions = this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition) || [];
+        private verifyGoToXWorker(endMarkers: string[], getDefs: () => ts.DefinitionInfo[] | undefined) {
+            const definitions = getDefs() || [];
 
             if (endMarkers.length !== definitions.length) {
                 this.raiseError(`goToDefinitions failed - expected to find ${endMarkers.length} definitions but got ${definitions.length}`);
@@ -1983,7 +2000,7 @@ namespace FourSlash {
          * Compares expected text to the text that would be in the sole range
          * (ie: [|...|]) in the file after applying the codefix sole codefix
          * in the source file.
-         * 
+         *
          * Because codefixes are only applied on the working file, it is unsafe
          * to apply this more than once (consider a refactoring across files).
          */
@@ -3038,10 +3055,6 @@ namespace FourSlashInterface {
             this.state.goToEOF();
         }
 
-        public type(definitionIndex = 0) {
-            this.state.goToTypeDefinition(definitionIndex);
-        }
-
         public implementation() {
             this.state.goToImplementation();
         }
@@ -3207,6 +3220,13 @@ namespace FourSlashInterface {
         public goToDefinition(startsAndEnds: { [startMarkerName: string]: string | string[] }): void;
         public goToDefinition(arg0: any, endMarkerName?: string | string[]) {
             this.state.verifyGoToDefinition(arg0, endMarkerName);
+        }
+
+        public goToType(startMarkerName: string | string[], endMarkerName: string | string[]): void;
+        public goToType(startsAndEnds: [string | string[], string | string[]][]): void;
+        public goToType(startsAndEnds: { [startMarkerName: string]: string | string[] }): void;
+        public goToType(arg0: any, endMarkerName?: string | string[]) {
+            this.state.verifyGoToType(arg0, endMarkerName);
         }
 
         public goToDefinitionForMarkers(...markerNames: string[]) {

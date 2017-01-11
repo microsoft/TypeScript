@@ -18,14 +18,14 @@ var __extends = (this && this.__extends) || (function () {
 var A = (function (_super) {
     __extends(A, _super);
     function A() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return A;
 }(C));
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
 }(A));
