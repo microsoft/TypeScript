@@ -7409,16 +7409,6 @@ namespace ts {
                             }
                         }
                     }
-                    else {
-                        // Given a type parameter K with a constraint keyof T, a type S is
-                        // assignable to K if S is assignable to keyof T.
-                        const constraint = getConstraintOfTypeParameter(<TypeParameter>target);
-                        if (constraint && constraint.flags & TypeFlags.Index) {
-                            if (result = isRelatedTo(source, constraint, reportErrors)) {
-                                return result;
-                            }
-                        }
-                    }
                 }
                 else if (target.flags & TypeFlags.Index) {
                     // A keyof S is related to a keyof T if T is related to S.
