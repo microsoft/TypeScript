@@ -4753,15 +4753,15 @@ namespace ts {
                 getPropertiesOfObjectType(type);
         }
 
-        function getConstraintOfTypeVariable(type: TypeVariable): Type {
-            return type.flags & TypeFlags.TypeParameter ? getConstraintOfTypeParameter(<TypeParameter>type) : getBaseConstraintOfTypeVariable(type);
+        function getConstraintOfType(type: TypeVariable | UnionOrIntersectionType): Type {
+            return type.flags & TypeFlags.TypeParameter ? getConstraintOfTypeParameter(<TypeParameter>type) : getBaseConstraintOfType(type);
         }
 
         function getConstraintOfTypeParameter(typeParameter: TypeParameter): Type {
             return hasNonCircularBaseConstraint(typeParameter) ? getConstraintFromTypeParameter(typeParameter) : undefined;
         }
 
-        function getBaseConstraintOfTypeVariable(type: TypeVariable): Type {
+        function getBaseConstraintOfType(type: TypeVariable | UnionOrIntersectionType): Type {
             const constraint = getResolvedBaseConstraint(type);
             return constraint !== noConstraintType && constraint !== circularConstraintType ? constraint : undefined;
         }
@@ -4775,15 +4775,15 @@ namespace ts {
          * type variable has no constraint, and the circularConstraintType singleton is returned if the constraint
          * circularly references the type variable.
          */
-        function getResolvedBaseConstraint(type: TypeVariable): Type {
+        function getResolvedBaseConstraint(type: TypeVariable | UnionOrIntersectionType): Type {
             let typeStack: Type[];
             let circular: boolean;
-            if (!type.resolvedApparentType) {
+            if (!type.resolvedBaseConstraint) {
                 typeStack = [];
                 const constraint = getBaseConstraint(type);
-                type.resolvedApparentType = circular ? circularConstraintType : getTypeWithThisArgument(constraint || noConstraintType, type);
+                type.resolvedBaseConstraint = circular ? circularConstraintType : getTypeWithThisArgument(constraint || noConstraintType, type);
             }
-            return type.resolvedApparentType;
+            return type.resolvedBaseConstraint;
 
             function getBaseConstraint(t: Type): Type {
                 if (contains(typeStack, t)) {
@@ -4834,7 +4834,7 @@ namespace ts {
          * type itself. Note that the apparent type of a union type is the union type itself.
          */
         function getApparentType(type: Type): Type {
-            const t = type.flags & TypeFlags.TypeVariable ? getBaseConstraintOfTypeVariable(<TypeVariable>type) || emptyObjectType : type;
+            const t = type.flags & TypeFlags.TypeVariable ? getBaseConstraintOfType(<TypeVariable>type) || emptyObjectType : type;
             return t.flags & TypeFlags.StringLike ? globalStringType :
                 t.flags & TypeFlags.NumberLike ? globalNumberType :
                 t.flags & TypeFlags.BooleanLike ? globalBooleanType :
@@ -7409,16 +7409,6 @@ namespace ts {
                             }
                         }
                     }
-                    else {
-                        // Given a type parameter K with a constraint keyof T, a type S is
-                        // assignable to K if S is assignable to keyof T.
-                        const constraint = getConstraintOfTypeParameter(<TypeParameter>target);
-                        if (constraint && constraint.flags & TypeFlags.Index) {
-                            if (result = isRelatedTo(source, constraint, reportErrors)) {
-                                return result;
-                            }
-                        }
-                    }
                 }
                 else if (target.flags & TypeFlags.Index) {
                     // A keyof S is related to a keyof T if T is related to S.
@@ -7427,14 +7417,12 @@ namespace ts {
                             return result;
                         }
                     }
-                    // Given a type variable T with a constraint C, a type S is assignable to
-                    // keyof T if S is assignable to keyof C.
-                    if ((<IndexType>target).type.flags & TypeFlags.TypeVariable) {
-                        const constraint = getConstraintOfTypeVariable(<TypeVariable>(<IndexType>target).type);
-                        if (constraint) {
-                            if (result = isRelatedTo(source, getIndexType(constraint), reportErrors)) {
-                                return result;
-                            }
+                    // A type S is assignable to keyof T if S is assignable to keyof C, where C is the
+                    // constraint of T.
+                    const constraint = getConstraintOfType((<IndexType>target).type);
+                    if (constraint) {
+                        if (result = isRelatedTo(source, getIndexType(constraint), reportErrors)) {
+                            return result;
                         }
                     }
                 }
@@ -7448,7 +7436,7 @@ namespace ts {
                     }
                     // A type S is related to a type T[K] if S is related to A[K], where K is string-like and
                     // A is the apparent type of S.
-                    const constraint = getBaseConstraintOfTypeVariable(<IndexedAccessType>target);
+                    const constraint = getBaseConstraintOfType(<IndexedAccessType>target);
                     if (constraint) {
                         if (result = isRelatedTo(source, constraint, reportErrors)) {
                             errorInfo = saveErrorInfo;
@@ -7488,7 +7476,7 @@ namespace ts {
                 else if (source.flags & TypeFlags.IndexedAccess) {
                     // A type S[K] is related to a type T if A[K] is related to T, where K is string-like and
                     // A is the apparent type of S.
-                    const constraint = getBaseConstraintOfTypeVariable(<IndexedAccessType>source);
+                    const constraint = getBaseConstraintOfType(<IndexedAccessType>source);
                     if (constraint) {
                         if (result = isRelatedTo(constraint, target, reportErrors)) {
                             errorInfo = saveErrorInfo;
@@ -15207,7 +15195,7 @@ namespace ts {
         function isLiteralContextualType(contextualType: Type) {
             if (contextualType) {
                 if (contextualType.flags & TypeFlags.TypeVariable) {
-                    const constraint = getBaseConstraintOfTypeVariable(<TypeVariable>contextualType) || emptyObjectType;
+                    const constraint = getBaseConstraintOfType(<TypeVariable>contextualType) || emptyObjectType;
                     // If the type parameter is constrained to the base primitive type we're checking for,
                     // consider this a literal context. For example, given a type parameter 'T extends string',
                     // this causes us to infer string literal types for T.

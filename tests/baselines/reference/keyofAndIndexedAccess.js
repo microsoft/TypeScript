@@ -464,6 +464,16 @@ function addToMyThingy<S extends KeyTypes>(key: S) {
     MyThingy[key].push("a");
 }
 
+// Repro from #13102
+
+type Handler<T> = {
+    onChange: (name: keyof T) => void;
+};
+
+function onChangeGenericFunction<T>(handler: Handler<T & {preset: number}>) {
+    handler.onChange('preset')
+}
+
 // Repro from #13285
 
 function updateIds<T extends Record<K, string>, K extends string>(
@@ -801,6 +811,9 @@ var MyThingy;
 function addToMyThingy(key) {
     MyThingy[key].push("a");
 }
+function onChangeGenericFunction(handler) {
+    handler.onChange('preset');
+}
 // Repro from #13285
 function updateIds(obj, idFields, idMapping) {
     for (var _i = 0, idFields_1 = idFields; _i < idFields_1.length; _i++) {
@@ -1034,6 +1047,12 @@ declare let MyThingy: {
     [key in KeyTypes]: string[];
 };
 declare function addToMyThingy<S extends KeyTypes>(key: S): void;
+declare type Handler<T> = {
+    onChange: (name: keyof T) => void;
+};
+declare function onChangeGenericFunction<T>(handler: Handler<T & {
+    preset: number;
+}>): void;
 declare function updateIds<T extends Record<K, string>, K extends string>(obj: T, idFields: K[], idMapping: {
     [oldId: string]: string;
 }): Record<K, string>;
