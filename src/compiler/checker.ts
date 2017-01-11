@@ -7947,17 +7947,25 @@ namespace ts {
                 let result = Ternary.True;
                 const saveErrorInfo = errorInfo;
 
+                let minArgumentCountOfSource = 0;
+                for (const s of sourceSignatures) {
+                    minArgumentCountOfSource = Math.max(minArgumentCountOfSource, s.minArgumentCount);
+                }
+
                 outer: for (const t of targetSignatures) {
                     // Only elaborate errors from the first failure
                     let shouldElaborateErrors = reportErrors;
+                    const maximumEffectiveCallLength = Math.min(minArgumentCountOfSource, t.minArgumentCount);
                     for (const s of sourceSignatures) {
-                        const related = signatureRelatedTo(s, t, shouldElaborateErrors);
-                        if (related) {
-                            result &= related;
-                            errorInfo = saveErrorInfo;
-                            continue outer;
+                        if (s.hasRestParameter || s.minArgumentCount >= maximumEffectiveCallLength) {
+                            const related = signatureRelatedTo(s, t, shouldElaborateErrors);
+                            if (related) {
+                                result &= related;
+                                errorInfo = saveErrorInfo;
+                                continue outer;
+                            }
+                            shouldElaborateErrors = false;
                         }
-                        shouldElaborateErrors = false;
                     }
 
                     if (shouldElaborateErrors) {
