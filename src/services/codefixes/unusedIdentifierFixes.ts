@@ -146,7 +146,7 @@ namespace ts.codefix {
 
             function createCodeFix(newText: string, start: number, length: number): CodeAction[] {
                 return [{
-                    description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Remove_the_unused_identifier_Colon_0), { 0: token.getText() }),
+                    description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Remove_declaration_for_Colon_0), { 0: token.getText() }),
                     changes: [{
                         fileName: sourceFile.fileName,
                         textChanges: [{ newText, span: { start, length } }]
