@@ -2615,7 +2615,7 @@ namespace ts {
             parseExpected(SyntaxKind.SpreadKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
             node.left = parseType();
-            if(parseOptional(SyntaxKind.CommaToken)) {
+            if (parseOptional(SyntaxKind.CommaToken)) {
                 node.right = parseType();
             }
             parseExpected(SyntaxKind.CloseParenToken);
