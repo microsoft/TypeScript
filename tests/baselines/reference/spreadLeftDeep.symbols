@@ -1,0 +1,29 @@
+=== tests/cases/conformance/types/spread/spreadLeftDeep.ts ===
+function f<T,U,V,W>(t: T, u: U, v: V, w: W) {
+>f : Symbol(f, Decl(spreadLeftDeep.ts, 0, 0))
+>T : Symbol(T, Decl(spreadLeftDeep.ts, 0, 11))
+>U : Symbol(U, Decl(spreadLeftDeep.ts, 0, 13))
+>V : Symbol(V, Decl(spreadLeftDeep.ts, 0, 15))
+>W : Symbol(W, Decl(spreadLeftDeep.ts, 0, 17))
+>t : Symbol(t, Decl(spreadLeftDeep.ts, 0, 20))
+>T : Symbol(T, Decl(spreadLeftDeep.ts, 0, 11))
+>u : Symbol(u, Decl(spreadLeftDeep.ts, 0, 25))
+>U : Symbol(U, Decl(spreadLeftDeep.ts, 0, 13))
+>v : Symbol(v, Decl(spreadLeftDeep.ts, 0, 31))
+>V : Symbol(V, Decl(spreadLeftDeep.ts, 0, 15))
+>w : Symbol(w, Decl(spreadLeftDeep.ts, 0, 37))
+>W : Symbol(W, Decl(spreadLeftDeep.ts, 0, 17))
+
+    // right-deep structure (T (U (V W)) should get transformed to
+    // left-deep structure (((T U) V) W)
+    let x: spread(T, spread(U, spread(V, W)));
+>x : Symbol(x, Decl(spreadLeftDeep.ts, 3, 7))
+>T : Symbol(T, Decl(spreadLeftDeep.ts, 0, 11))
+>U : Symbol(U, Decl(spreadLeftDeep.ts, 0, 13))
+>V : Symbol(V, Decl(spreadLeftDeep.ts, 0, 15))
+>W : Symbol(W, Decl(spreadLeftDeep.ts, 0, 17))
+
+    return x;
+>x : Symbol(x, Decl(spreadLeftDeep.ts, 3, 7))
+}
+

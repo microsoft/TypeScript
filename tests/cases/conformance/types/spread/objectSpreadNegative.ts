@@ -8,7 +8,7 @@ class PrivateOptionalX {
 class PublicX {
     public x: number;
 }
-let o2: { ...PublicX, ...PrivateOptionalX };
+let o2: spread(PublicX, PrivateOptionalX);
 let sn: number = o2.x; // error, x is private
 let optionalString: { sn?: string };
 let optionalNumber: { sn?: number };
@@ -18,7 +18,7 @@ let allOptional: { sn: string | number } = { ...optionalString, ...optionalNumbe
 // assignability as target
 interface Bool { b: boolean };
 interface Str { s: string };
-let spread: { ...Bool, ...Str } = { s: "foo" };  // error, missing 'b'
+let spread: spread(Bool, Str) = { s: "foo" };  // error, missing 'b'
 let b: Bool;
 spread = b; // error, missing 's'
 
@@ -55,14 +55,14 @@ let c: C = new C()
 let spreadC = { ...c }
 spreadC.m(); // error 'm' is not in '{ ... c }'
 
-let callableConstructableSpread: { ...PublicX, (n: number): number, new (p: number) };
+let callableConstructableSpread: spread(PublicX, { (n: number): number, new (p: number) });
 callableConstructableSpread(12); // error, no call signature
 new callableConstructableSpread(12); // error, no construct signature
 
 function override<T,U,V>(initial: U, override: U, t: T, v: V): U {
     // { ...T & V } is not assignable to { ...T & U }
-    let tvs: { ...T & V };
-    let mistake: { ...T & U } = tvs;
+    let tvs: spread(T & V);
+    let mistake: spread(T & U) = tvs;
     // { ...U } is not assignable to U
     return { ...initial, ...override };
 }

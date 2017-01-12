@@ -324,7 +324,7 @@ let shortCutted: { a: number, b: string } = { ...o, a }
 >a : Symbol(a, Decl(objectSpread.ts, 80, 51))
 
 // generics
-function f<T, U>(t: T, u: U): { ...T, ...U, id: string } {
+function f<T, U>(t: T, u: U): spread(spread(T, U), { id: string }) {
 >f : Symbol(f, Decl(objectSpread.ts, 80, 55))
 >T : Symbol(T, Decl(objectSpread.ts, 83, 11))
 >U : Symbol(U, Decl(objectSpread.ts, 83, 13))
@@ -334,7 +334,7 @@ function f<T, U>(t: T, u: U): { ...T, ...U, id: string } {
 >U : Symbol(U, Decl(objectSpread.ts, 83, 13))
 >T : Symbol(T, Decl(objectSpread.ts, 83, 11))
 >U : Symbol(U, Decl(objectSpread.ts, 83, 13))
->id : Symbol(id, Decl(objectSpread.ts, 83, 43))
+>id : Symbol(id, Decl(objectSpread.ts, 83, 52))
 
     return { ...t, ...u, id: 'id' };
 >t : Symbol(t, Decl(objectSpread.ts, 83, 17))
@@ -398,9 +398,9 @@ class D { m() { }; q = 2; }
 >m : Symbol(D.m, Decl(objectSpread.ts, 96, 9))
 >q : Symbol(D.q, Decl(objectSpread.ts, 96, 18))
 
-let classesAreWrong: { id: string, ...C, ...D } =
+let classesAreWrong: spread(spread({ id: string }, C), D) =
 >classesAreWrong : Symbol(classesAreWrong, Decl(objectSpread.ts, 97, 3))
->id : Symbol(id, Decl(objectSpread.ts, 97, 22))
+>id : Symbol(id, Decl(objectSpread.ts, 97, 36))
 >C : Symbol(C, Decl(objectSpread.ts, 43, 32))
 >D : Symbol(D, Decl(objectSpread.ts, 94, 44))
 

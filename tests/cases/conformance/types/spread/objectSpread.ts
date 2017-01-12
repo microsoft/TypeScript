@@ -82,7 +82,7 @@ let a = 12;
 let shortCutted: { a: number, b: string } = { ...o, a }
 
 // generics
-function f<T, U>(t: T, u: U): { ...T, ...U, id: string } {
+function f<T, U>(t: T, u: U): spread(spread(T, U), { id: string }) {
     return { ...t, ...u, id: 'id' };
 }
 
@@ -96,5 +96,5 @@ let overwriteId: { id: string, a: number, c: number, d: string } =
     f({ a: 1, id: true }, { c: 1, d: 'no' })
 
 class D { m() { }; q = 2; }
-let classesAreWrong: { id: string, ...C, ...D } =
+let classesAreWrong: spread(spread({ id: string }, C), D) =
     f(new C(), new D())

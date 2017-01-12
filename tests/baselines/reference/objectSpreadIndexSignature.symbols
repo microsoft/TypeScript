@@ -1,0 +1,87 @@
+=== tests/cases/conformance/types/spread/objectSpreadIndexSignature.ts ===
+class C {
+>C : Symbol(C, Decl(objectSpreadIndexSignature.ts, 0, 0))
+
+    a: number;
+>a : Symbol(C.a, Decl(objectSpreadIndexSignature.ts, 0, 9))
+
+    c: boolean;
+>c : Symbol(C.c, Decl(objectSpreadIndexSignature.ts, 1, 14))
+}
+// index signatures are not allowed in object literals with spread types
+let c: spread(C, { b: string, c?: string, [n: number]: string });
+>c : Symbol(c, Decl(objectSpreadIndexSignature.ts, 5, 3))
+>C : Symbol(C, Decl(objectSpreadIndexSignature.ts, 0, 0))
+>b : Symbol(b, Decl(objectSpreadIndexSignature.ts, 5, 18))
+>c : Symbol(c, Decl(objectSpreadIndexSignature.ts, 5, 29))
+>n : Symbol(n, Decl(objectSpreadIndexSignature.ts, 5, 43))
+
+let n: number = c.a;
+>n : Symbol(n, Decl(objectSpreadIndexSignature.ts, 6, 3))
+>c.a : Symbol(C.a, Decl(objectSpreadIndexSignature.ts, 0, 9))
+>c : Symbol(c, Decl(objectSpreadIndexSignature.ts, 5, 3))
+>a : Symbol(C.a, Decl(objectSpreadIndexSignature.ts, 0, 9))
+
+let s: string = c[12];
+>s : Symbol(s, Decl(objectSpreadIndexSignature.ts, 7, 3))
+>c : Symbol(c, Decl(objectSpreadIndexSignature.ts, 5, 3))
+
+interface Indexed {
+>Indexed : Symbol(Indexed, Decl(objectSpreadIndexSignature.ts, 7, 22))
+
+    [n: string]: number;
+>n : Symbol(n, Decl(objectSpreadIndexSignature.ts, 9, 5))
+
+    a: number;
+>a : Symbol(Indexed.a, Decl(objectSpreadIndexSignature.ts, 9, 24))
+}
+interface Indexed2 {
+>Indexed2 : Symbol(Indexed2, Decl(objectSpreadIndexSignature.ts, 11, 1))
+
+    [n: string]: boolean;
+>n : Symbol(n, Decl(objectSpreadIndexSignature.ts, 13, 5))
+
+    c: boolean;
+>c : Symbol(Indexed2.c, Decl(objectSpreadIndexSignature.ts, 13, 25))
+}
+let indexed: Indexed;
+>indexed : Symbol(indexed, Decl(objectSpreadIndexSignature.ts, 16, 3))
+>Indexed : Symbol(Indexed, Decl(objectSpreadIndexSignature.ts, 7, 22))
+
+let indexed2: Indexed2;
+>indexed2 : Symbol(indexed2, Decl(objectSpreadIndexSignature.ts, 17, 3))
+>Indexed2 : Symbol(Indexed2, Decl(objectSpreadIndexSignature.ts, 11, 1))
+
+let i: spread(Indexed, { b: number });
+>i : Symbol(i, Decl(objectSpreadIndexSignature.ts, 18, 3))
+>Indexed : Symbol(Indexed, Decl(objectSpreadIndexSignature.ts, 7, 22))
+>b : Symbol(b, Decl(objectSpreadIndexSignature.ts, 18, 24))
+
+// only indexed has indexer, so i[101]: any
+i[101];
+>i : Symbol(i, Decl(objectSpreadIndexSignature.ts, 18, 3))
+
+let ii: spread(spread(Indexed, Indexed2), { b: boolean, d: number });
+>ii : Symbol(ii, Decl(objectSpreadIndexSignature.ts, 21, 3))
+>Indexed : Symbol(Indexed, Decl(objectSpreadIndexSignature.ts, 7, 22))
+>Indexed2 : Symbol(Indexed2, Decl(objectSpreadIndexSignature.ts, 11, 1))
+>b : Symbol(b, Decl(objectSpreadIndexSignature.ts, 21, 43))
+>d : Symbol(d, Decl(objectSpreadIndexSignature.ts, 21, 55))
+
+// both have indexer, so i[1001]: number | boolean
+let nb: number | boolean = ii[1001];
+>nb : Symbol(nb, Decl(objectSpreadIndexSignature.ts, 23, 3))
+>ii : Symbol(ii, Decl(objectSpreadIndexSignature.ts, 21, 3))
+
+function f<T>(t: T) {
+>f : Symbol(f, Decl(objectSpreadIndexSignature.ts, 23, 36))
+>T : Symbol(T, Decl(objectSpreadIndexSignature.ts, 25, 11))
+>t : Symbol(t, Decl(objectSpreadIndexSignature.ts, 25, 14))
+>T : Symbol(T, Decl(objectSpreadIndexSignature.ts, 25, 11))
+
+    let i: spread(T, { [n: number]: string });
+>i : Symbol(i, Decl(objectSpreadIndexSignature.ts, 26, 7))
+>T : Symbol(T, Decl(objectSpreadIndexSignature.ts, 25, 11))
+>n : Symbol(n, Decl(objectSpreadIndexSignature.ts, 26, 24))
+}
+

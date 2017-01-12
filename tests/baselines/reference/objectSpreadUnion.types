@@ -24,7 +24,7 @@ let sn: number | string = result.a;
 >result : { a: number; } | { a: string; }
 >a : string | number
 
-let assignable: { ...(A1 | A2) } = result;
+let assignable: spread(A1 | A2) = result;
 >assignable : { a: number; } | { a: string; }
 >A1 : A1
 >A2 : A2
@@ -49,29 +49,29 @@ function tripleUnion<T, U, V>(t: T, u: U, v: V): void {
 >V : V
 
     let result = { ...tuv, id: 'foo' };
->result : { ...T; id: string; } | { ...U; id: string; } | { ...V; id: string; }
->{ ...tuv, id: 'foo' } : { ...T; id: string; } | { ...U; id: string; } | { ...V; id: string; }
+>result : spread(T, { id: string; }) | spread(U, { id: string; }) | spread(V, { id: string; })
+>{ ...tuv, id: 'foo' } : spread(T, { id: string; }) | spread(U, { id: string; }) | spread(V, { id: string; })
 >tuv : T | U | V
 >id : string
 >'foo' : "foo"
 
-    let expected: { ...T, id: string } | { ...U, id: string } | { ...V, id: string } = result;
->expected : { ...T; id: string; } | { ...U; id: string; } | { ...V; id: string; }
+    let expected: spread(T, { id: string }) | spread(U, { id: string }) | spread(V, { id: string }) = result;
+>expected : spread(T, { id: string; }) | spread(U, { id: string; }) | spread(V, { id: string; })
 >T : T
 >id : string
 >U : U
 >id : string
 >V : V
 >id : string
->result : { ...T; id: string; } | { ...U; id: string; } | { ...V; id: string; }
+>result : spread(T, { id: string; }) | spread(U, { id: string; }) | spread(V, { id: string; })
 
-    let assignable: { ...(T | U | V), id: string } = result;
->assignable : { ...T; id: string; } | { ...U; id: string; } | { ...V; id: string; }
+    let assignable: spread(T | U | V, { id: string }) = result;
+>assignable : spread(T, { id: string; }) | spread(U, { id: string; }) | spread(V, { id: string; })
 >T : T
 >U : U
 >V : V
 >id : string
->result : { ...T; id: string; } | { ...U; id: string; } | { ...V; id: string; }
+>result : spread(T, { id: string; }) | spread(U, { id: string; }) | spread(V, { id: string; })
 }
 function iteratedDoubleUnion<T, U, V>(t: T, u: U, v: V): void {
 >iteratedDoubleUnion : <T, U, V>(t: T, u: U, v: V) => void
@@ -96,15 +96,15 @@ function iteratedDoubleUnion<T, U, V>(t: T, u: U, v: V): void {
 >V : V
 
     let result = { ...tu, ...uv, id: 'bar' };
->result : { ...U; id: string; } | { ...T; ...U; id: string; } | { ...T; ...V; id: string; } | { ...U; ...V; id: string; }
->{ ...tu, ...uv, id: 'bar' } : { ...U; id: string; } | { ...T; ...U; id: string; } | { ...T; ...V; id: string; } | { ...U; ...V; id: string; }
+>result : spread(U, { id: string; }) | spread(spread(T, U), { id: string; }) | spread(spread(T, V), { id: string; }) | spread(spread(U, V), { id: string; })
+>{ ...tu, ...uv, id: 'bar' } : spread(U, { id: string; }) | spread(spread(T, U), { id: string; }) | spread(spread(T, V), { id: string; }) | spread(spread(U, V), { id: string; })
 >tu : T | U
 >uv : U | V
 >id : string
 >'bar' : "bar"
 
-    let expected: { ...T, ...U, id: string } | { ...T, ...V, id: string } | { ...U, id: string } | { ...U, ...V, id: string };
->expected : { ...T; ...U; id: string; } | { ...T; ...V; id: string; } | { ...U; id: string; } | { ...U; ...V; id: string; }
+    let expected: spread(spread(T, U), { id: string }) | spread(spread(T, V), { id: string }) | spread(U, { id: string }) | spread(spread(U, V), { id: string });
+>expected : spread(spread(T, U), { id: string; }) | spread(spread(T, V), { id: string; }) | spread(U, { id: string; }) | spread(spread(U, V), { id: string; })
 >T : T
 >U : U
 >id : string
@@ -117,13 +117,13 @@ function iteratedDoubleUnion<T, U, V>(t: T, u: U, v: V): void {
 >V : V
 >id : string
 
-    let assignable: { ...(T | U), ...(U | V), id: string } = result;
->assignable : { ...U; id: string; } | { ...T; ...U; id: string; } | { ...T; ...V; id: string; } | { ...U; ...V; id: string; }
+    let assignable: spread(spread(T | U, U | V), { id: string }) = result;
+>assignable : spread(U, { id: string; }) | spread(spread(T, U), { id: string; }) | spread(spread(T, V), { id: string; }) | spread(spread(U, V), { id: string; })
 >T : T
 >U : U
 >U : U
 >V : V
 >id : string
->result : { ...U; id: string; } | { ...T; ...U; id: string; } | { ...T; ...V; id: string; } | { ...U; ...V; id: string; }
+>result : spread(U, { id: string; }) | spread(spread(T, U), { id: string; }) | spread(spread(T, V), { id: string; }) | spread(spread(U, V), { id: string; })
 }
 

@@ -16,15 +16,13 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(40,19): error TS269
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(45,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{}' has no compatible call signatures.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(49,12): error TS2339: Property 'b' does not exist on type '{}'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(55,9): error TS2339: Property 'm' does not exist on type '{ p: number; }'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(57,48): error TS2699: Type literals with spreads cannot contain index, call or constructor signatures.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(57,69): error TS2699: Type literals with spreads cannot contain index, call or constructor signatures.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(58,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{ x: number; }' has no compatible call signatures.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(59,1): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(64,9): error TS2322: Type '{ ...T & V }' is not assignable to type '{ ...T & U }'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(66,12): error TS2322: Type '{ ...U }' is not assignable to type 'U'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(64,9): error TS2322: Type 'spread(T & V)' is not assignable to type 'spread(T & U)'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(66,12): error TS2322: Type 'spread(U)' is not assignable to type 'U'.
 
 
-==== tests/cases/conformance/types/spread/objectSpreadNegative.ts (21 errors) ====
+==== tests/cases/conformance/types/spread/objectSpreadNegative.ts (19 errors) ====
     let o = { a: 1, b: 'no' }
     
     /// private propagates
@@ -34,7 +32,7 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(66,12): error TS232
     class PublicX {
         public x: number;
     }
-    let o2: { ...PublicX, ...PrivateOptionalX };
+    let o2: spread(PublicX, PrivateOptionalX);
     let sn: number = o2.x; // error, x is private
                         ~
 !!! error TS2339: Property 'x' does not exist on type '{}'.
@@ -49,7 +47,7 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(66,12): error TS232
     // assignability as target
     interface Bool { b: boolean };
     interface Str { s: string };
-    let spread: { ...Bool, ...Str } = { s: "foo" };  // error, missing 'b'
+    let spread: spread(Bool, Str) = { s: "foo" };  // error, missing 'b'
         ~~~~~~
 !!! error TS2322: Type '{ s: string; }' is not assignable to type '{ s: string; b: boolean; }'.
 !!! error TS2322:   Property 'b' is missing in type '{ s: string; }'.
@@ -114,11 +112,7 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(66,12): error TS232
             ~
 !!! error TS2339: Property 'm' does not exist on type '{ p: number; }'.
     
-    let callableConstructableSpread: { ...PublicX, (n: number): number, new (p: number) };
-                                                   ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2699: Type literals with spreads cannot contain index, call or constructor signatures.
-                                                                        ~~~~~~~~~~~~~~~
-!!! error TS2699: Type literals with spreads cannot contain index, call or constructor signatures.
+    let callableConstructableSpread: spread(PublicX, { (n: number): number, new (p: number) });
     callableConstructableSpread(12); // error, no call signature
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{ x: number; }' has no compatible call signatures.
@@ -128,13 +122,13 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(66,12): error TS232
     
     function override<T,U,V>(initial: U, override: U, t: T, v: V): U {
         // { ...T & V } is not assignable to { ...T & U }
-        let tvs: { ...T & V };
-        let mistake: { ...T & U } = tvs;
+        let tvs: spread(T & V);
+        let mistake: spread(T & U) = tvs;
             ~~~~~~~
-!!! error TS2322: Type '{ ...T & V }' is not assignable to type '{ ...T & U }'.
+!!! error TS2322: Type 'spread(T & V)' is not assignable to type 'spread(T & U)'.
         // { ...U } is not assignable to U
         return { ...initial, ...override };
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ ...U }' is not assignable to type 'U'.
+!!! error TS2322: Type 'spread(U)' is not assignable to type 'U'.
     }
     

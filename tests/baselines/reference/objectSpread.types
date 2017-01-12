@@ -418,8 +418,8 @@ let shortCutted: { a: number, b: string } = { ...o, a }
 >a : number
 
 // generics
-function f<T, U>(t: T, u: U): { ...T, ...U, id: string } {
->f : <T, U>(t: T, u: U) => { ...T; ...U; id: string; }
+function f<T, U>(t: T, u: U): spread(spread(T, U), { id: string }) {
+>f : <T, U>(t: T, u: U) => spread(spread(T, U), { id: string; })
 >T : T
 >U : U
 >t : T
@@ -431,7 +431,7 @@ function f<T, U>(t: T, u: U): { ...T, ...U, id: string } {
 >id : string
 
     return { ...t, ...u, id: 'id' };
->{ ...t, ...u, id: 'id' } : { ...T; ...U; id: string; }
+>{ ...t, ...u, id: 'id' } : spread(spread(T, U), { id: string; })
 >t : T
 >u : U
 >id : string
@@ -448,7 +448,7 @@ let exclusive: { id: string, a: number, b: string, c: string, d: boolean } =
 
     f({ a: 1, b: 'yes' }, { c: 'no', d: false })
 >f({ a: 1, b: 'yes' }, { c: 'no', d: false }) : { id: string; c: string; d: boolean; a: number; b: string; }
->f : <T, U>(t: T, u: U) => { ...T; ...U; id: string; }
+>f : <T, U>(t: T, u: U) => spread(spread(T, U), { id: string; })
 >{ a: 1, b: 'yes' } : { a: number; b: string; }
 >a : number
 >1 : 1
@@ -468,7 +468,7 @@ let overlap: { id: string, a: number, b: string } =
 
     f({ a: 1 }, { a: 2, b: 'extra' })
 >f({ a: 1 }, { a: 2, b: 'extra' }) : { id: string; a: number; b: string; }
->f : <T, U>(t: T, u: U) => { ...T; ...U; id: string; }
+>f : <T, U>(t: T, u: U) => spread(spread(T, U), { id: string; })
 >{ a: 1 } : { a: number; }
 >a : number
 >1 : 1
@@ -485,7 +485,7 @@ let overlapConflict: { id:string, a: string } =
 
     f({ a: 1 }, { a: 'mismatch' })
 >f({ a: 1 }, { a: 'mismatch' }) : { id: string; a: string; }
->f : <T, U>(t: T, u: U) => { ...T; ...U; id: string; }
+>f : <T, U>(t: T, u: U) => spread(spread(T, U), { id: string; })
 >{ a: 1 } : { a: number; }
 >a : number
 >1 : 1
@@ -502,7 +502,7 @@ let overwriteId: { id: string, a: number, c: number, d: string } =
 
     f({ a: 1, id: true }, { c: 1, d: 'no' })
 >f({ a: 1, id: true }, { c: 1, d: 'no' }) : { id: string; c: number; d: string; a: number; }
->f : <T, U>(t: T, u: U) => { ...T; ...U; id: string; }
+>f : <T, U>(t: T, u: U) => spread(spread(T, U), { id: string; })
 >{ a: 1, id: true } : { a: number; id: true; }
 >a : number
 >1 : 1
@@ -520,7 +520,7 @@ class D { m() { }; q = 2; }
 >q : number
 >2 : 2
 
-let classesAreWrong: { id: string, ...C, ...D } =
+let classesAreWrong: spread(spread({ id: string }, C), D) =
 >classesAreWrong : { q: number; p: number; id: string; }
 >id : string
 >C : C
@@ -528,7 +528,7 @@ let classesAreWrong: { id: string, ...C, ...D } =
 
     f(new C(), new D())
 >f(new C(), new D()) : { id: string; q: number; p: number; }
->f : <T, U>(t: T, u: U) => { ...T; ...U; id: string; }
+>f : <T, U>(t: T, u: U) => spread(spread(T, U), { id: string; })
 >new C() : C
 >C : typeof C
 >new D() : D

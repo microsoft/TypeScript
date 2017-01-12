@@ -2,7 +2,7 @@
 
 ////interface A1 { [|a|]: string };
 ////interface A2 { [|a|]?: number };
-////let a12: { ...A1, ...A2 };
+////let a12: spread(A1, A2);
 ////a12.[|a|];
 const ranges = test.ranges();
 // members of spread types only refer to themselves and the resulting property
