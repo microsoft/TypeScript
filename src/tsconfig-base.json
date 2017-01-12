@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "lib": ["es5"],
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "pretty": true,
+        "preserveConstEnums": true,
+        "stripInternal": true,
+        "sourceMap": true,
+        "target": "es5"
+    }
+}
