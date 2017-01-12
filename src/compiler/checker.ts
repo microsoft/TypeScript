@@ -7172,8 +7172,7 @@ namespace ts {
             if (source.flags & TypeFlags.Enum && target.flags & TypeFlags.Enum && isEnumTypeRelatedTo(<EnumType>source, <EnumType>target, errorReporter)) return true;
             if (source.flags & TypeFlags.Undefined && (!strictNullChecks || target.flags & (TypeFlags.Undefined | TypeFlags.Void))) return true;
             if (source.flags & TypeFlags.Null && (!strictNullChecks || target.flags & TypeFlags.Null)) return true;
-            if (source.flags & TypeFlags.Object && target === nonPrimitiveType) return true;
-            if (source.flags & TypeFlags.Primitive && target === nonPrimitiveType) return false;
+            if (source.flags & TypeFlags.Object && target.flags & TypeFlags.NonPrimitive) return true;
             if (relation === assignableRelation || relation === comparableRelation) {
                 if (source.flags & TypeFlags.Any) return true;
                 if ((source.flags & TypeFlags.Number | source.flags & TypeFlags.NumberLiteral) && target.flags & TypeFlags.EnumLike) return true;
@@ -7457,19 +7456,19 @@ namespace ts {
                     }
                     else {
                         let constraint = getConstraintOfTypeParameter(<TypeParameter>source);
-
-                        if (!constraint || constraint.flags & TypeFlags.Any) {
-                            constraint = emptyObjectType;
-                        }
-
-                        // The constraint may need to be further instantiated with its 'this' type.
-                        constraint = getTypeWithThisArgument(constraint, source);
-
-                        // Report constraint errors only if the constraint is not the empty object type
-                        const reportConstraintErrors = reportErrors && constraint !== emptyObjectType;
-                        if (result = isRelatedTo(constraint, target, reportConstraintErrors)) {
-                            errorInfo = saveErrorInfo;
-                            return result;
+                        // A type parameter with no constraint is not related to the non-primitive object type.
+                        if (constraint || !(target.flags & TypeFlags.NonPrimitive)) {
+                            if (!constraint || constraint.flags & TypeFlags.Any) {
+                                constraint = emptyObjectType;
+                            }
+                            // The constraint may need to be further instantiated with its 'this' type.
+                            constraint = getTypeWithThisArgument(constraint, source);
+                            // Report constraint errors only if the constraint is not the empty object type
+                            const reportConstraintErrors = reportErrors && constraint !== emptyObjectType;
+                            if (result = isRelatedTo(constraint, target, reportConstraintErrors)) {
+                                errorInfo = saveErrorInfo;
+                                return result;
+                            }
                         }
                     }
                 }
@@ -9237,9 +9236,6 @@ namespace ts {
         }
 
         function getTypeFacts(type: Type): TypeFacts {
-            if (type === nonPrimitiveType) {
-                return strictNullChecks ? TypeFacts.ObjectStrictFacts : TypeFacts.ObjectFacts;
-            }
             const flags = type.flags;
             if (flags & TypeFlags.String) {
                 return strictNullChecks ? TypeFacts.StringStrictFacts : TypeFacts.StringFacts;
@@ -9279,6 +9275,9 @@ namespace ts {
             }
             if (flags & TypeFlags.ESSymbol) {
                 return strictNullChecks ? TypeFacts.SymbolStrictFacts : TypeFacts.SymbolFacts;
+            }
+            if (flags & TypeFlags.NonPrimitive) {
+                return strictNullChecks ? TypeFacts.ObjectStrictFacts : TypeFacts.ObjectFacts;
             }
             if (flags & TypeFlags.TypeParameter) {
                 const constraint = getConstraintOfTypeParameter(<TypeParameter>type);
