@@ -1,0 +1,459 @@
+=== tests/cases/conformance/types/promised/promised.ts ===
+
+var p00: Promise<boolean>;
+>p00 : Promise<boolean>
+>Promise : Promise<T>
+
+var p01: Promise<Promise<boolean>>;
+>p01 : Promise<Promise<boolean>>
+>Promise : Promise<T>
+>Promise : Promise<T>
+
+var p02: Promise<PromiseLike<boolean>>;
+>p02 : Promise<PromiseLike<boolean>>
+>Promise : Promise<T>
+>PromiseLike : PromiseLike<T>
+
+var p03: Promise<{ then(cb: (value: boolean) => any): any; }>;
+>p03 : Promise<{ then(cb: (value: boolean) => any): any; }>
+>Promise : Promise<T>
+>then : (cb: (value: boolean) => any) => any
+>cb : (value: boolean) => any
+>value : boolean
+
+var p04: boolean | Promise<boolean>;
+>p04 : boolean | Promise<boolean>
+>Promise : Promise<T>
+
+var p05: promised Promise<boolean>;
+>p05 : boolean
+>Promise : Promise<T>
+
+var p06: promised Promise<Promise<boolean>>;
+>p06 : boolean
+>Promise : Promise<T>
+>Promise : Promise<T>
+
+var p07: promised Promise<PromiseLike<boolean>>;
+>p07 : boolean
+>Promise : Promise<T>
+>PromiseLike : PromiseLike<T>
+
+var p08: promised Promise<{ then(cb: (value: boolean) => any): any; }>;
+>p08 : boolean
+>Promise : Promise<T>
+>then : (cb: (value: boolean) => any) => any
+>cb : (value: boolean) => any
+>value : boolean
+
+var p09: promised (boolean | Promise<boolean>);
+>p09 : boolean
+>Promise : Promise<T>
+
+var p0a: { a: "A", b: Promise<"B"> };
+>p0a : { a: "A"; b: Promise<"B">; }
+>a : "A"
+>b : Promise<"B">
+>Promise : Promise<T>
+
+var p0b: Promise<{ a: "A", b: Promise<"B"> }>;
+>p0b : Promise<{ a: "A"; b: Promise<"B">; }>
+>Promise : Promise<T>
+>a : "A"
+>b : Promise<"B">
+>Promise : Promise<T>
+
+const cp0 = { p00, p01, p02, p03, p04, p05, p06, p07, p08, p09 };
+>cp0 : { p00: Promise<boolean>; p01: Promise<Promise<boolean>>; p02: Promise<PromiseLike<boolean>>; p03: Promise<{ then(cb: (value: boolean) => any): any; }>; p04: boolean | Promise<boolean>; p05: boolean; p06: boolean; p07: boolean; p08: boolean; p09: boolean; }
+>{ p00, p01, p02, p03, p04, p05, p06, p07, p08, p09 } : { p00: Promise<boolean>; p01: Promise<Promise<boolean>>; p02: Promise<PromiseLike<boolean>>; p03: Promise<{ then(cb: (value: boolean) => any): any; }>; p04: boolean | Promise<boolean>; p05: boolean; p06: boolean; p07: boolean; p08: boolean; p09: boolean; }
+>p00 : Promise<boolean>
+>p01 : Promise<Promise<boolean>>
+>p02 : Promise<PromiseLike<boolean>>
+>p03 : Promise<{ then(cb: (value: boolean) => any): any; }>
+>p04 : boolean | Promise<boolean>
+>p05 : boolean
+>p06 : boolean
+>p07 : boolean
+>p08 : boolean
+>p09 : boolean
+
+function f00() { var p: promised typeof p00; return p; }
+>f00 : () => boolean
+>p : boolean
+>p00 : Promise<boolean>
+>p : boolean
+
+function f01() { var p: promised typeof p01; return p; }
+>f01 : () => boolean
+>p : boolean
+>p01 : Promise<Promise<boolean>>
+>p : boolean
+
+function f02() { var p: promised typeof p02; return p; }
+>f02 : () => boolean
+>p : boolean
+>p02 : Promise<PromiseLike<boolean>>
+>p : boolean
+
+function f03() { var p: promised typeof p03; return p; }
+>f03 : () => boolean
+>p : boolean
+>p03 : Promise<{ then(cb: (value: boolean) => any): any; }>
+>p : boolean
+
+function f04() { var p: promised typeof p04; return p; }
+>f04 : () => boolean
+>p : boolean
+>p04 : boolean | Promise<boolean>
+>p : boolean
+
+function f05() { return p05; }
+>f05 : () => boolean
+>p05 : boolean
+
+function f06() { return p06; }
+>f06 : () => boolean
+>p06 : boolean
+
+function f07() { return p07; }
+>f07 : () => boolean
+>p07 : boolean
+
+function f08() { return p08; }
+>f08 : () => boolean
+>p08 : boolean
+
+function f09() { return p09; }
+>f09 : () => boolean
+>p09 : boolean
+
+function f10<T>(x: T) { var p: promised T; return p; }
+>f10 : <T>(x: T) => promised T
+>T : T
+>x : T
+>T : T
+>p : promised T
+>T : T
+>p : promised T
+
+const c10p00 = f10(p00);
+>c10p00 : boolean
+>f10(p00) : boolean
+>f10 : <T>(x: T) => promised T
+>p00 : Promise<boolean>
+
+const c10p01 = f10(p01);
+>c10p01 : boolean
+>f10(p01) : boolean
+>f10 : <T>(x: T) => promised T
+>p01 : Promise<Promise<boolean>>
+
+const c10p02 = f10(p02);
+>c10p02 : boolean
+>f10(p02) : boolean
+>f10 : <T>(x: T) => promised T
+>p02 : Promise<PromiseLike<boolean>>
+
+const c10p03 = f10(p03);
+>c10p03 : boolean
+>f10(p03) : boolean
+>f10 : <T>(x: T) => promised T
+>p03 : Promise<{ then(cb: (value: boolean) => any): any; }>
+
+const c10p04 = f10(p04);
+>c10p04 : boolean
+>f10(p04) : boolean
+>f10 : <T>(x: T) => promised T
+>p04 : boolean | Promise<boolean>
+
+const c10p05 = f10(p05);
+>c10p05 : boolean
+>f10(p05) : boolean
+>f10 : <T>(x: T) => promised T
+>p05 : boolean
+
+const c10p06 = f10(p06);
+>c10p06 : boolean
+>f10(p06) : boolean
+>f10 : <T>(x: T) => promised T
+>p06 : boolean
+
+const c10p07 = f10(p07);
+>c10p07 : boolean
+>f10(p07) : boolean
+>f10 : <T>(x: T) => promised T
+>p07 : boolean
+
+const c10p08 = f10(p08);
+>c10p08 : boolean
+>f10(p08) : boolean
+>f10 : <T>(x: T) => promised T
+>p08 : boolean
+
+const c10p09 = f10(p09);
+>c10p09 : boolean
+>f10(p09) : boolean
+>f10 : <T>(x: T) => promised T
+>p09 : boolean
+
+function f11<T>(x: T) { var y: { [P in keyof T]: promised T[P] }; return y; }
+>f11 : <T>(x: T) => { [P in keyof T]: promised T[P]; }
+>T : T
+>x : T
+>T : T
+>y : { [P in keyof T]: promised T[P]; }
+>P : P
+>T : T
+>T : T
+>P : P
+>y : { [P in keyof T]: promised T[P]; }
+
+const f11c00 = f11(cp0);
+>f11c00 : { p00: boolean; p01: boolean; p02: boolean; p03: boolean; p04: boolean; p05: boolean; p06: boolean; p07: boolean; p08: boolean; p09: boolean; }
+>f11(cp0) : { p00: boolean; p01: boolean; p02: boolean; p03: boolean; p04: boolean; p05: boolean; p06: boolean; p07: boolean; p08: boolean; p09: boolean; }
+>f11 : <T>(x: T) => { [P in keyof T]: promised T[P]; }
+>cp0 : { p00: Promise<boolean>; p01: Promise<Promise<boolean>>; p02: Promise<PromiseLike<boolean>>; p03: Promise<{ then(cb: (value: boolean) => any): any; }>; p04: boolean | Promise<boolean>; p05: boolean; p06: boolean; p07: boolean; p08: boolean; p09: boolean; }
+
+function f12<T, K extends keyof T>(x: T, ...k: K[]) { var y: { [P in K]: promised T[K]; }; return y; }
+>f12 : <T, K extends keyof T>(x: T, ...k: K[]) => { [P in K]: promised T[K]; }
+>T : T
+>K : K
+>T : T
+>x : T
+>T : T
+>k : K[]
+>K : K
+>y : { [P in K]: promised T[K]; }
+>P : P
+>K : K
+>T : T
+>K : K
+>y : { [P in K]: promised T[K]; }
+
+const f12c00 = f12(cp0, "p00");
+>f12c00 : { p00: boolean; }
+>f12(cp0, "p00") : { p00: boolean; }
+>f12 : <T, K extends keyof T>(x: T, ...k: K[]) => { [P in K]: promised T[K]; }
+>cp0 : { p00: Promise<boolean>; p01: Promise<Promise<boolean>>; p02: Promise<PromiseLike<boolean>>; p03: Promise<{ then(cb: (value: boolean) => any): any; }>; p04: boolean | Promise<boolean>; p05: boolean; p06: boolean; p07: boolean; p08: boolean; p09: boolean; }
+>"p00" : "p00"
+
+const f12c01 = f12(cp0, "p01");
+>f12c01 : { p01: boolean; }
+>f12(cp0, "p01") : { p01: boolean; }
+>f12 : <T, K extends keyof T>(x: T, ...k: K[]) => { [P in K]: promised T[K]; }
+>cp0 : { p00: Promise<boolean>; p01: Promise<Promise<boolean>>; p02: Promise<PromiseLike<boolean>>; p03: Promise<{ then(cb: (value: boolean) => any): any; }>; p04: boolean | Promise<boolean>; p05: boolean; p06: boolean; p07: boolean; p08: boolean; p09: boolean; }
+>"p01" : "p01"
+
+const f12c02 = f12(cp0, "p02");
+>f12c02 : { p02: boolean; }
+>f12(cp0, "p02") : { p02: boolean; }
+>f12 : <T, K extends keyof T>(x: T, ...k: K[]) => { [P in K]: promised T[K]; }
+>cp0 : { p00: Promise<boolean>; p01: Promise<Promise<boolean>>; p02: Promise<PromiseLike<boolean>>; p03: Promise<{ then(cb: (value: boolean) => any): any; }>; p04: boolean | Promise<boolean>; p05: boolean; p06: boolean; p07: boolean; p08: boolean; p09: boolean; }
+>"p02" : "p02"
+
+const f12c03 = f12(cp0, "p03");
+>f12c03 : { p03: boolean; }
+>f12(cp0, "p03") : { p03: boolean; }
+>f12 : <T, K extends keyof T>(x: T, ...k: K[]) => { [P in K]: promised T[K]; }
+>cp0 : { p00: Promise<boolean>; p01: Promise<Promise<boolean>>; p02: Promise<PromiseLike<boolean>>; p03: Promise<{ then(cb: (value: boolean) => any): any; }>; p04: boolean | Promise<boolean>; p05: boolean; p06: boolean; p07: boolean; p08: boolean; p09: boolean; }
+>"p03" : "p03"
+
+const f12c04 = f12(cp0, "p04");
+>f12c04 : { p04: boolean; }
+>f12(cp0, "p04") : { p04: boolean; }
+>f12 : <T, K extends keyof T>(x: T, ...k: K[]) => { [P in K]: promised T[K]; }
+>cp0 : { p00: Promise<boolean>; p01: Promise<Promise<boolean>>; p02: Promise<PromiseLike<boolean>>; p03: Promise<{ then(cb: (value: boolean) => any): any; }>; p04: boolean | Promise<boolean>; p05: boolean; p06: boolean; p07: boolean; p08: boolean; p09: boolean; }
+>"p04" : "p04"
+
+const f12c05 = f12(cp0, "p05");
+>f12c05 : { p05: boolean; }
+>f12(cp0, "p05") : { p05: boolean; }
+>f12 : <T, K extends keyof T>(x: T, ...k: K[]) => { [P in K]: promised T[K]; }
+>cp0 : { p00: Promise<boolean>; p01: Promise<Promise<boolean>>; p02: Promise<PromiseLike<boolean>>; p03: Promise<{ then(cb: (value: boolean) => any): any; }>; p04: boolean | Promise<boolean>; p05: boolean; p06: boolean; p07: boolean; p08: boolean; p09: boolean; }
+>"p05" : "p05"
+
+const f12c06 = f12(cp0, "p06");
+>f12c06 : { p06: boolean; }
+>f12(cp0, "p06") : { p06: boolean; }
+>f12 : <T, K extends keyof T>(x: T, ...k: K[]) => { [P in K]: promised T[K]; }
+>cp0 : { p00: Promise<boolean>; p01: Promise<Promise<boolean>>; p02: Promise<PromiseLike<boolean>>; p03: Promise<{ then(cb: (value: boolean) => any): any; }>; p04: boolean | Promise<boolean>; p05: boolean; p06: boolean; p07: boolean; p08: boolean; p09: boolean; }
+>"p06" : "p06"
+
+const f12c07 = f12(cp0, "p07");
+>f12c07 : { p07: boolean; }
+>f12(cp0, "p07") : { p07: boolean; }
+>f12 : <T, K extends keyof T>(x: T, ...k: K[]) => { [P in K]: promised T[K]; }
+>cp0 : { p00: Promise<boolean>; p01: Promise<Promise<boolean>>; p02: Promise<PromiseLike<boolean>>; p03: Promise<{ then(cb: (value: boolean) => any): any; }>; p04: boolean | Promise<boolean>; p05: boolean; p06: boolean; p07: boolean; p08: boolean; p09: boolean; }
+>"p07" : "p07"
+
+const f12c08 = f12(cp0, "p08");
+>f12c08 : { p08: boolean; }
+>f12(cp0, "p08") : { p08: boolean; }
+>f12 : <T, K extends keyof T>(x: T, ...k: K[]) => { [P in K]: promised T[K]; }
+>cp0 : { p00: Promise<boolean>; p01: Promise<Promise<boolean>>; p02: Promise<PromiseLike<boolean>>; p03: Promise<{ then(cb: (value: boolean) => any): any; }>; p04: boolean | Promise<boolean>; p05: boolean; p06: boolean; p07: boolean; p08: boolean; p09: boolean; }
+>"p08" : "p08"
+
+const f12c09 = f12(cp0, "p09");
+>f12c09 : { p09: boolean; }
+>f12(cp0, "p09") : { p09: boolean; }
+>f12 : <T, K extends keyof T>(x: T, ...k: K[]) => { [P in K]: promised T[K]; }
+>cp0 : { p00: Promise<boolean>; p01: Promise<Promise<boolean>>; p02: Promise<PromiseLike<boolean>>; p03: Promise<{ then(cb: (value: boolean) => any): any; }>; p04: boolean | Promise<boolean>; p05: boolean; p06: boolean; p07: boolean; p08: boolean; p09: boolean; }
+>"p09" : "p09"
+
+const f12c00c05 = f12(cp0, "p00", "p05");
+>f12c00c05 : { p00: boolean; p05: boolean; }
+>f12(cp0, "p00", "p05") : { p00: boolean; p05: boolean; }
+>f12 : <T, K extends keyof T>(x: T, ...k: K[]) => { [P in K]: promised T[K]; }
+>cp0 : { p00: Promise<boolean>; p01: Promise<Promise<boolean>>; p02: Promise<PromiseLike<boolean>>; p03: Promise<{ then(cb: (value: boolean) => any): any; }>; p04: boolean | Promise<boolean>; p05: boolean; p06: boolean; p07: boolean; p08: boolean; p09: boolean; }
+>"p00" : "p00"
+>"p05" : "p05"
+
+const f12c04c09 = f12(cp0, "p04", "p09");
+>f12c04c09 : { p04: boolean; p09: boolean; }
+>f12(cp0, "p04", "p09") : { p04: boolean; p09: boolean; }
+>f12 : <T, K extends keyof T>(x: T, ...k: K[]) => { [P in K]: promised T[K]; }
+>cp0 : { p00: Promise<boolean>; p01: Promise<Promise<boolean>>; p02: Promise<PromiseLike<boolean>>; p03: Promise<{ then(cb: (value: boolean) => any): any; }>; p04: boolean | Promise<boolean>; p05: boolean; p06: boolean; p07: boolean; p08: boolean; p09: boolean; }
+>"p04" : "p04"
+>"p09" : "p09"
+
+type t00 = { [P in promised "a"]: P; };
+>t00 : t00
+>P : P
+>P : P
+
+var t00v00: t00;
+>t00v00 : t00
+>t00 : t00
+
+const t00v00c00 = t00v00.a;
+>t00v00c00 : "a"
+>t00v00.a : "a"
+>t00v00 : t00
+>a : "a"
+
+type t01 = { [P in promised Promise<"b">]: P; };
+>t01 : t01
+>P : P
+>Promise : Promise<T>
+>P : P
+
+var t01v00: t01;
+>t01v00 : t01
+>t01 : t01
+
+const t01v00c00 = t01v00.b;
+>t01v00c00 : "b"
+>t01v00.b : "b"
+>t01v00 : t01
+>b : "b"
+
+type t02 = { [P in promised ("a" | Promise<"b">)]: P; };
+>t02 : t02
+>P : P
+>Promise : Promise<T>
+>P : P
+
+var t02v00: t02;
+>t02v00 : t02
+>t02 : t02
+
+const t02v00c00 = t02v00.a;
+>t02v00c00 : "a"
+>t02v00.a : "a"
+>t02v00 : t02
+>a : "a"
+
+const t02v00c01 = t02v00.b;
+>t02v00c01 : "b"
+>t02v00.b : "b"
+>t02v00 : t02
+>b : "b"
+
+type t03<T> = { [P in keyof promised T]: promised (promised T)[P]; };
+>t03 : t03<T>
+>T : T
+>P : P
+>T : T
+>T : T
+>P : P
+
+var t03v00: t03<typeof p0a>;
+>t03v00 : t03<{ a: "A"; b: Promise<"B">; }>
+>t03 : t03<T>
+>p0a : { a: "A"; b: Promise<"B">; }
+
+const t03v00c00 = t03v00.a;
+>t03v00c00 : "A"
+>t03v00.a : "A"
+>t03v00 : t03<{ a: "A"; b: Promise<"B">; }>
+>a : "A"
+
+const t03v00c01 = t03v00.b;
+>t03v00c01 : "B"
+>t03v00.b : "B"
+>t03v00 : t03<{ a: "A"; b: Promise<"B">; }>
+>b : "B"
+
+var t03v01: t03<typeof p0b>;
+>t03v01 : t03<Promise<{ a: "A"; b: Promise<"B">; }>>
+>t03 : t03<T>
+>p0b : Promise<{ a: "A"; b: Promise<"B">; }>
+
+const t03v01c00 = t03v01.a;
+>t03v01c00 : "A"
+>t03v01.a : "A"
+>t03v01 : t03<Promise<{ a: "A"; b: Promise<"B">; }>>
+>a : "A"
+
+const t03v01c01 = t03v01.b;
+>t03v01c01 : "B"
+>t03v01.b : "B"
+>t03v01 : t03<Promise<{ a: "A"; b: Promise<"B">; }>>
+>b : "B"
+
+function f13<T>(x: T) { var y: t03<T>; return y; }
+>f13 : <T>(x: T) => t03<T>
+>T : T
+>x : T
+>T : T
+>y : t03<T>
+>t03 : t03<T>
+>T : T
+>y : t03<T>
+
+const f13c00 = f13(p0a);
+>f13c00 : t03<{ a: "A"; b: Promise<"B">; }>
+>f13(p0a) : t03<{ a: "A"; b: Promise<"B">; }>
+>f13 : <T>(x: T) => t03<T>
+>p0a : { a: "A"; b: Promise<"B">; }
+
+const f13c00c00 = f13c00.a;
+>f13c00c00 : "A"
+>f13c00.a : "A"
+>f13c00 : t03<{ a: "A"; b: Promise<"B">; }>
+>a : "A"
+
+const f13c00c01 = f13c00.b;
+>f13c00c01 : "B"
+>f13c00.b : "B"
+>f13c00 : t03<{ a: "A"; b: Promise<"B">; }>
+>b : "B"
+
+const f13c01 = f13(p0b);
+>f13c01 : t03<Promise<{ a: "A"; b: Promise<"B">; }>>
+>f13(p0b) : t03<Promise<{ a: "A"; b: Promise<"B">; }>>
+>f13 : <T>(x: T) => t03<T>
+>p0b : Promise<{ a: "A"; b: Promise<"B">; }>
+
+const f13c01c00 = f13c01.a;
+>f13c01c00 : "A"
+>f13c01.a : "A"
+>f13c01 : t03<Promise<{ a: "A"; b: Promise<"B">; }>>
+>a : "A"
+
+const f13c01c01 = f13c01.b;
+>f13c01c01 : "B"
+>f13c01.b : "B"
+>f13c01 : t03<Promise<{ a: "A"; b: Promise<"B">; }>>
+>b : "B"
+

@@ -148,10 +148,10 @@ declare var console: any;
 
 out().then(() => {
 >out().then(() => {    console.log("Yea!");}) : Promise<void>
->out().then : { (onfulfilled?: (value: {}) => {} | PromiseLike<{}>, onrejected?: (reason: any) => {} | PromiseLike<{}>): Promise<{}>; <TResult>(onfulfilled: (value: {}) => {} | PromiseLike<{}>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<{} | TResult>; <TResult>(onfulfilled: (value: {}) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult1, TResult2>(onfulfilled: (value: {}) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; }
+>out().then : { (onfulfilled?: (value: {}) => {}, onrejected?: null): Promise<{}>; <TResult>(onfulfilled: (value: {}) => {}, onrejected: (reason: any) => TResult): Promise<promised ({} | TResult)>; <TResult>(onfulfilled: (value: {}) => TResult, onrejected?: null): Promise<promised TResult>; <TResult>(onfulfilled: (value: {}) => TResult, onrejected: (reason: any) => TResult): Promise<promised TResult>; <TResult1, TResult2>(onfulfilled: (value: {}) => TResult1, onrejected: (reason: any) => TResult2): Promise<promised (TResult1 | TResult2)>; }
 >out() : Promise<{}>
 >out : () => Promise<{}>
->then : { (onfulfilled?: (value: {}) => {} | PromiseLike<{}>, onrejected?: (reason: any) => {} | PromiseLike<{}>): Promise<{}>; <TResult>(onfulfilled: (value: {}) => {} | PromiseLike<{}>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<{} | TResult>; <TResult>(onfulfilled: (value: {}) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult1, TResult2>(onfulfilled: (value: {}) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; }
+>then : { (onfulfilled?: (value: {}) => {}, onrejected?: null): Promise<{}>; <TResult>(onfulfilled: (value: {}) => {}, onrejected: (reason: any) => TResult): Promise<promised ({} | TResult)>; <TResult>(onfulfilled: (value: {}) => TResult, onrejected?: null): Promise<promised TResult>; <TResult>(onfulfilled: (value: {}) => TResult, onrejected: (reason: any) => TResult): Promise<promised TResult>; <TResult1, TResult2>(onfulfilled: (value: {}) => TResult1, onrejected: (reason: any) => TResult2): Promise<promised (TResult1 | TResult2)>; }
 >() => {    console.log("Yea!");} : () => void
 
     console.log("Yea!");

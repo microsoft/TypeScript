@@ -102,6 +102,7 @@ namespace ts {
         "package": SyntaxKind.PackageKeyword,
         "private": SyntaxKind.PrivateKeyword,
         "protected": SyntaxKind.ProtectedKeyword,
+        "promised": SyntaxKind.PromisedKeyword,
         "public": SyntaxKind.PublicKeyword,
         "readonly": SyntaxKind.ReadonlyKeyword,
         "require": SyntaxKind.RequireKeyword,

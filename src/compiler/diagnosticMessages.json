@@ -175,7 +175,7 @@
         "category": "Error",
         "code": 1057
     },
-    "Type used as operand to 'await' or the return type of an async function must not contain a callable 'then' member if it is not a promise.": {
+    "The promised type cannot be determined. The type must not contain a callable 'then' member if it is not a promise.": {
         "category": "Error",
         "code": 1058
     },
