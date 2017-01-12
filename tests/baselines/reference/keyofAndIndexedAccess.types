@@ -2013,6 +2013,35 @@ function addToMyThingy<S extends KeyTypes>(key: S) {
 >"a" : "a"
 }
 
+// Repro from #13102
+
+type Handler<T> = {
+>Handler : Handler<T>
+>T : T
+
+    onChange: (name: keyof T) => void;
+>onChange : (name: keyof T) => void
+>name : keyof T
+>T : T
+
+};
+
+function onChangeGenericFunction<T>(handler: Handler<T & {preset: number}>) {
+>onChangeGenericFunction : <T>(handler: Handler<T & { preset: number; }>) => void
+>T : T
+>handler : Handler<T & { preset: number; }>
+>Handler : Handler<T>
+>T : T
+>preset : number
+
+    handler.onChange('preset')
+>handler.onChange('preset') : void
+>handler.onChange : (name: keyof (T & { preset: number; })) => void
+>handler : Handler<T & { preset: number; }>
+>onChange : (name: keyof (T & { preset: number; })) => void
+>'preset' : "preset"
+}
+
 // Repro from #13285
 
 function updateIds<T extends Record<K, string>, K extends string>(

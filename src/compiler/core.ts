@@ -44,7 +44,6 @@ namespace ts {
         return new MapCtr<T>();
     }
 
-    //!!!
     export function createMapFromTemplate<T>(template?: MapLike<T>): Map<T> {
         const map: Map<T> = new MapCtr<T>();
 

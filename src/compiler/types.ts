@@ -2942,6 +2942,8 @@
         /* @internal */
         resolvedIndexType: IndexType;
         /* @internal */
+        resolvedBaseConstraint: Type;
+        /* @internal */
         couldContainTypeVariables: boolean;
     }
 
@@ -3001,7 +3003,7 @@
 
     export interface TypeVariable extends Type {
         /* @internal */
-        resolvedApparentType: Type;
+        resolvedBaseConstraint: Type;
         /* @internal */
         resolvedIndexType: IndexType;
     }
