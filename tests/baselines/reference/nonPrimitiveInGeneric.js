@@ -1,5 +1,7 @@
 //// [nonPrimitiveInGeneric.ts]
-function generic<T>(t: T) {}
+function generic<T>(t: T) {
+    var o: object = t; // expect error
+}
 var a = {};
 var b = "42";
 
@@ -8,7 +10,9 @@ generic<object>(a);
 generic<object>(123); // expect error
 generic<object>(b); // expect error
 
-function bound<T extends object>(t: T) {}
+function bound<T extends object>(t: T) {
+    var o: object = t; // ok
+}
 
 bound({});
 bound(a);
@@ -37,14 +41,18 @@ var u: Proxy<Blah>; // ok
 
 
 //// [nonPrimitiveInGeneric.js]
-function generic(t) { }
+function generic(t) {
+    var o = t; // expect error
+}
 var a = {};
 var b = "42";
 generic({});
 generic(a);
 generic(123); // expect error
 generic(b); // expect error
-function bound(t) { }
+function bound(t) {
+    var o = t; // ok
+}
 bound({});
 bound(a);
 bound(123); // expect error
