@@ -40,7 +40,21 @@ declare namespace NodeJS {
         ActiveXObject: typeof ActiveXObject;
     }
 }
+
+declare var window: {};
+declare var XMLHttpRequest: {
+    new(): XMLHttpRequest;
+}
+interface XMLHttpRequest  {
+    readonly readyState: number;
+    readonly responseText: string;
+    readonly status: number;
+    open(method: string, url: string, async?: boolean, user?: string, password?: string): void;
+    send(data?: string): void;
+    setRequestHeader(header: string, value: string): void;
+}
 /* tslint:enable:no-var-keyword */
+
 
 namespace Utils {
     // Setup some globals based on the current environment
