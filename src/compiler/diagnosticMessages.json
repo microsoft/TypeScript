@@ -2015,10 +2015,6 @@
         "category": "Error",
         "code": 2698
     },
-    "Type literals with spreads cannot contain index, call or constructor signatures.": {
-        "category": "Error",
-        "code": 2699
-    },
     "Rest types may only be created from object types.": {
         "category": "Error",
         "code": 2700
@@ -2038,10 +2034,6 @@
     "The operand of a delete operator cannot be a read-only property": {
         "category": "Error",
         "code": 2704
-    },
-    "Interface declaration cannot contain a spread property.": {
-        "category": "Error",
-        "code": 2705
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

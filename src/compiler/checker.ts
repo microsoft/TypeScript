@@ -2440,45 +2440,25 @@ namespace ts {
                     }
                 }
 
-                function writeSpreadType(type: SpreadType) {
-                    writePunctuation(writer, SyntaxKind.OpenBraceToken);
-                    writer.writeLine();
-                    writer.increaseIndent();
-
-                    writeSpreadTypeWorker(type, /*atEnd*/true);
-
-                    writer.decreaseIndent();
-                    writePunctuation(writer, SyntaxKind.CloseBraceToken);
-                }
-
-                function writeSpreadTypeWorker(type: SpreadType, atEnd: boolean): void {
-                    if (type.left.flags & TypeFlags.Spread) {
-                        writeSpreadTypeWorker(type.left as SpreadType, /*atEnd*/false);
-                    }
-                    else {
-                        const saveInObjectTypeLiteral = inObjectTypeLiteral;
-                        inObjectTypeLiteral = true;
-                        writeObjectLiteralType(resolveStructuredTypeMembers(type.left as ResolvedType));
-                        inObjectTypeLiteral = saveInObjectTypeLiteral;
-                    }
-                    if (type.right.flags & TypeFlags.Object) {
-                        // if type.right is an object type, don't surround with ...{ }.
-                        // this gives { a: number, ... T } instead of { ...{ a: number }, ...T }
-                        const saveInObjectTypeLiteral = inObjectTypeLiteral;
-                        inObjectTypeLiteral = true;
-                        writeObjectLiteralType(resolveStructuredTypeMembers(type.right as ResolvedType));
-                        inObjectTypeLiteral = saveInObjectTypeLiteral;
-                    }
-                    else {
-                        writePunctuation(writer, SyntaxKind.DotDotDotToken);
+                function writeSpreadType(type: SpreadType, nested?: boolean) {
+                    if (nested && type.left === emptyObjectType) {
                         writeType(type.right, TypeFormatFlags.None);
-                        if (atEnd) {
+                    }
+                    else {
+                        writer.writeKeyword("spread");
+                        writePunctuation(writer, SyntaxKind.OpenParenToken);
+                        if (type.left !== emptyObjectType) {
+                            if (type.left.flags & TypeFlags.Spread) {
+                                writeSpreadType(type.left as SpreadType, /*nested*/ true);
+                            }
+                            else {
+                                writeType(type.left, TypeFormatFlags.None);
+                            }
+                            writePunctuation(writer, SyntaxKind.CommaToken);
                             writeSpace(writer);
                         }
-                        else {
-                            writePunctuation(writer, SyntaxKind.SemicolonToken);
-                            writer.writeLine();
-                        }
+                        writeType(type.right, TypeFormatFlags.None);
+                        writePunctuation(writer, SyntaxKind.CloseParenToken);
                     }
                 }
 
@@ -6080,6 +6060,16 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function getTypeFromSpreadTypeNode(node: SpreadTypeNode): Type {
+            const links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                links.resolvedType = getSpreadType(
+                    node.right ? getTypeFromTypeNode(node.left) : emptyObjectType,
+                    getTypeFromTypeNode(node.right || node.left));
+            }
+            return links.resolvedType;
+        }
+
         function getIndexTypeForGenericType(type: TypeVariable | UnionOrIntersectionType) {
             if (!type.resolvedIndexType) {
                 type.resolvedIndexType = <IndexType>createType(TypeFlags.Index);
@@ -6264,12 +6254,6 @@ namespace ts {
         function getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node: TypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                const hasSpread = (node.kind === SyntaxKind.TypeLiteral &&
-                                   find((node as TypeLiteralNode).members, elt => elt.kind === SyntaxKind.SpreadTypeAssignment));
-                if (hasSpread) {
-                    return getTypeFromSpreadTypeLiteral(node as TypeLiteralNode);
-                }
-
                 // Deferred resolution of members is handled by resolveObjectTypeMembers
                 const aliasSymbol = getAliasSymbolForTypeNode(node);
                 if (isEmpty(node.symbol.members) && !aliasSymbol) {
@@ -6285,50 +6269,6 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getTypeFromSpreadTypeLiteral(node: TypeLiteralNode): Type {
-            let spread: Type = emptyObjectType;
-            let members: Map<Symbol>;
-            let stringIndexInfo: IndexInfo;
-            let numberIndexInfo: IndexInfo;
-            for (const member of node.members) {
-                if (member.kind === SyntaxKind.SpreadTypeAssignment) {
-                    if (members) {
-                        const type = createAnonymousType(node.symbol, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
-                        spread = getSpreadType(spread, type);
-                        members = undefined;
-                        stringIndexInfo = undefined;
-                        numberIndexInfo = undefined;
-                    }
-                    const type = getTypeFromTypeNode((member as SpreadTypeAssignment).type);
-                    spread = getSpreadType(spread, type);
-                }
-                else if (member.kind !== SyntaxKind.IndexSignature &&
-                         member.kind !== SyntaxKind.CallSignature &&
-                         member.kind !== SyntaxKind.ConstructSignature) {
-                    // it is an error for spread types to include index, call or construct signatures
-                    const flags = SymbolFlags.Property | SymbolFlags.Transient | (member.questionToken ? SymbolFlags.Optional : 0);
-                    const text = getTextOfPropertyName(member.name);
-                    const symbol = <TransientSymbol>createSymbol(flags, text);
-                    symbol.declarations = [member];
-                    symbol.valueDeclaration = member;
-                    symbol.type = getTypeFromTypeNode((member as IndexSignatureDeclaration | PropertySignature | MethodSignature).type);
-                    if (!members) {
-                        members = createMap<Symbol>();
-                    }
-                    members[symbol.name] = symbol;
-                }
-            }
-            if (members || stringIndexInfo || numberIndexInfo) {
-                const type = createAnonymousType(node.symbol, members || emptySymbols, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
-                spread = getSpreadType(spread, type);
-            }
-            if (spread.flags & TypeFlags.Object) {
-                // only set the symbol if this is a (fresh) object type
-                spread.symbol = node.symbol;
-            }
-            return spread;
-        }
-
         function getAliasSymbolForTypeNode(node: TypeNode) {
             return node.parent.kind === SyntaxKind.TypeAliasDeclaration ? getSymbolOfNode(node.parent) : undefined;
         }
@@ -6339,9 +6279,9 @@ namespace ts {
         }
 
         /**
-         * Since the source of spread types are object literals, which are not binary,
-         * this function should be called in a left folding style, with left = previous result of getSpreadType
-         * and right = the new element to be spread.
+         * Since spread types are binary and object literals are not,
+         * checkObjectLiteral calls getSpreadType in a left-folding way.
+         * If a nested spread type literal is not left-deep, getSpreadType will transform it to left-deep form.
          *
          * If getSpreadType returns a spread type, the following properties hold:
          * 1. Left-deep: spread.left is always another spread type (the recursive case)
@@ -6394,6 +6334,10 @@ namespace ts {
                 return left;
             }
 
+            if (!(left.flags & (TypeFlags.Spread | TypeFlags.Object))) {
+                // put an emptyObjectType terminator on the left
+                left = getSpreadType(emptyObjectType, left);
+            }
             const simplified = simplifySpreadType(left, right);
             if (simplified) {
                 return simplified;
@@ -6403,8 +6347,6 @@ namespace ts {
                 return createSpreadType(left, right);
             }
             const spread = spreadTypes[id] = createType(TypeFlags.Spread) as SpreadType;
-            Debug.assert(!!(left.flags & (TypeFlags.Spread | TypeFlags.Object)), "Left flags: " + left.flags.toString(2));
-            Debug.assert(!!(right.flags & (TypeFlags.TypeParameter | TypeFlags.Intersection | TypeFlags.Index | TypeFlags.IndexedAccess | TypeFlags.Object)), "Right flags: " + right.flags.toString(2));
             spread.left = left as SpreadType | ResolvedType;
             spread.right = right as TypeParameter | IntersectionType | IndexType | IndexedAccessType | ResolvedType;
             return spread;
@@ -6646,6 +6588,8 @@ namespace ts {
                     return getTypeFromUnionTypeNode(<UnionTypeNode>node);
                 case SyntaxKind.IntersectionType:
                     return getTypeFromIntersectionTypeNode(<IntersectionTypeNode>node);
+                case SyntaxKind.SpreadType:
+                    return getTypeFromSpreadTypeNode(node as SpreadTypeNode);
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.JSDocNullableType:
                 case SyntaxKind.JSDocNonNullableType:
@@ -7687,8 +7631,7 @@ namespace ts {
                     }
                     else if (target.flags & TypeFlags.Spread) {
                         // T is assignable to ...T
-                        if (source.symbol === (target as SpreadType).right.symbol
-                            && (target as SpreadType).left === emptyObjectType) {
+                        if (source === (target as SpreadType).right && (target as SpreadType).left === emptyObjectType) {
                             return Ternary.True;
                         }
                     }
@@ -16265,19 +16208,10 @@ namespace ts {
         function checkTypeLiteral(node: TypeLiteralNode) {
             forEach(node.members, checkSourceElement);
             if (produceDiagnostics) {
-                if (find(node.members, p => p.kind === SyntaxKind.SpreadTypeAssignment)) {
-                    for (const signature of filter(node.members, p => p.kind === SyntaxKind.IndexSignature ||
-                                                   p.kind === SyntaxKind.CallSignature ||
-                                                   p.kind === SyntaxKind.ConstructSignature)) {
-                        error(signature, Diagnostics.Type_literals_with_spreads_cannot_contain_index_call_or_constructor_signatures);
-                    }
-                }
-                else {
-                    const type = getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node);
-                    checkIndexConstraints(type);
-                    checkTypeForDuplicateIndexSignatures(node);
-                    checkObjectTypeForDuplicateDeclarations(node);
-                }
+                const type = getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node);
+                checkIndexConstraints(type);
+                checkTypeForDuplicateIndexSignatures(node);
+                checkObjectTypeForDuplicateDeclarations(node);
             }
         }
 
@@ -21658,11 +21592,6 @@ namespace ts {
                     // Grammar checking heritageClause inside class declaration
                     checkGrammarHeritageClause(heritageClause);
                 }
-            }
-
-            let result: TypeElement;
-            if (result = find(node.members, e => e.kind === SyntaxKind.SpreadTypeAssignment)) {
-                return grammarErrorOnNode(result, Diagnostics.Interface_declaration_cannot_contain_a_spread_property);
             }
 
             return false;

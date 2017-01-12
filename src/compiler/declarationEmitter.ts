@@ -412,6 +412,8 @@ namespace ts {
                     return emitUnionType(<UnionTypeNode>type);
                 case SyntaxKind.IntersectionType:
                     return emitIntersectionType(<IntersectionTypeNode>type);
+                case SyntaxKind.SpreadType:
+                    return emitSpreadType(type as SpreadTypeNode);
                 case SyntaxKind.ParenthesizedType:
                     return emitParenType(<ParenthesizedTypeNode>type);
                 case SyntaxKind.TypeOperator:
@@ -1174,10 +1176,12 @@ namespace ts {
             writeLine();
         }
 
-        function emitSpreadTypeAssignment(type: SpreadTypeAssignment) {
-            write("...");
-            emitType(type.type);
-            write(";");
+        function emitSpreadType(type: SpreadTypeNode) {
+            write("spread(");
+            emitType(type.left);
+            write(",")
+            emitType(type.right);
+            write(")");
             writeLine();
         }
 
@@ -1771,8 +1775,6 @@ namespace ts {
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
                     return emitPropertyDeclaration(<PropertyDeclaration>node);
-                case SyntaxKind.SpreadTypeAssignment:
-                    return emitSpreadTypeAssignment(node as SpreadTypeAssignment);
                 case SyntaxKind.EnumMember:
                     return emitEnumMemberDeclaration(<EnumMember>node);
                 case SyntaxKind.ExportAssignment:

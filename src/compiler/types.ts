@@ -169,6 +169,7 @@ namespace ts {
         GetKeyword,
         IsKeyword,
         KeyOfKeyword,
+        SpreadKeyword,
         ModuleKeyword,
         NamespaceKeyword,
         NeverKeyword,
@@ -216,6 +217,7 @@ namespace ts {
         TupleType,
         UnionType,
         IntersectionType,
+        SpreadType,
         ParenthesizedType,
         ThisType,
         TypeOperator,
@@ -324,7 +326,6 @@ namespace ts {
         PropertyAssignment,
         ShorthandPropertyAssignment,
         SpreadAssignment,
-        SpreadTypeAssignment,
 
         // Enum
         EnumMember,
@@ -665,11 +666,6 @@ namespace ts {
         initializer?: Expression;           // Optional initializer
     }
 
-    export interface SpreadTypeAssignment extends TypeElement {
-        kind: SyntaxKind.SpreadTypeAssignment;
-        type: TypeNode;
-    }
-
     export interface PropertyDeclaration extends ClassElement {
         kind: SyntaxKind.PropertyDeclaration;
         questionToken?: QuestionToken;      // Present for use with reporting a grammar error
@@ -890,6 +886,12 @@ namespace ts {
 
     export interface IntersectionTypeNode extends UnionOrIntersectionTypeNode {
         kind: SyntaxKind.IntersectionType;
+    }
+
+    export interface SpreadTypeNode extends TypeNode {
+        kind: SyntaxKind.SpreadType;
+        left: TypeNode;
+        right?: TypeNode;
     }
 
     export interface ParenthesizedTypeNode extends TypeNode {

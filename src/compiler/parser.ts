@@ -76,8 +76,9 @@ namespace ts {
                     visitNode(cbNode, (<ShorthandPropertyAssignment>node).objectAssignmentInitializer);
             case SyntaxKind.SpreadAssignment:
                 return visitNode(cbNode, (<SpreadAssignment>node).expression);
-            case SyntaxKind.SpreadTypeAssignment:
-                return visitNode(cbNode, (node as SpreadTypeAssignment).type);
+            case SyntaxKind.SpreadType:
+                return visitNode(cbNode, (node as SpreadTypeNode).left) ||
+                    visitNode(cbNode, (node as SpreadTypeNode).right);
             case SyntaxKind.Parameter:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
@@ -2377,9 +2378,6 @@ namespace ts {
             if (token() === SyntaxKind.OpenBracketToken) {
                 return true;
             }
-            if (token() === SyntaxKind.DotDotDotToken) {
-                return true;
-            }
             // Try to get the first property-like token following all modifiers
             if (isLiteralPropertyName()) {
                 idToken = token();
@@ -2399,17 +2397,11 @@ namespace ts {
         }
 
         function parseTypeMember(): TypeElement {
-            switch (token()) {
-                case SyntaxKind.OpenParenToken:
-                case SyntaxKind.LessThanToken:
-                    return parseSignatureMember(SyntaxKind.CallSignature);
-                case SyntaxKind.NewKeyword:
-                    if (lookAhead(isStartOfConstructSignature)) {
-                        return parseSignatureMember(SyntaxKind.ConstructSignature);
-                    }
-                    break;
-                case SyntaxKind.DotDotDotToken:
-                    return parseSpreadTypeAssignment();
+            if (token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.LessThanToken) {
+                return parseSignatureMember(SyntaxKind.CallSignature);
+            }
+            if (token() === SyntaxKind.NewKeyword && lookAhead(isStartOfConstructSignature)) {
+                return parseSignatureMember(SyntaxKind.ConstructSignature);
             }
             const fullStart = getNodePos();
             const modifiers = parseModifiers();
@@ -2417,14 +2409,6 @@ namespace ts {
                 return parseIndexSignatureDeclaration(fullStart, /*decorators*/ undefined, modifiers);
             }
             return parsePropertyOrMethodSignature(fullStart, modifiers);
-        }
-
-        function parseSpreadTypeAssignment() {
-            const element = createNode(SyntaxKind.SpreadTypeAssignment, scanner.getStartPos()) as SpreadTypeAssignment;
-            parseTokenNode<Node>(); // parse `...`
-            element.type = parseType();
-            parseTypeMemberSemicolon();
-            return finishNode(element);
         }
 
         function isStartOfConstructSignature() {
@@ -2626,6 +2610,26 @@ namespace ts {
             return type;
         }
 
+        function parseSpreadType(): TypeNode {
+            const node = createNode(SyntaxKind.SpreadType) as SpreadTypeNode;
+            parseExpected(SyntaxKind.SpreadKeyword);
+            parseExpected(SyntaxKind.OpenParenToken);
+            node.left = parseType();
+            if(parseOptional(SyntaxKind.CommaToken)) {
+                node.right = parseType();
+            }
+            parseExpected(SyntaxKind.CloseParenToken);
+            return finishNode(node);
+        }
+
+        function parseSpreadTypeOrHigher() {
+            switch (token()) {
+                case SyntaxKind.SpreadKeyword:
+                    return parseSpreadType();
+            }
+            return parseArrayTypeOrHigher();
+        }
+
         function parseTypeOperator(operator: SyntaxKind.KeyOfKeyword) {
             const node = <TypeOperatorNode>createNode(SyntaxKind.TypeOperator);
             parseExpected(operator);
@@ -2639,7 +2643,7 @@ namespace ts {
                 case SyntaxKind.KeyOfKeyword:
                     return parseTypeOperator(SyntaxKind.KeyOfKeyword);
             }
-            return parseArrayTypeOrHigher();
+            return parseSpreadTypeOrHigher();
         }
 
         function parseUnionOrIntersectionType(kind: SyntaxKind, parseConstituentType: () => TypeNode, operator: SyntaxKind): TypeNode {
