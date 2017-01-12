@@ -3,7 +3,6 @@
     "compilerOptions": {
         "removeComments": false,
         "outFile": "../../built/local/typescriptServices.js",
-        "noResolve": false,
         "declaration": true,
         "types": []
     },
