@@ -420,10 +420,10 @@ namespace ts.codefix {
                         const options = context.program.getCompilerOptions();
 
                         return tryGetModuleNameFromAmbientModule() ||
-                            tryGetModuleNameFromBaseUrl() ||
-                            tryGetModuleNameFromRootDirs() ||
                             tryGetModuleNameFromTypeRoots() ||
                             tryGetModuleNameAsNodeModule() ||
+                            tryGetModuleNameFromBaseUrl() ||
+                            tryGetModuleNameFromRootDirs() ||
                             removeFileExtension(getRelativePath(moduleFileName, sourceDirectory));
 
                         function tryGetModuleNameFromAmbientModule(): string {
