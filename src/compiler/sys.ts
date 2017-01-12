@@ -1,5 +1,8 @@
 /// <reference path="core.ts"/>
 
+declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
+declare function clearTimeout(handle: any): void;
+
 namespace ts {
     export type FileWatcherCallback = (fileName: string, removed?: boolean) => void;
     export type DirectoryWatcherCallback = (fileName: string) => void;
