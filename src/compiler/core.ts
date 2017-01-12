@@ -895,7 +895,7 @@ namespace ts {
         return undefined;
     }
 
-    /** `forEachInMap` for just keys. */
+    /** `forEachEntry` for just keys. */
     export function forEachKey<T>(map: Map<{}>, callback: (key: string) => T | undefined): T | undefined {
         const iterator = map.keys();
         for (let { value: key, done } = iterator.next(); !done; { value: key, done } = iterator.next()) {
