@@ -1,0 +1,34 @@
+=== tests/cases/conformance/types/rest/objectRestNested.ts ===
+let abc: { a: number, b: string, c: boolean };
+>abc : { a: number; b: string; c: boolean; }
+>a : number
+>b : string
+>c : boolean
+
+var { a, ...{ b, ...rest } } = abc;
+>a : number
+>b : string
+>rest : { c: boolean; }
+>abc : { a: number; b: string; c: boolean; }
+
+var a: number;
+>a : number
+
+var b: string;
+>b : string
+
+var other: { c: boolean };
+>other : { c: boolean; }
+>c : boolean
+
+({ a, ...{ b, ...other } } = abc);
+>({ a, ...{ b, ...other } } = abc) : { a: number; b: string; c: boolean; }
+>{ a, ...{ b, ...other } } = abc : { a: number; b: string; c: boolean; }
+>{ a, ...{ b, ...other } } : { c: boolean; b: string; a: number; }
+>a : number
+>{ b, ...other } : { c: boolean; b: string; }
+>b : string
+>other : { c: boolean; }
+>abc : { a: number; b: string; c: boolean; }
+
+

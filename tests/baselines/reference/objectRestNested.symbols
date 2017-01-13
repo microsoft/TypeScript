@@ -1,0 +1,30 @@
+=== tests/cases/conformance/types/rest/objectRestNested.ts ===
+let abc: { a: number, b: string, c: boolean };
+>abc : Symbol(abc, Decl(objectRestNested.ts, 0, 3))
+>a : Symbol(a, Decl(objectRestNested.ts, 0, 10))
+>b : Symbol(b, Decl(objectRestNested.ts, 0, 21))
+>c : Symbol(c, Decl(objectRestNested.ts, 0, 32))
+
+var { a, ...{ b, ...rest } } = abc;
+>a : Symbol(a, Decl(objectRestNested.ts, 1, 5), Decl(objectRestNested.ts, 2, 3))
+>b : Symbol(b, Decl(objectRestNested.ts, 1, 13), Decl(objectRestNested.ts, 3, 3))
+>rest : Symbol(rest, Decl(objectRestNested.ts, 1, 16))
+>abc : Symbol(abc, Decl(objectRestNested.ts, 0, 3))
+
+var a: number;
+>a : Symbol(a, Decl(objectRestNested.ts, 1, 5), Decl(objectRestNested.ts, 2, 3))
+
+var b: string;
+>b : Symbol(b, Decl(objectRestNested.ts, 1, 13), Decl(objectRestNested.ts, 3, 3))
+
+var other: { c: boolean };
+>other : Symbol(other, Decl(objectRestNested.ts, 4, 3))
+>c : Symbol(c, Decl(objectRestNested.ts, 4, 12))
+
+({ a, ...{ b, ...other } } = abc);
+>a : Symbol(a, Decl(objectRestNested.ts, 5, 2))
+>b : Symbol(b, Decl(objectRestNested.ts, 5, 10))
+>other : Symbol(other, Decl(objectRestNested.ts, 4, 3))
+>abc : Symbol(abc, Decl(objectRestNested.ts, 0, 3))
+
+
