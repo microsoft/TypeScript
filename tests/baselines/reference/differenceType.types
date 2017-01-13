@@ -1,0 +1,86 @@
+=== tests/cases/conformance/types/rest/differenceType.ts ===
+type A = { a };
+>A : A
+>a : any
+
+type Ab = { a; b };
+>Ab : Ab
+>a : any
+>b : any
+
+let nothing: rest(A, 'a');
+>nothing : {}
+>A : A
+
+let none: rest(Ab, 'a' | 'b');
+>none : {}
+>Ab : Ab
+
+let over: rest(A, 'a' | 'b');
+>over : {}
+>A : A
+
+let under: rest(Ab, 'a');
+>under : { b: any; }
+>Ab : Ab
+
+let partial: rest(Ab, 'b' | 'd');
+>partial : { a: any; }
+>Ab : Ab
+
+let empty: rest(Ab, 'a' | 'b');
+>empty : {}
+>Ab : Ab
+
+let nope: rest({}, string);
+>nope : {}
+
+let nope2: rest(Ab, string);
+>nope2 : {}
+>Ab : Ab
+
+let nope3: rest({}, 'a' | 'b');
+>nope3 : {}
+
+type Abcd = { a; b; c; d }
+>Abcd : Abcd
+>a : any
+>b : any
+>c : any
+>d : any
+
+function f<T>(t: T) {
+>f : <T>(t: T) => rest(T, "b" | "d")
+>T : T
+>t : T
+>T : T
+
+    let tsubu: rest(T, 'b' | 'd');
+>tsubu : rest(T, "b" | "d")
+>T : T
+
+    return tsubu;
+>tsubu : rest(T, "b" | "d")
+}
+
+const justA = f<Ab>({ a: 1, b: 2 })
+>justA : { a: any; }
+>f<Ab>({ a: 1, b: 2 }) : { a: any; }
+>f : <T>(t: T) => rest(T, "b" | "d")
+>Ab : Ab
+>{ a: 1, b: 2 } : { a: number; b: number; }
+>a : number
+>1 : 1
+>b : number
+>2 : 2
+
+const inferred = f({ a: 1, b: 2 })
+>inferred : { a: number; }
+>f({ a: 1, b: 2 }) : { a: number; }
+>f : <T>(t: T) => rest(T, "b" | "d")
+>{ a: 1, b: 2 } : { a: number; b: number; }
+>a : number
+>1 : 1
+>b : number
+>2 : 2
+

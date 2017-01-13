@@ -38,8 +38,8 @@ var {...rest4 } = nullAndUndefinedUnion;
 >rest4 : {}
 >nullAndUndefinedUnion : null | undefined
 
-declare const unionWithIntersection: ({ n: number } & { s: string }) & undefined | null;
->unionWithIntersection : ({ n: number; } & { s: string; } & undefined) | null
+declare const unionWithIntersection: ({ n: number } & { s: string }) | null;
+>unionWithIntersection : ({ n: number; } & { s: string; }) | null
 >n : number
 >s : string
 >null : null
@@ -51,5 +51,5 @@ var rest5: { n: number, s: string };
 
 var {...rest5 } = unionWithIntersection;
 >rest5 : { n: number; s: string; }
->unionWithIntersection : ({ n: number; } & { s: string; } & undefined) | null
+>unionWithIntersection : ({ n: number; } & { s: string; }) | null
 
