@@ -124,6 +124,7 @@ namespace ts {
         const tupleTypes: GenericType[] = [];
         const unionTypes = createMap<UnionType>();
         const intersectionTypes = createMap<IntersectionType>();
+        const restTypes = createMap<RestType>();
         const stringLiteralTypes = createMap<LiteralType>();
         const numericLiteralTypes = createMap<LiteralType>();
         const indexedAccessTypes = createMap<IndexedAccessType>();
@@ -1167,7 +1168,7 @@ namespace ts {
         // type/namespace side of another symbol. Consider this example:
         //
         //   declare module graphics {
-        //       interface Point {
+        //       interface Point {
         //           x: number;
         //           y: number;
         //       }
@@ -2321,6 +2322,9 @@ namespace ts {
                     else if (type.flags & TypeFlags.UnionOrIntersection) {
                         writeUnionOrIntersectionType(<UnionOrIntersectionType>type, nextFlags);
                     }
+                    else if (type.flags & TypeFlags.Rest) {
+                        writeRestType(type as RestType);
+                    }
                     else if (getObjectFlags(type) & (ObjectFlags.Anonymous | ObjectFlags.Mapped)) {
                         writeAnonymousType(<ObjectType>type, nextFlags);
                     }
@@ -2434,6 +2438,16 @@ namespace ts {
                     if (flags & TypeFormatFlags.InElementType) {
                         writePunctuation(writer, SyntaxKind.CloseParenToken);
                     }
+                }
+
+                function writeRestType(type: RestType) {
+                    writer.writeKeyword("rest");
+                    writePunctuation(writer, SyntaxKind.OpenParenToken);
+                    writeType(type.source, TypeFormatFlags.None);
+                    writePunctuation(writer, SyntaxKind.CommaToken);
+                    writeSpace(writer);
+                    writeType(type.remove, TypeFormatFlags.None);
+                    writePunctuation(writer, SyntaxKind.CloseParenToken);
                 }
 
                 function writeAnonymousType(type: ObjectType, flags: TypeFormatFlags) {
@@ -3107,23 +3121,55 @@ namespace ts {
             return name.kind === SyntaxKind.ComputedPropertyName && !isStringOrNumericLiteral((<ComputedPropertyName>name).expression);
         }
 
-        function getRestType(source: Type, properties: PropertyName[], symbol: Symbol): Type {
+        function getRestType(source: Type, remove: Type): Type {
+            if (source.flags & TypeFlags.Any || remove.flags & TypeFlags.Any) {
+                return anyType;
+            }
+            const id = getTypeListId([source, remove]);
+            if (id in restTypes) {
+                return restTypes[id];
+            }
+
             source = filterType(source, t => !(t.flags & TypeFlags.Nullable));
             if (source.flags & TypeFlags.Never) {
                 return emptyObjectType;
             }
 
+            if (source.flags & TypeFlags.Intersection) {
+                source = resolveObjectIntersection(source as IntersectionType);
+            }
             if (source.flags & TypeFlags.Union) {
-                return mapType(source, t => getRestType(t, properties, symbol));
+                return mapType(source, t => getRestType(t, remove));
             }
 
-            const members = createMap<Symbol>();
-            const names = createMap<true>();
-            for (const name of properties) {
-                names[getTextOfPropertyName(name)] = true;
+            if (source.flags & (TypeFlags.Object | TypeFlags.Primitive | TypeFlags.NonPrimitive) ) {
+                if(isStringLiteralUnion(remove)) {
+                    return createRestType(source, remove);
+                }
+                else if (remove.flags & TypeFlags.String) {
+                    return emptyObjectType;
+                }
+                else if (remove.flags & TypeFlags.Never) {
+                    return source;
+                }
             }
+
+            const difference = restTypes[id] = createType(TypeFlags.Rest) as RestType;
+            difference.source = source;
+            difference.remove = remove;
+            return difference;
+        }
+
+        function createRestType(source: Type, remove: Type) {
+            const literalsToRemove = remove.flags & TypeFlags.StringLiteral ? [(remove as LiteralType).text] :
+                map((remove as UnionType).types, t => (t as LiteralType).text);
+            const namesToRemove = createMap<true>();
+            for (const name of literalsToRemove) {
+                namesToRemove[name] = true;
+            }
+            const members = createMap<Symbol>();
             for (const prop of getPropertiesOfType(source)) {
-                const inNamesToRemove = prop.name in names;
+                const inNamesToRemove = prop.name in namesToRemove;
                 const isPrivate = getDeclarationModifierFlagsFromSymbol(prop) & (ModifierFlags.Private | ModifierFlags.Protected);
                 const isSetOnlyAccessor = prop.flags & SymbolFlags.SetAccessor && !(prop.flags & SymbolFlags.GetAccessor);
                 if (!inNamesToRemove && !isPrivate && !isClassMethod(prop) && !isSetOnlyAccessor) {
@@ -3132,7 +3178,25 @@ namespace ts {
             }
             const stringIndexInfo = getIndexInfoOfType(source, IndexKind.String);
             const numberIndexInfo = getIndexInfoOfType(source, IndexKind.Number);
-            return createAnonymousType(symbol, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
+            return createAnonymousType(undefined, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
+        }
+
+        function resolveObjectIntersection(intersection: IntersectionType): IntersectionType | ResolvedType {
+            if (find(intersection.types, t => !(t.flags & TypeFlags.Object))) {
+                return intersection;
+            }
+            const members = createMap<Symbol>();
+            for (const property of getPropertiesOfType(intersection)) {
+                members[property.name] = property;
+            }
+            const stringIndex = getIndexInfoOfType(intersection, IndexKind.String);
+            const numberIndex = getIndexInfoOfType(intersection, IndexKind.Number);
+            return createAnonymousType(undefined, members, emptyArray, emptyArray, stringIndex, numberIndex);
+        }
+
+        function isStringLiteralUnion(type: Type) {
+            return type.flags & TypeFlags.StringLiteral ||
+                type.flags & TypeFlags.Union && every((type as UnionType).types, t => !!(t.flags & TypeFlags.StringLiteral));
         }
 
         /** Return the inferred type for a binding element */
@@ -3160,13 +3224,19 @@ namespace ts {
                         error(declaration, Diagnostics.Rest_types_may_only_be_created_from_object_types);
                         return unknownType;
                     }
-                    const literalMembers: PropertyName[] = [];
+                    const literalMembers = [];
                     for (const element of pattern.elements) {
                         if (!(element as BindingElement).dotDotDotToken) {
-                            literalMembers.push(element.propertyName || element.name as Identifier);
+                            literalMembers.push(
+                                createLiteralType(
+                                    TypeFlags.StringLiteral,
+                                    getTextOfPropertyName(element.propertyName || element.name as Identifier)));
                         }
                     }
-                    type = getRestType(parentType, literalMembers, declaration.symbol);
+                    type = getRestType(parentType, getUnionType(literalMembers));
+                    if (type.flags & TypeFlags.Object) {
+                        type.symbol = declaration.symbol;
+                    }
                 }
                 else {
                     // Use explicitly specified property name ({ p: xxx } form), or otherwise the implied name ({ p } form)
@@ -4824,13 +4894,18 @@ namespace ts {
             }
         }
 
+        function getApparentTypeOfRest(type: RestType) {
+            return getRestType(getApparentType(type.source), getApparentType(type.remove));
+        }
+
         /**
          * For a type parameter, return the base constraint of the type parameter. For the string, number,
          * boolean, and symbol primitive types, return the corresponding object types. Otherwise return the
          * type itself. Note that the apparent type of a union type is the union type itself.
          */
         function getApparentType(type: Type): Type {
-            const t = type.flags & TypeFlags.TypeVariable ? getBaseConstraintOfType(<TypeVariable>type) || emptyObjectType : type;
+            const t = type.flags & TypeFlags.TypeVariable ? getBaseConstraintOfType(<TypeVariable>type) || emptyObjectType :
+                type.flags & TypeFlags.Rest ? getApparentTypeOfRest(type as RestType) : type;
             return t.flags & TypeFlags.StringLike ? globalStringType :
                 t.flags & TypeFlags.NumberLike ? globalNumberType :
                 t.flags & TypeFlags.BooleanLike ? globalBooleanType :
@@ -6024,6 +6099,14 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function getTypeFromRestTypeNode(node: RestTypeNode): Type {
+            const links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                links.resolvedType = getRestType(getTypeFromTypeNode(node.source), getTypeFromTypeNode(node.remove));
+            }
+            return links.resolvedType;
+        }
+
         function getIndexTypeForGenericType(type: TypeVariable | UnionOrIntersectionType) {
             if (!type.resolvedIndexType) {
                 type.resolvedIndexType = <IndexType>createType(TypeFlags.Index);
@@ -6440,6 +6523,8 @@ namespace ts {
                 case SyntaxKind.UnionType:
                 case SyntaxKind.JSDocUnionType:
                     return getTypeFromUnionTypeNode(<UnionTypeNode>node);
+                case SyntaxKind.RestType:
+                    return getTypeFromRestTypeNode(node as RestTypeNode);
                 case SyntaxKind.IntersectionType:
                     return getTypeFromIntersectionTypeNode(<IntersectionTypeNode>node);
                 case SyntaxKind.ParenthesizedType:
@@ -6816,6 +6901,10 @@ namespace ts {
             }
             if (type.flags & TypeFlags.Intersection) {
                 return getIntersectionType(instantiateTypes((<IntersectionType>type).types, mapper), type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
+            }
+            if (type.flags & TypeFlags.Rest) {
+                const difference = type as RestType;
+                return getRestType(instantiateType(difference.source, mapper), instantiateType(difference.remove, mapper));
             }
             if (type.flags & TypeFlags.Index) {
                 return getIndexType(instantiateType((<IndexType>type).type, mapper));
@@ -7435,6 +7524,21 @@ namespace ts {
                     if (constraint) {
                         if (result = isRelatedTo(source, constraint, reportErrors)) {
                             errorInfo = saveErrorInfo;
+                            return result;
+                        }
+                    }
+                }
+                else if (target.flags & TypeFlags.Rest) {
+                    if (source.flags & TypeFlags.TypeParameter && (target as RestType).source === source) {
+                        return Ternary.True;
+                    }
+                    else if (source.flags & TypeFlags.Rest) {
+                        const srcDiff = source as RestType;
+                        const tgtDiff = target as RestType;
+                        if ((result = isRelatedTo(srcDiff.source, tgtDiff.source, reportErrors)) === Ternary.False) {
+                            return result;
+                        }
+                        if (result = isRelatedTo(srcDiff.remove, tgtDiff.remove, reportErrors)) {
                             return result;
                         }
                     }
@@ -14651,13 +14755,16 @@ namespace ts {
                 if (languageVersion < ScriptTarget.ESNext) {
                     checkExternalEmitHelpers(property, ExternalEmitHelpers.Rest);
                 }
-                const nonRestNames: PropertyName[] = [];
+                const nonRestNames = [];
                 if (allProperties) {
                     for (let i = 0; i < allProperties.length - 1; i++) {
-                        nonRestNames.push(allProperties[i].name);
+                        nonRestNames.push(createLiteralType(TypeFlags.StringLiteral, getTextOfPropertyName(allProperties[i].name)));
                     }
                 }
-                const type = getRestType(objectLiteralType, nonRestNames, objectLiteralType.symbol);
+                const type = getRestType(objectLiteralType, getUnionType(nonRestNames));
+                if (type.flags & TypeFlags.Object) {
+                    type.symbol = objectLiteralType.symbol;
+                }
                 return checkDestructuringAssignment(property.expression, type);
             }
             else {
@@ -16019,6 +16126,15 @@ namespace ts {
 
         function checkUnionOrIntersectionType(node: UnionOrIntersectionTypeNode) {
             forEach(node.types, checkSourceElement);
+        }
+
+        function checkRestType(node: RestTypeNode) {
+            const remove = getTypeFromTypeNode(node.remove);
+            if (!(remove.flags & (TypeFlags.Never | TypeFlags.String) || isStringLiteralUnion(remove))) {
+                error(node.remove, Diagnostics.The_right_side_of_a_rest_type_must_be_a_string_or_string_literal_union);
+            }
+            checkSourceElement(node.source);
+            checkSourceElement(node.remove);
         }
 
         function checkIndexedAccessIndexType(type: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode) {
@@ -19360,6 +19476,8 @@ namespace ts {
                 case SyntaxKind.UnionType:
                 case SyntaxKind.IntersectionType:
                     return checkUnionOrIntersectionType(<UnionOrIntersectionTypeNode>node);
+                case SyntaxKind.RestType:
+                    return checkRestType(node as RestTypeNode);
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.TypeOperator:
                     return checkSourceElement((<ParenthesizedTypeNode | TypeOperatorNode>node).type);

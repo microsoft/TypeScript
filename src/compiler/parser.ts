@@ -135,6 +135,9 @@ namespace ts {
             case SyntaxKind.UnionType:
             case SyntaxKind.IntersectionType:
                 return visitNodes(cbNodes, (<UnionOrIntersectionTypeNode>node).types);
+            case SyntaxKind.RestType:
+                return visitNode(cbNode, (node as RestTypeNode).source) ||
+                    visitNode(cbNode, (node as RestTypeNode).remove);
             case SyntaxKind.ParenthesizedType:
             case SyntaxKind.TypeOperator:
                 return visitNode(cbNode, (<ParenthesizedTypeNode | TypeOperatorNode>node).type);
@@ -2620,7 +2623,7 @@ namespace ts {
                 case SyntaxKind.KeyOfKeyword:
                     return parseTypeOperator(SyntaxKind.KeyOfKeyword);
             }
-            return parseArrayTypeOrHigher();
+            return parseRestTypeOrHigher();
         }
 
         function parseUnionOrIntersectionType(kind: SyntaxKind, parseConstituentType: () => TypeNode, operator: SyntaxKind): TypeNode {
@@ -2639,7 +2642,26 @@ namespace ts {
             return type;
         }
 
-        function parseIntersectionTypeOrHigher(): TypeNode {
+        function parseRestTypeOrHigher() {
+            switch (token()) {
+                case SyntaxKind.RestKeyword:
+                    return parseRestType();
+            }
+            return parseArrayTypeOrHigher();
+        }
+
+        function parseRestType(): TypeNode {
+            const node = createNode(SyntaxKind.RestType) as RestTypeNode;
+            parseExpected(SyntaxKind.RestKeyword);
+            parseExpected(SyntaxKind.OpenParenToken);
+            node.source = parseType();
+            parseExpected(SyntaxKind.CommaToken);
+            node.remove = parseType();
+            parseExpected(SyntaxKind.CloseParenToken);
+            return finishNode(node);
+        }
+
+       function parseIntersectionTypeOrHigher(): TypeNode {
             return parseUnionOrIntersectionType(SyntaxKind.IntersectionType, parseTypeOperatorOrHigher, SyntaxKind.AmpersandToken);
         }
 
