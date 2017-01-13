@@ -36,20 +36,20 @@ var other: { c: boolean };
 >abc : Abc
 
 function f<T extends Abc>(t: T) {
->f : <T extends Abc>(t: T) => rest(rest(T, "a"), "b")
+>f : <T extends Abc>(t: T) => rest(T, "a" | "b")
 >T : T
 >Abc : Abc
 >t : T
 >T : T
 
     let other: rest(rest(T, 'a'), 'b')
->other : rest(rest(T, "a"), "b")
+>other : rest(T, "a" | "b")
 >T : T
 
     var { a, ...{ b, ...rest } } = t;
 >a : number
 >b : string
->rest : rest(rest(T, "a"), "b")
+>rest : rest(T, "a" | "b")
 >t : T
 
     ({ a, ...{ b, ...rest } } = t);
@@ -59,31 +59,31 @@ function f<T extends Abc>(t: T) {
 >a : number
 >{ b, ...rest } : any
 >b : string
->rest : rest(rest(T, "a"), "b")
+>rest : rest(T, "a" | "b")
 >t : T
 
     other = rest;
->other = rest : rest(rest(T, "a"), "b")
->other : rest(rest(T, "a"), "b")
->rest : rest(rest(T, "a"), "b")
+>other = rest : rest(T, "a" | "b")
+>other : rest(T, "a" | "b")
+>rest : rest(T, "a" | "b")
 
     rest = other;
->rest = other : rest(rest(T, "a"), "b")
->rest : rest(rest(T, "a"), "b")
->other : rest(rest(T, "a"), "b")
+>rest = other : rest(T, "a" | "b")
+>rest : rest(T, "a" | "b")
+>other : rest(T, "a" | "b")
 
     rest.c;
 >rest.c : boolean
->rest : rest(rest(T, "a"), "b")
+>rest : rest(T, "a" | "b")
 >c : boolean
 
     return rest;
->rest : rest(rest(T, "a"), "b")
+>rest : rest(T, "a" | "b")
 }
 
 f({ a: 1, b: 'foo', c: false, d: 54 });
 >f({ a: 1, b: 'foo', c: false, d: 54 }) : { c: false; d: number; }
->f : <T extends Abc>(t: T) => rest(rest(T, "a"), "b")
+>f : <T extends Abc>(t: T) => rest(T, "a" | "b")
 >{ a: 1, b: 'foo', c: false, d: 54 } : { a: number; b: string; c: false; d: number; }
 >a : number
 >1 : 1

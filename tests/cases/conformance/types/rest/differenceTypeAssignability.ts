@@ -36,4 +36,14 @@ function f<T extends Abcuxyz, U extends Abcuxyz, V extends string> (t: T, u: U, 
     var bn: BN;
     t_a = bn; // error, we have no idea what other properties T has
     bn = t_a; // ok, T - a still has b:any
+
+    let nest: rest(rest(T, 'a'), 'b');
+    let flip: rest(rest(T, 'b'), 'a');
+    let flat: rest(T, 'a' | 'b');
+    nest = flip;
+    nest = flat;
+    flip = nest;
+    flip = flat;
+    flat = nest;
+    flat = flip;
 }

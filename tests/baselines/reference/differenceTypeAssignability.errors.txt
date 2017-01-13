@@ -75,5 +75,15 @@ tests/cases/conformance/types/rest/differenceTypeAssignability.ts(37,5): error T
         ~~~
 !!! error TS2322: Type 'BN' is not assignable to type 'rest(T, "a")'.
         bn = t_a; // ok, T - a still has b:any
+    
+        let nest: rest(rest(T, 'a'), 'b');
+        let flip: rest(rest(T, 'b'), 'a');
+        let flat: rest(T, 'a' | 'b');
+        nest = flip;
+        nest = flat;
+        flip = nest;
+        flip = flat;
+        flat = nest;
+        flat = flip;
     }
     
