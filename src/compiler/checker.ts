@@ -1168,7 +1168,7 @@ namespace ts {
         // type/namespace side of another symbol. Consider this example:
         //
         //   declare module graphics {
-        //       interface Point {
+        //       interface Point {
         //           x: number;
         //           y: number;
         //       }
