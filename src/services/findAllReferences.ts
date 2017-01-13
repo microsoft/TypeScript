@@ -502,9 +502,8 @@ namespace ts.FindAllReferences {
                 const result: Node[] = [];
 
                 for (const decl of classSymbol.members["__constructor"].declarations) {
-                    Debug.assert(decl.kind === SyntaxKind.Constructor);
-                    const ctrKeyword = decl.getChildAt(0);
-                    Debug.assert(ctrKeyword.kind === SyntaxKind.ConstructorKeyword);
+                    const ctrKeyword = ts.findChildOfKind(decl, ts.SyntaxKind.ConstructorKeyword, sourceFile)!
+                    Debug.assert(decl.kind === SyntaxKind.Constructor && !!ctrKeyword);
                     result.push(ctrKeyword);
                 }
 
