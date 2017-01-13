@@ -1,32 +1,30 @@
-tests/cases/conformance/types/rest/differenceTypeAssignability.ts(14,5): error TS2322: Type 'rest(T, string)' is not assignable to type 'rest(T, "u")'.
+tests/cases/conformance/types/rest/differenceTypeAssignability.ts(16,5): error TS2322: Type 'rest(T, string)' is not assignable to type 'rest(T, "u")'.
   Type 'string' is not assignable to type '"u"'.
-tests/cases/conformance/types/rest/differenceTypeAssignability.ts(15,5): error TS2322: Type 'U' is not assignable to type 'T'.
-  Type '"u"' is not assignable to type 'T'.
-tests/cases/conformance/types/rest/differenceTypeAssignability.ts(26,5): error TS2322: Type 'rest(T, "c")' is not assignable to type 'rest(T, "a")'.
+tests/cases/conformance/types/rest/differenceTypeAssignability.ts(17,5): error TS2322: Type 'U' is not assignable to type 'T'.
+  Type 'Abcuxyz' is not assignable to type 'T'.
+tests/cases/conformance/types/rest/differenceTypeAssignability.ts(28,5): error TS2322: Type 'rest(T, "c")' is not assignable to type 'rest(T, "a")'.
   Type '"c"' is not assignable to type '"a"'.
-tests/cases/conformance/types/rest/differenceTypeAssignability.ts(27,5): error TS2322: Type 'rest(T, AB)' is not assignable to type 'rest(T, "a")'.
+tests/cases/conformance/types/rest/differenceTypeAssignability.ts(29,5): error TS2322: Type 'rest(T, AB)' is not assignable to type 'rest(T, "a")'.
   Type 'AB' is not assignable to type '"a"'.
     Type '"b"' is not assignable to type '"a"'.
-tests/cases/conformance/types/rest/differenceTypeAssignability.ts(28,5): error TS2322: Type 'rest(T, "a")' is not assignable to type 'T'.
-tests/cases/conformance/types/rest/differenceTypeAssignability.ts(29,5): error TS2322: Type 'U' is not assignable to type 'T'.
-  Type '"u"' is not assignable to type 'T'.
-tests/cases/conformance/types/rest/differenceTypeAssignability.ts(36,5): error TS2322: Type '{ a: any; }' is not assignable to type 'rest(T, "a")'.
-tests/cases/conformance/types/rest/differenceTypeAssignability.ts(37,5): error TS2322: Type 'rest(T, "u")' is not assignable to type 'rest(T, "a")'.
-  Type '"u"' is not assignable to type '"a"'.
-tests/cases/conformance/types/rest/differenceTypeAssignability.ts(38,5): error TS2322: Type 'rest(T, "a")' is not assignable to type 'rest(T, "u")'.
-  Type '"a"' is not assignable to type '"u"'.
-tests/cases/conformance/types/rest/differenceTypeAssignability.ts(41,5): error TS2322: Type 'BN' is not assignable to type 'rest(T, "a")'.
-tests/cases/conformance/types/rest/differenceTypeAssignability.ts(42,5): error TS2322: Type 'rest(T, "a")' is not assignable to type 'BN'.
+tests/cases/conformance/types/rest/differenceTypeAssignability.ts(30,5): error TS2322: Type 'rest(T, "a")' is not assignable to type 'T'.
+tests/cases/conformance/types/rest/differenceTypeAssignability.ts(31,5): error TS2322: Type 'U' is not assignable to type 'T'.
+  Type 'Abcuxyz' is not assignable to type 'T'.
+tests/cases/conformance/types/rest/differenceTypeAssignability.ts(34,5): error TS2322: Type '{ a: any; }' is not assignable to type 'rest(T, "a")'.
+tests/cases/conformance/types/rest/differenceTypeAssignability.ts(37,5): error TS2322: Type 'BN' is not assignable to type 'rest(T, "a")'.
+tests/cases/conformance/types/rest/differenceTypeAssignability.ts(38,5): error TS2322: Type 'rest(T, "a")' is not assignable to type 'BN'.
 
 
-==== tests/cases/conformance/types/rest/differenceTypeAssignability.ts (11 errors) ====
+==== tests/cases/conformance/types/rest/differenceTypeAssignability.ts (9 errors) ====
     type A = 'a';
     type B = 'b';
     type C = 'c';
     type AB = A | B;
     type AC = A | C;
+    type Abcuxyz = { a, b, c, u, x, y, z }
     type BN = { b: number };
-    function f<T extends 'x' | 'y' | 'z', U extends 'u', V extends string> (t: T, u: U, v: V) {
+    
+    function f<T extends Abcuxyz, U extends Abcuxyz, V extends string> (t: T, u: U, v: V) {
         let t_u: rest(T, 'u');
         let t_string: rest(T, string);
         let u_xyz: rest(U, 'x' | 'y' | 'z');
@@ -40,7 +38,7 @@ tests/cases/conformance/types/rest/differenceTypeAssignability.ts(42,5): error T
         t_u = u_xyz; // error
         ~~~
 !!! error TS2322: Type 'U' is not assignable to type 'T'.
-!!! error TS2322:   Type '"u"' is not assignable to type 'T'.
+!!! error TS2322:   Type 'Abcuxyz' is not assignable to type 'T'.
     
         var t_a: rest(T, A);
         var t_c: rest(T, C);
@@ -66,24 +64,12 @@ tests/cases/conformance/types/rest/differenceTypeAssignability.ts(42,5): error T
         t_a = u_a; // error
         ~~~
 !!! error TS2322: Type 'U' is not assignable to type 'T'.
-!!! error TS2322:   Type '"u"' is not assignable to type 'T'.
+!!! error TS2322:   Type 'Abcuxyz' is not assignable to type 'T'.
     
-        var ab_u: rest({ a, b }, 'u');
-        var ab_xyz: rest({ a, b }, 'x' | 'y' | 'z');
-        var a_xyz: rest({ a }, 'x' | 'y' | 'z');
-        var ac_xyz: rest({ a, c }, 'x' | 'y' | 'z');
-    
+        var a_xyz: rest({ a, x, y, z }, 'x' | 'y' | 'z');
         t_a = a_xyz; // error, this makes no sense.
         ~~~
 !!! error TS2322: Type '{ a: any; }' is not assignable to type 'rest(T, "a")'.
-        t_a = t_u; // error, let T and U contain property u. Then T-a has property u but T-U does not.
-        ~~~
-!!! error TS2322: Type 'rest(T, "u")' is not assignable to type 'rest(T, "a")'.
-!!! error TS2322:   Type '"u"' is not assignable to type '"a"'.
-        t_u = t_a; // error, let T contain property a and U not. Then T-a has no a, but T-U does.
-        ~~~
-!!! error TS2322: Type 'rest(T, "a")' is not assignable to type 'rest(T, "u")'.
-!!! error TS2322:   Type '"a"' is not assignable to type '"u"'.
     
         var bn: BN;
         t_a = bn; // error, we have no idea what T is supposed to be

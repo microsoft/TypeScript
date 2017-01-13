@@ -16,63 +16,57 @@ let none: rest(Ab, 'a' | 'b');
 >none : Symbol(none, Decl(differenceType.ts, 3, 3))
 >Ab : Symbol(Ab, Decl(differenceType.ts, 0, 15))
 
-let over: rest(A, 'a' | 'b');
->over : Symbol(over, Decl(differenceType.ts, 4, 3))
->A : Symbol(A, Decl(differenceType.ts, 0, 0))
-
 let under: rest(Ab, 'a');
->under : Symbol(under, Decl(differenceType.ts, 5, 3))
->Ab : Symbol(Ab, Decl(differenceType.ts, 0, 15))
-
-let partial: rest(Ab, 'b' | 'd');
->partial : Symbol(partial, Decl(differenceType.ts, 6, 3))
+>under : Symbol(under, Decl(differenceType.ts, 4, 3))
 >Ab : Symbol(Ab, Decl(differenceType.ts, 0, 15))
 
 let empty: rest(Ab, 'a' | 'b');
->empty : Symbol(empty, Decl(differenceType.ts, 7, 3))
+>empty : Symbol(empty, Decl(differenceType.ts, 5, 3))
 >Ab : Symbol(Ab, Decl(differenceType.ts, 0, 15))
 
 let nope: rest({}, string);
->nope : Symbol(nope, Decl(differenceType.ts, 8, 3))
+>nope : Symbol(nope, Decl(differenceType.ts, 6, 3))
 
 let nope2: rest(Ab, string);
->nope2 : Symbol(nope2, Decl(differenceType.ts, 9, 3))
+>nope2 : Symbol(nope2, Decl(differenceType.ts, 7, 3))
 >Ab : Symbol(Ab, Decl(differenceType.ts, 0, 15))
-
-let nope3: rest({}, 'a' | 'b');
->nope3 : Symbol(nope3, Decl(differenceType.ts, 10, 3))
 
 type Abcd = { a; b; c; d }
->Abcd : Symbol(Abcd, Decl(differenceType.ts, 10, 31))
->a : Symbol(a, Decl(differenceType.ts, 12, 13))
->b : Symbol(b, Decl(differenceType.ts, 12, 16))
->c : Symbol(c, Decl(differenceType.ts, 12, 19))
->d : Symbol(d, Decl(differenceType.ts, 12, 22))
+>Abcd : Symbol(Abcd, Decl(differenceType.ts, 7, 28))
+>a : Symbol(a, Decl(differenceType.ts, 9, 13))
+>b : Symbol(b, Decl(differenceType.ts, 9, 16))
+>c : Symbol(c, Decl(differenceType.ts, 9, 19))
+>d : Symbol(d, Decl(differenceType.ts, 9, 22))
 
-function f<T>(t: T) {
->f : Symbol(f, Decl(differenceType.ts, 12, 26))
->T : Symbol(T, Decl(differenceType.ts, 14, 11))
->t : Symbol(t, Decl(differenceType.ts, 14, 14))
->T : Symbol(T, Decl(differenceType.ts, 14, 11))
+function f<T extends Abcd>(t: T) {
+>f : Symbol(f, Decl(differenceType.ts, 9, 26))
+>T : Symbol(T, Decl(differenceType.ts, 11, 11))
+>Abcd : Symbol(Abcd, Decl(differenceType.ts, 7, 28))
+>t : Symbol(t, Decl(differenceType.ts, 11, 27))
+>T : Symbol(T, Decl(differenceType.ts, 11, 11))
 
     let tsubu: rest(T, 'b' | 'd');
->tsubu : Symbol(tsubu, Decl(differenceType.ts, 15, 7))
->T : Symbol(T, Decl(differenceType.ts, 14, 11))
+>tsubu : Symbol(tsubu, Decl(differenceType.ts, 12, 7))
+>T : Symbol(T, Decl(differenceType.ts, 11, 11))
 
     return tsubu;
->tsubu : Symbol(tsubu, Decl(differenceType.ts, 15, 7))
+>tsubu : Symbol(tsubu, Decl(differenceType.ts, 12, 7))
 }
 
-const justA = f<Ab>({ a: 1, b: 2 })
->justA : Symbol(justA, Decl(differenceType.ts, 19, 5))
->f : Symbol(f, Decl(differenceType.ts, 12, 26))
->Ab : Symbol(Ab, Decl(differenceType.ts, 0, 15))
->a : Symbol(a, Decl(differenceType.ts, 19, 21))
->b : Symbol(b, Decl(differenceType.ts, 19, 27))
+const explicit = f<Abcd>({ a: 1, b: 2, c: 3, d: 4 })
+>explicit : Symbol(explicit, Decl(differenceType.ts, 16, 5))
+>f : Symbol(f, Decl(differenceType.ts, 9, 26))
+>Abcd : Symbol(Abcd, Decl(differenceType.ts, 7, 28))
+>a : Symbol(a, Decl(differenceType.ts, 16, 26))
+>b : Symbol(b, Decl(differenceType.ts, 16, 32))
+>c : Symbol(c, Decl(differenceType.ts, 16, 38))
+>d : Symbol(d, Decl(differenceType.ts, 16, 44))
 
-const inferred = f({ a: 1, b: 2 })
->inferred : Symbol(inferred, Decl(differenceType.ts, 20, 5))
->f : Symbol(f, Decl(differenceType.ts, 12, 26))
->a : Symbol(a, Decl(differenceType.ts, 20, 20))
->b : Symbol(b, Decl(differenceType.ts, 20, 26))
+const inferred = f({ a: 1, b: 2, c: 3, d: 5 })
+>inferred : Symbol(inferred, Decl(differenceType.ts, 17, 5))
+>f : Symbol(f, Decl(differenceType.ts, 9, 26))
+>a : Symbol(a, Decl(differenceType.ts, 17, 20))
+>b : Symbol(b, Decl(differenceType.ts, 17, 26))
+>c : Symbol(c, Decl(differenceType.ts, 17, 32))
+>d : Symbol(d, Decl(differenceType.ts, 17, 38))
 
