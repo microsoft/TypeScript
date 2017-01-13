@@ -1,30 +1,82 @@
 === tests/cases/conformance/types/rest/objectRestNested.ts ===
-let abc: { a: number, b: string, c: boolean };
->abc : Symbol(abc, Decl(objectRestNested.ts, 0, 3))
->a : Symbol(a, Decl(objectRestNested.ts, 0, 10))
->b : Symbol(b, Decl(objectRestNested.ts, 0, 21))
->c : Symbol(c, Decl(objectRestNested.ts, 0, 32))
+type Abc = { a: number, b: string, c: boolean }
+>Abc : Symbol(Abc, Decl(objectRestNested.ts, 0, 0))
+>a : Symbol(a, Decl(objectRestNested.ts, 0, 12))
+>b : Symbol(b, Decl(objectRestNested.ts, 0, 23))
+>c : Symbol(c, Decl(objectRestNested.ts, 0, 34))
+
+let abc: Abc;
+>abc : Symbol(abc, Decl(objectRestNested.ts, 1, 3))
+>Abc : Symbol(Abc, Decl(objectRestNested.ts, 0, 0))
 
 var { a, ...{ b, ...rest } } = abc;
->a : Symbol(a, Decl(objectRestNested.ts, 1, 5), Decl(objectRestNested.ts, 2, 3))
->b : Symbol(b, Decl(objectRestNested.ts, 1, 13), Decl(objectRestNested.ts, 3, 3))
->rest : Symbol(rest, Decl(objectRestNested.ts, 1, 16))
->abc : Symbol(abc, Decl(objectRestNested.ts, 0, 3))
+>a : Symbol(a, Decl(objectRestNested.ts, 2, 5), Decl(objectRestNested.ts, 3, 3))
+>b : Symbol(b, Decl(objectRestNested.ts, 2, 13), Decl(objectRestNested.ts, 4, 3))
+>rest : Symbol(rest, Decl(objectRestNested.ts, 2, 16))
+>abc : Symbol(abc, Decl(objectRestNested.ts, 1, 3))
 
 var a: number;
->a : Symbol(a, Decl(objectRestNested.ts, 1, 5), Decl(objectRestNested.ts, 2, 3))
+>a : Symbol(a, Decl(objectRestNested.ts, 2, 5), Decl(objectRestNested.ts, 3, 3))
 
 var b: string;
->b : Symbol(b, Decl(objectRestNested.ts, 1, 13), Decl(objectRestNested.ts, 3, 3))
+>b : Symbol(b, Decl(objectRestNested.ts, 2, 13), Decl(objectRestNested.ts, 4, 3))
 
 var other: { c: boolean };
->other : Symbol(other, Decl(objectRestNested.ts, 4, 3))
->c : Symbol(c, Decl(objectRestNested.ts, 4, 12))
+>other : Symbol(other, Decl(objectRestNested.ts, 5, 3))
+>c : Symbol(c, Decl(objectRestNested.ts, 5, 12))
 
 ({ a, ...{ b, ...other } } = abc);
->a : Symbol(a, Decl(objectRestNested.ts, 5, 2))
->b : Symbol(b, Decl(objectRestNested.ts, 5, 10))
->other : Symbol(other, Decl(objectRestNested.ts, 4, 3))
->abc : Symbol(abc, Decl(objectRestNested.ts, 0, 3))
+>a : Symbol(a, Decl(objectRestNested.ts, 6, 2))
+>b : Symbol(b, Decl(objectRestNested.ts, 6, 10))
+>other : Symbol(other, Decl(objectRestNested.ts, 5, 3))
+>abc : Symbol(abc, Decl(objectRestNested.ts, 1, 3))
+
+function f<T extends Abc>(t: T) {
+>f : Symbol(f, Decl(objectRestNested.ts, 6, 34))
+>T : Symbol(T, Decl(objectRestNested.ts, 8, 11))
+>Abc : Symbol(Abc, Decl(objectRestNested.ts, 0, 0))
+>t : Symbol(t, Decl(objectRestNested.ts, 8, 26))
+>T : Symbol(T, Decl(objectRestNested.ts, 8, 11))
+
+    let other: rest(rest(T, 'a'), 'b')
+>other : Symbol(other, Decl(objectRestNested.ts, 9, 7))
+>T : Symbol(T, Decl(objectRestNested.ts, 8, 11))
+
+    var { a, ...{ b, ...rest } } = t;
+>a : Symbol(a, Decl(objectRestNested.ts, 10, 9))
+>b : Symbol(b, Decl(objectRestNested.ts, 10, 17))
+>rest : Symbol(rest, Decl(objectRestNested.ts, 10, 20))
+>t : Symbol(t, Decl(objectRestNested.ts, 8, 26))
+
+    ({ a, ...{ b, ...rest } } = t);
+>a : Symbol(a, Decl(objectRestNested.ts, 11, 6))
+>b : Symbol(b, Decl(objectRestNested.ts, 11, 14))
+>rest : Symbol(rest, Decl(objectRestNested.ts, 10, 20))
+>t : Symbol(t, Decl(objectRestNested.ts, 8, 26))
+
+    other = rest;
+>other : Symbol(other, Decl(objectRestNested.ts, 9, 7))
+>rest : Symbol(rest, Decl(objectRestNested.ts, 10, 20))
+
+    rest = other;
+>rest : Symbol(rest, Decl(objectRestNested.ts, 10, 20))
+>other : Symbol(other, Decl(objectRestNested.ts, 9, 7))
+
+    rest.c;
+>rest.c : Symbol(c, Decl(objectRestNested.ts, 0, 34))
+>rest : Symbol(rest, Decl(objectRestNested.ts, 10, 20))
+>c : Symbol(c, Decl(objectRestNested.ts, 0, 34))
+
+    return rest;
+>rest : Symbol(rest, Decl(objectRestNested.ts, 10, 20))
+}
+
+f({ a: 1, b: 'foo', c: false, d: 54 });
+>f : Symbol(f, Decl(objectRestNested.ts, 6, 34))
+>a : Symbol(a, Decl(objectRestNested.ts, 18, 3))
+>b : Symbol(b, Decl(objectRestNested.ts, 18, 9))
+>c : Symbol(c, Decl(objectRestNested.ts, 18, 19))
+>d : Symbol(d, Decl(objectRestNested.ts, 18, 29))
+
 
 

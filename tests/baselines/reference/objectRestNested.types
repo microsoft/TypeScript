@@ -1,15 +1,19 @@
 === tests/cases/conformance/types/rest/objectRestNested.ts ===
-let abc: { a: number, b: string, c: boolean };
->abc : { a: number; b: string; c: boolean; }
+type Abc = { a: number, b: string, c: boolean }
+>Abc : Abc
 >a : number
 >b : string
 >c : boolean
+
+let abc: Abc;
+>abc : Abc
+>Abc : Abc
 
 var { a, ...{ b, ...rest } } = abc;
 >a : number
 >b : string
 >rest : { c: boolean; }
->abc : { a: number; b: string; c: boolean; }
+>abc : Abc
 
 var a: number;
 >a : number
@@ -22,13 +26,73 @@ var other: { c: boolean };
 >c : boolean
 
 ({ a, ...{ b, ...other } } = abc);
->({ a, ...{ b, ...other } } = abc) : { a: number; b: string; c: boolean; }
->{ a, ...{ b, ...other } } = abc : { a: number; b: string; c: boolean; }
+>({ a, ...{ b, ...other } } = abc) : Abc
+>{ a, ...{ b, ...other } } = abc : Abc
 >{ a, ...{ b, ...other } } : { c: boolean; b: string; a: number; }
 >a : number
 >{ b, ...other } : { c: boolean; b: string; }
 >b : string
 >other : { c: boolean; }
->abc : { a: number; b: string; c: boolean; }
+>abc : Abc
+
+function f<T extends Abc>(t: T) {
+>f : <T extends Abc>(t: T) => rest(rest(T, "a"), "b")
+>T : T
+>Abc : Abc
+>t : T
+>T : T
+
+    let other: rest(rest(T, 'a'), 'b')
+>other : rest(rest(T, "a"), "b")
+>T : T
+
+    var { a, ...{ b, ...rest } } = t;
+>a : number
+>b : string
+>rest : rest(rest(T, "a"), "b")
+>t : T
+
+    ({ a, ...{ b, ...rest } } = t);
+>({ a, ...{ b, ...rest } } = t) : T
+>{ a, ...{ b, ...rest } } = t : T
+>{ a, ...{ b, ...rest } } : any
+>a : number
+>{ b, ...rest } : any
+>b : string
+>rest : rest(rest(T, "a"), "b")
+>t : T
+
+    other = rest;
+>other = rest : rest(rest(T, "a"), "b")
+>other : rest(rest(T, "a"), "b")
+>rest : rest(rest(T, "a"), "b")
+
+    rest = other;
+>rest = other : rest(rest(T, "a"), "b")
+>rest : rest(rest(T, "a"), "b")
+>other : rest(rest(T, "a"), "b")
+
+    rest.c;
+>rest.c : boolean
+>rest : rest(rest(T, "a"), "b")
+>c : boolean
+
+    return rest;
+>rest : rest(rest(T, "a"), "b")
+}
+
+f({ a: 1, b: 'foo', c: false, d: 54 });
+>f({ a: 1, b: 'foo', c: false, d: 54 }) : { c: false; d: number; }
+>f : <T extends Abc>(t: T) => rest(rest(T, "a"), "b")
+>{ a: 1, b: 'foo', c: false, d: 54 } : { a: number; b: string; c: false; d: number; }
+>a : number
+>1 : 1
+>b : string
+>'foo' : "foo"
+>c : boolean
+>false : false
+>d : number
+>54 : 54
+
 
 

@@ -35,8 +35,8 @@ function f<T extends Abcuxyz, U extends Abcuxyz, V extends string> (t: T, u: U, 
     t_a = a_xyz; // error, this makes no sense.
 
     var bn: BN;
-    t_a = bn; // error, we have no idea what T is supposed to be
-    bn = t_a; // would be ok only if T extends BN
+    t_a = bn; // error, we have no idea what other properties T has
+    bn = t_a; // ok, T - a still has b:any
 }
 
 
@@ -63,6 +63,6 @@ function f(t, u, v) {
     var a_xyz;
     t_a = a_xyz; // error, this makes no sense.
     var bn;
-    t_a = bn; // error, we have no idea what T is supposed to be
-    bn = t_a; // would be ok only if T extends BN
+    t_a = bn; // error, we have no idea what other properties T has
+    bn = t_a; // ok, T - a still has b:any
 }
