@@ -3142,7 +3142,7 @@ namespace ts {
                 return mapType(source, t => getRestType(t, remove));
             }
 
-            if (source.flags & (TypeFlags.Object | TypeFlags.Primitive | TypeFlags.NonPrimitive) ) {
+            if (source.flags & (TypeFlags.Object | TypeFlags.Primitive | TypeFlags.NonPrimitive)) {
                 if (isStringLiteralUnion(remove)) {
                     return createRestType(source, remove);
                 }
@@ -3220,7 +3220,7 @@ namespace ts {
             let type: Type;
             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
                 if (declaration.dotDotDotToken) {
-                    if (!isValidSpreadType(parentType)) {
+                    if (parentType.flags & (TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.BooleanLike | TypeFlags.EnumLike | TypeFlags.ESSymbol)) {
                         error(declaration, Diagnostics.Rest_types_may_only_be_created_from_object_types);
                         return unknownType;
                     }
@@ -3228,7 +3228,7 @@ namespace ts {
                     for (const element of pattern.elements) {
                         if (!(element as BindingElement).dotDotDotToken) {
                             literalMembers.push(
-                                createLiteralType(
+                                getLiteralTypeForText(
                                     TypeFlags.StringLiteral,
                                     getTextOfPropertyName(element.propertyName || element.name as Identifier)));
                         }
@@ -4895,7 +4895,7 @@ namespace ts {
         }
 
         function getApparentTypeOfRest(type: RestType) {
-            return getRestType(getApparentType(type.source), getApparentType(type.remove));
+            return getRestType(getApparentType(type.source), type.remove);
         }
 
         /**
@@ -14758,7 +14758,7 @@ namespace ts {
                 const nonRestNames = [];
                 if (allProperties) {
                     for (let i = 0; i < allProperties.length - 1; i++) {
-                        nonRestNames.push(createLiteralType(TypeFlags.StringLiteral, getTextOfPropertyName(allProperties[i].name)));
+                        nonRestNames.push(getLiteralTypeForText(TypeFlags.StringLiteral, getTextOfPropertyName(allProperties[i].name)));
                     }
                 }
                 const type = getRestType(objectLiteralType, getUnionType(nonRestNames));
