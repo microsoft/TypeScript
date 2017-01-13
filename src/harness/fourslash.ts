@@ -425,8 +425,7 @@ namespace FourSlash {
         }
 
         private raiseError(message: string) {
-            message = this.messageAtLastKnownMarker(message);
-            throw new Error(message);
+            throw new Error(this.messageAtLastKnownMarker(message));
         }
 
         private messageAtLastKnownMarker(message: string) {
@@ -721,6 +720,27 @@ namespace FourSlash {
             if (completions && completions.isGlobalCompletion !== expected) {
                 this.raiseError(`verifyCompletionListIsGlobal failed - expected result to be ${completions.isGlobalCompletion}`);
             }
+        }
+
+        public verifyCompletionsAt(markerName: string, expected: string[]) {
+            this.goToMarker(markerName);
+
+            const actualCompletions = this.getCompletionListAtCaret();
+            if (!actualCompletions) {
+                this.raiseError(`No completions at position '${this.currentCaretPosition}'.`);
+            }
+
+            const actual = actualCompletions.entries;
+
+            if (actual.length !== expected.length) {
+                this.raiseError(`Expected ${expected.length} completions, got ${actual.map(a => a.name)}.`);
+            }
+
+            ts.zipWith(actual, expected, (completion, expectedCompletion, index) => {
+                if (completion.name !== expectedCompletion) {
+                    this.raiseError(`Expected completion at index ${index} to be ${expectedCompletion}, got ${completion.name}`);
+                }
+            });
         }
 
         public verifyCompletionListContains(symbol: string, text?: string, documentation?: string, kind?: string, spanIndex?: number) {
@@ -3164,6 +3184,10 @@ namespace FourSlashInterface {
     export class Verify extends VerifyNegatable {
         constructor(state: FourSlash.TestState) {
             super(state);
+        }
+
+        public completionsAt(markerName: string, completions: string[]) {
+            this.state.verifyCompletionsAt(markerName, completions);
         }
 
         public quickInfoIs(expectedText: string, expectedDocumentation?: string) {
