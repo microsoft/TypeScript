@@ -144,7 +144,7 @@ namespace ts {
         }
 
         let typeRoots: string[];
-        forEachAncestorDirectory(currentDirectory, directory => {
+        forEachAncestorDirectory(ts.normalizePath(currentDirectory), directory => {
             const atTypes = combinePaths(directory, nodeModulesAtTypes);
             if (host.directoryExists(atTypes)) {
                 (typeRoots || (typeRoots = [])).push(atTypes);
