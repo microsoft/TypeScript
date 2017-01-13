@@ -3143,7 +3143,7 @@ namespace ts {
             }
 
             if (source.flags & (TypeFlags.Object | TypeFlags.Primitive | TypeFlags.NonPrimitive) ) {
-                if(isStringLiteralUnion(remove)) {
+                if (isStringLiteralUnion(remove)) {
                     return createRestType(source, remove);
                 }
                 else if (remove.flags & TypeFlags.String) {
