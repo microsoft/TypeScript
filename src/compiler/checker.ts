@@ -16129,9 +16129,20 @@ namespace ts {
         }
 
         function checkRestType(node: RestTypeNode) {
+            const source = getTypeFromTypeNode(node.source);
             const remove = getTypeFromTypeNode(node.remove);
             if (!(remove.flags & (TypeFlags.Never | TypeFlags.String) || isStringLiteralUnion(remove))) {
                 error(node.remove, Diagnostics.The_right_side_of_a_rest_type_must_be_a_string_or_string_literal_union);
+            }
+            else if (!(remove.flags & (TypeFlags.Never | TypeFlags.String))) {
+                const removeNames = remove.flags & TypeFlags.Union ?
+                    map((remove as UnionType).types, t => (t as LiteralType).text) :
+                    [(remove as LiteralType).text];
+                for (const name of removeNames) {
+                    if (!getPropertyOfType(source, name)) {
+                        error(node.source, Diagnostics.Property_0_is_missing_in_type_1, name, typeToString(source));
+                    }
+                }
             }
             checkSourceElement(node.source);
             checkSourceElement(node.remove);
