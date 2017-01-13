@@ -108,7 +108,7 @@ namespace ts {
             getAliasedSymbol: resolveAlias,
             getEmitResolver,
             getExportsOfModule: getExportsOfModuleAsArray,
-            resolveExternalModuleSymbol,
+            getExportsAndPropertiesOfModule,
             getAmbientModules,
             getJsxElementAttributesType,
             getJsxIntrinsicTagNames,
@@ -1526,6 +1526,15 @@ namespace ts {
 
         function getExportsOfModuleAsArray(moduleSymbol: Symbol): Symbol[] {
             return symbolsToArray(getExportsOfModule(moduleSymbol));
+        }
+
+        function getExportsAndPropertiesOfModule(moduleSymbol: Symbol): Symbol[] {
+            const exports = getExportsOfModuleAsArray(moduleSymbol);
+            const exportEquals = resolveExternalModuleSymbol(moduleSymbol);
+            if (exportEquals !== moduleSymbol) {
+                addRange(exports, getPropertiesOfType(getTypeOfSymbol(exportEquals)));
+            }
+            return exports;
         }
 
         function tryGetMemberInModuleExports(memberName: string, moduleSymbol: Symbol): Symbol | undefined {
