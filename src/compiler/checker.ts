@@ -12332,16 +12332,18 @@ namespace ts {
         }
 
         function checkNonNullExpression(node: Expression | QualifiedName) {
-            const type = checkExpression(node);
-            if (strictNullChecks) {
-                const kind = getFalsyFlags(type) & TypeFlags.Nullable;
-                if (kind) {
-                    error(node, kind & TypeFlags.Undefined ? kind & TypeFlags.Null ?
-                        Diagnostics.Object_is_possibly_null_or_undefined :
-                        Diagnostics.Object_is_possibly_undefined :
-                        Diagnostics.Object_is_possibly_null);
-                }
-                return getNonNullableType(type);
+            return checkNonNullType(checkExpression(node), node);
+        }
+
+        function checkNonNullType(type: Type, errorNode: Node): Type {
+            const kind = (strictNullChecks ? getFalsyFlags(type) : type.flags) & TypeFlags.Nullable;
+            if (kind) {
+                error(errorNode, kind & TypeFlags.Undefined ? kind & TypeFlags.Null ?
+                    Diagnostics.Object_is_possibly_null_or_undefined :
+                    Diagnostics.Object_is_possibly_undefined :
+                    Diagnostics.Object_is_possibly_null);
+                const t = getNonNullableType(type);
+                return t.flags & (TypeFlags.Nullable | TypeFlags.Never) ? unknownType : t;
             }
             return type;
         }
@@ -14880,17 +14882,9 @@ namespace ts {
                     if (leftType === silentNeverType || rightType === silentNeverType) {
                         return silentNeverType;
                     }
-                    // TypeScript 1.0 spec (April 2014): 4.19.1
-                    // These operators require their operands to be of type Any, the Number primitive type,
-                    // or an enum type. Operands of an enum type are treated
-                    // as having the primitive type Number. If one operand is the null or undefined value,
-                    // it is treated as having the type of the other operand.
-                    // The result is always of the Number primitive type.
-                    if (leftType.flags & TypeFlags.Nullable) leftType = rightType;
-                    if (rightType.flags & TypeFlags.Nullable) rightType = leftType;
 
-                    leftType = getNonNullableType(leftType);
-                    rightType = getNonNullableType(rightType);
+                    leftType = checkNonNullType(leftType, left);
+                    rightType = checkNonNullType(rightType, right);
 
                     let suggestedOperator: SyntaxKind;
                     // if a user tries to apply a bitwise operator to 2 boolean operands
@@ -14915,16 +14909,11 @@ namespace ts {
                     if (leftType === silentNeverType || rightType === silentNeverType) {
                         return silentNeverType;
                     }
-                    // TypeScript 1.0 spec (April 2014): 4.19.2
-                    // The binary + operator requires both operands to be of the Number primitive type or an enum type,
-                    // or at least one of the operands to be of type Any or the String primitive type.
 
-                    // If one operand is the null or undefined value, it is treated as having the type of the other operand.
-                    if (leftType.flags & TypeFlags.Nullable) leftType = rightType;
-                    if (rightType.flags & TypeFlags.Nullable) rightType = leftType;
-
-                    leftType = getNonNullableType(leftType);
-                    rightType = getNonNullableType(rightType);
+                    if (!isTypeOfKind(leftType, TypeFlags.Any | TypeFlags.StringLike) && !isTypeOfKind(rightType, TypeFlags.Any | TypeFlags.StringLike)) {
+                        leftType = checkNonNullType(leftType, left);
+                        rightType = checkNonNullType(rightType, right);
+                    }
 
                     let resultType: Type;
                     if (isTypeOfKind(leftType, TypeFlags.NumberLike) && isTypeOfKind(rightType, TypeFlags.NumberLike)) {
