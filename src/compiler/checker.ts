@@ -3141,6 +3141,10 @@ namespace ts {
             if (source.flags & TypeFlags.Union) {
                 return mapType(source, t => getRestType(t, remove));
             }
+            if (source.flags & TypeFlags.Rest) {
+                const rest = source as RestType;
+                return getRestType(rest.source, getUnionType([rest.remove, remove]));
+            }
 
             if (source.flags & (TypeFlags.Object | TypeFlags.Primitive | TypeFlags.NonPrimitive)) {
                 if (isStringLiteralUnion(remove)) {
