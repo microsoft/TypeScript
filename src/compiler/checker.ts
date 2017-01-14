@@ -4842,8 +4842,6 @@ namespace ts {
 
         function getDefaultOfTypeParameter(typeParameter: TypeParameter): Type {
             return hasNonCircularDefault(typeParameter) ? getDefaultFromTypeParameter(typeParameter) : undefined;
-            // const defaultType = getResolvedDefault(typeParameter);
-            // return defaultType !== noConstraintOrDefaultType && defaultType !== circularConstraintOrDefaultType ? defaultType : undefined;
         }
 
         function hasNonCircularDefault(type: TypeParameter) {
@@ -4870,11 +4868,9 @@ namespace ts {
                 return getResolvedDefault(<TypeParameter>type);
             }
             if (type.flags & TypeFlags.UnionOrIntersection) {
-                const types = (<UnionOrIntersectionType>type).types;
-                const defaultTypes = filter(map(types, getResolvedDefaultWorker), x => x !== circularConstraintOrDefaultType);
-                return type.flags & TypeFlags.Union && defaultTypes.length === types.length ? getUnionType(defaultTypes) :
-                    type.flags & TypeFlags.Intersection && defaultTypes.length ? getIntersectionType(defaultTypes) :
-                    undefined;
+                const types = map((<UnionOrIntersectionType>type).types, getResolvedDefaultWorker);
+                return some(types, x => x === circularConstraintOrDefaultType) ? circularConstraintOrDefaultType :
+                    type.flags & TypeFlags.Union ? getUnionType(types) : getIntersectionType(types);
             }
             return type;
         }
@@ -5178,30 +5174,28 @@ namespace ts {
         }
 
         function fillMissingTypeArguments(typeArguments: Type[] | undefined, typeParameters: TypeParameter[] | undefined, minTypeArgumentCount: number) {
-            const numTypeArguments = typeArguments ? typeArguments.length : 0;
             const numTypeParameters = typeParameters ? typeParameters.length : 0;
-            if (numTypeArguments >= minTypeArgumentCount && numTypeArguments <= numTypeParameters) {
-                if (numTypeParameters) {
+            if (numTypeParameters) {
+                const numTypeArguments = typeArguments ? typeArguments.length : 0;
+                if (numTypeArguments >= minTypeArgumentCount && numTypeArguments <= numTypeParameters) {
                     if (!typeArguments) {
                         typeArguments = [];
                     }
+
+                    // Map an unsatisfied type parameter with a default type to the default type.
+                    // If a type parameter does not have a default type, or if the default type
+                    // is a circular reference, the empty object type is used.
                     const mapper: TypeMapper = t => {
-                        for (let i = 0; i < numTypeParameters; i++) {
-                            if (t === typeParameters[i]) {
-                                if (!typeArguments[i]) {
-                                    typeArguments[i] = emptyObjectType;
-                                    const defaultType = getDefaultOfTypeParameter(typeParameters[i]);
-                                    if (defaultType) {
-                                        typeArguments[i] = instantiateType(defaultType, mapper);
-                                    }
-                                }
-                                return typeArguments[i];
-                            }
-                        }
-                        return t;
+                        const i = indexOf(typeParameters, t);
+                        return i >= 0
+                            ? typeArguments[i] || (typeArguments[i] =
+                                instantiateType(getDefaultOfTypeParameter(typeParameters[i]), mapper) ||
+                                emptyObjectType)
+                            : t;
                     };
+
                     for (let i = numTypeArguments; i < numTypeParameters; i++) {
-                        typeArguments[i] = instantiateType(typeParameters[i], mapper);
+                        instantiateType(typeParameters[i], mapper);
                     }
                 }
             }
