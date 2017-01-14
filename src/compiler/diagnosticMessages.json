@@ -2517,7 +2517,7 @@
         "category": "Message",
         "code": 6019
     },
-    "Compile the project in the given directory.": {
+    "Compile the project given the path to its configuration file, or to a folder with a 'tsconfig.json'": {
         "category": "Message",
         "code": 6020
     },
@@ -2576,6 +2576,10 @@
     "STRATEGY": {
         "category": "Message",
         "code": 6039
+    },
+    "FILE OR DIRECTORY": {
+        "category": "Message",
+        "code": 6040
     },
     "Compilation complete. Watching for file changes.": {
         "category": "Message",
@@ -3247,7 +3251,7 @@
         "category": "Message",
         "code": 90003
     },
-    "Remove unused identifiers.": {
+    "Remove declaration for: {0}": {
         "category": "Message",
         "code": 90004
     },

@@ -420,10 +420,10 @@ namespace ts.codefix {
                         const options = context.program.getCompilerOptions();
 
                         return tryGetModuleNameFromAmbientModule() ||
-                            tryGetModuleNameFromBaseUrl() ||
-                            tryGetModuleNameFromRootDirs() ||
                             tryGetModuleNameFromTypeRoots() ||
                             tryGetModuleNameAsNodeModule() ||
+                            tryGetModuleNameFromBaseUrl() ||
+                            tryGetModuleNameFromRootDirs() ||
                             removeFileExtension(getRelativePath(moduleFileName, sourceDirectory));
 
                         function tryGetModuleNameFromAmbientModule(): string {
@@ -443,6 +443,7 @@ namespace ts.codefix {
                                 return undefined;
                             }
 
+                            const relativeNameWithIndex = removeFileExtension(relativeName);
                             relativeName = removeExtensionAndIndexPostFix(relativeName);
 
                             if (options.paths) {
@@ -462,7 +463,7 @@ namespace ts.codefix {
                                                 return key.replace("\*", matchedStar);
                                             }
                                         }
-                                        else if (pattern === relativeName) {
+                                        else if (pattern === relativeName || pattern === relativeNameWithIndex) {
                                             return key;
                                         }
                                     }

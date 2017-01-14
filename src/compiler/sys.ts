@@ -18,7 +18,7 @@ namespace ts {
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
         /**
-         * @pollingInterval - this parameter is used in polling-based watchers and ignored in watchers that 
+         * @pollingInterval - this parameter is used in polling-based watchers and ignored in watchers that
          * use native OS file watching
          */
         watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;

@@ -29,8 +29,15 @@ class Removable {
     removed: string;
     remainder: string;
 }
+interface I {
+    m(): void;
+    removed: string;
+    remainder: string;
+}
 var removable = new Removable();
 var { removed, ...removableRest } = removable;
+var i: I = removable;
+var { removed, ...removableRest2 } = i;
 
 let computed = 'b';
 let computed2 = 'a';
@@ -74,6 +81,8 @@ class Removable {
 }
 var removable = new Removable();
 var { removed } = removable, removableRest = __rest(removable, ["removed"]);
+var i = removable;
+var { removed } = i, removableRest2 = __rest(i, ["removed"]);
 let computed = 'b';
 let computed2 = 'a';
 var _g = computed, stillNotGreat = o[_g], _h = computed2, soSo = o[_h], o = __rest(o, [typeof _g === "symbol" ? _g : _g + "", typeof _h === "symbol" ? _h : _h + ""]);

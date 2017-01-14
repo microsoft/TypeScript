@@ -116,11 +116,16 @@ class B3 extends A3 {
 
 
 //// [protectedMembers.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 // Class with protected members
 var C1 = (function () {
     function C1() {
@@ -137,7 +142,7 @@ var C1 = (function () {
 var C2 = (function (_super) {
     __extends(C2, _super);
     function C2() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     C2.prototype.f = function () {
         return _super.prototype.f.call(this) + this.x;
@@ -151,7 +156,7 @@ var C2 = (function (_super) {
 var C3 = (function (_super) {
     __extends(C3, _super);
     function C3() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     C3.prototype.f = function () {
         return _super.prototype.f.call(this);
@@ -187,14 +192,14 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     C.foo = function (a, b, c, d, e) {
         a.x = 1; // Error, access must be through C or type derived from C
@@ -208,7 +213,7 @@ var C = (function (_super) {
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return D;
 }(C));
@@ -239,7 +244,7 @@ var A2 = (function () {
 var B2 = (function (_super) {
     __extends(B2, _super);
     function B2() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return B2;
 }(A2));
@@ -252,7 +257,7 @@ var A3 = (function () {
 var B3 = (function (_super) {
     __extends(B3, _super);
     function B3() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return B3;
 }(A3));

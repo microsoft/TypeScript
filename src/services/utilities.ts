@@ -600,7 +600,7 @@ namespace ts {
         return !!findChildOfKind(n, kind, sourceFile);
     }
 
-    export function findChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFile): Node {
+    export function findChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFile): Node | undefined {
         return forEach(n.getChildren(sourceFile), c => c.kind === kind && c);
     }
 
@@ -1111,6 +1111,10 @@ namespace ts {
             const commentText = sourceFile.text.substring(c.pos, c.end);
             return !tripleSlashDirectivePrefixRegex.test(commentText);
         }
+    }
+
+    export function createTextSpanFromNode(node: Node, sourceFile?: SourceFile): TextSpan {
+        return createTextSpanFromBounds(node.getStart(sourceFile), node.getEnd());
     }
 }
 

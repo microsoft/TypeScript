@@ -27,3 +27,6 @@
 // contextually typed parameters.
 let twelve = (f => f(12))(i => i);
 let eleven = (o => o.a(11))({ a: function(n) { return n; } });
+// missing arguments
+(function(x, undefined) { return x; })(42);
+((x, y, z) => 42)();

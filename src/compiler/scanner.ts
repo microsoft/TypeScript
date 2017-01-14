@@ -98,6 +98,7 @@ namespace ts {
         "new": SyntaxKind.NewKeyword,
         "null": SyntaxKind.NullKeyword,
         "number": SyntaxKind.NumberKeyword,
+        "object": SyntaxKind.ObjectKeyword,
         "package": SyntaxKind.PackageKeyword,
         "private": SyntaxKind.PrivateKeyword,
         "protected": SyntaxKind.ProtectedKeyword,
@@ -733,11 +734,11 @@ namespace ts {
         return comments;
     }
 
-    export function getLeadingCommentRanges(text: string, pos: number): CommentRange[] {
+    export function getLeadingCommentRanges(text: string, pos: number): CommentRange[] | undefined {
         return reduceEachLeadingCommentRange(text, pos, appendCommentRange, undefined, undefined);
     }
 
-    export function getTrailingCommentRanges(text: string, pos: number): CommentRange[] {
+    export function getTrailingCommentRanges(text: string, pos: number): CommentRange[] | undefined {
         return reduceEachTrailingCommentRange(text, pos, appendCommentRange, undefined, undefined);
     }
 

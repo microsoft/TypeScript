@@ -1,8 +1,6 @@
-/// <reference path='../compiler/utilities.ts' />
-
 /* @internal */
 namespace ts.Completions {
-    export function getCompletionsAtPosition(host: LanguageServiceHost, typeChecker: TypeChecker, log: (message: string) => void, compilerOptions: CompilerOptions, sourceFile: SourceFile, position: number): CompletionInfo {
+    export function getCompletionsAtPosition(host: LanguageServiceHost, typeChecker: TypeChecker, log: (message: string) => void, compilerOptions: CompilerOptions, sourceFile: SourceFile, position: number): CompletionInfo | undefined {
         if (isInReferenceComment(sourceFile, position)) {
             return getTripleSlashReferenceCompletion(sourceFile, position);
         }
@@ -134,7 +132,7 @@ namespace ts.Completions {
             return uniqueNames;
         }
 
-        function getStringLiteralCompletionEntries(sourceFile: SourceFile, position: number) {
+        function getStringLiteralCompletionEntries(sourceFile: SourceFile, position: number): CompletionInfo | undefined {
             const node = findPrecedingToken(position, sourceFile);
             if (!node || node.kind !== SyntaxKind.StringLiteral) {
                 return undefined;
@@ -174,7 +172,7 @@ namespace ts.Completions {
                 return getStringLiteralCompletionEntriesFromModuleNames(<StringLiteral>node);
             }
             else {
-                const argumentInfo = SignatureHelp.getContainingArgumentInfo(node, position, sourceFile);
+                const argumentInfo = SignatureHelp.getImmediatelyContainingArgumentInfo(node, position, sourceFile);
                 if (argumentInfo) {
                     // Get string literal completions from specialized signatures of the target
                     // i.e. declare function f(a: 'A');
@@ -188,7 +186,7 @@ namespace ts.Completions {
             }
         }
 
-        function getStringLiteralCompletionEntriesFromPropertyAssignment(element: ObjectLiteralElement) {
+        function getStringLiteralCompletionEntriesFromPropertyAssignment(element: ObjectLiteralElement): CompletionInfo | undefined {
             const type = typeChecker.getContextualType((<ObjectLiteralExpression>element.parent));
             const entries: CompletionEntry[] = [];
             if (type) {
@@ -199,7 +197,7 @@ namespace ts.Completions {
             }
         }
 
-        function getStringLiteralCompletionEntriesFromCallExpression(argumentInfo: SignatureHelp.ArgumentListInfo) {
+        function getStringLiteralCompletionEntriesFromCallExpression(argumentInfo: SignatureHelp.ArgumentListInfo): CompletionInfo | undefined {
             const candidates: Signature[] = [];
             const entries: CompletionEntry[] = [];
 
@@ -219,7 +217,7 @@ namespace ts.Completions {
             return undefined;
         }
 
-        function getStringLiteralCompletionEntriesFromElementAccess(node: ElementAccessExpression) {
+        function getStringLiteralCompletionEntriesFromElementAccess(node: ElementAccessExpression): CompletionInfo | undefined {
             const type = typeChecker.getTypeAtLocation(node.expression);
             const entries: CompletionEntry[] = [];
             if (type) {
@@ -231,7 +229,7 @@ namespace ts.Completions {
             return undefined;
         }
 
-        function getStringLiteralCompletionEntriesFromContextualType(node: StringLiteral) {
+        function getStringLiteralCompletionEntriesFromContextualType(node: StringLiteral): CompletionInfo | undefined {
             const type = typeChecker.getContextualType(node);
             if (type) {
                 const entries: CompletionEntry[] = [];
@@ -243,7 +241,7 @@ namespace ts.Completions {
             return undefined;
         }
 
-        function addStringLiteralCompletionsFromType(type: Type, result: CompletionEntry[]): void {
+        function addStringLiteralCompletionsFromType(type: Type, result: Push<CompletionEntry>): void {
             if (type && type.flags & TypeFlags.TypeParameter) {
                 type = typeChecker.getApparentType(type);
             }
@@ -251,17 +249,17 @@ namespace ts.Completions {
                 return;
             }
             if (type.flags & TypeFlags.Union) {
-                forEach((<UnionType>type).types, t => addStringLiteralCompletionsFromType(t, result));
-            }
-            else {
-                if (type.flags & TypeFlags.StringLiteral) {
-                    result.push({
-                        name: (<LiteralType>type).text,
-                        kindModifiers: ScriptElementKindModifier.none,
-                        kind: ScriptElementKind.variableElement,
-                        sortText: "0"
-                    });
+                for (const t of (<UnionType>type).types) {
+                    addStringLiteralCompletionsFromType(t, result);
                 }
+            }
+            else if (type.flags & TypeFlags.StringLiteral) {
+                result.push({
+                    name: (<LiteralType>type).text,
+                    kindModifiers: ScriptElementKindModifier.none,
+                    kind: ScriptElementKind.variableElement,
+                    sortText: "0"
+                });
             }
         }
 
@@ -1320,14 +1318,14 @@ namespace ts.Completions {
             isMemberCompletion = true;
             isNewIdentifierLocation = false;
 
-            let exports: Symbol[];
-            const moduleSpecifierSymbol = typeChecker.getSymbolAtLocation(importOrExportDeclaration.moduleSpecifier);
-            if (moduleSpecifierSymbol) {
-                exports = typeChecker.getExportsOfModule(moduleSpecifierSymbol);
+            const moduleSpecifierSymbol = typeChecker.getSymbolAtLocation(moduleSpecifier);
+            if (!moduleSpecifierSymbol) {
+                symbols = emptyArray;
+                return true;
             }
 
-            symbols = exports ? filterNamedImportOrExportCompletionItems(exports, namedImportsOrExports.elements) : emptyArray;
-
+            const exports = typeChecker.getExportsAndPropertiesOfModule(moduleSpecifierSymbol);
+            symbols = filterNamedImportOrExportCompletionItems(exports, namedImportsOrExports.elements);
             return true;
         }
 
