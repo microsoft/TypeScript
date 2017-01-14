@@ -1000,6 +1000,23 @@ namespace ts {
                         emitTypeWithNewGetSymbolAccessibilityDiagnostic(node.constraint, getTypeParameterConstraintVisibilityError);
                     }
                 }
+                if (node.default && !isPrivateMethodTypeParameter(node)) {
+                    write(" = ");
+                    if (node.parent.kind === SyntaxKind.FunctionType ||
+                        node.parent.kind === SyntaxKind.ConstructorType ||
+                        (node.parent.parent && node.parent.parent.kind === SyntaxKind.TypeLiteral)) {
+                        Debug.assert(node.parent.kind === SyntaxKind.MethodDeclaration ||
+                            node.parent.kind === SyntaxKind.MethodSignature ||
+                            node.parent.kind === SyntaxKind.FunctionType ||
+                            node.parent.kind === SyntaxKind.ConstructorType ||
+                            node.parent.kind === SyntaxKind.CallSignature ||
+                            node.parent.kind === SyntaxKind.ConstructSignature);
+                        emitType(node.default);
+                    }
+                    else {
+                        emitTypeWithNewGetSymbolAccessibilityDiagnostic(node.default, getTypeParameterConstraintVisibilityError);
+                    }
+                }
 
                 function getTypeParameterConstraintVisibilityError(): SymbolAccessibilityDiagnostic {
                     // Type parameter constraints are named by user so we should always be able to name it

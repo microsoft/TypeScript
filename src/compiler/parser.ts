@@ -66,6 +66,7 @@ namespace ts {
             case SyntaxKind.TypeParameter:
                 return visitNode(cbNode, (<TypeParameterDeclaration>node).name) ||
                     visitNode(cbNode, (<TypeParameterDeclaration>node).constraint) ||
+                    visitNode(cbNode, (<TypeParameterDeclaration>node).default) ||
                     visitNode(cbNode, (<TypeParameterDeclaration>node).expression);
             case SyntaxKind.ShorthandPropertyAssignment:
                 return visitNodes(cbNodes, node.decorators) ||
@@ -2096,6 +2097,10 @@ namespace ts {
                     // We do *not* want to consume the  >  as we're consuming the expression for "".
                     node.expression = parseUnaryExpressionOrHigher();
                 }
+            }
+
+            if (parseOptional(SyntaxKind.EqualsToken)) {
+                node.default = parseType();
             }
 
             return finishNode(node);
