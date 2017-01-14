@@ -1,6 +1,6 @@
 //// [unusedLocalsOnFunctionDeclarationWithinFunctionDeclaration1.ts]
 
-function greeter(person: string, person2: string) {
+function greeter(person: string, person2: string, person3: string) {
     var unused = 20;
     function maker(child: string): void {
         var unused2 = 22;
@@ -9,7 +9,7 @@ function greeter(person: string, person2: string) {
 }
 
 //// [unusedLocalsOnFunctionDeclarationWithinFunctionDeclaration1.js]
-function greeter(person, person2) {
+function greeter(person, person2, person3) {
     var unused = 20;
     function maker(child) {
         var unused2 = 22;

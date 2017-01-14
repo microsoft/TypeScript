@@ -1,6 +1,6 @@
 //// [unusedLocalsOnFunctionExpressionWithinFunctionExpression2.ts]
 
-var greeter = function (person: string, person2: string) {
+var greeter = function (person: string, person2: string, person3: string) {
     var unused = 20;
     var maker = function (child: string): void {
         var unused2 = 22;
@@ -12,7 +12,7 @@ var greeter = function (person: string, person2: string) {
 }
 
 //// [unusedLocalsOnFunctionExpressionWithinFunctionExpression2.js]
-var greeter = function (person, person2) {
+var greeter = function (person, person2, person3) {
     var unused = 20;
     var maker = function (child) {
         var unused2 = 22;

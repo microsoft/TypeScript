@@ -1,16 +1,10 @@
-tests/cases/compiler/unusedMultipleParameter2InContructor.ts(3,17): error TS6133: 'person' is declared but never used.
-tests/cases/compiler/unusedMultipleParameter2InContructor.ts(3,50): error TS6133: 'person3' is declared but never used.
 tests/cases/compiler/unusedMultipleParameter2InContructor.ts(4,13): error TS6133: 'unused' is declared but never used.
 
 
-==== tests/cases/compiler/unusedMultipleParameter2InContructor.ts (3 errors) ====
+==== tests/cases/compiler/unusedMultipleParameter2InContructor.ts (1 errors) ====
     
     class Dummy {
-        constructor(person: string, person2: string, person3: string) {
-                    ~~~~~~
-!!! error TS6133: 'person' is declared but never used.
-                                                     ~~~~~~~
-!!! error TS6133: 'person3' is declared but never used.
+        constructor(person: string, person2: string) {
             var unused = 20;
                 ~~~~~~
 !!! error TS6133: 'unused' is declared but never used.
