@@ -15694,8 +15694,8 @@ namespace ts {
         }
 
         /** 
-         * Static members being set on a constructor function may conflict with built-in Function 
-         * object properties. Esp. in ECMAScript 5 there are non-configurable and non-writable 
+         * Static members being set on a constructor function may conflict with built-in properties
+         * of Function. Esp. in ECMAScript 5 there are non-configurable and non-writable 
          * built-in properties. This check issues a transpile error when a class has a static 
          * member with the same name as a non-writable built-in property.
          * 
@@ -15705,37 +15705,21 @@ namespace ts {
          * @see http://www.ecma-international.org/ecma-262/6.0/#sec-function-instances
          */
         function checkClassForStaticPropertyNameConflicts(node: ClassLikeDeclaration) {
-            const message = Diagnostics.Static_property_0_conflicts_with_built_in_property_Function_0_of_constructor_function_1;
-            const className = getNameOfSymbol(getSymbolOfNode(node));
             for (const member of node.members) {
-                const isStatic = getModifierFlags(member) & ModifierFlags.Static;
-                const isMethod = member.kind === SyntaxKind.MethodDeclaration;
                 const memberNameNode = member.name;
+                const isStatic = getModifierFlags(member) & ModifierFlags.Static;
                 if (isStatic && memberNameNode) {
                     const memberName = getPropertyNameForPropertyNameNode(memberNameNode);
-                    if (languageVersion <= ScriptTarget.ES5) {  // ES3, ES5
-                        if (memberName === "prototype" ||
-                            memberName === "name" ||
-                            memberName === "length" ||
-                            memberName === "caller" ||
-                            memberName === "arguments"
-                        ) {
+                    switch (memberName) {
+                        case "name":
+                        case "length":
+                        case "caller":
+                        case "arguments":
+                        case "prototype":
+                            const message = Diagnostics.Static_property_0_conflicts_with_built_in_property_Function_0_of_constructor_function_1;
+                            const className = getNameOfSymbol(getSymbolOfNode(node));
                             error(memberNameNode, message, memberName, className);
-                        }
-                    }
-                    else { // ES6+
-                        if (memberName === "prototype") {
-                            error(memberNameNode, message, memberName, className);
-                        }
-                        else if ((
-                            memberName === "name" ||
-                            memberName === "length" ||
-                            memberName === "caller" ||
-                            memberName === "arguments") &&
-                            isMethod === false
-                        ) {
-                            error(memberNameNode, message, memberName, className);
-                        }
+                            break;
                     }
                 }
             }
