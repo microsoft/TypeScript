@@ -1,3 +1,5 @@
+tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithAnyOtherType.ts(34,24): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithAnyOtherType.ts(35,24): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithAnyOtherType.ts(46,26): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithAnyOtherType.ts(46,33): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithAnyOtherType.ts(47,26): error TS2531: Object is possibly 'null'.
@@ -7,7 +9,7 @@ tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWith
 tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithAnyOtherType.ts(54,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithAnyOtherType.ts (7 errors) ====
+==== tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithAnyOtherType.ts (9 errors) ====
     // + operator on any type
     
     var ANY: any;
@@ -42,7 +44,11 @@ tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWith
     
     // any type literal
     var ResultIsNumber7 = +undefined;
+                           ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
     var ResultIsNumber8 = +null;
+                           ~~~~
+!!! error TS2531: Object is possibly 'null'.
     
     // any type expressions
     var ResultIsNumber9 = +ANY2[0];
