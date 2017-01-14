@@ -42,6 +42,28 @@ const f03c06 = f03<number, number>();
 const f03c07 = f03<number, number>(1);
 const f03c08 = f03<number, number>(1, 2);
 
+declare function f04<T, U = T | { a: number }>(a?: T, b?: U): [T, U];
+const f04c00 = f04();
+const f04c01 = f04(1);
+const f04c02 = f04(1, 1);
+const f04c03 = f04<number>();
+const f04c04 = f04<number>(1);
+const f04c05 = f04<number>(1, 2);
+const f04c06 = f04<number, number>();
+const f04c07 = f04<number, number>(1);
+const f04c08 = f04<number, number>(1, 2);
+
+declare function f05<T, U = T & { a: number }>(a?: T, b?: U): [T, U];
+const f05c00 = f05();
+const f05c01 = f05(1);
+const f05c02 = f05(1, 1);
+const f05c03 = f05<number>();
+const f05c04 = f05<number>(1);
+const f05c05 = f05<number>(1, 2);
+const f05c06 = f05<number, number>();
+const f05c07 = f05<number, number>(1);
+const f05c08 = f05<number, number>(1, 2);
+
 interface i00<T = number> { a: T; }
 const i00c00 = (<i00>x).a;
 const i00c01 = (<i00<number>>x).a;
@@ -120,6 +142,24 @@ var f03c05 = f03(1, 2);
 var f03c06 = f03();
 var f03c07 = f03(1);
 var f03c08 = f03(1, 2);
+var f04c00 = f04();
+var f04c01 = f04(1);
+var f04c02 = f04(1, 1);
+var f04c03 = f04();
+var f04c04 = f04(1);
+var f04c05 = f04(1, 2);
+var f04c06 = f04();
+var f04c07 = f04(1);
+var f04c08 = f04(1, 2);
+var f05c00 = f05();
+var f05c01 = f05(1);
+var f05c02 = f05(1, 1);
+var f05c03 = f05();
+var f05c04 = f05(1);
+var f05c05 = f05(1, 2);
+var f05c06 = f05();
+var f05c07 = f05(1);
+var f05c08 = f05(1, 2);
 var i00c00 = x.a;
 var i00c01 = x.a;
 var i01c00 = x.a;
@@ -187,6 +227,46 @@ declare const f03c05: [number, number];
 declare const f03c06: [number, number];
 declare const f03c07: [number, number];
 declare const f03c08: [number, number];
+declare function f04<T, U = T | {
+    a: number;
+}>(a?: T, b?: U): [T, U];
+declare const f04c00: [{}, {} | {
+    a: number;
+}];
+declare const f04c01: [number, number | {
+    a: number;
+}];
+declare const f04c02: [number, number];
+declare const f04c03: [number, number | {
+    a: number;
+}];
+declare const f04c04: [number, number | {
+    a: number;
+}];
+declare const f04c05: [number, number];
+declare const f04c06: [number, number];
+declare const f04c07: [number, number];
+declare const f04c08: [number, number];
+declare function f05<T, U = T & {
+    a: number;
+}>(a?: T, b?: U): [T, U];
+declare const f05c00: [{}, {} & {
+    a: number;
+}];
+declare const f05c01: [number, number & {
+    a: number;
+}];
+declare const f05c02: [number, number];
+declare const f05c03: [number, number & {
+    a: number;
+}];
+declare const f05c04: [number, number & {
+    a: number;
+}];
+declare const f05c05: [number, number];
+declare const f05c06: [number, number];
+declare const f05c07: [number, number];
+declare const f05c08: [number, number];
 interface i00<T = number> {
     a: T;
 }

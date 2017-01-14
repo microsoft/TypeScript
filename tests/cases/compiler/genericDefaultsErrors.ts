@@ -9,13 +9,17 @@ declare function f03<T extends string = number>(): void;
 declare function f04<T extends string, U extends number = T>(): void;
 declare function f05<T, U extends number = T>(): void;
 declare function f06<T, U extends T = number>(): void;
+declare function f07<T = U, U = T | { a: number }>(): void;
+declare function f08<T = U, U = T & { a: number }>(): void;
+declare function f09<T = U, U = T | { a: number }>(): void;
+declare function f10<T = U, U = T & { a: number }>(): void;
 
-declare function f07<T, U, V = number>(): void;
-f07(); // ok
-f07<1>(); // error
-f07<1, 2>(); // ok
-f07<1, 2, 3>(); // ok
-f07<1, 2, 3, 4>(); // error
+declare function f11<T, U, V = number>(): void;
+f11(); // ok
+f11<1>(); // error
+f11<1, 2>(); // ok
+f11<1, 2, 3>(); // ok
+f11<1, 2, 3, 4>(); // error
 
 interface i00<T> { }
 interface i00<T = number> { }

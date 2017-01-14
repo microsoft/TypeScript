@@ -4840,15 +4840,60 @@ namespace ts {
             }
         }
 
-        function getDefaultOfTypeParameter(typeParameter: TypeParameter): Type {
+        /**
+         * Gets the default type for a type parameter.
+         *
+         * If the type parameter is the result of an instantiation, this gets the instantiated
+         * default type of its target. If the type parameter has no default type, `undefined`
+         * is returned.
+         *
+         * This function *does not* perform a circularity check.
+         */
+        function getDefaultFromTypeParameter(typeParameter: TypeParameter): Type | undefined {
+            if (!typeParameter.default) {
+                if (typeParameter.target) {
+                    const targetDefault = getDefaultFromTypeParameter(typeParameter.target);
+                    typeParameter.default = targetDefault ? instantiateType(targetDefault, typeParameter.mapper) : noConstraintOrDefaultType;
+                }
+                else {
+                    const defaultDeclaration = typeParameter.symbol && forEach(typeParameter.symbol.declarations, decl => isTypeParameter(decl) && decl.default);
+                    typeParameter.default = defaultDeclaration ? getTypeFromTypeNode(defaultDeclaration) : noConstraintOrDefaultType;
+                }
+            }
+            return typeParameter.default === noConstraintOrDefaultType ? undefined : typeParameter.default;
+        }
+
+        /**
+         * Gets the default type for a type parameter.
+         *
+         * If the type parameter is the result of an instantiation, this gets the instantiated
+         * default type of its target. If the type parameter has no default type, or if the default
+         * type circularly references the type parameter, `undefined` is returned.
+         *
+         * This function *does* perform a circularity check.
+         */
+        function getDefaultOfTypeParameter(typeParameter: TypeParameter): Type | undefined {
             return hasNonCircularDefault(typeParameter) ? getDefaultFromTypeParameter(typeParameter) : undefined;
         }
 
-        function hasNonCircularDefault(type: TypeParameter) {
-            return getResolvedDefault(type) !== circularConstraintOrDefaultType;
+        /**
+         * Determines whether a type parameter has a non-circular default type.
+         *
+         * Note that this function also returns `true` if a type parameter *does not* have a
+         * default type.
+         */
+        function hasNonCircularDefault(typeParameter: TypeParameter): boolean {
+            return getResolvedDefault(typeParameter) !== circularConstraintOrDefaultType;
         }
 
-        function getResolvedDefault(typeParameter: TypeParameter) {
+        /**
+         * Resolves the default type of a type parameter.
+         *
+         * If the type parameter has no default, the `noConstraintOrDefaultType` singleton is
+         * returned. If the type parameter has a circular default, the
+         * `circularConstraintOrDefaultType` singleton is returned.
+         */
+        function getResolvedDefault(typeParameter: TypeParameter): Type {
             if (!typeParameter.resolvedDefault) {
                 if (!pushTypeResolution(typeParameter, TypeSystemPropertyName.ResolvedDefault)) {
                     return circularConstraintOrDefaultType;
@@ -4863,6 +4908,12 @@ namespace ts {
             return typeParameter.resolvedDefault;
         }
 
+        /**
+         * Recursively resolves the default type for a type.
+         *
+         * If the type is a union or intersection type and any of its constituents is a circular
+         * reference, the `circularConstraintOrDefaultType` singleton is returned.
+         */
         function getResolvedDefaultWorker(type: Type): Type {
             if (type.flags & TypeFlags.TypeParameter) {
                 return getResolvedDefault(<TypeParameter>type);
@@ -5173,6 +5224,14 @@ namespace ts {
             return minTypeArgumentCount;
         }
 
+        /**
+         * Fill in default types for unsupplied type arguments. If `typeArguments` is undefined
+         * when a default type is supplied, a new array will be created and returned.
+         *
+         * @param typeArguments The supplied type arguments.
+         * @param typeParameters The requested type parameters.
+         * @param minTypeArgumentCount The minimum number of required type arguments.
+         */
         function fillMissingTypeArguments(typeArguments: Type[] | undefined, typeParameters: TypeParameter[] | undefined, minTypeArgumentCount: number) {
             const numTypeParameters = typeParameters ? typeParameters.length : 0;
             if (numTypeParameters) {
@@ -5486,20 +5545,6 @@ namespace ts {
                 }
             }
             return typeParameter.constraint === noConstraintOrDefaultType ? undefined : typeParameter.constraint;
-        }
-
-        function getDefaultFromTypeParameter(typeParameter: TypeParameter): Type | undefined {
-            if (!typeParameter.default) {
-                if (typeParameter.target) {
-                    const targetDefault = getDefaultFromTypeParameter(typeParameter.target);
-                    typeParameter.default = targetDefault ? instantiateType(targetDefault, typeParameter.mapper) : noConstraintOrDefaultType;
-                }
-                else {
-                    const defaultDeclaration = typeParameter.symbol && forEach(typeParameter.symbol.declarations, decl => isTypeParameter(decl) && decl.default);
-                    typeParameter.default = defaultDeclaration ? getTypeFromTypeNode(defaultDeclaration) : noConstraintOrDefaultType;
-                }
-            }
-            return typeParameter.default === noConstraintOrDefaultType ? undefined : typeParameter.default;
         }
 
         function getParentSymbolOfTypeParameter(typeParameter: TypeParameter): Symbol {
@@ -13535,6 +13580,7 @@ namespace ts {
                         ? createInferenceContext(originalCandidate, /*inferUnionTypes*/ false)
                         : undefined;
 
+                    // fix each supplied type argument in the inference context
                     if (typeArguments) {
                         for (let i = 0; i < typeArguments.length; i++) {
                             inferenceContext.inferredTypes[i] = getTypeFromTypeNode(typeArguments[i]);
@@ -13545,8 +13591,10 @@ namespace ts {
                     while (true) {
                         candidate = originalCandidate;
                         if (candidate.typeParameters) {
-                            typeArgumentsAreValid = typeArguments ? checkTypeArguments(candidate, typeArguments, inferenceContext.inferredTypes, /*reportErrors*/ false) : true;
+                            // Check any supplied type arguments against the candidate.
+                            typeArgumentsAreValid = !typeArguments || checkTypeArguments(candidate, typeArguments, inferenceContext.inferredTypes, /*reportErrors*/ false);
                             if (typeArgumentsAreValid) {
+                                // Infer any unsupplied type arguments for the candidate.
                                 inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
                                 typeArgumentsAreValid = inferenceContext.failedTypeParameterIndex === undefined;
                             }

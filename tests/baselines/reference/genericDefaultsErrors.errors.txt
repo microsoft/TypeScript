@@ -7,25 +7,33 @@ tests/cases/compiler/genericDefaultsErrors.ts(8,59): error TS2344: Type 'T' does
   Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/genericDefaultsErrors.ts(9,44): error TS2344: Type 'T' does not satisfy the constraint 'number'.
 tests/cases/compiler/genericDefaultsErrors.ts(10,39): error TS2344: Type 'number' does not satisfy the constraint 'T'.
-tests/cases/compiler/genericDefaultsErrors.ts(14,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/genericDefaultsErrors.ts(17,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/genericDefaultsErrors.ts(20,11): error TS2428: All declarations of 'i00' must have identical type parameters.
-tests/cases/compiler/genericDefaultsErrors.ts(23,11): error TS2428: All declarations of 'i01' must have identical type parameters.
-tests/cases/compiler/genericDefaultsErrors.ts(25,19): error TS2706: Type parameter 'T' has a circular default.
-tests/cases/compiler/genericDefaultsErrors.ts(26,19): error TS2706: Type parameter 'T' has a circular default.
-tests/cases/compiler/genericDefaultsErrors.ts(26,26): error TS2706: Type parameter 'U' has a circular default.
-tests/cases/compiler/genericDefaultsErrors.ts(27,22): error TS2705: Required type parameters may not follow optional type parameters
-tests/cases/compiler/genericDefaultsErrors.ts(28,34): error TS2344: Type 'number' does not satisfy the constraint 'string'.
-tests/cases/compiler/genericDefaultsErrors.ts(29,52): error TS2344: Type 'T' does not satisfy the constraint 'number'.
+tests/cases/compiler/genericDefaultsErrors.ts(11,26): error TS2706: Type parameter 'T' has a circular default.
+tests/cases/compiler/genericDefaultsErrors.ts(11,33): error TS2706: Type parameter 'U' has a circular default.
+tests/cases/compiler/genericDefaultsErrors.ts(12,26): error TS2706: Type parameter 'T' has a circular default.
+tests/cases/compiler/genericDefaultsErrors.ts(12,33): error TS2706: Type parameter 'U' has a circular default.
+tests/cases/compiler/genericDefaultsErrors.ts(13,26): error TS2706: Type parameter 'T' has a circular default.
+tests/cases/compiler/genericDefaultsErrors.ts(13,33): error TS2706: Type parameter 'U' has a circular default.
+tests/cases/compiler/genericDefaultsErrors.ts(14,26): error TS2706: Type parameter 'T' has a circular default.
+tests/cases/compiler/genericDefaultsErrors.ts(14,33): error TS2706: Type parameter 'U' has a circular default.
+tests/cases/compiler/genericDefaultsErrors.ts(18,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/genericDefaultsErrors.ts(21,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/genericDefaultsErrors.ts(24,11): error TS2428: All declarations of 'i00' must have identical type parameters.
+tests/cases/compiler/genericDefaultsErrors.ts(27,11): error TS2428: All declarations of 'i01' must have identical type parameters.
+tests/cases/compiler/genericDefaultsErrors.ts(29,19): error TS2706: Type parameter 'T' has a circular default.
+tests/cases/compiler/genericDefaultsErrors.ts(30,19): error TS2706: Type parameter 'T' has a circular default.
+tests/cases/compiler/genericDefaultsErrors.ts(30,26): error TS2706: Type parameter 'U' has a circular default.
+tests/cases/compiler/genericDefaultsErrors.ts(31,22): error TS2705: Required type parameters may not follow optional type parameters
+tests/cases/compiler/genericDefaultsErrors.ts(32,34): error TS2344: Type 'number' does not satisfy the constraint 'string'.
+tests/cases/compiler/genericDefaultsErrors.ts(33,52): error TS2344: Type 'T' does not satisfy the constraint 'number'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/genericDefaultsErrors.ts(30,37): error TS2344: Type 'T' does not satisfy the constraint 'number'.
-tests/cases/compiler/genericDefaultsErrors.ts(31,32): error TS2344: Type 'number' does not satisfy the constraint 'T'.
-tests/cases/compiler/genericDefaultsErrors.ts(34,15): error TS2707: Generic type 'i09<T, U, V>' requires between 2 and 3 type arguments
-tests/cases/compiler/genericDefaultsErrors.ts(35,15): error TS2707: Generic type 'i09<T, U, V>' requires between 2 and 3 type arguments
+tests/cases/compiler/genericDefaultsErrors.ts(34,37): error TS2344: Type 'T' does not satisfy the constraint 'number'.
+tests/cases/compiler/genericDefaultsErrors.ts(35,32): error TS2344: Type 'number' does not satisfy the constraint 'T'.
 tests/cases/compiler/genericDefaultsErrors.ts(38,15): error TS2707: Generic type 'i09<T, U, V>' requires between 2 and 3 type arguments
+tests/cases/compiler/genericDefaultsErrors.ts(39,15): error TS2707: Generic type 'i09<T, U, V>' requires between 2 and 3 type arguments
+tests/cases/compiler/genericDefaultsErrors.ts(42,15): error TS2707: Generic type 'i09<T, U, V>' requires between 2 and 3 type arguments
 
 
-==== tests/cases/compiler/genericDefaultsErrors.ts (23 errors) ====
+==== tests/cases/compiler/genericDefaultsErrors.ts (31 errors) ====
     
     declare const x: any;
     
@@ -53,15 +61,35 @@ tests/cases/compiler/genericDefaultsErrors.ts(38,15): error TS2707: Generic type
     declare function f06<T, U extends T = number>(): void;
                                           ~~~~~~
 !!! error TS2344: Type 'number' does not satisfy the constraint 'T'.
+    declare function f07<T = U, U = T | { a: number }>(): void;
+                             ~
+!!! error TS2706: Type parameter 'T' has a circular default.
+                                    ~~~~~~~~~~~~~~~~~
+!!! error TS2706: Type parameter 'U' has a circular default.
+    declare function f08<T = U, U = T & { a: number }>(): void;
+                             ~
+!!! error TS2706: Type parameter 'T' has a circular default.
+                                    ~~~~~~~~~~~~~~~~~
+!!! error TS2706: Type parameter 'U' has a circular default.
+    declare function f09<T = U, U = T | { a: number }>(): void;
+                             ~
+!!! error TS2706: Type parameter 'T' has a circular default.
+                                    ~~~~~~~~~~~~~~~~~
+!!! error TS2706: Type parameter 'U' has a circular default.
+    declare function f10<T = U, U = T & { a: number }>(): void;
+                             ~
+!!! error TS2706: Type parameter 'T' has a circular default.
+                                    ~~~~~~~~~~~~~~~~~
+!!! error TS2706: Type parameter 'U' has a circular default.
     
-    declare function f07<T, U, V = number>(): void;
-    f07(); // ok
-    f07<1>(); // error
+    declare function f11<T, U, V = number>(): void;
+    f11(); // ok
+    f11<1>(); // error
     ~~~~~~~~
 !!! error TS2346: Supplied parameters do not match any signature of call target.
-    f07<1, 2>(); // ok
-    f07<1, 2, 3>(); // ok
-    f07<1, 2, 3, 4>(); // error
+    f11<1, 2>(); // ok
+    f11<1, 2, 3>(); // ok
+    f11<1, 2, 3, 4>(); // error
     ~~~~~~~~~~~~~~~~~
 !!! error TS2346: Supplied parameters do not match any signature of call target.
     

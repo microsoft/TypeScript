@@ -42,6 +42,28 @@ const f03c06 = f03<number, number>();
 const f03c07 = f03<number, number>(1);
 const f03c08 = f03<number, number>(1, 2);
 
+declare function f04<T, U = T | { a: number }>(a?: T, b?: U): [T, U];
+const f04c00 = f04();
+const f04c01 = f04(1);
+const f04c02 = f04(1, 1);
+const f04c03 = f04<number>();
+const f04c04 = f04<number>(1);
+const f04c05 = f04<number>(1, 2);
+const f04c06 = f04<number, number>();
+const f04c07 = f04<number, number>(1);
+const f04c08 = f04<number, number>(1, 2);
+
+declare function f05<T, U = T & { a: number }>(a?: T, b?: U): [T, U];
+const f05c00 = f05();
+const f05c01 = f05(1);
+const f05c02 = f05(1, 1);
+const f05c03 = f05<number>();
+const f05c04 = f05<number>(1);
+const f05c05 = f05<number>(1, 2);
+const f05c06 = f05<number, number>();
+const f05c07 = f05<number, number>(1);
+const f05c08 = f05<number, number>(1, 2);
+
 interface i00<T = number> { a: T; }
 const i00c00 = (<i00>x).a;
 const i00c01 = (<i00<number>>x).a;

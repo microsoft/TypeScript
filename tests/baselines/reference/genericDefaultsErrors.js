@@ -9,13 +9,17 @@ declare function f03<T extends string = number>(): void;
 declare function f04<T extends string, U extends number = T>(): void;
 declare function f05<T, U extends number = T>(): void;
 declare function f06<T, U extends T = number>(): void;
+declare function f07<T = U, U = T | { a: number }>(): void;
+declare function f08<T = U, U = T & { a: number }>(): void;
+declare function f09<T = U, U = T | { a: number }>(): void;
+declare function f10<T = U, U = T & { a: number }>(): void;
 
-declare function f07<T, U, V = number>(): void;
-f07(); // ok
-f07<1>(); // error
-f07<1, 2>(); // ok
-f07<1, 2, 3>(); // ok
-f07<1, 2, 3, 4>(); // error
+declare function f11<T, U, V = number>(): void;
+f11(); // ok
+f11<1>(); // error
+f11<1, 2>(); // ok
+f11<1, 2, 3>(); // ok
+f11<1, 2, 3, 4>(); // error
 
 interface i00<T> { }
 interface i00<T = number> { }
@@ -39,11 +43,11 @@ type i09t03 = i09<1, 2, 3>; // ok
 type i09t04 = i09<1, 2, 3, 4>; // error
 
 //// [genericDefaultsErrors.js]
-f07(); // ok
-f07(); // error
-f07(); // ok
-f07(); // ok
-f07(); // error
+f11(); // ok
+f11(); // error
+f11(); // ok
+f11(); // ok
+f11(); // error
 
 
 //// [genericDefaultsErrors.d.ts]
@@ -55,7 +59,19 @@ declare function f03<T extends string = number>(): void;
 declare function f04<T extends string, U extends number = T>(): void;
 declare function f05<T, U extends number = T>(): void;
 declare function f06<T, U extends T = number>(): void;
-declare function f07<T, U, V = number>(): void;
+declare function f07<T = U, U = T | {
+    a: number;
+}>(): void;
+declare function f08<T = U, U = T & {
+    a: number;
+}>(): void;
+declare function f09<T = U, U = T | {
+    a: number;
+}>(): void;
+declare function f10<T = U, U = T & {
+    a: number;
+}>(): void;
+declare function f11<T, U, V = number>(): void;
 interface i00<T> {
 }
 interface i00<T = number> {
