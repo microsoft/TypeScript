@@ -767,7 +767,7 @@
         "category": "Error",
         "code": 1241
     },
-    "'abstract' modifier can only appear on a class, method, or property declaration.": {
+    "'{0}' modifier can only appear on a class, method, or property declaration.": {
         "category": "Error",
         "code": 1242
     },
@@ -3291,21 +3291,25 @@
         "category": "Error",
         "code": 90030
     },
-    "Class member '{0}' was marked 'override', but no matching definition was found in any supertype of '{1}'": {
+    "Class member '{0}' was marked 'override', but no matching declaration was found in any supertype of '{1}'": {
         "category": "Error",
         "code": 90032
     },
-    "Class member '{0}' must be marked 'override' when noImplicitOverride is enabled ({1})": {
+    "Class member '{0}' must be marked 'override' when noImplicitOverride is enabled (inherited from {1})": {
         "category": "Error",
         "code": 90033
     },
-    "override modifier cannot be used with an optional property declaration": {
+    "Class member '{0}' must be marked 'override' when noImplicitOverride is enabled (augmented from Object.{1})": {
         "category": "Error",
         "code": 90034
     },
-    "All declarations of an override method must be consecutive.": {
+    "override modifier cannot be used with an optional property declaration": {
         "category": "Error",
         "code": 90035
+    },
+    "All declarations of an override method must be consecutive.": {
+        "category": "Error",
+        "code": 90036
     },
     "Octal literal types must use ES2015 syntax. Use the syntax '{0}'.": {
         "category": "Error",

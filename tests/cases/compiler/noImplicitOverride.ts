@@ -5,6 +5,7 @@ class Base {
     get name(): string {
         return 'Base';
     }
+    getMeaningOfLife(): number { return 42; }
     public userId: number = 1;
 }
 
@@ -15,7 +16,7 @@ class RejectWhenOverrideMissingOnInheritedMethod extends Object {
     }
 }
 
-class RejectWhenOverrideMissingOnMethodThatMasksObjectTypeMember {
+class RejectWhenOverrideMissingOnAugmentedProperty {
     toString(): string { return 'foo'; };
     hasOwnProperty(prop: string): boolean {
         return false;

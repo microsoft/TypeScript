@@ -4,6 +4,7 @@ class Base {
     get name(): string {
         return 'Base';
     }
+    getMeaningOfLife(): number { return 42; }
     public userId: number = 1;
 }
 
@@ -14,7 +15,7 @@ class RejectWhenOverrideMissingOnInheritedMethod extends Object {
     }
 }
 
-class RejectWhenOverrideMissingOnMethodThatMasksObjectTypeMember {
+class RejectWhenOverrideMissingOnAugmentedProperty {
     toString(): string { return 'foo'; };
     hasOwnProperty(prop: string): boolean {
         return false;
@@ -54,11 +55,16 @@ class FIXME_AcceptWhenOverrideSpecifiedByJSDocAnnotation extends Base {
 
 
 //// [noImplicitOverride.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var Base = (function () {
     function Base() {
         this.userId = 1;
@@ -70,12 +76,13 @@ var Base = (function () {
         enumerable: true,
         configurable: true
     });
+    Base.prototype.getMeaningOfLife = function () { return 42; };
     return Base;
 }());
 var RejectWhenOverrideMissingOnInheritedMethod = (function (_super) {
     __extends(RejectWhenOverrideMissingOnInheritedMethod, _super);
     function RejectWhenOverrideMissingOnInheritedMethod() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     RejectWhenOverrideMissingOnInheritedMethod.prototype.toString = function () { return 'foo'; };
     ;
@@ -84,15 +91,15 @@ var RejectWhenOverrideMissingOnInheritedMethod = (function (_super) {
     };
     return RejectWhenOverrideMissingOnInheritedMethod;
 }(Object));
-var RejectWhenOverrideMissingOnMethodThatMasksObjectTypeMember = (function () {
-    function RejectWhenOverrideMissingOnMethodThatMasksObjectTypeMember() {
+var RejectWhenOverrideMissingOnAugmentedProperty = (function () {
+    function RejectWhenOverrideMissingOnAugmentedProperty() {
     }
-    RejectWhenOverrideMissingOnMethodThatMasksObjectTypeMember.prototype.toString = function () { return 'foo'; };
+    RejectWhenOverrideMissingOnAugmentedProperty.prototype.toString = function () { return 'foo'; };
     ;
-    RejectWhenOverrideMissingOnMethodThatMasksObjectTypeMember.prototype.hasOwnProperty = function (prop) {
+    RejectWhenOverrideMissingOnAugmentedProperty.prototype.hasOwnProperty = function (prop) {
         return false;
     };
-    return RejectWhenOverrideMissingOnMethodThatMasksObjectTypeMember;
+    return RejectWhenOverrideMissingOnAugmentedProperty;
 }());
 var RejectWhenOverrideTypeMismatchOnMethodThatMasksObjectTypeMember = (function () {
     function RejectWhenOverrideTypeMismatchOnMethodThatMasksObjectTypeMember() {
@@ -105,7 +112,7 @@ var RejectWhenOverrideTypeMismatchOnMethodThatMasksObjectTypeMember = (function 
 var RejectWhenOverrideMissingOnInheritedProperty = (function (_super) {
     __extends(RejectWhenOverrideMissingOnInheritedProperty, _super);
     function RejectWhenOverrideMissingOnInheritedProperty() {
-        var _this = _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.userId = 2;
         return _this;
     }
@@ -114,7 +121,7 @@ var RejectWhenOverrideMissingOnInheritedProperty = (function (_super) {
 var RejectWhenOverrideMissingOnInheritedAccessor = (function (_super) {
     __extends(RejectWhenOverrideMissingOnInheritedAccessor, _super);
     function RejectWhenOverrideMissingOnInheritedAccessor() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     Object.defineProperty(RejectWhenOverrideMissingOnInheritedAccessor.prototype, "name", {
         get: function () { return 'foo'; },
@@ -127,7 +134,7 @@ var RejectWhenOverrideMissingOnInheritedAccessor = (function (_super) {
 var FIXME_AcceptWhenOverrideSpecifiedByJSDocAnnotation = (function (_super) {
     __extends(FIXME_AcceptWhenOverrideSpecifiedByJSDocAnnotation, _super);
     function FIXME_AcceptWhenOverrideSpecifiedByJSDocAnnotation() {
-        var _this = _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         /** @override */ _this.userId = 2;
         return _this;
     }
