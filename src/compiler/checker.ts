@@ -7697,12 +7697,9 @@ namespace ts {
                 const id = relation !== identityRelation || source.id < target.id ? source.id + "," + target.id : target.id + "," + source.id;
                 const related = relation[id];
                 if (related !== undefined) {
-                    if (reportErrors && related === RelationComparisonResult.Failed) {
-                        // We are elaborating errors and the cached result is an unreported failure. Record the result as a reported
-                        // failure and continue computing the relation such that errors get reported.
-                        relation[id] = RelationComparisonResult.FailedAndReported;
-                    }
-                    else {
+                    // If we computed this relation already and it was failed and reported, or if we're not being asked to elaborate
+                    // errors, we can use the cached value. Otherwise, recompute the relation.
+                    if (!reportErrors || related === RelationComparisonResult.FailedAndReported) {
                         return related === RelationComparisonResult.Succeeded ? Ternary.True : Ternary.False;
                     }
                 }
