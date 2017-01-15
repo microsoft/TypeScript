@@ -568,12 +568,12 @@ namespace ts {
         function getSymbolLinks(symbol: Symbol): SymbolLinks {
             if (symbol.flags & SymbolFlags.Transient) return <TransientSymbol>symbol;
             const id = getSymbolId(symbol);
-            return symbolLinks[id] || (symbolLinks[id] = {});
+            return getOrUpdateArray(symbolLinks, id, () => ({}));
         }
 
         function getNodeLinks(node: Node): NodeLinks {
             const nodeId = getNodeId(node);
-            return nodeLinks[nodeId] || (nodeLinks[nodeId] = { flags: 0 });
+            return getOrUpdateArray<NodeLinks>(nodeLinks, nodeId, () => ({ flags: 0 }));
         }
 
         function getObjectFlags(type: Type): ObjectFlags {
@@ -9856,7 +9856,7 @@ namespace ts {
                 // If we have previously computed the control flow type for the reference at
                 // this flow loop junction, return the cached type.
                 const id = getFlowNodeId(flow);
-                const cache = flowLoopCaches[id] || (flowLoopCaches[id] = createMap<Type>());
+                const cache = getOrUpdateArray<Map<Type>>(flowLoopCaches, id, () => createMap<Type>());
                 if (!key) {
                     key = getFlowCacheKey(reference);
                 }

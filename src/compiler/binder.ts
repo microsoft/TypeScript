@@ -349,7 +349,7 @@ namespace ts {
                 // Otherwise, we'll be merging into a compatible existing symbol (for example when
                 // you have multiple 'vars' with the same name in the same container).  In this case
                 // just add this node into the declarations list of the symbol.
-                symbol = symbolTable[name] || (symbolTable[name] = createSymbol(SymbolFlags.None, name));
+                symbol = getOrUpdate(symbolTable, name, name => createSymbol(SymbolFlags.None, name));
 
                 if (name && (includes & SymbolFlags.Classifiable)) {
                     classifiableNames[name] = name;
