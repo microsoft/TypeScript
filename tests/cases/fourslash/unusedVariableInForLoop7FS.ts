@@ -9,4 +9,4 @@
 ////}
 ////
 
-verify.codeFixAtPosition("");
+verify.rangeAfterCodeFix("");

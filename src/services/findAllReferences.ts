@@ -325,7 +325,7 @@ namespace ts.FindAllReferences {
                 fileName: targetLabel.getSourceFile().fileName,
                 kind: ScriptElementKind.label,
                 name: labelName,
-                textSpan: createTextSpanFromBounds(targetLabel.getStart(), targetLabel.getEnd()),
+                textSpan: createTextSpanFromNode(targetLabel, sourceFile),
                 displayParts: [displayPart(labelName, SymbolDisplayPartKind.text)]
             };
 
@@ -502,9 +502,8 @@ namespace ts.FindAllReferences {
                 const result: Node[] = [];
 
                 for (const decl of classSymbol.members["__constructor"].declarations) {
-                    Debug.assert(decl.kind === SyntaxKind.Constructor);
-                    const ctrKeyword = decl.getChildAt(0);
-                    Debug.assert(ctrKeyword.kind === SyntaxKind.ConstructorKeyword);
+                    const ctrKeyword = ts.findChildOfKind(decl, ts.SyntaxKind.ConstructorKeyword, sourceFile)!
+                    Debug.assert(decl.kind === SyntaxKind.Constructor && !!ctrKeyword);
                     result.push(ctrKeyword);
                 }
 
@@ -871,7 +870,7 @@ namespace ts.FindAllReferences {
                     fileName: node.getSourceFile().fileName,
                     kind: ScriptElementKind.variableElement,
                     name: "this",
-                    textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd()),
+                    textSpan: createTextSpanFromNode(node),
                     displayParts
                 },
                 references: references
@@ -942,7 +941,7 @@ namespace ts.FindAllReferences {
                     fileName: node.getSourceFile().fileName,
                     kind: ScriptElementKind.variableElement,
                     name: type.text,
-                    textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd()),
+                    textSpan: createTextSpanFromNode(node),
                     displayParts: [displayPart(getTextOfNode(node), SymbolDisplayPartKind.stringLiteral)]
                 },
                 references: references

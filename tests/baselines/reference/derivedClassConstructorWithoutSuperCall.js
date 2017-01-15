@@ -34,11 +34,16 @@ class Derived4<T> extends Base2<T> {
 
 //// [derivedClassConstructorWithoutSuperCall.js]
 // derived class constructors must contain a super call
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var Base = (function () {
     function Base() {
     }
@@ -47,7 +52,7 @@ var Base = (function () {
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        var _this;
+        var _this = this;
         return _this;
     }
     return Derived;
@@ -60,7 +65,7 @@ var Base2 = (function () {
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
-        var _this;
+        var _this = this;
         var r2 = function () { return _this = _super.call(this) || this; }; // error for misplaced super call (nested function)
         return _this;
     }
@@ -69,7 +74,7 @@ var Derived2 = (function (_super) {
 var Derived3 = (function (_super) {
     __extends(Derived3, _super);
     function Derived3() {
-        var _this;
+        var _this = this;
         var r = function () { _this = _super.call(this) || this; }; // error
         return _this;
     }
@@ -78,7 +83,7 @@ var Derived3 = (function (_super) {
 var Derived4 = (function (_super) {
     __extends(Derived4, _super);
     function Derived4() {
-        var _this;
+        var _this = this;
         var r = _this = _super.call(this) || this; // ok
         return _this;
     }

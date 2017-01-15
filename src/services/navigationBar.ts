@@ -514,7 +514,7 @@ namespace ts.NavigationBar {
         return {
             text: getItemName(n.node),
             kind: getNodeKind(n.node),
-            kindModifiers: getNodeModifiers(n.node),
+            kindModifiers: getModifiers(n.node),
             spans: getSpans(n),
             childItems: map(n.children, convertToTree)
         };
@@ -524,7 +524,7 @@ namespace ts.NavigationBar {
         return {
             text: getItemName(n.node),
             kind: getNodeKind(n.node),
-            kindModifiers: getNodeModifiers(n.node),
+            kindModifiers: getModifiers(n.node),
             spans: getSpans(n),
             childItems: map(n.children, convertToChildItem) || emptyChildItemArray,
             indent: n.indent,
@@ -591,7 +591,14 @@ namespace ts.NavigationBar {
     function getNodeSpan(node: Node): TextSpan {
         return node.kind === SyntaxKind.SourceFile
             ? createTextSpanFromBounds(node.getFullStart(), node.getEnd())
-            : createTextSpanFromBounds(node.getStart(curSourceFile), node.getEnd());
+            : createTextSpanFromNode(node, curSourceFile);
+    }
+
+    function getModifiers(node: ts.Node): string {
+        if (node.parent && node.parent.kind === SyntaxKind.VariableDeclaration) {
+            node = node.parent;
+        }
+        return getNodeModifiers(node);
     }
 
     function getFunctionOrClassName(node: FunctionExpression | FunctionDeclaration | ArrowFunction | ClassLikeDeclaration): string {
@@ -626,15 +633,15 @@ namespace ts.NavigationBar {
 
     /**
      * Matches all whitespace characters in a string. Eg:
-     * 
+     *
      * "app.
-     * 
+     *
      * onactivated"
-     * 
+     *
      * matches because of the newline, whereas
-     * 
+     *
      * "app.onactivated"
-     * 
+     *
      * does not match.
      */
     const whiteSpaceRegex = /\s+/g;

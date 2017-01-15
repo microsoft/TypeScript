@@ -600,7 +600,7 @@ namespace ts {
         return !!findChildOfKind(n, kind, sourceFile);
     }
 
-    export function findChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFile): Node {
+    export function findChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFile): Node | undefined {
         return forEach(n.getChildren(sourceFile), c => c.kind === kind && c);
     }
 
@@ -1112,6 +1112,10 @@ namespace ts {
             return !tripleSlashDirectivePrefixRegex.test(commentText);
         }
     }
+
+    export function createTextSpanFromNode(node: Node, sourceFile?: SourceFile): TextSpan {
+        return createTextSpanFromBounds(node.getStart(sourceFile), node.getEnd());
+    }
 }
 
 // Display-part writer helpers
@@ -1357,5 +1361,10 @@ namespace ts {
             configJsonObject: config || {},
             diagnostics: error ? concatenate(diagnostics, [error]) : diagnostics
         };
+    }
+
+    export function getOpenBraceEnd(constructor: ConstructorDeclaration, sourceFile: SourceFile) {
+        // First token is the open curly, this is where we want to put the 'super' call.
+        return constructor.body.getFirstToken(sourceFile).getEnd();
     }
 }

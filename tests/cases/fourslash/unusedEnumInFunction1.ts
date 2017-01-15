@@ -5,7 +5,7 @@
 ////     enum Directions { Up, Down}
 //// } |]
 
-verify.codeFixAtPosition(`function f1 () {
+verify.rangeAfterCodeFix(`function f1 () {
 }
 `);
 

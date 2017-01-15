@@ -38,11 +38,16 @@ str = isD1(c2Ord1) && c2Ord1.p1; // D1
 var r2: C2 | D1 = isC1(c2Ord1) && c2Ord1; // C2 | D1
 
 //// [typeGuardOfFormIsType.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var C1 = (function () {
     function C1() {
     }
@@ -56,7 +61,7 @@ var C2 = (function () {
 var D1 = (function (_super) {
     __extends(D1, _super);
     function D1() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return D1;
 }(C1));

@@ -96,11 +96,16 @@ class Derived10<T> extends Base2<T> {
 
 //// [derivedClassParameterProperties.js]
 // ordering of super calls in derived constructors matters depending on other class contents
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var Base = (function () {
     function Base() {
     }
@@ -109,7 +114,7 @@ var Base = (function () {
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived(y) {
-        var _this;
+        var _this = this;
         var a = 1;
         _this = _super.call(this) || this; // ok
         return _this;
@@ -119,7 +124,7 @@ var Derived = (function (_super) {
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     function Derived2(y) {
-        var _this;
+        var _this = this;
         _this.y = y;
         var a = 1;
         _this = _super.call(this) || this; // error
@@ -140,7 +145,7 @@ var Derived3 = (function (_super) {
 var Derived4 = (function (_super) {
     __extends(Derived4, _super);
     function Derived4(y) {
-        var _this;
+        var _this = this;
         _this.a = 1;
         var b = 2;
         _this = _super.call(this) || this; // error
@@ -161,7 +166,7 @@ var Derived5 = (function (_super) {
 var Derived6 = (function (_super) {
     __extends(Derived6, _super);
     function Derived6(y) {
-        var _this;
+        var _this = this;
         _this.a = 1;
         var b = 2;
         _this = _super.call(this) || this; // error: "super" has to be called before "this" accessing
@@ -172,7 +177,7 @@ var Derived6 = (function (_super) {
 var Derived7 = (function (_super) {
     __extends(Derived7, _super);
     function Derived7(y) {
-        var _this;
+        var _this = this;
         _this.a = 1;
         _this.a = 3;
         _this.b = 3;
@@ -201,7 +206,7 @@ var Base2 = (function () {
 var Derived9 = (function (_super) {
     __extends(Derived9, _super);
     function Derived9(y) {
-        var _this;
+        var _this = this;
         _this.a = 1;
         _this.a = 3;
         _this.b = 3;

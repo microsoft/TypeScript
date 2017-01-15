@@ -1830,7 +1830,7 @@ namespace ts {
         }
     }
 
-    export function getAncestor(node: Node, kind: SyntaxKind): Node {
+    export function getAncestor(node: Node | undefined, kind: SyntaxKind): Node {
         while (node) {
             if (node.kind === kind) {
                 return node;

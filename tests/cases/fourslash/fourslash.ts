@@ -110,7 +110,6 @@ declare namespace FourSlashInterface {
         marker(name?: string): void;
         bof(): void;
         eof(): void;
-        type(definitionIndex?: number): void;
         implementation(): void;
         position(position: number, fileIndex?: number): any;
         position(position: number, fileName?: string): any;
@@ -139,6 +138,7 @@ declare namespace FourSlashInterface {
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
         caretAtMarker(markerName?: string): void;
+        completionsAt(markerName: string, completions: string[]): void;
         indentationIs(numberOfSpaces: number): void;
         indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle?: ts.IndentStyle, baseIndentSize?: number): void;
         textAtCaretIs(text: string): void;
@@ -165,6 +165,8 @@ declare namespace FourSlashInterface {
         goToDefinition(startsAndEnds: { [startMarkerName: string]: string | string[] }): void;
         /** Verifies goToDefinition for each `${markerName}Reference` -> `${markerName}Definition` */
         goToDefinitionForMarkers(...markerNames: string[]): void;
+        goToType(startsAndEnds: { [startMarkerName: string]: string | string[] }): void;
+        goToType(startMarkerNames: string | string[], endMarkerNames: string | string[]): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
         /**
@@ -208,7 +210,7 @@ declare namespace FourSlashInterface {
         noMatchingBracePositionInCurrentFile(bracePosition: number): void;
         DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean): void;
         noDocCommentTemplate(): void;
-        codeFixAtPosition(expectedText: string, errorCode?: number): void;
+        rangeAfterCodeFix(expectedText: string, errorCode?: number): void;
         importFixAtPosition(expectedTextArray: string[], errorCode?: number): void;
 
         navigationBar(json: any): void;

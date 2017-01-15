@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: goToTypeDefinition_Definition.ts
-/////*definition*/class C {
+////class /*definition*/C {
 ////    p;
 ////}
 ////var c: C;
@@ -9,6 +9,4 @@
 // @Filename: goToTypeDefinition_Consumption.ts
 /////*reference*/c = undefined;
 
-goTo.marker('reference');
-goTo.type();
-verify.caretAtMarker('definition');
+verify.goToType("reference", "definition");

@@ -250,3 +250,22 @@ let eleven = (o => o.a(11))({ a: function(n) { return n; } });
 >n : any
 >n : any
 
+// missing arguments
+(function(x, undefined) { return x; })(42);
+>(function(x, undefined) { return x; })(42) : number
+>(function(x, undefined) { return x; }) : (x: number, undefined: any) => number
+>function(x, undefined) { return x; } : (x: number, undefined: any) => number
+>x : number
+>undefined : any
+>x : number
+>42 : 42
+
+((x, y, z) => 42)();
+>((x, y, z) => 42)() : number
+>((x, y, z) => 42) : (x: any, y: any, z: any) => number
+>(x, y, z) => 42 : (x: any, y: any, z: any) => number
+>x : any
+>y : any
+>z : any
+>42 : 42
+

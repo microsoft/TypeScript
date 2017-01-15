@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: goToTypeDefinitioAliases_module1.ts
-/////*definition*/interface I {
+////interface /*definition*/I {
 ////    p;
 ////}
 ////export {I as I2};
@@ -15,10 +15,7 @@
 ////import {/*reference1*/v2 as v3} from "./goToTypeDefinitioAliases_module2";
 /////*reference2*/v3;
 
-goTo.marker('reference1');
-goTo.type();
-verify.caretAtMarker('definition');
-
-goTo.marker('reference2');
-goTo.type();
-verify.caretAtMarker('definition');
+verify.goToType({
+    reference1: "definition",
+    reference2: "definition"
+});

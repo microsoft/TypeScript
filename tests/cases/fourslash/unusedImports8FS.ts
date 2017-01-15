@@ -21,4 +21,4 @@
 ////
 //// }
 
-verify.codeFixAtPosition(`import {Calculator as calc, test as t1} from "./file1"`);
+verify.rangeAfterCodeFix(`import {Calculator as calc, test as t1} from "./file1"`);

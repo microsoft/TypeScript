@@ -1,4 +1,4 @@
-/// <reference path='fourslash.ts' />
+/// <reference path='../fourslash.ts' />
 
 ////class Base{
 ////}
@@ -7,4 +7,4 @@
 ////    }
 ////}
 
-verify.codeFixAtPosition('super();');
+verify.rangeAfterCodeFix('super();');

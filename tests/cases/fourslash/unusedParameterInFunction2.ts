@@ -5,4 +5,4 @@
 ////    x++;
 ////}
 
-verify.codeFixAtPosition("greeter(x)");
+verify.rangeAfterCodeFix("greeter(x)");
