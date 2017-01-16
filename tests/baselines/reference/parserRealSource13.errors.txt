@@ -122,7 +122,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(135,36): error 
     
     ///<reference path='typescript.ts' />
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS6053: File 'typescript.ts' not found.
+!!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
     
     module TypeScript.AstWalkerWithDetailCallback {
         export interface AstWalkerDetailCallback {

@@ -17,6 +17,6 @@ var c: string = x;
 
 var d: String = x;
 >d : Symbol(d, Decl(validStringAssignments.ts, 5, 3))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(validStringAssignments.ts, 0, 3))
 

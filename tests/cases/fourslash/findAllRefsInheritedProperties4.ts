@@ -13,18 +13,9 @@
 //// d.[|prop0|];  // r3
 //// d.[|prop1|];  // r4
 
-function verifyReferences(query: FourSlashInterface.Range, references: FourSlashInterface.Range[]) {
-    goTo.position(query.start);
-    for (const ref of references) {
-        verify.referencesAtPositionContains(ref);
-    }
-}
-
-const ranges = test.ranges();
-verify.assertHasRanges(ranges);
-const [r0, r1, r2, r3, r4] = ranges;
-verifyReferences(r0, [r0, r2, r3]);
-verifyReferences(r1, [r1]);
-verifyReferences(r2, [r0, r2, r3]);
-verifyReferences(r3, [r0, r2, r3]);
-verifyReferences(r4, []);
+const [r0, r1, r2, r3, r4] = test.ranges();
+verify.referencesOf(r0, [r0, r2, r3]);
+verify.referencesOf(r1, [r1]);
+verify.referencesOf(r2, [r0, r2, r3]);
+verify.referencesOf(r3, [r0, r2, r3]);
+verify.referencesOf(r4, []);

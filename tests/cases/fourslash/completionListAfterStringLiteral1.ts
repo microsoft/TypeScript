@@ -3,5 +3,5 @@
 ////"a"./**/
 
 goTo.marker();
-verify.not.memberListContains('alert');
-verify.memberListContains('charAt');
+verify.not.completionListContains('alert');
+verify.completionListContains('charAt');

@@ -91,10 +91,10 @@ These two files represent the DOM typings and are auto-generated. To make any mo
 
 ## Running the Tests
 
-To run all tests, invoke the `runtests` target using jake:
+To run all tests, invoke the `runtests-parallel` target using jake:
 
 ```Shell
-jake runtests
+jake runtests-parallel
 ```
 
 This run will all tests; to run only a specific subset of tests, use:
@@ -183,5 +183,3 @@ jake baseline-accept
 ```
 
 to establish the new baselines as the desired behavior. This will change the files in `tests\baselines\reference`, which should be included as part of your commit. It's important to carefully validate changes in the baselines.
-
-**Note** that `baseline-accept` should only be run after a full test run! Accepting baselines after running a subset of tests will delete baseline files for the tests that didn't run.

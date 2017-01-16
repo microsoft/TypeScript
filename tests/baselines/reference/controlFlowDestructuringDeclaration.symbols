@@ -1,0 +1,164 @@
+=== tests/cases/conformance/controlFlow/controlFlowDestructuringDeclaration.ts ===
+
+function f1() {
+>f1 : Symbol(f1, Decl(controlFlowDestructuringDeclaration.ts, 0, 0))
+
+    let x: string | number = 1;
+>x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 2, 7))
+
+    x;
+>x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 2, 7))
+
+    let y: string | undefined = "";
+>y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 4, 7))
+
+    y;
+>y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 4, 7))
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(controlFlowDestructuringDeclaration.ts, 6, 1))
+
+    let [x]: [string | number] = [1];
+>x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 9, 9))
+
+    x;
+>x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 9, 9))
+
+    let [y]: [string | undefined] = [""];
+>y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 11, 9))
+
+    y;
+>y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 11, 9))
+
+    let [z = ""]: [string | undefined] = [undefined];
+>z : Symbol(z, Decl(controlFlowDestructuringDeclaration.ts, 13, 9))
+>undefined : Symbol(undefined)
+
+    z;
+>z : Symbol(z, Decl(controlFlowDestructuringDeclaration.ts, 13, 9))
+}
+
+function f3() {
+>f3 : Symbol(f3, Decl(controlFlowDestructuringDeclaration.ts, 15, 1))
+
+    let [x]: (string | number)[] = [1];
+>x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 18, 9))
+
+    x;
+>x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 18, 9))
+
+    let [y]: (string | undefined)[] = [""];
+>y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 20, 9))
+
+    y;
+>y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 20, 9))
+
+    let [z = ""]: (string | undefined)[] = [undefined];
+>z : Symbol(z, Decl(controlFlowDestructuringDeclaration.ts, 22, 9))
+>undefined : Symbol(undefined)
+
+    z;
+>z : Symbol(z, Decl(controlFlowDestructuringDeclaration.ts, 22, 9))
+}
+
+function f4() {
+>f4 : Symbol(f4, Decl(controlFlowDestructuringDeclaration.ts, 24, 1))
+
+    let { x }: { x: string | number } = { x: 1 };
+>x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 27, 9))
+>x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 27, 16))
+>x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 27, 41))
+
+    x;
+>x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 27, 9))
+
+    let { y }: { y: string | undefined } = { y: "" };
+>y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 29, 9))
+>y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 29, 16))
+>y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 29, 44))
+
+    y;
+>y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 29, 9))
+
+    let { z = "" }: { z: string | undefined } = { z: undefined };
+>z : Symbol(z, Decl(controlFlowDestructuringDeclaration.ts, 31, 9))
+>z : Symbol(z, Decl(controlFlowDestructuringDeclaration.ts, 31, 21))
+>z : Symbol(z, Decl(controlFlowDestructuringDeclaration.ts, 31, 49))
+>undefined : Symbol(undefined)
+
+    z;
+>z : Symbol(z, Decl(controlFlowDestructuringDeclaration.ts, 31, 9))
+}
+
+function f5() {
+>f5 : Symbol(f5, Decl(controlFlowDestructuringDeclaration.ts, 33, 1))
+
+    let { x }: { x?: string | number } = { x: 1 };
+>x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 36, 9))
+>x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 36, 16))
+>x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 36, 42))
+
+    x;
+>x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 36, 9))
+
+    let { y }: { y?: string | undefined } = { y: "" };
+>y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 38, 9))
+>y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 38, 16))
+>y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 38, 45))
+
+    y;
+>y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 38, 9))
+
+    let { z = "" }: { z?: string | undefined } = { z: undefined };
+>z : Symbol(z, Decl(controlFlowDestructuringDeclaration.ts, 40, 9))
+>z : Symbol(z, Decl(controlFlowDestructuringDeclaration.ts, 40, 21))
+>z : Symbol(z, Decl(controlFlowDestructuringDeclaration.ts, 40, 50))
+>undefined : Symbol(undefined)
+
+    z;
+>z : Symbol(z, Decl(controlFlowDestructuringDeclaration.ts, 40, 9))
+}
+
+function f6() {
+>f6 : Symbol(f6, Decl(controlFlowDestructuringDeclaration.ts, 42, 1))
+
+    let { x }: { x?: string | number } = {};
+>x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 45, 9))
+>x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 45, 16))
+
+    x;
+>x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 45, 9))
+
+    let { y }: { y?: string | undefined } = {};
+>y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 47, 9))
+>y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 47, 16))
+
+    y;
+>y : Symbol(y, Decl(controlFlowDestructuringDeclaration.ts, 47, 9))
+
+    let { z = "" }: { z?: string | undefined } = {};
+>z : Symbol(z, Decl(controlFlowDestructuringDeclaration.ts, 49, 9))
+>z : Symbol(z, Decl(controlFlowDestructuringDeclaration.ts, 49, 21))
+
+    z;
+>z : Symbol(z, Decl(controlFlowDestructuringDeclaration.ts, 49, 9))
+}
+
+function f7() {
+>f7 : Symbol(f7, Decl(controlFlowDestructuringDeclaration.ts, 51, 1))
+
+    let o: { [x: string]: number } = { x: 1 };
+>o : Symbol(o, Decl(controlFlowDestructuringDeclaration.ts, 54, 7))
+>x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 54, 14))
+>x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 54, 38))
+
+    let { x }: { [x: string]: string | number } = o;
+>x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 55, 9))
+>x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 55, 18))
+>o : Symbol(o, Decl(controlFlowDestructuringDeclaration.ts, 54, 7))
+
+    x;
+>x : Symbol(x, Decl(controlFlowDestructuringDeclaration.ts, 55, 9))
+}
+

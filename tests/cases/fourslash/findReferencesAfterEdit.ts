@@ -2,21 +2,19 @@
 
 // @Filename: a.ts
 ////interface A {
-////    foo: string;
+////    [|foo|]: string;
 ////}
 
 // @Filename: b.ts
 ///////<reference path='a.ts'/>
-/////*0*/
+/////**/
 ////function foo(x: A) {
-////    x.f/*1*/oo
+////    x.[|foo|]
 ////}
 
-goTo.marker("1");
-verify.referencesCountIs(2);
+verify.rangesReferenceEachOther();
 
-goTo.marker("0");
+goTo.marker("");
 edit.insert("\r\n");
 
-goTo.marker("1");
-verify.referencesCountIs(2);
+verify.rangesReferenceEachOther();

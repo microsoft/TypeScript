@@ -113,7 +113,7 @@ namespace ts {
         // we see the name of a module that is used everywhere, or the name of an overload).  As
         // such, we cache the information we compute about the candidate for the life of this
         // pattern matcher so we don't have to compute it multiple times.
-        const stringToWordSpans: Map<TextSpan[]> = {};
+        const stringToWordSpans = createMap<TextSpan[]>();
 
         pattern = pattern.trim();
 
@@ -188,7 +188,7 @@ namespace ts {
         }
 
         function getWordSpans(word: string): TextSpan[] {
-            if (!hasProperty(stringToWordSpans, word)) {
+            if (!(word in stringToWordSpans)) {
                 stringToWordSpans[word] = breakIntoWordSpans(word);
             }
 
@@ -514,19 +514,10 @@ namespace ts {
         return str === str.toLowerCase();
     }
 
-    function startsWith(string: string, search: string) {
-        for (let i = 0, n = search.length; i < n; i++) {
-            if (string.charCodeAt(i) !== search.charCodeAt(i)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     // Assumes 'value' is already lowercase.
     function indexOfIgnoringCase(string: string, value: string): number {
-        for (let i = 0, n = string.length - value.length; i <= n; i++) {
+        const n = string.length - value.length;
+        for (let i = 0; i <= n; i++) {
             if (startsWithIgnoringCase(string, value, i)) {
                 return i;
             }
@@ -537,7 +528,7 @@ namespace ts {
 
     // Assumes 'value' is already lowercase.
     function startsWithIgnoringCase(string: string, value: string, start: number): boolean {
-        for (let i = 0, n = value.length; i < n; i++) {
+        for (let i = 0; i < value.length; i++) {
             const ch1 = toLowerCase(string.charCodeAt(i + start));
             const ch2 = value.charCodeAt(i);
 
@@ -623,7 +614,7 @@ namespace ts {
         const result: TextSpan[] = [];
 
         let wordStart = 0;
-        for (let i = 1, n = identifier.length; i < n; i++) {
+        for (let i = 1; i < identifier.length; i++) {
             const lastIsDigit = isDigit(identifier.charCodeAt(i - 1));
             const currentIsDigit = isDigit(identifier.charCodeAt(i));
 

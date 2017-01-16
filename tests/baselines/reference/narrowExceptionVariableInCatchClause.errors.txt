@@ -1,0 +1,33 @@
+tests/cases/conformance/types/any/narrowExceptionVariableInCatchClause.ts(11,17): error TS2339: Property 'doPanic' does not exist on type '{ type: "foo"; dontPanic(): any; }'.
+tests/cases/conformance/types/any/narrowExceptionVariableInCatchClause.ts(16,17): error TS2339: Property 'massage' does not exist on type 'Error'.
+
+
+==== tests/cases/conformance/types/any/narrowExceptionVariableInCatchClause.ts (2 errors) ====
+    declare function isFooError(x: any): x is { type: 'foo'; dontPanic(); };
+    
+    function tryCatch() {
+        try {
+            // do stuff...
+        }
+        catch (err) { // err is implicitly 'any' and cannot be annotated
+    
+            if (isFooError(err)) {
+                err.dontPanic(); // OK
+                err.doPanic(); // ERROR: Property 'doPanic' does not exist on type '{...}'
+                    ~~~~~~~
+!!! error TS2339: Property 'doPanic' does not exist on type '{ type: "foo"; dontPanic(): any; }'.
+            }
+    
+            else if (err instanceof Error) {
+                err.message;
+                err.massage; // ERROR: Property 'massage' does not exist on type 'Error'
+                    ~~~~~~~
+!!! error TS2339: Property 'massage' does not exist on type 'Error'.
+            }
+    
+            else {
+                throw err;
+            }
+        }
+    }
+    

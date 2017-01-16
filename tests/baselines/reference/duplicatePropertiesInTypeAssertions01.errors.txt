@@ -1,0 +1,11 @@
+tests/cases/conformance/expressions/typeAssertions/duplicatePropertiesInTypeAssertions01.ts(2,11): error TS2300: Duplicate identifier 'a'.
+tests/cases/conformance/expressions/typeAssertions/duplicatePropertiesInTypeAssertions01.ts(2,22): error TS2300: Duplicate identifier 'a'.
+
+
+==== tests/cases/conformance/expressions/typeAssertions/duplicatePropertiesInTypeAssertions01.ts (2 errors) ====
+    
+    let x = <{a: number; a: number}>{};
+              ~
+!!! error TS2300: Duplicate identifier 'a'.
+                         ~
+!!! error TS2300: Duplicate identifier 'a'.

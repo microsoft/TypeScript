@@ -7,6 +7,7 @@
         "indent": [true,
             "spaces"
         ],
+        "linebreak-style": [true, "CRLF"],
         "one-line": [true,
             "check-open-brace",
             "check-whitespace"
@@ -16,13 +17,14 @@
             "double",
             "avoid-escape"
         ],
-        "semicolon": true,
+        "semicolon": [true, "ignore-bound-class-methods"],
         "whitespace": [true,
             "check-branch",
+            "check-decl",
             "check-operator",
+            "check-module",
             "check-separator",
-            "check-type",
-            "check-module"
+            "check-type"
         ],
         "typedef-whitespace": [true, {
             "call-signature": "nospace",
@@ -31,19 +33,19 @@
             "property-declaration": "nospace",
             "variable-declaration": "nospace"
         }],
-        "next-line": [true, 
+        "next-line": [true,
             "check-catch",
             "check-else"
         ],
         "no-internal-module": true,
         "no-trailing-whitespace": true,
         "no-inferrable-types": true,
-        "no-null": true,
-        "no-unused-variable": true,
+        "no-null-keyword": true,
         "boolean-trivia": true,
         "type-operator-spacing": true,
         "prefer-const": true,
-        "no-in-operator": true,
-        "no-increment-decrement": true
+        "no-increment-decrement": true,
+        "object-literal-surrounding-space": true,
+        "no-type-assertion-whitespace": true
   }
 }

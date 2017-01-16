@@ -3,6 +3,6 @@
 var [x] = [1, 2];
 >x : number
 >[1, 2] : [number, number]
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 

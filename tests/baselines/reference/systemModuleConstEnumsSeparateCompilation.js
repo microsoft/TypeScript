@@ -13,27 +13,27 @@ module M {
 }
 
 //// [systemModuleConstEnumsSeparateCompilation.js]
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var TopLevelConstEnum, M;
     function foo() {
         use(TopLevelConstEnum.X);
         use(M.NonTopLevelConstEnum.X);
     }
     exports_1("foo", foo);
+    var TopLevelConstEnum, M;
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
             (function (TopLevelConstEnum) {
                 TopLevelConstEnum[TopLevelConstEnum["X"] = 0] = "X";
             })(TopLevelConstEnum || (TopLevelConstEnum = {}));
             (function (M) {
+                var NonTopLevelConstEnum;
                 (function (NonTopLevelConstEnum) {
                     NonTopLevelConstEnum[NonTopLevelConstEnum["X"] = 0] = "X";
-                })(M.NonTopLevelConstEnum || (M.NonTopLevelConstEnum = {}));
-                var NonTopLevelConstEnum = M.NonTopLevelConstEnum;
+                })(NonTopLevelConstEnum = M.NonTopLevelConstEnum || (M.NonTopLevelConstEnum = {}));
             })(M || (M = {}));
         }
-    }
+    };
 });

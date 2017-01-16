@@ -6,7 +6,7 @@ tests/cases/compiler/requireOfAnEmptyFile1_a.ts(3,21): error TS2306: File 'tests
     
     import fs = require('./requireOfAnEmptyFile1_b');
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2306: File 'requireOfAnEmptyFile1_b.ts' is not a module.
+!!! error TS2306: File 'tests/cases/compiler/requireOfAnEmptyFile1_b.ts' is not a module.
     
 ==== tests/cases/compiler/requireOfAnEmptyFile1_b.ts (0 errors) ====
     

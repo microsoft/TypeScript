@@ -13,7 +13,7 @@ function foo<T>(...s: T[]) { return s[0] }
 >T : T
 >s[0] : T
 >s : T[]
->0 : number
+>0 : 0
 
 class SymbolIterator {
 >SymbolIterator : SymbolIterator
@@ -31,7 +31,7 @@ class SymbolIterator {
 
             done: false
 >done : boolean
->false : boolean
+>false : false
 
         };
     }

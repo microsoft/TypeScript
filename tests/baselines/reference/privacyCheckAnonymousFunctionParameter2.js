@@ -25,7 +25,6 @@ define(["require", "exports"], function (require, exports) {
         }
         Q.foo = foo;
     })(Q || (Q = {}));
-    var Q;
     (function (Q) {
         function bar() {
             Q.foo(null);

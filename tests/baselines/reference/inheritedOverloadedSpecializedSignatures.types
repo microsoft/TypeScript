@@ -26,7 +26,7 @@ b('foo').charAt(0);
 >b : B
 >'foo' : "foo"
 >charAt : (pos: number) => string
->0 : number
+>0 : 0
 
 interface A {
 >A : A
@@ -118,7 +118,7 @@ var x5: void = c('A0');
 >x5 : void
 >c('A0') : void
 >c : C
->'A0' : string
+>'A0' : "A0"
 
 var x6: number[] = c('C1');
 >x6 : number[]
@@ -142,5 +142,5 @@ var x9: void = c('generic');
 >x9 : void
 >c('generic') : void
 >c : C
->'generic' : string
+>'generic' : "generic"
 

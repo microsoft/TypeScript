@@ -19,7 +19,7 @@ type T1 = ([a, b, c]);
 >c : c
 
 type F1 = ([a, b, c]) => void;
->F1 : ([a, b, c]: [any, any, any]) => void
+>F1 : F1
 >a : any
 >b : any
 >c : any
@@ -29,7 +29,7 @@ type T2 = ({ a });
 >a : any
 
 type F2 = ({ a }) => void;
->F2 : ({a}: { a: any; }) => void
+>F2 : F2
 >a : any
 
 type T3 = ([{ a: b }, { b: a }]);
@@ -40,7 +40,7 @@ type T3 = ([{ a: b }, { b: a }]);
 >a : a
 
 type F3 = ([{ a: b }, { b: a }]) => void;
->F3 : ([{a: b}, {b: a}]: [{ a: any; }, { b: any; }]) => void
+>F3 : F3
 >a : any
 >b : any
 >b : any
@@ -53,13 +53,13 @@ type T4 = ([{ a: [b, c] }]);
 >c : c
 
 type F4 = ([{ a: [b, c] }]) => void;
->F4 : ([{a: [b, c]}]: [{ a: [any, any]; }]) => void
+>F4 : F4
 >a : any
 >b : any
 >c : any
 
 type C1 = new ([{ a: [b, c] }]) => void;
->C1 : new ([{a: [b, c]}]: [{ a: [any, any]; }]) => void
+>C1 : C1
 >a : any
 >b : any
 >c : any
@@ -70,7 +70,7 @@ var v1 = ([a, b, c]) => "hello";
 >a : any
 >b : any
 >c : any
->"hello" : string
+>"hello" : "hello"
 
 var v2: ([a, b, c]) => string;
 >v2 : ([a, b, c]: [any, any, any]) => string

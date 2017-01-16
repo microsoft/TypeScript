@@ -21,7 +21,7 @@ function R3(n:number) {
 	if (n == 0) {
 >n == 0 : boolean
 >n : number
->0 : number
+>0 : 0
 
 		//return;
 	}

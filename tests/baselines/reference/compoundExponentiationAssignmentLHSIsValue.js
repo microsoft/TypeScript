@@ -1,6 +1,6 @@
 //// [compoundExponentiationAssignmentLHSIsValue.ts]
 // expected error for all the LHS of compound assignments (arithmetic and addition)
-var value;
+var value: any;
 
 // this
 class C {
@@ -86,11 +86,16 @@ foo() **= value;
 (foo()) **= value;
 
 //// [compoundExponentiationAssignmentLHSIsValue.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 // expected error for all the LHS of compound assignments (arithmetic and addition)
 var value;
 // this
@@ -134,21 +139,22 @@ false = Math.pow(false, value);
 }
 value;
 // array literals
-['', ''] = Math.pow(['', ''], value);
+_a = Math.pow(['', ''], value), '' = _a[0], '' = _a[1];
 // super
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        _super.call(this);
-        (_a = _super.prototype, _a. = Math.pow(_a., value));
+        var _this = _super.call(this) || this;
+        (_a = _super.prototype). = Math.pow(_a., value);
         var _a;
+        return _this;
     }
     Derived.prototype.foo = function () {
-        (_a = _super.prototype, _a. = Math.pow(_a., value));
+        (_a = _super.prototype). = Math.pow(_a., value);
         var _a;
     };
     Derived.sfoo = function () {
-        (_a = _super, _a. = Math.pow(_a., value));
+        (_a = _super). = Math.pow(_a., value);
         var _a;
     };
     return Derived;
@@ -175,3 +181,4 @@ foo() = Math.pow(foo(), value);
 ([]) = Math.pow(([]), value);
 (function baz1() { }) = Math.pow((function baz1() { }), value);
 (foo()) = Math.pow((foo()), value);
+var _a;

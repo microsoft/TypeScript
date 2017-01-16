@@ -6,7 +6,7 @@ class C {
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
->0 : number
+>0 : 0
 
     [Symbol.unscopables]: number;
 >Symbol.unscopables : symbol
@@ -24,6 +24,6 @@ class C {
 >toStringTag : symbol
 
         return 0;
->0 : number
+>0 : 0
     }
 }

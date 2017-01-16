@@ -1,0 +1,22 @@
+error TS2318: Cannot find global type 'Promise'.
+tests/cases/compiler/asyncFunctionNoReturnType.ts(1,1): error TS2697: An async function or method must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your `--lib` option.
+tests/cases/compiler/asyncFunctionNoReturnType.ts(1,1): error TS7030: Not all code paths return a value.
+tests/cases/compiler/asyncFunctionNoReturnType.ts(2,9): error TS2304: Cannot find name 'window'.
+tests/cases/compiler/asyncFunctionNoReturnType.ts(3,9): error TS7030: Not all code paths return a value.
+
+
+!!! error TS2318: Cannot find global type 'Promise'.
+==== tests/cases/compiler/asyncFunctionNoReturnType.ts (4 errors) ====
+    async () => {
+    ~~~~~~~~~~~~~
+!!! error TS2697: An async function or method must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your `--lib` option.
+    ~~~~~~~~~~~~~
+!!! error TS7030: Not all code paths return a value.
+        if (window)
+            ~~~~~~
+!!! error TS2304: Cannot find name 'window'.
+            return;
+            ~~~~~~~
+!!! error TS7030: Not all code paths return a value.
+    }
+    

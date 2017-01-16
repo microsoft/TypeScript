@@ -18,7 +18,6 @@ var C = (function () {
     }
     return C;
 }());
-var C;
 (function (C) {
     C.f = C.foo; // OK
     C.b = C.bar; // error

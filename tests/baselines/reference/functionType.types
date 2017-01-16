@@ -4,10 +4,10 @@ function salt() {}
 
 salt.apply("hello", []);
 >salt.apply("hello", []) : any
->salt.apply : (thisArg: any, argArray?: any) => any
+>salt.apply : (this: Function, thisArg: any, argArray?: any) => any
 >salt : () => void
->apply : (thisArg: any, argArray?: any) => any
->"hello" : string
+>apply : (this: Function, thisArg: any, argArray?: any) => any
+>"hello" : "hello"
 >[] : undefined[]
 
 (new Function("return 5"))();
@@ -15,7 +15,7 @@ salt.apply("hello", []);
 >(new Function("return 5")) : Function
 >new Function("return 5") : Function
 >Function : FunctionConstructor
->"return 5" : string
+>"return 5" : "return 5"
  
  
 

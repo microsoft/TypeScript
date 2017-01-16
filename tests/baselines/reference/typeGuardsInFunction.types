@@ -22,7 +22,7 @@ function f(param: string | number) {
 >typeof var1 === "string" : boolean
 >typeof var1 : string
 >var1 : string | number
->"string" : string
+>"string" : "string"
 >var1.length : number
 >var1 : string
 >length : number
@@ -38,7 +38,7 @@ function f(param: string | number) {
 >typeof var2 === "string" : boolean
 >typeof var2 : string
 >var2 : string | number
->"string" : string
+>"string" : "string"
 >var2.length : number
 >var2 : string
 >length : number
@@ -51,7 +51,7 @@ function f(param: string | number) {
 >typeof param === "string" : boolean
 >typeof param : string
 >param : string | number
->"string" : string
+>"string" : "string"
 >param.length : number
 >param : string
 >length : number
@@ -76,7 +76,7 @@ function f1(param: string | number) {
 >typeof var1 === "string" : boolean
 >typeof var1 : string
 >var1 : string | number
->"string" : string
+>"string" : "string"
 >var1.length : number
 >var1 : string
 >length : number
@@ -89,7 +89,7 @@ function f1(param: string | number) {
 >typeof var2 === "string" : boolean
 >typeof var2 : string
 >var2 : string | number
->"string" : string
+>"string" : "string"
 >var2.length : number
 >var2 : string
 >length : number
@@ -102,7 +102,7 @@ function f1(param: string | number) {
 >typeof param === "string" : boolean
 >typeof param : string
 >param : string | number
->"string" : string
+>"string" : "string"
 >param.length : number
 >param : string
 >length : number
@@ -118,7 +118,7 @@ function f1(param: string | number) {
 >typeof var3 === "string" : boolean
 >typeof var3 : string
 >var3 : string | number
->"string" : string
+>"string" : "string"
 >var3.length : number
 >var3 : string
 >length : number
@@ -130,7 +130,7 @@ function f1(param: string | number) {
 >typeof param1 === "string" : boolean
 >typeof param1 : string
 >param1 : string | number
->"string" : string
+>"string" : "string"
 >param1.length : number
 >param1 : string
 >length : number
@@ -160,7 +160,7 @@ function f2(param: string | number) {
 >typeof var1 === "string" : boolean
 >typeof var1 : string
 >var1 : string | number
->"string" : string
+>"string" : "string"
 >var1.length : number
 >var1 : string
 >length : number
@@ -173,7 +173,7 @@ function f2(param: string | number) {
 >typeof var2 === "string" : boolean
 >typeof var2 : string
 >var2 : string | number
->"string" : string
+>"string" : "string"
 >var2.length : number
 >var2 : string
 >length : number
@@ -186,7 +186,7 @@ function f2(param: string | number) {
 >typeof param === "string" : boolean
 >typeof param : string
 >param : string | number
->"string" : string
+>"string" : "string"
 >param.length : number
 >param : string
 >length : number
@@ -202,7 +202,7 @@ function f2(param: string | number) {
 >typeof var3 === "string" : boolean
 >typeof var3 : string
 >var3 : string | number
->"string" : string
+>"string" : "string"
 >var3.length : number
 >var3 : string
 >length : number
@@ -214,7 +214,7 @@ function f2(param: string | number) {
 >typeof param1 === "string" : boolean
 >typeof param1 : string
 >param1 : string | number
->"string" : string
+>"string" : "string"
 >param1.length : number
 >param1 : string
 >length : number
@@ -247,7 +247,7 @@ function f3(param: string | number) {
 >typeof var1 === "string" : boolean
 >typeof var1 : string
 >var1 : string | number
->"string" : string
+>"string" : "string"
 >var1.length : number
 >var1 : string
 >length : number
@@ -260,7 +260,7 @@ function f3(param: string | number) {
 >typeof var2 === "string" : boolean
 >typeof var2 : string
 >var2 : string | number
->"string" : string
+>"string" : "string"
 >var2.length : number
 >var2 : string
 >length : number
@@ -273,7 +273,7 @@ function f3(param: string | number) {
 >typeof param === "string" : boolean
 >typeof param : string
 >param : string | number
->"string" : string
+>"string" : "string"
 >param.length : number
 >param : string
 >length : number
@@ -289,7 +289,7 @@ function f3(param: string | number) {
 >typeof var3 === "string" : boolean
 >typeof var3 : string
 >var3 : string | number
->"string" : string
+>"string" : "string"
 >var3.length : number
 >var3 : string
 >length : number
@@ -301,7 +301,7 @@ function f3(param: string | number) {
 >typeof param1 === "string" : boolean
 >typeof param1 : string
 >param1 : string | number
->"string" : string
+>"string" : "string"
 >param1.length : number
 >param1 : string
 >length : number
@@ -332,7 +332,7 @@ strOrNum = typeof f4() === "string" && f4(); // string | number
 >typeof f4() : string
 >f4() : string | number
 >f4 : () => string | number
->"string" : string
+>"string" : "string"
 >f4() : string | number
 >f4 : () => string | number
 

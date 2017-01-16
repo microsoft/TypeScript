@@ -61,51 +61,21 @@
 ////var /*15*/r15 = ty2[1];
 ////var /*16*/r16 = ty2['1'];
 
-
-goTo.marker('1');
-verify.quickInfoIs('var r1: Date');
-
-goTo.marker('2');
-verify.quickInfoIs('var r2: any');
-
-goTo.marker('3');
-verify.quickInfoIs('var r3: RegExp');
-
-goTo.marker('4');
-verify.quickInfoIs('var r4: RegExp');
-
-goTo.marker('5');
-verify.quickInfoIs('var r5: Date');
-
-goTo.marker('6');
-verify.quickInfoIs('var r6: any');
-
-goTo.marker('7');
-verify.quickInfoIs('var r7: RegExp');
-
-goTo.marker('8');
-verify.quickInfoIs('var r8: RegExp');
-
-goTo.marker('9');
-verify.quickInfoIs('var r9: Date');
-
-goTo.marker('10');
-verify.quickInfoIs('var r10: any');
-
-goTo.marker('11');
-verify.quickInfoIs('var r11: Date');
-
-goTo.marker('12');
-verify.quickInfoIs('var r12: Date');
-
-goTo.marker('13');
-verify.quickInfoIs('var r13: Ty<Date>');
-
-goTo.marker('14');
-verify.quickInfoIs('var r14: any');
-
-goTo.marker('15');
-verify.quickInfoIs('var r15: {\n    [x: number]: Date;\n}');
-
-goTo.marker('16');
-verify.quickInfoIs('var r16: any');
+verify.quickInfos({
+    1: "var r1: Date",
+    2: "var r2: any",
+    3: "var r3: RegExp",
+    4: "var r4: RegExp",
+    5: "var r5: Date",
+    6: "var r6: any",
+    7: "var r7: RegExp",
+    8: "var r8: RegExp",
+    9: "var r9: Date",
+    10: "var r10: any",
+    11: "var r11: Date",
+    12: "var r12: Date",
+    13: "var r13: Ty<Date>",
+    14: "var r14: any",
+    15: "var r15: {\n    [x: number]: Date;\n}",
+    16: "var r16: any"
+});

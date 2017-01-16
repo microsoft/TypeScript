@@ -1,0 +1,29 @@
+tests/cases/compiler/external.ts(2,16): error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
+
+
+==== tests/cases/compiler/external.ts (1 errors) ====
+    export class A { }
+    export class B extends A { }
+                   ~~~~~~~~~
+!!! error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
+    
+    declare var dec: any;
+    
+    @dec
+    class C {
+        method(@dec x: number) {
+        }
+    }
+    
+==== tests/cases/compiler/script.ts (0 errors) ====
+    class A { }
+    class B extends A { }
+    
+    declare var dec: any;
+    
+    @dec
+    class C {
+        method(@dec x: number) {
+        }
+    }
+    

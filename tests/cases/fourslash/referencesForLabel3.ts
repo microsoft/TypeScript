@@ -2,9 +2,9 @@
 
 // References to unused label
 
-/////*1*/label: while (true) {
+////[|label|]: while (true) {
 ////    var label = "label";
 ////}
 
-goTo.marker("1");
-verify.referencesCountIs(1);
+const [label] = test.ranges();
+verify.referencesOf(label, [label]);

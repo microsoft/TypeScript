@@ -10,7 +10,7 @@ interface I {
 }
 
 class C {
-    x?: number; // error
+    x?: number; // ok
 }
 
 interface I2<T> {
@@ -18,7 +18,7 @@ interface I2<T> {
 }
 
 class C2<T> {
-    x?: T; // error
+    x?: T; // ok
 }
 
 var b = {

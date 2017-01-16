@@ -24,12 +24,12 @@ let test: indexAccess;
 let s = test[0];
 >s : Symbol(s, Decl(constIndexedAccess.ts, 13, 3))
 >test : Symbol(test, Decl(constIndexedAccess.ts, 11, 3))
->0 : Symbol(indexAccess.0, Decl(constIndexedAccess.ts, 6, 23))
+>0 : Symbol(indexAccess[0], Decl(constIndexedAccess.ts, 6, 23))
 
 let n = test[1];
 >n : Symbol(n, Decl(constIndexedAccess.ts, 14, 3))
 >test : Symbol(test, Decl(constIndexedAccess.ts, 11, 3))
->1 : Symbol(indexAccess.1, Decl(constIndexedAccess.ts, 7, 14))
+>1 : Symbol(indexAccess[1], Decl(constIndexedAccess.ts, 7, 14))
 
 let s1 = test[numbers.zero];
 >s1 : Symbol(s1, Decl(constIndexedAccess.ts, 16, 3))

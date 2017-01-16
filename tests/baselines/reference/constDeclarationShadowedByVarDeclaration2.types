@@ -5,14 +5,14 @@ function outer() {
 >outer : () => void
 
     const x = 0;
->x : number
->0 : number
+>x : 0
+>0 : 0
 
     function inner() {
 >inner : () => void
 
         var x = "inner";
 >x : string
->"inner" : string
+>"inner" : "inner"
     }
 }

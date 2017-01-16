@@ -42,16 +42,16 @@ declare var _: Underscore.Static;
 >Static : Underscore.Static
 
 var r = _.all([true, 1, null, 'yes'], _.identity);
->r : boolean | number | string
->_.all([true, 1, null, 'yes'], _.identity) : boolean | number | string
+>r : string | number | boolean
+>_.all([true, 1, null, 'yes'], _.identity) : string | number | boolean
 >_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
 >_ : Underscore.Static
 >all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
->[true, 1, null, 'yes'] : (boolean | number | string)[]
->true : boolean
->1 : number
+>[true, 1, null, 'yes'] : (true | 1 | "yes")[]
+>true : true
+>1 : 1
 >null : null
->'yes' : string
+>'yes' : "yes"
 >_.identity : <T>(value: T) => T
 >_ : Underscore.Static
 >identity : <T>(value: T) => T
@@ -62,8 +62,8 @@ var r2 = _.all([true], _.identity);
 >_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
 >_ : Underscore.Static
 >all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
->[true] : boolean[]
->true : boolean
+>[true] : true[]
+>true : true
 >_.identity : <T>(value: T) => T
 >_ : Underscore.Static
 >identity : <T>(value: T) => T
@@ -87,7 +87,7 @@ var r4 = _.all([<any>true], _.identity);
 >all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
 >[<any>true] : any[]
 ><any>true : any
->true : boolean
+>true : true
 >_.identity : <T>(value: T) => T
 >_ : Underscore.Static
 >identity : <T>(value: T) => T

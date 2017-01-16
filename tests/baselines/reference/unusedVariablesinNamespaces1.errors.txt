@@ -1,0 +1,10 @@
+tests/cases/compiler/unusedVariablesinNamespaces1.ts(3,11): error TS6133: 'lettersRegexp' is declared but never used.
+
+
+==== tests/cases/compiler/unusedVariablesinNamespaces1.ts (1 errors) ====
+    
+    namespace Validation {
+        const lettersRegexp = /^[A-Za-z]+$/;
+              ~~~~~~~~~~~~~
+!!! error TS6133: 'lettersRegexp' is declared but never used.
+    }

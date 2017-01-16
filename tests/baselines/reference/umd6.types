@@ -19,5 +19,5 @@ export = Thing;
 >Thing : typeof Thing
 
 export as namespace Foo;
->Foo : any
+>Foo : typeof Thing
 

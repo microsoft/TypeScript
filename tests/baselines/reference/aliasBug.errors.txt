@@ -1,4 +1,4 @@
-tests/cases/compiler/aliasBug.ts(17,15): error TS2305: Module 'foo.bar.baz' has no exported member 'bar'.
+tests/cases/compiler/aliasBug.ts(17,15): error TS2694: Namespace 'foo.bar.baz' has no exported member 'bar'.
 
 
 ==== tests/cases/compiler/aliasBug.ts (1 errors) ====
@@ -20,7 +20,7 @@ tests/cases/compiler/aliasBug.ts(17,15): error TS2305: Module 'foo.bar.baz' has 
       var p2: foo.Provide;
       var p3:booz.bar;
                   ~~~
-!!! error TS2305: Module 'foo.bar.baz' has no exported member 'bar'.
+!!! error TS2694: Namespace 'foo.bar.baz' has no exported member 'bar'.
       var p22 = new provide.Provide();
     }
     

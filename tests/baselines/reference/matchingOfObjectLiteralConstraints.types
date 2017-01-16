@@ -15,7 +15,7 @@ foo2({ y: "foo" }, "foo");
 >foo2 : <T, U extends { y: T; }>(x: U, z: T) => void
 >{ y: "foo" } : { y: string; }
 >y : string
->"foo" : string
->"foo" : string
+>"foo" : "foo"
+>"foo" : "foo"
  
 

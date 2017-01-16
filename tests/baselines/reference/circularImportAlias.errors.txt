@@ -1,0 +1,25 @@
+tests/cases/conformance/internalModules/importDeclarations/circularImportAlias.ts(5,28): error TS2690: A class must be declared after its base class.
+
+
+==== tests/cases/conformance/internalModules/importDeclarations/circularImportAlias.ts (1 errors) ====
+    // expected no error
+    
+    module B {
+        export import a = A;
+        export class D extends a.C {
+                               ~~~
+!!! error TS2690: A class must be declared after its base class.
+            id: number;
+        }
+    }
+    
+    module A {
+        export class C { name: string }
+        export import b = B;
+    }
+    
+    var c: { name: string };
+    var c = new B.a.C();
+    
+    
+    

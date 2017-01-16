@@ -1,0 +1,10 @@
+tests/cases/conformance/es7/trailingCommasInGetter.ts(2,11): error TS1138: Parameter declaration expected.
+
+
+==== tests/cases/conformance/es7/trailingCommasInGetter.ts (1 errors) ====
+    class X {
+        get x(,) { return 0; }
+              ~
+!!! error TS1138: Parameter declaration expected.
+    }
+    

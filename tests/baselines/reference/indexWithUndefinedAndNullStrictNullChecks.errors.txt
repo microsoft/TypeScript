@@ -1,0 +1,40 @@
+tests/cases/compiler/indexWithUndefinedAndNullStrictNullChecks.ts(9,19): error TS2454: Variable 'n' is used before being assigned.
+tests/cases/compiler/indexWithUndefinedAndNullStrictNullChecks.ts(9,21): error TS2538: Type 'undefined' cannot be used as an index type.
+tests/cases/compiler/indexWithUndefinedAndNullStrictNullChecks.ts(10,7): error TS2454: Variable 'n' is used before being assigned.
+tests/cases/compiler/indexWithUndefinedAndNullStrictNullChecks.ts(10,9): error TS2538: Type 'null' cannot be used as an index type.
+tests/cases/compiler/indexWithUndefinedAndNullStrictNullChecks.ts(11,19): error TS2454: Variable 's' is used before being assigned.
+tests/cases/compiler/indexWithUndefinedAndNullStrictNullChecks.ts(11,21): error TS2538: Type 'undefined' cannot be used as an index type.
+tests/cases/compiler/indexWithUndefinedAndNullStrictNullChecks.ts(12,7): error TS2454: Variable 's' is used before being assigned.
+tests/cases/compiler/indexWithUndefinedAndNullStrictNullChecks.ts(12,9): error TS2538: Type 'null' cannot be used as an index type.
+
+
+==== tests/cases/compiler/indexWithUndefinedAndNullStrictNullChecks.ts (8 errors) ====
+    interface N {
+        [n: number]: string;
+    }
+    interface S {
+        [s: string]: number;
+    }
+    let n: N;
+    let s: S;
+    let str: string = n[undefined];
+                      ~
+!!! error TS2454: Variable 'n' is used before being assigned.
+                        ~~~~~~~~~
+!!! error TS2538: Type 'undefined' cannot be used as an index type.
+    str = n[null];
+          ~
+!!! error TS2454: Variable 'n' is used before being assigned.
+            ~~~~
+!!! error TS2538: Type 'null' cannot be used as an index type.
+    let num: number = s[undefined];
+                      ~
+!!! error TS2454: Variable 's' is used before being assigned.
+                        ~~~~~~~~~
+!!! error TS2538: Type 'undefined' cannot be used as an index type.
+    num = s[null];
+          ~
+!!! error TS2454: Variable 's' is used before being assigned.
+            ~~~~
+!!! error TS2538: Type 'null' cannot be used as an index type.
+    

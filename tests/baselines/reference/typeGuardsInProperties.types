@@ -37,7 +37,7 @@ class C1 {
 >this.pp1 : string | number
 >this : this
 >pp1 : string | number
->"string" : string
+>"string" : "string"
 >this.pp1 : string
 >this : this
 >pp1 : string
@@ -51,24 +51,24 @@ class C1 {
 >this.pp2 : string | number
 >this : this
 >pp2 : string | number
->"string" : string
+>"string" : "string"
 >this.pp2 : string
 >this : this
 >pp2 : string
 
         strOrNum = typeof this.pp3 === "string" && this.pp3; // string | number
->strOrNum = typeof this.pp3 === "string" && this.pp3 : string | number
+>strOrNum = typeof this.pp3 === "string" && this.pp3 : string
 >strOrNum : string | number
->typeof this.pp3 === "string" && this.pp3 : string | number
+>typeof this.pp3 === "string" && this.pp3 : string
 >typeof this.pp3 === "string" : boolean
 >typeof this.pp3 : string
 >this.pp3 : string | number
 >this : this
 >pp3 : string | number
->"string" : string
->this.pp3 : string | number
+>"string" : "string"
+>this.pp3 : string
 >this : this
->pp3 : string | number
+>pp3 : string
     }
 }
 var c1: C1;
@@ -84,24 +84,24 @@ strOrNum = typeof c1.pp2 === "string" && c1.pp2; // string | number
 >c1.pp2 : string | number
 >c1 : C1
 >pp2 : string | number
->"string" : string
+>"string" : "string"
 >c1.pp2 : string
 >c1 : C1
 >pp2 : string
 
 strOrNum = typeof c1.pp3 === "string" && c1.pp3; // string | number
->strOrNum = typeof c1.pp3 === "string" && c1.pp3 : string | number
+>strOrNum = typeof c1.pp3 === "string" && c1.pp3 : string
 >strOrNum : string | number
->typeof c1.pp3 === "string" && c1.pp3 : string | number
+>typeof c1.pp3 === "string" && c1.pp3 : string
 >typeof c1.pp3 === "string" : boolean
 >typeof c1.pp3 : string
 >c1.pp3 : string | number
 >c1 : C1
 >pp3 : string | number
->"string" : string
->c1.pp3 : string | number
+>"string" : "string"
+>c1.pp3 : string
 >c1 : C1
->pp3 : string | number
+>pp3 : string
 
 var obj1: {
 >obj1 : { x: string | number; }
@@ -119,7 +119,7 @@ strOrNum = typeof obj1.x === "string" && obj1.x;  // string | number
 >obj1.x : string | number
 >obj1 : { x: string | number; }
 >x : string | number
->"string" : string
+>"string" : "string"
 >obj1.x : string
 >obj1 : { x: string | number; }
 >x : string

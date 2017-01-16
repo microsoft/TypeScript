@@ -1,5 +1,5 @@
 // @module: amd
-// @traceModuleResolution: true
+// @traceResolution: true
 
 // @filename: c:/root/src/tsconfig.json
 {

@@ -1,7 +1,7 @@
 === tests/cases/compiler/sourceMapValidationFunctionExpressions.ts ===
 var greetings = 0;
 >greetings : number
->0 : number
+>0 : 0
 
 var greet = (greeting: string): number => {
 >greet : (greeting: string) => number
@@ -18,7 +18,7 @@ var greet = (greeting: string): number => {
 greet("Hello");
 >greet("Hello") : number
 >greet : (greeting: string) => number
->"Hello" : string
+>"Hello" : "Hello"
 
 var incrGreetings = () => greetings++;
 >incrGreetings : () => number

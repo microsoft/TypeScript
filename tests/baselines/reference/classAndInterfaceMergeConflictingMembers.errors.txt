@@ -1,44 +1,38 @@
-tests/cases/conformance/classes/classDeclarations/classAndInterfaceMergeConflictingMembers.ts(2,12): error TS2300: Duplicate identifier 'x'.
-tests/cases/conformance/classes/classDeclarations/classAndInterfaceMergeConflictingMembers.ts(6,5): error TS2300: Duplicate identifier 'x'.
-tests/cases/conformance/classes/classDeclarations/classAndInterfaceMergeConflictingMembers.ts(10,15): error TS2300: Duplicate identifier 'x'.
-tests/cases/conformance/classes/classDeclarations/classAndInterfaceMergeConflictingMembers.ts(14,5): error TS2300: Duplicate identifier 'x'.
-tests/cases/conformance/classes/classDeclarations/classAndInterfaceMergeConflictingMembers.ts(18,13): error TS2300: Duplicate identifier 'x'.
-tests/cases/conformance/classes/classDeclarations/classAndInterfaceMergeConflictingMembers.ts(22,5): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/classes/classDeclarations/classAndInterfaceMergeConflictingMembers.ts(10,15): error TS2687: All declarations of 'x' must have identical modifiers.
+tests/cases/conformance/classes/classDeclarations/classAndInterfaceMergeConflictingMembers.ts(14,5): error TS2687: All declarations of 'x' must have identical modifiers.
+tests/cases/conformance/classes/classDeclarations/classAndInterfaceMergeConflictingMembers.ts(18,13): error TS2687: All declarations of 'x' must have identical modifiers.
+tests/cases/conformance/classes/classDeclarations/classAndInterfaceMergeConflictingMembers.ts(22,5): error TS2687: All declarations of 'x' must have identical modifiers.
 
 
-==== tests/cases/conformance/classes/classDeclarations/classAndInterfaceMergeConflictingMembers.ts (6 errors) ====
+==== tests/cases/conformance/classes/classDeclarations/classAndInterfaceMergeConflictingMembers.ts (4 errors) ====
     declare class C1 {
         public x : number;
-               ~
-!!! error TS2300: Duplicate identifier 'x'.
     }
     
     interface C1 {
         x : number;
-        ~
-!!! error TS2300: Duplicate identifier 'x'.
     }
     
     declare class C2 {
         protected x : number;
                   ~
-!!! error TS2300: Duplicate identifier 'x'.
+!!! error TS2687: All declarations of 'x' must have identical modifiers.
     }
     
     interface C2 {
         x : number;
         ~
-!!! error TS2300: Duplicate identifier 'x'.
+!!! error TS2687: All declarations of 'x' must have identical modifiers.
     }
     
     declare class C3 {
         private x : number;
                 ~
-!!! error TS2300: Duplicate identifier 'x'.
+!!! error TS2687: All declarations of 'x' must have identical modifiers.
     }
     
     interface C3 {
         x : number;
         ~
-!!! error TS2300: Duplicate identifier 'x'.
+!!! error TS2687: All declarations of 'x' must have identical modifiers.
     }

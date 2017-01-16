@@ -5,8 +5,43 @@
 ////    }
 ////}
 
-verify.getScriptLexicalStructureListContains("Test", "class");
-verify.getScriptLexicalStructureListContains("constructor", "constructor");
+verify.navigationTree({
+    "text": "<global>",
+    "kind": "script",
+    "childItems": [
+        {
+            "text": "Test",
+            "kind": "class",
+            "childItems": [
+                {
+                    "text": "constructor",
+                    "kind": "constructor"
+                }
+            ]
+        }
+    ]
+});
 
-// no other items
-verify.getScriptLexicalStructureListCount(2);
+verify.navigationBar([
+    {
+        "text": "<global>",
+        "kind": "script",
+        "childItems": [
+            {
+                "text": "Test",
+                "kind": "class"
+            }
+        ]
+    },
+    {
+        "text": "Test",
+        "kind": "class",
+        "childItems": [
+            {
+                "text": "constructor",
+                "kind": "constructor"
+            }
+        ],
+        "indent": 1
+    }
+]);

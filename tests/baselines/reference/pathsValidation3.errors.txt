@@ -1,0 +1,6 @@
+error TS5066: Substitutions for pattern 'foo' shouldn't be an empty array.
+
+
+!!! error TS5066: Substitutions for pattern 'foo' shouldn't be an empty array.
+==== tests/cases/compiler/a.ts (0 errors) ====
+    let x = 1;

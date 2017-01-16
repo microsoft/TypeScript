@@ -52,7 +52,7 @@ var b: { [x: string]: string; } = { foo: '' };
 >x : string
 >{ foo: '' } : { foo: string; }
 >foo : string
->'' : string
+>'' : ""
 
 function foo1(x: A);
 >foo1 : { (x: A): any; (x: A): any; }

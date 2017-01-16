@@ -39,6 +39,7 @@ var t = p.x;
 === tests/cases/conformance/externalModules/node_modules/math2d/index.d.ts ===
 
 export as namespace Math2d;
+>Math2d : Symbol(Math2d, Decl(index.d.ts, 0, 0))
 
 export interface Point {
 >Point : Symbol(Point, Decl(index.d.ts, 1, 27))

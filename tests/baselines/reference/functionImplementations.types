@@ -102,7 +102,7 @@ var n = function () {
 >function () {    return 3;} : () => number
 
     return 3;
->3 : number
+>3 : 3
 
 } ();
 
@@ -139,7 +139,7 @@ var un = function () {
 // FunctionExpression with no return type annotation and returns a type parameter type
 var n = function <T>(x: T) {
 >n : number
->function <T>(x: T) {    return x;} (4) : number
+>function <T>(x: T) {    return x;} (4) : 4
 >function <T>(x: T) {    return x;} : <T>(x: T) => T
 >T : T
 >x : T
@@ -149,12 +149,12 @@ var n = function <T>(x: T) {
 >x : T
 
 } (4);
->4 : number
+>4 : 4
 
 // FunctionExpression with no return type annotation and returns a constrained type parameter type
 var n = function <T extends {}>(x: T) {
 >n : number
->function <T extends {}>(x: T) {    return x;} (4) : number
+>function <T extends {}>(x: T) {    return x;} (4) : 4
 >function <T extends {}>(x: T) {    return x;} : <T extends {}>(x: T) => T
 >T : T
 >x : T
@@ -164,19 +164,19 @@ var n = function <T extends {}>(x: T) {
 >x : T
 
 } (4);
->4 : number
+>4 : 4
 
 // FunctionExpression with no return type annotation with multiple return statements with identical types
 var n = function () {
 >n : number
->function () {    return 3;    return 5;}() : number
->function () {    return 3;    return 5;} : () => number
+>function () {    return 3;    return 5;}() : 3 | 5
+>function () {    return 3;    return 5;} : () => 3 | 5
 
     return 3;
->3 : number
+>3 : 3
 
     return 5;
->5 : number
+>5 : 5
 
 }();
 
@@ -255,7 +255,7 @@ function thisFunc() {
 function opt1(n = 4) {
 >opt1 : (n?: number) => void
 >n : number
->4 : number
+>4 : 4
 
     var m = n;
 >m : number
@@ -325,13 +325,13 @@ class AnotherClass { private x }
 var f7: (x: number) => string | number = x => { // should be (x: number) => number | string
 >f7 : (x: number) => string | number
 >x : number
->x => { // should be (x: number) => number | string    if (x < 0) { return x; }    return x.toString();} : (x: number) => number | string
+>x => { // should be (x: number) => number | string    if (x < 0) { return x; }    return x.toString();} : (x: number) => string | number
 >x : number
 
     if (x < 0) { return x; }
 >x < 0 : boolean
 >x : number
->0 : number
+>0 : 0
 >x : number
 
     return x.toString();

@@ -13,12 +13,9 @@
 ////var /*3*/x2 = f2.x;
 ////var /*4*/y2 = f2.y;
 
-goTo.marker('1');
-verify.quickInfoIs('var xx: Foo<string>');
-goTo.marker('2');
-verify.quickInfoIs('var yy: Foo<number>');
-
-goTo.marker('3');
-verify.quickInfoIs('var x2: Foo<string>');
-goTo.marker('4');
-verify.quickInfoIs('var y2: Foo<number>');
+verify.quickInfos({
+    1: "var xx: Foo<string>",
+    2: "var yy: Foo<number>",
+    3: "var x2: Foo<string>",
+    4: "var y2: Foo<number>"
+});

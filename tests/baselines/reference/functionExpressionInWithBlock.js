@@ -11,7 +11,8 @@ function x() {
 function x() {
     with ({}) {
         function f() {
-            (function () { return this; });
+            var _this = this;
+            (function () { return _this; });
         }
     }
 }

@@ -11,4 +11,4 @@ var C = (function () {
     }
     return C;
 }());
-exports.C = C;
+module.exports = B;

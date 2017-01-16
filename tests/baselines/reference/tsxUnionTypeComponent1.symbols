@@ -1,0 +1,58 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+
+import React = require('react');
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+
+interface ComponentProps {
+>ComponentProps : Symbol(ComponentProps, Decl(file.tsx, 1, 32))
+
+    AnyComponent: React.StatelessComponent<any> | React.ComponentClass<any>;
+>AnyComponent : Symbol(ComponentProps.AnyComponent, Decl(file.tsx, 3, 26))
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>StatelessComponent : Symbol(React.StatelessComponent, Decl(react.d.ts, 139, 5))
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>ComponentClass : Symbol(React.ComponentClass, Decl(react.d.ts, 150, 5))
+}
+
+class MyComponent extends React.Component<ComponentProps, {}> {
+>MyComponent : Symbol(MyComponent, Decl(file.tsx, 5, 1))
+>React.Component : Symbol(React.Component, Decl(react.d.ts, 114, 55))
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>Component : Symbol(React.Component, Decl(react.d.ts, 114, 55))
+>ComponentProps : Symbol(ComponentProps, Decl(file.tsx, 1, 32))
+
+    render() {
+>render : Symbol(MyComponent.render, Decl(file.tsx, 7, 63))
+
+        const { AnyComponent } = this.props;
+>AnyComponent : Symbol(AnyComponent, Decl(file.tsx, 9, 15))
+>this.props : Symbol(React.Component.props, Decl(react.d.ts, 122, 30))
+>this : Symbol(MyComponent, Decl(file.tsx, 5, 1))
+>props : Symbol(React.Component.props, Decl(react.d.ts, 122, 30))
+
+        return (<AnyComponent />);
+>AnyComponent : Symbol(AnyComponent, Decl(file.tsx, 9, 15))
+    }
+}
+
+// Stateless Component As Props
+<MyComponent AnyComponent={() => <button>test</button>}/>
+>MyComponent : Symbol(MyComponent, Decl(file.tsx, 5, 1))
+>AnyComponent : Symbol(ComponentProps.AnyComponent, Decl(file.tsx, 3, 26))
+>button : Symbol(JSX.IntrinsicElements.button, Decl(react.d.ts, 913, 43))
+>button : Symbol(JSX.IntrinsicElements.button, Decl(react.d.ts, 913, 43))
+
+// Component Class as Props
+class MyButtonComponent extends React.Component<{},{}> {
+>MyButtonComponent : Symbol(MyButtonComponent, Decl(file.tsx, 15, 57))
+>React.Component : Symbol(React.Component, Decl(react.d.ts, 114, 55))
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>Component : Symbol(React.Component, Decl(react.d.ts, 114, 55))
+}
+
+<MyComponent AnyComponent={MyButtonComponent} />
+>MyComponent : Symbol(MyComponent, Decl(file.tsx, 5, 1))
+>AnyComponent : Symbol(ComponentProps.AnyComponent, Decl(file.tsx, 3, 26))
+>MyButtonComponent : Symbol(MyButtonComponent, Decl(file.tsx, 15, 57))
+
+

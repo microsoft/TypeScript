@@ -1,4 +1,4 @@
-import modErr  = require("./foo/bar.js");
+import modErr  = require("./foo/bar.tx");
 import modErr1 = require("baz");
 import modErr2 = require("./baz");
 

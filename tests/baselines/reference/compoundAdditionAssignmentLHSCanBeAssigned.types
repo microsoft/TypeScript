@@ -1,8 +1,8 @@
 === tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCanBeAssigned.ts ===
 enum E { a, b }
 >E : E
->a : E
->b : E
+>a : E.a
+>b : E.b
 
 var a: any;
 >a : any
@@ -26,24 +26,24 @@ x1 += b;
 x1 += true;
 >x1 += true : any
 >x1 : any
->true : boolean
+>true : true
 
 x1 += 0;
 >x1 += 0 : any
 >x1 : any
->0 : number
+>0 : 0
 
 x1 += '';
 >x1 += '' : string
 >x1 : any
->'' : string
+>'' : ""
 
 x1 += E.a;
 >x1 += E.a : any
 >x1 : any
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 
 x1 += {};
 >x1 += {} : any
@@ -76,24 +76,24 @@ x2 += b;
 x2 += true;
 >x2 += true : string
 >x2 : string
->true : boolean
+>true : true
 
 x2 += 0;
 >x2 += 0 : string
 >x2 : string
->0 : number
+>0 : 0
 
 x2 += '';
 >x2 += '' : string
 >x2 : string
->'' : string
+>'' : ""
 
 x2 += E.a;
 >x2 += E.a : string
 >x2 : string
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 
 x2 += {};
 >x2 += {} : string
@@ -121,14 +121,14 @@ x3 += a;
 x3 += 0;
 >x3 += 0 : number
 >x3 : number
->0 : number
+>0 : 0
 
 x3 += E.a;
 >x3 += E.a : number
 >x3 : number
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 
 x3 += null;
 >x3 += null : number
@@ -152,14 +152,14 @@ x4 += a;
 x4 += 0;
 >x4 += 0 : number
 >x4 : E
->0 : number
+>0 : 0
 
 x4 += E.a;
 >x4 += E.a : number
 >x4 : E
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 
 x4 += null;
 >x4 += null : number
@@ -190,7 +190,7 @@ x6 += a;
 x6 += '';
 >x6 += '' : string
 >x6 : {}
->'' : string
+>'' : ""
 
 var x7: void;
 >x7 : void

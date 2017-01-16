@@ -20,32 +20,32 @@ numOrDate = unionOfDifferentReturnType["hello"]; // number | Date
 >numOrDate : number | Date
 >unionOfDifferentReturnType["hello"] : number | Date
 >unionOfDifferentReturnType : { [a: string]: number; } | { [a: string]: Date; }
->"hello" : string
+>"hello" : "hello"
 
 numOrDate = unionOfDifferentReturnType[10]; // number | Date
 >numOrDate = unionOfDifferentReturnType[10] : number | Date
 >numOrDate : number | Date
 >unionOfDifferentReturnType[10] : number | Date
 >unionOfDifferentReturnType : { [a: string]: number; } | { [a: string]: Date; }
->10 : number
+>10 : 10
 
 var unionOfTypesWithAndWithoutStringSignature: { [a: string]: number; } | boolean;
->unionOfTypesWithAndWithoutStringSignature : { [a: string]: number; } | boolean
+>unionOfTypesWithAndWithoutStringSignature : boolean | { [a: string]: number; }
 >a : string
 
 anyVar = unionOfTypesWithAndWithoutStringSignature["hello"]; // any
 >anyVar = unionOfTypesWithAndWithoutStringSignature["hello"] : any
 >anyVar : number
 >unionOfTypesWithAndWithoutStringSignature["hello"] : any
->unionOfTypesWithAndWithoutStringSignature : { [a: string]: number; } | boolean
->"hello" : string
+>unionOfTypesWithAndWithoutStringSignature : boolean | { [a: string]: number; }
+>"hello" : "hello"
 
 anyVar = unionOfTypesWithAndWithoutStringSignature[10]; // any
 >anyVar = unionOfTypesWithAndWithoutStringSignature[10] : any
 >anyVar : number
 >unionOfTypesWithAndWithoutStringSignature[10] : any
->unionOfTypesWithAndWithoutStringSignature : { [a: string]: number; } | boolean
->10 : number
+>unionOfTypesWithAndWithoutStringSignature : boolean | { [a: string]: number; }
+>10 : 10
 
 // If each type in U has a numeric index signature, 
 // U has a numeric index signature of a union type of the types of the numeric index signatures from each type in U.
@@ -60,30 +60,30 @@ numOrDate = unionOfDifferentReturnType1["hello"]; // any
 >numOrDate : number | Date
 >unionOfDifferentReturnType1["hello"] : any
 >unionOfDifferentReturnType1 : { [a: number]: number; } | { [a: number]: Date; }
->"hello" : string
+>"hello" : "hello"
 
 numOrDate = unionOfDifferentReturnType1[10]; // number | Date
 >numOrDate = unionOfDifferentReturnType1[10] : number | Date
 >numOrDate : number | Date
 >unionOfDifferentReturnType1[10] : number | Date
 >unionOfDifferentReturnType1 : { [a: number]: number; } | { [a: number]: Date; }
->10 : number
+>10 : 10
 
 var unionOfTypesWithAndWithoutStringSignature1: { [a: number]: number; } | boolean;
->unionOfTypesWithAndWithoutStringSignature1 : { [a: number]: number; } | boolean
+>unionOfTypesWithAndWithoutStringSignature1 : boolean | { [a: number]: number; }
 >a : number
 
 anyVar = unionOfTypesWithAndWithoutStringSignature1["hello"]; // any
 >anyVar = unionOfTypesWithAndWithoutStringSignature1["hello"] : any
 >anyVar : number
 >unionOfTypesWithAndWithoutStringSignature1["hello"] : any
->unionOfTypesWithAndWithoutStringSignature1 : { [a: number]: number; } | boolean
->"hello" : string
+>unionOfTypesWithAndWithoutStringSignature1 : boolean | { [a: number]: number; }
+>"hello" : "hello"
 
 anyVar = unionOfTypesWithAndWithoutStringSignature1[10]; // any
 >anyVar = unionOfTypesWithAndWithoutStringSignature1[10] : any
 >anyVar : number
 >unionOfTypesWithAndWithoutStringSignature1[10] : any
->unionOfTypesWithAndWithoutStringSignature1 : { [a: number]: number; } | boolean
->10 : number
+>unionOfTypesWithAndWithoutStringSignature1 : boolean | { [a: number]: number; }
+>10 : 10
 

@@ -13,7 +13,7 @@ var foo: () => [any] = function bar() {
 >intermediate = [""] : [string]
 >intermediate : [any]
 >[""] : [string]
->"" : string
+>"" : ""
 
     return [undefined];
 >[undefined] : [undefined]

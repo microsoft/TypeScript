@@ -7,15 +7,11 @@
 // @Filename: a.ts
 ////export module Module {
 ////}
-/////*classDefinition*/export class Class {
+////export class /*classDefinition*/Class {
 ////    private f;
 ////}
 ////export interface Interface {
 ////    x;
 ////}
 
-goTo.file("b.ts");
-
-goTo.marker('classAliasDefinition');
-goTo.definition();
-verify.caretAtMarker('classDefinition');
+verify.goToDefinition("classAliasDefinition", "classDefinition");

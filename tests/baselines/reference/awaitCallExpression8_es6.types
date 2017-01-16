@@ -34,12 +34,19 @@ declare var po: Promise<{ fn(arg0: boolean, arg1: boolean, arg2: boolean): void;
 >arg1 : boolean
 >arg2 : boolean
 
+declare function before(): void;
+>before : () => void
+
+declare function after(): void;
+>after : () => void
+
 async function func(): Promise<void> {
 >func : () => Promise<void>
 >Promise : Promise<T>
 
-    "before";
->"before" : string
+    before();
+>before() : void
+>before : () => void
 
     var b = (await po).fn(a, a, a);
 >b : void
@@ -53,6 +60,7 @@ async function func(): Promise<void> {
 >a : boolean
 >a : boolean
 
-    "after";
->"after" : string
+    after();
+>after() : void
+>after : () => void
 }

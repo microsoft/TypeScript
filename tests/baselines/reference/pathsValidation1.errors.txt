@@ -1,0 +1,6 @@
+error TS5063: Substitutions for pattern '*' should be an array.
+
+
+!!! error TS5063: Substitutions for pattern '*' should be an array.
+==== tests/cases/compiler/a.ts (0 errors) ====
+    let x = 1;

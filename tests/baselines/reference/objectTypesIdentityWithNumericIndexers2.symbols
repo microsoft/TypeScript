@@ -60,25 +60,24 @@ var a: {
 >x : Symbol(x, Decl(objectTypesIdentityWithNumericIndexers2.ts, 28, 5))
 >Base : Symbol(Base, Decl(objectTypesIdentityWithNumericIndexers2.ts, 0, 0))
 }
-var b: { [x: number]: Derived; } = { foo: <Derived>null };
+var b: { [x: number]: Derived; } = { 0: <Derived>null };
 >b : Symbol(b, Decl(objectTypesIdentityWithNumericIndexers2.ts, 30, 3))
 >x : Symbol(x, Decl(objectTypesIdentityWithNumericIndexers2.ts, 30, 10))
 >Derived : Symbol(Derived, Decl(objectTypesIdentityWithNumericIndexers2.ts, 2, 27))
->foo : Symbol(foo, Decl(objectTypesIdentityWithNumericIndexers2.ts, 30, 36))
 >Derived : Symbol(Derived, Decl(objectTypesIdentityWithNumericIndexers2.ts, 2, 27))
 
 function foo1(x: A);
->foo1 : Symbol(foo1, Decl(objectTypesIdentityWithNumericIndexers2.ts, 30, 58), Decl(objectTypesIdentityWithNumericIndexers2.ts, 32, 20), Decl(objectTypesIdentityWithNumericIndexers2.ts, 33, 20))
+>foo1 : Symbol(foo1, Decl(objectTypesIdentityWithNumericIndexers2.ts, 30, 56), Decl(objectTypesIdentityWithNumericIndexers2.ts, 32, 20), Decl(objectTypesIdentityWithNumericIndexers2.ts, 33, 20))
 >x : Symbol(x, Decl(objectTypesIdentityWithNumericIndexers2.ts, 32, 14))
 >A : Symbol(A, Decl(objectTypesIdentityWithNumericIndexers2.ts, 3, 43))
 
 function foo1(x: A); // error
->foo1 : Symbol(foo1, Decl(objectTypesIdentityWithNumericIndexers2.ts, 30, 58), Decl(objectTypesIdentityWithNumericIndexers2.ts, 32, 20), Decl(objectTypesIdentityWithNumericIndexers2.ts, 33, 20))
+>foo1 : Symbol(foo1, Decl(objectTypesIdentityWithNumericIndexers2.ts, 30, 56), Decl(objectTypesIdentityWithNumericIndexers2.ts, 32, 20), Decl(objectTypesIdentityWithNumericIndexers2.ts, 33, 20))
 >x : Symbol(x, Decl(objectTypesIdentityWithNumericIndexers2.ts, 33, 14))
 >A : Symbol(A, Decl(objectTypesIdentityWithNumericIndexers2.ts, 3, 43))
 
 function foo1(x: any) { }
->foo1 : Symbol(foo1, Decl(objectTypesIdentityWithNumericIndexers2.ts, 30, 58), Decl(objectTypesIdentityWithNumericIndexers2.ts, 32, 20), Decl(objectTypesIdentityWithNumericIndexers2.ts, 33, 20))
+>foo1 : Symbol(foo1, Decl(objectTypesIdentityWithNumericIndexers2.ts, 30, 56), Decl(objectTypesIdentityWithNumericIndexers2.ts, 32, 20), Decl(objectTypesIdentityWithNumericIndexers2.ts, 33, 20))
 >x : Symbol(x, Decl(objectTypesIdentityWithNumericIndexers2.ts, 34, 14))
 
 function foo1b(x: B);

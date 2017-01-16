@@ -9,7 +9,7 @@
 >Object : ObjectConstructor
 >defineProperty : (o: any, p: string, attributes: PropertyDescriptor) => any
 >obj : {}
->"accProperty" : string
+>"accProperty" : "accProperty"
 ><PropertyDescriptor>({                get: function () {                    eval("public = 1;");                    return 11;                },                set: function (v) {                }            }) : PropertyDescriptor
 >PropertyDescriptor : PropertyDescriptor
 >({                get: function () {                    eval("public = 1;");                    return 11;                },                set: function (v) {                }            }) : { get: () => number; set: (v: any) => void; }
@@ -22,10 +22,10 @@
                     eval("public = 1;");
 >eval("public = 1;") : any
 >eval : (x: string) => any
->"public = 1;" : string
+>"public = 1;" : "public = 1;"
 
                     return 11;
->11 : number
+>11 : 11
 
                 },
                 set: function (v) {

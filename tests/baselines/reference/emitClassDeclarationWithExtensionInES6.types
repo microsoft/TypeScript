@@ -6,7 +6,7 @@ class B {
 >baz : (a: string, y?: number) => void
 >a : string
 >y : number
->10 : number
+>10 : 10
 }
 class C extends B {
 >C : C
@@ -57,8 +57,8 @@ class D extends C {
 >super.baz : (a: string, y: number) => void
 >super : C
 >baz : (a: string, y: number) => void
->"hello" : string
->10 : number
+>"hello" : "hello"
+>10 : 10
     }
 }
 

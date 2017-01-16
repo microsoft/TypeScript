@@ -1,6 +1,7 @@
 //// [tests/cases/compiler/commonSourceDir5.ts] ////
 
 //// [bar.ts]
+
 import {z} from "./foo";
 export var x = z + z;
 

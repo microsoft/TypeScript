@@ -1,9 +1,9 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: b.ts
-/////*alias1Definition*/import alias1 = require("fileb");
+////import /*alias1Definition*/alias1 = require("fileb");
 ////module Module {
-////    /*alias2Definition*/export import alias2 = alias1;
+////    export import /*alias2Definition*/alias2 = alias1;
 ////}
 ////
 ////// Type position
@@ -23,20 +23,7 @@
 ////    x;
 ////}
 
-
-goTo.marker('alias1Type');
-goTo.definition();
-verify.caretAtMarker('alias1Definition');
-
-goTo.marker('alias2Type');
-goTo.definition();
-verify.caretAtMarker('alias2Definition');
-
-
-goTo.marker('alias1Value');
-goTo.definition();
-verify.caretAtMarker('alias1Definition');
-
-goTo.marker('alias2Value');
-goTo.definition();
-verify.caretAtMarker('alias2Definition');
+verify.goToDefinition([
+    [["alias1Type", "alias1Value"], "alias1Definition"],
+    [["alias2Type", "alias2Value"], "alias2Definition"]
+]);

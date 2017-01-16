@@ -1,5 +1,5 @@
 //// [assignmentLHSIsReference.ts]
-var value;
+var value: any;
 
 // identifiers: variable and parameter
 var x1: number;

@@ -74,49 +74,49 @@ var a = bar(1, 1, g);      // Should be number
 >a : number
 >bar(1, 1, g) : number
 >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 >g : <T>(x: T, y: T) => T
 
 var a = baz(1, 1, g);      // Should be number
 >a : number
 >baz(1, 1, g) : number
 >baz : <T, U>(x: T, y: T, cb: (x: T, y: T) => U) => U
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 >g : <T>(x: T, y: T) => T
 
 var b: number | string;
->b : number | string
+>b : string | number
 
 var b = foo(g);            // Should be number | string
->b : number | string
->foo(g) : number | string
+>b : string | number
+>foo(g) : string | number
 >foo : <T>(cb: (x: number, y: string) => T) => T
 >g : <T>(x: T, y: T) => T
 
 var b = bar(1, "one", g);  // Should be number | string
->b : number | string
->bar(1, "one", g) : number | string
+>b : string | number
+>bar(1, "one", g) : string | number
 >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
->1 : number
->"one" : string
+>1 : 1
+>"one" : "one"
 >g : <T>(x: T, y: T) => T
 
 var b = bar("one", 1, g);  // Should be number | string
->b : number | string
+>b : string | number
 >bar("one", 1, g) : string | number
 >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
->"one" : string
->1 : number
+>"one" : "one"
+>1 : 1
 >g : <T>(x: T, y: T) => T
 
 var b = baz(b, b, g);      // Should be number | string
->b : number | string
->baz(b, b, g) : number | string
+>b : string | number
+>baz(b, b, g) : string | number
 >baz : <T, U>(x: T, y: T, cb: (x: T, y: T) => U) => U
->b : number | string
->b : number | string
+>b : string | number
+>b : string | number
 >g : <T>(x: T, y: T) => T
 
 var d: number[] | string[];
@@ -132,16 +132,16 @@ var d = bar(1, "one", h);  // Should be number[] | string[]
 >d : number[] | string[]
 >bar(1, "one", h) : number[] | string[]
 >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
->1 : number
->"one" : string
+>1 : 1
+>"one" : "one"
 >h : <T, U>(x: T, y: U) => T[] | U[]
 
 var d = bar("one", 1, h);  // Should be number[] | string[]
 >d : number[] | string[]
->bar("one", 1, h) : string[] | number[]
+>bar("one", 1, h) : number[] | string[]
 >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
->"one" : string
->1 : number
+>"one" : "one"
+>1 : 1
 >h : <T, U>(x: T, y: U) => T[] | U[]
 
 var d = baz(d, d, g);      // Should be number[] | string[]

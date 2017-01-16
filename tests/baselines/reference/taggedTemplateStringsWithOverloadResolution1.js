@@ -1,8 +1,8 @@
 //// [taggedTemplateStringsWithOverloadResolution1.ts]
-function foo(strs: string[]): number;
-function foo(strs: string[], x: number): string;
-function foo(strs: string[], x: number, y: number): boolean;
-function foo(strs: string[], x: number, y: string): {};
+function foo(strs: TemplateStringsArray): number;
+function foo(strs: TemplateStringsArray, x: number): string;
+function foo(strs: TemplateStringsArray, x: number, y: number): boolean;
+function foo(strs: TemplateStringsArray, x: number, y: string): {};
 function foo(...stuff: any[]): any {
     return undefined;
 }
@@ -26,7 +26,7 @@ var z = foo `${1}${2}${3}`;  // any (with error)
 function foo() {
     var stuff = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        stuff[_i - 0] = arguments[_i];
+        stuff[_i] = arguments[_i];
     }
     return undefined;
 }

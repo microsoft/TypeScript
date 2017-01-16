@@ -4,7 +4,7 @@ tests/cases/compiler/aliasErrors.ts(13,12): error TS1003: Identifier expected.
 tests/cases/compiler/aliasErrors.ts(14,12): error TS1003: Identifier expected.
 tests/cases/compiler/aliasErrors.ts(15,12): error TS1003: Identifier expected.
 tests/cases/compiler/aliasErrors.ts(16,12): error TS2503: Cannot find namespace 'undefined'.
-tests/cases/compiler/aliasErrors.ts(26,15): error TS2305: Module 'foo.bar.baz' has no exported member 'bar'.
+tests/cases/compiler/aliasErrors.ts(26,15): error TS2694: Namespace 'foo.bar.baz' has no exported member 'bar'.
 
 
 ==== tests/cases/compiler/aliasErrors.ts (7 errors) ====
@@ -47,7 +47,7 @@ tests/cases/compiler/aliasErrors.ts(26,15): error TS2305: Module 'foo.bar.baz' h
       var p2: foo.Provide;
       var p3:booz.bar;
                   ~~~
-!!! error TS2305: Module 'foo.bar.baz' has no exported member 'bar'.
+!!! error TS2694: Namespace 'foo.bar.baz' has no exported member 'bar'.
       var p22 = new provide.Provide();
     }
     

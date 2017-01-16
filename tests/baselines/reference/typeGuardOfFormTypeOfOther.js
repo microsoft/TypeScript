@@ -38,12 +38,11 @@ else {
     var r4: boolean = boolOrC; // boolean
 }
 
-// Narrowing occurs only if target type is a subtype of variable type
 if (typeof strOrNumOrBool === "Object") {
-    var q1: string | number | boolean = strOrNumOrBool; // string | number | boolean
+    let q1: {} = strOrNumOrBool; // {}
 }
 else {
-    var q2: string | number | boolean = strOrNumOrBool; // string | number | boolean
+    let q2: string | number | boolean = strOrNumOrBool; // string | number | boolean
 }
 
 // A type guard of the form typeof x !== s, where s is a string literal,
@@ -68,12 +67,11 @@ else {
     c = boolOrC; // C
 }
 
-// Narrowing occurs only if target type is a subtype of variable type
 if (typeof strOrNumOrBool !== "Object") {
-    var q1: string | number | boolean = strOrNumOrBool; // string | number | boolean
+    let q1: string | number | boolean = strOrNumOrBool; // string | number | boolean
 }
 else {
-    var q2: string | number | boolean = strOrNumOrBool; // string | number | boolean
+    let q2: {} = strOrNumOrBool; // {}
 }
 
 
@@ -118,9 +116,8 @@ if (typeof boolOrC === "Object") {
 else {
     var r4 = boolOrC; // boolean
 }
-// Narrowing occurs only if target type is a subtype of variable type
 if (typeof strOrNumOrBool === "Object") {
-    var q1 = strOrNumOrBool; // string | number | boolean
+    var q1 = strOrNumOrBool; // {}
 }
 else {
     var q2 = strOrNumOrBool; // string | number | boolean
@@ -146,10 +143,9 @@ if (typeof boolOrC !== "Object") {
 else {
     c = boolOrC; // C
 }
-// Narrowing occurs only if target type is a subtype of variable type
 if (typeof strOrNumOrBool !== "Object") {
     var q1 = strOrNumOrBool; // string | number | boolean
 }
 else {
-    var q2 = strOrNumOrBool; // string | number | boolean
+    var q2 = strOrNumOrBool; // {}
 }

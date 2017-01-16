@@ -67,11 +67,16 @@ class I extends G {
 
 
 //// [returnInConstructor1.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var A = (function () {
     function A() {
         return;
@@ -123,7 +128,7 @@ var G = (function () {
 var H = (function (_super) {
     __extends(H, _super);
     function H() {
-        _super.call(this);
+        var _this = _super.call(this) || this;
         return new G(); //error
     }
     return H;
@@ -131,7 +136,7 @@ var H = (function (_super) {
 var I = (function (_super) {
     __extends(I, _super);
     function I() {
-        _super.call(this);
+        var _this = _super.call(this) || this;
         return new G();
     }
     return I;

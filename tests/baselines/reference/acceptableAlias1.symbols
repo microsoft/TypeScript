@@ -13,5 +13,5 @@ module M {
 import r = M.X;
 >r : Symbol(r, Decl(acceptableAlias1.ts, 4, 1))
 >M : Symbol(M, Decl(acceptableAlias1.ts, 0, 0))
->X : Symbol(r, Decl(acceptableAlias1.ts, 0, 10))
+>X : Symbol(M.X, Decl(acceptableAlias1.ts, 2, 5))
 

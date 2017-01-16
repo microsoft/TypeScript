@@ -18,7 +18,6 @@ module foo.Baz {
 function foo(title) {
     var x = 10;
 }
-var foo;
 (function (foo) {
     var Bar;
     (function (Bar) {
@@ -27,7 +26,6 @@ var foo;
         Bar.f = f;
     })(Bar = foo.Bar || (foo.Bar = {}));
 })(foo || (foo = {}));
-var foo;
 (function (foo) {
     var Baz;
     (function (Baz) {

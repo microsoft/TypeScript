@@ -4,7 +4,7 @@ tests/cases/conformance/Symbols/ES5SymbolProperty2.ts(10,11): error TS2304: Cann
 
 ==== tests/cases/conformance/Symbols/ES5SymbolProperty2.ts (2 errors) ====
     module M {
-        var Symbol;
+        var Symbol: any;
     
         export class C {
             [Symbol.iterator]() { }

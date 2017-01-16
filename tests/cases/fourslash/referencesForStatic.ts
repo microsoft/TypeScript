@@ -6,35 +6,28 @@
 ////var n = 43;
 ////
 ////class foo {
-////    static n = '';
+////    static [|n|] = '';
 ////
 ////    public bar() {
-////        foo./*1*/n = "'";
-////        if(foo.n) {
-////            var x = foo.n;
+////        foo.[|n|] = "'";
+////        if(foo.[|n|]) {
+////            var x = foo.[|n|];
 ////        }
 ////    }
 ////}
 ////
 ////class foo2 {
-////    private x = foo./*2*/n;
+////    private x = foo.[|n|];
 ////    constructor() {
-////        foo./*3*/n = x;
+////        foo.[|n|] = x;
 ////    }
 ////
 ////    function b(n) {
-////        n = foo.n;
+////        n = foo.[|n|];
 ////    }
 ////}
 
 // @Filename: referencesOnStatic_2.ts
-////var q = foo.n;
+////var q = foo.[|n|];
 
-goTo.marker("1");
-verify.referencesCountIs(8);
-
-goTo.marker("2");
-verify.referencesCountIs(8);
-
-goTo.marker("3");
-verify.referencesCountIs(8);
+verify.rangesReferenceEachOther();

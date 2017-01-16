@@ -133,7 +133,7 @@ var b = { new<T extends U, U extends Two>(x: T, y: U) { return ''; } }; // not a
 >T : T
 >y : U
 >U : U
->'' : string
+>'' : ""
 
 function foo1b(x: B<Two, Two>);
 >foo1b : { (x: B<Two, Two>): any; (x: B<Two, Two>): any; }

@@ -1,0 +1,153 @@
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(2,18): error TS6133: 'person' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(3,9): error TS6133: 'unused' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(6,32): error TS6133: 'unusedtypeparameter' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(7,13): error TS6133: 'unusedprivatevariable' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(12,17): error TS6133: 'message' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(13,13): error TS6133: 'unused2' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(17,20): error TS6133: 'person' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(18,13): error TS6133: 'unused' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(25,13): error TS6133: 'unUsedPrivateFunction' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(38,11): error TS6133: 'numberRegexp' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(45,17): error TS6133: 'unUsedPrivateFunction' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(58,15): error TS6133: 'usedLocallyInterface2' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(65,11): error TS6133: 'dummy' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(68,15): error TS6133: 'unusedInterface' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(80,11): error TS6133: 'class3' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(100,15): error TS6133: 'interface5' is declared but never used.
+
+
+==== tests/cases/compiler/unusedIdentifiersConsolidated1.ts (16 errors) ====
+    
+    function greeter(person: string) {
+                     ~~~~~~
+!!! error TS6133: 'person' is declared but never used.
+        var unused = 20;
+            ~~~~~~
+!!! error TS6133: 'unused' is declared but never used.
+    }
+    
+    class Dummy<usedtypeparameter, unusedtypeparameter> {
+                                   ~~~~~~~~~~~~~~~~~~~
+!!! error TS6133: 'unusedtypeparameter' is declared but never used.
+        private unusedprivatevariable: string;
+                ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6133: 'unusedprivatevariable' is declared but never used.
+        private greeting: string;
+        public unusedpublicvariable: string;
+        public typedvariable: usedtypeparameter;
+    
+        constructor(message: string) {
+                    ~~~~~~~
+!!! error TS6133: 'message' is declared but never used.
+            var unused2 = 22;
+                ~~~~~~~
+!!! error TS6133: 'unused2' is declared but never used.
+            this.greeting = "Dummy Message";
+        }
+    
+        public greeter(person: string) {
+                       ~~~~~~
+!!! error TS6133: 'person' is declared but never used.
+            var unused = 20;
+                ~~~~~~
+!!! error TS6133: 'unused' is declared but never used.
+            this.usedPrivateFunction();
+        }
+    
+        private usedPrivateFunction() {
+        }
+    
+        private unUsedPrivateFunction() {
+                ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6133: 'unUsedPrivateFunction' is declared but never used.
+        }
+    }
+    
+    var user = "Jane User";
+    var user2 = "Jane2 User2";
+    
+    namespace Validation {
+        export interface StringValidator {
+            isAcceptable(s: string): boolean;
+        }
+    
+        const lettersRegexp = /^[A-Za-z]+$/;
+        const numberRegexp = /^[0-9]+$/;
+              ~~~~~~~~~~~~
+!!! error TS6133: 'numberRegexp' is declared but never used.
+    
+        export class LettersOnlyValidator implements StringValidator {
+            isAcceptable(s2: string) {
+                return lettersRegexp.test(s2);
+            }
+    
+            private unUsedPrivateFunction() {
+                    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6133: 'unUsedPrivateFunction' is declared but never used.
+            }
+        }
+    
+        export class ZipCodeValidator implements StringValidator {
+            isAcceptable(s3: string) {
+                return s3.length === 5;
+            }
+        }
+    
+        interface usedLocallyInterface {
+        }
+    
+        interface usedLocallyInterface2 {
+                  ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6133: 'usedLocallyInterface2' is declared but never used.
+            someFunction(s1: string): void;
+        }
+    
+        export interface exportedInterface {
+        }
+    
+        class dummy implements usedLocallyInterface {
+              ~~~~~
+!!! error TS6133: 'dummy' is declared but never used.
+        }
+    
+        interface unusedInterface {
+                  ~~~~~~~~~~~~~~~
+!!! error TS6133: 'unusedInterface' is declared but never used.
+        }
+    }
+    
+    
+    namespace Greeter {
+        class class1 {
+        }
+    
+        export class class2 extends class1 {
+        }
+    
+        class class3 {
+              ~~~~~~
+!!! error TS6133: 'class3' is declared but never used.
+        }
+    
+        export class class4 {
+        }
+    
+        interface interface1 {
+        }
+    
+        export interface interface2 extends interface1 {
+        }
+    
+        interface interface3 {
+        }
+    
+        export interface interface4 {
+        }
+    
+        export let a: interface3;
+    
+        interface interface5 {
+                  ~~~~~~~~~~
+!!! error TS6133: 'interface5' is declared but never used.
+        }
+    }

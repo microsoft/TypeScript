@@ -5,14 +5,9 @@
 //// class MyElement {}
 //// var z = <My/*3*/Element></My/*4*/Element>
 
-goTo.marker("1");
-verify.quickInfoIs("any", undefined);
-
-goTo.marker("2");
-verify.quickInfoIs("any", undefined);;
-
-goTo.marker("3");
-verify.quickInfoIs("class MyElement", undefined);;
-
-goTo.marker("4");
-verify.quickInfoIs("class MyElement", undefined);;
+verify.quickInfos({
+    1: "any",
+    2: "any",
+    3: "class MyElement",
+    4: "class MyElement"
+});

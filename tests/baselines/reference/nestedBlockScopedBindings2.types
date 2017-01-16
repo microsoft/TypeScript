@@ -4,7 +4,7 @@ function a0() {
     {
         let x = 1;
 >x : number
->1 : number
+>1 : 1
 
         () => x;
 >() => x : () => number
@@ -13,7 +13,7 @@ function a0() {
     {
         let x = 1;
 >x : number
->1 : number
+>1 : 1
     }
 }
 
@@ -26,7 +26,7 @@ function a1() {
     {
         let x = 1;
 >x : number
->1 : number
+>1 : 1
 
         () => x;
 >() => x : () => number
@@ -39,7 +39,7 @@ function a2() {
     {
         let x = 1;
 >x : number
->1 : number
+>1 : 1
 
         () => x;
 >() => x : () => number
@@ -61,17 +61,17 @@ function a3() {
     {
         let x = 1;
 >x : number
->1 : number
+>1 : 1
 
         () => x;
 >() => x : () => number
 >x : number
     }
     switch (1) {
->1 : number
+>1 : 1
 
         case 1:
->1 : number
+>1 : 1
 
             let x;
 >x : any
@@ -92,10 +92,10 @@ function a4() {
 >x : any
     }
     switch (1) {
->1 : number
+>1 : 1
 
         case 1:
->1 : number
+>1 : 1
 
             let x;
 >x : any
@@ -120,10 +120,10 @@ function a5() {
 >x : any
     }
     switch (1) {
->1 : number
+>1 : 1
 
         case 1:
->1 : number
+>1 : 1
 
             let x;
 >x : any
@@ -136,10 +136,10 @@ function a6() {
 >a6 : () => void
 
     switch (1) {
->1 : number
+>1 : 1
 
         case 1:
->1 : number
+>1 : 1
 
             let x;
 >x : any
@@ -147,10 +147,10 @@ function a6() {
             break;
     }
     switch (1) {
->1 : number
+>1 : 1
 
         case 1:
->1 : number
+>1 : 1
 
             let x;
 >x : any
@@ -163,10 +163,10 @@ function a7() {
 >a7 : () => void
 
     switch (1) {
->1 : number
+>1 : 1
 
         case 1:
->1 : number
+>1 : 1
 
             let x;
 >x : any
@@ -178,10 +178,10 @@ function a7() {
             break;
     }
     switch (1) {
->1 : number
+>1 : 1
 
         case 1:
->1 : number
+>1 : 1
 
             let x;
 >x : any
@@ -194,10 +194,10 @@ function a8() {
 >a8 : () => void
 
     switch (1) {
->1 : number
+>1 : 1
 
         case 1:
->1 : number
+>1 : 1
 
             let x;
 >x : any
@@ -205,10 +205,10 @@ function a8() {
             break;
     }
     switch (1) {
->1 : number
+>1 : 1
 
         case 1:
->1 : number
+>1 : 1
 
             let x;
 >x : any
@@ -225,10 +225,10 @@ function a9() {
 >a9 : () => void
 
     switch (1) {
->1 : number
+>1 : 1
 
         case 1:
->1 : number
+>1 : 1
 
             let x;
 >x : any
@@ -240,10 +240,10 @@ function a9() {
             break;
     }
     switch (1) {
->1 : number
+>1 : 1
 
         case 1:
->1 : number
+>1 : 1
 
             let x;
 >x : any

@@ -1,0 +1,143 @@
+=== tests/cases/conformance/controlFlow/controlFlowTruthiness.ts ===
+
+declare function foo(): string | undefined;
+>foo : Symbol(foo, Decl(controlFlowTruthiness.ts, 0, 0))
+
+function f1() {
+>f1 : Symbol(f1, Decl(controlFlowTruthiness.ts, 1, 43))
+
+    let x = foo();
+>x : Symbol(x, Decl(controlFlowTruthiness.ts, 4, 7))
+>foo : Symbol(foo, Decl(controlFlowTruthiness.ts, 0, 0))
+
+    if (x) {
+>x : Symbol(x, Decl(controlFlowTruthiness.ts, 4, 7))
+
+        x; // string
+>x : Symbol(x, Decl(controlFlowTruthiness.ts, 4, 7))
+    }
+    else {
+        x; // string | undefined
+>x : Symbol(x, Decl(controlFlowTruthiness.ts, 4, 7))
+    }
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(controlFlowTruthiness.ts, 11, 1))
+
+    let x: string | undefined;
+>x : Symbol(x, Decl(controlFlowTruthiness.ts, 14, 7))
+
+    x = foo();
+>x : Symbol(x, Decl(controlFlowTruthiness.ts, 14, 7))
+>foo : Symbol(foo, Decl(controlFlowTruthiness.ts, 0, 0))
+
+    if (x) {
+>x : Symbol(x, Decl(controlFlowTruthiness.ts, 14, 7))
+
+        x; // string
+>x : Symbol(x, Decl(controlFlowTruthiness.ts, 14, 7))
+    }
+    else {
+        x; // string | undefined
+>x : Symbol(x, Decl(controlFlowTruthiness.ts, 14, 7))
+    }
+}
+
+function f3() {
+>f3 : Symbol(f3, Decl(controlFlowTruthiness.ts, 22, 1))
+
+    let x: string | undefined;
+>x : Symbol(x, Decl(controlFlowTruthiness.ts, 25, 7))
+
+    if (x = foo()) {
+>x : Symbol(x, Decl(controlFlowTruthiness.ts, 25, 7))
+>foo : Symbol(foo, Decl(controlFlowTruthiness.ts, 0, 0))
+
+        x; // string
+>x : Symbol(x, Decl(controlFlowTruthiness.ts, 25, 7))
+    }
+    else {
+        x; // string | undefined
+>x : Symbol(x, Decl(controlFlowTruthiness.ts, 25, 7))
+    }
+}
+
+function f4() {
+>f4 : Symbol(f4, Decl(controlFlowTruthiness.ts, 32, 1))
+
+    let x: string | undefined;
+>x : Symbol(x, Decl(controlFlowTruthiness.ts, 35, 7))
+
+    if (!(x = foo())) {
+>x : Symbol(x, Decl(controlFlowTruthiness.ts, 35, 7))
+>foo : Symbol(foo, Decl(controlFlowTruthiness.ts, 0, 0))
+
+        x; // string | undefined
+>x : Symbol(x, Decl(controlFlowTruthiness.ts, 35, 7))
+    }
+    else {
+        x; // string
+>x : Symbol(x, Decl(controlFlowTruthiness.ts, 35, 7))
+    }
+}
+
+function f5() {
+>f5 : Symbol(f5, Decl(controlFlowTruthiness.ts, 42, 1))
+
+    let x: string | undefined;
+>x : Symbol(x, Decl(controlFlowTruthiness.ts, 45, 7))
+
+    let y: string | undefined;
+>y : Symbol(y, Decl(controlFlowTruthiness.ts, 46, 7))
+
+    if (x = y = foo()) {
+>x : Symbol(x, Decl(controlFlowTruthiness.ts, 45, 7))
+>y : Symbol(y, Decl(controlFlowTruthiness.ts, 46, 7))
+>foo : Symbol(foo, Decl(controlFlowTruthiness.ts, 0, 0))
+
+        x; // string
+>x : Symbol(x, Decl(controlFlowTruthiness.ts, 45, 7))
+
+        y; // string | undefined
+>y : Symbol(y, Decl(controlFlowTruthiness.ts, 46, 7))
+    }
+    else {
+        x; // string | undefined
+>x : Symbol(x, Decl(controlFlowTruthiness.ts, 45, 7))
+
+        y; // string | undefined
+>y : Symbol(y, Decl(controlFlowTruthiness.ts, 46, 7))
+    }
+}
+
+function f6() {
+>f6 : Symbol(f6, Decl(controlFlowTruthiness.ts, 55, 1))
+
+    let x: string | undefined;
+>x : Symbol(x, Decl(controlFlowTruthiness.ts, 58, 7))
+
+    let y: string | undefined;
+>y : Symbol(y, Decl(controlFlowTruthiness.ts, 59, 7))
+
+    if (x = foo(), y = foo()) {
+>x : Symbol(x, Decl(controlFlowTruthiness.ts, 58, 7))
+>foo : Symbol(foo, Decl(controlFlowTruthiness.ts, 0, 0))
+>y : Symbol(y, Decl(controlFlowTruthiness.ts, 59, 7))
+>foo : Symbol(foo, Decl(controlFlowTruthiness.ts, 0, 0))
+
+        x; // string | undefined
+>x : Symbol(x, Decl(controlFlowTruthiness.ts, 58, 7))
+
+        y; // string
+>y : Symbol(y, Decl(controlFlowTruthiness.ts, 59, 7))
+    }
+    else {
+        x; // string | undefined
+>x : Symbol(x, Decl(controlFlowTruthiness.ts, 58, 7))
+
+        y; // string | undefined
+>y : Symbol(y, Decl(controlFlowTruthiness.ts, 59, 7))
+    }
+}
+

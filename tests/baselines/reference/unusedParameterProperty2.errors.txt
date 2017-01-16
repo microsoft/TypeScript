@@ -1,0 +1,14 @@
+tests/cases/compiler/unusedParameterProperty2.ts(3,25): error TS6138: Property 'used' is declared but never used.
+
+
+==== tests/cases/compiler/unusedParameterProperty2.ts (1 errors) ====
+    
+    class A {
+        constructor(private used) {
+                            ~~~~
+!!! error TS6138: Property 'used' is declared but never used.
+            let foge = used;
+            foge += "";
+        }
+    }
+    

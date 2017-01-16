@@ -6,35 +6,32 @@
 ////}
 ////
 ////interface B {
-////    /*1*/b: number;
+////    [|b|]: number;
 ////    common: number;
 ////}
 ////
 ////// Assignment
 ////var v1: A | B = { a: 0, common: "" };
-////var v2: A | B = { /*2*/b: 0, common: 3 };
+////var v2: A | B = { [|b|]: 0, common: 3 };
 ////
 ////// Function call
 ////function consumer(f:  A | B) { }
-////consumer({ a: 0, /*3*/b: 0, common: 1 });
+////consumer({ a: 0, [|b|]: 0, common: 1 });
 ////
 ////// Type cast 
-////var c = <A | B> { common: 0, /*4*/b: 0 };
+////var c = <A | B> { common: 0, [|b|]: 0 };
 ////
 ////// Array literal
-////var ar: Array<A|B> = [{ a: 0, common: "" }, { /*5*/b: 0, common: 0 }];
+////var ar: Array<A|B> = [{ a: 0, common: "" }, { [|b|]: 0, common: 0 }];
 ////
 ////// Nested object literal
-////var ob: { aorb: A|B } = { aorb: { /*6*/b: 0, common: 0 } };
+////var ob: { aorb: A|B } = { aorb: { [|b|]: 0, common: 0 } };
 ////
 ////// Widened type
-////var w: A|B = { /*7*/b:undefined, common: undefined };
+////var w: A|B = { [|b|]:undefined, common: undefined };
 ////
 ////// Untped -- should not be included
 ////var u1 = { a: 0, b: 0, common: "" };
 ////var u2 = { b: 0, common: 0 };
 
-test.markers().forEach((m) => {
-    goTo.position(m.position, m.fileName);
-    verify.referencesCountIs(7); 
-});
+verify.rangesReferenceEachOther();

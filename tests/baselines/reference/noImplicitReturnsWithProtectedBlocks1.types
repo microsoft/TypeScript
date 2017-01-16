@@ -18,6 +18,6 @@ function main1() : number {
         log("in finally");
 >log("in finally") : void
 >log : (s: string) => void
->"in finally" : string
+>"in finally" : "in finally"
     }
 }

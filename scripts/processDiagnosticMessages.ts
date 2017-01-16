@@ -69,7 +69,7 @@ function checkForUniqueCodes(messages: string[], diagnosticTable: InputDiagnosti
 }
 
 function buildUniqueNameMap(names: string[]): ts.Map<string> {
-    var nameMap: ts.Map<string> = {};
+    var nameMap = ts.createMap<string>();
 
     var uniqueNames = NameGenerator.ensureUniqueness(names, /* isCaseSensitive */ false, /* isFixed */ undefined);
 
@@ -86,7 +86,7 @@ function buildInfoFileOutput(messageTable: InputDiagnosticMessageTable, nameMap:
         '/// <reference path="types.ts" />\r\n' +
         '/* @internal */\r\n' +
         'namespace ts {\r\n' +
-        '    export var Diagnostics = {\r\n';
+        '    export const Diagnostics = {\r\n';
     var names = Utilities.getObjectKeys(messageTable);
     for (var i = 0; i < names.length; i++) {
         var name = names[i];

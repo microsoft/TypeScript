@@ -2,13 +2,14 @@
 interface I {
 >I : Symbol(I, Decl(taggedTemplateStringsWithTypedTagsES6.ts, 0, 0))
 
-    (stringParts: string[], ...rest: number[]): I;
+    (stringParts: TemplateStringsArray, ...rest: number[]): I;
 >stringParts : Symbol(stringParts, Decl(taggedTemplateStringsWithTypedTagsES6.ts, 1, 5))
->rest : Symbol(rest, Decl(taggedTemplateStringsWithTypedTagsES6.ts, 1, 27))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>rest : Symbol(rest, Decl(taggedTemplateStringsWithTypedTagsES6.ts, 1, 39))
 >I : Symbol(I, Decl(taggedTemplateStringsWithTypedTagsES6.ts, 0, 0))
 
     g: I;
->g : Symbol(I.g, Decl(taggedTemplateStringsWithTypedTagsES6.ts, 1, 50))
+>g : Symbol(I.g, Decl(taggedTemplateStringsWithTypedTagsES6.ts, 1, 62))
 >I : Symbol(I, Decl(taggedTemplateStringsWithTypedTagsES6.ts, 0, 0))
 
     h: I;

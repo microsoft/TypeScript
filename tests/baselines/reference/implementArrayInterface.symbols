@@ -52,22 +52,21 @@ declare class MyArray<T> implements Array<T> {
 >end : Symbol(end, Decl(implementArrayInterface.ts, 10, 25))
 >T : Symbol(T, Decl(implementArrayInterface.ts, 0, 22))
 
-    sort(compareFn?: (a: T, b: T) => number): T[];
+    sort(compareFn?: (a: T, b: T) => number): this;
 >sort : Symbol(MyArray.sort, Decl(implementArrayInterface.ts, 10, 45))
 >compareFn : Symbol(compareFn, Decl(implementArrayInterface.ts, 11, 9))
 >a : Symbol(a, Decl(implementArrayInterface.ts, 11, 22))
 >T : Symbol(T, Decl(implementArrayInterface.ts, 0, 22))
 >b : Symbol(b, Decl(implementArrayInterface.ts, 11, 27))
 >T : Symbol(T, Decl(implementArrayInterface.ts, 0, 22))
->T : Symbol(T, Decl(implementArrayInterface.ts, 0, 22))
 
     splice(start: number): T[];
->splice : Symbol(MyArray.splice, Decl(implementArrayInterface.ts, 11, 50), Decl(implementArrayInterface.ts, 12, 31))
+>splice : Symbol(MyArray.splice, Decl(implementArrayInterface.ts, 11, 51), Decl(implementArrayInterface.ts, 12, 31))
 >start : Symbol(start, Decl(implementArrayInterface.ts, 12, 11))
 >T : Symbol(T, Decl(implementArrayInterface.ts, 0, 22))
 
     splice(start: number, deleteCount: number, ...items: T[]): T[];
->splice : Symbol(MyArray.splice, Decl(implementArrayInterface.ts, 11, 50), Decl(implementArrayInterface.ts, 12, 31))
+>splice : Symbol(MyArray.splice, Decl(implementArrayInterface.ts, 11, 51), Decl(implementArrayInterface.ts, 12, 31))
 >start : Symbol(start, Decl(implementArrayInterface.ts, 13, 11))
 >deleteCount : Symbol(deleteCount, Decl(implementArrayInterface.ts, 13, 25))
 >items : Symbol(items, Decl(implementArrayInterface.ts, 13, 46))

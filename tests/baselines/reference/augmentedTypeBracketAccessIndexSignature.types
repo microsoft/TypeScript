@@ -27,12 +27,12 @@ var a = {}[0]; // Should be Foo
 >a : any
 >{}[0] : any
 >{} : {}
->0 : number
+>0 : 0
 
 var b = (() => { })[0]; // Should be Bar
 >b : any
 >(() => { })[0] : any
 >(() => { }) : () => void
 >() => { } : () => void
->0 : number
+>0 : 0
 

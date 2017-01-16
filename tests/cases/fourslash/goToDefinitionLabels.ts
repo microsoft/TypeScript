@@ -9,19 +9,11 @@
 ////    }
 ////}
 
-goTo.marker('1');
-goTo.definition();
-verify.caretAtMarker('label1Definition');
-
-goTo.marker('2');
-goTo.definition();
-verify.caretAtMarker('label2Definition');
-
-// labels accross function bounderies
-goTo.marker('3');
-goTo.definition();
-verify.caretAtMarker('label1Definition');
-
-// undefined label
-goTo.marker('4');
-verify.not.definitionLocationExists();
+verify.goToDefinition({
+    1: "label1Definition",
+    2: "label2Definition",
+    // labels accross function boundaries
+    3: "label1Definition",
+    // undefined label
+    4: []
+});

@@ -9,5 +9,5 @@
 ////}
 
 goTo.marker();
-verify.memberListContains("bar");
-verify.memberListContains("baz");
+verify.completionListContains("bar");
+verify.completionListContains("baz");

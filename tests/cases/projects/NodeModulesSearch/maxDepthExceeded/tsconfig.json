@@ -1,0 +1,9 @@
+{
+  "compilerOptions": { 
+    "allowJs": true,
+    "maxNodeModuleJsDepth": 1, // Note: Module m1 is already included as a root file
+    "outDir": "built"
+  },
+  "include": ["**/*"],
+  "exclude": ["node_modules/m2/**/*"]
+}

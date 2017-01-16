@@ -1,0 +1,9 @@
+=== tests/cases/compiler/test.d.ts ===
+
+declare var S: typeof A; // no error
+>S : Symbol(S, Decl(test.d.ts, 1, 11))
+>A : Symbol(A, Decl(test.d.ts, 2, 13))
+
+declare const A: number;  
+>A : Symbol(A, Decl(test.d.ts, 2, 13))
+

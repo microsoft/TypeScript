@@ -10,7 +10,7 @@ import {A} from "./f1";
 >A : Symbol(A, Decl(f2.ts, 2, 8))
 
 declare global {
->global : Symbol(, Decl(f2.ts, 2, 23))
+>global : Symbol(global, Decl(f2.ts, 2, 23))
 
     interface Array<T> {
 >Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(f2.ts, 4, 16))

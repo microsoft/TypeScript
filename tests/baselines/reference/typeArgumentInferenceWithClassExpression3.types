@@ -18,6 +18,6 @@ foo(class { prop = "hello" }).length;
 >foo : <T>(x?: typeof (Anonymous class)) => T
 >class { prop = "hello" } : typeof (Anonymous class)
 >prop : string
->"hello" : string
+>"hello" : "hello"
 >length : number
 

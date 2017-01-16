@@ -1,0 +1,12 @@
+=== /a.ts ===
+/// <reference types="jquery" />
+$.x;
+>$.x : Symbol(x, Decl(index.d.ts, 0, 16))
+>$ : Symbol($, Decl(index.d.ts, 0, 11))
+>x : Symbol(x, Decl(index.d.ts, 0, 16))
+
+=== /node_modules/@types/jquery/index.d.ts ===
+declare var $: { x: any };
+>$ : Symbol($, Decl(index.d.ts, 0, 11))
+>x : Symbol(x, Decl(index.d.ts, 0, 16))
+

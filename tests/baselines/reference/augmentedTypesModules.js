@@ -138,7 +138,6 @@ function m2b() { }
 // should be errors to have function first
 function m2c() { }
 ;
-var m2c;
 (function (m2c) {
     m2c.y = 2;
 })(m2c || (m2c = {}));
@@ -146,7 +145,6 @@ function m2f() { }
 ;
 function m2g() { }
 ;
-var m2g;
 (function (m2g) {
     var C = (function () {
         function C() {
@@ -177,7 +175,6 @@ var m3b = (function () {
     m3b.prototype.foo = function () { };
     return m3b;
 }());
-var m3b;
 (function (m3b) {
     var y = 2;
 })(m3b || (m3b = {}));
@@ -187,7 +184,6 @@ var m3c = (function () {
     m3c.prototype.foo = function () { };
     return m3c;
 }());
-var m3c;
 (function (m3c) {
     m3c.y = 2;
 })(m3c || (m3c = {}));
@@ -216,7 +212,6 @@ var m4a;
 (function (m4a) {
     var y = 2;
 })(m4a || (m4a = {}));
-var m4a;
 (function (m4a) {
     m4a[m4a["One"] = 0] = "One";
 })(m4a || (m4a = {}));
@@ -224,7 +219,6 @@ var m4b;
 (function (m4b) {
     m4b.y = 2;
 })(m4b || (m4b = {}));
-var m4b;
 (function (m4b) {
     m4b[m4b["One"] = 0] = "One";
 })(m4b || (m4b = {}));
@@ -241,7 +235,6 @@ var m4d;
         return C;
     }());
 })(m4d || (m4d = {}));
-var m4d;
 (function (m4d) {
     m4d[m4d["One"] = 0] = "One";
 })(m4d || (m4d = {}));

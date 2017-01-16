@@ -34,19 +34,19 @@ else if (b.isFollower()) {
     b.follow();
 }
 
-if (((a.isLeader)())) {
-    a.lead();
-}
-else if (((a).isFollower())) {
-    a.follow();
-}
+// if (((a.isLeader)())) {
+//     a.lead();
+// }
+// else if (((a).isFollower())) {
+//     a.follow();
+// }
 
-if (((a["isLeader"])())) {
-    a.lead();
-}
-else if (((a)["isFollower"]())) {
-    a.follow();
-}
+// if (((a["isLeader"])())) {
+//     a.lead();
+// }
+// else if (((a)["isFollower"]())) {
+//     a.follow();
+// }
 
 var holder2 = {a};
 
@@ -142,11 +142,16 @@ interface MimicGuardInterface {
 
 
 //// [typeGuardFunctionOfFormThis.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var RoyalGuard = (function () {
     function RoyalGuard() {
     }
@@ -161,7 +166,7 @@ var RoyalGuard = (function () {
 var LeadGuard = (function (_super) {
     __extends(LeadGuard, _super);
     function LeadGuard() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     LeadGuard.prototype.lead = function () { };
     ;
@@ -170,7 +175,7 @@ var LeadGuard = (function (_super) {
 var FollowerGuard = (function (_super) {
     __extends(FollowerGuard, _super);
     function FollowerGuard() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     FollowerGuard.prototype.follow = function () { };
     ;
@@ -190,18 +195,18 @@ if (b.isLeader()) {
 else if (b.isFollower()) {
     b.follow();
 }
-if (((a.isLeader)())) {
-    a.lead();
-}
-else if (((a).isFollower())) {
-    a.follow();
-}
-if (((a["isLeader"])())) {
-    a.lead();
-}
-else if (((a)["isFollower"]())) {
-    a.follow();
-}
+// if (((a.isLeader)())) {
+//     a.lead();
+// }
+// else if (((a).isFollower())) {
+//     a.follow();
+// }
+// if (((a["isLeader"])())) {
+//     a.lead();
+// }
+// else if (((a)["isFollower"]())) {
+//     a.follow();
+// }
 var holder2 = { a: a };
 if (holder2.a.isLeader()) {
     holder2.a;
@@ -224,7 +229,7 @@ var ArrowGuard = (function () {
 var ArrowElite = (function (_super) {
     __extends(ArrowElite, _super);
     function ArrowElite() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     ArrowElite.prototype.defend = function () { };
     return ArrowElite;
@@ -232,7 +237,7 @@ var ArrowElite = (function (_super) {
 var ArrowMedic = (function (_super) {
     __extends(ArrowMedic, _super);
     function ArrowMedic() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     ArrowMedic.prototype.heal = function () { };
     return ArrowMedic;
@@ -266,7 +271,7 @@ var MimicGuard = (function () {
 var MimicLeader = (function (_super) {
     __extends(MimicLeader, _super);
     function MimicLeader() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     MimicLeader.prototype.lead = function () { };
     return MimicLeader;
@@ -274,7 +279,7 @@ var MimicLeader = (function (_super) {
 var MimicFollower = (function (_super) {
     __extends(MimicFollower, _super);
     function MimicFollower() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     MimicFollower.prototype.follow = function () { };
     return MimicFollower;

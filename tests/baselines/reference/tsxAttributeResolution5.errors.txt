@@ -2,9 +2,10 @@ tests/cases/conformance/jsx/file.tsx(21,16): error TS2606: Property 'x' of JSX s
   Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/jsx/file.tsx(25,9): error TS2324: Property 'x' is missing in type 'Attribs1'.
 tests/cases/conformance/jsx/file.tsx(29,1): error TS2324: Property 'x' is missing in type 'Attribs1'.
+tests/cases/conformance/jsx/file.tsx(30,1): error TS2324: Property 'toString' is missing in type 'Attribs2'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (4 errors) ====
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements {
@@ -41,5 +42,7 @@ tests/cases/conformance/jsx/file.tsx(29,1): error TS2324: Property 'x' is missin
     <test1 {...{}} />; // Error, missing x
     ~~~~~~~~~~~~~~~~~
 !!! error TS2324: Property 'x' is missing in type 'Attribs1'.
-    <test2 {...{}} />; // OK
+    <test2 {...{}} />; // Error, missing toString
+    ~~~~~~~~~~~~~~~~~
+!!! error TS2324: Property 'toString' is missing in type 'Attribs2'.
     

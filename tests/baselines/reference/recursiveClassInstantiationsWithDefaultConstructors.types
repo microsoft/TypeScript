@@ -14,7 +14,7 @@ export class MemberName {
 
 public prefix: string = "";
 >prefix : string
->"" : string
+>"" : ""
 }
 export class MemberNameArray extends MemberName {
 >MemberNameArray : MemberNameArray

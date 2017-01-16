@@ -39,22 +39,22 @@ let robot: Robot = { name: "mower", skill: "mowing" };
 >Robot : Robot
 >{ name: "mower", skill: "mowing" } : { name: string; skill: string; }
 >name : string
->"mower" : string
+>"mower" : "mower"
 >skill : string
->"mowing" : string
+>"mowing" : "mowing"
 
 let multiRobot: MultiRobot = { name: "mower", skills: { primary: "mowing", secondary: "none" } };
 >multiRobot : MultiRobot
 >MultiRobot : MultiRobot
 >{ name: "mower", skills: { primary: "mowing", secondary: "none" } } : { name: string; skills: { primary: string; secondary: string; }; }
 >name : string
->"mower" : string
+>"mower" : "mower"
 >skills : { primary: string; secondary: string; }
 >{ primary: "mowing", secondary: "none" } : { primary: string; secondary: string; }
 >primary : string
->"mowing" : string
+>"mowing" : "mowing"
 >secondary : string
->"none" : string
+>"none" : "none"
 
 function getRobot() {
 >getRobot : () => Robot
@@ -74,10 +74,10 @@ for (let {name: nameA } = robot, i = 0; i < 1; i++) {
 >nameA : string
 >robot : Robot
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -94,10 +94,10 @@ for (let {name: nameA } = getRobot(), i = 0; i < 1; i++) {
 >getRobot() : Robot
 >getRobot : () => Robot
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -115,14 +115,14 @@ for (let {name: nameA } = <Robot>{ name: "trimmer", skill: "trimming" }, i = 0; 
 >Robot : Robot
 >{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
 >name : string
->"trimmer" : string
+>"trimmer" : "trimmer"
 >skill : string
->"trimming" : string
+>"trimming" : "trimming"
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -141,10 +141,10 @@ for (let { skills: { primary: primaryA, secondary: secondaryA } } = multiRobot, 
 >secondaryA : string
 >multiRobot : MultiRobot
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -164,10 +164,10 @@ for (let { skills: { primary: primaryA, secondary: secondaryA } } = getMultiRobo
 >getMultiRobot() : MultiRobot
 >getMultiRobot : () => MultiRobot
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -190,20 +190,20 @@ for (let { skills: { primary: primaryA, secondary: secondaryA } } =
 >MultiRobot : MultiRobot
 >{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : { name: string; skills: { primary: string; secondary: string; }; }
 >name : string
->"trimmer" : string
+>"trimmer" : "trimmer"
 >skills : { primary: string; secondary: string; }
 >{ primary: "trimming", secondary: "edging" } : { primary: string; secondary: string; }
 >primary : string
->"trimming" : string
+>"trimming" : "trimming"
 >secondary : string
->"edging" : string
+>"edging" : "edging"
 
     i = 0; i < 1; i++) {
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -222,10 +222,10 @@ for (let {name: nameA, skill: skillA } = robot, i = 0; i < 1; i++) {
 >skillA : string
 >robot : Robot
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -244,10 +244,10 @@ for (let {name: nameA, skill: skillA } = getRobot(), i = 0; i < 1; i++) {
 >getRobot() : Robot
 >getRobot : () => Robot
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -267,14 +267,14 @@ for (let {name: nameA, skill: skillA } = <Robot>{ name: "trimmer", skill: "trimm
 >Robot : Robot
 >{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
 >name : string
->"trimmer" : string
+>"trimmer" : "trimmer"
 >skill : string
->"trimming" : string
+>"trimming" : "trimming"
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -295,10 +295,10 @@ for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } = 
 >secondaryA : string
 >multiRobot : MultiRobot
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -320,10 +320,10 @@ for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } = 
 >getMultiRobot() : MultiRobot
 >getMultiRobot : () => MultiRobot
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -348,20 +348,20 @@ for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } =
 >MultiRobot : MultiRobot
 >{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : { name: string; skills: { primary: string; secondary: string; }; }
 >name : string
->"trimmer" : string
+>"trimmer" : "trimmer"
 >skills : { primary: string; secondary: string; }
 >{ primary: "trimming", secondary: "edging" } : { primary: string; secondary: string; }
 >primary : string
->"trimming" : string
+>"trimming" : "trimming"
 >secondary : string
->"edging" : string
+>"edging" : "edging"
 
     i = 0; i < 1; i++) {
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 

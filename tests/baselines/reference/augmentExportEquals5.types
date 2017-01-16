@@ -16,12 +16,12 @@ declare module Express {
 
 declare module "express" {
     function e(): e.Express;
->e : typeof 
+>e : typeof e
 >e : any
 >Express : Express
 
     namespace e {
->e : typeof 
+>e : typeof e
 
         interface IRoute {
 >IRoute : IRoute

@@ -1,4 +1,5 @@
 //// [bitwiseNotOperatorWithEnumType.ts]
+
 // ~ operator on enum type
 
 enum ENUM1 { A, B, "" };

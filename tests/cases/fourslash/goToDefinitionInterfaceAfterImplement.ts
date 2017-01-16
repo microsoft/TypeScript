@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-/////*interfaceDefinition*/interface sInt {
+////interface /*interfaceDefinition*/sInt {
 ////    sVar: number;
 ////    sFn: () => void;
 ////}
@@ -11,6 +11,4 @@
 ////    }
 ////}
 
-goTo.marker('interfaceReference');
-goTo.definition();
-verify.caretAtMarker('interfaceDefinition');
+verify.goToDefinitionForMarkers("interface");

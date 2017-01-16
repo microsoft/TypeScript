@@ -23,7 +23,7 @@ class A {
 >v : string
 
                 case "test": use(this);
->"test" : string
+>"test" : "test"
 >use(this) : void
 >use : (a: any) => void
 >this : this

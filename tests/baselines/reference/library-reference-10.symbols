@@ -1,0 +1,13 @@
+=== /foo/consumer.ts ===
+/// <reference types="jquery" />
+$.foo();
+>$.foo : Symbol(foo, Decl(jquery.d.ts, 0, 16))
+>$ : Symbol($, Decl(jquery.d.ts, 0, 11))
+>foo : Symbol(foo, Decl(jquery.d.ts, 0, 16))
+
+=== /foo/types/jquery/jquery.d.ts ===
+declare var $: { foo(): void };
+>$ : Symbol($, Decl(jquery.d.ts, 0, 11))
+>foo : Symbol(foo, Decl(jquery.d.ts, 0, 16))
+
+

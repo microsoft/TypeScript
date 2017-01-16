@@ -37,4 +37,4 @@ verify.currentLineContentIs("            x = 'Foo';");
 goTo.marker("11");
 verify.currentLineContentIs("        return fun;");
 goTo.marker("12");
-verify.currentLineContentIs("    } (fun1));");
+verify.currentLineContentIs("    }(fun1));");

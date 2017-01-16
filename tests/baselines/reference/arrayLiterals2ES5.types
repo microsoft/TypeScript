@@ -13,25 +13,25 @@ var a0 = [,, 2, 3, 4]
 >[,, 2, 3, 4] : number[]
 > : undefined
 > : undefined
->2 : number
->3 : number
->4 : number
+>2 : 2
+>3 : 3
+>4 : 4
 
 var a1 = ["hello", "world"]
 >a1 : string[]
 >["hello", "world"] : string[]
->"hello" : string
->"world" : string
+>"hello" : "hello"
+>"world" : "world"
 
 var a2 = [, , , ...a0, "hello"];
->a2 : (number | string)[]
->[, , , ...a0, "hello"] : (number | string)[]
+>a2 : (string | number)[]
+>[, , , ...a0, "hello"] : (string | number)[]
 > : undefined
 > : undefined
 > : undefined
 >...a0 : number
 >a0 : number[]
->"hello" : string
+>"hello" : "hello"
 
 var a3 = [,, ...a0]
 >a3 : number[]
@@ -45,7 +45,7 @@ var a4 = [() => 1, ];
 >a4 : (() => number)[]
 >[() => 1, ] : (() => number)[]
 >() => 1 : () => number
->1 : number
+>1 : 1
 
 var a5 = [...a0, , ]
 >a5 : number[]
@@ -74,12 +74,12 @@ var b1: [number[], string[]] = [[1, 2, 3], ["hello", "string"]];
 >b1 : [number[], string[]]
 >[[1, 2, 3], ["hello", "string"]] : [number[], string[]]
 >[1, 2, 3] : number[]
->1 : number
->2 : number
->3 : number
+>1 : 1
+>2 : 2
+>3 : 3
 >["hello", "string"] : string[]
->"hello" : string
->"string" : string
+>"hello" : "hello"
+>"string" : "string"
 
 // The resulting type an array literal expression is determined as follows:
 //     - If the array literal contains no spread elements and is an array assignment pattern in a destructuring assignment (section 4.17.1),
@@ -89,16 +89,16 @@ var [c0, c1] = [1, 2];        // tuple type [number, number]
 >c0 : number
 >c1 : number
 >[1, 2] : [number, number]
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 
 var [c2, c3] = [1, 2, true];  // tuple type [number, number, boolean]
 >c2 : number
 >c3 : number
 >[1, 2, true] : [number, number, boolean]
->1 : number
->2 : number
->true : boolean
+>1 : 1
+>2 : 2
+>true : true
 
 // The resulting type an array literal expression is determined as follows:
 //      - the resulting type is an array type with an element type that is the union of the types of the
@@ -106,27 +106,27 @@ var [c2, c3] = [1, 2, true];  // tuple type [number, number, boolean]
 var temp = ["s", "t", "r"];
 >temp : string[]
 >["s", "t", "r"] : string[]
->"s" : string
->"t" : string
->"r" : string
+>"s" : "s"
+>"t" : "t"
+>"r" : "r"
 
 var temp1 = [1, 2, 3];
 >temp1 : number[]
 >[1, 2, 3] : number[]
->1 : number
->2 : number
->3 : number
+>1 : 1
+>2 : 2
+>3 : 3
 
 var temp2: [number[], string[]] = [[1, 2, 3], ["hello", "string"]];
 >temp2 : [number[], string[]]
 >[[1, 2, 3], ["hello", "string"]] : [number[], string[]]
 >[1, 2, 3] : number[]
->1 : number
->2 : number
->3 : number
+>1 : 1
+>2 : 2
+>3 : 3
 >["hello", "string"] : string[]
->"hello" : string
->"string" : string
+>"hello" : "hello"
+>"string" : "string"
 
 var temp3 = [undefined, null, undefined];
 >temp3 : any[]
@@ -151,10 +151,10 @@ interface myArray2 extends Array<Number|String> { }
 >String : String
 
 var d0 = [1, true, ...temp,];  // has type (string|number|boolean)[]
->d0 : (number | boolean | string)[]
->[1, true, ...temp,] : (number | boolean | string)[]
->1 : number
->true : boolean
+>d0 : (string | number | boolean)[]
+>[1, true, ...temp,] : (string | number | boolean)[]
+>1 : 1
+>true : true
 >...temp : string
 >temp : string[]
 
@@ -214,12 +214,12 @@ var d8: number[][] = [[...temp1]]
 >temp1 : number[]
 
 var d9 = [[...temp1], ...["hello"]];
->d9 : (number[] | string)[]
->[[...temp1], ...["hello"]] : (number[] | string)[]
+>d9 : (string | number[])[]
+>[[...temp1], ...["hello"]] : (string | number[])[]
 >[...temp1] : number[]
 >...temp1 : number
 >temp1 : number[]
 >...["hello"] : string
 >["hello"] : string[]
->"hello" : string
+>"hello" : "hello"
 

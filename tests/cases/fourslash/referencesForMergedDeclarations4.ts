@@ -2,28 +2,24 @@
 
 // class and instanciated module
 
-////class testClass {
+////class [|testClass|] {
 ////    static staticMethod() { }
 ////    method() { }
 ////}
 ////
-////module testClass {
+////module [|testClass|] {
 ////    export interface Bar {
 ////
 ////    }
 ////    export var s = 0;
 ////}
 ////
-////var c1: /*1*/testClass;
-////var c2: /*2*/testClass.Bar;
-/////*3*/testClass.staticMethod();
-/////*4*/testClass.prototype.method();
-/////*5*/testClass.bind(this);
-/////*6*/testClass.s;
-////new /*7*/testClass();
+////var c1: [|testClass|];
+////var c2: [|testClass|].Bar;
+////[|testClass|].staticMethod();
+////[|testClass|].prototype.method();
+////[|testClass|].bind(this);
+////[|testClass|].s;
+////new [|testClass|]();
 
-// Instanciated Module and class intersect in the value space, so we consider them all one group
-test.markers().forEach(m => {
-    goTo.position(m.position, m.fileName);
-    verify.referencesCountIs(9);
-});
+verify.rangesReferenceEachOther();

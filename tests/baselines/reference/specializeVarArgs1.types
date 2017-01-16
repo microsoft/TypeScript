@@ -41,5 +41,5 @@ a.push('Some Value');
 >a.push : (...values: string[]) => any
 >a : ObservableArray<string>
 >push : (...values: string[]) => any
->'Some Value' : string
+>'Some Value' : "Some Value"
 

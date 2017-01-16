@@ -127,9 +127,9 @@ function foo() {
 >z1 : Symbol(z1, Decl(capturedLetConstInLoop9_ES6.ts, 68, 21))
 >x1 : Symbol(x1, Decl(capturedLetConstInLoop9_ES6.ts, 68, 33))
 >y : Symbol(y, Decl(capturedLetConstInLoop9_ES6.ts, 68, 38))
->arguments.length : Symbol(IArguments.length, Decl(lib.d.ts, --, --))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 >arguments : Symbol(arguments)
->length : Symbol(IArguments.length, Decl(lib.d.ts, --, --))
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 
             if (b === 1) {
 >b : Symbol(b, Decl(capturedLetConstInLoop9_ES6.ts, 67, 16))
@@ -247,24 +247,24 @@ function foo3 () {
 
     let x = arguments.length;
 >x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 132, 7))
->arguments.length : Symbol(IArguments.length, Decl(lib.d.ts, --, --))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 >arguments : Symbol(arguments)
->length : Symbol(IArguments.length, Decl(lib.d.ts, --, --))
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 
     for (let y of []) {
 >y : Symbol(y, Decl(capturedLetConstInLoop9_ES6.ts, 133, 12))
 
         let z = arguments.length;
 >z : Symbol(z, Decl(capturedLetConstInLoop9_ES6.ts, 134, 11))
->arguments.length : Symbol(IArguments.length, Decl(lib.d.ts, --, --))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 >arguments : Symbol(arguments)
->length : Symbol(IArguments.length, Decl(lib.d.ts, --, --))
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 
         (function() { return y + z + arguments.length; });
 >y : Symbol(y, Decl(capturedLetConstInLoop9_ES6.ts, 133, 12))
 >z : Symbol(z, Decl(capturedLetConstInLoop9_ES6.ts, 134, 11))
->arguments.length : Symbol(IArguments.length, Decl(lib.d.ts, --, --))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 >arguments : Symbol(arguments)
->length : Symbol(IArguments.length, Decl(lib.d.ts, --, --))
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
     }
 }

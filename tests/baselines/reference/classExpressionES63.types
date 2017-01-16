@@ -5,11 +5,11 @@ let C = class extends class extends class { a = 1 } { b = 2 } { c = 3 };
 >class extends class { a = 1 } { b = 2 } : (Anonymous class)
 >class { a = 1 } : (Anonymous class)
 >a : number
->1 : number
+>1 : 1
 >b : number
->2 : number
+>2 : 2
 >c : number
->3 : number
+>3 : 3
 
 let c = new C();
 >c : (Anonymous class)

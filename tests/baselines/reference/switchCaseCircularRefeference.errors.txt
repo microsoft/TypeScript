@@ -1,0 +1,16 @@
+tests/cases/compiler/switchCaseCircularRefeference.ts(5,10): error TS2678: Type '{ a: "A"; b: any; } | { a: "C"; e: any; }' is not comparable to type 'string'.
+  Type '{ a: "C"; e: any; }' is not comparable to type 'string'.
+
+
+==== tests/cases/compiler/switchCaseCircularRefeference.ts (1 errors) ====
+    // Repro from #9507
+    
+    function f(x: {a: "A", b} | {a: "C", e}) {
+        switch (x.a) {
+        case x:
+             ~
+!!! error TS2678: Type '{ a: "A"; b: any; } | { a: "C"; e: any; }' is not comparable to type 'string'.
+!!! error TS2678:   Type '{ a: "C"; e: any; }' is not comparable to type 'string'.
+            break;
+        }
+    }

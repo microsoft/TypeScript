@@ -5,6 +5,6 @@ module m1 {
   export var n = { 'foo bar': 4 };
 >n : { 'foo bar': number; }
 >{ 'foo bar': 4 } : { 'foo bar': number; }
->4 : number
+>4 : 4
 }
 

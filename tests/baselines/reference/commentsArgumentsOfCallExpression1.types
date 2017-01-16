@@ -6,7 +6,7 @@ function foo(/*c1*/ x: any) { }
 foo(/*c2*/ 1);
 >foo(/*c2*/ 1) : void
 >foo : (x: any) => void
->1 : number
+>1 : 1
 
 foo(/*c3*/ function () { });
 >foo(/*c3*/ function () { }) : void

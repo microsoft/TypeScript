@@ -194,226 +194,115 @@
 ////    }
 ////};
 
-// this line triggers a semantic/syntactic error check, remove line when 788570 is fixed
-edit.insert('');
-
-goTo.marker('1');
-verify.quickInfoIs("(property) C1T5.foo: (i: number, s: string) => number");
-goTo.marker('2');
-verify.quickInfoIs("(parameter) i: number");
-goTo.marker('3');
-verify.quickInfoIs("(parameter) i: number");
-goTo.marker('4');
-verify.quickInfoIs("var C2T5.foo: (i: number, s: string) => number");
-goTo.marker('5');
-verify.quickInfoIs("(parameter) i: number");
-goTo.marker('6');
-verify.quickInfoIs("(parameter) i: number");
-goTo.marker('7');
-verify.quickInfoIs("var c3t1: (s: string) => string");
-goTo.marker('8');
-verify.quickInfoIs("(parameter) s: string");
-goTo.marker('9');
-verify.quickInfoIs("(parameter) s: string");
-goTo.marker('10');
-verify.quickInfoIs("var c3t2: IFoo");
-goTo.marker('11');
-verify.quickInfoIs("var c3t3: number[]");
-goTo.marker('12');
-verify.quickInfoIs("var c3t4: () => IFoo");
-goTo.marker('13');
-verify.quickInfoIs("var c3t5: (n: number) => IFoo");
-goTo.marker('14');
-verify.quickInfoIs("(parameter) n: number");
-goTo.marker('15');
-verify.quickInfoIs("var c3t6: (n: number, s: string) => IFoo");
-goTo.marker('16');
-verify.quickInfoIs("(parameter) n: number");
-goTo.marker('17');
-verify.quickInfoIs("(parameter) s: string");
-goTo.marker('18');
-verify.quickInfoIs("var c3t7: {\n    (n: number): number;\n    (s1: string): number;\n}");
-goTo.marker('20');
-verify.quickInfoIs("var c3t8: (n: number, s: string) => number");
-goTo.marker('21');
-verify.quickInfoIs("(parameter) n: number");
-goTo.marker('22');
-verify.quickInfoIs("var c3t9: number[][]");
-goTo.marker('23');
-verify.quickInfoIs("var c3t10: IFoo[]");
-goTo.marker('24');
-verify.quickInfoIs("var c3t11: ((n: number, s: string) => string)[]");
-goTo.marker('25');
-verify.quickInfoIs("(parameter) n: number");
-goTo.marker('26');
-verify.quickInfoIs("(parameter) s: string");
-goTo.marker('27');
-verify.quickInfoIs("var c3t12: IBar");
-goTo.marker('28');
-verify.quickInfoIs("(property) foo: IFoo");
-goTo.marker('29');
-verify.quickInfoIs("var c3t13: IFoo");
-goTo.marker('30');
-verify.quickInfoIs("(property) f: (i: number, s: string) => string");
-goTo.marker('31');
-verify.quickInfoIs("(parameter) i: number");
-goTo.marker('32');
-verify.quickInfoIs("(parameter) s: string");
-goTo.marker('33');
-verify.quickInfoIs("var c3t14: IFoo");
-goTo.marker('34');
-verify.quickInfoIs("(property) a: undefined[]");
-goTo.marker('35');
-verify.quickInfoIs("(property) C4T5.foo: (i: number, s: string) => string");
-goTo.marker('36');
-verify.quickInfoIs("(parameter) i: number");
-goTo.marker('37');
-verify.quickInfoIs("(parameter) s: string");
-goTo.marker('38');
-verify.quickInfoIs("var C5T5.foo: (i: number, s: string) => string");
-goTo.marker('39');
-verify.quickInfoIs("(parameter) i: number");
-goTo.marker('40');
-verify.quickInfoIs("(parameter) s: string");
-goTo.marker('41');
-verify.quickInfoIs("var c6t5: (n: number) => IFoo");
-goTo.marker('42');
-verify.quickInfoIs("(parameter) n: number");
-goTo.marker('43');
-verify.quickInfoIs("var c7t2: IFoo[]");
-goTo.marker('44');
-verify.quickInfoIs("var c7t2: IFoo[]");
-goTo.marker('45');
-verify.quickInfoIs("(property) t1: (s: string) => string");
-goTo.marker('46');
-verify.quickInfoIs("(parameter) s: string");
-goTo.marker('47');
-verify.quickInfoIs("(property) t2: IFoo");
-goTo.marker('48');
-verify.quickInfoIs("(property) t3: number[]");
-goTo.marker('49');
-verify.quickInfoIs("(property) t4: () => IFoo");
-goTo.marker('50');
-verify.quickInfoIs("(property) t5: (n: number) => IFoo");
-goTo.marker('51');
-verify.quickInfoIs("(parameter) n: number");
-goTo.marker('52');
-verify.quickInfoIs("(property) t6: (n: number, s: string) => IFoo");
-goTo.marker('53');
-verify.quickInfoIs("(parameter) n: number");
-goTo.marker('54');
-verify.quickInfoIs("(parameter) s: string");
-goTo.marker('55');
-verify.quickInfoIs("(property) t7: (n: number, s: string) => number");
-goTo.marker('56');
-verify.quickInfoIs("(property) t8: (n: number, s: string) => number");
-goTo.marker('57');
-verify.quickInfoIs("(parameter) n: number");
-goTo.marker('58');
-verify.quickInfoIs("(property) t9: number[][]");
-goTo.marker('59');
-verify.quickInfoIs("(property) t10: IFoo[]");
-goTo.marker('60');
-verify.quickInfoIs("(property) t11: ((n: number, s: string) => string)[]");
-goTo.marker('61');
-verify.quickInfoIs("(parameter) n: number");
-goTo.marker('62');
-verify.quickInfoIs("(parameter) s: string");
-goTo.marker('63');
-verify.quickInfoIs("(property) t12: IBar");
-goTo.marker('64');
-verify.quickInfoIs("(property) foo: IFoo");
-goTo.marker('65');
-verify.quickInfoIs("(property) t13: IFoo");
-goTo.marker('66');
-verify.quickInfoIs("(property) f: (i: number, s: string) => string");
-goTo.marker('67');
-verify.quickInfoIs("(parameter) i: number");
-goTo.marker('68');
-verify.quickInfoIs("(parameter) s: string");
-goTo.marker('69');
-verify.quickInfoIs("(property) t14: IFoo");
-goTo.marker('70');
-verify.quickInfoIs("(property) a: undefined[]");
-goTo.marker('71');
-verify.quickInfoIs("(parameter) n: number");
-goTo.marker('72');
-verify.quickInfoIs("var c10t5: () => (n: number) => IFoo");
-goTo.marker('73');
-verify.quickInfoIs("(parameter) n: number");
-goTo.marker('74');
-verify.quickInfoIs("(parameter) n: number");
-goTo.marker('75');
-verify.quickInfoIs("var c12t1: (s: string) => string");
-goTo.marker('76');
-verify.quickInfoIs("(parameter) s: string");
-goTo.marker('77');
-verify.quickInfoIs("var c12t2: IFoo");
-goTo.marker('78');
-verify.quickInfoIs("var c12t3: number[]");
-goTo.marker('79');
-verify.quickInfoIs("var c12t4: () => IFoo");
-goTo.marker('80');
-verify.quickInfoIs("var c12t5: (n: number) => IFoo");
-goTo.marker('81');
-verify.quickInfoIs("(parameter) n: number");
-goTo.marker('82');
-verify.quickInfoIs("var c12t6: (n: number, s: string) => IFoo");
-goTo.marker('83');
-verify.quickInfoIs("(parameter) n: number");
-goTo.marker('84');
-verify.quickInfoIs("(parameter) s: string");
-goTo.marker('85');
-verify.quickInfoIs("var c12t7: (n: number, s: string) => number");
-goTo.marker('86');
-verify.quickInfoIs("var c12t8: (n: number, s: string) => number");
-goTo.marker('87');
-verify.quickInfoIs("(parameter) n: number");
-goTo.marker('88');
-verify.quickInfoIs("var c12t9: number[][]");
-goTo.marker('89');
-verify.quickInfoIs("var c12t10: IFoo[]");
-goTo.marker('90');
-verify.quickInfoIs("var c12t11: ((n: number, s: string) => string)[]");
-goTo.marker('91');
-verify.quickInfoIs("(parameter) n: number");
-goTo.marker('92');
-verify.quickInfoIs("(parameter) s: string");
-goTo.marker('93');
-verify.quickInfoIs("var c12t12: IBar");
-goTo.marker('94');
-verify.quickInfoIs("(property) foo: IFoo");
-goTo.marker('95');
-verify.quickInfoIs("var c12t13: IFoo");
-goTo.marker('96');
-verify.quickInfoIs("(property) f: (i: number, s: string) => string");
-goTo.marker('97');
-verify.quickInfoIs("(parameter) i: number");
-goTo.marker('98');
-verify.quickInfoIs("(parameter) s: string");
-goTo.marker('99');
-verify.quickInfoIs("var c12t14: IFoo");
-goTo.marker('100');
-verify.quickInfoIs("(property) a: undefined[]");
-goTo.marker('101');
-verify.quickInfoIs("function EF1(a: number, b: number): number");
-goTo.marker('102');
-verify.quickInfoIs("(parameter) a: any");
-goTo.marker('103');
-verify.quickInfoIs("(parameter) b: any");
-goTo.marker('110');
-verify.quickInfoIs("(property) Point.origin: Point");
-goTo.marker('111');
-verify.quickInfoIs("constructor Point(x: number, y: number): Point");
-goTo.marker('112');
-verify.quickInfoIs("(method) Point.add(dx: number, dy: number): Point");
-goTo.marker('113');
-verify.quickInfoIs("(parameter) dx: number");
-goTo.marker('114');
-verify.quickInfoIs("(parameter) dy: number");
-goTo.marker('115');
-verify.quickInfoIs("(property) add: (dx: number, dy: number) => Point");
-goTo.marker('116');
-verify.quickInfoIs("(parameter) dx: number");
-goTo.marker('117');
-verify.quickInfoIs("(parameter) dy: number");
+verify.quickInfos({
+    1: "(property) C1T5.foo: (i: number, s: string) => number",
+    2: "(parameter) i: number",
+    3: "(parameter) i: number",
+    4: "var C2T5.foo: (i: number, s: string) => number",
+    5: "(parameter) i: number",
+    6: "(parameter) i: number",
+    7: "var c3t1: (s: string) => string",
+    8: "(parameter) s: string",
+    9: "(parameter) s: string",
+    10: "var c3t2: IFoo",
+    11: "var c3t3: number[]",
+    12: "var c3t4: () => IFoo",
+    13: "var c3t5: (n: number) => IFoo",
+    14: "(parameter) n: number",
+    15: "var c3t6: (n: number, s: string) => IFoo",
+    16: "(parameter) n: number",
+    17: "(parameter) s: string",
+    18: "var c3t7: {\n    (n: number): number;\n    (s1: string): number;\n}",
+    20: "var c3t8: (n: number, s: string) => number",
+    21: "(parameter) n: number",
+    22: "var c3t9: number[][]",
+    23: "var c3t10: IFoo[]",
+    24: "var c3t11: ((n: number, s: string) => string)[]",
+    25: "(parameter) n: number",
+    26: "(parameter) s: string",
+    27: "var c3t12: IBar",
+    28: "(property) foo: IFoo",
+    29: "var c3t13: IFoo",
+    30: "(property) f: (i: number, s: string) => string",
+    31: "(parameter) i: number",
+    32: "(parameter) s: string",
+    33: "var c3t14: IFoo",
+    34: "(property) a: undefined[]",
+    35: "(property) C4T5.foo: (i: number, s: string) => string",
+    36: "(parameter) i: number",
+    37: "(parameter) s: string",
+    38: "var C5T5.foo: (i: number, s: string) => string",
+    39: "(parameter) i: number",
+    40: "(parameter) s: string",
+    41: "var c6t5: (n: number) => IFoo",
+    42: "(parameter) n: number",
+    43: "var c7t2: IFoo[]",
+    44: "var c7t2: IFoo[]",
+    45: "(property) t1: (s: string) => string",
+    46: "(parameter) s: string",
+    47: "(property) t2: IFoo",
+    48: "(property) t3: number[]",
+    49: "(property) t4: () => IFoo",
+    50: "(property) t5: (n: number) => IFoo",
+    51: "(parameter) n: number",
+    52: "(property) t6: (n: number, s: string) => IFoo",
+    53: "(parameter) n: number",
+    54: "(parameter) s: string",
+    55: "(property) t7: (n: number, s: string) => number",
+    56: "(property) t8: (n: number, s: string) => number",
+    57: "(parameter) n: number",
+    58: "(property) t9: number[][]",
+    59: "(property) t10: IFoo[]",
+    60: "(property) t11: ((n: number, s: string) => string)[]",
+    61: "(parameter) n: number",
+    62: "(parameter) s: string",
+    63: "(property) t12: IBar",
+    64: "(property) foo: IFoo",
+    65: "(property) t13: IFoo",
+    66: "(property) f: (i: number, s: string) => string",
+    67: "(parameter) i: number",
+    68: "(parameter) s: string",
+    69: "(property) t14: IFoo",
+    70: "(property) a: undefined[]",
+    71: "(parameter) n: number",
+    72: "var c10t5: () => (n: number) => IFoo",
+    73: "(parameter) n: number",
+    74: "(parameter) n: number",
+    75: "var c12t1: (s: string) => string",
+    76: "(parameter) s: string",
+    77: "var c12t2: IFoo",
+    78: "var c12t3: number[]",
+    79: "var c12t4: () => IFoo",
+    80: "var c12t5: (n: number) => IFoo",
+    81: "(parameter) n: number",
+    82: "var c12t6: (n: number, s: string) => IFoo",
+    83: "(parameter) n: number",
+    84: "(parameter) s: string",
+    85: "var c12t7: (n: number, s: string) => number",
+    86: "var c12t8: (n: number, s: string) => number",
+    87: "(parameter) n: number",
+    88: "var c12t9: number[][]",
+    89: "var c12t10: IFoo[]",
+    90: "var c12t11: ((n: number, s: string) => string)[]",
+    91: "(parameter) n: number",
+    92: "(parameter) s: string",
+    93: "var c12t12: IBar",
+    94: "(property) foo: IFoo",
+    95: "var c12t13: IFoo",
+    96: "(property) f: (i: number, s: string) => string",
+    97: "(parameter) i: number",
+    98: "(parameter) s: string",
+    99: "var c12t14: IFoo",
+    100: "(property) a: undefined[]",
+    101: "function EF1(a: number, b: number): number",
+    102: "(parameter) a: any",
+    103: "(parameter) b: any",
+    110: "(property) Point.origin: Point",
+    111: "constructor Point(x: number, y: number): Point",
+    112: "(method) Point.add(dx: number, dy: number): Point",
+    113: "(parameter) dx: number",
+    114: "(parameter) dy: number",
+    115: "(property) add: (dx: number, dy: number) => Point",
+    116: "(parameter) dx: number",
+    117: "(parameter) dy: number"
+});

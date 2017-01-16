@@ -140,7 +140,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(454,35): error T
     
     ///<reference path='typescript.ts' />
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS6053: File 'typescript.ts' not found.
+!!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
     
     module TypeScript {
     

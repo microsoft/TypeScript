@@ -27,8 +27,8 @@ function foo1(bar: { a:string }[]): Dog;
 
 function foo1([x]: { a:number | string }[]): Animal {
 >foo1 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Dog; }
->x : { a: number | string; }
->a : number | string
+>x : { a: string | number; }
+>a : string | number
 >Animal : Animal
 
     return undefined;
@@ -49,8 +49,8 @@ function foo2(bar: { a:string }[]): Dog;
 
 function foo2([x]: { a:number | string }[]): Cat | Dog {
 >foo2 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Dog; }
->x : { a: number | string; }
->a : number | string
+>x : { a: string | number; }
+>a : string | number
 >Cat : Cat
 >Dog : Dog
 
@@ -66,7 +66,7 @@ var x1 = foo1([{a: "str"}]);
 >[{a: "str"}] : { a: string; }[]
 >{a: "str"} : { a: string; }
 >a : string
->"str" : string
+>"str" : "str"
 
 var y1 = foo1([{a: 100}]);
 >y1 : Cat
@@ -75,7 +75,7 @@ var y1 = foo1([{a: 100}]);
 >[{a: 100}] : { a: number; }[]
 >{a: 100} : { a: number; }
 >a : number
->100 : number
+>100 : 100
 
 var x2 = foo2([{a: "str"}]);
 >x2 : Dog
@@ -84,7 +84,7 @@ var x2 = foo2([{a: "str"}]);
 >[{a: "str"}] : { a: string; }[]
 >{a: "str"} : { a: string; }
 >a : string
->"str" : string
+>"str" : "str"
 
 var y2 = foo2([{a: 100}]);
 >y2 : Cat
@@ -93,5 +93,5 @@ var y2 = foo2([{a: 100}]);
 >[{a: 100}] : { a: number; }[]
 >{a: 100} : { a: number; }
 >a : number
->100 : number
+>100 : 100
 

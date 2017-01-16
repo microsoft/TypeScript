@@ -1,0 +1,70 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardNarrowsPrimitiveIntersection.ts ===
+type Tag = {__tag: any};
+>Tag : Symbol(Tag, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 0, 0))
+>__tag : Symbol(__tag, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 0, 12))
+
+declare function isNonBlank(value: string) : value is (string & Tag);
+>isNonBlank : Symbol(isNonBlank, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 0, 24))
+>value : Symbol(value, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 1, 28))
+>value : Symbol(value, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 1, 28))
+>Tag : Symbol(Tag, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 0, 0))
+
+declare function doThis(value: string & Tag): void;
+>doThis : Symbol(doThis, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 1, 69))
+>value : Symbol(value, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 2, 24))
+>Tag : Symbol(Tag, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 0, 0))
+
+declare function doThat(value: string) : void;
+>doThat : Symbol(doThat, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 2, 51))
+>value : Symbol(value, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 3, 24))
+
+let value: string;
+>value : Symbol(value, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 4, 3))
+
+if (isNonBlank(value)) {
+>isNonBlank : Symbol(isNonBlank, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 0, 24))
+>value : Symbol(value, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 4, 3))
+
+    doThis(value);
+>doThis : Symbol(doThis, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 1, 69))
+>value : Symbol(value, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 4, 3))
+
+} else {
+    doThat(value);
+>doThat : Symbol(doThat, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 2, 51))
+>value : Symbol(value, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 4, 3))
+}
+
+
+const enum Tag2 {}
+>Tag2 : Symbol(Tag2, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 9, 1))
+
+declare function isNonBlank2(value: string) : value is (string & Tag2);
+>isNonBlank2 : Symbol(isNonBlank2, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 12, 18))
+>value : Symbol(value, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 13, 29))
+>value : Symbol(value, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 13, 29))
+>Tag2 : Symbol(Tag2, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 9, 1))
+
+declare function doThis2(value: string & Tag2): void;
+>doThis2 : Symbol(doThis2, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 13, 71))
+>value : Symbol(value, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 14, 25))
+>Tag2 : Symbol(Tag2, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 9, 1))
+
+declare function doThat2(value: string) : void;
+>doThat2 : Symbol(doThat2, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 14, 53))
+>value : Symbol(value, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 15, 25))
+
+if (isNonBlank2(value)) {
+>isNonBlank2 : Symbol(isNonBlank2, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 12, 18))
+>value : Symbol(value, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 4, 3))
+
+    doThis2(value);
+>doThis2 : Symbol(doThis2, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 13, 71))
+>value : Symbol(value, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 4, 3))
+
+} else {
+    doThat2(value);
+>doThat2 : Symbol(doThat2, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 14, 53))
+>value : Symbol(value, Decl(typeGuardNarrowsPrimitiveIntersection.ts, 4, 3))
+}
+

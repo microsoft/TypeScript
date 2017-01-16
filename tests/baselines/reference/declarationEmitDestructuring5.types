@@ -22,11 +22,11 @@ function bar1([z, , , ] = [1, 3, 4, 6, 7]) { }
 > : undefined
 > : undefined
 >[1, 3, 4, 6, 7] : [number, number, number, number, number]
->1 : number
->3 : number
->4 : number
->6 : number
->7 : number
+>1 : 1
+>3 : 3
+>4 : 4
+>6 : 6
+>7 : 7
 
 function bar2([,,z, , , ]) { }
 >bar2 : ([, , z, , ,]: [any, any, any, any, any]) => void

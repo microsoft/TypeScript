@@ -1,10 +1,10 @@
 /// <reference path='fourslash.ts'/>
 
-////interface Foo { }
-////module Foo { export interface Bar { } }
-////function Foo() { }
+////interface [|Foo|] { }
+////module [|Foo|] { export interface Bar { } }
+////function [|Foo|]() { }
 ////
-////export = /*1*/Foo;
+////export = [|Foo|];
 
-goTo.marker("1");
-verify.referencesCountIs(4);
+const [r0, r1, r2, r3] = test.ranges();
+verify.referencesOf(r3, [r0, r1, r2, r3]);

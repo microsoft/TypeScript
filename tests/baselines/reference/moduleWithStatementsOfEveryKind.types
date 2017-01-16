@@ -40,19 +40,19 @@ module A {
     }
     enum Color { Blue, Red }
 >Color : Color
->Blue : Color
->Red : Color
+>Blue : Color.Blue
+>Red : Color.Red
 
     var x = 12;
 >x : number
->12 : number
+>12 : 12
 
     function F(s: string): number {
 >F : (s: string) => number
 >s : string
 
         return 2;
->2 : number
+>2 : 2
     }
     var array: I[] = null;
 >array : I[]
@@ -66,18 +66,18 @@ module A {
 
         return 'hello ' + s;
 >'hello ' + s : string
->'hello ' : string
+>'hello ' : "hello "
 >s : string
     }
     var ol = { s: 'hello', id: 2, isvalid: true };
 >ol : { s: string; id: number; isvalid: boolean; }
 >{ s: 'hello', id: 2, isvalid: true } : { s: string; id: number; isvalid: boolean; }
 >s : string
->'hello' : string
+>'hello' : "hello"
 >id : number
->2 : number
+>2 : 2
 >isvalid : boolean
->true : boolean
+>true : true
 
     declare class DC {
 >DC : DC
@@ -128,19 +128,19 @@ module Y {
     }
     export enum Color { Blue, Red }
 >Color : Color
->Blue : Color
->Red : Color
+>Blue : Color.Blue
+>Red : Color.Red
 
     export var x = 12;
 >x : number
->12 : number
+>12 : 12
 
     export function F(s: string): number {
 >F : (s: string) => number
 >s : string
 
         return 2;
->2 : number
+>2 : 2
     }
     export var array: I[] = null;
 >array : I[]
@@ -154,18 +154,18 @@ module Y {
 
         return 'hello ' + s;
 >'hello ' + s : string
->'hello ' : string
+>'hello ' : "hello "
 >s : string
     }
     export var ol = { s: 'hello', id: 2, isvalid: true };
 >ol : { s: string; id: number; isvalid: boolean; }
 >{ s: 'hello', id: 2, isvalid: true } : { s: string; id: number; isvalid: boolean; }
 >s : string
->'hello' : string
+>'hello' : "hello"
 >id : number
->2 : number
+>2 : 2
 >isvalid : boolean
->true : boolean
+>true : true
 
     export declare class DC {
 >DC : DC

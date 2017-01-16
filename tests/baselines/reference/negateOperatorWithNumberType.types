@@ -6,12 +6,12 @@ var NUMBER: number;
 var NUMBER1: number[] = [1, 2];
 >NUMBER1 : number[]
 >[1, 2] : number[]
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 
 function foo(): number { return 1; }
 >foo : () => number
->1 : number
+>1 : 1
 
 class A {
 >A : A
@@ -21,7 +21,7 @@ class A {
 
     static foo() { return 1; }
 >foo : () => number
->1 : number
+>1 : 1
 }
 module M {
 >M : typeof M
@@ -49,24 +49,24 @@ var ResultIsNumber2 = -NUMBER1;
 // number type literal
 var ResultIsNumber3 = -1;
 >ResultIsNumber3 : number
->-1 : number
->1 : number
+>-1 : -1
+>1 : 1
 
 var ResultIsNumber4 = -{ x: 1, y: 2};
 >ResultIsNumber4 : number
 >-{ x: 1, y: 2} : number
 >{ x: 1, y: 2} : { x: number; y: number; }
 >x : number
->1 : number
+>1 : 1
 >y : number
->2 : number
+>2 : 2
 
 var ResultIsNumber5 = -{ x: 1, y: (n: number) => { return n; } };
 >ResultIsNumber5 : number
 >-{ x: 1, y: (n: number) => { return n; } } : number
 >{ x: 1, y: (n: number) => { return n; } } : { x: number; y: (n: number) => number; }
 >x : number
->1 : number
+>1 : 1
 >y : (n: number) => number
 >(n: number) => { return n; } : (n: number) => number
 >n : number
@@ -92,7 +92,7 @@ var ResultIsNumber8 = -NUMBER1[0];
 >-NUMBER1[0] : number
 >NUMBER1[0] : number
 >NUMBER1 : number[]
->0 : number
+>0 : 0
 
 var ResultIsNumber9 = -foo();
 >ResultIsNumber9 : number
@@ -118,8 +118,8 @@ var ResultIsNumber11 = -(NUMBER - NUMBER);
 
 // miss assignment operators
 -1;
->-1 : number
->1 : number
+>-1 : -1
+>1 : 1
 
 -NUMBER;
 >-NUMBER : number

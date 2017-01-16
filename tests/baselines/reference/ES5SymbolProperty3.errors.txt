@@ -2,7 +2,7 @@ tests/cases/conformance/Symbols/ES5SymbolProperty3.ts(4,6): error TS2471: A comp
 
 
 ==== tests/cases/conformance/Symbols/ES5SymbolProperty3.ts (1 errors) ====
-    var Symbol;
+    var Symbol: any;
     
     class C {
         [Symbol.iterator]() { }

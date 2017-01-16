@@ -309,7 +309,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(828,13): error T
     
     ///<reference path='typescript.ts' />
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS6053: File 'typescript.ts' not found.
+!!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
     
     module TypeScript {
         export class Continuation {

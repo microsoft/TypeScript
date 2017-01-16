@@ -26,7 +26,7 @@ class PB extends B {
 var a: {
     [x: string]: string;
 }
-var b: { [x: number]: string; } = { foo: '' };
+var b: { [x: number]: string; } = { 0: '' };
 
 function foo1(x: A);
 function foo1(x: A); // error
@@ -124,11 +124,16 @@ function foo16(x: any) { }
 
 //// [objectTypesIdentityWithNumericIndexers3.js]
 // object types are identical structurally
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var A = (function () {
     function A() {
     }
@@ -147,19 +152,19 @@ var C = (function () {
 var PA = (function (_super) {
     __extends(PA, _super);
     function PA() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return PA;
 }(A));
 var PB = (function (_super) {
     __extends(PB, _super);
     function PB() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return PB;
 }(B));
 var a;
-var b = { foo: '' };
+var b = { 0: '' };
 function foo1(x) { }
 function foo1b(x) { }
 function foo1c(x) { }

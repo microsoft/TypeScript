@@ -13,19 +13,19 @@ var decorator: ClassDecorator;
 export default class {}
 
 //// [a.js]
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
-    var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
         else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
         return c > 3 && r && Object.defineProperty(target, key, r), r;
     };
+    var __moduleName = context_1 && context_1.id;
     var decorator, Foo;
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
             Foo = class Foo {
             };
             Foo = __decorate([
@@ -33,22 +33,22 @@ System.register([], function(exports_1, context_1) {
             ], Foo);
             exports_1("default", Foo);
         }
-    }
+    };
 });
 //// [b.js]
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
-    var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
         else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
         return c > 3 && r && Object.defineProperty(target, key, r), r;
     };
+    var __moduleName = context_1 && context_1.id;
     var decorator, default_1;
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
             default_1 = class {
             };
             default_1 = __decorate([
@@ -56,5 +56,5 @@ System.register([], function(exports_1, context_1) {
             ], default_1);
             exports_1("default", default_1);
         }
-    }
+    };
 });

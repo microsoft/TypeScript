@@ -1,25 +1,39 @@
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1_ES6.ts(12,20): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1_ES6.ts(9,13): error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
+  Property 'raw' is missing in type 'undefined[]'.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1_ES6.ts(10,13): error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1_ES6.ts(11,13): error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1_ES6.ts(12,13): error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1_ES6.ts(13,13): error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1_ES6.ts(14,9): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1_ES6.ts(19,20): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1_ES6.ts(19,20): error TS2345: Argument of type 'true' is not assignable to parameter of type 'string'.
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1_ES6.ts(21,9): error TS2346: Supplied parameters do not match any signature of call target.
 
 
-==== tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1_ES6.ts (4 errors) ====
-    function foo(strs: string[]): number;
-    function foo(strs: string[], x: number): string;
-    function foo(strs: string[], x: number, y: number): boolean;
-    function foo(strs: string[], x: number, y: string): {};
+==== tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1_ES6.ts (8 errors) ====
+    function foo(strs: TemplateStringsArray): number;
+    function foo(strs: TemplateStringsArray, x: number): string;
+    function foo(strs: TemplateStringsArray, x: number, y: number): boolean;
+    function foo(strs: TemplateStringsArray, x: number, y: string): {};
     function foo(...stuff: any[]): any {
         return undefined;
     }
     
     var a = foo([]);             // number
+                ~~
+!!! error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
+!!! error TS2345:   Property 'raw' is missing in type 'undefined[]'.
     var b = foo([], 1);          // string
+                ~~
+!!! error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
     var c = foo([], 1, 2);       // boolean
+                ~~
+!!! error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
     var d = foo([], 1, true);    // boolean (with error)
-                       ~~~~
-!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
+                ~~
+!!! error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
     var e = foo([], 1, "2");     // {}
+                ~~
+!!! error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
     var f = foo([], 1, 2, 3);    // any (with error)
             ~~~~~~~~~~~~~~~~
 !!! error TS2346: Supplied parameters do not match any signature of call target.
@@ -29,7 +43,7 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolutio
     var w = foo `${1}${2}`;      // boolean
     var x = foo `${1}${true}`;   // boolean (with error)
                        ~~~~
-!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'true' is not assignable to parameter of type 'string'.
     var y = foo `${1}${"2"}`;    // {}
     var z = foo `${1}${2}${3}`;  // any (with error)
             ~~~~~~~~~~~~~~~~~~

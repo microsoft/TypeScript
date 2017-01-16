@@ -71,9 +71,9 @@ var flat = _.reduceRight(list, (a, b) => a.concat(b), []);
 >list : Symbol(list, Decl(underscoreTest1_underscoreTests.ts, 13, 3))
 >a : Symbol(a, Decl(underscoreTest1_underscoreTests.ts, 14, 32))
 >b : Symbol(b, Decl(underscoreTest1_underscoreTests.ts, 14, 34))
->a.concat : Symbol(Array.concat, Decl(lib.d.ts, --, --))
+>a.concat : Symbol(Array.concat, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >a : Symbol(a, Decl(underscoreTest1_underscoreTests.ts, 14, 32))
->concat : Symbol(Array.concat, Decl(lib.d.ts, --, --))
+>concat : Symbol(Array.concat, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >b : Symbol(b, Decl(underscoreTest1_underscoreTests.ts, 14, 34))
 
 var even = _.find([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
@@ -437,7 +437,7 @@ var log = _.bind((message?: string, ...rest: string[]) => { }, Date);
 >bind : Symbol(Underscore.Static.bind, Decl(underscoreTest1_underscore.ts, 548, 68), Decl(underscoreTest1_underscore.ts, 550, 58))
 >message : Symbol(message, Decl(underscoreTest1_underscoreTests.ts, 108, 18))
 >rest : Symbol(rest, Decl(underscoreTest1_underscoreTests.ts, 108, 35))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 _.delay(log, 1000, 'logged later');
 >_.delay : Symbol(Underscore.Static.delay, Decl(underscoreTest1_underscore.ts, 557, 73))
@@ -782,7 +782,7 @@ _.isDate(new Date());
 >_.isDate : Symbol(Underscore.Static.isDate, Decl(underscoreTest1_underscore.ts, 611, 40))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 645, 11))
 >isDate : Symbol(Underscore.Static.isDate, Decl(underscoreTest1_underscore.ts, 611, 40))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 _.isRegExp(/moe/);
 >_.isRegExp : Symbol(Underscore.Static.isRegExp, Decl(underscoreTest1_underscore.ts, 612, 37))

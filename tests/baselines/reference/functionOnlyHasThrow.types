@@ -5,5 +5,5 @@ function clone():number {
 	throw new Error("To be implemented");
 >new Error("To be implemented") : Error
 >Error : ErrorConstructor
->"To be implemented" : string
+>"To be implemented" : "To be implemented"
 }

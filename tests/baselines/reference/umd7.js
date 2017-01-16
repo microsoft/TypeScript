@@ -13,4 +13,4 @@ let y: number = Foo();
 
 //// [a.js]
 /// <reference path="foo.d.ts" />
-var y = exports.Foo();
+var y = Foo();

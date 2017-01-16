@@ -1,0 +1,35 @@
+=== tests/cases/compiler/exportEqualsOfModule.ts ===
+declare module '~popsicle/dist/request' {
+    export class Request {}
+>Request : Symbol(Request, Decl(exportEqualsOfModule.ts, 0, 41))
+}
+
+declare module '~popsicle/dist/common' {
+    import { Request } from '~popsicle/dist/request';
+>Request : Symbol(Request, Decl(exportEqualsOfModule.ts, 5, 12))
+
+    export { Request };
+>Request : Symbol(Request, Decl(exportEqualsOfModule.ts, 6, 12))
+}
+
+declare module 'popsicle' {
+    import alias = require('~popsicle/dist/common');
+>alias : Symbol(alias, Decl(exportEqualsOfModule.ts, 9, 27))
+
+    export = alias;
+>alias : Symbol(alias, Decl(exportEqualsOfModule.ts, 9, 27))
+}
+
+declare module 'popsicle-proxy-agent' {
+    import { Request } from 'popsicle';
+>Request : Symbol(Request, Decl(exportEqualsOfModule.ts, 15, 12))
+
+    function proxy(): (request: Request) => any;
+>proxy : Symbol(proxy, Decl(exportEqualsOfModule.ts, 15, 39))
+>request : Symbol(request, Decl(exportEqualsOfModule.ts, 16, 23))
+>Request : Symbol(Request, Decl(exportEqualsOfModule.ts, 15, 12))
+
+    export = proxy;
+>proxy : Symbol(proxy, Decl(exportEqualsOfModule.ts, 15, 39))
+}
+

@@ -3,13 +3,15 @@
 type T = "" | "foo";
 >T : Symbol(T, Decl(stringLiteralTypesInUnionTypes04.ts, 0, 0))
 
-let x: T = "";
+let x: T = undefined;
 >x : Symbol(x, Decl(stringLiteralTypesInUnionTypes04.ts, 3, 3))
 >T : Symbol(T, Decl(stringLiteralTypesInUnionTypes04.ts, 0, 0))
+>undefined : Symbol(undefined)
 
-let y: T = "foo";
+let y: T = undefined;
 >y : Symbol(y, Decl(stringLiteralTypesInUnionTypes04.ts, 4, 3))
 >T : Symbol(T, Decl(stringLiteralTypesInUnionTypes04.ts, 0, 0))
+>undefined : Symbol(undefined)
 
 if (x === "") {
 >x : Symbol(x, Decl(stringLiteralTypesInUnionTypes04.ts, 3, 3))

@@ -1,41 +1,218 @@
 /// <reference path="fourslash.ts" />
-//// {| "itemName": "Windows", "kind": "module", "parentName": "" |}declare module Windows {
-////     {| "itemName": "Foundation", "kind": "module", "parentName": "Windows" |}export module Foundation {
-////         export var {| "itemName": "A", "kind": "var" |}A;
-////         {| "itemName": "Test", "kind": "class" |}export class Test {
-////             {| "itemName": "wow", "kind": "method" |}public wow();
+//// declare module Windows {
+////     export module Foundation {
+////         export var A;
+////         export class Test {
+////             public wow();
 ////         }
 ////     }
 //// }
-//// 
-//// {| "itemName": "Windows", "kind": "module", "parentName": "", "isAdditionalRange": true |}declare module Windows {
-////     {| "itemName": "Foundation", "kind": "module", "parentName": "Windows", "isAdditionalRange": true |}export module Foundation {
-////         export var {| "itemName": "B", "kind": "var" |}B;
-////         {| "itemName": "Test", "kind": "module" |}export module Test {
-////             {| "itemName": "Boom", "kind": "function" |}export function Boom(): number;
+////
+//// declare module Windows {
+////     export module Foundation {
+////         export var B;
+////         export module Test {
+////             export function Boom(): number;
 ////         }
 ////     }
 //// }
-//// 
-//// {| "itemName": "ABC", "kind": "class", "parentName": "" |}class ABC {
-////     {| "itemName": "foo", "kind": "method" |}public foo() {
+////
+//// class ABC {
+////     public foo() {
 ////         return 3;
 ////     }
 //// }
-//// 
-//// {| "itemName": "ABC", "kind": "module", "parentName": "" |}module ABC {
-////     export var {| "itemName": "x", "kind": "var" |}x = 3;
+////
+//// module ABC {
+////     export var x = 3;
 //// }
 
-test.markers().forEach(marker => {
-    if (marker.data) {
-        verify.getScriptLexicalStructureListContains(
-            marker.data.itemName,
-            marker.data.kind,
-            marker.fileName,
-            marker.data.parentName,
-            marker.data.isAdditionalRange,
-            marker.position);
-    }
+verify.navigationTree({
+    "text": "<global>",
+    "kind": "script",
+    "childItems": [
+        {
+            "text": "ABC",
+            "kind": "class",
+            "childItems": [
+                {
+                    "text": "foo",
+                    "kind": "method",
+                    "kindModifiers": "public"
+                }
+            ]
+        },
+        {
+            "text": "ABC",
+            "kind": "module",
+            "childItems": [
+                {
+                    "text": "x",
+                    "kind": "var",
+                    "kindModifiers": "export"
+                }
+            ]
+        },
+        {
+            "text": "Windows",
+            "kind": "module",
+            "kindModifiers": "declare",
+            "childItems": [
+                {
+                    "text": "Foundation",
+                    "kind": "module",
+                    "kindModifiers": "export,declare",
+                    "childItems": [
+                        {
+                            "text": "A",
+                            "kind": "var",
+                            "kindModifiers": "export,declare"
+                        },
+                        {
+                            "text": "B",
+                            "kind": "var",
+                            "kindModifiers": "export,declare"
+                        },
+                        {
+                            "text": "Test",
+                            "kind": "class",
+                            "kindModifiers": "export,declare",
+                            "childItems": [
+                                {
+                                    "text": "wow",
+                                    "kind": "method",
+                                    "kindModifiers": "public,declare"
+                                }
+                            ]
+                        },
+                        {
+                            "text": "Test",
+                            "kind": "module",
+                            "kindModifiers": "export,declare",
+                            "childItems": [
+                                {
+                                    "text": "Boom",
+                                    "kind": "function",
+                                    "kindModifiers": "export,declare"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
 });
-verify.getScriptLexicalStructureListCount(12);
+
+verify.navigationBar([
+    {
+        "text": "<global>",
+        "kind": "script",
+        "childItems": [
+            {
+                "text": "ABC",
+                "kind": "class"
+            },
+            {
+                "text": "ABC",
+                "kind": "module"
+            },
+            {
+                "text": "Windows",
+                "kind": "module",
+                "kindModifiers": "declare"
+            }
+        ]
+    },
+    {
+        "text": "ABC",
+        "kind": "class",
+        "childItems": [
+            {
+                "text": "foo",
+                "kind": "method",
+                "kindModifiers": "public"
+            }
+        ],
+        "indent": 1
+    },
+    {
+        "text": "ABC",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "x",
+                "kind": "var",
+                "kindModifiers": "export"
+            }
+        ],
+        "indent": 1
+    },
+    {
+        "text": "Windows",
+        "kind": "module",
+        "kindModifiers": "declare",
+        "childItems": [
+            {
+                "text": "Foundation",
+                "kind": "module",
+                "kindModifiers": "export,declare"
+            }
+        ],
+        "indent": 1
+    },
+    {
+        "text": "Foundation",
+        "kind": "module",
+        "kindModifiers": "export,declare",
+        "childItems": [
+            {
+                "text": "A",
+                "kind": "var",
+                "kindModifiers": "export,declare"
+            },
+            {
+                "text": "B",
+                "kind": "var",
+                "kindModifiers": "export,declare"
+            },
+            {
+                "text": "Test",
+                "kind": "class",
+                "kindModifiers": "export,declare"
+            },
+            {
+                "text": "Test",
+                "kind": "module",
+                "kindModifiers": "export,declare"
+            }
+        ],
+        "indent": 2
+    },
+    {
+        "text": "Test",
+        "kind": "class",
+        "kindModifiers": "export,declare",
+        "childItems": [
+            {
+                "text": "wow",
+                "kind": "method",
+                "kindModifiers": "public,declare"
+            }
+        ],
+        "indent": 3
+    },
+    {
+        "text": "Test",
+        "kind": "module",
+        "kindModifiers": "export,declare",
+        "childItems": [
+            {
+                "text": "Boom",
+                "kind": "function",
+                "kindModifiers": "export,declare"
+            }
+        ],
+        "indent": 3
+    }
+]);

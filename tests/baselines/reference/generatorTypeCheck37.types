@@ -5,5 +5,5 @@ function* g() {
     return yield yield 0;
 >yield yield 0 : any
 >yield 0 : any
->0 : number
+>0 : 0
 }

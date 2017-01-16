@@ -9,5 +9,5 @@
 //// }
 
 goTo.marker();
-verify.memberListContains("charAt");
-verify.memberListCount(1);
+verify.completionListContains("charAt");
+verify.completionListCount(1);

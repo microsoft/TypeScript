@@ -23,7 +23,7 @@ var C1T5 = (function () {
 }());
 var bigClass = (function () {
     function bigClass() {
-        this.break = 1;
+        this["break"] = 1;
     }
     return bigClass;
 }());

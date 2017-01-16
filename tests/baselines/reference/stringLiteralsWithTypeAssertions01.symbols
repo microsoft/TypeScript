@@ -1,0 +1,26 @@
+=== tests/cases/conformance/types/literal/stringLiteralsWithTypeAssertions01.ts ===
+let fooOrBar: "foo" | "bar";
+>fooOrBar : Symbol(fooOrBar, Decl(stringLiteralsWithTypeAssertions01.ts, 0, 3))
+
+let a = "foo" as "bar";
+>a : Symbol(a, Decl(stringLiteralsWithTypeAssertions01.ts, 2, 3))
+
+let b = "bar" as "foo";
+>b : Symbol(b, Decl(stringLiteralsWithTypeAssertions01.ts, 3, 3))
+
+let c = fooOrBar as "foo";
+>c : Symbol(c, Decl(stringLiteralsWithTypeAssertions01.ts, 4, 3))
+>fooOrBar : Symbol(fooOrBar, Decl(stringLiteralsWithTypeAssertions01.ts, 0, 3))
+
+let d = fooOrBar as "bar";
+>d : Symbol(d, Decl(stringLiteralsWithTypeAssertions01.ts, 5, 3))
+>fooOrBar : Symbol(fooOrBar, Decl(stringLiteralsWithTypeAssertions01.ts, 0, 3))
+
+let e = fooOrBar as "baz";
+>e : Symbol(e, Decl(stringLiteralsWithTypeAssertions01.ts, 6, 3))
+>fooOrBar : Symbol(fooOrBar, Decl(stringLiteralsWithTypeAssertions01.ts, 0, 3))
+
+let f = "baz" as typeof fooOrBar;
+>f : Symbol(f, Decl(stringLiteralsWithTypeAssertions01.ts, 7, 3))
+>fooOrBar : Symbol(fooOrBar, Decl(stringLiteralsWithTypeAssertions01.ts, 0, 3))
+

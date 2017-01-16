@@ -1,4 +1,4 @@
-tests/cases/compiler/moduleClassArrayCodeGenTest.ts(10,11): error TS2305: Module 'M' has no exported member 'B'.
+tests/cases/compiler/moduleClassArrayCodeGenTest.ts(10,11): error TS2694: Namespace 'M' has no exported member 'B'.
 
 
 ==== tests/cases/compiler/moduleClassArrayCodeGenTest.ts (1 errors) ====
@@ -13,4 +13,4 @@ tests/cases/compiler/moduleClassArrayCodeGenTest.ts(10,11): error TS2305: Module
     var t: M.A[] = [];
     var t2: M.B[] = [];
               ~
-!!! error TS2305: Module 'M' has no exported member 'B'.
+!!! error TS2694: Namespace 'M' has no exported member 'B'.

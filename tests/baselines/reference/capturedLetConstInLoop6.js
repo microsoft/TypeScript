@@ -239,8 +239,7 @@ for (const y = 0; y < 1;) {
 
 
 //// [capturedLetConstInLoop6.js]
-// ====let
-var _loop_1 = function(x) {
+var _loop_1 = function (x) {
     (function () { return x; });
     (function () { return x; });
     if (x == 1) {
@@ -250,12 +249,14 @@ var _loop_1 = function(x) {
         return "continue";
     }
 };
+// ====let
 for (var _i = 0, _a = []; _i < _a.length; _i++) {
     var x = _a[_i];
     var state_1 = _loop_1(x);
-    if (state_1 === "break") break;
+    if (state_1 === "break")
+        break;
 }
-var _loop_2 = function(x) {
+var _loop_2 = function (x) {
     (function () { return x; });
     (function () { return x; });
     if (x == "1") {
@@ -267,9 +268,10 @@ var _loop_2 = function(x) {
 };
 for (var x in []) {
     var state_2 = _loop_2(x);
-    if (state_2 === "break") break;
+    if (state_2 === "break")
+        break;
 }
-var _loop_3 = function(x) {
+var _loop_3 = function (x) {
     (function () { return x; });
     (function () { return x; });
     if (x == 1) {
@@ -281,9 +283,10 @@ var _loop_3 = function(x) {
 };
 for (var x = 0; x < 1; ++x) {
     var state_3 = _loop_3(x);
-    if (state_3 === "break") break;
+    if (state_3 === "break")
+        break;
 }
-var _loop_4 = function() {
+var _loop_4 = function () {
     var x;
     (function () { return x; });
     (function () { return x; });
@@ -296,9 +299,10 @@ var _loop_4 = function() {
 };
 while (1 === 1) {
     var state_4 = _loop_4();
-    if (state_4 === "break") break;
+    if (state_4 === "break")
+        break;
 }
-var _loop_5 = function() {
+var _loop_5 = function () {
     var x;
     (function () { return x; });
     (function () { return x; });
@@ -311,9 +315,10 @@ var _loop_5 = function() {
 };
 do {
     var state_5 = _loop_5();
-    if (state_5 === "break") break;
+    if (state_5 === "break")
+        break;
 } while (1 === 1);
-var _loop_6 = function(y) {
+var _loop_6 = function (y) {
     var x = 1;
     (function () { return x; });
     (function () { return x; });
@@ -326,9 +331,10 @@ var _loop_6 = function(y) {
 };
 for (var y = 0; y < 1; ++y) {
     var state_6 = _loop_6(y);
-    if (state_6 === "break") break;
+    if (state_6 === "break")
+        break;
 }
-var _loop_7 = function(x, y) {
+var _loop_7 = function (x, y) {
     (function () { return x + y; });
     (function () { return x + y; });
     if (x == 1) {
@@ -340,9 +346,10 @@ var _loop_7 = function(x, y) {
 };
 for (var x = 0, y = 1; x < 1; ++x) {
     var state_7 = _loop_7(x, y);
-    if (state_7 === "break") break;
+    if (state_7 === "break")
+        break;
 }
-var _loop_8 = function() {
+var _loop_8 = function () {
     var x, y;
     (function () { return x + y; });
     (function () { return x + y; });
@@ -355,9 +362,10 @@ var _loop_8 = function() {
 };
 while (1 === 1) {
     var state_8 = _loop_8();
-    if (state_8 === "break") break;
+    if (state_8 === "break")
+        break;
 }
-var _loop_9 = function() {
+var _loop_9 = function () {
     var x, y;
     (function () { return x + y; });
     (function () { return x + y; });
@@ -370,9 +378,10 @@ var _loop_9 = function() {
 };
 do {
     var state_9 = _loop_9();
-    if (state_9 === "break") break;
+    if (state_9 === "break")
+        break;
 } while (1 === 1);
-var _loop_10 = function(y) {
+var _loop_10 = function (y) {
     var x = 1;
     (function () { return x + y; });
     (function () { return x + y; });
@@ -385,10 +394,10 @@ var _loop_10 = function(y) {
 };
 for (var y = 0; y < 1; ++y) {
     var state_10 = _loop_10(y);
-    if (state_10 === "break") break;
+    if (state_10 === "break")
+        break;
 }
-// ====const
-var _loop_11 = function(x) {
+var _loop_11 = function (x) {
     (function () { return x; });
     (function () { return x; });
     if (x == 1) {
@@ -398,12 +407,14 @@ var _loop_11 = function(x) {
         return "continue";
     }
 };
+// ====const
 for (var _b = 0, _c = []; _b < _c.length; _b++) {
     var x = _c[_b];
     var state_11 = _loop_11(x);
-    if (state_11 === "break") break;
+    if (state_11 === "break")
+        break;
 }
-var _loop_12 = function(x) {
+var _loop_12 = function (x) {
     (function () { return x; });
     (function () { return x; });
     if (x == "1") {
@@ -415,9 +426,10 @@ var _loop_12 = function(x) {
 };
 for (var x in []) {
     var state_12 = _loop_12(x);
-    if (state_12 === "break") break;
+    if (state_12 === "break")
+        break;
 }
-var _loop_13 = function(x) {
+var _loop_13 = function (x) {
     (function () { return x; });
     (function () { return x; });
     if (x == 1) {
@@ -429,9 +441,10 @@ var _loop_13 = function(x) {
 };
 for (var x = 0; x < 1;) {
     var state_13 = _loop_13(x);
-    if (state_13 === "break") break;
+    if (state_13 === "break")
+        break;
 }
-var _loop_14 = function() {
+var _loop_14 = function () {
     var x = 1;
     (function () { return x; });
     (function () { return x; });
@@ -444,9 +457,10 @@ var _loop_14 = function() {
 };
 while (1 === 1) {
     var state_14 = _loop_14();
-    if (state_14 === "break") break;
+    if (state_14 === "break")
+        break;
 }
-var _loop_15 = function() {
+var _loop_15 = function () {
     var x = 1;
     (function () { return x; });
     (function () { return x; });
@@ -459,9 +473,10 @@ var _loop_15 = function() {
 };
 do {
     var state_15 = _loop_15();
-    if (state_15 === "break") break;
+    if (state_15 === "break")
+        break;
 } while (1 === 1);
-var _loop_16 = function(y) {
+var _loop_16 = function (y) {
     var x = 1;
     (function () { return x; });
     (function () { return x; });
@@ -474,9 +489,10 @@ var _loop_16 = function(y) {
 };
 for (var y = 0; y < 1;) {
     var state_16 = _loop_16(y);
-    if (state_16 === "break") break;
+    if (state_16 === "break")
+        break;
 }
-var _loop_17 = function(x, y) {
+var _loop_17 = function (x, y) {
     (function () { return x + y; });
     (function () { return x + y; });
     if (x == 1) {
@@ -488,9 +504,10 @@ var _loop_17 = function(x, y) {
 };
 for (var x = 0, y = 1; x < 1;) {
     var state_17 = _loop_17(x, y);
-    if (state_17 === "break") break;
+    if (state_17 === "break")
+        break;
 }
-var _loop_18 = function() {
+var _loop_18 = function () {
     var x = 1, y = 1;
     (function () { return x + y; });
     (function () { return x + y; });
@@ -503,9 +520,10 @@ var _loop_18 = function() {
 };
 while (1 === 1) {
     var state_18 = _loop_18();
-    if (state_18 === "break") break;
+    if (state_18 === "break")
+        break;
 }
-var _loop_19 = function() {
+var _loop_19 = function () {
     var x = 1, y = 1;
     (function () { return x + y; });
     (function () { return x + y; });
@@ -518,9 +536,10 @@ var _loop_19 = function() {
 };
 do {
     var state_19 = _loop_19();
-    if (state_19 === "break") break;
+    if (state_19 === "break")
+        break;
 } while (1 === 1);
-var _loop_20 = function(y) {
+var _loop_20 = function (y) {
     var x = 1;
     (function () { return x + y; });
     (function () { return x + y; });
@@ -533,5 +552,6 @@ var _loop_20 = function(y) {
 };
 for (var y = 0; y < 1;) {
     var state_20 = _loop_20(y);
-    if (state_20 === "break") break;
+    if (state_20 === "break")
+        break;
 }

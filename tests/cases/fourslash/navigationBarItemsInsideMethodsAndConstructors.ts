@@ -2,41 +2,207 @@
 
 ////class Class {
 ////    constructor() {
-////        {| "itemName": "LocalFunctionInConstructor", "kind": "function", "parentName": "Class"|}function LocalFunctionInConstructor() {
-////
-////        }
-////
-////        {| "itemName": "LocalInterfaceInConstrcutor", "kind": "interface", "parentName": "foo"|}interface LocalInterfaceInConstrcutor {
-////        }
-////
-////        enum LocalEnumInConstructor {
-////            {| "itemName": "LocalEnumMemberInConstructor", "kind": "property", "parentName": "LocalEnumInConstructor"|}LocalEnumMemberInConstructor,
-////        }
+////        function LocalFunctionInConstructor() {}
+////        interface LocalInterfaceInConstrcutor {}
+////        enum LocalEnumInConstructor { LocalEnumMemberInConstructor }
 ////    }
 ////
 ////    method() {
-////        {| "itemName": "LocalFunctionInMethod", "kind": "function", "parentName": "foo"|}function LocalFunctionInMethod() {
-////            {| "itemName": "LocalFunctionInLocalFunctionInMethod", "kind": "function", "parentName": "bar"|}function LocalFunctionInLocalFunctionInMethod() {
-////
-////            }
+////        function LocalFunctionInMethod() {
+////            function LocalFunctionInLocalFunctionInMethod() {}
 ////        }
-////
-////        {| "itemName": "LocalInterfaceInMethod", "kind": "interface", "parentName": "foo"|}interface LocalInterfaceInMethod {
-////        }
-////
-////        enum LocalEnumInMethod {
-////            {| "itemName": "LocalEnumMemberInMethod", "kind": "property", "parentName": "foo"|}LocalEnumMemberInMethod,
-////        }
+////        interface LocalInterfaceInMethod {}
+////        enum LocalEnumInMethod { LocalEnumMemberInMethod }
 ////    }
 ////
-////    emptyMethod() { // Non child functions method should not be duplicated
-////
-////    }
+////    emptyMethod() { } // Non child functions method should not be duplicated
 ////}
 
-test.markers().forEach((marker) => {
-    verify.getScriptLexicalStructureListContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
+verify.navigationTree({
+    "text": "<global>",
+    "kind": "script",
+    "childItems": [
+        {
+            "text": "Class",
+            "kind": "class",
+            "childItems": [
+                {
+                    "text": "constructor",
+                    "kind": "constructor",
+                    "childItems": [
+                        {
+                            "text": "LocalEnumInConstructor",
+                            "kind": "enum",
+                            "childItems": [
+                                {
+                                    "text": "LocalEnumMemberInConstructor",
+                                    "kind": "const"
+                                }
+                            ]
+                        },
+                        {
+                            "text": "LocalFunctionInConstructor",
+                            "kind": "function"
+                        },
+                        {
+                            "text": "LocalInterfaceInConstrcutor",
+                            "kind": "interface"
+                        }
+                    ]
+                },
+                {
+                    "text": "emptyMethod",
+                    "kind": "method"
+                },
+                {
+                    "text": "method",
+                    "kind": "method",
+                    "childItems": [
+                        {
+                            "text": "LocalEnumInMethod",
+                            "kind": "enum",
+                            "childItems": [
+                                {
+                                    "text": "LocalEnumMemberInMethod",
+                                    "kind": "const"
+                                }
+                            ]
+                        },
+                        {
+                            "text": "LocalFunctionInMethod",
+                            "kind": "function",
+                            "childItems": [
+                                {
+                                    "text": "LocalFunctionInLocalFunctionInMethod",
+                                    "kind": "function"
+                                }
+                            ]
+                        },
+                        {
+                            "text": "LocalInterfaceInMethod",
+                            "kind": "interface"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
 });
 
-// no other items
-verify.getScriptLexicalStructureListCount(17);
+verify.navigationBar([
+    {
+        "text": "<global>",
+        "kind": "script",
+        "childItems": [
+            {
+                "text": "Class",
+                "kind": "class"
+            }
+        ]
+    },
+    {
+        "text": "Class",
+        "kind": "class",
+        "childItems": [
+            {
+                "text": "constructor",
+                "kind": "constructor"
+            },
+            {
+                "text": "emptyMethod",
+                "kind": "method"
+            },
+            {
+                "text": "method",
+                "kind": "method"
+            }
+        ],
+        "indent": 1
+    },
+    {
+        "text": "constructor",
+        "kind": "constructor",
+        "childItems": [
+            {
+                "text": "LocalEnumInConstructor",
+                "kind": "enum"
+            },
+            {
+                "text": "LocalFunctionInConstructor",
+                "kind": "function"
+            },
+            {
+                "text": "LocalInterfaceInConstrcutor",
+                "kind": "interface"
+            }
+        ],
+        "indent": 2
+    },
+    {
+        "text": "LocalEnumInConstructor",
+        "kind": "enum",
+        "childItems": [
+            {
+                "text": "LocalEnumMemberInConstructor",
+                "kind": "const"
+            }
+        ],
+        "indent": 3
+    },
+    {
+        "text": "LocalFunctionInConstructor",
+        "kind": "function",
+        "indent": 3
+    },
+    {
+        "text": "LocalInterfaceInConstrcutor",
+        "kind": "interface",
+        "indent": 3
+    },
+    {
+        "text": "method",
+        "kind": "method",
+        "childItems": [
+            {
+                "text": "LocalEnumInMethod",
+                "kind": "enum"
+            },
+            {
+                "text": "LocalFunctionInMethod",
+                "kind": "function"
+            },
+            {
+                "text": "LocalInterfaceInMethod",
+                "kind": "interface"
+            }
+        ],
+        "indent": 2
+    },
+    {
+        "text": "LocalEnumInMethod",
+        "kind": "enum",
+        "childItems": [
+            {
+                "text": "LocalEnumMemberInMethod",
+                "kind": "const"
+            }
+        ],
+        "indent": 3
+    },
+    {
+        "text": "LocalFunctionInMethod",
+        "kind": "function",
+        "childItems": [
+            {
+                "text": "LocalFunctionInLocalFunctionInMethod",
+                "kind": "function"
+            }
+        ],
+        "indent": 3
+    },
+    {
+        "text": "LocalInterfaceInMethod",
+        "kind": "interface",
+        "indent": 3
+    }
+]);

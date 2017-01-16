@@ -19,7 +19,7 @@ var App: React.StatelessComponent<{ children }> = ({children}) => (
 );
 
 //// [file.jsx]
-define(["require", "exports", 'react'], function (require, exports, React) {
+define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
     var Foo = function (props) { return <div />; };
     // Should be OK

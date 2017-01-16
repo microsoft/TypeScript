@@ -84,7 +84,7 @@ function blah(a /* multiline trailing comment
 function blah2(a /* single line multiple trailing comments */ /* second */) {
 }
 function blah3(a // trailing commen single line
-    ) {
+) {
 }
 lambdaFoo = function (a, b) { return a * b; }; // This is trailing comment
 /*leading comment*/ (function () { return 0; }); // Needs to be wrapped in parens to be a valid expression (not declaration)

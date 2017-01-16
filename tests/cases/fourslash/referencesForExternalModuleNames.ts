@@ -3,16 +3,12 @@
 // Global interface reference.
 
 // @Filename: referencesForGlobals_1.ts
-////declare module /*1*/"foo" {
+////declare module "[|foo|]" {
 ////    var f: number;
 ////}
 
 
 // @Filename: referencesForGlobals_2.ts
-////import f = require(/*2*/"foo");
+////import f = require("[|foo|]");
 
-goTo.marker("1");
-verify.referencesCountIs(2);
-
-goTo.marker("2");
-verify.referencesCountIs(2);
+verify.rangesReferenceEachOther();

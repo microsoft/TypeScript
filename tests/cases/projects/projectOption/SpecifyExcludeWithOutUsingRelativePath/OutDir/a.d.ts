@@ -1,0 +1,1 @@
+declare var test: string;  // Shouldn't error since it is not include in compilation

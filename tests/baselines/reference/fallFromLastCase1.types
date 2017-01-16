@@ -12,21 +12,21 @@ function foo1(a: number) {
 >a : number
 
         case 1:
->1 : number
+>1 : 1
 
             use("1");
 >use("1") : any
 >use : (a: string) => any
->"1" : string
+>"1" : "1"
 
             break;
         case 2:
->2 : number
+>2 : 2
 
             use("2");
 >use("2") : any
 >use : (a: string) => any
->"2" : string
+>"2" : "2"
     }
 }
 
@@ -39,18 +39,18 @@ function foo2(a: number) {
 >a : number
 
         case 1:
->1 : number
+>1 : 1
 
             use("1");
 >use("1") : any
 >use : (a: string) => any
->"1" : string
+>"1" : "1"
 
             break;
         default:
             use("2");
 >use("2") : any
 >use : (a: string) => any
->"2" : string
+>"2" : "2"
     }
 }

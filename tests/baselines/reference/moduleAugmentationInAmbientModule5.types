@@ -5,7 +5,7 @@ import "array";
 let x = [1];
 >x : number[]
 >[1] : number[]
->1 : number
+>1 : 1
 
 let y = x.getA().x;
 >y : number

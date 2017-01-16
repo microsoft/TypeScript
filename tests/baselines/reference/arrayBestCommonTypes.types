@@ -40,7 +40,7 @@ module EmptyTypes {
 >voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >x : any
 >y : boolean
->false : boolean
+>false : false
 >null : null
 
         public x() {
@@ -55,9 +55,9 @@ module EmptyTypes {
 >voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >[4, 2][0] : number
 >[4, 2] : number[]
->4 : number
->2 : number
->0 : number
+>4 : 4
+>2 : 2
+>0 : 0
 
             <number>(this.voidIfAny([4, 2, undefined][0]));
 ><number>(this.voidIfAny([4, 2, undefined][0])) : number
@@ -68,10 +68,10 @@ module EmptyTypes {
 >voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >[4, 2, undefined][0] : number
 >[4, 2, undefined] : number[]
->4 : number
->2 : number
+>4 : 4
+>2 : 2
 >undefined : undefined
->0 : number
+>0 : 0
 
             <number>(this.voidIfAny([undefined, 2, 4][0]));
 ><number>(this.voidIfAny([undefined, 2, 4][0])) : number
@@ -83,9 +83,9 @@ module EmptyTypes {
 >[undefined, 2, 4][0] : number
 >[undefined, 2, 4] : number[]
 >undefined : undefined
->2 : number
->4 : number
->0 : number
+>2 : 2
+>4 : 4
+>0 : 0
 
             <number>(this.voidIfAny([null, 2, 4][0]));
 ><number>(this.voidIfAny([null, 2, 4][0])) : number
@@ -97,9 +97,9 @@ module EmptyTypes {
 >[null, 2, 4][0] : number
 >[null, 2, 4] : number[]
 >null : null
->2 : number
->4 : number
->0 : number
+>2 : 2
+>4 : 4
+>0 : 0
 
             <number>(this.voidIfAny([2, 4, null][0]));
 ><number>(this.voidIfAny([2, 4, null][0])) : number
@@ -110,10 +110,10 @@ module EmptyTypes {
 >voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >[2, 4, null][0] : number
 >[2, 4, null] : number[]
->2 : number
->4 : number
+>2 : 2
+>4 : 4
 >null : null
->0 : number
+>0 : 0
 
             <number>(this.voidIfAny([undefined, 4, null][0]));
 ><number>(this.voidIfAny([undefined, 4, null][0])) : number
@@ -125,9 +125,9 @@ module EmptyTypes {
 >[undefined, 4, null][0] : number
 >[undefined, 4, null] : number[]
 >undefined : undefined
->4 : number
+>4 : 4
 >null : null
->0 : number
+>0 : 0
 
             <number>(this.voidIfAny(['', "q"][0]));
 ><number>(this.voidIfAny(['', "q"][0])) : number
@@ -138,9 +138,9 @@ module EmptyTypes {
 >voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >['', "q"][0] : string
 >['', "q"] : string[]
->'' : string
->"q" : string
->0 : number
+>'' : ""
+>"q" : "q"
+>0 : 0
 
             <number>(this.voidIfAny(['', "q", undefined][0]));
 ><number>(this.voidIfAny(['', "q", undefined][0])) : number
@@ -151,10 +151,10 @@ module EmptyTypes {
 >voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >['', "q", undefined][0] : string
 >['', "q", undefined] : string[]
->'' : string
->"q" : string
+>'' : ""
+>"q" : "q"
 >undefined : undefined
->0 : number
+>0 : 0
 
             <number>(this.voidIfAny([undefined, "q", ''][0]));
 ><number>(this.voidIfAny([undefined, "q", ''][0])) : number
@@ -166,9 +166,9 @@ module EmptyTypes {
 >[undefined, "q", ''][0] : string
 >[undefined, "q", ''] : string[]
 >undefined : undefined
->"q" : string
->'' : string
->0 : number
+>"q" : "q"
+>'' : ""
+>0 : 0
 
             <number>(this.voidIfAny([null, "q", ''][0]));
 ><number>(this.voidIfAny([null, "q", ''][0])) : number
@@ -180,9 +180,9 @@ module EmptyTypes {
 >[null, "q", ''][0] : string
 >[null, "q", ''] : string[]
 >null : null
->"q" : string
->'' : string
->0 : number
+>"q" : "q"
+>'' : ""
+>0 : 0
 
             <number>(this.voidIfAny(["q", '', null][0]));
 ><number>(this.voidIfAny(["q", '', null][0])) : number
@@ -193,10 +193,10 @@ module EmptyTypes {
 >voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >["q", '', null][0] : string
 >["q", '', null] : string[]
->"q" : string
->'' : string
+>"q" : "q"
+>'' : ""
 >null : null
->0 : number
+>0 : 0
 
             <number>(this.voidIfAny([undefined, '', null][0]));
 ><number>(this.voidIfAny([undefined, '', null][0])) : number
@@ -208,9 +208,9 @@ module EmptyTypes {
 >[undefined, '', null][0] : string
 >[undefined, '', null] : string[]
 >undefined : undefined
->'' : string
+>'' : ""
 >null : null
->0 : number
+>0 : 0
 
             <number>(this.voidIfAny([[3, 4], [null]][0][0]));
 ><number>(this.voidIfAny([[3, 4], [null]][0][0])) : number
@@ -223,12 +223,12 @@ module EmptyTypes {
 >[[3, 4], [null]][0] : number[]
 >[[3, 4], [null]] : number[][]
 >[3, 4] : number[]
->3 : number
->4 : number
+>3 : 3
+>4 : 4
 >[null] : null[]
 >null : null
->0 : number
->0 : number
+>0 : 0
+>0 : 0
 
 
             var t1: { x: number; y: base; }[] = [{ x: 7, y: new derived() }, { x: 5, y: new base() }];
@@ -239,13 +239,13 @@ module EmptyTypes {
 >[{ x: 7, y: new derived() }, { x: 5, y: new base() }] : { x: number; y: derived; }[]
 >{ x: 7, y: new derived() } : { x: number; y: derived; }
 >x : number
->7 : number
+>7 : 7
 >y : derived
 >new derived() : derived
 >derived : typeof derived
 >{ x: 5, y: new base() } : { x: number; y: base; }
 >x : number
->5 : number
+>5 : 5
 >y : base
 >new base() : base
 >base : typeof base
@@ -255,16 +255,16 @@ module EmptyTypes {
 >x : boolean
 >y : base
 >base : base
->[{ x: true, y: new derived() }, { x: false, y: new base() }] : { x: boolean; y: derived; }[]
->{ x: true, y: new derived() } : { x: boolean; y: derived; }
+>[{ x: true, y: new derived() }, { x: false, y: new base() }] : ({ x: true; y: derived; } | { x: false; y: base; })[]
+>{ x: true, y: new derived() } : { x: true; y: derived; }
 >x : boolean
->true : boolean
+>true : true
 >y : derived
 >new derived() : derived
 >derived : typeof derived
->{ x: false, y: new base() } : { x: boolean; y: base; }
+>{ x: false, y: new base() } : { x: false; y: base; }
 >x : boolean
->false : boolean
+>false : false
 >y : base
 >new base() : base
 >base : typeof base
@@ -283,7 +283,7 @@ module EmptyTypes {
 >base : typeof base
 >{ x: '', y: new derived() } : { x: string; y: derived; }
 >x : string
->'' : string
+>'' : ""
 >y : derived
 >new derived() : derived
 >derived : typeof derived
@@ -298,19 +298,19 @@ module EmptyTypes {
 >[{ x: 0, y: 'a' }, { x: 'a', y: 'a' }, { x: anyObj, y: 'a' }] : { x: any; y: string; }[]
 >{ x: 0, y: 'a' } : { x: number; y: string; }
 >x : number
->0 : number
+>0 : 0
 >y : string
->'a' : string
+>'a' : "a"
 >{ x: 'a', y: 'a' } : { x: string; y: string; }
 >x : string
->'a' : string
+>'a' : "a"
 >y : string
->'a' : string
+>'a' : "a"
 >{ x: anyObj, y: 'a' } : { x: any; y: string; }
 >x : any
 >anyObj : any
 >y : string
->'a' : string
+>'a' : "a"
 
             var a2 = [{ x: anyObj, y: 'a' }, { x: 0, y: 'a' }, { x: 'a', y: 'a' }];
 >a2 : { x: any; y: string; }[]
@@ -319,36 +319,36 @@ module EmptyTypes {
 >x : any
 >anyObj : any
 >y : string
->'a' : string
+>'a' : "a"
 >{ x: 0, y: 'a' } : { x: number; y: string; }
 >x : number
->0 : number
+>0 : 0
 >y : string
->'a' : string
+>'a' : "a"
 >{ x: 'a', y: 'a' } : { x: string; y: string; }
 >x : string
->'a' : string
+>'a' : "a"
 >y : string
->'a' : string
+>'a' : "a"
 
             var a3 = [{ x: 0, y: 'a' }, { x: anyObj, y: 'a' }, { x: 'a', y: 'a' }];
 >a3 : { x: any; y: string; }[]
 >[{ x: 0, y: 'a' }, { x: anyObj, y: 'a' }, { x: 'a', y: 'a' }] : { x: any; y: string; }[]
 >{ x: 0, y: 'a' } : { x: number; y: string; }
 >x : number
->0 : number
+>0 : 0
 >y : string
->'a' : string
+>'a' : "a"
 >{ x: anyObj, y: 'a' } : { x: any; y: string; }
 >x : any
 >anyObj : any
 >y : string
->'a' : string
+>'a' : "a"
 >{ x: 'a', y: 'a' } : { x: string; y: string; }
 >x : string
->'a' : string
+>'a' : "a"
 >y : string
->'a' : string
+>'a' : "a"
 
             var ifaceObj: iface = null;
 >ifaceObj : iface
@@ -366,22 +366,22 @@ module EmptyTypes {
 >base2 : typeof base2
 
             var b1 = [baseObj, base2Obj, ifaceObj];
->b1 : base[]
->[baseObj, base2Obj, ifaceObj] : base[]
+>b1 : iface[]
+>[baseObj, base2Obj, ifaceObj] : iface[]
 >baseObj : base
 >base2Obj : base2
 >ifaceObj : iface
 
             var b2 = [base2Obj, baseObj, ifaceObj];
->b2 : base2[]
->[base2Obj, baseObj, ifaceObj] : base2[]
+>b2 : iface[]
+>[base2Obj, baseObj, ifaceObj] : iface[]
 >base2Obj : base2
 >baseObj : base
 >ifaceObj : iface
 
             var b3 = [baseObj, ifaceObj, base2Obj];
->b3 : base[]
->[baseObj, ifaceObj, base2Obj] : base[]
+>b3 : iface[]
+>[baseObj, ifaceObj, base2Obj] : iface[]
 >baseObj : base
 >ifaceObj : iface
 >base2Obj : base2
@@ -443,7 +443,7 @@ module NonEmptyTypes {
 >voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >x : any
 >y : boolean
->false : boolean
+>false : false
 >null : null
 
         public x() {
@@ -458,9 +458,9 @@ module NonEmptyTypes {
 >voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >[4, 2][0] : number
 >[4, 2] : number[]
->4 : number
->2 : number
->0 : number
+>4 : 4
+>2 : 2
+>0 : 0
 
             <number>(this.voidIfAny([4, 2, undefined][0]));
 ><number>(this.voidIfAny([4, 2, undefined][0])) : number
@@ -471,10 +471,10 @@ module NonEmptyTypes {
 >voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >[4, 2, undefined][0] : number
 >[4, 2, undefined] : number[]
->4 : number
->2 : number
+>4 : 4
+>2 : 2
 >undefined : undefined
->0 : number
+>0 : 0
 
             <number>(this.voidIfAny([undefined, 2, 4][0]));
 ><number>(this.voidIfAny([undefined, 2, 4][0])) : number
@@ -486,9 +486,9 @@ module NonEmptyTypes {
 >[undefined, 2, 4][0] : number
 >[undefined, 2, 4] : number[]
 >undefined : undefined
->2 : number
->4 : number
->0 : number
+>2 : 2
+>4 : 4
+>0 : 0
 
             <number>(this.voidIfAny([null, 2, 4][0]));
 ><number>(this.voidIfAny([null, 2, 4][0])) : number
@@ -500,9 +500,9 @@ module NonEmptyTypes {
 >[null, 2, 4][0] : number
 >[null, 2, 4] : number[]
 >null : null
->2 : number
->4 : number
->0 : number
+>2 : 2
+>4 : 4
+>0 : 0
 
             <number>(this.voidIfAny([2, 4, null][0]));
 ><number>(this.voidIfAny([2, 4, null][0])) : number
@@ -513,10 +513,10 @@ module NonEmptyTypes {
 >voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >[2, 4, null][0] : number
 >[2, 4, null] : number[]
->2 : number
->4 : number
+>2 : 2
+>4 : 4
 >null : null
->0 : number
+>0 : 0
 
             <number>(this.voidIfAny([undefined, 4, null][0]));
 ><number>(this.voidIfAny([undefined, 4, null][0])) : number
@@ -528,9 +528,9 @@ module NonEmptyTypes {
 >[undefined, 4, null][0] : number
 >[undefined, 4, null] : number[]
 >undefined : undefined
->4 : number
+>4 : 4
 >null : null
->0 : number
+>0 : 0
 
             <number>(this.voidIfAny(['', "q"][0]));
 ><number>(this.voidIfAny(['', "q"][0])) : number
@@ -541,9 +541,9 @@ module NonEmptyTypes {
 >voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >['', "q"][0] : string
 >['', "q"] : string[]
->'' : string
->"q" : string
->0 : number
+>'' : ""
+>"q" : "q"
+>0 : 0
 
             <number>(this.voidIfAny(['', "q", undefined][0]));
 ><number>(this.voidIfAny(['', "q", undefined][0])) : number
@@ -554,10 +554,10 @@ module NonEmptyTypes {
 >voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >['', "q", undefined][0] : string
 >['', "q", undefined] : string[]
->'' : string
->"q" : string
+>'' : ""
+>"q" : "q"
 >undefined : undefined
->0 : number
+>0 : 0
 
             <number>(this.voidIfAny([undefined, "q", ''][0]));
 ><number>(this.voidIfAny([undefined, "q", ''][0])) : number
@@ -569,9 +569,9 @@ module NonEmptyTypes {
 >[undefined, "q", ''][0] : string
 >[undefined, "q", ''] : string[]
 >undefined : undefined
->"q" : string
->'' : string
->0 : number
+>"q" : "q"
+>'' : ""
+>0 : 0
 
             <number>(this.voidIfAny([null, "q", ''][0]));
 ><number>(this.voidIfAny([null, "q", ''][0])) : number
@@ -583,9 +583,9 @@ module NonEmptyTypes {
 >[null, "q", ''][0] : string
 >[null, "q", ''] : string[]
 >null : null
->"q" : string
->'' : string
->0 : number
+>"q" : "q"
+>'' : ""
+>0 : 0
 
             <number>(this.voidIfAny(["q", '', null][0]));
 ><number>(this.voidIfAny(["q", '', null][0])) : number
@@ -596,10 +596,10 @@ module NonEmptyTypes {
 >voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >["q", '', null][0] : string
 >["q", '', null] : string[]
->"q" : string
->'' : string
+>"q" : "q"
+>'' : ""
 >null : null
->0 : number
+>0 : 0
 
             <number>(this.voidIfAny([undefined, '', null][0]));
 ><number>(this.voidIfAny([undefined, '', null][0])) : number
@@ -611,9 +611,9 @@ module NonEmptyTypes {
 >[undefined, '', null][0] : string
 >[undefined, '', null] : string[]
 >undefined : undefined
->'' : string
+>'' : ""
 >null : null
->0 : number
+>0 : 0
 
             <number>(this.voidIfAny([[3, 4], [null]][0][0]));
 ><number>(this.voidIfAny([[3, 4], [null]][0][0])) : number
@@ -626,12 +626,12 @@ module NonEmptyTypes {
 >[[3, 4], [null]][0] : number[]
 >[[3, 4], [null]] : number[][]
 >[3, 4] : number[]
->3 : number
->4 : number
+>3 : 3
+>4 : 4
 >[null] : null[]
 >null : null
->0 : number
->0 : number
+>0 : 0
+>0 : 0
 
 
             var t1: { x: number; y: base; }[] = [{ x: 7, y: new derived() }, { x: 5, y: new base() }];
@@ -642,13 +642,13 @@ module NonEmptyTypes {
 >[{ x: 7, y: new derived() }, { x: 5, y: new base() }] : { x: number; y: base; }[]
 >{ x: 7, y: new derived() } : { x: number; y: derived; }
 >x : number
->7 : number
+>7 : 7
 >y : derived
 >new derived() : derived
 >derived : typeof derived
 >{ x: 5, y: new base() } : { x: number; y: base; }
 >x : number
->5 : number
+>5 : 5
 >y : base
 >new base() : base
 >base : typeof base
@@ -658,16 +658,16 @@ module NonEmptyTypes {
 >x : boolean
 >y : base
 >base : base
->[{ x: true, y: new derived() }, { x: false, y: new base() }] : { x: boolean; y: base; }[]
->{ x: true, y: new derived() } : { x: boolean; y: derived; }
+>[{ x: true, y: new derived() }, { x: false, y: new base() }] : ({ x: true; y: derived; } | { x: false; y: base; })[]
+>{ x: true, y: new derived() } : { x: true; y: derived; }
 >x : boolean
->true : boolean
+>true : true
 >y : derived
 >new derived() : derived
 >derived : typeof derived
->{ x: false, y: new base() } : { x: boolean; y: base; }
+>{ x: false, y: new base() } : { x: false; y: base; }
 >x : boolean
->false : boolean
+>false : false
 >y : base
 >new base() : base
 >base : typeof base
@@ -686,7 +686,7 @@ module NonEmptyTypes {
 >base : typeof base
 >{ x: '', y: new derived() } : { x: string; y: derived; }
 >x : string
->'' : string
+>'' : ""
 >y : derived
 >new derived() : derived
 >derived : typeof derived
@@ -701,19 +701,19 @@ module NonEmptyTypes {
 >[{ x: 0, y: 'a' }, { x: 'a', y: 'a' }, { x: anyObj, y: 'a' }] : { x: any; y: string; }[]
 >{ x: 0, y: 'a' } : { x: number; y: string; }
 >x : number
->0 : number
+>0 : 0
 >y : string
->'a' : string
+>'a' : "a"
 >{ x: 'a', y: 'a' } : { x: string; y: string; }
 >x : string
->'a' : string
+>'a' : "a"
 >y : string
->'a' : string
+>'a' : "a"
 >{ x: anyObj, y: 'a' } : { x: any; y: string; }
 >x : any
 >anyObj : any
 >y : string
->'a' : string
+>'a' : "a"
 
             var a2 = [{ x: anyObj, y: 'a' }, { x: 0, y: 'a' }, { x: 'a', y: 'a' }];
 >a2 : { x: any; y: string; }[]
@@ -722,36 +722,36 @@ module NonEmptyTypes {
 >x : any
 >anyObj : any
 >y : string
->'a' : string
+>'a' : "a"
 >{ x: 0, y: 'a' } : { x: number; y: string; }
 >x : number
->0 : number
+>0 : 0
 >y : string
->'a' : string
+>'a' : "a"
 >{ x: 'a', y: 'a' } : { x: string; y: string; }
 >x : string
->'a' : string
+>'a' : "a"
 >y : string
->'a' : string
+>'a' : "a"
 
             var a3 = [{ x: 0, y: 'a' }, { x: anyObj, y: 'a' }, { x: 'a', y: 'a' }];
 >a3 : { x: any; y: string; }[]
 >[{ x: 0, y: 'a' }, { x: anyObj, y: 'a' }, { x: 'a', y: 'a' }] : { x: any; y: string; }[]
 >{ x: 0, y: 'a' } : { x: number; y: string; }
 >x : number
->0 : number
+>0 : 0
 >y : string
->'a' : string
+>'a' : "a"
 >{ x: anyObj, y: 'a' } : { x: any; y: string; }
 >x : any
 >anyObj : any
 >y : string
->'a' : string
+>'a' : "a"
 >{ x: 'a', y: 'a' } : { x: string; y: string; }
 >x : string
->'a' : string
+>'a' : "a"
 >y : string
->'a' : string
+>'a' : "a"
 
             var ifaceObj: iface = null;
 >ifaceObj : iface

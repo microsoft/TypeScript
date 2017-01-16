@@ -18,7 +18,7 @@ function f2(s) { }
 function f3() {
     var s = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        s[_i - 0] = arguments[_i];
+        s[_i] = arguments[_i];
     }
 }
 function f4(s, s2) { }

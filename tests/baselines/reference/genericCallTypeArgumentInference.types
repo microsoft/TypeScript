@@ -13,9 +13,9 @@ function foo<T>(t: T) {
 
 var r = foo(''); // string
 >r : string
->foo('') : string
+>foo('') : ""
 >foo : <T>(t: T) => T
->'' : string
+>'' : ""
 
 function foo2<T, U>(t: T, u: U) {
 >foo2 : <T, U>(t: T, u: U) => U
@@ -47,16 +47,16 @@ function foo2b<T, U>(u: U) {
 
 var r2 = foo2('', 1); // number
 >r2 : number
->foo2('', 1) : number
+>foo2('', 1) : 1
 >foo2 : <T, U>(t: T, u: U) => U
->'' : string
->1 : number
+>'' : ""
+>1 : 1
 
 var r3 = foo2b(1); // {}
 >r3 : {}
 >foo2b(1) : {}
 >foo2b : <T, U>(u: U) => T
->1 : number
+>1 : 1
 
 class C<T, U> {
 >C : C<T, U>
@@ -175,8 +175,8 @@ var c = new C('', 1);
 >c : C<string, number>
 >new C('', 1) : C<string, number>
 >C : typeof C
->'' : string
->1 : number
+>'' : ""
+>1 : 1
 
 var r4 = c.foo('', 1); // string
 >r4 : string
@@ -184,8 +184,8 @@ var r4 = c.foo('', 1); // string
 >c.foo : (t: string, u: number) => string
 >c : C<string, number>
 >foo : (t: string, u: number) => string
->'' : string
->1 : number
+>'' : ""
+>1 : 1
 
 var r5 = c.foo2('', 1); // number
 >r5 : number
@@ -193,17 +193,17 @@ var r5 = c.foo2('', 1); // number
 >c.foo2 : (t: string, u: number) => number
 >c : C<string, number>
 >foo2 : (t: string, u: number) => number
->'' : string
->1 : number
+>'' : ""
+>1 : 1
 
 var r6 = c.foo3(true, 1); // boolean
 >r6 : boolean
->c.foo3(true, 1) : boolean
+>c.foo3(true, 1) : true
 >c.foo3 : <T>(t: T, u: number) => T
 >c : C<string, number>
 >foo3 : <T>(t: T, u: number) => T
->true : boolean
->1 : number
+>true : true
+>1 : 1
 
 var r7 = c.foo4('', true); // string
 >r7 : string
@@ -211,17 +211,17 @@ var r7 = c.foo4('', true); // string
 >c.foo4 : <U>(t: string, u: U) => string
 >c : C<string, number>
 >foo4 : <U>(t: string, u: U) => string
->'' : string
->true : boolean
+>'' : ""
+>true : true
 
 var r8 = c.foo5(true, 1); // boolean
 >r8 : boolean
->c.foo5(true, 1) : boolean
+>c.foo5(true, 1) : true
 >c.foo5 : <T, U>(t: T, u: U) => T
 >c : C<string, number>
 >foo5 : <T, U>(t: T, u: U) => T
->true : boolean
->1 : number
+>true : true
+>1 : 1
 
 var r9 = c.foo6(); // {}
 >r9 : {}
@@ -236,7 +236,7 @@ var r10 = c.foo7(''); // {}
 >c.foo7 : <T, U>(u: U) => T
 >c : C<string, number>
 >foo7 : <T, U>(u: U) => T
->'' : string
+>'' : ""
 
 var r11 = c.foo8(); // {}
 >r11 : {}
@@ -331,8 +331,8 @@ var r4 = i.foo('', 1); // string
 >i.foo : (t: string, u: number) => string
 >i : I<string, number>
 >foo : (t: string, u: number) => string
->'' : string
->1 : number
+>'' : ""
+>1 : 1
 
 var r5 = i.foo2('', 1); // number
 >r5 : number
@@ -340,17 +340,17 @@ var r5 = i.foo2('', 1); // number
 >i.foo2 : (t: string, u: number) => number
 >i : I<string, number>
 >foo2 : (t: string, u: number) => number
->'' : string
->1 : number
+>'' : ""
+>1 : 1
 
 var r6 = i.foo3(true, 1); // boolean
 >r6 : boolean
->i.foo3(true, 1) : boolean
+>i.foo3(true, 1) : true
 >i.foo3 : <T>(t: T, u: number) => T
 >i : I<string, number>
 >foo3 : <T>(t: T, u: number) => T
->true : boolean
->1 : number
+>true : true
+>1 : 1
 
 var r7 = i.foo4('', true); // string
 >r7 : string
@@ -358,17 +358,17 @@ var r7 = i.foo4('', true); // string
 >i.foo4 : <U>(t: string, u: U) => string
 >i : I<string, number>
 >foo4 : <U>(t: string, u: U) => string
->'' : string
->true : boolean
+>'' : ""
+>true : true
 
 var r8 = i.foo5(true, 1); // boolean
 >r8 : boolean
->i.foo5(true, 1) : boolean
+>i.foo5(true, 1) : true
 >i.foo5 : <T, U>(t: T, u: U) => T
 >i : I<string, number>
 >foo5 : <T, U>(t: T, u: U) => T
->true : boolean
->1 : number
+>true : true
+>1 : 1
 
 var r9 = i.foo6(); // {}
 >r9 : {}
@@ -383,7 +383,7 @@ var r10 = i.foo7(''); // {}
 >i.foo7 : <T, U>(u: U) => T
 >i : I<string, number>
 >foo7 : <T, U>(u: U) => T
->'' : string
+>'' : ""
 
 var r11 = i.foo8(); // {}
 >r11 : {}

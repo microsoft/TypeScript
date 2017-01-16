@@ -8,7 +8,7 @@ import ReactRouter = require('react-router');
 
 import Route = ReactRouter.Route;
 >Route : Symbol(Route, Decl(test.tsx, 2, 45))
->ReactRouter : Symbol(ReactRouter, Decl(react.d.ts, 4, 1))
+>ReactRouter : Symbol(ReactRouter, Decl(test.tsx, 1, 32))
 >Route : Symbol(ReactRouter.Route, Decl(react.d.ts, 7, 4))
 
 var routes1 = <Route />;

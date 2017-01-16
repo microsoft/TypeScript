@@ -9,4 +9,4 @@
 //// f6('', /**/false)
 
 goTo.marker();
-verify.currentSignatureHelpIs('f6(p0: string, p1?: boolean): number')
+verify.currentSignatureHelpIs('f6(arg0: string, arg1?: boolean): number')

@@ -7,8 +7,8 @@ let v = new Math2d.Vector(3, 2);
 >Math2d.Vector : typeof Math2d.Vector
 >Math2d : typeof Math2d
 >Vector : typeof Math2d.Vector
->3 : number
->2 : number
+>3 : 3
+>2 : 2
 
 let magnitude = Math2d.getLength(v);
 >magnitude : number
@@ -26,8 +26,8 @@ let p: Math2d.Point = v.translate(5, 5);
 >v.translate : (dx: number, dy: number) => Vector
 >v : Vector
 >translate : (dx: number, dy: number) => Vector
->5 : number
->5 : number
+>5 : 5
+>5 : 5
 
 p = v.reverse();
 >p = v.reverse() : Math2d.Point
@@ -46,7 +46,7 @@ var t = p.x;
 === tests/cases/conformance/externalModules/node_modules/math2d/index.d.ts ===
 
 export as namespace Math2d;
->Math2d : any
+>Math2d : typeof Math2d
 
 export interface Point {
 >Point : Point

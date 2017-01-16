@@ -2,27 +2,16 @@
 
 // References to shadowed label
 
-/////*outer1*/label:  while (true) {
-////            if (false) break /*outer2*/label;
+////[|label|]:  while (true) {
+////            if (false) break [|label|];
 ////            function blah() {
-/////*inner1*/label:          while (true) {
-////                    if (false) break /*inner2*/label;
+////[|label|]:          while (true) {
+////                    if (false) break [|label|];
 ////                }
 ////            }
-////            if (false) break /*outer3*/label;
+////            if (false) break [|label|];
 ////        }
 
-goTo.marker("outer1");
-verify.referencesCountIs(3);
-
-goTo.marker("outer2");
-verify.referencesCountIs(3);
-
-goTo.marker("outer3");
-verify.referencesCountIs(3);
-
-goTo.marker("inner1");
-verify.referencesCountIs(2);
-
-goTo.marker("inner2");
-verify.referencesCountIs(2);
+const [outer1, outer2, inner1, inner2, outer3] = test.ranges();
+verify.rangesReferenceEachOther([outer1, outer2, outer3]);
+verify.rangesReferenceEachOther([inner1, inner2]);

@@ -4,7 +4,7 @@ import RT_ALIAS = require("file1");
 
 import ReferredTo = RT_ALIAS.elaborate.nested.mod.name.ReferredTo;
 >ReferredTo : Symbol(ReferredTo, Decl(file2.ts, 0, 35))
->RT_ALIAS : Symbol(RT_ALIAS, Decl(file1.ts, 0, 0))
+>RT_ALIAS : Symbol(RT_ALIAS, Decl(file2.ts, 0, 0))
 >elaborate : Symbol(RT_ALIAS.elaborate, Decl(file1.ts, 0, 0))
 >nested : Symbol(RT_ALIAS.elaborate.nested, Decl(file1.ts, 0, 24))
 >mod : Symbol(RT_ALIAS.elaborate.nested.mod, Decl(file1.ts, 0, 31))

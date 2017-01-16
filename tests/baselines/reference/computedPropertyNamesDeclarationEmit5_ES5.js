@@ -20,8 +20,7 @@ var v = (_a = {},
         enumerable: true,
         configurable: true
     }),
-    _a
-);
+    _a);
 var _a;
 
 

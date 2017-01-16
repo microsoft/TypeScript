@@ -52,11 +52,16 @@ d3({ y: "world" });
 
 //// [destructuringParameterDeclaration5.js]
 // Parameter Declaration with generic
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var Class = (function () {
     function Class() {
     }
@@ -65,7 +70,7 @@ var Class = (function () {
 var SubClass = (function (_super) {
     __extends(SubClass, _super);
     function SubClass() {
-        _super.call(this);
+        return _super.call(this) || this;
     }
     return SubClass;
 }(Class));
@@ -77,7 +82,7 @@ var D = (function () {
 var SubD = (function (_super) {
     __extends(SubD, _super);
     function SubD() {
-        _super.call(this);
+        return _super.call(this) || this;
     }
     return SubD;
 }(D));

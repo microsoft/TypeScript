@@ -5,11 +5,11 @@ function foo() {
 
     var a = 10;
 >a : number
->10 : number
+>10 : 10
 
     var b = "Hello";
 >b : string
->"Hello" : string
+>"Hello" : "Hello"
 
     return {
 >{        a,        b    } : { a: number; b: string; }

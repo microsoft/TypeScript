@@ -115,9 +115,9 @@ condObject ? exprString1 : exprBoolean1; // union
 >({ a: 1, b: "s" }) : { a: number; b: string; }
 >{ a: 1, b: "s" } : { a: number; b: string; }
 >a : number
->1 : number
+>1 : 1
 >b : string
->"s" : string
+>"s" : "s"
 >exprString1 : string
 >exprString2 : string
 
@@ -126,9 +126,9 @@ condObject ? exprString1 : exprBoolean1; // union
 >({ a: 1, b: "s" }) : { a: number; b: string; }
 >{ a: 1, b: "s" } : { a: number; b: string; }
 >a : number
->1 : number
+>1 : 1
 >b : string
->"s" : string
+>"s" : "s"
 >exprIsObject1 : Object
 >exprIsObject2 : Object
 
@@ -137,9 +137,9 @@ condObject ? exprString1 : exprBoolean1; // union
 >({ a: 1, b: "s" }) : { a: number; b: string; }
 >{ a: 1, b: "s" } : { a: number; b: string; }
 >a : number
->1 : number
+>1 : 1
 >b : string
->"s" : string
+>"s" : "s"
 >exprString1 : string
 >exprBoolean1 : boolean
 
@@ -271,9 +271,9 @@ var resultIsString2 = ({ a: 1, b: "s" }) ? exprString1 : exprString2;
 >({ a: 1, b: "s" }) : { a: number; b: string; }
 >{ a: 1, b: "s" } : { a: number; b: string; }
 >a : number
->1 : number
+>1 : 1
 >b : string
->"s" : string
+>"s" : "s"
 >exprString1 : string
 >exprString2 : string
 
@@ -283,9 +283,9 @@ var resultIsObject2 = ({ a: 1, b: "s" }) ? exprIsObject1 : exprIsObject2;
 >({ a: 1, b: "s" }) : { a: number; b: string; }
 >{ a: 1, b: "s" } : { a: number; b: string; }
 >a : number
->1 : number
+>1 : 1
 >b : string
->"s" : string
+>"s" : "s"
 >exprIsObject1 : Object
 >exprIsObject2 : Object
 
@@ -295,9 +295,9 @@ var resultIsStringOrBoolean2 = ({ a: 1, b: "s" }) ? exprString1 : exprBoolean1; 
 >({ a: 1, b: "s" }) : { a: number; b: string; }
 >{ a: 1, b: "s" } : { a: number; b: string; }
 >a : number
->1 : number
+>1 : 1
 >b : string
->"s" : string
+>"s" : "s"
 >exprString1 : string
 >exprBoolean1 : boolean
 

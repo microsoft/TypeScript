@@ -1,0 +1,33 @@
+=== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration7ES5.ts ===
+
+interface ISomething {
+>ISomething : Symbol(ISomething, Decl(destructuringParameterDeclaration7ES5.ts, 0, 0))
+
+    foo: string,
+>foo : Symbol(ISomething.foo, Decl(destructuringParameterDeclaration7ES5.ts, 1, 22))
+
+    bar: string
+>bar : Symbol(ISomething.bar, Decl(destructuringParameterDeclaration7ES5.ts, 2, 16))
+}
+
+function foo({}, {foo, bar}: ISomething) {}
+>foo : Symbol(foo, Decl(destructuringParameterDeclaration7ES5.ts, 4, 1))
+>foo : Symbol(foo, Decl(destructuringParameterDeclaration7ES5.ts, 6, 18))
+>bar : Symbol(bar, Decl(destructuringParameterDeclaration7ES5.ts, 6, 22))
+>ISomething : Symbol(ISomething, Decl(destructuringParameterDeclaration7ES5.ts, 0, 0))
+
+function baz([], {foo, bar}: ISomething) {}
+>baz : Symbol(baz, Decl(destructuringParameterDeclaration7ES5.ts, 6, 43))
+>foo : Symbol(foo, Decl(destructuringParameterDeclaration7ES5.ts, 8, 18))
+>bar : Symbol(bar, Decl(destructuringParameterDeclaration7ES5.ts, 8, 22))
+>ISomething : Symbol(ISomething, Decl(destructuringParameterDeclaration7ES5.ts, 0, 0))
+
+function one([], {}) {}
+>one : Symbol(one, Decl(destructuringParameterDeclaration7ES5.ts, 8, 43))
+
+function two([], [a, b, c]: number[]) {}
+>two : Symbol(two, Decl(destructuringParameterDeclaration7ES5.ts, 10, 23))
+>a : Symbol(a, Decl(destructuringParameterDeclaration7ES5.ts, 12, 18))
+>b : Symbol(b, Decl(destructuringParameterDeclaration7ES5.ts, 12, 20))
+>c : Symbol(c, Decl(destructuringParameterDeclaration7ES5.ts, 12, 23))
+

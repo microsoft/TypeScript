@@ -1,4 +1,4 @@
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(4,17): error TS2304: Cannot find name 'I'.
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(4,17): error TS2689: Cannot extend an interface 'I'. Did you mean 'implements'?
 tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(6,18): error TS2507: Type '{ foo: any; }' is not a constructor function type.
 tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(6,25): error TS2304: Cannot find name 'string'.
 tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(6,31): error TS1005: ',' expected.
@@ -14,7 +14,7 @@ tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/cla
     }
     class C extends I { } // error
                     ~
-!!! error TS2304: Cannot find name 'I'.
+!!! error TS2689: Cannot extend an interface 'I'. Did you mean 'implements'?
     
     class C2 extends { foo: string; } { } // error
                      ~~~~~~~~~~~~~~~~

@@ -2,7 +2,7 @@
 
 /* @internal */
 namespace ts.formatting {
-    export module Shared {
+    export namespace Shared {
         export interface ITokenAccess {
             GetTokens(): SyntaxKind[];
             Contains(token: SyntaxKind): boolean;
@@ -60,14 +60,14 @@ namespace ts.formatting {
 
         export class TokenAllAccess implements ITokenAccess {
             public GetTokens(): SyntaxKind[] {
-                let result: SyntaxKind[] = [];
+                const result: SyntaxKind[] = [];
                 for (let token = SyntaxKind.FirstToken; token <= SyntaxKind.LastToken; token++) {
                     result.push(token);
                 }
                 return result;
             }
 
-            public Contains(tokenValue: SyntaxKind): boolean {
+            public Contains(): boolean {
                 return true;
             }
 

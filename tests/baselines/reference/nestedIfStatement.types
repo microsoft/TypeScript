@@ -1,15 +1,15 @@
 === tests/cases/compiler/nestedIfStatement.ts ===
 if (0) {
->0 : number
+>0 : 0
 
 } else if (1) {
->1 : number
+>1 : 1
 
 } else if (2) {
->2 : number
+>2 : 2
 
 } else if (3) {
->3 : number
+>3 : 3
 
 } else {
 }

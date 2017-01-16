@@ -1,5 +1,5 @@
 // @module: commonjs
-// @traceModuleResolution: true
+// @traceResolution: true
 
 // baseurl is defined in tsconfig.json
 // paths has errors

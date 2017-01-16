@@ -5,14 +5,14 @@
 ////var n = 14;
 ////
 ////class foo {
-////    private /*1*/n = 0;
+////    private [|n|] = 0;
 ////
 ////    public bar() {
-////        this.n = 9;
+////        this.[|n|] = 9;
 ////    }
 ////
 ////    constructor() {
-////        this./*2*/n = 4;
+////        this.[|n|] = 4;
 ////    }
 ////
 ////    public bar2() {
@@ -20,8 +20,4 @@
 ////    }
 ////}
 
-goTo.marker("1");
-verify.referencesCountIs(3);
-
-goTo.marker("2");
-verify.referencesCountIs(3);
+verify.rangesReferenceEachOther();

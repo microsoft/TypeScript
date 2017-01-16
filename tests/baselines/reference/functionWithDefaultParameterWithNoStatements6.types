@@ -2,10 +2,10 @@
 function foo(a = true) { }
 >foo : (a?: boolean) => void
 >a : boolean
->true : boolean
+>true : true
 
 function bar(a = true) {
 >bar : (a?: boolean) => void
 >a : boolean
->true : boolean
+>true : true
 }

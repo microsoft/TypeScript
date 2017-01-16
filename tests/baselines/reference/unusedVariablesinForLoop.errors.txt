@@ -1,0 +1,12 @@
+tests/cases/compiler/unusedVariablesinForLoop.ts(3,13): error TS6133: 'i' is declared but never used.
+
+
+==== tests/cases/compiler/unusedVariablesinForLoop.ts (1 errors) ====
+    
+    function f1 () {
+        for(var i = 0; ;) {
+                ~
+!!! error TS6133: 'i' is declared but never used.
+    
+        }
+    }

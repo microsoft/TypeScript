@@ -20,9 +20,4 @@
 // and all value-uses of 'f' are included in the references to the function.
 
 goTo.marker();
-let ranges = test.ranges();
-verify.referencesCountIs(ranges.length);
-
-for (let expectedReference of ranges) {
-    verify.referencesAtPositionContains(expectedReference);
-}
+verify.referencesAre(test.ranges());

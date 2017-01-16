@@ -4,12 +4,12 @@ import appJs = require("file1");
 
 import Services = appJs.Services;
 >Services : Symbol(Services, Decl(file2.ts, 0, 32))
->appJs : Symbol(appJs, Decl(file1.ts, 0, 0))
+>appJs : Symbol(appJs, Decl(file2.ts, 0, 0))
 >Services : Symbol(appJs.Services, Decl(file1.ts, 0, 12))
 
 import UserServices = Services.UserServices;
 >UserServices : Symbol(UserServices, Decl(file2.ts, 1, 33))
->Services : Symbol(appJs.Services, Decl(file1.ts, 0, 12))
+>Services : Symbol(Services, Decl(file2.ts, 0, 32))
 >UserServices : Symbol(Services.UserServices, Decl(file1.ts, 1, 28))
 
 var x = new UserServices().getUserName();

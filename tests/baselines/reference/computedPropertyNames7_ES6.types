@@ -13,5 +13,5 @@ var v = {
 >E.member : E
 >E : typeof E
 >member : E
->0 : number
+>0 : 0
 }

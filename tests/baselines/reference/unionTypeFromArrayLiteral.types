@@ -7,27 +7,27 @@
 var arr1 = [1, 2]; // number[]
 >arr1 : number[]
 >[1, 2] : number[]
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 
 var arr2 = ["hello", true]; // (string | number)[]
 >arr2 : (string | boolean)[]
 >["hello", true] : (string | boolean)[]
->"hello" : string
->true : boolean
+>"hello" : "hello"
+>true : true
 
 var arr3Tuple: [number, string] = [3, "three"]; // [number, string]
 >arr3Tuple : [number, string]
 >[3, "three"] : [number, string]
->3 : number
->"three" : string
+>3 : 3
+>"three" : "three"
 
 var arr4Tuple: [number, string] = [3, "three", "hello"]; // [number, string, string]
 >arr4Tuple : [number, string]
 >[3, "three", "hello"] : [number, string, string]
->3 : number
->"three" : string
->"hello" : string
+>3 : 3
+>"three" : "three"
+>"hello" : "hello"
 
 var arrEmpty = [];
 >arrEmpty : any[]
@@ -40,13 +40,13 @@ var arr5Tuple: {
     5: number;
 } = ["hello", true, false, " hello", true, 10, "any"]; // Tuple
 >["hello", true, false, " hello", true, 10, "any"] : [string, boolean, boolean, string, boolean, number, string]
->"hello" : string
->true : boolean
->false : boolean
->" hello" : string
->true : boolean
->10 : number
->"any" : string
+>"hello" : "hello"
+>true : true
+>false : false
+>" hello" : " hello"
+>true : true
+>10 : 10
+>"any" : "any"
 
 class C { foo() { } }
 >C : C

@@ -13,7 +13,7 @@ export * from "file1"
 export * from "file3"
 export var x = 1;
 >x : number
->1 : number
+>1 : 1
 
 === tests/cases/compiler/file3.ts ===
 export interface B { x }
@@ -23,5 +23,5 @@ export interface B { x }
 export * from "file2"
 export var x = 1;
 >x : number
->1 : number
+>1 : 1
 

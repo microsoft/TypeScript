@@ -4,7 +4,7 @@
 
         export var debug = false;
 >debug : boolean
->false : boolean
+>false : false
 
         export interface IDiagnosticWriter {
 >IDiagnosticWriter : IDiagnosticWriter
@@ -21,7 +21,7 @@
 
         export var analysisPass: number = 0;
 >analysisPass : number
->0 : number
+>0 : 0
 
         export function Alert(output: string) {
 >Alert : (output: string) => void

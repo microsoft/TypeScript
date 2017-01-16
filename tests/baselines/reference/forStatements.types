@@ -38,7 +38,7 @@ class D<T>{
 function F(x: string): number { return 42; }
 >F : (x: string) => number
 >x : string
->42 : number
+>42 : 42
 
 module M {
 >M : typeof M
@@ -61,18 +61,18 @@ module M {
 
 for(var aNumber: number = 9.9;;){} 
 >aNumber : number
->9.9 : number
+>9.9 : 9.9
 
 for(var aString: string = 'this is a string';;){}
 >aString : string
->'this is a string' : string
+>'this is a string' : "this is a string"
 
 for(var aDate: Date = new Date(12);;){}
 >aDate : Date
 >Date : Date
 >new Date(12) : Date
 >Date : DateConstructor
->12 : number
+>12 : 12
 
 for(var anObject: Object = new Object();;){}
 >anObject : Object
@@ -115,7 +115,7 @@ for(var anObjectLiteral: I = { id: 12 };;){}
 >I : I
 >{ id: 12 } : { id: number; }
 >id : number
->12 : number
+>12 : 12
 
 for(var anOtherObjectLiteral: { id: number } = new C();;){}
 >anOtherObjectLiteral : { id: number; }
@@ -138,7 +138,7 @@ for(var aLambda: typeof F = (x) => 2;;){}
 >F : (x: string) => number
 >(x) => 2 : (x: string) => number
 >x : string
->2 : number
+>2 : 2
 
 for(var aModule: typeof M = M;;){}
 >aModule : typeof M
@@ -161,5 +161,5 @@ for(var aFunctionInModule: typeof M.F2 = (x) => 'this is a string';;){}
 >F2 : (x: number) => string
 >(x) => 'this is a string' : (x: number) => string
 >x : number
->'this is a string' : string
+>'this is a string' : "this is a string"
 

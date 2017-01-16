@@ -10,5 +10,5 @@ function foo(bar:number):number;
 function foo(bar?:number):any { return "" }
 >foo : { (bar: number): string; (bar: number): number; }
 >bar : number
->"" : string
+>"" : ""
 

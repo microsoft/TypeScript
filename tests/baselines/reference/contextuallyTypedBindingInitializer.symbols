@@ -26,6 +26,7 @@ function f2({ "show": showRename = v => v.toString() }: Show) {}
 
 function f3({ ["show"]: showRename = v => v.toString() }: Show) {}
 >f3 : Symbol(f3, Decl(contextuallyTypedBindingInitializer.ts, 4, 64))
+>"show" : Symbol(showRename, Decl(contextuallyTypedBindingInitializer.ts, 5, 13))
 >showRename : Symbol(showRename, Decl(contextuallyTypedBindingInitializer.ts, 5, 13))
 >v : Symbol(v, Decl(contextuallyTypedBindingInitializer.ts, 5, 36))
 >v.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))

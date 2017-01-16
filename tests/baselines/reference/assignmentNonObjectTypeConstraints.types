@@ -1,9 +1,9 @@
 === tests/cases/compiler/assignmentNonObjectTypeConstraints.ts ===
 const enum E { A, B, C }
 >E : E
->A : E
->B : E
->C : E
+>A : E.A
+>B : E.B
+>C : E.C
 
 function foo<T extends number>(x: T) {
 >foo : <T extends number>(x: T) => void
@@ -19,14 +19,14 @@ function foo<T extends number>(x: T) {
 foo(5);
 >foo(5) : void
 >foo : <T extends number>(x: T) => void
->5 : number
+>5 : 5
 
 foo(E.A);
 >foo(E.A) : void
 >foo : <T extends number>(x: T) => void
->E.A : E
+>E.A : E.A
 >E : typeof E
->A : E
+>A : E.A
 
 class A { a }
 >A : A

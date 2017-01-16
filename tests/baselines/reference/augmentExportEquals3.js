@@ -28,7 +28,6 @@ let b = x.b;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     function foo() { }
-    var foo;
     (function (foo) {
         foo.v = 1;
     })(foo || (foo = {}));

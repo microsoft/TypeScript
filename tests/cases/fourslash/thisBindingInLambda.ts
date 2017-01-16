@@ -8,5 +8,4 @@
 ////	}
 ////}
 
-goTo.marker();
-verify.quickInfoIs('class Greeter');
+verify.quickInfoAt("", "this: this");

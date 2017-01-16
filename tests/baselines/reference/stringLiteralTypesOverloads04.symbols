@@ -9,11 +9,11 @@ f(y => {
 >f : Symbol(f, Decl(stringLiteralTypesOverloads04.ts, 0, 0))
 >y : Symbol(y, Decl(stringLiteralTypesOverloads04.ts, 3, 2))
 
-    let z = y = "foo";
->z : Symbol(z, Decl(stringLiteralTypesOverloads04.ts, 4, 7))
+    const z = y = "foo";
+>z : Symbol(z, Decl(stringLiteralTypesOverloads04.ts, 4, 9))
 >y : Symbol(y, Decl(stringLiteralTypesOverloads04.ts, 3, 2))
 
     return z;
->z : Symbol(z, Decl(stringLiteralTypesOverloads04.ts, 4, 7))
+>z : Symbol(z, Decl(stringLiteralTypesOverloads04.ts, 4, 9))
 
 })

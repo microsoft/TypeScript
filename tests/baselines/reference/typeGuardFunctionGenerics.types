@@ -134,5 +134,5 @@ let test3: B = funE(isB, 1);
 >funE(isB, 1) : B
 >funE : <T, U>(p1: (p1: any) => p1 is T, p2: U) => T
 >isB : (p1: any) => p1 is B
->1 : number
+>1 : 1
 

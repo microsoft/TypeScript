@@ -28,7 +28,7 @@ class PB extends B {
 var a: {
     [x: number]: Base;
 }
-var b: { [x: number]: Derived; } = { foo: <Derived>null };
+var b: { [x: number]: Derived; } = { 0: <Derived>null };
 
 function foo1(x: A);
 function foo1(x: A); // error

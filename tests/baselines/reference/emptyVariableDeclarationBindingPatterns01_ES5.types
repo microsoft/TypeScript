@@ -56,9 +56,9 @@
     for (var {} = {}, {} = {}; false; void 0) {
 >{} : {}
 >{} : {}
->false : boolean
+>false : false
 >void 0 : undefined
->0 : number
+>0 : 0
     }
 
     function f({} = a, [] = a, { p: {} = a} = a) {

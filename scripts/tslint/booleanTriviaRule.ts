@@ -1,4 +1,4 @@
-import * as Lint from "tslint/lib/lint";
+import * as Lint from "tslint/lib";
 import * as ts from "typescript";
 
 export class Rule extends Lint.Rules.AbstractRule {
@@ -18,7 +18,7 @@ class BooleanTriviaWalker extends Lint.RuleWalker {
 
     visitCallExpression(node: ts.CallExpression) {
         super.visitCallExpression(node);
-        if (node.arguments) {
+        if (node.arguments && node.arguments.some(arg => arg.kind === ts.SyntaxKind.TrueKeyword || arg.kind === ts.SyntaxKind.FalseKeyword)) {
             const targetCallSignature = this.checker.getResolvedSignature(node);
             if (!!targetCallSignature) {
                 const targetParameters = targetCallSignature.getParameters();

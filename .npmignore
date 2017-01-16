@@ -1,10 +1,15 @@
 built
 doc
+Gulpfile.ts
+internal
+issue_template.md
+jenkins.sh
 lib/README.md
+netci.groovy
+pull_request_template.md
 scripts
 src
 tests
-internal
 tslint.json
 Jakefile.js
 .editorconfig

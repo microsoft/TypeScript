@@ -40,20 +40,14 @@
 ////     obj.;
 //// }
 
-goTo.marker("1");
-verify.quickInfoIs("(method) FileSystemObject.isFile(): this is Item");
-goTo.marker("2");
-verify.quickInfoIs("(method) FileSystemObject.isDirectory(): this is Directory");
-goTo.marker("3");
-verify.quickInfoIs("(method) FileSystemObject.isNetworked(): this is Networked & this");
+verify.quickInfos({
+    1: "(method) FileSystemObject.isFile(): this is Item",
+    2: "(method) FileSystemObject.isDirectory(): this is Directory",
+    3: "(method) FileSystemObject.isNetworked(): this is Networked & this",
 
-goTo.marker("4");
-verify.quickInfoIs("(method) FileSystemObject.isFile(): this is Item");
-goTo.marker("5");
-verify.quickInfoIs("(method) FileSystemObject.isNetworked(): this is Networked & Item");
-goTo.marker("6");
-verify.quickInfoIs("(method) FileSystemObject.isDirectory(): this is Directory");
-goTo.marker("7");
-verify.quickInfoIs("(method) FileSystemObject.isNetworked(): this is Networked & Directory");
-goTo.marker("8");
-verify.quickInfoIs("(method) FileSystemObject.isNetworked(): this is Networked & FileSystemObject");
+    4: "(method) FileSystemObject.isFile(): this is Item",
+    5: "(method) FileSystemObject.isNetworked(): this is Networked & Item",
+    6: "(method) FileSystemObject.isDirectory(): this is Directory",
+    7: "(method) FileSystemObject.isNetworked(): this is Networked & Directory",
+    8: "(method) FileSystemObject.isNetworked(): this is Networked & FileSystemObject"
+});

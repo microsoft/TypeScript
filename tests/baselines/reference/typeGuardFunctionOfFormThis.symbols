@@ -91,45 +91,19 @@ else if (b.isFollower()) {
 >follow : Symbol(FollowerGuard.follow, Decl(typeGuardFunctionOfFormThis.ts, 13, 40))
 }
 
-if (((a.isLeader)())) {
->a.isLeader : Symbol(RoyalGuard.isLeader, Decl(typeGuardFunctionOfFormThis.ts, 0, 18))
->a : Symbol(a, Decl(typeGuardFunctionOfFormThis.ts, 17, 3))
->isLeader : Symbol(RoyalGuard.isLeader, Decl(typeGuardFunctionOfFormThis.ts, 0, 18))
+// if (((a.isLeader)())) {
+//     a.lead();
+// }
+// else if (((a).isFollower())) {
+//     a.follow();
+// }
 
-    a.lead();
->a.lead : Symbol(LeadGuard.lead, Decl(typeGuardFunctionOfFormThis.ts, 9, 36))
->a : Symbol(a, Decl(typeGuardFunctionOfFormThis.ts, 17, 3))
->lead : Symbol(LeadGuard.lead, Decl(typeGuardFunctionOfFormThis.ts, 9, 36))
-}
-else if (((a).isFollower())) {
->(a).isFollower : Symbol(RoyalGuard.isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
->a : Symbol(a, Decl(typeGuardFunctionOfFormThis.ts, 17, 3))
->isFollower : Symbol(RoyalGuard.isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
-
-    a.follow();
->a.follow : Symbol(FollowerGuard.follow, Decl(typeGuardFunctionOfFormThis.ts, 13, 40))
->a : Symbol(a, Decl(typeGuardFunctionOfFormThis.ts, 17, 3))
->follow : Symbol(FollowerGuard.follow, Decl(typeGuardFunctionOfFormThis.ts, 13, 40))
-}
-
-if (((a["isLeader"])())) {
->a : Symbol(a, Decl(typeGuardFunctionOfFormThis.ts, 17, 3))
->"isLeader" : Symbol(RoyalGuard.isLeader, Decl(typeGuardFunctionOfFormThis.ts, 0, 18))
-
-    a.lead();
->a.lead : Symbol(LeadGuard.lead, Decl(typeGuardFunctionOfFormThis.ts, 9, 36))
->a : Symbol(a, Decl(typeGuardFunctionOfFormThis.ts, 17, 3))
->lead : Symbol(LeadGuard.lead, Decl(typeGuardFunctionOfFormThis.ts, 9, 36))
-}
-else if (((a)["isFollower"]())) {
->a : Symbol(a, Decl(typeGuardFunctionOfFormThis.ts, 17, 3))
->"isFollower" : Symbol(RoyalGuard.isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
-
-    a.follow();
->a.follow : Symbol(FollowerGuard.follow, Decl(typeGuardFunctionOfFormThis.ts, 13, 40))
->a : Symbol(a, Decl(typeGuardFunctionOfFormThis.ts, 17, 3))
->follow : Symbol(FollowerGuard.follow, Decl(typeGuardFunctionOfFormThis.ts, 13, 40))
-}
+// if (((a["isLeader"])())) {
+//     a.lead();
+// }
+// else if (((a)["isFollower"]())) {
+//     a.follow();
+// }
 
 var holder2 = {a};
 >holder2 : Symbol(holder2, Decl(typeGuardFunctionOfFormThis.ts, 49, 3))

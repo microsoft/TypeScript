@@ -10,8 +10,7 @@
 ////var /*1*/aa: d.C<number>;
 ////var /*2*/bb: d.D;
 
-goTo.marker('1');
-verify.quickInfoIs('var aa: d.C<number>');
-
-goTo.marker('2');
-verify.quickInfoIs('var bb: d.D');
+verify.quickInfos({
+    1: "var aa: d.C<number>",
+    2: "var bb: d.D"
+});

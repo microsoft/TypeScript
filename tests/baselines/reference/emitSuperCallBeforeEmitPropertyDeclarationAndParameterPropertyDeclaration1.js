@@ -14,11 +14,16 @@ class B extends A {
 }
 
 //// [emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var A = (function () {
     function A() {
         this.blub = 6;
@@ -30,9 +35,10 @@ var B = (function (_super) {
     function B(x) {
         "use strict";
         'someStringForEgngInject';
-        _super.call(this);
-        this.x = x;
-        this.blah = 2;
+        var _this = _super.call(this) || this;
+        _this.x = x;
+        _this.blah = 2;
+        return _this;
     }
     return B;
 }(A));

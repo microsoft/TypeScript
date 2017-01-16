@@ -1,5 +1,10 @@
 /// <reference path="harness.ts" />
 
+
+type TestRunnerKind = CompilerTestKind | FourslashTestKind | "project" | "rwc" | "test262";
+type CompilerTestKind = "conformance" | "compiler";
+type FourslashTestKind = "fourslash" | "fourslash-shims" | "fourslash-shims-pp" | "fourslash-server";
+
 abstract class RunnerBase {
     constructor() { }
 
@@ -12,24 +17,22 @@ abstract class RunnerBase {
     }
 
     public enumerateFiles(folder: string, regex?: RegExp, options?: { recursive: boolean }): string[] {
-        return Harness.IO.listFiles(Harness.userSpecifiedRoot + folder, regex, { recursive: (options ? options.recursive : false) });
+        return ts.map(Harness.IO.listFiles(Harness.userSpecifiedRoot + folder, regex, { recursive: (options ? options.recursive : false) }), ts.normalizeSlashes);
     }
 
-    /** Setup the runner's tests so that they are ready to be executed by the harness 
+    abstract kind(): TestRunnerKind;
+
+    abstract enumerateTestFiles(): string[];
+
+    /** Setup the runner's tests so that they are ready to be executed by the harness
      *  The first test should be a describe/it block that sets up the harness's compiler instance appropriately
      */
     public abstract initializeTests(): void;
 
     /** Replaces instances of full paths with fileNames only */
     static removeFullPaths(path: string) {
-        let fixedPath = path;
-
-        // full paths either start with a drive letter or / for *nix, shouldn't have \ in the path at this point
-        const fullPath = /(\w+:|\/)?([\w+\-\.]|\/)*\.tsx?/g;
-        const fullPathList = fixedPath.match(fullPath);
-        if (fullPathList) {
-            fullPathList.forEach((match: string) => fixedPath = fixedPath.replace(match, Harness.Path.getFileName(match)));
-        }
+        // If its a full path (starts with "C:" or "/") replace with just the filename
+        let fixedPath = /^(\w:|\/)/.test(path) ? ts.getBaseFileName(path) : path;
 
         // when running in the browser the 'full path' is the host name, shows up in error baselines
         const localHost = /http:\/localhost:\d+/g;

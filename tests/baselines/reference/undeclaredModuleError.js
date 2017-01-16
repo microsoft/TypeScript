@@ -16,13 +16,13 @@ function instrumentFile(covFileDir: string, covFileName: string, originalFilePat
 }
 
 //// [undeclaredModuleError.js]
-define(["require", "exports", 'fs'], function (require, exports, fs) {
+define(["require", "exports", "fs"], function (require, exports, fs) {
     "use strict";
     function readdir(path, accept, callback) { }
     function join() {
         var paths = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            paths[_i - 0] = arguments[_i];
+            paths[_i] = arguments[_i];
         }
     }
     function instrumentFile(covFileDir, covFileName, originalFilePath) {

@@ -3,5 +3,5 @@ function * foo() {
 }
 
 //// [FunctionDeclaration1_es6.js]
-function foo() {
+function* foo() {
 }

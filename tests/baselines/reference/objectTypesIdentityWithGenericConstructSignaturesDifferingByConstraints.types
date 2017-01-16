@@ -60,7 +60,7 @@ var b = { new<T extends RegExp>(x: T) { return ''; } }; // not a construct signa
 >RegExp : RegExp
 >x : T
 >T : T
->'' : string
+>'' : ""
 
 function foo1b(x: B<Array<number>>);
 >foo1b : { (x: B<number[]>): any; (x: B<number[]>): any; }
