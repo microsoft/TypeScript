@@ -10,3 +10,8 @@ var a = ""; // error
 var b = ""; // ok
 a = b; // error
 b = a; // ok
+
+
+//// [nonPrimitiveUnionIntersection.d.ts]
+declare var a: object & string;
+declare var b: object | string;
