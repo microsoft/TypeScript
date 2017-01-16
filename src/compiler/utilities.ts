@@ -660,6 +660,7 @@ namespace ts {
             case SyntaxKind.SymbolKeyword:
             case SyntaxKind.UndefinedKeyword:
             case SyntaxKind.NeverKeyword:
+            case SyntaxKind.ObjectKeyword:
                 return true;
             case SyntaxKind.VoidKeyword:
                 return node.parent.kind !== SyntaxKind.VoidExpression;
@@ -3732,6 +3733,7 @@ namespace ts {
             || kind === SyntaxKind.SymbolKeyword
             || kind === SyntaxKind.VoidKeyword
             || kind === SyntaxKind.NeverKeyword
+            || kind === SyntaxKind.ObjectKeyword
             || kind === SyntaxKind.ExpressionWithTypeArguments;
     }
 

@@ -350,6 +350,7 @@ namespace ts {
                 case SyntaxKind.UndefinedKeyword:
                 case SyntaxKind.FromKeyword:
                 case SyntaxKind.GlobalKeyword:
+                case SyntaxKind.ObjectKeyword:
                 case SyntaxKind.OfKeyword:
                     writeTokenText(kind);
                     return;

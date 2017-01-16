@@ -320,6 +320,7 @@ namespace ts {
                 case SyntaxKind.NeverKeyword:
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.SymbolKeyword:
+                case SyntaxKind.ObjectKeyword:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.TypeQuery:
@@ -1687,6 +1688,9 @@ namespace ts {
 
                 case SyntaxKind.StringKeyword:
                     return createIdentifier("String");
+
+                case SyntaxKind.ObjectKeyword:
+                    return createIdentifier("Object");
 
                 case SyntaxKind.LiteralType:
                     switch ((<LiteralTypeNode>node).literal.kind) {
