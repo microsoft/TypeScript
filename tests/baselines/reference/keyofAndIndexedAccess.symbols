@@ -1806,3 +1806,13 @@ function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
 >x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 498, 7))
 }
 
+// Repro from #13514
+
+declare function head<T extends Array<any>>(list: T): T[0];
+>head : Symbol(head, Decl(keyofAndIndexedAccess.ts, 500, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 504, 22))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>list : Symbol(list, Decl(keyofAndIndexedAccess.ts, 504, 44))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 504, 22))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 504, 22))
+
