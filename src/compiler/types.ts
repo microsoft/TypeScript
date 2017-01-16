@@ -2370,6 +2370,8 @@ namespace ts {
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
         getAliasedSymbol(symbol: Symbol): Symbol;
         getExportsOfModule(moduleSymbol: Symbol): Symbol[];
+        /** Unlike `getExportsOfModule`, this includes properties of an `export =` value. */
+        /* @internal */ getExportsAndPropertiesOfModule(moduleSymbol: Symbol): Symbol[];
 
         getJsxElementAttributesType(elementNode: JsxOpeningLikeElement): Type;
         getJsxIntrinsicTagNames(): Symbol[];
@@ -2923,6 +2925,8 @@ namespace ts {
         /* @internal */
         resolvedIndexType: IndexType;
         /* @internal */
+        resolvedBaseConstraint: Type;
+        /* @internal */
         couldContainTypeVariables: boolean;
     }
 
@@ -2982,7 +2986,7 @@ namespace ts {
 
     export interface TypeVariable extends Type {
         /* @internal */
-        resolvedApparentType: Type;
+        resolvedBaseConstraint: Type;
         /* @internal */
         resolvedIndexType: IndexType;
     }

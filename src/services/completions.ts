@@ -1318,14 +1318,14 @@ namespace ts.Completions {
             isMemberCompletion = true;
             isNewIdentifierLocation = false;
 
-            let exports: Symbol[];
-            const moduleSpecifierSymbol = typeChecker.getSymbolAtLocation(importOrExportDeclaration.moduleSpecifier);
-            if (moduleSpecifierSymbol) {
-                exports = typeChecker.getExportsOfModule(moduleSpecifierSymbol);
+            const moduleSpecifierSymbol = typeChecker.getSymbolAtLocation(moduleSpecifier);
+            if (!moduleSpecifierSymbol) {
+                symbols = emptyArray;
+                return true;
             }
 
-            symbols = exports ? filterNamedImportOrExportCompletionItems(exports, namedImportsOrExports.elements) : emptyArray;
-
+            const exports = typeChecker.getExportsAndPropertiesOfModule(moduleSpecifierSymbol);
+            symbols = filterNamedImportOrExportCompletionItems(exports, namedImportsOrExports.elements);
             return true;
         }
 
