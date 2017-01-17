@@ -54,7 +54,6 @@ namespace ts {
         let typeCount = 0;
         let symbolCount = 0;
 
-        const emptyArray: any[] = [];
         const emptySymbols = createMap<Symbol>();
 
         const compilerOptions = host.getCompilerOptions();

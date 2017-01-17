@@ -3594,6 +3594,7 @@
         Dts,
         Js,
         Jsx,
+        Json,
         LastTypeScriptExtension = Dts
     }
 

@@ -2,6 +2,8 @@
 
 /* @internal */
 namespace ts {
+    export const emptyArray: any[] = [];
+
     export const externalHelpersModuleNameText = "tslib";
 
     export interface ReferencePathMatchResult {

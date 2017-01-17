@@ -35,7 +35,8 @@ namespace ts {
     enum Extensions {
         TypeScript, /** '.ts', '.tsx', or '.d.ts' */
         JavaScript, /** '.js' or '.jsx' */
-        DtsOnly /** Only '.d.ts' */
+        Json,       /** '.json' */
+        DtsOnly, /** Only '.d.ts' */
     }
 
     /** Used with `Extensions.DtsOnly` to extract the path from TypeScript results. */
@@ -76,6 +77,7 @@ namespace ts {
                 return tryReadFromField("typings") || tryReadFromField("types");
 
             case Extensions.JavaScript:
+            case Extensions.Json:
                 if (typeof jsonContent.main === "string") {
                     if (state.traceEnabled) {
                         trace(state.host, Diagnostics.No_types_specified_in_package_json_so_returning_main_value_of_0, jsonContent.main);
@@ -690,7 +692,7 @@ namespace ts {
         const failedLookupLocations: string[] = [];
         const state: ModuleResolutionState = { compilerOptions, host, traceEnabled };
 
-        const result = tryResolve(Extensions.TypeScript) || tryResolve(Extensions.JavaScript);
+        const result = tryResolve(Extensions.TypeScript) || tryResolve(Extensions.JavaScript) || tryResolve(Extensions.Json);
         if (result && result.value) {
             const { resolved, isExternalLibraryImport } = result.value;
             return createResolvedModuleWithFailedLookupLocations(resolved, isExternalLibraryImport, failedLookupLocations);
@@ -781,7 +783,7 @@ namespace ts {
 
         // If that didn't work, try stripping a ".js" or ".jsx" extension and replacing it with a TypeScript one;
         // e.g. "./foo.js" can be matched by "./foo.ts" or "./foo.d.ts"
-        if (hasJavaScriptFileExtension(candidate)) {
+        if (hasJavaScriptFileExtension(candidate) || fileExtensionIs(candidate, supportedJsonExtension)) {
             const extensionless = removeFileExtension(candidate);
             if (state.traceEnabled) {
                 const extension = candidate.substring(extensionless.length);
@@ -808,6 +810,8 @@ namespace ts {
                 return tryExtension(".ts", Extension.Ts) || tryExtension(".tsx", Extension.Tsx) || tryExtension(".d.ts", Extension.Dts);
             case Extensions.JavaScript:
                 return tryExtension(".js", Extension.Js) || tryExtension(".jsx", Extension.Jsx);
+            case Extensions.Json:
+                return tryExtension(".json", Extension.Json);
         }
 
         function tryExtension(ext: string, extension: Extension): Resolved | undefined {
@@ -890,6 +894,8 @@ namespace ts {
         switch (extensions) {
             case Extensions.JavaScript:
                 return extension === Extension.Js || extension === Extension.Jsx;
+            case Extensions.Json:
+                return extension === Extension.Json;
             case Extensions.TypeScript:
                 return extension === Extension.Ts || extension === Extension.Tsx || extension === Extension.Dts;
             case Extensions.DtsOnly:
@@ -941,7 +947,7 @@ namespace ts {
         if (packageResult) {
             return packageResult;
         }
-        if (extensions !== Extensions.JavaScript) {
+        if (extensions !== Extensions.JavaScript && extensions !== Extensions.Json) {
             const nodeModulesAtTypes = combinePaths(nodeModulesFolder, "@types");
             let nodeModulesAtTypesExists = nodeModulesFolderExists;
             if (nodeModulesFolderExists && !directoryProbablyExists(nodeModulesAtTypes, state.host)) {

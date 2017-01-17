@@ -1994,6 +1994,7 @@ namespace ts {
     /**
      *  List of supported extensions in order of file resolution precedence.
      */
+    export const supportedJsonExtension = ".json";
     export const supportedTypeScriptExtensions = [".ts", ".tsx", ".d.ts"];
     /** Must have ".d.ts" first because if ".ts" goes first, that will be detected as the extension instead of ".d.ts". */
     export const supportedTypescriptExtensionsForExtractExtension = [".d.ts", ".ts", ".tsx"];
@@ -2086,7 +2087,7 @@ namespace ts {
         }
     }
 
-    const extensionsToRemove = [".d.ts", ".ts", ".js", ".tsx", ".jsx"];
+    const extensionsToRemove = supportedTypescriptExtensionsForExtractExtension.concat(supportedJavascriptExtensions, [supportedJsonExtension]);
     export function removeFileExtension(path: string): string {
         for (const ext of extensionsToRemove) {
             const extensionless = tryRemoveExtension(path, ext);

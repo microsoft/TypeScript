@@ -3,8 +3,6 @@
 /// <reference path="core.ts" />
 
 namespace ts {
-    const emptyArray: any[] = [];
-
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string {
         while (true) {
             const fileName = combinePaths(searchPath, configName);
@@ -1847,6 +1845,7 @@ namespace ts {
         switch (extension) {
             case Extension.Ts:
             case Extension.Dts:
+            case Extension.Json:
                 // These are always allowed.
                 return undefined;
             case Extension.Tsx:

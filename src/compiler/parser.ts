@@ -212,6 +212,7 @@ namespace ts {
                 return visitNodes(cbNodes, (<Block>node).statements);
             case SyntaxKind.SourceFile:
                 return visitNodes(cbNodes, (<SourceFile>node).statements) ||
+                    visitNode(cbNode, (<JsonSourceFile>node).jsonObject) ||
                     visitNode(cbNode, (<SourceFile>node).endOfFileToken);
             case SyntaxKind.VariableStatement:
                 return visitNodes(cbNodes, node.decorators) ||
@@ -603,6 +604,13 @@ namespace ts {
 
         export function parseSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean, scriptKind?: ScriptKind): SourceFile {
             scriptKind = ensureScriptKind(fileName, scriptKind);
+            if (scriptKind === ScriptKind.JSON) {
+                const result = parseJsonText(fileName, sourceText, languageVersion, syntaxCursor, setParentNodes);
+                result.statements = <any>emptyArray;
+                result.typeReferenceDirectives = emptyArray;
+                result.amdDependencies = emptyArray;
+                return result;
+            }
 
             initializeState(sourceText, languageVersion, syntaxCursor, scriptKind);
 
@@ -623,8 +631,8 @@ namespace ts {
             return isInvalid ? entityName : undefined;
         }
 
-        export function parseJsonText(fileName: string, sourceText: string): JsonSourceFile {
-            initializeState(sourceText, ScriptTarget.ES2015, /*syntaxCursor*/ undefined, ScriptKind.JSON);
+        export function parseJsonText(fileName: string, sourceText: string, languageVersion: ScriptTarget = ScriptTarget.ES2015, syntaxCursor?: IncrementalParser.SyntaxCursor, setParentNodes?: boolean): JsonSourceFile {
+            initializeState(sourceText, languageVersion, syntaxCursor, ScriptKind.JSON);
             // Set source file so that errors will be reported with this file name
             sourceFile = createSourceFile(fileName, ScriptTarget.ES2015, ScriptKind.JSON);
             const result = <JsonSourceFile>sourceFile;
@@ -641,6 +649,10 @@ namespace ts {
             }
             else {
                 parseExpected(SyntaxKind.OpenBraceToken);
+            }
+
+            if (setParentNodes) {
+                fixupParentReferences(sourceFile);
             }
 
             sourceFile.parseDiagnostics = parseDiagnostics;
