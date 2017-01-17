@@ -12342,16 +12342,18 @@ namespace ts {
         }
 
         function checkNonNullExpression(node: Expression | QualifiedName) {
-            const type = checkExpression(node);
-            if (strictNullChecks) {
-                const kind = getFalsyFlags(type) & TypeFlags.Nullable;
-                if (kind) {
-                    error(node, kind & TypeFlags.Undefined ? kind & TypeFlags.Null ?
-                        Diagnostics.Object_is_possibly_null_or_undefined :
-                        Diagnostics.Object_is_possibly_undefined :
-                        Diagnostics.Object_is_possibly_null);
-                }
-                return getNonNullableType(type);
+            return checkNonNullType(checkExpression(node), node);
+        }
+
+        function checkNonNullType(type: Type, errorNode: Node): Type {
+            const kind = (strictNullChecks ? getFalsyFlags(type) : type.flags) & TypeFlags.Nullable;
+            if (kind) {
+                error(errorNode, kind & TypeFlags.Undefined ? kind & TypeFlags.Null ?
+                    Diagnostics.Object_is_possibly_null_or_undefined :
+                    Diagnostics.Object_is_possibly_undefined :
+                    Diagnostics.Object_is_possibly_null);
+                const t = getNonNullableType(type);
+                return t.flags & (TypeFlags.Nullable | TypeFlags.Never) ? unknownType : t;
             }
             return type;
         }
@@ -14491,6 +14493,7 @@ namespace ts {
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.MinusToken:
                 case SyntaxKind.TildeToken:
+                    checkNonNullType(operandType, node.operand);
                     if (maybeTypeOfKind(operandType, TypeFlags.ESSymbol)) {
                         error(node.operand, Diagnostics.The_0_operator_cannot_be_applied_to_type_symbol, tokenToString(node.operator));
                     }
@@ -14502,7 +14505,7 @@ namespace ts {
                         booleanType;
                 case SyntaxKind.PlusPlusToken:
                 case SyntaxKind.MinusMinusToken:
-                    const ok = checkArithmeticOperandType(node.operand, getNonNullableType(operandType),
+                    const ok = checkArithmeticOperandType(node.operand, checkNonNullType(operandType, node.operand),
                         Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
                     if (ok) {
                         // run check only if former checks succeeded to avoid reporting cascading errors
@@ -14518,7 +14521,7 @@ namespace ts {
             if (operandType === silentNeverType) {
                 return silentNeverType;
             }
-            const ok = checkArithmeticOperandType(node.operand, getNonNullableType(operandType),
+            const ok = checkArithmeticOperandType(node.operand, checkNonNullType(operandType, node.operand),
                 Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
             if (ok) {
                 // run check only if former checks succeeded to avoid reporting cascading errors
@@ -14593,7 +14596,6 @@ namespace ts {
             }
             // NOTE: do not raise error if right is unknown as related error was already reported
             if (!(isTypeAny(rightType) ||
-                  rightType.flags & TypeFlags.Nullable ||
                   getSignaturesOfType(rightType, SignatureKind.Call).length ||
                   getSignaturesOfType(rightType, SignatureKind.Construct).length ||
                   isTypeSubtypeOf(rightType, globalFunctionType))) {
@@ -14606,6 +14608,8 @@ namespace ts {
             if (leftType === silentNeverType || rightType === silentNeverType) {
                 return silentNeverType;
             }
+            leftType = checkNonNullType(leftType, left);
+            rightType = checkNonNullType(rightType, right);
             // TypeScript 1.0 spec (April 2014): 4.15.5
             // The in operator requires the left operand to be of type Any, the String primitive type, or the Number primitive type,
             // and the right operand to be of type Any, an object type, or a type parameter type.
@@ -14890,17 +14894,9 @@ namespace ts {
                     if (leftType === silentNeverType || rightType === silentNeverType) {
                         return silentNeverType;
                     }
-                    // TypeScript 1.0 spec (April 2014): 4.19.1
-                    // These operators require their operands to be of type Any, the Number primitive type,
-                    // or an enum type. Operands of an enum type are treated
-                    // as having the primitive type Number. If one operand is the null or undefined value,
-                    // it is treated as having the type of the other operand.
-                    // The result is always of the Number primitive type.
-                    if (leftType.flags & TypeFlags.Nullable) leftType = rightType;
-                    if (rightType.flags & TypeFlags.Nullable) rightType = leftType;
 
-                    leftType = getNonNullableType(leftType);
-                    rightType = getNonNullableType(rightType);
+                    leftType = checkNonNullType(leftType, left);
+                    rightType = checkNonNullType(rightType, right);
 
                     let suggestedOperator: SyntaxKind;
                     // if a user tries to apply a bitwise operator to 2 boolean operands
@@ -14925,16 +14921,11 @@ namespace ts {
                     if (leftType === silentNeverType || rightType === silentNeverType) {
                         return silentNeverType;
                     }
-                    // TypeScript 1.0 spec (April 2014): 4.19.2
-                    // The binary + operator requires both operands to be of the Number primitive type or an enum type,
-                    // or at least one of the operands to be of type Any or the String primitive type.
 
-                    // If one operand is the null or undefined value, it is treated as having the type of the other operand.
-                    if (leftType.flags & TypeFlags.Nullable) leftType = rightType;
-                    if (rightType.flags & TypeFlags.Nullable) rightType = leftType;
-
-                    leftType = getNonNullableType(leftType);
-                    rightType = getNonNullableType(rightType);
+                    if (!isTypeOfKind(leftType, TypeFlags.Any | TypeFlags.StringLike) && !isTypeOfKind(rightType, TypeFlags.Any | TypeFlags.StringLike)) {
+                        leftType = checkNonNullType(leftType, left);
+                        rightType = checkNonNullType(rightType, right);
+                    }
 
                     let resultType: Type;
                     if (isTypeOfKind(leftType, TypeFlags.NumberLike) && isTypeOfKind(rightType, TypeFlags.NumberLike)) {
@@ -14973,8 +14964,8 @@ namespace ts {
                 case SyntaxKind.LessThanEqualsToken:
                 case SyntaxKind.GreaterThanEqualsToken:
                     if (checkForDisallowedESSymbolOperand(operator)) {
-                        leftType = getBaseTypeOfLiteralType(leftType);
-                        rightType = getBaseTypeOfLiteralType(rightType);
+                        leftType = getBaseTypeOfLiteralType(checkNonNullType(leftType, left));
+                        rightType = getBaseTypeOfLiteralType(checkNonNullType(rightType, right));
                         if (!isTypeComparableTo(leftType, rightType) && !isTypeComparableTo(rightType, leftType)) {
                             reportOperatorError();
                         }

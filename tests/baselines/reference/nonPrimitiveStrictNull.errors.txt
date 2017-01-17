@@ -12,21 +12,17 @@ tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(22,5): erro
   Type 'null' is not assignable to type 'object'.
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(27,5): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(29,5): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(29,7): error TS2339: Property 'toString' does not exist on type 'never'.
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(33,5): error TS2533: Object is possibly 'null' or 'undefined'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(33,7): error TS2339: Property 'toString' does not exist on type 'never'.
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(39,5): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(39,7): error TS2339: Property 'toString' does not exist on type 'never'.
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(41,5): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(45,5): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(45,7): error TS2339: Property 'toString' does not exist on type 'never'.
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(47,5): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(52,14): error TS2344: Type 'number' does not satisfy the constraint 'object'.
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(53,14): error TS2344: Type 'null' does not satisfy the constraint 'object'.
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(54,14): error TS2344: Type 'undefined' does not satisfy the constraint 'object'.
 
 
-==== tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts (22 errors) ====
+==== tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts (18 errors) ====
     
     var a: object
     declare var b: object | null
@@ -80,16 +76,12 @@ tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(54,14): err
         d.toString(); // error, undefined
         ~
 !!! error TS2532: Object is possibly 'undefined'.
-          ~~~~~~~~
-!!! error TS2339: Property 'toString' does not exist on type 'never'.
     }
     
     if (d == null) {
         d.toString(); // error, undefined | null
         ~
 !!! error TS2533: Object is possibly 'null' or 'undefined'.
-          ~~~~~~~~
-!!! error TS2339: Property 'toString' does not exist on type 'never'.
     } else {
         d.toString(); // object
     }
@@ -98,8 +90,6 @@ tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(54,14): err
         d.toString(); // error, null
         ~
 !!! error TS2531: Object is possibly 'null'.
-          ~~~~~~~~
-!!! error TS2339: Property 'toString' does not exist on type 'never'.
     } else {
         d.toString(); // error, object | undefined
         ~
@@ -110,8 +100,6 @@ tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(54,14): err
         d.toString(); // error, undefined
         ~
 !!! error TS2532: Object is possibly 'undefined'.
-          ~~~~~~~~
-!!! error TS2339: Property 'toString' does not exist on type 'never'.
     } else {
         d.toString(); // error, object | null
         ~
