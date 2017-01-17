@@ -7,14 +7,14 @@ namespace ts.codefix {
      * @param possiblyMissingSymbols The collection of symbols to filter and then get insertions for.
      * @returns Empty string iff there are no member insertions.
      */
-    export function getMissingMembersInsertion(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: Symbol[], checker: TypeChecker, newlineChar: string): string {
+    export function getMissingMembersInsertion(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: Symbol[], checker: TypeChecker, formatInfo: CodeFixFormatInfo): string {
         const classMembers = classDeclaration.symbol.members;
         const missingMembers = possiblyMissingSymbols.filter(symbol => !(symbol.getName() in classMembers));
 
         let insertion = "";
 
         for (const symbol of missingMembers) {
-            insertion = insertion.concat(getInsertionForMemberSymbol(symbol, classDeclaration, checker, newlineChar));
+            insertion = insertion.concat(getInsertionForMemberSymbol(symbol, classDeclaration, checker, formatInfo));
         }
         return insertion;
     }
@@ -22,7 +22,7 @@ namespace ts.codefix {
     /**
      * @returns Empty string iff there we can't figure out a representation for `symbol` in `enclosingDeclaration`.
      */
-    function getInsertionForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker, newlineChar: string): string {
+    function getInsertionForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker, formatInfo: CodeFixFormatInfo): string {
         // const name = symbol.getName();
         const type = checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration);
         const declarations = symbol.getDeclarations();
@@ -40,7 +40,7 @@ namespace ts.codefix {
             case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyDeclaration:
                 const typeString = checker.typeToString(type, enclosingDeclaration, TypeFormatFlags.None);
-                return `${visibility}${name}: ${typeString};${newlineChar}`;
+                return `${formatInfo.newLineAndIndentationStr}${visibility}${name}: ${typeString};`;
 
             case SyntaxKind.MethodSignature:
             case SyntaxKind.MethodDeclaration:
@@ -55,16 +55,19 @@ namespace ts.codefix {
                 if (!(signatures && signatures.length > 0)) {
                     return "";
                 }
+
+                const newLineAndFunctionBodyIndent = formatInfo.editorSettings.newLineCharacter + ts.formatting.getIndentationString(formatInfo.indentationlevel + 2 * formatInfo.editorSettings.tabSize, formatInfo.editorSettings);
+
                 if (declarations.length === 1) {
                     Debug.assert(signatures.length === 1);
                     const sigString = checker.signatureToString(signatures[0], enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
-                    return `${visibility}${name}${sigString}${getMethodBodyStub(newlineChar)}`;
+                    return `${formatInfo.newLineAndIndentationStr}${visibility}${name}${sigString}${getMethodBodyStub(newLineAndFunctionBodyIndent, formatInfo.newLineAndIndentationStr)}`;
                 }
 
                 let result = "";
                 for (let i = 0; i < signatures.length; i++) {
                     const sigString = checker.signatureToString(signatures[i], enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
-                    result += `${visibility}${name}${sigString};${newlineChar}`;
+                    result += `${formatInfo.newLineAndIndentationStr}${visibility}${name}${sigString};`;
                 }
 
                 // If there is a declaration with a body, it is the last declaration,
@@ -78,7 +81,7 @@ namespace ts.codefix {
                     bodySig = createBodySignatureWithAnyTypes(signatures, enclosingDeclaration, checker);
                 }
                 const sigString = checker.signatureToString(bodySig, enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
-                result += `${visibility}${name}${sigString}${getMethodBodyStub(newlineChar)}`;
+                result += `${formatInfo.newLineAndIndentationStr}${visibility}${name}${sigString}${getMethodBodyStub(newLineAndFunctionBodyIndent, formatInfo.newLineAndIndentationStr)}`;
 
                 return result;
             default:
@@ -138,8 +141,12 @@ namespace ts.codefix {
         }
     }
 
-    function getMethodBodyStub(newLineChar: string) {
-        return ` {${newLineChar}throw new Error('Method not implemented.');${newLineChar}}${newLineChar}`;
+    /**
+     * @param indentLevel The level of indentation of the enclosing function declaration.
+     * @param editorSettings newLineChar msut be defined.
+     */
+    function getMethodBodyStub(newlineAndFunctionBodyIndent: string, newLineAndclosingBraceIndent: string) {
+        return ` {${newlineAndFunctionBodyIndent}throw new Error('Method not implemented.');${newLineAndclosingBraceIndent}}`;
     }
 
     function getVisibilityPrefix(flags: ModifierFlags): string {

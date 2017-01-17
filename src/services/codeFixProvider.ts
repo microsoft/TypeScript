@@ -13,6 +13,20 @@ namespace ts {
         newLineCharacter: string;
         host: LanguageServiceHost;
         cancellationToken: CancellationToken;
+        formatInfo: CodeFixFormatInfo
+    }
+
+    export class CodeFixFormatInfo {
+        /**
+         * Has one level of indentation beyond the indentation at the error span.
+         */
+        public newLineAndIndentationStr: string;
+        /**
+         * @param indentationlevel The indentation, in columns, for the beginning of the span where the error is reported.
+         */
+        constructor(public editorSettings: EditorSettings, public indentationlevel: number) {
+            this.newLineAndIndentationStr = editorSettings.newLineCharacter + ts.formatting.getIndentationString(indentationlevel + editorSettings.tabSize, editorSettings);
+        }
     }
 
     export namespace codefix {

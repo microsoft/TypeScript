@@ -16,7 +16,7 @@ namespace ts.codefix {
                 return undefined;
             }
 
-            // figure out if the this access is actuall inside the supercall
+            // figure out if the this access is actually inside the supercall
             // i.e. super(this.a), since in that case we won't suggest a fix
             if (superCall.expression && superCall.expression.kind == SyntaxKind.CallExpression) {
                 const arguments = (<CallExpression>superCall.expression).arguments;
@@ -30,7 +30,7 @@ namespace ts.codefix {
             const newPosition = getOpenBraceEnd(<ConstructorDeclaration>constructor, sourceFile);
             const changes = [{
                 fileName: sourceFile.fileName, textChanges: [{
-                    newText: superCall.getText(sourceFile),
+                    newText: context.formatInfo.newLineAndIndentationStr + superCall.getText(sourceFile),
                     span: { start: newPosition, length: 0 }
                 },
                 {

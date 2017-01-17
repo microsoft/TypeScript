@@ -11,9 +11,10 @@ namespace ts.codefix {
             }
 
             const newPosition = getOpenBraceEnd(<ConstructorDeclaration>token.parent, sourceFile);
+
             return [{
                 description: getLocaleSpecificMessage(Diagnostics.Add_missing_super_call),
-                changes: [{ fileName: sourceFile.fileName, textChanges: [{ newText: "super();", span: { start: newPosition, length: 0 } }] }]
+                changes: [{ fileName: sourceFile.fileName, textChanges: [{ newText: `${context.formatInfo.newLineAndIndentationStr}super();`, span: { start: newPosition, length: 0 } }] }]
             }];
         }
     });

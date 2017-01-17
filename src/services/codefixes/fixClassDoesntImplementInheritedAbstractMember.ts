@@ -30,7 +30,7 @@ namespace ts.codefix {
             const extendsSymbols = checker.getPropertiesOfType(instantiatedExtendsType);
             const abstractAndNonPrivateExtendsSymbols = extendsSymbols.filter(symbolPointsToNonPrivateAndAbstractMember);
 
-            const insertion = getMissingMembersInsertion(classDecl, abstractAndNonPrivateExtendsSymbols, checker, context.newLineCharacter);
+            const insertion = getMissingMembersInsertion(classDecl, abstractAndNonPrivateExtendsSymbols, checker, context.formatInfo);
 
             if (insertion.length) {
                 return [{
