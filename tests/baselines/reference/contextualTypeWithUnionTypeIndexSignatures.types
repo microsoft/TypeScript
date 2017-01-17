@@ -24,6 +24,7 @@ interface IWithNoNumberIndexSignature {
 >IWithNoNumberIndexSignature : IWithNoNumberIndexSignature
 
     0: string;
+>0 : string
 }
 interface IWithStringIndexSignature1 {
 >IWithStringIndexSignature1 : IWithStringIndexSignature1
@@ -125,6 +126,7 @@ var x3: IWithNoNumberIndexSignature | IWithNumberIndexSignature1 = { 1: a => a }
 >IWithNoNumberIndexSignature : IWithNoNumberIndexSignature
 >IWithNumberIndexSignature1 : IWithNumberIndexSignature1
 >{ 1: a => a } : { 1: (a: number) => number; }
+>1 : (a: number) => number
 >a => a : (a: number) => number
 >a : number
 >a : number
@@ -134,6 +136,7 @@ var x3: IWithNoNumberIndexSignature | IWithNumberIndexSignature1 = { 0: a => a }
 >IWithNoNumberIndexSignature : IWithNoNumberIndexSignature
 >IWithNumberIndexSignature1 : IWithNumberIndexSignature1
 >{ 0: a => a } : { 0: (a: any) => any; }
+>0 : (a: any) => any
 >a => a : (a: any) => any
 >a : any
 >a : any
@@ -143,6 +146,7 @@ var x3: IWithNoNumberIndexSignature | IWithNumberIndexSignature1 = { 0: "hello" 
 >IWithNoNumberIndexSignature : IWithNoNumberIndexSignature
 >IWithNumberIndexSignature1 : IWithNumberIndexSignature1
 >{ 0: "hello" } : { 0: string; }
+>0 : string
 >"hello" : "hello"
 
 var x4: IWithNumberIndexSignature1 | IWithNumberIndexSignature2 = { 1: a => a.toString() }; // a should be number
@@ -150,6 +154,7 @@ var x4: IWithNumberIndexSignature1 | IWithNumberIndexSignature2 = { 1: a => a.to
 >IWithNumberIndexSignature1 : IWithNumberIndexSignature1
 >IWithNumberIndexSignature2 : IWithNumberIndexSignature2
 >{ 1: a => a.toString() } : { 1: (a: number) => string; }
+>1 : (a: number) => string
 >a => a.toString() : (a: number) => string
 >a : number
 >a.toString() : string
@@ -162,6 +167,7 @@ var x4: IWithNumberIndexSignature1 | IWithNumberIndexSignature2 = { 1: a => a };
 >IWithNumberIndexSignature1 : IWithNumberIndexSignature1
 >IWithNumberIndexSignature2 : IWithNumberIndexSignature2
 >{ 1: a => a } : { 1: (a: number) => number; }
+>1 : (a: number) => number
 >a => a : (a: number) => number
 >a : number
 >a : number

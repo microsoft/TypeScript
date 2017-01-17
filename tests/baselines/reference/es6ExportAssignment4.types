@@ -1,6 +1,8 @@
 === tests/cases/compiler/modules.d.ts ===
 
 declare module "a" {
+>"a" : typeof "a"
+
     var a: number;
 >a : number
 

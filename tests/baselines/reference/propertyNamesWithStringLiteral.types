@@ -17,9 +17,11 @@ interface NamedColors {
 >_Color : _Color
 
     "blue": _Color;
+>"blue" : _Color
 >_Color : _Color
 
     "pale blue": _Color;
+>"pale blue" : _Color
 >_Color : _Color
 }
 module Color {

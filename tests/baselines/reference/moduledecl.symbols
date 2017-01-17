@@ -301,6 +301,8 @@ declare module m55 {
 }
 
 declare module "m3" {
+>"m3" : Symbol("m3", Decl(moduledecl.ts, 132, 1))
+
     export var b: number;
 >b : Symbol(b, Decl(moduledecl.ts, 135, 14))
 }

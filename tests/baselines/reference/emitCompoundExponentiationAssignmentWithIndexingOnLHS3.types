@@ -9,6 +9,8 @@ var object = {
 >2 : 2
 
     get 0() {
+>0 : number
+
         return this._0;
 >this._0 : any
 >this : any
@@ -16,6 +18,7 @@ var object = {
 
     },
     set 0(x: number) {
+>0 : number
 >x : number
 
         this._0 = x;

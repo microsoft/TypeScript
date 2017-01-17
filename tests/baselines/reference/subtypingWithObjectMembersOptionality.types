@@ -44,6 +44,7 @@ interface T2 {
 >T2 : T2
 
     1?: Base; 
+>1 : Base
 >Base : Base
 }
 
@@ -52,6 +53,7 @@ interface S2 extends T2 {
 >T2 : T2
 
     1: Derived;
+>1 : Derived
 >Derived : Derived
 }
 
@@ -59,6 +61,7 @@ interface T3 {
 >T3 : T3
 
     '1'?: Base;
+>'1' : Base
 >Base : Base
 }
 
@@ -67,6 +70,7 @@ interface S3 extends T3 {
 >T3 : T3
 
     '1.': Derived;
+>'1.' : Derived
 >Derived : Derived
 }
 
@@ -115,6 +119,7 @@ module TwoLevels {
 >T2 : T2
 
         1?: Base;
+>1 : Base
 >Base : Base
     }
 
@@ -123,6 +128,7 @@ module TwoLevels {
 >T2 : T2
 
         1: Derived2;
+>1 : Derived2
 >Derived2 : Derived2
     }
 
@@ -130,6 +136,7 @@ module TwoLevels {
 >T3 : T3
 
         '1'?: Base;
+>'1' : Base
 >Base : Base
     }
 
@@ -138,6 +145,7 @@ module TwoLevels {
 >T3 : T3
 
         '1.': Derived2;
+>'1.' : Derived2
 >Derived2 : Derived2
     }
 

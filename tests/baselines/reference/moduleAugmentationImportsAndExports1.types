@@ -29,6 +29,8 @@ A.prototype.foo = function () { return undefined; }
 >undefined : undefined
 
 declare module "./f1" {
+>"./f1" : typeof "tests/cases/compiler/f1"
+
     interface A {
 >A : A
 

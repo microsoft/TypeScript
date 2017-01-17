@@ -36,6 +36,8 @@ module M {
 === tests/cases/conformance/jsx/react.d.ts ===
 
 declare module 'react' {
+>'react' : typeof 'react'
+
 	var x: any;
 >x : any
 
@@ -53,6 +55,8 @@ declare module ReactRouter {
 >Thing : Thing
 }
 declare module 'react-router' {
+>'react-router' : typeof 'react-router'
+
 	export = ReactRouter;
 >ReactRouter : typeof ReactRouter
 }

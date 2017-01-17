@@ -3,4 +3,5 @@ interface I {
 >I : I
 
   0;
+>0 : any
 }

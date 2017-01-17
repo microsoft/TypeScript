@@ -9,6 +9,7 @@ function foo() {
 >globalCounter : Symbol(globalCounter, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 0, 3))
 
     return { 0: 2 };
+>0 : Symbol(0, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 3, 12))
 }
 foo()[0] **= foo()[0];
 >foo : Symbol(foo, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts, 0, 22))

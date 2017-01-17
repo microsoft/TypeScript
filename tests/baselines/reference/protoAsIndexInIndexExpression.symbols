@@ -19,11 +19,14 @@ var o = {
 >o : Symbol(o, Decl(protoAsIndexInIndexExpression_1.ts, 8, 3))
 
     "__proto__": 0
+>"__proto__" : Symbol("__proto__", Decl(protoAsIndexInIndexExpression_1.ts, 8, 9))
+
 };
 class C {
 >C : Symbol(C, Decl(protoAsIndexInIndexExpression_1.ts, 10, 2))
 
     "__proto__" = 0;
+>"__proto__" : Symbol(C["__proto__"], Decl(protoAsIndexInIndexExpression_1.ts, 11, 9))
 }
 === tests/cases/compiler/protoAsIndexInIndexExpression_0.ts ===
 export var x;

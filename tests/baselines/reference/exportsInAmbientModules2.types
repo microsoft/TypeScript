@@ -5,7 +5,8 @@ export default class C {}
 
 === tests/cases/compiler/main.ts ===
 
-No type information for this code.declare module "M" {
-No type information for this code.    export * from "external"
-No type information for this code.}
-No type information for this code.
+declare module "M" {
+>"M" : typeof "M"
+
+    export * from "external"
+}

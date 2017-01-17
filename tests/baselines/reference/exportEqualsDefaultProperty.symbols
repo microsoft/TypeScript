@@ -4,7 +4,11 @@ var x = {
 >x : Symbol(x, Decl(exp.ts, 1, 3))
 
     "greeting": "hello, world",
+>"greeting" : Symbol("greeting", Decl(exp.ts, 1, 9))
+
     "default": 42
+>"default" : Symbol("default", Decl(exp.ts, 2, 31))
+
 };
 
 export = x

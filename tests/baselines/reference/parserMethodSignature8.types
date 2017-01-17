@@ -3,5 +3,6 @@ interface I {
 >I : I
 
   "H"?<T>();
+>"H" : <T>() => any
 >T : T
 }

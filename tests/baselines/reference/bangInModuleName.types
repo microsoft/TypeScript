@@ -9,9 +9,12 @@ import * as http from 'intern/dojo/node!http';
 
 
 declare module "http" {
+>"http" : typeof "http"
 }
 
 declare module 'intern/dojo/node!http' {
+>'intern/dojo/node!http' : typeof 'intern/dojo/node!http'
+
     import http = require('http');
 >http : typeof http
 

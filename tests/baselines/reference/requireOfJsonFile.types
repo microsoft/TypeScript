@@ -37,8 +37,10 @@ if (x) {
 >{    "a": true,    "b": "hello"} : { "a": boolean; "b": string; }
 
     "a": true,
+>"a" : boolean
 >true : true
 
     "b": "hello"
+>"b" : string
 >"hello" : "hello"
 }

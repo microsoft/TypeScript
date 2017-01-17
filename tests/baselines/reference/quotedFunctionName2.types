@@ -3,4 +3,5 @@ class Test1 {
 >Test1 : Test1
 
   static "prop1"() { }
+>"prop1" : () => void
 }

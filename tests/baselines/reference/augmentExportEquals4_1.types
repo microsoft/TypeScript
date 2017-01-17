@@ -1,6 +1,8 @@
 === tests/cases/compiler/file1.d.ts ===
 
 declare module "file1" {
+>"file1" : typeof "file1"
+
     class foo {}
 >foo : foo
 
@@ -29,6 +31,8 @@ x.b = 1;
 
 // OK - './file1' is a namespace
 declare module "file1" {
+>"file1" : typeof x
+
     interface A { a }
 >A : A
 >a : any

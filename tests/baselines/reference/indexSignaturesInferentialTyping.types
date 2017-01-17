@@ -22,7 +22,9 @@ var x1 = foo({ 0: 0, 1: 1 });       // type should be number
 >foo({ 0: 0, 1: 1 }) : number
 >foo : <T>(items: { [index: number]: T; }) => T
 >{ 0: 0, 1: 1 } : { 0: number; 1: number; }
+>0 : number
 >0 : 0
+>1 : number
 >1 : 1
 
 var x2 = bar({ 0: 0, 1: 1 });
@@ -30,7 +32,9 @@ var x2 = bar({ 0: 0, 1: 1 });
 >bar({ 0: 0, 1: 1 }) : number
 >bar : <T>(items: { [index: string]: T; }) => T
 >{ 0: 0, 1: 1 } : { 0: number; 1: number; }
+>0 : number
 >0 : 0
+>1 : number
 >1 : 1
 
 var x3 = bar({ zero: 0, one: 1 });  // type should be number

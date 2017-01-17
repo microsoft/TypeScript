@@ -23,7 +23,11 @@ var arr5Tuple: {
 >arr5Tuple : Symbol(arr5Tuple, Decl(unionTypeFromArrayLiteral.ts, 10, 3))
 
     0: string;
+>0 : Symbol(0, Decl(unionTypeFromArrayLiteral.ts, 10, 16))
+
     5: number;
+>5 : Symbol(5, Decl(unionTypeFromArrayLiteral.ts, 11, 14))
+
 } = ["hello", true, false, " hello", true, 10, "any"]; // Tuple
 class C { foo() { } }
 >C : Symbol(C, Decl(unionTypeFromArrayLiteral.ts, 13, 54))

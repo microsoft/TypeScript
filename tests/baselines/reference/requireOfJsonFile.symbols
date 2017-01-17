@@ -31,7 +31,9 @@ if (x) {
 
 === tests/cases/compiler/b.json ===
 {
-No type information for this code.    "a": true,
-No type information for this code.    "b": "hello"
-No type information for this code.}
-No type information for this code.
+    "a": true,
+>"a" : Symbol("a", Decl(b.json, 0, 1))
+
+    "b": "hello"
+>"b" : Symbol("b", Decl(b.json, 1, 14))
+}

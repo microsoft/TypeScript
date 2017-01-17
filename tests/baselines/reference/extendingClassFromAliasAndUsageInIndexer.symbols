@@ -28,9 +28,11 @@ var moduleMap: { [key: string]: IHasVisualizationModel } = {
 >IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 2, 79))
 
     "moduleA": moduleA,
+>"moduleA" : Symbol("moduleA", Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 7, 60))
 >moduleA : Symbol(moduleA, Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 0, 81))
 
     "moduleB": moduleB
+>"moduleB" : Symbol("moduleB", Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 8, 23))
 >moduleB : Symbol(moduleB, Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 1, 79))
 
 };

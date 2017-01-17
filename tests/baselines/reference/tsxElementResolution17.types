@@ -26,6 +26,8 @@ declare module JSX {
 }
 
 declare module 'elements1' {
+>'elements1' : typeof 'elements1'
+
 	class MyElement {
 >MyElement : MyElement
 
@@ -33,6 +35,8 @@ declare module 'elements1' {
 }
 
 declare module 'elements2' {
+>'elements2' : typeof 'elements2'
+
 	class MyElement {
 >MyElement : MyElement
 

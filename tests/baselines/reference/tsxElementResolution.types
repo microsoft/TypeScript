@@ -11,7 +11,10 @@ declare namespace JSX {
 >x : string
 
 		'string_named';
+>'string_named' : any
+
 		'var';
+>'var' : any
 	}
 }
 

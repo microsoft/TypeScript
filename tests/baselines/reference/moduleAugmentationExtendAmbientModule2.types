@@ -57,6 +57,8 @@ import { Observable } from "observable"
 >function() { } : () => void
 
 declare module "observable" {
+>"observable" : typeof "observable"
+
     interface Observable<T> {
 >Observable : Observable<T>
 >T : T
@@ -81,6 +83,8 @@ declare module "observable" {
 
 === tests/cases/compiler/observable.d.ts ===
 declare module "observable" {
+>"observable" : typeof "observable"
+
     class Observable<T> {
 >Observable : Observable<T>
 >T : T

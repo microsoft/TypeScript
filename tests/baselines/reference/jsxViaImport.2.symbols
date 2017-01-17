@@ -35,6 +35,8 @@ declare module React {
 >U : Symbol(U, Decl(component.d.ts, 5, 20))
 }
 declare module "BaseComponent" {
+>"BaseComponent" : Symbol("BaseComponent", Decl(component.d.ts, 6, 1))
+
     export default class extends React.Component<any, {}> {
 >React.Component : Symbol(React.Component, Decl(component.d.ts, 4, 22))
 >React : Symbol(React, Decl(component.d.ts, 3, 1))

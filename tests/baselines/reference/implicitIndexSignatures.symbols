@@ -137,10 +137,14 @@ function f4() {
 
     const o1 = { 0: "0", 1: "1", count: 2 };
 >o1 : Symbol(o1, Decl(implicitIndexSignatures.ts, 38, 9))
+>0 : Symbol(0, Decl(implicitIndexSignatures.ts, 38, 16))
+>1 : Symbol(1, Decl(implicitIndexSignatures.ts, 38, 24))
 >count : Symbol(count, Decl(implicitIndexSignatures.ts, 38, 32))
 
     let o2: { 0: string, 1: string, count: number };    
 >o2 : Symbol(o2, Decl(implicitIndexSignatures.ts, 39, 7))
+>0 : Symbol(0, Decl(implicitIndexSignatures.ts, 39, 13))
+>1 : Symbol(1, Decl(implicitIndexSignatures.ts, 39, 24))
 >count : Symbol(count, Decl(implicitIndexSignatures.ts, 39, 35))
 
     const v1 = getStringIndexValue(o1);

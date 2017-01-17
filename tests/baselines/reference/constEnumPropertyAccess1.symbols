@@ -31,6 +31,8 @@ var o: {
 
 } = {
         1: true
+>1 : Symbol(1, Decl(constEnumPropertyAccess1.ts, 14, 5))
+
     };
 
 var a = G.A;

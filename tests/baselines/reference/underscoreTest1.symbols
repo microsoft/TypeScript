@@ -1011,9 +1011,11 @@ interface Tuple2<T0, T1> extends Array<any> {
 >Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     0: T0;
+>0 : Symbol(Tuple2[0], Decl(underscoreTest1_underscore.ts, 12, 45))
 >T0 : Symbol(T0, Decl(underscoreTest1_underscore.ts, 12, 17))
 
     1: T1;
+>1 : Symbol(Tuple2[1], Decl(underscoreTest1_underscore.ts, 13, 10))
 >T1 : Symbol(T1, Decl(underscoreTest1_underscore.ts, 12, 20))
 }
 
@@ -1025,12 +1027,15 @@ interface Tuple3<T0, T1, T2> extends Array<any> {
 >Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     0: T0;
+>0 : Symbol(Tuple3[0], Decl(underscoreTest1_underscore.ts, 17, 49))
 >T0 : Symbol(T0, Decl(underscoreTest1_underscore.ts, 17, 17))
 
     1: T1;
+>1 : Symbol(Tuple3[1], Decl(underscoreTest1_underscore.ts, 18, 10))
 >T1 : Symbol(T1, Decl(underscoreTest1_underscore.ts, 17, 20))
 
     2: T2;
+>2 : Symbol(Tuple3[2], Decl(underscoreTest1_underscore.ts, 19, 10))
 >T2 : Symbol(T2, Decl(underscoreTest1_underscore.ts, 17, 24))
 }
 
@@ -1043,15 +1048,19 @@ interface Tuple4<T0, T1, T2, T3> extends Array<any> {
 >Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     0: T0;
+>0 : Symbol(Tuple4[0], Decl(underscoreTest1_underscore.ts, 23, 53))
 >T0 : Symbol(T0, Decl(underscoreTest1_underscore.ts, 23, 17))
 
     1: T1;
+>1 : Symbol(Tuple4[1], Decl(underscoreTest1_underscore.ts, 24, 10))
 >T1 : Symbol(T1, Decl(underscoreTest1_underscore.ts, 23, 20))
 
     2: T2;
+>2 : Symbol(Tuple4[2], Decl(underscoreTest1_underscore.ts, 25, 10))
 >T2 : Symbol(T2, Decl(underscoreTest1_underscore.ts, 23, 24))
 
     3: T3;
+>3 : Symbol(Tuple4[3], Decl(underscoreTest1_underscore.ts, 26, 10))
 >T3 : Symbol(T3, Decl(underscoreTest1_underscore.ts, 23, 28))
 }
 

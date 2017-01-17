@@ -33,6 +33,8 @@ import {Cls} from "./m1";
 >"1" : "1"
 
 declare module "./m1" {
+>"./m1" : typeof "tests/cases/compiler/m1"
+
     interface Cls {
 >Cls : Cls
 
@@ -42,6 +44,8 @@ declare module "./m1" {
 }
 
 declare module "./m1" {
+>"./m1" : typeof "tests/cases/compiler/m1"
+
     interface Cls {
 >Cls : Cls
 
@@ -92,6 +96,8 @@ import {C1, C2} from "./m3";
 >undefined : undefined
 
 declare module "./m1" {
+>"./m1" : typeof "tests/cases/compiler/m1"
+
     interface Cls {
 >Cls : Cls
 
@@ -102,6 +108,8 @@ declare module "./m1" {
 }
 
 declare module "./m1" {
+>"./m1" : typeof "tests/cases/compiler/m1"
+
     interface Cls {
 >Cls : Cls
 

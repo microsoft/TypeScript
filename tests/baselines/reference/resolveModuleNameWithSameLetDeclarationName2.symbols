@@ -1,5 +1,7 @@
 === tests/cases/compiler/resolveModuleNameWithSameLetDeclarationName2.ts ===
 declare module "punycode" {
+>"punycode" : Symbol("punycode", Decl(resolveModuleNameWithSameLetDeclarationName2.ts, 0, 0))
+
     interface ucs2 {
 >ucs2 : Symbol(ucs2, Decl(resolveModuleNameWithSameLetDeclarationName2.ts, 0, 27), Decl(resolveModuleNameWithSameLetDeclarationName2.ts, 6, 14))
 
