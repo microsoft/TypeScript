@@ -3,8 +3,7 @@
     "compilerOptions": {
         "removeComments": false,
         "outFile": "../../built/local/typescriptServices.js",
-        "declaration": true,
-        "types": []
+        "declaration": true
     },
     "files": [
         "../compiler/core.ts",
