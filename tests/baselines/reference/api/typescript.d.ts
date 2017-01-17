@@ -413,6 +413,7 @@ declare namespace ts {
         ThisNodeOrAnySubNodesHasError = 131072,
         HasAggregatedChildData = 262144,
         JSDoc = 1048576,
+        JsonFile = 8388608,
         BlockScoped = 3,
         ReachabilityCheckFlags = 384,
         ReachabilityAndEmitFlags = 1408,

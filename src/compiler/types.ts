@@ -492,6 +492,7 @@ namespace ts {
         JSDoc =              1 << 20, // If node was parsed inside jsdoc
         /* @internal */ Ambient =         1 << 21, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
         /* @internal */ InWithStatement = 1 << 22, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
+        JsonFile = 1 << 23, // If node was parsed in a Json
 
         BlockScoped = Let | Const,
 
