@@ -56,6 +56,10 @@ namespace ts {
     // So for JavaScript files, '.jsx' is only emitted if the input was '.jsx', and JsxEmit.Preserve.
     // For TypeScript, the only time to emit with a '.jsx' extension, is on JSX input, and JsxEmit.Preserve
     function getOutputExtension(sourceFile: SourceFile, options: CompilerOptions): Extension {
+        if (isJsonSourceFile(sourceFile)) {
+            return Extension.Json;
+        }
+
         if (options.jsx === JsxEmit.Preserve) {
             if (isSourceFileJavaScript(sourceFile)) {
                 if (fileExtensionIs(sourceFile.fileName, Extension.Jsx)) {
@@ -1615,7 +1619,9 @@ namespace ts {
 
         function emitExpressionStatement(node: ExpressionStatement) {
             emitExpression(node.expression);
-            writeSemicolon();
+            if (!isJsonSourceFile(currentSourceFile)) {
+                writeSemicolon();
+            }
         }
 
         function emitIfStatement(node: IfStatement) {

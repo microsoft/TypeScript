@@ -1802,6 +1802,10 @@ namespace Harness {
             return ts.endsWith(fileName, ts.Extension.Jsx);
         }
 
+        export function isJSON(fileName: string) {
+            return ts.endsWith(fileName, ts.Extension.Json);
+        }
+
         export function isJSMap(fileName: string) {
             return ts.endsWith(fileName, ".js.map") || ts.endsWith(fileName, ".jsx.map");
         }
@@ -1822,7 +1826,7 @@ namespace Harness {
                         // .d.ts file, add to declFiles emit
                         this.declFilesCode.push(emittedFile);
                     }
-                    else if (isJS(emittedFile.fileName) || isJSX(emittedFile.fileName)) {
+                    else if (isJS(emittedFile.fileName) || isJSX(emittedFile.fileName) || isJSON(emittedFile.fileName)) {
                         // .js file, add to files
                         this.files.push(emittedFile);
                     }
