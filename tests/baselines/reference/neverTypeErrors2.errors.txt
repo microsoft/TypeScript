@@ -5,7 +5,7 @@ tests/cases/conformance/types/never/neverTypeErrors2.ts(7,5): error TS2322: Type
 tests/cases/conformance/types/never/neverTypeErrors2.ts(8,5): error TS2322: Type 'null' is not assignable to type 'never'.
 tests/cases/conformance/types/never/neverTypeErrors2.ts(9,5): error TS2322: Type '{}' is not assignable to type 'never'.
 tests/cases/conformance/types/never/neverTypeErrors2.ts(13,5): error TS2322: Type 'undefined' is not assignable to type 'never'.
-tests/cases/conformance/types/never/neverTypeErrors2.ts(17,12): error TS2322: Type '1' is not assignable to type 'never'.
+tests/cases/conformance/types/never/neverTypeErrors2.ts(17,5): error TS2322: Type '1' is not assignable to type 'never'.
 tests/cases/conformance/types/never/neverTypeErrors2.ts(20,16): error TS2534: A function returning 'never' cannot have a reachable end point.
 
 
@@ -41,7 +41,7 @@ tests/cases/conformance/types/never/neverTypeErrors2.ts(20,16): error TS2534: A 
     
     function f3(): never {
         return 1;
-               ~
+        ~~~~~~~~~
 !!! error TS2322: Type '1' is not assignable to type 'never'.
     }
     

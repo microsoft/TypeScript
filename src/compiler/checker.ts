@@ -84,6 +84,7 @@ namespace ts {
             getIndexTypeOfType,
             getBaseTypes,
             getTypeFromTypeNode,
+            getParameterType: getTypeAtPosition,
             getReturnTypeOfSignature,
             getNonNullableType,
             getSymbolsInScope,
@@ -108,6 +109,7 @@ namespace ts {
             getAliasedSymbol: resolveAlias,
             getEmitResolver,
             getExportsOfModule: getExportsOfModuleAsArray,
+            getExportsAndPropertiesOfModule,
             getAmbientModules,
             getJsxElementAttributesType,
             getJsxIntrinsicTagNames,
@@ -1533,6 +1535,15 @@ namespace ts {
 
         function getExportsOfModuleAsArray(moduleSymbol: Symbol): Symbol[] {
             return symbolsToArray(getExportsOfModule(moduleSymbol));
+        }
+
+        function getExportsAndPropertiesOfModule(moduleSymbol: Symbol): Symbol[] {
+            const exports = getExportsOfModuleAsArray(moduleSymbol);
+            const exportEquals = resolveExternalModuleSymbol(moduleSymbol);
+            if (exportEquals !== moduleSymbol) {
+                addRange(exports, getPropertiesOfType(getTypeOfSymbol(exportEquals)));
+            }
+            return exports;
         }
 
         function tryGetMemberInModuleExports(memberName: string, moduleSymbol: Symbol): Symbol | undefined {
@@ -4672,10 +4683,6 @@ namespace ts {
             return type.modifiersType;
         }
 
-        function getErasedTemplateTypeFromMappedType(type: MappedType) {
-            return instantiateType(getTemplateTypeFromMappedType(type), createTypeEraser([getTypeParameterFromMappedType(type)]));
-        }
-
         function isGenericMappedType(type: Type) {
             if (getObjectFlags(type) & ObjectFlags.Mapped) {
                 const constraintType = getConstraintTypeFromMappedType(<MappedType>type);
@@ -7204,8 +7211,7 @@ namespace ts {
             if (source.flags & TypeFlags.Enum && target.flags & TypeFlags.Enum && isEnumTypeRelatedTo(<EnumType>source, <EnumType>target, errorReporter)) return true;
             if (source.flags & TypeFlags.Undefined && (!strictNullChecks || target.flags & (TypeFlags.Undefined | TypeFlags.Void))) return true;
             if (source.flags & TypeFlags.Null && (!strictNullChecks || target.flags & TypeFlags.Null)) return true;
-            if (source.flags & TypeFlags.Object && target === nonPrimitiveType) return true;
-            if (source.flags & TypeFlags.Primitive && target === nonPrimitiveType) return false;
+            if (source.flags & TypeFlags.Object && target.flags & TypeFlags.NonPrimitive) return true;
             if (relation === assignableRelation || relation === comparableRelation) {
                 if (source.flags & TypeFlags.Any) return true;
                 if ((source.flags & TypeFlags.Number | source.flags & TypeFlags.NumberLiteral) && target.flags & TypeFlags.EnumLike) return true;
@@ -7489,19 +7495,19 @@ namespace ts {
                     }
                     else {
                         let constraint = getConstraintOfTypeParameter(<TypeParameter>source);
-
-                        if (!constraint || constraint.flags & TypeFlags.Any) {
-                            constraint = emptyObjectType;
-                        }
-
-                        // The constraint may need to be further instantiated with its 'this' type.
-                        constraint = getTypeWithThisArgument(constraint, source);
-
-                        // Report constraint errors only if the constraint is not the empty object type
-                        const reportConstraintErrors = reportErrors && constraint !== emptyObjectType;
-                        if (result = isRelatedTo(constraint, target, reportConstraintErrors)) {
-                            errorInfo = saveErrorInfo;
-                            return result;
+                        // A type parameter with no constraint is not related to the non-primitive object type.
+                        if (constraint || !(target.flags & TypeFlags.NonPrimitive)) {
+                            if (!constraint || constraint.flags & TypeFlags.Any) {
+                                constraint = emptyObjectType;
+                            }
+                            // The constraint may need to be further instantiated with its 'this' type.
+                            constraint = getTypeWithThisArgument(constraint, source);
+                            // Report constraint errors only if the constraint is not the empty object type
+                            const reportConstraintErrors = reportErrors && constraint !== emptyObjectType;
+                            if (result = isRelatedTo(constraint, target, reportConstraintErrors)) {
+                                errorInfo = saveErrorInfo;
+                                return result;
+                            }
                         }
                     }
                 }
@@ -7797,25 +7803,24 @@ namespace ts {
                 return result;
             }
 
-            // A type [P in S]: X is related to a type [P in T]: Y if T is related to S and X is related to Y.
+            // A type [P in S]: X is related to a type [Q in T]: Y if T is related to S and X' is
+            // related to Y, where X' is an instantiation of X in which P is replaced with Q. Notice
+            // that S and T are contra-variant whereas X and Y are co-variant.
             function mappedTypeRelatedTo(source: Type, target: Type, reportErrors: boolean): Ternary {
                 if (isGenericMappedType(target)) {
                     if (isGenericMappedType(source)) {
-                        let result: Ternary;
-                        if (relation === identityRelation) {
-                            const readonlyMatches = !(<MappedType>source).declaration.readonlyToken === !(<MappedType>target).declaration.readonlyToken;
-                            const optionalMatches = !(<MappedType>source).declaration.questionToken === !(<MappedType>target).declaration.questionToken;
-                            if (readonlyMatches && optionalMatches) {
-                                if (result = isRelatedTo(getConstraintTypeFromMappedType(<MappedType>target), getConstraintTypeFromMappedType(<MappedType>source), reportErrors)) {
-                                    return result & isRelatedTo(getErasedTemplateTypeFromMappedType(<MappedType>source), getErasedTemplateTypeFromMappedType(<MappedType>target), reportErrors);
-                                }
-                            }
-                        }
-                        else {
-                            if (relation === comparableRelation || !(<MappedType>source).declaration.questionToken || (<MappedType>target).declaration.questionToken) {
-                                if (result = isRelatedTo(getConstraintTypeFromMappedType(<MappedType>target), getConstraintTypeFromMappedType(<MappedType>source), reportErrors)) {
-                                    return result & isRelatedTo(getTemplateTypeFromMappedType(<MappedType>source), getTemplateTypeFromMappedType(<MappedType>target), reportErrors);
-                                }
+                        const sourceReadonly = !!(<MappedType>source).declaration.readonlyToken;
+                        const sourceOptional = !!(<MappedType>source).declaration.questionToken;
+                        const targetReadonly = !!(<MappedType>target).declaration.readonlyToken;
+                        const targetOptional = !!(<MappedType>target).declaration.questionToken;
+                        const modifiersRelated = relation === identityRelation ?
+                            sourceReadonly === targetReadonly && sourceOptional === targetOptional :
+                            relation === comparableRelation || !sourceOptional || targetOptional;
+                        if (modifiersRelated) {
+                            let result: Ternary;
+                            if (result = isRelatedTo(getConstraintTypeFromMappedType(<MappedType>target), getConstraintTypeFromMappedType(<MappedType>source), reportErrors)) {
+                                const mapper = createTypeMapper([getTypeParameterFromMappedType(<MappedType>source)], [getTypeParameterFromMappedType(<MappedType>target)]);
+                                return result & isRelatedTo(instantiateType(getTemplateTypeFromMappedType(<MappedType>source), mapper), getTemplateTypeFromMappedType(<MappedType>target), reportErrors);
                             }
                         }
                     }
@@ -9269,9 +9274,6 @@ namespace ts {
         }
 
         function getTypeFacts(type: Type): TypeFacts {
-            if (type === nonPrimitiveType) {
-                return strictNullChecks ? TypeFacts.ObjectStrictFacts : TypeFacts.ObjectFacts;
-            }
             const flags = type.flags;
             if (flags & TypeFlags.String) {
                 return strictNullChecks ? TypeFacts.StringStrictFacts : TypeFacts.StringFacts;
@@ -9311,6 +9313,9 @@ namespace ts {
             }
             if (flags & TypeFlags.ESSymbol) {
                 return strictNullChecks ? TypeFacts.SymbolStrictFacts : TypeFacts.SymbolFacts;
+            }
+            if (flags & TypeFlags.NonPrimitive) {
+                return strictNullChecks ? TypeFacts.ObjectStrictFacts : TypeFacts.ObjectFacts;
             }
             if (flags & TypeFlags.TypeParameter) {
                 const constraint = getConstraintOfTypeParameter(<TypeParameter>type);
@@ -12372,16 +12377,18 @@ namespace ts {
         }
 
         function checkNonNullExpression(node: Expression | QualifiedName) {
-            const type = checkExpression(node);
-            if (strictNullChecks) {
-                const kind = getFalsyFlags(type) & TypeFlags.Nullable;
-                if (kind) {
-                    error(node, kind & TypeFlags.Undefined ? kind & TypeFlags.Null ?
-                        Diagnostics.Object_is_possibly_null_or_undefined :
-                        Diagnostics.Object_is_possibly_undefined :
-                        Diagnostics.Object_is_possibly_null);
-                }
-                return getNonNullableType(type);
+            return checkNonNullType(checkExpression(node), node);
+        }
+
+        function checkNonNullType(type: Type, errorNode: Node): Type {
+            const kind = (strictNullChecks ? getFalsyFlags(type) : type.flags) & TypeFlags.Nullable;
+            if (kind) {
+                error(errorNode, kind & TypeFlags.Undefined ? kind & TypeFlags.Null ?
+                    Diagnostics.Object_is_possibly_null_or_undefined :
+                    Diagnostics.Object_is_possibly_undefined :
+                    Diagnostics.Object_is_possibly_null);
+                const t = getNonNullableType(type);
+                return t.flags & (TypeFlags.Nullable | TypeFlags.Never) ? unknownType : t;
             }
             return type;
         }
@@ -14521,6 +14528,7 @@ namespace ts {
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.MinusToken:
                 case SyntaxKind.TildeToken:
+                    checkNonNullType(operandType, node.operand);
                     if (maybeTypeOfKind(operandType, TypeFlags.ESSymbol)) {
                         error(node.operand, Diagnostics.The_0_operator_cannot_be_applied_to_type_symbol, tokenToString(node.operator));
                     }
@@ -14532,7 +14540,7 @@ namespace ts {
                         booleanType;
                 case SyntaxKind.PlusPlusToken:
                 case SyntaxKind.MinusMinusToken:
-                    const ok = checkArithmeticOperandType(node.operand, getNonNullableType(operandType),
+                    const ok = checkArithmeticOperandType(node.operand, checkNonNullType(operandType, node.operand),
                         Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
                     if (ok) {
                         // run check only if former checks succeeded to avoid reporting cascading errors
@@ -14548,7 +14556,7 @@ namespace ts {
             if (operandType === silentNeverType) {
                 return silentNeverType;
             }
-            const ok = checkArithmeticOperandType(node.operand, getNonNullableType(operandType),
+            const ok = checkArithmeticOperandType(node.operand, checkNonNullType(operandType, node.operand),
                 Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
             if (ok) {
                 // run check only if former checks succeeded to avoid reporting cascading errors
@@ -14623,7 +14631,6 @@ namespace ts {
             }
             // NOTE: do not raise error if right is unknown as related error was already reported
             if (!(isTypeAny(rightType) ||
-                  rightType.flags & TypeFlags.Nullable ||
                   getSignaturesOfType(rightType, SignatureKind.Call).length ||
                   getSignaturesOfType(rightType, SignatureKind.Construct).length ||
                   isTypeSubtypeOf(rightType, globalFunctionType))) {
@@ -14636,6 +14643,8 @@ namespace ts {
             if (leftType === silentNeverType || rightType === silentNeverType) {
                 return silentNeverType;
             }
+            leftType = checkNonNullType(leftType, left);
+            rightType = checkNonNullType(rightType, right);
             // TypeScript 1.0 spec (April 2014): 4.15.5
             // The in operator requires the left operand to be of type Any, the String primitive type, or the Number primitive type,
             // and the right operand to be of type Any, an object type, or a type parameter type.
@@ -14920,17 +14929,9 @@ namespace ts {
                     if (leftType === silentNeverType || rightType === silentNeverType) {
                         return silentNeverType;
                     }
-                    // TypeScript 1.0 spec (April 2014): 4.19.1
-                    // These operators require their operands to be of type Any, the Number primitive type,
-                    // or an enum type. Operands of an enum type are treated
-                    // as having the primitive type Number. If one operand is the null or undefined value,
-                    // it is treated as having the type of the other operand.
-                    // The result is always of the Number primitive type.
-                    if (leftType.flags & TypeFlags.Nullable) leftType = rightType;
-                    if (rightType.flags & TypeFlags.Nullable) rightType = leftType;
 
-                    leftType = getNonNullableType(leftType);
-                    rightType = getNonNullableType(rightType);
+                    leftType = checkNonNullType(leftType, left);
+                    rightType = checkNonNullType(rightType, right);
 
                     let suggestedOperator: SyntaxKind;
                     // if a user tries to apply a bitwise operator to 2 boolean operands
@@ -14955,16 +14956,11 @@ namespace ts {
                     if (leftType === silentNeverType || rightType === silentNeverType) {
                         return silentNeverType;
                     }
-                    // TypeScript 1.0 spec (April 2014): 4.19.2
-                    // The binary + operator requires both operands to be of the Number primitive type or an enum type,
-                    // or at least one of the operands to be of type Any or the String primitive type.
 
-                    // If one operand is the null or undefined value, it is treated as having the type of the other operand.
-                    if (leftType.flags & TypeFlags.Nullable) leftType = rightType;
-                    if (rightType.flags & TypeFlags.Nullable) rightType = leftType;
-
-                    leftType = getNonNullableType(leftType);
-                    rightType = getNonNullableType(rightType);
+                    if (!isTypeOfKind(leftType, TypeFlags.Any | TypeFlags.StringLike) && !isTypeOfKind(rightType, TypeFlags.Any | TypeFlags.StringLike)) {
+                        leftType = checkNonNullType(leftType, left);
+                        rightType = checkNonNullType(rightType, right);
+                    }
 
                     let resultType: Type;
                     if (isTypeOfKind(leftType, TypeFlags.NumberLike) && isTypeOfKind(rightType, TypeFlags.NumberLike)) {
@@ -15003,8 +14999,8 @@ namespace ts {
                 case SyntaxKind.LessThanEqualsToken:
                 case SyntaxKind.GreaterThanEqualsToken:
                     if (checkForDisallowedESSymbolOperand(operator)) {
-                        leftType = getBaseTypeOfLiteralType(leftType);
-                        rightType = getBaseTypeOfLiteralType(rightType);
+                        leftType = getBaseTypeOfLiteralType(checkNonNullType(leftType, left));
+                        rightType = getBaseTypeOfLiteralType(checkNonNullType(rightType, right));
                         if (!isTypeComparableTo(leftType, rightType) && !isTypeComparableTo(rightType, leftType)) {
                             reportOperatorError();
                         }
@@ -17950,27 +17946,27 @@ namespace ts {
 
                     if (func.kind === SyntaxKind.SetAccessor) {
                         if (node.expression) {
-                            error(node.expression, Diagnostics.Setters_cannot_return_a_value);
+                            error(node, Diagnostics.Setters_cannot_return_a_value);
                         }
                     }
                     else if (func.kind === SyntaxKind.Constructor) {
-                        if (node.expression && !checkTypeAssignableTo(exprType, returnType, node.expression)) {
-                            error(node.expression, Diagnostics.Return_type_of_constructor_signature_must_be_assignable_to_the_instance_type_of_the_class);
+                        if (node.expression && !checkTypeAssignableTo(exprType, returnType, node)) {
+                            error(node, Diagnostics.Return_type_of_constructor_signature_must_be_assignable_to_the_instance_type_of_the_class);
                         }
                     }
                     else if (func.type || isGetAccessorWithAnnotatedSetAccessor(func)) {
                         if (isAsyncFunctionLike(func)) {
                             const promisedType = getPromisedType(returnType);
-                            const awaitedType = checkAwaitedType(exprType, node.expression || node, Diagnostics.Return_expression_in_async_function_does_not_have_a_valid_callable_then_member);
+                            const awaitedType = checkAwaitedType(exprType, node, Diagnostics.Return_expression_in_async_function_does_not_have_a_valid_callable_then_member);
                             if (promisedType) {
                                 // If the function has a return type, but promisedType is
                                 // undefined, an error will be reported in checkAsyncFunctionReturnType
                                 // so we don't need to report one here.
-                                checkTypeAssignableTo(awaitedType, promisedType, node.expression || node);
+                                checkTypeAssignableTo(awaitedType, promisedType, node);
                             }
                         }
                         else {
-                            checkTypeAssignableTo(exprType, returnType, node.expression || node);
+                            checkTypeAssignableTo(exprType, returnType, node);
                         }
                     }
                 }

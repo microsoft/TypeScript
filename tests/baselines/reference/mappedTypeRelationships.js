@@ -106,6 +106,69 @@ function f51<T extends ItemMap, K extends keyof T>(obj: T, key: K) {
     return obj[key].name;
 }
 
+type T1<T> = {
+    [P in keyof T]: T[P];
+}
+
+type T2<T> = {
+    [P in keyof T]: T[P];
+}
+
+function f60<U>(x: T1<U>, y: T2<U>) {
+    x = y;
+    y = x;
+}
+
+type Identity<T> = {
+    [P in keyof T]: T[P];
+}
+
+function f61<U>(x: Identity<U>, y: Partial<U>) {
+    x = y;  // Error
+    y = x;
+}
+
+function f62<U>(x: Identity<U>, y: Readonly<U>) {
+    x = y;
+    y = x;
+}
+
+function f70<T>(x: { [P in keyof T]: T[P] }, y: { [P in keyof T]: T[P] }) {
+    x = y;
+    y = x;
+}
+
+function f71<T, U extends T>(x: { [P in keyof T]: T[P] }, y: { [P in keyof T]: U[P] }) {
+    x = y;
+    y = x;  // Error
+}
+
+function f72<T, U extends T>(x: { [P in keyof T]: T[P] }, y: { [P in keyof U]: U[P] }) {
+    x = y;
+    y = x;  // Error
+}
+
+function f73<T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in keyof T]: T[P] }) {
+    x = y;
+    y = x;  // Error
+}
+
+function f74<T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in keyof U]: U[P] }) {
+    x = y;
+    y = x;  // Error
+}
+
+function f75<T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in keyof T]: U[P] }) {
+    x = y;
+    y = x;  // Error
+}
+
+function f76<T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in K]: U[P] }) {
+    x = y;
+    y = x;  // Error
+}
+
+
 //// [mappedTypeRelationships.js]
 function f1(x, k) {
     return x[k];
@@ -185,6 +248,46 @@ function f51(obj, key) {
     var item = obj[key];
     return obj[key].name;
 }
+function f60(x, y) {
+    x = y;
+    y = x;
+}
+function f61(x, y) {
+    x = y; // Error
+    y = x;
+}
+function f62(x, y) {
+    x = y;
+    y = x;
+}
+function f70(x, y) {
+    x = y;
+    y = x;
+}
+function f71(x, y) {
+    x = y;
+    y = x; // Error
+}
+function f72(x, y) {
+    x = y;
+    y = x; // Error
+}
+function f73(x, y) {
+    x = y;
+    y = x; // Error
+}
+function f74(x, y) {
+    x = y;
+    y = x; // Error
+}
+function f75(x, y) {
+    x = y;
+    y = x; // Error
+}
+function f76(x, y) {
+    x = y;
+    y = x; // Error
+}
 
 
 //// [mappedTypeRelationships.d.ts]
@@ -214,3 +317,50 @@ declare type ItemMap = {
 };
 declare function f50<T extends ItemMap>(obj: T, key: keyof T): string;
 declare function f51<T extends ItemMap, K extends keyof T>(obj: T, key: K): string;
+declare type T1<T> = {
+    [P in keyof T]: T[P];
+};
+declare type T2<T> = {
+    [P in keyof T]: T[P];
+};
+declare function f60<U>(x: T1<U>, y: T2<U>): void;
+declare type Identity<T> = {
+    [P in keyof T]: T[P];
+};
+declare function f61<U>(x: Identity<U>, y: Partial<U>): void;
+declare function f62<U>(x: Identity<U>, y: Readonly<U>): void;
+declare function f70<T>(x: {
+    [P in keyof T]: T[P];
+}, y: {
+    [P in keyof T]: T[P];
+}): void;
+declare function f71<T, U extends T>(x: {
+    [P in keyof T]: T[P];
+}, y: {
+    [P in keyof T]: U[P];
+}): void;
+declare function f72<T, U extends T>(x: {
+    [P in keyof T]: T[P];
+}, y: {
+    [P in keyof U]: U[P];
+}): void;
+declare function f73<T, K extends keyof T>(x: {
+    [P in K]: T[P];
+}, y: {
+    [P in keyof T]: T[P];
+}): void;
+declare function f74<T, U extends T, K extends keyof T>(x: {
+    [P in K]: T[P];
+}, y: {
+    [P in keyof U]: U[P];
+}): void;
+declare function f75<T, U extends T, K extends keyof T>(x: {
+    [P in K]: T[P];
+}, y: {
+    [P in keyof T]: U[P];
+}): void;
+declare function f76<T, U extends T, K extends keyof T>(x: {
+    [P in K]: T[P];
+}, y: {
+    [P in K]: U[P];
+}): void;

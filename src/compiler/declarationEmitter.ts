@@ -390,6 +390,7 @@ namespace ts {
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.NumberKeyword:
                 case SyntaxKind.BooleanKeyword:
+                case SyntaxKind.ObjectKeyword:
                 case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.UndefinedKeyword:

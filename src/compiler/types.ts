@@ -2360,6 +2360,11 @@
         getIndexTypeOfType(type: Type, kind: IndexKind): Type;
         getBaseTypes(type: InterfaceType): ObjectType[];
         getReturnTypeOfSignature(signature: Signature): Type;
+        /**
+         * Gets the type of a parameter at a given position in a signature.
+         * Returns `any` if the index is not valid.
+         */
+        /* @internal */ getParameterType(signature: Signature, parameterIndex: number): Type;
         getNonNullableType(type: Type): Type;
 
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
@@ -2389,6 +2394,8 @@
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
         getAliasedSymbol(symbol: Symbol): Symbol;
         getExportsOfModule(moduleSymbol: Symbol): Symbol[];
+        /** Unlike `getExportsOfModule`, this includes properties of an `export =` value. */
+        /* @internal */ getExportsAndPropertiesOfModule(moduleSymbol: Symbol): Symbol[];
 
         getJsxElementAttributesType(elementNode: JsxOpeningLikeElement): Type;
         getJsxIntrinsicTagNames(): Symbol[];

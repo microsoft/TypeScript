@@ -600,7 +600,7 @@ namespace ts {
         return !!findChildOfKind(n, kind, sourceFile);
     }
 
-    export function findChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFile): Node {
+    export function findChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFile): Node | undefined {
         return forEach(n.getChildren(sourceFile), c => c.kind === kind && c);
     }
 
