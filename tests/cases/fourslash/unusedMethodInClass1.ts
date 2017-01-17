@@ -6,6 +6,6 @@
 ////    }
 ////} |]
 
-verify.codeFixAtPosition(`
+verify.rangeAfterCodeFix(`
 class greeter {
 }`);

@@ -278,7 +278,7 @@ namespace ts.server {
                 if (!this.formatCodeSettings) {
                     this.formatCodeSettings = getDefaultFormatCodeSettings(this.host);
                 }
-                mergeMaps(this.formatCodeSettings, formatSettings);
+                mergeMapLikes(this.formatCodeSettings, formatSettings);
             }
         }
 
@@ -354,6 +354,10 @@ namespace ts.server {
          */
         positionToLineOffset(position: number): ILineInfo {
             return this.textStorage.positionToLineOffset(position);
+        }
+
+        public isJavaScript() {
+            return this.scriptKind === ScriptKind.JS || this.scriptKind === ScriptKind.JSX;
         }
     }
 }

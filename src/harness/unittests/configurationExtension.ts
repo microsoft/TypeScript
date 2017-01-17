@@ -2,7 +2,7 @@
 /// <reference path="..\virtualFileSystem.ts" />
 
 namespace ts {
-    const testContents = {
+    const testContents = createMapFromTemplate({
         "/dev/tsconfig.json": `{
   "extends": "./configs/base",
   "files": [
@@ -86,10 +86,10 @@ namespace ts {
         "/dev/tests/utils.ts": "",
         "/dev/tests/scenarios/first.json": "",
         "/dev/tests/baselines/first/output.ts": ""
-    };
+    });
 
     const caseInsensitiveBasePath = "c:/dev/";
-    const caseInsensitiveHost = new Utils.MockParseConfigHost(caseInsensitiveBasePath, /*useCaseSensitiveFileNames*/ false, mapObject(testContents, (key, content) => [`c:${key}`, content]));
+    const caseInsensitiveHost = new Utils.MockParseConfigHost(caseInsensitiveBasePath, /*useCaseSensitiveFileNames*/ false, mapEntries(testContents, (key, content) => [`c:${key}`, content]));
 
     const caseSensitiveBasePath = "/dev/";
     const caseSensitiveHost = new Utils.MockParseConfigHost(caseSensitiveBasePath, /*useCaseSensitiveFileNames*/ true, testContents);

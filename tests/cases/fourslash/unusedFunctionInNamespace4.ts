@@ -7,5 +7,5 @@
 ////    }
 ////} |]
 
-verify.codeFixAtPosition(`namespace Validation {
+verify.rangeAfterCodeFix(`namespace Validation {
 }`);

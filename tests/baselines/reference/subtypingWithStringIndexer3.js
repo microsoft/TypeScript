@@ -45,11 +45,16 @@ module Generics {
 
 //// [subtypingWithStringIndexer3.js]
 // Derived type indexer must be subtype of base type indexer
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var A = (function () {
     function A() {
     }
@@ -58,14 +63,14 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
 var B2 = (function (_super) {
     __extends(B2, _super);
     function B2() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return B2;
 }(A));
@@ -79,35 +84,35 @@ var Generics;
     var B = (function (_super) {
         __extends(B, _super);
         function B() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return B;
     }(A));
     var B2 = (function (_super) {
         __extends(B2, _super);
         function B2() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return B2;
     }(A));
     var B3 = (function (_super) {
         __extends(B3, _super);
         function B3() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return B3;
     }(A));
     var B4 = (function (_super) {
         __extends(B4, _super);
         function B4() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return B4;
     }(A));
     var B5 = (function (_super) {
         __extends(B5, _super);
         function B5() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return B5;
     }(A));

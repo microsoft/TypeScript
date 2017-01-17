@@ -9,7 +9,7 @@ namespace ts {
         externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[]; // imports of other external modules
         externalHelpersImportDeclaration: ImportDeclaration | undefined; // import of external helpers
         exportSpecifiers: Map<ExportSpecifier[]>; // export specifiers by name
-        exportedBindings: Map<Identifier[]>; // exported names of local declarations
+        exportedBindings: Identifier[][]; // exported names of local declarations
         exportedNames: Identifier[]; // all exported names local to module
         exportEquals: ExportAssignment | undefined; // an export= declaration if one was present
         hasExportStarsToExportValues: boolean; // whether this module contains export*
@@ -17,8 +17,8 @@ namespace ts {
 
     export function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver, compilerOptions: CompilerOptions): ExternalModuleInfo {
         const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
-        const exportSpecifiers = createMap<ExportSpecifier[]>();
-        const exportedBindings = createMap<Identifier[]>();
+        const exportSpecifiers = createMultiMap<ExportSpecifier>();
+        const exportedBindings: Identifier[][] = [];
         const uniqueExports = createMap<boolean>();
         let exportedNames: Identifier[];
         let hasExportDefault = false;
@@ -69,18 +69,18 @@ namespace ts {
                     else {
                         // export { x, y }
                         for (const specifier of (<ExportDeclaration>node).exportClause.elements) {
-                            if (!uniqueExports[specifier.name.text]) {
+                            if (!uniqueExports.get(specifier.name.text)) {
                                 const name = specifier.propertyName || specifier.name;
-                                multiMapAdd(exportSpecifiers, name.text, specifier);
+                                exportSpecifiers.add(name.text, specifier);
 
                                 const decl = resolver.getReferencedImportDeclaration(name)
                                     || resolver.getReferencedValueDeclaration(name);
 
                                 if (decl) {
-                                    multiMapAdd(exportedBindings, getOriginalNodeId(decl), specifier.name);
+                                    multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(decl), specifier.name);
                                 }
 
-                                uniqueExports[specifier.name.text] = true;
+                                uniqueExports.set(specifier.name.text, true);
                                 exportedNames = append(exportedNames, specifier.name);
                             }
                         }
@@ -107,16 +107,16 @@ namespace ts {
                         if (hasModifier(node, ModifierFlags.Default)) {
                             // export default function() { }
                             if (!hasExportDefault) {
-                                multiMapAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<FunctionDeclaration>node));
+                                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<FunctionDeclaration>node));
                                 hasExportDefault = true;
                             }
                         }
                         else {
                             // export function x() { }
                             const name = (<FunctionDeclaration>node).name;
-                            if (!uniqueExports[name.text]) {
-                                multiMapAdd(exportedBindings, getOriginalNodeId(node), name);
-                                uniqueExports[name.text] = true;
+                            if (!uniqueExports.get(name.text)) {
+                                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
+                                uniqueExports.set(name.text, true);
                                 exportedNames = append(exportedNames, name);
                             }
                         }
@@ -128,16 +128,16 @@ namespace ts {
                         if (hasModifier(node, ModifierFlags.Default)) {
                             // export default class { }
                             if (!hasExportDefault) {
-                                multiMapAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<ClassDeclaration>node));
+                                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<ClassDeclaration>node));
                                 hasExportDefault = true;
                             }
                         }
                         else {
                             // export class x { }
                             const name = (<ClassDeclaration>node).name;
-                            if (!uniqueExports[name.text]) {
-                                multiMapAdd(exportedBindings, getOriginalNodeId(node), name);
-                                uniqueExports[name.text] = true;
+                            if (!uniqueExports.get(name.text)) {
+                                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
+                                uniqueExports.set(name.text, true);
                                 exportedNames = append(exportedNames, name);
                             }
                         }
@@ -158,11 +158,23 @@ namespace ts {
             }
         }
         else if (!isGeneratedIdentifier(decl.name)) {
-            if (!uniqueExports[decl.name.text]) {
-                uniqueExports[decl.name.text] = true;
+            if (!uniqueExports.get(decl.name.text)) {
+                uniqueExports.set(decl.name.text, true);
                 exportedNames = append(exportedNames, decl.name);
             }
         }
         return exportedNames;
+    }
+
+    /** Use a sparse array as a multi-map. */
+    function multiMapSparseArrayAdd<V>(map: V[][], key: number, value: V): V[] {
+        let values = map[key];
+        if (values) {
+            values.push(value);
+        }
+        else {
+            map[key] = values = [value];
+        }
+        return values;
     }
 }

@@ -62,8 +62,7 @@ function forInStatement1() {
                     _i = 0;
                     _c.label = 2;
                 case 2:
-                    if (!(_i < _a.length))
-                        return [3 /*break*/, 4];
+                    if (!(_i < _a.length)) return [3 /*break*/, 4];
                     x = _a[_i];
                     z;
                     _c.label = 3;
@@ -87,8 +86,7 @@ function forInStatement2() {
                     _i = 0;
                     _c.label = 1;
                 case 1:
-                    if (!(_i < _a.length))
-                        return [3 /*break*/, 4];
+                    if (!(_i < _a.length)) return [3 /*break*/, 4];
                     x = _a[_i];
                     return [4 /*yield*/, z];
                 case 2:
@@ -114,8 +112,7 @@ function forInStatement3() {
                     _i = 0;
                     _c.label = 1;
                 case 1:
-                    if (!(_i < _a.length))
-                        return [3 /*break*/, 4];
+                    if (!(_i < _a.length)) return [3 /*break*/, 4];
                     return [4 /*yield*/, x];
                 case 2:
                     (_c.sent()).a = _a[_i];
@@ -143,8 +140,7 @@ function forInStatement4() {
                     _i = 0;
                     _c.label = 2;
                 case 2:
-                    if (!(_i < _a.length))
-                        return [3 /*break*/, 4];
+                    if (!(_i < _a.length)) return [3 /*break*/, 4];
                     x.a = _a[_i];
                     z;
                     _c.label = 3;
@@ -168,8 +164,7 @@ function forInStatement5() {
                     _i = 0;
                     _c.label = 1;
                 case 1:
-                    if (!(_i < _a.length))
-                        return [3 /*break*/, 4];
+                    if (!(_i < _a.length)) return [3 /*break*/, 4];
                     x.a = _a[_i];
                     return [4 /*yield*/, z];
                 case 2:
@@ -208,8 +203,7 @@ function forInStatement7() {
                     _i = 0;
                     _c.label = 2;
                 case 2:
-                    if (!(_i < _a.length))
-                        return [3 /*break*/, 4];
+                    if (!(_i < _a.length)) return [3 /*break*/, 4];
                     b = _a[_i];
                     z;
                     _c.label = 3;
@@ -233,8 +227,7 @@ function forInStatement8() {
                     _i = 0;
                     _c.label = 1;
                 case 1:
-                    if (!(_i < _a.length))
-                        return [3 /*break*/, 4];
+                    if (!(_i < _a.length)) return [3 /*break*/, 4];
                     c = _a[_i];
                     return [4 /*yield*/, z];
                 case 2:

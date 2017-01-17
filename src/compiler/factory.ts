@@ -1,4 +1,4 @@
-/// <reference path="core.ts"/>
+﻿/// <reference path="core.ts"/>
 /// <reference path="utilities.ts"/>
 
 /* @internal */
@@ -1317,15 +1317,16 @@ namespace ts {
         return node;
     }
 
-    export function createJsxExpression(expression: Expression, location?: TextRange) {
+    export function createJsxExpression(expression: Expression, dotDotDotToken: Token<SyntaxKind.DotDotDotToken>, location?: TextRange) {
         const node = <JsxExpression>createNode(SyntaxKind.JsxExpression, location);
+        node.dotDotDotToken = dotDotDotToken;
         node.expression = expression;
         return node;
     }
 
     export function updateJsxExpression(node: JsxExpression, expression: Expression) {
         if (node.expression !== expression) {
-            return updateNode(createJsxExpression(expression, node), node);
+            return updateNode(createJsxExpression(expression, node.dotDotDotToken, node), node);
         }
         return node;
     }
@@ -1526,19 +1527,6 @@ namespace ts {
         if (node.expression !== expression) {
             return updateNode(createPartiallyEmittedExpression(expression, node.original, node), node);
         }
-        return node;
-    }
-
-    /**
-     * Creates a node that emits a string of raw text in an expression position. Raw text is never
-     * transformed, should be ES3 compliant, and should have the same precedence as
-     * PrimaryExpression.
-     *
-     * @param text The raw text of the node.
-     */
-    export function createRawExpression(text: string) {
-        const node = <RawExpression>createNode(SyntaxKind.RawExpression);
-        node.text = text;
         return node;
     }
 
@@ -1753,6 +1741,23 @@ namespace ts {
     }
 
     // Utilities
+
+    export function restoreEnclosingLabel(node: Statement, outermostLabeledStatement: LabeledStatement, afterRestoreLabelCallback?: (node: LabeledStatement) => void): Statement {
+        if (!outermostLabeledStatement) {
+            return node;
+        }
+        const updated = updateLabel(
+            outermostLabeledStatement,
+            outermostLabeledStatement.label,
+            outermostLabeledStatement.statement.kind === SyntaxKind.LabeledStatement
+                ? restoreEnclosingLabel(node, <LabeledStatement>outermostLabeledStatement.statement)
+                : node
+        );
+        if (afterRestoreLabelCallback) {
+            afterRestoreLabelCallback(outermostLabeledStatement);
+        }
+        return updated;
+    }
 
     export interface CallBinding {
         target: LeftHandSideExpression;
@@ -2631,9 +2636,11 @@ namespace ts {
         return destEmitNode;
     }
 
-    function mergeTokenSourceMapRanges(sourceRanges: Map<TextRange>, destRanges: Map<TextRange>) {
-        if (!destRanges) destRanges = createMap<TextRange>();
-        copyProperties(sourceRanges, destRanges);
+    function mergeTokenSourceMapRanges(sourceRanges: TextRange[], destRanges: TextRange[]) {
+        if (!destRanges) destRanges = [];
+        for (const key in sourceRanges) {
+            destRanges[key] = sourceRanges[key];
+        }
         return destRanges;
     }
 
@@ -2747,7 +2754,7 @@ namespace ts {
      */
     export function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange) {
         const emitNode = getOrCreateEmitNode(node);
-        const tokenSourceMapRanges = emitNode.tokenSourceMapRanges || (emitNode.tokenSourceMapRanges = createMap<TextRange>());
+        const tokenSourceMapRanges = emitNode.tokenSourceMapRanges || (emitNode.tokenSourceMapRanges = []);
         tokenSourceMapRanges[token] = range;
         return node;
     }
@@ -2959,10 +2966,8 @@ namespace ts {
      * Here we check if alternative name was provided for a given moduleName and return it if possible.
      */
     function tryRenameExternalModule(moduleName: LiteralExpression, sourceFile: SourceFile) {
-        if (sourceFile.renamedDependencies && hasProperty(sourceFile.renamedDependencies, moduleName.text)) {
-            return createLiteral(sourceFile.renamedDependencies[moduleName.text]);
-        }
-        return undefined;
+        const rename = sourceFile.renamedDependencies && sourceFile.renamedDependencies.get(moduleName.text);
+        return rename && createLiteral(rename);
     }
 
     /**

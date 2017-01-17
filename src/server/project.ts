@@ -1,4 +1,4 @@
-/// <reference path="..\services\services.ts" />
+﻿/// <reference path="..\services\services.ts" />
 /// <reference path="utilities.ts"/>
 /// <reference path="scriptInfo.ts"/>
 /// <reference path="lsHost.ts"/>
@@ -58,6 +58,7 @@ namespace ts.server {
         return counts.ts === 0 && counts.tsx === 0;
     }
 
+    /* @internal */
     export interface ProjectFilesWithTSDiagnostics extends protocol.ProjectFiles {
         projectErrors: Diagnostic[];
     }
@@ -395,7 +396,9 @@ namespace ts.server {
         }
 
         removeFile(info: ScriptInfo, detachFromProject = true) {
-            this.removeRootFileIfNecessary(info);
+            if (this.isRoot(info)) {
+                this.removeRoot(info);
+            }
             this.lsHost.notifyFileRemoved(info);
             this.cachedUnresolvedImportsPerFile.remove(info.path);
 
@@ -407,7 +410,7 @@ namespace ts.server {
         }
 
         registerFileUpdate(fileName: string) {
-            (this.updatedFileNames || (this.updatedFileNames = createMap<string>()))[fileName] = fileName;
+            (this.updatedFileNames || (this.updatedFileNames = createMap<string>())).set(fileName, fileName);
         }
 
         markAsDirty() {
@@ -425,9 +428,9 @@ namespace ts.server {
             }
             let unresolvedImports: string[];
             if (file.resolvedModules) {
-                for (const name in file.resolvedModules) {
+                file.resolvedModules.forEach((resolvedModule, name) => {
                     // pick unresolved non-relative names
-                    if (!file.resolvedModules[name] && !isExternalModuleNameRelative(name)) {
+                    if (!resolvedModule && !isExternalModuleNameRelative(name)) {
                         // for non-scoped names extract part up-to the first slash
                         // for scoped names - extract up to the second slash
                         let trimmed = name.trim();
@@ -441,7 +444,7 @@ namespace ts.server {
                         (unresolvedImports || (unresolvedImports = [])).push(trimmed);
                         result.push(trimmed);
                     }
-                }
+                });
             }
             this.cachedUnresolvedImportsPerFile.set(file.path, unresolvedImports || emptyArray);
         }
@@ -463,7 +466,7 @@ namespace ts.server {
             }
 
             // 1. no changes in structure, no changes in unresolved imports - do nothing
-            // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files 
+            // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files
             // (can reuse cached imports for files that were not changed)
             // 3. new files were added/removed, but compilation settings stays the same - collect unresolved imports for all new/modified files
             // (can reuse cached imports for files that were not changed)
@@ -566,9 +569,6 @@ namespace ts.server {
 
         setCompilerOptions(compilerOptions: CompilerOptions) {
             if (compilerOptions) {
-                if (this.projectKind === ProjectKind.Inferred) {
-                    compilerOptions.allowJs = true;
-                }
                 compilerOptions.allowNonTsExtensions = true;
                 if (changesAffectModuleResolution(this.compilerOptions, compilerOptions)) {
                     // reset cached unresolved imports if changes in compiler options affected module resolution
@@ -593,6 +593,7 @@ namespace ts.server {
             return false;
         }
 
+        /* @internal */
         getChangesSinceVersion(lastKnownVersion?: number): ProjectFilesWithTSDiagnostics {
             this.updateGraph();
 
@@ -617,17 +618,18 @@ namespace ts.server {
 
                 const added: string[] = [];
                 const removed: string[] = [];
-                const updated: string[] = getOwnKeys(updatedFileNames);
-                for (const id in currentFiles) {
-                    if (!hasProperty(lastReportedFileNames, id)) {
+                const updated: string[] = arrayFrom(updatedFileNames.keys());
+
+                forEachKey(currentFiles, id => {
+                    if (!lastReportedFileNames.has(id)) {
                         added.push(id);
                     }
-                }
-                for (const id in lastReportedFileNames) {
-                    if (!hasProperty(currentFiles, id)) {
+                });
+                forEachKey(lastReportedFileNames, id => {
+                    if (!currentFiles.has(id)) {
                         removed.push(id);
                     }
-                }
+                });
                 this.lastReportedFileNames = currentFiles;
                 this.lastReportedVersion = this.projectStructureVersion;
                 return { info, changes: { added, removed, updated }, projectErrors: this.projectErrors };
@@ -661,7 +663,7 @@ namespace ts.server {
                     if (symbol && symbol.declarations && symbol.declarations[0]) {
                         const declarationSourceFile = symbol.declarations[0].getSourceFile();
                         if (declarationSourceFile) {
-                            referencedFiles[declarationSourceFile.path] = true;
+                            referencedFiles.set(declarationSourceFile.path, true);
                         }
                     }
                 }
@@ -673,34 +675,31 @@ namespace ts.server {
             if (sourceFile.referencedFiles && sourceFile.referencedFiles.length > 0) {
                 for (const referencedFile of sourceFile.referencedFiles) {
                     const referencedPath = toPath(referencedFile.fileName, currentDirectory, getCanonicalFileName);
-                    referencedFiles[referencedPath] = true;
+                    referencedFiles.set(referencedPath, true);
                 }
             }
 
             // Handle type reference directives
             if (sourceFile.resolvedTypeReferenceDirectiveNames) {
-                for (const typeName in sourceFile.resolvedTypeReferenceDirectiveNames) {
-                    const resolvedTypeReferenceDirective = sourceFile.resolvedTypeReferenceDirectiveNames[typeName];
+                sourceFile.resolvedTypeReferenceDirectiveNames.forEach((resolvedTypeReferenceDirective) => {
                     if (!resolvedTypeReferenceDirective) {
-                        continue;
+                        return;
                     }
 
                     const fileName = resolvedTypeReferenceDirective.resolvedFileName;
                     const typeFilePath = toPath(fileName, currentDirectory, getCanonicalFileName);
-                    referencedFiles[typeFilePath] = true;
-                }
+                    referencedFiles.set(typeFilePath, true);
+                })
             }
 
-            const allFileNames = map(Object.keys(referencedFiles), key => <Path>key);
+            const allFileNames = arrayFrom(referencedFiles.keys()) as Path[];
             return filter(allFileNames, file => this.projectService.host.fileExists(file));
         }
 
         // remove a root file from project
-        private removeRootFileIfNecessary(info: ScriptInfo): void {
-            if (this.isRoot(info)) {
-                remove(this.rootFiles, info);
-                this.rootFilesMap.remove(info.path);
-            }
+        protected removeRoot(info: ScriptInfo): void {
+            remove(this.rootFiles, info);
+            this.rootFilesMap.remove(info.path);
         }
     }
 
@@ -715,6 +714,32 @@ namespace ts.server {
             }
         })();
 
+        private _isJsInferredProject = false;
+
+        toggleJsInferredProject(isJsInferredProject: boolean) {
+            if (isJsInferredProject !== this._isJsInferredProject) {
+                this._isJsInferredProject = isJsInferredProject;
+                this.setCompilerOptions();
+            }
+        }
+
+        setCompilerOptions(options?: CompilerOptions) {
+            // Avoid manipulating the given options directly
+            const newOptions = options ? clone(options) : this.getCompilerOptions();
+            if (!newOptions) {
+                return;
+            }
+
+            if (this._isJsInferredProject && typeof newOptions.maxNodeModuleJsDepth !== "number") {
+                newOptions.maxNodeModuleJsDepth = 2;
+            }
+            else if (!this._isJsInferredProject) {
+                newOptions.maxNodeModuleJsDepth = undefined;
+            }
+            newOptions.allowJs = true;
+            super.setCompilerOptions(newOptions);
+        }
+
         // Used to keep track of what directories are watched for this project
         directoriesWatchedForTsconfig: string[] = [];
 
@@ -727,6 +752,22 @@ namespace ts.server {
                 /*languageServiceEnabled*/ true,
                 compilerOptions,
                 /*compileOnSaveEnabled*/ false);
+        }
+
+        addRoot(info: ScriptInfo) {
+            if (!this._isJsInferredProject && info.isJavaScript()) {
+                this.toggleJsInferredProject(/*isJsInferredProject*/ true);
+            }
+            super.addRoot(info);
+        }
+
+        removeRoot(info: ScriptInfo) {
+            if (this._isJsInferredProject && info.isJavaScript()) {
+                if (filter(this.getRootScriptInfos(), info => info.isJavaScript()).length === 0) {
+                    this.toggleJsInferredProject(/*isJsInferredProject*/ false);
+                }
+            }
+            super.removeRoot(info);
         }
 
         getProjectRootPath() {
@@ -827,18 +868,19 @@ namespace ts.server {
                 return;
             }
             const configDirectoryPath = getDirectoryPath(this.getConfigFilePath());
-            this.directoriesWatchedForWildcards = reduceProperties(this.wildcardDirectories, (watchers, flag, directory) => {
+
+            this.directoriesWatchedForWildcards = createMap<FileWatcher>();
+            this.wildcardDirectories.forEach((flag, directory) => {
                 if (comparePaths(configDirectoryPath, directory, ".", !this.projectService.host.useCaseSensitiveFileNames) !== Comparison.EqualTo) {
                     const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
                     this.projectService.logger.info(`Add ${recursive ? "recursive " : ""}watcher for: ${directory}`);
-                    watchers[directory] = this.projectService.host.watchDirectory(
+                    this.directoriesWatchedForWildcards.set(directory, this.projectService.host.watchDirectory(
                         directory,
                         path => callback(this, path),
                         recursive
-                    );
+                    ));
                 }
-                return watchers;
-            }, <Map<FileWatcher>>{});
+            });
         }
 
         stopWatchingDirectory() {
@@ -862,9 +904,9 @@ namespace ts.server {
                 this.typeRootsWatchers = undefined;
             }
 
-            for (const id in this.directoriesWatchedForWildcards) {
-                this.directoriesWatchedForWildcards[id].close();
-            }
+            this.directoriesWatchedForWildcards.forEach(watcher => {
+                watcher.close();
+            });
             this.directoriesWatchedForWildcards = undefined;
 
             this.stopWatchingDirectory();

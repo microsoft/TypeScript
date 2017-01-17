@@ -7,5 +7,5 @@
 ////     }
 //// }
 
-verify.codeFixAtPosition("for(; ;)");
+verify.rangeAfterCodeFix("for(; ;)");
 

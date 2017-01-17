@@ -1,4 +1,4 @@
-/// <reference path="..\harness.ts" />
+﻿/// <reference path="..\harness.ts" />
 /// <reference path="../../server/typingsInstaller/typingsInstaller.ts" />
 
 namespace ts.projectSystem {
@@ -141,6 +141,7 @@ namespace ts.projectSystem {
         useCaseSensitiveFileNames?: boolean;
         executingFilePath?: string;
         currentDirectory?: string;
+        newLine?: string;
     }
 
     export function createServerHost(fileOrFolderList: FileOrFolder[], params?: TestServerHostCreationParameters): TestServerHost {
@@ -151,7 +152,8 @@ namespace ts.projectSystem {
             params.useCaseSensitiveFileNames !== undefined ? params.useCaseSensitiveFileNames : false,
             params.executingFilePath || getExecutingFilePathFromLibFile(),
             params.currentDirectory || "/",
-            fileOrFolderList);
+            fileOrFolderList,
+            params.newLine);
         return host;
     }
 
@@ -242,9 +244,9 @@ namespace ts.projectSystem {
     }
 
     export function checkMapKeys(caption: string, map: Map<any>, expectedKeys: string[]) {
-        assert.equal(reduceProperties(map, count => count + 1, 0), expectedKeys.length, `${caption}: incorrect size of map`);
+        assert.equal(map.size, expectedKeys.length, `${caption}: incorrect size of map`);
         for (const name of expectedKeys) {
-            assert.isTrue(name in map, `${caption} is expected to contain ${name}, actual keys: ${Object.keys(map)}`);
+            assert.isTrue(map.has(name), `${caption} is expected to contain ${name}, actual keys: ${arrayFrom(map.keys())}`);
         }
     }
 
@@ -290,7 +292,7 @@ namespace ts.projectSystem {
     }
 
     export class Callbacks {
-        private map: { [n: number]: TimeOutCallback } = {};
+        private map: TimeOutCallback[] = [];
         private nextId = 1;
 
         register(cb: (...args: any[]) => void, args: any[]) {
@@ -308,20 +310,16 @@ namespace ts.projectSystem {
         count() {
             let n = 0;
             for (const _ in this.map) {
-                // TODO: GH#11734
-                _;
                 n++;
             }
             return n;
         }
 
         invoke() {
-            for (const id in this.map) {
-                if (hasProperty(this.map, id)) {
-                    this.map[id]();
-                }
+            for (const key in this.map) {
+                this.map[key]();
             }
-            this.map = {};
+            this.map = [];
         }
     }
 
@@ -329,7 +327,6 @@ namespace ts.projectSystem {
 
     export class TestServerHost implements server.ServerHost {
         args: string[] = [];
-        newLine: "\n";
 
         private fs: ts.FileMap<FSEntry>;
         private getCanonicalFileName: (s: string) => string;
@@ -337,12 +334,12 @@ namespace ts.projectSystem {
         private timeoutCallbacks = new Callbacks();
         private immediateCallbacks = new Callbacks();
 
-        readonly watchedDirectories = createMap<{ cb: DirectoryWatcherCallback, recursive: boolean }[]>();
-        readonly watchedFiles = createMap<FileWatcherCallback[]>();
+        readonly watchedDirectories = createMultiMap<{ cb: DirectoryWatcherCallback, recursive: boolean }>();
+        readonly watchedFiles = createMultiMap<FileWatcherCallback>();
 
         private filesOrFolders: FileOrFolder[];
 
-        constructor(public useCaseSensitiveFileNames: boolean, private executingFilePath: string, private currentDirectory: string, fileOrFolderList: FileOrFolder[]) {
+        constructor(public useCaseSensitiveFileNames: boolean, private executingFilePath: string, private currentDirectory: string, fileOrFolderList: FileOrFolder[], public readonly newLine = "\n") {
             this.getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
             this.toPath = s => toPath(s, currentDirectory, this.getCanonicalFileName);
 
@@ -424,11 +421,11 @@ namespace ts.projectSystem {
         watchDirectory(directoryName: string, callback: DirectoryWatcherCallback, recursive: boolean): DirectoryWatcher {
             const path = this.toPath(directoryName);
             const cbWithRecursive = { cb: callback, recursive };
-            multiMapAdd(this.watchedDirectories, path, cbWithRecursive);
+            this.watchedDirectories.add(path, cbWithRecursive);
             return {
                 referenceCount: 0,
                 directoryName,
-                close: () => multiMapRemove(this.watchedDirectories, path, cbWithRecursive)
+                close: () => this.watchedDirectories.remove(path, cbWithRecursive)
             };
         }
 
@@ -438,7 +435,7 @@ namespace ts.projectSystem {
 
         triggerDirectoryWatcherCallback(directoryName: string, fileName: string): void {
             const path = this.toPath(directoryName);
-            const callbacks = this.watchedDirectories[path];
+            const callbacks = this.watchedDirectories.get(path);
             if (callbacks) {
                 for (const callback of callbacks) {
                     callback.cb(fileName);
@@ -448,7 +445,7 @@ namespace ts.projectSystem {
 
         triggerFileWatcherCallback(fileName: string, removed?: boolean): void {
             const path = this.toPath(fileName);
-            const callbacks = this.watchedFiles[path];
+            const callbacks = this.watchedFiles.get(path);
             if (callbacks) {
                 for (const callback of callbacks) {
                     callback(path, removed);
@@ -458,8 +455,8 @@ namespace ts.projectSystem {
 
         watchFile(fileName: string, callback: FileWatcherCallback) {
             const path = this.toPath(fileName);
-            multiMapAdd(this.watchedFiles, path, callback);
-            return { close: () => multiMapRemove(this.watchedFiles, path, callback) };
+            this.watchedFiles.add(path, callback);
+            return { close: () => this.watchedFiles.remove(path, callback) };
         }
 
         // TOOD: record and invoke callbacks to simulate timer events
@@ -1619,7 +1616,7 @@ namespace ts.projectSystem {
             const configureHostRequest = makeSessionRequest<protocol.ConfigureRequestArguments>(CommandNames.Configure, { extraFileExtensions });
             session.executeCommand(configureHostRequest).response;
 
-             // HTML file still not included in the project as it is closed
+            // HTML file still not included in the project as it is closed
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             checkProjectActualFiles(projectService.configuredProjects[0], [file1.path]);
 
@@ -2068,58 +2065,17 @@ namespace ts.projectSystem {
             assert.deepEqual(resolutionTrace, [
                 "======== Resolving module 'lib' from '/a/b/app.js'. ========",
                 "Module resolution kind is not specified, using 'NodeJs'.",
-                "Loading module 'lib' from 'node_modules' folder.",
-                "File '/a/b/node_modules/lib.ts' does not exist.",
-                "File '/a/b/node_modules/lib.tsx' does not exist.",
-                "File '/a/b/node_modules/lib.d.ts' does not exist.",
-                "File '/a/b/node_modules/lib/package.json' does not exist.",
-                "File '/a/b/node_modules/lib/index.ts' does not exist.",
-                "File '/a/b/node_modules/lib/index.tsx' does not exist.",
-                "File '/a/b/node_modules/lib/index.d.ts' does not exist.",
-                "File '/a/b/node_modules/@types/lib.d.ts' does not exist.",
-                "File '/a/b/node_modules/@types/lib/package.json' does not exist.",
-                "File '/a/b/node_modules/@types/lib/index.d.ts' does not exist.",
-                "File '/a/node_modules/lib.ts' does not exist.",
-                "File '/a/node_modules/lib.tsx' does not exist.",
-                "File '/a/node_modules/lib.d.ts' does not exist.",
-                "File '/a/node_modules/lib/package.json' does not exist.",
-                "File '/a/node_modules/lib/index.ts' does not exist.",
-                "File '/a/node_modules/lib/index.tsx' does not exist.",
-                "File '/a/node_modules/lib/index.d.ts' does not exist.",
-                "File '/a/node_modules/@types/lib.d.ts' does not exist.",
-                "File '/a/node_modules/@types/lib/package.json' does not exist.",
-                "File '/a/node_modules/@types/lib/index.d.ts' does not exist.",
-                "File '/node_modules/lib.ts' does not exist.",
-                "File '/node_modules/lib.tsx' does not exist.",
-                "File '/node_modules/lib.d.ts' does not exist.",
-                "File '/node_modules/lib/package.json' does not exist.",
-                "File '/node_modules/lib/index.ts' does not exist.",
-                "File '/node_modules/lib/index.tsx' does not exist.",
-                "File '/node_modules/lib/index.d.ts' does not exist.",
-                "File '/node_modules/@types/lib.d.ts' does not exist.",
-                "File '/node_modules/@types/lib/package.json' does not exist.",
-                "File '/node_modules/@types/lib/index.d.ts' does not exist.",
-                "Loading module 'lib' from 'node_modules' folder.",
-                "File '/a/b/node_modules/lib.js' does not exist.",
-                "File '/a/b/node_modules/lib.jsx' does not exist.",
-                "File '/a/b/node_modules/lib/package.json' does not exist.",
-                "File '/a/b/node_modules/lib/index.js' does not exist.",
-                "File '/a/b/node_modules/lib/index.jsx' does not exist.",
-                "File '/a/node_modules/lib.js' does not exist.",
-                "File '/a/node_modules/lib.jsx' does not exist.",
-                "File '/a/node_modules/lib/package.json' does not exist.",
-                "File '/a/node_modules/lib/index.js' does not exist.",
-                "File '/a/node_modules/lib/index.jsx' does not exist.",
-                "File '/node_modules/lib.js' does not exist.",
-                "File '/node_modules/lib.jsx' does not exist.",
-                "File '/node_modules/lib/package.json' does not exist.",
-                "File '/node_modules/lib/index.js' does not exist.",
-                "File '/node_modules/lib/index.jsx' does not exist.",
+                "Loading module 'lib' from 'node_modules' folder, target file type 'TypeScript'.",
+                "Directory '/a/b/node_modules' does not exist, skipping all lookups in it.",
+                "Directory '/a/node_modules' does not exist, skipping all lookups in it.",
+                "Directory '/node_modules' does not exist, skipping all lookups in it.",
+                "Loading module 'lib' from 'node_modules' folder, target file type 'JavaScript'.",
+                "Directory '/a/b/node_modules' does not exist, skipping all lookups in it.",
+                "Directory '/a/node_modules' does not exist, skipping all lookups in it.",
+                "Directory '/node_modules' does not exist, skipping all lookups in it.",
                 "======== Module name 'lib' was not resolved. ========",
                 `Auto discovery for typings is enabled in project '${proj.getProjectName()}'. Running extra resolution pass for module 'lib' using cache location '/a/cache'.`,
                 "File '/a/cache/node_modules/lib.d.ts' does not exist.",
-                "File '/a/cache/node_modules/lib/package.json' does not exist.",
-                "File '/a/cache/node_modules/lib/index.d.ts' does not exist.",
                 "File '/a/cache/node_modules/@types/lib.d.ts' does not exist.",
                 "File '/a/cache/node_modules/@types/lib/package.json' does not exist.",
                 "File '/a/cache/node_modules/@types/lib/index.d.ts' exist - use it as a name resolution result.",
@@ -3091,4 +3047,59 @@ namespace ts.projectSystem {
             service.checkNumberOfProjects({ externalProjects: 1 });
         });
     });
+
+    describe("maxNodeModuleJsDepth for inferred projects", () => {
+        it("should be set to 2 if the project has js root files", () => {
+            const file1: FileOrFolder = {
+                path: "/a/b/file1.js",
+                content: `var t = require("test"); t.`
+            };
+            const moduleFile: FileOrFolder = {
+                path: "/a/b/node_modules/test/index.js",
+                content: `var v = 10; module.exports = v;`
+            };
+
+            const host = createServerHost([file1, moduleFile]);
+            const projectService = createProjectService(host);
+            projectService.openClientFile(file1.path);
+
+            let project = projectService.inferredProjects[0];
+            let options = project.getCompilerOptions();
+            assert.isTrue(options.maxNodeModuleJsDepth === 2);
+
+            // Assert the option sticks 
+            projectService.setCompilerOptionsForInferredProjects({ target: ScriptTarget.ES2016 });
+            project = projectService.inferredProjects[0];
+            options = project.getCompilerOptions();
+            assert.isTrue(options.maxNodeModuleJsDepth === 2);
+        });
+
+        it("should return to normal state when all js root files are removed from project", () => {
+            const file1 = {
+                path: "/a/file1.ts",
+                content: "let x =1;"
+            };
+            const file2 = {
+                path: "/a/file2.js",
+                content: "let x =1;"
+            };
+
+            const host = createServerHost([file1, file2, libFile]);
+            const projectService = createProjectService(host, { useSingleInferredProject: true });
+
+            projectService.openClientFile(file1.path);
+            checkNumberOfInferredProjects(projectService, 1);
+            let project = projectService.inferredProjects[0];
+            assert.isUndefined(project.getCompilerOptions().maxNodeModuleJsDepth);
+
+            projectService.openClientFile(file2.path);
+            project = projectService.inferredProjects[0];
+            assert.isTrue(project.getCompilerOptions().maxNodeModuleJsDepth === 2);
+
+            projectService.closeClientFile(file2.path);
+            project = projectService.inferredProjects[0];
+            assert.isUndefined(project.getCompilerOptions().maxNodeModuleJsDepth);
+        });
+    });
+
 }

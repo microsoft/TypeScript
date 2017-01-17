@@ -560,11 +560,11 @@ namespace ts.BreakpointResolver {
             function spanInOpenBraceToken(node: Node): TextSpan {
                 switch (node.parent.kind) {
                     case SyntaxKind.EnumDeclaration:
-                        let enumDeclaration = <EnumDeclaration>node.parent;
+                        const enumDeclaration = <EnumDeclaration>node.parent;
                         return spanInNodeIfStartsOnSameLine(findPrecedingToken(node.pos, sourceFile, node.parent), enumDeclaration.members.length ? enumDeclaration.members[0] : enumDeclaration.getLastToken(sourceFile));
 
                     case SyntaxKind.ClassDeclaration:
-                        let classDeclaration = <ClassDeclaration>node.parent;
+                        const classDeclaration = <ClassDeclaration>node.parent;
                         return spanInNodeIfStartsOnSameLine(findPrecedingToken(node.pos, sourceFile, node.parent), classDeclaration.members.length ? classDeclaration.members[0] : classDeclaration.getLastToken(sourceFile));
 
                     case SyntaxKind.CaseBlock:
@@ -600,8 +600,8 @@ namespace ts.BreakpointResolver {
 
                     case SyntaxKind.CaseBlock:
                         // breakpoint in last statement of the last clause
-                        let caseBlock = <CaseBlock>node.parent;
-                        let lastClause = lastOrUndefined(caseBlock.clauses);
+                        const caseBlock = <CaseBlock>node.parent;
+                        const lastClause = lastOrUndefined(caseBlock.clauses);
                         if (lastClause) {
                             return spanInNode(lastOrUndefined(lastClause.statements));
                         }
@@ -609,7 +609,7 @@ namespace ts.BreakpointResolver {
 
                     case SyntaxKind.ObjectBindingPattern:
                         // Breakpoint in last binding element or binding pattern if it contains no elements
-                        let bindingPattern = <BindingPattern>node.parent;
+                        const bindingPattern = <BindingPattern>node.parent;
                         return spanInNode(lastOrUndefined(bindingPattern.elements) || bindingPattern);
 
                     // Default to parent node
@@ -627,7 +627,7 @@ namespace ts.BreakpointResolver {
                 switch (node.parent.kind) {
                     case SyntaxKind.ArrayBindingPattern:
                         // Breakpoint in last binding element or binding pattern if it contains no elements
-                        let bindingPattern = <BindingPattern>node.parent;
+                        const bindingPattern = <BindingPattern>node.parent;
                         return textSpan(lastOrUndefined(bindingPattern.elements) || bindingPattern);
 
                     default:

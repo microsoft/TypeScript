@@ -1,4 +1,4 @@
-/// <reference path="../../factory.ts" />
+﻿/// <reference path="../../factory.ts" />
 /// <reference path="../../visitor.ts" />
 
 /*@internal*/
@@ -28,10 +28,10 @@ namespace ts {
         context.enableSubstitution(SyntaxKind.PostfixUnaryExpression); // Substitutes updates to exported symbols.
         context.enableEmitNotification(SyntaxKind.SourceFile); // Restore state when substituting nodes in a file.
 
-        const moduleInfoMap = createMap<ExternalModuleInfo>(); // The ExternalModuleInfo for each file.
-        const deferredExports = createMap<Statement[]>(); // Exports to defer until an EndOfDeclarationMarker is found.
-        const exportFunctionsMap = createMap<Identifier>(); // The export function associated with a source file.
-        const noSubstitutionMap = createMap<Map<boolean>>(); // Set of nodes for which substitution rules should be ignored for each file.
+        const moduleInfoMap: ExternalModuleInfo[] = []; // The ExternalModuleInfo for each file.
+        const deferredExports: Statement[][] = []; // Exports to defer until an EndOfDeclarationMarker is found.
+        const exportFunctionsMap: Identifier[] = []; // The export function associated with a source file.
+        const noSubstitutionMap: boolean[][] = []; // Set of nodes for which substitution rules should be ignored for each file.
 
         let currentSourceFile: SourceFile; // The current file.
         let moduleInfo: ExternalModuleInfo; // ExternalModuleInfo for the current file.
@@ -39,7 +39,7 @@ namespace ts {
         let contextObject: Identifier; // The context object for the current file.
         let hoistedStatements: Statement[];
         let enclosingBlockScopedContainer: Node;
-        let noSubstitution: Map<boolean>; // Set of nodes for which substitution rules should be ignored.
+        let noSubstitution: boolean[]; // Set of nodes for which substitution rules should be ignored.
 
         return transformSourceFile;
 
@@ -77,7 +77,8 @@ namespace ts {
 
             // Make sure that the name of the 'exports' function does not conflict with
             // existing identifiers.
-            exportFunction = exportFunctionsMap[id] = createUniqueName("exports");
+            exportFunction = createUniqueName("exports");
+            exportFunctionsMap[id] = exportFunction;
             contextObject = createUniqueName("context");
 
             // Add the body of the module.
@@ -148,13 +149,13 @@ namespace ts {
                 const externalImport = externalImports[i];
                 const externalModuleName = getExternalModuleNameLiteral(externalImport, currentSourceFile, host, resolver, compilerOptions);
                 const text = externalModuleName.text;
-                if (hasProperty(groupIndices, text)) {
+                const groupIndex = groupIndices.get(text);
+                if (groupIndex !== undefined) {
                     // deduplicate/group entries in dependency list by the dependency name
-                    const groupIndex = groupIndices[text];
                     dependencyGroups[groupIndex].externalImports.push(externalImport);
                 }
                 else {
-                    groupIndices[text] = dependencyGroups.length;
+                    groupIndices.set(text, dependencyGroups.length);
                     dependencyGroups.push({
                         name: externalModuleName,
                         externalImports: [externalImport]
@@ -306,7 +307,7 @@ namespace ts {
             // this set is used to filter names brought by star expors.
 
             // local names set should only be added if we have anything exported
-            if (!moduleInfo.exportedNames && isEmpty(moduleInfo.exportSpecifiers)) {
+            if (!moduleInfo.exportedNames && moduleInfo.exportSpecifiers.size === 0) {
                 // no exported declarations (export var ...) or export specifiers (export {x})
                 // check if we have any non star export declarations.
                 let hasExportDeclarationWithExportClause = false;
@@ -1081,7 +1082,7 @@ namespace ts {
             }
 
             const name = getDeclarationName(decl);
-            const exportSpecifiers = moduleInfo.exportSpecifiers[name.text];
+            const exportSpecifiers = moduleInfo.exportSpecifiers.get(name.text);
             if (exportSpecifiers) {
                 for (const exportSpecifier of exportSpecifiers) {
                     if (exportSpecifier.name.text !== excludeName) {
@@ -1770,7 +1771,7 @@ namespace ts {
          * @param node The node which should not be substituted.
          */
         function preventSubstitution<T extends Node>(node: T): T {
-            if (noSubstitution === undefined) noSubstitution = createMap<boolean>();
+            if (noSubstitution === undefined) noSubstitution = [];
             noSubstitution[getNodeId(node)] = true;
             return node;
         }

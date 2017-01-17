@@ -13,7 +13,7 @@ declare let x2: T2<"x">;
 let x2x = x2.x;
 
 interface T3<T extends T3<T>> {
-    x: T["x"];  // Error
+    x: T["x"];
 }
 
 interface T4<T extends T4<T>> {
@@ -25,10 +25,20 @@ class C1 {
 }
 
 class C2 {
-    x: this["y"];  // Error
-    y: this["z"];  // Error
-    z: this["x"];  // Error
+    x: this["y"];
+    y: this["z"];
+    z: this["x"];
 }
+
+// Repro from #12627
+
+interface Foo {
+    hello: boolean;
+}
+
+function foo<T extends Foo | T["hello"]>() {
+}
+
 
 //// [circularIndexedAccessErrors.js]
 var x2x = x2.x;
@@ -42,6 +52,8 @@ var C2 = (function () {
     }
     return C2;
 }());
+function foo() {
+}
 
 
 //// [circularIndexedAccessErrors.d.ts]
@@ -68,3 +80,7 @@ declare class C2 {
     y: this["z"];
     z: this["x"];
 }
+interface Foo {
+    hello: boolean;
+}
+declare function foo<T extends Foo | T["hello"]>(): void;

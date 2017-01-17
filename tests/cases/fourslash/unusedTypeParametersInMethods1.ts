@@ -5,4 +5,4 @@
 ////     [|public f1<X, Y, Z>(a: X)|] { a; var b: Z; b }
 //// }
 
-verify.codeFixAtPosition("public f1<X, Z>(a: X)");
+verify.rangeAfterCodeFix("public f1<X, Z>(a: X)");

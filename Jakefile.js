@@ -153,6 +153,7 @@ var servicesSources = [
     "signatureHelp.ts",
     "symbolDisplay.ts",
     "transpile.ts",
+    // Formatting
     "formatting/formatting.ts",
     "formatting/formattingContext.ts",
     "formatting/formattingRequestKind.ts",
@@ -168,27 +169,44 @@ var servicesSources = [
     "formatting/rulesMap.ts",
     "formatting/rulesProvider.ts",
     "formatting/smartIndenter.ts",
-    "formatting/tokenRange.ts"
+    "formatting/tokenRange.ts",
+    // CodeFixes
+    "codeFixProvider.ts",
+    "codefixes/fixes.ts",
+    "codefixes/fixExtendsInterfaceBecomesImplements.ts",
+    "codefixes/fixClassIncorrectlyImplementsInterface.ts",
+    "codefixes/fixClassDoesntImplementInheritedAbstractMember.ts",
+    "codefixes/fixClassSuperMustPrecedeThisAccess.ts",
+    "codefixes/fixConstructorForDerivedNeedSuperCall.ts",
+    "codefixes/helpers.ts",
+    "codefixes/importFixes.ts",
+    "codefixes/unusedIdentifierFixes.ts"
 ].map(function (f) {
     return path.join(servicesDirectory, f);
 }));
 
-var serverCoreSources = [
-    "types.d.ts",
-    "shared.ts",
-    "utilities.ts",
-    "scriptVersionCache.ts",
-    "typingsCache.ts",
-    "scriptInfo.ts",
+var baseServerCoreSources = [
+	"builder.ts",
+    "editorServices.ts",
     "lsHost.ts",
     "project.ts",
-    "editorServices.ts",
     "protocol.ts",
+    "scriptInfo.ts",
+    "scriptVersionCache.ts",
     "session.ts",
-    "server.ts"
+    "shared.ts",
+    "types.ts",
+    "typingsCache.ts",
+    "utilities.ts",
 ].map(function (f) {
     return path.join(serverDirectory, f);
 });
+
+var serverCoreSources = [
+    "server.ts"
+].map(function (f) {
+    return path.join(serverDirectory, f);
+}).concat(baseServerCoreSources);
 
 var cancellationTokenSources = [
     "cancellationToken.ts"
@@ -197,7 +215,7 @@ var cancellationTokenSources = [
 });
 
 var typingsInstallerSources = [
-    "../types.d.ts",
+    "../types.ts",
     "../shared.ts",
     "typingsInstaller.ts",
     "nodeTypingsInstaller.ts"
@@ -206,20 +224,7 @@ var typingsInstallerSources = [
 });
 
 var serverSources = serverCoreSources.concat(servicesSources);
-
-var languageServiceLibrarySources = [
-    "protocol.ts",
-    "utilities.ts",
-    "scriptVersionCache.ts",
-    "scriptInfo.ts",
-    "lsHost.ts",
-    "project.ts",
-    "editorServices.ts",
-    "session.ts",
-
-].map(function (f) {
-    return path.join(serverDirectory, f);
-}).concat(servicesSources);
+var languageServiceLibrarySources = baseServerCoreSources.concat(servicesSources);
 
 var harnessCoreSources = [
     "harness.ts",
@@ -717,7 +722,18 @@ compileFile(
     [builtLocalDirectory, copyright, builtLocalCompiler].concat(languageServiceLibrarySources).concat(libraryTargets),
     /*prefixes*/[copyright],
     /*useBuiltCompiler*/ true,
-    { noOutFile: false, generateDeclarations: true });
+    { noOutFile: false, generateDeclarations: true, stripInternal: true },
+    /*callback*/ function () {
+        prependFile(copyright, tsserverLibraryDefinitionFile);
+
+        // Appending exports at the end of the server library
+        var tsserverLibraryDefinitionFileContents =
+            fs.readFileSync(tsserverLibraryDefinitionFile).toString() + 
+            "\r\nexport = ts;" +
+            "\r\nexport as namespace ts;";
+
+        fs.writeFileSync(tsserverLibraryDefinitionFile, tsserverLibraryDefinitionFileContents);
+    });
 
 // Local target to build the language service server library
 desc("Builds language service server library");
@@ -1181,7 +1197,6 @@ task("update-sublime", ["local", serverFile], function () {
 var tslintRuleDir = "scripts/tslint";
 var tslintRules = [
     "nextLineRule",
-    "preferConstRule",
     "booleanTriviaRule",
     "typeOperatorSpacingRule",
     "noInOperatorRule",

@@ -7,5 +7,5 @@
 ////   }
 //// } |]
 
-verify.codeFixAtPosition(`namespace greeter {
+verify.rangeAfterCodeFix(`namespace greeter {
 }`);

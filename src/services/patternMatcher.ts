@@ -188,11 +188,11 @@ namespace ts {
         }
 
         function getWordSpans(word: string): TextSpan[] {
-            if (!(word in stringToWordSpans)) {
-                stringToWordSpans[word] = breakIntoWordSpans(word);
+            let spans = stringToWordSpans.get(word);
+            if (!spans) {
+                stringToWordSpans.set(word, spans = breakIntoWordSpans(word));
             }
-
-            return stringToWordSpans[word];
+            return spans;
         }
 
         function matchTextChunk(candidate: string, chunk: TextChunk, punctuationStripped: boolean): PatternMatch {
@@ -516,7 +516,8 @@ namespace ts {
 
     // Assumes 'value' is already lowercase.
     function indexOfIgnoringCase(string: string, value: string): number {
-        for (let i = 0, n = string.length - value.length; i <= n; i++) {
+        const n = string.length - value.length;
+        for (let i = 0; i <= n; i++) {
             if (startsWithIgnoringCase(string, value, i)) {
                 return i;
             }
@@ -527,7 +528,7 @@ namespace ts {
 
     // Assumes 'value' is already lowercase.
     function startsWithIgnoringCase(string: string, value: string, start: number): boolean {
-        for (let i = 0, n = value.length; i < n; i++) {
+        for (let i = 0; i < value.length; i++) {
             const ch1 = toLowerCase(string.charCodeAt(i + start));
             const ch2 = value.charCodeAt(i);
 
@@ -613,7 +614,7 @@ namespace ts {
         const result: TextSpan[] = [];
 
         let wordStart = 0;
-        for (let i = 1, n = identifier.length; i < n; i++) {
+        for (let i = 1; i < identifier.length; i++) {
             const lastIsDigit = isDigit(identifier.charCodeAt(i - 1));
             const currentIsDigit = isDigit(identifier.charCodeAt(i));
 

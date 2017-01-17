@@ -6,4 +6,4 @@
 //// [|var x: string;|]
 //// export var y: string;
 
-verify.codeFixAtPosition("");
+verify.rangeAfterCodeFix("");

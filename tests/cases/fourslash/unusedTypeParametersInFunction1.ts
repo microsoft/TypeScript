@@ -3,4 +3,4 @@
 // @noUnusedLocals: true
 //// [|function f1<T>() {}|]
 
-verify.codeFixAtPosition("function f1() {}");
+verify.rangeAfterCodeFix("function f1() {}");

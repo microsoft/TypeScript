@@ -40,7 +40,8 @@ namespace ts {
                 return;
             }
 
-            for (let i = 0, n = Math.min(commonPathComponents.length, sourcePathComponents.length); i < n; i++) {
+            const n = Math.min(commonPathComponents.length, sourcePathComponents.length);
+            for (let i = 0; i < n; i++) {
                 if (getCanonicalFileName(commonPathComponents[i]) !== getCanonicalFileName(sourcePathComponents[i])) {
                     if (i === 0) {
                         // Failed to find any common path component
@@ -110,11 +111,11 @@ namespace ts {
         }
 
         function directoryExists(directoryPath: string): boolean {
-            if (directoryPath in existingDirectories) {
+            if (existingDirectories.has(directoryPath)) {
                 return true;
             }
             if (sys.directoryExists(directoryPath)) {
-                existingDirectories[directoryPath] = true;
+                existingDirectories.set(directoryPath, true);
                 return true;
             }
             return false;
@@ -138,11 +139,11 @@ namespace ts {
             const hash = sys.createHash(data);
             const mtimeBefore = sys.getModifiedTime(fileName);
 
-            if (mtimeBefore && fileName in outputFingerprints) {
-                const fingerprint = outputFingerprints[fileName];
-
+            if (mtimeBefore) {
+                const fingerprint = outputFingerprints.get(fileName);
                 // If output has not been changed, and the file has no external modification
-                if (fingerprint.byteOrderMark === writeByteOrderMark &&
+                if (fingerprint &&
+                    fingerprint.byteOrderMark === writeByteOrderMark &&
                     fingerprint.hash === hash &&
                     fingerprint.mtime.getTime() === mtimeBefore.getTime()) {
                     return;
@@ -153,11 +154,11 @@ namespace ts {
 
             const mtimeAfter = sys.getModifiedTime(fileName);
 
-            outputFingerprints[fileName] = {
+            outputFingerprints.set(fileName, {
                 hash,
                 byteOrderMark: writeByteOrderMark,
                 mtime: mtimeAfter
-            };
+            });
         }
 
         function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
@@ -277,9 +278,13 @@ namespace ts {
         const resolutions: T[] = [];
         const cache = createMap<T>();
         for (const name of names) {
-            const result = name in cache
-                ? cache[name]
-                : cache[name] = loader(name, containingFile);
+            let result: T;
+            if (cache.has(name)) {
+                result = cache.get(name);
+            }
+            else {
+                cache.set(name, result = loader(name, containingFile));
+            }
             resolutions.push(result);
         }
         return resolutions;
@@ -459,7 +464,7 @@ namespace ts {
                 classifiableNames = createMap<string>();
 
                 for (const sourceFile of files) {
-                    copyProperties(sourceFile.classifiableNames, classifiableNames);
+                    copyEntries(sourceFile.classifiableNames, classifiableNames);
                 }
             }
 
@@ -700,7 +705,7 @@ namespace ts {
             }
 
             // update fileName -> file mapping
-            for (let i = 0, len = newSourceFiles.length; i < len; i++) {
+            for (let i = 0; i < newSourceFiles.length; i++) {
                 filesByName.set(filePaths[i], newSourceFiles[i]);
             }
 
@@ -734,7 +739,7 @@ namespace ts {
         }
 
         function isSourceFileFromExternalLibrary(file: SourceFile): boolean {
-            return sourceFilesFoundSearchingNodeModules[file.path];
+            return sourceFilesFoundSearchingNodeModules.get(file.path);
         }
 
         function getDiagnosticsProducingTypeChecker() {
@@ -957,7 +962,7 @@ namespace ts {
                             }
                             break;
                         case SyntaxKind.HeritageClause:
-                            let heritageClause = <HeritageClause>node;
+                            const heritageClause = <HeritageClause>node;
                             if (heritageClause.token === SyntaxKind.ImplementsKeyword) {
                                 diagnostics.push(createDiagnosticForNode(node, Diagnostics.implements_clauses_can_only_be_used_in_a_ts_file));
                                 return;
@@ -976,7 +981,7 @@ namespace ts {
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics.enum_declarations_can_only_be_used_in_a_ts_file));
                             return;
                         case SyntaxKind.TypeAssertionExpression:
-                            let typeAssertionExpression = <TypeAssertion>node;
+                            const typeAssertionExpression = <TypeAssertion>node;
                             diagnostics.push(createDiagnosticForNode(typeAssertionExpression.type, Diagnostics.type_assertion_expressions_can_only_be_used_in_a_ts_file));
                             return;
                     }
@@ -1175,7 +1180,7 @@ namespace ts {
                     case SyntaxKind.ImportDeclaration:
                     case SyntaxKind.ImportEqualsDeclaration:
                     case SyntaxKind.ExportDeclaration:
-                        let moduleNameExpr = getExternalModuleName(node);
+                        const moduleNameExpr = getExternalModuleName(node);
                         if (!moduleNameExpr || moduleNameExpr.kind !== SyntaxKind.StringLiteral) {
                             break;
                         }
@@ -1297,20 +1302,20 @@ namespace ts {
 
                 // If the file was previously found via a node_modules search, but is now being processed as a root file,
                 // then everything it sucks in may also be marked incorrectly, and needs to be checked again.
-                if (file && sourceFilesFoundSearchingNodeModules[file.path] && currentNodeModulesDepth == 0) {
-                    sourceFilesFoundSearchingNodeModules[file.path] = false;
+                if (file && sourceFilesFoundSearchingNodeModules.get(file.path) && currentNodeModulesDepth == 0) {
+                    sourceFilesFoundSearchingNodeModules.set(file.path, false);
                     if (!options.noResolve) {
                         processReferencedFiles(file, isDefaultLib);
                         processTypeReferenceDirectives(file);
                     }
 
-                    modulesWithElidedImports[file.path] = false;
+                    modulesWithElidedImports.set(file.path, false);
                     processImportedModules(file);
                 }
                 // See if we need to reprocess the imports due to prior skipped imports
-                else if (file && modulesWithElidedImports[file.path]) {
+                else if (file && modulesWithElidedImports.get(file.path)) {
                     if (currentNodeModulesDepth < maxNodeModuleJsDepth) {
-                        modulesWithElidedImports[file.path] = false;
+                        modulesWithElidedImports.set(file.path, false);
                         processImportedModules(file);
                     }
                 }
@@ -1331,7 +1336,7 @@ namespace ts {
 
             filesByName.set(path, file);
             if (file) {
-                sourceFilesFoundSearchingNodeModules[path] = (currentNodeModulesDepth > 0);
+                sourceFilesFoundSearchingNodeModules.set(path, currentNodeModulesDepth > 0);
                 file.path = path;
 
                 if (host.useCaseSensitiveFileNames()) {
@@ -1392,7 +1397,7 @@ namespace ts {
             refFile?: SourceFile, refPos?: number, refEnd?: number): void {
 
             // If we already found this library as a primary reference - nothing to do
-            const previousResolution = resolvedTypeReferenceDirectives[typeReferenceDirective];
+            const previousResolution = resolvedTypeReferenceDirectives.get(typeReferenceDirective);
             if (previousResolution && previousResolution.primary) {
                 return;
             }
@@ -1432,7 +1437,7 @@ namespace ts {
             }
 
             if (saveResolution) {
-                resolvedTypeReferenceDirectives[typeReferenceDirective] = resolvedTypeReferenceDirective;
+                resolvedTypeReferenceDirectives.set(typeReferenceDirective, resolvedTypeReferenceDirective);
             }
         }
 
@@ -1485,7 +1490,7 @@ namespace ts {
                     const shouldAddFile = resolvedFileName && !getResolutionDiagnostic(options, resolution) && !options.noResolve && i < file.imports.length && !elideImport;
 
                     if (elideImport) {
-                        modulesWithElidedImports[file.path] = true;
+                        modulesWithElidedImports.set(file.path, true);
                     }
                     else if (shouldAddFile) {
                         const path = toPath(resolvedFileName, currentDirectory, getCanonicalFileName);

@@ -1,4 +1,4 @@
-/// <reference path="../factory.ts" />
+﻿/// <reference path="../factory.ts" />
 /// <reference path="../visitor.ts" />
 /// <reference path="./destructuring.ts" />
 
@@ -60,7 +60,7 @@ namespace ts {
          * A map that keeps track of aliases created for classes with decorators to avoid issues
          * with the double-binding behavior of classes.
          */
-        let classAliases: Map<Identifier>;
+        let classAliases: Identifier[];
 
         /**
          * Keeps track of whether  we are within any containing namespaces when performing
@@ -2538,8 +2538,8 @@ namespace ts {
                     currentScopeFirstDeclarationsOfName = createMap<Node>();
                 }
 
-                if (!(name in currentScopeFirstDeclarationsOfName)) {
-                    currentScopeFirstDeclarationsOfName[name] = node;
+                if (!currentScopeFirstDeclarationsOfName.has(name)) {
+                    currentScopeFirstDeclarationsOfName.set(name, node);
                 }
             }
         }
@@ -2552,7 +2552,7 @@ namespace ts {
             if (currentScopeFirstDeclarationsOfName) {
                 const name = node.symbol && node.symbol.name;
                 if (name) {
-                    return currentScopeFirstDeclarationsOfName[name] === node;
+                    return currentScopeFirstDeclarationsOfName.get(name) === node;
                 }
             }
 
@@ -2731,7 +2731,7 @@ namespace ts {
             let blockLocation: TextRange;
             const body = node.body;
             if (body.kind === SyntaxKind.ModuleBlock) {
-                addRange(statements, visitNodes((<ModuleBlock>body).statements, namespaceElementVisitor, isStatement));
+                saveStateAndInvoke(body, body => addRange(statements, visitNodes((<ModuleBlock>body).statements, namespaceElementVisitor, isStatement)));
                 statementsLocation = (<ModuleBlock>body).statements;
                 blockLocation = body;
             }
@@ -3125,7 +3125,7 @@ namespace ts {
                 context.enableSubstitution(SyntaxKind.Identifier);
 
                 // Keep track of class aliases.
-                classAliases = createMap<Identifier>();
+                classAliases = [];
             }
         }
 

@@ -11,4 +11,4 @@
 //// export function f2(s: string){};
 //// export default f1;
 
-verify.codeFixAtPosition('import * as s from "./file1";');
+verify.rangeAfterCodeFix('import * as s from "./file1";');

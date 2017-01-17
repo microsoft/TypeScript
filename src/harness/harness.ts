@@ -85,7 +85,7 @@ namespace Utils {
                 eval(fileContents);
                 break;
             case ExecutionEnvironment.Node:
-                let vm = require("vm");
+                const vm = require("vm");
                 if (nodeContext) {
                     vm.runInNewContext(fileContents, nodeContext, fileName);
                 }
@@ -175,9 +175,9 @@ namespace Utils {
                     assert.isFalse(array.end > node.end, "array.end > node.end");
                     assert.isFalse(array.pos < currentPos, "array.pos < currentPos");
 
-                    for (let i = 0, n = array.length; i < n; i++) {
-                        assert.isFalse(array[i].pos < currentPos, "array[i].pos < currentPos");
-                        currentPos = array[i].end;
+                    for (const item of array) {
+                        assert.isFalse(item.pos < currentPos, "array[i].pos < currentPos");
+                        currentPos = item.end;
                     }
 
                     currentPos = array.end;
@@ -344,7 +344,7 @@ namespace Utils {
 
         assert.equal(array1.length, array2.length, "array1.length !== array2.length");
 
-        for (let i = 0, n = array1.length; i < n; i++) {
+        for (let i = 0; i < array1.length; i++) {
             const d1 = array1[i];
             const d2 = array2[i];
 
@@ -400,7 +400,7 @@ namespace Utils {
         assert.equal(array1.end, array2.end, "array1.end !== array2.end");
         assert.equal(array1.length, array2.length, "array1.length !== array2.length");
 
-        for (let i = 0, n = array1.length; i < n; i++) {
+        for (let i = 0; i < array1.length; i++) {
             assertStructuralEquals(array1[i], array2[i]);
         }
     }
@@ -909,7 +909,7 @@ namespace Harness {
         export const defaultLibFileName = "lib.d.ts";
         export const es2015DefaultLibFileName = "lib.es2015.d.ts";
 
-        const libFileNameSourceFileMap = ts.createMap<ts.SourceFile>({
+        const libFileNameSourceFileMap = ts.createMapFromTemplate<ts.SourceFile>({
             [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest)
         });
 
@@ -918,10 +918,11 @@ namespace Harness {
                 return undefined;
             }
 
-            if (!libFileNameSourceFileMap[fileName]) {
-                libFileNameSourceFileMap[fileName] = createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName), ts.ScriptTarget.Latest);
+            let sourceFile = libFileNameSourceFileMap.get(fileName);
+            if (!sourceFile) {
+                libFileNameSourceFileMap.set(fileName, sourceFile = createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName), ts.ScriptTarget.Latest));
             }
-            return libFileNameSourceFileMap[fileName];
+            return sourceFile;
         }
 
         export function getDefaultLibFileName(options: ts.CompilerOptions): string {
@@ -1103,10 +1104,10 @@ namespace Harness {
                 optionsIndex = ts.createMap<ts.CommandLineOption>();
                 const optionDeclarations = harnessOptionDeclarations.concat(ts.optionDeclarations);
                 for (const option of optionDeclarations) {
-                    optionsIndex[option.name.toLowerCase()] = option;
+                    optionsIndex.set(option.name.toLowerCase(), option);
                 }
             }
-            return optionsIndex[name.toLowerCase()];
+            return optionsIndex.get(name.toLowerCase());
         }
 
         export function setCompilerOptionsFromHarnessSetting(settings: Harness.TestCaseParser.CompilerSettings, options: ts.CompilerOptions & HarnessOptions): void {
@@ -1466,7 +1467,7 @@ namespace Harness {
             const fullResults = ts.createMap<TypeWriterResult[]>();
 
             for (const sourceFile of allFiles) {
-                fullResults[sourceFile.unitName] = fullWalker.getTypeAndSymbols(sourceFile.unitName);
+                fullResults.set(sourceFile.unitName, fullWalker.getTypeAndSymbols(sourceFile.unitName));
             }
 
             // Produce baselines.  The first gives the types for all expressions.
@@ -1519,7 +1520,7 @@ namespace Harness {
 
                 allFiles.forEach(file => {
                     const codeLines = file.content.split("\n");
-                    typeWriterResults[file.unitName].forEach(result => {
+                    typeWriterResults.get(file.unitName).forEach(result => {
                         if (isSymbolBaseline && !result.symbol) {
                             return;
                         }

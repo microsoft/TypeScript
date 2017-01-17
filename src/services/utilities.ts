@@ -600,7 +600,7 @@ namespace ts {
         return !!findChildOfKind(n, kind, sourceFile);
     }
 
-    export function findChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFile): Node {
+    export function findChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFile): Node | undefined {
         return forEach(n.getChildren(sourceFile), c => c.kind === kind && c);
     }
 
@@ -675,8 +675,7 @@ namespace ts {
             }
 
             // find the child that contains 'position'
-            for (let i = 0, n = current.getChildCount(sourceFile); i < n; i++) {
-                const child = current.getChildAt(i);
+            for (const child of current.getChildren()) {
                 // all jsDocComment nodes were already visited
                 if (isJSDocNode(child)) {
                     continue;
@@ -766,7 +765,7 @@ namespace ts {
             }
 
             const children = n.getChildren();
-            for (let i = 0, len = children.length; i < len; i++) {
+            for (let i = 0; i < children.length; i++) {
                 const child = children[i];
                 // condition 'position < child.end' checks if child node end after the position
                 // in the example below this condition will be false for 'aaaa' and 'bbbb' and true for 'ccc'
@@ -1113,6 +1112,10 @@ namespace ts {
             return !tripleSlashDirectivePrefixRegex.test(commentText);
         }
     }
+
+    export function createTextSpanFromNode(node: Node, sourceFile?: SourceFile): TextSpan {
+        return createTextSpanFromBounds(node.getStart(sourceFile), node.getEnd());
+    }
 }
 
 // Display-part writer helpers
@@ -1334,5 +1337,10 @@ namespace ts {
             scriptKind = getScriptKindFromFileName(fileName);
         }
         return ensureScriptKind(fileName, scriptKind);
+    }
+
+    export function getOpenBraceEnd(constructor: ConstructorDeclaration, sourceFile: SourceFile) {
+        // First token is the open curly, this is where we want to put the 'super' call.
+        return constructor.body.getFirstToken(sourceFile).getEnd();
     }
 }
