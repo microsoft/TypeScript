@@ -84,6 +84,7 @@ namespace ts {
             getIndexTypeOfType,
             getBaseTypes,
             getTypeFromTypeNode,
+            getParameterType: getTypeAtPosition,
             getReturnTypeOfSignature,
             getNonNullableType,
             getSymbolsInScope,

@@ -2341,6 +2341,11 @@ namespace ts {
         getIndexTypeOfType(type: Type, kind: IndexKind): Type;
         getBaseTypes(type: InterfaceType): ObjectType[];
         getReturnTypeOfSignature(signature: Signature): Type;
+        /**
+         * Gets the type of a parameter at a given position in a signature.
+         * Returns `any` if the index is not valid.
+         */
+        /* @internal */ getParameterType(signature: Signature, parameterIndex: number): Type;
         getNonNullableType(type: Type): Type;
 
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];

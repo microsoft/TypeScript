@@ -204,10 +204,7 @@ namespace ts.Completions {
             typeChecker.getResolvedSignature(argumentInfo.invocation, candidates);
 
             for (const candidate of candidates) {
-                if (candidate.parameters.length > argumentInfo.argumentIndex) {
-                    const parameter = candidate.parameters[argumentInfo.argumentIndex];
-                    addStringLiteralCompletionsFromType(typeChecker.getTypeAtLocation(parameter.valueDeclaration), entries);
-                }
+                addStringLiteralCompletionsFromType(typeChecker.getParameterType(candidate, argumentInfo.argumentIndex), entries);
             }
 
             if (entries.length) {
