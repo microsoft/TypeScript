@@ -2646,6 +2646,9 @@ namespace ts {
                 return ".jsx";
             }
         }
+        if (isJsonSourceFile(sourceFile)) {
+            return ".json";
+        }
         return ".js";
     }
 

@@ -1746,7 +1746,7 @@ namespace Harness {
                         // .d.ts file, add to declFiles emit
                         this.declFilesCode.push(emittedFile);
                     }
-                    else if (isJS(emittedFile.fileName) || isJSX(emittedFile.fileName)) {
+                    else if (isJS(emittedFile.fileName) || isJSX(emittedFile.fileName) || ts.hasJsonFileExtension(emittedFile.fileName)) {
                         // .js file, add to files
                         this.files.push(emittedFile);
                     }

@@ -1986,6 +1986,9 @@ namespace ts {
             writeLine();
             emitShebang();
             emitBodyWithDetachedComments(node, node.statements, emitSourceFileWorker);
+            if (isJsonSourceFile(node) && node.jsonObject) {
+                emitObjectLiteralExpression(node.jsonObject);
+            }
         }
 
         function emitSourceFileWorker(node: SourceFile) {

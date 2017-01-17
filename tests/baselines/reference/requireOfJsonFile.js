@@ -16,7 +16,11 @@ if (x) {
     "b": "hello"
 }
 
-//// [b.js]
+//// [b.json]
+{
+    "a": true,
+    "b": "hello"
+}
 //// [file1.js]
 "use strict";
 var b1 = require("./b");

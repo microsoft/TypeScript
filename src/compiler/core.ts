@@ -2015,6 +2015,10 @@ namespace ts {
         return extensions;
     }
 
+    export function hasJsonFileExtension(fileName: string) {
+        return fileExtensionIs(fileName, supportedJsonExtension);
+    }
+
     export function hasJavaScriptFileExtension(fileName: string) {
         return forEach(supportedJavascriptExtensions, extension => fileExtensionIs(fileName, extension));
     }

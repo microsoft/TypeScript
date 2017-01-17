@@ -1,4 +1,5 @@
 // @module: commonjs
+// @outdir: out/
 
 // @Filename: file1.ts
 import b1 = require('./b');

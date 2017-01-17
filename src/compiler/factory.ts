@@ -1438,6 +1438,7 @@ namespace ts {
         if (node.statements !== statements) {
             const updated = <SourceFile>createNode(SyntaxKind.SourceFile, /*location*/ node, node.flags);
             updated.statements = createNodeArray(statements);
+            if (isJsonSourceFile(node) && node.jsonObject !== undefined) (<JsonSourceFile>updated).jsonObject = node.jsonObject;
             updated.endOfFileToken = node.endOfFileToken;
             updated.fileName = node.fileName;
             updated.path = node.path;
