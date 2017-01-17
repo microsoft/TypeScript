@@ -1,4 +1,4 @@
-/* @internal */
+﻿/* @internal */
 namespace ts.FindAllReferences {
     export function findReferencedSymbols(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFiles: SourceFile[], sourceFile: SourceFile, position: number, findInStrings: boolean, findInComments: boolean): ReferencedSymbol[] {
         const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
@@ -95,7 +95,7 @@ namespace ts.FindAllReferences {
 
                 const nameTable = getNameTable(sourceFile);
 
-                if (nameTable[internedName] !== undefined) {
+                if (nameTable.get(internedName) !== undefined) {
                     result = result || [];
                     getReferencesInNode(sourceFile, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex, implementations, typeChecker, cancellationToken);
                 }
@@ -497,13 +497,13 @@ namespace ts.FindAllReferences {
         function findOwnConstructorCalls(classSymbol: Symbol): Node[] {
             const result: Node[] = [];
 
-            for (const decl of classSymbol.members["__constructor"].declarations) {
+            for (const decl of classSymbol.members.get("__constructor").declarations) {
                 const ctrKeyword = ts.findChildOfKind(decl, ts.SyntaxKind.ConstructorKeyword, sourceFile)!
                 Debug.assert(decl.kind === SyntaxKind.Constructor && !!ctrKeyword);
                 result.push(ctrKeyword);
             }
 
-            forEachProperty(classSymbol.exports, member => {
+            classSymbol.exports.forEach(member => {
                 const decl = member.valueDeclaration;
                 if (decl && decl.kind === SyntaxKind.MethodDeclaration) {
                     const body = (<MethodDeclaration>decl).body;
@@ -523,7 +523,7 @@ namespace ts.FindAllReferences {
         /** Find references to `super` in the constructor of an extending class.  */
         function superConstructorAccesses(cls: ClassLikeDeclaration): Node[] {
             const symbol = cls.symbol;
-            const ctr = symbol.members["__constructor"];
+            const ctr = symbol.members.get("__constructor");
             if (!ctr) {
                 return [];
             }
@@ -712,12 +712,13 @@ namespace ts.FindAllReferences {
             }
 
             const key = getSymbolId(symbol) + "," + getSymbolId(parent);
-            if (key in cachedResults) {
-                return cachedResults[key];
+            const cached = cachedResults.get(key);
+            if (cached !== undefined) {
+                return cached;
             }
 
             // Set the key so that we don't infinitely recurse
-            cachedResults[key] = false;
+            cachedResults.set(key, false);
 
             const inherits = forEach(symbol.getDeclarations(), declaration => {
                 if (isClassLike(declaration)) {
@@ -741,7 +742,7 @@ namespace ts.FindAllReferences {
                 return false;
             });
 
-            cachedResults[key] = inherits;
+            cachedResults.set(key, inherits);
             return inherits;
         }
 
@@ -1074,7 +1075,7 @@ namespace ts.FindAllReferences {
         // the function will add any found symbol of the property-name, then its sub-routine will call
         // getPropertySymbolsFromBaseTypes again to walk up any base types to prevent revisiting already
         // visited symbol, interface "C", the sub-routine will pass the current symbol as previousIterationSymbol.
-        if (symbol.name in previousIterationSymbolsCache) {
+        if (previousIterationSymbolsCache.has(symbol.name)) {
             return;
         }
 
@@ -1101,7 +1102,7 @@ namespace ts.FindAllReferences {
                     }
 
                     // Visit the typeReference as well to see if it directly or indirectly use that property
-                    previousIterationSymbolsCache[symbol.name] = symbol;
+                    previousIterationSymbolsCache.set(symbol.name, symbol);
                     getPropertySymbolsFromBaseTypes(type.symbol, propertyName, result, previousIterationSymbolsCache, typeChecker);
                 }
             }
