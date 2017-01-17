@@ -2650,13 +2650,16 @@ namespace ts {
             if (options.jsx === JsxEmit.Preserve) {
                 if (isSourceFileJavaScript(sourceFile)) {
                     if (fileExtensionIs(sourceFile.fileName, ".jsx")) {
-                        extension = ".jsx";
+                        extension = options.jsxExtName || ".jsx";
                     }
                 }
                 else if (sourceFile.languageVariant === LanguageVariant.JSX) {
                     // TypeScript source file preserving JSX syntax
-                    extension = ".jsx";
+                    extension = options.jsxExtName || ".jsx";
                 }
+            }
+            if(extension.charAt(0) !== '.') {
+                extension = '.' + extension;
             }
             const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, extension);
             const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);

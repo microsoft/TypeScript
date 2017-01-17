@@ -64,6 +64,10 @@ namespace ts {
             type: "boolean",
         },
         {
+            name: "jsxExtName",
+            type: "string",
+        },
+        {
             name: "jsx",
             type: createMap({
                 "preserve": JsxEmit.Preserve,
