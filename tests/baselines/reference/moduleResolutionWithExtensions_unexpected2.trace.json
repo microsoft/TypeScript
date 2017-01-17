@@ -34,5 +34,12 @@
     "'package.json' does not have a 'main' field.",
     "File '/node_modules/foo/index.js' does not exist.",
     "File '/node_modules/foo/index.jsx' does not exist.",
+    "Loading module 'foo' from 'node_modules' folder, target file type 'Json'.",
+    "'package.json' does not have a 'typings' field.",
+    "'package.json' has 'types' field 'foo.js' that references '/node_modules/foo/foo.js'.",
+    "Found 'package.json' at '/node_modules/foo/package.json'.",
+    "File '/node_modules/foo.json' does not exist.",
+    "'package.json' does not have a 'main' field.",
+    "File '/node_modules/foo/index.json' does not exist.",
     "======== Module name 'foo' was not resolved. ========"
 ]

@@ -471,6 +471,10 @@ namespace ts {
                         "File 'node_modules/a.jsx' does not exist.",
                         "File 'node_modules/a/index.js' does not exist.",
                         "File 'node_modules/a/index.jsx' does not exist.",
+                        "Loading module 'a' from 'node_modules' folder, target file type 'Json'.",
+                        "File 'node_modules/a/package.json' does not exist.",
+                        "File 'node_modules/a.json' does not exist.",
+                        "File 'node_modules/a/index.json' does not exist.",
                         "======== Module name 'a' was not resolved. ========"
                     ],
                     "initialProgram: execute module resolution normally.");

@@ -1975,7 +1975,7 @@ namespace ts {
                     }
 
                     const isFromNodeModulesSearch = resolution.isExternalLibraryImport;
-                    const isJsFile = !extensionIsTypeScript(resolution.extension);
+                    const isJsFile = !resolutionExtensionIsTypeScriptOrJson(resolution.extension);
                     const isJsFileFromNodeModules = isFromNodeModulesSearch && isJsFile;
                     const resolvedFileName = resolution.resolvedFileName;
 
@@ -2404,6 +2404,7 @@ namespace ts {
         switch (extension) {
             case Extension.Ts:
             case Extension.Dts:
+            case Extension.Json:
                 // These are always allowed.
                 return undefined;
             case Extension.Tsx:
