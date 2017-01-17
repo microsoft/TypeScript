@@ -55,7 +55,6 @@ interface XMLHttpRequest  {
 }
 /* tslint:enable:no-var-keyword */
 
-
 namespace Utils {
     // Setup some globals based on the current environment
     export const enum ExecutionEnvironment {
