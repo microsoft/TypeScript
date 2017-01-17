@@ -1668,7 +1668,7 @@ namespace FourSlash {
             this.goToPosition(len);
         }
 
-        private goToRangeStart({fileName, start}: Range) {
+        public goToRangeStart({fileName, start}: Range) {
             this.openFile(fileName);
             this.goToPosition(start);
         }
@@ -3080,6 +3080,10 @@ namespace FourSlashInterface {
         // is given
         public marker(name?: string) {
             this.state.goToMarker(name);
+        }
+
+        public rangeStart(range: FourSlash.Range) {
+            this.state.goToRangeStart(range);
         }
 
         public bof() {

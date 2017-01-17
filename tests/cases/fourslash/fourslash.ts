@@ -118,6 +118,7 @@ declare namespace FourSlashInterface {
     }
     class goTo {
         marker(name?: string): void;
+        rangeStart(range: Range): void;
         bof(): void;
         eof(): void;
         implementation(): void;

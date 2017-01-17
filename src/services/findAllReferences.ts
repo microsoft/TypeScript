@@ -1,29 +1,16 @@
 ﻿/* @internal */
 namespace ts.FindAllReferences {
-    export function findReferencedSymbols(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFiles: SourceFile[], sourceFile: SourceFile, position: number, findInStrings: boolean, findInComments: boolean): ReferencedSymbol[] {
+    export function findReferencedSymbols(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFiles: SourceFile[], sourceFile: SourceFile, position: number, findInStrings: boolean, findInComments: boolean): ReferencedSymbol[] | undefined {
         const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
-        if (node === sourceFile) {
-            return undefined;
-        }
-
-        switch (node.kind) {
-            case SyntaxKind.NumericLiteral:
-                if (!isLiteralNameOfPropertyDeclarationOrIndexAccess(node)) {
-                    break;
-                }
-                // Fallthrough
-            case SyntaxKind.Identifier:
-            case SyntaxKind.ThisKeyword:
-            // case SyntaxKind.SuperKeyword: TODO:GH#9268
-            case SyntaxKind.ConstructorKeyword:
-            case SyntaxKind.StringLiteral:
-                return getReferencedSymbolsForNode(typeChecker, cancellationToken, node, sourceFiles, findInStrings, findInComments, /*implementations*/false);
-        }
-        return undefined;
+        return getReferencedSymbolsForNode(typeChecker, cancellationToken, node, sourceFiles, findInStrings, findInComments, /*implementations*/false);
     }
 
-    export function getReferencedSymbolsForNode(typeChecker: TypeChecker, cancellationToken: CancellationToken, node: Node, sourceFiles: SourceFile[], findInStrings: boolean, findInComments: boolean, implementations: boolean): ReferencedSymbol[] {
+    export function getReferencedSymbolsForNode(typeChecker: TypeChecker, cancellationToken: CancellationToken, node: Node, sourceFiles: SourceFile[], findInStrings: boolean, findInComments: boolean, implementations: boolean): ReferencedSymbol[] | undefined {
         if (!implementations) {
+            if (isTypeKeyword(node.kind)) {
+                return getAllReferencesForKeyword(sourceFiles, node.kind, cancellationToken);
+            }
+
             // Labels
             if (isLabelName(node)) {
                 if (isJumpStatementTarget(node)) {
@@ -68,8 +55,6 @@ namespace ts.FindAllReferences {
             return undefined;
         }
 
-        let result: ReferencedSymbol[];
-
         // Compute the meaning from the location and the symbol it references
         const searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), declarations);
 
@@ -84,6 +69,7 @@ namespace ts.FindAllReferences {
         // Maps from a symbol ID to the ReferencedSymbol entry in 'result'.
         const symbolToIndex: number[] = [];
 
+        let result: ReferencedSymbol[];
         if (scope) {
             result = [];
             getReferencesInNode(scope, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex, implementations, typeChecker, cancellationToken);
@@ -92,10 +78,7 @@ namespace ts.FindAllReferences {
             const internedName = getInternedName(symbol, node);
             for (const sourceFile of sourceFiles) {
                 cancellationToken.throwIfCancellationRequested();
-
-                const nameTable = getNameTable(sourceFile);
-
-                if (nameTable.get(internedName) !== undefined) {
+                if (sourceFileHasName(sourceFile, internedName)) {
                     result = result || [];
                     getReferencesInNode(sourceFile, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex, implementations, typeChecker, cancellationToken);
                 }
@@ -105,9 +88,13 @@ namespace ts.FindAllReferences {
         return result;
     }
 
+    function sourceFileHasName(sourceFile: SourceFile, name: string): boolean {
+        return getNameTable(sourceFile).get(name) !== undefined;
+    }
+
     function getDefinition(symbol: Symbol, node: Node, typeChecker: TypeChecker): ReferencedSymbolDefinitionInfo {
-        const info = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, node.getSourceFile(), getContainerNode(node), node);
-        const name = map(info.displayParts, p => p.text).join("");
+        const { displayParts, symbolKind } = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, node.getSourceFile(), getContainerNode(node), node);
+        const name = displayParts.map(p => p.text).join("");
         const declarations = symbol.declarations;
         if (!declarations || declarations.length === 0) {
             return undefined;
@@ -117,10 +104,10 @@ namespace ts.FindAllReferences {
             containerKind: "",
             containerName: "",
             name,
-            kind: info.symbolKind,
+            kind: symbolKind,
             fileName: declarations[0].getSourceFile().fileName,
             textSpan: createTextSpan(declarations[0].getStart(), 0),
-            displayParts: info.displayParts
+            displayParts
         };
     }
 
@@ -351,6 +338,45 @@ namespace ts.FindAllReferences {
         }
     }
 
+    function getAllReferencesForKeyword(sourceFiles: SourceFile[], keywordKind: ts.SyntaxKind, cancellationToken: CancellationToken): ReferencedSymbol[] {
+        const name = tokenToString(keywordKind);
+        const definition: ReferencedSymbolDefinitionInfo = {
+            containerKind: "",
+            containerName: "",
+            fileName: "",
+            kind: ScriptElementKind.keyword,
+            name,
+            textSpan: createTextSpan(0, 1),
+            displayParts: [{ text: name, kind: ScriptElementKind.keyword }]
+        }
+
+        const references: ReferenceEntry[] = [];
+        for (const sourceFile of sourceFiles) {
+            cancellationToken.throwIfCancellationRequested();
+            if (sourceFileHasName(sourceFile, name)) {
+                addReferencesForKeywordInFile(sourceFile, keywordKind, name, cancellationToken, references);
+            }
+        }
+
+        return [{ definition, references }];
+    }
+
+    function addReferencesForKeywordInFile(sourceFile: SourceFile, kind: SyntaxKind, searchText: string, cancellationToken: CancellationToken, references: Push<ReferenceEntry>): void {
+        const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, searchText, sourceFile.getStart(), sourceFile.getEnd(), cancellationToken);
+        for (const position of possiblePositions) {
+            cancellationToken.throwIfCancellationRequested();
+            const referenceLocation = getTouchingPropertyName(sourceFile, position);
+            if (referenceLocation.kind === kind) {
+                references.push({
+                    textSpan: createTextSpanFromNode(referenceLocation),
+                    fileName: sourceFile.fileName,
+                    isWriteAccess: false,
+                    isDefinition: false,
+                });
+            }
+        }
+    }
+
     /** Search within node "container" for references for a search value, where the search value is defined as a
          * tuple of(searchSymbol, searchText, searchLocation, and searchMeaning).
         * searchLocation: a node where the search value
@@ -375,67 +401,64 @@ namespace ts.FindAllReferences {
 
         const parents = getParentSymbolsOfPropertyAccess();
         const inheritsFromCache: Map<boolean> = createMap<boolean>();
+        // Build the set of symbols to search for, initially it has only the current symbol
+        const searchSymbols = populateSearchSymbolSet(searchSymbol, searchLocation, typeChecker, implementations);
 
-        if (possiblePositions.length) {
-            // Build the set of symbols to search for, initially it has only the current symbol
-            const searchSymbols = populateSearchSymbolSet(searchSymbol, searchLocation, typeChecker, implementations);
+        for (const position of possiblePositions) {
+            cancellationToken.throwIfCancellationRequested();
 
-            forEach(possiblePositions, position => {
-                cancellationToken.throwIfCancellationRequested();
+            const referenceLocation = getTouchingPropertyName(sourceFile, position);
+            if (!isValidReferencePosition(referenceLocation, searchText)) {
+                // This wasn't the start of a token.  Check to see if it might be a
+                // match in a comment or string if that's what the caller is asking
+                // for.
+                if (!implementations && ((findInStrings && isInString(sourceFile, position)) ||
+                    (findInComments && isInNonReferenceComment(sourceFile, position)))) {
 
-                const referenceLocation = getTouchingPropertyName(sourceFile, position);
-                if (!isValidReferencePosition(referenceLocation, searchText)) {
-                    // This wasn't the start of a token.  Check to see if it might be a
-                    // match in a comment or string if that's what the caller is asking
-                    // for.
-                    if (!implementations && ((findInStrings && isInString(sourceFile, position)) ||
-                        (findInComments && isInNonReferenceComment(sourceFile, position)))) {
-
-                        // In the case where we're looking inside comments/strings, we don't have
-                        // an actual definition.  So just use 'undefined' here.  Features like
-                        // 'Rename' won't care (as they ignore the definitions), and features like
-                        // 'FindReferences' will just filter out these results.
-                        result.push({
-                            definition: undefined,
-                            references: [{
-                                fileName: sourceFile.fileName,
-                                textSpan: createTextSpan(position, searchText.length),
-                                isWriteAccess: false,
-                                isDefinition: false
-                            }]
-                        });
-                    }
-                    return;
+                    // In the case where we're looking inside comments/strings, we don't have
+                    // an actual definition.  So just use 'undefined' here.  Features like
+                    // 'Rename' won't care (as they ignore the definitions), and features like
+                    // 'FindReferences' will just filter out these results.
+                    result.push({
+                        definition: undefined,
+                        references: [{
+                            fileName: sourceFile.fileName,
+                            textSpan: createTextSpan(position, searchText.length),
+                            isWriteAccess: false,
+                            isDefinition: false
+                        }]
+                    });
                 }
+                continue;
+            }
 
-                if (!(getMeaningFromLocation(referenceLocation) & searchMeaning)) {
-                    return;
+            if (!(getMeaningFromLocation(referenceLocation) & searchMeaning)) {
+                continue;
+            }
+
+            const referenceSymbol = typeChecker.getSymbolAtLocation(referenceLocation);
+            if (referenceSymbol) {
+                const referenceSymbolDeclaration = referenceSymbol.valueDeclaration;
+                const shorthandValueSymbol = typeChecker.getShorthandAssignmentValueSymbol(referenceSymbolDeclaration);
+                const relatedSymbol = getRelatedSymbol(searchSymbols, referenceSymbol, referenceLocation,
+                    /*searchLocationIsConstructor*/ searchLocation.kind === SyntaxKind.ConstructorKeyword, parents, inheritsFromCache, typeChecker);
+
+                if (relatedSymbol) {
+                    addReferenceToRelatedSymbol(referenceLocation, relatedSymbol);
                 }
-
-                const referenceSymbol = typeChecker.getSymbolAtLocation(referenceLocation);
-                if (referenceSymbol) {
-                    const referenceSymbolDeclaration = referenceSymbol.valueDeclaration;
-                    const shorthandValueSymbol = typeChecker.getShorthandAssignmentValueSymbol(referenceSymbolDeclaration);
-                    const relatedSymbol = getRelatedSymbol(searchSymbols, referenceSymbol, referenceLocation,
-                        /*searchLocationIsConstructor*/ searchLocation.kind === SyntaxKind.ConstructorKeyword, parents, inheritsFromCache, typeChecker);
-
-                    if (relatedSymbol) {
-                        addReferenceToRelatedSymbol(referenceLocation, relatedSymbol);
-                    }
-                    /* Because in short-hand property assignment, an identifier which stored as name of the short-hand property assignment
-                        * has two meaning : property name and property value. Therefore when we do findAllReference at the position where
-                        * an identifier is declared, the language service should return the position of the variable declaration as well as
-                        * the position in short-hand property assignment excluding property accessing. However, if we do findAllReference at the
-                        * position of property accessing, the referenceEntry of such position will be handled in the first case.
-                        */
-                    else if (!(referenceSymbol.flags & SymbolFlags.Transient) && searchSymbols.indexOf(shorthandValueSymbol) >= 0) {
-                        addReferenceToRelatedSymbol(referenceSymbolDeclaration.name, shorthandValueSymbol);
-                    }
-                    else if (searchLocation.kind === SyntaxKind.ConstructorKeyword) {
-                        findAdditionalConstructorReferences(referenceSymbol, referenceLocation);
-                    }
+                /* Because in short-hand property assignment, an identifier which stored as name of the short-hand property assignment
+                    * has two meaning : property name and property value. Therefore when we do findAllReference at the position where
+                    * an identifier is declared, the language service should return the position of the variable declaration as well as
+                    * the position in short-hand property assignment excluding property accessing. However, if we do findAllReference at the
+                    * position of property accessing, the referenceEntry of such position will be handled in the first case.
+                    */
+                else if (!(referenceSymbol.flags & SymbolFlags.Transient) && searchSymbols.indexOf(shorthandValueSymbol) >= 0) {
+                    addReferenceToRelatedSymbol(referenceSymbolDeclaration.name, shorthandValueSymbol);
                 }
-            });
+                else if (searchLocation.kind === SyntaxKind.ConstructorKeyword) {
+                    findAdditionalConstructorReferences(referenceSymbol, referenceLocation);
+                }
+            }
         }
         return;
 

@@ -71,7 +71,10 @@ namespace ts {
     }
 
     export function getMeaningFromLocation(node: Node): SemanticMeaning {
-        if (node.parent.kind === SyntaxKind.ExportAssignment) {
+        if (node.kind === SyntaxKind.SourceFile) {
+            return SemanticMeaning.Value;
+        }
+        else if (node.parent.kind === SyntaxKind.ExportAssignment) {
             return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
         }
         else if (isInRightSideOfImport(node)) {
@@ -1115,6 +1118,23 @@ namespace ts {
 
     export function createTextSpanFromNode(node: Node, sourceFile?: SourceFile): TextSpan {
         return createTextSpanFromBounds(node.getStart(sourceFile), node.getEnd());
+    }
+
+    export function isTypeKeyword(kind: SyntaxKind): boolean {
+        switch (kind) {
+            case SyntaxKind.AnyKeyword:
+            case SyntaxKind.BooleanKeyword:
+            case SyntaxKind.NeverKeyword:
+            case SyntaxKind.NumberKeyword:
+            case SyntaxKind.KeyOfKeyword:
+            case SyntaxKind.ObjectKeyword:
+            case SyntaxKind.StringKeyword:
+            case SyntaxKind.SymbolKeyword:
+            case SyntaxKind.VoidKeyword:
+                return true;
+            default:
+                return false;
+        }
     }
 }
 
