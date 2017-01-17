@@ -701,6 +701,11 @@ namespace ts {
         return (file.externalModuleIndicator || file.commonJsModuleIndicator) !== undefined;
     }
 
+
+    export function isJsonSourceFile(file: SourceFile): file is JsonSourceFile {
+        return file.scriptKind === ScriptKind.JSON;
+    }
+
     export function isConstEnumDeclaration(node: Node): boolean {
         return node.kind === SyntaxKind.EnumDeclaration && isConst(node);
     }

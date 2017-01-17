@@ -4366,6 +4366,11 @@ namespace ts {
                     return links.type = anyType;
                 }
                 // Handle export default expressions
+                if (declaration.kind === SyntaxKind.SourceFile) {
+                    Debug.assert(isJsonSourceFile(declaration as SourceFile));
+                    const jsonSourceFile = <JsonSourceFile>declaration;
+                    return links.type = jsonSourceFile.statements.length ? checkObjectLiteral(jsonSourceFile.statements[0].expression) : emptyObjectType;
+                }
                 if (declaration.kind === SyntaxKind.ExportAssignment) {
                     return links.type = checkExpression((<ExportAssignment>declaration).expression);
                 }
