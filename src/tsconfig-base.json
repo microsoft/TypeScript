@@ -10,6 +10,7 @@
         "preserveConstEnums": true,
         "stripInternal": true,
         "sourceMap": true,
-        "target": "es5"
+        "target": "es5",
+        "types": []
     }
 }

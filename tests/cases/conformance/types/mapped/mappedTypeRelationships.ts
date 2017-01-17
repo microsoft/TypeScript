@@ -106,3 +106,65 @@ function f51<T extends ItemMap, K extends keyof T>(obj: T, key: K) {
     let item: Item = obj[key];
     return obj[key].name;
 }
+
+type T1<T> = {
+    [P in keyof T]: T[P];
+}
+
+type T2<T> = {
+    [P in keyof T]: T[P];
+}
+
+function f60<U>(x: T1<U>, y: T2<U>) {
+    x = y;
+    y = x;
+}
+
+type Identity<T> = {
+    [P in keyof T]: T[P];
+}
+
+function f61<U>(x: Identity<U>, y: Partial<U>) {
+    x = y;  // Error
+    y = x;
+}
+
+function f62<U>(x: Identity<U>, y: Readonly<U>) {
+    x = y;
+    y = x;
+}
+
+function f70<T>(x: { [P in keyof T]: T[P] }, y: { [P in keyof T]: T[P] }) {
+    x = y;
+    y = x;
+}
+
+function f71<T, U extends T>(x: { [P in keyof T]: T[P] }, y: { [P in keyof T]: U[P] }) {
+    x = y;
+    y = x;  // Error
+}
+
+function f72<T, U extends T>(x: { [P in keyof T]: T[P] }, y: { [P in keyof U]: U[P] }) {
+    x = y;
+    y = x;  // Error
+}
+
+function f73<T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in keyof T]: T[P] }) {
+    x = y;
+    y = x;  // Error
+}
+
+function f74<T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in keyof U]: U[P] }) {
+    x = y;
+    y = x;  // Error
+}
+
+function f75<T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in keyof T]: U[P] }) {
+    x = y;
+    y = x;  // Error
+}
+
+function f76<T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in K]: U[P] }) {
+    x = y;
+    y = x;  // Error
+}

@@ -44,11 +44,11 @@ namespace ts.DocumentHighlights {
                 for (const referencedSymbol of referencedSymbols) {
                     for (const referenceEntry of referencedSymbol.references) {
                         const fileName = referenceEntry.fileName;
-                        let documentHighlights = fileNameToDocumentHighlights[fileName];
+                        let documentHighlights = fileNameToDocumentHighlights.get(fileName);
                         if (!documentHighlights) {
                             documentHighlights = { fileName, highlightSpans: [] };
 
-                            fileNameToDocumentHighlights[fileName] = documentHighlights;
+                            fileNameToDocumentHighlights.set(fileName, documentHighlights);
                             result.push(documentHighlights);
                         }
 

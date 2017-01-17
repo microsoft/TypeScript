@@ -195,11 +195,17 @@ namespace Utils {
     }
 
     export class MockParseConfigHost extends VirtualFileSystem implements ts.ParseConfigHost {
-        constructor(currentDirectory: string, ignoreCase: boolean, files: ts.MapLike<string> | string[]) {
+        constructor(currentDirectory: string, ignoreCase: boolean, files: ts.Map<string> | string[]) {
             super(currentDirectory, ignoreCase);
-            const fileNames = (files instanceof Array) ? files : ts.getOwnKeys(files);
-            for (const file of fileNames) {
-                this.addFile(file, new  Harness.LanguageService.ScriptInfo(file, (files as ts.MapLike<string>)[file], /*isRootFile*/false));
+            if (files instanceof Array) {
+                for (const file of files) {
+                    this.addFile(file, new Harness.LanguageService.ScriptInfo(file, undefined, /*isRootFile*/false));
+                }
+            }
+            else {
+                files.forEach((fileContent, fileName) => {
+                    this.addFile(fileName, new Harness.LanguageService.ScriptInfo(fileName, fileContent, /*isRootFile*/false));
+                });
             }
         }
 

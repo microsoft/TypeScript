@@ -1,4 +1,7 @@
-function generic<T>(t: T) {}
+// @declaration: true
+function generic<T>(t: T) {
+    var o: object = t; // expect error
+}
 var a = {};
 var b = "42";
 
@@ -7,7 +10,9 @@ generic<object>(a);
 generic<object>(123); // expect error
 generic<object>(b); // expect error
 
-function bound<T extends object>(t: T) {}
+function bound<T extends object>(t: T) {
+    var o: object = t; // ok
+}
 
 bound({});
 bound(a);
@@ -21,6 +26,10 @@ bound2<Object>();
 bound2<number>(); // expect error
 bound2<string>(); // expect error
 
+function bound3<T extends {}>(t: T) {
+    var o: object = t; // ok
+}
+
 interface Proxy<T extends object> {}
 
 var x: Proxy<number>; // error
@@ -29,7 +38,7 @@ var z: Proxy<undefined> ; // ok
 
 
 interface Blah {
-  foo: number;
+    foo: number;
 }
 
 var u: Proxy<Blah>; // ok

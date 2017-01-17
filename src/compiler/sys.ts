@@ -1,4 +1,4 @@
-/// <reference path="core.ts"/>
+﻿/// <reference path="core.ts"/>
 
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;
@@ -246,23 +246,23 @@ namespace ts {
             function createWatchedFileSet() {
                 const dirWatchers = createMap<DirectoryWatcher>();
                 // One file can have multiple watchers
-                const fileWatcherCallbacks = createMap<FileWatcherCallback[]>();
+                const fileWatcherCallbacks = createMultiMap<FileWatcherCallback>();
                 return { addFile, removeFile };
 
                 function reduceDirWatcherRefCountForFile(fileName: string) {
                     const dirName = getDirectoryPath(fileName);
-                    const watcher = dirWatchers[dirName];
+                    const watcher = dirWatchers.get(dirName);
                     if (watcher) {
                         watcher.referenceCount -= 1;
                         if (watcher.referenceCount <= 0) {
                             watcher.close();
-                            delete dirWatchers[dirName];
+                            dirWatchers.delete(dirName);
                         }
                     }
                 }
 
                 function addDirWatcher(dirPath: string): void {
-                    let watcher = dirWatchers[dirPath];
+                    let watcher = dirWatchers.get(dirPath);
                     if (watcher) {
                         watcher.referenceCount += 1;
                         return;
@@ -273,12 +273,12 @@ namespace ts {
                         (eventName: string, relativeFileName: string) => fileEventHandler(eventName, relativeFileName, dirPath)
                     );
                     watcher.referenceCount = 1;
-                    dirWatchers[dirPath] = watcher;
+                    dirWatchers.set(dirPath, watcher);
                     return;
                 }
 
                 function addFileWatcherCallback(filePath: string, callback: FileWatcherCallback): void {
-                    multiMapAdd(fileWatcherCallbacks, filePath, callback);
+                    fileWatcherCallbacks.add(filePath, callback);
                 }
 
                 function addFile(fileName: string, callback: FileWatcherCallback): WatchedFile {
@@ -294,7 +294,7 @@ namespace ts {
                 }
 
                 function removeFileWatcherCallback(filePath: string, callback: FileWatcherCallback) {
-                    multiMapRemove(fileWatcherCallbacks, filePath, callback);
+                    fileWatcherCallbacks.remove(filePath, callback);
                 }
 
                 function fileEventHandler(eventName: string, relativeFileName: string, baseDirPath: string) {
@@ -303,9 +303,12 @@ namespace ts {
                         ? undefined
                         : ts.getNormalizedAbsolutePath(relativeFileName, baseDirPath);
                     // Some applications save a working file via rename operations
-                    if ((eventName === "change" || eventName === "rename") && fileWatcherCallbacks[fileName]) {
-                        for (const fileCallback of fileWatcherCallbacks[fileName]) {
-                            fileCallback(fileName);
+                    if ((eventName === "change" || eventName === "rename")) {
+                        const callbacks = fileWatcherCallbacks.get(fileName);
+                        if (callbacks) {
+                            for (const fileCallback of callbacks) {
+                                fileCallback(fileName);
+                            }
                         }
                     }
                 }

@@ -40,7 +40,7 @@ namespace FourSlash {
         files: FourSlashFile[];
 
         // A mapping from marker names to name/position pairs
-        markerPositions: { [index: string]: Marker; };
+        markerPositions: ts.Map<Marker>;
 
         markers: Marker[];
 
@@ -59,10 +59,6 @@ namespace FourSlash {
         fileName: string;
         position: number;
         data?: any;
-    }
-
-    interface MarkerMap {
-        [index: string]: Marker;
     }
 
     export interface Range {
@@ -94,7 +90,7 @@ namespace FourSlash {
 
     export import IndentStyle = ts.IndentStyle;
 
-    const entityMap = ts.createMap({
+    const entityMap = ts.createMapFromTemplate({
         "&": "&amp;",
         "\"": "&quot;",
         "'": "&#39;",
@@ -104,7 +100,7 @@ namespace FourSlash {
     });
 
     export function escapeXmlAttributeValue(s: string) {
-        return s.replace(/[&<>"'\/]/g, ch => entityMap[ch]);
+        return s.replace(/[&<>"'\/]/g, ch => entityMap.get(ch));
     }
 
     // Name of testcase metadata including ts.CompilerOptions properties that will be used by globalOptions
@@ -230,7 +226,7 @@ namespace FourSlash {
             }
 
             function tryAdd(path: string) {
-                const inputFile = inputFiles[path];
+                const inputFile = inputFiles.get(path);
                 if (inputFile && !Harness.isDefaultLibraryFile(path)) {
                     languageServiceAdapterHost.addScript(path, inputFile, /*isRootFile*/ true);
                     return true;
@@ -265,7 +261,7 @@ namespace FourSlash {
             let configFileName: string;
             ts.forEach(testData.files, file => {
                 // Create map between fileName and its content for easily looking up when resolveReference flag is specified
-                this.inputFiles[file.fileName] = file.content;
+                this.inputFiles.set(file.fileName, file.content);
                 if (ts.getBaseFileName(file.fileName).toLowerCase() === "tsconfig.json") {
                     configFileName = file.fileName;
                 }
@@ -283,7 +279,7 @@ namespace FourSlash {
                 const baseDir = ts.normalizePath(ts.getDirectoryPath(configFileName));
                 const host = new Utils.MockParseConfigHost(baseDir, /*ignoreCase*/ false, this.inputFiles);
 
-                const configJsonObj = ts.parseConfigFileTextToJson(configFileName, this.inputFiles[configFileName]);
+                const configJsonObj = ts.parseConfigFileTextToJson(configFileName, this.inputFiles.get(configFileName));
                 assert.isTrue(configJsonObj.config !== undefined);
 
                 const { options, errors } = ts.parseJsonConfigFileContent(configJsonObj.config, host, baseDir);
@@ -334,11 +330,11 @@ namespace FourSlash {
             }
             else {
                 // resolveReference file-option is not specified then do not resolve any files and include all inputFiles
-                for (const fileName in this.inputFiles) {
+                this.inputFiles.forEach((file, fileName) => {
                     if (!Harness.isDefaultLibraryFile(fileName)) {
-                        this.languageServiceAdapterHost.addScript(fileName, this.inputFiles[fileName], /*isRootFile*/ true);
+                        this.languageServiceAdapterHost.addScript(fileName, file, /*isRootFile*/ true);
                     }
-                }
+                });
                 this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName,
                     Harness.Compiler.getDefaultLibrarySourceFile().text, /*isRootFile*/ false);
             }
@@ -425,8 +421,7 @@ namespace FourSlash {
         }
 
         private raiseError(message: string) {
-            message = this.messageAtLastKnownMarker(message);
-            throw new Error(message);
+            throw new Error(this.messageAtLastKnownMarker(message));
         }
 
         private messageAtLastKnownMarker(message: string) {
@@ -685,11 +680,12 @@ namespace FourSlash {
             const completions = this.getCompletionListAtCaret();
             const uniqueItems = ts.createMap<string>();
             for (const item of completions.entries) {
-                if (!(item.name in uniqueItems)) {
-                    uniqueItems[item.name] = item.kind;
+                const uniqueItem = uniqueItems.get(item.name);
+                if (!uniqueItem) {
+                    uniqueItems.set(item.name, item.kind);
                 }
                 else {
-                    assert.equal(item.kind, uniqueItems[item.name], `Items should have the same kind, got ${item.kind} and ${uniqueItems[item.name]}`);
+                    assert.equal(item.kind, uniqueItem, `Items should have the same kind, got ${item.kind} and ${uniqueItem}`);
                 }
             }
         }
@@ -721,6 +717,27 @@ namespace FourSlash {
             if (completions && completions.isGlobalCompletion !== expected) {
                 this.raiseError(`verifyCompletionListIsGlobal failed - expected result to be ${completions.isGlobalCompletion}`);
             }
+        }
+
+        public verifyCompletionsAt(markerName: string, expected: string[]) {
+            this.goToMarker(markerName);
+
+            const actualCompletions = this.getCompletionListAtCaret();
+            if (!actualCompletions) {
+                this.raiseError(`No completions at position '${this.currentCaretPosition}'.`);
+            }
+
+            const actual = actualCompletions.entries;
+
+            if (actual.length !== expected.length) {
+                this.raiseError(`Expected ${expected.length} completions, got ${actual.map(a => a.name)}.`);
+            }
+
+            ts.zipWith(actual, expected, (completion, expectedCompletion, index) => {
+                if (completion.name !== expectedCompletion) {
+                    this.raiseError(`Expected completion at index ${index} to be ${expectedCompletion}, got ${completion.name}`);
+                }
+            });
         }
 
         public verifyCompletionListContains(symbol: string, text?: string, documentation?: string, kind?: string, spanIndex?: number) {
@@ -857,7 +874,7 @@ namespace FourSlash {
         }
 
         public verifyRangesWithSameTextReferenceEachOther() {
-            ts.forEachProperty(this.rangesByText(), ranges => this.verifyRangesReferenceEachOther(ranges));
+            this.rangesByText().forEach(ranges => this.verifyRangesReferenceEachOther(ranges));
         }
 
         public verifyDisplayPartsOfReferencedSymbol(expected: ts.SymbolDisplayPart[]) {
@@ -929,7 +946,8 @@ namespace FourSlash {
         }
 
         public verifyQuickInfos(namesAndTexts: { [name: string]: string | [string, string] }) {
-            ts.forEachProperty(ts.createMap(namesAndTexts), (text, name) => {
+            for (const name in namesAndTexts) if (ts.hasProperty(namesAndTexts, name)) {
+                const text = namesAndTexts[name];
                 if (text instanceof Array) {
                     assert(text.length === 2);
                     const [expectedText, expectedDocumentation] = text;
@@ -938,7 +956,7 @@ namespace FourSlash {
                 else {
                     this.verifyQuickInfoAt(name, text);
                 }
-            });
+            }
         }
 
         public verifyQuickInfoString(expectedText: string, expectedDocumentation?: string) {
@@ -1776,7 +1794,7 @@ namespace FourSlash {
         }
 
         public getMarkerNames(): string[] {
-            return Object.keys(this.testData.markerPositions);
+            return ts.arrayFrom(this.testData.markerPositions.keys());
         }
 
         public getRanges(): Range[] {
@@ -1784,10 +1802,10 @@ namespace FourSlash {
         }
 
         public rangesByText(): ts.Map<Range[]> {
-            const result = ts.createMap<Range[]>();
+            const result = ts.createMultiMap<Range>();
             for (const range of this.getRanges()) {
                 const text = this.rangeText(range);
-                ts.multiMapAdd(result, text, range);
+                result.add(text, range);
             }
             return result;
         }
@@ -2143,7 +2161,7 @@ namespace FourSlash {
 
         public verifyBraceCompletionAtPosition(negative: boolean, openingBrace: string) {
 
-            const openBraceMap = ts.createMap<ts.CharacterCodes>({
+            const openBraceMap = ts.createMapFromTemplate<ts.CharacterCodes>({
                 "(": ts.CharacterCodes.openParen,
                 "{": ts.CharacterCodes.openBrace,
                 "[": ts.CharacterCodes.openBracket,
@@ -2153,7 +2171,7 @@ namespace FourSlash {
                 "<": ts.CharacterCodes.lessThan
             });
 
-            const charCode = openBraceMap[openingBrace];
+            const charCode = openBraceMap.get(openingBrace);
 
             if (!charCode) {
                 this.raiseError(`Invalid openingBrace '${openingBrace}' specified.`);
@@ -2509,11 +2527,9 @@ namespace FourSlash {
         }
 
         public getMarkerByName(markerName: string) {
-            const markerPos = this.testData.markerPositions[markerName];
+            const markerPos = this.testData.markerPositions.get(markerName);
             if (markerPos === undefined) {
-                const markerNames: string[] = [];
-                for (const m in this.testData.markerPositions) markerNames.push(m);
-                throw new Error(`Unknown marker "${markerName}" Available markers: ${markerNames.map(m => "\"" + m + "\"").join(", ")}`);
+                throw new Error(`Unknown marker "${markerName}" Available markers: ${this.getMarkerNames().map(m => "\"" + m + "\"").join(", ")}`);
             }
             else {
                 return markerPos;
@@ -2606,7 +2622,7 @@ ${code}
         // we have to string-based splitting instead and try to figure out the delimiting chars
         const lines = contents.split("\n");
 
-        const markerPositions: MarkerMap = {};
+        const markerPositions = ts.createMap<Marker>();
         const markers: Marker[] = [];
         const ranges: Range[] = [];
 
@@ -2745,7 +2761,7 @@ ${code}
         throw new Error(errorMessage);
     }
 
-    function recordObjectMarker(fileName: string, location: LocationInformation, text: string, markerMap: MarkerMap, markers: Marker[]): Marker {
+    function recordObjectMarker(fileName: string, location: LocationInformation, text: string, markerMap: ts.Map<Marker>, markers: Marker[]): Marker {
         let markerValue: any = undefined;
         try {
             // Attempt to parse the marker value as JSON
@@ -2768,7 +2784,7 @@ ${code}
 
         // Object markers can be anonymous
         if (markerValue.name) {
-            markerMap[markerValue.name] = marker;
+            markerMap.set(markerValue.name, marker);
         }
 
         markers.push(marker);
@@ -2776,26 +2792,26 @@ ${code}
         return marker;
     }
 
-    function recordMarker(fileName: string, location: LocationInformation, name: string, markerMap: MarkerMap, markers: Marker[]): Marker {
+    function recordMarker(fileName: string, location: LocationInformation, name: string, markerMap: ts.Map<Marker>, markers: Marker[]): Marker {
         const marker: Marker = {
             fileName,
             position: location.position
         };
 
         // Verify markers for uniqueness
-        if (markerMap[name] !== undefined) {
+        if (markerMap.has(name)) {
             const message = "Marker '" + name + "' is duplicated in the source file contents.";
             reportError(marker.fileName, location.sourceLine, location.sourceColumn, message);
             return undefined;
         }
         else {
-            markerMap[name] = marker;
+            markerMap.set(name, marker);
             markers.push(marker);
             return marker;
         }
     }
 
-    function parseFileContent(content: string, fileName: string, markerMap: MarkerMap, markers: Marker[], ranges: Range[]): FourSlashFile {
+    function parseFileContent(content: string, fileName: string, markerMap: ts.Map<Marker>, markers: Marker[], ranges: Range[]): FourSlashFile {
         content = chompLeadingSpace(content);
 
         // Any slash-star comment with a character not in this string is not a marker.
@@ -3164,6 +3180,10 @@ namespace FourSlashInterface {
     export class Verify extends VerifyNegatable {
         constructor(state: FourSlash.TestState) {
             super(state);
+        }
+
+        public completionsAt(markerName: string, completions: string[]) {
+            this.state.verifyCompletionsAt(markerName, completions);
         }
 
         public quickInfoIs(expectedText: string, expectedDocumentation?: string) {

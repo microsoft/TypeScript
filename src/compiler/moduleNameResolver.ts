@@ -336,9 +336,10 @@ namespace ts {
             if (!moduleHasNonRelativeName(nonRelativeModuleName)) {
                 return undefined;
             }
-            let perModuleNameCache = moduleNameToDirectoryMap[nonRelativeModuleName];
+            let perModuleNameCache = moduleNameToDirectoryMap.get(nonRelativeModuleName);
             if (!perModuleNameCache) {
-                moduleNameToDirectoryMap[nonRelativeModuleName] = perModuleNameCache = createPerModuleNameCache();
+                perModuleNameCache = createPerModuleNameCache();
+                moduleNameToDirectoryMap.set(nonRelativeModuleName, perModuleNameCache);
             }
             return perModuleNameCache;
         }
@@ -422,7 +423,7 @@ namespace ts {
         }
         const containingDirectory = getDirectoryPath(containingFile);
         const perFolderCache = cache && cache.getOrCreateCacheForDirectory(containingDirectory);
-        let result = perFolderCache && perFolderCache[moduleName];
+        let result = perFolderCache && perFolderCache.get(moduleName);
 
         if (result) {
             if (traceEnabled) {
@@ -453,7 +454,7 @@ namespace ts {
             }
 
             if (perFolderCache) {
-                perFolderCache[moduleName] = result;
+                perFolderCache.set(moduleName, result);
                 // put result in per-module name cache
                 const perModuleNameCache = cache.getOrCreateCacheForModuleName(moduleName);
                 if (perModuleNameCache) {

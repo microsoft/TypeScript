@@ -31,10 +31,11 @@ namespace ts.server {
         }
 
         private getLineMap(fileName: string): number[] {
-            let lineMap = this.lineMaps[fileName];
+            let lineMap = this.lineMaps.get(fileName);
             if (!lineMap) {
                 const scriptSnapshot = this.host.getScriptSnapshot(fileName);
-                lineMap = this.lineMaps[fileName] = ts.computeLineStarts(scriptSnapshot.getText(0, scriptSnapshot.getLength()));
+                lineMap = ts.computeLineStarts(scriptSnapshot.getText(0, scriptSnapshot.getLength()));
+                this.lineMaps.set(fileName, lineMap);
             }
             return lineMap;
         }
@@ -140,7 +141,7 @@ namespace ts.server {
 
         changeFile(fileName: string, start: number, end: number, newText: string): void {
             // clear the line map after an edit
-            this.lineMaps[fileName] = undefined;
+            this.lineMaps.set(fileName, undefined);
 
             const lineOffset = this.positionToOneBasedLineOffset(fileName, start);
             const endLineOffset = this.positionToOneBasedLineOffset(fileName, end);
