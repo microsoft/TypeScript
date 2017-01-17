@@ -3231,10 +3231,11 @@ namespace ts {
                     const literalMembers = [];
                     for (const element of pattern.elements) {
                         if (!(element as BindingElement).dotDotDotToken) {
-                            literalMembers.push(
-                                getLiteralTypeForText(
-                                    TypeFlags.StringLiteral,
-                                    getTextOfPropertyName(element.propertyName || element.name as Identifier)));
+                            const propertyName = getTextOfPropertyName(element.propertyName || element.name as Identifier);
+                            literalMembers.push(getLiteralTypeForText(TypeFlags.StringLiteral, propertyName));
+                            if (element.propertyName && propertyName === undefined) {
+                                error(element.propertyName, Diagnostics.Computed_properties_cannot_be_used_with_object_rest_assignments);
+                            }
                         }
                     }
                     type = getRestType(parentType, getUnionType(literalMembers));
@@ -14762,7 +14763,11 @@ namespace ts {
                 const nonRestNames = [];
                 if (allProperties) {
                     for (let i = 0; i < allProperties.length - 1; i++) {
-                        nonRestNames.push(getLiteralTypeForText(TypeFlags.StringLiteral, getTextOfPropertyName(allProperties[i].name)));
+                        const propertyName = getTextOfPropertyName(allProperties[i].name);
+                        nonRestNames.push(getLiteralTypeForText(TypeFlags.StringLiteral, propertyName));
+                        if (propertyName === undefined) {
+                            error(allProperties[i].name, Diagnostics.Computed_properties_cannot_be_used_with_object_rest_assignments);
+                        }
                     }
                 }
                 const type = getRestType(objectLiteralType, getUnionType(nonRestNames));

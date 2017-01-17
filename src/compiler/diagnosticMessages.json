@@ -2015,6 +2015,10 @@
         "category": "Error",
         "code": 2698
     },
+    "Computed properties cannot be used with object rest assignments.": {
+        "category": "Error",
+        "code": 2699
+    },
     "Rest types may only be created from object types.": {
         "category": "Error",
         "code": 2700
