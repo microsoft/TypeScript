@@ -31,6 +31,7 @@ interface T2 {
 >T2 : T2
 
     1: Base; 
+>1 : Base
 >Base : Base
 }
 
@@ -39,6 +40,7 @@ interface S2 extends T2 {
 >T2 : T2
 
     2?: Derived; // ok
+>2 : Derived
 >Derived : Derived
 }
 
@@ -46,6 +48,7 @@ interface T3 {
 >T3 : T3
 
     '1': Base;
+>'1' : Base
 >Base : Base
 }
 
@@ -54,6 +57,7 @@ interface S3 extends T3 {
 >T3 : T3
 
     '1.0'?: Derived; // ok
+>'1.0' : Derived
 >Derived : Derived
 }
 

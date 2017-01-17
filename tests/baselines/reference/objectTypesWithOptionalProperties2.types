@@ -50,6 +50,7 @@ var b = {
 
     x()?: 1 // error
 >x : () => any
+>1 : any
 }
 > : any
 

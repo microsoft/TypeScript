@@ -3,4 +3,5 @@ class C {
 >C : C
 
   get 0() { }
+>0 : void
 }

@@ -33,6 +33,7 @@ function Meet({name = 'world'}) {
 function MeetAndGreet(k: {"prop-name": string}) {
 >MeetAndGreet : (k: { "prop-name": string; }) => JSX.Element
 >k : { "prop-name": string; }
+>"prop-name" : string
 
 	return <div>Hi Hi</div>;
 ><div>Hi Hi</div> : JSX.Element
@@ -179,6 +180,7 @@ let j4 = <EmptyPropSFC {...{ "data-info": "hi"}} />
 ><EmptyPropSFC {...{ "data-info": "hi"}} /> : JSX.Element
 >EmptyPropSFC : () => JSX.Element
 >{ "data-info": "hi"} : { "data-info": string; }
+>"data-info" : string
 >"hi" : "hi"
 
 

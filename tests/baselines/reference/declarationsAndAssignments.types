@@ -280,7 +280,9 @@ function f9() {
 >c : number
 >d : number
 >{ 0: 10, 1: 20 } : { 0: number; 1: number; }
+>0 : number
 >10 : 10
+>1 : number
 >20 : 20
 
     var [e, f] = [10, 20];
@@ -323,14 +325,18 @@ function f11() {
 >a : number
 >b : string
 >{ 0: 10, 1: "hello" } : { 0: number; 1: string; }
+>0 : number
 >10 : 10
+>1 : string
 >"hello" : "hello"
 
     var { "<": a, ">": b } = { "<": 10, ">": "hello" };
 >a : number
 >b : string
 >{ "<": 10, ">": "hello" } : { "<": number; ">": string; }
+>"<" : number
 >10 : 10
+>">" : string
 >"hello" : "hello"
 
     var { 0: a, 1: b } = [10, "hello"];

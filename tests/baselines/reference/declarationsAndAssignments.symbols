@@ -210,6 +210,8 @@ function f9() {
     var [c, d] = { 0: 10, 1: 20 };  // Error, not array type
 >c : Symbol(c, Decl(declarationsAndAssignments.ts, 67, 9))
 >d : Symbol(d, Decl(declarationsAndAssignments.ts, 67, 11))
+>0 : Symbol(0, Decl(declarationsAndAssignments.ts, 67, 18))
+>1 : Symbol(1, Decl(declarationsAndAssignments.ts, 67, 25))
 
     var [e, f] = [10, 20];
 >e : Symbol(e, Decl(declarationsAndAssignments.ts, 68, 9))
@@ -242,10 +244,14 @@ function f11() {
     var { 0: a, 1: b } = { 0: 10, 1: "hello" };
 >a : Symbol(a, Decl(declarationsAndAssignments.ts, 77, 9), Decl(declarationsAndAssignments.ts, 78, 9), Decl(declarationsAndAssignments.ts, 79, 9), Decl(declarationsAndAssignments.ts, 80, 9), Decl(declarationsAndAssignments.ts, 81, 7))
 >b : Symbol(b, Decl(declarationsAndAssignments.ts, 77, 15), Decl(declarationsAndAssignments.ts, 78, 15), Decl(declarationsAndAssignments.ts, 79, 17), Decl(declarationsAndAssignments.ts, 80, 15), Decl(declarationsAndAssignments.ts, 82, 7))
+>0 : Symbol(0, Decl(declarationsAndAssignments.ts, 78, 26))
+>1 : Symbol(1, Decl(declarationsAndAssignments.ts, 78, 33))
 
     var { "<": a, ">": b } = { "<": 10, ">": "hello" };
 >a : Symbol(a, Decl(declarationsAndAssignments.ts, 77, 9), Decl(declarationsAndAssignments.ts, 78, 9), Decl(declarationsAndAssignments.ts, 79, 9), Decl(declarationsAndAssignments.ts, 80, 9), Decl(declarationsAndAssignments.ts, 81, 7))
 >b : Symbol(b, Decl(declarationsAndAssignments.ts, 77, 15), Decl(declarationsAndAssignments.ts, 78, 15), Decl(declarationsAndAssignments.ts, 79, 17), Decl(declarationsAndAssignments.ts, 80, 15), Decl(declarationsAndAssignments.ts, 82, 7))
+>"<" : Symbol("<", Decl(declarationsAndAssignments.ts, 79, 30))
+>">" : Symbol(">", Decl(declarationsAndAssignments.ts, 79, 39))
 
     var { 0: a, 1: b } = [10, "hello"];
 >a : Symbol(a, Decl(declarationsAndAssignments.ts, 77, 9), Decl(declarationsAndAssignments.ts, 78, 9), Decl(declarationsAndAssignments.ts, 79, 9), Decl(declarationsAndAssignments.ts, 80, 9), Decl(declarationsAndAssignments.ts, 81, 7))

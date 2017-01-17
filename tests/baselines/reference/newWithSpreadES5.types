@@ -36,6 +36,7 @@ interface C {
 >C : C
 
     "a-b": typeof B;
+>"a-b" : typeof B
 >B : typeof B
 }
 
@@ -43,6 +44,7 @@ interface D {
 >D : D
 
     1: typeof B;
+>1 : typeof B
 >B : typeof B
 }
 

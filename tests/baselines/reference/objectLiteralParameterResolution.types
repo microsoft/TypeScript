@@ -60,6 +60,7 @@ var s = $.extend({
     converters: { "text json": "" },
 >converters : { "text json": string; }
 >{ "text json": "" } : { "text json": string; }
+>"text json" : string
 >"" : ""
 
     traditional: true ,

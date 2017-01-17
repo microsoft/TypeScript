@@ -29,6 +29,7 @@ interface J extends Array<Number> {
 >Number : Number
 
     2: number;
+>2 : number
 }
 
 function bar(): J {
@@ -89,6 +90,7 @@ function foo(idx: number): F {
 >{        2: true    } : { 2: true; }
 
         2: true
+>2 : true
 >true : true
     }
 }
