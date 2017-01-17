@@ -3513,6 +3513,11 @@ namespace ts {
                     return links.type = anyType;
                 }
                 // Handle export default expressions
+                if (declaration.kind === SyntaxKind.SourceFile) {
+                    // JSON file
+                    const jsonSourceFile = <JsonSourceFile>declaration;
+                    return links.type = jsonSourceFile.jsonObject ? checkObjectLiteral(jsonSourceFile.jsonObject) : emptyObjectType;
+                }
                 if (declaration.kind === SyntaxKind.ExportAssignment) {
                     return links.type = checkExpression((<ExportAssignment>declaration).expression);
                 }
@@ -19605,6 +19610,9 @@ namespace ts {
                 deferredUnusedIdentifierNodes = produceDiagnostics && noUnusedIdentifiers ? [] : undefined;
 
                 forEach(node.statements, checkSourceElement);
+                if (isJsonSourceFile(node) && node.jsonObject) {
+                    checkObjectLiteral(node.jsonObject);
+                }
 
                 checkDeferredNodes();
 

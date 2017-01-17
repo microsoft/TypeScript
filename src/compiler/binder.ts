@@ -258,6 +258,10 @@ namespace ts {
                     return "__export";
                 case SyntaxKind.ExportAssignment:
                     return (<ExportAssignment>node).isExportEquals ? "export=" : "default";
+                case SyntaxKind.SourceFile:
+                    // json file should behave as
+                    // module.exports = ...
+                    return "export=";
                 case SyntaxKind.BinaryExpression:
                     switch (getSpecialPropertyAssignmentKind(node)) {
                         case SpecialPropertyAssignmentKind.ModuleExports:
@@ -2084,6 +2088,11 @@ namespace ts {
             setExportContextFlag(file);
             if (isExternalModule(file)) {
                 bindSourceFileAsExternalModule();
+            }
+            else if (isJsonSourceFile(file)) {
+                bindSourceFileAsExternalModule();
+                // Create symbol equivalent for the module.exports = {}
+                declareSymbol(file.symbol.exports, file.symbol, file, SymbolFlags.Property | SymbolFlags.Export | SymbolFlags.ValueModule, SymbolFlags.None);
             }
         }
 
