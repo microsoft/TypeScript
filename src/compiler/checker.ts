@@ -2171,24 +2171,25 @@ namespace ts {
             return type.flags & TypeFlags.StringLiteral ? `"${escapeString((<LiteralType>type).text)}"` : (<LiteralType>type).text;
         }
 
-        function getSymbolDisplayBuilder(): SymbolDisplayBuilder {
 
-            function getNameOfSymbol(symbol: Symbol): string {
-                if (symbol.declarations && symbol.declarations.length) {
-                    const declaration = symbol.declarations[0];
-                    if (declaration.name) {
-                        return declarationNameToString(declaration.name);
-                    }
-                    switch (declaration.kind) {
-                        case SyntaxKind.ClassExpression:
-                            return "(Anonymous class)";
-                        case SyntaxKind.FunctionExpression:
-                        case SyntaxKind.ArrowFunction:
-                            return "(Anonymous function)";
-                    }
+        function getNameOfSymbol(symbol: Symbol): string {
+            if (symbol.declarations && symbol.declarations.length) {
+                const declaration = symbol.declarations[0];
+                if (declaration.name) {
+                    return declarationNameToString(declaration.name);
                 }
-                return symbol.name;
+                switch (declaration.kind) {
+                    case SyntaxKind.ClassExpression:
+                        return "(Anonymous class)";
+                    case SyntaxKind.FunctionExpression:
+                    case SyntaxKind.ArrowFunction:
+                        return "(Anonymous function)";
+                }
             }
+            return symbol.name;
+        }
+
+        function getSymbolDisplayBuilder(): SymbolDisplayBuilder {
 
             /**
              * Writes only the name of the symbol out to the writer. Uses the original source text
@@ -15680,7 +15681,7 @@ namespace ts {
                     }
                 }
                 else {
-                    const isStatic = forEach(member.modifiers, m => m.kind === SyntaxKind.StaticKeyword);
+                    const isStatic = getModifierFlags(member) & ModifierFlags.Static;
                     const names = isStatic ? staticNames : instanceNames;
 
                     const memberName = member.name && getPropertyNameForPropertyNameNode(member.name);
@@ -15714,6 +15715,38 @@ namespace ts {
                 }
                 else {
                     names.set(name, meaning);
+                }
+            }
+        }
+
+        /** 
+         * Static members being set on a constructor function may conflict with built-in properties
+         * of Function. Esp. in ECMAScript 5 there are non-configurable and non-writable 
+         * built-in properties. This check issues a transpile error when a class has a static 
+         * member with the same name as a non-writable built-in property.
+         * 
+         * @see http://www.ecma-international.org/ecma-262/5.1/#sec-15.3.3
+         * @see http://www.ecma-international.org/ecma-262/5.1/#sec-15.3.5
+         * @see http://www.ecma-international.org/ecma-262/6.0/#sec-properties-of-the-function-constructor
+         * @see http://www.ecma-international.org/ecma-262/6.0/#sec-function-instances
+         */
+        function checkClassForStaticPropertyNameConflicts(node: ClassLikeDeclaration) {
+            for (const member of node.members) {
+                const memberNameNode = member.name;
+                const isStatic = getModifierFlags(member) & ModifierFlags.Static;
+                if (isStatic && memberNameNode) {
+                    const memberName = getPropertyNameForPropertyNameNode(memberNameNode);
+                    switch (memberName) {
+                        case "name":
+                        case "length":
+                        case "caller":
+                        case "arguments":
+                        case "prototype":
+                            const message = Diagnostics.Static_property_0_conflicts_with_built_in_property_Function_0_of_constructor_function_1;
+                            const className = getNameOfSymbol(getSymbolOfNode(node));
+                            error(memberNameNode, message, memberName, className);
+                            break;
+                    }
                 }
             }
         }
@@ -18291,6 +18324,7 @@ namespace ts {
             const staticType = <ObjectType>getTypeOfSymbol(symbol);
             checkTypeParameterListsIdentical(node, symbol);
             checkClassForDuplicateDeclarations(node);
+            checkClassForStaticPropertyNameConflicts(node);
 
             const baseTypeNode = getClassExtendsHeritageClauseElement(node);
             if (baseTypeNode) {
