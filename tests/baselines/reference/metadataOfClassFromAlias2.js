@@ -1,4 +1,4 @@
-//// [tests/cases/compiler/metadataOfClassFromAlias.ts] ////
+//// [tests/cases/compiler/metadataOfClassFromAlias2.ts] ////
 
 //// [auxiliry.ts]
 
@@ -12,7 +12,7 @@ function annotation(): PropertyDecorator {
     return (target: any): void => { };
 }
 export class ClassA {
-    @annotation() array: SomeClass | null;
+    @annotation() array: SomeClass | null | string;
 }
 
 //// [auxiliry.js]
@@ -34,7 +34,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var auxiliry_1 = require("./auxiliry");
 function annotation() {
     return function (target) { };
 }
@@ -45,6 +44,6 @@ var ClassA = (function () {
 }());
 __decorate([
     annotation(),
-    __metadata("design:type", auxiliry_1.SomeClass)
+    __metadata("design:type", Object)
 ], ClassA.prototype, "array", void 0);
 exports.ClassA = ClassA;
