@@ -1,7 +1,7 @@
 interface Array<T> {
-    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T,
+    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: this) => T,
         initialValue?: T): T;
-    reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U,
+    reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: this) => U,
         initialValue: U): U;
 }
 var a: Array<string>;

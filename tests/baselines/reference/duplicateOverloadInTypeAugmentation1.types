@@ -3,16 +3,15 @@ interface Array<T> {
 >Array : T[]
 >T : T
 
-    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T,
->reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
->callbackfn : (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T
+    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: this) => T,
+>reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: this) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: this) => U, initialValue: U): U; (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: this) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: this) => U, initialValue: U): U; }
+>callbackfn : (previousValue: T, currentValue: T, currentIndex: number, array: this) => T
 >previousValue : T
 >T : T
 >currentValue : T
 >T : T
 >currentIndex : number
->array : T[]
->T : T
+>array : this
 >T : T
 
         initialValue?: T): T;
@@ -20,17 +19,16 @@ interface Array<T> {
 >T : T
 >T : T
 
-    reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U,
->reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
+    reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: this) => U,
+>reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: this) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: this) => U, initialValue: U): U; (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: this) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: this) => U, initialValue: U): U; }
 >U : U
->callbackfn : (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U
+>callbackfn : (previousValue: U, currentValue: T, currentIndex: number, array: this) => U
 >previousValue : U
 >U : U
 >currentValue : T
 >T : T
 >currentIndex : number
->array : T[]
->T : T
+>array : this
 >U : U
 
         initialValue: U): U;

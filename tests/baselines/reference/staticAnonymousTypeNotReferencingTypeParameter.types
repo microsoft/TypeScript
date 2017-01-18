@@ -39,9 +39,9 @@ class ListWrapper2 {
 >T : T
 >T : T
 >array.slice(0) : T[]
->array.slice : (start?: number, end?: number) => T[]
+>array.slice : { (start?: 0): T[]; (start: number, end?: number): T[]; }
 >array : T[]
->slice : (start?: number, end?: number) => T[]
+>slice : { (start?: 0): T[]; (start: number, end?: number): T[]; }
 >0 : 0
 
   static reversed<T>(dit: typeof ListWrapper2, array: T[]): T[] {
@@ -168,9 +168,9 @@ class ListWrapper {
 >T : T
 >T : T
 >array.slice(0) : T[]
->array.slice : (start?: number, end?: number) => T[]
+>array.slice : { (start?: 0): T[]; (start: number, end?: number): T[]; }
 >array : T[]
->slice : (start?: number, end?: number) => T[]
+>slice : { (start?: 0): T[]; (start: number, end?: number): T[]; }
 >0 : 0
 
   static forEachWithIndex<T>(dit: typeof ListWrapper, array: T[], fn: (t: T, n: number) => void) {
@@ -348,9 +348,9 @@ class ListWrapper {
 >a : any[]
 >b : any[]
 >a.concat(b) : any[]
->a.concat : { (...items: any[][]): any[]; (...items: any[]): any[]; }
+>a.concat : { (): any[]; (...items: any[][]): any[]; (...items: any[]): any[]; }
 >a : any[]
->concat : { (...items: any[][]): any[]; (...items: any[]): any[]; }
+>concat : { (): any[]; (...items: any[][]): any[]; (...items: any[]): any[]; }
 >b : any[]
 
   static insert<T>(dit: typeof ListWrapper, list: T[], index: number, value: T) { list.splice(index, 0, value); }
@@ -581,9 +581,9 @@ class ListWrapper {
 
     return l.slice(from, to === null ? undefined : to);
 >l.slice(from, to === null ? undefined : to) : T[]
->l.slice : (start?: number, end?: number) => T[]
+>l.slice : { (start?: 0): T[]; (start: number, end?: number): T[]; }
 >l : T[]
->slice : (start?: number, end?: number) => T[]
+>slice : { (start?: 0): T[]; (start: number, end?: number): T[]; }
 >from : number
 >to === null ? undefined : to : number
 >to === null : boolean
