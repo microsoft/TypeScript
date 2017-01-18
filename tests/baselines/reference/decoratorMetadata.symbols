@@ -28,3 +28,24 @@ class MyComponent {
 >x : Symbol(x, Decl(component.ts, 10, 11))
     }
 }
+
+
+@decorator
+>decorator : Symbol(decorator, Decl(component.ts, 2, 11))
+
+class NonPrimitiveComponent {
+>NonPrimitiveComponent : Symbol(NonPrimitiveComponent, Decl(component.ts, 12, 1))
+
+    constructor(public obj: object) {
+>obj : Symbol(NonPrimitiveComponent.obj, Decl(component.ts, 17, 16))
+    }
+
+    @decorator
+>decorator : Symbol(decorator, Decl(component.ts, 2, 11))
+
+    method(x: object) {
+>method : Symbol(NonPrimitiveComponent.method, Decl(component.ts, 18, 5))
+>x : Symbol(x, Decl(component.ts, 21, 11))
+    }
+}
+
