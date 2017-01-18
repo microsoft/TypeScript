@@ -229,8 +229,8 @@ declare namespace FourSlashInterface {
         navigationItemsListContains(name: string, kind: string, searchValue: string, matchKind: string, fileName?: string, parentName?: string): void;
         occurrencesAtPositionContains(range: Range, isWriteAccess?: boolean): void;
         occurrencesAtPositionCount(expectedCount: number): void;
-        documentHighlightsAtPositionContains(range: Range, fileNamesToSearch: string[], kind?: string): void;
-        documentHighlightsAtPositionCount(expectedCount: number, fileNamesToSearch: string[]): void;
+        rangesAreDocumentHighlights(ranges?: Range[]): void;
+        rangesWithSameTextAreDocumentHighlights(): void;
         completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string): void;
         /**
          * This method *requires* a contiguous, complete, and ordered stream of classifications for a file.
