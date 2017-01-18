@@ -98,7 +98,7 @@ interface Object {
       * Determines whether an object exists in another object's prototype chain.
       * @param v Another object whose prototype chain is to be checked.
       */
-    isPrototypeOf(v: Object): boolean;
+    isPrototypeOf(v: object): boolean;
 
     /**
       * Determines whether a specified property is enumerable.
@@ -1303,9 +1303,9 @@ interface TypedPropertyDescriptor<T> {
 }
 
 declare type ClassDecorator = <TFunction extends Function>(target: TFunction) => TFunction | void;
-declare type PropertyDecorator = (target: Object, propertyKey: string | symbol) => void;
-declare type MethodDecorator = <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void;
-declare type ParameterDecorator = (target: Object, propertyKey: string | symbol, parameterIndex: number) => void;
+declare type PropertyDecorator = (target: object, propertyKey: string | symbol) => void;
+declare type MethodDecorator = <T>(target: object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void;
+declare type ParameterDecorator = (target: object, propertyKey: string | symbol, parameterIndex: number) => void;
 
 declare type PromiseConstructorLike = new <T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void) => PromiseLike<T>;
 
