@@ -1217,17 +1217,11 @@ namespace ts {
 
     /**
      * Merges generated lexical declarations into a statement list, creating a new statement list.
-     *
-     * @param statements The statements.
-     * @param declarations The lexical declarations to merge.
      */
     export function mergeLexicalEnvironment(statements: NodeArray<Statement>, declarations: Statement[]): NodeArray<Statement>;
 
     /**
      * Appends generated lexical declarations to an array of statements.
-     *
-     * @param statements The statements.
-     * @param declarations The lexical declarations to merge.
      */
     export function mergeLexicalEnvironment(statements: Statement[], declarations: Statement[]): Statement[];
     export function mergeLexicalEnvironment(statements: Statement[], declarations: Statement[]) {

@@ -210,7 +210,7 @@ namespace ts {
         let deferredGlobalAsyncIterableType: GenericType;
         let deferredGlobalAsyncIteratorType: GenericType;
         let deferredGlobalAsyncIterableIteratorType: GenericType;
-        let defferedGlobalTemplateStringsArrayType: ObjectType;
+        let deferredGlobalTemplateStringsArrayType: ObjectType;
         let deferredJsxElementClassType: Type;
 
         let deferredNodes: Node[];
@@ -5647,75 +5647,75 @@ namespace ts {
             return <ObjectType>type;
         }
 
-        function getGlobalValueSymbol(name: string, unchecked?: boolean): Symbol {
-            return getGlobalSymbol(name, SymbolFlags.Value, unchecked ? undefined : Diagnostics.Cannot_find_global_value_0);
+        function getGlobalValueSymbol(name: string, reportErrors: boolean): Symbol {
+            return getGlobalSymbol(name, SymbolFlags.Value, reportErrors ? Diagnostics.Cannot_find_global_value_0 : undefined);
         }
 
-        function getGlobalTypeSymbol(name: string, unchecked?: boolean): Symbol {
-            return getGlobalSymbol(name, SymbolFlags.Type, unchecked ? undefined : Diagnostics.Cannot_find_global_type_0);
+        function getGlobalTypeSymbol(name: string, reportErrors: boolean): Symbol {
+            return getGlobalSymbol(name, SymbolFlags.Type, reportErrors ? Diagnostics.Cannot_find_global_type_0 : undefined);
         }
 
         function getGlobalSymbol(name: string, meaning: SymbolFlags, diagnostic: DiagnosticMessage): Symbol {
             return resolveName(undefined, name, meaning, diagnostic, name);
         }
 
-        function getGlobalType(name: string, arity?: 0, unchecked?: boolean): ObjectType;
-        function getGlobalType(name: string, arity: number, unchecked?: boolean): GenericType;
-        function getGlobalType(name: string, arity = 0, unchecked?: boolean): ObjectType {
-            const symbol = getGlobalTypeSymbol(name, unchecked);
-            return symbol || !unchecked ? getTypeOfGlobalSymbol(symbol, arity) : undefined;
+        function getGlobalType(name: string, arity: 0, reportErrors: boolean): ObjectType;
+        function getGlobalType(name: string, arity: number, reportErrors: boolean): GenericType;
+        function getGlobalType(name: string, arity: number, reportErrors: boolean): ObjectType {
+            const symbol = getGlobalTypeSymbol(name, reportErrors);
+            return symbol || reportErrors ? getTypeOfGlobalSymbol(symbol, arity) : undefined;
         }
 
         function getGlobalTypedPropertyDescriptorType() {
-            return deferredGlobalTypedPropertyDescriptorType || (deferredGlobalTypedPropertyDescriptorType = getGlobalType("TypedPropertyDescriptor", 1)) || emptyGenericType;
+            return deferredGlobalTypedPropertyDescriptorType || (deferredGlobalTypedPropertyDescriptorType = getGlobalType("TypedPropertyDescriptor", /*arity*/ 1, /*reportErrors*/ true)) || emptyGenericType;
         }
 
         function getGlobalTemplateStringsArrayType() {
-            return defferedGlobalTemplateStringsArrayType || (defferedGlobalTemplateStringsArrayType = getGlobalType("TemplateStringsArray")) || emptyObjectType;
+            return deferredGlobalTemplateStringsArrayType || (deferredGlobalTemplateStringsArrayType = getGlobalType("TemplateStringsArray", /*arity*/ 0, /*reportErrors*/ true)) || emptyObjectType;
         }
 
-        function getGlobalESSymbolConstructorSymbol(checked: boolean) {
-            return deferredGlobalESSymbolConstructorSymbol || (deferredGlobalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol", !checked));
+        function getGlobalESSymbolConstructorSymbol(reportErrors: boolean) {
+            return deferredGlobalESSymbolConstructorSymbol || (deferredGlobalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol", reportErrors));
         }
 
-        function getGlobalESSymbolType(checked: boolean) {
-            return deferredGlobalESSymbolType || (deferredGlobalESSymbolType = getGlobalType("Symbol", 0, !checked)) || emptyObjectType;
+        function getGlobalESSymbolType(reportErrors: boolean) {
+            return deferredGlobalESSymbolType || (deferredGlobalESSymbolType = getGlobalType("Symbol", /*arity*/ 0, reportErrors)) || emptyObjectType;
         }
 
-        function getGlobalPromiseType(checked: boolean) {
-            return deferredGlobalPromiseType || (deferredGlobalPromiseType = getGlobalType("Promise", 1, !checked)) || emptyGenericType;
+        function getGlobalPromiseType(reportErrors: boolean) {
+            return deferredGlobalPromiseType || (deferredGlobalPromiseType = getGlobalType("Promise", /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
-        function getGlobalPromiseConstructorSymbol(checked: boolean): Symbol | undefined {
-            return deferredGlobalPromiseConstructorSymbol || (deferredGlobalPromiseConstructorSymbol = getGlobalValueSymbol("Promise", !checked));
+        function getGlobalPromiseConstructorSymbol(reportErrors: boolean): Symbol | undefined {
+            return deferredGlobalPromiseConstructorSymbol || (deferredGlobalPromiseConstructorSymbol = getGlobalValueSymbol("Promise", reportErrors));
         }
 
-        function getGlobalPromiseConstructorLikeType(checked: boolean) {
-            return deferredGlobalPromiseConstructorLikeType || (deferredGlobalPromiseConstructorLikeType = getGlobalType("PromiseConstructorLike", 0, !checked)) || emptyObjectType;
+        function getGlobalPromiseConstructorLikeType(reportErrors: boolean) {
+            return deferredGlobalPromiseConstructorLikeType || (deferredGlobalPromiseConstructorLikeType = getGlobalType("PromiseConstructorLike", /*arity*/ 0, reportErrors)) || emptyObjectType;
         }
 
-        function getGlobalAsyncIterableType(checked: boolean) {
-            return deferredGlobalAsyncIterableType || (deferredGlobalAsyncIterableType = getGlobalType("AsyncIterable", 1, !checked)) || emptyGenericType;
+        function getGlobalAsyncIterableType(reportErrors: boolean) {
+            return deferredGlobalAsyncIterableType || (deferredGlobalAsyncIterableType = getGlobalType("AsyncIterable", /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
-        function getGlobalAsyncIteratorType(checked: boolean) {
-            return deferredGlobalAsyncIteratorType || (deferredGlobalAsyncIteratorType = getGlobalType("AsyncIterator", 1, !checked)) || emptyGenericType;
+        function getGlobalAsyncIteratorType(reportErrors: boolean) {
+            return deferredGlobalAsyncIteratorType || (deferredGlobalAsyncIteratorType = getGlobalType("AsyncIterator", /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
-        function getGlobalAsyncIterableIteratorType(checked: boolean) {
-            return deferredGlobalAsyncIterableIteratorType || (deferredGlobalAsyncIterableIteratorType = getGlobalType("AsyncIterableIterator", 1, !checked)) || emptyGenericType;
+        function getGlobalAsyncIterableIteratorType(reportErrors: boolean) {
+            return deferredGlobalAsyncIterableIteratorType || (deferredGlobalAsyncIterableIteratorType = getGlobalType("AsyncIterableIterator", /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
-        function getGlobalIterableType(checked: boolean) {
-            return deferredGlobalIterableType || (deferredGlobalIterableType = getGlobalType("Iterable", 1, !checked)) || emptyGenericType;
+        function getGlobalIterableType(reportErrors: boolean) {
+            return deferredGlobalIterableType || (deferredGlobalIterableType = getGlobalType("Iterable", /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
-        function getGlobalIteratorType(checked: boolean) {
-            return deferredGlobalIteratorType || (deferredGlobalIteratorType = getGlobalType("Iterator", 1, !checked)) || emptyGenericType;
+        function getGlobalIteratorType(reportErrors: boolean) {
+            return deferredGlobalIteratorType || (deferredGlobalIteratorType = getGlobalType("Iterator", /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
-        function getGlobalIterableIteratorType(checked: boolean) {
-            return deferredGlobalIterableIteratorType || (deferredGlobalIterableIteratorType = getGlobalType("IterableIterator", 1, !checked)) || emptyGenericType;
+        function getGlobalIterableIteratorType(reportErrors: boolean) {
+            return deferredGlobalIterableIteratorType || (deferredGlobalIterableIteratorType = getGlobalType("IterableIterator", /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
         /**
@@ -16667,7 +16667,7 @@ namespace ts {
             const widenedType = getWidenedType(type);
             if (isThenableType(widenedType)) {
                 if (errorNode) {
-                    error(errorNode, Diagnostics.Type_used_as_operand_to_await_or_the_return_type_of_an_async_function_must_not_contain_a_callable_then_member_if_it_is_not_a_promise);
+                    error(errorNode, Diagnostics.Type_used_as_operand_to_await_or_the_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
                 }
                 return undefined;
             }
@@ -21093,17 +21093,17 @@ namespace ts {
             addToSymbolTable(globals, builtinGlobals, Diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0);
 
             getSymbolLinks(undefinedSymbol).type = undefinedWideningType;
-            getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments");
+            getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments", /*arity*/ 0, /*reportErrors*/ true);
             getSymbolLinks(unknownSymbol).type = unknownType;
 
             // Initialize special types
-            globalArrayType = <GenericType>getGlobalType("Array", /*arity*/ 1);
-            globalObjectType = getGlobalType("Object");
-            globalFunctionType = getGlobalType("Function");
-            globalStringType = getGlobalType("String");
-            globalNumberType = getGlobalType("Number");
-            globalBooleanType = getGlobalType("Boolean");
-            globalRegExpType = getGlobalType("RegExp");
+            globalArrayType = getGlobalType("Array", /*arity*/ 1, /*reportErrors*/ true);
+            globalObjectType = getGlobalType("Object", /*arity*/ 0, /*reportErrors*/ true);
+            globalFunctionType = getGlobalType("Function", /*arity*/ 0, /*reportErrors*/ true);
+            globalStringType = getGlobalType("String", /*arity*/ 0, /*reportErrors*/ true);
+            globalNumberType = getGlobalType("Number", /*arity*/ 0, /*reportErrors*/ true);
+            globalBooleanType = getGlobalType("Boolean", /*arity*/ 0, /*reportErrors*/ true);
+            globalRegExpType = getGlobalType("RegExp", /*arity*/ 0, /*reportErrors*/ true);
             jsxElementType = getExportedTypeFromNamespace("JSX", JsxNames.Element);
             anyArrayType = createArrayType(anyType);
             autoArrayType = createArrayType(autoType);

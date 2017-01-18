@@ -3776,7 +3776,7 @@ namespace ts {
         SpreadIncludes = Read | Spread,
 
         FirstEmitHelper = Extends,
-        LastEmitHelper = Spread
+        LastEmitHelper = AsyncValues
     }
 
     /* @internal */

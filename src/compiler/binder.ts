@@ -2794,7 +2794,6 @@ namespace ts {
             transformFlags |= node.asteriskToken ? TransformFlags.AssertESNext : TransformFlags.AssertES2017;
         }
 
-        // Currently, we only support generators that were originally async function bodies.
         if (node.asteriskToken) {
             transformFlags |= TransformFlags.AssertGenerator;
         }
@@ -2922,8 +2921,6 @@ namespace ts {
         // If a FunctionExpression is generator function and is the body of a
         // transformed async function, then this node can be transformed to a
         // down-level generator.
-        // Currently we do not support transforming any other generator fucntions
-        // down level.
         if (node.asteriskToken) {
             transformFlags |= TransformFlags.AssertGenerator;
         }

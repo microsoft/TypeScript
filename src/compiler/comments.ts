@@ -25,8 +25,6 @@ namespace ts {
         let detachedCommentsInfo: { nodePos: number, detachedCommentEndPos: number}[];
         let hasWrittenComment = false;
         let disabled: boolean = compilerOptions.removeComments;
-        // let leadingCommentPositions: Map<boolean>;
-        // let trailingCommentPositions: Map<boolean>;
 
         return {
             reset,
@@ -288,8 +286,6 @@ namespace ts {
             currentText = undefined;
             currentLineMap = undefined;
             detachedCommentsInfo = undefined;
-            // leadingCommentPositions = undefined;
-            // trailingCommentPositions = undefined;
         }
 
         function setSourceFile(sourceFile: SourceFile) {
@@ -297,8 +293,6 @@ namespace ts {
             currentText = currentSourceFile.text;
             currentLineMap = getLineStarts(currentSourceFile);
             detachedCommentsInfo = undefined;
-            // leadingCommentPositions = createMap<boolean>();
-            // trailingCommentPositions = createMap<boolean>();
         }
 
         function hasDetachedComments(pos: number) {
