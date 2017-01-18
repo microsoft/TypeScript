@@ -21,7 +21,7 @@
 ////    export let a = function3; |]
 ////}
 
-verify.codeFixAtPosition(`function function3() {
+verify.rangeAfterCodeFix(`function function3() {
         function1();
     }
 

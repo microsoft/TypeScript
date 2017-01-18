@@ -1,0 +1,18 @@
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveUnionIntersection.ts(1,5): error TS2322: Type '""' is not assignable to type 'object & string'.
+  Type '""' is not assignable to type 'object'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveUnionIntersection.ts(3,1): error TS2322: Type 'string' is not assignable to type 'object & string'.
+  Type 'string' is not assignable to type 'object'.
+
+
+==== tests/cases/conformance/types/nonPrimitive/nonPrimitiveUnionIntersection.ts (2 errors) ====
+    var a: object & string = ""; // error
+        ~
+!!! error TS2322: Type '""' is not assignable to type 'object & string'.
+!!! error TS2322:   Type '""' is not assignable to type 'object'.
+    var b: object | string = ""; // ok
+    a = b; // error
+    ~
+!!! error TS2322: Type 'string' is not assignable to type 'object & string'.
+!!! error TS2322:   Type 'string' is not assignable to type 'object'.
+    b = a; // ok
+    

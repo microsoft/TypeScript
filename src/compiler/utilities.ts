@@ -43,6 +43,7 @@ namespace ts {
                 writeSpace: writeText,
                 writeStringLiteral: writeText,
                 writeParameter: writeText,
+                writeProperty: writeText,
                 writeSymbol: writeText,
 
                 // Completely ignore indentation for string writers.  And map newlines to
@@ -69,11 +70,11 @@ namespace ts {
     }
 
     export function hasResolvedModule(sourceFile: SourceFile, moduleNameText: string): boolean {
-        return !!(sourceFile && sourceFile.resolvedModules && sourceFile.resolvedModules[moduleNameText]);
+        return !!(sourceFile && sourceFile.resolvedModules && sourceFile.resolvedModules.get(moduleNameText));
     }
 
     export function getResolvedModule(sourceFile: SourceFile, moduleNameText: string): ResolvedModuleFull {
-        return hasResolvedModule(sourceFile, moduleNameText) ? sourceFile.resolvedModules[moduleNameText] : undefined;
+        return hasResolvedModule(sourceFile, moduleNameText) ? sourceFile.resolvedModules.get(moduleNameText) : undefined;
     }
 
     export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleFull): void {
@@ -81,7 +82,7 @@ namespace ts {
             sourceFile.resolvedModules = createMap<ResolvedModuleFull>();
         }
 
-        sourceFile.resolvedModules[moduleNameText] = resolvedModule;
+        sourceFile.resolvedModules.set(moduleNameText, resolvedModule);
     }
 
     export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective): void {
@@ -89,7 +90,7 @@ namespace ts {
             sourceFile.resolvedTypeReferenceDirectiveNames = createMap<ResolvedTypeReferenceDirective>();
         }
 
-        sourceFile.resolvedTypeReferenceDirectiveNames[typeReferenceDirectiveName] = resolvedTypeReferenceDirective;
+        sourceFile.resolvedTypeReferenceDirectiveNames.set(typeReferenceDirectiveName, resolvedTypeReferenceDirective);
     }
 
     /* @internal */
@@ -111,7 +112,7 @@ namespace ts {
         }
         for (let i = 0; i < names.length; i++) {
             const newResolution = newResolutions[i];
-            const oldResolution = oldResolutions && oldResolutions[names[i]];
+            const oldResolution = oldResolutions && oldResolutions.get(names[i]);
             const changed =
                 oldResolution
                     ? !newResolution || !comparer(oldResolution, newResolution)
@@ -549,7 +550,7 @@ namespace ts {
         let errorNode = node;
         switch (node.kind) {
             case SyntaxKind.SourceFile:
-                let pos = skipTrivia(sourceFile.text, 0, /*stopAfterLineBreak*/ false);
+                const pos = skipTrivia(sourceFile.text, 0, /*stopAfterLineBreak*/ false);
                 if (pos === sourceFile.text.length) {
                     // file is empty - return span for the beginning of the file
                     return createTextSpan(0, 0);
@@ -681,7 +682,7 @@ namespace ts {
             case SyntaxKind.QualifiedName:
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ThisKeyword:
-                let parent = node.parent;
+                const parent = node.parent;
                 if (parent.kind === SyntaxKind.TypeQuery) {
                     return false;
                 }
@@ -731,6 +732,20 @@ namespace ts {
         return false;
     }
 
+    export function isChildOfNodeWithKind(node: Node, kind: SyntaxKind): boolean {
+        while (node) {
+            if (node.kind === kind) {
+                return true;
+            }
+            node = node.parent;
+        }
+        return false;
+    }
+
+    export function isPrefixUnaryExpression(node: Node): node is PrefixUnaryExpression {
+        return node.kind === SyntaxKind.PrefixUnaryExpression;
+    }
+
     // Warning: This has the same semantics as the forEach family of functions,
     //          in that traversal terminates in the event that 'visitor' supplies a truthy value.
     export function forEachReturnStatement<T>(body: Block, visitor: (stmt: ReturnStatement) => T): T {
@@ -769,7 +784,7 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.YieldExpression:
                     visitor(<YieldExpression>node);
-                    let operand = (<YieldExpression>node).expression;
+                    const operand = (<YieldExpression>node).expression;
                     if (operand) {
                         traverse(operand);
                     }
@@ -802,6 +817,23 @@ namespace ts {
         }
     }
 
+    /**
+     * Gets the most likely element type for a TypeNode. This is not an exhaustive test
+     * as it assumes a rest argument can only be an array type (either T[], or Array<T>).
+     *
+     * @param node The type node.
+     */
+    export function getRestParameterElementType(node: TypeNode) {
+        if (node && node.kind === SyntaxKind.ArrayType) {
+            return (<ArrayTypeNode>node).elementType;
+        }
+        else if (node && node.kind === SyntaxKind.TypeReference) {
+            return singleOrUndefined((<TypeReferenceNode>node).typeArguments);
+        }
+        else {
+            return undefined;
+        }
+    }
 
     export function isVariableLike(node: Node): node is VariableLikeDeclaration {
         if (node) {
@@ -882,6 +914,17 @@ namespace ts {
         return false;
     }
 
+    export function unwrapInnermostStatmentOfLabel(node: LabeledStatement, beforeUnwrapLabelCallback?: (node: LabeledStatement) => void) {
+        while (true) {
+            if (beforeUnwrapLabelCallback) {
+                beforeUnwrapLabelCallback(node);
+            }
+            if (node.statement.kind !== SyntaxKind.LabeledStatement) {
+                return node.statement;
+            }
+            node = <LabeledStatement>node.statement;
+        }
+    }
 
     export function isFunctionBlock(node: Node) {
         return node && node.kind === SyntaxKind.Block && isFunctionLike(node.parent);
@@ -981,6 +1024,20 @@ namespace ts {
                     return node;
             }
         }
+    }
+
+    export function getNewTargetContainer(node: Node) {
+        const container = getThisContainer(node, /*includeArrowFunctions*/ false);
+        if (container) {
+            switch (container.kind) {
+                case SyntaxKind.Constructor:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                    return container;
+            }
+        }
+
+        return undefined;
     }
 
     /**
@@ -1190,6 +1247,7 @@ namespace ts {
             case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.YieldExpression:
             case SyntaxKind.AwaitExpression:
+            case SyntaxKind.MetaProperty:
                 return true;
             case SyntaxKind.QualifiedName:
                 while (node.parent.kind === SyntaxKind.QualifiedName) {
@@ -1204,7 +1262,7 @@ namespace ts {
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.StringLiteral:
             case SyntaxKind.ThisKeyword:
-                let parent = node.parent;
+                const parent = node.parent;
                 switch (parent.kind) {
                     case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.Parameter:
@@ -1226,13 +1284,13 @@ namespace ts {
                     case SyntaxKind.SwitchStatement:
                         return (<ExpressionStatement>parent).expression === node;
                     case SyntaxKind.ForStatement:
-                        let forStatement = <ForStatement>parent;
+                        const forStatement = <ForStatement>parent;
                         return (forStatement.initializer === node && forStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
                             forStatement.condition === node ||
                             forStatement.incrementor === node;
                     case SyntaxKind.ForInStatement:
                     case SyntaxKind.ForOfStatement:
-                        let forInStatement = <ForInStatement | ForOfStatement>parent;
+                        const forInStatement = <ForInStatement | ForOfStatement>parent;
                         return (forInStatement.initializer === node && forInStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
                             forInStatement.expression === node;
                     case SyntaxKind.TypeAssertionExpression:
@@ -1625,6 +1683,18 @@ namespace ts {
         return getAssignmentTargetKind(node) !== AssignmentKind.None;
     }
 
+    // a node is delete target iff. it is PropertyAccessExpression/ElementAccessExpression with parentheses skipped
+    export function isDeleteTarget(node: Node): boolean {
+        if (node.kind !== SyntaxKind.PropertyAccessExpression && node.kind !== SyntaxKind.ElementAccessExpression) {
+            return false;
+        }
+        node = node.parent;
+        while (node && node.kind === SyntaxKind.ParenthesizedExpression) {
+            node = node.parent;
+        }
+        return node && node.kind === SyntaxKind.DeleteExpression;
+    }
+
     export function isNodeDescendantOf(node: Node, ancestor: Node): boolean {
         while (node) {
             if (node === ancestor) return true;
@@ -1760,7 +1830,7 @@ namespace ts {
         }
     }
 
-    export function getAncestor(node: Node, kind: SyntaxKind): Node {
+    export function getAncestor(node: Node | undefined, kind: SyntaxKind): Node {
         while (node) {
             if (node.kind === kind) {
                 return node;
@@ -2086,7 +2156,6 @@ namespace ts {
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.OmittedExpression:
-            case SyntaxKind.RawExpression:
                 return 19;
 
             case SyntaxKind.TaggedTemplateExpression:
@@ -2216,22 +2285,16 @@ namespace ts {
         }
 
         function reattachFileDiagnostics(newFile: SourceFile): void {
-            if (!hasProperty(fileDiagnostics, newFile.fileName)) {
-                return;
-            }
-
-            for (const diagnostic of fileDiagnostics[newFile.fileName]) {
-                diagnostic.file = newFile;
-            }
+            forEach(fileDiagnostics.get(newFile.fileName), diagnostic => diagnostic.file = newFile);
         }
 
         function add(diagnostic: Diagnostic): void {
             let diagnostics: Diagnostic[];
             if (diagnostic.file) {
-                diagnostics = fileDiagnostics[diagnostic.file.fileName];
+                diagnostics = fileDiagnostics.get(diagnostic.file.fileName);
                 if (!diagnostics) {
                     diagnostics = [];
-                    fileDiagnostics[diagnostic.file.fileName] = diagnostics;
+                    fileDiagnostics.set(diagnostic.file.fileName, diagnostics);
                 }
             }
             else {
@@ -2251,7 +2314,7 @@ namespace ts {
         function getDiagnostics(fileName?: string): Diagnostic[] {
             sortAndDeduplicate();
             if (fileName) {
-                return fileDiagnostics[fileName] || [];
+                return fileDiagnostics.get(fileName) || [];
             }
 
             const allDiagnostics: Diagnostic[] = [];
@@ -2261,9 +2324,9 @@ namespace ts {
 
             forEach(nonFileDiagnostics, pushDiagnostic);
 
-            for (const key in fileDiagnostics) {
-                forEach(fileDiagnostics[key], pushDiagnostic);
-            }
+            fileDiagnostics.forEach(diagnostics => {
+                forEach(diagnostics, pushDiagnostic);
+            });
 
             return sortAndDeduplicateDiagnostics(allDiagnostics);
         }
@@ -2276,9 +2339,9 @@ namespace ts {
             diagnosticsModified = false;
             nonFileDiagnostics = sortAndDeduplicateDiagnostics(nonFileDiagnostics);
 
-            for (const key in fileDiagnostics) {
-                fileDiagnostics[key] = sortAndDeduplicateDiagnostics(fileDiagnostics[key]);
-            }
+            fileDiagnostics.forEach((diagnostics, key) => {
+                fileDiagnostics.set(key, sortAndDeduplicateDiagnostics(diagnostics));
+            });
         }
     }
 
@@ -2288,7 +2351,7 @@ namespace ts {
     // the map below must be updated. Note that this regexp *does not* include the 'delete' character.
     // There is no reason for this other than that JSON.stringify does not handle it either.
     const escapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
-    const escapedCharsMap = createMap({
+    const escapedCharsMap = createMapFromTemplate({
         "\0": "\\0",
         "\t": "\\t",
         "\v": "\\v",
@@ -2310,13 +2373,11 @@ namespace ts {
      * Note that this doesn't actually wrap the input in double quotes.
      */
     export function escapeString(s: string): string {
-        s = escapedCharsRegExp.test(s) ? s.replace(escapedCharsRegExp, getReplacement) : s;
+        return s.replace(escapedCharsRegExp, getReplacement);
+    }
 
-        return s;
-
-        function getReplacement(c: string) {
-            return escapedCharsMap[c] || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
-        }
+    function getReplacement(c: string) {
+        return escapedCharsMap.get(c) || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
     }
 
     export function isIntrinsicJsxName(name: string) {
@@ -3188,55 +3249,6 @@ namespace ts {
         return output;
     }
 
-    /**
-     * Serialize an object graph into a JSON string. This is intended only for use on an acyclic graph
-     * as the fallback implementation does not check for circular references by default.
-     */
-    export const stringify: (value: any) => string = typeof JSON !== "undefined" && JSON.stringify
-        ? JSON.stringify
-        : stringifyFallback;
-
-    /**
-     * Serialize an object graph into a JSON string.
-     */
-    function stringifyFallback(value: any): string {
-        // JSON.stringify returns `undefined` here, instead of the string "undefined".
-        return value === undefined ? undefined : stringifyValue(value);
-    }
-
-    function stringifyValue(value: any): string {
-        return typeof value === "string" ? `"${escapeString(value)}"`
-            : typeof value === "number" ? isFinite(value) ? String(value) : "null"
-                : typeof value === "boolean" ? value ? "true" : "false"
-                    : typeof value === "object" && value ? isArray(value) ? cycleCheck(stringifyArray, value) : cycleCheck(stringifyObject, value)
-                        : /*fallback*/ "null";
-    }
-
-    function cycleCheck(cb: (value: any) => string, value: any) {
-        Debug.assert(!value.hasOwnProperty("__cycle"), "Converting circular structure to JSON");
-        value.__cycle = true;
-        const result = cb(value);
-        delete value.__cycle;
-        return result;
-    }
-
-    function stringifyArray(value: any) {
-        return `[${reduceLeft(value, stringifyElement, "")}]`;
-    }
-
-    function stringifyElement(memo: string, value: any) {
-        return (memo ? memo + "," : memo) + stringifyValue(value);
-    }
-
-    function stringifyObject(value: any) {
-        return `{${reduceOwnProperties(value, stringifyProperty, "")}}`;
-    }
-
-    function stringifyProperty(memo: string, value: any, key: string) {
-        return value === undefined || typeof value === "function" || key === "__cycle" ? memo
-            : (memo ? memo + "," : memo) + `"${escapeString(key)}":${stringifyValue(value)}`;
-    }
-
     const base64Digits = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 
     /**
@@ -3365,18 +3377,21 @@ namespace ts {
         return false;
     }
 
-    const syntaxKindCache = createMap<string>();
+    const syntaxKindCache: string[] = [];
 
     export function formatSyntaxKind(kind: SyntaxKind): string {
         const syntaxKindEnum = (<any>ts).SyntaxKind;
         if (syntaxKindEnum) {
-            if (syntaxKindCache[kind]) {
-                return syntaxKindCache[kind];
+            const cached = syntaxKindCache[kind];
+            if (cached !== undefined) {
+                return cached;
             }
 
             for (const name in syntaxKindEnum) {
                 if (syntaxKindEnum[name] === kind) {
-                    return syntaxKindCache[kind] = kind.toString() + " (" + name + ")";
+                    const result = `${kind} (${name})`;
+                    syntaxKindCache[kind] = result;
+                    return result;
                 }
             }
         }
@@ -3610,6 +3625,10 @@ namespace ts {
 
     export function isIdentifier(node: Node): node is Identifier {
         return node.kind === SyntaxKind.Identifier;
+    }
+
+    export function isVoidExpression(node: Node): node is VoidExpression {
+        return node.kind === SyntaxKind.VoidExpression;
     }
 
     export function isGeneratedIdentifier(node: Node): node is GeneratedIdentifier {
@@ -3879,7 +3898,7 @@ namespace ts {
             || kind === SyntaxKind.TrueKeyword
             || kind === SyntaxKind.SuperKeyword
             || kind === SyntaxKind.NonNullExpression
-            || kind === SyntaxKind.RawExpression;
+            || kind === SyntaxKind.MetaProperty;
     }
 
     export function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression {
@@ -3909,7 +3928,6 @@ namespace ts {
             || kind === SyntaxKind.SpreadElement
             || kind === SyntaxKind.AsExpression
             || kind === SyntaxKind.OmittedExpression
-            || kind === SyntaxKind.RawExpression
             || isUnaryExpressionKind(kind);
     }
 

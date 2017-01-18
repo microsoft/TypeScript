@@ -1,19 +1,12 @@
 {
+    "extends": "../tsconfig-base",
     "compilerOptions": {
-        "noImplicitAny": true,
-        "pretty": true,
         "removeComments": false,
-        "preserveConstEnums": true,
         "outFile": "../../built/local/run.js",
-        "sourceMap": true,
         "declaration": false,
-        "stripInternal": true,
         "types": [
             "node", "mocha", "chai"
-        ],
-        "target": "es5",
-        "noUnusedLocals": true,
-        "noUnusedParameters": true
+        ]
     },
     "files": [
         "../compiler/core.ts",
@@ -74,7 +67,18 @@
         "../services/formatting/rulesProvider.ts",
         "../services/formatting/smartIndenter.ts",
         "../services/formatting/tokenRange.ts",
-        "harness.ts",
+        "../services/codeFixProvider.ts",
+        "../services/codefixes/fixes.ts",
+        "../services/codefixes/fixExtendsInterfaceBecomesImplements.ts",
+        "../services/codefixes/fixClassIncorrectlyImplementsInterface.ts",
+        "../services/codefixes/fixClassDoesntImplementInheritedAbstractMember.ts",
+        "../services/codefixes/fixClassSuperMustPrecedeThisAccess.ts",
+        "../services/codefixes/fixConstructorForDerivedNeedSuperCall.ts",
+        "../services/codefixes/helpers.ts",
+        "../services/codefixes/importFixes.ts",
+        "../services/codefixes/unusedIdentifierFixes.ts",
+        "../services/harness.ts",
+
         "sourceMapRecorder.ts",
         "harnessLanguageService.ts",
         "fourslash.ts",

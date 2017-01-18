@@ -10,4 +10,4 @@
 
 // Q does not show up in member list of x
 goTo.marker("1");
-verify.memberListContains("Q");
+verify.completionListContains("Q");

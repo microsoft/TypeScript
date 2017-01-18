@@ -5,7 +5,7 @@
 ////var x = new n.Foo();
 
 // @Filename: a.ts
-/////*2*/declare module "e" {
+////declare module /*2*/"e" {
 ////    class Foo { }
 ////}
 

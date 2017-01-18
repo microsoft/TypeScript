@@ -4,7 +4,7 @@
 ////    /*ctr*/constructor() {}
 ////    x() {}
 ////}
-/////*B*/class B extends A {}
+////class /*B*/B extends A {}
 ////class C extends B {
 ////    constructor() {
 ////        /*super*/super();

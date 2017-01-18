@@ -14,7 +14,7 @@
 
 // @Filename: foo_user.ts
 ///////<reference path="foo.d.ts" />
-/////*foo_type_declaration*/import foo = require("foo_module");
+////import /*foo_type_declaration*/foo = require("foo_module");
 ////const x = foo/*foo_value*/;
 ////const i: foo/*foo_type*/ = { x: 1, y: 2 };
 
@@ -37,7 +37,7 @@ verify.goToDefinitionIs("foo_type_declaration");
 
 
 // @Filename: bar.d.ts
-/////*bar_type_declaration*/declare interface bar { x: number; y: number }
+////declare interface /*bar_type_declaration*/bar { x: number; y: number }
 ////declare module "bar_module" {
 ////    const x: number;
 ////    export = x;
@@ -45,7 +45,7 @@ verify.goToDefinitionIs("foo_type_declaration");
 
 // @Filename: bar_user.ts
 ///////<reference path="bar.d.ts" />
-/////*bar_value_declaration*/import bar = require("bar_module");
+////import /*bar_value_declaration*/bar = require("bar_module");
 ////const x = bar/*bar_value*/;
 ////const i: bar/*bar_type*/ = { x: 1, y: 2 };
 

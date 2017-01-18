@@ -75,17 +75,32 @@ namespace ts.server {
         getFilesAffectedBy(scriptInfo: ScriptInfo): string[];
         onProjectUpdateGraph(): void;
         emitFile(scriptInfo: ScriptInfo, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): boolean;
+        clear(): void;
     }
 
     abstract class AbstractBuilder<T extends BuilderFileInfo> implements Builder {
 
-        private fileInfos = createFileMap<T>();
+        /**
+         * stores set of files from the project.
+         * NOTE: this field is created on demand and should not be accessed directly.
+         * Use 'getFileInfos' instead.
+         */
+        private fileInfos_doNotAccessDirectly: FileMap<T>;
 
         constructor(public readonly project: Project, private ctor: { new (scriptInfo: ScriptInfo, project: Project): T }) {
         }
 
+        private getFileInfos() {
+            return this.fileInfos_doNotAccessDirectly || (this.fileInfos_doNotAccessDirectly = createFileMap<T>());
+        }
+
+        public clear() {
+            // drop the existing list - it will be re-created as necessary
+            this.fileInfos_doNotAccessDirectly = undefined;
+        }
+
         protected getFileInfo(path: Path): T {
-            return this.fileInfos.get(path);
+            return this.getFileInfos().get(path);
         }
 
         protected getOrCreateFileInfo(path: Path): T {
@@ -99,19 +114,19 @@ namespace ts.server {
         }
 
         protected getFileInfoPaths(): Path[] {
-            return this.fileInfos.getKeys();
+            return this.getFileInfos().getKeys();
         }
 
         protected setFileInfo(path: Path, info: T) {
-            this.fileInfos.set(path, info);
+            this.getFileInfos().set(path, info);
         }
 
         protected removeFileInfo(path: Path) {
-            this.fileInfos.remove(path);
+            this.getFileInfos().remove(path);
         }
 
         protected forEachFileInfo(action: (fileInfo: T) => any) {
-            this.fileInfos.forEachValue((_path, value) => action(value));
+            this.getFileInfos().forEachValue((_path, value) => action(value));
         }
 
         abstract getFilesAffectedBy(scriptInfo: ScriptInfo): string[];
@@ -231,6 +246,11 @@ namespace ts.server {
 
         private projectVersionForDependencyGraph: string;
 
+        public clear() {
+            this.projectVersionForDependencyGraph = undefined;
+            super.clear();
+        }
+
         private getReferencedFileInfos(fileInfo: ModuleBuilderFileInfo): ModuleBuilderFileInfo[] {
             if (!fileInfo.isExternalModuleOrHasOnlyAmbientExternalModules()) {
                 return [];
@@ -336,24 +356,24 @@ namespace ts.server {
             // Use slice to clone the array to avoid manipulating in place
             const queue = fileInfo.referencedBy.slice(0);
             const fileNameSet = createMap<ScriptInfo>();
-            fileNameSet[scriptInfo.fileName] = scriptInfo;
+            fileNameSet.set(scriptInfo.fileName, scriptInfo);
             while (queue.length > 0) {
                 const processingFileInfo = queue.pop();
                 if (processingFileInfo.updateShapeSignature() && processingFileInfo.referencedBy.length > 0) {
                     for (const potentialFileInfo of processingFileInfo.referencedBy) {
-                        if (!fileNameSet[potentialFileInfo.scriptInfo.fileName]) {
+                        if (!fileNameSet.has(potentialFileInfo.scriptInfo.fileName)) {
                             queue.push(potentialFileInfo);
                         }
                     }
                 }
-                fileNameSet[processingFileInfo.scriptInfo.fileName] = processingFileInfo.scriptInfo;
+                fileNameSet.set(processingFileInfo.scriptInfo.fileName, processingFileInfo.scriptInfo);
             }
             const result: string[] = [];
-            for (const fileName in fileNameSet) {
-                if (shouldEmitFile(fileNameSet[fileName])) {
+            fileNameSet.forEach((scriptInfo, fileName) => {
+                if (shouldEmitFile(scriptInfo)) {
                     result.push(fileName);
                 }
-            }
+            });
             return result;
         }
     }

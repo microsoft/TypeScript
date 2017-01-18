@@ -227,7 +227,7 @@
         "category": "Error",
         "code": 1084
     },
-    "Octal literals are not available when targeting ECMAScript 5 and higher.": {
+    "Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '{0}'.": {
         "category": "Error",
         "code": 1085
     },
@@ -854,6 +854,10 @@
     "An abstract accessor cannot have an implementation.": {
         "category": "Error",
         "code": 1318
+    },
+    "A default export can only be used in an ECMAScript-style module.": {
+        "category": "Error",
+        "code": 1319
     },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1771,6 +1775,14 @@
         "category": "Error",
         "code": 2542
     },
+    "Duplicate identifier '_newTarget'. Compiler uses variable declaration '_newTarget' to capture 'new.target' meta-property reference.": {
+        "category": "Error",
+        "code": 2543
+    },
+    "Expression resolves to variable declaration '_newTarget' that compiler uses to capture 'new.target' meta-property reference.": {
+        "category": "Error",
+        "code": 2544
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -1806,6 +1818,10 @@
     "The global type 'JSX.{0}' may not have more than one property": {
         "category": "Error",
         "code": 2608
+    },
+    "JSX spread child must be an array type.": {
+        "category": "Error",
+        "code": 2609
     },
     "Cannot emit namespaced JSX elements in React": {
         "category": "Error",
@@ -1999,6 +2015,10 @@
         "category": "Error",
         "code": 2698
     },
+    "Static property '{0}' conflicts with built-in property 'Function.{0}' of constructor function '{1}'.": {
+        "category": "Error",
+        "code": 2699
+    },
     "Rest types may only be created from object types.": {
         "category": "Error",
         "code": 2700
@@ -2010,6 +2030,14 @@
     "'{0}' only refers to a type, but is being used as a namespace here.": {
         "category": "Error",
         "code": 2702
+    },
+    "The operand of a delete operator must be a property reference": {
+        "category": "Error",
+        "code": 2703
+    },
+    "The operand of a delete operator cannot be a read-only property": {
+        "category": "Error",
+        "code": 2704
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -2489,7 +2517,7 @@
         "category": "Message",
         "code": 6019
     },
-    "Compile the project in the given directory.": {
+    "Compile the project given the path to its configuration file, or to a folder with a 'tsconfig.json'": {
         "category": "Message",
         "code": 6020
     },
@@ -2548,6 +2576,10 @@
     "STRATEGY": {
         "category": "Message",
         "code": 6039
+    },
+    "FILE OR DIRECTORY": {
+        "category": "Message",
+        "code": 6040
     },
     "Compilation complete. Watching for file changes.": {
         "category": "Message",
@@ -2685,6 +2717,10 @@
         "category": "Message",
         "code": 6080
     },
+    "File '{0}' has an unsupported extension, so skipping it.": {
+        "category": "Message",
+        "code": 6081
+    },
     "Only 'amd' and 'system' modules are supported alongside --{0}.": {
         "category": "Error",
         "code": 6082
@@ -2737,7 +2773,7 @@
         "category": "Message",
         "code": 6094
     },
-    "Loading module as file / folder, candidate module location '{0}'.": {
+    "Loading module as file / folder, candidate module location '{0}', target file type '{1}'.": {
         "category": "Message",
         "code": 6095
     },
@@ -2749,7 +2785,7 @@
         "category": "Message",
         "code": 6097
     },
-    "Loading module '{0}' from 'node_modules' folder.": {
+    "Loading module '{0}' from 'node_modules' folder, target file type '{1}'.": {
         "category": "Message",
         "code": 6098
     },
@@ -2944,6 +2980,14 @@
     "Specify the JSX factory function to use when targeting 'react' JSX emit, e.g. 'React.createElement' or 'h'.": {
         "category": "Message",
         "code": 6146
+    },
+    "Resolution for module '{0}' was found in cache.": {
+        "category": "Message",
+        "code": 6147
+    },
+    "Directory '{0}' does not exist, skipping all lookups in it.": {
+        "category": "Message",
+        "code": 6148
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -3165,6 +3209,18 @@
         "category": "Error",
         "code": 17010
     },
+    "'super' must be called before accessing a property of 'super' in the constructor of a derived class.": {
+        "category": "Error",
+        "code": 17011
+    },
+    "'{0}' is not a valid meta-property for keyword '{1}'. Did you mean '{0}'?": {
+        "category": "Error",
+        "code": 17012
+    },
+    "Meta-property '{0}' is only allowed in the body of a function declaration, function expression, or constructor.": {
+        "category": "Error",
+        "code": 17013
+    },
 
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",
@@ -3191,23 +3247,19 @@
         "category": "Message",
         "code": 90002
     },
-    "Change 'extends' to 'implements'": {
+    "Change 'extends' to 'implements'.": {
         "category": "Message",
         "code": 90003
     },
-    "Remove unused identifiers": {
+    "Remove declaration for: {0}": {
         "category": "Message",
         "code": 90004
     },
-    "Implement interface on reference": {
-        "category": "Message",
-        "code": 90005
-    },
-    "Implement interface on class": {
+    "Implement interface '{0}'.": {
         "category": "Message",
         "code": 90006
     },
-    "Implement inherited abstract class": {
+    "Implement inherited abstract class.": {
         "category": "Message",
         "code": 90007
     },
@@ -3230,5 +3282,13 @@
     "Add {0} to existing import declaration from {1}": {
         "category": "Message",
         "code": 90015
+    },
+    "Octal literal types must use ES2015 syntax. Use the syntax '{0}'.": {
+        "category": "Error",
+        "code": 8017
+    },
+    "Octal literals are not allowed in enums members initializer. Use the syntax '{0}'.": {
+        "category": "Error",
+        "code": 8018
     }
 }

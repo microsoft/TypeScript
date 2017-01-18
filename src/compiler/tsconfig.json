@@ -1,17 +1,9 @@
 {
+    "extends": "../tsconfig-base",
     "compilerOptions": {
-        "noImplicitAny": true,
-        "noImplicitThis": true,
         "removeComments": true,
-        "preserveConstEnums": true,
-        "pretty": true,
         "outFile": "../../built/local/tsc.js",
-        "sourceMap": true,
-        "declaration": true,
-        "stripInternal": true,
-        "target": "es5",
-        "noUnusedLocals": true,
-        "noUnusedParameters": true
+        "declaration": true
     },
     "files": [
         "core.ts",

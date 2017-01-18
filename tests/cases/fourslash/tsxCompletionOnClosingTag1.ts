@@ -10,5 +10,5 @@
 //// var x1 = <div><//**/
 
 goTo.marker();
-verify.memberListCount(1);
+verify.completionListCount(1);
 verify.completionListContains('div');

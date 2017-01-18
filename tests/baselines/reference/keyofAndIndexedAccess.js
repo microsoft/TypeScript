@@ -249,6 +249,77 @@ function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[
     let b = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b');  // string | boolean
 }
 
+function f80<T extends { a: { x: any } }>(obj: T) {
+    let a1 = obj.a;  // { x: any }
+    let a2 = obj['a'];  // { x: any }
+    let a3 = obj['a'] as T['a'];  // T["a"]
+    let x1 = obj.a.x;  // any
+    let x2 = obj['a']['x'];  // any
+    let x3 = obj['a']['x'] as T['a']['x'];  // T["a"]["x"]
+}
+
+function f81<T extends { a: { x: any } }>(obj: T) {
+    return obj['a']['x'] as T['a']['x'];
+}
+
+function f82() {
+    let x1 = f81({ a: { x: "hello" } });  // string
+    let x2 = f81({ a: { x: 42 } });  // number
+}
+
+function f83<T extends { [x: string]: { x: any } }, K extends keyof T>(obj: T, key: K) {
+    return obj[key]['x'] as T[K]['x'];
+}
+
+function f84() {
+    let x1 = f83({ foo: { x: "hello" } }, "foo");  // string
+    let x2 = f83({ bar: { x: 42 } }, "bar");  // number
+}
+
+class C1 {
+    x: number;
+    get<K extends keyof this>(key: K) {
+        return this[key];
+    }
+    set<K extends keyof this>(key: K, value: this[K]) {
+        this[key] = value;
+    }
+    foo() {
+        let x1 = this.x;  // number
+        let x2 = this["x"];  // number
+        let x3 = this.get("x");  // this["x"]
+        let x4 = getProperty(this, "x"); // this["x"]
+        this.x = 42;
+        this["x"] = 42;
+        this.set("x", 42);
+        setProperty(this, "x", 42);
+    }
+}
+
+type S2 = {
+    a: string;
+    b: string;
+};
+
+function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K], x4: T[K]) {
+    x1 = x2;
+    x1 = x3;
+    x1 = x4;
+    x2 = x1;
+    x2 = x3;
+    x2 = x4;
+    x3 = x1;
+    x3 = x2;
+    x3 = x4;
+    x4 = x1;
+    x4 = x2;
+    x4 = x3;
+    x1.length;
+    x2.length;
+    x3.length;
+    x4.length;
+}
+
 // Repros from #12011
 
 class Base {
@@ -366,12 +437,86 @@ function f<K extends keyof R>(p: K) {
     a[p].add;  // any
 }
 
-//// [keyofAndIndexedAccess.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+// Repro from #12651
+
+type MethodDescriptor = {
+	name: string;
+	args: any[];
+	returnValue: any;
+}
+
+declare function dispatchMethod<M extends MethodDescriptor>(name: M['name'], args: M['args']): M['returnValue'];
+
+type SomeMethodDescriptor = {
+	name: "someMethod";
+	args: [string, number];
+	returnValue: string[];
+}
+
+let result = dispatchMethod<SomeMethodDescriptor>("someMethod", ["hello", 35]);
+
+// Repro from #13073
+
+type KeyTypes = "a" | "b"
+let MyThingy: { [key in KeyTypes]: string[] };
+
+function addToMyThingy<S extends KeyTypes>(key: S) {
+    MyThingy[key].push("a");
+}
+
+// Repro from #13102
+
+type Handler<T> = {
+    onChange: (name: keyof T) => void;
 };
+
+function onChangeGenericFunction<T>(handler: Handler<T & {preset: number}>) {
+    handler.onChange('preset')
+}
+
+// Repro from #13285
+
+function updateIds<T extends Record<K, string>, K extends string>(
+    obj: T,
+    idFields: K[],
+    idMapping: { [oldId: string]: string }
+): Record<K, string> {
+    for (const idField of idFields) {
+        const newId = idMapping[obj[idField]];
+        if (newId) {
+            obj[idField] = newId;
+        }
+    }
+    return obj;
+}
+
+// Repro from #13285
+
+function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
+    obj: T,
+    key: K,
+    stringMap: { [oldId: string]: string }
+) {
+    var x = obj[key];
+    stringMap[x]; // Should be OK.
+}
+
+// Repro from #13514
+
+declare function head<T extends Array<any>>(list: T): T[0];
+
+
+//// [keyofAndIndexedAccess.js]
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var Shape = (function () {
     function Shape() {
     }
@@ -380,7 +525,7 @@ var Shape = (function () {
 var TaggedShape = (function (_super) {
     __extends(TaggedShape, _super);
     function TaggedShape() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return TaggedShape;
 }(Shape));
@@ -536,6 +681,67 @@ function f74(func) {
     var a = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'a'); // number
     var b = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b'); // string | boolean
 }
+function f80(obj) {
+    var a1 = obj.a; // { x: any }
+    var a2 = obj['a']; // { x: any }
+    var a3 = obj['a']; // T["a"]
+    var x1 = obj.a.x; // any
+    var x2 = obj['a']['x']; // any
+    var x3 = obj['a']['x']; // T["a"]["x"]
+}
+function f81(obj) {
+    return obj['a']['x'];
+}
+function f82() {
+    var x1 = f81({ a: { x: "hello" } }); // string
+    var x2 = f81({ a: { x: 42 } }); // number
+}
+function f83(obj, key) {
+    return obj[key]['x'];
+}
+function f84() {
+    var x1 = f83({ foo: { x: "hello" } }, "foo"); // string
+    var x2 = f83({ bar: { x: 42 } }, "bar"); // number
+}
+var C1 = (function () {
+    function C1() {
+    }
+    C1.prototype.get = function (key) {
+        return this[key];
+    };
+    C1.prototype.set = function (key, value) {
+        this[key] = value;
+    };
+    C1.prototype.foo = function () {
+        var x1 = this.x; // number
+        var x2 = this["x"]; // number
+        var x3 = this.get("x"); // this["x"]
+        var x4 = getProperty(this, "x"); // this["x"]
+        this.x = 42;
+        this["x"] = 42;
+        this.set("x", 42);
+        setProperty(this, "x", 42);
+    };
+    return C1;
+}());
+function f90(x1, x2, x3, x4) {
+    x1 = x2;
+    x1 = x3;
+    x1 = x4;
+    x2 = x1;
+    x2 = x3;
+    x2 = x4;
+    x3 = x1;
+    x3 = x2;
+    x3 = x4;
+    x4 = x1;
+    x4 = x2;
+    x4 = x3;
+    x1.length;
+    x2.length;
+    x3.length;
+    x4.length;
+}
 // Repros from #12011
 var Base = (function () {
     function Base() {
@@ -603,6 +809,30 @@ c1.get("hello");
 function f(p) {
     var a;
     a[p].add; // any
+}
+var result = dispatchMethod("someMethod", ["hello", 35]);
+var MyThingy;
+function addToMyThingy(key) {
+    MyThingy[key].push("a");
+}
+function onChangeGenericFunction(handler) {
+    handler.onChange('preset');
+}
+// Repro from #13285
+function updateIds(obj, idFields, idMapping) {
+    for (var _i = 0, idFields_1 = idFields; _i < idFields_1.length; _i++) {
+        var idField = idFields_1[_i];
+        var newId = idMapping[obj[idField]];
+        if (newId) {
+            obj[idField] = newId;
+        }
+    }
+    return obj;
+}
+// Repro from #13285
+function updateIds2(obj, key, stringMap) {
+    var x = obj[key];
+    stringMap[x]; // Should be OK.
 }
 
 
@@ -716,6 +946,34 @@ declare function f71(func: <T, U>(x: T, y: U) => Partial<T & U>): void;
 declare function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]): void;
 declare function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]): void;
 declare function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]): void;
+declare function f80<T extends {
+    a: {
+        x: any;
+    };
+}>(obj: T): void;
+declare function f81<T extends {
+    a: {
+        x: any;
+    };
+}>(obj: T): T["a"]["x"];
+declare function f82(): void;
+declare function f83<T extends {
+    [x: string]: {
+        x: any;
+    };
+}, K extends keyof T>(obj: T, key: K): T[K]["x"];
+declare function f84(): void;
+declare class C1 {
+    x: number;
+    get<K extends keyof this>(key: K): this[K];
+    set<K extends keyof this>(key: K, value: this[K]): void;
+    foo(): void;
+}
+declare type S2 = {
+    a: string;
+    b: string;
+};
+declare function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K], x4: T[K]): void;
 declare class Base {
     get<K extends keyof this>(prop: K): this[K];
     set<K extends keyof this>(prop: K, value: this[K]): void;
@@ -723,12 +981,12 @@ declare class Base {
 declare class Person extends Base {
     parts: number;
     constructor(parts: number);
-    getParts(): number;
+    getParts(): this["parts"];
 }
 declare class OtherPerson {
     parts: number;
     constructor(parts: number);
-    getParts(): number;
+    getParts(): this["parts"];
 }
 declare function path<T, K1 extends keyof T>(obj: T, key1: K1): T[K1];
 declare function path<T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2];
@@ -776,3 +1034,35 @@ interface R {
     p: number;
 }
 declare function f<K extends keyof R>(p: K): void;
+declare type MethodDescriptor = {
+    name: string;
+    args: any[];
+    returnValue: any;
+};
+declare function dispatchMethod<M extends MethodDescriptor>(name: M['name'], args: M['args']): M['returnValue'];
+declare type SomeMethodDescriptor = {
+    name: "someMethod";
+    args: [string, number];
+    returnValue: string[];
+};
+declare let result: string[];
+declare type KeyTypes = "a" | "b";
+declare let MyThingy: {
+    [key in KeyTypes]: string[];
+};
+declare function addToMyThingy<S extends KeyTypes>(key: S): void;
+declare type Handler<T> = {
+    onChange: (name: keyof T) => void;
+};
+declare function onChangeGenericFunction<T>(handler: Handler<T & {
+    preset: number;
+}>): void;
+declare function updateIds<T extends Record<K, string>, K extends string>(obj: T, idFields: K[], idMapping: {
+    [oldId: string]: string;
+}): Record<K, string>;
+declare function updateIds2<T extends {
+    [x: string]: string;
+}, K extends keyof T>(obj: T, key: K, stringMap: {
+    [oldId: string]: string;
+}): void;
+declare function head<T extends Array<any>>(list: T): T[0];

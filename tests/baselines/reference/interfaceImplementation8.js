@@ -41,11 +41,16 @@ class C8 extends C7 implements i2{
 
 
 //// [interfaceImplementation8.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var C1 = (function () {
     function C1() {
     }
@@ -64,21 +69,21 @@ var C3 = (function () {
 var C4 = (function (_super) {
     __extends(C4, _super);
     function C4() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C4;
 }(C1));
 var C5 = (function (_super) {
     __extends(C5, _super);
     function C5() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C5;
 }(C2));
 var C6 = (function (_super) {
     __extends(C6, _super);
     function C6() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C6;
 }(C3));
@@ -90,7 +95,7 @@ var C7 = (function () {
 var C8 = (function (_super) {
     __extends(C8, _super);
     function C8() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C8;
 }(C7));

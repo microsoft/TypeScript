@@ -158,6 +158,18 @@ class Removable {
     remainder: string;
 >remainder : string
 }
+interface I {
+>I : I
+
+    m(): void;
+>m : () => void
+
+    removed: string;
+>removed : string
+
+    remainder: string;
+>remainder : string
+}
 var removable = new Removable();
 >removable : Removable
 >new Removable() : Removable
@@ -167,6 +179,16 @@ var { removed, ...removableRest } = removable;
 >removed : string
 >removableRest : { both: number; remainder: string; }
 >removable : Removable
+
+var i: I = removable;
+>i : I
+>I : I
+>removable : Removable
+
+var { removed, ...removableRest2 } = i;
+>removed : string
+>removableRest2 : { m(): void; remainder: string; }
+>i : I
 
 let computed = 'b';
 >computed : string

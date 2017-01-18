@@ -56,7 +56,7 @@ namespace ts {
         tryScan<T>(callback: () => T): T;
     }
 
-    const textToToken = createMap({
+    const textToToken = createMapFromTemplate({
         "abstract": SyntaxKind.AbstractKeyword,
         "any": SyntaxKind.AnyKeyword,
         "as": SyntaxKind.AsKeyword,
@@ -98,6 +98,7 @@ namespace ts {
         "new": SyntaxKind.NewKeyword,
         "null": SyntaxKind.NullKeyword,
         "number": SyntaxKind.NumberKeyword,
+        "object": SyntaxKind.ObjectKeyword,
         "package": SyntaxKind.PackageKeyword,
         "private": SyntaxKind.PrivateKeyword,
         "protected": SyntaxKind.ProtectedKeyword,
@@ -275,9 +276,9 @@ namespace ts {
 
     function makeReverseMap(source: Map<number>): string[] {
         const result: string[] = [];
-        for (const name in source) {
-            result[source[name]] = name;
-        }
+        source.forEach((value, name) => {
+            result[value] = name;
+        });
         return result;
     }
 
@@ -289,7 +290,7 @@ namespace ts {
 
     /* @internal */
     export function stringToToken(s: string): SyntaxKind {
-        return textToToken[s];
+        return textToToken.get(s);
     }
 
     /* @internal */
@@ -362,8 +363,6 @@ namespace ts {
     export function getLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter {
         return computeLineAndCharacterOfPosition(getLineStarts(sourceFile), position);
     }
-
-    const hasOwnProperty = Object.prototype.hasOwnProperty;
 
     export function isWhiteSpace(ch: number): boolean {
         return isWhiteSpaceSingleLine(ch) || isLineBreak(ch);
@@ -531,7 +530,7 @@ namespace ts {
             const ch = text.charCodeAt(pos);
 
             if ((pos + mergeConflictMarkerLength) < text.length) {
-                for (let i = 0, n = mergeConflictMarkerLength; i < n; i++) {
+                for (let i = 0; i < mergeConflictMarkerLength; i++) {
                     if (text.charCodeAt(pos + i) !== ch) {
                         return false;
                     }
@@ -643,7 +642,7 @@ namespace ts {
                     pos++;
                     continue;
                 case CharacterCodes.slash:
-                    let nextChar = text.charCodeAt(pos + 1);
+                    const nextChar = text.charCodeAt(pos + 1);
                     let hasTrailingNewLine = false;
                     if (nextChar === CharacterCodes.slash || nextChar === CharacterCodes.asterisk) {
                         const kind = nextChar === CharacterCodes.slash ? SyntaxKind.SingleLineCommentTrivia : SyntaxKind.MultiLineCommentTrivia;
@@ -733,11 +732,11 @@ namespace ts {
         return comments;
     }
 
-    export function getLeadingCommentRanges(text: string, pos: number): CommentRange[] {
+    export function getLeadingCommentRanges(text: string, pos: number): CommentRange[] | undefined {
         return reduceEachLeadingCommentRange(text, pos, appendCommentRange, undefined, undefined);
     }
 
-    export function getTrailingCommentRanges(text: string, pos: number): CommentRange[] {
+    export function getTrailingCommentRanges(text: string, pos: number): CommentRange[] | undefined {
         return reduceEachTrailingCommentRange(text, pos, appendCommentRange, undefined, undefined);
     }
 
@@ -766,7 +765,7 @@ namespace ts {
             return false;
         }
 
-        for (let i = 1, n = name.length; i < n; i++) {
+        for (let i = 1; i < name.length; i++) {
             if (!isIdentifierPart(name.charCodeAt(i), languageVersion)) {
                 return false;
             }
@@ -1183,8 +1182,11 @@ namespace ts {
             const len = tokenValue.length;
             if (len >= 2 && len <= 11) {
                 const ch = tokenValue.charCodeAt(0);
-                if (ch >= CharacterCodes.a && ch <= CharacterCodes.z && hasOwnProperty.call(textToToken, tokenValue)) {
-                    return token = textToToken[tokenValue];
+                if (ch >= CharacterCodes.a && ch <= CharacterCodes.z) {
+                    token = textToToken.get(tokenValue);
+                    if (token !== undefined) {
+                        return token;
+                    }
                 }
             }
             return token = SyntaxKind.Identifier;
@@ -1563,7 +1565,7 @@ namespace ts {
                         pos++;
                         return token = SyntaxKind.AtToken;
                     case CharacterCodes.backslash:
-                        let cookedChar = peekUnicodeEscape();
+                        const cookedChar = peekUnicodeEscape();
                         if (cookedChar >= 0 && isIdentifierStart(cookedChar, languageVersion)) {
                             pos += 6;
                             tokenValue = String.fromCharCode(cookedChar) + scanIdentifierParts();

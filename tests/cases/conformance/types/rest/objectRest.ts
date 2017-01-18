@@ -29,8 +29,15 @@ class Removable {
     removed: string;
     remainder: string;
 }
+interface I {
+    m(): void;
+    removed: string;
+    remainder: string;
+}
 var removable = new Removable();
 var { removed, ...removableRest } = removable;
+var i: I = removable;
+var { removed, ...removableRest2 } = i;
 
 let computed = 'b';
 let computed2 = 'a';

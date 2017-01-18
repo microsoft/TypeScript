@@ -1,4 +1,4 @@
-/// <reference path="visitor.ts" />
+﻿/// <reference path="visitor.ts" />
 /// <reference path="transformers/ts.ts" />
 /// <reference path="transformers/jsx.ts" />
 /// <reference path="transformers/esnext.ts" />
@@ -13,14 +13,16 @@
 
 /* @internal */
 namespace ts {
-    const moduleTransformerMap = createMap<Transformer>({
-        [ModuleKind.ES2015]: transformES2015Module,
-        [ModuleKind.System]: transformSystemModule,
-        [ModuleKind.AMD]: transformModule,
-        [ModuleKind.CommonJS]: transformModule,
-        [ModuleKind.UMD]: transformModule,
-        [ModuleKind.None]: transformModule,
-    });
+    function getModuleTransformer(moduleKind: ModuleKind): Transformer {
+        switch (moduleKind) {
+            case ModuleKind.ES2015:
+                return transformES2015Module;
+            case ModuleKind.System:
+                return transformSystemModule;
+            default:
+                return transformModule;
+        }
+    }
 
     const enum SyntaxKindFeatureFlags {
         Substitution = 1 << 0,
@@ -56,7 +58,7 @@ namespace ts {
             transformers.push(transformGenerators);
         }
 
-        transformers.push(moduleTransformerMap[moduleKind] || moduleTransformerMap[ModuleKind.None]);
+        transformers.push(getModuleTransformer(moduleKind));
 
         // The ES5 transformer is last so that it can substitute expressions like `exports.default`
         // for ES3.

@@ -202,15 +202,14 @@ goTo.marker("4");
 verify.referencesAre([]);
 
 const rangesByText = test.rangesByText();
-for (const text in rangesByText) {
-    const ranges = rangesByText[text];
+rangesByText.forEach((ranges, text) => {
     if (text === "globalVar") {
         verify.rangesReferenceEachOther(ranges.filter(isShadow));
         verify.rangesReferenceEachOther(ranges.filter(r => !isShadow(r)));
     } else {
         verify.rangesReferenceEachOther(ranges);
     }
-}
+});
 
 function isShadow(r) {
     return r.marker && r.marker.data && r.marker.data.shadow;

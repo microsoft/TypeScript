@@ -11,5 +11,5 @@
 goTo.marker();
 edit.insert('.');
 
-verify.memberListContains('charAt');
+verify.completionListContains('charAt');
 

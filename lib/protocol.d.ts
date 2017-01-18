@@ -680,9 +680,13 @@ declare namespace ts.server.protocol {
          */
         options: ExternalProjectCompilerOptions;
         /**
-         * Explicitly specified typing options for the project
+         * @deprecated typingOptions. Use typeAcquisition instead
          */
-        typingOptions?: TypingOptions;
+        typingOptions?: TypeAcquisition;
+        /**
+         * Explicitly specified type acquisition for the project
+         */
+        typeAcquisition?: TypeAcquisition;
     }
     interface CompileOnSaveMixin {
         /**
@@ -707,6 +711,10 @@ declare namespace ts.server.protocol {
          * List of removed files
          */
         removed: string[];
+        /**
+         * List of updated files
+         */
+        updated: string[];
     }
     /**
       * Information found in a configure request.
@@ -725,6 +733,10 @@ declare namespace ts.server.protocol {
          * The format options to use during formatting and other code editing features.
          */
         formatOptions?: FormatCodeSettings;
+        /**
+         * The host's additional supported file extensions
+         */
+        extraFileExtensions?: FileExtensionInfo[];
     }
     /**
       *  Configure request; value of command field is "configure".  Specifies
@@ -1400,6 +1412,25 @@ declare namespace ts.server.protocol {
         body?: ConfigFileDiagnosticEventBody;
         event: "configFileDiag";
     }
+    type ProjectLanguageServiceStateEventName = "projectLanguageServiceState";
+    interface ProjectLanguageServiceStateEvent extends Event {
+        event: ProjectLanguageServiceStateEventName;
+        body?: ProjectLanguageServiceStateEventBody;
+    }
+    interface ProjectLanguageServiceStateEventBody {
+        /**
+         * Project name that has changes in the state of language service.
+         * For configured projects this will be the config file path.
+         * For external projects this will be the name of the projects specified when project was open.
+         * For inferred projects this event is not raised.
+         */
+        projectName: string;
+        /**
+         * True if language service state switched from disabled to enabled
+         * and false otherwise.
+         */
+        languageServiceEnabled: boolean;
+    }
     /**
       * Arguments for reload request.
       */
@@ -1634,6 +1665,38 @@ declare namespace ts.server.protocol {
          * true if install request succeeded, otherwise - false
          */
         installSuccess: boolean;
+        /**
+         * version of typings installer
+         */
+        typingsInstallerVersion: string;
+    }
+    type BeginInstallTypesEventName = "beginInstallTypes";
+    type EndInstallTypesEventName = "endInstallTypes";
+    interface BeginInstallTypesEvent extends Event {
+        event: BeginInstallTypesEventName;
+        body: BeginInstallTypesEventBody;
+    }
+    interface EndInstallTypesEvent extends Event {
+        event: EndInstallTypesEventName;
+        body: EndInstallTypesEventBody;
+    }
+    interface InstallTypesEventBody {
+        /**
+         * correlation id to match begin and end events
+         */
+        eventId: number;
+        /**
+         * list of packages to install
+         */
+        packages: ReadonlyArray<string>;
+    }
+    interface BeginInstallTypesEventBody extends InstallTypesEventBody {
+    }
+    interface EndInstallTypesEventBody extends InstallTypesEventBody {
+        /**
+         * true if installation succeeded, otherwise false
+         */
+        success: boolean;
     }
     interface NavBarResponse extends Response {
         body?: NavigationBarItem[];
@@ -1659,12 +1722,14 @@ declare namespace ts.server.protocol {
         insertSpaceAfterCommaDelimiter?: boolean;
         insertSpaceAfterSemicolonInForStatements?: boolean;
         insertSpaceBeforeAndAfterBinaryOperators?: boolean;
+        insertSpaceAfterConstructor?: boolean;
         insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
         insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
+        insertSpaceBeforeFunctionParenthesis?: boolean;
         placeOpenBraceOnNewLineForFunctions?: boolean;
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
     }
@@ -1783,11 +1848,18 @@ declare namespace ts.server.protocol {
         position: number;
     }
 
-    interface TypingOptions {
+    interface TypeAcquisition {
         enableAutoDiscovery?: boolean;
+        enable?: boolean;
         include?: string[];
         exclude?: string[];
         [option: string]: string[] | boolean | undefined;
+    }
+
+    interface FileExtensionInfo {
+        extension: string;
+        scriptKind: ScriptKind;
+        isMixedContent: boolean;
     }
 
     interface MapLike<T> {

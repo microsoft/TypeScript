@@ -1,6 +1,7 @@
 tests/cases/compiler/widenedTypes.ts(2,1): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
-tests/cases/compiler/widenedTypes.ts(6,7): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
-tests/cases/compiler/widenedTypes.ts(8,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+tests/cases/compiler/widenedTypes.ts(5,1): error TS2531: Object is possibly 'null'.
+tests/cases/compiler/widenedTypes.ts(6,7): error TS2531: Object is possibly 'null'.
+tests/cases/compiler/widenedTypes.ts(8,15): error TS2531: Object is possibly 'null'.
 tests/cases/compiler/widenedTypes.ts(10,14): error TS2695: Left side of comma operator is unused and has no side effects.
 tests/cases/compiler/widenedTypes.ts(11,1): error TS2322: Type '""' is not assignable to type 'number'.
 tests/cases/compiler/widenedTypes.ts(18,1): error TS2322: Type '""' is not assignable to type 'number'.
@@ -11,7 +12,7 @@ tests/cases/compiler/widenedTypes.ts(24,5): error TS2322: Type '{ x: number; y: 
     Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/widenedTypes.ts (8 errors) ====
+==== tests/cases/compiler/widenedTypes.ts (9 errors) ====
     
     null instanceof (() => { });
     ~~~~
@@ -19,13 +20,15 @@ tests/cases/compiler/widenedTypes.ts(24,5): error TS2322: Type '{ x: number; y: 
     ({}) instanceof null; // Ok because null is a subtype of function
     
     null in {};
+    ~~~~
+!!! error TS2531: Object is possibly 'null'.
     "" in null;
           ~~~~
-!!! error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+!!! error TS2531: Object is possibly 'null'.
     
     for (var a in null) { }
                   ~~~~
-!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+!!! error TS2531: Object is possibly 'null'.
     
     var t = [3, (3, null)];
                  ~
