@@ -1,4 +1,4 @@
-﻿/// <reference path="moduleNameResolver.ts"/>
+/// <reference path="moduleNameResolver.ts"/>
 /// <reference path="binder.ts"/>
 
 /* @internal */
@@ -11784,7 +11784,7 @@ namespace ts {
        }
 
         function isValidSpreadType(type: Type): boolean {
-            return !!(type.flags & (TypeFlags.Any | TypeFlags.Null | TypeFlags.Undefined) ||
+            return !!(type.flags & (TypeFlags.Any | TypeFlags.Null | TypeFlags.Undefined | TypeFlags.NonPrimitive) ||
                 type.flags & TypeFlags.Object && !isGenericMappedType(type) ||
                 type.flags & TypeFlags.UnionOrIntersection && !forEach((<UnionOrIntersectionType>type).types, t => !isValidSpreadType(t)));
         }
