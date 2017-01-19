@@ -15,7 +15,7 @@
 ////     propString: "hell"
 ////     /*pt2*/optional?: boolean
 //// }
-//// /*opt*/declare function Opt(attributes: OptionPropBag): JSX.Element;
+//// declare function /*opt*/Opt(attributes: OptionPropBag): JSX.Element;
 //// let opt = <O/*one*/pt />;
 //// let opt1 = <Op/*two*/t pr/*p1*/opx={100} />;
 //// let opt2 = <Op/*three*/t propx={100} opt/*p2*/ional />;

@@ -156,13 +156,13 @@ const b4 = <MainButton {...obj1} />;  // any; just pick the first overload
 >b4 : JSX.Element
 ><MainButton {...obj1} /> : JSX.Element
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->obj1 : undefined
+>obj1 : any
 
 const b5 = <MainButton {...obj1} to="/to/somewhere" />;  // should pick the second overload
 >b5 : JSX.Element
 ><MainButton {...obj1} to="/to/somewhere" /> : JSX.Element
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->obj1 : undefined
+>obj1 : any
 >to : string
 
 const b6 = <MainButton {...obj2} />;
@@ -184,11 +184,10 @@ const b7 = <MainButton {...{onClick: () => { console.log("hi") }}} />;
 >log : (message?: any, ...optionalParams: any[]) => void
 >"hi" : "hi"
 
-const b8 = <MainButton {...obj} {...{onClick() {}}} />;  // OK; method declaration get discarded
+const b8 = <MainButton {...{onClick() {}}} />;  // OK; method declaration get retained (See GitHub #13365)
 >b8 : JSX.Element
-><MainButton {...obj} {...{onClick() {}}} /> : JSX.Element
+><MainButton {...{onClick() {}}} /> : JSX.Element
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->obj : { children: string; to: string; }
 >{onClick() {}} : { onClick(): void; }
 >onClick : () => void
 

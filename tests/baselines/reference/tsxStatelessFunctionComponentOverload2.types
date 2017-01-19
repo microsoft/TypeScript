@@ -105,7 +105,7 @@ const c7 = <OneThing {...defaultObj} yy {...obj} />;  // No error. should pick s
 >c7 : JSX.Element
 ><OneThing {...defaultObj} yy {...obj} /> : JSX.Element
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
->defaultObj : undefined
+>defaultObj : any
 >yy : true
 >obj : { yy: number; yy1: string; }
 

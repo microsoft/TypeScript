@@ -6,15 +6,12 @@ tests/cases/conformance/jsx/file.tsx(51,24): error TS2322: Type '{ onClick: () =
   Property 'onClick' does not exist on type 'IntrinsicAttributes & HyphenProps'.
 tests/cases/conformance/jsx/file.tsx(52,24): error TS2322: Type '{ onClick: (k: any) => void; to: string; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
   Property 'onClick' does not exist on type 'IntrinsicAttributes & HyphenProps'.
-tests/cases/conformance/jsx/file.tsx(54,24): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
-  Type '{}' is not assignable to type 'HyphenProps'.
-    Property '"data-format"' is missing in type '{}'.
-tests/cases/conformance/jsx/file.tsx(55,24): error TS2322: Type '{ children: 10; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
-  Type '{ children: 10; }' is not assignable to type 'HyphenProps'.
-    Property '"data-format"' is missing in type '{ children: 10; }'.
-tests/cases/conformance/jsx/file.tsx(56,24): error TS2322: Type '{ children: "hello"; className: true; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
-  Type '{ children: "hello"; className: true; }' is not assignable to type 'HyphenProps'.
-    Property '"data-format"' is missing in type '{ children: "hello"; className: true; }'.
+tests/cases/conformance/jsx/file.tsx(54,24): error TS2322: Type '{ to: string; onClick(e: any): void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
+  Property 'to' does not exist on type 'IntrinsicAttributes & HyphenProps'.
+tests/cases/conformance/jsx/file.tsx(55,24): error TS2322: Type '{ children: 10; onClick(e: any): void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
+  Property 'onClick' does not exist on type 'IntrinsicAttributes & HyphenProps'.
+tests/cases/conformance/jsx/file.tsx(56,24): error TS2322: Type '{ children: "hello"; className: true; onClick(e: any): void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
+  Property 'onClick' does not exist on type 'IntrinsicAttributes & HyphenProps'.
 tests/cases/conformance/jsx/file.tsx(57,24): error TS2322: Type '{ data-format: true; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
   Type '{ data-format: true; }' is not assignable to type 'HyphenProps'.
     Types of property '"data-format"' are incompatible.
@@ -86,23 +83,20 @@ tests/cases/conformance/jsx/file.tsx(57,24): error TS2322: Type '{ data-format: 
                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '{ onClick: (k: any) => void; to: string; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
 !!! error TS2322:   Property 'onClick' does not exist on type 'IntrinsicAttributes & HyphenProps'.
-    const b4 = <MainButton {...obj3} to />;  // Shoudld erro because Incorrect type; but attributes are any so everything is allowed
-    const b5 = <MainButton {...{ onclick(){} }} />;  // Spread doesn't retain method declaration
-                           ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
-!!! error TS2322:   Type '{}' is not assignable to type 'HyphenProps'.
-!!! error TS2322:     Property '"data-format"' is missing in type '{}'.
-    const b6 = <MainButton {...{ onclick(){} }} children={10} />;  // incorrect type for optional attribute
-                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ children: 10; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
-!!! error TS2322:   Type '{ children: 10; }' is not assignable to type 'HyphenProps'.
-!!! error TS2322:     Property '"data-format"' is missing in type '{ children: 10; }'.
-    const b7 = <MainButton {...{ onclick(){} }} children="hello" className />;  // incorrect type for optional attribute
-                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ children: "hello"; className: true; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
-!!! error TS2322:   Type '{ children: "hello"; className: true; }' is not assignable to type 'HyphenProps'.
-!!! error TS2322:     Property '"data-format"' is missing in type '{ children: "hello"; className: true; }'.
-    const b8 = <MainButton data-format />;  // incorrect type for specified hyphanted name
+    const b4 = <MainButton {...obj3} to />;  // Should error because Incorrect type; but attributes are any so everything is allowed
+    const b5 = <MainButton {...{ onClick(e: any) { } }} {...obj0} />;  // Spread retain method declaration (see GitHub #13365), so now there is an extra attributes
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ to: string; onClick(e: any): void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
+!!! error TS2322:   Property 'to' does not exist on type 'IntrinsicAttributes & HyphenProps'.
+    const b6 = <MainButton {...{ onClick(e: any){} }} children={10} />;  // incorrect type for optional attribute
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ children: 10; onClick(e: any): void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
+!!! error TS2322:   Property 'onClick' does not exist on type 'IntrinsicAttributes & HyphenProps'.
+    const b7 = <MainButton {...{ onClick(e: any){} }} children="hello" className />;  // incorrect type for optional attribute
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ children: "hello"; className: true; onClick(e: any): void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
+!!! error TS2322:   Property 'onClick' does not exist on type 'IntrinsicAttributes & HyphenProps'.
+    const b8 = <MainButton data-format />;  // incorrect type for specified hyphanated name
                            ~~~~~~~~~~~
 !!! error TS2322: Type '{ data-format: true; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
 !!! error TS2322:   Type '{ data-format: true; }' is not assignable to type 'HyphenProps'.

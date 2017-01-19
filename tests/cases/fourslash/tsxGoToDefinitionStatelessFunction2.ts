@@ -20,9 +20,9 @@
 //// interface LinkProps extends ClickableProps {
 ////     goTo: string;
 //// }
-//// /*firstSource*/declare function MainButton(buttonProps: ButtonProps): JSX.Element;
-//// /*secondSource*/declare function MainButton(linkProps: LinkProps): JSX.Element;
-//// /*thirdSource*/declare function MainButton(props: ButtonProps | LinkProps): JSX.Element;
+//// declare function /*firstSource*/MainButton(buttonProps: ButtonProps): JSX.Element;
+//// declare function /*secondSource*/MainButton(linkProps: LinkProps): JSX.Element;
+//// declare function /*thirdSource*/MainButton(props: ButtonProps | LinkProps): JSX.Element;
 //// let opt = <Main/*firstTarget*/Button />;
 //// let opt = <Main/*secondTarget*/Button children="chidlren" />;
 //// let opt = <Main/*thirdTarget*/Button onClick={()=>{}} />;

@@ -51,11 +51,11 @@ const b0 = <MainButton to='/some/path' onClick={(e)=>{}}>GO</MainButton>;  // ex
 const b1 = <MainButton onClick={(e: any)=> {}} {...obj0}>Hello world</MainButton>;  // extra property;
 const b2 = <MainButton {...{to: "10000"}} {...obj2} />;  // extra property
 const b3 = <MainButton {...{to: "10000"}} {...{onClick: (k) => {}}} />;  // extra property
-const b4 = <MainButton {...obj3} to />;  // Shoudld erro because Incorrect type; but attributes are any so everything is allowed
-const b5 = <MainButton {...{ onclick(){} }} />;  // Spread doesn't retain method declaration
-const b6 = <MainButton {...{ onclick(){} }} children={10} />;  // incorrect type for optional attribute
-const b7 = <MainButton {...{ onclick(){} }} children="hello" className />;  // incorrect type for optional attribute
-const b8 = <MainButton data-format />;  // incorrect type for specified hyphanted name
+const b4 = <MainButton {...obj3} to />;  // Should error because Incorrect type; but attributes are any so everything is allowed
+const b5 = <MainButton {...{ onClick(e: any) { } }} {...obj0} />;  // Spread retain method declaration (see GitHub #13365), so now there is an extra attributes
+const b6 = <MainButton {...{ onClick(e: any){} }} children={10} />;  // incorrect type for optional attribute
+const b7 = <MainButton {...{ onClick(e: any){} }} children="hello" className />;  // incorrect type for optional attribute
+const b8 = <MainButton data-format />;  // incorrect type for specified hyphanated name
 
 //// [file.jsx]
 define(["require", "exports", "react"], function (require, exports, React) {
@@ -84,9 +84,9 @@ define(["require", "exports", "react"], function (require, exports, React) {
     var b1 = <MainButton onClick={function (e) { }} {...obj0}>Hello world</MainButton>; // extra property;
     var b2 = <MainButton {...{ to: "10000" }} {...obj2}/>; // extra property
     var b3 = <MainButton {...{ to: "10000" }} {...{ onClick: function (k) { } }}/>; // extra property
-    var b4 = <MainButton {...obj3} to/>; // Shoudld erro because Incorrect type; but attributes are any so everything is allowed
-    var b5 = <MainButton {...{ onclick: function () { } }}/>; // Spread doesn't retain method declaration
-    var b6 = <MainButton {...{ onclick: function () { } }} children={10}/>; // incorrect type for optional attribute
-    var b7 = <MainButton {...{ onclick: function () { } }} children="hello" className/>; // incorrect type for optional attribute
-    var b8 = <MainButton data-format/>; // incorrect type for specified hyphanted name
+    var b4 = <MainButton {...obj3} to/>; // Should error because Incorrect type; but attributes are any so everything is allowed
+    var b5 = <MainButton {...{ onClick: function (e) { } }} {...obj0}/>; // Spread retain method declaration (see GitHub #13365), so now there is an extra attributes
+    var b6 = <MainButton {...{ onClick: function (e) { } }} children={10}/>; // incorrect type for optional attribute
+    var b7 = <MainButton {...{ onClick: function (e) { } }} children="hello" className/>; // incorrect type for optional attribute
+    var b8 = <MainButton data-format/>; // incorrect type for specified hyphanated name
 });

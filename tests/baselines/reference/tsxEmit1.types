@@ -60,8 +60,8 @@ var selfClosed7 = <div x={p} y='p' />;
 >selfClosed7 : JSX.Element
 ><div x={p} y='p' /> : JSX.Element
 >div : any
->x : undefined
->p : undefined
+>x : any
+>p : any
 >y : string
 
 var openClosed1 = <div></div>;
@@ -82,7 +82,7 @@ var openClosed3 = <div n='m'>{p}</div>;
 ><div n='m'>{p}</div> : JSX.Element
 >div : any
 >n : string
->p : undefined
+>p : any
 >div : any
 
 var openClosed4 = <div n='m'>{p < p}</div>;

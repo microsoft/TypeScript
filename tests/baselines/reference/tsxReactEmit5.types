@@ -34,3 +34,4 @@ var spread1 = <div x='' {...foo} y='' />;
 >x : string
 >foo : any
 >y : string
+

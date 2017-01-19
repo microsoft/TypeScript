@@ -53,7 +53,7 @@ const b4 = <MainButton {...obj1} />;  // any; just pick the first overload
 const b5 = <MainButton {...obj1} to="/to/somewhere" />;  // should pick the second overload
 const b6 = <MainButton {...obj2} />;
 const b7 = <MainButton {...{onClick: () => { console.log("hi") }}} />;
-const b8 = <MainButton {...obj} {...{onClick() {}}} />;  // OK; method declaration get discarded
+const b8 = <MainButton {...{onClick() {}}} />;  // OK; method declaration get retained (See GitHub #13365)
 const b9 = <MainButton to='/some/path' extra-prop>GO</MainButton>;
 const b10 = <MainButton to='/some/path' children="hi" >GO</MainButton>;
 const b11 = <MainButton onClick={(e) => {}} className="hello" data-format>Hello world</MainButton>;
