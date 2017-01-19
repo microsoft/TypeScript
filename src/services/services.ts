@@ -2007,7 +2007,7 @@ namespace ts {
         if (node.name.kind === SyntaxKind.ComputedPropertyName) {
             const nameExpression = (<ComputedPropertyName>node.name).expression;
             // treat computed property names where expression is string/numeric literal as just string/numeric literal
-            if (isStringOrNumericLiteral(nameExpression.kind)) {
+            if (isStringOrNumericLiteral(nameExpression)) {
                 return (<LiteralExpression>nameExpression).text;
             }
             return undefined;

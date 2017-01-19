@@ -11903,13 +11903,13 @@ namespace ts {
                     }
                     attributeSymbol.type = exprType;
                     attributeSymbol.target = member;
-                    attributesTable[attributeSymbol.name] = attributeSymbol;
+                    attributesTable.set(attributeSymbol.name, attributeSymbol);
                     attributesArray.push(attributeSymbol);
                 }
                 else {
                     Debug.assert(attributeDecl.kind === SyntaxKind.JsxSpreadAttribute);
                     if (attributesArray.length > 0) {
-                        spread = getSpreadType(spread, createJsxAttributesType(attributes.symbol, attributesTable), /*isFromObjectLiteral*/ true);
+                        spread = getSpreadType(spread, createJsxAttributesType(attributes.symbol, attributesTable));
                         attributesArray = [];
                         attributesTable = createMap<Symbol>();
                     }
@@ -11922,13 +11922,13 @@ namespace ts {
                     if (isTypeAny(widenExprType)) {
                         return undefined;
                     }
-                    spread = getSpreadType(spread, exprType, /*isFromObjectLiteral*/ false);
+                    spread = getSpreadType(spread, exprType);
                 }
             }
 
             if (spread !== emptyObjectType) {
                 if (attributesArray.length > 0) {
-                    spread = getSpreadType(spread, createJsxAttributesType(attributes.symbol, attributesTable), /*isFromObjectLiteral*/ true);
+                    spread = getSpreadType(spread, createJsxAttributesType(attributes.symbol, attributesTable));
                     attributesArray = [];
                     attributesTable = createMap<Symbol>();
                 }
@@ -11962,7 +11962,7 @@ namespace ts {
             if (symbolArray) {
                 const symbolTable = createMap<Symbol>();
                 forEach(symbolArray, (attr) => {
-                    symbolTable[attr.name] = attr;
+                    symbolTable.set(attr.name, attr);
                 });
                 argAttributesType = createJsxAttributesType(node.symbol, symbolTable);
             }
@@ -11986,7 +11986,7 @@ namespace ts {
             }
 
             const symbolArray = getJsxAttributesSymbolArrayFromAttributesProperty(openingLikeElement);
-            // sourceAttributesType is a type of an attributes properties.
+            // sourceAttributesType is a type of attributes properties.
             // i.e <div attr1={10} attr2="string" />
             //     attr1 and attr2 are treated as JSXAttributes attached in the JsxOpeningLikeElement as "attributes". They resolved to be sourceAttributesType.
             let sourceAttributesType = anyType as Type;
@@ -11996,7 +11996,7 @@ namespace ts {
                 const symbolTable = createMap<Symbol>();
                 forEach(symbolArray, (attr) => {
                     if (isUnhyphenatedJsxName(attr.name) || getPropertyOfType(targetAttributesType, attr.name)) {
-                        symbolTable[attr.name] = attr;
+                        symbolTable.set(attr.name, attr);
                         isSourceAttributesTypeEmpty = false;
                     }
                 });
@@ -12450,7 +12450,7 @@ namespace ts {
                 }
             }
 
-            checkJSXAttributesAssignableToTagnameAttributes(openingLikeElement);
+            checkJSXAttributesAssignableToTagnameAttributes(node);
         }
 
         function checkJsxExpression(node: JsxExpression) {

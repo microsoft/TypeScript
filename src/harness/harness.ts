@@ -1011,13 +1011,13 @@ namespace Harness {
                     const libFileName = "tests/lib/" + fileName;
 
                     if (scriptTarget <= ts.ScriptTarget.ES5) {
-                        if (!testLibFileNameSourceFileMap[libFileName]) {
-                            testLibFileNameSourceFileMap[libFileName] = createSourceFileAndAssertInvariants(libFileName, IO.readFile(libFileName), scriptTarget);
+                        if (!testLibFileNameSourceFileMap.get(libFileName)) {
+                            testLibFileNameSourceFileMap.set(libFileName, createSourceFileAndAssertInvariants(libFileName, IO.readFile(libFileName), scriptTarget));
                         }
                     }
                     else {
-                        if (!es6TestLibFileNameSourceFileMap[libFileName]) {
-                            es6TestLibFileNameSourceFileMap[libFileName] = createSourceFileAndAssertInvariants(libFileName, IO.readFile(libFileName), scriptTarget);
+                        if (!es6TestLibFileNameSourceFileMap.get(libFileName)) {
+                            es6TestLibFileNameSourceFileMap.set(libFileName, createSourceFileAndAssertInvariants(libFileName, IO.readFile(libFileName), scriptTarget))
                         }
                     }
                 }
@@ -1035,7 +1035,7 @@ namespace Harness {
                     return fourslashSourceFile;
                 }
                 else if (ts.startsWith(fileName, "tests/lib/")) {
-                    return scriptTarget <= ts.ScriptTarget.ES5 ? testLibFileNameSourceFileMap[fileName] : es6TestLibFileNameSourceFileMap[fileName];
+                    return scriptTarget <= ts.ScriptTarget.ES5 ? testLibFileNameSourceFileMap.get(fileName) : es6TestLibFileNameSourceFileMap.get(fileName);
                 }
                 else {
                     // Don't throw here -- the compiler might be looking for a test that actually doesn't exist as part of the TC
