@@ -33,6 +33,6 @@ var SomeClass = (function () {
 }());
 __decorate([
     Input,
-    __metadata("design:type", event_1.Event)
+    __metadata("design:type", Object)
 ], SomeClass.prototype, "event", void 0);
 exports.SomeClass = SomeClass;
