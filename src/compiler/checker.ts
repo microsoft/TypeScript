@@ -4841,7 +4841,7 @@ namespace ts {
             return t.flags & TypeFlags.StringLike ? globalStringType :
                 t.flags & TypeFlags.NumberLike ? globalNumberType :
                 t.flags & TypeFlags.BooleanLike ? globalBooleanType :
-                t.flags & TypeFlags.ESSymbol ? getGlobalESSymbolType(/*checked*/ languageVersion >= ScriptTarget.ES2015) :
+                t.flags & TypeFlags.ESSymbol ? getGlobalESSymbolType(/*reportErrors*/ languageVersion >= ScriptTarget.ES2015) :
                 t.flags & TypeFlags.NonPrimitive ? globalObjectType :
                 t;
         }
@@ -5740,19 +5740,19 @@ namespace ts {
         }
 
         function createAsyncIterableType(iteratedType: Type): Type {
-            return createTypeFromGenericGlobalType(getGlobalAsyncIterableType(/*checked*/ true), [iteratedType]);
+            return createTypeFromGenericGlobalType(getGlobalAsyncIterableType(/*reportErrors*/ true), [iteratedType]);
         }
 
         function createAsyncIterableIteratorType(iteratedType: Type): Type {
-            return createTypeFromGenericGlobalType(getGlobalAsyncIterableIteratorType(/*checked*/ true), [iteratedType]);
+            return createTypeFromGenericGlobalType(getGlobalAsyncIterableIteratorType(/*reportErrors*/ true), [iteratedType]);
         }
 
         function createIterableType(iteratedType: Type): Type {
-            return createTypeFromGenericGlobalType(getGlobalIterableType(/*checked*/ true), [iteratedType]);
+            return createTypeFromGenericGlobalType(getGlobalIterableType(/*reportErrors*/ true), [iteratedType]);
         }
 
         function createIterableIteratorType(iteratedType: Type): Type {
-            return createTypeFromGenericGlobalType(getGlobalIterableIteratorType(/*checked*/ true), [iteratedType]);
+            return createTypeFromGenericGlobalType(getGlobalIterableIteratorType(/*reportErrors*/ true), [iteratedType]);
         }
 
         function createArrayType(elementType: Type): ObjectType {
@@ -7350,7 +7350,7 @@ namespace ts {
                 if ((globalStringType === source && stringType === target) ||
                     (globalNumberType === source && numberType === target) ||
                     (globalBooleanType === source && booleanType === target) ||
-                    (getGlobalESSymbolType(/*checked*/ false) === source && esSymbolType === target)) {
+                    (getGlobalESSymbolType(/*reportErrors*/ false) === source && esSymbolType === target)) {
                         reportError(Diagnostics._0_is_a_primitive_but_1_is_a_wrapper_object_Prefer_using_0_when_possible, targetType, sourceType);
                 }
             }
@@ -12624,7 +12624,7 @@ namespace ts {
                 return false;
             }
 
-            const globalESSymbol = getGlobalESSymbolConstructorSymbol(/*checked*/ true);
+            const globalESSymbol = getGlobalESSymbolConstructorSymbol(/*reportErrors*/ true);
             if (!globalESSymbol) {
                 // Already errored when we tried to look up the symbol
                 return false;
@@ -14100,7 +14100,7 @@ namespace ts {
 
         function createPromiseType(promisedType: Type): Type {
             // creates a `Promise<T>` type where `T` is the promisedType argument
-            const globalPromiseType = getGlobalPromiseType(/*checked*/ true);
+            const globalPromiseType = getGlobalPromiseType(/*reportErrors*/ true);
             if (globalPromiseType !== emptyGenericType) {
                 // if the promised type is itself a promise, get the underlying type; otherwise, fallback to the promised type
                 promisedType = getAwaitedType(promisedType) || emptyObjectType;
@@ -16527,7 +16527,7 @@ namespace ts {
                 return typeAsPromise.promisedTypeOfPromise;
             }
 
-            if (isReferenceToType(promise, getGlobalPromiseType(/*checked*/ false))) {
+            if (isReferenceToType(promise, getGlobalPromiseType(/*reportErrors*/ false))) {
                 return typeAsPromise.promisedTypeOfPromise = (<GenericType>promise).typeArguments[0];
             }
 
@@ -16717,7 +16717,7 @@ namespace ts {
                 if (returnType === unknownType) {
                     return unknownType;
                 }
-                const globalPromiseType = getGlobalPromiseType(/*checked*/ true);
+                const globalPromiseType = getGlobalPromiseType(/*reportErrors*/ true);
                 if (globalPromiseType !== emptyGenericType && !isReferenceToType(returnType, globalPromiseType)) {
                     // The promise type was not a valid type reference to the global promise type, so we
                     // report an error and return the unknown type.
@@ -16746,7 +16746,7 @@ namespace ts {
                     return unknownType;
                 }
 
-                const globalPromiseConstructorLikeType = getGlobalPromiseConstructorLikeType(/*checked*/ true);
+                const globalPromiseConstructorLikeType = getGlobalPromiseConstructorLikeType(/*reportErrors*/ true);
                 if (globalPromiseConstructorLikeType === emptyObjectType) {
                     // If we couldn't resolve the global PromiseConstructorLike type we cannot verify
                     // compatibility with __awaiter.
@@ -17862,14 +17862,14 @@ namespace ts {
             // As an optimization, if the type is instantiated directly using the
             // globalAsyncIterableType (AsyncIterable<T>) or globalAsyncIterableIteratorType
             // (AsyncIterableIterator<T>), then just grab its type argument.
-            if (isReferenceToType(type, getGlobalAsyncIterableType(/*checked*/ false)) ||
-                isReferenceToType(type, getGlobalAsyncIterableIteratorType(/*checked*/ false))) {
+            if (isReferenceToType(type, getGlobalAsyncIterableType(/*reportErrors*/ false)) ||
+                isReferenceToType(type, getGlobalAsyncIterableIteratorType(/*reportErrors*/ false))) {
                 return typeAsAsyncIterable.iteratedTypeOfAsyncIterable = (<GenericType>type).typeArguments[0];
             }
 
             if (allowIterables) {
-                if (isReferenceToType(type, getGlobalIterableType(/*checked*/ false)) ||
-                    isReferenceToType(type, getGlobalIterableIteratorType(/*checked*/ false))) {
+                if (isReferenceToType(type, getGlobalIterableType(/*reportErrors*/ false)) ||
+                    isReferenceToType(type, getGlobalIterableIteratorType(/*reportErrors*/ false))) {
                     return typeAsAsyncIterable.iteratedTypeOfAsyncIterable = (<GenericType>type).typeArguments[0];
                 }
             }
@@ -17922,7 +17922,7 @@ namespace ts {
 
             // As an optimization, if the type is instantiated directly using the
             // globalAsyncIteratorType (AsyncIterator<number>), then just grab its type argument.
-            if (isReferenceToType(type, getGlobalAsyncIteratorType(/*checked*/ false))) {
+            if (isReferenceToType(type, getGlobalAsyncIteratorType(/*reportErrors*/ false))) {
                 return typeAsAsyncIterator.iteratedTypeOfAsyncIterator = (<GenericType>type).typeArguments[0];
             }
 
@@ -18002,8 +18002,8 @@ namespace ts {
             // As an optimization, if the type is instantiated directly using the
             // globalIterableType (Iterable<T>) or globalIterableIteratorType (IterableIterator<T>),
             // then just grab its type argument.
-            if (isReferenceToType(type, getGlobalIterableType(/*checked*/ false)) ||
-                isReferenceToType(type, getGlobalIterableIteratorType(/*checked*/ false))) {
+            if (isReferenceToType(type, getGlobalIterableType(/*reportErrors*/ false)) ||
+                isReferenceToType(type, getGlobalIterableIteratorType(/*reportErrors*/ false))) {
                 return typeAsIterable.iteratedTypeOfIterable = (<GenericType>type).typeArguments[0];
             }
 
@@ -18049,7 +18049,7 @@ namespace ts {
 
             // As an optimization, if the type is instantiated directly using the globalIteratorType (Iterator<number>),
             // then just grab its type argument.
-            if (isReferenceToType(type, getGlobalIteratorType(/*checked*/ false))) {
+            if (isReferenceToType(type, getGlobalIteratorType(/*reportErrors*/ false))) {
                 return typeAsIterator.iteratedTypeOfIterator = (<GenericType>type).typeArguments[0];
             }
 
@@ -20781,7 +20781,7 @@ namespace ts {
         function getTypeReferenceSerializationKind(typeName: EntityName, location?: Node): TypeReferenceSerializationKind {
             // Resolve the symbol as a value to ensure the type can be reached at runtime during emit.
             const valueSymbol = resolveEntityName(typeName, SymbolFlags.Value, /*ignoreErrors*/ true, /*dontResolveAlias*/ false, location);
-            const globalPromiseSymbol = getGlobalPromiseConstructorSymbol(/*checked*/ false);
+            const globalPromiseSymbol = getGlobalPromiseConstructorSymbol(/*reportErrors*/ false);
             if (globalPromiseSymbol && valueSymbol === globalPromiseSymbol) {
                 return TypeReferenceSerializationKind.Promise;
             }

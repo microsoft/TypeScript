@@ -2156,7 +2156,7 @@ namespace ts {
                 convertedLoopState.labels = createMap<string>();
             }
             const statement = unwrapInnermostStatmentOfLabel(node, convertedLoopState && recordLabel);
-            return isIterationStatement(statement, /*lookInLabeledStatements*/ false) && shouldConvertIterationStatementBody(statement)
+            return isIterationStatement(statement, /*lookInLabeledStatements*/ false)
                 ? visitIterationStatement(statement, /*outermostLabeledStatement*/ node)
                 : restoreEnclosingLabel(visitNode(statement, visitor, isStatement), node, convertedLoopState && resetLabel);
         }
