@@ -296,7 +296,7 @@ namespace ts.SignatureHelp {
 
             // findListItemInfo can return undefined if we are not in parent's argument list
             // or type argument list. This includes cases where the cursor is:
-            //   - To the right of the closing parenthesize, non-substitution template, or template tail.
+            //   - To the right of the closing parenthesis, non-substitution template, or template tail.
             //   - Between the type arguments and the arguments (greater than token)
             //   - On the target of the call (parent.func)
             //   - On the 'new' keyword in a 'new' expression
@@ -358,7 +358,7 @@ namespace ts.SignatureHelp {
             // This is not guarantee that JSX tag-name is resolved into stateless function component. (that is done in "getSignatureHelpItems")
             // i.e
             //      export function MainButton(props: ButtonProps, context: any): JSX.Element { ... }
-            //      <MainBuntton /*signatureHelp*/
+            //      <MainButton /*signatureHelp*/
             const attributeSpanStart = node.parent.attributes.getFullStart();
             const attributeSpanEnd = skipTrivia(sourceFile.text, node.parent.attributes.getEnd(), /*stopAfterLineBreak*/ false);
             return {

@@ -102,19 +102,19 @@ namespace ts.GoToDefinition {
         // object literal, lookup the property symbol in the contextual type, and use this for goto-definition.
         // For example
         //      interface Props{
-        //          /first*/prop1: number
+        //          /*first*/prop1: number
         //          prop2: boolean
         //      }
         //      function Foo(arg: Props) {}
         //      Foo( { pr/*1*/op1: 10, prop2: true })
-        const container = getContainingObjectLiteralElement(node);
-        if (container) {
-            const contextualType = typeChecker.getContextualType(node.parent.parent as Expression);
-            if (contextualType) {
-                let result: DefinitionInfo[] = [];
-                forEach(getPropertySymbolsFromContextualType(typeChecker, container), contextualSymbol => {
-                    result = result.concat(getDefinitionFromSymbol(typeChecker, contextualSymbol, node));
-                });
+        const element = getContainingObjectLiteralElement(node);
+        if (element) {
+            if (typeChecker.getContextualType(element.parent as Expression)) {
+                const result: DefinitionInfo[] = [];
+                const propertySymbols = getPropertySymbolsFromContextualType(typeChecker, element);
+                for (const propertySymbol of propertySymbols) {
+                    result.push(...getDefinitionFromSymbol(typeChecker, propertySymbol, node));
+                }
                 return result;
             }
         }

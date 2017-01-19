@@ -1990,9 +1990,10 @@ namespace ts {
         }
     }
 
-    function isObjectLiteralPropertyDeclaration(node: Node): node is ObjectLiteralElement  {
+    function isObjectLiteralElement(node: Node): node is ObjectLiteralElement  {
         switch (node.kind) {
             case SyntaxKind.JsxAttribute:
+            case SyntaxKind.JsxSpreadAttribute:
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
             case SyntaxKind.MethodDeclaration:
@@ -2001,18 +2002,6 @@ namespace ts {
                 return true;
         }
         return false;
-    }
-
-    function getNameFromObjectLiteralElement(node: ObjectLiteralElement) {
-        if (node.name.kind === SyntaxKind.ComputedPropertyName) {
-            const nameExpression = (<ComputedPropertyName>node.name).expression;
-            // treat computed property names where expression is string/numeric literal as just string/numeric literal
-            if (isStringOrNumericLiteral(nameExpression)) {
-                return (<LiteralExpression>nameExpression).text;
-            }
-            return undefined;
-        }
-        return (<Identifier | LiteralExpression>node.name).text;
     }
 
     /**
@@ -2024,11 +2013,11 @@ namespace ts {
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NumericLiteral:
                 if (node.parent.kind === SyntaxKind.ComputedPropertyName) {
-                    return isObjectLiteralPropertyDeclaration(node.parent.parent) ? node.parent.parent : undefined;
+                    return isObjectLiteralElement(node.parent.parent) ? node.parent.parent : undefined;
                 }
             // intentionally fall through
             case SyntaxKind.Identifier:
-                return isObjectLiteralPropertyDeclaration(node.parent) &&
+                return isObjectLiteralElement(node.parent) &&
                     (node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression || node.parent.parent.kind === SyntaxKind.JsxAttributes) &&
                     (<ObjectLiteralElement>node.parent).name === node ? node.parent as ObjectLiteralElement : undefined;
         }
@@ -2037,27 +2026,28 @@ namespace ts {
 
     /* @internal */
     export function getPropertySymbolsFromContextualType(typeChecker: TypeChecker, node: ObjectLiteralElement): Symbol[] {
-            const objectLiteral = <ObjectLiteralExpression>node.parent;
-            const contextualType = typeChecker.getContextualType(objectLiteral);
-            const name = getNameFromObjectLiteralElement(node);
-            if (name && contextualType) {
-                const result: Symbol[] = [];
-                const symbol = contextualType.getProperty(name);
-                if (symbol) {
-                    result.push(symbol);
-                }
-
-                if (contextualType.flags & TypeFlags.Union) {
-                    forEach((<UnionType>contextualType).types, t => {
-                        const symbol = t.getProperty(name);
-                        if (symbol) {
-                            result.push(symbol);
-                        }
-                    });
-                }
+        const objectLiteral = <ObjectLiteralExpression | JsxAttributes>node.parent;
+        const contextualType = typeChecker.getContextualType(objectLiteral);
+        const name = getTextOfPropertyName(node.name);
+        if (name && contextualType) {
+            const result: Symbol[] = [];
+            const symbol = contextualType.getProperty(name);
+            if (contextualType.flags & TypeFlags.Union) {
+                forEach((<UnionType>contextualType).types, t => {
+                    const symbol = t.getProperty(name);
+                    if (symbol) {
+                        result.push(symbol);
+                    }
+                });
                 return result;
             }
-            return undefined;
+
+            if (symbol) {
+                result.push(symbol);
+                return result;
+            }
+        }
+        return undefined;
     }
 
     function isArgumentOfElementAccessExpression(node: Node) {
