@@ -2948,7 +2948,9 @@
     export interface UnionOrIntersectionType extends Type {
         types: Type[];                    // Constituent types
         /* @internal */
-        resolvedProperties: SymbolTable;  // Cache of resolved properties
+        propertyCache: SymbolTable;       // Cache of resolved properties
+        /* @internal */
+        resolvedProperties: Symbol[];
         /* @internal */
         resolvedIndexType: IndexType;
         /* @internal */

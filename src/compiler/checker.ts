@@ -4754,28 +4754,26 @@ namespace ts {
         }
 
         function getPropertiesOfUnionOrIntersectionType(type: UnionOrIntersectionType): Symbol[] {
-            for (const current of type.types) {
-                for (const prop of getPropertiesOfType(current)) {
-                    getUnionOrIntersectionProperty(type, prop.name);
-                }
-                // The properties of a union type are those that are present in all constituent types, so
-                // we only need to check the properties of the first type
-                if (type.flags & TypeFlags.Union) {
-                    break;
-                }
-            }
-            const props = type.resolvedProperties;
-            if (props) {
-                const result: Symbol[] = [];
-                props.forEach(prop => {
-                    // We need to filter out partial properties in union types
-                    if (!(prop.flags & SymbolFlags.SyntheticProperty && (<TransientSymbol>prop).isPartial)) {
-                        result.push(prop);
+            if (!type.resolvedProperties) {
+                const members = createMap<Symbol>();
+                for (const current of type.types) {
+                    for (const prop of getPropertiesOfType(current)) {
+                        if (!members.has(prop.name)) {
+                            const combinedProp = getPropertyOfUnionOrIntersectionType(type, prop.name);
+                            if (combinedProp) {
+                                members.set(prop.name, combinedProp);
+                            }
+                        }
                     }
-                });
-                return result;
+                    // The properties of a union type are those that are present in all constituent types, so
+                    // we only need to check the properties of the first type
+                    if (type.flags & TypeFlags.Union) {
+                        break;
+                    }
+                }
+                type.resolvedProperties = getNamedMembers(members);
             }
-            return emptyArray;
+            return type.resolvedProperties;
         }
 
         function getPropertiesOfType(type: Type): Symbol[] {
@@ -4943,7 +4941,7 @@ namespace ts {
         // these partial properties when identifying discriminant properties, but otherwise they are filtered out
         // and do not appear to be present in the union type.
         function getUnionOrIntersectionProperty(type: UnionOrIntersectionType, name: string): Symbol {
-            const properties = type.resolvedProperties || (type.resolvedProperties = createMap<Symbol>());
+            const properties = type.propertyCache || (type.propertyCache = createMap<Symbol>());
             let property = properties.get(name);
             if (!property) {
                 property = createUnionOrIntersectionProperty(type, name);
