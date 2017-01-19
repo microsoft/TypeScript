@@ -16493,7 +16493,6 @@ namespace ts {
             //  }
             //
 
-            // TODO(rbuckton): Verify whether we need to call getApparentType. See checkNonThenableType in master
             const thenFunction = getTypeOfPropertyOfType(type, "then");
             const thenSignatures = thenFunction ? getSignaturesOfType(thenFunction, SignatureKind.Call) : emptyArray;
             if (thenSignatures.length > 0) {
@@ -16600,7 +16599,7 @@ namespace ts {
                 if (type.id === promisedType.id || indexOf(awaitedTypeStack, promisedType.id) >= 0) {
                     // Verify that we don't have a bad actor in the form of a promise whose
                     // promised type is the same as the promise type, or a mutually recursive
-                    // promise. If so, we returnundefined as we cannot guess the shape. If this
+                    // promise. If so, we return undefined as we cannot guess the shape. If this
                     // were the actual case in the JavaScript, this Promise would never resolve.
                     //
                     // An example of a bad actor with a singly-recursive promise type might
@@ -16664,15 +16663,14 @@ namespace ts {
             // of a runtime problem. If the user wants to return this value from an async
             // function, they would need to wrap it in some other value. If they want it to
             // be treated as a promise, they can cast to <any>.
-            const widenedType = getWidenedType(type);
-            if (isThenableType(widenedType)) {
+            if (isThenableType(type)) {
                 if (errorNode) {
                     error(errorNode, Diagnostics.Type_used_as_operand_to_await_or_the_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
                 }
                 return undefined;
             }
 
-            return typeAsAwaitable.awaitedTypeOfType = widenedType;
+            return typeAsAwaitable.awaitedTypeOfType = type;
         }
 
         /**
