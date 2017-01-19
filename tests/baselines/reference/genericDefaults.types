@@ -536,6 +536,22 @@ const i03c04 = (<i03<number, 1>>x).a;
 >x : any
 >a : [number, 1]
 
+interface i04 {}
+>i04 : i04<T, U>
+
+interface i04<T> {}
+>i04 : i04<T, U>
+>T : T
+
+interface i04<T = number> {}
+>i04 : i04<T, U>
+>T : T
+
+interface i04<T = number, U = string> {}
+>i04 : i04<T, U>
+>T : T
+>U : U
+
 interface Base01<T> { a: T; }
 >Base01 : Base01<T>
 >T : T

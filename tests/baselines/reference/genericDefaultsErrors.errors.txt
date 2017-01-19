@@ -93,38 +93,38 @@ tests/cases/compiler/genericDefaultsErrors.ts(42,15): error TS2707: Generic type
     ~~~~~~~~~~~~~~~~~
 !!! error TS2346: Supplied parameters do not match any signature of call target.
     
-    interface i00<T> { }
-    interface i00<T = number> { }
+    interface i00<T> { } // ok
+    interface i00<U = number> { } // error
               ~~~
 !!! error TS2428: All declarations of 'i00' must have identical type parameters.
     
-    interface i01<T = number> { }
-    interface i01<T = string> { }
+    interface i01<T = number> { } // ok
+    interface i01<T = string> { } // error
               ~~~
 !!! error TS2428: All declarations of 'i01' must have identical type parameters.
     
-    interface i02<T = T> { }
+    interface i02<T = T> { } // error
                       ~
 !!! error TS2706: Type parameter 'T' has a circular default.
-    interface i03<T = U, U = T> { }
+    interface i03<T = U, U = T> { } // error
                       ~
 !!! error TS2706: Type parameter 'T' has a circular default.
                              ~
 !!! error TS2706: Type parameter 'U' has a circular default.
-    interface i04<T = U, U> { }
+    interface i04<T = U, U> { } // error
                          ~
 !!! error TS2705: Required type parameters may not follow optional type parameters
-    interface i05<T extends string = number> { }
+    interface i05<T extends string = number> { } // error
                                      ~~~~~~
 !!! error TS2344: Type 'number' does not satisfy the constraint 'string'.
-    interface i06<T extends string, U extends number = T> { }
+    interface i06<T extends string, U extends number = T> { } // error
                                                        ~
 !!! error TS2344: Type 'T' does not satisfy the constraint 'number'.
 !!! error TS2344:   Type 'string' is not assignable to type 'number'.
-    interface i07<T, U extends number = T> { }
+    interface i07<T, U extends number = T> { } // error
                                         ~
 !!! error TS2344: Type 'T' does not satisfy the constraint 'number'.
-    interface i08<T, U extends T = number> { }
+    interface i08<T, U extends T = number> { } // error
                                    ~~~~~~
 !!! error TS2344: Type 'number' does not satisfy the constraint 'T'.
     

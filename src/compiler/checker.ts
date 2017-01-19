@@ -18403,16 +18403,110 @@ namespace ts {
             if (symbol.declarations.length === 1) {
                 return;
             }
-            let firstDecl: ClassLikeDeclaration | InterfaceDeclaration;
-            for (const declaration of symbol.declarations) {
-                if (declaration.kind === SyntaxKind.ClassDeclaration || declaration.kind === SyntaxKind.InterfaceDeclaration) {
-                    if (!firstDecl) {
-                        firstDecl = <ClassLikeDeclaration | InterfaceDeclaration>declaration;
-                    }
-                    else if (!areTypeParametersIdentical(firstDecl.typeParameters, node.typeParameters)) {
-                        error(node.name, Diagnostics.All_declarations_of_0_must_have_identical_type_parameters, node.name.text);
+
+            // Resolve the type parameters and minimum type argument count for all declarations
+            resolveTypeParametersOfClassOrInterface(symbol);
+
+            const { typeParameters, minTypeArgumentCount } = getSymbolLinks(symbol);
+            const maxTypeArgumentCount = typeParameters ? typeParameters.length : 0;
+            const numTypeParameters = node.typeParameters ? node.typeParameters.length : 0;
+
+            // If this declaration has too few or too many type parameters, we report an error
+            if (numTypeParameters < minTypeArgumentCount || numTypeParameters > maxTypeArgumentCount) {
+                error(node.name, Diagnostics.All_declarations_of_0_must_have_identical_type_parameters, node.name.text);
+                return;
+            }
+
+            for (let i = 0; i < numTypeParameters; i++) {
+                const source = node.typeParameters[i];
+                const target = typeParameters[i];
+
+                // If the type parameter node does not have the same name as the resolved type
+                // parameter at this position, we report an error.
+                if (source.name.text !== target.symbol.name) {
+                    error(node.name, Diagnostics.All_declarations_of_0_must_have_identical_type_parameters, node.name.text);
+                    return;
+                }
+
+                // If the type parameter node does not have an identical constraint as the resolved
+                // type parameter at this position, we report an error.
+                const sourceConstraint = source.constraint && getTypeFromTypeNode(source.constraint);
+                const targetConstraint = getConstraintFromTypeParameter(target);
+                if ((sourceConstraint || targetConstraint) &&
+                    (!sourceConstraint || !targetConstraint || !isTypeIdenticalTo(sourceConstraint, targetConstraint))) {
+                    error(node.name, Diagnostics.All_declarations_of_0_must_have_identical_type_parameters, node.name.text);
+                    return;
+                }
+
+                // If the type parameter node has a default and it is not identical to the default
+                // for the type parameter at this position, we report an error.
+                const sourceDefault = source.default && getTypeFromTypeNode(source.default);
+                const targetDefault = getDefaultFromTypeParameter(target);
+                if (sourceDefault && targetDefault && !isTypeIdenticalTo(sourceDefault, targetDefault)) {
+                    error(node.name, Diagnostics.All_declarations_of_0_must_have_identical_type_parameters, node.name.text);
+                    return;
+                }
+            }
+        }
+
+        function resolveTypeParametersOfClassOrInterface(symbol: Symbol) {
+            const links = getSymbolLinks(symbol);
+            if (!links.typeParameters) {
+                let typeParameters: TypeParameter[] | undefined;
+                let minTypeArgumentCount = -1;
+                let maxTypeArgumentCount = -1;
+                for (const declaration of symbol.declarations) {
+                    if (declaration.kind === SyntaxKind.ClassDeclaration || declaration.kind === SyntaxKind.InterfaceDeclaration) {
+                        const typeParameterNodes = (<ClassDeclaration | InterfaceDeclaration>declaration).typeParameters;
+                        const numTypeParameters = typeParameterNodes ? typeParameterNodes.length : 0;
+                        if (maxTypeArgumentCount === -1) {
+                            // For the first declaration, establish the initial maximum and
+                            // minimum type argument counts. These only change when we
+                            // encounter default type arguments.
+                            maxTypeArgumentCount = numTypeParameters;
+                            minTypeArgumentCount = numTypeParameters;
+                        }
+
+                        if (typeParameterNodes) {
+                            if (!typeParameters) {
+                                typeParameters = [];
+                            }
+
+                            for (let i = 0; i < typeParameterNodes.length; i++) {
+                                if (typeParameterNodes[i].default) {
+                                    // When we encounter a type parameter with a default, establish
+                                    // new minimum and maximum type arguments if necessary.
+                                    if (minTypeArgumentCount > i) {
+                                        minTypeArgumentCount = i;
+                                    }
+                                    if (maxTypeArgumentCount < i + 1) {
+                                        maxTypeArgumentCount = i + 1;
+                                    }
+                                }
+                                if (typeParameters.length <= i) {
+                                    // When we encounter a new type parameter at this position,
+                                    // get the declared type for the type parameter. If another
+                                    // declaration attempts to establish a type parameter with a
+                                    // different name or constraint than the first one we find,
+                                    // we will report an error when checking the type parameters.
+                                    typeParameters[i] = getDeclaredTypeOfTypeParameter(getSymbolOfNode(typeParameterNodes[i]));
+                                }
+                            }
+                        }
                     }
                 }
+                if (maxTypeArgumentCount === -1) {
+                    maxTypeArgumentCount = 0;
+                }
+                if (minTypeArgumentCount === -1) {
+                    minTypeArgumentCount = maxTypeArgumentCount;
+                }
+                if (typeParameters && typeParameters.length > maxTypeArgumentCount) {
+                    // Trim the type parameters to the maximum length
+                    typeParameters.length = maxTypeArgumentCount;
+                }
+                links.typeParameters = typeParameters || emptyArray;
+                links.minTypeArgumentCount = minTypeArgumentCount;
             }
         }
 
@@ -18652,36 +18746,6 @@ namespace ts {
 
         function isAccessor(kind: SyntaxKind): boolean {
             return kind === SyntaxKind.GetAccessor || kind === SyntaxKind.SetAccessor;
-        }
-
-        function areTypeParametersIdentical(list1: TypeParameterDeclaration[], list2: TypeParameterDeclaration[]) {
-            if (!list1 && !list2) {
-                return true;
-            }
-            if (!list1 || !list2 || list1.length !== list2.length) {
-                return false;
-            }
-            // TypeScript 1.0 spec (April 2014):
-            // When a generic interface has multiple declarations,  all declarations must have identical type parameter
-            // lists, i.e. identical type parameter names with identical constraints in identical order.
-            for (let i = 0; i < list1.length; i++) {
-                const tp1 = list1[i];
-                const tp2 = list2[i];
-                if (tp1.name.text !== tp2.name.text) {
-                    return false;
-                }
-                if (tp1.constraint || tp2.constraint) {
-                    if (!tp1.constraint || !tp2.constraint || !isTypeIdenticalTo(getTypeFromTypeNode(tp1.constraint), getTypeFromTypeNode(tp2.constraint))) {
-                        return false;
-                    }
-                }
-                if (tp1.default || tp2.default) {
-                    if (!tp1.default || !tp2.default || !isTypeIdenticalTo(getTypeFromTypeNode(tp1.default), getTypeFromTypeNode(tp2.default))) {
-                        return false;
-                    }
-                }
-            }
-            return true;
         }
 
         function checkInheritedPropertiesAreIdentical(type: InterfaceType, typeNode: Node): boolean {

@@ -21,19 +21,19 @@ f11<1, 2>(); // ok
 f11<1, 2, 3>(); // ok
 f11<1, 2, 3, 4>(); // error
 
-interface i00<T> { }
-interface i00<T = number> { }
+interface i00<T> { } // ok
+interface i00<U = number> { } // error
 
-interface i01<T = number> { }
-interface i01<T = string> { }
+interface i01<T = number> { } // ok
+interface i01<T = string> { } // error
 
-interface i02<T = T> { }
-interface i03<T = U, U = T> { }
-interface i04<T = U, U> { }
-interface i05<T extends string = number> { }
-interface i06<T extends string, U extends number = T> { }
-interface i07<T, U extends number = T> { }
-interface i08<T, U extends T = number> { }
+interface i02<T = T> { } // error
+interface i03<T = U, U = T> { } // error
+interface i04<T = U, U> { } // error
+interface i05<T extends string = number> { } // error
+interface i06<T extends string, U extends number = T> { } // error
+interface i07<T, U extends number = T> { } // error
+interface i08<T, U extends T = number> { } // error
 
 interface i09<T, U, V = number> { }
 type i09t00 = i09; // error
@@ -74,7 +74,7 @@ declare function f10<T = U, U = T & {
 declare function f11<T, U, V = number>(): void;
 interface i00<T> {
 }
-interface i00<T = number> {
+interface i00<U = number> {
 }
 interface i01<T = number> {
 }

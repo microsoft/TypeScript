@@ -86,6 +86,11 @@ const i03c02 = (<i03<number, number>>x).a;
 const i03c03 = (<i03<1, 1>>x).a;
 const i03c04 = (<i03<number, 1>>x).a;
 
+interface i04 {}
+interface i04<T> {}
+interface i04<T = number> {}
+interface i04<T = number, U = string> {}
+
 interface Base01<T> { a: T; }
 interface Base01Constructor { new <T = number>(a?: T): Base01<T>; }
 
@@ -293,6 +298,14 @@ declare const i03c01: [1, 1];
 declare const i03c02: [number, number];
 declare const i03c03: [1, 1];
 declare const i03c04: [number, 1];
+interface i04 {
+}
+interface i04<T> {
+}
+interface i04<T = number> {
+}
+interface i04<T = number, U = string> {
+}
 interface Base01<T> {
     a: T;
 }
