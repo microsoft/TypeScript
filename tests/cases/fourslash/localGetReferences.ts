@@ -3,7 +3,7 @@
 // @Filename: localGetReferences_1.ts
 ////// Comment Refence Test: g/*1*/lobalVar
 ////// References to a variable declared in global.
-////var [|globalVar|]: n/*2*/umber = 2;
+////var [|globalVar|]: number = 2;
 ////
 ////class fooCls {
 ////    // References to static variable declared in a class.
@@ -187,10 +187,6 @@
 
 // References to comment.
 goTo.marker("1");
-verify.referencesAre([]);
-
-// References to type.
-goTo.marker("2");
 verify.referencesAre([]);
 
 // References to unresolved symbol.

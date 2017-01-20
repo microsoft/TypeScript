@@ -495,7 +495,7 @@ namespace ts {
 
     export interface SymbolDisplayPart {
         text: string;
-        kind: string;
+        kind: string; // A ScriptElementKind
     }
 
     export interface QuickInfo {

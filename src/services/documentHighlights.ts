@@ -17,25 +17,11 @@ namespace ts.DocumentHighlights {
     }
 
     function getSemanticDocumentHighlights(node: Node, typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFilesToSearch: SourceFile[]): DocumentHighlights[] {
-        if (node.kind === SyntaxKind.Identifier ||
-            node.kind === SyntaxKind.ThisKeyword ||
-            node.kind === SyntaxKind.ThisType ||
-            node.kind === SyntaxKind.SuperKeyword ||
-            node.kind === SyntaxKind.StringLiteral ||
-            isLiteralNameOfPropertyDeclarationOrIndexAccess(node)) {
-
-            const referencedSymbols = FindAllReferences.getReferencedSymbolsForNode(typeChecker, cancellationToken, node, sourceFilesToSearch, /*findInStrings*/ false, /*findInComments*/ false, /*implementations*/false);
-            return convertReferencedSymbols(referencedSymbols);
-        }
-
-        return undefined;
+        const referencedSymbols = FindAllReferences.getReferencedSymbolsForNode(typeChecker, cancellationToken, node, sourceFilesToSearch, /*findInStrings*/false, /*findInComments*/false, /*implementations*/false);
+        return referencedSymbols && convertReferencedSymbols(referencedSymbols);
     }
 
     function convertReferencedSymbols(referencedSymbols: ReferencedSymbol[]): DocumentHighlights[] {
-        if (!referencedSymbols) {
-            return undefined;
-        }
-
         const fileNameToDocumentHighlights = createMap<DocumentHighlights>();
         const result: DocumentHighlights[] = [];
         for (const referencedSymbol of referencedSymbols) {
