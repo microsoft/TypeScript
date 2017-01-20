@@ -194,8 +194,9 @@ namespace ts {
             }
 
             const child = children[0];
-
-            return child.kind < SyntaxKind.FirstNode ? child : child.getFirstToken(sourceFile);
+            return child.kind < SyntaxKind.FirstNode || SyntaxKind.FirstJSDocNode <= child.kind && child.kind <= SyntaxKind.LastJSDocNode ?
+                child :
+                child.getFirstToken(sourceFile);
         }
 
         public getLastToken(sourceFile?: SourceFile): Node {
@@ -206,7 +207,9 @@ namespace ts {
                 return undefined;
             }
 
-            return child.kind < SyntaxKind.FirstNode ? child : child.getLastToken(sourceFile);
+            return child.kind < SyntaxKind.FirstNode || SyntaxKind.FirstJSDocNode <= child.kind && child.kind <= SyntaxKind.LastJSDocNode ?
+                child :
+                child.getLastToken(sourceFile);
         }
     }
 
