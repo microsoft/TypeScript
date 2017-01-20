@@ -4172,7 +4172,6 @@ namespace ts {
         }
 
         function getDeclaredTypeOfSymbol(symbol: Symbol): Type {
-            Debug.assert((symbol.flags & SymbolFlags.Instantiated) === 0);
             if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                 return getDeclaredTypeOfClassOrInterface(symbol);
             }

@@ -11,9 +11,4 @@
 ////let b = new [|B|]();
 ////b.test();
 
-let ranges = test.ranges()
-for (let range of ranges) {
-    goTo.file(range.fileName);
-    goTo.position(range.start);
-    verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ false);
-}
+verify.rangesAreRenameLocations();

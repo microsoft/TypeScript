@@ -372,8 +372,8 @@ namespace FourSlash {
         }
 
         // Entry points from fourslash.ts
-        public goToMarker(name = "") {
-            const marker = this.getMarkerByName(name);
+        public goToMarker(name: string | Marker = "") {
+            const marker = typeof name === "string" ? this.getMarkerByName(name) : name;
             if (this.activeFile.fileName !== marker.fileName) {
                 this.openFile(marker.fileName);
             }
@@ -382,8 +382,35 @@ namespace FourSlash {
             if (marker.position === -1 || marker.position > content.length) {
                 throw new Error(`Marker "${name}" has been invalidated by unrecoverable edits to the file.`);
             }
-            this.lastKnownMarker = name;
+            const mName = typeof name === "string" ? name : this.markerName(marker);
+            this.lastKnownMarker = mName;
             this.goToPosition(marker.position);
+        }
+
+        public goToEachMarker(action: () => void) {
+            const markers = this.getMarkers();
+            assert(markers.length);
+            for (const marker of markers) {
+                this.goToMarker(marker);
+                action();
+            }
+        }
+
+        public goToEachRange(action: () => void) {
+            const ranges = this.getRanges();
+            assert(ranges.length);
+            for (const range of ranges) {
+                this.goToRangeStart(range);
+                action();
+            }
+        }
+
+        private markerName(m: Marker): string {
+            return ts.forEachEntry(this.testData.markerPositions, (marker, name) => {
+                if (marker === m) {
+                    return name;
+                }
+            })!;
         }
 
         public goToPosition(pos: number) {
@@ -2365,6 +2392,21 @@ namespace FourSlash {
             return this.languageService.getDocumentHighlights(this.activeFile.fileName, this.currentCaretPosition, filesToSearch);
         }
 
+        public verifyRangesAreOccurrences(isWriteAccess?: boolean) {
+            const ranges = this.getRanges();
+            for (const r of ranges) {
+                this.goToRangeStart(r);
+                this.verifyOccurrencesAtPositionListCount(ranges.length);
+                for (const range of ranges) {
+                    this.verifyOccurrencesAtPositionListContains(range.fileName, range.start, range.end, isWriteAccess);
+                }
+            }
+        }
+
+        public verifyRangesAreRenameLocations(findInStrings: boolean, findInComments: boolean) {
+            this.goToEachRange(() => this.verifyRenameLocations(findInStrings, findInComments));
+        }
+
         public verifyRangesWithSameTextAreDocumentHighlights() {
             this.rangesByText().forEach(ranges => this.verifyRangesAreDocumentHighlights(ranges));
         }
@@ -3078,12 +3120,20 @@ namespace FourSlashInterface {
         // Moves the caret to the specified marker,
         // or the anonymous marker ('/**/') if no name
         // is given
-        public marker(name?: string) {
+        public marker(name?: string | FourSlash.Marker) {
             this.state.goToMarker(name);
+        }
+
+        public eachMarker(action: () => void) {
+            this.state.goToEachMarker(action);
         }
 
         public rangeStart(range: FourSlash.Range) {
             this.state.goToRangeStart(range);
+        }
+
+        public eachRange(action: () => void) {
+            this.state.goToEachRange(action);
         }
 
         public bof() {
@@ -3434,6 +3484,14 @@ namespace FourSlashInterface {
 
         public occurrencesAtPositionCount(expectedCount: number) {
             this.state.verifyOccurrencesAtPositionListCount(expectedCount);
+        }
+
+        public rangesAreOccurrences(isWriteAccess?: boolean) {
+            this.state.verifyRangesAreOccurrences(isWriteAccess);
+        }
+
+        public rangesAreRenameLocations(findInStrings = false, findInComments = false) {
+            this.state.verifyRangesAreRenameLocations(findInStrings, findInComments);
         }
 
         public rangesAreDocumentHighlights(ranges?: FourSlash.Range[]) {
