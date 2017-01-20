@@ -40,22 +40,18 @@ function myFunction(myType: MyType) {
 >x : 5
 >5 : 5
 
-        [1, 2, 3].forEach(function(j) {
->[1, 2, 3].forEach(function(j) {            use(x);        }) : void
+        [1, 2, 3].forEach(function(j) { use(x); })
+>[1, 2, 3].forEach(function(j) { use(x); }) : void
 >[1, 2, 3].forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
 >[1, 2, 3] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
 >forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->function(j) {            use(x);        } : (j: number) => void
+>function(j) { use(x); } : (j: number) => void
 >j : number
-
-            use(x);
 >use(x) : any
 >use : (s: any) => any
 >x : 5
-
-        })
     }
 }

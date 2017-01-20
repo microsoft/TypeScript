@@ -31,17 +31,13 @@ function myFunction(myType: MyType) {
 
         // create closure so that tsc will turn loop body into function
         const x = 5;
->x : Symbol(x, Decl(argumentsAsPropertyName.ts, 12, 13))
+>x : Symbol(x, Decl(argumentsAsPropertyName.ts, 11, 13))
 
-        [1, 2, 3].forEach(function(j) {
+        [1, 2, 3].forEach(function(j) { use(x); })
 >[1, 2, 3].forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
 >forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
->j : Symbol(j, Decl(argumentsAsPropertyName.ts, 13, 35))
-
-            use(x);
+>j : Symbol(j, Decl(argumentsAsPropertyName.ts, 12, 35))
 >use : Symbol(use, Decl(argumentsAsPropertyName.ts, 3, 1))
->x : Symbol(x, Decl(argumentsAsPropertyName.ts, 12, 13))
-
-        })
+>x : Symbol(x, Decl(argumentsAsPropertyName.ts, 11, 13))
     }
 }
