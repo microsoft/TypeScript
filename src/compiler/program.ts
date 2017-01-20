@@ -439,7 +439,7 @@ namespace ts {
 
         function getCommonSourceDirectory() {
             if (commonSourceDirectory === undefined) {
-                const emittedFiles = filterSourceFilesInDirectory(files, isSourceFileFromExternalLibrary);
+                const emittedFiles = filter(files, file => sourceFileMayBeEmitted(file, options, isSourceFileFromExternalLibrary));
                 if (options.rootDir && checkSourceFilesBelongToPath(emittedFiles, options.rootDir)) {
                     // If a rootDir is specified and is valid use it as the commonSourceDirectory
                     commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir, currentDirectory);
