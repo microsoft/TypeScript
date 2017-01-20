@@ -3095,6 +3095,7 @@ namespace ts {
         inferUnionTypes: boolean;           // Infer union types for disjoint candidates (otherwise undefinedType)
         inferences: TypeInferences[];       // Inferences made for each type parameter
         inferredTypes: Type[];              // Inferred type for each type parameter
+        suppliedTypes?: Type[];             // Supplied types for non-default type parameters
         mapper?: TypeMapper;                // Type mapper for this inference context
         failedTypeParameterIndex?: number;  // Index of type parameter for which inference failed
         // It is optional because in contextual signature instantiation, nothing fails

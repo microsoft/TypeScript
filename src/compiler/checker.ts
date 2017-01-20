@@ -9155,8 +9155,15 @@ namespace ts {
             return constraint && maybeTypeOfKind(constraint, TypeFlags.Primitive | TypeFlags.Index);
         }
 
+        function getSuppliedType(context: InferenceContext, index: number): Type | undefined {
+            if (context.suppliedTypes && index < context.suppliedTypes.length) {
+                return context.inferredTypes[index] = context.suppliedTypes[index];
+            }
+            return undefined;
+        }
+
         function getInferredType(context: InferenceContext, index: number): Type {
-            let inferredType = context.inferredTypes[index];
+            let inferredType = context.inferredTypes[index] || getSuppliedType(context, index);
             let inferenceSucceeded: boolean;
             if (!inferredType) {
                 const inferences = getInferenceCandidates(context, index);
@@ -13410,6 +13417,7 @@ namespace ts {
                 }
             }
 
+            const numTypeArguments = typeArguments ? typeArguments.length : 0;
             const candidates = candidatesOutArray || [];
             // reorderCandidates fills up the candidates array directly
             reorderCandidates(signatures, candidates);
@@ -13580,28 +13588,26 @@ namespace ts {
                         ? createInferenceContext(originalCandidate, /*inferUnionTypes*/ false)
                         : undefined;
 
-                    // fix each supplied type argument in the inference context
-                    if (typeArguments) {
-                        for (let i = 0; i < typeArguments.length; i++) {
-                            inferenceContext.inferredTypes[i] = getTypeFromTypeNode(typeArguments[i]);
-                            inferenceContext.inferences[i].isFixed = true;
-                        }
-                    }
-
                     while (true) {
                         candidate = originalCandidate;
                         if (candidate.typeParameters) {
-                            // Check any supplied type arguments against the candidate.
-                            typeArgumentsAreValid = !typeArguments || checkTypeArguments(candidate, typeArguments, inferenceContext.inferredTypes, /*reportErrors*/ false);
-                            if (typeArgumentsAreValid) {
+                            let typeArgumentTypes: Type[] | undefined;
+                            if (typeArguments) {
+                                // Check any supplied type arguments against the candidate.
+                                typeArgumentTypes = map(typeArguments, getTypeFromTypeNode)
+                                typeArgumentsAreValid = checkTypeArguments(candidate, typeArguments, typeArgumentTypes, /*reportErrors*/ false);
+                            }
+                            if ((!typeArguments || typeArgumentsAreValid) && numTypeArguments < candidate.typeParameters.length) {
                                 // Infer any unsupplied type arguments for the candidate.
+                                inferenceContext.suppliedTypes = typeArgumentTypes;
                                 inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
                                 typeArgumentsAreValid = inferenceContext.failedTypeParameterIndex === undefined;
+                                typeArgumentTypes = inferenceContext.inferredTypes;
                             }
                             if (!typeArgumentsAreValid) {
                                 break;
                             }
-                            candidate = getSignatureInstantiation(candidate, inferenceContext.inferredTypes);
+                            candidate = getSignatureInstantiation(candidate, typeArgumentTypes);
                         }
                         if (!checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
                             break;
