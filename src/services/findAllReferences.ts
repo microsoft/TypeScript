@@ -353,9 +353,7 @@ namespace ts.FindAllReferences {
         const references: ReferenceEntry[] = [];
         for (const sourceFile of sourceFiles) {
             cancellationToken.throwIfCancellationRequested();
-            if (sourceFileHasName(sourceFile, name)) {
-                addReferencesForKeywordInFile(sourceFile, keywordKind, name, cancellationToken, references);
-            }
+            addReferencesForKeywordInFile(sourceFile, keywordKind, name, cancellationToken, references);
         }
 
         return [{ definition, references }];

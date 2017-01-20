@@ -1,4 +1,4 @@
-// These utilities are common to multiple language service features.
+﻿// These utilities are common to multiple language service features.
 /* @internal */
 namespace ts {
     export const scanner: Scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
@@ -1126,7 +1126,6 @@ namespace ts {
             case SyntaxKind.BooleanKeyword:
             case SyntaxKind.NeverKeyword:
             case SyntaxKind.NumberKeyword:
-            case SyntaxKind.KeyOfKeyword:
             case SyntaxKind.ObjectKeyword:
             case SyntaxKind.StringKeyword:
             case SyntaxKind.SymbolKeyword:

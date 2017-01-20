@@ -21,8 +21,6 @@
 
 ////function v(v: [|void|]): [|void|];
 
-////function k(x: [|keyof|] Date): [|keyof|] Date;
-
 // @Filename: b.ts
 // const z: [|any|] = 0;
 

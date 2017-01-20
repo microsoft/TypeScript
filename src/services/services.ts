@@ -1975,20 +1975,11 @@ namespace ts {
                         setNameTable((<LiteralExpression>node).text, node);
                     }
                     break;
-                case SyntaxKind.TypeOperator:
-                    setNameTable(tokenToString((node as ts.TypeOperatorNode).operator), node);
-                    forEachChild(node, walk);
-                    break;
                 default:
-                    if (isTypeKeyword(node.kind)) {
-                        setNameTable(tokenToString(node.kind), node);
-                    }
-                    else {
-                        forEachChild(node, walk);
-                        if (node.jsDoc) {
-                            for (const jsDoc of node.jsDoc) {
-                                forEachChild(jsDoc, walk);
-                            }
+                    forEachChild(node, walk);
+                    if (node.jsDoc) {
+                        for (const jsDoc of node.jsDoc) {
+                            forEachChild(jsDoc, walk);
                         }
                     }
             }
