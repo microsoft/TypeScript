@@ -20517,18 +20517,21 @@ namespace ts {
         function getTypeReferenceSerializationKind(typeName: EntityName, location?: Node): TypeReferenceSerializationKind {
             // Resolve the symbol as a value to ensure the type can be reached at runtime during emit.
             const valueSymbol = resolveEntityName(typeName, SymbolFlags.Value, /*ignoreErrors*/ true, /*dontResolveAlias*/ false, location);
-            const globalPromiseSymbol = tryGetGlobalPromiseConstructorSymbol();
-            if (globalPromiseSymbol && valueSymbol === globalPromiseSymbol) {
-                return TypeReferenceSerializationKind.Promise;
-            }
-
-            const constructorType = valueSymbol ? getTypeOfSymbol(valueSymbol) : undefined;
-            if (constructorType && isConstructorType(constructorType)) {
-                return TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue;
-            }
 
             // Resolve the symbol as a type so that we can provide a more useful hint for the type serializer.
             const typeSymbol = resolveEntityName(typeName, SymbolFlags.Type, /*ignoreErrors*/ true, /*dontResolveAlias*/ false, location);
+            if (valueSymbol && valueSymbol === typeSymbol) {
+                const globalPromiseSymbol = tryGetGlobalPromiseConstructorSymbol();
+                if (globalPromiseSymbol && valueSymbol === globalPromiseSymbol) {
+                    return TypeReferenceSerializationKind.Promise;
+                }
+
+                const constructorType = getTypeOfSymbol(valueSymbol);
+                if (constructorType && isConstructorType(constructorType)) {
+                    return TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue;
+                }
+            }
+
             // We might not be able to resolve type symbol so use unknown type in that case (eg error case)
             if (!typeSymbol) {
                 return TypeReferenceSerializationKind.ObjectType;
