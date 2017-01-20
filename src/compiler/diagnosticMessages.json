@@ -2035,7 +2035,7 @@
         "category": "Error",
         "code": 2704
     },
-    "Required type parameters may not follow optional type parameters": {
+    "Required type parameters may not follow optional type parameters.": {
         "category": "Error",
         "code": 2705
     },
@@ -2043,7 +2043,7 @@
         "category": "Error",
         "code": 2706
     },
-     "Generic type '{0}' requires between {1} and {2} type arguments": {
+     "Generic type '{0}' requires between {1} and {2} type arguments.": {
         "category": "Error",
         "code": 2707
     },
