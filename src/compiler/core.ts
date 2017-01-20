@@ -202,6 +202,10 @@ namespace ts {
         GreaterThan = 1
     }
 
+    export function length(array: any[]) {
+        return array ? array.length : 0;
+    }
+
     /**
      * Iterates through 'array' by index and performs the callback on each element of array until the callback
      * returns a truthy value, then returns that value.
