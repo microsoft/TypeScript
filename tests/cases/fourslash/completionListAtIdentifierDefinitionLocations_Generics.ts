@@ -11,8 +11,4 @@
 
 ////function A</*genericName5*/
 
-
-test.markers().forEach((m) => {
-    goTo.position(m.position, m.fileName);
-    verify.completionListIsEmpty();
-});
+goTo.eachMarker(() => verify.completionListIsEmpty());
