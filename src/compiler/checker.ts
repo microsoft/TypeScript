@@ -17594,6 +17594,11 @@ namespace ts {
                     error(node.name, Diagnostics.All_declarations_of_0_must_have_identical_modifiers, declarationNameToString(node.name));
                 }
             }
+            if (type.flags & TypeFlags.TypeParameter && !(<TypeParameter>type).isThisType && type.symbol) {
+                if (!isTypeParameterInScope(<TypeParameter>type, node)) {
+                    error(node.name, Diagnostics.Type_parameter_0_cannot_be_referenced_outside_of_a_declaration_that_defines_it, symbolToString(type.symbol));
+                }
+            }
             if (node.kind !== SyntaxKind.PropertyDeclaration && node.kind !== SyntaxKind.PropertySignature) {
                 // We know we don't have a binding pattern or computed name here
                 checkExportsOnMergedDeclarations(node);
@@ -17606,6 +17611,19 @@ namespace ts {
                 checkCollisionWithRequireExportsInGeneratedCode(node, <Identifier>node.name);
                 checkCollisionWithGlobalPromiseInGeneratedCode(node, <Identifier>node.name);
             }
+        }
+
+        function isTypeParameterInScope(typeParameter: TypeParameter, node: Node) {
+            const parents = map(filter(typeParameter.symbol.declarations, isTypeParameter), node => node.parent);
+            while (node) {
+                if (isFunctionLike(node) || isClassLike(node) || node.kind === SyntaxKind.InterfaceDeclaration || node.kind === SyntaxKind.TypeAliasDeclaration) {
+                    if (contains(parents, node)) {
+                        return true;
+                    }
+                }
+                node = node.parent;
+            }
+            return false;
         }
 
         function areDeclarationFlagsIdentical(left: Declaration, right: Declaration) {

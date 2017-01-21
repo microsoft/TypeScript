@@ -42,6 +42,9 @@ type i09t02 = i09<1, 2>; // ok
 type i09t03 = i09<1, 2, 3>; // ok
 type i09t04 = i09<1, 2, 3, 4>; // error
 
+interface i10 { x: T; } // error
+interface i10<T = number> {}
+
 //// [genericDefaultsErrors.js]
 f11(); // ok
 f11(); // error
@@ -101,3 +104,8 @@ declare type i09t01 = i09<1>;
 declare type i09t02 = i09<1, 2>;
 declare type i09t03 = i09<1, 2, 3>;
 declare type i09t04 = i09<1, 2, 3, 4>;
+interface i10 {
+    x: T;
+}
+interface i10<T = number> {
+}

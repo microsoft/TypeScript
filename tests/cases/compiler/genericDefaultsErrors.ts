@@ -41,3 +41,6 @@ type i09t01 = i09<1>; // error
 type i09t02 = i09<1, 2>; // ok
 type i09t03 = i09<1, 2, 3>; // ok
 type i09t04 = i09<1, 2, 3, 4>; // error
+
+interface i10 { x: T; } // error
+interface i10<T = number> {}
