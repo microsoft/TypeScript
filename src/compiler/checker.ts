@@ -1,4 +1,4 @@
-﻿/// <reference path="moduleNameResolver.ts"/>
+/// <reference path="moduleNameResolver.ts"/>
 /// <reference path="binder.ts"/>
 
 /* @internal */
@@ -18337,7 +18337,11 @@ namespace ts {
             const staticType = <ObjectType>getTypeOfSymbol(symbol);
             checkTypeParameterListsIdentical(node, symbol);
             checkClassForDuplicateDeclarations(node);
+
+            // Only check for reserved static identifiers on non-ambient context.
+            if (!isInAmbientContext(node)) {
             checkClassForStaticPropertyNameConflicts(node);
+            }
 
             const baseTypeNode = getClassExtendsHeritageClauseElement(node);
             if (baseTypeNode) {
