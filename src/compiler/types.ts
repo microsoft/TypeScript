@@ -2358,7 +2358,7 @@
         getIndexInfoOfType(type: Type, kind: IndexKind): IndexInfo;
         getSignaturesOfType(type: Type, kind: SignatureKind): Signature[];
         getIndexTypeOfType(type: Type, kind: IndexKind): Type;
-        getBaseTypes(type: InterfaceType): ObjectType[];
+        getBaseTypes(type: InterfaceType): BaseType[];
         getReturnTypeOfSignature(signature: Signature): Type;
         /**
          * Gets the type of a parameter at a given position in a signature.
@@ -2910,8 +2910,11 @@
         /* @internal */
         resolvedBaseConstructorType?: Type;        // Resolved base constructor type of class
         /* @internal */
-        resolvedBaseTypes: ObjectType[];           // Resolved base types
+        resolvedBaseTypes: BaseType[];             // Resolved base types
     }
+
+    // Object type or intersection of object types
+    export type BaseType = ObjectType | IntersectionType;
 
     export interface InterfaceTypeWithDeclaredMembers extends InterfaceType {
         declaredProperties: Symbol[];              // Declared members
@@ -2945,7 +2948,9 @@
     export interface UnionOrIntersectionType extends Type {
         types: Type[];                    // Constituent types
         /* @internal */
-        resolvedProperties: SymbolTable;  // Cache of resolved properties
+        propertyCache: SymbolTable;       // Cache of resolved properties
+        /* @internal */
+        resolvedProperties: Symbol[];
         /* @internal */
         resolvedIndexType: IndexType;
         /* @internal */
@@ -2956,7 +2961,10 @@
 
     export interface UnionType extends UnionOrIntersectionType { }
 
-    export interface IntersectionType extends UnionOrIntersectionType { }
+    export interface IntersectionType extends UnionOrIntersectionType {
+        /* @internal */
+        resolvedApparentType: Type;
+    }
 
     export type StructuredType = ObjectType | UnionType | IntersectionType;
 

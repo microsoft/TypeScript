@@ -3732,11 +3732,16 @@ namespace ts {
             return getObjectFlags(type) & ObjectFlags.Reference ? (<TypeReference>type).target : type;
         }
 
-        function hasBaseType(type: InterfaceType, checkBase: InterfaceType) {
+        function hasBaseType(type: BaseType, checkBase: BaseType) {
             return check(type);
-            function check(type: InterfaceType): boolean {
-                const target = <InterfaceType>getTargetType(type);
-                return target === checkBase || forEach(getBaseTypes(target), check);
+            function check(type: BaseType): boolean {
+                if (getObjectFlags(type) & (ObjectFlags.ClassOrInterface | ObjectFlags.Reference)) {
+                    const target = <InterfaceType>getTargetType(type);
+                    return target === checkBase || forEach(getBaseTypes(target), check);
+                }
+                else if (type.flags & TypeFlags.Intersection) {
+                    return forEach((<IntersectionType>type).types, check);
+                }
             }
         }
 
@@ -3805,7 +3810,7 @@ namespace ts {
         }
 
         function isConstructorType(type: Type): boolean {
-            return type.flags & TypeFlags.Object && getSignaturesOfType(type, SignatureKind.Construct).length > 0;
+            return isValidBaseType(type) && getSignaturesOfType(type, SignatureKind.Construct).length > 0;
         }
 
         function getBaseTypeNodeOfClass(type: InterfaceType): ExpressionWithTypeArguments {
@@ -3844,7 +3849,7 @@ namespace ts {
                     return unknownType;
                 }
                 const baseConstructorType = checkExpression(baseTypeNode.expression);
-                if (baseConstructorType.flags & TypeFlags.Object) {
+                if (baseConstructorType.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
                     // Resolving the members of a class requires us to resolve the base class of that class.
                     // We force resolution here such that we catch circularities now.
                     resolveStructuredTypeMembers(<ObjectType>baseConstructorType);
@@ -3862,7 +3867,7 @@ namespace ts {
             return type.resolvedBaseConstructorType;
         }
 
-        function getBaseTypes(type: InterfaceType): ObjectType[] {
+        function getBaseTypes(type: InterfaceType): BaseType[] {
             if (!type.resolvedBaseTypes) {
                 if (type.objectFlags & ObjectFlags.Tuple) {
                     type.resolvedBaseTypes = [createArrayType(getUnionType(type.typeParameters))];
@@ -3885,7 +3890,7 @@ namespace ts {
         function resolveBaseTypesOfClass(type: InterfaceType): void {
             type.resolvedBaseTypes = type.resolvedBaseTypes || emptyArray;
             const baseConstructorType = <ObjectType>getBaseConstructorTypeOfClass(type);
-            if (!(baseConstructorType.flags & TypeFlags.Object)) {
+            if (!(baseConstructorType.flags & (TypeFlags.Object | TypeFlags.Intersection))) {
                 return;
             }
             const baseTypeNode = getBaseTypeNodeOfClass(type);
@@ -3922,11 +3927,11 @@ namespace ts {
             if (baseType === unknownType) {
                 return;
             }
-            if (!(getObjectFlags(getTargetType(baseType)) & ObjectFlags.ClassOrInterface)) {
+            if (!isValidBaseType(baseType)) {
                 error(baseTypeNode.expression, Diagnostics.Base_constructor_return_type_0_is_not_a_class_or_interface_type, typeToString(baseType));
                 return;
             }
-            if (type === baseType || hasBaseType(<InterfaceType>baseType, type)) {
+            if (type === baseType || hasBaseType(<BaseType>baseType, type)) {
                 error(valueDecl, Diagnostics.Type_0_recursively_references_itself_as_a_base_type,
                     typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType));
                 return;
@@ -3951,6 +3956,13 @@ namespace ts {
             return true;
         }
 
+        // A valid base type is any non-generic object type or intersection of non-generic
+        // object types.
+        function isValidBaseType(type: Type): boolean {
+            return type.flags & TypeFlags.Object && !isGenericMappedType(type) ||
+                type.flags & TypeFlags.Intersection && !forEach((<IntersectionType>type).types, t => !isValidBaseType(t));
+        }
+
         function resolveBaseTypesOfInterface(type: InterfaceType): void {
             type.resolvedBaseTypes = type.resolvedBaseTypes || emptyArray;
             for (const declaration of type.symbol.declarations) {
@@ -3958,8 +3970,8 @@ namespace ts {
                     for (const node of getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration)) {
                         const baseType = getTypeFromTypeNode(node);
                         if (baseType !== unknownType) {
-                            if (getObjectFlags(getTargetType(baseType)) & ObjectFlags.ClassOrInterface) {
-                                if (type !== baseType && !hasBaseType(<InterfaceType>baseType, type)) {
+                            if (isValidBaseType(baseType)) {
+                                if (type !== baseType && !hasBaseType(<BaseType>baseType, type)) {
                                     if (type.resolvedBaseTypes === emptyArray) {
                                         type.resolvedBaseTypes = [<ObjectType>baseType];
                                     }
@@ -4313,8 +4325,14 @@ namespace ts {
 
         function getTypeWithThisArgument(type: Type, thisArgument?: Type): Type {
             if (getObjectFlags(type) & ObjectFlags.Reference) {
-                return createTypeReference((<TypeReference>type).target,
-                    concatenate((<TypeReference>type).typeArguments, [thisArgument || (<TypeReference>type).target.thisType]));
+                const target = (<TypeReference>type).target;
+                const typeArguments = (<TypeReference>type).typeArguments;
+                if (length(target.typeParameters) === length(typeArguments)) {
+                    return createTypeReference(target, concatenate(typeArguments, [thisArgument || target.thisType]));
+                }
+            }
+            else if (type.flags & TypeFlags.Intersection) {
+                return getIntersectionType(map((<IntersectionType>type).types, t => getTypeWithThisArgument(t, thisArgument)));
             }
             return type;
         }
@@ -4349,8 +4367,8 @@ namespace ts {
                 }
                 const thisArgument = lastOrUndefined(typeArguments);
                 for (const baseType of baseTypes) {
-                    const instantiatedBaseType = thisArgument ? getTypeWithThisArgument(<ObjectType>instantiateType(baseType, mapper), thisArgument) : baseType;
-                    addInheritedMembers(members, getPropertiesOfObjectType(instantiatedBaseType));
+                    const instantiatedBaseType = thisArgument ? getTypeWithThisArgument(instantiateType(baseType, mapper), thisArgument) : baseType;
+                    addInheritedMembers(members, getPropertiesOfType(instantiatedBaseType));
                     callSignatures = concatenate(callSignatures, getSignaturesOfType(instantiatedBaseType, SignatureKind.Call));
                     constructSignatures = concatenate(constructSignatures, getSignaturesOfType(instantiatedBaseType, SignatureKind.Construct));
                     stringIndexInfo = stringIndexInfo || getIndexInfoOfType(instantiatedBaseType, IndexKind.String);
@@ -4572,9 +4590,9 @@ namespace ts {
                         constructSignatures = getDefaultConstructSignatures(classType);
                     }
                     const baseConstructorType = getBaseConstructorTypeOfClass(classType);
-                    if (baseConstructorType.flags & TypeFlags.Object) {
+                    if (baseConstructorType.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
                         members = createSymbolTable(getNamedMembers(members));
-                        addInheritedMembers(members, getPropertiesOfObjectType(baseConstructorType));
+                        addInheritedMembers(members, getPropertiesOfType(baseConstructorType));
                     }
                 }
                 const numberIndexInfo = symbol.flags & SymbolFlags.Enum ? enumNumberIndexInfo : undefined;
@@ -4738,28 +4756,26 @@ namespace ts {
         }
 
         function getPropertiesOfUnionOrIntersectionType(type: UnionOrIntersectionType): Symbol[] {
-            for (const current of type.types) {
-                for (const prop of getPropertiesOfType(current)) {
-                    getUnionOrIntersectionProperty(type, prop.name);
-                }
-                // The properties of a union type are those that are present in all constituent types, so
-                // we only need to check the properties of the first type
-                if (type.flags & TypeFlags.Union) {
-                    break;
-                }
-            }
-            const props = type.resolvedProperties;
-            if (props) {
-                const result: Symbol[] = [];
-                props.forEach(prop => {
-                    // We need to filter out partial properties in union types
-                    if (!(prop.flags & SymbolFlags.SyntheticProperty && (<TransientSymbol>prop).isPartial)) {
-                        result.push(prop);
+            if (!type.resolvedProperties) {
+                const members = createMap<Symbol>();
+                for (const current of type.types) {
+                    for (const prop of getPropertiesOfType(current)) {
+                        if (!members.has(prop.name)) {
+                            const combinedProp = getPropertyOfUnionOrIntersectionType(type, prop.name);
+                            if (combinedProp) {
+                                members.set(prop.name, combinedProp);
+                            }
+                        }
                     }
-                });
-                return result;
+                    // The properties of a union type are those that are present in all constituent types, so
+                    // we only need to check the properties of the first type
+                    if (type.flags & TypeFlags.Union) {
+                        break;
+                    }
+                }
+                type.resolvedProperties = getNamedMembers(members);
             }
-            return emptyArray;
+            return type.resolvedProperties;
         }
 
         function getPropertiesOfType(type: Type): Symbol[] {
@@ -4844,6 +4860,10 @@ namespace ts {
             }
         }
 
+        function getApparentTypeOfIntersectionType(type: IntersectionType) {
+            return type.resolvedIndexType || (type.resolvedApparentType = getTypeWithThisArgument(type, type));
+        }
+
         /**
          * For a type parameter, return the base constraint of the type parameter. For the string, number,
          * boolean, and symbol primitive types, return the corresponding object types. Otherwise return the
@@ -4851,7 +4871,8 @@ namespace ts {
          */
         function getApparentType(type: Type): Type {
             const t = type.flags & TypeFlags.TypeVariable ? getBaseConstraintOfType(<TypeVariable>type) || emptyObjectType : type;
-            return t.flags & TypeFlags.StringLike ? globalStringType :
+            return t.flags & TypeFlags.Intersection ? getApparentTypeOfIntersectionType(<IntersectionType>type) :
+                t.flags & TypeFlags.StringLike ? globalStringType :
                 t.flags & TypeFlags.NumberLike ? globalNumberType :
                 t.flags & TypeFlags.BooleanLike ? globalBooleanType :
                 t.flags & TypeFlags.ESSymbol ? getGlobalESSymbolType() :
@@ -4927,7 +4948,7 @@ namespace ts {
         // these partial properties when identifying discriminant properties, but otherwise they are filtered out
         // and do not appear to be present in the union type.
         function getUnionOrIntersectionProperty(type: UnionOrIntersectionType, name: string): Symbol {
-            const properties = type.resolvedProperties || (type.resolvedProperties = createMap<Symbol>());
+            const properties = type.propertyCache || (type.propertyCache = createMap<Symbol>());
             let property = properties.get(name);
             if (!property) {
                 property = createUnionOrIntersectionProperty(type, name);
@@ -18215,16 +18236,18 @@ namespace ts {
                     return;
                 }
 
+                const propDeclaration = prop.valueDeclaration;
+
                 // index is numeric and property name is not valid numeric literal
-                if (indexKind === IndexKind.Number && !isNumericName(prop.valueDeclaration.name)) {
+                if (indexKind === IndexKind.Number && !(propDeclaration ? isNumericName(propDeclaration.name) : isNumericLiteralName(prop.name))) {
                     return;
                 }
 
                 // perform property check if property or indexer is declared in 'type'
                 // this allows to rule out cases when both property and indexer are inherited from the base class
                 let errorNode: Node;
-                if (prop.valueDeclaration.name.kind === SyntaxKind.ComputedPropertyName || prop.parent === containingType.symbol) {
-                    errorNode = prop.valueDeclaration;
+                if (propDeclaration && (propDeclaration.name.kind === SyntaxKind.ComputedPropertyName || prop.parent === containingType.symbol)) {
+                    errorNode = propDeclaration;
                 }
                 else if (indexDeclaration) {
                     errorNode = indexDeclaration;
@@ -18367,7 +18390,7 @@ namespace ts {
                     checkTypeAssignableTo(staticType, getTypeWithoutSignatures(staticBaseType), node.name || node,
                         Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
 
-                    if (baseType.symbol.valueDeclaration &&
+                    if (baseType.symbol && baseType.symbol.valueDeclaration &&
                         !isInAmbientContext(baseType.symbol.valueDeclaration) &&
                         baseType.symbol.valueDeclaration.kind === SyntaxKind.ClassDeclaration) {
                         if (!isBlockScopedNameDeclaredBeforeUse(baseType.symbol.valueDeclaration, node)) {
@@ -18399,8 +18422,7 @@ namespace ts {
                     if (produceDiagnostics) {
                         const t = getTypeFromTypeNode(typeRefNode);
                         if (t !== unknownType) {
-                            const declaredType = getObjectFlags(t) & ObjectFlags.Reference ? (<TypeReference>t).target : t;
-                            if (getObjectFlags(declaredType) & ObjectFlags.ClassOrInterface) {
+                            if (isValidBaseType(t)) {
                                 checkTypeAssignableTo(typeWithThis, getTypeWithThisArgument(t, type.thisType), node.name || node, Diagnostics.Class_0_incorrectly_implements_interface_1);
                             }
                             else {
@@ -18440,7 +18462,7 @@ namespace ts {
             return forEach(symbol.declarations, d => isClassLike(d) ? d : undefined);
         }
 
-        function checkKindsOfPropertyMemberOverrides(type: InterfaceType, baseType: ObjectType): void {
+        function checkKindsOfPropertyMemberOverrides(type: InterfaceType, baseType: BaseType): void {
 
             // TypeScript 1.0 spec (April 2014): 8.2.3
             // A derived class inherits all members from its base class it doesn't override.
@@ -18457,7 +18479,7 @@ namespace ts {
             // derived class instance member variables and accessors, but not by other kinds of members.
 
             // NOTE: assignability is checked in checkClassDeclaration
-            const baseProperties = getPropertiesOfObjectType(baseType);
+            const baseProperties = getPropertiesOfType(baseType);
             for (const baseProperty of baseProperties) {
                 const base = getTargetSymbol(baseProperty);
 
@@ -18581,7 +18603,7 @@ namespace ts {
             let ok = true;
 
             for (const base of baseTypes) {
-                const properties = getPropertiesOfObjectType(getTypeWithThisArgument(base, type.thisType));
+                const properties = getPropertiesOfType(getTypeWithThisArgument(base, type.thisType));
                 for (const prop of properties) {
                     const existing = seen.get(prop.name);
                     if (!existing) {

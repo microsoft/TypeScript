@@ -382,7 +382,7 @@ namespace ts {
         getNumberIndexType(): Type {
             return this.checker.getIndexTypeOfType(this, IndexKind.Number);
         }
-        getBaseTypes(): ObjectType[] {
+        getBaseTypes(): BaseType[] {
             return this.flags & TypeFlags.Object && this.objectFlags & (ObjectFlags.Class | ObjectFlags.Interface)
                 ? this.checker.getBaseTypes(<InterfaceType><Type>this)
                 : undefined;
