@@ -288,5 +288,19 @@ namespace ts {
   */`);
             });
         });
+        describe("getFirstToken", () => {
+            it("gets jsdoc", () => {
+                const first = ts.createSourceFile("foo.ts", "/** comment */var a = true;", ts.ScriptTarget.ES5, /*setParentNodes*/ true);
+                assert.isDefined(first);
+                assert.equal(first.kind, 263);
+            });
+        });
+        describe("getLastToken", () => {
+            it("gets jsdoc", () => {
+                const last = ts.createSourceFile("foo.ts", "var a = true;/** comment */", ts.ScriptTarget.ES5, /*setParentNodes*/ true);
+                assert.isDefined(last);
+                assert.equal(last.kind, 263);
+            });
+        });
     });
 }
