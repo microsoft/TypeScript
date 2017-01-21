@@ -18240,14 +18240,14 @@ namespace ts {
                 const propDeclaration = prop.valueDeclaration;
 
                 // index is numeric and property name is not valid numeric literal
-                if (indexKind === IndexKind.Number && propDeclaration && !isNumericName(propDeclaration.name)) {
+                if (indexKind === IndexKind.Number && !(propDeclaration ? isNumericName(propDeclaration.name) : isNumericLiteralName(prop.name))) {
                     return;
                 }
 
                 // perform property check if property or indexer is declared in 'type'
                 // this allows to rule out cases when both property and indexer are inherited from the base class
                 let errorNode: Node;
-                if (propDeclaration && propDeclaration.name.kind === SyntaxKind.ComputedPropertyName || prop.parent === containingType.symbol) {
+                if (propDeclaration && (propDeclaration.name.kind === SyntaxKind.ComputedPropertyName || prop.parent === containingType.symbol)) {
                     errorNode = propDeclaration;
                 }
                 else if (indexDeclaration) {
