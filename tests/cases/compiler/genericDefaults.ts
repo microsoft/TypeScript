@@ -111,3 +111,25 @@ const Derived02c00 = new Derived02();
 const Derived02c01 = new Derived02(1);
 const Derived02c02 = new Derived02<number>();
 const Derived02c03 = new Derived02<number>(1);
+
+type t00<T = number> = { a: T; }
+const t00c00 = (<t00>x).a;
+const t00c01 = (<t00<number>>x).a;
+
+type t01<T, U = T> = { a: [T, U]; }
+const t01c00 = (<t01<number>>x).a;
+const t01c01 = (<t01<number, string>>x).a;
+
+type t02<T extends number, U = T> = { a: [T, U]; }
+const t02c00 = (<t02<number>>x).a;
+const t02c01 = (<t02<1>>x).a;
+const t02c02 = (<t02<number, number>>x).a;
+const t02c03 = (<t02<1, number>>x).a;
+const t02c04 = (<t02<number, 1>>x).a;
+
+type t03<T extends number, U extends T = T> = { a: [T, U]; }
+const t03c00 = (<t03<number>>x).a;
+const t03c01 = (<t03<1>>x).a;
+const t03c02 = (<t03<number, number>>x).a;
+const t03c03 = (<t03<1, 1>>x).a;
+const t03c04 = (<t03<number, 1>>x).a;

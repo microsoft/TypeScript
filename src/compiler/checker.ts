@@ -5648,7 +5648,7 @@ namespace ts {
             const links = getSymbolLinks(symbol);
             const typeParameters = links.typeParameters;
             const id = getTypeListId(typeArguments);
-            return links.instantiations[id] || (links.instantiations[id] = instantiateTypeNoAlias(type, createTypeMapper(typeParameters, typeArguments)));
+            return links.instantiations[id] || (links.instantiations[id] = instantiateTypeNoAlias(type, createTypeMapper(typeParameters, fillMissingTypeArguments(typeArguments, typeParameters, links.minTypeArgumentCount))));
         }
 
         // Get type from reference to type alias. When a type alias is generic, the declared type of the type alias may include
@@ -16167,6 +16167,9 @@ namespace ts {
                         checkTypeArgumentConstraints(typeParameters, node.typeArguments, minTypeArgumentCount);
                     }
                 }
+                if (type.flags & TypeFlags.TypeParameter && !(<TypeParameter>type).isThisType && type.symbol && !isTypeParameterInScope(<TypeParameter>type, node)) {
+                    error(node, Diagnostics.Type_parameter_0_cannot_be_referenced_outside_of_the_declaration_that_defines_it, symbolToString(type.symbol));
+                }
                 if (type.flags & TypeFlags.Enum && !(<EnumType>type).memberTypes && getNodeLinks(node).resolvedSymbol.flags & SymbolFlags.EnumMember) {
                     error(node, Diagnostics.Enum_type_0_has_members_with_initializers_that_are_not_literals, typeToString(type));
                 }
@@ -17583,11 +17586,6 @@ namespace ts {
                     error(node.name, Diagnostics.All_declarations_of_0_must_have_identical_modifiers, declarationNameToString(node.name));
                 }
             }
-            if (type.flags & TypeFlags.TypeParameter && !(<TypeParameter>type).isThisType && type.symbol) {
-                if (!isTypeParameterInScope(<TypeParameter>type, node)) {
-                    error(node.name, Diagnostics.Type_parameter_0_cannot_be_referenced_outside_of_a_declaration_that_defines_it, symbolToString(type.symbol));
-                }
-            }
             if (node.kind !== SyntaxKind.PropertyDeclaration && node.kind !== SyntaxKind.PropertySignature) {
                 // We know we don't have a binding pattern or computed name here
                 checkExportsOnMergedDeclarations(node);
@@ -17605,7 +17603,11 @@ namespace ts {
         function isTypeParameterInScope(typeParameter: TypeParameter, node: Node) {
             const parents = map(filter(typeParameter.symbol.declarations, isTypeParameter), node => node.parent);
             while (node) {
-                if (isFunctionLike(node) || isClassLike(node) || node.kind === SyntaxKind.InterfaceDeclaration || node.kind === SyntaxKind.TypeAliasDeclaration) {
+                if (isFunctionLike(node) ||
+                    isClassLike(node) ||
+                    node.kind === SyntaxKind.InterfaceDeclaration ||
+                    node.kind === SyntaxKind.TypeAliasDeclaration ||
+                    node.kind === SyntaxKind.MappedType) {
                     if (contains(parents, node)) {
                         return true;
                     }

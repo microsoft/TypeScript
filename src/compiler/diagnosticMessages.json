@@ -1127,7 +1127,7 @@
         "category": "Error",
         "code": 2366
     },
-    "Type parameter '{0}' cannot be referenced outside of a declaration that defines it.": {
+    "Type parameter '{0}' cannot be referenced outside of the declaration that defines it.": {
         "category": "Error",
         "code": 2367
     },
