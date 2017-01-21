@@ -9155,15 +9155,8 @@ namespace ts {
             return constraint && maybeTypeOfKind(constraint, TypeFlags.Primitive | TypeFlags.Index);
         }
 
-        function getSuppliedType(context: InferenceContext, index: number): Type | undefined {
-            if (context.suppliedTypes && index < context.suppliedTypes.length) {
-                return context.inferredTypes[index] = context.suppliedTypes[index];
-            }
-            return undefined;
-        }
-
         function getInferredType(context: InferenceContext, index: number): Type {
-            let inferredType = context.inferredTypes[index] || getSuppliedType(context, index);
+            let inferredType = context.inferredTypes[index];
             let inferenceSucceeded: boolean;
             if (!inferredType) {
                 const inferences = getInferenceCandidates(context, index);
@@ -13417,7 +13410,6 @@ namespace ts {
                 }
             }
 
-            const numTypeArguments = typeArguments ? typeArguments.length : 0;
             const candidates = candidatesOutArray || [];
             // reorderCandidates fills up the candidates array directly
             reorderCandidates(signatures, candidates);
@@ -13593,16 +13585,13 @@ namespace ts {
                         if (candidate.typeParameters) {
                             let typeArgumentTypes: Type[] | undefined;
                             if (typeArguments) {
-                                // Check any supplied type arguments against the candidate.
-                                typeArgumentTypes = map(typeArguments, getTypeFromTypeNode)
+                                typeArgumentTypes = fillMissingTypeArguments(map(typeArguments, getTypeFromTypeNode), candidate.typeParameters, candidate.minTypeArgumentCount);
                                 typeArgumentsAreValid = checkTypeArguments(candidate, typeArguments, typeArgumentTypes, /*reportErrors*/ false);
                             }
-                            if ((!typeArguments || typeArgumentsAreValid) && numTypeArguments < candidate.typeParameters.length) {
-                                // Infer any unsupplied type arguments for the candidate.
-                                inferenceContext.suppliedTypes = typeArgumentTypes;
+                            else {
                                 inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
-                                typeArgumentsAreValid = inferenceContext.failedTypeParameterIndex === undefined;
                                 typeArgumentTypes = inferenceContext.inferredTypes;
+                                typeArgumentsAreValid = inferenceContext.failedTypeParameterIndex === undefined;
                             }
                             if (!typeArgumentsAreValid) {
                                 break;

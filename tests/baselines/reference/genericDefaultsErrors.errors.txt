@@ -17,24 +17,25 @@ tests/cases/compiler/genericDefaultsErrors.ts(14,26): error TS2706: Type paramet
 tests/cases/compiler/genericDefaultsErrors.ts(14,33): error TS2706: Type parameter 'U' has a circular default.
 tests/cases/compiler/genericDefaultsErrors.ts(18,1): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/compiler/genericDefaultsErrors.ts(21,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/genericDefaultsErrors.ts(24,11): error TS2428: All declarations of 'i00' must have identical type parameters.
-tests/cases/compiler/genericDefaultsErrors.ts(27,11): error TS2428: All declarations of 'i01' must have identical type parameters.
-tests/cases/compiler/genericDefaultsErrors.ts(29,19): error TS2706: Type parameter 'T' has a circular default.
-tests/cases/compiler/genericDefaultsErrors.ts(30,19): error TS2706: Type parameter 'T' has a circular default.
-tests/cases/compiler/genericDefaultsErrors.ts(30,26): error TS2706: Type parameter 'U' has a circular default.
-tests/cases/compiler/genericDefaultsErrors.ts(31,22): error TS2705: Required type parameters may not follow optional type parameters.
-tests/cases/compiler/genericDefaultsErrors.ts(32,34): error TS2344: Type 'number' does not satisfy the constraint 'string'.
-tests/cases/compiler/genericDefaultsErrors.ts(33,52): error TS2344: Type 'T' does not satisfy the constraint 'number'.
+tests/cases/compiler/genericDefaultsErrors.ts(25,13): error TS2345: Argument of type '"a"' is not assignable to parameter of type 'number'.
+tests/cases/compiler/genericDefaultsErrors.ts(28,11): error TS2428: All declarations of 'i00' must have identical type parameters.
+tests/cases/compiler/genericDefaultsErrors.ts(31,11): error TS2428: All declarations of 'i01' must have identical type parameters.
+tests/cases/compiler/genericDefaultsErrors.ts(33,19): error TS2706: Type parameter 'T' has a circular default.
+tests/cases/compiler/genericDefaultsErrors.ts(34,19): error TS2706: Type parameter 'T' has a circular default.
+tests/cases/compiler/genericDefaultsErrors.ts(34,26): error TS2706: Type parameter 'U' has a circular default.
+tests/cases/compiler/genericDefaultsErrors.ts(35,22): error TS2705: Required type parameters may not follow optional type parameters.
+tests/cases/compiler/genericDefaultsErrors.ts(36,34): error TS2344: Type 'number' does not satisfy the constraint 'string'.
+tests/cases/compiler/genericDefaultsErrors.ts(37,52): error TS2344: Type 'T' does not satisfy the constraint 'number'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/genericDefaultsErrors.ts(34,37): error TS2344: Type 'T' does not satisfy the constraint 'number'.
-tests/cases/compiler/genericDefaultsErrors.ts(35,32): error TS2344: Type 'number' does not satisfy the constraint 'T'.
-tests/cases/compiler/genericDefaultsErrors.ts(38,15): error TS2707: Generic type 'i09<T, U, V>' requires between 2 and 3 type arguments.
-tests/cases/compiler/genericDefaultsErrors.ts(39,15): error TS2707: Generic type 'i09<T, U, V>' requires between 2 and 3 type arguments.
+tests/cases/compiler/genericDefaultsErrors.ts(38,37): error TS2344: Type 'T' does not satisfy the constraint 'number'.
+tests/cases/compiler/genericDefaultsErrors.ts(39,32): error TS2344: Type 'number' does not satisfy the constraint 'T'.
 tests/cases/compiler/genericDefaultsErrors.ts(42,15): error TS2707: Generic type 'i09<T, U, V>' requires between 2 and 3 type arguments.
-tests/cases/compiler/genericDefaultsErrors.ts(44,17): error TS2367: Type parameter 'T' cannot be referenced outside of a declaration that defines it.
+tests/cases/compiler/genericDefaultsErrors.ts(43,15): error TS2707: Generic type 'i09<T, U, V>' requires between 2 and 3 type arguments.
+tests/cases/compiler/genericDefaultsErrors.ts(46,15): error TS2707: Generic type 'i09<T, U, V>' requires between 2 and 3 type arguments.
+tests/cases/compiler/genericDefaultsErrors.ts(48,17): error TS2367: Type parameter 'T' cannot be referenced outside of a declaration that defines it.
 
 
-==== tests/cases/compiler/genericDefaultsErrors.ts (32 errors) ====
+==== tests/cases/compiler/genericDefaultsErrors.ts (33 errors) ====
     
     declare const x: any;
     
@@ -93,6 +94,12 @@ tests/cases/compiler/genericDefaultsErrors.ts(44,17): error TS2367: Type paramet
     f11<1, 2, 3, 4>(); // error
     ~~~~~~~~~~~~~~~~~
 !!! error TS2346: Supplied parameters do not match any signature of call target.
+    
+    declare function f12<T, U = T>(a?: U): void;
+    f12<number>(); // ok
+    f12<number>("a"); // error
+                ~~~
+!!! error TS2345: Argument of type '"a"' is not assignable to parameter of type 'number'.
     
     interface i00<T> { } // ok
     interface i00<U = number> { } // error

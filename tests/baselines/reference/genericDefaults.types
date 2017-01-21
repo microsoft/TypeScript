@@ -84,12 +84,12 @@ const f01c04 = f01<number>(1);
 >f01 : <T, U = T>(a?: T, b?: U) => [T, U]
 >1 : 1
 
-const f01c05 = f01<number>(1, "a");
->f01c05 : [number, string]
->f01<number>(1, "a") : [number, string]
+const f01c05 = f01<number>(1, 2);
+>f01c05 : [number, number]
+>f01<number>(1, 2) : [number, number]
 >f01 : <T, U = T>(a?: T, b?: U) => [T, U]
 >1 : 1
->"a" : "a"
+>2 : 2
 
 const f01c06 = f01<number, string>();
 >f01c06 : [number, string]
@@ -150,12 +150,12 @@ const f02c04 = f02<number>(1);
 >f02 : <T extends number, U = T>(a?: T, b?: U) => [T, U]
 >1 : 1
 
-const f02c05 = f02<number>(1, "a");
->f02c05 : [number, string]
->f02<number>(1, "a") : [number, string]
+const f02c05 = f02<number>(1, 2);
+>f02c05 : [number, number]
+>f02<number>(1, 2) : [number, number]
 >f02 : <T extends number, U = T>(a?: T, b?: U) => [T, U]
 >1 : 1
->"a" : "a"
+>2 : 2
 
 const f02c06 = f02<number, string>();
 >f02c06 : [number, string]
@@ -285,8 +285,8 @@ const f04c04 = f04<number>(1);
 >1 : 1
 
 const f04c05 = f04<number>(1, 2);
->f04c05 : [number, number]
->f04<number>(1, 2) : [number, number]
+>f04c05 : [number, number | { a: number; }]
+>f04<number>(1, 2) : [number, number | { a: number; }]
 >f04 : <T, U = T | { a: number; }>(a?: T, b?: U) => [T, U]
 >1 : 1
 >2 : 2
@@ -309,12 +309,12 @@ const f04c08 = f04<number, number>(1, 2);
 >1 : 1
 >2 : 2
 
-declare function f05<T, U = T & { a: number }>(a?: T, b?: U): [T, U];
->f05 : <T, U = T & { a: number; }>(a?: T, b?: U) => [T, U]
+declare function f05<T, U = T & { b: number }>(a?: T, b?: U): [T, U];
+>f05 : <T, U = T & { b: number; }>(a?: T, b?: U) => [T, U]
 >T : T
 >U : U
 >T : T
->a : number
+>b : number
 >a : T
 >T : T
 >b : U
@@ -323,56 +323,63 @@ declare function f05<T, U = T & { a: number }>(a?: T, b?: U): [T, U];
 >U : U
 
 const f05c00 = f05();
->f05c00 : [{}, {} & { a: number; }]
->f05() : [{}, {} & { a: number; }]
->f05 : <T, U = T & { a: number; }>(a?: T, b?: U) => [T, U]
+>f05c00 : [{}, {} & { b: number; }]
+>f05() : [{}, {} & { b: number; }]
+>f05 : <T, U = T & { b: number; }>(a?: T, b?: U) => [T, U]
 
 const f05c01 = f05(1);
->f05c01 : [number, number & { a: number; }]
->f05(1) : [number, number & { a: number; }]
->f05 : <T, U = T & { a: number; }>(a?: T, b?: U) => [T, U]
+>f05c01 : [number, number & { b: number; }]
+>f05(1) : [number, number & { b: number; }]
+>f05 : <T, U = T & { b: number; }>(a?: T, b?: U) => [T, U]
 >1 : 1
 
 const f05c02 = f05(1, 1);
 >f05c02 : [number, number]
 >f05(1, 1) : [number, number]
->f05 : <T, U = T & { a: number; }>(a?: T, b?: U) => [T, U]
+>f05 : <T, U = T & { b: number; }>(a?: T, b?: U) => [T, U]
 >1 : 1
 >1 : 1
 
 const f05c03 = f05<number>();
->f05c03 : [number, number & { a: number; }]
->f05<number>() : [number, number & { a: number; }]
->f05 : <T, U = T & { a: number; }>(a?: T, b?: U) => [T, U]
+>f05c03 : [number, number & { b: number; }]
+>f05<number>() : [number, number & { b: number; }]
+>f05 : <T, U = T & { b: number; }>(a?: T, b?: U) => [T, U]
 
 const f05c04 = f05<number>(1);
->f05c04 : [number, number & { a: number; }]
->f05<number>(1) : [number, number & { a: number; }]
->f05 : <T, U = T & { a: number; }>(a?: T, b?: U) => [T, U]
+>f05c04 : [number, number & { b: number; }]
+>f05<number>(1) : [number, number & { b: number; }]
+>f05 : <T, U = T & { b: number; }>(a?: T, b?: U) => [T, U]
 >1 : 1
 
-const f05c05 = f05<number>(1, 2);
->f05c05 : [number, number]
->f05<number>(1, 2) : [number, number]
->f05 : <T, U = T & { a: number; }>(a?: T, b?: U) => [T, U]
+const f05c05 = f05<{ a: number }>({ a: 1 }, { a: 2, b: 3});
+>f05c05 : [{ a: number; }, { a: number; } & { b: number; }]
+>f05<{ a: number }>({ a: 1 }, { a: 2, b: 3}) : [{ a: number; }, { a: number; } & { b: number; }]
+>f05 : <T, U = T & { b: number; }>(a?: T, b?: U) => [T, U]
+>a : number
+>{ a: 1 } : { a: number; }
+>a : number
 >1 : 1
+>{ a: 2, b: 3} : { a: number; b: number; }
+>a : number
 >2 : 2
+>b : number
+>3 : 3
 
 const f05c06 = f05<number, number>();
 >f05c06 : [number, number]
 >f05<number, number>() : [number, number]
->f05 : <T, U = T & { a: number; }>(a?: T, b?: U) => [T, U]
+>f05 : <T, U = T & { b: number; }>(a?: T, b?: U) => [T, U]
 
 const f05c07 = f05<number, number>(1);
 >f05c07 : [number, number]
 >f05<number, number>(1) : [number, number]
->f05 : <T, U = T & { a: number; }>(a?: T, b?: U) => [T, U]
+>f05 : <T, U = T & { b: number; }>(a?: T, b?: U) => [T, U]
 >1 : 1
 
 const f05c08 = f05<number, number>(1, 2);
 >f05c08 : [number, number]
 >f05<number, number>(1, 2) : [number, number]
->f05 : <T, U = T & { a: number; }>(a?: T, b?: U) => [T, U]
+>f05 : <T, U = T & { b: number; }>(a?: T, b?: U) => [T, U]
 >1 : 1
 >2 : 2
 

@@ -21,6 +21,10 @@ f11<1, 2>(); // ok
 f11<1, 2, 3>(); // ok
 f11<1, 2, 3, 4>(); // error
 
+declare function f12<T, U = T>(a?: U): void;
+f12<number>(); // ok
+f12<number>("a"); // error
+
 interface i00<T> { } // ok
 interface i00<U = number> { } // error
 

@@ -15,7 +15,7 @@ const f01c01 = f01(1);
 const f01c02 = f01(1, "a");
 const f01c03 = f01<number>();
 const f01c04 = f01<number>(1);
-const f01c05 = f01<number>(1, "a");
+const f01c05 = f01<number>(1, 2);
 const f01c06 = f01<number, string>();
 const f01c07 = f01<number, string>(1);
 const f01c08 = f01<number, string>(1, "a");
@@ -26,7 +26,7 @@ const f02c01 = f02(1);
 const f02c02 = f02(1, "a");
 const f02c03 = f02<number>();
 const f02c04 = f02<number>(1);
-const f02c05 = f02<number>(1, "a");
+const f02c05 = f02<number>(1, 2);
 const f02c06 = f02<number, string>();
 const f02c07 = f02<number, string>(1);
 const f02c08 = f02<number, string>(1, "a");
@@ -53,13 +53,13 @@ const f04c06 = f04<number, number>();
 const f04c07 = f04<number, number>(1);
 const f04c08 = f04<number, number>(1, 2);
 
-declare function f05<T, U = T & { a: number }>(a?: T, b?: U): [T, U];
+declare function f05<T, U = T & { b: number }>(a?: T, b?: U): [T, U];
 const f05c00 = f05();
 const f05c01 = f05(1);
 const f05c02 = f05(1, 1);
 const f05c03 = f05<number>();
 const f05c04 = f05<number>(1);
-const f05c05 = f05<number>(1, 2);
+const f05c05 = f05<{ a: number }>({ a: 1 }, { a: 2, b: 3});
 const f05c06 = f05<number, number>();
 const f05c07 = f05<number, number>(1);
 const f05c08 = f05<number, number>(1, 2);
@@ -125,7 +125,7 @@ var f01c01 = f01(1);
 var f01c02 = f01(1, "a");
 var f01c03 = f01();
 var f01c04 = f01(1);
-var f01c05 = f01(1, "a");
+var f01c05 = f01(1, 2);
 var f01c06 = f01();
 var f01c07 = f01(1);
 var f01c08 = f01(1, "a");
@@ -134,7 +134,7 @@ var f02c01 = f02(1);
 var f02c02 = f02(1, "a");
 var f02c03 = f02();
 var f02c04 = f02(1);
-var f02c05 = f02(1, "a");
+var f02c05 = f02(1, 2);
 var f02c06 = f02();
 var f02c07 = f02(1);
 var f02c08 = f02(1, "a");
@@ -161,7 +161,7 @@ var f05c01 = f05(1);
 var f05c02 = f05(1, 1);
 var f05c03 = f05();
 var f05c04 = f05(1);
-var f05c05 = f05(1, 2);
+var f05c05 = f05({ a: 1 }, { a: 2, b: 3 });
 var f05c06 = f05();
 var f05c07 = f05(1);
 var f05c08 = f05(1, 2);
@@ -208,7 +208,7 @@ declare const f01c01: [number, number];
 declare const f01c02: [number, string];
 declare const f01c03: [number, number];
 declare const f01c04: [number, number];
-declare const f01c05: [number, string];
+declare const f01c05: [number, number];
 declare const f01c06: [number, string];
 declare const f01c07: [number, string];
 declare const f01c08: [number, string];
@@ -218,7 +218,7 @@ declare const f02c01: [1, 1];
 declare const f02c02: [1, string];
 declare const f02c03: [number, number];
 declare const f02c04: [number, number];
-declare const f02c05: [number, string];
+declare const f02c05: [number, number];
 declare const f02c06: [number, string];
 declare const f02c07: [number, string];
 declare const f02c08: [number, string];
@@ -248,27 +248,35 @@ declare const f04c03: [number, number | {
 declare const f04c04: [number, number | {
     a: number;
 }];
-declare const f04c05: [number, number];
+declare const f04c05: [number, number | {
+    a: number;
+}];
 declare const f04c06: [number, number];
 declare const f04c07: [number, number];
 declare const f04c08: [number, number];
 declare function f05<T, U = T & {
-    a: number;
+    b: number;
 }>(a?: T, b?: U): [T, U];
 declare const f05c00: [{}, {} & {
-    a: number;
+    b: number;
 }];
 declare const f05c01: [number, number & {
-    a: number;
+    b: number;
 }];
 declare const f05c02: [number, number];
 declare const f05c03: [number, number & {
-    a: number;
+    b: number;
 }];
 declare const f05c04: [number, number & {
-    a: number;
+    b: number;
 }];
-declare const f05c05: [number, number];
+declare const f05c05: [{
+    a: number;
+}, {
+    a: number;
+} & {
+    b: number;
+}];
 declare const f05c06: [number, number];
 declare const f05c07: [number, number];
 declare const f05c08: [number, number];

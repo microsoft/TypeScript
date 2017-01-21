@@ -65,7 +65,7 @@ const f01c04 = f01<number>(1);
 >f01c04 : Symbol(f01c04, Decl(genericDefaults.ts, 15, 5))
 >f01 : Symbol(f01, Decl(genericDefaults.ts, 8, 32))
 
-const f01c05 = f01<number>(1, "a");
+const f01c05 = f01<number>(1, 2);
 >f01c05 : Symbol(f01c05, Decl(genericDefaults.ts, 16, 5))
 >f01 : Symbol(f01, Decl(genericDefaults.ts, 8, 32))
 
@@ -113,7 +113,7 @@ const f02c04 = f02<number>(1);
 >f02c04 : Symbol(f02c04, Decl(genericDefaults.ts, 26, 5))
 >f02 : Symbol(f02, Decl(genericDefaults.ts, 19, 43))
 
-const f02c05 = f02<number>(1, "a");
+const f02c05 = f02<number>(1, 2);
 >f02c05 : Symbol(f02c05, Decl(genericDefaults.ts, 27, 5))
 >f02 : Symbol(f02, Decl(genericDefaults.ts, 19, 43))
 
@@ -227,12 +227,12 @@ const f04c08 = f04<number, number>(1, 2);
 >f04c08 : Symbol(f04c08, Decl(genericDefaults.ts, 52, 5))
 >f04 : Symbol(f04, Decl(genericDefaults.ts, 41, 41))
 
-declare function f05<T, U = T & { a: number }>(a?: T, b?: U): [T, U];
+declare function f05<T, U = T & { b: number }>(a?: T, b?: U): [T, U];
 >f05 : Symbol(f05, Decl(genericDefaults.ts, 52, 41))
 >T : Symbol(T, Decl(genericDefaults.ts, 54, 21))
 >U : Symbol(U, Decl(genericDefaults.ts, 54, 23))
 >T : Symbol(T, Decl(genericDefaults.ts, 54, 21))
->a : Symbol(a, Decl(genericDefaults.ts, 54, 33))
+>b : Symbol(b, Decl(genericDefaults.ts, 54, 33))
 >a : Symbol(a, Decl(genericDefaults.ts, 54, 47))
 >T : Symbol(T, Decl(genericDefaults.ts, 54, 21))
 >b : Symbol(b, Decl(genericDefaults.ts, 54, 53))
@@ -260,9 +260,13 @@ const f05c04 = f05<number>(1);
 >f05c04 : Symbol(f05c04, Decl(genericDefaults.ts, 59, 5))
 >f05 : Symbol(f05, Decl(genericDefaults.ts, 52, 41))
 
-const f05c05 = f05<number>(1, 2);
+const f05c05 = f05<{ a: number }>({ a: 1 }, { a: 2, b: 3});
 >f05c05 : Symbol(f05c05, Decl(genericDefaults.ts, 60, 5))
 >f05 : Symbol(f05, Decl(genericDefaults.ts, 52, 41))
+>a : Symbol(a, Decl(genericDefaults.ts, 60, 20))
+>a : Symbol(a, Decl(genericDefaults.ts, 60, 35))
+>a : Symbol(a, Decl(genericDefaults.ts, 60, 45))
+>b : Symbol(b, Decl(genericDefaults.ts, 60, 51))
 
 const f05c06 = f05<number, number>();
 >f05c06 : Symbol(f05c06, Decl(genericDefaults.ts, 61, 5))

@@ -21,6 +21,10 @@ f11<1, 2>(); // ok
 f11<1, 2, 3>(); // ok
 f11<1, 2, 3, 4>(); // error
 
+declare function f12<T, U = T>(a?: U): void;
+f12<number>(); // ok
+f12<number>("a"); // error
+
 interface i00<T> { } // ok
 interface i00<U = number> { } // error
 
@@ -51,6 +55,8 @@ f11(); // error
 f11(); // ok
 f11(); // ok
 f11(); // error
+f12(); // ok
+f12("a"); // error
 
 
 //// [genericDefaultsErrors.d.ts]
@@ -75,6 +81,7 @@ declare function f10<T = U, U = T & {
     a: number;
 }>(): void;
 declare function f11<T, U, V = number>(): void;
+declare function f12<T, U = T>(a?: U): void;
 interface i00<T> {
 }
 interface i00<U = number> {
