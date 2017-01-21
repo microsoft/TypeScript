@@ -46,7 +46,7 @@
 ////                        default:
 ////                            continue;
 ////                    }
-////                    
+////
 ////                    // these cross function boundaries
 ////                    br/*5*/eak label1;
 ////                    co/*6*/ntinue label1;
@@ -63,8 +63,4 @@
 ////
 ////label7: while (true) co/*10*/ntinue label5;
 
-test.markers().forEach(m => {
-    goTo.position(m.position);
-
-    verify.occurrencesAtPositionCount(0);
-});
+goTo.eachMarker(() => verify.occurrencesAtPositionCount(0));
