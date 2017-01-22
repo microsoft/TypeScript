@@ -2215,8 +2215,12 @@ namespace ts {
             constructorFunction.parent = classPrototype;
             classPrototype.parent = leftSideOfAssignment;
 
-            const funcSymbol = container.locals.get(constructorFunction.text);
-            if (!funcSymbol || !(funcSymbol.flags & SymbolFlags.Function || isDeclarationOfFunctionExpression(funcSymbol))) {
+            let funcSymbol = container.locals.get(constructorFunction.text);
+            if (isDeclarationOfFunctionOrClassExpression(funcSymbol)) {
+                funcSymbol = (funcSymbol.valueDeclaration as VariableDeclaration).initializer.symbol;
+            }
+
+            if (!funcSymbol || !(funcSymbol.flags & (SymbolFlags.Function | SymbolFlags.Class))) {
                 return;
             }
 
@@ -2241,8 +2245,12 @@ namespace ts {
             leftSideOfAssignment.parent = node;
             target.parent = leftSideOfAssignment;
 
-            const funcSymbol = container.locals[target.text];
-            if (!funcSymbol || !(funcSymbol.flags & SymbolFlags.Function || isDeclarationOfFunctionExpression(funcSymbol))) {
+            let funcSymbol = container.locals.get(target.text);
+            if (isDeclarationOfFunctionOrClassExpression(funcSymbol)) {
+                funcSymbol = (funcSymbol.valueDeclaration as VariableDeclaration).initializer.symbol;
+            }
+
+            if (!funcSymbol || !(funcSymbol.flags & (SymbolFlags.Function | SymbolFlags.Class))) {
                 return;
             }
 

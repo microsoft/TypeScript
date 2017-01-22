@@ -1366,16 +1366,12 @@ namespace ts {
      * Returns true if the node is a variable declaration whose initializer is a function expression.
      * This function does not test if the node is in a JavaScript file or not.
      */
-    export function isDeclarationOfFunctionExpression(s: Symbol) {
+    export function isDeclarationOfFunctionOrClassExpression(s: Symbol) {
         if (s.valueDeclaration && s.valueDeclaration.kind === SyntaxKind.VariableDeclaration) {
             const declaration = s.valueDeclaration as VariableDeclaration;
-            return declaration.initializer && declaration.initializer.kind === SyntaxKind.FunctionExpression;
+            return declaration.initializer && (declaration.initializer.kind === SyntaxKind.FunctionExpression || declaration.initializer.kind === SyntaxKind.ClassExpression);
         }
         return false;
-    }
-
-    export function isValidSpecialPropertyAssignmentParent(parentSymbol: Symbol) {
-        return parentSymbol && (parentSymbol.flags & SymbolFlags.Function || isDeclarationOfFunctionExpression(parentSymbol));
     }
 
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
