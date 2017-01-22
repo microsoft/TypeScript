@@ -2171,12 +2171,14 @@ namespace ts {
             return type.flags & TypeFlags.StringLiteral ? `"${escapeString((<LiteralType>type).text)}"` : (<LiteralType>type).text;
         }
 
-
         function getNameOfSymbol(symbol: Symbol): string {
             if (symbol.declarations && symbol.declarations.length) {
                 const declaration = symbol.declarations[0];
                 if (declaration.name) {
                     return declarationNameToString(declaration.name);
+                }
+                if (declaration.parent && declaration.parent.kind === SyntaxKind.VariableDeclaration) {
+                    return declarationNameToString((<VariableDeclaration>declaration.parent).name);
                 }
                 switch (declaration.kind) {
                     case SyntaxKind.ClassExpression:

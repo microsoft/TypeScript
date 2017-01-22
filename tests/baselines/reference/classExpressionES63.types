@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/classExpressions/classExpressionES63.ts ===
 let C = class extends class extends class { a = 1 } { b = 2 } { c = 3 };
->C : typeof (Anonymous class)
->class extends class extends class { a = 1 } { b = 2 } { c = 3 } : typeof (Anonymous class)
+>C : typeof C
+>class extends class extends class { a = 1 } { b = 2 } { c = 3 } : typeof C
 >class extends class { a = 1 } { b = 2 } : (Anonymous class)
 >class { a = 1 } : (Anonymous class)
 >a : number
@@ -12,22 +12,22 @@ let C = class extends class extends class { a = 1 } { b = 2 } { c = 3 };
 >3 : 3
 
 let c = new C();
->c : (Anonymous class)
->new C() : (Anonymous class)
->C : typeof (Anonymous class)
+>c : C
+>new C() : C
+>C : typeof C
 
 c.a;
 >c.a : number
->c : (Anonymous class)
+>c : C
 >a : number
 
 c.b;
 >c.b : number
->c : (Anonymous class)
+>c : C
 >b : number
 
 c.c;
 >c.c : number
->c : (Anonymous class)
+>c : C
 >c : number
 
