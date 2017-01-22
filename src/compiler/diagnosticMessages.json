@@ -2015,6 +2015,10 @@
         "category": "Error",
         "code": 2698
     },
+    "Static property '{0}' conflicts with built-in property 'Function.{0}' of constructor function '{1}'.": {
+        "category": "Error",
+        "code": 2699
+    },
     "Rest types may only be created from object types.": {
         "category": "Error",
         "code": 2700

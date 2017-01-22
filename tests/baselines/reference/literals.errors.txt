@@ -1,7 +1,7 @@
-tests/cases/conformance/expressions/literals/literals.ts(9,10): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/expressions/literals/literals.ts(9,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/expressions/literals/literals.ts(10,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/expressions/literals/literals.ts(10,21): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/literals/literals.ts(9,10): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/literals/literals.ts(9,17): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/literals/literals.ts(10,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/expressions/literals/literals.ts(10,21): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/expressions/literals/literals.ts(20,9): error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '0o1'.
 tests/cases/conformance/expressions/literals/literals.ts(25,9): error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '-0o3'.
 
@@ -17,14 +17,14 @@ tests/cases/conformance/expressions/literals/literals.ts(25,9): error TS1085: Oc
     
     var nu = null / null;
              ~~~~
-!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2531: Object is possibly 'null'.
                     ~~~~
-!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2531: Object is possibly 'null'.
     var u = undefined / undefined;
             ~~~~~~~~~
-!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2532: Object is possibly 'undefined'.
                         ~~~~~~~~~
-!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2532: Object is possibly 'undefined'.
     
     var b: boolean;
     var b = true;

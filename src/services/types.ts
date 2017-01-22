@@ -33,7 +33,7 @@ namespace ts {
         getConstructSignatures(): Signature[];
         getStringIndexType(): Type;
         getNumberIndexType(): Type;
-        getBaseTypes(): ObjectType[];
+        getBaseTypes(): BaseType[];
         getNonNullableType(): Type;
     }
 
@@ -495,7 +495,7 @@ namespace ts {
 
     export interface SymbolDisplayPart {
         text: string;
-        kind: string;
+        kind: string; // A ScriptElementKind
     }
 
     export interface QuickInfo {
