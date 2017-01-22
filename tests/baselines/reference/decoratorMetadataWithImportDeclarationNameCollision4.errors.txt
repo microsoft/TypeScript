@@ -1,4 +1,5 @@
 tests/cases/compiler/service.ts(1,8): error TS1192: Module '"tests/cases/compiler/db"' has no default export.
+tests/cases/compiler/service.ts(1,8): message TS6150: Did you mean to import the named import 'db' by using curly braces
 
 
 ==== tests/cases/compiler/db.ts (0 errors) ====
@@ -7,10 +8,12 @@ tests/cases/compiler/service.ts(1,8): error TS1192: Module '"tests/cases/compile
         }
     }
     
-==== tests/cases/compiler/service.ts (1 errors) ====
+==== tests/cases/compiler/service.ts (2 errors) ====
     import db from './db'; // error no default export
            ~~
 !!! error TS1192: Module '"tests/cases/compiler/db"' has no default export.
+           ~~
+!!! message TS6150: Did you mean to import the named import 'db' by using curly braces
     function someDecorator(target) {
         return target;
     }
