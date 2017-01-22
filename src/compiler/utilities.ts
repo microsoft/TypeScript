@@ -1374,6 +1374,10 @@ namespace ts {
         return false;
     }
 
+    export function isValidSpecialPropertyAssignmentParent(parentSymbol: Symbol) {
+        return parentSymbol && (parentSymbol.flags & SymbolFlags.Function || isDeclarationOfFunctionExpression(parentSymbol));
+    }
+
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
     /// assignments we treat as special in the binder
     export function getSpecialPropertyAssignmentKind(expression: Node): SpecialPropertyAssignmentKind {
@@ -1398,6 +1402,10 @@ namespace ts {
                 // module.exports = expr
                 return SpecialPropertyAssignmentKind.ModuleExports;
             }
+            else {
+                // F.x = expr
+                return SpecialPropertyAssignmentKind.Property;
+            }
         }
         else if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
             return SpecialPropertyAssignmentKind.ThisProperty;
@@ -1416,6 +1424,7 @@ namespace ts {
                 }
             }
         }
+
 
         return SpecialPropertyAssignmentKind.None;
     }

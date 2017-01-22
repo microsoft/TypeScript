@@ -265,6 +265,7 @@ namespace ts {
                             return "export=";
                         case SpecialPropertyAssignmentKind.ExportsProperty:
                         case SpecialPropertyAssignmentKind.ThisProperty:
+                        case SpecialPropertyAssignmentKind.Property:
                             // exports.x = ... or this.y = ...
                             return ((node as BinaryExpression).left as PropertyAccessExpression).name.text;
                         case SpecialPropertyAssignmentKind.PrototypeProperty:
@@ -1921,6 +1922,9 @@ namespace ts {
                             case SpecialPropertyAssignmentKind.ThisProperty:
                                 bindThisPropertyAssignment(<BinaryExpression>node);
                                 break;
+                            case SpecialPropertyAssignmentKind.Property:
+                                bindPropertyAssignment(<BinaryExpression>node);
+                                break;
                             case SpecialPropertyAssignmentKind.None:
                                 // Nothing to do
                                 break;
@@ -2223,6 +2227,32 @@ namespace ts {
 
             // Declare the method/property
             declareSymbol(funcSymbol.members, funcSymbol, leftSideOfAssignment, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+        }
+
+        function bindPropertyAssignment(node: BinaryExpression) {
+            // We saw a node of the form 'x.y = z'. Declare a 'member' y on x if x was a function.
+
+            // Look up the function in the local scope, since prototype assignments should
+            // follow the function declaration
+            const leftSideOfAssignment = node.left as PropertyAccessExpression;
+            const target = leftSideOfAssignment.expression as Identifier;
+
+            // Fix up parent pointers since we're going to use these nodes before we bind into them
+            leftSideOfAssignment.parent = node;
+            target.parent = leftSideOfAssignment;
+
+            const funcSymbol = container.locals[target.text];
+            if (!funcSymbol || !(funcSymbol.flags & SymbolFlags.Function || isDeclarationOfFunctionExpression(funcSymbol))) {
+                return;
+            }
+
+            // Set up the members collection if it doesn't exist already
+            if (!funcSymbol.exports) {
+                funcSymbol.exports = createMap<Symbol>();
+            }
+
+            // Declare the method/property
+            declareSymbol(funcSymbol.exports, funcSymbol, leftSideOfAssignment, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
         }
 
         function bindCallExpression(node: CallExpression) {

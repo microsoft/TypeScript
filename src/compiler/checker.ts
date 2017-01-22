@@ -4580,7 +4580,7 @@ namespace ts {
                 // Combinations of function, class, enum and module
                 let members = emptySymbols;
                 let constructSignatures: Signature[] = emptyArray;
-                if (symbol.flags & SymbolFlags.HasExports) {
+                if (symbol.exports) {
                     members = getExportsOfSymbol(symbol);
                 }
                 if (symbol.flags & SymbolFlags.Class) {
@@ -19871,22 +19871,29 @@ namespace ts {
             return getLeftSideOfImportEqualsOrExportAssignment(node) !== undefined;
         }
 
+        function getSpecialPropertyAssignmentSymbolFromEntityName(entityName: EntityName | PropertyAccessExpression) {
+            const specialPropertyAssignmentKind = getSpecialPropertyAssignmentKind(entityName.parent.parent);
+            switch (specialPropertyAssignmentKind) {
+                case SpecialPropertyAssignmentKind.ExportsProperty:
+                case SpecialPropertyAssignmentKind.PrototypeProperty:
+                    return getSymbolOfNode(entityName.parent);
+                case SpecialPropertyAssignmentKind.ThisProperty:
+                case SpecialPropertyAssignmentKind.ModuleExports:
+                case SpecialPropertyAssignmentKind.Property:
+                    return getSymbolOfNode(entityName.parent.parent);
+            }
+        }
+
         function getSymbolOfEntityNameOrPropertyAccessExpression(entityName: EntityName | PropertyAccessExpression): Symbol | undefined {
             if (isDeclarationName(entityName)) {
                 return getSymbolOfNode(entityName.parent);
             }
 
             if (isInJavaScriptFile(entityName) && entityName.parent.kind === SyntaxKind.PropertyAccessExpression) {
-                const specialPropertyAssignmentKind = getSpecialPropertyAssignmentKind(entityName.parent.parent);
-                switch (specialPropertyAssignmentKind) {
-                    case SpecialPropertyAssignmentKind.ExportsProperty:
-                    case SpecialPropertyAssignmentKind.PrototypeProperty:
-                        return getSymbolOfNode(entityName.parent);
-                    case SpecialPropertyAssignmentKind.ThisProperty:
-                    case SpecialPropertyAssignmentKind.ModuleExports:
-                        return getSymbolOfNode(entityName.parent.parent);
-                    default:
-                        // Fall through if it is not a special property assignment
+                // Check if this is a special property assignment
+                const specialPropertyAssignmentSymbol = getSpecialPropertyAssignmentSymbolFromEntityName(entityName);
+                if (specialPropertyAssignmentSymbol) {
+                    return specialPropertyAssignmentSymbol;
                 }
             }
 
