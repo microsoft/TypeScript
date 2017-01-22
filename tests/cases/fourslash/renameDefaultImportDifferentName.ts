@@ -11,13 +11,7 @@
 ////let b = new [|B|]();
 ////b.test();
 
-goTo.file("B.ts");
 goTo.marker("1");
 verify.occurrencesAtPositionCount(1);
 
-goTo.file("A.ts");
-let ranges = test.ranges()
-for (let range of ranges) {
-    goTo.position(range.start);
-    verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ false);
-}
+verify.rangesAreRenameLocations();

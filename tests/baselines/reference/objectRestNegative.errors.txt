@@ -7,10 +7,9 @@ tests/cases/conformance/types/rest/objectRestNegative.ts(11,30): error TS7008: M
 tests/cases/conformance/types/rest/objectRestNegative.ts(11,33): error TS7008: Member 'y' implicitly has an 'any' type.
 tests/cases/conformance/types/rest/objectRestNegative.ts(12,17): error TS2700: Rest types may only be created from object types.
 tests/cases/conformance/types/rest/objectRestNegative.ts(17,9): error TS2701: The target of an object rest assignment must be a variable or a property access.
-tests/cases/conformance/types/rest/objectRestNegative.ts(19,90): error TS2339: Property 'anythingGoes' does not exist on type '{ [x: string]: any; }'.
 
 
-==== tests/cases/conformance/types/rest/objectRestNegative.ts (8 errors) ====
+==== tests/cases/conformance/types/rest/objectRestNegative.ts (7 errors) ====
     let o = { a: 1, b: 'no' };
     var { ...mustBeLast, a } = o;
              ~~~~~~~~~~
@@ -44,8 +43,4 @@ tests/cases/conformance/types/rest/objectRestNegative.ts(19,90): error TS2339: P
     ({a, ...rest.b + rest.b} = o);
             ~~~~~~~~~~~~~~~
 !!! error TS2701: The target of an object rest assignment must be a variable or a property access.
-    
-    var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes;
-                                                                                             ~~~~~~~~~~~~
-!!! error TS2339: Property 'anythingGoes' does not exist on type '{ [x: string]: any; }'.
     

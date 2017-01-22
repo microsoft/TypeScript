@@ -328,6 +328,7 @@ const builtGeneratedDiagnosticMessagesJSON = path.join(builtLocalDirectory, "dia
 // processDiagnosticMessages script
 gulp.task(processDiagnosticMessagesJs, false, [], () => {
     const settings: tsc.Settings = getCompilerSettings({
+        target: "es5",
         declaration: false,
         removeComments: true,
         noResolve: false,

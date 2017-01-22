@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "lib": ["es5", "scripthost"],
         "noEmitOnError": true,
         "noImplicitAny": true,
         "noImplicitThis": true,
@@ -9,6 +10,7 @@
         "preserveConstEnums": true,
         "stripInternal": true,
         "sourceMap": true,
-        "target": "es5"
+        "target": "es5",
+        "types": []
     }
 }

@@ -11,7 +11,7 @@
 //// var y : any = "", x = (a/*var5*/
 
 ////class C{}
-////var y = new C( 
+////var y = new C(
 
 //// class C{}
 //// var y = new C(0, /*var7*/
@@ -26,9 +26,4 @@
 
 ////var y = 10; y=/*var12*/
 
-test.markers().forEach((m) => {
-    goTo.position(m.position, m.fileName);
-    verify.completionListAllowsNewIdentifier();
-});
-
-
+goTo.eachMarker(() => verify.completionListAllowsNewIdentifier());
