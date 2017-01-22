@@ -4871,7 +4871,7 @@ namespace ts {
          */
         function getApparentType(type: Type): Type {
             const t = type.flags & TypeFlags.TypeVariable ? getBaseConstraintOfType(<TypeVariable>type) || emptyObjectType : type;
-            return t.flags & TypeFlags.Intersection ? getApparentTypeOfIntersectionType(<IntersectionType>type) :
+            return t.flags & TypeFlags.Intersection ? getApparentTypeOfIntersectionType(<IntersectionType>t) :
                 t.flags & TypeFlags.StringLike ? globalStringType :
                 t.flags & TypeFlags.NumberLike ? globalNumberType :
                 t.flags & TypeFlags.BooleanLike ? globalBooleanType :
