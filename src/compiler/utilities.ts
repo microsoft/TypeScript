@@ -395,7 +395,7 @@ namespace ts {
 
     function isShorthandAmbientModule(node: Node): boolean {
         // The only kind of module that can be missing a body is a shorthand ambient module.
-        return node.kind === SyntaxKind.ModuleDeclaration && (!(<ModuleDeclaration>node).body);
+        return node && node.kind === SyntaxKind.ModuleDeclaration && (!(<ModuleDeclaration>node).body);
     }
 
     export function isBlockScopedContainerTopLevel(node: Node): boolean {
@@ -3104,7 +3104,11 @@ namespace ts {
     }
 
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
-        return symbol && symbol.valueDeclaration && hasModifier(symbol.valueDeclaration, ModifierFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
+        return isExportDefaultSymbol(symbol) ? symbol.valueDeclaration.localSymbol : undefined;
+    }
+
+    export function isExportDefaultSymbol(symbol: Symbol): boolean {
+        return symbol && symbol.valueDeclaration && hasModifier(symbol.valueDeclaration, ModifierFlags.Default);
     }
 
     /** Return ".ts", ".d.ts", or ".tsx", if that is the extension. */
