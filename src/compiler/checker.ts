@@ -12146,7 +12146,8 @@ namespace ts {
          * Get JSX attributes type by trying to resolve openingLikeElement as a stateless function component.
          * Return all attributes type of resolved call signature including candidate signatures.
          * This function assumes that the caller handled other possible element type of the JSX element.
-         * This function is a behavior used by language service when looking up completion in JSX element.,
+         * This function is a behavior used by language service when looking up completion in JSX element.
+         *
          * @param openingLikeElement a JSX opening-like element to find attributes type
          * @param elementType a type of the opening-like element. This elementType can't be an union type
          * @param elemInstanceType an element instance type (the result of newing or invoking this tag)
@@ -12203,10 +12204,12 @@ namespace ts {
          *      declare function Foo(attr: { p1: string}): JSX.Element;
          *      <Foo p1={10} />;  // This function will try resolve "Foo" and return an attributes type of "Foo" which is "{ p1: string }"
          *
-         * The function is intended to initially be called from getAttributesTypeFromJsxOpeningLikeElement which already handle JSX-intrinsic-element.
+         * The function is intended to initially be called from getAttributesTypeFromJsxOpeningLikeElement which already handle JSX-intrinsic-element..
+         * This function will try to resolve custom JSX attributes type in following order: string literal, stateless function, and stateful component
+         *
          * @param openingLikeElement a non-intrinsic JSXOPeningLikeElement
          * @param shouldIncludeAllStatelessAttributesType a boolean indicating whether to include all attributes types from all stateless function signature
-         * @param elementType an instance type of the given opening-like element
+         * @param elementType an instance type of the given opening-like element. If undefined, the function will check type openinglikeElement's tagname.
          * @param elementClassType a JSX-ElementClass type. This is a result of looking up ElementClass interface in the JSX global (imported from react.d.ts)
          * @return attributes type if able to resolve the type of node
          *         anyType if there is no type ElementAttributesProperty or there is an error
@@ -12352,6 +12355,7 @@ namespace ts {
         /**
          * Get attributes type of the given custom opening-like JSX element.
          * The function is intended to be called from a function which has handle intrinsic JSX element already.
+         *
          * @param node a custom JSX opening-like element
          */
         function getCustomJsxElementAttributesType(node: JsxOpeningLikeElement, shouldIncludeAllStatelessAttributesType: boolean): Type {
@@ -12364,10 +12368,12 @@ namespace ts {
         }
 
         /**
-         * Get all possible attributes type,especially in the case of overload stateless function component, of the given JSX opening-like element.
+         * Get all possible attributes type, especially for an overload stateless function component, of the given JSX opening-like element.
          * This function is called by language service (see: completions-tryGetGlobalSymbols)
+         *
          * Because in language service, the given JSX opening-like element may be incomplete and therefore, we can't resolve to exact signature if the element
          * is a stateless function component so the best thing to do is return all attributes type from all overloads.
+         *
          * @param node a JSX opening-like element to get attributes type for
          */
         function getAllAttributesTypeFromJsxOpeningLikeElement(node: JsxOpeningLikeElement): Type {
@@ -12381,6 +12387,7 @@ namespace ts {
 
         /**
          * Get the attributes type which is the type that indicate which attributes are valid on the given JSXOpeningLikeElement.
+         *
          * @param node a JSXOpeningLikeElement node
          * @return an attributes type of the given node
          */
@@ -14052,10 +14059,15 @@ namespace ts {
         }
 
         /**
-         * 
-         * @param openingLikeElement
-         * @param elementType
-         * @param candidatesOutArray
+         * This function is similar to getResolvedSignature but exclusively for trying to resolve JSX stateless-function component.
+         * The main reason we have to use this function because, the caller of this function will already check the type of openingLikeElement's tagname
+         * pass the type as elementType. The elementType can not be a union (as such case should be handled by the caller of this function)
+         * At this point, it is still not sure whether the opening-like element is a stateless function component or not.
+         *
+         * @param openingLikeElement an opening-like JSX element to try to resolve as JSX stateless function
+         * @param elementType an element type of the opneing-like element by checking opening-like element's tagname.
+         * @param candidatesOutArray an array of signature to be filled in by the function. It is passed by signature help in the language service;
+         *                           the function will fill it up with appropriate candidate signatures
          */
         function getResolvedJsxStatelessFunctionSignature(openingLikeElement: JsxOpeningLikeElement, elementType: Type, candidatesOutArray: Signature[]): Signature {
             Debug.assert(!(elementType.flags & TypeFlags.Union));
@@ -14080,7 +14092,7 @@ namespace ts {
         }
 
         /**
-         * Try treating a given opening-like element as stateless function component and try to resolve a signature.
+         * Try treating a given opening-like element as stateless function component and resolve a tag-name to a function signature.
          * @param openingLikeElement an JsxOpeningLikeElement we want to try resolve its state-less function if possible
          * @param elementType a type of the opening-like JSX element, a result of resolving tagName in opening-like element.
          * @param candidatesOutArray an array of signature to be filled in by the function. It is passed by signature help in the language service;
