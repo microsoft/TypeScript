@@ -22,8 +22,4 @@
 
 ////class bar10{ constructor(...a/*constructorParamter6*/
 
-
-test.markers().forEach((m) => {
-    goTo.position(m.position, m.fileName);
-    verify.completionListIsEmpty();
-});
+goTo.eachMarker(() => verify.completionListIsEmpty());

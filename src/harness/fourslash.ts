@@ -372,8 +372,8 @@ namespace FourSlash {
         }
 
         // Entry points from fourslash.ts
-        public goToMarker(name = "") {
-            const marker = this.getMarkerByName(name);
+        public goToMarker(name: string | Marker = "") {
+            const marker = typeof name === "string" ? this.getMarkerByName(name) : name;
             if (this.activeFile.fileName !== marker.fileName) {
                 this.openFile(marker.fileName);
             }
@@ -382,8 +382,35 @@ namespace FourSlash {
             if (marker.position === -1 || marker.position > content.length) {
                 throw new Error(`Marker "${name}" has been invalidated by unrecoverable edits to the file.`);
             }
-            this.lastKnownMarker = name;
+            const mName = typeof name === "string" ? name : this.markerName(marker);
+            this.lastKnownMarker = mName;
             this.goToPosition(marker.position);
+        }
+
+        public goToEachMarker(action: () => void) {
+            const markers = this.getMarkers();
+            assert(markers.length);
+            for (const marker of markers) {
+                this.goToMarker(marker);
+                action();
+            }
+        }
+
+        public goToEachRange(action: () => void) {
+            const ranges = this.getRanges();
+            assert(ranges.length);
+            for (const range of ranges) {
+                this.goToRangeStart(range);
+                action();
+            }
+        }
+
+        private markerName(m: Marker): string {
+            return ts.forEachEntry(this.testData.markerPositions, (marker, name) => {
+                if (marker === m) {
+                    return name;
+                }
+            })!;
         }
 
         public goToPosition(pos: number) {
@@ -859,9 +886,8 @@ namespace FourSlash {
             }
         }
 
-        public verifyReferencesOf({fileName, start}: Range, references: Range[]) {
-            this.openFile(fileName);
-            this.goToPosition(start);
+        public verifyReferencesOf(range: Range, references: Range[]) {
+            this.goToRangeStart(range);
             this.verifyReferencesAre(references);
         }
 
@@ -1669,6 +1695,11 @@ namespace FourSlash {
             this.goToPosition(len);
         }
 
+        public goToRangeStart({fileName, start}: Range) {
+            this.openFile(fileName);
+            this.goToPosition(start);
+        }
+
         public goToTypeDefinition(definitionIndex: number) {
             const definitions = this.languageService.getTypeDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             if (!definitions || !definitions.length) {
@@ -2361,40 +2392,60 @@ namespace FourSlash {
             return this.languageService.getDocumentHighlights(this.activeFile.fileName, this.currentCaretPosition, filesToSearch);
         }
 
-        public verifyDocumentHighlightsAtPositionListContains(fileName: string, start: number, end: number, fileNamesToSearch: string[], kind?: string) {
-            const documentHighlights = this.getDocumentHighlightsAtCurrentPosition(fileNamesToSearch);
-
-            if (!documentHighlights || documentHighlights.length === 0) {
-                this.raiseError("verifyDocumentHighlightsAtPositionListContains failed - found 0 highlights, expected at least one.");
+        public verifyRangesAreOccurrences(isWriteAccess?: boolean) {
+            const ranges = this.getRanges();
+            for (const r of ranges) {
+                this.goToRangeStart(r);
+                this.verifyOccurrencesAtPositionListCount(ranges.length);
+                for (const range of ranges) {
+                    this.verifyOccurrencesAtPositionListContains(range.fileName, range.start, range.end, isWriteAccess);
+                }
             }
+        }
 
-            for (const documentHighlight of documentHighlights) {
-                if (documentHighlight.fileName === fileName) {
-                    const { highlightSpans } = documentHighlight;
+        public verifyRangesAreRenameLocations(findInStrings: boolean, findInComments: boolean) {
+            this.goToEachRange(() => this.verifyRenameLocations(findInStrings, findInComments));
+        }
 
-                    for (const highlight of highlightSpans) {
-                        if (highlight && highlight.textSpan.start === start && ts.textSpanEnd(highlight.textSpan) === end) {
-                            if (typeof kind !== "undefined" && highlight.kind !== kind) {
-                                this.raiseError(`verifyDocumentHighlightsAtPositionListContains failed - item "kind" value does not match, actual: ${highlight.kind}, expected: ${kind}.`);
-                            }
-                            return;
-                        }
-                    }
+        public verifyRangesWithSameTextAreDocumentHighlights() {
+            this.rangesByText().forEach(ranges => this.verifyRangesAreDocumentHighlights(ranges));
+        }
+
+        public verifyRangesAreDocumentHighlights(ranges?: Range[]) {
+            ranges = ranges || this.getRanges();
+            const fileNames = unique(ranges, range => range.fileName);
+            for (const range of ranges) {
+                this.goToRangeStart(range);
+                this.verifyDocumentHighlights(ranges, fileNames);
+            }
+        }
+
+        private verifyDocumentHighlights(expectedRanges: Range[], fileNames: string[] = [this.activeFile.fileName]) {
+            const documentHighlights = this.getDocumentHighlightsAtCurrentPosition(fileNames) || [];
+
+            for (const dh of documentHighlights) {
+                if (fileNames.indexOf(dh.fileName) === -1) {
+                    this.raiseError(`verifyDocumentHighlights failed - got highlights in unexpected file name ${dh.fileName}`);
                 }
             }
 
-            const missingItem = { fileName: fileName, start: start, end: end, kind: kind };
-            this.raiseError(`verifyDocumentHighlightsAtPositionListContains failed - could not find the item: ${stringify(missingItem)} in the returned list: (${stringify(documentHighlights)})`);
-        }
+            for (const fileName of fileNames) {
+                const expectedRangesInFile = expectedRanges.filter(r => r.fileName === fileName);
+                const highlights = ts.find(documentHighlights, dh => dh.fileName === fileName);
+                if (!highlights) {
+                    this.raiseError(`verifyDocumentHighlights failed - found no highlights in ${fileName}`);
+                }
+                const spansInFile = highlights.highlightSpans.sort((s1, s2) => s1.textSpan.start - s2.textSpan.start);
 
-        public verifyDocumentHighlightsAtPositionListCount(expectedCount: number, fileNamesToSearch: string[]) {
-            const documentHighlights = this.getDocumentHighlightsAtCurrentPosition(fileNamesToSearch);
-            const actualCount = documentHighlights
-                ? documentHighlights.reduce((currentCount, { highlightSpans }) => currentCount + highlightSpans.length, 0)
-                : 0;
+                if (expectedRangesInFile.length !== spansInFile.length) {
+                    this.raiseError(`verifyDocumentHighlights failed - In ${fileName}, expected ${expectedRangesInFile.length} highlights, got ${spansInFile.length}`);
+                }
 
-            if (expectedCount !== actualCount) {
-                this.raiseError("verifyDocumentHighlightsAtPositionListCount failed - actual: " + actualCount + ", expected:" + expectedCount);
+                ts.zipWith(expectedRangesInFile, spansInFile, (expectedRange, span) => {
+                    if (span.textSpan.start !== expectedRange.start || ts.textSpanEnd(span.textSpan) !== expectedRange.end) {
+                        this.raiseError(`verifyDocumentHighlights failed - span does not match, actual: ${JSON.stringify(span.textSpan)}, expected: ${expectedRange.start}--${expectedRange.end}`);
+                    }
+                });
             }
         }
 
@@ -3021,6 +3072,16 @@ ${code}
     function stringify(data: any, replacer?: (key: string, value: any) => any): string {
         return JSON.stringify(data, replacer, 2);
     }
+
+    /** Collects an array of unique outputs. */
+    function unique<T>(inputs: T[], getOutput: (t: T) => string): string[] {
+        const set = ts.createMap<true>();
+        for (const input of inputs) {
+            const out = getOutput(input);
+            set.set(out, true);
+        }
+        return ts.arrayFrom(set.keys());
+    }
 }
 
 namespace FourSlashInterface {
@@ -3059,8 +3120,20 @@ namespace FourSlashInterface {
         // Moves the caret to the specified marker,
         // or the anonymous marker ('/**/') if no name
         // is given
-        public marker(name?: string) {
+        public marker(name?: string | FourSlash.Marker) {
             this.state.goToMarker(name);
+        }
+
+        public eachMarker(action: () => void) {
+            this.state.goToEachMarker(action);
+        }
+
+        public rangeStart(range: FourSlash.Range) {
+            this.state.goToRangeStart(range);
+        }
+
+        public eachRange(action: () => void) {
+            this.state.goToEachRange(action);
         }
 
         public bof() {
@@ -3413,12 +3486,20 @@ namespace FourSlashInterface {
             this.state.verifyOccurrencesAtPositionListCount(expectedCount);
         }
 
-        public documentHighlightsAtPositionContains(range: FourSlash.Range, fileNamesToSearch: string[], kind?: string) {
-            this.state.verifyDocumentHighlightsAtPositionListContains(range.fileName, range.start, range.end, fileNamesToSearch, kind);
+        public rangesAreOccurrences(isWriteAccess?: boolean) {
+            this.state.verifyRangesAreOccurrences(isWriteAccess);
         }
 
-        public documentHighlightsAtPositionCount(expectedCount: number, fileNamesToSearch: string[]) {
-            this.state.verifyDocumentHighlightsAtPositionListCount(expectedCount, fileNamesToSearch);
+        public rangesAreRenameLocations(findInStrings = false, findInComments = false) {
+            this.state.verifyRangesAreRenameLocations(findInStrings, findInComments);
+        }
+
+        public rangesAreDocumentHighlights(ranges?: FourSlash.Range[]) {
+            this.state.verifyRangesAreDocumentHighlights(ranges);
+        }
+
+        public rangesWithSameTextAreDocumentHighlights() {
+            this.state.verifyRangesWithSameTextAreDocumentHighlights();
         }
 
         public completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string) {

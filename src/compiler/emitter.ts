@@ -73,7 +73,7 @@ namespace ts {
 
         // Emit each output file
         performance.mark("beforePrint");
-        forEachTransformedEmitFile(host, transformed, emitFile, emitOnlyDtsFiles);
+        forEachEmittedFile(host, emitFile, transformed, emitOnlyDtsFiles);
         performance.measure("printTime", "beforePrint");
 
         // Clean up emit nodes on parse tree
@@ -88,7 +88,7 @@ namespace ts {
             sourceMaps: sourceMapDataList
         };
 
-        function emitFile(jsFilePath: string, sourceMapFilePath: string, declarationFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) {
+        function emitFile({ jsFilePath, sourceMapFilePath, declarationFilePath }: EmitFileNames, sourceFiles: SourceFile[], isBundledEmit: boolean) {
             // Make sure not to write js file and source map file if any of them cannot be written
             if (!host.isEmitBlocked(jsFilePath) && !compilerOptions.noEmit) {
                 if (!emitOnlyDtsFiles) {

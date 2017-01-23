@@ -27,13 +27,13 @@
 ////
 ////mod/*invlaid10*/ule m1 {
 ////    va/*invlaid11*/r varibale = 0;
-////    
+////
 ////    func/*invlaid12*/tion foo(arg1: number) {
 ////        ret/*invlaid13*/urn string;
 ////    }
 ////
 ////    class foo {
-////    
+////
 ////    }
 ////
 ////    var object = {
@@ -44,9 +44,5 @@
 ////    };
 ////}
 
-
-test.markers().forEach((marker) => {
-    goTo.position(marker.position, marker.fileName);
-    verify.not.quickInfoExists();
-});
+goTo.eachMarker(() => verify.not.quickInfoExists());
 

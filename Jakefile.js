@@ -458,7 +458,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
             options += " --stripInternal";
         }
 
-        options += " --target es5 --noUnusedLocals --noUnusedParameters";
+        options += " --target es5 --lib es5,scripthost --noUnusedLocals --noUnusedParameters";
 
         var cmd = host + " " + compilerPath + " " + options + " ";
         cmd = cmd + sources.join(" ");
@@ -728,7 +728,7 @@ compileFile(
 
         // Appending exports at the end of the server library
         var tsserverLibraryDefinitionFileContents =
-            fs.readFileSync(tsserverLibraryDefinitionFile).toString() + 
+            fs.readFileSync(tsserverLibraryDefinitionFile).toString() +
             "\r\nexport = ts;" +
             "\r\nexport as namespace ts;";
 

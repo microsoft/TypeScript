@@ -117,7 +117,10 @@ declare namespace FourSlashInterface {
         markerByName(s: string): Marker;
     }
     class goTo {
-        marker(name?: string): void;
+        marker(name?: string | Marker): void;
+        eachMarker(action: () => void): void;
+        rangeStart(range: Range): void;
+        eachRange(action: () => void): void;
         bof(): void;
         eof(): void;
         implementation(): void;
@@ -191,6 +194,8 @@ declare namespace FourSlashInterface {
          * `start` should be included in `references`.
          */
         referencesOf(start: Range, references: Range[]): void;
+        rangesAreOccurrences(isWriteAccess?: boolean): void;
+        rangesAreRenameLocations(findInStrings?: boolean, findInComments?: boolean): void;
         /**
          * Performs `referencesOf` for every range on the whole set.
          * If `ranges` is omitted, this is `test.ranges()`.
@@ -229,8 +234,8 @@ declare namespace FourSlashInterface {
         navigationItemsListContains(name: string, kind: string, searchValue: string, matchKind: string, fileName?: string, parentName?: string): void;
         occurrencesAtPositionContains(range: Range, isWriteAccess?: boolean): void;
         occurrencesAtPositionCount(expectedCount: number): void;
-        documentHighlightsAtPositionContains(range: Range, fileNamesToSearch: string[], kind?: string): void;
-        documentHighlightsAtPositionCount(expectedCount: number, fileNamesToSearch: string[]): void;
+        rangesAreDocumentHighlights(ranges?: Range[]): void;
+        rangesWithSameTextAreDocumentHighlights(): void;
         completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string): void;
         /**
          * This method *requires* a contiguous, complete, and ordered stream of classifications for a file.

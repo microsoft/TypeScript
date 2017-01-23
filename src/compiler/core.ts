@@ -24,7 +24,9 @@ namespace ts {
     }
 
     // More efficient to create a collator once and use its `compare` than to call `a.localeCompare(b)` many times.
-    export const collator: { compare(a: string, b: string): number } = typeof Intl === "object" && typeof Intl.Collator === "function" ? new Intl.Collator() : undefined;
+    export const collator: { compare(a: string, b: string): number } = typeof Intl === "object" && typeof Intl.Collator === "function" ? new Intl.Collator(/*locales*/ undefined, { usage: "sort", sensitivity: "accent" }) : undefined;
+    // Intl is missing in Safari, and node 0.10 treats "a" as greater than "B".
+    export const localeCompareIsCorrect = ts.collator && ts.collator.compare("a", "B") < 0;
 
     /** Create a MapLike with good performance. */
     function createDictionaryObject<T>(): MapLike<T> {
@@ -200,6 +202,10 @@ namespace ts {
         LessThan    = -1,
         EqualTo     = 0,
         GreaterThan = 1
+    }
+
+    export function length(array: any[]) {
+        return array ? array.length : 0;
     }
 
     /**
@@ -1247,9 +1253,12 @@ namespace ts {
         if (a === undefined) return Comparison.LessThan;
         if (b === undefined) return Comparison.GreaterThan;
         if (ignoreCase) {
-            if (collator && String.prototype.localeCompare) {
-                // accent means a ≠ b, a ≠ á, a = A
-                const result = a.localeCompare(b, /*locales*/ undefined, { usage: "sort", sensitivity: "accent" });
+            // Checking if "collator exists indicates that Intl is available.
+            // We still have to check if "collator.compare" is correct. If it is not, use "String.localeComapre"
+            if (collator) {
+                const result = localeCompareIsCorrect ?
+                    collator.compare(a, b) :
+                    a.localeCompare(b, /*locales*/ undefined, { usage: "sort", sensitivity: "accent" });  // accent means a ≠ b, a ≠ á, a = A
                 return result < 0 ? Comparison.LessThan : result > 0 ? Comparison.GreaterThan : Comparison.EqualTo;
             }
 
