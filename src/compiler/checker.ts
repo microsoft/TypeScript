@@ -13635,12 +13635,6 @@ namespace ts {
                 return result;
             }
 
-            if (isJsxOpeningOrSelfClosingElement) {
-                // If there is not result, just return the last one we try as a candidate.
-                // We do not report any error here because any error will be handled in "resolveCustomJsxElementAttributesType".
-                return candidateForArgumentError;
-            }
-
             // No signatures were applicable. Now report errors based on the last applicable signature with
             // no arguments excluded from assignability checks.
             // If candidate is undefined, it means that no candidates had a suitable arity. In that case,
@@ -13651,6 +13645,11 @@ namespace ts {
                 // in arguments too early. If possible, we'd like to only type them once we know the correct
                 // overload. However, this matters for the case where the call is correct. When the call is
                 // an error, we don't need to exclude any arguments, although it would cause no harm to do so.
+                if (isJsxOpeningOrSelfClosingElement) {
+                    // If there is not result, just return the last one we try as a candidate.
+                    // We do not report any error here because any error will be handled in "resolveCustomJsxElementAttributesType".
+                    return candidateForArgumentError;
+                }
                 checkApplicableSignature(node, args, candidateForArgumentError, assignableRelation, /*excludeArgument*/ undefined, /*reportErrors*/ true);
             }
             else if (candidateForTypeArgumentError) {
@@ -13671,7 +13670,7 @@ namespace ts {
                         diagnosticChainHead = chainDiagnosticMessages(diagnosticChainHead, headMessage);
                     }
 
-                    reportNoCommonSupertypeError(inferenceCandidates, (<CallExpression>node).expression || (<TaggedTemplateExpression>node).tag, diagnosticChainHead);
+                    reportNoCommonSupertypeError(inferenceCandidates, (<JsxOpeningLikeElement>node).tagName || (<CallExpression>node).expression || (<TaggedTemplateExpression>node).tag, diagnosticChainHead);
                 }
             }
             else {
@@ -14072,10 +14071,6 @@ namespace ts {
             links.resolvedSignature = resolvingSignature;
 
             let callSignature = resolveStatelessJsxOpeningLikeElement(openingLikeElement, elementType, candidatesOutArray);
-            if (!callSignature || callSignature === unknownSignature) {
-                const callSignatures = elementType && getSignaturesOfType(elementType, SignatureKind.Call);
-                callSignature = callSignatures[callSignatures.length - 1];
-            }
             links.resolvedSignature = callSignature;
             // If signature resolution originated in control flow type analysis (for example to compute the
             // assigned type in a flow assignment) we don't cache the result as it may be based on temporary
