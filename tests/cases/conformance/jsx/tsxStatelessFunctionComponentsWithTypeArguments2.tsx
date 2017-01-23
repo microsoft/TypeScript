@@ -25,3 +25,13 @@ declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;
 function createLink(func: (a: number, b: string)=>void) {
     let o = <Link func={func} />
 }
+
+interface InferParamProp<T> {
+    values: Array<T>;
+    selectHandler: (selectedVal: T) => void;
+}
+
+declare function InferParamComponent<T>(attr: InferParamProp<T>): JSX.Element;
+
+// Error
+let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val: string) => { }} />;

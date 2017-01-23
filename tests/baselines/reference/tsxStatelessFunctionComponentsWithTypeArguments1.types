@@ -3,7 +3,6 @@
 import React = require('react')
 >React : typeof React
 
-
 declare function ComponentWithTwoAttributes<K,V>(l: {key1: K, value: V}): JSX.Element;
 >ComponentWithTwoAttributes : <K, V>(l: { key1: K; value: V; }) => JSX.Element
 >K : K
@@ -46,85 +45,6 @@ function Baz<T,U>(key1: T, value: U) {
 >key : string
 }
 
-// OK
-declare function Component<U>(l: U): JSX.Element;
->Component : <U>(l: U) => JSX.Element
->U : U
->l : U
->U : U
->JSX : any
->Element : JSX.Element
-
-function createComponent<T extends {prop: number}>(arg:T) {
->createComponent : <T extends { prop: number; }>(arg: T) => void
->T : T
->prop : number
->arg : T
->T : T
-
-    let a1 = <Component {...arg} />;
->a1 : JSX.Element
-><Component {...arg} /> : JSX.Element
->Component : <U>(l: U) => JSX.Element
->arg : T
-
-    let a2 = <Component {...arg} prop1 />;
->a2 : JSX.Element
-><Component {...arg} prop1 /> : JSX.Element
->Component : <U>(l: U) => JSX.Element
->arg : T
->prop1 : true
-}
-
-declare function ComponentSpecific<U>(l: {prop: U}): JSX.Element;
->ComponentSpecific : <U>(l: { prop: U; }) => JSX.Element
->U : U
->l : { prop: U; }
->prop : U
->U : U
->JSX : any
->Element : JSX.Element
-
-declare function ComponentSpecific1<U>(l: {prop: U, "ignore-prop": number}): JSX.Element;
->ComponentSpecific1 : <U>(l: { prop: U; "ignore-prop": number; }) => JSX.Element
->U : U
->l : { prop: U; "ignore-prop": number; }
->prop : U
->U : U
->JSX : any
->Element : JSX.Element
-
-// OK
-function Bar<T extends {prop: number}>(arg: T) {
->Bar : <T extends { prop: number; }>(arg: T) => void
->T : T
->prop : number
->arg : T
->T : T
-
-    let a1 = <ComponentSpecific {...arg} ignore-prop="hi" />;  // U is number
->a1 : JSX.Element
-><ComponentSpecific {...arg} ignore-prop="hi" /> : JSX.Element
->ComponentSpecific : <U>(l: { prop: U; }) => JSX.Element
->arg : T
->ignore-prop : string
-
-    let a2 = <ComponentSpecific1 {...arg} ignore-prop={10} />;  // U is number
->a2 : JSX.Element
-><ComponentSpecific1 {...arg} ignore-prop={10} /> : JSX.Element
->ComponentSpecific1 : <U>(l: { prop: U; "ignore-prop": number; }) => JSX.Element
->arg : T
->ignore-prop : number
->10 : 10
-
-    let a3 = <ComponentSpecific {...arg} prop="hello" />;   // U is "hello"
->a3 : JSX.Element
-><ComponentSpecific {...arg} prop="hello" /> : JSX.Element
->ComponentSpecific : <U>(l: { prop: U; }) => JSX.Element
->arg : T
->prop : string
-}
-
 declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;
 >Link : <U>(l: { func: (arg: U) => void; }) => JSX.Element
 >U : U
@@ -162,4 +82,42 @@ function createLink1(func: (a: number)=>boolean) {
 >func : (a: number) => boolean
 }
 
+interface InferParamProp<T> {
+>InferParamProp : InferParamProp<T>
+>T : T
+
+    values: Array<T>;
+>values : T[]
+>Array : T[]
+>T : T
+
+    selectHandler: (selectedVal: T) => void;
+>selectHandler : (selectedVal: T) => void
+>selectedVal : T
+>T : T
+}
+
+declare function InferParamComponent<T>(attr: InferParamProp<T>): JSX.Element;
+>InferParamComponent : <T>(attr: InferParamProp<T>) => JSX.Element
+>T : T
+>attr : InferParamProp<T>
+>InferParamProp : InferParamProp<T>
+>T : T
+>JSX : any
+>Element : JSX.Element
+
+// OK
+let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val) => { }} />;
+>i : JSX.Element
+><InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val) => { }} /> : JSX.Element
+>InferParamComponent : <T>(attr: InferParamProp<T>) => JSX.Element
+>values : number[]
+>[1, 2, 3, 4] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
+>selectHandler : (val: number) => void
+>(val) => { } : (val: number) => void
+>val : number
 

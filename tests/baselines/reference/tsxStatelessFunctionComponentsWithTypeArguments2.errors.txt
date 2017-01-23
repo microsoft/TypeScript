@@ -4,9 +4,11 @@ tests/cases/conformance/jsx/file.tsx(21,19): error TS2322: Type '{ func: (a: num
   Type '{ func: (a: number, b: string) => void; }' is not assignable to type '{ func: (arg: number) => void; }'.
     Types of property 'func' are incompatible.
       Type '(a: number, b: string) => void' is not assignable to type '(arg: number) => void'.
+tests/cases/conformance/jsx/file.tsx(32,10): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
+  Type argument candidate 'number' is not a valid type argument because it is not a supertype of candidate 'string'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (4 errors) ====
     
     import React = require('react')
     
@@ -38,3 +40,17 @@ tests/cases/conformance/jsx/file.tsx(21,19): error TS2322: Type '{ func: (a: num
 !!! error TS2322:     Types of property 'func' are incompatible.
 !!! error TS2322:       Type '(a: number, b: string) => void' is not assignable to type '(arg: number) => void'.
     }
+    
+    interface InferParamProp<T> {
+        values: Array<T>;
+        selectHandler: (selectedVal: T) => void;
+    }
+    
+    declare function InferParamComponent<T>(attr: InferParamProp<T>): JSX.Element;
+    
+    // Error
+    let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val: string) => { }} />;
+             ~~~~~~~~~~~~~~~~~~~
+!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
+!!! error TS2453:   Type argument candidate 'number' is not a valid type argument because it is not a supertype of candidate 'string'.
+    
