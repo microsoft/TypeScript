@@ -6877,7 +6877,7 @@ namespace ts {
 
         // Returns true if the given expression contains (at any level of nesting) a function or arrow expression
         // that is subject to contextual typing.
-        function isContextSensitive(node: Expression | MethodDeclaration | ObjectLiteralElementLike): boolean {
+        function isContextSensitive(node: Expression | MethodDeclaration | ObjectLiteralElementLike | JsxAttributeLike): boolean {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
             switch (node.kind) {
                 case SyntaxKind.FunctionExpression:
@@ -6900,6 +6900,14 @@ namespace ts {
                     return isContextSensitiveFunctionLikeDeclaration(<MethodDeclaration>node);
                 case SyntaxKind.ParenthesizedExpression:
                     return isContextSensitive((<ParenthesizedExpression>node).expression);
+                case SyntaxKind.JsxAttributes:
+                    return forEach((<JsxAttributes>node).properties, isContextSensitive);
+                case SyntaxKind.JsxAttribute:
+                    // If written as a shorthand (e.g <... attr /> then there is no explicit initializer as it has implicit boolean value of true
+                    // which is not context sensitvie.
+                    return (<JsxAttribute>node).initializer && isContextSensitive((<JsxAttribute>node).initializer);
+                case SyntaxKind.JsxExpression:
+                    return isContextSensitive((<JsxExpression>node).expression);
             }
 
             return false;
@@ -11281,7 +11289,7 @@ namespace ts {
 
         function getContextualTypeForJsxAttribute(attribute: JsxAttribute | JsxSpreadAttribute) {
             // When we trying to resolve JsxOpeningLikeElement as a stateless function element, we will already give JSXAttributes a contextual type
-            // which is a type of the parameter  of the signature we are trying out. This is not the case if it is a stateful JSX (i.e ReactComponenet class)
+            // which is a type of the parameter of the signature we are trying out. This is not the case if it is a stateful JSX (i.e ReactComponenet class)
             // So if that is the case, just return the type of the JsxAttribute in such contextual type with out going into resolving of the JsxOpeningLikeElement again
             const attributesType = getContextualType(<Expression>attribute.parent) || getAttributesTypeFromJsxOpeningLikeElement(<JsxOpeningLikeElement>attribute.parent.parent);
 
@@ -11870,7 +11878,7 @@ namespace ts {
          * @param openingLikeElement a Jsx opening-like element
          * @return an anonymous type (similar to the one returned by checkObjectLiteral) in which its properties are attributes property.
          */
-        function createJsxAttributesTypeFromAttributesProperty(openingLikeElement: JsxOpeningLikeElement, filter?: (symbol: Symbol) => boolean) {
+        function createJsxAttributesTypeFromAttributesProperty(openingLikeElement: JsxOpeningLikeElement, filter?: (symbol: Symbol) => boolean, contextualMapper?: TypeMapper) {
             const attributes = openingLikeElement.attributes;
             let attributesTable = createMap<Symbol>();
             let spread: Type = emptyObjectType;
@@ -11879,7 +11887,7 @@ namespace ts {
                 const member = attributeDecl.symbol;
                 if (isJsxAttribute(attributeDecl)) {
                     const exprType = attributeDecl.initializer ?
-                        checkExpression(attributeDecl.initializer) :
+                        checkExpression(attributeDecl.initializer, contextualMapper) :
                         trueType;  // <Elem attr /> is sugar for <Elem attr={true} /> 
 
                     const attributeSymbol = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.name);
@@ -11951,12 +11959,12 @@ namespace ts {
          *      the JSX opening-like element attributes property with contextual type.
          * @param node a JSXAttributes to be resolved of its type
          */
-        function checkJsxAttributes(node: JsxAttributes) {
-            return createJsxAttributesTypeFromAttributesProperty(node.parent as JsxOpeningLikeElement);
+        function checkJsxAttributes(node: JsxAttributes, contextualMapper?: TypeMapper) {
+            return createJsxAttributesTypeFromAttributesProperty(node.parent as JsxOpeningLikeElement, /*filter*/ undefined, contextualMapper);
         }
 
         /**
-         * Check whether the given attributes of JsxOpeningLikeElement is assignable to its corresponding tag-name attributes type.
+         * Check whether the given attributes of JsxOpeningLikeElement is assignable to the tag-name attributes type.
          *      Resolve the type of attributes of the openingLikeElement through checking type of tag-name
          *      Check assignablity between given attributes property, "attributes" and the target attributes resulted from resolving tag-name
          * @param openingLikeElement an opening-like JSX element to check its JSXAttributes
@@ -11965,7 +11973,7 @@ namespace ts {
             // The function involves following steps:
             //      1. Figure out expected attributes type expected by resolving tag-name of the JSX opening-like element, targetAttributesType.
             //         During these steps, we will try to resolve the tag-name as intrinsic name, stateless function, stateful component (in the order)
-            //      2. Solved Jsx attributes type given by users, sourceAttributesType, which is by resolving "attributes" property of the JSX opening-like element.
+            //      2. Solved JSX attributes type given by users, sourceAttributesType, which is by resolving "attributes" property of the JSX opening-like element.
             //      3. Check if the two are assignable to each other
 
             // targetAttributesType is a type of an attributes from resolving tag-name of an opening-like JSX element.
@@ -12190,12 +12198,17 @@ namespace ts {
         }
 
         /**
-         * Resolve attributes type of the given node. The function is intended to initially be called from getAttributesTypeFromJsxOpeningLikeElement which already handle JSX-intrinsic-element.
+         * Resolve attributes type of the given opening-like element. The attributes type is a type of attributes associated with the given elementType.
+         * For instance:
+         *      declare function Foo(attr: { p1: string}): JSX.Element;
+         *      <Foo p1={10} />;  // This function will try resolve "Foo" and return an attributes type of "Foo" which is "{ p1: string }"
+         *
+         * The function is intended to initially be called from getAttributesTypeFromJsxOpeningLikeElement which already handle JSX-intrinsic-element.
          * @param openingLikeElement a non-intrinsic JSXOPeningLikeElement
          * @param shouldIncludeAllStatelessAttributesType a boolean indicating whether to include all attributes types from all stateless function signature
-         * @param elementType an instance type of the given node
+         * @param elementType an instance type of the given opening-like element
          * @param elementClassType a JSX-ElementClass type. This is a result of looking up ElementClass interface in the JSX global (imported from react.d.ts)
-         * @return attributes'type if able to resolve the type of node
+         * @return attributes type if able to resolve the type of node
          *         anyType if there is no type ElementAttributesProperty or there is an error
          *         emptyObjectType if there is no "prop" in the element instance type
          **/
@@ -12337,9 +12350,9 @@ namespace ts {
         }
 
         /**
-         * Get attributes type of the given custom opening-like Jsx element.
-         * The function is intended to be called from a function which has handle intrinsic Jsx element already.
-         * @param node a custom Jsx opening-like element
+         * Get attributes type of the given custom opening-like JSX element.
+         * The function is intended to be called from a function which has handle intrinsic JSX element already.
+         * @param node a custom JSX opening-like element
          */
         function getCustomJsxElementAttributesType(node: JsxOpeningLikeElement, shouldIncludeAllStatelessAttributesType: boolean): Type {
             const links = getNodeLinks(node);
@@ -12439,9 +12452,9 @@ namespace ts {
             checkJsxAttributesAssignableToTagnameAttributes(node);
         }
 
-        function checkJsxExpression(node: JsxExpression) {
+        function checkJsxExpression(node: JsxExpression, contextualMapper?: TypeMapper) {
             if (node.expression) {
-                const type = checkExpression(node.expression);
+                const type = checkExpression(node.expression, contextualMapper);
                 if (node.dotDotDotToken && type !== anyType && !isArrayType(type)) {
                     error(node, Diagnostics.JSX_spread_child_must_be_an_array_type, node.toString(), typeToString(type));
                 }
@@ -13554,7 +13567,7 @@ namespace ts {
             // For a decorator, no arguments are susceptible to contextual typing due to the fact
             // decorators are applied to a declaration by the emitter, and not to an expression.
             let excludeArgument: boolean[];
-            if (!isDecorator && !isJsxOpeningOrSelfClosingElement) {
+            if (!isDecorator) {
                 // We do not need to call `getEffectiveArgumentCount` here as it only
                 // applies when calculating the number of arguments for a decorator.
                 for (let i = isTaggedTemplate ? 1 : 0; i < args.length; i++) {
@@ -15737,13 +15750,13 @@ namespace ts {
                 case SyntaxKind.YieldExpression:
                     return checkYieldExpression(<YieldExpression>node);
                 case SyntaxKind.JsxExpression:
-                    return checkJsxExpression(<JsxExpression>node);
+                    return checkJsxExpression(<JsxExpression>node, contextualMapper);
                 case SyntaxKind.JsxElement:
                     return checkJsxElement(<JsxElement>node);
                 case SyntaxKind.JsxSelfClosingElement:
                     return checkJsxSelfClosingElement(<JsxSelfClosingElement>node);
                 case SyntaxKind.JsxAttributes:
-                    return checkJsxAttributes(<JsxAttributes>node);
+                    return checkJsxAttributes(<JsxAttributes>node, contextualMapper);
                 case SyntaxKind.JsxOpeningElement:
                     Debug.fail("Shouldn't ever directly check a JsxOpeningElement");
             }
