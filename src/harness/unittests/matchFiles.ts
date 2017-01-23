@@ -909,16 +909,16 @@ namespace ts {
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveMixedExtensionHost, caseInsensitiveBasePath);
                 assertParsed(actual, expected);
             });
-            it("with jsx=preserveWithJsExtension, allowJs=false", () => {
+            it("with jsx=react-native, allowJs=false", () => {
                 const json = {
                     compilerOptions: {
-                        jsx: "preserveWithJsExtension",
+                        jsx: "react-native",
                         allowJs: false
                     }
                 };
                 const expected: ts.ParsedCommandLine = {
                     options: {
-                        jsx: ts.JsxEmit.PreserveWithJsExtension,
+                        jsx: ts.JsxEmit.ReactNative,
                         allowJs: false
                     },
                     errors: [],
@@ -986,16 +986,16 @@ namespace ts {
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveMixedExtensionHost, caseInsensitiveBasePath);
                 assertParsed(actual, expected);
             });
-            it("with jsx=preserveWithJsExtension, allowJs=true", () => {
+            it("with jsx=react-native, allowJs=true", () => {
                 const json = {
                     compilerOptions: {
-                        jsx: "preserveWithJsExtension",
+                        jsx: "react-native",
                         allowJs: true
                     }
                 };
                 const expected: ts.ParsedCommandLine = {
                     options: {
-                        jsx: ts.JsxEmit.PreserveWithJsExtension,
+                        jsx: ts.JsxEmit.ReactNative,
                         allowJs: true
                     },
                     errors: [],

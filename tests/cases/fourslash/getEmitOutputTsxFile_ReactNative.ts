@@ -1,9 +1,9 @@
 /// <reference path="fourslash.ts" />
 
-// @BaselineFile: getEmitOutputTsxFile_PreserveWithJsExtension.baseline
+// @BaselineFile: getEmitOutputTsxFile_ReactNative.baseline
 // @declaration: true
 // @sourceMap: true
-// @jsx: preserveWithJsExtension
+// @jsx: react-native
 
 // @Filename: inputFile1.ts
 // @emitThisFile: true

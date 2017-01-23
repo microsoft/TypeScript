@@ -2272,11 +2272,11 @@ namespace ts.server.protocol {
     export namespace JsxEmit {
         export type None = "None";
         export type Preserve = "Preserve";
-        export type PreserveWithJsExtension = "PreserveWithJsExtension";
+        export type ReactNative = "ReactNative";
         export type React = "React";
     }
 
-    export type JsxEmit = JsxEmit.None | JsxEmit.Preserve | JsxEmit.React | JsxEmit.PreserveWithJsExtension;
+    export type JsxEmit = JsxEmit.None | JsxEmit.Preserve | JsxEmit.React | JsxEmit.ReactNative;
 
     export namespace ModuleKind {
         export type None = "None";

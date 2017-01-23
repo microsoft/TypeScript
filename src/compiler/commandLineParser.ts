@@ -67,11 +67,11 @@ namespace ts {
             name: "jsx",
             type: createMapFromTemplate({
                 "preserve": JsxEmit.Preserve,
-                "preservewithjsextension": JsxEmit.PreserveWithJsExtension,
+                "react-native": JsxEmit.ReactNative,
                 "react": JsxEmit.React
             }),
             paramType: Diagnostics.KIND,
-            description: Diagnostics.Specify_JSX_code_generation_Colon_preserve_preserveWithJsExtension_or_react,
+            description: Diagnostics.Specify_JSX_code_generation_Colon_preserve_react_native_or_react,
         },
         {
             name: "reactNamespace",

@@ -3299,7 +3299,7 @@
         None = 0,
         Preserve = 1,
         React = 2,
-        PreserveWithJsExtension = 3
+        ReactNative = 3
     }
 
     export const enum NewLineKind {
