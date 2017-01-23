@@ -1803,7 +1803,7 @@ interface CanvasRenderingContext2D extends Object, CanvasPathMethods {
     drawImage(image: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement, offsetX: number, offsetY: number, width?: number, height?: number, canvasOffsetX?: number, canvasOffsetY?: number, canvasImageWidth?: number, canvasImageHeight?: number): void;
     fill(fillRule?: string): void;
     fillRect(x: number, y: number, w: number, h: number): void;
-    fillText(text: string, x: number, y: number, maxWidth?: number): void;
+    fillText(text: string | number, x: number, y: number, maxWidth?: number): void;
     getImageData(sx: number, sy: number, sw: number, sh: number): ImageData;
     getLineDash(): number[];
     isPointInPath(x: number, y: number, fillRule?: string): boolean;
