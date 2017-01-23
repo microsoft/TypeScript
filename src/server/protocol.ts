@@ -91,6 +91,7 @@ namespace ts.server.protocol {
         /* @internal */
         export type BreakpointStatement = "breakpointStatement";
         export type CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects";
+        export type TypeAcquisitionForInferredProjects = "typeAcquisitionForInferredProjects";
         export type GetCodeFixes = "getCodeFixes";
         /* @internal */
         export type GetCodeFixesFull = "getCodeFixes-full";
@@ -1183,6 +1184,11 @@ namespace ts.server.protocol {
         arguments: SetCompilerOptionsForInferredProjectsArgs;
     }
 
+    export interface SetTypeAcquisitionForInferredProjectsRequest extends Request {
+        command: CommandTypes.TypeAcquisitionForInferredProjects;
+        arguments: SetTypeAcquisitionForInferredProjectsArgs;
+    }
+
     /**
      * Argument for SetCompilerOptionsForInferredProjectsRequest request.
      */
@@ -1191,6 +1197,16 @@ namespace ts.server.protocol {
          * Compiler options to be used with inferred projects.
          */
         options: ExternalProjectCompilerOptions;
+    }
+
+    /**
+     * Argument for SetTypeAcquisitionForInferredProjectsRequest request.
+     */
+    export interface SetTypeAcquisitionForInferredProjectsArgs {
+        /**
+         * Type acquisition to be used with inferred projects.
+         */
+        typeAcquisition: TypeAcquisition;
     }
 
     /**
