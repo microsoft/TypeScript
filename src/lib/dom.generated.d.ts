@@ -1807,7 +1807,7 @@ interface CanvasRenderingContext2D extends Object, CanvasPathMethods {
     getImageData(sx: number, sy: number, sw: number, sh: number): ImageData;
     getLineDash(): number[];
     isPointInPath(x: number, y: number, fillRule?: string): boolean;
-    measureText(text: string): TextMetrics;
+    measureText(text: string | number): TextMetrics;
     putImageData(imagedata: ImageData, dx: number, dy: number, dirtyX?: number, dirtyY?: number, dirtyWidth?: number, dirtyHeight?: number): void;
     restore(): void;
     rotate(angle: number): void;
