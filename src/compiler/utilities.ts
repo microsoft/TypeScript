@@ -2590,27 +2590,20 @@ namespace ts {
     }
 
     /**
-     * Iterates over the source files that are expected to have an emit output. This function
-     * is used by the legacy emitter and the declaration emitter and should not be used by
-     * the tree transforming emitter.
+     * Iterates over the source files that are expected to have an emit output.
      *
      * @param host An EmitHost.
      * @param action The action to execute.
-     * @param targetSourceFile An optional target source file to emit.
+     * @param sourceFilesOrTargetSourceFile
+     *   If an array, the full list of source files to emit.
+     *   Else, calls `getSourceFilesToEmit` with the (optional) target source file to determine the list of source files to emit.
      */
-    export function forEachExpectedEmitFile(host: EmitHost,
-        action: (emitFileNames: EmitFileNames, sourceFiles: SourceFile[], isBundledEmit: boolean, emitOnlyDtsFiles: boolean) => void,
-        targetSourceFile?: SourceFile,
+    export function forEachEmittedFile(
+        host: EmitHost, action: (emitFileNames: EmitFileNames, sourceFiles: SourceFile[], isBundledEmit: boolean, emitOnlyDtsFiles: boolean) => void,
+        sourceFilesOrTargetSourceFile?: SourceFile[] | SourceFile,
         emitOnlyDtsFiles?: boolean) {
-        forEachEmittedFile(host, getSourceFilesToEmit(host, targetSourceFile), action, emitOnlyDtsFiles);
-    }
 
-    /**
-     * Iterates over each source file to emit.
-     */
-    export function forEachEmittedFile(host: EmitHost, sourceFiles: SourceFile[],
-        action: (emitFileNames: EmitFileNames, sourceFiles: SourceFile[], isBundledEmit: boolean, emitOnlyDtsFiles: boolean) => void,
-        emitOnlyDtsFiles?: boolean) {
+        const sourceFiles = isArray(sourceFilesOrTargetSourceFile) ? sourceFilesOrTargetSourceFile : getSourceFilesToEmit(host, sourceFilesOrTargetSourceFile);
         const options = host.getCompilerOptions();
         if (options.outFile || options.out) {
             if (sourceFiles.length) {
@@ -2622,7 +2615,6 @@ namespace ts {
         }
         else {
             for (const sourceFile of sourceFiles) {
-                const options = host.getCompilerOptions();
                 const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, getOutputExtension(sourceFile, options));
                 const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
                 const declarationFilePath = !isSourceFileJavaScript(sourceFile) && (emitOnlyDtsFiles || options.declaration) ? getDeclarationEmitOutputFilePath(sourceFile, host) : undefined;

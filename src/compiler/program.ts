@@ -1707,7 +1707,7 @@ namespace ts {
             if (!options.noEmit && !options.suppressOutputPathCheck) {
                 const emitHost = getEmitHost();
                 const emitFilesSeen = createFileMap<boolean>(!host.useCaseSensitiveFileNames() ? key => key.toLocaleLowerCase() : undefined);
-                forEachExpectedEmitFile(emitHost, (emitFileNames) => {
+                forEachEmittedFile(emitHost, (emitFileNames) => {
                     verifyEmitFilePath(emitFileNames.jsFilePath, emitFilesSeen);
                     verifyEmitFilePath(emitFileNames.declarationFilePath, emitFilesSeen);
                 });

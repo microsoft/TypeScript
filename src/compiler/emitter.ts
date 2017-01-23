@@ -73,7 +73,7 @@ namespace ts {
 
         // Emit each output file
         performance.mark("beforePrint");
-        forEachEmittedFile(host, transformed, emitFile, emitOnlyDtsFiles);
+        forEachEmittedFile(host, emitFile, transformed, emitOnlyDtsFiles);
         performance.measure("printTime", "beforePrint");
 
         // Clean up emit nodes on parse tree
