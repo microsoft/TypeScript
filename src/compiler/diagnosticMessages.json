@@ -2043,11 +2043,7 @@
         "category": "Error",
         "code": 2705
     },
-     "Type parameter '{0}' has a circular default.": {
-        "category": "Error",
-        "code": 2706
-    },
-     "Generic type '{0}' requires between {1} and {2} type arguments.": {
+    "Generic type '{0}' requires between {1} and {2} type arguments.": {
         "category": "Error",
         "code": 2707
     },

@@ -375,7 +375,6 @@ namespace ts {
             ResolvedBaseConstructorType,
             DeclaredType,
             ResolvedReturnType,
-            ResolvedDefault
         }
 
         const builtinGlobals = createMap<Symbol>();
@@ -2651,7 +2650,7 @@ namespace ts {
                     writeSpace(writer);
                     buildTypeDisplay(constraint, writer, enclosingDeclaration, flags, symbolStack);
                 }
-                const defaultType = getDefaultOfTypeParameter(tp);
+                const defaultType = getDefaultFromTypeParameter(tp);
                 if (defaultType) {
                     writeSpace(writer);
                     writePunctuation(writer, SyntaxKind.EqualsToken);
@@ -3053,9 +3052,6 @@ namespace ts {
             }
             if (propertyName === TypeSystemPropertyName.ResolvedReturnType) {
                 return (<Signature>target).resolvedReturnType;
-            }
-            if (propertyName === TypeSystemPropertyName.ResolvedDefault) {
-                return (<TypeVariable>target).resolvedDefault;
             }
 
             Debug.fail("Unhandled TypeSystemPropertyName " + propertyName);
@@ -4864,69 +4860,6 @@ namespace ts {
         }
 
         /**
-         * Gets the default type for a type parameter.
-         *
-         * If the type parameter is the result of an instantiation, this gets the instantiated
-         * default type of its target. If the type parameter has no default type, or if the default
-         * type circularly references the type parameter, `undefined` is returned.
-         *
-         * This function *does* perform a circularity check.
-         */
-        function getDefaultOfTypeParameter(typeParameter: TypeParameter): Type | undefined {
-            return hasNonCircularDefault(typeParameter) ? getDefaultFromTypeParameter(typeParameter) : undefined;
-        }
-
-        /**
-         * Determines whether a type parameter has a non-circular default type.
-         *
-         * Note that this function also returns `true` if a type parameter *does not* have a
-         * default type.
-         */
-        function hasNonCircularDefault(typeParameter: TypeParameter): boolean {
-            return getResolvedDefault(typeParameter) !== circularConstraintOrDefaultType;
-        }
-
-        /**
-         * Resolves the default type of a type parameter.
-         *
-         * If the type parameter has no default, the `noConstraintOrDefaultType` singleton is
-         * returned. If the type parameter has a circular default, the
-         * `circularConstraintOrDefaultType` singleton is returned.
-         */
-        function getResolvedDefault(typeParameter: TypeParameter): Type {
-            if (!typeParameter.resolvedDefault) {
-                if (!pushTypeResolution(typeParameter, TypeSystemPropertyName.ResolvedDefault)) {
-                    return circularConstraintOrDefaultType;
-                }
-                const defaultType = getDefaultFromTypeParameter(typeParameter);
-                const type = defaultType && getResolvedDefaultWorker(defaultType);
-                if (!popTypeResolution()) {
-                    return typeParameter.resolvedDefault = circularConstraintOrDefaultType;
-                }
-                typeParameter.resolvedDefault = type || noConstraintOrDefaultType;
-            }
-            return typeParameter.resolvedDefault;
-        }
-
-        /**
-         * Recursively resolves the default type for a type.
-         *
-         * If the type is a union or intersection type and any of its constituents is a circular
-         * reference, the `circularConstraintOrDefaultType` singleton is returned.
-         */
-        function getResolvedDefaultWorker(type: Type): Type {
-            if (type.flags & TypeFlags.TypeParameter) {
-                return getResolvedDefault(<TypeParameter>type);
-            }
-            if (type.flags & TypeFlags.UnionOrIntersection) {
-                const types = map((<UnionOrIntersectionType>type).types, getResolvedDefaultWorker);
-                return some(types, x => x === circularConstraintOrDefaultType) ? circularConstraintOrDefaultType :
-                    type.flags & TypeFlags.Union ? getUnionType(types) : getIntersectionType(types);
-            }
-            return type;
-        }
-
-        /**
          * For a type parameter, return the base constraint of the type parameter. For the string, number,
          * boolean, and symbol primitive types, return the corresponding object types. Otherwise return the
          * type itself. Note that the apparent type of a union type is the union type itself.
@@ -5241,20 +5174,23 @@ namespace ts {
                         typeArguments = [];
                     }
 
-                    // Map an unsatisfied type parameter with a default type to the default type.
+                    // Map an unsatisfied type parameter with a default type.
                     // If a type parameter does not have a default type, or if the default type
-                    // is a circular reference, the empty object type is used.
+                    // is a forward reference, the empty object type is used.
                     const mapper: TypeMapper = t => {
                         const i = indexOf(typeParameters, t);
-                        return i >= 0
-                            ? typeArguments[i] || (typeArguments[i] =
-                                instantiateType(getDefaultOfTypeParameter(typeParameters[i]), mapper) ||
-                                emptyObjectType)
-                            : t;
+                        if (i >= typeArguments.length) {
+                            return emptyObjectType;
+                        }
+                        if (i >= 0) {
+                            return typeArguments[i];
+                        }
+                        return t;
                     };
 
                     for (let i = numTypeArguments; i < numTypeParameters; i++) {
-                        instantiateType(typeParameters[i], mapper);
+                        const defaultType = getDefaultFromTypeParameter(typeParameters[i]);
+                        typeArguments[i] = defaultType ? instantiateType(defaultType, mapper) : emptyObjectType;
                     }
                 }
             }
@@ -9181,8 +9117,16 @@ namespace ts {
                     // succeeds, meaning there is no error for not having inference candidates. An
                     // inference error only occurs when there are *conflicting* candidates, i.e.
                     // candidates with no common supertype.
-                    const defaultType = getDefaultOfTypeParameter(context.signature.typeParameters[index]);
-                    inferredType = defaultType ? instantiateType(defaultType, getInferenceMapper(context)) : emptyObjectType;
+                    const defaultType = getDefaultFromTypeParameter(context.signature.typeParameters[index]);
+                    if (defaultType) {
+                        const backreferenceMapper: TypeMapper = t => indexOf(context.signature.typeParameters, t) >= index ? emptyObjectType : t;
+                        const mapper = combineTypeMappers(backreferenceMapper, getInferenceMapper(context));
+                        inferredType = instantiateType(defaultType, mapper);
+                    }
+                    else {
+                        inferredType = emptyObjectType;
+                    }
+
                     inferenceSucceeded = true;
                 }
                 context.inferredTypes[index] = inferredType;
@@ -15574,11 +15518,8 @@ namespace ts {
             if (!hasNonCircularBaseConstraint(typeParameter)) {
                 error(node.constraint, Diagnostics.Type_parameter_0_has_a_circular_constraint, typeToString(typeParameter));
             }
-            if (!hasNonCircularDefault(typeParameter)) {
-                error(node.default, Diagnostics.Type_parameter_0_has_a_circular_default, typeToString(typeParameter));
-            }
             const constraintType = getConstraintOfTypeParameter(typeParameter);
-            const defaultType = getDefaultOfTypeParameter(typeParameter);
+            const defaultType = getDefaultFromTypeParameter(typeParameter);
             if (constraintType && defaultType) {
                 checkTypeAssignableTo(defaultType, getTypeWithThisArgument(constraintType, defaultType), node.default, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
             }

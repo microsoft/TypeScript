@@ -1,68 +1,398 @@
 // @declaration: true
+interface A { a: number; }
+interface B { b: number; }
+interface C { c: number; }
+interface D { d: number; }
+interface AB { a: number; b: number; }
+interface BC { b: number; c: number; }
+
+declare const a: A;
+declare const b: B;
+declare const c: C;
+declare const d: D;
+declare const ab: AB;
+declare const bc: BC;
 declare const x: any;
 
-declare function f00<T = number>(a?: T): T;
-const f00c00 = f00();
-const f00c01 = f00(1);
-const f00c02 = f00("a");
-const f00c03 = f00<number>();
-const f00c04 = f00<number>(1);
-const f00c05 = f00<string>("a");
+// function without type parameters
+declare function f00(a?: A): A;
+// no inference
+f00();
+f00(a);
 
-declare function f01<T, U = T>(a?: T, b?: U): [T, U];
-const f01c00 = f01();
-const f01c01 = f01(1);
-const f01c02 = f01(1, "a");
-const f01c03 = f01<number>();
-const f01c04 = f01<number>(1);
-const f01c05 = f01<number>(1, 2);
-const f01c06 = f01<number, string>();
-const f01c07 = f01<number, string>(1);
-const f01c08 = f01<number, string>(1, "a");
+// function with a type parameter without a default
+declare function f01<T>(a?: T): T;
+// inference
+f01();
+f01(a);
+// no inference, fully supplied
+f01<A>();
+f01<A>(a);
 
-declare function f02<T extends number, U = T>(a?: T, b?: U): [T, U];
-const f02c00 = f02();
-const f02c01 = f02(1);
-const f02c02 = f02(1, "a");
-const f02c03 = f02<number>();
-const f02c04 = f02<number>(1);
-const f02c05 = f02<number>(1, 2);
-const f02c06 = f02<number, string>();
-const f02c07 = f02<number, string>(1);
-const f02c08 = f02<number, string>(1, "a");
+// function with a type paramter with a default
+declare function f02<T = A>(a?: T): T;
+// inference
+f02();
+f02(a);
+f02(b);
+// no inference, fully supplied
+f02<A>();
+f02<A>(a);
+f02<B>();
+f02<B>(b);
 
-declare function f03<T extends number, U extends T = T>(a?: T, b?: U): [T, U];
-const f03c00 = f03();
-const f03c01 = f03(1);
-const f03c02 = f03(1, 1);
-const f03c03 = f03<number>();
-const f03c04 = f03<number>(1);
-const f03c05 = f03<number>(1, 2);
-const f03c06 = f03<number, number>();
-const f03c07 = f03<number, number>(1);
-const f03c08 = f03<number, number>(1, 2);
+// function with a type parameter with a default that refers to itself
+declare function f03<T = T>(a?: T): T;
+// inference
+f03();
+f03(a);
+f03(b);
+// no inference, fully supplied
+f03<A>();
+f03<A>(a);
+f03<B>();
+f03<B>(b);
 
-declare function f04<T, U = T | { a: number }>(a?: T, b?: U): [T, U];
-const f04c00 = f04();
-const f04c01 = f04(1);
-const f04c02 = f04(1, 1);
-const f04c03 = f04<number>();
-const f04c04 = f04<number>(1);
-const f04c05 = f04<number>(1, 2);
-const f04c06 = f04<number, number>();
-const f04c07 = f04<number, number>(1);
-const f04c08 = f04<number, number>(1, 2);
+// function with a type paramter without a default and a type parameter with a default
+declare function f04<T, U = B>(a?: T, b?: U): [T, U];
+// inference
+f04();
+f04(a);
+f04(a, b);
+f04(a, c);
+// no inference, partially supplied
+f04<A>();
+f04<A>(a);
+f04<A>(a, b);
+// no inference, fully supplied
+f04<A, B>();
+f04<A, B>(a);
+f04<A, B>(a, b);
+f04<A, C>();
+f04<A, C>(a);
+f04<A, C>(a, c);
 
-declare function f05<T, U = T & { b: number }>(a?: T, b?: U): [T, U];
-const f05c00 = f05();
-const f05c01 = f05(1);
-const f05c02 = f05(1, 1);
-const f05c03 = f05<number>();
-const f05c04 = f05<number>(1);
-const f05c05 = f05<{ a: number }>({ a: 1 }, { a: 2, b: 3});
-const f05c06 = f05<number, number>();
-const f05c07 = f05<number, number>(1);
-const f05c08 = f05<number, number>(1, 2);
+// function with a type parameter without a default and a type parameter with a default that refers to an earlier type parameter
+declare function f05<T, U = T>(a?: T, b?: U): [T, U];
+// inference
+f05();
+f05(a);
+f05(a, a);
+f05(a, b);
+// no inference, partially supplied
+f05<A>();
+f05<A>(a);
+f05<A>(a, a);
+// no inference, fully supplied
+f05<A, B>();
+f05<A, B>(a);
+f05<A, B>(a, b);
+
+// function with a type parameter with a default that refers to an earlier type parameter with a default
+declare function f06<T = A, U = T>(a?: T, b?: U): [T, U];
+// inference
+f06();
+f06(a);
+f06(a, a);
+f06(a, b);
+f06(b, a);
+f06(b, b);
+// no inference, partially supplied
+f06<A>();
+f06<A>(a);
+f06<A>(a, a);
+f06<B>();
+f06<B>(b);
+f06<B>(b, b);
+// no inference, fully supplied
+f06<A, B>();
+f06<A, B>(a);
+f06<A, B>(a, b);
+f06<B, C>();
+f06<B, C>(b);
+f06<B, C>(b, c);
+
+// function with a type parameter without a default and a type parameter with a default that refers to an earlier type parameter with a default
+declare function f07<T, U = B, V = U>(a?: T, b?: U, c?: V): [T, U, V];
+// inference
+f07();
+f07(a, b);
+f07(a, c);
+f07(a, b, b);
+f07(a, b, c);
+f07(a, c, b);
+f07(a, c, c);
+// no inference, partially supplied
+f07<A>();
+f07<A>(a);
+f07<A>(a, b);
+f07<A>(a, b, b);
+f07<A, B>();
+f07<A, B>(a);
+f07<A, B>(a, b);
+f07<A, B>(a, b, b);
+f07<A, C>();
+f07<A, C>(a);
+f07<A, C>(a, c);
+f07<A, C>(a, c, c);
+// no inference, fully supplied
+f07<A, B, C>();
+f07<A, B, C>(a);
+f07<A, B, C>(a, b);
+f07<A, B, C>(a, b, c);
+f07<A, C, A>();
+f07<A, C, A>(a);
+f07<A, C, D>(a, c);
+f07<A, C, D>(a, c, d);
+
+// function with a type parameter with a default that refers to an earlier type parameter with a constraint
+declare function f08<T extends A, U = T>(a?: T, b?: U): [T, U];
+// inference
+f08();
+f08(a);
+f08(a, a);
+f08(a, b);
+// no inference, partially supplied
+f08<A>();
+f08<A>(a);
+f08<A>(a, a);
+// no inference, fully supplied
+f08<A, B>();
+f08<A, B>(a);
+f08<A, B>(a, b);
+
+// function with a type parameter with a constraint and a default that refers to an earlier type parameter
+declare function f09<T, U extends T = T>(a?: T, b?: U): [T, U];
+// inference
+f09();
+f09(a);
+f09(a, a);
+f09(a, ab);
+// no inference, partially supplied
+f09<A>();
+f09<A>(a);
+f09<A>(a, a);
+f09<A>(a, ab);
+// no inference, fully supplied
+f09<A, AB>();
+f09<A, AB>(a);
+f09<A, AB>(a, ab);
+
+// function with a type parameter with a constraint and a default that refers to an earlier type parameter with a constraint
+declare function f10<T extends A, U extends T = T>(a?: T, b?: U): [T, U];
+// inference
+f10();
+f10(a);
+f10(a, a);
+f10(a, ab);
+// no inference, partially supplied
+f10<A>();
+f10<A>(a);
+f10<A>(a, a);
+f10<A>(a, ab);
+// no inference, fully supplied
+f10<A, A>();
+f10<A, A>(a);
+f10<A, A>(a, a);
+f10<A, A>(a, ab);
+f10<A, AB>();
+f10<A, AB>(a);
+f10<A, AB>(a, ab);
+
+// function with a type parameter with a default that refers to an earier type parameter in a union
+declare function f11<T, U = T | B>(a?: T, b?: U): [T, U];
+// inference
+f11();
+f11(a);
+f11(a, a);
+f11(a, b);
+f11(a, c);
+// no inference, partially supplied
+f11<A>();
+f11<A>(a);
+f11<A>(a, a);
+f11<A>(a, b);
+// no inference, fully supplied
+f11<A, C>();
+f11<A, C>(a);
+f11<A, C>(a, c);
+
+// function with a type parameter with a default that refers to an earlier type parameter in an intersection
+declare function f12<T, U = T & B>(a?: T, b?: U): [T, U];
+// inference
+f12();
+f12(a);
+f12(a, a);
+f12(a, b);
+f12(a, c);
+// no inference, partially supplied
+f12<A>();
+f12<A>(a);
+f12<A>(a, ab);
+// no inference, fully supplied
+f12<A, C>();
+f12<A, C>(a);
+f12<A, C>(a, c);
+
+// function with a type parameter with a default that refers to a later type parameter with a default
+declare function f13<T = U, U = B>(a?: T, b?: U): [T, U];
+// inference
+f13();
+f13(a);
+f13(a, b);
+f13(a, c);
+// no inference, partially supplied
+f13<A>();
+f13<A>(a);
+f13<A>(a, b);
+// no inference, fully supplied
+f13<A, C>();
+f13<A, C>(a);
+f13<A, C>(a, c);
+f13<A, C>(a, c);
+
+// function with a type parameter without a default and a type parameter with a default that refers to a later type parameter with a default
+declare function f14<T, U = V, V = C>(a?: T, b?: U, c?: V): [T, U, V];
+// inference
+f14();
+f14(a);
+f14(a, b);
+f14(a, b, c);
+f14(a, b, d);
+// no inference, partially supplied
+f14<A>();
+f14<A>(a);
+f14<A>(a, b);
+f14<A>(a, b, c);
+f14<A, B>();
+f14<A, B>(a);
+f14<A, B>(a, b);
+f14<A, B>(a, b, c);
+// no inference fully supplied
+f14<A, B, D>();
+f14<A, B, D>(a);
+f14<A, B, D>(a, b);
+f14<A, B, D>(a, b, d);
+
+// function with two type parameters with defaults that mutually refer to each other
+declare function f15<T = U, U = T>(a?: T, b?: U): [T, U];
+// inference
+f15();
+f15(a);
+f15(a, b);
+// no inference, partially supplied
+f15<A>();
+f15<A>(a);
+f15<A>(a, a);
+// no inference, fully supplied
+f15<A, B>();
+f15<A, B>(a);
+f15<A, B>(a, b);
+
+// function with a type parameter without a default and two type parameters with defaults that mutually refer to each other
+declare function f16<T, U = V, V = U>(a?: T, b?: U, c?: V): [T, U, V];
+// no inference
+f16();
+f16(a);
+f16(a, b);
+f16(a, b, b);
+// no inference, partially supplied
+f16<A>();
+f16<A>(a);
+f16<A>(a, b);
+f16<A>(a, b, b);
+f16<A, B>();
+f16<A, B>(a);
+f16<A, B>(a, b);
+f16<A, B>(a, b, b);
+// no inference, fully supplied
+f16<A, B, D>();
+f16<A, B, D>(a);
+f16<A, B, D>(a, b);
+f16<A, B, D>(a, b, d);
+
+// function with a type parameter with a default that refers to a later type parameter with a default that refers to an earlier type parameter in a union
+declare function f17<T = U, U = T | B>(a?: T, b?: U): [T, U];
+// inference
+f17();
+f17(a);
+f17(a, a);
+f17(a, b);
+f17(a, c);
+// no inference, partially supplied
+f17<A>();
+f17<A>(a);
+f17<A>(a, a);
+f17<A>(a, b);
+// no inference, fully supplied
+f17<A, C>();
+f17<A, C>(a);
+f17<A, C>(a, c);
+
+// function with a type parameter without a default and a type parameter with a default that refers to a later type parameter with a default that refers to an earlier type parameter in a union
+declare function f18<T, U = V, V = U | C>(a?: T, b?: U, c?: V): [T, U, V];
+// inference
+f18();
+f18(a);
+f18(a, b);
+f18(a, b, b);
+f18(a, b, c);
+// no inference, partially supplied
+f18<A>();
+f18<A>(a);
+f18<A>(a, b);
+f18<A>(a, b, b);
+f18<A>(a, b, c);
+f18<A, B>();
+f18<A, B>(a);
+f18<A, B>(a, b);
+f18<A, B>(a, b, b);
+f18<A, B>(a, b, c);
+// no inference, fully supplied
+f18<A, B, D>();
+f18<A, B, D>(a);
+f18<A, B, D>(a, b);
+f18<A, B, D>(a, b, d);
+
+// function with a type parameter with a default that refers to a later type parameter with a default that refers to an earlier type parameter in an intersection
+declare function f19<T = U, U = T & B>(a?: T, b?: U): [T, U];
+// inference
+f19();
+f19(a);
+f19(a, a);
+f19(a, b);
+f19(a, ab);
+f19(a, c);
+// no inference, partially supplied
+f19<A>();
+f19<A>(a);
+f19<A>(a, ab);
+// no inference, fully supplied
+f19<A, C>();
+f19<A, C>(a);
+f19<A, C>(a, c);
+
+// function with a type parameter without a default and a type parameter with a default that refers to a later type parameter with a default that refers to an earlier type parameter in an intersection
+declare function f20<T, U = V, V = U & C>(a?: T, b?: U, c?: V): [T, U, V];
+// inference
+f20();
+f20(a);
+f20(a, b);
+f20(a, b, c);
+// no inference, partially supplied
+f20<A>();
+f20<A>(a);
+f20<A>(a, b);
+f20<A>(a, b, bc);
+f20<A, B>();
+f20<A, B>(a);
+f20<A, B>(a, b);
+f20<A, B>(a, b, bc);
+// no inference, fully supplied
+f20<A, B, D>();
+f20<A, B, D>(a);
+f20<A, B, D>(a, b);
+f20<A, B, D>(a, b, d);
 
 interface i00<T = number> { a: T; }
 const i00c00 = (<i00>x).a;
@@ -90,6 +420,15 @@ interface i04 {}
 interface i04<T> {}
 interface i04<T = number> {}
 interface i04<T = number, U = string> {}
+
+interface i05<T = T> { a: T; }
+const i05c00 = (<i05>x).a;
+const i05c01 = (<i05<number>>x).a;
+
+interface i06<T = U, U = T> { a: [T, U]; }
+const i06c00 = (<i06>x).a;
+const i06c01 = (<i06<number>>x).a;
+const i06c02 = (<i06<number, string>>x).a;
 
 interface Base01<T> { a: T; }
 interface Base01Constructor { new <T = number>(a?: T): Base01<T>; }

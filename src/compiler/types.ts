@@ -2990,8 +2990,6 @@ namespace ts {
         /* @internal */
         resolvedBaseConstraint: Type;
         /* @internal */
-        resolvedDefault: Type;
-        /* @internal */
         resolvedIndexType: IndexType;
     }
 
