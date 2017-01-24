@@ -341,16 +341,52 @@ namespace ts {
     }
 
     export function isBinaryOrOctalIntegerLiteral(node: LiteralLikeNode, text: string) {
-        if (node.kind === SyntaxKind.NumericLiteral && text.length > 1) {
+        return node.kind === SyntaxKind.NumericLiteral
+            && (getNumericLiteralFlags(text, /*hint*/ NumericLiteralFlags.BinaryOrOctal) & NumericLiteralFlags.BinaryOrOctal) !== 0;
+    }
+
+    export const enum NumericLiteralFlags {
+        None = 0,
+        Hexadecimal = 1 << 0,
+        Binary = 1 << 1,
+        Octal = 1 << 2,
+        Scientific = 1 << 3,
+
+        BinaryOrOctal = Binary | Octal,
+        BinaryOrOctalOrHexadecimal = BinaryOrOctal | Hexadecimal,
+        All = Hexadecimal | Binary | Octal | Scientific,
+    }
+
+    /**
+     * Scans a numeric literal string to determine the form of the number.
+     * @param text Numeric literal text
+     * @param hint If `Scientific` or `All` is specified, performs a more expensive check to scan for scientific notation.
+     */
+    export function getNumericLiteralFlags(text: string, hint?: NumericLiteralFlags) {
+        if (text.length > 1) {
             switch (text.charCodeAt(1)) {
                 case CharacterCodes.b:
                 case CharacterCodes.B:
+                    return NumericLiteralFlags.Binary;
                 case CharacterCodes.o:
                 case CharacterCodes.O:
-                    return true;
+                    return NumericLiteralFlags.Octal;
+                case CharacterCodes.x:
+                case CharacterCodes.X:
+                    return NumericLiteralFlags.Hexadecimal;
+            }
+
+            if (hint & NumericLiteralFlags.Scientific) {
+                for (let i = text.length - 1; i >= 0; i--) {
+                    switch (text.charCodeAt(i)) {
+                        case CharacterCodes.e:
+                        case CharacterCodes.E:
+                            return NumericLiteralFlags.Scientific;
+                    }
+                }
             }
         }
-        return false;
+        return NumericLiteralFlags.None;
     }
 
     function getQuotedEscapedLiteralText(leftQuote: string, text: string, rightQuote: string) {
