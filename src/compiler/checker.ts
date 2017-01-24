@@ -14110,7 +14110,7 @@ namespace ts {
             }
             links.resolvedSignature = resolvingSignature;
 
-            let callSignature = resolveStatelessJsxOpeningLikeElement(openingLikeElement, elementType, candidatesOutArray);
+            const callSignature = resolveStatelessJsxOpeningLikeElement(openingLikeElement, elementType, candidatesOutArray);
             links.resolvedSignature = callSignature;
             // If signature resolution originated in control flow type analysis (for example to compute the
             // assigned type in a flow assignment) we don't cache the result as it may be based on temporary
