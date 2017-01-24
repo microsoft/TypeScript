@@ -4618,12 +4618,14 @@ namespace ts {
             const typeParameter = getTypeParameterFromMappedType(type);
             const constraintType = getConstraintTypeFromMappedType(type);
             const templateType = getTemplateTypeFromMappedType(type);
-            const modifiersType = getApparentType(getModifiersTypeFromMappedType(type));
+            const modifiersType = getApparentType(getModifiersTypeFromMappedType(type)); // The 'T' in 'keyof T'
             const templateReadonly = !!type.declaration.readonlyToken;
             const templateOptional = !!type.declaration.questionToken;
             if (type.declaration.typeParameter.constraint.kind === SyntaxKind.TypeOperator) {
                 // We have a { [P in keyof T]: X }
-                forEachType(getLiteralTypeFromPropertyNames(modifiersType), addMemberForKeyType);
+                for (const propertySymbol of getPropertiesOfType(modifiersType)) {
+                    addMemberForKeyType(getLiteralTypeFromPropertyName(propertySymbol), propertySymbol);
+                }
                 if (getIndexInfoOfType(modifiersType, IndexKind.String)) {
                     addMemberForKeyType(stringType);
                 }
@@ -4638,7 +4640,7 @@ namespace ts {
             }
             setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, undefined);
 
-            function addMemberForKeyType(t: Type) {
+            function addMemberForKeyType(t: Type, propertySymbol?: Symbol) {
                 // Create a mapper from T to the current iteration type constituent. Then, if the
                 // mapped type is itself an instantiated type, combine the iteration mapper with the
                 // instantiation mapper.
@@ -4654,6 +4656,9 @@ namespace ts {
                     const prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | (isOptional ? SymbolFlags.Optional : 0), propName);
                     prop.type = propType;
                     prop.isReadonly = templateReadonly || modifiersProp && isReadonlySymbol(modifiersProp);
+                    if (propertySymbol) {
+                        prop.mappedTypeOrigin = propertySymbol;
+                    }
                     members.set(propName, prop);
                 }
                 else if (t.flags & TypeFlags.String) {
@@ -20230,6 +20235,10 @@ namespace ts {
                     const links = symbol as SymbolLinks;
                     return [links.leftSpread, links.rightSpread];
                 }
+                if ((symbol as SymbolLinks).mappedTypeOrigin) {
+                    return getRootSymbols((symbol as SymbolLinks).mappedTypeOrigin);
+                }
+
                 let target: Symbol;
                 let next = symbol;
                 while (next = getSymbolLinks(next).target) {
