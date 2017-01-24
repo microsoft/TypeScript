@@ -1,11 +1,11 @@
 ﻿/* @internal */
 namespace ts.FindAllReferences {
-    export function findReferencedSymbols(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFiles: SourceFile[], sourceFile: SourceFile, position: number, findInStrings: boolean, findInComments: boolean): ReferencedSymbol[] | undefined {
+    export function findReferencedSymbols(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFiles: SourceFile[], sourceFile: SourceFile, position: number, findInStrings: boolean, findInComments: boolean, isForRename: boolean): ReferencedSymbol[] | undefined {
         const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
-        return getReferencedSymbolsForNode(typeChecker, cancellationToken, node, sourceFiles, findInStrings, findInComments, /*implementations*/false);
+        return getReferencedSymbolsForNode(typeChecker, cancellationToken, node, sourceFiles, findInStrings, findInComments, isForRename);
     }
 
-    export function getReferencedSymbolsForNode(typeChecker: TypeChecker, cancellationToken: CancellationToken, node: Node, sourceFiles: SourceFile[], findInStrings: boolean, findInComments: boolean, implementations: boolean): ReferencedSymbol[] | undefined {
+    export function getReferencedSymbolsForNode(typeChecker: TypeChecker, cancellationToken: CancellationToken, node: Node, sourceFiles: SourceFile[], findInStrings?: boolean, findInComments?: boolean, isForRename?: boolean, implementations?: boolean): ReferencedSymbol[] | undefined {
         if (!implementations) {
             const special = getReferencedSymbolsSpecial(node, sourceFiles, typeChecker, cancellationToken);
             if (special) {
@@ -33,11 +33,16 @@ namespace ts.FindAllReferences {
             return undefined;
         }
 
-        const aliasedSymbol = followAliasIfNecessary(symbol, node, typeChecker);
-        const isShorthandModule = ts.isShorthandAmbientModuleSymbol(aliasedSymbol);
-        // Don't follow alias for shorthand modules because we lose information that way.
-        if (!isShorthandModule) {
-            symbol = aliasedSymbol;
+        const { symbol: aliasedSymbol, shorthandModuleSymbol } = followAliases(symbol, node, typeChecker, isForRename);
+        symbol = aliasedSymbol;
+
+        // Build the set of symbols to search for, initially it has only the current symbol
+        const searchSymbols = populateSearchSymbolSet(symbol, node, typeChecker, implementations);
+        if (shorthandModuleSymbol) {
+            searchSymbols.push(shorthandModuleSymbol);
+        }
+        function isSearchedFor(symbol: Symbol): boolean {
+            return contains(searchSymbols, symbol);
         }
 
         // Compute the meaning from the location and the symbol it references
@@ -47,12 +52,6 @@ namespace ts.FindAllReferences {
         // Maps from a symbol ID to the ReferencedSymbol entry in 'result'.
         const symbolToIndex: number[] = [];
         const inheritsFromCache: Map<boolean> = createMap<boolean>();
-
-        // Build the set of symbols to search for, initially it has only the current symbol
-        const searchSymbols = populateSearchSymbolSet(symbol, node, typeChecker, implementations, isShorthandModule ? aliasedSymbol : undefined);
-        function isSearchedFor(symbol: Symbol): boolean {
-            return contains(searchSymbols, symbol);
-        }
 
         // Get the text to search for.
         // Note: if this is an external module symbol, the name doesn't include quotes.
@@ -116,6 +115,31 @@ namespace ts.FindAllReferences {
         return undefined;
     }
 
+    /**
+     * Follows aliases to get to the original declaration of a symbol.
+     * For a shorthand ambient module, we don't follow the alias to it, but we will need to add it to the set of search symbols.
+     */
+    function followAliases(symbol: Symbol, node: Node, typeChecker: TypeChecker, isForRename: boolean): { symbol: Symbol, shorthandModuleSymbol?: Symbol } {
+        while (true) {
+            // When renaming a default import, only rename in the current file
+            if (isForRename && isImportDefaultSymbol(symbol)) {
+                return { symbol };
+            }
+
+            const aliasedSymbol = getAliasSymbolForPropertyNameSymbol(symbol, node, typeChecker);
+            // Don't follow alias if it goes to unknown symbol. This can happen if it points to an untyped module.
+            if (!aliasedSymbol || !aliasedSymbol.declarations) {
+                return { symbol };
+            }
+
+            if (ts.isShorthandAmbientModuleSymbol(aliasedSymbol)) {
+                return { symbol, shorthandModuleSymbol: aliasedSymbol };
+            }
+
+            symbol = aliasedSymbol;
+        }
+    }
+
     function sourceFileHasName(sourceFile: SourceFile, name: string): boolean {
         return getNameTable(sourceFile).get(name) !== undefined;
     }
@@ -157,29 +181,30 @@ namespace ts.FindAllReferences {
     }
 
     function getAliasSymbolForPropertyNameSymbol(symbol: Symbol, location: Node, typeChecker: TypeChecker): Symbol | undefined {
-        if (symbol.flags & SymbolFlags.Alias) {
-            // Default import get alias
-            const defaultImport = getDeclarationOfKind(symbol, SyntaxKind.ImportClause);
-            if (defaultImport) {
-                return typeChecker.getAliasedSymbol(symbol);
-            }
-
-            const importOrExportSpecifier = <ImportOrExportSpecifier>forEach(symbol.declarations,
-                declaration => (declaration.kind === SyntaxKind.ImportSpecifier ||
-                    declaration.kind === SyntaxKind.ExportSpecifier) ? declaration : undefined);
-            if (importOrExportSpecifier &&
-                // export { a }
-                (!importOrExportSpecifier.propertyName ||
-                    // export {a as class } where a is location
-                    importOrExportSpecifier.propertyName === location)) {
-                // If Import specifier -> get alias
-                // else Export specifier -> get local target
-                return importOrExportSpecifier.kind === SyntaxKind.ImportSpecifier ?
-                    typeChecker.getAliasedSymbol(symbol) :
-                    typeChecker.getExportSpecifierLocalTargetSymbol(importOrExportSpecifier);
-            }
+        if (!(symbol.flags & SymbolFlags.Alias)) {
+            return undefined;
         }
-        return undefined;
+
+        // Default import get alias
+        const defaultImport = getDeclarationOfKind(symbol, SyntaxKind.ImportClause);
+        if (defaultImport) {
+            return typeChecker.getAliasedSymbol(symbol);
+        }
+
+        const importOrExportSpecifier = <ImportOrExportSpecifier>forEach(symbol.declarations,
+            declaration => (declaration.kind === SyntaxKind.ImportSpecifier ||
+                declaration.kind === SyntaxKind.ExportSpecifier) ? declaration : undefined);
+        if (importOrExportSpecifier &&
+            // export { a }
+            (!importOrExportSpecifier.propertyName ||
+                // export {a as class } where a is location
+                importOrExportSpecifier.propertyName === location)) {
+            // If Import specifier -> get alias
+            // else Export specifier -> get local target
+            return importOrExportSpecifier.kind === SyntaxKind.ImportSpecifier ?
+                typeChecker.getAliasedSymbol(symbol) :
+                typeChecker.getExportSpecifierLocalTargetSymbol(importOrExportSpecifier);
+        }
     }
 
     function followAliasIfNecessary(symbol: Symbol, location: Node, typeChecker: TypeChecker): Symbol {
@@ -1022,9 +1047,9 @@ namespace ts.FindAllReferences {
         }
     }
 
-    function populateSearchSymbolSet(symbol: Symbol, location: Node, typeChecker: TypeChecker, implementations: boolean, aliasSymbol?: Symbol): Symbol[] {
+    function populateSearchSymbolSet(symbol: Symbol, location: Node, typeChecker: TypeChecker, implementations: boolean): Symbol[] {
         // The search set contains at least the current symbol
-        let result = [symbol];
+        const result = [symbol];
 
         // If the location is name of property symbol from object literal destructuring pattern
         // Search the property symbol
@@ -1035,10 +1060,6 @@ namespace ts.FindAllReferences {
             if (propertySymbol) {
                 result.push(propertySymbol);
             }
-        }
-
-        if (aliasSymbol) {
-            result = result.concat(populateSearchSymbolSet(aliasSymbol, location, typeChecker, implementations));
         }
 
         // If the location is in a context sensitive location (i.e. in an object literal) try
@@ -1072,7 +1093,7 @@ namespace ts.FindAllReferences {
         // Property Declaration symbol is a member of the class, so the symbol is stored in its class Declaration.symbol.members
         if (symbol.valueDeclaration && symbol.valueDeclaration.kind === SyntaxKind.Parameter &&
             isParameterPropertyDeclaration(<ParameterDeclaration>symbol.valueDeclaration)) {
-            result = result.concat(typeChecker.getSymbolsOfParameterPropertyDeclaration(<ParameterDeclaration>symbol.valueDeclaration, symbol.name));
+            addRange(result, typeChecker.getSymbolsOfParameterPropertyDeclaration(<ParameterDeclaration>symbol.valueDeclaration, symbol.name));
         }
 
         // If this is symbol of binding element without propertyName declaration in Object binding pattern
@@ -1446,5 +1467,9 @@ namespace ts.FindAllReferences {
         }
 
         return false;
+    }
+
+    function isImportDefaultSymbol(symbol: Symbol): boolean {
+        return symbol.declarations[0].kind === SyntaxKind.ImportClause;
     }
 }
