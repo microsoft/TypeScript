@@ -79,5 +79,4 @@ let computedAfter: { a: number, b: string, "at the end": number } =
 let a = 12;
 let shortCutted: { a: number, b: string } = { ...o, a }
 // non primitive
-let spreadNonPrimitve = { ...<object>{}}
-
+let spreadNonPrimitive = { ...<object>{}};

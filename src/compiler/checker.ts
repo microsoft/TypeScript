@@ -6291,6 +6291,9 @@ namespace ts {
             if (right.flags & TypeFlags.Union) {
                 return mapType(right, t => getSpreadType(left, t));
             }
+            if (right.flags & TypeFlags.NonPrimitive) {
+                return emptyObjectType;
+            }
 
             const members = createMap<Symbol>();
             const skippedPrivateMembers = createMap<boolean>();
@@ -15719,12 +15722,12 @@ namespace ts {
             }
         }
 
-        /** 
+        /**
          * Static members being set on a constructor function may conflict with built-in properties
-         * of Function. Esp. in ECMAScript 5 there are non-configurable and non-writable 
-         * built-in properties. This check issues a transpile error when a class has a static 
+         * of Function. Esp. in ECMAScript 5 there are non-configurable and non-writable
+         * built-in properties. This check issues a transpile error when a class has a static
          * member with the same name as a non-writable built-in property.
-         * 
+         *
          * @see http://www.ecma-international.org/ecma-262/5.1/#sec-15.3.3
          * @see http://www.ecma-international.org/ecma-262/5.1/#sec-15.3.5
          * @see http://www.ecma-international.org/ecma-262/6.0/#sec-properties-of-the-function-constructor

@@ -408,10 +408,9 @@ let shortCutted: { a: number, b: string } = { ...o, a }
 >a : number
 
 // non primitive
-let spreadNonPrimitve = { ...<object>{}}
->spreadNonPrimitve : { constructor: Function; toString(): string; toLocaleString(): string; valueOf(): Object; hasOwnProperty(v: string): boolean; isPrototypeOf(v: Object): boolean; propertyIsEnumerable(v: string): boolean; }
->{ ...<object>{}} : { constructor: Function; toString(): string; toLocaleString(): string; valueOf(): Object; hasOwnProperty(v: string): boolean; isPrototypeOf(v: Object): boolean; propertyIsEnumerable(v: string): boolean; }
+let spreadNonPrimitive = { ...<object>{}};
+>spreadNonPrimitive : {}
+>{ ...<object>{}} : {}
 ><object>{} : object
 >{} : {}
-
 
