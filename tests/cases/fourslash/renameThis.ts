@@ -8,7 +8,7 @@
 
 let [r0, r1, r2, r3] = test.ranges()
 for (let range of [r0, r1]) {
-    goTo.position(range.start);
+    goTo.rangeStart(range);
     verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ false, [r0, r1]);
 }
 
@@ -17,6 +17,6 @@ goTo.marker();
 verify.renameInfoFailed("You cannot rename this element.");
 
 for (let range of [r2, r3]) {
-    goTo.position(range.start);
+    goTo.rangeStart(range);
     verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ false, [r2, r3]);
 }

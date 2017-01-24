@@ -5,16 +5,18 @@
 ////let [|a1|]: A1;
 ////let [|a2|]: A2;
 ////let a12 = { ...[|a1|], ...[|a2|] };
+
 const ranges = test.ranges();
 verify.assertHasRanges(ranges);
 
+
 // rename a1
-goTo.position(ranges[0].start);
+goTo.rangeStart(ranges[0]);
 verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ false, [ranges[0], ranges[2]]);
-goTo.position(ranges[2].start);
+goTo.rangeStart(ranges[2]);
 verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ false, [ranges[0], ranges[2]]);
 // rename a2
-goTo.position(ranges[1].start);
+goTo.rangeStart(ranges[1]);
 verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ false, [ranges[1], ranges[3]]);
-goTo.position(ranges[3].start);
+goTo.rangeStart(ranges[3]);
 verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ false, [ranges[1], ranges[3]]);

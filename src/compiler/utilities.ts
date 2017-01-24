@@ -1,4 +1,4 @@
-/// <reference path="sys.ts" />
+﻿/// <reference path="sys.ts" />
 
 /* @internal */
 namespace ts {
@@ -84,11 +84,11 @@ namespace ts {
     }
 
     export function hasResolvedModule(sourceFile: SourceFile, moduleNameText: string): boolean {
-        return !!(sourceFile && sourceFile.resolvedModules && sourceFile.resolvedModules[moduleNameText]);
+        return !!(sourceFile && sourceFile.resolvedModules && sourceFile.resolvedModules.get(moduleNameText));
     }
 
     export function getResolvedModule(sourceFile: SourceFile, moduleNameText: string): ResolvedModuleFull {
-        return hasResolvedModule(sourceFile, moduleNameText) ? sourceFile.resolvedModules[moduleNameText] : undefined;
+        return hasResolvedModule(sourceFile, moduleNameText) ? sourceFile.resolvedModules.get(moduleNameText) : undefined;
     }
 
     export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleFull): void {
@@ -96,7 +96,7 @@ namespace ts {
             sourceFile.resolvedModules = createMap<ResolvedModuleFull>();
         }
 
-        sourceFile.resolvedModules[moduleNameText] = resolvedModule;
+        sourceFile.resolvedModules.set(moduleNameText, resolvedModule);
     }
 
     export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective): void {
@@ -104,7 +104,7 @@ namespace ts {
             sourceFile.resolvedTypeReferenceDirectiveNames = createMap<ResolvedTypeReferenceDirective>();
         }
 
-        sourceFile.resolvedTypeReferenceDirectiveNames[typeReferenceDirectiveName] = resolvedTypeReferenceDirective;
+        sourceFile.resolvedTypeReferenceDirectiveNames.set(typeReferenceDirectiveName, resolvedTypeReferenceDirective);
     }
 
     /* @internal */
@@ -126,7 +126,7 @@ namespace ts {
         }
         for (let i = 0; i < names.length; i++) {
             const newResolution = newResolutions[i];
-            const oldResolution = oldResolutions && oldResolutions[names[i]];
+            const oldResolution = oldResolutions && oldResolutions.get(names[i]);
             const changed =
                 oldResolution
                     ? !newResolution || !comparer(oldResolution, newResolution)
@@ -2299,22 +2299,16 @@ namespace ts {
         }
 
         function reattachFileDiagnostics(newFile: SourceFile): void {
-            if (!hasProperty(fileDiagnostics, newFile.fileName)) {
-                return;
-            }
-
-            for (const diagnostic of fileDiagnostics[newFile.fileName]) {
-                diagnostic.file = newFile;
-            }
+            forEach(fileDiagnostics.get(newFile.fileName), diagnostic => diagnostic.file = newFile);
         }
 
         function add(diagnostic: Diagnostic): void {
             let diagnostics: Diagnostic[];
             if (diagnostic.file) {
-                diagnostics = fileDiagnostics[diagnostic.file.fileName];
+                diagnostics = fileDiagnostics.get(diagnostic.file.fileName);
                 if (!diagnostics) {
                     diagnostics = [];
-                    fileDiagnostics[diagnostic.file.fileName] = diagnostics;
+                    fileDiagnostics.set(diagnostic.file.fileName, diagnostics);
                 }
             }
             else {
@@ -2334,7 +2328,7 @@ namespace ts {
         function getDiagnostics(fileName?: string): Diagnostic[] {
             sortAndDeduplicate();
             if (fileName) {
-                return fileDiagnostics[fileName] || [];
+                return fileDiagnostics.get(fileName) || [];
             }
 
             const allDiagnostics: Diagnostic[] = [];
@@ -2344,9 +2338,9 @@ namespace ts {
 
             forEach(nonFileDiagnostics, pushDiagnostic);
 
-            for (const key in fileDiagnostics) {
-                forEach(fileDiagnostics[key], pushDiagnostic);
-            }
+            fileDiagnostics.forEach(diagnostics => {
+                forEach(diagnostics, pushDiagnostic);
+            });
 
             return sortAndDeduplicateDiagnostics(allDiagnostics);
         }
@@ -2359,9 +2353,9 @@ namespace ts {
             diagnosticsModified = false;
             nonFileDiagnostics = sortAndDeduplicateDiagnostics(nonFileDiagnostics);
 
-            for (const key in fileDiagnostics) {
-                fileDiagnostics[key] = sortAndDeduplicateDiagnostics(fileDiagnostics[key]);
-            }
+            fileDiagnostics.forEach((diagnostics, key) => {
+                fileDiagnostics.set(key, sortAndDeduplicateDiagnostics(diagnostics));
+            });
         }
     }
 
@@ -2371,7 +2365,7 @@ namespace ts {
     // the map below must be updated. Note that this regexp *does not* include the 'delete' character.
     // There is no reason for this other than that JSON.stringify does not handle it either.
     const escapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
-    const escapedCharsMap = createMap({
+    const escapedCharsMap = createMapFromTemplate({
         "\0": "\\0",
         "\t": "\\t",
         "\v": "\\v",
@@ -2397,7 +2391,7 @@ namespace ts {
     }
 
     function getReplacement(c: string) {
-        return escapedCharsMap[c] || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
+        return escapedCharsMap.get(c) || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
     }
 
     export function isIntrinsicJsxName(name: string) {
@@ -3397,18 +3391,21 @@ namespace ts {
         return false;
     }
 
-    const syntaxKindCache = createMap<string>();
+    const syntaxKindCache: string[] = [];
 
     export function formatSyntaxKind(kind: SyntaxKind): string {
         const syntaxKindEnum = (<any>ts).SyntaxKind;
         if (syntaxKindEnum) {
-            if (syntaxKindCache[kind]) {
-                return syntaxKindCache[kind];
+            const cached = syntaxKindCache[kind];
+            if (cached !== undefined) {
+                return cached;
             }
 
             for (const name in syntaxKindEnum) {
                 if (syntaxKindEnum[name] === kind) {
-                    return syntaxKindCache[kind] = kind.toString() + " (" + name + ")";
+                    const result = `${kind} (${name})`;
+                    syntaxKindCache[kind] = result;
+                    return result;
                 }
             }
         }

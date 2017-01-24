@@ -17,7 +17,7 @@ tests/cases/compiler/genericDefaultsErrors.ts(30,32): error TS2344: Type 'number
 tests/cases/compiler/genericDefaultsErrors.ts(33,15): error TS2707: Generic type 'i09<T, U, V>' requires between 2 and 3 type arguments.
 tests/cases/compiler/genericDefaultsErrors.ts(34,15): error TS2707: Generic type 'i09<T, U, V>' requires between 2 and 3 type arguments.
 tests/cases/compiler/genericDefaultsErrors.ts(37,15): error TS2707: Generic type 'i09<T, U, V>' requires between 2 and 3 type arguments.
-tests/cases/compiler/genericDefaultsErrors.ts(39,17): error TS2367: Type parameter 'T' cannot be referenced outside of a declaration that defines it.
+tests/cases/compiler/genericDefaultsErrors.ts(39,20): error TS2367: Type parameter 'T' cannot be referenced outside of the declaration that defines it.
 
 
 ==== tests/cases/compiler/genericDefaultsErrors.ts (18 errors) ====
@@ -96,6 +96,6 @@ tests/cases/compiler/genericDefaultsErrors.ts(39,17): error TS2367: Type paramet
 !!! error TS2707: Generic type 'i09<T, U, V>' requires between 2 and 3 type arguments.
     
     interface i10 { x: T; } // error
-                    ~
-!!! error TS2367: Type parameter 'T' cannot be referenced outside of a declaration that defines it.
+                       ~
+!!! error TS2367: Type parameter 'T' cannot be referenced outside of the declaration that defines it.
     interface i10<T = number> {}

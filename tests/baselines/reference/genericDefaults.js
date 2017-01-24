@@ -451,6 +451,28 @@ const Derived02c01 = new Derived02(1);
 const Derived02c02 = new Derived02<number>();
 const Derived02c03 = new Derived02<number>(1);
 
+type t00<T = number> = { a: T; }
+const t00c00 = (<t00>x).a;
+const t00c01 = (<t00<number>>x).a;
+
+type t01<T, U = T> = { a: [T, U]; }
+const t01c00 = (<t01<number>>x).a;
+const t01c01 = (<t01<number, string>>x).a;
+
+type t02<T extends number, U = T> = { a: [T, U]; }
+const t02c00 = (<t02<number>>x).a;
+const t02c01 = (<t02<1>>x).a;
+const t02c02 = (<t02<number, number>>x).a;
+const t02c03 = (<t02<1, number>>x).a;
+const t02c04 = (<t02<number, 1>>x).a;
+
+type t03<T extends number, U extends T = T> = { a: [T, U]; }
+const t03c00 = (<t03<number>>x).a;
+const t03c01 = (<t03<1>>x).a;
+const t03c02 = (<t03<number, number>>x).a;
+const t03c03 = (<t03<1, 1>>x).a;
+const t03c04 = (<t03<number, 1>>x).a;
+
 
 //// [genericDefaults.js]
 // no inference
@@ -801,6 +823,20 @@ var Derived02c00 = new Derived02();
 var Derived02c01 = new Derived02(1);
 var Derived02c02 = new Derived02();
 var Derived02c03 = new Derived02(1);
+var t00c00 = x.a;
+var t00c01 = x.a;
+var t01c00 = x.a;
+var t01c01 = x.a;
+var t02c00 = x.a;
+var t02c01 = x.a;
+var t02c02 = x.a;
+var t02c03 = x.a;
+var t02c04 = x.a;
+var t03c00 = x.a;
+var t03c01 = x.a;
+var t03c02 = x.a;
+var t03c03 = x.a;
+var t03c04 = x.a;
 
 
 //// [genericDefaults.d.ts]
@@ -920,3 +956,29 @@ declare const Derived02c00: Derived02<string>;
 declare const Derived02c01: Derived02<number>;
 declare const Derived02c02: Derived02<number>;
 declare const Derived02c03: Derived02<number>;
+declare type t00<T = number> = {
+    a: T;
+};
+declare const t00c00: number;
+declare const t00c01: number;
+declare type t01<T, U = T> = {
+    a: [T, U];
+};
+declare const t01c00: [number, number];
+declare const t01c01: [number, string];
+declare type t02<T extends number, U = T> = {
+    a: [T, U];
+};
+declare const t02c00: [number, number];
+declare const t02c01: [1, 1];
+declare const t02c02: [number, number];
+declare const t02c03: [1, number];
+declare const t02c04: [number, 1];
+declare type t03<T extends number, U extends T = T> = {
+    a: [T, U];
+};
+declare const t03c00: [number, number];
+declare const t03c01: [1, 1];
+declare const t03c02: [number, number];
+declare const t03c03: [1, 1];
+declare const t03c04: [number, 1];

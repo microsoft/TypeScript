@@ -44,4 +44,4 @@ let computed2 = 'a';
 var { [computed]: stillNotGreat, [computed2]: soSo,  ...o } = o;
 ({ [computed]: stillNotGreat, [computed2]: soSo, ...o } = o);
 
-var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject['anythingGoes'];
+var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes;

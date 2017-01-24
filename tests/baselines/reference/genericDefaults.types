@@ -2397,3 +2397,163 @@ const Derived02c03 = new Derived02<number>(1);
 >Derived02 : typeof Derived02
 >1 : 1
 
+type t00<T = number> = { a: T; }
+>t00 : t00<T>
+>T : T
+>a : T
+>T : T
+
+const t00c00 = (<t00>x).a;
+>t00c00 : number
+>(<t00>x).a : number
+>(<t00>x) : t00<number>
+><t00>x : t00<number>
+>t00 : t00<T>
+>x : any
+>a : number
+
+const t00c01 = (<t00<number>>x).a;
+>t00c01 : number
+>(<t00<number>>x).a : number
+>(<t00<number>>x) : t00<number>
+><t00<number>>x : t00<number>
+>t00 : t00<T>
+>x : any
+>a : number
+
+type t01<T, U = T> = { a: [T, U]; }
+>t01 : t01<T, U>
+>T : T
+>U : U
+>T : T
+>a : [T, U]
+>T : T
+>U : U
+
+const t01c00 = (<t01<number>>x).a;
+>t01c00 : [number, number]
+>(<t01<number>>x).a : [number, number]
+>(<t01<number>>x) : t01<number, number>
+><t01<number>>x : t01<number, number>
+>t01 : t01<T, U>
+>x : any
+>a : [number, number]
+
+const t01c01 = (<t01<number, string>>x).a;
+>t01c01 : [number, string]
+>(<t01<number, string>>x).a : [number, string]
+>(<t01<number, string>>x) : t01<number, string>
+><t01<number, string>>x : t01<number, string>
+>t01 : t01<T, U>
+>x : any
+>a : [number, string]
+
+type t02<T extends number, U = T> = { a: [T, U]; }
+>t02 : t02<T, U>
+>T : T
+>U : U
+>T : T
+>a : [T, U]
+>T : T
+>U : U
+
+const t02c00 = (<t02<number>>x).a;
+>t02c00 : [number, number]
+>(<t02<number>>x).a : [number, number]
+>(<t02<number>>x) : t02<number, number>
+><t02<number>>x : t02<number, number>
+>t02 : t02<T, U>
+>x : any
+>a : [number, number]
+
+const t02c01 = (<t02<1>>x).a;
+>t02c01 : [1, 1]
+>(<t02<1>>x).a : [1, 1]
+>(<t02<1>>x) : t02<1, 1>
+><t02<1>>x : t02<1, 1>
+>t02 : t02<T, U>
+>x : any
+>a : [1, 1]
+
+const t02c02 = (<t02<number, number>>x).a;
+>t02c02 : [number, number]
+>(<t02<number, number>>x).a : [number, number]
+>(<t02<number, number>>x) : t02<number, number>
+><t02<number, number>>x : t02<number, number>
+>t02 : t02<T, U>
+>x : any
+>a : [number, number]
+
+const t02c03 = (<t02<1, number>>x).a;
+>t02c03 : [1, number]
+>(<t02<1, number>>x).a : [1, number]
+>(<t02<1, number>>x) : t02<1, number>
+><t02<1, number>>x : t02<1, number>
+>t02 : t02<T, U>
+>x : any
+>a : [1, number]
+
+const t02c04 = (<t02<number, 1>>x).a;
+>t02c04 : [number, 1]
+>(<t02<number, 1>>x).a : [number, 1]
+>(<t02<number, 1>>x) : t02<number, 1>
+><t02<number, 1>>x : t02<number, 1>
+>t02 : t02<T, U>
+>x : any
+>a : [number, 1]
+
+type t03<T extends number, U extends T = T> = { a: [T, U]; }
+>t03 : t03<T, U>
+>T : T
+>U : U
+>T : T
+>T : T
+>a : [T, U]
+>T : T
+>U : U
+
+const t03c00 = (<t03<number>>x).a;
+>t03c00 : [number, number]
+>(<t03<number>>x).a : [number, number]
+>(<t03<number>>x) : t03<number, number>
+><t03<number>>x : t03<number, number>
+>t03 : t03<T, U>
+>x : any
+>a : [number, number]
+
+const t03c01 = (<t03<1>>x).a;
+>t03c01 : [1, 1]
+>(<t03<1>>x).a : [1, 1]
+>(<t03<1>>x) : t03<1, 1>
+><t03<1>>x : t03<1, 1>
+>t03 : t03<T, U>
+>x : any
+>a : [1, 1]
+
+const t03c02 = (<t03<number, number>>x).a;
+>t03c02 : [number, number]
+>(<t03<number, number>>x).a : [number, number]
+>(<t03<number, number>>x) : t03<number, number>
+><t03<number, number>>x : t03<number, number>
+>t03 : t03<T, U>
+>x : any
+>a : [number, number]
+
+const t03c03 = (<t03<1, 1>>x).a;
+>t03c03 : [1, 1]
+>(<t03<1, 1>>x).a : [1, 1]
+>(<t03<1, 1>>x) : t03<1, 1>
+><t03<1, 1>>x : t03<1, 1>
+>t03 : t03<T, U>
+>x : any
+>a : [1, 1]
+
+const t03c04 = (<t03<number, 1>>x).a;
+>t03c04 : [number, 1]
+>(<t03<number, 1>>x).a : [number, 1]
+>(<t03<number, 1>>x) : t03<number, 1>
+><t03<number, 1>>x : t03<number, 1>
+>t03 : t03<T, U>
+>x : any
+>a : [number, 1]
+
