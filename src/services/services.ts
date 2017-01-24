@@ -193,9 +193,10 @@ namespace ts {
                 return undefined;
             }
 
-            const child = children[0];
-
-            return child.kind < SyntaxKind.FirstNode ? child : child.getFirstToken(sourceFile);
+            const child = ts.find(children, kid => kid.kind < SyntaxKind.FirstJSDocNode || kid.kind > SyntaxKind.LastJSDocNode);
+            return child.kind < SyntaxKind.FirstNode ?
+                child :
+                child.getFirstToken(sourceFile);
         }
 
         public getLastToken(sourceFile?: SourceFile): Node {
@@ -379,7 +380,7 @@ namespace ts {
         getNumberIndexType(): Type {
             return this.checker.getIndexTypeOfType(this, IndexKind.Number);
         }
-        getBaseTypes(): ObjectType[] {
+        getBaseTypes(): BaseType[] {
             return this.flags & TypeFlags.Object && this.objectFlags & (ObjectFlags.Class | ObjectFlags.Interface)
                 ? this.checker.getBaseTypes(<InterfaceType><Type>this)
                 : undefined;
@@ -1959,11 +1960,9 @@ namespace ts {
 
         function walk(node: Node) {
             switch (node.kind) {
-                case SyntaxKind.Identifier: {
-                    const text = (<Identifier>node).text;
-                    nameTable.set(text, nameTable.get(text) === undefined ? node.pos : -1);
+                case SyntaxKind.Identifier:
+                    setNameTable((<Identifier>node).text, node);
                     break;
-                }
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NumericLiteral:
                     // We want to store any numbers/strings if they were a name that could be
@@ -1974,9 +1973,7 @@ namespace ts {
                         node.parent.kind === SyntaxKind.ExternalModuleReference ||
                         isArgumentOfElementAccessExpression(node) ||
                         isLiteralComputedPropertyDeclarationName(node)) {
-
-                        const text = (<LiteralExpression>node).text;
-                        nameTable.set(text, nameTable.get(text) === undefined ? node.pos : -1);
+                        setNameTable((<LiteralExpression>node).text, node);
                     }
                     break;
                 default:
@@ -1987,6 +1984,10 @@ namespace ts {
                         }
                     }
             }
+        }
+
+        function setNameTable(text: string, node: ts.Node): void {
+            nameTable.set(text, nameTable.get(text) === undefined ? node.pos : -1);
         }
     }
 

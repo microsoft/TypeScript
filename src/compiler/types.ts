@@ -422,7 +422,7 @@
         LastBinaryOperator = CaretEqualsToken,
         FirstNode = QualifiedName,
         FirstJSDocNode = JSDocTypeExpression,
-        LastJSDocNode = JSDocLiteralType,
+        LastJSDocNode = JSDocNeverKeyword,
         FirstJSDocTagNode = JSDocComment,
         LastJSDocTagNode = JSDocNeverKeyword
     }
@@ -2363,7 +2363,7 @@
         getIndexInfoOfType(type: Type, kind: IndexKind): IndexInfo;
         getSignaturesOfType(type: Type, kind: SignatureKind): Signature[];
         getIndexTypeOfType(type: Type, kind: IndexKind): Type;
-        getBaseTypes(type: InterfaceType): ObjectType[];
+        getBaseTypes(type: InterfaceType): BaseType[];
         getReturnTypeOfSignature(signature: Signature): Type;
         /**
          * Gets the type of a parameter at a given position in a signature.
@@ -2718,6 +2718,7 @@
         containingType?: UnionOrIntersectionType;  // Containing union or intersection type for synthetic property
         leftSpread?: Symbol;                // Left source for synthetic spread property
         rightSpread?: Symbol;               // Right source for synthetic spread property
+        mappedTypeOrigin?: Symbol;          // For a property on a mapped type, points back to the orignal 'T' from 'keyof T'.
         hasNonUniformType?: boolean;        // True if constituents have non-uniform types
         isPartial?: boolean;                // True if syntheric property of union type occurs in some but not all constituents
         isDiscriminantProperty?: boolean;   // True if discriminant synthetic property
@@ -2918,8 +2919,11 @@
         /* @internal */
         resolvedBaseConstructorType?: Type;        // Resolved base constructor type of class
         /* @internal */
-        resolvedBaseTypes: ObjectType[];           // Resolved base types
+        resolvedBaseTypes: BaseType[];             // Resolved base types
     }
+
+    // Object type or intersection of object types
+    export type BaseType = ObjectType | IntersectionType;
 
     export interface InterfaceTypeWithDeclaredMembers extends InterfaceType {
         declaredProperties: Symbol[];              // Declared members
@@ -2953,7 +2957,9 @@
     export interface UnionOrIntersectionType extends Type {
         types: Type[];                    // Constituent types
         /* @internal */
-        resolvedProperties: SymbolTable;  // Cache of resolved properties
+        propertyCache: SymbolTable;       // Cache of resolved properties
+        /* @internal */
+        resolvedProperties: Symbol[];
         /* @internal */
         resolvedIndexType: IndexType;
         /* @internal */
@@ -2964,7 +2970,10 @@
 
     export interface UnionType extends UnionOrIntersectionType { }
 
-    export interface IntersectionType extends UnionOrIntersectionType { }
+    export interface IntersectionType extends UnionOrIntersectionType {
+        /* @internal */
+        resolvedApparentType: Type;
+    }
 
     export type StructuredType = ObjectType | UnionType | IntersectionType;
 
@@ -3298,7 +3307,8 @@
     export const enum JsxEmit {
         None = 0,
         Preserve = 1,
-        React = 2
+        React = 2,
+        ReactNative = 3
     }
 
     export const enum NewLineKind {

@@ -417,7 +417,7 @@ namespace ts.server.protocol {
         startOffset: number;
 
         /**
-         * Position (can be specified instead of line/offset pair) 
+         * Position (can be specified instead of line/offset pair)
          */
         /* @internal */
         startPosition?: number;
@@ -433,7 +433,7 @@ namespace ts.server.protocol {
         endOffset: number;
 
         /**
-         * Position (can be specified instead of line/offset pair) 
+         * Position (can be specified instead of line/offset pair)
          */
         /* @internal */
         endPosition?: number;
@@ -445,7 +445,7 @@ namespace ts.server.protocol {
     }
 
     /**
-     * Response for GetCodeFixes request. 
+     * Response for GetCodeFixes request.
      */
     export interface GetCodeFixesResponse extends Response {
         body?: CodeAction[];
@@ -2272,10 +2272,11 @@ namespace ts.server.protocol {
     export namespace JsxEmit {
         export type None = "None";
         export type Preserve = "Preserve";
+        export type ReactNative = "ReactNative";
         export type React = "React";
     }
 
-    export type JsxEmit = JsxEmit.None | JsxEmit.Preserve | JsxEmit.React;
+    export type JsxEmit = JsxEmit.None | JsxEmit.Preserve | JsxEmit.React | JsxEmit.ReactNative;
 
     export namespace ModuleKind {
         export type None = "None";

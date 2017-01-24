@@ -1,0 +1,11 @@
+=== tests/cases/compiler/es3-jsx-react-native.tsx ===
+
+const React: any = null;
+>React : Symbol(React, Decl(es3-jsx-react-native.tsx, 1, 5))
+
+const elem = <div></div>;
+>elem : Symbol(elem, Decl(es3-jsx-react-native.tsx, 3, 5))
+>div : Symbol(unknown)
+>div : Symbol(unknown)
+
+

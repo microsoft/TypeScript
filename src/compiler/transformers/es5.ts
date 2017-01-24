@@ -11,10 +11,10 @@ namespace ts {
     export function transformES5(context: TransformationContext) {
         const compilerOptions = context.getCompilerOptions();
 
-        // enable emit notification only if using --jsx preserve
+        // enable emit notification only if using --jsx preserve or react-native
         let previousOnEmitNode: (emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void) => void;
         let noSubstitution: boolean[];
-        if (compilerOptions.jsx === JsxEmit.Preserve) {
+        if (compilerOptions.jsx === JsxEmit.Preserve || compilerOptions.jsx === JsxEmit.ReactNative) {
             previousOnEmitNode = context.onEmitNode;
             context.onEmitNode = onEmitNode;
             context.enableEmitNotification(SyntaxKind.JsxOpeningElement);
