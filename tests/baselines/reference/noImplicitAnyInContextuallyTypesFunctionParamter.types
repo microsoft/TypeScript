@@ -8,10 +8,10 @@ var regexMatchList = ['', ''];
 
 regexMatchList.forEach(match => ''.replace(match, ''));
 >regexMatchList.forEach(match => ''.replace(match, '')) : void
->regexMatchList.forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>regexMatchList.forEach : { (callbackfn: (this: undefined, value: string, index: number, array: string[]) => void): void; (callbackfn: (this: undefined, value: string, index: number, array: string[]) => void, thisArg: undefined): void; <Z>(callbackfn: (this: Z, value: string, index: number, array: string[]) => void, thisArg: Z): void; }
 >regexMatchList : string[]
->forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
->match => ''.replace(match, '') : (match: string) => string
+>forEach : { (callbackfn: (this: undefined, value: string, index: number, array: string[]) => void): void; (callbackfn: (this: undefined, value: string, index: number, array: string[]) => void, thisArg: undefined): void; <Z>(callbackfn: (this: Z, value: string, index: number, array: string[]) => void, thisArg: Z): void; }
+>match => ''.replace(match, '') : (this: undefined, match: string) => string
 >match : string
 >''.replace(match, '') : string
 >''.replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replacer: (substring: string, ...args: any[]) => string): string; }

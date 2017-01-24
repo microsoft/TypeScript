@@ -9,9 +9,9 @@ function f(x: number, y: number, z: number) {
 
     return Array.from(arguments);
 >Array.from(arguments) : any[]
->Array.from : { <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(arrayLike: ArrayLike<T>): T[]; }
+>Array.from : { <T, U>(arrayLike: ArrayLike<T>, mapfn: (this: undefined, v: T, k: number) => U): U[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (this: undefined, v: T, k: number) => U, thisArg: undefined): U[]; <Z, T, U>(arrayLike: ArrayLike<T>, mapfn: (this: Z, v: T, k: number) => U, thisArg: Z): U[]; <T>(arrayLike: ArrayLike<T>): T[]; }
 >Array : ArrayConstructor
->from : { <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(arrayLike: ArrayLike<T>): T[]; }
+>from : { <T, U>(arrayLike: ArrayLike<T>, mapfn: (this: undefined, v: T, k: number) => U): U[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (this: undefined, v: T, k: number) => U, thisArg: undefined): U[]; <Z, T, U>(arrayLike: ArrayLike<T>, mapfn: (this: Z, v: T, k: number) => U, thisArg: Z): U[]; <T>(arrayLike: ArrayLike<T>): T[]; }
 >arguments : IArguments
 }
 
