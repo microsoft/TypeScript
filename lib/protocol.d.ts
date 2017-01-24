@@ -1798,10 +1798,9 @@ declare namespace ts.server.protocol {
     namespace JsxEmit {
         type None = "None";
         type Preserve = "Preserve";
-        type ReactNative = "ReactNative";
         type React = "React";
     }
-    type JsxEmit = JsxEmit.None | JsxEmit.Preserve | JsxEmit.React | JsxEmit.ReactNative;
+    type JsxEmit = JsxEmit.None | JsxEmit.Preserve | JsxEmit.React;
     namespace ModuleKind {
         type None = "None";
         type CommonJS = "CommonJS";
