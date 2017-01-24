@@ -193,8 +193,8 @@ namespace ts {
                 return undefined;
             }
 
-            const child = children[0];
-            return child.kind < SyntaxKind.FirstNode || SyntaxKind.FirstJSDocNode <= child.kind && child.kind <= SyntaxKind.LastJSDocNode ?
+            const child = ts.find(children, kid => kid.kind < SyntaxKind.FirstJSDocNode || kid.kind > SyntaxKind.LastJSDocNode);
+            return child.kind < SyntaxKind.FirstNode ?
                 child :
                 child.getFirstToken(sourceFile);
         }
@@ -207,9 +207,7 @@ namespace ts {
                 return undefined;
             }
 
-            return child.kind < SyntaxKind.FirstNode || SyntaxKind.FirstJSDocNode <= child.kind && child.kind <= SyntaxKind.LastJSDocNode ?
-                child :
-                child.getLastToken(sourceFile);
+            return child.kind < SyntaxKind.FirstNode ? child : child.getLastToken(sourceFile);
         }
     }
 
