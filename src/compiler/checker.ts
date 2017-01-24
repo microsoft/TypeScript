@@ -166,8 +166,8 @@ namespace ts {
         // in getPropagatingFlagsOfTypes, and it is checked in inferFromTypes.
         anyFunctionType.flags |= TypeFlags.ContainsAnyFunctionType;
 
-        const noConstraintOrDefaultType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
-        const circularConstraintOrDefaultType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        const noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        const circularConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
         const anySignature = createSignature(undefined, undefined, 0, undefined, emptyArray, anyType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         const unknownSignature = createSignature(undefined, undefined, 0, undefined, emptyArray, unknownType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
@@ -4791,11 +4791,11 @@ namespace ts {
 
         function getBaseConstraintOfType(type: TypeVariable | UnionOrIntersectionType): Type {
             const constraint = getResolvedBaseConstraint(type);
-            return constraint !== noConstraintOrDefaultType && constraint !== circularConstraintOrDefaultType ? constraint : undefined;
+            return constraint !== noConstraintType && constraint !== circularConstraintType ? constraint : undefined;
         }
 
         function hasNonCircularBaseConstraint(type: TypeVariable): boolean {
-            return getResolvedBaseConstraint(type) !== circularConstraintOrDefaultType;
+            return getResolvedBaseConstraint(type) !== circularConstraintType;
         }
 
         /**
@@ -4809,7 +4809,7 @@ namespace ts {
             if (!type.resolvedBaseConstraint) {
                 typeStack = [];
                 const constraint = getBaseConstraint(type);
-                type.resolvedBaseConstraint = circular ? circularConstraintOrDefaultType : getTypeWithThisArgument(constraint || noConstraintOrDefaultType, type);
+                type.resolvedBaseConstraint = circular ? circularConstraintType : getTypeWithThisArgument(constraint || noConstraintType, type);
             }
             return type.resolvedBaseConstraint;
 
@@ -4869,14 +4869,14 @@ namespace ts {
             if (!typeParameter.default) {
                 if (typeParameter.target) {
                     const targetDefault = getDefaultFromTypeParameter(typeParameter.target);
-                    typeParameter.default = targetDefault ? instantiateType(targetDefault, typeParameter.mapper) : noConstraintOrDefaultType;
+                    typeParameter.default = targetDefault ? instantiateType(targetDefault, typeParameter.mapper) : noConstraintType;
                 }
                 else {
                     const defaultDeclaration = typeParameter.symbol && forEach(typeParameter.symbol.declarations, decl => isTypeParameter(decl) && decl.default);
-                    typeParameter.default = defaultDeclaration ? getTypeFromTypeNode(defaultDeclaration) : noConstraintOrDefaultType;
+                    typeParameter.default = defaultDeclaration ? getTypeFromTypeNode(defaultDeclaration) : noConstraintType;
                 }
             }
-            return typeParameter.default === noConstraintOrDefaultType ? undefined : typeParameter.default;
+            return typeParameter.default === noConstraintType ? undefined : typeParameter.default;
         }
 
         /**
@@ -5497,14 +5497,14 @@ namespace ts {
             if (!typeParameter.constraint) {
                 if (typeParameter.target) {
                     const targetConstraint = getConstraintOfTypeParameter(typeParameter.target);
-                    typeParameter.constraint = targetConstraint ? instantiateType(targetConstraint, typeParameter.mapper) : noConstraintOrDefaultType;
+                    typeParameter.constraint = targetConstraint ? instantiateType(targetConstraint, typeParameter.mapper) : noConstraintType;
                 }
                 else {
                     const constraintDeclaration = getConstraintDeclaration(typeParameter);
-                    typeParameter.constraint = constraintDeclaration ? getTypeFromTypeNode(constraintDeclaration) : noConstraintOrDefaultType;
+                    typeParameter.constraint = constraintDeclaration ? getTypeFromTypeNode(constraintDeclaration) : noConstraintType;
                 }
             }
-            return typeParameter.constraint === noConstraintOrDefaultType ? undefined : typeParameter.constraint;
+            return typeParameter.constraint === noConstraintType ? undefined : typeParameter.constraint;
         }
 
         function getParentSymbolOfTypeParameter(typeParameter: TypeParameter): Symbol {
@@ -15846,12 +15846,12 @@ namespace ts {
             }
         }
 
-        /** 
+        /**
          * Static members being set on a constructor function may conflict with built-in properties
-         * of Function. Esp. in ECMAScript 5 there are non-configurable and non-writable 
-         * built-in properties. This check issues a transpile error when a class has a static 
+         * of Function. Esp. in ECMAScript 5 there are non-configurable and non-writable
+         * built-in properties. This check issues a transpile error when a class has a static
          * member with the same name as a non-writable built-in property.
-         * 
+         *
          * @see http://www.ecma-international.org/ecma-262/5.1/#sec-15.3.3
          * @see http://www.ecma-international.org/ecma-262/5.1/#sec-15.3.5
          * @see http://www.ecma-international.org/ecma-262/6.0/#sec-properties-of-the-function-constructor
