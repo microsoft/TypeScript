@@ -13169,19 +13169,13 @@ namespace ts {
             const paramType = getTypeAtPosition(signature, 0);
             const argType = checkExpressionWithContextualType(node.attributes, paramType, /*contextualMapper*/ undefined);
             const argProperties = getPropertiesOfType(argType);
-            const paramProperties = getPropertiesOfType(paramType);
-            if (argProperties.length === paramProperties.length && checkTypeRelatedTo(argType, paramType, relation, /*errorNode*/ undefined, headMessage)) {
-                return true;
+            for (const arg of argProperties) {
+                if (!getPropertyOfType(paramType, arg.name) && isUnhyphenatedJsxName(arg.name)) {
+                    return false;
+                }
             }
-            else {
-                for (const arg of argProperties) {
-                    if (!getPropertyOfType(paramType, arg.name) && isUnhyphenatedJsxName(arg.name)) {
-                        return false;
-                    }
-                }
-                if (checkTypeRelatedTo(argType, paramType, relation, /*errorNode*/ undefined, headMessage)) {
-                    return true;
-                }
+            if (checkTypeRelatedTo(argType, paramType, relation, /*errorNode*/ undefined, headMessage)) {
+                return true;
             }
             return false;
         }
@@ -13723,9 +13717,6 @@ namespace ts {
             return resolveErrorCall(node);
 
             function reportError(message: DiagnosticMessage, arg0?: string, arg1?: string, arg2?: string): void {
-                if (isJsxOpeningOrSelfClosingElement) {
-                    return;
-                }
                 let errorInfo: DiagnosticMessageChain;
                 errorInfo = chainDiagnosticMessages(errorInfo, message, arg0, arg1, arg2);
                 if (headMessage) {
@@ -14125,7 +14116,7 @@ namespace ts {
                 let result: Signature;
                 for (const type of types) {
                     // This is mainly to fill in all the candidates if there is one.
-                    result = result || resolveStatelessJsxOpeningLikeElement(openingLikeElement, type, candidatesOutArray);
+                    result = result && resolveStatelessJsxOpeningLikeElement(openingLikeElement, type, candidatesOutArray);
                 }
 
                 return result;
