@@ -297,6 +297,30 @@ class C1 {
     }
 }
 
+type S2 = {
+    a: string;
+    b: string;
+};
+
+function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K], x4: T[K]) {
+    x1 = x2;
+    x1 = x3;
+    x1 = x4;
+    x2 = x1;
+    x2 = x3;
+    x2 = x4;
+    x3 = x1;
+    x3 = x2;
+    x3 = x4;
+    x4 = x1;
+    x4 = x2;
+    x4 = x3;
+    x1.length;
+    x2.length;
+    x3.length;
+    x4.length;
+}
+
 // Repros from #12011
 
 class Base {
@@ -431,3 +455,65 @@ type SomeMethodDescriptor = {
 }
 
 let result = dispatchMethod<SomeMethodDescriptor>("someMethod", ["hello", 35]);
+
+// Repro from #13073
+
+type KeyTypes = "a" | "b"
+let MyThingy: { [key in KeyTypes]: string[] };
+
+function addToMyThingy<S extends KeyTypes>(key: S) {
+    MyThingy[key].push("a");
+}
+
+// Repro from #13102
+
+type Handler<T> = {
+    onChange: (name: keyof T) => void;
+};
+
+function onChangeGenericFunction<T>(handler: Handler<T & {preset: number}>) {
+    handler.onChange('preset')
+}
+
+// Repro from #13285
+
+function updateIds<T extends Record<K, string>, K extends string>(
+    obj: T,
+    idFields: K[],
+    idMapping: { [oldId: string]: string }
+): Record<K, string> {
+    for (const idField of idFields) {
+        const newId = idMapping[obj[idField]];
+        if (newId) {
+            obj[idField] = newId;
+        }
+    }
+    return obj;
+}
+
+// Repro from #13285
+
+function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
+    obj: T,
+    key: K,
+    stringMap: { [oldId: string]: string }
+) {
+    var x = obj[key];
+    stringMap[x]; // Should be OK.
+}
+
+// Repro from #13514
+
+declare function head<T extends Array<any>>(list: T): T[0];
+
+// Repro from #13604
+
+class A<T> {
+	props: T & { foo: string };
+}
+
+class B extends A<{ x: number}> {
+	f(p: this["props"]) {
+		p.x;
+	}
+}

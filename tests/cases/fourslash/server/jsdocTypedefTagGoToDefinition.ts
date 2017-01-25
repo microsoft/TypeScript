@@ -5,7 +5,7 @@
 
 //// /**
 ////  * @typedef {Object} Person
-////  * /*1*/@property {string} personName
+////  * @property {string} /*1*/personName
 ////  * @property {number} personAge
 ////  */
 ////

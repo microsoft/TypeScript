@@ -158,6 +158,18 @@ class Removable {
     remainder: string;
 >remainder : string
 }
+interface I {
+>I : I
+
+    m(): void;
+>m : () => void
+
+    removed: string;
+>removed : string
+
+    remainder: string;
+>remainder : string
+}
 var removable = new Removable();
 >removable : Removable
 >new Removable() : Removable
@@ -167,6 +179,16 @@ var { removed, ...removableRest } = removable;
 >removed : string
 >removableRest : { both: number; remainder: string; }
 >removable : Removable
+
+var i: I = removable;
+>i : I
+>I : I
+>removable : Removable
+
+var { removed, ...removableRest2 } = i;
+>removed : string
+>removableRest2 : { m(): void; remainder: string; }
+>i : I
 
 let computed = 'b';
 >computed : string
@@ -195,15 +217,15 @@ var { [computed]: stillNotGreat, [computed2]: soSo,  ...o } = o;
 >o : { a: number; b: string; }
 >o : { a: number; b: string; }
 
-var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject['anythingGoes'];
+var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes;
 >noContextualType : ({aNumber, ...notEmptyObject}: { [x: string]: any; aNumber?: number; }) => any
->({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject['anythingGoes'] : ({aNumber, ...notEmptyObject}: { [x: string]: any; aNumber?: number; }) => any
+>({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes : ({aNumber, ...notEmptyObject}: { [x: string]: any; aNumber?: number; }) => any
 >aNumber : number
 >12 : 12
 >notEmptyObject : { [x: string]: any; }
->aNumber + notEmptyObject['anythingGoes'] : any
+>aNumber + notEmptyObject.anythingGoes : any
 >aNumber : number
->notEmptyObject['anythingGoes'] : any
+>notEmptyObject.anythingGoes : any
 >notEmptyObject : { [x: string]: any; }
->'anythingGoes' : "anythingGoes"
+>anythingGoes : any
 

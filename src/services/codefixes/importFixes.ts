@@ -14,20 +14,21 @@ namespace ts.codefix {
     }
 
     class ImportCodeActionMap {
-        private symbolIdToActionMap = createMap<ImportCodeAction[]>();
+        private symbolIdToActionMap: ImportCodeAction[][] = [];
 
         addAction(symbolId: number, newAction: ImportCodeAction) {
             if (!newAction) {
                 return;
             }
 
-            if (!this.symbolIdToActionMap[symbolId]) {
+            const actions = this.symbolIdToActionMap[symbolId];
+            if (!actions) {
                 this.symbolIdToActionMap[symbolId] = [newAction];
                 return;
             }
 
             if (newAction.kind === "CodeChange") {
-                this.symbolIdToActionMap[symbolId].push(newAction);
+                actions.push(newAction);
                 return;
             }
 
@@ -73,8 +74,8 @@ namespace ts.codefix {
 
         getAllActions() {
             let result: ImportCodeAction[] = [];
-            for (const symbolId in this.symbolIdToActionMap) {
-                result = concatenate(result, this.symbolIdToActionMap[symbolId]);
+            for (const key in this.symbolIdToActionMap) {
+                result = concatenate(result, this.symbolIdToActionMap[key])
             }
             return result;
         }
@@ -127,7 +128,7 @@ namespace ts.codefix {
             const symbolIdActionMap = new ImportCodeActionMap();
 
             // this is a module id -> module import declaration map
-            const cachedImportDeclarations = createMap<(ImportDeclaration | ImportEqualsDeclaration)[]>();
+            const cachedImportDeclarations: (ImportDeclaration | ImportEqualsDeclaration)[][] = [];
             let cachedNewImportInsertPosition: number;
 
             const currentTokenMeaning = getMeaningFromLocation(token);
@@ -170,8 +171,9 @@ namespace ts.codefix {
             function getImportDeclarations(moduleSymbol: Symbol) {
                 const moduleSymbolId = getUniqueSymbolId(moduleSymbol);
 
-                if (cachedImportDeclarations[moduleSymbolId]) {
-                    return cachedImportDeclarations[moduleSymbolId];
+                const cached = cachedImportDeclarations[moduleSymbolId];
+                if (cached) {
+                    return cached;
                 }
 
                 const existingDeclarations: (ImportDeclaration | ImportEqualsDeclaration)[] = [];
@@ -420,10 +422,10 @@ namespace ts.codefix {
                         const options = context.program.getCompilerOptions();
 
                         return tryGetModuleNameFromAmbientModule() ||
-                            tryGetModuleNameFromBaseUrl() ||
-                            tryGetModuleNameFromRootDirs() ||
                             tryGetModuleNameFromTypeRoots() ||
                             tryGetModuleNameAsNodeModule() ||
+                            tryGetModuleNameFromBaseUrl() ||
+                            tryGetModuleNameFromRootDirs() ||
                             removeFileExtension(getRelativePath(moduleFileName, sourceDirectory));
 
                         function tryGetModuleNameFromAmbientModule(): string {

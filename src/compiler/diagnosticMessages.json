@@ -2015,6 +2015,10 @@
         "category": "Error",
         "code": 2698
     },
+    "Static property '{0}' conflicts with built-in property 'Function.{0}' of constructor function '{1}'.": {
+        "category": "Error",
+        "code": 2699
+    },
     "Rest types may only be created from object types.": {
         "category": "Error",
         "code": 2700
@@ -2513,7 +2517,7 @@
         "category": "Message",
         "code": 6019
     },
-    "Compile the project in the given directory.": {
+    "Compile the project given the path to its configuration file, or to a folder with a 'tsconfig.json'": {
         "category": "Message",
         "code": 6020
     },
@@ -2572,6 +2576,10 @@
     "STRATEGY": {
         "category": "Message",
         "code": 6039
+    },
+    "FILE OR DIRECTORY": {
+        "category": "Message",
+        "code": 6040
     },
     "Compilation complete. Watching for file changes.": {
         "category": "Message",
@@ -2705,7 +2713,7 @@
         "category": "Message",
         "code": 6079
     },
-    "Specify JSX code generation: 'preserve' or 'react'": {
+    "Specify JSX code generation: 'preserve', 'react-native', or 'react'": {
         "category": "Message",
         "code": 6080
     },
@@ -3243,7 +3251,7 @@
         "category": "Message",
         "code": 90003
     },
-    "Remove unused identifiers.": {
+    "Remove declaration for: {0}": {
         "category": "Message",
         "code": 90004
     },

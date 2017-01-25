@@ -15,7 +15,7 @@ namespace ts {
     }
 
     /** Array that is only intended to be pushed to, never read. */
-    interface Push<T> {
+    export interface Push<T> {
         push(value: T): void;
     }
 
@@ -336,9 +336,10 @@ namespace ts {
             if (!moduleHasNonRelativeName(nonRelativeModuleName)) {
                 return undefined;
             }
-            let perModuleNameCache = moduleNameToDirectoryMap[nonRelativeModuleName];
+            let perModuleNameCache = moduleNameToDirectoryMap.get(nonRelativeModuleName);
             if (!perModuleNameCache) {
-                moduleNameToDirectoryMap[nonRelativeModuleName] = perModuleNameCache = createPerModuleNameCache();
+                perModuleNameCache = createPerModuleNameCache();
+                moduleNameToDirectoryMap.set(nonRelativeModuleName, perModuleNameCache);
             }
             return perModuleNameCache;
         }
@@ -357,7 +358,7 @@ namespace ts {
              * Then it computes the set of parent folders for 'directory' that should have the same module resolution result
              * and for every parent folder in set it adds entry: parent -> module resolution. .
              * Lets say we first directory name: /a/b/c/d/e and resolution result is: /a/b/bar.ts.
-             * Set of parent folders that should have the same result will be: 
+             * Set of parent folders that should have the same result will be:
              * [
              *     /a/b/c/d, /a/b/c, /a/b
              * ]
@@ -391,7 +392,7 @@ namespace ts {
                     }
                 }
             }
-            
+
             function getCommonPrefix(directory: Path, resolution: string) {
                 if (resolution === undefined) {
                     return undefined;
@@ -421,8 +422,8 @@ namespace ts {
             trace(host, Diagnostics.Resolving_module_0_from_1, moduleName, containingFile);
         }
         const containingDirectory = getDirectoryPath(containingFile);
-        let perFolderCache = cache && cache.getOrCreateCacheForDirectory(containingDirectory);
-        let result = perFolderCache && perFolderCache[moduleName];
+        const perFolderCache = cache && cache.getOrCreateCacheForDirectory(containingDirectory);
+        let result = perFolderCache && perFolderCache.get(moduleName);
 
         if (result) {
             if (traceEnabled) {
@@ -453,7 +454,7 @@ namespace ts {
             }
 
             if (perFolderCache) {
-                perFolderCache[moduleName] = result;
+                perFolderCache.set(moduleName, result);
                 // put result in per-module name cache
                 const perModuleNameCache = cache.getOrCreateCacheForModuleName(moduleName);
                 if (perModuleNameCache) {
@@ -1022,7 +1023,7 @@ namespace ts {
 
     /**
      * Represents result of search. Normally when searching among several alternatives we treat value `undefined` as indicator
-     * that search fails and we should try another option. 
+     * that search fails and we should try another option.
      * However this does not allow us to represent final result that should be used instead of further searching (i.e. a final result that was found in cache).
      * SearchResult is used to deal with this issue, its values represents following outcomes:
      * - undefined - not found, continue searching
@@ -1030,7 +1031,7 @@ namespace ts {
      * - { value: <some-value> } - found - stop searching
      */
     type SearchResult<T> = { value: T | undefined } | undefined;
-    
+
     /**
      * Wraps value to SearchResult.
      * @returns undefined if value is undefined or { value } otherwise

@@ -29,15 +29,22 @@ class Removable {
     removed: string;
     remainder: string;
 }
+interface I {
+    m(): void;
+    removed: string;
+    remainder: string;
+}
 var removable = new Removable();
 var { removed, ...removableRest } = removable;
+var i: I = removable;
+var { removed, ...removableRest2 } = i;
 
 let computed = 'b';
 let computed2 = 'a';
 var { [computed]: stillNotGreat, [computed2]: soSo,  ...o } = o;
 ({ [computed]: stillNotGreat, [computed2]: soSo, ...o } = o);
 
-var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject['anythingGoes'];
+var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes;
 
 
 //// [objectRest.js]
@@ -74,12 +81,14 @@ class Removable {
 }
 var removable = new Removable();
 var { removed } = removable, removableRest = __rest(removable, ["removed"]);
+var i = removable;
+var { removed } = i, removableRest2 = __rest(i, ["removed"]);
 let computed = 'b';
 let computed2 = 'a';
 var _g = computed, stillNotGreat = o[_g], _h = computed2, soSo = o[_h], o = __rest(o, [typeof _g === "symbol" ? _g : _g + "", typeof _h === "symbol" ? _h : _h + ""]);
 (_j = computed, stillNotGreat = o[_j], _k = computed2, soSo = o[_k], o = __rest(o, [typeof _j === "symbol" ? _j : _j + "", typeof _k === "symbol" ? _k : _k + ""]));
 var noContextualType = (_a) => {
     var { aNumber = 12 } = _a, notEmptyObject = __rest(_a, ["aNumber"]);
-    return aNumber + notEmptyObject['anythingGoes'];
+    return aNumber + notEmptyObject.anythingGoes;
 };
 var _d, _f, _j, _k;

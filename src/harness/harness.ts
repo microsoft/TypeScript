@@ -40,6 +40,19 @@ declare namespace NodeJS {
         ActiveXObject: typeof ActiveXObject;
     }
 }
+
+declare var window: {};
+declare var XMLHttpRequest: {
+    new(): XMLHttpRequest;
+}
+interface XMLHttpRequest  {
+    readonly readyState: number;
+    readonly responseText: string;
+    readonly status: number;
+    open(method: string, url: string, async?: boolean, user?: string, password?: string): void;
+    send(data?: string): void;
+    setRequestHeader(header: string, value: string): void;
+}
 /* tslint:enable:no-var-keyword */
 
 namespace Utils {
@@ -909,7 +922,7 @@ namespace Harness {
         export const defaultLibFileName = "lib.d.ts";
         export const es2015DefaultLibFileName = "lib.es2015.d.ts";
 
-        const libFileNameSourceFileMap = ts.createMap<ts.SourceFile>({
+        const libFileNameSourceFileMap = ts.createMapFromTemplate<ts.SourceFile>({
             [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest)
         });
 
@@ -918,10 +931,11 @@ namespace Harness {
                 return undefined;
             }
 
-            if (!libFileNameSourceFileMap[fileName]) {
-                libFileNameSourceFileMap[fileName] = createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName), ts.ScriptTarget.Latest);
+            let sourceFile = libFileNameSourceFileMap.get(fileName);
+            if (!sourceFile) {
+                libFileNameSourceFileMap.set(fileName, sourceFile = createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName), ts.ScriptTarget.Latest));
             }
-            return libFileNameSourceFileMap[fileName];
+            return sourceFile;
         }
 
         export function getDefaultLibFileName(options: ts.CompilerOptions): string {
@@ -1103,10 +1117,10 @@ namespace Harness {
                 optionsIndex = ts.createMap<ts.CommandLineOption>();
                 const optionDeclarations = harnessOptionDeclarations.concat(ts.optionDeclarations);
                 for (const option of optionDeclarations) {
-                    optionsIndex[option.name.toLowerCase()] = option;
+                    optionsIndex.set(option.name.toLowerCase(), option);
                 }
             }
-            return optionsIndex[name.toLowerCase()];
+            return optionsIndex.get(name.toLowerCase());
         }
 
         export function setCompilerOptionsFromHarnessSetting(settings: Harness.TestCaseParser.CompilerSettings, options: ts.CompilerOptions & HarnessOptions): void {
@@ -1466,7 +1480,7 @@ namespace Harness {
             const fullResults = ts.createMap<TypeWriterResult[]>();
 
             for (const sourceFile of allFiles) {
-                fullResults[sourceFile.unitName] = fullWalker.getTypeAndSymbols(sourceFile.unitName);
+                fullResults.set(sourceFile.unitName, fullWalker.getTypeAndSymbols(sourceFile.unitName));
             }
 
             // Produce baselines.  The first gives the types for all expressions.
@@ -1519,7 +1533,7 @@ namespace Harness {
 
                 allFiles.forEach(file => {
                     const codeLines = file.content.split("\n");
-                    typeWriterResults[file.unitName].forEach(result => {
+                    typeWriterResults.get(file.unitName).forEach(result => {
                         if (isSymbolBaseline && !result.symbol) {
                             return;
                         }

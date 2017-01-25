@@ -19,15 +19,9 @@
 ////    return true;
 ////}
 
-test.ranges().forEach(r => {
-    goTo.position(r.start);
-
-    test.ranges().forEach(range => {
-        verify.occurrencesAtPositionContains(range, false);
-    });
-});
+verify.rangesAreOccurrences(false);
 
 goTo.marker();
-test.ranges().forEach(range => {
+for (const range of test.ranges()) {
     verify.occurrencesAtPositionContains(range, false);
-});
+}

@@ -242,22 +242,20 @@ function needsUpdate(source: string | string[], dest: string | string[]): boolea
     return true;
 }
 
+// Doing tsconfig inheritance manually. https://github.com/ivogabe/gulp-typescript/issues/459
+const tsconfigBase = JSON.parse(fs.readFileSync("src/tsconfig-base.json", "utf-8")).compilerOptions;
+
 function getCompilerSettings(base: tsc.Settings, useBuiltCompiler?: boolean): tsc.Settings {
     const copy: tsc.Settings = {};
-    copy.noEmitOnError = true;
-    copy.noImplicitAny = true;
-    copy.noImplicitThis = true;
-    copy.pretty = true;
-    copy.types = [];
+    for (const key in tsconfigBase) {
+        copy[key] = tsconfigBase[key];
+    }
     for (const key in base) {
         copy[key] = base[key];
     }
     if (!useDebugMode) {
         if (copy.removeComments === undefined) copy.removeComments = true;
         copy.newLine = "lf";
-    }
-    else {
-        copy.preserveConstEnums = true;
     }
     if (useBuiltCompiler === true) {
         copy.typescript = require("./built/local/typescript.js");
@@ -330,6 +328,7 @@ const builtGeneratedDiagnosticMessagesJSON = path.join(builtLocalDirectory, "dia
 // processDiagnosticMessages script
 gulp.task(processDiagnosticMessagesJs, false, [], () => {
     const settings: tsc.Settings = getCompilerSettings({
+        target: "es5",
         declaration: false,
         removeComments: true,
         noResolve: false,

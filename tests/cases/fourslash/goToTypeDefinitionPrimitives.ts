@@ -12,14 +12,9 @@
 /////*reference3*/y;
 /////*reference4*/y;
 
-goTo.marker('reference1');
-verify.typeDefinitionCountIs(0);
-
-goTo.marker('reference1');
-verify.typeDefinitionCountIs(0);
-
-goTo.marker('reference2');
-verify.typeDefinitionCountIs(0);
-
-goTo.marker('reference4');
-verify.typeDefinitionCountIs(0);
+verify.goToType({
+    reference1: [],
+    reference2: [],
+    reference3: [],
+    reference4: []
+});
