@@ -4,19 +4,29 @@
 /* @internal */
 namespace ts {
     let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+    let TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+    let IdentifierConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
     let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
 
-    function createNode(kind: SyntaxKind, location?: TextRange, flags?: NodeFlags): Node {
-        const ConstructorForKind = kind === SyntaxKind.SourceFile
-            ? (SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor()))
-            : (NodeConstructor || (NodeConstructor = objectAllocator.getNodeConstructor()));
+    function getConstructorForKind(kind: SyntaxKind): new (kind: SyntaxKind, pos: number, end: number) => Node {
+        if (kind === SyntaxKind.SourceFile) {
+            return SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor());
+        }
+        if (kind === SyntaxKind.Identifier) {
+            return IdentifierConstructor || (IdentifierConstructor = objectAllocator.getIdentifierConstructor());
+        }
+        if (kind < SyntaxKind.FirstNode) {
+            return TokenConstructor || (TokenConstructor = objectAllocator.getTokenConstructor());
+        }
+        return NodeConstructor || (NodeConstructor = objectAllocator.getNodeConstructor());
+    }
 
+    function createNode(kind: SyntaxKind, location?: TextRange, flags?: NodeFlags): Node {
+        const ConstructorForKind = getConstructorForKind(kind);
         const node = location
             ? new ConstructorForKind(kind, location.pos, location.end)
             : new ConstructorForKind(kind, /*pos*/ -1, /*end*/ -1);
-
         node.flags = flags | NodeFlags.Synthesized;
-
         return node;
     }
 
@@ -211,6 +221,13 @@ namespace ts {
 
     // Names
 
+    export function createQualifiedName(left: EntityName, right: Identifier, location?: TextRange) {
+        const node = <QualifiedName>createNode(SyntaxKind.QualifiedName, location);
+        node.left = left;
+        node.right = right;
+        return node;
+    }
+
     export function createComputedPropertyName(expression: Expression, location?: TextRange) {
         const node = <ComputedPropertyName>createNode(SyntaxKind.ComputedPropertyName, location);
         node.expression = expression;
@@ -225,6 +242,24 @@ namespace ts {
     }
 
     // Signature elements
+    export function createTypeParameter(name: Identifier, constraintOrExpression: TypeNode | Expression) {
+        let constraint: TypeNode;
+        let expression: Expression;
+        if (constraint) {
+            if (isTypeNode(constraintOrExpression)) {
+                constraint = constraintOrExpression;
+            }
+            else {
+                expression = constraintOrExpression;
+            }
+        }
+
+        const node = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
+        node.name = name;
+        node.constraint = constraint;
+        node.expression = expression;
+        return node;
+    }
 
     export function createParameter(decorators: Decorator[], modifiers: Modifier[], dotDotDotToken: DotDotDotToken, name: string | Identifier | BindingPattern, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression, location?: TextRange, flags?: NodeFlags) {
         const node = <ParameterDeclaration>createNode(SyntaxKind.Parameter, location, flags);
@@ -338,6 +373,28 @@ namespace ts {
         if (node.decorators !== decorators || node.modifiers !== modifiers || node.name !== name || node.parameters !== parameters || node.body !== body) {
             return updateNode(createSetAccessor(decorators, modifiers, name, parameters, body, /*location*/ node, node.flags), node);
         }
+        return node;
+    }
+
+    // Types
+
+    export function createTypePredicate(parameterName: Identifier | ThisTypeNode, type: TypeNode) {
+        const node = <TypePredicateNode>createNode(SyntaxKind.TypePredicate, /*location*/ undefined);
+        node.parameterName = parameterName;
+        node.type = type;
+        return node;
+    }
+
+    export function createTypeReference(typeName: EntityName, typeArguments: TypeNode[]) {
+        const node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference, /*location*/ undefined);
+        node.typeName = typeName;
+        node.typeArguments = typeArguments ? createNodeArray(typeArguments) : undefined;
+        return node;
+    }
+
+    export function createTypeQuery(exprName: EntityName) {
+        const node = <TypeQueryNode>createNode(SyntaxKind.TypeQuery, /*location*/ undefined);
+        node.exprName = exprName;
         return node;
     }
 
