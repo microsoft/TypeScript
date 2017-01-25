@@ -2,11 +2,18 @@
 
 ////interface A1 { [|a|]: string };
 ////interface A2 { [|a|]?: number };
-////let a12: spread(A1, A2);
-////a12.[|a|];
+////interface A3 { [|a|]?: boolean };
+////let a123: spread(spread(A1, A2), A3);
+////a123.[|a|];
 const ranges = test.ranges();
+
 // members of spread types only refer to themselves and the resulting property
-verify.referencesOf(ranges[0], [ranges[0], ranges[2]]);
-verify.referencesOf(ranges[1], [ranges[1], ranges[2]]);
+verifyReferencesOfIndices(ranges, 0, [0, 3]);
+verifyReferencesOfIndices(ranges, 1, [1, 3]);
+verifyReferencesOfIndices(ranges, 2, [2, 3]);
 // but the resulting property refers to everything
-verify.referencesOf(ranges[2], ranges);
+verifyReferencesOfIndices(ranges, 3, [0, 1, 2, 3]);
+
+function verifyReferencesOfIndices(ranges: FourSlashInterface.Range[], source: number, ns: number[]) {
+    verify.referencesOf(ranges[source], ns.map(n => ranges[n]));
+}

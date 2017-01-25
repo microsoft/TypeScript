@@ -20430,8 +20430,13 @@ namespace ts {
             }
             else if (symbol.flags & SymbolFlags.Transient) {
                 if ((symbol as SymbolLinks).leftSpread) {
-                    const links = symbol as SymbolLinks;
-                    return [links.leftSpread, links.rightSpread];
+                    const symbols = [];
+                    while ((symbol as SymbolLinks).leftSpread) {
+                        symbols.push((symbol as SymbolLinks).rightSpread);
+                        symbol = (symbol as SymbolLinks).leftSpread;
+                    }
+                    symbols.push(symbol);
+                    return symbols;
                 }
                 if ((symbol as SymbolLinks).mappedTypeOrigin) {
                     return getRootSymbols((symbol as SymbolLinks).mappedTypeOrigin);
