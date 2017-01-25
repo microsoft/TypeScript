@@ -132,6 +132,8 @@ namespace ts {
         const evolvingArrayTypes: EvolvingArrayType[] = [];
 
         const unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
+        const untypedModuleSymbol = createSymbol(SymbolFlags.ValueModule, "<untyped>");
+        untypedModuleSymbol.exports = createMap<Symbol>();
         const resolvingSymbol = createSymbol(SymbolFlags.Transient, "__resolving__");
 
         const anyType = createIntrinsicType(TypeFlags.Any, "any");
@@ -1490,10 +1492,10 @@ namespace ts {
                         resolvedModule.resolvedFileName);
                     return undefined;
                 }
-                // Unlike a failed import, an untyped module produces a dummy symbol. This is checked for by `isUntypedOrShorthandAmbientModuleSymbol`.
-                const untypedSymbol = createSymbol(SymbolFlags.ValueModule, `"${moduleName}"`);
-                untypedSymbol.exports = createMap<Symbol>();
-                return untypedSymbol;
+                // Unlike a failed import, an untyped module produces a dummy symbol.
+                // This is checked for by `isUntypedOrShorthandAmbientModuleSymbol`.
+                // This must be different than `unknownSymbol` because `getBaseConstructorTypeOfClass` won't fail for `unknownSymbol`.
+                return untypedModuleSymbol;
             }
 
             if (moduleNotFoundError) {
