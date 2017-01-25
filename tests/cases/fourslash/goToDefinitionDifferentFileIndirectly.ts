@@ -2,10 +2,10 @@
 
 // @Filename: Remote2.ts
 ////var /*remoteVariableDefinition*/rem2Var;
-/////*remoteFunctionDefinition*/function rem2Fn() { }
-/////*remoteClassDefinition*/class rem2Cls { }
-/////*remoteInterfaceDefinition*/interface rem2Int{}
-/////*remoteModuleDefinition*/module rem2Mod { export var foo; }
+////function /*remoteFunctionDefinition*/rem2Fn() { }
+////class /*remoteClassDefinition*/rem2Cls { }
+////interface /*remoteInterfaceDefinition*/rem2Int{}
+////module /*remoteModuleDefinition*/rem2Mod { export var foo; }
 
 // @Filename: Remote1.ts
 ////var remVar;

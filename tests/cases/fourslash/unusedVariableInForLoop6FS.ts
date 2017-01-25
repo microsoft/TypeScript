@@ -7,5 +7,5 @@
 ////     }
 //// }
 
-verify.codeFixAtPosition("const {} of ");
+verify.rangeAfterCodeFix("const {} of ");
 

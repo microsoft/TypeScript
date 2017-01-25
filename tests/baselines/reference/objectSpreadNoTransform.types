@@ -17,7 +17,7 @@ const o = { x: 1, ...y };
 var b;
 >b : any
 
-var rest;
+var rest: any;
 >rest : any
 
 ({ b, ...rest } = o);
@@ -25,6 +25,6 @@ var rest;
 >{ b, ...rest } = o : { a: string; b: string; x: number; }
 >{ b, ...rest } : any
 >b : any
->rest : undefined
+>rest : any
 >o : { a: string; b: string; x: number; }
 

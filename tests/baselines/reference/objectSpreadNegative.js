@@ -29,9 +29,7 @@ spread = b; // error, missing 's'
 let duplicated = { b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' }
 let duplicatedSpread = { ...o, ...o }
 
-// null, undefined and primitives are not allowed
-let spreadNull = { ...null };
-let spreadUndefind = { ...undefined };
+// primitives are not allowed
 let spreadNum = { ...12 };
 let spreadSum = { ...1 + 1 };
 spreadSum.toFixed(); // error, no methods from number
@@ -53,6 +51,11 @@ class C { p = 1; m() { } }
 let c: C = new C()
 let spreadC = { ...c }
 spreadC.m(); // error 'm' is not in '{ ... c }'
+
+// non primitive
+let obj: object = { a: 123 };
+let spreadObj = { ...obj };
+spreadObj.a; // error 'a' is not in {}
 
 // generics
 function f<T, U>(t: T, u: U) {
@@ -108,9 +111,7 @@ spread = b; // error, missing 's'
 // literal repeats are not allowed, but spread repeats are fine
 var duplicated = __assign({ b: 'bad' }, o, { b: 'bad' }, o2, { b: 'bad' });
 var duplicatedSpread = __assign({}, o, o);
-// null, undefined and primitives are not allowed
-var spreadNull = __assign({}, null);
-var spreadUndefind = __assign({}, undefined);
+// primitives are not allowed
 var spreadNum = __assign({}, 12);
 var spreadSum = __assign({}, 1 + 1);
 spreadSum.toFixed(); // error, no methods from number
@@ -136,6 +137,10 @@ var C = (function () {
 var c = new C();
 var spreadC = __assign({}, c);
 spreadC.m(); // error 'm' is not in '{ ... c }'
+// non primitive
+var obj = { a: 123 };
+var spreadObj = __assign({}, obj);
+spreadObj.a; // error 'a' is not in {}
 // generics
 function f(t, u) {
     return __assign({}, t, u, { id: 'id' });

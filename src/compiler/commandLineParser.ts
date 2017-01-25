@@ -1,4 +1,4 @@
-/// <reference path="sys.ts"/>
+﻿/// <reference path="sys.ts"/>
 /// <reference path="types.ts"/>
 /// <reference path="core.ts"/>
 /// <reference path="diagnosticInformationMap.generated.ts"/>
@@ -65,12 +65,13 @@ namespace ts {
         },
         {
             name: "jsx",
-            type: createMap({
+            type: createMapFromTemplate({
                 "preserve": JsxEmit.Preserve,
+                "react-native": JsxEmit.ReactNative,
                 "react": JsxEmit.React
             }),
             paramType: Diagnostics.KIND,
-            description: Diagnostics.Specify_JSX_code_generation_Colon_preserve_or_react,
+            description: Diagnostics.Specify_JSX_code_generation_Colon_preserve_react_native_or_react,
         },
         {
             name: "reactNamespace",
@@ -100,7 +101,7 @@ namespace ts {
         {
             name: "module",
             shortName: "m",
-            type: createMap({
+            type: createMapFromTemplate({
                 "none": ModuleKind.None,
                 "commonjs": ModuleKind.CommonJS,
                 "amd": ModuleKind.AMD,
@@ -114,7 +115,7 @@ namespace ts {
         },
         {
             name: "newLine",
-            type: createMap({
+            type: createMapFromTemplate({
                 "crlf": NewLineKind.CarriageReturnLineFeed,
                 "lf": NewLineKind.LineFeed
             }),
@@ -212,8 +213,8 @@ namespace ts {
             shortName: "p",
             type: "string",
             isFilePath: true,
-            description: Diagnostics.Compile_the_project_in_the_given_directory,
-            paramType: Diagnostics.DIRECTORY
+            description: Diagnostics.Compile_the_project_given_the_path_to_its_configuration_file_or_to_a_folder_with_a_tsconfig_json,
+            paramType: Diagnostics.FILE_OR_DIRECTORY
         },
         {
             name: "removeComments",
@@ -263,7 +264,7 @@ namespace ts {
         {
             name: "target",
             shortName: "t",
-            type: createMap({
+            type: createMapFromTemplate({
                 "es3": ScriptTarget.ES3,
                 "es5": ScriptTarget.ES5,
                 "es6": ScriptTarget.ES2015,
@@ -272,7 +273,7 @@ namespace ts {
                 "es2017": ScriptTarget.ES2017,
                 "esnext": ScriptTarget.ESNext,
             }),
-            description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES2015,
+            description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_or_ESNEXT,
             paramType: Diagnostics.VERSION,
         },
         {
@@ -300,7 +301,7 @@ namespace ts {
         },
         {
             name: "moduleResolution",
-            type: createMap({
+            type: createMapFromTemplate({
                 "node": ModuleResolutionKind.NodeJs,
                 "classic": ModuleResolutionKind.Classic,
             }),
@@ -409,7 +410,7 @@ namespace ts {
             type: "list",
             element: {
                 name: "lib",
-                type: createMap({
+                type: createMapFromTemplate({
                     // JavaScript only
                     "es5": "lib.es5.d.ts",
                     "es6": "lib.es2015.d.ts",
@@ -462,9 +463,16 @@ namespace ts {
     ];
 
     /* @internal */
-    export let typingOptionDeclarations: CommandLineOption[] = [
+    export let typeAcquisitionDeclarations: CommandLineOption[] = [
         {
+            /* @deprecated typingOptions.enableAutoDiscovery
+             * Use typeAcquisition.enable instead.
+             */
             name: "enableAutoDiscovery",
+            type: "boolean",
+        },
+        {
+            name: "enable",
             type: "boolean",
         },
         {
@@ -502,6 +510,20 @@ namespace ts {
     let optionNameMapCache: OptionNameMap;
 
     /* @internal */
+    export function convertEnableAutoDiscoveryToEnable(typeAcquisition: TypeAcquisition): TypeAcquisition {
+        // Convert deprecated typingOptions.enableAutoDiscovery to typeAcquisition.enable
+        if (typeAcquisition && typeAcquisition.enableAutoDiscovery !== undefined && typeAcquisition.enable === undefined) {
+            const result: TypeAcquisition = {
+                enable: typeAcquisition.enableAutoDiscovery,
+                include: typeAcquisition.include || [],
+                exclude: typeAcquisition.exclude || []
+            };
+            return result;
+        }
+        return typeAcquisition;
+    }
+
+    /* @internal */
     export function getOptionNameMap(): OptionNameMap {
         if (optionNameMapCache) {
             return optionNameMapCache;
@@ -510,9 +532,9 @@ namespace ts {
         const optionNameMap = createMap<CommandLineOption>();
         const shortOptionNames = createMap<string>();
         forEach(optionDeclarations, option => {
-            optionNameMap[option.name.toLowerCase()] = option;
+            optionNameMap.set(option.name.toLowerCase(), option);
             if (option.shortName) {
-                shortOptionNames[option.shortName] = option.name;
+                shortOptionNames.set(option.shortName, option.name);
             }
         });
 
@@ -522,20 +544,13 @@ namespace ts {
 
     /* @internal */
     export function createCompilerDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType): Diagnostic {
-        const namesOfType = Object.keys(opt.type).map(key => `'${key}'`).join(", ");
+        const namesOfType = arrayFrom(opt.type.keys()).map(key => `'${key}'`).join(", ");
         return createCompilerDiagnostic(Diagnostics.Argument_for_0_option_must_be_Colon_1, `--${opt.name}`, namesOfType);
     }
 
     /* @internal */
     export function parseCustomTypeOption(opt: CommandLineOptionOfCustomType, value: string, errors: Diagnostic[]) {
-        const key = trimString((value || "")).toLowerCase();
-        const map = opt.type;
-        if (key in map) {
-            return map[key];
-        }
-        else {
-            errors.push(createCompilerDiagnosticForInvalidCustomType(opt));
-        }
+        return convertJsonOptionOfCustomType(opt, trimString(value || ""), errors);
     }
 
     /* @internal */
@@ -558,7 +573,6 @@ namespace ts {
         }
     }
 
-    /* @internal */
     export function parseCommandLine(commandLine: string[], readFile?: (path: string) => string): ParsedCommandLine {
         const options: CompilerOptions = {};
         const fileNames: string[] = [];
@@ -584,13 +598,13 @@ namespace ts {
                     s = s.slice(s.charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
 
                     // Try to translate short option names to their full equivalents.
-                    if (s in shortOptionNames) {
-                        s = shortOptionNames[s];
+                    const short = shortOptionNames.get(s);
+                    if (short !== undefined) {
+                        s = short;
                     }
 
-                    if (s in optionNameMap) {
-                        const opt = optionNameMap[s];
-
+                    const opt = optionNameMap.get(s);
+                    if (opt) {
                         if (opt.isTSConfigOnly) {
                             errors.push(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file, opt.name));
                         }
@@ -607,7 +621,7 @@ namespace ts {
                                     break;
                                 case "boolean":
                                     // boolean flag has optional value true, false, others
-                                    let optValue = args[i];
+                                    const optValue = args[i];
                                     options[opt.name] = optValue !== "false";
                                     // consume next argument as boolean flag value
                                     if (optValue === "false" || optValue === "true") {
@@ -713,7 +727,7 @@ namespace ts {
      * @param fileNames array of filenames to be generated into tsconfig.json
      */
     /* @internal */
-    export function generateTSConfig(options: CompilerOptions, fileNames: string[]): { compilerOptions: Map<CompilerOptionsValue> } {
+    export function generateTSConfig(options: CompilerOptions, fileNames: string[]): { compilerOptions: MapLike<CompilerOptionsValue> } {
         const compilerOptions = extend(options, defaultInitCompilerOptions);
         const configurations: any = {
             compilerOptions: serializeCompilerOptions(compilerOptions)
@@ -738,18 +752,17 @@ namespace ts {
             }
         }
 
-        function getNameOfCompilerOptionValue(value: CompilerOptionsValue, customTypeMap: MapLike<string | number>): string | undefined {
+        function getNameOfCompilerOptionValue(value: CompilerOptionsValue, customTypeMap: Map<string | number>): string | undefined {
             // There is a typeMap associated with this command-line option so use it to map value back to its name
-            for (const key in customTypeMap) {
-                if (customTypeMap[key] === value) {
+            return forEachEntry(customTypeMap, (mapValue, key) => {
+                if (mapValue === value) {
                     return key;
                 }
-            }
-            return undefined;
+            });
         }
 
-        function serializeCompilerOptions(options: CompilerOptions): Map<CompilerOptionsValue> {
-            const result = createMap<CompilerOptionsValue>();
+        function serializeCompilerOptions(options: CompilerOptions): MapLike<CompilerOptionsValue> {
+            const result: ts.MapLike<CompilerOptionsValue> = {};
             const optionsNameMap = getOptionNameMap().optionNameMap;
 
             for (const name in options) {
@@ -765,7 +778,7 @@ namespace ts {
                             break;
                         default:
                             const value = options[name];
-                            let optionDefinition = optionsNameMap[name.toLowerCase()];
+                            const optionDefinition = optionsNameMap.get(name.toLowerCase());
                             if (optionDefinition) {
                                 const customTypeMap = getCustomTypeMapOfCommandLineOption(optionDefinition);
                                 if (!customTypeMap) {
@@ -827,15 +840,16 @@ namespace ts {
       * @param basePath A root directory to resolve relative path entries in the config
       *    file to. e.g. outDir
       */
-    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions: CompilerOptions = {}, configFileName?: string, resolutionStack: Path[] = []): ParsedCommandLine {
+    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions: CompilerOptions = {}, configFileName?: string, resolutionStack: Path[] = [], extraFileExtensions: FileExtensionInfo[] = []): ParsedCommandLine {
         const errors: Diagnostic[] = [];
+        basePath = normalizeSlashes(basePath);
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
         const resolvedPath = toPath(configFileName || "", basePath, getCanonicalFileName);
         if (resolutionStack.indexOf(resolvedPath) >= 0) {
             return {
                 options: {},
                 fileNames: [],
-                typingOptions: {},
+                typeAcquisition: {},
                 raw: json,
                 errors: [createCompilerDiagnostic(Diagnostics.Circularity_detected_while_resolving_configuration_Colon_0, [...resolutionStack, resolvedPath].join(" -> "))],
                 wildcardDirectories: {}
@@ -843,7 +857,10 @@ namespace ts {
         }
 
         let options: CompilerOptions = convertCompilerOptionsFromJsonWorker(json["compilerOptions"], basePath, errors, configFileName);
-        const typingOptions: TypingOptions = convertTypingOptionsFromJsonWorker(json["typingOptions"], basePath, errors, configFileName);
+        // typingOptions has been deprecated and is only supported for backward compatibility purposes.
+        // It should be removed in future releases - use typeAcquisition instead.
+        const jsonOptions = json["typeAcquisition"] || json["typingOptions"];
+        const typeAcquisition: TypeAcquisition = convertTypeAcquisitionFromJsonWorker(jsonOptions, basePath, errors, configFileName);
 
         if (json["extends"]) {
             let [include, exclude, files, baseOptions]: [string[], string[], string[], CompilerOptions] = [undefined, undefined, undefined, {}];
@@ -874,7 +891,7 @@ namespace ts {
         return {
             options,
             fileNames,
-            typingOptions,
+            typeAcquisition,
             raw: json,
             errors,
             wildcardDirectories,
@@ -951,8 +968,8 @@ namespace ts {
                 errors.push(createCompilerDiagnostic(Diagnostics.Unknown_option_excludes_Did_you_mean_exclude));
             }
             else {
-                // By default, exclude common package folders and the outDir
-                excludeSpecs = ["node_modules", "bower_components", "jspm_packages"];
+                // If no includes were specified, exclude common package folders and the outDir
+                excludeSpecs = includeSpecs ? [] : ["node_modules", "bower_components", "jspm_packages"];
 
                 const outDir = json["compilerOptions"] && json["compilerOptions"]["outDir"];
                 if (outDir) {
@@ -964,7 +981,7 @@ namespace ts {
                 includeSpecs = ["**/*"];
             }
 
-            const result = matchFileNames(fileNames, includeSpecs, excludeSpecs, basePath, options, host, errors);
+            const result = matchFileNames(fileNames, includeSpecs, excludeSpecs, basePath, options, host, errors, extraFileExtensions);
 
             if (result.fileNames.length === 0 && !hasProperty(json, "files") && resolutionStack.length === 0) {
                 errors.push(
@@ -996,9 +1013,9 @@ namespace ts {
         return { options, errors };
     }
 
-    export function convertTypingOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): { options: TypingOptions, errors: Diagnostic[] } {
+    export function convertTypeAcquisitionFromJson(jsonOptions: any, basePath: string, configFileName?: string): { options: TypeAcquisition, errors: Diagnostic[] } {
         const errors: Diagnostic[] = [];
-        const options = convertTypingOptionsFromJsonWorker(jsonOptions, basePath, errors, configFileName);
+        const options = convertTypeAcquisitionFromJsonWorker(jsonOptions, basePath, errors, configFileName);
         return { options, errors };
     }
 
@@ -1012,16 +1029,18 @@ namespace ts {
         return options;
     }
 
-    function convertTypingOptionsFromJsonWorker(jsonOptions: any,
-        basePath: string, errors: Diagnostic[], configFileName?: string): TypingOptions {
+    function convertTypeAcquisitionFromJsonWorker(jsonOptions: any,
+        basePath: string, errors: Diagnostic[], configFileName?: string): TypeAcquisition {
 
-        const options: TypingOptions = { enableAutoDiscovery: getBaseFileName(configFileName) === "jsconfig.json", include: [], exclude: [] };
-        convertOptionsFromJson(typingOptionDeclarations, jsonOptions, basePath, options, Diagnostics.Unknown_typing_option_0, errors);
+        const options: TypeAcquisition = { enable: getBaseFileName(configFileName) === "jsconfig.json", include: [], exclude: [] };
+        const typeAcquisition = convertEnableAutoDiscoveryToEnable(jsonOptions);
+        convertOptionsFromJson(typeAcquisitionDeclarations, typeAcquisition, basePath, options, Diagnostics.Unknown_type_acquisition_option_0, errors);
+
         return options;
     }
 
     function convertOptionsFromJson(optionDeclarations: CommandLineOption[], jsonOptions: any, basePath: string,
-        defaultOptions: CompilerOptions | TypingOptions, diagnosticMessage: DiagnosticMessage, errors: Diagnostic[]) {
+        defaultOptions: CompilerOptions | TypeAcquisition, diagnosticMessage: DiagnosticMessage, errors: Diagnostic[]) {
 
         if (!jsonOptions) {
             return;
@@ -1030,8 +1049,8 @@ namespace ts {
         const optionNameMap = arrayToMap(optionDeclarations, opt => opt.name);
 
         for (const id in jsonOptions) {
-            if (id in optionNameMap) {
-                const opt = optionNameMap[id];
+            const opt = optionNameMap.get(id);
+            if (opt) {
                 defaultOptions[opt.name] = convertJsonOption(opt, jsonOptions[id], basePath, errors);
             }
             else {
@@ -1067,8 +1086,9 @@ namespace ts {
 
     function convertJsonOptionOfCustomType(opt: CommandLineOptionOfCustomType, value: string, errors: Diagnostic[]) {
         const key = value.toLowerCase();
-        if (key in opt.type) {
-            return opt.type[key];
+        const val = opt.type.get(key);
+        if (val !== undefined) {
+            return val;
         }
         else {
             errors.push(createCompilerDiagnosticForInvalidCustomType(opt));
@@ -1166,7 +1186,7 @@ namespace ts {
      * @param host The host used to resolve files and directories.
      * @param errors An array for diagnostic reporting.
      */
-    function matchFileNames(fileNames: string[], include: string[], exclude: string[], basePath: string, options: CompilerOptions, host: ParseConfigHost, errors: Diagnostic[]): ExpandResult {
+    function matchFileNames(fileNames: string[], include: string[], exclude: string[], basePath: string, options: CompilerOptions, host: ParseConfigHost, errors: Diagnostic[], extraFileExtensions: FileExtensionInfo[]): ExpandResult {
         basePath = normalizePath(basePath);
 
         // The exclude spec list is converted into a regular expression, which allows us to quickly
@@ -1196,18 +1216,18 @@ namespace ts {
         // file map that marks whether it was a regular wildcard match (with a `*` or `?` token),
         // or a recursive directory. This information is used by filesystem watchers to monitor for
         // new entries in these paths.
-        const wildcardDirectories: Map<WatchDirectoryFlags> = getWildcardDirectories(include, exclude, basePath, host.useCaseSensitiveFileNames);
+        const wildcardDirectories = getWildcardDirectories(include, exclude, basePath, host.useCaseSensitiveFileNames);
 
         // Rather than requery this for each file and filespec, we query the supported extensions
         // once and store it on the expansion context.
-        const supportedExtensions = getSupportedExtensions(options);
+        const supportedExtensions = getSupportedExtensions(options, extraFileExtensions);
 
         // Literal files are always included verbatim. An "include" or "exclude" specification cannot
         // remove a literal file.
         if (fileNames) {
             for (const fileName of fileNames) {
                 const file = combinePaths(basePath, fileName);
-                literalFileMap[keyMapper(file)] = file;
+                literalFileMap.set(keyMapper(file), file);
             }
         }
 
@@ -1230,14 +1250,14 @@ namespace ts {
                 removeWildcardFilesWithLowerPriorityExtension(file, wildcardFileMap, supportedExtensions, keyMapper);
 
                 const key = keyMapper(file);
-                if (!(key in literalFileMap) && !(key in wildcardFileMap)) {
-                    wildcardFileMap[key] = file;
+                if (!literalFileMap.has(key) && !wildcardFileMap.has(key)) {
+                    wildcardFileMap.set(key, file);
                 }
             }
         }
 
-        const literalFiles = reduceProperties(literalFileMap, addFileToOutput, []);
-        const wildcardFiles = reduceProperties(wildcardFileMap, addFileToOutput, []);
+        const literalFiles = arrayFrom(literalFileMap.values());
+        const wildcardFiles = arrayFrom(wildcardFileMap.values());
         wildcardFiles.sort(host.useCaseSensitiveFileNames ? compareStrings : compareStringsCaseInsensitive);
         return {
             fileNames: literalFiles.concat(wildcardFiles),
@@ -1268,7 +1288,7 @@ namespace ts {
     /**
      * Gets directories in a set of include patterns that should be watched for changes.
      */
-    function getWildcardDirectories(include: string[], exclude: string[], path: string, useCaseSensitiveFileNames: boolean): Map<WatchDirectoryFlags> {
+    function getWildcardDirectories(include: string[], exclude: string[], path: string, useCaseSensitiveFileNames: boolean): MapLike<WatchDirectoryFlags> {
         // We watch a directory recursively if it contains a wildcard anywhere in a directory segment
         // of the pattern:
         //
@@ -1283,7 +1303,7 @@ namespace ts {
         //  /a/b/a?z    - Watch /a/b directly to catch any new file matching a?z
         const rawExcludeRegex = getRegularExpressionForWildcard(exclude, path, "exclude");
         const excludeRegex = rawExcludeRegex && new RegExp(rawExcludeRegex, useCaseSensitiveFileNames ? "" : "i");
-        const wildcardDirectories = createMap<WatchDirectoryFlags>();
+        const wildcardDirectories: ts.MapLike<WatchDirectoryFlags> = {};
         if (include !== undefined) {
             const recursiveKeys: string[] = [];
             for (const file of include) {
@@ -1306,13 +1326,13 @@ namespace ts {
             }
 
             // Remove any subpaths under an existing recursively watched directory.
-            for (const key in wildcardDirectories) {
+            for (const key in wildcardDirectories) if (hasProperty(wildcardDirectories, key)) {
                 for (const recursiveKey of recursiveKeys) {
                     if (key !== recursiveKey && containsPath(recursiveKey, key, path, !useCaseSensitiveFileNames)) {
                         delete wildcardDirectories[key];
                     }
                 }
-            }
+            };
         }
 
         return wildcardDirectories;
@@ -1346,7 +1366,7 @@ namespace ts {
         for (let i = ExtensionPriority.Highest; i < adjustedExtensionPriority; i++) {
             const higherPriorityExtension = extensions[i];
             const higherPriorityPath = keyMapper(changeExtension(file, higherPriorityExtension));
-            if (higherPriorityPath in literalFiles || higherPriorityPath in wildcardFiles) {
+            if (literalFiles.has(higherPriorityPath) || wildcardFiles.has(higherPriorityPath)) {
                 return true;
             }
         }
@@ -1368,19 +1388,8 @@ namespace ts {
         for (let i = nextExtensionPriority; i < extensions.length; i++) {
             const lowerPriorityExtension = extensions[i];
             const lowerPriorityPath = keyMapper(changeExtension(file, lowerPriorityExtension));
-            delete wildcardFiles[lowerPriorityPath];
+            wildcardFiles.delete(lowerPriorityPath);
         }
-    }
-
-    /**
-     * Adds a file to an array of files.
-     *
-     * @param output The output array.
-     * @param file The file path.
-     */
-    function addFileToOutput(output: string[], file: string) {
-        output.push(file);
-        return output;
     }
 
     /**

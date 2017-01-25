@@ -10,7 +10,4 @@
 ////export [|const|] enum E {
 ////}
 
-test.ranges().forEach(range => {
-    goTo.position(range.start);
-    verify.occurrencesAtPositionCount(0);
-});
+goTo.eachRange(() => verify.occurrencesAtPositionCount(0));

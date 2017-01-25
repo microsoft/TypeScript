@@ -3,7 +3,7 @@ interface Symbol {
     toString(): string;
 
     /** Returns the primitive value of the specified object. */
-    valueOf(): Object;
+    valueOf(): symbol;
 }
 
 interface SymbolConstructor {

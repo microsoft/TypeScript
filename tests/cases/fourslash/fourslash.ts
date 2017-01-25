@@ -43,6 +43,16 @@
 // TODO: figure out a better solution to the API exposure problem.
 
 declare module ts {
+    export type MapKey = string | number;
+    export interface Map<T> {
+        forEach(action: (value: T, key: string) => void): void;
+        get(key: MapKey): T;
+        has(key: MapKey): boolean;
+        set(key: MapKey, value: T): this;
+        delete(key: MapKey): boolean;
+        clear(): void;
+    }
+
     interface SymbolDisplayPart {
         text: string;
         kind: string;
@@ -103,14 +113,16 @@ declare namespace FourSlashInterface {
         markerNames(): string[];
         marker(name?: string): Marker;
         ranges(): Range[];
-        rangesByText(): { [text: string]: Range[] };
+        rangesByText(): ts.Map<Range[]>;
         markerByName(s: string): Marker;
     }
     class goTo {
-        marker(name?: string): void;
+        marker(name?: string | Marker): void;
+        eachMarker(action: () => void): void;
+        rangeStart(range: Range): void;
+        eachRange(action: () => void): void;
         bof(): void;
         eof(): void;
-        type(definitionIndex?: number): void;
         implementation(): void;
         position(position: number, fileIndex?: number): any;
         position(position: number, fileName?: string): any;
@@ -121,13 +133,11 @@ declare namespace FourSlashInterface {
         private negative;
         not: verifyNegatable;
         constructor(negative?: boolean);
-        memberListContains(symbol: string, text?: string, documenation?: string, kind?: string): void;
-        memberListCount(expectedCount: number): void;
+        completionListCount(expectedCount: number): void;
         completionListContains(symbol: string, text?: string, documentation?: string, kind?: string, spanIndex?: number): void;
         completionListItemsCountIsGreaterThan(count: number): void;
         completionListIsEmpty(): void;
         completionListAllowsNewIdentifier(): void;
-        memberListIsEmpty(): void;
         signatureHelpPresent(): void;
         errorExistsBetweenMarkers(startMarker: string, endMarker: string): void;
         errorExistsAfterMarker(markerName?: string): void;
@@ -141,6 +151,7 @@ declare namespace FourSlashInterface {
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
         caretAtMarker(markerName?: string): void;
+        completionsAt(markerName: string, completions: string[]): void;
         indentationIs(numberOfSpaces: number): void;
         indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle?: ts.IndentStyle, baseIndentSize?: number): void;
         textAtCaretIs(text: string): void;
@@ -167,6 +178,8 @@ declare namespace FourSlashInterface {
         goToDefinition(startsAndEnds: { [startMarkerName: string]: string | string[] }): void;
         /** Verifies goToDefinition for each `${markerName}Reference` -> `${markerName}Definition` */
         goToDefinitionForMarkers(...markerNames: string[]): void;
+        goToType(startsAndEnds: { [startMarkerName: string]: string | string[] }): void;
+        goToType(startMarkerNames: string | string[], endMarkerNames: string | string[]): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
         /**
@@ -181,6 +194,8 @@ declare namespace FourSlashInterface {
          * `start` should be included in `references`.
          */
         referencesOf(start: Range, references: Range[]): void;
+        rangesAreOccurrences(isWriteAccess?: boolean): void;
+        rangesAreRenameLocations(findInStrings?: boolean, findInComments?: boolean): void;
         /**
          * Performs `referencesOf` for every range on the whole set.
          * If `ranges` is omitted, this is `test.ranges()`.
@@ -210,7 +225,7 @@ declare namespace FourSlashInterface {
         noMatchingBracePositionInCurrentFile(bracePosition: number): void;
         DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean): void;
         noDocCommentTemplate(): void;
-        codeFixAtPosition(expectedText: string, errorCode?: number): void;
+        rangeAfterCodeFix(expectedText: string, errorCode?: number): void;
         importFixAtPosition(expectedTextArray: string[], errorCode?: number): void;
 
         navigationBar(json: any): void;
@@ -219,8 +234,8 @@ declare namespace FourSlashInterface {
         navigationItemsListContains(name: string, kind: string, searchValue: string, matchKind: string, fileName?: string, parentName?: string): void;
         occurrencesAtPositionContains(range: Range, isWriteAccess?: boolean): void;
         occurrencesAtPositionCount(expectedCount: number): void;
-        documentHighlightsAtPositionContains(range: Range, fileNamesToSearch: string[], kind?: string): void;
-        documentHighlightsAtPositionCount(expectedCount: number, fileNamesToSearch: string[]): void;
+        rangesAreDocumentHighlights(ranges?: Range[]): void;
+        rangesWithSameTextAreDocumentHighlights(): void;
         completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string): void;
         /**
          * This method *requires* a contiguous, complete, and ordered stream of classifications for a file.
@@ -279,7 +294,6 @@ declare namespace FourSlashInterface {
         printCurrentFileStateWithoutCaret(): void;
         printCurrentQuickInfo(): void;
         printCurrentSignatureHelp(): void;
-        printMemberListMembers(): void;
         printCompletionListMembers(): void;
         printBreakpointLocation(pos: number): void;
         printBreakpointAtCurrentLocation(): void;
@@ -297,9 +311,7 @@ declare namespace FourSlashInterface {
         setFormatOptions(options: FormatCodeOptions): any;
         selection(startMarker: string, endMarker: string): void;
         onType(posMarker: string, key: string): void;
-        setOption(name: string, value: number): any;
-        setOption(name: string, value: string): any;
-        setOption(name: string, value: boolean): any;
+        setOption(name: string, value: number | string | boolean): void;
     }
     class cancellation {
         resetCancelled(): void;

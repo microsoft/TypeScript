@@ -88,50 +88,65 @@ namespace ts.server {
 
     export namespace CommandNames {
         export const Brace: protocol.CommandTypes.Brace = "brace";
+        /* @internal */
         export const BraceFull: protocol.CommandTypes.BraceFull = "brace-full";
         export const BraceCompletion: protocol.CommandTypes.BraceCompletion = "braceCompletion";
         export const Change: protocol.CommandTypes.Change = "change";
         export const Close: protocol.CommandTypes.Close = "close";
         export const Completions: protocol.CommandTypes.Completions = "completions";
+        /* @internal */
         export const CompletionsFull: protocol.CommandTypes.CompletionsFull = "completions-full";
         export const CompletionDetails: protocol.CommandTypes.CompletionDetails = "completionEntryDetails";
         export const CompileOnSaveAffectedFileList: protocol.CommandTypes.CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList";
         export const CompileOnSaveEmitFile: protocol.CommandTypes.CompileOnSaveEmitFile = "compileOnSaveEmitFile";
         export const Configure: protocol.CommandTypes.Configure = "configure";
         export const Definition: protocol.CommandTypes.Definition = "definition";
+        /* @internal */
         export const DefinitionFull: protocol.CommandTypes.DefinitionFull = "definition-full";
         export const Exit: protocol.CommandTypes.Exit = "exit";
         export const Format: protocol.CommandTypes.Format = "format";
         export const Formatonkey: protocol.CommandTypes.Formatonkey = "formatonkey";
+        /* @internal */
         export const FormatFull: protocol.CommandTypes.FormatFull = "format-full";
+        /* @internal */
         export const FormatonkeyFull: protocol.CommandTypes.FormatonkeyFull = "formatonkey-full";
+        /* @internal */
         export const FormatRangeFull: protocol.CommandTypes.FormatRangeFull = "formatRange-full";
         export const Geterr: protocol.CommandTypes.Geterr = "geterr";
         export const GeterrForProject: protocol.CommandTypes.GeterrForProject = "geterrForProject";
         export const Implementation: protocol.CommandTypes.Implementation = "implementation";
+        /* @internal */
         export const ImplementationFull: protocol.CommandTypes.ImplementationFull = "implementation-full";
         export const SemanticDiagnosticsSync: protocol.CommandTypes.SemanticDiagnosticsSync = "semanticDiagnosticsSync";
         export const SyntacticDiagnosticsSync: protocol.CommandTypes.SyntacticDiagnosticsSync = "syntacticDiagnosticsSync";
         export const NavBar: protocol.CommandTypes.NavBar = "navbar";
+        /* @internal */
         export const NavBarFull: protocol.CommandTypes.NavBarFull = "navbar-full";
         export const NavTree: protocol.CommandTypes.NavTree = "navtree";
         export const NavTreeFull: protocol.CommandTypes.NavTreeFull = "navtree-full";
         export const Navto: protocol.CommandTypes.Navto = "navto";
+        /* @internal */
         export const NavtoFull: protocol.CommandTypes.NavtoFull = "navto-full";
         export const Occurrences: protocol.CommandTypes.Occurrences = "occurrences";
         export const DocumentHighlights: protocol.CommandTypes.DocumentHighlights = "documentHighlights";
+        /* @internal */
         export const DocumentHighlightsFull: protocol.CommandTypes.DocumentHighlightsFull = "documentHighlights-full";
         export const Open: protocol.CommandTypes.Open = "open";
         export const Quickinfo: protocol.CommandTypes.Quickinfo = "quickinfo";
+        /* @internal */
         export const QuickinfoFull: protocol.CommandTypes.QuickinfoFull = "quickinfo-full";
         export const References: protocol.CommandTypes.References = "references";
+        /* @internal */
         export const ReferencesFull: protocol.CommandTypes.ReferencesFull = "references-full";
         export const Reload: protocol.CommandTypes.Reload = "reload";
         export const Rename: protocol.CommandTypes.Rename = "rename";
+        /* @internal */
         export const RenameInfoFull: protocol.CommandTypes.RenameInfoFull = "rename-full";
+        /* @internal */
         export const RenameLocationsFull: protocol.CommandTypes.RenameLocationsFull = "renameLocations-full";
         export const Saveto: protocol.CommandTypes.Saveto = "saveto";
         export const SignatureHelp: protocol.CommandTypes.SignatureHelp = "signatureHelp";
+        /* @internal */
         export const SignatureHelpFull: protocol.CommandTypes.SignatureHelpFull = "signatureHelp-full";
         export const TypeDefinition: protocol.CommandTypes.TypeDefinition = "typeDefinition";
         export const ProjectInfo: protocol.CommandTypes.ProjectInfo = "projectInfo";
@@ -140,19 +155,28 @@ namespace ts.server {
         export const OpenExternalProject: protocol.CommandTypes.OpenExternalProject = "openExternalProject";
         export const OpenExternalProjects: protocol.CommandTypes.OpenExternalProjects = "openExternalProjects";
         export const CloseExternalProject: protocol.CommandTypes.CloseExternalProject = "closeExternalProject";
+        /* @internal */
         export const SynchronizeProjectList: protocol.CommandTypes.SynchronizeProjectList = "synchronizeProjectList";
+        /* @internal */
         export const ApplyChangedToOpenFiles: protocol.CommandTypes.ApplyChangedToOpenFiles = "applyChangedToOpenFiles";
+        /* @internal */
         export const EncodedSemanticClassificationsFull: protocol.CommandTypes.EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full";
+        /* @internal */
         export const Cleanup: protocol.CommandTypes.Cleanup = "cleanup";
+        /* @internal */
         export const OutliningSpans: protocol.CommandTypes.OutliningSpans = "outliningSpans";
         export const TodoComments: protocol.CommandTypes.TodoComments = "todoComments";
         export const Indentation: protocol.CommandTypes.Indentation = "indentation";
         export const DocCommentTemplate: protocol.CommandTypes.DocCommentTemplate = "docCommentTemplate";
+        /* @internal */
         export const CompilerOptionsDiagnosticsFull: protocol.CommandTypes.CompilerOptionsDiagnosticsFull = "compilerOptionsDiagnostics-full";
+        /* @internal */
         export const NameOrDottedNameSpan: protocol.CommandTypes.NameOrDottedNameSpan = "nameOrDottedNameSpan";
+        /* @internal */
         export const BreakpointStatement: protocol.CommandTypes.BreakpointStatement = "breakpointStatement";
         export const CompilerOptionsForInferredProjects: protocol.CommandTypes.CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects";
         export const GetCodeFixes: protocol.CommandTypes.GetCodeFixes = "getCodeFixes";
+        /* @internal */
         export const GetCodeFixesFull: protocol.CommandTypes.GetCodeFixesFull = "getCodeFixes-full";
         export const GetSupportedCodeFixes: protocol.CommandTypes.GetSupportedCodeFixes = "getSupportedCodeFixes";
     }
@@ -709,7 +733,7 @@ namespace ts.server {
                 const displayString = ts.displayPartsToString(nameInfo.displayParts);
                 const nameSpan = nameInfo.textSpan;
                 const nameColStart = scriptInfo.positionToLineOffset(nameSpan.start).offset;
-                const nameText = scriptInfo.snap().getText(nameSpan.start, ts.textSpanEnd(nameSpan));
+                const nameText = scriptInfo.getSnapshot().getText(nameSpan.start, ts.textSpanEnd(nameSpan));
                 const refs = combineProjectOutput<protocol.ReferencesResponseItem>(
                     projects,
                     (project: Project) => {
@@ -722,7 +746,7 @@ namespace ts.server {
                             const refScriptInfo = project.getScriptInfo(ref.fileName);
                             const start = refScriptInfo.positionToLineOffset(ref.textSpan.start);
                             const refLineSpan = refScriptInfo.lineToTextSpan(start.line - 1);
-                            const lineText = refScriptInfo.snap().getText(refLineSpan.start, ts.textSpanEnd(refLineSpan)).replace(/\r|\n/g, "");
+                            const lineText = refScriptInfo.getSnapshot().getText(refLineSpan.start, ts.textSpanEnd(refLineSpan)).replace(/\r|\n/g, "");
                             return {
                                 file: ref.fileName,
                                 start: start,
@@ -1026,6 +1050,9 @@ namespace ts.server {
             if (!project) {
                 Errors.ThrowNoProject();
             }
+            if (!project.languageServiceEnabled) {
+                return false;
+            }
             const scriptInfo = project.getScriptInfo(file);
             return project.builder.emitFile(scriptInfo, (path, data, writeByteOrderMark) => this.host.writeFile(path, data, writeByteOrderMark));
         }
@@ -1326,7 +1353,7 @@ namespace ts.server {
                     highPriorityFiles.push(fileNameInProject);
                 else {
                     const info = this.projectService.getScriptInfo(fileNameInProject);
-                    if (!info.isOpen) {
+                    if (!info.isScriptOpen()) {
                         if (fileNameInProject.indexOf(".d.ts") > 0)
                             veryLowPriorityFiles.push(fileNameInProject);
                         else
@@ -1363,16 +1390,14 @@ namespace ts.server {
             return { response, responseRequired: true };
         }
 
-        private handlers = createMap<(request: protocol.Request) => { response?: any, responseRequired?: boolean }>({
+        private handlers = createMapFromTemplate<(request: protocol.Request) => { response?: any, responseRequired?: boolean }>({
             [CommandNames.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
-                this.projectService.openExternalProject(request.arguments);
+                this.projectService.openExternalProject(request.arguments, /*suppressRefreshOfInferredProjects*/ false);
                 // TODO: report errors
                 return this.requiredResponse(true);
             },
             [CommandNames.OpenExternalProjects]: (request: protocol.OpenExternalProjectsRequest) => {
-                for (const proj of request.arguments.projects) {
-                    this.projectService.openExternalProject(proj);
-                }
+                this.projectService.openExternalProjects(request.arguments.projects);
                 // TODO: report errors
                 return this.requiredResponse(true);
             },
@@ -1609,14 +1634,14 @@ namespace ts.server {
         });
 
         public addProtocolHandler(command: string, handler: (request: protocol.Request) => { response?: any, responseRequired: boolean }) {
-            if (command in this.handlers) {
+            if (this.handlers.has(command)) {
                 throw new Error(`Protocol handler already exists for command "${command}"`);
             }
-            this.handlers[command] = handler;
+            this.handlers.set(command, handler);
         }
 
         public executeCommand(request: protocol.Request): { response?: any, responseRequired?: boolean } {
-            const handler = this.handlers[request.command];
+            const handler = this.handlers.get(request.command);
             if (handler) {
                 return handler(request);
             }

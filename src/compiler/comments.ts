@@ -156,6 +156,9 @@ namespace ts {
 
             if (!skipTrailingComments) {
                 emitLeadingComments(detachedRange.end, /*isEmittedNode*/ true);
+                if (hasWrittenComment && !writer.isAtStartOfLine()) {
+                    writer.writeLine();
+                }
             }
 
             if (extendedDiagnostics) {

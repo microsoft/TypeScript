@@ -28,6 +28,9 @@
 // contextually typed parameters.
 let twelve = (f => f(12))(i => i);
 let eleven = (o => o.a(11))({ a: function(n) { return n; } });
+// missing arguments
+(function(x, undefined) { return x; })(42);
+((x, y, z) => 42)();
 
 
 //// [contextuallyTypedIife.js]
@@ -102,3 +105,6 @@ let eleven = (o => o.a(11))({ a: function(n) { return n; } });
 // contextually typed parameters.
 var twelve = (function (f) { return f(12); })(function (i) { return i; });
 var eleven = (function (o) { return o.a(11); })({ a: function (n) { return n; } });
+// missing arguments
+(function (x, undefined) { return x; })(42);
+(function (x, y, z) { return 42; })();

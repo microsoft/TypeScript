@@ -1,22 +1,14 @@
 {
+    "extends": "../../tsconfig-base",
     "compilerOptions": {
-        "noImplicitAny": true,
-        "noImplicitThis": true,
         "removeComments": true,
-        "preserveConstEnums": true,
-        "pretty": true,
         "outFile": "../../../built/local/typingsInstaller.js",
-        "sourceMap": true,
-        "stripInternal": true,
         "types": [
             "node"
-        ],
-        "target": "es5",
-        "noUnusedLocals": true,
-        "noUnusedParameters": true
+        ]
     },
     "files": [
-        "../types.d.ts",
+        "../types.ts",
         "../shared.ts",
         "typingsInstaller.ts",
         "nodeTypingsInstaller.ts"

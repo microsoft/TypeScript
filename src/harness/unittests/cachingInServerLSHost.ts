@@ -1,4 +1,4 @@
-/// <reference path="..\harness.ts" />
+﻿/// <reference path="..\harness.ts" />
 
 namespace ts {
     interface File {
@@ -8,25 +8,28 @@ namespace ts {
 
     function createDefaultServerHost(fileMap: Map<File>): server.ServerHost {
         const existingDirectories = createMap<boolean>();
-        for (const name in fileMap) {
+        forEachKey(fileMap, name => {
             let dir = getDirectoryPath(name);
             let previous: string;
             do {
-                existingDirectories[dir] = true;
+                existingDirectories.set(dir, true);
                 previous = dir;
                 dir = getDirectoryPath(dir);
             } while (dir !== previous);
-        }
+        });
         return {
             args: <string[]>[],
             newLine: "\r\n",
             useCaseSensitiveFileNames: false,
             write: noop,
-            readFile: path => path in fileMap ? fileMap[path].content : undefined,
+            readFile: path => {
+                const file = fileMap.get(path);
+                return file && file.content;
+            },
             writeFile: notImplemented,
             resolvePath: notImplemented,
-            fileExists: path => path in fileMap,
-            directoryExists: path => existingDirectories[path] || false,
+            fileExists: path => fileMap.has(path),
+            directoryExists: path => existingDirectories.get(path) || false,
             createDirectory: noop,
             getExecutingFilePath: () => "",
             getCurrentDirectory: () => "",
@@ -83,7 +86,7 @@ namespace ts {
                 content: `foo()`
             };
 
-            const serverHost = createDefaultServerHost(createMap({ [root.name]: root, [imported.name]: imported }));
+            const serverHost = createDefaultServerHost(createMapFromTemplate({ [root.name]: root, [imported.name]: imported }));
             const { project, rootScriptInfo } = createProject(root.name, serverHost);
 
             // ensure that imported file was found
@@ -167,7 +170,7 @@ namespace ts {
                 content: `export var y = 1`
             };
 
-            const fileMap = createMap({ [root.name]: root });
+            const fileMap = createMapFromTemplate({ [root.name]: root });
             const serverHost = createDefaultServerHost(fileMap);
             const originalFileExists = serverHost.fileExists;
 
@@ -191,7 +194,7 @@ namespace ts {
             assert.isTrue(typeof diags[0].messageText === "string" && ((<string>diags[0].messageText).indexOf("Cannot find module") === 0), "should be 'cannot find module' message");
 
             // assert that import will success once file appear on disk
-            fileMap[imported.name] = imported;
+            fileMap.set(imported.name, imported);
             fileExistsCalledForBar = false;
             rootScriptInfo.editContent(0, root.content.length, `import {y} from "bar"`);
 
