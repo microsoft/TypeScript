@@ -501,6 +501,22 @@ function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
     stringMap[x]; // Should be OK.
 }
 
+// Repro from #13514
+
+declare function head<T extends Array<any>>(list: T): T[0];
+
+// Repro from #13604
+
+class A<T> {
+	props: T & { foo: string };
+}
+
+class B extends A<{ x: number}> {
+	f(p: this["props"]) {
+		p.x;
+	}
+}
+
 
 //// [keyofAndIndexedAccess.js]
 var __extends = (this && this.__extends) || (function () {
@@ -830,6 +846,22 @@ function updateIds2(obj, key, stringMap) {
     var x = obj[key];
     stringMap[x]; // Should be OK.
 }
+// Repro from #13604
+var A = (function () {
+    function A() {
+    }
+    return A;
+}());
+var B = (function (_super) {
+    __extends(B, _super);
+    function B() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    B.prototype.f = function (p) {
+        p.x;
+    };
+    return B;
+}(A));
 
 
 //// [keyofAndIndexedAccess.d.ts]
@@ -1061,3 +1093,14 @@ declare function updateIds2<T extends {
 }, K extends keyof T>(obj: T, key: K, stringMap: {
     [oldId: string]: string;
 }): void;
+declare function head<T extends Array<any>>(list: T): T[0];
+declare class A<T> {
+    props: T & {
+        foo: string;
+    };
+}
+declare class B extends A<{
+    x: number;
+}> {
+    f(p: this["props"]): void;
+}

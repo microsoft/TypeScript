@@ -1823,6 +1823,10 @@
         "category": "Error",
         "code": 2609
     },
+    "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
+        "category": "Error",
+        "code": 2649
+    },
     "Cannot emit namespaced JSX elements in React": {
         "category": "Error",
         "code": 2650
@@ -2015,7 +2019,7 @@
         "category": "Error",
         "code": 2698
     },
-    "Computed properties cannot be used with object rest assignments.": {
+    "Static property '{0}' conflicts with built-in property 'Function.{0}' of constructor function '{1}'.": {
         "category": "Error",
         "code": 2699
     },
@@ -2042,6 +2046,10 @@
     "The right side of a rest type must be a string or string literal union.": {
         "category": "Error",
         "code": 2705
+    },
+    "Computed properties cannot be used with object rest assignments.": {
+        "category": "Error",
+        "code": 2706
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -2717,7 +2725,7 @@
         "category": "Message",
         "code": 6079
     },
-    "Specify JSX code generation: 'preserve' or 'react'": {
+    "Specify JSX code generation: 'preserve', 'react-native', or 'react'": {
         "category": "Message",
         "code": 6080
     },

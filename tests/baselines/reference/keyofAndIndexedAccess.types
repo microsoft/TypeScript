@@ -2128,3 +2128,41 @@ function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
 >x : T[K]
 }
 
+// Repro from #13514
+
+declare function head<T extends Array<any>>(list: T): T[0];
+>head : <T extends any[]>(list: T) => T[0]
+>T : T
+>Array : T[]
+>list : T
+>T : T
+>T : T
+
+// Repro from #13604
+
+class A<T> {
+>A : A<T>
+>T : T
+
+	props: T & { foo: string };
+>props : T & { foo: string; }
+>T : T
+>foo : string
+}
+
+class B extends A<{ x: number}> {
+>B : B
+>A : A<{ x: number; }>
+>x : number
+
+	f(p: this["props"]) {
+>f : (p: this["props"]) => void
+>p : this["props"]
+
+		p.x;
+>p.x : number
+>p : this["props"]
+>x : number
+	}
+}
+

@@ -4,8 +4,4 @@
 
 ////enum a { /*enumValueName1*/
 
-
-test.markers().forEach((m) => {
-    goTo.position(m.position, m.fileName);
-    verify.completionListIsEmpty();
-});
+goTo.eachMarker(() => verify.completionListIsEmpty());

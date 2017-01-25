@@ -1,0 +1,11 @@
+tests/cases/compiler/moduleVariableArrayIndexer.ts(3,13): error TS2532: Object is possibly 'undefined'.
+
+
+==== tests/cases/compiler/moduleVariableArrayIndexer.ts (1 errors) ====
+    module Bar {
+        export var a = 1;
+        var t = undefined[a][a]; // CG: var t = undefined[Bar.a][a];
+                ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    }
+    
