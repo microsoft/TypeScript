@@ -2316,7 +2316,7 @@ namespace ts {
                 addRange(statements, convertedLoopBodyStatements);
             }
             else {
-                const statement = visitNode(node.statement, visitor, isStatement);
+                const statement = visitNode(node.statement, visitor, isStatement, /*optional*/ false, liftToBlock);
                 if (isBlock(statement)) {
                     addRange(statements, statement.statements);
                     bodyLocation = statement;
