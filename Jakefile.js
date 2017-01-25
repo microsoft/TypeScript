@@ -151,6 +151,7 @@ var servicesSources = [
     "signatureHelp.ts",
     "symbolDisplay.ts",
     "transpile.ts",
+    // Formatting
     "formatting/formatting.ts",
     "formatting/formattingContext.ts",
     "formatting/formattingRequestKind.ts",
@@ -166,27 +167,44 @@ var servicesSources = [
     "formatting/rulesMap.ts",
     "formatting/rulesProvider.ts",
     "formatting/smartIndenter.ts",
-    "formatting/tokenRange.ts"
+    "formatting/tokenRange.ts",
+    // CodeFixes
+    "codeFixProvider.ts",
+    "codefixes/fixes.ts",
+    "codefixes/fixExtendsInterfaceBecomesImplements.ts",
+    "codefixes/fixClassIncorrectlyImplementsInterface.ts",
+    "codefixes/fixClassDoesntImplementInheritedAbstractMember.ts",
+    "codefixes/fixClassSuperMustPrecedeThisAccess.ts",
+    "codefixes/fixConstructorForDerivedNeedSuperCall.ts",
+    "codefixes/helpers.ts",
+    "codefixes/importFixes.ts",
+    "codefixes/unusedIdentifierFixes.ts"
 ].map(function (f) {
     return path.join(servicesDirectory, f);
 }));
 
-var serverCoreSources = [
-    "types.d.ts",
-    "shared.ts",
-    "utilities.ts",
-    "scriptVersionCache.ts",
-    "typingsCache.ts",
-    "scriptInfo.ts",
+var baseServerCoreSources = [
+	"builder.ts",
+    "editorServices.ts",
     "lsHost.ts",
     "project.ts",
-    "editorServices.ts",
     "protocol.ts",
+    "scriptInfo.ts",
+    "scriptVersionCache.ts",
     "session.ts",
-    "server.ts"
+    "shared.ts",
+    "types.ts",
+    "typingsCache.ts",
+    "utilities.ts",
 ].map(function (f) {
     return path.join(serverDirectory, f);
 });
+
+var serverCoreSources = [
+    "server.ts"
+].map(function (f) {
+    return path.join(serverDirectory, f);
+}).concat(baseServerCoreSources);
 
 var cancellationTokenSources = [
     "cancellationToken.ts"
@@ -195,7 +213,7 @@ var cancellationTokenSources = [
 });
 
 var typingsInstallerSources = [
-    "../types.d.ts",
+    "../types.ts",
     "../shared.ts",
     "typingsInstaller.ts",
     "nodeTypingsInstaller.ts"
@@ -204,20 +222,7 @@ var typingsInstallerSources = [
 });
 
 var serverSources = serverCoreSources.concat(servicesSources);
-
-var languageServiceLibrarySources = [
-    "protocol.ts",
-    "utilities.ts",
-    "scriptVersionCache.ts",
-    "scriptInfo.ts",
-    "lsHost.ts",
-    "project.ts",
-    "editorServices.ts",
-    "session.ts",
-
-].map(function (f) {
-    return path.join(serverDirectory, f);
-}).concat(servicesSources);
+var languageServiceLibrarySources = baseServerCoreSources.concat(servicesSources);
 
 var harnessCoreSources = [
     "harness.ts",
@@ -250,6 +255,7 @@ var harnessSources = harnessCoreSources.concat([
     "convertToBase64.ts",
     "transpile.ts",
     "reuseProgramStructure.ts",
+    "textStorage.ts",
     "cachingInServerLSHost.ts",
     "moduleResolution.ts",
     "tsconfigParsing.ts",
@@ -352,19 +358,16 @@ function prependFile(prefixFile, destinationFile) {
 // concatenate a list of sourceFiles to a destinationFile
 function concatenateFiles(destinationFile, sourceFiles) {
     var temp = "temptemp";
-    // Copy the first file to temp
-    if (!fs.existsSync(sourceFiles[0])) {
-        fail(sourceFiles[0] + " does not exist!");
-    }
-    jake.cpR(sourceFiles[0], temp, { silent: true });
     // append all files in sequence
-    for (var i = 1; i < sourceFiles.length; i++) {
+    var text = "";
+    for (var i = 0; i < sourceFiles.length; i++) {
         if (!fs.existsSync(sourceFiles[i])) {
             fail(sourceFiles[i] + " does not exist!");
         }
-        fs.appendFileSync(temp, "\n\n");
-        fs.appendFileSync(temp, fs.readFileSync(sourceFiles[i]));
+        if (i > 0) { text += "\n\n"; }
+        text += fs.readFileSync(sourceFiles[i]).toString().replace(/\r?\n/g, "\n");
     }
+    fs.writeFileSync(temp, text);
     // Move the file to the final destination
     fs.renameSync(temp, destinationFile);
 }
@@ -453,7 +456,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
             options += " --stripInternal";
         }
 
-        options += " --target es5 --noUnusedLocals --noUnusedParameters";
+        options += " --target es5 --lib es5,scripthost --noUnusedLocals --noUnusedParameters";
 
         var cmd = host + " " + compilerPath + " " + options + " ";
         cmd = cmd + sources.join(" ");
@@ -717,7 +720,18 @@ compileFile(
     [builtLocalDirectory, copyright, builtLocalCompiler].concat(languageServiceLibrarySources).concat(libraryTargets),
     /*prefixes*/[copyright],
     /*useBuiltCompiler*/ true,
-    { noOutFile: false, generateDeclarations: true });
+    { noOutFile: false, generateDeclarations: true, stripInternal: true },
+    /*callback*/ function () {
+        prependFile(copyright, tsserverLibraryDefinitionFile);
+
+        // Appending exports at the end of the server library
+        var tsserverLibraryDefinitionFileContents =
+            fs.readFileSync(tsserverLibraryDefinitionFile).toString() +
+            "\r\nexport = ts;" +
+            "\r\nexport as namespace ts;";
+
+        fs.writeFileSync(tsserverLibraryDefinitionFile, tsserverLibraryDefinitionFileContents);
+    });
 
 // Local target to build the language service server library
 desc("Builds language service server library");
@@ -1181,7 +1195,6 @@ task("update-sublime", ["local", serverFile], function () {
 var tslintRuleDir = "scripts/tslint";
 var tslintRules = [
     "nextLineRule",
-    "preferConstRule",
     "booleanTriviaRule",
     "typeOperatorSpacingRule",
     "noInOperatorRule",

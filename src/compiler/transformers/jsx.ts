@@ -150,6 +150,9 @@ namespace ts {
                 return decoded ? createLiteral(decoded, /*location*/ node) : node;
             }
             else if (node.kind === SyntaxKind.JsxExpression) {
+                if (node.expression === undefined) {
+                    return createLiteral(true);
+                }
                 return visitJsxExpression(<JsxExpression>node);
             }
             else {
@@ -157,33 +160,50 @@ namespace ts {
             }
         }
 
-        function visitJsxText(node: JsxText) {
-            const text = getTextOfNode(node, /*includeTrivia*/ true);
-            let parts: Expression[];
-            let firstNonWhitespace = 0;
-            let lastNonWhitespace = -1;
+        function visitJsxText(node: JsxText): StringLiteral | undefined {
+            const fixed = fixupWhitespaceAndDecodeEntities(getTextOfNode(node, /*includeTrivia*/ true));
+            return fixed === undefined ? undefined : createLiteral(fixed);
+        }
 
-            // JSX trims whitespace at the end and beginning of lines, except that the
-            // start/end of a tag is considered a start/end of a line only if that line is
-            // on the same line as the closing tag. See examples in
-            // tests/cases/conformance/jsx/tsxReactEmitWhitespace.tsx
+        /**
+         * JSX trims whitespace at the end and beginning of lines, except that the
+         * start/end of a tag is considered a start/end of a line only if that line is
+         * on the same line as the closing tag. See examples in
+         * tests/cases/conformance/jsx/tsxReactEmitWhitespace.tsx
+         * See also https://www.w3.org/TR/html4/struct/text.html#h-9.1 and https://www.w3.org/TR/CSS2/text.html#white-space-model
+         *
+         * An equivalent algorithm would be:
+         * - If there is only one line, return it.
+         * - If there is only whitespace (but multiple lines), return `undefined`.
+         * - Split the text into lines.
+         * - 'trimRight' the first line, 'trimLeft' the last line, 'trim' middle lines.
+         * - Decode entities on each line (individually).
+         * - Remove empty lines and join the rest with " ".
+         */
+        function fixupWhitespaceAndDecodeEntities(text: string): string | undefined {
+            let acc: string | undefined;
+            // First non-whitespace character on this line.
+            let firstNonWhitespace = 0;
+            // Last non-whitespace character on this line.
+            let lastNonWhitespace = -1;
+            // These initial values are special because the first line is:
+            // firstNonWhitespace = 0 to indicate that we want leading whitsepace,
+            // but lastNonWhitespace = -1 as a special flag to indicate that we *don't* include the line if it's all whitespace.
+
             for (let i = 0; i < text.length; i++) {
                 const c = text.charCodeAt(i);
                 if (isLineBreak(c)) {
-                    if (firstNonWhitespace !== -1 && (lastNonWhitespace - firstNonWhitespace + 1 > 0)) {
-                        const part = text.substr(firstNonWhitespace, lastNonWhitespace - firstNonWhitespace + 1);
-                        if (!parts) {
-                            parts = [];
-                        }
-
-                        // We do not escape the string here as that is handled by the printer
-                        // when it emits the literal. We do, however, need to decode JSX entities.
-                        parts.push(createLiteral(decodeEntities(part)));
+                    // If we've seen any non-whitespace characters on this line, add the 'trim' of the line.
+                    // (lastNonWhitespace === -1 is a special flag to detect whether the first line is all whitespace.)
+                    if (firstNonWhitespace !== -1 && lastNonWhitespace !== -1) {
+                        acc = addLineOfJsxText(acc, text.substr(firstNonWhitespace, lastNonWhitespace - firstNonWhitespace + 1));
                     }
 
+                    // Reset firstNonWhitespace for the next line.
+                    // Don't bother to reset lastNonWhitespace because we ignore it if firstNonWhitespace = -1.
                     firstNonWhitespace = -1;
                 }
-                else if (!isWhiteSpace(c)) {
+                else if (!isWhiteSpaceSingleLine(c)) {
                     lastNonWhitespace = i;
                     if (firstNonWhitespace === -1) {
                         firstNonWhitespace = i;
@@ -191,29 +211,18 @@ namespace ts {
                 }
             }
 
-            if (firstNonWhitespace !== -1) {
-                const part = text.substr(firstNonWhitespace);
-                if (!parts) {
-                    parts = [];
-                }
-
-                // We do not escape the string here as that is handled by the printer
-                // when it emits the literal. We do, however, need to decode JSX entities.
-                parts.push(createLiteral(decodeEntities(part)));
-            }
-
-            if (parts) {
-                return reduceLeft(parts, aggregateJsxTextParts);
-            }
-
-            return undefined;
+            return firstNonWhitespace !== -1
+                // Last line had a non-whitespace character. Emit the 'trimLeft', meaning keep trailing whitespace.
+                ? addLineOfJsxText(acc, text.substr(firstNonWhitespace))
+                // Last line was all whitespace, so ignore it
+                : acc;
         }
 
-        /**
-         * Aggregates two expressions by interpolating them with a whitespace literal.
-         */
-        function aggregateJsxTextParts(left: Expression, right: Expression) {
-            return createAdd(createAdd(left, createLiteral(" ")), right);
+        function addLineOfJsxText(acc: string | undefined, trimmedLine: string): string {
+            // We do not escape the string here as that is handled by the printer
+            // when it emits the literal. We do, however, need to decode JSX entities.
+            const decoded = decodeEntities(trimmedLine);
+            return acc === undefined ? decoded : acc + " " + decoded;
         }
 
         /**
@@ -229,7 +238,7 @@ namespace ts {
                     return String.fromCharCode(parseInt(hex, 16));
                 }
                 else {
-                    const ch = entities[word];
+                    const ch = entities.get(word);
                     // If this is not a valid entity, then just use `match` (replace it with itself, i.e. don't replace)
                     return ch ? String.fromCharCode(ch) : match;
                 }
@@ -277,7 +286,7 @@ namespace ts {
         }
     }
 
-    const entities = createMap<number>({
+    const entities = createMapFromTemplate<number>({
         "quot": 0x0022,
         "amp": 0x0026,
         "apos": 0x0027,

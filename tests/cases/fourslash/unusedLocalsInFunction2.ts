@@ -6,4 +6,4 @@
 ////    x+1;
 ////}
 
-verify.codeFixAtPosition("var x;");
+verify.rangeAfterCodeFix("var x;");

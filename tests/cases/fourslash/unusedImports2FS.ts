@@ -16,4 +16,4 @@
 ////
 //// }
 
-verify.codeFixAtPosition(`import {Calculator} from "./file1"`);
+verify.rangeAfterCodeFix(`import {Calculator} from "./file1"`);

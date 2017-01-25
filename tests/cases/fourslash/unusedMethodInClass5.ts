@@ -5,4 +5,4 @@
 ////     private ["string"] (){} 
 //// }|]
 
-verify.codeFixAtPosition("class C { }");
+verify.rangeAfterCodeFix("class C { }");

@@ -41,7 +41,7 @@ var p = 0;
 <div>   
    </div>;
 
-// Emit "foo" + ' ' + "bar"
+// Emit "foo bar"
 <div>  
 
    foo
@@ -50,6 +50,18 @@ var p = 0;
 
   </div>;
 
+// Emit "hello\\ world"
+<div>
+
+    hello\
+
+world
+</div>;
+
+// Emit "  a b  c d  "
+<div>  a
+    b  c
+    d  </div>;
 
 
 //// [file.js]
@@ -75,5 +87,9 @@ React.createElement("div", null, "  3  ");
 React.createElement("div", null, "3");
 // Emit no args
 React.createElement("div", null);
-// Emit "foo" + ' ' + "bar"
-React.createElement("div", null, "foo" + " " + "bar");
+// Emit "foo bar"
+React.createElement("div", null, "foo bar");
+// Emit "hello\\ world"
+React.createElement("div", null, "hello\\ world");
+// Emit "  a b  c d  "
+React.createElement("div", null, "  a b  c d  ");

@@ -61,11 +61,16 @@ class glo_C11_public extends glo_c_public implements glo_i_public {
 
 
 //// [privacyGloClass.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var m1;
 (function (m1) {
     var m1_c_public = (function () {
@@ -84,21 +89,21 @@ var m1;
     var m1_C1_private = (function (_super) {
         __extends(m1_C1_private, _super);
         function m1_C1_private() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return m1_C1_private;
     }(m1_c_public));
     var m1_C2_private = (function (_super) {
         __extends(m1_C2_private, _super);
         function m1_C2_private() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return m1_C2_private;
     }(m1_c_private));
     var m1_C3_public = (function (_super) {
         __extends(m1_C3_public, _super);
         function m1_C3_public() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return m1_C3_public;
     }(m1_c_public));
@@ -106,7 +111,7 @@ var m1;
     var m1_C4_public = (function (_super) {
         __extends(m1_C4_public, _super);
         function m1_C4_public() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return m1_C4_public;
     }(m1_c_private));
@@ -136,21 +141,21 @@ var m1;
     var m1_C9_private = (function (_super) {
         __extends(m1_C9_private, _super);
         function m1_C9_private() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return m1_C9_private;
     }(m1_c_public));
     var m1_C10_private = (function (_super) {
         __extends(m1_C10_private, _super);
         function m1_C10_private() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return m1_C10_private;
     }(m1_c_private));
     var m1_C11_public = (function (_super) {
         __extends(m1_C11_public, _super);
         function m1_C11_public() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return m1_C11_public;
     }(m1_c_public));
@@ -158,7 +163,7 @@ var m1;
     var m1_C12_public = (function (_super) {
         __extends(m1_C12_public, _super);
         function m1_C12_public() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return m1_C12_public;
     }(m1_c_private));
@@ -174,7 +179,7 @@ var glo_c_public = (function () {
 var glo_C3_public = (function (_super) {
     __extends(glo_C3_public, _super);
     function glo_C3_public() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return glo_C3_public;
 }(glo_c_public));
@@ -186,7 +191,7 @@ var glo_C7_public = (function () {
 var glo_C11_public = (function (_super) {
     __extends(glo_C11_public, _super);
     function glo_C11_public() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return glo_C11_public;
 }(glo_c_public));

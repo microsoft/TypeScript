@@ -78,7 +78,8 @@ let computedAfter: { a: number, b: string, "at the end": number } =
 // shortcut syntax
 let a = 12;
 let shortCutted: { a: number, b: string } = { ...o, a }
-
+// non primitive
+let spreadNonPrimitive = { ...<object>{}};
 
 
 //// [objectSpread.js]
@@ -148,4 +149,6 @@ var computedAfter = __assign({}, o, (_c = { b: 'yeah' }, _c['at the end'] = 14, 
 // shortcut syntax
 var a = 12;
 var shortCutted = __assign({}, o, { a: a });
+// non primitive
+var spreadNonPrimitive = __assign({}, {});
 var _a, _b, _c;

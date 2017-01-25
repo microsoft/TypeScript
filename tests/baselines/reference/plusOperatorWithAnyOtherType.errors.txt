@@ -1,10 +1,15 @@
-tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithAnyOtherType.ts(46,26): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
-tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithAnyOtherType.ts(47,26): error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
-tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithAnyOtherType.ts(48,26): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithAnyOtherType.ts(34,24): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithAnyOtherType.ts(35,24): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithAnyOtherType.ts(46,26): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithAnyOtherType.ts(46,33): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithAnyOtherType.ts(47,26): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithAnyOtherType.ts(47,33): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithAnyOtherType.ts(48,26): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithAnyOtherType.ts(48,38): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithAnyOtherType.ts(54,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithAnyOtherType.ts (4 errors) ====
+==== tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithAnyOtherType.ts (9 errors) ====
     // + operator on any type
     
     var ANY: any;
@@ -39,7 +44,11 @@ tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWith
     
     // any type literal
     var ResultIsNumber7 = +undefined;
+                           ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
     var ResultIsNumber8 = +null;
+                           ~~~~
+!!! error TS2531: Object is possibly 'null'.
     
     // any type expressions
     var ResultIsNumber9 = +ANY2[0];
@@ -51,14 +60,20 @@ tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWith
     var ResultIsNumber15 = +A.foo();
     var ResultIsNumber16 = +(ANY + ANY1);
     var ResultIsNumber17 = +(null + undefined);
-                             ~~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+                             ~~~~
+!!! error TS2531: Object is possibly 'null'.
+                                    ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
     var ResultIsNumber18 = +(null + null);
-                             ~~~~~~~~~~~
-!!! error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
+                             ~~~~
+!!! error TS2531: Object is possibly 'null'.
+                                    ~~~~
+!!! error TS2531: Object is possibly 'null'.
     var ResultIsNumber19 = +(undefined + undefined);
-                             ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+                             ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+                                         ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
     
     // miss assignment operators
     +ANY;

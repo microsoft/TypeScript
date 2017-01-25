@@ -6,4 +6,4 @@
 ////     [|return <T>(x:number) => {x}|]
 //// }
 
-verify.codeFixAtPosition("return (x:number) => {x}");
+verify.rangeAfterCodeFix("return (x:number) => {x}");

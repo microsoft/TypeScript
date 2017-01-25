@@ -7,4 +7,4 @@
 //// x;
 //// export var y: string;
 
-verify.codeFixAtPosition(`var x = function f1() {}`);
+verify.rangeAfterCodeFix(`var x = function f1() {}`);

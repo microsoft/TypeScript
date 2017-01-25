@@ -6,4 +6,4 @@
 ////     [|new <T, U>(a: T): void;|]
 //// }
 
-verify.codeFixAtPosition("new <T>(a: T): void;");
+verify.rangeAfterCodeFix("new <T>(a: T): void;");

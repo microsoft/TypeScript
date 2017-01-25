@@ -58,6 +58,7 @@ namespace ts.server {
         return counts.ts === 0 && counts.tsx === 0;
     }
 
+    /* @internal */
     export interface ProjectFilesWithTSDiagnostics extends protocol.ProjectFiles {
         projectErrors: Diagnostic[];
     }
@@ -90,87 +91,6 @@ namespace ts.server {
         }
     }
 
-    const emptyResult: any[] = [];
-    const getEmptyResult = () => emptyResult;
-    const getUndefined = () => <any>undefined;
-    const emptyEncodedSemanticClassifications = { spans: emptyResult, endOfLineState: EndOfLineState.None };
-
-    export function createNoSemanticFeaturesWrapper(realLanguageService: LanguageService): LanguageService {
-        return {
-            cleanupSemanticCache: noop,
-            getSyntacticDiagnostics: (fileName) =>
-                fileName ? realLanguageService.getSyntacticDiagnostics(fileName) : emptyResult,
-            getSemanticDiagnostics: getEmptyResult,
-            getCompilerOptionsDiagnostics: () =>
-                realLanguageService.getCompilerOptionsDiagnostics(),
-            getSyntacticClassifications: (fileName, span) =>
-                realLanguageService.getSyntacticClassifications(fileName, span),
-            getEncodedSyntacticClassifications: (fileName, span) =>
-                realLanguageService.getEncodedSyntacticClassifications(fileName, span),
-            getSemanticClassifications: getEmptyResult,
-            getEncodedSemanticClassifications: () =>
-                emptyEncodedSemanticClassifications,
-            getCompletionsAtPosition: getUndefined,
-            findReferences: getEmptyResult,
-            getCompletionEntryDetails: getUndefined,
-            getQuickInfoAtPosition: getUndefined,
-            findRenameLocations: getEmptyResult,
-            getNameOrDottedNameSpan: (fileName, startPos, endPos) =>
-                realLanguageService.getNameOrDottedNameSpan(fileName, startPos, endPos),
-            getBreakpointStatementAtPosition: (fileName, position) =>
-                realLanguageService.getBreakpointStatementAtPosition(fileName, position),
-            getBraceMatchingAtPosition: (fileName, position) =>
-                realLanguageService.getBraceMatchingAtPosition(fileName, position),
-            getSignatureHelpItems: getUndefined,
-            getDefinitionAtPosition: getEmptyResult,
-            getRenameInfo: () => ({
-                canRename: false,
-                localizedErrorMessage: getLocaleSpecificMessage(Diagnostics.Language_service_is_disabled),
-                displayName: undefined,
-                fullDisplayName: undefined,
-                kind: undefined,
-                kindModifiers: undefined,
-                triggerSpan: undefined
-            }),
-            getTypeDefinitionAtPosition: getUndefined,
-            getReferencesAtPosition: getEmptyResult,
-            getDocumentHighlights: getEmptyResult,
-            getOccurrencesAtPosition: getEmptyResult,
-            getNavigateToItems: getEmptyResult,
-            getNavigationBarItems: fileName =>
-                realLanguageService.getNavigationBarItems(fileName),
-            getNavigationTree: fileName =>
-                realLanguageService.getNavigationTree(fileName),
-            getOutliningSpans: fileName =>
-                realLanguageService.getOutliningSpans(fileName),
-            getTodoComments: getEmptyResult,
-            getIndentationAtPosition: (fileName, position, options) =>
-                realLanguageService.getIndentationAtPosition(fileName, position, options),
-            getFormattingEditsForRange: (fileName, start, end, options) =>
-                realLanguageService.getFormattingEditsForRange(fileName, start, end, options),
-            getFormattingEditsForDocument: (fileName, options) =>
-                realLanguageService.getFormattingEditsForDocument(fileName, options),
-            getFormattingEditsAfterKeystroke: (fileName, position, key, options) =>
-                realLanguageService.getFormattingEditsAfterKeystroke(fileName, position, key, options),
-            getDocCommentTemplateAtPosition: (fileName, position) =>
-                realLanguageService.getDocCommentTemplateAtPosition(fileName, position),
-            isValidBraceCompletionAtPosition: (fileName, position, openingBrace) =>
-                realLanguageService.isValidBraceCompletionAtPosition(fileName, position, openingBrace),
-            getEmitOutput: getUndefined,
-            getProgram: () =>
-                realLanguageService.getProgram(),
-            getNonBoundSourceFile: fileName =>
-                realLanguageService.getNonBoundSourceFile(fileName),
-            dispose: () =>
-                realLanguageService.dispose(),
-            getCompletionEntrySymbol: getUndefined,
-            getImplementationAtPosition: getEmptyResult,
-            getSourceFile: fileName =>
-                realLanguageService.getSourceFile(fileName),
-            getCodeFixesAtPosition: getEmptyResult
-        };
-    }
-
     export abstract class Project {
         private rootFiles: ScriptInfo[] = [];
         private rootFilesMap: FileMap<ScriptInfo> = createFileMap<ScriptInfo>();
@@ -181,12 +101,14 @@ namespace ts.server {
         private lastCachedUnresolvedImportsList: SortedReadonlyArray<string>;
 
         private readonly languageService: LanguageService;
-        // wrapper over the real language service that will suppress all semantic operations
-        private readonly noSemanticFeaturesLanguageService: LanguageService;
 
         public languageServiceEnabled = true;
 
         builder: Builder;
+        /**
+         * Set of files names that were updated since the last call to getChangesSinceVersion.
+         */
+        private updatedFileNames: Map<string>;
         /**
          * Set of files that was returned from the last call to getChangesSinceVersion.
          */
@@ -254,7 +176,6 @@ namespace ts.server {
             this.lsHost.setCompilationSettings(this.compilerOptions);
 
             this.languageService = ts.createLanguageService(this.lsHost, this.documentRegistry);
-            this.noSemanticFeaturesLanguageService = createNoSemanticFeaturesWrapper(this.languageService);
 
             if (!languageServiceEnabled) {
                 this.disableLanguageService();
@@ -278,9 +199,7 @@ namespace ts.server {
             if (ensureSynchronized) {
                 this.updateGraph();
             }
-            return this.languageServiceEnabled
-                ? this.languageService
-                : this.noSemanticFeaturesLanguageService;
+            return this.languageService;
         }
 
         getCompileOnSaveAffectedFileList(scriptInfo: ScriptInfo): string[] {
@@ -339,8 +258,9 @@ namespace ts.server {
                     info.detachFromProject(this);
                 }
             }
-            else {
-                // release all root files
+            if (!this.program || !this.languageServiceEnabled) {
+                // release all root files either if there is no program or language service is disabled.
+                // in the latter case set of root files can be larger than the set of files in program.
                 for (const root of this.rootFiles) {
                     root.detachFromProject(this);
                 }
@@ -369,7 +289,10 @@ namespace ts.server {
             const result: string[] = [];
             if (this.rootFiles) {
                 for (const f of this.rootFiles) {
-                    result.push(f.fileName);
+                    if (this.languageServiceEnabled || f.isScriptOpen()) {
+                        // if language service is disabled - process only files that are open
+                        result.push(f.fileName);
+                    }
                 }
                 if (this.typingFiles) {
                     for (const f of this.typingFiles) {
@@ -385,6 +308,10 @@ namespace ts.server {
         }
 
         getScriptInfos() {
+            if (!this.languageServiceEnabled) {
+                // if language service is not enabled - return just root files
+                return this.rootFiles;
+            }
             return map(this.program.getSourceFiles(), sourceFile => {
                 const scriptInfo = this.projectService.getScriptInfoForPath(sourceFile.path);
                 if (!scriptInfo) {
@@ -448,7 +375,7 @@ namespace ts.server {
 
         containsFile(filename: NormalizedPath, requireOpen?: boolean) {
             const info = this.projectService.getScriptInfoForNormalizedPath(filename);
-            if (info && (info.isOpen || !requireOpen)) {
+            if (info && (info.isScriptOpen() || !requireOpen)) {
                 return this.containsScriptInfo(info);
             }
         }
@@ -469,7 +396,9 @@ namespace ts.server {
         }
 
         removeFile(info: ScriptInfo, detachFromProject = true) {
-            this.removeRootFileIfNecessary(info);
+            if (this.isRoot(info)) {
+                this.removeRoot(info);
+            }
             this.lsHost.notifyFileRemoved(info);
             this.cachedUnresolvedImportsPerFile.remove(info.path);
 
@@ -478,6 +407,10 @@ namespace ts.server {
             }
 
             this.markAsDirty();
+        }
+
+        registerFileUpdate(fileName: string) {
+            (this.updatedFileNames || (this.updatedFileNames = createMap<string>())).set(fileName, fileName);
         }
 
         markAsDirty() {
@@ -495,9 +428,9 @@ namespace ts.server {
             }
             let unresolvedImports: string[];
             if (file.resolvedModules) {
-                for (const name in file.resolvedModules) {
+                file.resolvedModules.forEach((resolvedModule, name) => {
                     // pick unresolved non-relative names
-                    if (!file.resolvedModules[name] && !isExternalModuleNameRelative(name)) {
+                    if (!resolvedModule && !isExternalModuleNameRelative(name)) {
                         // for non-scoped names extract part up-to the first slash
                         // for scoped names - extract up to the second slash
                         let trimmed = name.trim();
@@ -511,7 +444,7 @@ namespace ts.server {
                         (unresolvedImports || (unresolvedImports = [])).push(trimmed);
                         result.push(trimmed);
                     }
-                }
+                });
             }
             this.cachedUnresolvedImportsPerFile.set(file.path, unresolvedImports || emptyArray);
         }
@@ -521,10 +454,6 @@ namespace ts.server {
          * @returns: true if set of files in the project stays the same and false - otherwise.
          */
         updateGraph(): boolean {
-            if (!this.languageServiceEnabled) {
-                return true;
-            }
-
             this.lsHost.startRecordingFilesWithChangedResolutions();
 
             let hasChanges = this.updateGraphWorker();
@@ -537,7 +466,7 @@ namespace ts.server {
             }
 
             // 1. no changes in structure, no changes in unresolved imports - do nothing
-            // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files 
+            // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files
             // (can reuse cached imports for files that were not changed)
             // 3. new files were added/removed, but compilation settings stays the same - collect unresolved imports for all new/modified files
             // (can reuse cached imports for files that were not changed)
@@ -556,6 +485,16 @@ namespace ts.server {
             if (this.setTypings(cachedTypings)) {
                 hasChanges = this.updateGraphWorker() || hasChanges;
             }
+
+            // update builder only if language service is enabled
+            // otherwise tell it to drop its internal state
+            if (this.languageServiceEnabled) {
+                this.builder.onProjectUpdateGraph();
+            }
+            else {
+                this.builder.clear();
+            }
+
             if (hasChanges) {
                 this.projectStructureVersion++;
             }
@@ -594,7 +533,6 @@ namespace ts.server {
                     }
                 }
             }
-            this.builder.onProjectUpdateGraph();
             return hasChanges;
         }
 
@@ -631,9 +569,6 @@ namespace ts.server {
 
         setCompilerOptions(compilerOptions: CompilerOptions) {
             if (compilerOptions) {
-                if (this.projectKind === ProjectKind.Inferred) {
-                    compilerOptions.allowJs = true;
-                }
                 compilerOptions.allowNonTsExtensions = true;
                 if (changesAffectModuleResolution(this.compilerOptions, compilerOptions)) {
                     // reset cached unresolved imports if changes in compiler options affected module resolution
@@ -658,6 +593,7 @@ namespace ts.server {
             return false;
         }
 
+        /* @internal */
         getChangesSinceVersion(lastKnownVersion?: number): ProjectFilesWithTSDiagnostics {
             this.updateGraph();
 
@@ -665,12 +601,15 @@ namespace ts.server {
                 projectName: this.getProjectName(),
                 version: this.projectStructureVersion,
                 isInferred: this.projectKind === ProjectKind.Inferred,
-                options: this.getCompilerOptions()
+                options: this.getCompilerOptions(),
+                languageServiceDisabled: !this.languageServiceEnabled
             };
+            const updatedFileNames = this.updatedFileNames;
+            this.updatedFileNames = undefined;
             // check if requested version is the same that we have reported last time
             if (this.lastReportedFileNames && lastKnownVersion === this.lastReportedVersion) {
-                // if current structure version is the same - return info witout any changes
-                if (this.projectStructureVersion == this.lastReportedVersion) {
+                // if current structure version is the same - return info without any changes
+                if (this.projectStructureVersion == this.lastReportedVersion && !updatedFileNames) {
                     return { info, projectErrors: this.projectErrors };
                 }
                 // compute and return the difference
@@ -679,19 +618,21 @@ namespace ts.server {
 
                 const added: string[] = [];
                 const removed: string[] = [];
-                for (const id in currentFiles) {
-                    if (!hasProperty(lastReportedFileNames, id)) {
+                const updated: string[] = arrayFrom(updatedFileNames.keys());
+
+                forEachKey(currentFiles, id => {
+                    if (!lastReportedFileNames.has(id)) {
                         added.push(id);
                     }
-                }
-                for (const id in lastReportedFileNames) {
-                    if (!hasProperty(currentFiles, id)) {
+                });
+                forEachKey(lastReportedFileNames, id => {
+                    if (!currentFiles.has(id)) {
                         removed.push(id);
                     }
-                }
+                });
                 this.lastReportedFileNames = currentFiles;
                 this.lastReportedVersion = this.projectStructureVersion;
-                return { info, changes: { added, removed }, projectErrors: this.projectErrors };
+                return { info, changes: { added, removed, updated }, projectErrors: this.projectErrors };
             }
             else {
                 // unknown version - return everything
@@ -722,7 +663,7 @@ namespace ts.server {
                     if (symbol && symbol.declarations && symbol.declarations[0]) {
                         const declarationSourceFile = symbol.declarations[0].getSourceFile();
                         if (declarationSourceFile) {
-                            referencedFiles[declarationSourceFile.path] = true;
+                            referencedFiles.set(declarationSourceFile.path, true);
                         }
                     }
                 }
@@ -734,34 +675,31 @@ namespace ts.server {
             if (sourceFile.referencedFiles && sourceFile.referencedFiles.length > 0) {
                 for (const referencedFile of sourceFile.referencedFiles) {
                     const referencedPath = toPath(referencedFile.fileName, currentDirectory, getCanonicalFileName);
-                    referencedFiles[referencedPath] = true;
+                    referencedFiles.set(referencedPath, true);
                 }
             }
 
             // Handle type reference directives
             if (sourceFile.resolvedTypeReferenceDirectiveNames) {
-                for (const typeName in sourceFile.resolvedTypeReferenceDirectiveNames) {
-                    const resolvedTypeReferenceDirective = sourceFile.resolvedTypeReferenceDirectiveNames[typeName];
+                sourceFile.resolvedTypeReferenceDirectiveNames.forEach((resolvedTypeReferenceDirective) => {
                     if (!resolvedTypeReferenceDirective) {
-                        continue;
+                        return;
                     }
 
                     const fileName = resolvedTypeReferenceDirective.resolvedFileName;
                     const typeFilePath = toPath(fileName, currentDirectory, getCanonicalFileName);
-                    referencedFiles[typeFilePath] = true;
-                }
+                    referencedFiles.set(typeFilePath, true);
+                })
             }
 
-            const allFileNames = map(Object.keys(referencedFiles), key => <Path>key);
+            const allFileNames = arrayFrom(referencedFiles.keys()) as Path[];
             return filter(allFileNames, file => this.projectService.host.fileExists(file));
         }
 
         // remove a root file from project
-        private removeRootFileIfNecessary(info: ScriptInfo): void {
-            if (this.isRoot(info)) {
-                remove(this.rootFiles, info);
-                this.rootFilesMap.remove(info.path);
-            }
+        protected removeRoot(info: ScriptInfo): void {
+            remove(this.rootFiles, info);
+            this.rootFilesMap.remove(info.path);
         }
     }
 
@@ -776,6 +714,32 @@ namespace ts.server {
             }
         })();
 
+        private _isJsInferredProject = false;
+
+        toggleJsInferredProject(isJsInferredProject: boolean) {
+            if (isJsInferredProject !== this._isJsInferredProject) {
+                this._isJsInferredProject = isJsInferredProject;
+                this.setCompilerOptions();
+            }
+        }
+
+        setCompilerOptions(options?: CompilerOptions) {
+            // Avoid manipulating the given options directly
+            const newOptions = options ? clone(options) : this.getCompilerOptions();
+            if (!newOptions) {
+                return;
+            }
+
+            if (this._isJsInferredProject && typeof newOptions.maxNodeModuleJsDepth !== "number") {
+                newOptions.maxNodeModuleJsDepth = 2;
+            }
+            else if (!this._isJsInferredProject) {
+                newOptions.maxNodeModuleJsDepth = undefined;
+            }
+            newOptions.allowJs = true;
+            super.setCompilerOptions(newOptions);
+        }
+
         // Used to keep track of what directories are watched for this project
         directoriesWatchedForTsconfig: string[] = [];
 
@@ -788,6 +752,22 @@ namespace ts.server {
                 /*languageServiceEnabled*/ true,
                 compilerOptions,
                 /*compileOnSaveEnabled*/ false);
+        }
+
+        addRoot(info: ScriptInfo) {
+            if (!this._isJsInferredProject && info.isJavaScript()) {
+                this.toggleJsInferredProject(/*isJsInferredProject*/ true);
+            }
+            super.addRoot(info);
+        }
+
+        removeRoot(info: ScriptInfo) {
+            if (this._isJsInferredProject && info.isJavaScript()) {
+                if (filter(this.getRootScriptInfos(), info => info.isJavaScript()).length === 0) {
+                    this.toggleJsInferredProject(/*isJsInferredProject*/ false);
+                }
+            }
+            super.removeRoot(info);
         }
 
         getProjectRootPath() {
@@ -888,18 +868,19 @@ namespace ts.server {
                 return;
             }
             const configDirectoryPath = getDirectoryPath(this.getConfigFilePath());
-            this.directoriesWatchedForWildcards = reduceProperties(this.wildcardDirectories, (watchers, flag, directory) => {
+
+            this.directoriesWatchedForWildcards = createMap<FileWatcher>();
+            this.wildcardDirectories.forEach((flag, directory) => {
                 if (comparePaths(configDirectoryPath, directory, ".", !this.projectService.host.useCaseSensitiveFileNames) !== Comparison.EqualTo) {
                     const recursive = (flag & WatchDirectoryFlags.Recursive) !== 0;
                     this.projectService.logger.info(`Add ${recursive ? "recursive " : ""}watcher for: ${directory}`);
-                    watchers[directory] = this.projectService.host.watchDirectory(
+                    this.directoriesWatchedForWildcards.set(directory, this.projectService.host.watchDirectory(
                         directory,
                         path => callback(this, path),
                         recursive
-                    );
+                    ));
                 }
-                return watchers;
-            }, <Map<FileWatcher>>{});
+            });
         }
 
         stopWatchingDirectory() {
@@ -923,9 +904,9 @@ namespace ts.server {
                 this.typeRootsWatchers = undefined;
             }
 
-            for (const id in this.directoriesWatchedForWildcards) {
-                this.directoriesWatchedForWildcards[id].close();
-            }
+            this.directoriesWatchedForWildcards.forEach(watcher => {
+                watcher.close();
+            });
             this.directoriesWatchedForWildcards = undefined;
 
             this.stopWatchingDirectory();

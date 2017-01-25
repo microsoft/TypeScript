@@ -307,7 +307,7 @@ and grew 1cm per day`;
 
         it("Start pos from line", () => {
             for (let i = 0; i < iterationCount; i++) {
-                for (let j = 0, llen = lines.length; j < llen; j++) {
+                for (let j = 0; j < lines.length; j++) {
                     const lineInfo = lineIndex.lineNumberToInfo(j + 1);
                     const lineIndexOffset = lineInfo.offset;
                     const lineMapOffset = lineMap[j];

@@ -1,4 +1,4 @@
-/// <reference path="core.ts"/>
+﻿/// <reference path="core.ts"/>
 /// <reference path="utilities.ts"/>
 
 /* @internal */
@@ -1317,15 +1317,16 @@ namespace ts {
         return node;
     }
 
-    export function createJsxExpression(expression: Expression, location?: TextRange) {
+    export function createJsxExpression(expression: Expression, dotDotDotToken: Token<SyntaxKind.DotDotDotToken>, location?: TextRange) {
         const node = <JsxExpression>createNode(SyntaxKind.JsxExpression, location);
+        node.dotDotDotToken = dotDotDotToken;
         node.expression = expression;
         return node;
     }
 
     export function updateJsxExpression(node: JsxExpression, expression: Expression) {
         if (node.expression !== expression) {
-            return updateNode(createJsxExpression(expression, node), node);
+            return updateNode(createJsxExpression(expression, node.dotDotDotToken, node), node);
         }
         return node;
     }
@@ -1526,19 +1527,6 @@ namespace ts {
         if (node.expression !== expression) {
             return updateNode(createPartiallyEmittedExpression(expression, node.original, node), node);
         }
-        return node;
-    }
-
-    /**
-     * Creates a node that emits a string of raw text in an expression position. Raw text is never
-     * transformed, should be ES3 compliant, and should have the same precedence as
-     * PrimaryExpression.
-     *
-     * @param text The raw text of the node.
-     */
-    export function createRawExpression(text: string) {
-        const node = <RawExpression>createNode(SyntaxKind.RawExpression);
-        node.text = text;
         return node;
     }
 
@@ -1753,6 +1741,23 @@ namespace ts {
     }
 
     // Utilities
+
+    export function restoreEnclosingLabel(node: Statement, outermostLabeledStatement: LabeledStatement, afterRestoreLabelCallback?: (node: LabeledStatement) => void): Statement {
+        if (!outermostLabeledStatement) {
+            return node;
+        }
+        const updated = updateLabel(
+            outermostLabeledStatement,
+            outermostLabeledStatement.label,
+            outermostLabeledStatement.statement.kind === SyntaxKind.LabeledStatement
+                ? restoreEnclosingLabel(node, <LabeledStatement>outermostLabeledStatement.statement)
+                : node
+        );
+        if (afterRestoreLabelCallback) {
+            afterRestoreLabelCallback(outermostLabeledStatement);
+        }
+        return updated;
+    }
 
     export interface CallBinding {
         target: LeftHandSideExpression;
@@ -2641,9 +2646,11 @@ namespace ts {
         return destEmitNode;
     }
 
-    function mergeTokenSourceMapRanges(sourceRanges: Map<TextRange>, destRanges: Map<TextRange>) {
-        if (!destRanges) destRanges = createMap<TextRange>();
-        copyProperties(sourceRanges, destRanges);
+    function mergeTokenSourceMapRanges(sourceRanges: TextRange[], destRanges: TextRange[]) {
+        if (!destRanges) destRanges = [];
+        for (const key in sourceRanges) {
+            destRanges[key] = sourceRanges[key];
+        }
         return destRanges;
     }
 
@@ -2757,7 +2764,7 @@ namespace ts {
      */
     export function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange) {
         const emitNode = getOrCreateEmitNode(node);
-        const tokenSourceMapRanges = emitNode.tokenSourceMapRanges || (emitNode.tokenSourceMapRanges = createMap<TextRange>());
+        const tokenSourceMapRanges = emitNode.tokenSourceMapRanges || (emitNode.tokenSourceMapRanges = []);
         tokenSourceMapRanges[token] = range;
         return node;
     }
@@ -2969,10 +2976,8 @@ namespace ts {
      * Here we check if alternative name was provided for a given moduleName and return it if possible.
      */
     function tryRenameExternalModule(moduleName: LiteralExpression, sourceFile: SourceFile) {
-        if (sourceFile.renamedDependencies && hasProperty(sourceFile.renamedDependencies, moduleName.text)) {
-            return createLiteral(sourceFile.renamedDependencies[moduleName.text]);
-        }
-        return undefined;
+        const rename = sourceFile.renamedDependencies && sourceFile.renamedDependencies.get(moduleName.text);
+        return rename && createLiteral(rename);
     }
 
     /**
@@ -3272,7 +3277,7 @@ namespace ts {
         externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[]; // imports of other external modules
         externalHelpersImportDeclaration: ImportDeclaration | undefined; // import of external helpers
         exportSpecifiers: Map<ExportSpecifier[]>; // export specifiers by name
-        exportedBindings: Map<Identifier[]>; // exported names of local declarations
+        exportedBindings: Identifier[][]; // exported names of local declarations
         exportedNames: Identifier[]; // all exported names local to module
         exportEquals: ExportAssignment | undefined; // an export= declaration if one was present
         hasExportStarsToExportValues: boolean; // whether this module contains export*
@@ -3280,8 +3285,8 @@ namespace ts {
 
     export function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver, compilerOptions: CompilerOptions): ExternalModuleInfo {
         const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
-        const exportSpecifiers = createMap<ExportSpecifier[]>();
-        const exportedBindings = createMap<Identifier[]>();
+        const exportSpecifiers = createMultiMap<ExportSpecifier>();
+        const exportedBindings: Identifier[][] = [];
         const uniqueExports = createMap<boolean>();
         let exportedNames: Identifier[];
         let hasExportDefault = false;
@@ -3332,18 +3337,18 @@ namespace ts {
                     else {
                         // export { x, y }
                         for (const specifier of (<ExportDeclaration>node).exportClause.elements) {
-                            if (!uniqueExports[specifier.name.text]) {
+                            if (!uniqueExports.get(specifier.name.text)) {
                                 const name = specifier.propertyName || specifier.name;
-                                multiMapAdd(exportSpecifiers, name.text, specifier);
+                                exportSpecifiers.add(name.text, specifier);
 
                                 const decl = resolver.getReferencedImportDeclaration(name)
                                     || resolver.getReferencedValueDeclaration(name);
 
                                 if (decl) {
-                                    multiMapAdd(exportedBindings, getOriginalNodeId(decl), specifier.name);
+                                    multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(decl), specifier.name);
                                 }
 
-                                uniqueExports[specifier.name.text] = true;
+                                uniqueExports.set(specifier.name.text, true);
                                 exportedNames = append(exportedNames, specifier.name);
                             }
                         }
@@ -3370,16 +3375,16 @@ namespace ts {
                         if (hasModifier(node, ModifierFlags.Default)) {
                             // export default function() { }
                             if (!hasExportDefault) {
-                                multiMapAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<FunctionDeclaration>node));
+                                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<FunctionDeclaration>node));
                                 hasExportDefault = true;
                             }
                         }
                         else {
                             // export function x() { }
                             const name = (<FunctionDeclaration>node).name;
-                            if (!uniqueExports[name.text]) {
-                                multiMapAdd(exportedBindings, getOriginalNodeId(node), name);
-                                uniqueExports[name.text] = true;
+                            if (!uniqueExports.get(name.text)) {
+                                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
+                                uniqueExports.set(name.text, true);
                                 exportedNames = append(exportedNames, name);
                             }
                         }
@@ -3391,16 +3396,16 @@ namespace ts {
                         if (hasModifier(node, ModifierFlags.Default)) {
                             // export default class { }
                             if (!hasExportDefault) {
-                                multiMapAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<ClassDeclaration>node));
+                                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<ClassDeclaration>node));
                                 hasExportDefault = true;
                             }
                         }
                         else {
                             // export class x { }
                             const name = (<ClassDeclaration>node).name;
-                            if (!uniqueExports[name.text]) {
-                                multiMapAdd(exportedBindings, getOriginalNodeId(node), name);
-                                uniqueExports[name.text] = true;
+                            if (!uniqueExports.get(name.text)) {
+                                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
+                                uniqueExports.set(name.text, true);
                                 exportedNames = append(exportedNames, name);
                             }
                         }
@@ -3421,11 +3426,23 @@ namespace ts {
             }
         }
         else if (!isGeneratedIdentifier(decl.name)) {
-            if (!uniqueExports[decl.name.text]) {
-                uniqueExports[decl.name.text] = true;
+            if (!uniqueExports.get(decl.name.text)) {
+                uniqueExports.set(decl.name.text, true);
                 exportedNames = append(exportedNames, decl.name);
             }
         }
         return exportedNames;
+    }
+
+    /** Use a sparse array as a multi-map. */
+    function multiMapSparseArrayAdd<V>(map: V[][], key: number, value: V): V[] {
+        let values = map[key];
+        if (values) {
+            values.push(value);
+        }
+        else {
+            map[key] = values = [value];
+        }
+        return values;
     }
 }

@@ -75,15 +75,16 @@ namespace ts.server {
 
             for (const name of names) {
                 // check if this is a duplicate entry in the list
-                let resolution = newResolutions[name];
+                let resolution = newResolutions.get(name);
                 if (!resolution) {
-                    const existingResolution = currentResolutionsInFile && currentResolutionsInFile[name];
+                    const existingResolution = currentResolutionsInFile && currentResolutionsInFile.get(name);
                     if (moduleResolutionIsValid(existingResolution)) {
                         // ok, it is safe to use existing name resolution results
                         resolution = existingResolution;
                     }
                     else {
-                        newResolutions[name] = resolution = loader(name, containingFile, compilerOptions, this);
+                        resolution = loader(name, containingFile, compilerOptions, this);
+                        newResolutions.set(name, resolution);
                     }
                     if (logChanges && this.filesWithChangedSetOfUnresolvedImports && !resolutionIsEqualTo(existingResolution, resolution)) {
                         this.filesWithChangedSetOfUnresolvedImports.push(path);
@@ -135,6 +136,10 @@ namespace ts.server {
             }
         }
 
+        getNewLine() {
+            return this.host.newLine;
+        }
+
         getProjectVersion() {
             return this.project.getProjectVersion();
         }
@@ -169,7 +174,7 @@ namespace ts.server {
         getScriptSnapshot(filename: string): ts.IScriptSnapshot {
             const scriptInfo = this.project.getScriptInfoLSHost(filename);
             if (scriptInfo) {
-                return scriptInfo.snap();
+                return scriptInfo.getSnapshot();
             }
         }
 
