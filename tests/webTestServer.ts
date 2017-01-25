@@ -315,7 +315,6 @@ if (browser === "chrome") {
     let defaultChromePath = "";
     switch (os.platform()) {
         case "win32":
-        case "win64":
             defaultChromePath = "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe";
             break;
         case "darwin":
