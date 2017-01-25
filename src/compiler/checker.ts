@@ -3253,17 +3253,21 @@ namespace ts {
                         error(declaration, Diagnostics.Rest_types_may_only_be_created_from_object_types);
                         return unknownType;
                     }
-                    const literalMembers = [];
+                    let literalMembers = [];
                     for (const element of pattern.elements) {
                         if (!(element as BindingElement).dotDotDotToken) {
                             const propertyName = getTextOfPropertyName(element.propertyName || element.name as Identifier);
                             literalMembers.push(getLiteralTypeForText(TypeFlags.StringLiteral, propertyName));
                             if (element.propertyName && propertyName === undefined) {
-                                error(element.propertyName, Diagnostics.Computed_properties_cannot_be_used_with_object_rest_assignments);
+                                if (compilerOptions.noImplicitAny && parentType !== anyType) {
+                                    error(declaration, Diagnostics.Object_rest_element_implicitly_has_type_any_because_the_destructuring_contains_a_computed_property);
+                                }
+                                literalMembers = undefined;
+                                break;
                             }
                         }
                     }
-                    type = getRestType(parentType, getUnionType(literalMembers));
+                    type = literalMembers ? getRestType(parentType, getUnionType(literalMembers)) : anyType;
                     if (type.flags & TypeFlags.Object) {
                         type.symbol = declaration.symbol;
                     }
@@ -14845,20 +14849,25 @@ namespace ts {
                 if (languageVersion < ScriptTarget.ESNext) {
                     checkExternalEmitHelpers(property, ExternalEmitHelpers.Rest);
                 }
-                const nonRestNames = [];
+                let nonRestNames: LiteralType[] = [];
                 if (allProperties) {
                     for (let i = 0; i < allProperties.length - 1; i++) {
                         const propertyName = getTextOfPropertyName(allProperties[i].name);
                         nonRestNames.push(getLiteralTypeForText(TypeFlags.StringLiteral, propertyName));
                         if (propertyName === undefined) {
-                            error(allProperties[i].name, Diagnostics.Computed_properties_cannot_be_used_with_object_rest_assignments);
+                            if (compilerOptions.noImplicitAny && objectLiteralType !== anyType) {
+                                error(property, Diagnostics.Object_rest_element_implicitly_has_type_any_because_the_destructuring_contains_a_computed_property);
+                            }
+                            nonRestNames = undefined;
+                            break;
                         }
                     }
                 }
-                const type = getRestType(objectLiteralType, getUnionType(nonRestNames));
+                const type = nonRestNames ? getRestType(objectLiteralType, getUnionType(nonRestNames)) : anyType;
                 if (type.flags & TypeFlags.Object) {
                     type.symbol = objectLiteralType.symbol;
                 }
+
                 return checkDestructuringAssignment(property.expression, type);
             }
             else {

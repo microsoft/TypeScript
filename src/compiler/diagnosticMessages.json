@@ -2047,7 +2047,7 @@
         "category": "Error",
         "code": 2705
     },
-    "Computed properties cannot be used with object rest assignments.": {
+    "Object rest element implicitly has type 'any' because the destructuring contains a computed property.": {
         "category": "Error",
         "code": 2706
     },
