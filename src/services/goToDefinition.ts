@@ -187,7 +187,15 @@ namespace ts.GoToDefinition {
     }
 
     function isSignatureDeclaration(node: Node): boolean {
-        return node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature
+        switch (node.kind) {
+            case ts.SyntaxKind.Constructor:
+            case ts.SyntaxKind.FunctionDeclaration:
+            case ts.SyntaxKind.MethodDeclaration:
+            case ts.SyntaxKind.MethodSignature:
+                return true;
+            default:
+                return false;
+        }
     }
 
     /** Creates a DefinitionInfo from a Declaration, using the declaration's name if possible. */
@@ -254,6 +262,11 @@ namespace ts.GoToDefinition {
 
     function tryGetSignatureDeclaration(typeChecker: TypeChecker, node: Node): SignatureDeclaration | undefined {
         const callLike = getAncestorCallLikeExpression(node);
-        return callLike && typeChecker.getResolvedSignature(callLike).declaration;
+        const decl = callLike && typeChecker.getResolvedSignature(callLike).declaration;
+        if (decl && isSignatureDeclaration(decl)) {
+            return decl;
+        }
+        // Don't go to a function type, go to the value having that type.
+        return undefined;
     }
 }
