@@ -35,9 +35,10 @@ let getter: { a: number, c: number } =
     { ...op, c: 7 }
 getter.a = 12;
 
-// null, undefined and functions result in { }
+// null, undefined, object and functions result in { }
 let spreadNull = { ...null };
 let spreadUndefined = { ...undefined };
+let spreadNonPrimitive = { ...<object>{}};
 let spreadFunc = { ...(function () { }) };
 
 // any results in any
@@ -130,9 +131,10 @@ var propertyNested = { a: __assign({}, o) };
 var op = { get a() { return 6; } };
 var getter = __assign({}, op, { c: 7 });
 getter.a = 12;
-// null, undefined and functions result in { }
+// null, undefined, object and functions result in { }
 var spreadNull = __assign({}, null);
 var spreadUndefined = __assign({}, undefined);
+var spreadNonPrimitive = __assign({}, {});
 var spreadFunc = __assign({}, (function () { }));
 // any results in any
 var anything;

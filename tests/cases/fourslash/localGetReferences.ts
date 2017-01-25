@@ -3,7 +3,7 @@
 // @Filename: localGetReferences_1.ts
 ////// Comment Refence Test: g/*1*/lobalVar
 ////// References to a variable declared in global.
-////var [|globalVar|]: n/*2*/umber = 2;
+////var [|globalVar|]: number = 2;
 ////
 ////class fooCls {
 ////    // References to static variable declared in a class.
@@ -189,10 +189,6 @@
 goTo.marker("1");
 verify.referencesAre([]);
 
-// References to type.
-goTo.marker("2");
-verify.referencesAre([]);
-
 // References to unresolved symbol.
 goTo.marker("3");
 verify.referencesAre([]);
@@ -202,15 +198,14 @@ goTo.marker("4");
 verify.referencesAre([]);
 
 const rangesByText = test.rangesByText();
-for (const text in rangesByText) {
-    const ranges = rangesByText[text];
+rangesByText.forEach((ranges, text) => {
     if (text === "globalVar") {
         verify.rangesReferenceEachOther(ranges.filter(isShadow));
         verify.rangesReferenceEachOther(ranges.filter(r => !isShadow(r)));
     } else {
         verify.rangesReferenceEachOther(ranges);
     }
-}
+});
 
 function isShadow(r) {
     return r.marker && r.marker.data && r.marker.data.shadow;

@@ -1823,6 +1823,10 @@
         "category": "Error",
         "code": 2609
     },
+    "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
+        "category": "Error",
+        "code": 2649
+    },
     "Cannot emit namespaced JSX elements in React": {
         "category": "Error",
         "code": 2650
@@ -2014,6 +2018,10 @@
     "Spread types may only be created from object types.": {
         "category": "Error",
         "code": 2698
+    },
+    "Static property '{0}' conflicts with built-in property 'Function.{0}' of constructor function '{1}'.": {
+        "category": "Error",
+        "code": 2699
     },
     "Rest types may only be created from object types.": {
         "category": "Error",
@@ -2709,7 +2717,7 @@
         "category": "Message",
         "code": 6079
     },
-    "Specify JSX code generation: 'preserve' or 'react'": {
+    "Specify JSX code generation: 'preserve', 'react-native', or 'react'": {
         "category": "Message",
         "code": 6080
     },

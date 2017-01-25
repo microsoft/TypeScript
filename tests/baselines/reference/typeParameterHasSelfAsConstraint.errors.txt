@@ -1,5 +1,5 @@
 tests/cases/compiler/typeParameterHasSelfAsConstraint.ts(1,24): error TS2313: Type parameter 'T' has a circular constraint.
-tests/cases/compiler/typeParameterHasSelfAsConstraint.ts(2,12): error TS2322: Type 'T' is not assignable to type 'number'.
+tests/cases/compiler/typeParameterHasSelfAsConstraint.ts(2,5): error TS2322: Type 'T' is not assignable to type 'number'.
 
 
 ==== tests/cases/compiler/typeParameterHasSelfAsConstraint.ts (2 errors) ====
@@ -7,7 +7,7 @@ tests/cases/compiler/typeParameterHasSelfAsConstraint.ts(2,12): error TS2322: Ty
                            ~
 !!! error TS2313: Type parameter 'T' has a circular constraint.
         return x;
-               ~
+        ~~~~~~~~~
 !!! error TS2322: Type 'T' is not assignable to type 'number'.
     }
      

@@ -465,6 +465,16 @@ function addToMyThingy<S extends KeyTypes>(key: S) {
     MyThingy[key].push("a");
 }
 
+// Repro from #13102
+
+type Handler<T> = {
+    onChange: (name: keyof T) => void;
+};
+
+function onChangeGenericFunction<T>(handler: Handler<T & {preset: number}>) {
+    handler.onChange('preset')
+}
+
 // Repro from #13285
 
 function updateIds<T extends Record<K, string>, K extends string>(
@@ -490,4 +500,20 @@ function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
 ) {
     var x = obj[key];
     stringMap[x]; // Should be OK.
+}
+
+// Repro from #13514
+
+declare function head<T extends Array<any>>(list: T): T[0];
+
+// Repro from #13604
+
+class A<T> {
+	props: T & { foo: string };
+}
+
+class B extends A<{ x: number}> {
+	f(p: this["props"]) {
+		p.x;
+	}
 }

@@ -1699,83 +1699,148 @@ function addToMyThingy<S extends KeyTypes>(key: S) {
 >push : Symbol(Array.push, Decl(lib.d.ts, --, --))
 }
 
+// Repro from #13102
+
+type Handler<T> = {
+>Handler : Symbol(Handler, Decl(keyofAndIndexedAccess.ts, 463, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 467, 13))
+
+    onChange: (name: keyof T) => void;
+>onChange : Symbol(onChange, Decl(keyofAndIndexedAccess.ts, 467, 19))
+>name : Symbol(name, Decl(keyofAndIndexedAccess.ts, 468, 15))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 467, 13))
+
+};
+
+function onChangeGenericFunction<T>(handler: Handler<T & {preset: number}>) {
+>onChangeGenericFunction : Symbol(onChangeGenericFunction, Decl(keyofAndIndexedAccess.ts, 469, 2))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 471, 33))
+>handler : Symbol(handler, Decl(keyofAndIndexedAccess.ts, 471, 36))
+>Handler : Symbol(Handler, Decl(keyofAndIndexedAccess.ts, 463, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 471, 33))
+>preset : Symbol(preset, Decl(keyofAndIndexedAccess.ts, 471, 58))
+
+    handler.onChange('preset')
+>handler.onChange : Symbol(onChange, Decl(keyofAndIndexedAccess.ts, 467, 19))
+>handler : Symbol(handler, Decl(keyofAndIndexedAccess.ts, 471, 36))
+>onChange : Symbol(onChange, Decl(keyofAndIndexedAccess.ts, 467, 19))
+}
+
 // Repro from #13285
 
 function updateIds<T extends Record<K, string>, K extends string>(
->updateIds : Symbol(updateIds, Decl(keyofAndIndexedAccess.ts, 463, 1))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 467, 19))
+>updateIds : Symbol(updateIds, Decl(keyofAndIndexedAccess.ts, 473, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 477, 19))
 >Record : Symbol(Record, Decl(lib.d.ts, --, --))
->K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 467, 47))
->K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 467, 47))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 477, 47))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 477, 47))
 
     obj: T,
->obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 467, 66))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 467, 19))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 477, 66))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 477, 19))
 
     idFields: K[],
->idFields : Symbol(idFields, Decl(keyofAndIndexedAccess.ts, 468, 11))
->K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 467, 47))
+>idFields : Symbol(idFields, Decl(keyofAndIndexedAccess.ts, 478, 11))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 477, 47))
 
     idMapping: { [oldId: string]: string }
->idMapping : Symbol(idMapping, Decl(keyofAndIndexedAccess.ts, 469, 18))
->oldId : Symbol(oldId, Decl(keyofAndIndexedAccess.ts, 470, 18))
+>idMapping : Symbol(idMapping, Decl(keyofAndIndexedAccess.ts, 479, 18))
+>oldId : Symbol(oldId, Decl(keyofAndIndexedAccess.ts, 480, 18))
 
 ): Record<K, string> {
 >Record : Symbol(Record, Decl(lib.d.ts, --, --))
->K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 467, 47))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 477, 47))
 
     for (const idField of idFields) {
->idField : Symbol(idField, Decl(keyofAndIndexedAccess.ts, 472, 14))
->idFields : Symbol(idFields, Decl(keyofAndIndexedAccess.ts, 468, 11))
+>idField : Symbol(idField, Decl(keyofAndIndexedAccess.ts, 482, 14))
+>idFields : Symbol(idFields, Decl(keyofAndIndexedAccess.ts, 478, 11))
 
         const newId = idMapping[obj[idField]];
->newId : Symbol(newId, Decl(keyofAndIndexedAccess.ts, 473, 13))
->idMapping : Symbol(idMapping, Decl(keyofAndIndexedAccess.ts, 469, 18))
->obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 467, 66))
->idField : Symbol(idField, Decl(keyofAndIndexedAccess.ts, 472, 14))
+>newId : Symbol(newId, Decl(keyofAndIndexedAccess.ts, 483, 13))
+>idMapping : Symbol(idMapping, Decl(keyofAndIndexedAccess.ts, 479, 18))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 477, 66))
+>idField : Symbol(idField, Decl(keyofAndIndexedAccess.ts, 482, 14))
 
         if (newId) {
->newId : Symbol(newId, Decl(keyofAndIndexedAccess.ts, 473, 13))
+>newId : Symbol(newId, Decl(keyofAndIndexedAccess.ts, 483, 13))
 
             obj[idField] = newId;
->obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 467, 66))
->idField : Symbol(idField, Decl(keyofAndIndexedAccess.ts, 472, 14))
->newId : Symbol(newId, Decl(keyofAndIndexedAccess.ts, 473, 13))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 477, 66))
+>idField : Symbol(idField, Decl(keyofAndIndexedAccess.ts, 482, 14))
+>newId : Symbol(newId, Decl(keyofAndIndexedAccess.ts, 483, 13))
         }
     }
     return obj;
->obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 467, 66))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 477, 66))
 }
 
 // Repro from #13285
 
 function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
->updateIds2 : Symbol(updateIds2, Decl(keyofAndIndexedAccess.ts, 479, 1))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 483, 20))
->x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 483, 33))
->K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 483, 54))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 483, 20))
+>updateIds2 : Symbol(updateIds2, Decl(keyofAndIndexedAccess.ts, 489, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 493, 20))
+>x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 493, 33))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 493, 54))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 493, 20))
 
     obj: T,
->obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 483, 74))
->T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 483, 20))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 493, 74))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 493, 20))
 
     key: K,
->key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 484, 11))
->K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 483, 54))
+>key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 494, 11))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 493, 54))
 
     stringMap: { [oldId: string]: string }
->stringMap : Symbol(stringMap, Decl(keyofAndIndexedAccess.ts, 485, 11))
->oldId : Symbol(oldId, Decl(keyofAndIndexedAccess.ts, 486, 18))
+>stringMap : Symbol(stringMap, Decl(keyofAndIndexedAccess.ts, 495, 11))
+>oldId : Symbol(oldId, Decl(keyofAndIndexedAccess.ts, 496, 18))
 
 ) {
     var x = obj[key];
->x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 488, 7))
->obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 483, 74))
->key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 484, 11))
+>x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 498, 7))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 493, 74))
+>key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 494, 11))
 
     stringMap[x]; // Should be OK.
->stringMap : Symbol(stringMap, Decl(keyofAndIndexedAccess.ts, 485, 11))
->x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 488, 7))
+>stringMap : Symbol(stringMap, Decl(keyofAndIndexedAccess.ts, 495, 11))
+>x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 498, 7))
+}
+
+// Repro from #13514
+
+declare function head<T extends Array<any>>(list: T): T[0];
+>head : Symbol(head, Decl(keyofAndIndexedAccess.ts, 500, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 504, 22))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>list : Symbol(list, Decl(keyofAndIndexedAccess.ts, 504, 44))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 504, 22))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 504, 22))
+
+// Repro from #13604
+
+class A<T> {
+>A : Symbol(A, Decl(keyofAndIndexedAccess.ts, 504, 59))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 508, 8))
+
+	props: T & { foo: string };
+>props : Symbol(A.props, Decl(keyofAndIndexedAccess.ts, 508, 12))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 508, 8))
+>foo : Symbol(foo, Decl(keyofAndIndexedAccess.ts, 509, 13))
+}
+
+class B extends A<{ x: number}> {
+>B : Symbol(B, Decl(keyofAndIndexedAccess.ts, 510, 1))
+>A : Symbol(A, Decl(keyofAndIndexedAccess.ts, 504, 59))
+>x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 512, 19))
+
+	f(p: this["props"]) {
+>f : Symbol(B.f, Decl(keyofAndIndexedAccess.ts, 512, 33))
+>p : Symbol(p, Decl(keyofAndIndexedAccess.ts, 513, 3))
+
+		p.x;
+>p.x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 512, 19))
+>p : Symbol(p, Decl(keyofAndIndexedAccess.ts, 513, 3))
+>x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 512, 19))
+	}
 }
 

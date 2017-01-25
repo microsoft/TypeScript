@@ -223,7 +223,7 @@ getter.a = 12;
 >a : number
 >12 : 12
 
-// null, undefined and functions result in { }
+// null, undefined, object and functions result in { }
 let spreadNull = { ...null };
 >spreadNull : {}
 >{ ...null } : {}
@@ -233,6 +233,12 @@ let spreadUndefined = { ...undefined };
 >spreadUndefined : {}
 >{ ...undefined } : {}
 >undefined : undefined
+
+let spreadNonPrimitive = { ...<object>{}};
+>spreadNonPrimitive : spread(object)
+>{ ...<object>{}} : spread(object)
+><object>{} : object
+>{} : {}
 
 let spreadFunc = { ...(function () { }) };
 >spreadFunc : {}

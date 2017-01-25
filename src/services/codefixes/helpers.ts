@@ -9,7 +9,7 @@ namespace ts.codefix {
      */
     export function getMissingMembersInsertion(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: Symbol[], checker: TypeChecker, newlineChar: string): string {
         const classMembers = classDeclaration.symbol.members;
-        const missingMembers = possiblyMissingSymbols.filter(symbol => !(symbol.getName() in classMembers));
+        const missingMembers = possiblyMissingSymbols.filter(symbol => !classMembers.has(symbol.getName()));
 
         let insertion = "";
 

@@ -464,6 +464,16 @@ function addToMyThingy<S extends KeyTypes>(key: S) {
     MyThingy[key].push("a");
 }
 
+// Repro from #13102
+
+type Handler<T> = {
+    onChange: (name: keyof T) => void;
+};
+
+function onChangeGenericFunction<T>(handler: Handler<T & {preset: number}>) {
+    handler.onChange('preset')
+}
+
 // Repro from #13285
 
 function updateIds<T extends Record<K, string>, K extends string>(
@@ -489,6 +499,22 @@ function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
 ) {
     var x = obj[key];
     stringMap[x]; // Should be OK.
+}
+
+// Repro from #13514
+
+declare function head<T extends Array<any>>(list: T): T[0];
+
+// Repro from #13604
+
+class A<T> {
+	props: T & { foo: string };
+}
+
+class B extends A<{ x: number}> {
+	f(p: this["props"]) {
+		p.x;
+	}
 }
 
 
@@ -801,6 +827,9 @@ var MyThingy;
 function addToMyThingy(key) {
     MyThingy[key].push("a");
 }
+function onChangeGenericFunction(handler) {
+    handler.onChange('preset');
+}
 // Repro from #13285
 function updateIds(obj, idFields, idMapping) {
     for (var _i = 0, idFields_1 = idFields; _i < idFields_1.length; _i++) {
@@ -817,6 +846,22 @@ function updateIds2(obj, key, stringMap) {
     var x = obj[key];
     stringMap[x]; // Should be OK.
 }
+// Repro from #13604
+var A = (function () {
+    function A() {
+    }
+    return A;
+}());
+var B = (function (_super) {
+    __extends(B, _super);
+    function B() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    B.prototype.f = function (p) {
+        p.x;
+    };
+    return B;
+}(A));
 
 
 //// [keyofAndIndexedAccess.d.ts]
@@ -1034,6 +1079,12 @@ declare let MyThingy: {
     [key in KeyTypes]: string[];
 };
 declare function addToMyThingy<S extends KeyTypes>(key: S): void;
+declare type Handler<T> = {
+    onChange: (name: keyof T) => void;
+};
+declare function onChangeGenericFunction<T>(handler: Handler<T & {
+    preset: number;
+}>): void;
 declare function updateIds<T extends Record<K, string>, K extends string>(obj: T, idFields: K[], idMapping: {
     [oldId: string]: string;
 }): Record<K, string>;
@@ -1042,3 +1093,14 @@ declare function updateIds2<T extends {
 }, K extends keyof T>(obj: T, key: K, stringMap: {
     [oldId: string]: string;
 }): void;
+declare function head<T extends Array<any>>(list: T): T[0];
+declare class A<T> {
+    props: T & {
+        foo: string;
+    };
+}
+declare class B extends A<{
+    x: number;
+}> {
+    f(p: this["props"]): void;
+}

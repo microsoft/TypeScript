@@ -14,15 +14,16 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(36,19): error TS269
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(38,20): error TS2698: Spread types may only be created from object types.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(40,19): error TS2698: Spread types may only be created from object types.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(45,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{}' has no compatible call signatures.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(49,12): error TS2339: Property 'b' does not exist on type '{}'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(55,9): error TS2339: Property 'm' does not exist on type '{ p: number; }'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(58,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{ x: number; }' has no compatible call signatures.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(59,1): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(64,9): error TS2322: Type 'spread(T & V)' is not assignable to type 'spread(T & U)'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(66,12): error TS2322: Type 'spread(U)' is not assignable to type 'U'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(50,11): error TS2339: Property 'a' does not exist on type 'spread(object)'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(54,12): error TS2339: Property 'b' does not exist on type '{}'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(60,9): error TS2339: Property 'm' does not exist on type '{ p: number; }'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(63,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{ x: number; }' has no compatible call signatures.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(64,1): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(69,9): error TS2322: Type 'spread(T & V)' is not assignable to type 'spread(T & U)'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(71,5): error TS2322: Type 'spread(U)' is not assignable to type 'U'.
 
 
-==== tests/cases/conformance/types/spread/objectSpreadNegative.ts (19 errors) ====
+==== tests/cases/conformance/types/spread/objectSpreadNegative.ts (20 errors) ====
     let o = { a: 1, b: 'no' }
     
     /// private propagates
@@ -98,6 +99,13 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(66,12): error TS232
     ~~~~~~~~~~~~
 !!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{}' has no compatible call signatures.
     
+    // non primitive produces empty object
+    let obj: object = { a: 123 };
+    let spreadObj = { ...obj };
+    spreadObj.a; // error 'a' is not in {}
+              ~
+!!! error TS2339: Property 'a' does not exist on type 'spread(object)'.
+    
     // write-only properties get skipped
     let setterOnly = { ...{ set b (bad: number) { } } };
     setterOnly.b = 12; // error, 'b' does not exist
@@ -128,7 +136,7 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(66,12): error TS232
 !!! error TS2322: Type 'spread(T & V)' is not assignable to type 'spread(T & U)'.
         // { ...U } is not assignable to U
         return { ...initial, ...override };
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'spread(U)' is not assignable to type 'U'.
     }
     

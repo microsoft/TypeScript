@@ -45,6 +45,11 @@ spreadStr.charAt(1); // error, no methods either
 let spreadFunc = { ...function () { } }
 spreadFunc(); // error, no call signature
 
+// non primitive produces empty object
+let obj: object = { a: 123 };
+let spreadObj = { ...obj };
+spreadObj.a; // error 'a' is not in {}
+
 // write-only properties get skipped
 let setterOnly = { ...{ set b (bad: number) { } } };
 setterOnly.b = 12; // error, 'b' does not exist
@@ -119,6 +124,10 @@ spreadStr.charAt(1); // error, no methods either
 // functions are skipped
 var spreadFunc = __assign({}, function () { });
 spreadFunc(); // error, no call signature
+// non primitive produces empty object
+var obj = { a: 123 };
+var spreadObj = __assign({}, obj);
+spreadObj.a; // error 'a' is not in {}
 // write-only properties get skipped
 var setterOnly = __assign({ set b(bad) { } });
 setterOnly.b = 12; // error, 'b' does not exist

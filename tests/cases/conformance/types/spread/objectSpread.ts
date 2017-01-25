@@ -35,9 +35,10 @@ let getter: { a: number, c: number } =
     { ...op, c: 7 }
 getter.a = 12;
 
-// null, undefined and functions result in { }
+// null, undefined, object and functions result in { }
 let spreadNull = { ...null };
 let spreadUndefined = { ...undefined };
+let spreadNonPrimitive = { ...<object>{}};
 let spreadFunc = { ...(function () { }) };
 
 // any results in any
