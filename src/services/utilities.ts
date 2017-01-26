@@ -1,4 +1,4 @@
-// These utilities are common to multiple language service features.
+﻿// These utilities are common to multiple language service features.
 /* @internal */
 namespace ts {
     export const scanner: Scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
@@ -71,7 +71,10 @@ namespace ts {
     }
 
     export function getMeaningFromLocation(node: Node): SemanticMeaning {
-        if (node.parent.kind === SyntaxKind.ExportAssignment) {
+        if (node.kind === SyntaxKind.SourceFile) {
+            return SemanticMeaning.Value;
+        }
+        else if (node.parent.kind === SyntaxKind.ExportAssignment) {
             return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
         }
         else if (isInRightSideOfImport(node)) {
@@ -600,7 +603,7 @@ namespace ts {
         return !!findChildOfKind(n, kind, sourceFile);
     }
 
-    export function findChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFile): Node {
+    export function findChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFile): Node | undefined {
         return forEach(n.getChildren(sourceFile), c => c.kind === kind && c);
     }
 
@@ -675,8 +678,7 @@ namespace ts {
             }
 
             // find the child that contains 'position'
-            for (let i = 0, n = current.getChildCount(sourceFile); i < n; i++) {
-                const child = current.getChildAt(i);
+            for (const child of current.getChildren()) {
                 // all jsDocComment nodes were already visited
                 if (isJSDocNode(child)) {
                     continue;
@@ -766,7 +768,7 @@ namespace ts {
             }
 
             const children = n.getChildren();
-            for (let i = 0, len = children.length; i < len; i++) {
+            for (let i = 0; i < children.length; i++) {
                 const child = children[i];
                 // condition 'position < child.end' checks if child node end after the position
                 // in the example below this condition will be false for 'aaaa' and 'bbbb' and true for 'ccc'
@@ -951,10 +953,10 @@ namespace ts {
         }
 
         if (node) {
-            if (node.jsDocComments) {
-                for (const jsDocComment of node.jsDocComments) {
-                    if (jsDocComment.tags) {
-                        for (const tag of jsDocComment.tags) {
+            if (node.jsDoc) {
+                for (const jsDoc of node.jsDoc) {
+                    if (jsDoc.tags) {
+                        for (const tag of jsDoc.tags) {
                             if (tag.pos <= position && position <= tag.end) {
                                 return tag;
                             }
@@ -1113,6 +1115,26 @@ namespace ts {
             return !tripleSlashDirectivePrefixRegex.test(commentText);
         }
     }
+
+    export function createTextSpanFromNode(node: Node, sourceFile?: SourceFile): TextSpan {
+        return createTextSpanFromBounds(node.getStart(sourceFile), node.getEnd());
+    }
+
+    export function isTypeKeyword(kind: SyntaxKind): boolean {
+        switch (kind) {
+            case SyntaxKind.AnyKeyword:
+            case SyntaxKind.BooleanKeyword:
+            case SyntaxKind.NeverKeyword:
+            case SyntaxKind.NumberKeyword:
+            case SyntaxKind.ObjectKeyword:
+            case SyntaxKind.StringKeyword:
+            case SyntaxKind.SymbolKeyword:
+            case SyntaxKind.VoidKeyword:
+                return true;
+            default:
+                return false;
+        }
+    }
 }
 
 // Display-part writer helpers
@@ -1137,6 +1159,7 @@ namespace ts {
             writeSpace: text => writeKind(text, SymbolDisplayPartKind.space),
             writeStringLiteral: text => writeKind(text, SymbolDisplayPartKind.stringLiteral),
             writeParameter: text => writeKind(text, SymbolDisplayPartKind.parameterName),
+            writeProperty: text => writeKind(text, SymbolDisplayPartKind.propertyName),
             writeSymbol,
             writeLine,
             increaseIndent: () => { indent++; },
@@ -1296,7 +1319,7 @@ namespace ts {
         return name;
     }
 
-    export function isImportOrExportSpecifierName(location: Node): boolean {
+    export function isImportOrExportSpecifierName(location: Node): location is Identifier {
         return location.parent &&
             (location.parent.kind === SyntaxKind.ImportSpecifier || location.parent.kind === SyntaxKind.ExportSpecifier) &&
             (<ImportOrExportSpecifier>location.parent).propertyName === location;
@@ -1357,5 +1380,10 @@ namespace ts {
             configJsonObject: config || {},
             diagnostics: error ? concatenate(diagnostics, [error]) : diagnostics
         };
+    }
+
+    export function getOpenBraceEnd(constructor: ConstructorDeclaration, sourceFile: SourceFile) {
+        // First token is the open curly, this is where we want to put the 'super' call.
+        return constructor.body.getFirstToken(sourceFile).getEnd();
     }
 }

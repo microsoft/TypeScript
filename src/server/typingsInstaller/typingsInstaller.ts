@@ -1,7 +1,7 @@
 ﻿/// <reference path="../../compiler/core.ts" />
 /// <reference path="../../compiler/moduleNameResolver.ts" />
 /// <reference path="../../services/jsTyping.ts"/>
-/// <reference path="../types.d.ts"/>
+/// <reference path="../types.ts"/>
 /// <reference path="../shared.ts"/>
 
 namespace ts.server.typingsInstaller {
@@ -97,7 +97,6 @@ namespace ts.server.typingsInstaller {
             readonly globalCachePath: string,
             readonly safeListPath: Path,
             readonly throttleLimit: number,
-            readonly telemetryEnabled: boolean,
             protected readonly log = nullLog) {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Global cache location '${globalCachePath}', safe file path '${safeListPath}'`);
@@ -113,7 +112,7 @@ namespace ts.server.typingsInstaller {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Closing file watchers for project '${projectName}'`);
             }
-            const watchers = this.projectWatchers[projectName];
+            const watchers = this.projectWatchers.get(projectName);
             if (!watchers) {
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`No watchers are registered for project '${projectName}'`);
@@ -124,7 +123,7 @@ namespace ts.server.typingsInstaller {
                 w.close();
             }
 
-            delete this.projectWatchers[projectName];
+            this.projectWatchers.delete(projectName);
 
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Closing file watchers for project '${projectName}' - done.`);
@@ -150,7 +149,7 @@ namespace ts.server.typingsInstaller {
                 req.projectRootPath,
                 this.safeListPath,
                 this.packageNameToTypingLocation,
-                req.typingOptions,
+                req.typeAcquisition,
                 req.unresolvedImports);
 
             if (this.log.isEnabled()) {
@@ -178,7 +177,7 @@ namespace ts.server.typingsInstaller {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Processing cache location '${cacheLocation}'`);
             }
-            if (this.knownCachesSet[cacheLocation]) {
+            if (this.knownCachesSet.get(cacheLocation)) {
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`Cache location was already processed...`);
                 }
@@ -202,10 +201,10 @@ namespace ts.server.typingsInstaller {
                         }
                         const typingFile = typingToFileName(cacheLocation, packageName, this.installTypingHost, this.log);
                         if (!typingFile) {
-                            this.missingTypingsSet[packageName] = true;
+                            this.missingTypingsSet.set(packageName, true);
                             continue;
                         }
-                        const existingTypingFile = this.packageNameToTypingLocation[packageName];
+                        const existingTypingFile = this.packageNameToTypingLocation.get(packageName);
                         if (existingTypingFile === typingFile) {
                             continue;
                         }
@@ -217,14 +216,14 @@ namespace ts.server.typingsInstaller {
                         if (this.log.isEnabled()) {
                             this.log.writeLine(`Adding entry into typings cache: '${packageName}' => '${typingFile}'`);
                         }
-                        this.packageNameToTypingLocation[packageName] = typingFile;
+                        this.packageNameToTypingLocation.set(packageName, typingFile);
                     }
                 }
             }
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Finished processing cache location '${cacheLocation}'`);
             }
-            this.knownCachesSet[cacheLocation] = true;
+            this.knownCachesSet.set(cacheLocation, true);
         }
 
         private filterTypings(typingsToInstall: string[]) {
@@ -233,12 +232,12 @@ namespace ts.server.typingsInstaller {
             }
             const result: string[] = [];
             for (const typing of typingsToInstall) {
-                if (this.missingTypingsSet[typing] || this.packageNameToTypingLocation[typing]) {
+                if (this.missingTypingsSet.get(typing) || this.packageNameToTypingLocation.get(typing)) {
                     continue;
                 }
                 const validationResult = validatePackageName(typing);
                 if (validationResult === PackageNameValidationResult.Ok) {
-                    if (typing in this.typesRegistry) {
+                    if (this.typesRegistry.has(typing)) {
                         result.push(typing);
                     }
                     else {
@@ -249,7 +248,7 @@ namespace ts.server.typingsInstaller {
                 }
                 else {
                     // add typing name to missing set so we won't process it again
-                    this.missingTypingsSet[typing] = true;
+                    this.missingTypingsSet.set(typing, true);
                     if (this.log.isEnabled()) {
                         switch (validationResult) {
                             case PackageNameValidationResult.EmptyName:
@@ -309,47 +308,58 @@ namespace ts.server.typingsInstaller {
             const requestId = this.installRunCount;
             this.installRunCount++;
 
+            // send progress event
+            this.sendResponse(<BeginInstallTypes>{
+                kind: EventBeginInstallTypes,
+                eventId: requestId,
+                typingsInstallerVersion: ts.version, // qualified explicitly to prevent occasional shadowing
+                projectName: req.projectName
+            });
+
             this.installTypingsAsync(requestId, scopedTypings, cachePath, ok => {
-                if (this.telemetryEnabled) {
-                    this.sendResponse(<TypingsInstallEvent>{
-                        kind: EventInstall,
+                try {
+                    if (!ok) {
+                        if (this.log.isEnabled()) {
+                            this.log.writeLine(`install request failed, marking packages as missing to prevent repeated requests: ${JSON.stringify(filteredTypings)}`);
+                        }
+                        for (const typing of filteredTypings) {
+                            this.missingTypingsSet.set(typing, true);
+                        }
+                        return;
+                    }
+
+                    // TODO: watch project directory
+                    if (this.log.isEnabled()) {
+                        this.log.writeLine(`Installed typings ${JSON.stringify(scopedTypings)}`);
+                    }
+                    const installedTypingFiles: string[] = [];
+                    for (const packageName of filteredTypings) {
+                        const typingFile = typingToFileName(cachePath, packageName, this.installTypingHost, this.log);
+                        if (!typingFile) {
+                            this.missingTypingsSet.set(packageName, true);
+                            continue;
+                        }
+                        if (!this.packageNameToTypingLocation.has(packageName)) {
+                            this.packageNameToTypingLocation.set(packageName, typingFile);
+                        }
+                        installedTypingFiles.push(typingFile);
+                    }
+                    if (this.log.isEnabled()) {
+                        this.log.writeLine(`Installed typing files ${JSON.stringify(installedTypingFiles)}`);
+                    }
+
+                    this.sendResponse(this.createSetTypings(req, currentlyCachedTypings.concat(installedTypingFiles)));
+                }
+                finally {
+                    this.sendResponse(<EndInstallTypes>{
+                        kind: EventEndInstallTypes,
+                        eventId: requestId,
+                        projectName: req.projectName,
                         packagesToInstall: scopedTypings,
                         installSuccess: ok,
                         typingsInstallerVersion: ts.version // qualified explicitly to prevent occasional shadowing
                     });
                 }
-
-                if (!ok) {
-                    if (this.log.isEnabled()) {
-                        this.log.writeLine(`install request failed, marking packages as missing to prevent repeated requests: ${JSON.stringify(filteredTypings)}`);
-                    }
-                    for (const typing of filteredTypings) {
-                        this.missingTypingsSet[typing] = true;
-                    }
-                    return;
-                }
-
-                // TODO: watch project directory
-                if (this.log.isEnabled()) {
-                    this.log.writeLine(`Installed typings ${JSON.stringify(scopedTypings)}`);
-                }
-                const installedTypingFiles: string[] = [];
-                for (const packageName of filteredTypings) {
-                    const typingFile = typingToFileName(cachePath, packageName, this.installTypingHost, this.log);
-                    if (!typingFile) {
-                        this.missingTypingsSet[packageName] = true;
-                        continue;
-                    }
-                    if (!this.packageNameToTypingLocation[packageName]) {
-                        this.packageNameToTypingLocation[packageName] = typingFile;
-                    }
-                    installedTypingFiles.push(typingFile);
-                }
-                if (this.log.isEnabled()) {
-                    this.log.writeLine(`Installed typing files ${JSON.stringify(installedTypingFiles)}`);
-                }
-
-                this.sendResponse(this.createSetTypings(req, currentlyCachedTypings.concat(installedTypingFiles)));
             });
         }
 
@@ -385,13 +395,13 @@ namespace ts.server.typingsInstaller {
                 }, /*pollingInterval*/ 2000);
                 watchers.push(w);
             }
-            this.projectWatchers[projectName] = watchers;
+            this.projectWatchers.set(projectName, watchers);
         }
 
         private createSetTypings(request: DiscoverTypings, typings: string[]): SetTypings {
             return {
                 projectName: request.projectName,
-                typingOptions: request.typingOptions,
+                typeAcquisition: request.typeAcquisition,
                 compilerOptions: request.compilerOptions,
                 typings,
                 unresolvedImports: request.unresolvedImports,
@@ -417,6 +427,6 @@ namespace ts.server.typingsInstaller {
         }
 
         protected abstract installWorker(requestId: number, args: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void;
-        protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | TypingsInstallEvent): void;
+        protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes): void;
     }
 }

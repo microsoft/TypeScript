@@ -26,26 +26,25 @@ type T37 = { [P in keyof symbol]: void };
 type T38 = { [P in keyof never]: void };
 
 type T40 = { [P in string]: void };
-type T41 = { [P in number]: void };
-type T42 = { [P in string | number]: void };
-type T43 = { [P in "a" | "b" | 0 | 1]: void };
+type T43 = { [P in "a" | "b"]: void };
 type T44 = { [P in "a" | "b" | "0" | "1"]: void };
-type T45 = { [P in "a" | "b" | "0" | "1" | 0 | 1]: void };
-type T46 = { [P in number | "a" | "b" | 0 | 1]: void };
-type T47 = { [P in string | number | "a" | "b" | 0 | 1]: void };
+type T47 = { [P in string | "a" | "b" | "0" | "1"]: void };
 
 declare function f1<T1>(): { [P in keyof T1]: void };
 declare function f2<T1 extends string>(): { [P in keyof T1]: void };
 declare function f3<T1 extends number>(): { [P in keyof T1]: void };
+declare function f4<T1 extends Number>(): { [P in keyof T1]: void };
 
 let x1 = f1();
 let x2 = f2();
 let x3 = f3();
+let x4 = f4();
 
 //// [mappedTypes1.js]
 var x1 = f1();
 var x2 = f2();
 var x3 = f3();
+var x4 = f4();
 
 
 //// [mappedTypes1.d.ts]
@@ -114,26 +113,14 @@ declare type T38 = {
 declare type T40 = {
     [P in string]: void;
 };
-declare type T41 = {
-    [P in number]: void;
-};
-declare type T42 = {
-    [P in string | number]: void;
-};
 declare type T43 = {
-    [P in "a" | "b" | 0 | 1]: void;
+    [P in "a" | "b"]: void;
 };
 declare type T44 = {
     [P in "a" | "b" | "0" | "1"]: void;
 };
-declare type T45 = {
-    [P in "a" | "b" | "0" | "1" | 0 | 1]: void;
-};
-declare type T46 = {
-    [P in number | "a" | "b" | 0 | 1]: void;
-};
 declare type T47 = {
-    [P in string | number | "a" | "b" | 0 | 1]: void;
+    [P in string | "a" | "b" | "0" | "1"]: void;
 };
 declare function f1<T1>(): {
     [P in keyof T1]: void;
@@ -144,36 +131,17 @@ declare function f2<T1 extends string>(): {
 declare function f3<T1 extends number>(): {
     [P in keyof T1]: void;
 };
-declare let x1: {};
-declare let x2: {
-    [x: number]: void;
-    toString: void;
-    charAt: void;
-    charCodeAt: void;
-    concat: void;
-    indexOf: void;
-    lastIndexOf: void;
-    localeCompare: void;
-    match: void;
-    replace: void;
-    search: void;
-    slice: void;
-    split: void;
-    substring: void;
-    toLowerCase: void;
-    toLocaleLowerCase: void;
-    toUpperCase: void;
-    toLocaleUpperCase: void;
-    trim: void;
-    length: void;
-    substr: void;
-    valueOf: void;
+declare function f4<T1 extends Number>(): {
+    [P in keyof T1]: void;
 };
-declare let x3: {
+declare let x1: {};
+declare let x2: string;
+declare let x3: number;
+declare let x4: {
     toString: void;
-    valueOf: void;
     toFixed: void;
     toExponential: void;
     toPrecision: void;
+    valueOf: void;
     toLocaleString: void;
 };

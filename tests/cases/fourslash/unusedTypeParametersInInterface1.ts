@@ -4,4 +4,4 @@
 // @noUnusedParameters: true
 //// [|interface I<T> {}|]
 
-verify.codeFixAtPosition("interface I {}");
+verify.rangeAfterCodeFix("interface I {}");

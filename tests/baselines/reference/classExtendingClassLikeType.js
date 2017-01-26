@@ -59,16 +59,21 @@ class D5 extends getBadBase() {
 
 
 //// [classExtendingClassLikeType.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 // Error, no Base constructor function
 var D0 = (function (_super) {
     __extends(D0, _super);
     function D0() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return D0;
 }(Base));
@@ -107,7 +112,7 @@ var D3 = (function (_super) {
 var D4 = (function (_super) {
     __extends(D4, _super);
     function D4() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return D4;
 }(getBase()));
@@ -115,7 +120,7 @@ var D4 = (function (_super) {
 var D5 = (function (_super) {
     __extends(D5, _super);
     function D5() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return D5;
 }(getBadBase()));

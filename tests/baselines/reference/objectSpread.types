@@ -407,4 +407,10 @@ let shortCutted: { a: number, b: string } = { ...o, a }
 >o : { a: number; b: string; }
 >a : number
 
+// non primitive
+let spreadNonPrimitive = { ...<object>{}};
+>spreadNonPrimitive : {}
+>{ ...<object>{}} : {}
+><object>{} : object
+>{} : {}
 

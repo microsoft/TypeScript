@@ -7,10 +7,10 @@
     "project": "maxDepthExceeded",
     "resolvedInputFiles": [
         "lib.d.ts",
-        "maxDepthExceeded/node_modules/m2/entry.js",
         "maxDepthExceeded/node_modules/m1/relative.js",
         "maxDepthExceeded/node_modules/m1/index.js",
-        "maxDepthExceeded/root.ts"
+        "maxDepthExceeded/root.ts",
+        "maxDepthExceeded/node_modules/m2/entry.js"
     ],
     "emittedFiles": [
         "maxDepthExceeded/built/node_modules/m1/relative.js",

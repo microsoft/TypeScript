@@ -41,11 +41,16 @@ var d5 = new D(); // error
 var d6 = new D(1); // ok
 
 //// [classWithBaseClassButNoConstructor.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var Base = (function () {
     function Base(x) {
     }
@@ -54,7 +59,7 @@ var Base = (function () {
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
 }(Base));
@@ -69,7 +74,7 @@ var Base2 = (function () {
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return D;
 }(Base2));
@@ -80,7 +85,7 @@ var d2 = new D(1); // ok
 var D2 = (function (_super) {
     __extends(D2, _super);
     function D2() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return D2;
 }(Base2));
@@ -90,7 +95,7 @@ var d4 = new D(1); // ok
 var D3 = (function (_super) {
     __extends(D3, _super);
     function D3() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return D3;
 }(Base2));

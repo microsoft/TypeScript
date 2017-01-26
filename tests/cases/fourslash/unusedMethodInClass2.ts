@@ -8,7 +8,7 @@
 ////    }
 ////} |]
 
-verify.codeFixAtPosition(`
+verify.rangeAfterCodeFix(`
 class greeter {
     public function2() {
     }

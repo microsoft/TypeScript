@@ -6,4 +6,4 @@
 ////    public b: Z;
 ////}
 
-verify.codeFixAtPosition("class greeter<X, Z>");
+verify.rangeAfterCodeFix("class greeter<X, Z>");

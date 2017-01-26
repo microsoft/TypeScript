@@ -9,10 +9,10 @@
 
 goTo.marker("1");
 
-verify.memberListContains("I");
-verify.memberListContains("TString");
-verify.memberListContains("TNumber");
+verify.completionListContains("I");
+verify.completionListContains("TString");
+verify.completionListContains("TNumber");
 
 // Ideally the following shouldn't show up since they're not types.
-verify.memberListContains("foo");
-verify.memberListContains("obj");
+verify.completionListContains("foo");
+verify.completionListContains("obj");

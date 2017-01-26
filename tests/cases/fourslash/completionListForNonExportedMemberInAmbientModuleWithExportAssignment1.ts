@@ -10,4 +10,4 @@
 //// test./**/
 
 goTo.marker();
-verify.not.memberListContains("x");
+verify.not.completionListContains("x");

@@ -14,17 +14,17 @@
 
 goTo.marker("c1");
 edit.insert(".");
-verify.memberListContains("x");
-verify.memberListContains("prototype");
-verify.memberListContains("staticMethod");
+verify.completionListContains("x");
+verify.completionListContains("prototype");
+verify.completionListContains("staticMethod");
 
 goTo.marker("c2");
 edit.insert(".");
-verify.memberListContains("x");
-verify.memberListContains("staticMethod");
-verify.memberListContains("prototype");
+verify.completionListContains("x");
+verify.completionListContains("staticMethod");
+verify.completionListContains("prototype");
 
 goTo.marker("c3");
 edit.insert(".");
-verify.memberListContains("doStuff");
-verify.memberListCount(1);
+verify.completionListContains("doStuff");
+verify.completionListCount(1);

@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: Definition.ts
-//// /*2*/class c { }
+////class /*2*/c { }
 
 // @Filename: Consumption.ts
 //// var n = new /*1*/c();

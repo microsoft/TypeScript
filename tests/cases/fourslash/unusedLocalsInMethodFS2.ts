@@ -9,4 +9,4 @@
 ////    }
 ////}
 
-verify.codeFixAtPosition("var  y;");
+verify.rangeAfterCodeFix("var  y;");

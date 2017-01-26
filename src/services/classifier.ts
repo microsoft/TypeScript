@@ -71,7 +71,7 @@ namespace ts {
             const dense = classifications.spans;
             let lastEnd = 0;
 
-            for (let i = 0, n = dense.length; i < n; i += 3) {
+            for (let i = 0; i < dense.length; i += 3) {
                 const start = dense[i];
                 const length = dense[i + 1];
                 const type = <ClassificationType>dense[i + 2];
@@ -557,7 +557,7 @@ namespace ts {
                     // Only bother calling into the typechecker if this is an identifier that
                     // could possibly resolve to a type name.  This makes classification run
                     // in a third of the time it would normally take.
-                    if (classifiableNames[identifier.text]) {
+                    if (classifiableNames.get(identifier.text)) {
                         const symbol = typeChecker.getSymbolAtLocation(node);
                         if (symbol) {
                             const type = classifySymbol(symbol, getMeaningFromLocation(node));
@@ -605,7 +605,7 @@ namespace ts {
         Debug.assert(classifications.spans.length % 3 === 0);
         const dense = classifications.spans;
         const result: ClassifiedSpan[] = [];
-        for (let i = 0, n = dense.length; i < n; i += 3) {
+        for (let i = 0; i < dense.length; i += 3) {
             result.push({
                 textSpan: createTextSpan(dense[i], dense[i + 1]),
                 classificationType: getClassificationTypeName(dense[i + 2])
@@ -972,9 +972,7 @@ namespace ts {
             if (decodedTextSpanIntersectsWith(spanStart, spanLength, element.pos, element.getFullWidth())) {
                 checkForClassificationCancellation(cancellationToken, element.kind);
 
-                const children = element.getChildren(sourceFile);
-                for (let i = 0, n = children.length; i < n; i++) {
-                    const child = children[i];
+                for (const child of element.getChildren(sourceFile)) {
                     if (!tryClassifyNode(child)) {
                         // Recurse into our child nodes.
                         processElement(child);
