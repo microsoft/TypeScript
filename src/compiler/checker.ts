@@ -5145,6 +5145,12 @@ namespace ts {
                 Debug.assert(parameterIndex >= 0);
                 return parameterIndex >= signature.minArgumentCount;
             }
+            const iife = getImmediatelyInvokedFunctionExpression(node.parent);
+            if (iife) {
+                return !node.type &&
+                    !node.dotDotDotToken &&
+                    indexOf((node.parent as SignatureDeclaration).parameters, node) >= iife.arguments.length;
+            }
 
             return false;
         }
