@@ -44,6 +44,7 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
     boolean: ["debug", "light", "colors", "lint", "soft"],
     string: ["browser", "tests", "host", "reporter", "stackTraceLimit"],
     alias: {
+        b: "browser",
         d: "debug",
         t: "tests",
         test: "tests",

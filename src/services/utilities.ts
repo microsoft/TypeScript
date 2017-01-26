@@ -1304,21 +1304,14 @@ namespace ts {
     export function getDeclaredName(typeChecker: TypeChecker, symbol: Symbol, location: Node): string {
         // If this is an export or import specifier it could have been renamed using the 'as' syntax.
         // If so we want to search for whatever is under the cursor.
-        if (isImportOrExportSpecifierName(location)) {
-            return location.getText();
-        }
-        else if (isStringOrNumericLiteral(location) &&
-            location.parent.kind === SyntaxKind.ComputedPropertyName) {
-            return (<LiteralExpression>location).text;
+        if (isImportOrExportSpecifierName(location) || isStringOrNumericLiteral(location) && location.parent.kind === SyntaxKind.ComputedPropertyName) {
+            return location.text;
         }
 
         // Try to get the local symbol if we're dealing with an 'export default'
         // since that symbol has the "true" name.
         const localExportDefaultSymbol = getLocalSymbolForExportDefault(symbol);
-
-        const name = typeChecker.symbolToString(localExportDefaultSymbol || symbol);
-
-        return name;
+        return typeChecker.symbolToString(localExportDefaultSymbol || symbol);
     }
 
     export function isImportOrExportSpecifierName(location: Node): location is Identifier {

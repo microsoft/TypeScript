@@ -35,4 +35,4 @@ verify.not.completionListContains('bar');
 verify.not.completionListContains('baz');
 edit.insert('foo;');
 
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();

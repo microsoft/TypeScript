@@ -17,4 +17,4 @@ edit.insert("interface Array<T> { pop(def: T): T; }");
 
 verify.not.errorExistsBetweenMarkers("1", "2");
 verify.quickInfoAt("y", "var y: number");
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();

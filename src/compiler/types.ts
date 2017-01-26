@@ -1818,6 +1818,7 @@
     }
 
     export interface ExternalModuleReference extends Node {
+        parent: ImportEqualsDeclaration;
         kind: SyntaxKind.ExternalModuleReference;
         expression?: Expression;
     }
@@ -1829,6 +1830,7 @@
     export interface ImportDeclaration extends Statement {
         kind: SyntaxKind.ImportDeclaration;
         importClause?: ImportClause;
+        /** If this is not a StringLiteral it will be a grammar error. */
         moduleSpecifier: Expression;
     }
 
@@ -1860,6 +1862,7 @@
     export interface ExportDeclaration extends DeclarationStatement {
         kind: SyntaxKind.ExportDeclaration;
         exportClause?: NamedExports;
+        /** If this is not a StringLiteral it will be a grammar error. */
         moduleSpecifier?: Expression;
     }
 
@@ -1869,6 +1872,7 @@
     }
 
     export interface NamedExports extends Node {
+        parent: ExportDeclaration;
         kind: SyntaxKind.NamedExports;
         elements: NodeArray<ExportSpecifier>;
     }
@@ -1882,6 +1886,7 @@
     }
 
     export interface ExportSpecifier extends Declaration {
+        parent: NamedExports;
         kind: SyntaxKind.ExportSpecifier;
         propertyName?: Identifier;  // Name preceding "as" keyword (or undefined when "as" is absent)
         name: Identifier;           // Declared name
@@ -2219,8 +2224,8 @@
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
         /* @internal */ resolvedModules: Map<ResolvedModuleFull>;
         /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
-        /* @internal */ imports: LiteralExpression[];
-        /* @internal */ moduleAugmentations: LiteralExpression[];
+        /* @internal */ imports: StringLiteral[];
+        /* @internal */ moduleAugmentations: StringLiteral[];
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
         /* @internal */ ambientModuleNames: string[];
     }
@@ -2418,10 +2423,14 @@
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
         isUnknownSymbol(symbol: Symbol): boolean;
+        /* @internal */ getMergedSymbol(symbol: Symbol): Symbol;
 
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
+        /** Follow all aliases to get the original symbol. */
         getAliasedSymbol(symbol: Symbol): Symbol;
+        /** Follow a *single* alias to get the immediately aliased symbol. */
+        /* @internal */ getImmediateAliasedSymbol(symbol: Symbol): Symbol;
         getExportsOfModule(moduleSymbol: Symbol): Symbol[];
         /** Unlike `getExportsOfModule`, this includes properties of an `export =` value. */
         /* @internal */ getExportsAndPropertiesOfModule(moduleSymbol: Symbol): Symbol[];
@@ -2728,6 +2737,7 @@
 
     /* @internal */
     export interface SymbolLinks {
+        immediateTarget?: Symbol;           // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
         target?: Symbol;                    // Resolved (non-alias) target of an alias
         type?: Type;                        // Type of value symbol
         declaredType?: Type;                // Type of class, interface, enum, type alias, or type parameter

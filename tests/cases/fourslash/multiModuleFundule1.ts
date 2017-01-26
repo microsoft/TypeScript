@@ -30,4 +30,4 @@ verify.completionListContains('x');
 verify.completionListContains('foo');
 edit.insert('x;');
 
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();

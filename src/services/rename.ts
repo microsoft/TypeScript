@@ -84,8 +84,12 @@ namespace ts.Rename {
         return createTextSpan(start, width);
     }
 
-    function nodeIsEligibleForRename(node: Node) {
-        return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.StringLiteral ||
+    function nodeIsEligibleForRename(node: Node): boolean {
+        if (node.kind === SyntaxKind.Identifier) {
+            // Cannot rename `default` as in `import { default as foo } from "./someModule";
+            return (node as Identifier).originalKeywordKind !== SyntaxKind.DefaultKeyword;
+        }
+        return node.kind === SyntaxKind.StringLiteral ||
             isLiteralNameOfPropertyDeclarationOrIndexAccess(node) ||
             isThis(node);
     }

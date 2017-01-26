@@ -72,6 +72,7 @@ namespace ts {
             isUndefinedSymbol: symbol => symbol === undefinedSymbol,
             isArgumentsSymbol: symbol => symbol === argumentsSymbol,
             isUnknownSymbol: symbol => symbol === unknownSymbol,
+            getMergedSymbol,
             getDiagnostics,
             getGlobalDiagnostics,
             getTypeOfSymbolAtLocation,
@@ -106,6 +107,7 @@ namespace ts {
             isValidPropertyAccess,
             getSignatureFromDeclaration,
             isImplementationOfOverload,
+            getImmediateAliasedSymbol,
             getAliasedSymbol: resolveAlias,
             getEmitResolver,
             getExportsOfModule: getExportsOfModuleAsArray,
@@ -1161,14 +1163,14 @@ namespace ts {
             return find<Declaration>(symbol.declarations, isAliasSymbolDeclaration);
         }
 
-        function getTargetOfImportEqualsDeclaration(node: ImportEqualsDeclaration): Symbol {
+        function getTargetOfImportEqualsDeclaration(node: ImportEqualsDeclaration, dontResolveAlias: boolean): Symbol {
             if (node.moduleReference.kind === SyntaxKind.ExternalModuleReference) {
                 return resolveExternalModuleSymbol(resolveExternalModuleName(node, getExternalModuleImportEqualsDeclarationExpression(node)));
             }
-            return getSymbolOfPartOfRightHandSideOfImportEquals(<EntityName>node.moduleReference);
+            return getSymbolOfPartOfRightHandSideOfImportEquals(<EntityName>node.moduleReference, dontResolveAlias);
         }
 
-        function getTargetOfImportClause(node: ImportClause): Symbol {
+        function getTargetOfImportClause(node: ImportClause, dontResolveAlias: boolean): Symbol {
             const moduleSymbol = resolveExternalModuleName(node, (<ImportDeclaration>node.parent).moduleSpecifier);
 
             if (moduleSymbol) {
@@ -1180,22 +1182,22 @@ namespace ts {
                     const exportValue = moduleSymbol.exports.get("export=");
                     exportDefaultSymbol = exportValue
                         ? getPropertyOfType(getTypeOfSymbol(exportValue), "default")
-                        : resolveSymbol(moduleSymbol.exports.get("default"));
+                        : resolveSymbol(moduleSymbol.exports.get("default"), dontResolveAlias);
                 }
 
                 if (!exportDefaultSymbol && !allowSyntheticDefaultImports) {
                     error(node.name, Diagnostics.Module_0_has_no_default_export, symbolToString(moduleSymbol));
                 }
                 else if (!exportDefaultSymbol && allowSyntheticDefaultImports) {
-                    return resolveExternalModuleSymbol(moduleSymbol) || resolveSymbol(moduleSymbol);
+                    return resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias) || resolveSymbol(moduleSymbol, dontResolveAlias);
                 }
                 return exportDefaultSymbol;
             }
         }
 
-        function getTargetOfNamespaceImport(node: NamespaceImport): Symbol {
+        function getTargetOfNamespaceImport(node: NamespaceImport, dontResolveAlias: boolean): Symbol {
             const moduleSpecifier = (<ImportDeclaration>node.parent.parent).moduleSpecifier;
-            return resolveESModuleSymbol(resolveExternalModuleName(node, moduleSpecifier), moduleSpecifier);
+            return resolveESModuleSymbol(resolveExternalModuleName(node, moduleSpecifier), moduleSpecifier, dontResolveAlias);
         }
 
         // This function creates a synthetic symbol that combines the value side of one symbol with the
@@ -1229,12 +1231,9 @@ namespace ts {
             return result;
         }
 
-        function getExportOfModule(symbol: Symbol, name: string): Symbol {
+        function getExportOfModule(symbol: Symbol, name: string, dontResolveAlias: boolean): Symbol {
             if (symbol.flags & SymbolFlags.Module) {
-                const exportedSymbol = getExportsOfSymbol(symbol).get(name);
-                if (exportedSymbol) {
-                    return resolveSymbol(exportedSymbol);
-                }
+                return resolveSymbol(getExportsOfSymbol(symbol).get(name), dontResolveAlias);
             }
         }
 
@@ -1247,9 +1246,9 @@ namespace ts {
             }
         }
 
-        function getExternalModuleMember(node: ImportDeclaration | ExportDeclaration, specifier: ImportOrExportSpecifier): Symbol {
+        function getExternalModuleMember(node: ImportDeclaration | ExportDeclaration, specifier: ImportOrExportSpecifier, dontResolveAlias?: boolean): Symbol {
             const moduleSymbol = resolveExternalModuleName(node, node.moduleSpecifier);
-            const targetSymbol = resolveESModuleSymbol(moduleSymbol, node.moduleSpecifier);
+            const targetSymbol = resolveESModuleSymbol(moduleSymbol, node.moduleSpecifier, dontResolveAlias);
             if (targetSymbol) {
                 const name = specifier.propertyName || specifier.name;
                 if (name.text) {
@@ -1266,11 +1265,11 @@ namespace ts {
                         symbolFromVariable = getPropertyOfVariable(targetSymbol, name.text);
                     }
                     // if symbolFromVariable is export - get its final target
-                    symbolFromVariable = resolveSymbol(symbolFromVariable);
-                    let symbolFromModule = getExportOfModule(targetSymbol, name.text);
+                    symbolFromVariable = resolveSymbol(symbolFromVariable, dontResolveAlias);
+                    let symbolFromModule = getExportOfModule(targetSymbol, name.text, dontResolveAlias);
                     // If the export member we're looking for is default, and there is no real default but allowSyntheticDefaultImports is on, return the entire module as the default
                     if (!symbolFromModule && allowSyntheticDefaultImports && name.text === "default") {
-                        symbolFromModule = resolveExternalModuleSymbol(moduleSymbol) || resolveSymbol(moduleSymbol);
+                        symbolFromModule = resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias) || resolveSymbol(moduleSymbol, dontResolveAlias);
                     }
                     const symbol = symbolFromModule && symbolFromVariable ?
                         combineValueAndTypeSymbols(symbolFromVariable, symbolFromModule) :
@@ -1283,45 +1282,58 @@ namespace ts {
             }
         }
 
-        function getTargetOfImportSpecifier(node: ImportSpecifier): Symbol {
-            return getExternalModuleMember(<ImportDeclaration>node.parent.parent.parent, node);
+        function getTargetOfImportSpecifier(node: ImportSpecifier, dontResolveAlias: boolean): Symbol {
+            return getExternalModuleMember(<ImportDeclaration>node.parent.parent.parent, node, dontResolveAlias);
         }
 
-        function getTargetOfNamespaceExportDeclaration(node: NamespaceExportDeclaration): Symbol {
-            return resolveExternalModuleSymbol(node.parent.symbol);
+        function getTargetOfNamespaceExportDeclaration(node: NamespaceExportDeclaration, dontResolveAlias: boolean): Symbol {
+            return resolveExternalModuleSymbol(node.parent.symbol, dontResolveAlias);
         }
 
-        function getTargetOfExportSpecifier(node: ExportSpecifier): Symbol {
+        function getTargetOfExportSpecifier(node: ExportSpecifier, dontResolveAlias?: boolean): Symbol {
             return (<ExportDeclaration>node.parent.parent).moduleSpecifier ?
-                getExternalModuleMember(<ExportDeclaration>node.parent.parent, node) :
-                resolveEntityName(node.propertyName || node.name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace);
+                getExternalModuleMember(<ExportDeclaration>node.parent.parent, node, dontResolveAlias) :
+                resolveEntityName(node.propertyName || node.name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, /*ignoreErrors*/false, dontResolveAlias);
         }
 
-        function getTargetOfExportAssignment(node: ExportAssignment): Symbol {
-            return resolveEntityName(<EntityNameExpression>node.expression, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace);
+        function getTargetOfExportAssignment(node: ExportAssignment, dontResolveAlias: boolean): Symbol {
+            return resolveEntityName(<EntityNameExpression>node.expression, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, /*ignoreErrors*/false, dontResolveAlias);
         }
 
-        function getTargetOfAliasDeclaration(node: Declaration): Symbol {
+        function getTargetOfAliasDeclaration(node: Declaration, dontRecursivelyResolve?: boolean): Symbol {
             switch (node.kind) {
                 case SyntaxKind.ImportEqualsDeclaration:
-                    return getTargetOfImportEqualsDeclaration(<ImportEqualsDeclaration>node);
+                    return getTargetOfImportEqualsDeclaration(<ImportEqualsDeclaration>node, dontRecursivelyResolve);
                 case SyntaxKind.ImportClause:
-                    return getTargetOfImportClause(<ImportClause>node);
+                    return getTargetOfImportClause(<ImportClause>node, dontRecursivelyResolve);
                 case SyntaxKind.NamespaceImport:
-                    return getTargetOfNamespaceImport(<NamespaceImport>node);
+                    return getTargetOfNamespaceImport(<NamespaceImport>node, dontRecursivelyResolve);
                 case SyntaxKind.ImportSpecifier:
-                    return getTargetOfImportSpecifier(<ImportSpecifier>node);
+                    return getTargetOfImportSpecifier(<ImportSpecifier>node, dontRecursivelyResolve);
                 case SyntaxKind.ExportSpecifier:
-                    return getTargetOfExportSpecifier(<ExportSpecifier>node);
+                    return getTargetOfExportSpecifier(<ExportSpecifier>node, dontRecursivelyResolve);
                 case SyntaxKind.ExportAssignment:
-                    return getTargetOfExportAssignment(<ExportAssignment>node);
+                    return getTargetOfExportAssignment(<ExportAssignment>node, dontRecursivelyResolve);
                 case SyntaxKind.NamespaceExportDeclaration:
-                    return getTargetOfNamespaceExportDeclaration(<NamespaceExportDeclaration>node);
+                    return getTargetOfNamespaceExportDeclaration(<NamespaceExportDeclaration>node, dontRecursivelyResolve);
             }
         }
 
-        function resolveSymbol(symbol: Symbol): Symbol {
-            return symbol && symbol.flags & SymbolFlags.Alias && !(symbol.flags & (SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace)) ? resolveAlias(symbol) : symbol;
+        function resolveSymbol(symbol: Symbol, dontResolveAlias?: boolean): Symbol {
+            const shouldResolve = !dontResolveAlias && symbol && symbol.flags & SymbolFlags.Alias && !(symbol.flags & (SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace));
+            return shouldResolve ? resolveAlias(symbol) : symbol;
+        }
+
+        function getImmediateAliasedSymbol(symbol: Symbol): Symbol {
+            Debug.assert((symbol.flags & SymbolFlags.Alias) !== 0, "Should only get Alias here.");
+            const links = getSymbolLinks(symbol);
+            if (!links.immediateTarget) {
+                const node = getDeclarationOfAliasSymbol(symbol);
+                Debug.assert(!!node);
+                links.immediateTarget = getTargetOfAliasDeclaration(node, /*dontRecursivelyResolve*/true);
+            }
+
+            return links.immediateTarget;
         }
 
         function resolveAlias(symbol: Symbol): Symbol {
@@ -1538,16 +1550,16 @@ namespace ts {
 
         // An external module with an 'export =' declaration resolves to the target of the 'export =' declaration,
         // and an external module with no 'export =' declaration resolves to the module itself.
-        function resolveExternalModuleSymbol(moduleSymbol: Symbol): Symbol {
-            return moduleSymbol && getMergedSymbol(resolveSymbol(moduleSymbol.exports.get("export="))) || moduleSymbol;
+        function resolveExternalModuleSymbol(moduleSymbol: Symbol, dontResolveAlias?: boolean): Symbol {
+            return moduleSymbol && getMergedSymbol(resolveSymbol(moduleSymbol.exports.get("export="), dontResolveAlias)) || moduleSymbol;
         }
 
         // An external module with an 'export =' declaration may be referenced as an ES6 module provided the 'export ='
         // references a symbol that is at least declared as a module or a variable. The target of the 'export =' may
         // combine other declarations with the module or variable (e.g. a class/module, function/module, interface/variable).
-        function resolveESModuleSymbol(moduleSymbol: Symbol, moduleReferenceExpression: Expression): Symbol {
-            let symbol = resolveExternalModuleSymbol(moduleSymbol);
-            if (symbol && !(symbol.flags & (SymbolFlags.Module | SymbolFlags.Variable))) {
+        function resolveESModuleSymbol(moduleSymbol: Symbol, moduleReferenceExpression: Expression, dontResolveAlias: boolean): Symbol {
+            let symbol = resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias);
+            if (!dontResolveAlias && symbol && !(symbol.flags & (SymbolFlags.Module | SymbolFlags.Variable))) {
                 error(moduleReferenceExpression, Diagnostics.Module_0_resolves_to_a_non_module_entity_and_cannot_be_imported_using_this_construct, symbolToString(moduleSymbol));
                 symbol = undefined;
             }
