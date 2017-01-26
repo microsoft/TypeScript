@@ -3154,11 +3154,11 @@ namespace ts {
         /**
          * Hook for node emit.
          *
-         * @param emitContext A context hint for the emitter.
+         * @param hint A hint as to the intended usage of the node.
          * @param node The node to emit.
          * @param emit A callback used to emit the node in the printer.
          */
-        function onEmitNode(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void {
+        function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void {
             const savedApplicableSubstitutions = applicableSubstitutions;
 
             if (enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports && isTransformedModuleDeclaration(node)) {
@@ -3169,7 +3169,7 @@ namespace ts {
                 applicableSubstitutions |= TypeScriptSubstitutionFlags.NonQualifiedEnumMembers;
             }
 
-            previousOnEmitNode(emitContext, node, emitCallback);
+            previousOnEmitNode(hint, node, emitCallback);
 
             applicableSubstitutions = savedApplicableSubstitutions;
         }
@@ -3177,12 +3177,12 @@ namespace ts {
         /**
          * Hooks node substitutions.
          *
-         * @param emitContext A context hint for the emitter.
+         * @param hint A hint as to the intended usage of the node.
          * @param node The node to substitute.
          */
-        function onSubstituteNode(emitContext: EmitContext, node: Node) {
-            node = previousOnSubstituteNode(emitContext, node);
-            if (emitContext === EmitContext.Expression) {
+        function onSubstituteNode(hint: EmitHint, node: Node) {
+            node = previousOnSubstituteNode(hint, node);
+            if (hint === EmitHint.Expression) {
                 return substituteExpression(<Expression>node);
             }
             else if (isShorthandPropertyAssignment(node)) {

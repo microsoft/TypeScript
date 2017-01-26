@@ -1909,9 +1909,9 @@ namespace ts {
             return -1;
         }
 
-        function onSubstituteNode(emitContext: EmitContext, node: Node): Node {
-            node = previousOnSubstituteNode(emitContext, node);
-            if (emitContext === EmitContext.Expression) {
+        function onSubstituteNode(hint: EmitHint, node: Node): Node {
+            node = previousOnSubstituteNode(hint, node);
+            if (hint === EmitHint.Expression) {
                 return substituteExpression(<Expression>node);
             }
             return node;

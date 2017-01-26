@@ -3435,9 +3435,11 @@ namespace ts {
         /**
          * Called by the printer just before a node is printed.
          *
+         * @param hint A hint as to the intended usage of the node.
          * @param node The node to be printed.
+         * @param emitCallback The callback used to emit the node.
          */
-        function onEmitNode(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void) {
+        function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
             if (enabledSubstitutions & ES2015SubstitutionFlags.CapturedThis && isFunctionLike(node)) {
                 // If we are tracking a captured `this`, keep track of the enclosing function.
                 const ancestorFacts = enterSubtree(
@@ -3445,11 +3447,11 @@ namespace ts {
                     getEmitFlags(node) & EmitFlags.CapturesThis
                         ? HierarchyFacts.FunctionIncludes | HierarchyFacts.CapturesThis
                         : HierarchyFacts.FunctionIncludes);
-                previousOnEmitNode(emitContext, node, emitCallback);
+                previousOnEmitNode(hint, node, emitCallback);
                 exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
                 return;
             }
-            previousOnEmitNode(emitContext, node, emitCallback);
+            previousOnEmitNode(hint, node, emitCallback);
         }
 
         /**
@@ -3484,13 +3486,13 @@ namespace ts {
         /**
          * Hooks node substitutions.
          *
-         * @param emitContext The context for the emitter.
+         * @param hint The context for the emitter.
          * @param node The node to substitute.
          */
-        function onSubstituteNode(emitContext: EmitContext, node: Node) {
-            node = previousOnSubstituteNode(emitContext, node);
+        function onSubstituteNode(hint: EmitHint, node: Node) {
+            node = previousOnSubstituteNode(hint, node);
 
-            if (emitContext === EmitContext.Expression) {
+            if (hint === EmitHint.Expression) {
                 return substituteExpression(node);
             }
 

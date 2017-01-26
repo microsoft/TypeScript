@@ -1548,11 +1548,11 @@ namespace ts {
         /**
          * Hook for node emit notifications.
          *
-         * @param emitContext A context hint for the emitter.
+         * @param hint A hint as to the intended usage of the node.
          * @param node The node to emit.
-         * @param emit A callback used to emit the node in the printer.
+         * @param emitCallback A callback used to emit the node in the printer.
          */
-        function onEmitNode(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void {
+        function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void {
             if (node.kind === SyntaxKind.SourceFile) {
                 const id = getOriginalNodeId(node);
                 currentSourceFile = <SourceFile>node;
@@ -1564,7 +1564,7 @@ namespace ts {
                     delete noSubstitutionMap[id];
                 }
 
-                previousOnEmitNode(emitContext, node, emitCallback);
+                previousOnEmitNode(hint, node, emitCallback);
 
                 currentSourceFile = undefined;
                 moduleInfo = undefined;
@@ -1572,7 +1572,7 @@ namespace ts {
                 noSubstitution = undefined;
             }
             else {
-                previousOnEmitNode(emitContext, node, emitCallback);
+                previousOnEmitNode(hint, node, emitCallback);
             }
         }
 
@@ -1583,16 +1583,16 @@ namespace ts {
         /**
          * Hooks node substitutions.
          *
-         * @param emitContext A context hint for the emitter.
+         * @param hint A hint as to the intended usage of the node.
          * @param node The node to substitute.
          */
-        function onSubstituteNode(emitContext: EmitContext, node: Node) {
-            node = previousOnSubstituteNode(emitContext, node);
+        function onSubstituteNode(hint: EmitHint, node: Node) {
+            node = previousOnSubstituteNode(hint, node);
             if (isSubstitutionPrevented(node)) {
                 return node;
             }
 
-            if (emitContext === EmitContext.Expression) {
+            if (hint === EmitHint.Expression) {
                 return substituteExpression(<Expression>node);
             }
 
