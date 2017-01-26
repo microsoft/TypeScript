@@ -3151,7 +3151,7 @@ namespace ts {
                 return anyType;
             }
             const id = getTypeListId([source, remove]);
-            if (id in restTypes) {
+            if (restTypes.has(id)) {
                 return restTypes.get(id);
             }
 
