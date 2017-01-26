@@ -5,17 +5,13 @@ namespace ts {
     export interface CommentWriter {
         reset(): void;
         setSourceFile(sourceFile: SourceFile): void;
-        emitNodeWithComments(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void;
+        emitNodeWithComments(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
         emitBodyWithDetachedComments(node: Node, detachedRange: TextRange, emitCallback: (node: Node) => void): void;
         emitTrailingCommentsOfPosition(pos: number): void;
     }
 
-    export function createCommentWriter(host: EmitHost, writer: EmitTextWriter, sourceMap: SourceMapWriter): CommentWriter {
-        const compilerOptions = host.getCompilerOptions();
+    export function createCommentWriter(writer: EmitTextWriter, compilerOptions: CompilerOptions, newLine: string, emitPos: (pos: number) => void): CommentWriter {
         const extendedDiagnostics = compilerOptions.extendedDiagnostics;
-        const newLine = host.getNewLine();
-        const { emitPos } = sourceMap;
-
         let containerPos = -1;
         let containerEnd = -1;
         let declarationListContainerEnd = -1;
@@ -34,9 +30,9 @@ namespace ts {
             emitTrailingCommentsOfPosition,
         };
 
-        function emitNodeWithComments(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void) {
+        function emitNodeWithComments(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
             if (disabled) {
-                emitCallback(emitContext, node);
+                emitCallback(hint, node);
                 return;
             }
 
@@ -47,11 +43,11 @@ namespace ts {
                     // Both pos and end are synthesized, so just emit the node without comments.
                     if (emitFlags & EmitFlags.NoNestedComments) {
                         disabled = true;
-                        emitCallback(emitContext, node);
+                        emitCallback(hint, node);
                         disabled = false;
                     }
                     else {
-                        emitCallback(emitContext, node);
+                        emitCallback(hint, node);
                     }
                 }
                 else {
@@ -94,11 +90,11 @@ namespace ts {
 
                     if (emitFlags & EmitFlags.NoNestedComments) {
                         disabled = true;
-                        emitCallback(emitContext, node);
+                        emitCallback(hint, node);
                         disabled = false;
                     }
                     else {
-                        emitCallback(emitContext, node);
+                        emitCallback(hint, node);
                     }
 
                     if (extendedDiagnostics) {

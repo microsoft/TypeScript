@@ -348,6 +348,7 @@
         EnumMember,
         // Top-level nodes
         SourceFile,
+        Bundle,
 
         // JSDoc nodes
         JSDocTypeExpression,
@@ -557,15 +558,6 @@
 
     export type ModifiersArray = NodeArray<Modifier>;
 
-    /*@internal*/
-    export const enum GeneratedIdentifierKind {
-        None,   // Not automatically generated.
-        Auto,   // Automatically generated identifier.
-        Loop,   // Automatically generated identifier with a preference for '_i'.
-        Unique, // Unique name based on the 'text' property.
-        Node,   // Unique name based on the node in the 'original' property.
-    }
-
     export interface Identifier extends PrimaryExpression {
         kind: SyntaxKind.Identifier;
         text: string;                                  // Text of identifier (with escapes converted to characters)
@@ -580,7 +572,14 @@
         resolvedSymbol: Symbol;
     }
 
-    /*@internal*/
+    export const enum GeneratedIdentifierKind {
+        None,   // Not automatically generated.
+        Auto,   // Automatically generated identifier.
+        Loop,   // Automatically generated identifier with a preference for '_i'.
+        Unique, // Unique name based on the 'text' property.
+        Node,   // Unique name based on the node in the 'original' property.
+    }
+
     export interface GeneratedIdentifier extends Identifier {
         autoGenerateKind: GeneratedIdentifierKind.Auto
                         | GeneratedIdentifierKind.Loop
@@ -2201,6 +2200,11 @@
         /* @internal */ ambientModuleNames: string[];
     }
 
+    export interface Bundle extends Node {
+        kind: SyntaxKind.Bundle;
+        sourceFiles: SourceFile[];
+    }
+
     export interface ScriptReferenceHost {
         getCompilerOptions(): CompilerOptions;
         getSourceFile(fileName: string): SourceFile;
@@ -3780,8 +3784,7 @@
         LastEmitHelper = Generator
     }
 
-    /* @internal */
-    export const enum EmitContext {
+    export const enum EmitHint {
         SourceFile,         // Emitting a SourceFile
         Expression,         // Emitting an Expression
         IdentifierName,     // Emitting an IdentifierName
@@ -3856,7 +3859,7 @@
          * Hook used by transformers to substitute expressions just before they
          * are emitted by the pretty printer.
          */
-        onSubstituteNode?: (emitContext: EmitContext, node: Node) => Node;
+        onSubstituteNode?: (hint: EmitHint, node: Node) => Node;
 
         /**
          * Enables before/after emit notifications in the pretty printer for the provided
@@ -3874,7 +3877,7 @@
          * Hook used to allow transformers to capture state before or after
          * the printer emits a node.
          */
-        onEmitNode?: (emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void) => void;
+        onEmitNode?: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
     }
 
     /* @internal */
@@ -3887,24 +3890,60 @@
         /**
          * Emits the substitute for a node, if one is available; otherwise, emits the node.
          *
-         * @param emitContext The current emit context.
+         * @param hint A hint as to the intended usage of the node.
          * @param node The node to substitute.
          * @param emitCallback A callback used to emit the node or its substitute.
          */
-        emitNodeWithSubstitution(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void;
+        emitNodeWithSubstitution(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
 
         /**
          * Emits a node with possible notification.
          *
-         * @param emitContext The current emit context.
+         * @param hint A hint as to the intended usage of the node.
          * @param node The node to emit.
          * @param emitCallback A callback used to emit the node.
          */
-        emitNodeWithNotification(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void;
+        emitNodeWithNotification(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
     }
 
     /* @internal */
     export type Transformer = (context: TransformationContext) => (node: SourceFile) => SourceFile;
+
+    export interface EmitTextWriter {
+        write(s: string): void;
+        writeTextOfNode(text: string, node: Node): void;
+        writeLine(): void;
+        increaseIndent(): void;
+        decreaseIndent(): void;
+        getText(): string;
+        rawWrite(s: string): void;
+        writeLiteral(s: string): void;
+        getTextPos(): number;
+        getLine(): number;
+        getColumn(): number;
+        getIndent(): number;
+        isAtStartOfLine(): boolean;
+        reset(): void;
+    }
+
+    export interface Printer {
+        printNode(hint: EmitHint, node: Node, sourceFile: SourceFile): void;
+        printFile(sourceFile: SourceFile): void;
+        printBundle(bundle: Bundle): void;
+    }
+
+    export interface PrinterOptions {
+        hasGlobalName?: (name: string) => boolean;
+        onEmitSourceMapOfNode?: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
+        onEmitSourceMapOfToken?: (node: Node, token: SyntaxKind, pos: number, emitCallback: (token: SyntaxKind, pos: number) => number) => number;
+        onEmitCommentsOfNode?: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
+        onEmitDetachedCommentsOfNode?: (node: Node, detachedRange: TextRange, emitCallback: (node: Node) => void) => void;
+        onEmitTrailingCommentsOfPosition?: (pos: number) => void;
+        onEmitNode?: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
+        onEmitHelpers?: (node: Node, writeLines: (text: string) => void) => void;
+        onSetSourceFile?: (node: SourceFile) => void;
+        onSubstituteNode?: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
+    }
 
     export interface TextSpan {
         start: number;

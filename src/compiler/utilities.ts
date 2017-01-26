@@ -2088,16 +2088,19 @@ namespace ts {
         return undefined;
     }
 
-    export function getOriginalSourceFiles(sourceFiles: SourceFile[]) {
-        const originalSourceFiles: SourceFile[] = [];
-        for (const sourceFile of sourceFiles) {
-            const originalSourceFile = getParseTreeNode(sourceFile, isSourceFile);
-            if (originalSourceFile) {
-                originalSourceFiles.push(originalSourceFile);
-            }
+    export function getOriginalSourceFileOrBundle(sourceFileOrBundle: SourceFile | Bundle) {
+        if (sourceFileOrBundle.kind === SyntaxKind.Bundle) {
+            return updateBundle(sourceFileOrBundle, sameMap(sourceFileOrBundle.sourceFiles, getOriginalSourceFile));
         }
+        return getOriginalSourceFile(sourceFileOrBundle);
+    }
 
-        return originalSourceFiles;
+    function getOriginalSourceFile(sourceFile: SourceFile) {
+        return getParseTreeNode(sourceFile, isSourceFile) || sourceFile;
+    }
+
+    export function getOriginalSourceFiles(sourceFiles: SourceFile[]) {
+        return sameMap(sourceFiles, getOriginalSourceFile);
     }
 
     export function getOriginalNodeId(node: Node) {
@@ -2436,23 +2439,6 @@ namespace ts {
             s;
     }
 
-    export interface EmitTextWriter {
-        write(s: string): void;
-        writeTextOfNode(text: string, node: Node): void;
-        writeLine(): void;
-        increaseIndent(): void;
-        decreaseIndent(): void;
-        getText(): string;
-        rawWrite(s: string): void;
-        writeLiteral(s: string): void;
-        getTextPos(): number;
-        getLine(): number;
-        getColumn(): number;
-        getIndent(): number;
-        isAtStartOfLine(): boolean;
-        reset(): void;
-    }
-
     const indentStrings: string[] = ["", "    "];
     export function getIndentString(level: number) {
         if (indentStrings[level] === undefined) {
@@ -2635,7 +2621,7 @@ namespace ts {
      *   Else, calls `getSourceFilesToEmit` with the (optional) target source file to determine the list of source files to emit.
      */
     export function forEachEmittedFile(
-        host: EmitHost, action: (emitFileNames: EmitFileNames, sourceFiles: SourceFile[], isBundledEmit: boolean, emitOnlyDtsFiles: boolean) => void,
+        host: EmitHost, action: (emitFileNames: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle, emitOnlyDtsFiles: boolean) => void,
         sourceFilesOrTargetSourceFile?: SourceFile[] | SourceFile,
         emitOnlyDtsFiles?: boolean) {
 
@@ -2646,7 +2632,7 @@ namespace ts {
                 const jsFilePath = options.outFile || options.out;
                 const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
                 const declarationFilePath = options.declaration ? removeFileExtension(jsFilePath) + ".d.ts" : undefined;
-                action({ jsFilePath, sourceMapFilePath, declarationFilePath }, sourceFiles, /*isBundledEmit*/true, emitOnlyDtsFiles);
+                action({ jsFilePath, sourceMapFilePath, declarationFilePath }, createBundle(sourceFiles), emitOnlyDtsFiles);
             }
         }
         else {
@@ -2654,7 +2640,7 @@ namespace ts {
                 const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, getOutputExtension(sourceFile, options));
                 const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
                 const declarationFilePath = !isSourceFileJavaScript(sourceFile) && (emitOnlyDtsFiles || options.declaration) ? getDeclarationEmitOutputFilePath(sourceFile, host) : undefined;
-                action({ jsFilePath, sourceMapFilePath, declarationFilePath }, [sourceFile], /*isBundledEmit*/false, emitOnlyDtsFiles);
+                action({ jsFilePath, sourceMapFilePath, declarationFilePath }, sourceFile, emitOnlyDtsFiles);
             }
         }
     }

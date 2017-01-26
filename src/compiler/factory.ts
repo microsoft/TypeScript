@@ -1530,6 +1530,19 @@ namespace ts {
         return node;
     }
 
+    export function createBundle(sourceFiles: SourceFile[]) {
+        const node = <Bundle>createNode(SyntaxKind.Bundle);
+        node.sourceFiles = sourceFiles;
+        return node;
+    }
+
+    export function updateBundle(node: Bundle, sourceFiles: SourceFile[]) {
+        if (node.sourceFiles !== sourceFiles) {
+            return createBundle(sourceFiles);
+        }
+        return node;
+    }
+
     // Compound nodes
 
     export function createComma(left: Expression, right: Expression) {

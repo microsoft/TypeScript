@@ -37,6 +37,7 @@
         "../compiler/comments.ts",
         "../compiler/sourcemap.ts",
         "../compiler/declarationEmitter.ts",
+        "../compiler/printer.ts",
         "../compiler/emitter.ts",
         "../compiler/program.ts",
         "../compiler/commandLineParser.ts",
