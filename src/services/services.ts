@@ -1404,25 +1404,25 @@ namespace ts {
         }
 
         function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] {
-            const referencedSymbols = findReferencedSymbols(fileName, position, findInStrings, findInComments);
+            const referencedSymbols = findReferencedSymbols(fileName, position, findInStrings, findInComments, /*isForRename*/true);
             return FindAllReferences.convertReferences(referencedSymbols);
         }
 
         function getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
-            const referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings*/ false, /*findInComments*/ false);
+            const referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings*/ false, /*findInComments*/ false, /*isForRename*/false);
             return FindAllReferences.convertReferences(referencedSymbols);
         }
 
         function findReferences(fileName: string, position: number): ReferencedSymbol[] {
-            const referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings*/ false, /*findInComments*/ false);
+            const referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings*/ false, /*findInComments*/ false, /*isForRename*/false);
 
             // Only include referenced symbols that have a valid definition.
             return filter(referencedSymbols, rs => !!rs.definition);
         }
 
-        function findReferencedSymbols(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): ReferencedSymbol[] {
+        function findReferencedSymbols(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, isForRename: boolean): ReferencedSymbol[] {
             synchronizeHostData();
-            return FindAllReferences.findReferencedSymbols(program.getTypeChecker(), cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position, findInStrings, findInComments);
+            return FindAllReferences.findReferencedSymbols(program.getTypeChecker(), cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position, findInStrings, findInComments, isForRename);
         }
 
         /// NavigateTo
