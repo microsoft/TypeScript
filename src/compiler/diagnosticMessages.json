@@ -1823,6 +1823,10 @@
         "category": "Error",
         "code": 2609
     },
+    "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
+        "category": "Error",
+        "code": 2649
+    },
     "Cannot emit namespaced JSX elements in React": {
         "category": "Error",
         "code": 2650
