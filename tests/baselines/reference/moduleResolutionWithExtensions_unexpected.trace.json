@@ -6,6 +6,7 @@
     "File '/node_modules/normalize.css.tsx' does not exist.",
     "File '/node_modules/normalize.css.d.ts' does not exist.",
     "Found 'package.json' at '/node_modules/normalize.css/package.json'.",
+    "'package.json' does not have a 'typings' field.",
     "'package.json' does not have a 'types' field.",
     "File '/node_modules/normalize.css/index.ts' does not exist.",
     "File '/node_modules/normalize.css/index.tsx' does not exist.",

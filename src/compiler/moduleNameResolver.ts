@@ -67,16 +67,15 @@ namespace ts {
     }
 
     /** Reads from "main" or "types"/"typings" depending on `extensions`. */
-    function tryReadPackageJsonFields(ts: boolean, packageJsonPath: string, baseDirectory: string, state: ModuleResolutionState): string | undefined {
+    function tryReadPackageJsonFields(readTypes: boolean, packageJsonPath: string, baseDirectory: string, state: ModuleResolutionState): string | undefined {
         const jsonContent = readJson(packageJsonPath, state.host);
-        const file = ts ? tryReadFromField("typings") || tryReadFromField("types") : tryReadFromField("main");
-        if (!file && state.traceEnabled) {
-            trace(state.host, Diagnostics.package_json_does_not_have_a_0_field, ts ? "types" : "main");
-        }
-        return file;
+        return readTypes ? tryReadFromField("typings") || tryReadFromField("types") : tryReadFromField("main");
 
         function tryReadFromField(fieldName: "typings" | "types" | "main"): string | undefined {
             if (!hasProperty(jsonContent, fieldName)) {
+                if (state.traceEnabled) {
+                    trace(state.host, Diagnostics.package_json_does_not_have_a_0_field, fieldName);
+                }
                 return;
             }
 
@@ -690,7 +689,8 @@ namespace ts {
         return { resolvedModule: undefined, failedLookupLocations };
 
         function tryResolve(extensions: Extensions): SearchResult<{ resolved: Resolved, isExternalLibraryImport: boolean }> {
-            const resolved = tryLoadModuleUsingOptionalResolutionSettings(extensions, moduleName, containingDirectory, nodeLoadModuleByRelativeName, failedLookupLocations, state);
+            const loader: ResolutionKindSpecificLoader = (extensions, candidate, failedLookupLocations, onlyRecordFailures, state) => nodeLoadModuleByRelativeName(extensions, candidate, failedLookupLocations, onlyRecordFailures, state, /*considerPackageJson*/true);
+            const resolved = tryLoadModuleUsingOptionalResolutionSettings(extensions, moduleName, containingDirectory, loader, failedLookupLocations, state);
             if (resolved) {
                 return toSearchResult({ resolved, isExternalLibraryImport: false });
             }
@@ -705,7 +705,7 @@ namespace ts {
             }
             else {
                 const candidate = normalizePath(combinePaths(containingDirectory, moduleName));
-                const resolved = nodeLoadModuleByRelativeName(extensions, candidate, failedLookupLocations, /*onlyRecordFailures*/ false, state);
+                const resolved = nodeLoadModuleByRelativeName(extensions, candidate, failedLookupLocations, /*onlyRecordFailures*/ false, state, /*considerPackageJson*/true);
                 return resolved && toSearchResult({ resolved, isExternalLibraryImport: false });
             }
         }
@@ -723,7 +723,7 @@ namespace ts {
         return real;
     }
 
-    function nodeLoadModuleByRelativeName(extensions: Extensions, candidate: string, failedLookupLocations: Push<string>, onlyRecordFailures: boolean, state: ModuleResolutionState, considerPackageJson = true): Resolved | undefined {
+    function nodeLoadModuleByRelativeName(extensions: Extensions, candidate: string, failedLookupLocations: Push<string>, onlyRecordFailures: boolean, state: ModuleResolutionState, considerPackageJson: boolean): Resolved | undefined {
         if (state.traceEnabled) {
             trace(state.host, Diagnostics.Loading_module_as_file_Slash_folder_candidate_module_location_0_target_file_type_1, candidate, Extensions[extensions]);
         }
@@ -855,8 +855,7 @@ namespace ts {
             trace(state.host, Diagnostics.Found_package_json_at_0, packageJsonPath);
         }
 
-        const ts = extensions !== Extensions.JavaScript;
-        const file = tryReadPackageJsonFields(ts, packageJsonPath, candidate, state);
+        const file = tryReadPackageJsonFields(extensions !== Extensions.JavaScript, packageJsonPath, candidate, state);
         if (!file) {
             return undefined;
         }
