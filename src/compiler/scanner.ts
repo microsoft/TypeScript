@@ -56,7 +56,7 @@ namespace ts {
         tryScan<T>(callback: () => T): T;
     }
 
-    const textToToken = createMap({
+    const textToToken = createMapFromTemplate({
         "abstract": SyntaxKind.AbstractKeyword,
         "any": SyntaxKind.AnyKeyword,
         "as": SyntaxKind.AsKeyword,
@@ -98,6 +98,7 @@ namespace ts {
         "new": SyntaxKind.NewKeyword,
         "null": SyntaxKind.NullKeyword,
         "number": SyntaxKind.NumberKeyword,
+        "object": SyntaxKind.ObjectKeyword,
         "package": SyntaxKind.PackageKeyword,
         "private": SyntaxKind.PrivateKeyword,
         "protected": SyntaxKind.ProtectedKeyword,
@@ -275,9 +276,9 @@ namespace ts {
 
     function makeReverseMap(source: Map<number>): string[] {
         const result: string[] = [];
-        for (const name in source) {
-            result[source[name]] = name;
-        }
+        source.forEach((value, name) => {
+            result[value] = name;
+        });
         return result;
     }
 
@@ -289,7 +290,7 @@ namespace ts {
 
     /* @internal */
     export function stringToToken(s: string): SyntaxKind {
-        return textToToken[s];
+        return textToToken.get(s);
     }
 
     /* @internal */
@@ -362,8 +363,6 @@ namespace ts {
     export function getLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter {
         return computeLineAndCharacterOfPosition(getLineStarts(sourceFile), position);
     }
-
-    const hasOwnProperty = Object.prototype.hasOwnProperty;
 
     export function isWhiteSpace(ch: number): boolean {
         return isWhiteSpaceSingleLine(ch) || isLineBreak(ch);
@@ -733,11 +732,11 @@ namespace ts {
         return comments;
     }
 
-    export function getLeadingCommentRanges(text: string, pos: number): CommentRange[] {
+    export function getLeadingCommentRanges(text: string, pos: number): CommentRange[] | undefined {
         return reduceEachLeadingCommentRange(text, pos, appendCommentRange, undefined, undefined);
     }
 
-    export function getTrailingCommentRanges(text: string, pos: number): CommentRange[] {
+    export function getTrailingCommentRanges(text: string, pos: number): CommentRange[] | undefined {
         return reduceEachTrailingCommentRange(text, pos, appendCommentRange, undefined, undefined);
     }
 
@@ -1183,8 +1182,11 @@ namespace ts {
             const len = tokenValue.length;
             if (len >= 2 && len <= 11) {
                 const ch = tokenValue.charCodeAt(0);
-                if (ch >= CharacterCodes.a && ch <= CharacterCodes.z && hasOwnProperty.call(textToToken, tokenValue)) {
-                    return token = textToToken[tokenValue];
+                if (ch >= CharacterCodes.a && ch <= CharacterCodes.z) {
+                    token = textToToken.get(tokenValue);
+                    if (token !== undefined) {
+                        return token;
+                    }
                 }
             }
             return token = SyntaxKind.Identifier;

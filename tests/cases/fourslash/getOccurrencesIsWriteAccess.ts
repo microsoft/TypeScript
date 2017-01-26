@@ -18,10 +18,8 @@
 ////[|{| "isWriteAccess": true |}x|] += 1;
 ////[|{| "isWriteAccess": true |}x|] <<= 1;
 
+goTo.rangeStart(test.ranges()[0]);
 
-var firstRange = test.ranges()[0];
-goTo.position(firstRange.start, firstRange.fileName);
-
-test.ranges().forEach((range) => {
+for (const range of test.ranges()) {
     verify.occurrencesAtPositionContains(range, range.marker.data.isWriteAccess);
-});
+}
