@@ -41,9 +41,6 @@ namespace ts.FindAllReferences {
         if (shorthandModuleSymbol) {
             searchSymbols.push(shorthandModuleSymbol);
         }
-        function isSearchedFor(symbol: Symbol): boolean {
-            return contains(searchSymbols, symbol);
-        }
 
         // Compute the meaning from the location and the symbol it references
         const searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), declarations);
@@ -80,7 +77,7 @@ namespace ts.FindAllReferences {
 
         function getRefs(scope: ts.Node, searchName: string): void {
             getReferencesInNode(scope, symbol, searchName, node, searchMeaning, findInStrings, findInComments, result,
-                symbolToIndex, implementations, typeChecker, cancellationToken, isSearchedFor, inheritsFromCache);
+                symbolToIndex, implementations, typeChecker, cancellationToken, searchSymbols, inheritsFromCache);
         }
     }
 
@@ -456,7 +453,7 @@ namespace ts.FindAllReferences {
         implementations: boolean,
         typeChecker: TypeChecker,
         cancellationToken: CancellationToken,
-        isSearchedFor: (symbol: Symbol) => boolean,
+        searchSymbols: Symbol[],
         inheritsFromCache: Map<boolean>): void {
 
         const sourceFile = container.getSourceFile();
@@ -502,7 +499,7 @@ namespace ts.FindAllReferences {
             if (referenceSymbol) {
                 const referenceSymbolDeclaration = referenceSymbol.valueDeclaration;
                 const shorthandValueSymbol = typeChecker.getShorthandAssignmentValueSymbol(referenceSymbolDeclaration);
-                const relatedSymbol = getRelatedSymbol(isSearchedFor, referenceSymbol, referenceLocation,
+                const relatedSymbol = getRelatedSymbol(searchSymbols, referenceSymbol, referenceLocation,
                     /*searchLocationIsConstructor*/ searchLocation.kind === SyntaxKind.ConstructorKeyword, parents, inheritsFromCache, typeChecker);
 
                 if (relatedSymbol) {
@@ -514,7 +511,7 @@ namespace ts.FindAllReferences {
                  * the position in short-hand property assignment excluding property accessing. However, if we do findAllReference at the
                  * position of property accessing, the referenceEntry of such position will be handled in the first case.
                  */
-                else if (!(referenceSymbol.flags & SymbolFlags.Transient) && isSearchedFor(shorthandValueSymbol)) {
+                else if (!(referenceSymbol.flags & SymbolFlags.Transient) && contains(searchSymbols, shorthandValueSymbol)) {
                     addReferenceToRelatedSymbol(referenceSymbolDeclaration.name, shorthandValueSymbol);
                 }
                 else if (searchLocation.kind === SyntaxKind.ConstructorKeyword) {
@@ -1178,8 +1175,8 @@ namespace ts.FindAllReferences {
         }
     }
 
-    function getRelatedSymbol(isSearchedFor: (symbol: Symbol) => boolean, referenceSymbol: Symbol, referenceLocation: Node, searchLocationIsConstructor: boolean, parents: Symbol[] | undefined, cache: Map<boolean>, typeChecker: TypeChecker): Symbol | undefined {
-        if (isSearchedFor(referenceSymbol)) {
+    function getRelatedSymbol(searchSymbols: Symbol[], referenceSymbol: Symbol, referenceLocation: Node, searchLocationIsConstructor: boolean, parents: Symbol[] | undefined, cache: Map<boolean>, typeChecker: TypeChecker): Symbol | undefined {
+        if (contains(searchSymbols, referenceSymbol)) {
             // If we are searching for constructor uses, they must be 'new' expressions.
             return (!searchLocationIsConstructor || isNewExpressionTarget(referenceLocation)) ? referenceSymbol : undefined;
         }
@@ -1188,7 +1185,7 @@ namespace ts.FindAllReferences {
         // symbols but by looking up for related symbol of this alias so it can handle multiple level of indirectness.
         const aliasSymbol = getAliasSymbolForPropertyNameSymbol(referenceSymbol, referenceLocation, typeChecker);
         if (aliasSymbol) {
-            return getRelatedSymbol(isSearchedFor, aliasSymbol, referenceLocation, searchLocationIsConstructor, parents, cache, typeChecker);
+            return getRelatedSymbol(searchSymbols, aliasSymbol, referenceLocation, searchLocationIsConstructor, parents, cache, typeChecker);
         }
 
         // If the reference location is in an object literal, try to get the contextual type for the
@@ -1197,7 +1194,7 @@ namespace ts.FindAllReferences {
         const containingObjectLiteralElement = getContainingObjectLiteralElement(referenceLocation);
         if (containingObjectLiteralElement) {
             const contextualSymbol = forEach(getPropertySymbolsFromContextualType(containingObjectLiteralElement, typeChecker), contextualSymbol =>
-                find(typeChecker.getRootSymbols(contextualSymbol), isSearchedFor));
+                find(typeChecker.getRootSymbols(contextualSymbol), symbol => contains(searchSymbols, symbol)));
 
             if (contextualSymbol) {
                 return contextualSymbol;
@@ -1208,7 +1205,7 @@ namespace ts.FindAllReferences {
             // In below eg. get 'property' from type of elems iterating type
             //      for ( { property: p2 } of elems) { }
             const propertySymbol = getPropertySymbolOfDestructuringAssignment(referenceLocation, typeChecker);
-            if (propertySymbol && isSearchedFor(propertySymbol)) {
+            if (propertySymbol && contains(searchSymbols, propertySymbol)) {
                 return propertySymbol;
             }
         }
@@ -1217,7 +1214,7 @@ namespace ts.FindAllReferences {
         // then include the binding element in the related symbols
         //      let { a } : { a };
         const bindingElementPropertySymbol = getPropertySymbolOfObjectBindingPatternWithoutPropertyName(referenceSymbol, typeChecker);
-        if (bindingElementPropertySymbol && isSearchedFor(bindingElementPropertySymbol)) {
+        if (bindingElementPropertySymbol && contains(searchSymbols, bindingElementPropertySymbol)) {
             return bindingElementPropertySymbol;
         }
 
@@ -1225,7 +1222,7 @@ namespace ts.FindAllReferences {
         // Or a union property, use its underlying unioned symbols
         return forEach(typeChecker.getRootSymbols(referenceSymbol), rootSymbol => {
             // if it is in the list, then we are done
-            if (isSearchedFor(rootSymbol)) {
+            if (contains(searchSymbols, rootSymbol)) {
                 return rootSymbol;
             }
 
@@ -1242,7 +1239,7 @@ namespace ts.FindAllReferences {
 
                 const result: Symbol[] = [];
                 getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, /*previousIterationSymbolsCache*/ createMap<Symbol>(), typeChecker);
-                return find(result, isSearchedFor);
+                return find(result, symbol => contains(searchSymbols, symbol));
             }
 
             return undefined;
