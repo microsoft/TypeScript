@@ -260,6 +260,16 @@ namespace ts {
         return undefined;
     }
 
+    /** Works like Array.prototype.findIndex, returning `-1` if no element satisfying the predicate is found. */
+    export function findIndex<T>(array: T[], predicate: (element: T, index: number) => boolean): number {
+        for (let i = 0; i < array.length; i++) {
+            if (predicate(array[i], i)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     /**
      * Returns the first truthy result of `callback`, or else fails.
      * This is like `forEach`, but never returns undefined.
@@ -1724,7 +1734,19 @@ namespace ts {
     const singleAsteriskRegexFragmentFiles = "([^./]|(\\.(?!min\\.js$))?)*";
     const singleAsteriskRegexFragmentOther = "[^/]*";
 
-    export function getRegularExpressionForWildcard(specs: string[], basePath: string, usage: "files" | "directories" | "exclude") {
+    export function getRegularExpressionForWildcard(specs: string[], basePath: string, usage: "files" | "directories" | "exclude"): string | undefined {
+        const patterns = getRegularExpressionsForWildcards(specs, basePath, usage);
+        if (!patterns || !patterns.length) {
+            return undefined;
+        }
+
+        const pattern = patterns.map(pattern => `(${pattern})`).join("|");
+        // If excluding, match "foo/bar/baz...", but if including, only allow "foo".
+        const terminator = usage === "exclude" ? "($|/)" : "$";
+        return `^(${pattern})${terminator}`;
+    }
+
+    function getRegularExpressionsForWildcards(specs: string[], basePath: string, usage: "files" | "directories" | "exclude"): string[] | undefined {
         if (specs === undefined || specs.length === 0) {
             return undefined;
         }
@@ -1738,33 +1760,8 @@ namespace ts {
          */
         const doubleAsteriskRegexFragment = usage === "exclude" ? "(/.+?)?" : "(/[^/.][^/]*)*?";
 
-        let pattern = "";
-        let hasWrittenSubpattern = false;
-        for (const spec of specs) {
-            if (!spec) {
-                continue;
-            }
-
-            const subPattern = getSubPatternFromSpec(spec, basePath, usage, singleAsteriskRegexFragment, doubleAsteriskRegexFragment, replaceWildcardCharacter);
-            if (subPattern === undefined) {
-                continue;
-            }
-
-            if (hasWrittenSubpattern) {
-                pattern += "|";
-            }
-
-            pattern += "(" + subPattern + ")";
-            hasWrittenSubpattern = true;
-        }
-
-        if (!pattern) {
-            return undefined;
-        }
-
-        // If excluding, match "foo/bar/baz...", but if including, only allow "foo".
-        const terminator = usage === "exclude" ? "($|/)" : "$";
-        return `^(${pattern})${terminator}`;
+        return flatMap(specs, spec =>
+            spec && getSubPatternFromSpec(spec, basePath, usage, singleAsteriskRegexFragment, doubleAsteriskRegexFragment, replaceWildcardCharacter));
     }
 
     /**
@@ -1859,6 +1856,9 @@ namespace ts {
     }
 
     export interface FileMatcherPatterns {
+        /** One pattern for each "include" spec. */
+        includeFilePatterns: string[];
+        /** One pattern matching one of any of the "include" specs. */
         includeFilePattern: string;
         includeDirectoryPattern: string;
         excludePattern: string;
@@ -1871,6 +1871,7 @@ namespace ts {
         const absolutePath = combinePaths(currentDirectory, path);
 
         return {
+            includeFilePatterns: map(getRegularExpressionsForWildcards(includes, absolutePath, "files"), pattern => `^${pattern}$`),
             includeFilePattern: getRegularExpressionForWildcard(includes, absolutePath, "files"),
             includeDirectoryPattern: getRegularExpressionForWildcard(includes, absolutePath, "directories"),
             excludePattern: getRegularExpressionForWildcard(excludes, absolutePath, "exclude"),
@@ -1885,26 +1886,39 @@ namespace ts {
         const patterns = getFileMatcherPatterns(path, excludes, includes, useCaseSensitiveFileNames, currentDirectory);
 
         const regexFlag = useCaseSensitiveFileNames ? "" : "i";
-        const includeFileRegex = patterns.includeFilePattern && new RegExp(patterns.includeFilePattern, regexFlag);
+        const includeFileRegexes = patterns.includeFilePatterns && patterns.includeFilePatterns.map(pattern => new RegExp(pattern, regexFlag));
         const includeDirectoryRegex = patterns.includeDirectoryPattern && new RegExp(patterns.includeDirectoryPattern, regexFlag);
         const excludeRegex = patterns.excludePattern && new RegExp(patterns.excludePattern, regexFlag);
 
-        const result: string[] = [];
+        // Associate an array of results with each include regex. This keeps results in order of the "include" order.
+        // If there are no "includes", then just put everything in results[0].
+        const results: string[][] = includeFileRegexes ? includeFileRegexes.map(() => []) : [[]];
+
+        const comparer = useCaseSensitiveFileNames ? compareStrings : compareStringsCaseInsensitive;
         for (const basePath of patterns.basePaths) {
             visitDirectory(basePath, combinePaths(currentDirectory, basePath));
         }
-        return result;
+
+        return flatten(results);
 
         function visitDirectory(path: string, absolutePath: string) {
-            const { files, directories } = getFileSystemEntries(path);
+            let { files, directories } = getFileSystemEntries(path);
+            files = files.slice().sort(comparer);
+            directories = directories.slice().sort(comparer);
 
             for (const current of files) {
                 const name = combinePaths(path, current);
                 const absoluteName = combinePaths(absolutePath, current);
-                if ((!extensions || fileExtensionIsAny(name, extensions)) &&
-                    (!includeFileRegex || includeFileRegex.test(absoluteName)) &&
-                    (!excludeRegex || !excludeRegex.test(absoluteName))) {
-                    result.push(name);
+                if (extensions && !fileExtensionIsAny(name, extensions)) continue;
+                if (excludeRegex && excludeRegex.test(absoluteName)) continue;
+                if (!includeFileRegexes) {
+                    results[0].push(name);
+                }
+                else {
+                    const includeIndex = findIndex(includeFileRegexes, re => re.test(absoluteName));
+                    if (includeIndex !== -1) {
+                        results[includeIndex].push(name);
+                    }
                 }
             }
 
