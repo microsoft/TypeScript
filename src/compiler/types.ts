@@ -2499,12 +2499,6 @@
         CannotBeNamed
     }
 
-    /* @internal */
-    export const enum SyntheticSymbolKind {
-        UnionOrIntersection,
-        Spread
-    }
-
     export const enum TypePredicateKind {
         This,
         Identifier
