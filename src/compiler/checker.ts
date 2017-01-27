@@ -6407,9 +6407,10 @@ namespace ts {
             if (right.flags & TypeFlags.Object && left.flags & TypeFlags.Object) {
                 return createSpreadType(left, right);
             }
-            const spread = spreadTypes.set(id, createType(TypeFlags.Spread) as SpreadType).get(id);
+            const spread = createType(TypeFlags.Spread) as SpreadType
             spread.left = left as SpreadType | ResolvedType;
             spread.right = right as TypeParameter | IntersectionType | IndexType | IndexedAccessType | ResolvedType;
+            spreadTypes.set(id, spread);
             return spread;
         }
 
