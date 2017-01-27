@@ -12,18 +12,13 @@ function foo1(x: string = "string", b: number) {
     x.length;
 }
 
-function foo2(x: string | undefined = "string", b: number) {
-    x.length; // ok, should be narrowed to string
+function foo2(x = "string", b: number) {
+    x.length;
 }
 
-function foo3(x = "string", b: number) {
-    x.length; // ok, should be narrowed to string
-}
-
-// .d.ts should have `T | undefined` for foo1, foo2, foo3
+// .d.ts should have `T | undefined` for foo1 and foo2
 foo1(undefined, 1);
 foo2(undefined, 1);
-foo3(undefined, 1);
 
 
 function removeUndefinedButNotFalse(x = true) {
@@ -60,16 +55,11 @@ function foo1(x, b) {
 }
 function foo2(x, b) {
     if (x === void 0) { x = "string"; }
-    x.length; // ok, should be narrowed to string
+    x.length;
 }
-function foo3(x, b) {
-    if (x === void 0) { x = "string"; }
-    x.length; // ok, should be narrowed to string
-}
-// .d.ts should have `T | undefined` for foo1, foo2, foo3
+// .d.ts should have `T | undefined` for foo1 and foo2
 foo1(undefined, 1);
 foo2(undefined, 1);
-foo3(undefined, 1);
 function removeUndefinedButNotFalse(x) {
     if (x === void 0) { x = true; }
     if (x === false) {
@@ -93,7 +83,6 @@ declare function g(addUndefined: string | undefined, addDefined: number): number
 declare let total: number;
 declare function foo1(x: string | undefined, b: number): void;
 declare function foo2(x: string | undefined, b: number): void;
-declare function foo3(x: string | undefined, b: number): void;
 declare function removeUndefinedButNotFalse(x?: boolean | undefined): false | undefined;
 declare const cond: boolean;
 declare function removeNothing(y?: boolean | undefined): boolean;

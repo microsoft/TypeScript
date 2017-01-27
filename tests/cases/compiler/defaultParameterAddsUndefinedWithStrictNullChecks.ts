@@ -13,18 +13,13 @@ function foo1(x: string = "string", b: number) {
     x.length;
 }
 
-function foo2(x: string | undefined = "string", b: number) {
-    x.length; // ok, should be narrowed to string
+function foo2(x = "string", b: number) {
+    x.length;
 }
 
-function foo3(x = "string", b: number) {
-    x.length; // ok, should be narrowed to string
-}
-
-// .d.ts should have `T | undefined` for foo1, foo2, foo3
+// .d.ts should have `T | undefined` for foo1 and foo2
 foo1(undefined, 1);
 foo2(undefined, 1);
-foo3(undefined, 1);
 
 
 function removeUndefinedButNotFalse(x = true) {
