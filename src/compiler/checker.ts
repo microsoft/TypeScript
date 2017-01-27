@@ -2694,7 +2694,11 @@ namespace ts {
                 writePunctuation(writer, SyntaxKind.ColonToken);
                 writeSpace(writer);
 
-                buildTypeDisplay(getTypeOfSymbol(p), writer, enclosingDeclaration, flags, symbolStack);
+                let type = getTypeOfSymbol(p);
+                if (strictNullChecks && parameterNode.initializer && !(getModifierFlags(parameterNode) & ModifierFlags.ParameterPropertyModifier)) {
+                    type = includeFalsyTypes(type, TypeFlags.Undefined);
+                }
+                buildTypeDisplay(type, writer, enclosingDeclaration, flags, symbolStack);
             }
 
             function buildBindingPatternDisplay(bindingPattern: BindingPattern, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
@@ -3315,9 +3319,7 @@ namespace ts {
 
             // Use type from type annotation if one is present
             if (declaration.type) {
-                const isOptional = declaration.questionToken ||
-                    (declaration.initializer && declaration.kind === SyntaxKind.Parameter && !(getModifierFlags(declaration) & ModifierFlags.ParameterPropertyModifier));
-                return addOptionality(getTypeFromTypeNode(declaration.type), /*optional*/ isOptional && includeOptionality);
+                return addOptionality(getTypeFromTypeNode(declaration.type), /*optional*/ declaration.questionToken && includeOptionality);
             }
 
             if ((compilerOptions.noImplicitAny || declaration.flags & NodeFlags.JavaScriptFile) &&
@@ -3368,10 +3370,7 @@ namespace ts {
             // Use the type of the initializer expression if one is present
             if (declaration.initializer) {
                 const type = checkDeclarationInitializer(declaration);
-                // initialized parameters (but not parameter properties) are optional
-                const isOptional = declaration.questionToken ||
-                    (declaration.kind === SyntaxKind.Parameter && !(getModifierFlags(declaration) & ModifierFlags.ParameterPropertyModifier));
-                return addOptionality(type, isOptional && includeOptionality);
+                return addOptionality(type, /*optional*/ declaration.questionToken && includeOptionality);
             }
 
             // If it is a short-hand property assignment, use the type of the identifier
@@ -7101,8 +7100,8 @@ namespace ts {
             const sourceParams = source.parameters;
             const targetParams = target.parameters;
             for (let i = 0; i < checkCount; i++) {
-                const s = i < sourceMax ? getTypeOfSymbol(sourceParams[i]) : getRestTypeOfSignature(source);
-                const t = i < targetMax ? getTypeOfSymbol(targetParams[i]) : getRestTypeOfSignature(target);
+                const s = i < sourceMax ? getTypeOfParameter(sourceParams[i]) : getRestTypeOfSignature(source);
+                const t = i < targetMax ? getTypeOfParameter(targetParams[i]) : getRestTypeOfSignature(target);
                 const related = compareTypes(s, t, /*reportErrors*/ false) || compareTypes(t, s, reportErrors);
                 if (!related) {
                     if (reportErrors) {
@@ -8299,8 +8298,8 @@ namespace ts {
 
             const targetLen = target.parameters.length;
             for (let i = 0; i < targetLen; i++) {
-                const s = isRestParameterIndex(source, i) ? getRestTypeOfSignature(source) : getTypeOfSymbol(source.parameters[i]);
-                const t = isRestParameterIndex(target, i) ? getRestTypeOfSignature(target) : getTypeOfSymbol(target.parameters[i]);
+                const s = isRestParameterIndex(source, i) ? getRestTypeOfSignature(source) : getTypeOfParameter(source.parameters[i]);
+                const t = isRestParameterIndex(target, i) ? getRestTypeOfSignature(target) : getTypeOfParameter(target.parameters[i]);
                 const related = compareTypes(s, t);
                 if (!related) {
                     return Ternary.False;
@@ -9196,8 +9195,8 @@ namespace ts {
             switch (source.kind) {
                 case SyntaxKind.Identifier:
                     return target.kind === SyntaxKind.Identifier && getResolvedSymbol(<Identifier>source) === getResolvedSymbol(<Identifier>target) ||
-                    (target.kind === SyntaxKind.VariableDeclaration || target.kind === SyntaxKind.BindingElement || target.kind === SyntaxKind.Parameter) &&
-                    getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(source as Identifier)) === getSymbolOfNode(target);
+                        (target.kind === SyntaxKind.VariableDeclaration || target.kind === SyntaxKind.BindingElement) &&
+                        getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(<Identifier>source)) === getSymbolOfNode(target);
                 case SyntaxKind.ThisKeyword:
                     return target.kind === SyntaxKind.ThisKeyword;
                 case SyntaxKind.PropertyAccessExpression:
@@ -9289,13 +9288,6 @@ namespace ts {
                 }
             }
             return false;
-        }
-
-        function getInitializedParameterReducedType(declaredType: UnionType, assignedType: Type) {
-            if (declaredType === assignedType || getFalsyFlags(assignedType) & TypeFlags.Undefined) {
-                return declaredType;
-            }
-            return getTypeWithFacts(declaredType, TypeFacts.NEUndefined);
         }
 
         // Remove those constituent types of declaredType to which no constituent type of assignedType is assignable.
@@ -9478,7 +9470,7 @@ namespace ts {
             return links.resolvedType || getTypeOfExpression(node);
         }
 
-        function getInitialTypeOfVariableDeclaration(node: VariableDeclaration | ParameterDeclaration) {
+        function getInitialTypeOfVariableDeclaration(node: VariableDeclaration) {
             if (node.initializer) {
                 return getTypeOfInitializer(node.initializer);
             }
@@ -9491,15 +9483,15 @@ namespace ts {
             return unknownType;
         }
 
-        function getInitialType(node: VariableDeclaration | BindingElement | ParameterDeclaration) {
-            return node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.Parameter ?
-                getInitialTypeOfVariableDeclaration(<VariableDeclaration | ParameterDeclaration>node) :
+        function getInitialType(node: VariableDeclaration | BindingElement) {
+            return node.kind === SyntaxKind.VariableDeclaration ?
+                getInitialTypeOfVariableDeclaration(<VariableDeclaration>node) :
                 getInitialTypeOfBindingElement(<BindingElement>node);
         }
 
-        function getInitialOrAssignedType(node: VariableDeclaration | BindingElement | Expression | ParameterDeclaration) {
-            return node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement || node.kind === SyntaxKind.Parameter ?
-                getInitialType(<VariableDeclaration | BindingElement | ParameterDeclaration>node) :
+        function getInitialOrAssignedType(node: VariableDeclaration | BindingElement | Expression) {
+            return node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement ?
+                getInitialType(<VariableDeclaration | BindingElement>node) :
                 getAssignedType(<Expression>node);
         }
 
@@ -9768,13 +9760,6 @@ namespace ts {
                             continue;
                         }
                     }
-                    else if (flow.flags & FlowFlags.InitializedParameter) {
-                        type = getTypeAtFlowInitializedParameter(flow as FlowInitializedParameter);
-                        if (!type) {
-                            flow = (flow as FlowInitializedParameter).antecedent;
-                            continue;
-                        }
-                    }
                     else if (flow.flags & FlowFlags.Condition) {
                         type = getTypeAtFlowCondition(<FlowCondition>flow);
                     }
@@ -9820,20 +9805,6 @@ namespace ts {
                     }
                     return type;
                 }
-            }
-
-            function getTypeAtFlowInitializedParameter(flow: FlowInitializedParameter) {
-                const node = flow.node;
-                // Parameter initializers don't really narrow the declared type except to remove undefined.
-                // If the initializer includes undefined in the type, it doesn't even remove undefined.
-                if (isMatchingReference(reference, node)) {
-                    if (declaredType.flags & TypeFlags.Union) {
-                        return getInitializedParameterReducedType(<UnionType>declaredType, getInitialOrAssignedType(node));
-                    }
-                    return declaredType;
-                }
-
-                return undefined;
             }
 
             function getTypeAtFlowAssignment(flow: FlowAssignment) {
@@ -14033,10 +14004,21 @@ namespace ts {
             }
         }
 
+        function getTypeOfParameter(symbol: Symbol) {
+            const type = getTypeOfSymbol(symbol);
+            if (strictNullChecks) {
+                const declaration = symbol.valueDeclaration;
+                if (declaration && (<VariableLikeDeclaration>declaration).initializer) {
+                    return includeFalsyTypes(type, TypeFlags.Undefined);
+                }
+            }
+            return type;
+        }
+
         function getTypeAtPosition(signature: Signature, pos: number): Type {
             return signature.hasRestParameter ?
-                pos < signature.parameters.length - 1 ? getTypeOfSymbol(signature.parameters[pos]) : getRestTypeOfSignature(signature) :
-                pos < signature.parameters.length ? getTypeOfSymbol(signature.parameters[pos]) : anyType;
+                pos < signature.parameters.length - 1 ? getTypeOfParameter(signature.parameters[pos]) : getRestTypeOfSignature(signature) :
+                pos < signature.parameters.length ? getTypeOfParameter(signature.parameters[pos]) : anyType;
         }
 
         function assignContextualParameterTypes(signature: Signature, context: Signature, mapper: TypeMapper) {
@@ -20652,9 +20634,15 @@ namespace ts {
         function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
             // Get type of the symbol if this is the valid symbol otherwise get type at location
             const symbol = getSymbolOfNode(declaration);
-            const type = symbol && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))
+            let type = symbol && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))
                 ? getWidenedLiteralType(getTypeOfSymbol(symbol))
                 : unknownType;
+            if (strictNullChecks &&
+                declaration.kind === SyntaxKind.Parameter &&
+                (declaration as ParameterDeclaration).initializer &&
+                !(getModifierFlags(declaration) & ModifierFlags.ParameterPropertyModifier)) {
+                type = includeFalsyTypes(type, TypeFlags.Undefined);
+            }
 
             getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
         }

@@ -822,15 +822,6 @@ namespace ts {
             };
         }
 
-        function createFlowInitializedParameter(antecedent: FlowNode, node: ParameterDeclaration): FlowNode {
-            setFlowNodeReferenced(antecedent);
-            return <FlowInitializedParameter>{
-                flags: FlowFlags.InitializedParameter,
-                antecedent,
-                node
-            };
-        }
-
         function createFlowArrayMutation(antecedent: FlowNode, node: CallExpression | BinaryExpression): FlowNode {
             setFlowNodeReferenced(antecedent);
             return <FlowArrayMutation>{
@@ -2328,9 +2319,6 @@ namespace ts {
             }
             else {
                 declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes);
-                if (node.initializer) {
-                    currentFlow = createFlowInitializedParameter(currentFlow, node);
-                }
             }
 
             // If this is a property-parameter, then also declare the property symbol into the

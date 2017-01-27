@@ -2062,13 +2062,12 @@
         BranchLabel    = 1 << 2,  // Non-looping junction
         LoopLabel      = 1 << 3,  // Looping junction
         Assignment     = 1 << 4,  // Assignment
-        InitializedParameter = 1 << 5, // Parameter with initializer
-        TrueCondition  = 1 << 6,  // Condition known to be true
-        FalseCondition = 1 << 7,  // Condition known to be false
-        SwitchClause   = 1 << 8,  // Switch statement clause
-        ArrayMutation  = 1 << 9,  // Potential array mutation
-        Referenced     = 1 << 10,  // Referenced as antecedent once
-        Shared         = 1 << 11, // Referenced as antecedent more than once
+        TrueCondition  = 1 << 5,  // Condition known to be true
+        FalseCondition = 1 << 6,  // Condition known to be false
+        SwitchClause   = 1 << 7,  // Switch statement clause
+        ArrayMutation  = 1 << 8,  // Potential array mutation
+        Referenced     = 1 << 9,  // Referenced as antecedent once
+        Shared         = 1 << 10, // Referenced as antecedent more than once
         Label = BranchLabel | LoopLabel,
         Condition = TrueCondition | FalseCondition
     }
@@ -2115,11 +2114,6 @@
     // operation of the form 'x.push(value)', 'x.unshift(value)' or 'x[n] = value'.
     export interface FlowArrayMutation extends FlowNode {
         node: CallExpression | BinaryExpression;
-        antecedent: FlowNode;
-    }
-
-    export interface FlowInitializedParameter extends FlowNode {
-        node: ParameterDeclaration;
         antecedent: FlowNode;
     }
 
