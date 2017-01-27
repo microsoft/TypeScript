@@ -12337,12 +12337,15 @@ namespace ts {
                 // - In a static member function or static member accessor
                 //   where this references the constructor function object of a derived class,
                 //   a super property access is permitted and must specify a public static member function of the base class.
-                if (languageVersion < ScriptTarget.ES2015 && getDeclarationKindFromSymbol(prop) !== SyntaxKind.MethodDeclaration) {
-                    // `prop` refers to a *property* declared in the super class
-                    // rather than a *method*, so it does not satisfy the above criteria.
+                if (languageVersion < ScriptTarget.ES2015) {
+                    const propKind = getDeclarationKindFromSymbol(prop);
+                    if (propKind !== SyntaxKind.MethodDeclaration && propKind !== SyntaxKind.MethodSignature) {
+                        // `prop` refers to a *property* declared in the super class
+                        // rather than a *method*, so it does not satisfy the above criteria.
 
-                    error(errorNode, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
-                    return false;
+                        error(errorNode, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
+                        return false;
+                    }
                 }
 
                 if (flags & ModifierFlags.Abstract) {
