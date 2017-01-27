@@ -1698,11 +1698,15 @@ namespace ts {
                     node = parent;
                     break;
                 case SyntaxKind.ShorthandPropertyAssignment:
-                    if ((<ShorthandPropertyAssignment>parent).name !== node) {
+                    if ((parent as ShorthandPropertyAssignment).name !== node) {
                         return AssignmentKind.None;
                     }
-                // Fall through
+                    node = parent.parent;
+                    break;
                 case SyntaxKind.PropertyAssignment:
+                    if ((parent as ShorthandPropertyAssignment).name === node) {
+                        return AssignmentKind.None;
+                    }
                     node = parent.parent;
                     break;
                 default:
@@ -1714,7 +1718,8 @@ namespace ts {
 
     // A node is an assignment target if it is on the left hand side of an '=' token, if it is parented by a property
     // assignment in an object literal that is an assignment target, or if it is parented by an array literal that is
-    // an assignment target. Examples include 'a = xxx', '{ p: a } = xxx', '[{ p: a}] = xxx'.
+    // an assignment target. Examples include 'a = xxx', '{ p: a } = xxx', '[{ a }] = xxx'.
+    // (Note that `p` is not a target in the above examples, only `a`.)
     export function isAssignmentTarget(node: Node): boolean {
         return getAssignmentTargetKind(node) !== AssignmentKind.None;
     }
