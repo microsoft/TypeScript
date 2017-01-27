@@ -452,7 +452,8 @@ namespace FourSlash {
         }
 
         private messageAtLastKnownMarker(message: string) {
-            return "Marker: " + this.lastKnownMarker + "\n" + message;
+            const locationDescription = this.lastKnownMarker ? this.lastKnownMarker : this.getLineColStringAtPosition(this.currentCaretPosition);
+            return `At ${locationDescription}: ${message}`;
         }
 
         private assertionMessageAtLastKnownMarker(msg: string) {
@@ -562,7 +563,7 @@ namespace FourSlash {
         }
 
         public verifyGoToDefinitionIs(endMarker: string | string[]) {
-            this.verifyGoToXWorker(endMarker instanceof Array ? endMarker : [endMarker], () => this.getGoToDefinition());
+            this.verifyGoToXWorker(toArray(endMarker), () => this.getGoToDefinition());
         }
 
         public verifyGoToDefinition(arg0: any, endMarkerNames?: string | string[]) {
@@ -582,7 +583,7 @@ namespace FourSlash {
             if (endMarkerNames) {
                 this.verifyGoToXPlain(arg0, endMarkerNames, getDefs);
             }
-            else if (arg0 instanceof Array) {
+            else if (ts.isArray(arg0)) {
                 const pairs: [string | string[], string | string[]][] = arg0;
                 for (const [start, end] of pairs) {
                     this.verifyGoToXPlain(start, end, getDefs);
@@ -599,13 +600,8 @@ namespace FourSlash {
         }
 
         private verifyGoToXPlain(startMarkerNames: string | string[], endMarkerNames: string | string[], getDefs: () => ts.DefinitionInfo[] | undefined) {
-            if (startMarkerNames instanceof Array) {
-                for (const start of startMarkerNames) {
-                    this.verifyGoToXSingle(start, endMarkerNames, getDefs);
-                }
-            }
-            else {
-                this.verifyGoToXSingle(startMarkerNames, endMarkerNames, getDefs);
+            for (const start of toArray(startMarkerNames)) {
+                this.verifyGoToXSingle(start, endMarkerNames, getDefs);
             }
         }
 
@@ -617,7 +613,7 @@ namespace FourSlash {
 
         private verifyGoToXSingle(startMarkerName: string, endMarkerNames: string | string[], getDefs: () => ts.DefinitionInfo[] | undefined) {
             this.goToMarker(startMarkerName);
-            this.verifyGoToXWorker(endMarkerNames instanceof Array ? endMarkerNames : [endMarkerNames], getDefs);
+            this.verifyGoToXWorker(toArray(endMarkerNames), getDefs);
         }
 
         private verifyGoToXWorker(endMarkers: string[], getDefs: () => ts.DefinitionInfo[] | undefined) {
@@ -899,8 +895,74 @@ namespace FourSlash {
             }
         }
 
-        public verifyRangesWithSameTextReferenceEachOther() {
-            this.rangesByText().forEach(ranges => this.verifyRangesReferenceEachOther(ranges));
+        public verifyReferenceGroups(startRanges: Range | Range[], parts: Array<{ definition: string, ranges: Range[] }>): void {
+            interface ReferenceJson { definition: string; ranges: ts.ReferenceEntry[]; }
+            type ReferencesJson = ReferenceJson[];
+            const fullExpected = parts.map<ReferenceJson>(({ definition, ranges }) => ({ definition, ranges: ranges.map(rangeToReferenceEntry) }));
+
+            for (const startRange of toArray(startRanges)) {
+                this.goToRangeStart(startRange);
+                const fullActual = this.findReferencesAtCaret().map<ReferenceJson>(({ definition, references }) => ({
+                    definition: definition.displayParts.map(d => d.text).join(""),
+                    ranges: references
+                }));
+                this.assertObjectsEqual<ReferencesJson>(fullActual, fullExpected);
+            }
+
+            function rangeToReferenceEntry(r: Range) {
+                let { isWriteAccess, isDefinition } = (r.marker && r.marker.data) || { isWriteAccess: false, isDefinition: false };
+                isWriteAccess = isWriteAccess || false; isDefinition = isDefinition || false;
+                return { fileName: r.fileName, textSpan: { start: r.start, length: r.end - r.start }, isWriteAccess, isDefinition }
+            }
+        }
+
+        public verifyNoReferences(markerNameOrRange?: string | Range) {
+            if (markerNameOrRange) {
+                if (typeof markerNameOrRange === "string") {
+                    this.goToMarker(markerNameOrRange);
+                }
+                else {
+                    this.goToRangeStart(markerNameOrRange);
+                }
+            }
+
+            const refs = this.getReferencesAtCaret();
+            if (refs && refs.length) {
+                console.log(refs);
+                this.raiseError("Expected getReferences to fail");
+            }
+        }
+
+        public verifySingleReferenceGroup(definition: string, ranges?: Range[]) {
+            ranges = ranges || this.getRanges();
+            this.verifyReferenceGroups(ranges, [{ definition, ranges }]);
+        }
+
+        private assertObjectsEqual<T>(fullActual: T, fullExpected: T, msgPrefix = ""): void {
+            const recur = <U>(actual: U, expected: U, path: string) => {
+                const fail = (msg: string) => {
+                    console.log("Expected:", stringify(fullExpected));
+                    console.log("Actual: ", stringify(fullActual));
+                    this.raiseError(`${msgPrefix}At ${path}: ${msg}`);
+                };
+
+                for (const key in actual) if (ts.hasProperty(actual as any, key)) {
+                    const ak = actual[key], ek = expected[key];
+                    if (typeof ak === "object" && typeof ek === "object") {
+                        recur(ak, ek, path ? path + "." + key : key);
+                    }
+                    else if (ak !== ek) {
+                        fail(`Expected '${key}' to be '${ek}', got '${ak}'`);
+                    }
+                }
+                for (const key in expected) if (ts.hasProperty(expected as any, key)) {
+                    if (!ts.hasProperty(actual as any, key)) {
+                        fail(`${msgPrefix}Missing property '${key}'`);
+                    }
+                }
+            };
+            recur(fullActual, fullExpected, "");
+
         }
 
         public verifyDisplayPartsOfReferencedSymbol(expected: ts.SymbolDisplayPart[]) {
@@ -974,7 +1036,7 @@ namespace FourSlash {
         public verifyQuickInfos(namesAndTexts: { [name: string]: string | [string, string] }) {
             for (const name in namesAndTexts) if (ts.hasProperty(namesAndTexts, name)) {
                 const text = namesAndTexts[name];
-                if (text instanceof Array) {
+                if (ts.isArray(text)) {
                     assert(text.length === 2);
                     const [expectedText, expectedDocumentation] = text;
                     this.verifyQuickInfoAt(name, expectedText, expectedDocumentation);
@@ -1409,13 +1471,6 @@ namespace FourSlash {
             info.entries.sort((m, n) => m.sortText > n.sortText ? 1 : m.sortText < n.sortText ? -1 : m.name > n.name ? 1 : m.name < n.name ? -1 : 0);
             const membersString = info.entries.map(m => `${pad(m.name, longestNameLength)} ${pad(m.kind, longestKindLength)} ${m.kindModifiers}`).join("\n");
             Harness.IO.log(membersString);
-        }
-
-        public printReferences() {
-            const references = this.getReferencesAtCaret();
-            ts.forEach(references, entry => {
-                Harness.IO.log(stringify(entry));
-            });
         }
 
         public printContext() {
@@ -3082,6 +3137,10 @@ ${code}
         }
         return ts.arrayFrom(set.keys());
     }
+
+    function toArray<T>(x: T | T[]): T[] {
+        return ts.isArray(x) ? x : [x];
+    }
 }
 
 namespace FourSlashInterface {
@@ -3346,16 +3405,24 @@ namespace FourSlashInterface {
             this.state.verifyReferencesOf(start, references);
         }
 
+        public referenceGroups(startRanges: FourSlash.Range[], parts: Array<{ definition: string, ranges: FourSlash.Range[] }>) {
+            this.state.verifyReferenceGroups(startRanges, parts);
+        }
+
+        public noReferences(markerNameOrRange?: string | FourSlash.Range) {
+            this.state.verifyNoReferences(markerNameOrRange);
+        }
+
+        public singleReferenceGroup(definition: string, ranges?: FourSlash.Range[]) {
+            this.state.verifySingleReferenceGroup(definition, ranges);
+        }
+
         public rangesReferenceEachOther(ranges?: FourSlash.Range[]) {
             this.state.verifyRangesReferenceEachOther(ranges);
         }
 
         public findReferencesDefinitionDisplayPartsAtCaretAre(expected: ts.SymbolDisplayPart[]) {
             this.state.verifyDisplayPartsOfReferencedSymbol(expected);
-        }
-
-        public rangesWithSameTextReferenceEachOther() {
-            this.state.verifyRangesWithSameTextReferenceEachOther();
         }
 
         public currentParameterHelpArgumentNameIs(name: string) {
@@ -3658,10 +3725,6 @@ namespace FourSlashInterface {
 
         public printNavigationBar() {
             this.state.printNavigationBar();
-        }
-
-        public printReferences() {
-            this.state.printReferences();
         }
 
         public printContext() {
