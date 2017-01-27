@@ -3183,9 +3183,10 @@ namespace ts {
                 }
             }
 
-            const difference = restTypes.set(id, createType(TypeFlags.Rest) as RestType).get(id);
+            const difference = createType(TypeFlags.Rest) as RestType;
             difference.source = source;
             difference.remove = remove;
+            restTypes.set(id, difference);
             return difference;
         }
 
