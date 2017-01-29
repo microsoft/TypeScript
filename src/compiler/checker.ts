@@ -4571,6 +4571,19 @@ namespace ts {
                 getUnionType([info1.type, info2.type]), info1.isReadonly || info2.isReadonly);
         }
 
+        function includeMixinType(type: Type, types: Type[], index: number): Type {
+            const mixedTypes: Type[] = [];
+            for (let i = 0; i < types.length; i++) {
+                if (i === index) {
+                    mixedTypes.push(type);
+                }
+                else if (isMixinConstructorType(types[i])) {
+                    mixedTypes.push(getReturnTypeOfSignature(getSignaturesOfType(types[i], SignatureKind.Construct)[0]));
+                }
+            }
+            return getIntersectionType(mixedTypes);
+        }
+
         function resolveIntersectionTypeMembers(type: IntersectionType) {
             // The members and properties collections are empty for intersection types. To get all properties of an
             // intersection type use getPropertiesOfType (only the language service uses this).
@@ -4578,26 +4591,23 @@ namespace ts {
             let constructSignatures: Signature[] = emptyArray;
             let stringIndexInfo: IndexInfo;
             let numberIndexInfo: IndexInfo;
-            let mixinTypes: Type[];
-            const count = type.types.length;
-            for (let i = 0; i < count; i++) {
+            const types = type.types;
+            const mixinCount = countWhere(types, isMixinConstructorType);
+            for (let i = 0; i < types.length; i++) {
                 const t = type.types[i];
-                // When a type T is preceded by a mixin constructor type, the return type of each construct signature
-                // in T is intersected with the return type of the mixin constructor, and the mixin construct signature
-                // is removed. For example, the intersection '{ new(...args: any[]) => A } & { new(s: string) => B }'
-                // has a single construct signature 'new(s: string) => A & B'.
-                let signatures = getSignaturesOfType(t, SignatureKind.Construct);
-                if (i < count - 1 && isMixinConstructorType(t)) {
-                    (mixinTypes || (mixinTypes = [])).push(getReturnTypeOfSignature(signatures[0]));
-                }
-                else {
-                    if (mixinTypes) {
+                // When an intersection type contains mixin constructor types, the construct signatures from
+                // those types are discarded and their return types are mixed into the return types of all
+                // other construct signatures in the intersection type. For example, the intersection type
+                // '{ new(...args: any[]) => A } & { new(s: string) => B }' has a single construct signature
+                // 'new(s: string) => A & B'.
+                if (mixinCount === 0 || mixinCount === types.length && i === 0 || !isMixinConstructorType(t)) {
+                    let signatures = getSignaturesOfType(t, SignatureKind.Construct);
+                    if (signatures.length && mixinCount > 0) {
                         signatures = map(signatures, s => {
                             const clone = cloneSignature(s);
-                            clone.resolvedReturnType = getIntersectionType([...mixinTypes, getReturnTypeOfSignature(s)]);
+                            clone.resolvedReturnType = includeMixinType(getReturnTypeOfSignature(s), types, i);
                             return clone;
                         });
-                        mixinTypes = undefined;
                     }
                     constructSignatures = concatenate(constructSignatures, signatures);
                 }
