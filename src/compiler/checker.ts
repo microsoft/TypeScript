@@ -865,6 +865,11 @@ namespace ts {
                                 error(errorLocation, Diagnostics.Static_members_cannot_reference_class_type_parameters);
                                 return undefined;
                             }
+                            // Only perform additional check if error reporting was requested
+                            if (nameNotFoundMessage && !isTypeParameterSymbolDeclaredInContainer(result, location)) {
+                                error(errorLocation, Diagnostics.Type_parameter_0_cannot_be_referenced_outside_of_the_declaration_that_defines_it, symbolToString(result));
+                                return undefined;
+                            }
                             break loop;
                         }
                         if (location.kind === SyntaxKind.ClassExpression && meaning & SymbolFlags.Class) {
@@ -1006,6 +1011,16 @@ namespace ts {
                 }
             }
             return result;
+        }
+
+        function isTypeParameterSymbolDeclaredInContainer(symbol: Symbol, container: Node) {
+            for (const decl of symbol.declarations) {
+                if (decl.kind === SyntaxKind.TypeParameter && decl.parent === container) {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         function checkAndReportErrorForMissingPrefix(errorLocation: Node, name: string, nameArg: string | Identifier): boolean {
@@ -5226,18 +5241,11 @@ namespace ts {
                     // Map an unsatisfied type parameter with a default type.
                     // If a type parameter does not have a default type, or if the default type
                     // is a forward reference, the empty object type is used.
-                    const mapper: TypeMapper = t => {
-                        const i = indexOf(typeParameters, t);
-                        if (i >= typeArguments.length) {
-                            return emptyObjectType;
-                        }
-                        if (i >= 0) {
-                            return typeArguments[i];
-                        }
-                        return t;
-                    };
-
                     for (let i = numTypeArguments; i < numTypeParameters; i++) {
+                        typeArguments[i] = emptyObjectType;
+                    }
+                    for (let i = numTypeArguments; i < numTypeParameters; i++) {
+                        const mapper = createTypeMapper(typeParameters, typeArguments);
                         const defaultType = getDefaultFromTypeParameter(typeParameters[i]);
                         typeArguments[i] = defaultType ? instantiateType(defaultType, mapper) : emptyObjectType;
                     }
@@ -6710,6 +6718,16 @@ namespace ts {
 
         function createTypeEraser(sources: Type[]): TypeMapper {
             return createTypeMapper(sources, undefined);
+        }
+
+        /**
+         * Maps forward-references to later types parameters to the empty object type.
+         * This is used during inference when instantiating type parameter defaults.
+         */
+        function createBackreferenceMapper(typeParameters: TypeParameter[], index: number) {
+            const mapper: TypeMapper = t => indexOf(typeParameters, t) >= index ? emptyObjectType : t;
+            mapper.mappedTypes = typeParameters;
+            return mapper;
         }
 
         function getInferenceMapper(context: InferenceContext): TypeMapper {
@@ -9194,9 +9212,12 @@ namespace ts {
                     // candidates with no common supertype.
                     const defaultType = getDefaultFromTypeParameter(context.signature.typeParameters[index]);
                     if (defaultType) {
-                        const backreferenceMapper: TypeMapper = t => indexOf(context.signature.typeParameters, t) >= index ? emptyObjectType : t;
-                        const mapper = combineTypeMappers(backreferenceMapper, getInferenceMapper(context));
-                        inferredType = instantiateType(defaultType, mapper);
+                        // Instantiate the default type. Any forward reference to a type
+                        // parameter should be instantiated to the empty object type.
+                        inferredType = instantiateType(defaultType,
+                            combineTypeMappers(
+                                createBackreferenceMapper(context.signature.typeParameters, index),
+                                getInferenceMapper(context)));
                     }
                     else {
                         inferredType = emptyObjectType;
@@ -16216,9 +16237,6 @@ namespace ts {
                         checkTypeArgumentConstraints(typeParameters, node.typeArguments, minTypeArgumentCount);
                     }
                 }
-                if (type.flags & TypeFlags.TypeParameter && !(<TypeParameter>type).isThisType && type.symbol && !isTypeParameterInScope(<TypeParameter>type, node)) {
-                    error(node, Diagnostics.Type_parameter_0_cannot_be_referenced_outside_of_the_declaration_that_defines_it, symbolToString(type.symbol));
-                }
                 if (type.flags & TypeFlags.Enum && !(<EnumType>type).memberTypes && getNodeLinks(node).resolvedSymbol.flags & SymbolFlags.EnumMember) {
                     error(node, Diagnostics.Enum_type_0_has_members_with_initializers_that_are_not_literals, typeToString(type));
                 }
@@ -17655,23 +17673,6 @@ namespace ts {
                 checkCollisionWithRequireExportsInGeneratedCode(node, <Identifier>node.name);
                 checkCollisionWithGlobalPromiseInGeneratedCode(node, <Identifier>node.name);
             }
-        }
-
-        function isTypeParameterInScope(typeParameter: TypeParameter, node: Node) {
-            const parents = map(filter(typeParameter.symbol.declarations, isTypeParameter), node => node.parent);
-            while (node) {
-                if (isFunctionLike(node) ||
-                    isClassLike(node) ||
-                    node.kind === SyntaxKind.InterfaceDeclaration ||
-                    node.kind === SyntaxKind.TypeAliasDeclaration ||
-                    node.kind === SyntaxKind.MappedType) {
-                    if (contains(parents, node)) {
-                        return true;
-                    }
-                }
-                node = node.parent;
-            }
-            return false;
         }
 
         function areDeclarationFlagsIdentical(left: Declaration, right: Declaration) {
