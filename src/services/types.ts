@@ -33,7 +33,7 @@ namespace ts {
         getConstructSignatures(): Signature[];
         getStringIndexType(): Type;
         getNumberIndexType(): Type;
-        getBaseTypes(): ObjectType[];
+        getBaseTypes(): BaseType[];
         getNonNullableType(): Type;
     }
 

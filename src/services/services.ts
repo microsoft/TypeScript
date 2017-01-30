@@ -193,8 +193,8 @@ namespace ts {
                 return undefined;
             }
 
-            const child = children[0];
-            return child.kind < SyntaxKind.FirstNode || SyntaxKind.FirstJSDocNode <= child.kind && child.kind <= SyntaxKind.LastJSDocNode ?
+            const child = ts.find(children, kid => kid.kind < SyntaxKind.FirstJSDocNode || kid.kind > SyntaxKind.LastJSDocNode);
+            return child.kind < SyntaxKind.FirstNode ?
                 child :
                 child.getFirstToken(sourceFile);
         }
@@ -207,9 +207,7 @@ namespace ts {
                 return undefined;
             }
 
-            return child.kind < SyntaxKind.FirstNode || SyntaxKind.FirstJSDocNode <= child.kind && child.kind <= SyntaxKind.LastJSDocNode ?
-                child :
-                child.getLastToken(sourceFile);
+            return child.kind < SyntaxKind.FirstNode ? child : child.getLastToken(sourceFile);
         }
     }
 
@@ -382,7 +380,7 @@ namespace ts {
         getNumberIndexType(): Type {
             return this.checker.getIndexTypeOfType(this, IndexKind.Number);
         }
-        getBaseTypes(): ObjectType[] {
+        getBaseTypes(): BaseType[] {
             return this.flags & TypeFlags.Object && this.objectFlags & (ObjectFlags.Class | ObjectFlags.Interface)
                 ? this.checker.getBaseTypes(<InterfaceType><Type>this)
                 : undefined;
@@ -1407,25 +1405,25 @@ namespace ts {
         }
 
         function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] {
-            const referencedSymbols = findReferencedSymbols(fileName, position, findInStrings, findInComments);
+            const referencedSymbols = findReferencedSymbols(fileName, position, findInStrings, findInComments, /*isForRename*/true);
             return FindAllReferences.convertReferences(referencedSymbols);
         }
 
         function getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
-            const referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings*/ false, /*findInComments*/ false);
+            const referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings*/ false, /*findInComments*/ false, /*isForRename*/false);
             return FindAllReferences.convertReferences(referencedSymbols);
         }
 
         function findReferences(fileName: string, position: number): ReferencedSymbol[] {
-            const referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings*/ false, /*findInComments*/ false);
+            const referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings*/ false, /*findInComments*/ false, /*isForRename*/false);
 
             // Only include referenced symbols that have a valid definition.
             return filter(referencedSymbols, rs => !!rs.definition);
         }
 
-        function findReferencedSymbols(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): ReferencedSymbol[] {
+        function findReferencedSymbols(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, isForRename: boolean): ReferencedSymbol[] {
             synchronizeHostData();
-            return FindAllReferences.findReferencedSymbols(program.getTypeChecker(), cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position, findInStrings, findInComments);
+            return FindAllReferences.findReferencedSymbols(program.getTypeChecker(), cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position, findInStrings, findInComments, isForRename);
         }
 
         /// NavigateTo

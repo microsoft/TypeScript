@@ -1319,7 +1319,7 @@ namespace ts {
         return name;
     }
 
-    export function isImportOrExportSpecifierName(location: Node): boolean {
+    export function isImportOrExportSpecifierName(location: Node): location is Identifier {
         return location.parent &&
             (location.parent.kind === SyntaxKind.ImportSpecifier || location.parent.kind === SyntaxKind.ExportSpecifier) &&
             (<ImportOrExportSpecifier>location.parent).propertyName === location;

@@ -32,7 +32,7 @@ namespace ts {
 
     export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
         const declarationDiagnostics = createDiagnosticCollection();
-        forEachExpectedEmitFile(host, getDeclarationDiagnosticsFromFile, targetSourceFile);
+        forEachEmittedFile(host, getDeclarationDiagnosticsFromFile, targetSourceFile);
         return declarationDiagnostics.getDiagnostics(targetSourceFile ? targetSourceFile.fileName : undefined);
 
         function getDeclarationDiagnosticsFromFile({ declarationFilePath }: EmitFileNames, sources: SourceFile[], isBundledEmit: boolean) {
@@ -1805,7 +1805,7 @@ namespace ts {
             }
             else {
                 // Get the declaration file path
-                forEachExpectedEmitFile(host, getDeclFileName, referencedFile, emitOnlyDtsFiles);
+                forEachEmittedFile(host, getDeclFileName, referencedFile, emitOnlyDtsFiles);
             }
 
             if (declFileName) {

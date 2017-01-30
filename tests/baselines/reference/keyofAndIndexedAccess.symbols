@@ -1816,3 +1816,31 @@ declare function head<T extends Array<any>>(list: T): T[0];
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 504, 22))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 504, 22))
 
+// Repro from #13604
+
+class A<T> {
+>A : Symbol(A, Decl(keyofAndIndexedAccess.ts, 504, 59))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 508, 8))
+
+	props: T & { foo: string };
+>props : Symbol(A.props, Decl(keyofAndIndexedAccess.ts, 508, 12))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 508, 8))
+>foo : Symbol(foo, Decl(keyofAndIndexedAccess.ts, 509, 13))
+}
+
+class B extends A<{ x: number}> {
+>B : Symbol(B, Decl(keyofAndIndexedAccess.ts, 510, 1))
+>A : Symbol(A, Decl(keyofAndIndexedAccess.ts, 504, 59))
+>x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 512, 19))
+
+	f(p: this["props"]) {
+>f : Symbol(B.f, Decl(keyofAndIndexedAccess.ts, 512, 33))
+>p : Symbol(p, Decl(keyofAndIndexedAccess.ts, 513, 3))
+
+		p.x;
+>p.x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 512, 19))
+>p : Symbol(p, Decl(keyofAndIndexedAccess.ts, 513, 3))
+>x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 512, 19))
+	}
+}
+

@@ -385,7 +385,10 @@ namespace ts {
             if (settingsJson == null || settingsJson == "") {
                 throw Error("LanguageServiceShimHostAdapter.getCompilationSettings: empty compilationSettings");
             }
-            return <CompilerOptions>JSON.parse(settingsJson);
+            const compilerOptions = <CompilerOptions>JSON.parse(settingsJson);
+            // permit language service to handle all files (filtering should be performed on the host side)
+            compilerOptions.allowNonTsExtensions = true;
+            return compilerOptions;
         }
 
         public getScriptFileNames(): string[] {
@@ -1061,12 +1064,6 @@ namespace ts {
                 const compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
                 const result = resolveModuleName(moduleName, normalizeSlashes(fileName), compilerOptions, this.host);
                 const resolvedFileName = result.resolvedModule ? result.resolvedModule.resolvedFileName : undefined;
-                if (resolvedFileName && !compilerOptions.allowJs && fileExtensionIs(resolvedFileName, ".js")) {
-                    return {
-                        resolvedFileName: undefined,
-                        failedLookupLocations: []
-                    };
-                }
                 return {
                     resolvedFileName,
                     failedLookupLocations: result.failedLookupLocations
