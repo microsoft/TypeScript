@@ -3915,13 +3915,9 @@
         printNode(hint: EmitHint, node: Node, sourceFile: SourceFile): string;
         printFile(sourceFile: SourceFile): string;
         printBundle(bundle: Bundle): string;
-    }
-
-    /*@internal*/
-    export interface Printer {
-        writeNode(hint: EmitHint, node: Node, sourceFile: SourceFile, writer: EmitTextWriter): void;
-        writeFile(sourceFile: SourceFile, writer: EmitTextWriter): void;
-        writeBundle(bundle: Bundle, writer: EmitTextWriter): void;
+        /*@internal*/ writeNode(hint: EmitHint, node: Node, sourceFile: SourceFile, writer: EmitTextWriter): void;
+        /*@internal*/ writeFile(sourceFile: SourceFile, writer: EmitTextWriter): void;
+        /*@internal*/ writeBundle(bundle: Bundle, writer: EmitTextWriter): void;
     }
 
     export interface PrintHandlers {
@@ -3942,6 +3938,24 @@
         /*@internal*/ sourceMap?: boolean;
         /*@internal*/ inlineSourceMap?: boolean;
         /*@internal*/ extendedDiagnostics?: boolean;
+    }
+
+    /*@internal*/
+    export interface EmitTextWriter {
+        write(s: string): void;
+        writeTextOfNode(text: string, node: Node): void;
+        writeLine(): void;
+        increaseIndent(): void;
+        decreaseIndent(): void;
+        getText(): string;
+        rawWrite(s: string): void;
+        writeLiteral(s: string): void;
+        getTextPos(): number;
+        getLine(): number;
+        getColumn(): number;
+        getIndent(): number;
+        isAtStartOfLine(): boolean;
+        reset(): void;
     }
 
     export interface TextSpan {
