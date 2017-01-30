@@ -558,6 +558,15 @@
 
     export type ModifiersArray = NodeArray<Modifier>;
 
+    /*@internal*/
+    export const enum GeneratedIdentifierKind {
+        None,   // Not automatically generated.
+        Auto,   // Automatically generated identifier.
+        Loop,   // Automatically generated identifier with a preference for '_i'.
+        Unique, // Unique name based on the 'text' property.
+        Node,   // Unique name based on the node in the 'original' property.
+    }
+
     export interface Identifier extends PrimaryExpression {
         kind: SyntaxKind.Identifier;
         text: string;                                  // Text of identifier (with escapes converted to characters)
@@ -572,14 +581,7 @@
         resolvedSymbol: Symbol;
     }
 
-    export const enum GeneratedIdentifierKind {
-        None,   // Not automatically generated.
-        Auto,   // Automatically generated identifier.
-        Loop,   // Automatically generated identifier with a preference for '_i'.
-        Unique, // Unique name based on the 'text' property.
-        Node,   // Unique name based on the node in the 'original' property.
-    }
-
+    /*@internal*/
     export interface GeneratedIdentifier extends Identifier {
         autoGenerateKind: GeneratedIdentifierKind.Auto
                         | GeneratedIdentifierKind.Loop
@@ -3909,40 +3911,38 @@
     /* @internal */
     export type Transformer = (context: TransformationContext) => (node: SourceFile) => SourceFile;
 
-    export interface EmitTextWriter {
-        write(s: string): void;
-        writeTextOfNode(text: string, node: Node): void;
-        writeLine(): void;
-        increaseIndent(): void;
-        decreaseIndent(): void;
-        getText(): string;
-        rawWrite(s: string): void;
-        writeLiteral(s: string): void;
-        getTextPos(): number;
-        getLine(): number;
-        getColumn(): number;
-        getIndent(): number;
-        isAtStartOfLine(): boolean;
-        reset(): void;
+    export interface Printer {
+        printNode(hint: EmitHint, node: Node, sourceFile: SourceFile): string;
+        printFile(sourceFile: SourceFile): string;
+        printBundle(bundle: Bundle): string;
     }
 
+    /*@internal*/
     export interface Printer {
-        printNode(hint: EmitHint, node: Node, sourceFile: SourceFile): void;
-        printFile(sourceFile: SourceFile): void;
-        printBundle(bundle: Bundle): void;
+        writeNode(hint: EmitHint, node: Node, sourceFile: SourceFile, writer: EmitTextWriter): void;
+        writeFile(sourceFile: SourceFile, writer: EmitTextWriter): void;
+        writeBundle(bundle: Bundle, writer: EmitTextWriter): void;
+    }
+
+    export interface PrintHandlers {
+        hasGlobalName?: (name: string) => boolean;
+        onEmitNode?: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
+        onSubstituteNode?: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
+        /*@internal*/ onEmitSourceMapOfNode?: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
+        /*@internal*/ onEmitSourceMapOfToken?: (node: Node, token: SyntaxKind, pos: number, emitCallback: (token: SyntaxKind, pos: number) => number) => number;
+        /*@internal*/ onEmitSourceMapOfPosition?: (pos: number) => void;
+        /*@internal*/ onEmitHelpers?: (node: Node, writeLines: (text: string) => void) => void;
+        /*@internal*/ onSetSourceFile?: (node: SourceFile) => void;
     }
 
     export interface PrinterOptions {
-        hasGlobalName?: (name: string) => boolean;
-        onEmitSourceMapOfNode?: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
-        onEmitSourceMapOfToken?: (node: Node, token: SyntaxKind, pos: number, emitCallback: (token: SyntaxKind, pos: number) => number) => number;
-        onEmitCommentsOfNode?: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
-        onEmitDetachedCommentsOfNode?: (node: Node, detachedRange: TextRange, emitCallback: (node: Node) => void) => void;
-        onEmitTrailingCommentsOfPosition?: (pos: number) => void;
-        onEmitNode?: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
-        onEmitHelpers?: (node: Node, writeLines: (text: string) => void) => void;
-        onSetSourceFile?: (node: SourceFile) => void;
-        onSubstituteNode?: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
+        target?: ScriptTarget;
+        module?: ModuleKind;
+        removeComments?: boolean;
+        newLine?: NewLineKind;
+        /*@internal*/ sourceMap?: boolean;
+        /*@internal*/ inlineSourceMap?: boolean;
+        /*@internal*/ extendedDiagnostics?: boolean;
     }
 
     export interface TextSpan {

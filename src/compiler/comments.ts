@@ -5,13 +5,16 @@ namespace ts {
     export interface CommentWriter {
         reset(): void;
         setSourceFile(sourceFile: SourceFile): void;
+        setWriter(writer: EmitTextWriter): void;
         emitNodeWithComments(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
         emitBodyWithDetachedComments(node: Node, detachedRange: TextRange, emitCallback: (node: Node) => void): void;
         emitTrailingCommentsOfPosition(pos: number): void;
     }
 
-    export function createCommentWriter(writer: EmitTextWriter, compilerOptions: CompilerOptions, newLine: string, emitPos: (pos: number) => void): CommentWriter {
-        const extendedDiagnostics = compilerOptions.extendedDiagnostics;
+    export function createCommentWriter(printerOptions: PrinterOptions, emitPos: (pos: number) => void): CommentWriter {
+        const extendedDiagnostics = printerOptions.extendedDiagnostics;
+        const newLine = getNewLineCharacter(printerOptions);
+        let writer: EmitTextWriter;
         let containerPos = -1;
         let containerEnd = -1;
         let declarationListContainerEnd = -1;
@@ -20,10 +23,11 @@ namespace ts {
         let currentLineMap: number[];
         let detachedCommentsInfo: { nodePos: number, detachedCommentEndPos: number}[];
         let hasWrittenComment = false;
-        let disabled: boolean = compilerOptions.removeComments;
+        let disabled: boolean = printerOptions.removeComments;
 
         return {
             reset,
+            setWriter,
             setSourceFile,
             emitNodeWithComments,
             emitBodyWithDetachedComments,
@@ -194,9 +198,9 @@ namespace ts {
             }
 
             // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
-            emitPos(commentPos);
+            if (emitPos) emitPos(commentPos);
             writeCommentRange(currentText, currentLineMap, writer, commentPos, commentEnd, newLine);
-            emitPos(commentEnd);
+            if (emitPos) emitPos(commentEnd);
 
             if (hasTrailingNewLine) {
                 writer.writeLine();
@@ -216,9 +220,9 @@ namespace ts {
                 writer.write(" ");
             }
 
-            emitPos(commentPos);
+            if (emitPos) emitPos(commentPos);
             writeCommentRange(currentText, currentLineMap, writer, commentPos, commentEnd, newLine);
-            emitPos(commentEnd);
+            if (emitPos) emitPos(commentEnd);
 
             if (hasTrailingNewLine) {
                 writer.writeLine();
@@ -244,9 +248,9 @@ namespace ts {
         function emitTrailingCommentOfPosition(commentPos: number, commentEnd: number, _kind: SyntaxKind, hasTrailingNewLine: boolean) {
             // trailing comments of a position are emitted at /*trailing comment1 */space/*trailing comment*/space
 
-            emitPos(commentPos);
+            if (emitPos) emitPos(commentPos);
             writeCommentRange(currentText, currentLineMap, writer, commentPos, commentEnd, newLine);
-            emitPos(commentEnd);
+            if (emitPos) emitPos(commentEnd);
 
             if (hasTrailingNewLine) {
                 writer.writeLine();
@@ -280,6 +284,10 @@ namespace ts {
             currentText = undefined;
             currentLineMap = undefined;
             detachedCommentsInfo = undefined;
+        }
+
+        function setWriter(output: EmitTextWriter): void {
+            writer = output;
         }
 
         function setSourceFile(sourceFile: SourceFile) {
@@ -319,9 +327,9 @@ namespace ts {
         }
 
         function writeComment(text: string, lineMap: number[], writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) {
-            emitPos(commentPos);
+            if (emitPos) emitPos(commentPos);
             writeCommentRange(text, lineMap, writer, commentPos, commentEnd, newLine);
-            emitPos(commentEnd);
+            if (emitPos) emitPos(commentEnd);
         }
 
         /**

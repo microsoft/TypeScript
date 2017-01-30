@@ -34,7 +34,6 @@
         "comments.ts",
         "sourcemap.ts",
         "declarationEmitter.ts",
-        "printer.ts",
         "emitter.ts",
         "program.ts",
         "commandLineParser.ts",

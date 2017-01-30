@@ -1447,11 +1447,11 @@ namespace ts {
         return /^\.\.?($|[\\/])/.test(moduleName);
     }
 
-    export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
+    export function getEmitScriptTarget(compilerOptions: CompilerOptions | PrinterOptions) {
         return compilerOptions.target || ScriptTarget.ES3;
     }
 
-    export function getEmitModuleKind(compilerOptions: CompilerOptions) {
+    export function getEmitModuleKind(compilerOptions: CompilerOptions | PrinterOptions) {
         return typeof compilerOptions.module === "number" ?
             compilerOptions.module :
             getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
