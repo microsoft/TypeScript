@@ -11721,7 +11721,7 @@ namespace ts {
                     member = prop;
                 }
                 else if (memberDecl.kind === SyntaxKind.SpreadAssignment) {
-                    if (languageVersion < ScriptTarget.ESNext) {
+                    if (languageVersion < ScriptTarget.ES2015) {
                         checkExternalEmitHelpers(memberDecl, ExternalEmitHelpers.Assign);
                     }
                     if (propertiesArray.length > 0) {
