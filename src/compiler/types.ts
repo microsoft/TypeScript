@@ -3937,7 +3937,6 @@
 
     export interface PrinterOptions {
         target?: ScriptTarget;
-        module?: ModuleKind;
         removeComments?: boolean;
         newLine?: NewLineKind;
         /*@internal*/ sourceMap?: boolean;

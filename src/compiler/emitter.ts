@@ -12,6 +12,7 @@ namespace ts {
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean): EmitResult {
         const compilerOptions = host.getCompilerOptions();
+        const moduleKind = getEmitModuleKind(compilerOptions);
         const sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
         const emittedFilesList: string[] = compilerOptions.listEmittedFiles ? [] : undefined;
         const emitterDiagnostics = createDiagnosticCollection();
@@ -147,6 +148,10 @@ namespace ts {
         function emitHelpers(node: Node, writeLines: (text: string) => void) {
             let helpersEmitted = false;
             const bundle = node.kind === SyntaxKind.Bundle ? <Bundle>node : undefined;
+            if (bundle && moduleKind === ModuleKind.None) {
+                return;
+            }
+
             const numNodes = bundle ? bundle.sourceFiles.length : 1;
             for (let i = 0; i < numNodes; i++) {
                 const currentNode = bundle ? bundle.sourceFiles[i] : node;
@@ -201,7 +206,6 @@ namespace ts {
 
         const newLine = getNewLineCharacter(printerOptions);
         const languageVersion = getEmitScriptTarget(printerOptions);
-        const moduleKind = getEmitModuleKind(printerOptions);
         const comments = createCommentWriter(printerOptions, onEmitSourceMapOfPosition);
         const {
             emitNodeWithComments,
@@ -257,9 +261,7 @@ namespace ts {
         function writeBundle(bundle: Bundle, output: EmitTextWriter) {
             const previousWriter = writer;
             setWriter(output);
-            if (moduleKind) {
-                emitHelpersIndirect(bundle);
-            }
+            emitHelpersIndirect(bundle);
             for (const sourceFile of bundle.sourceFiles) {
                 print(EmitHint.SourceFile, sourceFile, sourceFile);
             }
@@ -280,11 +282,8 @@ namespace ts {
         }
 
         function endPrint() {
-            const text = writer.getText();
-            if (writer === ownWriter) {
-                writer.reset();
-            }
-
+            const text = ownWriter.getText();
+            ownWriter.reset();
             return text;
         }
 
@@ -385,6 +384,15 @@ namespace ts {
 
         function pipelineEmitUnspecified(node: Node): void {
             const kind = node.kind;
+
+            // Reserved words
+            // Strict mode reserved words
+            // Contextual keywords
+            if (isKeyword(kind)) {
+                writeTokenText(kind);
+                return;
+            }
+
             switch (kind) {
                 // Pseudo-literals
                 case SyntaxKind.TemplateHead:
@@ -395,46 +403,6 @@ namespace ts {
                 // Identifiers
                 case SyntaxKind.Identifier:
                     return emitIdentifier(<Identifier>node);
-
-                // Reserved words
-                case SyntaxKind.ConstKeyword:
-                case SyntaxKind.DefaultKeyword:
-                case SyntaxKind.ExportKeyword:
-                case SyntaxKind.VoidKeyword:
-
-                // Strict mode reserved words
-                case SyntaxKind.PrivateKeyword:
-                case SyntaxKind.ProtectedKeyword:
-                case SyntaxKind.PublicKeyword:
-                case SyntaxKind.StaticKeyword:
-
-                // Contextual keywords
-                case SyntaxKind.AbstractKeyword:
-                case SyntaxKind.AsKeyword:
-                case SyntaxKind.AnyKeyword:
-                case SyntaxKind.AsyncKeyword:
-                case SyntaxKind.AwaitKeyword:
-                case SyntaxKind.BooleanKeyword:
-                case SyntaxKind.ConstructorKeyword:
-                case SyntaxKind.DeclareKeyword:
-                case SyntaxKind.GetKeyword:
-                case SyntaxKind.IsKeyword:
-                case SyntaxKind.ModuleKeyword:
-                case SyntaxKind.NamespaceKeyword:
-                case SyntaxKind.NeverKeyword:
-                case SyntaxKind.ReadonlyKeyword:
-                case SyntaxKind.RequireKeyword:
-                case SyntaxKind.NumberKeyword:
-                case SyntaxKind.SetKeyword:
-                case SyntaxKind.StringKeyword:
-                case SyntaxKind.SymbolKeyword:
-                case SyntaxKind.TypeKeyword:
-                case SyntaxKind.UndefinedKeyword:
-                case SyntaxKind.FromKeyword:
-                case SyntaxKind.GlobalKeyword:
-                case SyntaxKind.OfKeyword:
-                    writeTokenText(kind);
-                    return;
 
                 // Parse tree nodes
 
