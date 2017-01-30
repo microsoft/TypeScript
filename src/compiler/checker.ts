@@ -2341,7 +2341,7 @@ namespace ts {
                     else if (!(flags & TypeFormatFlags.InTypeAlias) && type.aliasSymbol &&
                         isSymbolAccessible(type.aliasSymbol, enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/ false).accessibility === SymbolAccessibility.Accessible) {
                         const typeArguments = type.aliasTypeArguments;
-                        writeSymbolTypeReference(type.aliasSymbol, typeArguments, 0, typeArguments ? typeArguments.length : 0, nextFlags);
+                        writeSymbolTypeReference(type.aliasSymbol, typeArguments, 0, length(typeArguments), nextFlags);
                     }
                     else if (type.flags & TypeFlags.UnionOrIntersection) {
                         writeUnionOrIntersectionType(<UnionOrIntersectionType>type, nextFlags);
@@ -3828,9 +3828,9 @@ namespace ts {
         }
 
         function getConstructorsForTypeArguments(type: Type, typeArgumentNodes: TypeNode[]): Signature[] {
-            const typeArgCount = typeArgumentNodes ? typeArgumentNodes.length : 0;
+            const typeArgCount = length(typeArgumentNodes);
             return filter(getSignaturesOfType(type, SignatureKind.Construct),
-                sig => typeArgCount >= sig.minTypeArgumentCount && typeArgCount <= (sig.typeParameters ? sig.typeParameters.length : 0));
+                sig => typeArgCount >= sig.minTypeArgumentCount && typeArgCount <= length(sig.typeParameters));
         }
 
         function getInstantiatedConstructorsForTypeArguments(type: Type, typeArgumentNodes: TypeNode[]): Signature[] {
@@ -4431,11 +4431,11 @@ namespace ts {
             }
             const baseTypeNode = getBaseTypeNodeOfClass(classType);
             const typeArguments = map(baseTypeNode.typeArguments, getTypeFromTypeNode);
-            const typeArgCount = typeArguments ? typeArguments.length : 0;
+            const typeArgCount = length(typeArguments);
             const result: Signature[] = [];
             for (const baseSig of baseSignatures) {
                 const minTypeArgumentCount = baseSig.minTypeArgumentCount;
-                const typeParamCount = baseSig.typeParameters ? baseSig.typeParameters.length : 0;
+                const typeParamCount = length(baseSig.typeParameters);
                 if (typeArgCount >= minTypeArgumentCount && typeArgCount <= typeParamCount) {
                     const sig = typeParamCount ? createSignatureInstantiation(baseSig, fillMissingTypeArguments(typeArguments, baseSig.typeParameters, minTypeArgumentCount)) : cloneSignature(baseSig);
                     sig.typeParameters = classType.localTypeParameters;
@@ -5215,9 +5215,9 @@ namespace ts {
          * @param minTypeArgumentCount The minimum number of required type arguments.
          */
         function fillMissingTypeArguments(typeArguments: Type[] | undefined, typeParameters: TypeParameter[] | undefined, minTypeArgumentCount: number) {
-            const numTypeParameters = typeParameters ? typeParameters.length : 0;
+            const numTypeParameters = length(typeParameters);
             if (numTypeParameters) {
-                const numTypeArguments = typeArguments ? typeArguments.length : 0;
+                const numTypeArguments = length(typeArguments);
                 if (numTypeArguments >= minTypeArgumentCount && numTypeArguments <= numTypeParameters) {
                     if (!typeArguments) {
                         typeArguments = [];
@@ -5601,7 +5601,7 @@ namespace ts {
         }
 
         function getTypeReferenceArity(type: TypeReference): number {
-            return type.target.typeParameters ? type.target.typeParameters.length : 0;
+            return length(type.target.typeParameters);
         }
 
         // Get type from reference to class or interface
@@ -5609,7 +5609,7 @@ namespace ts {
             const type = <InterfaceType>getDeclaredTypeOfSymbol(getMergedSymbol(symbol));
             const typeParameters = type.localTypeParameters;
             if (typeParameters) {
-                const numTypeArguments = node.typeArguments ? node.typeArguments.length : 0;
+                const numTypeArguments = length(node.typeArguments);
                 if (numTypeArguments < type.minTypeArgumentCount || numTypeArguments > typeParameters.length) {
                     error(node,
                         type.minTypeArgumentCount === typeParameters.length
@@ -5652,7 +5652,7 @@ namespace ts {
             const type = getDeclaredTypeOfSymbol(symbol);
             const { typeParameters, minTypeArgumentCount } = getSymbolLinks(symbol);
             if (typeParameters) {
-                const numTypeArguments = node.typeArguments ? node.typeArguments.length : 0;
+                const numTypeArguments = length(node.typeArguments);
                 if (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length) {
                     error(node,
                         minTypeArgumentCount === typeParameters.length
@@ -5798,7 +5798,7 @@ namespace ts {
                 error(getTypeDeclaration(symbol), Diagnostics.Global_type_0_must_be_a_class_or_interface_type, symbol.name);
                 return arity ? emptyGenericType : emptyObjectType;
             }
-            if (((<InterfaceType>type).typeParameters ? (<InterfaceType>type).typeParameters.length : 0) !== arity) {
+            if (length((<InterfaceType>type).typeParameters) !== arity) {
                 error(getTypeDeclaration(symbol), Diagnostics.Global_type_0_must_have_1_type_parameter_s, symbol.name, arity);
                 return arity ? emptyGenericType : emptyObjectType;
             }
@@ -8364,7 +8364,7 @@ namespace ts {
             // the constraints with a common set of type arguments to get relatable entities in places where
             // type parameters occur in the constraints. The complexity of doing that doesn't seem worthwhile,
             // particularly as we're comparing erased versions of the signatures below.
-            if ((source.typeParameters ? source.typeParameters.length : 0) !== (target.typeParameters ? target.typeParameters.length : 0)) {
+            if (length(source.typeParameters) !== length(target.typeParameters)) {
                 return Ternary.False;
             }
             // Spec 1.0 Section 3.8.3 & 3.8.4:
@@ -12915,7 +12915,7 @@ namespace ts {
 
             // If the user supplied type arguments, but the number of type arguments does not match
             // the declared number of type parameters, the call has an incorrect arity.
-            const numTypeParameters = signature.typeParameters ? signature.typeParameters.length : 0;
+            const numTypeParameters = length(signature.typeParameters);
             const hasRightNumberOfTypeArgs = !typeArguments ||
                 (typeArguments.length >= signature.minTypeArgumentCount && typeArguments.length <= numTypeParameters);
             if (!hasRightNumberOfTypeArgs) {
@@ -18482,8 +18482,8 @@ namespace ts {
             resolveTypeParametersOfClassOrInterface(symbol);
 
             const { typeParameters, minTypeArgumentCount } = getSymbolLinks(symbol);
-            const maxTypeArgumentCount = typeParameters ? typeParameters.length : 0;
-            const numTypeParameters = node.typeParameters ? node.typeParameters.length : 0;
+            const maxTypeArgumentCount = length(typeParameters);
+            const numTypeParameters = length(node.typeParameters);
 
             // If this declaration has too few or too many type parameters, we report an error
             if (numTypeParameters < minTypeArgumentCount || numTypeParameters > maxTypeArgumentCount) {
@@ -18532,7 +18532,7 @@ namespace ts {
                 for (const declaration of symbol.declarations) {
                     if (declaration.kind === SyntaxKind.ClassDeclaration || declaration.kind === SyntaxKind.InterfaceDeclaration) {
                         const typeParameterNodes = (<ClassDeclaration | InterfaceDeclaration>declaration).typeParameters;
-                        const numTypeParameters = typeParameterNodes ? typeParameterNodes.length : 0;
+                        const numTypeParameters = length(typeParameterNodes);
                         if (maxTypeArgumentCount === -1) {
                             // For the first declaration, establish the initial maximum and
                             // minimum type argument counts. These only change when we
