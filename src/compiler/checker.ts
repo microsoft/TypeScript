@@ -14970,8 +14970,16 @@ namespace ts {
                         return silentNeverType;
                     }
 
-                    leftType = checkNonNullType(leftType, left);
-                    rightType = checkNonNullType(rightType, right);
+                    const leftBarZero = (rightType.flags & TypeFlags.NumberLiteral)
+                        && (<LiteralType>rightType).text === "0"
+                        && (operator === SyntaxKind.BarToken || operator === SyntaxKind.BarEqualsToken);
+                    if (leftBarZero) {
+                        leftType = getNonNullableType(leftType);
+                    }
+                    else {
+                        leftType = checkNonNullType(leftType, left);
+                        rightType = checkNonNullType(rightType, right);
+                    }
 
                     let suggestedOperator: SyntaxKind;
                     // if a user tries to apply a bitwise operator to 2 boolean operands
