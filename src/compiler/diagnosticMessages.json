@@ -1783,6 +1783,10 @@
         "category": "Error",
         "code": 2544
     },
+    "A mixin class must have a constructor with a single rest parameter of type 'any[]'.": {
+        "category": "Error",
+        "code": 2545
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
