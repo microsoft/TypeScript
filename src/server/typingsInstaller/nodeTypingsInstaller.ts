@@ -46,7 +46,7 @@ namespace ts.server.typingsInstaller {
         }
         try {
             const content = <TypesRegistryFile>JSON.parse(host.readFile(typesRegistryFilePath));
-            return createMap<void>(content.entries);
+            return createMapFromTemplate<void>(content.entries);
         }
         catch (e) {
             if (log.isEnabled()) {
@@ -61,34 +61,27 @@ namespace ts.server.typingsInstaller {
         return combinePaths(normalizeSlashes(globalTypingsCacheLocation), `node_modules/${TypesRegistryPackageName}/index.json`);
     }
 
-
-    type Exec = {
-        (command: string, options: { cwd: string }, callback?: (error: Error, stdout: string, stderr: string) => void): any
-    };
-
     type ExecSync = {
-        (command: string, options: { cwd: string, stdio: "ignore" }): any
-    };
+        (command: string, options: { cwd: string, stdio?: "ignore" }): any
+    }
 
     export class NodeTypingsInstaller extends TypingsInstaller {
-        private readonly exec: Exec;
+        private readonly execSync: ExecSync;
         private readonly npmPath: string;
         readonly typesRegistry: Map<void>;
 
-        constructor(globalTypingsCacheLocation: string, throttleLimit: number, telemetryEnabled: boolean, log: Log) {
+        constructor(globalTypingsCacheLocation: string, throttleLimit: number, log: Log) {
             super(
                 sys,
                 globalTypingsCacheLocation,
                 toPath("typingSafeList.json", __dirname, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
                 throttleLimit,
-                telemetryEnabled,
                 log);
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Process id: ${process.pid}`);
             }
             this.npmPath = getNPMLocation(process.argv[0]);
-            let execSync: ExecSync;
-            ({ exec: this.exec, execSync } = require("child_process"));
+            ({ execSync: this.execSync } = require("child_process"));
 
             this.ensurePackageDirectoryExists(globalTypingsCacheLocation);
 
@@ -96,7 +89,7 @@ namespace ts.server.typingsInstaller {
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`Updating ${TypesRegistryPackageName} npm package...`);
                 }
-                execSync(`${this.npmPath} install ${TypesRegistryPackageName}`, { cwd: globalTypingsCacheLocation, stdio: "ignore" });
+                this.execSync(`${this.npmPath} install ${TypesRegistryPackageName}`, { cwd: globalTypingsCacheLocation, stdio: "ignore" });
             }
             catch (e) {
                 if (this.log.isEnabled()) {
@@ -119,7 +112,7 @@ namespace ts.server.typingsInstaller {
             });
         }
 
-        protected sendResponse(response: SetTypings | InvalidateCachedTypings) {
+        protected sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes) {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Sending response: ${JSON.stringify(response)}`);
             }
@@ -133,21 +126,28 @@ namespace ts.server.typingsInstaller {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`#${requestId} with arguments'${JSON.stringify(args)}'.`);
             }
-            const command = `${this.npmPath} install ${args.join(" ")} --save-dev`;
+            const command = `${this.npmPath} install ${args.join(" ")} --save-dev --user-agent="typesInstaller/${version}"`;
             const start = Date.now();
-            this.exec(command, { cwd }, (_err, stdout, stderr) => {
-                if (this.log.isEnabled()) {
-                    this.log.writeLine(`npm install #${requestId} took: ${Date.now() - start} ms${sys.newLine}stdout: ${stdout}${sys.newLine}stderr: ${stderr}`);
-                }
-                // treat any output on stdout as success
-                onRequestCompleted(!!stdout);
-            });
+            let stdout: Buffer;
+            let stderr: Buffer;
+            let hasError = false;
+            try {
+                stdout = this.execSync(command, { cwd });
+            }
+            catch (e) {
+                stdout = e.stdout;
+                stderr = e.stderr;
+                hasError = true;
+            }
+            if (this.log.isEnabled()) {
+                this.log.writeLine(`npm install #${requestId} took: ${Date.now() - start} ms${sys.newLine}stdout: ${stdout && stdout.toString()}${sys.newLine}stderr: ${stderr && stderr.toString()}`);
+            }
+            onRequestCompleted(!hasError);
         }
     }
 
     const logFilePath = findArgument(server.Arguments.LogFile);
     const globalTypingsCacheLocation = findArgument(server.Arguments.GlobalCacheLocation);
-    const telemetryEnabled = hasArgument(server.Arguments.EnableTelemetry);
 
     const log = new FileLog(logFilePath);
     if (log.isEnabled()) {
@@ -161,6 +161,6 @@ namespace ts.server.typingsInstaller {
         }
         process.exit(0);
     });
-    const installer = new NodeTypingsInstaller(globalTypingsCacheLocation, /*throttleLimit*/5, telemetryEnabled, log);
+    const installer = new NodeTypingsInstaller(globalTypingsCacheLocation, /*throttleLimit*/5, log);
     installer.listen();
 }

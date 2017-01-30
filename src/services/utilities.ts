@@ -1,4 +1,4 @@
-// These utilities are common to multiple language service features.
+﻿// These utilities are common to multiple language service features.
 /* @internal */
 namespace ts {
     export const scanner: Scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
@@ -71,7 +71,10 @@ namespace ts {
     }
 
     export function getMeaningFromLocation(node: Node): SemanticMeaning {
-        if (node.parent.kind === SyntaxKind.ExportAssignment) {
+        if (node.kind === SyntaxKind.SourceFile) {
+            return SemanticMeaning.Value;
+        }
+        else if (node.parent.kind === SyntaxKind.ExportAssignment) {
             return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
         }
         else if (isInRightSideOfImport(node)) {
@@ -530,8 +533,8 @@ namespace ts {
             case SyntaxKind.DeleteExpression:
             case SyntaxKind.VoidExpression:
             case SyntaxKind.YieldExpression:
-            case SyntaxKind.SpreadElementExpression:
-                const unaryWordExpression = (<TypeOfExpression | DeleteExpression | VoidExpression | YieldExpression | SpreadElementExpression>n);
+            case SyntaxKind.SpreadElement:
+                const unaryWordExpression = n as (TypeOfExpression | DeleteExpression | VoidExpression | YieldExpression | SpreadElement);
                 return isCompletedNode(unaryWordExpression.expression, sourceFile);
 
             case SyntaxKind.TaggedTemplateExpression:
@@ -600,7 +603,7 @@ namespace ts {
         return !!findChildOfKind(n, kind, sourceFile);
     }
 
-    export function findChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFile): Node {
+    export function findChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFile): Node | undefined {
         return forEach(n.getChildren(sourceFile), c => c.kind === kind && c);
     }
 
@@ -675,8 +678,7 @@ namespace ts {
             }
 
             // find the child that contains 'position'
-            for (let i = 0, n = current.getChildCount(sourceFile); i < n; i++) {
-                const child = current.getChildAt(i);
+            for (const child of current.getChildren()) {
                 // all jsDocComment nodes were already visited
                 if (isJSDocNode(child)) {
                     continue;
@@ -766,7 +768,7 @@ namespace ts {
             }
 
             const children = n.getChildren();
-            for (let i = 0, len = children.length; i < len; i++) {
+            for (let i = 0; i < children.length; i++) {
                 const child = children[i];
                 // condition 'position < child.end' checks if child node end after the position
                 // in the example below this condition will be false for 'aaaa' and 'bbbb' and true for 'ccc'
@@ -951,10 +953,10 @@ namespace ts {
         }
 
         if (node) {
-            if (node.jsDocComments) {
-                for (const jsDocComment of node.jsDocComments) {
-                    if (jsDocComment.tags) {
-                        for (const tag of jsDocComment.tags) {
+            if (node.jsDoc) {
+                for (const jsDoc of node.jsDoc) {
+                    if (jsDoc.tags) {
+                        for (const tag of jsDoc.tags) {
                             if (tag.pos <= position && position <= tag.end) {
                                 return tag;
                             }
@@ -1113,6 +1115,26 @@ namespace ts {
             return !tripleSlashDirectivePrefixRegex.test(commentText);
         }
     }
+
+    export function createTextSpanFromNode(node: Node, sourceFile?: SourceFile): TextSpan {
+        return createTextSpanFromBounds(node.getStart(sourceFile), node.getEnd());
+    }
+
+    export function isTypeKeyword(kind: SyntaxKind): boolean {
+        switch (kind) {
+            case SyntaxKind.AnyKeyword:
+            case SyntaxKind.BooleanKeyword:
+            case SyntaxKind.NeverKeyword:
+            case SyntaxKind.NumberKeyword:
+            case SyntaxKind.ObjectKeyword:
+            case SyntaxKind.StringKeyword:
+            case SyntaxKind.SymbolKeyword:
+            case SyntaxKind.VoidKeyword:
+                return true;
+            default:
+                return false;
+        }
+    }
 }
 
 // Display-part writer helpers
@@ -1137,6 +1159,7 @@ namespace ts {
             writeSpace: text => writeKind(text, SymbolDisplayPartKind.space),
             writeStringLiteral: text => writeKind(text, SymbolDisplayPartKind.stringLiteral),
             writeParameter: text => writeKind(text, SymbolDisplayPartKind.parameterName),
+            writeProperty: text => writeKind(text, SymbolDisplayPartKind.propertyName),
             writeSymbol,
             writeLine,
             increaseIndent: () => { indent++; },
@@ -1282,7 +1305,7 @@ namespace ts {
         if (isImportOrExportSpecifierName(location)) {
             return location.getText();
         }
-        else if (isStringOrNumericLiteral(location.kind) &&
+        else if (isStringOrNumericLiteral(location) &&
             location.parent.kind === SyntaxKind.ComputedPropertyName) {
             return (<LiteralExpression>location).text;
         }
@@ -1296,7 +1319,7 @@ namespace ts {
         return name;
     }
 
-    export function isImportOrExportSpecifierName(location: Node): boolean {
+    export function isImportOrExportSpecifierName(location: Node): location is Identifier {
         return location.parent &&
             (location.parent.kind === SyntaxKind.ImportSpecifier || location.parent.kind === SyntaxKind.ExportSpecifier) &&
             (<ImportOrExportSpecifier>location.parent).propertyName === location;
@@ -1357,112 +1380,6 @@ namespace ts {
             configJsonObject: config || {},
             diagnostics: error ? concatenate(diagnostics, [error]) : diagnostics
         };
-    }
-
-    export function getMissingAbstractMembersInsertion(classDecl: ClassDeclaration, resolvedType: ResolvedType, checker: TypeChecker, newlineChar: string): string {
-        const classSymbol = checker.getSymbolOfNode(classDecl);
-        const missingMembers = filterMissingMembers(filterAbstract(filterNonPrivate(resolvedType.members)), classSymbol.members);
-        return getInsertionsForMembers(missingMembers, classDecl, checker, newlineChar);
-    }
-
-    /**
-     * Finds members of the resolved type that are missing in the class pointed to by class decl
-     * and generates source code for the missing members.
-     */
-    export function getMissingMembersInsertion(classDecl: ClassDeclaration, resolvedType: ResolvedType, checker: TypeChecker, newlineChar: string): string {
-        const classSymbol = checker.getSymbolOfNode(classDecl);
-        const missingMembers = filterMissingMembers(filterNonPrivate(resolvedType.members), classSymbol.members);
-        return getInsertionsForMembers(missingMembers, classDecl, checker, newlineChar);
-    }
-
-    /**
-     * Finds the symbols in source but not target, generating a new map with the differences.
-     */
-    function filterMissingMembers(sourceSymbols: Map<Symbol>, targetSymbols: Map<Symbol>): Map<Symbol> {
-        const result: Map<Symbol> = createMap<Symbol>();
-        outer:
-        for (const sourceName in sourceSymbols) {
-            for (const targetName in targetSymbols) {
-                if (sourceName === targetName) {
-                    continue outer;
-                }
-            }
-            result[sourceName] = sourceSymbols[sourceName];
-        }
-        return result;
-    }
-
-    function filterSymbolMapByDecl(symbolMap: Map<Symbol>, pred: (decl: Declaration) => boolean): Map<Symbol> {
-        const result = createMap<Symbol>();
-        for (const key in symbolMap) {
-            const decl = symbolMap[key].getDeclarations();
-            Debug.assert(!!(decl && decl.length));
-            if (pred(decl[0])) {
-                result[key] = symbolMap[key];
-            }
-        }
-        return result;
-    }
-
-    function filterAbstract(symbolMap: Map<Symbol>) {
-        return filterSymbolMapByDecl(symbolMap, decl => !!(getModifierFlags(decl) & ModifierFlags.Abstract));
-    }
-
-    function filterNonPrivate(symbolMap: Map<Symbol>) {
-        return filterSymbolMapByDecl(symbolMap, decl => !(getModifierFlags(decl) & ModifierFlags.Private));
-    }
-
-    function getInsertionsForMembers(symbolMap: MapLike<Symbol>, enclosingDeclaration: ClassDeclaration, checker: TypeChecker, newlineChar: string): string {
-        let insertion = "";
-
-        for (const symbolName in symbolMap) {
-            insertion = insertion.concat(getInsertionForMemberSymbol(symbolMap[symbolName], enclosingDeclaration, checker, newlineChar));
-        }
-        return insertion;
-    }
-
-    function getInsertionForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassDeclaration, checker: TypeChecker, newlineChar: string): string {
-        const name = symbol.getName();
-        const type = checker.getTypeOfSymbol(symbol);
-        const decls = symbol.getDeclarations();
-        if (!(decls && decls.length)) {
-            return "";
-        }
-        const node = decls[0];
-        const visibility = getVisibilityPrefix(getModifierFlags(node));
-        switch (node.kind) {
-            case SyntaxKind.PropertySignature:
-            case SyntaxKind.PropertyDeclaration:
-                const typeString = checker.typeToString(type, enclosingDeclaration, TypeFormatFlags.None);
-                return `${visibility}${name}: ${typeString};${newlineChar}`;
-
-            case SyntaxKind.MethodSignature:
-            case SyntaxKind.MethodDeclaration:
-                const sigs = checker.getSignaturesOfType(type, SignatureKind.Call);
-                if (!(sigs && sigs.length > 0)) {
-                    return "";
-                }
-                // TODO: (arozga) Deal with multiple signatures.
-                const sigString = checker.signatureToString(sigs[0], enclosingDeclaration, TypeFormatFlags.supressAnyReturnType, SignatureKind.Call);
-
-                return `${visibility}${name}${sigString}${getMethodBodyStub(newlineChar)}`;
-            default:
-                return "";
-        }
-    }
-
-    function getMethodBodyStub(newLineChar: string) {
-        return `{${newLineChar}throw new Error('Method not Implemented');${newLineChar}}${newLineChar}`;
-    }
-
-    function getVisibilityPrefix(flags: ModifierFlags): string {
-        if (flags & ModifierFlags.Public) {
-            return "public ";
-        }
-        else if (flags & ModifierFlags.Protected) {
-            return "protected ";
-        }
-        return "";
     }
 
     export function getOpenBraceEnd(constructor: ConstructorDeclaration, sourceFile: SourceFile) {

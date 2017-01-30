@@ -1,11 +1,11 @@
 === tests/cases/conformance/types/typeRelationships/widenedTypes/strictNullChecksNoWidening.ts ===
 
 var a1 = null;
->a1 : any
+>a1 : null
 >null : null
 
 var a2 = undefined;
->a2 : any
+>a2 : undefined
 >undefined : undefined
 
 var a3 = void 0;
@@ -14,7 +14,7 @@ var a3 = void 0;
 >0 : 0
 
 var b1 = [];
->b1 : any[]
+>b1 : never[]
 >[] : never[]
 
 var b2 = [,];

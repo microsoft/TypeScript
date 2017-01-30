@@ -14,11 +14,9 @@ namespace ts.GoToDefinition {
         // Type reference directives
         const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
         if (typeReferenceDirective) {
-            const referenceFile = program.getResolvedTypeReferenceDirectives()[typeReferenceDirective.fileName];
-            if (referenceFile && referenceFile.resolvedFileName) {
-                return [getDefinitionInfoForFileReference(typeReferenceDirective.fileName, referenceFile.resolvedFileName)];
-            }
-            return undefined;
+            const referenceFile = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName);
+            return referenceFile && referenceFile.resolvedFileName &&
+                [getDefinitionInfoForFileReference(typeReferenceDirective.fileName, referenceFile.resolvedFileName)];
         }
 
         const node = getTouchingPropertyName(sourceFile, position);
@@ -30,7 +28,7 @@ namespace ts.GoToDefinition {
         if (isJumpStatementTarget(node)) {
             const labelName = (<Identifier>node).text;
             const label = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
-            return label ? [createDefinitionInfo(label, ScriptElementKind.label, labelName, /*containerName*/ undefined)] : undefined;
+            return label ? [createDefinitionInfoFromName(label, ScriptElementKind.label, labelName, /*containerName*/ undefined)] : undefined;
         }
 
         const typeChecker = program.getTypeChecker();
@@ -171,33 +169,46 @@ namespace ts.GoToDefinition {
 
         function tryAddSignature(signatureDeclarations: Declaration[], selectConstructors: boolean, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
             const declarations: Declaration[] = [];
-            let definition: Declaration;
+            let definition: Declaration | undefined;
 
-            forEach(signatureDeclarations, d => {
-                if ((selectConstructors && d.kind === SyntaxKind.Constructor) ||
-                    (!selectConstructors && (d.kind === SyntaxKind.FunctionDeclaration || d.kind === SyntaxKind.MethodDeclaration || d.kind === SyntaxKind.MethodSignature))) {
+            for (const d of signatureDeclarations) {
+                if (selectConstructors ? d.kind === SyntaxKind.Constructor : isSignatureDeclaration(d)) {
                     declarations.push(d);
                     if ((<FunctionLikeDeclaration>d).body) definition = d;
                 }
-            });
-
-            if (definition) {
-                result.push(createDefinitionInfo(definition, symbolKind, symbolName, containerName));
-                return true;
-            }
-            else if (declarations.length) {
-                result.push(createDefinitionInfo(lastOrUndefined(declarations), symbolKind, symbolName, containerName));
-                return true;
             }
 
+            if (declarations.length) {
+                result.push(createDefinitionInfo(definition || lastOrUndefined(declarations), symbolKind, symbolName, containerName));
+                return true;
+            }
             return false;
         }
     }
 
-    function createDefinitionInfo(node: Node, symbolKind: string, symbolName: string, containerName: string): DefinitionInfo {
+    function isSignatureDeclaration(node: Node): boolean {
+        switch (node.kind) {
+            case ts.SyntaxKind.Constructor:
+            case ts.SyntaxKind.FunctionDeclaration:
+            case ts.SyntaxKind.MethodDeclaration:
+            case ts.SyntaxKind.MethodSignature:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /** Creates a DefinitionInfo from a Declaration, using the declaration's name if possible. */
+    function createDefinitionInfo(node: Declaration, symbolKind: string, symbolName: string, containerName: string): DefinitionInfo {
+        return createDefinitionInfoFromName(node.name || node, symbolKind, symbolName, containerName);
+    }
+
+    /** Creates a DefinitionInfo directly from the name of a declaration. */
+    function createDefinitionInfoFromName(name: Node, symbolKind: string, symbolName: string, containerName: string): DefinitionInfo {
+        const sourceFile = name.getSourceFile();
         return {
-            fileName: node.getSourceFile().fileName,
-            textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd()),
+            fileName: sourceFile.fileName,
+            textSpan: createTextSpanFromNode(name, sourceFile),
             kind: symbolKind,
             name: symbolName,
             containerKind: undefined,
@@ -251,6 +262,11 @@ namespace ts.GoToDefinition {
 
     function tryGetSignatureDeclaration(typeChecker: TypeChecker, node: Node): SignatureDeclaration | undefined {
         const callLike = getAncestorCallLikeExpression(node);
-        return callLike && typeChecker.getResolvedSignature(callLike).declaration;
+        const decl = callLike && typeChecker.getResolvedSignature(callLike).declaration;
+        if (decl && isSignatureDeclaration(decl)) {
+            return decl;
+        }
+        // Don't go to a function type, go to the value having that type.
+        return undefined;
     }
 }

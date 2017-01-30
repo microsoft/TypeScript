@@ -2,14 +2,14 @@
 
 // @Filename: goToDefinitionPartialImplementation_1.ts
 ////module A {
-////    /*Part1Definition*/export interface IA {
+////    export interface /*Part1Definition*/IA {
 ////        y: string;
 ////    }
 ////}
 
 // @Filename: goToDefinitionPartialImplementation_2.ts
 ////module A {
-////    /*Part2Definition*/export interface IA {
+////    export interface /*Part2Definition*/IA {
 ////        x: number;
 ////    }
 ////

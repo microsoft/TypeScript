@@ -12,6 +12,10 @@ class C {
     }
 }
 
+const o = { a: 1 };
+const y = { ...o };
+const { ...x } = y;
+
 //// [script.ts]
 class A { }
 class B extends A { }
@@ -27,6 +31,7 @@ class C {
 //// [tslib.d.ts]
 export {}
 
+
 //// [external.js]
 "use strict";
 var tslib_1 = require("tslib");
@@ -39,7 +44,7 @@ exports.A = A;
 var B = (function (_super) {
     tslib_1.__extends(B, _super);
     function B() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
@@ -58,15 +63,22 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:returntype", void 0)
 ], C.prototype, "method", null);
 C = tslib_1.__decorate([
-    dec,
-    tslib_1.__metadata("design:paramtypes", [])
+    dec
 ], C);
+var o = { a: 1 };
+var y = tslib_1.__assign({}, o);
+var x = tslib_1.__rest(y, []);
 //// [script.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -87,7 +99,7 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
@@ -105,6 +117,5 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], C.prototype, "method", null);
 C = __decorate([
-    dec,
-    __metadata("design:paramtypes", [])
+    dec
 ], C);

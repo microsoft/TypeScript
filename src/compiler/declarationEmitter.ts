@@ -32,7 +32,7 @@ namespace ts {
 
     export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
         const declarationDiagnostics = createDiagnosticCollection();
-        forEachExpectedEmitFile(host, getDeclarationDiagnosticsFromFile, targetSourceFile);
+        forEachEmittedFile(host, getDeclarationDiagnosticsFromFile, targetSourceFile);
         return declarationDiagnostics.getDiagnostics(targetSourceFile ? targetSourceFile.fileName : undefined);
 
         function getDeclarationDiagnosticsFromFile({ declarationFilePath }: EmitFileNames, sources: SourceFile[], isBundledEmit: boolean) {
@@ -156,9 +156,9 @@ namespace ts {
         });
 
         if (usedTypeDirectiveReferences) {
-            for (const directive in usedTypeDirectiveReferences) {
+            forEachKey(usedTypeDirectiveReferences, directive => {
                 referencesOutput += `/// <reference types="${directive}" />${newLine}`;
-            }
+            });
         }
 
         return {
@@ -194,6 +194,7 @@ namespace ts {
             writer.writeSpace = writer.write;
             writer.writeStringLiteral = writer.writeLiteral;
             writer.writeParameter = writer.write;
+            writer.writeProperty = writer.write;
             writer.writeSymbol = writer.write;
             setWriter(writer);
         }
@@ -270,8 +271,8 @@ namespace ts {
                 usedTypeDirectiveReferences = createMap<string>();
             }
             for (const directive of typeReferenceDirectives) {
-                if (!(directive in usedTypeDirectiveReferences)) {
-                    usedTypeDirectiveReferences[directive] = directive;
+                if (!usedTypeDirectiveReferences.has(directive)) {
+                    usedTypeDirectiveReferences.set(directive, directive);
                 }
             }
         }
@@ -371,7 +372,7 @@ namespace ts {
 
         function writeJsDocComments(declaration: Node) {
             if (declaration) {
-                const jsDocComments = getJsDocCommentsFromText(declaration, currentText);
+                const jsDocComments = getJSDocCommentRanges(declaration, currentText);
                 emitNewLineBeforeLeadingComments(currentLineMap, writer, declaration, jsDocComments);
                 // jsDoc comments are emitted at /*leading comment1 */space/*leading comment*/space
                 emitComments(currentText, currentLineMap, writer, jsDocComments, /*leadingSeparator*/ false, /*trailingSeparator*/ true, newLine, writeCommentRange);
@@ -389,6 +390,7 @@ namespace ts {
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.NumberKeyword:
                 case SyntaxKind.BooleanKeyword:
+                case SyntaxKind.ObjectKeyword:
                 case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.UndefinedKeyword:
@@ -416,7 +418,9 @@ namespace ts {
                 case SyntaxKind.TypeOperator:
                     return emitTypeOperator(<TypeOperatorNode>type);
                 case SyntaxKind.IndexedAccessType:
-                    return emitPropertyAccessType(<IndexedAccessTypeNode>type);
+                    return emitIndexedAccessType(<IndexedAccessTypeNode>type);
+                case SyntaxKind.MappedType:
+                    return emitMappedType(<MappedTypeNode>type);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                     return emitSignatureDeclarationWithJsDocComments(<FunctionOrConstructorTypeNode>type);
@@ -516,11 +520,37 @@ namespace ts {
                 emitType(type.type);
             }
 
-            function emitPropertyAccessType(node: IndexedAccessTypeNode) {
+            function emitIndexedAccessType(node: IndexedAccessTypeNode) {
                 emitType(node.objectType);
                 write("[");
                 emitType(node.indexType);
                 write("]");
+            }
+
+            function emitMappedType(node: MappedTypeNode) {
+                const prevEnclosingDeclaration = enclosingDeclaration;
+                enclosingDeclaration = node;
+                write("{");
+                writeLine();
+                increaseIndent();
+                if (node.readonlyToken) {
+                    write("readonly ");
+                }
+                write("[");
+                writeEntityName(node.typeParameter.name);
+                write(" in ");
+                emitType(node.typeParameter.constraint);
+                write("]");
+                if (node.questionToken) {
+                    write("?");
+                }
+                write(": ");
+                emitType(node.type);
+                write(";");
+                writeLine();
+                decreaseIndent();
+                write("}");
+                enclosingDeclaration = prevEnclosingDeclaration;
             }
 
             function emitTypeLiteral(type: TypeLiteralNode) {
@@ -552,14 +582,14 @@ namespace ts {
         // do not need to keep track of created temp names.
         function getExportDefaultTempVariableName(): string {
             const baseName = "_default";
-            if (!(baseName in currentIdentifiers)) {
+            if (!currentIdentifiers.has(baseName)) {
                 return baseName;
             }
             let count = 0;
             while (true) {
                 count++;
                 const name = baseName + "_" + count;
-                if (!(name in currentIdentifiers)) {
+                if (!currentIdentifiers.has(name)) {
                     return name;
                 }
             }
@@ -1009,6 +1039,10 @@ namespace ts {
                             diagnosticMessage = Diagnostics.Type_parameter_0_of_exported_function_has_or_is_using_private_name_1;
                             break;
 
+                        case SyntaxKind.TypeAliasDeclaration:
+                            diagnosticMessage = Diagnostics.Type_parameter_0_of_exported_type_alias_has_or_is_using_private_name_1;
+                            break;
+
                         default:
                             Debug.fail("This is unknown parent for type parameter: " + node.parent.kind);
                     }
@@ -1115,7 +1149,10 @@ namespace ts {
             const prevEnclosingDeclaration = enclosingDeclaration;
             enclosingDeclaration = node;
             emitTypeParameters(node.typeParameters);
-            emitHeritageClause(getInterfaceBaseTypeNodes(node), /*isImplementsList*/ false);
+            const interfaceExtendsTypes = filter(getInterfaceBaseTypeNodes(node), base => isEntityNameExpression(base.expression));
+            if (interfaceExtendsTypes && interfaceExtendsTypes.length) {
+                emitHeritageClause(interfaceExtendsTypes, /*isImplementsList*/ false);
+            }
             write(" {");
             writeLine();
             increaseIndent();
@@ -1590,6 +1627,12 @@ namespace ts {
                             Diagnostics.Parameter_0_of_call_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
                             Diagnostics.Parameter_0_of_call_signature_from_exported_interface_has_or_is_using_private_name_1;
 
+                    case SyntaxKind.IndexSignature:
+                        // Interfaces cannot have parameter types that cannot be named
+                        return symbolAccessibilityResult.errorModuleName ?
+                            Diagnostics.Parameter_0_of_index_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Parameter_0_of_index_signature_from_exported_interface_has_or_is_using_private_name_1;
+
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:
                         if (hasModifier(node.parent, ModifierFlags.Static)) {
@@ -1745,7 +1788,7 @@ namespace ts {
             }
             else {
                 // Get the declaration file path
-                forEachExpectedEmitFile(host, getDeclFileName, referencedFile, emitOnlyDtsFiles);
+                forEachEmittedFile(host, getDeclFileName, referencedFile, emitOnlyDtsFiles);
             }
 
             if (declFileName) {

@@ -10,6 +10,6 @@
 ////f./**/
 
 goTo.marker();
-verify.memberListCount(2);
-verify.memberListContains('pubMeth', '(method) C1.pubMeth(): void');
-verify.memberListContains('pubProp', '(property) C1.pubProp: number');
+verify.completionListCount(2);
+verify.completionListContains('pubMeth', '(method) C1.pubMeth(): void');
+verify.completionListContains('pubProp', '(property) C1.pubProp: number');

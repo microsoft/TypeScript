@@ -1,4 +1,4 @@
-/* @internal */
+﻿/* @internal */
 namespace ts {
     export interface CodeFix {
         errorCodes: number[];
@@ -11,10 +11,12 @@ namespace ts {
         span: TextSpan;
         program: Program;
         newLineCharacter: string;
+        host: LanguageServiceHost;
+        cancellationToken: CancellationToken;
     }
 
     export namespace codefix {
-        const codeFixes = createMap<CodeFix[]>();
+        const codeFixes: CodeFix[][] = [];
 
         export function registerCodeFix(action: CodeFix) {
             forEach(action.errorCodes, error => {

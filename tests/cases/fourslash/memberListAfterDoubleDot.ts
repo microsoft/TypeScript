@@ -3,4 +3,4 @@
 ////../**/
 
 goTo.marker();
-verify.memberListIsEmpty();
+verify.completionListIsEmpty();

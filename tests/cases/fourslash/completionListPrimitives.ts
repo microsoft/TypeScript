@@ -3,10 +3,10 @@
 /////**/
 
 goTo.marker();
-verify.memberListContains("any");
-verify.memberListContains("boolean");
-verify.memberListContains("null");
-verify.memberListContains("number");
-verify.memberListContains("string");
-verify.memberListContains("undefined");
-verify.memberListContains("void");
+verify.completionListContains("any");
+verify.completionListContains("boolean");
+verify.completionListContains("null");
+verify.completionListContains("number");
+verify.completionListContains("string");
+verify.completionListContains("undefined");
+verify.completionListContains("void");

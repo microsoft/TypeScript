@@ -20,4 +20,4 @@ verify.quickInfoIs('function f(p1: "literal", p2: "literal", p3: "other1" | "oth
 goTo.marker('2');
 verify.completionListContains("other1");
 verify.completionListContains("other2");
-verify.memberListCount(2);
+verify.completionListCount(2);

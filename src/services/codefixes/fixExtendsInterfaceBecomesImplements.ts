@@ -6,39 +6,42 @@ namespace ts.codefix {
             const sourceFile = context.sourceFile;
             const start = context.span.start;
             const token = getTokenAtPosition(sourceFile, start);
-
-            if (!(token.kind === SyntaxKind.Identifier && token.parent.parent.parent.kind === SyntaxKind.ClassDeclaration)) {
+            const classDeclNode = getContainingClass(token);
+            if (!(token.kind === SyntaxKind.Identifier && isClassLike(classDeclNode))) {
                 return undefined;
             }
 
-            const extendsNode = (token.parent.parent as HeritageClause).getChildren()[0];
+            const heritageClauses = classDeclNode.heritageClauses;
+            if (!(heritageClauses && heritageClauses.length > 0)) {
+                return undefined;
+            }
+
+            const extendsToken = heritageClauses[0].getFirstToken();
+            if (!(extendsToken && extendsToken.kind === SyntaxKind.ExtendsKeyword)) {
+                return undefined;
+            }
+
+            let changeStart = extendsToken.getStart(sourceFile);
+            let changeEnd = extendsToken.getEnd();
+            const textChanges: TextChange[] = [{ newText: " implements", span: { start: changeStart, length: changeEnd - changeStart } }];
+
+            // We replace existing keywords with commas.
+            for (let i = 1; i < heritageClauses.length; i++) {
+                const keywordToken = heritageClauses[i].getFirstToken();
+                if (keywordToken) {
+                    changeStart = keywordToken.getStart(sourceFile);
+                    changeEnd = keywordToken.getEnd();
+                    textChanges.push({ newText: ",", span: { start: changeStart, length: changeEnd - changeStart } });
+                }
+            }
 
             const result = [{
                 description: getLocaleSpecificMessage(Diagnostics.Change_extends_to_implements),
                 changes: [{
                     fileName: sourceFile.fileName,
-                    textChanges: [{ newText: " implements", span: { start: extendsNode.pos, length: extendsNode.end - extendsNode.pos } }]
+                    textChanges: textChanges
                 }]
             }];
-
-            // We check if the implements keyword is present and replace it with a comma if so.
-            const classDeclChildren = (token.parent.parent.parent as ClassDeclaration).getChildren();
-            if (classDeclChildren.length < 3) {
-                return result;
-            }
-
-            let classSyntaxListChildren: Node[];
-            if (classDeclChildren[2].kind !== SyntaxKind.SyntaxList || (classSyntaxListChildren = classDeclChildren[2].getChildren()).length < 2) {
-                return result;
-            }
-
-            let implementsTokenChildren: Node[];
-            if ((classSyntaxListChildren[1] as HeritageClause).token !== SyntaxKind.ImplementsKeyword || (implementsTokenChildren = classSyntaxListChildren[1].getChildren()).length === 0) {
-                return result;
-            }
-
-            const implementsNode = implementsTokenChildren[0];
-            result[0].changes[0].textChanges.push({ newText: ",", span: { start: implementsNode.pos, length: implementsNode.end - implementsNode.pos } });
 
             return result;
         }

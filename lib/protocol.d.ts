@@ -59,7 +59,7 @@ declare namespace ts.server.protocol {
         /**
           * One of "request", "response", or "event"
           */
-        type: string;
+        type: "request" | "response" | "event";
     }
     /**
       * Client-initiated request message
@@ -653,7 +653,7 @@ declare namespace ts.server.protocol {
         /**
          * Script kind of the file
          */
-        scriptKind?: ScriptKind;
+        scriptKind?: ScriptKindName | ts.ScriptKind;
         /**
          * Whether file has mixed content (i.e. .cshtml file that combines html markup with C#/JavaScript)
          */
@@ -680,41 +680,25 @@ declare namespace ts.server.protocol {
          */
         options: ExternalProjectCompilerOptions;
         /**
-         * Explicitly specified typing options for the project
+         * @deprecated typingOptions. Use typeAcquisition instead
          */
-        typingOptions?: TypingOptions;
+        typingOptions?: TypeAcquisition;
+        /**
+         * Explicitly specified type acquisition for the project
+         */
+        typeAcquisition?: TypeAcquisition;
     }
-    /**
-     * For external projects, some of the project settings are sent together with
-     * compiler settings.
-     */
-    interface ExternalProjectCompilerOptions extends CompilerOptions {
+    interface CompileOnSaveMixin {
         /**
          * If compile on save is enabled for the project
          */
         compileOnSave?: boolean;
     }
     /**
-     * Contains information about current project version
+     * For external projects, some of the project settings are sent together with
+     * compiler settings.
      */
-    interface ProjectVersionInfo {
-        /**
-         * Project name
-         */
-        projectName: string;
-        /**
-         * true if project is inferred or false if project is external or configured
-         */
-        isInferred: boolean;
-        /**
-         * Project version
-         */
-        version: number;
-        /**
-         * Current set of compiler options for project
-         */
-        options: CompilerOptions;
-    }
+    type ExternalProjectCompilerOptions = CompilerOptions & CompileOnSaveMixin;
     /**
      * Represents a set of changes that happen in project
      */
@@ -727,36 +711,10 @@ declare namespace ts.server.protocol {
          * List of removed files
          */
         removed: string[];
-    }
-    /**
-     * Describes set of files in the project.
-     * info might be omitted in case of inferred projects
-     * if files is set - then this is the entire set of files in the project
-     * if changes is set - then this is the set of changes that should be applied to existing project
-     * otherwise - assume that nothing is changed
-     */
-    interface ProjectFiles {
         /**
-         * Information abount project verison
+         * List of updated files
          */
-        info?: ProjectVersionInfo;
-        /**
-         * List of files in project (might be omitted if current state of project can be computed using only information from 'changes')
-         */
-        files?: string[];
-        /**
-         * Set of changes in project (omitted if the entire set of files in project should be replaced)
-         */
-        changes?: ProjectChanges;
-    }
-    /**
-     * Combines project information with project level errors.
-     */
-    interface ProjectFilesWithDiagnostics extends ProjectFiles {
-        /**
-         * List of errors in project
-         */
-        projectErrors: DiagnosticWithLinePosition[];
+        updated: string[];
     }
     /**
       * Information found in a configure request.
@@ -775,6 +733,10 @@ declare namespace ts.server.protocol {
          * The format options to use during formatting and other code editing features.
          */
         formatOptions?: FormatCodeSettings;
+        /**
+         * The host's additional supported file extensions
+         */
+        extraFileExtensions?: FileExtensionInfo[];
     }
     /**
       *  Configure request; value of command field is "configure".  Specifies
@@ -803,8 +765,9 @@ declare namespace ts.server.protocol {
          * Used to specify the script kind of the file explicitly. It could be one of the following:
          *      "TS", "JS", "TSX", "JSX"
          */
-        scriptKindName?: "TS" | "JS" | "TSX" | "JSX";
+        scriptKindName?: ScriptKindName;
     }
+    type ScriptKindName = "TS" | "JS" | "TSX" | "JSX";
     /**
       * Open request; value of command field is "open". Notify the
       * server that the client has file open.  The server will not
@@ -877,15 +840,6 @@ declare namespace ts.server.protocol {
      * no body field is required.
      */
     interface CloseExternalProjectResponse extends Response {
-    }
-    /**
-     * Arguments to SynchronizeProjectListRequest
-     */
-    interface SynchronizeProjectListRequestArgs {
-        /**
-         * List of last known projects
-         */
-        knownProjects: protocol.ProjectVersionInfo[];
     }
     /**
      * Request to set compiler options for inferred projects.
@@ -1458,6 +1412,25 @@ declare namespace ts.server.protocol {
         body?: ConfigFileDiagnosticEventBody;
         event: "configFileDiag";
     }
+    type ProjectLanguageServiceStateEventName = "projectLanguageServiceState";
+    interface ProjectLanguageServiceStateEvent extends Event {
+        event: ProjectLanguageServiceStateEventName;
+        body?: ProjectLanguageServiceStateEventBody;
+    }
+    interface ProjectLanguageServiceStateEventBody {
+        /**
+         * Project name that has changes in the state of language service.
+         * For configured projects this will be the config file path.
+         * For external projects this will be the name of the projects specified when project was open.
+         * For inferred projects this event is not raised.
+         */
+        projectName: string;
+        /**
+         * True if language service state switched from disabled to enabled
+         * and false otherwise.
+         */
+        languageServiceEnabled: boolean;
+    }
     /**
       * Arguments for reload request.
       */
@@ -1669,68 +1642,102 @@ declare namespace ts.server.protocol {
         spans: TextSpan[];
         childItems?: NavigationTree[];
     }
+    type TelemetryEventName = "telemetry";
+    interface TelemetryEvent extends Event {
+        event: TelemetryEventName;
+        body: TelemetryEventBody;
+    }
+    interface TelemetryEventBody {
+        telemetryEventName: string;
+        payload: any;
+    }
+    type TypingsInstalledTelemetryEventName = "typingsInstalled";
+    interface TypingsInstalledTelemetryEventBody extends TelemetryEventBody {
+        telemetryEventName: TypingsInstalledTelemetryEventName;
+        payload: TypingsInstalledTelemetryEventPayload;
+    }
+    interface TypingsInstalledTelemetryEventPayload {
+        /**
+         * Comma separated list of installed typing packages
+         */
+        installedPackages: string;
+        /**
+         * true if install request succeeded, otherwise - false
+         */
+        installSuccess: boolean;
+        /**
+         * version of typings installer
+         */
+        typingsInstallerVersion: string;
+    }
+    type BeginInstallTypesEventName = "beginInstallTypes";
+    type EndInstallTypesEventName = "endInstallTypes";
+    interface BeginInstallTypesEvent extends Event {
+        event: BeginInstallTypesEventName;
+        body: BeginInstallTypesEventBody;
+    }
+    interface EndInstallTypesEvent extends Event {
+        event: EndInstallTypesEventName;
+        body: EndInstallTypesEventBody;
+    }
+    interface InstallTypesEventBody {
+        /**
+         * correlation id to match begin and end events
+         */
+        eventId: number;
+        /**
+         * list of packages to install
+         */
+        packages: ReadonlyArray<string>;
+    }
+    interface BeginInstallTypesEventBody extends InstallTypesEventBody {
+    }
+    interface EndInstallTypesEventBody extends InstallTypesEventBody {
+        /**
+         * true if installation succeeded, otherwise false
+         */
+        success: boolean;
+    }
     interface NavBarResponse extends Response {
         body?: NavigationBarItem[];
     }
     interface NavTreeResponse extends Response {
         body?: NavigationTree;
     }
-}
-declare namespace ts.server.protocol {
-
-    interface TextInsertion {
-        newText: string;
-        /** The position in newText the caret should point to after the insertion. */
-        caretOffset: number;
+    namespace IndentStyle {
+        type None = "None";
+        type Block = "Block";
+        type Smart = "Smart";
     }
-
-    interface TodoCommentDescriptor {
-        text: string;
-        priority: number;
-    }
-
-    interface TodoComment {
-        descriptor: TodoCommentDescriptor;
-        message: string;
-        position: number;
-    }
-
+    type IndentStyle = IndentStyle.None | IndentStyle.Block | IndentStyle.Smart;
     interface EditorSettings {
         baseIndentSize?: number;
         indentSize?: number;
         tabSize?: number;
         newLineCharacter?: string;
         convertTabsToSpaces?: boolean;
-        indentStyle?: IndentStyle;
+        indentStyle?: IndentStyle | ts.IndentStyle;
     }
-
-    enum IndentStyle {
-        None = 0,
-        Block = 1,
-        Smart = 2,
+    interface FormatCodeSettings extends EditorSettings {
+        insertSpaceAfterCommaDelimiter?: boolean;
+        insertSpaceAfterSemicolonInForStatements?: boolean;
+        insertSpaceBeforeAndAfterBinaryOperators?: boolean;
+        insertSpaceAfterConstructor?: boolean;
+        insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
+        insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
+        insertSpaceBeforeFunctionParenthesis?: boolean;
+        placeOpenBraceOnNewLineForFunctions?: boolean;
+        placeOpenBraceOnNewLineForControlBlocks?: boolean;
     }
-
-    enum ScriptKind {
-        Unknown = 0,
-        JS = 1,
-        JSX = 2,
-        TS = 3,
-        TSX = 4,
-    }
-
-    interface TypingOptions {
-        enableAutoDiscovery?: boolean;
-        include?: string[];
-        exclude?: string[];
-        [option: string]: string[] | boolean | undefined;
-    }
-
     interface CompilerOptions {
         allowJs?: boolean;
         allowSyntheticDefaultImports?: boolean;
         allowUnreachableCode?: boolean;
         allowUnusedLabels?: boolean;
-        alwaysStrict?: boolean;
         baseUrl?: string;
         charset?: string;
         declaration?: boolean;
@@ -1740,18 +1747,17 @@ declare namespace ts.server.protocol {
         emitDecoratorMetadata?: boolean;
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
-        importHelpers?: boolean;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
         isolatedModules?: boolean;
-        jsx?: JsxEmit;
+        jsx?: JsxEmit | ts.JsxEmit;
         lib?: string[];
         locale?: string;
         mapRoot?: string;
         maxNodeModuleJsDepth?: number;
-        module?: ModuleKind;
-        moduleResolution?: ModuleResolutionKind;
-        newLine?: NewLineKind;
+        module?: ModuleKind | ts.ModuleKind;
+        moduleResolution?: ModuleResolutionKind | ts.ModuleResolutionKind;
+        newLine?: NewLineKind | ts.NewLineKind;
         noEmit?: boolean;
         noEmitHelpers?: boolean;
         noEmitOnError?: boolean;
@@ -1782,67 +1788,96 @@ declare namespace ts.server.protocol {
         strictNullChecks?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
-        target?: ScriptTarget;
+        target?: ScriptTarget | ts.ScriptTarget;
         traceResolution?: boolean;
         types?: string[];
         /** Paths used to used to compute primary types search locations */
         typeRoots?: string[];
         [option: string]: CompilerOptionsValue | undefined;
     }
+    namespace JsxEmit {
+        type None = "None";
+        type Preserve = "Preserve";
+        type React = "React";
+    }
+    type JsxEmit = JsxEmit.None | JsxEmit.Preserve | JsxEmit.React;
+    namespace ModuleKind {
+        type None = "None";
+        type CommonJS = "CommonJS";
+        type AMD = "AMD";
+        type UMD = "UMD";
+        type System = "System";
+        type ES6 = "ES6";
+        type ES2015 = "ES2015";
+    }
+    type ModuleKind = ModuleKind.None | ModuleKind.CommonJS | ModuleKind.AMD | ModuleKind.UMD | ModuleKind.System | ModuleKind.ES6 | ModuleKind.ES2015;
+    namespace ModuleResolutionKind {
+        type Classic = "Classic";
+        type Node = "Node";
+    }
+    type ModuleResolutionKind = ModuleResolutionKind.Classic | ModuleResolutionKind.Node;
+    namespace NewLineKind {
+        type Crlf = "Crlf";
+        type Lf = "Lf";
+    }
+    type NewLineKind = NewLineKind.Crlf | NewLineKind.Lf;
+    namespace ScriptTarget {
+        type ES3 = "ES3";
+        type ES5 = "ES5";
+        type ES6 = "ES6";
+        type ES2015 = "ES2015";
+    }
+    type ScriptTarget = ScriptTarget.ES3 | ScriptTarget.ES5 | ScriptTarget.ES6 | ScriptTarget.ES2015;
+}
+declare namespace ts.server.protocol {
 
-    enum JsxEmit {
-        None = 0,
-        Preserve = 1,
-        React = 2,
+    interface TextInsertion {
+        newText: string;
+        /** The position in newText the caret should point to after the insertion. */
+        caretOffset: number;
     }
 
-    enum ModuleKind {
-        None = 0,
-        CommonJS = 1,
-        AMD = 2,
-        UMD = 3,
-        System = 4,
-        ES6 = 5,
-        ES2015 = 5,
+    interface TodoCommentDescriptor {
+        text: string;
+        priority: number;
     }
 
-    enum ModuleResolutionKind {
-        Classic = 1,
-        NodeJs = 2,
+    interface TodoComment {
+        descriptor: TodoCommentDescriptor;
+        message: string;
+        position: number;
     }
 
-    enum NewLineKind {
-        CarriageReturnLineFeed = 0,
-        LineFeed = 1,
+    interface TypeAcquisition {
+        enableAutoDiscovery?: boolean;
+        enable?: boolean;
+        include?: string[];
+        exclude?: string[];
+        [option: string]: string[] | boolean | undefined;
+    }
+
+    interface FileExtensionInfo {
+        extension: string;
+        scriptKind: ScriptKind;
+        isMixedContent: boolean;
     }
 
     interface MapLike<T> {
         [index: string]: T;
     }
 
-    enum ScriptTarget {
-        ES3 = 0,
-        ES5 = 1,
-        ES6 = 2,
-        ES2015 = 2,
-        Latest = 2,
-    }
-
     type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]>;
-
-    interface FormatCodeSettings extends EditorSettings {
-        insertSpaceAfterCommaDelimiter?: boolean;
-        insertSpaceAfterSemicolonInForStatements?: boolean;
-        insertSpaceBeforeAndAfterBinaryOperators?: boolean;
-        insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
-        insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces?: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
-        insertSpaceAfterTypeAssertion?: boolean;
-        placeOpenBraceOnNewLineForFunctions?: boolean;
-        placeOpenBraceOnNewLineForControlBlocks?: boolean;
-    }
 }
+declare namespace ts {
+    // these types are empty stubs for types from services and should not be used directly
+    export type ScriptKind = never;
+    export type IndentStyle = never;
+    export type JsxEmit = never;
+    export type ModuleKind = never;
+    export type ModuleResolutionKind = never;
+    export type NewLineKind = never;
+    export type ScriptTarget = never;
+}
+import protocol = ts.server.protocol;
+export = protocol;
+export as namespace protocol;

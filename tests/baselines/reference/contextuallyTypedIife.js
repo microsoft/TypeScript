@@ -28,6 +28,9 @@
 // contextually typed parameters.
 let twelve = (f => f(12))(i => i);
 let eleven = (o => o.a(11))({ a: function(n) { return n; } });
+// missing arguments
+(function(x, undefined) { return x; })(42);
+((x, y, z) => 42)();
 
 
 //// [contextuallyTypedIife.js]
@@ -57,21 +60,21 @@ let eleven = (o => o.a(11))({ a: function(n) { return n; } });
 (function () {
     var numbers = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        numbers[_i - 0] = arguments[_i];
+        numbers[_i] = arguments[_i];
     }
     return numbers.every(function (n) { return n > 0; });
 })(5, 6, 7);
 (function () {
     var mixed = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        mixed[_i - 0] = arguments[_i];
+        mixed[_i] = arguments[_i];
     }
     return mixed.every(function (n) { return !!n; });
 })(5, 'oops', 'oh no');
 (function () {
     var noNumbers = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        noNumbers[_i - 0] = arguments[_i];
+        noNumbers[_i] = arguments[_i];
     }
     return noNumbers.some(function (n) { return n > 0; });
 })();
@@ -102,3 +105,6 @@ let eleven = (o => o.a(11))({ a: function(n) { return n; } });
 // contextually typed parameters.
 var twelve = (function (f) { return f(12); })(function (i) { return i; });
 var eleven = (function (o) { return o.a(11); })({ a: function (n) { return n; } });
+// missing arguments
+(function (x, undefined) { return x; })(42);
+(function (x, y, z) { return 42; })();

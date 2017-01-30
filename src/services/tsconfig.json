@@ -1,18 +1,9 @@
-{
+﻿{
+    "extends": "../tsconfig-base",
     "compilerOptions": {
-        "noImplicitAny": true,
-        "noImplicitThis": true,
         "removeComments": false,
-        "preserveConstEnums": true,
-        "pretty": true,
         "outFile": "../../built/local/typescriptServices.js",
-        "sourceMap": true,
-        "stripInternal": true,
-        "noResolve": false,
-        "declaration": true,
-        "target": "es5",
-        "noUnusedLocals": true,
-        "noUnusedParameters": true
+        "declaration": true
     },
     "files": [
         "../compiler/core.ts",
@@ -28,6 +19,7 @@
         "../compiler/visitor.ts",
         "../compiler/transformers/ts.ts",
         "../compiler/transformers/jsx.ts",
+        "../compiler/transformers/esnext.ts",
         "../compiler/transformers/es2017.ts",
         "../compiler/transformers/es2016.ts",
         "../compiler/transformers/es2015.ts",
@@ -86,12 +78,15 @@
         "formatting/smartIndenter.ts",
         "formatting/tokenRange.ts",
         "codeFixProvider.ts",
-        "codeFixes/fixes.ts",
-        "codeFixes/fixExtendsInterfaceBecomesImplements.ts",
-        "codeFixes/fixClassIncorrectlyImplementsInterface.ts",
-        "codeFixes/fixClassDoesntImplementInheritedAbstractMember.ts",
-        "codeFixes/fixClassSuperMustPrecedeThisAccess.ts",
-        "codeFixes/fixConstructorForDerivedNeedSuperCall.ts",
-        "codefixes/fixForgottenThisPropertyAccess.ts"
+        "codefixes/fixExtendsInterfaceBecomesImplements.ts",
+        "codefixes/fixClassIncorrectlyImplementsInterface.ts",
+        "codefixes/fixClassDoesntImplementInheritedAbstractMember.ts",
+        "codefixes/fixClassSuperMustPrecedeThisAccess.ts",
+        "codefixes/fixConstructorForDerivedNeedSuperCall.ts",
+        "codefixes/fixForgottenThisPropertyAccess.ts",
+        "codefixes/fixes.ts",
+        "codefixes/helpers.ts",
+        "codefixes/importFixes.ts",
+        "codefixes/unusedIdentifierFixes.ts"
     ]
 }

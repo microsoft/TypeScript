@@ -1,4 +1,4 @@
-﻿/**
+/**
   * Declaration module describing the TypeScript Server protocol
   */
 namespace ts.server.protocol {
@@ -417,7 +417,7 @@ namespace ts.server.protocol {
         startOffset: number;
 
         /**
-         * Position (can be specified instead of line/offset pair) 
+         * Position (can be specified instead of line/offset pair)
          */
         /* @internal */
         startPosition?: number;
@@ -433,7 +433,7 @@ namespace ts.server.protocol {
         endOffset: number;
 
         /**
-         * Position (can be specified instead of line/offset pair) 
+         * Position (can be specified instead of line/offset pair)
          */
         /* @internal */
         endPosition?: number;
@@ -445,7 +445,7 @@ namespace ts.server.protocol {
     }
 
     /**
-     * Response for GetCodeFixes request. 
+     * Response for GetCodeFixes request.
      */
     export interface GetCodeFixesResponse extends Response {
         body?: CodeAction[];
@@ -861,9 +861,13 @@ namespace ts.server.protocol {
          */
         options: ExternalProjectCompilerOptions;
         /**
-         * Explicitly specified typing options for the project
+         * @deprecated typingOptions. Use typeAcquisition instead
          */
-        typingOptions?: TypingOptions;
+        typingOptions?: TypeAcquisition;
+        /**
+         * Explicitly specified type acquisition for the project
+         */
+        typeAcquisition?: TypeAcquisition;
     }
 
     export interface CompileOnSaveMixin {
@@ -900,6 +904,11 @@ namespace ts.server.protocol {
          * Current set of compiler options for project
          */
         options: ts.CompilerOptions;
+
+        /**
+         * true if project language service is disabled
+         */
+        languageServiceDisabled: boolean;
     }
 
     /**
@@ -914,6 +923,10 @@ namespace ts.server.protocol {
          * List of removed files
          */
         removed: string[];
+        /**
+         * List of updated files
+         */
+        updated: string[];
     }
 
     /**
@@ -986,6 +999,11 @@ namespace ts.server.protocol {
          * The format options to use during formatting and other code editing features.
          */
         formatOptions?: FormatCodeSettings;
+
+        /**
+         * The host's additional supported file extensions
+         */
+        extraFileExtensions?: FileExtensionInfo[];
     }
 
     /**
@@ -1814,6 +1832,27 @@ namespace ts.server.protocol {
         event: "configFileDiag";
     }
 
+    export type ProjectLanguageServiceStateEventName = "projectLanguageServiceState";
+    export interface ProjectLanguageServiceStateEvent extends Event {
+        event: ProjectLanguageServiceStateEventName;
+        body?: ProjectLanguageServiceStateEventBody;
+    }
+
+    export interface ProjectLanguageServiceStateEventBody {
+        /**
+         * Project name that has changes in the state of language service.
+         * For configured projects this will be the config file path.
+         * For external projects this will be the name of the projects specified when project was open.
+         * For inferred projects this event is not raised.
+         */
+        projectName: string;
+        /**
+         * True if language service state switched from disabled to enabled
+         * and false otherwise.
+         */
+        languageServiceEnabled: boolean;
+    }
+
     /**
       * Arguments for reload request.
       */
@@ -2081,6 +2120,49 @@ namespace ts.server.protocol {
          * Comma separated list of installed typing packages
          */
         installedPackages: string;
+        /**
+         * true if install request succeeded, otherwise - false
+         */
+        installSuccess: boolean;
+
+        /**
+         * version of typings installer
+         */
+        typingsInstallerVersion: string;
+    }
+
+    export type BeginInstallTypesEventName = "beginInstallTypes";
+    export type EndInstallTypesEventName = "endInstallTypes";
+
+    export interface BeginInstallTypesEvent extends Event {
+        event: BeginInstallTypesEventName;
+        body: BeginInstallTypesEventBody;
+    }
+
+    export interface EndInstallTypesEvent extends Event {
+        event: EndInstallTypesEventName;
+        body: EndInstallTypesEventBody;
+    }
+
+    export interface InstallTypesEventBody {
+        /**
+         * correlation id to match begin and end events
+         */
+        eventId: number;
+        /**
+         * list of packages to install
+         */
+        packages: ReadonlyArray<string>;
+    }
+
+    export interface BeginInstallTypesEventBody extends InstallTypesEventBody {
+    }
+
+    export interface EndInstallTypesEventBody extends InstallTypesEventBody {
+        /**
+         * true if installation succeeded, otherwise false
+         */
+        success: boolean;
     }
 
     export interface NavBarResponse extends Response {
@@ -2112,12 +2194,14 @@ namespace ts.server.protocol {
         insertSpaceAfterCommaDelimiter?: boolean;
         insertSpaceAfterSemicolonInForStatements?: boolean;
         insertSpaceBeforeAndAfterBinaryOperators?: boolean;
+        insertSpaceAfterConstructor?: boolean;
         insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
         insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
+        insertSpaceBeforeFunctionParenthesis?: boolean;
         placeOpenBraceOnNewLineForFunctions?: boolean;
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
     }
@@ -2188,10 +2272,11 @@ namespace ts.server.protocol {
     export namespace JsxEmit {
         export type None = "None";
         export type Preserve = "Preserve";
+        export type ReactNative = "ReactNative";
         export type React = "React";
     }
 
-    export type JsxEmit = JsxEmit.None | JsxEmit.Preserve | JsxEmit.React;
+    export type JsxEmit = JsxEmit.None | JsxEmit.Preserve | JsxEmit.React | JsxEmit.ReactNative;
 
     export namespace ModuleKind {
         export type None = "None";
