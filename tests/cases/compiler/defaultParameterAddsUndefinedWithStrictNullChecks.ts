@@ -14,12 +14,24 @@ function foo1(x: string = "string", b: number) {
 }
 
 function foo2(x = "string", b: number) {
-    x.length;
+    x.length; // ok, should be string
 }
 
-// .d.ts should have `T | undefined` for foo1 and foo2
+function foo3(x: string | undefined = "string", b: number) {
+    x.length; // ok, should be string
+}
+
+function foo4(x: string | undefined = undefined, b: number) {
+    x; // should be string | undefined
+}
+
+
+
+// .d.ts should have `string | undefined` for foo1, foo2, foo3 and foo4
 foo1(undefined, 1);
 foo2(undefined, 1);
+foo3(undefined, 1);
+foo4(undefined, 1);
 
 
 function removeUndefinedButNotFalse(x = true) {

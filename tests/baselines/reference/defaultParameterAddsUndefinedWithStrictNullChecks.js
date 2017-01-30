@@ -13,12 +13,24 @@ function foo1(x: string = "string", b: number) {
 }
 
 function foo2(x = "string", b: number) {
-    x.length;
+    x.length; // ok, should be string
 }
 
-// .d.ts should have `T | undefined` for foo1 and foo2
+function foo3(x: string | undefined = "string", b: number) {
+    x.length; // ok, should be string
+}
+
+function foo4(x: string | undefined = undefined, b: number) {
+    x; // should be string | undefined
+}
+
+
+
+// .d.ts should have `string | undefined` for foo1, foo2, foo3 and foo4
 foo1(undefined, 1);
 foo2(undefined, 1);
+foo3(undefined, 1);
+foo4(undefined, 1);
 
 
 function removeUndefinedButNotFalse(x = true) {
@@ -55,11 +67,21 @@ function foo1(x, b) {
 }
 function foo2(x, b) {
     if (x === void 0) { x = "string"; }
-    x.length;
+    x.length; // ok, should be string
 }
-// .d.ts should have `T | undefined` for foo1 and foo2
+function foo3(x, b) {
+    if (x === void 0) { x = "string"; }
+    x.length; // ok, should be string
+}
+function foo4(x, b) {
+    if (x === void 0) { x = undefined; }
+    x; // should be string | undefined
+}
+// .d.ts should have `string | undefined` for foo1, foo2, foo3 and foo4
 foo1(undefined, 1);
 foo2(undefined, 1);
+foo3(undefined, 1);
+foo4(undefined, 1);
 function removeUndefinedButNotFalse(x) {
     if (x === void 0) { x = true; }
     if (x === false) {
@@ -83,6 +105,8 @@ declare function g(addUndefined: string | undefined, addDefined: number): number
 declare let total: number;
 declare function foo1(x: string | undefined, b: number): void;
 declare function foo2(x: string | undefined, b: number): void;
+declare function foo3(x: string | undefined, b: number): void;
+declare function foo4(x: string | undefined, b: number): void;
 declare function removeUndefinedButNotFalse(x?: boolean | undefined): false | undefined;
 declare const cond: boolean;
 declare function removeNothing(y?: boolean | undefined): boolean;
