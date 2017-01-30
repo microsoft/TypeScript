@@ -3267,6 +3267,10 @@
         "category": "Message",
         "code": 90007
     },
+    "Add 'this.' to unresolved variable.": {
+        "category": "Message",
+        "code": 90008
+    },
     "Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig": {
         "category": "Error",
         "code": 90009
