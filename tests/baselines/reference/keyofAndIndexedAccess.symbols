@@ -1844,3 +1844,39 @@ class B extends A<{ x: number}> {
 	}
 }
 
+// Repro from #13749
+
+class Form<T> {
+>Form : Symbol(Form, Decl(keyofAndIndexedAccess.ts, 516, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 520, 11))
+
+    private childFormFactories: {[K in keyof T]: (v: T[K]) => Form<T[K]>}
+>childFormFactories : Symbol(Form.childFormFactories, Decl(keyofAndIndexedAccess.ts, 520, 15))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 521, 34))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 520, 11))
+>v : Symbol(v, Decl(keyofAndIndexedAccess.ts, 521, 50))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 520, 11))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 521, 34))
+>Form : Symbol(Form, Decl(keyofAndIndexedAccess.ts, 516, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 520, 11))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 521, 34))
+
+    public set<K extends keyof T>(prop: K, value: T[K]) {
+>set : Symbol(Form.set, Decl(keyofAndIndexedAccess.ts, 521, 73))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 523, 15))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 520, 11))
+>prop : Symbol(prop, Decl(keyofAndIndexedAccess.ts, 523, 34))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 523, 15))
+>value : Symbol(value, Decl(keyofAndIndexedAccess.ts, 523, 42))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 520, 11))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 523, 15))
+
+        this.childFormFactories[prop](value)
+>this.childFormFactories : Symbol(Form.childFormFactories, Decl(keyofAndIndexedAccess.ts, 520, 15))
+>this : Symbol(Form, Decl(keyofAndIndexedAccess.ts, 516, 1))
+>childFormFactories : Symbol(Form.childFormFactories, Decl(keyofAndIndexedAccess.ts, 520, 15))
+>prop : Symbol(prop, Decl(keyofAndIndexedAccess.ts, 523, 34))
+>value : Symbol(value, Decl(keyofAndIndexedAccess.ts, 523, 42))
+    }
+}
+
