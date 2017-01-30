@@ -6864,6 +6864,11 @@ namespace ts {
                             }
                         }
                         break;
+                    case SyntaxKind.MappedType:
+                        if (contains(mappedTypes, getDeclaredTypeOfTypeParameter(getSymbolOfNode((<MappedTypeNode>node).typeParameter)))) {
+                            return true;
+                        }
+                        break;
                     case SyntaxKind.JSDocFunctionType:
                         const func = node as JSDocFunctionType;
                         for (const p of func.parameters) {
