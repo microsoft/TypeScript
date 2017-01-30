@@ -3286,6 +3286,16 @@ namespace ts {
             return strictNullChecks && optional ? includeFalsyTypes(type, TypeFlags.Undefined) : type;
         }
 
+        /** remove undefined from the annotated type of a parameter when there is an initializer (that doesn't include undefined) */
+        function removeOptionalityFromAnnotation(annotatedType: Type, declaration: VariableLikeDeclaration): Type {
+            const annotationIncludesUndefined = strictNullChecks &&
+                declaration.kind === SyntaxKind.Parameter &&
+                declaration.initializer &&
+                getFalsyFlags(annotatedType) & TypeFlags.Undefined &&
+                !(getFalsyFlags(checkExpression(declaration.initializer)) & TypeFlags.Undefined);
+            return annotationIncludesUndefined ? getNonNullableType(annotatedType) : annotatedType;
+        }
+
         // Return the inferred type for a variable, parameter, or property declaration
         function getTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration, includeOptionality: boolean): Type {
             if (declaration.flags & NodeFlags.JavaScriptFile) {
@@ -3319,7 +3329,8 @@ namespace ts {
 
             // Use type from type annotation if one is present
             if (declaration.type) {
-                return addOptionality(getTypeFromTypeNode(declaration.type), /*optional*/ declaration.questionToken && includeOptionality);
+                const declaredType = removeOptionalityFromAnnotation(getTypeFromTypeNode(declaration.type), declaration);
+                return addOptionality(declaredType, /*optional*/ declaration.questionToken && includeOptionality);
             }
 
             if ((compilerOptions.noImplicitAny || declaration.flags & NodeFlags.JavaScriptFile) &&
