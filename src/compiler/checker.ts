@@ -7687,7 +7687,7 @@ namespace ts {
             function isKnownProperty(type: Type, name: string): boolean {
                 if (type.flags & TypeFlags.Object) {
                     const resolved = resolveStructuredTypeMembers(<ObjectType>type);
-                    if ((relation === assignableRelation || relation === comparableRelation) && (type === globalObjectType || isEmptyObjectType(resolved)) ||
+                    if ((relation === assignableRelation || relation === comparableRelation) && (type === globalObjectType || isEmptyResolvedType(resolved)) ||
                         resolved.stringIndexInfo ||
                         (resolved.numberIndexInfo && isNumericLiteralName(name)) ||
                         getPropertyOfType(type, name)) {
@@ -7704,12 +7704,16 @@ namespace ts {
                 return false;
             }
 
-            function isEmptyObjectType(t: ResolvedType) {
+            function isEmptyResolvedType(t: ResolvedType) {
                 return t.properties.length === 0 &&
                     t.callSignatures.length === 0 &&
                     t.constructSignatures.length === 0 &&
                     !t.stringIndexInfo &&
                     !t.numberIndexInfo;
+            }
+
+            function isEmptyObjectType(type: Type) {
+                return type.flags & TypeFlags.Object && isEmptyResolvedType(resolveStructuredTypeMembers(<ObjectType>type));
             }
 
             function hasExcessProperties(source: FreshObjectLiteralType, target: Type, reportErrors: boolean): boolean {
@@ -7925,10 +7929,14 @@ namespace ts {
                             }
                         }
                     }
+                    else if ((<MappedType>target).declaration.questionToken && isEmptyObjectType(source)) {
+                        return Ternary.True;
+
+                    }
                 }
                 else if (relation !== identityRelation) {
                     const resolved = resolveStructuredTypeMembers(<ObjectType>target);
-                    if (isEmptyObjectType(resolved) || resolved.stringIndexInfo && resolved.stringIndexInfo.type.flags & TypeFlags.Any) {
+                    if (isEmptyResolvedType(resolved) || resolved.stringIndexInfo && resolved.stringIndexInfo.type.flags & TypeFlags.Any) {
                         return Ternary.True;
                     }
                 }
