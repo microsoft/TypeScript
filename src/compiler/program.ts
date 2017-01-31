@@ -76,6 +76,7 @@ namespace ts {
         hash: string;
         byteOrderMark: boolean;
         mtime: Date;
+        updated: boolean;
     }
 
     export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
@@ -143,22 +144,53 @@ namespace ts {
                 const fingerprint = outputFingerprints.get(fileName);
                 // If output has not been changed, and the file has no external modification
                 if (fingerprint &&
-                    fingerprint.byteOrderMark === writeByteOrderMark &&
+                    fingerprint.byteOrderMark === !!writeByteOrderMark &&
                     fingerprint.hash === hash &&
                     fingerprint.mtime.getTime() === mtimeBefore.getTime()) {
                     return;
                 }
             }
 
-            sys.writeFile(fileName, data, writeByteOrderMark);
+            writeFileIfDiff(fileName, data, writeByteOrderMark, hash);
+        }
 
-            const mtimeAfter = sys.getModifiedTime(fileName);
+        function writeFileIfDiff(fileName: string, data: string, writeByteOrderMark: boolean, hash?: string) {
+            let oldContent: string | undefined, info: {
+                bom?: string
+            };
+            if (!outputFingerprints) {
+                outputFingerprints = createMap<OutputFingerprint>();
+            }
+            hash = hash !== undefined ? hash : sys.createHash(data);
+
+            info = {};
+            try {
+                oldContent = sys.readFile(fileName, undefined, info);
+            }
+            catch (e) {
+            }
+            const sameBOM = info.bom === undefined || (info.bom === "\uFEFF") === !!writeByteOrderMark;
+            const isSame = oldContent !== undefined && oldContent === data && sameBOM;
+
+            if (!isSame) {
+                sys.writeFile(fileName, data, writeByteOrderMark);
+            }
+            const mtime = sys.getModifiedTime(fileName);
 
             outputFingerprints.set(fileName, {
                 hash,
-                byteOrderMark: writeByteOrderMark,
-                mtime: mtimeAfter
+                byteOrderMark: !!writeByteOrderMark,
+                mtime,
+                updated: !isSame
             });
+        }
+
+        function isOutputFileUpdated(fileName: string): boolean {
+            if (outputFingerprints) {
+                const fingerprint = outputFingerprints.get(fileName);
+                return !!fingerprint.updated;
+            }
+            return false;
         }
 
         function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
@@ -170,7 +202,7 @@ namespace ts {
                     writeFileIfUpdated(fileName, data, writeByteOrderMark);
                 }
                 else {
-                    sys.writeFile(fileName, data, writeByteOrderMark);
+                    writeFileIfDiff(fileName, data, writeByteOrderMark);
                 }
 
                 performance.mark("afterIOWrite");
@@ -195,6 +227,7 @@ namespace ts {
             getDefaultLibLocation,
             getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
             writeFile,
+            isOutputFileUpdated,
             getCurrentDirectory: memoize(() => sys.getCurrentDirectory()),
             useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
             getCanonicalFileName,

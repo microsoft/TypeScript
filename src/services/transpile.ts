@@ -85,6 +85,7 @@
                     outputText = text;
                 }
             },
+            isOutputFileUpdated: (name) => fileExtensionIs(name, ".map") ? !!sourceMapText : !!outputText,
             getDefaultLibFileName: () => "lib.d.ts",
             useCaseSensitiveFileNames: () => false,
             getCanonicalFileName: fileName => fileName,

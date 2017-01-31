@@ -3616,6 +3616,7 @@
         getDefaultLibFileName(options: CompilerOptions): string;
         getDefaultLibLocation?(): string;
         writeFile: WriteFileCallback;
+        isOutputFileUpdated?(fileName: string): boolean;
         getCurrentDirectory(): string;
         getDirectories(path: string): string[];
         getCanonicalFileName(fileName: string): string;

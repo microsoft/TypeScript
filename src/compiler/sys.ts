@@ -17,7 +17,7 @@ namespace ts {
         newLine: string;
         useCaseSensitiveFileNames: boolean;
         write(s: string): void;
-        readFile(path: string, encoding?: string): string;
+        readFile(path: string, encoding?: string, info?: {bom?: string}): string;
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
         /**
@@ -106,7 +106,13 @@ namespace ts {
                 args[i] = WScript.Arguments.Item(i);
             }
 
-            function readFile(fileName: string, encoding?: string): string {
+            function readFile(fileName: string, encoding?: string, info?: {bom?: string}): string {
+                if (info) {
+                    info.bom = undefined;
+                }
+                else {
+                    info = {};
+                }
                 if (!fso.FileExists(fileName)) {
                     return undefined;
                 }
@@ -124,7 +130,10 @@ namespace ts {
                         // Position must be at 0 before encoding can be changed
                         fileStream.Position = 0;
                         // [0xFF,0xFE] and [0xFE,0xFF] mean utf-16 (little or big endian), otherwise default to utf-8
-                        fileStream.Charset = bom.length >= 2 && (bom.charCodeAt(0) === 0xFF && bom.charCodeAt(1) === 0xFE || bom.charCodeAt(0) === 0xFE && bom.charCodeAt(1) === 0xFF) ? "unicode" : "utf-8";
+                        const isUnicode = bom.length >= 2 && (bom.charCodeAt(0) === 0xFF && bom.charCodeAt(1) === 0xFE || bom.charCodeAt(0) === 0xFE && bom.charCodeAt(1) === 0xFF);
+                        const isUtf8BOM = bom.length >= 3 && (bom.charCodeAt(0) === 0xEF && bom.charCodeAt(1) === 0xBB && bom.charCodeAt(2) === 0xBF);
+                        fileStream.Charset = isUnicode ? "unicode" : "utf-8";
+                        info.bom = isUnicode ? bom.substring(0, 2) : isUtf8BOM ? "\uFEFF" : "";
                     }
                     // ReadText method always strips byte order mark from resulting string
                     return fileStream.ReadText();
@@ -332,7 +341,13 @@ namespace ts {
             const platform: string = _os.platform();
             const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
 
-            function readFile(fileName: string, _encoding?: string): string {
+            function readFile(fileName: string, _encoding?: string, info?: {bom?: string}): string {
+                if (info) {
+                    info.bom = undefined;
+                }
+                else {
+                    info = {};
+                }
                 if (!fileExists(fileName)) {
                     return undefined;
                 }
@@ -347,16 +362,20 @@ namespace ts {
                         buffer[i] = buffer[i + 1];
                         buffer[i + 1] = temp;
                     }
+                    info.bom = "\uFFFE";
                     return buffer.toString("utf16le", 2);
                 }
                 if (len >= 2 && buffer[0] === 0xFF && buffer[1] === 0xFE) {
                     // Little endian UTF-16 byte order mark detected
+                    info.bom = "\uFEFF";
                     return buffer.toString("utf16le", 2);
                 }
                 if (len >= 3 && buffer[0] === 0xEF && buffer[1] === 0xBB && buffer[2] === 0xBF) {
                     // UTF-8 byte order mark detected
+                    info.bom = "\uFEFF";
                     return buffer.toString("utf8", 3);
                 }
+                info.bom = "";
                 // Default is UTF-8 with no byte order mark
                 return buffer.toString("utf8");
             }
@@ -587,8 +606,11 @@ namespace ts {
                 args: ChakraHost.args,
                 useCaseSensitiveFileNames: !!ChakraHost.useCaseSensitiveFileNames,
                 write: ChakraHost.echo,
-                readFile(path: string, _encoding?: string) {
+                readFile(path: string, _encoding?: string, info?: {bom?: string}) {
                     // encoding is automatically handled by the implementation in ChakraHost
+                    if (info) {
+                        info.bom = undefined;
+                    }
                     return ChakraHost.readFile(path);
                 },
                 writeFile(path: string, data: string, writeByteOrderMark?: boolean) {
