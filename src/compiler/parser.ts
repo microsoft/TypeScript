@@ -6693,10 +6693,15 @@ namespace ts {
                     typedefTag.fullName = parseJSDocTypeNameWithNamespace(/*flags*/ 0);
                     if (typedefTag.fullName) {
                         let rightNode = typedefTag.fullName;
-                        while (rightNode.kind !== SyntaxKind.Identifier) {
+                        while (true) {
+                            if (rightNode.kind === SyntaxKind.Identifier || !rightNode.body) {
+                                // if node is identifier - use it as name
+                                // otherwise use name of the rightmost part that we were able to parse
+                                typedefTag.name = rightNode.kind === SyntaxKind.Identifier ? rightNode : rightNode.name;
+                                break;
+                            }
                             rightNode = rightNode.body;
                         }
-                        typedefTag.name = rightNode;
                     }
                     typedefTag.typeExpression = typeExpression;
                     skipWhitespace();

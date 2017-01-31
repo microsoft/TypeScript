@@ -1,4 +1,4 @@
-﻿/// <reference path="moduleNameResolver.ts"/>
+/// <reference path="moduleNameResolver.ts"/>
 /// <reference path="binder.ts"/>
 
 /* @internal */
@@ -485,6 +485,9 @@ namespace ts {
                     mergeSymbolTable(target.exports, source.exports);
                 }
                 recordMergedSymbol(target, source);
+            }
+            else if (target.flags & SymbolFlags.NamespaceModule) {
+                error(source.valueDeclaration.name, Diagnostics.Cannot_augment_module_0_with_value_exports_because_it_resolves_to_a_non_module_entity, symbolToString(target));
             }
             else {
                 const message = target.flags & SymbolFlags.BlockScopedVariable || source.flags & SymbolFlags.BlockScopedVariable
@@ -2464,7 +2467,8 @@ namespace ts {
                     const symbol = type.symbol;
                     if (symbol) {
                         // Always use 'typeof T' for type of class, enum, and module objects
-                        if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule)) {
+                        if (symbol.flags & SymbolFlags.Class && !getBaseTypeVariableOfClass(symbol) ||
+                            symbol.flags & (SymbolFlags.Enum | SymbolFlags.ValueModule)) {
                             writeTypeOfSymbol(type, flags);
                         }
                         else if (shouldWriteTypeOfFunctionSymbol()) {
@@ -3638,6 +3642,11 @@ namespace ts {
             return links.type;
         }
 
+        function getBaseTypeVariableOfClass(symbol: Symbol) {
+            const baseConstructorType = getBaseConstructorTypeOfClass(getDeclaredTypeOfClassOrInterface(symbol));
+            return baseConstructorType.flags & TypeFlags.TypeVariable ? baseConstructorType : undefined;
+        }
+
         function getTypeOfFuncClassEnumModule(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
             if (!links.type) {
@@ -3646,8 +3655,13 @@ namespace ts {
                 }
                 else {
                     const type = createObjectType(ObjectFlags.Anonymous, symbol);
-                    links.type = strictNullChecks && symbol.flags & SymbolFlags.Optional ?
-                        includeFalsyTypes(type, TypeFlags.Undefined) : type;
+                    if (symbol.flags & SymbolFlags.Class) {
+                        const baseTypeVariable = getBaseTypeVariableOfClass(symbol);
+                        links.type = baseTypeVariable ? getIntersectionType([type, baseTypeVariable]) : type;
+                    }
+                    else {
+                        links.type = strictNullChecks && symbol.flags & SymbolFlags.Optional ? includeFalsyTypes(type, TypeFlags.Undefined) : type;
+                    }
                 }
             }
             return links.type;
@@ -3811,8 +3825,26 @@ namespace ts {
             return concatenate(getOuterTypeParametersOfClassOrInterface(symbol), getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol));
         }
 
+        // A type is a mixin constructor if it has a single construct signature taking no type parameters and a single
+        // rest parameter of type any[].
+        function isMixinConstructorType(type: Type) {
+            const signatures = getSignaturesOfType(type, SignatureKind.Construct);
+            if (signatures.length === 1) {
+                const s = signatures[0];
+                return !s.typeParameters && s.parameters.length === 1 && s.hasRestParameter && getTypeOfParameter(s.parameters[0]) === anyArrayType;
+            }
+            return false;
+        }
+
         function isConstructorType(type: Type): boolean {
-            return isValidBaseType(type) && getSignaturesOfType(type, SignatureKind.Construct).length > 0;
+            if (isValidBaseType(type) && getSignaturesOfType(type, SignatureKind.Construct).length > 0) {
+                return true;
+            }
+            if (type.flags & TypeFlags.TypeVariable) {
+                const constraint = getBaseConstraintOfType(<TypeVariable>type);
+                return isValidBaseType(constraint) && isMixinConstructorType(constraint);
+            }
+            return false;
         }
 
         function getBaseTypeNodeOfClass(type: InterfaceType): ExpressionWithTypeArguments {
@@ -3891,7 +3923,7 @@ namespace ts {
 
         function resolveBaseTypesOfClass(type: InterfaceType): void {
             type.resolvedBaseTypes = type.resolvedBaseTypes || emptyArray;
-            const baseConstructorType = <ObjectType>getBaseConstructorTypeOfClass(type);
+            const baseConstructorType = getApparentType(getBaseConstructorTypeOfClass(type));
             if (!(baseConstructorType.flags & (TypeFlags.Object | TypeFlags.Intersection))) {
                 return;
             }
@@ -4541,16 +4573,47 @@ namespace ts {
                 getUnionType([info1.type, info2.type]), info1.isReadonly || info2.isReadonly);
         }
 
+        function includeMixinType(type: Type, types: Type[], index: number): Type {
+            const mixedTypes: Type[] = [];
+            for (let i = 0; i < types.length; i++) {
+                if (i === index) {
+                    mixedTypes.push(type);
+                }
+                else if (isMixinConstructorType(types[i])) {
+                    mixedTypes.push(getReturnTypeOfSignature(getSignaturesOfType(types[i], SignatureKind.Construct)[0]));
+                }
+            }
+            return getIntersectionType(mixedTypes);
+        }
+
         function resolveIntersectionTypeMembers(type: IntersectionType) {
             // The members and properties collections are empty for intersection types. To get all properties of an
             // intersection type use getPropertiesOfType (only the language service uses this).
             let callSignatures: Signature[] = emptyArray;
             let constructSignatures: Signature[] = emptyArray;
-            let stringIndexInfo: IndexInfo = undefined;
-            let numberIndexInfo: IndexInfo = undefined;
-            for (const t of type.types) {
+            let stringIndexInfo: IndexInfo;
+            let numberIndexInfo: IndexInfo;
+            const types = type.types;
+            const mixinCount = countWhere(types, isMixinConstructorType);
+            for (let i = 0; i < types.length; i++) {
+                const t = type.types[i];
+                // When an intersection type contains mixin constructor types, the construct signatures from
+                // those types are discarded and their return types are mixed into the return types of all
+                // other construct signatures in the intersection type. For example, the intersection type
+                // '{ new(...args: any[]) => A } & { new(s: string) => B }' has a single construct signature
+                // 'new(s: string) => A & B'.
+                if (mixinCount === 0 || mixinCount === types.length && i === 0 || !isMixinConstructorType(t)) {
+                    let signatures = getSignaturesOfType(t, SignatureKind.Construct);
+                    if (signatures.length && mixinCount > 0) {
+                        signatures = map(signatures, s => {
+                            const clone = cloneSignature(s);
+                            clone.resolvedReturnType = includeMixinType(getReturnTypeOfSignature(s), types, i);
+                            return clone;
+                        });
+                    }
+                    constructSignatures = concatenate(constructSignatures, signatures);
+                }
                 callSignatures = concatenate(callSignatures, getSignaturesOfType(t, SignatureKind.Call));
-                constructSignatures = concatenate(constructSignatures, getSignaturesOfType(t, SignatureKind.Construct));
                 stringIndexInfo = intersectIndexInfos(stringIndexInfo, getIndexInfoOfType(t, IndexKind.String));
                 numberIndexInfo = intersectIndexInfos(numberIndexInfo, getIndexInfoOfType(t, IndexKind.Number));
             }
@@ -4592,7 +4655,7 @@ namespace ts {
                         constructSignatures = getDefaultConstructSignatures(classType);
                     }
                     const baseConstructorType = getBaseConstructorTypeOfClass(classType);
-                    if (baseConstructorType.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
+                    if (baseConstructorType.flags & (TypeFlags.Object | TypeFlags.Intersection | TypeFlags.TypeVariable)) {
                         members = createSymbolTable(getNamedMembers(members));
                         addInheritedMembers(members, getPropertiesOfType(baseConstructorType));
                     }
@@ -4620,12 +4683,14 @@ namespace ts {
             const typeParameter = getTypeParameterFromMappedType(type);
             const constraintType = getConstraintTypeFromMappedType(type);
             const templateType = getTemplateTypeFromMappedType(type);
-            const modifiersType = getApparentType(getModifiersTypeFromMappedType(type));
+            const modifiersType = getApparentType(getModifiersTypeFromMappedType(type)); // The 'T' in 'keyof T'
             const templateReadonly = !!type.declaration.readonlyToken;
             const templateOptional = !!type.declaration.questionToken;
             if (type.declaration.typeParameter.constraint.kind === SyntaxKind.TypeOperator) {
                 // We have a { [P in keyof T]: X }
-                forEachType(getLiteralTypeFromPropertyNames(modifiersType), addMemberForKeyType);
+                for (const propertySymbol of getPropertiesOfType(modifiersType)) {
+                    addMemberForKeyType(getLiteralTypeFromPropertyName(propertySymbol), propertySymbol);
+                }
                 if (getIndexInfoOfType(modifiersType, IndexKind.String)) {
                     addMemberForKeyType(stringType);
                 }
@@ -4640,7 +4705,7 @@ namespace ts {
             }
             setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, undefined);
 
-            function addMemberForKeyType(t: Type) {
+            function addMemberForKeyType(t: Type, propertySymbol?: Symbol) {
                 // Create a mapper from T to the current iteration type constituent. Then, if the
                 // mapped type is itself an instantiated type, combine the iteration mapper with the
                 // instantiation mapper.
@@ -4656,6 +4721,9 @@ namespace ts {
                     const prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | (isOptional ? SymbolFlags.Optional : 0), propName);
                     prop.type = propType;
                     prop.isReadonly = templateReadonly || modifiersProp && isReadonlySymbol(modifiersProp);
+                    if (propertySymbol) {
+                        prop.mappedTypeOrigin = propertySymbol;
+                    }
                     members.set(propName, prop);
                 }
                 else if (t.flags & TypeFlags.String) {
@@ -4884,6 +4952,7 @@ namespace ts {
 
         function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: string): Symbol {
             const types = containingType.types;
+            const excludeModifiers = containingType.flags & TypeFlags.Union ? ModifierFlags.Private | ModifierFlags.Protected : 0;
             let props: Symbol[];
             // Flags we want to propagate to the result if they exist in all source symbols
             let commonFlags = (containingType.flags & TypeFlags.Intersection) ? SymbolFlags.Optional : SymbolFlags.None;
@@ -4893,7 +4962,7 @@ namespace ts {
                 const type = getApparentType(current);
                 if (type !== unknownType) {
                     const prop = getPropertyOfType(type, name);
-                    if (prop && !(getDeclarationModifierFlagsFromSymbol(prop) & (ModifierFlags.Private | ModifierFlags.Protected))) {
+                    if (prop && !(getDeclarationModifierFlagsFromSymbol(prop) & excludeModifiers)) {
                         commonFlags &= prop.flags;
                         if (!props) {
                             props = [prop];
@@ -6313,6 +6382,9 @@ namespace ts {
             if (right.flags & TypeFlags.Union) {
                 return mapType(right, t => getSpreadType(left, t));
             }
+            if (right.flags & TypeFlags.NonPrimitive) {
+                return emptyObjectType;
+            }
 
             const members = createMap<Symbol>();
             const skippedPrivateMembers = createMap<boolean>();
@@ -6794,6 +6866,11 @@ namespace ts {
                             }
                         }
                         break;
+                    case SyntaxKind.MappedType:
+                        if (contains(mappedTypes, getDeclaredTypeOfTypeParameter(getSymbolOfNode((<MappedTypeNode>node).typeParameter)))) {
+                            return true;
+                        }
+                        break;
                     case SyntaxKind.JSDocFunctionType:
                         const func = node as JSDocFunctionType;
                         for (const p of func.parameters) {
@@ -6956,8 +7033,11 @@ namespace ts {
                     result.properties = resolved.properties;
                     result.callSignatures = emptyArray;
                     result.constructSignatures = emptyArray;
-                    type = result;
+                    return result;
                 }
+            }
+            else if (type.flags & TypeFlags.Intersection) {
+                return getIntersectionType(map((<IntersectionType>type).types, getTypeWithoutSignatures));
             }
             return type;
         }
@@ -11712,7 +11792,7 @@ namespace ts {
                     member = prop;
                 }
                 else if (memberDecl.kind === SyntaxKind.SpreadAssignment) {
-                    if (languageVersion < ScriptTarget.ESNext) {
+                    if (languageVersion < ScriptTarget.ES2015) {
                         checkExternalEmitHelpers(memberDecl, ExternalEmitHelpers.Assign);
                     }
                     if (propertiesArray.length > 0) {
@@ -11806,7 +11886,7 @@ namespace ts {
        }
 
         function isValidSpreadType(type: Type): boolean {
-            return !!(type.flags & (TypeFlags.Any | TypeFlags.Null | TypeFlags.Undefined) ||
+            return !!(type.flags & (TypeFlags.Any | TypeFlags.Null | TypeFlags.Undefined | TypeFlags.NonPrimitive) ||
                 type.flags & TypeFlags.Object && !isGenericMappedType(type) ||
                 type.flags & TypeFlags.UnionOrIntersection && !forEach((<UnionOrIntersectionType>type).types, t => !isValidSpreadType(t)));
         }
@@ -11870,6 +11950,16 @@ namespace ts {
         function checkJsxAttribute(node: JsxAttribute, elementAttributesType: Type, nameTable: Map<boolean>) {
             let correspondingPropType: Type = undefined;
 
+            // We need to unconditionally get the expression type
+            let exprType: Type;
+            if (node.initializer) {
+                exprType = checkExpression(node.initializer);
+            }
+            else {
+                // <Elem attr /> is sugar for <Elem attr={true} />
+                exprType = booleanType;
+            }
+
             // Look up the corresponding property for this attribute
             if (elementAttributesType === emptyObjectType && isUnhyphenatedJsxName(node.name.text)) {
                 // If there is no 'props' property, you may not have non-"data-" attributes
@@ -11891,15 +11981,6 @@ namespace ts {
                         }
                     }
                 }
-            }
-
-            let exprType: Type;
-            if (node.initializer) {
-                exprType = checkExpression(node.initializer);
-            }
-            else {
-                // <Elem attr /> is sugar for <Elem attr={true} />
-                exprType = booleanType;
             }
 
             if (correspondingPropType) {
@@ -12327,12 +12408,15 @@ namespace ts {
                 // - In a static member function or static member accessor
                 //   where this references the constructor function object of a derived class,
                 //   a super property access is permitted and must specify a public static member function of the base class.
-                if (languageVersion < ScriptTarget.ES2015 && getDeclarationKindFromSymbol(prop) !== SyntaxKind.MethodDeclaration) {
-                    // `prop` refers to a *property* declared in the super class
-                    // rather than a *method*, so it does not satisfy the above criteria.
+                if (languageVersion < ScriptTarget.ES2015) {
+                    const propKind = getDeclarationKindFromSymbol(prop);
+                    if (propKind !== SyntaxKind.MethodDeclaration && propKind !== SyntaxKind.MethodSignature) {
+                        // `prop` refers to a *property* declared in the super class
+                        // rather than a *method*, so it does not satisfy the above criteria.
 
-                    error(errorNode, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
-                    return false;
+                        error(errorNode, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
+                        return false;
+                    }
                 }
 
                 if (flags & ModifierFlags.Abstract) {
@@ -18380,7 +18464,8 @@ namespace ts {
                 const baseTypes = getBaseTypes(type);
                 if (baseTypes.length && produceDiagnostics) {
                     const baseType = baseTypes[0];
-                    const staticBaseType = getBaseConstructorTypeOfClass(type);
+                    const baseConstructorType = getBaseConstructorTypeOfClass(type);
+                    const staticBaseType = getApparentType(baseConstructorType);
                     checkBaseTypeAccessibility(staticBaseType, baseTypeNode);
                     checkSourceElement(baseTypeNode.expression);
                     if (baseTypeNode.typeArguments) {
@@ -18394,6 +18479,9 @@ namespace ts {
                     checkTypeAssignableTo(typeWithThis, getTypeWithThisArgument(baseType, type.thisType), node.name || node, Diagnostics.Class_0_incorrectly_extends_base_class_1);
                     checkTypeAssignableTo(staticType, getTypeWithoutSignatures(staticBaseType), node.name || node,
                         Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
+                    if (baseConstructorType.flags & TypeFlags.TypeVariable && !isMixinConstructorType(staticType)) {
+                        error(node.name || node, Diagnostics.A_mixin_class_must_have_a_constructor_with_a_single_rest_parameter_of_type_any);
+                    }
 
                     if (baseType.symbol && baseType.symbol.valueDeclaration &&
                         !isInAmbientContext(baseType.symbol.valueDeclaration) &&
@@ -18403,7 +18491,7 @@ namespace ts {
                         }
                     }
 
-                    if (!(staticBaseType.symbol && staticBaseType.symbol.flags & SymbolFlags.Class)) {
+                    if (!(staticBaseType.symbol && staticBaseType.symbol.flags & SymbolFlags.Class) && !(baseConstructorType.flags & TypeFlags.TypeVariable)) {
                         // When the static base type is a "class-like" constructor function (but not actually a class), we verify
                         // that all instantiated base constructor signatures return the same type. We can simply compare the type
                         // references (as opposed to checking the structure of the types) because elsewhere we have already checked
@@ -20242,6 +20330,10 @@ namespace ts {
                     const links = symbol as SymbolLinks;
                     return [links.leftSpread, links.rightSpread];
                 }
+                if ((symbol as SymbolLinks).mappedTypeOrigin) {
+                    return getRootSymbols((symbol as SymbolLinks).mappedTypeOrigin);
+                }
+
                 let target: Symbol;
                 let next = symbol;
                 while (next = getSymbolLinks(next).target) {

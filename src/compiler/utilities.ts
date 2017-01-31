@@ -341,16 +341,52 @@ namespace ts {
     }
 
     export function isBinaryOrOctalIntegerLiteral(node: LiteralLikeNode, text: string) {
-        if (node.kind === SyntaxKind.NumericLiteral && text.length > 1) {
+        return node.kind === SyntaxKind.NumericLiteral
+            && (getNumericLiteralFlags(text, /*hint*/ NumericLiteralFlags.BinaryOrOctal) & NumericLiteralFlags.BinaryOrOctal) !== 0;
+    }
+
+    export const enum NumericLiteralFlags {
+        None = 0,
+        Hexadecimal = 1 << 0,
+        Binary = 1 << 1,
+        Octal = 1 << 2,
+        Scientific = 1 << 3,
+
+        BinaryOrOctal = Binary | Octal,
+        BinaryOrOctalOrHexadecimal = BinaryOrOctal | Hexadecimal,
+        All = Hexadecimal | Binary | Octal | Scientific,
+    }
+
+    /**
+     * Scans a numeric literal string to determine the form of the number.
+     * @param text Numeric literal text
+     * @param hint If `Scientific` or `All` is specified, performs a more expensive check to scan for scientific notation.
+     */
+    export function getNumericLiteralFlags(text: string, hint?: NumericLiteralFlags) {
+        if (text.length > 1) {
             switch (text.charCodeAt(1)) {
                 case CharacterCodes.b:
                 case CharacterCodes.B:
+                    return NumericLiteralFlags.Binary;
                 case CharacterCodes.o:
                 case CharacterCodes.O:
-                    return true;
+                    return NumericLiteralFlags.Octal;
+                case CharacterCodes.x:
+                case CharacterCodes.X:
+                    return NumericLiteralFlags.Hexadecimal;
+            }
+
+            if (hint & NumericLiteralFlags.Scientific) {
+                for (let i = text.length - 1; i >= 0; i--) {
+                    switch (text.charCodeAt(i)) {
+                        case CharacterCodes.e:
+                        case CharacterCodes.E:
+                            return NumericLiteralFlags.Scientific;
+                    }
+                }
             }
         }
-        return false;
+        return NumericLiteralFlags.None;
     }
 
     function getQuotedEscapedLiteralText(leftQuote: string, text: string, rightQuote: string) {
@@ -395,7 +431,7 @@ namespace ts {
 
     function isShorthandAmbientModule(node: Node): boolean {
         // The only kind of module that can be missing a body is a shorthand ambient module.
-        return node.kind === SyntaxKind.ModuleDeclaration && (!(<ModuleDeclaration>node).body);
+        return node && node.kind === SyntaxKind.ModuleDeclaration && (!(<ModuleDeclaration>node).body);
     }
 
     export function isBlockScopedContainerTopLevel(node: Node): boolean {
@@ -1667,11 +1703,15 @@ namespace ts {
                     node = parent;
                     break;
                 case SyntaxKind.ShorthandPropertyAssignment:
-                    if ((<ShorthandPropertyAssignment>parent).name !== node) {
+                    if ((parent as ShorthandPropertyAssignment).name !== node) {
                         return AssignmentKind.None;
                     }
-                // Fall through
+                    node = parent.parent;
+                    break;
                 case SyntaxKind.PropertyAssignment:
+                    if ((parent as ShorthandPropertyAssignment).name === node) {
+                        return AssignmentKind.None;
+                    }
                     node = parent.parent;
                     break;
                 default:
@@ -1683,7 +1723,8 @@ namespace ts {
 
     // A node is an assignment target if it is on the left hand side of an '=' token, if it is parented by a property
     // assignment in an object literal that is an assignment target, or if it is parented by an array literal that is
-    // an assignment target. Examples include 'a = xxx', '{ p: a } = xxx', '[{ p: a}] = xxx'.
+    // an assignment target. Examples include 'a = xxx', '{ p: a } = xxx', '[{ a }] = xxx'.
+    // (Note that `p` is not a target in the above examples, only `a`.)
     export function isAssignmentTarget(node: Node): boolean {
         return getAssignmentTargetKind(node) !== AssignmentKind.None;
     }
@@ -3109,7 +3150,11 @@ namespace ts {
     }
 
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
-        return symbol && symbol.valueDeclaration && hasModifier(symbol.valueDeclaration, ModifierFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
+        return isExportDefaultSymbol(symbol) ? symbol.valueDeclaration.localSymbol : undefined;
+    }
+
+    export function isExportDefaultSymbol(symbol: Symbol): boolean {
+        return symbol && symbol.valueDeclaration && hasModifier(symbol.valueDeclaration, ModifierFlags.Default);
     }
 
     /** Return ".ts", ".d.ts", or ".tsx", if that is the extension. */

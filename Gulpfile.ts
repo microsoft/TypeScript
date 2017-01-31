@@ -50,7 +50,8 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         r: "reporter",
         color: "colors",
         f: "files",
-        file: "files"
+        file: "files",
+        w: "workers",
     },
     default: {
         soft: false,
@@ -63,6 +64,7 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         reporter: process.env.reporter || process.env.r,
         lint: process.env.lint || true,
         files: process.env.f || process.env.file || process.env.files || "",
+        workers: process.env.workerCount || os.cpus().length,
     }
 });
 
@@ -604,7 +606,7 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
             } while (fs.existsSync(taskConfigsFolder));
             fs.mkdirSync(taskConfigsFolder);
 
-            workerCount = process.env.workerCount || os.cpus().length;
+            workerCount = cmdLineOptions["workers"];
         }
 
         if (tests || light || taskConfigsFolder) {
@@ -1017,7 +1019,7 @@ gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: 
             cb();
         }, (cb) => {
             files = files.filter(file =>  fileMatcher.test(file.path)).sort((filea, fileb) => filea.stat.size - fileb.stat.size);
-            const workerCount = (process.env.workerCount && +process.env.workerCount) || os.cpus().length;
+            const workerCount = cmdLineOptions["workers"];
             for (let i = 0; i < workerCount; i++) {
                 spawnLintWorker(files, finished);
             }
