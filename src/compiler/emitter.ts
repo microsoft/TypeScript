@@ -1837,7 +1837,7 @@ namespace ts {
             write("<");
             emitJsxTagName(node.tagName);
             writeIfAny(node.attributes.properties, " ");
-            // We are checking here so we won't re-enter the emiting pipeline and emit extra sourcemap
+            // We are checking here so we won't re-enter the emitting pipeline and emit extra sourcemap
             if (node.attributes.properties && node.attributes.properties.length > 0) {
                 emit(node.attributes);
             }

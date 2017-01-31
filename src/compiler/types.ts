@@ -2702,7 +2702,6 @@
         /* @internal */ isReferenced?: boolean; // True if the symbol is referenced elsewhere
         /* @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
         /* @internal */ isAssigned?: boolean;   // True if the symbol is a parameter with assignments
-        /* @internal */ syntheticKind?: SyntheticSymbolKind; // Synthetic symbols are either spread or union/intersection
     }
 
     /* @internal */
