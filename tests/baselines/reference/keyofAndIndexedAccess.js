@@ -517,6 +517,16 @@ class B extends A<{ x: number}> {
 	}
 }
 
+// Repro from #13749
+
+class Form<T> {
+    private childFormFactories: {[K in keyof T]: (v: T[K]) => Form<T[K]>}
+
+    public set<K extends keyof T>(prop: K, value: T[K]) {
+        this.childFormFactories[prop](value)
+    }
+}
+
 
 //// [keyofAndIndexedAccess.js]
 var __extends = (this && this.__extends) || (function () {
@@ -862,6 +872,15 @@ var B = (function (_super) {
     };
     return B;
 }(A));
+// Repro from #13749
+var Form = (function () {
+    function Form() {
+    }
+    Form.prototype.set = function (prop, value) {
+        this.childFormFactories[prop](value);
+    };
+    return Form;
+}());
 
 
 //// [keyofAndIndexedAccess.d.ts]
@@ -1103,4 +1122,8 @@ declare class B extends A<{
     x: number;
 }> {
     f(p: this["props"]): void;
+}
+declare class Form<T> {
+    private childFormFactories;
+    set<K extends keyof T>(prop: K, value: T[K]): void;
 }
