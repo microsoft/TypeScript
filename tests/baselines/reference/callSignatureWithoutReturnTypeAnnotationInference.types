@@ -103,17 +103,17 @@ var r6 = foo6(1);
 >1 : 1
 
 function foo7(x) {
->foo7 : (x: any) => string
+>foo7 : (x: any) => "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : any
 
     return typeof x;
->typeof x : string
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : any
 }
 var r7 = foo7(1);
->r7 : string
->foo7(1) : string
->foo7 : (x: any) => string
+>r7 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>foo7(1) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>foo7 : (x: any) => "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >1 : 1
 
 // object types
