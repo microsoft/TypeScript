@@ -1923,7 +1923,6 @@ namespace ts {
         }
 
         function emitCatchClause(node: CatchClause) {
-            writeLine();
             const openParenPos = writeToken(SyntaxKind.CatchKeyword, node.pos);
             write(" ");
             writeToken(SyntaxKind.OpenParenToken, openParenPos);
