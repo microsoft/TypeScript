@@ -14609,7 +14609,9 @@ namespace ts {
 
         function checkTypeOfExpression(node: TypeOfExpression): Type {
             checkExpression(node.expression);
-            return stringType;
+            const types: Type[] = [];
+            typeofEQFacts.forEach((_, s) => types.push(getLiteralTypeForText(TypeFlags.StringLiteral, s)));
+            return getUnionType(types);
         }
 
         function checkVoidExpression(node: VoidExpression): Type {
