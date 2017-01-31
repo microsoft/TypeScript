@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: B.ts
-////export default class [|B|] {
+////export default class /*1*/[|B|] {
 ////    test() {
 ////    }
 ////}
@@ -11,4 +11,17 @@
 ////let b = new [|B|]();
 ////b.test();
 
-verify.rangesAreRenameLocations();
+goTo.marker("1");
+verify.occurrencesAtPositionCount(1);
+
+const [C, B0, B1] = test.ranges();
+verify.rangesReferenceEachOther();
+
+goTo.rangeStart(C);
+verify.renameLocations(false, false, [C, B0, B1]);
+
+const rangesInB = [B0, B1];
+for (const r of rangesInB) {
+    goTo.rangeStart(r);
+    verify.renameLocations(false, false, rangesInB);
+}
