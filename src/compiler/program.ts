@@ -139,6 +139,7 @@ namespace ts {
 
             const hash = sys.createHash(data);
             const mtimeBefore = sys.getModifiedTime(fileName);
+            let forceUpdate = false;
 
             if (mtimeBefore) {
                 const fingerprint = outputFingerprints.get(fileName);
@@ -147,30 +148,35 @@ namespace ts {
                     fingerprint.byteOrderMark === !!writeByteOrderMark &&
                     fingerprint.hash === hash &&
                     fingerprint.mtime.getTime() === mtimeBefore.getTime()) {
+                    fingerprint.updated = false;
                     return;
+                }
+                if (fingerprint) {
+                    forceUpdate = true;
                 }
             }
 
-            writeFileIfDiff(fileName, data, writeByteOrderMark, hash);
+            writeFileIfDiff(fileName, data, writeByteOrderMark, hash, forceUpdate);
         }
 
-        function writeFileIfDiff(fileName: string, data: string, writeByteOrderMark: boolean, hash?: string) {
-            let oldContent: string | undefined, info: {
-                bom?: string
-            };
+        function writeFileIfDiff(fileName: string, data: string, writeByteOrderMark: boolean, hash?: string, forceUpdate?: boolean) {
             if (!outputFingerprints) {
                 outputFingerprints = createMap<OutputFingerprint>();
             }
             hash = hash !== undefined ? hash : sys.createHash(data);
 
-            info = {};
-            try {
-                oldContent = sys.readFile(fileName, undefined, info);
+            let isSame = false;
+            if (forceUpdate !== true) {
+                const info = {} as { bom?: string };
+                let oldContent: string | undefined;
+                try {
+                    oldContent = sys.readFile(fileName, undefined, info);
+                }
+                catch (e) {
+                }
+                const sameBOM = info.bom === undefined || (info.bom === "\uFEFF") === !!writeByteOrderMark;
+                isSame = oldContent !== undefined && oldContent === data && sameBOM;
             }
-            catch (e) {
-            }
-            const sameBOM = info.bom === undefined || (info.bom === "\uFEFF") === !!writeByteOrderMark;
-            const isSame = oldContent !== undefined && oldContent === data && sameBOM;
 
             if (!isSame) {
                 sys.writeFile(fileName, data, writeByteOrderMark);
