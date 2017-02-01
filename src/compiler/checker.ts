@@ -1725,7 +1725,7 @@ namespace ts {
         }
 
         function createTypeofType() {
-            return getUnionType(arrayFromMap(typeofEQFacts.keys(), s => getLiteralTypeForText(TypeFlags.StringLiteral, s)));
+            return getUnionType(convertToArray(typeofEQFacts.keys(), s => getLiteralTypeForText(TypeFlags.StringLiteral, s)));
         }
 
         // A reserved member name starts with two underscores, but the third character cannot be an underscore

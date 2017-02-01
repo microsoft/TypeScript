@@ -895,7 +895,7 @@ namespace ts {
         return result;
     }
 
-    export function arrayFromMap<T, U>(iterator: Iterator<T>, f: (value: T) => U) {
+    export function convertToArray<T, U>(iterator: Iterator<T>, f: (value: T) => U) {
         const result: U[] = [];
         for (let { value, done } = iterator.next(); !done; { value, done } = iterator.next()) {
             result.push(f(value));
