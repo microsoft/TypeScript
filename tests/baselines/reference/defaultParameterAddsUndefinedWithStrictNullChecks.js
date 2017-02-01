@@ -100,13 +100,13 @@ function removeNothing(y) {
 
 
 //// [defaultParameterAddsUndefinedWithStrictNullChecks.d.ts]
-declare function f(addUndefined1?: string | undefined, addUndefined2?: number | undefined): number;
+declare function f(addUndefined1?: string, addUndefined2?: number): number;
 declare function g(addUndefined: string | undefined, addDefined: number): number;
 declare let total: number;
 declare function foo1(x: string | undefined, b: number): void;
 declare function foo2(x: string | undefined, b: number): void;
 declare function foo3(x: string | undefined, b: number): void;
 declare function foo4(x: string | undefined, b: number): void;
-declare function removeUndefinedButNotFalse(x?: boolean | undefined): false | undefined;
+declare function removeUndefinedButNotFalse(x?: boolean): false | undefined;
 declare const cond: boolean;
 declare function removeNothing(y?: boolean | undefined): boolean;

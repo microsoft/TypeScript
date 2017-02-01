@@ -137,7 +137,7 @@ declare class Bar {
     a: number;
     b?: number;
     c?: number | undefined;
-    constructor(d?: number | undefined, e?: number);
+    constructor(d?: number, e?: number);
     f(): number;
     g?(): number;
     h?(): number;
