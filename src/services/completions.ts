@@ -173,6 +173,11 @@ namespace ts.Completions {
             //      var y = require("/*completion position*/");
             return getStringLiteralCompletionEntriesFromModuleNames(<StringLiteral>node, compilerOptions, host, typeChecker);
         }
+        else if (isEqualityExpression(node.parent)) {
+            // Get all known external module names or complete a path to a module
+            // i.e. x === '/*completion position'
+            return getStringLiteralCompletionEntriesFromBinaryExpression(<StringLiteral>node, node.parent, typeChecker);
+        }
         else {
             const argumentInfo = SignatureHelp.getImmediatelyContainingArgumentInfo(node, position, sourceFile);
             if (argumentInfo) {
@@ -230,6 +235,18 @@ namespace ts.Completions {
 
     function getStringLiteralCompletionEntriesFromContextualType(node: StringLiteral, typeChecker: TypeChecker): CompletionInfo | undefined {
         const type = typeChecker.getContextualType(node);
+        if (type) {
+            const entries: CompletionEntry[] = [];
+            addStringLiteralCompletionsFromType(type, entries, typeChecker);
+            if (entries.length) {
+                return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries };
+            }
+        }
+        return undefined;
+    }
+
+    function getStringLiteralCompletionEntriesFromBinaryExpression(node: StringLiteral, parent: BinaryExpression, typeChecker: TypeChecker): CompletionInfo | undefined {
+        const type = typeChecker.getTypeAtLocation(parent.left === node ? parent.right : parent.left);
         if (type) {
             const entries: CompletionEntry[] = [];
             addStringLiteralCompletionsFromType(type, entries, typeChecker);
@@ -1755,5 +1772,12 @@ namespace ts.Completions {
         }
         catch (e) {}
         return undefined;
+    }
+
+    function isEqualityExpression(node: Node): node is BinaryExpression {
+        return isBinaryExpression(node) && (node.operatorToken.kind == SyntaxKind.EqualsEqualsToken ||
+            node.operatorToken.kind === SyntaxKind.ExclamationEqualsToken ||
+            node.operatorToken.kind === SyntaxKind.EqualsEqualsEqualsToken ||
+            node.operatorToken.kind === SyntaxKind.ExclamationEqualsEqualsToken);
     }
 }
