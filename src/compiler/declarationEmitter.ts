@@ -322,13 +322,22 @@ namespace ts {
         function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, type: TypeNode, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic) {
             writer.getSymbolAccessibilityDiagnostic = getSymbolAccessibilityDiagnostic;
             write(": ");
-            if (type) {
+
+            // use the checker's type, not the declared type,
+            // for non-optional initialized parameters that aren't a parameter property
+            const shouldUseResolverType = declaration.kind === SyntaxKind.Parameter &&
+                resolver.isRequiredInitializedParameter(declaration as ParameterDeclaration);
+            if (type && !shouldUseResolverType) {
                 // Write the type
                 emitType(type);
             }
             else {
                 errorNameNode = declaration.name;
-                resolver.writeTypeOfDeclaration(declaration, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseTypeAliasValue, writer);
+                let format = TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseTypeAliasValue;
+                if (shouldUseResolverType) {
+                    format |= TypeFormatFlags.AddUndefined;
+                }
+                resolver.writeTypeOfDeclaration(declaration, enclosingDeclaration, format, writer);
                 errorNameNode = undefined;
             }
         }
@@ -1594,12 +1603,7 @@ namespace ts {
                 emitTypeOfVariableDeclarationFromTypeLiteral(node);
             }
             else if (!hasModifier(node.parent, ModifierFlags.Private)) {
-                // use the checker's type, not the declared type,
-                // for optional parameters and initialized ones that aren't a parameter property
-                const typeShouldAddUndefined = resolver.isOptionalParameter(node) ||
-                    node.initializer && !(getModifierFlags(node) & ModifierFlags.ParameterPropertyModifier);
-                const typeNode = typeShouldAddUndefined ? undefined : node.type;
-                writeTypeOfDeclaration(node, typeNode, getParameterDeclarationTypeVisibilityError);
+                writeTypeOfDeclaration(node, node.type, getParameterDeclarationTypeVisibilityError);
             }
 
             function getParameterDeclarationTypeVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {

@@ -2695,7 +2695,7 @@ namespace ts {
                 writeSpace(writer);
 
                 let type = getTypeOfSymbol(p);
-                if (strictNullChecks && parameterNode.initializer && !(getModifierFlags(parameterNode) & ModifierFlags.ParameterPropertyModifier)) {
+                if (isRequiredInitializedParameter(parameterNode)) {
                     type = includeFalsyTypes(type, TypeFlags.Undefined);
                 }
                 buildTypeDisplay(type, writer, enclosingDeclaration, flags, symbolStack);
@@ -3181,12 +3181,6 @@ namespace ts {
                     return checkDeclarationInitializer(declaration);
                 }
                 return parentType;
-            }
-            // In strict null checking mode, a default value of a binding pattern adds undefined,
-            // which should be removed to get the type of the elements
-            const func = getContainingFunction(declaration);
-            if (strictNullChecks && func && !func.body && getFalsyFlags(parentType) & TypeFlags.Undefined) {
-                parentType = getTypeWithFacts(parentType, TypeFacts.NEUndefined);
             }
 
             let type: Type;
@@ -20554,6 +20548,13 @@ namespace ts {
             return false;
         }
 
+        function isRequiredInitializedParameter(parameter: ParameterDeclaration) {
+            return strictNullChecks &&
+                !isOptionalParameter(parameter) &&
+                parameter.initializer &&
+                !(getModifierFlags(parameter) & ModifierFlags.ParameterPropertyModifier);
+        }
+
         function getNodeCheckFlags(node: Node): NodeCheckFlags {
             node = getParseTreeNode(node);
             return node ? getNodeLinks(node).flags : undefined;
@@ -20648,13 +20649,9 @@ namespace ts {
             let type = symbol && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))
                 ? getWidenedLiteralType(getTypeOfSymbol(symbol))
                 : unknownType;
-            if (strictNullChecks &&
-                declaration.kind === SyntaxKind.Parameter &&
-                (declaration as ParameterDeclaration).initializer &&
-                !(getModifierFlags(declaration) & ModifierFlags.ParameterPropertyModifier)) {
+            if (flags & TypeFormatFlags.AddUndefined) {
                 type = includeFalsyTypes(type, TypeFlags.Undefined);
             }
-
             getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
         }
 
@@ -20753,6 +20750,7 @@ namespace ts {
                 isTopLevelValueImportEqualsWithEntityName,
                 isDeclarationVisible,
                 isImplementationOfOverload,
+                isRequiredInitializedParameter,
                 writeTypeOfDeclaration,
                 writeReturnTypeOfSignatureDeclaration,
                 writeTypeOfExpression,
