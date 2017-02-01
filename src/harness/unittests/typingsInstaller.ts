@@ -44,6 +44,8 @@ namespace ts.projectSystem {
         });
     }
 
+    import typingsName = server.typingsInstaller.typingsName;
+
     describe("typingsInstaller", () => {
         it("configured projects (typings installed) 1", () => {
             const file1 = {
@@ -519,32 +521,32 @@ namespace ts.projectSystem {
             const commander = {
                 path: "/a/data/node_modules/@types/commander/index.d.ts",
                 content: "declare const commander: { x: number }",
-                typings: "@types/commander"
+                typings: typingsName("commander")
             };
             const jquery = {
                 path: "/a/data/node_modules/@types/jquery/index.d.ts",
                 content: "declare const jquery: { x: number }",
-                typings: "@types/jquery"
+                typings: typingsName("jquery")
             };
             const lodash = {
                 path: "/a/data/node_modules/@types/lodash/index.d.ts",
                 content: "declare const lodash: { x: number }",
-                typings: "@types/lodash"
+                typings: typingsName("lodash")
             };
             const cordova = {
                 path: "/a/data/node_modules/@types/cordova/index.d.ts",
                 content: "declare const cordova: { x: number }",
-                typings: "@types/cordova"
+                typings: typingsName("cordova")
             };
             const grunt = {
                 path: "/a/data/node_modules/@types/grunt/index.d.ts",
                 content: "declare const grunt: { x: number }",
-                typings: "@types/grunt"
+                typings: typingsName("grunt")
             };
             const gulp = {
                 path: "/a/data/node_modules/@types/gulp/index.d.ts",
                 content: "declare const gulp: { x: number }",
-                typings: "@types/gulp"
+                typings: typingsName("gulp")
             };
 
             const host = createServerHost([lodashJs, commanderJs, file3]);
@@ -554,7 +556,7 @@ namespace ts.projectSystem {
                 }
                 installWorker(_requestId: number, args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
                     let typingFiles: (FileOrFolder & { typings: string })[] = [];
-                    if (args.indexOf("@types/commander") >= 0) {
+                    if (args.indexOf(typingsName("commander")) >= 0) {
                         typingFiles = [commander, jquery, lodash, cordova];
                     }
                     else {
@@ -982,7 +984,7 @@ namespace ts.projectSystem {
                         return;
                     }
                     if (response.kind === server.EventEndInstallTypes) {
-                        assert.deepEqual(response.packagesToInstall, ["@types/commander"]);
+                        assert.deepEqual(response.packagesToInstall, [typingsName("commander")]);
                         seenTelemetryEvent = true;
                         return;
                     }
