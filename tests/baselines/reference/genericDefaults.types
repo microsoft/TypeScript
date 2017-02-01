@@ -2301,6 +2301,55 @@ const i06c02 = (<i06<number, string>>x).a;
 >x : any
 >a : [number, string]
 
+interface i07 { a: A; }
+>i07 : i07<A>
+>a : A
+>A : A
+
+interface i07<A = number> { b: A; }
+>i07 : i07<A>
+>A : A
+>b : A
+>A : A
+
+const i07c00 = (<i07>x).a;
+>i07c00 : A
+>(<i07>x).a : A
+>(<i07>x) : i07<number>
+><i07>x : i07<number>
+>i07 : i07<A>
+>x : any
+>a : A
+
+const i07c01 = (<i07>x).b;
+>i07c01 : number
+>(<i07>x).b : number
+>(<i07>x) : i07<number>
+><i07>x : i07<number>
+>i07 : i07<A>
+>x : any
+>b : number
+
+const i07c02 = (<i07<B>>x).a;
+>i07c02 : A
+>(<i07<B>>x).a : A
+>(<i07<B>>x) : i07<B>
+><i07<B>>x : i07<B>
+>i07 : i07<A>
+>B : B
+>x : any
+>a : A
+
+const i07c03 = (<i07<B>>x).b;
+>i07c03 : B
+>(<i07<B>>x).b : B
+>(<i07<B>>x) : i07<B>
+><i07<B>>x : i07<B>
+>i07 : i07<A>
+>B : B
+>x : any
+>b : B
+
 interface Base01<T> { a: T; }
 >Base01 : Base01<T>
 >T : T

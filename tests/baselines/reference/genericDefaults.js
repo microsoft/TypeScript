@@ -430,6 +430,13 @@ const i06c00 = (<i06>x).a;
 const i06c01 = (<i06<number>>x).a;
 const i06c02 = (<i06<number, string>>x).a;
 
+interface i07 { a: A; }
+interface i07<A = number> { b: A; }
+const i07c00 = (<i07>x).a;
+const i07c01 = (<i07>x).b;
+const i07c02 = (<i07<B>>x).a;
+const i07c03 = (<i07<B>>x).b;
+
 interface Base01<T> { a: T; }
 interface Base01Constructor { new <T = number>(a?: T): Base01<T>; }
 
@@ -811,6 +818,10 @@ var i05c01 = x.a;
 var i06c00 = x.a;
 var i06c01 = x.a;
 var i06c02 = x.a;
+var i07c00 = x.a;
+var i07c01 = x.b;
+var i07c02 = x.a;
+var i07c03 = x.b;
 var Base01c00 = new Base01();
 var Base01c01 = new Base01(1);
 var Base01c02 = new Base01();
@@ -933,6 +944,16 @@ interface i06<T = U, U = T> {
 declare const i06c00: [{}, {}];
 declare const i06c01: [number, number];
 declare const i06c02: [number, string];
+interface i07 {
+    a: A;
+}
+interface i07<A = number> {
+    b: A;
+}
+declare const i07c00: A;
+declare const i07c01: number;
+declare const i07c02: A;
+declare const i07c03: B;
 interface Base01<T> {
     a: T;
 }

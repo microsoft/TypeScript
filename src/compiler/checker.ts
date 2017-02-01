@@ -858,16 +858,16 @@ namespace ts {
                     case SyntaxKind.ClassExpression:
                     case SyntaxKind.InterfaceDeclaration:
                         if (result = getSymbol(getSymbolOfNode(location).members, name, meaning & SymbolFlags.Type)) {
+                            if (!isTypeParameterSymbolDeclaredInContainer(result, location)) {
+                                // ignore type parameters not declared in this container
+                                result = undefined;
+                                break;
+                            }
                             if (lastLocation && getModifierFlags(lastLocation) & ModifierFlags.Static) {
                                 // TypeScript 1.0 spec (April 2014): 3.4.1
                                 // The scope of a type parameter extends over the entire declaration with which the type
                                 // parameter list is associated, with the exception of static member declarations in classes.
                                 error(errorLocation, Diagnostics.Static_members_cannot_reference_class_type_parameters);
-                                return undefined;
-                            }
-                            // Only perform additional check if error reporting was requested
-                            if (nameNotFoundMessage && !isTypeParameterSymbolDeclaredInContainer(result, location)) {
-                                error(errorLocation, Diagnostics.Type_parameter_0_cannot_be_referenced_outside_of_the_declaration_that_defines_it, symbolToString(result));
                                 return undefined;
                             }
                             break loop;
