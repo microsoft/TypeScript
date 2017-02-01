@@ -4929,7 +4929,7 @@ namespace ts {
         }
 
         function getApparentTypeOfIntersectionType(type: IntersectionType) {
-            return type.resolvedIndexType || (type.resolvedApparentType = getTypeWithThisArgument(type, type));
+            return type.resolvedApparentType || (type.resolvedApparentType = getTypeWithThisArgument(type, type));
         }
 
         /**
