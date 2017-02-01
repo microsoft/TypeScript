@@ -19,3 +19,14 @@ class MyComponent {
     method(x: this) {
     }
 }
+
+
+@decorator
+class NonPrimitiveComponent {
+    constructor(public obj: object) {
+    }
+
+    @decorator
+    method(x: object) {
+    }
+}

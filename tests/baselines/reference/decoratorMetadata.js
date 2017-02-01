@@ -18,6 +18,18 @@ class MyComponent {
     }
 }
 
+
+@decorator
+class NonPrimitiveComponent {
+    constructor(public obj: object) {
+    }
+
+    @decorator
+    method(x: object) {
+    }
+}
+
+
 //// [service.js]
 "use strict";
 var Service = (function () {
@@ -57,3 +69,21 @@ MyComponent = __decorate([
     decorator,
     __metadata("design:paramtypes", [service_1.default])
 ], MyComponent);
+var NonPrimitiveComponent = (function () {
+    function NonPrimitiveComponent(obj) {
+        this.obj = obj;
+    }
+    NonPrimitiveComponent.prototype.method = function (x) {
+    };
+    return NonPrimitiveComponent;
+}());
+__decorate([
+    decorator,
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], NonPrimitiveComponent.prototype, "method", null);
+NonPrimitiveComponent = __decorate([
+    decorator,
+    __metadata("design:paramtypes", [Object])
+], NonPrimitiveComponent);

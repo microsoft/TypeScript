@@ -28,3 +28,24 @@ class MyComponent {
 >x : this
     }
 }
+
+
+@decorator
+>decorator : any
+
+class NonPrimitiveComponent {
+>NonPrimitiveComponent : NonPrimitiveComponent
+
+    constructor(public obj: object) {
+>obj : object
+    }
+
+    @decorator
+>decorator : any
+
+    method(x: object) {
+>method : (x: object) => void
+>x : object
+    }
+}
+
