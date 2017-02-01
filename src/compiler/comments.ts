@@ -11,7 +11,7 @@ namespace ts {
         emitTrailingCommentsOfPosition(pos: number): void;
     }
 
-    export function createCommentWriter(printerOptions: PrinterOptions, emitPos: (pos: number) => void): CommentWriter {
+    export function createCommentWriter(printerOptions: PrinterOptions, emitPos: ((pos: number) => void) | undefined): CommentWriter {
         const extendedDiagnostics = printerOptions.extendedDiagnostics;
         const newLine = getNewLineCharacter(printerOptions);
         let writer: EmitTextWriter;
