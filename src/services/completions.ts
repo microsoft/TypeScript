@@ -1769,9 +1769,13 @@ namespace ts.Completions {
     }
 
     function isEqualityExpression(node: Node): node is BinaryExpression {
-        return isBinaryExpression(node) && (node.operatorToken.kind == SyntaxKind.EqualsEqualsToken ||
-            node.operatorToken.kind === SyntaxKind.ExclamationEqualsToken ||
-            node.operatorToken.kind === SyntaxKind.EqualsEqualsEqualsToken ||
-            node.operatorToken.kind === SyntaxKind.ExclamationEqualsEqualsToken);
+        return isBinaryExpression(node) && isEqualityOperatorKind(node.operatorToken.kind);
+    }
+
+    function isEqualityOperatorKind(kind: SyntaxKind) {
+        return kind == SyntaxKind.EqualsEqualsToken ||
+            kind === SyntaxKind.ExclamationEqualsToken ||
+            kind === SyntaxKind.EqualsEqualsEqualsToken ||
+            kind === SyntaxKind.ExclamationEqualsEqualsToken;
     }
 }
