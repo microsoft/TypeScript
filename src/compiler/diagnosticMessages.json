@@ -2997,6 +2997,14 @@
         "category": "Message",
         "code": 6148
     },
+    "Did you mean to import the default export, with no curly braces":{
+        "category": "Message",
+        "code": 6149
+    },
+    "Did you mean to import the named import '{0}' by using curly braces":{
+        "category": "Message",
+        "code": 6150
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
