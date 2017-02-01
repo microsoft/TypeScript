@@ -174,9 +174,16 @@ namespace ts.Completions {
             return getStringLiteralCompletionEntriesFromModuleNames(<StringLiteral>node, compilerOptions, host, typeChecker);
         }
         else if (isEqualityExpression(node.parent)) {
-            // Get all known external module names or complete a path to a module
+            // Get completions from the type of the other operand
+            // i.e. switch (a) {
+            //         case '/*completion position*/'
+            //      }
+            return getStringLiteralCompletionEntriesFromType(typeChecker.getTypeAtLocation(node.parent.left === node ? node.parent.right : node.parent.left), typeChecker);
+        }
+        else if (isCaseOrDefaultClause(node.parent)) {
+            // Get completions from the type of the switch expression
             // i.e. x === '/*completion position'
-            return getStringLiteralCompletionEntriesFromBinaryExpression(<StringLiteral>node, node.parent, typeChecker);
+            return getStringLiteralCompletionEntriesFromType(typeChecker.getTypeAtLocation((<SwitchStatement>node.parent.parent.parent).expression), typeChecker);
         }
         else {
             const argumentInfo = SignatureHelp.getImmediatelyContainingArgumentInfo(node, position, sourceFile);
@@ -189,7 +196,7 @@ namespace ts.Completions {
 
             // Get completion for string literal from string literal type
             // i.e. var x: "hi" | "hello" = "/*completion position*/"
-            return getStringLiteralCompletionEntriesFromContextualType(<StringLiteral>node, typeChecker);
+            return getStringLiteralCompletionEntriesFromType(typeChecker.getContextualType(<StringLiteral>node), typeChecker);
         }
     }
 
@@ -233,20 +240,7 @@ namespace ts.Completions {
         return undefined;
     }
 
-    function getStringLiteralCompletionEntriesFromContextualType(node: StringLiteral, typeChecker: TypeChecker): CompletionInfo | undefined {
-        const type = typeChecker.getContextualType(node);
-        if (type) {
-            const entries: CompletionEntry[] = [];
-            addStringLiteralCompletionsFromType(type, entries, typeChecker);
-            if (entries.length) {
-                return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries };
-            }
-        }
-        return undefined;
-    }
-
-    function getStringLiteralCompletionEntriesFromBinaryExpression(node: StringLiteral, parent: BinaryExpression, typeChecker: TypeChecker): CompletionInfo | undefined {
-        const type = typeChecker.getTypeAtLocation(parent.left === node ? parent.right : parent.left);
+    function getStringLiteralCompletionEntriesFromType(type: Type, typeChecker: TypeChecker): CompletionInfo | undefined {
         if (type) {
             const entries: CompletionEntry[] = [];
             addStringLiteralCompletionsFromType(type, entries, typeChecker);
