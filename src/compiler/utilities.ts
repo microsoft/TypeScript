@@ -3331,6 +3331,14 @@ namespace ts {
         }
     }
 
+    export function getRangePos(range: TextRange | undefined) {
+        return range ? range.pos : -1;
+    }
+
+    export function getRangeEnd(range: TextRange | undefined) {
+        return range ? range.end : -1;
+    }
+
     /**
      * Increases (or decreases) a position by the provided amount.
      *

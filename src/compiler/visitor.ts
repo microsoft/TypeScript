@@ -627,8 +627,7 @@ namespace ts {
             // If we are not visiting all of the original nodes, we must always create a new array.
             // Since this is a fragment of a node array, we do not copy over the previous location
             // and will only copy over `hasTrailingComma` if we are including the last element.
-            updated = createNodeArray<Node>([], /*location*/ undefined,
-                /*hasTrailingComma*/ nodes.hasTrailingComma && start + count === length);
+            updated = createNodeArray<Node>([], /*hasTrailingComma*/ nodes.hasTrailingComma && start + count === length);
         }
 
         // Visit each original node.
@@ -639,7 +638,8 @@ namespace ts {
             if (updated !== undefined || visited === undefined || visited !== node) {
                 if (updated === undefined) {
                     // Ensure we have a copy of `nodes`, up to the current index.
-                    updated = createNodeArray(nodes.slice(0, i), /*location*/ nodes, nodes.hasTrailingComma);
+                    updated = createNodeArray(nodes.slice(0, i), nodes.hasTrailingComma);
+                    setTextRange(updated, nodes);
                 }
                 if (visited) {
                     if (isArray(visited)) {
@@ -675,10 +675,10 @@ namespace ts {
         context.startLexicalEnvironment();
         statements = visitNodes(statements, visitor, isStatement, start);
         if (ensureUseStrict && !startsWithUseStrict(statements)) {
-            statements = createNodeArray([createStatement(createLiteral("use strict")), ...statements], statements);
+            statements = setTextRange(createNodeArray([createStatement(createLiteral("use strict")), ...statements]), statements);
         }
         const declarations = context.endLexicalEnvironment();
-        return createNodeArray(concatenate(statements, declarations), statements);
+        return setTextRange(createNodeArray(concatenate(statements, declarations)), statements);
     }
 
     /**
@@ -1228,7 +1228,7 @@ namespace ts {
             return statements;
         }
         return isNodeArray(statements)
-            ? createNodeArray(concatenate(statements, declarations), statements)
+            ? setTextRange(createNodeArray(concatenate(statements, declarations)), statements)
             : addRange(statements, declarations);
     }
 
@@ -1252,13 +1252,19 @@ namespace ts {
     export function mergeFunctionBodyLexicalEnvironment(body: ConciseBody, declarations: Statement[]): ConciseBody {
         if (body && declarations !== undefined && declarations.length > 0) {
             if (isBlock(body)) {
-                return updateBlock(body, createNodeArray(concatenate(body.statements, declarations), body.statements));
+                return updateBlock(body, setTextRange(createNodeArray(concatenate(body.statements, declarations)), body.statements));
             }
             else {
-                return createBlock(
-                    createNodeArray([createReturn(body, /*location*/ body), ...declarations], body),
-                    /*location*/ body,
-                    /*multiLine*/ true);
+                return setTextRange(
+                    createBlock(
+                        setTextRange(
+                            createNodeArray([setTextRange(createReturn(body), body), ...declarations]),
+                            body
+                        ),
+                        /*multiLine*/ true
+                    ),
+                    /*location*/ body
+                );
             }
         }
         return body;

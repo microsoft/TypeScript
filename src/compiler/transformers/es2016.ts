@@ -48,29 +48,37 @@ namespace ts {
                 // Transforms `a[x] **= b` into `(_a = a)[_x = x] = Math.pow(_a[_x], b)`
                 const expressionTemp = createTempVariable(hoistVariableDeclaration);
                 const argumentExpressionTemp = createTempVariable(hoistVariableDeclaration);
-                target = createElementAccess(
-                    createAssignment(expressionTemp, left.expression, /*location*/ left.expression),
-                    createAssignment(argumentExpressionTemp, left.argumentExpression, /*location*/ left.argumentExpression),
-                    /*location*/ left
+                target = setTextRange(
+                    createElementAccess(
+                        setTextRange(createAssignment(expressionTemp, left.expression), left.expression),
+                        setTextRange(createAssignment(argumentExpressionTemp, left.argumentExpression), left.argumentExpression)
+                    ),
+                    left
                 );
-                value = createElementAccess(
-                    expressionTemp,
-                    argumentExpressionTemp,
-                    /*location*/ left
+                value = setTextRange(
+                    createElementAccess(
+                        expressionTemp,
+                        argumentExpressionTemp
+                    ),
+                    left
                 );
             }
             else if (isPropertyAccessExpression(left)) {
                 // Transforms `a.x **= b` into `(_a = a).x = Math.pow(_a.x, b)`
                 const expressionTemp = createTempVariable(hoistVariableDeclaration);
-                target = createPropertyAccess(
-                    createAssignment(expressionTemp, left.expression, /*location*/ left.expression),
-                    left.name,
-                    /*location*/ left
+                target = setTextRange(
+                    createPropertyAccess(
+                        setTextRange(createAssignment(expressionTemp, left.expression), left.expression),
+                        left.name
+                    ),
+                    left
                 );
-                value = createPropertyAccess(
-                    expressionTemp,
-                    left.name,
-                    /*location*/ left
+                value = setTextRange(
+                    createPropertyAccess(
+                        expressionTemp,
+                        left.name
+                    ),
+                    left
                 );
             }
             else {
@@ -78,7 +86,13 @@ namespace ts {
                 target = left;
                 value = left;
             }
-            return createAssignment(target, createMathPow(value, right, /*location*/ node), /*location*/ node);
+            return setTextRange(
+                createAssignment(
+                    target,
+                    createMathPow(value, right, /*location*/ node)
+                ),
+                node
+            );
         }
 
         function visitExponentiationExpression(node: BinaryExpression) {

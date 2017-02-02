@@ -88,7 +88,7 @@ namespace ts {
             addRange(statements, endLexicalEnvironment());
             addExportEqualsIfNeeded(statements, /*emitAsReturn*/ false);
 
-            const updated = updateSourceFileNode(node, createNodeArray(statements, node.statements));
+            const updated = updateSourceFileNode(node, setTextRange(createNodeArray(statements), node.statements));
             if (currentModuleInfo.hasExportStarsToExportValues) {
                 addEmitHelper(updated, exportStarHelper);
             }
@@ -131,47 +131,49 @@ namespace ts {
             // Create an updated SourceFile:
             //
             //     define(moduleName?, ["module1", "module2"], function ...
-            return updateSourceFileNode(node, createNodeArray(
-                [
-                    createStatement(
-                        createCall(
-                            define,
-                            /*typeArguments*/ undefined,
-                            [
-                                // Add the module name (if provided).
-                                ...(moduleName ? [moduleName] : []),
+            return updateSourceFileNode(node,
+                setTextRange(
+                    createNodeArray([
+                        createStatement(
+                            createCall(
+                                define,
+                                /*typeArguments*/ undefined,
+                                [
+                                    // Add the module name (if provided).
+                                    ...(moduleName ? [moduleName] : []),
 
-                                // Add the dependency array argument:
-                                //
-                                //     ["require", "exports", module1", "module2", ...]
-                                createArrayLiteral([
-                                    createLiteral("require"),
-                                    createLiteral("exports"),
-                                    ...aliasedModuleNames,
-                                    ...unaliasedModuleNames
-                                ]),
+                                    // Add the dependency array argument:
+                                    //
+                                    //     ["require", "exports", module1", "module2", ...]
+                                    createArrayLiteral([
+                                        createLiteral("require"),
+                                        createLiteral("exports"),
+                                        ...aliasedModuleNames,
+                                        ...unaliasedModuleNames
+                                    ]),
 
-                                // Add the module body function argument:
-                                //
-                                //     function (require, exports, module1, module2) ...
-                                createFunctionExpression(
-                                    /*modifiers*/ undefined,
-                                    /*asteriskToken*/ undefined,
-                                    /*name*/ undefined,
-                                    /*typeParameters*/ undefined,
-                                    [
-                                        createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
-                                        createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
-                                        ...importAliasNames
-                                    ],
-                                    /*type*/ undefined,
-                                    transformAsynchronousModuleBody(node)
-                                )
-                            ]
+                                    // Add the module body function argument:
+                                    //
+                                    //     function (require, exports, module1, module2) ...
+                                    createFunctionExpression(
+                                        /*modifiers*/ undefined,
+                                        /*asteriskToken*/ undefined,
+                                        /*name*/ undefined,
+                                        /*typeParameters*/ undefined,
+                                        [
+                                            createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
+                                            createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
+                                            ...importAliasNames
+                                        ],
+                                        /*type*/ undefined,
+                                        transformAsynchronousModuleBody(node)
+                                    )
+                                ]
+                            )
                         )
-                    )
-                ],
-                /*location*/ node.statements)
+                    ]),
+                    /*location*/ node.statements
+                )
             );
         }
 
@@ -189,74 +191,76 @@ namespace ts {
                 /*typeParameters*/ undefined,
                 [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "factory")],
                 /*type*/ undefined,
-                createBlock(
-                    [
-                        createIf(
-                            createLogicalAnd(
-                                createTypeCheck(createIdentifier("module"), "object"),
-                                createTypeCheck(createPropertyAccess(createIdentifier("module"), "exports"), "object")
-                            ),
-                            createBlock([
-                                createVariableStatement(
-                                    /*modifiers*/ undefined,
-                                    [
-                                        createVariableDeclaration(
-                                            "v",
-                                            /*type*/ undefined,
+                setTextRange(
+                    createBlock(
+                        [
+                            createIf(
+                                createLogicalAnd(
+                                    createTypeCheck(createIdentifier("module"), "object"),
+                                    createTypeCheck(createPropertyAccess(createIdentifier("module"), "exports"), "object")
+                                ),
+                                createBlock([
+                                    createVariableStatement(
+                                        /*modifiers*/ undefined,
+                                        [
+                                            createVariableDeclaration(
+                                                "v",
+                                                /*type*/ undefined,
+                                                createCall(
+                                                    createIdentifier("factory"),
+                                                    /*typeArguments*/ undefined,
+                                                    [
+                                                        createIdentifier("require"),
+                                                        createIdentifier("exports")
+                                                    ]
+                                                )
+                                            )
+                                        ]
+                                    ),
+                                    setEmitFlags(
+                                        createIf(
+                                            createStrictInequality(
+                                                createIdentifier("v"),
+                                                createIdentifier("undefined")
+                                            ),
+                                            createStatement(
+                                                createAssignment(
+                                                    createPropertyAccess(createIdentifier("module"), "exports"),
+                                                    createIdentifier("v")
+                                                )
+                                            )
+                                        ),
+                                        EmitFlags.SingleLine
+                                    )
+                                ]),
+                                createIf(
+                                    createLogicalAnd(
+                                        createTypeCheck(createIdentifier("define"), "function"),
+                                        createPropertyAccess(createIdentifier("define"), "amd")
+                                    ),
+                                    createBlock([
+                                        createStatement(
                                             createCall(
-                                                createIdentifier("factory"),
+                                                createIdentifier("define"),
                                                 /*typeArguments*/ undefined,
                                                 [
-                                                    createIdentifier("require"),
-                                                    createIdentifier("exports")
+                                                    createArrayLiteral([
+                                                        createLiteral("require"),
+                                                        createLiteral("exports"),
+                                                        ...aliasedModuleNames,
+                                                        ...unaliasedModuleNames
+                                                    ]),
+                                                    createIdentifier("factory")
                                                 ]
                                             )
                                         )
-                                    ]
-                                ),
-                                setEmitFlags(
-                                    createIf(
-                                        createStrictInequality(
-                                            createIdentifier("v"),
-                                            createIdentifier("undefined")
-                                        ),
-                                        createStatement(
-                                            createAssignment(
-                                                createPropertyAccess(createIdentifier("module"), "exports"),
-                                                createIdentifier("v")
-                                            )
-                                        )
-                                    ),
-                                    EmitFlags.SingleLine
+                                    ])
                                 )
-                            ]),
-                            createIf(
-                                createLogicalAnd(
-                                    createTypeCheck(createIdentifier("define"), "function"),
-                                    createPropertyAccess(createIdentifier("define"), "amd")
-                                ),
-                                createBlock([
-                                    createStatement(
-                                        createCall(
-                                            createIdentifier("define"),
-                                            /*typeArguments*/ undefined,
-                                            [
-                                                createArrayLiteral([
-                                                    createLiteral("require"),
-                                                    createLiteral("exports"),
-                                                    ...aliasedModuleNames,
-                                                    ...unaliasedModuleNames
-                                                ]),
-                                                createIdentifier("factory")
-                                            ]
-                                        )
-                                    )
-                                ])
                             )
-                        )
-                    ],
-                    /*location*/ undefined,
-                    /*multiLine*/ true
+                        ],
+                        /*multiLine*/ true
+                    ),
+                    /*location*/ undefined
                 )
             );
 
@@ -274,8 +278,8 @@ namespace ts {
 
             return updateSourceFileNode(
                 node,
-                createNodeArray(
-                    [
+                setTextRange(
+                    createNodeArray([
                         createStatement(
                             createCall(
                                 umdHeader,
@@ -300,7 +304,7 @@ namespace ts {
                                 ]
                             )
                         )
-                    ],
+                    ]),
                     /*location*/ node.statements
                 )
             );
@@ -378,7 +382,7 @@ namespace ts {
             // Append the 'export =' statement if provided.
             addExportEqualsIfNeeded(statements, /*emitAsReturn*/ true);
 
-            const body = createBlock(statements, /*location*/ undefined, /*multiLine*/ true);
+            const body = createBlock(statements, /*multiLine*/ true);
             if (currentModuleInfo.hasExportStarsToExportValues) {
                 // If we have any `export * from ...` declarations
                 // we need to inform the emitter to add the __export helper.
@@ -399,11 +403,8 @@ namespace ts {
         function addExportEqualsIfNeeded(statements: Statement[], emitAsReturn: boolean) {
             if (currentModuleInfo.exportEquals) {
                 if (emitAsReturn) {
-                    const statement = createReturn(
-                        currentModuleInfo.exportEquals.expression,
-                        /*location*/ currentModuleInfo.exportEquals
-                    );
-
+                    const statement = createReturn(currentModuleInfo.exportEquals.expression);
+                    setTextRange(statement, currentModuleInfo.exportEquals);
                     setEmitFlags(statement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoComments);
                     statements.push(statement);
                 }
@@ -415,10 +416,10 @@ namespace ts {
                                 "exports"
                             ),
                             currentModuleInfo.exportEquals.expression
-                        ),
-                        /*location*/ currentModuleInfo.exportEquals
+                        )
                     );
 
+                    setTextRange(statement, currentModuleInfo.exportEquals);
                     setEmitFlags(statement, EmitFlags.NoComments);
                     statements.push(statement);
                 }
@@ -481,7 +482,7 @@ namespace ts {
             if (moduleKind !== ModuleKind.AMD) {
                 if (!node.importClause) {
                     // import "mod";
-                    return createStatement(createRequireCall(node), /*location*/ node);
+                    return setTextRange(createStatement(createRequireCall(node)), node);
                 }
                 else {
                     const variables: VariableDeclaration[] = [];
@@ -520,12 +521,13 @@ namespace ts {
                     }
 
                     statements = append(statements,
-                        createVariableStatement(
-                            /*modifiers*/ undefined,
-                            createVariableDeclarationList(
-                                variables,
-                                /*location*/ undefined,
-                                languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
+                        setTextRange(
+                            createVariableStatement(
+                                /*modifiers*/ undefined,
+                                createVariableDeclarationList(
+                                    variables,
+                                    languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
+                                )
                             ),
                             /*location*/ node
                         )
@@ -539,14 +541,15 @@ namespace ts {
                         /*modifiers*/ undefined,
                         createVariableDeclarationList(
                             [
-                                createVariableDeclaration(
-                                    getSynthesizedClone(namespaceDeclaration.name),
-                                    /*type*/ undefined,
-                                    getGeneratedNameForNode(node),
+                                setTextRange(
+                                    createVariableDeclaration(
+                                        getSynthesizedClone(namespaceDeclaration.name),
+                                        /*type*/ undefined,
+                                        getGeneratedNameForNode(node)
+                                    ),
                                     /*location*/ node
                                 )
                             ],
-                            /*location*/ undefined,
                             languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
                         )
                     )
@@ -592,31 +595,34 @@ namespace ts {
             if (moduleKind !== ModuleKind.AMD) {
                 if (hasModifier(node, ModifierFlags.Export)) {
                     statements = append(statements,
-                        createStatement(
-                            createExportExpression(
-                                node.name,
-                                createRequireCall(node)
+                        setTextRange(
+                            createStatement(
+                                createExportExpression(
+                                    node.name,
+                                    createRequireCall(node)
+                                )
                             ),
-                            /*location*/ node
+                            node
                         )
                     );
                 }
                 else {
                     statements = append(statements,
-                        createVariableStatement(
-                            /*modifiers*/ undefined,
-                            createVariableDeclarationList(
-                                [
-                                    createVariableDeclaration(
-                                        getSynthesizedClone(node.name),
-                                        /*type*/ undefined,
-                                        createRequireCall(node)
-                                    )
-                                ],
-                                /*location*/ undefined,
-                                /*flags*/ languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
+                        setTextRange(
+                            createVariableStatement(
+                                /*modifiers*/ undefined,
+                                createVariableDeclarationList(
+                                    [
+                                        createVariableDeclaration(
+                                            getSynthesizedClone(node.name),
+                                            /*type*/ undefined,
+                                            createRequireCall(node)
+                                        )
+                                    ],
+                                    /*flags*/ languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
+                                )
                             ),
-                            /*location*/ node
+                            node
                         )
                     );
                 }
@@ -624,9 +630,11 @@ namespace ts {
             else {
                 if (hasModifier(node, ModifierFlags.Export)) {
                     statements = append(statements,
-                        createStatement(
-                            createExportExpression(getExportName(node), getLocalName(node)),
-                            /*location*/ node
+                        setTextRange(
+                            createStatement(
+                                createExportExpression(getExportName(node), getLocalName(node))
+                            ),
+                            node
                         )
                     );
                 }
@@ -662,15 +670,17 @@ namespace ts {
                 // export { x, y } from "mod";
                 if (moduleKind !== ModuleKind.AMD) {
                     statements.push(
-                        createVariableStatement(
-                            /*modifiers*/ undefined,
-                            createVariableDeclarationList([
-                                createVariableDeclaration(
-                                    generatedName,
-                                    /*type*/ undefined,
-                                    createRequireCall(node)
-                                )
-                            ]),
+                        setTextRange(
+                            createVariableStatement(
+                                /*modifiers*/ undefined,
+                                createVariableDeclarationList([
+                                    createVariableDeclaration(
+                                        generatedName,
+                                        /*type*/ undefined,
+                                        createRequireCall(node)
+                                    )
+                                ])
+                            ),
                             /*location*/ node
                         )
                     );
@@ -681,9 +691,11 @@ namespace ts {
                         specifier.propertyName || specifier.name
                     );
                     statements.push(
-                        createStatement(
-                            createExportExpression(getExportName(specifier), exportedValue),
-                            /*location*/ specifier
+                        setTextRange(
+                            createStatement(
+                                createExportExpression(getExportName(specifier), exportedValue)
+                            ),
+                            specifier
                         )
                     );
                 }
@@ -692,17 +704,19 @@ namespace ts {
             }
             else {
                 // export * from "mod";
-                return createStatement(
-                    createCall(
-                        createIdentifier("__export"),
-                        /*typeArguments*/ undefined,
-                        [
-                            moduleKind !== ModuleKind.AMD
-                                ? createRequireCall(node)
-                                : generatedName
-                        ]
+                return setTextRange(
+                    createStatement(
+                        createCall(
+                            createIdentifier("__export"),
+                            /*typeArguments*/ undefined,
+                            [
+                                moduleKind !== ModuleKind.AMD
+                                    ? createRequireCall(node)
+                                    : generatedName
+                            ]
+                        )
                     ),
-                    /*location*/ node
+                    node
                 );
             }
         }
@@ -741,15 +755,17 @@ namespace ts {
             if (hasModifier(node, ModifierFlags.Export)) {
                 statements = append(statements,
                     setOriginalNode(
-                        createFunctionDeclaration(
-                            /*decorators*/ undefined,
-                            visitNodes(node.modifiers, modifierVisitor, isModifier),
-                            node.asteriskToken,
-                            getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
-                            /*typeParameters*/ undefined,
-                            node.parameters,
-                            /*type*/ undefined,
-                            node.body,
+                        setTextRange(
+                            createFunctionDeclaration(
+                                /*decorators*/ undefined,
+                                visitNodes(node.modifiers, modifierVisitor, isModifier),
+                                node.asteriskToken,
+                                getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
+                                /*typeParameters*/ undefined,
+                                node.parameters,
+                                /*type*/ undefined,
+                                node.body
+                            ),
                             /*location*/ node
                         ),
                         /*original*/ node
@@ -782,16 +798,18 @@ namespace ts {
             if (hasModifier(node, ModifierFlags.Export)) {
                 statements = append(statements,
                     setOriginalNode(
-                        createClassDeclaration(
-                            /*decorators*/ undefined,
-                            visitNodes(node.modifiers, modifierVisitor, isModifier),
-                            getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
-                            /*typeParameters*/ undefined,
-                            node.heritageClauses,
-                            node.members,
-                            /*location*/ node
+                        setTextRange(
+                            createClassDeclaration(
+                                /*decorators*/ undefined,
+                                visitNodes(node.modifiers, modifierVisitor, isModifier),
+                                getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
+                                /*typeParameters*/ undefined,
+                                node.heritageClauses,
+                                node.members
+                            ),
+                            node
                         ),
-                        /*original*/ node
+                        node
                     )
                 );
             }
@@ -843,7 +861,7 @@ namespace ts {
                 }
 
                 if (expressions) {
-                    statements = append(statements, createStatement(inlineExpressions(expressions), /*location*/ node));
+                    statements = append(statements, setTextRange(createStatement(inlineExpressions(expressions)), node));
                 }
             }
             else {
@@ -880,9 +898,11 @@ namespace ts {
             }
             else {
                 return createAssignment(
-                    createPropertyAccess(
-                        createIdentifier("exports"),
-                        node.name,
+                    setTextRange(
+                        createPropertyAccess(
+                            createIdentifier("exports"),
+                            node.name
+                        ),
                         /*location*/ node.name
                     ),
                     node.initializer
@@ -1115,7 +1135,7 @@ namespace ts {
                             createStatement(
                                 createExportExpression(
                                     createIdentifier("__esModule"),
-                                    createLiteral(true)
+                                    createTrue()
                                 )
                             )
                         );
@@ -1130,7 +1150,7 @@ namespace ts {
                                         createIdentifier("exports"),
                                         createLiteral("__esModule"),
                                         createObjectLiteral([
-                                            createPropertyAssignment("value", createLiteral(true))
+                                            createPropertyAssignment("value", createTrue())
                                         ])
                                     ]
                                 )
@@ -1153,7 +1173,7 @@ namespace ts {
          * @param allowComments An optional value indicating whether to emit comments for the statement.
          */
         function createExportStatement(name: Identifier, value: Expression, location?: TextRange, allowComments?: boolean) {
-            const statement = createStatement(createExportExpression(name, value), location);
+            const statement = setTextRange(createStatement(createExportExpression(name, value)), location);
             startOnNewLine(statement);
             if (!allowComments) {
                 setEmitFlags(statement, EmitFlags.NoComments);
@@ -1170,12 +1190,14 @@ namespace ts {
          * @param location The location to use for source maps and comments for the export.
          */
         function createExportExpression(name: Identifier, value: Expression, location?: TextRange) {
-            return createAssignment(
-                createPropertyAccess(
-                    createIdentifier("exports"),
-                    getSynthesizedClone(name)
+            return setTextRange(
+                createAssignment(
+                    createPropertyAccess(
+                        createIdentifier("exports"),
+                        getSynthesizedClone(name)
+                    ),
+                    value
                 ),
-                value,
                 location
             );
         }
@@ -1268,9 +1290,9 @@ namespace ts {
                 // destructuring assignment
                 if (node.objectAssignmentInitializer) {
                     const initializer = createAssignment(exportedOrImportedName, node.objectAssignmentInitializer);
-                    return createPropertyAssignment(name, initializer, /*location*/ node);
+                    return setTextRange(createPropertyAssignment(name, initializer), node);
                 }
-                return createPropertyAssignment(name, exportedOrImportedName, /*location*/ node);
+                return setTextRange(createPropertyAssignment(name, exportedOrImportedName), node);
             }
             return node;
         }
@@ -1312,9 +1334,11 @@ namespace ts {
             if (!isGeneratedIdentifier(node) && !isLocalName(node)) {
                 const exportContainer = resolver.getReferencedExportContainer(node, isExportName(node));
                 if (exportContainer && exportContainer.kind === SyntaxKind.SourceFile) {
-                    return createPropertyAccess(
-                        createIdentifier("exports"),
-                        getSynthesizedClone(node),
+                    return setTextRange(
+                        createPropertyAccess(
+                            createIdentifier("exports"),
+                            getSynthesizedClone(node)
+                        ),
                         /*location*/ node
                     );
                 }
@@ -1322,17 +1346,21 @@ namespace ts {
                 const importDeclaration = resolver.getReferencedImportDeclaration(node);
                 if (importDeclaration) {
                     if (isImportClause(importDeclaration)) {
-                        return createPropertyAccess(
-                            getGeneratedNameForNode(importDeclaration.parent),
-                            createIdentifier("default"),
+                        return setTextRange(
+                            createPropertyAccess(
+                                getGeneratedNameForNode(importDeclaration.parent),
+                                createIdentifier("default")
+                            ),
                             /*location*/ node
                         );
                     }
                     else if (isImportSpecifier(importDeclaration)) {
                         const name = importDeclaration.propertyName || importDeclaration.name;
-                        return createPropertyAccess(
-                            getGeneratedNameForNode(importDeclaration.parent.parent.parent),
-                            getSynthesizedClone(name),
+                        return setTextRange(
+                            createPropertyAccess(
+                                getGeneratedNameForNode(importDeclaration.parent.parent.parent),
+                                getSynthesizedClone(name)
+                            ),
                             /*location*/ node
                         );
                     }
@@ -1400,10 +1428,12 @@ namespace ts {
                 const exportedNames = getExports(node.operand);
                 if (exportedNames) {
                     let expression: Expression = node.kind === SyntaxKind.PostfixUnaryExpression
-                        ? createBinary(
-                            node.operand,
-                            createToken(node.operator === SyntaxKind.PlusPlusToken ? SyntaxKind.PlusEqualsToken : SyntaxKind.MinusEqualsToken),
-                            createLiteral(1),
+                        ? setTextRange(
+                            createBinary(
+                                node.operand,
+                                createToken(node.operator === SyntaxKind.PlusPlusToken ? SyntaxKind.PlusEqualsToken : SyntaxKind.MinusEqualsToken),
+                                createLiteral(1)
+                            ),
                             /*location*/ node)
                         : node;
                     for (const exportName of exportedNames) {
