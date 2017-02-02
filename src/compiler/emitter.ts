@@ -236,6 +236,21 @@ namespace ts {
         };
 
         function printNode(hint: EmitHint, node: Node, sourceFile: SourceFile): string {
+            switch (hint) {
+                case EmitHint.SourceFile:
+                    Debug.assert(isSourceFile(node), "Expected a SourceFile node.");
+                    break;
+                case EmitHint.IdentifierName:
+                    Debug.assert(isIdentifier(node), "Expected an Identifier node.");
+                    break;
+                case EmitHint.Expression:
+                    Debug.assert(isExpression(node), "Expected an Expression node.");
+                    break;
+            }
+            switch (node.kind) {
+                case SyntaxKind.SourceFile: return printFile(<SourceFile>node);
+                case SyntaxKind.Bundle: return printBundle(<Bundle>node);
+            }
             writeNode(hint, node, sourceFile, beginPrint());
             return endPrint();
         }

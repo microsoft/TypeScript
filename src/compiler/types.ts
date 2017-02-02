@@ -3912,8 +3912,27 @@
     export type Transformer = (context: TransformationContext) => (node: SourceFile) => SourceFile;
 
     export interface Printer {
+        /**
+         * Print a node and its subtree as-is, without any emit transformations.
+         * @param hint A value indicating the purpose of a node. This is primarily used to
+         * distinguish between an `Identifier` used in an expression position, versus an
+         * `Identifier` used as an `IdentifierName` as part of a declaration. For most nodes you
+         * should just pass `Unspecified`.
+         * @param node The node to print. The node and its subtree are printed as-is, without any
+         * emit transformations.
+         * @param sourceFile A source file that provides context for the node. The source text of
+         * the file is used to emit the original source content for literals and identifiers, while
+         * the identifiers of the source file are used when generating unique names to avoid
+         * collisions.
+         */
         printNode(hint: EmitHint, node: Node, sourceFile: SourceFile): string;
+        /**
+         * Prints a source file as-is, without any emit transformations.
+         */
         printFile(sourceFile: SourceFile): string;
+        /**
+         * Prints a bundle of source files as-is, without any emit transformations.
+         */
         printBundle(bundle: Bundle): string;
         /*@internal*/ writeNode(hint: EmitHint, node: Node, sourceFile: SourceFile, writer: EmitTextWriter): void;
         /*@internal*/ writeFile(sourceFile: SourceFile, writer: EmitTextWriter): void;
@@ -3921,9 +3940,50 @@
     }
 
     export interface PrintHandlers {
-        hasGlobalName?: (name: string) => boolean;
-        onEmitNode?: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
-        onSubstituteNode?: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
+        /**
+         * A hook used by the Printer when generating unique names to avoid collisions with
+         * globally defined names that exist outside of the current source file.
+         */
+        hasGlobalName?(name: string): boolean;
+        /**
+         * A hook used by the Printer to provide notifications prior to emitting a node. A
+         * compatible implementation **must** invoke `emitCallback` with the provided `hint` and
+         * `node` values.
+         * @param hint A hint indicating the intended purpose of the node.
+         * @param node The node to emit.
+         * @param emitCallback A callback that, when invoked, will emit the node.
+         * @example
+         * ```ts
+         * var printer = createPrinter(printerOptions, {
+         *   onEmitNode(hint, node, emitCallback) {
+         *     // set up or track state prior to emitting the node...
+         *     emitCallback(hint, node);
+         *     // restore state after emitting the node...
+         *   }
+         * });
+         * ```
+         */
+        onEmitNode?(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
+        /**
+         * A hook used by the Printer to perform just-in-time substitution of a node. This is
+         * primarily used by node transformations that need to substitute one node for another,
+         * such as replacing `myExportedVar` with `exports.myExportedVar`. A compatible
+         * implementation **must** invoke `emitCallback` eith the provided `hint` and either
+         * the provided `node`, or its substitute.
+         * @param hint A hint indicating the intended purpose of the node.
+         * @param node The node to emit.
+         * @param emitCallback A callback that, when invoked, will emit the node.
+         * @example
+         * ```ts
+         * var printer = createPrinter(printerOptions, {
+         *   onSubstituteNode(hint, node, emitCallback) {
+         *     // perform substitution if necessary...
+         *     emitCallback(hint, node);
+         *   }
+         * });
+         * ```
+         */
+        onSubstituteNode?(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
         /*@internal*/ onEmitSourceMapOfNode?: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
         /*@internal*/ onEmitSourceMapOfToken?: (node: Node, token: SyntaxKind, pos: number, emitCallback: (token: SyntaxKind, pos: number) => number) => number;
         /*@internal*/ onEmitSourceMapOfPosition?: (pos: number) => void;
