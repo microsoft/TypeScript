@@ -2042,57 +2042,6 @@ namespace ts {
             || positionIsSynthesized(node.end);
     }
 
-    export function getOriginalNode(node: Node): Node;
-    export function getOriginalNode<T extends Node>(node: Node, nodeTest: (node: Node) => node is T): T;
-    export function getOriginalNode(node: Node, nodeTest?: (node: Node) => boolean): Node {
-        if (node) {
-            while (node.original !== undefined) {
-                node = node.original;
-            }
-        }
-
-        return !nodeTest || nodeTest(node) ? node : undefined;
-    }
-
-    /**
-     * Gets a value indicating whether a node originated in the parse tree.
-     *
-     * @param node The node to test.
-     */
-    export function isParseTreeNode(node: Node): boolean {
-        return (node.flags & NodeFlags.Synthesized) === 0;
-    }
-
-    /**
-     * Gets the original parse tree node for a node.
-     *
-     * @param node The original node.
-     * @returns The original parse tree node if found; otherwise, undefined.
-     */
-    export function getParseTreeNode(node: Node): Node;
-
-    /**
-     * Gets the original parse tree node for a node.
-     *
-     * @param node The original node.
-     * @param nodeTest A callback used to ensure the correct type of parse tree node is returned.
-     * @returns The original parse tree node if found; otherwise, undefined.
-     */
-    export function getParseTreeNode<T extends Node>(node: Node, nodeTest?: (node: Node) => node is T): T;
-    export function getParseTreeNode(node: Node, nodeTest?: (node: Node) => boolean): Node {
-        if (isParseTreeNode(node)) {
-            return node;
-        }
-
-        node = getOriginalNode(node);
-
-        if (isParseTreeNode(node) && (!nodeTest || nodeTest(node))) {
-            return node;
-        }
-
-        return undefined;
-    }
-
     export function getOriginalSourceFileOrBundle(sourceFileOrBundle: SourceFile | Bundle) {
         if (sourceFileOrBundle.kind === SyntaxKind.Bundle) {
             return updateBundle(sourceFileOrBundle, sameMap(sourceFileOrBundle.sourceFiles, getOriginalSourceFile));
@@ -4529,5 +4478,56 @@ namespace ts {
 
             return true;
         }
+    }
+
+    export function getOriginalNode(node: Node): Node;
+    export function getOriginalNode<T extends Node>(node: Node, nodeTest: (node: Node) => node is T): T;
+    export function getOriginalNode(node: Node, nodeTest?: (node: Node) => boolean): Node {
+        if (node) {
+            while (node.original !== undefined) {
+                node = node.original;
+            }
+        }
+
+        return !nodeTest || nodeTest(node) ? node : undefined;
+    }
+
+    /**
+     * Gets a value indicating whether a node originated in the parse tree.
+     *
+     * @param node The node to test.
+     */
+    export function isParseTreeNode(node: Node): boolean {
+        return (node.flags & NodeFlags.Synthesized) === 0;
+    }
+
+    /**
+     * Gets the original parse tree node for a node.
+     *
+     * @param node The original node.
+     * @returns The original parse tree node if found; otherwise, undefined.
+     */
+    export function getParseTreeNode(node: Node): Node;
+
+    /**
+     * Gets the original parse tree node for a node.
+     *
+     * @param node The original node.
+     * @param nodeTest A callback used to ensure the correct type of parse tree node is returned.
+     * @returns The original parse tree node if found; otherwise, undefined.
+     */
+    export function getParseTreeNode<T extends Node>(node: Node, nodeTest?: (node: Node) => node is T): T;
+    export function getParseTreeNode(node: Node, nodeTest?: (node: Node) => boolean): Node {
+        if (isParseTreeNode(node)) {
+            return node;
+        }
+
+        node = getOriginalNode(node);
+
+        if (isParseTreeNode(node) && (!nodeTest || nodeTest(node))) {
+            return node;
+        }
+
+        return undefined;
     }
 }
