@@ -1783,6 +1783,10 @@
         "category": "Error",
         "code": 2544
     },
+    "A mixin class must have a constructor with a single rest parameter of type 'any[]'.": {
+        "category": "Error",
+        "code": 2545
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -3266,6 +3270,10 @@
     "Implement inherited abstract class.": {
         "category": "Message",
         "code": 90007
+    },
+    "Add 'this.' to unresolved variable.": {
+        "category": "Message",
+        "code": 90008
     },
     "Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig": {
         "category": "Error",

@@ -402,6 +402,11 @@ namespace ts {
     };
 
     export function createAssignHelper(context: TransformationContext, attributesSegments: Expression[]) {
+        if (context.getCompilerOptions().target >= ScriptTarget.ES2015) {
+            return createCall(createPropertyAccess(createIdentifier("Object"), "assign"),
+                              /*typeArguments*/ undefined,
+                              attributesSegments);
+        }
         context.requestEmitHelper(assignHelper);
         return createCall(
             getHelperName("__assign"),
