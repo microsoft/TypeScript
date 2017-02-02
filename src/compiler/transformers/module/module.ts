@@ -45,6 +45,7 @@ namespace ts {
         let currentSourceFile: SourceFile; // The current file.
         let currentModuleInfo: ExternalModuleInfo; // The ExternalModuleInfo for the current file.
         let noSubstitution: boolean[]; // Set of nodes for which substitution rules should be ignored.
+        let shouldAppendUnderscoreUnderscoreEsModule: boolean;  // A boolean indicating whether "__esModule" should be emitted
 
         return transformSourceFile;
 
@@ -62,6 +63,7 @@ namespace ts {
 
             currentSourceFile = node;
             currentModuleInfo = collectExternalModuleInfo(node, resolver, compilerOptions);
+            shouldAppendUnderscoreUnderscoreEsModule = false;
             moduleInfoMap[getOriginalNodeId(node)] = currentModuleInfo;
 
             // Perform the transformation.
@@ -88,11 +90,14 @@ namespace ts {
             addRange(statements, endLexicalEnvironment());
             addExportEqualsIfNeeded(statements, /*emitAsReturn*/ false);
 
+            if (shouldAppendUnderscoreUnderscoreEsModule) {
+                append(statements, createUnderscoreUnderscoreESModule());
+            }
+
             const updated = updateSourceFileNode(node, createNodeArray(statements, node.statements));
             if (currentModuleInfo.hasExportStarsToExportValues) {
                 addEmitHelper(updated, exportStarHelper);
             }
-
             return updated;
         }
 
@@ -378,6 +383,10 @@ namespace ts {
             // Append the 'export =' statement if provided.
             addExportEqualsIfNeeded(statements, /*emitAsReturn*/ true);
 
+            if (shouldAppendUnderscoreUnderscoreEsModule) {
+                append(statements, createUnderscoreUnderscoreESModule());
+            }
+
             const body = createBlock(statements, /*location*/ undefined, /*multiLine*/ true);
             if (currentModuleInfo.hasExportStarsToExportValues) {
                 // If we have any `export * from ...` declarations
@@ -657,6 +666,8 @@ namespace ts {
             }
 
             const generatedName = getGeneratedNameForNode(node);
+            shouldAppendUnderscoreUnderscoreEsModule = true;
+
             if (node.exportClause) {
                 const statements: Statement[] = [];
                 // export { x, y } from "mod";
@@ -834,6 +845,7 @@ namespace ts {
                         variables = append(variables, variable);
                     }
                     else if (variable.initializer) {
+                        shouldAppendUnderscoreUnderscoreEsModule = true;
                         expressions = append(expressions, transformInitializedVariable(variable));
                     }
                 }
@@ -1107,41 +1119,38 @@ namespace ts {
          * @param allowComments Whether to allow comments on the export.
          */
         function appendExportStatement(statements: Statement[] | undefined, exportName: Identifier, expression: Expression, location?: TextRange, allowComments?: boolean): Statement[] | undefined {
-            if (exportName.text === "default") {
-                const sourceFile = getOriginalNode(currentSourceFile, isSourceFile);
-                if (sourceFile && !sourceFile.symbol.exports.get("___esModule")) {
-                    if (languageVersion === ScriptTarget.ES3) {
-                        statements = append(statements,
-                            createStatement(
-                                createExportExpression(
-                                    createIdentifier("__esModule"),
-                                    createLiteral(true)
-                                )
-                            )
-                        );
-                    }
-                    else {
-                        statements = append(statements,
-                            createStatement(
-                                createCall(
-                                    createPropertyAccess(createIdentifier("Object"), "defineProperty"),
-                                    /*typeArguments*/ undefined,
-                                    [
-                                        createIdentifier("exports"),
-                                        createLiteral("__esModule"),
-                                        createObjectLiteral([
-                                            createPropertyAssignment("value", createLiteral(true))
-                                        ])
-                                    ]
-                                )
-                            )
-                        );
-                    }
-                }
-            }
-
+            shouldAppendUnderscoreUnderscoreEsModule = true;
             statements = append(statements, createExportStatement(exportName, expression, location, allowComments));
             return statements;
+        }
+
+        function createUnderscoreUnderscoreESModule() {
+            let statement: Statement;
+            if (languageVersion === ScriptTarget.ES3) {
+                statement = createStatement(
+                    createExportExpression(
+                        createIdentifier("__esModule"),
+                        createLiteral(true)
+                    )
+                )
+            }
+            else {
+                statement = createStatement(
+                    createCall(
+                        createPropertyAccess(createIdentifier("Object"), "defineProperty"),
+                        /*typeArguments*/ undefined,
+                        [
+                            createIdentifier("exports"),
+                            createLiteral("__esModule"),
+                            createObjectLiteral([
+                                createPropertyAssignment("value", createLiteral(true))
+                            ])
+                        ]
+                    )
+                );
+            }
+            setEmitFlags(statement, EmitFlags.CustomPrologue);
+            return statement;
         }
 
         /**
