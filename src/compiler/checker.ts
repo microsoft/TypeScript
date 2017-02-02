@@ -17980,16 +17980,92 @@ namespace ts {
          * of a iterable (if defined globally) or element type of an array like for ES2015 or earlier.
          */
         function getIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean, checkAssignability: boolean): Type {
-            if (languageVersion >= ScriptTarget.ES2015) {
-                const iteratedType = getIteratedTypeOfIterable(inputType, errorNode);
-                if (checkAssignability && errorNode && iteratedType) {
-                    checkTypeAssignableTo(inputType, createIterableType(iteratedType), errorNode);
+            const uplevelIteration = languageVersion >= ScriptTarget.ES2015;
+            const downlevelIteration = !uplevelIteration && compilerOptions.downlevelIteration;
+
+            // Get the iterated type of an `Iterable<T>` or `IterableIterator<T>` only in ES2015
+            // or higher, or when downlevelIteration is supplied.
+            if (uplevelIteration || downlevelIteration) {
+                // We only report errors for an invalid iterable type in ES2015 or higher.
+                const iteratedType = getIteratedTypeOfIterable(inputType, uplevelIteration ? errorNode : undefined);
+                if (iteratedType || uplevelIteration) {
+                    // Normally we would perform this check in `checkIteratedTypeOrElementType`,
+                    // but we need to perform it here as `checkIteratedTypeOrElementType` won't
+                    // have enough context to know whether the input type actually conforms
+                    // to `Iterable<T>`.
+                    if (checkAssignability && errorNode && iteratedType) {
+                        checkTypeAssignableTo(inputType, createIterableType(iteratedType), errorNode);
+                    }
+                    return iteratedType;
                 }
-                return iteratedType;
             }
-            return allowStringInput
-                ? getIteratedTypeOfIterableOrElementTypeOfArrayOrString(inputType, errorNode, checkAssignability)
-                : getIteratedTypeOfIterableOrElementTypeOfArray(inputType, errorNode, checkAssignability);
+
+            let arrayType = inputType;
+            let reportedError = false;
+            let hasStringConstituent = false;
+
+            // If strings are permitted, remove any string-like constituents from the array type.
+            // This allows us to find other non-string element types from an array unioned with
+            // a string.
+            if (allowStringInput) {
+                if (arrayType.flags & TypeFlags.Union) {
+                    // After we remove all types that are StringLike, we will know if there was a string constituent
+                    // based on whether the result of filter is a new array.
+                    const arrayTypes = (<UnionType>inputType).types;
+                    const filteredTypes = filter(arrayTypes, t => !(t.flags & TypeFlags.StringLike));
+                    if (filteredTypes !== arrayTypes) {
+                        arrayType = getUnionType(filteredTypes, /*subtypeReduction*/ true);
+                    }
+                }
+                else if (arrayType.flags & TypeFlags.StringLike) {
+                    arrayType = neverType;
+                }
+                hasStringConstituent = arrayType !== inputType;
+                if (hasStringConstituent) {
+                    if (languageVersion < ScriptTarget.ES5) {
+                        if (errorNode) {
+                            error(errorNode, Diagnostics.Using_a_string_in_a_for_of_statement_is_only_supported_in_ECMAScript_5_and_higher);
+                            reportedError = true;
+                        }
+                    }
+
+                    // Now that we've removed all the StringLike types, if no constituents remain, then the entire
+                    // arrayOrStringType was a string.
+                    if (arrayType.flags & TypeFlags.Never) {
+                        return stringType;
+                    }
+                }
+            }
+
+            if (!isArrayLikeType(arrayType)) {
+                if (errorNode && !reportedError) {
+                    // Which error we report depends on whether we allow strings or if there was a
+                    // string constituent. For example, if the input type is number | string, we
+                    // want to say that number is not an array type. But if the input was just
+                    // number and string input is allowed, we want to say that number is not an
+                    // array type or a string type.
+                    const diagnostic = !allowStringInput || hasStringConstituent
+                        ? downlevelIteration
+                            ? Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator
+                            : Diagnostics.Type_0_is_not_an_array_type
+                        : downlevelIteration
+                            ? Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator
+                            : Diagnostics.Type_0_is_not_an_array_type_or_a_string_type;
+                    error(errorNode, diagnostic, typeToString(arrayType));
+                }
+                return hasStringConstituent ? stringType : undefined;
+            }
+
+            const arrayElementType = getIndexTypeOfType(arrayType, IndexKind.Number);
+            if (hasStringConstituent && arrayElementType) {
+                // This is just an optimization for the case where arrayOrStringType is string | string[]
+                if (arrayElementType.flags & TypeFlags.StringLike) {
+                    return stringType;
+                }
+
+                return getUnionType([arrayElementType, stringType], /*subtypeReduction*/ true);
+            }
+            return arrayElementType;
         }
 
         function checkIteratedTypeOfIterableOrAsyncIterable(asyncIterable: Type, errorNode: Node): Type {
@@ -18277,116 +18353,6 @@ namespace ts {
 
             return getIteratedTypeOfIterable(type, /*errorNode*/ undefined) ||
                 getIteratedTypeOfIterator(type, /*errorNode*/ undefined);
-        }
-
-        /**
-         * This function does the following steps:
-         *   1. Break up arrayOrStringType (possibly a union) into its string constituents and array constituents.
-         *   2. Take the element types of the array constituents.
-         *   3. Return the union of the element types, and string if there was a string constituent.
-         *
-         * For example:
-         *     string -> string
-         *     number[] -> number
-         *     string[] | number[] -> string | number
-         *     string | number[] -> string | number
-         *     string | string[] | number[] -> string | number
-         *
-         * It also errors if:
-         *   1. Some constituent is neither a string nor an array.
-         *   2. Some constituent is a string and target is less than ES5 (because in ES3 string is not indexable).
-         */
-        function getIteratedTypeOfIterableOrElementTypeOfArrayOrString(arrayOrStringType: Type, errorNode: Node, checkAssignability: boolean): Type {
-            const iteratedType = compilerOptions.downlevelIteration && getIteratedTypeOfIterable(arrayOrStringType, /*errorNode*/ undefined);
-            if (iteratedType) {
-                if (checkAssignability && errorNode) {
-                    checkTypeAssignableTo(arrayOrStringType, createIterableType(iteratedType), errorNode);
-                }
-                return iteratedType;
-            }
-
-            let arrayType = arrayOrStringType;
-            if (arrayOrStringType.flags & TypeFlags.Union) {
-                // After we remove all types that are StringLike, we will know if there was a string constituent
-                // based on whether the result of filter is a new array.
-                const arrayTypes = (arrayOrStringType as UnionType).types;
-                const filteredTypes = filter(arrayTypes, t => !(t.flags & TypeFlags.StringLike));
-                if (filteredTypes !== arrayTypes) {
-                    arrayType = getUnionType(filteredTypes, /*subtypeReduction*/ true);
-                }
-            }
-            else if (arrayOrStringType.flags & TypeFlags.StringLike) {
-                arrayType = neverType;
-            }
-
-            const hasStringConstituent = arrayOrStringType !== arrayType;
-            let reportedError = false;
-            if (hasStringConstituent) {
-                if (languageVersion < ScriptTarget.ES5) {
-                    if (errorNode) {
-                        error(errorNode, Diagnostics.Using_a_string_in_a_for_of_statement_is_only_supported_in_ECMAScript_5_and_higher);
-                        reportedError = true;
-                    }
-                }
-
-                // Now that we've removed all the StringLike types, if no constituents remain, then the entire
-                // arrayOrStringType was a string.
-                if (arrayType.flags & TypeFlags.Never) {
-                    return stringType;
-                }
-            }
-
-            if (!isArrayLikeType(arrayType)) {
-                if (errorNode) {
-                    if (!reportedError) {
-                        // Which error we report depends on whether there was a string constituent. For example,
-                        // if the input type is number | string, we want to say that number is not an array type.
-                        // But if the input was just number, we want to say that number is not an array type
-                        // or a string type.
-                        const diagnostic = hasStringConstituent
-                            ? compilerOptions.downlevelIteration
-                                ? Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator
-                                : Diagnostics.Type_0_is_not_an_array_type
-                            : compilerOptions.downlevelIteration
-                                ? Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator
-                                : Diagnostics.Type_0_is_not_an_array_type_or_a_string_type;
-                        error(errorNode, diagnostic, typeToString(arrayType));
-                    }
-                }
-                return hasStringConstituent ? stringType : undefined;
-            }
-
-            const arrayElementType = getIndexTypeOfType(arrayType, IndexKind.Number);
-            if (arrayElementType && hasStringConstituent) {
-                // This is just an optimization for the case where arrayOrStringType is string | string[]
-                if (arrayElementType.flags & TypeFlags.StringLike) {
-                    return stringType;
-                }
-
-                return getUnionType([arrayElementType, stringType], /*subtypeReduction*/ true);
-            }
-
-            return arrayElementType;
-        }
-
-        function getIteratedTypeOfIterableOrElementTypeOfArray(inputType: Type, errorNode: Node, checkAssignability: boolean): Type {
-            const iteratedType = compilerOptions.downlevelIteration && getIteratedTypeOfIterable(inputType, /*errorNode*/ undefined);
-            if (iteratedType) {
-                if (checkAssignability && errorNode) {
-                    checkTypeAssignableTo(inputType, createIterableType(iteratedType), errorNode);
-                }
-                return iteratedType;
-            }
-            if (isArrayLikeType(inputType)) {
-                return getIndexTypeOfType(inputType, IndexKind.Number);
-            }
-            if (errorNode) {
-                const diagnostic = compilerOptions.downlevelIteration
-                    ? Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator
-                    : Diagnostics.Type_0_is_not_an_array_type;
-                error(errorNode, diagnostic, typeToString(inputType));
-            }
-            return undefined;
         }
 
         function checkBreakOrContinueStatement(node: BreakOrContinueStatement) {
