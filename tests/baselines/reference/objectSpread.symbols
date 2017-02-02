@@ -316,4 +316,7 @@ let shortCutted: { a: number, b: string } = { ...o, a }
 >o : Symbol(o, Decl(objectSpread.ts, 0, 3))
 >a : Symbol(a, Decl(objectSpread.ts, 78, 51))
 
+// non primitive
+let spreadNonPrimitive = { ...<object>{}};
+>spreadNonPrimitive : Symbol(spreadNonPrimitive, Decl(objectSpread.ts, 80, 3))
 

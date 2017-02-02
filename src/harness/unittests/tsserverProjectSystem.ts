@@ -1,4 +1,4 @@
-/// <reference path="..\harness.ts" />
+﻿/// <reference path="..\harness.ts" />
 /// <reference path="../../server/typingsInstaller/typingsInstaller.ts" />
 
 namespace ts.projectSystem {
@@ -244,9 +244,9 @@ namespace ts.projectSystem {
     }
 
     export function checkMapKeys(caption: string, map: Map<any>, expectedKeys: string[]) {
-        assert.equal(reduceProperties(map, count => count + 1, 0), expectedKeys.length, `${caption}: incorrect size of map`);
+        assert.equal(map.size, expectedKeys.length, `${caption}: incorrect size of map`);
         for (const name of expectedKeys) {
-            assert.isTrue(name in map, `${caption} is expected to contain ${name}, actual keys: ${Object.keys(map)}`);
+            assert.isTrue(map.has(name), `${caption} is expected to contain ${name}, actual keys: ${arrayFrom(map.keys())}`);
         }
     }
 
@@ -292,7 +292,7 @@ namespace ts.projectSystem {
     }
 
     export class Callbacks {
-        private map: { [n: number]: TimeOutCallback } = {};
+        private map: TimeOutCallback[] = [];
         private nextId = 1;
 
         register(cb: (...args: any[]) => void, args: any[]) {
@@ -310,20 +310,16 @@ namespace ts.projectSystem {
         count() {
             let n = 0;
             for (const _ in this.map) {
-                // TODO: GH#11734
-                _;
                 n++;
             }
             return n;
         }
 
         invoke() {
-            for (const id in this.map) {
-                if (hasProperty(this.map, id)) {
-                    this.map[id]();
-                }
+            for (const key in this.map) {
+                this.map[key]();
             }
-            this.map = {};
+            this.map = [];
         }
     }
 
@@ -338,8 +334,8 @@ namespace ts.projectSystem {
         private timeoutCallbacks = new Callbacks();
         private immediateCallbacks = new Callbacks();
 
-        readonly watchedDirectories = createMap<{ cb: DirectoryWatcherCallback, recursive: boolean }[]>();
-        readonly watchedFiles = createMap<FileWatcherCallback[]>();
+        readonly watchedDirectories = createMultiMap<{ cb: DirectoryWatcherCallback, recursive: boolean }>();
+        readonly watchedFiles = createMultiMap<FileWatcherCallback>();
 
         private filesOrFolders: FileOrFolder[];
 
@@ -425,11 +421,11 @@ namespace ts.projectSystem {
         watchDirectory(directoryName: string, callback: DirectoryWatcherCallback, recursive: boolean): DirectoryWatcher {
             const path = this.toPath(directoryName);
             const cbWithRecursive = { cb: callback, recursive };
-            multiMapAdd(this.watchedDirectories, path, cbWithRecursive);
+            this.watchedDirectories.add(path, cbWithRecursive);
             return {
                 referenceCount: 0,
                 directoryName,
-                close: () => multiMapRemove(this.watchedDirectories, path, cbWithRecursive)
+                close: () => this.watchedDirectories.remove(path, cbWithRecursive)
             };
         }
 
@@ -439,7 +435,7 @@ namespace ts.projectSystem {
 
         triggerDirectoryWatcherCallback(directoryName: string, fileName: string): void {
             const path = this.toPath(directoryName);
-            const callbacks = this.watchedDirectories[path];
+            const callbacks = this.watchedDirectories.get(path);
             if (callbacks) {
                 for (const callback of callbacks) {
                     callback.cb(fileName);
@@ -449,7 +445,7 @@ namespace ts.projectSystem {
 
         triggerFileWatcherCallback(fileName: string, removed?: boolean): void {
             const path = this.toPath(fileName);
-            const callbacks = this.watchedFiles[path];
+            const callbacks = this.watchedFiles.get(path);
             if (callbacks) {
                 for (const callback of callbacks) {
                     callback(path, removed);
@@ -459,8 +455,8 @@ namespace ts.projectSystem {
 
         watchFile(fileName: string, callback: FileWatcherCallback) {
             const path = this.toPath(fileName);
-            multiMapAdd(this.watchedFiles, path, callback);
-            return { close: () => multiMapRemove(this.watchedFiles, path, callback) };
+            this.watchedFiles.add(path, callback);
+            return { close: () => this.watchedFiles.remove(path, callback) };
         }
 
         // TOOD: record and invoke callbacks to simulate timer events

@@ -501,3 +501,56 @@ function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
     var x = obj[key];
     stringMap[x]; // Should be OK.
 }
+
+// Repro from #13514
+
+declare function head<T extends Array<any>>(list: T): T[0];
+
+// Repro from #13604
+
+class A<T> {
+	props: T & { foo: string };
+}
+
+class B extends A<{ x: number}> {
+	f(p: this["props"]) {
+		p.x;
+	}
+}
+
+// Repro from #13749
+
+class Form<T> {
+    private childFormFactories: {[K in keyof T]: (v: T[K]) => Form<T[K]>}
+
+    public set<K extends keyof T>(prop: K, value: T[K]) {
+        this.childFormFactories[prop](value)
+    }
+}
+
+// Repro from #13787
+
+class SampleClass<P> {
+    public props: Readonly<P>;
+    constructor(props: P) {
+        this.props = Object.freeze(props);
+    }
+}
+
+interface Foo {
+    foo: string;
+}
+
+declare function merge<T, U>(obj1: T, obj2: U): T & U;
+
+class AnotherSampleClass<T> extends SampleClass<T & Foo> {
+    constructor(props: T) {
+        const foo: Foo = { foo: "bar" };
+        super(merge(props, foo));
+    }
+
+    public brokenMethod() {
+        this.props.foo.concat;
+    }
+}
+new AnotherSampleClass({});

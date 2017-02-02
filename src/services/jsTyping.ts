@@ -17,11 +17,11 @@ namespace ts.JsTyping {
 
     interface PackageJson {
         _requiredBy?: string[];
-        dependencies?: Map<string>;
-        devDependencies?: Map<string>;
+        dependencies?: MapLike<string>;
+        devDependencies?: MapLike<string>;
         name?: string;
-        optionalDependencies?: Map<string>;
-        peerDependencies?: Map<string>;
+        optionalDependencies?: MapLike<string>;
+        peerDependencies?: MapLike<string>;
         typings?: string;
     };
 
@@ -76,7 +76,7 @@ namespace ts.JsTyping {
 
         if (!safeList) {
             const result = readConfigFile(safeListPath, (path: string) => host.readFile(path));
-            safeList = result.config ? createMap<string>(result.config) : EmptySafeList;
+            safeList = result.config ? createMapFromTemplate<string>(result.config) : EmptySafeList;
         }
 
         const filesToWatch: string[] = [];
@@ -107,34 +107,34 @@ namespace ts.JsTyping {
         // add typings for unresolved imports
         if (unresolvedImports) {
             for (const moduleId of unresolvedImports) {
-                const typingName = moduleId in nodeCoreModules ? "node" : moduleId;
-                if (!(typingName in inferredTypings)) {
-                    inferredTypings[typingName] = undefined;
+                const typingName = nodeCoreModules.has(moduleId) ? "node" : moduleId;
+                if (!inferredTypings.has(typingName)) {
+                    inferredTypings.set(typingName, undefined);
                 }
             }
         }
         // Add the cached typing locations for inferred typings that are already installed
-        for (const name in packageNameToTypingLocation) {
-            if (name in inferredTypings && !inferredTypings[name]) {
-                inferredTypings[name] = packageNameToTypingLocation[name];
+        packageNameToTypingLocation.forEach((typingLocation, name) => {
+            if (inferredTypings.has(name) && inferredTypings.get(name) === undefined) {
+                inferredTypings.set(name, typingLocation);
             }
-        }
+        });
 
         // Remove typings that the user has added to the exclude list
         for (const excludeTypingName of exclude) {
-            delete inferredTypings[excludeTypingName];
+            inferredTypings.delete(excludeTypingName);
         }
 
         const newTypingNames: string[] = [];
         const cachedTypingPaths: string[] = [];
-        for (const typing in inferredTypings) {
-            if (inferredTypings[typing] !== undefined) {
-                cachedTypingPaths.push(inferredTypings[typing]);
+        inferredTypings.forEach((inferred, typing) => {
+            if (inferred !== undefined) {
+                cachedTypingPaths.push(inferred);
             }
             else {
                 newTypingNames.push(typing);
             }
-        }
+        });
         return { cachedTypingPaths, newTypingNames, filesToWatch };
 
         /**
@@ -146,8 +146,8 @@ namespace ts.JsTyping {
             }
 
             for (const typing of typingNames) {
-                if (!(typing in inferredTypings)) {
-                    inferredTypings[typing] = undefined;
+                if (!inferredTypings.has(typing)) {
+                    inferredTypings.set(typing, undefined);
                 }
             }
         }
@@ -189,7 +189,7 @@ namespace ts.JsTyping {
             const cleanedTypingNames = map(inferredTypingNames, f => f.replace(/((?:\.|-)min(?=\.|$))|((?:-|\.)\d+)/g, ""));
 
             if (safeList !== EmptySafeList) {
-                mergeTypings(filter(cleanedTypingNames, f => f in safeList));
+                mergeTypings(filter(cleanedTypingNames, f => safeList.has(f)));
             }
 
             const hasJsxFile = forEach(fileNames, f => ensureScriptKind(f, getScriptKindFromFileName(f)) === ScriptKind.JSX);
@@ -236,7 +236,7 @@ namespace ts.JsTyping {
                 }
                 if (packageJson.typings) {
                     const absolutePath = getNormalizedAbsolutePath(packageJson.typings, getDirectoryPath(normalizedFileName));
-                    inferredTypings[packageJson.name] = absolutePath;
+                    inferredTypings.set(packageJson.name, absolutePath);
                 }
                 else {
                     typingNames.push(packageJson.name);

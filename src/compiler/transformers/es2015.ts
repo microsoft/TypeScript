@@ -587,7 +587,7 @@ namespace ts {
             if (isGeneratedIdentifier(node)) {
                 return node;
             }
-            if (node.text !== "arguments" && !resolver.isArgumentsLocalBinding(node)) {
+            if (node.text !== "arguments" || !resolver.isArgumentsLocalBinding(node)) {
                 return node;
             }
             return convertedLoopState.argumentsName || (convertedLoopState.argumentsName = createUniqueName("arguments"));
@@ -601,7 +601,7 @@ namespace ts {
                 //   - break/continue is non-labeled and located in non-converted loop/switch statement
                 const jump = node.kind === SyntaxKind.BreakStatement ? Jump.Break : Jump.Continue;
                 const canUseBreakOrContinue =
-                    (node.label && convertedLoopState.labels && convertedLoopState.labels[node.label.text]) ||
+                    (node.label && convertedLoopState.labels && convertedLoopState.labels.get(node.label.text)) ||
                     (!node.label && (convertedLoopState.allowedNonLabeledJumps & jump));
 
                 if (!canUseBreakOrContinue) {
@@ -2144,11 +2144,11 @@ namespace ts {
         }
 
         function recordLabel(node: LabeledStatement) {
-            convertedLoopState.labels[node.label.text] = node.label.text;
+            convertedLoopState.labels.set(node.label.text, node.label.text);
         }
 
         function resetLabel(node: LabeledStatement) {
-            convertedLoopState.labels[node.label.text] = undefined;
+            convertedLoopState.labels.set(node.label.text, undefined);
         }
 
         function visitLabeledStatement(node: LabeledStatement): VisitResult<Statement> {
@@ -2294,7 +2294,7 @@ namespace ts {
                 addRange(statements, convertedLoopBodyStatements);
             }
             else {
-                const statement = visitNode(node.statement, visitor, isStatement);
+                const statement = visitNode(node.statement, visitor, isStatement, /*optional*/ false, liftToBlock);
                 if (isBlock(statement)) {
                     addRange(statements, statement.statements);
                     bodyLocation = statement;
@@ -2903,13 +2903,13 @@ namespace ts {
                 if (!state.labeledNonLocalBreaks) {
                     state.labeledNonLocalBreaks = createMap<string>();
                 }
-                state.labeledNonLocalBreaks[labelText] = labelMarker;
+                state.labeledNonLocalBreaks.set(labelText, labelMarker);
             }
             else {
                 if (!state.labeledNonLocalContinues) {
                     state.labeledNonLocalContinues = createMap<string>();
                 }
-                state.labeledNonLocalContinues[labelText] = labelMarker;
+                state.labeledNonLocalContinues.set(labelText, labelMarker);
             }
         }
 
@@ -2917,13 +2917,12 @@ namespace ts {
             if (!table) {
                 return;
             }
-            for (const labelText in table) {
-                const labelMarker = table[labelText];
+            table.forEach((labelMarker, labelText) => {
                 const statements: Statement[] = [];
                 // if there are no outer converted loop or outer label in question is located inside outer converted loop
                 // then emit labeled break\continue
                 // otherwise propagate pair 'label -> marker' to outer converted loop and emit 'return labelMarker' so outer loop can later decide what to do
-                if (!outerLoop || (outerLoop.labels && outerLoop.labels[labelText])) {
+                if (!outerLoop || (outerLoop.labels && outerLoop.labels.get(labelText))) {
                     const label = createIdentifier(labelText);
                     statements.push(isBreak ? createBreak(label) : createContinue(label));
                 }
@@ -2932,7 +2931,7 @@ namespace ts {
                     statements.push(createReturn(loopResultName));
                 }
                 caseClauses.push(createCaseClause(createLiteral(labelMarker), statements));
-            }
+            });
         }
 
         function processLoopVariableDeclaration(decl: VariableDeclaration | BindingElement, loopParameters: ParameterDeclaration[], loopOutParameters: LoopOutParameter[]) {
@@ -3556,9 +3555,11 @@ namespace ts {
         /**
          * Called by the printer just before a node is printed.
          *
+         * @param hint A hint as to the intended usage of the node.
          * @param node The node to be printed.
+         * @param emitCallback The callback used to emit the node.
          */
-        function onEmitNode(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void) {
+        function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
             if (enabledSubstitutions & ES2015SubstitutionFlags.CapturedThis && isFunctionLike(node)) {
                 // If we are tracking a captured `this`, keep track of the enclosing function.
                 const ancestorFacts = enterSubtree(
@@ -3566,11 +3567,11 @@ namespace ts {
                     getEmitFlags(node) & EmitFlags.CapturesThis
                         ? HierarchyFacts.FunctionIncludes | HierarchyFacts.CapturesThis
                         : HierarchyFacts.FunctionIncludes);
-                previousOnEmitNode(emitContext, node, emitCallback);
+                previousOnEmitNode(hint, node, emitCallback);
                 exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
                 return;
             }
-            previousOnEmitNode(emitContext, node, emitCallback);
+            previousOnEmitNode(hint, node, emitCallback);
         }
 
         /**
@@ -3605,13 +3606,13 @@ namespace ts {
         /**
          * Hooks node substitutions.
          *
-         * @param emitContext The context for the emitter.
+         * @param hint The context for the emitter.
          * @param node The node to substitute.
          */
-        function onSubstituteNode(emitContext: EmitContext, node: Node) {
-            node = previousOnSubstituteNode(emitContext, node);
+        function onSubstituteNode(hint: EmitHint, node: Node) {
+            node = previousOnSubstituteNode(hint, node);
 
-            if (emitContext === EmitContext.Expression) {
+            if (hint === EmitHint.Expression) {
                 return substituteExpression(node);
             }
 

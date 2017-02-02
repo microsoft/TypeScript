@@ -14,20 +14,21 @@ namespace ts.codefix {
     }
 
     class ImportCodeActionMap {
-        private symbolIdToActionMap = createMap<ImportCodeAction[]>();
+        private symbolIdToActionMap: ImportCodeAction[][] = [];
 
         addAction(symbolId: number, newAction: ImportCodeAction) {
             if (!newAction) {
                 return;
             }
 
-            if (!this.symbolIdToActionMap[symbolId]) {
+            const actions = this.symbolIdToActionMap[symbolId];
+            if (!actions) {
                 this.symbolIdToActionMap[symbolId] = [newAction];
                 return;
             }
 
             if (newAction.kind === "CodeChange") {
-                this.symbolIdToActionMap[symbolId].push(newAction);
+                actions.push(newAction);
                 return;
             }
 
@@ -73,8 +74,8 @@ namespace ts.codefix {
 
         getAllActions() {
             let result: ImportCodeAction[] = [];
-            for (const symbolId in this.symbolIdToActionMap) {
-                result = concatenate(result, this.symbolIdToActionMap[symbolId]);
+            for (const key in this.symbolIdToActionMap) {
+                result = concatenate(result, this.symbolIdToActionMap[key])
             }
             return result;
         }
@@ -127,7 +128,7 @@ namespace ts.codefix {
             const symbolIdActionMap = new ImportCodeActionMap();
 
             // this is a module id -> module import declaration map
-            const cachedImportDeclarations = createMap<(ImportDeclaration | ImportEqualsDeclaration)[]>();
+            const cachedImportDeclarations: (ImportDeclaration | ImportEqualsDeclaration)[][] = [];
             let cachedNewImportInsertPosition: number;
 
             const currentTokenMeaning = getMeaningFromLocation(token);
@@ -170,8 +171,9 @@ namespace ts.codefix {
             function getImportDeclarations(moduleSymbol: Symbol) {
                 const moduleSymbolId = getUniqueSymbolId(moduleSymbol);
 
-                if (cachedImportDeclarations[moduleSymbolId]) {
-                    return cachedImportDeclarations[moduleSymbolId];
+                const cached = cachedImportDeclarations[moduleSymbolId];
+                if (cached) {
+                    return cached;
                 }
 
                 const existingDeclarations: (ImportDeclaration | ImportEqualsDeclaration)[] = [];
@@ -414,8 +416,8 @@ namespace ts.codefix {
                     );
 
                     function getModuleSpecifierForNewImport() {
-                        const fileName = sourceFile.path;
-                        const moduleFileName = moduleSymbol.valueDeclaration.getSourceFile().path;
+                        const fileName = sourceFile.fileName;
+                        const moduleFileName = moduleSymbol.valueDeclaration.getSourceFile().fileName;
                         const sourceDirectory = getDirectoryPath(fileName);
                         const options = context.program.getCompilerOptions();
 
@@ -437,8 +439,7 @@ namespace ts.codefix {
                                 return undefined;
                             }
 
-                            const normalizedBaseUrl = toPath(options.baseUrl, getDirectoryPath(options.baseUrl), getCanonicalFileName);
-                            let relativeName = tryRemoveParentDirectoryName(moduleFileName, normalizedBaseUrl);
+                            let relativeName = getRelativePathIfInDirectory(moduleFileName, options.baseUrl);
                             if (!relativeName) {
                                 return undefined;
                             }
@@ -475,9 +476,8 @@ namespace ts.codefix {
 
                         function tryGetModuleNameFromRootDirs() {
                             if (options.rootDirs) {
-                                const normalizedRootDirs = map(options.rootDirs, rootDir => toPath(rootDir, /*basePath*/ undefined, getCanonicalFileName));
-                                const normalizedTargetPath = getPathRelativeToRootDirs(moduleFileName, normalizedRootDirs);
-                                const normalizedSourcePath = getPathRelativeToRootDirs(sourceDirectory, normalizedRootDirs);
+                                const normalizedTargetPath = getPathRelativeToRootDirs(moduleFileName, options.rootDirs);
+                                const normalizedSourcePath = getPathRelativeToRootDirs(sourceDirectory, options.rootDirs);
                                 if (normalizedTargetPath !== undefined) {
                                     const relativePath = normalizedSourcePath !== undefined ? getRelativePath(normalizedTargetPath, normalizedSourcePath) : normalizedTargetPath;
                                     return removeFileExtension(relativePath);
@@ -544,9 +544,9 @@ namespace ts.codefix {
                         }
                     }
 
-                    function getPathRelativeToRootDirs(path: Path, rootDirs: Path[]) {
+                    function getPathRelativeToRootDirs(path: string, rootDirs: string[]) {
                         for (const rootDir of rootDirs) {
-                            const relativeName = tryRemoveParentDirectoryName(path, rootDir);
+                            const relativeName = getRelativePathIfInDirectory(path, rootDir);
                             if (relativeName !== undefined) {
                                 return relativeName;
                             }
@@ -562,19 +562,14 @@ namespace ts.codefix {
                         return fileName;
                     }
 
+                    function getRelativePathIfInDirectory(path: string, directoryPath: string) {
+                        const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, false);
+                        return isRootedDiskPath(relativePath) || startsWith(relativePath, "..") ? undefined : relativePath;
+                    }
+
                     function getRelativePath(path: string, directoryPath: string) {
                         const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, false);
                         return moduleHasNonRelativeName(relativePath) ? "./" + relativePath : relativePath;
-                    }
-
-                    function tryRemoveParentDirectoryName(path: Path, parentDirectory: Path) {
-                        const index = path.indexOf(parentDirectory);
-                        if (index === 0) {
-                            return endsWith(parentDirectory, directorySeparator)
-                                ? path.substring(parentDirectory.length)
-                                : path.substring(parentDirectory.length + 1);
-                        }
-                        return undefined;
                     }
                 }
 

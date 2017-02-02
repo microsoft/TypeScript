@@ -1806,3 +1806,160 @@ function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
 >x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 498, 7))
 }
 
+// Repro from #13514
+
+declare function head<T extends Array<any>>(list: T): T[0];
+>head : Symbol(head, Decl(keyofAndIndexedAccess.ts, 500, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 504, 22))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>list : Symbol(list, Decl(keyofAndIndexedAccess.ts, 504, 44))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 504, 22))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 504, 22))
+
+// Repro from #13604
+
+class A<T> {
+>A : Symbol(A, Decl(keyofAndIndexedAccess.ts, 504, 59))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 508, 8))
+
+	props: T & { foo: string };
+>props : Symbol(A.props, Decl(keyofAndIndexedAccess.ts, 508, 12))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 508, 8))
+>foo : Symbol(foo, Decl(keyofAndIndexedAccess.ts, 509, 13))
+}
+
+class B extends A<{ x: number}> {
+>B : Symbol(B, Decl(keyofAndIndexedAccess.ts, 510, 1))
+>A : Symbol(A, Decl(keyofAndIndexedAccess.ts, 504, 59))
+>x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 512, 19))
+
+	f(p: this["props"]) {
+>f : Symbol(B.f, Decl(keyofAndIndexedAccess.ts, 512, 33))
+>p : Symbol(p, Decl(keyofAndIndexedAccess.ts, 513, 3))
+
+		p.x;
+>p.x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 512, 19))
+>p : Symbol(p, Decl(keyofAndIndexedAccess.ts, 513, 3))
+>x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 512, 19))
+	}
+}
+
+// Repro from #13749
+
+class Form<T> {
+>Form : Symbol(Form, Decl(keyofAndIndexedAccess.ts, 516, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 520, 11))
+
+    private childFormFactories: {[K in keyof T]: (v: T[K]) => Form<T[K]>}
+>childFormFactories : Symbol(Form.childFormFactories, Decl(keyofAndIndexedAccess.ts, 520, 15))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 521, 34))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 520, 11))
+>v : Symbol(v, Decl(keyofAndIndexedAccess.ts, 521, 50))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 520, 11))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 521, 34))
+>Form : Symbol(Form, Decl(keyofAndIndexedAccess.ts, 516, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 520, 11))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 521, 34))
+
+    public set<K extends keyof T>(prop: K, value: T[K]) {
+>set : Symbol(Form.set, Decl(keyofAndIndexedAccess.ts, 521, 73))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 523, 15))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 520, 11))
+>prop : Symbol(prop, Decl(keyofAndIndexedAccess.ts, 523, 34))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 523, 15))
+>value : Symbol(value, Decl(keyofAndIndexedAccess.ts, 523, 42))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 520, 11))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 523, 15))
+
+        this.childFormFactories[prop](value)
+>this.childFormFactories : Symbol(Form.childFormFactories, Decl(keyofAndIndexedAccess.ts, 520, 15))
+>this : Symbol(Form, Decl(keyofAndIndexedAccess.ts, 516, 1))
+>childFormFactories : Symbol(Form.childFormFactories, Decl(keyofAndIndexedAccess.ts, 520, 15))
+>prop : Symbol(prop, Decl(keyofAndIndexedAccess.ts, 523, 34))
+>value : Symbol(value, Decl(keyofAndIndexedAccess.ts, 523, 42))
+    }
+}
+
+// Repro from #13787
+
+class SampleClass<P> {
+>SampleClass : Symbol(SampleClass, Decl(keyofAndIndexedAccess.ts, 526, 1))
+>P : Symbol(P, Decl(keyofAndIndexedAccess.ts, 530, 18))
+
+    public props: Readonly<P>;
+>props : Symbol(SampleClass.props, Decl(keyofAndIndexedAccess.ts, 530, 22))
+>Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>P : Symbol(P, Decl(keyofAndIndexedAccess.ts, 530, 18))
+
+    constructor(props: P) {
+>props : Symbol(props, Decl(keyofAndIndexedAccess.ts, 532, 16))
+>P : Symbol(P, Decl(keyofAndIndexedAccess.ts, 530, 18))
+
+        this.props = Object.freeze(props);
+>this.props : Symbol(SampleClass.props, Decl(keyofAndIndexedAccess.ts, 530, 22))
+>this : Symbol(SampleClass, Decl(keyofAndIndexedAccess.ts, 526, 1))
+>props : Symbol(SampleClass.props, Decl(keyofAndIndexedAccess.ts, 530, 22))
+>Object.freeze : Symbol(ObjectConstructor.freeze, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>freeze : Symbol(ObjectConstructor.freeze, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>props : Symbol(props, Decl(keyofAndIndexedAccess.ts, 532, 16))
+    }
+}
+
+interface Foo {
+>Foo : Symbol(Foo, Decl(keyofAndIndexedAccess.ts, 535, 1))
+
+    foo: string;
+>foo : Symbol(Foo.foo, Decl(keyofAndIndexedAccess.ts, 537, 15))
+}
+
+declare function merge<T, U>(obj1: T, obj2: U): T & U;
+>merge : Symbol(merge, Decl(keyofAndIndexedAccess.ts, 539, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 541, 23))
+>U : Symbol(U, Decl(keyofAndIndexedAccess.ts, 541, 25))
+>obj1 : Symbol(obj1, Decl(keyofAndIndexedAccess.ts, 541, 29))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 541, 23))
+>obj2 : Symbol(obj2, Decl(keyofAndIndexedAccess.ts, 541, 37))
+>U : Symbol(U, Decl(keyofAndIndexedAccess.ts, 541, 25))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 541, 23))
+>U : Symbol(U, Decl(keyofAndIndexedAccess.ts, 541, 25))
+
+class AnotherSampleClass<T> extends SampleClass<T & Foo> {
+>AnotherSampleClass : Symbol(AnotherSampleClass, Decl(keyofAndIndexedAccess.ts, 541, 54))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 543, 25))
+>SampleClass : Symbol(SampleClass, Decl(keyofAndIndexedAccess.ts, 526, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 543, 25))
+>Foo : Symbol(Foo, Decl(keyofAndIndexedAccess.ts, 535, 1))
+
+    constructor(props: T) {
+>props : Symbol(props, Decl(keyofAndIndexedAccess.ts, 544, 16))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 543, 25))
+
+        const foo: Foo = { foo: "bar" };
+>foo : Symbol(foo, Decl(keyofAndIndexedAccess.ts, 545, 13))
+>Foo : Symbol(Foo, Decl(keyofAndIndexedAccess.ts, 535, 1))
+>foo : Symbol(foo, Decl(keyofAndIndexedAccess.ts, 545, 26))
+
+        super(merge(props, foo));
+>super : Symbol(SampleClass, Decl(keyofAndIndexedAccess.ts, 526, 1))
+>merge : Symbol(merge, Decl(keyofAndIndexedAccess.ts, 539, 1))
+>props : Symbol(props, Decl(keyofAndIndexedAccess.ts, 544, 16))
+>foo : Symbol(foo, Decl(keyofAndIndexedAccess.ts, 545, 13))
+    }
+
+    public brokenMethod() {
+>brokenMethod : Symbol(AnotherSampleClass.brokenMethod, Decl(keyofAndIndexedAccess.ts, 547, 5))
+
+        this.props.foo.concat;
+>this.props.foo.concat : Symbol(String.concat, Decl(lib.d.ts, --, --))
+>this.props.foo : Symbol(foo)
+>this.props : Symbol(SampleClass.props, Decl(keyofAndIndexedAccess.ts, 530, 22))
+>this : Symbol(AnotherSampleClass, Decl(keyofAndIndexedAccess.ts, 541, 54))
+>props : Symbol(SampleClass.props, Decl(keyofAndIndexedAccess.ts, 530, 22))
+>foo : Symbol(foo)
+>concat : Symbol(String.concat, Decl(lib.d.ts, --, --))
+    }
+}
+new AnotherSampleClass({});
+>AnotherSampleClass : Symbol(AnotherSampleClass, Decl(keyofAndIndexedAccess.ts, 541, 54))
+

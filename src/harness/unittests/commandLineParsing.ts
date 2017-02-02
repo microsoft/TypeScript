@@ -87,7 +87,7 @@ namespace ts {
                         start: undefined,
                         length: undefined,
                     }, {
-                            messageText: "Argument for '--jsx' option must be: 'preserve', 'react'",
+                            messageText: "Argument for '--jsx' option must be: 'preserve', 'react-native', 'react'",
                             category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                             code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 

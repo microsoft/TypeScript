@@ -1135,7 +1135,11 @@ namespace ts {
 
         function internIdentifier(text: string): string {
             text = escapeIdentifier(text);
-            return identifiers[text] || (identifiers[text] = text);
+            let identifier = identifiers.get(text);
+            if (identifier === undefined) {
+                identifiers.set(text, identifier = text);
+            }
+            return identifier;
         }
 
         // An identifier that starts with two underscores has an extra underscore character prepended to it to avoid issues
@@ -6692,10 +6696,15 @@ namespace ts {
                     typedefTag.fullName = parseJSDocTypeNameWithNamespace(/*flags*/ 0);
                     if (typedefTag.fullName) {
                         let rightNode = typedefTag.fullName;
-                        while (rightNode.kind !== SyntaxKind.Identifier) {
+                        while (true) {
+                            if (rightNode.kind === SyntaxKind.Identifier || !rightNode.body) {
+                                // if node is identifier - use it as name
+                                // otherwise use name of the rightmost part that we were able to parse
+                                typedefTag.name = rightNode.kind === SyntaxKind.Identifier ? rightNode : rightNode.name;
+                                break;
+                            }
                             rightNode = rightNode.body;
                         }
-                        typedefTag.name = rightNode;
                     }
                     typedefTag.typeExpression = typeExpression;
                     skipWhitespace();

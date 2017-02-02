@@ -700,12 +700,13 @@ namespace ts {
         }
 
         /**
-         * Hook for node emit.
+         * Called by the printer just before a node is printed.
          *
-         * @param node The node to emit.
-         * @param emit A callback used to emit the node in the printer.
+         * @param hint A hint as to the intended usage of the node.
+         * @param node The node to be printed.
+         * @param emitCallback The callback used to emit the node.
          */
-        function onEmitNode(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void {
+        function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
             // If we need to support substitutions for `super` in an async method,
             // we should track it here.
             if (enabledSubstitutions & ESNextSubstitutionFlags.AsyncMethodsWithSuper && isSuperContainer(node)) {
@@ -713,25 +714,24 @@ namespace ts {
                 if (superContainerFlags !== enclosingSuperContainerFlags) {
                     const savedEnclosingSuperContainerFlags = enclosingSuperContainerFlags;
                     enclosingSuperContainerFlags = superContainerFlags;
-                    previousOnEmitNode(emitContext, node, emitCallback);
+                    previousOnEmitNode(hint, node, emitCallback);
                     enclosingSuperContainerFlags = savedEnclosingSuperContainerFlags;
                     return;
                 }
             }
 
-            previousOnEmitNode(emitContext, node, emitCallback);
+            previousOnEmitNode(hint, node, emitCallback);
         }
 
         /**
          * Hooks node substitutions.
          *
+         * @param hint The context for the emitter.
          * @param node The node to substitute.
-         * @param isExpression A value indicating whether the node is to be used in an expression
-         *                     position.
          */
-        function onSubstituteNode(emitContext: EmitContext, node: Node) {
-            node = previousOnSubstituteNode(emitContext, node);
-            if (emitContext === EmitContext.Expression && enclosingSuperContainerFlags) {
+        function onSubstituteNode(hint: EmitHint, node: Node) {
+            node = previousOnSubstituteNode(hint, node);
+            if (hint === EmitHint.Expression && enclosingSuperContainerFlags) {
                 return substituteExpression(<Expression>node);
             }
             return node;
@@ -835,6 +835,11 @@ namespace ts {
     };
 
     export function createAssignHelper(context: TransformationContext, attributesSegments: Expression[]) {
+        if (context.getCompilerOptions().target >= ScriptTarget.ES2015) {
+            return createCall(createPropertyAccess(createIdentifier("Object"), "assign"),
+                              /*typeArguments*/ undefined,
+                              attributesSegments);
+        }
         context.requestEmitHelper(assignHelper);
         return createCall(
             getHelperName("__assign"),

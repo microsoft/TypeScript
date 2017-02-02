@@ -1,10 +1,13 @@
-tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts(45,27): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
-tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts(46,27): error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
-tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts(47,27): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts(45,27): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts(45,34): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts(46,27): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts(46,34): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts(47,27): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts(47,39): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts(57,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts (4 errors) ====
+==== tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts (7 errors) ====
     // ! operator on any type
     
     var ANY: any;
@@ -50,14 +53,20 @@ tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNot
     var ResultIsBoolean15 = !A.foo();
     var ResultIsBoolean16 = !(ANY + ANY1);
     var ResultIsBoolean17 = !(null + undefined);
-                              ~~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+                              ~~~~
+!!! error TS2531: Object is possibly 'null'.
+                                     ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
     var ResultIsBoolean18 = !(null + null);
-                              ~~~~~~~~~~~
-!!! error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
+                              ~~~~
+!!! error TS2531: Object is possibly 'null'.
+                                     ~~~~
+!!! error TS2531: Object is possibly 'null'.
     var ResultIsBoolean19 = !(undefined + undefined);
-                              ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+                              ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+                                          ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
     
     // multiple ! operators
     var ResultIsBoolean20 = !!ANY;

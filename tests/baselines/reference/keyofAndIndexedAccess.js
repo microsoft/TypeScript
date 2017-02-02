@@ -501,6 +501,59 @@ function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
     stringMap[x]; // Should be OK.
 }
 
+// Repro from #13514
+
+declare function head<T extends Array<any>>(list: T): T[0];
+
+// Repro from #13604
+
+class A<T> {
+	props: T & { foo: string };
+}
+
+class B extends A<{ x: number}> {
+	f(p: this["props"]) {
+		p.x;
+	}
+}
+
+// Repro from #13749
+
+class Form<T> {
+    private childFormFactories: {[K in keyof T]: (v: T[K]) => Form<T[K]>}
+
+    public set<K extends keyof T>(prop: K, value: T[K]) {
+        this.childFormFactories[prop](value)
+    }
+}
+
+// Repro from #13787
+
+class SampleClass<P> {
+    public props: Readonly<P>;
+    constructor(props: P) {
+        this.props = Object.freeze(props);
+    }
+}
+
+interface Foo {
+    foo: string;
+}
+
+declare function merge<T, U>(obj1: T, obj2: U): T & U;
+
+class AnotherSampleClass<T> extends SampleClass<T & Foo> {
+    constructor(props: T) {
+        const foo: Foo = { foo: "bar" };
+        super(merge(props, foo));
+    }
+
+    public brokenMethod() {
+        this.props.foo.concat;
+    }
+}
+new AnotherSampleClass({});
+
 
 //// [keyofAndIndexedAccess.js]
 var __extends = (this && this.__extends) || (function () {
@@ -830,6 +883,52 @@ function updateIds2(obj, key, stringMap) {
     var x = obj[key];
     stringMap[x]; // Should be OK.
 }
+// Repro from #13604
+var A = (function () {
+    function A() {
+    }
+    return A;
+}());
+var B = (function (_super) {
+    __extends(B, _super);
+    function B() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    B.prototype.f = function (p) {
+        p.x;
+    };
+    return B;
+}(A));
+// Repro from #13749
+var Form = (function () {
+    function Form() {
+    }
+    Form.prototype.set = function (prop, value) {
+        this.childFormFactories[prop](value);
+    };
+    return Form;
+}());
+// Repro from #13787
+var SampleClass = (function () {
+    function SampleClass(props) {
+        this.props = Object.freeze(props);
+    }
+    return SampleClass;
+}());
+var AnotherSampleClass = (function (_super) {
+    __extends(AnotherSampleClass, _super);
+    function AnotherSampleClass(props) {
+        var _this = this;
+        var foo = { foo: "bar" };
+        _this = _super.call(this, merge(props, foo)) || this;
+        return _this;
+    }
+    AnotherSampleClass.prototype.brokenMethod = function () {
+        this.props.foo.concat;
+    };
+    return AnotherSampleClass;
+}(SampleClass));
+new AnotherSampleClass({});
 
 
 //// [keyofAndIndexedAccess.d.ts]
@@ -1061,3 +1160,30 @@ declare function updateIds2<T extends {
 }, K extends keyof T>(obj: T, key: K, stringMap: {
     [oldId: string]: string;
 }): void;
+declare function head<T extends Array<any>>(list: T): T[0];
+declare class A<T> {
+    props: T & {
+        foo: string;
+    };
+}
+declare class B extends A<{
+    x: number;
+}> {
+    f(p: this["props"]): void;
+}
+declare class Form<T> {
+    private childFormFactories;
+    set<K extends keyof T>(prop: K, value: T[K]): void;
+}
+declare class SampleClass<P> {
+    props: Readonly<P>;
+    constructor(props: P);
+}
+interface Foo {
+    foo: string;
+}
+declare function merge<T, U>(obj1: T, obj2: U): T & U;
+declare class AnotherSampleClass<T> extends SampleClass<T & Foo> {
+    constructor(props: T);
+    brokenMethod(): void;
+}

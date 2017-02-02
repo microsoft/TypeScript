@@ -1795,17 +1795,21 @@
         "category": "Error",
         "code": 2544
     },
-    "The type returned by the 'next()' method of an async iterator must be a promise for a type with a 'value' property.": {
+    "A mixin class must have a constructor with a single rest parameter of type 'any[]'.": {
         "category": "Error",
         "code": 2545
     },
-    "Type '{0}' is not an array type or does not have a '[Symbol.iterator]()' method that returns an iterator.": {
+    "The type returned by the 'next()' method of an async iterator must be a promise for a type with a 'value' property.": {
         "category": "Error",
         "code": 2546
     },
-    "Type '{0}' is not an array type or a string type or does not have a '[Symbol.iterator]()' method that returns an iterator.": {
+    "Type '{0}' is not an array type or does not have a '[Symbol.iterator]()' method that returns an iterator.": {
         "category": "Error",
         "code": 2547
+    },
+    "Type '{0}' is not an array type or a string type or does not have a '[Symbol.iterator]()' method that returns an iterator.": {
+        "category": "Error",
+        "code": 2548
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
@@ -1846,6 +1850,10 @@
     "JSX spread child must be an array type.": {
         "category": "Error",
         "code": 2609
+    },
+    "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
+        "category": "Error",
+        "code": 2649
     },
     "Cannot emit namespaced JSX elements in React": {
         "category": "Error",
@@ -2038,6 +2046,10 @@
     "Spread types may only be created from object types.": {
         "category": "Error",
         "code": 2698
+    },
+    "Static property '{0}' conflicts with built-in property 'Function.{0}' of constructor function '{1}'.": {
+        "category": "Error",
+        "code": 2699
     },
     "Rest types may only be created from object types.": {
         "category": "Error",
@@ -2733,7 +2745,7 @@
         "category": "Message",
         "code": 6079
     },
-    "Specify JSX code generation: 'preserve' or 'react'": {
+    "Specify JSX code generation: 'preserve', 'react-native', or 'react'": {
         "category": "Message",
         "code": 6080
     },
@@ -3286,6 +3298,10 @@
     "Implement inherited abstract class.": {
         "category": "Message",
         "code": 90007
+    },
+    "Add 'this.' to unresolved variable.": {
+        "category": "Message",
+        "code": 90008
     },
     "Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig": {
         "category": "Error",

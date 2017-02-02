@@ -3,7 +3,7 @@
 export { };
 
 declare global {
->global : any
+>global : typeof global
 
   var x: number;
 >x : number
