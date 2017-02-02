@@ -136,13 +136,7 @@ namespace ts.SymbolDisplay {
                         signature = candidateSignatures[0];
                     }
 
-                    let useConstructSignatures = false;
-                    if (callExpressionLike.kind === SyntaxKind.NewExpression) {
-                        useConstructSignatures = true;
-                    }
-                    else if (isCallExpression(callExpressionLike) && callExpressionLike.expression.kind === SyntaxKind.SuperKeyword) {
-                        useConstructSignatures = true;
-                    }
+                    const useConstructSignatures = callExpressionLike.kind === SyntaxKind.NewExpression || (isCallExpression(callExpressionLike) && callExpressionLike.expression.kind === SyntaxKind.SuperKeyword);
 
                     const allSignatures = useConstructSignatures ? type.getConstructSignatures() : type.getCallSignatures();
 

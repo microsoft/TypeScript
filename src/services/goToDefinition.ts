@@ -86,15 +86,13 @@ namespace ts.GoToDefinition {
         }
 
         if (isJsxOpeningLikeElement(node.parent)) {
-            // For JSX opening-like element, the tag can be resolved either as stateful component (e.g class) or stateless function component.
-            // Because if it is a stateless function component with an error while trying to resolve the signature, we don't want to return all
-            // possible overloads but just the first one.
+            // If there are errors when trying to figure out stateless component function, just return the first declaration
             // For example:
-            //      /*firstSource*/declare function MainButton(buttonProps: ButtonProps): JSX.Element;
-            //      /*secondSource*/declare function MainButton(linkProps: LinkProps): JSX.Element;
-            //      /*thirdSource*/declare function MainButton(props: ButtonProps | LinkProps): JSX.Element;
-            //      let opt = <Main/*firstTarget*/Button />;  // We get undefined for resolved signature indicating an error, then just return the first declaration
-            const {symbolName, symbolKind, containerName}  = getSymbolInfo(typeChecker, symbol, node);
+            //      declare function /*firstSource*/iMainButton(buttonProps: ButtonProps): JSX.Element;
+            //      declare function /*secondSource*/MainButton(linkProps: LinkProps): JSX.Element;
+            //      declare function /*thirdSource*/MainButton(props: ButtonProps | LinkProps): JSX.Element;
+            //      let opt = <Main/*firstTarget*/Button />;  // Error - We get undefined for resolved signature indicating an error, then just return the first declaration
+            const {symbolName, symbolKind, containerName} = getSymbolInfo(typeChecker, symbol, node);
             return [createDefinitionInfo(symbol.valueDeclaration, symbolKind, symbolName, containerName)];
         }
 

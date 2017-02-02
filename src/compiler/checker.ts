@@ -11398,7 +11398,7 @@ namespace ts {
             // When we trying to resolve JsxOpeningLikeElement as a stateless function element, we will already give its attributes a contextual type
             // which is a type of the parameter of the signature we are trying out.
             // If there is no contextual type (e.g. we are trying to resolve stateful component), get attributes type from resolving element's tagName
-            const attributesType = getContextualType(<Expression>attribute.parent) || getAttributesTypeFromJsxOpeningLikeElement(<JsxOpeningLikeElement>attribute.parent.parent);
+            const attributesType = getContextualType(<Expression>attribute.parent);
 
             if (isJsxAttribute(attribute)) {
                 if (!attributesType || isTypeAny(attributesType)) {
@@ -12071,42 +12071,6 @@ namespace ts {
             return createJsxAttributesTypeFromAttributesProperty(node.parent as JsxOpeningLikeElement, /*filter*/ undefined, contextualMapper);
         }
 
-        /**
-         * Check whether the given attributes of JSX opening-like element is assignable to the tagName attributes.
-         *      Get the attributes type of the opening-like element through resolving the tagName, "target attributes"
-         *      Check assignablity between given attributes property, "source attributes", and the "target attributes"
-         * @param openingLikeElement an opening-like JSX element to check its JSXAttributes
-         */
-        function checkJsxAttributesAssignableToTagNameAttributes(openingLikeElement: JsxOpeningLikeElement) {
-            // The function involves following steps:
-            //      1. Figure out expected attributes type by resolving tagName of the JSX opening-like element, targetAttributesType.
-            //         During these steps, we will try to resolve the tagName as intrinsic name, stateless function, stateful component (in the order)
-            //      2. Solved JSX attributes type given by users, sourceAttributesType, which is by resolving "attributes" property of the JSX opening-like element.
-            //      3. Check if the two are assignable to each other
-
-            // targetAttributesType is a type of an attributes from resolving tagName of an opening-like JSX element.
-            const targetAttributesType = isJsxIntrinsicIdentifier(openingLikeElement.tagName) ?
-                getIntrinsicAttributesTypeFromJsxOpeningLikeElement(openingLikeElement) :
-                getCustomJsxElementAttributesType(openingLikeElement, /*shouldIncludeAllStatelessAttributesType*/ false);
-
-            // sourceAttributesType is a type of an attributes properties.
-            // i.e <div attr1={10} attr2="string" />
-            //     attr1 and attr2 are treated as JSXAttributes attached in the JsxOpeningLikeElement as "attributes".
-            const sourceAttributesType = createJsxAttributesTypeFromAttributesProperty(openingLikeElement,
-                attribute => {
-                    return isUnhyphenatedJsxName(attribute.name) || !!(getPropertyOfType(targetAttributesType, attribute.name));
-                });
-
-            // If the targetAttributesType is an emptyObjectType, indicating that there is no property named 'props' on this instance type.
-            // but there exists a sourceAttributesType, we need to explicitly give an error as normal assignability check allow excess properties and will pass.
-            if (targetAttributesType === emptyObjectType && (isTypeAny(sourceAttributesType) || (<ResolvedType>sourceAttributesType).properties.length > 0)) {
-                error(openingLikeElement, Diagnostics.JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property, getJsxElementPropertiesName());
-            }
-            else {
-                checkTypeAssignableTo(sourceAttributesType, targetAttributesType, openingLikeElement.attributes.properties.length > 0 ? openingLikeElement.attributes : openingLikeElement);
-            }
-        }
-
         function getJsxType(name: string) {
             let jsxType = jsxTypes.get(name);
             if (jsxType === undefined) {
@@ -12462,6 +12426,7 @@ namespace ts {
          * Get attributes type of the given custom opening-like JSX element.
          * This function is intended to be called from a caller that handles intrinsic JSX element already.
          * @param node a custom JSX opening-like element
+         * @param shouldIncludeAllStatelessAttributesType a boolean value used by language service to get all possible attributes type from an overload stateless function component
          */
         function getCustomJsxElementAttributesType(node: JsxOpeningLikeElement, shouldIncludeAllStatelessAttributesType: boolean): Type {
             const links = getNodeLinks(node);
@@ -12489,7 +12454,7 @@ namespace ts {
         }
 
         /**
-         * Get the attributes type which is the type that indicate which attributes are valid on the given JSXOpeningLikeElement.
+         * Get the attributes type, which indicates the attributes that are valid on the given JSXOpeningLikeElement. 
          * @param node a JSXOpeningLikeElement node
          * @return an attributes type of the given node
          */
@@ -12520,7 +12485,9 @@ namespace ts {
             return jsxElementClassType;
         }
 
-        // Returns all the properties of the Jsx.IntrinsicElements interface
+        /**
+         * Returns all the properties of the Jsx.IntrinsicElements interface
+         */
         function getJsxIntrinsicTagNames(): Symbol[] {
             const intrinsics = getJsxType(JsxNames.IntrinsicElements);
             return intrinsics ? getPropertiesOfType(intrinsics) : emptyArray;
@@ -12559,6 +12526,42 @@ namespace ts {
             }
 
             checkJsxAttributesAssignableToTagNameAttributes(node);
+        }
+
+         /**
+         * Check whether the given attributes of JSX opening-like element is assignable to the tagName attributes.
+         *      Get the attributes type of the opening-like element through resolving the tagName, "target attributes"
+         *      Check assignablity between given attributes property, "source attributes", and the "target attributes"
+         * @param openingLikeElement an opening-like JSX element to check its JSXAttributes
+         */
+        function checkJsxAttributesAssignableToTagNameAttributes(openingLikeElement: JsxOpeningLikeElement) {
+            // The function involves following steps:
+            //      1. Figure out expected attributes type by resolving tagName of the JSX opening-like element, targetAttributesType.
+            //         During these steps, we will try to resolve the tagName as intrinsic name, stateless function, stateful component (in the order)
+            //      2. Solved JSX attributes type given by users, sourceAttributesType, which is by resolving "attributes" property of the JSX opening-like element.
+            //      3. Check if the two are assignable to each other
+
+            // targetAttributesType is a type of an attributes from resolving tagName of an opening-like JSX element.
+            const targetAttributesType = isJsxIntrinsicIdentifier(openingLikeElement.tagName) ?
+                getIntrinsicAttributesTypeFromJsxOpeningLikeElement(openingLikeElement) :
+                getCustomJsxElementAttributesType(openingLikeElement, /*shouldIncludeAllStatelessAttributesType*/ false);
+
+            // sourceAttributesType is a type of an attributes properties.
+            // i.e <div attr1={10} attr2="string" />
+            //     attr1 and attr2 are treated as JSXAttributes attached in the JsxOpeningLikeElement as "attributes".
+            const sourceAttributesType = createJsxAttributesTypeFromAttributesProperty(openingLikeElement,
+                attribute => {
+                    return isUnhyphenatedJsxName(attribute.name) || !!(getPropertyOfType(targetAttributesType, attribute.name));
+                });
+
+            // If the targetAttributesType is an emptyObjectType, indicating that there is no property named 'props' on this instance type.
+            // but there exists a sourceAttributesType, we need to explicitly give an error as normal assignability check allow excess properties and will pass.
+            if (targetAttributesType === emptyObjectType && (isTypeAny(sourceAttributesType) || (<ResolvedType>sourceAttributesType).properties.length > 0)) {
+                error(openingLikeElement, Diagnostics.JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property, getJsxElementPropertiesName());
+            }
+            else {
+                checkTypeAssignableTo(sourceAttributesType, targetAttributesType, openingLikeElement.attributes.properties.length > 0 ? openingLikeElement.attributes : openingLikeElement);
+            }
         }
 
         function checkJsxExpression(node: JsxExpression, contextualMapper?: TypeMapper) {
@@ -13021,9 +13024,7 @@ namespace ts {
             let spreadArgIndex = -1;
 
             if (isJsxOpeningLikeElement(node)) {
-                // For JSX opening-like element, we will ignore regular arity check (which is what is done here).
-                // Instead, the arity check will be done in "checkApplicableSignatureForJsxOpeningLikeElement" as we are required to figure out
-                // all property inside the given attributes.
+                // The arity check will be done in "checkApplicableSignatureForJsxOpeningLikeElement".
                 return true;
             }
 
@@ -13250,14 +13251,14 @@ namespace ts {
             // However "context" and "updater" are implicit and can't be specify by users. Only the first parameter, props,
             // can be specified by users through attributes property.
             const paramType = getTypeAtPosition(signature, 0);
-            const argType = checkExpressionWithContextualType(node.attributes, paramType, /*contextualMapper*/ undefined);
-            const argProperties = getPropertiesOfType(argType);
+            const attributesType = checkExpressionWithContextualType(node.attributes, paramType, /*contextualMapper*/ undefined);
+            const argProperties = getPropertiesOfType(attributesType);
             for (const arg of argProperties) {
                 if (!getPropertyOfType(paramType, arg.name) && isUnhyphenatedJsxName(arg.name)) {
                     return false;
                 }
             }
-            if (checkTypeRelatedTo(argType, paramType, relation, /*errorNode*/ undefined, headMessage)) {
+            if (checkTypeRelatedTo(attributesType, paramType, relation, /*errorNode*/ undefined, headMessage)) {
                 return true;
             }
             return false;
@@ -13744,16 +13745,15 @@ namespace ts {
             // If candidate is undefined, it means that no candidates had a suitable arity. In that case,
             // skip the checkApplicableSignature check.
             if (candidateForArgumentError) {
+                if (isJsxOpeningOrSelfClosingElement) {
+                    // We do not report any error here because any error will be handled in "resolveCustomJsxElementAttributesType".
+                    return candidateForArgumentError;
+                }
                 // excludeArgument is undefined, in this case also equivalent to [undefined, undefined, ...]
                 // The importance of excludeArgument is to prevent us from typing function expression parameters
                 // in arguments too early. If possible, we'd like to only type them once we know the correct
                 // overload. However, this matters for the case where the call is correct. When the call is
                 // an error, we don't need to exclude any arguments, although it would cause no harm to do so.
-                if (isJsxOpeningOrSelfClosingElement) {
-                    // If there is not result, just return the last one we try as a candidate.
-                    // We do not report any error here because any error will be handled in "resolveCustomJsxElementAttributesType".
-                    return candidateForArgumentError;
-                }
                 checkApplicableSignature(node, args, candidateForArgumentError, assignableRelation, /*excludeArgument*/ undefined, /*reportErrors*/ true);
             }
             else if (candidateForTypeArgumentError) {
