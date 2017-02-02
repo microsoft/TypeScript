@@ -15,3 +15,4 @@ export var x = new Foo();
 "use strict";
 var b_1 = require("./b");
 exports.x = new b_1["default"]();
+exports.__esModule = true;

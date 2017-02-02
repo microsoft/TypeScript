@@ -1025,3 +1025,4 @@ function viewFactory_AppComponent0(viewUtils, parentInjector, declarationEl) {
     return new _View_AppComponent0(viewUtils, parentInjector, declarationEl);
 }
 exports.viewFactory_AppComponent0 = viewFactory_AppComponent0;
+exports.__esModule = true;

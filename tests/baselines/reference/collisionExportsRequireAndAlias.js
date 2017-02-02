@@ -23,6 +23,7 @@ define(["require", "exports"], function (require, exports) {
     function bar() {
     }
     exports.bar = bar;
+    exports.__esModule = true;
 });
 //// [collisionExportsRequireAndAlias_file3333.js]
 define(["require", "exports"], function (require, exports) {
@@ -30,6 +31,7 @@ define(["require", "exports"], function (require, exports) {
     function bar2() {
     }
     exports.bar2 = bar2;
+    exports.__esModule = true;
 });
 //// [collisionExportsRequireAndAlias_file2.js]
 define(["require", "exports", "collisionExportsRequireAndAlias_file1", "collisionExportsRequireAndAlias_file3333"], function (require, exports, require, exports) {
@@ -42,4 +44,5 @@ define(["require", "exports", "collisionExportsRequireAndAlias_file1", "collisio
         exports.bar2();
     }
     exports.foo2 = foo2;
+    exports.__esModule = true;
 });

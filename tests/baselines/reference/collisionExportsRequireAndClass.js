@@ -79,6 +79,7 @@ define(["require", "exports"], function (require, exports) {
         }());
         m2.exports = exports;
     })(m2 || (m2 = {}));
+    exports.__esModule = true;
 });
 //// [collisionExportsRequireAndClass_globalFile.js]
 var require = (function () {

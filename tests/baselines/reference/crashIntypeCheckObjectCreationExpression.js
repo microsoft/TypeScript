@@ -22,4 +22,5 @@ define(["require", "exports"], function (require, exports) {
         return BuildWorkspaceService;
     }());
     exports.BuildWorkspaceService = BuildWorkspaceService;
+    exports.__esModule = true;
 });

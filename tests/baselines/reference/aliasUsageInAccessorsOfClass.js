@@ -35,6 +35,7 @@ var Model = (function () {
     return Model;
 }());
 exports.Model = Model;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [aliasUsage1_moduleA.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -56,6 +57,7 @@ var VisualizationModel = (function (_super) {
     return VisualizationModel;
 }(Backbone.Model));
 exports.VisualizationModel = VisualizationModel;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [aliasUsage1_main.js]
 "use strict";
 var moduleA = require("./aliasUsage1_moduleA");

@@ -162,6 +162,7 @@ define(["require", "exports"], function (require, exports) {
             exports.C = C;
         })(exports = m2.exports || (m2.exports = {}));
     })(m2 || (m2 = {}));
+    exports.__esModule = true;
 });
 //// [collisionExportsRequireAndModule_globalFile.js]
 var require;

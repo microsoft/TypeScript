@@ -14,6 +14,7 @@ Foo();
 "use strict";
 function Foo() { }
 exports.Foo = Foo;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [main.js]
 "use strict";
 var _10_lib_1 = require("./10_lib");

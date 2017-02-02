@@ -18,7 +18,9 @@ var Foo = (function () {
     return Foo;
 }());
 exports.Foo = Foo;
+exports.__esModule = true;
 //// [a.js]
 "use strict";
 var b_1 = require("./b");
 exports.x = new b_1["default"].Foo();
+exports.__esModule = true;

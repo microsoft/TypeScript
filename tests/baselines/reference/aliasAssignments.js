@@ -21,6 +21,7 @@ var someClass = (function () {
     return someClass;
 }());
 exports.someClass = someClass;
+exports.__esModule = true;
 //// [aliasAssignments_1.js]
 "use strict";
 var moduleA = require("./aliasAssignments_moduleA");

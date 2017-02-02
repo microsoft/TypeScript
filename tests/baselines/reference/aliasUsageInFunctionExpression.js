@@ -28,6 +28,7 @@ var Model = (function () {
     return Model;
 }());
 exports.Model = Model;
+exports.__esModule = true;
 //// [aliasUsageInFunctionExpression_moduleA.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -49,6 +50,7 @@ var VisualizationModel = (function (_super) {
     return VisualizationModel;
 }(Backbone.Model));
 exports.VisualizationModel = VisualizationModel;
+exports.__esModule = true;
 //// [aliasUsageInFunctionExpression_main.js]
 "use strict";
 var moduleA = require("./aliasUsageInFunctionExpression_moduleA");

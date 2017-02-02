@@ -289,3 +289,4 @@ var StyleParser = (function () {
     return StyleParser;
 }());
 exports.StyleParser = StyleParser;
+exports.__esModule = true;

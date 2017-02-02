@@ -21,13 +21,16 @@ define("B:/baz", ["require", "exports", "A:/bar", "A:/foo"], function (require, 
     "use strict";
     exports.pi = Math.PI;
     exports.y = bar_1.x * foo_1.i;
+    exports.__esModule = true;
 });
 define("A:/foo", ["require", "exports", "B:/baz"], function (require, exports, baz_1) {
     "use strict";
     exports.i = Math.sqrt(-1);
     exports.z = baz_1.pi * baz_1.pi;
+    exports.__esModule = true;
 });
 define("A:/bar", ["require", "exports", "A:/foo"], function (require, exports, foo_2) {
     "use strict";
     exports.x = foo_2.z + foo_2.z;
+    exports.__esModule = true;
 });

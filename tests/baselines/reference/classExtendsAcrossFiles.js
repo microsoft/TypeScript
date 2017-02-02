@@ -49,6 +49,7 @@ exports.b = {
         a_1.a.f();
     }
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [a.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -79,3 +80,4 @@ exports.a = {
         b_1.b.f();
     }
 };
+Object.defineProperty(exports, "__esModule", { value: true });

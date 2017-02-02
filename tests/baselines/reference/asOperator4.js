@@ -16,6 +16,7 @@ import { foo } from './foo';
 "use strict";
 function foo() { }
 exports.foo = foo;
+exports.__esModule = true;
 //// [bar.js]
 "use strict";
 var foo_1 = require("./foo");

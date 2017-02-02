@@ -132,6 +132,7 @@ define(["require", "exports", "commentsExternalModules2_0"], function (require, 
     exports.newVar = new extMod.m1.m2.c();
     extMod.m4.fooExport();
     exports.newVar2 = new extMod.m4.m2.c();
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 
 

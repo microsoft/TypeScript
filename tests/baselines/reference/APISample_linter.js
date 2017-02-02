@@ -117,3 +117,4 @@ fileNames.forEach(function (fileName) {
     // delint it
     delint(sourceFile);
 });
+exports.__esModule = true;

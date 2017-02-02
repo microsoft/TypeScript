@@ -53,4 +53,5 @@ define(["require", "exports"], function (require, exports) {
         }
         m2.require = require;
     })(m2 || (m2 = {}));
+    exports.__esModule = true;
 });

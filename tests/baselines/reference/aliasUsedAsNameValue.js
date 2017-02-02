@@ -24,6 +24,7 @@ export var a = function () {
 "use strict";
 function b(a) { return null; }
 exports.b = b;
+exports.__esModule = true;
 //// [aliasUsedAsNameValue_2.js]
 "use strict";
 ///<reference path='aliasUsedAsNameValue_0.ts' />
@@ -34,3 +35,4 @@ exports.a = function () {
     //var x = mod.id; // TODO needed hack that mod is loaded
     b.b(mod);
 };
+exports.__esModule = true;

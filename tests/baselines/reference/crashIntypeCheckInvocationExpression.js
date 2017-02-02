@@ -23,4 +23,5 @@ define(["require", "exports"], function (require, exports) {
         var folder = path.join(), fileset = nake.fileSetSync(folder);
         return doCompile(fileset, moduleType);
     });
+    exports.__esModule = true;
 });

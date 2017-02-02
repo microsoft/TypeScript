@@ -7,3 +7,4 @@ export const a = 1
 "use strict";
 // Module commonjs
 exports.a = 1;
+exports.__esModule = true;

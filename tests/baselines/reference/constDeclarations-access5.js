@@ -52,6 +52,7 @@ m.x.toString();
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.x = 0;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [constDeclarations_access_2.js]
 define(["require", "exports", "constDeclarations_access_1"], function (require, exports, m) {

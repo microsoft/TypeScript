@@ -23,6 +23,7 @@ var C1 = (function () {
 }());
 C1.s1 = true;
 exports.C1 = C1;
+exports.__esModule = true;
 //// [foo_1.js]
 "use strict";
 var foo = require("./foo_0");

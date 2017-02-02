@@ -14,6 +14,7 @@ class Test {
 class Task extends Promise {
 }
 exports.Task = Task;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [test.js]
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {

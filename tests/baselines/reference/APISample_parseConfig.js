@@ -68,3 +68,4 @@ function createProgram(rootFiles, compilerOptionsJson) {
     return ts.createProgram(rootFiles, settings.options);
 }
 exports.createProgram = createProgram;
+exports.__esModule = true;

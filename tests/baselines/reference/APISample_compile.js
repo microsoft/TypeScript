@@ -60,3 +60,4 @@ compile(process.argv.slice(2), {
     noEmitOnError: true, noImplicitAny: true,
     target: ts.ScriptTarget.ES5, module: ts.ModuleKind.CommonJS
 });
+exports.__esModule = true;

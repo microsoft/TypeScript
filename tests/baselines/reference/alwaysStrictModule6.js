@@ -7,3 +7,4 @@ export const a = 1;
 "use strict";
 // Targeting ES5
 exports.a = 1;
+Object.defineProperty(exports, "__esModule", { value: true });
