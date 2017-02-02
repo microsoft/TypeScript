@@ -166,14 +166,14 @@ interface ObjectConstructor {
       * Creates an object that has the specified prototype, and that optionally contains specified properties.
       * @param o Object to use as a prototype. May be null
       */
-    create<T>(o: T): T;
+    create<T extends object>(o: T): T;
 
     /**
       * Creates an object that has the specified prototype, and that optionally contains specified properties.
       * @param o Object to use as a prototype. May be null
       * @param properties JavaScript object that contains one or more property descriptors.
       */
-    create(o: any, properties: PropertyDescriptorMap): any;
+    create(o: object | null, properties: PropertyDescriptorMap): any;
 
     /**
       * Adds a property to an object, or modifies attributes of an existing property.
@@ -4523,7 +4523,7 @@ interface ObjectConstructor {
       * @param o The object to change its prototype.
       * @param proto The value of the new prototype or null.
       */
-    setPrototypeOf(o: any, proto: any): any;
+    setPrototypeOf(o: any, proto: object | null): any;
 
     /**
       * Gets the own property descriptor of the specified object.
@@ -4728,7 +4728,7 @@ interface Map<K, V> {
     forEach(callbackfn: (value: V, key: K, map: Map<K, V>) => void, thisArg?: any): void;
     get(key: K): V | undefined;
     has(key: K): boolean;
-    set(key: K, value?: V): this;
+    set(key: K, value: V): this;
     readonly size: number;
 }
 
@@ -4746,16 +4746,16 @@ interface ReadonlyMap<K, V> {
     readonly size: number;
 }
 
-interface WeakMap<K, V> {
+interface WeakMap<K extends object, V> {
     delete(key: K): boolean;
     get(key: K): V | undefined;
     has(key: K): boolean;
-    set(key: K, value?: V): this;
+    set(key: K, value: V): this;
 }
 
 interface WeakMapConstructor {
     new (): WeakMap<any, any>;
-    new <K, V>(entries?: [K, V][]): WeakMap<K, V>;
+    new <K extends object, V>(entries?: [K, V][]): WeakMap<K, V>;
     readonly prototype: WeakMap<any, any>;
 }
 declare var WeakMap: WeakMapConstructor;
@@ -4911,10 +4911,10 @@ interface MapConstructor {
     new <K, V>(iterable: Iterable<[K, V]>): Map<K, V>;
 }
 
-interface WeakMap<K, V> { }
+interface WeakMap<K extends object, V> { }
 
 interface WeakMapConstructor {
-    new <K, V>(iterable: Iterable<[K, V]>): WeakMap<K, V>;
+    new <K extends object, V>(iterable: Iterable<[K, V]>): WeakMap<K, V>;
 }
 
 interface Set<T> {
@@ -5256,6 +5256,7 @@ interface Float64ArrayConstructor {
     from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array;
 }
 
+
 /**
  * Represents the completion of an asynchronous operation
  */
@@ -5512,7 +5513,7 @@ interface PromiseConstructor {
 declare var Promise: PromiseConstructor;
 
 interface ProxyHandler<T> {
-    getPrototypeOf? (target: T): {} | null;
+    getPrototypeOf? (target: T): object | null;
     setPrototypeOf? (target: T, v: any): boolean;
     isExtensible? (target: T): boolean;
     preventExtensions? (target: T): boolean;
@@ -5525,7 +5526,7 @@ interface ProxyHandler<T> {
     enumerate? (target: T): PropertyKey[];
     ownKeys? (target: T): PropertyKey[];
     apply? (target: T, thisArg: any, argArray?: any): any;
-    construct? (target: T, argArray: any, newTarget?: any): {};
+    construct? (target: T, argArray: any, newTarget?: any): object
 }
 
 interface ProxyConstructor {
@@ -5556,7 +5557,7 @@ interface Symbol {
     toString(): string;
 
     /** Returns the primitive value of the specified object. */
-    valueOf(): Object;
+    valueOf(): symbol;
 }
 
 interface SymbolConstructor {
@@ -5700,7 +5701,7 @@ interface Map<K, V> {
     readonly [Symbol.toStringTag]: "Map";
 }
 
-interface WeakMap<K, V>{
+interface WeakMap<K extends object, V>{
     readonly [Symbol.toStringTag]: "WeakMap";
 }
 
@@ -5915,6 +5916,7 @@ interface Float32Array {
 interface Float64Array {
     readonly [Symbol.toStringTag]: "Float64Array";
 }
+
 
 
 /////////////////////////////

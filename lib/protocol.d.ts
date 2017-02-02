@@ -1798,9 +1798,10 @@ declare namespace ts.server.protocol {
     namespace JsxEmit {
         type None = "None";
         type Preserve = "Preserve";
+        type ReactNative = "ReactNative";
         type React = "React";
     }
-    type JsxEmit = JsxEmit.None | JsxEmit.Preserve | JsxEmit.React;
+    type JsxEmit = JsxEmit.None | JsxEmit.Preserve | JsxEmit.React | JsxEmit.ReactNative;
     namespace ModuleKind {
         type None = "None";
         type CommonJS = "CommonJS";
@@ -1862,6 +1863,11 @@ declare namespace ts.server.protocol {
         isMixedContent: boolean;
     }
 
+    /**
+     * Type of objects whose values are all of the same type.
+     * The `in` and `for-in` operators can *not* be safely used,
+     * since `Object.prototype` may be modified by outside code.
+     */
     interface MapLike<T> {
         [index: string]: T;
     }
