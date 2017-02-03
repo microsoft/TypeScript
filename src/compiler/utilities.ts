@@ -3887,6 +3887,19 @@ namespace ts {
     export function isModuleBody(node: Node): node is ModuleBody {
         const kind = node.kind;
         return kind === SyntaxKind.ModuleBlock
+            || kind === SyntaxKind.ModuleDeclaration
+            || kind === SyntaxKind.Identifier;
+    }
+
+    export function isNamespaceBody(node: Node): node is NamespaceBody {
+        const kind = node.kind;
+        return kind === SyntaxKind.ModuleBlock
+            || kind === SyntaxKind.ModuleDeclaration;
+    }
+
+    export function isJSDocNamespaceBody(node: Node): node is JSDocNamespaceBody {
+        const kind = node.kind;
+        return kind === SyntaxKind.Identifier
             || kind === SyntaxKind.ModuleDeclaration;
     }
 

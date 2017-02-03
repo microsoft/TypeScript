@@ -187,6 +187,20 @@ namespace ts {
 
     // Names
 
+    export function createQualifiedName(left: EntityName, right: string | Identifier) {
+        const node = <QualifiedName>createSynthesizedNode(SyntaxKind.QualifiedName);
+        node.left = left;
+        node.right = asName(right);
+        return node;
+    }
+
+    export function updateQualifiedName(node: QualifiedName, left: EntityName, right: Identifier) {
+        return node.left !== left
+            || node.right !== right
+            ? updateNode(createQualifiedName(left, right), node)
+            : node;
+    }
+
     export function createComputedPropertyName(expression: Expression) {
         const node = <ComputedPropertyName>createSynthesizedNode(SyntaxKind.ComputedPropertyName);
         node.expression = expression;
@@ -502,6 +516,20 @@ namespace ts {
             : node;
     }
 
+    export function createTypeAssertion(type: TypeNode, expression: Expression) {
+        const node = <TypeAssertion>createSynthesizedNode(SyntaxKind.TypeAssertionExpression);
+        node.type = type;
+        node.expression = parenthesizePrefixOperand(expression);
+        return node;
+    }
+
+    export function updateTypeAssertion(node: TypeAssertion, type: TypeNode, expression: Expression) {
+        return node.type !== type
+            || node.expression !== expression
+            ? updateNode(createTypeAssertion(type, expression), node)
+            : node;
+    }
+
     export function createParen(expression: Expression) {
         const node = <ParenthesizedExpression>createSynthesizedNode(SyntaxKind.ParenthesizedExpression);
         node.expression = expression;
@@ -746,6 +774,32 @@ namespace ts {
         return node.typeArguments !== typeArguments
             || node.expression !== expression
             ? updateNode(createExpressionWithTypeArguments(typeArguments, expression), node)
+            : node;
+    }
+
+    export function createAsExpression(expression: Expression, type: TypeNode) {
+        const node = <AsExpression>createSynthesizedNode(SyntaxKind.AsExpression);
+        node.expression = expression;
+        node.type = type;
+        return node;
+    }
+
+    export function updateAsExpression(node: AsExpression, expression: Expression, type: TypeNode) {
+        return node.expression !== expression
+            || node.type !== type
+            ? updateNode(createAsExpression(expression, type), node)
+            : node;
+    }
+
+    export function createNonNullExpression(expression: Expression) {
+        const node = <NonNullExpression>createSynthesizedNode(SyntaxKind.NonNullExpression);
+        node.expression = parenthesizeForAccess(expression);
+        return node;
+    }
+
+    export function updateNonNullExpression(node: NonNullExpression, expression: Expression) {
+        return node.expression !== expression
+            ? updateNode(createNonNullExpression(expression), node)
             : node;
     }
 
@@ -1040,18 +1094,6 @@ namespace ts {
             : node;
     }
 
-    export function createCaseBlock(clauses: CaseOrDefaultClause[]): CaseBlock {
-        const node = <CaseBlock>createSynthesizedNode(SyntaxKind.CaseBlock);
-        node.clauses = createNodeArray(clauses);
-        return node;
-    }
-
-    export function updateCaseBlock(node: CaseBlock, clauses: CaseOrDefaultClause[]) {
-        return node.clauses !== clauses
-            ? updateNode(createCaseBlock(clauses), node)
-            : node;
-    }
-
     export function createFunctionDeclaration(decorators: Decorator[], modifiers: Modifier[], asteriskToken: AsteriskToken, name: string | Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block) {
         const node = <FunctionDeclaration>createSynthesizedNode(SyntaxKind.FunctionDeclaration);
         node.decorators = asNodeArray(decorators);
@@ -1096,6 +1138,85 @@ namespace ts {
             || node.heritageClauses !== heritageClauses
             || node.members !== members
             ? updateNode(createClassDeclaration(decorators, modifiers, name, typeParameters, heritageClauses, members), node)
+            : node;
+    }
+
+    export function createEnumDeclaration(decorators: Decorator[], modifiers: Modifier[], name: string | Identifier, members: EnumMember[]) {
+        const node = <EnumDeclaration>createSynthesizedNode(SyntaxKind.EnumDeclaration);
+        node.decorators = asNodeArray(decorators);
+        node.modifiers = asNodeArray(modifiers);
+        node.name = asName(name);
+        node.members = createNodeArray(members);
+        return node;
+    }
+
+    export function updateEnumDeclaration(node: EnumDeclaration, decorators: Decorator[], modifiers: Modifier[], name: Identifier, members: EnumMember[]) {
+        return node.decorators !== decorators
+            || node.modifiers !== modifiers
+            || node.name !== name
+            || node.members !== members
+            ? updateNode(createEnumDeclaration(decorators, modifiers, name, members), node)
+            : node;
+    }
+
+    export function createModuleDeclaration(decorators: Decorator[], modifiers: Modifier[], name: ModuleName, body: ModuleBody, flags?: NodeFlags) {
+        const node = <ModuleDeclaration>createSynthesizedNode(SyntaxKind.ModuleDeclaration);
+        node.flags |= flags;
+        node.decorators = asNodeArray(decorators);
+        node.modifiers = asNodeArray(modifiers);
+        node.name = name;
+        node.body = body;
+        return node;
+    }
+
+    export function updateModuleDeclaration(node: ModuleDeclaration, decorators: Decorator[], modifiers: Modifier[], name: ModuleName, body: ModuleBody) {
+        return node.decorators !== decorators
+            || node.modifiers !== modifiers
+            || node.name !== name
+            || node.body !== body
+            ? updateNode(createModuleDeclaration(decorators, modifiers, name, body, node.flags), node)
+            : node;
+    }
+
+    export function createModuleBlock(statements: Statement[]) {
+        const node = <ModuleBlock>createSynthesizedNode(SyntaxKind.CaseBlock);
+        node.statements = createNodeArray(statements);
+        return node;
+    }
+
+    export function updateModuleBlock(node: ModuleBlock, statements: Statement[]) {
+        return node.statements !== statements
+            ? updateNode(createModuleBlock(statements), node)
+            : node;
+    }
+
+    export function createCaseBlock(clauses: CaseOrDefaultClause[]): CaseBlock {
+        const node = <CaseBlock>createSynthesizedNode(SyntaxKind.CaseBlock);
+        node.clauses = createNodeArray(clauses);
+        return node;
+    }
+
+    export function updateCaseBlock(node: CaseBlock, clauses: CaseOrDefaultClause[]) {
+        return node.clauses !== clauses
+            ? updateNode(createCaseBlock(clauses), node)
+            : node;
+    }
+
+    export function createImportEqualsDeclaration(decorators: Decorator[], modifiers: Modifier[], name: string | Identifier, moduleReference: ModuleReference) {
+        const node = <ImportEqualsDeclaration>createSynthesizedNode(SyntaxKind.ImportEqualsDeclaration);
+        node.decorators = asNodeArray(decorators);
+        node.modifiers = asNodeArray(modifiers);
+        node.name = asName(name);
+        node.moduleReference = moduleReference;
+        return node;
+    }
+
+    export function updateImportEqualsDeclaration(node: ImportEqualsDeclaration, decorators: Decorator[], modifiers: Modifier[], name: Identifier, moduleReference: ModuleReference) {
+        return node.decorators !== decorators
+            || node.modifiers !== modifiers
+            || node.name !== name
+            || node.moduleReference !== moduleReference
+            ? updateNode(createImportEqualsDeclaration(decorators, modifiers, name, moduleReference), node)
             : node;
     }
 
@@ -1225,6 +1346,20 @@ namespace ts {
     export function updateExportSpecifier(node: ExportSpecifier, name: Identifier, propertyName: Identifier) {
         return node.name !== name || node.propertyName !== propertyName
             ? updateNode(createExportSpecifier(name, propertyName), node)
+            : node;
+    }
+
+    // Module references
+
+    export function createExternalModuleReference(expression: Expression) {
+        const node = <ExternalModuleReference>createSynthesizedNode(SyntaxKind.ExternalModuleReference);
+        node.expression = expression;
+        return node;
+    }
+
+    export function updateExternalModuleReference(node: ExternalModuleReference, expression: Expression) {
+        return node.expression !== expression
+            ? updateNode(createExternalModuleReference(expression), node)
             : node;
     }
 
@@ -1424,6 +1559,22 @@ namespace ts {
             return updateNode(createSpreadAssignment(expression), node);
         }
         return node;
+    }
+
+    // Enum
+
+    export function createEnumMember(name: string | PropertyName, initializer?: Expression) {
+        const node = <EnumMember>createSynthesizedNode(SyntaxKind.EnumMember);
+        node.name = asName(name);
+        node.initializer = initializer && parenthesizeExpressionForList(initializer);
+        return node;
+    }
+
+    export function updateEnumMember(node: EnumMember, name: PropertyName, initializer: Expression | undefined) {
+        return node.name !== name
+            || node.initializer !== initializer
+            ? updateNode(createEnumMember(name, initializer), node)
+            : node;
     }
 
     // Top-level nodes

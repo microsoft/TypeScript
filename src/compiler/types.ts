@@ -1771,24 +1771,28 @@
         members: NodeArray<EnumMember>;
     }
 
-    export type ModuleBody = ModuleBlock | ModuleDeclaration;
-
     export type ModuleName = Identifier | StringLiteral;
+
+    export type ModuleBody = NamespaceBody | JSDocNamespaceBody;
 
     export interface ModuleDeclaration extends DeclarationStatement {
         kind: SyntaxKind.ModuleDeclaration;
         name: Identifier | StringLiteral;
-        body?: ModuleBlock | NamespaceDeclaration | JSDocNamespaceDeclaration | Identifier;
+        body?: ModuleBody | JSDocNamespaceDeclaration | Identifier;
     }
+
+    export type NamespaceBody = ModuleBlock | NamespaceDeclaration;
 
     export interface NamespaceDeclaration extends ModuleDeclaration {
         name: Identifier;
-        body: ModuleBlock | NamespaceDeclaration;
+        body: NamespaceBody;
     }
+
+    export type JSDocNamespaceBody = Identifier | JSDocNamespaceDeclaration;
 
     export interface JSDocNamespaceDeclaration extends ModuleDeclaration {
         name: Identifier;
-        body: JSDocNamespaceDeclaration | Identifier;
+        body: JSDocNamespaceBody;
     }
 
     export interface ModuleBlock extends Node, Statement {
