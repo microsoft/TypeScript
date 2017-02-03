@@ -56,6 +56,7 @@ var M;
 exports.M = M;
 var a = M.x;
 exports.a = a;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [t2.js]
 "use strict";
 var t1_1 = require("./t1");
@@ -65,6 +66,7 @@ exports.C = t1_1.C;
 exports.E = t1_1.E;
 exports.M = t1_1.M;
 exports.a = t1_1.a;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [t3.js]
 "use strict";
 const t1_1 = require("./t1");
@@ -74,3 +76,4 @@ exports.C = t1_1.C;
 exports.E = t1_1.E;
 exports.M = t1_1.M;
 exports.a = t1_1.a;
+Object.defineProperty(exports, "__esModule", { value: true });

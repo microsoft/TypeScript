@@ -48,6 +48,7 @@ var SomeClass = (function () {
     return SomeClass;
 }());
 exports.SomeClass = SomeClass;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [aux1.js]
 "use strict";
 var SomeClass1 = (function () {
@@ -56,6 +57,7 @@ var SomeClass1 = (function () {
     return SomeClass1;
 }());
 exports.SomeClass1 = SomeClass1;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [aux2.js]
 "use strict";
 var SomeClass2 = (function () {
@@ -64,6 +66,7 @@ var SomeClass2 = (function () {
     return SomeClass2;
 }());
 exports.SomeClass2 = SomeClass2;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [main.js]
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -110,3 +113,4 @@ ClassA = __decorate([
     __metadata("design:paramtypes", [aux_1.SomeClass])
 ], ClassA);
 exports.ClassA = ClassA;
+Object.defineProperty(exports, "__esModule", { value: true });

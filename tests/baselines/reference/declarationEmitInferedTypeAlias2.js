@@ -28,6 +28,7 @@ function bar() {
     return v;
 }
 exports.bar = bar;
+exports.__esModule = true;
 
 
 //// [0.d.ts]

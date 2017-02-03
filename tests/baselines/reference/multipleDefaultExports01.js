@@ -25,15 +25,13 @@ var foo = (function () {
     }
     return foo;
 }());
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = foo;
 function bar() {
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = bar;
 var x = 10;
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = x;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [m2.js]
 "use strict";
 var m1_1 = require("./m1");

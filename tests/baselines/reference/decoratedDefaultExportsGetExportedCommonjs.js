@@ -27,8 +27,8 @@ let Foo = class Foo {
 Foo = __decorate([
     decorator
 ], Foo);
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Foo;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [b.js]
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -43,5 +43,5 @@ let default_1 = class {
 default_1 = __decorate([
     decorator
 ], default_1);
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;
+Object.defineProperty(exports, "__esModule", { value: true });

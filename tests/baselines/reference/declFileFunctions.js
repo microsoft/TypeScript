@@ -145,6 +145,7 @@ function nonExportedFooWithRestParameters(a) {
 function nonExportedFooWithOverloads(a) {
     return a;
 }
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [declFileFunctions_1.js]
 /** This comment should appear for foo*/
 function globalfoo() {

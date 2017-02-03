@@ -19,6 +19,7 @@ var Greeter = (function () {
     return Greeter;
 }());
 exports.Greeter = Greeter;
+exports.__esModule = true;
 //// [importAsBaseClass_1.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {

@@ -10,6 +10,7 @@ export import "server";
 //// [server.js]
 "use strict";
 exports.a = 10;
+exports.__esModule = true;
 //// [client.js]
 "use strict";
 require("server");

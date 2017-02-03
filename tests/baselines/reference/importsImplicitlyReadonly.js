@@ -26,6 +26,7 @@ a3.y = 1;
 exports.x = 1;
 var y = 1;
 exports.y = y;
+exports.__esModule = true;
 //// [b.js]
 "use strict";
 var a_1 = require("./a");

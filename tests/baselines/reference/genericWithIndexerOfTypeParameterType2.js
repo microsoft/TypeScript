@@ -56,4 +56,5 @@ define(["require", "exports"], function (require, exports) {
         return ListItem;
     }(CollectionItem));
     exports.ListItem = ListItem;
+    exports.__esModule = true;
 });

@@ -50,6 +50,7 @@ exports.x1 = 10;
 exports.z1 = 10;
 exports.z2 = 10;
 exports.aaaa = 10;
+exports.__esModule = true;
 //// [client.js]
 "use strict";
 var server_1 = require("./server");
@@ -73,6 +74,7 @@ var server_8 = require("./server");
 exports.z111 = server_8.z1;
 var server_9 = require("./server");
 exports.z2 = server_9.z2; // z2 shouldn't give redeclare error
+exports.__esModule = true;
 
 
 //// [server.d.ts]

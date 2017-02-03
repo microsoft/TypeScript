@@ -33,6 +33,7 @@ var db = (function () {
     return db;
 }());
 exports.db = db;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [service.js]
 "use strict";
 var db_1 = require("./db"); // error no default export
@@ -52,3 +53,4 @@ MyClass = __decorate([
 ], MyClass);
 exports.MyClass = MyClass;
 var _a;
+Object.defineProperty(exports, "__esModule", { value: true });

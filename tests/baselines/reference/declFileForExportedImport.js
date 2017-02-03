@@ -13,6 +13,7 @@ var z = b.x;
 
 //// [declFileForExportedImport_0.js]
 "use strict";
+exports.__esModule = true;
 //// [declFileForExportedImport_1.js]
 "use strict";
 ///<reference path='declFileForExportedImport_0.ts'/>

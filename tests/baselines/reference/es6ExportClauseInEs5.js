@@ -32,6 +32,7 @@ var m;
 exports.instantiatedModule = m;
 var x = 10;
 exports.x = x;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [server.d.ts]

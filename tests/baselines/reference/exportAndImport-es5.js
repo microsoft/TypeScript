@@ -16,13 +16,13 @@ export default function f2() {
 "use strict";
 function f1() {
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = f1;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [m2.js]
 "use strict";
 var m1_1 = require("./m1");
 function f2() {
     m1_1.default();
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = f2;
+Object.defineProperty(exports, "__esModule", { value: true });

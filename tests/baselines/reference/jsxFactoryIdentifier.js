@@ -67,6 +67,7 @@ exports.createElement = Element.createElement;
 function toCamelCase(text) {
     return text[0].toLowerCase() + text.substring(1);
 }
+Object.defineProperty(exports, "__esModule", { value: true });
 //# sourceMappingURL=Element.js.map//// [test.js]
 "use strict";
 const Element_1 = require("./Element");

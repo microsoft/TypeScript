@@ -31,6 +31,7 @@ var A = (function () {
     return A;
 }());
 exports.A = A;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [exportStarFromEmptyModule_module2.js]
 // empty
 //// [exportStarFromEmptyModule_module3.js]
@@ -46,6 +47,7 @@ var A = (function () {
     return A;
 }());
 exports.A = A;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [exportStarFromEmptyModule_module4.js]
 "use strict";
 var X = require("./exportStarFromEmptyModule_module3");

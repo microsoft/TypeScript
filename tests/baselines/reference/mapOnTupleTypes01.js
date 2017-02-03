@@ -67,6 +67,7 @@ exports.g = numNumNumNumNum.map(function (n) { return n * n; });
 // Length 6
 var numNumNumNumNumNum = [1, 2, 3, 4, 5, 6];
 exports.h = numNumNumNumNum.map(function (n) { return n * n; });
+exports.__esModule = true;
 
 
 //// [mapOnTupleTypes01.d.ts]

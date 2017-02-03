@@ -14,4 +14,5 @@ define(["require", "exports"], function (require, exports) {
         foo(fn); // Invocation is necessary to repro (!)
     }
     exports.foo = foo;
+    exports.__esModule = true;
 });

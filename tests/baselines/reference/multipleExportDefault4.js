@@ -12,9 +12,8 @@ var C = (function () {
     }
     return C;
 }());
-exports.__esModule = true;
 exports["default"] = C;
-exports.__esModule = true;
 exports["default"] = {
     uhoh: "another default"
 };
+exports.__esModule = true;

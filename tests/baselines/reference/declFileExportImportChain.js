@@ -59,6 +59,7 @@ define(["require", "exports", "declFileExportImportChain_b1"], function (require
 //// [declFileExportImportChain_d.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
 });
 
 

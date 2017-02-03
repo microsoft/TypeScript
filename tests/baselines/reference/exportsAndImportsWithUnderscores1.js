@@ -17,12 +17,12 @@ const { __, _, ___ } = R;
 //// [m1.js]
 "use strict";
 var R;
-exports.__esModule = true;
 exports["default"] = R = {
     "__": 20,
     "_": 10,
     "___": 30
 };
+exports.__esModule = true;
 //// [m2.js]
 "use strict";
 var m1_1 = require("./m1");

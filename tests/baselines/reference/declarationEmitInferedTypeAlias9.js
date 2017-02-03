@@ -14,6 +14,7 @@ function returnSomeGlobalValue() {
     return x;
 }
 exports.returnSomeGlobalValue = returnSomeGlobalValue;
+exports.__esModule = true;
 
 
 //// [declarationEmitInferedTypeAlias9.d.ts]

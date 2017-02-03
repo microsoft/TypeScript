@@ -51,6 +51,7 @@ exports.x1 = 10;
 exports.z1 = 10;
 exports.z2 = 10;
 exports.aaaa = 10;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [es6ImportNamedImportInEs5_1.js]
 "use strict";
 var es6ImportNamedImportInEs5_0_1 = require("./es6ImportNamedImportInEs5_0");

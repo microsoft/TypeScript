@@ -20,6 +20,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.x.a;
+    exports.__esModule = true;
 });
 
 

@@ -25,6 +25,7 @@ define(["require", "exports"], function (require, exports) {
     })(a = exports.a || (exports.a = {}));
     var b = a.weekend;
     exports.bVal = b.Sunday;
+    exports.__esModule = true;
 });
 
 

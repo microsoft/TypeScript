@@ -53,6 +53,7 @@ function runSampleBreaks(a, b, c, d, e) {
     });
 }
 exports.runSampleBreaks = runSampleBreaks;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [declarationEmitPromise.d.ts]

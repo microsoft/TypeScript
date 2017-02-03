@@ -33,3 +33,4 @@ var c;
     c.x = new b.c();
 })(c = exports.c || (exports.c = {}));
 exports.d = new c.b.c();
+exports.__esModule = true;

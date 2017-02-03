@@ -14,3 +14,4 @@ function f(x) {
     return typeof x.a === "number";
 }
 exports.f = f;
+exports.__esModule = true;

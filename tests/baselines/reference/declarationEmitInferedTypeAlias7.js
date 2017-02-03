@@ -16,6 +16,7 @@ var obj = true;
 "use strict";
 var v = "str" || true;
 exports.v = v;
+exports.__esModule = true;
 
 
 //// [0.d.ts]

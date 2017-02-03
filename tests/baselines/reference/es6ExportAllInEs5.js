@@ -29,12 +29,14 @@ var m;
     m.x = 10;
 })(m = exports.m || (exports.m = {}));
 exports.x = 10;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [client.js]
 "use strict";
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 __export(require("./server"));
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [server.d.ts]

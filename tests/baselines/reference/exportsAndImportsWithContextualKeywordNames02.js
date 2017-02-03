@@ -22,6 +22,7 @@ import { as } from "./t1";
 var as = 100;
 exports.return = as;
 exports.as = as;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [t2.js]
 "use strict";
 var as = require("./t1");

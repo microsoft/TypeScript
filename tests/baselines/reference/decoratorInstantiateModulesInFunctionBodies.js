@@ -25,6 +25,7 @@ class Wat {
 "use strict";
 // from #3108
 exports.test = 'abc';
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [b.js]
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {

@@ -26,6 +26,7 @@ define(["require", "exports"], function (require, exports) {
     })(a = exports.a || (exports.a = {}));
     var b = a.b;
     exports.x = new b.c();
+    exports.__esModule = true;
 });
 
 

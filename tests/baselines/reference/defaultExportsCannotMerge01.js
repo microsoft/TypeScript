@@ -35,13 +35,13 @@ Entity.y;
 function Decl() {
     return 0;
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Decl;
 var Decl;
 (function (Decl) {
     Decl.x = 10;
     Decl.y = 20;
 })(Decl = exports.Decl || (exports.Decl = {}));
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [m2.js]
 "use strict";
 var m1_1 = require("m1");

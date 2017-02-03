@@ -23,6 +23,7 @@ define(["require", "exports"], function (require, exports) {
     exports.b = a.foo;
     exports.bVal = exports.b(10);
     exports.bVal2 = exports.b;
+    exports.__esModule = true;
 });
 
 

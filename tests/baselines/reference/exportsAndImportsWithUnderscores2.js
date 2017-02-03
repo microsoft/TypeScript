@@ -16,11 +16,11 @@ const { __esmodule, __proto__ } = R;
 //// [m1.js]
 "use strict";
 var R;
-exports.__esModule = true;
 exports["default"] = R = {
     "__esmodule": true,
     "__proto__": {}
 };
+exports.__esModule = true;
 //// [m2.js]
 "use strict";
 var m1_1 = require("./m1");

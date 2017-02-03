@@ -27,8 +27,8 @@ function assert(value) {
     if (!value)
         throw new Error("Assertion failed!");
 }
-exports.__esModule = true;
 exports["default"] = assert;
+exports.__esModule = true;
 //// [es3defaultAliasQuoted_file1.js]
 "use strict";
 var es3defaultAliasQuoted_file0_1 = require("./es3defaultAliasQuoted_file0");

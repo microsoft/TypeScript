@@ -23,11 +23,11 @@ import z2 from "./z";
 
 //// [x.js]
 "use strict";
-exports.__esModule = true;
 exports["default"] = 0;
+exports.__esModule = true;
 //// [y.jsx]
 "use strict";
-exports.__esModule = true;
 exports["default"] = 0;
+exports.__esModule = true;
 //// [user.js]
 "use strict";

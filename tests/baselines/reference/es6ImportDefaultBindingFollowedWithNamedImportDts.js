@@ -62,6 +62,7 @@ var x11 = (function () {
     return x11;
 }());
 exports.x11 = x11;
+exports.__esModule = true;
 //// [client.js]
 "use strict";
 var server_1 = require("./server");
@@ -75,6 +76,7 @@ var server_4 = require("./server");
 exports.x3 = new server_4.x11();
 var server_5 = require("./server");
 exports.x6 = new server_5.m();
+exports.__esModule = true;
 
 
 //// [server.d.ts]

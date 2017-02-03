@@ -18,9 +18,11 @@ export var main = 10;
 //// [elidingImportNames_main.js]
 "use strict";
 exports.main = 10;
+exports.__esModule = true;
 //// [elidingImportNames_main1.js]
 "use strict";
 exports.main = 10;
+exports.__esModule = true;
 //// [elidingImportNames_test.js]
 "use strict";
 var a = require("./elidingImportNames_main"); // alias used in typeof

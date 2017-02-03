@@ -22,3 +22,4 @@ var c;
     c.bVal = b;
 })(c = exports.c || (exports.c = {}));
 exports.z = c.b;
+exports.__esModule = true;

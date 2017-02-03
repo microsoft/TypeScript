@@ -67,4 +67,5 @@ define(["require", "exports"], function (require, exports) {
     exports.f1 = new D;
     exports.g1 = new D;
     exports.h1 = new D;
+    exports.__esModule = true;
 });

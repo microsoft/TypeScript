@@ -31,6 +31,7 @@ var v4 = function () { return 5; };
 "use strict";
 exports.v3 = true;
 var v2 = [1, 2, 3]; // Module scope. Should not appear in global scope
+exports.__esModule = true;
 //// [file4.js]
 "use strict";
 var file3 = require("./file3");

@@ -32,11 +32,13 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.x = 1;
+    exports.__esModule = true;
 });
 //// [file3.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.x = 1;
+    exports.__esModule = true;
 });
 //// [file4.js]
 define(["require", "exports", "file2", "file3"], function (require, exports, file2_1, file3_1) {
@@ -47,6 +49,7 @@ define(["require", "exports", "file2", "file3"], function (require, exports, fil
     __export(file2_1);
     __export(file3_1);
     exports.x = 1;
+    exports.__esModule = true;
 });
 //// [file5.js]
 define(["require", "exports", "file4"], function (require, exports, file4_1) {
@@ -56,4 +59,5 @@ define(["require", "exports", "file4"], function (require, exports, file4_1) {
     }
     __export(file4_1);
     exports.x = 1;
+    exports.__esModule = true;
 });

@@ -64,6 +64,7 @@ define("m1", ["require", "exports"], function (require, exports) {
         return Cls;
     }());
     exports.Cls = Cls;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 define("m2", ["require", "exports", "m1"], function (require, exports, m1_1) {
     "use strict";
@@ -84,6 +85,7 @@ define("m3", ["require", "exports"], function (require, exports) {
         return C2;
     }());
     exports.C2 = C2;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 define("m4", ["require", "exports", "m1"], function (require, exports, m1_2) {
     "use strict";

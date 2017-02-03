@@ -11,5 +11,6 @@ import defaultBinding from "./es6ImportDefaultBindingNoDefaultProperty_0";
 //// [es6ImportDefaultBindingNoDefaultProperty_0.js]
 "use strict";
 exports.a = 10;
+exports.__esModule = true;
 //// [es6ImportDefaultBindingNoDefaultProperty_1.js]
 "use strict";

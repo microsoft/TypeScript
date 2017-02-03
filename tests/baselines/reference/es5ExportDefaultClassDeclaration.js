@@ -13,8 +13,8 @@ var C = (function () {
     C.prototype.method = function () { };
     return C;
 }());
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = C;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [es5ExportDefaultClassDeclaration.d.ts]

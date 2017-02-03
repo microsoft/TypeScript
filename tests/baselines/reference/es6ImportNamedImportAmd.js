@@ -52,6 +52,7 @@ define(["require", "exports"], function (require, exports) {
     exports.z1 = 10;
     exports.z2 = 10;
     exports.aaaa = 10;
+    exports.__esModule = true;
 });
 //// [es6ImportNamedImportAmd_1.js]
 define(["require", "exports", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0"], function (require, exports, es6ImportNamedImportAmd_0_1, es6ImportNamedImportAmd_0_2, es6ImportNamedImportAmd_0_3, es6ImportNamedImportAmd_0_4, es6ImportNamedImportAmd_0_5, es6ImportNamedImportAmd_0_6, es6ImportNamedImportAmd_0_7, es6ImportNamedImportAmd_0_8, es6ImportNamedImportAmd_0_9) {

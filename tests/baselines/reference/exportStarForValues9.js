@@ -28,6 +28,7 @@ define(["require", "exports", "file2"], function (require, exports, file2_1) {
     }
     __export(file2_1);
     exports.x = 1;
+    exports.__esModule = true;
 });
 //// [file2.js]
 define(["require", "exports", "file3"], function (require, exports, file3_1) {
@@ -37,4 +38,5 @@ define(["require", "exports", "file3"], function (require, exports, file3_1) {
     }
     __export(file3_1);
     exports.x = 1;
+    exports.__esModule = true;
 });

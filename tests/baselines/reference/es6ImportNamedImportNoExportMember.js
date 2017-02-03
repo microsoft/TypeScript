@@ -13,5 +13,6 @@ import { x1 as x } from "./es6ImportNamedImportNoExportMember_0";
 "use strict";
 exports.a = 10;
 exports.x = exports.a;
+exports.__esModule = true;
 //// [es6ImportNamedImport_1.js]
 "use strict";

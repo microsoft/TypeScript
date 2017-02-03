@@ -13,5 +13,5 @@ function f() {
         args[_i] = arguments[_i];
     }
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = f;
+Object.defineProperty(exports, "__esModule", { value: true });

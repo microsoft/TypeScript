@@ -19,6 +19,7 @@ var obj = true;
 //let v2: Z.Data;
 var v = "str" || true;
 exports.v = v;
+exports.__esModule = true;
 
 
 //// [0.d.ts]

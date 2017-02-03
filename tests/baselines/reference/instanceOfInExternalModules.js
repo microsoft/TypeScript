@@ -20,6 +20,7 @@ define(["require", "exports"], function (require, exports) {
         return Foo;
     }());
     exports.Foo = Foo;
+    exports.__esModule = true;
 });
 //// [instanceOfInExternalModules_1.js]
 define(["require", "exports", "instanceOfInExternalModules_require"], function (require, exports, Bar) {

@@ -11,6 +11,7 @@ var x: number = nameSpaceBinding.a;
 //// [es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0.js]
 "use strict";
 exports.a = 10;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_1.js]
 "use strict";
 var nameSpaceBinding = require("./es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0");

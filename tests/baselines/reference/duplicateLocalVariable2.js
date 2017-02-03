@@ -77,4 +77,5 @@ define(["require", "exports"], function (require, exports) {
         }));
         return testRunner;
     })();
+    exports.__esModule = true;
 });

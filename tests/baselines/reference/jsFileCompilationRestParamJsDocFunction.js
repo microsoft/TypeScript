@@ -46,6 +46,6 @@ define("_apply", ["require", "exports"], function (require, exports) {
         }
         return func.apply(thisArg, args);
     }
-    exports.__esModule = true;
     exports["default"] = apply;
+    exports.__esModule = true;
 });

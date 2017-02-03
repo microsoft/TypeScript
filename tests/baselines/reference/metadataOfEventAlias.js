@@ -36,3 +36,4 @@ __decorate([
     __metadata("design:type", Object)
 ], SomeClass.prototype, "event", void 0);
 exports.SomeClass = SomeClass;
+Object.defineProperty(exports, "__esModule", { value: true });

@@ -30,6 +30,7 @@ define(["require", "exports"], function (require, exports) {
         return { name: 'value' };
     }
     exports.w = w;
+    exports.__esModule = true;
 });
 
 

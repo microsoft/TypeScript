@@ -14,11 +14,13 @@ export import * as nameSpaceBinding2 from "server"; // Not referenced imports
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.a = 10;
+    exports.__esModule = true;
 });
 //// [client.js]
 define(["require", "exports", "server"], function (require, exports, nameSpaceBinding) {
     "use strict";
     exports.x = nameSpaceBinding.a;
+    exports.__esModule = true;
 });
 
 

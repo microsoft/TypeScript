@@ -22,3 +22,4 @@ C = __decorate([
     dec
 ], C);
 exports.C = C;
+Object.defineProperty(exports, "__esModule", { value: true });

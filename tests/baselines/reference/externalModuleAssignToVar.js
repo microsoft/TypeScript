@@ -35,6 +35,7 @@ define(["require", "exports"], function (require, exports) {
         return C;
     }());
     exports.C = C;
+    exports.__esModule = true;
 });
 //// [externalModuleAssignToVar_core_require2.js]
 define(["require", "exports"], function (require, exports) {

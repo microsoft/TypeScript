@@ -91,6 +91,7 @@ var C4 = (function () {
     return C4;
 }());
 exports.C4 = C4;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [declarationEmitClassMemberNameConflict.d.ts]

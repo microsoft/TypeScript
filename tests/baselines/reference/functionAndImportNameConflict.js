@@ -14,8 +14,10 @@ export function f() {
 function f() {
 }
 exports.f = f;
+exports.__esModule = true;
 //// [f2.js]
 "use strict";
 function f() {
 }
 exports.f = f;
+exports.__esModule = true;

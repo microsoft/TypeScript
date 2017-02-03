@@ -7,3 +7,4 @@ export { toString };
 "use strict";
 var toString = 0;
 exports.toString = toString;
+exports.__esModule = true;

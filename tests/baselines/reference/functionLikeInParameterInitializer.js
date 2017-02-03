@@ -50,3 +50,4 @@ function baz3(func) {
     var foo = "in";
 }
 exports.baz3 = baz3;
+exports.__esModule = true;

@@ -76,3 +76,4 @@ var Utensils;
 (function (Utensils) {
     Utensils[Utensils["Spork"] = 3] = "Spork";
 })(Utensils = exports.Utensils || (exports.Utensils = {}));
+exports.__esModule = true;

@@ -33,6 +33,7 @@ var db = (function () {
     return db;
 }());
 exports.db = db;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [service.js]
 "use strict";
 var db_1 = require("./db");
@@ -51,3 +52,4 @@ MyClass = __decorate([
     __metadata("design:paramtypes", [db_1.db])
 ], MyClass);
 exports.MyClass = MyClass;
+Object.defineProperty(exports, "__esModule", { value: true });

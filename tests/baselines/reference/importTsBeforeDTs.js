@@ -16,6 +16,7 @@ var z2 = foo.y + 10; // Should resolve
 //// [foo_0.js]
 "use strict";
 exports.y = 42;
+exports.__esModule = true;
 //// [foo_1.js]
 "use strict";
 var foo = require("./foo_0");

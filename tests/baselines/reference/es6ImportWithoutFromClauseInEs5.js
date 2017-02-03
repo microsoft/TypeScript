@@ -10,6 +10,7 @@ import "es6ImportWithoutFromClauseInEs5_0";
 //// [es6ImportWithoutFromClauseInEs5_0.js]
 "use strict";
 exports.a = 10;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [es6ImportWithoutFromClauseInEs5_1.js]
 "use strict";
 require("es6ImportWithoutFromClauseInEs5_0");

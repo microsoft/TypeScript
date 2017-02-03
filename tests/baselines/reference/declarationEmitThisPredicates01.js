@@ -38,6 +38,7 @@ var D = (function (_super) {
     return D;
 }(C));
 exports.D = D;
+exports.__esModule = true;
 
 
 //// [declarationEmitThisPredicates01.d.ts]

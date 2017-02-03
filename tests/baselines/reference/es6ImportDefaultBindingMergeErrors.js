@@ -19,8 +19,8 @@ import defaultBinding3 from "./es6ImportDefaultBindingMergeErrors_0"; // SHould 
 //// [es6ImportDefaultBindingMergeErrors_0.js]
 "use strict";
 var a = 10;
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = a;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [es6ImportDefaultBindingMergeErrors_1.js]
 "use strict";
 var es6ImportDefaultBindingMergeErrors_0_1 = require("./es6ImportDefaultBindingMergeErrors_0");

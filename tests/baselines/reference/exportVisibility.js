@@ -22,3 +22,4 @@ function test(foo) {
     return true;
 }
 exports.test = test;
+exports.__esModule = true;

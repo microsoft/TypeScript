@@ -21,3 +21,4 @@ exports.obj = {
         return dis.a != null && dis.b != null && dis.c != null;
     }
 };
+exports.__esModule = true;

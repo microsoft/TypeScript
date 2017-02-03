@@ -304,3 +304,4 @@ __export(require("function"));
 __export(require("function-module"));
 __export(require("class"));
 __export(require("class-module"));
+exports.__esModule = true;

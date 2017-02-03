@@ -11,10 +11,12 @@ export var x: number = nameSpaceBinding.a;
 //// [server.js]
 "use strict";
 exports.a = 10;
+exports.__esModule = true;
 //// [client.js]
 "use strict";
 var nameSpaceBinding = require("./server");
 exports.x = nameSpaceBinding.a;
+exports.__esModule = true;
 
 
 //// [server.d.ts]

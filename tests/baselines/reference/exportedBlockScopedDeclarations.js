@@ -38,4 +38,5 @@ define(["require", "exports"], function (require, exports) {
     (function (NS1) {
         NS1.bar1 = NS1.bar1; // should be compile error
     })(NS1 || (NS1 = {}));
+    exports.__esModule = true;
 });

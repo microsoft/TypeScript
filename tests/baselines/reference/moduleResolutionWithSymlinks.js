@@ -49,10 +49,12 @@ var MyClass = (function () {
     return MyClass;
 }());
 exports.MyClass = MyClass;
+exports.__esModule = true;
 //// [/src/library-b/index.js]
 "use strict";
 var library_a_1 = require("library-a");
 exports.MyClass2 = library_a_1.MyClass;
+exports.__esModule = true;
 //// [/src/app.js]
 "use strict";
 var x;

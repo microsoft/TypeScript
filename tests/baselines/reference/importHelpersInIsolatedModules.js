@@ -66,6 +66,7 @@ tslib_1.__decorate([
 C = tslib_1.__decorate([
     dec
 ], C);
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [script.js]
 "use strict";
 var tslib_1 = require("tslib");

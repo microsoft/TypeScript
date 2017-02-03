@@ -26,6 +26,7 @@ var base = (function () {
 exports.base = base;
 function foo(target, propertyKey, parameterIndex) { }
 exports.foo = foo;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [2.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -61,3 +62,4 @@ C = __decorate([
     __param(0, _0_2.foo)
 ], C);
 exports.C = C;
+Object.defineProperty(exports, "__esModule", { value: true });

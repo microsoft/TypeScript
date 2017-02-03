@@ -19,6 +19,7 @@ function f() {
     return x;
 }
 exports.f = f;
+exports.__esModule = true;
 
 
 //// [b.d.ts]

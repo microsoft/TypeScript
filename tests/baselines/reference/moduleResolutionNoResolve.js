@@ -13,3 +13,4 @@ export var c = '';
 //// [b.js]
 "use strict";
 exports.c = '';
+exports.__esModule = true;

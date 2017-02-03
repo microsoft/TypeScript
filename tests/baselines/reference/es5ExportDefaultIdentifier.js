@@ -9,8 +9,8 @@ export default f;
 "use strict";
 function f() { }
 exports.f = f;
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = f;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [es5ExportDefaultIdentifier.d.ts]

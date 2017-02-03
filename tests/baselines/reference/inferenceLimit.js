@@ -79,3 +79,4 @@ class BrokenClass {
     }
 }
 exports.BrokenClass = BrokenClass;
+Object.defineProperty(exports, "__esModule", { value: true });

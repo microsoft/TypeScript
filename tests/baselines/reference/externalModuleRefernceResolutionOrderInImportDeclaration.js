@@ -23,6 +23,7 @@ file1.bar();
 function foo() { }
 exports.foo = foo;
 ;
+exports.__esModule = true;
 //// [externalModuleRefernceResolutionOrderInImportDeclaration_file3.js]
 "use strict";
 ///<reference path='externalModuleRefernceResolutionOrderInImportDeclaration_file2.ts'/>

@@ -33,12 +33,13 @@ foo;
 "use strict";
 exports.x = 1;
 exports.y = 2;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [t2.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = "hello";
 function foo() { }
 exports.foo = foo;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [t3.js]
 "use strict";
 var x = "x";
@@ -47,6 +48,7 @@ var y = "y";
 exports.y = y;
 var z = "z";
 exports.z = z;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [t4.js]
 "use strict";
 function __export(m) {
@@ -55,6 +57,7 @@ function __export(m) {
 __export(require("./t1"));
 __export(require("./t2"));
 __export(require("./t3"));
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [main.js]
 "use strict";
 var t4_1 = require("./t4");

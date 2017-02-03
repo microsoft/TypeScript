@@ -16,13 +16,13 @@ export default function f2() {
 "use strict";
 function f1() {
 }
-exports.__esModule = true;
 exports["default"] = f1;
+exports.__esModule = true;
 //// [m2.js]
 "use strict";
 var m1_1 = require("./m1");
 function f2() {
     m1_1["default"]();
 }
-exports.__esModule = true;
 exports["default"] = f2;
+exports.__esModule = true;

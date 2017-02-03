@@ -14,9 +14,9 @@ var before = func();
 function func() {
     return func;
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = func;
 var after = func();
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [es5ExportDefaultFunctionDeclaration3.d.ts]

@@ -9,11 +9,10 @@ export default {
 
 //// [multipleExportDefault6.js]
 "use strict";
-exports.__esModule = true;
 exports["default"] = {
     lol: 1
 };
-exports.__esModule = true;
 exports["default"] = {
     lol: 2
 };
+exports.__esModule = true;

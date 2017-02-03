@@ -102,6 +102,7 @@ var h = (function (_super) {
 }(C.A));
 exports.h = h;
 exports.j = C.F6;
+exports.__esModule = true;
 
 
 //// [declFileGenericType.d.ts]

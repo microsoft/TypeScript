@@ -12,9 +12,8 @@ export default {
 "use strict";
 function Foo() {
 }
-exports.__esModule = true;
 exports["default"] = Foo;
-exports.__esModule = true;
 exports["default"] = {
     uhoh: "another default"
 };
+exports.__esModule = true;

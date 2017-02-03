@@ -35,6 +35,7 @@ define(["require", "exports"], function (require, exports) {
         return A;
     }());
     exports.A = A;
+    exports.__esModule = true;
 });
 //// [b.js]
 var __extends = (this && this.__extends) || (function () {
@@ -59,4 +60,5 @@ define(["require", "exports", "./a"], function (require, exports, a_1) {
         return B;
     }(a_1.A));
     exports.B = B;
+    exports.__esModule = true;
 });

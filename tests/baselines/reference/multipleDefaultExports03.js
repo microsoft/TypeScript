@@ -13,12 +13,11 @@ var C = (function () {
     }
     return C;
 }());
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = C;
 var C = (function () {
     function C() {
     }
     return C;
 }());
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = C;
+Object.defineProperty(exports, "__esModule", { value: true });

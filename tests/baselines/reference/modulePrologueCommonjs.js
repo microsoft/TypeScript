@@ -11,3 +11,4 @@ var Foo = (function () {
     return Foo;
 }());
 exports.Foo = Foo;
+exports.__esModule = true;

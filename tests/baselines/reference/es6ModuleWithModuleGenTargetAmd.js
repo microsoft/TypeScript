@@ -22,4 +22,5 @@ define(["require", "exports"], function (require, exports) {
         }
     }
     exports.A = A;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });

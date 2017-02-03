@@ -54,6 +54,7 @@ for ((stuff[n]) of []) {}
 //// [f1.js]
 "use strict";
 exports.x = 1;
+exports.__esModule = true;
 //// [f2.js]
 "use strict";
 // all mutations below are illegal and should be fixed

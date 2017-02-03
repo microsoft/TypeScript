@@ -7,5 +7,5 @@ export default Foo
 "use strict";
 var Foo = From;
 './Foo'; // Syntax error
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Foo;
+Object.defineProperty(exports, "__esModule", { value: true });

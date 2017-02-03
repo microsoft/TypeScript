@@ -28,6 +28,7 @@ function foo() {
     });
 }
 exports.foo = foo;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [script.js]
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {

@@ -34,3 +34,4 @@ exports.bizz = bizz;
 exports.bizz = bizz += 1; // compiles to exports.bizz = bizz += 1
 exports.bizz = bizz -= 1; // similarly
 exports.bizz = ++bizz; // compiles to exports.bizz = ++bizz
+Object.defineProperty(exports, "__esModule", { value: true });

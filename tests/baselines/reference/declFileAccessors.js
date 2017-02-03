@@ -185,6 +185,7 @@ var c1 = (function () {
     return c1;
 }());
 exports.c1 = c1;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [declFileAccessors_1.js]
 /** This is comment for c2 - the global class*/
 var c2 = (function () {

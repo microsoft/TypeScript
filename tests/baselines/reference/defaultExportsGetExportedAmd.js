@@ -12,13 +12,13 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     class Foo {
     }
-    Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = Foo;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [b.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
     function foo() { }
-    Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = foo;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });

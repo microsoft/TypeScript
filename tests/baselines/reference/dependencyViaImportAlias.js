@@ -19,6 +19,7 @@ define(["require", "exports"], function (require, exports) {
         return A;
     }());
     exports.A = A;
+    exports.__esModule = true;
 });
 //// [B.js]
 define(["require", "exports", "A"], function (require, exports, a) {

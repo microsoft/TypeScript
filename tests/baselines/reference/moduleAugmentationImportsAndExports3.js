@@ -45,6 +45,7 @@ var A = (function () {
     return A;
 }());
 exports.A = A;
+exports.__esModule = true;
 //// [f2.js]
 "use strict";
 var B = (function () {
@@ -53,6 +54,7 @@ var B = (function () {
     return B;
 }());
 exports.B = B;
+exports.__esModule = true;
 //// [f3.js]
 "use strict";
 var f1_1 = require("./f1");

@@ -18,6 +18,7 @@ define("a", ["require", "exports"], function (require, exports) {
         return c;
     }());
     exports.c = c;
+    exports.__esModule = true;
 });
 function foo() {
 }

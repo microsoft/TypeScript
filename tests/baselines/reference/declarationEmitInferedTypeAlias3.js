@@ -20,8 +20,8 @@ export default x;
 //// [1.js]
 "use strict";
 var x = "hi" || 5;
-exports.__esModule = true;
 exports["default"] = x;
+exports.__esModule = true;
 
 
 //// [0.d.ts]

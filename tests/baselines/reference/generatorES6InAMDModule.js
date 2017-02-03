@@ -10,4 +10,5 @@ define(["require", "exports"], function (require, exports) {
         yield;
     }
     exports.foo = foo;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });

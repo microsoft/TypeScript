@@ -16,6 +16,7 @@ var a;
 })(a = exports.a || (exports.a = {}));
 var b = a.x;
 exports.bVal = b;
+exports.__esModule = true;
 
 
 //// [internalAliasVarInsideTopLevelModuleWithoutExport.d.ts]

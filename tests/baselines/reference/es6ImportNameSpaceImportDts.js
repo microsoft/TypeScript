@@ -18,10 +18,12 @@ var c = (function () {
 }());
 exports.c = c;
 ;
+exports.__esModule = true;
 //// [client.js]
 "use strict";
 var nameSpaceBinding = require("./server");
 exports.x = new nameSpaceBinding.c();
+exports.__esModule = true;
 
 
 //// [server.d.ts]

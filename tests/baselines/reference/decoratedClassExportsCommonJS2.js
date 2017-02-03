@@ -20,3 +20,4 @@ Testing123 = Testing123_1 = __decorate([
 ], Testing123);
 exports.Testing123 = Testing123;
 var Testing123_1;
+Object.defineProperty(exports, "__esModule", { value: true });

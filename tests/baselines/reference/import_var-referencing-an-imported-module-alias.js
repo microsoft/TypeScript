@@ -19,6 +19,7 @@ define(["require", "exports"], function (require, exports) {
         return Host;
     }());
     exports.Host = Host;
+    exports.__esModule = true;
 });
 //// [consumer.js]
 define(["require", "exports", "host"], function (require, exports, host) {

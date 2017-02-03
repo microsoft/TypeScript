@@ -32,8 +32,8 @@ var db = (function () {
     };
     return db;
 }());
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = db;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [service.js]
 "use strict";
 var db_1 = require("./db");
@@ -52,3 +52,4 @@ MyClass = __decorate([
     __metadata("design:paramtypes", [Object])
 ], MyClass);
 exports.MyClass = MyClass;
+Object.defineProperty(exports, "__esModule", { value: true });

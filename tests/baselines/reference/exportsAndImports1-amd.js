@@ -60,6 +60,7 @@ define(["require", "exports"], function (require, exports) {
     exports.M = M;
     var a = M.x;
     exports.a = a;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [t2.js]
 define(["require", "exports", "./t1"], function (require, exports, t1_1) {
@@ -70,6 +71,7 @@ define(["require", "exports", "./t1"], function (require, exports, t1_1) {
     exports.E = t1_1.E;
     exports.M = t1_1.M;
     exports.a = t1_1.a;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [t3.js]
 define(["require", "exports", "./t1"], function (require, exports, t1_1) {
@@ -80,4 +82,5 @@ define(["require", "exports", "./t1"], function (require, exports, t1_1) {
     exports.E = t1_1.E;
     exports.M = t1_1.M;
     exports.a = t1_1.a;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });

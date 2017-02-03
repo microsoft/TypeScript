@@ -20,4 +20,5 @@ export class Foo {}
         return Foo;
     }());
     exports.Foo = Foo;
+    exports.__esModule = true;
 });

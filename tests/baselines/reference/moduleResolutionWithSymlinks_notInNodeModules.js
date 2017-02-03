@@ -19,12 +19,14 @@ x + x2;
 // See GH#10364. 
 "use strict";
 exports.x = 0;
+exports.__esModule = true;
 //// [/src/bin/shared2/abc.js]
 // When symlinked files are not in node_modules, realpath is not used.
 // A symlink file acts like the real thing. So, 2 symlinks act like 2 different files.
 // See GH#10364. 
 "use strict";
 exports.x = 0;
+exports.__esModule = true;
 //// [/src/bin/app.js]
 "use strict";
 var abc_1 = require("./shared/abc");

@@ -1107,6 +1107,7 @@ define(["require", "exports"], function (require, exports) {
         ;
     })(eM = exports.eM || (exports.eM = {}));
     ;
+    exports.__esModule = true;
 });
 
 

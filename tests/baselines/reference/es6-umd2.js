@@ -32,4 +32,5 @@ export class A
         }
     }
     exports.A = A;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });

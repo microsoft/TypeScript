@@ -16,10 +16,12 @@ var Foo = (function () {
     return Foo;
 }());
 exports.Foo = Foo;
+exports.__esModule = true;
 //// [declFileAliasUseBeforeDeclaration_test.js]
 "use strict";
 function bar(a) { }
 exports.bar = bar;
+exports.__esModule = true;
 
 
 //// [declFileAliasUseBeforeDeclaration_foo.d.ts]

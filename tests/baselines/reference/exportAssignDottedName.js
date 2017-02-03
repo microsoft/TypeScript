@@ -16,6 +16,7 @@ function x() {
     return true;
 }
 exports.x = x;
+exports.__esModule = true;
 //// [foo2.js]
 "use strict";
 var foo1 = require("./foo1");

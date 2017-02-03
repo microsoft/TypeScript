@@ -38,3 +38,4 @@ __decorate([
     __metadata("design:type", Object)
 ], B.prototype, "x", void 0);
 exports.B = B;
+Object.defineProperty(exports, "__esModule", { value: true });

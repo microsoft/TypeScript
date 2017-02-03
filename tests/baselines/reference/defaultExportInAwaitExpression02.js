@@ -15,8 +15,8 @@ import x from './a';
 //// [a.js]
 "use strict";
 const x = new Promise((resolve, reject) => { resolve({}); });
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = x;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [b.js]
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {

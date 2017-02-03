@@ -25,8 +25,8 @@ var Service = (function () {
     }
     return Service;
 }());
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Service;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [component.js]
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {

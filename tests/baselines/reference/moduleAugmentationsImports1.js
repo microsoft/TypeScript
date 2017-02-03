@@ -51,6 +51,7 @@ define("a", ["require", "exports"], function (require, exports) {
         return A;
     }());
     exports.A = A;
+    exports.__esModule = true;
 });
 define("b", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -60,6 +61,7 @@ define("b", ["require", "exports"], function (require, exports) {
         return B;
     }());
     exports.B = B;
+    exports.__esModule = true;
 });
 /// <reference path="c.d.ts"/>
 define("d", ["require", "exports", "a"], function (require, exports, a_1) {

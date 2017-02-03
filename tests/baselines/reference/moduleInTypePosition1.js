@@ -19,6 +19,7 @@ var Promise = (function () {
     return Promise;
 }());
 exports.Promise = Promise;
+exports.__esModule = true;
 //// [moduleInTypePosition1_1.js]
 "use strict";
 var x = function (w1) { };

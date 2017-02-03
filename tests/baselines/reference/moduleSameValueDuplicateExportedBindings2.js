@@ -25,6 +25,7 @@ var Animals;
 "use strict";
 var c_1 = require("./c");
 exports.Animals = c_1.Animals;
+exports.__esModule = true;
 //// [a.js]
 "use strict";
 function __export(m) {
@@ -32,3 +33,4 @@ function __export(m) {
 }
 __export(require("./b"));
 __export(require("./c"));
+exports.__esModule = true;

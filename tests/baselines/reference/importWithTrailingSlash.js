@@ -22,12 +22,12 @@ aIndex.aIndex;
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
 exports["default"] = { a: 0 };
+exports.__esModule = true;
 //// [index.js]
 "use strict";
-exports.__esModule = true;
 exports["default"] = { aIndex: 0 };
+exports.__esModule = true;
 //// [test.js]
 "use strict";
 var _1 = require(".");

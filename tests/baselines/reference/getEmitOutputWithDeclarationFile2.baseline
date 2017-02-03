@@ -9,6 +9,7 @@ var Foo = (function () {
     return Foo;
 }());
 exports.Foo = Foo;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 EmitSkipped: false
 FileName : /tests/cases/fourslash/inputFile3.js

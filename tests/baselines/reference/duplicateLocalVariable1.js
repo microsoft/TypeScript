@@ -636,3 +636,4 @@ exports.tests = (function () {
     }, "Codepoint at index: 3 has control value: 8"));
     return testRunner;
 })();
+exports.__esModule = true;

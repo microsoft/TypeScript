@@ -30,6 +30,7 @@ var A = (function () {
 }());
 exports.A = A;
 ;
+exports.__esModule = true;
 //// [f2.js]
 "use strict";
 //// [f3.js]

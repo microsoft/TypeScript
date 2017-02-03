@@ -23,4 +23,5 @@ define(["require", "exports"], function (require, exports) {
         return DbSet;
     }());
     exports.DbSet = DbSet;
+    exports.__esModule = true;
 });

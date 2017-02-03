@@ -22,6 +22,7 @@ var a;
 var b = a.foo;
 exports.bVal = b(10);
 exports.bVal2 = b;
+exports.__esModule = true;
 
 
 //// [internalAliasFunctionInsideTopLevelModuleWithoutExport.d.ts]

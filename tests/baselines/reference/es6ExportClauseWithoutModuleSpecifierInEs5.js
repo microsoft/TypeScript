@@ -33,6 +33,7 @@ var m;
     m.x = 10;
 })(m = exports.m || (exports.m = {}));
 exports.x = 10;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [client.js]
 "use strict";
 var server_1 = require("./server");
@@ -43,6 +44,7 @@ var server_3 = require("./server");
 exports.instantiatedModule = server_3.m;
 var server_4 = require("./server");
 exports.x = server_4.x;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [server.d.ts]

@@ -10,9 +10,8 @@ export default function f() {
 "use strict";
 function f() {
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = f;
 function f() {
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = f;
+Object.defineProperty(exports, "__esModule", { value: true });

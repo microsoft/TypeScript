@@ -26,8 +26,8 @@ var a = (function () {
     }
     return a;
 }());
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = a;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [client.js]
 "use strict";
 var server_1 = require("./server");
@@ -42,6 +42,7 @@ var server_5 = require("./server");
 exports.x5 = new server_5.default();
 var server_6 = require("./server");
 exports.x6 = new server_6.default();
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [server.d.ts]

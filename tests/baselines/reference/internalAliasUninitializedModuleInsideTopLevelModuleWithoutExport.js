@@ -15,6 +15,7 @@ x.foo();
 //// [internalAliasUninitializedModuleInsideTopLevelModuleWithoutExport.js]
 "use strict";
 exports.x.foo();
+exports.__esModule = true;
 
 
 //// [internalAliasUninitializedModuleInsideTopLevelModuleWithoutExport.d.ts]

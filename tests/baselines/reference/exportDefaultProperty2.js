@@ -25,8 +25,8 @@ var C = (function () {
     }
     return C;
 }());
-exports.__esModule = true;
 exports["default"] = C.B;
+exports.__esModule = true;
 //// [b.js]
 "use strict";
 var a_1 = require("./a");

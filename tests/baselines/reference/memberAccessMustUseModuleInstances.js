@@ -26,6 +26,7 @@ define(["require", "exports"], function (require, exports) {
         return Promise;
     }());
     exports.Promise = Promise;
+    exports.__esModule = true;
 });
 //// [memberAccessMustUseModuleInstances_1.js]
 define(["require", "exports", "memberAccessMustUseModuleInstances_0"], function (require, exports, WinJS) {

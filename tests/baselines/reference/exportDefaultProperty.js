@@ -55,12 +55,12 @@ var A;
         B.b = 0;
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));
-exports.__esModule = true;
 exports["default"] = A.B;
+exports.__esModule = true;
 //// [b.js]
 "use strict";
-exports.__esModule = true;
 exports["default"] = "foo".length;
+exports.__esModule = true;
 //// [index.js]
 "use strict";
 /// <reference path="declarations.d.ts" />

@@ -11,10 +11,10 @@ export default function foo() {}
 "use strict";
 class Foo {
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Foo;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [b.js]
 "use strict";
 function foo() { }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = foo;
+Object.defineProperty(exports, "__esModule", { value: true });

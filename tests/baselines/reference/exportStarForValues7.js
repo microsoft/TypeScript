@@ -20,6 +20,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.x = 1;
+    exports.__esModule = true;
 });
 //// [file3.js]
 define(["require", "exports", "file2"], function (require, exports, file2_1) {
@@ -29,4 +30,5 @@ define(["require", "exports", "file2"], function (require, exports, file2_1) {
     }
     __export(file2_1);
     exports.x = 1;
+    exports.__esModule = true;
 });

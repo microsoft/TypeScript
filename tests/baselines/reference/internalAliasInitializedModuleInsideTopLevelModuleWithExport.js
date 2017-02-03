@@ -25,6 +25,7 @@ var a;
 })(a = exports.a || (exports.a = {}));
 exports.b = a.b;
 exports.x = new exports.b.c();
+exports.__esModule = true;
 
 
 //// [internalAliasInitializedModuleInsideTopLevelModuleWithExport.d.ts]

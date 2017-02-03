@@ -104,3 +104,4 @@ var MyClass4 = (function (_super) {
     return MyClass4;
 }(getExportedClass(undefined)));
 exports.MyClass4 = MyClass4;
+exports.__esModule = true;

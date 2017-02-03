@@ -28,6 +28,7 @@ var set = {
 exports.set = set;
 var get = 10;
 exports.get = get;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [t2.js]
 "use strict";
 //// [t3.js]

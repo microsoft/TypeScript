@@ -26,6 +26,7 @@ var A = (function () {
     return A;
 }());
 exports.A = A;
+exports.__esModule = true;
 //// [f2.js]
 "use strict";
 var x = [1];

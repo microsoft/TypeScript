@@ -68,6 +68,7 @@ C = tslib_1.__decorate([
 var o = { a: 1 };
 var y = tslib_1.__assign({}, o);
 var x = tslib_1.__rest(y, []);
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [script.js]
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||

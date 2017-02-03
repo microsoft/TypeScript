@@ -25,6 +25,7 @@ define(["require", "exports"], function (require, exports) {
         return A;
     }());
     exports.A = A;
+    exports.__esModule = true;
 });
 //// [b.js]
 define(["require", "exports"], function (require, exports) {

@@ -11,6 +11,7 @@ import {x} from "./a"
 //// [a.js]
 "use strict";
 exports.x = 1;
+exports.__esModule = true;
 //// [b.js]
 "use strict";
 (function () { return 1; }());

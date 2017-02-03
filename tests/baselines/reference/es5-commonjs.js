@@ -24,5 +24,5 @@ var A = (function () {
     };
     return A;
 }());
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = A;
+Object.defineProperty(exports, "__esModule", { value: true });

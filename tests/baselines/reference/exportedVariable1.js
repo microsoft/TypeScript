@@ -8,4 +8,5 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.foo = { name: "Bill" };
     var upper = exports.foo.name.toUpperCase();
+    exports.__esModule = true;
 });

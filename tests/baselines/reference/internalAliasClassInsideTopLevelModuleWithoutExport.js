@@ -28,6 +28,7 @@ var x;
 var xc = x.c;
 exports.cProp = new xc();
 var cReturnVal = exports.cProp.foo(10);
+exports.__esModule = true;
 
 
 //// [internalAliasClassInsideTopLevelModuleWithoutExport.d.ts]

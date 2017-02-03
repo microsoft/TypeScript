@@ -18,16 +18,19 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.x = "x";
     exports.y = "y";
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [t2.js]
 define(["require", "exports", "./t1"], function (require, exports, t1_1) {
     "use strict";
     exports.y = t1_1.x;
     exports.x = t1_1.y;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [t3.js]
 define(["require", "exports", "./t1"], function (require, exports, t1_1) {
     "use strict";
     exports.y = t1_1.x;
     exports.x = t1_1.y;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });

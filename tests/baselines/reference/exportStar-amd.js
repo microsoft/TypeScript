@@ -34,14 +34,15 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.x = 1;
     exports.y = 2;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [t2.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = "hello";
     function foo() { }
     exports.foo = foo;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [t3.js]
 define(["require", "exports"], function (require, exports) {
@@ -52,6 +53,7 @@ define(["require", "exports"], function (require, exports) {
     exports.y = y;
     var z = "z";
     exports.z = z;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [t4.js]
 define(["require", "exports", "./t1", "./t2", "./t3"], function (require, exports, t1_1, t2_1, t3_1) {
@@ -62,6 +64,7 @@ define(["require", "exports", "./t1", "./t2", "./t3"], function (require, export
     __export(t1_1);
     __export(t2_1);
     __export(t3_1);
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [main.js]
 define(["require", "exports", "./t4"], function (require, exports, t4_1) {

@@ -28,8 +28,8 @@ define(["require", "exports"], function (require, exports) {
     exports.a = 10;
     exports.x = exports.a;
     exports.m = exports.a;
-    Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = {};
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [client.js]
 define(["require", "exports", "server", "server", "server", "server", "server"], function (require, exports, server_1, server_2, server_3, server_4, server_5) {
@@ -40,6 +40,7 @@ define(["require", "exports", "server", "server", "server", "server", "server"],
     exports.x1 = server_3.a;
     exports.x1 = server_4.x;
     exports.x1 = server_5.m;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 
 

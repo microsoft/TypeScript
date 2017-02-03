@@ -19,6 +19,7 @@ var Super = (function () {
     return Super;
 }());
 exports.Super = Super;
+exports.__esModule = true;
 //// [importUsedInExtendsList1_1.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {

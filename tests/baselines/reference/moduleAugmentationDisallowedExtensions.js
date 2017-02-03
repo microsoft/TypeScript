@@ -50,6 +50,7 @@ import "./x";
 //// [x0.js]
 "use strict";
 exports.a = 1;
+exports.__esModule = true;
 //// [x.js]
 "use strict";
 var N1;
@@ -59,9 +60,11 @@ var N1;
 //// [observable.js]
 "use strict";
 exports.x = 1;
+exports.__esModule = true;
 //// [test.js]
 "use strict";
 exports.b = 1;
+exports.__esModule = true;
 //// [main.js]
 "use strict";
 require("./x");

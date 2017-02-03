@@ -17,6 +17,7 @@ var Enhancement = (function () {
     return Enhancement;
 }());
 exports.Enhancement = Enhancement;
+exports.__esModule = true;
 
 
 //// [declFileClassWithStaticMethodReturningConstructor.d.ts]

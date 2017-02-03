@@ -20,6 +20,7 @@ export var a = function () {
 
 //// [aliasUsedAsNameValue_0.js]
 "use strict";
+exports.__esModule = true;
 //// [aliasUsedAsNameValue_1.js]
 "use strict";
 function b(a) { return null; }

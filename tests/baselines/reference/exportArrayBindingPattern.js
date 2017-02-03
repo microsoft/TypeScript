@@ -9,3 +9,4 @@ export { a, b };
 var _a = [1, 2, 3], a = _a[0], b = _a[2];
 exports.a = a;
 exports.b = b;
+exports.__esModule = true;

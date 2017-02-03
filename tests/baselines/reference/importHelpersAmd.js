@@ -25,6 +25,7 @@ define(["require", "exports"], function (require, exports) {
         return A;
     }());
     exports.A = A;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [b.js]
 define(["require", "exports", "tslib", "./a"], function (require, exports, tslib_1, a_1) {
@@ -37,4 +38,5 @@ define(["require", "exports", "tslib", "./a"], function (require, exports, tslib
         return B;
     }(a_1.A));
     exports.B = B;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });

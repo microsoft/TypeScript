@@ -38,6 +38,7 @@ define(["require", "exports", "./exporter"], function (require, exports, e) {
         return new e.w();
     }
     exports.w = w;
+    exports.__esModule = true;
 });
 
 

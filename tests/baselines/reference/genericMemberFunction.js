@@ -59,4 +59,5 @@ define(["require", "exports"], function (require, exports) {
         return BuildResult;
     }());
     exports.BuildResult = BuildResult;
+    exports.__esModule = true;
 });

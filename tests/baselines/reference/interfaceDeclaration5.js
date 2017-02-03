@@ -12,4 +12,5 @@ define(["require", "exports"], function (require, exports) {
         return C1;
     }());
     exports.C1 = C1;
+    exports.__esModule = true;
 });

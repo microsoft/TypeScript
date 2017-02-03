@@ -37,3 +37,4 @@ var M;
     M.bar7 = { a: 1 }.a;
     M.bar8 = { a: 1 }.a;
 })(M = exports.M || (exports.M = {}));
+Object.defineProperty(exports, "__esModule", { value: true });

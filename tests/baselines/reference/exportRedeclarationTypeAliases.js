@@ -7,3 +7,4 @@ export function Foo(): any {}
 "use strict";
 function Foo() { }
 exports.Foo = Foo;
+exports.__esModule = true;

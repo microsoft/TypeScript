@@ -23,8 +23,8 @@ var x: number = defaultBinding6;
 //// [es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0.js]
 "use strict";
 var a = 10;
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = a;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [es6ImportDefaultBindingFollowedWithNamedImport1InEs5_1.js]
 "use strict";
 var es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_1 = require("./es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
