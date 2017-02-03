@@ -2498,6 +2498,7 @@ var privateModule;
         return privateClassWithPrivateModuleSetAccessorTypes;
     }());
 })(privateModule || (privateModule = {}));
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [privacyAccessorDeclFile_GlobalFile.js]
 var publicClassInGlobal = (function () {
     function publicClassInGlobal() {

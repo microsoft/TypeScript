@@ -11,3 +11,4 @@ var f = 10;
 function f() {
 }
 exports.f = f;
+exports.__esModule = true;

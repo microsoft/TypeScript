@@ -82,3 +82,4 @@ var publicClassT = (function () {
     return publicClassT;
 }());
 exports.publicClassT = publicClassT;
+exports.__esModule = true;

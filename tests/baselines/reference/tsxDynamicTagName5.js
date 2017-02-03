@@ -45,3 +45,4 @@ var Text = (function (_super) {
     return Text;
 }(React.Component));
 exports.Text = Text;
+exports.__esModule = true;

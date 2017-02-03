@@ -16,9 +16,11 @@ import { bar } from "bar";
 "use strict";
 function foo() { }
 exports.foo = foo;
+exports.__esModule = true;
 //// [bar.js]
 "use strict";
 function bar() { }
 exports.bar = bar;
+exports.__esModule = true;
 //// [a.js]
 "use strict";

@@ -21,7 +21,7 @@ var Member = (function () {
     return Member;
 }());
 exports.Member = Member;
-exports.__esModule = true;
 exports["default"] = Member;
+exports.__esModule = true;
 //// [a.js]
 "use strict";

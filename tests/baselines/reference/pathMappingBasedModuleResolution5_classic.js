@@ -29,21 +29,25 @@ export var z1 = 1;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.x = 1;
+    exports.__esModule = true;
 });
 //// [file2.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.y = 1;
+    exports.__esModule = true;
 });
 //// [file3.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.z = 1;
+    exports.__esModule = true;
 });
 //// [file4.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.z1 = 1;
+    exports.__esModule = true;
 });
 //// [file1.js]
 define(["require", "exports", "folder2/file1", "folder3/file2", "components/file3", "file4"], function (require, exports, file1_1, file2_1, file3_1, file4_1) {

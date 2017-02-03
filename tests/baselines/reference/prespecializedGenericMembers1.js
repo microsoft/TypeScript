@@ -39,3 +39,4 @@ var catThing = {
     barry: cat
 };
 var catBag = new CatBag(catThing);
+exports.__esModule = true;

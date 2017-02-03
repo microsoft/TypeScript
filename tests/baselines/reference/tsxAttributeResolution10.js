@@ -48,4 +48,5 @@ define(["require", "exports"], function (require, exports) {
     <MyComponent bar={true}/>;
     // Should be ok
     <MyComponent data-bar='hello'/>;
+    exports.__esModule = true;
 });

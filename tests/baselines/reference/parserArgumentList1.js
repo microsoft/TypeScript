@@ -13,3 +13,4 @@ function removeClass(node, className) {
     });
 }
 exports.removeClass = removeClass;
+exports.__esModule = true;

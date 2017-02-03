@@ -41,6 +41,7 @@ var Cls = (function () {
     return Cls;
 }());
 exports.Cls = Cls;
+exports.__esModule = true;
 //// [mod1.js]
 /// <reference types="lib" />
 "use strict";
@@ -53,6 +54,7 @@ require("./mod1");
 exports.cls = main_1.Cls;
 exports.foo = new main_1.Cls().foo();
 exports.bar = main_1.Cls.bar();
+exports.__esModule = true;
 
 
 //// [main.d.ts]

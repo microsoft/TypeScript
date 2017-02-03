@@ -89,3 +89,4 @@ exports.foo = foo;
     }());
     foo.C = C;
 })(foo = exports.foo || (exports.foo = {}));
+exports.__esModule = true;

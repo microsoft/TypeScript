@@ -14,3 +14,4 @@ var Logger = (function () {
     return Logger;
 }());
 exports.Logger = Logger;
+exports.__esModule = true;

@@ -56,6 +56,7 @@ define("ref/a", ["require", "exports"], function (require, exports) {
         return A;
     }());
     exports.A = A;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 define("b", ["require", "exports", "ref/a"], function (require, exports, a_1) {
     "use strict";
@@ -67,6 +68,7 @@ define("b", ["require", "exports", "ref/a"], function (require, exports, a_1) {
         return B;
     }(a_1.A));
     exports.B = B;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //# sourceMappingURL=all.js.map
 

@@ -10,5 +10,6 @@ import y = require("./a");
 //// [a.js]
 "use strict";
 exports.x = 1;
+exports.__esModule = true;
 //// [b.js]
 "use strict";

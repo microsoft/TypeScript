@@ -40,4 +40,5 @@ define(["require", "exports"], function (require, exports) {
     exports.MyComponent = MyComponent;
     <MyComponent foo="bar"/>; // ok  
     <MyComponent foo={0}/>; // should be an error
+    exports.__esModule = true;
 });

@@ -504,4 +504,5 @@ define(["require", "exports"], function (require, exports) {
         });
         return C8_private;
     }());
+    Object.defineProperty(exports, "__esModule", { value: true });
 });

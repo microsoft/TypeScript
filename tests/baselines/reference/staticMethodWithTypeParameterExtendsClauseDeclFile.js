@@ -52,6 +52,7 @@ var publicClassWithWithPrivateTypeParameters = (function () {
     return publicClassWithWithPrivateTypeParameters;
 }());
 exports.publicClassWithWithPrivateTypeParameters = publicClassWithWithPrivateTypeParameters;
+exports.__esModule = true;
 
 
 //// [staticMethodWithTypeParameterExtendsClauseDeclFile.d.ts]

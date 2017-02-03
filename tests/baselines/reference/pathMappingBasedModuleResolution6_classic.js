@@ -15,6 +15,7 @@ export {x} from "../file2";
 define(["require", "exports", "../file2"], function (require, exports, file2_1) {
     "use strict";
     exports.x = file2_1.x;
+    exports.__esModule = true;
 });
 //// [file1.js]
 define(["require", "exports", "./project/file3"], function (require, exports, file3_1) {

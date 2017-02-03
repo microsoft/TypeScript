@@ -29,6 +29,7 @@ exports.Calculator = Calculator;
 function test() {
 }
 exports.test = test;
+exports.__esModule = true;
 //// [file2.js]
 "use strict";
 var file1_1 = require("./file1");

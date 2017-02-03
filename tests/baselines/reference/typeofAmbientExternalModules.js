@@ -26,6 +26,7 @@ var C = (function () {
     return C;
 }());
 exports.C = C;
+exports.__esModule = true;
 //// [typeofAmbientExternalModules_1.js]
 "use strict";
 var D = (function () {

@@ -86,3 +86,4 @@ function foo() { }
     }());
     foo.C = C;
 })(foo || (foo = {}));
+exports.__esModule = true;

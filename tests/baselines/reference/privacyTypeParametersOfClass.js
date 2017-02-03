@@ -108,3 +108,4 @@ var privateClassWithPublicTypeParametersWithoutExtends = (function () {
     };
     return privateClassWithPublicTypeParametersWithoutExtends;
 }());
+exports.__esModule = true;

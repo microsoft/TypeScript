@@ -18,6 +18,7 @@ use(foo);
 //// [existingModule.js]
 "use strict";
 exports.x = 1;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [test.js]
 "use strict";
 const existingModule_1 = require("./existingModule");

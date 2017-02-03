@@ -18,6 +18,7 @@ function foo() {
     return new classes(null);
 }
 exports.foo = foo;
+exports.__esModule = true;
 //// [file2.js]
 "use strict";
 var f = require("./file1");

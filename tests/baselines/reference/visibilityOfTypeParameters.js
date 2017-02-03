@@ -17,6 +17,7 @@ var MyClass = (function () {
     return MyClass;
 }());
 exports.MyClass = MyClass;
+exports.__esModule = true;
 
 
 //// [visibilityOfTypeParameters.d.ts]

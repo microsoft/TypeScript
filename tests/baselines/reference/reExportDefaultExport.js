@@ -18,9 +18,9 @@ foo();
 "use strict";
 function f() {
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = f;
 exports.f = f;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [m2.js]
 "use strict";
 var m1_1 = require("./m1");

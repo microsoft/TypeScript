@@ -1027,6 +1027,7 @@ var privateModule;
     function privateFunctionWithPrivateModuleParameterTypes(param) {
     }
 })(privateModule || (privateModule = {}));
+exports.__esModule = true;
 //// [privacyFunctionParameterDeclFile_GlobalFile.js]
 var publicClassInGlobal = (function () {
     function publicClassInGlobal() {

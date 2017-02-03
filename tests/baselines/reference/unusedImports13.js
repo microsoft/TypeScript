@@ -25,3 +25,4 @@ declare global {
 "use strict";
 var React = require("react");
 exports.FooComponent = <div></div>;
+exports.__esModule = true;

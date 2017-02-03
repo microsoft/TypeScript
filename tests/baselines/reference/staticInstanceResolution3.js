@@ -23,6 +23,7 @@ var Promise = (function () {
     return Promise;
 }());
 exports.Promise = Promise;
+exports.__esModule = true;
 //// [staticInstanceResolution3_1.js]
 "use strict";
 ///<reference path='staticInstanceResolution3_0.ts'/>

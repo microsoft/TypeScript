@@ -264,3 +264,4 @@ var privateModule;
     }());
     privateModule.publicClassInPrivateModuleT = publicClassInPrivateModuleT;
 })(privateModule || (privateModule = {}));
+exports.__esModule = true;

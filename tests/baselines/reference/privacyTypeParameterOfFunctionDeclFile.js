@@ -815,3 +815,4 @@ var privateModule;
     function privateFunctionWithPublicTypeParametersWithoutExtends() {
     }
 })(privateModule || (privateModule = {}));
+exports.__esModule = true;

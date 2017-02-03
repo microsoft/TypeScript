@@ -28,6 +28,7 @@ define(["require", "exports"], function (require, exports) {
         return Promise;
     }());
     exports.Promise = Promise;
+    exports.__esModule = true;
 });
 //// [staticInstanceResolution5_1.js]
 define(["require", "exports"], function (require, exports) {

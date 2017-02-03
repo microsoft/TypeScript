@@ -15,6 +15,7 @@ export {x} from "../file2";
 "use strict";
 var file2_1 = require("../file2");
 exports.x = file2_1.x;
+exports.__esModule = true;
 //// [file1.js]
 "use strict";
 var file3_1 = require("./project/file3");

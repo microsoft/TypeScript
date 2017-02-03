@@ -382,3 +382,4 @@ var privateModule;
         return privateClassWithPublicTypeParametersWithoutExtends;
     }());
 })(privateModule || (privateModule = {}));
+exports.__esModule = true;

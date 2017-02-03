@@ -55,6 +55,7 @@ var Button = (function (_super) {
     return Button;
 }(React.Component));
 exports.Button = Button;
+exports.__esModule = true;
 //// [app.jsx]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -81,3 +82,4 @@ var App = (function (_super) {
     return App;
 }(React.Component));
 exports.App = App;
+exports.__esModule = true;

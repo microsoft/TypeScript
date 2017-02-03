@@ -24,3 +24,4 @@ var NullLogger = (function () {
     return NullLogger;
 }());
 exports.NullLogger = NullLogger;
+exports.__esModule = true;

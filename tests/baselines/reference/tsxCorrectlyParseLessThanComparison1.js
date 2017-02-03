@@ -44,3 +44,4 @@ var ShortDetails = (function (_super) {
     return ShortDetails;
 }(React.Component));
 exports.ShortDetails = ShortDetails;
+exports.__esModule = true;

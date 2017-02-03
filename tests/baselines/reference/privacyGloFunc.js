@@ -983,4 +983,5 @@ define(["require", "exports"], function (require, exports) {
         return new C5_private(); //error
     }
     exports.f12_public = f12_public;
+    exports.__esModule = true;
 });

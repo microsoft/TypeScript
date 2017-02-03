@@ -14,6 +14,7 @@ function foo() {
     var x = { test: exports.test };
 }
 exports.foo = foo;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [shorthandOfExportedEntity02_targetES5_CommonJS.d.ts]

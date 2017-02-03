@@ -574,6 +574,7 @@ var privateModule;
     }());
     var privateVarWithPrivateModulePropertyTypes;
 })(privateModule || (privateModule = {}));
+exports.__esModule = true;
 //// [privacyVarDeclFile_GlobalFile.js]
 var publicClassInGlobal = (function () {
     function publicClassInGlobal() {

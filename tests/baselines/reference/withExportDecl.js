@@ -99,6 +99,7 @@ define(["require", "exports"], function (require, exports) {
     exports.eVar2 = 10;
     var eVar22;
     exports.eVar3 = 10;
+    exports.__esModule = true;
 });
 
 

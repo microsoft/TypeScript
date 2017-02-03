@@ -60,6 +60,7 @@ define(["require", "exports"], function (require, exports) {
         return c_public;
     }());
     exports.c_public = c_public;
+    exports.__esModule = true;
 });
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_require1.js]
 define(["require", "exports"], function (require, exports) {
@@ -70,6 +71,7 @@ define(["require", "exports"], function (require, exports) {
         return c_public;
     }());
     exports.c_public = c_public;
+    exports.__esModule = true;
 });
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_core.js]
 define(["require", "exports", "m", "m2", "privacyTopLevelAmbientExternalModuleImportWithoutExport_require"], function (require, exports, im_private_mi_private, im_private_mu_private, im_private_mi_public) {
@@ -83,6 +85,7 @@ define(["require", "exports", "m", "m2", "privacyTopLevelAmbientExternalModuleIm
     exports.publicUse_im_private_mi_public = new im_private_mi_public.c_public();
     var privateUse_im_private_mi_public = new im_private_mi_public.c_public();
     exports.publicUse_im_private_mi_public = new im_private_mi_public.c_public();
+    exports.__esModule = true;
 });
 
 

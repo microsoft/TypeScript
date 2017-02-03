@@ -35,6 +35,7 @@ exports.test = test;
 function test2() {
 }
 exports.test2 = test2;
+exports.__esModule = true;
 //// [file2.js]
 "use strict";
 var file1_1 = require("./file1");

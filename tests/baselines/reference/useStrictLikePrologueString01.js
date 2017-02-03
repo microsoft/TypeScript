@@ -12,3 +12,4 @@ export function f() {
 function f() {
 }
 exports.f = f;
+Object.defineProperty(exports, "__esModule", { value: true });

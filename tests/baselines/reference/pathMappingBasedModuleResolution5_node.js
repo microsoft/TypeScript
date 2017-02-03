@@ -28,12 +28,15 @@ export var z1 = 1;
 //// [file1.js]
 "use strict";
 exports.x = 1;
+exports.__esModule = true;
 //// [file2.js]
 "use strict";
 exports.y = 1;
+exports.__esModule = true;
 //// [file4.js]
 "use strict";
 exports.z1 = 1;
+exports.__esModule = true;
 //// [file1.js]
 "use strict";
 var file1_1 = require("folder2/file1");

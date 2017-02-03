@@ -5,4 +5,5 @@ export var x = 0;
 //// [noImplicitUseStrict_amd.js]
 define(["require", "exports"], function (require, exports) {
     exports.x = 0;
+    exports.__esModule = true;
 });

@@ -17,6 +17,7 @@ function main() {
 "use strict";
 function mkdirSync(path, mode) { }
 exports.mkdirSync = mkdirSync;
+exports.__esModule = true;
 //// [voidAsNonAmbiguousReturnType_1.js]
 "use strict";
 ///<reference path='voidAsNonAmbiguousReturnType_0.ts'/>

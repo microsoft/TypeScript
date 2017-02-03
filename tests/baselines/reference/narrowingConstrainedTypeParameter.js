@@ -30,3 +30,4 @@ function speak(pet, voice) {
     return voice(pet);
 }
 exports.speak = speak;
+exports.__esModule = true;

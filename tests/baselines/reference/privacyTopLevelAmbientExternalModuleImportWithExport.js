@@ -59,6 +59,7 @@ var c_public = (function () {
     return c_public;
 }());
 exports.c_public = c_public;
+exports.__esModule = true;
 //// [privacyTopLevelAmbientExternalModuleImportWithExport_require1.js]
 "use strict";
 var c_public = (function () {
@@ -67,6 +68,7 @@ var c_public = (function () {
     return c_public;
 }());
 exports.c_public = c_public;
+exports.__esModule = true;
 //// [privacyTopLevelAmbientExternalModuleImportWithExport_core.js]
 "use strict";
 ///<reference path='privacyTopLevelAmbientExternalModuleImportWithExport_require2.ts'/>
@@ -85,6 +87,7 @@ var privateUse_im_public_mi_public = new exports.im_public_mi_public.c_private()
 exports.publicUse_im_public_mi_public = new exports.im_public_mi_public.c_private();
 var privateUse_im_public_mi_public = new exports.im_public_mi_public.c_private();
 exports.publicUse_im_public_mi_public = new exports.im_public_mi_public.c_private();
+exports.__esModule = true;
 
 
 //// [privacyTopLevelAmbientExternalModuleImportWithExport_require2.d.ts]

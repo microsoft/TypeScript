@@ -52,6 +52,7 @@ define(["require", "exports"], function (require, exports) {
         return A;
     }());
     exports.A = A;
+    exports.__esModule = true;
 });
 //// [withImportDecl_1.js]
 define(["require", "exports", "withImportDecl_0"], function (require, exports, m3) {

@@ -31,6 +31,7 @@ var Query;
         });
     }
 })(Query || (Query = {}));
+exports.__esModule = true;
 
 
 //// [privacyCheckAnonymousFunctionParameter.d.ts]

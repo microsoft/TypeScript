@@ -227,3 +227,4 @@ function f6() {
     x = "";
     x.slice();
 }
+exports.__esModule = true;

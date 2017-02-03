@@ -23,6 +23,7 @@ export { x as a, from
 //// [t1.js]
 "use strict";
 exports.x = "x";
+exports.__esModule = true;
 //// [t2.js]
 "use strict";
 "./t1";

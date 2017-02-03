@@ -12,3 +12,4 @@ function foo() {
     }
 }
 exports.foo = foo;
+exports.__esModule = true;

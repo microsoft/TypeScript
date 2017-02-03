@@ -1819,6 +1819,7 @@ var privateModule;
         return new privateModule.publicClass();
     }
 })(privateModule || (privateModule = {}));
+exports.__esModule = true;
 //// [privacyFunctionReturnTypeDeclFile_GlobalFile.js]
 var publicClassInGlobal = (function () {
     function publicClassInGlobal() {

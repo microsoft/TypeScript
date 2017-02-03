@@ -45,3 +45,4 @@ if (typeof exports.var2 === "string") {
 else {
     strOrNum = exports.var2; // number | string
 }
+exports.__esModule = true;

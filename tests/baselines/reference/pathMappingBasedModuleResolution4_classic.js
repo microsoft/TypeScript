@@ -20,16 +20,19 @@ export var y = 100;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.x = 1;
+    exports.__esModule = true;
 });
 //// [file4.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.y = 100;
+    exports.__esModule = true;
 });
 //// [file2.js]
 define(["require", "exports", "./file3", "file4"], function (require, exports, file3_1, file4_1) {
     "use strict";
     exports.x = file3_1.x + file4_1.y;
+    exports.__esModule = true;
 });
 //// [file1.js]
 define(["require", "exports", "folder2/file2"], function (require, exports, file2_1) {

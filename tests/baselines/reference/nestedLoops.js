@@ -45,3 +45,4 @@ var Test = (function () {
     return Test;
 }());
 exports.Test = Test;
+Object.defineProperty(exports, "__esModule", { value: true });

@@ -18,10 +18,12 @@ export const bar = foo();
 "use strict";
 function foo() { return { x: 1 }; }
 exports.foo = foo;
+exports.__esModule = true;
 //// [mod2.js]
 "use strict";
 var mod1_1 = require("./mod1");
 exports.bar = mod1_1.foo();
+exports.__esModule = true;
 
 
 //// [mod1.d.ts]

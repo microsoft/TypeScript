@@ -17,3 +17,4 @@ var LoggerAdapter = (function () {
     return LoggerAdapter;
 }());
 exports.LoggerAdapter = LoggerAdapter;
+exports.__esModule = true;

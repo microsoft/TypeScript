@@ -12,3 +12,4 @@ export var j = "hello";  // error
 //// [1.js]
 "use strict";
 exports.j = "hello"; // error
+exports.__esModule = true;

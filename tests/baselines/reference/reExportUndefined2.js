@@ -14,6 +14,7 @@ use(undefined);
 "use strict";
 var undefined;
 exports.undefined = undefined;
+exports.__esModule = true;
 //// [b.js]
 "use strict";
 var a_1 = require("./a");

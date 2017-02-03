@@ -10,3 +10,4 @@ export var b = foo;
 function foo() {
 }
 exports.b = foo;
+exports.__esModule = true;

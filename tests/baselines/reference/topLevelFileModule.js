@@ -14,6 +14,7 @@ var z = foo.x + fum.y;
 
 //// [foo_0.js]
 "use strict";
+exports.__esModule = true;
 //// [foo_1.js]
 "use strict";
 var foo = require("./vs/foo_0");

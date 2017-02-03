@@ -18,4 +18,5 @@ define(["require", "exports"], function (require, exports) {
         return FilterManager;
     }());
     exports.FilterManager = FilterManager;
+    exports.__esModule = true;
 });

@@ -5,4 +5,5 @@ export var x = 1;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.x = 1;
+    exports.__esModule = true;
 });

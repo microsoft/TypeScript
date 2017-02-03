@@ -244,3 +244,4 @@ function publicFunctionWithPublicTypeParametersWithoutExtends() {
 exports.publicFunctionWithPublicTypeParametersWithoutExtends = publicFunctionWithPublicTypeParametersWithoutExtends;
 function privateFunctionWithPublicTypeParametersWithoutExtends() {
 }
+exports.__esModule = true;

@@ -12,3 +12,4 @@ var C = (function () {
     return C;
 }());
 module.exports = B;
+exports.__esModule = true;

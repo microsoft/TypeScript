@@ -57,3 +57,4 @@ function extent(array) {
 exports.extent = extent;
 var extentMixed;
 extentMixed = extent([new NumCoercible(10), 13, '12', true]);
+exports.__esModule = true;

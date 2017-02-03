@@ -35,3 +35,4 @@ function foo() {
     var children = props.children, _a = props.active, rest = __rest(props, ["children", "active"]);
 }
 exports.asdf = 123;
+exports.__esModule = true;

@@ -30,6 +30,7 @@ define(["require", "exports"], function (require, exports) {
         return MyClass;
     }());
     exports.MyClass = MyClass;
+    exports.__esModule = true;
 });
 //// [file2.js]
 define(["require", "exports", "react", "./file1"], function (require, exports, React, file1_1) {

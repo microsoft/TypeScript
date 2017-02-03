@@ -198,4 +198,5 @@ define(["require", "exports"], function (require, exports) {
     var privateUse_im_public_mi_public = new exports.im_public_mi_public.c();
     exports.publicUse_im_public_mi_public = new exports.im_public_mi_public.c();
     var privateUse_im_public_mu_public;
+    exports.__esModule = true;
 });

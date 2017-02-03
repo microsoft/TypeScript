@@ -28,6 +28,7 @@ j + k + l;
 //// [lquery.js]
 "use strict";
 exports.l = 2;
+exports.__esModule = true;
 //// [a.js]
 "use strict";
 var jquery_1 = require("jquery");

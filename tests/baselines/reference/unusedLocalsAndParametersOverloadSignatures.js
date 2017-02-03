@@ -43,3 +43,4 @@ function genericFunc(details, message) {
     return details + message;
 }
 exports.genericFunc = genericFunc;
+exports.__esModule = true;

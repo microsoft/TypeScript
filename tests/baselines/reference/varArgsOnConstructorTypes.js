@@ -56,4 +56,5 @@ define(["require", "exports"], function (require, exports) {
     exports.B = B;
     var reg;
     reg.register(B);
+    exports.__esModule = true;
 });

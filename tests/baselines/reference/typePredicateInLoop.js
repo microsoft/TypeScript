@@ -36,3 +36,4 @@ function y(arg) {
     }
 }
 exports.y = y;
+exports.__esModule = true;

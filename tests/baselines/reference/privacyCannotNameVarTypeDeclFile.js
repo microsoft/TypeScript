@@ -128,6 +128,7 @@ var SpecializedWidget;
     }
     SpecializedWidget.createWidget2 = createWidget2;
 })(SpecializedWidget = exports.SpecializedWidget || (exports.SpecializedWidget = {}));
+exports.__esModule = true;
 //// [privacyCannotNameVarTypeDeclFile_exporter.js]
 "use strict";
 ///<reference path='privacyCannotNameVarTypeDeclFile_GlobalWidgets.ts'/>
@@ -149,6 +150,7 @@ function createExportedWidget4() {
     return Widgets1.SpecializedGlobalWidget.createWidget4();
 }
 exports.createExportedWidget4 = createExportedWidget4;
+exports.__esModule = true;
 //// [privacyCannotNameVarTypeDeclFile_consumer.js]
 "use strict";
 var exporter = require("./privacyCannotNameVarTypeDeclFile_exporter");
@@ -206,6 +208,7 @@ privateClassWithPrivateModulePropertyTypes.myPublicStaticProperty = exporter.cre
 privateClassWithPrivateModulePropertyTypes.myPublicStaticProperty1 = exporter.createExportedWidget4();
 var privateVarWithPrivateModulePropertyTypes = exporter.createExportedWidget2();
 var privateVarWithPrivateModulePropertyTypes1 = exporter.createExportedWidget4();
+exports.__esModule = true;
 
 
 //// [privacyCannotNameVarTypeDeclFile_GlobalWidgets.d.ts]

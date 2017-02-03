@@ -191,6 +191,7 @@ var SpecializedWidget;
     }
     SpecializedWidget.createWidget2 = createWidget2;
 })(SpecializedWidget = exports.SpecializedWidget || (exports.SpecializedWidget = {}));
+exports.__esModule = true;
 //// [privacyFunctionReturnTypeDeclFile_exporter.js]
 "use strict";
 ///<reference path='privacyFunctionReturnTypeDeclFile_GlobalWidgets.ts'/>
@@ -212,6 +213,7 @@ function createExportedWidget4() {
     return Widgets1.SpecializedGlobalWidget.createWidget4();
 }
 exports.createExportedWidget4 = createExportedWidget4;
+exports.__esModule = true;
 //// [privacyFunctionReturnTypeDeclFile_consumer.js]
 "use strict";
 var exporter = require("./privacyFunctionReturnTypeDeclFile_exporter");
@@ -349,6 +351,7 @@ function privateFunctionWithPrivateModuleReturnTypes() {
 function privateFunctionWithPrivateModuleReturnTypes1() {
     return exporter.createExportedWidget4();
 }
+exports.__esModule = true;
 
 
 //// [privacyFunctionReturnTypeDeclFile_GlobalWidgets.d.ts]

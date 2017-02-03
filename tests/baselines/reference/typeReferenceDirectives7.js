@@ -20,6 +20,7 @@ export let y = () => x
 "use strict";
 exports.$ = 1;
 exports.y = function () { return exports.x; };
+exports.__esModule = true;
 
 
 //// [app.d.ts]

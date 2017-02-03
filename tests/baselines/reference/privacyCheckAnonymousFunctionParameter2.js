@@ -30,6 +30,7 @@ define(["require", "exports"], function (require, exports) {
             Q.foo(null);
         }
     })(Q || (Q = {}));
+    exports.__esModule = true;
 });
 
 

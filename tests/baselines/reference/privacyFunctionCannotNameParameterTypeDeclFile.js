@@ -184,6 +184,7 @@ var SpecializedWidget;
     }
     SpecializedWidget.createWidget2 = createWidget2;
 })(SpecializedWidget = exports.SpecializedWidget || (exports.SpecializedWidget = {}));
+exports.__esModule = true;
 //// [privacyFunctionCannotNameParameterTypeDeclFile_exporter.js]
 "use strict";
 ///<reference path='privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts'/>
@@ -205,6 +206,7 @@ function createExportedWidget4() {
     return Widgets1.SpecializedGlobalWidget.createWidget4();
 }
 exports.createExportedWidget4 = createExportedWidget4;
+exports.__esModule = true;
 //// [privacyFunctionCannotNameParameterTypeDeclFile_consumer.js]
 "use strict";
 var exporter = require("./privacyFunctionCannotNameParameterTypeDeclFile_exporter");
@@ -392,6 +394,7 @@ function privateFunctionWithPrivateModuleParameterTypes(param) {
 function privateFunctionWithPrivateModuleParameterTypes1(param) {
     if (param === void 0) { param = exporter.createExportedWidget4(); }
 }
+exports.__esModule = true;
 
 
 //// [privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.d.ts]

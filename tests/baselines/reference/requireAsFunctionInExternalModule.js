@@ -19,10 +19,10 @@ hello();
 //// [c.js]
 "use strict";
 function require(a) { }
-exports.__esModule = true;
 exports["default"] = require;
 function has(a) { return true; }
 exports.has = has;
+exports.__esModule = true;
 //// [m.js]
 "use strict";
 var c_1 = require("./c");
@@ -31,6 +31,7 @@ exports.hello = hello;
 if (c_1.has('ember-debug')) {
     c_1["default"]('ember-debug');
 }
+exports.__esModule = true;
 //// [m2.js]
 "use strict";
 var m_1 = require("./m");
