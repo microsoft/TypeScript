@@ -3048,6 +3048,31 @@ namespace ts.projectSystem {
         });
     });
 
+    describe("import in completion list", () => {
+        it("should include exported members of all source files", () => {
+            const file1: FileOrFolder = {
+                path: "/a/b/file1.ts",
+                content: `export function Test1() { }`
+            };
+            const file2: FileOrFolder = {
+                path: "/a/b/file2.ts",
+                content: `T`
+            };
+            const configFile: FileOrFolder = {
+                path: "/a/b/tsconfig.json",
+                content: ""
+            };
+
+            const host = createServerHost([file1, file2, configFile]);
+            const service = createProjectService(host);
+            service.openClientFile(file2.path);
+            
+            const completions1 = service.configuredProjects[0].getLanguageService().getCompletionsAtPosition(file2.path, 1);
+            // should contain completions for string
+            assert.isTrue(completions1.entries.some(e => e.name === "Test1"), "should contain 'charAt'");            
+        });
+    });
+
     describe("maxNodeModuleJsDepth for inferred projects", () => {
         it("should be set to 2 if the project has js root files", () => {
             const file1: FileOrFolder = {
@@ -3101,5 +3126,4 @@ namespace ts.projectSystem {
             assert.isUndefined(project.getCompilerOptions().maxNodeModuleJsDepth);
         });
     });
-
 }

@@ -2,7 +2,7 @@
 namespace ts.Completions {
     export type Log = (message: string) => void;
 
-    export function getCompletionsAtPosition(host: LanguageServiceHost, typeChecker: TypeChecker, log: Log, compilerOptions: CompilerOptions, sourceFile: SourceFile, position: number): CompletionInfo | undefined {
+    export function getCompletionsAtPosition(host: LanguageServiceHost, typeChecker: TypeChecker, log: Log, compilerOptions: CompilerOptions, sourceFile: SourceFile, position: number, allSourceFiles: SourceFile[]): CompletionInfo | undefined {
         if (isInReferenceComment(sourceFile, position)) {
             return getTripleSlashReferenceCompletion(sourceFile, position, compilerOptions, host);
         }
@@ -11,7 +11,7 @@ namespace ts.Completions {
             return getStringLiteralCompletionEntries(sourceFile, position, typeChecker, compilerOptions, host, log);
         }
 
-        const completionData = getCompletionData(typeChecker, log, sourceFile, position);
+        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles);
         if (!completionData) {
             return undefined;
         }
@@ -756,9 +756,9 @@ namespace ts.Completions {
         return hasTrailingDirectorySeparator(path) ? ensureTrailingDirectorySeparator(normalizePath(path)) : normalizePath(path);
     }
 
-    export function getCompletionEntryDetails(typeChecker: TypeChecker, log: (message: string) => void, compilerOptions: CompilerOptions, sourceFile: SourceFile, position: number, entryName: string): CompletionEntryDetails {
+    export function getCompletionEntryDetails(typeChecker: TypeChecker, log: (message: string) => void, compilerOptions: CompilerOptions, sourceFile: SourceFile, position: number, entryName: string, allSourceFiles: SourceFile[]): CompletionEntryDetails {
         // Compute all the completion symbols again.
-        const completionData = getCompletionData(typeChecker, log, sourceFile, position);
+        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles);
         if (completionData) {
             const { symbols, location } = completionData;
 
@@ -795,9 +795,9 @@ namespace ts.Completions {
         return undefined;
     }
 
-    export function getCompletionEntrySymbol(typeChecker: TypeChecker, log: (message: string) => void, compilerOptions: CompilerOptions, sourceFile: SourceFile, position: number, entryName: string): Symbol {
+    export function getCompletionEntrySymbol(typeChecker: TypeChecker, log: (message: string) => void, compilerOptions: CompilerOptions, sourceFile: SourceFile, position: number, entryName: string, allSourceFiles: SourceFile[]): Symbol {
         // Compute all the completion symbols again.
-        const completionData = getCompletionData(typeChecker, log, sourceFile, position);
+        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles);
         if (completionData) {
             const { symbols, location } = completionData;
 
@@ -811,7 +811,7 @@ namespace ts.Completions {
         return undefined;
     }
 
-    function getCompletionData(typeChecker: TypeChecker, log: (message: string) => void, sourceFile: SourceFile, position: number) {
+    function getCompletionData(typeChecker: TypeChecker, log: (message: string) => void, sourceFile: SourceFile, position: number, allSourceFiles: SourceFile[]) {
         const isJavaScriptFile = isSourceFileJavaScript(sourceFile);
 
         let isJsDocTagName = false;
@@ -1100,7 +1100,36 @@ namespace ts.Completions {
             const symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
             symbols = typeChecker.getSymbolsInScope(scopeNode, symbolMeanings);
 
+            getSymbolsFromAllSourceFiles(previousToken.getText());
+
             return true;
+        }
+
+        function getSymbolsFromAllSourceFiles(tokenText: string) {
+            const allPotentialModules = typeChecker.getAmbientModules();
+            const tokenTextLowerCase = tokenText.toLowerCase();
+            for (const otherSourceFile of allSourceFiles) {
+                if (otherSourceFile !== sourceFile && isExternalOrCommonJsModule(otherSourceFile)) {
+                    allPotentialModules.push(otherSourceFile.symbol);
+                }
+            }
+
+            for (const moduleSymbol of allPotentialModules) {
+                // check the default export
+                const defaultExport = typeChecker.tryGetMemberInModuleExports("default", moduleSymbol);
+                if (defaultExport) {
+                    const localSymbol = getLocalSymbolForExportDefault(defaultExport);
+                    if (localSymbol && startsWith(localSymbol.name.toLowerCase(), tokenTextLowerCase)) {
+                        symbols.push(localSymbol);
+                    }
+                }
+
+                // check exports with the same name
+                const allExports = typeChecker.getExportsOfModule(moduleSymbol);
+                if (allExports) {
+                    addRange(symbols, filter(allExports, e => e.name && startsWith(e.name.toLowerCase(), tokenTextLowerCase)));
+                }
+            }
         }
 
         /**

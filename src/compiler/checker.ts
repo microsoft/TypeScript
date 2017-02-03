@@ -5145,11 +5145,13 @@ namespace ts {
 
         function symbolsToArray(symbols: SymbolTable): Symbol[] {
             const result: Symbol[] = [];
-            symbols.forEach((symbol, id) => {
-                if (!isReservedMemberName(id)) {
-                    result.push(symbol);
-                }
-            });
+            if (symbols) {
+                symbols.forEach((symbol, id) => {
+                    if (!isReservedMemberName(id)) {
+                        result.push(symbol);
+                    }
+                });
+            }
             return result;
         }
 
