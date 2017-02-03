@@ -25,7 +25,7 @@ namespace ts.codefix {
                                     const forStatement = <ForStatement>token.parent.parent.parent;
                                     const forInitializer = <VariableDeclarationList>forStatement.initializer;
                                     if (forInitializer.declarations.length === 1) {
-                                        return createCodeFix("", forInitializer.pos, forInitializer.end - forInitializer.pos);
+                                        return createCodeFixToRemoveNode(forInitializer);
                                     }
                                     else {
                                         return removeSingleItem(forInitializer.declarations, token);
@@ -35,7 +35,7 @@ namespace ts.codefix {
                                     const forOfStatement = <ForOfStatement>token.parent.parent.parent;
                                     if (forOfStatement.initializer.kind === SyntaxKind.VariableDeclarationList) {
                                         const forOfInitializer = <VariableDeclarationList>forOfStatement.initializer;
-                                        return createCodeFix("{}", forOfInitializer.declarations[0].pos, forOfInitializer.declarations[0].end - forOfInitializer.declarations[0].pos);
+                                        return createCodeFix("{}", forOfInitializer.declarations[0].getStart(), forOfInitializer.declarations[0].getWidth());
                                     }
                                     break;
 
@@ -47,12 +47,12 @@ namespace ts.codefix {
                                 case SyntaxKind.CatchClause:
                                     const catchClause = <CatchClause>token.parent.parent;
                                     const parameter = catchClause.variableDeclaration.getChildren()[0];
-                                    return createCodeFix("", parameter.pos, parameter.end - parameter.pos);
+                                    return createCodeFixToRemoveNode(parameter);
 
                                 default:
                                     const variableStatement = <VariableStatement>token.parent.parent.parent;
                                     if (variableStatement.declarationList.declarations.length === 1) {
-                                        return createCodeFix("", variableStatement.pos, variableStatement.end - variableStatement.pos);
+                                        return createCodeFixToRemoveNode(variableStatement);
                                     }
                                     else {
                                         const declarations = variableStatement.declarationList.declarations;
@@ -72,7 +72,7 @@ namespace ts.codefix {
                         case ts.SyntaxKind.Parameter:
                             const functionDeclaration = <FunctionDeclaration>token.parent.parent;
                             if (functionDeclaration.parameters.length === 1) {
-                                return createCodeFix("", token.parent.pos, token.parent.end - token.parent.pos);
+                                return createCodeFixToRemoveNode(token.parent);
                             }
                             else {
                                 return removeSingleItem(functionDeclaration.parameters, token);
@@ -81,14 +81,14 @@ namespace ts.codefix {
                         // handle case where 'import a = A;'
                         case SyntaxKind.ImportEqualsDeclaration:
                             const importEquals = findImportDeclaration(token);
-                            return createCodeFix("", importEquals.pos, importEquals.end - importEquals.pos);
+                            return createCodeFixToRemoveNode(importEquals);
 
                         case SyntaxKind.ImportSpecifier:
                             const namedImports = <NamedImports>token.parent.parent;
                             if (namedImports.elements.length === 1) {
                                 // Only 1 import and it is unused. So the entire declaration should be removed.
                                 const importSpec = findImportDeclaration(token);
-                                return createCodeFix("", importSpec.pos, importSpec.end - importSpec.pos);
+                                return createCodeFixToRemoveNode(importSpec);
                             }
                             else {
                                 return removeSingleItem(namedImports.elements, token);
@@ -100,17 +100,24 @@ namespace ts.codefix {
                             const importClause = <ImportClause>token.parent;
                             if (!importClause.namedBindings) { // |import d from './file'| or |import * as ns from './file'|
                                 const importDecl = findImportDeclaration(importClause);
-                                return createCodeFix("", importDecl.pos, importDecl.end - importDecl.pos);
+                                return createCodeFixToRemoveNode(importDecl);
                             }
-                            else { // import |d,| * as ns from './file'
-                                return createCodeFix("", importClause.name.pos, importClause.namedBindings.pos - importClause.name.pos);
+                            else {
+                                // import |d,| * as ns from './file'
+                                const start = importClause.name.getStart();
+                                let end = findFirstNonSpaceCharPosStarting(importClause.name.end);
+                                if (sourceFile.text.charCodeAt(end) === CharacterCodes.comma) {
+                                    end = findFirstNonSpaceCharPosStarting(end + 1);
+                                }
+
+                                return createCodeFix("", start, end - start);
                             }
 
                         case SyntaxKind.NamespaceImport:
                             const namespaceImport = <NamespaceImport>token.parent;
                             if (namespaceImport.name == token && !(<ImportClause>namespaceImport.parent).name) {
                                 const importDecl = findImportDeclaration(namespaceImport);
-                                return createCodeFix("", importDecl.pos, importDecl.end - importDecl.pos);
+                                return createCodeFixToRemoveNode(importDecl);
                             }
                             else {
                                 const start = (<ImportClause>namespaceImport.parent).name.end;
@@ -120,16 +127,14 @@ namespace ts.codefix {
                     break;
 
                 case SyntaxKind.PropertyDeclaration:
-                    return createCodeFix("", token.parent.pos, token.parent.end - token.parent.pos);
-
                 case SyntaxKind.NamespaceImport:
-                    return createCodeFix("", token.parent.pos, token.parent.end - token.parent.pos);
+                    return createCodeFixToRemoveNode(token.parent);
             }
             if (isDeclarationName(token)) {
-                return createCodeFix("", token.parent.pos, token.parent.end - token.parent.pos);
+                return createCodeFixToRemoveNode(token.parent);
             }
             else if (isLiteralComputedPropertyDeclarationName(token)) {
-                return createCodeFix("", token.parent.parent.pos, token.parent.parent.end - token.parent.parent.pos);
+                return createCodeFixToRemoveNode(token.parent.parent);
             }
             else {
                 return undefined;
@@ -142,6 +147,17 @@ namespace ts.codefix {
                 }
 
                 return importDecl;
+            }
+
+            function createCodeFixToRemoveNode(node: Node) {
+                return createCodeFix("", node.getStart(), node.getWidth());
+            }
+
+            function findFirstNonSpaceCharPosStarting(start: number) {
+                while (isWhiteSpace(sourceFile.text.charCodeAt(start))) {
+                    start += 1;
+                }
+                return start;
             }
 
             function createCodeFix(newText: string, start: number, length: number): CodeAction[] {

@@ -295,8 +295,7 @@ namespace ts.server.typingsInstaller {
                 this.log.writeLine(`Installing typings ${JSON.stringify(typingsToInstall)}`);
             }
             const filteredTypings = this.filterTypings(typingsToInstall);
-            const scopedTypings = filteredTypings.map(x => `@types/${x}`);
-            if (scopedTypings.length === 0) {
+            if (filteredTypings.length === 0) {
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`All typings are known to be missing or invalid - no need to go any further`);
                 }
@@ -316,6 +315,7 @@ namespace ts.server.typingsInstaller {
                 projectName: req.projectName
             });
 
+            const scopedTypings = filteredTypings.map(typingsName);
             this.installTypingsAsync(requestId, scopedTypings, cachePath, ok => {
                 try {
                     if (!ok) {
@@ -429,4 +429,10 @@ namespace ts.server.typingsInstaller {
         protected abstract installWorker(requestId: number, args: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void;
         protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes): void;
     }
+
+    /* @internal */
+    export function typingsName(packageName: string): string {
+        return `@types/${packageName}@ts${versionMajorMinor}`;
+    }
+    const versionMajorMinor = version.split(".").slice(0, 2).join(".");
 }

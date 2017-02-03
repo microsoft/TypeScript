@@ -8,10 +8,9 @@ namespace ts {
          *
          * @param filePath The path to the generated output file.
          * @param sourceMapFilePath The path to the output source map file.
-         * @param sourceFiles The input source files for the program.
-         * @param isBundledEmit A value indicating whether the generated output file is a bundle.
+         * @param sourceFileOrBundle The input source file or bundle for the program.
          */
-        initialize(filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean): void;
+        initialize(filePath: string, sourceMapFilePath: string, sourceFileOrBundle: SourceFile | Bundle): void;
 
         /**
          * Reset the SourceMapWriter to an empty state.
@@ -38,11 +37,11 @@ namespace ts {
         /**
          * Emits a node with possible leading and trailing source maps.
          *
-         * @param emitContext The current emit context
+         * @param hint The current emit context
          * @param node The node to emit.
          * @param emitCallback The callback used to emit the node.
          */
-        emitNodeWithSourceMap(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void;
+        emitNodeWithSourceMap(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
 
         /**
          * Emits a token of a node node with possible leading and trailing source maps.
@@ -115,10 +114,9 @@ namespace ts {
          *
          * @param filePath The path to the generated output file.
          * @param sourceMapFilePath The path to the output source map file.
-         * @param sourceFiles The input source files for the program.
-         * @param isBundledEmit A value indicating whether the generated output file is a bundle.
+         * @param sourceFileOrBundle The input source file or bundle for the program.
          */
-        function initialize(filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) {
+        function initialize(filePath: string, sourceMapFilePath: string, sourceFileOrBundle: SourceFile | Bundle) {
             if (disabled) {
                 return;
             }
@@ -161,11 +159,10 @@ namespace ts {
 
             if (compilerOptions.mapRoot) {
                 sourceMapDir = normalizeSlashes(compilerOptions.mapRoot);
-                if (!isBundledEmit) { // emitting single module file
-                    Debug.assert(sourceFiles.length === 1);
+                if (sourceFileOrBundle.kind === SyntaxKind.SourceFile) { // emitting single module file
                     // For modules or multiple emit files the mapRoot will have directory structure like the sources
                     // So if src\a.ts and src\lib\b.ts are compiled together user would be moving the maps into mapRoot\a.js.map and mapRoot\lib\b.js.map
-                    sourceMapDir = getDirectoryPath(getSourceFilePathInNewDir(sourceFiles[0], host, sourceMapDir));
+                    sourceMapDir = getDirectoryPath(getSourceFilePathInNewDir(sourceFileOrBundle, host, sourceMapDir));
                 }
 
                 if (!isRootedDiskPath(sourceMapDir) && !isUrl(sourceMapDir)) {
@@ -311,12 +308,13 @@ namespace ts {
         /**
          * Emits a node with possible leading and trailing source maps.
          *
+         * @param hint A hint as to the intended usage of the node.
          * @param node The node to emit.
          * @param emitCallback The callback used to emit the node.
          */
-        function emitNodeWithSourceMap(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void) {
+        function emitNodeWithSourceMap(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
             if (disabled) {
-                return emitCallback(emitContext, node);
+                return emitCallback(hint, node);
             }
 
             if (node) {
@@ -332,11 +330,11 @@ namespace ts {
 
                 if (emitFlags & EmitFlags.NoNestedSourceMaps) {
                     disabled = true;
-                    emitCallback(emitContext, node);
+                    emitCallback(hint, node);
                     disabled = false;
                 }
                 else {
-                    emitCallback(emitContext, node);
+                    emitCallback(hint, node);
                 }
 
                 if (node.kind !== SyntaxKind.NotEmittedStatement
