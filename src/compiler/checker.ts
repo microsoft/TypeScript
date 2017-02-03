@@ -16662,26 +16662,6 @@ namespace ts {
         }
 
         /**
-         * Determines whether a type has a callable 'then' method.
-         */
-        function isThenableType(type: Type) {
-            //
-            //  {
-            //      then( // thenFunction
-            //      ): any;
-            //  }
-            //
-
-            const thenFunction = getTypeOfPropertyOfType(type, "then");
-            const thenSignatures = thenFunction ? getSignaturesOfType(thenFunction, SignatureKind.Call) : emptyArray;
-            if (thenSignatures.length > 0) {
-                return true;
-            }
-
-            return false;
-        }
-
-        /**
           * Gets the "promised type" of a promise.
           * @param type The type of the promise.
           * @remarks The "promised type" of a type is the type of the "value" parameter of the "onfulfilled" callback.
@@ -16842,7 +16822,8 @@ namespace ts {
             // of a runtime problem. If the user wants to return this value from an async
             // function, they would need to wrap it in some other value. If they want it to
             // be treated as a promise, they can cast to <any>.
-            if (isThenableType(type)) {
+            const thenFunction = getTypeOfPropertyOfType(type, "then");
+            if (thenFunction && getSignaturesOfType(thenFunction, SignatureKind.Call).length > 0) {
                 if (errorNode) {
                     error(errorNode, Diagnostics.Type_used_as_operand_to_await_or_the_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
                 }
