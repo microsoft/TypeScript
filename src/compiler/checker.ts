@@ -3211,7 +3211,7 @@ namespace ts {
                 // This elementType will be used if the specific property corresponding to this index is not
                 // present (aka the tuple element property). This call also checks that the parentType is in
                 // fact an iterable or array (depending on target language).
-                const elementType = checkIteratedTypeOrElementType(parentType, pattern, /*allowStringInput*/ false);
+                const elementType = checkIteratedTypeOrElementType(parentType, pattern, /*allowStringInput*/ false, /*allowAsyncIterable*/ false);
                 if (declaration.dotDotDotToken) {
                     // Rest element has an array type with the same element type as the parent type
                     type = createArrayType(elementType);
@@ -9512,12 +9512,12 @@ namespace ts {
 
         function getTypeOfDestructuredArrayElement(type: Type, index: number) {
             return isTupleLikeType(type) && getTypeOfPropertyOfType(type, "" + index) ||
-                checkIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false) ||
+                checkIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterable*/ false) ||
                 unknownType;
         }
 
         function getTypeOfDestructuredSpreadExpression(type: Type) {
-            return createArrayType(checkIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false) || unknownType);
+            return createArrayType(checkIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterable*/ false) || unknownType);
         }
 
         function getAssignedTypeOfBinaryExpression(node: BinaryExpression): Type {
@@ -11410,7 +11410,7 @@ namespace ts {
                 const index = indexOf(arrayLiteral.elements, node);
                 return getTypeOfPropertyOfContextualType(type, "" + index)
                     || getIndexTypeOfContextualType(type, IndexKind.Number)
-                    || getIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false, /*checkAssignability*/ false);
+                    || getIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterable*/ false, /*checkAssignability*/ false);
             }
             return undefined;
         }
@@ -11628,7 +11628,7 @@ namespace ts {
             }
 
             const arrayOrIterableType = checkExpression(node.expression, contextualMapper);
-            return checkIteratedTypeOrElementType(arrayOrIterableType, node.expression, /*allowStringInput*/ false);
+            return checkIteratedTypeOrElementType(arrayOrIterableType, node.expression, /*allowStringInput*/ false, /*allowAsyncIterable*/ false);
         }
 
         function hasDefaultValue(node: BindingElement | Expression): boolean {
@@ -11657,7 +11657,7 @@ namespace ts {
                     // if there is no index type / iterated type.
                     const restArrayType = checkExpression((<SpreadElement>e).expression, contextualMapper);
                     const restElementType = getIndexTypeOfType(restArrayType, IndexKind.Number) ||
-                        getIteratedTypeOrElementType(restArrayType, /*errorNode*/ undefined, /*allowStringInput*/ false, /*checkAssignability*/ false);
+                        getIteratedTypeOrElementType(restArrayType, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterable*/ false, /*checkAssignability*/ false);
                     if (restElementType) {
                         elementTypes.push(restElementType);
                     }
@@ -14359,9 +14359,7 @@ namespace ts {
                     let type = checkExpressionCached(expr, contextualMapper);
                     if (yieldExpression.asteriskToken) {
                         // A yield* expression effectively yields everything that its operand yields
-                        type = functionFlags & FunctionFlags.Async
-                            ? checkIteratedTypeOfAsyncIterable(type, yieldExpression.expression) // AsyncGenerator function
-                            : checkIteratedTypeOrElementType(type, yieldExpression.expression, /*allowStringInput*/ false); // Generator function
+                        type = checkIteratedTypeOrElementType(type, yieldExpression.expression, /*allowStringInput*/ false, (functionFlags & FunctionFlags.Async) !== 0);
                     }
                     if (!contains(aggregatedTypes, type)) {
                         aggregatedTypes.push(type);
@@ -14914,7 +14912,7 @@ namespace ts {
             // This elementType will be used if the specific property corresponding to this index is not
             // present (aka the tuple element property). This call also checks that the parentType is in
             // fact an iterable or array (depending on target language).
-            const elementType = checkIteratedTypeOrElementType(sourceType, node, /*allowStringInput*/ false) || unknownType;
+            const elementType = checkIteratedTypeOrElementType(sourceType, node, /*allowStringInput*/ false, /*allowAsyncIterable*/ false) || unknownType;
             const elements = node.elements;
             for (let i = 0; i < elements.length; i++) {
                 checkArrayLiteralDestructuringElementAssignment(node, sourceType, i, elementType, contextualMapper);
@@ -15339,9 +15337,7 @@ namespace ts {
                     let expressionElementType: Type;
                     const nodeIsYieldStar = !!node.asteriskToken;
                     if (nodeIsYieldStar) {
-                        expressionElementType = functionFlags & FunctionFlags.Async
-                            ? checkIteratedTypeOfAsyncIterable(expressionType, node.expression) // AsyncGenerator function
-                            : checkIteratedTypeOrElementType(expressionType, node.expression, /*allowStringInput*/ false); // Generator function
+                        expressionElementType = checkIteratedTypeOrElementType(expressionType, node.expression, /*allowStringInput*/ false, (functionFlags & FunctionFlags.Async) !== 0);
                     }
 
                     // There is no point in doing an assignability check if the function
@@ -17936,25 +17932,15 @@ namespace ts {
 
         function checkRightHandSideOfForOf(rhsExpression: Expression, awaitModifier: AwaitKeywordToken | undefined): Type {
             const expressionType = checkNonNullExpression(rhsExpression);
-            return awaitModifier
-                ? checkIteratedTypeOfAsyncIterable(expressionType, rhsExpression)
-                : checkIteratedTypeOrElementType(expressionType, rhsExpression, /*allowStringInput*/ true);
+            return checkIteratedTypeOrElementType(expressionType, rhsExpression, /*allowStringInput*/ true, awaitModifier !== undefined);
         }
 
-        function checkIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean): Type {
+        function checkIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean, allowAsyncIterable: boolean): Type {
             if (isTypeAny(inputType)) {
                 return inputType;
             }
 
-            return getIteratedTypeOrElementType(inputType, errorNode, allowStringInput, /*checkAssignability*/ true) || anyType;
-        }
-
-        function checkIteratedTypeOfAsyncIterable(inputType: Type, errorNode: Node): Type {
-            if (isTypeAny(inputType)) {
-                return inputType;
-            }
-
-            return getIteratedTypeOfIterable(inputType, errorNode, /*isAsyncIterable*/ true, /*allowNonAsyncIterables*/ true, /*checkAssignability*/ true) || anyType;
+            return getIteratedTypeOrElementType(inputType, errorNode, allowStringInput, allowAsyncIterable, /*checkAssignability*/ true) || anyType;
         }
 
         /**
@@ -17962,15 +17948,16 @@ namespace ts {
          * we want to get the iterated type of an iterable for ES2015 or later, or the iterated type
          * of a iterable (if defined globally) or element type of an array like for ES2015 or earlier.
          */
-        function getIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean, checkAssignability: boolean): Type {
+        function getIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean, allowAsyncIterable: boolean, checkAssignability: boolean): Type {
             const uplevelIteration = languageVersion >= ScriptTarget.ES2015;
             const downlevelIteration = !uplevelIteration && compilerOptions.downlevelIteration;
 
             // Get the iterated type of an `Iterable<T>` or `IterableIterator<T>` only in ES2015
-            // or higher, or when downlevelIteration is supplied.
-            if (uplevelIteration || downlevelIteration) {
+            // or higher, when inside of an async generator or for-await-if, or when
+            // downlevelIteration is requested.
+            if (uplevelIteration || downlevelIteration || allowAsyncIterable) {
                 // We only report errors for an invalid iterable type in ES2015 or higher.
-                const iteratedType = getIteratedTypeOfIterable(inputType, uplevelIteration ? errorNode : undefined, /*isAsyncIterable*/ false, /*allowNonAsyncIterables*/ false, checkAssignability);
+                const iteratedType = getIteratedTypeOfIterable(inputType, uplevelIteration ? errorNode : undefined, allowAsyncIterable, allowAsyncIterable, checkAssignability);
                 if (iteratedType || uplevelIteration) {
                     return iteratedType;
                 }
@@ -20458,7 +20445,7 @@ namespace ts {
             Debug.assert(expr.parent.kind === SyntaxKind.ArrayLiteralExpression);
             //    [{ property1: p1, property2 }] = elems;
             const typeOfArrayLiteral = getTypeOfArrayLiteralOrObjectLiteralDestructuringAssignment(<Expression>expr.parent);
-            const elementType = checkIteratedTypeOrElementType(typeOfArrayLiteral || unknownType, expr.parent, /*allowStringInput*/ false) || unknownType;
+            const elementType = checkIteratedTypeOrElementType(typeOfArrayLiteral || unknownType, expr.parent, /*allowStringInput*/ false, /*allowAsyncIterable*/ false) || unknownType;
             return checkArrayLiteralDestructuringElementAssignment(<ArrayLiteralExpression>expr.parent, typeOfArrayLiteral,
                 indexOf((<ArrayLiteralExpression>expr.parent).elements, expr), elementType || unknownType);
         }
