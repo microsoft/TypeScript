@@ -2706,7 +2706,6 @@
         type?: Type;                        // Type of value symbol
         declaredType?: Type;                // Type of class, interface, enum, type alias, or type parameter
         typeParameters?: TypeParameter[];   // Type parameters of type alias (undefined if non-generic)
-        minTypeArgumentCount?: number;
         inferredClassType?: Type;           // Type of an inferred ES5 class
         instantiations?: Map<Type>;         // Instantiations of generic type alias (undefined if non-generic)
         mapper?: TypeMapper;                // Type mapper for instantiation alias
@@ -2909,8 +2908,6 @@
         typeParameters: TypeParameter[];           // Type parameters (undefined if non-generic)
         outerTypeParameters: TypeParameter[];      // Outer type parameters (undefined if none)
         localTypeParameters: TypeParameter[];      // Local type parameters (undefined if none)
-        /* @internal */
-        minTypeArgumentCount: number;
         thisType: TypeParameter;                   // The "this" type (undefined if none)
         /* @internal */
         resolvedBaseConstructorType?: Type;        // Resolved base constructor type of class
@@ -3063,8 +3060,6 @@
     export interface Signature {
         declaration: SignatureDeclaration;  // Originating declaration
         typeParameters: TypeParameter[];    // Type parameters (undefined if non-generic)
-        /* @internal */
-        minTypeArgumentCount: number;       // Number of non-optional type parameters
         parameters: Symbol[];               // Parameters
         /* @internal */
         thisParameter?: Symbol;             // symbol of this-type parameter
