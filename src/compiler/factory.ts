@@ -108,7 +108,7 @@ namespace ts {
 
     export function createIdentifier(text: string): Identifier {
         const node = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
-        node.text = text ? escapeIdentifier(text) : undefined;
+        node.text = escapeIdentifier(text);
         node.originalKeywordKind = text ? stringToToken(text) : SyntaxKind.Unknown;
         node.autoGenerateKind = GeneratedIdentifierKind.None;
         node.autoGenerateId = 0;
@@ -140,8 +140,7 @@ namespace ts {
 
     /** Create a unique name based on the supplied text. */
     export function createUniqueName(text: string): Identifier {
-        const name = createIdentifier("");
-        name.text = text;
+        const name = createIdentifier(text);
         name.autoGenerateKind = GeneratedIdentifierKind.Unique;
         name.autoGenerateId = nextAutoGenerateId;
         nextAutoGenerateId++;

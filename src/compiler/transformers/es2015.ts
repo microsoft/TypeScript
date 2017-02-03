@@ -2251,7 +2251,7 @@ namespace ts {
             // we don't want to emit a temporary variable for the RHS, just use it directly.
             const counter = createLoopVariable();
             const rhsReference = expression.kind === SyntaxKind.Identifier
-                ? createUniqueName((<Identifier>expression).text)
+                ? createUniqueName(unescapeIdentifier((<Identifier>expression).text))
                 : createTempVariable(/*recordTempVariable*/ undefined);
             const elementAccess = createElementAccess(rhsReference, counter);
 
@@ -2872,7 +2872,7 @@ namespace ts {
             else {
                 loopParameters.push(createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, name));
                 if (resolver.getNodeCheckFlags(decl) & NodeCheckFlags.NeedsLoopOutParameter) {
-                    const outParamName = createUniqueName("out_" + name.text);
+                    const outParamName = createUniqueName("out_" + unescapeIdentifier(name.text));
                     loopOutParameters.push({ originalName: name, outParamName });
                 }
             }
