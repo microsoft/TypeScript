@@ -40,7 +40,7 @@ tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx(37,25): err
         return this._buildMainButton(props);
     }
     
-    const b0 = <MainButton {...{onClick: (k) => {console.log(k)}}} extra />;  // k has type any
+    const b0 = <MainButton {...{onClick: (k) => {console.log(k)}}} extra />;  // k has type "left" | "right"
                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '{ extra: true; onClick: (k: "left" | "right") => void; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
 !!! error TS2322:   Property 'extra' does not exist on type 'IntrinsicAttributes & LinkProps'.

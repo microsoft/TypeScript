@@ -31,7 +31,6 @@
 //// let e1 = <MainButton/*1*/ /*2*/
 
 goTo.marker("1");
-// The second overload is chosen because the first doesn't get selected by choose overload as it has incorrect arity
 verify.signatureHelpCountIs(2);
 verify.currentSignatureHelpIs("MainButton(buttonProps: ButtonProps): any");
 verify.currentParameterSpanIs("buttonProps: ButtonProps");

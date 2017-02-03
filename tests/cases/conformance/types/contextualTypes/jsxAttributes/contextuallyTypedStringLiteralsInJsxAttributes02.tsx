@@ -30,7 +30,7 @@ export function MainButton(props: ButtonProps | LinkProps): JSX.Element {
     return this._buildMainButton(props);
 }
 
-const b0 = <MainButton {...{onClick: (k) => {console.log(k)}}} extra />;  // k has type any
+const b0 = <MainButton {...{onClick: (k) => {console.log(k)}}} extra />;  // k has type "left" | "right"
 const b2 = <MainButton onClick={(k)=>{console.log(k)}} extra />;  // k has type "left" | "right"
 const b3 = <MainButton {...{goTo:"home"}} extra />;  // goTo has type"home" | "contact"
 const b4 = <MainButton goTo="home" extra />;  // goTo has type "home" | "contact"
