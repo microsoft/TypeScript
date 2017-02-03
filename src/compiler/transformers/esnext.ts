@@ -140,7 +140,7 @@ namespace ts {
 
         function visitLabeledStatement(node: LabeledStatement) {
             if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
-                const statement = unwrapInnermostStatmentOfLabel(node);
+                const statement = unwrapInnermostStatementOfLabel(node);
                 if (statement.kind === SyntaxKind.ForOfStatement && (<ForOfStatement>statement).awaitModifier) {
                     return visitForOfStatement(<ForOfStatement>statement, node);
                 }
