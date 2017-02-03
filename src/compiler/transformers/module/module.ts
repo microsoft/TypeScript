@@ -831,6 +831,13 @@ namespace ts {
             let statements: Statement[];
             let variables: VariableDeclaration[];
             let expressions: Expression[];
+
+            const parseTreeNode = getParseTreeNode(node);
+            if (!shouldAppendUnderscoreUnderscoreEsModule) {
+                // class declaration get down-level transformed to be variable statement
+                shouldAppendUnderscoreUnderscoreEsModule = (parseTreeNode.kind === SyntaxKind.VariableStatement || parseTreeNode.kind === SyntaxKind.ClassDeclaration) && hasModifier(parseTreeNode, ModifierFlags.Export);
+            }
+ 
             if (hasModifier(node, ModifierFlags.Export)) {
                 let modifiers: NodeArray<Modifier>;
 
@@ -845,7 +852,6 @@ namespace ts {
                         variables = append(variables, variable);
                     }
                     else if (variable.initializer) {
-                        shouldAppendUnderscoreUnderscoreEsModule = true;
                         expressions = append(expressions, transformInitializedVariable(variable));
                     }
                 }
