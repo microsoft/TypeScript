@@ -6,7 +6,9 @@ tests/cases/compiler/genericDefaultsErrors.ts(7,39): error TS2344: Type 'number'
 tests/cases/compiler/genericDefaultsErrors.ts(11,1): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/compiler/genericDefaultsErrors.ts(14,1): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/compiler/genericDefaultsErrors.ts(18,13): error TS2345: Argument of type '"a"' is not assignable to parameter of type 'number'.
+tests/cases/compiler/genericDefaultsErrors.ts(20,11): error TS2428: All declarations of 'i00' must have identical type parameters.
 tests/cases/compiler/genericDefaultsErrors.ts(21,11): error TS2428: All declarations of 'i00' must have identical type parameters.
+tests/cases/compiler/genericDefaultsErrors.ts(23,11): error TS2428: All declarations of 'i01' must have identical type parameters.
 tests/cases/compiler/genericDefaultsErrors.ts(24,11): error TS2428: All declarations of 'i01' must have identical type parameters.
 tests/cases/compiler/genericDefaultsErrors.ts(26,27): error TS2705: Required type parameters may not follow optional type parameters.
 tests/cases/compiler/genericDefaultsErrors.ts(27,34): error TS2344: Type 'number' does not satisfy the constraint 'string'.
@@ -21,7 +23,7 @@ tests/cases/compiler/genericDefaultsErrors.ts(39,20): error TS2304: Cannot find 
 tests/cases/compiler/genericDefaultsErrors.ts(39,20): error TS4033: Property 'x' of exported interface has or is using private name 'T'.
 
 
-==== tests/cases/compiler/genericDefaultsErrors.ts (19 errors) ====
+==== tests/cases/compiler/genericDefaultsErrors.ts (21 errors) ====
     
     declare const x: any;
     
@@ -57,11 +59,15 @@ tests/cases/compiler/genericDefaultsErrors.ts(39,20): error TS4033: Property 'x'
 !!! error TS2345: Argument of type '"a"' is not assignable to parameter of type 'number'.
     
     interface i00<T> { } // ok
+              ~~~
+!!! error TS2428: All declarations of 'i00' must have identical type parameters.
     interface i00<U = number> { } // error
               ~~~
 !!! error TS2428: All declarations of 'i00' must have identical type parameters.
     
     interface i01<T = number> { } // ok
+              ~~~
+!!! error TS2428: All declarations of 'i01' must have identical type parameters.
     interface i01<T = string> { } // error
               ~~~
 !!! error TS2428: All declarations of 'i01' must have identical type parameters.

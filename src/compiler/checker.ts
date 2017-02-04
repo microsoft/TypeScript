@@ -376,7 +376,7 @@ namespace ts {
             Type,
             ResolvedBaseConstructorType,
             DeclaredType,
-            ResolvedReturnType,
+            ResolvedReturnType
         }
 
         const builtinGlobals = createMap<Symbol>();
@@ -18549,115 +18549,67 @@ namespace ts {
         }
 
         /** Check that type parameter lists are identical across multiple declarations */
-        function checkTypeParameterListsIdentical(node: ClassLikeDeclaration | InterfaceDeclaration, symbol: Symbol) {
+        function checkTypeParameterListsIdentical(symbol: Symbol) {
             if (symbol.declarations.length === 1) {
                 return;
             }
 
-            // Resolve the type parameters and minimum type argument count for all declarations
-            resolveTypeParametersOfClassOrInterface(symbol);
-
-            const typeParameters = getSymbolLinks(symbol).typeParameters;
-            const maxTypeArgumentCount = length(typeParameters);
-            const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
-            const numTypeParameters = length(node.typeParameters);
-
-            // If this declaration has too few or too many type parameters, we report an error
-            if (numTypeParameters < minTypeArgumentCount || numTypeParameters > maxTypeArgumentCount) {
-                error(node.name, Diagnostics.All_declarations_of_0_must_have_identical_type_parameters, node.name.text);
-                return;
-            }
-
-            for (let i = 0; i < numTypeParameters; i++) {
-                const source = node.typeParameters[i];
-                const target = typeParameters[i];
-
-                // If the type parameter node does not have the same name as the resolved type
-                // parameter at this position, we report an error.
-                if (source.name.text !== target.symbol.name) {
-                    error(node.name, Diagnostics.All_declarations_of_0_must_have_identical_type_parameters, node.name.text);
-                    return;
-                }
-
-                // If the type parameter node does not have an identical constraint as the resolved
-                // type parameter at this position, we report an error.
-                const sourceConstraint = source.constraint && getTypeFromTypeNode(source.constraint);
-                const targetConstraint = getConstraintFromTypeParameter(target);
-                if ((sourceConstraint || targetConstraint) &&
-                    (!sourceConstraint || !targetConstraint || !isTypeIdenticalTo(sourceConstraint, targetConstraint))) {
-                    error(node.name, Diagnostics.All_declarations_of_0_must_have_identical_type_parameters, node.name.text);
-                    return;
-                }
-
-                // If the type parameter node has a default and it is not identical to the default
-                // for the type parameter at this position, we report an error.
-                const sourceDefault = source.default && getTypeFromTypeNode(source.default);
-                const targetDefault = getDefaultFromTypeParameter(target);
-                if (sourceDefault && targetDefault && !isTypeIdenticalTo(sourceDefault, targetDefault)) {
-                    error(node.name, Diagnostics.All_declarations_of_0_must_have_identical_type_parameters, node.name.text);
-                    return;
+            const links = getSymbolLinks(symbol);
+            if (!links.typeParametersChecked) {
+                links.typeParametersChecked = true;
+                const type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
+                const declarations = getClassOrInterfaceDeclarationsOfSymbol(symbol);
+                if (!areTypeParametersIdentical(declarations, type.localTypeParameters)) {
+                    // Report an error on every conflicting declaration.
+                    const name = symbolToString(symbol);
+                    for (const declaration of declarations) {
+                        error(declaration.name, Diagnostics.All_declarations_of_0_must_have_identical_type_parameters, name);
+                    }
                 }
             }
         }
 
-        function resolveTypeParametersOfClassOrInterface(symbol: Symbol) {
-            const links = getSymbolLinks(symbol);
-            if (!links.typeParameters) {
-                let typeParameters: TypeParameter[] | undefined;
-                let minTypeArgumentCount = -1;
-                let maxTypeArgumentCount = -1;
-                for (const declaration of symbol.declarations) {
-                    if (declaration.kind === SyntaxKind.ClassDeclaration || declaration.kind === SyntaxKind.InterfaceDeclaration) {
-                        const typeParameterNodes = (<ClassDeclaration | InterfaceDeclaration>declaration).typeParameters;
-                        const numTypeParameters = length(typeParameterNodes);
-                        if (maxTypeArgumentCount === -1) {
-                            // For the first declaration, establish the initial maximum and
-                            // minimum type argument counts. These only change when we
-                            // encounter default type arguments.
-                            maxTypeArgumentCount = numTypeParameters;
-                            minTypeArgumentCount = numTypeParameters;
-                        }
+        function areTypeParametersIdentical(declarations: (ClassDeclaration | InterfaceDeclaration)[], typeParameters: TypeParameter[]) {
+            const maxTypeArgumentCount = length(typeParameters);
+            const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
 
-                        if (typeParameterNodes) {
-                            if (!typeParameters) {
-                                typeParameters = [];
-                            }
+            for (const declaration of declarations) {
+                // If this declaration has too few or too many type parameters, we report an error
+                const numTypeParameters = length(declaration.typeParameters);
+                if (numTypeParameters < minTypeArgumentCount || numTypeParameters > maxTypeArgumentCount) {
+                    return false;
+                }
 
-                            for (let i = 0; i < typeParameterNodes.length; i++) {
-                                if (typeParameterNodes[i].default) {
-                                    // When we encounter a type parameter with a default, establish
-                                    // new minimum and maximum type arguments if necessary.
-                                    if (minTypeArgumentCount > i) {
-                                        minTypeArgumentCount = i;
-                                    }
-                                    if (maxTypeArgumentCount < i + 1) {
-                                        maxTypeArgumentCount = i + 1;
-                                    }
-                                }
-                                if (typeParameters.length <= i) {
-                                    // When we encounter a new type parameter at this position,
-                                    // get the declared type for the type parameter. If another
-                                    // declaration attempts to establish a type parameter with a
-                                    // different name or constraint than the first one we find,
-                                    // we will report an error when checking the type parameters.
-                                    typeParameters[i] = getDeclaredTypeOfTypeParameter(getSymbolOfNode(typeParameterNodes[i]));
-                                }
-                            }
-                        }
+                for (let i = 0; i < numTypeParameters; i++) {
+                    const source = declaration.typeParameters[i];
+                    const target = typeParameters[i];
+
+                    // If the type parameter node does not have the same as the resolved type
+                    // parameter at this position, we report an error.
+                    if (source.name.text !== target.symbol.name) {
+                        return false;
+                    }
+
+                    // If the type parameter node does not have an identical constraint as the resolved
+                    // type parameter at this position, we report an error.
+                    const sourceConstraint = source.constraint && getTypeFromTypeNode(source.constraint);
+                    const targetConstraint = getConstraintFromTypeParameter(target);
+                    if ((sourceConstraint || targetConstraint) &&
+                        (!sourceConstraint || !targetConstraint || !isTypeIdenticalTo(sourceConstraint, targetConstraint))) {
+                        return false;
+                    }
+
+                    // If the type parameter node has a default and it is not identical to the default
+                    // for the type parameter at this position, we report an error.
+                    const sourceDefault = source.default && getTypeFromTypeNode(source.default);
+                    const targetDefault = getDefaultFromTypeParameter(target);
+                    if (sourceDefault && targetDefault && !isTypeIdenticalTo(sourceDefault, targetDefault)) {
+                        return false;
                     }
                 }
-                if (maxTypeArgumentCount === -1) {
-                    maxTypeArgumentCount = 0;
-                }
-                if (minTypeArgumentCount === -1) {
-                    minTypeArgumentCount = maxTypeArgumentCount;
-                }
-                if (typeParameters && typeParameters.length > maxTypeArgumentCount) {
-                    // Trim the type parameters to the maximum length
-                    typeParameters.length = maxTypeArgumentCount;
-                }
-                links.typeParameters = typeParameters || emptyArray;
             }
+
+            return true;
         }
 
         function checkClassExpression(node: ClassExpression): Type {
@@ -18697,7 +18649,7 @@ namespace ts {
             const type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
             const typeWithThis = getTypeWithThisArgument(type);
             const staticType = <ObjectType>getTypeOfSymbol(symbol);
-            checkTypeParameterListsIdentical(node, symbol);
+            checkTypeParameterListsIdentical(symbol);
             checkClassForDuplicateDeclarations(node);
 
             // Only check for reserved static identifiers on non-ambient context.
@@ -18803,6 +18755,11 @@ namespace ts {
 
         function getClassLikeDeclarationOfSymbol(symbol: Symbol): Declaration {
             return forEach(symbol.declarations, d => isClassLike(d) ? d : undefined);
+        }
+
+        function getClassOrInterfaceDeclarationsOfSymbol(symbol: Symbol) {
+            return filter(symbol.declarations, (d: Declaration): d is ClassDeclaration | InterfaceDeclaration =>
+                d.kind === SyntaxKind.ClassDeclaration || d.kind === SyntaxKind.InterfaceDeclaration);
         }
 
         function checkKindsOfPropertyMemberOverrides(type: InterfaceType, baseType: BaseType): void {
@@ -18952,7 +18909,7 @@ namespace ts {
 
                 checkExportsOnMergedDeclarations(node);
                 const symbol = getSymbolOfNode(node);
-                checkTypeParameterListsIdentical(node, symbol);
+                checkTypeParameterListsIdentical(symbol);
 
                 // Only check this symbol once
                 const firstInterfaceDecl = <InterfaceDeclaration>getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration);
