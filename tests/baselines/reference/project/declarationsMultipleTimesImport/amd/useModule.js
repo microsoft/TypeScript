@@ -15,4 +15,5 @@ define(["require", "exports", "m4", "m4"], function (require, exports, m4, multi
     exports.useMultiImport_m4_x4 = multiImport_m4.x;
     exports.useMultiImport_m4_d4 = multiImport_m4.d;
     exports.useMultiImport_m4_f4 = multiImport_m4.foo();
+    exports.__esModule = true;
 });

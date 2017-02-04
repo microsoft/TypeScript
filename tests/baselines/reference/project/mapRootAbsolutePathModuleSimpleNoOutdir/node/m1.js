@@ -11,4 +11,5 @@ function m1_f1() {
     return exports.m1_instance1;
 }
 exports.m1_f1 = m1_f1;
+exports.__esModule = true;
 //# sourceMappingURL=/tests/cases/projects/outputdir_module_simple/mapFiles/m1.js.map

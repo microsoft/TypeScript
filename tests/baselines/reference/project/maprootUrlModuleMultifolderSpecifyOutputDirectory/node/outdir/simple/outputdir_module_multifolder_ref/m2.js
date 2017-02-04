@@ -11,4 +11,5 @@ function m2_f1() {
     return exports.m2_instance1;
 }
 exports.m2_f1 = m2_f1;
+exports.__esModule = true;
 //# sourceMappingURL=http://www.typescriptlang.org/outputdir_module_multifolder_ref/m2.js.map

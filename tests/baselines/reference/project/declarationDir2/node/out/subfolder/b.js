@@ -5,3 +5,4 @@ var B = (function () {
     return B;
 }());
 exports.B = B;
+exports.__esModule = true;

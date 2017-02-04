@@ -14,6 +14,7 @@ define(["require", "exports"], function (require, exports) {
     function foo() { }
     exports.foo = foo;
     ;
+    exports.__esModule = true;
 });
 //// [externalModuleReferenceOfImportDeclarationWithExportModifier_1.js]
 define(["require", "exports", "externalModuleReferenceOfImportDeclarationWithExportModifier_0"], function (require, exports, file1) {

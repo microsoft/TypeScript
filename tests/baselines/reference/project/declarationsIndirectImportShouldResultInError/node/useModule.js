@@ -7,3 +7,4 @@ function n() {
     return m5.foo2();
 }
 exports.n = n;
+exports.__esModule = true;

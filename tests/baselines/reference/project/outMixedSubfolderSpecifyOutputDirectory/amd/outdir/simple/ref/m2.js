@@ -12,4 +12,5 @@ define(["require", "exports"], function (require, exports) {
         return exports.m2_instance1;
     }
     exports.m2_f1 = m2_f1;
+    exports.__esModule = true;
 });

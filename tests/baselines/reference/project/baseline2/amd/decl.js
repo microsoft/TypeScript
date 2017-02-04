@@ -5,4 +5,5 @@ define(["require", "exports"], function (require, exports) {
         return { x: x, y: y };
     }
     exports.point = point;
+    exports.__esModule = true;
 });

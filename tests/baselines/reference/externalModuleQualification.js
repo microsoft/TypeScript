@@ -28,3 +28,4 @@ var NavigateAction = (function () {
     };
     return NavigateAction;
 }());
+exports.__esModule = true;

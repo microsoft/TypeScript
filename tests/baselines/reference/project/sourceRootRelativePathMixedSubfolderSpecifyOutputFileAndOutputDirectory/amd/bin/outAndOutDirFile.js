@@ -22,6 +22,7 @@ define("ref/m2", ["require", "exports"], function (require, exports) {
         return exports.m2_instance1;
     }
     exports.m2_f1 = m2_f1;
+    exports.__esModule = true;
 });
 /// <reference path='ref/m1.ts'/>
 /// <reference path='ref/m2.ts'/>

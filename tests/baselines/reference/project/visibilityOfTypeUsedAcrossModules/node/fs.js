@@ -14,3 +14,4 @@ var RM = (function () {
     return RM;
 }());
 exports.RM = RM;
+exports.__esModule = true;

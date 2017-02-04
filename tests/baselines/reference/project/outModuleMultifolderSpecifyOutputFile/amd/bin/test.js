@@ -12,6 +12,7 @@ define("outputdir_module_multifolder/ref/m1", ["require", "exports"], function (
         return exports.m1_instance1;
     }
     exports.m1_f1 = m1_f1;
+    exports.__esModule = true;
 });
 define("outputdir_module_multifolder_ref/m2", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -27,6 +28,7 @@ define("outputdir_module_multifolder_ref/m2", ["require", "exports"], function (
         return exports.m2_instance1;
     }
     exports.m2_f1 = m2_f1;
+    exports.__esModule = true;
 });
 define("outputdir_module_multifolder/test", ["require", "exports", "outputdir_module_multifolder/ref/m1", "outputdir_module_multifolder_ref/m2"], function (require, exports, m1, m2) {
     "use strict";
@@ -44,4 +46,5 @@ define("outputdir_module_multifolder/test", ["require", "exports", "outputdir_mo
     exports.f1 = f1;
     exports.a2 = m1.m1_c1;
     exports.a3 = m2.m2_c1;
+    exports.__esModule = true;
 });

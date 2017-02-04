@@ -11,3 +11,4 @@ var b: a;
 "use strict";
 exports.a = x.c;
 var b;
+exports.__esModule = true;

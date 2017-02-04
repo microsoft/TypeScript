@@ -6,4 +6,5 @@ define(["require", "exports", "m5"], function (require, exports, m5) {
         return m5.foo2();
     }
     exports.n = n;
+    exports.__esModule = true;
 });

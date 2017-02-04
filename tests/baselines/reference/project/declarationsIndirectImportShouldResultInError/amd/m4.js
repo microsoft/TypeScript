@@ -11,4 +11,5 @@ define(["require", "exports"], function (require, exports) {
         return new d();
     }
     exports.foo = foo;
+    exports.__esModule = true;
 });

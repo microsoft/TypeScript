@@ -4,4 +4,5 @@ define(["require", "exports"], function (require, exports) {
         return "success";
     }
     exports.call = call;
+    exports.__esModule = true;
 });

@@ -12,4 +12,5 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.a = x.c;
     var b;
+    exports.__esModule = true;
 });

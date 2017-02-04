@@ -13,4 +13,5 @@ define(["require", "exports", "m4", "m5"], function (require, exports, m4, m5) {
         var f3 = m4.foo();
     })(m1 = exports.m1 || (exports.m1 = {}));
     exports.d = m5.foo2();
+    exports.__esModule = true;
 });

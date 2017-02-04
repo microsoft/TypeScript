@@ -12,5 +12,6 @@ define(["require", "exports"], function (require, exports) {
         return exports.m2_instance1;
     }
     exports.m2_f1 = m2_f1;
+    exports.__esModule = true;
 });
 //# sourceMappingURL=../../../../../mapFiles/outputdir_module_multifolder_ref/m2.js.map

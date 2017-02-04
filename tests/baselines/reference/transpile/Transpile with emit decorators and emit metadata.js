@@ -16,4 +16,5 @@ MyClass = __decorate([
 ], MyClass);
 exports.MyClass = MyClass;
 var _a;
+Object.defineProperty(exports, "__esModule", { value: true });
 //# sourceMappingURL=file.js.map

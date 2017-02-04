@@ -13,4 +13,5 @@ function f1() {
 }
 exports.f1 = f1;
 exports.a2 = m1.m1_c1;
+exports.__esModule = true;
 //# sourceMappingURL=/tests/cases/projects/outputdir_module_subfolder/mapFiles/test.js.map

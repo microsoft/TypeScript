@@ -6,4 +6,5 @@ define(["require", "exports"], function (require, exports) {
         return C;
     }());
     exports.C = C;
+    exports.__esModule = true;
 });

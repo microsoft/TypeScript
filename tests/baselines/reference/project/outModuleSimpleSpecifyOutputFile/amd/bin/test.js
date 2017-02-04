@@ -12,6 +12,7 @@ define("m1", ["require", "exports"], function (require, exports) {
         return exports.m1_instance1;
     }
     exports.m1_f1 = m1_f1;
+    exports.__esModule = true;
 });
 define("test", ["require", "exports", "m1"], function (require, exports, m1) {
     "use strict";
@@ -28,4 +29,5 @@ define("test", ["require", "exports", "m1"], function (require, exports, m1) {
     }
     exports.f1 = f1;
     exports.a2 = m1.m1_c1;
+    exports.__esModule = true;
 });

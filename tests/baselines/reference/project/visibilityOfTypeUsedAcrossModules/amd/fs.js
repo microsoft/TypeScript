@@ -15,4 +15,5 @@ define(["require", "exports"], function (require, exports) {
         return RM;
     }());
     exports.RM = RM;
+    exports.__esModule = true;
 });

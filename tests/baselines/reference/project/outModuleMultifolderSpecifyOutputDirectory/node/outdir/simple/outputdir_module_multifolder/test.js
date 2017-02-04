@@ -15,3 +15,4 @@ function f1() {
 exports.f1 = f1;
 exports.a2 = m1.m1_c1;
 exports.a3 = m2.m2_c1;
+exports.__esModule = true;
