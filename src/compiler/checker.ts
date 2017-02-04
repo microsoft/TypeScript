@@ -18557,8 +18557,12 @@ namespace ts {
             const links = getSymbolLinks(symbol);
             if (!links.typeParametersChecked) {
                 links.typeParametersChecked = true;
-                const type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
                 const declarations = getClassOrInterfaceDeclarationsOfSymbol(symbol);
+                if (declarations.length <= 1) {
+                    return;
+                }
+
+                const type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
                 if (!areTypeParametersIdentical(declarations, type.localTypeParameters)) {
                     // Report an error on every conflicting declaration.
                     const name = symbolToString(symbol);
