@@ -1,0 +1,39 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare module JSX {
+>JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
+
+	interface Element { }
+>Element : Symbol(Element, Decl(file.tsx, 0, 20))
+
+	interface ElementTypeProperty { returnType; }
+>ElementTypeProperty : Symbol(ElementTypeProperty, Decl(file.tsx, 1, 22))
+>returnType : Symbol(ElementTypeProperty.returnType, Decl(file.tsx, 2, 32))
+}
+
+interface CustomType { }
+>CustomType : Symbol(CustomType, Decl(file.tsx, 3, 1))
+
+class Obj1 {
+>Obj1 : Symbol(Obj1, Decl(file.tsx, 5, 24))
+
+	returnType: CustomType;
+>returnType : Symbol(Obj1.returnType, Decl(file.tsx, 7, 12))
+>CustomType : Symbol(CustomType, Decl(file.tsx, 3, 1))
+}
+const obj = <Obj1 param="123"/>; // OK
+>obj : Symbol(obj, Decl(file.tsx, 10, 5))
+>Obj1 : Symbol(Obj1, Decl(file.tsx, 5, 24))
+>param : Symbol(unknown)
+
+const objSelfClosing = <Obj1/>; // OK
+>objSelfClosing : Symbol(objSelfClosing, Decl(file.tsx, 12, 5))
+>Obj1 : Symbol(Obj1, Decl(file.tsx, 5, 24))
+
+const Func = () => <Obj1/>;
+>Func : Symbol(Func, Decl(file.tsx, 14, 5))
+>Obj1 : Symbol(Obj1, Decl(file.tsx, 5, 24))
+
+const objFromFactory = <Func/>; // OK
+>objFromFactory : Symbol(objFromFactory, Decl(file.tsx, 16, 5))
+>Func : Symbol(Func, Decl(file.tsx, 14, 5))
+

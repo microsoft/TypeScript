@@ -356,6 +356,7 @@ namespace ts {
             IntrinsicElements: "IntrinsicElements",
             ElementClass: "ElementClass",
             ElementAttributesPropertyNameContainer: "ElementAttributesProperty",
+            ElementTypePropertyNameContainer: "ElementTypeProperty",
             Element: "Element",
             IntrinsicAttributes: "IntrinsicAttributes",
             IntrinsicClassAttributes: "IntrinsicClassAttributes"
@@ -11901,7 +11902,7 @@ namespace ts {
 
         function checkJsxSelfClosingElement(node: JsxSelfClosingElement) {
             checkJsxOpeningLikeElement(node);
-            return jsxElementType || anyType;
+            return getJsxElementType(node);
         }
 
         function checkJsxElement(node: JsxElement) {
@@ -11931,7 +11932,7 @@ namespace ts {
                 }
             }
 
-            return jsxElementType || anyType;
+            return getJsxElementType(node);
         }
 
         /**
@@ -12073,7 +12074,7 @@ namespace ts {
          * element is not a class element, or the class element type cannot be determined, returns 'undefined'.
          * For example, in the element <MyClass>, the element instance type is `MyClass` (not `typeof MyClass`).
          */
-        function getJsxElementInstanceType(node: JsxOpeningLikeElement, valueType: Type) {
+        function getJsxElementInstanceType(node: JsxOpeningLikeElement | JsxElement | JsxSelfClosingElement, valueType: Type) {
             Debug.assert(!(valueType.flags & TypeFlags.Union));
             if (isTypeAny(valueType)) {
                 // Short-circuit if the class tag is using an element type 'any'
@@ -12086,8 +12087,11 @@ namespace ts {
                 // No construct signatures, try call signatures
                 signatures = getSignaturesOfType(valueType, SignatureKind.Call);
                 if (signatures.length === 0) {
+
+                    const tagName = (node.kind === SyntaxKind.JsxElement) ? node.openingElement.tagName : node.tagName;
+
                     // We found no signatures at all, which is an error
-                    error(node.tagName, Diagnostics.JSX_element_type_0_does_not_have_any_construct_or_call_signatures, getTextOfNode(node.tagName));
+                    error(tagName, Diagnostics.JSX_element_type_0_does_not_have_any_construct_or_call_signatures, getTextOfNode(tagName));
                     return unknownType;
                 }
             }
@@ -12128,6 +12132,41 @@ namespace ts {
             }
             else {
                 // No interface exists, so the element attributes type will be an implicit any
+                return undefined;
+            }
+        }
+
+        /// Returns a property name which type will be the JSX Element type
+        /// or 'undefined' if ElementTypeProperty doesn't exist (then element type will be type of JSX.Element or any)
+        /// or '' if it has 0 properties (element type will be class instance type)
+        function getJsxElementTypePropertyName() {
+            // JSX
+            const jsxNamespace = getGlobalSymbol(JsxNames.JSX, SymbolFlags.Namespace, /*diagnosticMessage*/undefined);
+            // JSX.ElementTypeProperty [symbol]
+            const attribsPropTypeSym = jsxNamespace && getSymbol(jsxNamespace.exports, JsxNames.ElementTypePropertyNameContainer, SymbolFlags.Type);
+            // JSX.ElementTypeProperty [type]
+            const attribPropType = attribsPropTypeSym && getDeclaredTypeOfSymbol(attribsPropTypeSym);
+            // The properties of JSX.ElementTypeProperty
+            const attribProperties = attribPropType && getPropertiesOfType(attribPropType);
+
+            if (attribProperties) {
+                // ElementTypeProperty has zero properties, so the element type will be the class instance type
+                if (attribProperties.length === 0) {
+                    return "";
+                }
+                // ElementTypeProperty has one property, so the element type type will be the type of the corresponding
+                // property of the class instance type
+                else if (attribProperties.length === 1) {
+                    return attribProperties[0].name;
+                }
+                // More than one property on ElementTypeProperty is an error
+                else {
+                    error(attribsPropTypeSym.declarations[0], Diagnostics.The_global_type_JSX_0_may_not_have_more_than_one_property, JsxNames.ElementTypePropertyNameContainer);
+                    return undefined;
+                }
+            }
+            else {
+                // No interface exists, so the element type will be a type of JSX.Element or any
                 return undefined;
             }
         }
@@ -12253,6 +12292,88 @@ namespace ts {
         }
 
         /**
+         * Given React element instance type and the class type, resolve the Jsx element type
+         * Pass elemType to handle individual type in the union typed element type.
+         */
+        function getResolvedJsxElementType(node: JsxElement | JsxSelfClosingElement, elemType?: Type, elemClassType?: Type): Type {
+            const defaultJsxElementType = jsxElementType || anyType;
+
+            const propsName = getJsxElementTypePropertyName();
+            if (propsName === undefined) {
+                // There is no type ElementTypeProperty just return JSX.Element or 'any'
+                return defaultJsxElementType;
+            }
+
+            const tagName = (node.kind === SyntaxKind.JsxElement) ? node.openingElement.tagName : node.tagName;
+
+            if (!elemType) {
+                elemType = checkExpression(tagName);
+            }
+
+            if (elemType.flags & TypeFlags.Union) {
+                const types = (<UnionOrIntersectionType>elemType).types;
+                return getUnionType(map(types, type => {
+                    return getResolvedJsxElementType(node, type, elemClassType);
+                }), /*subtypeReduction*/ true);
+            }
+
+            // If the elemType is a string type, we have to return JSX.Element or 'any' to prevent an error downstream as we will try to find construct or call signature of the type
+            if (elemType.flags & TypeFlags.String) {
+                return defaultJsxElementType;
+            }
+            else if (elemType.flags & TypeFlags.StringLiteral) {
+                return defaultJsxElementType;
+            }
+
+            // Get the element instance type (the result of newing or invoking this tag)
+            const elemInstanceType = getJsxElementInstanceType(node, elemType);
+
+            if (!elemClassType || !isTypeAssignableTo(elemInstanceType, elemClassType)) {
+                // Is this is a stateless function component? See if its single signature's return type is
+                // assignable to the JSX Element Type
+                if (jsxElementType) {
+                    const callSignatures = elemType && getSignaturesOfType(elemType, SignatureKind.Call);
+                    const callSignature = callSignatures && callSignatures.length > 0 && callSignatures[0];
+                    const callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
+
+                    if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType)) {
+                         return callReturnType;
+                    }
+                }
+            }
+
+            if (isTypeAny(elemInstanceType)) {
+                return defaultJsxElementType;
+            }
+
+
+            if (propsName === "") {
+                // If there is no e.g. attribute member in ElementTypeProperty, use the element class type instead
+                return elemInstanceType;
+            }
+            else {
+                const attributesType = getTypeOfPropertyOfType(elemInstanceType, propsName);
+
+                if (!attributesType) {
+                    // There is no element property on this instance type return JSX.Element or 'any'
+                    return defaultJsxElementType;
+                }
+                else if (isTypeAny(attributesType) || (attributesType === unknownType)) {
+                    return defaultJsxElementType;
+                }
+                else if (attributesType.flags & TypeFlags.Union) {
+                    // Props cannot be a union type
+                    error(tagName, Diagnostics.JSX_element_attributes_type_0_may_not_be_a_union_type, typeToString(attributesType));
+                    return defaultJsxElementType;
+                }
+                else {
+                    return attributesType;
+                }
+            }
+        }
+
+
+        /**
          * Given an opening/self-closing element, get the 'element attributes type', i.e. the type that tells
          * us which attributes are valid on a given element.
          */
@@ -12277,6 +12398,27 @@ namespace ts {
                 }
             }
             return links.resolvedJsxType;
+        }
+
+        /**
+         * Given an jsx element, get the 'element type'
+         */
+        function getJsxElementType(node: JsxElement | JsxSelfClosingElement): Type {
+            const links = getNodeLinks(node);
+
+            if (!links.resolvedJsxElementType) {
+
+                const tagName = (node.kind === SyntaxKind.JsxElement) ? node.openingElement.tagName : node.tagName;
+
+                if (isJsxIntrinsicIdentifier(tagName)) {
+                    return jsxElementType || anyType;
+                }
+                else {
+                    const elemClassType = getJsxGlobalElementClassType();
+                    return links.resolvedJsxElementType = getResolvedJsxElementType(node, undefined, elemClassType);
+                }
+            }
+            return links.resolvedJsxElementType;
         }
 
         /**
