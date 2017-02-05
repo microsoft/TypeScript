@@ -3254,7 +3254,7 @@ namespace ts {
                 type;
         }
 
-        function getTypeForVariableLikeDeclarationFromJSDocComment(declaration: VariableLikeDeclaration) {
+        function getTypeForDeclarationFromJSDocComment(declaration: Node ) {
             const jsdocType = getJSDocType(declaration);
             if (jsdocType) {
                 return getTypeFromTypeNode(jsdocType);
@@ -3282,7 +3282,7 @@ namespace ts {
                 // If this is a variable in a JavaScript file, then use the JSDoc type (if it has
                 // one as its type), otherwise fallback to the below standard TS codepaths to
                 // try to figure it out.
-                const type = getTypeForVariableLikeDeclarationFromJSDocComment(declaration);
+                const type = getTypeForDeclarationFromJSDocComment(declaration);
                 if (type && type !== unknownType) {
                     return type;
                 }
@@ -3375,6 +3375,27 @@ namespace ts {
 
             // No type specified and nothing can be inferred
             return undefined;
+        }
+
+        // Return the inferred type for a variable, parameter, or property declaration
+        function getWidenedTypeForJSSpecialPropertyDeclaration(declaration: Declaration): Type {
+            const expression = declaration.kind === SyntaxKind.BinaryExpression ? <BinaryExpression>declaration :
+                declaration.kind === SyntaxKind.PropertyAccessExpression ? <BinaryExpression>getAncestor(declaration, SyntaxKind.BinaryExpression) :
+                undefined;
+
+            if (!expression) {
+                return unknownType;
+            }
+
+            if (expression.flags & NodeFlags.JavaScriptFile) {
+                // If there is a JSDoc type, use it
+                const type = getTypeForDeclarationFromJSDocComment(expression.parent);
+                if (type && type !== unknownType) {
+                    return getWidenedType(type);
+                }
+            }
+
+            return getWidenedType(getWidenedLiteralType(checkExpressionCached(expression.right)));
         }
 
         // Return the type implied by a binding pattern element. This is the type of the initializer of the element if
@@ -3531,18 +3552,7 @@ namespace ts {
                 // * className.prototype.method = expr
                 if (declaration.kind === SyntaxKind.BinaryExpression ||
                     declaration.kind === SyntaxKind.PropertyAccessExpression && declaration.parent.kind === SyntaxKind.BinaryExpression) {
-                    // Use JS Doc type if present on parent expression statement
-                    if (declaration.flags & NodeFlags.JavaScriptFile) {
-                        const jsdocType = getJSDocType(declaration.parent);
-                        if (jsdocType) {
-                            return links.type = getTypeFromTypeNode(jsdocType);
-                        }
-                    }
-                    const declaredTypes = map(symbol.declarations,
-                        decl => decl.kind === SyntaxKind.BinaryExpression ?
-                            checkExpressionCached((<BinaryExpression>decl).right) :
-                            checkExpressionCached((<BinaryExpression>decl.parent).right));
-                    type = getUnionType(declaredTypes, /*subtypeReduction*/ true);
+                    type = getUnionType(map(symbol.declarations, getWidenedTypeForJSSpecialPropertyDeclaration), /*subtypeReduction*/ true);
                 }
                 else {
                     type = getWidenedTypeForVariableLikeDeclaration(<VariableLikeDeclaration>declaration, /*reportErrors*/ true);
@@ -3585,7 +3595,7 @@ namespace ts {
                 const setter = <AccessorDeclaration>getDeclarationOfKind(symbol, SyntaxKind.SetAccessor);
 
                 if (getter && getter.flags & NodeFlags.JavaScriptFile) {
-                    const jsDocType = getTypeForVariableLikeDeclarationFromJSDocComment(getter);
+                    const jsDocType = getTypeForDeclarationFromJSDocComment(getter);
                     if (jsDocType) {
                         return links.type = jsDocType;
                     }
