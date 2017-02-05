@@ -587,7 +587,7 @@ namespace ts {
                 }
                 if (visited) {
                     if (isArray(visited)) {
-                        for (let visitedNode of visited) {
+                        for (const visitedNode of visited) {
                             Debug.assertNode(visitedNode, test);
                             aggregateTransformFlags(visitedNode);
                             updated.push(<T>visitedNode);
