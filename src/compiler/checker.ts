@@ -5226,6 +5226,7 @@ namespace ts {
                 let hasThisParameter: boolean;
                 const iife = getImmediatelyInvokedFunctionExpression(declaration);
                 const isJSConstructSignature = isJSDocConstructSignature(declaration);
+                const isUntypedSignatureInJSFile = !iife && !isJSConstructSignature && isInJavaScriptFile(declaration);
 
                 // If this is a JSDoc construct signature, then skip the first parameter in the
                 // parameter list.  The first parameter represents the return type of the construct
@@ -5251,10 +5252,13 @@ namespace ts {
                         hasLiteralTypes = true;
                     }
 
+                    const isUntypedParamInJSFile = isUntypedSignatureInJSFile && !param.type && !getJSDocParameterTags(param);
+
                     // Record a new minimum argument count if this is not an optional parameter
                     const isOptionalParameter = param.initializer || param.questionToken || param.dotDotDotToken ||
                         iife && parameters.length > iife.arguments.length && !param.type ||
-                        isJSDocOptionalParameter(param);
+                        isJSDocOptionalParameter(param) ||
+                        isUntypedParamInJSFile;
                     if (!isOptionalParameter) {
                         minArgumentCount = parameters.length;
                     }
