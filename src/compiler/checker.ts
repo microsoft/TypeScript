@@ -19372,7 +19372,9 @@ namespace ts {
                     forEach(node.exportClause.elements, checkExportSpecifier);
 
                     const inAmbientExternalModule = node.parent.kind === SyntaxKind.ModuleBlock && isAmbientModule(node.parent.parent);
-                    if (node.parent.kind !== SyntaxKind.SourceFile && !inAmbientExternalModule) {
+                    const inAmbientNamespaceDeclaration = !inAmbientExternalModule && node.parent.kind === SyntaxKind.ModuleBlock &&
+                        !node.moduleSpecifier && isInAmbientContext(node);
+                    if (node.parent.kind !== SyntaxKind.SourceFile && !inAmbientExternalModule && !inAmbientNamespaceDeclaration) {
                         error(node, Diagnostics.Export_declarations_are_not_permitted_in_a_namespace);
                     }
                 }
