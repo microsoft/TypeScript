@@ -8,3 +8,4 @@ export var __esModule = 1;
 "use strict";
 exports.default = "test";
 exports.__esModule = 1;
+Object.defineProperty(exports, "__esModule", { value: true });
