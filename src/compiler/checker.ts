@@ -11864,6 +11864,8 @@ namespace ts {
                 if (spread.flags & TypeFlags.Object) {
                     // only set the symbol and flags if this is a (fresh) object type
                     spread.flags |= propagatedFlags;
+                    spread.flags |= TypeFlags.FreshLiteral;
+                    (spread as ObjectType).objectFlags |= ObjectFlags.ObjectLiteral;
                     spread.symbol = node.symbol;
                 }
                 return spread;
