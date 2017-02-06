@@ -354,14 +354,14 @@ interface String {
     match(regexp: RegExp | string): RegExpMatchArray | null;
 
     /**
-      * Replaces text in a string, using a regular expression or search string. Only regular expression with global flag replaces all occurrences.
+      * Replaces text in a string, using a regular expression or search string. When given a regular expression with its global flag set, this method replaces all occurrences. Otherwise, only the first match is replaced.
       * @param searchValue A literal search string or a regular expression object.
       * @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
       */
     replace(searchValue: RegExp | string, replaceValue: string): string;
 
     /**
-      * Replaces text in a string, using a regular expression or search string. Only regular expression with global flag replaces all occurrences.
+      * Replaces text in a string, using a regular expression or search string. When given a regular expression with its global flag set, this method replaces all occurrences. Otherwise, only the first match is replaced.
       * @param searchValue A string that represents the regular expression.
       * @param replacer A function that returns the replacement text.
       */
