@@ -835,10 +835,10 @@ namespace ts {
             const parseTreeNode = getParseTreeNode(node);
             if (parseTreeNode && !shouldAppendEsModuleMarker) {
                 // class declaration get down-level transformed to be variable statement
-                shouldAppendEsModuleMarker = (parseTreeNode.kind === SyntaxKind.VariableStatement ||parseTreeNode.kind === SyntaxKind.ClassDeclaration || parseTreeNode.kind === SyntaxKind.ImportEqualsDeclaration)
+                shouldAppendEsModuleMarker = (parseTreeNode.kind === SyntaxKind.VariableStatement || parseTreeNode.kind === SyntaxKind.ClassDeclaration || parseTreeNode.kind === SyntaxKind.ImportEqualsDeclaration)
                     && hasModifier(parseTreeNode, ModifierFlags.Export);
             }
- 
+
             if (hasModifier(node, ModifierFlags.Export)) {
                 let modifiers: NodeArray<Modifier>;
 
