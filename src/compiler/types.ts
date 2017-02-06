@@ -958,8 +958,7 @@
     }
 
     // Represents an expression that is elided as part of a transformation to emit comments on a
-    // not-emitted node. The 'expression' property of a NotEmittedExpression should be emitted.
-    // @internal
+    // not-emitted node. The 'expression' property of a PartiallyEmittedExpression should be emitted.
     export interface PartiallyEmittedExpression extends LeftHandSideExpression {
         kind: SyntaxKind.PartiallyEmittedExpression;
         expression: Expression;
@@ -1538,7 +1537,6 @@
 
     // Represents a statement that is elided as part of a transformation to emit comments on a
     // not-emitted node.
-    // @internal
     export interface NotEmittedStatement extends Statement {
         kind: SyntaxKind.NotEmittedStatement;
     }
@@ -1773,24 +1771,28 @@
         members: NodeArray<EnumMember>;
     }
 
-    export type ModuleBody = ModuleBlock | ModuleDeclaration;
-
     export type ModuleName = Identifier | StringLiteral;
+
+    export type ModuleBody = NamespaceBody | JSDocNamespaceBody;
 
     export interface ModuleDeclaration extends DeclarationStatement {
         kind: SyntaxKind.ModuleDeclaration;
         name: Identifier | StringLiteral;
-        body?: ModuleBlock | NamespaceDeclaration | JSDocNamespaceDeclaration | Identifier;
+        body?: ModuleBody | JSDocNamespaceDeclaration | Identifier;
     }
+
+    export type NamespaceBody = ModuleBlock | NamespaceDeclaration;
 
     export interface NamespaceDeclaration extends ModuleDeclaration {
         name: Identifier;
-        body: ModuleBlock | NamespaceDeclaration;
+        body: NamespaceBody;
     }
+
+    export type JSDocNamespaceBody = Identifier | JSDocNamespaceDeclaration;
 
     export interface JSDocNamespaceDeclaration extends ModuleDeclaration {
         name: Identifier;
-        body: JSDocNamespaceDeclaration | Identifier;
+        body: JSDocNamespaceBody;
     }
 
     export interface ModuleBlock extends Node, Statement {
@@ -3730,7 +3732,6 @@
         helpers?: EmitHelper[];                 // Emit helpers for the node
     }
 
-    /* @internal */
     export const enum EmitFlags {
         SingleLine = 1 << 0,                     // The contents of this node should be emitted on a single line.
         AdviseOnEmitNode = 1 << 1,               // The printer should invoke the onEmitNode callback when printing this node.
@@ -3759,7 +3760,6 @@
         HasEndOfDeclarationMarker = 1 << 21,     // Declaration has an associated NotEmittedStatement to mark the end of the declaration
     }
 
-    /* @internal */
     export interface EmitHelper {
         readonly name: string;      // A unique name for this helper.
         readonly scoped: boolean;   // Indicates whether ther helper MUST be emitted in the current scope.
