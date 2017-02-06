@@ -1766,8 +1766,6 @@ namespace ts {
 
     // Utilities
 
-    function asName(name: string): Identifier;
-    function asName(name: Identifier): Identifier;
     function asName(name: string | Identifier): Identifier;
     function asName(name: string | BindingName): BindingName;
     function asName(name: string | PropertyName): PropertyName;
@@ -1811,8 +1809,6 @@ namespace ts {
     /**
      * Associates a node with the current transformation, initializing
      * various transient transformation properties.
-     *
-     * @param node The node.
      */
     /* @internal */
     export function getOrCreateEmitNode(node: Node) {
@@ -1845,8 +1841,6 @@ namespace ts {
 
     /**
      * Gets flags that control emit behavior of a node.
-     *
-     * @param node The node.
      */
     export function getEmitFlags(node: Node) {
         const emitNode = node.emitNode;
@@ -1855,9 +1849,6 @@ namespace ts {
 
     /**
      * Sets flags that control emit behavior of a node.
-     *
-     * @param node The node.
-     * @param emitFlags The NodeEmitFlags for the node.
      */
     export function setEmitFlags<T extends Node>(node: T, emitFlags: EmitFlags) {
         getOrCreateEmitNode(node).flags = emitFlags;
@@ -1866,8 +1857,6 @@ namespace ts {
 
     /**
      * Gets a custom text range to use when emitting source maps.
-     *
-     * @param node The node.
      */
     export function getSourceMapRange(node: Node) {
         const emitNode = node.emitNode;
@@ -1876,9 +1865,6 @@ namespace ts {
 
     /**
      * Sets a custom text range to use when emitting source maps.
-     *
-     * @param node The node.
-     * @param range The text range.
      */
     export function setSourceMapRange<T extends Node>(node: T, range: TextRange) {
         getOrCreateEmitNode(node).sourceMapRange = range;
@@ -1887,9 +1873,6 @@ namespace ts {
 
     /**
      * Gets the TextRange to use for source maps for a token of a node.
-     *
-     * @param node The node.
-     * @param token The token.
      */
     export function getTokenSourceMapRange(node: Node, token: SyntaxKind) {
         const emitNode = node.emitNode;
@@ -1899,10 +1882,6 @@ namespace ts {
 
     /**
      * Sets the TextRange to use for source maps for a token of a node.
-     *
-     * @param node The node.
-     * @param token The token.
-     * @param range The text range.
      */
     export function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange) {
         const emitNode = getOrCreateEmitNode(node);
@@ -1913,8 +1892,6 @@ namespace ts {
 
     /**
      * Gets a custom text range to use when emitting comments.
-     *
-     * @param node The node.
      */
     export function getCommentRange(node: Node) {
         const emitNode = node.emitNode;
