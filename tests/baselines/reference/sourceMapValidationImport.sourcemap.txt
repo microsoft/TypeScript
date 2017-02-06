@@ -228,7 +228,7 @@ sourceFile:sourceMapValidationImport.ts
 6 >            ^^^^^^^^^
 7 >                     ^^
 8 >                       ^
-9 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+9 >                        ^^^->
 1->
   >
 2 >var 
@@ -247,4 +247,5 @@ sourceFile:sourceMapValidationImport.ts
 7 >Emitted(14, 24) Source(8, 16) + SourceIndex(0)
 8 >Emitted(14, 25) Source(8, 17) + SourceIndex(0)
 ---
+>>>exports.__esModule = true;
 >>>//# sourceMappingURL=sourceMapValidationImport.js.map
