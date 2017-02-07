@@ -1239,6 +1239,11 @@ namespace ts.server.protocol {
          * List of files names that should be recompiled
          */
         fileNames: string[];
+
+        /**
+         * true if project uses outFile or out compiler option
+         */
+        projectUsesOutFile: boolean;
     }
 
     /**
