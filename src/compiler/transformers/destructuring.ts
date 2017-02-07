@@ -112,7 +112,10 @@ namespace ts {
             Debug.assertNode(target, createAssignmentCallback ? isIdentifier : isExpression);
             const expression = createAssignmentCallback
                 ? createAssignmentCallback(<Identifier>target, value, location)
-                : createAssignment(visitNode(<Expression>target, visitor, isExpression), value, location);
+                : setTextRange(
+                    createAssignment(visitNode(<Expression>target, visitor, isExpression), value),
+                    location
+                );
             expression.original = original;
             emitExpression(expression);
         }
@@ -174,9 +177,10 @@ namespace ts {
             const variable = createVariableDeclaration(
                 name,
                 /*type*/ undefined,
-                pendingExpressions ? inlineExpressions(append(pendingExpressions, value)) : value,
-                location);
+                pendingExpressions ? inlineExpressions(append(pendingExpressions, value)) : value
+            );
             variable.original = original;
+            setTextRange(variable, location);
             if (isIdentifier(name)) {
                 setEmitFlags(variable, EmitFlags.NoNestedSourceMaps);
             }
@@ -416,7 +420,7 @@ namespace ts {
             const temp = createTempVariable(/*recordTempVariable*/ undefined);
             if (flattenContext.hoistTempVariables) {
                 flattenContext.context.hoistVariableDeclaration(temp);
-                flattenContext.emitExpression(createAssignment(temp, value, location));
+                flattenContext.emitExpression(setTextRange(createAssignment(temp, value), location));
             }
             else {
                 flattenContext.emitBindingOrAssignment(temp, value, location, /*original*/ undefined);
@@ -492,6 +496,15 @@ namespace ts {
                 }
             }
         }
-        return createCall(getHelperName("__rest"), undefined, [value, createArrayLiteral(propertyNames, location)]);
+        return createCall(
+            getHelperName("__rest"),
+            undefined,
+            [
+                value,
+                setTextRange(
+                    createArrayLiteral(propertyNames),
+                    location
+                )
+            ]);
     }
 }

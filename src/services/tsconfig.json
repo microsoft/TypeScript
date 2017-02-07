@@ -83,6 +83,7 @@
         "codefixes/fixClassDoesntImplementInheritedAbstractMember.ts",
         "codefixes/fixClassSuperMustPrecedeThisAccess.ts",
         "codefixes/fixConstructorForDerivedNeedSuperCall.ts",
+        "codefixes/fixForgottenThisPropertyAccess.ts",
         "codefixes/fixes.ts",
         "codefixes/helpers.ts",
         "codefixes/importFixes.ts",

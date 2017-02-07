@@ -118,6 +118,7 @@
         "./unittests/initializeTSConfig.ts",
         "./unittests/compileOnSave.ts",
         "./unittests/typingsInstaller.ts",
-        "./unittests/projectErrors.ts"
+        "./unittests/projectErrors.ts",
+        "./unittests/printer.ts"
     ]
 }

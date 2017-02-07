@@ -210,36 +210,40 @@ namespace ts {
                         const statement = createVariableStatement(
                             /*modifiers*/ undefined,
                             updateVariableDeclarationList(initializer, declarations),
-                            /*location*/ initializer
                         );
+                        setTextRange(statement, initializer);
                         leadingStatements = append(leadingStatements, statement);
                     }
                 }
                 else if (isAssignmentPattern(initializer)) {
                     temp = createTempVariable(/*recordTempVariable*/ undefined);
                     const expression = flattenDestructuringAssignment(
-                        aggregateTransformFlags(createAssignment(initializer, temp, /*location*/ node.initializer)),
+                        aggregateTransformFlags(
+                            setTextRange(
+                                createAssignment(initializer, temp),
+                                node.initializer
+                            )
+                        ),
                         visitor,
                         context,
                         FlattenLevel.ObjectRest
                     );
-                    leadingStatements = append(leadingStatements, createStatement(expression, /*location*/ node.initializer));
+                    leadingStatements = append(leadingStatements, setTextRange(createStatement(expression), node.initializer));
                 }
             }
             if (temp) {
                 const expression = visitNode(node.expression, visitor, isExpression);
                 const statement = visitNode(node.statement, visitor, isStatement);
                 const block = isBlock(statement)
-                    ? updateBlock(statement, createNodeArray(concatenate(leadingStatements, statement.statements), statement.statements))
-                    : createBlock(append(leadingStatements, statement), statement, /*multiLine*/ true);
+                    ? updateBlock(statement, setTextRange(createNodeArray(concatenate(leadingStatements, statement.statements)), statement.statements))
+                    : setTextRange(createBlock(append(leadingStatements, statement), /*multiLine*/ true), statement);
                 return updateForOf(
                     node,
-                    createVariableDeclarationList(
-                        [
-                            createVariableDeclaration(temp, /*type*/ undefined, /*initializer*/ undefined, node.initializer)
-                        ],
-                        node.initializer,
-                        NodeFlags.Let
+                    setTextRange(
+                        createVariableDeclarationList([
+                            setTextRange(createVariableDeclaration(temp), node.initializer)
+                        ], NodeFlags.Let),
+                        node.initializer
                     ),
                     expression,
                     block
@@ -380,7 +384,7 @@ namespace ts {
             const trailingStatements = endLexicalEnvironment();
             if (some(leadingStatements) || some(trailingStatements)) {
                 const block = convertToFunctionBody(body, /*multiLine*/ true);
-                return updateBlock(block, createNodeArray(concatenate(concatenate(leadingStatements, block.statements), trailingStatements), block.statements));
+                return updateBlock(block, setTextRange(createNodeArray(concatenate(concatenate(leadingStatements, block.statements), trailingStatements)), block.statements));
             }
             return body;
         }
@@ -402,6 +406,11 @@ namespace ts {
     };
 
     export function createAssignHelper(context: TransformationContext, attributesSegments: Expression[]) {
+        if (context.getCompilerOptions().target >= ScriptTarget.ES2015) {
+            return createCall(createPropertyAccess(createIdentifier("Object"), "assign"),
+                              /*typeArguments*/ undefined,
+                              attributesSegments);
+        }
         context.requestEmitHelper(assignHelper);
         return createCall(
             getHelperName("__assign"),

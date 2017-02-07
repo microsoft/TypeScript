@@ -115,6 +115,7 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes: [
             Diagnostics.Cannot_find_name_0.code,
+            Diagnostics.Cannot_find_namespace_0.code,
             Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code
         ],
         getCodeActions: (context: CodeFixContext) => {
@@ -416,8 +417,8 @@ namespace ts.codefix {
                     );
 
                     function getModuleSpecifierForNewImport() {
-                        const fileName = sourceFile.path;
-                        const moduleFileName = moduleSymbol.valueDeclaration.getSourceFile().path;
+                        const fileName = sourceFile.fileName;
+                        const moduleFileName = moduleSymbol.valueDeclaration.getSourceFile().fileName;
                         const sourceDirectory = getDirectoryPath(fileName);
                         const options = context.program.getCompilerOptions();
 
@@ -439,8 +440,7 @@ namespace ts.codefix {
                                 return undefined;
                             }
 
-                            const normalizedBaseUrl = toPath(options.baseUrl, getDirectoryPath(options.baseUrl), getCanonicalFileName);
-                            let relativeName = tryRemoveParentDirectoryName(moduleFileName, normalizedBaseUrl);
+                            let relativeName = getRelativePathIfInDirectory(moduleFileName, options.baseUrl);
                             if (!relativeName) {
                                 return undefined;
                             }
@@ -477,9 +477,8 @@ namespace ts.codefix {
 
                         function tryGetModuleNameFromRootDirs() {
                             if (options.rootDirs) {
-                                const normalizedRootDirs = map(options.rootDirs, rootDir => toPath(rootDir, /*basePath*/ undefined, getCanonicalFileName));
-                                const normalizedTargetPath = getPathRelativeToRootDirs(moduleFileName, normalizedRootDirs);
-                                const normalizedSourcePath = getPathRelativeToRootDirs(sourceDirectory, normalizedRootDirs);
+                                const normalizedTargetPath = getPathRelativeToRootDirs(moduleFileName, options.rootDirs);
+                                const normalizedSourcePath = getPathRelativeToRootDirs(sourceDirectory, options.rootDirs);
                                 if (normalizedTargetPath !== undefined) {
                                     const relativePath = normalizedSourcePath !== undefined ? getRelativePath(normalizedTargetPath, normalizedSourcePath) : normalizedTargetPath;
                                     return removeFileExtension(relativePath);
@@ -546,9 +545,9 @@ namespace ts.codefix {
                         }
                     }
 
-                    function getPathRelativeToRootDirs(path: Path, rootDirs: Path[]) {
+                    function getPathRelativeToRootDirs(path: string, rootDirs: string[]) {
                         for (const rootDir of rootDirs) {
-                            const relativeName = tryRemoveParentDirectoryName(path, rootDir);
+                            const relativeName = getRelativePathIfInDirectory(path, rootDir);
                             if (relativeName !== undefined) {
                                 return relativeName;
                             }
@@ -564,19 +563,14 @@ namespace ts.codefix {
                         return fileName;
                     }
 
+                    function getRelativePathIfInDirectory(path: string, directoryPath: string) {
+                        const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, false);
+                        return isRootedDiskPath(relativePath) || startsWith(relativePath, "..") ? undefined : relativePath;
+                    }
+
                     function getRelativePath(path: string, directoryPath: string) {
                         const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, false);
                         return moduleHasNonRelativeName(relativePath) ? "./" + relativePath : relativePath;
-                    }
-
-                    function tryRemoveParentDirectoryName(path: Path, parentDirectory: Path) {
-                        const index = path.indexOf(parentDirectory);
-                        if (index === 0) {
-                            return endsWith(parentDirectory, directorySeparator)
-                                ? path.substring(parentDirectory.length)
-                                : path.substring(parentDirectory.length + 1);
-                        }
-                        return undefined;
                     }
                 }
 
