@@ -8540,7 +8540,7 @@ namespace ts {
             if (flags & TypeFlags.Void) types.push(voidType);
             if (flags & TypeFlags.Undefined) types.push(undefinedType);
             if (flags & TypeFlags.Null) types.push(nullType);
-            return getUnionType(types, /*subtypeReduction*/ true);
+            return getUnionType(types);
         }
 
         function removeDefinitelyFalsyTypes(type: Type): Type {
