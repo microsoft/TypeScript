@@ -16,7 +16,7 @@ namespace ts.Completions {
             return undefined;
         }
 
-        const { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, isJsDocTagName } = completionData;
+        const { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, isJsDocTagName, symbolActionMap } = completionData;
 
         if (isJsDocTagName) {
             // If the current position is a jsDoc tag name, only tag names should be provided for completion
@@ -26,7 +26,7 @@ namespace ts.Completions {
         const entries: CompletionEntry[] = [];
 
         if (isSourceFileJavaScript(sourceFile)) {
-            const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries, location, /*performCharacterChecks*/ true, typeChecker, compilerOptions.target, log);
+            const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries, location, /*performCharacterChecks*/ true, typeChecker, compilerOptions.target, log, symbolActionMap);
             addRange(entries, getJavaScriptCompletionEntries(sourceFile, location.pos, uniqueNames, compilerOptions.target));
         }
         else {
@@ -50,7 +50,7 @@ namespace ts.Completions {
                 }
             }
 
-            getCompletionEntriesFromSymbols(symbols, entries, location, /*performCharacterChecks*/ true, typeChecker, compilerOptions.target, log);
+            getCompletionEntriesFromSymbols(symbols, entries, location, /*performCharacterChecks*/ true, typeChecker, compilerOptions.target, log, symbolActionMap);
         }
 
         // Add keywords if this is not a member completion list
@@ -59,6 +59,10 @@ namespace ts.Completions {
         }
 
         return { isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation: isNewIdentifierLocation, entries };
+    }
+
+    function getSymbolIdAsString(symbol: Symbol) {
+        return getSymbolId(symbol) + "";
     }
 
     function getJavaScriptCompletionEntries(sourceFile: SourceFile, position: number, uniqueNames: Map<string>, target: ScriptTarget): CompletionEntry[] {
@@ -114,7 +118,7 @@ namespace ts.Completions {
         };
     }
 
-    function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: Push<CompletionEntry>, location: Node, performCharacterChecks: boolean, typeChecker: TypeChecker, target: ScriptTarget, log: Log): Map<string> {
+    function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: Push<CompletionEntry>, location: Node, performCharacterChecks: boolean, typeChecker: TypeChecker, target: ScriptTarget, log: Log, symbolActionMap?: Map<true>): Map<string> {
         const start = timestamp();
         const uniqueNames = createMap<string>();
         if (symbols) {
@@ -123,6 +127,9 @@ namespace ts.Completions {
                 if (entry) {
                     const id = escapeIdentifier(entry.name);
                     if (!uniqueNames.get(id)) {
+                        if (symbolActionMap && symbolActionMap.has(getSymbolIdAsString(symbol))) {
+                            entry.hasAction = true;
+                        }
                         entries.push(entry);
                         uniqueNames.set(id, id);
                     }
@@ -855,7 +862,7 @@ namespace ts.Completions {
             }
 
             if (isJsDocTagName) {
-                return { symbols: undefined, isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, location: undefined, isRightOfDot: false, isJsDocTagName };
+                return { symbols: undefined, isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, location: undefined, isRightOfDot: false, isJsDocTagName, symbolActionMap: undefined };
             }
 
             if (!insideJsDocTagExpression) {
@@ -931,6 +938,7 @@ namespace ts.Completions {
         let isMemberCompletion: boolean;
         let isNewIdentifierLocation: boolean;
         let symbols: Symbol[] = [];
+        const symbolActionMap = createMap<true>();
 
         if (isRightOfDot) {
             getTypeScriptMemberSymbols();
@@ -967,7 +975,7 @@ namespace ts.Completions {
 
         log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
 
-        return { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag), isJsDocTagName };
+        return { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag), isJsDocTagName, symbolActionMap };
 
         function getTypeScriptMemberSymbols(): void {
             // Right of dot member completion list
@@ -1100,14 +1108,15 @@ namespace ts.Completions {
             const symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
             symbols = typeChecker.getSymbolsInScope(scopeNode, symbolMeanings);
 
-            getSymbolsFromAllSourceFiles(previousToken.getText());
+            getSymbolsFromOtherSourceFileExports(previousToken === undefined ? "" : previousToken.getText());
 
             return true;
         }
 
-        function getSymbolsFromAllSourceFiles(tokenText: string) {
+        function getSymbolsFromOtherSourceFileExports(tokenText: string) {
             const allPotentialModules = typeChecker.getAmbientModules();
             const tokenTextLowerCase = tokenText.toLowerCase();
+            const symbolIdMap = arrayToMap(symbols, s => getSymbolIdAsString(s));
             for (const otherSourceFile of allSourceFiles) {
                 if (otherSourceFile !== sourceFile && isExternalOrCommonJsModule(otherSourceFile)) {
                     allPotentialModules.push(otherSourceFile.symbol);
@@ -1119,15 +1128,21 @@ namespace ts.Completions {
                 const defaultExport = typeChecker.tryGetMemberInModuleExports("default", moduleSymbol);
                 if (defaultExport) {
                     const localSymbol = getLocalSymbolForExportDefault(defaultExport);
-                    if (localSymbol && startsWith(localSymbol.name.toLowerCase(), tokenTextLowerCase)) {
+                    if (localSymbol && !symbolIdMap.has(getSymbolIdAsString(localSymbol)) && startsWith(localSymbol.name.toLowerCase(), tokenTextLowerCase)) {
                         symbols.push(localSymbol);
+                        symbolActionMap.set(getSymbolIdAsString(localSymbol), true);
                     }
                 }
 
                 // check exports with the same name
-                const allExports = typeChecker.getExportsOfModule(moduleSymbol);
-                if (allExports) {
-                    addRange(symbols, filter(allExports, e => e.name && startsWith(e.name.toLowerCase(), tokenTextLowerCase)));
+                const allExportedSymbols = typeChecker.getExportsOfModule(moduleSymbol);
+                if (allExportedSymbols) {
+                    for (const exportedSymbol of allExportedSymbols) {
+                        if (exportedSymbol.name && !symbolIdMap.has(getSymbolIdAsString(exportedSymbol)) && startsWith(exportedSymbol.name.toLowerCase(), tokenTextLowerCase)) {
+                            symbols.push(exportedSymbol);
+                            symbolActionMap.set(getSymbolIdAsString(exportedSymbol), true);
+                        }
+                    }
                 }
             }
         }

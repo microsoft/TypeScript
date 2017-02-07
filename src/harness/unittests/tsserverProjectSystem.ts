@@ -3052,24 +3052,36 @@ namespace ts.projectSystem {
         it("should include exported members of all source files", () => {
             const file1: FileOrFolder = {
                 path: "/a/b/file1.ts",
-                content: `export function Test1() { }`
+                content: `
+                export function Test1() { }
+                export function Test2() { }
+                `
             };
             const file2: FileOrFolder = {
                 path: "/a/b/file2.ts",
-                content: `T`
+                content: `
+                import { Test2 } from "./file1";
+
+                t`
             };
             const configFile: FileOrFolder = {
                 path: "/a/b/tsconfig.json",
-                content: ""
+                content: "{}"
             };
 
             const host = createServerHost([file1, file2, configFile]);
             const service = createProjectService(host);
             service.openClientFile(file2.path);
-            
-            const completions1 = service.configuredProjects[0].getLanguageService().getCompletionsAtPosition(file2.path, 1);
-            // should contain completions for string
-            assert.isTrue(completions1.entries.some(e => e.name === "Test1"), "should contain 'charAt'");            
+
+            const completions1 = service.configuredProjects[0].getLanguageService().getCompletionsAtPosition(file2.path, file2.path.length);
+            const test1Entry = find(completions1.entries, e => e.name === "Test1");
+            const test2Entry = find(completions1.entries, e => e.name === "Test2");
+
+            assert.isTrue(test1Entry !== undefined, "should contain 'Test1'");
+            assert.isTrue(test2Entry !== undefined, "should contain 'Test2'");
+
+            assert.isTrue(test1Entry.hasAction === true, "should set the 'hasAction' property to true for Test1");
+            assert.isTrue(test2Entry.hasAction === undefined, "should not set the 'hasAction' property for Test2");
         });
     });
 
@@ -3092,7 +3104,7 @@ namespace ts.projectSystem {
             let options = project.getCompilerOptions();
             assert.isTrue(options.maxNodeModuleJsDepth === 2);
 
-            // Assert the option sticks 
+            // Assert the option sticks
             projectService.setCompilerOptionsForInferredProjects({ target: ScriptTarget.ES2016 });
             project = projectService.inferredProjects[0];
             options = project.getCompilerOptions();

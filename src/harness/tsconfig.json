@@ -77,8 +77,6 @@
         "../services/codefixes/helpers.ts",
         "../services/codefixes/importFixes.ts",
         "../services/codefixes/unusedIdentifierFixes.ts",
-        "../services/harness.ts",
-
         "sourceMapRecorder.ts",
         "harnessLanguageService.ts",
         "fourslash.ts",

@@ -572,6 +572,7 @@ namespace ts {
           * be used in that case
           */
         replacementSpan?: TextSpan;
+        hasAction?: true;
     }
 
     export interface CompletionEntryDetails {

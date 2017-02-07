@@ -97,6 +97,7 @@ namespace ts.server {
         /* @internal */
         export const CompletionsFull: protocol.CommandTypes.CompletionsFull = "completions-full";
         export const CompletionDetails: protocol.CommandTypes.CompletionDetails = "completionEntryDetails";
+        export const CommitCompletionWithCodeAction: protocol.CommandTypes.CommitCompletionWithCodeAction = "commitCompletionWithCodeAction";
         export const CompileOnSaveAffectedFileList: protocol.CommandTypes.CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList";
         export const CompileOnSaveEmitFile: protocol.CommandTypes.CompileOnSaveEmitFile = "compileOnSaveEmitFile";
         export const Configure: protocol.CommandTypes.Configure = "configure";
@@ -1047,6 +1048,11 @@ namespace ts.server {
             return result;
         }
 
+        private getCodeActionAfterCommittingCompletion(args: protocol.CommitCompletionWithCodeActionRequest) {
+            args.arguments.errorCodes = [Diagnostics.Cannot_find_name_0.code];
+            return this.getCodeFixes(args.arguments, /*simplifiedResult*/ true);
+        }
+
         private emitFile(args: protocol.CompileOnSaveEmitFileRequestArgs) {
             const { file, project } = this.getFileAndProject(args);
             if (!project) {
@@ -1526,6 +1532,9 @@ namespace ts.server {
             },
             [CommandNames.CompileOnSaveEmitFile]: (request: protocol.CompileOnSaveEmitFileRequest) => {
                 return this.requiredResponse(this.emitFile(request.arguments));
+            },
+            [CommandNames.CommitCompletionWithCodeAction]: (request: protocol.CommitCompletionWithCodeActionRequest) => {
+                return this.requiredResponse(this.getCodeActionAfterCommittingCompletion(request));
             },
             [CommandNames.SignatureHelp]: (request: protocol.SignatureHelpRequest) => {
                 return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ true));
