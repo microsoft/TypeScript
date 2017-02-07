@@ -640,7 +640,7 @@ namespace ts {
                 }
                 // declaration is after usage
                 // can be legal if usage is deferred (i.e. inside function or in initializer of instance property)
-                if (isUsedInFunctionOrNonStaticProperty(usage)) {
+                if (isUsedInFunctionOrInstanceProperty(usage)) {
                     return true;
                 }
                 const sourceFiles = host.getSourceFiles();
@@ -667,10 +667,12 @@ namespace ts {
             }
 
 
-            // declaration is after usage
-            // can be legal if usage is deferred (i.e. inside function or in initializer of instance property)
+            // declaration is after usage, but it can still be legal if usage is deferred:
+            // 1. inside a function
+            // 2. inside an instance property initializer, a reference to a non-instance property
             const container = getEnclosingBlockScopeContainer(declaration);
-            return isUsedInFunctionOrNonStaticProperty(usage, container);
+            const isInstanceProperty = declaration.kind === SyntaxKind.PropertyDeclaration && !(getModifierFlags(declaration) & ModifierFlags.Static);
+            return isUsedInFunctionOrInstanceProperty(usage, isInstanceProperty, container);
 
             function isImmediatelyUsedInInitializerOfBlockScopedVariable(declaration: VariableDeclaration, usage: Node): boolean {
                 const container = getEnclosingBlockScopeContainer(declaration);
@@ -699,7 +701,7 @@ namespace ts {
                 return false;
             }
 
-            function isUsedInFunctionOrNonStaticProperty(usage: Node, container?: Node): boolean {
+            function isUsedInFunctionOrInstanceProperty(usage: Node, isDeclarationInstanceProperty?: boolean, container?: Node): boolean {
                 let current = usage;
                 while (current) {
                     if (current === container) {
@@ -710,13 +712,13 @@ namespace ts {
                         return true;
                     }
 
-                    const initializerOfNonStaticProperty = current.parent &&
+                    const initializerOfInstanceProperty = current.parent &&
                         current.parent.kind === SyntaxKind.PropertyDeclaration &&
                         (getModifierFlags(current.parent) & ModifierFlags.Static) === 0 &&
                         (<PropertyDeclaration>current.parent).initializer === current;
 
-                    if (initializerOfNonStaticProperty) {
-                        return true;
+                    if (initializerOfInstanceProperty) {
+                        return !isDeclarationInstanceProperty;
                     }
 
                     current = current.parent;
@@ -985,10 +987,10 @@ namespace ts {
                 //              interface bar {}
                 //          }
                 //      const foo/*1*/: foo/*2*/.bar;
-                // The foo at /*1*/ and /*2*/ will share same symbol with two meaning
-                // block - scope variable and namespace module. However, only when we
+                // The foo at /*1*/ and /*2*/ will share same symbol with two meanings:
+                // block-scoped variable and namespace module. However, only when we
                 // try to resolve name in /*1*/ which is used in variable position,
-                // we want to check for block- scoped
+                // we want to check for block-scoped
                 if (meaning & SymbolFlags.BlockScopedVariable) {
                     const exportOrLocalSymbol = getExportSymbolOfValueSymbolIfExported(result);
                     if (exportOrLocalSymbol.flags & SymbolFlags.BlockScopedVariable) {
@@ -1012,7 +1014,7 @@ namespace ts {
                 return false;
             }
 
-            const container = getThisContainer(errorLocation, /* includeArrowFunctions */ true);
+            const container = getThisContainer(errorLocation, /*includeArrowFunctions*/ true);
             let location = container;
             while (location) {
                 if (isClassLike(location.parent)) {
@@ -3994,7 +3996,7 @@ namespace ts {
         // A valid base type is any non-generic object type or intersection of non-generic
         // object types.
         function isValidBaseType(type: Type): boolean {
-            return type.flags & TypeFlags.Object && !isGenericMappedType(type) ||
+            return type.flags & (TypeFlags.Object | TypeFlags.NonPrimitive) && !isGenericMappedType(type) ||
                 type.flags & TypeFlags.Intersection && !forEach((<IntersectionType>type).types, t => !isValidBaseType(t));
         }
 
@@ -4932,7 +4934,7 @@ namespace ts {
         }
 
         function getApparentTypeOfIntersectionType(type: IntersectionType) {
-            return type.resolvedIndexType || (type.resolvedApparentType = getTypeWithThisArgument(type, type));
+            return type.resolvedApparentType || (type.resolvedApparentType = getTypeWithThisArgument(type, type));
         }
 
         /**
@@ -4947,7 +4949,7 @@ namespace ts {
                 t.flags & TypeFlags.NumberLike ? globalNumberType :
                 t.flags & TypeFlags.BooleanLike ? globalBooleanType :
                 t.flags & TypeFlags.ESSymbol ? getGlobalESSymbolType() :
-                t.flags & TypeFlags.NonPrimitive ? globalObjectType :
+                t.flags & TypeFlags.NonPrimitive ? emptyObjectType :
                 t;
         }
 
@@ -12546,6 +12548,16 @@ namespace ts {
             }
         }
 
+        function isInPropertyInitializer(node: Node): boolean {
+            while (node) {
+                if (node.parent && node.parent.kind === SyntaxKind.PropertyDeclaration && (node.parent as PropertyDeclaration).initializer === node) {
+                    return true;
+                }
+                node = node.parent;
+            }
+            return false;
+        }
+
         function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, right: Identifier) {
             const type = checkNonNullExpression(left);
             if (isTypeAny(type) || type === silentNeverType) {
@@ -12567,6 +12579,11 @@ namespace ts {
                     reportNonexistentProperty(right, type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType ? apparentType : type);
                 }
                 return unknownType;
+            }
+            if (prop.valueDeclaration &&
+                isInPropertyInitializer(node) &&
+                !isBlockScopedNameDeclaredBeforeUse(prop.valueDeclaration, right)) {
+                error(right, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, right.text);
             }
 
             markPropertyAsReferenced(prop);

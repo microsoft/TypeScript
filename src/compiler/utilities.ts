@@ -2042,67 +2042,19 @@ namespace ts {
             || positionIsSynthesized(node.end);
     }
 
-    export function getOriginalNode(node: Node): Node;
-    export function getOriginalNode<T extends Node>(node: Node, nodeTest: (node: Node) => node is T): T;
-    export function getOriginalNode(node: Node, nodeTest?: (node: Node) => boolean): Node {
-        if (node) {
-            while (node.original !== undefined) {
-                node = node.original;
-            }
+    export function getOriginalSourceFileOrBundle(sourceFileOrBundle: SourceFile | Bundle) {
+        if (sourceFileOrBundle.kind === SyntaxKind.Bundle) {
+            return updateBundle(sourceFileOrBundle, sameMap(sourceFileOrBundle.sourceFiles, getOriginalSourceFile));
         }
-
-        return !nodeTest || nodeTest(node) ? node : undefined;
+        return getOriginalSourceFile(sourceFileOrBundle);
     }
 
-    /**
-     * Gets a value indicating whether a node originated in the parse tree.
-     *
-     * @param node The node to test.
-     */
-    export function isParseTreeNode(node: Node): boolean {
-        return (node.flags & NodeFlags.Synthesized) === 0;
-    }
-
-    /**
-     * Gets the original parse tree node for a node.
-     *
-     * @param node The original node.
-     * @returns The original parse tree node if found; otherwise, undefined.
-     */
-    export function getParseTreeNode(node: Node): Node;
-
-    /**
-     * Gets the original parse tree node for a node.
-     *
-     * @param node The original node.
-     * @param nodeTest A callback used to ensure the correct type of parse tree node is returned.
-     * @returns The original parse tree node if found; otherwise, undefined.
-     */
-    export function getParseTreeNode<T extends Node>(node: Node, nodeTest?: (node: Node) => node is T): T;
-    export function getParseTreeNode(node: Node, nodeTest?: (node: Node) => boolean): Node {
-        if (isParseTreeNode(node)) {
-            return node;
-        }
-
-        node = getOriginalNode(node);
-
-        if (isParseTreeNode(node) && (!nodeTest || nodeTest(node))) {
-            return node;
-        }
-
-        return undefined;
+    function getOriginalSourceFile(sourceFile: SourceFile) {
+        return getParseTreeNode(sourceFile, isSourceFile) || sourceFile;
     }
 
     export function getOriginalSourceFiles(sourceFiles: SourceFile[]) {
-        const originalSourceFiles: SourceFile[] = [];
-        for (const sourceFile of sourceFiles) {
-            const originalSourceFile = getParseTreeNode(sourceFile, isSourceFile);
-            if (originalSourceFile) {
-                originalSourceFiles.push(originalSourceFile);
-            }
-        }
-
-        return originalSourceFiles;
+        return sameMap(sourceFiles, getOriginalSourceFile);
     }
 
     export function getOriginalNodeId(node: Node) {
@@ -2441,23 +2393,6 @@ namespace ts {
             s;
     }
 
-    export interface EmitTextWriter {
-        write(s: string): void;
-        writeTextOfNode(text: string, node: Node): void;
-        writeLine(): void;
-        increaseIndent(): void;
-        decreaseIndent(): void;
-        getText(): string;
-        rawWrite(s: string): void;
-        writeLiteral(s: string): void;
-        getTextPos(): number;
-        getLine(): number;
-        getColumn(): number;
-        getIndent(): number;
-        isAtStartOfLine(): boolean;
-        reset(): void;
-    }
-
     const indentStrings: string[] = ["", "    "];
     export function getIndentString(level: number) {
         if (indentStrings[level] === undefined) {
@@ -2640,7 +2575,7 @@ namespace ts {
      *   Else, calls `getSourceFilesToEmit` with the (optional) target source file to determine the list of source files to emit.
      */
     export function forEachEmittedFile(
-        host: EmitHost, action: (emitFileNames: EmitFileNames, sourceFiles: SourceFile[], isBundledEmit: boolean, emitOnlyDtsFiles: boolean) => void,
+        host: EmitHost, action: (emitFileNames: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle, emitOnlyDtsFiles: boolean) => void,
         sourceFilesOrTargetSourceFile?: SourceFile[] | SourceFile,
         emitOnlyDtsFiles?: boolean) {
 
@@ -2651,7 +2586,7 @@ namespace ts {
                 const jsFilePath = options.outFile || options.out;
                 const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
                 const declarationFilePath = options.declaration ? removeFileExtension(jsFilePath) + ".d.ts" : undefined;
-                action({ jsFilePath, sourceMapFilePath, declarationFilePath }, sourceFiles, /*isBundledEmit*/true, emitOnlyDtsFiles);
+                action({ jsFilePath, sourceMapFilePath, declarationFilePath }, createBundle(sourceFiles), emitOnlyDtsFiles);
             }
         }
         else {
@@ -2659,7 +2594,7 @@ namespace ts {
                 const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, getOutputExtension(sourceFile, options));
                 const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
                 const declarationFilePath = !isSourceFileJavaScript(sourceFile) && (emitOnlyDtsFiles || options.declaration) ? getDeclarationEmitOutputFilePath(sourceFile, host) : undefined;
-                action({ jsFilePath, sourceMapFilePath, declarationFilePath }, [sourceFile], /*isBundledEmit*/false, emitOnlyDtsFiles);
+                action({ jsFilePath, sourceMapFilePath, declarationFilePath }, sourceFile, emitOnlyDtsFiles);
             }
         }
     }
@@ -3234,7 +3169,7 @@ namespace ts {
 
     const carriageReturnLineFeed = "\r\n";
     const lineFeed = "\n";
-    export function getNewLineCharacter(options: CompilerOptions): string {
+    export function getNewLineCharacter(options: CompilerOptions | PrinterOptions): string {
         if (options.newLine === NewLineKind.CarriageReturnLineFeed) {
             return carriageReturnLineFeed;
         }
@@ -3343,6 +3278,14 @@ namespace ts {
         else {
             return kind.toString();
         }
+    }
+
+    export function getRangePos(range: TextRange | undefined) {
+        return range ? range.pos : -1;
+    }
+
+    export function getRangeEnd(range: TextRange | undefined) {
+        return range ? range.end : -1;
     }
 
     /**
@@ -3944,6 +3887,19 @@ namespace ts {
     export function isModuleBody(node: Node): node is ModuleBody {
         const kind = node.kind;
         return kind === SyntaxKind.ModuleBlock
+            || kind === SyntaxKind.ModuleDeclaration
+            || kind === SyntaxKind.Identifier;
+    }
+
+    export function isNamespaceBody(node: Node): node is NamespaceBody {
+        const kind = node.kind;
+        return kind === SyntaxKind.ModuleBlock
+            || kind === SyntaxKind.ModuleDeclaration;
+    }
+
+    export function isJSDocNamespaceBody(node: Node): node is JSDocNamespaceBody {
+        const kind = node.kind;
+        return kind === SyntaxKind.Identifier
             || kind === SyntaxKind.ModuleDeclaration;
     }
 
@@ -4535,5 +4491,56 @@ namespace ts {
 
             return true;
         }
+    }
+
+    export function getOriginalNode(node: Node): Node;
+    export function getOriginalNode<T extends Node>(node: Node, nodeTest: (node: Node) => node is T): T;
+    export function getOriginalNode(node: Node, nodeTest?: (node: Node) => boolean): Node {
+        if (node) {
+            while (node.original !== undefined) {
+                node = node.original;
+            }
+        }
+
+        return !nodeTest || nodeTest(node) ? node : undefined;
+    }
+
+    /**
+     * Gets a value indicating whether a node originated in the parse tree.
+     *
+     * @param node The node to test.
+     */
+    export function isParseTreeNode(node: Node): boolean {
+        return (node.flags & NodeFlags.Synthesized) === 0;
+    }
+
+    /**
+     * Gets the original parse tree node for a node.
+     *
+     * @param node The original node.
+     * @returns The original parse tree node if found; otherwise, undefined.
+     */
+    export function getParseTreeNode(node: Node): Node;
+
+    /**
+     * Gets the original parse tree node for a node.
+     *
+     * @param node The original node.
+     * @param nodeTest A callback used to ensure the correct type of parse tree node is returned.
+     * @returns The original parse tree node if found; otherwise, undefined.
+     */
+    export function getParseTreeNode<T extends Node>(node: Node, nodeTest?: (node: Node) => node is T): T;
+    export function getParseTreeNode(node: Node, nodeTest?: (node: Node) => boolean): Node {
+        if (isParseTreeNode(node)) {
+            return node;
+        }
+
+        node = getOriginalNode(node);
+
+        if (isParseTreeNode(node) && (!nodeTest || nodeTest(node))) {
+            return node;
+        }
+
+        return undefined;
     }
 }
