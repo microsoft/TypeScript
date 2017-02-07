@@ -3842,39 +3842,30 @@
         /** Ends a lexical environment, returning any declarations. */
         endLexicalEnvironment(): Statement[];
 
-        /**
-         * Hoists a function declaration to the containing scope.
-         */
+        /** Hoists a function declaration to the containing scope. */
         hoistFunctionDeclaration(node: FunctionDeclaration): void;
 
-        /**
-         * Hoists a variable declaration to the containing scope.
-         */
+        /** Hoists a variable declaration to the containing scope. */
         hoistVariableDeclaration(node: Identifier): void;
 
-        /**
-         * Records a request for a non-scoped emit helper in the current context.
-         */
+        /** Records a request for a non-scoped emit helper in the current context. */
         requestEmitHelper(helper: EmitHelper): void;
 
-        /**
-         * Gets and resets the requested non-scoped emit helpers.
-         */
+        /** Gets and resets the requested non-scoped emit helpers. */
         readEmitHelpers(): EmitHelper[] | undefined;
 
-        /**
-         * Enables expression substitutions in the pretty printer for the provided SyntaxKind.
-         */
+        /** Enables expression substitutions in the pretty printer for the provided SyntaxKind. */
         enableSubstitution(kind: SyntaxKind): void;
 
-        /**
-         * Determines whether expression substitutions are enabled for the provided node.
-         */
+        /** Determines whether expression substitutions are enabled for the provided node. */
         isSubstitutionEnabled(node: Node): boolean;
 
         /**
          * Hook used by transformers to substitute expressions just before they
          * are emitted by the pretty printer.
+         *
+         * NOTE: Transformation hooks should only be modified during `Transformer` initialization,
+         * before returning the `FileTransformer` callback.
          */
         onSubstituteNode?: (hint: EmitHint, node: Node) => Node;
 
@@ -3893,6 +3884,9 @@
         /**
          * Hook used to allow transformers to capture state before or after
          * the printer emits a node.
+         *
+         * NOTE: Transformation hooks should only be modified during `Transformer` initialization,
+         * before returning the `FileTransformer` callback.
          */
         onEmitNode?: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
     }
@@ -3927,7 +3921,16 @@
         dispose(): void;
     }
 
-    export type Transformer = (context: TransformationContext) => (node: SourceFile) => SourceFile;
+    /**
+     * A function that is used to initialize and return a `FileTransformer` callback, which in turn
+     * will be used to transform one or more `SourceFile` objects.
+     */
+    export type Transformer = (context: TransformationContext) => FileTransformer;
+
+    /**
+     * A function that transforms a `SourceFile` object.
+     */
+    export type FileTransformer = (node: SourceFile) => SourceFile;
 
     export interface Printer {
         /**
