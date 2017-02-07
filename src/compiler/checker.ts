@@ -21909,7 +21909,8 @@ namespace ts {
                 }
             }
 
-            if (hasModifier(node.parent.parent, ModifierFlags.Export) && compilerOptions.module !== ModuleKind.ES2015) {
+            if (compilerOptions.module !== ModuleKind.ES2015 && !compilerOptions.noEmit &&
+                !isInAmbientContext(node.parent.parent) && hasModifier(node.parent.parent, ModifierFlags.Export)) {
                 checkESModuleMarker(node.name);
             }
 
