@@ -45,7 +45,6 @@ namespace ts {
         let currentSourceFile: SourceFile; // The current file.
         let currentModuleInfo: ExternalModuleInfo; // The ExternalModuleInfo for the current file.
         let noSubstitution: boolean[]; // Set of nodes for which substitution rules should be ignored.
-        let shouldAppendEsModuleMarker: boolean;  // A boolean indicating whether "__esModule" should be emitted
 
         return transformSourceFile;
 
@@ -63,7 +62,6 @@ namespace ts {
 
             currentSourceFile = node;
             currentModuleInfo = collectExternalModuleInfo(node, resolver, compilerOptions);
-            shouldAppendEsModuleMarker = false;
             moduleInfoMap[getOriginalNodeId(node)] = currentModuleInfo;
 
             // Perform the transformation.
@@ -90,7 +88,7 @@ namespace ts {
             addRange(statements, endLexicalEnvironment());
             addExportEqualsIfNeeded(statements, /*emitAsReturn*/ false);
 
-            if (shouldAppendEsModuleMarker) {
+            if (!currentModuleInfo.exportEquals) {
                 append(statements, createUnderscoreUnderscoreESModule());
             }
 
@@ -387,7 +385,7 @@ namespace ts {
             // Append the 'export =' statement if provided.
             addExportEqualsIfNeeded(statements, /*emitAsReturn*/ true);
 
-            if (shouldAppendEsModuleMarker) {
+            if (!currentModuleInfo.exportEquals) {
                 append(statements, createUnderscoreUnderscoreESModule());
             }
 
@@ -674,7 +672,6 @@ namespace ts {
             }
 
             const generatedName = getGeneratedNameForNode(node);
-            shouldAppendEsModuleMarker = true;
 
             if (node.exportClause) {
                 const statements: Statement[] = [];
@@ -849,13 +846,6 @@ namespace ts {
             let statements: Statement[];
             let variables: VariableDeclaration[];
             let expressions: Expression[];
-
-            const parseTreeNode = getParseTreeNode(node);
-            if (parseTreeNode && !shouldAppendEsModuleMarker) {
-                // class declaration get down-level transformed to be variable statement
-                shouldAppendEsModuleMarker = (parseTreeNode.kind === SyntaxKind.VariableStatement || parseTreeNode.kind === SyntaxKind.ClassDeclaration || parseTreeNode.kind === SyntaxKind.ImportEqualsDeclaration)
-                    && hasModifier(parseTreeNode, ModifierFlags.Export);
-            }
 
             if (hasModifier(node, ModifierFlags.Export)) {
                 let modifiers: NodeArray<Modifier>;
@@ -1146,7 +1136,6 @@ namespace ts {
          * @param allowComments Whether to allow comments on the export.
          */
         function appendExportStatement(statements: Statement[] | undefined, exportName: Identifier, expression: Expression, location?: TextRange, allowComments?: boolean): Statement[] | undefined {
-            shouldAppendEsModuleMarker = true;
             statements = append(statements, createExportStatement(exportName, expression, location, allowComments));
             return statements;
         }
