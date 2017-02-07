@@ -29,11 +29,13 @@ namespace ts {
         EmitNotifications = 1 << 1,
     }
 
-    export function getTransformers(compilerOptions: CompilerOptions) {
+    export function getTransformers(compilerOptions: CompilerOptions, customTransformers?: CustomTransformers) {
         const jsx = compilerOptions.jsx;
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
         const transformers: Transformer[] = [];
+
+        addRange(transformers, customTransformers && customTransformers.before);
 
         transformers.push(transformTypeScript);
 
@@ -66,6 +68,8 @@ namespace ts {
             transformers.push(transformES5);
         }
 
+        addRange(transformers, customTransformers && customTransformers.after);
+
         return transformers;
     }
 
@@ -79,16 +83,13 @@ namespace ts {
      */
     export function transformFiles(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformers: Transformer[]): TransformationResult {
         const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);
-
         let lexicalEnvironmentDisabled = false;
-
         let lexicalEnvironmentVariableDeclarations: VariableDeclaration[];
         let lexicalEnvironmentFunctionDeclarations: FunctionDeclaration[];
         let lexicalEnvironmentVariableDeclarationsStack: VariableDeclaration[][] = [];
         let lexicalEnvironmentFunctionDeclarationsStack: FunctionDeclaration[][] = [];
         let lexicalEnvironmentStackOffset = 0;
         let lexicalEnvironmentSuspended = false;
-
         let emitHelpers: EmitHelper[];
 
         // The transformation context is provided to each transformer as part of transformer
@@ -113,6 +114,9 @@ namespace ts {
             isEmitNotificationEnabled
         };
 
+        // Ensure the parse tree is clean before applying transformations
+        dispose();
+
         performance.mark("beforeTransform");
 
         // Chain together and initialize each transformer.
@@ -130,7 +134,8 @@ namespace ts {
         return {
             transformed,
             emitNodeWithSubstitution,
-            emitNodeWithNotification
+            emitNodeWithNotification,
+            dispose
         };
 
         /**
@@ -322,6 +327,13 @@ namespace ts {
             const helpers = emitHelpers;
             emitHelpers = undefined;
             return helpers;
+        }
+
+        function dispose() {
+            // Clean up emit nodes on parse tree
+            for (const sourceFile of sourceFiles) {
+                disposeEmitNodes(sourceFile);
+            }
         }
     }
 }

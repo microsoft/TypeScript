@@ -5816,7 +5816,11 @@ namespace ts {
                     }
                 }
 
-                const range = { pos: triviaScanner.getTokenPos(), end: triviaScanner.getTextPos(), kind: triviaScanner.getToken() };
+                const range = {
+                    kind: <SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia>triviaScanner.getToken(),
+                    pos: triviaScanner.getTokenPos(),
+                    end: triviaScanner.getTextPos(),
+                };
 
                 const comment = sourceText.substring(range.pos, range.end);
                 const referencePathMatchResult = getFileReferenceFromReferencePath(comment, range);

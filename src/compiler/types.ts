@@ -1313,7 +1313,6 @@
 
     export interface NumericLiteral extends LiteralExpression {
         kind: SyntaxKind.NumericLiteral;
-        trailingComment?: string;
     }
 
     export interface TemplateHead extends LiteralLikeNode {
@@ -1893,9 +1892,17 @@
         fileName: string;
     }
 
+    export type CommentKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia;
+
     export interface CommentRange extends TextRange {
         hasTrailingNewLine?: boolean;
-        kind: SyntaxKind;
+        kind: CommentKind;
+    }
+
+    export interface SynthesizedComment extends CommentRange {
+        text: string;
+        pos: -1;
+        end: -1;
     }
 
     // represents a top level: { type } expression in a JSDoc comment.
@@ -2265,7 +2272,7 @@
          * used for writing the JavaScript and declaration files.  Otherwise, the writeFile parameter
          * will be invoked when writing the JavaScript and declaration files.
          */
-        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean): EmitResult;
+        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult;
 
         getOptionsDiagnostics(cancellationToken?: CancellationToken): Diagnostic[];
         getGlobalDiagnostics(cancellationToken?: CancellationToken): Diagnostic[];
@@ -2297,6 +2304,13 @@
         /* @internal */ isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         // For testing purposes only.
         /* @internal */ structureIsReused?: boolean;
+    }
+
+    export interface CustomTransformers {
+        /** Custom transformers to evaluate before built-in transformations. */
+        before?: Transformer[];
+        /** Custom transformers to evaluate after built-in transformations. */
+        after?: Transformer[];
     }
 
     export interface SourceMapSpan {
@@ -3724,9 +3738,11 @@
     export interface EmitNode {
         annotatedNodes?: Node[];                // Tracks Parse-tree nodes with EmitNodes for eventual cleanup.
         flags?: EmitFlags;                      // Flags that customize emit
+        leadingComments?: SynthesizedComment[]; // Synthesized leading comments
+        trailingComments?: SynthesizedComment[]; // Synthesized trailing comments
         commentRange?: TextRange;               // The text range to use when emitting leading or trailing comments
         sourceMapRange?: TextRange;             // The text range to use when emitting leading or trailing source mappings
-        tokenSourceMapRanges?: TextRange[];  // The text range to use when emitting source mappings for tokens
+        tokenSourceMapRanges?: TextRange[];     // The text range to use when emitting source mappings for tokens
         constantValue?: number;                 // The constant value of an expression
         externalHelpersModuleName?: Identifier; // The local name for an imported helpers module
         helpers?: EmitHelper[];                 // Emit helpers for the node
@@ -3762,7 +3778,7 @@
 
     export interface EmitHelper {
         readonly name: string;      // A unique name for this helper.
-        readonly scoped: boolean;   // Indicates whether ther helper MUST be emitted in the current scope.
+        readonly scoped: boolean;   // Indicates whether the helper MUST be emitted in the current scope.
         readonly text: string;      // ES3-compatible raw script text.
         readonly priority?: number; // Helpers with a higher priority are emitted earlier than other helpers on the node.
     }
@@ -3809,11 +3825,10 @@
         writeFile: WriteFileCallback;
     }
 
-    /* @internal */
     export interface TransformationContext {
-        getCompilerOptions(): CompilerOptions;
-        getEmitResolver(): EmitResolver;
-        getEmitHost(): EmitHost;
+        /*@internal*/ getCompilerOptions(): CompilerOptions;
+        /*@internal*/ getEmitResolver(): EmitResolver;
+        /*@internal*/ getEmitHost(): EmitHost;
 
         /** Starts a new lexical environment. */
         startLexicalEnvironment(): void;
@@ -3882,7 +3897,6 @@
         onEmitNode?: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
     }
 
-    /* @internal */
     export interface TransformationResult {
         /**
          * Gets the transformed source files.
@@ -3906,9 +3920,13 @@
          * @param emitCallback A callback used to emit the node.
          */
         emitNodeWithNotification(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
+
+        /**
+         * Clean up EmitNode entries on any parse-tree nodes.
+         */
+        dispose(): void;
     }
 
-    /* @internal */
     export type Transformer = (context: TransformationContext) => (node: SourceFile) => SourceFile;
 
     export interface Printer {

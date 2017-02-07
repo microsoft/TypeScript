@@ -57,6 +57,7 @@
         "preProcess.ts",
         "rename.ts",
         "services.ts",
+        "transform.ts",
         "transpile.ts",
         "shims.ts",
         "signatureHelp.ts",

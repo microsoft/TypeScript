@@ -170,6 +170,11 @@ namespace ts {
          * completions will not be provided
          */
         getDirectories?(directoryName: string): string[];
+
+        /**
+         * Gets a set of custom transformers to use during emit.
+         */
+        getCustomTransformers?(): CustomTransformers | undefined;
     }
 
     //

@@ -77,8 +77,8 @@
         "../services/codefixes/helpers.ts",
         "../services/codefixes/importFixes.ts",
         "../services/codefixes/unusedIdentifierFixes.ts",
-        "../services/harness.ts",
 
+        "harness.ts",
         "sourceMapRecorder.ts",
         "harnessLanguageService.ts",
         "fourslash.ts",
@@ -119,6 +119,8 @@
         "./unittests/compileOnSave.ts",
         "./unittests/typingsInstaller.ts",
         "./unittests/projectErrors.ts",
-        "./unittests/printer.ts"
+        "./unittests/printer.ts",
+        "./unittests/transform.ts",
+        "./unittests/customTransforms.ts"
     ]
 }

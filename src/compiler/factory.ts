@@ -1906,6 +1906,34 @@ namespace ts {
         return node;
     }
 
+    export function getSyntheticLeadingComments(node: Node): SynthesizedComment[] | undefined {
+        const emitNode = node.emitNode;
+        return emitNode && emitNode.leadingComments;
+    }
+
+    export function setSyntheticLeadingComments<T extends Node>(node: T, comments: SynthesizedComment[]) {
+        getOrCreateEmitNode(node).leadingComments = comments;
+        return node;
+    }
+
+    export function addSyntheticLeadingComment<T extends Node>(node: T, kind: SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia, text: string, hasTrailingNewLine?: boolean) {
+        return setSyntheticLeadingComments(node, append(getSyntheticLeadingComments(node), <SynthesizedComment>{ kind, pos: -1, end: -1, hasTrailingNewLine, text }));
+    }
+
+    export function getSyntheticTrailingComments(node: Node): SynthesizedComment[] | undefined {
+        const emitNode = node.emitNode;
+        return emitNode && emitNode.trailingComments;
+    }
+
+    export function setSyntheticTrailingComments<T extends Node>(node: T, comments: SynthesizedComment[]) {
+        getOrCreateEmitNode(node).trailingComments = comments;
+        return node;
+    }
+
+    export function addSyntheticTrailingComment<T extends Node>(node: T, kind: SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia, text: string, hasTrailingNewLine?: boolean) {
+        return setSyntheticTrailingComments(node, append(getSyntheticTrailingComments(node), <SynthesizedComment>{ kind, pos: -1, end: -1, hasTrailingNewLine, text }));
+    }
+
     /**
      * Gets the constant value to emit for an expression.
      */
@@ -2018,6 +2046,8 @@ namespace ts {
     function mergeEmitNode(sourceEmitNode: EmitNode, destEmitNode: EmitNode) {
         const {
             flags,
+            leadingComments,
+            trailingComments,
             commentRange,
             sourceMapRange,
             tokenSourceMapRanges,
@@ -2025,6 +2055,8 @@ namespace ts {
             helpers
         } = sourceEmitNode;
         if (!destEmitNode) destEmitNode = {};
+        if (leadingComments) destEmitNode.leadingComments = addRange(leadingComments.slice(), destEmitNode.leadingComments);
+        if (trailingComments) destEmitNode.trailingComments = addRange(trailingComments.slice(), destEmitNode.trailingComments);
         if (flags) destEmitNode.flags = flags;
         if (commentRange) destEmitNode.commentRange = commentRange;
         if (sourceMapRange) destEmitNode.sourceMapRange = sourceMapRange;
