@@ -134,7 +134,6 @@ namespace ts {
                     performance.mark("postEmitNodeWithSynthesizedComments");
                 }
 
-                debugger;
                 forEach(trailingComments, emitTrailingSynthesizedComment);
 
                 if (extendedDiagnostics) {
