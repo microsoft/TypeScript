@@ -42,6 +42,7 @@ var A;
     })(Utils = A.Utils || (A.Utils = {}));
     A.Origin = { x: 0, y: 0 };
 })(A = exports.A || (exports.A = {}));
+exports.__esModule = true;
 //// [part2.js]
 "use strict";
 var A;
@@ -60,3 +61,4 @@ var A;
         Utils.Plane = Plane;
     })(Utils = A.Utils || (A.Utils = {}));
 })(A = exports.A || (exports.A = {}));
+exports.__esModule = true;

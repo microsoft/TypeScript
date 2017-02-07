@@ -74,4 +74,5 @@ define(["require", "exports", "./t4"], function (require, exports, t4_1) {
     t4_1.y;
     t4_1.z;
     t4_1.foo;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });

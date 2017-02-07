@@ -30,3 +30,4 @@ module.exports = C.B;
 "use strict";
 var B = require("./a");
 var x = { c: B };
+exports.__esModule = true;

@@ -274,5 +274,6 @@ define(["require", "exports"], function (require, exports) {
             SubModule3.ClassA = ClassA;
         })(SubModule3 = TopLevelModule2.SubModule3 || (TopLevelModule2.SubModule3 = {}));
     })(TopLevelModule2 || (TopLevelModule2 = {}));
+    exports.__esModule = true;
 });
 //# sourceMappingURL=typeResolution.js.map

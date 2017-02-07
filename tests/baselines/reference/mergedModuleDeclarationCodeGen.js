@@ -40,3 +40,4 @@ var X;
         Y.B = B;
     })(Y = X.Y || (X.Y = {}));
 })(X = exports.X || (exports.X = {}));
+exports.__esModule = true;

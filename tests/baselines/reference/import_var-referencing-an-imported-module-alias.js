@@ -26,4 +26,5 @@ define(["require", "exports", "host"], function (require, exports, host) {
     "use strict";
     var hostVar = host;
     var v = new hostVar.Host();
+    exports.__esModule = true;
 });

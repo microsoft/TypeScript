@@ -19,3 +19,4 @@ module.exports = M1;
 "use strict";
 var foo1 = require("./foo1");
 var x = foo1.b();
+exports.__esModule = true;

@@ -33,4 +33,5 @@ define(["require", "exports", "./foo_0"], function (require, exports, foo) {
     if (foo.answer === 42) {
         var x = foo();
     }
+    exports.__esModule = true;
 });

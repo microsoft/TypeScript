@@ -24,3 +24,4 @@ var x;
 var y = x.n;
 // should error
 var z = Foo;
+exports.__esModule = true;

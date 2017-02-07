@@ -47,6 +47,7 @@ exports.__esModule = true;
 "use strict";
 var main_1 = require("./main");
 main_1.Cls.prototype.foo = function () { return undefined; };
+exports.__esModule = true;
 //// [mod2.js]
 "use strict";
 var main_1 = require("./main");

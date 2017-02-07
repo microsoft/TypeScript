@@ -56,4 +56,5 @@ define(["require", "exports", "folder2/file1", "folder3/file2", "components/file
     use(file2_1.y.toExponential());
     use(file3_1.z.toExponential());
     use(file4_1.z1.toExponential());
+    exports.__esModule = true;
 });

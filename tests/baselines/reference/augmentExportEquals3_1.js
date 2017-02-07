@@ -31,10 +31,12 @@ let b = x.b;
 define(["require", "exports", "file1"], function (require, exports, x) {
     "use strict";
     x.b = 1;
+    exports.__esModule = true;
 });
 //// [file3.js]
 define(["require", "exports", "file1", "file2"], function (require, exports, x) {
     "use strict";
     var a;
     var b = x.b;
+    exports.__esModule = true;
 });

@@ -27,6 +27,7 @@ import "B";
 /// <reference path="f2.d.ts"/>
 require("A");
 require("B");
+exports.__esModule = true;
 
 
 //// [f3.d.ts]

@@ -23,3 +23,4 @@ var B = (function (_super) {
     }
     return B;
 }(A));
+exports.__esModule = true;

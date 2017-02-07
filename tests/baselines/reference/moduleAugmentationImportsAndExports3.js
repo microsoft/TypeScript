@@ -59,11 +59,13 @@ exports.__esModule = true;
 "use strict";
 var f1_1 = require("./f1");
 f1_1.A.prototype.foo = function () { return undefined; };
+exports.__esModule = true;
 //// [f4.js]
 "use strict";
 require("./f3");
 var a;
 var b = a.foo().n;
+exports.__esModule = true;
 
 
 //// [f1.d.ts]

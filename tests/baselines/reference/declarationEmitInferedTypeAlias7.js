@@ -12,6 +12,7 @@ export { v }
 //// [0.js]
 "use strict";
 var obj = true;
+exports.__esModule = true;
 //// [1.js]
 "use strict";
 var v = "str" || true;

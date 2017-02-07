@@ -10,5 +10,6 @@
     "use strict";
     var SomeName_1 = require("SomeOtherName");
     use(SomeName_1.foo);
+    exports.__esModule = true;
 });
 //# sourceMappingURL=file.js.map

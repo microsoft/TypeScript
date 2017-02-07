@@ -9,3 +9,4 @@
 var SignatureFlags;
 (function (SignatureFlags) {
 })(SignatureFlags = exports.SignatureFlags || (exports.SignatureFlags = {}));
+exports.__esModule = true;

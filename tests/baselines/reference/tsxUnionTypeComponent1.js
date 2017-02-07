@@ -59,3 +59,4 @@ var MyButtonComponent = (function (_super) {
     return MyButtonComponent;
 }(React.Component));
 React.createElement(MyComponent, { AnyComponent: MyButtonComponent });
+exports.__esModule = true;

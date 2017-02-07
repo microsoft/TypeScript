@@ -29,3 +29,4 @@ var x = moduleA;
 x = 1; // Should be error
 var y = 1;
 y = moduleA; // should be error
+exports.__esModule = true;

@@ -16,3 +16,4 @@ exports.__esModule = true;
 "use strict";
 var foo = require("./foo_0.js");
 var x = foo.foo + 42;
+exports.__esModule = true;

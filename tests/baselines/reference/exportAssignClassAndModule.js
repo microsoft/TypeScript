@@ -31,3 +31,4 @@ module.exports = Foo;
 var z;
 var zz;
 zz.x;
+exports.__esModule = true;

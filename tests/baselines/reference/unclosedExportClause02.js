@@ -27,12 +27,16 @@ exports.__esModule = true;
 //// [t2.js]
 "use strict";
 "./t1";
+exports.__esModule = true;
 //// [t3.js]
 "use strict";
 "./t1";
+exports.__esModule = true;
 //// [t4.js]
 "use strict";
 "./t1";
+exports.__esModule = true;
 //// [t5.js]
 "use strict";
 "./t1";
+exports.__esModule = true;

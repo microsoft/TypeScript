@@ -17,3 +17,4 @@ x;
 "use strict";
 var foo_1 = require("foo");
 foo_1.x;
+exports.__esModule = true;

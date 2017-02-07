@@ -63,3 +63,4 @@ function foo(x) {
 }
 var r = foo({ a: moduleA });
 var r2 = foo({ a: null });
+exports.__esModule = true;

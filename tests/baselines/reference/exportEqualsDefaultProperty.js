@@ -25,3 +25,4 @@ module.exports = x;
 "use strict";
 var exp_1 = require("./exp");
 exp_1["default"].toExponential(2);
+exports.__esModule = true;

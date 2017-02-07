@@ -2969,5 +2969,6 @@ sourceFile:typeResolution.ts
 6 >Emitted(163, 43) Source(102, 23) + SourceIndex(0)
 7 >Emitted(163, 51) Source(108, 2) + SourceIndex(0)
 ---
+>>>    exports.__esModule = true;
 >>>});
 >>>//# sourceMappingURL=typeResolution.js.map

@@ -20,4 +20,5 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "exportAssignmentFunction_A"], function (require, exports, fooFunc) {
     "use strict";
     var n = fooFunc();
+    exports.__esModule = true;
 });

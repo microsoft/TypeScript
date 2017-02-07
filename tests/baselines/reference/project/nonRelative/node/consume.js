@@ -8,3 +8,4 @@ var str = mod.call();
 if (str !== "success") {
     fail();
 }
+exports.__esModule = true;

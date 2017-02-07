@@ -21,6 +21,7 @@ define(["require", "exports"], function (require, exports) {
         c.b = a.x;
         c.bVal = c.b;
     })(c = exports.c || (exports.c = {}));
+    exports.__esModule = true;
 });
 
 

@@ -42,3 +42,4 @@ foobarbaz_1.foo(foosball_1.foos);
 // Works with relative file name
 var file_text_1 = require("./file!text");
 foobarbaz_1.foo(file_text_1["default"]);
+exports.__esModule = true;

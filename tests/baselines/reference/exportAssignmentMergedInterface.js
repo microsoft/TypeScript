@@ -25,6 +25,7 @@ z = x.d;
 //// [foo_0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
 });
 //// [foo_1.js]
 define(["require", "exports"], function (require, exports) {
@@ -36,4 +37,5 @@ define(["require", "exports"], function (require, exports) {
     if (!!x.c) { }
     var z = { x: 1, y: 2 };
     z = x.d;
+    exports.__esModule = true;
 });

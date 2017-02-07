@@ -43,6 +43,7 @@ define(["require", "exports"], function (require, exports) {
     var m2;
     (function (m2) {
     })(m2 || (m2 = {}));
+    exports.__esModule = true;
 });
 //// [collisionExportsRequireAndAmbientClass_globalFile.js]
 var m4;

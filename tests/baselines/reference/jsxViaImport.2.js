@@ -47,3 +47,4 @@ var TestComponent = (function (_super) {
     };
     return TestComponent;
 }(React.Component));
+exports.__esModule = true;

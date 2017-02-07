@@ -24,3 +24,4 @@ var baz = (function () {
     return baz;
 }());
 function bar(s) { }
+exports.__esModule = true;

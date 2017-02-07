@@ -55,3 +55,4 @@ if (isHTMLCollection(sourceObj)) {
 if (isNodeList(sourceObj) || isHTMLCollection(sourceObj)) {
     sourceObj.length;
 }
+exports.__esModule = true;

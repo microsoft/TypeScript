@@ -7,3 +7,4 @@ var outer;
         inner.a = local;
     })(inner = outer.inner || (outer.inner = {}));
 })(outer = exports.outer || (exports.outer = {}));
+exports.__esModule = true;

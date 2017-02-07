@@ -28,3 +28,4 @@ var c;
     c.bVal2 = b;
 })(c = exports.c || (exports.c = {}));
 var d = c.b(11);
+exports.__esModule = true;

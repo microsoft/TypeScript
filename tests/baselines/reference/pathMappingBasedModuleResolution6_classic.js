@@ -21,4 +21,5 @@ define(["require", "exports", "../file2"], function (require, exports, file2_1) 
 define(["require", "exports", "./project/file3"], function (require, exports, file3_1) {
     "use strict";
     use(file3_1.x.toExponential());
+    exports.__esModule = true;
 });

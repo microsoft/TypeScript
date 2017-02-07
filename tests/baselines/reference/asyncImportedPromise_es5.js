@@ -78,3 +78,4 @@ var Test = (function () {
     };
     return Test;
 }());
+Object.defineProperty(exports, "__esModule", { value: true });

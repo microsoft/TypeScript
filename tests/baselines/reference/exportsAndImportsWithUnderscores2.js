@@ -25,3 +25,4 @@ exports.__esModule = true;
 "use strict";
 var m1_1 = require("./m1");
 var __esmodule = m1_1["default"].__esmodule, __proto__ = m1_1["default"].__proto__;
+exports.__esModule = true;

@@ -18,3 +18,4 @@ module.exports = x;
 "use strict";
 var y = require("./exportAssignmentVariable_A");
 var n = y;
+exports.__esModule = true;

@@ -27,3 +27,4 @@ var y; // OK in type position
 y.foo();
 var z; // OK in ns position
 var x = Foo; // Not OK in value position
+exports.__esModule = true;

@@ -29,6 +29,7 @@ var thingy = {
     me: "A"
 };
 foo("IN " + thingy.me + "!");
+exports.__esModule = true;
 
 
 //// [unusedImportDeclaration_testerB.d.ts]

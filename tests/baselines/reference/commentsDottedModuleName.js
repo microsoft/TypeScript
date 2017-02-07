@@ -24,6 +24,7 @@ define(["require", "exports"], function (require, exports) {
             InnerModule.b = b;
         })(InnerModule = outerModule.InnerModule || (outerModule.InnerModule = {}));
     })(outerModule = exports.outerModule || (exports.outerModule = {}));
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 
 

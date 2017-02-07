@@ -21,3 +21,4 @@ x;
 /// <reference path="./declarations.d.ts" />
 var foo_1 = require("foo");
 foo_1.x;
+exports.__esModule = true;

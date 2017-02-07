@@ -14,3 +14,4 @@ exports.a = 10;
 exports.__esModule = true;
 //// [es6ImportDefaultBindingNoDefaultProperty_1.js]
 "use strict";
+exports.__esModule = true;

@@ -22,3 +22,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [es6ImportNameSpaceImportMergeErrors_1.js]
 "use strict";
 var nameSpaceBinding3 = 10;
+Object.defineProperty(exports, "__esModule", { value: true });

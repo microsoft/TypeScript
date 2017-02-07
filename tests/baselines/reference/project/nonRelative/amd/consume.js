@@ -6,4 +6,5 @@ define(["require", "exports", "decl", "lib/foo/a", "lib/bar/a"], function (requi
     if (str !== "success") {
         fail();
     }
+    exports.__esModule = true;
 });

@@ -36,4 +36,5 @@ define(["require", "exports"], function (require, exports) {
     void 0;
     if (!module.exports)
         module.exports = "";
+    exports.__esModule = true;
 });

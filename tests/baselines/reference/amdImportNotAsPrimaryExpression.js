@@ -58,4 +58,5 @@ define(["require", "exports"], function (require, exports) {
     var y = false;
     var z;
     var e = 0;
+    exports.__esModule = true;
 });

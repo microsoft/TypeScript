@@ -17,6 +17,7 @@ export default x;
 {
     var obj = true;
 }
+exports.__esModule = true;
 //// [1.js]
 "use strict";
 var x = "hi" || 5;

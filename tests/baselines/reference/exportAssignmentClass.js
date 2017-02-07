@@ -27,4 +27,5 @@ define(["require", "exports", "exportAssignmentClass_A"], function (require, exp
     "use strict";
     var d = new D();
     var x = d.p;
+    exports.__esModule = true;
 });

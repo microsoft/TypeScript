@@ -17,6 +17,7 @@ module bar {
 
 //// [reuseInnerModuleMember_0.js]
 "use strict";
+exports.__esModule = true;
 //// [reuseInnerModuleMember_1.js]
 "use strict";
 ///<reference path='reuseInnerModuleMember_0.ts'/>
@@ -24,3 +25,4 @@ var bar;
 (function (bar) {
     var x;
 })(bar || (bar = {}));
+exports.__esModule = true;

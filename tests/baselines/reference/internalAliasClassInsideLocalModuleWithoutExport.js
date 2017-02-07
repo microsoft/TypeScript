@@ -38,6 +38,7 @@ var m2;
         var cReturnVal = m3.cProp.foo(10);
     })(m3 = m2.m3 || (m2.m3 = {}));
 })(m2 = exports.m2 || (exports.m2 = {}));
+exports.__esModule = true;
 
 
 //// [internalAliasClassInsideLocalModuleWithoutExport.d.ts]

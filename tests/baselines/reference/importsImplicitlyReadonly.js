@@ -41,3 +41,4 @@ a2.x = 1;
 a2.y = 1;
 a3.x = 1;
 a3.y = 1;
+exports.__esModule = true;

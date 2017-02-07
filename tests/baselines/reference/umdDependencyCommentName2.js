@@ -23,4 +23,5 @@ m1.f();
     "use strict";
     var m1 = require("m2");
     m1.f();
+    exports.__esModule = true;
 });

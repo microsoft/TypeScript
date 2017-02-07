@@ -34,4 +34,5 @@ define(["require", "exports", "react"], function (require, exports, React) {
         <MainMenu />
 	</div>);
     };
+    exports.__esModule = true;
 });

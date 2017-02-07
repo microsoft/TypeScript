@@ -33,6 +33,7 @@ x.foo().x;
 "use strict";
 var x;
 x.foo().x;
+exports.__esModule = true;
 
 
 //// [main.d.ts]

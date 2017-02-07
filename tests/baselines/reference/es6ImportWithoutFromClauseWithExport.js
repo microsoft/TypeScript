@@ -14,6 +14,7 @@ exports.__esModule = true;
 //// [client.js]
 "use strict";
 require("server");
+exports.__esModule = true;
 
 
 //// [server.d.ts]

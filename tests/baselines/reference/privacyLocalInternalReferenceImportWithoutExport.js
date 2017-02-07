@@ -295,4 +295,5 @@ define(["require", "exports"], function (require, exports) {
         import_private.publicUse_im_private_mi_public = new im_private_mi_public.c();
         var privateUse_im_private_mu_public;
     })(import_private || (import_private = {}));
+    exports.__esModule = true;
 });

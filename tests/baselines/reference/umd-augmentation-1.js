@@ -48,3 +48,4 @@ var magnitude = m.getLength(v);
 var p = v.translate(5, 5);
 p = v.reverse();
 var t = p.x;
+exports.__esModule = true;

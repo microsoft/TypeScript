@@ -29,3 +29,4 @@ exports.__esModule = true;
 var foo = require("./foo_0");
 if (foo.C1.s1) {
 }
+exports.__esModule = true;

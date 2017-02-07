@@ -16,5 +16,7 @@ var N;
 (function (N) {
     N.x = 1;
 })(N = exports.N || (exports.N = {}));
+exports.__esModule = true;
 //// [f2.js]
 "use strict";
+exports.__esModule = true;

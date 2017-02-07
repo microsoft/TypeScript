@@ -9,4 +9,5 @@ m1.f();
 define(["require", "exports", "bar", "m2"], function (require, exports, b, m1) {
     "use strict";
     m1.f();
+    exports.__esModule = true;
 });

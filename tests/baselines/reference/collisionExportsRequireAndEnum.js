@@ -99,6 +99,7 @@ define(["require", "exports"], function (require, exports) {
             exports[exports["_thisVal2"] = 1] = "_thisVal2";
         })(exports = m2.exports || (m2.exports = {}));
     })(m2 || (m2 = {}));
+    exports.__esModule = true;
 });
 //// [collisionExportsRequireAndEnum_globalFile.js]
 var require;

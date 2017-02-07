@@ -24,4 +24,5 @@ define(["require", "exports"], function (require, exports) {
         }
         return Emitter;
     }());
+    exports.__esModule = true;
 });

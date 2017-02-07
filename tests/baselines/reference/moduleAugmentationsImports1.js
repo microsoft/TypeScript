@@ -68,12 +68,14 @@ define("d", ["require", "exports", "a"], function (require, exports, a_1) {
     "use strict";
     a_1.A.prototype.getB = function () { return undefined; };
     a_1.A.prototype.getCls = function () { return undefined; };
+    exports.__esModule = true;
 });
 define("main", ["require", "exports", "d"], function (require, exports) {
     "use strict";
     var a;
     var b = a.getB().x.toFixed();
     var c = a.getCls().y.toLowerCase();
+    exports.__esModule = true;
 });
 
 

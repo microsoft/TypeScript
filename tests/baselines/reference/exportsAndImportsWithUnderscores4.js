@@ -74,3 +74,4 @@ m1_1.___hello();
 m1_1.__esmodule();
 m1_1.__proto();
 m1_1._hi();
+exports.__esModule = true;

@@ -124,6 +124,7 @@ define(["require", "exports"], function (require, exports) {
     })(m4 = exports.m4 || (exports.m4 = {}));
     m4.fooExport();
     var myvar2 = new m4.m2.c();
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [commentsExternalModules_1.js]
 define(["require", "exports", "commentsExternalModules_0"], function (require, exports, extMod) {
@@ -132,6 +133,7 @@ define(["require", "exports", "commentsExternalModules_0"], function (require, e
     var newVar = new extMod.m1.m2.c();
     extMod.m4.fooExport();
     var newVar2 = new extMod.m4.m2.c();
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 
 

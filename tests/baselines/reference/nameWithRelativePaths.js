@@ -40,6 +40,7 @@ var M2;
 (function (M2) {
     M2.x = true;
 })(M2 = exports.M2 || (exports.M2 = {}));
+exports.__esModule = true;
 //// [foo_3.js]
 "use strict";
 var foo0 = require("../foo_0");
@@ -48,3 +49,4 @@ var foo2 = require("./.././test/foo_2");
 if (foo2.M2.x) {
     var x = foo0.foo + foo1.f();
 }
+exports.__esModule = true;

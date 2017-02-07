@@ -66,3 +66,4 @@ t4_1.x;
 t4_1.y;
 t4_1.z;
 t4_1.foo;
+Object.defineProperty(exports, "__esModule", { value: true });

@@ -45,3 +45,4 @@ require("Map");
 var x;
 x.foo().x;
 x.foo2().x2;
+exports.__esModule = true;

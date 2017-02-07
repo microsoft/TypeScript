@@ -75,6 +75,7 @@ var es6ImportNamedImportInEs5_0_8 = require("./es6ImportNamedImportInEs5_0");
 var z111 = es6ImportNamedImportInEs5_0_8.z1;
 var es6ImportNamedImportInEs5_0_9 = require("./es6ImportNamedImportInEs5_0");
 var z2 = es6ImportNamedImportInEs5_0_9.z2; // z2 shouldn't give redeclare error
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [es6ImportNamedImportInEs5_0.d.ts]

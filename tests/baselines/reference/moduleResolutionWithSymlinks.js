@@ -61,6 +61,7 @@ var x;
 var y;
 x = y;
 y = x;
+exports.__esModule = true;
 /*
 # To reproduce in a real project:
 

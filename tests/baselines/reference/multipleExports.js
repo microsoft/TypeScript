@@ -22,3 +22,4 @@ var x = 0;
 (function (M) {
     M.v;
 })(M = exports.M || (exports.M = {}));
+exports.__esModule = true;

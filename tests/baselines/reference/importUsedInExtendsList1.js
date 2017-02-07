@@ -43,3 +43,4 @@ var Sub = (function (_super) {
 }(foo.Super));
 var s;
 var r = s.foo;
+exports.__esModule = true;

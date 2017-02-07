@@ -29,3 +29,4 @@ exports.__esModule = true;
 ///<reference path='staticInstanceResolution3_0.ts'/>
 var WinJS = require("./staticInstanceResolution3_0");
 WinJS.Promise.timeout(10);
+exports.__esModule = true;

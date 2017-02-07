@@ -87,4 +87,5 @@ define(["require", "exports", "constDeclarations_access_1"], function (require, 
     -m.x;
     +m.x;
     m.x.toString();
+    Object.defineProperty(exports, "__esModule", { value: true });
 });

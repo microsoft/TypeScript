@@ -20,6 +20,7 @@ export { v, bar }
 {
     var obj = true;
 }
+exports.__esModule = true;
 //// [1.js]
 "use strict";
 var v = "str" || true;

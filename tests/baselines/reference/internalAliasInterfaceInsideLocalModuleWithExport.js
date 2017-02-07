@@ -16,6 +16,7 @@ define(["require", "exports"], function (require, exports) {
     var c;
     (function (c) {
     })(c = exports.c || (exports.c = {}));
+    exports.__esModule = true;
 });
 
 

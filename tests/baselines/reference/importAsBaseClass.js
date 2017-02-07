@@ -40,3 +40,4 @@ var Hello = (function (_super) {
     }
     return Hello;
 }(Greeter));
+exports.__esModule = true;

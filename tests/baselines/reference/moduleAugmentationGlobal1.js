@@ -31,6 +31,7 @@ exports.__esModule = true;
 "use strict";
 var x = [1];
 var y = x.getA().x;
+exports.__esModule = true;
 
 
 //// [f1.d.ts]

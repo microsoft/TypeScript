@@ -51,3 +51,4 @@ var Wat = (function () {
 __decorate([
     filter(function () { return a_1.test == 'abc'; })
 ], Wat, "whatever", null);
+Object.defineProperty(exports, "__esModule", { value: true });

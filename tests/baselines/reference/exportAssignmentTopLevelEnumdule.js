@@ -38,4 +38,5 @@ define(["require", "exports", "./foo_0"], function (require, exports, foo) {
     if (color === foo.green) {
         color = foo.answer;
     }
+    exports.__esModule = true;
 });

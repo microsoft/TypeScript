@@ -65,4 +65,5 @@ define(["require", "exports"], function (require, exports) {
         // alias
         M.M_A = M_M;
     })(M = exports.M || (exports.M = {}));
+    Object.defineProperty(exports, "__esModule", { value: true });
 });

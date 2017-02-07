@@ -34,3 +34,4 @@ exports.__esModule = true;
 "use strict";
 var file2_1 = require("folder2/file2");
 use(file2_1.x.toExponential());
+exports.__esModule = true;

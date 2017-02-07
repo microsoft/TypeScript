@@ -15,3 +15,4 @@ x;
 "use strict";
 var xyz_1 = require("xyz");
 xyz_1.x;
+exports.__esModule = true;

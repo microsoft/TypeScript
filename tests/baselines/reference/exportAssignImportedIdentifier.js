@@ -30,3 +30,4 @@ module.exports = x;
 "use strict";
 var foo2 = require("./foo2");
 var x = foo2(); // should be boolean
+exports.__esModule = true;

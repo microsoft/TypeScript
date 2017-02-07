@@ -16,3 +16,4 @@ exports["default"] = 0;
 exports.__esModule = true;
 //// [a.js]
 "use strict";
+exports.__esModule = true;

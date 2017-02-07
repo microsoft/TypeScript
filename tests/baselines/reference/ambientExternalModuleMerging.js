@@ -22,5 +22,6 @@ define(["require", "exports", "M"], function (require, exports, M) {
     // Should be strings
     var x = M.x;
     var y = M.y;
+    exports.__esModule = true;
 });
 //// [ambientExternalModuleMerging_declare.js]

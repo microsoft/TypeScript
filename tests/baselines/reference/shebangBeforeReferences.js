@@ -20,3 +20,4 @@ use(x);
 "use strict";
 var test_1 = require("test");
 use(test_1.x);
+exports.__esModule = true;

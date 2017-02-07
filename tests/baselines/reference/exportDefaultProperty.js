@@ -73,3 +73,4 @@ var a_1 = require("./a");
 var b = new a_1["default"](a_1["default"].b);
 var b_1 = require("./b");
 b_1["default"] + 1;
+exports.__esModule = true;

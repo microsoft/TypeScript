@@ -15,3 +15,4 @@ Foo.default.default.foo();
 var Foo = require("./b");
 Foo["default"].bar();
 Foo["default"]["default"].foo();
+exports.__esModule = true;

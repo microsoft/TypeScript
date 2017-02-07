@@ -23,6 +23,7 @@ exports.__esModule = true;
 "use strict";
 var f = require("./file1");
 f.foo();
+exports.__esModule = true;
 
 
 //// [file1.d.ts]

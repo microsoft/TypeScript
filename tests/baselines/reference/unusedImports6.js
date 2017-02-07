@@ -39,3 +39,4 @@ exports["default"] = test2;
 exports.__esModule = true;
 //// [file2.js]
 "use strict";
+exports.__esModule = true;

@@ -50,3 +50,4 @@ var x;
 var y;
 m1_1.default.x;
 m1_1.default.y;
+Object.defineProperty(exports, "__esModule", { value: true });

@@ -16,4 +16,3 @@ var D = (function () {
     return D;
 }());
 module.exports = D;
-exports.__esModule = true;

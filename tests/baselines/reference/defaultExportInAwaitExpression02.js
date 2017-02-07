@@ -33,3 +33,4 @@ const a_1 = require("./a");
         const value = yield a_1.default;
     });
 }());
+Object.defineProperty(exports, "__esModule", { value: true });

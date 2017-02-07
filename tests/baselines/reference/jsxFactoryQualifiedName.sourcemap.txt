@@ -486,9 +486,10 @@ sourceFile:test.tsx
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(11, 2) Source(16, 2) + SourceIndex(0)
 ---
+>>>Object.defineProperty(exports, "__esModule", { value: true });
 >>>//# sourceMappingURL=test.js.map

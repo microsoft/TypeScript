@@ -41,6 +41,7 @@ define(["require", "exports"], function (require, exports) {
             })(mod = nested.mod || (nested.mod = {}));
         })(nested = elaborate.nested || (elaborate.nested = {}));
     })(elaborate = exports.elaborate || (exports.elaborate = {}));
+    exports.__esModule = true;
 });
 //// [file2.js]
 define(["require", "exports"], function (require, exports) {
@@ -54,4 +55,5 @@ define(["require", "exports"], function (require, exports) {
             return UsesReferredType;
         }());
     })(ImportingModule = exports.ImportingModule || (exports.ImportingModule = {}));
+    exports.__esModule = true;
 });

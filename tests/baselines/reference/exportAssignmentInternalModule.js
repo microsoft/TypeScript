@@ -24,4 +24,5 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "exportAssignmentInternalModule_A"], function (require, exports, modM) {
     "use strict";
     var n = modM.x;
+    exports.__esModule = true;
 });

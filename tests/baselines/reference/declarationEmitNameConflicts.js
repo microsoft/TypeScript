@@ -129,6 +129,7 @@ var M;
         })(N = Q.N || (Q.N = {}));
     })(Q = M.Q || (M.Q = {}));
 })(M = exports.M || (exports.M = {}));
+exports.__esModule = true;
 
 
 //// [declarationEmit_nameConflicts_1.d.ts]

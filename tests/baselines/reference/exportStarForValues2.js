@@ -15,14 +15,17 @@ var x = 1;
 //// [file1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
 });
 //// [file2.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
     var x = 1;
+    exports.__esModule = true;
 });
 //// [file3.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
     var x = 1;
+    exports.__esModule = true;
 });

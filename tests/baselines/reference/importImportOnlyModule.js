@@ -32,9 +32,11 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     var answer = 42; // No exports
+    exports.__esModule = true;
 });
 //// [foo_2.js]
 define(["require", "exports", "./foo_1"], function (require, exports, foo) {
     "use strict";
     var x = foo; // Cause a runtime dependency
+    exports.__esModule = true;
 });

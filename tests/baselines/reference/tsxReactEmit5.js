@@ -36,3 +36,4 @@ var test_1 = require("./test");
 //  and React.__spread
 var foo;
 var spread1 = test_1.React.createElement("div", __assign({ x: '' }, foo, { y: '' }));
+exports.__esModule = true;

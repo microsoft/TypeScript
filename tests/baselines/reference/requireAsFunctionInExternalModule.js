@@ -36,3 +36,4 @@ exports.__esModule = true;
 "use strict";
 var m_1 = require("./m");
 m_1.hello();
+exports.__esModule = true;

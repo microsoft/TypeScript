@@ -58,3 +58,4 @@ var moduleA = require("./aliasUsageInObjectLiteral_moduleA");
 var a = { x: moduleA };
 var b = { x: moduleA };
 var c = { y: { z: moduleA } };
+exports.__esModule = true;

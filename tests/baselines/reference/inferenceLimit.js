@@ -42,6 +42,7 @@ export interface MyModel {
 
 //// [mymodule.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [file1.js]
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {

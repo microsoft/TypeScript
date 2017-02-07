@@ -72,16 +72,19 @@ define("b", ["require", "exports"], function (require, exports) {
 define("d", ["require", "exports", "a"], function (require, exports, a_1) {
     "use strict";
     a_1.A.prototype.getB = function () { return undefined; };
+    exports.__esModule = true;
 });
 define("e", ["require", "exports", "a"], function (require, exports, a_2) {
     "use strict";
     a_2.A.prototype.getCls = function () { return undefined; };
+    exports.__esModule = true;
 });
 define("main", ["require", "exports", "d", "e"], function (require, exports) {
     "use strict";
     var a;
     var b = a.getB().x.toFixed();
     var c = a.getCls().y.toLowerCase();
+    exports.__esModule = true;
 });
 
 

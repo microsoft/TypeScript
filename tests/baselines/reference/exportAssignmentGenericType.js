@@ -25,3 +25,4 @@ module.exports = Foo;
 var foo = require("./foo_0");
 var x = new foo();
 var y = x.test;
+exports.__esModule = true;

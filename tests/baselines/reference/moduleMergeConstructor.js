@@ -36,4 +36,5 @@ define(["require", "exports", "foo"], function (require, exports, foo) {
         }
         return Test;
     }());
+    exports.__esModule = true;
 });

@@ -17,3 +17,4 @@ var z = foo.x + 10;
 /// <reference path="foo_0.ts"/>
 var foo = require("foo");
 var z = foo.x + 10;
+exports.__esModule = true;

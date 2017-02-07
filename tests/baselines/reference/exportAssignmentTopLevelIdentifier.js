@@ -27,4 +27,5 @@ define(["require", "exports", "./foo_0"], function (require, exports, foo) {
     "use strict";
     if (foo.answer === 42) {
     }
+    exports.__esModule = true;
 });

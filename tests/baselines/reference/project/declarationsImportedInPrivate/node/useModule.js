@@ -7,3 +7,4 @@ var usePrivate_m4_m1;
     var d3 = private_m4.d;
     var f3 = private_m4.foo();
 })(usePrivate_m4_m1 = exports.usePrivate_m4_m1 || (exports.usePrivate_m4_m1 = {}));
+exports.__esModule = true;

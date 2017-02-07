@@ -57,3 +57,4 @@ MyComponent = __decorate([
     decorator,
     __metadata("design:paramtypes", [service_1.default])
 ], MyComponent);
+Object.defineProperty(exports, "__esModule", { value: true });

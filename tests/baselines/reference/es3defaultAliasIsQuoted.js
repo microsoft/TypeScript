@@ -33,3 +33,4 @@ exports.__esModule = true;
 "use strict";
 var es3defaultAliasQuoted_file0_1 = require("./es3defaultAliasQuoted_file0");
 es3defaultAliasQuoted_file0_1["default"](es3defaultAliasQuoted_file0_1.Foo.CONSTANT === "Foo");
+exports.__esModule = true;

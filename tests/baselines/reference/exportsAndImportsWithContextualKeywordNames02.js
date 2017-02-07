@@ -28,7 +28,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var as = require("./t1");
 var x = as.as;
 var y = as.return;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [t3.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [t4.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

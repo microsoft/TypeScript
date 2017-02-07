@@ -13,4 +13,5 @@ m1.f();
 define(["require", "exports", "bar", "goo", "m2", "foo"], function (require, exports, b, c, m1) {
     "use strict";
     m1.f();
+    exports.__esModule = true;
 });

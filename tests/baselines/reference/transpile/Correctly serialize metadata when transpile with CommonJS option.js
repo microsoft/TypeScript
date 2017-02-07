@@ -20,4 +20,5 @@ MyClass1 = __decorate([
     __metadata("design:paramtypes", [typeof (_a = (typeof ng !== "undefined" && ng).ElementRef) === "function" && _a || Object])
 ], MyClass1);
 var _a;
+Object.defineProperty(exports, "__esModule", { value: true });
 //# sourceMappingURL=file.js.map

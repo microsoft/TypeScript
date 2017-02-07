@@ -15,3 +15,4 @@ import "foo";
 //// [a.js]
 "use strict";
 require("foo");
+exports.__esModule = true;

@@ -31,6 +31,7 @@ exports.x = t1_1.x;
 exports.__esModule = true;
 //// [t3.js]
 "use strict";
+exports.__esModule = true;
 //// [t4.js]
 "use strict";
 var t1_1 = require("./t1");

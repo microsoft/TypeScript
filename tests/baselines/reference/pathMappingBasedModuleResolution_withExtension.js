@@ -24,3 +24,4 @@ exports.bar = bar;
 exports.__esModule = true;
 //// [a.js]
 "use strict";
+exports.__esModule = true;

@@ -15,3 +15,4 @@ var myModule;
 (function (myModule) {
     var a = foo.x;
 })(myModule = exports.myModule || (exports.myModule = {}));
+exports.__esModule = true;

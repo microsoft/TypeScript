@@ -52,3 +52,4 @@ var a = foo.a();
 if (!!foo.b) {
     foo.Test.answer = foo.c(42);
 }
+exports.__esModule = true;

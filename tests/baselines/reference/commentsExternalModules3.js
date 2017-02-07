@@ -123,6 +123,7 @@ var m4;
 })(m4 = exports.m4 || (exports.m4 = {}));
 m4.fooExport();
 var myvar2 = new m4.m2.c();
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [commentsExternalModules_1.js]
 "use strict";
 /**This is on import declaration*/

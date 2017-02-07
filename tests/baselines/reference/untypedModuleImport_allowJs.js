@@ -14,3 +14,4 @@ foo.bar();
 "use strict";
 var foo_1 = require("foo");
 foo_1["default"].bar();
+exports.__esModule = true;

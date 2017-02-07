@@ -48,6 +48,7 @@ var M1;
     }());
     M1.C1 = C1;
 })(M1 = exports.M1 || (exports.M1 = {}));
+exports.__esModule = true;
 //// [foo2.js]
 "use strict";
 var foo1 = require("./foo1");
@@ -66,3 +67,4 @@ var M1;
     }());
     M1.C1 = C1;
 })(M1 = exports.M1 || (exports.M1 = {}));
+exports.__esModule = true;

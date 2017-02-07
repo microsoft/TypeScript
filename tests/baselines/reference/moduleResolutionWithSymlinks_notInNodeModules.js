@@ -32,3 +32,4 @@ exports.__esModule = true;
 var abc_1 = require("./shared/abc");
 var abc_2 = require("./shared2/abc");
 abc_1.x + abc_2.x;
+exports.__esModule = true;

@@ -30,3 +30,4 @@ class Test {
         return __awaiter(this, void 0, void 0, function* () { return; });
     }
 }
+Object.defineProperty(exports, "__esModule", { value: true });

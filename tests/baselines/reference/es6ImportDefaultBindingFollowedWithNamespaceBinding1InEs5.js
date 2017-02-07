@@ -18,6 +18,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 var es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0_1 = require("./es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0");
 var x = es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0_1.default;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0.d.ts]

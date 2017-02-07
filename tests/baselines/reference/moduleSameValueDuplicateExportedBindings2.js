@@ -21,6 +21,7 @@ var Animals;
     Animals[Animals["Dog"] = 1] = "Dog";
 })(Animals = exports.Animals || (exports.Animals = {}));
 ;
+exports.__esModule = true;
 //// [b.js]
 "use strict";
 var c_1 = require("./c");

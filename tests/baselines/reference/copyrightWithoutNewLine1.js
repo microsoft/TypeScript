@@ -15,4 +15,5 @@ define(["require", "exports", "./greeter"], function (require, exports, model) {
     var greeter = new model.Greeter(el);
     /** things */
     greeter.start();
+    exports.__esModule = true;
 });

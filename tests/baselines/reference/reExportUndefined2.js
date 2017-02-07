@@ -19,3 +19,4 @@ exports.__esModule = true;
 "use strict";
 var a_1 = require("./a");
 use(a_1.undefined);
+exports.__esModule = true;

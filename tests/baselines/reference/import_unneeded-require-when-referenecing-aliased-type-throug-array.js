@@ -21,4 +21,5 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     var testData;
     var p = testData[0].name;
+    exports.__esModule = true;
 });

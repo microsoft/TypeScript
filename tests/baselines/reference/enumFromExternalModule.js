@@ -16,8 +16,10 @@ var Mode;
 (function (Mode) {
     Mode[Mode["Open"] = 0] = "Open";
 })(Mode = exports.Mode || (exports.Mode = {}));
+exports.__esModule = true;
 //// [enumFromExternalModule_1.js]
 "use strict";
 ///<reference path='enumFromExternalModule_0.ts'/>
 var f = require("./enumFromExternalModule_0");
 var x = f.Mode.Open;
+exports.__esModule = true;

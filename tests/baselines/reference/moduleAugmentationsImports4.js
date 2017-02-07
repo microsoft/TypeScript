@@ -73,6 +73,7 @@ define("main", ["require", "exports", "D", "E"], function (require, exports) {
     var a;
     var b = a.getB().x.toFixed();
     var c = a.getCls().y.toLowerCase();
+    exports.__esModule = true;
 });
 
 

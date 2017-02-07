@@ -56,3 +56,4 @@ exports.__esModule = true;
 var moduleA = require("./aliasUsageInFunctionExpression_moduleA");
 var f = function (x) { return x; };
 f = function (x) { return moduleA; };
+exports.__esModule = true;

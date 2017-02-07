@@ -27,6 +27,7 @@ var c;
     var bVal = b(10);
     c.bVal2 = b;
 })(c = exports.c || (exports.c = {}));
+exports.__esModule = true;
 
 
 //// [internalAliasFunctionInsideLocalModuleWithoutExport.d.ts]

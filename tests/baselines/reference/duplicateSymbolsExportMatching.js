@@ -103,4 +103,5 @@ define(["require", "exports"], function (require, exports) {
             var t;
         })(C = M.C || (M.C = {}));
     })(M || (M = {}));
+    exports.__esModule = true;
 });

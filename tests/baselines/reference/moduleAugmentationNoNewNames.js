@@ -30,12 +30,15 @@ let y = x.map(x => x + 1);
 
 //// [observable.js]
 "use strict";
+exports.__esModule = true;
 //// [map.js]
 "use strict";
 var observable_1 = require("./observable");
 observable_1.Observable.prototype.map = function () { };
+exports.__esModule = true;
 //// [main.js]
 "use strict";
 require("./map");
 var x;
 var y = x.map(function (x) { return x + 1; });
+exports.__esModule = true;

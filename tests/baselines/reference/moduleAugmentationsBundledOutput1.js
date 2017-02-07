@@ -70,6 +70,7 @@ define("m2", ["require", "exports", "m1"], function (require, exports, m1_1) {
     "use strict";
     m1_1.Cls.prototype.foo = function () { return 1; };
     m1_1.Cls.prototype.bar = function () { return "1"; };
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 define("m3", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -91,6 +92,7 @@ define("m4", ["require", "exports", "m1"], function (require, exports, m1_2) {
     "use strict";
     m1_2.Cls.prototype.baz1 = function () { return undefined; };
     m1_2.Cls.prototype.baz2 = function () { return undefined; };
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 define("test", ["require", "exports", "m2", "m4"], function (require, exports) {
     "use strict";
@@ -99,6 +101,7 @@ define("test", ["require", "exports", "m2", "m4"], function (require, exports) {
     c.bar().toLowerCase();
     c.baz1().x.toExponential();
     c.baz2().x.toLowerCase();
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 
 

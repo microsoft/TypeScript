@@ -25,3 +25,4 @@ module.exports = server;
 ///<reference path='localAliasExportAssignment_0.ts'/>
 var connect = require("./localAliasExportAssignment_0");
 connect();
+exports.__esModule = true;

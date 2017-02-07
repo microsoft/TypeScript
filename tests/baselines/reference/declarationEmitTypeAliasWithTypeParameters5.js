@@ -15,3 +15,4 @@ function foo() {
 function foo() {
     return {};
 }
+exports.__esModule = true;

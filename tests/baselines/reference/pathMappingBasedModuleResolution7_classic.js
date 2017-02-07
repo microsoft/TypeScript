@@ -44,4 +44,5 @@ define(["require", "exports", "./project/file2", "module3"], function (require, 
     "use strict";
     use(file2_1.x.toFixed());
     use(module3_1.y.toFixed());
+    exports.__esModule = true;
 });

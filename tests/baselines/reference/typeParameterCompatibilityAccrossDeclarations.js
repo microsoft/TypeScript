@@ -37,4 +37,5 @@ define(["require", "exports"], function (require, exports) {
     i = a; // error
     a2 = i2; // no error
     i2 = a2; // no error
+    exports.__esModule = true;
 });

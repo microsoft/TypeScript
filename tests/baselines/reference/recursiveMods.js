@@ -51,3 +51,4 @@ var Foo;
         return;
     }
 })(Foo = exports.Foo || (exports.Foo = {}));
+exports.__esModule = true;

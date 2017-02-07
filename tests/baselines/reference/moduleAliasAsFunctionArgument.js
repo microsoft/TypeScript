@@ -26,4 +26,5 @@ define(["require", "exports", "moduleAliasAsFunctionArgument_0"], function (requ
     }
     a.x; // OK
     fn(a); // Error: property 'x' is missing from 'a'
+    exports.__esModule = true;
 });

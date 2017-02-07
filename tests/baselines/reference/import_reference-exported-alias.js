@@ -48,4 +48,5 @@ define(["require", "exports", "file1"], function (require, exports, appJs) {
     var Services = appJs.Services;
     var UserServices = Services.UserServices;
     var x = new UserServices().getUserName();
+    exports.__esModule = true;
 });

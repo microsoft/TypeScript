@@ -119,4 +119,5 @@ define(["require", "exports"], function (require, exports) {
         }
         return C3;
     }());
+    exports.__esModule = true;
 });

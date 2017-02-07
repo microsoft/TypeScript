@@ -47,3 +47,4 @@ use(file1_1.x.toExponential());
 use(file2_1.y.toExponential());
 use(file3_1.z.toExponential());
 use(file4_1.z1.toExponential());
+exports.__esModule = true;

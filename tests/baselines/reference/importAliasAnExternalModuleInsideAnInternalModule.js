@@ -21,6 +21,7 @@ var m;
     function foo() { }
     m.foo = foo;
 })(m = exports.m || (exports.m = {}));
+exports.__esModule = true;
 //// [importAliasAnExternalModuleInsideAnInternalModule_file1.js]
 "use strict";
 var r = require("./importAliasAnExternalModuleInsideAnInternalModule_file0");
@@ -30,3 +31,4 @@ var m_private;
     m_private.C = r; // no error
     m_private.C.m.foo();
 })(m_private || (m_private = {}));
+exports.__esModule = true;

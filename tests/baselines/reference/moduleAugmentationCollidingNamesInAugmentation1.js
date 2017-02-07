@@ -36,21 +36,25 @@ let x: Observable<number>;
 //// [observable.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
 });
 //// [map1.js]
 define(["require", "exports", "./observable"], function (require, exports, observable_1) {
     "use strict";
     observable_1.Observable.prototype.map = function () { };
+    exports.__esModule = true;
 });
 //// [map2.js]
 define(["require", "exports", "./observable"], function (require, exports, observable_1) {
     "use strict";
     observable_1.Observable.prototype.map = function () { };
+    exports.__esModule = true;
 });
 //// [main.js]
 define(["require", "exports", "./map1", "./map2"], function (require, exports) {
     "use strict";
     var x;
+    exports.__esModule = true;
 });
 
 

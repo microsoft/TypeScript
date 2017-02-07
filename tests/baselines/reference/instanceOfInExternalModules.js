@@ -28,4 +28,5 @@ define(["require", "exports", "instanceOfInExternalModules_require"], function (
     function IsFoo(value) {
         return value instanceof Bar.Foo;
     }
+    exports.__esModule = true;
 });

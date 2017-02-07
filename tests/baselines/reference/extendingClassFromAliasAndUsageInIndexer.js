@@ -96,3 +96,4 @@ var moduleMap = {
 };
 var moduleName;
 var visModel = new moduleMap[moduleName].VisualizationModel();
+exports.__esModule = true;

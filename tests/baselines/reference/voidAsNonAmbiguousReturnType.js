@@ -25,3 +25,4 @@ var fs = require("./voidAsNonAmbiguousReturnType_0");
 function main() {
     fs.mkdirSync('test'); // should not error - return types are the same
 }
+exports.__esModule = true;

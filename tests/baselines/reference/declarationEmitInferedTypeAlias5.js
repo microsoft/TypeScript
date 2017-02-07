@@ -14,6 +14,7 @@ export { v }
 //// [0.js]
 "use strict";
 var obj = true;
+exports.__esModule = true;
 //// [1.js]
 "use strict";
 //let v2: Z.Data;

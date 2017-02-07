@@ -12,3 +12,4 @@ var Baz;
 })(Baz = exports.Baz || (exports.Baz = {}));
 Baz.x = "goodbye";
 void 0;
+exports.__esModule = true;

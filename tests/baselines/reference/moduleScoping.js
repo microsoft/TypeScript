@@ -39,5 +39,6 @@ var t1 = v1;
 var t2 = v2;
 var t3 = file3.v3;
 var v4 = { a: true, b: NaN }; // Should shadow global v2 in this module
+exports.__esModule = true;
 //// [file5.js]
 var x = v2; // Should be global v2 of type number again

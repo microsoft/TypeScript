@@ -16,3 +16,4 @@ const X: Invalid1 = 1;
 var React = require("react");
 var X = 1;
 React.createElement(X, null);
+exports.__esModule = true;

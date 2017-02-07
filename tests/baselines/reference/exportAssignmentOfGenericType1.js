@@ -45,4 +45,5 @@ define(["require", "exports", "exportAssignmentOfGenericType1_0"], function (req
     }(q));
     var m;
     var r = m.foo;
+    exports.__esModule = true;
 });

@@ -21,10 +21,12 @@ define(["require", "exports"], function (require, exports) {
         E1[E1["B"] = 1] = "B";
         E1[E1["C"] = 2] = "C";
     })(E1 = exports.E1 || (exports.E1 = {}));
+    exports.__esModule = true;
 });
 //// [foo_1.js]
 define(["require", "exports", "./foo_0"], function (require, exports, foo) {
     "use strict";
     if (foo.E1.A === 0) {
     }
+    exports.__esModule = true;
 });

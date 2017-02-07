@@ -14,3 +14,4 @@ declare function dec<T>(target: T): T;
 exports.__esModule = true;
 //// [decoratorOnImportEquals2_1.js]
 "use strict";
+exports.__esModule = true;

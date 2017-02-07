@@ -52,4 +52,5 @@ define(["require", "exports"], function (require, exports) {
         new m2.exports();
         new m2.require();
     })(m2 || (m2 = {}));
+    exports.__esModule = true;
 });

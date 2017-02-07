@@ -12,3 +12,4 @@ var z = foo.x + 10;
 "use strict";
 var foo = require("./test/foo");
 var z = foo.x + 10;
+exports.__esModule = true;

@@ -40,3 +40,4 @@ var y = (function (_super) {
     }
     return y;
 }(x));
+exports.__esModule = true;

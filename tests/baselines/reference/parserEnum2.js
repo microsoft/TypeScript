@@ -17,3 +17,4 @@ var SignatureFlags;
     SignatureFlags[SignatureFlags["IsStringIndexer"] = 2] = "IsStringIndexer";
     SignatureFlags[SignatureFlags["IsNumberIndexer"] = 4] = "IsNumberIndexer";
 })(SignatureFlags = exports.SignatureFlags || (exports.SignatureFlags = {}));
+exports.__esModule = true;

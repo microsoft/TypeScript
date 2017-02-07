@@ -20,3 +20,4 @@ exports.__esModule = true;
 "use strict";
 var file3_1 = require("./project/file3");
 use(file3_1.x.toFixed());
+exports.__esModule = true;

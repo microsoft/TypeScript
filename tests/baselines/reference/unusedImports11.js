@@ -39,3 +39,4 @@ new b_2["default"]();
 new b_2.Member();
 new ns.Member();
 new r.Member();
+exports.__esModule = true;

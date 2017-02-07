@@ -27,3 +27,4 @@ exports.__esModule = true;
 "use strict";
 var m1_1 = require("./m1");
 var __ = m1_1["default"].__, _ = m1_1["default"]._, ___ = m1_1["default"].___;
+exports.__esModule = true;

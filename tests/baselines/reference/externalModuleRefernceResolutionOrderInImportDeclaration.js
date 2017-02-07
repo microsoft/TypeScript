@@ -30,3 +30,4 @@ exports.__esModule = true;
 var file1 = require("./externalModuleRefernceResolutionOrderInImportDeclaration_file1");
 file1.foo();
 file1.bar();
+exports.__esModule = true;

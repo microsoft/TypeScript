@@ -20,6 +20,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "es6ImportNameSpaceImportAmd_0"], function (require, exports, nameSpaceBinding) {
     "use strict";
     var x = nameSpaceBinding.a;
+    exports.__esModule = true;
 });
 
 

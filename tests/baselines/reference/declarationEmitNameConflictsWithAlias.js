@@ -11,6 +11,7 @@ export module M {
 var M;
 (function (M) {
 })(M = exports.M || (exports.M = {}));
+exports.__esModule = true;
 
 
 //// [declarationEmitNameConflictsWithAlias.d.ts]

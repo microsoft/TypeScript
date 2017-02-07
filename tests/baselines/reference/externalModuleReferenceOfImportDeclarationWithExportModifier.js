@@ -21,4 +21,5 @@ define(["require", "exports", "externalModuleReferenceOfImportDeclarationWithExp
     "use strict";
     exports.file1 = file1;
     exports.file1.foo();
+    exports.__esModule = true;
 });

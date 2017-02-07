@@ -66,4 +66,5 @@ define(["require", "exports", "externalModuleAssignToVar_core_require", "externa
     y2 = ext2; // ok
     var y3 = ext3;
     y3 = ext3; // ok
+    exports.__esModule = true;
 });

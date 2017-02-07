@@ -17,3 +17,4 @@ var Color;
     Color[Color["g"] = 1] = "g";
     Color[Color["b"] = 2] = "b";
 })(Color = exports.Color || (exports.Color = {}));
+exports.__esModule = true;

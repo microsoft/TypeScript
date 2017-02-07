@@ -31,3 +31,4 @@ var c;
     c.bVal = b.Sunday;
 })(c = exports.c || (exports.c = {}));
 var happyFriday = c.b.Friday;
+exports.__esModule = true;

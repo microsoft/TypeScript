@@ -35,4 +35,5 @@ define(["require", "exports", "fs"], function (require, exports, fs) {
             });
         });
     }
+    exports.__esModule = true;
 });

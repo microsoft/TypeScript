@@ -30,6 +30,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "./w1"], function (require, exports, w) {
     "use strict";
     exports.w = w;
+    exports.__esModule = true;
 });
 //// [consumer.js]
 define(["require", "exports", "./exporter"], function (require, exports, e) {

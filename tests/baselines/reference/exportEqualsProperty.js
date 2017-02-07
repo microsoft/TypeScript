@@ -69,3 +69,4 @@ var B = require("./a");
 var b = new B(B.b);
 var fooLength = require("./b");
 fooLength + 1;
+exports.__esModule = true;

@@ -20,12 +20,15 @@ import "./f2";
 
 //// [f1.js]
 "use strict";
+exports.__esModule = true;
 //// [f2.js]
 "use strict";
+exports.__esModule = true;
 //// [f3.js]
 "use strict";
 require("./f1");
 require("./f2");
+exports.__esModule = true;
 
 
 //// [f1.d.ts]

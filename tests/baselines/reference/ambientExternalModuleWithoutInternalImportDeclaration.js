@@ -22,4 +22,5 @@ var c = new A();
 define(["require", "exports", "M"], function (require, exports, A) {
     "use strict";
     var c = new A();
+    exports.__esModule = true;
 });

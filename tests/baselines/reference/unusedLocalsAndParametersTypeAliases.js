@@ -33,3 +33,4 @@ var x;
 x();
 var y;
 y[0]();
+exports.__esModule = true;

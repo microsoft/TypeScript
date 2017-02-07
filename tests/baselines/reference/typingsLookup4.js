@@ -35,3 +35,4 @@ var jquery_1 = require("jquery");
 var kquery_1 = require("kquery");
 var lquery_1 = require("lquery");
 jquery_1.j + kquery_1.k + lquery_1.l;
+exports.__esModule = true;

@@ -27,3 +27,4 @@ var x: foo.A = foo.bar("hello"); // foo.A should be ok but foo.bar should be err
 var z;
 z.bar("hello"); // This should be ok
 var x = foo.bar("hello"); // foo.A should be ok but foo.bar should be error
+exports.__esModule = true;

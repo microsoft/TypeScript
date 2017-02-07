@@ -29,3 +29,4 @@ var xyz_1 = require("xyz");
 var pdq_1 = require("pdq");
 var abc_1 = require("abc");
 xyz_1.x + pdq_1.y + abc_1.z;
+exports.__esModule = true;

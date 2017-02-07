@@ -18,3 +18,4 @@ declare var foo: any;
 "use strict";
 var myReactLib = require("my-React-Lib"); // should not be elided
 <foo data/>;
+exports.__esModule = true;

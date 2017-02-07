@@ -31,3 +31,4 @@ exports.__esModule = true;
 "use strict";
 var x = 10;
 var x44 = 10;
+exports.__esModule = true;

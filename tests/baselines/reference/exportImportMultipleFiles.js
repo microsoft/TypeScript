@@ -24,9 +24,11 @@ define(["require", "exports", "exportImportMultipleFiles_math"], function (requi
     "use strict";
     exports.math = math;
     exports.math.add(3, 4); // OK
+    exports.__esModule = true;
 });
 //// [exportImportMultipleFiles_userCode.js]
 define(["require", "exports", "./exportImportMultipleFiles_library"], function (require, exports, lib) {
     "use strict";
     lib.math.add(3, 4); // Shouldnt be error
+    exports.__esModule = true;
 });

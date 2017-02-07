@@ -27,3 +27,4 @@ module.exports = M2;
 "use strict";
 var x = require("./foo");
 x.Y; // .ts should be picked
+exports.__esModule = true;

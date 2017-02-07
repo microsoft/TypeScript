@@ -54,6 +54,7 @@ var X = require("./exportStarFromEmptyModule_module3");
 var s;
 X.A.q;
 X.A.r; // Error
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [exportStarFromEmptyModule_module1.d.ts]

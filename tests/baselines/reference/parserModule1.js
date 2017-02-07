@@ -59,3 +59,4 @@ var CompilerDiagnostics;
     }
     CompilerDiagnostics.assert = assert;
 })(CompilerDiagnostics = exports.CompilerDiagnostics || (exports.CompilerDiagnostics = {}));
+exports.__esModule = true;

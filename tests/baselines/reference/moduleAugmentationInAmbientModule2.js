@@ -34,3 +34,4 @@ x.foo().x;
 require("Map");
 var x;
 x.foo().x;
+exports.__esModule = true;

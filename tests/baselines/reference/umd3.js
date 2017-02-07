@@ -20,3 +20,4 @@ var Foo = require("./foo");
 Foo.fn();
 var x;
 var y = x.n;
+exports.__esModule = true;

@@ -45,10 +45,12 @@ module.exports = Math;
 //// [Drawing.js]
 "use strict";
 exports.Math = require("./Math/Math");
+exports.__esModule = true;
 //// [consumer.js]
 "use strict";
 var Drawing = require("./Drawing");
 var addr = new Drawing.Math.Adder();
+exports.__esModule = true;
 
 
 //// [Adder.d.ts]

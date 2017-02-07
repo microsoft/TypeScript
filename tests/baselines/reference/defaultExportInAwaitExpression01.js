@@ -52,4 +52,5 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             const value = yield a_1.default;
         });
     }());
+    Object.defineProperty(exports, "__esModule", { value: true });
 });

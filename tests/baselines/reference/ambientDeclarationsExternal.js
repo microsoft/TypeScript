@@ -32,3 +32,4 @@ var n: number;
 var imp3 = require("equ2");
 var n = imp3.x;
 var n;
+exports.__esModule = true;

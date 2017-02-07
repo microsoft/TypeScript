@@ -29,6 +29,7 @@ let y = x.getA().x;
 require("array");
 var x = [1];
 var y = x.getA().x;
+exports.__esModule = true;
 
 
 //// [f.d.ts]

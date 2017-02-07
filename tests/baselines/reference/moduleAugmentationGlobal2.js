@@ -32,6 +32,7 @@ exports.__esModule = true;
 "use strict";
 var x = [1];
 var y = x.getCountAsString().toLowerCase();
+exports.__esModule = true;
 
 
 //// [f1.d.ts]

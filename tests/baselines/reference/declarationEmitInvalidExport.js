@@ -12,3 +12,4 @@ export type MyClass = typeof myClass;
 if (false) {
     export var myClass = 0;
 }
+exports.__esModule = true;

@@ -35,10 +35,12 @@ define(["require", "exports"], function (require, exports) {
             Services.UserServices = UserServices;
         })(Services = App.Services || (App.Services = {}));
     })(App = exports.App || (exports.App = {}));
+    exports.__esModule = true;
 });
 //// [file2.js]
 define(["require", "exports", "file1"], function (require, exports, appJs) {
     "use strict";
     var Services = appJs.App.Services;
     var x = new Services.UserServices().getUserName();
+    exports.__esModule = true;
 });

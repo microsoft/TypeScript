@@ -30,6 +30,7 @@ define(["require", "exports", "es6ImportWithoutFromClauseAmd_0", "es6ImportWitho
     "use strict";
     var _a = 10;
     var _b = 10;
+    exports.__esModule = true;
 });
 
 

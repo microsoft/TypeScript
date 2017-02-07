@@ -40,6 +40,7 @@ var es6ImportDefaultBindingFollowedWithNamedImportInEs5_0_4 = require("./es6Impo
 var x1 = es6ImportDefaultBindingFollowedWithNamedImportInEs5_0_4.x;
 var es6ImportDefaultBindingFollowedWithNamedImportInEs5_0_5 = require("./es6ImportDefaultBindingFollowedWithNamedImportInEs5_0");
 var x1 = es6ImportDefaultBindingFollowedWithNamedImportInEs5_0_5.m;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [es6ImportDefaultBindingFollowedWithNamedImportInEs5_0.d.ts]

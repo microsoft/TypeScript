@@ -51,3 +51,4 @@ var x = (function (_super) {
     }
     return x;
 }(foo2.x));
+exports.__esModule = true;

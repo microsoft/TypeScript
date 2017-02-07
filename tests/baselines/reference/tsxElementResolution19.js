@@ -36,4 +36,5 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "react", "./file1"], function (require, exports, React, file1_1) {
     "use strict";
     React.createElement(file1_1.MyClass, null);
+    exports.__esModule = true;
 });

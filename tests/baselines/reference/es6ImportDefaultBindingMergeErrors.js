@@ -26,3 +26,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var es6ImportDefaultBindingMergeErrors_0_1 = require("./es6ImportDefaultBindingMergeErrors_0");
 var x = es6ImportDefaultBindingMergeErrors_0_1.default;
 var defaultBinding2 = "hello world";
+Object.defineProperty(exports, "__esModule", { value: true });

@@ -8,4 +8,5 @@ run(1);
 define(["require", "exports"], function (require, exports) {
     "use strict";
     run(1);
+    Object.defineProperty(exports, "__esModule", { value: true });
 });

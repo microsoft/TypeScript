@@ -57,6 +57,7 @@ var N1;
 (function (N1) {
     N1.x = 1;
 })(N1 || (N1 = {}));
+exports.__esModule = true;
 //// [observable.js]
 "use strict";
 exports.x = 1;
@@ -68,3 +69,4 @@ exports.__esModule = true;
 //// [main.js]
 "use strict";
 require("./x");
+exports.__esModule = true;

@@ -38,4 +38,5 @@ define(["require", "exports", "./file3", "file4"], function (require, exports, f
 define(["require", "exports", "folder2/file2"], function (require, exports, file2_1) {
     "use strict";
     use(file2_1.x.toExponential());
+    exports.__esModule = true;
 });

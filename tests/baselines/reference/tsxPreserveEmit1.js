@@ -45,4 +45,5 @@ define(["require", "exports", "react", "react-router"], function (require, expor
         // Should emit 'M.X' in both opening and closing tags
         var y = <M.X></M.X>;
     })(M || (M = {}));
+    Object.defineProperty(exports, "__esModule", { value: true });
 });

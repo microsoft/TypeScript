@@ -26,3 +26,4 @@ let p: Passport = passport.use();
 "use strict";
 var passport = require("passport");
 var p = passport.use();
+exports.__esModule = true;

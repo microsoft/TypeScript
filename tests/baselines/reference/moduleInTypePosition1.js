@@ -23,3 +23,4 @@ exports.__esModule = true;
 //// [moduleInTypePosition1_1.js]
 "use strict";
 var x = function (w1) { };
+exports.__esModule = true;

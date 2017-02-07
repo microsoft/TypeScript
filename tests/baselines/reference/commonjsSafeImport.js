@@ -19,6 +19,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 var _10_lib_1 = require("./10_lib");
 _10_lib_1.Foo();
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [10_lib.d.ts]

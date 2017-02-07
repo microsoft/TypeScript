@@ -42,3 +42,4 @@ var x;
 var y;
 var z = new m1_1.default();
 var sum = z.p1 + z.p2;
+Object.defineProperty(exports, "__esModule", { value: true });

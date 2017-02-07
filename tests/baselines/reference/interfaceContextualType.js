@@ -37,3 +37,4 @@ var Bug = (function () {
     };
     return Bug;
 }());
+exports.__esModule = true;
