@@ -326,7 +326,6 @@ namespace ts {
             "object": TypeFacts.TypeofEQObject,
             "function": TypeFacts.TypeofEQFunction
         });
-
         const typeofNEFacts = createMapFromTemplate({
             "string": TypeFacts.TypeofNEString,
             "number": TypeFacts.TypeofNENumber,
@@ -336,7 +335,6 @@ namespace ts {
             "object": TypeFacts.TypeofNEObject,
             "function": TypeFacts.TypeofNEFunction
         });
-
         const typeofTypesByName = createMapFromTemplate<Type>({
             "string": stringType,
             "number": numberType,
@@ -344,6 +342,7 @@ namespace ts {
             "symbol": esSymbolType,
             "undefined": undefinedType
         });
+        const typeofType = createTypeofType();
 
         let jsxElementType: Type;
         let _jsxNamespace: string;
@@ -1725,6 +1724,10 @@ namespace ts {
             type.objectFlags = objectFlags;
             type.symbol = symbol;
             return type;
+        }
+
+        function createTypeofType() {
+            return getUnionType(convertToArray(typeofEQFacts.keys(), s => getLiteralTypeForText(TypeFlags.StringLiteral, s)));
         }
 
         // A reserved member name starts with two underscores, but the third character cannot be an underscore
@@ -14626,7 +14629,7 @@ namespace ts {
 
         function checkTypeOfExpression(node: TypeOfExpression): Type {
             checkExpression(node.expression);
-            return stringType;
+            return typeofType;
         }
 
         function checkVoidExpression(node: VoidExpression): Type {
