@@ -211,6 +211,7 @@ namespace ts {
             emitNodeWithComments,
             emitBodyWithDetachedComments,
             emitTrailingCommentsOfPosition,
+            emitLeadingComments,
         } = comments;
 
         let currentSourceFile: SourceFile;
@@ -2228,6 +2229,15 @@ namespace ts {
 
                     // Write the delimiter if this is not the first node.
                     if (previousSibling) {
+                        // i.e
+                        //      function commentedParameters(
+                        //          /* Parameter a */
+                        //          a
+                        //          /* End of parameter a */ -> this comment doesn't consider to be trailing comment of parameter "a" due to newline
+                        //          ,
+                        if (emitLeadingComments && delimiter && previousSibling.end !== parentNode.end) {
+                            emitLeadingComments(previousSibling.end, /*isEmittedNode*/ previousSibling.kind !== SyntaxKind.NotEmittedStatement);
+                        }
                         write(delimiter);
 
                         // Write either a line terminator or whitespace to separate the elements.
@@ -2272,6 +2282,20 @@ namespace ts {
                 const hasTrailingComma = (format & ListFormat.AllowTrailingComma) && children.hasTrailingComma;
                 if (format & ListFormat.CommaDelimited && hasTrailingComma) {
                     write(",");
+                }
+
+
+                // Emit any trailing comment of the last element in the list
+                // i.e
+                //       var array = [...
+                //          2
+                //          /* end of element 2 */
+                //       ];
+                if (previousSibling && delimiter && previousSibling.end !== parentNode.end) {
+                    emitLeadingComments(previousSibling.end, /*isEmittedNode*/ previousSibling.kind !== SyntaxKind.NotEmittedStatement);
+                    if (hasTrailingComma) {
+                        emitLeadingComments(previousSibling.end,  /*isEmittedNode*/ previousSibling.kind !== SyntaxKind.NotEmittedStatement);
+                    }
                 }
 
                 // Decrease the indent, if requested.
