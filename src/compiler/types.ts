@@ -3826,9 +3826,11 @@
     }
 
     export interface TransformationContext {
-        /*@internal*/ getCompilerOptions(): CompilerOptions;
         /*@internal*/ getEmitResolver(): EmitResolver;
         /*@internal*/ getEmitHost(): EmitHost;
+
+        /** Gets the compiler options supplied to the transformer. */
+        getCompilerOptions(): CompilerOptions;
 
         /** Starts a new lexical environment. */
         startLexicalEnvironment(): void;
@@ -3892,10 +3894,11 @@
     }
 
     export interface TransformationResult {
-        /**
-         * Gets the transformed source files.
-         */
+        /** Gets the transformed source files. */
         transformed: SourceFile[];
+
+        /** Gets diagnostics for the transformation. */
+        diagnostics?: Diagnostic[];
 
         /**
          * Emits the substitute for a node, if one is available; otherwise, emits the node.

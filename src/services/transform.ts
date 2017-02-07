@@ -1,18 +1,15 @@
 /// <reference path="..\compiler\transformer.ts"/>
 /// <reference path="transpile.ts"/>
 namespace ts {
-    export interface TransformOptions {
-        newLine?: NewLineKind;
-    }
-
     /**
      * Transform one or more source files using the supplied transformers.
      * @param source A `SourceFile` or an array of `SourceFiles`.
      * @param transformers An array of `Transformer` callbacks used to process the transformation.
      * @param compilerOptions Optional compiler options.
      */
-    export function transform(source: SourceFile | SourceFile[], transformers: Transformer[], transformOptions?: TransformOptions) {
-        const compilerOptions = <CompilerOptions>transformOptions || {};
+    export function transform(source: SourceFile | SourceFile[], transformers: Transformer[], compilerOptions?: CompilerOptions) {
+        const diagnostics: Diagnostic[] = [];
+        compilerOptions = fixupCompilerOptions(compilerOptions, diagnostics);
         const newLine = getNewLineCharacter(compilerOptions);
         const sourceFiles = isArray(source) ? source : [source];
         const fileMap = arrayToMap(sourceFiles, sourceFile => sourceFile.fileName);
@@ -29,6 +26,8 @@ namespace ts {
             isEmitBlocked: () => false,
             writeFile: () => Debug.fail("'writeFile()' is not supported during transformation.")
         };
-        return transformFiles(/*resolver*/ undefined, emitHost, sourceFiles, transformers);
+        const result = transformFiles(/*resolver*/ undefined, emitHost, sourceFiles, transformers);
+        result.diagnostics = concatenate(result.diagnostics, diagnostics);
+        return result;
     }
 }
