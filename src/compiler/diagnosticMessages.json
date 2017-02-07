@@ -671,7 +671,7 @@
         "category": "Error",
         "code": 1215
     },
-    "Identifier expected. '__esModule' is reserved as a marker for transpiled ES2015 module.": {
+    "Identifier expected. '__esModule' is reserved as an exported marker when transforming ECMAScript modules.": {
         "category": "Error",
         "code": 1216
     },

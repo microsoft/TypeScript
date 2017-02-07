@@ -1,4 +1,4 @@
-tests/cases/compiler/es5-commonjs4.ts(14,12): error TS1216: Identifier expected. '__esModule' is reserved as a marker for transpiled ES2015 module.
+tests/cases/compiler/es5-commonjs4.ts(14,12): error TS1216: Identifier expected. '__esModule' is reserved as an exported marker when transforming ECMAScript modules.
 
 
 ==== tests/cases/compiler/es5-commonjs4.ts (1 errors) ====
@@ -17,5 +17,5 @@ tests/cases/compiler/es5-commonjs4.ts(14,12): error TS1216: Identifier expected.
     }
     export var __esModule = 1;
                ~~~~~~~~~~
-!!! error TS1216: Identifier expected. '__esModule' is reserved as a marker for transpiled ES2015 module.
+!!! error TS1216: Identifier expected. '__esModule' is reserved as an exported marker when transforming ECMAScript modules.
     

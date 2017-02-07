@@ -21929,7 +21929,7 @@ namespace ts {
         function checkESModuleMarker(name: Identifier | BindingPattern): boolean {
             if (name.kind === SyntaxKind.Identifier) {
                 if (unescapeIdentifier(name.text) === "__esModule") {
-                    return grammarErrorOnNode(name, Diagnostics.Identifier_expected_esModule_is_reserved_as_a_marker_for_transpiled_ES2015_module);
+                    return grammarErrorOnNode(name, Diagnostics.Identifier_expected_esModule_is_reserved_as_an_exported_marker_when_transforming_ECMAScript_modules);
                 }
             }
             else {
