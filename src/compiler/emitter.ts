@@ -1,4 +1,4 @@
-/// <reference path="checker.ts" />
+﻿/// <reference path="checker.ts" />
 /// <reference path="transformer.ts" />
 /// <reference path="declarationEmitter.ts" />
 /// <reference path="sourcemap.ts" />
@@ -211,7 +211,7 @@ namespace ts {
             emitNodeWithComments,
             emitBodyWithDetachedComments,
             emitTrailingCommentsOfPosition,
-            emitLeadingComments,
+            emitLeadingCommentsOfPosition,
         } = comments;
 
         let currentSourceFile: SourceFile;
@@ -1348,7 +1348,7 @@ namespace ts {
                 writeToken(SyntaxKind.OpenBraceToken, node.pos, /*contextNode*/ node);
                 emitBlockStatements(node);
                 // We have to call emitLeadingComments explicitly here because otherwise leading comments of the close brace token will not be emitted
-                emitLeadingComments(node.statements.end, /*isEmittedNode*/true);
+                emitLeadingCommentsOfPosition(node.statements.end);
                 writeToken(SyntaxKind.CloseBraceToken, node.statements.end, /*contextNode*/ node);
             }
         }
@@ -2235,10 +2235,10 @@ namespace ts {
                         //      function commentedParameters(
                         //          /* Parameter a */
                         //          a
-                        //          /* End of parameter a */ -> this comment doesn't consider to be trailing comment of parameter "a" due to newline
+                        //          /* End of parameter a */ -> this comment isn't considered to be trailing comment of parameter "a" due to newline
                         //          ,
-                        if (emitLeadingComments && delimiter && previousSibling.end !== parentNode.end) {
-                            emitLeadingComments(previousSibling.end, /*isEmittedNode*/ previousSibling.kind !== SyntaxKind.NotEmittedStatement);
+                        if (emitLeadingCommentsOfPosition && delimiter && previousSibling.end !== parentNode.end) {
+                            emitLeadingCommentsOfPosition(previousSibling.end);
                         }
                         write(delimiter);
 
@@ -2294,10 +2294,7 @@ namespace ts {
                 //          /* end of element 2 */
                 //       ];
                 if (previousSibling && delimiter && previousSibling.end !== parentNode.end) {
-                    emitLeadingComments(previousSibling.end, /*isEmittedNode*/ previousSibling.kind !== SyntaxKind.NotEmittedStatement);
-                    if (hasTrailingComma) {
-                        emitLeadingComments(previousSibling.end,  /*isEmittedNode*/ previousSibling.kind !== SyntaxKind.NotEmittedStatement);
-                    }
+                    emitLeadingCommentsOfPosition(previousSibling.end);
                 }
 
                 // Decrease the indent, if requested.
