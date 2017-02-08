@@ -501,19 +501,19 @@ namespace ts {
             // for correct behaviour, please use outFile
             category: "Advanced",
             paramType: Diagnostics.FILE,
-            description: Diagnostics.Concatenate_and_emit_output_to_single_file,
+            description: Diagnostics.Deprecated_Use_outFile_instead_Concatenate_and_emit_output_to_single_file,
         },
         {
             name: "reactNamespace",
             type: "string",
             category: "Advanced",
-            description: Diagnostics.Specify_the_object_invoked_for_createElement_and_spread_when_targeting_react_JSX_emit
+            description: Diagnostics.Deprecated_Use_jsxFactory_instead_Specify_the_object_invoked_for_createElement_when_targeting_react_JSX_emit
         },
         {
             name: "skipDefaultLibCheck",
             type: "boolean",
             category: "Advanced",
-            description: Diagnostics.Skip_type_checking_of_default_library_declaration_files
+            description: Diagnostics.Deprecated_Use_skipLibCheck_instead_Skip_type_checking_of_default_library_declaration_files
         },
 
         {

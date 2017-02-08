@@ -2737,7 +2737,7 @@
         "category": "Message",
         "code": 6083
     },
-    "Specify the object invoked for createElement and __spread when targeting 'react' JSX emit": {
+    "[Deprecated] Use '--jsxFactory' instead. Specify the object invoked for createElement when targeting 'react' JSX emit": {
         "category": "Message",
         "code": 6084
     },
@@ -3041,7 +3041,7 @@
         "category": "Message",
         "code": 6159
     },
-    "Skip type checking of default library declaration files.": {
+    "[Deprecated] Use '--skipLibCheck' instead. Skip type checking of default library declaration files.": {
         "category": "Message",
         "code": 6160
     },
@@ -3080,6 +3080,10 @@
     "Show all compiler options.": {
         "category": "Message",
         "code": 6169
+    },
+    "[Deprecated] Use '--outFile' instead. Concatenate and emit output to single file": {
+        "category": "Message",
+        "code": 6170
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
