@@ -22,7 +22,6 @@ install:
   - npm uninstall typescript
   - npm uninstall tslint
   - npm install
-  - npm update
 
 cache:
   directories:
