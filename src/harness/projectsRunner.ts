@@ -214,7 +214,7 @@ class ProjectRunner extends RunnerBase {
 
             let errors: ts.Diagnostic[];
             if (configFileName) {
-                const result = ts.readConfigFileToJsonSourceFile(configFileName, getSourceFileText);
+                const result = ts.readJsonConfigFile(configFileName, getSourceFileText);
                 configFileSourceFiles.push(result);
                 const configParseHost: ts.ParseConfigHost = {
                     useCaseSensitiveFileNames: Harness.IO.useCaseSensitiveFileNames(),

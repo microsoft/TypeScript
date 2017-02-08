@@ -233,7 +233,7 @@ namespace ts {
             }`;
             const result = parseJsonText("config.json", content);
             const diagnostics = result.parseDiagnostics;
-            const configJsonObject = convertToJson(result, diagnostics);
+            const configJsonObject = convertToObject(result, diagnostics);
             const expectedResult = {
                 compilerOptions: {
                     allowJs: true,

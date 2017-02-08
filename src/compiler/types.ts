@@ -3395,7 +3395,7 @@
     /* @internal */
     export interface TsConfigOnlyOption extends CommandLineOptionBase {
         type: "object";
-        optionDeclarations?: CommandLineOption[];
+        optionDeclarations?: Map<CommandLineOption>;
         extraKeyDiagnosticMessage?: DiagnosticMessage;
     }
 

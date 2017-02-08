@@ -117,7 +117,7 @@ namespace ts {
             }
 
             function getParseCommandLineJsonSourceFile(entry: string) {
-                const jsonSourceFile = ts.readConfigFileToJsonSourceFile(entry, name => host.readFile(name));
+                const jsonSourceFile = ts.readJsonConfigFile(entry, name => host.readFile(name));
                 assert(jsonSourceFile.endOfFileToken && !jsonSourceFile.parseDiagnostics.length, flattenDiagnosticMessageText(jsonSourceFile.parseDiagnostics[0] && jsonSourceFile.parseDiagnostics[0].messageText, "\n"));
                 return {
                     jsonSourceFile,
