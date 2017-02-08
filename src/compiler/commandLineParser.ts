@@ -866,7 +866,7 @@ namespace ts {
      * @param fileNames array of filenames to be generated into tsconfig.json
      */
     /* @internal */
-    export function generateTSConfig(options: CompilerOptions, fileNames: string[]): { compilerOptions: MapLike<CompilerOptionsValue> } {
+    export function generateTSConfig(options: CompilerOptions, fileNames: string[]): string {
         const compilerOptions = extend(options, defaultInitCompilerOptions);
         const configurations: any = {
             compilerOptions: serializeCompilerOptions(compilerOptions)
@@ -876,7 +876,7 @@ namespace ts {
             configurations.files = fileNames;
         }
 
-        return configurations;
+        return JSON.stringify(configurations, undefined, 4);
 
         function getCustomTypeMapOfCommandLineOption(optionDefinition: CommandLineOption): Map<string | number> | undefined {
             if (optionDefinition.type === "string" || optionDefinition.type === "number" || optionDefinition.type === "boolean") {
