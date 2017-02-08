@@ -908,39 +908,31 @@ namespace ts {
                 if (hasProperty(options, name)) {
                     // tsconfig only options cannot be specified via command line,
                     // so we can assume that only types that can appear here string | number | boolean
-                    switch (name) {
-                        case "init":
-                        case "watch":
-                        case "version":
-                        case "help":
-                        case "project":
-                        case "all":
-                            break;
-                        default:
-                            const value = options[name];
-                            const optionDefinition = optionsNameMap.get(name.toLowerCase());
-                            if (optionDefinition) {
-                                const customTypeMap = getCustomTypeMapOfCommandLineOption(optionDefinition);
-                                if (!customTypeMap) {
-                                    // There is no map associated with this compiler option then use the value as-is
-                                    // This is the case if the value is expect to be string, number, boolean or list of string
-                                    result[name] = value;
+                    if (optionsNameMap.has(name) && optionsNameMap.get(name).category === "CommandLine") {
+                        continue;
+                    }
+                    const value = options[name];
+                    const optionDefinition = optionsNameMap.get(name.toLowerCase());
+                    if (optionDefinition) {
+                        const customTypeMap = getCustomTypeMapOfCommandLineOption(optionDefinition);
+                        if (!customTypeMap) {
+                            // There is no map associated with this compiler option then use the value as-is
+                            // This is the case if the value is expect to be string, number, boolean or list of string
+                            result[name] = value;
+                        }
+                        else {
+                            if (optionDefinition.type === "list") {
+                                const convertedValue: string[] = [];
+                                for (const element of value as (string | number)[]) {
+                                    convertedValue.push(getNameOfCompilerOptionValue(element, customTypeMap));
                                 }
-                                else {
-                                    if (optionDefinition.type === "list") {
-                                        const convertedValue: string[] = [];
-                                        for (const element of value as (string | number)[]) {
-                                            convertedValue.push(getNameOfCompilerOptionValue(element, customTypeMap));
-                                        }
-                                        result[name] = convertedValue;
-                                    }
-                                    else {
-                                        // There is a typeMap associated with this command-line option so use it to map value back to its name
-                                        result[name] = getNameOfCompilerOptionValue(value, customTypeMap);
-                                    }
-                                }
+                                result[name] = convertedValue;
                             }
-                            break;
+                            else {
+                                // There is a typeMap associated with this command-line option so use it to map value back to its name
+                                result[name] = getNameOfCompilerOptionValue(value, customTypeMap);
+                            }
+                        }
                     }
                 }
             }
