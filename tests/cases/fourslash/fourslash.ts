@@ -182,18 +182,19 @@ declare namespace FourSlashInterface {
         goToType(startMarkerNames: string | string[], endMarkerNames: string | string[]): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
+        noReferences(markerNameOrRange?: string | Range): void;
         /**
-         * Asserts that the given ranges are the references from the current position.
-         * If ranges have markers, those markers may have "isDefinition" and "isWriteAccess" data
-         * (otherwise these properties pf the reference are not tested).
-         * Order of ranges does not matter.
-         */
-        referencesAre(ranges: Range[]): void;
-        /**
+         * @deprecated, prefer 'referenceGroups'
          * Like `referencesAre`, but goes to `start` first.
          * `start` should be included in `references`.
          */
         referencesOf(start: Range, references: Range[]): void;
+        /**
+         * For each of startRanges, asserts the ranges that are referenced from there.
+         * This uses the 'findReferences' command instead of 'getReferencesAtPosition', so references are grouped by their definition.
+         */
+        referenceGroups(startRanges: Range | Range[], parts: Array<{ definition: string, ranges: Range[] }>): void;
+        singleReferenceGroup(definition: string, ranges?: Range[]): void;
         rangesAreOccurrences(isWriteAccess?: boolean): void;
         rangesAreRenameLocations(findInStrings?: boolean, findInComments?: boolean): void;
         /**
@@ -202,7 +203,6 @@ declare namespace FourSlashInterface {
          */
         rangesReferenceEachOther(ranges?: Range[]): void;
         findReferencesDefinitionDisplayPartsAtCaretAre(expected: ts.SymbolDisplayPart[]): void;
-        rangesWithSameTextReferenceEachOther(): void;
         currentParameterHelpArgumentNameIs(name: string): void;
         currentParameterSpanIs(parameter: string): void;
         currentParameterHelpArgumentDocCommentIs(docComment: string): void;
