@@ -3935,6 +3935,13 @@
      */
     export type FileTransformer = (node: SourceFile) => SourceFile;
 
+    export type VisitResult<T extends Node> = T | T[];
+
+    /**
+     * A function that accepts and possible transforms a node.
+     */
+    export type Visitor = (node: Node) => VisitResult<Node>;
+
     export interface Printer {
         /**
          * Print a node and its subtree as-is, without any emit transformations.
