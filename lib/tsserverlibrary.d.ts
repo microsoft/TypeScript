@@ -3584,7 +3584,7 @@ declare namespace ts.performance {
     function disable(): void;
 }
 declare namespace ts {
-    const version = "2.1.5";
+    const version = "2.1.6";
 }
 declare namespace ts {
     const enum Ternary {
