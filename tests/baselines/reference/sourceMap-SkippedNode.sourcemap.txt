@@ -12,7 +12,7 @@ sourceFile:sourceMap-SkippedNode.ts
 1 >
 2 >^^^^
 3 >    ^
-4 >     ^^->
+4 >     ^^^^^^->
 1 >
 2 >try 
 3 >    {
@@ -20,14 +20,14 @@ sourceFile:sourceMap-SkippedNode.ts
 2 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
 3 >Emitted(1, 6) Source(1, 6) + SourceIndex(0)
 ---
->>>// ...
-1->
-2 >^^^^^^
+>>>    // ...
+1->^^^^
+2 >    ^^^^^^
 1->
   >
-2 >// ...
-1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
-2 >Emitted(2, 7) Source(2, 7) + SourceIndex(0)
+2 >    // ...
+1->Emitted(2, 5) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 11) Source(2, 7) + SourceIndex(0)
 ---
 >>>}
 1 >
@@ -42,20 +42,20 @@ sourceFile:sourceMap-SkippedNode.ts
 >>>finally {
 1->^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^^^^^^^^^->
+3 >         ^^^^^^^^^^^^^^^^^^^^->
 1-> finally 
 2 >        {
 1->Emitted(4, 9) Source(3, 11) + SourceIndex(0)
 2 >Emitted(4, 10) Source(3, 12) + SourceIndex(0)
 ---
->>>// N.B. No 'catch' block
-1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^
+>>>    // N.B. No 'catch' block
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^
 1->
   >
-2 >// N.B. No 'catch' block
-1->Emitted(5, 1) Source(4, 1) + SourceIndex(0)
-2 >Emitted(5, 25) Source(4, 25) + SourceIndex(0)
+2 >    // N.B. No 'catch' block
+1->Emitted(5, 5) Source(4, 1) + SourceIndex(0)
+2 >Emitted(5, 29) Source(4, 25) + SourceIndex(0)
 ---
 >>>}
 1 >

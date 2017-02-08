@@ -391,7 +391,7 @@ var TestRunner = (function () {
                     }
                 }
                 if (testResult === false) {
-                //console.log(e.message);
+                    //console.log(e.message);
                 }
             }
             if ((testcase.errorMessageRegEx !== undefined) && !exception) {

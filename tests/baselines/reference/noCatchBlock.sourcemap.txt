@@ -12,7 +12,7 @@ sourceFile:noCatchBlock.ts
 1 >
 2 >^^^^
 3 >    ^
-4 >     ^^->
+4 >     ^^^^^^->
 1 >
   >
 2 >try 
@@ -21,14 +21,14 @@ sourceFile:noCatchBlock.ts
 2 >Emitted(1, 5) Source(2, 5) + SourceIndex(0)
 3 >Emitted(1, 6) Source(2, 6) + SourceIndex(0)
 ---
->>>// ...
-1->
-2 >^^^^^^
+>>>    // ...
+1->^^^^
+2 >    ^^^^^^
 1->
   > 
-2 >// ...
-1->Emitted(2, 1) Source(3, 2) + SourceIndex(0)
-2 >Emitted(2, 7) Source(3, 8) + SourceIndex(0)
+2 >    // ...
+1->Emitted(2, 5) Source(3, 2) + SourceIndex(0)
+2 >Emitted(2, 11) Source(3, 8) + SourceIndex(0)
 ---
 >>>}
 1 >
@@ -43,20 +43,20 @@ sourceFile:noCatchBlock.ts
 >>>finally {
 1->^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^^^^^^^^^->
+3 >         ^^^^^^^^^^^^^^^^^^^^->
 1-> finally 
 2 >        {
 1->Emitted(4, 9) Source(4, 11) + SourceIndex(0)
 2 >Emitted(4, 10) Source(4, 12) + SourceIndex(0)
 ---
->>>// N.B. No 'catch' block
-1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^
+>>>    // N.B. No 'catch' block
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^
 1->
   > 
-2 >// N.B. No 'catch' block
-1->Emitted(5, 1) Source(5, 2) + SourceIndex(0)
-2 >Emitted(5, 25) Source(5, 26) + SourceIndex(0)
+2 >    // N.B. No 'catch' block
+1->Emitted(5, 5) Source(5, 2) + SourceIndex(0)
+2 >Emitted(5, 29) Source(5, 26) + SourceIndex(0)
 ---
 >>>}
 1 >
