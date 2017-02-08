@@ -415,6 +415,8 @@ namespace ts {
                     return emitUnionType(<UnionTypeNode>type);
                 case SyntaxKind.IntersectionType:
                     return emitIntersectionType(<IntersectionTypeNode>type);
+                case SyntaxKind.SpreadType:
+                    return emitSpreadType(type as SpreadTypeNode);
                 case SyntaxKind.ParenthesizedType:
                     return emitParenType(<ParenthesizedTypeNode>type);
                 case SyntaxKind.TypeOperator:
@@ -1174,6 +1176,15 @@ namespace ts {
             emitClassMemberDeclarationFlags(getModifierFlags(node));
             emitVariableDeclaration(<VariableDeclaration>node);
             write(";");
+            writeLine();
+        }
+
+        function emitSpreadType(type: SpreadTypeNode) {
+            write("spread(");
+            emitType(type.left);
+            write(",")
+            emitType(type.right);
+            write(")");
             writeLine();
         }
 

@@ -1,4 +1,33 @@
 === tests/cases/conformance/types/spread/objectSpreadIndexSignature.ts ===
+class C {
+>C : C
+
+    a: number;
+>a : number
+
+    c: boolean;
+>c : boolean
+}
+// index signatures are not allowed in object literals with spread types
+let c: spread(C, { b: string, c?: string, [n: number]: string });
+>c : { b: string; c: string | boolean; a: number; }
+>C : C
+>b : string
+>c : string
+>n : number
+
+let n: number = c.a;
+>n : number
+>c.a : number
+>c : { b: string; c: string | boolean; a: number; }
+>a : number
+
+let s: string = c[12];
+>s : string
+>c[12] : any
+>c : { b: string; c: string | boolean; a: number; }
+>12 : 12
+
 interface Indexed {
 >Indexed : Indexed
 
@@ -25,12 +54,10 @@ let indexed2: Indexed2;
 >indexed2 : Indexed2
 >Indexed2 : Indexed2
 
-let i = { ...indexed, b: 11 };
+let i: spread(Indexed, { b: number });
 >i : { b: number; a: number; }
->{ ...indexed, b: 11 } : { b: number; a: number; }
->indexed : Indexed
+>Indexed : Indexed
 >b : number
->11 : 11
 
 // only indexed has indexer, so i[101]: any
 i[101];
@@ -38,15 +65,29 @@ i[101];
 >i : { b: number; a: number; }
 >101 : 101
 
-let ii = { ...indexed, ...indexed2 };
->ii : { [x: string]: number | boolean; c: boolean; a: number; }
->{ ...indexed, ...indexed2 } : { [x: string]: number | boolean; c: boolean; a: number; }
->indexed : Indexed
->indexed2 : Indexed2
+let ii: spread(spread(Indexed, Indexed2), { b: boolean, d: number });
+>ii : { b: boolean; d: number; c: boolean; a: number; }
+>Indexed : Indexed
+>Indexed2 : Indexed2
+>b : boolean
+>d : number
 
 // both have indexer, so i[1001]: number | boolean
-ii[1001];
->ii[1001] : number | boolean
->ii : { [x: string]: number | boolean; c: boolean; a: number; }
+let nb: number | boolean = ii[1001];
+>nb : number | boolean
+>ii[1001] : any
+>ii : { b: boolean; d: number; c: boolean; a: number; }
 >1001 : 1001
+
+function f<T>(t: T) {
+>f : <T>(t: T) => void
+>T : T
+>t : T
+>T : T
+
+    let i: spread(T, { [n: number]: string });
+>i : spread(T, { [n: number]: string; })
+>T : T
+>n : number
+}
 

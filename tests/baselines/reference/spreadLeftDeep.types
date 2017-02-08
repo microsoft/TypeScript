@@ -1,0 +1,29 @@
+=== tests/cases/conformance/types/spread/spreadLeftDeep.ts ===
+function f<T,U,V,W>(t: T, u: U, v: V, w: W) {
+>f : <T, U, V, W>(t: T, u: U, v: V, w: W) => spread(spread(spread(T, U), V), W)
+>T : T
+>U : U
+>V : V
+>W : W
+>t : T
+>T : T
+>u : U
+>U : U
+>v : V
+>V : V
+>w : W
+>W : W
+
+    // right-deep structure (T (U (V W)) should get transformed to
+    // left-deep structure (((T U) V) W)
+    let x: spread(T, spread(U, spread(V, W)));
+>x : spread(spread(spread(T, U), V), W)
+>T : T
+>U : U
+>V : V
+>W : W
+
+    return x;
+>x : spread(spread(spread(T, U), V), W)
+}
+

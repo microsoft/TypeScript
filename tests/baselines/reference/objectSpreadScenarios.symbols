@@ -7,7 +7,7 @@ interface B1 { b: number };
 >B1 : Symbol(B1, Decl(objectSpreadScenarios.ts, 0, 27))
 >b : Symbol(B1.b, Decl(objectSpreadScenarios.ts, 1, 14))
 
-function override<U>(initial: U, override: U): { ...U, ...U } {
+function override<U>(initial: U, override: U): spread(U, U) {
 >override : Symbol(override, Decl(objectSpreadScenarios.ts, 1, 27))
 >U : Symbol(U, Decl(objectSpreadScenarios.ts, 2, 18))
 >initial : Symbol(initial, Decl(objectSpreadScenarios.ts, 2, 21))
@@ -18,14 +18,16 @@ function override<U>(initial: U, override: U): { ...U, ...U } {
 >U : Symbol(U, Decl(objectSpreadScenarios.ts, 2, 18))
 
     return { ...initial, ...override };
+>initial : Symbol(initial, Decl(objectSpreadScenarios.ts, 2, 21))
+>override : Symbol(override, Decl(objectSpreadScenarios.ts, 2, 32))
 }
-function update<U>(this: { u: { ...U } }, override: U): void {
+function update<U>(this: { u: spread(U) }, override: U): void {
 >update : Symbol(update, Decl(objectSpreadScenarios.ts, 4, 1))
 >U : Symbol(U, Decl(objectSpreadScenarios.ts, 5, 16))
 >this : Symbol(this, Decl(objectSpreadScenarios.ts, 5, 19))
 >u : Symbol(u, Decl(objectSpreadScenarios.ts, 5, 26))
 >U : Symbol(U, Decl(objectSpreadScenarios.ts, 5, 16))
->override : Symbol(override, Decl(objectSpreadScenarios.ts, 5, 41))
+>override : Symbol(override, Decl(objectSpreadScenarios.ts, 5, 42))
 >U : Symbol(U, Decl(objectSpreadScenarios.ts, 5, 16))
 
     this.u = { ...this.u, ...override };
@@ -35,8 +37,9 @@ function update<U>(this: { u: { ...U } }, override: U): void {
 >this.u : Symbol(u, Decl(objectSpreadScenarios.ts, 5, 26))
 >this : Symbol(this, Decl(objectSpreadScenarios.ts, 5, 19))
 >u : Symbol(u, Decl(objectSpreadScenarios.ts, 5, 26))
+>override : Symbol(override, Decl(objectSpreadScenarios.ts, 5, 42))
 }
-function mixin<T, U>(one: T, two: U): { ...T, ...U } {
+function mixin<T, U>(one: T, two: U): spread(T, U) {
 >mixin : Symbol(mixin, Decl(objectSpreadScenarios.ts, 7, 1))
 >T : Symbol(T, Decl(objectSpreadScenarios.ts, 8, 15))
 >U : Symbol(U, Decl(objectSpreadScenarios.ts, 8, 17))
@@ -48,6 +51,8 @@ function mixin<T, U>(one: T, two: U): { ...T, ...U } {
 >U : Symbol(U, Decl(objectSpreadScenarios.ts, 8, 17))
 
     return { ...one, ...two };
+>one : Symbol(one, Decl(objectSpreadScenarios.ts, 8, 21))
+>two : Symbol(two, Decl(objectSpreadScenarios.ts, 8, 28))
 }
 let a1: A1 = { a: true };
 >a1 : Symbol(a1, Decl(objectSpreadScenarios.ts, 11, 3))

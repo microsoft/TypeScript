@@ -4,8 +4,8 @@ interface Result<T,U,V> {
     u: U;
     v: V;
 }
-declare function infer<T,U,V>(tuv: { ...T, ...U, a: V }): { t: T, u: U, v: V };
-declare function infer2<T,U,V>(utv: { ...U, a: V, ...T }): { t: T, u: U, v: V };
+declare function infer<T,U,V>(tuv: spread(spread(T, U), { a: V })): { t: T, u: U, v: V };
+declare function infer2<T,U,V>(utv: spread(spread(U, { a: V }), T )): { t: T, u: U, v: V };
 function generic<W, X, Y>(w: W, x: X, y: Y) {
     // should infer { t: {}, u: {}, v: {} } because there is no trailing type parameter
     return infer({ ...w, ...x, a: y, b: "different type" });

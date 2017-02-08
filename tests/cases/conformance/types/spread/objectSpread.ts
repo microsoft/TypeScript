@@ -35,7 +35,10 @@ let getter: { a: number, c: number } =
     { ...op, c: 7 }
 getter.a = 12;
 
-// functions result in { }
+// null, undefined, object and functions result in { }
+let spreadNull = { ...null };
+let spreadUndefined = { ...undefined };
+let spreadNonPrimitive = { ...<object>{}};
 let spreadFunc = { ...(function () { }) };
 
 // any results in any
@@ -78,5 +81,21 @@ let computedAfter: { a: number, b: string, "at the end": number } =
 // shortcut syntax
 let a = 12;
 let shortCutted: { a: number, b: string } = { ...o, a }
-// non primitive
-let spreadNonPrimitive = { ...<object>{}};
+
+// generics
+function f<T, U>(t: T, u: U): spread(spread(T, U), { id: string }) {
+    return { ...t, ...u, id: 'id' };
+}
+
+let exclusive: { id: string, a: number, b: string, c: string, d: boolean } =
+    f({ a: 1, b: 'yes' }, { c: 'no', d: false })
+let overlap: { id: string, a: number, b: string } =
+    f({ a: 1 }, { a: 2, b: 'extra' })
+let overlapConflict: { id:string, a: string } =
+    f({ a: 1 }, { a: 'mismatch' })
+let overwriteId: { id: string, a: number, c: number, d: string } =
+    f({ a: 1, id: true }, { c: 1, d: 'no' })
+
+class D { m() { }; q = 2; }
+let classesAreWrong: spread(spread({ id: string }, C), D) =
+    f(new C(), new D())

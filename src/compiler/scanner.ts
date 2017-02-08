@@ -108,6 +108,7 @@ namespace ts {
         "global": SyntaxKind.GlobalKeyword,
         "return": SyntaxKind.ReturnKeyword,
         "set": SyntaxKind.SetKeyword,
+        "spread": SyntaxKind.SpreadKeyword,
         "static": SyntaxKind.StaticKeyword,
         "string": SyntaxKind.StringKeyword,
         "super": SyntaxKind.SuperKeyword,

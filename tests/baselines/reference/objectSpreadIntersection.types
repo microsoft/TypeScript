@@ -22,21 +22,21 @@ function iteratedUnionIntersection<T, U, V>(t: T, u: U, v: V): void {
 >V : V
 
     let result = { ...tu, ...uv, id: 'foo' };
->result : { ...T; ...U & V; id: string; } | { ...U; ...U & V; id: string; }
->{ ...tu, ...uv, id: 'foo' } : { ...T; ...U & V; id: string; } | { ...U; ...U & V; id: string; }
->tu : any
->uv : any
+>result : spread(spread(T, U & V), { id: string; }) | spread(spread(U, U & V), { id: string; })
+>{ ...tu, ...uv, id: 'foo' } : spread(spread(T, U & V), { id: string; }) | spread(spread(U, U & V), { id: string; })
+>tu : T | U
+>uv : U & V
 >id : string
 >'foo' : "foo"
 
-    let assignable: { ...(T | U), ...(U & V), id: string } = result;
->assignable : { ...T; ...U & V; id: string; } | { ...U; ...U & V; id: string; }
+    let assignable: spread(spread(T | U, U & V), { id: string }) = result;
+>assignable : spread(spread(T, U & V), { id: string; }) | spread(spread(U, U & V), { id: string; })
 >T : T
 >U : U
 >U : U
 >V : V
 >id : string
->result : { ...T; ...U & V; id: string; } | { ...U; ...U & V; id: string; }
+>result : spread(spread(T, U & V), { id: string; }) | spread(spread(U, U & V), { id: string; })
 }
 // concrete types work
 interface A1 { a: number }
@@ -68,8 +68,8 @@ let b12: B1 & B2;
 let result = { ...a12, ...b12 };
 >result : { b: number & string; a: number & string; }
 >{ ...a12, ...b12 } : { b: number & string; a: number & string; }
->a12 : any
->b12 : any
+>a12 : A1 & A2
+>b12 : B1 & B2
 
 let sn: number & string = result.a;
 >sn : number & string
@@ -84,7 +84,7 @@ sn = result.b;
 >result : { b: number & string; a: number & string; }
 >b : number & string
 
-let assignable: { ...(A1 & A2), ...(B1 & B2) } = result;
+let assignable: spread(A1 & A2, B1 & B2) = result;
 >assignable : { b: number & string; a: number & string; }
 >A1 : A1
 >A2 : A2
@@ -111,19 +111,19 @@ function tripleIntersection<T, U, V>(t: T, u: U, v: V): void {
 >V : V
 
     let result = { ...tuv, id: 'bar' };
->result : { ...T & U & V; id: string; }
->{ ...tuv, id: 'bar' } : { ...T & U & V; id: string; }
->tuv : any
+>result : spread(T & U & V, { id: string; })
+>{ ...tuv, id: 'bar' } : spread(T & U & V, { id: string; })
+>tuv : T & U & V
 >id : string
 >'bar' : "bar"
 
-    let assignable: { ...(T & U & V), id: string } = result;
->assignable : { ...T & U & V; id: string; }
+    let assignable: spread(T & U & V, { id: string }) = result;
+>assignable : spread(T & U & V, { id: string; })
 >T : T
 >U : U
 >V : V
 >id : string
->result : { ...T & U & V; id: string; }
+>result : spread(T & U & V, { id: string; })
 }
 function iteratedDoubleIntersection<T, U, V>(t: T, u: U, v: V): void {
 >iteratedDoubleIntersection : <T, U, V>(t: T, u: U, v: V) => void
@@ -148,21 +148,21 @@ function iteratedDoubleIntersection<T, U, V>(t: T, u: U, v: V): void {
 >V : V
 
     let result = { ...tu, ...uv, id: 'baz' };
->result : { ...T & U; ...U & V; id: string; }
->{ ...tu, ...uv, id: 'baz' } : { ...T & U; ...U & V; id: string; }
->tu : any
->uv : any
+>result : spread(spread(T & U, U & V), { id: string; })
+>{ ...tu, ...uv, id: 'baz' } : spread(spread(T & U, U & V), { id: string; })
+>tu : T & U
+>uv : U & V
 >id : string
 >'baz' : "baz"
 
-    let assignable: { ...(T & U), ...(U & V), id: string } = result;
->assignable : { ...T & U; ...U & V; id: string; }
+    let assignable: spread(spread(T & U, U & V), { id: string }) = result;
+>assignable : spread(spread(T & U, U & V), { id: string; })
 >T : T
 >U : U
 >U : U
 >V : V
 >id : string
->result : { ...T & U; ...U & V; id: string; }
+>result : spread(spread(T & U, U & V), { id: string; })
 }
 function iteratedIntersectionUnion<T, U, V>(t: T, u: U, v: V): void {
 >iteratedIntersectionUnion : <T, U, V>(t: T, u: U, v: V) => void
@@ -187,21 +187,20 @@ function iteratedIntersectionUnion<T, U, V>(t: T, u: U, v: V): void {
 >V : V
 
     let result = { ...tu, ...uv, id: 'qux' };
->result : { ...T & U; ...U; id: string; } | { ...T & U; ...V; id: string; }
->{ ...tu, ...uv, id: 'qux' } : { ...T & U; ...U; id: string; } | { ...T & U; ...V; id: string; }
->tu : any
->uv : any
+>result : spread(spread(T & U, U), { id: string; }) | spread(spread(T & U, V), { id: string; })
+>{ ...tu, ...uv, id: 'qux' } : spread(spread(T & U, U), { id: string; }) | spread(spread(T & U, V), { id: string; })
+>tu : T & U
+>uv : U | V
 >id : string
 >'qux' : "qux"
 
-    let assignable: { ...(T & U), ...(U | V), id: string } = result;
->assignable : { ...T & U; ...U; id: string; } | { ...T & U; ...V; id: string; }
+    let assignable: spread(spread(T & U, U | V), { id: string }) = result;
+>assignable : spread(spread(T & U, U), { id: string; }) | spread(spread(T & U, V), { id: string; })
 >T : T
 >U : U
 >U : U
 >V : V
 >id : string
->result : { ...T & U; ...U; id: string; } | { ...T & U; ...V; id: string; }
+>result : spread(spread(T & U, U), { id: string; }) | spread(spread(T & U, V), { id: string; })
 }
-
 

@@ -17,7 +17,7 @@ interface Result<T,U,V> {
 >v : Symbol(Result.v, Decl(objectSpreadInference.ts, 2, 9))
 >V : Symbol(V, Decl(objectSpreadInference.ts, 0, 21))
 }
-declare function infer<T,U,V>(tuv: { ...T, ...U, a: V }): { t: T, u: U, v: V };
+declare function infer<T,U,V>(tuv: spread(spread(T, U), { a: V })): { t: T, u: U, v: V };
 >infer : Symbol(infer, Decl(objectSpreadInference.ts, 4, 1))
 >T : Symbol(T, Decl(objectSpreadInference.ts, 5, 23))
 >U : Symbol(U, Decl(objectSpreadInference.ts, 5, 25))
@@ -25,34 +25,34 @@ declare function infer<T,U,V>(tuv: { ...T, ...U, a: V }): { t: T, u: U, v: V };
 >tuv : Symbol(tuv, Decl(objectSpreadInference.ts, 5, 30))
 >T : Symbol(T, Decl(objectSpreadInference.ts, 5, 23))
 >U : Symbol(U, Decl(objectSpreadInference.ts, 5, 25))
->a : Symbol(a, Decl(objectSpreadInference.ts, 5, 48))
+>a : Symbol(a, Decl(objectSpreadInference.ts, 5, 57))
 >V : Symbol(V, Decl(objectSpreadInference.ts, 5, 27))
->t : Symbol(t, Decl(objectSpreadInference.ts, 5, 59))
+>t : Symbol(t, Decl(objectSpreadInference.ts, 5, 69))
 >T : Symbol(T, Decl(objectSpreadInference.ts, 5, 23))
->u : Symbol(u, Decl(objectSpreadInference.ts, 5, 65))
+>u : Symbol(u, Decl(objectSpreadInference.ts, 5, 75))
 >U : Symbol(U, Decl(objectSpreadInference.ts, 5, 25))
->v : Symbol(v, Decl(objectSpreadInference.ts, 5, 71))
+>v : Symbol(v, Decl(objectSpreadInference.ts, 5, 81))
 >V : Symbol(V, Decl(objectSpreadInference.ts, 5, 27))
 
-declare function infer2<T,U,V>(utv: { ...U, a: V, ...T }): { t: T, u: U, v: V };
->infer2 : Symbol(infer2, Decl(objectSpreadInference.ts, 5, 79))
+declare function infer2<T,U,V>(utv: spread(spread(U, { a: V }), T )): { t: T, u: U, v: V };
+>infer2 : Symbol(infer2, Decl(objectSpreadInference.ts, 5, 89))
 >T : Symbol(T, Decl(objectSpreadInference.ts, 6, 24))
 >U : Symbol(U, Decl(objectSpreadInference.ts, 6, 26))
 >V : Symbol(V, Decl(objectSpreadInference.ts, 6, 28))
 >utv : Symbol(utv, Decl(objectSpreadInference.ts, 6, 31))
 >U : Symbol(U, Decl(objectSpreadInference.ts, 6, 26))
->a : Symbol(a, Decl(objectSpreadInference.ts, 6, 43))
+>a : Symbol(a, Decl(objectSpreadInference.ts, 6, 54))
 >V : Symbol(V, Decl(objectSpreadInference.ts, 6, 28))
 >T : Symbol(T, Decl(objectSpreadInference.ts, 6, 24))
->t : Symbol(t, Decl(objectSpreadInference.ts, 6, 60))
+>t : Symbol(t, Decl(objectSpreadInference.ts, 6, 71))
 >T : Symbol(T, Decl(objectSpreadInference.ts, 6, 24))
->u : Symbol(u, Decl(objectSpreadInference.ts, 6, 66))
+>u : Symbol(u, Decl(objectSpreadInference.ts, 6, 77))
 >U : Symbol(U, Decl(objectSpreadInference.ts, 6, 26))
->v : Symbol(v, Decl(objectSpreadInference.ts, 6, 72))
+>v : Symbol(v, Decl(objectSpreadInference.ts, 6, 83))
 >V : Symbol(V, Decl(objectSpreadInference.ts, 6, 28))
 
 function generic<W, X, Y>(w: W, x: X, y: Y) {
->generic : Symbol(generic, Decl(objectSpreadInference.ts, 6, 80))
+>generic : Symbol(generic, Decl(objectSpreadInference.ts, 6, 91))
 >W : Symbol(W, Decl(objectSpreadInference.ts, 7, 17))
 >X : Symbol(X, Decl(objectSpreadInference.ts, 7, 19))
 >Y : Symbol(Y, Decl(objectSpreadInference.ts, 7, 22))
@@ -66,6 +66,8 @@ function generic<W, X, Y>(w: W, x: X, y: Y) {
     // should infer { t: {}, u: {}, v: {} } because there is no trailing type parameter
     return infer({ ...w, ...x, a: y, b: "different type" });
 >infer : Symbol(infer, Decl(objectSpreadInference.ts, 4, 1))
+>w : Symbol(w, Decl(objectSpreadInference.ts, 7, 26))
+>x : Symbol(x, Decl(objectSpreadInference.ts, 7, 31))
 >a : Symbol(a, Decl(objectSpreadInference.ts, 9, 30))
 >y : Symbol(y, Decl(objectSpreadInference.ts, 7, 37))
 >b : Symbol(b, Decl(objectSpreadInference.ts, 9, 36))
@@ -82,18 +84,22 @@ let c: { c: number };
 let i1 = infer({ ...b, ...c, a: 12 });
 >i1 : Symbol(i1, Decl(objectSpreadInference.ts, 14, 3))
 >infer : Symbol(infer, Decl(objectSpreadInference.ts, 4, 1))
+>b : Symbol(b, Decl(objectSpreadInference.ts, 11, 3))
+>c : Symbol(c, Decl(objectSpreadInference.ts, 12, 3))
 >a : Symbol(a, Decl(objectSpreadInference.ts, 14, 28))
 
 // can only infer { t: {}, u: {}, v: {} }
 let i2 = infer2({ ...b, ...c, a: 12 });
 >i2 : Symbol(i2, Decl(objectSpreadInference.ts, 16, 3))
->infer2 : Symbol(infer2, Decl(objectSpreadInference.ts, 5, 79))
+>infer2 : Symbol(infer2, Decl(objectSpreadInference.ts, 5, 89))
+>b : Symbol(b, Decl(objectSpreadInference.ts, 11, 3))
+>c : Symbol(c, Decl(objectSpreadInference.ts, 12, 3))
 >a : Symbol(a, Decl(objectSpreadInference.ts, 16, 29))
 
 // can only infer { t: {}, u: {}, v: {} }
 let i3 = generic(b, c, { a: 12 });
 >i3 : Symbol(i3, Decl(objectSpreadInference.ts, 18, 3))
->generic : Symbol(generic, Decl(objectSpreadInference.ts, 6, 80))
+>generic : Symbol(generic, Decl(objectSpreadInference.ts, 6, 91))
 >b : Symbol(b, Decl(objectSpreadInference.ts, 11, 3))
 >c : Symbol(c, Decl(objectSpreadInference.ts, 12, 3))
 >a : Symbol(a, Decl(objectSpreadInference.ts, 18, 24))

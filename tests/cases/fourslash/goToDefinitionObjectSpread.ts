@@ -2,8 +2,6 @@
 
 ////interface A1 { /*1*/a: number };
 ////interface A2 { /*2*/a?: number };
-////let a1: A1;
-////let a2: A2;
-////let a12 = { ...a1, ...a2 };
+////let a12: spread(A1, A2);
 ////a12.a/*3*/;
 verify.goToDefinition('3', [ '1', '2' ]);

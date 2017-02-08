@@ -76,6 +76,9 @@ namespace ts {
                     visitNode(cbNode, (<ShorthandPropertyAssignment>node).objectAssignmentInitializer);
             case SyntaxKind.SpreadAssignment:
                 return visitNode(cbNode, (<SpreadAssignment>node).expression);
+            case SyntaxKind.SpreadType:
+                return visitNode(cbNode, (node as SpreadTypeNode).left) ||
+                    visitNode(cbNode, (node as SpreadTypeNode).right);
             case SyntaxKind.Parameter:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
@@ -2611,6 +2614,26 @@ namespace ts {
             return type;
         }
 
+        function parseSpreadType(): TypeNode {
+            const node = createNode(SyntaxKind.SpreadType) as SpreadTypeNode;
+            parseExpected(SyntaxKind.SpreadKeyword);
+            parseExpected(SyntaxKind.OpenParenToken);
+            node.left = parseType();
+            if (parseOptional(SyntaxKind.CommaToken)) {
+                node.right = parseType();
+            }
+            parseExpected(SyntaxKind.CloseParenToken);
+            return finishNode(node);
+        }
+
+        function parseSpreadTypeOrHigher() {
+            switch (token()) {
+                case SyntaxKind.SpreadKeyword:
+                    return parseSpreadType();
+            }
+            return parseArrayTypeOrHigher();
+        }
+
         function parseTypeOperator(operator: SyntaxKind.KeyOfKeyword) {
             const node = <TypeOperatorNode>createNode(SyntaxKind.TypeOperator);
             parseExpected(operator);
@@ -2624,7 +2647,7 @@ namespace ts {
                 case SyntaxKind.KeyOfKeyword:
                     return parseTypeOperator(SyntaxKind.KeyOfKeyword);
             }
-            return parseArrayTypeOrHigher();
+            return parseSpreadTypeOrHigher();
         }
 
         function parseUnionOrIntersectionType(kind: SyntaxKind, parseConstituentType: () => TypeNode, operator: SyntaxKind): TypeNode {

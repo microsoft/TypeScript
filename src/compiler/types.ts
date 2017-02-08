@@ -188,6 +188,7 @@
         GetKeyword,
         IsKeyword,
         KeyOfKeyword,
+        SpreadKeyword,
         ModuleKeyword,
         NamespaceKeyword,
         NeverKeyword,
@@ -235,6 +236,7 @@
         TupleType,
         UnionType,
         IntersectionType,
+        SpreadType,
         ParenthesizedType,
         ThisType,
         TypeOperator,
@@ -904,6 +906,12 @@
 
     export interface IntersectionTypeNode extends UnionOrIntersectionTypeNode {
         kind: SyntaxKind.IntersectionType;
+    }
+
+    export interface SpreadTypeNode extends TypeNode {
+        kind: SyntaxKind.SpreadType;
+        left: TypeNode;
+        right?: TypeNode;
     }
 
     export interface ParenthesizedTypeNode extends TypeNode {
@@ -2499,12 +2507,6 @@
         CannotBeNamed
     }
 
-    /* @internal */
-    export const enum SyntheticSymbolKind {
-        UnionOrIntersection,
-        Spread
-    }
-
     export const enum TypePredicateKind {
         This,
         Identifier
@@ -2630,7 +2632,7 @@
         Merged                  = 0x02000000,  // Merged symbol (created during program binding)
         Transient               = 0x04000000,  // Transient symbol (created during type check)
         Prototype               = 0x08000000,  // Prototype property (no source representation)
-        SyntheticProperty       = 0x10000000,  // Property in union or intersection type
+        SyntheticProperty       = 0x10000000,  // Property in union, intersection or spread type
         Optional                = 0x20000000,  // Optional property
         ExportStar              = 0x40000000,  // Export * declaration
 
@@ -2823,6 +2825,7 @@
         /* @internal */
         ContainsAnyFunctionType = 1 << 23,  // Type is or contains object literal type
         NonPrimitive            = 1 << 24,  // intrinsic object type
+        Spread                  = 1 << 25,  // Spread type
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -2840,13 +2843,13 @@
         BooleanLike = Boolean | BooleanLiteral,
         EnumLike = Enum | EnumLiteral,
         UnionOrIntersection = Union | Intersection,
-        StructuredType = Object | Union | Intersection,
+        StructuredType = Object | Union | Intersection | Spread,
         StructuredOrTypeVariable = StructuredType | TypeParameter | Index | IndexedAccess,
         TypeVariable = TypeParameter | IndexedAccess,
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
-        Narrowable = Any | StructuredType | TypeParameter | Index | IndexedAccess | StringLike | NumberLike | BooleanLike | ESSymbol | NonPrimitive,
+        Narrowable = Any | StructuredType | TypeParameter | Index | IndexedAccess | StringLike | NumberLike | BooleanLike | ESSymbol | NonPrimitive | Spread,
         NotUnionOrUnit = Any | ESSymbol | Object | NonPrimitive,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
@@ -2978,6 +2981,13 @@
     export type StructuredType = ObjectType | UnionType | IntersectionType;
 
     /* @internal */
+    export interface SpreadType extends Type {
+        left: SpreadType | ResolvedType;
+        // Note: probably should just make this to be Type now
+        right: TypeParameter | IntersectionType | IndexType | IndexedAccessType | ResolvedType;
+    }
+
+    /* @internal */
     // An instantiated anonymous type has a target and a mapper
     export interface AnonymousType extends ObjectType {
         target?: AnonymousType;  // Instantiation target
@@ -3000,7 +3010,7 @@
     }
 
     /* @internal */
-    // Resolved object, union, or intersection type
+    // Resolved object, spread, union, or intersection type
     export interface ResolvedType extends ObjectType, UnionOrIntersectionType {
         members: SymbolTable;              // Properties by name
         properties: Symbol[];              // Properties
