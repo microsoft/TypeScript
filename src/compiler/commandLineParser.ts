@@ -12,6 +12,7 @@ namespace ts {
         {
             name: "charset",
             type: "string",
+            description: Diagnostics.The_character_set_of_the_input_files
         },
         compileOnSaveCommandLineOption,
         {
@@ -25,19 +26,23 @@ namespace ts {
             type: "string",
             isFilePath: true,
             paramType: Diagnostics.DIRECTORY,
+            description: Diagnostics.Output_directory_for_generated_declaration_files
         },
         {
             name: "diagnostics",
             type: "boolean",
+            description: Diagnostics.Show_diagnostic_information
         },
         {
             name: "extendedDiagnostics",
             type: "boolean",
-            experimental: true
+            experimental: true,
+            description: Diagnostics.Show_extended_diagnostic_information
         },
         {
             name: "emitBOM",
-            type: "boolean"
+            type: "boolean",
+            description:Diagnostics.Emit_a_UTF_8_Byte_Order_Mark_BOM_in_the_beginning_of_output_files
         },
         {
             name: "help",
@@ -58,10 +63,12 @@ namespace ts {
         {
             name: "inlineSourceMap",
             type: "boolean",
+            description: Diagnostics.Emit_a_single_file_with_source_maps_instead_of_having_a_separate_file
         },
         {
             name: "inlineSources",
             type: "boolean",
+            description:Diagnostics.Emit_the_source_alongside_the_sourcemaps_within_a_single_file_requires_inlineSourceMap_or_sourceMap_to_be_set
         },
         {
             name: "jsx",
@@ -86,17 +93,19 @@ namespace ts {
         {
             name: "listFiles",
             type: "boolean",
+            description: Diagnostics.Print_names_of_files_part_of_the_compilation
         },
         {
             name: "locale",
             type: "string",
+            description: Diagnostics.The_locale_to_use_to_show_error_messages_e_g_en_us
         },
         {
             name: "mapRoot",
             type: "string",
             isFilePath: true,
-            description: Diagnostics.Specify_the_location_where_debugger_should_locate_map_files_instead_of_generated_locations,
             paramType: Diagnostics.LOCATION,
+            description: Diagnostics.Specify_the_location_where_debugger_should_locate_map_files_instead_of_generated_locations,
         },
         {
             name: "module",
@@ -110,8 +119,8 @@ namespace ts {
                 "es6": ModuleKind.ES2015,
                 "es2015": ModuleKind.ES2015,
             }),
-            description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_umd_or_es2015,
             paramType: Diagnostics.KIND,
+            description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_umd_or_es2015,
         },
         {
             name: "newLine",
@@ -119,8 +128,8 @@ namespace ts {
                 "crlf": NewLineKind.CarriageReturnLineFeed,
                 "lf": NewLineKind.LineFeed
             }),
-            description: Diagnostics.Specify_the_end_of_line_sequence_to_be_used_when_emitting_files_Colon_CRLF_dos_or_LF_unix,
             paramType: Diagnostics.NEWLINE,
+            description: Diagnostics.Specify_the_end_of_line_sequence_to_be_used_when_emitting_files_Colon_CRLF_dos_or_LF_unix,
         },
         {
             name: "noEmit",
@@ -129,7 +138,8 @@ namespace ts {
         },
         {
             name: "noEmitHelpers",
-            type: "boolean"
+            type: "boolean",
+            description: Diagnostics.Do_not_generate_custom_helper_functions_like_extends_in_compiled_output
         },
         {
             name: "noEmitOnError",
@@ -138,7 +148,8 @@ namespace ts {
         },
         {
             name: "noErrorTruncation",
-            type: "boolean"
+            type: "boolean",
+            description: Diagnostics.Do_not_truncation_error_messages
         },
         {
             name: "noImplicitAny",
@@ -163,14 +174,17 @@ namespace ts {
         {
             name: "noLib",
             type: "boolean",
+            description: Diagnostics.Do_not_include_the_default_library_file_lib_d_ts
         },
         {
             name: "noResolve",
             type: "boolean",
+            description:Diagnostics.Do_not_add_triple_slash_references_or_module_import_targets_to_the_list_of_compiled_files
         },
         {
             name: "skipDefaultLibCheck",
             type: "boolean",
+            description: Diagnostics.Skip_type_checking_of_default_library_declaration_files
         },
         {
             name: "skipLibCheck",
@@ -183,20 +197,21 @@ namespace ts {
             isFilePath: false, // This is intentionally broken to support compatability with existing tsconfig files
             // for correct behaviour, please use outFile
             paramType: Diagnostics.FILE,
+            description: Diagnostics.Concatenate_and_emit_output_to_single_file,
         },
         {
             name: "outFile",
             type: "string",
             isFilePath: true,
-            description: Diagnostics.Concatenate_and_emit_output_to_single_file,
             paramType: Diagnostics.FILE,
+            description: Diagnostics.Concatenate_and_emit_output_to_single_file,
         },
         {
             name: "outDir",
             type: "string",
             isFilePath: true,
-            description: Diagnostics.Redirect_output_structure_to_the_directory,
             paramType: Diagnostics.DIRECTORY,
+            description: Diagnostics.Redirect_output_structure_to_the_directory,
         },
         {
             name: "preserveConstEnums",
@@ -205,16 +220,16 @@ namespace ts {
         },
         {
             name: "pretty",
-            description: Diagnostics.Stylize_errors_and_messages_using_color_and_context_experimental,
-            type: "boolean"
+            type: "boolean",
+            description: Diagnostics.Stylize_errors_and_messages_using_color_and_context_experimental
         },
         {
             name: "project",
             shortName: "p",
             type: "string",
             isFilePath: true,
+            paramType: Diagnostics.FILE_OR_DIRECTORY,
             description: Diagnostics.Compile_the_project_given_the_path_to_its_configuration_file_or_to_a_folder_with_a_tsconfig_json,
-            paramType: Diagnostics.FILE_OR_DIRECTORY
         },
         {
             name: "removeComments",
@@ -231,6 +246,7 @@ namespace ts {
         {
             name: "isolatedModules",
             type: "boolean",
+            description: Diagnostics.Unconditionally_emit_imports_for_unresolved_files
         },
         {
             name: "sourceMap",
@@ -241,14 +257,14 @@ namespace ts {
             name: "sourceRoot",
             type: "string",
             isFilePath: true,
-            description: Diagnostics.Specify_the_location_where_debugger_should_locate_TypeScript_files_instead_of_source_locations,
             paramType: Diagnostics.LOCATION,
+            description: Diagnostics.Specify_the_location_where_debugger_should_locate_TypeScript_files_instead_of_source_locations,
         },
         {
             name: "suppressExcessPropertyErrors",
             type: "boolean",
+            experimental: true,
             description: Diagnostics.Suppress_excess_property_checks_for_object_literals,
-            experimental: true
         },
         {
             name: "suppressImplicitAnyIndexErrors",
@@ -258,8 +274,8 @@ namespace ts {
         {
             name: "stripInternal",
             type: "boolean",
+            experimental: true,
             description: Diagnostics.Do_not_emit_declarations_for_code_that_has_an_internal_annotation,
-            experimental: true
         },
         {
             name: "target",
@@ -273,8 +289,8 @@ namespace ts {
                 "es2017": ScriptTarget.ES2017,
                 "esnext": ScriptTarget.ESNext,
             }),
-            description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_or_ESNEXT,
             paramType: Diagnostics.VERSION,
+            description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_or_ESNEXT,
         },
         {
             name: "version",
@@ -305,8 +321,8 @@ namespace ts {
                 "node": ModuleResolutionKind.NodeJs,
                 "classic": ModuleResolutionKind.Classic,
             }),
-            description: Diagnostics.Specify_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
             paramType: Diagnostics.STRATEGY,
+            description: Diagnostics.Specify_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
         },
         {
             name: "allowUnusedLabels",
@@ -344,7 +360,9 @@ namespace ts {
             // use type = object to copy the value as-is
             name: "paths",
             type: "object",
-            isTSConfigOnly: true
+            isTSConfigOnly: true,
+            description: Diagnostics.List_of_path_mapping_entries_for_module_names_to_locations_relative_to_the_baseUrl
+
         },
         {
             // this option can only be specified in tsconfig.json
@@ -356,7 +374,8 @@ namespace ts {
                 name: "rootDirs",
                 type: "string",
                 isFilePath: true
-            }
+            },
+            description: Diagnostics.List_of_root_folders_whose_combined_content_represent_the_structure_of_the_project_at_runtime
         },
         {
             name: "typeRoots",
@@ -365,7 +384,8 @@ namespace ts {
                 name: "typeRoots",
                 type: "string",
                 isFilePath: true
-            }
+            },
+            description: Diagnostics.List_of_folders_to_include_type_definitions_from
         },
         {
             name: "types",
@@ -403,7 +423,8 @@ namespace ts {
         },
         {
             name: "listEmittedFiles",
-            type: "boolean"
+            type: "boolean",
+            description: Diagnostics.Print_names_of_generated_files_part_of_the_compilation
         },
         {
             name: "lib",
@@ -443,7 +464,8 @@ namespace ts {
         },
         {
             name: "disableSizeLimit",
-            type: "boolean"
+            type: "boolean",
+            description: Diagnostics.Disable_size_limitation_on_JavaScript_project
         },
         {
             name: "strictNullChecks",

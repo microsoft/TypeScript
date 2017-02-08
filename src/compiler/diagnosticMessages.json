@@ -2997,6 +2997,87 @@
         "category": "Message",
         "code": 6148
     },
+    "Show diagnostic information.": {
+        "category": "Message",
+        "code": 6149
+    },
+    "Show extended diagnostic information.": {
+        "category": "Message",
+        "code": 6150
+    },
+    "Emit a single file with source maps instead of having a separate file.": {
+        "category": "Message",
+        "code": 6151
+    },
+    "Emit the source alongside the sourcemaps within a single file; requires '--inlineSourceMap' or '--sourceMap' to be set.": {
+        "category": "Message",
+        "code": 6152
+    },
+    "Unconditionally emit imports for unresolved files.": {
+        "category": "Message",
+        "code": 6153
+    },
+    "Print names of generated files part of the compilation.": {
+        "category": "Message",
+        "code": 6154
+    },
+    "Print names of files part of the compilation.": {
+        "category": "Message",
+        "code": 6155
+    },
+    "The locale to use to show error messages, e.g. 'en-us'.": {
+        "category": "Message",
+        "code": 6156
+    },
+    "Do not generate custom helper functions like __extends in compiled output.": {
+        "category": "Message",
+        "code": 6157
+    },
+    "Do not include the default library file (lib.d.ts).": {
+        "category": "Message",
+        "code": 6158
+    },
+    "Do not add triple-slash references or module import targets to the list of compiled files.": {
+        "category": "Message",
+        "code": 6159
+    },
+    "Skip type checking of default library declaration files.": {
+        "category": "Message",
+        "code": 6160
+    },
+    "List of folders to include type definitions from.": {
+        "category": "Message",
+        "code": 6161
+    },
+    "Disable size limitation on JavaScript project.": {
+        "category": "Message",
+        "code": 6162
+    },
+    "The character set of the input files.": {
+        "category": "Message",
+        "code": 6163
+    },
+    "Emit a UTF-8 Byte Order Mark (BOM) in the beginning of output files.": {
+        "category": "Message",
+        "code": 6164
+    },
+    "Do not truncation error messages.": {
+        "category": "Message",
+        "code": 6165
+    },
+    "Output directory for generated declaration files.": {
+        "category": "Message",
+        "code": 6166
+    },
+    "List of path mapping entries for module names to locations relative to the 'baseUrl'.": {
+        "category": "Message",
+        "code": 6167
+    },
+    "List of root folders whose combined content represent the structure of the project at runtime.": {
+        "category": "Message",
+        "code": 6168
+    },
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
