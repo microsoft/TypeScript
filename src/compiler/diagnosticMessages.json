@@ -3077,6 +3077,10 @@
         "category": "Message",
         "code": 6168
     },
+    "Show all compiler options.": {
+        "category": "Message",
+        "code": 6169
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

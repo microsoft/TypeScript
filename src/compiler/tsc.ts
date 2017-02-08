@@ -227,7 +227,7 @@ namespace ts {
 
         if (commandLine.options.help) {
             printVersion();
-            printHelp();
+            printHelp(commandLine.options.all);
             return sys.exit(ExitStatus.Success);
         }
 
@@ -264,7 +264,7 @@ namespace ts {
 
         if (commandLine.fileNames.length === 0 && !configFileName) {
             printVersion();
-            printHelp();
+            printHelp(commandLine.options.all);
             return sys.exit(ExitStatus.Success);
         }
 
@@ -618,7 +618,7 @@ namespace ts {
         sys.write(getDiagnosticText(Diagnostics.Version_0, ts.version) + sys.newLine);
     }
 
-    function printHelp() {
+    function printHelp(showAllOptions: boolean) {
         const output: string[] = [];
 
         // We want to align our "syntax" and "examples" commands to a certain margin.
@@ -643,8 +643,9 @@ namespace ts {
         output.push(getDiagnosticText(Diagnostics.Options_Colon) + sys.newLine);
 
         // Sort our options by their names, (e.g. "--noImplicitAny" comes before "--watch")
-        const optsList = filter(optionDeclarations.slice(), v => !v.experimental);
-        //optsList.sort((a, b) => compareValues<string>(a.name.toLowerCase(), b.name.toLowerCase()));
+        const optsList = showAllOptions ?
+            optionDeclarations.slice().sort((a, b) => compareValues<string>(a.name.toLowerCase(), b.name.toLowerCase())) :
+            filter(optionDeclarations.slice(), v => v.showInSimplifiedHelpView);
 
         // We want our descriptions to align at the same column in our output,
         // so we keep track of the longest option usage string.
