@@ -1,4 +1,4 @@
-/// <reference path="moduleNameResolver.ts"/>
+﻿/// <reference path="moduleNameResolver.ts"/>
 /// <reference path="binder.ts"/>
 
 /* @internal */
@@ -590,7 +590,7 @@ namespace ts {
             return node.kind === SyntaxKind.SourceFile && !isExternalOrCommonJsModule(<SourceFile>node);
         }
 
-       function getSymbol(symbols: SymbolTable, name: string, meaning: SymbolFlags): Symbol {
+        function getSymbol(symbols: SymbolTable, name: string, meaning: SymbolFlags): Symbol {
             if (meaning) {
                 const symbol = symbols.get(name);
                 if (symbol) {
@@ -3362,7 +3362,8 @@ namespace ts {
                 const type = checkDeclarationInitializer(declaration);
                 return addOptionality(type, /*optional*/ declaration.questionToken && includeOptionality);
             }
-            else if (isJsxAttribute(declaration)) {
+
+            if (isJsxAttribute(declaration)) {
                 // if JSX attribute doesn't have initializer, by default the attribute will have boolean value of true.
                 // I.e <Elem attr /> is sugar for <Elem attr={true} />
                 return trueType;
@@ -7003,7 +7004,8 @@ namespace ts {
                     // If there is no initializer, JSX attribute has a boolean value of true which is not context sensitive.
                     return (<JsxAttribute>node).initializer && isContextSensitive((<JsxAttribute>node).initializer);
                 case SyntaxKind.JsxExpression:
-                    return isContextSensitive((<JsxExpression>node).expression);
+                    // It is possible to that node.expression is undefined (e.g <div x={} />)
+                    return (<JsxExpression>node).expression && isContextSensitive((<JsxExpression>node).expression);
             }
 
             return false;
@@ -13258,10 +13260,7 @@ namespace ts {
                     return false;
                 }
             }
-            if (checkTypeRelatedTo(attributesType, paramType, relation, /*errorNode*/ undefined, headMessage)) {
-                return true;
-            }
-            return false;
+            return checkTypeRelatedTo(attributesType, paramType, relation, /*errorNode*/ undefined, headMessage);
         }
 
         function checkApplicableSignature(node: CallLikeExpression, args: Expression[], signature: Signature, relation: Map<RelationComparisonResult>, excludeArgument: boolean[], reportErrors: boolean) {
@@ -13350,7 +13349,7 @@ namespace ts {
                 return undefined;
             }
             else if (isJsxOpeningLikeElement(node)) {
-                args = node.attributes.properties.length > 0 ? [node.attributes] : [];
+                args = node.attributes.properties.length > 0 ? [node.attributes] : emptyArray;
             }
             else {
                 args = node.arguments || emptyArray;
@@ -14164,23 +14163,7 @@ namespace ts {
          */
         function getResolvedJsxStatelessFunctionSignature(openingLikeElement: JsxOpeningLikeElement, elementType: Type, candidatesOutArray: Signature[]): Signature {
             Debug.assert(!(elementType.flags & TypeFlags.Union));
-            const links = getNodeLinks(openingLikeElement);
-            // If getResolvedSignature has already been called, we will have cached the resolvedSignature.
-            // However, it is possible that either candidatesOutArray was not passed in the first time,
-            // or that a different candidatesOutArray was passed in. Therefore, we need to redo the work
-            // to correctly fill the candidatesOutArray.
-            const cached = links.resolvedSignature;
-            if (cached && cached !== resolvingSignature && !candidatesOutArray) {
-                return cached;
-            }
-            links.resolvedSignature = resolvingSignature;
-
             const callSignature = resolveStatelessJsxOpeningLikeElement(openingLikeElement, elementType, candidatesOutArray);
-            links.resolvedSignature = callSignature;
-            // If signature resolution originated in control flow type analysis (for example to compute the
-            // assigned type in a flow assignment) we don't cache the result as it may be based on temporary
-            // types from the control flow analysis.
-            links.resolvedSignature = flowLoopStart === flowLoopCount ? callSignature : cached;
             return callSignature;
         }
 
@@ -14198,8 +14181,7 @@ namespace ts {
                 const types = (elementType as UnionType).types;
                 let result: Signature;
                 for (const type of types) {
-                    // This is mainly to fill in all the candidates if there is one.
-                    result = result && resolveStatelessJsxOpeningLikeElement(openingLikeElement, type, candidatesOutArray);
+                    result = result || resolveStatelessJsxOpeningLikeElement(openingLikeElement, type, candidatesOutArray);
                 }
 
                 return result;
@@ -14227,6 +14209,7 @@ namespace ts {
                     return resolveDecorator(<Decorator>node, candidatesOutArray);
                 case SyntaxKind.JsxOpeningElement:
                 case SyntaxKind.JsxSelfClosingElement:
+                    // This code-path is called by language service
                     return resolveStatelessJsxOpeningLikeElement(<JsxOpeningLikeElement>node, checkExpression((<JsxOpeningLikeElement>node).tagName), candidatesOutArray);
             }
             Debug.fail("Branch in 'resolveSignature' should be unreachable.");
