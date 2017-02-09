@@ -1,4 +1,4 @@
-/* @internal */
+﻿/* @internal */
 namespace ts.GoToDefinition {
     export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number): DefinitionInfo[] {
         /// Triple slash reference comments
@@ -88,7 +88,7 @@ namespace ts.GoToDefinition {
         if (isJsxOpeningLikeElement(node.parent)) {
             // If there are errors when trying to figure out stateless component function, just return the first declaration
             // For example:
-            //      declare function /*firstSource*/iMainButton(buttonProps: ButtonProps): JSX.Element;
+            //      declare function /*firstSource*/MainButton(buttonProps: ButtonProps): JSX.Element;
             //      declare function /*secondSource*/MainButton(linkProps: LinkProps): JSX.Element;
             //      declare function /*thirdSource*/MainButton(props: ButtonProps | LinkProps): JSX.Element;
             //      let opt = <Main/*firstTarget*/Button />;  // Error - We get undefined for resolved signature indicating an error, then just return the first declaration
@@ -296,8 +296,6 @@ namespace ts.GoToDefinition {
         const signature = callLike && typeChecker.getResolvedSignature(callLike);
         if (signature) {
             const decl = signature.declaration;
-            // We have to check that resolvedSignature is not undefined because in the case of JSX opening-like element,
-            // it may not be a stateless function component which then will cause getResolvedSignature to return undefined.
             if (decl && isSignatureDeclaration(decl)) {
                 return decl;
             }
