@@ -21,6 +21,20 @@ const obj: PoisonedProp = {
 // OK
 let p = <Poisoned {...obj} />;
 
+class EmptyProp extends React.Component<{}, {}> {
+    render() {
+        return <div>Default hi</div>;
+    }
+}
+
+// OK
+let j: any;
+let e1 = <EmptyProp {...{}} />;
+let e2 = <EmptyProp {...j} />
+let e3 = <EmptyProp {...{ ref: (input) => { this.textInput = input; } }} />
+let e4 = <EmptyProp data-prop />
+let e5 = <EmptyProp {...{ "data-prop": true}} />
+
 //// [file.jsx]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -33,6 +47,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var _this = this;
 var React = require("react");
 var Poisoned = (function (_super) {
     __extends(Poisoned, _super);
@@ -50,3 +65,20 @@ var obj = {
 };
 // OK
 var p = <Poisoned {...obj}/>;
+var EmptyProp = (function (_super) {
+    __extends(EmptyProp, _super);
+    function EmptyProp() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    EmptyProp.prototype.render = function () {
+        return <div>Default hi</div>;
+    };
+    return EmptyProp;
+}(React.Component));
+// OK
+var j;
+var e1 = <EmptyProp {...{}}/>;
+var e2 = <EmptyProp {...j}/>;
+var e3 = <EmptyProp {...{ ref: function (input) { _this.textInput = input; } }}/>;
+var e4 = <EmptyProp data-prop/>;
+var e5 = <EmptyProp {...{ "data-prop": true }}/>;

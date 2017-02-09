@@ -21,6 +21,19 @@ let obj = {
 // Error as "obj" has type { x: string; y: number }
 let p = <Poisoned {...obj} />;
 
+class EmptyProp extends React.Component<{}, {}> {
+    render() {
+        return <div>Default hi</div>;
+    }
+    greeting: string;
+}
+
+let o = {
+    prop1: false
+}
+// Error
+let e = <EmptyProp {...o} />;
+
 //// [file.jsx]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -50,3 +63,18 @@ var obj = {
 };
 // Error as "obj" has type { x: string; y: number }
 var p = <Poisoned {...obj}/>;
+var EmptyProp = (function (_super) {
+    __extends(EmptyProp, _super);
+    function EmptyProp() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    EmptyProp.prototype.render = function () {
+        return <div>Default hi</div>;
+    };
+    return EmptyProp;
+}(React.Component));
+var o = {
+    prop1: false
+};
+// Error
+var e = <EmptyProp {...o}/>;

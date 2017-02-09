@@ -7702,7 +7702,7 @@ namespace ts {
                 if (type.flags & TypeFlags.Object) {
                     const resolved = resolveStructuredTypeMembers(<ObjectType>type);
                     if ((relation === assignableRelation || relation === comparableRelation) &&
-                        (type === globalObjectType || isEmptyObjectType(resolved))) {
+                        (type === globalObjectType || (!isComparingJsxAttributes && isEmptyObjectType(resolved)))) {
                         return true;
                     }
                     else if (resolved.stringIndexInfo || (resolved.numberIndexInfo && isNumericLiteralName(name))) {
@@ -12200,15 +12200,17 @@ namespace ts {
                 if (jsxElementType) {
                     // We don't call getResolvedSignature here because we have already resolve the type of JSX Element.
                     const callSignature = getResolvedJsxStatelessFunctionSignature(openingLikeElement, elementType, /*candidatesOutArray*/ undefined);
-                    const callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
-                    let paramType = callReturnType && (callSignature.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature.parameters[0]));
-                    if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType)) {
-                        // Intersect in JSX.IntrinsicAttributes if it exists
-                        const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes);
-                        if (intrinsicAttributes !== unknownType) {
-                            paramType = intersectTypes(intrinsicAttributes, paramType);
+                    if (callSignature !== unknownSignature) {
+                        const callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
+                        let paramType = callReturnType && (callSignature.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature.parameters[0]));
+                        if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType)) {
+                            // Intersect in JSX.IntrinsicAttributes if it exists
+                            const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes);
+                            if (intrinsicAttributes !== unknownType) {
+                                paramType = intersectTypes(intrinsicAttributes, paramType);
+                            }
+                            return paramType;
                         }
-                        return paramType;
                     }
                 }
             }

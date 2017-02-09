@@ -23,3 +23,16 @@ let obj = {
 
 // Error as "obj" has type { x: string; y: number }
 let p = <Poisoned {...obj} />;
+
+class EmptyProp extends React.Component<{}, {}> {
+    render() {
+        return <div>Default hi</div>;
+    }
+    greeting: string;
+}
+
+let o = {
+    prop1: false
+}
+// Error
+let e = <EmptyProp {...o} />;

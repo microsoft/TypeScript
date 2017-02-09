@@ -3,6 +3,10 @@
 // @noLib: true
 // @libFiles: react.d.ts,lib.d.ts
 
+function EmptyPropSFC() {
+    return <div> Default Greeting </div>;
+}
+
 function Greet(x: {name: string}) {
 	return <div>Hello, {x}</div>;
 }
@@ -33,4 +37,23 @@ let f = <Meet naaaaaaame='no' />;
 let g = <MeetAndGreet prop-name="Bob" />;
 // Error
 let h = <MeetAndGreet extra-prop-name="World" />;
+
+// Error
+let i = <EmptyPropSFC prop1 />
+let i1 = <EmptyPropSFC ref={x => x.greeting.substr(10)} />
+
+let o = {
+    prop1: true;
+}
+
+// Error
+let i2 = <EmptyPropSFC {...o} />
+
+let o1: any;
+// OK
+let j = <EmptyPropSFC {...o1} />
+let j1 = <EmptyPropSFC />
+let j2 = <EmptyPropSFC data-prop />
+let j3 = <EmptyPropSFC {...{}} />
+let j4 = <EmptyPropSFC {...{ "data-info": "hi"}} />
 
