@@ -319,42 +319,43 @@ declare namespace ts {
         SpreadAssignment = 261,
         EnumMember = 262,
         SourceFile = 263,
-        JSDocTypeExpression = 264,
-        JSDocAllType = 265,
-        JSDocUnknownType = 266,
-        JSDocArrayType = 267,
-        JSDocUnionType = 268,
-        JSDocTupleType = 269,
-        JSDocNullableType = 270,
-        JSDocNonNullableType = 271,
-        JSDocRecordType = 272,
-        JSDocRecordMember = 273,
-        JSDocTypeReference = 274,
-        JSDocOptionalType = 275,
-        JSDocFunctionType = 276,
-        JSDocVariadicType = 277,
-        JSDocConstructorType = 278,
-        JSDocThisType = 279,
-        JSDocComment = 280,
-        JSDocTag = 281,
-        JSDocAugmentsTag = 282,
-        JSDocParameterTag = 283,
-        JSDocReturnTag = 284,
-        JSDocTypeTag = 285,
-        JSDocTemplateTag = 286,
-        JSDocTypedefTag = 287,
-        JSDocPropertyTag = 288,
-        JSDocTypeLiteral = 289,
-        JSDocLiteralType = 290,
-        JSDocNullKeyword = 291,
-        JSDocUndefinedKeyword = 292,
-        JSDocNeverKeyword = 293,
-        SyntaxList = 294,
-        NotEmittedStatement = 295,
-        PartiallyEmittedExpression = 296,
-        MergeDeclarationMarker = 297,
-        EndOfDeclarationMarker = 298,
-        Count = 299,
+        Bundle = 264,
+        JSDocTypeExpression = 265,
+        JSDocAllType = 266,
+        JSDocUnknownType = 267,
+        JSDocArrayType = 268,
+        JSDocUnionType = 269,
+        JSDocTupleType = 270,
+        JSDocNullableType = 271,
+        JSDocNonNullableType = 272,
+        JSDocRecordType = 273,
+        JSDocRecordMember = 274,
+        JSDocTypeReference = 275,
+        JSDocOptionalType = 276,
+        JSDocFunctionType = 277,
+        JSDocVariadicType = 278,
+        JSDocConstructorType = 279,
+        JSDocThisType = 280,
+        JSDocComment = 281,
+        JSDocTag = 282,
+        JSDocAugmentsTag = 283,
+        JSDocParameterTag = 284,
+        JSDocReturnTag = 285,
+        JSDocTypeTag = 286,
+        JSDocTemplateTag = 287,
+        JSDocTypedefTag = 288,
+        JSDocPropertyTag = 289,
+        JSDocTypeLiteral = 290,
+        JSDocLiteralType = 291,
+        JSDocNullKeyword = 292,
+        JSDocUndefinedKeyword = 293,
+        JSDocNeverKeyword = 294,
+        SyntaxList = 295,
+        NotEmittedStatement = 296,
+        PartiallyEmittedExpression = 297,
+        MergeDeclarationMarker = 298,
+        EndOfDeclarationMarker = 299,
+        Count = 300,
         FirstAssignment = 57,
         LastAssignment = 69,
         FirstCompoundAssignment = 58,
@@ -380,10 +381,10 @@ declare namespace ts {
         FirstBinaryOperator = 26,
         LastBinaryOperator = 69,
         FirstNode = 142,
-        FirstJSDocNode = 264,
-        LastJSDocNode = 293,
-        FirstJSDocTagNode = 280,
-        LastJSDocTagNode = 293,
+        FirstJSDocNode = 265,
+        LastJSDocNode = 294,
+        FirstJSDocTagNode = 281,
+        LastJSDocTagNode = 294,
     }
     const enum NodeFlags {
         None = 0,
@@ -726,6 +727,10 @@ declare namespace ts {
     interface OmittedExpression extends Expression {
         kind: SyntaxKind.OmittedExpression;
     }
+    interface PartiallyEmittedExpression extends LeftHandSideExpression {
+        kind: SyntaxKind.PartiallyEmittedExpression;
+        expression: Expression;
+    }
     interface UnaryExpression extends Expression {
         _unaryExpressionBrand: any;
     }
@@ -1020,6 +1025,9 @@ declare namespace ts {
     interface Statement extends Node {
         _statementBrand: any;
     }
+    interface NotEmittedStatement extends Statement {
+        kind: SyntaxKind.NotEmittedStatement;
+    }
     interface EmptyStatement extends Statement {
         kind: SyntaxKind.EmptyStatement;
     }
@@ -1186,20 +1194,22 @@ declare namespace ts {
         name: Identifier;
         members: NodeArray<EnumMember>;
     }
-    type ModuleBody = ModuleBlock | ModuleDeclaration;
     type ModuleName = Identifier | StringLiteral;
+    type ModuleBody = NamespaceBody | JSDocNamespaceBody;
     interface ModuleDeclaration extends DeclarationStatement {
         kind: SyntaxKind.ModuleDeclaration;
         name: Identifier | StringLiteral;
-        body?: ModuleBlock | NamespaceDeclaration | JSDocNamespaceDeclaration | Identifier;
+        body?: ModuleBody | JSDocNamespaceDeclaration | Identifier;
     }
+    type NamespaceBody = ModuleBlock | NamespaceDeclaration;
     interface NamespaceDeclaration extends ModuleDeclaration {
         name: Identifier;
-        body: ModuleBlock | NamespaceDeclaration;
+        body: NamespaceBody;
     }
+    type JSDocNamespaceBody = Identifier | JSDocNamespaceDeclaration;
     interface JSDocNamespaceDeclaration extends ModuleDeclaration {
         name: Identifier;
-        body: JSDocNamespaceDeclaration | Identifier;
+        body: JSDocNamespaceBody;
     }
     interface ModuleBlock extends Node, Statement {
         kind: SyntaxKind.ModuleBlock;
@@ -1466,6 +1476,10 @@ declare namespace ts {
         isDeclarationFile: boolean;
         hasNoDefaultLib: boolean;
         languageVersion: ScriptTarget;
+    }
+    interface Bundle extends Node {
+        kind: SyntaxKind.Bundle;
+        sourceFiles: SourceFile[];
     }
     interface ScriptReferenceHost {
         getCompilerOptions(): CompilerOptions;
@@ -2076,6 +2090,60 @@ declare namespace ts {
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         getEnvironmentVariable?(name: string): string;
     }
+    const enum EmitFlags {
+        SingleLine = 1,
+        AdviseOnEmitNode = 2,
+        NoSubstitution = 4,
+        CapturesThis = 8,
+        NoLeadingSourceMap = 16,
+        NoTrailingSourceMap = 32,
+        NoSourceMap = 48,
+        NoNestedSourceMaps = 64,
+        NoTokenLeadingSourceMaps = 128,
+        NoTokenTrailingSourceMaps = 256,
+        NoTokenSourceMaps = 384,
+        NoLeadingComments = 512,
+        NoTrailingComments = 1024,
+        NoComments = 1536,
+        NoNestedComments = 2048,
+        HelperName = 4096,
+        ExportName = 8192,
+        LocalName = 16384,
+        Indented = 32768,
+        NoIndentation = 65536,
+        AsyncFunctionBody = 131072,
+        ReuseTempVariableScope = 262144,
+        CustomPrologue = 524288,
+        NoHoisting = 1048576,
+        HasEndOfDeclarationMarker = 2097152,
+    }
+    interface EmitHelper {
+        readonly name: string;
+        readonly scoped: boolean;
+        readonly text: string;
+        readonly priority?: number;
+    }
+    const enum EmitHint {
+        SourceFile = 0,
+        Expression = 1,
+        IdentifierName = 2,
+        Unspecified = 3,
+    }
+    interface Printer {
+        printNode(hint: EmitHint, node: Node, sourceFile: SourceFile): string;
+        printFile(sourceFile: SourceFile): string;
+        printBundle(bundle: Bundle): string;
+    }
+    interface PrintHandlers {
+        hasGlobalName?(name: string): boolean;
+        onEmitNode?(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
+        onSubstituteNode?(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
+    }
+    interface PrinterOptions {
+        target?: ScriptTarget;
+        removeComments?: boolean;
+        newLine?: NewLineKind;
+    }
     interface TextSpan {
         start: number;
         length: number;
@@ -2089,7 +2157,7 @@ declare namespace ts {
     }
 }
 declare namespace ts {
-    const version = "2.2.0";
+    const version = "2.2.1";
 }
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;
@@ -2266,6 +2334,255 @@ declare namespace ts {
         fileExists(fileName: string): boolean;
         readFile(fileName: string): string;
     }, errors?: Diagnostic[]): void;
+    function getOriginalNode(node: Node): Node;
+    function getOriginalNode<T extends Node>(node: Node, nodeTest: (node: Node) => node is T): T;
+    function isParseTreeNode(node: Node): boolean;
+    function getParseTreeNode(node: Node): Node;
+    function getParseTreeNode<T extends Node>(node: Node, nodeTest?: (node: Node) => node is T): T;
+}
+declare namespace ts {
+    function createNodeArray<T extends Node>(elements?: T[], hasTrailingComma?: boolean): NodeArray<T>;
+    function createLiteral(value: string): StringLiteral;
+    function createLiteral(value: number): NumericLiteral;
+    function createLiteral(value: boolean): BooleanLiteral;
+    function createLiteral(sourceNode: StringLiteral | NumericLiteral | Identifier): StringLiteral;
+    function createLiteral(value: string | number | boolean): PrimaryExpression;
+    function createNumericLiteral(value: string): NumericLiteral;
+    function createIdentifier(text: string): Identifier;
+    function createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined): Identifier;
+    function createLoopVariable(): Identifier;
+    function createUniqueName(text: string): Identifier;
+    function getGeneratedNameForNode(node: Node): Identifier;
+    function createToken<TKind extends SyntaxKind>(token: TKind): Token<TKind>;
+    function createSuper(): PrimaryExpression;
+    function createThis(): PrimaryExpression;
+    function createNull(): PrimaryExpression;
+    function createTrue(): BooleanLiteral;
+    function createFalse(): BooleanLiteral;
+    function createQualifiedName(left: EntityName, right: string | Identifier): QualifiedName;
+    function updateQualifiedName(node: QualifiedName, left: EntityName, right: Identifier): QualifiedName;
+    function createComputedPropertyName(expression: Expression): ComputedPropertyName;
+    function updateComputedPropertyName(node: ComputedPropertyName, expression: Expression): ComputedPropertyName;
+    function createParameter(decorators: Decorator[], modifiers: Modifier[], dotDotDotToken: DotDotDotToken, name: string | Identifier | BindingPattern, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression): ParameterDeclaration;
+    function updateParameter(node: ParameterDeclaration, decorators: Decorator[], modifiers: Modifier[], dotDotDotToken: DotDotDotToken, name: BindingName, type: TypeNode, initializer: Expression): ParameterDeclaration;
+    function createDecorator(expression: Expression): Decorator;
+    function updateDecorator(node: Decorator, expression: Expression): Decorator;
+    function createProperty(decorators: Decorator[], modifiers: Modifier[], name: string | PropertyName, questionToken: QuestionToken, type: TypeNode, initializer: Expression): PropertyDeclaration;
+    function updateProperty(node: PropertyDeclaration, decorators: Decorator[], modifiers: Modifier[], name: PropertyName, type: TypeNode, initializer: Expression): PropertyDeclaration;
+    function createMethod(decorators: Decorator[], modifiers: Modifier[], asteriskToken: AsteriskToken, name: string | PropertyName, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block): MethodDeclaration;
+    function updateMethod(node: MethodDeclaration, decorators: Decorator[], modifiers: Modifier[], name: PropertyName, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block): MethodDeclaration;
+    function createConstructor(decorators: Decorator[], modifiers: Modifier[], parameters: ParameterDeclaration[], body: Block): ConstructorDeclaration;
+    function updateConstructor(node: ConstructorDeclaration, decorators: Decorator[], modifiers: Modifier[], parameters: ParameterDeclaration[], body: Block): ConstructorDeclaration;
+    function createGetAccessor(decorators: Decorator[], modifiers: Modifier[], name: string | PropertyName, parameters: ParameterDeclaration[], type: TypeNode, body: Block): GetAccessorDeclaration;
+    function updateGetAccessor(node: GetAccessorDeclaration, decorators: Decorator[], modifiers: Modifier[], name: PropertyName, parameters: ParameterDeclaration[], type: TypeNode, body: Block): GetAccessorDeclaration;
+    function createSetAccessor(decorators: Decorator[], modifiers: Modifier[], name: string | PropertyName, parameters: ParameterDeclaration[], body: Block): SetAccessorDeclaration;
+    function updateSetAccessor(node: SetAccessorDeclaration, decorators: Decorator[], modifiers: Modifier[], name: PropertyName, parameters: ParameterDeclaration[], body: Block): SetAccessorDeclaration;
+    function createObjectBindingPattern(elements: BindingElement[]): ObjectBindingPattern;
+    function updateObjectBindingPattern(node: ObjectBindingPattern, elements: BindingElement[]): ObjectBindingPattern;
+    function createArrayBindingPattern(elements: ArrayBindingElement[]): ArrayBindingPattern;
+    function updateArrayBindingPattern(node: ArrayBindingPattern, elements: ArrayBindingElement[]): ArrayBindingPattern;
+    function createBindingElement(propertyName: string | PropertyName, dotDotDotToken: DotDotDotToken, name: string | BindingName, initializer?: Expression): BindingElement;
+    function updateBindingElement(node: BindingElement, dotDotDotToken: DotDotDotToken, propertyName: PropertyName, name: BindingName, initializer: Expression): BindingElement;
+    function createArrayLiteral(elements?: Expression[], multiLine?: boolean): ArrayLiteralExpression;
+    function updateArrayLiteral(node: ArrayLiteralExpression, elements: Expression[]): ArrayLiteralExpression;
+    function createObjectLiteral(properties?: ObjectLiteralElementLike[], multiLine?: boolean): ObjectLiteralExpression;
+    function updateObjectLiteral(node: ObjectLiteralExpression, properties: ObjectLiteralElementLike[]): ObjectLiteralExpression;
+    function createPropertyAccess(expression: Expression, name: string | Identifier): PropertyAccessExpression;
+    function updatePropertyAccess(node: PropertyAccessExpression, expression: Expression, name: Identifier): PropertyAccessExpression;
+    function createElementAccess(expression: Expression, index: number | Expression): ElementAccessExpression;
+    function updateElementAccess(node: ElementAccessExpression, expression: Expression, argumentExpression: Expression): ElementAccessExpression;
+    function createCall(expression: Expression, typeArguments: TypeNode[], argumentsArray: Expression[]): CallExpression;
+    function updateCall(node: CallExpression, expression: Expression, typeArguments: TypeNode[], argumentsArray: Expression[]): CallExpression;
+    function createNew(expression: Expression, typeArguments: TypeNode[], argumentsArray: Expression[]): NewExpression;
+    function updateNew(node: NewExpression, expression: Expression, typeArguments: TypeNode[], argumentsArray: Expression[]): NewExpression;
+    function createTaggedTemplate(tag: Expression, template: TemplateLiteral): TaggedTemplateExpression;
+    function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, template: TemplateLiteral): TaggedTemplateExpression;
+    function createTypeAssertion(type: TypeNode, expression: Expression): TypeAssertion;
+    function updateTypeAssertion(node: TypeAssertion, type: TypeNode, expression: Expression): TypeAssertion;
+    function createParen(expression: Expression): ParenthesizedExpression;
+    function updateParen(node: ParenthesizedExpression, expression: Expression): ParenthesizedExpression;
+    function createFunctionExpression(modifiers: Modifier[], asteriskToken: AsteriskToken, name: string | Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block): FunctionExpression;
+    function updateFunctionExpression(node: FunctionExpression, modifiers: Modifier[], name: Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block): FunctionExpression;
+    function createArrowFunction(modifiers: Modifier[], typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, equalsGreaterThanToken: EqualsGreaterThanToken, body: ConciseBody): ArrowFunction;
+    function updateArrowFunction(node: ArrowFunction, modifiers: Modifier[], typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: ConciseBody): ArrowFunction;
+    function createDelete(expression: Expression): DeleteExpression;
+    function updateDelete(node: DeleteExpression, expression: Expression): DeleteExpression;
+    function createTypeOf(expression: Expression): TypeOfExpression;
+    function updateTypeOf(node: TypeOfExpression, expression: Expression): TypeOfExpression;
+    function createVoid(expression: Expression): VoidExpression;
+    function updateVoid(node: VoidExpression, expression: Expression): VoidExpression;
+    function createAwait(expression: Expression): AwaitExpression;
+    function updateAwait(node: AwaitExpression, expression: Expression): AwaitExpression;
+    function createPrefix(operator: PrefixUnaryOperator, operand: Expression): PrefixUnaryExpression;
+    function updatePrefix(node: PrefixUnaryExpression, operand: Expression): PrefixUnaryExpression;
+    function createPostfix(operand: Expression, operator: PostfixUnaryOperator): PostfixUnaryExpression;
+    function updatePostfix(node: PostfixUnaryExpression, operand: Expression): PostfixUnaryExpression;
+    function createBinary(left: Expression, operator: BinaryOperator | BinaryOperatorToken, right: Expression): BinaryExpression;
+    function updateBinary(node: BinaryExpression, left: Expression, right: Expression): BinaryExpression;
+    function createConditional(condition: Expression, whenTrue: Expression, whenFalse: Expression): ConditionalExpression;
+    function createConditional(condition: Expression, questionToken: QuestionToken, whenTrue: Expression, colonToken: ColonToken, whenFalse: Expression): ConditionalExpression;
+    function updateConditional(node: ConditionalExpression, condition: Expression, whenTrue: Expression, whenFalse: Expression): ConditionalExpression;
+    function createTemplateExpression(head: TemplateHead, templateSpans: TemplateSpan[]): TemplateExpression;
+    function updateTemplateExpression(node: TemplateExpression, head: TemplateHead, templateSpans: TemplateSpan[]): TemplateExpression;
+    function createYield(expression?: Expression): YieldExpression;
+    function createYield(asteriskToken: AsteriskToken, expression: Expression): YieldExpression;
+    function updateYield(node: YieldExpression, expression: Expression): YieldExpression;
+    function createSpread(expression: Expression): SpreadElement;
+    function updateSpread(node: SpreadElement, expression: Expression): SpreadElement;
+    function createClassExpression(modifiers: Modifier[], name: string | Identifier, typeParameters: TypeParameterDeclaration[], heritageClauses: HeritageClause[], members: ClassElement[]): ClassExpression;
+    function updateClassExpression(node: ClassExpression, modifiers: Modifier[], name: Identifier, typeParameters: TypeParameterDeclaration[], heritageClauses: HeritageClause[], members: ClassElement[]): ClassExpression;
+    function createOmittedExpression(): OmittedExpression;
+    function createExpressionWithTypeArguments(typeArguments: TypeNode[], expression: Expression): ExpressionWithTypeArguments;
+    function updateExpressionWithTypeArguments(node: ExpressionWithTypeArguments, typeArguments: TypeNode[], expression: Expression): ExpressionWithTypeArguments;
+    function createAsExpression(expression: Expression, type: TypeNode): AsExpression;
+    function updateAsExpression(node: AsExpression, expression: Expression, type: TypeNode): AsExpression;
+    function createNonNullExpression(expression: Expression): NonNullExpression;
+    function updateNonNullExpression(node: NonNullExpression, expression: Expression): NonNullExpression;
+    function createTemplateSpan(expression: Expression, literal: TemplateMiddle | TemplateTail): TemplateSpan;
+    function updateTemplateSpan(node: TemplateSpan, expression: Expression, literal: TemplateMiddle | TemplateTail): TemplateSpan;
+    function createBlock(statements: Statement[], multiLine?: boolean): Block;
+    function updateBlock(node: Block, statements: Statement[]): Block;
+    function createVariableStatement(modifiers: Modifier[], declarationList: VariableDeclarationList | VariableDeclaration[]): VariableStatement;
+    function updateVariableStatement(node: VariableStatement, modifiers: Modifier[], declarationList: VariableDeclarationList): VariableStatement;
+    function createVariableDeclarationList(declarations: VariableDeclaration[], flags?: NodeFlags): VariableDeclarationList;
+    function updateVariableDeclarationList(node: VariableDeclarationList, declarations: VariableDeclaration[]): VariableDeclarationList;
+    function createVariableDeclaration(name: string | BindingName, type?: TypeNode, initializer?: Expression): VariableDeclaration;
+    function updateVariableDeclaration(node: VariableDeclaration, name: BindingName, type: TypeNode, initializer: Expression): VariableDeclaration;
+    function createEmptyStatement(): EmptyStatement;
+    function createStatement(expression: Expression): ExpressionStatement;
+    function updateStatement(node: ExpressionStatement, expression: Expression): ExpressionStatement;
+    function createIf(expression: Expression, thenStatement: Statement, elseStatement?: Statement): IfStatement;
+    function updateIf(node: IfStatement, expression: Expression, thenStatement: Statement, elseStatement: Statement): IfStatement;
+    function createDo(statement: Statement, expression: Expression): DoStatement;
+    function updateDo(node: DoStatement, statement: Statement, expression: Expression): DoStatement;
+    function createWhile(expression: Expression, statement: Statement): WhileStatement;
+    function updateWhile(node: WhileStatement, expression: Expression, statement: Statement): WhileStatement;
+    function createFor(initializer: ForInitializer, condition: Expression, incrementor: Expression, statement: Statement): ForStatement;
+    function updateFor(node: ForStatement, initializer: ForInitializer, condition: Expression, incrementor: Expression, statement: Statement): ForStatement;
+    function createForIn(initializer: ForInitializer, expression: Expression, statement: Statement): ForInStatement;
+    function updateForIn(node: ForInStatement, initializer: ForInitializer, expression: Expression, statement: Statement): ForInStatement;
+    function createForOf(initializer: ForInitializer, expression: Expression, statement: Statement): ForOfStatement;
+    function updateForOf(node: ForOfStatement, initializer: ForInitializer, expression: Expression, statement: Statement): ForOfStatement;
+    function createContinue(label?: string | Identifier): ContinueStatement;
+    function updateContinue(node: ContinueStatement, label: Identifier): ContinueStatement;
+    function createBreak(label?: string | Identifier): BreakStatement;
+    function updateBreak(node: BreakStatement, label: Identifier): BreakStatement;
+    function createReturn(expression?: Expression): ReturnStatement;
+    function updateReturn(node: ReturnStatement, expression: Expression): ReturnStatement;
+    function createWith(expression: Expression, statement: Statement): WithStatement;
+    function updateWith(node: WithStatement, expression: Expression, statement: Statement): WithStatement;
+    function createSwitch(expression: Expression, caseBlock: CaseBlock): SwitchStatement;
+    function updateSwitch(node: SwitchStatement, expression: Expression, caseBlock: CaseBlock): SwitchStatement;
+    function createLabel(label: string | Identifier, statement: Statement): LabeledStatement;
+    function updateLabel(node: LabeledStatement, label: Identifier, statement: Statement): LabeledStatement;
+    function createThrow(expression: Expression): ThrowStatement;
+    function updateThrow(node: ThrowStatement, expression: Expression): ThrowStatement;
+    function createTry(tryBlock: Block, catchClause: CatchClause, finallyBlock: Block): TryStatement;
+    function updateTry(node: TryStatement, tryBlock: Block, catchClause: CatchClause, finallyBlock: Block): TryStatement;
+    function createFunctionDeclaration(decorators: Decorator[], modifiers: Modifier[], asteriskToken: AsteriskToken, name: string | Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block): FunctionDeclaration;
+    function updateFunctionDeclaration(node: FunctionDeclaration, decorators: Decorator[], modifiers: Modifier[], name: Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block): FunctionDeclaration;
+    function createClassDeclaration(decorators: Decorator[], modifiers: Modifier[], name: string | Identifier, typeParameters: TypeParameterDeclaration[], heritageClauses: HeritageClause[], members: ClassElement[]): ClassDeclaration;
+    function updateClassDeclaration(node: ClassDeclaration, decorators: Decorator[], modifiers: Modifier[], name: Identifier, typeParameters: TypeParameterDeclaration[], heritageClauses: HeritageClause[], members: ClassElement[]): ClassDeclaration;
+    function createEnumDeclaration(decorators: Decorator[], modifiers: Modifier[], name: string | Identifier, members: EnumMember[]): EnumDeclaration;
+    function updateEnumDeclaration(node: EnumDeclaration, decorators: Decorator[], modifiers: Modifier[], name: Identifier, members: EnumMember[]): EnumDeclaration;
+    function createModuleDeclaration(decorators: Decorator[], modifiers: Modifier[], name: ModuleName, body: ModuleBody, flags?: NodeFlags): ModuleDeclaration;
+    function updateModuleDeclaration(node: ModuleDeclaration, decorators: Decorator[], modifiers: Modifier[], name: ModuleName, body: ModuleBody): ModuleDeclaration;
+    function createModuleBlock(statements: Statement[]): ModuleBlock;
+    function updateModuleBlock(node: ModuleBlock, statements: Statement[]): ModuleBlock;
+    function createCaseBlock(clauses: CaseOrDefaultClause[]): CaseBlock;
+    function updateCaseBlock(node: CaseBlock, clauses: CaseOrDefaultClause[]): CaseBlock;
+    function createImportEqualsDeclaration(decorators: Decorator[], modifiers: Modifier[], name: string | Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
+    function updateImportEqualsDeclaration(node: ImportEqualsDeclaration, decorators: Decorator[], modifiers: Modifier[], name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
+    function createImportDeclaration(decorators: Decorator[], modifiers: Modifier[], importClause: ImportClause, moduleSpecifier?: Expression): ImportDeclaration;
+    function updateImportDeclaration(node: ImportDeclaration, decorators: Decorator[], modifiers: Modifier[], importClause: ImportClause, moduleSpecifier: Expression): ImportDeclaration;
+    function createImportClause(name: Identifier, namedBindings: NamedImportBindings): ImportClause;
+    function updateImportClause(node: ImportClause, name: Identifier, namedBindings: NamedImportBindings): ImportClause;
+    function createNamespaceImport(name: Identifier): NamespaceImport;
+    function updateNamespaceImport(node: NamespaceImport, name: Identifier): NamespaceImport;
+    function createNamedImports(elements: ImportSpecifier[]): NamedImports;
+    function updateNamedImports(node: NamedImports, elements: ImportSpecifier[]): NamedImports;
+    function createImportSpecifier(propertyName: Identifier, name: Identifier): ImportSpecifier;
+    function updateImportSpecifier(node: ImportSpecifier, propertyName: Identifier, name: Identifier): ImportSpecifier;
+    function createExportAssignment(decorators: Decorator[], modifiers: Modifier[], isExportEquals: boolean, expression: Expression): ExportAssignment;
+    function updateExportAssignment(node: ExportAssignment, decorators: Decorator[], modifiers: Modifier[], expression: Expression): ExportAssignment;
+    function createExportDeclaration(decorators: Decorator[], modifiers: Modifier[], exportClause: NamedExports, moduleSpecifier?: Expression): ExportDeclaration;
+    function updateExportDeclaration(node: ExportDeclaration, decorators: Decorator[], modifiers: Modifier[], exportClause: NamedExports, moduleSpecifier: Expression): ExportDeclaration;
+    function createNamedExports(elements: ExportSpecifier[]): NamedExports;
+    function updateNamedExports(node: NamedExports, elements: ExportSpecifier[]): NamedExports;
+    function createExportSpecifier(name: string | Identifier, propertyName?: string | Identifier): ExportSpecifier;
+    function updateExportSpecifier(node: ExportSpecifier, name: Identifier, propertyName: Identifier): ExportSpecifier;
+    function createExternalModuleReference(expression: Expression): ExternalModuleReference;
+    function updateExternalModuleReference(node: ExternalModuleReference, expression: Expression): ExternalModuleReference;
+    function createJsxElement(openingElement: JsxOpeningElement, children: JsxChild[], closingElement: JsxClosingElement): JsxElement;
+    function updateJsxElement(node: JsxElement, openingElement: JsxOpeningElement, children: JsxChild[], closingElement: JsxClosingElement): JsxElement;
+    function createJsxSelfClosingElement(tagName: JsxTagNameExpression, attributes: JsxAttributeLike[]): JsxSelfClosingElement;
+    function updateJsxSelfClosingElement(node: JsxSelfClosingElement, tagName: JsxTagNameExpression, attributes: JsxAttributeLike[]): JsxSelfClosingElement;
+    function createJsxOpeningElement(tagName: JsxTagNameExpression, attributes: JsxAttributeLike[]): JsxOpeningElement;
+    function updateJsxOpeningElement(node: JsxOpeningElement, tagName: JsxTagNameExpression, attributes: JsxAttributeLike[]): JsxOpeningElement;
+    function createJsxClosingElement(tagName: JsxTagNameExpression): JsxClosingElement;
+    function updateJsxClosingElement(node: JsxClosingElement, tagName: JsxTagNameExpression): JsxClosingElement;
+    function createJsxAttribute(name: Identifier, initializer: StringLiteral | JsxExpression): JsxAttribute;
+    function updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: StringLiteral | JsxExpression): JsxAttribute;
+    function createJsxSpreadAttribute(expression: Expression): JsxSpreadAttribute;
+    function updateJsxSpreadAttribute(node: JsxSpreadAttribute, expression: Expression): JsxSpreadAttribute;
+    function createJsxExpression(expression: Expression, dotDotDotToken: DotDotDotToken): JsxExpression;
+    function updateJsxExpression(node: JsxExpression, expression: Expression): JsxExpression;
+    function createHeritageClause(token: SyntaxKind, types: ExpressionWithTypeArguments[]): HeritageClause;
+    function updateHeritageClause(node: HeritageClause, types: ExpressionWithTypeArguments[]): HeritageClause;
+    function createCaseClause(expression: Expression, statements: Statement[]): CaseClause;
+    function updateCaseClause(node: CaseClause, expression: Expression, statements: Statement[]): CaseClause;
+    function createDefaultClause(statements: Statement[]): DefaultClause;
+    function updateDefaultClause(node: DefaultClause, statements: Statement[]): DefaultClause;
+    function createCatchClause(variableDeclaration: string | VariableDeclaration, block: Block): CatchClause;
+    function updateCatchClause(node: CatchClause, variableDeclaration: VariableDeclaration, block: Block): CatchClause;
+    function createPropertyAssignment(name: string | PropertyName, initializer: Expression): PropertyAssignment;
+    function updatePropertyAssignment(node: PropertyAssignment, name: PropertyName, initializer: Expression): PropertyAssignment;
+    function createShorthandPropertyAssignment(name: string | Identifier, objectAssignmentInitializer: Expression): ShorthandPropertyAssignment;
+    function createSpreadAssignment(expression: Expression): SpreadAssignment;
+    function updateShorthandPropertyAssignment(node: ShorthandPropertyAssignment, name: Identifier, objectAssignmentInitializer: Expression): ShorthandPropertyAssignment;
+    function updateSpreadAssignment(node: SpreadAssignment, expression: Expression): SpreadAssignment;
+    function createEnumMember(name: string | PropertyName, initializer?: Expression): EnumMember;
+    function updateEnumMember(node: EnumMember, name: PropertyName, initializer: Expression | undefined): EnumMember;
+    function updateSourceFileNode(node: SourceFile, statements: Statement[]): SourceFile;
+    function getMutableClone<T extends Node>(node: T): T;
+    function createNotEmittedStatement(original: Node): NotEmittedStatement;
+    function createPartiallyEmittedExpression(expression: Expression, original?: Node): PartiallyEmittedExpression;
+    function updatePartiallyEmittedExpression(node: PartiallyEmittedExpression, expression: Expression): PartiallyEmittedExpression;
+    function createBundle(sourceFiles: SourceFile[]): Bundle;
+    function updateBundle(node: Bundle, sourceFiles: SourceFile[]): Bundle;
+    function createComma(left: Expression, right: Expression): Expression;
+    function createLessThan(left: Expression, right: Expression): Expression;
+    function createAssignment(left: ObjectLiteralExpression | ArrayLiteralExpression, right: Expression): DestructuringAssignment;
+    function createAssignment(left: Expression, right: Expression): BinaryExpression;
+    function createStrictEquality(left: Expression, right: Expression): BinaryExpression;
+    function createStrictInequality(left: Expression, right: Expression): BinaryExpression;
+    function createAdd(left: Expression, right: Expression): BinaryExpression;
+    function createSubtract(left: Expression, right: Expression): BinaryExpression;
+    function createPostfixIncrement(operand: Expression): PostfixUnaryExpression;
+    function createLogicalAnd(left: Expression, right: Expression): BinaryExpression;
+    function createLogicalOr(left: Expression, right: Expression): BinaryExpression;
+    function createLogicalNot(operand: Expression): PrefixUnaryExpression;
+    function createVoidZero(): VoidExpression;
+    function createExportDefault(expression: Expression): ExportAssignment;
+    function createExternalModuleExport(exportName: Identifier): ExportDeclaration;
+    function disposeEmitNodes(sourceFile: SourceFile): void;
+    function setTextRange<T extends TextRange>(range: T, location: TextRange | undefined): T;
+    function getEmitFlags(node: Node): EmitFlags;
+    function setEmitFlags<T extends Node>(node: T, emitFlags: EmitFlags): T;
+    function getSourceMapRange(node: Node): TextRange;
+    function setSourceMapRange<T extends Node>(node: T, range: TextRange): T;
+    function getTokenSourceMapRange(node: Node, token: SyntaxKind): TextRange;
+    function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange): T;
+    function getCommentRange(node: Node): TextRange;
+    function setCommentRange<T extends Node>(node: T, range: TextRange): T;
+    function getConstantValue(node: PropertyAccessExpression | ElementAccessExpression): number;
+    function setConstantValue(node: PropertyAccessExpression | ElementAccessExpression, value: number): PropertyAccessExpression | ElementAccessExpression;
+    function addEmitHelper<T extends Node>(node: T, helper: EmitHelper): T;
+    function addEmitHelpers<T extends Node>(node: T, helpers: EmitHelper[] | undefined): T;
+    function removeEmitHelper(node: Node, helper: EmitHelper): boolean;
+    function getEmitHelpers(node: Node): EmitHelper[] | undefined;
+    function moveEmitHelpers(source: Node, target: Node, predicate: (helper: EmitHelper) => boolean): void;
+    function setOriginalNode<T extends Node>(node: T, original: Node): T;
 }
 declare namespace ts {
     function createNode(kind: SyntaxKind, pos?: number, end?: number): Node;
@@ -2274,6 +2591,9 @@ declare namespace ts {
     function parseIsolatedEntityName(text: string, languageVersion: ScriptTarget): EntityName;
     function isExternalModule(file: SourceFile): boolean;
     function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;
+}
+declare namespace ts {
+    function createPrinter(printerOptions?: PrinterOptions, handlers?: PrintHandlers): Printer;
 }
 declare namespace ts {
     function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName?: string): string;
@@ -2871,6 +3191,164 @@ declare namespace ts {
     function createLanguageService(host: LanguageServiceHost, documentRegistry?: DocumentRegistry): LanguageService;
     function getDefaultLibFilePath(options: CompilerOptions): string;
 }
+declare namespace ts.server {
+    interface CompressedData {
+        length: number;
+        compressionKind: string;
+        data: any;
+    }
+    interface ServerHost extends System {
+        setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
+        clearTimeout(timeoutId: any): void;
+        setImmediate(callback: (...args: any[]) => void, ...args: any[]): any;
+        clearImmediate(timeoutId: any): void;
+        gc?(): void;
+        trace?(s: string): void;
+    }
+    interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
+        " __sortedReadonlyArrayBrand": any;
+    }
+    interface TypingInstallerRequest {
+        readonly projectName: string;
+        readonly kind: "discover" | "closeProject";
+    }
+    interface DiscoverTypings extends TypingInstallerRequest {
+        readonly fileNames: string[];
+        readonly projectRootPath: ts.Path;
+        readonly compilerOptions: ts.CompilerOptions;
+        readonly typeAcquisition: ts.TypeAcquisition;
+        readonly unresolvedImports: SortedReadonlyArray<string>;
+        readonly cachePath?: string;
+        readonly kind: "discover";
+    }
+    interface CloseProject extends TypingInstallerRequest {
+        readonly kind: "closeProject";
+    }
+    type ActionSet = "action::set";
+    type ActionInvalidate = "action::invalidate";
+    type EventBeginInstallTypes = "event::beginInstallTypes";
+    type EventEndInstallTypes = "event::endInstallTypes";
+    interface TypingInstallerResponse {
+        readonly kind: ActionSet | ActionInvalidate | EventBeginInstallTypes | EventEndInstallTypes;
+    }
+    interface ProjectResponse extends TypingInstallerResponse {
+        readonly projectName: string;
+    }
+    interface SetTypings extends ProjectResponse {
+        readonly typeAcquisition: ts.TypeAcquisition;
+        readonly compilerOptions: ts.CompilerOptions;
+        readonly typings: string[];
+        readonly unresolvedImports: SortedReadonlyArray<string>;
+        readonly kind: ActionSet;
+    }
+    interface InvalidateCachedTypings extends ProjectResponse {
+        readonly kind: ActionInvalidate;
+    }
+    interface InstallTypes extends ProjectResponse {
+        readonly kind: EventBeginInstallTypes | EventEndInstallTypes;
+        readonly eventId: number;
+        readonly typingsInstallerVersion: string;
+        readonly packagesToInstall: ReadonlyArray<string>;
+    }
+    interface BeginInstallTypes extends InstallTypes {
+        readonly kind: EventBeginInstallTypes;
+    }
+    interface EndInstallTypes extends InstallTypes {
+        readonly kind: EventEndInstallTypes;
+        readonly installSuccess: boolean;
+    }
+}
+declare namespace ts.server {
+    const ActionSet: ActionSet;
+    const ActionInvalidate: ActionInvalidate;
+    const EventBeginInstallTypes: EventBeginInstallTypes;
+    const EventEndInstallTypes: EventEndInstallTypes;
+    namespace Arguments {
+        const GlobalCacheLocation = "--globalTypingsCacheLocation";
+        const LogFile = "--logFile";
+        const EnableTelemetry = "--enableTelemetry";
+    }
+    function hasArgument(argumentName: string): boolean;
+    function findArgument(argumentName: string): string;
+}
+declare namespace ts.server {
+    enum LogLevel {
+        terse = 0,
+        normal = 1,
+        requestTime = 2,
+        verbose = 3,
+    }
+    const emptyArray: ReadonlyArray<any>;
+    interface Logger {
+        close(): void;
+        hasLevel(level: LogLevel): boolean;
+        loggingEnabled(): boolean;
+        perftrc(s: string): void;
+        info(s: string): void;
+        startGroup(): void;
+        endGroup(): void;
+        msg(s: string, type?: Msg.Types): void;
+        getLogFileName(): string;
+    }
+    namespace Msg {
+        type Err = "Err";
+        const Err: Err;
+        type Info = "Info";
+        const Info: Info;
+        type Perf = "Perf";
+        const Perf: Perf;
+        type Types = Err | Info | Perf;
+    }
+    function createInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, cachePath?: string): DiscoverTypings;
+    namespace Errors {
+        function ThrowNoProject(): never;
+        function ThrowProjectLanguageServiceDisabled(): never;
+        function ThrowProjectDoesNotContainDocument(fileName: string, project: Project): never;
+    }
+    function getDefaultFormatCodeSettings(host: ServerHost): FormatCodeSettings;
+    function mergeMapLikes(target: MapLike<any>, source: MapLike<any>): void;
+    function removeItemFromSet<T>(items: T[], itemToRemove: T): void;
+    type NormalizedPath = string & {
+        __normalizedPathTag: any;
+    };
+    function toNormalizedPath(fileName: string): NormalizedPath;
+    function normalizedPathToPath(normalizedPath: NormalizedPath, currentDirectory: string, getCanonicalFileName: (f: string) => string): Path;
+    function asNormalizedPath(fileName: string): NormalizedPath;
+    interface NormalizedPathMap<T> {
+        get(path: NormalizedPath): T;
+        set(path: NormalizedPath, value: T): void;
+        contains(path: NormalizedPath): boolean;
+        remove(path: NormalizedPath): void;
+    }
+    function createNormalizedPathMap<T>(): NormalizedPathMap<T>;
+    interface ProjectOptions {
+        configHasFilesProperty?: boolean;
+        files?: string[];
+        wildcardDirectories?: Map<WatchDirectoryFlags>;
+        compilerOptions?: CompilerOptions;
+        typeAcquisition?: TypeAcquisition;
+        compileOnSave?: boolean;
+    }
+    function isInferredProjectName(name: string): boolean;
+    function makeInferredProjectName(counter: number): string;
+    function toSortedReadonlyArray(arr: string[]): SortedReadonlyArray<string>;
+    class ThrottledOperations {
+        private readonly host;
+        private pendingTimeouts;
+        constructor(host: ServerHost);
+        schedule(operationId: string, delay: number, cb: () => void): void;
+        private static run(self, operationId, cb);
+    }
+    class GcTimer {
+        private readonly host;
+        private readonly delay;
+        private readonly logger;
+        private timerId;
+        constructor(host: ServerHost, delay: number, logger: Logger);
+        scheduleCollect(): void;
+        private static run(self);
+    }
+}
 declare namespace ts.server.protocol {
     namespace CommandTypes {
         type Brace = "brace";
@@ -3233,6 +3711,7 @@ declare namespace ts.server.protocol {
     interface CompileOnSaveAffectedFileListSingleProject {
         projectFileName: string;
         fileNames: string[];
+        projectUsesOutFile: boolean;
     }
     interface CompileOnSaveAffectedFileListResponse extends Response {
         body: CompileOnSaveAffectedFileListSingleProject[];
@@ -3674,161 +4153,159 @@ declare namespace ts.server.protocol {
     type ScriptTarget = ScriptTarget.ES3 | ScriptTarget.ES5 | ScriptTarget.ES6 | ScriptTarget.ES2015;
 }
 declare namespace ts.server {
-    interface CompressedData {
-        length: number;
-        compressionKind: string;
-        data: any;
+    interface PendingErrorCheck {
+        fileName: NormalizedPath;
+        project: Project;
     }
-    interface ServerHost extends System {
-        setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
-        clearTimeout(timeoutId: any): void;
-        setImmediate(callback: (...args: any[]) => void, ...args: any[]): any;
-        clearImmediate(timeoutId: any): void;
-        gc?(): void;
-        trace?(s: string): void;
+    interface EventSender {
+        event(payload: any, eventName: string): void;
     }
-    interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
-        " __sortedReadonlyArrayBrand": any;
+    namespace CommandNames {
+        const Brace: protocol.CommandTypes.Brace;
+        const BraceCompletion: protocol.CommandTypes.BraceCompletion;
+        const Change: protocol.CommandTypes.Change;
+        const Close: protocol.CommandTypes.Close;
+        const Completions: protocol.CommandTypes.Completions;
+        const CompletionDetails: protocol.CommandTypes.CompletionDetails;
+        const CompileOnSaveAffectedFileList: protocol.CommandTypes.CompileOnSaveAffectedFileList;
+        const CompileOnSaveEmitFile: protocol.CommandTypes.CompileOnSaveEmitFile;
+        const Configure: protocol.CommandTypes.Configure;
+        const Definition: protocol.CommandTypes.Definition;
+        const Exit: protocol.CommandTypes.Exit;
+        const Format: protocol.CommandTypes.Format;
+        const Formatonkey: protocol.CommandTypes.Formatonkey;
+        const Geterr: protocol.CommandTypes.Geterr;
+        const GeterrForProject: protocol.CommandTypes.GeterrForProject;
+        const Implementation: protocol.CommandTypes.Implementation;
+        const SemanticDiagnosticsSync: protocol.CommandTypes.SemanticDiagnosticsSync;
+        const SyntacticDiagnosticsSync: protocol.CommandTypes.SyntacticDiagnosticsSync;
+        const NavBar: protocol.CommandTypes.NavBar;
+        const NavTree: protocol.CommandTypes.NavTree;
+        const NavTreeFull: protocol.CommandTypes.NavTreeFull;
+        const Navto: protocol.CommandTypes.Navto;
+        const Occurrences: protocol.CommandTypes.Occurrences;
+        const DocumentHighlights: protocol.CommandTypes.DocumentHighlights;
+        const Open: protocol.CommandTypes.Open;
+        const Quickinfo: protocol.CommandTypes.Quickinfo;
+        const References: protocol.CommandTypes.References;
+        const Reload: protocol.CommandTypes.Reload;
+        const Rename: protocol.CommandTypes.Rename;
+        const Saveto: protocol.CommandTypes.Saveto;
+        const SignatureHelp: protocol.CommandTypes.SignatureHelp;
+        const TypeDefinition: protocol.CommandTypes.TypeDefinition;
+        const ProjectInfo: protocol.CommandTypes.ProjectInfo;
+        const ReloadProjects: protocol.CommandTypes.ReloadProjects;
+        const Unknown: protocol.CommandTypes.Unknown;
+        const OpenExternalProject: protocol.CommandTypes.OpenExternalProject;
+        const OpenExternalProjects: protocol.CommandTypes.OpenExternalProjects;
+        const CloseExternalProject: protocol.CommandTypes.CloseExternalProject;
+        const TodoComments: protocol.CommandTypes.TodoComments;
+        const Indentation: protocol.CommandTypes.Indentation;
+        const DocCommentTemplate: protocol.CommandTypes.DocCommentTemplate;
+        const CompilerOptionsForInferredProjects: protocol.CommandTypes.CompilerOptionsForInferredProjects;
+        const GetCodeFixes: protocol.CommandTypes.GetCodeFixes;
+        const GetSupportedCodeFixes: protocol.CommandTypes.GetSupportedCodeFixes;
     }
-    interface TypingInstallerRequest {
-        readonly projectName: string;
-        readonly kind: "discover" | "closeProject";
-    }
-    interface DiscoverTypings extends TypingInstallerRequest {
-        readonly fileNames: string[];
-        readonly projectRootPath: ts.Path;
-        readonly compilerOptions: ts.CompilerOptions;
-        readonly typeAcquisition: ts.TypeAcquisition;
-        readonly unresolvedImports: SortedReadonlyArray<string>;
-        readonly cachePath?: string;
-        readonly kind: "discover";
-    }
-    interface CloseProject extends TypingInstallerRequest {
-        readonly kind: "closeProject";
-    }
-    type ActionSet = "action::set";
-    type ActionInvalidate = "action::invalidate";
-    type EventBeginInstallTypes = "event::beginInstallTypes";
-    type EventEndInstallTypes = "event::endInstallTypes";
-    interface TypingInstallerResponse {
-        readonly kind: ActionSet | ActionInvalidate | EventBeginInstallTypes | EventEndInstallTypes;
-    }
-    interface ProjectResponse extends TypingInstallerResponse {
-        readonly projectName: string;
-    }
-    interface SetTypings extends ProjectResponse {
-        readonly typeAcquisition: ts.TypeAcquisition;
-        readonly compilerOptions: ts.CompilerOptions;
-        readonly typings: string[];
-        readonly unresolvedImports: SortedReadonlyArray<string>;
-        readonly kind: ActionSet;
-    }
-    interface InvalidateCachedTypings extends ProjectResponse {
-        readonly kind: ActionInvalidate;
-    }
-    interface InstallTypes extends ProjectResponse {
-        readonly kind: EventBeginInstallTypes | EventEndInstallTypes;
-        readonly eventId: number;
-        readonly typingsInstallerVersion: string;
-        readonly packagesToInstall: ReadonlyArray<string>;
-    }
-    interface BeginInstallTypes extends InstallTypes {
-        readonly kind: EventBeginInstallTypes;
-    }
-    interface EndInstallTypes extends InstallTypes {
-        readonly kind: EventEndInstallTypes;
-        readonly installSuccess: boolean;
-    }
-}
-declare namespace ts.server {
-    const ActionSet: ActionSet;
-    const ActionInvalidate: ActionInvalidate;
-    const EventBeginInstallTypes: EventBeginInstallTypes;
-    const EventEndInstallTypes: EventEndInstallTypes;
-    namespace Arguments {
-        const GlobalCacheLocation = "--globalTypingsCacheLocation";
-        const LogFile = "--logFile";
-        const EnableTelemetry = "--enableTelemetry";
-    }
-    function hasArgument(argumentName: string): boolean;
-    function findArgument(argumentName: string): string;
-}
-declare namespace ts.server {
-    enum LogLevel {
-        terse = 0,
-        normal = 1,
-        requestTime = 2,
-        verbose = 3,
-    }
-    const emptyArray: ReadonlyArray<any>;
-    interface Logger {
-        close(): void;
-        hasLevel(level: LogLevel): boolean;
-        loggingEnabled(): boolean;
-        perftrc(s: string): void;
-        info(s: string): void;
-        startGroup(): void;
-        endGroup(): void;
-        msg(s: string, type?: Msg.Types): void;
-        getLogFileName(): string;
-    }
-    namespace Msg {
-        type Err = "Err";
-        const Err: Err;
-        type Info = "Info";
-        const Info: Info;
-        type Perf = "Perf";
-        const Perf: Perf;
-        type Types = Err | Info | Perf;
-    }
-    function createInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, cachePath?: string): DiscoverTypings;
-    namespace Errors {
-        function ThrowNoProject(): never;
-        function ThrowProjectLanguageServiceDisabled(): never;
-        function ThrowProjectDoesNotContainDocument(fileName: string, project: Project): never;
-    }
-    function getDefaultFormatCodeSettings(host: ServerHost): FormatCodeSettings;
-    function mergeMapLikes(target: MapLike<any>, source: MapLike<any>): void;
-    function removeItemFromSet<T>(items: T[], itemToRemove: T): void;
-    type NormalizedPath = string & {
-        __normalizedPathTag: any;
-    };
-    function toNormalizedPath(fileName: string): NormalizedPath;
-    function normalizedPathToPath(normalizedPath: NormalizedPath, currentDirectory: string, getCanonicalFileName: (f: string) => string): Path;
-    function asNormalizedPath(fileName: string): NormalizedPath;
-    interface NormalizedPathMap<T> {
-        get(path: NormalizedPath): T;
-        set(path: NormalizedPath, value: T): void;
-        contains(path: NormalizedPath): boolean;
-        remove(path: NormalizedPath): void;
-    }
-    function createNormalizedPathMap<T>(): NormalizedPathMap<T>;
-    interface ProjectOptions {
-        configHasFilesProperty?: boolean;
-        files?: string[];
-        wildcardDirectories?: Map<WatchDirectoryFlags>;
-        compilerOptions?: CompilerOptions;
-        typeAcquisition?: TypeAcquisition;
-        compileOnSave?: boolean;
-    }
-    function isInferredProjectName(name: string): boolean;
-    function makeInferredProjectName(counter: number): string;
-    function toSortedReadonlyArray(arr: string[]): SortedReadonlyArray<string>;
-    class ThrottledOperations {
-        private readonly host;
-        private pendingTimeouts;
-        constructor(host: ServerHost);
-        schedule(operationId: string, delay: number, cb: () => void): void;
-        private static run(self, operationId, cb);
-    }
-    class GcTimer {
-        private readonly host;
-        private readonly delay;
-        private readonly logger;
-        private timerId;
-        constructor(host: ServerHost, delay: number, logger: Logger);
-        scheduleCollect(): void;
-        private static run(self);
+    function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string;
+    class Session implements EventSender {
+        private host;
+        protected readonly typingsInstaller: ITypingsInstaller;
+        private byteLength;
+        private hrtime;
+        protected logger: Logger;
+        protected readonly canUseEvents: boolean;
+        private readonly gcTimer;
+        protected projectService: ProjectService;
+        private errorTimer;
+        private immediateId;
+        private changeSeq;
+        private eventHander;
+        constructor(host: ServerHost, cancellationToken: HostCancellationToken, useSingleInferredProject: boolean, typingsInstaller: ITypingsInstaller, byteLength: (buf: string, encoding?: string) => number, hrtime: (start?: number[]) => number[], logger: Logger, canUseEvents: boolean, eventHandler?: ProjectServiceEventHandler);
+        private defaultEventHandler(event);
+        logError(err: Error, cmd: string): void;
+        send(msg: protocol.Message): void;
+        configFileDiagnosticEvent(triggerFile: string, configFile: string, diagnostics: ts.Diagnostic[]): void;
+        event(info: any, eventName: string): void;
+        output(info: any, cmdName: string, reqSeq?: number, errorMsg?: string): void;
+        private semanticCheck(file, project);
+        private syntacticCheck(file, project);
+        private updateProjectStructure(seq, matchSeq, ms?);
+        private updateErrorCheck(checkList, seq, matchSeq, ms?, followMs?, requireOpen?);
+        private cleanProjects(caption, projects);
+        private cleanup();
+        private getEncodedSemanticClassifications(args);
+        private getProject(projectFileName);
+        private getCompilerOptionsDiagnostics(args);
+        private convertToDiagnosticsWithLinePosition(diagnostics, scriptInfo);
+        private getDiagnosticsWorker(args, isSemantic, selector, includeLinePosition);
+        private getDefinition(args, simplifiedResult);
+        private getTypeDefinition(args);
+        private getImplementation(args, simplifiedResult);
+        private getOccurrences(args);
+        private getSyntacticDiagnosticsSync(args);
+        private getSemanticDiagnosticsSync(args);
+        private getDocumentHighlights(args, simplifiedResult);
+        private setCompilerOptionsForInferredProjects(args);
+        private getProjectInfo(args);
+        private getProjectInfoWorker(uncheckedFileName, projectFileName, needFileNameList);
+        private getRenameInfo(args);
+        private getProjects(args);
+        private getRenameLocations(args, simplifiedResult);
+        private getReferences(args, simplifiedResult);
+        private openClientFile(fileName, fileContent?, scriptKind?);
+        private getPosition(args, scriptInfo);
+        private getFileAndProject(args, errorOnMissingProject?);
+        private getFileAndProjectWithoutRefreshingInferredProjects(args, errorOnMissingProject?);
+        private getFileAndProjectWorker(uncheckedFileName, projectFileName, refreshInferredProjects, errorOnMissingProject);
+        private getOutliningSpans(args);
+        private getTodoComments(args);
+        private getDocCommentTemplate(args);
+        private getIndentation(args);
+        private getBreakpointStatement(args);
+        private getNameOrDottedNameSpan(args);
+        private isValidBraceCompletion(args);
+        private getQuickInfoWorker(args, simplifiedResult);
+        private getFormattingEditsForRange(args);
+        private getFormattingEditsForRangeFull(args);
+        private getFormattingEditsForDocumentFull(args);
+        private getFormattingEditsAfterKeystrokeFull(args);
+        private getFormattingEditsAfterKeystroke(args);
+        private getCompletions(args, simplifiedResult);
+        private getCompletionEntryDetails(args);
+        private getCompileOnSaveAffectedFileList(args);
+        private emitFile(args);
+        private getSignatureHelpItems(args, simplifiedResult);
+        private getDiagnostics(delay, fileNames);
+        private change(args);
+        private reload(args, reqSeq);
+        private saveToTmp(fileName, tempFileName);
+        private closeClientFile(fileName);
+        private decorateNavigationBarItems(items, scriptInfo);
+        private getNavigationBarItems(args, simplifiedResult);
+        private decorateNavigationTree(tree, scriptInfo);
+        private decorateSpan(span, scriptInfo);
+        private getNavigationTree(args, simplifiedResult);
+        private getNavigateToItems(args, simplifiedResult);
+        private getSupportedCodeFixes();
+        private getCodeFixes(args, simplifiedResult);
+        private mapCodeAction(codeAction, scriptInfo);
+        private convertTextChangeToCodeEdit(change, scriptInfo);
+        private getBraceMatching(args, simplifiedResult);
+        getDiagnosticsForProject(delay: number, fileName: string): void;
+        getCanonicalFileName(fileName: string): string;
+        exit(): void;
+        private notRequired();
+        private requiredResponse(response);
+        private handlers;
+        addProtocolHandler(command: string, handler: (request: protocol.Request) => {
+            response?: any;
+            responseRequired: boolean;
+        }): void;
+        executeCommand(request: protocol.Request): {
+            response?: any;
+            responseRequired?: boolean;
+        };
+        onMessage(message: string): void;
     }
 }
 declare namespace ts.server {
@@ -4054,6 +4531,28 @@ declare namespace ts.server {
         deleteTypingsForProject(projectName: string): void;
         onProjectClosed(project: Project): void;
     }
+}
+declare namespace ts.server {
+    function shouldEmitFile(scriptInfo: ScriptInfo): boolean;
+    class BuilderFileInfo {
+        readonly scriptInfo: ScriptInfo;
+        readonly project: Project;
+        private lastCheckedShapeSignature;
+        constructor(scriptInfo: ScriptInfo, project: Project);
+        isExternalModuleOrHasOnlyAmbientExternalModules(): boolean;
+        private containsOnlyAmbientModules(sourceFile);
+        private computeHash(text);
+        private getSourceFile();
+        updateShapeSignature(): boolean;
+    }
+    interface Builder {
+        readonly project: Project;
+        getFilesAffectedBy(scriptInfo: ScriptInfo): string[];
+        onProjectUpdateGraph(): void;
+        emitFile(scriptInfo: ScriptInfo, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): boolean;
+        clear(): void;
+    }
+    function createBuilder(project: Project): Builder;
 }
 declare namespace ts.server {
     enum ProjectKind {
@@ -4318,184 +4817,6 @@ declare namespace ts.server {
         openExternalProjects(projects: protocol.ExternalProject[]): void;
         openExternalProject(proj: protocol.ExternalProject, suppressRefreshOfInferredProjects?: boolean): void;
     }
-}
-declare namespace ts.server {
-    interface PendingErrorCheck {
-        fileName: NormalizedPath;
-        project: Project;
-    }
-    interface EventSender {
-        event(payload: any, eventName: string): void;
-    }
-    namespace CommandNames {
-        const Brace: protocol.CommandTypes.Brace;
-        const BraceCompletion: protocol.CommandTypes.BraceCompletion;
-        const Change: protocol.CommandTypes.Change;
-        const Close: protocol.CommandTypes.Close;
-        const Completions: protocol.CommandTypes.Completions;
-        const CompletionDetails: protocol.CommandTypes.CompletionDetails;
-        const CompileOnSaveAffectedFileList: protocol.CommandTypes.CompileOnSaveAffectedFileList;
-        const CompileOnSaveEmitFile: protocol.CommandTypes.CompileOnSaveEmitFile;
-        const Configure: protocol.CommandTypes.Configure;
-        const Definition: protocol.CommandTypes.Definition;
-        const Exit: protocol.CommandTypes.Exit;
-        const Format: protocol.CommandTypes.Format;
-        const Formatonkey: protocol.CommandTypes.Formatonkey;
-        const Geterr: protocol.CommandTypes.Geterr;
-        const GeterrForProject: protocol.CommandTypes.GeterrForProject;
-        const Implementation: protocol.CommandTypes.Implementation;
-        const SemanticDiagnosticsSync: protocol.CommandTypes.SemanticDiagnosticsSync;
-        const SyntacticDiagnosticsSync: protocol.CommandTypes.SyntacticDiagnosticsSync;
-        const NavBar: protocol.CommandTypes.NavBar;
-        const NavTree: protocol.CommandTypes.NavTree;
-        const NavTreeFull: protocol.CommandTypes.NavTreeFull;
-        const Navto: protocol.CommandTypes.Navto;
-        const Occurrences: protocol.CommandTypes.Occurrences;
-        const DocumentHighlights: protocol.CommandTypes.DocumentHighlights;
-        const Open: protocol.CommandTypes.Open;
-        const Quickinfo: protocol.CommandTypes.Quickinfo;
-        const References: protocol.CommandTypes.References;
-        const Reload: protocol.CommandTypes.Reload;
-        const Rename: protocol.CommandTypes.Rename;
-        const Saveto: protocol.CommandTypes.Saveto;
-        const SignatureHelp: protocol.CommandTypes.SignatureHelp;
-        const TypeDefinition: protocol.CommandTypes.TypeDefinition;
-        const ProjectInfo: protocol.CommandTypes.ProjectInfo;
-        const ReloadProjects: protocol.CommandTypes.ReloadProjects;
-        const Unknown: protocol.CommandTypes.Unknown;
-        const OpenExternalProject: protocol.CommandTypes.OpenExternalProject;
-        const OpenExternalProjects: protocol.CommandTypes.OpenExternalProjects;
-        const CloseExternalProject: protocol.CommandTypes.CloseExternalProject;
-        const TodoComments: protocol.CommandTypes.TodoComments;
-        const Indentation: protocol.CommandTypes.Indentation;
-        const DocCommentTemplate: protocol.CommandTypes.DocCommentTemplate;
-        const CompilerOptionsForInferredProjects: protocol.CommandTypes.CompilerOptionsForInferredProjects;
-        const GetCodeFixes: protocol.CommandTypes.GetCodeFixes;
-        const GetSupportedCodeFixes: protocol.CommandTypes.GetSupportedCodeFixes;
-    }
-    function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string;
-    class Session implements EventSender {
-        private host;
-        protected readonly typingsInstaller: ITypingsInstaller;
-        private byteLength;
-        private hrtime;
-        protected logger: Logger;
-        protected readonly canUseEvents: boolean;
-        private readonly gcTimer;
-        protected projectService: ProjectService;
-        private errorTimer;
-        private immediateId;
-        private changeSeq;
-        private eventHander;
-        constructor(host: ServerHost, cancellationToken: HostCancellationToken, useSingleInferredProject: boolean, typingsInstaller: ITypingsInstaller, byteLength: (buf: string, encoding?: string) => number, hrtime: (start?: number[]) => number[], logger: Logger, canUseEvents: boolean, eventHandler?: ProjectServiceEventHandler);
-        private defaultEventHandler(event);
-        logError(err: Error, cmd: string): void;
-        send(msg: protocol.Message): void;
-        configFileDiagnosticEvent(triggerFile: string, configFile: string, diagnostics: ts.Diagnostic[]): void;
-        event(info: any, eventName: string): void;
-        output(info: any, cmdName: string, reqSeq?: number, errorMsg?: string): void;
-        private semanticCheck(file, project);
-        private syntacticCheck(file, project);
-        private updateProjectStructure(seq, matchSeq, ms?);
-        private updateErrorCheck(checkList, seq, matchSeq, ms?, followMs?, requireOpen?);
-        private cleanProjects(caption, projects);
-        private cleanup();
-        private getEncodedSemanticClassifications(args);
-        private getProject(projectFileName);
-        private getCompilerOptionsDiagnostics(args);
-        private convertToDiagnosticsWithLinePosition(diagnostics, scriptInfo);
-        private getDiagnosticsWorker(args, isSemantic, selector, includeLinePosition);
-        private getDefinition(args, simplifiedResult);
-        private getTypeDefinition(args);
-        private getImplementation(args, simplifiedResult);
-        private getOccurrences(args);
-        private getSyntacticDiagnosticsSync(args);
-        private getSemanticDiagnosticsSync(args);
-        private getDocumentHighlights(args, simplifiedResult);
-        private setCompilerOptionsForInferredProjects(args);
-        private getProjectInfo(args);
-        private getProjectInfoWorker(uncheckedFileName, projectFileName, needFileNameList);
-        private getRenameInfo(args);
-        private getProjects(args);
-        private getRenameLocations(args, simplifiedResult);
-        private getReferences(args, simplifiedResult);
-        private openClientFile(fileName, fileContent?, scriptKind?);
-        private getPosition(args, scriptInfo);
-        private getFileAndProject(args, errorOnMissingProject?);
-        private getFileAndProjectWithoutRefreshingInferredProjects(args, errorOnMissingProject?);
-        private getFileAndProjectWorker(uncheckedFileName, projectFileName, refreshInferredProjects, errorOnMissingProject);
-        private getOutliningSpans(args);
-        private getTodoComments(args);
-        private getDocCommentTemplate(args);
-        private getIndentation(args);
-        private getBreakpointStatement(args);
-        private getNameOrDottedNameSpan(args);
-        private isValidBraceCompletion(args);
-        private getQuickInfoWorker(args, simplifiedResult);
-        private getFormattingEditsForRange(args);
-        private getFormattingEditsForRangeFull(args);
-        private getFormattingEditsForDocumentFull(args);
-        private getFormattingEditsAfterKeystrokeFull(args);
-        private getFormattingEditsAfterKeystroke(args);
-        private getCompletions(args, simplifiedResult);
-        private getCompletionEntryDetails(args);
-        private getCompileOnSaveAffectedFileList(args);
-        private emitFile(args);
-        private getSignatureHelpItems(args, simplifiedResult);
-        private getDiagnostics(delay, fileNames);
-        private change(args);
-        private reload(args, reqSeq);
-        private saveToTmp(fileName, tempFileName);
-        private closeClientFile(fileName);
-        private decorateNavigationBarItems(items, scriptInfo);
-        private getNavigationBarItems(args, simplifiedResult);
-        private decorateNavigationTree(tree, scriptInfo);
-        private decorateSpan(span, scriptInfo);
-        private getNavigationTree(args, simplifiedResult);
-        private getNavigateToItems(args, simplifiedResult);
-        private getSupportedCodeFixes();
-        private getCodeFixes(args, simplifiedResult);
-        private mapCodeAction(codeAction, scriptInfo);
-        private convertTextChangeToCodeEdit(change, scriptInfo);
-        private getBraceMatching(args, simplifiedResult);
-        getDiagnosticsForProject(delay: number, fileName: string): void;
-        getCanonicalFileName(fileName: string): string;
-        exit(): void;
-        private notRequired();
-        private requiredResponse(response);
-        private handlers;
-        addProtocolHandler(command: string, handler: (request: protocol.Request) => {
-            response?: any;
-            responseRequired: boolean;
-        }): void;
-        executeCommand(request: protocol.Request): {
-            response?: any;
-            responseRequired?: boolean;
-        };
-        onMessage(message: string): void;
-    }
-}
-declare namespace ts.server {
-    function shouldEmitFile(scriptInfo: ScriptInfo): boolean;
-    class BuilderFileInfo {
-        readonly scriptInfo: ScriptInfo;
-        readonly project: Project;
-        private lastCheckedShapeSignature;
-        constructor(scriptInfo: ScriptInfo, project: Project);
-        isExternalModuleOrHasOnlyAmbientExternalModules(): boolean;
-        private containsOnlyAmbientModules(sourceFile);
-        private computeHash(text);
-        private getSourceFile();
-        updateShapeSignature(): boolean;
-    }
-    interface Builder {
-        readonly project: Project;
-        getFilesAffectedBy(scriptInfo: ScriptInfo): string[];
-        onProjectUpdateGraph(): void;
-        emitFile(scriptInfo: ScriptInfo, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): boolean;
-        clear(): void;
-    }
-    function createBuilder(project: Project): Builder;
 }
 
 export = ts;

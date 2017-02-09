@@ -326,42 +326,43 @@ declare namespace ts {
         SpreadAssignment = 261,
         EnumMember = 262,
         SourceFile = 263,
-        JSDocTypeExpression = 264,
-        JSDocAllType = 265,
-        JSDocUnknownType = 266,
-        JSDocArrayType = 267,
-        JSDocUnionType = 268,
-        JSDocTupleType = 269,
-        JSDocNullableType = 270,
-        JSDocNonNullableType = 271,
-        JSDocRecordType = 272,
-        JSDocRecordMember = 273,
-        JSDocTypeReference = 274,
-        JSDocOptionalType = 275,
-        JSDocFunctionType = 276,
-        JSDocVariadicType = 277,
-        JSDocConstructorType = 278,
-        JSDocThisType = 279,
-        JSDocComment = 280,
-        JSDocTag = 281,
-        JSDocAugmentsTag = 282,
-        JSDocParameterTag = 283,
-        JSDocReturnTag = 284,
-        JSDocTypeTag = 285,
-        JSDocTemplateTag = 286,
-        JSDocTypedefTag = 287,
-        JSDocPropertyTag = 288,
-        JSDocTypeLiteral = 289,
-        JSDocLiteralType = 290,
-        JSDocNullKeyword = 291,
-        JSDocUndefinedKeyword = 292,
-        JSDocNeverKeyword = 293,
-        SyntaxList = 294,
-        NotEmittedStatement = 295,
-        PartiallyEmittedExpression = 296,
-        MergeDeclarationMarker = 297,
-        EndOfDeclarationMarker = 298,
-        Count = 299,
+        Bundle = 264,
+        JSDocTypeExpression = 265,
+        JSDocAllType = 266,
+        JSDocUnknownType = 267,
+        JSDocArrayType = 268,
+        JSDocUnionType = 269,
+        JSDocTupleType = 270,
+        JSDocNullableType = 271,
+        JSDocNonNullableType = 272,
+        JSDocRecordType = 273,
+        JSDocRecordMember = 274,
+        JSDocTypeReference = 275,
+        JSDocOptionalType = 276,
+        JSDocFunctionType = 277,
+        JSDocVariadicType = 278,
+        JSDocConstructorType = 279,
+        JSDocThisType = 280,
+        JSDocComment = 281,
+        JSDocTag = 282,
+        JSDocAugmentsTag = 283,
+        JSDocParameterTag = 284,
+        JSDocReturnTag = 285,
+        JSDocTypeTag = 286,
+        JSDocTemplateTag = 287,
+        JSDocTypedefTag = 288,
+        JSDocPropertyTag = 289,
+        JSDocTypeLiteral = 290,
+        JSDocLiteralType = 291,
+        JSDocNullKeyword = 292,
+        JSDocUndefinedKeyword = 293,
+        JSDocNeverKeyword = 294,
+        SyntaxList = 295,
+        NotEmittedStatement = 296,
+        PartiallyEmittedExpression = 297,
+        MergeDeclarationMarker = 298,
+        EndOfDeclarationMarker = 299,
+        Count = 300,
         FirstAssignment = 57,
         LastAssignment = 69,
         FirstCompoundAssignment = 58,
@@ -387,10 +388,10 @@ declare namespace ts {
         FirstBinaryOperator = 26,
         LastBinaryOperator = 69,
         FirstNode = 142,
-        FirstJSDocNode = 264,
-        LastJSDocNode = 293,
-        FirstJSDocTagNode = 280,
-        LastJSDocTagNode = 293,
+        FirstJSDocNode = 265,
+        LastJSDocNode = 294,
+        FirstJSDocTagNode = 281,
+        LastJSDocTagNode = 294,
     }
     enum NodeFlags {
         None = 0,
@@ -743,6 +744,10 @@ declare namespace ts {
     interface OmittedExpression extends Expression {
         kind: SyntaxKind.OmittedExpression;
     }
+    interface PartiallyEmittedExpression extends LeftHandSideExpression {
+        kind: SyntaxKind.PartiallyEmittedExpression;
+        expression: Expression;
+    }
     interface UnaryExpression extends Expression {
         _unaryExpressionBrand: any;
     }
@@ -1044,6 +1049,9 @@ declare namespace ts {
     interface Statement extends Node {
         _statementBrand: any;
     }
+    interface NotEmittedStatement extends Statement {
+        kind: SyntaxKind.NotEmittedStatement;
+    }
     interface EmptyStatement extends Statement {
         kind: SyntaxKind.EmptyStatement;
     }
@@ -1210,20 +1218,22 @@ declare namespace ts {
         name: Identifier;
         members: NodeArray<EnumMember>;
     }
-    type ModuleBody = ModuleBlock | ModuleDeclaration;
     type ModuleName = Identifier | StringLiteral;
+    type ModuleBody = NamespaceBody | JSDocNamespaceBody;
     interface ModuleDeclaration extends DeclarationStatement {
         kind: SyntaxKind.ModuleDeclaration;
         name: Identifier | StringLiteral;
-        body?: ModuleBlock | NamespaceDeclaration | JSDocNamespaceDeclaration | Identifier;
+        body?: ModuleBody | JSDocNamespaceDeclaration | Identifier;
     }
+    type NamespaceBody = ModuleBlock | NamespaceDeclaration;
     interface NamespaceDeclaration extends ModuleDeclaration {
         name: Identifier;
-        body: ModuleBlock | NamespaceDeclaration;
+        body: NamespaceBody;
     }
+    type JSDocNamespaceBody = Identifier | JSDocNamespaceDeclaration;
     interface JSDocNamespaceDeclaration extends ModuleDeclaration {
         name: Identifier;
-        body: JSDocNamespaceDeclaration | Identifier;
+        body: JSDocNamespaceBody;
     }
     interface ModuleBlock extends Node, Statement {
         kind: SyntaxKind.ModuleBlock;
@@ -1501,6 +1511,10 @@ declare namespace ts {
          */
         hasNoDefaultLib: boolean;
         languageVersion: ScriptTarget;
+    }
+    interface Bundle extends Node {
+        kind: SyntaxKind.Bundle;
+        sourceFiles: SourceFile[];
     }
     interface ScriptReferenceHost {
         getCompilerOptions(): CompilerOptions;
@@ -2187,6 +2201,120 @@ declare namespace ts {
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         getEnvironmentVariable?(name: string): string;
     }
+    enum EmitFlags {
+        SingleLine = 1,
+        AdviseOnEmitNode = 2,
+        NoSubstitution = 4,
+        CapturesThis = 8,
+        NoLeadingSourceMap = 16,
+        NoTrailingSourceMap = 32,
+        NoSourceMap = 48,
+        NoNestedSourceMaps = 64,
+        NoTokenLeadingSourceMaps = 128,
+        NoTokenTrailingSourceMaps = 256,
+        NoTokenSourceMaps = 384,
+        NoLeadingComments = 512,
+        NoTrailingComments = 1024,
+        NoComments = 1536,
+        NoNestedComments = 2048,
+        HelperName = 4096,
+        ExportName = 8192,
+        LocalName = 16384,
+        Indented = 32768,
+        NoIndentation = 65536,
+        AsyncFunctionBody = 131072,
+        ReuseTempVariableScope = 262144,
+        CustomPrologue = 524288,
+        NoHoisting = 1048576,
+        HasEndOfDeclarationMarker = 2097152,
+    }
+    interface EmitHelper {
+        readonly name: string;
+        readonly scoped: boolean;
+        readonly text: string;
+        readonly priority?: number;
+    }
+    enum EmitHint {
+        SourceFile = 0,
+        Expression = 1,
+        IdentifierName = 2,
+        Unspecified = 3,
+    }
+    interface Printer {
+        /**
+         * Print a node and its subtree as-is, without any emit transformations.
+         * @param hint A value indicating the purpose of a node. This is primarily used to
+         * distinguish between an `Identifier` used in an expression position, versus an
+         * `Identifier` used as an `IdentifierName` as part of a declaration. For most nodes you
+         * should just pass `Unspecified`.
+         * @param node The node to print. The node and its subtree are printed as-is, without any
+         * emit transformations.
+         * @param sourceFile A source file that provides context for the node. The source text of
+         * the file is used to emit the original source content for literals and identifiers, while
+         * the identifiers of the source file are used when generating unique names to avoid
+         * collisions.
+         */
+        printNode(hint: EmitHint, node: Node, sourceFile: SourceFile): string;
+        /**
+         * Prints a source file as-is, without any emit transformations.
+         */
+        printFile(sourceFile: SourceFile): string;
+        /**
+         * Prints a bundle of source files as-is, without any emit transformations.
+         */
+        printBundle(bundle: Bundle): string;
+    }
+    interface PrintHandlers {
+        /**
+         * A hook used by the Printer when generating unique names to avoid collisions with
+         * globally defined names that exist outside of the current source file.
+         */
+        hasGlobalName?(name: string): boolean;
+        /**
+         * A hook used by the Printer to provide notifications prior to emitting a node. A
+         * compatible implementation **must** invoke `emitCallback` with the provided `hint` and
+         * `node` values.
+         * @param hint A hint indicating the intended purpose of the node.
+         * @param node The node to emit.
+         * @param emitCallback A callback that, when invoked, will emit the node.
+         * @example
+         * ```ts
+         * var printer = createPrinter(printerOptions, {
+         *   onEmitNode(hint, node, emitCallback) {
+         *     // set up or track state prior to emitting the node...
+         *     emitCallback(hint, node);
+         *     // restore state after emitting the node...
+         *   }
+         * });
+         * ```
+         */
+        onEmitNode?(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
+        /**
+         * A hook used by the Printer to perform just-in-time substitution of a node. This is
+         * primarily used by node transformations that need to substitute one node for another,
+         * such as replacing `myExportedVar` with `exports.myExportedVar`. A compatible
+         * implementation **must** invoke `emitCallback` eith the provided `hint` and either
+         * the provided `node`, or its substitute.
+         * @param hint A hint indicating the intended purpose of the node.
+         * @param node The node to emit.
+         * @param emitCallback A callback that, when invoked, will emit the node.
+         * @example
+         * ```ts
+         * var printer = createPrinter(printerOptions, {
+         *   onSubstituteNode(hint, node, emitCallback) {
+         *     // perform substitution if necessary...
+         *     emitCallback(hint, node);
+         *   }
+         * });
+         * ```
+         */
+        onSubstituteNode?(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
+    }
+    interface PrinterOptions {
+        target?: ScriptTarget;
+        removeComments?: boolean;
+        newLine?: NewLineKind;
+    }
     interface TextSpan {
         start: number;
         length: number;
@@ -2201,7 +2329,7 @@ declare namespace ts {
 }
 declare namespace ts {
     /** The version of the TypeScript compiler release */
-    const version = "2.2.0";
+    const version = "2.2.1";
 }
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;
@@ -2349,6 +2477,347 @@ declare namespace ts {
         fileExists(fileName: string): boolean;
         readFile(fileName: string): string;
     }, errors?: Diagnostic[]): void;
+    function getOriginalNode(node: Node): Node;
+    function getOriginalNode<T extends Node>(node: Node, nodeTest: (node: Node) => node is T): T;
+    /**
+     * Gets a value indicating whether a node originated in the parse tree.
+     *
+     * @param node The node to test.
+     */
+    function isParseTreeNode(node: Node): boolean;
+    /**
+     * Gets the original parse tree node for a node.
+     *
+     * @param node The original node.
+     * @returns The original parse tree node if found; otherwise, undefined.
+     */
+    function getParseTreeNode(node: Node): Node;
+    /**
+     * Gets the original parse tree node for a node.
+     *
+     * @param node The original node.
+     * @param nodeTest A callback used to ensure the correct type of parse tree node is returned.
+     * @returns The original parse tree node if found; otherwise, undefined.
+     */
+    function getParseTreeNode<T extends Node>(node: Node, nodeTest?: (node: Node) => node is T): T;
+}
+declare namespace ts {
+    /**
+     * Make `elements` into a `NodeArray<T>`. If `elements` is `undefined`, returns an empty `NodeArray<T>`.
+     */
+    function createNodeArray<T extends Node>(elements?: T[], hasTrailingComma?: boolean): NodeArray<T>;
+    function createLiteral(value: string): StringLiteral;
+    function createLiteral(value: number): NumericLiteral;
+    function createLiteral(value: boolean): BooleanLiteral;
+    /** Create a string literal whose source text is read from a source node during emit. */
+    function createLiteral(sourceNode: StringLiteral | NumericLiteral | Identifier): StringLiteral;
+    function createLiteral(value: string | number | boolean): PrimaryExpression;
+    function createNumericLiteral(value: string): NumericLiteral;
+    function createIdentifier(text: string): Identifier;
+    /** Create a unique temporary variable. */
+    function createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined): Identifier;
+    /** Create a unique temporary variable for use in a loop. */
+    function createLoopVariable(): Identifier;
+    /** Create a unique name based on the supplied text. */
+    function createUniqueName(text: string): Identifier;
+    /** Create a unique name generated for a node. */
+    function getGeneratedNameForNode(node: Node): Identifier;
+    function createToken<TKind extends SyntaxKind>(token: TKind): Token<TKind>;
+    function createSuper(): PrimaryExpression;
+    function createThis(): PrimaryExpression;
+    function createNull(): PrimaryExpression;
+    function createTrue(): BooleanLiteral;
+    function createFalse(): BooleanLiteral;
+    function createQualifiedName(left: EntityName, right: string | Identifier): QualifiedName;
+    function updateQualifiedName(node: QualifiedName, left: EntityName, right: Identifier): QualifiedName;
+    function createComputedPropertyName(expression: Expression): ComputedPropertyName;
+    function updateComputedPropertyName(node: ComputedPropertyName, expression: Expression): ComputedPropertyName;
+    function createParameter(decorators: Decorator[], modifiers: Modifier[], dotDotDotToken: DotDotDotToken, name: string | Identifier | BindingPattern, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression): ParameterDeclaration;
+    function updateParameter(node: ParameterDeclaration, decorators: Decorator[], modifiers: Modifier[], dotDotDotToken: DotDotDotToken, name: BindingName, type: TypeNode, initializer: Expression): ParameterDeclaration;
+    function createDecorator(expression: Expression): Decorator;
+    function updateDecorator(node: Decorator, expression: Expression): Decorator;
+    function createProperty(decorators: Decorator[], modifiers: Modifier[], name: string | PropertyName, questionToken: QuestionToken, type: TypeNode, initializer: Expression): PropertyDeclaration;
+    function updateProperty(node: PropertyDeclaration, decorators: Decorator[], modifiers: Modifier[], name: PropertyName, type: TypeNode, initializer: Expression): PropertyDeclaration;
+    function createMethod(decorators: Decorator[], modifiers: Modifier[], asteriskToken: AsteriskToken, name: string | PropertyName, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block): MethodDeclaration;
+    function updateMethod(node: MethodDeclaration, decorators: Decorator[], modifiers: Modifier[], name: PropertyName, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block): MethodDeclaration;
+    function createConstructor(decorators: Decorator[], modifiers: Modifier[], parameters: ParameterDeclaration[], body: Block): ConstructorDeclaration;
+    function updateConstructor(node: ConstructorDeclaration, decorators: Decorator[], modifiers: Modifier[], parameters: ParameterDeclaration[], body: Block): ConstructorDeclaration;
+    function createGetAccessor(decorators: Decorator[], modifiers: Modifier[], name: string | PropertyName, parameters: ParameterDeclaration[], type: TypeNode, body: Block): GetAccessorDeclaration;
+    function updateGetAccessor(node: GetAccessorDeclaration, decorators: Decorator[], modifiers: Modifier[], name: PropertyName, parameters: ParameterDeclaration[], type: TypeNode, body: Block): GetAccessorDeclaration;
+    function createSetAccessor(decorators: Decorator[], modifiers: Modifier[], name: string | PropertyName, parameters: ParameterDeclaration[], body: Block): SetAccessorDeclaration;
+    function updateSetAccessor(node: SetAccessorDeclaration, decorators: Decorator[], modifiers: Modifier[], name: PropertyName, parameters: ParameterDeclaration[], body: Block): SetAccessorDeclaration;
+    function createObjectBindingPattern(elements: BindingElement[]): ObjectBindingPattern;
+    function updateObjectBindingPattern(node: ObjectBindingPattern, elements: BindingElement[]): ObjectBindingPattern;
+    function createArrayBindingPattern(elements: ArrayBindingElement[]): ArrayBindingPattern;
+    function updateArrayBindingPattern(node: ArrayBindingPattern, elements: ArrayBindingElement[]): ArrayBindingPattern;
+    function createBindingElement(propertyName: string | PropertyName, dotDotDotToken: DotDotDotToken, name: string | BindingName, initializer?: Expression): BindingElement;
+    function updateBindingElement(node: BindingElement, dotDotDotToken: DotDotDotToken, propertyName: PropertyName, name: BindingName, initializer: Expression): BindingElement;
+    function createArrayLiteral(elements?: Expression[], multiLine?: boolean): ArrayLiteralExpression;
+    function updateArrayLiteral(node: ArrayLiteralExpression, elements: Expression[]): ArrayLiteralExpression;
+    function createObjectLiteral(properties?: ObjectLiteralElementLike[], multiLine?: boolean): ObjectLiteralExpression;
+    function updateObjectLiteral(node: ObjectLiteralExpression, properties: ObjectLiteralElementLike[]): ObjectLiteralExpression;
+    function createPropertyAccess(expression: Expression, name: string | Identifier): PropertyAccessExpression;
+    function updatePropertyAccess(node: PropertyAccessExpression, expression: Expression, name: Identifier): PropertyAccessExpression;
+    function createElementAccess(expression: Expression, index: number | Expression): ElementAccessExpression;
+    function updateElementAccess(node: ElementAccessExpression, expression: Expression, argumentExpression: Expression): ElementAccessExpression;
+    function createCall(expression: Expression, typeArguments: TypeNode[], argumentsArray: Expression[]): CallExpression;
+    function updateCall(node: CallExpression, expression: Expression, typeArguments: TypeNode[], argumentsArray: Expression[]): CallExpression;
+    function createNew(expression: Expression, typeArguments: TypeNode[], argumentsArray: Expression[]): NewExpression;
+    function updateNew(node: NewExpression, expression: Expression, typeArguments: TypeNode[], argumentsArray: Expression[]): NewExpression;
+    function createTaggedTemplate(tag: Expression, template: TemplateLiteral): TaggedTemplateExpression;
+    function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, template: TemplateLiteral): TaggedTemplateExpression;
+    function createTypeAssertion(type: TypeNode, expression: Expression): TypeAssertion;
+    function updateTypeAssertion(node: TypeAssertion, type: TypeNode, expression: Expression): TypeAssertion;
+    function createParen(expression: Expression): ParenthesizedExpression;
+    function updateParen(node: ParenthesizedExpression, expression: Expression): ParenthesizedExpression;
+    function createFunctionExpression(modifiers: Modifier[], asteriskToken: AsteriskToken, name: string | Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block): FunctionExpression;
+    function updateFunctionExpression(node: FunctionExpression, modifiers: Modifier[], name: Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block): FunctionExpression;
+    function createArrowFunction(modifiers: Modifier[], typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, equalsGreaterThanToken: EqualsGreaterThanToken, body: ConciseBody): ArrowFunction;
+    function updateArrowFunction(node: ArrowFunction, modifiers: Modifier[], typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: ConciseBody): ArrowFunction;
+    function createDelete(expression: Expression): DeleteExpression;
+    function updateDelete(node: DeleteExpression, expression: Expression): DeleteExpression;
+    function createTypeOf(expression: Expression): TypeOfExpression;
+    function updateTypeOf(node: TypeOfExpression, expression: Expression): TypeOfExpression;
+    function createVoid(expression: Expression): VoidExpression;
+    function updateVoid(node: VoidExpression, expression: Expression): VoidExpression;
+    function createAwait(expression: Expression): AwaitExpression;
+    function updateAwait(node: AwaitExpression, expression: Expression): AwaitExpression;
+    function createPrefix(operator: PrefixUnaryOperator, operand: Expression): PrefixUnaryExpression;
+    function updatePrefix(node: PrefixUnaryExpression, operand: Expression): PrefixUnaryExpression;
+    function createPostfix(operand: Expression, operator: PostfixUnaryOperator): PostfixUnaryExpression;
+    function updatePostfix(node: PostfixUnaryExpression, operand: Expression): PostfixUnaryExpression;
+    function createBinary(left: Expression, operator: BinaryOperator | BinaryOperatorToken, right: Expression): BinaryExpression;
+    function updateBinary(node: BinaryExpression, left: Expression, right: Expression): BinaryExpression;
+    function createConditional(condition: Expression, whenTrue: Expression, whenFalse: Expression): ConditionalExpression;
+    function createConditional(condition: Expression, questionToken: QuestionToken, whenTrue: Expression, colonToken: ColonToken, whenFalse: Expression): ConditionalExpression;
+    function updateConditional(node: ConditionalExpression, condition: Expression, whenTrue: Expression, whenFalse: Expression): ConditionalExpression;
+    function createTemplateExpression(head: TemplateHead, templateSpans: TemplateSpan[]): TemplateExpression;
+    function updateTemplateExpression(node: TemplateExpression, head: TemplateHead, templateSpans: TemplateSpan[]): TemplateExpression;
+    function createYield(expression?: Expression): YieldExpression;
+    function createYield(asteriskToken: AsteriskToken, expression: Expression): YieldExpression;
+    function updateYield(node: YieldExpression, expression: Expression): YieldExpression;
+    function createSpread(expression: Expression): SpreadElement;
+    function updateSpread(node: SpreadElement, expression: Expression): SpreadElement;
+    function createClassExpression(modifiers: Modifier[], name: string | Identifier, typeParameters: TypeParameterDeclaration[], heritageClauses: HeritageClause[], members: ClassElement[]): ClassExpression;
+    function updateClassExpression(node: ClassExpression, modifiers: Modifier[], name: Identifier, typeParameters: TypeParameterDeclaration[], heritageClauses: HeritageClause[], members: ClassElement[]): ClassExpression;
+    function createOmittedExpression(): OmittedExpression;
+    function createExpressionWithTypeArguments(typeArguments: TypeNode[], expression: Expression): ExpressionWithTypeArguments;
+    function updateExpressionWithTypeArguments(node: ExpressionWithTypeArguments, typeArguments: TypeNode[], expression: Expression): ExpressionWithTypeArguments;
+    function createAsExpression(expression: Expression, type: TypeNode): AsExpression;
+    function updateAsExpression(node: AsExpression, expression: Expression, type: TypeNode): AsExpression;
+    function createNonNullExpression(expression: Expression): NonNullExpression;
+    function updateNonNullExpression(node: NonNullExpression, expression: Expression): NonNullExpression;
+    function createTemplateSpan(expression: Expression, literal: TemplateMiddle | TemplateTail): TemplateSpan;
+    function updateTemplateSpan(node: TemplateSpan, expression: Expression, literal: TemplateMiddle | TemplateTail): TemplateSpan;
+    function createBlock(statements: Statement[], multiLine?: boolean): Block;
+    function updateBlock(node: Block, statements: Statement[]): Block;
+    function createVariableStatement(modifiers: Modifier[], declarationList: VariableDeclarationList | VariableDeclaration[]): VariableStatement;
+    function updateVariableStatement(node: VariableStatement, modifiers: Modifier[], declarationList: VariableDeclarationList): VariableStatement;
+    function createVariableDeclarationList(declarations: VariableDeclaration[], flags?: NodeFlags): VariableDeclarationList;
+    function updateVariableDeclarationList(node: VariableDeclarationList, declarations: VariableDeclaration[]): VariableDeclarationList;
+    function createVariableDeclaration(name: string | BindingName, type?: TypeNode, initializer?: Expression): VariableDeclaration;
+    function updateVariableDeclaration(node: VariableDeclaration, name: BindingName, type: TypeNode, initializer: Expression): VariableDeclaration;
+    function createEmptyStatement(): EmptyStatement;
+    function createStatement(expression: Expression): ExpressionStatement;
+    function updateStatement(node: ExpressionStatement, expression: Expression): ExpressionStatement;
+    function createIf(expression: Expression, thenStatement: Statement, elseStatement?: Statement): IfStatement;
+    function updateIf(node: IfStatement, expression: Expression, thenStatement: Statement, elseStatement: Statement): IfStatement;
+    function createDo(statement: Statement, expression: Expression): DoStatement;
+    function updateDo(node: DoStatement, statement: Statement, expression: Expression): DoStatement;
+    function createWhile(expression: Expression, statement: Statement): WhileStatement;
+    function updateWhile(node: WhileStatement, expression: Expression, statement: Statement): WhileStatement;
+    function createFor(initializer: ForInitializer, condition: Expression, incrementor: Expression, statement: Statement): ForStatement;
+    function updateFor(node: ForStatement, initializer: ForInitializer, condition: Expression, incrementor: Expression, statement: Statement): ForStatement;
+    function createForIn(initializer: ForInitializer, expression: Expression, statement: Statement): ForInStatement;
+    function updateForIn(node: ForInStatement, initializer: ForInitializer, expression: Expression, statement: Statement): ForInStatement;
+    function createForOf(initializer: ForInitializer, expression: Expression, statement: Statement): ForOfStatement;
+    function updateForOf(node: ForOfStatement, initializer: ForInitializer, expression: Expression, statement: Statement): ForOfStatement;
+    function createContinue(label?: string | Identifier): ContinueStatement;
+    function updateContinue(node: ContinueStatement, label: Identifier): ContinueStatement;
+    function createBreak(label?: string | Identifier): BreakStatement;
+    function updateBreak(node: BreakStatement, label: Identifier): BreakStatement;
+    function createReturn(expression?: Expression): ReturnStatement;
+    function updateReturn(node: ReturnStatement, expression: Expression): ReturnStatement;
+    function createWith(expression: Expression, statement: Statement): WithStatement;
+    function updateWith(node: WithStatement, expression: Expression, statement: Statement): WithStatement;
+    function createSwitch(expression: Expression, caseBlock: CaseBlock): SwitchStatement;
+    function updateSwitch(node: SwitchStatement, expression: Expression, caseBlock: CaseBlock): SwitchStatement;
+    function createLabel(label: string | Identifier, statement: Statement): LabeledStatement;
+    function updateLabel(node: LabeledStatement, label: Identifier, statement: Statement): LabeledStatement;
+    function createThrow(expression: Expression): ThrowStatement;
+    function updateThrow(node: ThrowStatement, expression: Expression): ThrowStatement;
+    function createTry(tryBlock: Block, catchClause: CatchClause, finallyBlock: Block): TryStatement;
+    function updateTry(node: TryStatement, tryBlock: Block, catchClause: CatchClause, finallyBlock: Block): TryStatement;
+    function createFunctionDeclaration(decorators: Decorator[], modifiers: Modifier[], asteriskToken: AsteriskToken, name: string | Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block): FunctionDeclaration;
+    function updateFunctionDeclaration(node: FunctionDeclaration, decorators: Decorator[], modifiers: Modifier[], name: Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block): FunctionDeclaration;
+    function createClassDeclaration(decorators: Decorator[], modifiers: Modifier[], name: string | Identifier, typeParameters: TypeParameterDeclaration[], heritageClauses: HeritageClause[], members: ClassElement[]): ClassDeclaration;
+    function updateClassDeclaration(node: ClassDeclaration, decorators: Decorator[], modifiers: Modifier[], name: Identifier, typeParameters: TypeParameterDeclaration[], heritageClauses: HeritageClause[], members: ClassElement[]): ClassDeclaration;
+    function createEnumDeclaration(decorators: Decorator[], modifiers: Modifier[], name: string | Identifier, members: EnumMember[]): EnumDeclaration;
+    function updateEnumDeclaration(node: EnumDeclaration, decorators: Decorator[], modifiers: Modifier[], name: Identifier, members: EnumMember[]): EnumDeclaration;
+    function createModuleDeclaration(decorators: Decorator[], modifiers: Modifier[], name: ModuleName, body: ModuleBody, flags?: NodeFlags): ModuleDeclaration;
+    function updateModuleDeclaration(node: ModuleDeclaration, decorators: Decorator[], modifiers: Modifier[], name: ModuleName, body: ModuleBody): ModuleDeclaration;
+    function createModuleBlock(statements: Statement[]): ModuleBlock;
+    function updateModuleBlock(node: ModuleBlock, statements: Statement[]): ModuleBlock;
+    function createCaseBlock(clauses: CaseOrDefaultClause[]): CaseBlock;
+    function updateCaseBlock(node: CaseBlock, clauses: CaseOrDefaultClause[]): CaseBlock;
+    function createImportEqualsDeclaration(decorators: Decorator[], modifiers: Modifier[], name: string | Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
+    function updateImportEqualsDeclaration(node: ImportEqualsDeclaration, decorators: Decorator[], modifiers: Modifier[], name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
+    function createImportDeclaration(decorators: Decorator[], modifiers: Modifier[], importClause: ImportClause, moduleSpecifier?: Expression): ImportDeclaration;
+    function updateImportDeclaration(node: ImportDeclaration, decorators: Decorator[], modifiers: Modifier[], importClause: ImportClause, moduleSpecifier: Expression): ImportDeclaration;
+    function createImportClause(name: Identifier, namedBindings: NamedImportBindings): ImportClause;
+    function updateImportClause(node: ImportClause, name: Identifier, namedBindings: NamedImportBindings): ImportClause;
+    function createNamespaceImport(name: Identifier): NamespaceImport;
+    function updateNamespaceImport(node: NamespaceImport, name: Identifier): NamespaceImport;
+    function createNamedImports(elements: ImportSpecifier[]): NamedImports;
+    function updateNamedImports(node: NamedImports, elements: ImportSpecifier[]): NamedImports;
+    function createImportSpecifier(propertyName: Identifier, name: Identifier): ImportSpecifier;
+    function updateImportSpecifier(node: ImportSpecifier, propertyName: Identifier, name: Identifier): ImportSpecifier;
+    function createExportAssignment(decorators: Decorator[], modifiers: Modifier[], isExportEquals: boolean, expression: Expression): ExportAssignment;
+    function updateExportAssignment(node: ExportAssignment, decorators: Decorator[], modifiers: Modifier[], expression: Expression): ExportAssignment;
+    function createExportDeclaration(decorators: Decorator[], modifiers: Modifier[], exportClause: NamedExports, moduleSpecifier?: Expression): ExportDeclaration;
+    function updateExportDeclaration(node: ExportDeclaration, decorators: Decorator[], modifiers: Modifier[], exportClause: NamedExports, moduleSpecifier: Expression): ExportDeclaration;
+    function createNamedExports(elements: ExportSpecifier[]): NamedExports;
+    function updateNamedExports(node: NamedExports, elements: ExportSpecifier[]): NamedExports;
+    function createExportSpecifier(name: string | Identifier, propertyName?: string | Identifier): ExportSpecifier;
+    function updateExportSpecifier(node: ExportSpecifier, name: Identifier, propertyName: Identifier): ExportSpecifier;
+    function createExternalModuleReference(expression: Expression): ExternalModuleReference;
+    function updateExternalModuleReference(node: ExternalModuleReference, expression: Expression): ExternalModuleReference;
+    function createJsxElement(openingElement: JsxOpeningElement, children: JsxChild[], closingElement: JsxClosingElement): JsxElement;
+    function updateJsxElement(node: JsxElement, openingElement: JsxOpeningElement, children: JsxChild[], closingElement: JsxClosingElement): JsxElement;
+    function createJsxSelfClosingElement(tagName: JsxTagNameExpression, attributes: JsxAttributeLike[]): JsxSelfClosingElement;
+    function updateJsxSelfClosingElement(node: JsxSelfClosingElement, tagName: JsxTagNameExpression, attributes: JsxAttributeLike[]): JsxSelfClosingElement;
+    function createJsxOpeningElement(tagName: JsxTagNameExpression, attributes: JsxAttributeLike[]): JsxOpeningElement;
+    function updateJsxOpeningElement(node: JsxOpeningElement, tagName: JsxTagNameExpression, attributes: JsxAttributeLike[]): JsxOpeningElement;
+    function createJsxClosingElement(tagName: JsxTagNameExpression): JsxClosingElement;
+    function updateJsxClosingElement(node: JsxClosingElement, tagName: JsxTagNameExpression): JsxClosingElement;
+    function createJsxAttribute(name: Identifier, initializer: StringLiteral | JsxExpression): JsxAttribute;
+    function updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: StringLiteral | JsxExpression): JsxAttribute;
+    function createJsxSpreadAttribute(expression: Expression): JsxSpreadAttribute;
+    function updateJsxSpreadAttribute(node: JsxSpreadAttribute, expression: Expression): JsxSpreadAttribute;
+    function createJsxExpression(expression: Expression, dotDotDotToken: DotDotDotToken): JsxExpression;
+    function updateJsxExpression(node: JsxExpression, expression: Expression): JsxExpression;
+    function createHeritageClause(token: SyntaxKind, types: ExpressionWithTypeArguments[]): HeritageClause;
+    function updateHeritageClause(node: HeritageClause, types: ExpressionWithTypeArguments[]): HeritageClause;
+    function createCaseClause(expression: Expression, statements: Statement[]): CaseClause;
+    function updateCaseClause(node: CaseClause, expression: Expression, statements: Statement[]): CaseClause;
+    function createDefaultClause(statements: Statement[]): DefaultClause;
+    function updateDefaultClause(node: DefaultClause, statements: Statement[]): DefaultClause;
+    function createCatchClause(variableDeclaration: string | VariableDeclaration, block: Block): CatchClause;
+    function updateCatchClause(node: CatchClause, variableDeclaration: VariableDeclaration, block: Block): CatchClause;
+    function createPropertyAssignment(name: string | PropertyName, initializer: Expression): PropertyAssignment;
+    function updatePropertyAssignment(node: PropertyAssignment, name: PropertyName, initializer: Expression): PropertyAssignment;
+    function createShorthandPropertyAssignment(name: string | Identifier, objectAssignmentInitializer: Expression): ShorthandPropertyAssignment;
+    function createSpreadAssignment(expression: Expression): SpreadAssignment;
+    function updateShorthandPropertyAssignment(node: ShorthandPropertyAssignment, name: Identifier, objectAssignmentInitializer: Expression): ShorthandPropertyAssignment;
+    function updateSpreadAssignment(node: SpreadAssignment, expression: Expression): SpreadAssignment;
+    function createEnumMember(name: string | PropertyName, initializer?: Expression): EnumMember;
+    function updateEnumMember(node: EnumMember, name: PropertyName, initializer: Expression | undefined): EnumMember;
+    function updateSourceFileNode(node: SourceFile, statements: Statement[]): SourceFile;
+    /**
+     * Creates a shallow, memberwise clone of a node for mutation.
+     */
+    function getMutableClone<T extends Node>(node: T): T;
+    /**
+     * Creates a synthetic statement to act as a placeholder for a not-emitted statement in
+     * order to preserve comments.
+     *
+     * @param original The original statement.
+     */
+    function createNotEmittedStatement(original: Node): NotEmittedStatement;
+    /**
+     * Creates a synthetic expression to act as a placeholder for a not-emitted expression in
+     * order to preserve comments or sourcemap positions.
+     *
+     * @param expression The inner expression to emit.
+     * @param original The original outer expression.
+     * @param location The location for the expression. Defaults to the positions from "original" if provided.
+     */
+    function createPartiallyEmittedExpression(expression: Expression, original?: Node): PartiallyEmittedExpression;
+    function updatePartiallyEmittedExpression(node: PartiallyEmittedExpression, expression: Expression): PartiallyEmittedExpression;
+    function createBundle(sourceFiles: SourceFile[]): Bundle;
+    function updateBundle(node: Bundle, sourceFiles: SourceFile[]): Bundle;
+    function createComma(left: Expression, right: Expression): Expression;
+    function createLessThan(left: Expression, right: Expression): Expression;
+    function createAssignment(left: ObjectLiteralExpression | ArrayLiteralExpression, right: Expression): DestructuringAssignment;
+    function createAssignment(left: Expression, right: Expression): BinaryExpression;
+    function createStrictEquality(left: Expression, right: Expression): BinaryExpression;
+    function createStrictInequality(left: Expression, right: Expression): BinaryExpression;
+    function createAdd(left: Expression, right: Expression): BinaryExpression;
+    function createSubtract(left: Expression, right: Expression): BinaryExpression;
+    function createPostfixIncrement(operand: Expression): PostfixUnaryExpression;
+    function createLogicalAnd(left: Expression, right: Expression): BinaryExpression;
+    function createLogicalOr(left: Expression, right: Expression): BinaryExpression;
+    function createLogicalNot(operand: Expression): PrefixUnaryExpression;
+    function createVoidZero(): VoidExpression;
+    function createExportDefault(expression: Expression): ExportAssignment;
+    function createExternalModuleExport(exportName: Identifier): ExportDeclaration;
+    /**
+     * Clears any EmitNode entries from parse-tree nodes.
+     * @param sourceFile A source file.
+     */
+    function disposeEmitNodes(sourceFile: SourceFile): void;
+    function setTextRange<T extends TextRange>(range: T, location: TextRange | undefined): T;
+    /**
+     * Gets flags that control emit behavior of a node.
+     */
+    function getEmitFlags(node: Node): EmitFlags;
+    /**
+     * Sets flags that control emit behavior of a node.
+     */
+    function setEmitFlags<T extends Node>(node: T, emitFlags: EmitFlags): T;
+    /**
+     * Gets a custom text range to use when emitting source maps.
+     */
+    function getSourceMapRange(node: Node): TextRange;
+    /**
+     * Sets a custom text range to use when emitting source maps.
+     */
+    function setSourceMapRange<T extends Node>(node: T, range: TextRange): T;
+    /**
+     * Gets the TextRange to use for source maps for a token of a node.
+     */
+    function getTokenSourceMapRange(node: Node, token: SyntaxKind): TextRange;
+    /**
+     * Sets the TextRange to use for source maps for a token of a node.
+     */
+    function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange): T;
+    /**
+     * Gets a custom text range to use when emitting comments.
+     */
+    function getCommentRange(node: Node): TextRange;
+    /**
+     * Sets a custom text range to use when emitting comments.
+     */
+    function setCommentRange<T extends Node>(node: T, range: TextRange): T;
+    /**
+     * Gets the constant value to emit for an expression.
+     */
+    function getConstantValue(node: PropertyAccessExpression | ElementAccessExpression): number;
+    /**
+     * Sets the constant value to emit for an expression.
+     */
+    function setConstantValue(node: PropertyAccessExpression | ElementAccessExpression, value: number): PropertyAccessExpression | ElementAccessExpression;
+    /**
+     * Adds an EmitHelper to a node.
+     */
+    function addEmitHelper<T extends Node>(node: T, helper: EmitHelper): T;
+    /**
+     * Add EmitHelpers to a node.
+     */
+    function addEmitHelpers<T extends Node>(node: T, helpers: EmitHelper[] | undefined): T;
+    /**
+     * Removes an EmitHelper from a node.
+     */
+    function removeEmitHelper(node: Node, helper: EmitHelper): boolean;
+    /**
+     * Gets the EmitHelpers of a node.
+     */
+    function getEmitHelpers(node: Node): EmitHelper[] | undefined;
+    /**
+     * Moves matching emit helpers from a source node to a target node.
+     */
+    function moveEmitHelpers(source: Node, target: Node, predicate: (helper: EmitHelper) => boolean): void;
+    function setOriginalNode<T extends Node>(node: T, original: Node): T;
 }
 declare namespace ts {
     function createNode(kind: SyntaxKind, pos?: number, end?: number): Node;
@@ -2405,6 +2874,9 @@ declare namespace ts {
     function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache): ResolvedModuleWithFailedLookupLocations;
     function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache): ResolvedModuleWithFailedLookupLocations;
     function classicNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: NonRelativeModuleNameResolutionCache): ResolvedModuleWithFailedLookupLocations;
+}
+declare namespace ts {
+    function createPrinter(printerOptions?: PrinterOptions, handlers?: PrintHandlers): Printer;
 }
 declare namespace ts {
     function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName?: string): string;
