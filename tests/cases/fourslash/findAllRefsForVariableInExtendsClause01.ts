@@ -1,6 +1,6 @@
 ﻿/// <reference path="fourslash.ts"/>
 
-////var [|Base|] = class { };
+////var [|{| "isWriteAccess": true, "isDefinition": true |}Base|] = class { };
 ////class C extends [|Base|] { }
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("var Base: typeof (Anonymous class)");

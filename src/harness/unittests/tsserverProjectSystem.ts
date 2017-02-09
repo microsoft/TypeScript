@@ -3031,6 +3031,54 @@ namespace ts.projectSystem {
         });
     });
 
+    describe("emit with outFile or out setting", () => {
+        function test(opts: CompilerOptions, expectedUsesOutFile: boolean) {
+            const f1 = {
+                path: "/a/a.ts",
+                content: "let x = 1"
+            };
+            const f2 = {
+                path: "/a/b.ts",
+                content: "let y = 1"
+            };
+            const config = {
+                path: "/a/tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: opts,
+                    compileOnSave: true
+                })
+            };
+            const host = createServerHost([f1, f2, config]);
+            const session = createSession(host);
+            session.executeCommand(<protocol.OpenRequest>{
+                seq: 1,
+                type: "request",
+                command: "open",
+                arguments: { file: f1.path }
+            });
+            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 1 });
+            const { response } = session.executeCommand(<protocol.CompileOnSaveAffectedFileListRequest>{
+                seq: 2,
+                type: "request",
+                command: "compileOnSaveAffectedFileList",
+                arguments: { file: f1.path }
+            });
+            assert.equal((<protocol.CompileOnSaveAffectedFileListSingleProject[]>response).length, 1, "expected output for 1 project");
+            assert.equal((<protocol.CompileOnSaveAffectedFileListSingleProject[]>response)[0].fileNames.length, 2, "expected output for 1 project");
+            assert.equal((<protocol.CompileOnSaveAffectedFileListSingleProject[]>response)[0].projectUsesOutFile, expectedUsesOutFile, "usesOutFile");
+        }
+
+        it ("projectUsesOutFile should not be returned if not set", () => {
+            test({}, /*expectedUsesOutFile*/ false);
+        });
+        it ("projectUsesOutFile should be true if outFile is set", () => {
+            test({ outFile: "/a/out.js" }, /*expectedUsesOutFile*/ true);
+        });
+        it ("projectUsesOutFile should be true if out is set", () => {
+            test({ out: "/a/out.js" }, /*expectedUsesOutFile*/ true);
+        });
+    });
+
     describe("import helpers", () => {
         it("should not crash in tsserver", () => {
             const f1 = {
@@ -3067,7 +3115,7 @@ namespace ts.projectSystem {
             let options = project.getCompilerOptions();
             assert.isTrue(options.maxNodeModuleJsDepth === 2);
 
-            // Assert the option sticks 
+            // Assert the option sticks
             projectService.setCompilerOptionsForInferredProjects({ target: ScriptTarget.ES2016 });
             project = projectService.inferredProjects[0];
             options = project.getCompilerOptions();

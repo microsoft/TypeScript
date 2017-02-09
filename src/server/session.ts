@@ -1040,7 +1040,8 @@ namespace ts.server {
                 if (project.compileOnSaveEnabled && project.languageServiceEnabled) {
                     result.push({
                         projectFileName: project.getProjectName(),
-                        fileNames: project.getCompileOnSaveAffectedFileList(info)
+                        fileNames: project.getCompileOnSaveAffectedFileList(info),
+                        projectUsesOutFile: !!project.getCompilerOptions().outFile || !!project.getCompilerOptions().out
                     });
                 }
             }

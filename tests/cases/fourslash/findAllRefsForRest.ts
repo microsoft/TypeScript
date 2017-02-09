@@ -1,11 +1,11 @@
 /// <reference path='fourslash.ts'/>
 ////interface Gen {
 ////    x: number
-////    [|parent|]: Gen;
+////    [|{| "isWriteAccess": true, "isDefinition": true |}parent|]: Gen;
 ////    millenial: string;
 ////}
 ////let t: Gen;
 ////var { x, ...rest } = t;
 ////rest.[|parent|];
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("(property) Gen.parent: Gen");
