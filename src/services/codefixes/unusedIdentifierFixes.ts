@@ -94,9 +94,9 @@ namespace ts.codefix {
                                 return removeSingleItem(namedImports.elements, token);
                             }
 
-                        // handle case where "import d, * as ns from './file'" 
+                        // handle case where "import d, * as ns from './file'"
                         // or "'import {a, b as ns} from './file'"
-                        case SyntaxKind.ImportClause: // this covers both 'import |d|' and 'import |d,| *'  
+                        case SyntaxKind.ImportClause: // this covers both 'import |d|' and 'import |d,| *'
                             const importClause = <ImportClause>token.parent;
                             if (!importClause.namedBindings) { // |import d from './file'| or |import * as ns from './file'|
                                 const importDecl = findImportDeclaration(importClause);
