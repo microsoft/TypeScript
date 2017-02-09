@@ -14179,6 +14179,7 @@ namespace ts {
          *         otherwise return undefined if tag-name of the opening-like element doesn't have call signatures
          */
         function resolveStatelessJsxOpeningLikeElement(openingLikeElement: JsxOpeningLikeElement, elementType: Type, candidatesOutArray: Signature[]): Signature {
+            // If this function is called from language service, elementType can be a union type. This is not possible if the function is called from compiler (see: resolveCustomJsxElementAttributesType)
             if (elementType.flags & TypeFlags.Union) {
                 const types = (elementType as UnionType).types;
                 let result: Signature;
