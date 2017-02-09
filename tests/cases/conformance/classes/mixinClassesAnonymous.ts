@@ -54,3 +54,11 @@ class Thing3 extends Thing2 {
         this.print();
     }
 }
+
+// Repro from #13805
+
+const Timestamped = <CT extends Constructor<object>>(Base: CT) => {
+    return class extends Base {
+        timestamp = new Date();
+    };
+}

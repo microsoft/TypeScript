@@ -4,10 +4,10 @@
 //// export function doThing(): string;
 //// export function doTheOtherThing(): void;
 
-//// export as namespace [|myLib|];
+//// export as namespace [|{| "isWriteAccess": true, "isDefinition": true |}myLib|];
 
 // @Filename: 1.ts
 //// /// <reference path="0.d.ts" />
 //// [|myLib|].doThing();
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("export namespace myLib");

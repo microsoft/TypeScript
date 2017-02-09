@@ -198,3 +198,25 @@ class Thing3 extends Thing2 {
     }
 }
 
+// Repro from #13805
+
+const Timestamped = <CT extends Constructor<object>>(Base: CT) => {
+>Timestamped : <CT extends Constructor<object>>(Base: CT) => { new (...args: any[]): (Anonymous class); prototype: <any>.(Anonymous class); } & CT
+><CT extends Constructor<object>>(Base: CT) => {    return class extends Base {        timestamp = new Date();    };} : <CT extends Constructor<object>>(Base: CT) => { new (...args: any[]): (Anonymous class); prototype: <any>.(Anonymous class); } & CT
+>CT : CT
+>Constructor : Constructor<T>
+>Base : CT
+>CT : CT
+
+    return class extends Base {
+>class extends Base {        timestamp = new Date();    } : { new (...args: any[]): (Anonymous class); prototype: <any>.(Anonymous class); } & CT
+>Base : object
+
+        timestamp = new Date();
+>timestamp : Date
+>new Date() : Date
+>Date : DateConstructor
+
+    };
+}
+

@@ -1,7 +1,7 @@
 /// <reference types="node" />
 
 
-// TODO: extract services types 
+// TODO: extract services types
 interface HostCancellationToken {
     isCancellationRequested(): boolean;
 }

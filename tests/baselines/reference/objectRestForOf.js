@@ -37,4 +37,5 @@ for (let _b of array) {
 }
 for (const norest of array.map(a => (Object.assign({}, a, { x: 'a string' })))) {
     [norest.x, norest.y];
+    // x is now a string. who knows why.
 }
