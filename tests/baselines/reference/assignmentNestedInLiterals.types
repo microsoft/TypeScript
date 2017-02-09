@@ -33,3 +33,19 @@ aegis = { x: a = 1, y: b = a };
 >b : any
 >a : number
 
+var kowloona, c, d;
+>kowloona : any
+>c : any
+>d : any
+
+for (kowloona of [c = 1, d = c]) {
+>kowloona : any
+>[c = 1, d = c] : number[]
+>c = 1 : 1
+>c : any
+>1 : 1
+>d = c : number
+>d : any
+>c : number
+}
+

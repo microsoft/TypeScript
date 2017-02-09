@@ -23,3 +23,15 @@ aegis = { x: a = 1, y: b = a };
 >b : Symbol(b, Decl(assignmentNestedInLiterals.ts, 3, 13))
 >a : Symbol(a, Decl(assignmentNestedInLiterals.ts, 3, 10))
 
+var kowloona, c, d;
+>kowloona : Symbol(kowloona, Decl(assignmentNestedInLiterals.ts, 6, 3))
+>c : Symbol(c, Decl(assignmentNestedInLiterals.ts, 6, 13))
+>d : Symbol(d, Decl(assignmentNestedInLiterals.ts, 6, 16))
+
+for (kowloona of [c = 1, d = c]) {
+>kowloona : Symbol(kowloona, Decl(assignmentNestedInLiterals.ts, 6, 3))
+>c : Symbol(c, Decl(assignmentNestedInLiterals.ts, 6, 13))
+>d : Symbol(d, Decl(assignmentNestedInLiterals.ts, 6, 16))
+>c : Symbol(c, Decl(assignmentNestedInLiterals.ts, 6, 13))
+}
+
