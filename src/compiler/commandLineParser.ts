@@ -641,9 +641,7 @@ namespace ts {
     /* @internal */
     export const defaultInitCompilerOptions: CompilerOptions = {
         module: ModuleKind.CommonJS,
-        target: ScriptTarget.ES5,
-        noImplicitAny: false,
-        sourceMap: false,
+        target: ScriptTarget.ES5
     };
 
     let optionNameMapCache: OptionNameMap;
