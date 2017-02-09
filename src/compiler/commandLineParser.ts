@@ -868,7 +868,7 @@ namespace ts {
     /* @internal */
     export function generateTSConfig(options: CompilerOptions, fileNames: string[]): string {
         const compilerOptions = extend(options, defaultInitCompilerOptions);
-        const configurations: any = {
+        const configurations: { compilerOptions: MapLike<CompilerOptionsValue>; files?: string[] } = {
             compilerOptions: serializeCompilerOptions(compilerOptions)
         };
         if (fileNames && fileNames.length) {
@@ -876,7 +876,8 @@ namespace ts {
             configurations.files = fileNames;
         }
 
-        return JSON.stringify(configurations, undefined, 4);
+
+        return writeConfigurations();
 
         function getCustomTypeMapOfCommandLineOption(optionDefinition: CommandLineOption): Map<string | number> | undefined {
             if (optionDefinition.type === "string" || optionDefinition.type === "number" || optionDefinition.type === "boolean") {
@@ -936,6 +937,72 @@ namespace ts {
                     }
                 }
             }
+            return result;
+        }
+
+        function getDefaultValueForOption(option: CommandLineOption) {
+            switch (option.type) {
+                case "number":
+                    return 1;
+                case "boolean":
+                    return true;
+                case "string":
+                    return option.isFilePath ? "./" : "";
+                case "list":
+                    return [];
+                case "object":
+                    return {};
+                default:
+                    return arrayFrom((<CommandLineOptionOfCustomType>option).type.keys())[0];
+            }
+        }
+
+        function writeConfigurations() {
+            const categorizedOptions = reduceLeft(
+                filter(optionDeclarations, o => o.category !== "CommandLine" && o.category !== "Advanced"),
+                (memo, value) => {
+                    if (value.category) {
+                        (memo[value.category] || (memo[value.category] = [])).push(value);
+                    }
+                    return memo;
+                }, <MapLike<CommandLineOption[]>>{});
+            const knownKesyCount = getOwnKeys(configurations.compilerOptions).length;
+
+            const newLine = "\n";
+            const tab = "    ";
+
+            let result = "";
+            let seenKnownKeys = 0;
+            result += `{${newLine}`;
+            result += `${tab}"compilerOptions": {${newLine}`;
+            for (const category in categorizedOptions) {
+                result += `${tab}${tab}// ${category}${newLine}`;
+                result += `${newLine}`;
+                for (const option of categorizedOptions[category]) {
+                    result += `${tab}${tab}// ${option.description && option.description.message || option.name}${newLine}`;
+                    if (option.name in configurations.compilerOptions) {
+                        result += `${tab}${tab}"${option.name}": ${JSON.stringify(configurations.compilerOptions[option.name])}${++seenKnownKeys === knownKesyCount ? "" : ","}${newLine}`;
+                    }
+                    else {
+                        result += `${tab}${tab}// "${option.name}": ${JSON.stringify(getDefaultValueForOption(option))},${newLine}`;
+                    }
+                    result += `${newLine}`;
+                }
+                result += `${newLine}`;
+            }
+            if (configurations.files && configurations.files.length) {
+                result += `${tab}},${newLine}`;
+                result += `${tab}"files": [${newLine}`;
+                for (let i = 0; i < configurations.files.length; i++) {
+                    result += `${tab}${tab}${JSON.stringify(configurations.files[i])}${i === configurations.files.length - 1 ? "" : ","}${newLine}`;
+                }
+                result += `${tab}]${newLine}`;
+            }
+            else {
+                result += `${tab}}${newLine}`;
+            }
+            result += `}${newLine}`;
+
             return result;
         }
     }
