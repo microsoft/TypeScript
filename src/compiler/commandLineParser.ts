@@ -205,14 +205,6 @@ namespace ts {
             description: Diagnostics.Specify_the_root_directory_of_input_files_Use_to_control_the_output_directory_structure_with_outDir,
         },
         {
-            name: "declarationDir",
-            type: "string",
-            isFilePath: true,
-            paramType: Diagnostics.DIRECTORY,
-            category: Diagnostics.Basic_Options,
-            description: Diagnostics.Output_directory_for_generated_declaration_files
-        },
-        {
             name: "removeComments",
             type: "boolean",
             showInSimplifiedHelpView: true,
@@ -231,12 +223,6 @@ namespace ts {
             type: "boolean",
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Import_emit_helpers_from_tslib
-        },
-        {
-            name: "skipLibCheck",
-            type: "boolean",
-            category: Diagnostics.Basic_Options,
-            description: Diagnostics.Skip_type_checking_of_declaration_files,
         },
         {
             name: "isolatedModules",
@@ -301,36 +287,6 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Strict_Checks,
             description: Diagnostics.Report_errors_for_fallthrough_cases_in_switch_statement
-        },
-        {
-            name: "allowUnusedLabels",
-            type: "boolean",
-            category: Diagnostics.Strict_Checks,
-            description: Diagnostics.Do_not_report_errors_on_unused_labels
-        },
-        {
-            name: "allowUnreachableCode",
-            type: "boolean",
-            category: Diagnostics.Strict_Checks,
-            description: Diagnostics.Do_not_report_errors_on_unreachable_code
-        },
-        {
-            name: "suppressExcessPropertyErrors",
-            type: "boolean",
-            category: Diagnostics.Strict_Checks,
-            description: Diagnostics.Suppress_excess_property_checks_for_object_literals,
-        },
-        {
-            name: "suppressImplicitAnyIndexErrors",
-            type: "boolean",
-            category: Diagnostics.Strict_Checks,
-            description: Diagnostics.Suppress_noImplicitAny_errors_for_indexing_objects_lacking_index_signatures,
-        },
-        {
-            name: "forceConsistentCasingInFileNames",
-            type: "boolean",
-            category: Diagnostics.Strict_Checks,
-            description: Diagnostics.Disallow_inconsistently_cased_references_to_the_same_file
         },
 
         // Module Resolution
@@ -402,12 +358,6 @@ namespace ts {
             type: "boolean",
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.Allow_default_imports_from_modules_with_no_default_export_This_does_not_affect_code_emit_just_typechecking
-        },
-        {
-            name: "maxNodeModuleJsDepth",
-            type: "number",
-            category: Diagnostics.Module_Resolution_Options,
-            description: Diagnostics.The_maximum_dependency_depth_to_search_under_node_modules_and_load_JavaScript_files
         },
 
         // Source Maps
@@ -598,6 +548,56 @@ namespace ts {
             type: "boolean",
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Do_not_erase_const_enum_declarations_in_generated_code
+        },
+        {
+            name: "declarationDir",
+            type: "string",
+            isFilePath: true,
+            paramType: Diagnostics.DIRECTORY,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Output_directory_for_generated_declaration_files
+        },
+        {
+            name: "skipLibCheck",
+            type: "boolean",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Skip_type_checking_of_declaration_files,
+        },
+        {
+            name: "allowUnusedLabels",
+            type: "boolean",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Do_not_report_errors_on_unused_labels
+        },
+        {
+            name: "allowUnreachableCode",
+            type: "boolean",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Do_not_report_errors_on_unreachable_code
+        },
+        {
+            name: "suppressExcessPropertyErrors",
+            type: "boolean",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Suppress_excess_property_checks_for_object_literals,
+        },
+        {
+            name: "suppressImplicitAnyIndexErrors",
+            type: "boolean",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Suppress_noImplicitAny_errors_for_indexing_objects_lacking_index_signatures,
+        },
+        {
+            name: "forceConsistentCasingInFileNames",
+            type: "boolean",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Disallow_inconsistently_cased_references_to_the_same_file
+        },
+        {
+            name: "maxNodeModuleJsDepth",
+            type: "number",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.The_maximum_dependency_depth_to_search_under_node_modules_and_load_JavaScript_files
         },
     ];
 
