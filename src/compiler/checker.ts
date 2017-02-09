@@ -3378,7 +3378,7 @@ namespace ts {
         }
 
         // Return the inferred type for a variable, parameter, or property declaration
-        function getWidenedTypeForJSSpecialPropertyDeclaration(declaration: Declaration): Type {
+        function getTypeForJSSpecialPropertyDeclaration(declaration: Declaration): Type {
             const expression = declaration.kind === SyntaxKind.BinaryExpression ? <BinaryExpression>declaration :
                 declaration.kind === SyntaxKind.PropertyAccessExpression ? <BinaryExpression>getAncestor(declaration, SyntaxKind.BinaryExpression) :
                 undefined;
@@ -3395,7 +3395,7 @@ namespace ts {
                 }
             }
 
-            return getWidenedType(getWidenedLiteralType(checkExpressionCached(expression.right)));
+            return getWidenedLiteralType(checkExpressionCached(expression.right));
         }
 
         // Return the type implied by a binding pattern element. This is the type of the initializer of the element if
@@ -3552,7 +3552,7 @@ namespace ts {
                 // * className.prototype.method = expr
                 if (declaration.kind === SyntaxKind.BinaryExpression ||
                     declaration.kind === SyntaxKind.PropertyAccessExpression && declaration.parent.kind === SyntaxKind.BinaryExpression) {
-                    type = getUnionType(map(symbol.declarations, getWidenedTypeForJSSpecialPropertyDeclaration), /*subtypeReduction*/ true);
+                    type = getWidenedType(getUnionType(map(symbol.declarations, getTypeForJSSpecialPropertyDeclaration), /*subtypeReduction*/ true));
                 }
                 else {
                     type = getWidenedTypeForVariableLikeDeclaration(<VariableLikeDeclaration>declaration, /*reportErrors*/ true);
