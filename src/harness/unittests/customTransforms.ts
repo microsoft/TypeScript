@@ -47,7 +47,7 @@ namespace ts {
             `
         }];
 
-        const before: Transformer = context => {
+        const before: TransformerFactory<SourceFile> = context => {
             return file => visitEachChild(file, visit, context);
             function visit(node: Node): VisitResult<Node> {
                 switch (node.kind) {
@@ -63,7 +63,7 @@ namespace ts {
             }
         };
 
-        const after: Transformer = context => {
+        const after: TransformerFactory<SourceFile> = context => {
             return file => visitEachChild(file, visit, context);
             function visit(node: Node): VisitResult<Node> {
                 switch (node.kind) {

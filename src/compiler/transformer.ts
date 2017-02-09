@@ -13,7 +13,7 @@
 
 /* @internal */
 namespace ts {
-    function getModuleTransformer(moduleKind: ModuleKind): Transformer {
+    function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile> {
         switch (moduleKind) {
             case ModuleKind.ES2015:
                 return transformES2015Module;
@@ -40,7 +40,7 @@ namespace ts {
         const jsx = compilerOptions.jsx;
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
-        const transformers: Transformer[] = [];
+        const transformers: TransformerFactory<SourceFile>[] = [];
 
         addRange(transformers, customTransformers && customTransformers.before);
 
@@ -84,11 +84,13 @@ namespace ts {
      * Transforms an array of SourceFiles by passing them through each transformer.
      *
      * @param resolver The emit resolver provided by the checker.
-     * @param host The emit host.
-     * @param sourceFiles An array of source files
-     * @param transforms An array of Transformers.
+     * @param host The emit host object used to interact with the file system.
+     * @param options Compiler options to surface in the `TransformationContext`.
+     * @param nodes An array of nodes to transform.
+     * @param transforms An array of `TransformerFactory` callbacks.
+     * @param allowDtsFiles A value indicating whether to allow the transformation of .d.ts files.
      */
-    export function transformFiles(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformers: Transformer[]): TransformationResult {
+    export function transformNodes<T extends Node>(resolver: EmitResolver, host: EmitHost, options: CompilerOptions, nodes: T[], transformers: TransformerFactory<T>[], allowDtsFiles: boolean): TransformationResult<T> {
         const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);
         let lexicalEnvironmentVariableDeclarations: VariableDeclaration[];
         let lexicalEnvironmentFunctionDeclarations: FunctionDeclaration[];
@@ -104,7 +106,7 @@ namespace ts {
         // The transformation context is provided to each transformer as part of transformer
         // initialization.
         const context: TransformationContext = {
-            getCompilerOptions: () => host.getCompilerOptions(),
+            getCompilerOptions: () => options,
             getEmitResolver: () => resolver,
             getEmitHost: () => host,
             startLexicalEnvironment,
@@ -134,7 +136,9 @@ namespace ts {
         };
 
         // Ensure the parse tree is clean before applying transformations
-        forEach(sourceFiles, disposeEmitNodes);
+        for (const node of nodes) {
+            disposeEmitNodes(getSourceFileOfNode(getParseTreeNode(node)));
+        }
 
         performance.mark("beforeTransform");
 
@@ -144,8 +148,8 @@ namespace ts {
         // prevent modification of transformation hooks.
         state = TransformationState.Initialized;
 
-        // Transform each source file.
-        const transformed = map(sourceFiles, transformSourceFile);
+        // Transform each node.
+        const transformed = map(nodes, allowDtsFiles ? transformation : transformRoot);
 
         // prevent modification of the lexical environment.
         state = TransformationState.Completed;
@@ -160,17 +164,8 @@ namespace ts {
             dispose
         };
 
-        /**
-         * Transforms a source file.
-         *
-         * @param sourceFile The source file to transform.
-         */
-        function transformSourceFile(sourceFile: SourceFile) {
-            if (isDeclarationFile(sourceFile)) {
-                return sourceFile;
-            }
-
-            return transformation(sourceFile);
+        function transformRoot(node: T) {
+            return node && (!isSourceFile(node) || !isDeclarationFile(node)) ? transformation(node) : node;
         }
 
         /**
@@ -366,7 +361,9 @@ namespace ts {
         function dispose() {
             if (state < TransformationState.Disposed) {
                 // Clean up emit nodes on parse tree
-                forEach(sourceFiles, disposeEmitNodes);
+                for (const node of nodes) {
+                    disposeEmitNodes(getSourceFileOfNode(getParseTreeNode(node)));
+                }
 
                 // Release references to external entries for GC purposes.
                 lexicalEnvironmentVariableDeclarations = undefined;

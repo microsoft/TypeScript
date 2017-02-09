@@ -2308,9 +2308,9 @@
 
     export interface CustomTransformers {
         /** Custom transformers to evaluate before built-in transformations. */
-        before?: Transformer[];
+        before?: TransformerFactory<SourceFile>[];
         /** Custom transformers to evaluate after built-in transformations. */
-        after?: Transformer[];
+        after?: TransformerFactory<SourceFile>[];
     }
 
     export interface SourceMapSpan {
@@ -3867,7 +3867,7 @@
          * are emitted by the pretty printer.
          *
          * NOTE: Transformation hooks should only be modified during `Transformer` initialization,
-         * before returning the `FileTransformer` callback.
+         * before returning the `NodeTransformer` callback.
          */
         onSubstituteNode?: (hint: EmitHint, node: Node) => Node;
 
@@ -3888,14 +3888,14 @@
          * the printer emits a node.
          *
          * NOTE: Transformation hooks should only be modified during `Transformer` initialization,
-         * before returning the `FileTransformer` callback.
+         * before returning the `NodeTransformer` callback.
          */
         onEmitNode?: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
     }
 
-    export interface TransformationResult {
+    export interface TransformationResult<T extends Node> {
         /** Gets the transformed source files. */
-        transformed: SourceFile[];
+        transformed: T[];
 
         /** Gets diagnostics for the transformation. */
         diagnostics?: Diagnostic[];
@@ -3925,22 +3925,22 @@
     }
 
     /**
-     * A function that is used to initialize and return a `FileTransformer` callback, which in turn
-     * will be used to transform one or more `SourceFile` objects.
+     * A function that is used to initialize and return a `Transformer` callback, which in turn
+     * will be used to transform one or more nodes.
      */
-    export type Transformer = (context: TransformationContext) => FileTransformer;
+    export type TransformerFactory<T extends Node> = (context: TransformationContext) => Transformer<T>;
 
     /**
-     * A function that transforms a `SourceFile` object.
+     * A function that transforms a node.
      */
-    export type FileTransformer = (node: SourceFile) => SourceFile;
-
-    export type VisitResult<T extends Node> = T | T[];
+    export type Transformer<T extends Node> = (node: T) => T;
 
     /**
      * A function that accepts and possible transforms a node.
      */
     export type Visitor = (node: Node) => VisitResult<Node>;
+
+    export type VisitResult<T extends Node> = T | T[];
 
     export interface Printer {
         /**

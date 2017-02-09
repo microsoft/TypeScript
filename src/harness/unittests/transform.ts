@@ -3,7 +3,7 @@
 
 namespace ts {
     describe("TransformAPI", () => {
-        function transformsCorrectly(name: string, source: string, transformers: Transformer[]) {
+        function transformsCorrectly(name: string, source: string, transformers: TransformerFactory<SourceFile>[]) {
             it(name, () => {
                 Harness.Baseline.runBaseline(`transformApi/transformsCorrectly.${name}.js`, () => {
                     const transformed = transform(createSourceFile("source.ts", source, ScriptTarget.ES2015), transformers);
