@@ -75,8 +75,8 @@
         "through2": "latest",
         "travis-fold": "latest",
         "ts-node": "latest",
-        "tslint": "next",
-        "typescript": "next"
+        "tslint": "4.3.0-dev.0",
+        "typescript": "^2.2"
     },
     "scripts": {
         "pretest": "jake tests",
