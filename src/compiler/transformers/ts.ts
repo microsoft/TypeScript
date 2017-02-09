@@ -3322,8 +3322,6 @@ namespace ts {
                         : getTextOfNode(node.argumentExpression);
 
                     addSyntheticTrailingComment(substitute, SyntaxKind.MultiLineCommentTrivia, ` ${propertyName} `);
-                    // wrap the substituted node so that it emits its own comments.
-                    return createPartiallyEmittedExpression(substitute);
                 }
 
                 return substitute;

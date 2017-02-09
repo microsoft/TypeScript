@@ -159,7 +159,7 @@ namespace ts {
 
         return {
             transformed,
-            emitNodeWithSubstitution,
+            substituteNode,
             emitNodeWithNotification,
             dispose
         };
@@ -191,14 +191,9 @@ namespace ts {
          * @param node The node to emit.
          * @param emitCallback The callback used to emit the node or its substitute.
          */
-        function emitNodeWithSubstitution(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
-            Debug.assert(state < TransformationState.Disposed, "Cannot invoke TransformationResult callbacks after the result is disposed.");
-            if (node) {
-                if (isSubstitutionEnabled(node)) {
-                    node = onSubstituteNode(hint, node) || node;
-                }
-                emitCallback(hint, node);
-            }
+        function substituteNode(hint: EmitHint, node: Node) {
+            Debug.assert(state < TransformationState.Disposed, "Cannot substitute a node after the result is disposed.");
+            return node && isSubstitutionEnabled(node) && onSubstituteNode(hint, node) || node;
         }
 
         /**

@@ -9,7 +9,7 @@ namespace ts {
                     const transformed = transform(createSourceFile("source.ts", source, ScriptTarget.ES2015), transformers);
                     const printer = createPrinter({ newLine: NewLineKind.CarriageReturnLineFeed }, {
                         onEmitNode: transformed.emitNodeWithNotification,
-                        onSubstituteNode: transformed.emitNodeWithSubstitution
+                        substituteNode: transformed.substituteNode
                     });
                     const result = printer.printBundle(createBundle(transformed.transformed));
                     transformed.dispose();

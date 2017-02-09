@@ -37,7 +37,7 @@ namespace ts {
 
             // transform hooks
             onEmitNode: transform.emitNodeWithNotification,
-            onSubstituteNode: transform.emitNodeWithSubstitution,
+            substituteNode: transform.substituteNode,
 
             // sourcemap hooks
             onEmitSourceMapOfNode: sourceMap.emitNodeWithSourceMap,
@@ -198,7 +198,7 @@ namespace ts {
             onEmitNode,
             onEmitHelpers,
             onSetSourceFile,
-            onSubstituteNode,
+            substituteNode,
         } = handlers;
 
         const newLine = getNewLineCharacter(printerOptions);
@@ -327,8 +327,8 @@ namespace ts {
             setWriter(/*output*/ undefined);
         }
 
-        function emit(node: Node, hint = EmitHint.Unspecified) {
-            pipelineEmitWithNotification(hint, node);
+        function emit(node: Node) {
+            pipelineEmitWithNotification(EmitHint.Unspecified, node);
         }
 
         function emitIdentifierName(node: Identifier) {
@@ -349,6 +349,7 @@ namespace ts {
         }
 
         function pipelineEmitWithComments(hint: EmitHint, node: Node) {
+            node = trySubstituteNode(hint, node);
             if (emitNodeWithComments && hint !== EmitHint.SourceFile) {
                 emitNodeWithComments(hint, node, pipelineEmitWithSourceMap);
             }
@@ -359,16 +360,7 @@ namespace ts {
 
         function pipelineEmitWithSourceMap(hint: EmitHint, node: Node) {
             if (onEmitSourceMapOfNode && hint !== EmitHint.SourceFile && hint !== EmitHint.IdentifierName) {
-                onEmitSourceMapOfNode(hint, node, pipelineEmitWithSubstitution);
-            }
-            else {
-                pipelineEmitWithSubstitution(hint, node);
-            }
-        }
-
-        function pipelineEmitWithSubstitution(hint: EmitHint, node: Node) {
-            if (onSubstituteNode) {
-                onSubstituteNode(hint, node, pipelineEmitWithHint);
+                onEmitSourceMapOfNode(hint, node, pipelineEmitWithHint);
             }
             else {
                 pipelineEmitWithHint(hint, node);
@@ -634,7 +626,7 @@ namespace ts {
             // If the node is an expression, try to emit it as an expression with
             // substitution.
             if (isExpression(node)) {
-                return pipelineEmitWithSubstitution(EmitHint.Expression, node);
+                return pipelineEmitExpression(trySubstituteNode(EmitHint.Expression, node));
             }
         }
 
@@ -729,6 +721,10 @@ namespace ts {
                 case SyntaxKind.PartiallyEmittedExpression:
                     return emitPartiallyEmittedExpression(<PartiallyEmittedExpression>node);
             }
+        }
+
+        function trySubstituteNode(hint: EmitHint, node: Node) {
+            return node && substituteNode && substituteNode(hint, node) || node;
         }
 
         function emitBodyIndirect(node: Node, elements: NodeArray<Node>, emitCallback: (node: Node) => void): void {

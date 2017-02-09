@@ -3901,13 +3901,12 @@
         diagnostics?: Diagnostic[];
 
         /**
-         * Emits the substitute for a node, if one is available; otherwise, emits the node.
+         * Gets a substitute for a node, if one is available; otherwise, returns the original node.
          *
          * @param hint A hint as to the intended usage of the node.
          * @param node The node to substitute.
-         * @param emitCallback A callback used to emit the node or its substitute.
          */
-        emitNodeWithSubstitution(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
+        substituteNode(hint: EmitHint, node: Node): Node;
 
         /**
          * Emits a node with possible notification.
@@ -3998,23 +3997,20 @@
         /**
          * A hook used by the Printer to perform just-in-time substitution of a node. This is
          * primarily used by node transformations that need to substitute one node for another,
-         * such as replacing `myExportedVar` with `exports.myExportedVar`. A compatible
-         * implementation **must** invoke `emitCallback` eith the provided `hint` and either
-         * the provided `node`, or its substitute.
+         * such as replacing `myExportedVar` with `exports.myExportedVar`.
          * @param hint A hint indicating the intended purpose of the node.
          * @param node The node to emit.
-         * @param emitCallback A callback that, when invoked, will emit the node.
          * @example
          * ```ts
          * var printer = createPrinter(printerOptions, {
-         *   onSubstituteNode(hint, node, emitCallback) {
+         *   substituteNode(hint, node) {
          *     // perform substitution if necessary...
-         *     emitCallback(hint, node);
+         *     return node;
          *   }
          * });
          * ```
          */
-        onSubstituteNode?(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
+        substituteNode?(hint: EmitHint, node: Node): Node;
         /*@internal*/ onEmitSourceMapOfNode?: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
         /*@internal*/ onEmitSourceMapOfToken?: (node: Node, token: SyntaxKind, pos: number, emitCallback: (token: SyntaxKind, pos: number) => number) => number;
         /*@internal*/ onEmitSourceMapOfPosition?: (pos: number) => void;

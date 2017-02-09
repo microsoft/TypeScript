@@ -709,7 +709,7 @@ namespace ts {
         return node ? f(initial, node) : initial;
     }
 
-    function reduceNodeArray<T>(nodes: Node[], f: (memo: T, nodes: Node[]) => T, initial: T) {
+    function reduceNodeArray<T>(nodes: NodeArray<Node>, f: (memo: T, nodes: NodeArray<Node>) => T, initial: T) {
         return nodes ? f(initial, nodes) : initial;
     }
 
@@ -721,12 +721,12 @@ namespace ts {
      * @param initial The initial value to supply to the reduction.
      * @param f The callback function
      */
-    export function reduceEachChild<T>(node: Node, initial: T, cbNode: (memo: T, node: Node) => T, cbNodeArray?: (memo: T, nodes: Node[]) => T): T {
+    export function reduceEachChild<T>(node: Node, initial: T, cbNode: (memo: T, node: Node) => T, cbNodeArray?: (memo: T, nodes: NodeArray<Node>) => T): T {
         if (node === undefined) {
             return initial;
         }
 
-        const reduceNodes: (nodes: Node[], f: (memo: T, node: Node | Node[]) => T, initial: T) => T = cbNodeArray ? reduceNodeArray : reduceLeft;
+        const reduceNodes: (nodes: NodeArray<Node>, f: (memo: T, node: Node | NodeArray<Node>) => T, initial: T) => T = cbNodeArray ? reduceNodeArray : reduceLeft;
         const cbNodes = cbNodeArray || cbNode;
         const kind = node.kind;
 

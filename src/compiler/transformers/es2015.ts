@@ -3549,7 +3549,7 @@ namespace ts {
             if (enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings) {
                 const original = getParseTreeNode(node, isIdentifier);
                 if (original && isNameOfDeclarationWithCollidingName(original)) {
-                    return getGeneratedNameForNode(original);
+                    return setTextRange(getGeneratedNameForNode(original), node);
                 }
             }
 
@@ -3602,7 +3602,7 @@ namespace ts {
             if (enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings) {
                 const declaration = resolver.getReferencedDeclarationWithCollidingName(node);
                 if (declaration) {
-                    return getGeneratedNameForNode(declaration.name);
+                    return setTextRange(getGeneratedNameForNode(declaration.name), node);
                 }
             }
 
