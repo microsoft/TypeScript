@@ -2239,7 +2239,7 @@ namespace ts {
                         //          a
                         //          /* End of parameter a */ -> this comment isn't considered to be trailing comment of parameter "a" due to newline
                         //          ,
-                        if (emitLeadingCommentsOfPosition && delimiter && previousSibling.end !== parentNode.end) {
+                        if (delimiter && previousSibling.end !== parentNode.end) {
                             emitLeadingCommentsOfPosition(previousSibling.end);
                         }
                         write(delimiter);
