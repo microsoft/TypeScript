@@ -6,97 +6,6 @@
 namespace ts {
     export type VisitResult<T extends Node> = T | T[];
 
-    /**
-     * Describes an edge of a Node, used when traversing a syntax tree.
-     */
-    interface NodeEdge {
-        /** The property name for the edge. */
-        name: string;
-
-        /** Indicates that the result is optional. */
-        optional?: boolean;
-
-        /** A callback used to test whether a node is valid. */
-        test?: (node: Node) => node is Node;
-
-        /** A callback used to lift a NodeArrayNode into a valid node. */
-        lift?: (nodes: NodeArray<Node>) => Node;
-
-        /** A callback used to parenthesize a node to preserve the intended order of operations. */
-        parenthesize?: (value: Node, parentNode: Node) => Node;
-    };
-
-    /**
-     * Describes the shape of a Node.
-     */
-    type NodeTraversalPath = NodeEdge[];
-
-    /**
-     * This map contains information about the shape of each Node in "types.ts" pertaining to how
-     * each node should be traversed during a transformation.
-     *
-     * Each edge corresponds to a property in a Node subtype that should be traversed when visiting
-     * each child. The properties are assigned in the order in which traversal should occur.
-     *
-     * We only add entries for nodes that do not have a create/update pair defined in factory.ts
-     *
-     * NOTE: This needs to be kept up to date with changes to nodes in "types.ts". Currently, this
-     *       map is not comprehensive. Only node edges relevant to tree transformation are
-     *       currently defined. We may extend this to be more comprehensive, and eventually
-     *       supplant the existing `forEachChild` implementation if performance is not
-     *       significantly impacted.
-     */
-    function getNodeEdgeTraversal(kind: SyntaxKind): NodeTraversalPath {
-        switch (kind) {
-            case SyntaxKind.QualifiedName: return [
-                { name: "left", test: isEntityName },
-                { name: "right", test: isIdentifier }
-            ];
-            case SyntaxKind.Decorator: return [
-                { name: "expression", test: isLeftHandSideExpression }
-            ];
-            case SyntaxKind.TypeAssertionExpression: return [
-                { name: "type", test: isTypeNode },
-                { name: "expression", test: isUnaryExpression }
-            ];
-            case SyntaxKind.AsExpression: return [
-                { name: "expression", test: isExpression },
-                { name: "type", test: isTypeNode }
-            ];
-            case SyntaxKind.NonNullExpression: return [
-                { name: "expression", test: isLeftHandSideExpression }
-            ];
-            case SyntaxKind.EnumDeclaration: return [
-                { name: "decorators", test: isDecorator },
-                { name: "modifiers", test: isModifier },
-                { name: "name", test: isIdentifier },
-                { name: "members", test: isEnumMember }
-            ];
-            case SyntaxKind.ModuleDeclaration: return [
-                { name: "decorators", test: isDecorator },
-                { name: "modifiers", test: isModifier },
-                { name: "name", test: isModuleName },
-                { name: "body", test: isModuleBody }
-            ];
-            case SyntaxKind.ModuleBlock: return [
-                { name: "statements", test: isStatement }
-            ];
-            case SyntaxKind.ImportEqualsDeclaration: return [
-                { name: "decorators", test: isDecorator },
-                { name: "modifiers", test: isModifier },
-                { name: "name", test: isIdentifier },
-                { name: "moduleReference", test: isModuleReference }
-            ];
-            case SyntaxKind.ExternalModuleReference: return [
-                { name: "expression", test: isExpression, optional: true }
-            ];
-            case SyntaxKind.EnumMember: return [
-                { name: "name", test: isPropertyName },
-                { name: "initializer", test: isExpression, optional: true, parenthesize: parenthesizeExpressionForList }
-            ];
-        }
-    }
-
     function reduceNode<T>(node: Node, f: (memo: T, node: Node) => T, initial: T) {
         return node ? f(initial, node) : initial;
     }
@@ -107,8 +16,7 @@ namespace ts {
 
     /**
      * Similar to `reduceLeft`, performs a reduction against each child of a node.
-     * NOTE: Unlike `forEachChild`, this does *not* visit every node. Only nodes added to the
-     *       `nodeEdgeTraversalMap` above will be visited.
+     * NOTE: Unlike `forEachChild`, this does *not* visit every node.
      *
      * @param node The node containing the children to reduce.
      * @param initial The initial value to supply to the reduction.
@@ -145,6 +53,11 @@ namespace ts {
                 break;
 
             // Names
+            case SyntaxKind.QualifiedName:
+                result = reduceNode((<QualifiedName>node).left, cbNode, result);
+                result = reduceNode((<QualifiedName>node).right, cbNode, result);
+                break;
+
             case SyntaxKind.ComputedPropertyName:
                 result = reduceNode((<ComputedPropertyName>node).expression, cbNode, result);
                 break;
@@ -252,6 +165,11 @@ namespace ts {
                 result = reduceNode((<TaggedTemplateExpression>node).template, cbNode, result);
                 break;
 
+            case SyntaxKind.TypeAssertionExpression:
+                result = reduceNode((<TypeAssertion>node).type, cbNode, result);
+                result = reduceNode((<TypeAssertion>node).expression, cbNode, result);
+                break;
+
             case SyntaxKind.FunctionExpression:
                 result = reduceNodes((<FunctionExpression>node).modifiers, cbNodes, result);
                 result = reduceNode((<FunctionExpression>node).name, cbNode, result);
@@ -312,6 +230,15 @@ namespace ts {
             case SyntaxKind.ExpressionWithTypeArguments:
                 result = reduceNode((<ExpressionWithTypeArguments>node).expression, cbNode, result);
                 result = reduceNodes((<ExpressionWithTypeArguments>node).typeArguments, cbNodes, result);
+                break;
+
+            case SyntaxKind.AsExpression:
+                result = reduceNode((<AsExpression>node).expression, cbNode, result);
+                result = reduceNode((<AsExpression>node).type, cbNode, result);
+                break;
+
+            case SyntaxKind.NonNullExpression:
+                result = reduceNode((<NonNullExpression>node).expression, cbNode, result);
                 break;
 
             // Misc
@@ -415,8 +342,33 @@ namespace ts {
                 result = reduceNodes((<ClassDeclaration>node).members, cbNodes, result);
                 break;
 
+            case SyntaxKind.EnumDeclaration:
+                result = reduceNodes((<EnumDeclaration>node).decorators, cbNodes, result);
+                result = reduceNodes((<EnumDeclaration>node).modifiers, cbNodes, result);
+                result = reduceNode((<EnumDeclaration>node).name, cbNode, result);
+                result = reduceNodes((<EnumDeclaration>node).members, cbNodes, result);
+                break;
+
+            case SyntaxKind.ModuleDeclaration:
+                result = reduceNodes((<ModuleDeclaration>node).decorators, cbNodes, result);
+                result = reduceNodes((<ModuleDeclaration>node).modifiers, cbNodes, result);
+                result = reduceNode((<ModuleDeclaration>node).name, cbNode, result);
+                result = reduceNode((<ModuleDeclaration>node).body, cbNode, result);
+                break;
+
+            case SyntaxKind.ModuleBlock:
+                result = reduceNodes((<ModuleBlock>node).statements, cbNodes, result);
+                break;
+
             case SyntaxKind.CaseBlock:
                 result = reduceNodes((<CaseBlock>node).clauses, cbNodes, result);
+                break;
+
+            case SyntaxKind.ImportEqualsDeclaration:
+                result = reduceNodes((<ImportEqualsDeclaration>node).decorators, cbNodes, result);
+                result = reduceNodes((<ImportEqualsDeclaration>node).modifiers, cbNodes, result);
+                result = reduceNode((<ImportEqualsDeclaration>node).name, cbNode, result);
+                result = reduceNode((<ImportEqualsDeclaration>node).moduleReference, cbNode, result);
                 break;
 
             case SyntaxKind.ImportDeclaration:
@@ -457,6 +409,11 @@ namespace ts {
                 result = reduceLeft((<ExportDeclaration>node).modifiers, cbNode, result);
                 result = reduceNode((<ExportDeclaration>node).exportClause, cbNode, result);
                 result = reduceNode((<ExportDeclaration>node).moduleSpecifier, cbNode, result);
+                break;
+
+            // Module references
+            case SyntaxKind.ExternalModuleReference:
+                result = reduceNode((<ExternalModuleReference>node).expression, cbNode, result);
                 break;
 
             // JSX
@@ -519,30 +476,25 @@ namespace ts {
                 break;
 
             case SyntaxKind.SpreadAssignment:
-                result = reduceNode((node as SpreadAssignment).expression, cbNode, result);
+                result = reduceNode((<SpreadAssignment>node).expression, cbNode, result);
                 break;
+
+            // Enum
+            case SyntaxKind.EnumMember:
+                result = reduceNode((<EnumMember>node).name, cbNode, result);
+                result = reduceNode((<EnumMember>node).initializer, cbNode, result);
 
             // Top-level nodes
             case SyntaxKind.SourceFile:
                 result = reduceNodes((<SourceFile>node).statements, cbNodes, result);
                 break;
 
+            // Transformation nodes
             case SyntaxKind.PartiallyEmittedExpression:
                 result = reduceNode((<PartiallyEmittedExpression>node).expression, cbNode, result);
                 break;
 
             default:
-                const edgeTraversalPath = getNodeEdgeTraversal(kind);
-                if (edgeTraversalPath) {
-                    for (const edge of edgeTraversalPath) {
-                        const value = (<MapLike<any>>node)[edge.name];
-                        if (value !== undefined) {
-                            result = isArray(value)
-                                ? reduceNodes(<NodeArray<Node>>value, cbNodes, result)
-                                : cbNode(result, <Node>value);
-                        }
-                    }
-                }
                 break;
         }
 
@@ -556,11 +508,9 @@ namespace ts {
      * @param visitor The callback used to visit the Node.
      * @param test A callback to execute to verify the Node is valid.
      * @param optional An optional value indicating whether the Node is itself optional.
-     * @param lift An optional callback to execute to lift a NodeArrayNode into a valid Node.
+     * @param lift An optional callback to execute to lift a NodeArray into a valid Node.
      */
-    export function visitNode<T extends Node>(node: T, visitor: (node: Node) => VisitResult<Node>, test: (node: Node) => boolean, optional?: boolean, lift?: (node: NodeArray<Node>) => T): T;
-    export function visitNode<T extends Node>(node: T, visitor: (node: Node) => VisitResult<Node>, test: (node: Node) => boolean, optional: boolean, lift: (node: NodeArray<Node>) => T, parenthesize: (node: Node, parentNode: Node) => Node, parentNode: Node): T;
-    export function visitNode(node: Node, visitor: (node: Node) => VisitResult<Node>, test: (node: Node) => boolean, optional?: boolean, lift?: (node: Node[]) => Node, parenthesize?: (node: Node, parentNode: Node) => Node, parentNode?: Node): Node {
+    export function visitNode<T extends Node>(node: T, visitor: (node: Node) => VisitResult<Node>, test: (node: Node) => boolean, optional?: boolean, lift?: (node: NodeArray<Node>) => T): T {
         if (node === undefined || visitor === undefined) {
             return node;
         }
@@ -586,13 +536,9 @@ namespace ts {
             visitedNode = visited;
         }
 
-        if (parenthesize !== undefined) {
-            visitedNode = parenthesize(visitedNode, parentNode);
-        }
-
         Debug.assertNode(visitedNode, test);
         aggregateTransformFlags(visitedNode);
-        return visitedNode;
+        return <T>visitedNode;
     }
 
     /**
@@ -604,14 +550,12 @@ namespace ts {
      * @param start An optional value indicating the starting offset at which to start visiting.
      * @param count An optional value indicating the maximum number of nodes to visit.
      */
-    export function visitNodes<T extends Node>(nodes: NodeArray<T>, visitor: (node: Node) => VisitResult<Node>, test: (node: Node) => boolean, start?: number, count?: number): NodeArray<T>;
-    export function visitNodes<T extends Node>(nodes: NodeArray<T>, visitor: (node: Node) => VisitResult<Node>, test: (node: Node) => boolean, start: number, count: number, parenthesize: (node: Node, parentNode: Node) => Node, parentNode: Node): NodeArray<T>;
-    export function visitNodes(nodes: NodeArray<Node>, visitor: (node: Node) => VisitResult<Node>, test: (node: Node) => boolean, start?: number, count?: number, parenthesize?: (node: Node, parentNode: Node) => Node, parentNode?: Node): NodeArray<Node> {
+    export function visitNodes<T extends Node>(nodes: NodeArray<T>, visitor: (node: Node) => VisitResult<Node>, test: (node: Node) => boolean, start?: number, count?: number): NodeArray<T> {
         if (nodes === undefined) {
             return undefined;
         }
 
-        let updated: NodeArray<Node>;
+        let updated: NodeArray<T>;
 
         // Ensure start and count have valid values
         const length = nodes.length;
@@ -627,8 +571,7 @@ namespace ts {
             // If we are not visiting all of the original nodes, we must always create a new array.
             // Since this is a fragment of a node array, we do not copy over the previous location
             // and will only copy over `hasTrailingComma` if we are including the last element.
-            updated = createNodeArray<Node>([], /*location*/ undefined,
-                /*hasTrailingComma*/ nodes.hasTrailingComma && start + count === length);
+            updated = createNodeArray<T>([], /*hasTrailingComma*/ nodes.hasTrailingComma && start + count === length);
         }
 
         // Visit each original node.
@@ -639,26 +582,21 @@ namespace ts {
             if (updated !== undefined || visited === undefined || visited !== node) {
                 if (updated === undefined) {
                     // Ensure we have a copy of `nodes`, up to the current index.
-                    updated = createNodeArray(nodes.slice(0, i), /*location*/ nodes, nodes.hasTrailingComma);
+                    updated = createNodeArray(nodes.slice(0, i), nodes.hasTrailingComma);
+                    setTextRange(updated, nodes);
                 }
                 if (visited) {
                     if (isArray(visited)) {
-                        for (let visitedNode of visited) {
-                            visitedNode = parenthesize
-                                ? parenthesize(visitedNode, parentNode)
-                                : visitedNode;
+                        for (const visitedNode of visited) {
                             Debug.assertNode(visitedNode, test);
                             aggregateTransformFlags(visitedNode);
-                            updated.push(visitedNode);
+                            updated.push(<T>visitedNode);
                         }
                     }
                     else {
-                        const visitedNode = parenthesize
-                            ? parenthesize(visited, parentNode)
-                            : visited;
-                        Debug.assertNode(visitedNode, test);
-                        aggregateTransformFlags(visitedNode);
-                        updated.push(visitedNode);
+                        Debug.assertNode(visited, test);
+                        aggregateTransformFlags(visited);
+                        updated.push(<T>visited);
                     }
                 }
             }
@@ -675,10 +613,10 @@ namespace ts {
         context.startLexicalEnvironment();
         statements = visitNodes(statements, visitor, isStatement, start);
         if (ensureUseStrict && !startsWithUseStrict(statements)) {
-            statements = createNodeArray([createStatement(createLiteral("use strict")), ...statements], statements);
+            statements = setTextRange(createNodeArray([createStatement(createLiteral("use strict")), ...statements]), statements);
         }
         const declarations = context.endLexicalEnvironment();
-        return createNodeArray(concatenate(statements, declarations), statements);
+        return setTextRange(createNodeArray(concatenate(statements, declarations)), statements);
     }
 
     /**
@@ -747,6 +685,11 @@ namespace ts {
                 return node;
 
             // Names
+            case SyntaxKind.QualifiedName:
+                return updateQualifiedName(<QualifiedName>node,
+                    visitNode((<QualifiedName>node).left, visitor, isEntityName),
+                    visitNode((<QualifiedName>node).right, visitor, isIdentifier));
+
             case SyntaxKind.ComputedPropertyName:
                 return updateComputedPropertyName(<ComputedPropertyName>node,
                     visitNode((<ComputedPropertyName>node).expression, visitor, isExpression));
@@ -760,6 +703,10 @@ namespace ts {
                     visitNode((<ParameterDeclaration>node).name, visitor, isBindingName),
                     visitNode((<ParameterDeclaration>node).type, visitor, isTypeNode, /*optional*/ true),
                     visitNode((<ParameterDeclaration>node).initializer, visitor, isExpression, /*optional*/ true));
+
+            case SyntaxKind.Decorator:
+                return updateDecorator(<Decorator>node,
+                    visitNode((<Decorator>node).expression, visitor, isExpression));
 
             // Type member
             case SyntaxKind.PropertyDeclaration:
@@ -856,6 +803,11 @@ namespace ts {
                     visitNode((<TaggedTemplateExpression>node).tag, visitor, isExpression),
                     visitNode((<TaggedTemplateExpression>node).template, visitor, isTemplateLiteral));
 
+            case SyntaxKind.TypeAssertionExpression:
+                return updateTypeAssertion(<TypeAssertion>node,
+                    visitNode((<TypeAssertion>node).type, visitor, isTypeNode),
+                    visitNode((<TypeAssertion>node).expression, visitor, isExpression));
+
             case SyntaxKind.ParenthesizedExpression:
                 return updateParen(<ParenthesizedExpression>node,
                     visitNode((<ParenthesizedExpression>node).expression, visitor, isExpression));
@@ -937,6 +889,15 @@ namespace ts {
                 return updateExpressionWithTypeArguments(<ExpressionWithTypeArguments>node,
                     visitNodes((<ExpressionWithTypeArguments>node).typeArguments, visitor, isTypeNode),
                     visitNode((<ExpressionWithTypeArguments>node).expression, visitor, isExpression));
+
+            case SyntaxKind.AsExpression:
+                return updateAsExpression(<AsExpression>node,
+                    visitNode((<AsExpression>node).expression, visitor, isExpression),
+                    visitNode((<AsExpression>node).type, visitor, isTypeNode));
+
+            case SyntaxKind.NonNullExpression:
+                return updateNonNullExpression(<NonNullExpression>node,
+                    visitNode((<NonNullExpression>node).expression, visitor, isExpression));
 
             // Misc
             case SyntaxKind.TemplateSpan:
@@ -1059,9 +1020,34 @@ namespace ts {
                     visitNodes((<ClassDeclaration>node).heritageClauses, visitor, isHeritageClause),
                     visitNodes((<ClassDeclaration>node).members, visitor, isClassElement));
 
+            case SyntaxKind.EnumDeclaration:
+                return updateEnumDeclaration(<EnumDeclaration>node,
+                    visitNodes((<EnumDeclaration>node).decorators, visitor, isDecorator),
+                    visitNodes((<EnumDeclaration>node).modifiers, visitor, isModifier),
+                    visitNode((<EnumDeclaration>node).name, visitor, isIdentifier),
+                    visitNodes((<EnumDeclaration>node).members, visitor, isEnumMember));
+
+            case SyntaxKind.ModuleDeclaration:
+                return updateModuleDeclaration(<ModuleDeclaration>node,
+                    visitNodes((<ModuleDeclaration>node).decorators, visitor, isDecorator),
+                    visitNodes((<ModuleDeclaration>node).modifiers, visitor, isModifier),
+                    visitNode((<ModuleDeclaration>node).name, visitor, isIdentifier),
+                    visitNode((<ModuleDeclaration>node).body, visitor, isModuleBody));
+
+            case SyntaxKind.ModuleBlock:
+                return updateModuleBlock(<ModuleBlock>node,
+                    visitNodes((<ModuleBlock>node).statements, visitor, isStatement));
+
             case SyntaxKind.CaseBlock:
                 return updateCaseBlock(<CaseBlock>node,
                     visitNodes((<CaseBlock>node).clauses, visitor, isCaseOrDefaultClause));
+
+            case SyntaxKind.ImportEqualsDeclaration:
+                return updateImportEqualsDeclaration(<ImportEqualsDeclaration>node,
+                    visitNodes((<ImportEqualsDeclaration>node).decorators, visitor, isDecorator),
+                    visitNodes((<ImportEqualsDeclaration>node).modifiers, visitor, isModifier),
+                    visitNode((<ImportEqualsDeclaration>node).name, visitor, isIdentifier),
+                    visitNode((<ImportEqualsDeclaration>node).moduleReference, visitor, isModuleReference));
 
             case SyntaxKind.ImportDeclaration:
                 return updateImportDeclaration(<ImportDeclaration>node,
@@ -1109,6 +1095,11 @@ namespace ts {
                 return updateExportSpecifier(<ExportSpecifier>node,
                     visitNode((<ExportSpecifier>node).propertyName, visitor, isIdentifier, /*optional*/ true),
                     visitNode((<ExportSpecifier>node).name, visitor, isIdentifier));
+
+            // Module references
+            case SyntaxKind.ExternalModuleReference:
+                return updateExternalModuleReference(<ExternalModuleReference>node,
+                    visitNode((<ExternalModuleReference>node).expression, visitor, isExpression));
 
             // JSX
             case SyntaxKind.JsxElement:
@@ -1175,10 +1166,16 @@ namespace ts {
                     visitNode((<ShorthandPropertyAssignment>node).objectAssignmentInitializer, visitor, isExpression));
 
             case SyntaxKind.SpreadAssignment:
-                return updateSpreadAssignment(node as SpreadAssignment,
-                    visitNode((node as SpreadAssignment).expression, visitor, isExpression));
+                return updateSpreadAssignment(<SpreadAssignment>node,
+                    visitNode((<SpreadAssignment>node).expression, visitor, isExpression));
 
-           // Top-level nodes
+            // Enum
+            case SyntaxKind.EnumMember:
+                return updateEnumMember(<EnumMember>node,
+                    visitNode((<EnumMember>node).name, visitor, isPropertyName),
+                    visitNode((<EnumMember>node).initializer, visitor, isExpression, /*optional*/ true));
+
+            // Top-level nodes
             case SyntaxKind.SourceFile:
                 return updateSourceFileNode(<SourceFile>node,
                     visitLexicalEnvironment((<SourceFile>node).statements, visitor, context));
@@ -1189,30 +1186,8 @@ namespace ts {
                     visitNode((<PartiallyEmittedExpression>node).expression, visitor, isExpression));
 
             default:
-                let updated: Node & MapLike<any>;
-                const edgeTraversalPath = getNodeEdgeTraversal(kind);
-                if (edgeTraversalPath) {
-                    for (const edge of edgeTraversalPath) {
-                        const value = <Node | NodeArray<Node>>(<Node & MapLike<any>>node)[edge.name];
-                        if (value !== undefined) {
-                            const visited = isArray(value)
-                                ? visitNodes(value, visitor, edge.test, 0, value.length, edge.parenthesize, node)
-                                : visitNode(value, visitor, edge.test, edge.optional, edge.lift, edge.parenthesize, node);
-                            if (updated !== undefined || visited !== value) {
-                                if (updated === undefined) {
-                                    updated = getMutableClone(node);
-                                }
-                                if (visited !== value) {
-                                    updated[edge.name] = visited;
-                                }
-                            }
-                        }
-                    }
-                }
-                return updated ? updateNode(updated, node) : node;
+                return node;
         }
-
-        // return node;
     }
 
     /**
@@ -1228,7 +1203,7 @@ namespace ts {
             return statements;
         }
         return isNodeArray(statements)
-            ? createNodeArray(concatenate(statements, declarations), statements)
+            ? setTextRange(createNodeArray(concatenate(statements, declarations)), statements)
             : addRange(statements, declarations);
     }
 
@@ -1252,13 +1227,19 @@ namespace ts {
     export function mergeFunctionBodyLexicalEnvironment(body: ConciseBody, declarations: Statement[]): ConciseBody {
         if (body && declarations !== undefined && declarations.length > 0) {
             if (isBlock(body)) {
-                return updateBlock(body, createNodeArray(concatenate(body.statements, declarations), body.statements));
+                return updateBlock(body, setTextRange(createNodeArray(concatenate(body.statements, declarations)), body.statements));
             }
             else {
-                return createBlock(
-                    createNodeArray([createReturn(body, /*location*/ body), ...declarations], body),
-                    /*location*/ body,
-                    /*multiLine*/ true);
+                return setTextRange(
+                    createBlock(
+                        setTextRange(
+                            createNodeArray([setTextRange(createReturn(body), body), ...declarations]),
+                            body
+                        ),
+                        /*multiLine*/ true
+                    ),
+                    /*location*/ body
+                );
             }
         }
         return body;

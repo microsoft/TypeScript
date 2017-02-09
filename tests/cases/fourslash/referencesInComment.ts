@@ -5,4 +5,4 @@
 ////class foo { }
 ////var bar = 0;
 
-goTo.eachMarker(() => verify.referencesAre([]));
+goTo.eachMarker(() => verify.noReferences());

@@ -35,13 +35,15 @@ namespace ts {
         forEachEmittedFile(host, getDeclarationDiagnosticsFromFile, targetSourceFile);
         return declarationDiagnostics.getDiagnostics(targetSourceFile ? targetSourceFile.fileName : undefined);
 
-        function getDeclarationDiagnosticsFromFile({ declarationFilePath }: EmitFileNames, sources: SourceFile[], isBundledEmit: boolean) {
-            emitDeclarations(host, resolver, declarationDiagnostics, declarationFilePath, sources, isBundledEmit, /*emitOnlyDtsFiles*/ false);
+        function getDeclarationDiagnosticsFromFile({ declarationFilePath }: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle) {
+            emitDeclarations(host, resolver, declarationDiagnostics, declarationFilePath, sourceFileOrBundle, /*emitOnlyDtsFiles*/ false);
         }
     }
 
     function emitDeclarations(host: EmitHost, resolver: EmitResolver, emitterDiagnostics: DiagnosticCollection, declarationFilePath: string,
-        sourceFiles: SourceFile[], isBundledEmit: boolean, emitOnlyDtsFiles: boolean): DeclarationEmit {
+        sourceFileOrBundle: SourceFile | Bundle, emitOnlyDtsFiles: boolean): DeclarationEmit {
+        const sourceFiles = sourceFileOrBundle.kind === SyntaxKind.Bundle ? sourceFileOrBundle.sourceFiles : [sourceFileOrBundle];
+        const isBundledEmit = sourceFileOrBundle.kind === SyntaxKind.Bundle;
         const newLine = host.getNewLine();
         const compilerOptions = host.getCompilerOptions();
 
@@ -1803,8 +1805,9 @@ namespace ts {
             }
             return addedBundledEmitReference;
 
-            function getDeclFileName(emitFileNames: EmitFileNames, _sourceFiles: SourceFile[], isBundledEmit: boolean) {
+            function getDeclFileName(emitFileNames: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle) {
                 // Dont add reference path to this file if it is a bundled emit and caller asked not emit bundled file path
+                const isBundledEmit = sourceFileOrBundle.kind === SyntaxKind.Bundle;
                 if (isBundledEmit && !addBundledFileReference) {
                     return;
                 }
@@ -1817,10 +1820,11 @@ namespace ts {
     }
 
     /* @internal */
-    export function writeDeclarationFile(declarationFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean, host: EmitHost, resolver: EmitResolver, emitterDiagnostics: DiagnosticCollection, emitOnlyDtsFiles: boolean) {
-        const emitDeclarationResult = emitDeclarations(host, resolver, emitterDiagnostics, declarationFilePath, sourceFiles, isBundledEmit, emitOnlyDtsFiles);
+    export function writeDeclarationFile(declarationFilePath: string, sourceFileOrBundle: SourceFile | Bundle, host: EmitHost, resolver: EmitResolver, emitterDiagnostics: DiagnosticCollection, emitOnlyDtsFiles: boolean) {
+        const emitDeclarationResult = emitDeclarations(host, resolver, emitterDiagnostics, declarationFilePath, sourceFileOrBundle, emitOnlyDtsFiles);
         const emitSkipped = emitDeclarationResult.reportedDeclarationError || host.isEmitBlocked(declarationFilePath) || host.getCompilerOptions().noEmit;
         if (!emitSkipped) {
+            const sourceFiles = sourceFileOrBundle.kind === SyntaxKind.Bundle ? sourceFileOrBundle.sourceFiles : [sourceFileOrBundle];
             const declarationOutput = emitDeclarationResult.referencesOutput
                 + getDeclarationOutput(emitDeclarationResult.synchronousDeclarationOutput, emitDeclarationResult.moduleElementDeclarationEmitInfo);
             writeFile(host, emitterDiagnostics, declarationFilePath, declarationOutput, host.getCompilerOptions().emitBOM, sourceFiles);

@@ -895,6 +895,14 @@ namespace ts {
         return result;
     }
 
+    export function convertToArray<T, U>(iterator: Iterator<T>, f: (value: T) => U) {
+        const result: U[] = [];
+        for (let { value, done } = iterator.next(); !done; { value, done } = iterator.next()) {
+            result.push(f(value));
+        }
+        return result;
+    }
+
     /**
      * Calls `callback` for each entry in the map, returning the first truthy result.
      * Use `map.forEach` instead for normal iteration.
@@ -1447,7 +1455,7 @@ namespace ts {
         return /^\.\.?($|[\\/])/.test(moduleName);
     }
 
-    export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
+    export function getEmitScriptTarget(compilerOptions: CompilerOptions | PrinterOptions) {
         return compilerOptions.target || ScriptTarget.ES3;
     }
 
