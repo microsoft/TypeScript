@@ -3115,7 +3115,7 @@ namespace ts.projectSystem {
             let options = project.getCompilerOptions();
             assert.isTrue(options.maxNodeModuleJsDepth === 2);
 
-            // Assert the option sticks 
+            // Assert the option sticks
             projectService.setCompilerOptionsForInferredProjects({ target: ScriptTarget.ES2016 });
             project = projectService.inferredProjects[0];
             options = project.getCompilerOptions();

@@ -183,7 +183,7 @@ namespace FourSlash {
 
         // The current caret position in the active file
         public currentCaretPosition = 0;
-        public lastKnownMarker: string = "";
+        public lastKnownMarker = "";
 
         // The file that's currently 'opened'
         public activeFile: FourSlashFile;
