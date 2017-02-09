@@ -3736,9 +3736,9 @@ namespace ts {
             return getObjectFlags(type) & ObjectFlags.Reference ? (<TypeReference>type).target : type;
         }
 
-        function hasBaseType(type: BaseType, checkBase: BaseType) {
+        function hasBaseType(type: Type, checkBase: Type) {
             return check(type);
-            function check(type: BaseType): boolean {
+            function check(type: Type): boolean {
                 if (getObjectFlags(type) & (ObjectFlags.ClassOrInterface | ObjectFlags.Reference)) {
                     const target = <InterfaceType>getTargetType(type);
                     return target === checkBase || forEach(getBaseTypes(target), check);
@@ -4939,17 +4939,19 @@ namespace ts {
         }
 
         function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: string): Symbol {
-            const types = containingType.types;
-            const excludeModifiers = containingType.flags & TypeFlags.Union ? ModifierFlags.Private | ModifierFlags.Protected : 0;
             let props: Symbol[];
+            const types = containingType.types;
+            const isUnion = containingType.flags & TypeFlags.Union;
+            const excludeModifiers = isUnion ? ModifierFlags.NonPublicAccessibilityModifier : 0;
             // Flags we want to propagate to the result if they exist in all source symbols
-            let commonFlags = (containingType.flags & TypeFlags.Intersection) ? SymbolFlags.Optional : SymbolFlags.None;
+            let commonFlags = isUnion ? SymbolFlags.None : SymbolFlags.Optional;
             let checkFlags = CheckFlags.SyntheticProperty;
             for (const current of types) {
                 const type = getApparentType(current);
                 if (type !== unknownType) {
                     const prop = getPropertyOfType(type, name);
-                    if (prop && !(getDeclarationModifierFlagsFromSymbol(prop) & excludeModifiers)) {
+                    const modifiers = prop ? getDeclarationModifierFlagsFromSymbol(prop) : 0;
+                    if (prop && !(modifiers & excludeModifiers)) {
                         commonFlags &= prop.flags;
                         if (!props) {
                             props = [prop];
@@ -4957,11 +4959,13 @@ namespace ts {
                         else if (!contains(props, prop)) {
                             props.push(prop);
                         }
-                        if (isReadonlySymbol(prop)) {
-                            checkFlags |= CheckFlags.Readonly;
-                        }
+                        checkFlags |= (isReadonlySymbol(prop) ? CheckFlags.Readonly : 0) |
+                            (!(modifiers & ModifierFlags.NonPublicAccessibilityModifier) ? CheckFlags.ContainsPublic : 0) |
+                            (modifiers & ModifierFlags.Protected ? CheckFlags.ContainsProtected : 0) |
+                            (modifiers & ModifierFlags.Private ? CheckFlags.ContainsPrivate : 0) |
+                            (modifiers & ModifierFlags.Static ? CheckFlags.ContainsStatic : 0);
                     }
-                    else if (containingType.flags & TypeFlags.Union) {
+                    else if (isUnion) {
                         checkFlags |= CheckFlags.Partial;
                     }
                 }
@@ -4992,7 +4996,7 @@ namespace ts {
             result.checkFlags = checkFlags;
             result.containingType = containingType;
             result.declarations = declarations;
-            result.type = containingType.flags & TypeFlags.Union ? getUnionType(propTypes) : getIntersectionType(propTypes);
+            result.type = isUnion ? getUnionType(propTypes) : getIntersectionType(propTypes);
             return result;
         }
 
@@ -6066,7 +6070,10 @@ namespace ts {
                 if (type.flags & TypeFlags.Union && typeSet.unionIndex === undefined) {
                     typeSet.unionIndex = typeSet.length;
                 }
-                typeSet.push(type);
+                if (!(type.flags & TypeFlags.Object && (<ObjectType>type).objectFlags & ObjectFlags.Anonymous &&
+                    type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && containsIdenticalType(typeSet, type))) {
+                    typeSet.push(type);
+                }
             }
         }
 
@@ -7950,6 +7957,12 @@ namespace ts {
                             const sourcePropFlags = getDeclarationModifierFlagsFromSymbol(sourceProp);
                             const targetPropFlags = getDeclarationModifierFlagsFromSymbol(targetProp);
                             if (sourcePropFlags & ModifierFlags.Private || targetPropFlags & ModifierFlags.Private) {
+                                if (getCheckFlags(sourceProp) & CheckFlags.ContainsPrivate) {
+                                    if (reportErrors) {
+                                        reportError(Diagnostics.Property_0_has_conflicting_declarations_and_is_inaccessible_in_type_1, symbolToString(sourceProp), typeToString(source));
+                                    }
+                                    return Ternary.False;
+                                }
                                 if (sourceProp.valueDeclaration !== targetProp.valueDeclaration) {
                                     if (reportErrors) {
                                         if (sourcePropFlags & ModifierFlags.Private && targetPropFlags & ModifierFlags.Private) {
@@ -7965,13 +7978,10 @@ namespace ts {
                                 }
                             }
                             else if (targetPropFlags & ModifierFlags.Protected) {
-                                const sourceDeclaredInClass = sourceProp.parent && sourceProp.parent.flags & SymbolFlags.Class;
-                                const sourceClass = sourceDeclaredInClass ? <InterfaceType>getDeclaredTypeOfSymbol(getParentOfSymbol(sourceProp)) : undefined;
-                                const targetClass = <InterfaceType>getDeclaredTypeOfSymbol(getParentOfSymbol(targetProp));
-                                if (!sourceClass || !hasBaseType(sourceClass, targetClass)) {
+                                if (!isValidOverrideOf(sourceProp, targetProp)) {
                                     if (reportErrors) {
-                                        reportError(Diagnostics.Property_0_is_protected_but_type_1_is_not_a_class_derived_from_2,
-                                            symbolToString(targetProp), typeToString(sourceClass || source), typeToString(targetClass));
+                                        reportError(Diagnostics.Property_0_is_protected_but_type_1_is_not_a_class_derived_from_2, symbolToString(targetProp),
+                                            typeToString(getDeclaringClass(sourceProp) || source), typeToString(getDeclaringClass(targetProp) || target));
                                     }
                                     return Ternary.False;
                                 }
@@ -8211,6 +8221,49 @@ namespace ts {
 
                 return false;
             }
+        }
+
+        // Invoke the callback for each underlying property symbol of the given symbol and return the first
+        // value that isn't undefined.
+        function forEachProperty<T>(prop: Symbol, callback: (p: Symbol) => T): T {
+            if (getCheckFlags(prop) & CheckFlags.SyntheticProperty) {
+                for (const t of (<TransientSymbol>prop).containingType.types) {
+                    const p = getPropertyOfType(t, prop.name);
+                    const result = p && forEachProperty(p, callback);
+                    if (result) {
+                        return result;
+                    }
+                }
+                return undefined;
+            }
+            return callback(prop);
+        }
+
+        // Return the declaring class type of a property or undefined if property not declared in class
+        function getDeclaringClass(prop: Symbol) {
+            return prop.parent && prop.parent.flags & SymbolFlags.Class ? getDeclaredTypeOfSymbol(getParentOfSymbol(prop)) : undefined;
+        }
+
+        // Return true if some underlying source property is declared in a class that derives
+        // from the given base class.
+        function isPropertyInClassDerivedFrom(prop: Symbol, baseClass: Type) {
+            return forEachProperty(prop, sp => {
+                const sourceClass = getDeclaringClass(sp);
+                return sourceClass ? hasBaseType(sourceClass, baseClass) : false;
+            });
+        }
+
+        // Return true if source property is a valid override of protected parts of target property.
+        function isValidOverrideOf(sourceProp: Symbol, targetProp: Symbol) {
+            return !forEachProperty(targetProp, tp => getDeclarationModifierFlagsFromSymbol(tp) & ModifierFlags.Protected ?
+                !isPropertyInClassDerivedFrom(sourceProp, getDeclaringClass(tp)) : false);
+        }
+
+        // Return true if the given class derives from each of the declaring classes of the protected
+        // constituents of the given property.
+        function isClassDerivedFromDeclaringClasses(checkClass: Type, prop: Symbol) {
+            return forEachProperty(prop, p => getDeclarationModifierFlagsFromSymbol(p) & ModifierFlags.Protected ?
+                !hasBaseType(checkClass, getDeclaringClass(p)) : false) ? undefined : checkClass;
         }
 
         // Return true if the given type is the constructor type for an abstract class
@@ -12369,7 +12422,22 @@ namespace ts {
         }
 
         function getDeclarationModifierFlagsFromSymbol(s: Symbol): ModifierFlags {
-            return s.valueDeclaration ? getCombinedModifierFlags(s.valueDeclaration) : s.flags & SymbolFlags.Prototype ? ModifierFlags.Public | ModifierFlags.Static : 0;
+            if (s.valueDeclaration) {
+                const flags = getCombinedModifierFlags(s.valueDeclaration);
+                return s.parent && s.parent.flags & SymbolFlags.Class ? flags : flags & ~ModifierFlags.AccessibilityModifier;
+            }
+            if (getCheckFlags(s) & CheckFlags.SyntheticProperty) {
+                const checkFlags = (<TransientSymbol>s).checkFlags;
+                const accessModifier = checkFlags & CheckFlags.ContainsPrivate ? ModifierFlags.Private :
+                    checkFlags & CheckFlags.ContainsPublic ? ModifierFlags.Public :
+                    ModifierFlags.Protected;
+                const staticModifier = checkFlags & CheckFlags.ContainsStatic ? ModifierFlags.Static : 0;
+                return accessModifier | staticModifier;
+            }
+            if (s.flags & SymbolFlags.Prototype) {
+                return ModifierFlags.Public | ModifierFlags.Static;
+            }
+            return 0;
         }
 
         function getDeclarationNodeFlagsFromSymbol(s: Symbol): NodeFlags {
@@ -12384,12 +12452,18 @@ namespace ts {
          * @param type The type of left.
          * @param prop The symbol for the right hand side of the property access.
          */
-        function checkClassPropertyAccess(node: PropertyAccessExpression | QualifiedName | VariableLikeDeclaration, left: Expression | QualifiedName, type: Type, prop: Symbol): boolean {
+        function checkPropertyAccessibility(node: PropertyAccessExpression | QualifiedName | VariableLikeDeclaration, left: Expression | QualifiedName, type: Type, prop: Symbol): boolean {
             const flags = getDeclarationModifierFlagsFromSymbol(prop);
-            const declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(getParentOfSymbol(prop));
             const errorNode = node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.VariableDeclaration ?
                 (<PropertyAccessExpression | VariableDeclaration>node).name :
                 (<QualifiedName>node).right;
+
+            if (getCheckFlags(prop) & CheckFlags.ContainsPrivate) {
+                // Synthetic property with private constituent property
+                error(errorNode, Diagnostics.Property_0_has_conflicting_declarations_and_is_inaccessible_in_type_1, symbolToString(prop), typeToString(type));
+                return false;
+            }
+
             if (left.kind === SyntaxKind.SuperKeyword) {
                 // TS 1.0 spec (April 2014): 4.8.2
                 // - In a constructor, instance member function, instance member accessor, or
@@ -12408,14 +12482,12 @@ namespace ts {
                         return false;
                     }
                 }
-
                 if (flags & ModifierFlags.Abstract) {
                     // A method cannot be accessed in a super property access if the method is abstract.
                     // This error could mask a private property access error. But, a member
                     // cannot simultaneously be private and abstract, so this will trigger an
                     // additional error elsewhere.
-
-                    error(errorNode, Diagnostics.Abstract_method_0_in_class_1_cannot_be_accessed_via_super_expression, symbolToString(prop), typeToString(declaringClass));
+                    error(errorNode, Diagnostics.Abstract_method_0_in_class_1_cannot_be_accessed_via_super_expression, symbolToString(prop), typeToString(getDeclaringClass(prop)));
                     return false;
                 }
             }
@@ -12431,7 +12503,7 @@ namespace ts {
             if (flags & ModifierFlags.Private) {
                 const declaringClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop));
                 if (!isNodeWithinClass(node, declaringClassDeclaration)) {
-                    error(errorNode, Diagnostics.Property_0_is_private_and_only_accessible_within_class_1, symbolToString(prop), typeToString(declaringClass));
+                    error(errorNode, Diagnostics.Property_0_is_private_and_only_accessible_within_class_1, symbolToString(prop), typeToString(getDeclaringClass(prop)));
                     return false;
                 }
                 return true;
@@ -12444,15 +12516,15 @@ namespace ts {
                 return true;
             }
 
-            // Get the enclosing class that has the declaring class as its base type
+            // Find the first enclosing class that has the declaring classes of the protected constituents
+            // of the property as base classes
             const enclosingClass = forEachEnclosingClass(node, enclosingDeclaration => {
                 const enclosingClass = <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingDeclaration));
-                return hasBaseType(enclosingClass, declaringClass) ? enclosingClass : undefined;
+                return isClassDerivedFromDeclaringClasses(enclosingClass, prop) ? enclosingClass : undefined;
             });
-
             // A protected property is accessible if the property is within the declaring class or classes derived from it
             if (!enclosingClass) {
-                error(errorNode, Diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, symbolToString(prop), typeToString(declaringClass));
+                error(errorNode, Diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, symbolToString(prop), typeToString(getDeclaringClass(prop) || type));
                 return false;
             }
             // No further restrictions for static properties
@@ -12464,9 +12536,7 @@ namespace ts {
                 // get the original type -- represented as the type constraint of the 'this' type
                 type = getConstraintOfTypeParameter(<TypeParameter>type);
             }
-
-            // TODO: why is the first part of this check here?
-            if (!(getObjectFlags(getTargetType(type)) & ObjectFlags.ClassOrInterface && hasBaseType(<InterfaceType>type, enclosingClass))) {
+            if (!(getObjectFlags(getTargetType(type)) & ObjectFlags.ClassOrInterface && hasBaseType(type, enclosingClass))) {
                 error(errorNode, Diagnostics.Property_0_is_protected_and_only_accessible_through_an_instance_of_class_1, symbolToString(prop), typeToString(enclosingClass));
                 return false;
             }
@@ -12553,9 +12623,7 @@ namespace ts {
 
             getNodeLinks(node).resolvedSymbol = prop;
 
-            if (prop.parent && prop.parent.flags & SymbolFlags.Class) {
-                checkClassPropertyAccess(node, left, apparentType, prop);
-            }
+            checkPropertyAccessibility(node, left, apparentType, prop);
 
             const propType = getTypeOfSymbol(prop);
             const assignmentKind = getAssignmentTargetKind(node);
@@ -12587,8 +12655,8 @@ namespace ts {
             const type = checkExpression(left);
             if (type !== unknownType && !isTypeAny(type)) {
                 const prop = getPropertyOfType(getWidenedType(type), propertyName);
-                if (prop && prop.parent && prop.parent.flags & SymbolFlags.Class) {
-                    return checkClassPropertyAccess(node, left, type, prop);
+                if (prop) {
+                    return checkPropertyAccessibility(node, left, type, prop);
                 }
             }
             return true;
@@ -17527,8 +17595,8 @@ namespace ts {
                 const name = node.propertyName || <Identifier>node.name;
                 const property = getPropertyOfType(parentType, getTextOfPropertyName(name));
                 markPropertyAsReferenced(property);
-                if (parent.initializer && property && getParentOfSymbol(property)) {
-                    checkClassPropertyAccess(parent, parent.initializer, parentType, property);
+                if (parent.initializer && property) {
+                    checkPropertyAccessibility(parent, parent.initializer, parentType, property);
                 }
             }
 

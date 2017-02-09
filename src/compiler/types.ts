@@ -2727,8 +2727,12 @@
         Instantiated      = 1 << 0,         // Instantiated symbol
         SyntheticProperty = 1 << 1,         // Property in union or intersection type
         Readonly          = 1 << 2,         // Readonly transient symbol
-        Partial           = 1 << 3,         // Property present in some but not all constituents
-        HasNonUniformType = 1 << 4,         // Constituents have non-uniform types
+        Partial           = 1 << 3,         // Synthetic property present in some but not all constituents
+        HasNonUniformType = 1 << 4,         // Synthetic property with non-uniform type in constituents
+        ContainsPublic    = 1 << 5,         // Synthetic property with public constituent(s)
+        ContainsProtected = 1 << 6,         // Synthetic property with protected constituent(s)
+        ContainsPrivate   = 1 << 7,         // Synthetic property with private constituent(s)
+        ContainsStatic    = 1 << 8,         // Synthetic property with static constituent(s)
     }
 
     /* @internal */

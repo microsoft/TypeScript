@@ -1787,6 +1787,10 @@
         "category": "Error",
         "code": 2545
     },
+    "Property '{0}' has conflicting declarations and is inaccessible in type '{1}'.": {
+        "category": "Error",
+        "code": 2546
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
