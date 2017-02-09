@@ -3085,6 +3085,39 @@
         "category": "Message",
         "code": 6170
     },
+    "CommandLine Options": {
+        "category": "Message",
+        "code": 6171
+    },
+    "Basic Options": {
+        "category": "Message",
+        "code": 6172
+    },
+    "Strict Checks": {
+        "category": "Message",
+        "code": 6173
+    },
+    "Module Resolution Options": {
+        "category": "Message",
+        "code": 6174
+    },
+    "SourceMap Options": {
+        "category": "Message",
+        "code": 6175
+    },
+    "JSX Options": {
+        "category": "Message",
+        "code": 6176
+    },
+    "Experimental Options": {
+        "category": "Message",
+        "code": 6177
+    },
+    "Advanced Options": {
+        "category": "Message",
+        "code": 6178
+    },
+
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

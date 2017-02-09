@@ -3386,7 +3386,7 @@
         isTSConfigOnly?: boolean;                               // True if option can only be specified via tsconfig.json file
         isCommandLineOnly?: boolean;
         showInSimplifiedHelpView?:boolean;
-        category?: "CommandLine" | "Basic" | "StrictChecks" | "ModuleResolution" | "JSX" | "SourceMaps" | "Experimental" | "Advanced";
+        category?: DiagnosticMessage;
     }
 
     /* @internal */
