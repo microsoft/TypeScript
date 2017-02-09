@@ -37,7 +37,6 @@ if (process.env.path !== undefined) {
 }
 
 function filesFromConfig(configPath) {
-    console.log(configPath);
     var configText = fs.readFileSync(configPath).toString();
     var config = ts.parseConfigFileTextToJson(configPath, configText, /*stripComments*/ true);
     if (config.error) {
