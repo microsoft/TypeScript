@@ -5226,7 +5226,7 @@ namespace ts {
                 let hasThisParameter: boolean;
                 const iife = getImmediatelyInvokedFunctionExpression(declaration);
                 const isJSConstructSignature = isJSDocConstructSignature(declaration);
-                const isUntypedSignatureInJSFile = !iife && !isJSConstructSignature && isInJavaScriptFile(declaration) && !hasJSDocParamterTags(declaration);
+                const isUntypedSignatureInJSFile = !iife && !isJSConstructSignature && isInJavaScriptFile(declaration) && !hasJSDocParameterTags(declaration);
 
                 // If this is a JSDoc construct signature, then skip the first parameter in the
                 // parameter list.  The first parameter represents the return type of the construct

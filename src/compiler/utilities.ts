@@ -1518,7 +1518,7 @@ namespace ts {
         return map(getJSDocs(node), doc => doc.comment);
     }
 
-    export function hasJSDocParamterTags(node: FunctionLikeDeclaration | SignatureDeclaration) {
+    export function hasJSDocParameterTags(node: FunctionLikeDeclaration | SignatureDeclaration) {
         const parameterTags = getJSDocTags(node, SyntaxKind.JSDocParameterTag);
         return parameterTags && parameterTags.length > 0;
     }
