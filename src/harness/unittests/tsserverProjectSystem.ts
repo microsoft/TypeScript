@@ -600,7 +600,7 @@ namespace ts.projectSystem {
 
             checkProjectActualFiles(service.configuredProjects[0], []);
             checkProjectActualFiles(service.inferredProjects[0], [f1.path]);
-        })
+        });
 
         it("create configured project without file list", () => {
             const configFile: FileOrFolder = {
@@ -1153,7 +1153,7 @@ namespace ts.projectSystem {
 
             const host = createServerHost([f1, f2, libFile]);
             const service = createProjectService(host);
-            service.openExternalProject({ projectFileName: "/a/b/project", rootFiles: toExternalFiles([f1.path, f2.path]), options: {} })
+            service.openExternalProject({ projectFileName: "/a/b/project", rootFiles: toExternalFiles([f1.path, f2.path]), options: {} });
 
             service.openClientFile(f1.path);
             service.openClientFile(f2.path, "let x: string");
@@ -1185,7 +1185,7 @@ namespace ts.projectSystem {
 
             const host = createServerHost([f1, f2, libFile]);
             const service = createProjectService(host);
-            service.openExternalProject({ projectFileName: "/a/b/project", rootFiles: [{ fileName: f1.path }, { fileName: f2.path, hasMixedContent: true }], options: {} })
+            service.openExternalProject({ projectFileName: "/a/b/project", rootFiles: [{ fileName: f1.path }, { fileName: f2.path, hasMixedContent: true }], options: {} });
 
             service.openClientFile(f1.path);
             service.openClientFile(f2.path, "let somelongname: string");
@@ -1868,7 +1868,7 @@ namespace ts.projectSystem {
 
             for (const f of [f2, f3]) {
                 const scriptInfo = projectService.getScriptInfoForNormalizedPath(server.toNormalizedPath(f.path));
-                assert.equal(scriptInfo.containingProjects.length, 0, `expect 0 containing projects for '${f.path}'`)
+                assert.equal(scriptInfo.containingProjects.length, 0, `expect 0 containing projects for '${f.path}'`);
             }
         });
 
@@ -1984,7 +1984,7 @@ namespace ts.projectSystem {
                 projectFileName,
                 rootFiles: [toExternalFile(f1.path)],
                 options: {}
-            })
+            });
             projectService.openClientFile(f1.path, "let x = 1;\nlet y = 2;");
 
             projectService.checkNumberOfProjects({ externalProjects: 1 });

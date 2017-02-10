@@ -689,7 +689,7 @@ namespace ts.server {
                     const fileName = resolvedTypeReferenceDirective.resolvedFileName;
                     const typeFilePath = toPath(fileName, currentDirectory, getCanonicalFileName);
                     referencedFiles.set(typeFilePath, true);
-                })
+                });
             }
 
             const allFileNames = arrayFrom(referencedFiles.keys()) as Path[];
@@ -711,7 +711,7 @@ namespace ts.server {
                 const id = nextId;
                 nextId++;
                 return makeInferredProjectName(id);
-            }
+            };
         })();
 
         private _isJsInferredProject = false;

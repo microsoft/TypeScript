@@ -19760,7 +19760,7 @@ namespace ts {
                 }
 
                 if (potentialNewTargetCollisions.length) {
-                    forEach(potentialNewTargetCollisions, checkIfNewTargetIsCapturedInEnclosingScope)
+                    forEach(potentialNewTargetCollisions, checkIfNewTargetIsCapturedInEnclosingScope);
                     potentialNewTargetCollisions.length = 0;
                 }
 

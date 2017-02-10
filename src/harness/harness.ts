@@ -44,7 +44,7 @@ declare namespace NodeJS {
 declare var window: {};
 declare var XMLHttpRequest: {
     new(): XMLHttpRequest;
-}
+};
 interface XMLHttpRequest  {
     readonly readyState: number;
     readonly responseText: string;
