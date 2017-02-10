@@ -99,8 +99,11 @@ namespace ts.JsTyping {
             const bowerJsonPath = combinePaths(searchDir, "bower.json");
             getTypingNamesFromJson(bowerJsonPath, filesToWatch);
 
+            const bowerComponentsPath = combinePaths(searchDir, "bower_components");
+            getTypingNamesFromPackagesFolder(bowerComponentsPath);
+
             const nodeModulesPath = combinePaths(searchDir, "node_modules");
-            getTypingNamesFromNodeModuleFolder(nodeModulesPath);
+            getTypingNamesFromPackagesFolder(nodeModulesPath);
         }
         getTypingNamesFromSourceFileNames(fileNames);
 
@@ -199,17 +202,20 @@ namespace ts.JsTyping {
         }
 
         /**
-         * Infer typing names from node_module folder
-         * @param nodeModulesPath is the path to the "node_modules" folder
+         * Infer typing names from packages folder (ex: node_module, bower_components)
+         * @param packagesFolderPath is the path to the packages folder
+
          */
-        function getTypingNamesFromNodeModuleFolder(nodeModulesPath: string) {
+        function getTypingNamesFromPackagesFolder(packagesFolderPath: string) {
+            filesToWatch.push(packagesFolderPath);
+
             // Todo: add support for ModuleResolutionHost too
-            if (!host.directoryExists(nodeModulesPath)) {
+            if (!host.directoryExists(packagesFolderPath)) {
                 return;
             }
 
             const typingNames: string[] = [];
-            const fileNames = host.readDirectory(nodeModulesPath, [".json"], /*excludes*/ undefined, /*includes*/ undefined, /*depth*/ 2);
+            const fileNames = host.readDirectory(packagesFolderPath, [".json"], /*excludes*/ undefined, /*includes*/ undefined, /*depth*/ 2);
             for (const fileName of fileNames) {
                 const normalizedFileName = normalizePath(fileName);
                 if (getBaseFileName(normalizedFileName) !== "package.json") {
