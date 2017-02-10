@@ -1,16 +1,22 @@
 /// <reference path='fourslash.ts'/>
 
-//// var [|dx|] = "Foo";
+//// var [|{| "isWriteAccess": true, "isDefinition": true |}dx|] = "Foo";
 ////
-//// module M { export var [|dx|]; }
+//// module M { export var [|{| "isWriteAccess": true, "isDefinition": true |}dx|]; }
 //// module M {
 ////    var z = 100;
-////    export var y = { [|dx|], z };
+////    export var y = { [|{| "isWriteAccess": true, "isDefinition": true |}dx|], z };
 //// }
 //// M.y.[|dx|];
 
 const [r0, r1, r2, r3] = test.ranges();
-verify.referencesOf(r0, [r0]);
-verify.referencesOf(r1, [r1, r2]);
-verify.referencesOf(r2, [r1, r2, r3]);
-verify.referencesOf(r3, [r2, r3]);
+verify.singleReferenceGroup("var dx: string", [r0]);
+verify.referenceGroups(r1, [{ definition: "var M.dx: any", ranges: [r1, r2] }]);
+verify.referenceGroups(r2, [
+    { definition: "var M.dx: any", ranges: [r1] },
+    { definition: "(property) dx: any", ranges: [r2, r3] }
+]);
+verify.referenceGroups(r3, [
+    { definition: "(property) dx: any", ranges: [r2] },
+    { definition: "(property) dx: any", ranges: [r3] }
+]);

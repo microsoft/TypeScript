@@ -227,9 +227,9 @@ function getValueAsString(value: IntersectionFail): string {
 
     if (value.kind === 'int') {
 >value.kind === 'int' : boolean
->value.kind : "int" | "string"
+>value.kind : "string" | "int"
 >value : IntersectionFail
->kind : "int" | "string"
+>kind : "string" | "int"
 >'int' : "int"
 
         return '' + value.num;

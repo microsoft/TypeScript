@@ -110,9 +110,11 @@ namespace ts {
             if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
                 const expression = visitNode(node.expression, visitor, isExpression);
                 return setOriginalNode(
-                    createYield(
-                        /*asteriskToken*/ undefined,
-                        createArrayLiteral([createLiteral("await"), expression]),
+                    setTextRange(
+                        createYield(
+                            /*asteriskToken*/ undefined,
+                            createArrayLiteral([createLiteral("await"), expression])
+                        ),
                         /*location*/ node
                     ),
                     node
@@ -294,18 +296,22 @@ namespace ts {
                 return updateForOf(
                     node,
                     node.awaitModifier,
-                    createVariableDeclarationList(
-                        [
-                            createVariableDeclaration(temp, /*type*/ undefined, /*initializer*/ undefined, node.initializer)
-                        ],
-                        node.initializer,
-                        NodeFlags.Let
+                    setTextRange(
+                        createVariableDeclarationList(
+                            [
+                                setTextRange(createVariableDeclaration(temp), node.initializer)
+                            ],
+                            NodeFlags.Let
+                        ),
+                        node.initializer
                     ),
                     node.expression,
-                    createBlock(
-                        createNodeArray(statements, statementsLocation),
-                        bodyLocation,
-                        /*multiLine*/ true
+                    setTextRange(
+                        createBlock(
+                            setTextRange(createNodeArray(statements), statementsLocation),
+                            /*multiLine*/ true
+                        ),
+                        bodyLocation
                     )
                 );
             }
@@ -329,10 +335,12 @@ namespace ts {
             }
 
             return setEmitFlags(
-                createBlock(
-                    createNodeArray(statements, statementsLocation),
-                    bodyLocation,
-                    /*multiLine*/ true
+                setTextRange(
+                    createBlock(
+                        setTextRange(createNodeArray(statements), statementsLocation),
+                        /*multiLine*/ true
+                    ),
+                    bodyLocation
                 ),
                 EmitFlags.NoSourceMap | EmitFlags.NoTokenSourceMaps
             );
@@ -358,17 +366,22 @@ namespace ts {
             hoistVariableDeclaration(returnMethod);
 
             const forStatement = setEmitFlags(
-                createFor(
-                    /*initializer*/ setEmitFlags(
-                        createVariableDeclarationList([
-                            createVariableDeclaration(iterator, /*type*/ undefined, values, node.expression),
-                            createVariableDeclaration(result, /*type*/ undefined, next)
-                        ], /*location*/ node.expression),
-                        EmitFlags.NoHoisting
+                setTextRange(
+                    createFor(
+                        /*initializer*/ setEmitFlags(
+                            setTextRange(
+                                createVariableDeclarationList([
+                                    setTextRange(createVariableDeclaration(iterator, /*type*/ undefined, values), node.expression),
+                                    createVariableDeclaration(result, /*type*/ undefined, next)
+                                ]),
+                                node.expression
+                            ),
+                            EmitFlags.NoHoisting
+                        ),
+                        /*condition*/ createLogicalNot(createPropertyAccess(result, "done")),
+                        /*incrementor*/ createAssignment(result, next),
+                        /*statement*/ convertForOfStatementHead(node, createPropertyAccess(result, "value"))
                     ),
-                    /*condition*/ createLogicalNot(createPropertyAccess(result, "done")),
-                    /*incrementor*/ createAssignment(result, next),
-                    /*statement*/ convertForOfStatementHead(node, createPropertyAccess(result, "value")),
                     /*location*/ node
                 ),
                 EmitFlags.NoTokenTrailingSourceMaps
@@ -381,7 +394,8 @@ namespace ts {
                         outermostLabeledStatement
                     )
                 ]),
-                createCatchClause(catchVariable,
+                createCatchClause(
+                    createVariableDeclaration(catchVariable),
                     setEmitFlags(
                         createBlock([
                             createStatement(
@@ -647,7 +661,7 @@ namespace ts {
             const trailingStatements = endLexicalEnvironment();
             if (some(leadingStatements) || some(trailingStatements)) {
                 const block = convertToFunctionBody(body, /*multiLine*/ true);
-                return updateBlock(block, createNodeArray(concatenate(concatenate(leadingStatements, block.statements), trailingStatements), block.statements));
+                return updateBlock(block, setTextRange(createNodeArray(concatenate(concatenate(leadingStatements, block.statements), trailingStatements)), block.statements));
             }
             return body;
         }
@@ -798,21 +812,25 @@ namespace ts {
 
         function createSuperAccessInAsyncMethod(argumentExpression: Expression, location: TextRange): LeftHandSideExpression {
             if (enclosingSuperContainerFlags & NodeCheckFlags.AsyncMethodWithSuperBinding) {
-                return createPropertyAccess(
+                return setTextRange(
+                    createPropertyAccess(
+                        createCall(
+                            createIdentifier("_super"),
+                            /*typeArguments*/ undefined,
+                            [argumentExpression]
+                        ),
+                        "value"
+                    ),
+                    location
+                );
+            }
+            else {
+                return setTextRange(
                     createCall(
                         createIdentifier("_super"),
                         /*typeArguments*/ undefined,
                         [argumentExpression]
                     ),
-                    "value",
-                    location
-                );
-            }
-            else {
-                return createCall(
-                    createIdentifier("_super"),
-                    /*typeArguments*/ undefined,
-                    [argumentExpression],
                     location
                 );
             }
@@ -898,10 +916,12 @@ namespace ts {
 
     function createAsyncDelegatorHelper(context: TransformationContext, expression: Expression, location?: TextRange) {
         context.requestEmitHelper(asyncDelegator);
-        return createCall(
-            getHelperName("__asyncDelegator"),
-            /*typeArguments*/ undefined,
-            [expression],
+        return setTextRange(
+            createCall(
+                getHelperName("__asyncDelegator"),
+                /*typeArguments*/ undefined,
+                [expression]
+            ),
             location
         );
     }
@@ -919,10 +939,12 @@ namespace ts {
 
     function createAsyncValuesHelper(context: TransformationContext, expression: Expression, location?: TextRange) {
         context.requestEmitHelper(asyncValues);
-        return createCall(
-            getHelperName("__asyncValues"),
-            /*typeArguments*/ undefined,
-            [expression],
+        return setTextRange(
+            createCall(
+                getHelperName("__asyncValues"),
+                /*typeArguments*/ undefined,
+                [expression]
+            ),
             location
         );
     }

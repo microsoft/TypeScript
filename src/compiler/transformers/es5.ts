@@ -87,7 +87,7 @@ namespace ts {
         function substitutePropertyAccessExpression(node: PropertyAccessExpression): Expression {
             const literalName = trySubstituteReservedName(node.name);
             if (literalName) {
-                return createElementAccess(node.expression, literalName, /*location*/ node);
+                return setTextRange(createElementAccess(node.expression, literalName), node);
             }
             return node;
         }
@@ -113,7 +113,7 @@ namespace ts {
         function trySubstituteReservedName(name: Identifier) {
             const token = name.originalKeywordKind || (nodeIsSynthesized(name) ? stringToToken(name.text) : undefined);
             if (token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord) {
-                return createLiteral(name, /*location*/ name);
+                return setTextRange(createLiteral(name), name);
             }
             return undefined;
         }
