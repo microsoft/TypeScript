@@ -19,6 +19,7 @@ export class B {
 
 //// [decoratorMetadataWithConstructorType.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var A = (function () {
     function A() {
         console.log('new A');
@@ -38,4 +39,3 @@ __decorate([
     __metadata("design:type", A)
 ], B.prototype, "x", void 0);
 exports.B = B;
-Object.defineProperty(exports, "__esModule", { value: true });

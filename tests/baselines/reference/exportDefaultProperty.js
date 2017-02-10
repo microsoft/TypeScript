@@ -43,6 +43,7 @@ fooLength + 1;
 
 //// [a.js]
 "use strict";
+exports.__esModule = true;
 var A;
 (function (A) {
     var B = (function () {
@@ -56,13 +57,13 @@ var A;
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));
 exports["default"] = A.B;
-exports.__esModule = true;
 //// [b.js]
 "use strict";
-exports["default"] = "foo".length;
 exports.__esModule = true;
+exports["default"] = "foo".length;
 //// [index.js]
 "use strict";
+exports.__esModule = true;
 /// <reference path="declarations.d.ts" />
 var foobar_1 = require("foobar");
 var X = foobar_1["default"].X;
@@ -73,4 +74,3 @@ var a_1 = require("./a");
 var b = new a_1["default"](a_1["default"].b);
 var b_1 = require("./b");
 b_1["default"] + 1;
-exports.__esModule = true;

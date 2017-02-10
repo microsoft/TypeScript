@@ -116,6 +116,7 @@ watch(currentDirectoryFiles, { module: ts.ModuleKind.CommonJS });
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 "use strict";
+exports.__esModule = true;
 var ts = require("typescript");
 function watch(rootFileNames, options) {
     var files = {};
@@ -189,4 +190,3 @@ var currentDirectoryFiles = fs.readdirSync(process.cwd()).
     filter(function (fileName) { return fileName.length >= 3 && fileName.substr(fileName.length - 3, 3) === ".ts"; });
 // Start the watcher
 watch(currentDirectoryFiles, { module: ts.ModuleKind.CommonJS });
-exports.__esModule = true;

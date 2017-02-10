@@ -17,19 +17,19 @@ export { v, bar }
 
 //// [0.js]
 "use strict";
+exports.__esModule = true;
 {
     var obj = true;
 }
-exports.__esModule = true;
 //// [1.js]
 "use strict";
+exports.__esModule = true;
 var v = "str" || true;
 exports.v = v;
 function bar() {
     return v;
 }
 exports.bar = bar;
-exports.__esModule = true;
 
 
 //// [0.d.ts]

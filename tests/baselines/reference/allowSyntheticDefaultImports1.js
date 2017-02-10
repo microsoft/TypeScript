@@ -12,15 +12,15 @@ export class Foo {
 
 //// [b.js]
 "use strict";
+exports.__esModule = true;
 var Foo = (function () {
     function Foo() {
     }
     return Foo;
 }());
 exports.Foo = Foo;
-exports.__esModule = true;
 //// [a.js]
 "use strict";
+exports.__esModule = true;
 var b_1 = require("./b");
 exports.x = new b_1["default"].Foo();
-exports.__esModule = true;

@@ -15,6 +15,7 @@ if(foo.C1.s1){
 
 //// [foo_0.js]
 "use strict";
+exports.__esModule = true;
 var C1 = (function () {
     function C1() {
         this.m1 = 42;
@@ -23,10 +24,9 @@ var C1 = (function () {
 }());
 C1.s1 = true;
 exports.C1 = C1;
-exports.__esModule = true;
 //// [foo_1.js]
 "use strict";
+exports.__esModule = true;
 var foo = require("./foo_0");
 if (foo.C1.s1) {
 }
-exports.__esModule = true;

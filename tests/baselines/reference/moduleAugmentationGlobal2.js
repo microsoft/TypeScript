@@ -20,6 +20,7 @@ let y = x.getCountAsString().toLowerCase();
 
 //// [f1.js]
 "use strict";
+exports.__esModule = true;
 var A = (function () {
     function A() {
     }
@@ -27,12 +28,11 @@ var A = (function () {
 }());
 exports.A = A;
 ;
-exports.__esModule = true;
 //// [f2.js]
 "use strict";
+exports.__esModule = true;
 var x = [1];
 var y = x.getCountAsString().toLowerCase();
-exports.__esModule = true;
 
 
 //// [f1.d.ts]

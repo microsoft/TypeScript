@@ -31,6 +31,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
 var a_1 = require("./a");
 exports.b = {
     f: function () {
@@ -49,7 +50,6 @@ exports.b = {
         a_1.a.f();
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 //// [a.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -62,6 +62,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
 var b_1 = require("./b");
 exports.a = {
     f: function () {
@@ -80,4 +81,3 @@ exports.a = {
         b_1.b.f();
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });

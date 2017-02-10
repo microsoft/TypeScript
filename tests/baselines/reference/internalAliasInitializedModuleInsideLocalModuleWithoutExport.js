@@ -13,6 +13,7 @@ export module c {
 
 //// [internalAliasInitializedModuleInsideLocalModuleWithoutExport.js]
 "use strict";
+exports.__esModule = true;
 var a;
 (function (a) {
     var b;
@@ -30,7 +31,6 @@ var c;
     var b = a.b;
     c.x = new b.c();
 })(c = exports.c || (exports.c = {}));
-exports.__esModule = true;
 
 
 //// [internalAliasInitializedModuleInsideLocalModuleWithoutExport.d.ts]

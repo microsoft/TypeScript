@@ -53,10 +53,11 @@ for ((stuff[n]) of []) {}
 
 //// [f1.js]
 "use strict";
-exports.x = 1;
 exports.__esModule = true;
+exports.x = 1;
 //// [f2.js]
 "use strict";
+exports.__esModule = true;
 // all mutations below are illegal and should be fixed
 var stuff = require("./f1");
 var n = 'baz';
@@ -108,4 +109,3 @@ for ((stuff[n]) in []) { }
 for (var _p = 0, _q = []; _p < _q.length; _p++) {
     (stuff[n]) = _q[_p];
 }
-exports.__esModule = true;

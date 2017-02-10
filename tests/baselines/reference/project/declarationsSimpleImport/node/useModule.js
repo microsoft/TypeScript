@@ -1,4 +1,5 @@
 "use strict";
+exports.__esModule = true;
 var m4 = require("m4"); // Emit used
 exports.x4 = m4.x;
 exports.d4 = m4.d;
@@ -12,4 +13,3 @@ var m1;
     var d3 = m4.d;
     var f3 = m4.foo();
 })(m1 = exports.m1 || (exports.m1 = {}));
-exports.__esModule = true;

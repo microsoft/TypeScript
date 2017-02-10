@@ -21,6 +21,7 @@ export class Test1 {
 var field1;
 //// [classMemberInitializerWithLamdaScoping3_1.js]
 "use strict";
+exports.__esModule = true;
 var Test1 = (function () {
     function Test1(field1) {
         this.field1 = field1;
@@ -33,4 +34,3 @@ var Test1 = (function () {
     return Test1;
 }());
 exports.Test1 = Test1;
-exports.__esModule = true;

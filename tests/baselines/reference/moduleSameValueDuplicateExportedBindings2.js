@@ -15,23 +15,23 @@ export enum Animals {
 
 //// [c.js]
 "use strict";
+exports.__esModule = true;
 var Animals;
 (function (Animals) {
     Animals[Animals["Cat"] = 0] = "Cat";
     Animals[Animals["Dog"] = 1] = "Dog";
 })(Animals = exports.Animals || (exports.Animals = {}));
 ;
-exports.__esModule = true;
 //// [b.js]
 "use strict";
+exports.__esModule = true;
 var c_1 = require("./c");
 exports.Animals = c_1.Animals;
-exports.__esModule = true;
 //// [a.js]
 "use strict";
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
+exports.__esModule = true;
 __export(require("./b"));
 __export(require("./c"));
-exports.__esModule = true;

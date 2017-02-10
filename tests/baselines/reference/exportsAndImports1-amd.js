@@ -37,6 +37,7 @@ export { v, f, C, I, E, D, M, N, T, a };
 //// [t1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var v = 1;
     exports.v = v;
     function f() { }
@@ -60,27 +61,26 @@ define(["require", "exports"], function (require, exports) {
     exports.M = M;
     var a = M.x;
     exports.a = a;
-    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [t2.js]
 define(["require", "exports", "./t1"], function (require, exports, t1_1) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.v = t1_1.v;
     exports.f = t1_1.f;
     exports.C = t1_1.C;
     exports.E = t1_1.E;
     exports.M = t1_1.M;
     exports.a = t1_1.a;
-    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [t3.js]
 define(["require", "exports", "./t1"], function (require, exports, t1_1) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.v = t1_1.v;
     exports.f = t1_1.f;
     exports.C = t1_1.C;
     exports.E = t1_1.E;
     exports.M = t1_1.M;
     exports.a = t1_1.a;
-    Object.defineProperty(exports, "__esModule", { value: true });
 });

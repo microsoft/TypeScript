@@ -34,6 +34,7 @@ var e: number = <foo.E1>0;
 //// [foo_0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var C1 = (function () {
         function C1() {
             this.m1 = 42;
@@ -48,15 +49,14 @@ define(["require", "exports"], function (require, exports) {
         E1[E1["B"] = 1] = "B";
         E1[E1["C"] = 2] = "C";
     })(E1 = exports.E1 || (exports.E1 = {}));
-    exports.__esModule = true;
 });
 //// [foo_1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var i;
     var x = {};
     var y = false;
     var z;
     var e = 0;
-    exports.__esModule = true;
 });

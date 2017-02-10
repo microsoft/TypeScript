@@ -17,6 +17,7 @@ export module X {
 
 //// [mergedModuleDeclarationCodeGen.js]
 "use strict";
+exports.__esModule = true;
 var X;
 (function (X) {
     var Y;
@@ -40,4 +41,3 @@ var X;
         Y.B = B;
     })(Y = X.Y || (X.Y = {}));
 })(X = exports.X || (exports.X = {}));
-exports.__esModule = true;

@@ -33,8 +33,8 @@ define(["require", "exports"], function (require, exports) {
 //// [foo_1.js]
 define(["require", "exports", "./foo_0"], function (require, exports, foo) {
     "use strict";
+    exports.__esModule = true;
     if (foo.answer === 42) {
         var x = new foo();
     }
-    exports.__esModule = true;
 });

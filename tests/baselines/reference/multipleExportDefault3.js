@@ -9,6 +9,7 @@ export default class C { }
 
 //// [multipleExportDefault3.js]
 "use strict";
+exports.__esModule = true;
 exports["default"] = {
     uhoh: "another default"
 };
@@ -18,4 +19,3 @@ var C = (function () {
     return C;
 }());
 exports["default"] = C;
-exports.__esModule = true;

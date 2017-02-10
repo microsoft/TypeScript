@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 define(["require", "exports", "angular2/core"], function (require, exports, ng) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var MyClass1 = (function () {
         function MyClass1(_elementRef) {
             this._elementRef = _elementRef;
@@ -21,5 +22,4 @@ define(["require", "exports", "angular2/core"], function (require, exports, ng) 
     ], MyClass1);
     exports.MyClass1 = MyClass1;
     var _a;
-    Object.defineProperty(exports, "__esModule", { value: true });
 });

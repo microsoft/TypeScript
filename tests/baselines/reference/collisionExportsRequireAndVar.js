@@ -29,6 +29,7 @@ module m4 {
 //// [collisionExportsRequireAndVar_externalmodule.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     function foo() {
     }
     exports.foo = foo;
@@ -44,7 +45,6 @@ define(["require", "exports"], function (require, exports) {
         m2.exports = 0;
         m2.require = "require";
     })(m2 || (m2 = {}));
-    exports.__esModule = true;
 });
 //// [collisionExportsRequireAndVar_globalFile.js]
 var exports = 0;

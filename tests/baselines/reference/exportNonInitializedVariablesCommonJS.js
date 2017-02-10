@@ -36,6 +36,7 @@ export let h1: D = new D;
 
 //// [exportNonInitializedVariablesCommonJS.js]
 "use strict";
+exports.__esModule = true;
 var ;
 let;
 var ;
@@ -66,4 +67,3 @@ exports.e1 = new D;
 exports.f1 = new D;
 exports.g1 = new D;
 exports.h1 = new D;
-exports.__esModule = true;

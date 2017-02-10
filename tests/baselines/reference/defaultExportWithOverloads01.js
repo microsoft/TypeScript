@@ -7,6 +7,7 @@ export default function f(...args: any[]) {
 
 //// [defaultExportWithOverloads01.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 function f() {
     var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
@@ -14,4 +15,3 @@ function f() {
     }
 }
 exports.default = f;
-Object.defineProperty(exports, "__esModule", { value: true });

@@ -104,6 +104,7 @@ export default md5;
 //// [controlFlowSelfReferentialLoop.js]
 // Repro from #12319
 "use strict";
+exports.__esModule = true;
 function md5(string) {
     function FF(a, b, c, d, x, s, ac) {
         return 0;
@@ -204,4 +205,3 @@ function md5(string) {
     }
 }
 exports["default"] = md5;
-exports.__esModule = true;

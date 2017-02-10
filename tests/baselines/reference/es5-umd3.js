@@ -25,6 +25,7 @@ export default class A
     }
 })(function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var A = (function () {
         function A() {
         }
@@ -34,5 +35,4 @@ export default class A
         return A;
     }());
     exports.default = A;
-    Object.defineProperty(exports, "__esModule", { value: true });
 });

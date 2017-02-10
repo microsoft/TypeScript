@@ -15,13 +15,13 @@ export const obj = {
 
 //// [declarationEmitThisPredicates02.js]
 "use strict";
+exports.__esModule = true;
 exports.obj = {
     m: function () {
         var dis = this;
         return dis.a != null && dis.b != null && dis.c != null;
     }
 };
-exports.__esModule = true;
 
 
 //// [declarationEmitThisPredicates02.d.ts]

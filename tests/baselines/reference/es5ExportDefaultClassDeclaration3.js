@@ -16,6 +16,7 @@ var t: typeof C = C;
 
 //// [es5ExportDefaultClassDeclaration3.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var before = new C();
 var C = (function () {
     function C() {
@@ -28,7 +29,6 @@ var C = (function () {
 exports.default = C;
 var after = new C();
 var t = C;
-Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [es5ExportDefaultClassDeclaration3.d.ts]

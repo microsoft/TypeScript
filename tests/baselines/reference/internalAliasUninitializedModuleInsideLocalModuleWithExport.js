@@ -15,11 +15,11 @@ export module c {
 
 //// [internalAliasUninitializedModuleInsideLocalModuleWithExport.js]
 "use strict";
+exports.__esModule = true;
 var c;
 (function (c) {
     c.x.foo();
 })(c = exports.c || (exports.c = {}));
-exports.__esModule = true;
 
 
 //// [internalAliasUninitializedModuleInsideLocalModuleWithExport.d.ts]

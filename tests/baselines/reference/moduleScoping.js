@@ -29,16 +29,16 @@ var v2 = 42; // Global scope
 var v4 = function () { return 5; };
 //// [file3.js]
 "use strict";
+exports.__esModule = true;
 exports.v3 = true;
 var v2 = [1, 2, 3]; // Module scope. Should not appear in global scope
-exports.__esModule = true;
 //// [file4.js]
 "use strict";
+exports.__esModule = true;
 var file3 = require("./file3");
 var t1 = v1;
 var t2 = v2;
 var t3 = file3.v3;
 var v4 = { a: true, b: NaN }; // Should shadow global v2 in this module
-exports.__esModule = true;
 //// [file5.js]
 var x = v2; // Should be global v2 of type number again

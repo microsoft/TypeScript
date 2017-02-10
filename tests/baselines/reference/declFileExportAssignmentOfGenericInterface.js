@@ -20,8 +20,8 @@ define(["require", "exports"], function (require, exports) {
 //// [declFileExportAssignmentOfGenericInterface_1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.x.a;
     exports.__esModule = true;
+    exports.x.a;
 });
 
 

@@ -29,13 +29,13 @@ class C2 {
 
 //// [aliasUsage1_backbone.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var Model = (function () {
     function Model() {
     }
     return Model;
 }());
 exports.Model = Model;
-Object.defineProperty(exports, "__esModule", { value: true });
 //// [aliasUsage1_moduleA.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -48,6 +48,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
 var Backbone = require("./aliasUsage1_backbone");
 var VisualizationModel = (function (_super) {
     __extends(VisualizationModel, _super);
@@ -57,9 +58,9 @@ var VisualizationModel = (function (_super) {
     return VisualizationModel;
 }(Backbone.Model));
 exports.VisualizationModel = VisualizationModel;
-Object.defineProperty(exports, "__esModule", { value: true });
 //// [aliasUsage1_main.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var moduleA = require("./aliasUsage1_moduleA");
 var C2 = (function () {
     function C2() {
@@ -76,4 +77,3 @@ var C2 = (function () {
     });
     return C2;
 }());
-Object.defineProperty(exports, "__esModule", { value: true });

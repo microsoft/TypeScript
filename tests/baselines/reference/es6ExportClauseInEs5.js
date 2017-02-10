@@ -18,6 +18,7 @@ export { x };
 
 //// [server.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var c = (function () {
     function c() {
     }
@@ -32,7 +33,6 @@ var m;
 exports.instantiatedModule = m;
 var x = 10;
 exports.x = x;
-Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [server.d.ts]

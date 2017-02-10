@@ -99,6 +99,7 @@ class GlobalConstructorWithParameterInitializer {
 
 //// [declFileConstructors_0.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var SimpleConstructor = (function () {
     /** This comment should appear for foo*/
     function SimpleConstructor() {
@@ -162,7 +163,6 @@ var ConstructorWithParameterInitializer = (function () {
     return ConstructorWithParameterInitializer;
 }());
 exports.ConstructorWithParameterInitializer = ConstructorWithParameterInitializer;
-Object.defineProperty(exports, "__esModule", { value: true });
 //// [declFileConstructors_1.js]
 var GlobalSimpleConstructor = (function () {
     /** This comment should appear for foo*/

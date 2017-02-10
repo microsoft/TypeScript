@@ -19,6 +19,7 @@ export declare function __generator(body: Function): any;
 
 //// [external.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = require("tslib");
 function foo() {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
@@ -28,7 +29,6 @@ function foo() {
     });
 }
 exports.foo = foo;
-Object.defineProperty(exports, "__esModule", { value: true });
 //// [script.js]
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {

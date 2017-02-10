@@ -44,6 +44,7 @@ export let h = numNumNumNumNum.map(n => n * n);
 
 //// [mapOnTupleTypes01.js]
 "use strict";
+exports.__esModule = true;
 exports.mapOnLooseArrayLiteral = [1, 2, 3, 4].map(function (n) { return n * n; });
 // Length 1
 var numTuple = [1];
@@ -67,7 +68,6 @@ exports.g = numNumNumNumNum.map(function (n) { return n * n; });
 // Length 6
 var numNumNumNumNumNum = [1, 2, 3, 4, 5, 6];
 exports.h = numNumNumNumNum.map(function (n) { return n * n; });
-exports.__esModule = true;
 
 
 //// [mapOnTupleTypes01.d.ts]

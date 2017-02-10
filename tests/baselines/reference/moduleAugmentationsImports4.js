@@ -50,30 +50,30 @@ let c = a.getCls().y.toLowerCase();
 //// [f.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var A = (function () {
         function A() {
         }
         return A;
     }());
     exports.A = A;
-    exports.__esModule = true;
 });
 define("b", ["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var B = (function () {
         function B() {
         }
         return B;
     }());
     exports.B = B;
-    exports.__esModule = true;
 });
 define("main", ["require", "exports", "D", "E"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var a;
     var b = a.getB().x.toFixed();
     var c = a.getCls().y.toLowerCase();
-    exports.__esModule = true;
 });
 
 

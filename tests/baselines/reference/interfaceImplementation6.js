@@ -27,6 +27,7 @@ export class Test {
 //// [interfaceImplementation6.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var C1 = (function () {
         function C1() {
         }
@@ -50,5 +51,4 @@ define(["require", "exports"], function (require, exports) {
         return Test;
     }());
     exports.Test = Test;
-    exports.__esModule = true;
 });

@@ -12,20 +12,20 @@ export var foo = 42;
 
 //// [c.js]
 "use strict";
-exports.foo = 42;
 exports.__esModule = true;
+exports.foo = 42;
 //// [b.js]
 "use strict";
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
-__export(require("./c"));
 exports.__esModule = true;
+__export(require("./c"));
 //// [a.js]
 "use strict";
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
+exports.__esModule = true;
 __export(require("./b"));
 __export(require("./c"));
-exports.__esModule = true;

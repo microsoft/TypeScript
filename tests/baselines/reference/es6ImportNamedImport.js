@@ -43,6 +43,7 @@ import { aaaa as bbbb } from "./es6ImportNamedImport_0";
 
 //// [es6ImportNamedImport_0.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = 10;
 exports.x = exports.a;
 exports.m = exports.a;
@@ -51,9 +52,9 @@ exports.x1 = 10;
 exports.z1 = 10;
 exports.z2 = 10;
 exports.aaaa = 10;
-Object.defineProperty(exports, "__esModule", { value: true });
 //// [es6ImportNamedImport_1.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const es6ImportNamedImport_0_1 = require("./es6ImportNamedImport_0");
 var xxxx = es6ImportNamedImport_0_1.a;
 const es6ImportNamedImport_0_2 = require("./es6ImportNamedImport_0");
@@ -75,7 +76,6 @@ const es6ImportNamedImport_0_8 = require("./es6ImportNamedImport_0");
 var z111 = es6ImportNamedImport_0_8.z1;
 const es6ImportNamedImport_0_9 = require("./es6ImportNamedImport_0");
 var z2 = es6ImportNamedImport_0_9.z2; // z2 shouldn't give redeclare error
-Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [es6ImportNamedImport_0.d.ts]

@@ -11,6 +11,7 @@ export function test(foo: Foo) {
 
 //// [exportVisibility.js]
 "use strict";
+exports.__esModule = true;
 var Foo = (function () {
     function Foo() {
     }
@@ -22,4 +23,3 @@ function test(foo) {
     return true;
 }
 exports.test = test;
-exports.__esModule = true;

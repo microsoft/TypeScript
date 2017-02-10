@@ -16,6 +16,7 @@ export class C  extends base{
 
 //// [0.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var base = (function () {
     function base() {
     }
@@ -24,7 +25,6 @@ var base = (function () {
 exports.base = base;
 function foo(target, propertyKey, parameterIndex) { }
 exports.foo = foo;
-Object.defineProperty(exports, "__esModule", { value: true });
 //// [2.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -46,6 +46,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 var _0_ts_1 = require("./0.ts");
 var _0_ts_2 = require("./0.ts");
 var C = (function (_super) {
@@ -59,4 +60,3 @@ C = __decorate([
     __param(0, _0_ts_2.foo)
 ], C);
 exports.C = C;
-Object.defineProperty(exports, "__esModule", { value: true });

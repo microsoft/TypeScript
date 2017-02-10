@@ -1,5 +1,5 @@
 "use strict";
+exports.__esModule = true;
 a;
 b;
-exports.__esModule = true;
 //# sourceMappingURL=file.js.map

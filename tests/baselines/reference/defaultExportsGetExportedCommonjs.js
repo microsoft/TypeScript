@@ -9,12 +9,12 @@ export default function foo() {}
 
 //// [a.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class Foo {
 }
 exports.default = Foo;
-Object.defineProperty(exports, "__esModule", { value: true });
 //// [b.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 function foo() { }
 exports.default = foo;
-Object.defineProperty(exports, "__esModule", { value: true });

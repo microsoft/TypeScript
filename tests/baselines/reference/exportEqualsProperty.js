@@ -60,6 +60,7 @@ module.exports = A.B;
 module.exports = "foo".length;
 //// [index.js]
 "use strict";
+exports.__esModule = true;
 /// <reference path="declarations.d.ts" />
 var foobar_1 = require("foobar");
 var X2 = require("foobarx");
@@ -69,4 +70,3 @@ var B = require("./a");
 var b = new B(B.b);
 var fooLength = require("./b");
 fooLength + 1;
-exports.__esModule = true;

@@ -30,11 +30,11 @@ class Test {
 //// [index.js]
 define(["require", "exports", "foo"], function (require, exports, foo) {
     "use strict";
+    exports.__esModule = true;
     var Test = (function () {
         function Test() {
             this.bar = new foo.Foo();
         }
         return Test;
     }());
-    exports.__esModule = true;
 });

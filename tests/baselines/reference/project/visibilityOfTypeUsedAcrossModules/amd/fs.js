@@ -1,5 +1,6 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var RM = (function () {
         function RM() {
         }
@@ -15,5 +16,4 @@ define(["require", "exports"], function (require, exports) {
         return RM;
     }());
     exports.RM = RM;
-    exports.__esModule = true;
 });

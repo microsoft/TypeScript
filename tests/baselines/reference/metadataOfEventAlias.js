@@ -13,8 +13,8 @@ export class SomeClass {
 
 //// [event.js]
 "use strict";
-;
 Object.defineProperty(exports, "__esModule", { value: true });
+;
 //// [test.js]
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -26,6 +26,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 function Input(target, key) { }
 var SomeClass = (function () {
     function SomeClass() {
@@ -37,4 +38,3 @@ __decorate([
     __metadata("design:type", Object)
 ], SomeClass.prototype, "event", void 0);
 exports.SomeClass = SomeClass;
-Object.defineProperty(exports, "__esModule", { value: true });

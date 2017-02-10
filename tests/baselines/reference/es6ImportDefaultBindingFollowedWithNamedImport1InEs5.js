@@ -22,11 +22,12 @@ var x: number = defaultBinding6;
 
 //// [es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var a = 10;
 exports.default = a;
-Object.defineProperty(exports, "__esModule", { value: true });
 //// [es6ImportDefaultBindingFollowedWithNamedImport1InEs5_1.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_1 = require("./es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
 var x = es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_1.default;
 var es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_2 = require("./es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
@@ -39,7 +40,6 @@ var es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_5 = require("./es6Imp
 var x = es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_5.default;
 var es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_6 = require("./es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
 var x = es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_6.default;
-Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0.d.ts]

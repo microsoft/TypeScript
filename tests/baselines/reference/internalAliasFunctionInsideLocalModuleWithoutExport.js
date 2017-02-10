@@ -14,6 +14,7 @@ export module c {
 
 //// [internalAliasFunctionInsideLocalModuleWithoutExport.js]
 "use strict";
+exports.__esModule = true;
 var a;
 (function (a) {
     function foo(x) {
@@ -27,7 +28,6 @@ var c;
     var bVal = b(10);
     c.bVal2 = b;
 })(c = exports.c || (exports.c = {}));
-exports.__esModule = true;
 
 
 //// [internalAliasFunctionInsideLocalModuleWithoutExport.d.ts]

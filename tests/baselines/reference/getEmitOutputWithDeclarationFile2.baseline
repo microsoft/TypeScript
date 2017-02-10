@@ -3,13 +3,13 @@ EmitSkipped: false
 EmitSkipped: false
 FileName : /tests/cases/fourslash/inputFile2.js
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var Foo = (function () {
     function Foo() {
     }
     return Foo;
 }());
 exports.Foo = Foo;
-Object.defineProperty(exports, "__esModule", { value: true });
 
 EmitSkipped: false
 FileName : /tests/cases/fourslash/inputFile3.js

@@ -13,6 +13,7 @@ var cReturnVal = cProp.foo(10);
 
 //// [internalAliasClassInsideTopLevelModuleWithoutExport.js]
 "use strict";
+exports.__esModule = true;
 var x;
 (function (x) {
     var c = (function () {
@@ -28,7 +29,6 @@ var x;
 var xc = x.c;
 exports.cProp = new xc();
 var cReturnVal = exports.cProp.foo(10);
-exports.__esModule = true;
 
 
 //// [internalAliasClassInsideTopLevelModuleWithoutExport.d.ts]

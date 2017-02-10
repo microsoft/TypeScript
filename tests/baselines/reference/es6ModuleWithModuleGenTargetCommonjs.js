@@ -13,6 +13,7 @@ export class A
 
 //// [es6ModuleWithModuleGenTargetCommonjs.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class A {
     constructor() {
     }
@@ -21,4 +22,3 @@ class A {
     }
 }
 exports.A = A;
-Object.defineProperty(exports, "__esModule", { value: true });

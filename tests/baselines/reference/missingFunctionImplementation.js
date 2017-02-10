@@ -82,6 +82,7 @@ namespace N12 {
 
 //// [missingFunctionImplementation.js]
 "use strict";
+exports.__esModule = true;
 var C1 = (function () {
     function C1() {
     }
@@ -162,4 +163,3 @@ var N12;
     function m(a) { }
     N12.m = m;
 })(N12 || (N12 = {}));
-exports.__esModule = true;

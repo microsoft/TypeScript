@@ -19,6 +19,7 @@ export var d = new m2.m3.c();
 
 //// [internalAliasClassInsideLocalModuleWithExport.js]
 "use strict";
+exports.__esModule = true;
 var x;
 (function (x) {
     var c = (function () {
@@ -41,7 +42,6 @@ var m2;
     })(m3 = m2.m3 || (m2.m3 = {}));
 })(m2 = exports.m2 || (exports.m2 = {}));
 exports.d = new m2.m3.c();
-exports.__esModule = true;
 
 
 //// [internalAliasClassInsideLocalModuleWithExport.d.ts]

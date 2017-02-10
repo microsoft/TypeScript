@@ -7,6 +7,7 @@ export default class C {
 
 //// [es5ExportDefaultClassDeclaration.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var C = (function () {
     function C() {
     }
@@ -14,7 +15,6 @@ var C = (function () {
     return C;
 }());
 exports.default = C;
-Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [es5ExportDefaultClassDeclaration.d.ts]

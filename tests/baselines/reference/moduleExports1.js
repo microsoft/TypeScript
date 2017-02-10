@@ -16,6 +16,7 @@ if (!module.exports) module.exports = "";
 //// [moduleExports1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var TypeScript;
     (function (TypeScript) {
         var Strasse;
@@ -36,5 +37,4 @@ define(["require", "exports"], function (require, exports) {
     void 0;
     if (!module.exports)
         module.exports = "";
-    exports.__esModule = true;
 });

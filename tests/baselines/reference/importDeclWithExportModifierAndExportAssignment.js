@@ -8,5 +8,5 @@ export = x;
 
 //// [importDeclWithExportModifierAndExportAssignment.js]
 "use strict";
-exports.a = x.c;
 exports.__esModule = true;
+exports.a = x.c;

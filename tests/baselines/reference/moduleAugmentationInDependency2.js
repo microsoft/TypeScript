@@ -13,5 +13,5 @@ import "A"
 exports.__esModule = true;
 //// [app.js]
 "use strict";
-require("A");
 exports.__esModule = true;
+require("A");

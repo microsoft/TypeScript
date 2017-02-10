@@ -36,6 +36,7 @@ _hi();
 
 //// [m1.js]
 "use strict";
+exports.__esModule = true;
 function _() {
     console.log("_");
 }
@@ -64,9 +65,9 @@ function ___hello() {
     console.log("___hello");
 }
 exports.___hello = ___hello;
-exports.__esModule = true;
 //// [m2.js]
 "use strict";
+exports.__esModule = true;
 var m1_1 = require("./m1");
 m1_1._();
 m1_1.__();
@@ -74,4 +75,3 @@ m1_1.___hello();
 m1_1.__esmodule();
 m1_1.__proto();
 m1_1._hi();
-exports.__esModule = true;

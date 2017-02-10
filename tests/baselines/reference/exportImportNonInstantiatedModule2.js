@@ -28,11 +28,11 @@ define(["require", "exports"], function (require, exports) {
 //// [consumer.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     function w() {
         return { name: 'value' };
     }
     exports.w = w;
-    exports.__esModule = true;
 });
 
 

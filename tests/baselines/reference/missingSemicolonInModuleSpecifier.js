@@ -10,9 +10,9 @@ import {x} from "./a"
 
 //// [a.js]
 "use strict";
-exports.x = 1;
 exports.__esModule = true;
+exports.x = 1;
 //// [b.js]
 "use strict";
-(function () { return 1; }());
 exports.__esModule = true;
+(function () { return 1; }());

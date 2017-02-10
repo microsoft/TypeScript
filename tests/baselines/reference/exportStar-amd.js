@@ -32,28 +32,28 @@ foo;
 //// [t1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.x = 1;
     exports.y = 2;
-    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [t2.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = "hello";
     function foo() { }
     exports.foo = foo;
-    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [t3.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var x = "x";
     exports.x = x;
     var y = "y";
     exports.y = y;
     var z = "z";
     exports.z = z;
-    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [t4.js]
 define(["require", "exports", "./t1", "./t2", "./t3"], function (require, exports, t1_1, t2_1, t3_1) {
@@ -61,18 +61,18 @@ define(["require", "exports", "./t1", "./t2", "./t3"], function (require, export
     function __export(m) {
         for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
     }
+    Object.defineProperty(exports, "__esModule", { value: true });
     __export(t1_1);
     __export(t2_1);
     __export(t3_1);
-    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [main.js]
 define(["require", "exports", "./t4"], function (require, exports, t4_1) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     t4_1.default;
     t4_1.x;
     t4_1.y;
     t4_1.z;
     t4_1.foo;
-    Object.defineProperty(exports, "__esModule", { value: true });
 });

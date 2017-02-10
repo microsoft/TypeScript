@@ -97,6 +97,7 @@ module m4 {
 //// [collisionExportsRequireAndAmbientModule_externalmodule.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     function foo() {
         return null;
     }
@@ -109,7 +110,6 @@ define(["require", "exports"], function (require, exports) {
     (function (m2) {
         var a = 10;
     })(m2 || (m2 = {}));
-    exports.__esModule = true;
 });
 //// [collisionExportsRequireAndAmbientModule_globalFile.js]
 var m4;

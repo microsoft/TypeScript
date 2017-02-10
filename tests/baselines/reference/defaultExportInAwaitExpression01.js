@@ -23,9 +23,9 @@ import x from './a';
     }
 })(function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     const x = new Promise((resolve, reject) => { resolve({}); });
     exports.default = x;
-    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [b.js]
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -46,11 +46,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     }
 })(function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     const a_1 = require("./a");
     (function () {
         return __awaiter(this, void 0, void 0, function* () {
             const value = yield a_1.default;
         });
     }());
-    Object.defineProperty(exports, "__esModule", { value: true });
 });

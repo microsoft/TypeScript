@@ -58,22 +58,23 @@ c.baz2().x.toLowerCase();
 //// [out.js]
 define("m1", ["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var Cls = (function () {
         function Cls() {
         }
         return Cls;
     }());
     exports.Cls = Cls;
-    Object.defineProperty(exports, "__esModule", { value: true });
 });
 define("m2", ["require", "exports", "m1"], function (require, exports, m1_1) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     m1_1.Cls.prototype.foo = function () { return 1; };
     m1_1.Cls.prototype.bar = function () { return "1"; };
-    Object.defineProperty(exports, "__esModule", { value: true });
 });
 define("m3", ["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var C1 = (function () {
         function C1() {
         }
@@ -86,22 +87,21 @@ define("m3", ["require", "exports"], function (require, exports) {
         return C2;
     }());
     exports.C2 = C2;
-    Object.defineProperty(exports, "__esModule", { value: true });
 });
 define("m4", ["require", "exports", "m1"], function (require, exports, m1_2) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     m1_2.Cls.prototype.baz1 = function () { return undefined; };
     m1_2.Cls.prototype.baz2 = function () { return undefined; };
-    Object.defineProperty(exports, "__esModule", { value: true });
 });
 define("test", ["require", "exports", "m2", "m4"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var c;
     c.foo().toExponential();
     c.bar().toLowerCase();
     c.baz1().x.toExponential();
     c.baz2().x.toLowerCase();
-    Object.defineProperty(exports, "__esModule", { value: true });
 });
 
 

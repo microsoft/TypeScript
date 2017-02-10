@@ -22,23 +22,23 @@ aIndex.aIndex;
 
 //// [a.js]
 "use strict";
-exports["default"] = { a: 0 };
 exports.__esModule = true;
+exports["default"] = { a: 0 };
 //// [index.js]
 "use strict";
-exports["default"] = { aIndex: 0 };
 exports.__esModule = true;
+exports["default"] = { aIndex: 0 };
 //// [test.js]
 "use strict";
+exports.__esModule = true;
 var _1 = require(".");
 var _2 = require("./");
 _1["default"].a;
 _2["default"].aIndex;
-exports.__esModule = true;
 //// [test.js]
 "use strict";
+exports.__esModule = true;
 var __1 = require("..");
 var _1 = require("../");
 __1["default"].a;
 _1["default"].aIndex;
-exports.__esModule = true;

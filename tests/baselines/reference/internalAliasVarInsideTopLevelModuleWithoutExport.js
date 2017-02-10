@@ -10,13 +10,13 @@ export var bVal = b;
 
 //// [internalAliasVarInsideTopLevelModuleWithoutExport.js]
 "use strict";
+exports.__esModule = true;
 var a;
 (function (a) {
     a.x = 10;
 })(a = exports.a || (exports.a = {}));
 var b = a.x;
 exports.bVal = b;
-exports.__esModule = true;
 
 
 //// [internalAliasVarInsideTopLevelModuleWithoutExport.d.ts]

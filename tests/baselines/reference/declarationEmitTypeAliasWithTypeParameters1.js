@@ -6,8 +6,8 @@ export const y = (x: Foo<string>) => 1
 
 //// [declarationEmitTypeAliasWithTypeParameters1.js]
 "use strict";
-exports.y = function (x) { return 1; };
 exports.__esModule = true;
+exports.y = function (x) { return 1; };
 
 
 //// [declarationEmitTypeAliasWithTypeParameters1.d.ts]

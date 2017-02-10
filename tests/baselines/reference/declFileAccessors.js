@@ -103,6 +103,7 @@ class c2 {
 
 //// [declFileAccessors_0.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /** This is comment for c1*/
 var c1 = (function () {
     function c1() {
@@ -185,7 +186,6 @@ var c1 = (function () {
     return c1;
 }());
 exports.c1 = c1;
-Object.defineProperty(exports, "__esModule", { value: true });
 //// [declFileAccessors_1.js]
 /** This is comment for c2 - the global class*/
 var c2 = (function () {

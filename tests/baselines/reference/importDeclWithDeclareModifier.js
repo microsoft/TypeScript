@@ -9,6 +9,6 @@ var b: a;
 
 //// [importDeclWithDeclareModifier.js]
 "use strict";
+exports.__esModule = true;
 exports.a = x.c;
 var b;
-exports.__esModule = true;

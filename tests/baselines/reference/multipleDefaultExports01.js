@@ -20,6 +20,7 @@ Entity();
 
 //// [m1.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var foo = (function () {
     function foo() {
     }
@@ -31,9 +32,8 @@ function bar() {
 exports.default = bar;
 var x = 10;
 exports.default = x;
-Object.defineProperty(exports, "__esModule", { value: true });
 //// [m2.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var m1_1 = require("./m1");
 m1_1.default();
-Object.defineProperty(exports, "__esModule", { value: true });

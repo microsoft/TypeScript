@@ -18,10 +18,10 @@ export default function foo() {}
     }
 })(function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     class Foo {
     }
     exports.default = Foo;
-    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [b.js]
 (function (factory) {
@@ -34,7 +34,7 @@ export default function foo() {}
     }
 })(function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     function foo() { }
     exports.default = foo;
-    Object.defineProperty(exports, "__esModule", { value: true });
 });

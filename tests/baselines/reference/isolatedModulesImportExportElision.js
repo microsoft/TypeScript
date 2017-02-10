@@ -25,6 +25,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
 var module_1 = require("module");
 var module_2 = require("module");
 var ns = require("module");
@@ -40,4 +41,3 @@ var y = ns.value;
 var module_3 = require("module");
 exports.c1 = module_3.c1;
 exports.z = x;
-Object.defineProperty(exports, "__esModule", { value: true });

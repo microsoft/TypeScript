@@ -18,6 +18,6 @@ define(["require", "exports"], function (require, exports) {
 //// [m2.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var v = 100 /* V */;
     exports.__esModule = true;
+    var v = 100 /* V */;
 });

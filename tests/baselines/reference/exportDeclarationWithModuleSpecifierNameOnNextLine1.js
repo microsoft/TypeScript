@@ -22,23 +22,23 @@ export { x as a, } from
 
 //// [t1.js]
 "use strict";
-exports.x = "x";
 exports.__esModule = true;
+exports.x = "x";
 //// [t2.js]
 "use strict";
+exports.__esModule = true;
 var t1_1 = require("./t1");
 exports.x = t1_1.x;
-exports.__esModule = true;
 //// [t3.js]
 "use strict";
 exports.__esModule = true;
 //// [t4.js]
 "use strict";
+exports.__esModule = true;
 var t1_1 = require("./t1");
 exports.a = t1_1.x;
-exports.__esModule = true;
 //// [t5.js]
 "use strict";
+exports.__esModule = true;
 var t1_1 = require("./t1");
 exports.a = t1_1.x;
-exports.__esModule = true;

@@ -12,13 +12,13 @@ function foo() {
 //// [a.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var c = (function () {
         function c() {
         }
         return c;
     }());
     exports.c = c;
-    exports.__esModule = true;
 });
 function foo() {
 }

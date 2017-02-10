@@ -13,18 +13,18 @@ var v = new hostVar.Host();
 //// [host.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var Host = (function () {
         function Host() {
         }
         return Host;
     }());
     exports.Host = Host;
-    exports.__esModule = true;
 });
 //// [consumer.js]
 define(["require", "exports", "host"], function (require, exports, host) {
     "use strict";
+    exports.__esModule = true;
     var hostVar = host;
     var v = new hostVar.Host();
-    exports.__esModule = true;
 });

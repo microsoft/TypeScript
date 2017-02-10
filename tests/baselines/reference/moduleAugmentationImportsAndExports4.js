@@ -41,32 +41,32 @@ let d = a.baz().b;
 
 //// [f1.js]
 "use strict";
+exports.__esModule = true;
 var A = (function () {
     function A() {
     }
     return A;
 }());
 exports.A = A;
-exports.__esModule = true;
 //// [f2.js]
 "use strict";
+exports.__esModule = true;
 var B = (function () {
     function B() {
     }
     return B;
 }());
 exports.B = B;
-exports.__esModule = true;
 //// [f3.js]
 "use strict";
+exports.__esModule = true;
 var f1_1 = require("./f1");
 f1_1.A.prototype.foo = function () { return undefined; };
-exports.__esModule = true;
 //// [f4.js]
 "use strict";
+exports.__esModule = true;
 require("./f3");
 var a;
 var b = a.foo().n;
 var c = a.bar().a;
 var d = a.baz().b;
-exports.__esModule = true;

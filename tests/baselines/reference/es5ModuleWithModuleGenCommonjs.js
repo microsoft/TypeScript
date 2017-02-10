@@ -13,6 +13,7 @@ export class A
 
 //// [es5ModuleWithModuleGenCommonjs.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var A = (function () {
     function A() {
     }
@@ -22,4 +23,3 @@ var A = (function () {
     return A;
 }());
 exports.A = A;
-Object.defineProperty(exports, "__esModule", { value: true });

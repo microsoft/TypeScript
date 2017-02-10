@@ -12,6 +12,7 @@ export var x: b.c = new b.c();
 //// [internalAliasInitializedModuleInsideTopLevelModuleWithoutExport.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var a;
     (function (a) {
         var b;
@@ -26,7 +27,6 @@ define(["require", "exports"], function (require, exports) {
     })(a = exports.a || (exports.a = {}));
     var b = a.b;
     exports.x = new b.c();
-    exports.__esModule = true;
 });
 
 

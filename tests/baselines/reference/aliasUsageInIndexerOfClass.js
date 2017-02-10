@@ -28,13 +28,13 @@ class N2 {
 
 //// [aliasUsageInIndexerOfClass_backbone.js]
 "use strict";
+exports.__esModule = true;
 var Model = (function () {
     function Model() {
     }
     return Model;
 }());
 exports.Model = Model;
-exports.__esModule = true;
 //// [aliasUsageInIndexerOfClass_moduleA.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -47,6 +47,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+exports.__esModule = true;
 var Backbone = require("./aliasUsageInIndexerOfClass_backbone");
 var VisualizationModel = (function (_super) {
     __extends(VisualizationModel, _super);
@@ -56,9 +57,9 @@ var VisualizationModel = (function (_super) {
     return VisualizationModel;
 }(Backbone.Model));
 exports.VisualizationModel = VisualizationModel;
-exports.__esModule = true;
 //// [aliasUsageInIndexerOfClass_main.js]
 "use strict";
+exports.__esModule = true;
 var moduleA = require("./aliasUsageInIndexerOfClass_moduleA");
 var N = (function () {
     function N() {
@@ -71,4 +72,3 @@ var N2 = (function () {
     }
     return N2;
 }());
-exports.__esModule = true;

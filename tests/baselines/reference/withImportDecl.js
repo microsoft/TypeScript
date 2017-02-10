@@ -46,17 +46,18 @@ b.foo;
 //// [withImportDecl_0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var A = (function () {
         function A() {
         }
         return A;
     }());
     exports.A = A;
-    exports.__esModule = true;
 });
 //// [withImportDecl_1.js]
 define(["require", "exports", "withImportDecl_0"], function (require, exports, m3) {
     "use strict";
+    exports.__esModule = true;
     ///<reference path='withImportDecl_0.ts'/>
     var simpleVar;
     var anotherVar;
@@ -81,7 +82,6 @@ define(["require", "exports", "withImportDecl_0"], function (require, exports, m
     })(m1 || (m1 = {}));
     var b = new m3.A();
     b.foo;
-    exports.__esModule = true;
 });
 
 

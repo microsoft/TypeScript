@@ -27,8 +27,8 @@ import j from "./jquery.js"
 
 //// [a.js]
 "use strict";
-exports["default"] = 0;
 exports.__esModule = true;
+exports["default"] = 0;
 // No extension: '.ts' added 
 //// [b.js]
 "use strict";

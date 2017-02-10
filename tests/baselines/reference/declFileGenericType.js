@@ -51,6 +51,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+exports.__esModule = true;
 var C;
 (function (C) {
     var A = (function () {
@@ -102,7 +103,6 @@ var h = (function (_super) {
 }(C.A));
 exports.h = h;
 exports.j = C.F6;
-exports.__esModule = true;
 
 
 //// [declFileGenericType.d.ts]

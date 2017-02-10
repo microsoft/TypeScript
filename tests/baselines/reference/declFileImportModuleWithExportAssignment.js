@@ -32,11 +32,11 @@ var m2;
 module.exports = m2;
 //// [declFileImportModuleWithExportAssignment_1.js]
 "use strict";
+exports.__esModule = true;
 /**This is on import declaration*/
 var a1 = require("./declFileImportModuleWithExportAssignment_0");
 exports.a = a1;
 exports.a.test1(null, null, null);
-exports.__esModule = true;
 
 
 //// [declFileImportModuleWithExportAssignment_0.d.ts]

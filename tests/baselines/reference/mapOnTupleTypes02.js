@@ -8,11 +8,11 @@ export function increment(point: Point) {
 
 //// [mapOnTupleTypes02.js]
 "use strict";
+exports.__esModule = true;
 function increment(point) {
     return point.map(function (d) { return d + 1; });
 }
 exports.increment = increment;
-exports.__esModule = true;
 
 
 //// [mapOnTupleTypes02.d.ts]

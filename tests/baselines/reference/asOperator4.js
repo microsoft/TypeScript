@@ -14,13 +14,13 @@ import { foo } from './foo';
 
 //// [foo.js]
 "use strict";
+exports.__esModule = true;
 function foo() { }
 exports.foo = foo;
-exports.__esModule = true;
 //// [bar.js]
 "use strict";
+exports.__esModule = true;
 var foo_1 = require("./foo");
 // These should emit identically
 foo_1.foo;
 foo_1.foo;
-exports.__esModule = true;

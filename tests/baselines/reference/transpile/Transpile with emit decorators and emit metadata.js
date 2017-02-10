@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var db_1 = require("./db");
 function someDecorator(target) {
     return target;
@@ -16,5 +17,4 @@ MyClass = __decorate([
 ], MyClass);
 exports.MyClass = MyClass;
 var _a;
-Object.defineProperty(exports, "__esModule", { value: true });
 //# sourceMappingURL=file.js.map

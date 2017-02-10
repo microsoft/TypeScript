@@ -20,15 +20,15 @@ const x: B = { c: B };
 //// [a.js]
 // This test is just like exportEqualsProperty2, but with `export default`.
 "use strict";
+exports.__esModule = true;
 var C = (function () {
     function C() {
     }
     return C;
 }());
 exports["default"] = C.B;
-exports.__esModule = true;
 //// [b.js]
 "use strict";
+exports.__esModule = true;
 var a_1 = require("./a");
 var x = { c: a_1["default"] };
-exports.__esModule = true;

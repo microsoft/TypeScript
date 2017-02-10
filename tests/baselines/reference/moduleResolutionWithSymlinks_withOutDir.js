@@ -22,22 +22,22 @@ y = x;
 //// [/src/bin/library-a/index.js]
 // Same as moduleResolutionWithSymlinks.ts, but with outDir
 "use strict";
+exports.__esModule = true;
 var MyClass = (function () {
     function MyClass() {
     }
     return MyClass;
 }());
 exports.MyClass = MyClass;
-exports.__esModule = true;
 //// [/src/bin/library-b/index.js]
 "use strict";
+exports.__esModule = true;
 var library_a_1 = require("library-a");
 exports.MyClass2 = library_a_1.MyClass;
-exports.__esModule = true;
 //// [/src/bin/app.js]
 "use strict";
+exports.__esModule = true;
 var x;
 var y;
 x = y;
 y = x;
-exports.__esModule = true;

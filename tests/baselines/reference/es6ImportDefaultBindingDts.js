@@ -13,18 +13,18 @@ import defaultBinding2 from "./server"; // elide this import since defaultBindin
 
 //// [server.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var c = (function () {
     function c() {
     }
     return c;
 }());
 exports.default = c;
-Object.defineProperty(exports, "__esModule", { value: true });
 //// [client.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var server_1 = require("./server");
 exports.x = new server_1.default();
-Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [server.d.ts]

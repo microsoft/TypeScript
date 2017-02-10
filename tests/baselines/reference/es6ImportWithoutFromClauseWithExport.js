@@ -9,12 +9,12 @@ export import "server";
 
 //// [server.js]
 "use strict";
-exports.a = 10;
 exports.__esModule = true;
+exports.a = 10;
 //// [client.js]
 "use strict";
-require("server");
 exports.__esModule = true;
+require("server");
 
 
 //// [server.d.ts]

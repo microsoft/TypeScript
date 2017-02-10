@@ -39,6 +39,7 @@ new multiM.d();
 //// [commentsMultiModuleMultiFile_0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     /** this is multi declare module*/
     var multiM;
     (function (multiM) {
@@ -69,11 +70,11 @@ define(["require", "exports"], function (require, exports) {
     })(multiM = exports.multiM || (exports.multiM = {}));
     new multiM.b();
     new multiM.c();
-    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [commentsMultiModuleMultiFile_1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     /** this is multi module 3 comment*/
     var multiM;
     (function (multiM) {
@@ -93,7 +94,6 @@ define(["require", "exports"], function (require, exports) {
         multiM.f = f;
     })(multiM = exports.multiM || (exports.multiM = {}));
     new multiM.d();
-    Object.defineProperty(exports, "__esModule", { value: true });
 });
 
 

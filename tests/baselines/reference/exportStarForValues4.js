@@ -24,12 +24,12 @@ define(["require", "exports"], function (require, exports) {
 //// [file3.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var x = 1;
     exports.__esModule = true;
+    var x = 1;
 });
 //// [file2.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var x = 1;
     exports.__esModule = true;
+    var x = 1;
 });

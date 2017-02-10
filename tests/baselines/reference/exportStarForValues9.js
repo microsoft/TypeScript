@@ -27,9 +27,9 @@ define(["require", "exports", "file2"], function (require, exports, file2_1) {
     function __export(m) {
         for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
     }
+    exports.__esModule = true;
     __export(file2_1);
     exports.x = 1;
-    exports.__esModule = true;
 });
 //// [file2.js]
 define(["require", "exports", "file3"], function (require, exports, file3_1) {
@@ -37,7 +37,7 @@ define(["require", "exports", "file3"], function (require, exports, file3_1) {
     function __export(m) {
         for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
     }
+    exports.__esModule = true;
     __export(file3_1);
     exports.x = 1;
-    exports.__esModule = true;
 });

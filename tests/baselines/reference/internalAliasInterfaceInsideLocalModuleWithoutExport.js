@@ -13,10 +13,10 @@ export module c {
 //// [internalAliasInterfaceInsideLocalModuleWithoutExport.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var c;
     (function (c) {
     })(c = exports.c || (exports.c = {}));
-    exports.__esModule = true;
 });
 
 

@@ -28,6 +28,6 @@ var C = (function () {
 module.exports = C.B;
 //// [b.js]
 "use strict";
+exports.__esModule = true;
 var B = require("./a");
 var x = { c: B };
-exports.__esModule = true;

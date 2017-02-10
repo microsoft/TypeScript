@@ -9,13 +9,13 @@ export default {
 
 //// [declarationEmitInferedDefaultExportType.js]
 "use strict";
+exports.__esModule = true;
 // test.ts
 exports["default"] = {
     foo: [],
     bar: undefined,
     baz: null
 };
-exports.__esModule = true;
 
 
 //// [declarationEmitInferedDefaultExportType.d.ts]
