@@ -7771,6 +7771,11 @@ namespace ts {
                 if (target.flags & TypeFlags.Union && containsType(targetTypes, source)) {
                     return Ternary.True;
                 }
+                const discriminantType = findMatchingDiscriminantType(source, target);
+                if (discriminantType) {
+                    return isRelatedTo(source, discriminantType, reportErrors);
+                }
+
                 const len = targetTypes.length;
                 for (let i = 0; i < len; i++) {
                     const related = isRelatedTo(source, targetTypes[i], reportErrors && i === len - 1);
@@ -7779,6 +7784,23 @@ namespace ts {
                     }
                 }
                 return Ternary.False;
+            }
+
+            function findMatchingDiscriminantType(source: Type, target: UnionOrIntersectionType) {
+                const sourceProperties = getPropertiesOfObjectType(source);
+                if (sourceProperties) {
+                    for (const sourceProperty of sourceProperties) {
+                        if (isDiscriminantProperty(target, sourceProperty.name)) {
+                            const sourceType = getTypeOfSymbol(sourceProperty);
+                            for (const type of target.types) {
+                                const targetType = getTypeOfPropertyOfType(type, sourceProperty.name);
+                                if (targetType && isRelatedTo(sourceType, targetType)) {
+                                    return type;
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             function typeRelatedToEachType(source: Type, target: UnionOrIntersectionType, reportErrors: boolean): Ternary {
