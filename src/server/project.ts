@@ -165,8 +165,8 @@ namespace ts.server {
                 this.compilerOptions.allowNonTsExtensions = true;
                 this.compilerOptions.allowJs = true;
             }
-            else if (hasExplicitListOfFiles) {
-                // If files are listed explicitly, allow all extensions
+            else if (hasExplicitListOfFiles || this.compilerOptions.allowJs) {
+                // If files are listed explicitly or allowJs is specified, allow all extensions
                 this.compilerOptions.allowNonTsExtensions = true;
             }
 
