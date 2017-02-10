@@ -82,70 +82,7 @@ var cancellationTokenSources = filesFromConfig(path.join(serverDirectory, "cance
 var typingsInstallerSources = filesFromConfig(path.join(serverDirectory, "typingsInstaller/tsconfig.json"));
 var serverSources = filesFromConfig(path.join(serverDirectory, "tsconfig.json"))
 var languageServiceLibrarySources = filesFromConfig(path.join(serverDirectory, "tsconfig.library.json"));
-
-var harnessCoreSources = [
-    "harness.ts",
-    "virtualFileSystem.ts",
-    "sourceMapRecorder.ts",
-    "harnessLanguageService.ts",
-    "fourslash.ts",
-    "runnerbase.ts",
-    "compilerRunner.ts",
-    "typeWriter.ts",
-    "fourslashRunner.ts",
-    "projectsRunner.ts",
-    "loggedIO.ts",
-    "rwcRunner.ts",
-    "test262Runner.ts",
-    "runner.ts"
-].map(function (f) {
-    return path.join(harnessDirectory, f);
-});
-
-var harnessSources = harnessCoreSources.concat([
-    "incrementalParser.ts",
-    "jsDocParsing.ts",
-    "services/colorization.ts",
-    "services/documentRegistry.ts",
-    "services/preProcessFile.ts",
-    "services/patternMatcher.ts",
-    "session.ts",
-    "versionCache.ts",
-    "convertToBase64.ts",
-    "transpile.ts",
-    "reuseProgramStructure.ts",
-    "textStorage.ts",
-    "cachingInServerLSHost.ts",
-    "moduleResolution.ts",
-    "tsconfigParsing.ts",
-    "commandLineParsing.ts",
-    "configurationExtension.ts",
-    "convertCompilerOptionsFromJson.ts",
-    "convertTypeAcquisitionFromJson.ts",
-    "tsserverProjectSystem.ts",
-    "compileOnSave.ts",
-    "typingsInstaller.ts",
-    "projectErrors.ts",
-    "matchFiles.ts",
-    "initializeTSConfig.ts",
-    "printer.ts",
-    "transform.ts",
-    "customTransforms.ts",
-].map(function (f) {
-    return path.join(unittestsDirectory, f);
-})).concat([
-    "protocol.ts",
-    "utilities.ts",
-    "scriptVersionCache.ts",
-    "scriptInfo.ts",
-    "lsHost.ts",
-    "project.ts",
-    "typingsCache.ts",
-    "editorServices.ts",
-    "session.ts",
-].map(function (f) {
-    return path.join(serverDirectory, f);
-}));
+var harnessSources = filesFromConfig("./src/harness/tsconfig.json");
 
 var es2015LibrarySources = [
     "es2015.core.d.ts",

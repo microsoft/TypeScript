@@ -3067,7 +3067,10 @@ namespace ts {
         Assertions = 1 << 1,
         PartiallyEmittedExpressions = 1 << 2,
 
-        All = Parentheses | Assertions | PartiallyEmittedExpressions
+        All = Parentheses | Assertions | PartiallyEmittedExpressions,
+
+        OnlySynthetic = 1 << 3,
+        SynthesizedParentheses = Parentheses | OnlySynthetic,
     }
 
     export function skipOuterExpressions(node: Expression, kinds?: OuterExpressionKinds): Expression;
@@ -3076,6 +3079,10 @@ namespace ts {
         let previousNode: Node;
         do {
             previousNode = node;
+            if (kinds & OuterExpressionKinds.OnlySynthetic && !nodeIsSynthesized(node)) {
+                break;
+            }
+
             if (kinds & OuterExpressionKinds.Parentheses) {
                 node = skipParentheses(node);
             }

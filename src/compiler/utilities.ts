@@ -3352,7 +3352,7 @@ namespace ts {
      * @param range A TextRange.
      */
     export function isCollapsedRange(range: TextRange) {
-        return range.pos === range.end;
+        return getRangePos(range) === getRangeEnd(range);
     }
 
     /**

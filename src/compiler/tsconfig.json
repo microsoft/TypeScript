@@ -31,7 +31,6 @@
         "transformers/module/system.ts",
         "transformers/module/es2015.ts",
         "transformer.ts",
-        "comments.ts",
         "sourcemap.ts",
         "declarationEmitter.ts",
         "emitter.ts",

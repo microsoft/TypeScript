@@ -3749,6 +3749,7 @@
     }
 
     export const enum EmitFlags {
+        None = 0,
         SingleLine = 1 << 0,                     // The contents of this node should be emitted on a single line.
         AdviseOnEmitNode = 1 << 1,               // The printer should invoke the onEmitNode callback when printing this node.
         NoSubstitution = 1 << 2,                 // Disables further substitution of an expression.
