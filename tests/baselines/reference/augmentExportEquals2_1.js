@@ -30,6 +30,6 @@ define(["require", "exports"], function (require, exports) {
 //// [file3.js]
 define(["require", "exports", "file2"], function (require, exports) {
     "use strict";
-    var a; // should not work
     exports.__esModule = true;
+    var a; // should not work
 });

@@ -10,5 +10,5 @@ declare var a: number;
 
 //// [1.js]
 "use strict";
-exports.j = "hello"; // error
 exports.__esModule = true;
+exports.j = "hello"; // error

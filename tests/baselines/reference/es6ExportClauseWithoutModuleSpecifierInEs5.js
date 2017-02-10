@@ -22,6 +22,7 @@ export { x } from "./server";
 
 //// [server.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var c = (function () {
     function c() {
     }
@@ -33,9 +34,9 @@ var m;
     m.x = 10;
 })(m = exports.m || (exports.m = {}));
 exports.x = 10;
-Object.defineProperty(exports, "__esModule", { value: true });
 //// [client.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var server_1 = require("./server");
 exports.c = server_1.c;
 var server_2 = require("./server");
@@ -44,7 +45,6 @@ var server_3 = require("./server");
 exports.instantiatedModule = server_3.m;
 var server_4 = require("./server");
 exports.x = server_4.x;
-Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [server.d.ts]

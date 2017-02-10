@@ -13,7 +13,7 @@ export {}
 
 //// [unusedLocalsAndParametersTypeAliases2.js]
 "use strict";
+exports.__esModule = true;
 function foo() {
     foo();
 }
-exports.__esModule = true;

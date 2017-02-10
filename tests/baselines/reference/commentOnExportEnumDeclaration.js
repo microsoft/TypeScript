@@ -8,6 +8,7 @@ export enum Color {
 
 //// [commentOnExportEnumDeclaration.js]
 "use strict";
+exports.__esModule = true;
 /**
  * comment
  */
@@ -17,4 +18,3 @@ var Color;
     Color[Color["g"] = 1] = "g";
     Color[Color["b"] = 2] = "b";
 })(Color = exports.Color || (exports.Color = {}));
-exports.__esModule = true;

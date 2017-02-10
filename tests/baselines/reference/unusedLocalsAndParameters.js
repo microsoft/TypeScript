@@ -86,6 +86,7 @@ namespace N {
 
 //// [unusedLocalsAndParameters.js]
 "use strict";
+exports.__esModule = true;
 // function declaration paramter
 function f(a) {
 }
@@ -166,4 +167,3 @@ var N;
 (function (N) {
     var x;
 })(N || (N = {}));
-exports.__esModule = true;

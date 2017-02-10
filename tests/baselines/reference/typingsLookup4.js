@@ -27,12 +27,12 @@ j + k + l;
 
 //// [lquery.js]
 "use strict";
-exports.l = 2;
 exports.__esModule = true;
+exports.l = 2;
 //// [a.js]
 "use strict";
+exports.__esModule = true;
 var jquery_1 = require("jquery");
 var kquery_1 = require("kquery");
 var lquery_1 = require("lquery");
 jquery_1.j + kquery_1.k + lquery_1.l;
-exports.__esModule = true;

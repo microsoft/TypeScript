@@ -347,6 +347,7 @@ export var tests: TestRunner = (function () {
 
 //// [duplicateLocalVariable1.js]
 "use strict";
+exports.__esModule = true;
 / /;
 commonjs;
 var TestFileDir = ".\\TempTestFiles";
@@ -636,4 +637,3 @@ exports.tests = (function () {
     }, "Codepoint at index: 3 has control value: 8"));
     return testRunner;
 })();
-exports.__esModule = true;

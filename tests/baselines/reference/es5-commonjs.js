@@ -16,6 +16,7 @@ export default class A
 
 //// [es5-commonjs.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var A = (function () {
     function A() {
     }
@@ -25,4 +26,3 @@ var A = (function () {
     return A;
 }());
 exports.default = A;
-Object.defineProperty(exports, "__esModule", { value: true });

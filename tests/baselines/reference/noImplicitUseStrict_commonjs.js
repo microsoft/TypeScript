@@ -3,5 +3,5 @@
 export var x = 0;
 
 //// [noImplicitUseStrict_commonjs.js]
-exports.x = 0;
 exports.__esModule = true;
+exports.x = 0;

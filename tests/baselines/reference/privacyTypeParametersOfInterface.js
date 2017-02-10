@@ -60,6 +60,7 @@ interface privateInterfaceWithPublicTypeParametersWithoutExtends<T> {
 
 //// [privacyTypeParametersOfInterface.js]
 "use strict";
+exports.__esModule = true;
 var privateClass = (function () {
     function privateClass() {
     }
@@ -82,4 +83,3 @@ var publicClassT = (function () {
     return publicClassT;
 }());
 exports.publicClassT = publicClassT;
-exports.__esModule = true;

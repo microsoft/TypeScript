@@ -9,12 +9,12 @@ export function returnSomeGlobalValue() {
 
 //// [declarationEmitInferedTypeAlias9.js]
 "use strict";
+exports.__esModule = true;
 var x;
 function returnSomeGlobalValue() {
     return x;
 }
 exports.returnSomeGlobalValue = returnSomeGlobalValue;
-exports.__esModule = true;
 
 
 //// [declarationEmitInferedTypeAlias9.d.ts]

@@ -23,6 +23,7 @@ export class publicClassWithWithPrivateTypeParameters {
 
 //// [staticMethodWithTypeParameterExtendsClauseDeclFile.js]
 "use strict";
+exports.__esModule = true;
 var privateClass = (function () {
     function privateClass() {
     }
@@ -52,7 +53,6 @@ var publicClassWithWithPrivateTypeParameters = (function () {
     return publicClassWithWithPrivateTypeParameters;
 }());
 exports.publicClassWithWithPrivateTypeParameters = publicClassWithWithPrivateTypeParameters;
-exports.__esModule = true;
 
 
 //// [staticMethodWithTypeParameterExtendsClauseDeclFile.d.ts]

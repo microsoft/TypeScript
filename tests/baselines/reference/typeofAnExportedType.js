@@ -53,6 +53,7 @@ export var r13: typeof foo;
 
 //// [typeofAnExportedType.js]
 "use strict";
+exports.__esModule = true;
 exports.x = 1;
 exports.y = { foo: '' };
 var C = (function () {
@@ -89,4 +90,3 @@ exports.foo = foo;
     }());
     foo.C = C;
 })(foo = exports.foo || (exports.foo = {}));
-exports.__esModule = true;

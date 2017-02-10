@@ -13,6 +13,7 @@ export var bVal2 = b;
 //// [internalAliasFunctionInsideTopLevelModuleWithExport.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var a;
     (function (a) {
         function foo(x) {
@@ -23,7 +24,6 @@ define(["require", "exports"], function (require, exports) {
     exports.b = a.foo;
     exports.bVal = exports.b(10);
     exports.bVal2 = exports.b;
-    exports.__esModule = true;
 });
 
 

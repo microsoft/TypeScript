@@ -34,19 +34,19 @@ let y = x.map(x => x + 1);
 
 //// [observable.js]
 "use strict";
+exports.__esModule = true;
 var Observable;
 (function (Observable) {
     var someValue;
 })(Observable = exports.Observable || (exports.Observable = {}));
-exports.__esModule = true;
 //// [map.js]
 "use strict";
+exports.__esModule = true;
 var observable_1 = require("./observable");
 observable_1.Observable.prototype.map = function () { };
-exports.__esModule = true;
 //// [main.js]
 "use strict";
+exports.__esModule = true;
 require("./map");
 var x;
 var y = x.map(function (x) { return x + 1; });
-exports.__esModule = true;

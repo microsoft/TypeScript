@@ -688,6 +688,7 @@ module publicModuleInGlobal {
 
 //// [privacyFunctionParameterDeclFile_externalModule.js]
 "use strict";
+exports.__esModule = true;
 var privateClass = (function () {
     function privateClass() {
     }
@@ -1027,7 +1028,6 @@ var privateModule;
     function privateFunctionWithPrivateModuleParameterTypes(param) {
     }
 })(privateModule || (privateModule = {}));
-exports.__esModule = true;
 //// [privacyFunctionParameterDeclFile_GlobalFile.js]
 var publicClassInGlobal = (function () {
     function publicClassInGlobal() {

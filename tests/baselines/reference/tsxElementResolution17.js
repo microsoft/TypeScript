@@ -31,6 +31,6 @@ import s2 = require('elements2');
 //// [consumer.jsx]
 define(["require", "exports", "elements1"], function (require, exports, s1) {
     "use strict";
-    <s1.MyElement />;
     exports.__esModule = true;
+    <s1.MyElement />;
 });

@@ -85,6 +85,7 @@ function x(a) {
 module.exports = x;
 //// [consumer.js]
 "use strict";
+exports.__esModule = true;
 var iString = require("./expString");
 var v1 = iString;
 var iNumber = require("./expNumber");
@@ -99,4 +100,3 @@ var iAny = require("./expAny");
 var v6 = iAny;
 var iGeneric = require("./expGeneric");
 var v7 = iGeneric;
-exports.__esModule = true;

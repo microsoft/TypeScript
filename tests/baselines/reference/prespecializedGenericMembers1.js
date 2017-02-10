@@ -22,6 +22,7 @@ var catBag = new CatBag(catThing);
 
 //// [prespecializedGenericMembers1.js]
 "use strict";
+exports.__esModule = true;
 var Cat = (function () {
     function Cat() {
     }
@@ -39,4 +40,3 @@ var catThing = {
     barry: cat
 };
 var catBag = new CatBag(catThing);
-exports.__esModule = true;

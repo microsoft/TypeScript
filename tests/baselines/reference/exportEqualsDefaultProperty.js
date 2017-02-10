@@ -23,6 +23,6 @@ var x = {
 module.exports = x;
 //// [imp.js]
 "use strict";
+exports.__esModule = true;
 var exp_1 = require("./exp");
 exp_1["default"].toExponential(2);
-exports.__esModule = true;

@@ -21,6 +21,6 @@ var c = new A();
 //// [ambientExternalModuleWithoutInternalImportDeclaration_1.js]
 define(["require", "exports", "M"], function (require, exports, A) {
     "use strict";
-    var c = new A();
     exports.__esModule = true;
+    var c = new A();
 });

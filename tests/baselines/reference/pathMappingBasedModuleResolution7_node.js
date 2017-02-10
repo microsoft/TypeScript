@@ -33,15 +33,15 @@ export let y: number;
 exports.__esModule = true;
 //// [file2.js]
 "use strict";
+exports.__esModule = true;
 var module1_1 = require("module1");
 var module2_1 = require("templates/module2");
 var file3_1 = require("../file3");
 exports.x = module1_1.a + module2_1.b + file3_1.x;
-exports.__esModule = true;
 //// [file1.js]
 "use strict";
+exports.__esModule = true;
 var file2_1 = require("./project/file2");
 var module3_1 = require("module3");
 use(file2_1.x.toFixed());
 use(module3_1.y.toFixed());
-exports.__esModule = true;

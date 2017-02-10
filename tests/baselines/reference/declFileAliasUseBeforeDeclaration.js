@@ -10,18 +10,18 @@ import foo = require("./declFileAliasUseBeforeDeclaration_foo");
 
 //// [declFileAliasUseBeforeDeclaration_foo.js]
 "use strict";
+exports.__esModule = true;
 var Foo = (function () {
     function Foo() {
     }
     return Foo;
 }());
 exports.Foo = Foo;
-exports.__esModule = true;
 //// [declFileAliasUseBeforeDeclaration_test.js]
 "use strict";
+exports.__esModule = true;
 function bar(a) { }
 exports.bar = bar;
-exports.__esModule = true;
 
 
 //// [declFileAliasUseBeforeDeclaration_foo.d.ts]

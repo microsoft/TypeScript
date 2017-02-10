@@ -109,6 +109,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+exports.__esModule = true;
 var publicModule;
 (function (publicModule) {
     var publicClassInPublicModule = (function () {
@@ -289,7 +290,6 @@ var publicClassExtendingFromPrivateModuleClass = (function (_super) {
     return publicClassExtendingFromPrivateModuleClass;
 }(privateModule.publicClassInPrivateModule));
 exports.publicClassExtendingFromPrivateModuleClass = publicClassExtendingFromPrivateModuleClass;
-exports.__esModule = true;
 //// [privacyClassExtendsClauseDeclFile_GlobalFile.js]
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||

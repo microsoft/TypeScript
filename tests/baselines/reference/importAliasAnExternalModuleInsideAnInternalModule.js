@@ -16,14 +16,15 @@ module m_private {
 
 //// [importAliasAnExternalModuleInsideAnInternalModule_file0.js]
 "use strict";
+exports.__esModule = true;
 var m;
 (function (m) {
     function foo() { }
     m.foo = foo;
 })(m = exports.m || (exports.m = {}));
-exports.__esModule = true;
 //// [importAliasAnExternalModuleInsideAnInternalModule_file1.js]
 "use strict";
+exports.__esModule = true;
 var r = require("./importAliasAnExternalModuleInsideAnInternalModule_file0");
 var m_private;
 (function (m_private) {
@@ -31,4 +32,3 @@ var m_private;
     m_private.C = r; // no error
     m_private.C.m.foo();
 })(m_private || (m_private = {}));
-exports.__esModule = true;

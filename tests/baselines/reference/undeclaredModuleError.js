@@ -18,6 +18,7 @@ function instrumentFile(covFileDir: string, covFileName: string, originalFilePat
 //// [undeclaredModuleError.js]
 define(["require", "exports", "fs"], function (require, exports, fs) {
     "use strict";
+    exports.__esModule = true;
     function readdir(path, accept, callback) { }
     function join() {
         var paths = [];
@@ -35,5 +36,4 @@ define(["require", "exports", "fs"], function (require, exports, fs) {
             });
         });
     }
-    exports.__esModule = true;
 });

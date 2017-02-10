@@ -13,14 +13,14 @@ var x = (w1: WinJS) => { };
 
 //// [moduleInTypePosition1_0.js]
 "use strict";
+exports.__esModule = true;
 var Promise = (function () {
     function Promise() {
     }
     return Promise;
 }());
 exports.Promise = Promise;
-exports.__esModule = true;
 //// [moduleInTypePosition1_1.js]
 "use strict";
-var x = function (w1) { };
 exports.__esModule = true;
+var x = function (w1) { };

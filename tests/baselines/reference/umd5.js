@@ -18,10 +18,10 @@ let z = Foo;
 
 //// [a.js]
 "use strict";
+exports.__esModule = true;
 var Bar = require("./foo");
 Bar.fn();
 var x;
 var y = x.n;
 // should error
 var z = Foo;
-exports.__esModule = true;

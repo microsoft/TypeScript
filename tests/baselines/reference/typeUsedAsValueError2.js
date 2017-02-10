@@ -34,7 +34,7 @@ define(["require", "exports"], function (require, exports) {
 //// [world.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     HelloInterface.world;
     HelloNamespace.world;
-    exports.__esModule = true;
 });

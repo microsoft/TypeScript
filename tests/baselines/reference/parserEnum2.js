@@ -10,6 +10,7 @@
 
 //// [parserEnum2.js]
 "use strict";
+exports.__esModule = true;
 var SignatureFlags;
 (function (SignatureFlags) {
     SignatureFlags[SignatureFlags["None"] = 0] = "None";
@@ -17,4 +18,3 @@ var SignatureFlags;
     SignatureFlags[SignatureFlags["IsStringIndexer"] = 2] = "IsStringIndexer";
     SignatureFlags[SignatureFlags["IsNumberIndexer"] = 4] = "IsNumberIndexer";
 })(SignatureFlags = exports.SignatureFlags || (exports.SignatureFlags = {}));
-exports.__esModule = true;

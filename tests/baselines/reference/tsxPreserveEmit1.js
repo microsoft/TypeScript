@@ -36,6 +36,7 @@ module M {
 //// [test.jsx]
 define(["require", "exports", "react", "react-router"], function (require, exports, React, ReactRouter) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var Route = ReactRouter.Route;
     var routes1 = <Route />;
     var M;
@@ -45,5 +46,4 @@ define(["require", "exports", "react", "react-router"], function (require, expor
         // Should emit 'M.X' in both opening and closing tags
         var y = <M.X></M.X>;
     })(M || (M = {}));
-    Object.defineProperty(exports, "__esModule", { value: true });
 });

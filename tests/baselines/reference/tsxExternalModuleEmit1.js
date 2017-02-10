@@ -43,6 +43,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+exports.__esModule = true;
 var React = require("react");
 var Button = (function (_super) {
     __extends(Button, _super);
@@ -55,7 +56,6 @@ var Button = (function (_super) {
     return Button;
 }(React.Component));
 exports.Button = Button;
-exports.__esModule = true;
 //// [app.jsx]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -68,6 +68,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+exports.__esModule = true;
 var React = require("react");
 // Should see var button_1 = require('./button') here
 var button_1 = require("./button");
@@ -82,4 +83,3 @@ var App = (function (_super) {
     return App;
 }(React.Component));
 exports.App = App;
-exports.__esModule = true;

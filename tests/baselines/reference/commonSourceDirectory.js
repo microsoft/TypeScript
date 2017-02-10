@@ -19,11 +19,11 @@ x + y;
 
 //// [/app/bin/index.js]
 "use strict";
+exports.__esModule = true;
 /// <reference path="../types/bar.d.ts"/>
 var foo_1 = require("foo");
 var bar_1 = require("bar");
 foo_1.x + bar_1.y;
-exports.__esModule = true;
 //# sourceMappingURL=/app/myMapRoot/index.js.map
 
 //// [/app/bin/index.d.ts]

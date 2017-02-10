@@ -139,6 +139,7 @@ class privateClassWithPrivateModuleGetAccessorTypes {
 //// [privacyCannotNameAccessorDeclFile_GlobalWidgets.js]
 //// [privacyCannotNameAccessorDeclFile_Widgets.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var Widget1 = (function () {
     function Widget1() {
         this.name = 'one';
@@ -164,9 +165,9 @@ var SpecializedWidget;
     }
     SpecializedWidget.createWidget2 = createWidget2;
 })(SpecializedWidget = exports.SpecializedWidget || (exports.SpecializedWidget = {}));
-Object.defineProperty(exports, "__esModule", { value: true });
 //// [privacyCannotNameAccessorDeclFile_exporter.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 ///<reference path='privacyCannotNameAccessorDeclFile_GlobalWidgets.ts'/>
 var Widgets = require("./privacyCannotNameAccessorDeclFile_Widgets");
 var Widgets1 = require("GlobalWidgets");
@@ -186,9 +187,9 @@ function createExportedWidget4() {
     return Widgets1.SpecializedGlobalWidget.createWidget4();
 }
 exports.createExportedWidget4 = createExportedWidget4;
-Object.defineProperty(exports, "__esModule", { value: true });
 //// [privacyCannotNameAccessorDeclFile_consumer.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var exporter = require("./privacyCannotNameAccessorDeclFile_exporter");
 var publicClassWithWithPrivateGetAccessorTypes = (function () {
     function publicClassWithWithPrivateGetAccessorTypes() {
@@ -380,7 +381,6 @@ var privateClassWithPrivateModuleGetAccessorTypes = (function () {
     });
     return privateClassWithPrivateModuleGetAccessorTypes;
 }());
-Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [privacyCannotNameAccessorDeclFile_GlobalWidgets.d.ts]

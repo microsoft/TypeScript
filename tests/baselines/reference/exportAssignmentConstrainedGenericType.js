@@ -24,8 +24,8 @@ var Foo = (function () {
 module.exports = Foo;
 //// [foo_1.js]
 "use strict";
+exports.__esModule = true;
 var foo = require("./foo_0");
 var x = new foo(true); // Should error
 var y = new foo({ a: "test", b: 42 }); // Should be OK
 var z = y.test.b;
-exports.__esModule = true;

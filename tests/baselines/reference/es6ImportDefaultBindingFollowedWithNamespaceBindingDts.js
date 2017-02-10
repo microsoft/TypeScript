@@ -10,18 +10,18 @@ export var x = new nameSpaceBinding.a();
 
 //// [server.js]
 "use strict";
+exports.__esModule = true;
 var a = (function () {
     function a() {
     }
     return a;
 }());
 exports.a = a;
-exports.__esModule = true;
 //// [client.js]
 "use strict";
+exports.__esModule = true;
 var nameSpaceBinding = require("./server");
 exports.x = new nameSpaceBinding.a();
-exports.__esModule = true;
 
 
 //// [server.d.ts]

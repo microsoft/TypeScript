@@ -15,6 +15,7 @@ import r = require("./b");
 
 //// [b.js]
 "use strict";
+exports.__esModule = true;
 var Member = (function () {
     function Member() {
     }
@@ -22,7 +23,6 @@ var Member = (function () {
 }());
 exports.Member = Member;
 exports["default"] = Member;
-exports.__esModule = true;
 //// [a.js]
 "use strict";
 exports.__esModule = true;

@@ -34,7 +34,7 @@ exports.__esModule = true;
 exports.__esModule = true;
 //// [visibilityOfCrossModuleTypeUsage_fs.js]
 "use strict";
+exports.__esModule = true;
 function run(configuration) {
     var absoluteWorkspacePath = configuration.workspace.toAbsolutePath(configuration.server);
 }
-exports.__esModule = true;

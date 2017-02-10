@@ -12,6 +12,6 @@ export var x = 0;
         define(["require", "exports"], factory);
     }
 })(function (require, exports) {
-    exports.x = 0;
     exports.__esModule = true;
+    exports.x = 0;
 });

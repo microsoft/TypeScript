@@ -9,12 +9,12 @@ export function foo () {
 
 //// [shorthandOfExportedEntity02_targetES5_CommonJS.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.test = "test";
 function foo() {
     var x = { test: exports.test };
 }
 exports.foo = foo;
-Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [shorthandOfExportedEntity02_targetES5_CommonJS.d.ts]

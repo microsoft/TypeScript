@@ -14,6 +14,7 @@ WinJS.Promise.timeout(10);
 
 //// [staticInstanceResolution3_0.js]
 "use strict";
+exports.__esModule = true;
 var Promise = (function () {
     function Promise() {
     }
@@ -23,10 +24,9 @@ var Promise = (function () {
     return Promise;
 }());
 exports.Promise = Promise;
-exports.__esModule = true;
 //// [staticInstanceResolution3_1.js]
 "use strict";
+exports.__esModule = true;
 ///<reference path='staticInstanceResolution3_0.ts'/>
 var WinJS = require("./staticInstanceResolution3_0");
 WinJS.Promise.timeout(10);
-exports.__esModule = true;

@@ -16,8 +16,8 @@ let y: number = x.n;
 
 //// [a.js]
 "use strict";
+exports.__esModule = true;
 var Foo = require("./foo");
 Foo.fn();
 var x;
 var y = x.n;
-exports.__esModule = true;

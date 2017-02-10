@@ -358,6 +358,7 @@ export module m3 {
 
 //// [privacyImport.js]
 "use strict";
+exports.__esModule = true;
 var m1;
 (function (m1) {
     var m1_M1_public;
@@ -701,4 +702,3 @@ var m3;
         //import m2 = require("use_glo_M1_public");
     })(m4 || (m4 = {}));
 })(m3 = exports.m3 || (exports.m3 = {}));
-exports.__esModule = true;

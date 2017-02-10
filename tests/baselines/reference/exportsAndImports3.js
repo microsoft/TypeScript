@@ -36,6 +36,7 @@ export { v, f, C, I, E, D, M, N, T, a };
 
 //// [t1.js]
 "use strict";
+exports.__esModule = true;
 exports.v = 1;
 exports.v1 = exports.v;
 function f() { }
@@ -61,9 +62,9 @@ var M;
 exports.M1 = M;
 exports.a = M.x;
 exports.a1 = exports.a;
-exports.__esModule = true;
 //// [t2.js]
 "use strict";
+exports.__esModule = true;
 var t1_1 = require("./t1");
 exports.v = t1_1.v1;
 exports.f = t1_1.f1;
@@ -71,9 +72,9 @@ exports.C = t1_1.C1;
 exports.E = t1_1.E1;
 exports.M = t1_1.M1;
 exports.a = t1_1.a1;
-exports.__esModule = true;
 //// [t3.js]
 "use strict";
+exports.__esModule = true;
 var t1_1 = require("./t1");
 exports.v = t1_1.v1;
 exports.f = t1_1.f1;
@@ -81,4 +82,3 @@ exports.C = t1_1.C1;
 exports.E = t1_1.E1;
 exports.M = t1_1.M1;
 exports.a = t1_1.a1;
-exports.__esModule = true;

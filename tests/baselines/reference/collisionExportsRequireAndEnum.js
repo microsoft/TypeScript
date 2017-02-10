@@ -63,6 +63,7 @@ module m4 {
 //// [collisionExportsRequireAndEnum_externalmodule.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var require;
     (function (require) {
         require[require["_thisVal1"] = 0] = "_thisVal1";
@@ -99,7 +100,6 @@ define(["require", "exports"], function (require, exports) {
             exports[exports["_thisVal2"] = 1] = "_thisVal2";
         })(exports = m2.exports || (m2.exports = {}));
     })(m2 || (m2 = {}));
-    exports.__esModule = true;
 });
 //// [collisionExportsRequireAndEnum_globalFile.js]
 var require;

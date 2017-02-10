@@ -19,16 +19,16 @@ import { as } from "./t1";
 
 //// [t1.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var as = 100;
 exports.return = as;
 exports.as = as;
-Object.defineProperty(exports, "__esModule", { value: true });
 //// [t2.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var as = require("./t1");
 var x = as.as;
 var y = as.return;
-Object.defineProperty(exports, "__esModule", { value: true });
 //// [t3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

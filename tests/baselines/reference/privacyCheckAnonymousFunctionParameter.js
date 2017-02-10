@@ -18,6 +18,7 @@ module Query {
 
 //// [privacyCheckAnonymousFunctionParameter.js]
 "use strict";
+exports.__esModule = true;
 exports.x = 1; // Makes this an external module
 var Query;
 (function (Query) {
@@ -31,7 +32,6 @@ var Query;
         });
     }
 })(Query || (Query = {}));
-exports.__esModule = true;
 
 
 //// [privacyCheckAnonymousFunctionParameter.d.ts]

@@ -45,6 +45,7 @@ class privateClassWithPublicTypeParametersWithoutExtends<T> {
 
 //// [privacyTypeParametersOfClass.js]
 "use strict";
+exports.__esModule = true;
 var privateClass = (function () {
     function privateClass() {
     }
@@ -108,4 +109,3 @@ var privateClassWithPublicTypeParametersWithoutExtends = (function () {
     };
     return privateClassWithPublicTypeParametersWithoutExtends;
 }());
-exports.__esModule = true;

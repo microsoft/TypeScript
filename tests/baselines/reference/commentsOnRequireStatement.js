@@ -19,14 +19,15 @@ export {subject1} from './1';
 
 //// [0.js]
 "use strict";
-exports.subject = 10;
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.subject = 10;
 //// [1.js]
 "use strict";
-exports.subject1 = 10;
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.subject1 = 10;
 //// [2.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /* blah0 */
 // blah 
 // blah 
@@ -36,4 +37,3 @@ exports.subject = _0_1.subject;
 /* blah1 */
 var _1_1 = require("./1");
 exports.subject1 = _1_1.subject1;
-Object.defineProperty(exports, "__esModule", { value: true });

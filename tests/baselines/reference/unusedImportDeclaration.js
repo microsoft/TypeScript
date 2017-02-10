@@ -25,11 +25,11 @@ var TesterB = (function () {
 module.exports = TesterB;
 //// [unusedImportDeclaration_testerA.js]
 "use strict";
+exports.__esModule = true;
 var thingy = {
     me: "A"
 };
 foo("IN " + thingy.me + "!");
-exports.__esModule = true;
 
 
 //// [unusedImportDeclaration_testerB.d.ts]

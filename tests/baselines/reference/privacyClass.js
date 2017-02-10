@@ -139,6 +139,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+exports.__esModule = true;
 var m1;
 (function (m1) {
     var m1_c_public = (function () {
@@ -430,4 +431,3 @@ var glo_C12_public = (function (_super) {
     return glo_C12_public;
 }(glo_c_private));
 exports.glo_C12_public = glo_C12_public;
-exports.__esModule = true;

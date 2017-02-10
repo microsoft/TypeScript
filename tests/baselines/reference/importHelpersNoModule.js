@@ -27,6 +27,7 @@ class C {
 
 //// [external.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = require("tslib");
 var A = (function () {
     function A() {
@@ -58,7 +59,6 @@ tslib_1.__decorate([
 C = tslib_1.__decorate([
     dec
 ], C);
-Object.defineProperty(exports, "__esModule", { value: true });
 //// [script.js]
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||

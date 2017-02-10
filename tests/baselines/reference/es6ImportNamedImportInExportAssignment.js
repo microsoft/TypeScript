@@ -10,8 +10,8 @@ export = a;
 
 //// [es6ImportNamedImportInExportAssignment_0.js]
 "use strict";
-exports.a = 10;
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.a = 10;
 //// [es6ImportNamedImportInExportAssignment_1.js]
 "use strict";
 const es6ImportNamedImportInExportAssignment_0_1 = require("./es6ImportNamedImportInExportAssignment_0");

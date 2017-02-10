@@ -32,6 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 class bluebird {
 }
 exports.bluebird = bluebird;
@@ -53,7 +54,6 @@ function runSampleBreaks(a, b, c, d, e) {
     });
 }
 exports.runSampleBreaks = runSampleBreaks;
-Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [declarationEmitPromise.d.ts]

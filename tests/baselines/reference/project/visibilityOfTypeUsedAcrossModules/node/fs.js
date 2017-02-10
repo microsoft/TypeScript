@@ -1,4 +1,5 @@
 "use strict";
+exports.__esModule = true;
 var RM = (function () {
     function RM() {
     }
@@ -14,4 +15,3 @@ var RM = (function () {
     return RM;
 }());
 exports.RM = RM;
-exports.__esModule = true;

@@ -15,6 +15,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+exports.__esModule = true;
 var A = require("");
 var B = (function (_super) {
     __extends(B, _super);
@@ -23,4 +24,3 @@ var B = (function (_super) {
     }
     return B;
 }(A));
-exports.__esModule = true;

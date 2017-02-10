@@ -13,6 +13,7 @@ export var x = 5;
 //// [exportingContainingVisibleType.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var Foo = (function () {
         function Foo() {
         }
@@ -27,5 +28,4 @@ define(["require", "exports"], function (require, exports) {
         return Foo;
     }());
     exports.x = 5;
-    exports.__esModule = true;
 });

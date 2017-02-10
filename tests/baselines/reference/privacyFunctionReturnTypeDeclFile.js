@@ -1195,6 +1195,7 @@ module publicModuleInGlobal {
 
 //// [privacyFunctionReturnTypeDeclFile_externalModule.js]
 "use strict";
+exports.__esModule = true;
 var privateClass = (function () {
     function privateClass() {
     }
@@ -1819,7 +1820,6 @@ var privateModule;
         return new privateModule.publicClass();
     }
 })(privateModule || (privateModule = {}));
-exports.__esModule = true;
 //// [privacyFunctionReturnTypeDeclFile_GlobalFile.js]
 var publicClassInGlobal = (function () {
     function publicClassInGlobal() {

@@ -29,8 +29,8 @@ y[0]();
 
 //// [unusedLocalsAndParametersTypeAliases.js]
 "use strict";
+exports.__esModule = true;
 var x;
 x();
 var y;
 y[0]();
-exports.__esModule = true;

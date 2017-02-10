@@ -44,6 +44,7 @@ import { aaaa as bbbb } from "es6ImportNamedImportAmd_0";
 //// [es6ImportNamedImportAmd_0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     exports.a = 10;
     exports.x = exports.a;
     exports.m = exports.a;
@@ -52,11 +53,11 @@ define(["require", "exports"], function (require, exports) {
     exports.z1 = 10;
     exports.z2 = 10;
     exports.aaaa = 10;
-    exports.__esModule = true;
 });
 //// [es6ImportNamedImportAmd_1.js]
 define(["require", "exports", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0"], function (require, exports, es6ImportNamedImportAmd_0_1, es6ImportNamedImportAmd_0_2, es6ImportNamedImportAmd_0_3, es6ImportNamedImportAmd_0_4, es6ImportNamedImportAmd_0_5, es6ImportNamedImportAmd_0_6, es6ImportNamedImportAmd_0_7, es6ImportNamedImportAmd_0_8, es6ImportNamedImportAmd_0_9) {
     "use strict";
+    exports.__esModule = true;
     var xxxx = es6ImportNamedImportAmd_0_1.a;
     var xxxx = es6ImportNamedImportAmd_0_2.a;
     var xxxx = es6ImportNamedImportAmd_0_3.x;
@@ -69,7 +70,6 @@ define(["require", "exports", "es6ImportNamedImportAmd_0", "es6ImportNamedImport
     var xxxx = es6ImportNamedImportAmd_0_7.x1;
     var z111 = es6ImportNamedImportAmd_0_8.z1;
     var z2 = es6ImportNamedImportAmd_0_9.z2; // z2 shouldn't give redeclare error
-    exports.__esModule = true;
 });
 
 

@@ -17,11 +17,11 @@ export function foo() {
 
 //// [app.js]
 "use strict";
+exports.__esModule = true;
 function foo() {
     return new Object();
 }
 exports.foo = foo;
-exports.__esModule = true;
 
 
 //// [app.d.ts]

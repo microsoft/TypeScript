@@ -23,6 +23,6 @@ define(["require", "exports"], function (require, exports) {
 //// [exportAssignmentInternalModule_B.js]
 define(["require", "exports", "exportAssignmentInternalModule_A"], function (require, exports, modM) {
     "use strict";
-    var n = modM.x;
     exports.__esModule = true;
+    var n = modM.x;
 });

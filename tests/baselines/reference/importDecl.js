@@ -83,6 +83,7 @@ export var useMultiImport_m4_f4 = multiImport_m4.foo();
 
 //// [importDecl_require.js]
 "use strict";
+exports.__esModule = true;
 var d = (function () {
     function d() {
     }
@@ -91,9 +92,9 @@ var d = (function () {
 exports.d = d;
 function foo() { return null; }
 exports.foo = foo;
-exports.__esModule = true;
 //// [importDecl_require1.js]
 "use strict";
+exports.__esModule = true;
 var d = (function () {
     function d() {
     }
@@ -103,9 +104,9 @@ exports.d = d;
 var x;
 function foo() { return null; }
 exports.foo = foo;
-exports.__esModule = true;
 //// [importDecl_require2.js]
 "use strict";
+exports.__esModule = true;
 var d = (function () {
     function d() {
     }
@@ -114,9 +115,9 @@ var d = (function () {
 exports.d = d;
 function foo() { return null; }
 exports.foo = foo;
-exports.__esModule = true;
 //// [importDecl_require3.js]
 "use strict";
+exports.__esModule = true;
 var d = (function () {
     function d() {
     }
@@ -125,14 +126,14 @@ var d = (function () {
 exports.d = d;
 function foo() { return null; }
 exports.foo = foo;
-exports.__esModule = true;
 //// [importDecl_require4.js]
 "use strict";
+exports.__esModule = true;
 function foo2() { return null; }
 exports.foo2 = foo2;
-exports.__esModule = true;
 //// [importDecl_1.js]
 "use strict";
+exports.__esModule = true;
 ///<reference path='importDecl_require.ts'/>
 ///<reference path='importDecl_require1.ts'/>
 ///<reference path='importDecl_require2.ts'/>
@@ -174,7 +175,6 @@ var multiImport_m4 = require("./importDecl_require"); // Emit used
 exports.useMultiImport_m4_x4 = multiImport_m4.x;
 exports.useMultiImport_m4_d4 = multiImport_m4.d;
 exports.useMultiImport_m4_f4 = multiImport_m4.foo();
-exports.__esModule = true;
 
 
 //// [importDecl_require.d.ts]

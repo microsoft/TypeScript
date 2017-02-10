@@ -31,6 +31,7 @@ export module A {
 
 //// [part1.js]
 "use strict";
+exports.__esModule = true;
 var A;
 (function (A) {
     var Utils;
@@ -42,9 +43,9 @@ var A;
     })(Utils = A.Utils || (A.Utils = {}));
     A.Origin = { x: 0, y: 0 };
 })(A = exports.A || (exports.A = {}));
-exports.__esModule = true;
 //// [part2.js]
 "use strict";
+exports.__esModule = true;
 var A;
 (function (A) {
     // collision with 'Origin' var in other part of merged module
@@ -61,4 +62,3 @@ var A;
         Utils.Plane = Plane;
     })(Utils = A.Utils || (A.Utils = {}));
 })(A = exports.A || (exports.A = {}));
-exports.__esModule = true;

@@ -38,6 +38,7 @@ extentMixed = extent([new NumCoercible(10), 13, '12', true]);
 
 //// [typeInferenceLiteralUnion.js]
 "use strict";
+exports.__esModule = true;
 // Not very useful, but meets Numeric
 var NumCoercible = (function () {
     function NumCoercible(a) {
@@ -57,4 +58,3 @@ function extent(array) {
 exports.extent = extent;
 var extentMixed;
 extentMixed = extent([new NumCoercible(10), 13, '12', true]);
-exports.__esModule = true;

@@ -50,6 +50,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+exports.__esModule = true;
 var React = require("react");
 function Greet(x) {
     return <div>Hello, {x}</div>;
@@ -82,4 +83,3 @@ var g = <BigGreeter key={100}/>;
 var h = <div ref={function (x) { return x.innerText; }}/>;
 // Error - property not on ontextually typed intrinsic ref callback parameter
 var i = <div ref={function (x) { return x.propertyNotOnHtmlDivElement; }}/>;
-exports.__esModule = true;

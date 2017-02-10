@@ -10,13 +10,13 @@ var x: number = nameSpaceBinding.a;
 
 //// [es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0.js]
 "use strict";
-exports.a = 10;
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.a = 10;
 //// [es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_1.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var nameSpaceBinding = require("./es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0");
 var x = nameSpaceBinding.a;
-Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0.d.ts]

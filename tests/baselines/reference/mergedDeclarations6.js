@@ -26,6 +26,7 @@ export class B extends A {
 //// [a.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var A = (function () {
         function A() {
         }
@@ -35,7 +36,6 @@ define(["require", "exports"], function (require, exports) {
         return A;
     }());
     exports.A = A;
-    exports.__esModule = true;
 });
 //// [b.js]
 var __extends = (this && this.__extends) || (function () {
@@ -50,6 +50,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 define(["require", "exports", "./a"], function (require, exports, a_1) {
     "use strict";
+    exports.__esModule = true;
     var B = (function (_super) {
         __extends(B, _super);
         function B() {
@@ -60,5 +61,4 @@ define(["require", "exports", "./a"], function (require, exports, a_1) {
         return B;
     }(a_1.A));
     exports.B = B;
-    exports.__esModule = true;
 });

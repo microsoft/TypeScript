@@ -63,6 +63,7 @@ var f;
 module.exports = f;
 //// [declarationEmit_nameConflicts_0.js]
 "use strict";
+exports.__esModule = true;
 var im = require("./declarationEmit_nameConflicts_1");
 var M;
 (function (M) {
@@ -129,7 +130,6 @@ var M;
         })(N = Q.N || (Q.N = {}));
     })(Q = M.Q || (M.Q = {}));
 })(M = exports.M || (exports.M = {}));
-exports.__esModule = true;
 
 
 //// [declarationEmit_nameConflicts_1.d.ts]

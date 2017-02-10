@@ -102,6 +102,7 @@ export var publicUse_im_public_mu_public: im_public_mu_public.i;
 //// [privacyTopLevelInternalReferenceImportWithExport.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     // private elements
     var m_private;
     (function (m_private) {
@@ -198,5 +199,4 @@ define(["require", "exports"], function (require, exports) {
     var privateUse_im_public_mi_public = new exports.im_public_mi_public.c();
     exports.publicUse_im_public_mi_public = new exports.im_public_mi_public.c();
     var privateUse_im_public_mu_public;
-    exports.__esModule = true;
 });

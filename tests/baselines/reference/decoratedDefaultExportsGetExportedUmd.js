@@ -30,6 +30,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     }
 })(function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var decorator;
     let Foo = class Foo {
     };
@@ -37,7 +38,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
         decorator
     ], Foo);
     exports.default = Foo;
-    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [b.js]
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -56,6 +56,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     }
 })(function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var decorator;
     let default_1 = class {
     };
@@ -63,5 +64,4 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
         decorator
     ], default_1);
     exports.default = default_1;
-    Object.defineProperty(exports, "__esModule", { value: true });
 });

@@ -5,6 +5,6 @@ export function Foo(): any {}
 
 //// [exportRedeclarationTypeAliases.js]
 "use strict";
+exports.__esModule = true;
 function Foo() { }
 exports.Foo = Foo;
-exports.__esModule = true;

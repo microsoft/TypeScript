@@ -13,6 +13,7 @@ export declare class Bar2 {
 
 //// [noImplicitAnyDestructuringInPrivateMethod.js]
 "use strict";
+exports.__esModule = true;
 var Bar = (function () {
     function Bar() {
     }
@@ -23,7 +24,6 @@ var Bar = (function () {
     return Bar;
 }());
 exports.Bar = Bar;
-exports.__esModule = true;
 
 
 //// [noImplicitAnyDestructuringInPrivateMethod.d.ts]

@@ -36,13 +36,13 @@ define(["require", "exports"], function (require, exports) {
 //// [file2.js]
 define(["require", "exports", "module1", "templates/module2", "../file3"], function (require, exports, module1_1, module2_1, file3_1) {
     "use strict";
-    exports.x = module1_1.a + module2_1.b + file3_1.x;
     exports.__esModule = true;
+    exports.x = module1_1.a + module2_1.b + file3_1.x;
 });
 //// [file1.js]
 define(["require", "exports", "./project/file2", "module3"], function (require, exports, file2_1, module3_1) {
     "use strict";
+    exports.__esModule = true;
     use(file2_1.x.toFixed());
     use(module3_1.y.toFixed());
-    exports.__esModule = true;
 });

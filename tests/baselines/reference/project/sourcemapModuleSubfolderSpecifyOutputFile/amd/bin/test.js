@@ -1,5 +1,6 @@
 define("ref/m1", ["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     exports.m1_a1 = 10;
     var m1_c1 = (function () {
         function m1_c1() {
@@ -12,10 +13,10 @@ define("ref/m1", ["require", "exports"], function (require, exports) {
         return exports.m1_instance1;
     }
     exports.m1_f1 = m1_f1;
-    exports.__esModule = true;
 });
 define("test", ["require", "exports", "ref/m1"], function (require, exports, m1) {
     "use strict";
+    exports.__esModule = true;
     exports.a1 = 10;
     var c1 = (function () {
         function c1() {
@@ -29,6 +30,5 @@ define("test", ["require", "exports", "ref/m1"], function (require, exports, m1)
     }
     exports.f1 = f1;
     exports.a2 = m1.m1_c1;
-    exports.__esModule = true;
 });
 //# sourceMappingURL=test.js.map

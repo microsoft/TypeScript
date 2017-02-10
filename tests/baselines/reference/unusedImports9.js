@@ -19,6 +19,7 @@ import c = require('./file1')
 
 //// [file1.js]
 "use strict";
+exports.__esModule = true;
 var Calculator = (function () {
     function Calculator() {
     }
@@ -32,7 +33,6 @@ exports.test = test;
 function test2() {
 }
 exports.test2 = test2;
-exports.__esModule = true;
 //// [file2.js]
 "use strict";
 exports.__esModule = true;

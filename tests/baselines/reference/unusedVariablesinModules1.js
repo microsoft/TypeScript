@@ -8,5 +8,5 @@ export var y: string;
 
 //// [unusedVariablesinModules1.js]
 "use strict";
-var x;
 exports.__esModule = true;
+var x;

@@ -156,6 +156,7 @@ module privateModule {
 
 //// [privacyTypeParametersOfClassDeclFile.js]
 "use strict";
+exports.__esModule = true;
 var privateClass = (function () {
     function privateClass() {
     }
@@ -382,4 +383,3 @@ var privateModule;
         return privateClassWithPublicTypeParametersWithoutExtends;
     }());
 })(privateModule || (privateModule = {}));
-exports.__esModule = true;

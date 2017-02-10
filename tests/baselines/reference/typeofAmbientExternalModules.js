@@ -20,13 +20,13 @@ y2 = ext;
 
 //// [typeofAmbientExternalModules_0.js]
 "use strict";
+exports.__esModule = true;
 var C = (function () {
     function C() {
     }
     return C;
 }());
 exports.C = C;
-exports.__esModule = true;
 //// [typeofAmbientExternalModules_1.js]
 "use strict";
 var D = (function () {
@@ -37,6 +37,7 @@ var D = (function () {
 module.exports = D;
 //// [typeofAmbientExternalModules_2.js]
 "use strict";
+exports.__esModule = true;
 ///<reference path='typeofAmbientExternalModules_0.ts'/>
 ///<reference path='typeofAmbientExternalModules_1.ts'/>
 var ext = require("./typeofAmbientExternalModules_0");
@@ -45,4 +46,3 @@ var y1 = ext;
 y1 = exp;
 var y2 = exp;
 y2 = ext;
-exports.__esModule = true;

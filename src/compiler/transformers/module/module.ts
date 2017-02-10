@@ -83,14 +83,15 @@ namespace ts {
 
             const statements: Statement[] = [];
             const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, sourceElementVisitor);
-            append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement, /*optional*/ true));
-            addRange(statements, visitNodes(node.statements, sourceElementVisitor, isStatement, statementOffset));
-            addRange(statements, endLexicalEnvironment());
-            addExportEqualsIfNeeded(statements, /*emitAsReturn*/ false);
 
             if (!currentModuleInfo.exportEquals) {
                 append(statements, createUnderscoreUnderscoreESModule());
             }
+
+            append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement, /*optional*/ true));
+            addRange(statements, visitNodes(node.statements, sourceElementVisitor, isStatement, statementOffset));
+            addRange(statements, endLexicalEnvironment());
+            addExportEqualsIfNeeded(statements, /*emitAsReturn*/ false);
 
             const updated = updateSourceFileNode(node, setTextRange(createNodeArray(statements), node.statements));
             if (currentModuleInfo.hasExportStarsToExportValues) {
@@ -374,6 +375,10 @@ namespace ts {
             const statements: Statement[] = [];
             const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, sourceElementVisitor);
 
+            if (!currentModuleInfo.exportEquals) {
+                append(statements, createUnderscoreUnderscoreESModule());
+            }
+
             // Visit each statement of the module body.
             append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement, /*optional*/ true));
             addRange(statements, visitNodes(node.statements, sourceElementVisitor, isStatement, statementOffset));
@@ -384,10 +389,6 @@ namespace ts {
 
             // Append the 'export =' statement if provided.
             addExportEqualsIfNeeded(statements, /*emitAsReturn*/ true);
-
-            if (!currentModuleInfo.exportEquals) {
-                append(statements, createUnderscoreUnderscoreESModule());
-            }
 
             const body = createBlock(statements, /*multiLine*/ true);
             if (currentModuleInfo.hasExportStarsToExportValues) {

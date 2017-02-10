@@ -23,6 +23,7 @@ class Bug {
 
 //// [interfaceContextualType.js]
 "use strict";
+exports.__esModule = true;
 var Bug = (function () {
     function Bug() {
     }
@@ -37,4 +38,3 @@ var Bug = (function () {
     };
     return Bug;
 }());
-exports.__esModule = true;

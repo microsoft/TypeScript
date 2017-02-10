@@ -1,4 +1,5 @@
 "use strict";
+exports.__esModule = true;
 var d = (function () {
     function d() {
     }
@@ -10,4 +11,3 @@ function foo() {
     return new d();
 }
 exports.foo = foo;
-exports.__esModule = true;

@@ -34,6 +34,7 @@ export class MyComponent {
 //// [file.jsx]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var MyComponent = (function () {
         function MyComponent() {
         }
@@ -48,5 +49,4 @@ define(["require", "exports"], function (require, exports) {
     <MyComponent bar={true}/>;
     // Should be ok
     <MyComponent data-bar='hello'/>;
-    exports.__esModule = true;
 });

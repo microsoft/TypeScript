@@ -15,11 +15,11 @@ export class AppComponent {
 
 //// [test.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class AppComponent {
     render(createElement) {
         return createElement("div", null);
     }
 }
 exports.AppComponent = AppComponent;
-Object.defineProperty(exports, "__esModule", { value: true });
 //# sourceMappingURL=test.js.map

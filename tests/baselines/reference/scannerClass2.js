@@ -9,6 +9,7 @@
 
 //// [scannerClass2.js]
 "use strict";
+exports.__esModule = true;
 var LoggerAdapter = (function () {
     function LoggerAdapter(logger) {
         this.logger = logger;
@@ -17,4 +18,3 @@ var LoggerAdapter = (function () {
     return LoggerAdapter;
 }());
 exports.LoggerAdapter = LoggerAdapter;
-exports.__esModule = true;

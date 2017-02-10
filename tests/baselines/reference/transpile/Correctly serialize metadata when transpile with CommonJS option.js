@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 var ng = require("angular2/core");
 var MyClass1 = (function () {
     function MyClass1(_elementRef) {
@@ -20,5 +21,4 @@ MyClass1 = __decorate([
     __metadata("design:paramtypes", [typeof (_a = (typeof ng !== "undefined" && ng).ElementRef) === "function" && _a || Object])
 ], MyClass1);
 var _a;
-Object.defineProperty(exports, "__esModule", { value: true });
 //# sourceMappingURL=file.js.map

@@ -1,5 +1,6 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var d = (function () {
         function d() {
         }
@@ -11,5 +12,4 @@ define(["require", "exports"], function (require, exports) {
         return new d();
     }
     exports.foo = foo;
-    exports.__esModule = true;
 });

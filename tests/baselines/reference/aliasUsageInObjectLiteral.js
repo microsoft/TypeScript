@@ -23,13 +23,13 @@ var c: { y: { z: IHasVisualizationModel } } = { y: { z: moduleA } };
 
 //// [aliasUsageInObjectLiteral_backbone.js]
 "use strict";
+exports.__esModule = true;
 var Model = (function () {
     function Model() {
     }
     return Model;
 }());
 exports.Model = Model;
-exports.__esModule = true;
 //// [aliasUsageInObjectLiteral_moduleA.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -42,6 +42,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+exports.__esModule = true;
 var Backbone = require("./aliasUsageInObjectLiteral_backbone");
 var VisualizationModel = (function (_super) {
     __extends(VisualizationModel, _super);
@@ -51,11 +52,10 @@ var VisualizationModel = (function (_super) {
     return VisualizationModel;
 }(Backbone.Model));
 exports.VisualizationModel = VisualizationModel;
-exports.__esModule = true;
 //// [aliasUsageInObjectLiteral_main.js]
 "use strict";
+exports.__esModule = true;
 var moduleA = require("./aliasUsageInObjectLiteral_moduleA");
 var a = { x: moduleA };
 var b = { x: moduleA };
 var c = { y: { z: moduleA } };
-exports.__esModule = true;

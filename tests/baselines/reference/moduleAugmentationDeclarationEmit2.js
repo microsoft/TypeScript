@@ -36,24 +36,24 @@ let z2 = Observable.someAnotherValue.toLowerCase();
 
 //// [observable.js]
 "use strict";
+exports.__esModule = true;
 var Observable;
 (function (Observable) {
 })(Observable = exports.Observable || (exports.Observable = {}));
-exports.__esModule = true;
 //// [map.js]
 "use strict";
+exports.__esModule = true;
 var observable_1 = require("./observable");
 observable_1.Observable.prototype.map = function () { };
-exports.__esModule = true;
 //// [main.js]
 "use strict";
+exports.__esModule = true;
 var observable_1 = require("./observable");
 require("./map");
 var x;
 var y = x.map(function (x) { return x + 1; });
 var z1 = observable_1.Observable.someValue.toFixed();
 var z2 = observable_1.Observable.someAnotherValue.toLowerCase();
-exports.__esModule = true;
 
 
 //// [observable.d.ts]

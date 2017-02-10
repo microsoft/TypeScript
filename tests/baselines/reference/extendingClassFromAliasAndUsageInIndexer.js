@@ -34,13 +34,13 @@ var visModel = new moduleMap[moduleName].VisualizationModel();
 
 //// [extendingClassFromAliasAndUsageInIndexer_backbone.js]
 "use strict";
+exports.__esModule = true;
 var Model = (function () {
     function Model() {
     }
     return Model;
 }());
 exports.Model = Model;
-exports.__esModule = true;
 //// [extendingClassFromAliasAndUsageInIndexer_moduleA.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -53,6 +53,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+exports.__esModule = true;
 var Backbone = require("./extendingClassFromAliasAndUsageInIndexer_backbone");
 var VisualizationModel = (function (_super) {
     __extends(VisualizationModel, _super);
@@ -62,7 +63,6 @@ var VisualizationModel = (function (_super) {
     return VisualizationModel;
 }(Backbone.Model));
 exports.VisualizationModel = VisualizationModel;
-exports.__esModule = true;
 //// [extendingClassFromAliasAndUsageInIndexer_moduleB.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -75,6 +75,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+exports.__esModule = true;
 var Backbone = require("./extendingClassFromAliasAndUsageInIndexer_backbone");
 var VisualizationModel = (function (_super) {
     __extends(VisualizationModel, _super);
@@ -84,9 +85,9 @@ var VisualizationModel = (function (_super) {
     return VisualizationModel;
 }(Backbone.Model));
 exports.VisualizationModel = VisualizationModel;
-exports.__esModule = true;
 //// [extendingClassFromAliasAndUsageInIndexer_main.js]
 "use strict";
+exports.__esModule = true;
 var moduleA = require("./extendingClassFromAliasAndUsageInIndexer_moduleA");
 var moduleB = require("./extendingClassFromAliasAndUsageInIndexer_moduleB");
 var moduleATyped = moduleA;
@@ -96,4 +97,3 @@ var moduleMap = {
 };
 var moduleName;
 var visModel = new moduleMap[moduleName].VisualizationModel();
-exports.__esModule = true;

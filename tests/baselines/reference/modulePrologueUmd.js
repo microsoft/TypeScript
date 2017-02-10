@@ -14,11 +14,11 @@ export class Foo {}
     }
 })(function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var Foo = (function () {
         function Foo() {
         }
         return Foo;
     }());
     exports.Foo = Foo;
-    exports.__esModule = true;
 });

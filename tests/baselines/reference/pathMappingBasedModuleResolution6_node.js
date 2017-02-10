@@ -13,11 +13,11 @@ export {x} from "../file2";
 
 //// [file3.js]
 "use strict";
+exports.__esModule = true;
 var file2_1 = require("../file2");
 exports.x = file2_1.x;
-exports.__esModule = true;
 //// [file1.js]
 "use strict";
+exports.__esModule = true;
 var file3_1 = require("./project/file3");
 use(file3_1.x.toFixed());
-exports.__esModule = true;

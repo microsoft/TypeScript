@@ -29,6 +29,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var C1 = (function () {
         function C1() {
         }
@@ -41,5 +42,4 @@ define(["require", "exports"], function (require, exports) {
         }
         return Test1;
     }(C1));
-    exports.__esModule = true;
 });

@@ -13,6 +13,7 @@ class NavigateAction {
 
 //// [externalModuleQualification.js]
 "use strict";
+exports.__esModule = true;
 exports.ID = "test";
 var DiffEditor = (function () {
     function DiffEditor(id) {
@@ -28,4 +29,3 @@ var NavigateAction = (function () {
     };
     return NavigateAction;
 }());
-exports.__esModule = true;

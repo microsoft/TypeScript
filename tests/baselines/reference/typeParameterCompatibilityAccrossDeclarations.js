@@ -25,6 +25,7 @@ i2 = a2; // no error
 //// [typeParameterCompatibilityAccrossDeclarations.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var a = {
         x: function (y) { return null; }
     };
@@ -37,5 +38,4 @@ define(["require", "exports"], function (require, exports) {
     i = a; // error
     a2 = i2; // no error
     i2 = a2; // no error
-    exports.__esModule = true;
 });

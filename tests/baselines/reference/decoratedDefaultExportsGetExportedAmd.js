@@ -22,6 +22,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var decorator;
     let Foo = class Foo {
     };
@@ -29,7 +30,6 @@ define(["require", "exports"], function (require, exports) {
         decorator
     ], Foo);
     exports.default = Foo;
-    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [b.js]
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -40,6 +40,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var decorator;
     let default_1 = class {
     };
@@ -47,5 +48,4 @@ define(["require", "exports"], function (require, exports) {
         decorator
     ], default_1);
     exports.default = default_1;
-    Object.defineProperty(exports, "__esModule", { value: true });
 });

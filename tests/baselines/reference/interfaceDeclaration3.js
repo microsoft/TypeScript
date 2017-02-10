@@ -58,6 +58,7 @@ interface I2 extends I1 { item:string; }
 //// [interfaceDeclaration3.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var M1;
     (function (M1) {
         var C1 = (function () {
@@ -119,5 +120,4 @@ define(["require", "exports"], function (require, exports) {
         }
         return C3;
     }());
-    exports.__esModule = true;
 });

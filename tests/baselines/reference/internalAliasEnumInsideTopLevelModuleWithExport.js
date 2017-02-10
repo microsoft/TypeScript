@@ -14,6 +14,7 @@ export var bVal: b = b.Sunday;
 //// [internalAliasEnumInsideTopLevelModuleWithExport.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var a;
     (function (a) {
         var weekend;
@@ -25,7 +26,6 @@ define(["require", "exports"], function (require, exports) {
     })(a = exports.a || (exports.a = {}));
     exports.b = a.weekend;
     exports.bVal = exports.b.Sunday;
-    exports.__esModule = true;
 });
 
 

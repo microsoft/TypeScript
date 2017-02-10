@@ -12,6 +12,7 @@ export module c {
 //// [internalAliasVarInsideLocalModuleWithoutExport.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var a;
     (function (a) {
         a.x = 10;
@@ -21,7 +22,6 @@ define(["require", "exports"], function (require, exports) {
         var b = a.x;
         c.bVal = b;
     })(c = exports.c || (exports.c = {}));
-    exports.__esModule = true;
 });
 
 

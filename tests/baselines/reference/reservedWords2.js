@@ -15,6 +15,7 @@ enum void {}
 
 //// [reservedWords2.js]
 "use strict";
+exports.__esModule = true;
 require();
 while ( = require("dfdf"))
     ;
@@ -37,4 +38,3 @@ if ()
 (function () {
 })( || ( = {}));
 void {};
-exports.__esModule = true;

@@ -1,4 +1,5 @@
 "use strict";
+exports.__esModule = true;
 exports.m2_a1 = 10;
 var m2_c1 = (function () {
     function m2_c1() {
@@ -11,4 +12,3 @@ function m2_f1() {
     return exports.m2_instance1;
 }
 exports.m2_f1 = m2_f1;
-exports.__esModule = true;

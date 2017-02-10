@@ -48,6 +48,7 @@ import { aaaa1 as bbbb } from "./server";
 
 //// [server.js]
 "use strict";
+exports.__esModule = true;
 var a = (function () {
     function a() {
     }
@@ -132,9 +133,9 @@ var aaaa1 = (function () {
     return aaaa1;
 }());
 exports.aaaa1 = aaaa1;
-exports.__esModule = true;
 //// [client.js]
 "use strict";
+exports.__esModule = true;
 var server_1 = require("./server");
 exports.xxxx = new server_1.a();
 var server_2 = require("./server");
@@ -156,7 +157,6 @@ var server_8 = require("./server");
 exports.z111 = new server_8.z1();
 var server_9 = require("./server");
 exports.z2 = new server_9.z2(); // z2 shouldn't give redeclare error
-exports.__esModule = true;
 
 
 //// [server.d.ts]

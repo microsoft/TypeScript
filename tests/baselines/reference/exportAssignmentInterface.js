@@ -22,7 +22,7 @@ define(["require", "exports"], function (require, exports) {
 //// [exportAssignmentInterface_B.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var i;
     var n = i.p1;
-    exports.__esModule = true;
 });

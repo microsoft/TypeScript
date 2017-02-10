@@ -45,6 +45,7 @@ export let h1: D = new D;
     }
 })(function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var ;
     let;
     var ;
@@ -75,5 +76,4 @@ export let h1: D = new D;
     exports.f1 = new D;
     exports.g1 = new D;
     exports.h1 = new D;
-    exports.__esModule = true;
 });

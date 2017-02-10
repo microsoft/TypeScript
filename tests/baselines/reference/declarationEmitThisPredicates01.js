@@ -21,6 +21,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+exports.__esModule = true;
 var C = (function () {
     function C() {
     }
@@ -38,7 +39,6 @@ var D = (function (_super) {
     return D;
 }(C));
 exports.D = D;
-exports.__esModule = true;
 
 
 //// [declarationEmitThisPredicates01.d.ts]

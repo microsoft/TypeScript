@@ -12,7 +12,7 @@ Foo.default.default.foo();
 
 //// [a.js]
 "use strict";
+exports.__esModule = true;
 var Foo = require("./b");
 Foo["default"].bar();
 Foo["default"]["default"].foo();
-exports.__esModule = true;

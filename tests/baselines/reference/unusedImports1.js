@@ -11,13 +11,13 @@ import {Calculator} from "./file1"
 
 //// [file1.js]
 "use strict";
+exports.__esModule = true;
 var Calculator = (function () {
     function Calculator() {
     }
     return Calculator;
 }());
 exports.Calculator = Calculator;
-exports.__esModule = true;
 //// [file2.js]
 "use strict";
 exports.__esModule = true;

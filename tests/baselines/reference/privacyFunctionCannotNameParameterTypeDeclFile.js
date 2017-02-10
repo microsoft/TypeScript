@@ -159,6 +159,7 @@ function privateFunctionWithPrivateModuleParameterTypes1(param= exporter.createE
 //// [privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.js]
 //// [privacyFunctionCannotNameParameterTypeDeclFile_Widgets.js]
 "use strict";
+exports.__esModule = true;
 var Widget1 = (function () {
     function Widget1() {
         this.name = 'one';
@@ -184,9 +185,9 @@ var SpecializedWidget;
     }
     SpecializedWidget.createWidget2 = createWidget2;
 })(SpecializedWidget = exports.SpecializedWidget || (exports.SpecializedWidget = {}));
-exports.__esModule = true;
 //// [privacyFunctionCannotNameParameterTypeDeclFile_exporter.js]
 "use strict";
+exports.__esModule = true;
 ///<reference path='privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts'/>
 var Widgets = require("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets");
 var Widgets1 = require("GlobalWidgets");
@@ -206,9 +207,9 @@ function createExportedWidget4() {
     return Widgets1.SpecializedGlobalWidget.createWidget4();
 }
 exports.createExportedWidget4 = createExportedWidget4;
-exports.__esModule = true;
 //// [privacyFunctionCannotNameParameterTypeDeclFile_consumer.js]
 "use strict";
+exports.__esModule = true;
 var exporter = require("./privacyFunctionCannotNameParameterTypeDeclFile_exporter");
 var publicClassWithWithPrivateParmeterTypes = (function () {
     function publicClassWithWithPrivateParmeterTypes(param, param1, param2) {
@@ -394,7 +395,6 @@ function privateFunctionWithPrivateModuleParameterTypes(param) {
 function privateFunctionWithPrivateModuleParameterTypes1(param) {
     if (param === void 0) { param = exporter.createExportedWidget4(); }
 }
-exports.__esModule = true;
 
 
 //// [privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.d.ts]

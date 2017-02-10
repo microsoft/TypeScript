@@ -18,13 +18,13 @@ y2 = ext;
 
 //// [typeofExternalModules_external.js]
 "use strict";
+exports.__esModule = true;
 var C = (function () {
     function C() {
     }
     return C;
 }());
 exports.C = C;
-exports.__esModule = true;
 //// [typeofExternalModules_exportAssign.js]
 "use strict";
 var D = (function () {
@@ -35,10 +35,10 @@ var D = (function () {
 module.exports = D;
 //// [typeofExternalModules_core.js]
 "use strict";
+exports.__esModule = true;
 var ext = require("./typeofExternalModules_external");
 var exp = require("./typeofExternalModules_exportAssign");
 var y1 = ext;
 y1 = exp;
 var y2 = exp;
 y2 = ext;
-exports.__esModule = true;

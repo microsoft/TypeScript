@@ -31,9 +31,9 @@ x.foo().x;
 //// [main.js]
 /// <reference path="O.d.ts" />
 "use strict";
+exports.__esModule = true;
 var x;
 x.foo().x;
-exports.__esModule = true;
 
 
 //// [main.d.ts]

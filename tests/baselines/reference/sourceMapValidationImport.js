@@ -10,6 +10,7 @@ var y = new b();
 
 //// [sourceMapValidationImport.js]
 "use strict";
+exports.__esModule = true;
 var m;
 (function (m) {
     var c = (function () {
@@ -23,5 +24,4 @@ var a = m.c;
 exports.b = m.c;
 var x = new a();
 var y = new exports.b();
-exports.__esModule = true;
 //# sourceMappingURL=sourceMapValidationImport.js.map

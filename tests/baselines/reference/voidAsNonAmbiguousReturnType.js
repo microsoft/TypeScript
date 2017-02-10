@@ -15,14 +15,14 @@ function main() {
 
 //// [voidAsNonAmbiguousReturnType_0.js]
 "use strict";
+exports.__esModule = true;
 function mkdirSync(path, mode) { }
 exports.mkdirSync = mkdirSync;
-exports.__esModule = true;
 //// [voidAsNonAmbiguousReturnType_1.js]
 "use strict";
+exports.__esModule = true;
 ///<reference path='voidAsNonAmbiguousReturnType_0.ts'/>
 var fs = require("./voidAsNonAmbiguousReturnType_0");
 function main() {
     fs.mkdirSync('test'); // should not error - return types are the same
 }
-exports.__esModule = true;

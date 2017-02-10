@@ -52,6 +52,7 @@ class A {
 
 //// [Element.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var Element;
 (function (Element) {
     function isElement(el) {
@@ -67,9 +68,9 @@ exports.createElement = Element.createElement;
 function toCamelCase(text) {
     return text[0].toLowerCase() + text.substring(1);
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 //# sourceMappingURL=Element.js.map//// [test.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const Element_1 = require("./Element");
 let createElement = Element_1.Element.createElement;
 let c;
@@ -81,5 +82,4 @@ class A {
         ];
     }
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 //# sourceMappingURL=test.js.map

@@ -11,13 +11,13 @@ export { v }
 
 //// [0.js]
 "use strict";
-var obj = true;
 exports.__esModule = true;
+var obj = true;
 //// [1.js]
 "use strict";
+exports.__esModule = true;
 var v = "str" || true;
 exports.v = v;
-exports.__esModule = true;
 
 
 //// [0.d.ts]

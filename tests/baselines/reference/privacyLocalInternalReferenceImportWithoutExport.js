@@ -155,6 +155,7 @@ module import_private {
 //// [privacyLocalInternalReferenceImportWithoutExport.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     // private elements
     var m_private;
     (function (m_private) {
@@ -295,5 +296,4 @@ define(["require", "exports"], function (require, exports) {
         import_private.publicUse_im_private_mi_public = new im_private_mi_public.c();
         var privateUse_im_private_mu_public;
     })(import_private || (import_private = {}));
-    exports.__esModule = true;
 });

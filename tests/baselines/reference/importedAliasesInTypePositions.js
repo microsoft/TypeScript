@@ -21,6 +21,7 @@ export module ImportingModule {
 //// [file1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var elaborate;
     (function (elaborate) {
         var nested;
@@ -41,11 +42,11 @@ define(["require", "exports"], function (require, exports) {
             })(mod = nested.mod || (nested.mod = {}));
         })(nested = elaborate.nested || (elaborate.nested = {}));
     })(elaborate = exports.elaborate || (exports.elaborate = {}));
-    exports.__esModule = true;
 });
 //// [file2.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var ImportingModule;
     (function (ImportingModule) {
         var UsesReferredType = (function () {
@@ -55,5 +56,4 @@ define(["require", "exports"], function (require, exports) {
             return UsesReferredType;
         }());
     })(ImportingModule = exports.ImportingModule || (exports.ImportingModule = {}));
-    exports.__esModule = true;
 });

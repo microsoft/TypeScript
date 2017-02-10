@@ -13,6 +13,6 @@ x;
 
 //// [a.js]
 "use strict";
+exports.__esModule = true;
 var xyz_1 = require("xyz");
 xyz_1.x;
-exports.__esModule = true;

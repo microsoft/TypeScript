@@ -12,11 +12,11 @@ export = foo;
 
 //// [utils.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 function foo() { }
 exports.foo = foo;
 function bar() { }
 exports.bar = bar;
-Object.defineProperty(exports, "__esModule", { value: true });
 //// [index.js]
 "use strict";
 var utils_1 = require("./utils");

@@ -15,6 +15,7 @@ export module c {
 
 //// [internalAliasEnumInsideLocalModuleWithExport.js]
 "use strict";
+exports.__esModule = true;
 var a;
 (function (a) {
     var weekend;
@@ -29,7 +30,6 @@ var c;
     c.b = a.weekend;
     c.bVal = c.b.Sunday;
 })(c = exports.c || (exports.c = {}));
-exports.__esModule = true;
 
 
 //// [internalAliasEnumInsideLocalModuleWithExport.d.ts]

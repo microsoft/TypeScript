@@ -22,13 +22,13 @@ var m: typeof moduleA = i;
 
 //// [aliasUsageInVarAssignment_backbone.js]
 "use strict";
+exports.__esModule = true;
 var Model = (function () {
     function Model() {
     }
     return Model;
 }());
 exports.Model = Model;
-exports.__esModule = true;
 //// [aliasUsageInVarAssignment_moduleA.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -41,6 +41,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+exports.__esModule = true;
 var Backbone = require("./aliasUsageInVarAssignment_backbone");
 var VisualizationModel = (function (_super) {
     __extends(VisualizationModel, _super);
@@ -50,9 +51,8 @@ var VisualizationModel = (function (_super) {
     return VisualizationModel;
 }(Backbone.Model));
 exports.VisualizationModel = VisualizationModel;
-exports.__esModule = true;
 //// [aliasUsageInVarAssignment_main.js]
 "use strict";
+exports.__esModule = true;
 var i;
 var m = i;
-exports.__esModule = true;

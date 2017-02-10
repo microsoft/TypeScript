@@ -21,6 +21,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
 var Task = (function (_super) {
     __extends(Task, _super);
     function Task() {
@@ -29,7 +30,6 @@ var Task = (function (_super) {
     return Task;
 }(Promise));
 exports.Task = Task;
-Object.defineProperty(exports, "__esModule", { value: true });
 //// [test.js]
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -67,6 +67,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 var task_1 = require("./task");
 var Test = (function () {
     function Test() {
@@ -78,4 +79,3 @@ var Test = (function () {
     };
     return Test;
 }());
-Object.defineProperty(exports, "__esModule", { value: true });

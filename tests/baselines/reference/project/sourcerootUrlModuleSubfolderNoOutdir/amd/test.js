@@ -1,5 +1,6 @@
 define(["require", "exports", "ref/m1"], function (require, exports, m1) {
     "use strict";
+    exports.__esModule = true;
     exports.a1 = 10;
     var c1 = (function () {
         function c1() {
@@ -13,6 +14,5 @@ define(["require", "exports", "ref/m1"], function (require, exports, m1) {
     }
     exports.f1 = f1;
     exports.a2 = m1.m1_c1;
-    exports.__esModule = true;
 });
 //# sourceMappingURL=test.js.map

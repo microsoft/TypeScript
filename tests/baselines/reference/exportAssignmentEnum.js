@@ -27,8 +27,8 @@ var E;
 module.exports = E;
 //// [exportAssignmentEnum_B.js]
 "use strict";
+exports.__esModule = true;
 var EnumE = require("./exportAssignmentEnum_A");
 var a = EnumE.A;
 var b = EnumE.B;
 var c = EnumE.C;
-exports.__esModule = true;

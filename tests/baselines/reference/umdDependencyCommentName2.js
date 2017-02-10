@@ -21,7 +21,7 @@ m1.f();
     }
 })(function (require, exports, b, c) {
     "use strict";
+    exports.__esModule = true;
     var m1 = require("m2");
     m1.f();
-    exports.__esModule = true;
 });

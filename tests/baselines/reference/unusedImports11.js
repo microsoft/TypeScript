@@ -20,6 +20,7 @@ new r.Member();
 
 //// [b.js]
 "use strict";
+exports.__esModule = true;
 var Member = (function () {
     function Member() {
     }
@@ -27,9 +28,9 @@ var Member = (function () {
 }());
 exports.Member = Member;
 exports["default"] = Member;
-exports.__esModule = true;
 //// [a.js]
 "use strict";
+exports.__esModule = true;
 var b_1 = require("./b");
 var b_2 = require("./b");
 var ns = require("./b");
@@ -39,4 +40,3 @@ new b_2["default"]();
 new b_2.Member();
 new ns.Member();
 new r.Member();
-exports.__esModule = true;

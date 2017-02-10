@@ -1061,6 +1061,7 @@ module publicModuleInGlobal {
 
 //// [privacyAccessorDeclFile_externalModule.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var privateClass = (function () {
     function privateClass() {
     }
@@ -2498,7 +2499,6 @@ var privateModule;
         return privateClassWithPrivateModuleSetAccessorTypes;
     }());
 })(privateModule || (privateModule = {}));
-Object.defineProperty(exports, "__esModule", { value: true });
 //// [privacyAccessorDeclFile_GlobalFile.js]
 var publicClassInGlobal = (function () {
     function publicClassInGlobal() {

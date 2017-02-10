@@ -17,6 +17,7 @@ interface I {
 
 //// [overloadModifiersMustAgree.js]
 "use strict";
+exports.__esModule = true;
 var baz = (function () {
     function baz() {
     }
@@ -24,4 +25,3 @@ var baz = (function () {
     return baz;
 }());
 function bar(s) { }
-exports.__esModule = true;

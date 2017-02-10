@@ -18,11 +18,11 @@ class Emitter {
 //// [objectIndexer.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var Emitter = (function () {
         function Emitter() {
             this.listeners = {};
         }
         return Emitter;
     }());
-    exports.__esModule = true;
 });

@@ -14,14 +14,14 @@ import { bar } from "bar";
 
 //// [foo.js]
 "use strict";
+exports.__esModule = true;
 function foo() { }
 exports.foo = foo;
-exports.__esModule = true;
 //// [bar.js]
 "use strict";
+exports.__esModule = true;
 function bar() { }
 exports.bar = bar;
-exports.__esModule = true;
 //// [a.js]
 "use strict";
 exports.__esModule = true;

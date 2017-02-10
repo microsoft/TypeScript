@@ -22,6 +22,6 @@ define(["require", "exports"], function (require, exports) {
 //// [exportEqualCallable_1.js]
 define(["require", "exports", "exportEqualCallable_0"], function (require, exports, connect) {
     "use strict";
-    connect();
     exports.__esModule = true;
+    connect();
 });

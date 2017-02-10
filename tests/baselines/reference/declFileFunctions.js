@@ -79,6 +79,7 @@ function globalfooWithOverloads(a: any): any {
 
 //// [declFileFunctions_0.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /** This comment should appear for foo*/
 function foo() {
 }
@@ -145,7 +146,6 @@ function nonExportedFooWithRestParameters(a) {
 function nonExportedFooWithOverloads(a) {
     return a;
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 //// [declFileFunctions_1.js]
 /** This comment should appear for foo*/
 function globalfoo() {

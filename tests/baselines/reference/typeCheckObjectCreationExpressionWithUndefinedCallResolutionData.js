@@ -13,17 +13,17 @@ f.foo();
 
 //// [file1.js]
 "use strict";
+exports.__esModule = true;
 function foo() {
     var classes = undefined;
     return new classes(null);
 }
 exports.foo = foo;
-exports.__esModule = true;
 //// [file2.js]
 "use strict";
+exports.__esModule = true;
 var f = require("./file1");
 f.foo();
-exports.__esModule = true;
 
 
 //// [file1.d.ts]

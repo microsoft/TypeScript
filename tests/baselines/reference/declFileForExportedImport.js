@@ -16,12 +16,12 @@ var z = b.x;
 exports.__esModule = true;
 //// [declFileForExportedImport_1.js]
 "use strict";
+exports.__esModule = true;
 ///<reference path='declFileForExportedImport_0.ts'/>
 exports.a = require("./declFileForExportedImport_0");
 var y = exports.a.x;
 exports.b = exports.a;
 var z = exports.b.x;
-exports.__esModule = true;
 
 
 //// [declFileForExportedImport_0.d.ts]

@@ -90,7 +90,7 @@ define(["require", "exports"], function (require, exports) {
 //// [consumer.js]
 define(["require", "exports", "./augmentation"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var x;
     var y = x.id;
-    exports.__esModule = true;
 });
