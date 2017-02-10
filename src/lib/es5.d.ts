@@ -341,14 +341,14 @@ interface String {
 
     /**
       * Replaces text in a string, using a regular expression or search string.
-      * @param searchValue A string that represents the regular expression.
+      * @param searchValue A string to search for.
       * @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
       */
     replace(searchValue: string, replaceValue: string): string;
 
     /**
       * Replaces text in a string, using a regular expression or search string.
-      * @param searchValue A string that represents the regular expression.
+      * @param searchValue A string to search for.
       * @param replacer A function that returns the replacement text.
       */
     replace(searchValue: string, replacer: (substring: string, ...args: any[]) => string): string;
