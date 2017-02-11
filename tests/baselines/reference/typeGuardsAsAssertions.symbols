@@ -313,3 +313,15 @@ function f6() {
 >slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
 }
 
+function f7() {
+>f7 : Symbol(f7, Decl(typeGuardsAsAssertions.ts, 120, 1))
+
+    let x: string;
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 123, 7))
+
+    x!.slice();
+>x!.slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 123, 7))
+>slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
+}
+
