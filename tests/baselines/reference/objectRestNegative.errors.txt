@@ -5,11 +5,14 @@ tests/cases/conformance/types/rest/objectRestNegative.ts(6,10): error TS2322: Ty
 tests/cases/conformance/types/rest/objectRestNegative.ts(9,31): error TS2462: A rest element must be last in a destructuring pattern
 tests/cases/conformance/types/rest/objectRestNegative.ts(11,30): error TS7008: Member 'x' implicitly has an 'any' type.
 tests/cases/conformance/types/rest/objectRestNegative.ts(11,33): error TS7008: Member 'y' implicitly has an 'any' type.
-tests/cases/conformance/types/rest/objectRestNegative.ts(12,17): error TS2700: Rest types may only be created from object types.
 tests/cases/conformance/types/rest/objectRestNegative.ts(17,9): error TS2701: The target of an object rest assignment must be a variable or a property access.
+tests/cases/conformance/types/rest/objectRestNegative.ts(22,26): error TS2706: Object rest element implicitly has type 'any' because the destructuring contains a computed property.
+tests/cases/conformance/types/rest/objectRestNegative.ts(23,20): error TS2706: Object rest element implicitly has type 'any' because the destructuring contains a computed property.
+tests/cases/conformance/types/rest/objectRestNegative.ts(27,19): error TS2706: Object rest element implicitly has type 'any' because the destructuring contains a computed property.
+tests/cases/conformance/types/rest/objectRestNegative.ts(28,12): error TS2706: Object rest element implicitly has type 'any' because the destructuring contains a computed property.
 
 
-==== tests/cases/conformance/types/rest/objectRestNegative.ts (7 errors) ====
+==== tests/cases/conformance/types/rest/objectRestNegative.ts (10 errors) ====
     let o = { a: 1, b: 'no' };
     var { ...mustBeLast, a } = o;
              ~~~~~~~~~~
@@ -34,8 +37,6 @@ tests/cases/conformance/types/rest/objectRestNegative.ts(17,9): error TS2701: Th
                                     ~
 !!! error TS7008: Member 'y' implicitly has an 'any' type.
         let { x, ...rest } = t;
-                    ~~~~
-!!! error TS2700: Rest types may only be created from object types.
         return rest;
     }
     
@@ -43,4 +44,26 @@ tests/cases/conformance/types/rest/objectRestNegative.ts(17,9): error TS2701: Th
     ({a, ...rest.b + rest.b} = o);
             ~~~~~~~~~~~~~~~
 !!! error TS2701: The target of an object rest assignment must be a variable or a property access.
+    
+    var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes;
+    
+    function computed<T extends { x: number, y: string }>(t: T, x: string) {
+        let { [x]: first, ...rest } = t; // error, computed causes rest to implicitly be any
+                             ~~~~
+!!! error TS2706: Object rest element implicitly has type 'any' because the destructuring contains a computed property.
+        ({ [x]: first, ...rest } = t);
+                       ~~~~~~~
+!!! error TS2706: Object rest element implicitly has type 'any' because the destructuring contains a computed property.
+        return [first, rest];
+    }
+    let x: string;
+    let { [x]: x1, ...unknownRest } = o; // error, computed causes rest to implicitly be any
+                      ~~~~~~~~~~~
+!!! error TS2706: Object rest element implicitly has type 'any' because the destructuring contains a computed property.
+    ({[x]: x1, ...unknownRest } = o);
+               ~~~~~~~~~~~~~~
+!!! error TS2706: Object rest element implicitly has type 'any' because the destructuring contains a computed property.
+    let { [x]: x2, ...explicitRest } = o as any; // ok, source is any
+    ({[x]: x2, ...explicitRest } = o as any);
+    let { ['a']: justA, ...knownRest } = o; // ok, 'a' is a constant
     

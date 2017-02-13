@@ -193,6 +193,7 @@
         NeverKeyword,
         ReadonlyKeyword,
         RequireKeyword,
+        RestKeyword,
         NumberKeyword,
         ObjectKeyword,
         SetKeyword,
@@ -236,6 +237,7 @@
         UnionType,
         IntersectionType,
         ParenthesizedType,
+        RestType,
         ThisType,
         TypeOperator,
         IndexedAccessType,
@@ -904,6 +906,12 @@
 
     export interface IntersectionTypeNode extends UnionOrIntersectionTypeNode {
         kind: SyntaxKind.IntersectionType;
+    }
+
+    export interface RestTypeNode extends TypeNode {
+        kind: SyntaxKind.RestType;
+        source: TypeNode;
+        remove: TypeNode;
     }
 
     export interface ParenthesizedTypeNode extends TypeNode {
@@ -2848,6 +2856,7 @@
         /* @internal */
         ContainsAnyFunctionType = 1 << 23,  // Type is or contains object literal type
         NonPrimitive            = 1 << 24,  // intrinsic object type
+        Rest                    = 1 << 25,  // rest(T, U)
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -3001,6 +3010,11 @@
     }
 
     export type StructuredType = ObjectType | UnionType | IntersectionType;
+
+    export interface RestType extends Type {
+        source: Type;
+        remove: Type; // should be a string, string literal union or never
+    }
 
     /* @internal */
     // An instantiated anonymous type has a target and a mapper

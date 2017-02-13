@@ -1,0 +1,72 @@
+=== tests/cases/conformance/types/rest/differenceType.ts ===
+type A = { a };
+>A : Symbol(A, Decl(differenceType.ts, 0, 0))
+>a : Symbol(a, Decl(differenceType.ts, 0, 10))
+
+type Ab = { a; b };
+>Ab : Symbol(Ab, Decl(differenceType.ts, 0, 15))
+>a : Symbol(a, Decl(differenceType.ts, 1, 11))
+>b : Symbol(b, Decl(differenceType.ts, 1, 14))
+
+let nothing: rest(A, 'a');
+>nothing : Symbol(nothing, Decl(differenceType.ts, 2, 3))
+>A : Symbol(A, Decl(differenceType.ts, 0, 0))
+
+let none: rest(Ab, 'a' | 'b');
+>none : Symbol(none, Decl(differenceType.ts, 3, 3))
+>Ab : Symbol(Ab, Decl(differenceType.ts, 0, 15))
+
+let under: rest(Ab, 'a');
+>under : Symbol(under, Decl(differenceType.ts, 4, 3))
+>Ab : Symbol(Ab, Decl(differenceType.ts, 0, 15))
+
+let empty: rest(Ab, 'a' | 'b');
+>empty : Symbol(empty, Decl(differenceType.ts, 5, 3))
+>Ab : Symbol(Ab, Decl(differenceType.ts, 0, 15))
+
+let nope: rest({}, string);
+>nope : Symbol(nope, Decl(differenceType.ts, 6, 3))
+
+let nope2: rest(Ab, string);
+>nope2 : Symbol(nope2, Decl(differenceType.ts, 7, 3))
+>Ab : Symbol(Ab, Decl(differenceType.ts, 0, 15))
+
+type Abcd = { a; b; c; d }
+>Abcd : Symbol(Abcd, Decl(differenceType.ts, 7, 28))
+>a : Symbol(a, Decl(differenceType.ts, 9, 13))
+>b : Symbol(b, Decl(differenceType.ts, 9, 16))
+>c : Symbol(c, Decl(differenceType.ts, 9, 19))
+>d : Symbol(d, Decl(differenceType.ts, 9, 22))
+
+function f<T extends Abcd>(t: T) {
+>f : Symbol(f, Decl(differenceType.ts, 9, 26))
+>T : Symbol(T, Decl(differenceType.ts, 11, 11))
+>Abcd : Symbol(Abcd, Decl(differenceType.ts, 7, 28))
+>t : Symbol(t, Decl(differenceType.ts, 11, 27))
+>T : Symbol(T, Decl(differenceType.ts, 11, 11))
+
+    let tsubu: rest(T, 'b' | 'd');
+>tsubu : Symbol(tsubu, Decl(differenceType.ts, 12, 7))
+>T : Symbol(T, Decl(differenceType.ts, 11, 11))
+
+    return tsubu;
+>tsubu : Symbol(tsubu, Decl(differenceType.ts, 12, 7))
+}
+
+const explicit = f<Abcd>({ a: 1, b: 2, c: 3, d: 4 })
+>explicit : Symbol(explicit, Decl(differenceType.ts, 16, 5))
+>f : Symbol(f, Decl(differenceType.ts, 9, 26))
+>Abcd : Symbol(Abcd, Decl(differenceType.ts, 7, 28))
+>a : Symbol(a, Decl(differenceType.ts, 16, 26))
+>b : Symbol(b, Decl(differenceType.ts, 16, 32))
+>c : Symbol(c, Decl(differenceType.ts, 16, 38))
+>d : Symbol(d, Decl(differenceType.ts, 16, 44))
+
+const inferred = f({ a: 1, b: 2, c: 3, d: 5 })
+>inferred : Symbol(inferred, Decl(differenceType.ts, 17, 5))
+>f : Symbol(f, Decl(differenceType.ts, 9, 26))
+>a : Symbol(a, Decl(differenceType.ts, 17, 20))
+>b : Symbol(b, Decl(differenceType.ts, 17, 26))
+>c : Symbol(c, Decl(differenceType.ts, 17, 32))
+>d : Symbol(d, Decl(differenceType.ts, 17, 38))
+

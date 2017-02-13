@@ -2055,6 +2055,14 @@
         "category": "Error",
         "code": 2704
     },
+    "The right side of a rest type must be a string or string literal union.": {
+        "category": "Error",
+        "code": 2705
+    },
+    "Object rest element implicitly has type 'any' because the destructuring contains a computed property.": {
+        "category": "Error",
+        "code": 2706
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

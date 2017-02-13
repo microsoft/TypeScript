@@ -1,0 +1,84 @@
+=== tests/cases/conformance/types/rest/differenceType.ts ===
+type A = { a };
+>A : A
+>a : any
+
+type Ab = { a; b };
+>Ab : Ab
+>a : any
+>b : any
+
+let nothing: rest(A, 'a');
+>nothing : {}
+>A : A
+
+let none: rest(Ab, 'a' | 'b');
+>none : {}
+>Ab : Ab
+
+let under: rest(Ab, 'a');
+>under : { b: any; }
+>Ab : Ab
+
+let empty: rest(Ab, 'a' | 'b');
+>empty : {}
+>Ab : Ab
+
+let nope: rest({}, string);
+>nope : {}
+
+let nope2: rest(Ab, string);
+>nope2 : {}
+>Ab : Ab
+
+type Abcd = { a; b; c; d }
+>Abcd : Abcd
+>a : any
+>b : any
+>c : any
+>d : any
+
+function f<T extends Abcd>(t: T) {
+>f : <T extends Abcd>(t: T) => rest(T, "b" | "d")
+>T : T
+>Abcd : Abcd
+>t : T
+>T : T
+
+    let tsubu: rest(T, 'b' | 'd');
+>tsubu : rest(T, "b" | "d")
+>T : T
+
+    return tsubu;
+>tsubu : rest(T, "b" | "d")
+}
+
+const explicit = f<Abcd>({ a: 1, b: 2, c: 3, d: 4 })
+>explicit : { a: any; c: any; }
+>f<Abcd>({ a: 1, b: 2, c: 3, d: 4 }) : { a: any; c: any; }
+>f : <T extends Abcd>(t: T) => rest(T, "b" | "d")
+>Abcd : Abcd
+>{ a: 1, b: 2, c: 3, d: 4 } : { a: number; b: number; c: number; d: number; }
+>a : number
+>1 : 1
+>b : number
+>2 : 2
+>c : number
+>3 : 3
+>d : number
+>4 : 4
+
+const inferred = f({ a: 1, b: 2, c: 3, d: 5 })
+>inferred : { a: number; c: number; }
+>f({ a: 1, b: 2, c: 3, d: 5 }) : { a: number; c: number; }
+>f : <T extends Abcd>(t: T) => rest(T, "b" | "d")
+>{ a: 1, b: 2, c: 3, d: 5 } : { a: number; b: number; c: number; d: number; }
+>a : number
+>1 : 1
+>b : number
+>2 : 2
+>c : number
+>3 : 3
+>d : number
+>5 : 5
+

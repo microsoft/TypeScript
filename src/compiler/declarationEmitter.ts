@@ -1184,6 +1184,15 @@ namespace ts {
             writeLine();
         }
 
+        function emitRestType(node: RestTypeNode) {
+            write("rest(");
+            emitType(node.source);
+            write(",");
+            emitType(node.remove);
+            write(")");
+            writeLine();
+        }
+
         function emitVariableDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration) {
             // If we are emitting property it isn't moduleElement and hence we already know it needs to be emitted
             // so there is no check needed to see if declaration is visible
@@ -1771,6 +1780,8 @@ namespace ts {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                     return emitAccessorDeclaration(<AccessorDeclaration>node);
+                case SyntaxKind.RestType:
+                    return emitRestType(node as RestTypeNode);
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
                     return emitPropertyDeclaration(<PropertyDeclaration>node);

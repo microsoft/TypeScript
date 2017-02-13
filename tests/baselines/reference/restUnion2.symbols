@@ -36,7 +36,7 @@ var {...rest4 } = nullAndUndefinedUnion;
 >rest4 : Symbol(rest4, Decl(restUnion2.ts, 12, 3), Decl(restUnion2.ts, 13, 5))
 >nullAndUndefinedUnion : Symbol(nullAndUndefinedUnion, Decl(restUnion2.ts, 11, 13))
 
-declare const unionWithIntersection: ({ n: number } & { s: string }) & undefined | null;
+declare const unionWithIntersection: ({ n: number } & { s: string }) | null;
 >unionWithIntersection : Symbol(unionWithIntersection, Decl(restUnion2.ts, 15, 13))
 >n : Symbol(n, Decl(restUnion2.ts, 15, 39))
 >s : Symbol(s, Decl(restUnion2.ts, 15, 55))

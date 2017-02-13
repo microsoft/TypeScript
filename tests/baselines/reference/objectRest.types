@@ -198,23 +198,29 @@ let computed2 = 'a';
 >computed2 : string
 >'a' : "a"
 
-var { [computed]: stillNotGreat, [computed2]: soSo,  ...o } = o;
+var { [computed]: stillNotGreat, [computed2]: soSo,  ...becauseItsAny } = o;
 >computed : string
 >stillNotGreat : any
 >computed2 : string
 >soSo : any
->o : { a: number; b: string; }
+>becauseItsAny : any
 >o : { a: number; b: string; }
 
-({ [computed]: stillNotGreat, [computed2]: soSo, ...o } = o);
->({ [computed]: stillNotGreat, [computed2]: soSo, ...o } = o) : { a: number; b: string; }
->{ [computed]: stillNotGreat, [computed2]: soSo, ...o } = o : { a: number; b: string; }
->{ [computed]: stillNotGreat, [computed2]: soSo, ...o } : { a: number; b: string; }
+({ [computed]: stillNotGreat, [computed2]: soSo, ...becauseItsAny } = o);
+>({ [computed]: stillNotGreat, [computed2]: soSo, ...becauseItsAny } = o) : { a: number; b: string; }
+>{ [computed]: stillNotGreat, [computed2]: soSo, ...becauseItsAny } = o : { a: number; b: string; }
+>{ [computed]: stillNotGreat, [computed2]: soSo, ...becauseItsAny } : any
 >computed : string
 >stillNotGreat : any
 >computed2 : string
 >soSo : any
+>becauseItsAny : any
 >o : { a: number; b: string; }
+
+let { ['a']: computedA, ...knownRest } = o; // ok, 'a' is a constant
+>'a' : "a"
+>computedA : number
+>knownRest : { b: string; }
 >o : { a: number; b: string; }
 
 var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes;

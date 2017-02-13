@@ -41,7 +41,8 @@ var { removed, ...removableRest2 } = i;
 
 let computed = 'b';
 let computed2 = 'a';
-var { [computed]: stillNotGreat, [computed2]: soSo,  ...o } = o;
-({ [computed]: stillNotGreat, [computed2]: soSo, ...o } = o);
+var { [computed]: stillNotGreat, [computed2]: soSo,  ...becauseItsAny } = o;
+({ [computed]: stillNotGreat, [computed2]: soSo, ...becauseItsAny } = o);
+let { ['a']: computedA, ...knownRest } = o; // ok, 'a' is a constant
 
 var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes;

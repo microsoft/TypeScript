@@ -1,0 +1,68 @@
+tests/cases/conformance/types/rest/differenceTypeNegative.ts(6,16): error TS2324: Property 'b' is missing in type 'A'.
+tests/cases/conformance/types/rest/differenceTypeNegative.ts(7,19): error TS2324: Property 'd' is missing in type 'Ab'.
+tests/cases/conformance/types/rest/differenceTypeNegative.ts(8,21): error TS2324: Property 'a' is missing in type '{}'.
+tests/cases/conformance/types/rest/differenceTypeNegative.ts(8,21): error TS2324: Property 'b' is missing in type '{}'.
+tests/cases/conformance/types/rest/differenceTypeNegative.ts(9,25): error TS2705: The right side of a rest type must be a string or string literal union.
+tests/cases/conformance/types/rest/differenceTypeNegative.ts(10,25): error TS2705: The right side of a rest type must be a string or string literal union.
+tests/cases/conformance/types/rest/differenceTypeNegative.ts(11,25): error TS2705: The right side of a rest type must be a string or string literal union.
+tests/cases/conformance/types/rest/differenceTypeNegative.ts(12,25): error TS2705: The right side of a rest type must be a string or string literal union.
+tests/cases/conformance/types/rest/differenceTypeNegative.ts(14,25): error TS2705: The right side of a rest type must be a string or string literal union.
+tests/cases/conformance/types/rest/differenceTypeNegative.ts(15,25): error TS2705: The right side of a rest type must be a string or string literal union.
+tests/cases/conformance/types/rest/differenceTypeNegative.ts(16,25): error TS2705: The right side of a rest type must be a string or string literal union.
+tests/cases/conformance/types/rest/differenceTypeNegative.ts(17,25): error TS2705: The right side of a rest type must be a string or string literal union.
+tests/cases/conformance/types/rest/differenceTypeNegative.ts(18,25): error TS2705: The right side of a rest type must be a string or string literal union.
+tests/cases/conformance/types/rest/differenceTypeNegative.ts(19,20): error TS2324: Property 'a' is missing in type 'T'.
+
+
+==== tests/cases/conformance/types/rest/differenceTypeNegative.ts (14 errors) ====
+    type A = { a };
+    type Ab = { a; b };
+    type Abc = { a; b; c }
+    type Surprise = 'a' | 'b' | 12;
+    
+    let over: rest(A, 'a' | 'b');
+                   ~
+!!! error TS2324: Property 'b' is missing in type 'A'.
+    let partial: rest(Ab, 'b' | 'd');
+                      ~~
+!!! error TS2324: Property 'd' is missing in type 'Ab'.
+    let emptyOver: rest({}, 'a' | 'b');
+                        ~~
+!!! error TS2324: Property 'a' is missing in type '{}'.
+                        ~~
+!!! error TS2324: Property 'b' is missing in type '{}'.
+    let badtype1: rest(Abc, 12);
+                            ~~
+!!! error TS2705: The right side of a rest type must be a string or string literal union.
+    let badtype2: rest(Abc, Surprise);
+                            ~~~~~~~~
+!!! error TS2705: The right side of a rest type must be a string or string literal union.
+    let badtype3: rest(Abc, 'a' & 'b');
+                            ~~~~~~~~~
+!!! error TS2705: The right side of a rest type must be a string or string literal union.
+    let badtype4: rest(Abc, number);
+                            ~~~~~~
+!!! error TS2705: The right side of a rest type must be a string or string literal union.
+    function f<T, U extends 12, V extends Surprise, W extends 'a' & 'b', X extends number>(t: T) {
+        let bad1: rest(Abc, T);
+                            ~
+!!! error TS2705: The right side of a rest type must be a string or string literal union.
+        let bad2: rest(Abc, 12);
+                            ~~
+!!! error TS2705: The right side of a rest type must be a string or string literal union.
+        let bad3: rest(Abc, Surprise);
+                            ~~~~~~~~
+!!! error TS2705: The right side of a rest type must be a string or string literal union.
+        let bad4: rest(Abc, 'a' & 'b');
+                            ~~~~~~~~~
+!!! error TS2705: The right side of a rest type must be a string or string literal union.
+        let bad5: rest(Abc, number);
+                            ~~~~~~
+!!! error TS2705: The right side of a rest type must be a string or string literal union.
+        let over: rest(T, 'a');
+                       ~
+!!! error TS2324: Property 'a' is missing in type 'T'.
+        return bad1;
+    }
+    
+    

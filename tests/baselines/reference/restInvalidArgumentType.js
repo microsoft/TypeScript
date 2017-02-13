@@ -29,21 +29,21 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 
     var e: E;
 
-    var {...r1} = p1;   // Error, generic type paramterre
+    var {...r1} = p1;   // OK, generic type paramterre
     var {...r2} = p2;   // OK
-    var {...r3} = t;   // Error, generic type paramter
+    var {...r3} = t;   // OK, generic type paramter
 
-    var {...r4} = i;   // Error, index access
+    var {...r4} = i;   // OK, index access
     var {...r5} = k;   // Error, index
 
-    var {...r6} = mapped_generic; // Error, generic mapped object type
+    var {...r6} = mapped_generic; // OK, generic mapped object type
     var {...r7} = mapped;  // OK, non-generic mapped type
 
-    var {...r8} = union_generic;  // Error, union with generic type parameter
-    var {...r9} = union_primitive;  // Error, union with generic type parameter
+    var {...r8} = union_generic;  // OK, union with generic type parameter
+    var {...r9} = union_primitive;  // OK, union with generic type parameter
 
-    var {...r10} = intersection_generic;  // Error, intersection with generic type parameter
-    var {...r11} = intersection_premitive;  // Error, intersection with generic type parameter
+    var {...r10} = intersection_generic;  // OK, intersection with generic type parameter
+    var {...r11} = intersection_premitive;  // OK, intersection with generic type parameter
 
     var {...r12} = num;  // Error
     var {...r13} = str;  // Error
@@ -58,6 +58,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 
     var {...r19} = e;  // Error, enum
 }
+
 
 //// [restInvalidArgumentType.js]
 var __rest = (this && this.__rest) || function (s, e) {
@@ -93,17 +94,17 @@ function f(p1, p2) {
     var literal_string;
     var literal_number;
     var e;
-    var r1 = __rest(p1, []); // Error, generic type paramterre
+    var r1 = __rest(p1, []); // OK, generic type paramterre
     var r2 = __rest(p2, []); // OK
-    var r3 = __rest(t, []); // Error, generic type paramter
-    var r4 = __rest(i, []); // Error, index access
+    var r3 = __rest(t, []); // OK, generic type paramter
+    var r4 = __rest(i, []); // OK, index access
     var r5 = __rest(k, []); // Error, index
-    var r6 = __rest(mapped_generic, []); // Error, generic mapped object type
+    var r6 = __rest(mapped_generic, []); // OK, generic mapped object type
     var r7 = __rest(mapped, []); // OK, non-generic mapped type
-    var r8 = __rest(union_generic, []); // Error, union with generic type parameter
-    var r9 = __rest(union_primitive, []); // Error, union with generic type parameter
-    var r10 = __rest(intersection_generic, []); // Error, intersection with generic type parameter
-    var r11 = __rest(intersection_premitive, []); // Error, intersection with generic type parameter
+    var r8 = __rest(union_generic, []); // OK, union with generic type parameter
+    var r9 = __rest(union_primitive, []); // OK, union with generic type parameter
+    var r10 = __rest(intersection_generic, []); // OK, intersection with generic type parameter
+    var r11 = __rest(intersection_premitive, []); // OK, intersection with generic type parameter
     var r12 = __rest(num, []); // Error
     var r13 = __rest(str, []); // Error
     var r14 = __rest(u, []); // OK
