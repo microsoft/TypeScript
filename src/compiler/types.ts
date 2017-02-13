@@ -2071,8 +2071,23 @@
         ArrayMutation  = 1 << 8,  // Potential array mutation
         Referenced     = 1 << 9,  // Referenced as antecedent once
         Shared         = 1 << 10, // Referenced as antecedent more than once
+        PreFinally     = 1 << 11, // Injected edge that links pre-finally label and pre-try flow
+        AfterFinally   = 1 << 12, // Injected edge that links post-finally flow with the rest of the graph
         Label = BranchLabel | LoopLabel,
         Condition = TrueCondition | FalseCondition
+    }
+
+    export interface FlowLock {
+        locked?: boolean;
+    }
+
+    export interface AfterFinallyFlow extends FlowNode, FlowLock {
+        antecedent: FlowNode;
+    }
+
+    export interface PreFinallyFlow extends FlowNode {
+        antecedent: FlowNode;
+        lock: FlowLock;
     }
 
     export interface FlowNode {
@@ -2474,7 +2489,8 @@
         InFirstTypeArgument             = 0x00000100,  // Writing first type argument of the instantiated type
         InTypeAlias                     = 0x00000200,  // Writing type in type alias declaration
         UseTypeAliasValue               = 0x00000400,  // Serialize the type instead of using type-alias. This is needed when we emit declaration file.
-        SuppressAnyReturnType            = 0x00000800,  // If the return type is any-like, don't offer a return type.
+        SuppressAnyReturnType           = 0x00000800,  // If the return type is any-like, don't offer a return type.
+        AddUndefined                    = 0x00001000,  // Add undefined to types of initialized, non-optional parameters
     }
 
     export const enum SymbolFormatFlags {
@@ -2579,6 +2595,7 @@
         isDeclarationVisible(node: Declaration): boolean;
         collectLinkedAliases(node: Identifier): Node[];
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
+        isRequiredInitializedParameter(node: ParameterDeclaration): boolean;
         writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
