@@ -21,6 +21,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 define("ref/a", ["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var A = (function () {
         function A() {
         }
@@ -30,6 +31,7 @@ define("ref/a", ["require", "exports"], function (require, exports) {
 });
 define("b", ["require", "exports", "ref/a"], function (require, exports, a_1) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var B = (function (_super) {
         __extends(B, _super);
         function B() {

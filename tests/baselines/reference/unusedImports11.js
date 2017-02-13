@@ -20,16 +20,17 @@ new r.Member();
 
 //// [b.js]
 "use strict";
+exports.__esModule = true;
 var Member = (function () {
     function Member() {
     }
     return Member;
 }());
 exports.Member = Member;
-exports.__esModule = true;
 exports["default"] = Member;
 //// [a.js]
 "use strict";
+exports.__esModule = true;
 var b_1 = require("./b");
 var b_2 = require("./b");
 var ns = require("./b");

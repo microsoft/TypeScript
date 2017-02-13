@@ -671,6 +671,10 @@
         "category": "Error",
         "code": 1215
     },
+    "Identifier expected. '__esModule' is reserved as an exported marker when transforming ECMAScript modules.": {
+        "category": "Error",
+        "code": 1216
+    },
     "Export assignment is not supported when '--module' flag is 'system'.": {
         "category": "Error",
         "code": 1218

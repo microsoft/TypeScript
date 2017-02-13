@@ -12,6 +12,7 @@ export var z = c.b;
 
 //// [internalAliasVarInsideLocalModuleWithoutExportAccessError.js]
 "use strict";
+exports.__esModule = true;
 var a;
 (function (a) {
     a.x = 10;

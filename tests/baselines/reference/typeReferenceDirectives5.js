@@ -16,6 +16,7 @@ export interface A {
 
 //// [app.js]
 "use strict";
+exports.__esModule = true;
 
 
 //// [app.d.ts]

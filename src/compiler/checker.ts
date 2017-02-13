@@ -1,4 +1,4 @@
-/// <reference path="moduleNameResolver.ts"/>
+﻿/// <reference path="moduleNameResolver.ts"/>
 /// <reference path="binder.ts"/>
 
 /* @internal */
@@ -22084,6 +22084,11 @@ namespace ts {
                 }
             }
 
+            if (compilerOptions.module !== ModuleKind.ES2015 && compilerOptions.module !== ModuleKind.System && !compilerOptions.noEmit &&
+                !isInAmbientContext(node.parent.parent) && hasModifier(node.parent.parent, ModifierFlags.Export)) {
+                checkESModuleMarker(node.name);
+            }
+
             const checkLetConstNames = (isLet(node) || isConst(node));
 
             // 1. LexicalDeclaration : LetOrConst BindingList ;
@@ -22094,6 +22099,22 @@ namespace ts {
             // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code
             // and its Identifier is eval or arguments
             return checkLetConstNames && checkGrammarNameInLetOrConstDeclarations(node.name);
+        }
+
+        function checkESModuleMarker(name: Identifier | BindingPattern): boolean {
+            if (name.kind === SyntaxKind.Identifier) {
+                if (unescapeIdentifier(name.text) === "__esModule") {
+                    return grammarErrorOnNode(name, Diagnostics.Identifier_expected_esModule_is_reserved_as_an_exported_marker_when_transforming_ECMAScript_modules);
+                }
+            }
+            else {
+                const elements = (<BindingPattern>name).elements;
+                for (const element of elements) {
+                    if (!isOmittedExpression(element)) {
+                        return checkESModuleMarker(element.name);
+                    }
+                }
+            }
         }
 
         function checkGrammarNameInLetOrConstDeclarations(name: Identifier | BindingPattern): boolean {

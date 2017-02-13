@@ -6,3 +6,4 @@ export declare namespace Foo {
 
 //// [ambientNameRestrictions.js]
 "use strict";
+exports.__esModule = true;
