@@ -2071,8 +2071,23 @@
         ArrayMutation  = 1 << 8,  // Potential array mutation
         Referenced     = 1 << 9,  // Referenced as antecedent once
         Shared         = 1 << 10, // Referenced as antecedent more than once
+        PreFinally     = 1 << 11, // Injected edge that links pre-finally label and pre-try flow
+        AfterFinally   = 1 << 12, // Injected edge that links post-finally flow with the rest of the graph
         Label = BranchLabel | LoopLabel,
         Condition = TrueCondition | FalseCondition
+    }
+
+    export interface FlowLock {
+        locked?: boolean;
+    }
+
+    export interface AfterFinallyFlow extends FlowNode, FlowLock {
+        antecedent: FlowNode;
+    }
+
+    export interface PreFinallyFlow extends FlowNode {
+        antecedent: FlowNode;
+        lock: FlowLock;
     }
 
     export interface FlowNode {

@@ -9916,7 +9916,19 @@ namespace ts {
                         }
                     }
                     let type: FlowType;
-                    if (flow.flags & FlowFlags.Assignment) {
+                    if (flow.flags & FlowFlags.AfterFinally) {
+                        // block flow edge: finally -> pre-try (for larger explanation check comment in binder.ts - bindTryStatement 
+                        (<AfterFinallyFlow>flow).locked = true;
+                        type = getTypeAtFlowNode((<AfterFinallyFlow>flow).antecedent);
+                        (<AfterFinallyFlow>flow).locked = false;
+                    }
+                    else if (flow.flags & FlowFlags.PreFinally) {
+                        // locked pre-finally flows are filtered out in getTypeAtFlowBranchLabel
+                        // so here just redirect to antecedent
+                        flow = (<PreFinallyFlow>flow).antecedent;
+                        continue;
+                    }
+                    else if (flow.flags & FlowFlags.Assignment) {
                         type = getTypeAtFlowAssignment(<FlowAssignment>flow);
                         if (!type) {
                             flow = (<FlowAssignment>flow).antecedent;
@@ -10072,6 +10084,12 @@ namespace ts {
                 let subtypeReduction = false;
                 let seenIncomplete = false;
                 for (const antecedent of flow.antecedents) {
+                    if (antecedent.flags & FlowFlags.PreFinally && (<PreFinallyFlow>antecedent).lock.locked) {
+                        // if flow correspond to branch from pre-try to finally and this branch is locked - this means that 
+                        // we initially have started following the flow outside the finally block.
+                        // in this case we should ignore this branch.
+                        continue;
+                    }
                     const flowType = getTypeAtFlowNode(antecedent);
                     const type = getTypeFromFlowType(flowType);
                     // If the type at a particular antecedent path is the declared type and the
