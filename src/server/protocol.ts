@@ -1001,7 +1001,7 @@ namespace ts.server.protocol {
         formatOptions?: FormatCodeSettings;
 
         /**
-         * The host's additional supported file extensions
+         * The host's additional supported .js file extensions
          */
         extraFileExtensions?: JsFileExtensionInfo[];
     }
