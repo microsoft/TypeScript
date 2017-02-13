@@ -235,16 +235,16 @@ namespace ts.FindAllReferences {
         markSeenContainingTypeReference(containingTypeReference: Node): boolean;
 
         /**
-         * It's possible that we will encounter either side of `export { foo as bar } from "x";` more than once.
+         * It's possible that we will encounter the right side of `export { foo as bar } from "x";` more than once.
          * For example:
-         *     export { foo as bar } from "a";
-         *     import { foo } from "a";
+         *     // b.ts
+         *     export { foo as bar } from "./a";
+         *     import { bar } from "./b";
          *
          * Normally at `foo as bar` we directly add `foo` and do not locally search for it (since it doesn't declare a local).
          * But another reference to it may appear in the same source file.
          * See `tests/cases/fourslash/transitiveExportImports3.ts`.
          */
-        markSeenReExportLHS(lhs: Identifier): boolean;
         markSeenReExportRHS(rhs: Identifier): boolean;
     }
 
@@ -259,7 +259,7 @@ namespace ts.FindAllReferences {
         return {
             ...options,
             sourceFiles, isForConstructor, checker, cancellationToken, searchMeaning, inheritsFromCache, getImportSearches, createSearch, referenceAdder, addStringOrCommentReference,
-            markSearchedSymbol, markSeenContainingTypeReference: nodeSeenTracker(), markSeenReExportLHS: nodeSeenTracker(), markSeenReExportRHS: nodeSeenTracker(),
+            markSearchedSymbol, markSeenContainingTypeReference: nodeSeenTracker(), markSeenReExportRHS: nodeSeenTracker(),
         };
 
         function getImportSearches(exportSymbol: Symbol, exportInfo: ExportInfo): ImportsResult {
@@ -312,9 +312,7 @@ namespace ts.FindAllReferences {
         if (singleReferences.length) {
             const addRef = state.referenceAdder(exportSymbol, exportLocation);
             for (const singleRef of singleReferences) {
-                if (state.markSeenReExportLHS(singleRef)) {
-                    addRef(singleRef);
-                }
+                addRef(singleRef);
             }
         }
 
@@ -648,9 +646,15 @@ namespace ts.FindAllReferences {
             return;
         }
 
-        if (isExportSpecifier(referenceLocation.parent)) {
+        const { parent } = referenceLocation;
+        if (isImportSpecifier(parent) && parent.propertyName === referenceLocation) {
+            // This is added through `singleReferences` in ImportsResult. If we happen to see it again, don't add it again.
+            return;
+        }
+
+        if (isExportSpecifier(parent)) {
             Debug.assert(referenceLocation.kind === SyntaxKind.Identifier);
-            getReferencesAtExportSpecifier(referenceLocation as Identifier, referenceSymbol, referenceLocation.parent, search, state);
+            getReferencesAtExportSpecifier(referenceLocation as Identifier, referenceSymbol, parent, search, state);
             return;
         }
 
@@ -672,38 +676,47 @@ namespace ts.FindAllReferences {
 
     function getReferencesAtExportSpecifier(referenceLocation: Identifier, referenceSymbol: Symbol, exportSpecifier: ExportSpecifier, search: Search, state: State): void {
         const { parent, propertyName, name } = exportSpecifier;
-        searchForExport(getLocalSymbolForExportSpecifier(referenceLocation, referenceSymbol, exportSpecifier, state.checker));
-
         const exportDeclaration = parent.parent;
-        if (search.comingFrom !== ImportExport.Export && exportDeclaration.moduleSpecifier && !propertyName) {
-            searchForImportedSymbol(state.checker.getExportSpecifierLocalTargetSymbol(exportSpecifier), state);
+        const localSymbol = getLocalSymbolForExportSpecifier(referenceLocation, referenceSymbol, exportSpecifier, state.checker);
+        if (!search.includes(localSymbol)) {
+            return;
         }
 
-        function searchForExport(localSymbol: Symbol): void {
-            if (!search.includes(localSymbol)) {
-                return;
+        if (!propertyName) {
+            addRef()
+        }
+        else if (referenceLocation === propertyName) {
+            // For `export { foo as bar } from "baz"`, "`foo`" will be added from the singleReferences for import searches of the original export.
+            // For `export { foo as bar };`, where `foo` is a local, so add it now.
+            if (!exportDeclaration.moduleSpecifier) {
+                addRef();
             }
 
-            if (!propertyName || (propertyName === referenceLocation ? state.markSeenReExportLHS : state.markSeenReExportRHS)(referenceLocation)) {
-                addReference(referenceLocation, localSymbol, search.location, state);
+            if (!state.isForRename && state.markSeenReExportRHS(name)) {
+                addReference(name, referenceSymbol, name, state);
             }
-
-            const renameExportRHS = propertyName === referenceLocation ? name : undefined;
-            if (renameExportRHS) {
-                // For `export { foo as bar }`, rename `foo`, but not `bar`.
-                if (state.isForRename) {
-                    return;
-                }
-
-                if (state.markSeenReExportRHS(renameExportRHS)) {
-                    addReference(renameExportRHS, referenceSymbol, renameExportRHS, state);
-                }
+        }
+        else {
+            if (state.markSeenReExportRHS(referenceLocation)) {
+                addRef();
             }
+        }
 
+        // For `export { foo as bar }`, rename `foo`, but not `bar`.
+        if (!(referenceLocation === propertyName && state.isForRename)) {
             const exportKind = (referenceLocation as Identifier).originalKeywordKind === ts.SyntaxKind.DefaultKeyword ? ExportKind.Default : ExportKind.Named;
             const exportInfo = getExportInfo(referenceSymbol, exportKind, state.checker);
             Debug.assert(!!exportInfo);
             searchForImportsOfExport(referenceLocation, referenceSymbol, exportInfo, state);
+        }
+
+        // At `export { x } from "foo"`, also search for the imported symbol `"foo".x`.
+        if (search.comingFrom !== ImportExport.Export && exportDeclaration.moduleSpecifier && !propertyName) {
+            searchForImportedSymbol(state.checker.getExportSpecifierLocalTargetSymbol(exportSpecifier), state);
+        }
+
+        function addRef() {
+            addReference(referenceLocation, localSymbol, search.location, state);
         }
     }
 
