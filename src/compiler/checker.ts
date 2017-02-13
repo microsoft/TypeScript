@@ -7771,18 +7771,14 @@ namespace ts {
                 if (target.flags & TypeFlags.Union && containsType(targetTypes, source)) {
                     return Ternary.True;
                 }
-                const discriminantType = findMatchingDiscriminantType(source, target);
-                if (discriminantType) {
-                    return isRelatedTo(source, discriminantType, reportErrors);
-                }
-
-                const len = targetTypes.length;
-                for (let i = 0; i < len; i++) {
-                    const related = isRelatedTo(source, targetTypes[i], reportErrors && i === len - 1);
+                for (const type of targetTypes) {
+                    const related = isRelatedTo(source, type, /*reportErrors*/ false);
                     if (related) {
                         return related;
                     }
                 }
+                const discriminantType = findMatchingDiscriminantType(source, target);
+                isRelatedTo(source, discriminantType || targetTypes[targetTypes.length - 1], reportErrors);
                 return Ternary.False;
             }
 
