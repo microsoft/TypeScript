@@ -1003,7 +1003,7 @@ namespace ts.server.protocol {
         /**
          * The host's additional supported file extensions
          */
-        extraFileExtensions?: FileExtensionInfo[];
+        extraFileExtensions?: JsFileExtensionInfo[];
     }
 
     /**
