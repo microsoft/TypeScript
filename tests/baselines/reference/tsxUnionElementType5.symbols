@@ -7,16 +7,16 @@ function EmptySFC1() {
 >EmptySFC1 : Symbol(EmptySFC1, Decl(file.tsx, 1, 32))
 
     return <div>hello</div>;
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2397, 45))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2397, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 }
 
 function EmptySFC2() {
 >EmptySFC2 : Symbol(EmptySFC2, Decl(file.tsx, 5, 1))
 
     return <div>Hello</div>;
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2397, 45))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2397, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 }
 
 function SFC2(prop: { x: boolean }) {
@@ -25,8 +25,8 @@ function SFC2(prop: { x: boolean }) {
 >x : Symbol(x, Decl(file.tsx, 11, 21))
 
     return <h1>World</h1>;
->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2407, 47))
->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2407, 47))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
 }
 
 var EmptySFCComp = EmptySFC1 || EmptySFC2;

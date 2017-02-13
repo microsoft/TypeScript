@@ -3,6 +3,7 @@
 //// [react.d.ts]
 
 declare module JSX {
+    type StatelessElement = JSX.Element | null;
 	interface Element { }
 	interface IntrinsicElements {
         div: any;
