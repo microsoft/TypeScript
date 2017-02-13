@@ -32,7 +32,7 @@ namespace ts.codefix {
 
         const declaration = declarations[0] as Declaration;
         const name = declaration.name ? declaration.name.getText() : undefined;
-        const visibility = getVisibilityPrefix(getModifierFlags(declaration));
+        const visibility = getVisibilityPrefixWithSpace(getModifierFlags(declaration));
 
         switch (declaration.kind) {
             case SyntaxKind.GetAccessor:
@@ -138,11 +138,15 @@ namespace ts.codefix {
         }
     }
 
-    function getMethodBodyStub(newLineChar: string) {
-        return ` {${newLineChar}throw new Error('Method not implemented.');${newLineChar}}${newLineChar}`;
+    export function getStubbedMethod(visibility: string, name: string, signature: string = '()', newlineChar: string): string {
+        return `${visibility}${name}${signature}${getMethodBodyStub(newlineChar)}`;
     }
 
-    function getVisibilityPrefix(flags: ModifierFlags): string {
+    function getMethodBodyStub(newlineChar: string) {
+        return ` {${newlineChar}throw new Error('Method not implemented.');${newlineChar}}${newlineChar}`;
+    }
+
+    function getVisibilityPrefixWithSpace(flags: ModifierFlags): string {
         if (flags & ModifierFlags.Public) {
             return "public ";
         }
