@@ -43,6 +43,7 @@ export function createProgram(rootFiles: string[], compilerOptionsJson: string):
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 "use strict";
+exports.__esModule = true;
 var ts = require("typescript");
 function printError(error) {
     if (!error) {

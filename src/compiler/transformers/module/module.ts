@@ -84,6 +84,11 @@ namespace ts {
 
             const statements: Statement[] = [];
             const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, sourceElementVisitor);
+
+            if (!currentModuleInfo.exportEquals) {
+                append(statements, createUnderscoreUnderscoreESModule());
+            }
+
             append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement, /*optional*/ true));
             addRange(statements, visitNodes(node.statements, sourceElementVisitor, isStatement, statementOffset));
             addExportEqualsIfNeeded(statements, /*emitAsReturn*/ false);
@@ -95,7 +100,6 @@ namespace ts {
                 // we need to inform the emitter to add the __export helper.
                 addEmitHelper(updated, exportStarHelper);
             }
-
             return updated;
         }
 
@@ -373,6 +377,10 @@ namespace ts {
 
             const statements: Statement[] = [];
             const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, sourceElementVisitor);
+
+            if (!currentModuleInfo.exportEquals) {
+                append(statements, createUnderscoreUnderscoreESModule());
+            }
 
             // Visit each statement of the module body.
             append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement, /*optional*/ true));
@@ -668,6 +676,7 @@ namespace ts {
             }
 
             const generatedName = getGeneratedNameForNode(node);
+
             if (node.exportClause) {
                 const statements: Statement[] = [];
                 // export { x, y } from "mod";
@@ -841,6 +850,7 @@ namespace ts {
             let statements: Statement[];
             let variables: VariableDeclaration[];
             let expressions: Expression[];
+
             if (hasModifier(node, ModifierFlags.Export)) {
                 let modifiers: NodeArray<Modifier>;
 
@@ -1130,41 +1140,37 @@ namespace ts {
          * @param allowComments Whether to allow comments on the export.
          */
         function appendExportStatement(statements: Statement[] | undefined, exportName: Identifier, expression: Expression, location?: TextRange, allowComments?: boolean): Statement[] | undefined {
-            if (exportName.text === "default") {
-                const sourceFile = getOriginalNode(currentSourceFile, isSourceFile);
-                if (sourceFile && !sourceFile.symbol.exports.get("___esModule")) {
-                    if (languageVersion === ScriptTarget.ES3) {
-                        statements = append(statements,
-                            createStatement(
-                                createExportExpression(
-                                    createIdentifier("__esModule"),
-                                    createTrue()
-                                )
-                            )
-                        );
-                    }
-                    else {
-                        statements = append(statements,
-                            createStatement(
-                                createCall(
-                                    createPropertyAccess(createIdentifier("Object"), "defineProperty"),
-                                    /*typeArguments*/ undefined,
-                                    [
-                                        createIdentifier("exports"),
-                                        createLiteral("__esModule"),
-                                        createObjectLiteral([
-                                            createPropertyAssignment("value", createTrue())
-                                        ])
-                                    ]
-                                )
-                            )
-                        );
-                    }
-                }
-            }
-
             statements = append(statements, createExportStatement(exportName, expression, location, allowComments));
             return statements;
+        }
+
+        function createUnderscoreUnderscoreESModule() {
+            let statement: Statement;
+            if (languageVersion === ScriptTarget.ES3) {
+                statement = createStatement(
+                    createExportExpression(
+                        createIdentifier("__esModule"),
+                        createLiteral(true)
+                    )
+                )
+            }
+            else {
+                statement = createStatement(
+                    createCall(
+                        createPropertyAccess(createIdentifier("Object"), "defineProperty"),
+                        /*typeArguments*/ undefined,
+                        [
+                            createIdentifier("exports"),
+                            createLiteral("__esModule"),
+                            createObjectLiteral([
+                                createPropertyAssignment("value", createLiteral(true))
+                            ])
+                        ]
+                    )
+                );
+            }
+            setEmitFlags(statement, EmitFlags.CustomPrologue);
+            return statement;
         }
 
         /**

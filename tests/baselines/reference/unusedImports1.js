@@ -11,6 +11,7 @@ import {Calculator} from "./file1"
 
 //// [file1.js]
 "use strict";
+exports.__esModule = true;
 var Calculator = (function () {
     function Calculator() {
     }
@@ -19,3 +20,4 @@ var Calculator = (function () {
 exports.Calculator = Calculator;
 //// [file2.js]
 "use strict";
+exports.__esModule = true;

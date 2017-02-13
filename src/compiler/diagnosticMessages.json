@@ -675,6 +675,10 @@
         "category": "Error",
         "code": 1215
     },
+    "Identifier expected. '__esModule' is reserved as an exported marker when transforming ECMAScript modules.": {
+        "category": "Error",
+        "code": 1216
+    },
     "Export assignment is not supported when '--module' flag is 'system'.": {
         "category": "Error",
         "code": 1218
@@ -1799,17 +1803,21 @@
         "category": "Error",
         "code": 2545
     },
-    "The type returned by the 'next()' method of an async iterator must be a promise for a type with a 'value' property.": {
+    "Property '{0}' has conflicting declarations and is inaccessible in type '{1}'.": {
         "category": "Error",
         "code": 2546
     },
-    "Type '{0}' is not an array type or does not have a '[Symbol.iterator]()' method that returns an iterator.": {
+    "The type returned by the 'next()' method of an async iterator must be a promise for a type with a 'value' property.": {
         "category": "Error",
         "code": 2547
     },
-    "Type '{0}' is not an array type or a string type or does not have a '[Symbol.iterator]()' method that returns an iterator.": {
+    "Type '{0}' is not an array type or does not have a '[Symbol.iterator]()' method that returns an iterator.": {
         "category": "Error",
         "code": 2548
+    },
+    "Type '{0}' is not an array type or a string type or does not have a '[Symbol.iterator]()' method that returns an iterator.": {
+        "category": "Error",
+        "code": 2549
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
@@ -2825,7 +2833,7 @@
         "category": "Message",
         "code": 6099
     },
-    "'package.json' does not have a 'types' or 'main' field.": {
+    "'package.json' does not have a '{0}' field.": {
         "category": "Message",
         "code": 6100
     },
@@ -2972,10 +2980,6 @@
     "The maximum dependency depth to search under node_modules and load JavaScript files": {
         "category": "Message",
         "code": 6136
-    },
-    "No types specified in 'package.json', so returning 'main' value of '{0}'": {
-        "category": "Message",
-        "code": 6137
     },
     "Property '{0}' is declared but never used.": {
         "category": "Error",

@@ -49,6 +49,7 @@ let c = a.getCls().y.toLowerCase();
 //// [f.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var A = (function () {
         function A() {
         }
@@ -58,6 +59,7 @@ define("a", ["require", "exports"], function (require, exports) {
 });
 define("b", ["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var B = (function () {
         function B() {
         }
@@ -67,10 +69,12 @@ define("b", ["require", "exports"], function (require, exports) {
 });
 define("e", ["require", "exports", "a"], function (require, exports, a_1) {
     "use strict";
+    exports.__esModule = true;
     a_1.A.prototype.getCls = function () { return undefined; };
 });
 define("main", ["require", "exports", "D", "e"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var a;
     var b = a.getB().x.toFixed();
     var c = a.getCls().y.toLowerCase();
