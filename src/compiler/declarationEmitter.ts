@@ -333,10 +333,8 @@ namespace ts {
             }
             else {
                 errorNameNode = declaration.name;
-                let format = TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseTypeAliasValue;
-                if (shouldUseResolverType) {
-                    format |= TypeFormatFlags.AddUndefined;
-                }
+                const format = TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseTypeAliasValue |
+                    (shouldUseResolverType ? TypeFormatFlags.AddUndefined : 0);
                 resolver.writeTypeOfDeclaration(declaration, enclosingDeclaration, format, writer);
                 errorNameNode = undefined;
             }

@@ -3167,8 +3167,7 @@ namespace ts {
         /** Return the inferred type for a binding element */
         function getTypeForBindingElement(declaration: BindingElement): Type {
             const pattern = <BindingPattern>declaration.parent;
-            let parentType = getTypeForBindingElementParent(<VariableLikeDeclaration>pattern.parent);
-
+            const parentType = getTypeForBindingElementParent(<VariableLikeDeclaration>pattern.parent);
             // If parent has the unknown (error) type, then so does this binding element
             if (parentType === unknownType) {
                 return unknownType;
