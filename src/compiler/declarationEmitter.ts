@@ -324,13 +324,20 @@ namespace ts {
         function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, type: TypeNode, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic) {
             writer.getSymbolAccessibilityDiagnostic = getSymbolAccessibilityDiagnostic;
             write(": ");
-            if (type) {
+
+            // use the checker's type, not the declared type,
+            // for non-optional initialized parameters that aren't a parameter property
+            const shouldUseResolverType = declaration.kind === SyntaxKind.Parameter &&
+                resolver.isRequiredInitializedParameter(declaration as ParameterDeclaration);
+            if (type && !shouldUseResolverType) {
                 // Write the type
                 emitType(type);
             }
             else {
                 errorNameNode = declaration.name;
-                resolver.writeTypeOfDeclaration(declaration, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseTypeAliasValue, writer);
+                const format = TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseTypeAliasValue |
+                    (shouldUseResolverType ? TypeFormatFlags.AddUndefined : 0);
+                resolver.writeTypeOfDeclaration(declaration, enclosingDeclaration, format, writer);
                 errorNameNode = undefined;
             }
         }

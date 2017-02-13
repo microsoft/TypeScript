@@ -2690,7 +2690,11 @@ namespace ts {
                 writePunctuation(writer, SyntaxKind.ColonToken);
                 writeSpace(writer);
 
-                buildTypeDisplay(getTypeOfSymbol(p), writer, enclosingDeclaration, flags, symbolStack);
+                let type = getTypeOfSymbol(p);
+                if (isRequiredInitializedParameter(parameterNode)) {
+                    type = includeFalsyTypes(type, TypeFlags.Undefined);
+                }
+                buildTypeDisplay(type, writer, enclosingDeclaration, flags, symbolStack);
             }
 
             function buildBindingPatternDisplay(bindingPattern: BindingPattern, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
@@ -3271,6 +3275,16 @@ namespace ts {
             return strictNullChecks && optional ? includeFalsyTypes(type, TypeFlags.Undefined) : type;
         }
 
+        /** remove undefined from the annotated type of a parameter when there is an initializer (that doesn't include undefined) */
+        function removeOptionalityFromAnnotation(annotatedType: Type, declaration: VariableLikeDeclaration): Type {
+            const annotationIncludesUndefined = strictNullChecks &&
+                declaration.kind === SyntaxKind.Parameter &&
+                declaration.initializer &&
+                getFalsyFlags(annotatedType) & TypeFlags.Undefined &&
+                !(getFalsyFlags(checkExpression(declaration.initializer)) & TypeFlags.Undefined);
+            return annotationIncludesUndefined ? getNonNullableType(annotatedType) : annotatedType;
+        }
+
         // Return the inferred type for a variable, parameter, or property declaration
         function getTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration, includeOptionality: boolean): Type {
             if (declaration.flags & NodeFlags.JavaScriptFile) {
@@ -3304,7 +3318,8 @@ namespace ts {
 
             // Use type from type annotation if one is present
             if (declaration.type) {
-                return addOptionality(getTypeFromTypeNode(declaration.type), /*optional*/ declaration.questionToken && includeOptionality);
+                const declaredType = removeOptionalityFromAnnotation(getTypeFromTypeNode(declaration.type), declaration);
+                return addOptionality(declaredType, /*optional*/ declaration.questionToken && includeOptionality);
             }
 
             if ((compilerOptions.noImplicitAny || declaration.flags & NodeFlags.JavaScriptFile) &&
@@ -5197,6 +5212,12 @@ namespace ts {
                 const parameterIndex = ts.indexOf(signatureDeclaration.parameters, node);
                 Debug.assert(parameterIndex >= 0);
                 return parameterIndex >= signature.minArgumentCount;
+            }
+            const iife = getImmediatelyInvokedFunctionExpression(node.parent);
+            if (iife) {
+                return !node.type &&
+                    !node.dotDotDotToken &&
+                    indexOf((node.parent as SignatureDeclaration).parameters, node) >= iife.arguments.length;
             }
 
             return false;
@@ -20702,6 +20723,13 @@ namespace ts {
             return false;
         }
 
+        function isRequiredInitializedParameter(parameter: ParameterDeclaration) {
+            return strictNullChecks &&
+                !isOptionalParameter(parameter) &&
+                parameter.initializer &&
+                !(getModifierFlags(parameter) & ModifierFlags.ParameterPropertyModifier);
+        }
+
         function getNodeCheckFlags(node: Node): NodeCheckFlags {
             node = getParseTreeNode(node);
             return node ? getNodeLinks(node).flags : undefined;
@@ -20793,10 +20821,12 @@ namespace ts {
         function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
             // Get type of the symbol if this is the valid symbol otherwise get type at location
             const symbol = getSymbolOfNode(declaration);
-            const type = symbol && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))
+            let type = symbol && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))
                 ? getWidenedLiteralType(getTypeOfSymbol(symbol))
                 : unknownType;
-
+            if (flags & TypeFormatFlags.AddUndefined) {
+                type = includeFalsyTypes(type, TypeFlags.Undefined);
+            }
             getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
         }
 
@@ -20895,6 +20925,7 @@ namespace ts {
                 isTopLevelValueImportEqualsWithEntityName,
                 isDeclarationVisible,
                 isImplementationOfOverload,
+                isRequiredInitializedParameter,
                 writeTypeOfDeclaration,
                 writeReturnTypeOfSignatureDeclaration,
                 writeTypeOfExpression,
