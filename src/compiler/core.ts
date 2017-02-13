@@ -2012,26 +2012,87 @@ namespace ts {
     }
 
     /**
+     * Stores list of supported extensions and index that separates .ts extensions from .d.ts and .js.
+     */
+    export interface SupportedExtensions {
+        readonly dtsAndJsIndex: number;
+        readonly extensions: string[];
+    }
+
+    /**
      *  List of supported extensions in order of file resolution precedence.
      */
-    export const supportedTypeScriptExtensions = [".ts", ".tsx", ".d.ts"];
-    /** Must have ".d.ts" first because if ".ts" goes first, that will be detected as the extension instead of ".d.ts". */
-    export const supportedTypescriptExtensionsForExtractExtension = [".d.ts", ".ts", ".tsx"];
-    export const supportedJavascriptExtensions = [".js", ".jsx"];
-    const allSupportedExtensions = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
+    const tsExtensions = [".ts", ".tsx"];
+    const dtsExtensions = [".d.ts"];
 
-    export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: FileExtensionInfo[]): string[] {
+    function toSupportedExtensions(ts: string[], dts: string[], js: string[]): SupportedExtensions {
+        return {
+            extensions: ts.concat(dts, js),
+            dtsAndJsIndex: ts.length,
+        };
+    }
+
+    export const supportedJavascriptExtensions = [".js", ".jsx"];
+    export const supportedTypeScriptExtensions = tsExtensions.concat(dtsExtensions);
+    /** Must have ".d.ts" first because if ".ts" goes first, that will be detected as the extension instead of ".d.ts". */
+    export const supportedTypescriptExtensionsForExtractExtension = dtsExtensions.concat(tsExtensions);
+
+    const tsOnlyExtensions: SupportedExtensions = toSupportedExtensions(tsExtensions, dtsExtensions, /*js*/[]);
+    const tsJsExtensions: SupportedExtensions = toSupportedExtensions(tsExtensions, dtsExtensions, supportedJavascriptExtensions);
+
+    /* @internal */
+    export function getSupportedExtensionsObject(options?: CompilerOptions, extraFileExtensions?: FileExtensionInfo[]): SupportedExtensions {
         const needAllExtensions = options && options.allowJs;
-        if (!extraFileExtensions || extraFileExtensions.length === 0) {
-            return needAllExtensions ? allSupportedExtensions : supportedTypeScriptExtensions;
-        }
-        const extensions = (needAllExtensions ? allSupportedExtensions : supportedTypeScriptExtensions).slice(0);
-        for (const extInfo of extraFileExtensions) {
-            if (needAllExtensions || extInfo.scriptKind === ScriptKind.TS) {
-                extensions.push(extInfo.extension);
+        // use separate lists for ts and js extensions
+        // extraFileExtensions can add more entries into both lists and we need to maintain proper order (ts extensions should come before js)
+        let ts = tsExtensions;
+        let js = supportedJavascriptExtensions;
+
+        if (extraFileExtensions) {
+            for (const extInfo of extraFileExtensions) {
+                if (needAllExtensions || extInfo.scriptKind === ScriptKind.TS) {
+                    switch (extInfo.scriptKind) {
+                        case ScriptKind.TS:
+                        case ScriptKind.TSX:
+                        case ScriptKind.Unknown:
+                            ts = tryAddExtension(extInfo.extension, ts, tsExtensions);
+                            break;
+                        case ScriptKind.JS:
+                        case ScriptKind.JSX:
+                            js = tryAddExtension(extInfo.extension, js, supportedJavascriptExtensions);
+                            break;
+                    }
+                }
             }
         }
-        return extensions;
+        // return precomputed objects if extraFileExtensions have not brought new entries.
+        if (needAllExtensions) {
+            if (ts === tsExtensions && js === supportedJavascriptExtensions) {
+                return tsJsExtensions;
+            }
+        }
+        else {
+            if (ts === tsExtensions) {
+                return tsOnlyExtensions;
+            }
+        }
+
+        return toSupportedExtensions(ts, dtsExtensions, js);
+
+        function tryAddExtension(extension: string, container: string[], originalList: string[]): string[] {
+            if (container.indexOf(extension) === -1) {
+                if (container === originalList) {
+                    // copy original list on first write
+                    container = originalList.slice(0);
+                }
+                container.push(extension);
+            }
+            return container;
+        }
+    }
+
+    export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: FileExtensionInfo[]): string[] {
+        return getSupportedExtensionsObject(options, extraFileExtensions).extensions;
     }
 
     export function hasJavaScriptFileExtension(fileName: string) {
@@ -2053,57 +2114,38 @@ namespace ts {
         return false;
     }
 
-    /**
-     * Extension boundaries by priority. Lower numbers indicate higher priorities, and are
-     * aligned to the offset of the highest priority extension in the
-     * allSupportedExtensions array.
-     */
-    export const enum ExtensionPriority {
-        TypeScriptFiles = 0,
-        DeclarationAndJavaScriptFiles = 2,
-        Limit = 5,
+    type ExtensionPosition = number;
+    const TypeScriptExtension = 0;
 
-        Highest = TypeScriptFiles,
-        Lowest = DeclarationAndJavaScriptFiles,
-    }
-
-    export function getExtensionPriority(path: string, supportedExtensions: string[]): ExtensionPriority {
-        for (let i = supportedExtensions.length - 1; i >= 0; i--) {
-            if (fileExtensionIs(path, supportedExtensions[i])) {
-                return adjustExtensionPriority(<ExtensionPriority>i);
+    export function getExtensionPriority(path: string, supportedExtensions: SupportedExtensions): ExtensionPosition {
+        for (let i = supportedExtensions.extensions.length - 1; i >= 0; i--) {
+            if (fileExtensionIs(path, supportedExtensions.extensions[i])) {
+                return adjustExtensionPriority(i, supportedExtensions);
             }
         }
 
         // If its not in the list of supported extensions, this is likely a
         // TypeScript file with a non-ts extension
-        return ExtensionPriority.Highest;
+        return TypeScriptExtension;
     }
 
     /**
      * Adjusts an extension priority to be the highest priority within the same range.
      */
-    export function adjustExtensionPriority(extensionPriority: ExtensionPriority): ExtensionPriority {
-        if (extensionPriority < ExtensionPriority.DeclarationAndJavaScriptFiles) {
-            return ExtensionPriority.TypeScriptFiles;
-        }
-        else if (extensionPriority < ExtensionPriority.Limit) {
-            return ExtensionPriority.DeclarationAndJavaScriptFiles;
-        }
-        else {
-            return ExtensionPriority.Limit;
-        }
+    function adjustExtensionPriority(extensionPosition: number, supportedExtensions: SupportedExtensions): ExtensionPosition {
+        return extensionPosition < supportedExtensions.dtsAndJsIndex
+            ? TypeScriptExtension
+            : extensionPosition < supportedExtensions.extensions.length
+                ? supportedExtensions.dtsAndJsIndex
+                : supportedExtensions.extensions.length;
     }
-
     /**
      * Gets the next lowest extension priority for a given priority.
      */
-    export function getNextLowestExtensionPriority(extensionPriority: ExtensionPriority): ExtensionPriority {
-        if (extensionPriority < ExtensionPriority.DeclarationAndJavaScriptFiles) {
-            return ExtensionPriority.DeclarationAndJavaScriptFiles;
-        }
-        else {
-            return ExtensionPriority.Limit;
-        }
+    export function getNextLowestExtensionPriority(extensionPosition: ExtensionPosition, supportedExtensions: SupportedExtensions): ExtensionPosition {
+        return extensionPosition < supportedExtensions.dtsAndJsIndex
+            ? supportedExtensions.dtsAndJsIndex
+            : supportedExtensions.extensions.length;
     }
 
     const extensionsToRemove = [".d.ts", ".ts", ".js", ".tsx", ".jsx"];

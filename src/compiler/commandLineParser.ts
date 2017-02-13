@@ -1220,7 +1220,7 @@ namespace ts {
 
         // Rather than requery this for each file and filespec, we query the supported extensions
         // once and store it on the expansion context.
-        const supportedExtensions = getSupportedExtensions(options, extraFileExtensions);
+        const supportedExtensions = getSupportedExtensionsObject(options, extraFileExtensions);
 
         // Literal files are always included verbatim. An "include" or "exclude" specification cannot
         // remove a literal file.
@@ -1232,7 +1232,7 @@ namespace ts {
         }
 
         if (include && include.length > 0) {
-            for (const file of host.readDirectory(basePath, supportedExtensions, exclude, include)) {
+            for (const file of host.readDirectory(basePath, supportedExtensions.extensions, exclude, include)) {
                 // If we have already included a literal or wildcard path with a
                 // higher priority extension, we should skip this file.
                 //
@@ -1359,11 +1359,10 @@ namespace ts {
      * @param extensionPriority The priority of the extension.
      * @param context The expansion context.
      */
-    function hasFileWithHigherPriorityExtension(file: string, literalFiles: Map<string>, wildcardFiles: Map<string>, extensions: string[], keyMapper: (value: string) => string) {
+    function hasFileWithHigherPriorityExtension(file: string, literalFiles: Map<string>, wildcardFiles: Map<string>, extensions: SupportedExtensions, keyMapper: (value: string) => string) {
         const extensionPriority = getExtensionPriority(file, extensions);
-        const adjustedExtensionPriority = adjustExtensionPriority(extensionPriority);
-        for (let i = ExtensionPriority.Highest; i < adjustedExtensionPriority; i++) {
-            const higherPriorityExtension = extensions[i];
+        for (let i = 0; i < extensionPriority; i++) {
+            const higherPriorityExtension = extensions.extensions[i];
             const higherPriorityPath = keyMapper(changeExtension(file, higherPriorityExtension));
             if (literalFiles.has(higherPriorityPath) || wildcardFiles.has(higherPriorityPath)) {
                 return true;
@@ -1381,11 +1380,11 @@ namespace ts {
      * @param extensionPriority The priority of the extension.
      * @param context The expansion context.
      */
-    function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: Map<string>, extensions: string[], keyMapper: (value: string) => string) {
-        const extensionPriority = getExtensionPriority(file, extensions);
-        const nextExtensionPriority = getNextLowestExtensionPriority(extensionPriority);
-        for (let i = nextExtensionPriority; i < extensions.length; i++) {
-            const lowerPriorityExtension = extensions[i];
+    function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: Map<string>, supportedExtensions: SupportedExtensions, keyMapper: (value: string) => string) {
+        const extensionPriority = getExtensionPriority(file, supportedExtensions);
+        const nextExtensionPriority = getNextLowestExtensionPriority(extensionPriority, supportedExtensions);
+        for (let i = nextExtensionPriority; i < supportedExtensions.extensions.length; i++) {
+            const lowerPriorityExtension = supportedExtensions.extensions[i];
             const lowerPriorityPath = keyMapper(changeExtension(file, lowerPriorityExtension));
             wildcardFiles.delete(lowerPriorityPath);
         }
