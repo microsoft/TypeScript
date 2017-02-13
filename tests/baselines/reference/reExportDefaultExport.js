@@ -16,13 +16,14 @@ foo();
 
 //// [m1.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 function f() {
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = f;
 exports.f = f;
 //// [m2.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var m1_1 = require("./m1");
 var m1_2 = require("./m1");
 m1_2.f();

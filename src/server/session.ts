@@ -484,18 +484,20 @@ namespace ts.server {
 
         private getImplementation(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.FileSpan[] | ImplementationLocation[] {
             const { file, project } = this.getFileAndProject(args);
-            const scriptInfo = project.getScriptInfoForNormalizedPath(file);
-            const position = this.getPosition(args, scriptInfo);
+            const position = this.getPosition(args, project.getScriptInfoForNormalizedPath(file));
             const implementations = project.getLanguageService().getImplementationAtPosition(file, position);
             if (!implementations) {
                 return [];
             }
             if (simplifiedResult) {
-                return implementations.map(impl => ({
-                    file: impl.fileName,
-                    start: scriptInfo.positionToLineOffset(impl.textSpan.start),
-                    end: scriptInfo.positionToLineOffset(ts.textSpanEnd(impl.textSpan))
-                }));
+                return implementations.map(({ fileName, textSpan }) => {
+                    const scriptInfo = project.getScriptInfo(fileName);
+                    return {
+                        file: fileName,
+                        start: scriptInfo.positionToLineOffset(textSpan.start),
+                        end: scriptInfo.positionToLineOffset(ts.textSpanEnd(textSpan))
+                    };
+                });
             }
             else {
                 return implementations;
@@ -1038,7 +1040,8 @@ namespace ts.server {
                 if (project.compileOnSaveEnabled && project.languageServiceEnabled) {
                     result.push({
                         projectFileName: project.getProjectName(),
-                        fileNames: project.getCompileOnSaveAffectedFileList(info)
+                        fileNames: project.getCompileOnSaveAffectedFileList(info),
+                        projectUsesOutFile: !!project.getCompilerOptions().outFile || !!project.getCompilerOptions().out
                     });
                 }
             }

@@ -2166,3 +2166,132 @@ class B extends A<{ x: number}> {
 	}
 }
 
+// Repro from #13749
+
+class Form<T> {
+>Form : Form<T>
+>T : T
+
+    private childFormFactories: {[K in keyof T]: (v: T[K]) => Form<T[K]>}
+>childFormFactories : { [K in keyof T]: (v: T[K]) => Form<T[K]>; }
+>K : K
+>T : T
+>v : T[K]
+>T : T
+>K : K
+>Form : Form<T>
+>T : T
+>K : K
+
+    public set<K extends keyof T>(prop: K, value: T[K]) {
+>set : <K extends keyof T>(prop: K, value: T[K]) => void
+>K : K
+>T : T
+>prop : K
+>K : K
+>value : T[K]
+>T : T
+>K : K
+
+        this.childFormFactories[prop](value)
+>this.childFormFactories[prop](value) : Form<T[K]>
+>this.childFormFactories[prop] : (v: T[K]) => Form<T[K]>
+>this.childFormFactories : { [K in keyof T]: (v: T[K]) => Form<T[K]>; }
+>this : this
+>childFormFactories : { [K in keyof T]: (v: T[K]) => Form<T[K]>; }
+>prop : K
+>value : T[K]
+    }
+}
+
+// Repro from #13787
+
+class SampleClass<P> {
+>SampleClass : SampleClass<P>
+>P : P
+
+    public props: Readonly<P>;
+>props : Readonly<P>
+>Readonly : Readonly<T>
+>P : P
+
+    constructor(props: P) {
+>props : P
+>P : P
+
+        this.props = Object.freeze(props);
+>this.props = Object.freeze(props) : Readonly<P>
+>this.props : Readonly<P>
+>this : this
+>props : Readonly<P>
+>Object.freeze(props) : Readonly<P>
+>Object.freeze : { <T>(a: T[]): ReadonlyArray<T>; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>Object : ObjectConstructor
+>freeze : { <T>(a: T[]): ReadonlyArray<T>; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>props : P
+    }
+}
+
+interface Foo {
+>Foo : Foo
+
+    foo: string;
+>foo : string
+}
+
+declare function merge<T, U>(obj1: T, obj2: U): T & U;
+>merge : <T, U>(obj1: T, obj2: U) => T & U
+>T : T
+>U : U
+>obj1 : T
+>T : T
+>obj2 : U
+>U : U
+>T : T
+>U : U
+
+class AnotherSampleClass<T> extends SampleClass<T & Foo> {
+>AnotherSampleClass : AnotherSampleClass<T>
+>T : T
+>SampleClass : SampleClass<T & Foo>
+>T : T
+>Foo : Foo
+
+    constructor(props: T) {
+>props : T
+>T : T
+
+        const foo: Foo = { foo: "bar" };
+>foo : Foo
+>Foo : Foo
+>{ foo: "bar" } : { foo: string; }
+>foo : string
+>"bar" : "bar"
+
+        super(merge(props, foo));
+>super(merge(props, foo)) : void
+>super : typeof SampleClass
+>merge(props, foo) : T & Foo
+>merge : <T, U>(obj1: T, obj2: U) => T & U
+>props : T
+>foo : Foo
+    }
+
+    public brokenMethod() {
+>brokenMethod : () => void
+
+        this.props.foo.concat;
+>this.props.foo.concat : (...strings: string[]) => string
+>this.props.foo : (T & Foo)["foo"]
+>this.props : Readonly<T & Foo>
+>this : this
+>props : Readonly<T & Foo>
+>foo : (T & Foo)["foo"]
+>concat : (...strings: string[]) => string
+    }
+}
+new AnotherSampleClass({});
+>new AnotherSampleClass({}) : AnotherSampleClass<{}>
+>AnotherSampleClass : typeof AnotherSampleClass
+>{} : {}
+

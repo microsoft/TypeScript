@@ -21,15 +21,16 @@ export var x6 = new defaultBinding6();
 
 //// [server.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var a = (function () {
     function a() {
     }
     return a;
 }());
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = a;
 //// [client.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var server_1 = require("./server");
 exports.x1 = new server_1.default();
 var server_2 = require("./server");

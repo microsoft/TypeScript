@@ -44,9 +44,11 @@ var Math = {
 module.exports = Math;
 //// [Drawing.js]
 "use strict";
+exports.__esModule = true;
 exports.Math = require("./Math/Math");
 //// [consumer.js]
 "use strict";
+exports.__esModule = true;
 var Drawing = require("./Drawing");
 var addr = new Drawing.Math.Adder();
 

@@ -13,6 +13,7 @@ export declare class Bar2 {
 
 //// [noImplicitAnyDestructuringInPrivateMethod.js]
 "use strict";
+exports.__esModule = true;
 var Bar = (function () {
     function Bar() {
     }

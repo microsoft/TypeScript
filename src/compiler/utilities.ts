@@ -341,16 +341,52 @@ namespace ts {
     }
 
     export function isBinaryOrOctalIntegerLiteral(node: LiteralLikeNode, text: string) {
-        if (node.kind === SyntaxKind.NumericLiteral && text.length > 1) {
+        return node.kind === SyntaxKind.NumericLiteral
+            && (getNumericLiteralFlags(text, /*hint*/ NumericLiteralFlags.BinaryOrOctal) & NumericLiteralFlags.BinaryOrOctal) !== 0;
+    }
+
+    export const enum NumericLiteralFlags {
+        None = 0,
+        Hexadecimal = 1 << 0,
+        Binary = 1 << 1,
+        Octal = 1 << 2,
+        Scientific = 1 << 3,
+
+        BinaryOrOctal = Binary | Octal,
+        BinaryOrOctalOrHexadecimal = BinaryOrOctal | Hexadecimal,
+        All = Hexadecimal | Binary | Octal | Scientific,
+    }
+
+    /**
+     * Scans a numeric literal string to determine the form of the number.
+     * @param text Numeric literal text
+     * @param hint If `Scientific` or `All` is specified, performs a more expensive check to scan for scientific notation.
+     */
+    export function getNumericLiteralFlags(text: string, hint?: NumericLiteralFlags) {
+        if (text.length > 1) {
             switch (text.charCodeAt(1)) {
                 case CharacterCodes.b:
                 case CharacterCodes.B:
+                    return NumericLiteralFlags.Binary;
                 case CharacterCodes.o:
                 case CharacterCodes.O:
-                    return true;
+                    return NumericLiteralFlags.Octal;
+                case CharacterCodes.x:
+                case CharacterCodes.X:
+                    return NumericLiteralFlags.Hexadecimal;
+            }
+
+            if (hint & NumericLiteralFlags.Scientific) {
+                for (let i = text.length - 1; i >= 0; i--) {
+                    switch (text.charCodeAt(i)) {
+                        case CharacterCodes.e:
+                        case CharacterCodes.E:
+                            return NumericLiteralFlags.Scientific;
+                    }
+                }
             }
         }
-        return false;
+        return NumericLiteralFlags.None;
     }
 
     function getQuotedEscapedLiteralText(leftQuote: string, text: string, rightQuote: string) {
@@ -395,7 +431,7 @@ namespace ts {
 
     function isShorthandAmbientModule(node: Node): boolean {
         // The only kind of module that can be missing a body is a shorthand ambient module.
-        return node.kind === SyntaxKind.ModuleDeclaration && (!(<ModuleDeclaration>node).body);
+        return node && node.kind === SyntaxKind.ModuleDeclaration && (!(<ModuleDeclaration>node).body);
     }
 
     export function isBlockScopedContainerTopLevel(node: Node): boolean {
@@ -1482,6 +1518,11 @@ namespace ts {
         return map(getJSDocs(node), doc => doc.comment);
     }
 
+    export function hasJSDocParameterTags(node: FunctionLikeDeclaration | SignatureDeclaration) {
+        const parameterTags = getJSDocTags(node, SyntaxKind.JSDocParameterTag);
+        return parameterTags && parameterTags.length > 0;
+    }
+
     function getJSDocTags(node: Node, kind: SyntaxKind): JSDocTag[] {
         const docs = getJSDocs(node);
         if (docs) {
@@ -1662,11 +1703,15 @@ namespace ts {
                     node = parent;
                     break;
                 case SyntaxKind.ShorthandPropertyAssignment:
-                    if ((<ShorthandPropertyAssignment>parent).name !== node) {
+                    if ((parent as ShorthandPropertyAssignment).name !== node) {
                         return AssignmentKind.None;
                     }
-                // Fall through
+                    node = parent.parent;
+                    break;
                 case SyntaxKind.PropertyAssignment:
+                    if ((parent as ShorthandPropertyAssignment).name === node) {
+                        return AssignmentKind.None;
+                    }
                     node = parent.parent;
                     break;
                 default:
@@ -1678,7 +1723,8 @@ namespace ts {
 
     // A node is an assignment target if it is on the left hand side of an '=' token, if it is parented by a property
     // assignment in an object literal that is an assignment target, or if it is parented by an array literal that is
-    // an assignment target. Examples include 'a = xxx', '{ p: a } = xxx', '[{ p: a}] = xxx'.
+    // an assignment target. Examples include 'a = xxx', '{ p: a } = xxx', '[{ a }] = xxx'.
+    // (Note that `p` is not a target in the above examples, only `a`.)
     export function isAssignmentTarget(node: Node): boolean {
         return getAssignmentTargetKind(node) !== AssignmentKind.None;
     }
@@ -2001,67 +2047,19 @@ namespace ts {
             || positionIsSynthesized(node.end);
     }
 
-    export function getOriginalNode(node: Node): Node;
-    export function getOriginalNode<T extends Node>(node: Node, nodeTest: (node: Node) => node is T): T;
-    export function getOriginalNode(node: Node, nodeTest?: (node: Node) => boolean): Node {
-        if (node) {
-            while (node.original !== undefined) {
-                node = node.original;
-            }
+    export function getOriginalSourceFileOrBundle(sourceFileOrBundle: SourceFile | Bundle) {
+        if (sourceFileOrBundle.kind === SyntaxKind.Bundle) {
+            return updateBundle(sourceFileOrBundle, sameMap(sourceFileOrBundle.sourceFiles, getOriginalSourceFile));
         }
-
-        return !nodeTest || nodeTest(node) ? node : undefined;
+        return getOriginalSourceFile(sourceFileOrBundle);
     }
 
-    /**
-     * Gets a value indicating whether a node originated in the parse tree.
-     *
-     * @param node The node to test.
-     */
-    export function isParseTreeNode(node: Node): boolean {
-        return (node.flags & NodeFlags.Synthesized) === 0;
-    }
-
-    /**
-     * Gets the original parse tree node for a node.
-     *
-     * @param node The original node.
-     * @returns The original parse tree node if found; otherwise, undefined.
-     */
-    export function getParseTreeNode(node: Node): Node;
-
-    /**
-     * Gets the original parse tree node for a node.
-     *
-     * @param node The original node.
-     * @param nodeTest A callback used to ensure the correct type of parse tree node is returned.
-     * @returns The original parse tree node if found; otherwise, undefined.
-     */
-    export function getParseTreeNode<T extends Node>(node: Node, nodeTest?: (node: Node) => node is T): T;
-    export function getParseTreeNode(node: Node, nodeTest?: (node: Node) => boolean): Node {
-        if (isParseTreeNode(node)) {
-            return node;
-        }
-
-        node = getOriginalNode(node);
-
-        if (isParseTreeNode(node) && (!nodeTest || nodeTest(node))) {
-            return node;
-        }
-
-        return undefined;
+    function getOriginalSourceFile(sourceFile: SourceFile) {
+        return getParseTreeNode(sourceFile, isSourceFile) || sourceFile;
     }
 
     export function getOriginalSourceFiles(sourceFiles: SourceFile[]) {
-        const originalSourceFiles: SourceFile[] = [];
-        for (const sourceFile of sourceFiles) {
-            const originalSourceFile = getParseTreeNode(sourceFile, isSourceFile);
-            if (originalSourceFile) {
-                originalSourceFiles.push(originalSourceFile);
-            }
-        }
-
-        return originalSourceFiles;
+        return sameMap(sourceFiles, getOriginalSourceFile);
     }
 
     export function getOriginalNodeId(node: Node) {
@@ -2400,23 +2398,6 @@ namespace ts {
             s;
     }
 
-    export interface EmitTextWriter {
-        write(s: string): void;
-        writeTextOfNode(text: string, node: Node): void;
-        writeLine(): void;
-        increaseIndent(): void;
-        decreaseIndent(): void;
-        getText(): string;
-        rawWrite(s: string): void;
-        writeLiteral(s: string): void;
-        getTextPos(): number;
-        getLine(): number;
-        getColumn(): number;
-        getIndent(): number;
-        isAtStartOfLine(): boolean;
-        reset(): void;
-    }
-
     const indentStrings: string[] = ["", "    "];
     export function getIndentString(level: number) {
         if (indentStrings[level] === undefined) {
@@ -2599,7 +2580,7 @@ namespace ts {
      *   Else, calls `getSourceFilesToEmit` with the (optional) target source file to determine the list of source files to emit.
      */
     export function forEachEmittedFile(
-        host: EmitHost, action: (emitFileNames: EmitFileNames, sourceFiles: SourceFile[], isBundledEmit: boolean, emitOnlyDtsFiles: boolean) => void,
+        host: EmitHost, action: (emitFileNames: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle, emitOnlyDtsFiles: boolean) => void,
         sourceFilesOrTargetSourceFile?: SourceFile[] | SourceFile,
         emitOnlyDtsFiles?: boolean) {
 
@@ -2610,7 +2591,7 @@ namespace ts {
                 const jsFilePath = options.outFile || options.out;
                 const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
                 const declarationFilePath = options.declaration ? removeFileExtension(jsFilePath) + ".d.ts" : undefined;
-                action({ jsFilePath, sourceMapFilePath, declarationFilePath }, sourceFiles, /*isBundledEmit*/true, emitOnlyDtsFiles);
+                action({ jsFilePath, sourceMapFilePath, declarationFilePath }, createBundle(sourceFiles), emitOnlyDtsFiles);
             }
         }
         else {
@@ -2618,7 +2599,7 @@ namespace ts {
                 const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, getOutputExtension(sourceFile, options));
                 const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
                 const declarationFilePath = !isSourceFileJavaScript(sourceFile) && (emitOnlyDtsFiles || options.declaration) ? getDeclarationEmitOutputFilePath(sourceFile, host) : undefined;
-                action({ jsFilePath, sourceMapFilePath, declarationFilePath }, [sourceFile], /*isBundledEmit*/false, emitOnlyDtsFiles);
+                action({ jsFilePath, sourceMapFilePath, declarationFilePath }, sourceFile, emitOnlyDtsFiles);
             }
         }
     }
@@ -3104,7 +3085,11 @@ namespace ts {
     }
 
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
-        return symbol && symbol.valueDeclaration && hasModifier(symbol.valueDeclaration, ModifierFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
+        return isExportDefaultSymbol(symbol) ? symbol.valueDeclaration.localSymbol : undefined;
+    }
+
+    export function isExportDefaultSymbol(symbol: Symbol): boolean {
+        return symbol && symbol.valueDeclaration && hasModifier(symbol.valueDeclaration, ModifierFlags.Default);
     }
 
     /** Return ".ts", ".d.ts", or ".tsx", if that is the extension. */
@@ -3189,7 +3174,7 @@ namespace ts {
 
     const carriageReturnLineFeed = "\r\n";
     const lineFeed = "\n";
-    export function getNewLineCharacter(options: CompilerOptions): string {
+    export function getNewLineCharacter(options: CompilerOptions | PrinterOptions): string {
         if (options.newLine === NewLineKind.CarriageReturnLineFeed) {
             return carriageReturnLineFeed;
         }
@@ -3298,6 +3283,14 @@ namespace ts {
         else {
             return kind.toString();
         }
+    }
+
+    export function getRangePos(range: TextRange | undefined) {
+        return range ? range.pos : -1;
+    }
+
+    export function getRangeEnd(range: TextRange | undefined) {
+        return range ? range.end : -1;
     }
 
     /**
@@ -3899,6 +3892,19 @@ namespace ts {
     export function isModuleBody(node: Node): node is ModuleBody {
         const kind = node.kind;
         return kind === SyntaxKind.ModuleBlock
+            || kind === SyntaxKind.ModuleDeclaration
+            || kind === SyntaxKind.Identifier;
+    }
+
+    export function isNamespaceBody(node: Node): node is NamespaceBody {
+        const kind = node.kind;
+        return kind === SyntaxKind.ModuleBlock
+            || kind === SyntaxKind.ModuleDeclaration;
+    }
+
+    export function isJSDocNamespaceBody(node: Node): node is JSDocNamespaceBody {
+        const kind = node.kind;
+        return kind === SyntaxKind.Identifier
             || kind === SyntaxKind.ModuleDeclaration;
     }
 
@@ -4490,5 +4496,56 @@ namespace ts {
 
             return true;
         }
+    }
+
+    export function getOriginalNode(node: Node): Node;
+    export function getOriginalNode<T extends Node>(node: Node, nodeTest: (node: Node) => node is T): T;
+    export function getOriginalNode(node: Node, nodeTest?: (node: Node) => boolean): Node {
+        if (node) {
+            while (node.original !== undefined) {
+                node = node.original;
+            }
+        }
+
+        return !nodeTest || nodeTest(node) ? node : undefined;
+    }
+
+    /**
+     * Gets a value indicating whether a node originated in the parse tree.
+     *
+     * @param node The node to test.
+     */
+    export function isParseTreeNode(node: Node): boolean {
+        return (node.flags & NodeFlags.Synthesized) === 0;
+    }
+
+    /**
+     * Gets the original parse tree node for a node.
+     *
+     * @param node The original node.
+     * @returns The original parse tree node if found; otherwise, undefined.
+     */
+    export function getParseTreeNode(node: Node): Node;
+
+    /**
+     * Gets the original parse tree node for a node.
+     *
+     * @param node The original node.
+     * @param nodeTest A callback used to ensure the correct type of parse tree node is returned.
+     * @returns The original parse tree node if found; otherwise, undefined.
+     */
+    export function getParseTreeNode<T extends Node>(node: Node, nodeTest?: (node: Node) => node is T): T;
+    export function getParseTreeNode(node: Node, nodeTest?: (node: Node) => boolean): Node {
+        if (isParseTreeNode(node)) {
+            return node;
+        }
+
+        node = getOriginalNode(node);
+
+        if (isParseTreeNode(node) && (!nodeTest || nodeTest(node))) {
+            return node;
+        }
+
+        return undefined;
     }
 }

@@ -14,6 +14,7 @@ export = x;
 
 //// [es6ImportNamedImportInIndirectExportAssignment_0.js]
 "use strict";
+exports.__esModule = true;
 var a;
 (function (a) {
     var c = (function () {

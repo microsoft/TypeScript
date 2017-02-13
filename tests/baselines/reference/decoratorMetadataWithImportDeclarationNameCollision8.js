@@ -25,6 +25,7 @@ export {MyClass};
 
 //// [db.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var db = (function () {
     function db() {
     }
@@ -35,6 +36,7 @@ var db = (function () {
 exports.db = db;
 //// [service.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var database = require("./db");
 function someDecorator(target) {
     return target;

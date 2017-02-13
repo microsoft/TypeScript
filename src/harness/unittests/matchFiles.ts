@@ -346,9 +346,9 @@ namespace ts {
                     fileNames: [
                         "c:/dev/a.ts",
                         "c:/dev/b.ts",
+                        "c:/dev/node_modules/a.ts",
                         "c:/dev/bower_components/a.ts",
-                        "c:/dev/jspm_packages/a.ts",
-                        "c:/dev/node_modules/a.ts"
+                        "c:/dev/jspm_packages/a.ts"
                     ],
                     wildcardDirectories: {},
                 };
@@ -373,9 +373,9 @@ namespace ts {
                     options: {},
                     errors: [],
                     fileNames: [
+                        "c:/dev/node_modules/a.ts",
                         "c:/dev/bower_components/a.ts",
-                        "c:/dev/jspm_packages/a.ts",
-                        "c:/dev/node_modules/a.ts"
+                        "c:/dev/jspm_packages/a.ts"
                     ],
                     wildcardDirectories: {},
                 };
@@ -398,9 +398,9 @@ namespace ts {
                     fileNames: [
                         "c:/dev/a.ts",
                         "c:/dev/b.ts",
+                        "c:/dev/node_modules/a.ts",
                         "c:/dev/bower_components/a.ts",
-                        "c:/dev/jspm_packages/a.ts",
-                        "c:/dev/node_modules/a.ts"
+                        "c:/dev/jspm_packages/a.ts"
                     ],
                     wildcardDirectories: {},
                 };
@@ -410,6 +410,36 @@ namespace ts {
         });
 
         describe("with wildcard include list", () => {
+            it("is sorted in include order, then in alphabetical order", () => {
+                const json = {
+                    include: [
+                        "z/*.ts",
+                        "x/*.ts"
+                    ]
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {},
+                    errors: [],
+                    fileNames: [
+                        "c:/dev/z/a.ts",
+                        "c:/dev/z/aba.ts",
+                        "c:/dev/z/abz.ts",
+                        "c:/dev/z/b.ts",
+                        "c:/dev/z/bba.ts",
+                        "c:/dev/z/bbz.ts",
+                        "c:/dev/x/a.ts",
+                        "c:/dev/x/aa.ts",
+                        "c:/dev/x/b.ts"
+                    ],
+                    wildcardDirectories: {
+                        "c:/dev/z": ts.WatchDirectoryFlags.None,
+                        "c:/dev/x": ts.WatchDirectoryFlags.None
+                    },
+                };
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
+                assertParsed(actual, expected);
+            });
+
             it("same named declarations are excluded", () => {
                 const json = {
                     include: [
@@ -506,8 +536,8 @@ namespace ts {
                     options: {},
                     errors: [],
                     fileNames: [
-                        "c:/dev/x/a.ts",
                         "c:/dev/x/y/a.ts",
+                        "c:/dev/x/a.ts",
                         "c:/dev/z/a.ts"
                     ],
                     wildcardDirectories: {
@@ -1282,8 +1312,8 @@ namespace ts {
                         options: {},
                         errors: [],
                         fileNames: [
-                            "c:/dev/.z/.b.ts",
-                            "c:/dev/x/.y/a.ts"
+                            "c:/dev/x/.y/a.ts",
+                            "c:/dev/.z/.b.ts"
                         ],
                         wildcardDirectories: {}
                     };
@@ -1323,8 +1353,8 @@ namespace ts {
                         options: {},
                         errors: [],
                         fileNames: [
-                            "c:/dev/.z/.b.ts",
-                            "c:/dev/x/.y/a.ts"
+                            "c:/dev/x/.y/a.ts",
+                            "c:/dev/.z/.b.ts"
                         ],
                         wildcardDirectories: {
                             "c:/dev/.z": ts.WatchDirectoryFlags.Recursive,

@@ -36,6 +36,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 define(["require", "exports", "exportAssignmentOfGenericType1_0"], function (require, exports, q) {
     "use strict";
+    exports.__esModule = true;
     var M = (function (_super) {
         __extends(M, _super);
         function M() {

@@ -1512,7 +1512,7 @@ namespace ts {
                     errorOnFirstToken(node, Diagnostics.export_modifier_cannot_be_applied_to_ambient_modules_and_module_augmentations_since_they_are_always_visible);
                 }
                 if (isExternalModuleAugmentation(node)) {
-                    declareSymbolAndAddToSymbolTable(node, SymbolFlags.NamespaceModule, SymbolFlags.NamespaceModuleExcludes);
+                    declareModuleSymbol(node);
                 }
                 else {
                     let pattern: Pattern | undefined;
@@ -1534,12 +1534,8 @@ namespace ts {
                 }
             }
             else {
-                const state = getModuleInstanceState(node);
-                if (state === ModuleInstanceState.NonInstantiated) {
-                    declareSymbolAndAddToSymbolTable(node, SymbolFlags.NamespaceModule, SymbolFlags.NamespaceModuleExcludes);
-                }
-                else {
-                    declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
+                const state = declareModuleSymbol(node);
+                if (state !== ModuleInstanceState.NonInstantiated) {
                     if (node.symbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.RegularEnum)) {
                         // if module was already merged with some function, class or non-const enum
                         // treat is a non-const-enum-only
@@ -1558,6 +1554,15 @@ namespace ts {
                     }
                 }
             }
+        }
+
+        function declareModuleSymbol(node: ModuleDeclaration): ModuleInstanceState {
+            const state = getModuleInstanceState(node);
+            const instantiated = state !== ModuleInstanceState.NonInstantiated;
+            declareSymbolAndAddToSymbolTable(node,
+                instantiated ? SymbolFlags.ValueModule : SymbolFlags.NamespaceModule,
+                instantiated ? SymbolFlags.ValueModuleExcludes : SymbolFlags.NamespaceModuleExcludes);
+            return state;
         }
 
         function bindFunctionOrConstructorType(node: SignatureDeclaration): void {
