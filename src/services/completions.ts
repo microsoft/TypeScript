@@ -915,13 +915,29 @@ namespace ts.Completions {
                 }
             }
             else if (sourceFile.languageVariant === LanguageVariant.JSX) {
-                if (kind === SyntaxKind.LessThanToken) {
-                    isRightOfOpenTag = true;
-                    location = contextToken;
-                }
-                else if (kind === SyntaxKind.SlashToken && contextToken.parent.kind === SyntaxKind.JsxClosingElement) {
-                    isStartingCloseTag = true;
-                    location = contextToken;
+                switch (contextToken.parent.kind) {
+                    case SyntaxKind.JsxClosingElement:
+                        if (kind === SyntaxKind.SlashToken) {
+                            isStartingCloseTag = true;
+                            location = contextToken;
+                        }
+                        break;
+
+                    case SyntaxKind.BinaryExpression:
+                        if (!((contextToken.parent as BinaryExpression).left.flags & NodeFlags.ThisNodeHasError)) {
+                            // It has a left-hand side, so we're not in an opening JSX tag.
+                            break;
+                        }
+                        // fall through
+
+                    case SyntaxKind.JsxSelfClosingElement:
+                    case SyntaxKind.JsxElement:
+                    case SyntaxKind.JsxOpeningElement:
+                        if (kind === SyntaxKind.LessThanToken) {
+                            isRightOfOpenTag = true;
+                            location = contextToken;
+                        }
+                        break;
                 }
             }
         }
