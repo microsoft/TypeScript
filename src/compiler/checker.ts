@@ -7777,8 +7777,10 @@ namespace ts {
                         return related;
                     }
                 }
-                const discriminantType = findMatchingDiscriminantType(source, target);
-                isRelatedTo(source, discriminantType || targetTypes[targetTypes.length - 1], reportErrors);
+                if (reportErrors) {
+                    const discriminantType = findMatchingDiscriminantType(source, target);
+                    isRelatedTo(source, discriminantType || targetTypes[targetTypes.length - 1], /*reportErrors*/ true);
+                }
                 return Ternary.False;
             }
 
