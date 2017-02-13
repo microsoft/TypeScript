@@ -1589,6 +1589,41 @@ namespace ts.projectSystem {
             checkProjectActualFiles(projectService.inferredProjects[1], [file2.path]);
         });
 
+        it ("loading files with correct priority", () => {
+            const f1 = {
+                path: "/a/main.ts",
+                content: "let x = 1"
+            };
+            const f2 = {
+                path: "/a/main.js",
+                content: "var y = 1"
+            };
+            const config = {
+                path: "/a/tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: { allowJs: true }
+                })
+            };
+            const host = createServerHost([f1, f2, config]);
+            const projectService = createProjectService(host);
+            projectService.setHostConfiguration({
+                extraFileExtensions: [
+                    { extension: ".js", isMixedContent: false },
+                    { extension: ".html", isMixedContent: true }
+                ]
+            });
+            projectService.openClientFile(f1.path);
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+            checkProjectActualFiles(projectService.configuredProjects[0], [ f1.path ]);
+
+            projectService.closeClientFile(f1.path);
+
+            projectService.openClientFile(f2.path);
+            projectService.checkNumberOfProjects({ configuredProjects: 1, inferredProjects: 1 });
+            checkProjectActualFiles(projectService.configuredProjects[0], [ f1.path ]);
+            checkProjectActualFiles(projectService.inferredProjects[0], [ f2.path ]);
+        });
+
         it("tsconfig script block support", () => {
             const file1 = {
                 path: "/a/b/f1.ts",

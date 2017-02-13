@@ -3153,9 +3153,8 @@
         ThisProperty
     }
 
-    export interface FileExtensionInfo {
+    export interface JsFileExtensionInfo {
         extension: string;
-        scriptKind: ScriptKind;
         isMixedContent: boolean;
     }
 
