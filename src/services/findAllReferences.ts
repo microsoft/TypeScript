@@ -406,19 +406,22 @@ namespace ts.FindAllReferences {
 
     function getAllReferencesForKeyword(sourceFiles: SourceFile[], keywordKind: ts.SyntaxKind, cancellationToken: CancellationToken): ReferencedSymbol[] {
         const name = tokenToString(keywordKind);
-        const definition: ReferencedSymbolDefinitionInfo = {
-            containerKind: "",
-            containerName: "",
-            fileName: "",
-            kind: ScriptElementKind.keyword,
-            name,
-            textSpan: createTextSpan(0, 1),
-            displayParts: [{ text: name, kind: ScriptElementKind.keyword }]
-        }
         const references: ReferenceEntry[] = [];
         for (const sourceFile of sourceFiles) {
             cancellationToken.throwIfCancellationRequested();
             addReferencesForKeywordInFile(sourceFile, keywordKind, name, cancellationToken, references);
+        }
+
+        if (!references.length) return undefined;
+
+        const definition: ReferencedSymbolDefinitionInfo = {
+            containerKind: "",
+            containerName: "",
+            fileName: references[0].fileName,
+            kind: ScriptElementKind.keyword,
+            name,
+            textSpan: references[0].textSpan,
+            displayParts: [{ text: name, kind: ScriptElementKind.keyword }]
         }
 
         return [{ definition, references }];
