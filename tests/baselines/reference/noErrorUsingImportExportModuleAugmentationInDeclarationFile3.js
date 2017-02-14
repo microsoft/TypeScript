@@ -11,4 +11,5 @@ export var j = "hello";  // error
 
 //// [1.js]
 "use strict";
+exports.__esModule = true;
 exports.j = "hello"; // error

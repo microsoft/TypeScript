@@ -8,6 +8,7 @@ export class MyClass {
 
 //// [visibilityOfTypeParameters.js]
 "use strict";
+exports.__esModule = true;
 var MyClass = (function () {
     function MyClass() {
     }

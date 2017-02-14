@@ -37,6 +37,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var A = (function () {
         function A(ctor) {
         }

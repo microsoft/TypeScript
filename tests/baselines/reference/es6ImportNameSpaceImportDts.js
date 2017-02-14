@@ -11,6 +11,7 @@ import * as nameSpaceBinding2 from "./server"; // unreferenced
 
 //// [server.js]
 "use strict";
+exports.__esModule = true;
 var c = (function () {
     function c() {
     }
@@ -20,6 +21,7 @@ exports.c = c;
 ;
 //// [client.js]
 "use strict";
+exports.__esModule = true;
 var nameSpaceBinding = require("./server");
 exports.x = new nameSpaceBinding.c();
 

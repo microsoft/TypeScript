@@ -24,6 +24,7 @@ export function y(arg: Type): void {
 //// [typePredicateInLoop.js]
 // Repro from #12101
 "use strict";
+exports.__esModule = true;
 var guard = function (arg) { return arg.type === 1; };
 var otherFunc = function (arg1, arg2) { };
 function y(arg) {

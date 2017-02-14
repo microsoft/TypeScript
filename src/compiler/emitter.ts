@@ -1,4 +1,4 @@
-/// <reference path="checker.ts" />
+﻿/// <reference path="checker.ts" />
 /// <reference path="transformer.ts" />
 /// <reference path="declarationEmitter.ts" />
 /// <reference path="sourcemap.ts" />
@@ -211,6 +211,7 @@ namespace ts {
             emitNodeWithComments,
             emitBodyWithDetachedComments,
             emitTrailingCommentsOfPosition,
+            emitLeadingCommentsOfPosition,
         } = comments;
 
         let currentSourceFile: SourceFile;
@@ -1346,6 +1347,10 @@ namespace ts {
             else {
                 writeToken(SyntaxKind.OpenBraceToken, node.pos, /*contextNode*/ node);
                 emitBlockStatements(node);
+                // We have to call emitLeadingComments explicitly here because otherwise leading comments of the close brace token will not be emitted
+                increaseIndent();
+                emitLeadingCommentsOfPosition(node.statements.end);
+                decreaseIndent();
                 writeToken(SyntaxKind.CloseBraceToken, node.statements.end, /*contextNode*/ node);
             }
         }
@@ -2228,6 +2233,15 @@ namespace ts {
 
                     // Write the delimiter if this is not the first node.
                     if (previousSibling) {
+                        // i.e
+                        //      function commentedParameters(
+                        //          /* Parameter a */
+                        //          a
+                        //          /* End of parameter a */ -> this comment isn't considered to be trailing comment of parameter "a" due to newline
+                        //          ,
+                        if (delimiter && previousSibling.end !== parentNode.end) {
+                            emitLeadingCommentsOfPosition(previousSibling.end);
+                        }
                         write(delimiter);
 
                         // Write either a line terminator or whitespace to separate the elements.
@@ -2272,6 +2286,17 @@ namespace ts {
                 const hasTrailingComma = (format & ListFormat.AllowTrailingComma) && children.hasTrailingComma;
                 if (format & ListFormat.CommaDelimited && hasTrailingComma) {
                     write(",");
+                }
+
+
+                // Emit any trailing comment of the last element in the list
+                // i.e
+                //       var array = [...
+                //          2
+                //          /* end of element 2 */
+                //       ];
+                if (previousSibling && delimiter && previousSibling.end !== parentNode.end) {
+                    emitLeadingCommentsOfPosition(previousSibling.end);
                 }
 
                 // Decrease the indent, if requested.

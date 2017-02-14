@@ -5,7 +5,7 @@
 
 namespace Harness.LanguageService {
     export class ScriptInfo {
-        public version: number = 1;
+        public version = 1;
         public editRanges: { length: number; textChangeRange: ts.TextChangeRange; }[] = [];
         private lineMap: number[] = undefined;
 
@@ -594,7 +594,7 @@ namespace Harness.LanguageService {
     class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
         args: string[] = [];
         newLine: string;
-        useCaseSensitiveFileNames: boolean = false;
+        useCaseSensitiveFileNames = false;
 
         constructor(private host: NativeLanguageServiceHost) {
             this.newLine = this.host.getNewLine();

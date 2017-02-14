@@ -2020,14 +2020,14 @@ namespace ts {
     export const supportedJavascriptExtensions = [".js", ".jsx"];
     const allSupportedExtensions = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
 
-    export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: FileExtensionInfo[]): string[] {
+    export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: JsFileExtensionInfo[]): string[] {
         const needAllExtensions = options && options.allowJs;
-        if (!extraFileExtensions || extraFileExtensions.length === 0) {
+        if (!extraFileExtensions || extraFileExtensions.length === 0 || !needAllExtensions) {
             return needAllExtensions ? allSupportedExtensions : supportedTypeScriptExtensions;
         }
-        const extensions = (needAllExtensions ? allSupportedExtensions : supportedTypeScriptExtensions).slice(0);
+        const extensions = allSupportedExtensions.slice(0);
         for (const extInfo of extraFileExtensions) {
-            if (needAllExtensions || extInfo.scriptKind === ScriptKind.TS) {
+            if (extensions.indexOf(extInfo.extension) === -1) {
                 extensions.push(extInfo.extension);
             }
         }
@@ -2042,7 +2042,7 @@ namespace ts {
         return forEach(supportedTypeScriptExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
-    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, extraFileExtensions?: FileExtensionInfo[]) {
+    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, extraFileExtensions?: JsFileExtensionInfo[]) {
         if (!fileName) { return false; }
 
         for (const extension of getSupportedExtensions(compilerOptions, extraFileExtensions)) {
@@ -2061,7 +2061,6 @@ namespace ts {
     export const enum ExtensionPriority {
         TypeScriptFiles = 0,
         DeclarationAndJavaScriptFiles = 2,
-        Limit = 5,
 
         Highest = TypeScriptFiles,
         Lowest = DeclarationAndJavaScriptFiles,
@@ -2070,7 +2069,7 @@ namespace ts {
     export function getExtensionPriority(path: string, supportedExtensions: string[]): ExtensionPriority {
         for (let i = supportedExtensions.length - 1; i >= 0; i--) {
             if (fileExtensionIs(path, supportedExtensions[i])) {
-                return adjustExtensionPriority(<ExtensionPriority>i);
+                return adjustExtensionPriority(<ExtensionPriority>i, supportedExtensions);
             }
         }
 
@@ -2082,27 +2081,26 @@ namespace ts {
     /**
      * Adjusts an extension priority to be the highest priority within the same range.
      */
-    export function adjustExtensionPriority(extensionPriority: ExtensionPriority): ExtensionPriority {
+    export function adjustExtensionPriority(extensionPriority: ExtensionPriority, supportedExtensions: string[]): ExtensionPriority {
         if (extensionPriority < ExtensionPriority.DeclarationAndJavaScriptFiles) {
             return ExtensionPriority.TypeScriptFiles;
         }
-        else if (extensionPriority < ExtensionPriority.Limit) {
+        else if (extensionPriority < supportedExtensions.length) {
             return ExtensionPriority.DeclarationAndJavaScriptFiles;
         }
         else {
-            return ExtensionPriority.Limit;
-        }
-    }
+            return supportedExtensions.length;
+        }    }
 
     /**
      * Gets the next lowest extension priority for a given priority.
      */
-    export function getNextLowestExtensionPriority(extensionPriority: ExtensionPriority): ExtensionPriority {
+    export function getNextLowestExtensionPriority(extensionPriority: ExtensionPriority, supportedExtensions: string[]): ExtensionPriority {
         if (extensionPriority < ExtensionPriority.DeclarationAndJavaScriptFiles) {
             return ExtensionPriority.DeclarationAndJavaScriptFiles;
         }
         else {
-            return ExtensionPriority.Limit;
+            return supportedExtensions.length;
         }
     }
 

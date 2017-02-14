@@ -17,6 +17,7 @@ interface I {
 
 //// [overloadModifiersMustAgree.js]
 "use strict";
+exports.__esModule = true;
 var baz = (function () {
     function baz() {
     }

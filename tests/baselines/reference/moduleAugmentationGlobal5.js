@@ -23,6 +23,7 @@ import "B";
 
 //// [f3.js]
 "use strict";
+exports.__esModule = true;
 /// <reference path="f1.d.ts"/>
 /// <reference path="f2.d.ts"/>
 require("A");

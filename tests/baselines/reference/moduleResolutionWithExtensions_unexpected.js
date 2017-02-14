@@ -14,4 +14,5 @@ import "normalize.css";
 
 //// [a.js]
 "use strict";
+exports.__esModule = true;
 require("normalize.css");

@@ -281,7 +281,7 @@ namespace ts.FindAllReferences {
 
         // if this symbol is visible from its parent container, e.g. exported, then bail out
         // if symbol correspond to the union property - bail out
-        if (symbol.parent || (symbol.flags & SymbolFlags.SyntheticProperty)) {
+        if (symbol.parent || (symbol.flags & SymbolFlags.Transient && (<TransientSymbol>symbol).checkFlags & CheckFlags.SyntheticProperty)) {
             return undefined;
         }
 
