@@ -2153,10 +2153,27 @@ namespace FourSlash {
             const diagnostics: ts.Diagnostic[] = this.getDiagnostics(fileName);
 
             let actions: ts.CodeAction[] = undefined;
+
+            const checkedDiagnostics = ts.createMap<boolean>();
+
             for (const diagnostic of diagnostics) {
 
                 if (errorCode && errorCode !== diagnostic.code) {
                     continue;
+                }
+
+                const summary = JSON.stringify({
+                    start: diagnostic.start,
+                    length: diagnostic.length,
+                    code: diagnostic.code
+                });
+
+                if (checkedDiagnostics.has(summary)) {
+                    // Don't want to ask for code fixes in an identical position for the same error code twice.
+                    continue;
+                }
+                else {
+                    checkedDiagnostics.set(summary, true);
                 }
 
                 const newActions = this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.length, [diagnostic.code]);
