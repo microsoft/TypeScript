@@ -317,7 +317,7 @@ namespace ts {
         function reportIllegalExtends() {
             if (errorNameNode) {
                 reportedDeclarationError = true;
-                emitterDiagnostics.add(createDiagnosticForNode(errorNameNode, Diagnostics.Extends_clause_of_exported_class_0_refers_to_a_type_with_no_declaration,
+                emitterDiagnostics.add(createDiagnosticForNode(errorNameNode, Diagnostics.Extends_clause_of_exported_class_0_refers_to_a_type_whose_name_cannot_be_referenced,
                     declarationNameToString(errorNameNode)));
             }
         }

@@ -2352,7 +2352,7 @@
         "category": "Error",
         "code": 4092
     },
-    "Extends clause of exported class '{0}' refers to a type with no declaration.": {
+    "Extends clause of exported class '{0}' refers to a type whose name cannot be referenced.": {
         "category": "Error",
         "code": 4093
     },
