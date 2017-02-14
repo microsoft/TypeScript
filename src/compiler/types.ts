@@ -3215,7 +3215,11 @@
         NodeJs   = 2
     }
 
-    export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]>;
+    export interface PluginImport {
+        name: string
+    }
+
+    export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[];
 
     export interface CompilerOptions {
         allowJs?: boolean;
@@ -3270,6 +3274,7 @@
         outDir?: string;
         outFile?: string;
         paths?: MapLike<string[]>;
+        /*@internal*/ plugins?: PluginImport[];
         preserveConstEnums?: boolean;
         project?: string;
         /* @internal */ pretty?: DiagnosticStyle;
@@ -3353,7 +3358,8 @@
         JS = 1,
         JSX = 2,
         TS = 3,
-        TSX = 4
+        TSX = 4,
+        External = 5
     }
 
     export const enum ScriptTarget {
@@ -3428,7 +3434,7 @@
     /* @internal */
     export interface CommandLineOptionOfListType extends CommandLineOptionBase {
         type: "list";
-        element: CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType;
+        element: CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType | TsConfigOnlyOption;
     }
 
     /* @internal */
