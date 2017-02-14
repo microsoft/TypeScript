@@ -1688,7 +1688,7 @@ namespace ts {
 
             let allFixes: CodeAction[] = [];
 
-            forEach(errorCodes, error => {
+            forEach(deduplicate(errorCodes), error => {
                 cancellationToken.throwIfCancellationRequested();
 
                 const context = {
