@@ -1928,7 +1928,7 @@ namespace ts {
                                 bindThisPropertyAssignment(<BinaryExpression>node);
                                 break;
                             case SpecialPropertyAssignmentKind.Property:
-                                bindPropertyAssignment(<BinaryExpression>node);
+                                bindStaticPropertyAssignment(<BinaryExpression>node);
                                 break;
                             case SpecialPropertyAssignmentKind.None:
                                 // Nothing to do
@@ -2220,25 +2220,10 @@ namespace ts {
             constructorFunction.parent = classPrototype;
             classPrototype.parent = leftSideOfAssignment;
 
-            let funcSymbol = container.locals.get(constructorFunction.text);
-            if (funcSymbol && isDeclarationOfFunctionOrClassExpression(funcSymbol)) {
-                funcSymbol = (funcSymbol.valueDeclaration as VariableDeclaration).initializer.symbol;
-            }
-
-            if (!funcSymbol || !(funcSymbol.flags & (SymbolFlags.Function | SymbolFlags.Class))) {
-                return;
-            }
-
-            // Set up the members collection if it doesn't exist already
-            if (!funcSymbol.members) {
-                funcSymbol.members = createMap<Symbol>();
-            }
-
-            // Declare the method/property
-            declareSymbol(funcSymbol.members, funcSymbol, leftSideOfAssignment, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+            bindPropertyAssignment(constructorFunction.text, leftSideOfAssignment, /*isPrototypeProperty*/ true);
         }
 
-        function bindPropertyAssignment(node: BinaryExpression) {
+        function bindStaticPropertyAssignment(node: BinaryExpression) {
             // We saw a node of the form 'x.y = z'. Declare a 'member' y on x if x was a function.
 
             // Look up the function in the local scope, since prototype assignments should
@@ -2250,22 +2235,26 @@ namespace ts {
             leftSideOfAssignment.parent = node;
             target.parent = leftSideOfAssignment;
 
-            let funcSymbol = container.locals.get(target.text);
-            if (funcSymbol && isDeclarationOfFunctionOrClassExpression(funcSymbol)) {
-                funcSymbol = (funcSymbol.valueDeclaration as VariableDeclaration).initializer.symbol;
+            bindPropertyAssignment(target.text, leftSideOfAssignment, /*isPrototypeProperty*/ false);
+        }
+
+        function bindPropertyAssignment(functionName: string, propertyAccessExpression: PropertyAccessExpression, isPrototypeProperty: boolean) {
+            let targetSymbol = container.locals.get(functionName);
+            if (targetSymbol && isDeclarationOfFunctionOrClassExpression(targetSymbol)) {
+                targetSymbol = (targetSymbol.valueDeclaration as VariableDeclaration).initializer.symbol;
             }
 
-            if (!funcSymbol || !(funcSymbol.flags & (SymbolFlags.Function | SymbolFlags.Class))) {
+            if (!targetSymbol || !(targetSymbol.flags & (SymbolFlags.Function | SymbolFlags.Class))) {
                 return;
             }
 
             // Set up the members collection if it doesn't exist already
-            if (!funcSymbol.exports) {
-                funcSymbol.exports = createMap<Symbol>();
-            }
+            const symbolTable = isPrototypeProperty ?
+                (targetSymbol.members || (targetSymbol.members = createMap<Symbol>())):
+                (targetSymbol.exports || (targetSymbol.exports = createMap<Symbol>()));
 
             // Declare the method/property
-            declareSymbol(funcSymbol.exports, funcSymbol, leftSideOfAssignment, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+            declareSymbol(symbolTable, targetSymbol, propertyAccessExpression, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
         }
 
         function bindCallExpression(node: CallExpression) {
