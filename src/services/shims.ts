@@ -1269,4 +1269,4 @@ namespace TypeScript.Services {
 // TODO: it should be moved into a namespace though.
 
 /* @internal */
-const toolsVersion = "2.2";
+const toolsVersion = "2.3";
