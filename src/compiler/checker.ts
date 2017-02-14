@@ -15933,19 +15933,20 @@ namespace ts {
         }
 
         function checkClassForDuplicateDeclarations(node: ClassLikeDeclaration) {
-            const enum Accessor {
+            const enum Declaration {
                 Getter = 1,
                 Setter = 2,
+                Method = 4,
                 Property = Getter | Setter
             }
 
-            const instanceNames = createMap<Accessor>();
-            const staticNames = createMap<Accessor>();
+            const instanceNames = createMap<Declaration>();
+            const staticNames = createMap<Declaration>();
             for (const member of node.members) {
                 if (member.kind === SyntaxKind.Constructor) {
                     for (const param of (member as ConstructorDeclaration).parameters) {
                         if (isParameterPropertyDeclaration(param)) {
-                            addName(instanceNames, param.name, (param.name as Identifier).text, Accessor.Property);
+                            addName(instanceNames, param.name, (param.name as Identifier).text, Declaration.Property);
                         }
                     }
                 }
@@ -15957,25 +15958,34 @@ namespace ts {
                     if (memberName) {
                         switch (member.kind) {
                             case SyntaxKind.GetAccessor:
-                                addName(names, member.name, memberName, Accessor.Getter);
+                                addName(names, member.name, memberName, Declaration.Getter);
                                 break;
 
                             case SyntaxKind.SetAccessor:
-                                addName(names, member.name, memberName, Accessor.Setter);
+                                addName(names, member.name, memberName, Declaration.Setter);
                                 break;
 
                             case SyntaxKind.PropertyDeclaration:
-                                addName(names, member.name, memberName, Accessor.Property);
+                                addName(names, member.name, memberName, Declaration.Property);
+                                break;
+
+                            case SyntaxKind.MethodDeclaration:
+                                addName(names, member.name, memberName, Declaration.Method);
                                 break;
                         }
                     }
                 }
             }
 
-            function addName(names: Map<Accessor>, location: Node, name: string, meaning: Accessor) {
+            function addName(names: Map<Declaration>, location: Node, name: string, meaning: Declaration) {
                 const prev = names.get(name);
                 if (prev) {
-                    if (prev & meaning) {
+                    if (prev & Declaration.Method) {
+                        if (meaning !== Declaration.Method) {
+                            error(location, Diagnostics.Duplicate_identifier_0, getTextOfNode(location));
+                        }
+                    }
+                    else if (prev & meaning) {
                         error(location, Diagnostics.Duplicate_identifier_0, getTextOfNode(location));
                     }
                     else {
