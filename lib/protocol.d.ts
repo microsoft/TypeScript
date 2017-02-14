@@ -734,9 +734,9 @@ declare namespace ts.server.protocol {
          */
         formatOptions?: FormatCodeSettings;
         /**
-         * The host's additional supported file extensions
+         * The host's additional supported .js file extensions
          */
-        extraFileExtensions?: FileExtensionInfo[];
+        extraFileExtensions?: JsFileExtensionInfo[];
     }
     /**
       *  Configure request; value of command field is "configure".  Specifies
@@ -1861,9 +1861,8 @@ declare namespace ts.server.protocol {
         [option: string]: string[] | boolean | undefined;
     }
 
-    interface FileExtensionInfo {
+    interface JsFileExtensionInfo {
         extension: string;
-        scriptKind: ScriptKind;
         isMixedContent: boolean;
     }
 

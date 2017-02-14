@@ -1421,8 +1421,20 @@ declare namespace ts {
         ArrayMutation = 256,
         Referenced = 512,
         Shared = 1024,
+        PreFinally = 2048,
+        AfterFinally = 4096,
         Label = 12,
         Condition = 96,
+    }
+    interface FlowLock {
+        locked?: boolean;
+    }
+    interface AfterFinallyFlow extends FlowNode, FlowLock {
+        antecedent: FlowNode;
+    }
+    interface PreFinallyFlow extends FlowNode {
+        antecedent: FlowNode;
+        lock: FlowLock;
     }
     interface FlowNode {
         flags: FlowFlags;
@@ -1630,6 +1642,7 @@ declare namespace ts {
         InTypeAlias = 512,
         UseTypeAliasValue = 1024,
         SuppressAnyReturnType = 2048,
+        AddUndefined = 4096,
     }
     const enum SymbolFormatFlags {
         None = 0,
@@ -1679,13 +1692,10 @@ declare namespace ts {
         ExportType = 2097152,
         ExportNamespace = 4194304,
         Alias = 8388608,
-        Instantiated = 16777216,
-        Merged = 33554432,
-        Transient = 67108864,
-        Prototype = 134217728,
-        SyntheticProperty = 268435456,
-        Optional = 536870912,
-        ExportStar = 1073741824,
+        Prototype = 16777216,
+        ExportStar = 33554432,
+        Optional = 67108864,
+        Transient = 134217728,
         Enum = 384,
         Variable = 3,
         Value = 107455,
@@ -1865,9 +1875,8 @@ declare namespace ts {
         isReadonly: boolean;
         declaration?: SignatureDeclaration;
     }
-    interface FileExtensionInfo {
+    interface JsFileExtensionInfo {
         extension: string;
-        scriptKind: ScriptKind;
         isMixedContent: boolean;
     }
     interface DiagnosticMessage {
@@ -2267,7 +2276,7 @@ declare namespace ts {
         config?: any;
         error?: Diagnostic;
     };
-    function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: FileExtensionInfo[]): ParsedCommandLine;
+    function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: JsFileExtensionInfo[]): ParsedCommandLine;
     function convertCompileOnSaveOptionFromJson(jsonOption: any, basePath: string, errors: Diagnostic[]): boolean;
     function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): {
         options: CompilerOptions;
@@ -3648,7 +3657,7 @@ declare namespace ts.server.protocol {
         hostInfo?: string;
         file?: string;
         formatOptions?: FormatCodeSettings;
-        extraFileExtensions?: FileExtensionInfo[];
+        extraFileExtensions?: JsFileExtensionInfo[];
     }
     interface ConfigureRequest extends Request {
         command: CommandTypes.Configure;
@@ -4730,7 +4739,7 @@ declare namespace ts.server {
     interface HostConfiguration {
         formatCodeOptions: FormatCodeSettings;
         hostInfo: string;
-        extraFileExtensions?: FileExtensionInfo[];
+        extraFileExtensions?: JsFileExtensionInfo[];
     }
     interface OpenConfiguredProjectResult {
         configFileName?: NormalizedPath;
