@@ -11189,6 +11189,19 @@ namespace ts {
                         return getTypeOfSymbol(thisParameter);
                     }
                 }
+                if (isObjectLiteralMethod(func)) {
+                    // For methods in an object literal, look for a '__this__' property in the contextual
+                    // type for the object literal. If one exists, remove 'undefined' from the type of that
+                    // property and report it as the contextual type for 'this' in the method.
+                    const objectLiteral = <ObjectLiteralExpression>func.parent;
+                    const type = getApparentTypeOfContextualType(objectLiteral);
+                    if (type) {
+                        const propertyType = getTypeOfPropertyOfContextualType(type, "___this__");
+                        if (propertyType) {
+                            return getNonNullableType(propertyType);
+                        }
+                    }
+                }
             }
             return undefined;
         }
