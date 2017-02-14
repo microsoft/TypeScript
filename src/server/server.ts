@@ -99,6 +99,8 @@ namespace ts.server {
         birthtime: Date;
     }
 
+    type RequireResult = { module: {}, error: undefined } | { module: undefined, error: {} };
+
     const readline: {
         createInterface(options: ReadLineOptions): NodeJS.EventEmitter;
     } = require("readline");
@@ -592,6 +594,16 @@ namespace ts.server {
     if (typeof global !== "undefined" && global.gc) {
         sys.gc = () => global.gc();
     }
+
+    sys.require = (initialDir: string, moduleName: string): RequireResult => {
+        const result = nodeModuleNameResolverWorker(moduleName, initialDir + "/program.ts", { moduleResolution: ts.ModuleResolutionKind.NodeJs, allowJs: true }, sys, undefined, /*jsOnly*/ true);
+        try {
+            return { module: require(result.resolvedModule.resolvedFileName), error: undefined };
+        }
+        catch (e) {
+            return { module: undefined, error: e };
+        }
+    };
 
     let cancellationToken: ServerCancellationToken;
     try {

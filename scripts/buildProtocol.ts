@@ -167,7 +167,7 @@ function generateProtocolFile(protocolTs: string, typeScriptServicesDts: string)
     const sanityCheckProgram = getProgramWithProtocolText(protocolDts, /*includeTypeScriptServices*/ false);
     const diagnostics = [...sanityCheckProgram.getSyntacticDiagnostics(), ...sanityCheckProgram.getSemanticDiagnostics(), ...sanityCheckProgram.getGlobalDiagnostics()];
     if (diagnostics.length) {
-        const flattenedDiagnostics = diagnostics.map(d => ts.flattenDiagnosticMessageText(d.messageText, "\n")).join("\n");
+        const flattenedDiagnostics = diagnostics.map(d => `${ts.flattenDiagnosticMessageText(d.messageText, "\n")} at ${d.file.fileName} line ${d.start}`).join("\n");
         throw new Error(`Unexpected errors during sanity check: ${flattenedDiagnostics}`);
     }
     return protocolDts;
