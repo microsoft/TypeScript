@@ -2150,10 +2150,18 @@ namespace FourSlash {
          * @param fileName Path to file where error should be retrieved from.
          */
         private getCodeFixActions(fileName: string, errorCode?: number): ts.CodeAction[] {
-            const diagnostics: ts.Diagnostic[] = this.getDiagnostics(fileName);
+            const diagnosticsForCodeFix = this.getDiagnostics(fileName).map(diagnostic => {
+                return {
+                    start: diagnostic.start,
+                    length: diagnostic.length,
+                    code: diagnostic.code
+                }
+            });
+            const dedupedDiagnositcs = ts.deduplicate(diagnosticsForCodeFix, ts.equalOwnProperties);
 
             let actions: ts.CodeAction[] = undefined;
-            for (const diagnostic of diagnostics) {
+
+            for (const diagnostic of dedupedDiagnositcs) {
 
                 if (errorCode && errorCode !== diagnostic.code) {
                     continue;
