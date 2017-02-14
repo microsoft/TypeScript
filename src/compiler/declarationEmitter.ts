@@ -317,7 +317,7 @@ namespace ts {
         function reportIllegalExtends() {
             if (errorNameNode) {
                 reportedDeclarationError = true;
-                emitterDiagnostics.add(createDiagnosticForNode(errorNameNode, Diagnostics.Extends_clause_of_exported_class_0_refers_to_a_type_whose_name_cannot_be_referenced,
+                emitterDiagnostics.add(createDiagnosticForNode(errorNameNode, Diagnostics.extends_clause_of_exported_class_0_refers_to_a_type_whose_name_cannot_be_referenced,
                     declarationNameToString(errorNameNode)));
             }
         }
@@ -1107,11 +1107,11 @@ namespace ts {
                         // Class or Interface implemented/extended is inaccessible
                         diagnosticMessage = isImplementsList ?
                             Diagnostics.Implements_clause_of_exported_class_0_has_or_is_using_private_name_1 :
-                            Diagnostics.Extends_clause_of_exported_class_0_has_or_is_using_private_name_1;
+                            Diagnostics.extends_clause_of_exported_class_0_has_or_is_using_private_name_1;
                     }
                     else {
                         // interface is inaccessible
-                        diagnosticMessage = Diagnostics.Extends_clause_of_exported_interface_0_has_or_is_using_private_name_1;
+                        diagnosticMessage = Diagnostics.extends_clause_of_exported_interface_0_has_or_is_using_private_name_1;
                     }
 
                     return {
