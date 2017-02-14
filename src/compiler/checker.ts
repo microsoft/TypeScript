@@ -345,6 +345,7 @@ namespace ts {
         const typeofType = createTypeofType();
 
         let jsxElementType: Type;
+        let jsxStatelessElementType: Type;
         let _jsxNamespace: string;
         let _jsxFactoryEntity: EntityName;
 
@@ -357,7 +358,8 @@ namespace ts {
             ElementAttributesPropertyNameContainer: "ElementAttributesProperty",
             Element: "Element",
             IntrinsicAttributes: "IntrinsicAttributes",
-            IntrinsicClassAttributes: "IntrinsicClassAttributes"
+            IntrinsicClassAttributes: "IntrinsicClassAttributes",
+            StatelessElement: "StatelessElement"
         };
 
         const subtypeRelation = createMap<RelationComparisonResult>();
@@ -12318,13 +12320,13 @@ namespace ts {
         function defaultTryGetJsxStatelessFunctionAttributesType(openingLikeElement: JsxOpeningLikeElement, elementType: Type, elemInstanceType: Type, elementClassType?: Type): Type {
             Debug.assert(!(elementType.flags & TypeFlags.Union));
             if (!elementClassType || !isTypeAssignableTo(elemInstanceType, elementClassType)) {
-                if (jsxElementType) {
+                if (jsxStatelessElementType) {
                     // We don't call getResolvedSignature here because we have already resolve the type of JSX Element.
                     const callSignature = getResolvedJsxStatelessFunctionSignature(openingLikeElement, elementType, /*candidatesOutArray*/ undefined);
                     if (callSignature !== unknownSignature) {
                         const callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
                         let paramType = callReturnType && (callSignature.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature.parameters[0]));
-                        if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType)) {
+                        if (callReturnType && isTypeAssignableTo(callReturnType, jsxStatelessElementType)) {
                             // Intersect in JSX.IntrinsicAttributes if it exists
                             const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes);
                             if (intrinsicAttributes !== unknownType) {
@@ -12352,7 +12354,7 @@ namespace ts {
             Debug.assert(!(elementType.flags & TypeFlags.Union));
             if (!elementClassType || !isTypeAssignableTo(elemInstanceType, elementClassType)) {
                 // Is this is a stateless function component? See if its single signature's return type is assignable to the JSX Element Type
-                if (jsxElementType) {
+                if (jsxStatelessElementType) {
                     // We don't call getResolvedSignature because here we have already resolve the type of JSX Element.
                     const candidatesOutArray: Signature[] = [];
                     getResolvedJsxStatelessFunctionSignature(openingLikeElement, elementType, candidatesOutArray);
@@ -12361,7 +12363,7 @@ namespace ts {
                     for (const candidate of candidatesOutArray) {
                         const callReturnType = getReturnTypeOfSignature(candidate);
                         const paramType = callReturnType && (candidate.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(candidate.parameters[0]));
-                        if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType)) {
+                        if (callReturnType && isTypeAssignableTo(callReturnType, jsxStatelessElementType)) {
                             let shouldBeCandidate = true;
                             for (const attribute of openingLikeElement.attributes.properties) {
                                 if (isJsxAttribute(attribute) &&
@@ -21460,6 +21462,7 @@ namespace ts {
             globalRegExpType = getGlobalType("RegExp");
 
             jsxElementType = getExportedTypeFromNamespace("JSX", JsxNames.Element);
+            jsxStatelessElementType = getExportedTypeFromNamespace("JSX", JsxNames.StatelessElement)
             getGlobalClassDecoratorType = memoize(() => getGlobalType("ClassDecorator"));
             getGlobalPropertyDecoratorType = memoize(() => getGlobalType("PropertyDecorator"));
             getGlobalMethodDecoratorType = memoize(() => getGlobalType("MethodDecorator"));

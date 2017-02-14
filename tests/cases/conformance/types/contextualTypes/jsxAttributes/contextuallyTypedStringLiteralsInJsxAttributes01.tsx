@@ -2,6 +2,7 @@
 // @declaration: true
 
 namespace JSX {
+    export type StatelessElement = JSX.Element | null;
     export interface IntrinsicElements {
         span: {};
     }

@@ -1,6 +1,7 @@
 //// [contextuallyTypedStringLiteralsInJsxAttributes01.tsx]
 
 namespace JSX {
+    export type StatelessElement = JSX.Element | null;
     export interface IntrinsicElements {
         span: {};
     }
@@ -27,6 +28,7 @@ var FooComponent = function (props) { return <span>{props.foo}</span>; };
 
 //// [contextuallyTypedStringLiteralsInJsxAttributes01.d.ts]
 declare namespace JSX {
+    type StatelessElement = JSX.Element | null;
     interface IntrinsicElements {
         span: {};
     }

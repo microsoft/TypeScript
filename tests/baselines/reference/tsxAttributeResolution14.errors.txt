@@ -9,6 +9,7 @@ tests/cases/conformance/jsx/file.tsx(16,28): error TS2322: Type '{ justRandomPro
 ==== tests/cases/conformance/jsx/react.d.ts (0 errors) ====
     
     declare module JSX {
+        type StatelessElement = JSX.Element | null;
     	interface Element { }
     	interface IntrinsicElements {
             div: any;

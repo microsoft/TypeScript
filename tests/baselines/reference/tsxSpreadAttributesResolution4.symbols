@@ -24,8 +24,8 @@ class Poisoned extends React.Component<PoisonedProp, {}> {
 >render : Symbol(Poisoned.render, Decl(file.tsx, 8, 58))
 
         return <div>Hello</div>;
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2397, 45))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2397, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
     }
 }
 
@@ -57,8 +57,8 @@ class EmptyProp extends React.Component<{}, {}> {
 >render : Symbol(EmptyProp.render, Decl(file.tsx, 22, 49))
 
         return <div>Default hi</div>;
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2397, 45))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2397, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
     }
 }
 
