@@ -1356,6 +1356,17 @@ declare namespace ts.server.protocol {
         command: CommandTypes.Geterr;
         arguments: GeterrRequestArgs;
     }
+    type RequestCompletedEventName = "requestCompleted";
+    /**
+     * Event that is sent when server have finished processing request with specified id.
+     */
+    interface RequestCompletedEvent extends Event {
+        event: RequestCompletedEventName;
+        body: RequestCompletedEventBody;
+    }
+    interface RequestCompletedEventBody {
+        request_seq: number;
+    }
     /**
       * Item of diagnostic information found in a DiagnosticEvent message.
       */

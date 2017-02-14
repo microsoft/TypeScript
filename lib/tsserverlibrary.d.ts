@@ -3886,6 +3886,14 @@ declare namespace ts.server.protocol {
         command: CommandTypes.Geterr;
         arguments: GeterrRequestArgs;
     }
+    type RequestCompletedEventName = "requestCompleted";
+    interface RequestCompletedEvent extends Event {
+        event: RequestCompletedEventName;
+        body: RequestCompletedEventBody;
+    }
+    interface RequestCompletedEventBody {
+        request_seq: number;
+    }
     interface Diagnostic {
         start: Location;
         end: Location;
@@ -4162,6 +4170,11 @@ declare namespace ts.server.protocol {
     type ScriptTarget = ScriptTarget.ES3 | ScriptTarget.ES5 | ScriptTarget.ES6 | ScriptTarget.ES2015;
 }
 declare namespace ts.server {
+    interface ServerCancellationToken extends HostCancellationToken {
+        setRequest(requestId: number): void;
+        resetRequest(requestId: number): void;
+    }
+    const nullCancellationToken: ServerCancellationToken;
     interface PendingErrorCheck {
         fileName: NormalizedPath;
         project: Project;
@@ -4218,6 +4231,7 @@ declare namespace ts.server {
     function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string;
     class Session implements EventSender {
         private host;
+        private readonly cancellationToken;
         protected readonly typingsInstaller: ITypingsInstaller;
         private byteLength;
         private hrtime;
@@ -4225,11 +4239,12 @@ declare namespace ts.server {
         protected readonly canUseEvents: boolean;
         private readonly gcTimer;
         protected projectService: ProjectService;
-        private errorTimer;
-        private immediateId;
         private changeSeq;
+        private currentRequestId;
+        private errorCheck;
         private eventHander;
-        constructor(host: ServerHost, cancellationToken: HostCancellationToken, useSingleInferredProject: boolean, typingsInstaller: ITypingsInstaller, byteLength: (buf: string, encoding?: string) => number, hrtime: (start?: number[]) => number[], logger: Logger, canUseEvents: boolean, eventHandler?: ProjectServiceEventHandler);
+        constructor(host: ServerHost, cancellationToken: ServerCancellationToken, useSingleInferredProject: boolean, typingsInstaller: ITypingsInstaller, byteLength: (buf: string, encoding?: string) => number, hrtime: (start?: number[]) => number[], logger: Logger, canUseEvents: boolean, eventHandler?: ProjectServiceEventHandler);
+        private sendRequestCompletedEvent(requestId);
         private defaultEventHandler(event);
         logError(err: Error, cmd: string): void;
         send(msg: protocol.Message): void;
@@ -4239,7 +4254,7 @@ declare namespace ts.server {
         private semanticCheck(file, project);
         private syntacticCheck(file, project);
         private updateProjectStructure(seq, matchSeq, ms?);
-        private updateErrorCheck(checkList, seq, matchSeq, ms?, followMs?, requireOpen?);
+        private updateErrorCheck(next, checkList, seq, matchSeq, ms?, followMs?, requireOpen?);
         private cleanProjects(caption, projects);
         private cleanup();
         private getEncodedSemanticClassifications(args);
@@ -4284,7 +4299,7 @@ declare namespace ts.server {
         private getCompileOnSaveAffectedFileList(args);
         private emitFile(args);
         private getSignatureHelpItems(args, simplifiedResult);
-        private getDiagnostics(delay, fileNames);
+        private getDiagnostics(next, delay, fileNames);
         private change(args);
         private reload(args, reqSeq);
         private saveToTmp(fileName, tempFileName);
@@ -4300,7 +4315,7 @@ declare namespace ts.server {
         private mapCodeAction(codeAction, scriptInfo);
         private convertTextChangeToCodeEdit(change, scriptInfo);
         private getBraceMatching(args, simplifiedResult);
-        getDiagnosticsForProject(delay: number, fileName: string): void;
+        private getDiagnosticsForProject(next, delay, fileName);
         getCanonicalFileName(fileName: string): string;
         exit(): void;
         private notRequired();
@@ -4310,6 +4325,9 @@ declare namespace ts.server {
             response?: any;
             responseRequired: boolean;
         }): void;
+        private setCurrentRequest(requestId);
+        private resetCurrentRequest(requestId);
+        executeWithRequestId<T>(requestId: number, f: () => T): T;
         executeCommand(request: protocol.Request): {
             response?: any;
             responseRequired?: boolean;
