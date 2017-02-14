@@ -210,6 +210,7 @@ class C8_private {
 //// [privacyGetter.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var m1;
     (function (m1) {
         var C1_public = (function () {

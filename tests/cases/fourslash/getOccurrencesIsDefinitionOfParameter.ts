@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
-////function f([|{| "isDefinition": true |}x|]: number) {
-////  return [|{| "isDefinition": false |}x|] + 1
+////function f([|{| "isWriteAccess": true, "isDefinition": true |}x|]: number) {
+////  return [|x|] + 1
 ////}
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("(parameter) x: number");

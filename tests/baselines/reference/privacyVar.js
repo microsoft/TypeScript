@@ -176,6 +176,7 @@ export var glo_v24_public: glo_C2_private = new glo_C2_private(); // error
 
 //// [privacyVar.js]
 "use strict";
+exports.__esModule = true;
 var m1;
 (function (m1) {
     var C1_public = (function () {

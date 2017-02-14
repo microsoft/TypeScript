@@ -1,4 +1,5 @@
 "use strict";
+exports.__esModule = true;
 var d = (function () {
     function d() {
     }

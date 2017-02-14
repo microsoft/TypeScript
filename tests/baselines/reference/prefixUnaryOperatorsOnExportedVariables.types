@@ -39,7 +39,7 @@ if (void x) {
 }
 
 if (typeof x) {
->typeof x : string
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : false
     
 }

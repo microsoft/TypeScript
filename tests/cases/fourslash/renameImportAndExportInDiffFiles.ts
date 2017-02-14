@@ -1,10 +1,10 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: a.ts
-////export var [|a|];
+////export var [|{| "isWriteAccess": true, "isDefinition": true |}a|];
 
 // @Filename: b.ts
-////import { [|a|] } from './a';
-////export { [|a|] };
+////import { [|{| "isWriteAccess": true, "isDefinition": true |}a|] } from './a';
+////export { [|{| "isWriteAccess": true, "isDefinition": true |}a|] };
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("var a: any");

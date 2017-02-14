@@ -100,7 +100,7 @@ function c<T>(data: string | T): T {
 
     if (typeof data === 'string') {
 >typeof data === 'string' : boolean
->typeof data : string
+>typeof data : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >data : string | T
 >'string' : "string"
 
@@ -124,7 +124,7 @@ function d<T extends string>(data: string | T): never {
 
     if (typeof data === 'string') {
 >typeof data === 'string' : boolean
->typeof data : string
+>typeof data : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >data : string | T
 >'string' : "string"
 

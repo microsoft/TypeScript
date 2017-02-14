@@ -1001,9 +1001,9 @@ namespace ts.server.protocol {
         formatOptions?: FormatCodeSettings;
 
         /**
-         * The host's additional supported file extensions
+         * The host's additional supported .js file extensions
          */
-        extraFileExtensions?: FileExtensionInfo[];
+        extraFileExtensions?: JsFileExtensionInfo[];
     }
 
     /**
@@ -1239,6 +1239,11 @@ namespace ts.server.protocol {
          * List of files names that should be recompiled
          */
         fileNames: string[];
+
+        /**
+         * true if project uses outFile or out compiler option
+         */
+        projectUsesOutFile: boolean;
     }
 
     /**

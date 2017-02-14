@@ -51,11 +51,13 @@ m.x.toString();
 //// [constDeclarations_access_1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.x = 0;
 });
 //// [constDeclarations_access_2.js]
 define(["require", "exports", "constDeclarations_access_1"], function (require, exports, m) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     // Errors
     m.x = 1;
     m.x += 2;

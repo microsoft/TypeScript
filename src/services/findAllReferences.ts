@@ -5,6 +5,10 @@ namespace ts.FindAllReferences {
         return getReferencedSymbolsForNode(typeChecker, cancellationToken, node, sourceFiles, findInStrings, findInComments, isForRename);
     }
 
+    export function convertReferences(referenceSymbols: ReferencedSymbol[]): ReferenceEntry[] {
+        return referenceSymbols && flatMap(referenceSymbols, r => r.references);
+    }
+
     export function getReferencedSymbolsForNode(typeChecker: TypeChecker, cancellationToken: CancellationToken, node: Node, sourceFiles: SourceFile[], findInStrings?: boolean, findInComments?: boolean, isForRename?: boolean, implementations?: boolean): ReferencedSymbol[] | undefined {
         if (!implementations) {
             const special = getReferencedSymbolsSpecial(node, sourceFiles, typeChecker, cancellationToken);
@@ -277,7 +281,7 @@ namespace ts.FindAllReferences {
 
         // if this symbol is visible from its parent container, e.g. exported, then bail out
         // if symbol correspond to the union property - bail out
-        if (symbol.parent || (symbol.flags & SymbolFlags.SyntheticProperty)) {
+        if (symbol.parent || (symbol.flags & SymbolFlags.Transient && (<TransientSymbol>symbol).checkFlags & CheckFlags.SyntheticProperty)) {
             return undefined;
         }
 
@@ -411,7 +415,6 @@ namespace ts.FindAllReferences {
             textSpan: createTextSpan(0, 1),
             displayParts: [{ text: name, kind: ScriptElementKind.keyword }]
         }
-
         const references: ReferenceEntry[] = [];
         for (const sourceFile of sourceFiles) {
             cancellationToken.throwIfCancellationRequested();
@@ -1314,20 +1317,6 @@ namespace ts.FindAllReferences {
             while (meaning !== lastIterationMeaning);
         }
         return meaning;
-    }
-
-    export function convertReferences(referenceSymbols: ReferencedSymbol[]): ReferenceEntry[] {
-        if (!referenceSymbols) {
-            return undefined;
-        }
-
-        const referenceEntries: ReferenceEntry[] = [];
-
-        for (const referenceSymbol of referenceSymbols) {
-            addRange(referenceEntries, referenceSymbol.references);
-        }
-
-        return referenceEntries;
     }
 
     function isImplementation(node: Node): boolean {
