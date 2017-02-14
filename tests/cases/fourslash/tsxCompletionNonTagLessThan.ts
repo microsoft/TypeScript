@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
+// @Filename: /a.tsx
 ////var x: Array<numb/*a*/;
 ////[].map<numb/*b*/;
 ////1 < Infini/*c*/;
