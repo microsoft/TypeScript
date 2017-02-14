@@ -59,6 +59,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 // https://github.com/Microsoft/TypeScript/issues/11177
 var Bluebird = require("bluebird");
 function a() {

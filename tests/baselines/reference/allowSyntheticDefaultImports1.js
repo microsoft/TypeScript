@@ -12,6 +12,7 @@ export class Foo {
 
 //// [b.js]
 "use strict";
+exports.__esModule = true;
 var Foo = (function () {
     function Foo() {
     }
@@ -20,5 +21,6 @@ var Foo = (function () {
 exports.Foo = Foo;
 //// [a.js]
 "use strict";
+exports.__esModule = true;
 var b_1 = require("./b");
 exports.x = new b_1["default"].Foo();

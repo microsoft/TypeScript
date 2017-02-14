@@ -37,4 +37,5 @@ define(["require", "exports"], function (require, exports) {
 //// [recursiveExportAssignmentAndFindAliasedType3_moduleA.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
 });

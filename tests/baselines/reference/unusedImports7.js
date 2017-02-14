@@ -21,6 +21,7 @@ import * as n from "./file1"
 
 //// [file1.js]
 "use strict";
+exports.__esModule = true;
 var Calculator = (function () {
     function Calculator() {
     }
@@ -33,7 +34,7 @@ function test() {
 exports.test = test;
 function test2() {
 }
-exports.__esModule = true;
 exports["default"] = test2;
 //// [file2.js]
 "use strict";
+exports.__esModule = true;

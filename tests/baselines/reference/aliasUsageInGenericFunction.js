@@ -26,6 +26,7 @@ var r2 = foo({ a: <IHasVisualizationModel>null });
 
 //// [aliasUsageInGenericFunction_backbone.js]
 "use strict";
+exports.__esModule = true;
 var Model = (function () {
     function Model() {
     }
@@ -44,6 +45,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+exports.__esModule = true;
 var Backbone = require("./aliasUsageInGenericFunction_backbone");
 var VisualizationModel = (function (_super) {
     __extends(VisualizationModel, _super);
@@ -55,6 +57,7 @@ var VisualizationModel = (function (_super) {
 exports.VisualizationModel = VisualizationModel;
 //// [aliasUsageInGenericFunction_main.js]
 "use strict";
+exports.__esModule = true;
 var moduleA = require("./aliasUsageInGenericFunction_moduleA");
 function foo(x) {
     return x;

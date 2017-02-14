@@ -96,6 +96,7 @@ class publicClassImplementingPublicInterfaceInGlobal implements publicInterfaceI
 
 //// [privacyClassImplementsClauseDeclFile_externalModule.js]
 "use strict";
+exports.__esModule = true;
 var publicModule;
 (function (publicModule) {
     var privateClassImplementingPublicInterfaceInModule = (function () {

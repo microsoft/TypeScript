@@ -38,10 +38,12 @@ let z2 = Observable.someAnotherValue.toLowerCase();
 
 //// [map.js]
 "use strict";
+exports.__esModule = true;
 var observable_1 = require("observable");
 observable_1.Observable.prototype.map = function () { };
 //// [main.js]
 "use strict";
+exports.__esModule = true;
 /// <reference path="observable.d.ts"/>
 var observable_1 = require("observable");
 require("./map");
