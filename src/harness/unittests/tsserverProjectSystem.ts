@@ -3318,6 +3318,27 @@ namespace ts.projectSystem {
 
                 requestToCancel = -1;
             }
+            {
+                const getErr1 = session.getNextSeq();
+                session.executeCommandSeq(<protocol.GeterrRequest>{
+                    command: "geterr",
+                    arguments: { files: [f1.path] }
+                });
+                assert.equal(host.getOutput().length, 0, "expect 0 messages");
+                // run first step
+                host.runQueuedTimeoutCallbacks();
+                assert.equal(host.getOutput().length, 1, "expect 1 messages");
+                const e1 = <protocol.Event>getMessage(0);
+                assert.equal(e1.event, "syntaxDiag");
+                host.clearOutput();
+
+                session.executeCommandSeq(<protocol.GeterrRequest>{
+                    command: "geterr",
+                    arguments: { files: [f1.path] }
+                });
+                // make sure that getErr1 is completed
+                verifyRequestCompleted(getErr1, 0);
+            }
 
             function verifyRequestCompleted(expectedSeq: number, n: number) {
                 const event = <protocol.RequestCompletedEvent>getMessage(n);
