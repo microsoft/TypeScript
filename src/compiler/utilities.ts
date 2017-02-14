@@ -53,7 +53,8 @@ namespace ts {
                 decreaseIndent: noop,
                 clear: () => str = "",
                 trackSymbol: noop,
-                reportInaccessibleThisError: noop
+                reportInaccessibleThisError: noop,
+                reportIllegalExtends: noop
             };
         }
 

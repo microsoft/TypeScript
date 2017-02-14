@@ -2356,6 +2356,10 @@
         "category": "Error",
         "code": 4092
     },
+    "Extends clause of exported class '{0}' refers to a type with no declaration.": {
+        "category": "Error",
+        "code": 4093
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",

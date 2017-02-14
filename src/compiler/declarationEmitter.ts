@@ -190,6 +190,7 @@ namespace ts {
             const writer = <EmitTextWriterWithSymbolWriter>createTextWriter(newLine);
             writer.trackSymbol = trackSymbol;
             writer.reportInaccessibleThisError = reportInaccessibleThisError;
+            writer.reportIllegalExtends = reportIllegalExtends;
             writer.writeKeyword = writer.write;
             writer.writeOperator = writer.write;
             writer.writePunctuation = writer.write;
@@ -311,6 +312,14 @@ namespace ts {
         function trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
             handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ true));
             recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForSymbol(symbol, meaning));
+        }
+
+        function reportIllegalExtends() {
+            if (errorNameNode) {
+                reportedDeclarationError = true;
+                emitterDiagnostics.add(createDiagnosticForNode(errorNameNode, Diagnostics.Extends_clause_of_exported_class_0_refers_to_a_type_with_no_declaration,
+                    declarationNameToString(errorNameNode)));
+            }
         }
 
         function reportInaccessibleThisError() {
@@ -1071,7 +1080,7 @@ namespace ts {
             }
         }
 
-        function emitHeritageClause(typeReferences: ExpressionWithTypeArguments[], isImplementsList: boolean) {
+        function emitHeritageClause(className: Identifier, typeReferences: ExpressionWithTypeArguments[], isImplementsList: boolean) {
             if (typeReferences) {
                 write(isImplementsList ? " implements " : " extends ");
                 emitCommaList(typeReferences, emitTypeOfTypeReference);
@@ -1086,7 +1095,9 @@ namespace ts {
                 }
                 else {
                     writer.getSymbolAccessibilityDiagnostic = getHeritageClauseVisibilityError;
+                    errorNameNode = className;
                     resolver.writeBaseConstructorTypeOfClass(<ClassLikeDeclaration>enclosingDeclaration, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseTypeAliasValue, writer);
+                    errorNameNode = undefined;
                 }
 
                 function getHeritageClauseVisibilityError(): SymbolAccessibilityDiagnostic {
@@ -1136,9 +1147,10 @@ namespace ts {
             emitTypeParameters(node.typeParameters);
             const baseTypeNode = getClassExtendsHeritageClauseElement(node);
             if (baseTypeNode) {
-                emitHeritageClause([baseTypeNode], /*isImplementsList*/ false);
+                node.name
+                emitHeritageClause(node.name, [baseTypeNode], /*isImplementsList*/ false);
             }
-            emitHeritageClause(getClassImplementsHeritageClauseElements(node), /*isImplementsList*/ true);
+            emitHeritageClause(node.name, getClassImplementsHeritageClauseElements(node), /*isImplementsList*/ true);
             write(" {");
             writeLine();
             increaseIndent();
@@ -1160,7 +1172,7 @@ namespace ts {
             emitTypeParameters(node.typeParameters);
             const interfaceExtendsTypes = filter(getInterfaceBaseTypeNodes(node), base => isEntityNameExpression(base.expression));
             if (interfaceExtendsTypes && interfaceExtendsTypes.length) {
-                emitHeritageClause(interfaceExtendsTypes, /*isImplementsList*/ false);
+                emitHeritageClause(node.name, interfaceExtendsTypes, /*isImplementsList*/ false);
             }
             write(" {");
             writeLine();
