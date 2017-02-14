@@ -426,7 +426,7 @@ namespace ts {
 
     /** Given a symbol for a module, checks that it is either an untyped import or a shorthand ambient module. */
     export function isUntypedOrShorthandAmbientModuleSymbol(moduleSymbol: Symbol): boolean {
-        return !moduleSymbol.valueDeclaration || isShorthandAmbientModule(moduleSymbol.valueDeclaration);
+        return !moduleSymbol.declarations || isShorthandAmbientModule(moduleSymbol.valueDeclaration);
     }
 
     function isShorthandAmbientModule(node: Node): boolean {
