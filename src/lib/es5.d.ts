@@ -137,12 +137,6 @@ interface ObjectConstructor {
     getOwnPropertyNames(o: any): string[];
 
     /**
-      * Creates an object that has the specified prototype.
-      * @param o Object to use as a prototype.
-      */
-    create<T extends object>(o: T): T;
-
-    /**
       * Creates an object that has the specified prototype or that has null prototype.
       * @param o Object to use as a prototype. May be null.
       */
