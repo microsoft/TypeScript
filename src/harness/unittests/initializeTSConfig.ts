@@ -12,7 +12,7 @@ namespace ts {
                 it(`Correct output for ${outputFileName}`, () => {
                     Harness.Baseline.runBaseline(outputFileName, () => {
                         if (initResult) {
-                            return JSON.stringify(initResult, undefined, 4);
+                            return initResult;
                         }
                         else {
                             // This can happen if compiler recieve invalid compiler-options

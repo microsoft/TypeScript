@@ -1,9 +1,131 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
+        // Basic Options
+
+        // Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'
         "target": "es5",
-        "noImplicitAny": false,
-        "sourceMap": false
+
+        // Specify module code generation: 'commonjs', 'amd', 'system', 'umd' or 'es2015'
+        "module": "commonjs"
+
+        // Specify library files to be included in the compilation: 
+        // "lib": [],
+
+        // Allow javascript files to be compiled.
+        // "allowJs": true,
+
+        // Specify JSX code generation: 'preserve', 'react-native', or 'react'
+        // "jsx": "preserve",
+
+        // Generates corresponding '.d.ts' file.
+        // "declaration": true,
+
+        // Generates corresponding '.map' file.
+        // "sourceMap": true,
+
+        // Concatenate and emit output to single file.
+        // "outFile": "./",
+
+        // Redirect output structure to the directory.
+        // "outDir": "./",
+
+        // Specify the root directory of input files. Use to control the output directory structure with --outDir.
+        // "rootDir": "./",
+
+        // Do not emit comments to output.
+        // "removeComments": true,
+
+        // Do not emit outputs.
+        // "noEmit": true,
+
+        // Import emit helpers from 'tslib'.
+        // "importHelpers": true,
+
+        // Unconditionally emit imports for unresolved files.
+        // "isolatedModules": true,
+
+
+        // Strict Checks
+
+        // Raise error on expressions and declarations with an implied 'any' type.
+        // "noImplicitAny": true,
+
+        // Enable strict null checks.
+        // "strictNullChecks": true,
+
+        // Raise error on 'this' expressions with an implied 'any' type.
+        // "noImplicitThis": true,
+
+        // Report errors on unused locals.
+        // "noUnusedLocals": true,
+
+        // Report errors on unused parameters.
+        // "noUnusedParameters": true,
+
+        // Parse in strict mode and emit "use strict" for each source file
+        // "alwaysStrict": true,
+
+        // Report error when not all code paths in function return a value.
+        // "noImplicitReturns": true,
+
+        // Report errors for fallthrough cases in switch statement.
+        // "noFallthroughCasesInSwitch": true,
+
+
+        // Module Resolution Options
+
+        // Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6).
+        // "moduleResolution": "node",
+
+        // Base directory to resolve non-absolute module names.
+        // "baseUrl": "./",
+
+        // List of path mapping entries for module names to locations relative to the 'baseUrl'.
+        // "paths": {},
+
+        // List of root folders whose combined content represent the structure of the project at runtime.
+        // "rootDirs": [],
+
+        // List of folders to include type definitions from.
+        // "typeRoots": [],
+
+        // Type declaration files to be included in compilation.
+        // "types": [],
+
+        // Allow default imports from modules with no default export. This does not affect code emit, just typechecking.
+        // "allowSyntheticDefaultImports": true,
+
+
+        // SourceMap Options
+
+        // Specify the location where debugger should locate TypeScript files instead of source locations.
+        // "sourceRoot": "./",
+
+        // Specify the location where debugger should locate map files instead of generated locations.
+        // "mapRoot": "./",
+
+        // Emit a single file with source maps instead of having a separate file.
+        // "inlineSourceMap": true,
+
+        // Emit the source alongside the sourcemaps within a single file; requires '--inlineSourceMap' or '--sourceMap' to be set.
+        // "inlineSources": true,
+
+
+        // JSX Options
+
+        // Specify the JSX factory function to use when targeting 'react' JSX emit, e.g. 'React.createElement' or 'h'.
+        // "jsxFactory": "",
+
+
+        // Experimental Options
+
+        // Enables experimental support for ES7 decorators.
+        // "experimentalDecorators": true,
+
+        // Enables experimental support for emitting type metadata for decorators.
+        // "emitDecoratorMetadata": true,
+
+
     },
     "files": [
         "file0.st",
