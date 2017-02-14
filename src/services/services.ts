@@ -1688,13 +1688,7 @@ namespace ts {
 
             let allFixes: CodeAction[] = [];
 
-            // De-duplicate error codes.
-            const errorCodeSet: number[] = [];
-            for (const code of errorCodes) {
-                errorCodeSet[code] = code;
-            }
-
-            forEach(errorCodeSet, error => {
+            forEach(deduplicate(errorCodes), error => {
                 cancellationToken.throwIfCancellationRequested();
 
                 const context = {
