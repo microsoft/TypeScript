@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-////function [|f|](...rest: any[]) { }
+////function [|{| "isWriteAccess": true, "isDefinition": true |}f|](...rest: any[]) { }
 ////[|f|] `${ [|f|] } ${ [|f|] }`
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("function f(...rest: any[]): void");

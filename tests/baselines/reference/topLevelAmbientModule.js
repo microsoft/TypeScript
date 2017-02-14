@@ -14,6 +14,7 @@ var z = foo.x + 10;
 //// [foo_0.js]
 //// [foo_1.js]
 "use strict";
+exports.__esModule = true;
 /// <reference path="foo_0.ts"/>
 var foo = require("foo");
 var z = foo.x + 10;

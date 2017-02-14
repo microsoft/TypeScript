@@ -143,15 +143,15 @@ namespace ts {
 
         function transformJsxAttributeInitializer(node: StringLiteral | JsxExpression) {
             if (node === undefined) {
-                return createLiteral(true);
+                return createTrue();
             }
             else if (node.kind === SyntaxKind.StringLiteral) {
                 const decoded = tryDecodeEntities((<StringLiteral>node).text);
-                return decoded ? createLiteral(decoded, /*location*/ node) : node;
+                return decoded ? setTextRange(createLiteral(decoded), node) : node;
             }
             else if (node.kind === SyntaxKind.JsxExpression) {
                 if (node.expression === undefined) {
-                    return createLiteral(true);
+                    return createTrue();
                 }
                 return visitJsxExpression(<JsxExpression>node);
             }

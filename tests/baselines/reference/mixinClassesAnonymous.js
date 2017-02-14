@@ -56,6 +56,14 @@ class Thing3 extends Thing2 {
     }
 }
 
+// Repro from #13805
+
+const Timestamped = <CT extends Constructor<object>>(Base: CT) => {
+    return class extends Base {
+        timestamp = new Date();
+    };
+}
+
 
 //// [mixinClassesAnonymous.js]
 var __extends = (this && this.__extends) || (function () {
@@ -138,3 +146,15 @@ var Thing3 = (function (_super) {
     };
     return Thing3;
 }(Thing2));
+// Repro from #13805
+var Timestamped = function (Base) {
+    return (function (_super) {
+        __extends(class_2, _super);
+        function class_2() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.timestamp = new Date();
+            return _this;
+        }
+        return class_2;
+    }(Base));
+};

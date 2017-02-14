@@ -31,6 +31,7 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
     }
     return t;
 };
+exports.__esModule = true;
 var test_1 = require("./test");
 // Should emit test_1.React.createElement
 //  and React.__spread

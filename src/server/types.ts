@@ -9,6 +9,7 @@ declare namespace ts.server {
         data: any;
     }
 
+    type RequireResult = { module: {}, error: undefined } | { module: undefined, error: {} };
     export interface ServerHost extends System {
         setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
         clearTimeout(timeoutId: any): void;
@@ -16,6 +17,7 @@ declare namespace ts.server {
         clearImmediate(timeoutId: any): void;
         gc?(): void;
         trace?(s: string): void;
+        require?(initialPath: string, moduleName: string): RequireResult;
     }
 
     export interface SortedReadonlyArray<T> extends ReadonlyArray<T> {

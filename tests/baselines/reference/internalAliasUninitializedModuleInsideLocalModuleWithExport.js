@@ -15,6 +15,7 @@ export module c {
 
 //// [internalAliasUninitializedModuleInsideLocalModuleWithExport.js]
 "use strict";
+exports.__esModule = true;
 var c;
 (function (c) {
     c.x.foo();

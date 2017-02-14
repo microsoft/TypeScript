@@ -23,6 +23,7 @@ var xs2: typeof moduleA[] = [moduleA];
 
 //// [aliasUsageInArray_backbone.js]
 "use strict";
+exports.__esModule = true;
 var Model = (function () {
     function Model() {
     }
@@ -41,6 +42,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+exports.__esModule = true;
 var Backbone = require("./aliasUsageInArray_backbone");
 var VisualizationModel = (function (_super) {
     __extends(VisualizationModel, _super);
@@ -52,6 +54,7 @@ var VisualizationModel = (function (_super) {
 exports.VisualizationModel = VisualizationModel;
 //// [aliasUsageInArray_main.js]
 "use strict";
+exports.__esModule = true;
 var moduleA = require("./aliasUsageInArray_moduleA");
 var xs = [moduleA];
 var xs2 = [moduleA];

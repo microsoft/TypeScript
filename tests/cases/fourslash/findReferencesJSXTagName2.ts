@@ -1,7 +1,9 @@
 /// <reference path='fourslash.ts'/>
 
 // @Filename: index.tsx
-////const [|obj|] = {Component: () => <div/>};
+////const [|{| "isWriteAccess": true, "isDefinition": true |}obj|] = {Component: () => <div/>};
 ////const element = <[|obj|].Component/>;
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup(`const obj: {
+    Component: () => any;
+}`);

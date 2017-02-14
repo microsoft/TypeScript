@@ -485,7 +485,10 @@ namespace ts {
                     // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows
                     // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
                     let options: any;
-                    if (!directoryExists(directoryName)) {
+                    if (!directoryExists(directoryName) || (isUNCPath(directoryName) && process.platform === "win32")) {
+                        // do nothing if either
+                        // - target folder does not exist
+                        // - this is UNC path on Windows (https://github.com/Microsoft/TypeScript/issues/13874)
                         return noOpFileWatcher;
                     }
 
@@ -509,6 +512,10 @@ namespace ts {
                             };
                         }
                     );
+
+                    function isUNCPath(s: string): boolean {
+                        return s.length > 2 && s.charCodeAt(0) === CharacterCodes.slash && s.charCodeAt(1) === CharacterCodes.slash;
+                    }
                 },
                 resolvePath: function(path: string): string {
                     return _path.resolve(path);

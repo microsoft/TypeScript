@@ -10,6 +10,7 @@ export module outerModule.InnerModule {
 //// [commentsDottedModuleName.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     /** this is multi declare module*/
     var outerModule;
     (function (outerModule) {

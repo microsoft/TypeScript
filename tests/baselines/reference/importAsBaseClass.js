@@ -12,6 +12,7 @@ class Hello extends Greeter { }
 
 //// [importAsBaseClass_0.js]
 "use strict";
+exports.__esModule = true;
 var Greeter = (function () {
     function Greeter() {
     }
@@ -31,6 +32,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+exports.__esModule = true;
 var Greeter = require("./importAsBaseClass_0");
 var Hello = (function (_super) {
     __extends(Hello, _super);

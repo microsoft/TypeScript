@@ -167,3 +167,22 @@ class Thing3 extends Thing2 {
     }
 }
 
+// Repro from #13805
+
+const Timestamped = <CT extends Constructor<object>>(Base: CT) => {
+>Timestamped : Symbol(Timestamped, Decl(mixinClassesAnonymous.ts, 59, 5))
+>CT : Symbol(CT, Decl(mixinClassesAnonymous.ts, 59, 21))
+>Constructor : Symbol(Constructor, Decl(mixinClassesAnonymous.ts, 0, 0))
+>Base : Symbol(Base, Decl(mixinClassesAnonymous.ts, 59, 53))
+>CT : Symbol(CT, Decl(mixinClassesAnonymous.ts, 59, 21))
+
+    return class extends Base {
+>Base : Symbol(Base, Decl(mixinClassesAnonymous.ts, 59, 53))
+
+        timestamp = new Date();
+>timestamp : Symbol((Anonymous class).timestamp, Decl(mixinClassesAnonymous.ts, 60, 31))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+    };
+}
+

@@ -21,4 +21,5 @@ import {React} from "./test";
 //// [react-consumer.jsx]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
 });
