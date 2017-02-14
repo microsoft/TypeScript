@@ -966,21 +966,31 @@ task("baseline-accept", function () {
 
 function acceptBaseline(sourceFolder, targetFolder) {
     console.log('Accept baselines from ' + sourceFolder + ' to ' + targetFolder);
-    var files = fs.readdirSync(sourceFolder);
     var deleteEnding = '.delete';
-    for (var i in files) {
-        var filename = files[i];
-        var fullLocalPath = path.join(sourceFolder, filename);
-        if (fs.statSync(fullLocalPath).isFile()) {
-            if (filename.substr(filename.length - deleteEnding.length) === deleteEnding) {
-                filename = filename.substr(0, filename.length - deleteEnding.length);
-                fs.unlinkSync(path.join(targetFolder, filename));
-            } else {
-                var target = path.join(targetFolder, filename);
-                if (fs.existsSync(target)) {
-                    fs.unlinkSync(target);
+
+    acceptBaselineFolder(sourceFolder, targetFolder);
+
+    function acceptBaselineFolder(sourceFolder, targetFolder) {
+        var files = fs.readdirSync(sourceFolder);
+
+        for (var i in files) {
+            var filename = files[i];
+            var fullLocalPath = path.join(sourceFolder, filename);
+            var stat = fs.statSync(fullLocalPath);
+            if (stat.isFile()) {
+                if (filename.substr(filename.length - deleteEnding.length) === deleteEnding) {
+                    filename = filename.substr(0, filename.length - deleteEnding.length);
+                    fs.unlinkSync(path.join(targetFolder, filename));
+                } else {
+                    var target = path.join(targetFolder, filename);
+                    if (fs.existsSync(target)) {
+                        fs.unlinkSync(target);
+                    }
+                    fs.renameSync(path.join(sourceFolder, filename), target);
                 }
-                fs.renameSync(path.join(sourceFolder, filename), target);
+            }
+            else if (stat.isDirectory()) {
+                acceptBaselineFolder(fullLocalPath, path.join(targetFolder, filename));
             }
         }
     }
