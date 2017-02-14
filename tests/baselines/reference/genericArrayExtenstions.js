@@ -7,3 +7,4 @@ concat(...items: T[]): T[];
 
 //// [genericArrayExtenstions.js]
 "use strict";
+exports.__esModule = true;

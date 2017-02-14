@@ -18,3 +18,4 @@ export {Cls2 as CCCls2};
 
 //// [file2.js]
 "use strict";
+exports.__esModule = true;

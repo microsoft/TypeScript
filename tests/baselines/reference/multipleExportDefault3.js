@@ -18,5 +18,4 @@ var C = (function () {
     }
     return C;
 }());
-exports.__esModule = true;
 exports["default"] = C;

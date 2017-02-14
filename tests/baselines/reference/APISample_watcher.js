@@ -116,6 +116,7 @@ watch(currentDirectoryFiles, { module: ts.ModuleKind.CommonJS });
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 "use strict";
+exports.__esModule = true;
 var ts = require("typescript");
 function watch(rootFileNames, options) {
     var files = {};

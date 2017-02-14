@@ -1518,6 +1518,11 @@ namespace ts {
         return map(getJSDocs(node), doc => doc.comment);
     }
 
+    export function hasJSDocParameterTags(node: FunctionLikeDeclaration | SignatureDeclaration) {
+        const parameterTags = getJSDocTags(node, SyntaxKind.JSDocParameterTag);
+        return parameterTags && parameterTags.length > 0;
+    }
+
     function getJSDocTags(node: Node, kind: SyntaxKind): JSDocTag[] {
         const docs = getJSDocs(node);
         if (docs) {
@@ -2040,57 +2045,6 @@ namespace ts {
     export function nodeIsSynthesized(node: TextRange): boolean {
         return positionIsSynthesized(node.pos)
             || positionIsSynthesized(node.end);
-    }
-
-    export function getOriginalNode(node: Node): Node;
-    export function getOriginalNode<T extends Node>(node: Node, nodeTest: (node: Node) => node is T): T;
-    export function getOriginalNode(node: Node, nodeTest?: (node: Node) => boolean): Node {
-        if (node) {
-            while (node.original !== undefined) {
-                node = node.original;
-            }
-        }
-
-        return !nodeTest || nodeTest(node) ? node : undefined;
-    }
-
-    /**
-     * Gets a value indicating whether a node originated in the parse tree.
-     *
-     * @param node The node to test.
-     */
-    export function isParseTreeNode(node: Node): boolean {
-        return (node.flags & NodeFlags.Synthesized) === 0;
-    }
-
-    /**
-     * Gets the original parse tree node for a node.
-     *
-     * @param node The original node.
-     * @returns The original parse tree node if found; otherwise, undefined.
-     */
-    export function getParseTreeNode(node: Node): Node;
-
-    /**
-     * Gets the original parse tree node for a node.
-     *
-     * @param node The original node.
-     * @param nodeTest A callback used to ensure the correct type of parse tree node is returned.
-     * @returns The original parse tree node if found; otherwise, undefined.
-     */
-    export function getParseTreeNode<T extends Node>(node: Node, nodeTest?: (node: Node) => node is T): T;
-    export function getParseTreeNode(node: Node, nodeTest?: (node: Node) => boolean): Node {
-        if (isParseTreeNode(node)) {
-            return node;
-        }
-
-        node = getOriginalNode(node);
-
-        if (isParseTreeNode(node) && (!nodeTest || nodeTest(node))) {
-            return node;
-        }
-
-        return undefined;
     }
 
     export function getOriginalSourceFileOrBundle(sourceFileOrBundle: SourceFile | Bundle) {
@@ -3331,6 +3285,14 @@ namespace ts {
         }
     }
 
+    export function getRangePos(range: TextRange | undefined) {
+        return range ? range.pos : -1;
+    }
+
+    export function getRangeEnd(range: TextRange | undefined) {
+        return range ? range.end : -1;
+    }
+
     /**
      * Increases (or decreases) a position by the provided amount.
      *
@@ -3930,6 +3892,19 @@ namespace ts {
     export function isModuleBody(node: Node): node is ModuleBody {
         const kind = node.kind;
         return kind === SyntaxKind.ModuleBlock
+            || kind === SyntaxKind.ModuleDeclaration
+            || kind === SyntaxKind.Identifier;
+    }
+
+    export function isNamespaceBody(node: Node): node is NamespaceBody {
+        const kind = node.kind;
+        return kind === SyntaxKind.ModuleBlock
+            || kind === SyntaxKind.ModuleDeclaration;
+    }
+
+    export function isJSDocNamespaceBody(node: Node): node is JSDocNamespaceBody {
+        const kind = node.kind;
+        return kind === SyntaxKind.Identifier
             || kind === SyntaxKind.ModuleDeclaration;
     }
 
@@ -4521,5 +4496,56 @@ namespace ts {
 
             return true;
         }
+    }
+
+    export function getOriginalNode(node: Node): Node;
+    export function getOriginalNode<T extends Node>(node: Node, nodeTest: (node: Node) => node is T): T;
+    export function getOriginalNode(node: Node, nodeTest?: (node: Node) => boolean): Node {
+        if (node) {
+            while (node.original !== undefined) {
+                node = node.original;
+            }
+        }
+
+        return !nodeTest || nodeTest(node) ? node : undefined;
+    }
+
+    /**
+     * Gets a value indicating whether a node originated in the parse tree.
+     *
+     * @param node The node to test.
+     */
+    export function isParseTreeNode(node: Node): boolean {
+        return (node.flags & NodeFlags.Synthesized) === 0;
+    }
+
+    /**
+     * Gets the original parse tree node for a node.
+     *
+     * @param node The original node.
+     * @returns The original parse tree node if found; otherwise, undefined.
+     */
+    export function getParseTreeNode(node: Node): Node;
+
+    /**
+     * Gets the original parse tree node for a node.
+     *
+     * @param node The original node.
+     * @param nodeTest A callback used to ensure the correct type of parse tree node is returned.
+     * @returns The original parse tree node if found; otherwise, undefined.
+     */
+    export function getParseTreeNode<T extends Node>(node: Node, nodeTest?: (node: Node) => node is T): T;
+    export function getParseTreeNode(node: Node, nodeTest?: (node: Node) => boolean): Node {
+        if (isParseTreeNode(node)) {
+            return node;
+        }
+
+        node = getOriginalNode(node);
+
+        if (isParseTreeNode(node) && (!nodeTest || nodeTest(node))) {
+            return node;
+        }
+
+        return undefined;
     }
 }

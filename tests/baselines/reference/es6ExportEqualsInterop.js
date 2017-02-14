@@ -213,6 +213,7 @@ export * from "class-module";
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
+exports.__esModule = true;
 var z2 = require("variable");
 var z3 = require("interface-variable");
 var z4 = require("module");

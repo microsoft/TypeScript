@@ -22,3 +22,4 @@ export {b as b2};
 
 //// [file2.js]
 "use strict";
+exports.__esModule = true;

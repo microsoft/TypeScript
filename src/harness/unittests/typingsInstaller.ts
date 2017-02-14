@@ -46,6 +46,45 @@ namespace ts.projectSystem {
 
     import typingsName = server.typingsInstaller.typingsName;
 
+    describe("local module", () => {
+        it("should not be picked up", () => {
+            const f1 = {
+                path: "/a/app.js",
+                content: "const c = require('./config');"
+            };
+            const f2 = {
+                path: "/a/config.js",
+                content: "export let x = 1"
+            };
+            const typesCache = "/cache"
+            const typesConfig = {
+                path: typesCache + "/node_modules/@types/config/index.d.ts",
+                content: "export let y: number;"
+            };
+            const config = {
+                path: "/a/jsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: { moduleResolution: "commonjs" },
+                    typeAcquisition: { enable: true }
+                })
+            };
+            const host = createServerHost([f1, f2, config, typesConfig]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { typesRegistry: createTypesRegistry("config"), globalTypingsCacheLocation: typesCache });
+                }
+                installWorker(_requestId: number, _args: string[], _cwd: string, _cb: server.typingsInstaller.RequestCompletedAction) {
+                    assert(false, "should not be called")
+                }
+            })();
+            const service = createProjectService(host, { typingsInstaller: installer });
+            service.openClientFile(f1.path);
+            service.checkNumberOfProjects({ configuredProjects: 1 });
+            checkProjectActualFiles(service.configuredProjects[0], [f1.path, f2.path]);
+            installer.installAll(0);
+        });
+    });
+
     describe("typingsInstaller", () => {
         it("configured projects (typings installed) 1", () => {
             const file1 = {

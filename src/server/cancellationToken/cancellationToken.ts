@@ -2,14 +2,13 @@
 
 import fs = require("fs");
 
-// TODO: remove after extrating services types into separate .d.ts file
 interface ServerCancellationToken {
     isCancellationRequested(): boolean;
     setRequest(requestId: number): void;
     resetRequest(requestId: number): void;
 }
 
-function isPipeExist(name: string): boolean {
+function pipeExists(name: string): boolean {
     try {
         fs.statSync(name);
         return true;
@@ -34,15 +33,20 @@ function createCancellationToken(args: string[]): ServerCancellationToken {
             resetRequest: (_requestId: number): void => void 0
         };
     }
+    // cancellationPipeName is a string without '*' inside that can optionally end with '*'
+    // when client wants to signal cancellation it should create a named pipe with name=<cancellationPipeName>
+    // server will synchronously check the presence of the pipe and treat its existance as indicator that current request should be canceled.
+    // in case if client prefers to use more fine-grained schema than one name for all request it can add '*' to the end of cancelellationPipeName.
+    // in this case pipe name will be build dynamically as <cancellationPipeName><request_seq>. 
     if (cancellationPipeName.charAt(cancellationPipeName.length - 1) === "*") {
-        const namePrefix = cancellationPipeName.substring(0, cancellationPipeName.length - 1);
+        const namePrefix = cancellationPipeName.slice(0, -1);
         if (namePrefix.length === 0 || namePrefix.indexOf("*") >= 0) {
             throw new Error("Invalid name for template cancellation pipe: it should have length greater than 2 characters and contain only one '*'.");
         }
         let perRequestPipeName: string;
         let currentRequestId: number;
         return {
-            isCancellationRequested: () =>  perRequestPipeName !== undefined && isPipeExist(perRequestPipeName),
+            isCancellationRequested: () =>  perRequestPipeName !== undefined && pipeExists(perRequestPipeName),
             setRequest(requestId: number) {
                 currentRequestId = currentRequestId;
                 perRequestPipeName = namePrefix + requestId;
@@ -57,7 +61,7 @@ function createCancellationToken(args: string[]): ServerCancellationToken {
     }
     else {
         return {
-            isCancellationRequested: () => isPipeExist(cancellationPipeName),
+            isCancellationRequested: () => pipeExists(cancellationPipeName),
             setRequest: (_requestId: number): void => void 0,
             resetRequest: (_requestId: number): void => void 0
         };

@@ -29,11 +29,13 @@ define(["require", "exports"], function (require, exports) {
 //// [exporter.js]
 define(["require", "exports", "./w1"], function (require, exports, w) {
     "use strict";
+    exports.__esModule = true;
     exports.w = w;
 });
 //// [consumer.js]
 define(["require", "exports", "./exporter"], function (require, exports, e) {
     "use strict";
+    exports.__esModule = true;
     function w() {
         return new e.w();
     }

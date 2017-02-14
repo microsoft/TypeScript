@@ -53,9 +53,11 @@ for ((stuff[n]) of []) {}
 
 //// [f1.js]
 "use strict";
+exports.__esModule = true;
 exports.x = 1;
 //// [f2.js]
 "use strict";
+exports.__esModule = true;
 // all mutations below are illegal and should be fixed
 var stuff = require("./f1");
 var n = 'baz';

@@ -154,8 +154,25 @@ namespace ts.projectSystem {
     }
 
     class TestSession extends server.Session {
+        private seq = 0;
+
         getProjectService() {
             return this.projectService;
+        }
+
+        public getSeq() {
+            return this.seq;
+        }
+
+        public getNextSeq() {
+            return this.seq + 1;
+        }
+
+        public executeCommandSeq<T extends server.protocol.Request>(request: Partial<T>) {
+            this.seq++;
+            request.seq = this.seq;
+            request.type = "request";
+            return this.executeCommand(<T>request);
         }
     };
 
@@ -322,6 +339,8 @@ namespace ts.projectSystem {
 
     export class TestServerHost implements server.ServerHost {
         args: string[] = [];
+
+        private readonly output: string[] = [];
 
         private fs: ts.FileMap<FSEntry>;
         private getCanonicalFileName: (s: string) => string;
@@ -508,7 +527,17 @@ namespace ts.projectSystem {
             this.reloadFS(filesOrFolders);
         }
 
-        write() { }
+        write(message: string) {
+            this.output.push(message);
+        }
+
+        getOutput(): ReadonlyArray<string> {
+            return this.output;
+        }
+
+        clearOutput() {
+            this.output.length = 0;
+        }
 
         readonly readFile = (s: string) => (<File>this.fs.get(this.toPath(s))).content;
         readonly resolvePath = (s: string) => s;
@@ -1586,6 +1615,41 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { inferredProjects: 2 });
             checkProjectActualFiles(projectService.inferredProjects[0], [file1.path]);
             checkProjectActualFiles(projectService.inferredProjects[1], [file2.path]);
+        });
+
+        it ("loading files with correct priority", () => {
+            const f1 = {
+                path: "/a/main.ts",
+                content: "let x = 1"
+            };
+            const f2 = {
+                path: "/a/main.js",
+                content: "var y = 1"
+            };
+            const config = {
+                path: "/a/tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: { allowJs: true }
+                })
+            };
+            const host = createServerHost([f1, f2, config]);
+            const projectService = createProjectService(host);
+            projectService.setHostConfiguration({
+                extraFileExtensions: [
+                    { extension: ".js", isMixedContent: false },
+                    { extension: ".html", isMixedContent: true }
+                ]
+            });
+            projectService.openClientFile(f1.path);
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+            checkProjectActualFiles(projectService.configuredProjects[0], [ f1.path ]);
+
+            projectService.closeClientFile(f1.path);
+
+            projectService.openClientFile(f2.path);
+            projectService.checkNumberOfProjects({ configuredProjects: 1, inferredProjects: 1 });
+            checkProjectActualFiles(projectService.configuredProjects[0], [ f1.path ]);
+            checkProjectActualFiles(projectService.inferredProjects[0], [ f2.path ]);
         });
 
         it("tsconfig script block support", () => {
@@ -3030,6 +3094,54 @@ namespace ts.projectSystem {
         });
     });
 
+    describe("emit with outFile or out setting", () => {
+        function test(opts: CompilerOptions, expectedUsesOutFile: boolean) {
+            const f1 = {
+                path: "/a/a.ts",
+                content: "let x = 1"
+            };
+            const f2 = {
+                path: "/a/b.ts",
+                content: "let y = 1"
+            };
+            const config = {
+                path: "/a/tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: opts,
+                    compileOnSave: true
+                })
+            };
+            const host = createServerHost([f1, f2, config]);
+            const session = createSession(host);
+            session.executeCommand(<protocol.OpenRequest>{
+                seq: 1,
+                type: "request",
+                command: "open",
+                arguments: { file: f1.path }
+            });
+            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 1 });
+            const { response } = session.executeCommand(<protocol.CompileOnSaveAffectedFileListRequest>{
+                seq: 2,
+                type: "request",
+                command: "compileOnSaveAffectedFileList",
+                arguments: { file: f1.path }
+            });
+            assert.equal((<protocol.CompileOnSaveAffectedFileListSingleProject[]>response).length, 1, "expected output for 1 project");
+            assert.equal((<protocol.CompileOnSaveAffectedFileListSingleProject[]>response)[0].fileNames.length, 2, "expected output for 1 project");
+            assert.equal((<protocol.CompileOnSaveAffectedFileListSingleProject[]>response)[0].projectUsesOutFile, expectedUsesOutFile, "usesOutFile");
+        }
+
+        it ("projectUsesOutFile should not be returned if not set", () => {
+            test({}, /*expectedUsesOutFile*/ false);
+        });
+        it ("projectUsesOutFile should be true if outFile is set", () => {
+            test({ outFile: "/a/out.js" }, /*expectedUsesOutFile*/ true);
+        });
+        it ("projectUsesOutFile should be true if out is set", () => {
+            test({ out: "/a/out.js" }, /*expectedUsesOutFile*/ true);
+        });
+    });
+
     describe("import helpers", () => {
         it("should not crash in tsserver", () => {
             const f1 = {
@@ -3067,42 +3179,156 @@ namespace ts.projectSystem {
             }
             const session = createSession(host, /*typingsInstaller*/ undefined, /*projectServiceEventHandler*/ undefined, cancellationToken);
 
-            expectedRequestId = 1;
-            session.executeCommand(<server.protocol.OpenRequest>{
-                seq: 1,
-                type: "request",
+            expectedRequestId = session.getNextSeq();
+            session.executeCommandSeq(<server.protocol.OpenRequest>{
                 command: "open",
-                arguments: {
-                    file: f1.path
-                }
+                arguments: { file: f1.path }
             });
 
-            expectedRequestId = 2;
-            session.executeCommand(<server.protocol.GeterrRequest>{
-                seq: 2,
-                type: "request",
+            expectedRequestId = session.getNextSeq();
+            session.executeCommandSeq(<server.protocol.GeterrRequest>{
                 command: "geterr",
-                arguments: {
-                    files: [f1.path]
-                }
+                arguments: { files: [f1.path] }
             });
 
-            expectedRequestId = 3;
-            session.executeCommand(<server.protocol.OccurrencesRequest>{
-                seq: 3,
-                type: "request",
+            expectedRequestId = session.getNextSeq();
+            session.executeCommandSeq(<server.protocol.OccurrencesRequest>{
                 command: "occurrences",
-                arguments: {
-                    file: f1.path,
-                    line: 1,
-                    offset: 6
-                }
+                arguments: { file: f1.path, line: 1, offset: 6 }
             });
 
             expectedRequestId = 2;
             host.runQueuedImmediateCallbacks();
             expectedRequestId = 2;
             host.runQueuedImmediateCallbacks();
+        });
+
+        it("Geterr is cancellable", () => {
+            const f1 = {
+                path: "/a/app.ts",
+                content: "let x = 1"
+            };
+            const config = {
+                path: "/a/tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: {}
+                })
+            };
+
+            let requestToCancel = -1;
+            const cancellationToken: server.ServerCancellationToken = (function(){
+                let currentId: number;
+                return <server.ServerCancellationToken>{
+                    setRequest(requestId) {
+                        currentId = requestId;
+                    },
+                    resetRequest(requestId) {
+                        assert.equal(requestId, currentId, "unexpected request id in cancellation")
+                        currentId = undefined;
+                    },
+                    isCancellationRequested() {
+                        return requestToCancel === currentId;
+                    }
+                }
+            })();
+            const host = createServerHost([f1, config]);
+            const session = createSession(host, /*typingsInstaller*/ undefined, () => {}, cancellationToken);
+            {
+                session.executeCommandSeq(<protocol.OpenRequest>{
+                    command: "open",
+                    arguments: { file: f1.path }
+                });
+                // send geterr for missing file
+                session.executeCommandSeq(<protocol.GeterrRequest>{
+                    command: "geterr",
+                    arguments: { files: ["/a/missing"] }
+                });
+                // no files - expect 'completed' event
+                assert.equal(host.getOutput().length, 1, "expect 1 message");
+                verifyRequestCompleted(session.getSeq(), 0);
+            }
+            {
+                const getErrId = session.getNextSeq();
+                // send geterr for a valid file
+                session.executeCommandSeq(<protocol.GeterrRequest>{
+                    command: "geterr",
+                    arguments: { files: [f1.path] }
+                });
+
+                assert.equal(host.getOutput().length, 0, "expect 0 messages");
+
+                // run new request
+                session.executeCommandSeq(<protocol.ProjectInfoRequest>{
+                    command: "projectInfo",
+                    arguments: { file: f1.path }
+                });
+                host.clearOutput();
+
+                // cancel previously issued Geterr
+                requestToCancel = getErrId;
+                host.runQueuedTimeoutCallbacks();
+
+                assert.equal(host.getOutput().length, 1, "expect 1 message");
+                verifyRequestCompleted(getErrId, 0);
+
+                requestToCancel = -1;
+            }
+            {
+                const getErrId = session.getNextSeq();
+                session.executeCommandSeq(<protocol.GeterrRequest>{
+                    command: "geterr",
+                    arguments: { files: [f1.path] }
+                });
+                assert.equal(host.getOutput().length, 0, "expect 0 messages");
+
+                // run first step
+                host.runQueuedTimeoutCallbacks();
+                assert.equal(host.getOutput().length, 1, "expect 1 messages");
+                const e1 = <protocol.Event>getMessage(0);
+                assert.equal(e1.event, "syntaxDiag");
+                host.clearOutput();
+
+                requestToCancel = getErrId;
+                host.runQueuedImmediateCallbacks();
+                assert.equal(host.getOutput().length, 1, "expect 1 message");
+                verifyRequestCompleted(getErrId, 0);
+
+                requestToCancel = -1;
+            }
+            {
+                const getErrId = session.getNextSeq();
+                session.executeCommandSeq(<protocol.GeterrRequest>{
+                    command: "geterr",
+                    arguments: { files: [f1.path] }
+                });
+                assert.equal(host.getOutput().length, 0, "expect 0 messages");
+
+                // run first step
+                host.runQueuedTimeoutCallbacks();
+                assert.equal(host.getOutput().length, 1, "expect 1 messages");
+                const e1 = <protocol.Event>getMessage(0);
+                assert.equal(e1.event, "syntaxDiag");
+                host.clearOutput();
+
+                host.runQueuedImmediateCallbacks();
+                assert.equal(host.getOutput().length, 2, "expect 2 messages");
+                const e2 = <protocol.Event>getMessage(0);
+                assert.equal(e2.event, "semanticDiag");
+                verifyRequestCompleted(getErrId, 1);
+
+                requestToCancel = -1;
+            }
+
+            function verifyRequestCompleted(expectedSeq: number, n: number) {
+                const event = <protocol.RequestCompletedEvent>getMessage(n);
+                assert.equal(event.event, "requestCompleted");
+                assert.equal(event.body.request_seq, expectedSeq, "expectedSeq");
+                host.clearOutput();
+            }
+
+            function getMessage(n: number) {
+                return JSON.parse(server.extractMessage(host.getOutput()[n]));
+            }
         });
     });
 
@@ -3125,7 +3351,7 @@ namespace ts.projectSystem {
             let options = project.getCompilerOptions();
             assert.isTrue(options.maxNodeModuleJsDepth === 2);
 
-            // Assert the option sticks 
+            // Assert the option sticks
             projectService.setCompilerOptionsForInferredProjects({ target: ScriptTarget.ES2016 });
             project = projectService.inferredProjects[0];
             options = project.getCompilerOptions();

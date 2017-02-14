@@ -1,4 +1,4 @@
-/// <reference path="checker.ts" />
+﻿/// <reference path="checker.ts" />
 /// <reference path="transformer.ts" />
 /// <reference path="declarationEmitter.ts" />
 /// <reference path="sourcemap.ts" />
@@ -211,6 +211,7 @@ namespace ts {
             emitNodeWithComments,
             emitBodyWithDetachedComments,
             emitTrailingCommentsOfPosition,
+            emitLeadingCommentsOfPosition,
         } = comments;
 
         let currentSourceFile: SourceFile;
@@ -1346,6 +1347,10 @@ namespace ts {
             else {
                 writeToken(SyntaxKind.OpenBraceToken, node.pos, /*contextNode*/ node);
                 emitBlockStatements(node);
+                // We have to call emitLeadingComments explicitly here because otherwise leading comments of the close brace token will not be emitted
+                increaseIndent();
+                emitLeadingCommentsOfPosition(node.statements.end);
+                decreaseIndent();
                 writeToken(SyntaxKind.CloseBraceToken, node.statements.end, /*contextNode*/ node);
             }
         }
@@ -2228,6 +2233,15 @@ namespace ts {
 
                     // Write the delimiter if this is not the first node.
                     if (previousSibling) {
+                        // i.e
+                        //      function commentedParameters(
+                        //          /* Parameter a */
+                        //          a
+                        //          /* End of parameter a */ -> this comment isn't considered to be trailing comment of parameter "a" due to newline
+                        //          ,
+                        if (delimiter && previousSibling.end !== parentNode.end) {
+                            emitLeadingCommentsOfPosition(previousSibling.end);
+                        }
                         write(delimiter);
 
                         // Write either a line terminator or whitespace to separate the elements.
@@ -2272,6 +2286,17 @@ namespace ts {
                 const hasTrailingComma = (format & ListFormat.AllowTrailingComma) && children.hasTrailingComma;
                 if (format & ListFormat.CommaDelimited && hasTrailingComma) {
                     write(",");
+                }
+
+
+                // Emit any trailing comment of the last element in the list
+                // i.e
+                //       var array = [...
+                //          2
+                //          /* end of element 2 */
+                //       ];
+                if (previousSibling && delimiter && previousSibling.end !== parentNode.end) {
+                    emitLeadingCommentsOfPosition(previousSibling.end);
                 }
 
                 // Decrease the indent, if requested.
@@ -2565,7 +2590,7 @@ namespace ts {
                 // Node names generate unique names based on their original node
                 // and are cached based on that node's id.
                 const node = getNodeForGeneratedName(name);
-                return generateNameCached(node, getTextOfNode);
+                return generateNameCached(node);
             }
             else {
                 // Auto, Loop, and Unique names are cached based on their unique
@@ -2575,9 +2600,9 @@ namespace ts {
             }
         }
 
-        function generateNameCached(node: Node, getTextOfNode: (node: Node, includeTrivia?: boolean) => string) {
+        function generateNameCached(node: Node) {
             const nodeId = getNodeId(node);
-            return nodeIdToGeneratedName[nodeId] || (nodeIdToGeneratedName[nodeId] = unescapeIdentifier(generateNameForNode(node, getTextOfNode)));
+            return nodeIdToGeneratedName[nodeId] || (nodeIdToGeneratedName[nodeId] = unescapeIdentifier(generateNameForNode(node)));
         }
 
         /**
@@ -2659,7 +2684,7 @@ namespace ts {
         /**
          * Generates a unique name for a ModuleDeclaration or EnumDeclaration.
          */
-        function generateNameForModuleOrEnum(node: ModuleDeclaration | EnumDeclaration, getTextOfNode: (node: Node, includeTrivia?: boolean) => string) {
+        function generateNameForModuleOrEnum(node: ModuleDeclaration | EnumDeclaration) {
             const name = getTextOfNode(node.name);
             // Use module/enum name itself if it is unique, otherwise make a unique variation
             return isUniqueLocalName(name, node) ? name : makeUniqueName(name);
@@ -2689,9 +2714,9 @@ namespace ts {
             return makeUniqueName("class");
         }
 
-        function generateNameForMethodOrAccessor(node: MethodDeclaration | AccessorDeclaration, getTextOfNode: (node: Node, includeTrivia?: boolean) => string) {
+        function generateNameForMethodOrAccessor(node: MethodDeclaration | AccessorDeclaration) {
             if (isIdentifier(node.name)) {
-                return generateNameCached(node.name, getTextOfNode);
+                return generateNameCached(node.name);
             }
             return makeTempVariableName(TempFlags.Auto);
         }
@@ -2699,13 +2724,13 @@ namespace ts {
         /**
          * Generates a unique name from a node.
          */
-        function generateNameForNode(node: Node, getTextOfNode: (node: Node, includeTrivia?: boolean) => string): string {
+        function generateNameForNode(node: Node): string {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     return makeUniqueName(getTextOfNode(node));
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.EnumDeclaration:
-                    return generateNameForModuleOrEnum(<ModuleDeclaration | EnumDeclaration>node, getTextOfNode);
+                    return generateNameForModuleOrEnum(<ModuleDeclaration | EnumDeclaration>node);
                 case SyntaxKind.ImportDeclaration:
                 case SyntaxKind.ExportDeclaration:
                     return generateNameForImportOrExportDeclaration(<ImportDeclaration | ExportDeclaration>node);
@@ -2718,7 +2743,7 @@ namespace ts {
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                    return generateNameForMethodOrAccessor(<MethodDeclaration | AccessorDeclaration>node, getTextOfNode);
+                    return generateNameForMethodOrAccessor(<MethodDeclaration | AccessorDeclaration>node);
                 default:
                     return makeTempVariableName(TempFlags.Auto);
             }
@@ -2734,7 +2759,7 @@ namespace ts {
                 case GeneratedIdentifierKind.Loop:
                     return makeTempVariableName(TempFlags._i);
                 case GeneratedIdentifierKind.Unique:
-                    return makeUniqueName(name.text);
+                    return makeUniqueName(unescapeIdentifier(name.text));
             }
 
             Debug.fail("Unsupported GeneratedIdentifierKind.");

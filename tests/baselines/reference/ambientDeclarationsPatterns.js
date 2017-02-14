@@ -34,6 +34,7 @@ foo(fileText);
 
 //// [user.js]
 "use strict";
+exports.__esModule = true;
 ///<reference path="declarations.d.ts" />
 var foobarbaz_1 = require("foobarbaz");
 foobarbaz_1.foo(foobarbaz_1.baz);
