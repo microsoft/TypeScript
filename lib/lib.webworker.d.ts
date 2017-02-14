@@ -188,13 +188,13 @@ declare var Blob: {
 }
 
 interface Cache {
-    add(request: RequestInfo): PromiseLike<void>;
-    addAll(requests: RequestInfo[]): PromiseLike<void>;
-    delete(request: RequestInfo, options?: CacheQueryOptions): PromiseLike<boolean>;
+    add(request: RequestInfo): Promise<void>;
+    addAll(requests: RequestInfo[]): Promise<void>;
+    delete(request: RequestInfo, options?: CacheQueryOptions): Promise<boolean>;
     keys(request?: RequestInfo, options?: CacheQueryOptions): any;
-    match(request: RequestInfo, options?: CacheQueryOptions): PromiseLike<Response>;
+    match(request: RequestInfo, options?: CacheQueryOptions): Promise<Response>;
     matchAll(request?: RequestInfo, options?: CacheQueryOptions): any;
-    put(request: RequestInfo, response: Response): PromiseLike<void>;
+    put(request: RequestInfo, response: Response): Promise<void>;
 }
 
 declare var Cache: {
@@ -203,11 +203,11 @@ declare var Cache: {
 }
 
 interface CacheStorage {
-    delete(cacheName: string): PromiseLike<boolean>;
-    has(cacheName: string): PromiseLike<boolean>;
+    delete(cacheName: string): Promise<boolean>;
+    has(cacheName: string): Promise<boolean>;
     keys(): any;
-    match(request: RequestInfo, options?: CacheQueryOptions): PromiseLike<any>;
-    open(cacheName: string): PromiseLike<Cache>;
+    match(request: RequestInfo, options?: CacheQueryOptions): Promise<any>;
+    open(cacheName: string): Promise<Cache>;
 }
 
 declare var CacheStorage: {
@@ -766,7 +766,7 @@ interface Notification extends EventTarget {
 declare var Notification: {
     prototype: Notification;
     new(title: string, options?: NotificationOptions): Notification;
-    requestPermission(callback?: NotificationPermissionCallback): PromiseLike<string>;
+    requestPermission(callback?: NotificationPermissionCallback): Promise<string>;
 }
 
 interface Performance {
@@ -882,9 +882,9 @@ declare var ProgressEvent: {
 }
 
 interface PushManager {
-    getSubscription(): PromiseLike<PushSubscription>;
-    permissionState(options?: PushSubscriptionOptionsInit): PromiseLike<string>;
-    subscribe(options?: PushSubscriptionOptionsInit): PromiseLike<PushSubscription>;
+    getSubscription(): Promise<PushSubscription>;
+    permissionState(options?: PushSubscriptionOptionsInit): Promise<string>;
+    subscribe(options?: PushSubscriptionOptionsInit): Promise<PushSubscription>;
 }
 
 declare var PushManager: {
@@ -897,7 +897,7 @@ interface PushSubscription {
     readonly options: PushSubscriptionOptions;
     getKey(name: string): ArrayBuffer | null;
     toJSON(): any;
-    unsubscribe(): PromiseLike<boolean>;
+    unsubscribe(): Promise<boolean>;
 }
 
 declare var PushSubscription: {
@@ -917,7 +917,7 @@ declare var PushSubscriptionOptions: {
 
 interface ReadableStream {
     readonly locked: boolean;
-    cancel(): PromiseLike<void>;
+    cancel(): Promise<void>;
     getReader(): ReadableStreamReader;
 }
 
@@ -927,8 +927,8 @@ declare var ReadableStream: {
 }
 
 interface ReadableStreamReader {
-    cancel(): PromiseLike<void>;
-    read(): PromiseLike<any>;
+    cancel(): Promise<void>;
+    read(): Promise<any>;
     releaseLock(): void;
 }
 
@@ -1006,9 +1006,9 @@ interface ServiceWorkerRegistration extends EventTarget {
     readonly sync: SyncManager;
     readonly waiting: ServiceWorker | null;
     getNotifications(filter?: GetNotificationOptions): any;
-    showNotification(title: string, options?: NotificationOptions): PromiseLike<void>;
-    unregister(): PromiseLike<boolean>;
-    update(): PromiseLike<void>;
+    showNotification(title: string, options?: NotificationOptions): Promise<void>;
+    unregister(): Promise<boolean>;
+    update(): Promise<void>;
     addEventListener<K extends keyof ServiceWorkerRegistrationEventMap>(type: K, listener: (this: ServiceWorkerRegistration, ev: ServiceWorkerRegistrationEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
@@ -1020,7 +1020,7 @@ declare var ServiceWorkerRegistration: {
 
 interface SyncManager {
     getTags(): any;
-    register(tag: string): PromiseLike<void>;
+    register(tag: string): Promise<void>;
 }
 
 declare var SyncManager: {
@@ -1150,14 +1150,14 @@ interface AbstractWorker {
 
 interface Body {
     readonly bodyUsed: boolean;
-    arrayBuffer(): PromiseLike<ArrayBuffer>;
-    blob(): PromiseLike<Blob>;
-    json(): PromiseLike<any>;
-    text(): PromiseLike<string>;
+    arrayBuffer(): Promise<ArrayBuffer>;
+    blob(): Promise<Blob>;
+    json(): Promise<any>;
+    text(): Promise<string>;
 }
 
 interface GlobalFetch {
-    fetch(input: RequestInfo, init?: RequestInit): PromiseLike<Response>;
+    fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
 }
 
 interface MSBaseReaderEventMap {
@@ -1254,10 +1254,10 @@ declare var Client: {
 }
 
 interface Clients {
-    claim(): PromiseLike<void>;
-    get(id: string): PromiseLike<any>;
+    claim(): Promise<void>;
+    get(id: string): Promise<any>;
     matchAll(options?: ClientQueryOptions): any;
-    openWindow(url: USVString): PromiseLike<WindowClient>;
+    openWindow(url: USVString): Promise<WindowClient>;
 }
 
 declare var Clients: {
@@ -1283,7 +1283,7 @@ declare var DedicatedWorkerGlobalScope: {
 }
 
 interface ExtendableEvent extends Event {
-    waitUntil(f: PromiseLike<any>): void;
+    waitUntil(f: Promise<any>): void;
 }
 
 declare var ExtendableEvent: {
@@ -1308,7 +1308,7 @@ interface FetchEvent extends ExtendableEvent {
     readonly clientId: string | null;
     readonly isReload: boolean;
     readonly request: Request;
-    respondWith(r: PromiseLike<Response>): void;
+    respondWith(r: Promise<Response>): void;
 }
 
 declare var FetchEvent: {
@@ -1383,7 +1383,7 @@ interface ServiceWorkerGlobalScope extends WorkerGlobalScope {
     onpushsubscriptionchange: (this: ServiceWorkerGlobalScope, ev: ExtendableEvent) => any;
     onsync: (this: ServiceWorkerGlobalScope, ev: SyncEvent) => any;
     readonly registration: ServiceWorkerRegistration;
-    skipWaiting(): PromiseLike<void>;
+    skipWaiting(): Promise<void>;
     addEventListener<K extends keyof ServiceWorkerGlobalScopeEventMap>(type: K, listener: (this: ServiceWorkerGlobalScope, ev: ServiceWorkerGlobalScopeEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
@@ -1406,8 +1406,8 @@ declare var SyncEvent: {
 interface WindowClient extends Client {
     readonly focused: boolean;
     readonly visibilityState: string;
-    focus(): PromiseLike<WindowClient>;
-    navigate(url: USVString): PromiseLike<WindowClient>;
+    focus(): Promise<WindowClient>;
+    navigate(url: USVString): Promise<WindowClient>;
 }
 
 declare var WindowClient: {
@@ -1735,7 +1735,7 @@ declare function setTimeout(handler: any, timeout?: any, ...args: any[]): number
 declare function atob(encodedString: string): string;
 declare function btoa(rawString: string): string;
 declare var console: Console;
-declare function fetch(input: RequestInfo, init?: RequestInit): PromiseLike<Response>;
+declare function fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
 declare function dispatchEvent(evt: Event): boolean;
 declare function removeEventListener(type: string, listener?: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 declare function addEventListener<K extends keyof DedicatedWorkerGlobalScopeEventMap>(type: K, listener: (this: DedicatedWorkerGlobalScope, ev: DedicatedWorkerGlobalScopeEventMap[K]) => any, useCapture?: boolean): void;

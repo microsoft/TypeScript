@@ -361,14 +361,14 @@ interface String {
 
     /**
       * Replaces text in a string, using a regular expression or search string.
-      * @param searchValue A string that represents the regular expression.
+      * @param searchValue A string to search for.
       * @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
       */
     replace(searchValue: string, replaceValue: string): string;
 
     /**
       * Replaces text in a string, using a regular expression or search string.
-      * @param searchValue A string that represents the regular expression.
+      * @param searchValue A string to search for.
       * @param replacer A function that returns the replacement text.
       */
     replace(searchValue: string, replacer: (substring: string, ...args: any[]) => string): string;
@@ -1369,6 +1369,57 @@ interface PromiseLike<T> {
     then<TResult1, TResult2>(
         onfulfilled: (value: T) => TResult1 | PromiseLike<TResult1>,
         onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): PromiseLike<TResult1 | TResult2>;
+}
+
+/**
+ * Represents the completion of an asynchronous operation
+ */
+interface Promise<T> {
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then(onfulfilled?: ((value: T) => T | PromiseLike<T>) | undefined | null, onrejected?: ((reason: any) => T | PromiseLike<T>) | undefined | null): Promise<T>;
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult>(onfulfilled: ((value: T) => T | PromiseLike<T>) | undefined | null, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<T | TResult>;
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult>(onfulfilled: (value: T) => TResult | PromiseLike<TResult>, onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<TResult>;
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1, TResult2>(onfulfilled: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>;
+
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch(onrejected?: ((reason: any) => T | PromiseLike<T>) | undefined | null): Promise<T>;
+
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult>(onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<T | TResult>;
 }
 
 interface ArrayLike<T> {
@@ -5257,56 +5308,6 @@ interface Float64ArrayConstructor {
 }
 
 
-/**
- * Represents the completion of an asynchronous operation
- */
-interface Promise<T> {
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then(onfulfilled?: ((value: T) => T | PromiseLike<T>) | undefined | null, onrejected?: ((reason: any) => T | PromiseLike<T>) | undefined | null): Promise<T>;
-
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult>(onfulfilled: ((value: T) => T | PromiseLike<T>) | undefined | null, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<T | TResult>;
-
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult>(onfulfilled: (value: T) => TResult | PromiseLike<TResult>, onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<TResult>;
-
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1, TResult2>(onfulfilled: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>;
-
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch(onrejected?: ((reason: any) => T | PromiseLike<T>) | undefined | null): Promise<T>;
-
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult>(onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<T | TResult>;
-}
 
 interface PromiseConstructor {
     /**
@@ -7251,7 +7252,7 @@ interface AudioContextBase extends EventTarget {
     onstatechange: (this: AudioContext, ev: Event) => any;
     readonly sampleRate: number;
     readonly state: string;
-    close(): PromiseLike<void>;
+    close(): Promise<void>;
     createAnalyser(): AnalyserNode;
     createBiquadFilter(): BiquadFilterNode;
     createBuffer(numberOfChannels: number, length: number, sampleRate: number): AudioBuffer;
@@ -7271,14 +7272,14 @@ interface AudioContextBase extends EventTarget {
     createScriptProcessor(bufferSize?: number, numberOfInputChannels?: number, numberOfOutputChannels?: number): ScriptProcessorNode;
     createStereoPanner(): StereoPannerNode;
     createWaveShaper(): WaveShaperNode;
-    decodeAudioData(audioData: ArrayBuffer, successCallback?: DecodeSuccessCallback, errorCallback?: DecodeErrorCallback): PromiseLike<AudioBuffer>;
-    resume(): PromiseLike<void>;
+    decodeAudioData(audioData: ArrayBuffer, successCallback?: DecodeSuccessCallback, errorCallback?: DecodeErrorCallback): Promise<AudioBuffer>;
+    resume(): Promise<void>;
     addEventListener<K extends keyof AudioContextEventMap>(type: K, listener: (this: AudioContext, ev: AudioContextEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 interface AudioContext extends AudioContextBase {
-    suspend(): PromiseLike<void>;
+    suspend(): Promise<void>;
 }
 
 declare var AudioContext: {
@@ -7996,13 +7997,13 @@ declare var CSSSupportsRule: {
 }
 
 interface Cache {
-    add(request: RequestInfo): PromiseLike<void>;
-    addAll(requests: RequestInfo[]): PromiseLike<void>;
-    delete(request: RequestInfo, options?: CacheQueryOptions): PromiseLike<boolean>;
+    add(request: RequestInfo): Promise<void>;
+    addAll(requests: RequestInfo[]): Promise<void>;
+    delete(request: RequestInfo, options?: CacheQueryOptions): Promise<boolean>;
     keys(request?: RequestInfo, options?: CacheQueryOptions): any;
-    match(request: RequestInfo, options?: CacheQueryOptions): PromiseLike<Response>;
+    match(request: RequestInfo, options?: CacheQueryOptions): Promise<Response>;
     matchAll(request?: RequestInfo, options?: CacheQueryOptions): any;
-    put(request: RequestInfo, response: Response): PromiseLike<void>;
+    put(request: RequestInfo, response: Response): Promise<void>;
 }
 
 declare var Cache: {
@@ -8011,11 +8012,11 @@ declare var Cache: {
 }
 
 interface CacheStorage {
-    delete(cacheName: string): PromiseLike<boolean>;
-    has(cacheName: string): PromiseLike<boolean>;
+    delete(cacheName: string): Promise<boolean>;
+    has(cacheName: string): Promise<boolean>;
     keys(): any;
-    match(request: RequestInfo, options?: CacheQueryOptions): PromiseLike<any>;
-    open(cacheName: string): PromiseLike<Cache>;
+    match(request: RequestInfo, options?: CacheQueryOptions): Promise<any>;
+    open(cacheName: string): Promise<Cache>;
 }
 
 declare var CacheStorage: {
@@ -11636,7 +11637,7 @@ interface HTMLMediaElement extends HTMLElement {
       * Loads and starts playback of a media resource.
       */
     play(): void;
-    setMediaKeys(mediaKeys: MediaKeys | null): PromiseLike<void>;
+    setMediaKeys(mediaKeys: MediaKeys | null): Promise<void>;
     readonly HAVE_CURRENT_DATA: number;
     readonly HAVE_ENOUGH_DATA: number;
     readonly HAVE_FUTURE_DATA: number;
@@ -13214,7 +13215,7 @@ interface MSApp {
     execAsyncAtPriority(asynchronousCallback: MSExecAtPriorityFunctionCallback, priority: string, ...args: any[]): void;
     execAtPriority(synchronousCallback: MSExecAtPriorityFunctionCallback, priority: string, ...args: any[]): any;
     getCurrentPriority(): string;
-    getHtmlPrintDocumentSourceAsync(htmlDoc: any): PromiseLike<any>;
+    getHtmlPrintDocumentSourceAsync(htmlDoc: any): Promise<any>;
     getViewId(view: any): any;
     isTaskScheduledAtPriorityOrHigher(priority: string): boolean;
     pageHandlesAllApplicationActivations(enabled: boolean): void;
@@ -13275,8 +13276,8 @@ declare var MSBlobBuilder: {
 }
 
 interface MSCredentials {
-    getAssertion(challenge: string, filter?: MSCredentialFilter, params?: MSSignatureParameters): PromiseLike<MSAssertion>;
-    makeCredential(accountInfo: MSAccountInfo, params: MSCredentialParameters[], challenge?: string): PromiseLike<MSAssertion>;
+    getAssertion(challenge: string, filter?: MSCredentialFilter, params?: MSSignatureParameters): Promise<MSAssertion>;
+    makeCredential(accountInfo: MSAccountInfo, params: MSCredentialParameters[], challenge?: string): Promise<MSAssertion>;
 }
 
 declare var MSCredentials: {
@@ -13664,7 +13665,7 @@ interface MediaDevices extends EventTarget {
     ondevicechange: (this: MediaDevices, ev: Event) => any;
     enumerateDevices(): any;
     getSupportedConstraints(): MediaTrackSupportedConstraints;
-    getUserMedia(constraints: MediaStreamConstraints): PromiseLike<MediaStream>;
+    getUserMedia(constraints: MediaStreamConstraints): Promise<MediaStream>;
     addEventListener<K extends keyof MediaDevicesEventMap>(type: K, listener: (this: MediaDevices, ev: MediaDevicesEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
@@ -13723,15 +13724,15 @@ declare var MediaKeyMessageEvent: {
 }
 
 interface MediaKeySession extends EventTarget {
-    readonly closed: PromiseLike<void>;
+    readonly closed: Promise<void>;
     readonly expiration: number;
     readonly keyStatuses: MediaKeyStatusMap;
     readonly sessionId: string;
-    close(): PromiseLike<void>;
-    generateRequest(initDataType: string, initData: any): PromiseLike<void>;
-    load(sessionId: string): PromiseLike<boolean>;
-    remove(): PromiseLike<void>;
-    update(response: any): PromiseLike<void>;
+    close(): Promise<void>;
+    generateRequest(initDataType: string, initData: any): Promise<void>;
+    load(sessionId: string): Promise<boolean>;
+    remove(): Promise<void>;
+    update(response: any): Promise<void>;
 }
 
 declare var MediaKeySession: {
@@ -13753,7 +13754,7 @@ declare var MediaKeyStatusMap: {
 
 interface MediaKeySystemAccess {
     readonly keySystem: string;
-    createMediaKeys(): PromiseLike<MediaKeys>;
+    createMediaKeys(): Promise<MediaKeys>;
     getConfiguration(): MediaKeySystemConfiguration;
 }
 
@@ -13764,7 +13765,7 @@ declare var MediaKeySystemAccess: {
 
 interface MediaKeys {
     createSession(sessionType?: string): MediaKeySession;
-    setServerCertificate(serverCertificate: any): PromiseLike<void>;
+    setServerCertificate(serverCertificate: any): Promise<void>;
 }
 
 declare var MediaKeys: {
@@ -13903,7 +13904,7 @@ interface MediaStreamTrack extends EventTarget {
     readonly readonly: boolean;
     readonly readyState: string;
     readonly remote: boolean;
-    applyConstraints(constraints: MediaTrackConstraints): PromiseLike<void>;
+    applyConstraints(constraints: MediaTrackConstraints): Promise<void>;
     clone(): MediaStreamTrack;
     getCapabilities(): MediaTrackCapabilities;
     getConstraints(): MediaTrackConstraints;
@@ -14137,7 +14138,7 @@ interface Navigator extends Object, NavigatorID, NavigatorOnLine, NavigatorConte
     getGamepads(): Gamepad[];
     javaEnabled(): boolean;
     msLaunchUri(uri: string, successCallback?: MSLaunchUriCallback, noHandlerCallback?: MSLaunchUriCallback): void;
-    requestMediaKeySystemAccess(keySystem: string, supportedConfigurations: MediaKeySystemConfiguration[]): PromiseLike<MediaKeySystemAccess>;
+    requestMediaKeySystemAccess(keySystem: string, supportedConfigurations: MediaKeySystemConfiguration[]): Promise<MediaKeySystemAccess>;
     vibrate(pattern: number | number[]): boolean;
 }
 
@@ -14297,7 +14298,7 @@ interface Notification extends EventTarget {
 declare var Notification: {
     prototype: Notification;
     new(title: string, options?: NotificationOptions): Notification;
-    requestPermission(callback?: NotificationPermissionCallback): PromiseLike<string>;
+    requestPermission(callback?: NotificationPermissionCallback): Promise<string>;
 }
 
 interface OES_element_index_uint {
@@ -14368,8 +14369,8 @@ interface OfflineAudioContextEventMap extends AudioContextEventMap {
 interface OfflineAudioContext extends AudioContextBase {
     readonly length: number;
     oncomplete: (this: OfflineAudioContext, ev: OfflineAudioCompletionEvent) => any;
-    startRendering(): PromiseLike<AudioBuffer>;
-    suspend(suspendTime: number): PromiseLike<void>;
+    startRendering(): Promise<AudioBuffer>;
+    suspend(suspendTime: number): Promise<void>;
     addEventListener<K extends keyof OfflineAudioContextEventMap>(type: K, listener: (this: OfflineAudioContext, ev: OfflineAudioContextEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
@@ -14484,8 +14485,8 @@ interface PaymentRequest extends EventTarget {
     readonly shippingAddress: PaymentAddress | null;
     readonly shippingOption: string | null;
     readonly shippingType: string | null;
-    abort(): PromiseLike<void>;
-    show(): PromiseLike<PaymentResponse>;
+    abort(): Promise<void>;
+    show(): Promise<PaymentResponse>;
     addEventListener<K extends keyof PaymentRequestEventMap>(type: K, listener: (this: PaymentRequest, ev: PaymentRequestEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
@@ -14496,7 +14497,7 @@ declare var PaymentRequest: {
 }
 
 interface PaymentRequestUpdateEvent extends Event {
-    updateWith(d: PromiseLike<PaymentDetails>): void;
+    updateWith(d: Promise<PaymentDetails>): void;
 }
 
 declare var PaymentRequestUpdateEvent: {
@@ -14512,7 +14513,7 @@ interface PaymentResponse {
     readonly payerPhone: string | null;
     readonly shippingAddress: PaymentAddress | null;
     readonly shippingOption: string | null;
-    complete(result?: string): PromiseLike<void>;
+    complete(result?: string): Promise<void>;
     toJSON(): any;
 }
 
@@ -14838,9 +14839,9 @@ declare var ProgressEvent: {
 }
 
 interface PushManager {
-    getSubscription(): PromiseLike<PushSubscription>;
-    permissionState(options?: PushSubscriptionOptionsInit): PromiseLike<string>;
-    subscribe(options?: PushSubscriptionOptionsInit): PromiseLike<PushSubscription>;
+    getSubscription(): Promise<PushSubscription>;
+    permissionState(options?: PushSubscriptionOptionsInit): Promise<string>;
+    subscribe(options?: PushSubscriptionOptionsInit): Promise<PushSubscription>;
 }
 
 declare var PushManager: {
@@ -14853,7 +14854,7 @@ interface PushSubscription {
     readonly options: PushSubscriptionOptions;
     getKey(name: string): ArrayBuffer | null;
     toJSON(): any;
-    unsubscribe(): PromiseLike<boolean>;
+    unsubscribe(): Promise<boolean>;
 }
 
 declare var PushSubscription: {
@@ -15047,19 +15048,19 @@ interface RTCPeerConnection extends EventTarget {
     onsignalingstatechange: (this: RTCPeerConnection, ev: Event) => any;
     readonly remoteDescription: RTCSessionDescription | null;
     readonly signalingState: string;
-    addIceCandidate(candidate: RTCIceCandidate, successCallback?: VoidFunction, failureCallback?: RTCPeerConnectionErrorCallback): PromiseLike<void>;
+    addIceCandidate(candidate: RTCIceCandidate, successCallback?: VoidFunction, failureCallback?: RTCPeerConnectionErrorCallback): Promise<void>;
     addStream(stream: MediaStream): void;
     close(): void;
-    createAnswer(successCallback?: RTCSessionDescriptionCallback, failureCallback?: RTCPeerConnectionErrorCallback): PromiseLike<RTCSessionDescription>;
-    createOffer(successCallback?: RTCSessionDescriptionCallback, failureCallback?: RTCPeerConnectionErrorCallback, options?: RTCOfferOptions): PromiseLike<RTCSessionDescription>;
+    createAnswer(successCallback?: RTCSessionDescriptionCallback, failureCallback?: RTCPeerConnectionErrorCallback): Promise<RTCSessionDescription>;
+    createOffer(successCallback?: RTCSessionDescriptionCallback, failureCallback?: RTCPeerConnectionErrorCallback, options?: RTCOfferOptions): Promise<RTCSessionDescription>;
     getConfiguration(): RTCConfiguration;
     getLocalStreams(): MediaStream[];
     getRemoteStreams(): MediaStream[];
-    getStats(selector: MediaStreamTrack | null, successCallback?: RTCStatsCallback, failureCallback?: RTCPeerConnectionErrorCallback): PromiseLike<RTCStatsReport>;
+    getStats(selector: MediaStreamTrack | null, successCallback?: RTCStatsCallback, failureCallback?: RTCPeerConnectionErrorCallback): Promise<RTCStatsReport>;
     getStreamById(streamId: string): MediaStream | null;
     removeStream(stream: MediaStream): void;
-    setLocalDescription(description: RTCSessionDescription, successCallback?: VoidFunction, failureCallback?: RTCPeerConnectionErrorCallback): PromiseLike<void>;
-    setRemoteDescription(description: RTCSessionDescription, successCallback?: VoidFunction, failureCallback?: RTCPeerConnectionErrorCallback): PromiseLike<void>;
+    setLocalDescription(description: RTCSessionDescription, successCallback?: VoidFunction, failureCallback?: RTCPeerConnectionErrorCallback): Promise<void>;
+    setRemoteDescription(description: RTCSessionDescription, successCallback?: VoidFunction, failureCallback?: RTCPeerConnectionErrorCallback): Promise<void>;
     addEventListener<K extends keyof RTCPeerConnectionEventMap>(type: K, listener: (this: RTCPeerConnection, ev: RTCPeerConnectionEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
@@ -15165,8 +15166,8 @@ declare var RTCSsrcConflictEvent: {
 }
 
 interface RTCStatsProvider extends EventTarget {
-    getStats(): PromiseLike<RTCStatsReport>;
-    msGetStats(): PromiseLike<RTCStatsReport>;
+    getStats(): Promise<RTCStatsReport>;
+    msGetStats(): Promise<RTCStatsReport>;
 }
 
 declare var RTCStatsProvider: {
@@ -15220,7 +15221,7 @@ declare var Range: {
 
 interface ReadableStream {
     readonly locked: boolean;
-    cancel(): PromiseLike<void>;
+    cancel(): Promise<void>;
     getReader(): ReadableStreamReader;
 }
 
@@ -15230,8 +15231,8 @@ declare var ReadableStream: {
 }
 
 interface ReadableStreamReader {
-    cancel(): PromiseLike<void>;
-    read(): PromiseLike<any>;
+    cancel(): Promise<void>;
+    read(): Promise<any>;
     releaseLock(): void;
 }
 
@@ -17205,10 +17206,10 @@ interface ServiceWorkerContainer extends EventTarget {
     readonly controller: ServiceWorker | null;
     oncontrollerchange: (this: ServiceWorkerContainer, ev: Event) => any;
     onmessage: (this: ServiceWorkerContainer, ev: ServiceWorkerMessageEvent) => any;
-    readonly ready: PromiseLike<ServiceWorkerRegistration>;
-    getRegistration(clientURL?: USVString): PromiseLike<any>;
+    readonly ready: Promise<ServiceWorkerRegistration>;
+    getRegistration(clientURL?: USVString): Promise<any>;
     getRegistrations(): any;
-    register(scriptURL: USVString, options?: RegistrationOptions): PromiseLike<ServiceWorkerRegistration>;
+    register(scriptURL: USVString, options?: RegistrationOptions): Promise<ServiceWorkerRegistration>;
     addEventListener<K extends keyof ServiceWorkerContainerEventMap>(type: K, listener: (this: ServiceWorkerContainer, ev: ServiceWorkerContainerEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
@@ -17244,9 +17245,9 @@ interface ServiceWorkerRegistration extends EventTarget {
     readonly sync: SyncManager;
     readonly waiting: ServiceWorker | null;
     getNotifications(filter?: GetNotificationOptions): any;
-    showNotification(title: string, options?: NotificationOptions): PromiseLike<void>;
-    unregister(): PromiseLike<boolean>;
-    update(): PromiseLike<void>;
+    showNotification(title: string, options?: NotificationOptions): Promise<void>;
+    unregister(): Promise<boolean>;
+    update(): Promise<void>;
     addEventListener<K extends keyof ServiceWorkerRegistrationEventMap>(type: K, listener: (this: ServiceWorkerRegistration, ev: ServiceWorkerRegistrationEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
@@ -17481,7 +17482,7 @@ declare var SubtleCrypto: {
 
 interface SyncManager {
     getTags(): any;
-    register(tag: string): PromiseLike<void>;
+    register(tag: string): Promise<void>;
 }
 
 declare var SyncManager: {
@@ -17895,8 +17896,8 @@ declare var WaveShaperNode: {
 }
 
 interface WebAuthentication {
-    getAssertion(assertionChallenge: any, options?: AssertionOptions): PromiseLike<WebAuthnAssertion>;
-    makeCredential(accountInformation: Account, cryptoParameters: ScopedCredentialParameters[], attestationChallenge: any, options?: ScopedCredentialOptions): PromiseLike<ScopedCredentialInfo>;
+    getAssertion(assertionChallenge: any, options?: AssertionOptions): Promise<WebAuthnAssertion>;
+    makeCredential(accountInformation: Account, cryptoParameters: ScopedCredentialParameters[], attestationChallenge: any, options?: ScopedCredentialOptions): Promise<ScopedCredentialInfo>;
 }
 
 declare var WebAuthentication: {
@@ -19389,10 +19390,10 @@ interface AbstractWorker {
 
 interface Body {
     readonly bodyUsed: boolean;
-    arrayBuffer(): PromiseLike<ArrayBuffer>;
-    blob(): PromiseLike<Blob>;
-    json(): PromiseLike<any>;
-    text(): PromiseLike<string>;
+    arrayBuffer(): Promise<ArrayBuffer>;
+    blob(): Promise<Blob>;
+    json(): Promise<any>;
+    text(): Promise<string>;
 }
 
 interface CanvasPathMethods {
@@ -19533,7 +19534,7 @@ interface GlobalEventHandlers {
 }
 
 interface GlobalFetch {
-    fetch(input: RequestInfo, init?: RequestInit): PromiseLike<Response>;
+    fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
 }
 
 interface HTMLTableAlignment {
@@ -20790,7 +20791,7 @@ declare var onwheel: (this: Window, ev: WheelEvent) => any;
 declare var indexedDB: IDBFactory;
 declare function atob(encodedString: string): string;
 declare function btoa(rawString: string): string;
-declare function fetch(input: RequestInfo, init?: RequestInit): PromiseLike<Response>;
+declare function fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
 declare function addEventListener<K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, useCapture?: boolean): void;
 declare function addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 type AAGUID = string;
