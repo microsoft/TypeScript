@@ -26,6 +26,7 @@ let d = <SFC2AndEmptyComp data-prop />;
 
 //// [file.js]
 "use strict";
+exports.__esModule = true;
 var React = require("react");
 function EmptySFC1() {
     return React.createElement("div", null, "Hi");

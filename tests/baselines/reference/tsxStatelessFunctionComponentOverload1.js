@@ -43,6 +43,7 @@ const e6 = <TestingOptional y1 y3 y2={10} />
 //// [file.jsx]
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
+    exports.__esModule = true;
     // OK
     var c1 = <OneThing yxx='ok'/>;
     var c2 = <OneThing yy={100} yy1="hello"/>;

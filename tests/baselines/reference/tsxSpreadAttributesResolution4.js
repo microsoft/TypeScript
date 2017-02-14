@@ -48,6 +48,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var _this = this;
+exports.__esModule = true;
 var React = require("react");
 var Poisoned = (function (_super) {
     __extends(Poisoned, _super);

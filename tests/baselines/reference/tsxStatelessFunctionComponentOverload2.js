@@ -36,6 +36,7 @@ const c10 = <OneThing {...obj2} yy1="boo" />;
 //// [file.jsx]
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
+    exports.__esModule = true;
     var obj = {
         yy: 10,
         yy1: "hello"

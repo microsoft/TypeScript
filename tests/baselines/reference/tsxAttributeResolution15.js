@@ -29,6 +29,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var _this = this;
+exports.__esModule = true;
 var React = require("react");
 var BigGreeter = (function (_super) {
     __extends(BigGreeter, _super);

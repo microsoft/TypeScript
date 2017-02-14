@@ -41,6 +41,7 @@ const d1 = <NoOverload1 {...{goTo:"home"}} extra  />;  // goTo has type "home" |
 //// [file.jsx]
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
+    exports.__esModule = true;
     function MainButton(props) {
         var linkProps = props;
         if (linkProps.goTo) {

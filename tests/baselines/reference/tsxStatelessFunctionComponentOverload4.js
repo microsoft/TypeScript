@@ -38,6 +38,7 @@ const e2 = <TestingOptional y1="hello" y2={1000} y3 />
 //// [file.jsx]
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
+    exports.__esModule = true;
     var obj = {
         yy: 10,
         yy1: "hello"

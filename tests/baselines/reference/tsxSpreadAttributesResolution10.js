@@ -36,6 +36,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+exports.__esModule = true;
 var React = require("react");
 var Opt = (function (_super) {
     __extends(Opt, _super);
