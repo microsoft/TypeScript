@@ -1908,7 +1908,10 @@ declare namespace ts {
         Classic = 1,
         NodeJs = 2,
     }
-    type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]>;
+    interface PluginImport {
+        name: string;
+    }
+    type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[];
     interface CompilerOptions {
         allowJs?: boolean;
         allowSyntheticDefaultImports?: boolean;
@@ -2017,6 +2020,7 @@ declare namespace ts {
         JSX = 2,
         TS = 3,
         TSX = 4,
+        External = 5,
     }
     const enum ScriptTarget {
         ES3 = 0,
@@ -3206,6 +3210,13 @@ declare namespace ts.server {
         compressionKind: string;
         data: any;
     }
+    type RequireResult = {
+        module: {};
+        error: undefined;
+    } | {
+        module: undefined;
+        error: {};
+    };
     interface ServerHost extends System {
         setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
         clearTimeout(timeoutId: any): void;
@@ -3213,6 +3224,7 @@ declare namespace ts.server {
         clearImmediate(timeoutId: any): void;
         gc?(): void;
         trace?(s: string): void;
+        require?(initialPath: string, moduleName: string): RequireResult;
     }
     interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
         " __sortedReadonlyArrayBrand": any;
@@ -4115,6 +4127,7 @@ declare namespace ts.server.protocol {
         outDir?: string;
         outFile?: string;
         paths?: MapLike<string[]>;
+        plugins?: PluginImport[];
         preserveConstEnums?: boolean;
         project?: string;
         reactNamespace?: string;
@@ -4598,6 +4611,22 @@ declare namespace ts.server {
         get(path: Path): ReadonlyArray<string>;
         set(path: Path, value: ReadonlyArray<string>): void;
     }
+    interface PluginCreateInfo {
+        project: Project;
+        languageService: LanguageService;
+        languageServiceHost: LanguageServiceHost;
+        serverHost: ServerHost;
+        config: any;
+    }
+    interface PluginModule {
+        create(createInfo: PluginCreateInfo): LanguageService;
+        getExternalFiles?(proj: Project): string[];
+    }
+    interface PluginModuleFactory {
+        (mod: {
+            typescript: typeof ts;
+        }): PluginModule;
+    }
     abstract class Project {
         private readonly projectName;
         readonly projectKind: ProjectKind;
@@ -4607,12 +4636,12 @@ declare namespace ts.server {
         compileOnSaveEnabled: boolean;
         private rootFiles;
         private rootFilesMap;
-        private lsHost;
         private program;
         private cachedUnresolvedImportsPerFile;
         private lastCachedUnresolvedImportsList;
-        private readonly languageService;
+        protected languageService: LanguageService;
         languageServiceEnabled: boolean;
+        protected readonly lsHost: LSHost;
         builder: Builder;
         private updatedFileNames;
         private lastReportedFileNames;
@@ -4625,6 +4654,7 @@ declare namespace ts.server {
         isNonTsProject(): boolean;
         isJsOnlyProject(): boolean;
         getCachedUnresolvedImportsPerFile_TestOnly(): UnresolvedImportsMap;
+        static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {};
         constructor(projectName: string, projectKind: ProjectKind, projectService: ProjectService, documentRegistry: ts.DocumentRegistry, hasExplicitListOfFiles: boolean, languageServiceEnabled: boolean, compilerOptions: CompilerOptions, compileOnSaveEnabled: boolean);
         private setInternalCompilerOptionsForEmittingJsFiles();
         getProjectErrors(): Diagnostic[];
@@ -4636,6 +4666,7 @@ declare namespace ts.server {
         getProjectName(): string;
         abstract getProjectRootPath(): string | undefined;
         abstract getTypeAcquisition(): TypeAcquisition;
+        getExternalFiles(): string[];
         getSourceFile(path: Path): SourceFile;
         updateTypes(): void;
         close(): void;
@@ -4682,6 +4713,7 @@ declare namespace ts.server {
         getTypeAcquisition(): TypeAcquisition;
     }
     class ConfiguredProject extends Project {
+        private configFileName;
         private wildcardDirectories;
         compileOnSaveEnabled: boolean;
         private typeAcquisition;
@@ -4690,13 +4722,17 @@ declare namespace ts.server {
         private directoriesWatchedForWildcards;
         private typeRootsWatchers;
         readonly canonicalConfigFilePath: NormalizedPath;
+        private plugins;
         openRefCount: number;
         constructor(configFileName: NormalizedPath, projectService: ProjectService, documentRegistry: ts.DocumentRegistry, hasExplicitListOfFiles: boolean, compilerOptions: CompilerOptions, wildcardDirectories: Map<WatchDirectoryFlags>, languageServiceEnabled: boolean, compileOnSaveEnabled: boolean);
         getConfigFilePath(): string;
+        enablePlugins(): void;
+        private enableProxy(pluginModuleFactory, configEntry);
         getProjectRootPath(): string;
         setProjectErrors(projectErrors: Diagnostic[]): void;
         setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void;
         getTypeAcquisition(): TypeAcquisition;
+        getExternalFiles(): string[];
         watchConfigFile(callback: (project: ConfiguredProject) => void): void;
         watchTypeRoots(callback: (project: ConfiguredProject, path: string) => void): void;
         watchConfigDirectory(callback: (project: ConfiguredProject, path: string) => void): void;
@@ -4752,7 +4788,7 @@ declare namespace ts.server {
     function convertFormatOptions(protocolOptions: protocol.FormatCodeSettings): FormatCodeSettings;
     function convertCompilerOptions(protocolOptions: protocol.ExternalProjectCompilerOptions): CompilerOptions & protocol.CompileOnSaveMixin;
     function tryConvertScriptKindName(scriptKindName: protocol.ScriptKindName | ScriptKind): ScriptKind;
-    function convertScriptKindName(scriptKindName: protocol.ScriptKindName): ScriptKind;
+    function convertScriptKindName(scriptKindName: protocol.ScriptKindName): ScriptKind.Unknown | ScriptKind.JS | ScriptKind.JSX | ScriptKind.TS | ScriptKind.TSX;
     function combineProjectOutput<T>(projects: Project[], action: (project: Project) => T[], comparer?: (a: T, b: T) => number, areEqual?: (a: T, b: T) => boolean): T[];
     interface HostConfiguration {
         formatCodeOptions: FormatCodeSettings;

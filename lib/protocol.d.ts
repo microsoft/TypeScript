@@ -1790,6 +1790,7 @@ declare namespace ts.server.protocol {
         outDir?: string;
         outFile?: string;
         paths?: MapLike<string[]>;
+        plugins?: PluginImport[];
         preserveConstEnums?: boolean;
         project?: string;
         reactNamespace?: string;
@@ -1886,7 +1887,11 @@ declare namespace ts.server.protocol {
         [index: string]: T;
     }
 
-    type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]>;
+    interface PluginImport {
+        name: string;
+    }
+
+    type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[];
 }
 declare namespace ts {
     // these types are empty stubs for types from services and should not be used directly

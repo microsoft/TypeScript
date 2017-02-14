@@ -1992,7 +1992,10 @@ declare namespace ts {
         Classic = 1,
         NodeJs = 2,
     }
-    type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]>;
+    interface PluginImport {
+        name: string;
+    }
+    type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[];
     interface CompilerOptions {
         allowJs?: boolean;
         allowSyntheticDefaultImports?: boolean;
@@ -2102,6 +2105,7 @@ declare namespace ts {
         JSX = 2,
         TS = 3,
         TSX = 4,
+        External = 5,
     }
     enum ScriptTarget {
         ES3 = 0,
