@@ -14358,6 +14358,9 @@ namespace ts {
                 error(func, Diagnostics.An_async_function_or_method_must_return_a_Promise_Make_sure_you_have_a_declaration_for_Promise_or_include_ES2015_in_your_lib_option);
                 return unknownType;
             }
+            else if (!getGlobalPromiseConstructorSymbol()) {
+                error(func, Diagnostics.An_async_function_or_method_in_ES5_SlashES3_requires_the_Promise_constructor_Make_sure_you_have_a_declaration_for_the_Promise_constructor_or_include_ES2015_in_your_lib_option);
+            }
 
             return promiseType;
         }
@@ -15930,19 +15933,20 @@ namespace ts {
         }
 
         function checkClassForDuplicateDeclarations(node: ClassLikeDeclaration) {
-            const enum Accessor {
+            const enum Declaration {
                 Getter = 1,
                 Setter = 2,
+                Method = 4,
                 Property = Getter | Setter
             }
 
-            const instanceNames = createMap<Accessor>();
-            const staticNames = createMap<Accessor>();
+            const instanceNames = createMap<Declaration>();
+            const staticNames = createMap<Declaration>();
             for (const member of node.members) {
                 if (member.kind === SyntaxKind.Constructor) {
                     for (const param of (member as ConstructorDeclaration).parameters) {
                         if (isParameterPropertyDeclaration(param)) {
-                            addName(instanceNames, param.name, (param.name as Identifier).text, Accessor.Property);
+                            addName(instanceNames, param.name, (param.name as Identifier).text, Declaration.Property);
                         }
                     }
                 }
@@ -15954,25 +15958,34 @@ namespace ts {
                     if (memberName) {
                         switch (member.kind) {
                             case SyntaxKind.GetAccessor:
-                                addName(names, member.name, memberName, Accessor.Getter);
+                                addName(names, member.name, memberName, Declaration.Getter);
                                 break;
 
                             case SyntaxKind.SetAccessor:
-                                addName(names, member.name, memberName, Accessor.Setter);
+                                addName(names, member.name, memberName, Declaration.Setter);
                                 break;
 
                             case SyntaxKind.PropertyDeclaration:
-                                addName(names, member.name, memberName, Accessor.Property);
+                                addName(names, member.name, memberName, Declaration.Property);
+                                break;
+
+                            case SyntaxKind.MethodDeclaration:
+                                addName(names, member.name, memberName, Declaration.Method);
                                 break;
                         }
                     }
                 }
             }
 
-            function addName(names: Map<Accessor>, location: Node, name: string, meaning: Accessor) {
+            function addName(names: Map<Declaration>, location: Node, name: string, meaning: Declaration) {
                 const prev = names.get(name);
                 if (prev) {
-                    if (prev & meaning) {
+                    if (prev & Declaration.Method) {
+                        if (meaning !== Declaration.Method) {
+                            error(location, Diagnostics.Duplicate_identifier_0, getTextOfNode(location));
+                        }
+                    }
+                    else if (prev & meaning) {
                         error(location, Diagnostics.Duplicate_identifier_0, getTextOfNode(location));
                     }
                     else {
@@ -16954,7 +16967,12 @@ namespace ts {
                 const promiseConstructorSymbol = resolveEntityName(promiseConstructorName, SymbolFlags.Value, /*ignoreErrors*/ true);
                 const promiseConstructorType = promiseConstructorSymbol ? getTypeOfSymbol(promiseConstructorSymbol) : unknownType;
                 if (promiseConstructorType === unknownType) {
-                    error(node.type, Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, entityNameToString(promiseConstructorName));
+                    if (promiseConstructorName.kind === SyntaxKind.Identifier && promiseConstructorName.text === "Promise" && getTargetType(returnType) === tryGetGlobalPromiseType()) {
+                        error(node.type, Diagnostics.An_async_function_or_method_in_ES5_SlashES3_requires_the_Promise_constructor_Make_sure_you_have_a_declaration_for_the_Promise_constructor_or_include_ES2015_in_your_lib_option);
+                    }
+                    else {
+                        error(node.type, Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, entityNameToString(promiseConstructorName));
+                    }
                     return unknownType;
                 }
 
@@ -19522,7 +19540,9 @@ namespace ts {
                     forEach(node.exportClause.elements, checkExportSpecifier);
 
                     const inAmbientExternalModule = node.parent.kind === SyntaxKind.ModuleBlock && isAmbientModule(node.parent.parent);
-                    if (node.parent.kind !== SyntaxKind.SourceFile && !inAmbientExternalModule) {
+                    const inAmbientNamespaceDeclaration = !inAmbientExternalModule && node.parent.kind === SyntaxKind.ModuleBlock &&
+                        !node.moduleSpecifier && isInAmbientContext(node);
+                    if (node.parent.kind !== SyntaxKind.SourceFile && !inAmbientExternalModule && !inAmbientNamespaceDeclaration) {
                         error(node, Diagnostics.Export_declarations_are_not_permitted_in_a_namespace);
                     }
                 }

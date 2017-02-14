@@ -2108,7 +2108,7 @@ namespace FourSlash {
          * Because codefixes are only applied on the working file, it is unsafe
          * to apply this more than once (consider a refactoring across files).
          */
-        public verifyRangeAfterCodeFix(expectedText: string, errorCode?: number) {
+        public verifyRangeAfterCodeFix(expectedText: string, errorCode?: number, includeWhiteSpace?: boolean) {
             const ranges = this.getRanges();
             if (ranges.length !== 1) {
                 this.raiseError("Exactly one range should be specified in the testfile.");
@@ -2120,7 +2120,11 @@ namespace FourSlash {
 
             const actualText = this.rangeText(ranges[0]);
 
-            if (this.removeWhitespace(actualText) !== this.removeWhitespace(expectedText)) {
+            const result = includeWhiteSpace
+                ? actualText === expectedText
+                : this.removeWhitespace(actualText) === this.removeWhitespace(expectedText)
+
+            if (!result) {
                 this.raiseError(`Actual text doesn't match expected text. Actual:\n'${actualText}'\nExpected:\n'${expectedText}'`);
             }
         }
@@ -2150,10 +2154,18 @@ namespace FourSlash {
          * @param fileName Path to file where error should be retrieved from.
          */
         private getCodeFixActions(fileName: string, errorCode?: number): ts.CodeAction[] {
-            const diagnostics: ts.Diagnostic[] = this.getDiagnostics(fileName);
+            const diagnosticsForCodeFix = this.getDiagnostics(fileName).map(diagnostic => {
+                return {
+                    start: diagnostic.start,
+                    length: diagnostic.length,
+                    code: diagnostic.code
+                }
+            });
+            const dedupedDiagnositcs = ts.deduplicate(diagnosticsForCodeFix, ts.equalOwnProperties);
 
             let actions: ts.CodeAction[] = undefined;
-            for (const diagnostic of diagnostics) {
+
+            for (const diagnostic of dedupedDiagnositcs) {
 
                 if (errorCode && errorCode !== diagnostic.code) {
                     continue;
@@ -3509,8 +3521,8 @@ namespace FourSlashInterface {
             this.DocCommentTemplate(/*expectedText*/ undefined, /*expectedOffset*/ undefined, /*empty*/ true);
         }
 
-        public rangeAfterCodeFix(expectedText: string, errorCode?: number): void {
-            this.state.verifyRangeAfterCodeFix(expectedText, errorCode);
+        public rangeAfterCodeFix(expectedText: string, errorCode?: number, includeWhiteSpace?: boolean): void {
+            this.state.verifyRangeAfterCodeFix(expectedText, errorCode, includeWhiteSpace);
         }
 
         public importFixAtPosition(expectedTextArray: string[], errorCode?: number): void {
