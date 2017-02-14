@@ -387,7 +387,7 @@ namespace ts {
             name: "inlineSources",
             type: "boolean",
             category: Diagnostics.SourceMap_Options,
-            description:Diagnostics.Emit_the_source_alongside_the_sourcemaps_within_a_single_file_requires_inlineSourceMap_or_sourceMap_to_be_set
+            description: Diagnostics.Emit_the_source_alongside_the_sourcemaps_within_a_single_file_requires_inlineSourceMap_or_sourceMap_to_be_set
         },
 
         // JSX
@@ -477,7 +477,7 @@ namespace ts {
             name: "emitBOM",
             type: "boolean",
             category: Diagnostics.Advanced_Options,
-            description:Diagnostics.Emit_a_UTF_8_Byte_Order_Mark_BOM_in_the_beginning_of_output_files
+            description: Diagnostics.Emit_a_UTF_8_Byte_Order_Mark_BOM_in_the_beginning_of_output_files
         },
         {
             name: "locale",
@@ -511,7 +511,7 @@ namespace ts {
             name: "noResolve",
             type: "boolean",
             category: Diagnostics.Advanced_Options,
-            description:Diagnostics.Do_not_add_triple_slash_references_or_module_import_targets_to_the_list_of_compiled_files
+            description: Diagnostics.Do_not_add_triple_slash_references_or_module_import_targets_to_the_list_of_compiled_files
         },
         {
             name: "stripInternal",
@@ -979,8 +979,8 @@ namespace ts {
                 result += `${newLine}`;
                 for (const option of categorizedOptions[category]) {
                     result += `${tab}${tab}// ${option.description && getLocaleSpecificMessage(option.description) || option.name}${newLine}`;
-                    if (option.name in configurations.compilerOptions) {
-                        result += `${tab}${tab}"${option.name}": ${JSON.stringify(configurations.compilerOptions[option.name])}${++seenKnownKeys === knownKesyCount ? "" : ","}${newLine}`;
+                    if (configurations.compilerOptions[option.name]) {
+                        result += `${tab}${tab}"${option.name}": ${JSON.stringify(configurations.compilerOptions[option.name])}${(seenKnownKeys += 1) === knownKesyCount ? "" : ","}${newLine}`;
                     }
                     else {
                         result += `${tab}${tab}// "${option.name}": ${JSON.stringify(getDefaultValueForOption(option))},${newLine}`;
