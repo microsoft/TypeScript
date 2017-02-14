@@ -459,6 +459,16 @@ namespace ts {
             name: "alwaysStrict",
             type: "boolean",
             description: Diagnostics.Parse_in_strict_mode_and_emit_use_strict_for_each_source_file
+        },
+        {
+            // A list of plugins to load in the language service
+            name: "plugins",
+            type: "list",
+            isTSConfigOnly: true,
+            element: {
+                name: "plugin",
+                type: "object"
+            }
         }
     ];
 
