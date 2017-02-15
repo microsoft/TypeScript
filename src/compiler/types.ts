@@ -3136,6 +3136,15 @@
     }
 
     /* @internal */
+    export interface FillContext {
+        typeParameters: TypeParameter[];    // Type parameters for which defaults are filled
+        typeParameterIndex?: number;        // Index of the type parameter being filled.
+        typeArguments: Type[];              // Filled type arguments for each type parameter.
+        mapper?: TypeMapper;                // Type mapper for this fill context
+        failed?: boolean;                   // Indicates whether the current type parameter failed.
+    }
+
+    /* @internal */
     export const enum SpecialPropertyAssignmentKind {
         None,
         /// exports.name = expr

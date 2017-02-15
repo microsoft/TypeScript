@@ -4478,7 +4478,7 @@ namespace ts {
                 const minTypeArgumentCount = getMinTypeArgumentCount(baseSig.typeParameters);
                 const typeParamCount = length(baseSig.typeParameters);
                 if (typeArgCount >= minTypeArgumentCount && typeArgCount <= typeParamCount) {
-                    const sig = typeParamCount ? createSignatureInstantiation(baseSig, fillMissingTypeArguments(typeArguments, baseSig.typeParameters, minTypeArgumentCount)) : cloneSignature(baseSig);
+                    const sig = typeParamCount ? createSignatureInstantiation(baseSig, fillMissingTypeArguments(typeArguments, baseSig.typeParameters, /*errorNode*/ undefined)) : cloneSignature(baseSig);
                     sig.typeParameters = classType.localTypeParameters;
                     sig.resolvedReturnType = classType;
                     result.push(sig);
@@ -5284,31 +5284,75 @@ namespace ts {
          *
          * @param typeArguments The supplied type arguments.
          * @param typeParameters The requested type parameters.
-         * @param minTypeArgumentCount The minimum number of required type arguments.
+         * @param errorNode The node on which to report any implicit `any` errors.
          */
-        function fillMissingTypeArguments(typeArguments: Type[] | undefined, typeParameters: TypeParameter[] | undefined, minTypeArgumentCount: number) {
+        function fillMissingTypeArguments(typeArguments: Type[] | undefined, typeParameters: TypeParameter[] | undefined, errorNode: Node) {
             const numTypeParameters = length(typeParameters);
             if (numTypeParameters) {
                 const numTypeArguments = length(typeArguments);
-                if (numTypeArguments >= minTypeArgumentCount && numTypeArguments <= numTypeParameters) {
-                    if (!typeArguments) {
-                        typeArguments = [];
-                    }
-
+                if (numTypeArguments <= numTypeParameters) {
                     // Map an unsatisfied type parameter with a default type.
                     // If a type parameter does not have a default type, or if the default type
                     // is a forward reference, the empty object type is used.
+                    const context = createFillContext(typeParameters, typeArguments);
                     for (let i = numTypeArguments; i < numTypeParameters; i++) {
-                        typeArguments[i] = emptyObjectType;
+                        fillTypeArgument(context, i);
+                        if (errorNode && context.failed && compilerOptions.noImplicitAny) {
+                            error(errorNode,
+                                Diagnostics.Type_parameter_0_implicitly_has_type_any_because_it_was_not_supplied,
+                                typeToString(typeParameters[i]));
+                            errorNode = undefined;
+                        }
                     }
-                    for (let i = numTypeArguments; i < numTypeParameters; i++) {
-                        const mapper = createTypeMapper(typeParameters, typeArguments);
-                        const defaultType = getDefaultFromTypeParameter(typeParameters[i]);
-                        typeArguments[i] = defaultType ? instantiateType(defaultType, mapper) : emptyObjectType;
-                    }
+
+                    return context.typeArguments;
                 }
             }
             return typeArguments;
+        }
+
+        function createFillContext(typeParameters: TypeParameter[], typeArguments: Type[]): FillContext {
+            return {
+                typeParameters,
+                typeArguments: typeArguments || [],
+            };
+        }
+
+        function fillTypeArgument(context: FillContext, index: number) {
+            const defaultType = getDefaultFromTypeParameter(context.typeParameters[index]);
+            if (defaultType) {
+                context.failed = false;
+                context.typeParameterIndex = index;
+                context.typeArguments[index] = instantiateType(defaultType, getFillMapper(context));
+            }
+            else {
+                context.failed = true;
+                context.typeArguments[index] = anyType;
+            }
+        }
+
+        function getFillMapper(context: FillContext): TypeMapper {
+            if (!context.mapper) {
+                const mapper: TypeMapper = t => {
+                    const typeParameters = context.typeParameters;
+                    for (let i = 0; i < typeParameters.length; i++) {
+                        if (t === typeParameters[i]) {
+                            return getDefaultType(context, i);
+                        }
+                    }
+                };
+                mapper.mappedTypes = context.typeParameters;
+            }
+            return context.mapper;
+        }
+
+        function getDefaultType(context: FillContext, index: number) {
+            if (index < context.typeParameterIndex) {
+                return context.typeArguments[index];
+            }
+
+            context.failed = true;
+            return anyType;
         }
 
         function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {
@@ -5508,7 +5552,7 @@ namespace ts {
         }
 
         function getSignatureInstantiation(signature: Signature, typeArguments: Type[]): Signature {
-            typeArguments = fillMissingTypeArguments(typeArguments, signature.typeParameters, getMinTypeArgumentCount(signature.typeParameters));
+            typeArguments = fillMissingTypeArguments(typeArguments, signature.typeParameters, /*errorNode*/ undefined);
             const instantiations = signature.instantiations || (signature.instantiations = createMap<Signature>());
             const id = getTypeListId(typeArguments);
             let instantiation = instantiations.get(id);
@@ -5675,21 +5719,17 @@ namespace ts {
             const typeParameters = type.localTypeParameters;
             if (typeParameters) {
                 const numTypeArguments = length(node.typeArguments);
-                const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
-                if (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length) {
+                if (numTypeArguments > typeParameters.length) {
                     error(node,
-                        minTypeArgumentCount === typeParameters.length
-                            ? Diagnostics.Generic_type_0_requires_1_type_argument_s
-                            : Diagnostics.Generic_type_0_requires_between_1_and_2_type_arguments,
+                        Diagnostics.Generic_type_0_requires_1_or_fewer_type_argument_s,
                         typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType),
-                        minTypeArgumentCount,
                         typeParameters.length);
                     return unknownType;
                 }
                 // In a type reference, the outer type parameters of the referenced class or interface are automatically
                 // supplied as type arguments and the type reference only specifies arguments for the local type parameters
                 // of the class or interface.
-                const typeArguments = concatenate(type.outerTypeParameters, fillMissingTypeArguments(map(node.typeArguments, getTypeFromTypeNode), typeParameters, minTypeArgumentCount));
+                const typeArguments = concatenate(type.outerTypeParameters, fillMissingTypeArguments(map(node.typeArguments, getTypeFromTypeNode), typeParameters, node));
                 return createTypeReference(<GenericType>type, typeArguments);
             }
             if (node.typeArguments) {
@@ -5699,14 +5739,14 @@ namespace ts {
             return type;
         }
 
-        function getTypeAliasInstantiation(symbol: Symbol, typeArguments: Type[]): Type {
+        function getTypeAliasInstantiation(symbol: Symbol, typeArguments: Type[], errorNode: Node): Type {
             const type = getDeclaredTypeOfSymbol(symbol);
             const links = getSymbolLinks(symbol);
             const typeParameters = links.typeParameters;
             const id = getTypeListId(typeArguments);
             let instantiation = links.instantiations.get(id);
             if (!instantiation) {
-                links.instantiations.set(id, instantiation = instantiateTypeNoAlias(type, createTypeMapper(typeParameters, fillMissingTypeArguments(typeArguments, typeParameters, getMinTypeArgumentCount(typeParameters)))));
+                links.instantiations.set(id, instantiation = instantiateTypeNoAlias(type, createTypeMapper(typeParameters, fillMissingTypeArguments(typeArguments, typeParameters, errorNode))));
             }
             return instantiation;
         }
@@ -5719,19 +5759,15 @@ namespace ts {
             const typeParameters = getSymbolLinks(symbol).typeParameters;
             if (typeParameters) {
                 const numTypeArguments = length(node.typeArguments);
-                const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
-                if (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length) {
+                if (numTypeArguments > typeParameters.length) {
                     error(node,
-                        minTypeArgumentCount === typeParameters.length
-                            ? Diagnostics.Generic_type_0_requires_1_type_argument_s
-                            : Diagnostics.Generic_type_0_requires_between_1_and_2_type_arguments,
+                        Diagnostics.Generic_type_0_requires_1_or_fewer_type_argument_s,
                         symbolToString(symbol),
-                        minTypeArgumentCount,
                         typeParameters.length);
                     return unknownType;
                 }
                 const typeArguments = map(node.typeArguments, getTypeFromTypeNode);
-                return getTypeAliasInstantiation(symbol, typeArguments);
+                return getTypeAliasInstantiation(symbol, typeArguments, node);
             }
             if (node.typeArguments) {
                 error(node, Diagnostics.Type_0_is_not_generic, symbolToString(symbol));
@@ -7038,7 +7074,7 @@ namespace ts {
                 // instantiated for T. Instead, we need to further instantiate the { x: U, t: U } form.
                 if (type.aliasSymbol && isTopLevelTypeAlias(type.aliasSymbol)) {
                     if (type.aliasTypeArguments) {
-                        return getTypeAliasInstantiation(type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
+                        return getTypeAliasInstantiation(type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper), /*errorNode*/ undefined);
                     }
                     return type;
                 }
@@ -13712,7 +13748,7 @@ namespace ts {
                         if (candidate.typeParameters) {
                             let typeArgumentTypes: Type[] | undefined;
                             if (typeArguments) {
-                                typeArgumentTypes = fillMissingTypeArguments(map(typeArguments, getTypeFromTypeNode), candidate.typeParameters, getMinTypeArgumentCount(candidate.typeParameters));
+                                typeArgumentTypes = fillMissingTypeArguments(map(typeArguments, getTypeFromTypeNode), candidate.typeParameters, /*errorNode*/ undefined);
                                 typeArgumentsAreValid = checkTypeArguments(candidate, typeArguments, typeArgumentTypes, /*reportErrors*/ false);
                             }
                             else {
@@ -16277,7 +16313,6 @@ namespace ts {
         }
 
         function checkTypeArgumentConstraints(typeParameters: TypeParameter[], typeArgumentNodes: TypeNode[]): boolean {
-            const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
             let typeArguments: Type[];
             let mapper: TypeMapper;
             let result = true;
@@ -16285,7 +16320,7 @@ namespace ts {
                 const constraint = getConstraintOfTypeParameter(typeParameters[i]);
                 if (constraint) {
                     if (!typeArguments) {
-                        typeArguments = fillMissingTypeArguments(map(typeArgumentNodes, getTypeFromTypeNode), typeParameters, minTypeArgumentCount);
+                        typeArguments = fillMissingTypeArguments(map(typeArgumentNodes, getTypeFromTypeNode), typeParameters, /*errorNode*/ undefined);
                         mapper = createTypeMapper(typeParameters, typeArguments);
                     }
                     const typeArgument = typeArguments[i];
