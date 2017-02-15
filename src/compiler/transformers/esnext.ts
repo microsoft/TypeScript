@@ -375,7 +375,6 @@ namespace ts {
                                 declarations
                             )
                         );
-                        setEmitFlags(statement, EmitFlags.CustomPrologue);
                         leadingStatements = append(leadingStatements, statement);
                     }
                 }
