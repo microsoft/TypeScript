@@ -99,6 +99,8 @@ namespace ts.server {
         birthtime: Date;
     }
 
+    type RequireResult = { module: {}, error: undefined } | { module: undefined, error: {} };
+
     const readline: {
         createInterface(options: ReadLineOptions): NodeJS.EventEmitter;
     } = require("readline");
@@ -354,7 +356,7 @@ namespace ts.server {
     class IOSession extends Session {
         constructor(
             host: ServerHost,
-            cancellationToken: HostCancellationToken,
+            cancellationToken: ServerCancellationToken,
             installerEventPort: number,
             canUseEvents: boolean,
             useSingleInferredProject: boolean,
@@ -593,15 +595,23 @@ namespace ts.server {
         sys.gc = () => global.gc();
     }
 
-    let cancellationToken: HostCancellationToken;
+    sys.require = (initialDir: string, moduleName: string): RequireResult => {
+        const result = nodeModuleNameResolverWorker(moduleName, initialDir + "/program.ts", { moduleResolution: ts.ModuleResolutionKind.NodeJs, allowJs: true }, sys, undefined, /*jsOnly*/ true);
+        try {
+            return { module: require(result.resolvedModule.resolvedFileName), error: undefined };
+        }
+        catch (e) {
+            return { module: undefined, error: e };
+        }
+    };
+
+    let cancellationToken: ServerCancellationToken;
     try {
         const factory = require("./cancellationToken");
         cancellationToken = factory(sys.args);
     }
     catch (e) {
-        cancellationToken = {
-            isCancellationRequested: () => false
-        };
+        cancellationToken = nullCancellationToken;
     };
 
     let eventPort: number;

@@ -8,6 +8,7 @@ export class Enhancement {
 
 //// [declFileClassWithStaticMethodReturningConstructor.js]
 "use strict";
+exports.__esModule = true;
 var Enhancement = (function () {
     function Enhancement() {
     }

@@ -104,10 +104,12 @@ namespace ts {
          */
         function visitAwaitExpression(node: AwaitExpression): Expression {
             return setOriginalNode(
-                createYield(
-                    /*asteriskToken*/ undefined,
-                    visitNode(node.expression, visitor, isExpression),
-                    /*location*/ node
+                setTextRange(
+                    createYield(
+                        /*asteriskToken*/ undefined,
+                        visitNode(node.expression, visitor, isExpression)
+                    ),
+                    node
                 ),
                 node
             );
@@ -238,7 +240,8 @@ namespace ts {
 
                 addRange(statements, endLexicalEnvironment());
 
-                const block = createBlock(statements, /*location*/ node.body, /*multiLine*/ true);
+                const block = createBlock(statements, /*multiLine*/ true);
+                setTextRange(block, node.body);
 
                 // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
                 // This step isn't needed if we eventually transform this to ES5.
@@ -266,7 +269,7 @@ namespace ts {
                 const declarations = endLexicalEnvironment();
                 if (some(declarations)) {
                     const block = convertToFunctionBody(expression);
-                    return updateBlock(block, createNodeArray(concatenate(block.statements, declarations), block.statements));
+                    return updateBlock(block, setTextRange(createNodeArray(concatenate(block.statements, declarations)), block.statements));
                 }
 
                 return expression;
@@ -281,7 +284,7 @@ namespace ts {
                 startLexicalEnvironment();
                 const visited = convertToFunctionBody(visitNode(body, visitor, isConciseBody));
                 const declarations = endLexicalEnvironment();
-                return updateBlock(visited, createNodeArray(concatenate(visited.statements, declarations), visited.statements));
+                return updateBlock(visited, setTextRange(createNodeArray(concatenate(visited.statements, declarations)), visited.statements));
             }
         }
 
@@ -431,21 +434,25 @@ namespace ts {
 
         function createSuperAccessInAsyncMethod(argumentExpression: Expression, flags: NodeCheckFlags, location: TextRange): LeftHandSideExpression {
             if (flags & NodeCheckFlags.AsyncMethodWithSuperBinding) {
-                return createPropertyAccess(
+                return setTextRange(
+                    createPropertyAccess(
+                        createCall(
+                            createIdentifier("_super"),
+                            /*typeArguments*/ undefined,
+                            [argumentExpression]
+                        ),
+                        "value"
+                    ),
+                    location
+                );
+            }
+            else {
+                return setTextRange(
                     createCall(
                         createIdentifier("_super"),
                         /*typeArguments*/ undefined,
                         [argumentExpression]
                     ),
-                    "value",
-                    location
-                );
-            }
-            else {
-                return createCall(
-                    createIdentifier("_super"),
-                    /*typeArguments*/ undefined,
-                    [argumentExpression],
                     location
                 );
             }

@@ -10,7 +10,7 @@ tests/cases/compiler/genericDefaultsErrors.ts(20,11): error TS2428: All declarat
 tests/cases/compiler/genericDefaultsErrors.ts(21,11): error TS2428: All declarations of 'i00' must have identical type parameters.
 tests/cases/compiler/genericDefaultsErrors.ts(23,11): error TS2428: All declarations of 'i01' must have identical type parameters.
 tests/cases/compiler/genericDefaultsErrors.ts(24,11): error TS2428: All declarations of 'i01' must have identical type parameters.
-tests/cases/compiler/genericDefaultsErrors.ts(26,27): error TS2705: Required type parameters may not follow optional type parameters.
+tests/cases/compiler/genericDefaultsErrors.ts(26,27): error TS2706: Required type parameters may not follow optional type parameters.
 tests/cases/compiler/genericDefaultsErrors.ts(27,34): error TS2344: Type 'number' does not satisfy the constraint 'string'.
 tests/cases/compiler/genericDefaultsErrors.ts(28,52): error TS2344: Type 'T' does not satisfy the constraint 'number'.
   Type 'string' is not assignable to type 'number'.
@@ -74,7 +74,7 @@ tests/cases/compiler/genericDefaultsErrors.ts(39,20): error TS4033: Property 'x'
     
     interface i04<T = number, U> { } // error
                               ~
-!!! error TS2705: Required type parameters may not follow optional type parameters.
+!!! error TS2706: Required type parameters may not follow optional type parameters.
     interface i05<T extends string = number> { } // error
                                      ~~~~~~
 !!! error TS2344: Type 'number' does not satisfy the constraint 'string'.

@@ -9,6 +9,7 @@ namespace ts {
         emitNodeWithComments(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
         emitBodyWithDetachedComments(node: Node, detachedRange: TextRange, emitCallback: (node: Node) => void): void;
         emitTrailingCommentsOfPosition(pos: number): void;
+        emitLeadingCommentsOfPosition(pos: number): void;
     }
 
     export function createCommentWriter(printerOptions: PrinterOptions, emitPos: ((pos: number) => void) | undefined): CommentWriter {
@@ -32,6 +33,7 @@ namespace ts {
             emitNodeWithComments,
             emitBodyWithDetachedComments,
             emitTrailingCommentsOfPosition,
+            emitLeadingCommentsOfPosition,
         };
 
         function emitNodeWithComments(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
@@ -208,6 +210,14 @@ namespace ts {
             else {
                 writer.write(" ");
             }
+        }
+
+        function emitLeadingCommentsOfPosition(pos: number) {
+            if (disabled || pos === -1) {
+                return;
+            }
+
+            emitLeadingComments(pos, /*isEmittedNode*/ true);
         }
 
         function emitTrailingComments(pos: number) {

@@ -94,9 +94,9 @@ namespace ts.codefix {
                                 return removeSingleItem(namedImports.elements, token);
                             }
 
-                        // handle case where "import d, * as ns from './file'" 
+                        // handle case where "import d, * as ns from './file'"
                         // or "'import {a, b as ns} from './file'"
-                        case SyntaxKind.ImportClause: // this covers both 'import |d|' and 'import |d,| *'  
+                        case SyntaxKind.ImportClause: // this covers both 'import |d|' and 'import |d,| *'
                             const importClause = <ImportClause>token.parent;
                             if (!importClause.namedBindings) { // |import d from './file'| or |import * as ns from './file'|
                                 const importDecl = findImportDeclaration(importClause);
@@ -150,7 +150,20 @@ namespace ts.codefix {
             }
 
             function createCodeFixToRemoveNode(node: Node) {
-                return createCodeFix("", node.getStart(), node.getWidth());
+                let end = node.getEnd();
+                const endCharCode = sourceFile.text.charCodeAt(end);
+                const afterEndCharCode = sourceFile.text.charCodeAt(end + 1);
+                if (isLineBreak(endCharCode)) {
+                    end += 1;
+                }
+                // in the case of CR LF, you could have two consecutive new line characters for one new line.
+                // this needs to be differenciated from two LF LF chars that actually mean two new lines.
+                if (isLineBreak(afterEndCharCode) && endCharCode !== afterEndCharCode) {
+                    end += 1;
+                }
+
+                const start = node.getStart();
+                return createCodeFix("", start, end - start);
             }
 
             function findFirstNonSpaceCharPosStarting(start: number) {

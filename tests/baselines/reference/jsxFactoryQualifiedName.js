@@ -52,6 +52,7 @@ class A {
 
 //// [Element.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var Element;
 (function (Element) {
     function isElement(el) {
@@ -69,6 +70,7 @@ function toCamelCase(text) {
 }
 //# sourceMappingURL=Element.js.map//// [test.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const Element_1 = require("./Element");
 let c;
 class A {

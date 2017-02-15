@@ -23,5 +23,6 @@ declare global {
 
 //// [foo.jsx]
 "use strict";
+exports.__esModule = true;
 var Element = require("react");
 exports.FooComponent = <div></div>;

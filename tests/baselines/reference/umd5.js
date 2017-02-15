@@ -18,6 +18,7 @@ let z = Foo;
 
 //// [a.js]
 "use strict";
+exports.__esModule = true;
 var Bar = require("./foo");
 Bar.fn();
 var x;

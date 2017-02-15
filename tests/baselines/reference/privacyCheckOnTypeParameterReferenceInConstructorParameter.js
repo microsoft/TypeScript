@@ -13,6 +13,7 @@ export class B<T2> {
 //// [privacyCheckOnTypeParameterReferenceInConstructorParameter.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var A = (function () {
         function A(callback) {
             var child = new B(this);

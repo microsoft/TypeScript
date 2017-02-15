@@ -12,9 +12,11 @@ use(undefined);
 
 //// [a.js]
 "use strict";
+exports.__esModule = true;
 var undefined;
 exports.undefined = undefined;
 //// [b.js]
 "use strict";
+exports.__esModule = true;
 var a_1 = require("./a");
 use(a_1.undefined);
