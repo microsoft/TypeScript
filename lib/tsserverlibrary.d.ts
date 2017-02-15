@@ -1627,6 +1627,7 @@ declare namespace ts {
         clear(): void;
         trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
         reportInaccessibleThisError(): void;
+        reportIllegalExtends(): void;
     }
     const enum TypeFormatFlags {
         None = 0,
