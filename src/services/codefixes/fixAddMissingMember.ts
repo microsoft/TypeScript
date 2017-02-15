@@ -30,6 +30,22 @@ namespace ts.codefix {
 
         // if function call, synthesize function declaration
         if(token.parent.parent.kind == SyntaxKind.CallExpression) {
+            const callExpression = token.parent.parent as CallExpression;
+            if(callExpression.typeArguments) {
+                /**
+                 * We can't in general know which arguments should use the type of the expression
+                 * or the type of the type argument in the declaration. Consider
+                 * ```
+                 * class A {
+                 *     constructor(a: number){
+                 *         this.foo<number>(a,1,true);
+                 *     }
+                 * }
+                 * ```
+                 */
+                return undefined;
+            }
+
 
         }
 
@@ -41,8 +57,8 @@ namespace ts.codefix {
             binaryExpression.operatorToken;
 
             const checker = context.program.getTypeChecker();
-            const type = checker.getWidenedType(checker.getTypeAtLocation(binaryExpression.right));
-            typeString = checker.typeToString(type);
+            const widenedType = checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(binaryExpression.right));
+            typeString = checker.typeToString(widenedType);
         }
 
         return [{
