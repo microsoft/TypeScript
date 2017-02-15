@@ -71,6 +71,9 @@ namespace ts.SymbolDisplay {
                 }
                 return unionPropertyKind;
             }
+            if (location.parent && isJsxAttribute(location.parent)) {
+                return ScriptElementKind.jsxAttribute;
+            }
             return ScriptElementKind.memberVariableElement;
         }
 
@@ -114,23 +117,27 @@ namespace ts.SymbolDisplay {
                 }
 
                 // try get the call/construct signature from the type if it matches
-                let callExpression: CallExpression | NewExpression;
+                let callExpressionLike: CallExpression | NewExpression | JsxOpeningLikeElement;
                 if (location.kind === SyntaxKind.CallExpression || location.kind === SyntaxKind.NewExpression) {
-                    callExpression = <CallExpression | NewExpression>location;
+                    callExpressionLike = <CallExpression | NewExpression>location;
                 }
                 else if (isCallExpressionTarget(location) || isNewExpressionTarget(location)) {
-                    callExpression = <CallExpression | NewExpression>location.parent;
+                    callExpressionLike = <CallExpression | NewExpression>location.parent;
+                }
+                else if (location.parent && isJsxOpeningLikeElement(location.parent) && isFunctionLike(symbol.valueDeclaration)) {
+                    callExpressionLike = <JsxOpeningLikeElement>location.parent;
                 }
 
-                if (callExpression) {
+                if (callExpressionLike) {
                     const candidateSignatures: Signature[] = [];
-                    signature = typeChecker.getResolvedSignature(callExpression, candidateSignatures);
+                    signature = typeChecker.getResolvedSignature(callExpressionLike, candidateSignatures);
                     if (!signature && candidateSignatures.length) {
                         // Use the first candidate:
                         signature = candidateSignatures[0];
                     }
 
-                    const useConstructSignatures = callExpression.kind === SyntaxKind.NewExpression || callExpression.expression.kind === SyntaxKind.SuperKeyword;
+                    const useConstructSignatures = callExpressionLike.kind === SyntaxKind.NewExpression || (isCallExpression(callExpressionLike) && callExpressionLike.expression.kind === SyntaxKind.SuperKeyword);
+
                     const allSignatures = useConstructSignatures ? type.getConstructSignatures() : type.getCallSignatures();
 
                     if (!contains(allSignatures, signature.target) && !contains(allSignatures, signature)) {
@@ -160,6 +167,7 @@ namespace ts.SymbolDisplay {
                         }
 
                         switch (symbolKind) {
+                            case ScriptElementKind.jsxAttribute:
                             case ScriptElementKind.memberVariableElement:
                             case ScriptElementKind.variableElement:
                             case ScriptElementKind.constElement:
@@ -373,6 +381,7 @@ namespace ts.SymbolDisplay {
 
                     // For properties, variables and local vars: show the type
                     if (symbolKind === ScriptElementKind.memberVariableElement ||
+                        symbolKind === ScriptElementKind.jsxAttribute ||
                         symbolFlags & SymbolFlags.Variable ||
                         symbolKind === ScriptElementKind.localVariableElement ||
                         isThisExpression) {
