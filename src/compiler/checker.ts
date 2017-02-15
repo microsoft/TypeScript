@@ -345,6 +345,7 @@ namespace ts {
         const typeofType = createTypeofType();
 
         let getJsxElementType: () => Type;
+        let getJsxStatelessElementType: () => Type;
         let _jsxNamespace: string;
         let _jsxFactoryEntity: EntityName;
 
@@ -12454,14 +12455,14 @@ namespace ts {
         function defaultTryGetJsxStatelessFunctionAttributesType(openingLikeElement: JsxOpeningLikeElement, elementType: Type, elemInstanceType: Type, elementClassType?: Type): Type {
             Debug.assert(!(elementType.flags & TypeFlags.Union));
             if (!elementClassType || !isTypeAssignableTo(elemInstanceType, elementClassType)) {
-                const jsxElementType = getJsxElementType();
-                if (jsxElementType) {
+                const jsxStatelessElementType = getJsxStatelessElementType();
+                if (jsxStatelessElementType) {
                     // We don't call getResolvedSignature here because we have already resolve the type of JSX Element.
                     const callSignature = getResolvedJsxStatelessFunctionSignature(openingLikeElement, elementType, /*candidatesOutArray*/ undefined);
                     if (callSignature !== unknownSignature) {
                         const callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
                         let paramType = callReturnType && (callSignature.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature.parameters[0]));
-                        if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType)) {
+                        if (callReturnType && isTypeAssignableTo(callReturnType, jsxStatelessElementType)) {
                             // Intersect in JSX.IntrinsicAttributes if it exists
                             const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes);
                             if (intrinsicAttributes !== unknownType) {
@@ -21641,6 +21642,7 @@ namespace ts {
             globalRegExpType = getGlobalType("RegExp");
 
             getJsxElementType = memoize(() => getExportedTypeFromNamespace("JSX", JsxNames.Element));
+            getJsxStatelessElementType = memoize(createJsxStatelessElementType);
             getGlobalClassDecoratorType = memoize(() => getGlobalType("ClassDecorator"));
             getGlobalPropertyDecoratorType = memoize(() => getGlobalType("PropertyDecorator"));
             getGlobalMethodDecoratorType = memoize(() => getGlobalType("MethodDecorator"));
@@ -21721,6 +21723,10 @@ namespace ts {
             return externalHelpersModule;
         }
 
+        function createJsxStatelessElementType() {
+            const jsxElementType = getJsxElementType();
+            return jsxElementType ? getUnionType([jsxElementType, nullType]) : nullType;
+        }
 
         function createInstantiatedPromiseLikeType(): ObjectType {
             const promiseLikeType = getGlobalPromiseLikeType();
