@@ -349,55 +349,29 @@ interface String {
 
     /**
       * Matches a string with a regular expression, and returns an array containing the results of that search.
-      * @param regexp A variable name or string literal containing the regular expression pattern and flags.
+      * @param regexp A string containing the regular expression pattern or a regular expression object.
       */
-    match(regexp: string): RegExpMatchArray | null;
+    match(regexp: RegExp | string): RegExpMatchArray | null;
 
     /**
-      * Matches a string with a regular expression, and returns an array containing the results of that search.
-      * @param regexp A regular expression object that contains the regular expression pattern and applicable flags.
-      */
-    match(regexp: RegExp): RegExpMatchArray | null;
-
-    /**
-      * Replaces text in a string, using a regular expression or search string.
-      * @param searchValue A string that represents the regular expression.
+      * Replaces text in a string, using a regular expression or search string. When given a regular expression with its global flag set, this method replaces all occurrences. Otherwise, only the first match is replaced.
+      * @param searchValue A literal search string or a regular expression object.
       * @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
       */
-    replace(searchValue: string, replaceValue: string): string;
+    replace(searchValue: RegExp | string, replaceValue: string): string;
 
     /**
-      * Replaces text in a string, using a regular expression or search string.
+      * Replaces text in a string, using a regular expression or search string. When given a regular expression with its global flag set, this method replaces all occurrences. Otherwise, only the first match is replaced.
       * @param searchValue A string that represents the regular expression.
       * @param replacer A function that returns the replacement text.
       */
-    replace(searchValue: string, replacer: (substring: string, ...args: any[]) => string): string;
-
-    /**
-      * Replaces text in a string, using a regular expression or search string.
-      * @param searchValue A Regular Expression object containing the regular expression pattern and applicable flags.
-      * @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
-      */
-    replace(searchValue: RegExp, replaceValue: string): string;
-
-    /**
-      * Replaces text in a string, using a regular expression or search string.
-      * @param searchValue A Regular Expression object containing the regular expression pattern and applicable flags
-      * @param replacer A function that returns the replacement text.
-      */
-    replace(searchValue: RegExp, replacer: (substring: string, ...args: any[]) => string): string;
+    replace(searchValue: RegExp | string, replacer: (substring: string, ...args: any[]) => string): string;
 
     /**
       * Finds the first substring match in a regular expression search.
-      * @param regexp The regular expression pattern and applicable flags.
+      * @param regexp The regular expression pattern or object.
       */
-    search(regexp: string): number;
-
-    /**
-      * Finds the first substring match in a regular expression search.
-      * @param regexp The regular expression pattern and applicable flags.
-      */
-    search(regexp: RegExp): number;
+    search(regexp: RegExp | string): number;
 
     /**
       * Returns a section of a string.
@@ -409,17 +383,10 @@ interface String {
 
     /**
       * Split a string into substrings using the specified separator and return them as an array.
-      * @param separator A string that identifies character or characters to use in separating the string. If omitted, a single-element array containing the entire string is returned.
+      * @param separator A literal string or a regular expression object that identifies character or characters to use in separating the string. If omitted, a single-element array containing the entire string is returned.
       * @param limit A value used to limit the number of elements returned in the array.
       */
-    split(separator: string, limit?: number): string[];
-
-    /**
-      * Split a string into substrings using the specified separator and return them as an array.
-      * @param separator A Regular Express that identifies character or characters to use in separating the string. If omitted, a single-element array containing the entire string is returned.
-      * @param limit A value used to limit the number of elements returned in the array.
-      */
-    split(separator: RegExp, limit?: number): string[];
+    split(separator: RegExp | string, limit?: number): string[];
 
     /**
       * Returns the substring at the specified location within a String object.
