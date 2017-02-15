@@ -15,6 +15,7 @@ var servicesDirectory = "src/services/";
 var serverDirectory = "src/server/";
 var typingsInstallerDirectory = "src/server/typingsInstaller";
 var cancellationTokenDirectory = "src/server/cancellationToken";
+var watchGuardDirectory = "src/server/watchGuard";
 var harnessDirectory = "src/harness/";
 var libraryDirectory = "src/lib/";
 var scriptsDirectory = "scripts/";
@@ -80,6 +81,7 @@ var compilerSources = filesFromConfig("./src/compiler/tsconfig.json");
 var servicesSources = filesFromConfig("./src/services/tsconfig.json");
 var cancellationTokenSources = filesFromConfig(path.join(serverDirectory, "cancellationToken/tsconfig.json"));
 var typingsInstallerSources = filesFromConfig(path.join(serverDirectory, "typingsInstaller/tsconfig.json"));
+var watchGuardSources = filesFromConfig(path.join(serverDirectory, "watchGuard/tsconfig.json"));
 var serverSources = filesFromConfig(path.join(serverDirectory, "tsconfig.json"))
 var languageServiceLibrarySources = filesFromConfig(path.join(serverDirectory, "tsconfig.library.json"));
 
@@ -570,8 +572,11 @@ compileFile(cancellationTokenFile, cancellationTokenSources, [builtLocalDirector
 var typingsInstallerFile = path.join(builtLocalDirectory, "typingsInstaller.js");
 compileFile(typingsInstallerFile, typingsInstallerSources, [builtLocalDirectory].concat(typingsInstallerSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { outDir: builtLocalDirectory, noOutFile: false });
 
+var watchGuardFile = path.join(builtLocalDirectory, "watchGuard.js");
+compileFile(watchGuardFile, watchGuardSources, [builtLocalDirectory].concat(watchGuardSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { outDir: builtLocalDirectory, noOutFile: false });
+
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
-compileFile(serverFile, serverSources, [builtLocalDirectory, copyright, cancellationTokenFile, typingsInstallerFile].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { types: ["node"] });
+compileFile(serverFile, serverSources, [builtLocalDirectory, copyright, cancellationTokenFile, typingsInstallerFile, watchGuardFile].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { types: ["node"] });
 var tsserverLibraryFile = path.join(builtLocalDirectory, "tsserverlibrary.js");
 var tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverlibrary.d.ts");
 compileFile(

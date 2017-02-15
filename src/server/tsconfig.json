@@ -8,6 +8,7 @@
         ]
     },
     "files": [
+        "watchGuard/types.d.ts",
         "../services/shims.ts",
         "../services/utilities.ts",
         "shared.ts",
