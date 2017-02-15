@@ -24,7 +24,7 @@ interface Map<K, V> {
     forEach(callbackfn: (value: V, key: K, map: Map<K, V>) => void, thisArg?: any): void;
     get(key: K): V | undefined;
     has(key: K): boolean;
-    set(key: K, value?: V): this;
+    set(key: K, value: V): this;
     readonly size: number;
 }
 
@@ -42,16 +42,16 @@ interface ReadonlyMap<K, V> {
     readonly size: number;
 }
 
-interface WeakMap<K, V> {
+interface WeakMap<K extends object, V> {
     delete(key: K): boolean;
     get(key: K): V | undefined;
     has(key: K): boolean;
-    set(key: K, value?: V): this;
+    set(key: K, value: V): this;
 }
 
 interface WeakMapConstructor {
     new (): WeakMap<any, any>;
-    new <K, V>(entries?: [K, V][]): WeakMap<K, V>;
+    new <K extends object, V>(entries?: [K, V][]): WeakMap<K, V>;
     readonly prototype: WeakMap<any, any>;
 }
 declare var WeakMap: WeakMapConstructor;

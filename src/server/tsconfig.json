@@ -3,6 +3,7 @@
     "compilerOptions": {
         "removeComments": true,
         "outFile": "../../built/local/tsserver.js",
+        "preserveConstEnums": true,
         "types": [
             "node"
         ]
