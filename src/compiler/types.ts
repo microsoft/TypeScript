@@ -2382,7 +2382,7 @@
         getSignaturesOfType(type: Type, kind: SignatureKind): Signature[];
         getIndexTypeOfType(type: Type, kind: IndexKind): Type;
         getBaseTypes(type: InterfaceType): BaseType[];
-        getWidenedType(type: Type): Type;
+        getBaseTypeOfLiteralType(type: Type): Type;
         getReturnTypeOfSignature(signature: Signature): Type;
         /**
          * Gets the type of a parameter at a given position in a signature.
