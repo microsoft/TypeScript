@@ -2205,7 +2205,7 @@ namespace FourSlash {
                     this.raiseError(`Should find at least ${index + 1} codefix(es), but ${actions ? actions.length : "none"} found.`);
                 }
             }
-            
+
             const fileChanges = ts.find(actions[index].changes, change => change.fileName === fileName);
             if (!fileChanges) {
                 this.raiseError("The CodeFix found doesn't provide any changes in this file.");

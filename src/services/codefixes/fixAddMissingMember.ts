@@ -9,16 +9,19 @@ namespace ts.codefix {
 
         const sourceFile = context.sourceFile;
         const start = context.span.start;
-        // This is the identifier in the case of a class declaration
-        // or the class keyword token in the case of a class expression.
+        // This is the identifier of the missing property. eg:
+        // this.missing = 1;
+        //      ^^^^^^^
         const token = getTokenAtPosition(sourceFile, start);
+
+        if (token.kind != SyntaxKind.Identifier) {
+            return undefined;
+        }
 
         const classDeclaration = getContainingClass(token);
         if (!classDeclaration) {
             return undefined;
         }
-
-        const startPos = classDeclaration.members.pos;
 
         if (!(token.parent && token.parent.kind === SyntaxKind.PropertyAccessExpression)) {
             return undefined;
@@ -28,38 +31,17 @@ namespace ts.codefix {
             return undefined;
         }
 
-        // if function call, synthesize function declaration
-        if(token.parent.parent.kind == SyntaxKind.CallExpression) {
-            const callExpression = token.parent.parent as CallExpression;
-            if(callExpression.typeArguments) {
-                /**
-                 * We can't in general know which arguments should use the type of the expression
-                 * or the type of the type argument in the declaration. Consider
-                 * ```
-                 * class A {
-                 *     constructor(a: number){
-                 *         this.foo<number>(a,1,true);
-                 *     }
-                 * }
-                 * ```
-                 */
-                return undefined;
-            }
+        let typeString = "any";
 
-
-        }
-
-        let typeString: string = 'any';
-
-        // if binary expression, try to infer type for LHS, else use any
         if (token.parent.parent.kind === SyntaxKind.BinaryExpression) {
             const binaryExpression = token.parent.parent as BinaryExpression;
-            binaryExpression.operatorToken;
 
             const checker = context.program.getTypeChecker();
             const widenedType = checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(binaryExpression.right));
             typeString = checker.typeToString(widenedType);
         }
+
+        const startPos = classDeclaration.members.pos;
 
         return [{
             description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_declaration_for_missing_property_0), [token.getText()]),
@@ -82,17 +64,4 @@ namespace ts.codefix {
             }]
         }];
     }
-
-    // Want to infer type of x when possible. ie:
-    // * assignment,
-    // * function call argument: foo<T>(this.x) where foo(x: SomeType<T>)
-    // * expression with a type assertion: this.x as MyFavoriteType
-    // * access expression: this.x.push("asdf") ... probably an array?
-    // * 
-    // What if there are multiple usages of this.x? Create intersection over all usages?
-
-    // needs to be in a class
-    // inferred type might be error. then add any.
-    // either make indexable of the inferred type
-    // add named member of the inferred type.
 }
