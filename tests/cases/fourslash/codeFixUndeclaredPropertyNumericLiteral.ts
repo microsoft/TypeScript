@@ -14,4 +14,4 @@ class A {
         this.x = 10;
     }
 }
-`);
+`, /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
