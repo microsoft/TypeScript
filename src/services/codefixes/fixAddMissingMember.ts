@@ -12,32 +12,41 @@ namespace ts.codefix {
         // This is the identifier in the case of a class declaration
         // or the class keyword token in the case of a class expression.
         const token = getTokenAtPosition(sourceFile, start);
-        const checker = context.program.getTypeChecker();
 
-        if(!(token.parent && token.parent.kind === SyntaxKind.PropertyAccessExpression)) {
+        const classDeclaration = getContainingClass(token);
+        if (!classDeclaration) {
             return undefined;
         }
 
-        if((token.parent as PropertyAccessExpression).expression.kind !== SyntaxKind.ThisKeyword) {
+        const startPos = classDeclaration.members.pos;
+
+        if (!(token.parent && token.parent.kind === SyntaxKind.PropertyAccessExpression)) {
             return undefined;
         }
-        1 + 1;
+
+        if ((token.parent as PropertyAccessExpression).expression.kind !== SyntaxKind.ThisKeyword) {
+            return undefined;
+        }
+
+        // if function call, synthesize function declaration
+        if(token.parent.parent.kind == SyntaxKind.CallExpression) {
+
+        }
 
         let typeString: string = 'any';
+
         // if binary expression, try to infer type for LHS, else use any
-        if(token.parent.parent.kind === SyntaxKind.BinaryExpression)
-        {
+        if (token.parent.parent.kind === SyntaxKind.BinaryExpression) {
             const binaryExpression = token.parent.parent as BinaryExpression;
             binaryExpression.operatorToken;
-            
-            const type = checker.getTypeAtLocation(binaryExpression.right);
+
+            const checker = context.program.getTypeChecker();
+            const type = checker.getWidenedType(checker.getTypeAtLocation(binaryExpression.right));
             typeString = checker.typeToString(type);
         }
 
-        const classDeclaration = getContainingClass(token);
-        const startPos = classDeclaration.members.pos;
         return [{
-            description: getLocaleSpecificMessage(Diagnostics.Implement_inherited_abstract_class),
+            description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_declaration_for_missing_property_0), [token.getText()]),
             changes: [{
                 fileName: sourceFile.fileName,
                 textChanges: [{
@@ -45,14 +54,19 @@ namespace ts.codefix {
                     newText: `${token.getFullText(sourceFile)}: ${typeString};`
                 }]
             }]
+        },
+        {
+            description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_index_accessor_for_missing_property_0), [token.getText()]),
+            changes: [{
+                fileName: sourceFile.fileName,
+                textChanges: [{
+                    span: { start: startPos, length: 0 },
+                    newText: `[name: string]: ${typeString};`
+                }]
+            }]
         }];
     }
 
-
-
-
-    // x needs to be a `this` construct. ie
-    // this.<thing>.
     // Want to infer type of x when possible. ie:
     // * assignment,
     // * function call argument: foo<T>(this.x) where foo(x: SomeType<T>)
@@ -66,9 +80,3 @@ namespace ts.codefix {
     // either make indexable of the inferred type
     // add named member of the inferred type.
 }
-
-// // class C {
-// //     constructor() {
-// //         this.x = 1;
-// //     }
-// // }
