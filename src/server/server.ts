@@ -12,6 +12,7 @@ namespace ts.server {
 
     const childProcess: {
         fork(modulePath: string, args: string[], options?: { execArgv: string[], env?: MapLike<string> }): NodeChildProcess;
+        execFileSync(file: string, args: string[], options: { stdio: "ignore", env: MapLike<string> }): string | Buffer;
     } = require("child_process");
 
     const os: {
@@ -575,151 +576,86 @@ namespace ts.server {
             writeMessage(pending.shift());
         }
     }
+
+    function extractWatchDirectoryCacheKey(path: string, currentDriveKey: string) {
+        path = normalizeSlashes(path);
+        if (isUNCPath(path)) {
+            // UNC path: extract server name
+            // //server/location
+            //         ^ <- from 0 to this position
+            const firstSlash = path.indexOf(directorySeparator, 2);
+            return path.substring(0, firstSlash).toLowerCase();
+        }
+        const rootLength = getRootLength(path);
+        if (rootLength === 0) {
+            // relative path - assume file is on the current drive
+            return currentDriveKey;
+        }
+        if (path.charCodeAt(1) === CharacterCodes.colon && path.charCodeAt(2) === CharacterCodes.slash) {
+            // rooted path that starts with c:/... - extract drive letter
+            return path.charAt(0).toLowerCase();
+        }
+        if (path.charCodeAt(0) === CharacterCodes.slash && path.charCodeAt(1) !== CharacterCodes.slash) {
+            // rooted path that starts with slash - /somename - use key for current drive
+            return currentDriveKey;
+        }
+        // do not cache any other cases
+        return undefined;
+    }
+
+    export function isUNCPath(s: string): boolean {
+        return s.length > 2 && s.charCodeAt(0) === CharacterCodes.slash && s.charCodeAt(1) === CharacterCodes.slash;
+    }
+
     const sys = <ServerHost>ts.sys;
     // use watchGuard process on Windows when node version is 4 or later
     const useWatchGuard = process.platform === "win32" && parseInt(process.version.charAt(1)) >= 4;
     if (useWatchGuard) {
-        interface DelayedWatcher extends FileWatcher {
-            readonly path: string;
-            readonly drive: string;
-            readonly startTime: number;
-            start(): void;
-        }
-
-        let watchGuard: NodeChildProcess;
-
-        // queue of watchDirectory requests
-        let pending: DelayedWatcher[] = [];
-        const cachedResultPerRootDrive = createMap<boolean>();
-
-        // kill watchGuard process when tsserver exits
-        process.on("exit", () => {
-            if (watchGuard) {
-                watchGuard.kill();
-                watchGuard = undefined;
-            }
-        });
-
-        spawnGuardIfNecessary();
-
+        const currentDrive = extractWatchDirectoryCacheKey(sys.resolvePath(sys.getCurrentDirectory()), /*currentDriveKey*/ undefined);
+        const statusCache = createMap<boolean>();
         const originalWatchDirectory = sys.watchDirectory;
         sys.watchDirectory = function (path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher {
-            const drive = path.charCodeAt(1) === CharacterCodes.colon ? path.charAt(0) : undefined;
-            if (drive && cachedResultPerRootDrive.has(drive)) {
+            const cacheKey = extractWatchDirectoryCacheKey(path, currentDrive);
+            let status = cacheKey && statusCache.get(cacheKey);
+            if (status === undefined) {
                 if (logger.hasLevel(LogLevel.verbose)) {
-                    logger.info(`watchDirectory for ${path} uses cached drive information.`);
+                    logger.info(`${cacheKey} not found in cache...`);
                 }
-                if (cachedResultPerRootDrive.get(drive)) {
-                    // this drive is known to be safe to use - call real 'watchDirectory'
-                    return originalWatchDirectory.call(sys, path, callback, recursive);
-                }
-                else {
-                    // this drive is known to be unsafe - return no-op watcher
-                    return { close() { } };
-                }
-            }
-
-            let realWatcher: FileWatcher;
-            // setup a proxy watcher
-            const proxyWatcher = {
-                path,
-                drive,
-                startTime: Date.now(),
-                close() {
-                    if (realWatcher) {
-                        realWatcher.close();
+                try {
+                    const args = [combinePaths(__dirname, "watchGuard.js"), path];
+                    if (logger.hasLevel(LogLevel.verbose)) {
+                        logger.info(`Starting ${process.execPath} with args ${JSON.stringify(args)}`);
                     }
-                },
-                start() {
-                    realWatcher = originalWatchDirectory.call(sys, path, callback, recursive);
-                }
-            }
-            pending.push(proxyWatcher);
-            dequeueWatchRequestIfNecessary(/*force*/ false);
-            return proxyWatcher;
-        }
-
-        function dequeueWatchRequestIfNecessary(force: boolean) {
-            if (pending.length === 0) {
-                return;
-            }
-            if (pending.length === 1 || force) {
-                // send requests to watchguard process one at a time
-                // if there are more than one requests in the queue - there are in-flight requests that were not finished yet.
-                // force is passed from function that process results so at this point we know for sure there are no other running requests
-                const w = pending[0];
-                spawnGuardIfNecessary().send(<WatchDirectoryRequest>{ directory: w.path });
-            }
-        }
-
-        function processResultForDrive(watcher: DelayedWatcher, driveSafeToUse: boolean) {
-            if (!watcher.drive) {
-                if (logger.hasLevel(LogLevel.verbose)) {
-                    logger.info(`WatchGuard: path ${watcher.drive}, safeToUse ${driveSafeToUse} finished in ${Date.now() - watcher.startTime}`);
-                }
-                return;
-            }
-            if (cachedResultPerRootDrive.has(watcher.drive)) {
-                return;
-            }
-            if (logger.hasLevel(LogLevel.verbose)) {
-                logger.info(`WatchGuard: path ${watcher.drive}, safeToUse ${driveSafeToUse} finished in ${Date.now() - watcher.startTime}`);
-            }
-            cachedResultPerRootDrive.set(watcher.drive, driveSafeToUse);
-            let newPending: typeof pending;
-            for (let i = 0; i < pending.length; i++) {
-                if (pending[i].drive === watcher.drive) {
-                    if (!newPending) {
-                        // copy old collection on first match
-                        newPending = pending.slice(0, i)
-                    }
-                    // if drive is safe to use - start the watcher directly without going through watch guard
-                    // otherwise just remove entry from pending requests
-                    if (driveSafeToUse) {
-                        pending[i].start();
+                    childProcess.execFileSync(process.execPath, args, { stdio: "ignore", env: { "ELECTRON_RUN_AS_NODE": "1" } });
+                    status = true;
+                    if (logger.hasLevel(LogLevel.verbose)) {
+                        logger.info(`WatchGuard for path ${path} returned: OK`);
                     }
                 }
-                else {
-                    if (newPending) {
-                        newPending.push(pending[i]);
+                catch (e) {
+                    status = false;
+                    if (logger.hasLevel(LogLevel.verbose)) {
+                        logger.info(`WatchGuard for path ${path} returned: ${e.message}`);
                     }
                 }
+                if (cacheKey) {
+                    statusCache.set(cacheKey, status);
+                }
             }
-            if (newPending) {
-                pending = newPending;
+            else if (logger.hasLevel(LogLevel.verbose)) {
+                logger.info(`watchDirectory for ${path} uses cached drive information.`);
             }
-        }
-
-        function spawnGuardIfNecessary() {
-            if (!watchGuard) {
-                watchGuard = childProcess.fork(combinePaths(__dirname, "watchGuard.js"), [], { execArgv: [] });
-                watchGuard.on("exit", () => {
-                    watchGuard = undefined;
-                    // if watchGuard process exits and we have outstanding requests - assume that it failed processing the last request
-                    if (pending.length) {
-                        // remove last request from the queue
-                        const watcher = pending.shift();
-                        processResultForDrive(watcher, /*driveSafeToUse*/ false);
-                        // schedule next request (this will restart the server)
-                        dequeueWatchRequestIfNecessary(/*force*/ true);
-                    }
-                })
-                watchGuard.on("message", (msg: WatchDirectoryResponse) => {
-                    // remove last request from the queue
-                    const watcher = pending.shift();
-                    Debug.assert(watcher.path === msg.directory);
-                    if (msg.ok) {
-                        processResultForDrive(watcher, /*driveSafeToUse*/ true);
-                        // start the actual watching
-                        watcher.start();
-                    }
-                    // schedule next request
-                    dequeueWatchRequestIfNecessary(/*force*/ true);
-                });
+            if (status) {
+                // this drive is safe to use - call real 'watchDirectory'
+                return originalWatchDirectory.call(sys, path, callback, recursive);
             }
-            return watchGuard;
+            else {
+                // this drive is unsafe - return no-op watcher
+                return { close() { } };
+            }
         }
     }
+
     // Override sys.write because fs.writeSync is not reliable on Node 4
     sys.write = (s: string) => writeMessage(new Buffer(s, "utf8"));
     sys.watchFile = (fileName, callback) => {

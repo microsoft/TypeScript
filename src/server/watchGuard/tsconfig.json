@@ -5,7 +5,6 @@
         "outFile": "../../../built/local/watchGuard.js"
     },
     "files": [
-        "types.d.ts",
         "watchGuard.ts"
     ]
 }

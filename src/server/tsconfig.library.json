@@ -13,7 +13,6 @@
         "declaration": true
     },
     "files": [
-        "watchGuard/types.d.ts",
         "editorServices.ts",
         "lsHost.ts",
         "project.ts",
