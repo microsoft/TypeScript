@@ -1,0 +1,44 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare module JSX {
+>JSX : any
+
+	interface Element { }
+>Element : Element
+
+	interface ElementTypeProperty { returnType; }
+>ElementTypeProperty : ElementTypeProperty
+>returnType : any
+}
+
+interface CustomType { }
+>CustomType : CustomType
+
+class Obj1 {
+>Obj1 : Obj1
+
+	returnType: CustomType;
+>returnType : CustomType
+>CustomType : CustomType
+}
+const obj = <Obj1 param="123"/>; // OK
+>obj : CustomType
+><Obj1 param="123"/> : CustomType
+>Obj1 : typeof Obj1
+>param : any
+
+const objSelfClosing = <Obj1/>; // OK
+>objSelfClosing : CustomType
+><Obj1/> : CustomType
+>Obj1 : typeof Obj1
+
+const Func = () => <Obj1/>;
+>Func : () => CustomType
+>() => <Obj1/> : () => CustomType
+><Obj1/> : CustomType
+>Obj1 : typeof Obj1
+
+const objFromFactory = <Func/>; // OK
+>objFromFactory : CustomType
+><Func/> : CustomType
+>Func : () => CustomType
+
