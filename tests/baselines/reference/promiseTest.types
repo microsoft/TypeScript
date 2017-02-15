@@ -5,7 +5,7 @@ interface Promise<T> {
 >T : T
 
     then<A>(success?: (value: T) => Promise<A>): Promise<A>;
->then : { (onfulfilled?: (value: T) => T | PromiseLike<T>, onrejected?: (reason: any) => T | PromiseLike<T>): Promise<T>; <TResult>(onfulfilled: (value: T) => T | PromiseLike<T>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<T | TResult>; <TResult>(onfulfilled: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult1, TResult2>(onfulfilled: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <A>(success?: (value: T) => Promise<A>): Promise<A>; <B>(success?: (value: T) => B): Promise<B>; }
+>then : { <TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <A>(success?: (value: T) => Promise<A>): Promise<A>; <B>(success?: (value: T) => B): Promise<B>; }
 >A : A
 >success : (value: T) => Promise<A>
 >value : T
@@ -16,7 +16,7 @@ interface Promise<T> {
 >A : A
 
     then<B>(success?: (value: T) => B): Promise<B>;
->then : { (onfulfilled?: (value: T) => T | PromiseLike<T>, onrejected?: (reason: any) => T | PromiseLike<T>): Promise<T>; <TResult>(onfulfilled: (value: T) => T | PromiseLike<T>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<T | TResult>; <TResult>(onfulfilled: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult1, TResult2>(onfulfilled: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <A>(success?: (value: T) => Promise<A>): Promise<A>; <B>(success?: (value: T) => B): Promise<B>; }
+>then : { <TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <A>(success?: (value: T) => Promise<A>): Promise<A>; <B>(success?: (value: T) => B): Promise<B>; }
 >B : B
 >success : (value: T) => B
 >value : T
@@ -38,9 +38,9 @@ var p: Promise<number> = null;
 var p2 = p.then(function (x) {
 >p2 : Promise<number>
 >p.then(function (x) {    return p;} ) : Promise<number>
->p.then : { (onfulfilled?: (value: number) => number | PromiseLike<number>, onrejected?: (reason: any) => number | PromiseLike<number>): Promise<number>; <TResult>(onfulfilled: (value: number) => number | PromiseLike<number>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<number | TResult>; <TResult>(onfulfilled: (value: number) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult1, TResult2>(onfulfilled: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <A>(success?: (value: number) => Promise<A>): Promise<A>; <B>(success?: (value: number) => B): Promise<B>; }
+>p.then : { <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <A>(success?: (value: number) => Promise<A>): Promise<A>; <B>(success?: (value: number) => B): Promise<B>; }
 >p : Promise<number>
->then : { (onfulfilled?: (value: number) => number | PromiseLike<number>, onrejected?: (reason: any) => number | PromiseLike<number>): Promise<number>; <TResult>(onfulfilled: (value: number) => number | PromiseLike<number>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<number | TResult>; <TResult>(onfulfilled: (value: number) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult1, TResult2>(onfulfilled: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <A>(success?: (value: number) => Promise<A>): Promise<A>; <B>(success?: (value: number) => B): Promise<B>; }
+>then : { <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <A>(success?: (value: number) => Promise<A>): Promise<A>; <B>(success?: (value: number) => B): Promise<B>; }
 >function (x) {    return p;} : (x: number) => Promise<number>
 >x : number
 

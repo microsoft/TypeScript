@@ -2059,6 +2059,14 @@
         "category": "Error",
         "code": 2705
     },
+    "Required type parameters may not follow optional type parameters.": {
+        "category": "Error",
+        "code": 2706
+    },
+    "Generic type '{0}' requires between {1} and {2} type arguments.": {
+        "category": "Error",
+        "code": 2707
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

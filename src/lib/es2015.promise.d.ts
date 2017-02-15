@@ -1,4 +1,3 @@
-
 interface PromiseConstructor {
     /**
       * A reference to the prototype.

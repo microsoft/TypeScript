@@ -24,6 +24,20 @@ namespace ts {
         return undefined;
     }
 
+    export function findDeclaration<T extends Declaration>(symbol: Symbol, predicate: (node: Declaration) => node is T): T | undefined;
+    export function findDeclaration(symbol: Symbol, predicate: (node: Declaration) => boolean): Declaration | undefined;
+    export function findDeclaration(symbol: Symbol, predicate: (node: Declaration) => boolean): Declaration | undefined {
+        const declarations = symbol.declarations;
+        if (declarations) {
+            for (const declaration of declarations) {
+                if (predicate(declaration)) {
+                    return declaration;
+                }
+            }
+        }
+        return undefined;
+    }
+
     export interface StringSymbolWriter extends SymbolWriter {
         string(): string;
     }
