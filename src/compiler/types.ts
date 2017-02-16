@@ -3912,7 +3912,7 @@
          * NOTE: Transformation hooks should only be modified during `Transformer` initialization,
          * before returning the `NodeTransformer` callback.
          */
-        onSubstituteNode?: (hint: EmitHint, node: Node) => Node;
+        onSubstituteNode: (hint: EmitHint, node: Node) => Node;
 
         /**
          * Enables before/after emit notifications in the pretty printer for the provided
@@ -3933,7 +3933,7 @@
          * NOTE: Transformation hooks should only be modified during `Transformer` initialization,
          * before returning the `NodeTransformer` callback.
          */
-        onEmitNode?: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
+        onEmitNode: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
     }
 
     export interface TransformationResult<T extends Node> {
