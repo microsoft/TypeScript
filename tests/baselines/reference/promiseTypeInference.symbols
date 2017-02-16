@@ -4,7 +4,7 @@ declare class Promise<T> {
 >T : Symbol(T, Decl(lib.d.ts, --, --), Decl(promiseTypeInference.ts, 0, 22))
 
     then<U>(success?: (value: T) => Promise<U>): Promise<U>;
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(promiseTypeInference.ts, 0, 26))
+>then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promiseTypeInference.ts, 0, 26))
 >U : Symbol(U, Decl(promiseTypeInference.ts, 1, 9))
 >success : Symbol(success, Decl(promiseTypeInference.ts, 1, 12))
 >value : Symbol(value, Decl(promiseTypeInference.ts, 1, 23))
@@ -41,9 +41,9 @@ declare function convert(s: string): IPromise<number>;
 
 var $$x = load("something").then(s => convert(s));
 >$$x : Symbol($$x, Decl(promiseTypeInference.ts, 9, 3))
->load("something").then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(promiseTypeInference.ts, 0, 26))
+>load("something").then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promiseTypeInference.ts, 0, 26))
 >load : Symbol(load, Decl(promiseTypeInference.ts, 5, 1))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(promiseTypeInference.ts, 0, 26))
+>then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promiseTypeInference.ts, 0, 26))
 >s : Symbol(s, Decl(promiseTypeInference.ts, 9, 33))
 >convert : Symbol(convert, Decl(promiseTypeInference.ts, 6, 53))
 >s : Symbol(s, Decl(promiseTypeInference.ts, 9, 33))

@@ -4,7 +4,7 @@ declare class Promise<T> {
 >T : T
 
     then<U>(success?: (value: T) => Promise<U>): Promise<U>;
->then : { (onfulfilled?: (value: T) => T | PromiseLike<T>, onrejected?: (reason: any) => T | PromiseLike<T>): Promise<T>; <TResult>(onfulfilled: (value: T) => T | PromiseLike<T>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<T | TResult>; <TResult>(onfulfilled: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult1, TResult2>(onfulfilled: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: T) => Promise<U>): Promise<U>; }
+>then : { <TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: T) => Promise<U>): Promise<U>; }
 >U : U
 >success : (value: T) => Promise<U>
 >value : T
@@ -42,11 +42,11 @@ declare function convert(s: string): IPromise<number>;
 var $$x = load("something").then(s => convert(s));
 >$$x : Promise<number>
 >load("something").then(s => convert(s)) : Promise<number>
->load("something").then : { (onfulfilled?: (value: string) => string | PromiseLike<string>, onrejected?: (reason: any) => string | PromiseLike<string>): Promise<string>; <TResult>(onfulfilled: (value: string) => string | PromiseLike<string>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<string | TResult>; <TResult>(onfulfilled: (value: string) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult1, TResult2>(onfulfilled: (value: string) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: string) => Promise<U>): Promise<U>; }
+>load("something").then : { <TResult1 = string, TResult2 = never>(onfulfilled?: (value: string) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: string) => Promise<U>): Promise<U>; }
 >load("something") : Promise<string>
 >load : (name: string) => Promise<string>
 >"something" : "something"
->then : { (onfulfilled?: (value: string) => string | PromiseLike<string>, onrejected?: (reason: any) => string | PromiseLike<string>): Promise<string>; <TResult>(onfulfilled: (value: string) => string | PromiseLike<string>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<string | TResult>; <TResult>(onfulfilled: (value: string) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult1, TResult2>(onfulfilled: (value: string) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: string) => Promise<U>): Promise<U>; }
+>then : { <TResult1 = string, TResult2 = never>(onfulfilled?: (value: string) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: string) => Promise<U>): Promise<U>; }
 >s => convert(s) : (s: string) => IPromise<number>
 >s : string
 >convert(s) : IPromise<number>
