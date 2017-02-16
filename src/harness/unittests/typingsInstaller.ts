@@ -731,6 +731,7 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = projectService.configuredProjects[0];
             checkProjectActualFiles(p, [app.path]);
+            checkWatchedFiles(host, [jsconfig.path, "/bower_components", "/node_modules"]);
 
             installer.installAll(/*expectedCount*/ 1);
 

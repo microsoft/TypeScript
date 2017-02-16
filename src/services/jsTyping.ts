@@ -218,7 +218,8 @@ namespace ts.JsTyping {
             const fileNames = host.readDirectory(packagesFolderPath, [".json"], /*excludes*/ undefined, /*includes*/ undefined, /*depth*/ 2);
             for (const fileName of fileNames) {
                 const normalizedFileName = normalizePath(fileName);
-                if (getBaseFileName(normalizedFileName) !== "package.json") {
+                const baseFileName = getBaseFileName(normalizedFileName);
+                if (baseFileName !== "package.json" && baseFileName !== "bower.json") {
                     continue;
                 }
                 const result = readConfigFile(normalizedFileName, (path: string) => host.readFile(path));
@@ -230,7 +231,7 @@ namespace ts.JsTyping {
                 // npm 3's package.json contains a "_requiredBy" field
                 // we should include all the top level module names for npm 2, and only module names whose
                 // "_requiredBy" field starts with "#" or equals "/" for npm 3.
-                if (packageJson._requiredBy &&
+                if (baseFileName === "package.json" && packageJson._requiredBy &&
                     filter(packageJson._requiredBy, (r: string) => r[0] === "#" || r === "/").length === 0) {
                     continue;
                 }
