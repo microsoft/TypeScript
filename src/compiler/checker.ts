@@ -12241,10 +12241,12 @@ namespace ts {
 
         /**
          * Get attributes type of the JSX opening-like element. The result is from resolving "attributes" property of the opening-like element.
-         * 
+         *
          * @param openingLikeElement a JSX opening-like element
          * @param filter a function to remove attributes that will not participate in checking whether attributes are assignable
          * @return an anonymous type (similar to the one returned by checkObjectLiteral) in which its properties are attributes property.
+         * @remarks Because this function calls getSpreadType, it needs to use the same checks as checkObjectLiteral,
+         * which also calls getSpreadType.
          */
         function createJsxAttributesTypeFromAttributesProperty(openingLikeElement: JsxOpeningLikeElement, filter?: (symbol: Symbol) => boolean, contextualMapper?: TypeMapper) {
             const attributes = openingLikeElement.attributes;
@@ -12256,7 +12258,7 @@ namespace ts {
                 if (isJsxAttribute(attributeDecl)) {
                     const exprType = attributeDecl.initializer ?
                         checkExpression(attributeDecl.initializer, contextualMapper) :
-                        trueType;  // <Elem attr /> is sugar for <Elem attr={true} /> 
+                        trueType;  // <Elem attr /> is sugar for <Elem attr={true} />
 
                     const attributeSymbol = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.name);
                     attributeSymbol.declarations = member.declarations;
@@ -12277,7 +12279,7 @@ namespace ts {
                         attributesTable = createMap<Symbol>();
                     }
                     const exprType = checkExpression(attributeDecl.expression);
-                    if (!(exprType.flags & (TypeFlags.Object | TypeFlags.Any))) {
+                    if (!isValidSpreadType(exprType)) {
                         error(attributeDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
                         return anyType;
                     }
