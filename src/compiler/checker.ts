@@ -346,7 +346,8 @@ namespace ts {
         });
         const typeofType = createTypeofType();
 
-        let jsxElementType: Type;
+        let getJsxElementType: () => Type;
+        let getJsxStatelessElementType: () => Type;
         let _jsxNamespace: string;
         let _jsxFactoryEntity: EntityName;
 
@@ -12187,12 +12188,12 @@ namespace ts {
                 type.flags & TypeFlags.UnionOrIntersection && !forEach((<UnionOrIntersectionType>type).types, t => !isValidSpreadType(t)));
         }
 
-        function checkJsxSelfClosingElement(node: JsxSelfClosingElement) {
+        function checkJsxSelfClosingElement(node: JsxSelfClosingElement): Type {
             checkJsxOpeningLikeElement(node);
-            return jsxElementType || anyType;
+            return getJsxElementType() || anyType;
         }
 
-        function checkJsxElement(node: JsxElement) {
+        function checkJsxElement(node: JsxElement): Type {
             // Check attributes
             checkJsxOpeningLikeElement(node.openingElement);
 
@@ -12219,7 +12220,7 @@ namespace ts {
                 }
             }
 
-            return jsxElementType || anyType;
+            return getJsxElementType() || anyType;
         }
 
         /**
@@ -12460,13 +12461,14 @@ namespace ts {
         function defaultTryGetJsxStatelessFunctionAttributesType(openingLikeElement: JsxOpeningLikeElement, elementType: Type, elemInstanceType: Type, elementClassType?: Type): Type {
             Debug.assert(!(elementType.flags & TypeFlags.Union));
             if (!elementClassType || !isTypeAssignableTo(elemInstanceType, elementClassType)) {
-                if (jsxElementType) {
+                const jsxStatelessElementType = getJsxStatelessElementType();
+                if (jsxStatelessElementType) {
                     // We don't call getResolvedSignature here because we have already resolve the type of JSX Element.
                     const callSignature = getResolvedJsxStatelessFunctionSignature(openingLikeElement, elementType, /*candidatesOutArray*/ undefined);
                     if (callSignature !== unknownSignature) {
                         const callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
                         let paramType = callReturnType && (callSignature.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature.parameters[0]));
-                        if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType)) {
+                        if (callReturnType && isTypeAssignableTo(callReturnType, jsxStatelessElementType)) {
                             // Intersect in JSX.IntrinsicAttributes if it exists
                             const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes);
                             if (intrinsicAttributes !== unknownType) {
@@ -12494,6 +12496,7 @@ namespace ts {
             Debug.assert(!(elementType.flags & TypeFlags.Union));
             if (!elementClassType || !isTypeAssignableTo(elemInstanceType, elementClassType)) {
                 // Is this is a stateless function component? See if its single signature's return type is assignable to the JSX Element Type
+                const jsxElementType = getJsxElementType();
                 if (jsxElementType) {
                     // We don't call getResolvedSignature because here we have already resolve the type of JSX Element.
                     const candidatesOutArray: Signature[] = [];
@@ -12766,7 +12769,7 @@ namespace ts {
                 error(errorNode, Diagnostics.Cannot_use_JSX_unless_the_jsx_flag_is_provided);
             }
 
-            if (jsxElementType === undefined) {
+            if (getJsxElementType() === undefined) {
                 if (compilerOptions.noImplicitAny) {
                     error(errorNode, Diagnostics.JSX_element_implicitly_has_type_any_because_the_global_type_JSX_Element_does_not_exist);
                 }
@@ -21657,7 +21660,8 @@ namespace ts {
             globalBooleanType = getGlobalType("Boolean");
             globalRegExpType = getGlobalType("RegExp");
 
-            jsxElementType = getExportedTypeFromNamespace("JSX", JsxNames.Element);
+            getJsxElementType = memoize(() => getExportedTypeFromNamespace("JSX", JsxNames.Element));
+            getJsxStatelessElementType = memoize(createJsxStatelessElementType);
             getGlobalClassDecoratorType = memoize(() => getGlobalType("ClassDecorator"));
             getGlobalPropertyDecoratorType = memoize(() => getGlobalType("PropertyDecorator"));
             getGlobalMethodDecoratorType = memoize(() => getGlobalType("MethodDecorator"));
@@ -21738,6 +21742,10 @@ namespace ts {
             return externalHelpersModule;
         }
 
+        function createJsxStatelessElementType() {
+            const jsxElementType = getJsxElementType();
+            return jsxElementType ? getUnionType([jsxElementType, nullType]) : nullType;
+        }
 
         function createInstantiatedPromiseLikeType(): ObjectType {
             const promiseLikeType = getGlobalPromiseLikeType();
