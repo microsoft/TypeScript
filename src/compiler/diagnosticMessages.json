@@ -3303,9 +3303,17 @@
         "category": "Message",
         "code": 90014
     },
-    "Add {0} to existing import declaration from {1}": {
+    "Add {0} to existing import declaration from {1}.": {
         "category": "Message",
         "code": 90015
+    },
+    "Add declaration for missing property '{0}'.": {
+        "category": "Message",
+        "code": 90016
+    },
+    "Add index signature for missing property '{0}'": {
+        "category": "Message",
+        "code": 90017
     },
     "Octal literal types must use ES2015 syntax. Use the syntax '{0}'.": {
         "category": "Error",
