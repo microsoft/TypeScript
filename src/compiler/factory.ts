@@ -1346,7 +1346,7 @@ namespace ts {
 
     export function updateExportSpecifier(node: ExportSpecifier, propertyName: Identifier | undefined, name: Identifier) {
         return node.propertyName !== propertyName
-            || node.name !== name 
+            || node.name !== name
             ? updateNode(createExportSpecifier(propertyName, name), node)
             : node;
     }
