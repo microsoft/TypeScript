@@ -1169,7 +1169,7 @@ namespace ts {
         }
 
         function getTargetOfImportClause(node: ImportClause): Symbol {
-            const moduleSymbol = resolveExternalModuleName(node, (<ImportDeclaration>node.parent).moduleSpecifier);
+            const moduleSymbol = resolveExternalModuleName(node, (<ImportDeclaration>node.parent).moduleSpecifier);    
 
             if (moduleSymbol) {
                 let exportDefaultSymbol: Symbol;
@@ -1185,6 +1185,9 @@ namespace ts {
 
                 if (!exportDefaultSymbol && !allowSyntheticDefaultImports) {
                     error(node.name, Diagnostics.Module_0_has_no_default_export, symbolToString(moduleSymbol));
+                    if(!moduleSymbol.exports[node.symbol.name]) {
+                        error(node, Diagnostics.Did_you_mean_to_import_the_named_import_0_by_using_curly_braces, symbolToString(node.symbol))
+                    }
                 }
                 else if (!exportDefaultSymbol && allowSyntheticDefaultImports) {
                     return resolveExternalModuleSymbol(moduleSymbol) || resolveSymbol(moduleSymbol);
@@ -1277,6 +1280,9 @@ namespace ts {
                         symbolFromModule || symbolFromVariable;
                     if (!symbol) {
                         error(name, Diagnostics.Module_0_has_no_exported_member_1, getFullyQualifiedName(moduleSymbol), declarationNameToString(name));
+                    }
+                    if(!symbol && moduleSymbol.exports["default"]){
+                        error(name, Diagnostics.Did_you_mean_to_import_the_default_export_with_no_curly_braces, getFullyQualifiedName(moduleSymbol), declarationNameToString(name));
                     }
                     return symbol;
                 }
