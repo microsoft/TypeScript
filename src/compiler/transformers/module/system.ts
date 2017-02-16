@@ -245,7 +245,7 @@ namespace ts {
             );
 
             // Visit the synthetic external helpers import declaration if present
-            visitNode(moduleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement, /*optional*/ true);
+            visitNode(moduleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement);
 
             // Visit the statements of the source file, emitting any transformations into
             // the `executeStatements` array. We do this *before* we fill the `setters` array
@@ -1218,8 +1218,8 @@ namespace ts {
             node = updateFor(
                 node,
                 visitForInitializer(node.initializer),
-                visitNode(node.condition, destructuringVisitor, isExpression, /*optional*/ true),
-                visitNode(node.incrementor, destructuringVisitor, isExpression, /*optional*/ true),
+                visitNode(node.condition, destructuringVisitor, isExpression),
+                visitNode(node.incrementor, destructuringVisitor, isExpression),
                 visitNode(node.statement, nestedElementVisitor, isStatement)
             );
 
@@ -1240,7 +1240,7 @@ namespace ts {
                 node,
                 visitForInitializer(node.initializer),
                 visitNode(node.expression, destructuringVisitor, isExpression),
-                visitNode(node.statement, nestedElementVisitor, isStatement, /*optional*/ false, liftToBlock)
+                visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock)
             );
 
             enclosingBlockScopedContainer = savedEnclosingBlockScopedContainer;
@@ -1260,7 +1260,7 @@ namespace ts {
                 node,
                 visitForInitializer(node.initializer),
                 visitNode(node.expression, destructuringVisitor, isExpression),
-                visitNode(node.statement, nestedElementVisitor, isStatement, /*optional*/ false, liftToBlock)
+                visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock)
             );
 
             enclosingBlockScopedContainer = savedEnclosingBlockScopedContainer;
@@ -1305,7 +1305,7 @@ namespace ts {
         function visitDoStatement(node: DoStatement): VisitResult<Statement> {
             return updateDo(
                 node,
-                visitNode(node.statement, nestedElementVisitor, isStatement, /*optional*/ false, liftToBlock),
+                visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock),
                 visitNode(node.expression, destructuringVisitor, isExpression)
             );
         }
@@ -1319,7 +1319,7 @@ namespace ts {
             return updateWhile(
                 node,
                 visitNode(node.expression, destructuringVisitor, isExpression),
-                visitNode(node.statement, nestedElementVisitor, isStatement, /*optional*/ false, liftToBlock)
+                visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock)
             );
         }
 
@@ -1332,7 +1332,7 @@ namespace ts {
             return updateLabel(
                 node,
                 node.label,
-                visitNode(node.statement, nestedElementVisitor, isStatement, /*optional*/ false, liftToBlock)
+                visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock)
             );
         }
 
@@ -1345,7 +1345,7 @@ namespace ts {
             return updateWith(
                 node,
                 visitNode(node.expression, destructuringVisitor, isExpression),
-                visitNode(node.statement, nestedElementVisitor, isStatement, /*optional*/ false, liftToBlock)
+                visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock)
             );
         }
 

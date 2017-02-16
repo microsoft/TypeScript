@@ -1227,7 +1227,7 @@ namespace ts {
                 case SyntaxKind.TryStatement:
                     return transformAndEmitTryStatement(<TryStatement>node);
                 default:
-                    return emitStatement(visitNode(node, visitor, isStatement, /*optional*/ true));
+                    return emitStatement(visitNode(node, visitor, isStatement));
             }
         }
 
@@ -1485,9 +1485,9 @@ namespace ts {
                     variables.length > 0
                         ? inlineExpressions(map(variables, transformInitializedVariable))
                         : undefined,
-                    visitNode(node.condition, visitor, isExpression, /*optional*/ true),
-                    visitNode(node.incrementor, visitor, isExpression, /*optional*/ true),
-                    visitNode(node.statement, visitor, isStatement, /*optional*/ false, liftToBlock)
+                    visitNode(node.condition, visitor, isExpression),
+                    visitNode(node.incrementor, visitor, isExpression),
+                    visitNode(node.statement, visitor, isStatement, liftToBlock)
                 );
             }
             else {
@@ -1609,7 +1609,7 @@ namespace ts {
                 node = updateForIn(node,
                     <Identifier>initializer.declarations[0].name,
                     visitNode(node.expression, visitor, isExpression),
-                    visitNode(node.statement, visitor, isStatement, /*optional*/ false, liftToBlock)
+                    visitNode(node.statement, visitor, isStatement, liftToBlock)
                 );
             }
             else {
@@ -1659,14 +1659,14 @@ namespace ts {
 
         function transformAndEmitReturnStatement(node: ReturnStatement): void {
             emitReturn(
-                visitNode(node.expression, visitor, isExpression, /*optional*/ true),
+                visitNode(node.expression, visitor, isExpression),
                 /*location*/ node
             );
         }
 
         function visitReturnStatement(node: ReturnStatement) {
             return createInlineReturn(
-                visitNode(node.expression, visitor, isExpression, /*optional*/ true),
+                visitNode(node.expression, visitor, isExpression),
                 /*location*/ node
             );
         }

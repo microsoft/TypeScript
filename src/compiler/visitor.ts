@@ -9,10 +9,9 @@ namespace ts {
      * @param node The Node to visit.
      * @param visitor The callback used to visit the Node.
      * @param test A callback to execute to verify the Node is valid.
-     * @param optional An optional value indicating whether the Node is itself optional.
      * @param lift An optional callback to execute to lift a NodeArray into a valid Node.
      */
-    export function visitNode<T extends Node>(node: T, visitor: Visitor, test: (node: Node) => node is T, optional?: boolean, lift?: (node: NodeArray<Node>) => T): T;
+    export function visitNode<T extends Node>(node: T, visitor: Visitor, test?: (node: Node) => boolean, lift?: (node: NodeArray<Node>) => T): T;
 
     /**
      * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
@@ -20,34 +19,11 @@ namespace ts {
      * @param node The Node to visit.
      * @param visitor The callback used to visit the Node.
      * @param test A callback to execute to verify the Node is valid.
-     * @param optional An optional value indicating whether the Node is itself optional.
      * @param lift An optional callback to execute to lift a NodeArray into a valid Node.
      */
-    export function visitNode<T extends Node>(node: T, visitor: Visitor, test?: (node: Node) => boolean, optional?: boolean, lift?: (node: NodeArray<Node>) => T): T;
+    export function visitNode<T extends Node>(node: T | undefined, visitor: Visitor, test?: (node: Node) => boolean, lift?: (node: NodeArray<Node>) => T): T | undefined;
 
-    /**
-     * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
-     *
-     * @param node The Node to visit.
-     * @param visitor The callback used to visit the Node.
-     * @param test A callback to execute to verify the Node is valid.
-     * @param optional An optional value indicating whether the Node is itself optional.
-     * @param lift An optional callback to execute to lift a NodeArray into a valid Node.
-     */
-    export function visitNode<T extends Node>(node: T | undefined, visitor: Visitor, test: (node: Node) => node is T, optional?: boolean, lift?: (node: NodeArray<Node>) => T): T | undefined;
-
-    /**
-     * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
-     *
-     * @param node The Node to visit.
-     * @param visitor The callback used to visit the Node.
-     * @param test A callback to execute to verify the Node is valid.
-     * @param optional An optional value indicating whether the Node is itself optional.
-     * @param lift An optional callback to execute to lift a NodeArray into a valid Node.
-     */
-    export function visitNode<T extends Node>(node: T | undefined, visitor: Visitor, test?: (node: Node) => boolean, optional?: boolean, lift?: (node: NodeArray<Node>) => T): T | undefined;
-
-    export function visitNode<T extends Node | undefined>(node: T, visitor: Visitor, test?: (node: Node) => boolean, optional?: boolean, lift?: (node: NodeArray<Node>) => T): T {
+    export function visitNode<T extends Node>(node: T | undefined, visitor: Visitor, test?: (node: Node) => boolean, lift?: (node: NodeArray<Node>) => T): T | undefined {
         if (node === undefined || visitor === undefined) {
             return node;
         }
@@ -60,10 +36,6 @@ namespace ts {
 
         let visitedNode: Node;
         if (visited === undefined) {
-            if (!optional) {
-                Debug.failNotOptional();
-            }
-
             return undefined;
         }
         else if (isArray(visited)) {
@@ -87,29 +59,7 @@ namespace ts {
      * @param start An optional value indicating the starting offset at which to start visiting.
      * @param count An optional value indicating the maximum number of nodes to visit.
      */
-    export function visitNodes<T extends Node>(nodes: NodeArray<T>, visitor: Visitor, test: (node: Node) => node is T, start?: number, count?: number): NodeArray<T>;
-
-    /**
-     * Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
-     *
-     * @param nodes The NodeArray to visit.
-     * @param visitor The callback used to visit a Node.
-     * @param test A node test to execute for each node.
-     * @param start An optional value indicating the starting offset at which to start visiting.
-     * @param count An optional value indicating the maximum number of nodes to visit.
-     */
     export function visitNodes<T extends Node>(nodes: NodeArray<T>, visitor: Visitor, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T>;
-
-    /**
-     * Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
-     *
-     * @param nodes The NodeArray to visit.
-     * @param visitor The callback used to visit a Node.
-     * @param test A node test to execute for each node.
-     * @param start An optional value indicating the starting offset at which to start visiting.
-     * @param count An optional value indicating the maximum number of nodes to visit.
-     */
-    export function visitNodes<T extends Node>(nodes: NodeArray<T> | undefined, visitor: Visitor, test: (node: Node) => node is T, start?: number, count?: number): NodeArray<T> | undefined;
 
     /**
      * Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
@@ -297,8 +247,8 @@ namespace ts {
                     visitNodes((<ParameterDeclaration>node).modifiers, visitor, isModifier),
                     (<ParameterDeclaration>node).dotDotDotToken,
                     visitNode((<ParameterDeclaration>node).name, visitor, isBindingName),
-                    visitNode((<ParameterDeclaration>node).type, visitor, isTypeNode, /*optional*/ true),
-                    visitNode((<ParameterDeclaration>node).initializer, visitor, isExpression, /*optional*/ true));
+                    visitNode((<ParameterDeclaration>node).type, visitor, isTypeNode),
+                    visitNode((<ParameterDeclaration>node).initializer, visitor, isExpression));
 
             case SyntaxKind.Decorator:
                 return updateDecorator(<Decorator>node,
@@ -310,8 +260,8 @@ namespace ts {
                     visitNodes((<PropertyDeclaration>node).decorators, visitor, isDecorator),
                     visitNodes((<PropertyDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<PropertyDeclaration>node).name, visitor, isPropertyName),
-                    visitNode((<PropertyDeclaration>node).type, visitor, isTypeNode, /*optional*/ true),
-                    visitNode((<PropertyDeclaration>node).initializer, visitor, isExpression, /*optional*/ true));
+                    visitNode((<PropertyDeclaration>node).type, visitor, isTypeNode),
+                    visitNode((<PropertyDeclaration>node).initializer, visitor, isExpression));
 
             case SyntaxKind.MethodDeclaration:
                 return updateMethod(<MethodDeclaration>node,
@@ -320,7 +270,7 @@ namespace ts {
                     visitNode((<MethodDeclaration>node).name, visitor, isPropertyName),
                     visitNodes((<MethodDeclaration>node).typeParameters, visitor, isTypeParameter),
                     visitParameterList((<MethodDeclaration>node).parameters, visitor, context),
-                    visitNode((<MethodDeclaration>node).type, visitor, isTypeNode, /*optional*/ true),
+                    visitNode((<MethodDeclaration>node).type, visitor, isTypeNode),
                     visitFunctionBody((<MethodDeclaration>node).body, visitor, context));
 
             case SyntaxKind.Constructor:
@@ -336,7 +286,7 @@ namespace ts {
                     visitNodes((<GetAccessorDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<GetAccessorDeclaration>node).name, visitor, isPropertyName),
                     visitParameterList((<GetAccessorDeclaration>node).parameters, visitor, context),
-                    visitNode((<GetAccessorDeclaration>node).type, visitor, isTypeNode, /*optional*/ true),
+                    visitNode((<GetAccessorDeclaration>node).type, visitor, isTypeNode),
                     visitFunctionBody((<GetAccessorDeclaration>node).body, visitor, context));
 
             case SyntaxKind.SetAccessor:
@@ -359,9 +309,9 @@ namespace ts {
             case SyntaxKind.BindingElement:
                 return updateBindingElement(<BindingElement>node,
                     (<BindingElement>node).dotDotDotToken,
-                    visitNode((<BindingElement>node).propertyName, visitor, isPropertyName, /*optional*/ true),
+                    visitNode((<BindingElement>node).propertyName, visitor, isPropertyName),
                     visitNode((<BindingElement>node).name, visitor, isBindingName),
-                    visitNode((<BindingElement>node).initializer, visitor, isExpression, /*optional*/ true));
+                    visitNode((<BindingElement>node).initializer, visitor, isExpression));
 
             // Expression
             case SyntaxKind.ArrayLiteralExpression:
@@ -411,10 +361,10 @@ namespace ts {
             case SyntaxKind.FunctionExpression:
                 return updateFunctionExpression(<FunctionExpression>node,
                     visitNodes((<FunctionExpression>node).modifiers, visitor, isModifier),
-                    visitNode((<FunctionExpression>node).name, visitor, isIdentifier, /*optional*/ true),
+                    visitNode((<FunctionExpression>node).name, visitor, isIdentifier),
                     visitNodes((<FunctionExpression>node).typeParameters, visitor, isTypeParameter),
                     visitParameterList((<FunctionExpression>node).parameters, visitor, context),
-                    visitNode((<FunctionExpression>node).type, visitor, isTypeNode, /*optional*/ true),
+                    visitNode((<FunctionExpression>node).type, visitor, isTypeNode),
                     visitFunctionBody((<FunctionExpression>node).body, visitor, context));
 
             case SyntaxKind.ArrowFunction:
@@ -422,7 +372,7 @@ namespace ts {
                     visitNodes((<ArrowFunction>node).modifiers, visitor, isModifier),
                     visitNodes((<ArrowFunction>node).typeParameters, visitor, isTypeParameter),
                     visitParameterList((<ArrowFunction>node).parameters, visitor, context),
-                    visitNode((<ArrowFunction>node).type, visitor, isTypeNode, /*optional*/ true),
+                    visitNode((<ArrowFunction>node).type, visitor, isTypeNode),
                     visitFunctionBody((<ArrowFunction>node).body, visitor, context));
 
             case SyntaxKind.DeleteExpression:
@@ -477,7 +427,7 @@ namespace ts {
             case SyntaxKind.ClassExpression:
                 return updateClassExpression(<ClassExpression>node,
                     visitNodes((<ClassExpression>node).modifiers, visitor, isModifier),
-                    visitNode((<ClassExpression>node).name, visitor, isIdentifier, /*optional*/ true),
+                    visitNode((<ClassExpression>node).name, visitor, isIdentifier),
                     visitNodes((<ClassExpression>node).typeParameters, visitor, isTypeParameter),
                     visitNodes((<ClassExpression>node).heritageClauses, visitor, isHeritageClause),
                     visitNodes((<ClassExpression>node).members, visitor, isClassElement));
@@ -519,54 +469,54 @@ namespace ts {
             case SyntaxKind.IfStatement:
                 return updateIf(<IfStatement>node,
                     visitNode((<IfStatement>node).expression, visitor, isExpression),
-                    visitNode((<IfStatement>node).thenStatement, visitor, isStatement, /*optional*/ false, liftToBlock),
-                    visitNode((<IfStatement>node).elseStatement, visitor, isStatement, /*optional*/ true, liftToBlock));
+                    visitNode((<IfStatement>node).thenStatement, visitor, isStatement, liftToBlock),
+                    visitNode((<IfStatement>node).elseStatement, visitor, isStatement, liftToBlock));
 
             case SyntaxKind.DoStatement:
                 return updateDo(<DoStatement>node,
-                    visitNode((<DoStatement>node).statement, visitor, isStatement, /*optional*/ false, liftToBlock),
+                    visitNode((<DoStatement>node).statement, visitor, isStatement, liftToBlock),
                     visitNode((<DoStatement>node).expression, visitor, isExpression));
 
             case SyntaxKind.WhileStatement:
                 return updateWhile(<WhileStatement>node,
                     visitNode((<WhileStatement>node).expression, visitor, isExpression),
-                    visitNode((<WhileStatement>node).statement, visitor, isStatement, /*optional*/ false, liftToBlock));
+                    visitNode((<WhileStatement>node).statement, visitor, isStatement, liftToBlock));
 
             case SyntaxKind.ForStatement:
                 return updateFor(<ForStatement>node,
                     visitNode((<ForStatement>node).initializer, visitor, isForInitializer),
                     visitNode((<ForStatement>node).condition, visitor, isExpression),
                     visitNode((<ForStatement>node).incrementor, visitor, isExpression),
-                    visitNode((<ForStatement>node).statement, visitor, isStatement, /*optional*/ false, liftToBlock));
+                    visitNode((<ForStatement>node).statement, visitor, isStatement, liftToBlock));
 
             case SyntaxKind.ForInStatement:
                 return updateForIn(<ForInStatement>node,
                     visitNode((<ForInStatement>node).initializer, visitor, isForInitializer),
                     visitNode((<ForInStatement>node).expression, visitor, isExpression),
-                    visitNode((<ForInStatement>node).statement, visitor, isStatement, /*optional*/ false, liftToBlock));
+                    visitNode((<ForInStatement>node).statement, visitor, isStatement, liftToBlock));
 
             case SyntaxKind.ForOfStatement:
                 return updateForOf(<ForOfStatement>node,
                     visitNode((<ForOfStatement>node).initializer, visitor, isForInitializer),
                     visitNode((<ForOfStatement>node).expression, visitor, isExpression),
-                    visitNode((<ForOfStatement>node).statement, visitor, isStatement, /*optional*/ false, liftToBlock));
+                    visitNode((<ForOfStatement>node).statement, visitor, isStatement, liftToBlock));
 
             case SyntaxKind.ContinueStatement:
                 return updateContinue(<ContinueStatement>node,
-                    visitNode((<ContinueStatement>node).label, visitor, isIdentifier, /*optional*/ true));
+                    visitNode((<ContinueStatement>node).label, visitor, isIdentifier));
 
             case SyntaxKind.BreakStatement:
                 return updateBreak(<BreakStatement>node,
-                    visitNode((<BreakStatement>node).label, visitor, isIdentifier, /*optional*/ true));
+                    visitNode((<BreakStatement>node).label, visitor, isIdentifier));
 
             case SyntaxKind.ReturnStatement:
                 return updateReturn(<ReturnStatement>node,
-                    visitNode((<ReturnStatement>node).expression, visitor, isExpression, /*optional*/ true));
+                    visitNode((<ReturnStatement>node).expression, visitor, isExpression));
 
             case SyntaxKind.WithStatement:
                 return updateWith(<WithStatement>node,
                     visitNode((<WithStatement>node).expression, visitor, isExpression),
-                    visitNode((<WithStatement>node).statement, visitor, isStatement, /*optional*/ false, liftToBlock));
+                    visitNode((<WithStatement>node).statement, visitor, isStatement, liftToBlock));
 
             case SyntaxKind.SwitchStatement:
                 return updateSwitch(<SwitchStatement>node,
@@ -576,7 +526,7 @@ namespace ts {
             case SyntaxKind.LabeledStatement:
                 return updateLabel(<LabeledStatement>node,
                     visitNode((<LabeledStatement>node).label, visitor, isIdentifier),
-                    visitNode((<LabeledStatement>node).statement, visitor, isStatement, /*optional*/ false, liftToBlock));
+                    visitNode((<LabeledStatement>node).statement, visitor, isStatement, liftToBlock));
 
             case SyntaxKind.ThrowStatement:
                 return updateThrow(<ThrowStatement>node,
@@ -585,14 +535,14 @@ namespace ts {
             case SyntaxKind.TryStatement:
                 return updateTry(<TryStatement>node,
                     visitNode((<TryStatement>node).tryBlock, visitor, isBlock),
-                    visitNode((<TryStatement>node).catchClause, visitor, isCatchClause, /*optional*/ true),
-                    visitNode((<TryStatement>node).finallyBlock, visitor, isBlock, /*optional*/ true));
+                    visitNode((<TryStatement>node).catchClause, visitor, isCatchClause),
+                    visitNode((<TryStatement>node).finallyBlock, visitor, isBlock));
 
             case SyntaxKind.VariableDeclaration:
                 return updateVariableDeclaration(<VariableDeclaration>node,
                     visitNode((<VariableDeclaration>node).name, visitor, isBindingName),
-                    visitNode((<VariableDeclaration>node).type, visitor, isTypeNode, /*optional*/ true),
-                    visitNode((<VariableDeclaration>node).initializer, visitor, isExpression, /*optional*/ true));
+                    visitNode((<VariableDeclaration>node).type, visitor, isTypeNode),
+                    visitNode((<VariableDeclaration>node).initializer, visitor, isExpression));
 
             case SyntaxKind.VariableDeclarationList:
                 return updateVariableDeclarationList(<VariableDeclarationList>node,
@@ -602,17 +552,17 @@ namespace ts {
                 return updateFunctionDeclaration(<FunctionDeclaration>node,
                     visitNodes((<FunctionDeclaration>node).decorators, visitor, isDecorator),
                     visitNodes((<FunctionDeclaration>node).modifiers, visitor, isModifier),
-                    visitNode((<FunctionDeclaration>node).name, visitor, isIdentifier, /*optional*/ true),
+                    visitNode((<FunctionDeclaration>node).name, visitor, isIdentifier),
                     visitNodes((<FunctionDeclaration>node).typeParameters, visitor, isTypeParameter),
                     visitParameterList((<FunctionDeclaration>node).parameters, visitor, context),
-                    visitNode((<FunctionDeclaration>node).type, visitor, isTypeNode, /*optional*/ true),
+                    visitNode((<FunctionDeclaration>node).type, visitor, isTypeNode),
                     visitFunctionBody((<FunctionExpression>node).body, visitor, context));
 
             case SyntaxKind.ClassDeclaration:
                 return updateClassDeclaration(<ClassDeclaration>node,
                     visitNodes((<ClassDeclaration>node).decorators, visitor, isDecorator),
                     visitNodes((<ClassDeclaration>node).modifiers, visitor, isModifier),
-                    visitNode((<ClassDeclaration>node).name, visitor, isIdentifier, /*optional*/ true),
+                    visitNode((<ClassDeclaration>node).name, visitor, isIdentifier),
                     visitNodes((<ClassDeclaration>node).typeParameters, visitor, isTypeParameter),
                     visitNodes((<ClassDeclaration>node).heritageClauses, visitor, isHeritageClause),
                     visitNodes((<ClassDeclaration>node).members, visitor, isClassElement));
@@ -650,13 +600,13 @@ namespace ts {
                 return updateImportDeclaration(<ImportDeclaration>node,
                     visitNodes((<ImportDeclaration>node).decorators, visitor, isDecorator),
                     visitNodes((<ImportDeclaration>node).modifiers, visitor, isModifier),
-                    visitNode((<ImportDeclaration>node).importClause, visitor, isImportClause, /*optional*/ true),
+                    visitNode((<ImportDeclaration>node).importClause, visitor, isImportClause),
                     visitNode((<ImportDeclaration>node).moduleSpecifier, visitor, isExpression));
 
             case SyntaxKind.ImportClause:
                 return updateImportClause(<ImportClause>node,
-                    visitNode((<ImportClause>node).name, visitor, isIdentifier, /*optional*/ true),
-                    visitNode((<ImportClause>node).namedBindings, visitor, isNamedImportBindings, /*optional*/ true));
+                    visitNode((<ImportClause>node).name, visitor, isIdentifier),
+                    visitNode((<ImportClause>node).namedBindings, visitor, isNamedImportBindings));
 
             case SyntaxKind.NamespaceImport:
                 return updateNamespaceImport(<NamespaceImport>node,
@@ -668,7 +618,7 @@ namespace ts {
 
             case SyntaxKind.ImportSpecifier:
                 return updateImportSpecifier(<ImportSpecifier>node,
-                    visitNode((<ImportSpecifier>node).propertyName, visitor, isIdentifier, /*optional*/ true),
+                    visitNode((<ImportSpecifier>node).propertyName, visitor, isIdentifier),
                     visitNode((<ImportSpecifier>node).name, visitor, isIdentifier));
 
             case SyntaxKind.ExportAssignment:
@@ -681,8 +631,8 @@ namespace ts {
                 return updateExportDeclaration(<ExportDeclaration>node,
                     visitNodes((<ExportDeclaration>node).decorators, visitor, isDecorator),
                     visitNodes((<ExportDeclaration>node).modifiers, visitor, isModifier),
-                    visitNode((<ExportDeclaration>node).exportClause, visitor, isNamedExports, /*optional*/ true),
-                    visitNode((<ExportDeclaration>node).moduleSpecifier, visitor, isExpression, /*optional*/ true));
+                    visitNode((<ExportDeclaration>node).exportClause, visitor, isNamedExports),
+                    visitNode((<ExportDeclaration>node).moduleSpecifier, visitor, isExpression));
 
             case SyntaxKind.NamedExports:
                 return updateNamedExports(<NamedExports>node,
@@ -690,7 +640,7 @@ namespace ts {
 
             case SyntaxKind.ExportSpecifier:
                 return updateExportSpecifier(<ExportSpecifier>node,
-                    visitNode((<ExportSpecifier>node).propertyName, visitor, isIdentifier, /*optional*/ true),
+                    visitNode((<ExportSpecifier>node).propertyName, visitor, isIdentifier),
                     visitNode((<ExportSpecifier>node).name, visitor, isIdentifier));
 
             // Module references
@@ -774,7 +724,7 @@ namespace ts {
             case SyntaxKind.EnumMember:
                 return updateEnumMember(<EnumMember>node,
                     visitNode((<EnumMember>node).name, visitor, isPropertyName),
-                    visitNode((<EnumMember>node).initializer, visitor, isExpression, /*optional*/ true));
+                    visitNode((<EnumMember>node).initializer, visitor, isExpression));
 
             // Top-level nodes
             case SyntaxKind.SourceFile:
@@ -1319,7 +1269,6 @@ namespace ts {
             : addRange(statements, declarations);
     }
 
-
     /**
      * Merges generated lexical declarations into the FunctionBody of a non-arrow function-like declaration.
      *
@@ -1434,10 +1383,6 @@ namespace ts {
     }
 
     export namespace Debug {
-        export const failNotOptional = shouldAssert(AssertionLevel.Normal)
-            ? (message?: string) => assert(false, message || "Node not optional.")
-            : noop;
-
         export const failBadSyntaxKind = shouldAssert(AssertionLevel.Normal)
             ? (node: Node, message?: string) => assert(false, message || "Unexpected node.", () => `Node ${formatSyntaxKind(node.kind)} was unexpected.`)
             : noop;

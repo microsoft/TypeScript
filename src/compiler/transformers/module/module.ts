@@ -88,7 +88,7 @@ namespace ts {
                 append(statements, createUnderscoreUnderscoreESModule());
             }
 
-            append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement, /*optional*/ true));
+            append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement));
             addRange(statements, visitNodes(node.statements, sourceElementVisitor, isStatement, statementOffset));
             addRange(statements, endLexicalEnvironment());
             addExportEqualsIfNeeded(statements, /*emitAsReturn*/ false);
@@ -380,7 +380,7 @@ namespace ts {
             }
 
             // Visit each statement of the module body.
-            append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement, /*optional*/ true));
+            append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement));
             addRange(statements, visitNodes(node.statements, sourceElementVisitor, isStatement, statementOffset));
 
             // End the lexical environment for the module body

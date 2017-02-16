@@ -2348,7 +2348,7 @@ namespace ts {
                 addRange(statements, convertedLoopBodyStatements);
             }
             else {
-                const statement = visitNode(node.statement, visitor, isStatement, /*optional*/ false, liftToBlock);
+                const statement = visitNode(node.statement, visitor, isStatement, liftToBlock);
                 if (isBlock(statement)) {
                     addRange(statements, statement.statements);
                     bodyLocation = statement;
@@ -2570,7 +2570,7 @@ namespace ts {
             }
 
             startLexicalEnvironment();
-            let loopBody = visitNode(node.statement, visitor, isStatement, /*optional*/ false, liftToBlock);
+            let loopBody = visitNode(node.statement, visitor, isStatement, liftToBlock);
             const lexicalEnvironment = endLexicalEnvironment();
 
             const currentState = convertedLoopState;
