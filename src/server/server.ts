@@ -584,7 +584,7 @@ namespace ts.server {
             // //server/location
             //         ^ <- from 0 to this position
             const firstSlash = path.indexOf(directorySeparator, 2);
-            return firstSlash !== -1 ? path.substring(0, firstSlash).toLowerCase() : undefined;
+            return firstSlash !== -1 ? path.substring(0, firstSlash).toLowerCase() : path;
         }
         const rootLength = getRootLength(path);
         if (rootLength === 0) {
@@ -619,7 +619,7 @@ namespace ts.server {
             let status = cacheKey && statusCache.get(cacheKey);
             if (status === undefined) {
                 if (logger.hasLevel(LogLevel.verbose)) {
-                    logger.info(`${cacheKey} not found in cache...`);
+                    logger.info(`${cacheKey} for path ${path} not found in cache...`);
                 }
                 try {
                     const args = [combinePaths(__dirname, "watchGuard.js"), path];
