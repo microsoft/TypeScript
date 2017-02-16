@@ -584,7 +584,7 @@ namespace ts.server {
             // //server/location
             //         ^ <- from 0 to this position
             const firstSlash = path.indexOf(directorySeparator, 2);
-            return path.substring(0, firstSlash).toLowerCase();
+            return firstSlash !== -1 ? path.substring(0, firstSlash).toLowerCase() : undefined;
         }
         const rootLength = getRootLength(path);
         if (rootLength === 0) {
@@ -609,7 +609,7 @@ namespace ts.server {
 
     const sys = <ServerHost>ts.sys;
     // use watchGuard process on Windows when node version is 4 or later
-    const useWatchGuard = process.platform === "win32" && parseInt(process.version.charAt(1)) >= 4;
+    const useWatchGuard = process.platform === "win32" && getNodeMajorVersion() >= 4;
     if (useWatchGuard) {
         const currentDrive = extractWatchDirectoryCacheKey(sys.resolvePath(sys.getCurrentDirectory()), /*currentDriveKey*/ undefined);
         const statusCache = createMap<boolean>();
