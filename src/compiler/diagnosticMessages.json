@@ -3303,11 +3303,11 @@
         "category": "Message",
         "code": 90014
     },
-    "Add {0} to existing import declaration from {1}": {
+    "Add {0} to existing import declaration from {1}.": {
         "category": "Message",
         "code": 90015
     },
-    "Add declaration for missing property '{0}'": {
+    "Add declaration for missing property '{0}'.": {
         "category": "Message",
         "code": 90016
     },
