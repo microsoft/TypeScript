@@ -1724,9 +1724,7 @@ namespace ts {
                         pos = scanConflictMarkerTrivia(text, pos, error);
                         return token = SyntaxKind.ConflictMarkerTrivia;
                     }
-                    else {
-                        break;
-                    }
+                    break;
                 }
             }
             return token = SyntaxKind.JsxText;
