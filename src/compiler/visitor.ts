@@ -12,7 +12,42 @@ namespace ts {
      * @param optional An optional value indicating whether the Node is itself optional.
      * @param lift An optional callback to execute to lift a NodeArray into a valid Node.
      */
-    export function visitNode<T extends Node>(node: T, visitor: Visitor, test: (node: Node) => boolean, optional?: boolean, lift?: (node: NodeArray<Node>) => T): T {
+    export function visitNode<T extends Node>(node: T, visitor: Visitor, test: (node: Node) => node is T, optional?: boolean, lift?: (node: NodeArray<Node>) => T): T;
+
+    /**
+     * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
+     *
+     * @param node The Node to visit.
+     * @param visitor The callback used to visit the Node.
+     * @param test A callback to execute to verify the Node is valid.
+     * @param optional An optional value indicating whether the Node is itself optional.
+     * @param lift An optional callback to execute to lift a NodeArray into a valid Node.
+     */
+    export function visitNode<T extends Node>(node: T, visitor: Visitor, test?: (node: Node) => boolean, optional?: boolean, lift?: (node: NodeArray<Node>) => T): T;
+
+    /**
+     * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
+     *
+     * @param node The Node to visit.
+     * @param visitor The callback used to visit the Node.
+     * @param test A callback to execute to verify the Node is valid.
+     * @param optional An optional value indicating whether the Node is itself optional.
+     * @param lift An optional callback to execute to lift a NodeArray into a valid Node.
+     */
+    export function visitNode<T extends Node>(node: T | undefined, visitor: Visitor, test: (node: Node) => node is T, optional?: boolean, lift?: (node: NodeArray<Node>) => T): T | undefined;
+
+    /**
+     * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
+     *
+     * @param node The Node to visit.
+     * @param visitor The callback used to visit the Node.
+     * @param test A callback to execute to verify the Node is valid.
+     * @param optional An optional value indicating whether the Node is itself optional.
+     * @param lift An optional callback to execute to lift a NodeArray into a valid Node.
+     */
+    export function visitNode<T extends Node>(node: T | undefined, visitor: Visitor, test?: (node: Node) => boolean, optional?: boolean, lift?: (node: NodeArray<Node>) => T): T | undefined;
+
+    export function visitNode<T extends Node | undefined>(node: T, visitor: Visitor, test?: (node: Node) => boolean, optional?: boolean, lift?: (node: NodeArray<Node>) => T): T {
         if (node === undefined || visitor === undefined) {
             return node;
         }
@@ -52,7 +87,51 @@ namespace ts {
      * @param start An optional value indicating the starting offset at which to start visiting.
      * @param count An optional value indicating the maximum number of nodes to visit.
      */
-    export function visitNodes<T extends Node>(nodes: NodeArray<T>, visitor: Visitor, test: (node: Node) => boolean, start?: number, count?: number): NodeArray<T> {
+    export function visitNodes<T extends Node>(nodes: NodeArray<T>, visitor: Visitor, test: (node: Node) => node is T, start?: number, count?: number): NodeArray<T>;
+
+    /**
+     * Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
+     *
+     * @param nodes The NodeArray to visit.
+     * @param visitor The callback used to visit a Node.
+     * @param test A node test to execute for each node.
+     * @param start An optional value indicating the starting offset at which to start visiting.
+     * @param count An optional value indicating the maximum number of nodes to visit.
+     */
+    export function visitNodes<T extends Node>(nodes: NodeArray<T>, visitor: Visitor, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T>;
+
+    /**
+     * Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
+     *
+     * @param nodes The NodeArray to visit.
+     * @param visitor The callback used to visit a Node.
+     * @param test A node test to execute for each node.
+     * @param start An optional value indicating the starting offset at which to start visiting.
+     * @param count An optional value indicating the maximum number of nodes to visit.
+     */
+    export function visitNodes<T extends Node>(nodes: NodeArray<T> | undefined, visitor: Visitor, test: (node: Node) => node is T, start?: number, count?: number): NodeArray<T> | undefined;
+
+    /**
+     * Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
+     *
+     * @param nodes The NodeArray to visit.
+     * @param visitor The callback used to visit a Node.
+     * @param test A node test to execute for each node.
+     * @param start An optional value indicating the starting offset at which to start visiting.
+     * @param count An optional value indicating the maximum number of nodes to visit.
+     */
+    export function visitNodes<T extends Node>(nodes: NodeArray<T> | undefined, visitor: Visitor, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T> | undefined;
+
+    /**
+     * Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
+     *
+     * @param nodes The NodeArray to visit.
+     * @param visitor The callback used to visit a Node.
+     * @param test A node test to execute for each node.
+     * @param start An optional value indicating the starting offset at which to start visiting.
+     * @param count An optional value indicating the maximum number of nodes to visit.
+     */
+    export function visitNodes<T extends Node>(nodes: NodeArray<T> | undefined, visitor: Visitor, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T> | undefined {
         if (nodes === undefined || visitor === undefined) {
             return nodes;
         }
@@ -138,6 +217,11 @@ namespace ts {
      */
     export function visitFunctionBody(node: FunctionBody, visitor: Visitor, context: TransformationContext): FunctionBody;
     /**
+     * Resumes a suspended lexical environment and visits a function body, ending the lexical
+     * environment and merging hoisted declarations upon completion.
+     */
+    export function visitFunctionBody(node: FunctionBody | undefined, visitor: Visitor, context: TransformationContext): FunctionBody | undefined;
+    /**
      * Resumes a suspended lexical environment and visits a concise body, ending the lexical
      * environment and merging hoisted declarations upon completion.
      */
@@ -162,6 +246,16 @@ namespace ts {
      * @param context A lexical environment context for the visitor.
      */
     export function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: TransformationContext): T;
+
+    /**
+     * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
+     *
+     * @param node The Node whose children will be visited.
+     * @param visitor The callback used to visit each child.
+     * @param context A lexical environment context for the visitor.
+     */
+    export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext): T | undefined;
+
     export function visitEachChild(node: Node, visitor: Visitor, context: TransformationContext): Node {
         if (node === undefined) {
             return undefined;
@@ -317,7 +411,7 @@ namespace ts {
             case SyntaxKind.FunctionExpression:
                 return updateFunctionExpression(<FunctionExpression>node,
                     visitNodes((<FunctionExpression>node).modifiers, visitor, isModifier),
-                    visitNode((<FunctionExpression>node).name, visitor, isPropertyName),
+                    visitNode((<FunctionExpression>node).name, visitor, isIdentifier, /*optional*/ true),
                     visitNodes((<FunctionExpression>node).typeParameters, visitor, isTypeParameter),
                     visitParameterList((<FunctionExpression>node).parameters, visitor, context),
                     visitNode((<FunctionExpression>node).type, visitor, isTypeNode, /*optional*/ true),
@@ -508,7 +602,7 @@ namespace ts {
                 return updateFunctionDeclaration(<FunctionDeclaration>node,
                     visitNodes((<FunctionDeclaration>node).decorators, visitor, isDecorator),
                     visitNodes((<FunctionDeclaration>node).modifiers, visitor, isModifier),
-                    visitNode((<FunctionDeclaration>node).name, visitor, isPropertyName),
+                    visitNode((<FunctionDeclaration>node).name, visitor, isIdentifier, /*optional*/ true),
                     visitNodes((<FunctionDeclaration>node).typeParameters, visitor, isTypeParameter),
                     visitParameterList((<FunctionDeclaration>node).parameters, visitor, context),
                     visitNode((<FunctionDeclaration>node).type, visitor, isTypeNode, /*optional*/ true),
