@@ -2122,7 +2122,7 @@ namespace FourSlash {
          * Because codefixes are only applied on the working file, it is unsafe
          * to apply this more than once (consider a refactoring across files).
          */
-        public verifyRangeAfterCodeFix(expectedText: string, errorCode?: number, includeWhiteSpace?: boolean) {
+        public verifyRangeAfterCodeFix(expectedText: string, includeWhiteSpace?: boolean, errorCode?: number, index?: number) {
             const ranges = this.getRanges();
             if (ranges.length !== 1) {
                 this.raiseError("Exactly one range should be specified in the testfile.");
@@ -2130,7 +2130,7 @@ namespace FourSlash {
 
             const fileName = this.activeFile.fileName;
 
-            this.applyCodeFixActions(fileName, this.getCodeFixActions(fileName, errorCode));
+            this.applyCodeAction(fileName, this.getCodeFixActions(fileName, errorCode), index);
 
             const actualText = this.rangeText(ranges[0]);
 
@@ -2155,7 +2155,7 @@ namespace FourSlash {
         public verifyFileAfterCodeFix(expectedContents: string, fileName?: string) {
             fileName = fileName ? fileName : this.activeFile.fileName;
 
-            this.applyCodeFixActions(fileName, this.getCodeFixActions(fileName));
+            this.applyCodeAction(fileName, this.getCodeFixActions(fileName));
 
             const actualContents: string = this.getFileContent(fileName);
             if (this.removeWhitespace(actualContents) !== this.removeWhitespace(expectedContents)) {
@@ -2193,12 +2193,20 @@ namespace FourSlash {
             return actions;
         }
 
-        private applyCodeFixActions(fileName: string, actions: ts.CodeAction[]): void {
-            if (!(actions && actions.length === 1)) {
-                this.raiseError(`Should find exactly one codefix, but ${actions ? actions.length : "none"} found.`);
+        private applyCodeAction(fileName: string, actions: ts.CodeAction[], index?: number): void {
+            if (index === undefined) {
+                if (!(actions && actions.length === 1)) {
+                    this.raiseError(`Should find exactly one codefix, but ${actions ? actions.length : "none"} found.`);
+                }
+                index = 0;
+            }
+            else {
+                if (!(actions && actions.length >= index + 1)) {
+                    this.raiseError(`Should find at least ${index + 1} codefix(es), but ${actions ? actions.length : "none"} found.`);
+                }
             }
 
-            const fileChanges = ts.find(actions[0].changes, change => change.fileName === fileName);
+            const fileChanges = ts.find(actions[index].changes, change => change.fileName === fileName);
             if (!fileChanges) {
                 this.raiseError("The CodeFix found doesn't provide any changes in this file.");
             }
@@ -3535,8 +3543,8 @@ namespace FourSlashInterface {
             this.DocCommentTemplate(/*expectedText*/ undefined, /*expectedOffset*/ undefined, /*empty*/ true);
         }
 
-        public rangeAfterCodeFix(expectedText: string, errorCode?: number, includeWhiteSpace?: boolean): void {
-            this.state.verifyRangeAfterCodeFix(expectedText, errorCode, includeWhiteSpace);
+        public rangeAfterCodeFix(expectedText: string, includeWhiteSpace?: boolean, errorCode?: number, index?: number): void {
+            this.state.verifyRangeAfterCodeFix(expectedText, includeWhiteSpace, errorCode, index);
         }
 
         public importFixAtPosition(expectedTextArray: string[], errorCode?: number): void {
