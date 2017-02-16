@@ -37,7 +37,7 @@ namespace ts.codefix {
             const binaryExpression = token.parent.parent as BinaryExpression;
 
             const checker = context.program.getTypeChecker();
-            const widenedType = checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(binaryExpression.right));
+            const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(binaryExpression.right)));
             typeString = checker.typeToString(widenedType);
         }
 
@@ -54,7 +54,7 @@ namespace ts.codefix {
             }]
         },
         {
-            description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_index_accessor_for_missing_property_0), [token.getText()]),
+            description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_index_signature_for_missing_property_0), [token.getText()]),
             changes: [{
                 fileName: sourceFile.fileName,
                 textChanges: [{
