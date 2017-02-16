@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// @strictNullChecks: true
+
 //// [|class A {
 ////     constructor() {
 ////         let e: any = 10;
@@ -9,7 +11,7 @@
 
 verify.rangeAfterCodeFix(`
 class A {
-    x: { a: number; b: string; c: any; d: any; e: any; };
+    x: { a: number; b: string; c: undefined; d: null; e: any; };
     
     constructor() {
         let e: any = 10;

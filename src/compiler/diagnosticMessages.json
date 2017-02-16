@@ -3307,7 +3307,7 @@
         "category": "Message",
         "code": 90016
     },
-    "Add index accessor for missing property '{0}'": {
+    "Add index signature for missing property '{0}'": {
         "category": "Message",
         "code": 90017
     },
