@@ -875,6 +875,7 @@ namespace ts {
 
             case SyntaxKind.YieldExpression:
                 return updateYield(<YieldExpression>node,
+                    (<YieldExpression>node).asteriskToken,
                     visitNode((<YieldExpression>node).expression, visitor, isExpression));
 
             case SyntaxKind.SpreadElement:
