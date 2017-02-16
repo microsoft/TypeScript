@@ -603,7 +603,7 @@ namespace ts.server {
         return undefined;
     }
 
-    export function isUNCPath(s: string): boolean {
+    function isUNCPath(s: string): boolean {
         return s.length > 2 && s.charCodeAt(0) === CharacterCodes.slash && s.charCodeAt(1) === CharacterCodes.slash;
     }
 
