@@ -2402,6 +2402,8 @@
         getSignaturesOfType(type: Type, kind: SignatureKind): Signature[];
         getIndexTypeOfType(type: Type, kind: IndexKind): Type;
         getBaseTypes(type: InterfaceType): BaseType[];
+        getBaseTypeOfLiteralType(type: Type): Type;
+        getWidenedType(type: Type): Type;
         getReturnTypeOfSignature(signature: Signature): Type;
         /**
          * Gets the type of a parameter at a given position in a signature.
@@ -3194,7 +3196,9 @@
         /// className.prototype.name = expr
         PrototypeProperty,
         /// this.name = expr
-        ThisProperty
+        ThisProperty,
+        // F.name = expr
+        Property
     }
 
     export interface JsFileExtensionInfo {

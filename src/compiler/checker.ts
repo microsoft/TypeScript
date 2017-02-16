@@ -95,6 +95,8 @@ namespace ts {
             getSignaturesOfType,
             getIndexTypeOfType,
             getBaseTypes,
+            getBaseTypeOfLiteralType,
+            getWidenedType,
             getTypeFromTypeNode: node => {
                 node = getParseTreeNode(node, isTypeNode);
                 return node ? getTypeFromTypeNode(node) : unknownType;
@@ -2247,12 +2249,14 @@ namespace ts {
             return type.flags & TypeFlags.StringLiteral ? `"${escapeString((<LiteralType>type).text)}"` : (<LiteralType>type).text;
         }
 
-
         function getNameOfSymbol(symbol: Symbol): string {
             if (symbol.declarations && symbol.declarations.length) {
                 const declaration = symbol.declarations[0];
                 if (declaration.name) {
                     return declarationNameToString(declaration.name);
+                }
+                if (declaration.parent && declaration.parent.kind === SyntaxKind.VariableDeclaration) {
+                    return declarationNameToString((<VariableDeclaration>declaration.parent).name);
                 }
                 switch (declaration.kind) {
                     case SyntaxKind.ClassExpression:
@@ -4755,7 +4759,7 @@ namespace ts {
                 // Combinations of function, class, enum and module
                 let members = emptySymbols;
                 let constructSignatures: Signature[] = emptyArray;
-                if (symbol.flags & SymbolFlags.HasExports) {
+                if (symbol.exports) {
                     members = getExportsOfSymbol(symbol);
                 }
                 if (symbol.flags & SymbolFlags.Class) {
@@ -14640,10 +14644,13 @@ namespace ts {
                     // in a JS file
                     // Note:JS inferred classes might come from a variable declaration instead of a function declaration.
                     // In this case, using getResolvedSymbol directly is required to avoid losing the members from the declaration.
-                    const funcSymbol = node.expression.kind === SyntaxKind.Identifier ?
+                    let funcSymbol = node.expression.kind === SyntaxKind.Identifier ?
                         getResolvedSymbol(node.expression as Identifier) :
                         checkExpression(node.expression).symbol;
-                    if (funcSymbol && funcSymbol.members && (funcSymbol.flags & SymbolFlags.Function || isDeclarationOfFunctionExpression(funcSymbol))) {
+                    if (funcSymbol && isDeclarationOfFunctionOrClassExpression(funcSymbol)) {
+                        funcSymbol = getSymbolOfNode((<VariableDeclaration>funcSymbol.valueDeclaration).initializer);
+                    }
+                    if (funcSymbol && funcSymbol.members && funcSymbol.flags & SymbolFlags.Function) {
                         return getInferredClassType(funcSymbol);
                     }
                     else if (compilerOptions.noImplicitAny) {
@@ -20692,22 +20699,29 @@ namespace ts {
             return getLeftSideOfImportEqualsOrExportAssignment(node) !== undefined;
         }
 
+        function getSpecialPropertyAssignmentSymbolFromEntityName(entityName: EntityName | PropertyAccessExpression) {
+            const specialPropertyAssignmentKind = getSpecialPropertyAssignmentKind(entityName.parent.parent);
+            switch (specialPropertyAssignmentKind) {
+                case SpecialPropertyAssignmentKind.ExportsProperty:
+                case SpecialPropertyAssignmentKind.PrototypeProperty:
+                    return getSymbolOfNode(entityName.parent);
+                case SpecialPropertyAssignmentKind.ThisProperty:
+                case SpecialPropertyAssignmentKind.ModuleExports:
+                case SpecialPropertyAssignmentKind.Property:
+                    return getSymbolOfNode(entityName.parent.parent);
+            }
+        }
+
         function getSymbolOfEntityNameOrPropertyAccessExpression(entityName: EntityName | PropertyAccessExpression): Symbol | undefined {
             if (isDeclarationName(entityName)) {
                 return getSymbolOfNode(entityName.parent);
             }
 
             if (isInJavaScriptFile(entityName) && entityName.parent.kind === SyntaxKind.PropertyAccessExpression) {
-                const specialPropertyAssignmentKind = getSpecialPropertyAssignmentKind(entityName.parent.parent);
-                switch (specialPropertyAssignmentKind) {
-                    case SpecialPropertyAssignmentKind.ExportsProperty:
-                    case SpecialPropertyAssignmentKind.PrototypeProperty:
-                        return getSymbolOfNode(entityName.parent);
-                    case SpecialPropertyAssignmentKind.ThisProperty:
-                    case SpecialPropertyAssignmentKind.ModuleExports:
-                        return getSymbolOfNode(entityName.parent.parent);
-                    default:
-                        // Fall through if it is not a special property assignment
+                // Check if this is a special property assignment
+                const specialPropertyAssignmentSymbol = getSpecialPropertyAssignmentSymbolFromEntityName(entityName);
+                if (specialPropertyAssignmentSymbol) {
+                    return specialPropertyAssignmentSymbol;
                 }
             }
 
