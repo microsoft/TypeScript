@@ -140,14 +140,14 @@ class C5 {
 }
 
 var C6 = class { constructor(p12: null) { } }
->C6 : typeof (Anonymous class)
->class { constructor(p12: null) { } } : typeof (Anonymous class)
+>C6 : typeof C6
+>class { constructor(p12: null) { } } : typeof C6
 >p12 : null
 >null : null
 
 var C7 = class { constructor(p13: undefined) { } }
->C7 : typeof (Anonymous class)
->class { constructor(p13: undefined) { } } : typeof (Anonymous class)
+>C7 : typeof C7
+>class { constructor(p13: undefined) { } } : typeof C7
 >p13 : undefined
 
 declare function fn<T>();

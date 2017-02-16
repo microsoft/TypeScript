@@ -3180,7 +3180,9 @@
         /// className.prototype.name = expr
         PrototypeProperty,
         /// this.name = expr
-        ThisProperty
+        ThisProperty,
+        // F.name = expr
+        Property
     }
 
     export interface JsFileExtensionInfo {
