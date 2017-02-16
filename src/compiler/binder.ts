@@ -1317,7 +1317,7 @@ namespace ts {
                 // if the node has a fullName "A.B.C", that means symbol "C" was already bound
                 // when we visit "fullName"; so when we visit the name "C" as the next child of
                 // the jsDocTypedefTag, we should skip binding it.
-                if (n === node.name && node.fullName.kind !== SyntaxKind.Identifier) {
+                if (node.fullName && n === node.name && node.fullName.kind !== SyntaxKind.Identifier) {
                     return;
                 }
                 bind(n);
