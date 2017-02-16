@@ -18,6 +18,7 @@ export let y = () => x
 //// [app.js]
 /// <reference types="lib"/>
 "use strict";
+exports.__esModule = true;
 exports.$ = 1;
 exports.y = function () { return exports.x; };
 

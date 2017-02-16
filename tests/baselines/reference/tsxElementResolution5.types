@@ -10,5 +10,5 @@ declare module JSX {
 <div n='x' />;
 ><div n='x' /> : JSX.Element
 >div : any
->n : any
+>n : string
 

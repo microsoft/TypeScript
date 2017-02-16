@@ -1045,7 +1045,35 @@ namespace ts {
             if (node.finallyBlock) {
                 // in finally flow is combined from pre-try/flow from try/flow from catch
                 // pre-flow is necessary to make sure that finally is reachable even if finally flows in both try and finally blocks are unreachable
-                addAntecedent(preFinallyLabel, preTryFlow);
+
+                // also for finally blocks we inject two extra edges into the flow graph.
+                // first -> edge that connects pre-try flow with the label at the beginning of the finally block, it has lock associated with it
+                // second -> edge that represents post-finally flow.
+                // these edges are used in following scenario:
+                // let a; (1)
+                // try { a = someOperation(); (2)} 
+                // finally { (3) console.log(a) } (4) 
+                // (5) a
+
+                // flow graph for this case looks roughly like this (arrows show ):
+                // (1-pre-try-flow) <--.. <-- (2-post-try-flow)
+                //  ^                                ^
+                //  |*****(3-pre-finally-label) -----|
+                //                ^
+                //                |-- ... <-- (4-post-finally-label) <--- (5)
+                // In case when we walk the flow starting from inside the finally block we want to take edge '*****' into account
+                // since it ensures that finally is always reachable. However when we start outside the finally block and go through label (5)
+                // then edge '*****' should be discarded because label 4 is only reachable if post-finally label-4 is reachable
+                // Simply speaking code inside finally block is treated as reachable as pre-try-flow 
+                // since we conservatively assume that any line in try block can throw or return in which case we'll enter finally.
+                // However code after finally is reachable only if control flow was not abrupted in try/catch or finally blocks - it should be composed from
+                // final flows of these blocks without taking pre-try flow into account.
+                // 
+                // extra edges that we inject allows to control this behavior
+                // if when walking the flow we step on post-finally edge - we can mark matching pre-finally edge as locked so it will be skipped.
+                const preFinallyFlow: PreFinallyFlow = { flags: FlowFlags.PreFinally, antecedent: preTryFlow, lock: {} };
+                addAntecedent(preFinallyLabel, preFinallyFlow);
+
                 currentFlow = finishFlowLabel(preFinallyLabel);
                 bind(node.finallyBlock);
                 // if flow after finally is unreachable - keep it
@@ -1060,6 +1088,11 @@ namespace ts {
                             ? reportedUnreachableFlow
                             : unreachableFlow;
                     }
+                }
+                if (!(currentFlow.flags & FlowFlags.Unreachable)) {
+                    const afterFinallyFlow: AfterFinallyFlow = { flags: FlowFlags.AfterFinally, antecedent: currentFlow };
+                    preFinallyFlow.lock = afterFinallyFlow;
+                    currentFlow = afterFinallyFlow;
                 }
             }
             else {
@@ -1331,6 +1364,7 @@ namespace ts {
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.JSDocTypeLiteral:
                 case SyntaxKind.JSDocRecordType:
+                case SyntaxKind.JsxAttributes:
                     return ContainerFlags.IsContainer;
 
                 case SyntaxKind.InterfaceDeclaration:
@@ -1437,6 +1471,7 @@ namespace ts {
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.JSDocRecordType:
                 case SyntaxKind.JSDocTypeLiteral:
+                case SyntaxKind.JsxAttributes:
                     // Interface/Object-types always have their children added to the 'members' of
                     // their container. They are only accessible through an instance of their
                     // container, and are never in scope otherwise (even inside the body of the
@@ -1624,6 +1659,14 @@ namespace ts {
             }
 
             return bindAnonymousDeclaration(node, SymbolFlags.ObjectLiteral, "__object");
+        }
+
+        function bindJsxAttributes(node: JsxAttributes) {
+            return bindAnonymousDeclaration(node, SymbolFlags.ObjectLiteral, "__jsxAttributes");
+        }
+
+        function bindJsxAttribute(node: JsxAttribute, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
+            return declareSymbolAndAddToSymbolTable(node, symbolFlags, symbolExcludes);
         }
 
         function bindAnonymousDeclaration(node: Declaration, symbolFlags: SymbolFlags, name: string) {
@@ -2046,6 +2089,12 @@ namespace ts {
                     return bindEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.ModuleDeclaration:
                     return bindModuleDeclaration(<ModuleDeclaration>node);
+
+                // Jsx-attributes
+                case SyntaxKind.JsxAttributes:
+                    return bindJsxAttributes(<JsxAttributes>node);
+                case SyntaxKind.JsxAttribute:
+                    return bindJsxAttribute(<JsxAttribute>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
 
                 // Imports and exports
                 case SyntaxKind.ImportEqualsDeclaration:
@@ -3123,6 +3172,7 @@ namespace ts {
             case SyntaxKind.JsxText:
             case SyntaxKind.JsxClosingElement:
             case SyntaxKind.JsxAttribute:
+            case SyntaxKind.JsxAttributes:
             case SyntaxKind.JsxSpreadAttribute:
             case SyntaxKind.JsxExpression:
                 // These nodes are Jsx syntax.

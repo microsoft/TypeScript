@@ -6,6 +6,7 @@ export class C1 { }
 //// [interfaceDeclaration5.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var C1 = (function () {
         function C1() {
         }

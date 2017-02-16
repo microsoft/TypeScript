@@ -39,6 +39,7 @@ import M3 from "M3";
 //// [es5ModuleInternalNamedImports.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var M;
     (function (M) {
         // variable

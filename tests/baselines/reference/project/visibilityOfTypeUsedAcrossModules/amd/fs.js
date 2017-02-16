@@ -1,5 +1,6 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var RM = (function () {
         function RM() {
         }

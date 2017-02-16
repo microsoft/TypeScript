@@ -1,4 +1,4 @@
-/// <reference path="moduleNameResolver.ts"/>
+﻿/// <reference path="moduleNameResolver.ts"/>
 /// <reference path="binder.ts"/>
 
 /* @internal */
@@ -60,9 +60,9 @@ namespace ts {
 
         const emitResolver = createResolver();
 
-        const undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
+        const undefinedSymbol = createSymbol(SymbolFlags.Property, "undefined");
         undefinedSymbol.declarations = [];
-        const argumentsSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "arguments");
+        const argumentsSymbol = createSymbol(SymbolFlags.Property, "arguments");
 
         // for public members that accept a Node or one of its subtypes, we must guard against
         // synthetic nodes created during transformations by calling `getParseTreeNode`.
@@ -168,9 +168,9 @@ namespace ts {
             getExportsOfModule: getExportsOfModuleAsArray,
             getExportsAndPropertiesOfModule,
             getAmbientModules,
-            getJsxElementAttributesType: node => {
+            getAllAttributesTypeFromJsxOpeningLikeElement: node => {
                 node = getParseTreeNode(node, isJsxOpeningLikeElement);
-                return node ? getJsxElementAttributesType(node) : undefined;
+                return node ? getAllAttributesTypeFromJsxOpeningLikeElement(node) : undefined;
             },
             getJsxIntrinsicTagNames,
             isOptionalParameter: node => {
@@ -194,8 +194,8 @@ namespace ts {
         const indexedAccessTypes = createMap<IndexedAccessType>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
 
-        const unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
-        const resolvingSymbol = createSymbol(SymbolFlags.Transient, "__resolving__");
+        const unknownSymbol = createSymbol(SymbolFlags.Property, "unknown");
+        const resolvingSymbol = createSymbol(0, "__resolving__");
 
         const anyType = createIntrinsicType(TypeFlags.Any, "any");
         const autoType = createIntrinsicType(TypeFlags.Any, "any");
@@ -217,7 +217,7 @@ namespace ts {
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
-        const emptyTypeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral | SymbolFlags.Transient, "__type");
+        const emptyTypeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type");
         emptyTypeLiteralSymbol.members = createMap<Symbol>();
         const emptyTypeLiteralType = createAnonymousType(emptyTypeLiteralSymbol, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
@@ -478,9 +478,11 @@ namespace ts {
             diagnostics.add(diagnostic);
         }
 
-        function createSymbol(flags: SymbolFlags, name: string): Symbol {
+        function createSymbol(flags: SymbolFlags, name: string) {
             symbolCount++;
-            return new Symbol(flags, name);
+            const symbol = <TransientSymbol>(new Symbol(flags | SymbolFlags.Transient, name));
+            symbol.checkFlags = 0;
+            return symbol;
         }
 
         function getExcludedSymbolFlags(flags: SymbolFlags): SymbolFlags {
@@ -513,7 +515,7 @@ namespace ts {
         }
 
         function cloneSymbol(symbol: Symbol): Symbol {
-            const result = createSymbol(symbol.flags | SymbolFlags.Merged, symbol.name);
+            const result = createSymbol(symbol.flags, symbol.name);
             result.declarations = symbol.declarations.slice(0);
             result.parent = symbol.parent;
             if (symbol.valueDeclaration) result.valueDeclaration = symbol.valueDeclaration;
@@ -570,7 +572,7 @@ namespace ts {
                     target.set(id, sourceSymbol);
                 }
                 else {
-                    if (!(targetSymbol.flags & SymbolFlags.Merged)) {
+                    if (!(targetSymbol.flags & SymbolFlags.Transient)) {
                         targetSymbol = cloneSymbol(targetSymbol);
                         target.set(id, targetSymbol);
                     }
@@ -607,7 +609,7 @@ namespace ts {
                 if (mainModule.flags & SymbolFlags.Namespace) {
                     // if module symbol has already been merged - it is safe to use it.
                     // otherwise clone it
-                    mainModule = mainModule.flags & SymbolFlags.Merged ? mainModule : cloneSymbol(mainModule);
+                    mainModule = mainModule.flags & SymbolFlags.Transient ? mainModule : cloneSymbol(mainModule);
                     mergeSymbol(mainModule, moduleAugmentation.symbol);
                 }
                 else {
@@ -648,6 +650,10 @@ namespace ts {
             return type.flags & TypeFlags.Object ? (<ObjectType>type).objectFlags : 0;
         }
 
+        function getCheckFlags(symbol: Symbol): CheckFlags {
+            return symbol.flags & SymbolFlags.Transient ? (<TransientSymbol>symbol).checkFlags : 0;
+        }
+
         function isGlobalSourceFile(node: Node) {
             return node.kind === SyntaxKind.SourceFile && !isExternalOrCommonJsModule(<SourceFile>node);
         }
@@ -656,7 +662,7 @@ namespace ts {
             if (meaning) {
                 const symbol = symbols.get(name);
                 if (symbol) {
-                    Debug.assert((symbol.flags & SymbolFlags.Instantiated) === 0, "Should never get an instantiated symbol here.");
+                    Debug.assert((getCheckFlags(symbol) & CheckFlags.Instantiated) === 0, "Should never get an instantiated symbol here.");
                     if (symbol.flags & meaning) {
                         return symbol;
                     }
@@ -922,6 +928,11 @@ namespace ts {
                     case SyntaxKind.ClassExpression:
                     case SyntaxKind.InterfaceDeclaration:
                         if (result = getSymbol(getSymbolOfNode(location).members, name, meaning & SymbolFlags.Type)) {
+                            if (!isTypeParameterSymbolDeclaredInContainer(result, location)) {
+                                // ignore type parameters not declared in this container
+                                result = undefined;
+                                break;
+                            }
                             if (lastLocation && getModifierFlags(lastLocation) & ModifierFlags.Static) {
                                 // TypeScript 1.0 spec (April 2014): 3.4.1
                                 // The scope of a type parameter extends over the entire declaration with which the type
@@ -1070,6 +1081,16 @@ namespace ts {
                 }
             }
             return result;
+        }
+
+        function isTypeParameterSymbolDeclaredInContainer(symbol: Symbol, container: Node) {
+            for (const decl of symbol.declarations) {
+                if (decl.kind === SyntaxKind.TypeParameter && decl.parent === container) {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         function checkAndReportErrorForMissingPrefix(errorLocation: Node, name: string, nameArg: string | Identifier): boolean {
@@ -1490,7 +1511,7 @@ namespace ts {
             else {
                 Debug.fail("Unknown entity name kind.");
             }
-            Debug.assert((symbol.flags & SymbolFlags.Instantiated) === 0, "Should never get an instantiated symbol here.");
+            Debug.assert((getCheckFlags(symbol) & CheckFlags.Instantiated) === 0, "Should never get an instantiated symbol here.");
             return (symbol.flags & meaning) || dontResolveAlias ? symbol : resolveAlias(symbol);
         }
 
@@ -1734,23 +1755,7 @@ namespace ts {
         }
 
         function symbolIsValue(symbol: Symbol): boolean {
-            // If it is an instantiated symbol, then it is a value if the symbol it is an
-            // instantiation of is a value.
-            if (symbol.flags & SymbolFlags.Instantiated) {
-                return symbolIsValue(getSymbolLinks(symbol).target);
-            }
-
-            // If the symbol has the value flag, it is trivially a value.
-            if (symbol.flags & SymbolFlags.Value) {
-                return true;
-            }
-
-            // If it is an alias, then it is a value if the symbol it resolves to is a value.
-            if (symbol.flags & SymbolFlags.Alias) {
-                return (resolveAlias(symbol).flags & SymbolFlags.Value) !== 0;
-            }
-
-            return false;
+            return !!(symbol.flags & SymbolFlags.Value || symbol.flags & SymbolFlags.Alias && resolveAlias(symbol).flags & SymbolFlags.Value);
         }
 
         function findConstructorDeclaration(node: ClassLikeDeclaration): ConstructorDeclaration {
@@ -2306,7 +2311,7 @@ namespace ts {
                     if (parentSymbol) {
                         // Write type arguments of instantiated class/interface here
                         if (flags & SymbolFormatFlags.WriteTypeParametersOrArguments) {
-                            if (symbol.flags & SymbolFlags.Instantiated) {
+                            if (getCheckFlags(symbol) & CheckFlags.Instantiated) {
                                 buildDisplayForTypeArgumentsAndDelimiters(getTypeParametersOfClassOrInterface(parentSymbol),
                                     (<TransientSymbol>symbol).mapper, writer, enclosingDeclaration);
                             }
@@ -2409,7 +2414,7 @@ namespace ts {
                     else if (!(flags & TypeFormatFlags.InTypeAlias) && type.aliasSymbol &&
                         isSymbolAccessible(type.aliasSymbol, enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/ false).accessibility === SymbolAccessibility.Accessible) {
                         const typeArguments = type.aliasTypeArguments;
-                        writeSymbolTypeReference(type.aliasSymbol, typeArguments, 0, typeArguments ? typeArguments.length : 0, nextFlags);
+                        writeSymbolTypeReference(type.aliasSymbol, typeArguments, 0, length(typeArguments), nextFlags);
                     }
                     else if (type.flags & TypeFlags.UnionOrIntersection) {
                         writeUnionOrIntersectionType(<UnionOrIntersectionType>type, nextFlags);
@@ -2744,6 +2749,13 @@ namespace ts {
                     writeSpace(writer);
                     buildTypeDisplay(constraint, writer, enclosingDeclaration, flags, symbolStack);
                 }
+                const defaultType = getDefaultFromTypeParameter(tp);
+                if (defaultType) {
+                    writeSpace(writer);
+                    writePunctuation(writer, SyntaxKind.EqualsToken);
+                    writeSpace(writer);
+                    buildTypeDisplay(defaultType, writer, enclosingDeclaration, flags, symbolStack);
+                }
             }
 
             function buildParameterDisplay(p: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
@@ -2763,7 +2775,11 @@ namespace ts {
                 writePunctuation(writer, SyntaxKind.ColonToken);
                 writeSpace(writer);
 
-                buildTypeDisplay(getTypeOfSymbol(p), writer, enclosingDeclaration, flags, symbolStack);
+                let type = getTypeOfSymbol(p);
+                if (isRequiredInitializedParameter(parameterNode)) {
+                    type = includeFalsyTypes(type, TypeFlags.Undefined);
+                }
+                buildTypeDisplay(type, writer, enclosingDeclaration, flags, symbolStack);
             }
 
             function buildBindingPatternDisplay(bindingPattern: BindingPattern, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
@@ -3344,6 +3360,16 @@ namespace ts {
             return strictNullChecks && optional ? includeFalsyTypes(type, TypeFlags.Undefined) : type;
         }
 
+        /** remove undefined from the annotated type of a parameter when there is an initializer (that doesn't include undefined) */
+        function removeOptionalityFromAnnotation(annotatedType: Type, declaration: VariableLikeDeclaration): Type {
+            const annotationIncludesUndefined = strictNullChecks &&
+                declaration.kind === SyntaxKind.Parameter &&
+                declaration.initializer &&
+                getFalsyFlags(annotatedType) & TypeFlags.Undefined &&
+                !(getFalsyFlags(checkExpression(declaration.initializer)) & TypeFlags.Undefined);
+            return annotationIncludesUndefined ? getNonNullableType(annotatedType) : annotatedType;
+        }
+
         // Return the inferred type for a variable, parameter, or property declaration
         function getTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration, includeOptionality: boolean): Type {
             if (declaration.flags & NodeFlags.JavaScriptFile) {
@@ -3377,7 +3403,8 @@ namespace ts {
 
             // Use type from type annotation if one is present
             if (declaration.type) {
-                return addOptionality(getTypeFromTypeNode(declaration.type), /*optional*/ declaration.questionToken && includeOptionality);
+                const declaredType = removeOptionalityFromAnnotation(getTypeFromTypeNode(declaration.type), declaration);
+                return addOptionality(declaredType, /*optional*/ declaration.questionToken && includeOptionality);
             }
 
             if ((compilerOptions.noImplicitAny || declaration.flags & NodeFlags.JavaScriptFile) &&
@@ -3429,6 +3456,12 @@ namespace ts {
             if (declaration.initializer) {
                 const type = checkDeclarationInitializer(declaration);
                 return addOptionality(type, /*optional*/ declaration.questionToken && includeOptionality);
+            }
+
+            if (isJsxAttribute(declaration)) {
+                // if JSX attribute doesn't have initializer, by default the attribute will have boolean value of true.
+                // I.e <Elem attr /> is sugar for <Elem attr={true} />
+                return trueType;
             }
 
             // If it is a short-hand property assignment, use the type of the identifier
@@ -3500,8 +3533,8 @@ namespace ts {
                 }
 
                 const text = getTextOfPropertyName(name);
-                const flags = SymbolFlags.Property | SymbolFlags.Transient | (e.initializer ? SymbolFlags.Optional : 0);
-                const symbol = <TransientSymbol>createSymbol(flags, text);
+                const flags = SymbolFlags.Property | (e.initializer ? SymbolFlags.Optional : 0);
+                const symbol = createSymbol(flags, text);
                 symbol.type = getTypeFromBindingElement(e, includePatternInType, reportErrors);
                 symbol.bindingElement = e;
                 members.set(symbol.name, symbol);
@@ -3799,7 +3832,7 @@ namespace ts {
         }
 
         function getTypeOfSymbol(symbol: Symbol): Type {
-            if (symbol.flags & SymbolFlags.Instantiated) {
+            if (getCheckFlags(symbol) & CheckFlags.Instantiated) {
                 return getTypeOfInstantiatedSymbol(symbol);
             }
             if (symbol.flags & (SymbolFlags.Variable | SymbolFlags.Property)) {
@@ -3824,9 +3857,9 @@ namespace ts {
             return getObjectFlags(type) & ObjectFlags.Reference ? (<TypeReference>type).target : type;
         }
 
-        function hasBaseType(type: BaseType, checkBase: BaseType) {
+        function hasBaseType(type: Type, checkBase: Type) {
             return check(type);
-            function check(type: BaseType): boolean {
+            function check(type: Type): boolean {
                 if (getObjectFlags(type) & (ObjectFlags.ClassOrInterface | ObjectFlags.Reference)) {
                     const target = <InterfaceType>getTargetType(type);
                     return target === checkBase || forEach(getBaseTypes(target), check);
@@ -3928,9 +3961,9 @@ namespace ts {
         }
 
         function getConstructorsForTypeArguments(type: Type, typeArgumentNodes: TypeNode[]): Signature[] {
-            const typeArgCount = typeArgumentNodes ? typeArgumentNodes.length : 0;
+            const typeArgCount = length(typeArgumentNodes);
             return filter(getSignaturesOfType(type, SignatureKind.Construct),
-                sig => (sig.typeParameters ? sig.typeParameters.length : 0) === typeArgCount);
+                sig => typeArgCount >= getMinTypeArgumentCount(sig.typeParameters) && typeArgCount <= length(sig.typeParameters));
         }
 
         function getInstantiatedConstructorsForTypeArguments(type: Type, typeArgumentNodes: TypeNode[]): Signature[] {
@@ -4528,12 +4561,13 @@ namespace ts {
             }
             const baseTypeNode = getBaseTypeNodeOfClass(classType);
             const typeArguments = map(baseTypeNode.typeArguments, getTypeFromTypeNode);
-            const typeArgCount = typeArguments ? typeArguments.length : 0;
+            const typeArgCount = length(typeArguments);
             const result: Signature[] = [];
             for (const baseSig of baseSignatures) {
-                const typeParamCount = baseSig.typeParameters ? baseSig.typeParameters.length : 0;
-                if (typeParamCount === typeArgCount) {
-                    const sig = typeParamCount ? createSignatureInstantiation(baseSig, typeArguments) : cloneSignature(baseSig);
+                const minTypeArgumentCount = getMinTypeArgumentCount(baseSig.typeParameters);
+                const typeParamCount = length(baseSig.typeParameters);
+                if (typeArgCount >= minTypeArgumentCount && typeArgCount <= typeParamCount) {
+                    const sig = typeParamCount ? createSignatureInstantiation(baseSig, fillMissingTypeArguments(typeArguments, baseSig.typeParameters, minTypeArgumentCount)) : cloneSignature(baseSig);
                     sig.typeParameters = classType.localTypeParameters;
                     sig.resolvedReturnType = classType;
                     result.push(sig);
@@ -4597,7 +4631,7 @@ namespace ts {
                                 s = cloneSignature(signature);
                                 if (forEach(unionSignatures, sig => sig.thisParameter)) {
                                     const thisType = getUnionType(map(unionSignatures, sig => getTypeOfSymbol(sig.thisParameter) || anyType), /*subtypeReduction*/ true);
-                                    s.thisParameter = createTransientSymbol(signature.thisParameter, thisType);
+                                    s.thisParameter = createSymbolWithType(signature.thisParameter, thisType);
                                 }
                                 // Clear resolved return type we possibly got from cloneSignature
                                 s.resolvedReturnType = undefined;
@@ -4794,9 +4828,9 @@ namespace ts {
                     const propName = (<LiteralType>t).text;
                     const modifiersProp = getPropertyOfType(modifiersType, propName);
                     const isOptional = templateOptional || !!(modifiersProp && modifiersProp.flags & SymbolFlags.Optional);
-                    const prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | (isOptional ? SymbolFlags.Optional : 0), propName);
+                    const prop = createSymbol(SymbolFlags.Property | (isOptional ? SymbolFlags.Optional : 0), propName);
+                    prop.checkFlags = templateReadonly || modifiersProp && isReadonlySymbol(modifiersProp) ? CheckFlags.Readonly : 0;
                     prop.type = propType;
-                    prop.isReadonly = templateReadonly || modifiersProp && isReadonlySymbol(modifiersProp);
                     if (propertySymbol) {
                         prop.mappedTypeOrigin = propertySymbol;
                     }
@@ -5011,6 +5045,29 @@ namespace ts {
         }
 
         /**
+         * Gets the default type for a type parameter.
+         *
+         * If the type parameter is the result of an instantiation, this gets the instantiated
+         * default type of its target. If the type parameter has no default type, `undefined`
+         * is returned.
+         *
+         * This function *does not* perform a circularity check.
+         */
+        function getDefaultFromTypeParameter(typeParameter: TypeParameter): Type | undefined {
+            if (!typeParameter.default) {
+                if (typeParameter.target) {
+                    const targetDefault = getDefaultFromTypeParameter(typeParameter.target);
+                    typeParameter.default = targetDefault ? instantiateType(targetDefault, typeParameter.mapper) : noConstraintType;
+                }
+                else {
+                    const defaultDeclaration = typeParameter.symbol && forEach(typeParameter.symbol.declarations, decl => isTypeParameter(decl) && decl.default);
+                    typeParameter.default = defaultDeclaration ? getTypeFromTypeNode(defaultDeclaration) : noConstraintType;
+                }
+            }
+            return typeParameter.default === noConstraintType ? undefined : typeParameter.default;
+        }
+
+        /**
          * For a type parameter, return the base constraint of the type parameter. For the string, number,
          * boolean, and symbol primitive types, return the corresponding object types. Otherwise return the
          * type itself. Note that the apparent type of a union type is the union type itself.
@@ -5027,18 +5084,19 @@ namespace ts {
         }
 
         function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: string): Symbol {
-            const types = containingType.types;
-            const excludeModifiers = containingType.flags & TypeFlags.Union ? ModifierFlags.Private | ModifierFlags.Protected : 0;
             let props: Symbol[];
+            const types = containingType.types;
+            const isUnion = containingType.flags & TypeFlags.Union;
+            const excludeModifiers = isUnion ? ModifierFlags.NonPublicAccessibilityModifier : 0;
             // Flags we want to propagate to the result if they exist in all source symbols
-            let commonFlags = (containingType.flags & TypeFlags.Intersection) ? SymbolFlags.Optional : SymbolFlags.None;
-            let isReadonly = false;
-            let isPartial = false;
+            let commonFlags = isUnion ? SymbolFlags.None : SymbolFlags.Optional;
+            let checkFlags = CheckFlags.SyntheticProperty;
             for (const current of types) {
                 const type = getApparentType(current);
                 if (type !== unknownType) {
                     const prop = getPropertyOfType(type, name);
-                    if (prop && !(getDeclarationModifierFlagsFromSymbol(prop) & excludeModifiers)) {
+                    const modifiers = prop ? getDeclarationModifierFlagsFromSymbol(prop) : 0;
+                    if (prop && !(modifiers & excludeModifiers)) {
                         commonFlags &= prop.flags;
                         if (!props) {
                             props = [prop];
@@ -5046,26 +5104,26 @@ namespace ts {
                         else if (!contains(props, prop)) {
                             props.push(prop);
                         }
-                        if (isReadonlySymbol(prop)) {
-                            isReadonly = true;
-                        }
-
+                        checkFlags |= (isReadonlySymbol(prop) ? CheckFlags.Readonly : 0) |
+                            (!(modifiers & ModifierFlags.NonPublicAccessibilityModifier) ? CheckFlags.ContainsPublic : 0) |
+                            (modifiers & ModifierFlags.Protected ? CheckFlags.ContainsProtected : 0) |
+                            (modifiers & ModifierFlags.Private ? CheckFlags.ContainsPrivate : 0) |
+                            (modifiers & ModifierFlags.Static ? CheckFlags.ContainsStatic : 0);
                     }
-                    else if (containingType.flags & TypeFlags.Union) {
-                        isPartial = true;
+                    else if (isUnion) {
+                        checkFlags |= CheckFlags.Partial;
                     }
                 }
             }
             if (!props) {
                 return undefined;
             }
-            if (props.length === 1 && !isPartial) {
+            if (props.length === 1 && !(checkFlags & CheckFlags.Partial)) {
                 return props[0];
             }
             const propTypes: Type[] = [];
             const declarations: Declaration[] = [];
             let commonType: Type = undefined;
-            let hasNonUniformType = false;
             for (const prop of props) {
                 if (prop.declarations) {
                     addRange(declarations, prop.declarations);
@@ -5075,17 +5133,15 @@ namespace ts {
                     commonType = type;
                 }
                 else if (type !== commonType) {
-                    hasNonUniformType = true;
+                    checkFlags |= CheckFlags.HasNonUniformType;
                 }
                 propTypes.push(type);
             }
-            const result = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | SymbolFlags.SyntheticProperty | commonFlags, name);
+            const result = createSymbol(SymbolFlags.Property | commonFlags, name);
+            result.checkFlags = checkFlags;
             result.containingType = containingType;
-            result.hasNonUniformType = hasNonUniformType;
-            result.isPartial = isPartial;
             result.declarations = declarations;
-            result.isReadonly = isReadonly;
-            result.type = containingType.flags & TypeFlags.Union ? getUnionType(propTypes) : getIntersectionType(propTypes);
+            result.type = isUnion ? getUnionType(propTypes) : getIntersectionType(propTypes);
             return result;
         }
 
@@ -5109,7 +5165,7 @@ namespace ts {
         function getPropertyOfUnionOrIntersectionType(type: UnionOrIntersectionType, name: string): Symbol {
             const property = getUnionOrIntersectionProperty(type, name);
             // We need to filter out partial properties in union types
-            return property && !(property.flags & SymbolFlags.SyntheticProperty && (<TransientSymbol>property).isPartial) ? property : undefined;
+            return property && !(getCheckFlags(property) & CheckFlags.Partial) ? property : undefined;
         }
 
         /**
@@ -5272,6 +5328,12 @@ namespace ts {
                 Debug.assert(parameterIndex >= 0);
                 return parameterIndex >= signature.minArgumentCount;
             }
+            const iife = getImmediatelyInvokedFunctionExpression(node.parent);
+            if (iife) {
+                return !node.type &&
+                    !node.dotDotDotToken &&
+                    indexOf((node.parent as SignatureDeclaration).parameters, node) >= iife.arguments.length;
+            }
 
             return false;
         }
@@ -5294,6 +5356,55 @@ namespace ts {
             }
         }
 
+        /**
+         * Gets the minimum number of type arguments needed to satisfy all non-optional type
+         * parameters.
+         */
+        function getMinTypeArgumentCount(typeParameters: TypeParameter[] | undefined): number {
+            let minTypeArgumentCount = 0;
+            if (typeParameters) {
+                for (let i = 0; i < typeParameters.length; i++) {
+                    if (!getDefaultFromTypeParameter(typeParameters[i])) {
+                        minTypeArgumentCount = i + 1;
+                    }
+                }
+            }
+            return minTypeArgumentCount;
+        }
+
+        /**
+         * Fill in default types for unsupplied type arguments. If `typeArguments` is undefined
+         * when a default type is supplied, a new array will be created and returned.
+         *
+         * @param typeArguments The supplied type arguments.
+         * @param typeParameters The requested type parameters.
+         * @param minTypeArgumentCount The minimum number of required type arguments.
+         */
+        function fillMissingTypeArguments(typeArguments: Type[] | undefined, typeParameters: TypeParameter[] | undefined, minTypeArgumentCount: number) {
+            const numTypeParameters = length(typeParameters);
+            if (numTypeParameters) {
+                const numTypeArguments = length(typeArguments);
+                if (numTypeArguments >= minTypeArgumentCount && numTypeArguments <= numTypeParameters) {
+                    if (!typeArguments) {
+                        typeArguments = [];
+                    }
+
+                    // Map an unsatisfied type parameter with a default type.
+                    // If a type parameter does not have a default type, or if the default type
+                    // is a forward reference, the empty object type is used.
+                    for (let i = numTypeArguments; i < numTypeParameters; i++) {
+                        typeArguments[i] = emptyObjectType;
+                    }
+                    for (let i = numTypeArguments; i < numTypeParameters; i++) {
+                        const mapper = createTypeMapper(typeParameters, typeArguments);
+                        const defaultType = getDefaultFromTypeParameter(typeParameters[i]);
+                        typeArguments[i] = defaultType ? instantiateType(defaultType, mapper) : emptyObjectType;
+                    }
+                }
+            }
+            return typeArguments;
+        }
+
         function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {
             const links = getNodeLinks(declaration);
             if (!links.resolvedSignature) {
@@ -5304,6 +5415,7 @@ namespace ts {
                 let hasThisParameter: boolean;
                 const iife = getImmediatelyInvokedFunctionExpression(declaration);
                 const isJSConstructSignature = isJSDocConstructSignature(declaration);
+                const isUntypedSignatureInJSFile = !iife && !isJSConstructSignature && isInJavaScriptFile(declaration) && !hasJSDocParameterTags(declaration);
 
                 // If this is a JSDoc construct signature, then skip the first parameter in the
                 // parameter list.  The first parameter represents the return type of the construct
@@ -5332,7 +5444,8 @@ namespace ts {
                     // Record a new minimum argument count if this is not an optional parameter
                     const isOptionalParameter = param.initializer || param.questionToken || param.dotDotDotToken ||
                         iife && parameters.length > iife.arguments.length && !param.type ||
-                        isJSDocOptionalParameter(param);
+                        isJSDocOptionalParameter(param) ||
+                        isUntypedSignatureInJSFile;
                     if (!isOptionalParameter) {
                         minArgumentCount = parameters.length;
                     }
@@ -5491,6 +5604,7 @@ namespace ts {
         }
 
         function getSignatureInstantiation(signature: Signature, typeArguments: Type[]): Signature {
+            typeArguments = fillMissingTypeArguments(typeArguments, signature.typeParameters, getMinTypeArgumentCount(signature.typeParameters));
             const instantiations = signature.instantiations || (signature.instantiations = createMap<Signature>());
             const id = getTypeListId(typeArguments);
             let instantiation = instantiations.get(id);
@@ -5648,7 +5762,7 @@ namespace ts {
         }
 
         function getTypeReferenceArity(type: TypeReference): number {
-            return type.target.typeParameters ? type.target.typeParameters.length : 0;
+            return length(type.target.typeParameters);
         }
 
         // Get type from reference to class or interface
@@ -5656,14 +5770,23 @@ namespace ts {
             const type = <InterfaceType>getDeclaredTypeOfSymbol(getMergedSymbol(symbol));
             const typeParameters = type.localTypeParameters;
             if (typeParameters) {
-                if (!node.typeArguments || node.typeArguments.length !== typeParameters.length) {
-                    error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType), typeParameters.length);
+                const numTypeArguments = length(node.typeArguments);
+                const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
+                if (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length) {
+                    error(node,
+                        minTypeArgumentCount === typeParameters.length
+                            ? Diagnostics.Generic_type_0_requires_1_type_argument_s
+                            : Diagnostics.Generic_type_0_requires_between_1_and_2_type_arguments,
+                        typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType),
+                        minTypeArgumentCount,
+                        typeParameters.length);
                     return unknownType;
                 }
                 // In a type reference, the outer type parameters of the referenced class or interface are automatically
                 // supplied as type arguments and the type reference only specifies arguments for the local type parameters
                 // of the class or interface.
-                return createTypeReference(<GenericType>type, concatenate(type.outerTypeParameters, map(node.typeArguments, getTypeFromTypeNode)));
+                const typeArguments = concatenate(type.outerTypeParameters, fillMissingTypeArguments(map(node.typeArguments, getTypeFromTypeNode), typeParameters, minTypeArgumentCount));
+                return createTypeReference(<GenericType>type, typeArguments);
             }
             if (node.typeArguments) {
                 error(node, Diagnostics.Type_0_is_not_generic, typeToString(type));
@@ -5679,7 +5802,7 @@ namespace ts {
             const id = getTypeListId(typeArguments);
             let instantiation = links.instantiations.get(id);
             if (!instantiation) {
-                links.instantiations.set(id, instantiation = instantiateTypeNoAlias(type, createTypeMapper(typeParameters, typeArguments)));
+                links.instantiations.set(id, instantiation = instantiateTypeNoAlias(type, createTypeMapper(typeParameters, fillMissingTypeArguments(typeArguments, typeParameters, getMinTypeArgumentCount(typeParameters)))));
             }
             return instantiation;
         }
@@ -5691,8 +5814,16 @@ namespace ts {
             const type = getDeclaredTypeOfSymbol(symbol);
             const typeParameters = getSymbolLinks(symbol).typeParameters;
             if (typeParameters) {
-                if (!node.typeArguments || node.typeArguments.length !== typeParameters.length) {
-                    error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, symbolToString(symbol), typeParameters.length);
+                const numTypeArguments = length(node.typeArguments);
+                const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
+                if (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length) {
+                    error(node,
+                        minTypeArgumentCount === typeParameters.length
+                            ? Diagnostics.Generic_type_0_requires_1_type_argument_s
+                            : Diagnostics.Generic_type_0_requires_between_1_and_2_type_arguments,
+                        symbolToString(symbol),
+                        minTypeArgumentCount,
+                        typeParameters.length);
                     return unknownType;
                 }
                 const typeArguments = map(node.typeArguments, getTypeFromTypeNode);
@@ -5830,7 +5961,7 @@ namespace ts {
                 error(getTypeDeclaration(symbol), Diagnostics.Global_type_0_must_be_a_class_or_interface_type, symbol.name);
                 return arity ? emptyGenericType : emptyObjectType;
             }
-            if (((<InterfaceType>type).typeParameters ? (<InterfaceType>type).typeParameters.length : 0) !== arity) {
+            if (length((<InterfaceType>type).typeParameters) !== arity) {
                 error(getTypeDeclaration(symbol), Diagnostics.Global_type_0_must_have_1_type_parameter_s, symbol.name, arity);
                 return arity ? emptyGenericType : emptyObjectType;
             }
@@ -5913,7 +6044,7 @@ namespace ts {
             for (let i = 0; i < arity; i++) {
                 const typeParameter = <TypeParameter>createType(TypeFlags.TypeParameter);
                 typeParameters.push(typeParameter);
-                const property = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "" + i);
+                const property = createSymbol(SymbolFlags.Property, "" + i);
                 property.type = typeParameter;
                 properties.push(property);
             }
@@ -6159,7 +6290,10 @@ namespace ts {
                 if (type.flags & TypeFlags.Union && typeSet.unionIndex === undefined) {
                     typeSet.unionIndex = typeSet.length;
                 }
-                typeSet.push(type);
+                if (!(type.flags & TypeFlags.Object && (<ObjectType>type).objectFlags & ObjectFlags.Anonymous &&
+                    type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && containsIdenticalType(typeSet, type))) {
+                    typeSet.push(type);
+                }
             }
         }
 
@@ -6497,13 +6631,13 @@ namespace ts {
                     const rightType = getTypeOfSymbol(rightProp);
                     if (maybeTypeOfKind(rightType, TypeFlags.Undefined) || rightProp.flags & SymbolFlags.Optional) {
                         const declarations: Declaration[] = concatenate(leftProp.declarations, rightProp.declarations);
-                        const flags = SymbolFlags.Property | SymbolFlags.Transient | (leftProp.flags & SymbolFlags.Optional);
-                        const result = <TransientSymbol>createSymbol(flags, leftProp.name);
+                        const flags = SymbolFlags.Property | (leftProp.flags & SymbolFlags.Optional);
+                        const result = createSymbol(flags, leftProp.name);
+                        result.checkFlags = isReadonlySymbol(leftProp) || isReadonlySymbol(rightProp) ? CheckFlags.Readonly : 0;
                         result.type = getUnionType([getTypeOfSymbol(leftProp), getTypeWithFacts(rightType, TypeFacts.NEUndefined)]);
                         result.leftSpread = leftProp;
                         result.rightSpread = rightProp;
                         result.declarations = declarations;
-                        result.isReadonly = isReadonlySymbol(leftProp) || isReadonlySymbol(rightProp);
                         members.set(leftProp.name, result);
                     }
                 }
@@ -6743,6 +6877,16 @@ namespace ts {
             return createTypeMapper(sources, undefined);
         }
 
+        /**
+         * Maps forward-references to later types parameters to the empty object type.
+         * This is used during inference when instantiating type parameter defaults.
+         */
+        function createBackreferenceMapper(typeParameters: TypeParameter[], index: number) {
+            const mapper: TypeMapper = t => indexOf(typeParameters, t) >= index ? emptyObjectType : t;
+            mapper.mappedTypes = typeParameters;
+            return mapper;
+        }
+
         function getInferenceMapper(context: InferenceContext): TypeMapper {
             if (!context.mapper) {
                 const mapper: TypeMapper = t => {
@@ -6830,7 +6974,7 @@ namespace ts {
         }
 
         function instantiateSymbol(symbol: Symbol, mapper: TypeMapper): Symbol {
-            if (symbol.flags & SymbolFlags.Instantiated) {
+            if (getCheckFlags(symbol) & CheckFlags.Instantiated) {
                 const links = getSymbolLinks(symbol);
                 // If symbol being instantiated is itself a instantiation, fetch the original target and combine the
                 // type mappers. This ensures that original type identities are properly preserved and that aliases
@@ -6838,10 +6982,10 @@ namespace ts {
                 symbol = links.target;
                 mapper = combineTypeMappers(links.mapper, mapper);
             }
-
             // Keep the flags from the symbol we're instantiating.  Mark that is instantiated, and
             // also transient so that we can just store data on it directly.
-            const result = <TransientSymbol>createSymbol(SymbolFlags.Instantiated | SymbolFlags.Transient | symbol.flags, symbol.name);
+            const result = createSymbol(symbol.flags, symbol.name);
+            result.checkFlags = CheckFlags.Instantiated;
             result.declarations = symbol.declarations;
             result.parent = symbol.parent;
             result.target = symbol;
@@ -6849,7 +6993,6 @@ namespace ts {
             if (symbol.valueDeclaration) {
                 result.valueDeclaration = symbol.valueDeclaration;
             }
-
             return result;
         }
 
@@ -7047,7 +7190,7 @@ namespace ts {
 
         // Returns true if the given expression contains (at any level of nesting) a function or arrow expression
         // that is subject to contextual typing.
-        function isContextSensitive(node: Expression | MethodDeclaration | ObjectLiteralElementLike): boolean {
+        function isContextSensitive(node: Expression | MethodDeclaration | ObjectLiteralElementLike | JsxAttributeLike): boolean {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
             switch (node.kind) {
                 case SyntaxKind.FunctionExpression:
@@ -7070,6 +7213,14 @@ namespace ts {
                     return isContextSensitiveFunctionLikeDeclaration(<MethodDeclaration>node);
                 case SyntaxKind.ParenthesizedExpression:
                     return isContextSensitive((<ParenthesizedExpression>node).expression);
+                case SyntaxKind.JsxAttributes:
+                    return forEach((<JsxAttributes>node).properties, isContextSensitive);
+                case SyntaxKind.JsxAttribute:
+                    // If there is no initializer, JSX attribute has a boolean value of true which is not context sensitive.
+                    return (<JsxAttribute>node).initializer && isContextSensitive((<JsxAttribute>node).initializer);
+                case SyntaxKind.JsxExpression:
+                    // It is possible to that node.expression is undefined (e.g <div x={} />)
+                    return (<JsxExpression>node).expression && isContextSensitive((<JsxExpression>node).expression);
             }
 
             return false;
@@ -7762,19 +7913,24 @@ namespace ts {
             // is considered known if the object type is empty and the check is for assignability, if the object type has
             // index signatures, or if the property is actually declared in the object type. In a union or intersection
             // type, a property is considered known if it is known in any constituent type.
-            function isKnownProperty(type: Type, name: string): boolean {
+            function isKnownProperty(type: Type, name: string, isComparingJsxAttributes: boolean): boolean {
                 if (type.flags & TypeFlags.Object) {
                     const resolved = resolveStructuredTypeMembers(<ObjectType>type);
-                    if ((relation === assignableRelation || relation === comparableRelation) && (type === globalObjectType || isEmptyResolvedType(resolved)) ||
-                        resolved.stringIndexInfo ||
-                        (resolved.numberIndexInfo && isNumericLiteralName(name)) ||
-                        getPropertyOfType(type, name)) {
+                    if ((relation === assignableRelation || relation === comparableRelation) &&
+                        (type === globalObjectType || (!isComparingJsxAttributes && isEmptyObjectType(resolved)))) {
+                        return true;
+                    }
+                    else if (resolved.stringIndexInfo || (resolved.numberIndexInfo && isNumericLiteralName(name))) {
+                        return true;
+                    }
+                    else if (getPropertyOfType(type, name) || (isComparingJsxAttributes && !isUnhyphenatedJsxName(name))) {
+                        // For JSXAttributes, if the attribute has a hyphenated name, consider that the attribute to be known.
                         return true;
                     }
                 }
                 else if (type.flags & TypeFlags.UnionOrIntersection) {
                     for (const t of (<UnionOrIntersectionType>type).types) {
-                        if (isKnownProperty(t, name)) {
+                        if (isKnownProperty(t, name, isComparingJsxAttributes)) {
                             return true;
                         }
                     }
@@ -7796,16 +7952,24 @@ namespace ts {
 
             function hasExcessProperties(source: FreshObjectLiteralType, target: Type, reportErrors: boolean): boolean {
                 if (maybeTypeOfKind(target, TypeFlags.Object) && !(getObjectFlags(target) & ObjectFlags.ObjectLiteralPatternWithComputedProperties)) {
+                    const isComparingJsxAttributes = !!(source.flags & TypeFlags.JsxAttributes);
                     for (const prop of getPropertiesOfObjectType(source)) {
-                        if (!isKnownProperty(target, prop.name)) {
+                        if (!isKnownProperty(target, prop.name, isComparingJsxAttributes)) {
                             if (reportErrors) {
                                 // We know *exactly* where things went wrong when comparing the types.
                                 // Use this property as the error node as this will be more helpful in
                                 // reasoning about what went wrong.
                                 Debug.assert(!!errorNode);
-                                errorNode = prop.valueDeclaration;
-                                reportError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
-                                    symbolToString(prop), typeToString(target));
+                                if (isJsxAttributes(errorNode)) {
+                                    // JsxAttributes has an object-literal flag and undergo same type-assignablity check as normal object-literal.
+                                    // However, using an object-literal error message will be very confusing to the users so we give different a message.
+                                    reportError(Diagnostics.Property_0_does_not_exist_on_type_1, symbolToString(prop), typeToString(target));
+                                }
+                                else {
+                                    errorNode = prop.valueDeclaration;
+                                    reportError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
+                                        symbolToString(prop), typeToString(target));
+                                }
                             }
                             return true;
                         }
@@ -7832,14 +7996,34 @@ namespace ts {
                 if (target.flags & TypeFlags.Union && containsType(targetTypes, source)) {
                     return Ternary.True;
                 }
-                const len = targetTypes.length;
-                for (let i = 0; i < len; i++) {
-                    const related = isRelatedTo(source, targetTypes[i], reportErrors && i === len - 1);
+                for (const type of targetTypes) {
+                    const related = isRelatedTo(source, type, /*reportErrors*/ false);
                     if (related) {
                         return related;
                     }
                 }
+                if (reportErrors) {
+                    const discriminantType = findMatchingDiscriminantType(source, target);
+                    isRelatedTo(source, discriminantType || targetTypes[targetTypes.length - 1], /*reportErrors*/ true);
+                }
                 return Ternary.False;
+            }
+
+            function findMatchingDiscriminantType(source: Type, target: UnionOrIntersectionType) {
+                const sourceProperties = getPropertiesOfObjectType(source);
+                if (sourceProperties) {
+                    for (const sourceProperty of sourceProperties) {
+                        if (isDiscriminantProperty(target, sourceProperty.name)) {
+                            const sourceType = getTypeOfSymbol(sourceProperty);
+                            for (const type of target.types) {
+                                const targetType = getTypeOfPropertyOfType(type, sourceProperty.name);
+                                if (targetType && isRelatedTo(sourceType, targetType)) {
+                                    return type;
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             function typeRelatedToEachType(source: Type, target: UnionOrIntersectionType, reportErrors: boolean): Ternary {
@@ -8044,6 +8228,12 @@ namespace ts {
                             const sourcePropFlags = getDeclarationModifierFlagsFromSymbol(sourceProp);
                             const targetPropFlags = getDeclarationModifierFlagsFromSymbol(targetProp);
                             if (sourcePropFlags & ModifierFlags.Private || targetPropFlags & ModifierFlags.Private) {
+                                if (getCheckFlags(sourceProp) & CheckFlags.ContainsPrivate) {
+                                    if (reportErrors) {
+                                        reportError(Diagnostics.Property_0_has_conflicting_declarations_and_is_inaccessible_in_type_1, symbolToString(sourceProp), typeToString(source));
+                                    }
+                                    return Ternary.False;
+                                }
                                 if (sourceProp.valueDeclaration !== targetProp.valueDeclaration) {
                                     if (reportErrors) {
                                         if (sourcePropFlags & ModifierFlags.Private && targetPropFlags & ModifierFlags.Private) {
@@ -8059,13 +8249,10 @@ namespace ts {
                                 }
                             }
                             else if (targetPropFlags & ModifierFlags.Protected) {
-                                const sourceDeclaredInClass = sourceProp.parent && sourceProp.parent.flags & SymbolFlags.Class;
-                                const sourceClass = sourceDeclaredInClass ? <InterfaceType>getDeclaredTypeOfSymbol(getParentOfSymbol(sourceProp)) : undefined;
-                                const targetClass = <InterfaceType>getDeclaredTypeOfSymbol(getParentOfSymbol(targetProp));
-                                if (!sourceClass || !hasBaseType(sourceClass, targetClass)) {
+                                if (!isValidOverrideOf(sourceProp, targetProp)) {
                                     if (reportErrors) {
-                                        reportError(Diagnostics.Property_0_is_protected_but_type_1_is_not_a_class_derived_from_2,
-                                            symbolToString(targetProp), typeToString(sourceClass || source), typeToString(targetClass));
+                                        reportError(Diagnostics.Property_0_is_protected_but_type_1_is_not_a_class_derived_from_2, symbolToString(targetProp),
+                                            typeToString(getDeclaringClass(sourceProp) || source), typeToString(getDeclaringClass(targetProp) || target));
                                     }
                                     return Ternary.False;
                                 }
@@ -8307,6 +8494,49 @@ namespace ts {
             }
         }
 
+        // Invoke the callback for each underlying property symbol of the given symbol and return the first
+        // value that isn't undefined.
+        function forEachProperty<T>(prop: Symbol, callback: (p: Symbol) => T): T {
+            if (getCheckFlags(prop) & CheckFlags.SyntheticProperty) {
+                for (const t of (<TransientSymbol>prop).containingType.types) {
+                    const p = getPropertyOfType(t, prop.name);
+                    const result = p && forEachProperty(p, callback);
+                    if (result) {
+                        return result;
+                    }
+                }
+                return undefined;
+            }
+            return callback(prop);
+        }
+
+        // Return the declaring class type of a property or undefined if property not declared in class
+        function getDeclaringClass(prop: Symbol) {
+            return prop.parent && prop.parent.flags & SymbolFlags.Class ? getDeclaredTypeOfSymbol(getParentOfSymbol(prop)) : undefined;
+        }
+
+        // Return true if some underlying source property is declared in a class that derives
+        // from the given base class.
+        function isPropertyInClassDerivedFrom(prop: Symbol, baseClass: Type) {
+            return forEachProperty(prop, sp => {
+                const sourceClass = getDeclaringClass(sp);
+                return sourceClass ? hasBaseType(sourceClass, baseClass) : false;
+            });
+        }
+
+        // Return true if source property is a valid override of protected parts of target property.
+        function isValidOverrideOf(sourceProp: Symbol, targetProp: Symbol) {
+            return !forEachProperty(targetProp, tp => getDeclarationModifierFlagsFromSymbol(tp) & ModifierFlags.Protected ?
+                !isPropertyInClassDerivedFrom(sourceProp, getDeclaringClass(tp)) : false);
+        }
+
+        // Return true if the given class derives from each of the declaring classes of the protected
+        // constituents of the given property.
+        function isClassDerivedFromDeclaringClasses(checkClass: Type, prop: Symbol) {
+            return forEachProperty(prop, p => getDeclarationModifierFlagsFromSymbol(p) & ModifierFlags.Protected ?
+                !hasBaseType(checkClass, getDeclaringClass(p)) : false) ? undefined : checkClass;
+        }
+
         // Return true if the given type is the constructor type for an abstract class
         function isAbstractConstructorType(type: Type) {
             if (getObjectFlags(type) & ObjectFlags.Anonymous) {
@@ -8411,7 +8641,7 @@ namespace ts {
             // the constraints with a common set of type arguments to get relatable entities in places where
             // type parameters occur in the constraints. The complexity of doing that doesn't seem worthwhile,
             // particularly as we're comparing erased versions of the signatures below.
-            if ((source.typeParameters ? source.typeParameters.length : 0) !== (target.typeParameters ? target.typeParameters.length : 0)) {
+            if (length(source.typeParameters) !== length(target.typeParameters)) {
                 return Ternary.False;
             }
             // Spec 1.0 Section 3.8.3 & 3.8.4:
@@ -8616,7 +8846,7 @@ namespace ts {
             if (flags & TypeFlags.Void) types.push(voidType);
             if (flags & TypeFlags.Undefined) types.push(undefinedType);
             if (flags & TypeFlags.Null) types.push(nullType);
-            return getUnionType(types, /*subtypeReduction*/ true);
+            return getUnionType(types);
         }
 
         function removeDefinitelyFalsyTypes(type: Type): Type {
@@ -8639,8 +8869,8 @@ namespace ts {
                 getSignaturesOfType(type, SignatureKind.Construct).length === 0;
         }
 
-        function createTransientSymbol(source: Symbol, type: Type) {
-            const symbol = <TransientSymbol>createSymbol(source.flags | SymbolFlags.Transient, source.name);
+        function createSymbolWithType(source: Symbol, type: Type) {
+            const symbol = createSymbol(source.flags, source.name);
             symbol.declarations = source.declarations;
             symbol.parent = source.parent;
             symbol.type = type;
@@ -8656,7 +8886,7 @@ namespace ts {
             for (const property of getPropertiesOfObjectType(type)) {
                 const original = getTypeOfSymbol(property);
                 const updated = f(original);
-                members.set(property.name, updated === original ? property : createTransientSymbol(property, updated));
+                members.set(property.name, updated === original ? property : createSymbolWithType(property, updated));
             };
             return members;
         }
@@ -8894,10 +9124,10 @@ namespace ts {
                 if (!inferredPropType) {
                     return undefined;
                 }
-                const inferredProp = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | prop.flags & optionalMask, prop.name);
+                const inferredProp = createSymbol(SymbolFlags.Property | prop.flags & optionalMask, prop.name);
+                inferredProp.checkFlags = readonlyMask && isReadonlySymbol(prop) ? CheckFlags.Readonly : 0;
                 inferredProp.declarations = prop.declarations;
                 inferredProp.type = inferredPropType;
-                inferredProp.isReadonly = readonlyMask && isReadonlySymbol(prop);
                 members.set(prop.name, inferredProp);
             }
             if (indexInfo) {
@@ -9234,11 +9464,24 @@ namespace ts {
                     inferenceSucceeded = !!unionOrSuperType;
                 }
                 else {
-                    // Infer the empty object type when no inferences were made. It is important to remember that
-                    // in this case, inference still succeeds, meaning there is no error for not having inference
-                    // candidates. An inference error only occurs when there are *conflicting* candidates, i.e.
+                    // Infer either the default or the empty object type when no inferences were
+                    // made. It is important to remember that in this case, inference still
+                    // succeeds, meaning there is no error for not having inference candidates. An
+                    // inference error only occurs when there are *conflicting* candidates, i.e.
                     // candidates with no common supertype.
-                    inferredType = emptyObjectType;
+                    const defaultType = getDefaultFromTypeParameter(context.signature.typeParameters[index]);
+                    if (defaultType) {
+                        // Instantiate the default type. Any forward reference to a type
+                        // parameter should be instantiated to the empty object type.
+                        inferredType = instantiateType(defaultType,
+                            combineTypeMappers(
+                                createBackreferenceMapper(context.signature.typeParameters, index),
+                                getInferenceMapper(context)));
+                    }
+                    else {
+                        inferredType = emptyObjectType;
+                    }
+
                     inferenceSucceeded = true;
                 }
                 context.inferredTypes[index] = inferredType;
@@ -9379,9 +9622,9 @@ namespace ts {
         function isDiscriminantProperty(type: Type, name: string) {
             if (type && type.flags & TypeFlags.Union) {
                 const prop = getUnionOrIntersectionProperty(<UnionType>type, name);
-                if (prop && prop.flags & SymbolFlags.SyntheticProperty) {
+                if (prop && getCheckFlags(prop) & CheckFlags.SyntheticProperty) {
                     if ((<TransientSymbol>prop).isDiscriminantProperty === undefined) {
-                        (<TransientSymbol>prop).isDiscriminantProperty = (<TransientSymbol>prop).hasNonUniformType && isLiteralType(getTypeOfSymbol(prop));
+                        (<TransientSymbol>prop).isDiscriminantProperty = (<TransientSymbol>prop).checkFlags & CheckFlags.HasNonUniformType && isLiteralType(getTypeOfSymbol(prop));
                     }
                     return (<TransientSymbol>prop).isDiscriminantProperty;
                 }
@@ -9899,7 +10142,19 @@ namespace ts {
                         }
                     }
                     let type: FlowType;
-                    if (flow.flags & FlowFlags.Assignment) {
+                    if (flow.flags & FlowFlags.AfterFinally) {
+                        // block flow edge: finally -> pre-try (for larger explanation check comment in binder.ts - bindTryStatement 
+                        (<AfterFinallyFlow>flow).locked = true;
+                        type = getTypeAtFlowNode((<AfterFinallyFlow>flow).antecedent);
+                        (<AfterFinallyFlow>flow).locked = false;
+                    }
+                    else if (flow.flags & FlowFlags.PreFinally) {
+                        // locked pre-finally flows are filtered out in getTypeAtFlowBranchLabel
+                        // so here just redirect to antecedent
+                        flow = (<PreFinallyFlow>flow).antecedent;
+                        continue;
+                    }
+                    else if (flow.flags & FlowFlags.Assignment) {
                         type = getTypeAtFlowAssignment(<FlowAssignment>flow);
                         if (!type) {
                             flow = (<FlowAssignment>flow).antecedent;
@@ -10055,6 +10310,12 @@ namespace ts {
                 let subtypeReduction = false;
                 let seenIncomplete = false;
                 for (const antecedent of flow.antecedents) {
+                    if (antecedent.flags & FlowFlags.PreFinally && (<PreFinallyFlow>antecedent).lock.locked) {
+                        // if flow correspond to branch from pre-try to finally and this branch is locked - this means that 
+                        // we initially have started following the flow outside the finally block.
+                        // in this case we should ignore this branch.
+                        continue;
+                    }
                     const flowType = getTypeAtFlowNode(antecedent);
                     const type = getTypeFromFlowType(flowType);
                     // If the type at a particular antecedent path is the declared type and the
@@ -11456,21 +11717,20 @@ namespace ts {
         }
 
         function getContextualTypeForJsxAttribute(attribute: JsxAttribute | JsxSpreadAttribute) {
-            const kind = attribute.kind;
-            const jsxElement = attribute.parent as JsxOpeningLikeElement;
-            const attrsType = getJsxElementAttributesType(jsxElement);
+            // When we trying to resolve JsxOpeningLikeElement as a stateless function element, we will already give its attributes a contextual type
+            // which is a type of the parameter of the signature we are trying out.
+            // If there is no contextual type (e.g. we are trying to resolve stateful component), get attributes type from resolving element's tagName
+            const attributesType = getContextualType(<Expression>attribute.parent);
 
-            if (attribute.kind === SyntaxKind.JsxAttribute) {
-                if (!attrsType || isTypeAny(attrsType)) {
+            if (isJsxAttribute(attribute)) {
+                if (!attributesType || isTypeAny(attributesType)) {
                     return undefined;
                 }
-                return getTypeOfPropertyOfType(attrsType, (attribute as JsxAttribute).name.text);
+                return getTypeOfPropertyOfType(attributesType, (attribute as JsxAttribute).name.text);
             }
-            else if (attribute.kind === SyntaxKind.JsxSpreadAttribute) {
-                return attrsType;
+            else {
+                return attributesType;
             }
-
-            Debug.fail(`Expected JsxAttribute or JsxSpreadAttribute, got ts.SyntaxKind[${kind}]`);
         }
 
         // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
@@ -11543,6 +11803,9 @@ namespace ts {
                 case SyntaxKind.JsxAttribute:
                 case SyntaxKind.JsxSpreadAttribute:
                     return getContextualTypeForJsxAttribute(<JsxAttribute | JsxSpreadAttribute>parent);
+                case SyntaxKind.JsxOpeningElement:
+                case SyntaxKind.JsxSelfClosingElement:
+                    return getAttributesTypeFromJsxOpeningLikeElement(<JsxOpeningLikeElement>parent);
             }
             return undefined;
         }
@@ -11846,7 +12109,7 @@ namespace ts {
                     }
 
                     typeFlags |= type.flags;
-                    const prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.name);
+                    const prop = createSymbol(SymbolFlags.Property | member.flags, member.name);
                     if (inDestructuringPattern) {
                         // If object literal is an assignment pattern and if the assignment pattern specifies a default value
                         // for the property, make the property optional.
@@ -12039,70 +12302,97 @@ namespace ts {
             }
         }
 
-        function checkJsxAttribute(node: JsxAttribute, elementAttributesType: Type, nameTable: Map<boolean>) {
-            let correspondingPropType: Type = undefined;
+        /**
+         * Get attributes type of the JSX opening-like element. The result is from resolving "attributes" property of the opening-like element.
+         *
+         * @param openingLikeElement a JSX opening-like element
+         * @param filter a function to remove attributes that will not participate in checking whether attributes are assignable
+         * @return an anonymous type (similar to the one returned by checkObjectLiteral) in which its properties are attributes property.
+         * @remarks Because this function calls getSpreadType, it needs to use the same checks as checkObjectLiteral,
+         * which also calls getSpreadType.
+         */
+        function createJsxAttributesTypeFromAttributesProperty(openingLikeElement: JsxOpeningLikeElement, filter?: (symbol: Symbol) => boolean, contextualMapper?: TypeMapper) {
+            const attributes = openingLikeElement.attributes;
+            let attributesTable = createMap<Symbol>();
+            let spread: Type = emptyObjectType;
+            let attributesArray: Symbol[] = [];
+            for (const attributeDecl of attributes.properties) {
+                const member = attributeDecl.symbol;
+                if (isJsxAttribute(attributeDecl)) {
+                    const exprType = attributeDecl.initializer ?
+                        checkExpression(attributeDecl.initializer, contextualMapper) :
+                        trueType;  // <Elem attr /> is sugar for <Elem attr={true} />
 
-            // We need to unconditionally get the expression type
-            let exprType: Type;
-            if (node.initializer) {
-                exprType = checkExpression(node.initializer);
-            }
-            else {
-                // <Elem attr /> is sugar for <Elem attr={true} />
-                exprType = booleanType;
-            }
-
-            // Look up the corresponding property for this attribute
-            if (elementAttributesType === emptyObjectType && isUnhyphenatedJsxName(node.name.text)) {
-                // If there is no 'props' property, you may not have non-"data-" attributes
-                error(node.parent, Diagnostics.JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property, getJsxElementPropertiesName());
-            }
-            else if (elementAttributesType && !isTypeAny(elementAttributesType)) {
-                const correspondingPropSymbol = getPropertyOfType(elementAttributesType, node.name.text);
-                correspondingPropType = correspondingPropSymbol && getTypeOfSymbol(correspondingPropSymbol);
-                if (isUnhyphenatedJsxName(node.name.text)) {
-                    const attributeType = getTypeOfPropertyOfType(elementAttributesType, getTextOfPropertyName(node.name)) || getIndexTypeOfType(elementAttributesType, IndexKind.String);
-                    if (attributeType) {
-                        correspondingPropType = attributeType;
+                    const attributeSymbol = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.name);
+                    attributeSymbol.declarations = member.declarations;
+                    attributeSymbol.parent = member.parent;
+                    if (member.valueDeclaration) {
+                        attributeSymbol.valueDeclaration = member.valueDeclaration;
                     }
-                    else {
-                        // If there's no corresponding property with this name, error
-                        if (!correspondingPropType) {
-                            error(node.name, Diagnostics.Property_0_does_not_exist_on_type_1, node.name.text, typeToString(elementAttributesType));
-                            return unknownType;
-                        }
+                    attributeSymbol.type = exprType;
+                    attributeSymbol.target = member;
+                    attributesTable.set(attributeSymbol.name, attributeSymbol);
+                    attributesArray.push(attributeSymbol);
+                }
+                else {
+                    Debug.assert(attributeDecl.kind === SyntaxKind.JsxSpreadAttribute);
+                    if (attributesArray.length > 0) {
+                        spread = getSpreadType(spread, createJsxAttributesType(attributes.symbol, attributesTable));
+                        attributesArray = [];
+                        attributesTable = createMap<Symbol>();
                     }
+                    const exprType = checkExpression(attributeDecl.expression);
+                    if (!isValidSpreadType(exprType)) {
+                        error(attributeDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
+                        return anyType;
+                    }
+                    if (isTypeAny(exprType)) {
+                        return anyType;
+                    }
+                    spread = getSpreadType(spread, exprType);
                 }
             }
 
-            if (correspondingPropType) {
-                checkTypeAssignableTo(exprType, correspondingPropType, node);
+            if (spread !== emptyObjectType) {
+                if (attributesArray.length > 0) {
+                    spread = getSpreadType(spread, createJsxAttributesType(attributes.symbol, attributesTable));
+                    attributesArray = [];
+                    attributesTable = createMap<Symbol>();
+                }
+                attributesArray = getPropertiesOfType(spread);
             }
 
-            nameTable.set(node.name.text, true);
-            return exprType;
+            attributesTable = createMap<Symbol>();
+            if (attributesArray) {
+                forEach(attributesArray, (attr) => {
+                    if (!filter || filter(attr)) {
+                        attributesTable.set(attr.name, attr);
+                    }
+                });
+            }
+            return createJsxAttributesType(attributes.symbol, attributesTable);
+
+            /**
+             * Create anonymous type from given attributes symbol table.
+             * @param symbol a symbol of JsxAttributes containing attributes corresponding to attributesTable
+             * @param attributesTable a symbol table of attributes property
+             */
+            function createJsxAttributesType(symbol: Symbol, attributesTable: Map<Symbol>) {
+                const result = createAnonymousType(symbol, attributesTable, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
+                const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshLiteral;
+                result.flags |= TypeFlags.JsxAttributes | TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag;
+                result.objectFlags |= ObjectFlags.ObjectLiteral;
+                return result;
+            }
         }
 
-        function checkJsxSpreadAttribute(node: JsxSpreadAttribute, elementAttributesType: Type, nameTable: Map<boolean>) {
-            if (compilerOptions.jsx === JsxEmit.React) {
-                checkExternalEmitHelpers(node, ExternalEmitHelpers.Assign);
-            }
-            const type = checkExpression(node.expression);
-            const props = getPropertiesOfType(type);
-            for (const prop of props) {
-                // Is there a corresponding property in the element attributes type? Skip checking of properties
-                // that have already been assigned to, as these are not actually pushed into the resulting type
-                if (!nameTable.get(prop.name)) {
-                    const targetPropSym = getPropertyOfType(elementAttributesType, prop.name);
-                    if (targetPropSym) {
-                        const msg = chainDiagnosticMessages(undefined, Diagnostics.Property_0_of_JSX_spread_attribute_is_not_assignable_to_target_property, prop.name);
-                        checkTypeAssignableTo(getTypeOfSymbol(prop), getTypeOfSymbol(targetPropSym), node, undefined, msg);
-                    }
-
-                    nameTable.set(prop.name, true);
-                }
-            }
-            return type;
+        /**
+         * Check attributes property of opening-like element. This function is called during chooseOverload to get call signature of a JSX opening-like element.
+         * (See "checkApplicableSignatureForJsxOpeningLikeElement" for how the function is used)
+         * @param node a JSXAttributes to be resolved of its type
+         */
+        function checkJsxAttributes(node: JsxAttributes, contextualMapper?: TypeMapper) {
+            return createJsxAttributesTypeFromAttributesProperty(node.parent as JsxOpeningLikeElement, /*filter*/ undefined, contextualMapper);
         }
 
         function getJsxType(name: string) {
@@ -12217,29 +12507,137 @@ namespace ts {
         }
 
         /**
-         * Given React element instance type and the class type, resolve the Jsx type
-         * Pass elemType to handle individual type in the union typed element type.
+         * Get JSX attributes type by trying to resolve openingLikeElement as a stateless function component.
+         * Return only attributes type of successfully resolved call signature.
+         * This function assumes that the caller handled other possible element type of the JSX element (e.g. stateful component)
+         * Unlike tryGetAllJsxStatelessFunctionAttributesType, this function is a default behavior of type-checkers.
+         * @param openingLikeElement a JSX opening-like element to find attributes type
+         * @param elementType a type of the opening-like element. This elementType can't be an union type
+         * @param elemInstanceType an element instance type (the result of newing or invoking this tag)
+         * @param elementClassType a JSX-ElementClass type. This is a result of looking up ElementClass interface in the JSX global
          */
-        function getResolvedJsxType(node: JsxOpeningLikeElement, elemType?: Type, elemClassType?: Type): Type {
-            if (!elemType) {
-                elemType = checkExpression(node.tagName);
+        function defaultTryGetJsxStatelessFunctionAttributesType(openingLikeElement: JsxOpeningLikeElement, elementType: Type, elemInstanceType: Type, elementClassType?: Type): Type {
+            Debug.assert(!(elementType.flags & TypeFlags.Union));
+            if (!elementClassType || !isTypeAssignableTo(elemInstanceType, elementClassType)) {
+                if (jsxElementType) {
+                    // We don't call getResolvedSignature here because we have already resolve the type of JSX Element.
+                    const callSignature = getResolvedJsxStatelessFunctionSignature(openingLikeElement, elementType, /*candidatesOutArray*/ undefined);
+                    if (callSignature !== unknownSignature) {
+                        const callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
+                        let paramType = callReturnType && (callSignature.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature.parameters[0]));
+                        if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType)) {
+                            // Intersect in JSX.IntrinsicAttributes if it exists
+                            const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes);
+                            if (intrinsicAttributes !== unknownType) {
+                                paramType = intersectTypes(intrinsicAttributes, paramType);
+                            }
+                            return paramType;
+                        }
+                    }
+                }
             }
-            if (elemType.flags & TypeFlags.Union) {
-                const types = (<UnionOrIntersectionType>elemType).types;
-                return getUnionType(map(types, type => {
-                    return getResolvedJsxType(node, type, elemClassType);
+            return undefined;
+        }
+
+        /**
+         * Get JSX attributes type by trying to resolve openingLikeElement as a stateless function component.
+         * Return all attributes type of resolved call signature including candidate signatures.
+         * This function assumes that the caller handled other possible element type of the JSX element.
+         * This function is a behavior used by language service when looking up completion in JSX element.
+         * @param openingLikeElement a JSX opening-like element to find attributes type
+         * @param elementType a type of the opening-like element. This elementType can't be an union type
+         * @param elemInstanceType an element instance type (the result of newing or invoking this tag)
+         * @param elementClassType a JSX-ElementClass type. This is a result of looking up ElementClass interface in the JSX global
+         */
+        function tryGetAllJsxStatelessFunctionAttributesType(openingLikeElement: JsxOpeningLikeElement, elementType: Type, elemInstanceType: Type, elementClassType?: Type): Type {
+            Debug.assert(!(elementType.flags & TypeFlags.Union));
+            if (!elementClassType || !isTypeAssignableTo(elemInstanceType, elementClassType)) {
+                // Is this is a stateless function component? See if its single signature's return type is assignable to the JSX Element Type
+                if (jsxElementType) {
+                    // We don't call getResolvedSignature because here we have already resolve the type of JSX Element.
+                    const candidatesOutArray: Signature[] = [];
+                    getResolvedJsxStatelessFunctionSignature(openingLikeElement, elementType, candidatesOutArray);
+                    let result: Type;
+                    let allMatchingAttributesType: Type;
+                    for (const candidate of candidatesOutArray) {
+                        const callReturnType = getReturnTypeOfSignature(candidate);
+                        const paramType = callReturnType && (candidate.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(candidate.parameters[0]));
+                        if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType)) {
+                            let shouldBeCandidate = true;
+                            for (const attribute of openingLikeElement.attributes.properties) {
+                                if (isJsxAttribute(attribute) &&
+                                    isUnhyphenatedJsxName(attribute.name.text) &&
+                                    !getPropertyOfType(paramType, attribute.name.text)) {
+                                    shouldBeCandidate = false;
+                                    break;
+                                }
+                            }
+                            if (shouldBeCandidate) {
+                                result = intersectTypes(result, paramType);
+                            }
+                            allMatchingAttributesType = intersectTypes(allMatchingAttributesType, paramType);
+                        }
+                    }
+
+                    // If we can't find any matching, just return everything.
+                    if (!result) {
+                        result = allMatchingAttributesType;
+                    }
+                    // Intersect in JSX.IntrinsicAttributes if it exists
+                    const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes);
+                    if (intrinsicAttributes !== unknownType) {
+                        result = intersectTypes(intrinsicAttributes, result);
+                    }
+                    return result;
+                }
+            }
+            return undefined;
+        }
+
+        /**
+         * Resolve attributes type of the given opening-like element. The attributes type is a type of attributes associated with the given elementType.
+         * For instance:
+         *      declare function Foo(attr: { p1: string}): JSX.Element;
+         *      <Foo p1={10} />;  // This function will try resolve "Foo" and return an attributes type of "Foo" which is "{ p1: string }"
+         *
+         * The function is intended to initially be called from getAttributesTypeFromJsxOpeningLikeElement which already handle JSX-intrinsic-element..
+         * This function will try to resolve custom JSX attributes type in following order: string literal, stateless function, and stateful component
+         *
+         * @param openingLikeElement a non-intrinsic JSXOPeningLikeElement
+         * @param shouldIncludeAllStatelessAttributesType a boolean indicating whether to include all attributes types from all stateless function signature
+         * @param elementType an instance type of the given opening-like element. If undefined, the function will check type openinglikeElement's tagname.
+         * @param elementClassType a JSX-ElementClass type. This is a result of looking up ElementClass interface in the JSX global (imported from react.d.ts)
+         * @return attributes type if able to resolve the type of node
+         *         anyType if there is no type ElementAttributesProperty or there is an error
+         *         emptyObjectType if there is no "prop" in the element instance type
+         **/
+        function resolveCustomJsxElementAttributesType(openingLikeElement: JsxOpeningLikeElement,
+            shouldIncludeAllStatelessAttributesType: boolean,
+            elementType?: Type,
+            elementClassType?: Type): Type {
+            if (!elementType) {
+                elementType = checkExpression(openingLikeElement.tagName);
+            }
+
+            if (elementType.flags & TypeFlags.Union) {
+                const types = (elementType as UnionType).types;
+                return getUnionType(types.map(type => {
+                    return resolveCustomJsxElementAttributesType(openingLikeElement, shouldIncludeAllStatelessAttributesType, type, elementClassType);
                 }), /*subtypeReduction*/ true);
             }
 
             // If the elemType is a string type, we have to return anyType to prevent an error downstream as we will try to find construct or call signature of the type
-            if (elemType.flags & TypeFlags.String) {
+            if (elementType.flags & TypeFlags.String) {
                 return anyType;
             }
-            else if (elemType.flags & TypeFlags.StringLiteral) {
+            else if (elementType.flags & TypeFlags.StringLiteral) {
                 // If the elemType is a stringLiteral type, we can then provide a check to make sure that the string literal type is one of the Jsx intrinsic element type
+                // For example:
+                //      var CustomTag: "h1" = "h1";
+                //      <CustomTag> Hello World </CustomTag> 
                 const intrinsicElementsType = getJsxType(JsxNames.IntrinsicElements);
                 if (intrinsicElementsType !== unknownType) {
-                    const stringLiteralTypeName = (<LiteralType>elemType).text;
+                    const stringLiteralTypeName = (<LiteralType>elementType).text;
                     const intrinsicProp = getPropertyOfType(intrinsicElementsType, stringLiteralTypeName);
                     if (intrinsicProp) {
                         return getTypeOfSymbol(intrinsicProp);
@@ -12248,37 +12646,28 @@ namespace ts {
                     if (indexSignatureType) {
                         return indexSignatureType;
                     }
-                    error(node, Diagnostics.Property_0_does_not_exist_on_type_1, stringLiteralTypeName, "JSX." + JsxNames.IntrinsicElements);
+                    error(openingLikeElement, Diagnostics.Property_0_does_not_exist_on_type_1, stringLiteralTypeName, "JSX." + JsxNames.IntrinsicElements);
                 }
                 // If we need to report an error, we already done so here. So just return any to prevent any more error downstream
                 return anyType;
             }
 
             // Get the element instance type (the result of newing or invoking this tag)
-            const elemInstanceType = getJsxElementInstanceType(node, elemType);
+            const elemInstanceType = getJsxElementInstanceType(openingLikeElement, elementType);
 
-            if (!elemClassType || !isTypeAssignableTo(elemInstanceType, elemClassType)) {
-                // Is this is a stateless function component? See if its single signature's return type is
-                // assignable to the JSX Element Type
-                if (jsxElementType) {
-                    const callSignatures = elemType && getSignaturesOfType(elemType, SignatureKind.Call);
-                    const callSignature = callSignatures && callSignatures.length > 0 && callSignatures[0];
-                    const callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
-                    let paramType = callReturnType && (callSignature.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature.parameters[0]));
-                    if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType)) {
-                        // Intersect in JSX.IntrinsicAttributes if it exists
-                        const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes);
-                        if (intrinsicAttributes !== unknownType) {
-                            paramType = intersectTypes(intrinsicAttributes, paramType);
-                        }
-                        return paramType;
-                    }
-                }
+            // If we should include all stateless attributes type, then get all attributes type from all stateless function signature.
+            // Otherwise get only attributes type from the signature picked by choose-overload logic.
+            const statelessAttributesType = shouldIncludeAllStatelessAttributesType ?
+                tryGetAllJsxStatelessFunctionAttributesType(openingLikeElement, elementType, elemInstanceType, elementClassType) :
+                defaultTryGetJsxStatelessFunctionAttributesType(openingLikeElement, elementType, elemInstanceType, elementClassType);
+
+            if (statelessAttributesType) {
+                return statelessAttributesType;
             }
 
             // Issue an error if this return type isn't assignable to JSX.ElementClass
-            if (elemClassType) {
-                checkTypeRelatedTo(elemInstanceType, elemClassType, assignableRelation, node, Diagnostics.JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements);
+            if (elementClassType) {
+                checkTypeRelatedTo(elemInstanceType, elementClassType, assignableRelation, openingLikeElement, Diagnostics.JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements);
             }
 
             if (isTypeAny(elemInstanceType)) {
@@ -12307,7 +12696,7 @@ namespace ts {
                 }
                 else if (attributesType.flags & TypeFlags.Union) {
                     // Props cannot be a union type
-                    error(node.tagName, Diagnostics.JSX_element_attributes_type_0_may_not_be_a_union_type, typeToString(attributesType));
+                    error(openingLikeElement.tagName, Diagnostics.JSX_element_attributes_type_0_may_not_be_a_union_type, typeToString(attributesType));
                     return anyType;
                 }
                 else {
@@ -12337,30 +12726,71 @@ namespace ts {
         }
 
         /**
-         * Given an opening/self-closing element, get the 'element attributes type', i.e. the type that tells
-         * us which attributes are valid on a given element.
+         * Get attributes type of the given intrinsic opening-like Jsx element by resolving the tag name.
+         * The function is intended to be called from a function which has checked that the opening element is an intrinsic element.
+         * @param node an intrinsic JSX opening-like element
          */
-        function getJsxElementAttributesType(node: JsxOpeningLikeElement): Type {
+        function getIntrinsicAttributesTypeFromJsxOpeningLikeElement(node: JsxOpeningLikeElement): Type {
+            Debug.assert(isJsxIntrinsicIdentifier(node.tagName));
             const links = getNodeLinks(node);
-            if (!links.resolvedJsxType) {
-                if (isJsxIntrinsicIdentifier(node.tagName)) {
-                    const symbol = getIntrinsicTagSymbol(node);
-                    if (links.jsxFlags & JsxFlags.IntrinsicNamedElement) {
-                        return links.resolvedJsxType = getTypeOfSymbol(symbol);
-                    }
-                    else if (links.jsxFlags & JsxFlags.IntrinsicIndexedElement) {
-                        return links.resolvedJsxType = getIndexInfoOfSymbol(symbol, IndexKind.String).type;
-                    }
-                    else {
-                        return links.resolvedJsxType = unknownType;
-                    }
+            if (!links.resolvedJsxElementAttributesType) {
+                const symbol = getIntrinsicTagSymbol(node);
+                if (links.jsxFlags & JsxFlags.IntrinsicNamedElement) {
+                    return links.resolvedJsxElementAttributesType = getTypeOfSymbol(symbol);
+                }
+                else if (links.jsxFlags & JsxFlags.IntrinsicIndexedElement) {
+                    return links.resolvedJsxElementAttributesType = getIndexInfoOfSymbol(symbol, IndexKind.String).type;
                 }
                 else {
-                    const elemClassType = getJsxGlobalElementClassType();
-                    return links.resolvedJsxType = getResolvedJsxType(node, undefined, elemClassType);
+                    return links.resolvedJsxElementAttributesType = unknownType;
                 }
             }
-            return links.resolvedJsxType;
+            return links.resolvedJsxElementAttributesType;
+        }
+
+        /**
+         * Get attributes type of the given custom opening-like JSX element.
+         * This function is intended to be called from a caller that handles intrinsic JSX element already.
+         * @param node a custom JSX opening-like element
+         * @param shouldIncludeAllStatelessAttributesType a boolean value used by language service to get all possible attributes type from an overload stateless function component
+         */
+        function getCustomJsxElementAttributesType(node: JsxOpeningLikeElement, shouldIncludeAllStatelessAttributesType: boolean): Type {
+            const links = getNodeLinks(node);
+            if (!links.resolvedJsxElementAttributesType) {
+                const elemClassType = getJsxGlobalElementClassType();
+                return links.resolvedJsxElementAttributesType = resolveCustomJsxElementAttributesType(node, shouldIncludeAllStatelessAttributesType, undefined, elemClassType);
+            }
+            return links.resolvedJsxElementAttributesType;
+        }
+
+        /**
+         * Get all possible attributes type, especially from an overload stateless function component, of the given JSX opening-like element.
+         * This function is called by language service (see: completions-tryGetGlobalSymbols).
+         * @param node a JSX opening-like element to get attributes type for
+         */
+        function getAllAttributesTypeFromJsxOpeningLikeElement(node: JsxOpeningLikeElement): Type {
+            if (isJsxIntrinsicIdentifier(node.tagName)) {
+                return getIntrinsicAttributesTypeFromJsxOpeningLikeElement(node);
+            }
+            else {
+                // Because in language service, the given JSX opening-like element may be incomplete and therefore,
+                // we can't resolve to exact signature if the element is a stateless function component so the best thing to do is return all attributes type from all overloads.
+                return getCustomJsxElementAttributesType(node, /*shouldIncludeAllStatelessAttributesType*/ true);
+            }
+        }
+
+        /**
+         * Get the attributes type, which indicates the attributes that are valid on the given JSXOpeningLikeElement. 
+         * @param node a JSXOpeningLikeElement node
+         * @return an attributes type of the given node
+         */
+        function getAttributesTypeFromJsxOpeningLikeElement(node: JsxOpeningLikeElement): Type {
+            if (isJsxIntrinsicIdentifier(node.tagName)) {
+                return getIntrinsicAttributesTypeFromJsxOpeningLikeElement(node);
+            }
+            else {
+                return getCustomJsxElementAttributesType(node, /*shouldIncludeAllStatelessAttributesType*/ false);
+            }
         }
 
         /**
@@ -12369,7 +12799,7 @@ namespace ts {
          * that have no matching element attributes type property.
          */
         function getJsxAttributePropertySymbol(attrib: JsxAttribute): Symbol {
-            const attributesType = getJsxElementAttributesType(<JsxOpeningElement>attrib.parent);
+            const attributesType = getAttributesTypeFromJsxOpeningLikeElement(attrib.parent.parent as JsxOpeningElement);
             const prop = getPropertyOfType(attributesType, attrib.name.text);
             return prop || unknownSymbol;
         }
@@ -12381,7 +12811,9 @@ namespace ts {
             return jsxElementClassType;
         }
 
-        /// Returns all the properties of the Jsx.IntrinsicElements interface
+        /**
+         * Returns all the properties of the Jsx.IntrinsicElements interface
+         */
         function getJsxIntrinsicTagNames(): Symbol[] {
             const intrinsics = getJsxType(JsxNames.IntrinsicElements);
             return intrinsics ? getPropertiesOfType(intrinsics) : emptyArray;
@@ -12419,41 +12851,48 @@ namespace ts {
                 }
             }
 
-            const targetAttributesType = getJsxElementAttributesType(node);
+            checkJsxAttributesAssignableToTagNameAttributes(node);
+        }
 
-            const nameTable = createMap<boolean>();
-            // Process this array in right-to-left order so we know which
-            // attributes (mostly from spreads) are being overwritten and
-            // thus should have their types ignored
-            let sawSpreadedAny = false;
-            for (let i = node.attributes.length - 1; i >= 0; i--) {
-                if (node.attributes[i].kind === SyntaxKind.JsxAttribute) {
-                    checkJsxAttribute(<JsxAttribute>(node.attributes[i]), targetAttributesType, nameTable);
-                }
-                else {
-                    Debug.assert(node.attributes[i].kind === SyntaxKind.JsxSpreadAttribute);
-                    const spreadType = checkJsxSpreadAttribute(<JsxSpreadAttribute>(node.attributes[i]), targetAttributesType, nameTable);
-                    if (isTypeAny(spreadType)) {
-                        sawSpreadedAny = true;
-                    }
-                }
+         /**
+         * Check whether the given attributes of JSX opening-like element is assignable to the tagName attributes.
+         *      Get the attributes type of the opening-like element through resolving the tagName, "target attributes"
+         *      Check assignablity between given attributes property, "source attributes", and the "target attributes"
+         * @param openingLikeElement an opening-like JSX element to check its JSXAttributes
+         */
+        function checkJsxAttributesAssignableToTagNameAttributes(openingLikeElement: JsxOpeningLikeElement) {
+            // The function involves following steps:
+            //      1. Figure out expected attributes type by resolving tagName of the JSX opening-like element, targetAttributesType.
+            //         During these steps, we will try to resolve the tagName as intrinsic name, stateless function, stateful component (in the order)
+            //      2. Solved JSX attributes type given by users, sourceAttributesType, which is by resolving "attributes" property of the JSX opening-like element.
+            //      3. Check if the two are assignable to each other
+
+            // targetAttributesType is a type of an attributes from resolving tagName of an opening-like JSX element.
+            const targetAttributesType = isJsxIntrinsicIdentifier(openingLikeElement.tagName) ?
+                getIntrinsicAttributesTypeFromJsxOpeningLikeElement(openingLikeElement) :
+                getCustomJsxElementAttributesType(openingLikeElement, /*shouldIncludeAllStatelessAttributesType*/ false);
+
+            // sourceAttributesType is a type of an attributes properties.
+            // i.e <div attr1={10} attr2="string" />
+            //     attr1 and attr2 are treated as JSXAttributes attached in the JsxOpeningLikeElement as "attributes".
+            const sourceAttributesType = createJsxAttributesTypeFromAttributesProperty(openingLikeElement,
+                attribute => {
+                    return isUnhyphenatedJsxName(attribute.name) || !!(getPropertyOfType(targetAttributesType, attribute.name));
+                });
+
+            // If the targetAttributesType is an emptyObjectType, indicating that there is no property named 'props' on this instance type.
+            // but there exists a sourceAttributesType, we need to explicitly give an error as normal assignability check allow excess properties and will pass.
+            if (targetAttributesType === emptyObjectType && (isTypeAny(sourceAttributesType) || (<ResolvedType>sourceAttributesType).properties.length > 0)) {
+                error(openingLikeElement, Diagnostics.JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property, getJsxElementPropertiesName());
             }
-
-            // Check that all required properties have been provided. If an 'any'
-            // was spreaded in, though, assume that it provided all required properties
-            if (targetAttributesType && !sawSpreadedAny) {
-                const targetProperties = getPropertiesOfType(targetAttributesType);
-                for (const targetProperty of targetProperties) {
-                    if (!(targetProperty.flags & SymbolFlags.Optional) && !nameTable.get(targetProperty.name)) {
-                        error(node, Diagnostics.Property_0_is_missing_in_type_1, targetProperty.name, typeToString(targetAttributesType));
-                    }
-                }
+            else {
+                checkTypeAssignableTo(sourceAttributesType, targetAttributesType, openingLikeElement.attributes.properties.length > 0 ? openingLikeElement.attributes : openingLikeElement);
             }
         }
 
-        function checkJsxExpression(node: JsxExpression) {
+        function checkJsxExpression(node: JsxExpression, contextualMapper?: TypeMapper) {
             if (node.expression) {
-                const type = checkExpression(node.expression);
+                const type = checkExpression(node.expression, contextualMapper);
                 if (node.dotDotDotToken && type !== anyType && !isArrayType(type)) {
                     error(node, Diagnostics.JSX_spread_child_must_be_an_array_type, node.toString(), typeToString(type));
                 }
@@ -12471,7 +12910,22 @@ namespace ts {
         }
 
         function getDeclarationModifierFlagsFromSymbol(s: Symbol): ModifierFlags {
-            return s.valueDeclaration ? getCombinedModifierFlags(s.valueDeclaration) : s.flags & SymbolFlags.Prototype ? ModifierFlags.Public | ModifierFlags.Static : 0;
+            if (s.valueDeclaration) {
+                const flags = getCombinedModifierFlags(s.valueDeclaration);
+                return s.parent && s.parent.flags & SymbolFlags.Class ? flags : flags & ~ModifierFlags.AccessibilityModifier;
+            }
+            if (getCheckFlags(s) & CheckFlags.SyntheticProperty) {
+                const checkFlags = (<TransientSymbol>s).checkFlags;
+                const accessModifier = checkFlags & CheckFlags.ContainsPrivate ? ModifierFlags.Private :
+                    checkFlags & CheckFlags.ContainsPublic ? ModifierFlags.Public :
+                    ModifierFlags.Protected;
+                const staticModifier = checkFlags & CheckFlags.ContainsStatic ? ModifierFlags.Static : 0;
+                return accessModifier | staticModifier;
+            }
+            if (s.flags & SymbolFlags.Prototype) {
+                return ModifierFlags.Public | ModifierFlags.Static;
+            }
+            return 0;
         }
 
         function getDeclarationNodeFlagsFromSymbol(s: Symbol): NodeFlags {
@@ -12486,12 +12940,18 @@ namespace ts {
          * @param type The type of left.
          * @param prop The symbol for the right hand side of the property access.
          */
-        function checkClassPropertyAccess(node: PropertyAccessExpression | QualifiedName | VariableLikeDeclaration, left: Expression | QualifiedName, type: Type, prop: Symbol): boolean {
+        function checkPropertyAccessibility(node: PropertyAccessExpression | QualifiedName | VariableLikeDeclaration, left: Expression | QualifiedName, type: Type, prop: Symbol): boolean {
             const flags = getDeclarationModifierFlagsFromSymbol(prop);
-            const declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(getParentOfSymbol(prop));
             const errorNode = node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.VariableDeclaration ?
                 (<PropertyAccessExpression | VariableDeclaration>node).name :
                 (<QualifiedName>node).right;
+
+            if (getCheckFlags(prop) & CheckFlags.ContainsPrivate) {
+                // Synthetic property with private constituent property
+                error(errorNode, Diagnostics.Property_0_has_conflicting_declarations_and_is_inaccessible_in_type_1, symbolToString(prop), typeToString(type));
+                return false;
+            }
+
             if (left.kind === SyntaxKind.SuperKeyword) {
                 // TS 1.0 spec (April 2014): 4.8.2
                 // - In a constructor, instance member function, instance member accessor, or
@@ -12510,14 +12970,12 @@ namespace ts {
                         return false;
                     }
                 }
-
                 if (flags & ModifierFlags.Abstract) {
                     // A method cannot be accessed in a super property access if the method is abstract.
                     // This error could mask a private property access error. But, a member
                     // cannot simultaneously be private and abstract, so this will trigger an
                     // additional error elsewhere.
-
-                    error(errorNode, Diagnostics.Abstract_method_0_in_class_1_cannot_be_accessed_via_super_expression, symbolToString(prop), typeToString(declaringClass));
+                    error(errorNode, Diagnostics.Abstract_method_0_in_class_1_cannot_be_accessed_via_super_expression, symbolToString(prop), typeToString(getDeclaringClass(prop)));
                     return false;
                 }
             }
@@ -12533,7 +12991,7 @@ namespace ts {
             if (flags & ModifierFlags.Private) {
                 const declaringClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop));
                 if (!isNodeWithinClass(node, declaringClassDeclaration)) {
-                    error(errorNode, Diagnostics.Property_0_is_private_and_only_accessible_within_class_1, symbolToString(prop), typeToString(declaringClass));
+                    error(errorNode, Diagnostics.Property_0_is_private_and_only_accessible_within_class_1, symbolToString(prop), typeToString(getDeclaringClass(prop)));
                     return false;
                 }
                 return true;
@@ -12546,15 +13004,15 @@ namespace ts {
                 return true;
             }
 
-            // Get the enclosing class that has the declaring class as its base type
+            // Find the first enclosing class that has the declaring classes of the protected constituents
+            // of the property as base classes
             const enclosingClass = forEachEnclosingClass(node, enclosingDeclaration => {
                 const enclosingClass = <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingDeclaration));
-                return hasBaseType(enclosingClass, declaringClass) ? enclosingClass : undefined;
+                return isClassDerivedFromDeclaringClasses(enclosingClass, prop) ? enclosingClass : undefined;
             });
-
             // A protected property is accessible if the property is within the declaring class or classes derived from it
             if (!enclosingClass) {
-                error(errorNode, Diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, symbolToString(prop), typeToString(declaringClass));
+                error(errorNode, Diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, symbolToString(prop), typeToString(getDeclaringClass(prop) || type));
                 return false;
             }
             // No further restrictions for static properties
@@ -12566,9 +13024,7 @@ namespace ts {
                 // get the original type -- represented as the type constraint of the 'this' type
                 type = getConstraintOfTypeParameter(<TypeParameter>type);
             }
-
-            // TODO: why is the first part of this check here?
-            if (!(getObjectFlags(getTargetType(type)) & ObjectFlags.ClassOrInterface && hasBaseType(<InterfaceType>type, enclosingClass))) {
+            if (!(getObjectFlags(getTargetType(type)) & ObjectFlags.ClassOrInterface && hasBaseType(type, enclosingClass))) {
                 error(errorNode, Diagnostics.Property_0_is_protected_and_only_accessible_through_an_instance_of_class_1, symbolToString(prop), typeToString(enclosingClass));
                 return false;
             }
@@ -12619,9 +13075,8 @@ namespace ts {
                 noUnusedIdentifiers &&
                 (prop.flags & SymbolFlags.ClassMember) &&
                 prop.valueDeclaration && (getModifierFlags(prop.valueDeclaration) & ModifierFlags.Private)) {
-                if (prop.flags & SymbolFlags.Instantiated) {
+                if (getCheckFlags(prop) & CheckFlags.Instantiated) {
                     getSymbolLinks(prop).target.isReferenced = true;
-
                 }
                 else {
                     prop.isReferenced = true;
@@ -12671,9 +13126,7 @@ namespace ts {
 
             getNodeLinks(node).resolvedSymbol = prop;
 
-            if (prop.parent && prop.parent.flags & SymbolFlags.Class) {
-                checkClassPropertyAccess(node, left, apparentType, prop);
-            }
+            checkPropertyAccessibility(node, left, apparentType, prop);
 
             const propType = getTypeOfSymbol(prop);
             const assignmentKind = getAssignmentTargetKind(node);
@@ -12705,8 +13158,8 @@ namespace ts {
             const type = checkExpression(left);
             if (type !== unknownType && !isTypeAny(type)) {
                 const prop = getPropertyOfType(getWidenedType(type), propertyName);
-                if (prop && prop.parent && prop.parent.flags & SymbolFlags.Class) {
-                    return checkClassPropertyAccess(node, left, type, prop);
+                if (prop) {
+                    return checkPropertyAccessibility(node, left, type, prop);
                 }
             }
             return true;
@@ -12925,6 +13378,11 @@ namespace ts {
             let isDecorator: boolean;
             let spreadArgIndex = -1;
 
+            if (isJsxOpeningLikeElement(node)) {
+                // The arity check will be done in "checkApplicableSignatureForJsxOpeningLikeElement".
+                return true;
+            }
+
             if (node.kind === SyntaxKind.TaggedTemplateExpression) {
                 const tagExpression = <TaggedTemplateExpression>node;
 
@@ -12966,7 +13424,7 @@ namespace ts {
 
                 argCount = signatureHelpTrailingComma ? args.length + 1 : args.length;
 
-                // If we are missing the close paren, the call is incomplete.
+                // If we are missing the close parenthesis, the call is incomplete.
                 callIsIncomplete = callExpression.arguments.end === callExpression.end;
 
                 typeArguments = callExpression.typeArguments;
@@ -12975,8 +13433,10 @@ namespace ts {
 
             // If the user supplied type arguments, but the number of type arguments does not match
             // the declared number of type parameters, the call has an incorrect arity.
+            const numTypeParameters = length(signature.typeParameters);
+            const minTypeArgumentCount = getMinTypeArgumentCount(signature.typeParameters);
             const hasRightNumberOfTypeArgs = !typeArguments ||
-                (signature.typeParameters && typeArguments.length === signature.typeParameters.length);
+                (typeArguments.length >= minTypeArgumentCount && typeArguments.length <= numTypeParameters);
             if (!hasRightNumberOfTypeArgs) {
                 return false;
             }
@@ -13098,7 +13558,7 @@ namespace ts {
             const typeParameters = signature.typeParameters;
             let typeArgumentsAreAssignable = true;
             let mapper: TypeMapper;
-            for (let i = 0; i < typeParameters.length; i++) {
+            for (let i = 0; i < typeArgumentNodes.length; i++) {
                 if (typeArgumentsAreAssignable /* so far */) {
                     const constraint = getConstraintOfTypeParameter(typeParameters[i]);
                     if (constraint) {
@@ -13124,7 +13584,44 @@ namespace ts {
             return typeArgumentsAreAssignable;
         }
 
+        /**
+         * Check if the given signature can possibly be a signature called by the JSX opening-like element.
+         * @param node a JSX opening-like element we are trying to figure its call signature
+         * @param signature a candidate signature we are trying whether it is a call signature
+         * @param relation a relationship to check parameter and argument type
+         * @param excludeArgument
+         */
+        function checkApplicableSignatureForJsxOpeningLikeElement(node: JsxOpeningLikeElement, signature: Signature, relation: Map<RelationComparisonResult>) {
+            // JSX opening-like element has correct arity for stateless-function component if the one of the following condition is true:
+            //      1. callIsIncomplete 
+            //      2. attributes property has same number of properties as the parameter object type.
+            //         We can figure that out by resolving attributes property and check number of properties in the resolved type
+            // If the call has correct arity, we will then check if the argument type and parameter type is assignable
+
+            const callIsIncomplete = node.attributes.end === node.end;  // If we are missing the close "/>", the call is incomplete
+            if (callIsIncomplete) {
+                return true;
+            }
+
+            const headMessage = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1;
+            // Stateless function components can have maximum of three arguments: "props", "context", and "updater".
+            // However "context" and "updater" are implicit and can't be specify by users. Only the first parameter, props,
+            // can be specified by users through attributes property.
+            const paramType = getTypeAtPosition(signature, 0);
+            const attributesType = checkExpressionWithContextualType(node.attributes, paramType, /*contextualMapper*/ undefined);
+            const argProperties = getPropertiesOfType(attributesType);
+            for (const arg of argProperties) {
+                if (!getPropertyOfType(paramType, arg.name) && isUnhyphenatedJsxName(arg.name)) {
+                    return false;
+                }
+            }
+            return checkTypeRelatedTo(attributesType, paramType, relation, /*errorNode*/ undefined, headMessage);
+        }
+
         function checkApplicableSignature(node: CallLikeExpression, args: Expression[], signature: Signature, relation: Map<RelationComparisonResult>, excludeArgument: boolean[], reportErrors: boolean) {
+            if (isJsxOpeningLikeElement(node)) {
+                return checkApplicableSignatureForJsxOpeningLikeElement(<JsxOpeningLikeElement>node, signature, relation);
+            }
             const thisType = getThisTypeOfSignature(signature);
             if (thisType && thisType !== voidType && node.kind !== SyntaxKind.NewExpression) {
                 // If the called expression is not of the form `x.f` or `x["f"]`, then sourceType = voidType
@@ -13206,8 +13703,11 @@ namespace ts {
                 // `getEffectiveArgumentCount` and `getEffectiveArgumentType` below.
                 return undefined;
             }
+            else if (isJsxOpeningLikeElement(node)) {
+                args = node.attributes.properties.length > 0 ? [node.attributes] : emptyArray;
+            }
             else {
-                args = (<CallExpression>node).arguments || emptyArray;
+                args = node.arguments || emptyArray;
             }
 
             return args;
@@ -13488,10 +13988,11 @@ namespace ts {
         function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[], headMessage?: DiagnosticMessage): Signature {
             const isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
             const isDecorator = node.kind === SyntaxKind.Decorator;
+            const isJsxOpeningOrSelfClosingElement = isJsxOpeningLikeElement(node);
 
             let typeArguments: TypeNode[];
 
-            if (!isTaggedTemplate && !isDecorator) {
+            if (!isTaggedTemplate && !isDecorator && !isJsxOpeningOrSelfClosingElement) {
                 typeArguments = (<CallExpression>node).typeArguments;
 
                 // We already perform checking on the type arguments on the class declaration itself.
@@ -13598,6 +14099,10 @@ namespace ts {
             // If candidate is undefined, it means that no candidates had a suitable arity. In that case,
             // skip the checkApplicableSignature check.
             if (candidateForArgumentError) {
+                if (isJsxOpeningOrSelfClosingElement) {
+                    // We do not report any error here because any error will be handled in "resolveCustomJsxElementAttributesType".
+                    return candidateForArgumentError;
+                }
                 // excludeArgument is undefined, in this case also equivalent to [undefined, undefined, ...]
                 // The importance of excludeArgument is to prevent us from typing function expression parameters
                 // in arguments too early. If possible, we'd like to only type them once we know the correct
@@ -13623,7 +14128,7 @@ namespace ts {
                         diagnosticChainHead = chainDiagnosticMessages(diagnosticChainHead, headMessage);
                     }
 
-                    reportNoCommonSupertypeError(inferenceCandidates, (<CallExpression>node).expression || (<TaggedTemplateExpression>node).tag, diagnosticChainHead);
+                    reportNoCommonSupertypeError(inferenceCandidates, (<JsxOpeningLikeElement>node).tagName || (<CallExpression>node).expression || (<TaggedTemplateExpression>node).tag, diagnosticChainHead);
                 }
             }
             else {
@@ -13673,15 +14178,15 @@ namespace ts {
                     while (true) {
                         candidate = originalCandidate;
                         if (candidate.typeParameters) {
-                            let typeArgumentTypes: Type[];
+                            let typeArgumentTypes: Type[] | undefined;
                             if (typeArguments) {
-                                typeArgumentTypes = map(typeArguments, getTypeFromTypeNode);
+                                typeArgumentTypes = fillMissingTypeArguments(map(typeArguments, getTypeFromTypeNode), candidate.typeParameters, getMinTypeArgumentCount(candidate.typeParameters));
                                 typeArgumentsAreValid = checkTypeArguments(candidate, typeArguments, typeArgumentTypes, /*reportErrors*/ false);
                             }
                             else {
                                 inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
-                                typeArgumentsAreValid = inferenceContext.failedTypeParameterIndex === undefined;
                                 typeArgumentTypes = inferenceContext.inferredTypes;
+                                typeArgumentsAreValid = inferenceContext.failedTypeParameterIndex === undefined;
                             }
                             if (!typeArgumentsAreValid) {
                                 break;
@@ -14001,6 +14506,53 @@ namespace ts {
             return resolveCall(node, callSignatures, candidatesOutArray, headMessage);
         }
 
+        /**
+         * This function is similar to getResolvedSignature but is exclusively for trying to resolve JSX stateless-function component.
+         * The main reason we have to use this function instead of getResolvedSignature because, the caller of this function will already check the type of openingLikeElement's tagName
+         * and pass the type as elementType. The elementType can not be a union (as such case should be handled by the caller of this function)
+         * Note: at this point, we are still not sure whether the opening-like element is a stateless function component or not.
+         * @param openingLikeElement an opening-like JSX element to try to resolve as JSX stateless function
+         * @param elementType an element type of the opneing-like element by checking opening-like element's tagname.
+         * @param candidatesOutArray an array of signature to be filled in by the function. It is passed by signature help in the language service;
+         *                           the function will fill it up with appropriate candidate signatures
+         */
+        function getResolvedJsxStatelessFunctionSignature(openingLikeElement: JsxOpeningLikeElement, elementType: Type, candidatesOutArray: Signature[]): Signature {
+            Debug.assert(!(elementType.flags & TypeFlags.Union));
+            const callSignature = resolveStatelessJsxOpeningLikeElement(openingLikeElement, elementType, candidatesOutArray);
+            return callSignature;
+        }
+
+        /**
+         * Try treating a given opening-like element as stateless function component and resolve a tagName to a function signature.
+         * @param openingLikeElement an JSX opening-like element we want to try resolve its stateless function if possible
+         * @param elementType a type of the opening-like JSX element, a result of resolving tagName in opening-like element.
+         * @param candidatesOutArray an array of signature to be filled in by the function. It is passed by signature help in the language service;
+         *                           the function will fill it up with appropriate candidate signatures
+         * @return a resolved signature if we can find function matching function signature through resolve call or a first signature in the list of functions.
+         *         otherwise return undefined if tag-name of the opening-like element doesn't have call signatures
+         */
+        function resolveStatelessJsxOpeningLikeElement(openingLikeElement: JsxOpeningLikeElement, elementType: Type, candidatesOutArray: Signature[]): Signature {
+            // If this function is called from language service, elementType can be a union type. This is not possible if the function is called from compiler (see: resolveCustomJsxElementAttributesType)
+            if (elementType.flags & TypeFlags.Union) {
+                const types = (elementType as UnionType).types;
+                let result: Signature;
+                for (const type of types) {
+                    result = result || resolveStatelessJsxOpeningLikeElement(openingLikeElement, type, candidatesOutArray);
+                }
+
+                return result;
+            }
+
+            const callSignatures = elementType && getSignaturesOfType(elementType, SignatureKind.Call);
+            if (callSignatures && callSignatures.length > 0) {
+                let callSignature: Signature;
+                callSignature = resolveCall(openingLikeElement, callSignatures, candidatesOutArray);
+                return callSignature;
+            }
+
+            return undefined;
+        }
+
         function resolveSignature(node: CallLikeExpression, candidatesOutArray?: Signature[]): Signature {
             switch (node.kind) {
                 case SyntaxKind.CallExpression:
@@ -14011,12 +14563,21 @@ namespace ts {
                     return resolveTaggedTemplateExpression(<TaggedTemplateExpression>node, candidatesOutArray);
                 case SyntaxKind.Decorator:
                     return resolveDecorator(<Decorator>node, candidatesOutArray);
+                case SyntaxKind.JsxOpeningElement:
+                case SyntaxKind.JsxSelfClosingElement:
+                    // This code-path is called by language service
+                    return resolveStatelessJsxOpeningLikeElement(<JsxOpeningLikeElement>node, checkExpression((<JsxOpeningLikeElement>node).tagName), candidatesOutArray);
             }
             Debug.fail("Branch in 'resolveSignature' should be unreachable.");
         }
 
-        // candidatesOutArray is passed by signature help in the language service, and collectCandidates
-        // must fill it up with the appropriate candidate signatures
+        /**
+         * Resolve a signature of a given call-like expression.
+         * @param node a call-like expression to try resolve a signature for
+         * @param candidatesOutArray an array of signature to be filled in by the function. It is passed by signature help in the language service;
+         *                           the function will fill it up with appropriate candidate signatures
+         * @return a signature of the call-like expression or undefined if one can't be found
+         */
         function getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[]): Signature {
             const links = getNodeLinks(node);
             // If getResolvedSignature has already been called, we will have cached the resolvedSignature.
@@ -14200,7 +14761,7 @@ namespace ts {
                 const parameter = signature.thisParameter;
                 if (!parameter || parameter.valueDeclaration && !(<ParameterDeclaration>parameter.valueDeclaration).type) {
                     if (!parameter) {
-                        signature.thisParameter = createTransientSymbol(context.thisParameter, undefined);
+                        signature.thisParameter = createSymbolWithType(context.thisParameter, undefined);
                     }
                     assignTypeToParameterAndFixTypeParameters(signature.thisParameter, getTypeOfSymbol(context.thisParameter), mapper);
                 }
@@ -14308,6 +14869,9 @@ namespace ts {
             if (promiseType === emptyObjectType) {
                 error(func, Diagnostics.An_async_function_or_method_must_return_a_Promise_Make_sure_you_have_a_declaration_for_Promise_or_include_ES2015_in_your_lib_option);
                 return unknownType;
+            }
+            else if (!getGlobalPromiseConstructorSymbol()) {
+                error(func, Diagnostics.An_async_function_or_method_in_ES5_SlashES3_requires_the_Promise_constructor_Make_sure_you_have_a_declaration_for_the_Promise_constructor_or_include_ES2015_in_your_lib_option);
             }
 
             return promiseType;
@@ -14642,11 +15206,11 @@ namespace ts {
             // Get accessors without matching set accessors
             // Enum members
             // Unions and intersections of the above (unions and intersections eagerly set isReadonly on creation)
-            return symbol.isReadonly ||
-                symbol.flags & SymbolFlags.Property && (getDeclarationModifierFlagsFromSymbol(symbol) & ModifierFlags.Readonly) !== 0 ||
-                symbol.flags & SymbolFlags.Variable && (getDeclarationNodeFlagsFromSymbol(symbol) & NodeFlags.Const) !== 0 ||
+            return !!(getCheckFlags(symbol) & CheckFlags.Readonly ||
+                symbol.flags & SymbolFlags.Property && getDeclarationModifierFlagsFromSymbol(symbol) & ModifierFlags.Readonly ||
+                symbol.flags & SymbolFlags.Variable && getDeclarationNodeFlagsFromSymbol(symbol) & NodeFlags.Const ||
                 symbol.flags & SymbolFlags.Accessor && !(symbol.flags & SymbolFlags.SetAccessor) ||
-                (symbol.flags & SymbolFlags.EnumMember) !== 0;
+                symbol.flags & SymbolFlags.EnumMember);
         }
 
         function isReferenceToReadonlyEntity(expr: Expression, symbol: Symbol): boolean {
@@ -15628,11 +16192,13 @@ namespace ts {
                 case SyntaxKind.YieldExpression:
                     return checkYieldExpression(<YieldExpression>node);
                 case SyntaxKind.JsxExpression:
-                    return checkJsxExpression(<JsxExpression>node);
+                    return checkJsxExpression(<JsxExpression>node, contextualMapper);
                 case SyntaxKind.JsxElement:
                     return checkJsxElement(<JsxElement>node);
                 case SyntaxKind.JsxSelfClosingElement:
                     return checkJsxSelfClosingElement(<JsxSelfClosingElement>node);
+                case SyntaxKind.JsxAttributes:
+                    return checkJsxAttributes(<JsxAttributes>node, contextualMapper);
                 case SyntaxKind.JsxOpeningElement:
                     Debug.fail("Shouldn't ever directly check a JsxOpeningElement");
             }
@@ -15648,11 +16214,16 @@ namespace ts {
             }
 
             checkSourceElement(node.constraint);
+            checkSourceElement(node.default);
             const typeParameter = getDeclaredTypeOfTypeParameter(getSymbolOfNode(node));
             if (!hasNonCircularBaseConstraint(typeParameter)) {
                 error(node.constraint, Diagnostics.Type_parameter_0_has_a_circular_constraint, typeToString(typeParameter));
             }
-            getConstraintOfTypeParameter(getDeclaredTypeOfTypeParameter(getSymbolOfNode(node)));
+            const constraintType = getConstraintOfTypeParameter(typeParameter);
+            const defaultType = getDefaultFromTypeParameter(typeParameter);
+            if (constraintType && defaultType) {
+                checkTypeAssignableTo(defaultType, getTypeWithThisArgument(constraintType, defaultType), node.default, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+            }
             if (produceDiagnostics) {
                 checkTypeNameIsReserved(node.name, Diagnostics.Type_parameter_name_cannot_be_0);
             }
@@ -15881,19 +16452,20 @@ namespace ts {
         }
 
         function checkClassForDuplicateDeclarations(node: ClassLikeDeclaration) {
-            const enum Accessor {
+            const enum Declaration {
                 Getter = 1,
                 Setter = 2,
+                Method = 4,
                 Property = Getter | Setter
             }
 
-            const instanceNames = createMap<Accessor>();
-            const staticNames = createMap<Accessor>();
+            const instanceNames = createMap<Declaration>();
+            const staticNames = createMap<Declaration>();
             for (const member of node.members) {
                 if (member.kind === SyntaxKind.Constructor) {
                     for (const param of (member as ConstructorDeclaration).parameters) {
                         if (isParameterPropertyDeclaration(param)) {
-                            addName(instanceNames, param.name, (param.name as Identifier).text, Accessor.Property);
+                            addName(instanceNames, param.name, (param.name as Identifier).text, Declaration.Property);
                         }
                     }
                 }
@@ -15905,25 +16477,34 @@ namespace ts {
                     if (memberName) {
                         switch (member.kind) {
                             case SyntaxKind.GetAccessor:
-                                addName(names, member.name, memberName, Accessor.Getter);
+                                addName(names, member.name, memberName, Declaration.Getter);
                                 break;
 
                             case SyntaxKind.SetAccessor:
-                                addName(names, member.name, memberName, Accessor.Setter);
+                                addName(names, member.name, memberName, Declaration.Setter);
                                 break;
 
                             case SyntaxKind.PropertyDeclaration:
-                                addName(names, member.name, memberName, Accessor.Property);
+                                addName(names, member.name, memberName, Declaration.Property);
+                                break;
+
+                            case SyntaxKind.MethodDeclaration:
+                                addName(names, member.name, memberName, Declaration.Method);
                                 break;
                         }
                     }
                 }
             }
 
-            function addName(names: Map<Accessor>, location: Node, name: string, meaning: Accessor) {
+            function addName(names: Map<Declaration>, location: Node, name: string, meaning: Declaration) {
                 const prev = names.get(name);
                 if (prev) {
-                    if (prev & meaning) {
+                    if (prev & Declaration.Method) {
+                        if (meaning !== Declaration.Method) {
+                            error(location, Diagnostics.Duplicate_identifier_0, getTextOfNode(location));
+                        }
+                    }
+                    else if (prev & meaning) {
                         error(location, Diagnostics.Duplicate_identifier_0, getTextOfNode(location));
                     }
                     else {
@@ -16235,6 +16816,7 @@ namespace ts {
         }
 
         function checkTypeArgumentConstraints(typeParameters: TypeParameter[], typeArgumentNodes: TypeNode[]): boolean {
+            const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
             let typeArguments: Type[];
             let mapper: TypeMapper;
             let result = true;
@@ -16242,7 +16824,7 @@ namespace ts {
                 const constraint = getConstraintOfTypeParameter(typeParameters[i]);
                 if (constraint) {
                     if (!typeArguments) {
-                        typeArguments = map(typeArgumentNodes, getTypeFromTypeNode);
+                        typeArguments = fillMissingTypeArguments(map(typeArgumentNodes, getTypeFromTypeNode), typeParameters, minTypeArgumentCount);
                         mapper = createTypeMapper(typeParameters, typeArguments);
                     }
                     const typeArgument = typeArguments[i];
@@ -16905,7 +17487,12 @@ namespace ts {
                 const promiseConstructorSymbol = resolveEntityName(promiseConstructorName, SymbolFlags.Value, /*ignoreErrors*/ true);
                 const promiseConstructorType = promiseConstructorSymbol ? getTypeOfSymbol(promiseConstructorSymbol) : unknownType;
                 if (promiseConstructorType === unknownType) {
-                    error(node.type, Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, entityNameToString(promiseConstructorName));
+                    if (promiseConstructorName.kind === SyntaxKind.Identifier && promiseConstructorName.text === "Promise" && getTargetType(returnType) === tryGetGlobalPromiseType()) {
+                        error(node.type, Diagnostics.An_async_function_or_method_in_ES5_SlashES3_requires_the_Promise_constructor_Make_sure_you_have_a_declaration_for_the_Promise_constructor_or_include_ES2015_in_your_lib_option);
+                    }
+                    else {
+                        error(node.type, Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, entityNameToString(promiseConstructorName));
+                    }
                     return unknownType;
                 }
 
@@ -17645,8 +18232,8 @@ namespace ts {
                 const name = node.propertyName || <Identifier>node.name;
                 const property = getPropertyOfType(parentType, getTextOfPropertyName(name));
                 markPropertyAsReferenced(property);
-                if (parent.initializer && property && getParentOfSymbol(property)) {
-                    checkClassPropertyAccess(parent, parent.initializer, parentType, property);
+                if (parent.initializer && property) {
+                    checkPropertyAccessibility(parent, parent.initializer, parentType, property);
                 }
             }
 
@@ -18478,14 +19065,23 @@ namespace ts {
             }
         }
 
-        /** Check each type parameter and check that type parameters have no duplicate type parameter declarations */
+        /**
+         * Check each type parameter and check that type parameters have no duplicate type parameter declarations
+         */
         function checkTypeParameters(typeParameterDeclarations: TypeParameterDeclaration[]) {
             if (typeParameterDeclarations) {
+                let seenDefault = false;
                 for (let i = 0; i < typeParameterDeclarations.length; i++) {
                     const node = typeParameterDeclarations[i];
                     checkTypeParameter(node);
 
                     if (produceDiagnostics) {
+                        if (node.default) {
+                            seenDefault = true;
+                        }
+                        else if (seenDefault) {
+                            error(node, Diagnostics.Required_type_parameters_may_not_follow_optional_type_parameters);
+                        }
                         for (let j = 0; j < i; j++) {
                             if (typeParameterDeclarations[j].symbol === node.symbol) {
                                 error(node.name, Diagnostics.Duplicate_identifier_0, declarationNameToString(node.name));
@@ -18497,21 +19093,71 @@ namespace ts {
         }
 
         /** Check that type parameter lists are identical across multiple declarations */
-        function checkTypeParameterListsIdentical(node: ClassLikeDeclaration | InterfaceDeclaration, symbol: Symbol) {
+        function checkTypeParameterListsIdentical(symbol: Symbol) {
             if (symbol.declarations.length === 1) {
                 return;
             }
-            let firstDecl: ClassLikeDeclaration | InterfaceDeclaration;
-            for (const declaration of symbol.declarations) {
-                if (declaration.kind === SyntaxKind.ClassDeclaration || declaration.kind === SyntaxKind.InterfaceDeclaration) {
-                    if (!firstDecl) {
-                        firstDecl = <ClassLikeDeclaration | InterfaceDeclaration>declaration;
-                    }
-                    else if (!areTypeParametersIdentical(firstDecl.typeParameters, node.typeParameters)) {
-                        error(node.name, Diagnostics.All_declarations_of_0_must_have_identical_type_parameters, node.name.text);
+
+            const links = getSymbolLinks(symbol);
+            if (!links.typeParametersChecked) {
+                links.typeParametersChecked = true;
+                const declarations = getClassOrInterfaceDeclarationsOfSymbol(symbol);
+                if (declarations.length <= 1) {
+                    return;
+                }
+
+                const type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
+                if (!areTypeParametersIdentical(declarations, type.localTypeParameters)) {
+                    // Report an error on every conflicting declaration.
+                    const name = symbolToString(symbol);
+                    for (const declaration of declarations) {
+                        error(declaration.name, Diagnostics.All_declarations_of_0_must_have_identical_type_parameters, name);
                     }
                 }
             }
+        }
+
+        function areTypeParametersIdentical(declarations: (ClassDeclaration | InterfaceDeclaration)[], typeParameters: TypeParameter[]) {
+            const maxTypeArgumentCount = length(typeParameters);
+            const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
+
+            for (const declaration of declarations) {
+                // If this declaration has too few or too many type parameters, we report an error
+                const numTypeParameters = length(declaration.typeParameters);
+                if (numTypeParameters < minTypeArgumentCount || numTypeParameters > maxTypeArgumentCount) {
+                    return false;
+                }
+
+                for (let i = 0; i < numTypeParameters; i++) {
+                    const source = declaration.typeParameters[i];
+                    const target = typeParameters[i];
+
+                    // If the type parameter node does not have the same as the resolved type
+                    // parameter at this position, we report an error.
+                    if (source.name.text !== target.symbol.name) {
+                        return false;
+                    }
+
+                    // If the type parameter node does not have an identical constraint as the resolved
+                    // type parameter at this position, we report an error.
+                    const sourceConstraint = source.constraint && getTypeFromTypeNode(source.constraint);
+                    const targetConstraint = getConstraintFromTypeParameter(target);
+                    if ((sourceConstraint || targetConstraint) &&
+                        (!sourceConstraint || !targetConstraint || !isTypeIdenticalTo(sourceConstraint, targetConstraint))) {
+                        return false;
+                    }
+
+                    // If the type parameter node has a default and it is not identical to the default
+                    // for the type parameter at this position, we report an error.
+                    const sourceDefault = source.default && getTypeFromTypeNode(source.default);
+                    const targetDefault = getDefaultFromTypeParameter(target);
+                    if (sourceDefault && targetDefault && !isTypeIdenticalTo(sourceDefault, targetDefault)) {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
 
         function checkClassExpression(node: ClassExpression): Type {
@@ -18551,7 +19197,7 @@ namespace ts {
             const type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
             const typeWithThis = getTypeWithThisArgument(type);
             const staticType = <ObjectType>getTypeOfSymbol(symbol);
-            checkTypeParameterListsIdentical(node, symbol);
+            checkTypeParameterListsIdentical(symbol);
             checkClassForDuplicateDeclarations(node);
 
             // Only check for reserved static identifiers on non-ambient context.
@@ -18652,11 +19298,16 @@ namespace ts {
         function getTargetSymbol(s: Symbol) {
             // if symbol is instantiated its flags are not copied from the 'target'
             // so we'll need to get back original 'target' symbol to work with correct set of flags
-            return s.flags & SymbolFlags.Instantiated ? getSymbolLinks(s).target : s;
+            return getCheckFlags(s) & CheckFlags.Instantiated ? (<TransientSymbol>s).target : s;
         }
 
         function getClassLikeDeclarationOfSymbol(symbol: Symbol): Declaration {
             return forEach(symbol.declarations, d => isClassLike(d) ? d : undefined);
+        }
+
+        function getClassOrInterfaceDeclarationsOfSymbol(symbol: Symbol) {
+            return filter(symbol.declarations, (d: Declaration): d is ClassDeclaration | InterfaceDeclaration =>
+                d.kind === SyntaxKind.ClassDeclaration || d.kind === SyntaxKind.InterfaceDeclaration);
         }
 
         function checkKindsOfPropertyMemberOverrides(type: InterfaceType, baseType: BaseType): void {
@@ -18760,35 +19411,6 @@ namespace ts {
             return kind === SyntaxKind.GetAccessor || kind === SyntaxKind.SetAccessor;
         }
 
-        function areTypeParametersIdentical(list1: TypeParameterDeclaration[], list2: TypeParameterDeclaration[]) {
-            if (!list1 && !list2) {
-                return true;
-            }
-            if (!list1 || !list2 || list1.length !== list2.length) {
-                return false;
-            }
-            // TypeScript 1.0 spec (April 2014):
-            // When a generic interface has multiple declarations,  all declarations must have identical type parameter
-            // lists, i.e. identical type parameter names with identical constraints in identical order.
-            for (let i = 0; i < list1.length; i++) {
-                const tp1 = list1[i];
-                const tp2 = list2[i];
-                if (tp1.name.text !== tp2.name.text) {
-                    return false;
-                }
-                if (!tp1.constraint && !tp2.constraint) {
-                    continue;
-                }
-                if (!tp1.constraint || !tp2.constraint) {
-                    return false;
-                }
-                if (!isTypeIdenticalTo(getTypeFromTypeNode(tp1.constraint), getTypeFromTypeNode(tp2.constraint))) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
         function checkInheritedPropertiesAreIdentical(type: InterfaceType, typeNode: Node): boolean {
             const baseTypes = getBaseTypes(type);
             if (baseTypes.length < 2) {
@@ -18835,7 +19457,7 @@ namespace ts {
 
                 checkExportsOnMergedDeclarations(node);
                 const symbol = getSymbolOfNode(node);
-                checkTypeParameterListsIdentical(node, symbol);
+                checkTypeParameterListsIdentical(symbol);
 
                 // Only check this symbol once
                 const firstInterfaceDecl = <InterfaceDeclaration>getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration);
@@ -19230,7 +19852,7 @@ namespace ts {
                         // We can detect if augmentation was applied using following rules:
                         // - augmentation for a global scope is always applied
                         // - augmentation for some external module is applied if symbol for augmentation is merged (it was combined with target module).
-                        const checkBody = isGlobalAugmentation || (getSymbolOfNode(node).flags & SymbolFlags.Merged);
+                        const checkBody = isGlobalAugmentation || (getSymbolOfNode(node).flags & SymbolFlags.Transient);
                         if (checkBody && node.body) {
                             // body of ambient external module is always a module block
                             for (const statement of (<ModuleBlock>node.body).statements) {
@@ -19309,7 +19931,7 @@ namespace ts {
                         // this is done it two steps
                         // 1. quick check - if symbol for node is not merged - this is local symbol to this augmentation - report error
                         // 2. main check - report error if value declaration of the parent symbol is module augmentation)
-                        let reportError = !(symbol.flags & SymbolFlags.Merged);
+                        let reportError = !(symbol.flags & SymbolFlags.Transient);
                         if (!reportError) {
                             // symbol should not originate in augmentation
                             reportError = isExternalModuleAugmentation(symbol.parent.declarations[0]);
@@ -19473,7 +20095,9 @@ namespace ts {
                     forEach(node.exportClause.elements, checkExportSpecifier);
 
                     const inAmbientExternalModule = node.parent.kind === SyntaxKind.ModuleBlock && isAmbientModule(node.parent.parent);
-                    if (node.parent.kind !== SyntaxKind.SourceFile && !inAmbientExternalModule) {
+                    const inAmbientNamespaceDeclaration = !inAmbientExternalModule && node.parent.kind === SyntaxKind.ModuleBlock &&
+                        !node.moduleSpecifier && isInAmbientContext(node);
+                    if (node.parent.kind !== SyntaxKind.SourceFile && !inAmbientExternalModule && !inAmbientNamespaceDeclaration) {
                         error(node, Diagnostics.Export_declarations_are_not_permitted_in_a_namespace);
                     }
                 }
@@ -20412,7 +21036,7 @@ namespace ts {
         }
 
         function getRootSymbols(symbol: Symbol): Symbol[] {
-            if (symbol.flags & SymbolFlags.SyntheticProperty) {
+            if (getCheckFlags(symbol) & CheckFlags.SyntheticProperty) {
                 const symbols: Symbol[] = [];
                 const name = symbol.name;
                 forEach(getSymbolLinks(symbol).containingType.types, t => {
@@ -20701,6 +21325,13 @@ namespace ts {
             return false;
         }
 
+        function isRequiredInitializedParameter(parameter: ParameterDeclaration) {
+            return strictNullChecks &&
+                !isOptionalParameter(parameter) &&
+                parameter.initializer &&
+                !(getModifierFlags(parameter) & ModifierFlags.ParameterPropertyModifier);
+        }
+
         function getNodeCheckFlags(node: Node): NodeCheckFlags {
             return getNodeLinks(node).flags;
         }
@@ -20801,10 +21432,12 @@ namespace ts {
         function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
             // Get type of the symbol if this is the valid symbol otherwise get type at location
             const symbol = getSymbolOfNode(declaration);
-            const type = symbol && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))
+            let type = symbol && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))
                 ? getWidenedLiteralType(getTypeOfSymbol(symbol))
                 : unknownType;
-
+            if (flags & TypeFormatFlags.AddUndefined) {
+                type = includeFalsyTypes(type, TypeFlags.Undefined);
+            }
             getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
         }
 
@@ -20822,6 +21455,9 @@ namespace ts {
             const classType = <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(node));
             resolveBaseTypesOfClass(classType);
             const baseType = classType.resolvedBaseTypes.length ? classType.resolvedBaseTypes[0] : unknownType;
+            if (!baseType.symbol) {
+                writer.reportIllegalExtends();
+            }
             getSymbolDisplayBuilder().buildTypeDisplay(baseType, writer, enclosingDeclaration, flags);
         }
 
@@ -20914,6 +21550,7 @@ namespace ts {
                 isTopLevelValueImportEqualsWithEntityName,
                 isDeclarationVisible,
                 isImplementationOfOverload,
+                isRequiredInitializedParameter,
                 writeTypeOfDeclaration,
                 writeReturnTypeOfSignatureDeclaration,
                 writeTypeOfExpression,
@@ -21174,7 +21811,7 @@ namespace ts {
 
         function createThenableType() {
             // build the thenable type that is used to verify against a non-promise "thenable" operand to `await`.
-            const thenPropertySymbol = createSymbol(SymbolFlags.Transient | SymbolFlags.Property, "then");
+            const thenPropertySymbol = createSymbol(SymbolFlags.Property, "then");
             getSymbolLinks(thenPropertySymbol).type = globalFunctionType;
 
             const thenableType = <ResolvedType>createObjectType(ObjectFlags.Anonymous);
@@ -21828,7 +22465,8 @@ namespace ts {
 
         function checkGrammarJsxElement(node: JsxOpeningLikeElement) {
             const seen = createMap<boolean>();
-            for (const attr of node.attributes) {
+
+            for (const attr of node.attributes.properties) {
                 if (attr.kind === SyntaxKind.JsxSpreadAttribute) {
                     continue;
                 }
@@ -22106,6 +22744,11 @@ namespace ts {
                 }
             }
 
+            if (compilerOptions.module !== ModuleKind.ES2015 && compilerOptions.module !== ModuleKind.System && !compilerOptions.noEmit &&
+                !isInAmbientContext(node.parent.parent) && hasModifier(node.parent.parent, ModifierFlags.Export)) {
+                checkESModuleMarker(node.name);
+            }
+
             const checkLetConstNames = (isLet(node) || isConst(node));
 
             // 1. LexicalDeclaration : LetOrConst BindingList ;
@@ -22116,6 +22759,22 @@ namespace ts {
             // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code
             // and its Identifier is eval or arguments
             return checkLetConstNames && checkGrammarNameInLetOrConstDeclarations(node.name);
+        }
+
+        function checkESModuleMarker(name: Identifier | BindingPattern): boolean {
+            if (name.kind === SyntaxKind.Identifier) {
+                if (unescapeIdentifier(name.text) === "__esModule") {
+                    return grammarErrorOnNode(name, Diagnostics.Identifier_expected_esModule_is_reserved_as_an_exported_marker_when_transforming_ECMAScript_modules);
+                }
+            }
+            else {
+                const elements = (<BindingPattern>name).elements;
+                for (const element of elements) {
+                    if (!isOmittedExpression(element)) {
+                        return checkESModuleMarker(element.name);
+                    }
+                }
+            }
         }
 
         function checkGrammarNameInLetOrConstDeclarations(name: Identifier | BindingPattern): boolean {

@@ -770,6 +770,11 @@ namespace ts {
         export const directory = "directory";
 
         export const externalModuleName = "external module name";
+
+        /**
+         * <JsxTagName attribute1 attribute2={0} />
+         **/
+        export const jsxAttribute = "JSX attribute";
     }
 
     export namespace ScriptElementKindModifier {

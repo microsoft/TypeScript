@@ -126,7 +126,7 @@ namespace Harness.LanguageService {
         protected virtualFileSystem: Utils.VirtualFileSystem = new Utils.VirtualFileSystem(virtualFileSystemRoot, /*useCaseSensitiveFilenames*/false);
 
         constructor(protected cancellationToken = DefaultHostCancellationToken.Instance,
-                    protected settings = ts.getDefaultCompilerOptions()) {
+            protected settings = ts.getDefaultCompilerOptions()) {
         }
 
         public getNewLine(): string {
@@ -135,7 +135,7 @@ namespace Harness.LanguageService {
 
         public getFilenames(): string[] {
             const fileNames: string[] = [];
-            for (const virtualEntry of this.virtualFileSystem.getAllFileEntries()){
+            for (const virtualEntry of this.virtualFileSystem.getAllFileEntries()) {
                 const scriptInfo = virtualEntry.content;
                 if (scriptInfo.isRootFile) {
                     // only include root files here
@@ -211,8 +211,8 @@ namespace Harness.LanguageService {
         readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[] {
             return ts.matchFiles(path, extensions, exclude, include,
             /*useCaseSensitiveFileNames*/false,
-            this.getCurrentDirectory(),
-            (p) => this.virtualFileSystem.getAccessibleFileSystemEntries(p));
+                this.getCurrentDirectory(),
+                (p) => this.virtualFileSystem.getAccessibleFileSystemEntries(p));
         }
         readFile(path: string): string {
             const snapshot = this.getScriptSnapshot(path);
@@ -724,6 +724,87 @@ namespace Harness.LanguageService {
         createHash(s: string) {
             return s;
         }
+
+        require(_initialDir: string, _moduleName: string): ts.server.RequireResult {
+            switch (_moduleName) {
+                // Adds to the Quick Info a fixed string and a string from the config file
+                // and replaces the first display part
+                case "quickinfo-augmeneter":
+                    return {
+                        module: () => ({
+                            create(info: ts.server.PluginCreateInfo) {
+                                const proxy = makeDefaultProxy(info);
+                                const langSvc: any = info.languageService;
+                                proxy.getQuickInfoAtPosition = function () {
+                                    const parts = langSvc.getQuickInfoAtPosition.apply(langSvc, arguments);
+                                    if (parts.displayParts.length > 0) {
+                                        parts.displayParts[0].text = "Proxied";
+                                    }
+                                    parts.displayParts.push({ text: info.config.message, kind: "punctuation" });
+                                    return parts;
+                                };
+
+                                return proxy;
+                            }
+                        }),
+                        error: undefined
+                    };
+
+                // Throws during initialization
+                case "create-thrower":
+                    return {
+                        module: () => ({
+                            create() {
+                                throw new Error("I am not a well-behaved plugin");
+                            }
+                        }),
+                        error: undefined
+                    };
+
+                // Adds another diagnostic
+                case "diagnostic-adder":
+                    return {
+                        module: () => ({
+                            create(info: ts.server.PluginCreateInfo) {
+                                const proxy = makeDefaultProxy(info);
+                                proxy.getSemanticDiagnostics = function (filename: string) {
+                                    const prev = info.languageService.getSemanticDiagnostics(filename);
+                                    const sourceFile: ts.SourceFile = info.languageService.getSourceFile(filename);
+                                    prev.push({
+                                        category: ts.DiagnosticCategory.Warning,
+                                        file: sourceFile,
+                                        code: 9999,
+                                        length: 3,
+                                        messageText: `Plugin diagnostic`,
+                                        start: 0
+                                    });
+                                    return prev;
+                                }
+                                return proxy;
+                            }
+                        }),
+                        error: undefined
+                    };
+
+                default:
+                    return {
+                        module: undefined,
+                        error: "Could not resolve module"
+                    };
+            }
+
+            function makeDefaultProxy(info: ts.server.PluginCreateInfo) {
+                // tslint:disable-next-line:no-null-keyword
+                const proxy = Object.create(null);
+                const langSvc: any = info.languageService;
+                for (const k of Object.keys(langSvc)) {
+                    proxy[k] = function () {
+                        return langSvc[k].apply(langSvc, arguments);
+                    };
+                }
+                return proxy;
+            }
+        }
     }
 
     export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
@@ -738,7 +819,7 @@ namespace Harness.LanguageService {
             // host to answer server queries about files on disk
             const serverHost = new SessionServerHost(clientHost);
             const server = new ts.server.Session(serverHost,
-                { isCancellationRequested: () => false },
+                ts.server.nullCancellationToken,
                 /*useOneInferredProject*/ false,
                 /*typingsInstaller*/ undefined,
                 Utils.byteLength,

@@ -19,6 +19,7 @@ x.handleChar();
 
 //// [file1.js]
 "use strict";
+exports.__esModule = true;
 var Calculator = (function () {
     function Calculator() {
     }
@@ -31,6 +32,7 @@ function test() {
 exports.test = test;
 //// [file2.js]
 "use strict";
+exports.__esModule = true;
 var file1_1 = require("./file1");
 var x = new file1_1.Calculator();
 x.handleChar();
