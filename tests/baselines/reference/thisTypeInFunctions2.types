@@ -92,26 +92,22 @@ extend1({
     }
 });
 extend2({
->extend2({    init() {        this  // this: any because the contextual signature of init doesn't specify this' type        this.mine        this.willDestroy    },    mine: 13,    foo() {        this // this: any because of the string indexer        this.mine        this.willDestroy    }}) : void
+>extend2({    init() {        this // this: containing object literal type        this.mine        //this.willDestroy    },    mine: 13,    foo() {        this // this: containing object literal type        this.mine    }}) : void
 >extend2 : (args: IndexedWithoutThis) => void
->{    init() {        this  // this: any because the contextual signature of init doesn't specify this' type        this.mine        this.willDestroy    },    mine: 13,    foo() {        this // this: any because of the string indexer        this.mine        this.willDestroy    }} : { init(): void; mine: number; foo(): void; }
+>{    init() {        this // this: containing object literal type        this.mine        //this.willDestroy    },    mine: 13,    foo() {        this // this: containing object literal type        this.mine    }} : { init(): void; mine: number; foo(): void; }
 
     init() {
 >init : () => void
 
-        this  // this: any because the contextual signature of init doesn't specify this' type
->this : any
+        this // this: containing object literal type
+>this : { init(): void; mine: number; foo(): void; }
 
         this.mine
->this.mine : any
->this : any
->mine : any
+>this.mine : number
+>this : { init(): void; mine: number; foo(): void; }
+>mine : number
 
-        this.willDestroy
->this.willDestroy : any
->this : any
->willDestroy : any
-
+        //this.willDestroy
     },
     mine: 13,
 >mine : number
@@ -120,39 +116,34 @@ extend2({
     foo() {
 >foo : () => void
 
-        this // this: any because of the string indexer
->this : any
+        this // this: containing object literal type
+>this : { init(): void; mine: number; foo(): void; }
 
         this.mine
->this.mine : any
->this : any
->mine : any
-
-        this.willDestroy
->this.willDestroy : any
->this : any
->willDestroy : any
+>this.mine : number
+>this : { init(): void; mine: number; foo(): void; }
+>mine : number
     }
 });
 
 simple({
 >simple({    foo(n) {        return n.length + this.bar();    },    bar() {        return 14;    }}) : void
 >simple : (arg: SimpleInterface) => void
->{    foo(n) {        return n.length + this.bar();    },    bar() {        return 14;    }} : { foo(n: string): any; bar(): number; }
+>{    foo(n) {        return n.length + this.bar();    },    bar() {        return 14;    }} : { foo(n: string): number; bar(): number; }
 
     foo(n) {
->foo : (n: string) => any
+>foo : (n: string) => number
 >n : string
 
         return n.length + this.bar();
->n.length + this.bar() : any
+>n.length + this.bar() : number
 >n.length : number
 >n : string
 >length : number
->this.bar() : any
->this.bar : any
->this : any
->bar : any
+>this.bar() : number
+>this.bar : () => number
+>this : { foo(n: string): number; bar(): number; }
+>bar : () => number
 
     },
     bar() {

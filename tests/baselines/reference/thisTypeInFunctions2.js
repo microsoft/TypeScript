@@ -33,15 +33,14 @@ extend1({
 });
 extend2({
     init() {
-        this  // this: any because the contextual signature of init doesn't specify this' type
+        this // this: containing object literal type
         this.mine
-        this.willDestroy
+        //this.willDestroy
     },
     mine: 13,
     foo() {
-        this // this: any because of the string indexer
+        this // this: containing object literal type
         this.mine
-        this.willDestroy
     }
 });
 
@@ -70,15 +69,14 @@ extend1({
 });
 extend2({
     init: function () {
-        this; // this: any because the contextual signature of init doesn't specify this' type
+        this; // this: containing object literal type
         this.mine;
-        this.willDestroy;
+        //this.willDestroy
     },
     mine: 13,
     foo: function () {
-        this; // this: any because of the string indexer
+        this; // this: containing object literal type
         this.mine;
-        this.willDestroy;
     }
 });
 simple({
