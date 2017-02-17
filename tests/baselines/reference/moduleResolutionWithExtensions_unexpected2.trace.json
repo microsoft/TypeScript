@@ -14,7 +14,7 @@
     "File '/node_modules/foo/foo.js.ts' does not exist.",
     "File '/node_modules/foo/foo.js.tsx' does not exist.",
     "File '/node_modules/foo/foo.js.d.ts' does not exist.",
-    "File name '/node_modules/foo/foo.js' has a '.js' extension - stripping it",
+    "File name '/node_modules/foo/foo.js' has a '.js' extension - stripping it.",
     "File '/node_modules/foo/foo.ts' does not exist.",
     "File '/node_modules/foo/foo.tsx' does not exist.",
     "File '/node_modules/foo/foo.d.ts' does not exist.",
