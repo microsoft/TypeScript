@@ -11518,6 +11518,14 @@ namespace ts {
                     // for 'this' is the type of the object literal itself.
                     return checkExpressionCached(containingLiteral);
                 }
+                // In an assignment of the form 'obj.xxx = function(...)' or 'obj[xxx] = function(...)', the
+                // contextual type for 'this' is 'obj'.
+                if (func.parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>func.parent).operatorToken.kind === SyntaxKind.EqualsToken) {
+                    const target = (<BinaryExpression>func.parent).left;
+                    if (target.kind === SyntaxKind.PropertyAccessExpression || target.kind === SyntaxKind.ElementAccessExpression) {
+                        return checkExpressionCached((<PropertyAccessExpression | ElementAccessExpression>target).expression);
+                    }
+                }
             }
             return undefined;
         }
