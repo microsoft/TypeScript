@@ -23,8 +23,6 @@ namespace ts.codefix {
      * @returns Empty string iff there we can't figure out a representation for `symbol` in `enclosingDeclaration`.
      */
     function getInsertionForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker, newlineChar: string): string {
-        // const name = symbol.getName();
-        const type = checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration);
         const declarations = symbol.getDeclarations();
         if (!(declarations && declarations.length)) {
             return "";
@@ -34,12 +32,22 @@ namespace ts.codefix {
         const name = declaration.name ? declaration.name.getText() : undefined;
         const visibility = getVisibilityPrefixWithSpace(getModifierFlags(declaration));
 
+        const typeAtNewDeclaration = checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration);
+
         switch (declaration.kind) {
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
             case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyDeclaration:
-                const typeString = checker.typeToString(type, enclosingDeclaration, TypeFormatFlags.None);
+                let typeString: string | undefined = undefined;
+                const typeAtOldDeclaration = checker.getTypeAtLocation(declaration);
+                if ((typeAtOldDeclaration as TypeParameter).isThisType) {
+                    typeString = "this";
+                }
+                else {
+                    typeString = checker.typeToString(typeAtNewDeclaration, enclosingDeclaration, TypeFormatFlags.None);
+                }
+
                 return `${visibility}${name}: ${typeString};${newlineChar}`;
 
             case SyntaxKind.MethodSignature:
@@ -51,7 +59,7 @@ namespace ts.codefix {
                 // If there is more than one overload but no implementation signature
                 // (eg: an abstract method or interface declaration), there is a 1-1
                 // correspondence of declarations and signatures.
-                const signatures = checker.getSignaturesOfType(type, SignatureKind.Call);
+                const signatures = checker.getSignaturesOfType(typeAtNewDeclaration, SignatureKind.Call);
                 if (!(signatures && signatures.length > 0)) {
                     return "";
                 }
