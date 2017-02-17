@@ -12884,7 +12884,7 @@ namespace ts {
         function getJsxGlobalStatelessElementType(): Type {
             if (!deferredJsxStatelessElementType) {
                 const jsxElementType = getJsxGlobalElementType();
-                if (jsxElementType){
+                if (jsxElementType) {
                     deferredJsxStatelessElementType = getUnionType([jsxElementType, nullType]);
                 }
             }
