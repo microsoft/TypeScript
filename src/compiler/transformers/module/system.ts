@@ -1,5 +1,6 @@
 ﻿/// <reference path="../../factory.ts" />
 /// <reference path="../../visitor.ts" />
+/// <reference path="../destructuring.ts" />
 
 /*@internal*/
 namespace ts {
@@ -136,7 +137,6 @@ namespace ts {
             contextObject = undefined;
             hoistedStatements = undefined;
             enclosingBlockScopedContainer = undefined;
-
             return aggregateTransformFlags(updated);
         }
 
@@ -669,6 +669,7 @@ namespace ts {
                         node,
                         node.decorators,
                         visitNodes(node.modifiers, modifierVisitor, isModifier),
+                        node.asteriskToken,
                         getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                         /*typeParameters*/ undefined,
                         visitNodes(node.parameters, destructuringVisitor, isParameterDeclaration),
@@ -1258,6 +1259,7 @@ namespace ts {
 
             node = updateForOf(
                 node,
+                node.awaitModifier,
                 visitForInitializer(node.initializer),
                 visitNode(node.expression, destructuringVisitor, isExpression),
                 visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock)
@@ -1492,7 +1494,7 @@ namespace ts {
          * @param node The destructuring target.
          */
         function hasExportedReferenceInDestructuringTarget(node: Expression | ObjectLiteralElementLike): boolean {
-            if (isAssignmentExpression(node)) {
+            if (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true)) {
                 return hasExportedReferenceInDestructuringTarget(node.left);
             }
             else if (isSpreadExpression(node)) {
@@ -1625,6 +1627,7 @@ namespace ts {
                 if (externalHelpersModuleName) {
                     return createPropertyAccess(externalHelpersModuleName, node);
                 }
+
                 return node;
             }
 

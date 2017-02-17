@@ -267,6 +267,7 @@ namespace ts {
                 return updateMethod(<MethodDeclaration>node,
                     visitNodes((<MethodDeclaration>node).decorators, visitor, isDecorator),
                     visitNodes((<MethodDeclaration>node).modifiers, visitor, isModifier),
+                    (<MethodDeclaration>node).asteriskToken,
                     visitNode((<MethodDeclaration>node).name, visitor, isPropertyName),
                     visitNodes((<MethodDeclaration>node).typeParameters, visitor, isTypeParameter),
                     visitParameterList((<MethodDeclaration>node).parameters, visitor, context),
@@ -361,6 +362,7 @@ namespace ts {
             case SyntaxKind.FunctionExpression:
                 return updateFunctionExpression(<FunctionExpression>node,
                     visitNodes((<FunctionExpression>node).modifiers, visitor, isModifier),
+                    (<FunctionExpression>node).asteriskToken,
                     visitNode((<FunctionExpression>node).name, visitor, isIdentifier),
                     visitNodes((<FunctionExpression>node).typeParameters, visitor, isTypeParameter),
                     visitParameterList((<FunctionExpression>node).parameters, visitor, context),
@@ -497,6 +499,7 @@ namespace ts {
 
             case SyntaxKind.ForOfStatement:
                 return updateForOf(<ForOfStatement>node,
+                    (<ForOfStatement>node).awaitModifier,
                     visitNode((<ForOfStatement>node).initializer, visitor, isForInitializer),
                     visitNode((<ForOfStatement>node).expression, visitor, isExpression),
                     visitNode((<ForOfStatement>node).statement, visitor, isStatement, liftToBlock));
@@ -552,6 +555,7 @@ namespace ts {
                 return updateFunctionDeclaration(<FunctionDeclaration>node,
                     visitNodes((<FunctionDeclaration>node).decorators, visitor, isDecorator),
                     visitNodes((<FunctionDeclaration>node).modifiers, visitor, isModifier),
+                    (<FunctionDeclaration>node).asteriskToken,
                     visitNode((<FunctionDeclaration>node).name, visitor, isIdentifier),
                     visitNodes((<FunctionDeclaration>node).typeParameters, visitor, isTypeParameter),
                     visitParameterList((<FunctionDeclaration>node).parameters, visitor, context),
@@ -1256,6 +1260,7 @@ namespace ts {
      * Merges generated lexical declarations into a new statement list.
      */
     export function mergeLexicalEnvironment(statements: NodeArray<Statement>, declarations: Statement[]): NodeArray<Statement>;
+
     /**
      * Appends generated lexical declarations to an array of statements.
      */
@@ -1264,46 +1269,10 @@ namespace ts {
         if (!some(declarations)) {
             return statements;
         }
+
         return isNodeArray(statements)
             ? setTextRange(createNodeArray(concatenate(statements, declarations)), statements)
             : addRange(statements, declarations);
-    }
-
-    /**
-     * Merges generated lexical declarations into the FunctionBody of a non-arrow function-like declaration.
-     *
-     * @param node The ConciseBody of an arrow function.
-     * @param declarations The lexical declarations to merge.
-     */
-    export function mergeFunctionBodyLexicalEnvironment(body: FunctionBody, declarations: Statement[]): FunctionBody;
-
-    /**
-     * Merges generated lexical declarations into the ConciseBody of an ArrowFunction.
-     *
-     * @param node The ConciseBody of an arrow function.
-     * @param declarations The lexical declarations to merge.
-     */
-    export function mergeFunctionBodyLexicalEnvironment(body: ConciseBody, declarations: Statement[]): ConciseBody;
-
-    export function mergeFunctionBodyLexicalEnvironment(body: ConciseBody, declarations: Statement[]): ConciseBody {
-        if (body && declarations !== undefined && declarations.length > 0) {
-            if (isBlock(body)) {
-                return updateBlock(body, setTextRange(createNodeArray(concatenate(body.statements, declarations)), body.statements));
-            }
-            else {
-                return setTextRange(
-                    createBlock(
-                        setTextRange(
-                            createNodeArray([setTextRange(createReturn(body), body), ...declarations]),
-                            body
-                        ),
-                        /*multiLine*/ true
-                    ),
-                    /*location*/ body
-                );
-            }
-        }
-        return body;
     }
 
     /**
