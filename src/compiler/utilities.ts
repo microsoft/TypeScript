@@ -960,7 +960,7 @@ namespace ts {
         return false;
     }
 
-    export function unwrapInnermostStatmentOfLabel(node: LabeledStatement, beforeUnwrapLabelCallback?: (node: LabeledStatement) => void) {
+    export function unwrapInnermostStatementOfLabel(node: LabeledStatement, beforeUnwrapLabelCallback?: (node: LabeledStatement) => void) {
         while (true) {
             if (beforeUnwrapLabelCallback) {
                 beforeUnwrapLabelCallback(node);
@@ -1950,8 +1950,51 @@ namespace ts {
         return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
     }
 
-    export function isAsyncFunctionLike(node: Node): boolean {
-        return isFunctionLike(node) && hasModifier(node, ModifierFlags.Async) && !isAccessor(node);
+    export const enum FunctionFlags {
+        Normal = 0,
+        Generator = 1 << 0,
+        Async = 1 << 1,
+        AsyncOrAsyncGenerator = Async | Generator,
+        Invalid = 1 << 2,
+        InvalidAsyncOrAsyncGenerator = AsyncOrAsyncGenerator | Invalid,
+        InvalidGenerator = Generator | Invalid,
+    }
+
+    export function getFunctionFlags(node: FunctionLikeDeclaration) {
+        let flags = FunctionFlags.Normal;
+        switch (node.kind) {
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.MethodDeclaration:
+                if (node.asteriskToken) {
+                    flags |= FunctionFlags.Generator;
+                }
+                // fall through
+            case SyntaxKind.ArrowFunction:
+                if (hasModifier(node, ModifierFlags.Async)) {
+                    flags |= FunctionFlags.Async;
+                }
+                break;
+        }
+
+        if (!node.body) {
+            flags |= FunctionFlags.Invalid;
+        }
+
+        return flags;
+    }
+
+    export function isAsyncFunction(node: Node): boolean {
+        switch (node.kind) {
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.MethodDeclaration:
+                return (<FunctionLikeDeclaration>node).body !== undefined
+                    && (<FunctionLikeDeclaration>node).asteriskToken === undefined
+                    && hasModifier(node, ModifierFlags.Async);
+        }
+        return false;
     }
 
     export function isStringOrNumericLiteral(node: Node): node is StringLiteral | NumericLiteral {
@@ -3756,6 +3799,12 @@ namespace ts {
         return node.kind === SyntaxKind.PropertyAccessExpression;
     }
 
+    export function isPropertyAccessOrQualifiedName(node: Node): node is PropertyAccessExpression | QualifiedName {
+        const kind = node.kind;
+        return kind === SyntaxKind.PropertyAccessExpression
+            || kind === SyntaxKind.QualifiedName;
+    }
+
     export function isElementAccessExpression(node: Node): node is ElementAccessExpression {
         return node.kind === SyntaxKind.ElementAccessExpression;
     }
@@ -4106,14 +4155,16 @@ namespace ts {
         return node.kind === SyntaxKind.JsxAttribute;
     }
 
-    export function isJsxOpeningLikeElement(node: Node): node is JsxOpeningLikeElement {
-        return node.kind === SyntaxKind.JsxOpeningElement || node.kind === SyntaxKind.JsxSelfClosingElement;
-    }
-
     export function isStringLiteralOrJsxExpression(node: Node): node is StringLiteral | JsxExpression {
         const kind = node.kind;
         return kind === SyntaxKind.StringLiteral
             || kind === SyntaxKind.JsxExpression;
+    }
+
+    export function isJsxOpeningLikeElement(node: Node): node is JsxOpeningLikeElement {
+        const kind = node.kind;
+        return kind === SyntaxKind.JsxOpeningElement
+            || kind === SyntaxKind.JsxSelfClosingElement;
     }
 
     // Clauses
@@ -4170,7 +4221,6 @@ namespace ts {
                 return "lib.es2016.d.ts";
             case ScriptTarget.ES2015:
                 return "lib.es6.d.ts";
-
             default:
                 return "lib.d.ts";
         }
@@ -4566,7 +4616,7 @@ namespace ts {
      */
     export function getParseTreeNode<T extends Node>(node: Node, nodeTest?: (node: Node) => node is T): T;
     export function getParseTreeNode(node: Node, nodeTest?: (node: Node) => boolean): Node {
-        if (isParseTreeNode(node)) {
+        if (node == undefined || isParseTreeNode(node)) {
             return node;
         }
 

@@ -67,10 +67,10 @@ namespace ts.OutliningElementsCollector {
 
             // Only outline spans of two or more consecutive single line comments
             if (count > 1) {
-                const multipleSingleLineComments = {
+                const multipleSingleLineComments: CommentRange = {
+                    kind: SyntaxKind.SingleLineCommentTrivia,
                     pos: start,
                     end: end,
-                    kind: SyntaxKind.SingleLineCommentTrivia
                 };
 
                 addOutliningSpanComments(multipleSingleLineComments, /*autoCollapse*/ false);
