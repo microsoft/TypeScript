@@ -3093,15 +3093,14 @@ namespace ts {
             (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node);
     }
 
-    export function isEmptyObjectLiteralOrArrayLiteral(expression: Node): boolean {
-        const kind = expression.kind;
-        if (kind === SyntaxKind.ObjectLiteralExpression) {
-            return (<ObjectLiteralExpression>expression).properties.length === 0;
-        }
-        if (kind === SyntaxKind.ArrayLiteralExpression) {
-            return (<ArrayLiteralExpression>expression).elements.length === 0;
-        }
-        return false;
+    export function isEmptyObjectLiteral(expression: Node): boolean {
+        return expression.kind === SyntaxKind.ObjectLiteralExpression &&
+            (<ObjectLiteralExpression>expression).properties.length === 0;
+    }
+
+    export function isEmptyArrayLiteral(expression: Node): boolean {
+        return expression.kind === SyntaxKind.ArrayLiteralExpression &&
+            (<ArrayLiteralExpression>expression).elements.length === 0;
     }
 
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
