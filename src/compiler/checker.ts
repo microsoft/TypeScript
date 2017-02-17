@@ -10138,7 +10138,7 @@ namespace ts {
                     }
                     let type: FlowType;
                     if (flow.flags & FlowFlags.AfterFinally) {
-                        // block flow edge: finally -> pre-try (for larger explanation check comment in binder.ts - bindTryStatement 
+                        // block flow edge: finally -> pre-try (for larger explanation check comment in binder.ts - bindTryStatement
                         (<AfterFinallyFlow>flow).locked = true;
                         type = getTypeAtFlowNode((<AfterFinallyFlow>flow).antecedent);
                         (<AfterFinallyFlow>flow).locked = false;
@@ -10306,7 +10306,7 @@ namespace ts {
                 let seenIncomplete = false;
                 for (const antecedent of flow.antecedents) {
                     if (antecedent.flags & FlowFlags.PreFinally && (<PreFinallyFlow>antecedent).lock.locked) {
-                        // if flow correspond to branch from pre-try to finally and this branch is locked - this means that 
+                        // if flow correspond to branch from pre-try to finally and this branch is locked - this means that
                         // we initially have started following the flow outside the finally block.
                         // in this case we should ignore this branch.
                         continue;
@@ -12631,7 +12631,7 @@ namespace ts {
                 // If the elemType is a stringLiteral type, we can then provide a check to make sure that the string literal type is one of the Jsx intrinsic element type
                 // For example:
                 //      var CustomTag: "h1" = "h1";
-                //      <CustomTag> Hello World </CustomTag> 
+                //      <CustomTag> Hello World </CustomTag>
                 const intrinsicElementsType = getJsxType(JsxNames.IntrinsicElements);
                 if (intrinsicElementsType !== unknownType) {
                     const stringLiteralTypeName = (<LiteralType>elementType).text;
@@ -12777,7 +12777,7 @@ namespace ts {
         }
 
         /**
-         * Get the attributes type, which indicates the attributes that are valid on the given JSXOpeningLikeElement. 
+         * Get the attributes type, which indicates the attributes that are valid on the given JSXOpeningLikeElement.
          * @param node a JSXOpeningLikeElement node
          * @return an attributes type of the given node
          */
@@ -13590,7 +13590,7 @@ namespace ts {
          */
         function checkApplicableSignatureForJsxOpeningLikeElement(node: JsxOpeningLikeElement, signature: Signature, relation: Map<RelationComparisonResult>) {
             // JSX opening-like element has correct arity for stateless-function component if the one of the following condition is true:
-            //      1. callIsIncomplete 
+            //      1. callIsIncomplete
             //      2. attributes property has same number of properties as the parameter object type.
             //         We can figure that out by resolving attributes property and check number of properties in the resolved type
             // If the call has correct arity, we will then check if the argument type and parameter type is assignable
@@ -14874,7 +14874,7 @@ namespace ts {
                 error(func, Diagnostics.An_async_function_or_method_must_return_a_Promise_Make_sure_you_have_a_declaration_for_Promise_or_include_ES2015_in_your_lib_option);
                 return unknownType;
             }
-            else if (!getGlobalPromiseConstructorSymbol()) {
+            else if (!getGlobalPromiseConstructorSymbol(/*reportErrors*/ true)) {
                 error(func, Diagnostics.An_async_function_or_method_in_ES5_SlashES3_requires_the_Promise_constructor_Make_sure_you_have_a_declaration_for_the_Promise_constructor_or_include_ES2015_in_your_lib_option);
             }
 
@@ -17525,7 +17525,7 @@ namespace ts {
                 const promiseConstructorSymbol = resolveEntityName(promiseConstructorName, SymbolFlags.Value, /*ignoreErrors*/ true);
                 const promiseConstructorType = promiseConstructorSymbol ? getTypeOfSymbol(promiseConstructorSymbol) : unknownType;
                 if (promiseConstructorType === unknownType) {
-                    if (promiseConstructorName.kind === SyntaxKind.Identifier && promiseConstructorName.text === "Promise" && getTargetType(returnType) === tryGetGlobalPromiseType()) {
+                    if (promiseConstructorName.kind === SyntaxKind.Identifier && promiseConstructorName.text === "Promise" && getTargetType(returnType) === getGlobalPromiseType(/*reportErrors*/ false)) {
                         error(node.type, Diagnostics.An_async_function_or_method_in_ES5_SlashES3_requires_the_Promise_constructor_Make_sure_you_have_a_declaration_for_the_Promise_constructor_or_include_ES2015_in_your_lib_option);
                     }
                     else {
