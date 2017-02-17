@@ -16,7 +16,7 @@ var messenger = {
 
         var _self = this;
 >_self : Symbol(_self, Decl(fatarrowfunctionsInFunctions.ts, 5, 11))
->this : Symbol(__object, Decl(fatarrowfunctionsInFunctions.ts, 2, 15))
+>this : Symbol(messenger, Decl(fatarrowfunctionsInFunctions.ts, 2, 15))
 
         setTimeout(function() {
 >setTimeout : Symbol(setTimeout, Decl(fatarrowfunctionsInFunctions.ts, 0, 0))

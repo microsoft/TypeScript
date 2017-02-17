@@ -165,7 +165,7 @@ var messenger = {
 >setTimeout : Symbol(setTimeout, Decl(fatarrowfunctions.ts, 34, 1))
 >this.message.toString : Symbol(String.toString, Decl(lib.d.ts, --, --))
 >this.message : Symbol(message, Decl(fatarrowfunctions.ts, 38, 17))
->this : Symbol(__object, Decl(fatarrowfunctions.ts, 38, 15))
+>this : Symbol(messenger, Decl(fatarrowfunctions.ts, 38, 15))
 >message : Symbol(message, Decl(fatarrowfunctions.ts, 38, 17))
 >toString : Symbol(String.toString, Decl(lib.d.ts, --, --))
     }
