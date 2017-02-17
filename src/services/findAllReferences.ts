@@ -154,7 +154,7 @@ namespace ts.FindAllReferences {
             const importDecl = importSpecifier.parent as ts.ImportDeclaration;
             Debug.assert(importDecl.moduleSpecifier === importSpecifier);
             const defaultName = importDecl.importClause.name;
-            const defaultReferencedSymbol = checker.getAliasedSymbol(checker.getSymbolAtLocation(defaultName));
+            const defaultReferencedSymbol = defaultName && checker.getAliasedSymbol(checker.getSymbolAtLocation(defaultName));
             if (symbol === defaultReferencedSymbol) {
                 return defaultName.text;
             }
