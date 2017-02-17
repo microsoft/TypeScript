@@ -197,6 +197,7 @@ namespace ts {
         let globalNumberType: ObjectType;
         let globalBooleanType: ObjectType;
         let globalRegExpType: ObjectType;
+        let globalThisType: GenericType;
         let anyArrayType: Type;
         let autoArrayType: Type;
         let anyReadonlyArrayType: Type;
@@ -5802,6 +5803,11 @@ namespace ts {
             return getTypeOfGlobalSymbol(getGlobalTypeSymbol(name), arity);
         }
 
+        function getGlobalTypeOrUndefined(name: string, arity = 0): ObjectType {
+            const symbol = getGlobalSymbol(name, SymbolFlags.Type, /*diagnostic*/ undefined);
+            return symbol && <GenericType>getTypeOfGlobalSymbol(symbol, arity);
+        }
+
         /**
          * Returns a type that is inside a namespace at the global scope, e.g.
          * getExportedTypeFromNamespace('JSX', 'Element') returns the JSX.Element type
@@ -11180,6 +11186,22 @@ namespace ts {
             }
         }
 
+        function getContainingObjectLiteral(func: FunctionLikeDeclaration) {
+            return func.kind === SyntaxKind.MethodDeclaration && func.parent.kind === SyntaxKind.ObjectLiteralExpression ? <ObjectLiteralExpression>func.parent :
+                func.kind === SyntaxKind.FunctionExpression && func.parent.kind === SyntaxKind.PropertyAssignment ? <ObjectLiteralExpression>func.parent.parent :
+                undefined;
+        }
+
+        function getThisTypeArgument(type: Type): Type {
+            return getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).target === globalThisType ? (<TypeReference>type).typeArguments[0] : undefined;
+        }
+
+        function getThisTypeFromContextualType(type: Type): Type {
+            return applyToContextualType(type, t => {
+                return t.flags & TypeFlags.Intersection ? forEach((<IntersectionType>t).types, getThisTypeArgument) : getThisTypeArgument(t);
+            });
+        }
+
         function getContextualThisParameterType(func: FunctionLikeDeclaration): Type {
             if (isContextSensitiveFunctionOrObjectLiteralMethod(func) && func.kind !== SyntaxKind.ArrowFunction) {
                 const contextualSignature = getContextualSignature(func);
@@ -11189,17 +11211,24 @@ namespace ts {
                         return getTypeOfSymbol(thisParameter);
                     }
                 }
-                if (isObjectLiteralMethod(func)) {
-                    // For methods in an object literal, look for a '__this__' property in the contextual
-                    // type for the object literal. If one exists, remove 'undefined' from the type of that
-                    // property and report it as the contextual type for 'this' in the method.
-                    const objectLiteral = <ObjectLiteralExpression>func.parent;
-                    const type = getApparentTypeOfContextualType(objectLiteral);
-                    if (type) {
-                        const propertyType = getTypeOfPropertyOfContextualType(type, "___this__");
-                        if (propertyType) {
-                            return getNonNullableType(propertyType);
+                const containingLiteral = getContainingObjectLiteral(func);
+                if (containingLiteral) {
+                    // We have an object literal method. Check if the containing object literal has a contextual type
+                    // and if that contextual type is or includes a ThisType<T>. If so, T is the contextual type for
+                    // 'this'. We continue looking in any directly enclosing object literals.
+                    let objectLiteral = containingLiteral;
+                    while (true) {
+                        const type = getApparentTypeOfContextualType(objectLiteral);
+                        if (type) {
+                            const thisType = getThisTypeFromContextualType(type);
+                            if (thisType) {
+                                return thisType;
+                            }
                         }
+                        if (objectLiteral.parent.kind !== SyntaxKind.PropertyAssignment) {
+                            break;
+                        }
+                        objectLiteral = <ObjectLiteralExpression>objectLiteral.parent.parent;
                     }
                 }
             }
@@ -21175,9 +21204,9 @@ namespace ts {
             anyArrayType = createArrayType(anyType);
             autoArrayType = createArrayType(autoType);
 
-            const symbol = getGlobalSymbol("ReadonlyArray", SymbolFlags.Type, /*diagnostic*/ undefined);
-            globalReadonlyArrayType = symbol && <GenericType>getTypeOfGlobalSymbol(symbol, /*arity*/ 1);
+            globalReadonlyArrayType = <GenericType>getGlobalTypeOrUndefined("ReadonlyArray", /*arity*/ 1);
             anyReadonlyArrayType = globalReadonlyArrayType ? createTypeFromGenericGlobalType(globalReadonlyArrayType, [anyType]) : anyArrayType;
+            globalThisType = <GenericType>getGlobalTypeOrUndefined("ThisType", /*arity*/ 1);
         }
 
         function checkExternalEmitHelpers(location: Node, helpers: ExternalEmitHelpers) {
