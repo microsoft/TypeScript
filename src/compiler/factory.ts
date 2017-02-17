@@ -1462,16 +1462,16 @@ namespace ts {
             : node;
     }
 
-    export function createJsxExpression(expression: Expression, dotDotDotToken: DotDotDotToken) {
+    export function createJsxExpression(dotDotDotToken: DotDotDotToken | undefined, expression: Expression | undefined) {
         const node = <JsxExpression>createSynthesizedNode(SyntaxKind.JsxExpression);
         node.dotDotDotToken = dotDotDotToken;
         node.expression = expression;
         return node;
     }
 
-    export function updateJsxExpression(node: JsxExpression, expression: Expression) {
+    export function updateJsxExpression(node: JsxExpression, expression: Expression | undefined) {
         return node.expression !== expression
-            ? updateNode(createJsxExpression(expression, node.dotDotDotToken), node)
+            ? updateNode(createJsxExpression(node.dotDotDotToken, expression), node)
             : node;
     }
 
