@@ -64,6 +64,11 @@ namespace ts {
         undefinedSymbol.declarations = [];
         const argumentsSymbol = createSymbol(SymbolFlags.Property, "arguments");
 
+        // for public members that accept a Node or one of its subtypes, we must guard against
+        // synthetic nodes created during transformations by calling `getParseTreeNode`.
+        // for most of these, we perform the guard only on `checker` to avoid any possible
+        // extra cost of calling `getParseTreeNode` when calling these functions from inside the
+        // checker.
         const checker: TypeChecker = {
             getNodeCount: () => sum(host.getSourceFiles(), "nodeCount"),
             getIdentifierCount: () => sum(host.getSourceFiles(), "identifierCount"),
@@ -74,8 +79,15 @@ namespace ts {
             isUnknownSymbol: symbol => symbol === unknownSymbol,
             getDiagnostics,
             getGlobalDiagnostics,
-            getTypeOfSymbolAtLocation,
-            getSymbolsOfParameterPropertyDeclaration,
+            getTypeOfSymbolAtLocation: (symbol, location) => {
+                location = getParseTreeNode(location);
+                return location ? getTypeOfSymbolAtLocation(symbol, location) : unknownType;
+            },
+            getSymbolsOfParameterPropertyDeclaration: (parameter, parameterName) => {
+                parameter = getParseTreeNode(parameter, isParameter);
+                Debug.assert(parameter !== undefined, "Cannot get symbols of a synthetic parameter that cannot be resolved to a parse-tree node.");
+                return getSymbolsOfParameterPropertyDeclaration(parameter, parameterName);
+            },
             getDeclaredTypeOfSymbol,
             getPropertiesOfType,
             getPropertyOfType,
@@ -85,37 +97,88 @@ namespace ts {
             getBaseTypes,
             getBaseTypeOfLiteralType,
             getWidenedType,
-            getTypeFromTypeNode,
+            getTypeFromTypeNode: node => {
+                node = getParseTreeNode(node, isTypeNode);
+                return node ? getTypeFromTypeNode(node) : unknownType;
+            },
             getParameterType: getTypeAtPosition,
             getReturnTypeOfSignature,
             getNonNullableType,
-            getSymbolsInScope,
-            getSymbolAtLocation,
-            getShorthandAssignmentValueSymbol,
-            getExportSpecifierLocalTargetSymbol,
-            getTypeAtLocation: getTypeOfNode,
-            getPropertySymbolOfDestructuringAssignment,
-            signatureToString,
-            typeToString,
+            getSymbolsInScope: (location, meaning) => {
+                location = getParseTreeNode(location);
+                return location ? getSymbolsInScope(location, meaning) : [];
+            },
+            getSymbolAtLocation: node => {
+                node = getParseTreeNode(node);
+                return node ? getSymbolAtLocation(node) : undefined;
+            },
+            getShorthandAssignmentValueSymbol: node => {
+                node = getParseTreeNode(node);
+                return node ? getShorthandAssignmentValueSymbol(node) : undefined;
+            },
+            getExportSpecifierLocalTargetSymbol: node => {
+                node = getParseTreeNode(node, isExportSpecifier);
+                return node ? getExportSpecifierLocalTargetSymbol(node) : undefined;
+            },
+            getTypeAtLocation: node => {
+                node = getParseTreeNode(node);
+                return node ? getTypeOfNode(node) : unknownType;
+            },
+            getPropertySymbolOfDestructuringAssignment: location => {
+                location = getParseTreeNode(location, isIdentifier);
+                return location ? getPropertySymbolOfDestructuringAssignment(location) : undefined;
+            },
+            signatureToString: (signature, enclosingDeclaration?, flags?, kind?) => {
+                return signatureToString(signature, getParseTreeNode(enclosingDeclaration), flags, kind);
+            },
+            typeToString: (type, enclosingDeclaration?, flags?) => {
+                return typeToString(type, getParseTreeNode(enclosingDeclaration), flags);
+            },
             getSymbolDisplayBuilder,
-            symbolToString,
+            symbolToString: (symbol, enclosingDeclaration?, meaning?) => {
+                return symbolToString(symbol, getParseTreeNode(enclosingDeclaration), meaning);
+            },
             getAugmentedPropertiesOfType,
             getRootSymbols,
-            getContextualType,
+            getContextualType: node => {
+                node = getParseTreeNode(node, isExpression)
+                return node ? getContextualType(node) : undefined;
+            },
             getFullyQualifiedName,
-            getResolvedSignature,
-            getConstantValue,
-            isValidPropertyAccess,
-            getSignatureFromDeclaration,
-            isImplementationOfOverload,
+            getResolvedSignature: (node, candidatesOutArray?) => {
+                node = getParseTreeNode(node, isCallLikeExpression);
+                return node ? getResolvedSignature(node, candidatesOutArray) : undefined;
+            },
+            getConstantValue: node => {
+                node = getParseTreeNode(node, canHaveConstantValue);
+                return node ? getConstantValue(node) : undefined;
+            },
+            isValidPropertyAccess: (node, propertyName) => {
+                node = getParseTreeNode(node, isPropertyAccessOrQualifiedName);
+                return node ? isValidPropertyAccess(node, propertyName) : false;
+            },
+            getSignatureFromDeclaration: declaration => {
+                declaration = getParseTreeNode(declaration, isFunctionLike);
+                return declaration ? getSignatureFromDeclaration(declaration) : undefined;
+            },
+            isImplementationOfOverload: node => {
+                node = getParseTreeNode(node, isFunctionLike);
+                return node ? isImplementationOfOverload(node) : undefined;
+            },
             getAliasedSymbol: resolveAlias,
             getEmitResolver,
             getExportsOfModule: getExportsOfModuleAsArray,
             getExportsAndPropertiesOfModule,
             getAmbientModules,
-            getAllAttributesTypeFromJsxOpeningLikeElement,
+            getAllAttributesTypeFromJsxOpeningLikeElement: node => {
+                node = getParseTreeNode(node, isJsxOpeningLikeElement);
+                return node ? getAllAttributesTypeFromJsxOpeningLikeElement(node) : undefined;
+            },
             getJsxIntrinsicTagNames,
-            isOptionalParameter,
+            isOptionalParameter: node => {
+                node = getParseTreeNode(node, isParameter);
+                return node ? isOptionalParameter(node) : false;
+            },
             tryGetMemberInModuleExports,
             tryFindAmbientModuleWithoutAugmentations: moduleName => {
                 // we deliberately exclude augmentations
@@ -20657,13 +20720,13 @@ namespace ts {
         }
 
         function getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[] {
-            const symbols = createMap<Symbol>();
-            let memberFlags: ModifierFlags = ModifierFlags.None;
-
             if (isInsideWithStatementBody(location)) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return [];
             }
+
+            const symbols = createMap<Symbol>();
+            let memberFlags: ModifierFlags = ModifierFlags.None;
 
             populateSymbols();
 
@@ -20931,6 +20994,7 @@ namespace ts {
             if (node.kind === SyntaxKind.SourceFile) {
                 return isExternalModule(<SourceFile>node) ? getMergedSymbol(node.symbol) : undefined;
             }
+
             if (isInsideWithStatementBody(node)) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return undefined;
@@ -21381,12 +21445,6 @@ namespace ts {
         }
 
         function isValueAliasDeclaration(node: Node): boolean {
-            node = getParseTreeNode(node);
-            if (node === undefined) {
-                // A synthesized node comes from an emit transformation and is always a value.
-                return true;
-            }
-
             switch (node.kind) {
                 case SyntaxKind.ImportEqualsDeclaration:
                 case SyntaxKind.ImportClause:
@@ -21433,12 +21491,6 @@ namespace ts {
         }
 
         function isReferencedAliasDeclaration(node: Node, checkChildren?: boolean): boolean {
-            node = getParseTreeNode(node);
-            // Purely synthesized nodes are always emitted.
-            if (node === undefined) {
-                return true;
-            }
-
             if (isAliasSymbolDeclaration(node)) {
                 const symbol = getSymbolOfNode(node);
                 if (symbol && getSymbolLinks(symbol).referenced) {
@@ -21481,13 +21533,22 @@ namespace ts {
         }
 
         function getNodeCheckFlags(node: Node): NodeCheckFlags {
-            node = getParseTreeNode(node);
-            return node ? getNodeLinks(node).flags : undefined;
+            return getNodeLinks(node).flags;
         }
 
         function getEnumMemberValue(node: EnumMember): number {
             computeEnumMemberValues(<EnumDeclaration>node.parent);
             return getNodeLinks(node).enumMemberValue;
+        }
+
+        function canHaveConstantValue(node: Node): node is EnumMember | PropertyAccessExpression | ElementAccessExpression {
+            switch (node.kind) {
+                case SyntaxKind.EnumMember:
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
+                    return true;
+            }
+            return false;
         }
 
         function getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number {
@@ -21671,10 +21732,21 @@ namespace ts {
                 getReferencedImportDeclaration,
                 getReferencedDeclarationWithCollidingName,
                 isDeclarationWithCollidingName,
-                isValueAliasDeclaration,
+                isValueAliasDeclaration: node => {
+                    node = getParseTreeNode(node);
+                    // Synthesized nodes are always treated like values.
+                    return node ? isValueAliasDeclaration(node) : true;
+                },
                 hasGlobalName,
-                isReferencedAliasDeclaration,
-                getNodeCheckFlags,
+                isReferencedAliasDeclaration: (node, checkChildren?) => {
+                    node = getParseTreeNode(node);
+                    // Synthesized nodes are always treated as referenced.
+                    return node ? isReferencedAliasDeclaration(node, checkChildren) : true;
+                },
+                getNodeCheckFlags: node => {
+                    node = getParseTreeNode(node);
+                    return node ? getNodeCheckFlags(node) : undefined;
+                },
                 isTopLevelValueImportEqualsWithEntityName,
                 isDeclarationVisible,
                 isImplementationOfOverload,
@@ -21685,7 +21757,10 @@ namespace ts {
                 writeBaseConstructorTypeOfClass,
                 isSymbolAccessible,
                 isEntityNameVisible,
-                getConstantValue,
+                getConstantValue: node => {
+                    node = getParseTreeNode(node, canHaveConstantValue);
+                    return node ? getConstantValue(node) : undefined;
+                },
                 collectLinkedAliases,
                 getReferencedValueDeclaration,
                 getTypeReferenceSerializationKind,

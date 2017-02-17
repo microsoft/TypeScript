@@ -41,7 +41,7 @@ const {runTestsInParallel} = mochaParallel;
 Error.stackTraceLimit = 1000;
 
 const cmdLineOptions = minimist(process.argv.slice(2), {
-    boolean: ["debug", "light", "colors", "lint", "soft"],
+    boolean: ["debug", "inspect", "light", "colors", "lint", "soft"],
     string: ["browser", "tests", "host", "reporter", "stackTraceLimit"],
     alias: {
         d: "debug",
@@ -57,6 +57,7 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         soft: false,
         colors: process.env.colors || process.env.color || true,
         debug: process.env.debug || process.env.d,
+        inspect: process.env.inspect,
         host: process.env.TYPESCRIPT_HOST || process.env.host || "node",
         browser: process.env.browser || process.env.b || "IE",
         tests: process.env.test || process.env.tests || process.env.t,
@@ -597,6 +598,7 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
     cleanTestDirs((err) => {
         if (err) { console.error(err); failWithStatus(err, 1); }
         const debug = cmdLineOptions["debug"];
+        const inspect = cmdLineOptions["inspect"];
         const tests = cmdLineOptions["tests"];
         const light = cmdLineOptions["light"];
         const stackTraceLimit = cmdLineOptions["stackTraceLimit"];
@@ -633,7 +635,10 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
         // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
         if (!runInParallel) {
             const args = [];
-            if (debug) {
+            if (inspect) {
+                args.push("--inspect");
+            }
+            if (inspect || debug) {
                 args.push("--debug-brk");
             }
             args.push("-R", reporter);

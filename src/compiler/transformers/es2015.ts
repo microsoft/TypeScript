@@ -2321,7 +2321,7 @@ namespace ts {
                 addRange(statements, convertedLoopBodyStatements);
             }
             else {
-                const statement = visitNode(node.statement, visitor, isStatement, /*optional*/ false, liftToBlock);
+                const statement = visitNode(node.statement, visitor, isStatement, liftToBlock);
                 if (isBlock(statement)) {
                     addRange(statements, statement.statements);
                     bodyLocation = statement;
@@ -2679,7 +2679,7 @@ namespace ts {
             }
 
             startLexicalEnvironment();
-            let loopBody = visitNode(node.statement, visitor, isStatement, /*optional*/ false, liftToBlock);
+            let loopBody = visitNode(node.statement, visitor, isStatement, liftToBlock);
             const lexicalEnvironment = endLexicalEnvironment();
 
             const currentState = convertedLoopState;
@@ -3674,7 +3674,7 @@ namespace ts {
             if (enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings) {
                 const original = getParseTreeNode(node, isIdentifier);
                 if (original && isNameOfDeclarationWithCollidingName(original)) {
-                    return getGeneratedNameForNode(original);
+                    return setTextRange(getGeneratedNameForNode(original), node);
                 }
             }
 
@@ -3727,7 +3727,7 @@ namespace ts {
             if (enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings) {
                 const declaration = resolver.getReferencedDeclarationWithCollidingName(node);
                 if (declaration) {
-                    return getGeneratedNameForNode(declaration.name);
+                    return setTextRange(getGeneratedNameForNode(declaration.name), node);
                 }
             }
 

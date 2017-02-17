@@ -1323,7 +1323,6 @@
 
     export interface NumericLiteral extends LiteralExpression {
         kind: SyntaxKind.NumericLiteral;
-        trailingComment?: string;
     }
 
     export interface TemplateHead extends LiteralLikeNode {
@@ -1907,9 +1906,17 @@
         fileName: string;
     }
 
+    export type CommentKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia;
+
     export interface CommentRange extends TextRange {
         hasTrailingNewLine?: boolean;
-        kind: SyntaxKind;
+        kind: CommentKind;
+    }
+
+    export interface SynthesizedComment extends CommentRange {
+        text: string;
+        pos: -1;
+        end: -1;
     }
 
     // represents a top level: { type } expression in a JSDoc comment.
@@ -2294,7 +2301,7 @@
          * used for writing the JavaScript and declaration files.  Otherwise, the writeFile parameter
          * will be invoked when writing the JavaScript and declaration files.
          */
-        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean): EmitResult;
+        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult;
 
         getOptionsDiagnostics(cancellationToken?: CancellationToken): Diagnostic[];
         getGlobalDiagnostics(cancellationToken?: CancellationToken): Diagnostic[];
@@ -2326,6 +2333,13 @@
         /* @internal */ isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         // For testing purposes only.
         /* @internal */ structureIsReused?: boolean;
+    }
+
+    export interface CustomTransformers {
+        /** Custom transformers to evaluate before built-in transformations. */
+        before?: TransformerFactory<SourceFile>[];
+        /** Custom transformers to evaluate after built-in transformations. */
+        after?: TransformerFactory<SourceFile>[];
     }
 
     export interface SourceMapSpan {
@@ -3789,9 +3803,11 @@
     export interface EmitNode {
         annotatedNodes?: Node[];                // Tracks Parse-tree nodes with EmitNodes for eventual cleanup.
         flags?: EmitFlags;                      // Flags that customize emit
+        leadingComments?: SynthesizedComment[]; // Synthesized leading comments
+        trailingComments?: SynthesizedComment[]; // Synthesized trailing comments
         commentRange?: TextRange;               // The text range to use when emitting leading or trailing comments
         sourceMapRange?: TextRange;             // The text range to use when emitting leading or trailing source mappings
-        tokenSourceMapRanges?: TextRange[];  // The text range to use when emitting source mappings for tokens
+        tokenSourceMapRanges?: TextRange[];     // The text range to use when emitting source mappings for tokens
         constantValue?: number;                 // The constant value of an expression
         externalHelpersModuleName?: Identifier; // The local name for an imported helpers module
         helpers?: EmitHelper[];                 // Emit helpers for the node
@@ -3827,7 +3843,7 @@
 
     export interface EmitHelper {
         readonly name: string;      // A unique name for this helper.
-        readonly scoped: boolean;   // Indicates whether ther helper MUST be emitted in the current scope.
+        readonly scoped: boolean;   // Indicates whether the helper MUST be emitted in the current scope.
         readonly text: string;      // ES3-compatible raw script text.
         readonly priority?: number; // Helpers with a higher priority are emitted earlier than other helpers on the node.
     }
@@ -3889,11 +3905,12 @@
         writeFile: WriteFileCallback;
     }
 
-    /* @internal */
     export interface TransformationContext {
+        /*@internal*/ getEmitResolver(): EmitResolver;
+        /*@internal*/ getEmitHost(): EmitHost;
+
+        /** Gets the compiler options supplied to the transformer. */
         getCompilerOptions(): CompilerOptions;
-        getEmitResolver(): EmitResolver;
-        getEmitHost(): EmitHost;
 
         /** Starts a new lexical environment. */
         startLexicalEnvironment(): void;
@@ -3907,41 +3924,32 @@
         /** Ends a lexical environment, returning any declarations. */
         endLexicalEnvironment(): Statement[];
 
-        /**
-         * Hoists a function declaration to the containing scope.
-         */
+        /** Hoists a function declaration to the containing scope. */
         hoistFunctionDeclaration(node: FunctionDeclaration): void;
 
-        /**
-         * Hoists a variable declaration to the containing scope.
-         */
+        /** Hoists a variable declaration to the containing scope. */
         hoistVariableDeclaration(node: Identifier): void;
 
-        /**
-         * Records a request for a non-scoped emit helper in the current context.
-         */
+        /** Records a request for a non-scoped emit helper in the current context. */
         requestEmitHelper(helper: EmitHelper): void;
 
-        /**
-         * Gets and resets the requested non-scoped emit helpers.
-         */
+        /** Gets and resets the requested non-scoped emit helpers. */
         readEmitHelpers(): EmitHelper[] | undefined;
 
-        /**
-         * Enables expression substitutions in the pretty printer for the provided SyntaxKind.
-         */
+        /** Enables expression substitutions in the pretty printer for the provided SyntaxKind. */
         enableSubstitution(kind: SyntaxKind): void;
 
-        /**
-         * Determines whether expression substitutions are enabled for the provided node.
-         */
+        /** Determines whether expression substitutions are enabled for the provided node. */
         isSubstitutionEnabled(node: Node): boolean;
 
         /**
          * Hook used by transformers to substitute expressions just before they
          * are emitted by the pretty printer.
+         *
+         * NOTE: Transformation hooks should only be modified during `Transformer` initialization,
+         * before returning the `NodeTransformer` callback.
          */
-        onSubstituteNode?: (hint: EmitHint, node: Node) => Node;
+        onSubstituteNode: (hint: EmitHint, node: Node) => Node;
 
         /**
          * Enables before/after emit notifications in the pretty printer for the provided
@@ -3958,25 +3966,27 @@
         /**
          * Hook used to allow transformers to capture state before or after
          * the printer emits a node.
+         *
+         * NOTE: Transformation hooks should only be modified during `Transformer` initialization,
+         * before returning the `NodeTransformer` callback.
          */
-        onEmitNode?: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
+        onEmitNode: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
     }
 
-    /* @internal */
-    export interface TransformationResult {
-        /**
-         * Gets the transformed source files.
-         */
-        transformed: SourceFile[];
+    export interface TransformationResult<T extends Node> {
+        /** Gets the transformed source files. */
+        transformed: T[];
+
+        /** Gets diagnostics for the transformation. */
+        diagnostics?: Diagnostic[];
 
         /**
-         * Emits the substitute for a node, if one is available; otherwise, emits the node.
+         * Gets a substitute for a node, if one is available; otherwise, returns the original node.
          *
          * @param hint A hint as to the intended usage of the node.
          * @param node The node to substitute.
-         * @param emitCallback A callback used to emit the node or its substitute.
          */
-        emitNodeWithSubstitution(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
+        substituteNode(hint: EmitHint, node: Node): Node;
 
         /**
          * Emits a node with possible notification.
@@ -3986,10 +3996,30 @@
          * @param emitCallback A callback used to emit the node.
          */
         emitNodeWithNotification(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
+
+        /**
+         * Clean up EmitNode entries on any parse-tree nodes.
+         */
+        dispose(): void;
     }
 
-    /* @internal */
-    export type Transformer = (context: TransformationContext) => (node: SourceFile) => SourceFile;
+    /**
+     * A function that is used to initialize and return a `Transformer` callback, which in turn
+     * will be used to transform one or more nodes.
+     */
+    export type TransformerFactory<T extends Node> = (context: TransformationContext) => Transformer<T>;
+
+    /**
+     * A function that transforms a node.
+     */
+    export type Transformer<T extends Node> = (node: T) => T;
+
+    /**
+     * A function that accepts and possible transforms a node.
+     */
+    export type Visitor = (node: Node) => VisitResult<Node>;
+
+    export type VisitResult<T extends Node> = T | T[];
 
     export interface Printer {
         /**
@@ -4047,23 +4077,20 @@
         /**
          * A hook used by the Printer to perform just-in-time substitution of a node. This is
          * primarily used by node transformations that need to substitute one node for another,
-         * such as replacing `myExportedVar` with `exports.myExportedVar`. A compatible
-         * implementation **must** invoke `emitCallback` eith the provided `hint` and either
-         * the provided `node`, or its substitute.
+         * such as replacing `myExportedVar` with `exports.myExportedVar`.
          * @param hint A hint indicating the intended purpose of the node.
          * @param node The node to emit.
-         * @param emitCallback A callback that, when invoked, will emit the node.
          * @example
          * ```ts
          * var printer = createPrinter(printerOptions, {
-         *   onSubstituteNode(hint, node, emitCallback) {
+         *   substituteNode(hint, node) {
          *     // perform substitution if necessary...
-         *     emitCallback(hint, node);
+         *     return node;
          *   }
          * });
          * ```
          */
-        onSubstituteNode?(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
+        substituteNode?(hint: EmitHint, node: Node): Node;
         /*@internal*/ onEmitSourceMapOfNode?: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
         /*@internal*/ onEmitSourceMapOfToken?: (node: Node, token: SyntaxKind, pos: number, emitCallback: (token: SyntaxKind, pos: number) => number) => number;
         /*@internal*/ onEmitSourceMapOfPosition?: (pos: number) => void;

@@ -131,6 +131,8 @@ var harnessSources = harnessCoreSources.concat([
     "matchFiles.ts",
     "initializeTSConfig.ts",
     "printer.ts",
+    "transform.ts",
+    "customTransforms.ts",
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
@@ -792,6 +794,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
     }
 
     var debug = process.env.debug || process.env.d;
+    var inspect = process.env.inspect;
     tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
     var stackTraceLimit = process.env.stackTraceLimit;
@@ -821,18 +824,39 @@ function runConsoleTests(defaultReporter, runInParallel) {
         testTimeout = 800000;
     }
 
-    colors = process.env.colors || process.env.color;
-    colors = colors ? ' --no-colors ' : ' --colors ';
-    reporter = process.env.reporter || process.env.r || defaultReporter;
-    var bail = (process.env.bail || process.env.b) ? "--bail" : "";
+    var colors = process.env.colors || process.env.color || true;
+    var reporter = process.env.reporter || process.env.r || defaultReporter;
+    var bail = process.env.bail || process.env.b;
     var lintFlag = process.env.lint !== 'false';
 
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
     if (!runInParallel) {
         var startTime = mark();
-        tests = tests ? ' -g "' + tests + '"' : '';
-        var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + bail + ' -t ' + testTimeout + ' ' + run;
+        var args = [];
+        if (inspect) {
+            args.push("--inspect");
+        }
+        if (inspect || debug) {
+            args.push("--debug-brk");
+        }
+        args.push("-R", reporter);
+        if (tests) {
+            args.push("-g", `"${tests}"`);
+        }
+        if (colors) {
+            args.push("--colors");
+        }
+        else {
+            args.push("--no-colors");
+        }
+        if (bail) {
+            args.push("--bail");
+        }
+        args.push("-t", testTimeout);
+        args.push(run);
+
+        var cmd = "mocha " + args.join(" ");
         console.log(cmd);
 
         var savedNodeEnv = process.env.NODE_ENV;
@@ -853,7 +877,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
         var savedNodeEnv = process.env.NODE_ENV;
         process.env.NODE_ENV = "development";
         var startTime = mark();
-        runTestsInParallel(taskConfigsFolder, run, { testTimeout: testTimeout, noColors: colors === " --no-colors " }, function (err) {
+        runTestsInParallel(taskConfigsFolder, run, { testTimeout: testTimeout, noColors: !colors }, function (err) {
             process.env.NODE_ENV = savedNodeEnv;
             measure(startTime);
             // last worker clean everything and runs linter in case if there were no errors

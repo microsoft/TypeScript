@@ -467,7 +467,7 @@ namespace ts {
     }
 
     function makeBindingElement(name: Identifier) {
-        return createBindingElement(/*propertyName*/ undefined, /*dotDotDotToken*/ undefined, name);
+        return createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, name);
     }
 
     function makeAssignmentElement(name: Identifier) {

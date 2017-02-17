@@ -128,6 +128,7 @@ namespace ts {
                 const expression = visitNode(node.expression, visitor, isExpression);
                 return updateYield(
                     node,
+                    node.asteriskToken,
                     node.asteriskToken
                         ? createAsyncDelegatorHelper(context, expression, expression)
                         : createArrayLiteral(
