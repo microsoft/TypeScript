@@ -1766,6 +1766,20 @@ namespace ts.server.protocol {
         arguments: GeterrRequestArgs;
     }
 
+    export type RequestCompletedEventName = "requestCompleted";
+
+    /**
+     * Event that is sent when server have finished processing request with specified id.
+     */
+    export interface RequestCompletedEvent extends Event {
+        event: RequestCompletedEventName;
+        body: RequestCompletedEventBody;
+    }
+
+    export interface RequestCompletedEventBody {
+        request_seq: number;
+    }
+
     /**
       * Item of diagnostic information found in a DiagnosticEvent message.
       */
@@ -2253,6 +2267,7 @@ namespace ts.server.protocol {
         outDir?: string;
         outFile?: string;
         paths?: MapLike<string[]>;
+        plugins?: PluginImport[];
         preserveConstEnums?: boolean;
         project?: string;
         reactNamespace?: string;

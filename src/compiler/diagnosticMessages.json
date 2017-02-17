@@ -175,15 +175,15 @@
         "category": "Error",
         "code": 1057
     },
-    "Operand for 'await' does not have a valid callable 'then' member.": {
+    "Type used as operand to 'await' or the return type of an async function must either be a valid promise or must not contain a callable 'then' member.": {
         "category": "Error",
         "code": 1058
     },
-    "Return expression in async function does not have a valid callable 'then' member.": {
+    "A promise must have a 'then' method.": {
         "category": "Error",
         "code": 1059
     },
-    "Expression body for async arrow function does not have a valid callable 'then' member.": {
+    "The first parameter of the 'then' method of a promise must be a callback.": {
         "category": "Error",
         "code": 1060
     },
@@ -191,7 +191,7 @@
         "category": "Error",
         "code": 1061
     },
-    "{0} is referenced directly or indirectly in the fulfillment callback of its own 'then' method.": {
+    "Type is referenced directly or indirectly in the fulfillment callback of its own 'then' method.": {
         "category": "Error",
         "code": 1062
     },
@@ -290,6 +290,10 @@
     "'delete' cannot be called on an identifier in strict mode.": {
         "category": "Error",
         "code": 1102
+    },
+    "A 'for-await-of' statement is only allowed within an async function or async generator.": {
+        "category": "Error",
+        "code": 1103
     },
     "A 'continue' statement can only be used within an enclosing iteration statement.": {
         "category": "Error",
@@ -1631,6 +1635,10 @@
         "category": "Error",
         "code": 2503
     },
+    "Type must have a '[Symbol.asyncIterator]()' method that returns an async iterator.": {
+        "category": "Error",
+        "code": 2504
+    },
     "A generator cannot have a 'void' type annotation.": {
         "category": "Error",
         "code": 2505
@@ -1686,6 +1694,10 @@
     "A 'this'-based type guard is not compatible with a parameter-based type guard.": {
         "category": "Error",
         "code": 2518
+    },
+    "An async iterator must have a 'next()' method.": {
+        "category": "Error",
+        "code": 2519
     },
     "Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.": {
         "category": "Error",
@@ -1794,6 +1806,18 @@
     "Property '{0}' has conflicting declarations and is inaccessible in type '{1}'.": {
         "category": "Error",
         "code": 2546
+    },
+    "The type returned by the 'next()' method of an async iterator must be a promise for a type with a 'value' property.": {
+        "category": "Error",
+        "code": 2547
+    },
+    "Type '{0}' is not an array type or does not have a '[Symbol.iterator]()' method that returns an iterator.": {
+        "category": "Error",
+        "code": 2548
+    },
+    "Type '{0}' is not an array type or a string type or does not have a '[Symbol.iterator]()' method that returns an iterator.": {
+        "category": "Error",
+        "code": 2549
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
@@ -2055,6 +2079,18 @@
         "category": "Error",
         "code": 2704
     },
+    "An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your `--lib` option.": {
+        "category": "Error",
+        "code": 2705
+    },
+    "Required type parameters may not follow optional type parameters.": {
+        "category": "Error",
+        "code": 2706
+    },
+    "Generic type '{0}' requires between {1} and {2} type arguments.": {
+        "category": "Error",
+        "code": 2707
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -2096,11 +2132,11 @@
         "category": "Error",
         "code": 4019
     },
-    "Extends clause of exported class '{0}' has or is using private name '{1}'.": {
+    "'extends' clause of exported class '{0}' has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4020
     },
-    "Extends clause of exported interface '{0}' has or is using private name '{1}'.": {
+    "'extends' clause of exported interface '{0}' has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4022
     },
@@ -2351,6 +2387,10 @@
     "Parameter '{0}' of index signature from exported interface has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4092
+    },
+    "'extends' clause of exported class '{0}' refers to a type whose name cannot be referenced.": {
+        "category": "Error",
+        "code": 4093
     },
 
     "The current host does not support the '{0}' option.": {
@@ -3001,6 +3041,10 @@
         "category": "Message",
         "code": 6148
     },
+    "Use full down-level iteration for iterables and arrays for 'for-of', spread, and destructuring in ES5/3.": {
+        "category": "Message",
+        "code": 6149
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -3165,7 +3209,7 @@
         "category": "Error",
         "code": 8016
     },
-    "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.": {
+    "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.": {
         "category": "Error",
         "code": 9002
     },
@@ -3298,6 +3342,14 @@
     "Add {0} to existing import declaration from {1}": {
         "category": "Message",
         "code": 90015
+    },
+    "Add declaration for missing property '{0}'": {
+        "category": "Message",
+        "code": 90016
+    },
+    "Add index signature for missing property '{0}'": {
+        "category": "Message",
+        "code": 90017
     },
     "Octal literal types must use ES2015 syntax. Use the syntax '{0}'.": {
         "category": "Error",

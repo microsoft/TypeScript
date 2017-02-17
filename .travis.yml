@@ -17,6 +17,7 @@ branches:
   only:
   - master
   - release-2.1
+  - release-2.2
 
 install:
   - npm uninstall typescript

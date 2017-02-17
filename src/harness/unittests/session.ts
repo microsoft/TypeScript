@@ -27,7 +27,7 @@ namespace ts.server {
         clearImmediate: noop,
         createHash: s => s
     };
-    const nullCancellationToken: HostCancellationToken = { isCancellationRequested: () => false };
+
     const mockLogger: Logger = {
         close: noop,
         hasLevel(): boolean { return false; },

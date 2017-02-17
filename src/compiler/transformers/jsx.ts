@@ -6,7 +6,6 @@
 namespace ts {
     export function transformJsx(context: TransformationContext) {
         const compilerOptions = context.getCompilerOptions();
-        let currentSourceFile: SourceFile;
 
         return transformSourceFile;
 
@@ -20,12 +19,8 @@ namespace ts {
                 return node;
             }
 
-            currentSourceFile = node;
-
             const visited = visitEachChild(node, visitor, context);
             addEmitHelpers(visited, context.readEmitHelpers());
-
-            currentSourceFile = undefined;
             return visited;
         }
 
@@ -85,7 +80,7 @@ namespace ts {
         function visitJsxOpeningLikeElement(node: JsxOpeningLikeElement, children: JsxChild[], isChild: boolean, location: TextRange) {
             const tagName = getTagName(node);
             let objectProperties: Expression;
-            const attrs = node.attributes;
+            const attrs = node.attributes.properties;
             if (attrs.length === 0) {
                 // When there are no attributes, React wants "null"
                 objectProperties = createNull();

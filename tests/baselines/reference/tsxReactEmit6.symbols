@@ -27,15 +27,15 @@ namespace M {
 
 	// Should emit M.React.createElement
 	//  and M.React.__spread
-	var foo;
+	var foo: any;
 >foo : Symbol(foo, Decl(react-consumer.tsx, 7, 4))
 
 	var spread1 = <div x='' {...foo} y='' />;
 >spread1 : Symbol(spread1, Decl(react-consumer.tsx, 8, 4))
 >div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 2, 22))
->x : Symbol(unknown)
+>x : Symbol(x, Decl(react-consumer.tsx, 8, 19))
 >foo : Symbol(foo, Decl(react-consumer.tsx, 7, 4))
->y : Symbol(unknown)
+>y : Symbol(y, Decl(react-consumer.tsx, 8, 33))
 
 	// Quotes
 	var x = <div>This "quote" thing</div>;

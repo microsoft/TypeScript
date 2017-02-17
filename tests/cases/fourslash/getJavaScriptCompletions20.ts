@@ -18,4 +18,4 @@
 //// Person.getNa/**/ = 10;
 
 goTo.marker();
-verify.not.completionListContains('getNa');
+verify.completionListContains('getName');
