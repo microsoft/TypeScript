@@ -11230,6 +11230,9 @@ namespace ts {
                         }
                         objectLiteral = <ObjectLiteralExpression>objectLiteral.parent.parent;
                     }
+                    // There was no contextual ThisType<T> for the containing object literal, so the contextual type
+                    // for 'this' is the type of the object literal itself.
+                    return checkExpressionCached(containingLiteral);
                 }
             }
             return undefined;
