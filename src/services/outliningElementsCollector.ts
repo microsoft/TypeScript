@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts.OutliningElementsCollector {
-    export function collectElements(sourceFile: SourceFile): OutliningSpan[] {
+    export function collectElements(sourceFile: SourceFile, cancellationToken: CancellationToken): OutliningSpan[] {
         const elements: OutliningSpan[] = [];
         const collapseText = "...";
 
@@ -38,6 +38,7 @@ namespace ts.OutliningElementsCollector {
                 let singleLineCommentCount = 0;
 
                 for (const currentComment of comments) {
+                    cancellationToken.throwIfCancellationRequested();
 
                     // For single line comments, combine consecutive ones (2 or more) into
                     // a single span from the start of the first till the end of the last
@@ -84,6 +85,7 @@ namespace ts.OutliningElementsCollector {
         let depth = 0;
         const maxDepth = 20;
         function walk(n: Node): void {
+            cancellationToken.throwIfCancellationRequested();
             if (depth > maxDepth) {
                 return;
             }

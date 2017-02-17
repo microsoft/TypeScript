@@ -3460,6 +3460,88 @@ namespace ts.projectSystem {
                 return JSON.parse(server.extractMessage(host.getOutput()[n]));
             }
         });
+        it("Lower priority tasks are cancellable", () => {
+            const f1 = {
+                path: "/a/app.ts",
+                content: `{ let x = 1; } var foo = "foo"; var bar = "bar"; var fooBar = "fooBar";`
+            };
+            const config = {
+                path: "/a/tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: {}
+                })
+            };
+
+            let requestToCancel = -1;
+            let isCancellationRequestedCount = 0;
+            let cancelAfterRequest = 3;
+            let operationCanceledExceptionThrown = false;
+            const cancellationToken: server.ServerCancellationToken = (function () {
+                let currentId: number;
+                return <server.ServerCancellationToken>{
+                    setRequest(requestId) {
+                        currentId = requestId;
+                    },
+                    resetRequest(requestId) {
+                        assert.equal(requestId, currentId, "unexpected request id in cancellation")
+                        currentId = undefined;
+                    },
+                    isCancellationRequested() {
+                        isCancellationRequestedCount++;
+                        return requestToCancel === currentId && isCancellationRequestedCount >= cancelAfterRequest;
+                    }
+                }
+            })();
+            const host = createServerHost([f1, config]);
+            const session = createSession(host, /*typingsInstaller*/ undefined, () => { }, cancellationToken);
+            {
+                session.executeCommandSeq(<protocol.OpenRequest>{
+                    command: "open",
+                    arguments: { file: f1.path }
+                });
+
+                // send navbar request (normal priority)
+                session.executeCommandSeq(<protocol.NavBarRequest>{
+                    command: "navbar",
+                    arguments: { file: f1.path }
+                });
+
+                // ensure the nav bar request can be canceled
+                verifyExecuteCommandSeqIsCancellable(<protocol.NavBarRequest>{
+                    command: "navbar",
+                    arguments: { file: f1.path }
+                });
+
+                // send outlining spans request (normal priority)
+                session.executeCommandSeq(<protocol.OutliningSpansRequest>{
+                    command: "outliningSpans",
+                    arguments: { file: f1.path }
+                });
+
+                // ensure the outlining spans request can be canceled
+                verifyExecuteCommandSeqIsCancellable(<protocol.OutliningSpansRequest>{
+                    command: "outliningSpans",
+                    arguments: { file: f1.path }
+                });
+            }
+
+            function verifyExecuteCommandSeqIsCancellable<T extends server.protocol.Request>(request: Partial<T>) {
+                // Set the next request to be cancellable
+                // The cancellation token will cancel the request the third time
+                // isCancellationRequested() is called.
+                requestToCancel = session.getNextSeq();
+                isCancellationRequestedCount = 0;
+                operationCanceledExceptionThrown = false;
+
+                try {
+                    session.executeCommandSeq(request);
+                } catch (e) {
+                    assert(e instanceof OperationCanceledException);
+                    operationCanceledExceptionThrown = true;
+                }
+                assert(operationCanceledExceptionThrown);
+            }
+        });
     });
 
     describe("maxNodeModuleJsDepth for inferred projects", () => {
