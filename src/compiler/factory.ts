@@ -1386,28 +1386,28 @@ namespace ts {
             : node;
     }
 
-    export function createJsxSelfClosingElement(tagName: JsxTagNameExpression, attributes: JsxAttributeLike[]) {
+    export function createJsxSelfClosingElement(tagName: JsxTagNameExpression, attributes: JsxAttributes) {
         const node = <JsxSelfClosingElement>createSynthesizedNode(SyntaxKind.JsxSelfClosingElement);
         node.tagName = tagName;
-        node.attributes = createNodeArray(attributes);
+        node.attributes = attributes;
         return node;
     }
 
-    export function updateJsxSelfClosingElement(node: JsxSelfClosingElement, tagName: JsxTagNameExpression, attributes: JsxAttributeLike[]) {
+    export function updateJsxSelfClosingElement(node: JsxSelfClosingElement, tagName: JsxTagNameExpression, attributes: JsxAttributes) {
         return node.tagName !== tagName
             || node.attributes !== attributes
             ? updateNode(createJsxSelfClosingElement(tagName, attributes), node)
             : node;
     }
 
-    export function createJsxOpeningElement(tagName: JsxTagNameExpression, attributes: JsxAttributeLike[]) {
+    export function createJsxOpeningElement(tagName: JsxTagNameExpression, attributes: JsxAttributes) {
         const node = <JsxOpeningElement>createSynthesizedNode(SyntaxKind.JsxOpeningElement);
         node.tagName = tagName;
-        node.attributes = createNodeArray(attributes);
+        node.attributes = attributes;
         return node;
     }
 
-    export function updateJsxOpeningElement(node: JsxOpeningElement, tagName: JsxTagNameExpression, attributes: JsxAttributeLike[]) {
+    export function updateJsxOpeningElement(node: JsxOpeningElement, tagName: JsxTagNameExpression, attributes: JsxAttributes) {
         return node.tagName !== tagName
             || node.attributes !== attributes
             ? updateNode(createJsxOpeningElement(tagName, attributes), node)
@@ -1424,6 +1424,19 @@ namespace ts {
         return node.tagName !== tagName
             ? updateNode(createJsxClosingElement(tagName), node)
             : node;
+    }
+
+    export function createJsxAttributes(properties: JsxAttributeLike[]) {
+        const jsxAttributes = <JsxAttributes>createSynthesizedNode(SyntaxKind.JsxAttributes);
+        jsxAttributes.properties = createNodeArray(properties);
+        return jsxAttributes;
+    }
+
+    export function updateJsxAttributes(jsxAttributes: JsxAttributes, properties: JsxAttributeLike[]) {
+        if (jsxAttributes.properties !== properties) {
+            return updateNode(createJsxAttributes(properties), jsxAttributes);
+        }
+        return jsxAttributes;
     }
 
     export function createJsxAttribute(name: Identifier, initializer: StringLiteral | JsxExpression) {

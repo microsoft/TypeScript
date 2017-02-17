@@ -24,6 +24,20 @@ namespace ts {
         return undefined;
     }
 
+    export function findDeclaration<T extends Declaration>(symbol: Symbol, predicate: (node: Declaration) => node is T): T | undefined;
+    export function findDeclaration(symbol: Symbol, predicate: (node: Declaration) => boolean): Declaration | undefined;
+    export function findDeclaration(symbol: Symbol, predicate: (node: Declaration) => boolean): Declaration | undefined {
+        const declarations = symbol.declarations;
+        if (declarations) {
+            for (const declaration of declarations) {
+                if (predicate(declaration)) {
+                    return declaration;
+                }
+            }
+        }
+        return undefined;
+    }
+
     export interface StringSymbolWriter extends SymbolWriter {
         string(): string;
     }
@@ -53,7 +67,8 @@ namespace ts {
                 decreaseIndent: noop,
                 clear: () => str = "",
                 trackSymbol: noop,
-                reportInaccessibleThisError: noop
+                reportInaccessibleThisError: noop,
+                reportIllegalExtends: noop
             };
         }
 
@@ -396,11 +411,6 @@ namespace ts {
     // Add an extra underscore to identifiers that start with two underscores to avoid issues with magic names like '__proto__'
     export function escapeIdentifier(identifier: string): string {
         return identifier.length >= 2 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ ? "_" + identifier : identifier;
-    }
-
-    // Remove extra underscore from escaped identifier
-    export function unescapeIdentifier(identifier: string): string {
-        return identifier.length >= 3 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ && identifier.charCodeAt(2) === CharacterCodes._ ? identifier.substr(1) : identifier;
     }
 
     // Make an identifier from an external module name by extracting the string after the last "/" and replacing
@@ -1169,6 +1179,8 @@ namespace ts {
 
     export function isCallLikeExpression(node: Node): node is CallLikeExpression {
         switch (node.kind) {
+            case SyntaxKind.JsxOpeningElement:
+            case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
             case SyntaxKind.TaggedTemplateExpression:
@@ -1182,6 +1194,9 @@ namespace ts {
     export function getInvokedExpression(node: CallLikeExpression): Expression {
         if (node.kind === SyntaxKind.TaggedTemplateExpression) {
             return (<TaggedTemplateExpression>node).tag;
+        }
+        else if (isJsxOpeningLikeElement(node)) {
+            return node.tagName;
         }
 
         // Will either be a CallExpression, NewExpression, or Decorator.
@@ -1402,10 +1417,10 @@ namespace ts {
      * Returns true if the node is a variable declaration whose initializer is a function expression.
      * This function does not test if the node is in a JavaScript file or not.
      */
-    export function isDeclarationOfFunctionExpression(s: Symbol) {
+    export function isDeclarationOfFunctionOrClassExpression(s: Symbol) {
         if (s.valueDeclaration && s.valueDeclaration.kind === SyntaxKind.VariableDeclaration) {
             const declaration = s.valueDeclaration as VariableDeclaration;
-            return declaration.initializer && declaration.initializer.kind === SyntaxKind.FunctionExpression;
+            return declaration.initializer && (declaration.initializer.kind === SyntaxKind.FunctionExpression || declaration.initializer.kind === SyntaxKind.ClassExpression);
         }
         return false;
     }
@@ -1434,6 +1449,10 @@ namespace ts {
                 // module.exports = expr
                 return SpecialPropertyAssignmentKind.ModuleExports;
             }
+            else {
+                // F.x = expr
+                return SpecialPropertyAssignmentKind.Property;
+            }
         }
         else if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
             return SpecialPropertyAssignmentKind.ThisProperty;
@@ -1452,6 +1471,7 @@ namespace ts {
                 }
             }
         }
+
 
         return SpecialPropertyAssignmentKind.None;
     }
@@ -3997,6 +4017,7 @@ namespace ts {
             || kind === SyntaxKind.ImportEqualsDeclaration
             || kind === SyntaxKind.ImportSpecifier
             || kind === SyntaxKind.InterfaceDeclaration
+            || kind === SyntaxKind.JsxAttribute
             || kind === SyntaxKind.MethodDeclaration
             || kind === SyntaxKind.MethodSignature
             || kind === SyntaxKind.ModuleDeclaration
@@ -4109,6 +4130,11 @@ namespace ts {
             || kind === SyntaxKind.JsxText;
     }
 
+    export function isJsxAttributes(node: Node): node is JsxAttributes {
+        const kind = node.kind;
+        return kind === SyntaxKind.JsxAttributes;
+    }
+
     export function isJsxAttributeLike(node: Node): node is JsxAttributeLike {
         const kind = node.kind;
         return kind === SyntaxKind.JsxAttribute
@@ -4121,6 +4147,10 @@ namespace ts {
 
     export function isJsxAttribute(node: Node): node is JsxAttribute {
         return node.kind === SyntaxKind.JsxAttribute;
+    }
+
+    export function isJsxOpeningLikeElement(node: Node): node is JsxOpeningLikeElement {
+        return node.kind === SyntaxKind.JsxOpeningElement || node.kind === SyntaxKind.JsxSelfClosingElement;
     }
 
     export function isStringLiteralOrJsxExpression(node: Node): node is StringLiteral | JsxExpression {
@@ -4589,5 +4619,15 @@ namespace ts {
         }
 
         return undefined;
+    }
+
+    /**
+     * Remove extra underscore from escaped identifier text content.
+     *
+     * @param identifier The escaped identifier text.
+     * @returns The unescaped identifier text.
+     */
+    export function unescapeIdentifier(identifier: string): string {
+        return identifier.length >= 3 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ && identifier.charCodeAt(2) === CharacterCodes._ ? identifier.substr(1) : identifier;
     }
 }

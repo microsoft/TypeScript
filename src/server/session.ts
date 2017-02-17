@@ -8,6 +8,17 @@ namespace ts.server {
         stack?: string;
     }
 
+    export interface ServerCancellationToken extends HostCancellationToken {
+        setRequest(requestId: number): void;
+        resetRequest(requestId: number): void;
+    }
+
+    export const nullCancellationToken: ServerCancellationToken = {
+        isCancellationRequested: () => false,
+        setRequest: () => void 0,
+        resetRequest: () => void 0
+    };
+
     function hrTimeToMilliseconds(time: number[]): number {
         const seconds = time[0];
         const nanoseconds = time[1];
@@ -193,18 +204,134 @@ namespace ts.server {
         return `Content-Length: ${1 + len}\r\n\r\n${json}${newLine}`;
     }
 
+    /**
+     * Allows to schedule next step in multistep operation
+     */
+    interface NextStep {
+        immediate(action: () => void): void;
+        delay(ms: number, action: () => void): void;
+    }
+
+    /**
+     * External capabilities used by multistep operation
+     */
+    interface MultistepOperationHost {
+        getCurrentRequestId(): number;
+        sendRequestCompletedEvent(requestId: number): void;
+        getServerHost(): ServerHost;
+        isCancellationRequested():  boolean;
+        executeWithRequestId(requestId: number, action: () => void): void;
+        logError(error: Error, message: string): void;
+    }
+
+    /**
+     * Represents operation that can schedule its next step to be executed later.
+     * Scheduling is done via instance of NextStep. If on current step subsequent step was not scheduled - operation is assumed to be completed. 
+     */
+    class MultistepOperation {
+        private requestId: number;
+        private timerHandle: any;
+        private immediateId: any;
+        private completed = true;
+        private readonly next: NextStep;
+
+        constructor(private readonly operationHost: MultistepOperationHost) {
+            this.next = {
+                immediate: action => this.immediate(action),
+                delay: (ms, action) => this.delay(ms, action)
+            }
+        }
+
+        public startNew(action: (next: NextStep) => void) {
+            this.complete();
+            this.requestId = this.operationHost.getCurrentRequestId();
+            this.completed = false;
+            this.executeAction(action);
+        }
+
+        private complete() {
+            if (!this.completed) {
+                if (this.requestId) {
+                    this.operationHost.sendRequestCompletedEvent(this.requestId);
+                }
+                this.completed = true;
+            }
+            this.setTimerHandle(undefined);
+            this.setImmediateId(undefined);
+        }
+
+        private immediate(action: () => void) {
+            const requestId = this.requestId;
+            Debug.assert(requestId === this.operationHost.getCurrentRequestId(), "immediate: incorrect request id")
+            this.setImmediateId(this.operationHost.getServerHost().setImmediate(() => {
+                this.immediateId = undefined;
+                this.operationHost.executeWithRequestId(requestId, () => this.executeAction(action));
+            }));
+        }
+
+        private delay(ms: number, action: () => void) {
+            const requestId = this.requestId;
+            Debug.assert(requestId === this.operationHost.getCurrentRequestId(), "delay: incorrect request id")
+            this.setTimerHandle(this.operationHost.getServerHost().setTimeout(() => {
+                this.timerHandle = undefined;
+                this.operationHost.executeWithRequestId(requestId, () => this.executeAction(action));
+            }, ms));
+        }
+
+        private executeAction(action: (next: NextStep) => void) {
+            let stop = false;
+            try {
+                if (this.operationHost.isCancellationRequested()) {
+                    stop = true;
+                }
+                else {
+                    action(this.next);
+                }
+            }
+            catch (e) {
+                stop = true;
+                // ignore cancellation request
+                if (!(e instanceof OperationCanceledException)) {
+                    this.operationHost.logError(e, `delayed processing of request ${this.requestId}`);
+                }
+            }
+            if (stop || !this.hasPendingWork()) {
+                this.complete();
+            }
+        }
+
+        private setTimerHandle(timerHandle: any) {;
+            if (this.timerHandle !== undefined) {
+                this.operationHost.getServerHost().clearTimeout(this.timerHandle);
+            }
+            this.timerHandle = timerHandle;
+        }
+
+        private setImmediateId(immediateId: number) {
+            if (this.immediateId !== undefined) {
+                this.operationHost.getServerHost().clearImmediate(this.immediateId);
+            }
+            this.immediateId = immediateId;
+        }
+
+        private hasPendingWork() {
+            return !!this.timerHandle || !!this.immediateId;
+        }
+    }
+
     export class Session implements EventSender {
         private readonly gcTimer: GcTimer;
         protected projectService: ProjectService;
-        private errorTimer: any; /*NodeJS.Timer | number*/
-        private immediateId: any;
         private changeSeq = 0;
+
+        private currentRequestId: number;
+        private errorCheck: MultistepOperation;
 
         private eventHander: ProjectServiceEventHandler;
 
         constructor(
             private host: ServerHost,
-            cancellationToken: HostCancellationToken,
+            private readonly cancellationToken: ServerCancellationToken,
             useSingleInferredProject: boolean,
             protected readonly typingsInstaller: ITypingsInstaller,
             private byteLength: (buf: string, encoding?: string) => number,
@@ -217,8 +344,27 @@ namespace ts.server {
                 ? eventHandler || (event => this.defaultEventHandler(event))
                 : undefined;
 
+            const multistepOperationHost: MultistepOperationHost = {
+                executeWithRequestId: (requestId, action) => this.executeWithRequestId(requestId, action),
+                getCurrentRequestId: () => this.currentRequestId,
+                getServerHost: () => this.host,
+                logError: (err, cmd) => this.logError(err, cmd),
+                sendRequestCompletedEvent: requestId => this.sendRequestCompletedEvent(requestId),
+                isCancellationRequested: () => cancellationToken.isCancellationRequested()
+            }
+            this.errorCheck = new MultistepOperation(multistepOperationHost);
             this.projectService = new ProjectService(host, logger, cancellationToken, useSingleInferredProject, typingsInstaller, this.eventHander);
             this.gcTimer = new GcTimer(host, /*delay*/ 7000, logger);
+        }
+
+        private sendRequestCompletedEvent(requestId: number): void {
+            const event: protocol.RequestCompletedEvent = {
+                seq: 0,
+                type: "event",
+                event: "requestCompleted",
+                body: { request_seq: requestId }
+            };
+            this.send(event);
         }
 
         private defaultEventHandler(event: ProjectServiceEvent) {
@@ -226,8 +372,7 @@ namespace ts.server {
                 case ContextEvent:
                     const { project, fileName } = event.data;
                     this.projectService.logger.info(`got context event, updating diagnostics for ${fileName}`);
-                    this.updateErrorCheck([{ fileName, project }], this.changeSeq,
-                        (n) => n === this.changeSeq, 100);
+                    this.errorCheck.startNew(next => this.updateErrorCheck(next, [{ fileName, project }], this.changeSeq, (n) => n === this.changeSeq, 100));
                     break;
                 case ConfigFileDiagEvent:
                     const { triggerFile, configFileName, diagnostics } = event.data;
@@ -284,7 +429,7 @@ namespace ts.server {
                 seq: 0,
                 type: "event",
                 event: eventName,
-                body: info,
+                body: info
             };
             this.send(ev);
         }
@@ -342,18 +487,11 @@ namespace ts.server {
             }, ms);
         }
 
-        private updateErrorCheck(checkList: PendingErrorCheck[], seq: number,
-            matchSeq: (seq: number) => boolean, ms = 1500, followMs = 200, requireOpen = true) {
+        private updateErrorCheck(next: NextStep, checkList: PendingErrorCheck[], seq: number, matchSeq: (seq: number) => boolean, ms = 1500, followMs = 200, requireOpen = true) {
             if (followMs > ms) {
                 followMs = ms;
             }
-            if (this.errorTimer) {
-                this.host.clearTimeout(this.errorTimer);
-            }
-            if (this.immediateId) {
-                this.host.clearImmediate(this.immediateId);
-                this.immediateId = undefined;
-            }
+
             let index = 0;
             const checkOne = () => {
                 if (matchSeq(seq)) {
@@ -361,21 +499,18 @@ namespace ts.server {
                     index++;
                     if (checkSpec.project.containsFile(checkSpec.fileName, requireOpen)) {
                         this.syntacticCheck(checkSpec.fileName, checkSpec.project);
-                        this.immediateId = this.host.setImmediate(() => {
+                        next.immediate(() => {
                             this.semanticCheck(checkSpec.fileName, checkSpec.project);
-                            this.immediateId = undefined;
                             if (checkList.length > index) {
-                                this.errorTimer = this.host.setTimeout(checkOne, followMs);
-                            }
-                            else {
-                                this.errorTimer = undefined;
+                                next.delay(followMs, checkOne);
                             }
                         });
                     }
                 }
             };
+
             if ((checkList.length > index) && (matchSeq(seq))) {
-                this.errorTimer = this.host.setTimeout(checkOne, ms);
+                next.delay(ms, checkOne);
             }
         }
 
@@ -1087,7 +1222,7 @@ namespace ts.server {
             }
         }
 
-        private getDiagnostics(delay: number, fileNames: string[]) {
+        private getDiagnostics(next: NextStep, delay: number, fileNames: string[]): void {
             const checkList = fileNames.reduce((accum: PendingErrorCheck[], uncheckedFileName: string) => {
                 const fileName = toNormalizedPath(uncheckedFileName);
                 const project = this.projectService.getDefaultProjectForFile(fileName, /*refreshInferredProjects*/ true);
@@ -1098,7 +1233,7 @@ namespace ts.server {
             }, []);
 
             if (checkList.length > 0) {
-                this.updateErrorCheck(checkList, this.changeSeq, (n) => n === this.changeSeq, delay);
+                this.updateErrorCheck(next, checkList, this.changeSeq, (n) => n === this.changeSeq, delay);
             }
         }
 
@@ -1335,7 +1470,7 @@ namespace ts.server {
                 : spans;
         }
 
-        getDiagnosticsForProject(delay: number, fileName: string) {
+        private getDiagnosticsForProject(next: NextStep, delay: number, fileName: string): void {
             const { fileNames, languageServiceDisabled } = this.getProjectInfoWorker(fileName, /*projectFileName*/ undefined, /*needFileNameList*/ true);
             if (languageServiceDisabled) {
                 return;
@@ -1373,7 +1508,7 @@ namespace ts.server {
                 const checkList = fileNamesInProject.map(fileName => ({ fileName, project }));
                 // Project level error analysis runs on background files too, therefore
                 // doesn't require the file to be opened
-                this.updateErrorCheck(checkList, this.changeSeq, (n) => n == this.changeSeq, delay, 200, /*requireOpen*/ false);
+                this.updateErrorCheck(next, checkList, this.changeSeq, (n) => n == this.changeSeq, delay, 200, /*requireOpen*/ false);
             }
         }
 
@@ -1550,13 +1685,13 @@ namespace ts.server {
             [CommandNames.SyntacticDiagnosticsSync]: (request: protocol.SyntacticDiagnosticsSyncRequest) => {
                 return this.requiredResponse(this.getSyntacticDiagnosticsSync(request.arguments));
             },
-            [CommandNames.Geterr]: (request: protocol.Request) => {
-                const geterrArgs = <protocol.GeterrRequestArgs>request.arguments;
-                return { response: this.getDiagnostics(geterrArgs.delay, geterrArgs.files), responseRequired: false };
+            [CommandNames.Geterr]: (request: protocol.GeterrRequest) => {
+                this.errorCheck.startNew(next => this.getDiagnostics(next, request.arguments.delay, request.arguments.files));
+                return this.notRequired();
             },
-            [CommandNames.GeterrForProject]: (request: protocol.Request) => {
-                const { file, delay } = <protocol.GeterrForProjectRequestArgs>request.arguments;
-                return { response: this.getDiagnosticsForProject(delay, file), responseRequired: false };
+            [CommandNames.GeterrForProject]: (request: protocol.GeterrForProjectRequest) => {
+                this.errorCheck.startNew(next => this.getDiagnosticsForProject(next, request.arguments.delay, request.arguments.file));
+                return this.notRequired();
             },
             [CommandNames.Change]: (request: protocol.ChangeRequest) => {
                 this.change(request.arguments);
@@ -1643,10 +1778,32 @@ namespace ts.server {
             this.handlers.set(command, handler);
         }
 
+        private setCurrentRequest(requestId: number): void {
+            Debug.assert(this.currentRequestId === undefined);
+            this.currentRequestId = requestId;
+            this.cancellationToken.setRequest(requestId);
+        }
+
+        private resetCurrentRequest(requestId: number): void {
+            Debug.assert(this.currentRequestId === requestId);
+            this.currentRequestId = undefined;
+            this.cancellationToken.resetRequest(requestId);
+        }
+
+        public executeWithRequestId<T>(requestId: number, f: () => T) {
+            try {
+                this.setCurrentRequest(requestId);
+                return f();
+            }
+            finally {
+                this.resetCurrentRequest(requestId);
+            }
+        }
+
         public executeCommand(request: protocol.Request): { response?: any, responseRequired?: boolean } {
             const handler = this.handlers.get(request.command);
             if (handler) {
-                return handler(request);
+                return this.executeWithRequestId(request.seq, () => handler(request));
             }
             else {
                 this.logger.msg(`Unrecognized JSON command: ${JSON.stringify(request)}`, Msg.Err);

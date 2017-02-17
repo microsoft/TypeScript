@@ -66,6 +66,7 @@ namespace ts {
             case SyntaxKind.TypeParameter:
                 return visitNode(cbNode, (<TypeParameterDeclaration>node).name) ||
                     visitNode(cbNode, (<TypeParameterDeclaration>node).constraint) ||
+                    visitNode(cbNode, (<TypeParameterDeclaration>node).default) ||
                     visitNode(cbNode, (<TypeParameterDeclaration>node).expression);
             case SyntaxKind.ShorthandPropertyAssignment:
                 return visitNodes(cbNodes, node.decorators) ||
@@ -369,7 +370,9 @@ namespace ts {
             case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.JsxOpeningElement:
                 return visitNode(cbNode, (<JsxOpeningLikeElement>node).tagName) ||
-                    visitNodes(cbNodes, (<JsxOpeningLikeElement>node).attributes);
+                    visitNode(cbNode, (<JsxOpeningLikeElement>node).attributes);
+            case SyntaxKind.JsxAttributes:
+                return visitNodes(cbNodes, (<JsxAttributes>node).properties);
             case SyntaxKind.JsxAttribute:
                 return visitNode(cbNode, (<JsxAttribute>node).name) ||
                     visitNode(cbNode, (<JsxAttribute>node).initializer);
@@ -2101,6 +2104,10 @@ namespace ts {
                     // We do *not* want to consume the  >  as we're consuming the expression for "".
                     node.expression = parseUnaryExpressionOrHigher();
                 }
+            }
+
+            if (parseOptional(SyntaxKind.EqualsToken)) {
+                node.default = parseType();
             }
 
             return finishNode(node);
@@ -3866,14 +3873,20 @@ namespace ts {
             return result;
         }
 
+        function parseJsxAttributes(): JsxAttributes {
+            const jsxAttributes = <JsxAttributes>createNode(SyntaxKind.JsxAttributes);
+            jsxAttributes.properties = parseList(ParsingContext.JsxAttributes, parseJsxAttribute);
+            return finishNode(jsxAttributes);
+        }
+
         function parseJsxOpeningOrSelfClosingElement(inExpressionContext: boolean): JsxOpeningElement | JsxSelfClosingElement {
             const fullStart = scanner.getStartPos();
 
             parseExpected(SyntaxKind.LessThanToken);
 
             const tagName = parseJsxElementName();
+            const attributes = parseJsxAttributes();
 
-            const attributes = parseList(ParsingContext.JsxAttributes, parseJsxAttribute);
             let node: JsxOpeningLikeElement;
 
             if (token() === SyntaxKind.GreaterThanToken) {

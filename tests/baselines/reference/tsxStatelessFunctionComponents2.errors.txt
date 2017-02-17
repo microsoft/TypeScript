@@ -1,4 +1,5 @@
-tests/cases/conformance/jsx/file.tsx(20,16): error TS2339: Property 'ref' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
+tests/cases/conformance/jsx/file.tsx(20,16): error TS2322: Type '{ ref: "myRef"; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
+  Property 'ref' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
 tests/cases/conformance/jsx/file.tsx(26,42): error TS2339: Property 'subtr' does not exist on type 'string'.
 tests/cases/conformance/jsx/file.tsx(28,33): error TS2339: Property 'notARealProperty' does not exist on type 'BigGreeter'.
 tests/cases/conformance/jsx/file.tsx(36,26): error TS2339: Property 'propertyNotOnHtmlDivElement' does not exist on type 'HTMLDivElement'.
@@ -25,8 +26,9 @@ tests/cases/conformance/jsx/file.tsx(36,26): error TS2339: Property 'propertyNot
     let b = <Greet key="k" />;
     // Error - not allowed to specify 'ref' on SFCs
     let c = <Greet ref="myRef" />;
-                   ~~~
-!!! error TS2339: Property 'ref' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
+                   ~~~~~~~~~~~
+!!! error TS2322: Type '{ ref: "myRef"; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
+!!! error TS2322:   Property 'ref' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
     
     
     // OK - ref is valid for classes
