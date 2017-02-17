@@ -1,5 +1,6 @@
 ﻿/// <reference path="../../factory.ts" />
 /// <reference path="../../visitor.ts" />
+/// <reference path="../destructuring.ts" />
 
 /*@internal*/
 namespace ts {
@@ -90,11 +91,13 @@ namespace ts {
 
             append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement, /*optional*/ true));
             addRange(statements, visitNodes(node.statements, sourceElementVisitor, isStatement, statementOffset));
-            addRange(statements, endLexicalEnvironment());
             addExportEqualsIfNeeded(statements, /*emitAsReturn*/ false);
+            addRange(statements, endLexicalEnvironment());
 
             const updated = updateSourceFileNode(node, setTextRange(createNodeArray(statements), node.statements));
             if (currentModuleInfo.hasExportStarsToExportValues) {
+                // If we have any `export * from ...` declarations
+                // we need to inform the emitter to add the __export helper.
                 addEmitHelper(updated, exportStarHelper);
             }
             return updated;
@@ -383,12 +386,12 @@ namespace ts {
             append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement, /*optional*/ true));
             addRange(statements, visitNodes(node.statements, sourceElementVisitor, isStatement, statementOffset));
 
+            // Append the 'export =' statement if provided.
+            addExportEqualsIfNeeded(statements, /*emitAsReturn*/ true);
+
             // End the lexical environment for the module body
             // and merge any new lexical declarations.
             addRange(statements, endLexicalEnvironment());
-
-            // Append the 'export =' statement if provided.
-            addExportEqualsIfNeeded(statements, /*emitAsReturn*/ true);
 
             const body = createBlock(statements, /*multiLine*/ true);
             if (currentModuleInfo.hasExportStarsToExportValues) {
@@ -1334,6 +1337,7 @@ namespace ts {
                 if (externalHelpersModuleName) {
                     return createPropertyAccess(externalHelpersModuleName, node);
                 }
+
                 return node;
             }
 

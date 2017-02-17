@@ -286,15 +286,16 @@ namespace ts {
         return node;
     }
 
-    export function updateMethod(node: MethodDeclaration, decorators: Decorator[], modifiers: Modifier[], name: PropertyName, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block) {
+    export function updateMethod(node: MethodDeclaration, decorators: Decorator[], modifiers: Modifier[], asteriskToken: AsteriskToken, name: PropertyName, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
+            || node.asteriskToken !== asteriskToken
             || node.name !== name
             || node.typeParameters !== typeParameters
             || node.parameters !== parameters
             || node.type !== type
             || node.body !== body
-            ? updateNode(createMethod(decorators, modifiers, node.asteriskToken, name, typeParameters, parameters, type, body), node)
+            ? updateNode(createMethod(decorators, modifiers, asteriskToken, name, typeParameters, parameters, type, body), node)
             : node;
     }
 
@@ -554,14 +555,15 @@ namespace ts {
         return node;
     }
 
-    export function updateFunctionExpression(node: FunctionExpression, modifiers: Modifier[], name: Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block) {
+    export function updateFunctionExpression(node: FunctionExpression, modifiers: Modifier[], asteriskToken: AsteriskToken, name: Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block) {
         return node.name !== name
             || node.modifiers !== modifiers
+            || node.asteriskToken !== asteriskToken
             || node.typeParameters !== typeParameters
             || node.parameters !== parameters
             || node.type !== type
             || node.body !== body
-            ? updateNode(createFunctionExpression(modifiers, node.asteriskToken, name, typeParameters, parameters, type, body), node)
+            ? updateNode(createFunctionExpression(modifiers, asteriskToken, name, typeParameters, parameters, type, body), node)
             : node;
     }
 
@@ -972,19 +974,21 @@ namespace ts {
             : node;
     }
 
-    export function createForOf(initializer: ForInitializer, expression: Expression, statement: Statement) {
+    export function createForOf(awaitModifier: AwaitKeywordToken, initializer: ForInitializer, expression: Expression, statement: Statement) {
         const node = <ForOfStatement>createSynthesizedNode(SyntaxKind.ForOfStatement);
+        node.awaitModifier = awaitModifier;
         node.initializer = initializer;
         node.expression = expression;
         node.statement = statement;
         return node;
     }
 
-    export function updateForOf(node: ForOfStatement, initializer: ForInitializer, expression: Expression, statement: Statement) {
-        return node.initializer !== initializer
+    export function updateForOf(node: ForOfStatement, awaitModifier: AwaitKeywordToken, initializer: ForInitializer, expression: Expression, statement: Statement) {
+        return node.awaitModifier !== awaitModifier
+            || node.initializer !== initializer
             || node.expression !== expression
             || node.statement !== statement
-            ? updateNode(createForOf(initializer, expression, statement), node)
+            ? updateNode(createForOf(awaitModifier, initializer, expression, statement), node)
             : node;
     }
 
@@ -1107,15 +1111,16 @@ namespace ts {
         return node;
     }
 
-    export function updateFunctionDeclaration(node: FunctionDeclaration, decorators: Decorator[], modifiers: Modifier[], name: Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block) {
+    export function updateFunctionDeclaration(node: FunctionDeclaration, decorators: Decorator[], modifiers: Modifier[], asteriskToken: AsteriskToken, name: Identifier, typeParameters: TypeParameterDeclaration[], parameters: ParameterDeclaration[], type: TypeNode, body: Block) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
+            || node.asteriskToken !== asteriskToken
             || node.name !== name
             || node.typeParameters !== typeParameters
             || node.parameters !== parameters
             || node.type !== type
             || node.body !== body
-            ? updateNode(createFunctionDeclaration(decorators, modifiers, node.asteriskToken, name, typeParameters, parameters, type, body), node)
+            ? updateNode(createFunctionDeclaration(decorators, modifiers, asteriskToken, name, typeParameters, parameters, type, body), node)
             : node;
     }
 
@@ -2211,7 +2216,128 @@ namespace ts {
         return setEmitFlags(createIdentifier(name), EmitFlags.HelperName | EmitFlags.AdviseOnEmitNode);
     }
 
+    const valuesHelper: EmitHelper = {
+        name: "typescript:values",
+        scoped: false,
+        text: `
+            var __values = (this && this.__values) || function (o) {
+                var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+                if (m) return m.call(o);
+                return {
+                    next: function () {
+                        if (o && i >= o.length) o = void 0;
+                        return { value: o && o[i++], done: !o };
+                    }
+                };
+            };
+        `
+    };
+
+    export function createValuesHelper(context: TransformationContext, expression: Expression, location?: TextRange) {
+        context.requestEmitHelper(valuesHelper);
+        return setTextRange(
+            createCall(
+                getHelperName("__values"),
+                /*typeArguments*/ undefined,
+                [expression]
+            ),
+            location
+        );
+    }
+
+    const readHelper: EmitHelper = {
+        name: "typescript:read",
+        scoped: false,
+        text: `
+            var __read = (this && this.__read) || function (o, n) {
+                var m = typeof Symbol === "function" && o[Symbol.iterator];
+                if (!m) return o;
+                var i = m.call(o), r, ar = [], e;
+                try {
+                    while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+                }
+                catch (error) { e = { error: error }; }
+                finally {
+                    try {
+                        if (r && !r.done && (m = i["return"])) m.call(i);
+                    }
+                    finally { if (e) throw e.error; }
+                }
+                return ar;
+            };
+        `
+    };
+
+    export function createReadHelper(context: TransformationContext, iteratorRecord: Expression, count: number | undefined, location?: TextRange) {
+        context.requestEmitHelper(readHelper);
+        return setTextRange(
+            createCall(
+                getHelperName("__read"),
+                /*typeArguments*/ undefined,
+                count !== undefined
+                    ? [iteratorRecord, createLiteral(count)]
+                    : [iteratorRecord]
+            ),
+            location
+        );
+    }
+
+    const spreadHelper: EmitHelper = {
+        name: "typescript:spread",
+        scoped: false,
+        text: `
+            var __spread = (this && this.__spread) || function () {
+                for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
+                return ar;
+            };`
+    };
+
+    export function createSpreadHelper(context: TransformationContext, argumentList: Expression[], location?: TextRange) {
+        context.requestEmitHelper(readHelper);
+        context.requestEmitHelper(spreadHelper);
+        return setTextRange(
+            createCall(
+                getHelperName("__spread"),
+                /*typeArguments*/ undefined,
+                argumentList
+            ),
+            location
+        );
+    }
+
     // Utilities
+
+    export function createForOfBindingStatement(node: ForInitializer, boundValue: Expression): Statement {
+        if (isVariableDeclarationList(node)) {
+            const firstDeclaration = firstOrUndefined(node.declarations);
+            const updatedDeclaration = updateVariableDeclaration(
+                firstDeclaration,
+                firstDeclaration.name,
+                /*typeNode*/ undefined,
+                boundValue
+            );
+            return setTextRange(
+                createVariableStatement(
+                    /*modifiers*/ undefined,
+                    updateVariableDeclarationList(node, [updatedDeclaration])
+                ),
+                /*location*/ node
+            );
+        }
+        else {
+            const updatedExpression = setTextRange(createAssignment(node, boundValue), /*location*/ node);
+            return setTextRange(createStatement(updatedExpression), /*location*/ node);
+        }
+    }
+
+    export function insertLeadingStatement(dest: Statement, source: Statement) {
+        if (isBlock(dest)) {
+            return updateBlock(dest, setTextRange(createNodeArray([source, ...dest.statements]), dest.statements));
+        }
+        else {
+            return createBlock(createNodeArray([dest, source]), /*multiLine*/ true);
+        }
+    }
 
     export function restoreEnclosingLabel(node: Statement, outermostLabeledStatement: LabeledStatement, afterRestoreLabelCallback?: (node: LabeledStatement) => void): Statement {
         if (!outermostLabeledStatement) {
@@ -2270,6 +2396,10 @@ namespace ts {
             target = languageVersion < ScriptTarget.ES2015
                 ? setTextRange(createIdentifier("_super"), callee)
                 : <PrimaryExpression>callee;
+        }
+        else if (getEmitFlags(callee) & EmitFlags.HelperName) {
+            thisArg = createVoidZero();
+            target = parenthesizeForAccess(callee);
         }
         else {
             switch (callee.kind) {
@@ -2682,6 +2812,16 @@ namespace ts {
         }
 
         return statements;
+    }
+
+    export function parenthesizeConditionalHead(condition: Expression) {
+        const conditionalPrecedence = getOperatorPrecedence(SyntaxKind.ConditionalExpression, SyntaxKind.QuestionToken);
+        const emittedCondition = skipPartiallyEmittedExpressions(condition);
+        const conditionPrecedence = getExpressionPrecedence(emittedCondition);
+        if (compareValues(conditionPrecedence, conditionalPrecedence) === Comparison.LessThan) {
+            return createParen(condition);
+        }
+        return condition;
     }
 
     /**

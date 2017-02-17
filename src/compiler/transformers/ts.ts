@@ -872,7 +872,7 @@ namespace ts {
          * @param hasExtendsClause A value indicating whether the class has an extends clause.
          */
         function transformConstructorBody(node: ClassExpression | ClassDeclaration, constructor: ConstructorDeclaration, hasExtendsClause: boolean) {
-            const statements: Statement[] = [];
+            let statements: Statement[] = [];
             let indexOfFirstStatement = 0;
 
             resumeLexicalEnvironment();
@@ -930,7 +930,7 @@ namespace ts {
             }
 
             // End the lexical environment.
-            addRange(statements, endLexicalEnvironment());
+            statements = mergeLexicalEnvironment(statements, endLexicalEnvironment());
             return setTextRange(
                 createBlock(
                     setTextRange(
@@ -1651,7 +1651,7 @@ namespace ts {
             if (isFunctionLike(node) && node.type) {
                 return serializeTypeNode(node.type);
             }
-            else if (isAsyncFunctionLike(node)) {
+            else if (isAsyncFunction(node)) {
                 return createIdentifier("Promise");
             }
 
@@ -2019,7 +2019,13 @@ namespace ts {
                 return undefined;
             }
 
-            return visitEachChild(node, visitor, context);
+            return updateConstructor(
+                node,
+                visitNodes(node.decorators, visitor, isDecorator),
+                visitNodes(node.modifiers, visitor, isModifier),
+                visitParameterList(node.parameters, visitor, context),
+                visitFunctionBody(node.body, visitor, context)
+            );
         }
 
         /**
@@ -2040,6 +2046,7 @@ namespace ts {
                 node,
                 /*decorators*/ undefined,
                 visitNodes(node.modifiers, modifierVisitor, isModifier),
+                node.asteriskToken,
                 visitPropertyNameOfClassElement(node),
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
@@ -2144,6 +2151,7 @@ namespace ts {
                 node,
                 /*decorators*/ undefined,
                 visitNodes(node.modifiers, modifierVisitor, isModifier),
+                node.asteriskToken,
                 node.name,
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
@@ -2167,17 +2175,18 @@ namespace ts {
          * @param node The function expression node.
          */
         function visitFunctionExpression(node: FunctionExpression): Expression {
-            if (nodeIsMissing(node.body)) {
+            if (!shouldEmitFunctionLikeDeclaration(node)) {
                 return createOmittedExpression();
             }
             const updated = updateFunctionExpression(
                 node,
                 visitNodes(node.modifiers, modifierVisitor, isModifier),
+                node.asteriskToken,
                 node.name,
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
-                visitFunctionBody(node.body, visitor, context)
+                visitFunctionBody(node.body, visitor, context) || createBlock([])
             );
             return updated;
         }
@@ -3187,6 +3196,11 @@ namespace ts {
          */
         function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void {
             const savedApplicableSubstitutions = applicableSubstitutions;
+            const savedCurrentSourceFile = currentSourceFile;
+
+            if (isSourceFile(node)) {
+                currentSourceFile = node;
+            }
 
             if (enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports && isTransformedModuleDeclaration(node)) {
                 applicableSubstitutions |= TypeScriptSubstitutionFlags.NamespaceExports;
@@ -3199,6 +3213,7 @@ namespace ts {
             previousOnEmitNode(hint, node, emitCallback);
 
             applicableSubstitutions = savedApplicableSubstitutions;
+            currentSourceFile = savedCurrentSourceFile;
         }
 
         /**
@@ -3340,13 +3355,60 @@ namespace ts {
         }
     }
 
-    const paramHelper: EmitHelper = {
-        name: "typescript:param",
+    function createDecorateHelper(context: TransformationContext, decoratorExpressions: Expression[], target: Expression, memberName?: Expression, descriptor?: Expression, location?: TextRange) {
+        const argumentsArray: Expression[] = [];
+        argumentsArray.push(createArrayLiteral(decoratorExpressions, /*multiLine*/ true));
+        argumentsArray.push(target);
+        if (memberName) {
+            argumentsArray.push(memberName);
+            if (descriptor) {
+                argumentsArray.push(descriptor);
+            }
+        }
+
+        context.requestEmitHelper(decorateHelper);
+        return setTextRange(
+            createCall(
+                getHelperName("__decorate"),
+                /*typeArguments*/ undefined,
+                argumentsArray
+            ),
+            location
+        );
+    }
+
+    const decorateHelper: EmitHelper = {
+        name: "typescript:decorate",
         scoped: false,
-        priority: 4,
+        priority: 2,
         text: `
-            var __param = (this && this.__param) || function (paramIndex, decorator) {
-                return function (target, key) { decorator(target, key, paramIndex); }
+            var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+                var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+                if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+                else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+                return c > 3 && r && Object.defineProperty(target, key, r), r;
+            };`
+    };
+
+    function createMetadataHelper(context: TransformationContext, metadataKey: string, metadataValue: Expression) {
+        context.requestEmitHelper(metadataHelper);
+        return createCall(
+            getHelperName("__metadata"),
+            /*typeArguments*/ undefined,
+            [
+                createLiteral(metadataKey),
+                metadataValue
+            ]
+        );
+    }
+
+    const metadataHelper: EmitHelper = {
+        name: "typescript:metadata",
+        scoped: false,
+        priority: 3,
+        text: `
+            var __metadata = (this && this.__metadata) || function (k, v) {
+                if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
             };`
     };
 
@@ -3365,60 +3427,13 @@ namespace ts {
         );
     }
 
-    const metadataHelper: EmitHelper = {
-        name: "typescript:metadata",
+    const paramHelper: EmitHelper = {
+        name: "typescript:param",
         scoped: false,
-        priority: 3,
+        priority: 4,
         text: `
-            var __metadata = (this && this.__metadata) || function (k, v) {
-                if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+            var __param = (this && this.__param) || function (paramIndex, decorator) {
+                return function (target, key) { decorator(target, key, paramIndex); }
             };`
     };
-
-    function createMetadataHelper(context: TransformationContext, metadataKey: string, metadataValue: Expression) {
-        context.requestEmitHelper(metadataHelper);
-        return createCall(
-            getHelperName("__metadata"),
-            /*typeArguments*/ undefined,
-            [
-                createLiteral(metadataKey),
-                metadataValue
-            ]
-        );
-    }
-
-    const decorateHelper: EmitHelper = {
-        name: "typescript:decorate",
-        scoped: false,
-        priority: 2,
-        text: `
-            var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-                var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-                if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-                else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-                return c > 3 && r && Object.defineProperty(target, key, r), r;
-            };`
-    };
-
-    function createDecorateHelper(context: TransformationContext, decoratorExpressions: Expression[], target: Expression, memberName?: Expression, descriptor?: Expression, location?: TextRange) {
-        context.requestEmitHelper(decorateHelper);
-        const argumentsArray: Expression[] = [];
-        argumentsArray.push(createArrayLiteral(decoratorExpressions, /*multiLine*/ true));
-        argumentsArray.push(target);
-        if (memberName) {
-            argumentsArray.push(memberName);
-            if (descriptor) {
-                argumentsArray.push(descriptor);
-            }
-        }
-
-        return setTextRange(
-            createCall(
-                getHelperName("__decorate"),
-                /*typeArguments*/ undefined,
-                argumentsArray
-            ),
-            location
-        );
-    }
 }

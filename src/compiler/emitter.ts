@@ -1450,6 +1450,7 @@ namespace ts {
         function emitForOfStatement(node: ForOfStatement) {
             const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos);
             write(" ");
+            emitWithSuffix(node.awaitModifier, " ");
             writeToken(SyntaxKind.OpenParenToken, openParenPos);
             emitForBinding(node.initializer);
             write(" of ");

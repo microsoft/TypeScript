@@ -957,6 +957,9 @@ namespace ts {
             const postLoopLabel = createBranchLabel();
             addAntecedent(preLoopLabel, currentFlow);
             currentFlow = preLoopLabel;
+            if (node.kind === SyntaxKind.ForOfStatement) {
+                bind(node.awaitModifier);
+            }
             bind(node.expression);
             addAntecedent(postLoopLabel, currentFlow);
             bind(node.initializer);
@@ -2407,7 +2410,7 @@ namespace ts {
 
         function bindFunctionDeclaration(node: FunctionDeclaration) {
             if (!isDeclarationFile(file) && !isInAmbientContext(node)) {
-                if (isAsyncFunctionLike(node)) {
+                if (isAsyncFunction(node)) {
                     emitFlags |= NodeFlags.HasAsyncFunctions;
                 }
             }
@@ -2424,7 +2427,7 @@ namespace ts {
 
         function bindFunctionExpression(node: FunctionExpression) {
             if (!isDeclarationFile(file) && !isInAmbientContext(node)) {
-                if (isAsyncFunctionLike(node)) {
+                if (isAsyncFunction(node)) {
                     emitFlags |= NodeFlags.HasAsyncFunctions;
                 }
             }
@@ -2438,7 +2441,7 @@ namespace ts {
 
         function bindPropertyOrMethodOrAccessor(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
             if (!isDeclarationFile(file) && !isInAmbientContext(node)) {
-                if (isAsyncFunctionLike(node)) {
+                if (isAsyncFunction(node)) {
                     emitFlags |= NodeFlags.HasAsyncFunctions;
                 }
             }
@@ -2872,11 +2875,10 @@ namespace ts {
 
         // An async method declaration is ES2017 syntax.
         if (hasModifier(node, ModifierFlags.Async)) {
-            transformFlags |= TransformFlags.AssertES2017;
+            transformFlags |= node.asteriskToken ? TransformFlags.AssertESNext : TransformFlags.AssertES2017;
         }
 
-        // Currently, we only support generators that were originally async function bodies.
-        if (node.asteriskToken && getEmitFlags(node) & EmitFlags.AsyncFunctionBody) {
+        if (node.asteriskToken) {
             transformFlags |= TransformFlags.AssertGenerator;
         }
 
@@ -2942,7 +2944,7 @@ namespace ts {
 
             // An async function declaration is ES2017 syntax.
             if (modifierFlags & ModifierFlags.Async) {
-                transformFlags |= TransformFlags.AssertES2017;
+                transformFlags |= node.asteriskToken ? TransformFlags.AssertESNext : TransformFlags.AssertES2017;
             }
 
             // function declarations with object rest destructuring are ES Next syntax
@@ -2962,7 +2964,7 @@ namespace ts {
             // down-level generator.
             // Currently we do not support transforming any other generator fucntions
             // down level.
-            if (node.asteriskToken && getEmitFlags(node) & EmitFlags.AsyncFunctionBody) {
+            if (node.asteriskToken) {
                 transformFlags |= TransformFlags.AssertGenerator;
             }
         }
@@ -2984,7 +2986,7 @@ namespace ts {
 
         // An async function expression is ES2017 syntax.
         if (hasModifier(node, ModifierFlags.Async)) {
-            transformFlags |= TransformFlags.AssertES2017;
+            transformFlags |= node.asteriskToken ? TransformFlags.AssertESNext : TransformFlags.AssertES2017;
         }
 
         // function expressions with object rest destructuring are ES Next syntax
@@ -3003,9 +3005,7 @@ namespace ts {
         // If a FunctionExpression is generator function and is the body of a
         // transformed async function, then this node can be transformed to a
         // down-level generator.
-        // Currently we do not support transforming any other generator fucntions
-        // down level.
-        if (node.asteriskToken && getEmitFlags(node) & EmitFlags.AsyncFunctionBody) {
+        if (node.asteriskToken) {
             transformFlags |= TransformFlags.AssertGenerator;
         }
 
@@ -3173,8 +3173,8 @@ namespace ts {
         switch (kind) {
             case SyntaxKind.AsyncKeyword:
             case SyntaxKind.AwaitExpression:
-                // async/await is ES2017 syntax
-                transformFlags |= TransformFlags.AssertES2017;
+                // async/await is ES2017 syntax, but may be ESNext syntax (for async generators)
+                transformFlags |= TransformFlags.AssertESNext | TransformFlags.AssertES2017;
                 break;
 
             case SyntaxKind.PublicKeyword:
@@ -3206,10 +3206,6 @@ namespace ts {
                 transformFlags |= TransformFlags.AssertJsx;
                 break;
 
-            case SyntaxKind.ForOfStatement:
-                // for-of might be ESNext if it has a rest destructuring
-                transformFlags |= TransformFlags.AssertESNext;
-                // FALLTHROUGH
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.TemplateHead:
             case SyntaxKind.TemplateMiddle:
@@ -3223,9 +3219,18 @@ namespace ts {
                 transformFlags |= TransformFlags.AssertES2015;
                 break;
 
+            case SyntaxKind.ForOfStatement:
+                // This node is either ES2015 syntax or ES2017 syntax (if it is a for-await-of).
+                if ((<ForOfStatement>node).awaitModifier) {
+                    transformFlags |= TransformFlags.AssertESNext;
+                }
+                transformFlags |= TransformFlags.AssertES2015;
+                break;
+
             case SyntaxKind.YieldExpression:
-                // This node is ES6 syntax.
-                transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsYield;
+                // This node is either ES2015 syntax (in a generator) or ES2017 syntax (in an async
+                // generator).
+                transformFlags |= TransformFlags.AssertESNext | TransformFlags.AssertES2015 | TransformFlags.ContainsYield;
                 break;
 
             case SyntaxKind.AnyKeyword:

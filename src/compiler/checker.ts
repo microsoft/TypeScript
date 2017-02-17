@@ -52,7 +52,7 @@ namespace ts {
         const emptySymbols = createMap<Symbol>();
 
         const compilerOptions = host.getCompilerOptions();
-        const languageVersion = compilerOptions.target || ScriptTarget.ES3;
+        const languageVersion = getEmitScriptTarget(compilerOptions);
         const modulekind = getEmitModuleKind(compilerOptions);
         const noUnusedIdentifiers = !!compilerOptions.noUnusedLocals || !!compilerOptions.noUnusedParameters;
         const allowSyntheticDefaultImports = typeof compilerOptions.allowSyntheticDefaultImports !== "undefined" ? compilerOptions.allowSyntheticDefaultImports : modulekind === ModuleKind.System;
@@ -186,11 +186,6 @@ namespace ts {
         */
         let patternAmbientModules: PatternAmbientModule[];
 
-        let getGlobalESSymbolConstructorSymbol: () => Symbol;
-
-        let getGlobalPromiseConstructorSymbol: () => Symbol;
-        let tryGetGlobalPromiseConstructorSymbol: () => Symbol;
-
         let globalObjectType: ObjectType;
         let globalFunctionType: ObjectType;
         let globalArrayType: GenericType;
@@ -206,26 +201,20 @@ namespace ts {
         // The library files are only loaded when the feature is used.
         // This allows users to just specify library files they want to used through --lib
         // and they will not get an error from not having unrelated library files
-        let getGlobalTemplateStringsArrayType: () => ObjectType;
-
-        let getGlobalESSymbolType: () => ObjectType;
-        let getGlobalIterableType: () => GenericType;
-        let getGlobalIteratorType: () => GenericType;
-        let getGlobalIterableIteratorType: () => GenericType;
-
-        let getGlobalClassDecoratorType: () => ObjectType;
-        let getGlobalParameterDecoratorType: () => ObjectType;
-        let getGlobalPropertyDecoratorType: () => ObjectType;
-        let getGlobalMethodDecoratorType: () => ObjectType;
-        let getGlobalTypedPropertyDescriptorType: () => ObjectType;
-        let getGlobalPromiseType: () => ObjectType;
-        let tryGetGlobalPromiseType: () => ObjectType;
-        let getGlobalPromiseLikeType: () => ObjectType;
-        let getInstantiatedGlobalPromiseLikeType: () => ObjectType;
-        let getGlobalPromiseConstructorLikeType: () => ObjectType;
-        let getGlobalThenableType: () => ObjectType;
-
-        let jsxElementClassType: Type;
+        let deferredGlobalESSymbolConstructorSymbol: Symbol;
+        let deferredGlobalESSymbolType: ObjectType;
+        let deferredGlobalTypedPropertyDescriptorType: GenericType;
+        let deferredGlobalPromiseType: GenericType;
+        let deferredGlobalPromiseConstructorSymbol: Symbol;
+        let deferredGlobalPromiseConstructorLikeType: ObjectType;
+        let deferredGlobalIterableType: GenericType;
+        let deferredGlobalIteratorType: GenericType;
+        let deferredGlobalIterableIteratorType: GenericType;
+        let deferredGlobalAsyncIterableType: GenericType;
+        let deferredGlobalAsyncIteratorType: GenericType;
+        let deferredGlobalAsyncIterableIteratorType: GenericType;
+        let deferredGlobalTemplateStringsArrayType: ObjectType;
+        let deferredJsxElementClassType: Type;
 
         let deferredNodes: Node[];
         let deferredUnusedIdentifierNodes: Node[];
@@ -3247,7 +3236,7 @@ namespace ts {
                 // This elementType will be used if the specific property corresponding to this index is not
                 // present (aka the tuple element property). This call also checks that the parentType is in
                 // fact an iterable or array (depending on target language).
-                const elementType = checkIteratedTypeOrElementType(parentType, pattern, /*allowStringInput*/ false);
+                const elementType = checkIteratedTypeOrElementType(parentType, pattern, /*allowStringInput*/ false, /*allowAsyncIterable*/ false);
                 if (declaration.dotDotDotToken) {
                     // Rest element has an array type with the same element type as the parent type
                     type = createArrayType(elementType);
@@ -3335,7 +3324,8 @@ namespace ts {
                 // missing properties/signatures required to get its iteratedType (like
                 // [Symbol.iterator] or next). This may be because we accessed properties from anyType,
                 // or it may have led to an error inside getElementTypeOfIterable.
-                return checkRightHandSideOfForOf((<ForOfStatement>declaration.parent.parent).expression) || anyType;
+                const forOfStatement = <ForOfStatement>declaration.parent.parent;
+                return checkRightHandSideOfForOf(forOfStatement.expression, forOfStatement.awaitModifier) || anyType;
             }
 
             if (isBindingPattern(declaration.parent)) {
@@ -3792,6 +3782,13 @@ namespace ts {
                 return getTypeOfAlias(symbol);
             }
             return unknownType;
+        }
+
+        function isReferenceToType(type: Type, target: Type) {
+            return type !== undefined
+                && target !== undefined
+                && (getObjectFlags(type) & ObjectFlags.Reference) !== 0
+                && (<TypeReference>type).target === target;
         }
 
         function getTargetType(type: Type): Type {
@@ -5019,7 +5016,7 @@ namespace ts {
                 t.flags & TypeFlags.StringLike ? globalStringType :
                 t.flags & TypeFlags.NumberLike ? globalNumberType :
                 t.flags & TypeFlags.BooleanLike ? globalBooleanType :
-                t.flags & TypeFlags.ESSymbol ? getGlobalESSymbolType() :
+                t.flags & TypeFlags.ESSymbol ? getGlobalESSymbolType(/*reportErrors*/ languageVersion >= ScriptTarget.ES2015) :
                 t.flags & TypeFlags.NonPrimitive ? emptyObjectType :
                 t;
         }
@@ -5909,20 +5906,75 @@ namespace ts {
             return <ObjectType>type;
         }
 
-        function getGlobalValueSymbol(name: string): Symbol {
-            return getGlobalSymbol(name, SymbolFlags.Value, Diagnostics.Cannot_find_global_value_0);
+        function getGlobalValueSymbol(name: string, reportErrors: boolean): Symbol {
+            return getGlobalSymbol(name, SymbolFlags.Value, reportErrors ? Diagnostics.Cannot_find_global_value_0 : undefined);
         }
 
-        function getGlobalTypeSymbol(name: string): Symbol {
-            return getGlobalSymbol(name, SymbolFlags.Type, Diagnostics.Cannot_find_global_type_0);
+        function getGlobalTypeSymbol(name: string, reportErrors: boolean): Symbol {
+            return getGlobalSymbol(name, SymbolFlags.Type, reportErrors ? Diagnostics.Cannot_find_global_type_0 : undefined);
         }
 
         function getGlobalSymbol(name: string, meaning: SymbolFlags, diagnostic: DiagnosticMessage): Symbol {
             return resolveName(undefined, name, meaning, diagnostic, name);
         }
 
-        function getGlobalType(name: string, arity = 0): ObjectType {
-            return getTypeOfGlobalSymbol(getGlobalTypeSymbol(name), arity);
+        function getGlobalType(name: string, arity: 0, reportErrors: boolean): ObjectType;
+        function getGlobalType(name: string, arity: number, reportErrors: boolean): GenericType;
+        function getGlobalType(name: string, arity: number, reportErrors: boolean): ObjectType {
+            const symbol = getGlobalTypeSymbol(name, reportErrors);
+            return symbol || reportErrors ? getTypeOfGlobalSymbol(symbol, arity) : undefined;
+        }
+
+        function getGlobalTypedPropertyDescriptorType() {
+            return deferredGlobalTypedPropertyDescriptorType || (deferredGlobalTypedPropertyDescriptorType = getGlobalType("TypedPropertyDescriptor", /*arity*/ 1, /*reportErrors*/ true)) || emptyGenericType;
+        }
+
+        function getGlobalTemplateStringsArrayType() {
+            return deferredGlobalTemplateStringsArrayType || (deferredGlobalTemplateStringsArrayType = getGlobalType("TemplateStringsArray", /*arity*/ 0, /*reportErrors*/ true)) || emptyObjectType;
+        }
+
+        function getGlobalESSymbolConstructorSymbol(reportErrors: boolean) {
+            return deferredGlobalESSymbolConstructorSymbol || (deferredGlobalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol", reportErrors));
+        }
+
+        function getGlobalESSymbolType(reportErrors: boolean) {
+            return deferredGlobalESSymbolType || (deferredGlobalESSymbolType = getGlobalType("Symbol", /*arity*/ 0, reportErrors)) || emptyObjectType;
+        }
+
+        function getGlobalPromiseType(reportErrors: boolean) {
+            return deferredGlobalPromiseType || (deferredGlobalPromiseType = getGlobalType("Promise", /*arity*/ 1, reportErrors)) || emptyGenericType;
+        }
+
+        function getGlobalPromiseConstructorSymbol(reportErrors: boolean): Symbol | undefined {
+            return deferredGlobalPromiseConstructorSymbol || (deferredGlobalPromiseConstructorSymbol = getGlobalValueSymbol("Promise", reportErrors));
+        }
+
+        function getGlobalPromiseConstructorLikeType(reportErrors: boolean) {
+            return deferredGlobalPromiseConstructorLikeType || (deferredGlobalPromiseConstructorLikeType = getGlobalType("PromiseConstructorLike", /*arity*/ 0, reportErrors)) || emptyObjectType;
+        }
+
+        function getGlobalAsyncIterableType(reportErrors: boolean) {
+            return deferredGlobalAsyncIterableType || (deferredGlobalAsyncIterableType = getGlobalType("AsyncIterable", /*arity*/ 1, reportErrors)) || emptyGenericType;
+        }
+
+        function getGlobalAsyncIteratorType(reportErrors: boolean) {
+            return deferredGlobalAsyncIteratorType || (deferredGlobalAsyncIteratorType = getGlobalType("AsyncIterator", /*arity*/ 1, reportErrors)) || emptyGenericType;
+        }
+
+        function getGlobalAsyncIterableIteratorType(reportErrors: boolean) {
+            return deferredGlobalAsyncIterableIteratorType || (deferredGlobalAsyncIterableIteratorType = getGlobalType("AsyncIterableIterator", /*arity*/ 1, reportErrors)) || emptyGenericType;
+        }
+
+        function getGlobalIterableType(reportErrors: boolean) {
+            return deferredGlobalIterableType || (deferredGlobalIterableType = getGlobalType("Iterable", /*arity*/ 1, reportErrors)) || emptyGenericType;
+        }
+
+        function getGlobalIteratorType(reportErrors: boolean) {
+            return deferredGlobalIteratorType || (deferredGlobalIteratorType = getGlobalType("Iterator", /*arity*/ 1, reportErrors)) || emptyGenericType;
+        }
+
+        function getGlobalIterableIteratorType(reportErrors: boolean) {
+            return deferredGlobalIterableIteratorType || (deferredGlobalIterableIteratorType = getGlobalType("IterableIterator", /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
         /**
@@ -5936,28 +5988,30 @@ namespace ts {
         }
 
         /**
-          * Creates a TypeReference for a generic `TypedPropertyDescriptor<T>`.
-          */
-        function createTypedPropertyDescriptorType(propertyType: Type): Type {
-            const globalTypedPropertyDescriptorType = getGlobalTypedPropertyDescriptorType();
-            return globalTypedPropertyDescriptorType !== emptyGenericType
-                ? createTypeReference(<GenericType>globalTypedPropertyDescriptorType, [propertyType])
-                : emptyObjectType;
-        }
-
-        /**
          * Instantiates a global type that is generic with some element type, and returns that instantiation.
          */
         function createTypeFromGenericGlobalType(genericGlobalType: GenericType, typeArguments: Type[]): ObjectType {
             return genericGlobalType !== emptyGenericType ? createTypeReference(genericGlobalType, typeArguments) : emptyObjectType;
         }
 
-        function createIterableType(elementType: Type): Type {
-            return createTypeFromGenericGlobalType(getGlobalIterableType(), [elementType]);
+        function createTypedPropertyDescriptorType(propertyType: Type): Type {
+            return createTypeFromGenericGlobalType(getGlobalTypedPropertyDescriptorType(), [propertyType]);
         }
 
-        function createIterableIteratorType(elementType: Type): Type {
-            return createTypeFromGenericGlobalType(getGlobalIterableIteratorType(), [elementType]);
+        function createAsyncIterableType(iteratedType: Type): Type {
+            return createTypeFromGenericGlobalType(getGlobalAsyncIterableType(/*reportErrors*/ true), [iteratedType]);
+        }
+
+        function createAsyncIterableIteratorType(iteratedType: Type): Type {
+            return createTypeFromGenericGlobalType(getGlobalAsyncIterableIteratorType(/*reportErrors*/ true), [iteratedType]);
+        }
+
+        function createIterableType(iteratedType: Type): Type {
+            return createTypeFromGenericGlobalType(getGlobalIterableType(/*reportErrors*/ true), [iteratedType]);
+        }
+
+        function createIterableIteratorType(iteratedType: Type): Type {
+            return createTypeFromGenericGlobalType(getGlobalIterableIteratorType(/*reportErrors*/ true), [iteratedType]);
         }
 
         function createArrayType(elementType: Type): ObjectType {
@@ -7600,7 +7654,7 @@ namespace ts {
                 if ((globalStringType === source && stringType === target) ||
                     (globalNumberType === source && numberType === target) ||
                     (globalBooleanType === source && booleanType === target) ||
-                    (getGlobalESSymbolType() === source && esSymbolType === target)) {
+                    (getGlobalESSymbolType(/*reportErrors*/ false) === source && esSymbolType === target)) {
                         reportError(Diagnostics._0_is_a_primitive_but_1_is_a_wrapper_object_Prefer_using_0_when_possible, targetType, sourceType);
                 }
             }
@@ -9720,12 +9774,12 @@ namespace ts {
 
         function getTypeOfDestructuredArrayElement(type: Type, index: number) {
             return isTupleLikeType(type) && getTypeOfPropertyOfType(type, "" + index) ||
-                checkIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false) ||
+                checkIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterable*/ false) ||
                 unknownType;
         }
 
         function getTypeOfDestructuredSpreadExpression(type: Type) {
-            return createArrayType(checkIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false) || unknownType);
+            return createArrayType(checkIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterable*/ false) || unknownType);
         }
 
         function getAssignedTypeOfBinaryExpression(node: BinaryExpression): Type {
@@ -9764,7 +9818,7 @@ namespace ts {
                 case SyntaxKind.ForInStatement:
                     return stringType;
                 case SyntaxKind.ForOfStatement:
-                    return checkRightHandSideOfForOf((<ForOfStatement>parent).expression) || unknownType;
+                    return checkRightHandSideOfForOf((<ForOfStatement>parent).expression, (<ForOfStatement>parent).awaitModifier) || unknownType;
                 case SyntaxKind.BinaryExpression:
                     return getAssignedTypeOfBinaryExpression(<BinaryExpression>parent);
                 case SyntaxKind.DeleteExpression:
@@ -9808,7 +9862,7 @@ namespace ts {
                 return stringType;
             }
             if (node.parent.parent.kind === SyntaxKind.ForOfStatement) {
-                return checkRightHandSideOfForOf((<ForOfStatement>node.parent.parent).expression) || unknownType;
+                return checkRightHandSideOfForOf((<ForOfStatement>node.parent.parent).expression, (<ForOfStatement>node.parent.parent).awaitModifier) || unknownType;
             }
             return unknownType;
         }
@@ -10084,7 +10138,7 @@ namespace ts {
                     }
                     let type: FlowType;
                     if (flow.flags & FlowFlags.AfterFinally) {
-                        // block flow edge: finally -> pre-try (for larger explanation check comment in binder.ts - bindTryStatement 
+                        // block flow edge: finally -> pre-try (for larger explanation check comment in binder.ts - bindTryStatement
                         (<AfterFinallyFlow>flow).locked = true;
                         type = getTypeAtFlowNode((<AfterFinallyFlow>flow).antecedent);
                         (<AfterFinallyFlow>flow).locked = false;
@@ -10252,7 +10306,7 @@ namespace ts {
                 let seenIncomplete = false;
                 for (const antecedent of flow.antecedents) {
                     if (antecedent.flags & FlowFlags.PreFinally && (<PreFinallyFlow>antecedent).lock.locked) {
-                        // if flow correspond to branch from pre-try to finally and this branch is locked - this means that 
+                        // if flow correspond to branch from pre-try to finally and this branch is locked - this means that
                         // we initially have started following the flow outside the finally block.
                         // in this case we should ignore this branch.
                         continue;
@@ -11444,31 +11498,29 @@ namespace ts {
 
         function getContextualTypeForReturnExpression(node: Expression): Type {
             const func = getContainingFunction(node);
-
-            if (isAsyncFunctionLike(func)) {
-                const contextualReturnType = getContextualReturnType(func);
-                if (contextualReturnType) {
-                    return getPromisedType(contextualReturnType);
+            if (func) {
+                const functionFlags = getFunctionFlags(func);
+                if (functionFlags & FunctionFlags.Generator) { // AsyncGenerator function or Generator function
+                    return undefined;
                 }
 
-                return undefined;
+                const contextualReturnType = getContextualReturnType(func);
+                return functionFlags & FunctionFlags.Async
+                    ? contextualReturnType && getAwaitedTypeOfPromise(contextualReturnType) // Async function
+                    : contextualReturnType; // Regular function
             }
-
-            if (func && !func.asteriskToken) {
-                return getContextualReturnType(func);
-            }
-
             return undefined;
         }
 
         function getContextualTypeForYieldOperand(node: YieldExpression): Type {
             const func = getContainingFunction(node);
             if (func) {
+                const functionFlags = getFunctionFlags(func);
                 const contextualReturnType = getContextualReturnType(func);
                 if (contextualReturnType) {
                     return node.asteriskToken
                         ? contextualReturnType
-                        : getElementTypeOfIterableIterator(contextualReturnType);
+                        : getIteratedTypeOfGenerator(contextualReturnType, (functionFlags & FunctionFlags.Async) !== 0);
                 }
             }
 
@@ -11646,7 +11698,7 @@ namespace ts {
                 const index = indexOf(arrayLiteral.elements, node);
                 return getTypeOfPropertyOfContextualType(type, "" + index)
                     || getIndexTypeOfContextualType(type, IndexKind.Number)
-                    || (languageVersion >= ScriptTarget.ES2015 ? getElementTypeOfIterable(type, /*errorNode*/ undefined) : undefined);
+                    || getIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterable*/ false, /*checkAssignability*/ false);
             }
             return undefined;
         }
@@ -11861,8 +11913,12 @@ namespace ts {
         }
 
         function checkSpreadExpression(node: SpreadElement, contextualMapper?: TypeMapper): Type {
+            if (languageVersion < ScriptTarget.ES2015 && compilerOptions.downlevelIteration) {
+                checkExternalEmitHelpers(node, ExternalEmitHelpers.SpreadIncludes);
+            }
+
             const arrayOrIterableType = checkExpression(node.expression, contextualMapper);
-            return checkIteratedTypeOrElementType(arrayOrIterableType, node.expression, /*allowStringInput*/ false);
+            return checkIteratedTypeOrElementType(arrayOrIterableType, node.expression, /*allowStringInput*/ false, /*allowAsyncIterable*/ false);
         }
 
         function hasDefaultValue(node: BindingElement | Expression): boolean {
@@ -11891,7 +11947,7 @@ namespace ts {
                     // if there is no index type / iterated type.
                     const restArrayType = checkExpression((<SpreadElement>e).expression, contextualMapper);
                     const restElementType = getIndexTypeOfType(restArrayType, IndexKind.Number) ||
-                        (languageVersion >= ScriptTarget.ES2015 ? getElementTypeOfIterable(restArrayType, /*errorNode*/ undefined) : undefined);
+                        getIteratedTypeOrElementType(restArrayType, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterable*/ false, /*checkAssignability*/ false);
                     if (restElementType) {
                         elementTypes.push(restElementType);
                     }
@@ -12575,7 +12631,7 @@ namespace ts {
                 // If the elemType is a stringLiteral type, we can then provide a check to make sure that the string literal type is one of the Jsx intrinsic element type
                 // For example:
                 //      var CustomTag: "h1" = "h1";
-                //      <CustomTag> Hello World </CustomTag> 
+                //      <CustomTag> Hello World </CustomTag>
                 const intrinsicElementsType = getJsxType(JsxNames.IntrinsicElements);
                 if (intrinsicElementsType !== unknownType) {
                     const stringLiteralTypeName = (<LiteralType>elementType).text;
@@ -12721,7 +12777,7 @@ namespace ts {
         }
 
         /**
-         * Get the attributes type, which indicates the attributes that are valid on the given JSXOpeningLikeElement. 
+         * Get the attributes type, which indicates the attributes that are valid on the given JSXOpeningLikeElement.
          * @param node a JSXOpeningLikeElement node
          * @return an attributes type of the given node
          */
@@ -12746,10 +12802,10 @@ namespace ts {
         }
 
         function getJsxGlobalElementClassType(): Type {
-            if (!jsxElementClassType) {
-                jsxElementClassType = getExportedTypeFromNamespace(JsxNames.JSX, JsxNames.ElementClass);
+            if (!deferredJsxElementClassType) {
+                deferredJsxElementClassType = getExportedTypeFromNamespace(JsxNames.JSX, JsxNames.ElementClass);
             }
-            return jsxElementClassType;
+            return deferredJsxElementClassType;
         }
 
         /**
@@ -13215,7 +13271,7 @@ namespace ts {
                 return false;
             }
 
-            const globalESSymbol = getGlobalESSymbolConstructorSymbol();
+            const globalESSymbol = getGlobalESSymbolConstructorSymbol(/*reportErrors*/ true);
             if (!globalESSymbol) {
                 // Already errored when we tried to look up the symbol
                 return false;
@@ -13534,7 +13590,7 @@ namespace ts {
          */
         function checkApplicableSignatureForJsxOpeningLikeElement(node: JsxOpeningLikeElement, signature: Signature, relation: Map<RelationComparisonResult>) {
             // JSX opening-like element has correct arity for stateless-function component if the one of the following condition is true:
-            //      1. callIsIncomplete 
+            //      1. callIsIncomplete
             //      2. attributes property has same number of properties as the parameter object type.
             //         We can figure that out by resolving attributes property and check number of properties in the resolved type
             // If the call has correct arity, we will then check if the argument type and parameter type is assignable
@@ -14691,6 +14747,10 @@ namespace ts {
                 pos < signature.parameters.length ? getTypeOfParameter(signature.parameters[pos]) : anyType;
         }
 
+        function getTypeOfFirstParameterOfSignature(signature: Signature) {
+            return signature.parameters.length > 0 ? getTypeAtPosition(signature, 0) : neverType;
+        }
+
         function assignContextualParameterTypes(signature: Signature, context: Signature, mapper: TypeMapper) {
             const len = signature.parameters.length - (signature.hasRestParameter ? 1 : 0);
             if (isInferentialContext(mapper)) {
@@ -14798,10 +14858,10 @@ namespace ts {
 
         function createPromiseType(promisedType: Type): Type {
             // creates a `Promise<T>` type where `T` is the promisedType argument
-            const globalPromiseType = getGlobalPromiseType();
+            const globalPromiseType = getGlobalPromiseType(/*reportErrors*/ true);
             if (globalPromiseType !== emptyGenericType) {
                 // if the promised type is itself a promise, get the underlying type; otherwise, fallback to the promised type
-                promisedType = getAwaitedType(promisedType);
+                promisedType = getAwaitedType(promisedType) || emptyObjectType;
                 return createTypeReference(<GenericType>globalPromiseType, [promisedType]);
             }
 
@@ -14814,7 +14874,7 @@ namespace ts {
                 error(func, Diagnostics.An_async_function_or_method_must_return_a_Promise_Make_sure_you_have_a_declaration_for_Promise_or_include_ES2015_in_your_lib_option);
                 return unknownType;
             }
-            else if (!getGlobalPromiseConstructorSymbol()) {
+            else if (!getGlobalPromiseConstructorSymbol(/*reportErrors*/ true)) {
                 error(func, Diagnostics.An_async_function_or_method_in_ES5_SlashES3_requires_the_Promise_constructor_Make_sure_you_have_a_declaration_for_the_Promise_constructor_or_include_ES2015_in_your_lib_option);
             }
 
@@ -14827,25 +14887,26 @@ namespace ts {
                 return unknownType;
             }
 
-            const isAsync = isAsyncFunctionLike(func);
+            const functionFlags = getFunctionFlags(func);
             let type: Type;
             if (func.body.kind !== SyntaxKind.Block) {
                 type = checkExpressionCached(<Expression>func.body, contextualMapper);
-                if (isAsync) {
+                if (functionFlags & FunctionFlags.Async) {
                     // From within an async function you can return either a non-promise value or a promise. Any
                     // Promise/A+ compatible implementation will always assimilate any foreign promise, so the
                     // return type of the body should be unwrapped to its awaited type, which we will wrap in
                     // the native Promise<T> type later in this function.
-                    type = checkAwaitedType(type, func, Diagnostics.Return_expression_in_async_function_does_not_have_a_valid_callable_then_member);
+                    type = checkAwaitedType(type, /*errorNode*/ func);
                 }
             }
             else {
                 let types: Type[];
-                const funcIsGenerator = !!func.asteriskToken;
-                if (funcIsGenerator) {
+                if (functionFlags & FunctionFlags.Generator) { // Generator or AsyncGenerator function
                     types = checkAndAggregateYieldOperandTypes(func, contextualMapper);
                     if (types.length === 0) {
-                        const iterableIteratorAny = createIterableIteratorType(anyType);
+                        const iterableIteratorAny = functionFlags & FunctionFlags.Async
+                            ? createAsyncIterableIteratorType(anyType) // AsyncGenerator function
+                            : createIterableIteratorType(anyType); // Generator function
                         if (compilerOptions.noImplicitAny) {
                             error(func.asteriskToken,
                                 Diagnostics.Generator_implicitly_has_type_0_because_it_does_not_yield_any_values_Consider_supplying_a_return_type, typeToString(iterableIteratorAny));
@@ -14857,23 +14918,31 @@ namespace ts {
                     types = checkAndAggregateReturnExpressionTypes(func, contextualMapper);
                     if (!types) {
                         // For an async function, the return type will not be never, but rather a Promise for never.
-                        return isAsync ? createPromiseReturnType(func, neverType) : neverType;
+                        return functionFlags & FunctionFlags.Async
+                            ? createPromiseReturnType(func, neverType) // Async function
+                            : neverType; // Normal function
                     }
                     if (types.length === 0) {
                         // For an async function, the return type will not be void, but rather a Promise for void.
-                        return isAsync ? createPromiseReturnType(func, voidType) : voidType;
+                        return functionFlags & FunctionFlags.Async
+                            ? createPromiseReturnType(func, voidType) // Async function
+                            : voidType; // Normal function
                     }
                 }
                 // Return a union of the return expression types.
                 type = getUnionType(types, /*subtypeReduction*/ true);
 
-                if (funcIsGenerator) {
-                    type = createIterableIteratorType(type);
+                if (functionFlags & FunctionFlags.Generator) { // AsyncGenerator function or Generator function
+                    type = functionFlags & FunctionFlags.Async
+                        ? createAsyncIterableIteratorType(type) // AsyncGenerator function
+                        : createIterableIteratorType(type); // Generator function
                 }
             }
+
             if (!contextualSignature) {
                 reportErrorsFromWidening(func, type);
             }
+
             if (isUnitType(type) &&
                 !(contextualSignature &&
                     isLiteralContextualType(
@@ -14885,22 +14954,22 @@ namespace ts {
             // From within an async function you can return either a non-promise value or a promise. Any
             // Promise/A+ compatible implementation will always assimilate any foreign promise, so the
             // return type of the body is awaited type of the body, wrapped in a native Promise<T> type.
-            return isAsync ? createPromiseReturnType(func, widenedType) : widenedType;
+            return (functionFlags & FunctionFlags.AsyncOrAsyncGenerator) === FunctionFlags.Async
+                ? createPromiseReturnType(func, widenedType) // Async function
+                : widenedType; // Generator function, AsyncGenerator function, or normal function
         }
 
         function checkAndAggregateYieldOperandTypes(func: FunctionLikeDeclaration, contextualMapper: TypeMapper): Type[] {
             const aggregatedTypes: Type[] = [];
-
+            const functionFlags = getFunctionFlags(func);
             forEachYieldExpression(<Block>func.body, yieldExpression => {
                 const expr = yieldExpression.expression;
                 if (expr) {
                     let type = checkExpressionCached(expr, contextualMapper);
-
                     if (yieldExpression.asteriskToken) {
                         // A yield* expression effectively yields everything that its operand yields
-                        type = checkElementTypeOfIterable(type, yieldExpression.expression);
+                        type = checkIteratedTypeOrElementType(type, yieldExpression.expression, /*allowStringInput*/ false, (functionFlags & FunctionFlags.Async) !== 0);
                     }
-
                     if (!contains(aggregatedTypes, type)) {
                         aggregatedTypes.push(type);
                     }
@@ -14937,7 +15006,7 @@ namespace ts {
         }
 
         function checkAndAggregateReturnExpressionTypes(func: FunctionLikeDeclaration, contextualMapper: TypeMapper): Type[] {
-            const isAsync = isAsyncFunctionLike(func);
+            const functionFlags = getFunctionFlags(func);
             const aggregatedTypes: Type[] = [];
             let hasReturnWithNoExpression = functionHasImplicitReturn(func);
             let hasReturnOfTypeNever = false;
@@ -14945,12 +15014,12 @@ namespace ts {
                 const expr = returnStatement.expression;
                 if (expr) {
                     let type = checkExpressionCached(expr, contextualMapper);
-                    if (isAsync) {
+                    if (functionFlags & FunctionFlags.Async) {
                         // From within an async function you can return either a non-promise value or a promise. Any
                         // Promise/A+ compatible implementation will always assimilate any foreign promise, so the
                         // return type of the body should be unwrapped to its awaited type, which should be wrapped in
                         // the native Promise<T> type by the caller.
-                        type = checkAwaitedType(type, func, Diagnostics.Return_expression_in_async_function_does_not_have_a_valid_callable_then_member);
+                        type = checkAwaitedType(type, func);
                     }
                     if (type.flags & TypeFlags.Never) {
                         hasReturnOfTypeNever = true;
@@ -15094,9 +15163,13 @@ namespace ts {
         function checkFunctionExpressionOrObjectLiteralMethodDeferred(node: ArrowFunction | FunctionExpression | MethodDeclaration) {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
 
-            const isAsync = isAsyncFunctionLike(node);
-            const returnOrPromisedType = node.type && (isAsync ? checkAsyncFunctionReturnType(node) : getTypeFromTypeNode(node.type));
-            if (!node.asteriskToken) {
+            const functionFlags = getFunctionFlags(node);
+            const returnOrPromisedType = node.type &&
+                ((functionFlags & FunctionFlags.AsyncOrAsyncGenerator) === FunctionFlags.Async ?
+                    checkAsyncFunctionReturnType(node) : // Async function
+                    getTypeFromTypeNode(node.type)); // AsyncGenerator function, Generator function, or normal function
+
+            if ((functionFlags & FunctionFlags.Generator) === 0) { // Async function or normal function
                 // return is not necessary in the body of generators
                 checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, returnOrPromisedType);
             }
@@ -15122,11 +15195,11 @@ namespace ts {
                     // its return type annotation.
                     const exprType = checkExpression(<Expression>node.body);
                     if (returnOrPromisedType) {
-                        if (isAsync) {
-                            const awaitedType = checkAwaitedType(exprType, node.body, Diagnostics.Expression_body_for_async_arrow_function_does_not_have_a_valid_callable_then_member);
+                        if ((functionFlags & FunctionFlags.AsyncOrAsyncGenerator) === FunctionFlags.Async) { // Async function
+                            const awaitedType = checkAwaitedType(exprType, node.body);
                             checkTypeAssignableTo(awaitedType, returnOrPromisedType, node.body);
                         }
-                        else {
+                        else { // Normal function
                             checkTypeAssignableTo(exprType, returnOrPromisedType, node.body);
                         }
                     }
@@ -15441,10 +15514,14 @@ namespace ts {
         }
 
         function checkArrayLiteralAssignment(node: ArrayLiteralExpression, sourceType: Type, contextualMapper?: TypeMapper): Type {
+            if (languageVersion < ScriptTarget.ES2015 && compilerOptions.downlevelIteration) {
+                checkExternalEmitHelpers(node, ExternalEmitHelpers.Read);
+            }
+
             // This elementType will be used if the specific property corresponding to this index is not
             // present (aka the tuple element property). This call also checks that the parentType is in
             // fact an iterable or array (depending on target language).
-            const elementType = checkIteratedTypeOrElementType(sourceType, node, /*allowStringInput*/ false) || unknownType;
+            const elementType = checkIteratedTypeOrElementType(sourceType, node, /*allowStringInput*/ false, /*allowAsyncIterable*/ false) || unknownType;
             const elements = node.elements;
             for (let i = 0; i < elements.length; i++) {
                 checkArrayLiteralDestructuringElementAssignment(node, sourceType, i, elementType, contextualMapper);
@@ -15852,18 +15929,31 @@ namespace ts {
                 const func = getContainingFunction(node);
                 // If the user's code is syntactically correct, the func should always have a star. After all,
                 // we are in a yield context.
-                if (func && func.asteriskToken) {
+                const functionFlags = func && getFunctionFlags(func);
+                if (node.asteriskToken) {
+                    if (functionFlags & FunctionFlags.Async) {
+                        if (languageVersion < ScriptTarget.ES2017) {
+                            checkExternalEmitHelpers(node, ExternalEmitHelpers.AsyncDelegator);
+                        }
+                    }
+                    else if (languageVersion < ScriptTarget.ES2015 && compilerOptions.downlevelIteration) {
+                        checkExternalEmitHelpers(node, ExternalEmitHelpers.Values);
+                    }
+                }
+
+                if (functionFlags & FunctionFlags.Generator) {
                     const expressionType = checkExpressionCached(node.expression, /*contextualMapper*/ undefined);
                     let expressionElementType: Type;
                     const nodeIsYieldStar = !!node.asteriskToken;
                     if (nodeIsYieldStar) {
-                        expressionElementType = checkElementTypeOfIterable(expressionType, node.expression);
+                        expressionElementType = checkIteratedTypeOrElementType(expressionType, node.expression, /*allowStringInput*/ false, (functionFlags & FunctionFlags.Async) !== 0);
                     }
+
                     // There is no point in doing an assignability check if the function
                     // has no explicit return type because the return type is directly computed
                     // from the yield expressions.
                     if (func.type) {
-                        const signatureElementType = getElementTypeOfIterableIterator(getTypeFromTypeNode(func.type)) || anyType;
+                        const signatureElementType = getIteratedTypeOfGenerator(getTypeFromTypeNode(func.type), (functionFlags & FunctionFlags.Async) !== 0) || anyType;
                         if (nodeIsYieldStar) {
                             checkTypeAssignableTo(expressionElementType, signatureElementType, node.expression, /*headMessage*/ undefined);
                         }
@@ -16209,16 +16299,6 @@ namespace ts {
             }
         }
 
-        function isSyntacticallyValidGenerator(node: SignatureDeclaration): boolean {
-            if (!(<FunctionLikeDeclaration>node).asteriskToken || !(<FunctionLikeDeclaration>node).body) {
-                return false;
-            }
-
-            return node.kind === SyntaxKind.MethodDeclaration ||
-                node.kind === SyntaxKind.FunctionDeclaration ||
-                node.kind === SyntaxKind.FunctionExpression;
-        }
-
         function getTypePredicateParameterIndex(parameterList: NodeArray<ParameterDeclaration>, parameter: Identifier): number {
             if (parameterList) {
                 for (let i = 0; i < parameterList.length; i++) {
@@ -16338,9 +16418,19 @@ namespace ts {
                 checkGrammarFunctionLikeDeclaration(<FunctionLikeDeclaration>node);
             }
 
-            if (isAsyncFunctionLike(node) && languageVersion < ScriptTarget.ES2017) {
+            const functionFlags = getFunctionFlags(<FunctionLikeDeclaration>node);
+            if ((functionFlags & FunctionFlags.InvalidAsyncOrAsyncGenerator) === FunctionFlags.Async && languageVersion < ScriptTarget.ES2017) {
                 checkExternalEmitHelpers(node, ExternalEmitHelpers.Awaiter);
                 if (languageVersion < ScriptTarget.ES2015) {
+                    checkExternalEmitHelpers(node, ExternalEmitHelpers.Generator);
+                }
+            }
+
+            if ((functionFlags & FunctionFlags.InvalidGenerator) === FunctionFlags.Generator) {
+                if (functionFlags & FunctionFlags.Async && languageVersion < ScriptTarget.ES2017) {
+                    checkExternalEmitHelpers(node, ExternalEmitHelpers.AsyncGenerator);
+                }
+                else if (languageVersion < ScriptTarget.ES2015) {
                     checkExternalEmitHelpers(node, ExternalEmitHelpers.Generator);
                 }
             }
@@ -16367,14 +16457,17 @@ namespace ts {
                 }
 
                 if (node.type) {
-                    if (languageVersion >= ScriptTarget.ES2015 && isSyntacticallyValidGenerator(node)) {
+                    const functionFlags = getFunctionFlags(<FunctionDeclaration>node);
+                    if ((functionFlags & FunctionFlags.InvalidGenerator) === FunctionFlags.Generator) {
                         const returnType = getTypeFromTypeNode(node.type);
                         if (returnType === voidType) {
                             error(node.type, Diagnostics.A_generator_cannot_have_a_void_type_annotation);
                         }
                         else {
-                            const generatorElementType = getElementTypeOfIterableIterator(returnType) || anyType;
-                            const iterableIteratorInstantiation = createIterableIteratorType(generatorElementType);
+                            const generatorElementType = getIteratedTypeOfGenerator(returnType, (functionFlags & FunctionFlags.Async) !== 0) || anyType;
+                            const iterableIteratorInstantiation = functionFlags & FunctionFlags.Async
+                                ? createAsyncIterableIteratorType(generatorElementType) // AsyncGenerator function
+                                : createIterableIteratorType(generatorElementType); // Generator function
 
                             // Naively, one could check that IterableIterator<any> is assignable to the return type annotation.
                             // However, that would not catch the error in the following case.
@@ -16385,7 +16478,7 @@ namespace ts {
                             checkTypeAssignableTo(iterableIteratorInstantiation, returnType, node.type);
                         }
                     }
-                    else if (isAsyncFunctionLike(node)) {
+                    else if ((functionFlags & FunctionFlags.AsyncOrAsyncGenerator) === FunctionFlags.Async) {
                         checkAsyncFunctionReturnType(<FunctionLikeDeclaration>node);
                     }
                 }
@@ -17186,22 +17279,9 @@ namespace ts {
             }
         }
 
-        function checkNonThenableType(type: Type, location?: Node, message?: DiagnosticMessage): Type {
-            type = getWidenedType(type);
-            const apparentType = getApparentType(type);
-            if ((apparentType.flags & (TypeFlags.Any | TypeFlags.Never)) === 0 && isTypeAssignableTo(type, getGlobalThenableType())) {
-                if (location) {
-                    if (!message) {
-                        message = Diagnostics.Operand_for_await_does_not_have_a_valid_callable_then_member;
-                    }
-
-                    error(location, message);
-                }
-
-                return unknownType;
-            }
-
-            return type;
+        function getAwaitedTypeOfPromise(type: Type, errorNode?: Node): Type | undefined {
+            const promisedType = getPromisedTypeOfPromise(type, errorNode);
+            return promisedType && getAwaitedType(promisedType, errorNode);
         }
 
         /**
@@ -17209,7 +17289,7 @@ namespace ts {
           * @param type The type of the promise.
           * @remarks The "promised type" of a type is the type of the "value" parameter of the "onfulfilled" callback.
           */
-        function getPromisedType(promise: Type): Type {
+        function getPromisedTypeOfPromise(promise: Type, errorNode?: Node): Type {
             //
             //  { // promise
             //      then( // thenFunction
@@ -17224,25 +17304,25 @@ namespace ts {
                 return undefined;
             }
 
-            if (getObjectFlags(promise) & ObjectFlags.Reference) {
-                if ((<GenericType>promise).target === tryGetGlobalPromiseType()
-                    || (<GenericType>promise).target === getGlobalPromiseLikeType()) {
-                    return (<GenericType>promise).typeArguments[0];
-                }
+            const typeAsPromise = <PromiseOrAwaitableType>promise;
+            if (typeAsPromise.promisedTypeOfPromise) {
+                return typeAsPromise.promisedTypeOfPromise;
             }
 
-            const globalPromiseLikeType = getInstantiatedGlobalPromiseLikeType();
-            if (globalPromiseLikeType === emptyObjectType || !isTypeAssignableTo(promise, globalPromiseLikeType)) {
-                return undefined;
+            if (isReferenceToType(promise, getGlobalPromiseType(/*reportErrors*/ false))) {
+                return typeAsPromise.promisedTypeOfPromise = (<GenericType>promise).typeArguments[0];
             }
 
             const thenFunction = getTypeOfPropertyOfType(promise, "then");
-            if (!thenFunction || isTypeAny(thenFunction)) {
+            if (isTypeAny(thenFunction)) {
                 return undefined;
             }
 
-            const thenSignatures = getSignaturesOfType(thenFunction, SignatureKind.Call);
+            const thenSignatures = thenFunction ? getSignaturesOfType(thenFunction, SignatureKind.Call) : emptyArray;
             if (thenSignatures.length === 0) {
+                if (errorNode) {
+                    error(errorNode, Diagnostics.A_promise_must_have_a_then_method);
+                }
                 return undefined;
             }
 
@@ -17253,14 +17333,13 @@ namespace ts {
 
             const onfulfilledParameterSignatures = getSignaturesOfType(onfulfilledParameterType, SignatureKind.Call);
             if (onfulfilledParameterSignatures.length === 0) {
+                if (errorNode) {
+                    error(errorNode, Diagnostics.The_first_parameter_of_the_then_method_of_a_promise_must_be_a_callback);
+                }
                 return undefined;
             }
 
-            return getUnionType(map(onfulfilledParameterSignatures, getTypeOfFirstParameterOfSignature), /*subtypeReduction*/ true);
-        }
-
-        function getTypeOfFirstParameterOfSignature(signature: Signature) {
-            return signature.parameters.length > 0 ? getTypeAtPosition(signature, 0) : neverType;
+            return typeAsPromise.promisedTypeOfPromise = getUnionType(map(onfulfilledParameterSignatures, getTypeOfFirstParameterOfSignature), /*subtypeReduction*/ true);
         }
 
         /**
@@ -17270,96 +17349,111 @@ namespace ts {
           * Promise-like type; otherwise, it is the type of the expression. This is used to reflect
           * The runtime behavior of the `await` keyword.
           */
-        function getAwaitedType(type: Type) {
-            return checkAwaitedType(type, /*location*/ undefined, /*message*/ undefined);
+        function checkAwaitedType(type: Type, errorNode: Node): Type {
+            return getAwaitedType(type, errorNode) || unknownType;
         }
 
-        function checkAwaitedType(type: Type, location?: Node, message?: DiagnosticMessage) {
-            return checkAwaitedTypeWorker(type);
-
-            function checkAwaitedTypeWorker(type: Type): Type {
-                if (type.flags & TypeFlags.Union) {
-                    const types: Type[] = [];
-                    for (const constituentType of (<UnionType>type).types) {
-                        types.push(checkAwaitedTypeWorker(constituentType));
-                    }
-
-                    return getUnionType(types, /*subtypeReduction*/ true);
-                }
-                else {
-                    const promisedType = getPromisedType(type);
-                    if (promisedType === undefined) {
-                        // The type was not a PromiseLike, so it could not be unwrapped any further.
-                        // As long as the type does not have a callable "then" property, it is
-                        // safe to return the type; otherwise, an error will have been reported in
-                        // the call to checkNonThenableType and we will return unknownType.
-                        //
-                        // An example of a non-promise "thenable" might be:
-                        //
-                        //  await { then(): void {} }
-                        //
-                        // The "thenable" does not match the minimal definition for a PromiseLike. When
-                        // a Promise/A+-compatible or ES6 promise tries to adopt this value, the promise
-                        // will never settle. We treat this as an error to help flag an early indicator
-                        // of a runtime problem. If the user wants to return this value from an async
-                        // function, they would need to wrap it in some other value. If they want it to
-                        // be treated as a promise, they can cast to <any>.
-                        return checkNonThenableType(type, location, message);
-                    }
-                    else {
-                        if (type.id === promisedType.id || indexOf(awaitedTypeStack, promisedType.id) >= 0) {
-                            // We have a bad actor in the form of a promise whose promised type is
-                            // the same promise type, or a mutually recursive promise. Return the
-                            // unknown type as we cannot guess the shape. If this were the actual
-                            // case in the JavaScript, this Promise would never resolve.
-                            //
-                            // An example of a bad actor with a singly-recursive promise type might
-                            // be:
-                            //
-                            //  interface BadPromise {
-                            //      then(
-                            //          onfulfilled: (value: BadPromise) => any,
-                            //          onrejected: (error: any) => any): BadPromise;
-                            //  }
-                            //
-                            // The above interface will pass the PromiseLike check, and return a
-                            // promised type of `BadPromise`. Since this is a self reference, we
-                            // don't want to keep recursing ad infinitum.
-                            //
-                            // An example of a bad actor in the form of a mutually-recursive
-                            // promise type might be:
-                            //
-                            //  interface BadPromiseA {
-                            //      then(
-                            //          onfulfilled: (value: BadPromiseB) => any,
-                            //          onrejected: (error: any) => any): BadPromiseB;
-                            //  }
-                            //
-                            //  interface BadPromiseB {
-                            //      then(
-                            //          onfulfilled: (value: BadPromiseA) => any,
-                            //          onrejected: (error: any) => any): BadPromiseA;
-                            //  }
-                            //
-                            if (location) {
-                                error(
-                                    location,
-                                    Diagnostics._0_is_referenced_directly_or_indirectly_in_the_fulfillment_callback_of_its_own_then_method,
-                                    symbolToString(type.symbol));
-                            }
-
-                            return unknownType;
-                        }
-
-                        // Keep track of the type we're about to unwrap to avoid bad recursive promise types.
-                        // See the comments above for more information.
-                        awaitedTypeStack.push(type.id);
-                        const awaitedType = checkAwaitedTypeWorker(promisedType);
-                        awaitedTypeStack.pop();
-                        return awaitedType;
-                    }
-                }
+        function getAwaitedType(type: Type, errorNode?: Node): Type | undefined {
+            const typeAsAwaitable = <PromiseOrAwaitableType>type;
+            if (typeAsAwaitable.awaitedTypeOfType) {
+                return typeAsAwaitable.awaitedTypeOfType;
             }
+
+            if (isTypeAny(type)) {
+                return typeAsAwaitable.awaitedTypeOfType = type;
+            }
+
+            if (type.flags & TypeFlags.Union) {
+                let types: Type[];
+                for (const constituentType of (<UnionType>type).types) {
+                    types = append(types, getAwaitedType(constituentType, errorNode));
+                }
+
+                if (!types) {
+                    return undefined;
+                }
+
+                return typeAsAwaitable.awaitedTypeOfType = getUnionType(types, /*subtypeReduction*/ true);
+            }
+
+            const promisedType = getPromisedTypeOfPromise(type);
+            if (promisedType) {
+                if (type.id === promisedType.id || indexOf(awaitedTypeStack, promisedType.id) >= 0) {
+                    // Verify that we don't have a bad actor in the form of a promise whose
+                    // promised type is the same as the promise type, or a mutually recursive
+                    // promise. If so, we return undefined as we cannot guess the shape. If this
+                    // were the actual case in the JavaScript, this Promise would never resolve.
+                    //
+                    // An example of a bad actor with a singly-recursive promise type might
+                    // be:
+                    //
+                    //  interface BadPromise {
+                    //      then(
+                    //          onfulfilled: (value: BadPromise) => any,
+                    //          onrejected: (error: any) => any): BadPromise;
+                    //  }
+                    // The above interface will pass the PromiseLike check, and return a
+                    // promised type of `BadPromise`. Since this is a self reference, we
+                    // don't want to keep recursing ad infinitum.
+                    //
+                    // An example of a bad actor in the form of a mutually-recursive
+                    // promise type might be:
+                    //
+                    //  interface BadPromiseA {
+                    //      then(
+                    //          onfulfilled: (value: BadPromiseB) => any,
+                    //          onrejected: (error: any) => any): BadPromiseB;
+                    //  }
+                    //
+                    //  interface BadPromiseB {
+                    //      then(
+                    //          onfulfilled: (value: BadPromiseA) => any,
+                    //          onrejected: (error: any) => any): BadPromiseA;
+                    //  }
+                    //
+                    if (errorNode) {
+                        error(errorNode, Diagnostics.Type_is_referenced_directly_or_indirectly_in_the_fulfillment_callback_of_its_own_then_method);
+                    }
+                    return undefined;
+                }
+
+                // Keep track of the type we're about to unwrap to avoid bad recursive promise types.
+                // See the comments above for more information.
+                awaitedTypeStack.push(type.id);
+                const awaitedType = getAwaitedType(promisedType, errorNode);
+                awaitedTypeStack.pop();
+
+                if (!awaitedType) {
+                    return undefined;
+                }
+
+                return typeAsAwaitable.awaitedTypeOfType = awaitedType;
+            }
+
+            // The type was not a promise, so it could not be unwrapped any further.
+            // As long as the type does not have a callable "then" property, it is
+            // safe to return the type; otherwise, an error will be reported in
+            // the call to getNonThenableType and we will return undefined.
+            //
+            // An example of a non-promise "thenable" might be:
+            //
+            //  await { then(): void {} }
+            //
+            // The "thenable" does not match the minimal definition for a promise. When
+            // a Promise/A+-compatible or ES6 promise tries to adopt this value, the promise
+            // will never settle. We treat this as an error to help flag an early indicator
+            // of a runtime problem. If the user wants to return this value from an async
+            // function, they would need to wrap it in some other value. If they want it to
+            // be treated as a promise, they can cast to <any>.
+            const thenFunction = getTypeOfPropertyOfType(type, "then");
+            if (thenFunction && getSignaturesOfType(thenFunction, SignatureKind.Call).length > 0) {
+                if (errorNode) {
+                    error(errorNode, Diagnostics.Type_used_as_operand_to_await_or_the_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
+                }
+                return undefined;
+            }
+
+            return typeAsAwaitable.awaitedTypeOfType = type;
         }
 
         /**
@@ -17406,8 +17500,8 @@ namespace ts {
                 if (returnType === unknownType) {
                     return unknownType;
                 }
-                const globalPromiseType = getGlobalPromiseType();
-                if (globalPromiseType !== emptyGenericType && globalPromiseType !== getTargetType(returnType)) {
+                const globalPromiseType = getGlobalPromiseType(/*reportErrors*/ true);
+                if (globalPromiseType !== emptyGenericType && !isReferenceToType(returnType, globalPromiseType)) {
                     // The promise type was not a valid type reference to the global promise type, so we
                     // report an error and return the unknown type.
                     error(node.type, Diagnostics.The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type);
@@ -17431,7 +17525,7 @@ namespace ts {
                 const promiseConstructorSymbol = resolveEntityName(promiseConstructorName, SymbolFlags.Value, /*ignoreErrors*/ true);
                 const promiseConstructorType = promiseConstructorSymbol ? getTypeOfSymbol(promiseConstructorSymbol) : unknownType;
                 if (promiseConstructorType === unknownType) {
-                    if (promiseConstructorName.kind === SyntaxKind.Identifier && promiseConstructorName.text === "Promise" && getTargetType(returnType) === tryGetGlobalPromiseType()) {
+                    if (promiseConstructorName.kind === SyntaxKind.Identifier && promiseConstructorName.text === "Promise" && getTargetType(returnType) === getGlobalPromiseType(/*reportErrors*/ false)) {
                         error(node.type, Diagnostics.An_async_function_or_method_in_ES5_SlashES3_requires_the_Promise_constructor_Make_sure_you_have_a_declaration_for_the_Promise_constructor_or_include_ES2015_in_your_lib_option);
                     }
                     else {
@@ -17440,7 +17534,7 @@ namespace ts {
                     return unknownType;
                 }
 
-                const globalPromiseConstructorLikeType = getGlobalPromiseConstructorLikeType();
+                const globalPromiseConstructorLikeType = getGlobalPromiseConstructorLikeType(/*reportErrors*/ true);
                 if (globalPromiseConstructorLikeType === emptyObjectType) {
                     // If we couldn't resolve the global PromiseConstructorLike type we cannot verify
                     // compatibility with __awaiter.
@@ -17465,7 +17559,7 @@ namespace ts {
             }
 
             // Get and return the awaited type of the return type.
-            return checkAwaitedType(returnType, node, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
+            return checkAwaitedType(returnType, node);
         }
 
         /** Check a decorator */
@@ -17611,7 +17705,7 @@ namespace ts {
         function checkFunctionOrMethodDeclaration(node: FunctionDeclaration | MethodDeclaration): void {
             checkDecorators(node);
             checkSignatureDeclaration(node);
-            const isAsync = isAsyncFunctionLike(node);
+            const functionFlags = getFunctionFlags(node);
 
             // Do not use hasDynamicName here, because that returns false for well known symbols.
             // We want to perform checkComputedPropertyName for all computed properties, including
@@ -17653,8 +17747,10 @@ namespace ts {
 
             checkSourceElement(node.body);
 
-            if (!node.asteriskToken) {
-                const returnOrPromisedType = node.type && (isAsync ? checkAsyncFunctionReturnType(node) : getTypeFromTypeNode(node.type));
+            if ((functionFlags & FunctionFlags.Generator) === 0) { // Async function or normal function
+                const returnOrPromisedType = node.type && (functionFlags & FunctionFlags.Async
+                    ? checkAsyncFunctionReturnType(node) // Async function
+                    : getTypeFromTypeNode(node.type)); // normal function
                 checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, returnOrPromisedType);
             }
 
@@ -17665,7 +17761,7 @@ namespace ts {
                     reportImplicitAnyError(node, anyType);
                 }
 
-                if (node.asteriskToken && nodeIsPresent(node.body)) {
+                if (functionFlags & FunctionFlags.Generator && nodeIsPresent(node.body)) {
                     // A generator with a body and no type annotation can still cause errors. It can error if the
                     // yielded values have no common supertype, or it can give an implicit any error if it has no
                     // yielded values. The only way to trigger these errors is to try checking its return type.
@@ -18162,7 +18258,7 @@ namespace ts {
             }
 
             if (node.kind === SyntaxKind.BindingElement) {
-                if (node.parent.kind === SyntaxKind.ObjectBindingPattern && languageVersion < ScriptTarget.ESNext && !isInAmbientContext(node)) {
+                if (node.parent.kind === SyntaxKind.ObjectBindingPattern && languageVersion < ScriptTarget.ESNext) {
                     checkExternalEmitHelpers(node, ExternalEmitHelpers.Rest);
                 }
                 // check computed properties inside property names of binding elements
@@ -18183,6 +18279,10 @@ namespace ts {
 
             // For a binding pattern, check contained binding elements
             if (isBindingPattern(node.name)) {
+                if (node.name.kind === SyntaxKind.ArrayBindingPattern && languageVersion < ScriptTarget.ES2015 && compilerOptions.downlevelIteration) {
+                    checkExternalEmitHelpers(node, ExternalEmitHelpers.Read);
+                }
+
                 forEach((<BindingPattern>node.name).elements, checkSourceElement);
             }
             // For a parameter declaration with an initializer, error and exit if the containing function doesn't have a body
@@ -18276,10 +18376,10 @@ namespace ts {
             forEach(node.declarationList.declarations, checkSourceElement);
         }
 
-        function checkGrammarDisallowedModifiersOnObjectLiteralExpressionMethod(node: Node) {
+        function checkGrammarDisallowedModifiersOnObjectLiteralExpressionMethod(node: MethodDeclaration) {
             // We only disallow modifier on a method declaration if it is a property of object-literal-expression
             if (node.modifiers && node.parent.kind === SyntaxKind.ObjectLiteralExpression) {
-                if (isAsyncFunctionLike(node)) {
+                if (getFunctionFlags(node) & FunctionFlags.Async) {
                     if (node.modifiers.length > 1) {
                         return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here);
                     }
@@ -18355,6 +18455,17 @@ namespace ts {
         function checkForOfStatement(node: ForOfStatement): void {
             checkGrammarForInOrForOfStatement(node);
 
+            if (node.kind === SyntaxKind.ForOfStatement) {
+                if ((<ForOfStatement>node).awaitModifier) {
+                    if (languageVersion < ScriptTarget.ES2017) {
+                        checkExternalEmitHelpers(node, ExternalEmitHelpers.ForAwaitOfIncludes);
+                    }
+                }
+                else if (languageVersion < ScriptTarget.ES2015 && compilerOptions.downlevelIteration) {
+                    checkExternalEmitHelpers(node, ExternalEmitHelpers.ForOfIncludes);
+                }
+            }
+
             // Check the LHS and RHS
             // If the LHS is a declaration, just check it as a variable declaration, which will in turn check the RHS
             // via checkRightHandSideOfForOf.
@@ -18365,7 +18476,7 @@ namespace ts {
             }
             else {
                 const varExpr = <Expression>node.initializer;
-                const iteratedType = checkRightHandSideOfForOf(node.expression);
+                const iteratedType = checkRightHandSideOfForOf(node.expression, node.awaitModifier);
 
                 // There may be a destructuring assignment on the left side
                 if (varExpr.kind === SyntaxKind.ArrayLiteralExpression || varExpr.kind === SyntaxKind.ObjectLiteralExpression) {
@@ -18451,56 +18562,126 @@ namespace ts {
             }
         }
 
-        function checkRightHandSideOfForOf(rhsExpression: Expression): Type {
+        function checkRightHandSideOfForOf(rhsExpression: Expression, awaitModifier: AwaitKeywordToken | undefined): Type {
             const expressionType = checkNonNullExpression(rhsExpression);
-            return checkIteratedTypeOrElementType(expressionType, rhsExpression, /*allowStringInput*/ true);
+            return checkIteratedTypeOrElementType(expressionType, rhsExpression, /*allowStringInput*/ true, awaitModifier !== undefined);
         }
 
-        function checkIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean): Type {
+        function checkIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean, allowAsyncIterable: boolean): Type {
             if (isTypeAny(inputType)) {
                 return inputType;
             }
-            if (languageVersion >= ScriptTarget.ES2015) {
-                return checkElementTypeOfIterable(inputType, errorNode);
-            }
-            if (allowStringInput) {
-                return checkElementTypeOfArrayOrString(inputType, errorNode);
-            }
-            if (isArrayLikeType(inputType)) {
-                const indexType = getIndexTypeOfType(inputType, IndexKind.Number);
-                if (indexType) {
-                    return indexType;
-                }
-            }
-            if (errorNode) {
-                error(errorNode, Diagnostics.Type_0_is_not_an_array_type, typeToString(inputType));
-            }
-            return unknownType;
+
+            return getIteratedTypeOrElementType(inputType, errorNode, allowStringInput, allowAsyncIterable, /*checkAssignability*/ true) || anyType;
         }
 
         /**
-         * When errorNode is undefined, it means we should not report any errors.
+         * When consuming an iterable type in a for..of, spread, or iterator destructuring assignment
+         * we want to get the iterated type of an iterable for ES2015 or later, or the iterated type
+         * of a iterable (if defined globally) or element type of an array like for ES2015 or earlier.
          */
-        function checkElementTypeOfIterable(iterable: Type, errorNode: Node): Type {
-            const elementType = getElementTypeOfIterable(iterable, errorNode);
-            // Now even though we have extracted the iteratedType, we will have to validate that the type
-            // passed in is actually an Iterable.
-            if (errorNode && elementType) {
-                checkTypeAssignableTo(iterable, createIterableType(elementType), errorNode);
+        function getIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean, allowAsyncIterable: boolean, checkAssignability: boolean): Type {
+            const uplevelIteration = languageVersion >= ScriptTarget.ES2015;
+            const downlevelIteration = !uplevelIteration && compilerOptions.downlevelIteration;
+
+            // Get the iterated type of an `Iterable<T>` or `IterableIterator<T>` only in ES2015
+            // or higher, when inside of an async generator or for-await-if, or when
+            // downlevelIteration is requested.
+            if (uplevelIteration || downlevelIteration || allowAsyncIterable) {
+                // We only report errors for an invalid iterable type in ES2015 or higher.
+                const iteratedType = getIteratedTypeOfIterable(inputType, uplevelIteration ? errorNode : undefined, allowAsyncIterable, allowAsyncIterable, checkAssignability);
+                if (iteratedType || uplevelIteration) {
+                    return iteratedType;
+                }
             }
 
-            return elementType || anyType;
+            let arrayType = inputType;
+            let reportedError = false;
+            let hasStringConstituent = false;
+
+            // If strings are permitted, remove any string-like constituents from the array type.
+            // This allows us to find other non-string element types from an array unioned with
+            // a string.
+            if (allowStringInput) {
+                if (arrayType.flags & TypeFlags.Union) {
+                    // After we remove all types that are StringLike, we will know if there was a string constituent
+                    // based on whether the result of filter is a new array.
+                    const arrayTypes = (<UnionType>inputType).types;
+                    const filteredTypes = filter(arrayTypes, t => !(t.flags & TypeFlags.StringLike));
+                    if (filteredTypes !== arrayTypes) {
+                        arrayType = getUnionType(filteredTypes, /*subtypeReduction*/ true);
+                    }
+                }
+                else if (arrayType.flags & TypeFlags.StringLike) {
+                    arrayType = neverType;
+                }
+
+                hasStringConstituent = arrayType !== inputType;
+                if (hasStringConstituent) {
+                    if (languageVersion < ScriptTarget.ES5) {
+                        if (errorNode) {
+                            error(errorNode, Diagnostics.Using_a_string_in_a_for_of_statement_is_only_supported_in_ECMAScript_5_and_higher);
+                            reportedError = true;
+                        }
+                    }
+
+                    // Now that we've removed all the StringLike types, if no constituents remain, then the entire
+                    // arrayOrStringType was a string.
+                    if (arrayType.flags & TypeFlags.Never) {
+                        return stringType;
+                    }
+                }
+            }
+
+            if (!isArrayLikeType(arrayType)) {
+                if (errorNode && !reportedError) {
+                    // Which error we report depends on whether we allow strings or if there was a
+                    // string constituent. For example, if the input type is number | string, we
+                    // want to say that number is not an array type. But if the input was just
+                    // number and string input is allowed, we want to say that number is not an
+                    // array type or a string type.
+                    const diagnostic = !allowStringInput || hasStringConstituent
+                        ? downlevelIteration
+                            ? Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator
+                            : Diagnostics.Type_0_is_not_an_array_type
+                        : downlevelIteration
+                            ? Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator
+                            : Diagnostics.Type_0_is_not_an_array_type_or_a_string_type;
+                    error(errorNode, diagnostic, typeToString(arrayType));
+                }
+                return hasStringConstituent ? stringType : undefined;
+            }
+
+            const arrayElementType = getIndexTypeOfType(arrayType, IndexKind.Number);
+            if (hasStringConstituent && arrayElementType) {
+                // This is just an optimization for the case where arrayOrStringType is string | string[]
+                if (arrayElementType.flags & TypeFlags.StringLike) {
+                    return stringType;
+                }
+
+                return getUnionType([arrayElementType, stringType], /*subtypeReduction*/ true);
+            }
+
+            return arrayElementType;
         }
 
         /**
          * We want to treat type as an iterable, and get the type it is an iterable of. The iterable
          * must have the following structure (annotated with the names of the variables below):
          *
-         * { // iterable
-         *     [Symbol.iterator]: { // iteratorFunction
-         *         (): Iterator<T>
+         *     { // iterable
+         *         [Symbol.iterator]: { // iteratorMethod
+         *             (): Iterator<T>
+         *         }
          *     }
-         * }
+         *
+         * For an async iterable, we expect the following structure:
+         *
+         *     { // iterable
+         *         [Symbol.asyncIterator]: { // iteratorMethod
+         *             (): AsyncIterator<T>
+         *         }
+         *     }
          *
          * T is the type we are after. At every level that involves analyzing return types
          * of signatures, we union the return types of all the signatures.
@@ -18512,187 +18693,190 @@ namespace ts {
          * caller requested it. Then the caller can decide what to do in the case where there is no iterated
          * type. This is different from returning anyType, because that would signify that we have matched the
          * whole pattern and that T (above) is 'any'.
+         *
+         * For a **for-of** statement, `yield*` (in a normal generator), spread, array
+         * destructuring, or normal generator we will only ever look for a `[Symbol.iterator]()`
+         * method.
+         *
+         * For an async generator we will only ever look at the `[Symbol.asyncIterator]()` method.
+         *
+         * For a **for-await-of** statement or a `yield*` in an async generator we will look for
+         * the `[Symbol.asyncIterator]()` method first, and then the `[Symbol.iterator]()` method.
          */
-        function getElementTypeOfIterable(type: Type, errorNode: Node): Type {
+        function getIteratedTypeOfIterable(type: Type, errorNode: Node | undefined, isAsyncIterable: boolean, allowNonAsyncIterables: boolean, checkAssignability: boolean): Type | undefined {
             if (isTypeAny(type)) {
                 return undefined;
             }
 
             const typeAsIterable = <IterableOrIteratorType>type;
-            if (!typeAsIterable.iterableElementType) {
-                // As an optimization, if the type is instantiated directly using the globalIterableType (Iterable<number>),
-                // then just grab its type argument.
-                if ((getObjectFlags(type) & ObjectFlags.Reference) && (<GenericType>type).target === getGlobalIterableType()) {
-                    typeAsIterable.iterableElementType = (<GenericType>type).typeArguments[0];
-                }
-                else {
-                    const iteratorFunction = getTypeOfPropertyOfType(type, getPropertyNameForKnownSymbolName("iterator"));
-                    if (isTypeAny(iteratorFunction)) {
-                        return undefined;
-                    }
+            if (isAsyncIterable ? typeAsIterable.iteratedTypeOfAsyncIterable : typeAsIterable.iteratedTypeOfIterable) {
+                return isAsyncIterable ? typeAsIterable.iteratedTypeOfAsyncIterable : typeAsIterable.iteratedTypeOfIterable;
+            }
 
-                    const iteratorFunctionSignatures = iteratorFunction ? getSignaturesOfType(iteratorFunction, SignatureKind.Call) : emptyArray;
-                    if (iteratorFunctionSignatures.length === 0) {
-                        if (errorNode) {
-                            error(errorNode, Diagnostics.Type_must_have_a_Symbol_iterator_method_that_returns_an_iterator);
-                        }
-                        return undefined;
-                    }
-
-                    typeAsIterable.iterableElementType = getElementTypeOfIterator(getUnionType(map(iteratorFunctionSignatures, getReturnTypeOfSignature), /*subtypeReduction*/ true), errorNode);
+            if (isAsyncIterable) {
+                // As an optimization, if the type is an instantiation of the global `AsyncIterable<T>`
+                // or the global `AsyncIterableIterator<T>` then just grab its type argument.
+                if (isReferenceToType(type, getGlobalAsyncIterableType(/*reportErrors*/ false)) ||
+                    isReferenceToType(type, getGlobalAsyncIterableIteratorType(/*reportErrors*/ false))) {
+                    return typeAsIterable.iteratedTypeOfAsyncIterable = (<GenericType>type).typeArguments[0];
                 }
             }
 
-            return typeAsIterable.iterableElementType;
+            if (!isAsyncIterable || allowNonAsyncIterables) {
+                // As an optimization, if the type is an instantiation of the global `Iterable<T>` or
+                // `IterableIterator<T>` then just grab its type argument.
+                if (isReferenceToType(type, getGlobalIterableType(/*reportErrors*/ false)) ||
+                    isReferenceToType(type, getGlobalIterableIteratorType(/*reportErrors*/ false))) {
+                    return isAsyncIterable
+                        ? typeAsIterable.iteratedTypeOfAsyncIterable = (<GenericType>type).typeArguments[0]
+                        : typeAsIterable.iteratedTypeOfIterable = (<GenericType>type).typeArguments[0];
+                }
+            }
+
+            let iteratorMethodSignatures: Signature[];
+            let mayBeIterable = false;
+            if (isAsyncIterable) {
+                const iteratorMethod = getTypeOfPropertyOfType(type, getPropertyNameForKnownSymbolName("asyncIterator"));
+                if (isTypeAny(iteratorMethod)) {
+                    return undefined;
+                }
+                iteratorMethodSignatures = iteratorMethod && getSignaturesOfType(iteratorMethod, SignatureKind.Call);
+            }
+
+            if (!isAsyncIterable || (allowNonAsyncIterables && !some(iteratorMethodSignatures))) {
+                const iteratorMethod = getTypeOfPropertyOfType(type, getPropertyNameForKnownSymbolName("iterator"));
+                if (isTypeAny(iteratorMethod)) {
+                    return undefined;
+                }
+                iteratorMethodSignatures = iteratorMethod && getSignaturesOfType(iteratorMethod, SignatureKind.Call);
+                mayBeIterable = true;
+            }
+
+            if (some(iteratorMethodSignatures)) {
+                const iteratorMethodReturnType = getUnionType(map(iteratorMethodSignatures, getReturnTypeOfSignature), /*subtypeReduction*/ true);
+                const iteratedType = getIteratedTypeOfIterator(iteratorMethodReturnType, errorNode, /*isAsyncIterator*/ false);
+                if (checkAssignability && errorNode && iteratedType) {
+                    // If `checkAssignability` was specified, we were called from
+                    // `checkIteratedTypeOrElementType`. As such, we need to validate that
+                    // the type passed in is actually an Iterable.
+                    checkTypeAssignableTo(type, mayBeIterable
+                        ? createIterableType(iteratedType)
+                        : createAsyncIterableType(iteratedType), errorNode);
+                }
+                return isAsyncIterable
+                    ? typeAsIterable.iteratedTypeOfAsyncIterable = iteratedType
+                    : typeAsIterable.iteratedTypeOfIterable = iteratedType;
+            }
+
+            if (errorNode) {
+                error(errorNode,
+                    isAsyncIterable
+                        ? Diagnostics.Type_must_have_a_Symbol_asyncIterator_method_that_returns_an_async_iterator
+                        : Diagnostics.Type_must_have_a_Symbol_iterator_method_that_returns_an_iterator);
+            }
+
+            return undefined;
         }
 
         /**
-         * This function has very similar logic as getElementTypeOfIterable, except that it operates on
+         * This function has very similar logic as getIteratedTypeOfIterable, except that it operates on
          * Iterators instead of Iterables. Here is the structure:
          *
          *  { // iterator
-         *      next: { // iteratorNextFunction
-         *          (): { // iteratorNextResult
-         *              value: T // iteratorNextValue
+         *      next: { // nextMethod
+         *          (): { // nextResult
+         *              value: T // nextValue
          *          }
          *      }
          *  }
          *
+         * For an async iterator, we expect the following structure:
+         *
+         *  { // iterator
+         *      next: { // nextMethod
+         *          (): PromiseLike<{ // nextResult
+         *              value: T // nextValue
+         *          }>
+         *      }
+         *  }
          */
-        function getElementTypeOfIterator(type: Type, errorNode: Node): Type {
+        function getIteratedTypeOfIterator(type: Type, errorNode: Node | undefined, isAsyncIterator: boolean): Type | undefined {
             if (isTypeAny(type)) {
                 return undefined;
             }
 
             const typeAsIterator = <IterableOrIteratorType>type;
-            if (!typeAsIterator.iteratorElementType) {
-                // As an optimization, if the type is instantiated directly using the globalIteratorType (Iterator<number>),
-                // then just grab its type argument.
-                if ((getObjectFlags(type) & ObjectFlags.Reference) && (<GenericType>type).target === getGlobalIteratorType()) {
-                    typeAsIterator.iteratorElementType = (<GenericType>type).typeArguments[0];
-                }
-                else {
-                    const iteratorNextFunction = getTypeOfPropertyOfType(type, "next");
-                    if (isTypeAny(iteratorNextFunction)) {
-                        return undefined;
-                    }
-
-                    const iteratorNextFunctionSignatures = iteratorNextFunction ? getSignaturesOfType(iteratorNextFunction, SignatureKind.Call) : emptyArray;
-                    if (iteratorNextFunctionSignatures.length === 0) {
-                        if (errorNode) {
-                            error(errorNode, Diagnostics.An_iterator_must_have_a_next_method);
-                        }
-                        return undefined;
-                    }
-
-                    const iteratorNextResult = getUnionType(map(iteratorNextFunctionSignatures, getReturnTypeOfSignature), /*subtypeReduction*/ true);
-                    if (isTypeAny(iteratorNextResult)) {
-                        return undefined;
-                    }
-
-                    const iteratorNextValue = getTypeOfPropertyOfType(iteratorNextResult, "value");
-                    if (!iteratorNextValue) {
-                        if (errorNode) {
-                            error(errorNode, Diagnostics.The_type_returned_by_the_next_method_of_an_iterator_must_have_a_value_property);
-                        }
-                        return undefined;
-                    }
-
-                    typeAsIterator.iteratorElementType = iteratorNextValue;
-                }
+            if (isAsyncIterator ? typeAsIterator.iteratedTypeOfAsyncIterator : typeAsIterator.iteratedTypeOfIterator) {
+                return isAsyncIterator ? typeAsIterator.iteratedTypeOfAsyncIterator : typeAsIterator.iteratedTypeOfIterator;
             }
 
-            return typeAsIterator.iteratorElementType;
-        }
+            // As an optimization, if the type is an instantiation of the global `Iterator<T>` (for
+            // a non-async iterator) or the global `AsyncIterator<T>` (for an async-iterator) then
+            // just grab its type argument.
+            const getIteratorType = isAsyncIterator ? getGlobalAsyncIteratorType : getGlobalIteratorType;
+            if (isReferenceToType(type, getIteratorType(/*reportErrors*/ false))) {
+                return isAsyncIterator
+                    ? typeAsIterator.iteratedTypeOfAsyncIterator = (<GenericType>type).typeArguments[0]
+                    : typeAsIterator.iteratedTypeOfIterator = (<GenericType>type).typeArguments[0];
+            }
 
-        function getElementTypeOfIterableIterator(type: Type): Type {
-            if (isTypeAny(type)) {
+            // Both async and non-async iterators must have a `next` method.
+            const nextMethod = getTypeOfPropertyOfType(type, "next");
+            if (isTypeAny(nextMethod)) {
                 return undefined;
             }
 
-            // As an optimization, if the type is instantiated directly using the globalIterableIteratorType (IterableIterator<number>),
-            // then just grab its type argument.
-            if ((getObjectFlags(type) & ObjectFlags.Reference) && (<GenericType>type).target === getGlobalIterableIteratorType()) {
-                return (<GenericType>type).typeArguments[0];
+            const nextMethodSignatures = nextMethod ? getSignaturesOfType(nextMethod, SignatureKind.Call) : emptyArray;
+            if (nextMethodSignatures.length === 0) {
+                if (errorNode) {
+                    error(errorNode, isAsyncIterator
+                        ? Diagnostics.An_async_iterator_must_have_a_next_method
+                        : Diagnostics.An_iterator_must_have_a_next_method);
+                }
+                return undefined;
             }
 
-            return getElementTypeOfIterable(type, /*errorNode*/ undefined) ||
-                getElementTypeOfIterator(type, /*errorNode*/ undefined);
+            let nextResult = getUnionType(map(nextMethodSignatures, getReturnTypeOfSignature), /*subtypeReduction*/ true);
+            if (isTypeAny(nextResult)) {
+                return undefined;
+            }
+
+            // For an async iterator, we must get the awaited type of the return type.
+            if (isAsyncIterator) {
+                nextResult = getAwaitedTypeOfPromise(nextResult, errorNode);
+                if (isTypeAny(nextResult)) {
+                    return undefined;
+                }
+            }
+
+            const nextValue = nextResult && getTypeOfPropertyOfType(nextResult, "value");
+            if (!nextValue) {
+                if (errorNode) {
+                    error(errorNode, isAsyncIterator
+                        ? Diagnostics.The_type_returned_by_the_next_method_of_an_async_iterator_must_be_a_promise_for_a_type_with_a_value_property
+                        : Diagnostics.The_type_returned_by_the_next_method_of_an_iterator_must_have_a_value_property);
+                }
+                return undefined;
+            }
+
+            return isAsyncIterator
+                ? typeAsIterator.iteratedTypeOfAsyncIterator = nextValue
+                : typeAsIterator.iteratedTypeOfIterator = nextValue;
         }
 
         /**
-         * This function does the following steps:
-         *   1. Break up arrayOrStringType (possibly a union) into its string constituents and array constituents.
-         *   2. Take the element types of the array constituents.
-         *   3. Return the union of the element types, and string if there was a string constituent.
-         *
-         * For example:
-         *     string -> string
-         *     number[] -> number
-         *     string[] | number[] -> string | number
-         *     string | number[] -> string | number
-         *     string | string[] | number[] -> string | number
-         *
-         * It also errors if:
-         *   1. Some constituent is neither a string nor an array.
-         *   2. Some constituent is a string and target is less than ES5 (because in ES3 string is not indexable).
+         * A generator may have a return type of `Iterator<T>`, `Iterable<T>`, or
+         * `IterableIterator<T>`. An async generator may have a return type of `AsyncIterator<T>`,
+         * `AsyncIterable<T>`, or `AsyncIterableIterator<T>`. This function can be used to extract
+         * the iterated type from this return type for contextual typing and verifying signatures.
          */
-        function checkElementTypeOfArrayOrString(arrayOrStringType: Type, errorNode: Node): Type {
-            Debug.assert(languageVersion < ScriptTarget.ES2015);
-
-            let arrayType = arrayOrStringType;
-            if (arrayOrStringType.flags & TypeFlags.Union) {
-                // After we remove all types that are StringLike, we will know if there was a string constituent
-                // based on whether the result of filter is a new array.
-                const arrayTypes = (arrayOrStringType as UnionType).types;
-                const filteredTypes = filter(arrayTypes, t => !(t.flags & TypeFlags.StringLike));
-                if (filteredTypes !== arrayTypes) {
-                    arrayType = getUnionType(filteredTypes, /*subtypeReduction*/ true);
-                }
-            }
-            else if (arrayOrStringType.flags & TypeFlags.StringLike) {
-                arrayType = neverType;
-            }
-            const hasStringConstituent = arrayOrStringType !== arrayType;
-            let reportedError = false;
-            if (hasStringConstituent) {
-                if (languageVersion < ScriptTarget.ES5) {
-                    error(errorNode, Diagnostics.Using_a_string_in_a_for_of_statement_is_only_supported_in_ECMAScript_5_and_higher);
-                    reportedError = true;
-                }
-
-                // Now that we've removed all the StringLike types, if no constituents remain, then the entire
-                // arrayOrStringType was a string.
-                if (arrayType.flags & TypeFlags.Never) {
-                    return stringType;
-                }
+        function getIteratedTypeOfGenerator(returnType: Type, isAsyncGenerator: boolean): Type {
+            if (isTypeAny(returnType)) {
+                return undefined;
             }
 
-            if (!isArrayLikeType(arrayType)) {
-                if (!reportedError) {
-                    // Which error we report depends on whether there was a string constituent. For example,
-                    // if the input type is number | string, we want to say that number is not an array type.
-                    // But if the input was just number, we want to say that number is not an array type
-                    // or a string type.
-                    const diagnostic = hasStringConstituent
-                        ? Diagnostics.Type_0_is_not_an_array_type
-                        : Diagnostics.Type_0_is_not_an_array_type_or_a_string_type;
-                    error(errorNode, diagnostic, typeToString(arrayType));
-                }
-                return hasStringConstituent ? stringType : unknownType;
-            }
-
-            const arrayElementType = getIndexTypeOfType(arrayType, IndexKind.Number) || unknownType;
-            if (hasStringConstituent) {
-                // This is just an optimization for the case where arrayOrStringType is string | string[]
-                if (arrayElementType.flags & TypeFlags.StringLike) {
-                    return stringType;
-                }
-
-                return getUnionType([arrayElementType, stringType], /*subtypeReduction*/ true);
-            }
-
-            return arrayElementType;
+            return getIteratedTypeOfIterable(returnType, /*errorNode*/ undefined, isAsyncGenerator, /*allowNonAsyncIterables*/ false, /*checkAssignability*/ false)
+                || getIteratedTypeOfIterator(returnType, /*errorNode*/ undefined, isAsyncGenerator);
         }
 
         function checkBreakOrContinueStatement(node: BreakOrContinueStatement) {
@@ -18707,7 +18891,9 @@ namespace ts {
         }
 
         function isUnwrappedReturnTypeVoidOrAny(func: FunctionLikeDeclaration, returnType: Type): boolean {
-            const unwrappedReturnType = isAsyncFunctionLike(func) ? getPromisedType(returnType) : returnType;
+            const unwrappedReturnType = (getFunctionFlags(func) & FunctionFlags.AsyncOrAsyncGenerator) === FunctionFlags.Async
+                ? getPromisedTypeOfPromise(returnType) // Async function
+                : returnType; // AsyncGenerator function, Generator function, or normal function
             return unwrappedReturnType && maybeTypeOfKind(unwrappedReturnType, TypeFlags.Void | TypeFlags.Any);
         }
 
@@ -18726,8 +18912,8 @@ namespace ts {
                 const returnType = getReturnTypeOfSignature(signature);
                 if (strictNullChecks || node.expression || returnType.flags & TypeFlags.Never) {
                     const exprType = node.expression ? checkExpressionCached(node.expression) : undefinedType;
-
-                    if (func.asteriskToken) {
+                    const functionFlags = getFunctionFlags(func);
+                    if (functionFlags & FunctionFlags.Generator) { // AsyncGenerator function or Generator function
                         // A generator does not need its return expressions checked against its return type.
                         // Instead, the yield expressions are checked against the element type.
                         // TODO: Check return expressions of generators when return type tracking is added
@@ -18746,9 +18932,9 @@ namespace ts {
                         }
                     }
                     else if (func.type || isGetAccessorWithAnnotatedSetAccessor(func)) {
-                        if (isAsyncFunctionLike(func)) {
-                            const promisedType = getPromisedType(returnType);
-                            const awaitedType = checkAwaitedType(exprType, node, Diagnostics.Return_expression_in_async_function_does_not_have_a_valid_callable_then_member);
+                        if (functionFlags & FunctionFlags.Async) { // Async function
+                            const promisedType = getPromisedTypeOfPromise(returnType);
+                            const awaitedType = checkAwaitedType(exprType, node);
                             if (promisedType) {
                                 // If the function has a return type, but promisedType is
                                 // undefined, an error will be reported in checkAsyncFunctionReturnType
@@ -19151,7 +19337,7 @@ namespace ts {
 
             const baseTypeNode = getClassExtendsHeritageClauseElement(node);
             if (baseTypeNode) {
-                if (languageVersion < ScriptTarget.ES2015 && !isInAmbientContext(node)) {
+                if (languageVersion < ScriptTarget.ES2015) {
                     checkExternalEmitHelpers(baseTypeNode.parent, ExternalEmitHelpers.Extends);
                 }
 
@@ -20916,7 +21102,7 @@ namespace ts {
             //     for ( { a } of elems) {
             //     }
             if (expr.parent.kind === SyntaxKind.ForOfStatement) {
-                const iteratedType = checkRightHandSideOfForOf((<ForOfStatement>expr.parent).expression);
+                const iteratedType = checkRightHandSideOfForOf((<ForOfStatement>expr.parent).expression, (<ForOfStatement>expr.parent).awaitModifier);
                 return checkDestructuringAssignment(expr, iteratedType || unknownType);
             }
             // If this is from "for" initializer
@@ -20935,7 +21121,7 @@ namespace ts {
             Debug.assert(expr.parent.kind === SyntaxKind.ArrayLiteralExpression);
             //    [{ property1: p1, property2 }] = elems;
             const typeOfArrayLiteral = getTypeOfArrayLiteralOrObjectLiteralDestructuringAssignment(<Expression>expr.parent);
-            const elementType = checkIteratedTypeOrElementType(typeOfArrayLiteral || unknownType, expr.parent, /*allowStringInput*/ false) || unknownType;
+            const elementType = checkIteratedTypeOrElementType(typeOfArrayLiteral || unknownType, expr.parent, /*allowStringInput*/ false, /*allowAsyncIterable*/ false) || unknownType;
             return checkArrayLiteralDestructuringElementAssignment(<ArrayLiteralExpression>expr.parent, typeOfArrayLiteral,
                 indexOf((<ArrayLiteralExpression>expr.parent).elements, expr), elementType || unknownType);
         }
@@ -21331,7 +21517,7 @@ namespace ts {
             // Resolve the symbol as a type so that we can provide a more useful hint for the type serializer.
             const typeSymbol = resolveEntityName(typeName, SymbolFlags.Type, /*ignoreErrors*/ true, /*dontResolveAlias*/ false, location);
             if (valueSymbol && valueSymbol === typeSymbol) {
-                const globalPromiseSymbol = tryGetGlobalPromiseConstructorSymbol();
+                const globalPromiseSymbol = getGlobalPromiseConstructorSymbol(/*reportErrors*/ false);
                 if (globalPromiseSymbol && valueSymbol === globalPromiseSymbol) {
                     return TypeReferenceSerializationKind.Promise;
                 }
@@ -21645,49 +21831,18 @@ namespace ts {
             addToSymbolTable(globals, builtinGlobals, Diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0);
 
             getSymbolLinks(undefinedSymbol).type = undefinedWideningType;
-            getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments");
+            getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments", /*arity*/ 0, /*reportErrors*/ true);
             getSymbolLinks(unknownSymbol).type = unknownType;
 
             // Initialize special types
-            globalArrayType = <GenericType>getGlobalType("Array", /*arity*/ 1);
-            globalObjectType = getGlobalType("Object");
-            globalFunctionType = getGlobalType("Function");
-            globalStringType = getGlobalType("String");
-            globalNumberType = getGlobalType("Number");
-            globalBooleanType = getGlobalType("Boolean");
-            globalRegExpType = getGlobalType("RegExp");
-
+            globalArrayType = getGlobalType("Array", /*arity*/ 1, /*reportErrors*/ true);
+            globalObjectType = getGlobalType("Object", /*arity*/ 0, /*reportErrors*/ true);
+            globalFunctionType = getGlobalType("Function", /*arity*/ 0, /*reportErrors*/ true);
+            globalStringType = getGlobalType("String", /*arity*/ 0, /*reportErrors*/ true);
+            globalNumberType = getGlobalType("Number", /*arity*/ 0, /*reportErrors*/ true);
+            globalBooleanType = getGlobalType("Boolean", /*arity*/ 0, /*reportErrors*/ true);
+            globalRegExpType = getGlobalType("RegExp", /*arity*/ 0, /*reportErrors*/ true);
             jsxElementType = getExportedTypeFromNamespace("JSX", JsxNames.Element);
-            getGlobalClassDecoratorType = memoize(() => getGlobalType("ClassDecorator"));
-            getGlobalPropertyDecoratorType = memoize(() => getGlobalType("PropertyDecorator"));
-            getGlobalMethodDecoratorType = memoize(() => getGlobalType("MethodDecorator"));
-            getGlobalParameterDecoratorType = memoize(() => getGlobalType("ParameterDecorator"));
-            getGlobalTypedPropertyDescriptorType = memoize(() => getGlobalType("TypedPropertyDescriptor", /*arity*/ 1));
-            getGlobalESSymbolConstructorSymbol = memoize(() => getGlobalValueSymbol("Symbol"));
-            getGlobalPromiseType = memoize(() => getGlobalType("Promise", /*arity*/ 1));
-            tryGetGlobalPromiseType = memoize(() => getGlobalSymbol("Promise", SymbolFlags.Type, /*diagnostic*/ undefined) && getGlobalPromiseType());
-            getGlobalPromiseLikeType = memoize(() => getGlobalType("PromiseLike", /*arity*/ 1));
-            getInstantiatedGlobalPromiseLikeType = memoize(createInstantiatedPromiseLikeType);
-            getGlobalPromiseConstructorSymbol = memoize(() => getGlobalValueSymbol("Promise"));
-            tryGetGlobalPromiseConstructorSymbol = memoize(() => getGlobalSymbol("Promise", SymbolFlags.Value, /*diagnostic*/ undefined) && getGlobalPromiseConstructorSymbol());
-            getGlobalPromiseConstructorLikeType = memoize(() => getGlobalType("PromiseConstructorLike"));
-            getGlobalThenableType = memoize(createThenableType);
-
-            getGlobalTemplateStringsArrayType = memoize(() => getGlobalType("TemplateStringsArray"));
-
-            if (languageVersion >= ScriptTarget.ES2015) {
-                getGlobalESSymbolType = memoize(() => getGlobalType("Symbol"));
-                getGlobalIterableType = memoize(() => <GenericType>getGlobalType("Iterable", /*arity*/ 1));
-                getGlobalIteratorType = memoize(() => <GenericType>getGlobalType("Iterator", /*arity*/ 1));
-                getGlobalIterableIteratorType = memoize(() => <GenericType>getGlobalType("IterableIterator", /*arity*/ 1));
-            }
-            else {
-                getGlobalESSymbolType = memoize(() => emptyObjectType);
-                getGlobalIterableType = memoize(() => emptyGenericType);
-                getGlobalIteratorType = memoize(() => emptyGenericType);
-                getGlobalIterableIteratorType = memoize(() => emptyGenericType);
-            }
-
             anyArrayType = createArrayType(anyType);
             autoArrayType = createArrayType(autoType);
 
@@ -21699,7 +21854,7 @@ namespace ts {
         function checkExternalEmitHelpers(location: Node, helpers: ExternalEmitHelpers) {
             if ((requestedExternalEmitHelpers & helpers) !== helpers && compilerOptions.importHelpers) {
                 const sourceFile = getSourceFileOfNode(location);
-                if (isEffectiveExternalModule(sourceFile, compilerOptions)) {
+                if (isEffectiveExternalModule(sourceFile, compilerOptions) && !isInAmbientContext(location)) {
                     const helpersModule = resolveHelpersModule(sourceFile, location);
                     if (helpersModule !== unknownSymbol) {
                         const uncheckedHelpers = helpers & ~requestedExternalEmitHelpers;
@@ -21728,6 +21883,13 @@ namespace ts {
                 case ExternalEmitHelpers.Param: return "__param";
                 case ExternalEmitHelpers.Awaiter: return "__awaiter";
                 case ExternalEmitHelpers.Generator: return "__generator";
+                case ExternalEmitHelpers.Values: return "__values";
+                case ExternalEmitHelpers.Read: return "__read";
+                case ExternalEmitHelpers.Spread: return "__spread";
+                case ExternalEmitHelpers.AsyncGenerator: return "__asyncGenerator";
+                case ExternalEmitHelpers.AsyncDelegator: return "__asyncDelegator";
+                case ExternalEmitHelpers.AsyncValues: return "__asyncValues";
+                default: Debug.fail("Unrecognized helper.");
             }
         }
 
@@ -21736,29 +21898,6 @@ namespace ts {
                 externalHelpersModule = resolveExternalModule(node, externalHelpersModuleNameText, Diagnostics.This_syntax_requires_an_imported_helper_but_module_0_cannot_be_found, errorNode) || unknownSymbol;
             }
             return externalHelpersModule;
-        }
-
-
-        function createInstantiatedPromiseLikeType(): ObjectType {
-            const promiseLikeType = getGlobalPromiseLikeType();
-            if (promiseLikeType !== emptyGenericType) {
-                return createTypeReference(<GenericType>promiseLikeType, [anyType]);
-            }
-
-            return emptyObjectType;
-        }
-
-        function createThenableType() {
-            // build the thenable type that is used to verify against a non-promise "thenable" operand to `await`.
-            const thenPropertySymbol = createSymbol(SymbolFlags.Property, "then");
-            getSymbolLinks(thenPropertySymbol).type = globalFunctionType;
-
-            const thenableType = <ResolvedType>createObjectType(ObjectFlags.Anonymous);
-            thenableType.properties = [thenPropertySymbol];
-            thenableType.members = createSymbolTable(thenableType.properties);
-            thenableType.callSignatures = [];
-            thenableType.constructSignatures = [];
-            return thenableType;
         }
 
         // GRAMMAR CHECKING
@@ -22052,10 +22191,7 @@ namespace ts {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
-                    if (!(<FunctionLikeDeclaration>node).asteriskToken) {
-                        return false;
-                    }
-                    break;
+                    return false;
             }
 
             return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_here, "async");
@@ -22300,9 +22436,6 @@ namespace ts {
                 if (!node.body) {
                     return grammarErrorOnNode(node.asteriskToken, Diagnostics.An_overload_signature_cannot_be_declared_as_a_generator);
                 }
-                if (languageVersion < ScriptTarget.ES2015) {
-                    return grammarErrorOnNode(node.asteriskToken, Diagnostics.Generators_are_only_available_when_targeting_ECMAScript_2015_or_higher);
-                }
             }
         }
 
@@ -22429,6 +22562,12 @@ namespace ts {
         function checkGrammarForInOrForOfStatement(forInOrOfStatement: ForInStatement | ForOfStatement): boolean {
             if (checkGrammarStatementInAmbientContext(forInOrOfStatement)) {
                 return true;
+            }
+
+            if (forInOrOfStatement.kind === SyntaxKind.ForOfStatement && forInOrOfStatement.awaitModifier) {
+                if ((forInOrOfStatement.flags & NodeFlags.AwaitContext) === NodeFlags.None) {
+                    return grammarErrorOnNode(forInOrOfStatement.awaitModifier, Diagnostics.A_for_await_of_statement_is_only_allowed_within_an_async_function_or_async_generator);
+                }
             }
 
             if (forInOrOfStatement.initializer.kind === SyntaxKind.VariableDeclarationList) {

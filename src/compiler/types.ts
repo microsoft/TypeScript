@@ -542,6 +542,7 @@
     export type EndOfFileToken = Token<SyntaxKind.EndOfFileToken>;
     export type AtToken = Token<SyntaxKind.AtToken>;
     export type ReadonlyToken = Token<SyntaxKind.ReadonlyKeyword>;
+    export type AwaitKeywordToken = Token<SyntaxKind.AwaitKeyword>;
 
     export type Modifier
         = Token<SyntaxKind.AbstractKeyword>
@@ -699,7 +700,13 @@
         name?: PropertyName;
     }
 
-    export type ObjectLiteralElementLike = PropertyAssignment | ShorthandPropertyAssignment | MethodDeclaration | AccessorDeclaration | SpreadAssignment;
+    export type ObjectLiteralElementLike
+        = PropertyAssignment
+        | ShorthandPropertyAssignment
+        | SpreadAssignment
+        | MethodDeclaration
+        | AccessorDeclaration
+        ;
 
     export interface PropertyAssignment extends ObjectLiteralElement {
         kind: SyntaxKind.PropertyAssignment;
@@ -1637,6 +1644,7 @@
 
     export interface ForOfStatement extends IterationStatement {
         kind: SyntaxKind.ForOfStatement;
+        awaitModifier?: AwaitKeywordToken;
         initializer: ForInitializer;
         expression: Expression;
     }
@@ -3058,8 +3066,17 @@
     // Just a place to cache element types of iterables and iterators
     /* @internal */
     export interface IterableOrIteratorType extends ObjectType, UnionType {
-        iterableElementType?: Type;
-        iteratorElementType?: Type;
+        iteratedTypeOfIterable?: Type;
+        iteratedTypeOfIterator?: Type;
+        iteratedTypeOfAsyncIterable?: Type;
+        iteratedTypeOfAsyncIterator?: Type;
+    }
+
+    /* @internal */
+    export interface PromiseOrAwaitableType extends ObjectType, UnionType {
+        promiseTypeOfPromiseConstructor?: Type;
+        promisedTypeOfPromise?: Type;
+        awaitedTypeOfType?: Type;
     }
 
     export interface TypeVariable extends Type {
@@ -3253,6 +3270,7 @@
         /* @internal */ diagnostics?: boolean;
         /* @internal */ extendedDiagnostics?: boolean;
         disableSizeLimit?: boolean;
+        downlevelIteration?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
         experimentalDecorators?: boolean;
@@ -3828,9 +3846,24 @@
         Param = 1 << 5,             // __param (used by TypeScript decorators transformation)
         Awaiter = 1 << 6,           // __awaiter (used by ES2017 async functions transformation)
         Generator = 1 << 7,         // __generator (used by ES2015 generator transformation)
+        Values = 1 << 8,            // __values (used by ES2015 for..of and yield* transformations)
+        Read = 1 << 9,             // __read (used by ES2015 iterator destructuring transformation)
+        Spread = 1 << 10,           // __spread (used by ES2015 array spread and argument list spread transformations)
+        AsyncGenerator = 1 << 11,   // __asyncGenerator (used by ES2017 async generator transformation)
+        AsyncDelegator = 1 << 12,   // __asyncDelegator (used by ES2017 async generator yield* transformation)
+        AsyncValues = 1 << 13,      // __asyncValues (used by ES2017 for..await..of transformation)
+
+        // Helpers included by ES2015 for..of
+        ForOfIncludes = Values,
+
+        // Helpers included by ES2017 for..await..of
+        ForAwaitOfIncludes = AsyncValues,
+
+        // Helpers included by ES2015 spread
+        SpreadIncludes = Read | Spread,
 
         FirstEmitHelper = Extends,
-        LastEmitHelper = Generator
+        LastEmitHelper = AsyncValues
     }
 
     export const enum EmitHint {
