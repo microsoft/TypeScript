@@ -1425,6 +1425,21 @@ namespace ts {
         return false;
     }
 
+    export function getRightMostAssignedExpression(node: Node) {
+        while (isAssignmentExpression(node, /*excludeCompoundAssignements*/ true)) {
+            node = node.right;
+        }
+        return node;
+    }
+
+    export function isExportsIdentifier(node: Node) {
+        return isIdentifier(node) && node.text === "exports";
+    }
+
+    export function isModuleExportsPropertyAccessExpression(node: Node) {
+        return isPropertyAccessExpression(node) && isIdentifier(node.expression) && node.expression.text === "module" && node.name.text === "exports";
+    }
+
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
     /// assignments we treat as special in the binder
     export function getSpecialPropertyAssignmentKind(expression: Node): SpecialPropertyAssignmentKind {
