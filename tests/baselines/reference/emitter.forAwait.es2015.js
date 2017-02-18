@@ -35,6 +35,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 var __asyncValues = (this && this.__asyncIterator) || function (o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var m = o[Symbol.asyncIterator];
     return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
 };
@@ -42,14 +43,14 @@ function f1() {
     return __awaiter(this, void 0, void 0, function* () {
         let y;
         try {
-            for (var y_1 = __asyncValues(y), y_1_1 = yield ["await", y_1.next()]; !y_1_1.done; y_1_1 = yield ["await", y_1.next()]) {
+            for (var y_1 = __asyncValues(y), y_1_1 = yield y_1.next(); !y_1_1.done; y_1_1 = yield y_1.next()) {
                 const x = y_1_1.value;
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
         finally {
             try {
-                if (y_1_1 && !y_1_1.done && (_a = y_1.return)) yield ["await", _a.call(y_1)];
+                if (y_1_1 && !y_1_1.done && (_a = y_1.return)) yield _a.call(y_1);
             }
             finally { if (e_1) throw e_1.error; }
         }
@@ -66,6 +67,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 var __asyncValues = (this && this.__asyncIterator) || function (o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var m = o[Symbol.asyncIterator];
     return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
 };
@@ -73,14 +75,14 @@ function f2() {
     return __awaiter(this, void 0, void 0, function* () {
         let x, y;
         try {
-            for (var y_1 = __asyncValues(y), y_1_1 = yield ["await", y_1.next()]; !y_1_1.done; y_1_1 = yield ["await", y_1.next()]) {
+            for (var y_1 = __asyncValues(y), y_1_1 = yield y_1.next(); !y_1_1.done; y_1_1 = yield y_1.next()) {
                 x = y_1_1.value;
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
         finally {
             try {
-                if (y_1_1 && !y_1_1.done && (_a = y_1.return)) yield ["await", _a.call(y_1)];
+                if (y_1_1 && !y_1_1.done && (_a = y_1.return)) yield _a.call(y_1);
             }
             finally { if (e_1) throw e_1.error; }
         }
@@ -89,10 +91,12 @@ function f2() {
 }
 //// [file3.js]
 var __asyncValues = (this && this.__asyncIterator) || function (o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var m = o[Symbol.asyncIterator];
     return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
 };
 var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var g = generator.apply(thisArg, _arguments || []), q = [], c, i;
     return i = { next: verb("next"), "throw": verb("throw"), "return": verb("return") }, i[Symbol.asyncIterator] = function () { return this; }, i;
     function verb(n) { return function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]), next(); }); }; }
@@ -124,10 +128,12 @@ function f3() {
 }
 //// [file4.js]
 var __asyncValues = (this && this.__asyncIterator) || function (o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var m = o[Symbol.asyncIterator];
     return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
 };
 var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var g = generator.apply(thisArg, _arguments || []), q = [], c, i;
     return i = { next: verb("next"), "throw": verb("throw"), "return": verb("return") }, i[Symbol.asyncIterator] = function () { return this; }, i;
     function verb(n) { return function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]), next(); }); }; }
