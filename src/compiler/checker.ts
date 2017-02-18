@@ -10053,7 +10053,7 @@ namespace ts {
                     }
                     let type: FlowType;
                     if (flow.flags & FlowFlags.AfterFinally) {
-                        // block flow edge: finally -> pre-try (for larger explanation check comment in binder.ts - bindTryStatement 
+                        // block flow edge: finally -> pre-try (for larger explanation check comment in binder.ts - bindTryStatement
                         (<AfterFinallyFlow>flow).locked = true;
                         type = getTypeAtFlowNode((<AfterFinallyFlow>flow).antecedent);
                         (<AfterFinallyFlow>flow).locked = false;
@@ -10221,7 +10221,7 @@ namespace ts {
                 let seenIncomplete = false;
                 for (const antecedent of flow.antecedents) {
                     if (antecedent.flags & FlowFlags.PreFinally && (<PreFinallyFlow>antecedent).lock.locked) {
-                        // if flow correspond to branch from pre-try to finally and this branch is locked - this means that 
+                        // if flow correspond to branch from pre-try to finally and this branch is locked - this means that
                         // we initially have started following the flow outside the finally block.
                         // in this case we should ignore this branch.
                         continue;
@@ -14320,12 +14320,20 @@ namespace ts {
         }
 
         function checkAssertion(node: AssertionExpression) {
-            const exprType = getRegularTypeOfObjectLiteral(getBaseTypeOfLiteralType(checkExpression(node.expression)));
+            const rawType = checkExpression(node.expression);
 
             checkSourceElement(node.type);
             const targetType = getTypeFromTypeNode(node.type);
 
             if (produceDiagnostics && targetType !== unknownType) {
+                const rawLiteralFlags = rawType.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral | TypeFlags.BooleanLiteral);
+                const check = (type: Type): boolean => !!(type.flags & rawLiteralFlags ||
+                                                          type.flags & TypeFlags.UnionOrIntersection && some((<UnionOrIntersectionType>type).types, check));
+
+                const exprType = rawLiteralFlags && check(targetType)
+                                    ? rawType
+                                    : getRegularTypeOfObjectLiteral(getWidenedLiteralType(rawType));
+
                 const widenedType = getWidenedType(exprType);
                 if (!isTypeComparableTo(targetType, widenedType)) {
                     checkTypeComparableTo(exprType, targetType, node, Diagnostics.Type_0_cannot_be_converted_to_type_1);
