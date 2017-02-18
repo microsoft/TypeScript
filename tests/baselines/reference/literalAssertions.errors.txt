@@ -1,0 +1,44 @@
+tests/cases/conformance/expressions/typeAssertions/literalAssertions.ts(2,1): error TS2352: Type '0' cannot be converted to type '1'.
+tests/cases/conformance/expressions/typeAssertions/literalAssertions.ts(5,1): error TS2352: Type 'false' cannot be converted to type 'string | true'.
+tests/cases/conformance/expressions/typeAssertions/literalAssertions.ts(8,1): error TS2352: Type '"hello"' cannot be converted to type '"str"'.
+tests/cases/conformance/expressions/typeAssertions/literalAssertions.ts(10,1): error TS2352: Type '"hello"' cannot be converted to type '"str" | 123'.
+tests/cases/conformance/expressions/typeAssertions/literalAssertions.ts(15,1): error TS2352: Type '"hello"' cannot be converted to type '"str" & { _brand: any; }'.
+  Type '"hello"' is not comparable to type '"str"'.
+tests/cases/conformance/expressions/typeAssertions/literalAssertions.ts(17,1): error TS2352: Type '"hello"' cannot be converted to type '1 | ("str" & { _brand: any; })'.
+
+
+==== tests/cases/conformance/expressions/typeAssertions/literalAssertions.ts (6 errors) ====
+    0 as 0; // OK
+    0 as 1; // Error
+    ~~~~~~
+!!! error TS2352: Type '0' cannot be converted to type '1'.
+    
+    false as (false | string); // OK
+    false as (true | string);  // Error
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2352: Type 'false' cannot be converted to type 'string | true'.
+    false as (boolean | string);  // OK
+    
+    'hello' as 'str'; // Error
+    ~~~~~~~~~~~~~~~~
+!!! error TS2352: Type '"hello"' cannot be converted to type '"str"'.
+    'hello' as 'hello'; // OK
+    'hello' as ('str' | 123); // Error
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2352: Type '"hello"' cannot be converted to type '"str" | 123'.
+    'hello' as ('hello' | 123); // OK
+    'hello' as ('str' & 'hello'); // OK
+    'hello' as ('str' | 'hello'); // OK
+    'hello' as (1 | 2 | string); // OK
+    'hello' as ('str' & { _brand: any }); // Error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2352: Type '"hello"' cannot be converted to type '"str" & { _brand: any; }'.
+!!! error TS2352:   Type '"hello"' is not comparable to type '"str"'.
+    'hello' as ('hello' & { _brand: any }); // OK
+    'hello' as ('str' & { _brand: any } | 1); // Error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2352: Type '"hello"' cannot be converted to type '1 | ("str" & { _brand: any; })'.
+    'hello' as ('hello' & { _brand: any } | 1); // OK
+    
+    ('string' as string as 'literal'); // OK
+    
