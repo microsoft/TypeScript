@@ -651,7 +651,7 @@
 
     export interface VariableDeclaration extends Declaration {
         kind: SyntaxKind.VariableDeclaration;
-        parent?: VariableDeclarationList;
+        parent?: VariableDeclarationList | CatchClause;
         name: BindingName;                  // Declared variable name
         type?: TypeNode;                    // Optional type annotation
         initializer?: Expression;           // Optional initializer
