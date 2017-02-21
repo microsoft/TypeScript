@@ -2436,6 +2436,7 @@
         getAugmentedPropertiesOfType(type: Type): Symbol[];
         getRootSymbols(symbol: Symbol): Symbol[];
         getContextualType(node: Expression): Type;
+        getContextualTypeForCompletion(node: Expression): Type;
         getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[]): Signature;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature;
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
@@ -2967,6 +2968,7 @@
     // Object types (TypeFlags.ObjectType)
     export interface ObjectType extends Type {
         objectFlags: ObjectFlags;
+        constraintType?: Type; // Contraint type for this object type. Used in completion with object literals
     }
 
     /** Class and interface types (TypeFlags.Class and TypeFlags.Interface). */

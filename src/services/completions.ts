@@ -1264,7 +1264,7 @@ namespace ts.Completions {
 
                 // If the object literal is being assigned to something of type 'null | { hello: string }',
                 // it clearly isn't trying to satisfy the 'null' type. So we grab the non-nullable type if possible.
-                typeForObject = typeChecker.getContextualType(<ObjectLiteralExpression>objectLikeContainer);
+                typeForObject = typeChecker.getContextualTypeForCompletion(<ObjectLiteralExpression>objectLikeContainer);
                 typeForObject = typeForObject && typeForObject.getNonNullableType();
 
                 existingMembers = (<ObjectLiteralExpression>objectLikeContainer).properties;

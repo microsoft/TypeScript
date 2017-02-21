@@ -144,6 +144,10 @@ namespace ts {
                 node = getParseTreeNode(node, isExpression)
                 return node ? getContextualType(node) : undefined;
             },
+            getContextualTypeForCompletion: node => {
+                node = getParseTreeNode(node, isExpression);
+                return node ? getContextualType(node, /*completion*/true) : undefined;
+            },
             getFullyQualifiedName,
             getResolvedSignature: (node, candidatesOutArray?) => {
                 node = getParseTreeNode(node, isCallLikeExpression);
@@ -9552,6 +9556,10 @@ namespace ts {
                         if (!isTypeAssignableTo(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
                             context.inferredTypes[index] = inferredType = instantiatedConstraint;
                         }
+                        else if (inferredType.flags & TypeFlags.Object) {
+                            // Store constraint type for completion usage scenaries
+                            (<ObjectType>inferredType).constraintType = instantiatedConstraint;
+                        }
                     }
                 }
                 else if (context.failedTypeParameterIndex === undefined || context.failedTypeParameterIndex > index) {
@@ -11622,12 +11630,16 @@ namespace ts {
         }
 
         // In a typed function call, an argument or substitution expression is contextually typed by the type of the corresponding parameter.
-        function getContextualTypeForArgument(callTarget: CallLikeExpression, arg: Expression): Type {
+        function getContextualTypeForArgument(callTarget: CallLikeExpression, arg: Expression, completion: boolean = false): Type {
             const args = getEffectiveCallArguments(callTarget);
             const argIndex = indexOf(args, arg);
             if (argIndex >= 0) {
                 const signature = getResolvedOrAnySignature(callTarget);
-                return getTypeAtPosition(signature, argIndex);
+                const type = getTypeAtPosition(signature, argIndex);
+                if (completion && type && type.flags & TypeFlags.Object && (<ObjectType>type).constraintType) {
+                    return (<ObjectType>type).constraintType;
+                }
+                return type;
             }
             return undefined;
         }
@@ -11728,10 +11740,13 @@ namespace ts {
             return getContextualTypeForObjectLiteralElement(node);
         }
 
-        function getContextualTypeForObjectLiteralElement(element: ObjectLiteralElementLike) {
+        function getContextualTypeForObjectLiteralElement(element: ObjectLiteralElementLike, completion: boolean = false) {
             const objectLiteral = <ObjectLiteralExpression>element.parent;
-            const type = getApparentTypeOfContextualType(objectLiteral);
+            let type = getApparentTypeOfContextualType(objectLiteral);
             if (type) {
+                if (completion && type.flags & TypeFlags.Object && (<ObjectType>type).constraintType) {
+                    type = (<ObjectType>type).constraintType;
+                }
                 if (!hasDynamicName(element)) {
                     // For a (non-symbol) computed property, there is no reason to look up the name
                     // in the type. It will just be "__computed", which does not appear in any
@@ -11811,9 +11826,10 @@ namespace ts {
          *   - Use 'getApparentTypeOfContextualType' when you're going to need the members of the type.
          *
          * @param node the expression whose contextual type will be returned.
+         * @param completion the function was invoked for completion
          * @returns the contextual type of an expression.
          */
-        function getContextualType(node: Expression): Type {
+        function getContextualType(node: Expression, completion: boolean = false): Type {
             if (isInsideWithStatementBody(node)) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return undefined;
@@ -11836,7 +11852,7 @@ namespace ts {
                     return getContextualTypeForYieldOperand(<YieldExpression>parent);
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
-                    return getContextualTypeForArgument(<CallExpression>parent, node);
+                    return getContextualTypeForArgument(<CallExpression>parent, node, completion);
                 case SyntaxKind.TypeAssertionExpression:
                 case SyntaxKind.AsExpression:
                     return getTypeFromTypeNode((<AssertionExpression>parent).type);
@@ -11844,7 +11860,7 @@ namespace ts {
                     return getContextualTypeForBinaryOperand(node);
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.ShorthandPropertyAssignment:
-                    return getContextualTypeForObjectLiteralElement(<ObjectLiteralElementLike>parent);
+                    return getContextualTypeForObjectLiteralElement(<ObjectLiteralElementLike>parent, completion);
                 case SyntaxKind.ArrayLiteralExpression:
                     return getContextualTypeForElementExpression(node);
                 case SyntaxKind.ConditionalExpression:
