@@ -7,8 +7,8 @@ interface Foo {
 }
 
 let cls = class implements Foo {
->cls : typeof (Anonymous class)
->class implements Foo {    doThing() { }} : typeof (Anonymous class)
+>cls : typeof cls
+>class implements Foo {    doThing() { }} : typeof cls
 >Foo : Foo
 
     doThing() { }

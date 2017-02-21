@@ -38,6 +38,7 @@ export class C4 {
 
 //// [declarationEmitClassMemberNameConflict.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var C1 = (function () {
     function C1() {
     }

@@ -1385,6 +1385,117 @@ class C1 {
     }
 }
 
+type S2 = {
+>S2 : S2
+
+    a: string;
+>a : string
+
+    b: string;
+>b : string
+
+};
+
+function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K], x4: T[K]) {
+>f90 : <T extends S2, K extends "a" | "b">(x1: string, x2: T["a" | "b"], x3: S2[K], x4: T[K]) => void
+>T : T
+>S2 : S2
+>K : K
+>S2 : S2
+>x1 : string
+>S2 : S2
+>S2 : S2
+>x2 : T["a" | "b"]
+>T : T
+>S2 : S2
+>x3 : S2[K]
+>S2 : S2
+>K : K
+>x4 : T[K]
+>T : T
+>K : K
+
+    x1 = x2;
+>x1 = x2 : T["a" | "b"]
+>x1 : string
+>x2 : T["a" | "b"]
+
+    x1 = x3;
+>x1 = x3 : S2[K]
+>x1 : string
+>x3 : S2[K]
+
+    x1 = x4;
+>x1 = x4 : T[K]
+>x1 : string
+>x4 : T[K]
+
+    x2 = x1;
+>x2 = x1 : string
+>x2 : T["a" | "b"]
+>x1 : string
+
+    x2 = x3;
+>x2 = x3 : S2[K]
+>x2 : T["a" | "b"]
+>x3 : S2[K]
+
+    x2 = x4;
+>x2 = x4 : T[K]
+>x2 : T["a" | "b"]
+>x4 : T[K]
+
+    x3 = x1;
+>x3 = x1 : string
+>x3 : S2[K]
+>x1 : string
+
+    x3 = x2;
+>x3 = x2 : T["a" | "b"]
+>x3 : S2[K]
+>x2 : T["a" | "b"]
+
+    x3 = x4;
+>x3 = x4 : T[K]
+>x3 : S2[K]
+>x4 : T[K]
+
+    x4 = x1;
+>x4 = x1 : string
+>x4 : T[K]
+>x1 : string
+
+    x4 = x2;
+>x4 = x2 : T["a" | "b"]
+>x4 : T[K]
+>x2 : T["a" | "b"]
+
+    x4 = x3;
+>x4 = x3 : S2[K]
+>x4 : T[K]
+>x3 : S2[K]
+
+    x1.length;
+>x1.length : number
+>x1 : string
+>length : number
+
+    x2.length;
+>x2.length : number
+>x2 : T["a" | "b"]
+>length : number
+
+    x3.length;
+>x3.length : number
+>x3 : S2[K]
+>length : number
+
+    x4.length;
+>x4.length : number
+>x4 : T[K]
+>length : number
+}
+
 // Repros from #12011
 
 class Base {
@@ -1874,4 +1985,313 @@ let result = dispatchMethod<SomeMethodDescriptor>("someMethod", ["hello", 35]);
 >["hello", 35] : [string, number]
 >"hello" : "hello"
 >35 : 35
+
+// Repro from #13073
+
+type KeyTypes = "a" | "b"
+>KeyTypes : "a" | "b"
+
+let MyThingy: { [key in KeyTypes]: string[] };
+>MyThingy : { a: string[]; b: string[]; }
+>key : key
+>KeyTypes : "a" | "b"
+
+function addToMyThingy<S extends KeyTypes>(key: S) {
+>addToMyThingy : <S extends "a" | "b">(key: S) => void
+>S : S
+>KeyTypes : "a" | "b"
+>key : S
+>S : S
+
+    MyThingy[key].push("a");
+>MyThingy[key].push("a") : number
+>MyThingy[key].push : (...items: string[]) => number
+>MyThingy[key] : { a: string[]; b: string[]; }[S]
+>MyThingy : { a: string[]; b: string[]; }
+>key : S
+>push : (...items: string[]) => number
+>"a" : "a"
+}
+
+// Repro from #13102
+
+type Handler<T> = {
+>Handler : Handler<T>
+>T : T
+
+    onChange: (name: keyof T) => void;
+>onChange : (name: keyof T) => void
+>name : keyof T
+>T : T
+
+};
+
+function onChangeGenericFunction<T>(handler: Handler<T & {preset: number}>) {
+>onChangeGenericFunction : <T>(handler: Handler<T & { preset: number; }>) => void
+>T : T
+>handler : Handler<T & { preset: number; }>
+>Handler : Handler<T>
+>T : T
+>preset : number
+
+    handler.onChange('preset')
+>handler.onChange('preset') : void
+>handler.onChange : (name: keyof (T & { preset: number; })) => void
+>handler : Handler<T & { preset: number; }>
+>onChange : (name: keyof (T & { preset: number; })) => void
+>'preset' : "preset"
+}
+
+// Repro from #13285
+
+function updateIds<T extends Record<K, string>, K extends string>(
+>updateIds : <T extends Record<K, string>, K extends string>(obj: T, idFields: K[], idMapping: { [oldId: string]: string; }) => Record<K, string>
+>T : T
+>Record : Record<K, T>
+>K : K
+>K : K
+
+    obj: T,
+>obj : T
+>T : T
+
+    idFields: K[],
+>idFields : K[]
+>K : K
+
+    idMapping: { [oldId: string]: string }
+>idMapping : { [oldId: string]: string; }
+>oldId : string
+
+): Record<K, string> {
+>Record : Record<K, T>
+>K : K
+
+    for (const idField of idFields) {
+>idField : K
+>idFields : K[]
+
+        const newId = idMapping[obj[idField]];
+>newId : { [oldId: string]: string; }[T[K]]
+>idMapping[obj[idField]] : { [oldId: string]: string; }[T[K]]
+>idMapping : { [oldId: string]: string; }
+>obj[idField] : T[K]
+>obj : T
+>idField : K
+
+        if (newId) {
+>newId : { [oldId: string]: string; }[T[K]]
+
+            obj[idField] = newId;
+>obj[idField] = newId : { [oldId: string]: string; }[T[K]]
+>obj[idField] : T[K]
+>obj : T
+>idField : K
+>newId : { [oldId: string]: string; }[T[K]]
+        }
+    }
+    return obj;
+>obj : T
+}
+
+// Repro from #13285
+
+function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
+>updateIds2 : <T extends { [x: string]: string; }, K extends keyof T>(obj: T, key: K, stringMap: { [oldId: string]: string; }) => void
+>T : T
+>x : string
+>K : K
+>T : T
+
+    obj: T,
+>obj : T
+>T : T
+
+    key: K,
+>key : K
+>K : K
+
+    stringMap: { [oldId: string]: string }
+>stringMap : { [oldId: string]: string; }
+>oldId : string
+
+) {
+    var x = obj[key];
+>x : T[K]
+>obj[key] : T[K]
+>obj : T
+>key : K
+
+    stringMap[x]; // Should be OK.
+>stringMap[x] : { [oldId: string]: string; }[T[K]]
+>stringMap : { [oldId: string]: string; }
+>x : T[K]
+}
+
+// Repro from #13514
+
+declare function head<T extends Array<any>>(list: T): T[0];
+>head : <T extends any[]>(list: T) => T[0]
+>T : T
+>Array : T[]
+>list : T
+>T : T
+>T : T
+
+// Repro from #13604
+
+class A<T> {
+>A : A<T>
+>T : T
+
+	props: T & { foo: string };
+>props : T & { foo: string; }
+>T : T
+>foo : string
+}
+
+class B extends A<{ x: number}> {
+>B : B
+>A : A<{ x: number; }>
+>x : number
+
+	f(p: this["props"]) {
+>f : (p: this["props"]) => void
+>p : this["props"]
+
+		p.x;
+>p.x : number
+>p : this["props"]
+>x : number
+	}
+}
+
+// Repro from #13749
+
+class Form<T> {
+>Form : Form<T>
+>T : T
+
+    private childFormFactories: {[K in keyof T]: (v: T[K]) => Form<T[K]>}
+>childFormFactories : { [K in keyof T]: (v: T[K]) => Form<T[K]>; }
+>K : K
+>T : T
+>v : T[K]
+>T : T
+>K : K
+>Form : Form<T>
+>T : T
+>K : K
+
+    public set<K extends keyof T>(prop: K, value: T[K]) {
+>set : <K extends keyof T>(prop: K, value: T[K]) => void
+>K : K
+>T : T
+>prop : K
+>K : K
+>value : T[K]
+>T : T
+>K : K
+
+        this.childFormFactories[prop](value)
+>this.childFormFactories[prop](value) : Form<T[K]>
+>this.childFormFactories[prop] : (v: T[K]) => Form<T[K]>
+>this.childFormFactories : { [K in keyof T]: (v: T[K]) => Form<T[K]>; }
+>this : this
+>childFormFactories : { [K in keyof T]: (v: T[K]) => Form<T[K]>; }
+>prop : K
+>value : T[K]
+    }
+}
+
+// Repro from #13787
+
+class SampleClass<P> {
+>SampleClass : SampleClass<P>
+>P : P
+
+    public props: Readonly<P>;
+>props : Readonly<P>
+>Readonly : Readonly<T>
+>P : P
+
+    constructor(props: P) {
+>props : P
+>P : P
+
+        this.props = Object.freeze(props);
+>this.props = Object.freeze(props) : Readonly<P>
+>this.props : Readonly<P>
+>this : this
+>props : Readonly<P>
+>Object.freeze(props) : Readonly<P>
+>Object.freeze : { <T>(a: T[]): ReadonlyArray<T>; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>Object : ObjectConstructor
+>freeze : { <T>(a: T[]): ReadonlyArray<T>; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>props : P
+    }
+}
+
+interface Foo {
+>Foo : Foo
+
+    foo: string;
+>foo : string
+}
+
+declare function merge<T, U>(obj1: T, obj2: U): T & U;
+>merge : <T, U>(obj1: T, obj2: U) => T & U
+>T : T
+>U : U
+>obj1 : T
+>T : T
+>obj2 : U
+>U : U
+>T : T
+>U : U
+
+class AnotherSampleClass<T> extends SampleClass<T & Foo> {
+>AnotherSampleClass : AnotherSampleClass<T>
+>T : T
+>SampleClass : SampleClass<T & Foo>
+>T : T
+>Foo : Foo
+
+    constructor(props: T) {
+>props : T
+>T : T
+
+        const foo: Foo = { foo: "bar" };
+>foo : Foo
+>Foo : Foo
+>{ foo: "bar" } : { foo: string; }
+>foo : string
+>"bar" : "bar"
+
+        super(merge(props, foo));
+>super(merge(props, foo)) : void
+>super : typeof SampleClass
+>merge(props, foo) : T & Foo
+>merge : <T, U>(obj1: T, obj2: U) => T & U
+>props : T
+>foo : Foo
+    }
+
+    public brokenMethod() {
+>brokenMethod : () => void
+
+        this.props.foo.concat;
+>this.props.foo.concat : (...strings: string[]) => string
+>this.props.foo : (T & Foo)["foo"]
+>this.props : Readonly<T & Foo>
+>this : this
+>props : Readonly<T & Foo>
+>foo : (T & Foo)["foo"]
+>concat : (...strings: string[]) => string
+    }
+}
+new AnotherSampleClass({});
+>new AnotherSampleClass({}) : AnotherSampleClass<{}>
+>AnotherSampleClass : typeof AnotherSampleClass
+>{} : {}
 

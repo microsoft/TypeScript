@@ -7,6 +7,7 @@ export class C {
 //// [fieldAndGetterWithSameName.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var C = (function () {
         function C() {
         }

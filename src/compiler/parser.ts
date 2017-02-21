@@ -66,6 +66,7 @@ namespace ts {
             case SyntaxKind.TypeParameter:
                 return visitNode(cbNode, (<TypeParameterDeclaration>node).name) ||
                     visitNode(cbNode, (<TypeParameterDeclaration>node).constraint) ||
+                    visitNode(cbNode, (<TypeParameterDeclaration>node).default) ||
                     visitNode(cbNode, (<TypeParameterDeclaration>node).expression);
             case SyntaxKind.ShorthandPropertyAssignment:
                 return visitNodes(cbNodes, node.decorators) ||
@@ -242,7 +243,8 @@ namespace ts {
                     visitNode(cbNode, (<ForInStatement>node).expression) ||
                     visitNode(cbNode, (<ForInStatement>node).statement);
             case SyntaxKind.ForOfStatement:
-                return visitNode(cbNode, (<ForOfStatement>node).initializer) ||
+                return visitNode(cbNode, (<ForOfStatement>node).awaitModifier) ||
+                    visitNode(cbNode, (<ForOfStatement>node).initializer) ||
                     visitNode(cbNode, (<ForOfStatement>node).expression) ||
                     visitNode(cbNode, (<ForOfStatement>node).statement);
             case SyntaxKind.ContinueStatement:
@@ -368,7 +370,9 @@ namespace ts {
             case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.JsxOpeningElement:
                 return visitNode(cbNode, (<JsxOpeningLikeElement>node).tagName) ||
-                    visitNodes(cbNodes, (<JsxOpeningLikeElement>node).attributes);
+                    visitNode(cbNode, (<JsxOpeningLikeElement>node).attributes);
+            case SyntaxKind.JsxAttributes:
+                return visitNodes(cbNodes, (<JsxAttributes>node).properties);
             case SyntaxKind.JsxAttribute:
                 return visitNode(cbNode, (<JsxAttribute>node).name) ||
                     visitNode(cbNode, (<JsxAttribute>node).initializer);
@@ -1134,7 +1138,11 @@ namespace ts {
 
         function internIdentifier(text: string): string {
             text = escapeIdentifier(text);
-            return identifiers[text] || (identifiers[text] = text);
+            let identifier = identifiers.get(text);
+            if (identifier === undefined) {
+                identifiers.set(text, identifier = text);
+            }
+            return identifier;
         }
 
         // An identifier that starts with two underscores has an extra underscore character prepended to it to avoid issues
@@ -2098,6 +2106,10 @@ namespace ts {
                 }
             }
 
+            if (parseOptional(SyntaxKind.EqualsToken)) {
+                node.default = parseType();
+            }
+
             return finishNode(node);
         }
 
@@ -2510,6 +2522,7 @@ namespace ts {
                 case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.UndefinedKeyword:
                 case SyntaxKind.NeverKeyword:
+                case SyntaxKind.ObjectKeyword:
                     // If these are followed by a dot, then parse these out as a dotted type reference instead.
                     const node = tryParse(parseKeywordAndNoDot);
                     return node || parseTypeReference();
@@ -2568,6 +2581,7 @@ namespace ts {
                 case SyntaxKind.NumericLiteral:
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
+                case SyntaxKind.ObjectKeyword:
                     return true;
                 case SyntaxKind.MinusToken:
                     return lookAhead(nextTokenIsNumericLiteral);
@@ -3859,14 +3873,20 @@ namespace ts {
             return result;
         }
 
+        function parseJsxAttributes(): JsxAttributes {
+            const jsxAttributes = <JsxAttributes>createNode(SyntaxKind.JsxAttributes);
+            jsxAttributes.properties = parseList(ParsingContext.JsxAttributes, parseJsxAttribute);
+            return finishNode(jsxAttributes);
+        }
+
         function parseJsxOpeningOrSelfClosingElement(inExpressionContext: boolean): JsxOpeningElement | JsxSelfClosingElement {
             const fullStart = scanner.getStartPos();
 
             parseExpected(SyntaxKind.LessThanToken);
 
             const tagName = parseJsxElementName();
+            const attributes = parseJsxAttributes();
 
-            const attributes = parseList(ParsingContext.JsxAttributes, parseJsxAttribute);
             let node: JsxOpeningLikeElement;
 
             if (token() === SyntaxKind.GreaterThanToken) {
@@ -4442,6 +4462,7 @@ namespace ts {
         function parseForOrForInOrForOfStatement(): Statement {
             const pos = getNodePos();
             parseExpected(SyntaxKind.ForKeyword);
+            const awaitToken = parseOptionalToken(SyntaxKind.AwaitKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
 
             let initializer: VariableDeclarationList | Expression = undefined;
@@ -4454,19 +4475,20 @@ namespace ts {
                 }
             }
             let forOrForInOrForOfStatement: IterationStatement;
-            if (parseOptional(SyntaxKind.InKeyword)) {
+            if (awaitToken ? parseExpected(SyntaxKind.OfKeyword) : parseOptional(SyntaxKind.OfKeyword)) {
+                const forOfStatement = <ForOfStatement>createNode(SyntaxKind.ForOfStatement, pos);
+                forOfStatement.awaitModifier = awaitToken;
+                forOfStatement.initializer = initializer;
+                forOfStatement.expression = allowInAnd(parseAssignmentExpressionOrHigher);
+                parseExpected(SyntaxKind.CloseParenToken);
+                forOrForInOrForOfStatement = forOfStatement;
+            }
+            else if (parseOptional(SyntaxKind.InKeyword)) {
                 const forInStatement = <ForInStatement>createNode(SyntaxKind.ForInStatement, pos);
                 forInStatement.initializer = initializer;
                 forInStatement.expression = allowInAnd(parseExpression);
                 parseExpected(SyntaxKind.CloseParenToken);
                 forOrForInOrForOfStatement = forInStatement;
-            }
-            else if (parseOptional(SyntaxKind.OfKeyword)) {
-                const forOfStatement = <ForOfStatement>createNode(SyntaxKind.ForOfStatement, pos);
-                forOfStatement.initializer = initializer;
-                forOfStatement.expression = allowInAnd(parseAssignmentExpressionOrHigher);
-                parseExpected(SyntaxKind.CloseParenToken);
-                forOrForInOrForOfStatement = forOfStatement;
             }
             else {
                 const forStatement = <ForStatement>createNode(SyntaxKind.ForStatement, pos);
@@ -5810,7 +5832,11 @@ namespace ts {
                     }
                 }
 
-                const range = { pos: triviaScanner.getTokenPos(), end: triviaScanner.getTextPos(), kind: triviaScanner.getToken() };
+                const range = {
+                    kind: <SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia>triviaScanner.getToken(),
+                    pos: triviaScanner.getTokenPos(),
+                    end: triviaScanner.getTextPos(),
+                };
 
                 const comment = sourceText.substring(range.pos, range.end);
                 const referencePathMatchResult = getFileReferenceFromReferencePath(comment, range);
@@ -6037,6 +6063,7 @@ namespace ts {
                     case SyntaxKind.NullKeyword:
                     case SyntaxKind.UndefinedKeyword:
                     case SyntaxKind.NeverKeyword:
+                    case SyntaxKind.ObjectKeyword:
                         return parseTokenNode<JSDocType>();
                     case SyntaxKind.StringLiteral:
                     case SyntaxKind.NumericLiteral:
@@ -6686,10 +6713,15 @@ namespace ts {
                     typedefTag.fullName = parseJSDocTypeNameWithNamespace(/*flags*/ 0);
                     if (typedefTag.fullName) {
                         let rightNode = typedefTag.fullName;
-                        while (rightNode.kind !== SyntaxKind.Identifier) {
+                        while (true) {
+                            if (rightNode.kind === SyntaxKind.Identifier || !rightNode.body) {
+                                // if node is identifier - use it as name
+                                // otherwise use name of the rightmost part that we were able to parse
+                                typedefTag.name = rightNode.kind === SyntaxKind.Identifier ? rightNode : rightNode.name;
+                                break;
+                            }
                             rightNode = rightNode.body;
                         }
-                        typedefTag.name = rightNode;
                     }
                     typedefTag.typeExpression = typeExpression;
                     skipWhitespace();

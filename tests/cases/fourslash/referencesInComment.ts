@@ -5,6 +5,4 @@
 ////class foo { }
 ////var bar = 0;
 
-for (const marker of test.markers()) {
-    verify.referencesAre([]);
-}
+goTo.eachMarker(() => verify.noReferences());

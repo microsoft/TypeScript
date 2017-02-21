@@ -1,4 +1,4 @@
-/// <reference path="types.d.ts" />
+/// <reference path="types.ts" />
 /// <reference path="shared.ts" />
 
 namespace ts.server {
@@ -95,7 +95,7 @@ namespace ts.server {
         };
     }
 
-    export function mergeMaps(target: MapLike<any>, source: MapLike <any>): void {
+    export function mergeMapLikes(target: MapLike<any>, source: MapLike <any>): void {
         for (const key in source) {
             if (hasProperty(source, key)) {
                 target[key] = source[key];
@@ -145,20 +145,20 @@ namespace ts.server {
 
     export function createNormalizedPathMap<T>(): NormalizedPathMap<T> {
 /* tslint:disable:no-null-keyword */
-        const map: Map<T> = Object.create(null);
+        const map = createMap<T>();
 /* tslint:enable:no-null-keyword */
         return {
             get(path) {
-                return map[path];
+                return map.get(path);
             },
             set(path, value) {
-                map[path] = value;
+                map.set(path, value);
             },
             contains(path) {
-                return hasProperty(map, path);
+                return map.has(path);
             },
             remove(path) {
-                delete map[path];
+                map.delete(path);
             }
         };
     }
@@ -198,16 +198,17 @@ namespace ts.server {
         }
 
         public schedule(operationId: string, delay: number, cb: () => void) {
-            if (hasProperty(this.pendingTimeouts, operationId)) {
+            const pendingTimeout = this.pendingTimeouts.get(operationId);
+            if (pendingTimeout) {
                 // another operation was already scheduled for this id - cancel it
-                this.host.clearTimeout(this.pendingTimeouts[operationId]);
+                this.host.clearTimeout(pendingTimeout);
             }
             // schedule new operation, pass arguments
-            this.pendingTimeouts[operationId] = this.host.setTimeout(ThrottledOperations.run, delay, this, operationId, cb);
+            this.pendingTimeouts.set(operationId, this.host.setTimeout(ThrottledOperations.run, delay, this, operationId, cb));
         }
 
         private static run(self: ThrottledOperations, operationId: string, cb: () => void) {
-            delete self.pendingTimeouts[operationId];
+            self.pendingTimeouts.delete(operationId);
             cb();
         }
     }

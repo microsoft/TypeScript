@@ -41,7 +41,7 @@ const {runTestsInParallel} = mochaParallel;
 Error.stackTraceLimit = 1000;
 
 const cmdLineOptions = minimist(process.argv.slice(2), {
-    boolean: ["debug", "light", "colors", "lint", "soft"],
+    boolean: ["debug", "inspect", "light", "colors", "lint", "soft"],
     string: ["browser", "tests", "host", "reporter", "stackTraceLimit"],
     alias: {
         d: "debug",
@@ -50,12 +50,14 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         r: "reporter",
         color: "colors",
         f: "files",
-        file: "files"
+        file: "files",
+        w: "workers",
     },
     default: {
         soft: false,
         colors: process.env.colors || process.env.color || true,
         debug: process.env.debug || process.env.d,
+        inspect: process.env.inspect,
         host: process.env.TYPESCRIPT_HOST || process.env.host || "node",
         browser: process.env.browser || process.env.b || "IE",
         tests: process.env.test || process.env.tests || process.env.t,
@@ -63,6 +65,7 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         reporter: process.env.reporter || process.env.r,
         lint: process.env.lint || true,
         files: process.env.f || process.env.file || process.env.files || "",
+        workers: process.env.workerCount || os.cpus().length,
     }
 });
 
@@ -136,6 +139,14 @@ const es2017LibrarySourceMap = es2017LibrarySource.map(function(source) {
     return { target: "lib." + source, sources: ["header.d.ts", source] };
 });
 
+const esnextLibrarySource = [
+    "esnext.asynciterable.d.ts"
+];
+
+const esnextLibrarySourceMap = esnextLibrarySource.map(function (source) {
+    return { target: "lib." + source, sources: ["header.d.ts", source] };
+});
+
 const hostsLibrarySources = ["dom.generated.d.ts", "webworker.importscripts.d.ts", "scripthost.d.ts"];
 
 const librarySourceMap = [
@@ -150,11 +161,12 @@ const librarySourceMap = [
     { target: "lib.es2015.d.ts", sources: ["header.d.ts", "es2015.d.ts"] },
     { target: "lib.es2016.d.ts", sources: ["header.d.ts", "es2016.d.ts"] },
     { target: "lib.es2017.d.ts", sources: ["header.d.ts", "es2017.d.ts"] },
+    { target: "lib.esnext.d.ts", sources: ["header.d.ts", "esnext.d.ts"] },
 
     // JavaScript + all host library
     { target: "lib.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(hostsLibrarySources) },
     { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts") }
-].concat(es2015LibrarySourceMap, es2016LibrarySourceMap, es2017LibrarySourceMap);
+].concat(es2015LibrarySourceMap, es2016LibrarySourceMap, es2017LibrarySourceMap, esnextLibrarySourceMap);
 
 const libraryTargets = librarySourceMap.map(function(f) {
     return path.join(builtLocalDirectory, f.target);
@@ -242,22 +254,20 @@ function needsUpdate(source: string | string[], dest: string | string[]): boolea
     return true;
 }
 
+// Doing tsconfig inheritance manually. https://github.com/ivogabe/gulp-typescript/issues/459
+const tsconfigBase = JSON.parse(fs.readFileSync("src/tsconfig-base.json", "utf-8")).compilerOptions;
+
 function getCompilerSettings(base: tsc.Settings, useBuiltCompiler?: boolean): tsc.Settings {
     const copy: tsc.Settings = {};
-    copy.noEmitOnError = true;
-    copy.noImplicitAny = true;
-    copy.noImplicitThis = true;
-    copy.pretty = true;
-    copy.types = [];
+    for (const key in tsconfigBase) {
+        copy[key] = tsconfigBase[key];
+    }
     for (const key in base) {
         copy[key] = base[key];
     }
     if (!useDebugMode) {
         if (copy.removeComments === undefined) copy.removeComments = true;
         copy.newLine = "lf";
-    }
-    else {
-        copy.preserveConstEnums = true;
     }
     if (useBuiltCompiler === true) {
         copy.typescript = require("./built/local/typescript.js");
@@ -330,6 +340,7 @@ const builtGeneratedDiagnosticMessagesJSON = path.join(builtLocalDirectory, "dia
 // processDiagnosticMessages script
 gulp.task(processDiagnosticMessagesJs, false, [], () => {
     const settings: tsc.Settings = getCompilerSettings({
+        target: "es5",
         declaration: false,
         removeComments: true,
         noResolve: false,
@@ -471,7 +482,10 @@ gulp.task(tsserverLibraryFile, false, [servicesFile], (done) => {
         js.pipe(prependCopyright())
             .pipe(sourcemaps.write("."))
             .pipe(gulp.dest(".")),
-        dts.pipe(prependCopyright())
+        dts.pipe(prependCopyright(/*outputCopyright*/true))
+            .pipe(insert.transform((content) => {
+                return content + "\r\nexport = ts;\r\nexport as namespace ts;";
+            }))
             .pipe(gulp.dest("."))
     ]);
 });
@@ -584,6 +598,7 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
     cleanTestDirs((err) => {
         if (err) { console.error(err); failWithStatus(err, 1); }
         const debug = cmdLineOptions["debug"];
+        const inspect = cmdLineOptions["inspect"];
         const tests = cmdLineOptions["tests"];
         const light = cmdLineOptions["light"];
         const stackTraceLimit = cmdLineOptions["stackTraceLimit"];
@@ -602,7 +617,7 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
             } while (fs.existsSync(taskConfigsFolder));
             fs.mkdirSync(taskConfigsFolder);
 
-            workerCount = process.env.workerCount || os.cpus().length;
+            workerCount = cmdLineOptions["workers"];
         }
 
         if (tests || light || taskConfigsFolder) {
@@ -620,7 +635,10 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
         // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
         if (!runInParallel) {
             const args = [];
-            if (debug) {
+            if (inspect) {
+                args.push("--inspect");
+            }
+            if (inspect || debug) {
                 args.push("--debug-brk");
             }
             args.push("-R", reporter);
@@ -1015,7 +1033,7 @@ gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: 
             cb();
         }, (cb) => {
             files = files.filter(file =>  fileMatcher.test(file.path)).sort((filea, fileb) => filea.stat.size - fileb.stat.size);
-            const workerCount = (process.env.workerCount && +process.env.workerCount) || os.cpus().length;
+            const workerCount = cmdLineOptions["workers"];
             for (let i = 0; i < workerCount; i++) {
                 spawnLintWorker(files, finished);
             }

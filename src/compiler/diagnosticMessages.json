@@ -175,15 +175,15 @@
         "category": "Error",
         "code": 1057
     },
-    "Operand for 'await' does not have a valid callable 'then' member.": {
+    "Type used as operand to 'await' or the return type of an async function must either be a valid promise or must not contain a callable 'then' member.": {
         "category": "Error",
         "code": 1058
     },
-    "Return expression in async function does not have a valid callable 'then' member.": {
+    "A promise must have a 'then' method.": {
         "category": "Error",
         "code": 1059
     },
-    "Expression body for async arrow function does not have a valid callable 'then' member.": {
+    "The first parameter of the 'then' method of a promise must be a callback.": {
         "category": "Error",
         "code": 1060
     },
@@ -191,7 +191,7 @@
         "category": "Error",
         "code": 1061
     },
-    "{0} is referenced directly or indirectly in the fulfillment callback of its own 'then' method.": {
+    "Type is referenced directly or indirectly in the fulfillment callback of its own 'then' method.": {
         "category": "Error",
         "code": 1062
     },
@@ -290,6 +290,10 @@
     "'delete' cannot be called on an identifier in strict mode.": {
         "category": "Error",
         "code": 1102
+    },
+    "A 'for-await-of' statement is only allowed within an async function or async generator.": {
+        "category": "Error",
+        "code": 1103
     },
     "A 'continue' statement can only be used within an enclosing iteration statement.": {
         "category": "Error",
@@ -670,6 +674,10 @@
     "Invalid use of '{0}'. Modules are automatically in strict mode.": {
         "category": "Error",
         "code": 1215
+    },
+    "Identifier expected. '__esModule' is reserved as an exported marker when transforming ECMAScript modules.": {
+        "category": "Error",
+        "code": 1216
     },
     "Export assignment is not supported when '--module' flag is 'system'.": {
         "category": "Error",
@@ -1627,6 +1635,10 @@
         "category": "Error",
         "code": 2503
     },
+    "Type must have a '[Symbol.asyncIterator]()' method that returns an async iterator.": {
+        "category": "Error",
+        "code": 2504
+    },
     "A generator cannot have a 'void' type annotation.": {
         "category": "Error",
         "code": 2505
@@ -1682,6 +1694,10 @@
     "A 'this'-based type guard is not compatible with a parameter-based type guard.": {
         "category": "Error",
         "code": 2518
+    },
+    "An async iterator must have a 'next()' method.": {
+        "category": "Error",
+        "code": 2519
     },
     "Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.": {
         "category": "Error",
@@ -1783,6 +1799,26 @@
         "category": "Error",
         "code": 2544
     },
+    "A mixin class must have a constructor with a single rest parameter of type 'any[]'.": {
+        "category": "Error",
+        "code": 2545
+    },
+    "Property '{0}' has conflicting declarations and is inaccessible in type '{1}'.": {
+        "category": "Error",
+        "code": 2546
+    },
+    "The type returned by the 'next()' method of an async iterator must be a promise for a type with a 'value' property.": {
+        "category": "Error",
+        "code": 2547
+    },
+    "Type '{0}' is not an array type or does not have a '[Symbol.iterator]()' method that returns an iterator.": {
+        "category": "Error",
+        "code": 2548
+    },
+    "Type '{0}' is not an array type or a string type or does not have a '[Symbol.iterator]()' method that returns an iterator.": {
+        "category": "Error",
+        "code": 2549
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -1822,6 +1858,10 @@
     "JSX spread child must be an array type.": {
         "category": "Error",
         "code": 2609
+    },
+    "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
+        "category": "Error",
+        "code": 2649
     },
     "Cannot emit namespaced JSX elements in React": {
         "category": "Error",
@@ -2015,6 +2055,10 @@
         "category": "Error",
         "code": 2698
     },
+    "Static property '{0}' conflicts with built-in property 'Function.{0}' of constructor function '{1}'.": {
+        "category": "Error",
+        "code": 2699
+    },
     "Rest types may only be created from object types.": {
         "category": "Error",
         "code": 2700
@@ -2034,6 +2078,18 @@
     "The operand of a delete operator cannot be a read-only property": {
         "category": "Error",
         "code": 2704
+    },
+    "An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your `--lib` option.": {
+        "category": "Error",
+        "code": 2705
+    },
+    "Required type parameters may not follow optional type parameters.": {
+        "category": "Error",
+        "code": 2706
+    },
+    "Generic type '{0}' requires between {1} and {2} type arguments.": {
+        "category": "Error",
+        "code": 2707
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -2076,11 +2132,11 @@
         "category": "Error",
         "code": 4019
     },
-    "Extends clause of exported class '{0}' has or is using private name '{1}'.": {
+    "'extends' clause of exported class '{0}' has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4020
     },
-    "Extends clause of exported interface '{0}' has or is using private name '{1}'.": {
+    "'extends' clause of exported interface '{0}' has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4022
     },
@@ -2332,6 +2388,10 @@
         "category": "Error",
         "code": 4092
     },
+    "'extends' clause of exported class '{0}' refers to a type whose name cannot be referenced.": {
+        "category": "Error",
+        "code": 4093
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
@@ -2513,7 +2573,7 @@
         "category": "Message",
         "code": 6019
     },
-    "Compile the project in the given directory.": {
+    "Compile the project given the path to its configuration file, or to a folder with a 'tsconfig.json'": {
         "category": "Message",
         "code": 6020
     },
@@ -2572,6 +2632,10 @@
     "STRATEGY": {
         "category": "Message",
         "code": 6039
+    },
+    "FILE OR DIRECTORY": {
+        "category": "Message",
+        "code": 6040
     },
     "Compilation complete. Watching for file changes.": {
         "category": "Message",
@@ -2705,7 +2769,7 @@
         "category": "Message",
         "code": 6079
     },
-    "Specify JSX code generation: 'preserve' or 'react'": {
+    "Specify JSX code generation: 'preserve', 'react-native', or 'react'": {
         "category": "Message",
         "code": 6080
     },
@@ -2785,7 +2849,7 @@
         "category": "Message",
         "code": 6099
     },
-    "'package.json' does not have a 'types' or 'main' field.": {
+    "'package.json' does not have a '{0}' field.": {
         "category": "Message",
         "code": 6100
     },
@@ -2933,10 +2997,6 @@
         "category": "Message",
         "code": 6136
     },
-    "No types specified in 'package.json', so returning 'main' value of '{0}'": {
-        "category": "Message",
-        "code": 6137
-    },
     "Property '{0}' is declared but never used.": {
         "category": "Error",
         "code": 6138
@@ -2980,6 +3040,10 @@
     "Directory '{0}' does not exist, skipping all lookups in it.": {
         "category": "Message",
         "code": 6148
+    },
+    "Use full down-level iteration for iterables and arrays for 'for-of', spread, and destructuring in ES5/3.": {
+        "category": "Message",
+        "code": 6149
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -3145,7 +3209,7 @@
         "category": "Error",
         "code": 8016
     },
-    "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.": {
+    "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.": {
         "category": "Error",
         "code": 9002
     },
@@ -3243,7 +3307,7 @@
         "category": "Message",
         "code": 90003
     },
-    "Remove unused identifiers.": {
+    "Remove declaration for: {0}": {
         "category": "Message",
         "code": 90004
     },
@@ -3254,6 +3318,10 @@
     "Implement inherited abstract class.": {
         "category": "Message",
         "code": 90007
+    },
+    "Add 'this.' to unresolved variable.": {
+        "category": "Message",
+        "code": 90008
     },
     "Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig": {
         "category": "Error",
@@ -3274,6 +3342,14 @@
     "Add {0} to existing import declaration from {1}": {
         "category": "Message",
         "code": 90015
+    },
+    "Add declaration for missing property '{0}'": {
+        "category": "Message",
+        "code": 90016
+    },
+    "Add index signature for missing property '{0}'": {
+        "category": "Message",
+        "code": 90017
     },
     "Octal literal types must use ES2015 syntax. Use the syntax '{0}'.": {
         "category": "Error",

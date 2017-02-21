@@ -1,19 +1,12 @@
 {
+    "extends": "../tsconfig-base",
     "compilerOptions": {
-        "noImplicitAny": true,
-        "pretty": true,
         "removeComments": false,
-        "preserveConstEnums": true,
         "outFile": "../../built/local/run.js",
-        "sourceMap": true,
         "declaration": false,
-        "stripInternal": true,
         "types": [
             "node", "mocha", "chai"
-        ],
-        "target": "es5",
-        "noUnusedLocals": true,
-        "noUnusedParameters": true
+        ]
     },
     "files": [
         "../compiler/core.ts",
@@ -84,8 +77,8 @@
         "../services/codefixes/helpers.ts",
         "../services/codefixes/importFixes.ts",
         "../services/codefixes/unusedIdentifierFixes.ts",
-        "../services/harness.ts",
-        
+
+        "harness.ts",
         "sourceMapRecorder.ts",
         "harnessLanguageService.ts",
         "fourslash.ts",
@@ -125,6 +118,9 @@
         "./unittests/initializeTSConfig.ts",
         "./unittests/compileOnSave.ts",
         "./unittests/typingsInstaller.ts",
-        "./unittests/projectErrors.ts"
+        "./unittests/projectErrors.ts",
+        "./unittests/printer.ts",
+        "./unittests/transform.ts",
+        "./unittests/customTransforms.ts"
     ]
 }

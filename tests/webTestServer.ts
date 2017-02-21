@@ -129,7 +129,7 @@ function dir(dirPath: string, spec?: string, options?: any) {
 function deleteFolderRecursive(dirPath: string) {
     if (fs.existsSync(dirPath)) {
         fs.readdirSync(dirPath).forEach((file) => {
-            const curPath = path.join(path, file);
+            const curPath = path.join(dirPath, file);
             if (fs.statSync(curPath).isDirectory()) { // recurse
                 deleteFolderRecursive(curPath);
             }
@@ -315,7 +315,6 @@ if (browser === "chrome") {
     let defaultChromePath = "";
     switch (os.platform()) {
         case "win32":
-        case "win64":
             defaultChromePath = "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe";
             break;
         case "darwin":

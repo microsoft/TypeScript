@@ -1,4 +1,4 @@
-/// <reference path="..\harness.ts" />
+﻿/// <reference path="..\harness.ts" />
 /// <reference path="../../server/typingsInstaller/typingsInstaller.ts" />
 
 namespace ts.projectSystem {
@@ -32,10 +32,6 @@ namespace ts.projectSystem {
         endGroup: () => void 0,
         msg: () => void 0,
         getLogFileName: (): string => undefined
-    };
-
-    export const nullCancellationToken: HostCancellationToken = {
-        isCancellationRequested: () => false
     };
 
     export const { content: libFileContent } = Harness.getDefaultLibraryFile(Harness.IO);
@@ -158,17 +154,33 @@ namespace ts.projectSystem {
     }
 
     class TestSession extends server.Session {
+        private seq = 0;
+
         getProjectService() {
             return this.projectService;
         }
+
+        public getSeq() {
+            return this.seq;
+        }
+
+        public getNextSeq() {
+            return this.seq + 1;
+        }
+
+        public executeCommandSeq<T extends server.protocol.Request>(request: Partial<T>) {
+            this.seq++;
+            request.seq = this.seq;
+            request.type = "request";
+            return this.executeCommand(<T>request);
+        }
     };
 
-    export function createSession(host: server.ServerHost, typingsInstaller?: server.ITypingsInstaller, projectServiceEventHandler?: server.ProjectServiceEventHandler) {
+    export function createSession(host: server.ServerHost, typingsInstaller?: server.ITypingsInstaller, projectServiceEventHandler?: server.ProjectServiceEventHandler, cancellationToken?: server.ServerCancellationToken) {
         if (typingsInstaller === undefined) {
             typingsInstaller = new TestTypingsInstaller("/a/data/", /*throttleLimit*/5, host);
         }
-
-        return new TestSession(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ projectServiceEventHandler !== undefined, projectServiceEventHandler);
+        return new TestSession(host, cancellationToken || server.nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ projectServiceEventHandler !== undefined, projectServiceEventHandler);
     }
 
     export interface CreateProjectServiceParameters {
@@ -191,7 +203,7 @@ namespace ts.projectSystem {
         }
     }
     export function createProjectService(host: server.ServerHost, parameters: CreateProjectServiceParameters = {}) {
-        const cancellationToken = parameters.cancellationToken || nullCancellationToken;
+        const cancellationToken = parameters.cancellationToken || server.nullCancellationToken;
         const logger = parameters.logger || nullLogger;
         const useSingleInferredProject = parameters.useSingleInferredProject !== undefined ? parameters.useSingleInferredProject : false;
         return new TestProjectService(host, logger, cancellationToken, useSingleInferredProject, parameters.typingsInstaller, parameters.eventHandler);
@@ -244,9 +256,9 @@ namespace ts.projectSystem {
     }
 
     export function checkMapKeys(caption: string, map: Map<any>, expectedKeys: string[]) {
-        assert.equal(reduceProperties(map, count => count + 1, 0), expectedKeys.length, `${caption}: incorrect size of map`);
+        assert.equal(map.size, expectedKeys.length, `${caption}: incorrect size of map`);
         for (const name of expectedKeys) {
-            assert.isTrue(name in map, `${caption} is expected to contain ${name}, actual keys: ${Object.keys(map)}`);
+            assert.isTrue(map.has(name), `${caption} is expected to contain ${name}, actual keys: ${arrayFrom(map.keys())}`);
         }
     }
 
@@ -292,7 +304,7 @@ namespace ts.projectSystem {
     }
 
     export class Callbacks {
-        private map: { [n: number]: TimeOutCallback } = {};
+        private map: TimeOutCallback[] = [];
         private nextId = 1;
 
         register(cb: (...args: any[]) => void, args: any[]) {
@@ -310,20 +322,16 @@ namespace ts.projectSystem {
         count() {
             let n = 0;
             for (const _ in this.map) {
-                // TODO: GH#11734
-                _;
                 n++;
             }
             return n;
         }
 
         invoke() {
-            for (const id in this.map) {
-                if (hasProperty(this.map, id)) {
-                    this.map[id]();
-                }
+            for (const key in this.map) {
+                this.map[key]();
             }
-            this.map = {};
+            this.map = [];
         }
     }
 
@@ -332,14 +340,16 @@ namespace ts.projectSystem {
     export class TestServerHost implements server.ServerHost {
         args: string[] = [];
 
+        private readonly output: string[] = [];
+
         private fs: ts.FileMap<FSEntry>;
         private getCanonicalFileName: (s: string) => string;
         private toPath: (f: string) => Path;
         private timeoutCallbacks = new Callbacks();
         private immediateCallbacks = new Callbacks();
 
-        readonly watchedDirectories = createMap<{ cb: DirectoryWatcherCallback, recursive: boolean }[]>();
-        readonly watchedFiles = createMap<FileWatcherCallback[]>();
+        readonly watchedDirectories = createMultiMap<{ cb: DirectoryWatcherCallback, recursive: boolean }>();
+        readonly watchedFiles = createMultiMap<FileWatcherCallback>();
 
         private filesOrFolders: FileOrFolder[];
 
@@ -425,11 +435,11 @@ namespace ts.projectSystem {
         watchDirectory(directoryName: string, callback: DirectoryWatcherCallback, recursive: boolean): DirectoryWatcher {
             const path = this.toPath(directoryName);
             const cbWithRecursive = { cb: callback, recursive };
-            multiMapAdd(this.watchedDirectories, path, cbWithRecursive);
+            this.watchedDirectories.add(path, cbWithRecursive);
             return {
                 referenceCount: 0,
                 directoryName,
-                close: () => multiMapRemove(this.watchedDirectories, path, cbWithRecursive)
+                close: () => this.watchedDirectories.remove(path, cbWithRecursive)
             };
         }
 
@@ -439,7 +449,7 @@ namespace ts.projectSystem {
 
         triggerDirectoryWatcherCallback(directoryName: string, fileName: string): void {
             const path = this.toPath(directoryName);
-            const callbacks = this.watchedDirectories[path];
+            const callbacks = this.watchedDirectories.get(path);
             if (callbacks) {
                 for (const callback of callbacks) {
                     callback.cb(fileName);
@@ -449,7 +459,7 @@ namespace ts.projectSystem {
 
         triggerFileWatcherCallback(fileName: string, removed?: boolean): void {
             const path = this.toPath(fileName);
-            const callbacks = this.watchedFiles[path];
+            const callbacks = this.watchedFiles.get(path);
             if (callbacks) {
                 for (const callback of callbacks) {
                     callback(path, removed);
@@ -459,8 +469,8 @@ namespace ts.projectSystem {
 
         watchFile(fileName: string, callback: FileWatcherCallback) {
             const path = this.toPath(fileName);
-            multiMapAdd(this.watchedFiles, path, callback);
-            return { close: () => multiMapRemove(this.watchedFiles, path, callback) };
+            this.watchedFiles.add(path, callback);
+            return { close: () => this.watchedFiles.remove(path, callback) };
         }
 
         // TOOD: record and invoke callbacks to simulate timer events
@@ -479,6 +489,10 @@ namespace ts.projectSystem {
 
         runQueuedTimeoutCallbacks() {
             this.timeoutCallbacks.invoke();
+        }
+
+        runQueuedImmediateCallbacks() {
+            this.immediateCallbacks.invoke();
         }
 
         setImmediate(callback: TimeOutCallback, _time: number, ...args: any[]) {
@@ -513,7 +527,17 @@ namespace ts.projectSystem {
             this.reloadFS(filesOrFolders);
         }
 
-        write() { }
+        write(message: string) {
+            this.output.push(message);
+        }
+
+        getOutput(): ReadonlyArray<string> {
+            return this.output;
+        }
+
+        clearOutput() {
+            this.output.length = 0;
+        }
 
         readonly readFile = (s: string) => (<File>this.fs.get(this.toPath(s))).content;
         readonly resolvePath = (s: string) => s;
@@ -1593,6 +1617,41 @@ namespace ts.projectSystem {
             checkProjectActualFiles(projectService.inferredProjects[1], [file2.path]);
         });
 
+        it ("loading files with correct priority", () => {
+            const f1 = {
+                path: "/a/main.ts",
+                content: "let x = 1"
+            };
+            const f2 = {
+                path: "/a/main.js",
+                content: "var y = 1"
+            };
+            const config = {
+                path: "/a/tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: { allowJs: true }
+                })
+            };
+            const host = createServerHost([f1, f2, config]);
+            const projectService = createProjectService(host);
+            projectService.setHostConfiguration({
+                extraFileExtensions: [
+                    { extension: ".js", isMixedContent: false },
+                    { extension: ".html", isMixedContent: true }
+                ]
+            });
+            projectService.openClientFile(f1.path);
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+            checkProjectActualFiles(projectService.configuredProjects[0], [ f1.path ]);
+
+            projectService.closeClientFile(f1.path);
+
+            projectService.openClientFile(f2.path);
+            projectService.checkNumberOfProjects({ configuredProjects: 1, inferredProjects: 1 });
+            checkProjectActualFiles(projectService.configuredProjects[0], [ f1.path ]);
+            checkProjectActualFiles(projectService.inferredProjects[0], [ f2.path ]);
+        });
+
         it("tsconfig script block support", () => {
             const file1 = {
                 path: "/a/b/f1.ts",
@@ -1620,7 +1679,7 @@ namespace ts.projectSystem {
             const configureHostRequest = makeSessionRequest<protocol.ConfigureRequestArguments>(CommandNames.Configure, { extraFileExtensions });
             session.executeCommand(configureHostRequest).response;
 
-             // HTML file still not included in the project as it is closed
+            // HTML file still not included in the project as it is closed
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             checkProjectActualFiles(projectService.configuredProjects[0], [file1.path]);
 
@@ -1652,6 +1711,115 @@ namespace ts.projectSystem {
             // Check identifiers defined in HTML content are not available in .ts file
             completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 5);
             assert(completions && completions.entries[0].name !== "hello", `unexpected hello entry in completion list`);
+        });
+
+        it("no tsconfig script block diagnostic errors", () => {
+
+            //  #1. Ensure no diagnostic errors when allowJs is true
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: ` `
+            };
+            const file2 = {
+                path: "/a/b/f2.html",
+                content: `var hello = "hello";`
+            };
+            const config1 = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({ compilerOptions: { allowJs: true } })
+            };
+
+            let host = createServerHost([file1, file2, config1, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
+            let session = createSession(host);
+
+            // Specify .html extension as mixed content in a configure host request
+            const extraFileExtensions = [{ extension: ".html", scriptKind: ScriptKind.JS, isMixedContent: true }];
+            const configureHostRequest = makeSessionRequest<protocol.ConfigureRequestArguments>(CommandNames.Configure, { extraFileExtensions });
+            session.executeCommand(configureHostRequest).response;
+
+            openFilesForSession([file1], session);
+            let projectService = session.getProjectService();
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+
+            let diagnostics = projectService.configuredProjects[0].getLanguageService().getCompilerOptionsDiagnostics();
+            assert.deepEqual(diagnostics, []);
+
+            //  #2. Ensure no errors when allowJs is false
+            const config2 = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({ compilerOptions: { allowJs: false } })
+            };
+
+            host = createServerHost([file1, file2, config2, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
+            session = createSession(host);
+
+            session.executeCommand(configureHostRequest).response;
+
+            openFilesForSession([file1], session);
+            projectService = session.getProjectService();
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+
+            diagnostics = projectService.configuredProjects[0].getLanguageService().getCompilerOptionsDiagnostics();
+            assert.deepEqual(diagnostics, []);
+
+            //  #3. Ensure no errors when compiler options aren't specified
+            const config3 = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({ })
+            };
+
+            host = createServerHost([file1, file2, config3, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
+            session = createSession(host);
+
+            session.executeCommand(configureHostRequest).response;
+
+            openFilesForSession([file1], session);
+            projectService = session.getProjectService();
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+
+            diagnostics = projectService.configuredProjects[0].getLanguageService().getCompilerOptionsDiagnostics();
+            assert.deepEqual(diagnostics, []);
+
+            //  #4. Ensure no errors when files are explicitly specified in tsconfig
+            const config4 = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({ compilerOptions: { allowJs: true }, files: [file1.path, file2.path] })
+            };
+
+            host = createServerHost([file1, file2, config4, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
+            session = createSession(host);
+
+            session.executeCommand(configureHostRequest).response;
+
+            openFilesForSession([file1], session);
+            projectService = session.getProjectService();
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+
+            diagnostics = projectService.configuredProjects[0].getLanguageService().getCompilerOptionsDiagnostics();
+            assert.deepEqual(diagnostics, []);
+
+            //  #4. Ensure no errors when files are explicitly excluded in tsconfig
+            const config5 = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({ compilerOptions: { allowJs: true }, exclude: [file2.path] })
+            };
+
+            host = createServerHost([file1, file2, config5, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
+            session = createSession(host);
+
+            session.executeCommand(configureHostRequest).response;
+
+            openFilesForSession([file1], session);
+            projectService = session.getProjectService();
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+
+            diagnostics = projectService.configuredProjects[0].getLanguageService().getCompilerOptionsDiagnostics();
+            assert.deepEqual(diagnostics, []);
         });
 
         it("project structure update is deferred if files are not added\removed", () => {
@@ -2867,6 +3035,33 @@ namespace ts.projectSystem {
             const inferredProject = projectService.inferredProjects[0];
             assert.isTrue(inferredProject.containsFile(<server.NormalizedPath>file1.path));
         });
+
+        it("should be able to handle @types if input file list is empty", () => {
+            const f = {
+                path: "/a/app.ts",
+                content: "let x = 1"
+            };
+            const config = {
+                path: "/a/tsconfig.json",
+                content: JSON.stringify({
+                    compiler: {},
+                    files: []
+                })
+            };
+            const t1 = {
+                path: "/a/node_modules/@types/typings/index.d.ts",
+                content: `export * from "./lib"`
+            };
+            const t2 = {
+                path: "/a/node_modules/@types/typings/lib.d.ts",
+                content: `export const x: number`
+            };
+            const host = createServerHost([f, config, t1, t2], { currentDirectory: getDirectoryPath(f.path) });
+            const projectService = createProjectService(host);
+
+            projectService.openClientFile(f.path);
+            projectService.checkNumberOfProjects({ configuredProjects: 1, inferredProjects: 1 });
+        });
     });
 
     describe("reload", () => {
@@ -3035,6 +3230,54 @@ namespace ts.projectSystem {
         });
     });
 
+    describe("emit with outFile or out setting", () => {
+        function test(opts: CompilerOptions, expectedUsesOutFile: boolean) {
+            const f1 = {
+                path: "/a/a.ts",
+                content: "let x = 1"
+            };
+            const f2 = {
+                path: "/a/b.ts",
+                content: "let y = 1"
+            };
+            const config = {
+                path: "/a/tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: opts,
+                    compileOnSave: true
+                })
+            };
+            const host = createServerHost([f1, f2, config]);
+            const session = createSession(host);
+            session.executeCommand(<protocol.OpenRequest>{
+                seq: 1,
+                type: "request",
+                command: "open",
+                arguments: { file: f1.path }
+            });
+            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 1 });
+            const { response } = session.executeCommand(<protocol.CompileOnSaveAffectedFileListRequest>{
+                seq: 2,
+                type: "request",
+                command: "compileOnSaveAffectedFileList",
+                arguments: { file: f1.path }
+            });
+            assert.equal((<protocol.CompileOnSaveAffectedFileListSingleProject[]>response).length, 1, "expected output for 1 project");
+            assert.equal((<protocol.CompileOnSaveAffectedFileListSingleProject[]>response)[0].fileNames.length, 2, "expected output for 1 project");
+            assert.equal((<protocol.CompileOnSaveAffectedFileListSingleProject[]>response)[0].projectUsesOutFile, expectedUsesOutFile, "usesOutFile");
+        }
+
+        it ("projectUsesOutFile should not be returned if not set", () => {
+            test({}, /*expectedUsesOutFile*/ false);
+        });
+        it ("projectUsesOutFile should be true if outFile is set", () => {
+            test({ outFile: "/a/out.js" }, /*expectedUsesOutFile*/ true);
+        });
+        it ("projectUsesOutFile should be true if out is set", () => {
+            test({ out: "/a/out.js" }, /*expectedUsesOutFile*/ true);
+        });
+    });
+
     describe("import helpers", () => {
         it("should not crash in tsserver", () => {
             const f1 = {
@@ -3049,6 +3292,254 @@ namespace ts.projectSystem {
             const service = createProjectService(host);
             service.openExternalProject({ projectFileName: "p", rootFiles: [toExternalFile(f1.path)], options: { importHelpers: true } });
             service.checkNumberOfProjects({ externalProjects: 1 });
+        });
+    });
+
+    describe("cancellationToken", () => {
+        it("is attached to request", () => {
+            const f1 = {
+                path: "/a/b/app.ts",
+                content: "let xyz = 1;"
+            };
+            const host = createServerHost([f1]);
+            let expectedRequestId: number;
+            const cancellationToken: server.ServerCancellationToken = {
+                isCancellationRequested: () => false,
+                setRequest: requestId => {
+                    if (expectedRequestId === undefined) {
+                        assert.isTrue(false, "unexpected call")
+                    }
+                    assert.equal(requestId, expectedRequestId);
+                },
+                resetRequest: noop
+            }
+            const session = createSession(host, /*typingsInstaller*/ undefined, /*projectServiceEventHandler*/ undefined, cancellationToken);
+
+            expectedRequestId = session.getNextSeq();
+            session.executeCommandSeq(<server.protocol.OpenRequest>{
+                command: "open",
+                arguments: { file: f1.path }
+            });
+
+            expectedRequestId = session.getNextSeq();
+            session.executeCommandSeq(<server.protocol.GeterrRequest>{
+                command: "geterr",
+                arguments: { files: [f1.path] }
+            });
+
+            expectedRequestId = session.getNextSeq();
+            session.executeCommandSeq(<server.protocol.OccurrencesRequest>{
+                command: "occurrences",
+                arguments: { file: f1.path, line: 1, offset: 6 }
+            });
+
+            expectedRequestId = 2;
+            host.runQueuedImmediateCallbacks();
+            expectedRequestId = 2;
+            host.runQueuedImmediateCallbacks();
+        });
+
+        it("Geterr is cancellable", () => {
+            const f1 = {
+                path: "/a/app.ts",
+                content: "let x = 1"
+            };
+            const config = {
+                path: "/a/tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: {}
+                })
+            };
+
+            let requestToCancel = -1;
+            const cancellationToken: server.ServerCancellationToken = (function(){
+                let currentId: number;
+                return <server.ServerCancellationToken>{
+                    setRequest(requestId) {
+                        currentId = requestId;
+                    },
+                    resetRequest(requestId) {
+                        assert.equal(requestId, currentId, "unexpected request id in cancellation")
+                        currentId = undefined;
+                    },
+                    isCancellationRequested() {
+                        return requestToCancel === currentId;
+                    }
+                }
+            })();
+            const host = createServerHost([f1, config]);
+            const session = createSession(host, /*typingsInstaller*/ undefined, () => {}, cancellationToken);
+            {
+                session.executeCommandSeq(<protocol.OpenRequest>{
+                    command: "open",
+                    arguments: { file: f1.path }
+                });
+                // send geterr for missing file
+                session.executeCommandSeq(<protocol.GeterrRequest>{
+                    command: "geterr",
+                    arguments: { files: ["/a/missing"] }
+                });
+                // no files - expect 'completed' event
+                assert.equal(host.getOutput().length, 1, "expect 1 message");
+                verifyRequestCompleted(session.getSeq(), 0);
+            }
+            {
+                const getErrId = session.getNextSeq();
+                // send geterr for a valid file
+                session.executeCommandSeq(<protocol.GeterrRequest>{
+                    command: "geterr",
+                    arguments: { files: [f1.path] }
+                });
+
+                assert.equal(host.getOutput().length, 0, "expect 0 messages");
+
+                // run new request
+                session.executeCommandSeq(<protocol.ProjectInfoRequest>{
+                    command: "projectInfo",
+                    arguments: { file: f1.path }
+                });
+                host.clearOutput();
+
+                // cancel previously issued Geterr
+                requestToCancel = getErrId;
+                host.runQueuedTimeoutCallbacks();
+
+                assert.equal(host.getOutput().length, 1, "expect 1 message");
+                verifyRequestCompleted(getErrId, 0);
+
+                requestToCancel = -1;
+            }
+            {
+                const getErrId = session.getNextSeq();
+                session.executeCommandSeq(<protocol.GeterrRequest>{
+                    command: "geterr",
+                    arguments: { files: [f1.path] }
+                });
+                assert.equal(host.getOutput().length, 0, "expect 0 messages");
+
+                // run first step
+                host.runQueuedTimeoutCallbacks();
+                assert.equal(host.getOutput().length, 1, "expect 1 messages");
+                const e1 = <protocol.Event>getMessage(0);
+                assert.equal(e1.event, "syntaxDiag");
+                host.clearOutput();
+
+                requestToCancel = getErrId;
+                host.runQueuedImmediateCallbacks();
+                assert.equal(host.getOutput().length, 1, "expect 1 message");
+                verifyRequestCompleted(getErrId, 0);
+
+                requestToCancel = -1;
+            }
+            {
+                const getErrId = session.getNextSeq();
+                session.executeCommandSeq(<protocol.GeterrRequest>{
+                    command: "geterr",
+                    arguments: { files: [f1.path] }
+                });
+                assert.equal(host.getOutput().length, 0, "expect 0 messages");
+
+                // run first step
+                host.runQueuedTimeoutCallbacks();
+                assert.equal(host.getOutput().length, 1, "expect 1 messages");
+                const e1 = <protocol.Event>getMessage(0);
+                assert.equal(e1.event, "syntaxDiag");
+                host.clearOutput();
+
+                host.runQueuedImmediateCallbacks();
+                assert.equal(host.getOutput().length, 2, "expect 2 messages");
+                const e2 = <protocol.Event>getMessage(0);
+                assert.equal(e2.event, "semanticDiag");
+                verifyRequestCompleted(getErrId, 1);
+
+                requestToCancel = -1;
+            }
+            {
+                const getErr1 = session.getNextSeq();
+                session.executeCommandSeq(<protocol.GeterrRequest>{
+                    command: "geterr",
+                    arguments: { files: [f1.path] }
+                });
+                assert.equal(host.getOutput().length, 0, "expect 0 messages");
+                // run first step
+                host.runQueuedTimeoutCallbacks();
+                assert.equal(host.getOutput().length, 1, "expect 1 messages");
+                const e1 = <protocol.Event>getMessage(0);
+                assert.equal(e1.event, "syntaxDiag");
+                host.clearOutput();
+
+                session.executeCommandSeq(<protocol.GeterrRequest>{
+                    command: "geterr",
+                    arguments: { files: [f1.path] }
+                });
+                // make sure that getErr1 is completed
+                verifyRequestCompleted(getErr1, 0);
+            }
+
+            function verifyRequestCompleted(expectedSeq: number, n: number) {
+                const event = <protocol.RequestCompletedEvent>getMessage(n);
+                assert.equal(event.event, "requestCompleted");
+                assert.equal(event.body.request_seq, expectedSeq, "expectedSeq");
+                host.clearOutput();
+            }
+
+            function getMessage(n: number) {
+                return JSON.parse(server.extractMessage(host.getOutput()[n]));
+            }
+        });
+    });
+
+    describe("maxNodeModuleJsDepth for inferred projects", () => {
+        it("should be set to 2 if the project has js root files", () => {
+            const file1: FileOrFolder = {
+                path: "/a/b/file1.js",
+                content: `var t = require("test"); t.`
+            };
+            const moduleFile: FileOrFolder = {
+                path: "/a/b/node_modules/test/index.js",
+                content: `var v = 10; module.exports = v;`
+            };
+
+            const host = createServerHost([file1, moduleFile]);
+            const projectService = createProjectService(host);
+            projectService.openClientFile(file1.path);
+
+            let project = projectService.inferredProjects[0];
+            let options = project.getCompilerOptions();
+            assert.isTrue(options.maxNodeModuleJsDepth === 2);
+
+            // Assert the option sticks
+            projectService.setCompilerOptionsForInferredProjects({ target: ScriptTarget.ES2016 });
+            project = projectService.inferredProjects[0];
+            options = project.getCompilerOptions();
+            assert.isTrue(options.maxNodeModuleJsDepth === 2);
+        });
+
+        it("should return to normal state when all js root files are removed from project", () => {
+            const file1 = {
+                path: "/a/file1.ts",
+                content: "let x =1;"
+            };
+            const file2 = {
+                path: "/a/file2.js",
+                content: "let x =1;"
+            };
+
+            const host = createServerHost([file1, file2, libFile]);
+            const projectService = createProjectService(host, { useSingleInferredProject: true });
+
+            projectService.openClientFile(file1.path);
+            checkNumberOfInferredProjects(projectService, 1);
+            let project = projectService.inferredProjects[0];
+            assert.isUndefined(project.getCompilerOptions().maxNodeModuleJsDepth);
+
+            projectService.openClientFile(file2.path);
+            project = projectService.inferredProjects[0];
+            assert.isTrue(project.getCompilerOptions().maxNodeModuleJsDepth === 2);
+
+            projectService.closeClientFile(file2.path);
+            project = projectService.inferredProjects[0];
+            assert.isUndefined(project.getCompilerOptions().maxNodeModuleJsDepth);
         });
     });
 }

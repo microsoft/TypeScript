@@ -119,3 +119,14 @@ let eleven = (o => o.a(11))({ a: function(n) { return n; } });
 >n : Symbol(n, Decl(contextuallyTypedIife.ts, 28, 42))
 >n : Symbol(n, Decl(contextuallyTypedIife.ts, 28, 42))
 
+// missing arguments
+(function(x, undefined) { return x; })(42);
+>x : Symbol(x, Decl(contextuallyTypedIife.ts, 30, 10))
+>undefined : Symbol(undefined, Decl(contextuallyTypedIife.ts, 30, 12))
+>x : Symbol(x, Decl(contextuallyTypedIife.ts, 30, 10))
+
+((x, y, z) => 42)();
+>x : Symbol(x, Decl(contextuallyTypedIife.ts, 31, 2))
+>y : Symbol(y, Decl(contextuallyTypedIife.ts, 31, 4))
+>z : Symbol(z, Decl(contextuallyTypedIife.ts, 31, 7))
+

@@ -59,3 +59,4 @@ export declare function __exportStar(m: any, exports: any): void;
 
 //// [b.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

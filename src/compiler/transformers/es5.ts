@@ -11,10 +11,10 @@ namespace ts {
     export function transformES5(context: TransformationContext) {
         const compilerOptions = context.getCompilerOptions();
 
-        // enable emit notification only if using --jsx preserve
-        let previousOnEmitNode: (emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void) => void;
+        // enable emit notification only if using --jsx preserve or react-native
+        let previousOnEmitNode: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
         let noSubstitution: boolean[];
-        if (compilerOptions.jsx === JsxEmit.Preserve) {
+        if (compilerOptions.jsx === JsxEmit.Preserve || compilerOptions.jsx === JsxEmit.ReactNative) {
             previousOnEmitNode = context.onEmitNode;
             context.onEmitNode = onEmitNode;
             context.enableEmitNotification(SyntaxKind.JsxOpeningElement);
@@ -41,9 +41,11 @@ namespace ts {
         /**
          * Called by the printer just before a node is printed.
          *
-         * @param node The node to be printed.
+         * @param hint A hint as to the intended usage of the node.
+         * @param node The node to emit.
+         * @param emitCallback A callback used to emit the node.
          */
-        function onEmitNode(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void) {
+        function onEmitNode(hint: EmitHint, node: Node, emitCallback: (emitContext: EmitHint, node: Node) => void) {
             switch (node.kind) {
                 case SyntaxKind.JsxOpeningElement:
                 case SyntaxKind.JsxClosingElement:
@@ -53,21 +55,21 @@ namespace ts {
                     break;
             }
 
-            previousOnEmitNode(emitContext, node, emitCallback);
+            previousOnEmitNode(hint, node, emitCallback);
         }
 
         /**
          * Hooks node substitutions.
          *
-         * @param emitContext The context for the emitter.
+         * @param hint A hint as to the intended usage of the node.
          * @param node The node to substitute.
          */
-        function onSubstituteNode(emitContext: EmitContext, node: Node) {
+        function onSubstituteNode(hint: EmitHint, node: Node) {
             if (node.id && noSubstitution && noSubstitution[node.id]) {
-                return previousOnSubstituteNode(emitContext, node);
+                return previousOnSubstituteNode(hint, node);
             }
 
-            node = previousOnSubstituteNode(emitContext, node);
+            node = previousOnSubstituteNode(hint, node);
             if (isPropertyAccessExpression(node)) {
                 return substitutePropertyAccessExpression(node);
             }
@@ -85,7 +87,7 @@ namespace ts {
         function substitutePropertyAccessExpression(node: PropertyAccessExpression): Expression {
             const literalName = trySubstituteReservedName(node.name);
             if (literalName) {
-                return createElementAccess(node.expression, literalName, /*location*/ node);
+                return setTextRange(createElementAccess(node.expression, literalName), node);
             }
             return node;
         }
@@ -111,7 +113,7 @@ namespace ts {
         function trySubstituteReservedName(name: Identifier) {
             const token = name.originalKeywordKind || (nodeIsSynthesized(name) ? stringToToken(name.text) : undefined);
             if (token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord) {
-                return createLiteral(name, /*location*/ name);
+                return setTextRange(createLiteral(name), name);
             }
             return undefined;
         }

@@ -28,7 +28,7 @@ namespace ts.server {
                     : undefined;
                 const primaryResult = resolveModuleName(moduleName, containingFile, compilerOptions, host);
                 // return result immediately only if it is .ts, .tsx or .d.ts
-                if (!(primaryResult.resolvedModule && extensionIsTypeScript(primaryResult.resolvedModule.extension)) && globalCache !== undefined) {
+                if (moduleHasNonRelativeName(moduleName) && !(primaryResult.resolvedModule && extensionIsTypeScript(primaryResult.resolvedModule.extension)) && globalCache !== undefined) {
                     // otherwise try to load typings from @types
 
                     // create different collection of failed lookup locations for second pass
@@ -75,15 +75,16 @@ namespace ts.server {
 
             for (const name of names) {
                 // check if this is a duplicate entry in the list
-                let resolution = newResolutions[name];
+                let resolution = newResolutions.get(name);
                 if (!resolution) {
-                    const existingResolution = currentResolutionsInFile && currentResolutionsInFile[name];
+                    const existingResolution = currentResolutionsInFile && currentResolutionsInFile.get(name);
                     if (moduleResolutionIsValid(existingResolution)) {
                         // ok, it is safe to use existing name resolution results
                         resolution = existingResolution;
                     }
                     else {
-                        newResolutions[name] = resolution = loader(name, containingFile, compilerOptions, this);
+                        resolution = loader(name, containingFile, compilerOptions, this);
+                        newResolutions.set(name, resolution);
                     }
                     if (logChanges && this.filesWithChangedSetOfUnresolvedImports && !resolutionIsEqualTo(existingResolution, resolution)) {
                         this.filesWithChangedSetOfUnresolvedImports.push(path);

@@ -1,5 +1,6 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     exports.m2_a1 = 10;
     var m2_c1 = (function () {
         function m2_c1() {

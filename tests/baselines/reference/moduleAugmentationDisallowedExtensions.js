@@ -49,19 +49,24 @@ import "./x";
 
 //// [x0.js]
 "use strict";
+exports.__esModule = true;
 exports.a = 1;
 //// [x.js]
 "use strict";
+exports.__esModule = true;
 var N1;
 (function (N1) {
     N1.x = 1;
 })(N1 || (N1 = {}));
 //// [observable.js]
 "use strict";
+exports.__esModule = true;
 exports.x = 1;
 //// [test.js]
 "use strict";
+exports.__esModule = true;
 exports.b = 1;
 //// [main.js]
 "use strict";
+exports.__esModule = true;
 require("./x");

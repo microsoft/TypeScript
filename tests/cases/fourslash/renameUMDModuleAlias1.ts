@@ -10,8 +10,4 @@
 //// /// <reference path="0.d.ts" />
 //// [|myLib|].doThing();
 
-const ranges = test.ranges()
-for (const range of ranges) {
-    goTo.position(range.start);
-    verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ false);
-}
+verify.rangesAreRenameLocations();

@@ -112,7 +112,7 @@ async function out() {
 >out : Symbol(out, Decl(modularizeLibrary_TargetES5UsingES6Lib.ts, 45, 37))
 
     return new Promise(function (resolve, reject) {});
->Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >resolve : Symbol(resolve, Decl(modularizeLibrary_TargetES5UsingES6Lib.ts, 49, 33))
 >reject : Symbol(reject, Decl(modularizeLibrary_TargetES5UsingES6Lib.ts, 49, 41))
 }
@@ -121,9 +121,9 @@ declare var console: any;
 >console : Symbol(console, Decl(modularizeLibrary_TargetES5UsingES6Lib.ts, 52, 11))
 
 out().then(() => {
->out().then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>out().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
 >out : Symbol(out, Decl(modularizeLibrary_TargetES5UsingES6Lib.ts, 45, 37))
->then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
 
     console.log("Yea!");
 >console : Symbol(console, Decl(modularizeLibrary_TargetES5UsingES6Lib.ts, 52, 11))

@@ -29,12 +29,19 @@ class Removable {
     removed: string;
     remainder: string;
 }
+interface I {
+    m(): void;
+    removed: string;
+    remainder: string;
+}
 var removable = new Removable();
 var { removed, ...removableRest } = removable;
+var i: I = removable;
+var { removed, ...removableRest2 } = i;
 
 let computed = 'b';
 let computed2 = 'a';
 var { [computed]: stillNotGreat, [computed2]: soSo,  ...o } = o;
 ({ [computed]: stillNotGreat, [computed2]: soSo, ...o } = o);
 
-var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject['anythingGoes'];
+var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes;

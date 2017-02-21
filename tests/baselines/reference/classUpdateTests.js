@@ -114,11 +114,16 @@ class R {
 }
 
 //// [classUpdateTests.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 //
 // test codegen for instance properties
 //
@@ -157,7 +162,7 @@ var D = (function () {
 var E = (function (_super) {
     __extends(E, _super);
     function E() {
-        var _this = _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.p1 = 0;
         return _this;
     }
@@ -166,7 +171,7 @@ var E = (function (_super) {
 var F = (function (_super) {
     __extends(F, _super);
     function F() {
-        var _this;
+        var _this = this;
         return _this;
     } // ERROR - super call required
     return F;
@@ -205,7 +210,7 @@ var J = (function (_super) {
 var K = (function (_super) {
     __extends(K, _super);
     function K(p1) {
-        var _this;
+        var _this = this;
         _this.p1 = p1;
         var i = 0;
         _this = _super.call(this) || this;
@@ -225,7 +230,7 @@ var L = (function (_super) {
 var M = (function (_super) {
     __extends(M, _super);
     function M(p1) {
-        var _this;
+        var _this = this;
         _this.p1 = p1;
         var i = 0;
         _this = _super.call(this) || this;

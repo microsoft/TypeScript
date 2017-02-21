@@ -17,6 +17,7 @@ tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsVa
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(41,1): error TS2539: Cannot assign to 'foo' because it is not a variable.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(42,1): error TS2539: Cannot assign to 'foo' because it is not a variable.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(45,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(45,1): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(46,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(47,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(48,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
@@ -55,6 +56,7 @@ tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsVa
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(104,2): error TS2539: Cannot assign to 'foo' because it is not a variable.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(105,2): error TS2539: Cannot assign to 'foo' because it is not a variable.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(106,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(106,1): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(107,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(108,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(109,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
@@ -74,7 +76,7 @@ tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsVa
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(123,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 
 
-==== tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts (74 errors) ====
+==== tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts (76 errors) ====
     
     // expected error for all the LHS of compound assignments (arithmetic and addition)
     var value: any;
@@ -158,6 +160,8 @@ tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsVa
     null *= value;
     ~~~~
 !!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    ~~~~
+!!! error TS2531: Object is possibly 'null'.
     null += value;
     ~~~~
 !!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
@@ -295,6 +299,8 @@ tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsVa
     (null) *= value;
     ~~~~~~
 !!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    ~~~~~~
+!!! error TS2531: Object is possibly 'null'.
     (null) += value;
     ~~~~~~
 !!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.

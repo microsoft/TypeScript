@@ -22,6 +22,7 @@ export declare function __exportStar(m: any, exports: any): void;
 //// [a.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var A = (function () {
         function A() {
         }
@@ -32,11 +33,12 @@ define(["require", "exports"], function (require, exports) {
 //// [b.js]
 define(["require", "exports", "tslib", "./a", "./a"], function (require, exports, tslib_1, a_1, a_2) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     tslib_1.__exportStar(a_2, exports);
     var B = (function (_super) {
         tslib_1.__extends(B, _super);
         function B() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return B;
     }(a_1.A));

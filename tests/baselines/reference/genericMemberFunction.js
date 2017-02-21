@@ -25,6 +25,7 @@ export class BuildResult<A, B, C>{
 //// [genericMemberFunction.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var BuildError = (function () {
         function BuildError() {
         }

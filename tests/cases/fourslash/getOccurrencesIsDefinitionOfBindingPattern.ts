@@ -1,5 +1,5 @@
 /// <reference path='fourslash.ts' />
-////const { [|{| "isDefinition": true |}x|], y } = { x: 1, y: 2 };
+////const { [|{| "isWriteAccess": true, "isDefinition": true |}x|], y } = { x: 1, y: 2 };
 ////const z = [|{| "isDefinition": false |}x|];
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("const x: number");

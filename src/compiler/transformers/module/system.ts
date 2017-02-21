@@ -1,5 +1,6 @@
-/// <reference path="../../factory.ts" />
+﻿/// <reference path="../../factory.ts" />
 /// <reference path="../../visitor.ts" />
+/// <reference path="../destructuring.ts" />
 
 /*@internal*/
 namespace ts {
@@ -28,10 +29,10 @@ namespace ts {
         context.enableSubstitution(SyntaxKind.PostfixUnaryExpression); // Substitutes updates to exported symbols.
         context.enableEmitNotification(SyntaxKind.SourceFile); // Restore state when substituting nodes in a file.
 
-        const moduleInfoMap = createMap<ExternalModuleInfo>(); // The ExternalModuleInfo for each file.
-        const deferredExports = createMap<Statement[]>(); // Exports to defer until an EndOfDeclarationMarker is found.
-        const exportFunctionsMap = createMap<Identifier>(); // The export function associated with a source file.
-        const noSubstitutionMap = createMap<Map<boolean>>(); // Set of nodes for which substitution rules should be ignored for each file.
+        const moduleInfoMap: ExternalModuleInfo[] = []; // The ExternalModuleInfo for each file.
+        const deferredExports: Statement[][] = []; // Exports to defer until an EndOfDeclarationMarker is found.
+        const exportFunctionsMap: Identifier[] = []; // The export function associated with a source file.
+        const noSubstitutionMap: boolean[][] = []; // Set of nodes for which substitution rules should be ignored for each file.
 
         let currentSourceFile: SourceFile; // The current file.
         let moduleInfo: ExternalModuleInfo; // ExternalModuleInfo for the current file.
@@ -39,7 +40,7 @@ namespace ts {
         let contextObject: Identifier; // The context object for the current file.
         let hoistedStatements: Statement[];
         let enclosingBlockScopedContainer: Node;
-        let noSubstitution: Map<boolean>; // Set of nodes for which substitution rules should be ignored.
+        let noSubstitution: boolean[]; // Set of nodes for which substitution rules should be ignored.
 
         return transformSourceFile;
 
@@ -77,7 +78,8 @@ namespace ts {
 
             // Make sure that the name of the 'exports' function does not conflict with
             // existing identifiers.
-            exportFunction = exportFunctionsMap[id] = createUniqueName("exports");
+            exportFunction = createUniqueName("exports");
+            exportFunctionsMap[id] = exportFunction;
             contextObject = createUniqueName("context");
 
             // Add the body of the module.
@@ -104,17 +106,20 @@ namespace ts {
             const updated = setEmitFlags(
                 updateSourceFileNode(
                     node,
-                    createNodeArray([
-                        createStatement(
-                            createCall(
-                                createPropertyAccess(createIdentifier("System"), "register"),
-                            /*typeArguments*/ undefined,
-                                moduleName
-                                    ? [moduleName, dependencies, moduleBodyFunction]
-                                    : [dependencies, moduleBodyFunction]
+                    setTextRange(
+                        createNodeArray([
+                            createStatement(
+                                createCall(
+                                    createPropertyAccess(createIdentifier("System"), "register"),
+                                /*typeArguments*/ undefined,
+                                    moduleName
+                                        ? [moduleName, dependencies, moduleBodyFunction]
+                                        : [dependencies, moduleBodyFunction]
+                                )
                             )
-                        )
-                    ], node.statements)
+                        ]),
+                        node.statements
+                    )
                 ), EmitFlags.NoTrailingComments);
 
             if (!(compilerOptions.outFile || compilerOptions.out)) {
@@ -132,7 +137,6 @@ namespace ts {
             contextObject = undefined;
             hoistedStatements = undefined;
             enclosingBlockScopedContainer = undefined;
-
             return aggregateTransformFlags(updated);
         }
 
@@ -148,13 +152,13 @@ namespace ts {
                 const externalImport = externalImports[i];
                 const externalModuleName = getExternalModuleNameLiteral(externalImport, currentSourceFile, host, resolver, compilerOptions);
                 const text = externalModuleName.text;
-                if (hasProperty(groupIndices, text)) {
+                const groupIndex = groupIndices.get(text);
+                if (groupIndex !== undefined) {
                     // deduplicate/group entries in dependency list by the dependency name
-                    const groupIndex = groupIndices[text];
                     dependencyGroups[groupIndex].externalImports.push(externalImport);
                 }
                 else {
-                    groupIndices[text] = dependencyGroups.length;
+                    groupIndices.set(text, dependencyGroups.length);
                     dependencyGroups.push({
                         name: externalModuleName,
                         externalImports: [externalImport]
@@ -241,7 +245,7 @@ namespace ts {
             );
 
             // Visit the synthetic external helpers import declaration if present
-            visitNode(moduleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement, /*optional*/ true);
+            visitNode(moduleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement);
 
             // Visit the statements of the source file, emitting any transformations into
             // the `executeStatements` array. We do this *before* we fill the `setters` array
@@ -259,35 +263,26 @@ namespace ts {
             addRange(statements, endLexicalEnvironment());
 
             const exportStarFunction = addExportStarIfNeeded(statements);
-            statements.push(
-                createReturn(
-                    setMultiLine(
-                        createObjectLiteral([
-                            createPropertyAssignment("setters",
-                                createSettersArray(exportStarFunction, dependencyGroups)
-                            ),
-                            createPropertyAssignment("execute",
-                                createFunctionExpression(
-                                    /*modifiers*/ undefined,
-                                    /*asteriskToken*/ undefined,
-                                    /*name*/ undefined,
-                                    /*typeParameters*/ undefined,
-                                    /*parameters*/ [],
-                                    /*type*/ undefined,
-                                    createBlock(
-                                        executeStatements,
-                                        /*location*/ undefined,
-                                        /*multiLine*/ true
-                                    )
-                                )
-                            )
-                        ]),
-                        /*multiLine*/ true
+            const moduleObject = createObjectLiteral([
+                createPropertyAssignment("setters",
+                    createSettersArray(exportStarFunction, dependencyGroups)
+                ),
+                createPropertyAssignment("execute",
+                    createFunctionExpression(
+                        /*modifiers*/ undefined,
+                        /*asteriskToken*/ undefined,
+                        /*name*/ undefined,
+                        /*typeParameters*/ undefined,
+                        /*parameters*/ [],
+                        /*type*/ undefined,
+                        createBlock(executeStatements, /*multiLine*/ true)
                     )
                 )
-            );
+            ]);
 
-            return createBlock(statements, /*location*/ undefined, /*multiLine*/ true);
+            moduleObject.multiLine = true;
+            statements.push(createReturn(moduleObject));
+            return createBlock(statements, /*multiLine*/ true);
         }
 
         /**
@@ -306,7 +301,7 @@ namespace ts {
             // this set is used to filter names brought by star expors.
 
             // local names set should only be added if we have anything exported
-            if (!moduleInfo.exportedNames && isEmpty(moduleInfo.exportSpecifiers)) {
+            if (!moduleInfo.exportedNames && moduleInfo.exportSpecifiers.size === 0) {
                 // no exported declarations (export var ...) or export specifiers (export {x})
                 // check if we have any non star export declarations.
                 let hasExportDeclarationWithExportClause = false;
@@ -336,7 +331,7 @@ namespace ts {
                     exportedNames.push(
                         createPropertyAssignment(
                             createLiteral(exportedLocalName),
-                            createLiteral(true)
+                            createTrue()
                         )
                     );
                 }
@@ -358,7 +353,7 @@ namespace ts {
                     exportedNames.push(
                         createPropertyAssignment(
                             createLiteral((element.name || element.propertyName).text),
-                            createLiteral(true)
+                            createTrue()
                         )
                     );
                 }
@@ -372,7 +367,7 @@ namespace ts {
                         createVariableDeclaration(
                             exportedNamesStorageRef,
                             /*type*/ undefined,
-                            createObjectLiteral(exportedNames, /*location*/ undefined, /*multiline*/ true)
+                            createObjectLiteral(exportedNames, /*multiline*/ true)
                         )
                     ])
                 )
@@ -455,9 +450,7 @@ namespace ts {
                             [exports]
                         )
                     )
-                ],
-                /*location*/ undefined,
-                /*multiline*/ true)
+                ], /*multiline*/ true)
             );
         }
 
@@ -524,7 +517,7 @@ namespace ts {
                                         createCall(
                                             exportFunction,
                                             /*typeArguments*/ undefined,
-                                            [createObjectLiteral(properties, /*location*/ undefined, /*multiline*/ true)]
+                                            [createObjectLiteral(properties, /*multiline*/ true)]
                                         )
                                     )
                                 );
@@ -557,12 +550,12 @@ namespace ts {
                         /*typeParameters*/ undefined,
                         [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, parameterName)],
                         /*type*/ undefined,
-                        createBlock(statements, /*location*/ undefined, /*multiLine*/ true)
+                        createBlock(statements, /*multiLine*/ true)
                     )
                 );
             }
 
-            return createArrayLiteral(setters, /*location*/ undefined, /*multiLine*/ true);
+            return createArrayLiteral(setters, /*multiLine*/ true);
         }
 
         //
@@ -676,6 +669,7 @@ namespace ts {
                         node,
                         node.decorators,
                         visitNodes(node.modifiers, modifierVisitor, isModifier),
+                        node.asteriskToken,
                         getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                         /*typeParameters*/ undefined,
                         visitNodes(node.parameters, destructuringVisitor, isParameterDeclaration),
@@ -712,19 +706,23 @@ namespace ts {
 
             // Rewrite the class declaration into an assignment of a class expression.
             statements = append(statements,
-                createStatement(
-                    createAssignment(
-                        name,
-                        createClassExpression(
-                            /*modifiers*/ undefined,
-                            node.name,
-                            /*typeParameters*/ undefined,
-                            visitNodes(node.heritageClauses, destructuringVisitor, isHeritageClause),
-                            visitNodes(node.members, destructuringVisitor, isClassElement),
-                            /*location*/ node
+                setTextRange(
+                    createStatement(
+                        createAssignment(
+                            name,
+                            setTextRange(
+                                createClassExpression(
+                                    /*modifiers*/ undefined,
+                                    node.name,
+                                    /*typeParameters*/ undefined,
+                                    visitNodes(node.heritageClauses, destructuringVisitor, isHeritageClause),
+                                    visitNodes(node.members, destructuringVisitor, isClassElement)
+                                ),
+                                node
+                            )
                         )
                     ),
-                    /*location*/ node
+                    node
                 )
             );
 
@@ -765,7 +763,7 @@ namespace ts {
 
             let statements: Statement[];
             if (expressions) {
-                statements = append(statements, createStatement(inlineExpressions(expressions), /*location*/ node));
+                statements = append(statements, setTextRange(createStatement(inlineExpressions(expressions)), node));
             }
 
             if (isMarkedDeclaration) {
@@ -863,8 +861,8 @@ namespace ts {
         function createVariableAssignment(name: Identifier, value: Expression, location: TextRange, isExportedDeclaration: boolean) {
             hoistVariableDeclaration(getSynthesizedClone(name));
             return isExportedDeclaration
-                ? createExportExpression(name, preventSubstitution(createAssignment(name, value, location)))
-                : preventSubstitution(createAssignment(name, value, location));
+                ? createExportExpression(name, preventSubstitution(setTextRange(createAssignment(name, value), location)))
+                : preventSubstitution(setTextRange(createAssignment(name, value), location));
         }
 
         /**
@@ -1081,7 +1079,7 @@ namespace ts {
             }
 
             const name = getDeclarationName(decl);
-            const exportSpecifiers = moduleInfo.exportSpecifiers[name.text];
+            const exportSpecifiers = moduleInfo.exportSpecifiers.get(name.text);
             if (exportSpecifiers) {
                 for (const exportSpecifier of exportSpecifiers) {
                     if (exportSpecifier.name.text !== excludeName) {
@@ -1221,8 +1219,8 @@ namespace ts {
             node = updateFor(
                 node,
                 visitForInitializer(node.initializer),
-                visitNode(node.condition, destructuringVisitor, isExpression, /*optional*/ true),
-                visitNode(node.incrementor, destructuringVisitor, isExpression, /*optional*/ true),
+                visitNode(node.condition, destructuringVisitor, isExpression),
+                visitNode(node.incrementor, destructuringVisitor, isExpression),
                 visitNode(node.statement, nestedElementVisitor, isStatement)
             );
 
@@ -1243,7 +1241,7 @@ namespace ts {
                 node,
                 visitForInitializer(node.initializer),
                 visitNode(node.expression, destructuringVisitor, isExpression),
-                visitNode(node.statement, nestedElementVisitor, isStatement, /*optional*/ false, liftToBlock)
+                visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock)
             );
 
             enclosingBlockScopedContainer = savedEnclosingBlockScopedContainer;
@@ -1261,9 +1259,10 @@ namespace ts {
 
             node = updateForOf(
                 node,
+                node.awaitModifier,
                 visitForInitializer(node.initializer),
                 visitNode(node.expression, destructuringVisitor, isExpression),
-                visitNode(node.statement, nestedElementVisitor, isStatement, /*optional*/ false, liftToBlock)
+                visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock)
             );
 
             enclosingBlockScopedContainer = savedEnclosingBlockScopedContainer;
@@ -1308,7 +1307,7 @@ namespace ts {
         function visitDoStatement(node: DoStatement): VisitResult<Statement> {
             return updateDo(
                 node,
-                visitNode(node.statement, nestedElementVisitor, isStatement, /*optional*/ false, liftToBlock),
+                visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock),
                 visitNode(node.expression, destructuringVisitor, isExpression)
             );
         }
@@ -1322,7 +1321,7 @@ namespace ts {
             return updateWhile(
                 node,
                 visitNode(node.expression, destructuringVisitor, isExpression),
-                visitNode(node.statement, nestedElementVisitor, isStatement, /*optional*/ false, liftToBlock)
+                visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock)
             );
         }
 
@@ -1335,7 +1334,7 @@ namespace ts {
             return updateLabel(
                 node,
                 node.label,
-                visitNode(node.statement, nestedElementVisitor, isStatement, /*optional*/ false, liftToBlock)
+                visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock)
             );
         }
 
@@ -1348,7 +1347,7 @@ namespace ts {
             return updateWith(
                 node,
                 visitNode(node.expression, destructuringVisitor, isExpression),
-                visitNode(node.statement, nestedElementVisitor, isStatement, /*optional*/ false, liftToBlock)
+                visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock)
             );
         }
 
@@ -1495,7 +1494,7 @@ namespace ts {
          * @param node The destructuring target.
          */
         function hasExportedReferenceInDestructuringTarget(node: Expression | ObjectLiteralElementLike): boolean {
-            if (isAssignmentExpression(node)) {
+            if (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true)) {
                 return hasExportedReferenceInDestructuringTarget(node.left);
             }
             else if (isSpreadExpression(node)) {
@@ -1547,11 +1546,11 @@ namespace ts {
         /**
          * Hook for node emit notifications.
          *
-         * @param emitContext A context hint for the emitter.
+         * @param hint A hint as to the intended usage of the node.
          * @param node The node to emit.
-         * @param emit A callback used to emit the node in the printer.
+         * @param emitCallback A callback used to emit the node in the printer.
          */
-        function onEmitNode(emitContext: EmitContext, node: Node, emitCallback: (emitContext: EmitContext, node: Node) => void): void {
+        function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void {
             if (node.kind === SyntaxKind.SourceFile) {
                 const id = getOriginalNodeId(node);
                 currentSourceFile = <SourceFile>node;
@@ -1563,7 +1562,7 @@ namespace ts {
                     delete noSubstitutionMap[id];
                 }
 
-                previousOnEmitNode(emitContext, node, emitCallback);
+                previousOnEmitNode(hint, node, emitCallback);
 
                 currentSourceFile = undefined;
                 moduleInfo = undefined;
@@ -1571,7 +1570,7 @@ namespace ts {
                 noSubstitution = undefined;
             }
             else {
-                previousOnEmitNode(emitContext, node, emitCallback);
+                previousOnEmitNode(hint, node, emitCallback);
             }
         }
 
@@ -1582,16 +1581,16 @@ namespace ts {
         /**
          * Hooks node substitutions.
          *
-         * @param emitContext A context hint for the emitter.
+         * @param hint A hint as to the intended usage of the node.
          * @param node The node to substitute.
          */
-        function onSubstituteNode(emitContext: EmitContext, node: Node) {
-            node = previousOnSubstituteNode(emitContext, node);
+        function onSubstituteNode(hint: EmitHint, node: Node) {
+            node = previousOnSubstituteNode(hint, node);
             if (isSubstitutionPrevented(node)) {
                 return node;
             }
 
-            if (emitContext === EmitContext.Expression) {
+            if (hint === EmitHint.Expression) {
                 return substituteExpression(<Expression>node);
             }
 
@@ -1628,6 +1627,7 @@ namespace ts {
                 if (externalHelpersModuleName) {
                     return createPropertyAccess(externalHelpersModuleName, node);
                 }
+
                 return node;
             }
 
@@ -1641,16 +1641,20 @@ namespace ts {
                 const importDeclaration = resolver.getReferencedImportDeclaration(node);
                 if (importDeclaration) {
                     if (isImportClause(importDeclaration)) {
-                        return createPropertyAccess(
-                            getGeneratedNameForNode(importDeclaration.parent),
-                            createIdentifier("default"),
+                        return setTextRange(
+                            createPropertyAccess(
+                                getGeneratedNameForNode(importDeclaration.parent),
+                                createIdentifier("default")
+                            ),
                             /*location*/ node
                         );
                     }
                     else if (isImportSpecifier(importDeclaration)) {
-                        return createPropertyAccess(
-                            getGeneratedNameForNode(importDeclaration.parent.parent.parent),
-                            getSynthesizedClone(importDeclaration.propertyName || importDeclaration.name),
+                        return setTextRange(
+                            createPropertyAccess(
+                                getGeneratedNameForNode(importDeclaration.parent.parent.parent),
+                                getSynthesizedClone(importDeclaration.propertyName || importDeclaration.name)
+                            ),
                             /*location*/ node
                         );
                     }
@@ -1717,10 +1721,13 @@ namespace ts {
                 const exportedNames = getExports(node.operand);
                 if (exportedNames) {
                     let expression: Expression = node.kind === SyntaxKind.PostfixUnaryExpression
-                        ? createPrefix(
-                            node.operator,
-                            node.operand,
-                            /*location*/ node)
+                        ? setTextRange(
+                            createPrefix(
+                                node.operator,
+                                node.operand
+                            ),
+                            node
+                        )
                         : node;
 
                     for (const exportName of exportedNames) {
@@ -1770,7 +1777,7 @@ namespace ts {
          * @param node The node which should not be substituted.
          */
         function preventSubstitution<T extends Node>(node: T): T {
-            if (noSubstitution === undefined) noSubstitution = createMap<boolean>();
+            if (noSubstitution === undefined) noSubstitution = [];
             noSubstitution[getNodeId(node)] = true;
             return node;
         }

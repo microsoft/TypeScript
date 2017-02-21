@@ -1,4 +1,7 @@
-/// <reference path="core.ts"/>
+﻿/// <reference path="core.ts"/>
+
+declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
+declare function clearTimeout(handle: any): void;
 
 namespace ts {
     export type FileWatcherCallback = (fileName: string, removed?: boolean) => void;
@@ -18,7 +21,7 @@ namespace ts {
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
         /**
-         * @pollingInterval - this parameter is used in polling-based watchers and ignored in watchers that 
+         * @pollingInterval - this parameter is used in polling-based watchers and ignored in watchers that
          * use native OS file watching
          */
         watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
@@ -55,6 +58,21 @@ namespace ts {
     declare var process: any;
     declare var global: any;
     declare var __filename: string;
+
+    export function getNodeMajorVersion() {
+        if (typeof process === "undefined") {
+            return undefined;
+        }
+        const version: string = process.version;
+        if (!version) {
+            return undefined;
+        }
+        const dot = version.indexOf(".");
+        if (dot === -1) {
+            return undefined;
+        }
+        return parseInt(version.substring(1, dot));
+    }
 
     declare class Enumerator {
         public atEnd(): boolean;
@@ -243,23 +261,23 @@ namespace ts {
             function createWatchedFileSet() {
                 const dirWatchers = createMap<DirectoryWatcher>();
                 // One file can have multiple watchers
-                const fileWatcherCallbacks = createMap<FileWatcherCallback[]>();
+                const fileWatcherCallbacks = createMultiMap<FileWatcherCallback>();
                 return { addFile, removeFile };
 
                 function reduceDirWatcherRefCountForFile(fileName: string) {
                     const dirName = getDirectoryPath(fileName);
-                    const watcher = dirWatchers[dirName];
+                    const watcher = dirWatchers.get(dirName);
                     if (watcher) {
                         watcher.referenceCount -= 1;
                         if (watcher.referenceCount <= 0) {
                             watcher.close();
-                            delete dirWatchers[dirName];
+                            dirWatchers.delete(dirName);
                         }
                     }
                 }
 
                 function addDirWatcher(dirPath: string): void {
-                    let watcher = dirWatchers[dirPath];
+                    let watcher = dirWatchers.get(dirPath);
                     if (watcher) {
                         watcher.referenceCount += 1;
                         return;
@@ -270,12 +288,12 @@ namespace ts {
                         (eventName: string, relativeFileName: string) => fileEventHandler(eventName, relativeFileName, dirPath)
                     );
                     watcher.referenceCount = 1;
-                    dirWatchers[dirPath] = watcher;
+                    dirWatchers.set(dirPath, watcher);
                     return;
                 }
 
                 function addFileWatcherCallback(filePath: string, callback: FileWatcherCallback): void {
-                    multiMapAdd(fileWatcherCallbacks, filePath, callback);
+                    fileWatcherCallbacks.add(filePath, callback);
                 }
 
                 function addFile(fileName: string, callback: FileWatcherCallback): WatchedFile {
@@ -291,7 +309,7 @@ namespace ts {
                 }
 
                 function removeFileWatcherCallback(filePath: string, callback: FileWatcherCallback) {
-                    multiMapRemove(fileWatcherCallbacks, filePath, callback);
+                    fileWatcherCallbacks.remove(filePath, callback);
                 }
 
                 function fileEventHandler(eventName: string, relativeFileName: string, baseDirPath: string) {
@@ -300,18 +318,20 @@ namespace ts {
                         ? undefined
                         : ts.getNormalizedAbsolutePath(relativeFileName, baseDirPath);
                     // Some applications save a working file via rename operations
-                    if ((eventName === "change" || eventName === "rename") && fileWatcherCallbacks[fileName]) {
-                        for (const fileCallback of fileWatcherCallbacks[fileName]) {
-                            fileCallback(fileName);
+                    if ((eventName === "change" || eventName === "rename")) {
+                        const callbacks = fileWatcherCallbacks.get(fileName);
+                        if (callbacks) {
+                            for (const fileCallback of callbacks) {
+                                fileCallback(fileName);
+                            }
                         }
                     }
                 }
             }
             const watchedFileSet = createWatchedFileSet();
 
-            function isNode4OrLater(): boolean {
-                return parseInt(process.version.charAt(1)) >= 4;
-            }
+            const nodeVersion = getNodeMajorVersion();
+            const isNode4OrLater = nodeVersion >= 4;
 
             function isFileSystemCaseSensitive(): boolean {
                 // win32\win64 are case insensitive platforms
@@ -480,10 +500,11 @@ namespace ts {
                     // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
                     let options: any;
                     if (!directoryExists(directoryName)) {
+                        // do nothing if target folder does not exist
                         return noOpFileWatcher;
                     }
 
-                    if (isNode4OrLater() && (process.platform === "win32" || process.platform === "darwin")) {
+                    if (isNode4OrLater && (process.platform === "win32" || process.platform === "darwin")) {
                         options = { persistent: true, recursive: !!recursive };
                     }
                     else {

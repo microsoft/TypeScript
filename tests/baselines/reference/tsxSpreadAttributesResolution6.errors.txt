@@ -1,0 +1,24 @@
+tests/cases/conformance/jsx/file.tsx(14,10): error TS2600: JSX element attributes type '({ editable: false; } & { children?: ReactNode; }) | ({ editable: true; onEdit: (newText: string) => void; } & { children?: ReactNode; })' may not be a union type.
+
+
+==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+    
+    import React = require('react');
+    
+    type TextProps = { editable: false }
+                   | { editable: true, onEdit: (newText: string) => void };
+    
+    class TextComponent extends React.Component<TextProps, {}> {
+        render() {
+            return <span>Some Text..</span>;
+        }
+    }
+    
+    // Error
+    let x = <TextComponent editable={true} />
+             ~~~~~~~~~~~~~
+!!! error TS2600: JSX element attributes type '({ editable: false; } & { children?: ReactNode; }) | ({ editable: true; onEdit: (newText: string) => void; } & { children?: ReactNode; })' may not be a union type.
+    
+    const textProps: TextProps = {
+        editable: false
+    };

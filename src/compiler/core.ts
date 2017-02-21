@@ -3,7 +3,7 @@
 
 namespace ts {
     /** The version of the TypeScript compiler release */
-    export const version = "2.2.0";
+    export const version = "2.3.0";
 }
 
 /* @internal */
@@ -23,13 +23,14 @@ namespace ts {
         True = -1
     }
 
-    const createObject = Object.create;
-
     // More efficient to create a collator once and use its `compare` than to call `a.localeCompare(b)` many times.
-    export const collator: { compare(a: string, b: string): number } = typeof Intl === "object" && typeof Intl.Collator === "function" ? new Intl.Collator() : undefined;
+    export const collator: { compare(a: string, b: string): number } = typeof Intl === "object" && typeof Intl.Collator === "function" ? new Intl.Collator(/*locales*/ undefined, { usage: "sort", sensitivity: "accent" }) : undefined;
+    // Intl is missing in Safari, and node 0.10 treats "a" as greater than "B".
+    export const localeCompareIsCorrect = ts.collator && ts.collator.compare("a", "B") < 0;
 
-    export function createMap<T>(template?: MapLike<T>): Map<T> {
-        const map: Map<T> = createObject(null); // tslint:disable-line:no-null-keyword
+    /** Create a MapLike with good performance. */
+    function createDictionaryObject<T>(): MapLike<T> {
+        const map = Object.create(null); // tslint:disable-line:no-null-keyword
 
         // Using 'delete' on an object causes V8 to put the object in dictionary mode.
         // This disables creation of hidden classes, which are expensive when an object is
@@ -37,17 +38,113 @@ namespace ts {
         map["__"] = undefined;
         delete map["__"];
 
+        return map;
+    }
+
+    /** Create a new map. If a template object is provided, the map will copy entries from it. */
+    export function createMap<T>(): Map<T> {
+        return new MapCtr<T>();
+    }
+
+    export function createMapFromTemplate<T>(template?: MapLike<T>): Map<T> {
+        const map: Map<T> = new MapCtr<T>();
+
         // Copies keys/values from template. Note that for..in will not throw if
         // template is undefined, and instead will just exit the loop.
         for (const key in template) if (hasOwnProperty.call(template, key)) {
-            map[key] = template[key];
+            map.set(key, template[key]);
         }
 
         return map;
     }
 
+    // The global Map object. This may not be available, so we must test for it.
+    declare const Map: { new<T>(): Map<T> } | undefined;
+    // Internet Explorer's Map doesn't support iteration, so don't use it.
+    // tslint:disable-next-line:no-in-operator
+    const MapCtr = typeof Map !== "undefined" && "entries" in Map.prototype ? Map : shimMap();
+
+    // Keep the class inside a function so it doesn't get compiled if it's not used.
+    function shimMap(): { new<T>(): Map<T> } {
+
+        class MapIterator<T, U extends (string | T | [string, T])> {
+            private data: MapLike<T>;
+            private keys: string[];
+            private index = 0;
+            private selector: (data: MapLike<T>, key: string) => U;
+            constructor(data: MapLike<T>, selector: (data: MapLike<T>, key: string) => U) {
+                this.data = data;
+                this.selector = selector;
+                this.keys = Object.keys(data);
+            }
+
+            public next(): { value: U, done: false } | { value: never, done: true } {
+                const index = this.index;
+                if (index < this.keys.length) {
+                    this.index++;
+                    return { value: this.selector(this.data, this.keys[index]), done: false };
+                }
+                return { value: undefined as never, done: true }
+            }
+        }
+
+        return class<T> implements Map<T> {
+            private data = createDictionaryObject<T>();
+            public size = 0;
+
+            get(key: string): T {
+                return this.data[key];
+            }
+
+            set(key: string, value: T): this {
+                if (!this.has(key)) {
+                    this.size++;
+                }
+                this.data[key] = value;
+                return this;
+            }
+
+            has(key: string): boolean {
+                // tslint:disable-next-line:no-in-operator
+                return key in this.data;
+            }
+
+            delete(key: string): boolean {
+                if (this.has(key)) {
+                    this.size--;
+                    delete this.data[key];
+                    return true;
+                }
+                return false;
+            }
+
+            clear(): void {
+                this.data = createDictionaryObject<T>();
+                this.size = 0;
+            }
+
+            keys() {
+                return new MapIterator(this.data, (_data, key) => key);
+            }
+
+            values() {
+                return new MapIterator(this.data, (data, key) => data[key]);
+            }
+
+            entries() {
+                return new MapIterator(this.data, (data, key) => [key, data[key]] as [string, T]);
+            }
+
+            forEach(action: (value: T, key: string) => void): void {
+                for (const key in this.data) {
+                    action(this.data[key], key);
+                }
+            }
+        }
+    }
+
     export function createFileMap<T>(keyMapper?: (key: string) => string): FileMap<T> {
-        let files = createMap<T>();
+        const files = createMap<T>();
         return {
             get,
             set,
@@ -59,39 +156,34 @@ namespace ts {
         };
 
         function forEachValueInMap(f: (key: Path, value: T) => void) {
-            for (const key in files) {
-                f(<Path>key, files[key]);
-            }
+            files.forEach((file, key) => {
+                f(<Path>key, file);
+            });
         }
 
         function getKeys() {
-            const keys: Path[] = [];
-            for (const key in files) {
-                keys.push(<Path>key);
-            }
-            return keys;
+            return arrayFrom(files.keys()) as Path[];
         }
 
         // path should already be well-formed so it does not need to be normalized
         function get(path: Path): T {
-            return files[toKey(path)];
+            return files.get(toKey(path));
         }
 
         function set(path: Path, value: T) {
-            files[toKey(path)] = value;
+            files.set(toKey(path), value);
         }
 
         function contains(path: Path) {
-            return toKey(path) in files;
+            return files.has(toKey(path));
         }
 
         function remove(path: Path) {
-            const key = toKey(path);
-            delete files[key];
+            files.delete(toKey(path));
         }
 
         function clear() {
-            files = createMap<T>();
+            files.clear();
         }
 
         function toKey(path: Path): string {
@@ -110,6 +202,10 @@ namespace ts {
         LessThan    = -1,
         EqualTo     = 0,
         GreaterThan = 1
+    }
+
+    export function length(array: any[]) {
+        return array ? array.length : 0;
     }
 
     /**
@@ -162,6 +258,16 @@ namespace ts {
             }
         }
         return undefined;
+    }
+
+    /** Works like Array.prototype.findIndex, returning `-1` if no element satisfying the predicate is found. */
+    export function findIndex<T>(array: T[], predicate: (element: T, index: number) => boolean): number {
+        for (let i = 0; i < array.length; i++) {
+            if (predicate(array[i], i)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     /**
@@ -420,17 +526,16 @@ namespace ts {
         return result;
     }
 
-    export function mapObject<T, U>(object: MapLike<T>, f: (key: string, x: T) => [string, U]): MapLike<U> {
-        let result: MapLike<U>;
-        if (object) {
-            result = {};
-            for (const v of getOwnKeys(object)) {
-                const [key, value]: [string, U] = f(v, object[v]) || [undefined, undefined];
-                if (key !== undefined) {
-                    result[key] = value;
-                }
-            }
+    export function mapEntries<T, U>(map: Map<T>, f: (key: string, value: T) => [string, U]): Map<U> {
+        if (!map) {
+            return undefined;
         }
+
+        const result = createMap<U>();
+        map.forEach((value, key) => {
+            const [newKey, newValue] = f(key, value);
+            result.set(newKey, newValue);
+        });
         return result;
     }
 
@@ -748,9 +853,6 @@ namespace ts {
     /**
      * Indicates whether a map-like contains an own property with the specified key.
      *
-     * NOTE: This is intended for use only with MapLike<T> objects. For Map<T> objects, use
-     *       the 'in' operator.
-     *
      * @param map A map-like.
      * @param key A property key.
      */
@@ -760,9 +862,6 @@ namespace ts {
 
     /**
      * Gets the value of an owned property in a map-like.
-     *
-     * NOTE: This is intended for use only with MapLike<T> objects. For Map<T> objects, use
-     *       an indexer.
      *
      * @param map A map-like.
      * @param key A property key.
@@ -787,50 +886,56 @@ namespace ts {
         return keys;
     }
 
-    /**
-     * Enumerates the properties of a Map<T>, invoking a callback and returning the first truthy result.
-     *
-     * @param map A map for which properties should be enumerated.
-     * @param callback A callback to invoke for each property.
-     */
-    export function forEachProperty<T, U>(map: Map<T>, callback: (value: T, key: string) => U): U {
-        let result: U;
-        for (const key in map) {
-            if (result = callback(map[key], key)) break;
+    /** Shims `Array.from`. */
+    export function arrayFrom<T>(iterator: Iterator<T>): T[] {
+        const result: T[] = [];
+        for (let { value, done } = iterator.next(); !done; { value, done } = iterator.next()) {
+            result.push(value);
+        }
+        return result;
+    }
+
+    export function convertToArray<T, U>(iterator: Iterator<T>, f: (value: T) => U) {
+        const result: U[] = [];
+        for (let { value, done } = iterator.next(); !done; { value, done } = iterator.next()) {
+            result.push(f(value));
         }
         return result;
     }
 
     /**
-     * Returns true if a Map<T> has some matching property.
-     *
-     * @param map A map whose properties should be tested.
-     * @param predicate An optional callback used to test each property.
+     * Calls `callback` for each entry in the map, returning the first truthy result.
+     * Use `map.forEach` instead for normal iteration.
      */
-    export function someProperties<T>(map: Map<T>, predicate?: (value: T, key: string) => boolean) {
-        for (const key in map) {
-            if (!predicate || predicate(map[key], key)) return true;
+    export function forEachEntry<T, U>(map: Map<T>, callback: (value: T, key: string) => U | undefined): U | undefined {
+        const iterator = map.entries();
+        for (let { value: pair, done } = iterator.next(); !done; { value: pair, done } = iterator.next()) {
+            const [key, value] = pair;
+            const result = callback(value, key);
+            if (result) {
+                return result;
+            }
         }
-        return false;
+        return undefined;
     }
 
-    /**
-     * Performs a shallow copy of the properties from a source Map<T> to a target MapLike<T>
-     *
-     * @param source A map from which properties should be copied.
-     * @param target A map to which properties should be copied.
-     */
-    export function copyProperties<T>(source: Map<T>, target: MapLike<T>): void {
-        for (const key in source) {
-            target[key] = source[key];
+    /** `forEachEntry` for just keys. */
+    export function forEachKey<T>(map: Map<{}>, callback: (key: string) => T | undefined): T | undefined {
+        const iterator = map.keys();
+        for (let { value: key, done } = iterator.next(); !done; { value: key, done } = iterator.next()) {
+            const result = callback(key);
+            if (result) {
+                return result;
+            }
         }
+        return undefined;
     }
 
-    export function appendProperty<T>(map: Map<T>, key: string | number, value: T): Map<T> {
-        if (key === undefined || value === undefined) return map;
-        if (map === undefined) map = createMap<T>();
-        map[key] = value;
-        return map;
+    /** Copy entries from `source` to `target`. */
+    export function copyEntries<T>(source: Map<T>, target: Map<T>): void {
+        source.forEach((value, key) => {
+            target.set(key, value);
+        });
     }
 
     export function assign<T1 extends MapLike<{}>, T2, T3>(t: T1, arg1: T2, arg2: T3): T1 & T2 & T3;
@@ -843,24 +948,6 @@ namespace ts {
             }
         }
         return t;
-    }
-
-    /**
-     * Reduce the properties of a map.
-     *
-     * NOTE: This is intended for use with Map<T> objects. For MapLike<T> objects, use
-     *       reduceOwnProperties instead as it offers better runtime safety.
-     *
-     * @param map The map to reduce
-     * @param callback An aggregation function that is called for each entry in the map
-     * @param initial The initial value for the reduction.
-     */
-    export function reduceProperties<T, U>(map: Map<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U): U {
-        let result = initial;
-        for (const key in map) {
-            result = callback(result, map[key], String(key));
-        }
-        return result;
     }
 
     /**
@@ -897,23 +984,14 @@ namespace ts {
     export function arrayToMap<T, U>(array: T[], makeKey: (value: T) => string, makeValue?: (value: T) => U): Map<T | U> {
         const result = createMap<T | U>();
         for (const value of array) {
-            result[makeKey(value)] = makeValue ? makeValue(value) : value;
+            result.set(makeKey(value), makeValue ? makeValue(value) : value);
         }
         return result;
     }
 
-    export function isEmpty<T>(map: Map<T>) {
-        for (const id in map) {
-            if (hasProperty(map, id)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     export function cloneMap<T>(map: Map<T>) {
         const clone = createMap<T>();
-        copyProperties(map, clone);
+        copyEntries(map, clone);
         return clone;
     }
 
@@ -938,32 +1016,43 @@ namespace ts {
         return result;
     }
 
-    /**
-     * Adds the value to an array of values associated with the key, and returns the array.
-     * Creates the array if it does not already exist.
-     */
-    export function multiMapAdd<V>(map: Map<V[]>, key: string | number, value: V): V[] {
-        const values = map[key];
-        if (values) {
-            values.push(value);
-            return values;
-        }
-        else {
-            return map[key] = [value];
-        }
+    export interface MultiMap<T> extends Map<T[]> {
+        /**
+         * Adds the value to an array of values associated with the key, and returns the array.
+         * Creates the array if it does not already exist.
+         */
+        add(key: string, value: T): T[];
+        /**
+         * Removes a value from an array of values associated with the key.
+         * Does not preserve the order of those values.
+         * Does nothing if `key` is not in `map`, or `value` is not in `map[key]`.
+         */
+        remove(key: string, value: T): void;
     }
 
-    /**
-     * Removes a value from an array of values associated with the key.
-     * Does not preserve the order of those values.
-     * Does nothing if `key` is not in `map`, or `value` is not in `map[key]`.
-     */
-    export function multiMapRemove<V>(map: Map<V[]>, key: string, value: V): void {
-        const values = map[key];
+    export function createMultiMap<T>(): MultiMap<T> {
+        const map = createMap<T[]>() as MultiMap<T>;
+        map.add = multiMapAdd;
+        map.remove = multiMapRemove;
+        return map;
+    }
+    function multiMapAdd<T>(this: MultiMap<T>, key: string, value: T) {
+        let values = this.get(key);
+        if (values) {
+            values.push(value);
+        }
+        else {
+            this.set(key, values = [value]);
+        }
+        return values;
+
+    }
+    function multiMapRemove<T>(this: MultiMap<T>, key: string, value: T) {
+        const values = this.get(key);
         if (values) {
             unorderedRemoveItem(values, value);
             if (!values.length) {
-                delete map[key];
+                this.delete(key);
             }
         }
     }
@@ -1066,7 +1155,7 @@ namespace ts {
         return text.replace(/{(\d+)}/g, (_match, index?) => args[+index + baseIndex]);
     }
 
-    export let localizedDiagnosticMessages: Map<string> = undefined;
+    export let localizedDiagnosticMessages: MapLike<string> = undefined;
 
     export function getLocaleSpecificMessage(message: DiagnosticMessage) {
         return localizedDiagnosticMessages && localizedDiagnosticMessages[message.key] || message.message;
@@ -1182,9 +1271,12 @@ namespace ts {
         if (a === undefined) return Comparison.LessThan;
         if (b === undefined) return Comparison.GreaterThan;
         if (ignoreCase) {
-            if (collator && String.prototype.localeCompare) {
-                // accent means a ≠ b, a ≠ á, a = A
-                const result = a.localeCompare(b, /*locales*/ undefined, { usage: "sort", sensitivity: "accent" });
+            // Checking if "collator exists indicates that Intl is available.
+            // We still have to check if "collator.compare" is correct. If it is not, use "String.localeComapre"
+            if (collator) {
+                const result = localeCompareIsCorrect ?
+                    collator.compare(a, b) :
+                    a.localeCompare(b, /*locales*/ undefined, { usage: "sort", sensitivity: "accent" });  // accent means a ≠ b, a ≠ á, a = A
                 return result < 0 ? Comparison.LessThan : result > 0 ? Comparison.GreaterThan : Comparison.EqualTo;
             }
 
@@ -1363,7 +1455,7 @@ namespace ts {
         return /^\.\.?($|[\\/])/.test(moduleName);
     }
 
-    export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
+    export function getEmitScriptTarget(compilerOptions: CompilerOptions | PrinterOptions) {
         return compilerOptions.target || ScriptTarget.ES3;
     }
 
@@ -1650,7 +1742,19 @@ namespace ts {
     const singleAsteriskRegexFragmentFiles = "([^./]|(\\.(?!min\\.js$))?)*";
     const singleAsteriskRegexFragmentOther = "[^/]*";
 
-    export function getRegularExpressionForWildcard(specs: string[], basePath: string, usage: "files" | "directories" | "exclude") {
+    export function getRegularExpressionForWildcard(specs: string[], basePath: string, usage: "files" | "directories" | "exclude"): string | undefined {
+        const patterns = getRegularExpressionsForWildcards(specs, basePath, usage);
+        if (!patterns || !patterns.length) {
+            return undefined;
+        }
+
+        const pattern = patterns.map(pattern => `(${pattern})`).join("|");
+        // If excluding, match "foo/bar/baz...", but if including, only allow "foo".
+        const terminator = usage === "exclude" ? "($|/)" : "$";
+        return `^(${pattern})${terminator}`;
+    }
+
+    function getRegularExpressionsForWildcards(specs: string[], basePath: string, usage: "files" | "directories" | "exclude"): string[] | undefined {
         if (specs === undefined || specs.length === 0) {
             return undefined;
         }
@@ -1664,33 +1768,8 @@ namespace ts {
          */
         const doubleAsteriskRegexFragment = usage === "exclude" ? "(/.+?)?" : "(/[^/.][^/]*)*?";
 
-        let pattern = "";
-        let hasWrittenSubpattern = false;
-        for (const spec of specs) {
-            if (!spec) {
-                continue;
-            }
-
-            const subPattern = getSubPatternFromSpec(spec, basePath, usage, singleAsteriskRegexFragment, doubleAsteriskRegexFragment, replaceWildcardCharacter);
-            if (subPattern === undefined) {
-                continue;
-            }
-
-            if (hasWrittenSubpattern) {
-                pattern += "|";
-            }
-
-            pattern += "(" + subPattern + ")";
-            hasWrittenSubpattern = true;
-        }
-
-        if (!pattern) {
-            return undefined;
-        }
-
-        // If excluding, match "foo/bar/baz...", but if including, only allow "foo".
-        const terminator = usage === "exclude" ? "($|/)" : "$";
-        return `^(${pattern})${terminator}`;
+        return flatMap(specs, spec =>
+            spec && getSubPatternFromSpec(spec, basePath, usage, singleAsteriskRegexFragment, doubleAsteriskRegexFragment, replaceWildcardCharacter));
     }
 
     /**
@@ -1785,6 +1864,9 @@ namespace ts {
     }
 
     export interface FileMatcherPatterns {
+        /** One pattern for each "include" spec. */
+        includeFilePatterns: string[];
+        /** One pattern matching one of any of the "include" specs. */
         includeFilePattern: string;
         includeDirectoryPattern: string;
         excludePattern: string;
@@ -1797,6 +1879,7 @@ namespace ts {
         const absolutePath = combinePaths(currentDirectory, path);
 
         return {
+            includeFilePatterns: map(getRegularExpressionsForWildcards(includes, absolutePath, "files"), pattern => `^${pattern}$`),
             includeFilePattern: getRegularExpressionForWildcard(includes, absolutePath, "files"),
             includeDirectoryPattern: getRegularExpressionForWildcard(includes, absolutePath, "directories"),
             excludePattern: getRegularExpressionForWildcard(excludes, absolutePath, "exclude"),
@@ -1811,26 +1894,39 @@ namespace ts {
         const patterns = getFileMatcherPatterns(path, excludes, includes, useCaseSensitiveFileNames, currentDirectory);
 
         const regexFlag = useCaseSensitiveFileNames ? "" : "i";
-        const includeFileRegex = patterns.includeFilePattern && new RegExp(patterns.includeFilePattern, regexFlag);
+        const includeFileRegexes = patterns.includeFilePatterns && patterns.includeFilePatterns.map(pattern => new RegExp(pattern, regexFlag));
         const includeDirectoryRegex = patterns.includeDirectoryPattern && new RegExp(patterns.includeDirectoryPattern, regexFlag);
         const excludeRegex = patterns.excludePattern && new RegExp(patterns.excludePattern, regexFlag);
 
-        const result: string[] = [];
+        // Associate an array of results with each include regex. This keeps results in order of the "include" order.
+        // If there are no "includes", then just put everything in results[0].
+        const results: string[][] = includeFileRegexes ? includeFileRegexes.map(() => []) : [[]];
+
+        const comparer = useCaseSensitiveFileNames ? compareStrings : compareStringsCaseInsensitive;
         for (const basePath of patterns.basePaths) {
             visitDirectory(basePath, combinePaths(currentDirectory, basePath));
         }
-        return result;
+
+        return flatten(results);
 
         function visitDirectory(path: string, absolutePath: string) {
-            const { files, directories } = getFileSystemEntries(path);
+            let { files, directories } = getFileSystemEntries(path);
+            files = files.slice().sort(comparer);
+            directories = directories.slice().sort(comparer);
 
             for (const current of files) {
                 const name = combinePaths(path, current);
                 const absoluteName = combinePaths(absolutePath, current);
-                if ((!extensions || fileExtensionIsAny(name, extensions)) &&
-                    (!includeFileRegex || includeFileRegex.test(absoluteName)) &&
-                    (!excludeRegex || !excludeRegex.test(absoluteName))) {
-                    result.push(name);
+                if (extensions && !fileExtensionIsAny(name, extensions)) continue;
+                if (excludeRegex && excludeRegex.test(absoluteName)) continue;
+                if (!includeFileRegexes) {
+                    results[0].push(name);
+                }
+                else {
+                    const includeIndex = findIndex(includeFileRegexes, re => re.test(absoluteName));
+                    if (includeIndex !== -1) {
+                        results[includeIndex].push(name);
+                    }
                 }
             }
 
@@ -1924,14 +2020,14 @@ namespace ts {
     export const supportedJavascriptExtensions = [".js", ".jsx"];
     const allSupportedExtensions = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
 
-    export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: FileExtensionInfo[]): string[] {
+    export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: JsFileExtensionInfo[]): string[] {
         const needAllExtensions = options && options.allowJs;
-        if (!extraFileExtensions || extraFileExtensions.length === 0) {
+        if (!extraFileExtensions || extraFileExtensions.length === 0 || !needAllExtensions) {
             return needAllExtensions ? allSupportedExtensions : supportedTypeScriptExtensions;
         }
-        const extensions = (needAllExtensions ? allSupportedExtensions : supportedTypeScriptExtensions).slice(0);
+        const extensions = allSupportedExtensions.slice(0);
         for (const extInfo of extraFileExtensions) {
-            if (needAllExtensions || extInfo.scriptKind === ScriptKind.TS) {
+            if (extensions.indexOf(extInfo.extension) === -1) {
                 extensions.push(extInfo.extension);
             }
         }
@@ -1946,7 +2042,7 @@ namespace ts {
         return forEach(supportedTypeScriptExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
-    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, extraFileExtensions?: FileExtensionInfo[]) {
+    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, extraFileExtensions?: JsFileExtensionInfo[]) {
         if (!fileName) { return false; }
 
         for (const extension of getSupportedExtensions(compilerOptions, extraFileExtensions)) {
@@ -1965,7 +2061,6 @@ namespace ts {
     export const enum ExtensionPriority {
         TypeScriptFiles = 0,
         DeclarationAndJavaScriptFiles = 2,
-        Limit = 5,
 
         Highest = TypeScriptFiles,
         Lowest = DeclarationAndJavaScriptFiles,
@@ -1974,7 +2069,7 @@ namespace ts {
     export function getExtensionPriority(path: string, supportedExtensions: string[]): ExtensionPriority {
         for (let i = supportedExtensions.length - 1; i >= 0; i--) {
             if (fileExtensionIs(path, supportedExtensions[i])) {
-                return adjustExtensionPriority(<ExtensionPriority>i);
+                return adjustExtensionPriority(<ExtensionPriority>i, supportedExtensions);
             }
         }
 
@@ -1986,27 +2081,26 @@ namespace ts {
     /**
      * Adjusts an extension priority to be the highest priority within the same range.
      */
-    export function adjustExtensionPriority(extensionPriority: ExtensionPriority): ExtensionPriority {
+    export function adjustExtensionPriority(extensionPriority: ExtensionPriority, supportedExtensions: string[]): ExtensionPriority {
         if (extensionPriority < ExtensionPriority.DeclarationAndJavaScriptFiles) {
             return ExtensionPriority.TypeScriptFiles;
         }
-        else if (extensionPriority < ExtensionPriority.Limit) {
+        else if (extensionPriority < supportedExtensions.length) {
             return ExtensionPriority.DeclarationAndJavaScriptFiles;
         }
         else {
-            return ExtensionPriority.Limit;
-        }
-    }
+            return supportedExtensions.length;
+        }    }
 
     /**
      * Gets the next lowest extension priority for a given priority.
      */
-    export function getNextLowestExtensionPriority(extensionPriority: ExtensionPriority): ExtensionPriority {
+    export function getNextLowestExtensionPriority(extensionPriority: ExtensionPriority, supportedExtensions: string[]): ExtensionPriority {
         if (extensionPriority < ExtensionPriority.DeclarationAndJavaScriptFiles) {
             return ExtensionPriority.DeclarationAndJavaScriptFiles;
         }
         else {
-            return ExtensionPriority.Limit;
+            return supportedExtensions.length;
         }
     }
 
