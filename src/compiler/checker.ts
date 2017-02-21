@@ -11630,7 +11630,7 @@ namespace ts {
         }
 
         // In a typed function call, an argument or substitution expression is contextually typed by the type of the corresponding parameter.
-        function getContextualTypeForArgument(callTarget: CallLikeExpression, arg: Expression, completion: boolean = false): Type {
+        function getContextualTypeForArgument(callTarget: CallLikeExpression, arg: Expression, completion = false): Type {
             const args = getEffectiveCallArguments(callTarget);
             const argIndex = indexOf(args, arg);
             if (argIndex >= 0) {
@@ -11740,7 +11740,7 @@ namespace ts {
             return getContextualTypeForObjectLiteralElement(node);
         }
 
-        function getContextualTypeForObjectLiteralElement(element: ObjectLiteralElementLike, completion: boolean = false) {
+        function getContextualTypeForObjectLiteralElement(element: ObjectLiteralElementLike, completion = false) {
             const objectLiteral = <ObjectLiteralExpression>element.parent;
             let type = getApparentTypeOfContextualType(objectLiteral);
             if (type) {
@@ -11829,7 +11829,7 @@ namespace ts {
          * @param completion the function was invoked for completion
          * @returns the contextual type of an expression.
          */
-        function getContextualType(node: Expression, completion: boolean = false): Type {
+        function getContextualType(node: Expression, completion = false): Type {
             if (isInsideWithStatementBody(node)) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return undefined;
