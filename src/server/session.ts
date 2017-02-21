@@ -1412,6 +1412,9 @@ namespace ts.server {
         }
 
         private getCodeFixes(args: protocol.CodeFixRequestArgs, simplifiedResult: boolean): protocol.CodeAction[] | CodeAction[] {
+            if (args.errorCodes.length === 0) {
+                return undefined;
+            }
             const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
 
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
