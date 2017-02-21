@@ -19,15 +19,15 @@
 ////funcB({ /*2*/ });
 ////funcB({ strict: true, /*3*/ });
 
-goTo.marker(1);
+goTo.marker("1");
 verify.completionListContains("hello");
 verify.completionListContains("world");
 
-goTo.marker(2);
+goTo.marker("2");
 verify.completionListContains("hello");
 verify.completionListContains("world");
 verify.completionListContains("strict");
 
-goTo.marker(3);
+goTo.marker("3");
 verify.completionListContains("hello");
 verify.completionListContains("world");
