@@ -14963,10 +14963,12 @@ namespace ts {
                 }
             }
             else {
-                let types: Type[];
+                let yieldTypes: Type[];
+                let returnTypes: Type[];
                 if (functionFlags & FunctionFlags.Generator) { // Generator or AsyncGenerator function
-                    types = checkAndAggregateYieldOperandTypes(func, contextualMapper);
-                    if (types.length === 0) {
+                    yieldTypes = checkAndAggregateYieldOperandTypes(func, contextualMapper);
+                    returnTypes = checkAndAggregateReturnExpressionTypes(func, contextualMapper);
+                    if (yieldTypes.length === 0 && (!returnTypes || returnTypes.length === 0)) {
                         const iterableIteratorAny = functionFlags & FunctionFlags.Async
                             ? createAsyncIterableIteratorType(anyType) // AsyncGenerator function
                             : createIterableIteratorType(anyType); // Generator function
@@ -14978,14 +14980,14 @@ namespace ts {
                     }
                 }
                 else {
-                    types = checkAndAggregateReturnExpressionTypes(func, contextualMapper);
-                    if (!types) {
+                    returnTypes = checkAndAggregateReturnExpressionTypes(func, contextualMapper);
+                    if (!returnTypes) {
                         // For an async function, the return type will not be never, but rather a Promise for never.
                         return functionFlags & FunctionFlags.Async
                             ? createPromiseReturnType(func, neverType) // Async function
                             : neverType; // Normal function
                     }
-                    if (types.length === 0) {
+                    if (returnTypes.length === 0) {
                         // For an async function, the return type will not be void, but rather a Promise for void.
                         return functionFlags & FunctionFlags.Async
                             ? createPromiseReturnType(func, voidType) // Async function
@@ -14993,7 +14995,7 @@ namespace ts {
                     }
                 }
                 // Return a union of the return expression types.
-                type = getUnionType(types, /*subtypeReduction*/ true);
+                type = getUnionType(yieldTypes ? yieldTypes.concat(returnTypes) : returnTypes, /*subtypeReduction*/ true);
 
                 if (functionFlags & FunctionFlags.Generator) { // AsyncGenerator function or Generator function
                     type = functionFlags & FunctionFlags.Async
