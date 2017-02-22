@@ -4853,8 +4853,8 @@ namespace ts {
         }
 
         function getConstraintTypeFromMappedType(type: MappedType) {
-            return type.completionConstraintType ||
-                (type.completionConstraintType = instantiateType(getConstraintOfTypeParameter(getTypeParameterFromMappedType(type)), type.mapper || identityMapper) || unknownType);
+            return type.constraintType ||
+                (type.constraintType = instantiateType(getConstraintOfTypeParameter(getTypeParameterFromMappedType(type)), type.mapper || identityMapper) || unknownType);
         }
 
         function getTemplateTypeFromMappedType(type: MappedType) {

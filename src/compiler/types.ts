@@ -3050,7 +3050,7 @@
     export interface MappedType extends ObjectType {
         declaration: MappedTypeNode;
         typeParameter?: TypeParameter;
-        completionConstraintType?: Type;
+        constraintType?: Type;
         templateType?: Type;
         modifiersType?: Type;
         mapper?: TypeMapper;  // Instantiation mapper
