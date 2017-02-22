@@ -547,6 +547,45 @@ namespace ts.projectSystem {
         readonly getEnvironmentVariable = notImplemented;
     }
 
+    export class TestServerCancellationToken implements server.ServerCancellationToken {
+        private currentId = -1;
+        private requestToCancel = -1;
+        private isCancellationRequestedCount = 0;
+
+        constructor(private cancelAfterRequest = 0) {
+        }
+
+        get throttleWaitMilliseconds() {
+            // For testing purposes disable the throttle
+            return 0;
+        }
+
+        setRequest(requestId: number) {
+            this.currentId = requestId;
+        }
+
+        setRequestToCancel(requestId: number) {
+            this.resetToken();
+            this.requestToCancel = requestId;
+        }
+
+        resetRequest(requestId: number) {
+            assert.equal(requestId, this.currentId, "unexpected request id in cancellation")
+            this.currentId = undefined;
+        }
+
+        isCancellationRequested() {
+            this.isCancellationRequestedCount++;
+            return this.requestToCancel === this.currentId && this.isCancellationRequestedCount >= this.cancelAfterRequest;
+        }
+
+        resetToken() {
+            this.currentId = -1;
+            this.isCancellationRequestedCount = 0;
+            this.requestToCancel = -1;
+        }
+    }
+
     export function makeSessionRequest<T>(command: string, args: T) {
         const newRequest: protocol.Request = {
             seq: 0,
@@ -3324,22 +3363,7 @@ namespace ts.projectSystem {
                 })
             };
 
-            let requestToCancel = -1;
-            const cancellationToken: server.ServerCancellationToken = (function(){
-                let currentId: number;
-                return <server.ServerCancellationToken>{
-                    setRequest(requestId) {
-                        currentId = requestId;
-                    },
-                    resetRequest(requestId) {
-                        assert.equal(requestId, currentId, "unexpected request id in cancellation")
-                        currentId = undefined;
-                    },
-                    isCancellationRequested() {
-                        return requestToCancel === currentId;
-                    }
-                }
-            })();
+            const cancellationToken = new TestServerCancellationToken();
             const host = createServerHost([f1, config]);
             const session = createSession(host, /*typingsInstaller*/ undefined, () => {}, cancellationToken);
             {
@@ -3374,13 +3398,13 @@ namespace ts.projectSystem {
                 host.clearOutput();
 
                 // cancel previously issued Geterr
-                requestToCancel = getErrId;
+                cancellationToken.setRequestToCancel(getErrId);
                 host.runQueuedTimeoutCallbacks();
 
                 assert.equal(host.getOutput().length, 1, "expect 1 message");
                 verifyRequestCompleted(getErrId, 0);
 
-                requestToCancel = -1;
+                cancellationToken.resetToken();
             }
             {
                 const getErrId = session.getNextSeq();
@@ -3397,12 +3421,12 @@ namespace ts.projectSystem {
                 assert.equal(e1.event, "syntaxDiag");
                 host.clearOutput();
 
-                requestToCancel = getErrId;
+                cancellationToken.setRequestToCancel(getErrId);
                 host.runQueuedImmediateCallbacks();
                 assert.equal(host.getOutput().length, 1, "expect 1 message");
                 verifyRequestCompleted(getErrId, 0);
 
-                requestToCancel = -1;
+                cancellationToken.resetToken();
             }
             {
                 const getErrId = session.getNextSeq();
@@ -3425,7 +3449,7 @@ namespace ts.projectSystem {
                 assert.equal(e2.event, "semanticDiag");
                 verifyRequestCompleted(getErrId, 1);
 
-                requestToCancel = -1;
+                cancellationToken.resetToken();
             }
             {
                 const getErr1 = session.getNextSeq();
@@ -3472,26 +3496,8 @@ namespace ts.projectSystem {
                 })
             };
 
-            let requestToCancel = -1;
-            let isCancellationRequestedCount = 0;
-            let cancelAfterRequest = 3;
             let operationCanceledExceptionThrown = false;
-            const cancellationToken: server.ServerCancellationToken = (function () {
-                let currentId: number;
-                return <server.ServerCancellationToken>{
-                    setRequest(requestId) {
-                        currentId = requestId;
-                    },
-                    resetRequest(requestId) {
-                        assert.equal(requestId, currentId, "unexpected request id in cancellation")
-                        currentId = undefined;
-                    },
-                    isCancellationRequested() {
-                        isCancellationRequestedCount++;
-                        return requestToCancel === currentId && isCancellationRequestedCount >= cancelAfterRequest;
-                    }
-                }
-            })();
+            const cancellationToken = new TestServerCancellationToken(/*cancelAfterRequest*/ 3);
             const host = createServerHost([f1, config]);
             const session = createSession(host, /*typingsInstaller*/ undefined, () => { }, cancellationToken);
             {
@@ -3529,17 +3535,17 @@ namespace ts.projectSystem {
                 // Set the next request to be cancellable
                 // The cancellation token will cancel the request the third time
                 // isCancellationRequested() is called.
-                requestToCancel = session.getNextSeq();
-                isCancellationRequestedCount = 0;
+                cancellationToken.setRequestToCancel(session.getNextSeq());
                 operationCanceledExceptionThrown = false;
 
                 try {
                     session.executeCommandSeq(request);
-                } catch (e) {
+                }
+                catch (e) {
                     assert(e instanceof OperationCanceledException);
                     operationCanceledExceptionThrown = true;
                 }
-                assert(operationCanceledExceptionThrown);
+                assert(operationCanceledExceptionThrown, "Operation Canceled Exception not thrown for request: " + JSON.stringify(request));
             }
         });
     });

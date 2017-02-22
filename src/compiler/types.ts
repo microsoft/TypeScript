@@ -2262,6 +2262,8 @@
 
         /** @throws OperationCanceledException if isCancellationRequested is true */
         throwIfCancellationRequested(): void;
+
+        throttleWaitMilliseconds?: number;
     }
 
     export interface Program extends ScriptReferenceHost {

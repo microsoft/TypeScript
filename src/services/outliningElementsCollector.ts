@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts.OutliningElementsCollector {
-    export function collectElements(sourceFile: SourceFile, cancellationToken: CancellationToken): OutliningSpan[] {
+    export function collectElements(sourceFile: SourceFile, cancellationToken: ThrottledCancellationToken): OutliningSpan[] {
         const elements: OutliningSpan[] = [];
         const collapseText = "...";
 

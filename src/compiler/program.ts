@@ -72,6 +72,20 @@ namespace ts {
         return getNormalizedPathFromPathComponents(commonPathComponents);
     }
 
+    /* @internal */
+    export function runWithCancellationToken<T>(func: () => T, onCancel?: () => void): T {
+        try {
+            return func();
+        }
+        catch (e) {
+            if (e instanceof OperationCanceledException && onCancel) {
+                // We were canceled while performing the operation.
+                onCancel();
+            }
+            throw e;
+        }
+    }
+
     interface OutputFingerprint {
         hash: string;
         byteOrderMark: boolean;
@@ -873,28 +887,18 @@ namespace ts {
             return sourceFile.parseDiagnostics;
         }
 
-        function runWithCancellationToken<T>(func: () => T): T {
-            try {
-                return func();
-            }
-            catch (e) {
-                if (e instanceof OperationCanceledException) {
-                    // We were canceled while performing the operation.  Because our type checker
-                    // might be a bad state, we need to throw it away.
-                    //
-                    // Note: we are overly aggressive here.  We do not actually *have* to throw away
-                    // the "noDiagnosticsTypeChecker".  However, for simplicity, i'd like to keep
-                    // the lifetimes of these two TypeCheckers the same.  Also, we generally only
-                    // cancel when the user has made a change anyways.  And, in that case, we (the
-                    // program instance) will get thrown away anyways.  So trying to keep one of
-                    // these type checkers alive doesn't serve much purpose.
-                    noDiagnosticsTypeChecker = undefined;
-                    diagnosticsProducingTypeChecker = undefined;
-                }
-
-                throw e;
-            }
+        function onCancel() {
+            // Because our type checker might be a bad state, we need to throw it away.
+            // Note: we are overly aggressive here.  We do not actually *have* to throw away
+            // the "noDiagnosticsTypeChecker".  However, for simplicity, i'd like to keep
+            // the lifetimes of these two TypeCheckers the same.  Also, we generally only
+            // cancel when the user has made a change anyways.  And, in that case, we (the
+            // program instance) will get thrown away anyways.  So trying to keep one of
+            // these type checkers alive doesn't serve much purpose.
+            noDiagnosticsTypeChecker = undefined;
+            diagnosticsProducingTypeChecker = undefined;
         }
+
 
         function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
             return runWithCancellationToken(() => {
@@ -910,7 +914,7 @@ namespace ts {
                 const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
 
                 return bindDiagnostics.concat(checkDiagnostics, fileProcessingDiagnosticsInFile, programDiagnosticsInFile);
-            });
+            }, onCancel);
         }
 
         function getJavaScriptSyntacticDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {
@@ -1089,7 +1093,7 @@ namespace ts {
                 function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): Diagnostic {
                     return createDiagnosticForNodeInSourceFile(sourceFile, node, message, arg0, arg1, arg2);
                 }
-            });
+            }, onCancel);
         }
 
         function getDeclarationDiagnosticsWorker(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
@@ -1097,7 +1101,7 @@ namespace ts {
                 const resolver = getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile, cancellationToken);
                 // Don't actually write any files since we're just getting diagnostics.
                 return ts.getDeclarationDiagnostics(getEmitHost(noop), resolver, sourceFile);
-            });
+            }, onCancel);
         }
 
         function getDeclarationDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
