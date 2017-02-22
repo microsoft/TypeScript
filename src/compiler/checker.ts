@@ -3952,7 +3952,7 @@ namespace ts {
             }
             if (type.flags & TypeFlags.TypeVariable) {
                 const constraint = getBaseConstraintOfType(<TypeVariable>type);
-                return isValidBaseType(constraint) && isMixinConstructorType(constraint);
+                return constraint && isValidBaseType(constraint) && isMixinConstructorType(constraint);
             }
             return false;
         }
