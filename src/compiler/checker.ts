@@ -12754,11 +12754,6 @@ namespace ts {
                     // Props is of type 'any' or unknown
                     return attributesType;
                 }
-                else if (attributesType.flags & TypeFlags.Union) {
-                    // Props cannot be a union type
-                    error(openingLikeElement.tagName, Diagnostics.JSX_element_attributes_type_0_may_not_be_a_union_type, typeToString(attributesType));
-                    return anyType;
-                }
                 else {
                     // Normal case -- add in IntrinsicClassElements<T> and IntrinsicElements
                     let apparentAttributesType = attributesType;
