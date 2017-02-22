@@ -440,8 +440,9 @@ namespace ts {
             : node;
     }
 
-    export function createPropertyAccess(expression: Expression, name: string | Identifier) {
+    export function createPropertyAccess(expression: Expression, name: string | Identifier, flags?: NodeFlags) {
         const node = <PropertyAccessExpression>createSynthesizedNode(SyntaxKind.PropertyAccessExpression);
+        node.flags |= flags;
         node.expression = parenthesizeForAccess(expression);
         node.name = asName(name);
         setEmitFlags(node, EmitFlags.NoIndentation);
@@ -453,12 +454,13 @@ namespace ts {
         // instead of using the default from createPropertyAccess
         return node.expression !== expression
             || node.name !== name
-            ? updateNode(setEmitFlags(createPropertyAccess(expression, name), getEmitFlags(node)), node)
+            ? updateNode(setEmitFlags(createPropertyAccess(expression, name, node.flags), getEmitFlags(node)), node)
             : node;
     }
 
-    export function createElementAccess(expression: Expression, index: number | Expression) {
+    export function createElementAccess(expression: Expression, index: number | Expression, flags?: NodeFlags) {
         const node = <ElementAccessExpression>createSynthesizedNode(SyntaxKind.ElementAccessExpression);
+        node.flags |= flags;
         node.expression = parenthesizeForAccess(expression);
         node.argumentExpression = asExpression(index);
         return node;
@@ -467,12 +469,13 @@ namespace ts {
     export function updateElementAccess(node: ElementAccessExpression, expression: Expression, argumentExpression: Expression) {
         return node.expression !== expression
             || node.argumentExpression !== argumentExpression
-            ? updateNode(createElementAccess(expression, argumentExpression), node)
+            ? updateNode(createElementAccess(expression, argumentExpression, node.flags), node)
             : node;
     }
 
-    export function createCall(expression: Expression, typeArguments: TypeNode[] | undefined, argumentsArray: Expression[]) {
+    export function createCall(expression: Expression, typeArguments: TypeNode[] | undefined, argumentsArray: Expression[], flags?: NodeFlags) {
         const node = <CallExpression>createSynthesizedNode(SyntaxKind.CallExpression);
+        node.flags |= flags;
         node.expression = parenthesizeForAccess(expression);
         node.typeArguments = asNodeArray(typeArguments);
         node.arguments = parenthesizeListElements(createNodeArray(argumentsArray));
@@ -483,12 +486,13 @@ namespace ts {
         return expression !== node.expression
             || typeArguments !== node.typeArguments
             || argumentsArray !== node.arguments
-            ? updateNode(createCall(expression, typeArguments, argumentsArray), node)
+            ? updateNode(createCall(expression, typeArguments, argumentsArray, node.flags), node)
             : node;
     }
 
-    export function createNew(expression: Expression, typeArguments: TypeNode[] | undefined, argumentsArray: Expression[] | undefined) {
+    export function createNew(expression: Expression, typeArguments: TypeNode[] | undefined, argumentsArray: Expression[] | undefined, flags?: NodeFlags) {
         const node = <NewExpression>createSynthesizedNode(SyntaxKind.NewExpression);
+        node.flags |= flags;
         node.expression = parenthesizeForNew(expression);
         node.typeArguments = asNodeArray(typeArguments);
         node.arguments = argumentsArray ? parenthesizeListElements(createNodeArray(argumentsArray)) : undefined;
@@ -499,7 +503,7 @@ namespace ts {
         return node.expression !== expression
             || node.typeArguments !== typeArguments
             || node.arguments !== argumentsArray
-            ? updateNode(createNew(expression, typeArguments, argumentsArray), node)
+            ? updateNode(createNew(expression, typeArguments, argumentsArray, node.flags), node)
             : node;
     }
 
@@ -1740,6 +1744,10 @@ namespace ts {
         return createBinary(left, SyntaxKind.EqualsToken, right);
     }
 
+    export function createEquality(left: Expression, right: Expression) {
+        return createBinary(left, SyntaxKind.EqualsEqualsToken, right);
+    }
+
     export function createStrictEquality(left: Expression, right: Expression) {
         return createBinary(left, SyntaxKind.EqualsEqualsEqualsToken, right);
     }
@@ -2449,7 +2457,8 @@ namespace ts {
                                 ),
                                 (<PropertyAccessExpression>callee).expression
                             ),
-                            (<PropertyAccessExpression>callee).name
+                            (<PropertyAccessExpression>callee).name,
+                            callee.flags & NodeFlags.PropagateNull
                         );
                         setTextRange(target, callee);
                     }
@@ -2472,7 +2481,8 @@ namespace ts {
                                 ),
                                 (<ElementAccessExpression>callee).expression
                             ),
-                            (<ElementAccessExpression>callee).argumentExpression
+                            (<ElementAccessExpression>callee).argumentExpression,
+                            callee.flags & NodeFlags.PropagateNull
                         );
                         setTextRange(target, callee);
                     }

@@ -1092,12 +1092,13 @@ namespace ts {
         }
 
         function emitPropertyAccessExpression(node: PropertyAccessExpression) {
+            const propagatesNull = node.flags & NodeFlags.PropagateNull;
             let indentBeforeDot = false;
             let indentAfterDot = false;
             if (!(getEmitFlags(node) & EmitFlags.NoIndentation)) {
                 const dotRangeStart = node.expression.end;
-                const dotRangeEnd = skipTrivia(currentSourceFile.text, node.expression.end) + 1;
-                const dotToken = <Node>{ kind: SyntaxKind.DotToken, pos: dotRangeStart, end: dotRangeEnd };
+                const dotRangeEnd = skipTrivia(currentSourceFile.text, node.expression.end) + (propagatesNull ? 2 : 1);
+                const dotToken = <Node>{ kind: propagatesNull ? SyntaxKind.QuestionDotToken : SyntaxKind.DotToken, pos: dotRangeStart, end: dotRangeEnd };
                 indentBeforeDot = needsIndentation(node, node.expression, dotToken);
                 indentAfterDot = needsIndentation(node, dotToken, node.name);
             }
@@ -1105,8 +1106,8 @@ namespace ts {
             emitExpression(node.expression);
             increaseIndentIf(indentBeforeDot);
 
-            const shouldEmitDotDot = !indentBeforeDot && needsDotDotForPropertyAccess(node.expression);
-            write(shouldEmitDotDot ? ".." : ".");
+            const shouldEmitDotDot = !propagatesNull && !indentBeforeDot && needsDotDotForPropertyAccess(node.expression);
+            write(shouldEmitDotDot ? ".." : propagatesNull ? "?." : ".");
 
             increaseIndentIf(indentAfterDot);
             emit(node.name);
@@ -1135,13 +1136,16 @@ namespace ts {
 
         function emitElementAccessExpression(node: ElementAccessExpression) {
             emitExpression(node.expression);
-            write("[");
+            write(node.flags & NodeFlags.PropagateNull ? "?.[" : "[");
             emitExpression(node.argumentExpression);
             write("]");
         }
 
         function emitCallExpression(node: CallExpression) {
             emitExpression(node.expression);
+            if (node.flags & NodeFlags.PropagateNull) {
+                write("?.");
+            }
             emitTypeArguments(node, node.typeArguments);
             emitExpressionList(node, node.arguments, ListFormat.CallExpressionArguments);
         }
@@ -1149,6 +1153,9 @@ namespace ts {
         function emitNewExpression(node: NewExpression) {
             write("new ");
             emitExpression(node.expression);
+            if (node.flags & NodeFlags.PropagateNull) {
+                write("?.");
+            }
             emitTypeArguments(node, node.typeArguments);
             emitExpressionList(node, node.arguments, ListFormat.NewExpressionArguments);
         }

@@ -2610,6 +2610,10 @@ namespace ts {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
+        if (node.flags & NodeFlags.PropagateNull) {
+            transformFlags |= TransformFlags.AssertESNext;
+        }
+
         if (subtreeFlags & TransformFlags.ContainsSpread
             || isSuperOrSuperProperty(expression, expressionKind)) {
             // If the this node contains a SpreadExpression, or is a super call, then it is an ES6
@@ -2641,11 +2645,17 @@ namespace ts {
         if (node.typeArguments) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
+
+        if (node.flags & NodeFlags.PropagateNull) {
+            transformFlags |= TransformFlags.AssertESNext;
+        }
+
         if (subtreeFlags & TransformFlags.ContainsSpread) {
             // If the this node contains a SpreadElementExpression then it is an ES6
             // node.
             transformFlags |= TransformFlags.AssertES2015;
         }
+
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
         return transformFlags & ~TransformFlags.ArrayLiteralOrCallOrNewExcludes;
     }
@@ -3049,6 +3059,10 @@ namespace ts {
         const expression = node.expression;
         const expressionKind = expression.kind;
 
+        if (node.flags & NodeFlags.PropagateNull) {
+            transformFlags |= TransformFlags.AssertESNext;
+        }
+
         // If a PropertyAccessExpression starts with a super keyword, then it is
         // ES6 syntax, and requires a lexical `this` binding.
         if (expressionKind === SyntaxKind.SuperKeyword) {
@@ -3354,12 +3368,18 @@ namespace ts {
                 break;
 
             case SyntaxKind.ArrayLiteralExpression:
-            case SyntaxKind.NewExpression:
                 excludeFlags = TransformFlags.ArrayLiteralOrCallOrNewExcludes;
                 if (subtreeFlags & TransformFlags.ContainsSpread) {
                     // If the this node contains a SpreadExpression, then it is an ES6
                     // node.
                     transformFlags |= TransformFlags.AssertES2015;
+                }
+
+                break;
+
+            case SyntaxKind.ElementAccessExpression:
+                if (node.flags & NodeFlags.PropagateNull) {
+                    transformFlags |= TransformFlags.AssertESNext;
                 }
 
                 break;

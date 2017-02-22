@@ -26,6 +26,7 @@ namespace ts {
         const previousOnSubstituteNode = context.onSubstituteNode;
         context.onSubstituteNode = onSubstituteNode;
 
+        const nullPropagatingExpressions = createMap<boolean>();
         let enabledSubstitutions: ESNextSubstitutionFlags;
         let enclosingFunctionFlags: FunctionFlags;
         let enclosingSuperContainerFlags: NodeCheckFlags = 0;
@@ -39,6 +40,7 @@ namespace ts {
 
             const visited = visitEachChild(node, visitor, context);
             addEmitHelpers(visited, context.readEmitHelpers());
+            nullPropagatingExpressions.clear();
             return visited;
         }
 
@@ -101,6 +103,20 @@ namespace ts {
                     return visitExpressionStatement(node as ExpressionStatement);
                 case SyntaxKind.ParenthesizedExpression:
                     return visitParenthesizedExpression(node as ParenthesizedExpression, noDestructuringValue);
+                case SyntaxKind.CallExpression:
+                    return visitCallExpression(node as CallExpression);
+                case SyntaxKind.NewExpression:
+                    return visitNewExpression(node as NewExpression);
+                case SyntaxKind.PropertyAccessExpression:
+                    return visitPropertyAccess(node as PropertyAccessExpression);
+                case SyntaxKind.ElementAccessExpression:
+                    return visitElementAccess(node as ElementAccessExpression);
+                case SyntaxKind.DeleteExpression:
+                    return visitDelete(node as DeleteExpression);
+                case SyntaxKind.PrefixUnaryExpression:
+                    return visitPrefix(node as PrefixUnaryExpression);
+                case SyntaxKind.PostfixUnaryExpression:
+                    return visitPostfix(node as PostfixUnaryExpression);
                 default:
                     return visitEachChild(node, visitor, context);
             }
@@ -230,7 +246,20 @@ namespace ts {
                     visitNode(node.right, noDestructuringValue ? visitorNoDestructuringValue : visitor, isExpression)
                 );
             }
-            return visitEachChild(node, visitor, context);
+
+            const left = visitNode(node.left, visitor, isExpression);
+            const right = visitNode(node.right, visitor, isExpression);
+            if (isAssignmentExpression(node)) {
+                const nilReference = getNilReference(left);
+                if (nilReference) {
+                    return updateNilReference(
+                        nilReference,
+                        updateBinary(node, nilReference.whenFalse, right)
+                    );
+                }
+            }
+
+            return updateBinary(node, left, right);
         }
 
         /**
@@ -697,6 +726,310 @@ namespace ts {
                 }
             }
             return statements;
+        }
+
+        function isNullPropagatingExpression(node: CallExpression | NewExpression | PropertyAccessExpression | ElementAccessExpression) {
+            return (node.flags & NodeFlags.PropagateNull) !== 0
+                && node.expression.kind !== SyntaxKind.SuperKeyword;
+        }
+
+        function getNilReference(expression: Expression): ConditionalExpression {
+            expression = skipOuterExpressions(expression);
+            return isConditionalExpression(expression)
+                && isBinaryExpression(expression.condition)
+                && expression.condition.operatorToken.kind === SyntaxKind.EqualsEqualsToken
+                && expression.condition.right.kind === SyntaxKind.NullKeyword
+                && isVoidZero(expression.whenTrue)
+                 ? expression
+                 : undefined;
+        }
+
+        function updateNilReference(expression: ConditionalExpression, whenNotNil: Expression) {
+            return setTextRange(
+                createConditional(
+                    expression.condition,
+                    expression.whenTrue,
+                    whenNotNil
+                ),
+                whenNotNil
+            );
+        }
+
+        function propagateNull<T extends Node>(finishExpression: (node: T, nullableExpression: Expression) => Expression, node: T, nullableExpression: Expression): Expression;
+        function propagateNull<T extends Node, U>(finishExpression: (node: T, nullableExpression: Expression, data: U) => Expression, node: T, nullableExpression: Expression, data: U): Expression;
+        function propagateNull<T extends Node, U>(finishExpression: (node: T, nullableExpression: Expression, data: U) => Expression, node: T, nullableExpression: Expression, data?: U): Expression {
+            if (node.flags & NodeFlags.PropagateNull) {
+                if (isIdentifier(nullableExpression)) {
+                    return setTextRange(
+                        createConditional(
+                            createEquality(nullableExpression, createNull()),
+                            createVoidZero(),
+                            finishExpression(node, nullableExpression, data)
+                        ),
+                        node
+                    );
+                }
+                else {
+                    const temp = createTempVariable(hoistVariableDeclaration);
+                    return setTextRange(
+                        createConditional(
+                            createEquality(
+                                createAssignment(temp, nullableExpression),
+                                createNull()
+                            ),
+                            createVoidZero(),
+                            finishExpression(node, temp, data)
+                        ),
+                        node
+                    );
+                }
+            }
+            return finishExpression(node, nullableExpression, data);
+        }
+
+        function visitCallExpression(node: CallExpression): Expression {
+            if (isNullPropagatingExpression(node)) {
+                // null propagation in call:
+                //  x?.()           ->  x == null ? void 0 : x()
+                //  (x)?.()         ->  (_a = (x)) == null ? void 0 : _a()
+                //  x.y?.()         ->  (_a = x.y) == null ? void 0 : _a.call(x);
+                //  x[y]?.()        ->  (_a = x[y]) == null ? void 0 : _a.call(x);
+                //  (x.y)?.()       ->  (_a = x.y) == null ? void 0 : _a.call(x);
+                //  (x[y])?.()      ->  (_a = x[y]) == null ? void 0 : _a.call(x);
+                const { target, thisArg } = createCallBinding(node.expression, hoistVariableDeclaration);
+                return propagateNull(finishNullableCallExpression, node, visitNode(target, visitor, isExpression), visitNode(thisArg, visitor, isExpression));
+            }
+
+            const expression = visitNode(node.expression, visitor, isExpression);
+            const argumentsArray = visitNodes(node.arguments, visitor, isExpression);
+            const nilReference = getNilReference(expression);
+            if (nilReference) {
+                // NilReference shortcut in expression
+                //  x?.y()          ->  x == null ? void 0 : x.y();
+                //  x?.[y]()        ->  x == null ? void 0 : x[y]();
+                return updateNilReference(
+                    nilReference,
+                    updateCall(
+                        node,
+                        nilReference.whenFalse,
+                        /*typeArguments*/ undefined,
+                        argumentsArray
+                    )
+                );
+            }
+
+            return updateCall(
+                node,
+                expression,
+                /*typeArguments*/ undefined,
+                argumentsArray
+            );
+        }
+
+        function finishNullableCallExpression(node: CallExpression, target: Expression, thisArg: Expression) {
+            if (!isVoidZero(thisArg)) {
+                return setOriginalNode(
+                    createFunctionCall(
+                        target,
+                        thisArg,
+                        visitNodes(node.arguments, visitor, isExpression),
+                        node
+                    ),
+                    node
+                );
+            }
+            return setOriginalNode(
+                setTextRange(
+                    createCall(
+                        target,
+                        /*typeArguments*/ undefined,
+                        visitNodes(node.arguments, visitor, isExpression)
+                    ),
+                    node
+                ),
+                node
+            );
+        }
+
+        function visitNewExpression(node: NewExpression): Expression {
+            const expression = visitNode(node.expression, visitor, isExpression);
+            if (isNullPropagatingExpression(node)) {
+                // null propagation in new:
+                //  new x?.()       ->  x == null ? void 0 : new x();
+                //  new (x)?.()     ->  (_a = (x)) == null ? void 0 : new _a();
+                //  new x.y?.()     ->  (_a = x.y) == null ? void 0 : new _a();
+                //  new x[y]?.()    ->  (_a = x[y]) == null ? void 0 : new _a();
+                //  new (x.y)?.()   ->  (_a = x.y) == null ? void 0 : new _a();
+                //  new (x[y])?.()  ->  (_a = x[y]) == null ? void 0 : new _a();
+                return propagateNull(finishNullableNewExpression, node, expression);
+            }
+
+            const argumentsArray = visitNodes(node.arguments, visitor, isExpression);
+            const nilReference = getNilReference(expression);
+            if (nilReference) {
+                // NilReference shortcut in expression
+                //  new x?.y()      ->  x == null ? void 0 : new x.y();
+                //  new x?.[y]()    ->  x == null ? void 0 : new x[y]();
+                return updateNilReference(
+                    nilReference,
+                    updateNew(
+                        node,
+                        nilReference.whenTrue,
+                        /*typeArguments*/ undefined,
+                        argumentsArray
+                    )
+                );
+            }
+
+            return updateNew(
+                node,
+                expression,
+                /*typeArguments*/ undefined,
+                argumentsArray);
+        }
+
+        function finishNullableNewExpression(node: NewExpression, expression: Expression) {
+            return setOriginalNode(
+                setTextRange(
+                    createNew(
+                        expression,
+                        /*typeArguments*/ undefined,
+                        visitNodes(node.arguments, visitor, isExpression)
+                    ),
+                    node
+                ),
+                node
+            );
+        }
+
+        function visitPropertyAccess(node: PropertyAccessExpression): Expression {
+            const expression = visitNode(node.expression, visitor, isExpression);
+            if (isNullPropagatingExpression(node)) {
+                // null propagation in property access
+                //  x?.y            -> x == null ? void 0 : x.y;
+                //  x.y?.z          -> (_a = x.y) == null ? void 0 : _a.z;
+                return propagateNull(finishNullablePropertyAccess, node, expression);
+            }
+
+            const name = visitNode(node.name, visitor, isIdentifier);
+            const nilReference = getNilReference(expression);
+            if (nilReference) {
+                // NilReference shortcut in expression
+                //  x?.y.z          -> x == null ? void 0 : x.y.z;
+                //  x.y?.z.a        -> (_a = x.y) == null ? void 0 : _a.z.a;
+                return updateNilReference(
+                    nilReference,
+                    updatePropertyAccess(
+                        node,
+                        nilReference.whenFalse,
+                        name
+                    )
+                );
+            }
+
+            return updatePropertyAccess(
+                node,
+                expression,
+                name
+            );
+        }
+
+        function finishNullablePropertyAccess(node: PropertyAccessExpression, expression: Expression) {
+            return setOriginalNode(
+                setTextRange(
+                    createPropertyAccess(
+                        expression,
+                        node.name
+                    ),
+                    node
+                ),
+                node
+            );
+        }
+
+        function visitElementAccess(node: ElementAccessExpression): Expression {
+            const expression = visitNode(node.expression, visitor, isExpression);
+            if (isNullPropagatingExpression(node)) {
+                // null propagation in element access
+                //  x?.[y]          -> x == null ? void 0 : x.[y];
+                //  x.y?.[z]        -> (_a = x.y) == null ? void 0 : _a.[z];
+                return propagateNull(finishNullableElementAccess, node, expression);
+            }
+
+            const argumentExpression = visitNode(node.argumentExpression, visitor, isExpression);
+            const nilReference = getNilReference(expression);
+            if (nilReference) {
+                // NilReference shortcut in expression
+                //  x?.y.[z]        -> x == null ? void 0 : x.y.[z];
+                //  x.y?.z.[a]      -> (_a = x.y) == null ? void 0 : _a.z.[a];
+                return updateNilReference(
+                    nilReference,
+                    updateElementAccess(
+                        node,
+                        nilReference.whenFalse,
+                        argumentExpression
+                    )
+                );
+            }
+
+            return updateElementAccess(
+                node,
+                expression,
+                argumentExpression
+            );
+        }
+
+        function finishNullableElementAccess(node: ElementAccessExpression, expression: Expression) {
+            return setOriginalNode(
+                setTextRange(
+                    createElementAccess(
+                        expression,
+                        visitNode(node.argumentExpression, visitor, isExpression)
+                    ),
+                    node
+                ),
+                node
+            );
+        }
+
+        function visitDelete(node: DeleteExpression) {
+            const expression = visitNode(node.expression, visitor, isExpression);
+            const nilReference = getNilReference(expression);
+            if (nilReference) {
+                return setTextRange(
+                    createConditional(
+                        nilReference.condition,
+                        createTrue(),
+                        updateDelete(node, nilReference.whenFalse)
+                    ),
+                    node
+                );
+            }
+            return updateDelete(node, expression);
+        }
+
+        function visitPrefix(node: PrefixUnaryExpression) {
+            const operand = visitNode(node.operand, visitor, isExpression);
+            const nilReference = getNilReference(operand);
+            if (nilReference) {
+                return updateNilReference(
+                    nilReference,
+                    updatePrefix(node, nilReference.whenFalse)
+                );
+            }
+            return updatePrefix(node, operand);
+        }
+
+        function visitPostfix(node: PostfixUnaryExpression) {
+            const operand = visitNode(node.operand, visitor, isExpression);
+            const nilReference = getNilReference(operand);
+            if (nilReference) {
+                return updateNilReference(
+                    nilReference,
+                    updatePostfix(node, nilReference.whenFalse)
+                );
+            }
+            return updatePostfix(node, operand);
         }
 
         function enableSubstitutionForAsyncMethodsWithSuper() {

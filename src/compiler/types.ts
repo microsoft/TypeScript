@@ -82,6 +82,7 @@
         DotDotDotToken,
         SemicolonToken,
         CommaToken,
+        QuestionDotToken,
         LessThanToken,
         LessThanSlashToken,
         GreaterThanToken,
@@ -435,20 +436,21 @@
         NestedNamespace =    1 << 2,  // Namespace declaration
         Synthesized =        1 << 3,  // Node was synthesized during transformation
         Namespace =          1 << 4,  // Namespace declaration
-        ExportContext =      1 << 5,  // Export context (initialized by binding)
-        ContainsThis =       1 << 6,  // Interface contains references to "this"
-        HasImplicitReturn =  1 << 7,  // If function implicitly returns on one of codepaths (initialized by binding)
-        HasExplicitReturn =  1 << 8,  // If function has explicit reachable return on one of codepaths (initialized by binding)
-        GlobalAugmentation = 1 << 9,  // Set if module declaration is an augmentation for the global scope
-        HasAsyncFunctions =  1 << 10, // If the file has async functions (initialized by binding)
-        DisallowInContext =  1 << 11, // If node was parsed in a context where 'in-expressions' are not allowed
-        YieldContext =       1 << 12, // If node was parsed in the 'yield' context created when parsing a generator
-        DecoratorContext =   1 << 13, // If node was parsed as part of a decorator
-        AwaitContext =       1 << 14, // If node was parsed in the 'await' context created when parsing an async function
-        ThisNodeHasError =   1 << 15, // If the parser encountered an error when parsing the code that created this node
-        JavaScriptFile =     1 << 16, // If node was parsed in a JavaScript
-        ThisNodeOrAnySubNodesHasError = 1 << 17, // If this node or any of its children had an error
-        HasAggregatedChildData = 1 << 18, // If we've computed data from children and cached it in this node
+        PropagateNull =      1 << 5,  // Expression
+        ExportContext =      1 << 6,  // Export context (initialized by binding)
+        ContainsThis =       1 << 7,  // Interface contains references to "this"
+        HasImplicitReturn =  1 << 8,  // If function implicitly returns on one of codepaths (initialized by binding)
+        HasExplicitReturn =  1 << 9,  // If function has explicit reachable return on one of codepaths (initialized by binding)
+        GlobalAugmentation = 1 << 10, // Set if module declaration is an augmentation for the global scope
+        HasAsyncFunctions =  1 << 11, // If the file has async functions (initialized by binding)
+        DisallowInContext =  1 << 12, // If node was parsed in a context where 'in-expressions' are not allowed
+        YieldContext =       1 << 13, // If node was parsed in the 'yield' context created when parsing a generator
+        DecoratorContext =   1 << 14, // If node was parsed as part of a decorator
+        AwaitContext =       1 << 15, // If node was parsed in the 'await' context created when parsing an async function
+        ThisNodeHasError =   1 << 16, // If the parser encountered an error when parsing the code that created this node
+        JavaScriptFile =     1 << 17, // If node was parsed in a JavaScript
+        ThisNodeOrAnySubNodesHasError = 1 << 18, // If this node or any of its children had an error
+        HasAggregatedChildData = 1 << 19, // If we've computed data from children and cached it in this node
 
         BlockScoped = Let | Const,
 

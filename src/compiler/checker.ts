@@ -13109,6 +13109,7 @@ namespace ts {
         }
 
         function checkPropertyAccessExpression(node: PropertyAccessExpression) {
+            checkGrammarNullPropagation(node);
             return checkPropertyAccessExpressionOrQualifiedName(node, node.expression, node.name);
         }
 
@@ -13276,6 +13277,8 @@ namespace ts {
         }
 
         function checkIndexedAccess(node: ElementAccessExpression): Type {
+            checkGrammarNullPropagation(node);
+
             const objectType = checkNonNullExpression(node.expression);
 
             const indexExpression = node.argumentExpression;
@@ -14678,7 +14681,7 @@ namespace ts {
          */
         function checkCallExpression(node: CallExpression | NewExpression): Type {
             // Grammar checking; stop grammar-checking if checkGrammarTypeArguments return true
-            checkGrammarTypeArguments(node, node.typeArguments) || checkGrammarArguments(node, node.arguments);
+            checkGrammarNullPropagation(node) || checkGrammarTypeArguments(node, node.typeArguments) || checkGrammarArguments(node, node.arguments);
 
             const signature = getResolvedSignature(node);
 
@@ -22384,6 +22387,18 @@ namespace ts {
         function checkGrammarIndexSignature(node: SignatureDeclaration) {
             // Prevent cascading error by short-circuit
             return checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarIndexSignatureParameters(node);
+        }
+
+        function checkGrammarNullPropagation(node: CallExpression | NewExpression | PropertyAccessExpression | ElementAccessExpression) {
+            if (node.flags & NodeFlags.PropagateNull && node.expression.kind === SyntaxKind.SuperKeyword) {
+                const sourceFile = getSourceFileOfNode(node);
+                const start = skipTrivia(sourceFile.text, node.expression.end);
+                if (node.kind === SyntaxKind.PropertyAccessExpression) {
+                    return grammarErrorAtPos(sourceFile, start, 2, Diagnostics._0_expected, tokenToString(SyntaxKind.DotToken));
+                }
+
+                return grammarErrorAtPos(sourceFile, start, 2, Diagnostics.Unexpected_token);
+            }
         }
 
         function checkGrammarForAtLeastOneTypeArgument(node: Node, typeArguments: NodeArray<TypeNode>): boolean {

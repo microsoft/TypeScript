@@ -3583,10 +3583,6 @@ namespace ts {
         return node.kind === SyntaxKind.Identifier;
     }
 
-    export function isVoidExpression(node: Node): node is VoidExpression {
-        return node.kind === SyntaxKind.VoidExpression;
-    }
-
     export function isGeneratedIdentifier(node: Node): node is GeneratedIdentifier {
         // Using `>` here catches both `GeneratedIdentifierKind.None` and `undefined`.
         return isIdentifier(node) && node.autoGenerateKind > GeneratedIdentifierKind.None;
@@ -3895,6 +3891,16 @@ namespace ts {
 
     export function isExpression(node: Node): node is Expression {
         return isExpressionKind(skipPartiallyEmittedExpressions(node).kind);
+    }
+
+    export function isVoidExpression(node: Node): node is VoidExpression {
+        return node.kind === SyntaxKind.VoidExpression;
+    }
+
+    export function isVoidZero(node: Node): boolean {
+        return isVoidExpression(node)
+            && node.expression.kind === SyntaxKind.NumericLiteral
+            && (<NumericLiteral>node.expression).text === "0";
     }
 
     export function isAssertionExpression(node: Node): node is AssertionExpression {

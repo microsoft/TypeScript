@@ -3748,7 +3748,10 @@ namespace ts {
 
         function parseSuperExpression(): MemberExpression {
             const expression = parseTokenNode<PrimaryExpression>();
-            if (token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.DotToken || token() === SyntaxKind.OpenBracketToken) {
+            if (token() === SyntaxKind.OpenParenToken ||
+                token() === SyntaxKind.DotToken ||
+                token() === SyntaxKind.OpenBracketToken ||
+                token() === SyntaxKind.QuestionDotToken) {
                 return expression;
             }
 
@@ -4004,11 +4007,32 @@ namespace ts {
             return finishNode(node);
         }
 
+        function isNullPropagatingCallOrNewExpression() {
+            return token() === SyntaxKind.QuestionDotToken
+                && lookAhead(nextTokenIsOpenParenOrLessThanToken);
+        }
+
+        function nextTokenIsOpenParenOrLessThanToken() {
+            nextToken();
+            return token() === SyntaxKind.OpenParenToken
+                || token() === SyntaxKind.LessThanToken;
+        }
+
         function parseMemberExpressionRest(expression: LeftHandSideExpression): MemberExpression {
             while (true) {
+                if (isNullPropagatingCallOrNewExpression()) {
+                    // In a null-propagating call or new expression, we defer parsing `.?` to parseCallExpressionRest.
+                    return <MemberExpression>expression;
+                }
+
                 const dotToken = parseOptionalToken(SyntaxKind.DotToken);
-                if (dotToken) {
+                const questionDotToken = !dotToken && parseOptionalToken(SyntaxKind.QuestionDotToken);
+                if (dotToken || (questionDotToken && token() !== SyntaxKind.OpenBracketToken)) {
                     const propertyAccess = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
+                    if (questionDotToken) {
+                        propertyAccess.flags |= NodeFlags.PropagateNull;
+                    }
+
                     propertyAccess.expression = expression;
                     propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames*/ true);
                     expression = finishNode(propertyAccess);
@@ -4024,8 +4048,13 @@ namespace ts {
                 }
 
                 // when in the [Decorator] context, we do not parse ElementAccess as it could be part of a ComputedPropertyName
-                if (!inDecoratorContext() && parseOptional(SyntaxKind.OpenBracketToken)) {
+                // however, `?.[` is unambiguously *not* a ComputedPropertyName.
+                if ((questionDotToken || !inDecoratorContext()) && parseOptional(SyntaxKind.OpenBracketToken)) {
                     const indexedAccess = <ElementAccessExpression>createNode(SyntaxKind.ElementAccessExpression, expression.pos);
+                    if (questionDotToken) {
+                        indexedAccess.flags |= NodeFlags.PropagateNull;
+                    }
+
                     indexedAccess.expression = expression;
 
                     // It's not uncommon for a user to write: "new Type[]".
@@ -4060,32 +4089,34 @@ namespace ts {
         function parseCallExpressionRest(expression: LeftHandSideExpression): LeftHandSideExpression {
             while (true) {
                 expression = parseMemberExpressionRest(expression);
+                const questionDot = parseOptionalToken(SyntaxKind.QuestionDotToken);
+                let typeArguments: NodeArray<TypeNode>;
                 if (token() === SyntaxKind.LessThanToken) {
                     // See if this is the start of a generic invocation.  If so, consume it and
                     // keep checking for postfix expressions.  Otherwise, it's just a '<' that's
                     // part of an arithmetic expression.  Break out so we consume it higher in the
                     // stack.
-                    const typeArguments = tryParse(parseTypeArgumentsInExpression);
+                    // If we have seen `?.<` then this is definately a call expression.
+                    typeArguments = questionDot
+                        ? parseTypeArgumentsInExpression()
+                        : tryParse(parseTypeArgumentsInExpression);
                     if (!typeArguments) {
                         return expression;
                     }
-
-                    const callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
-                    callExpr.expression = expression;
-                    callExpr.typeArguments = typeArguments;
-                    callExpr.arguments = parseArgumentList();
-                    expression = finishNode(callExpr);
-                    continue;
                 }
-                else if (token() === SyntaxKind.OpenParenToken) {
-                    const callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
-                    callExpr.expression = expression;
-                    callExpr.arguments = parseArgumentList();
-                    expression = finishNode(callExpr);
-                    continue;
+                else if (token() !== SyntaxKind.OpenParenToken) {
+                    return expression;
                 }
 
-                return expression;
+                const callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
+                if (questionDot) {
+                    callExpr.flags |= NodeFlags.PropagateNull;
+                }
+
+                callExpr.expression = expression;
+                callExpr.typeArguments = typeArguments;
+                callExpr.arguments = parseArgumentList();
+                expression = finishNode(callExpr);
             }
         }
 
@@ -4121,6 +4152,7 @@ namespace ts {
                 // list.  So we definitely want to treat this as a type arg list.
 
                 case SyntaxKind.DotToken:                       // foo<x>.
+                case SyntaxKind.QuestionDotToken:               // foo<x>?.
                 case SyntaxKind.CloseParenToken:                // foo<x>)
                 case SyntaxKind.CloseBracketToken:              // foo<x>]
                 case SyntaxKind.ColonToken:                     // foo<x>:
@@ -4365,6 +4397,10 @@ namespace ts {
 
             const node = <NewExpression>createNode(SyntaxKind.NewExpression, fullStart);
             node.expression = parseMemberExpressionOrHigher();
+            if (parseOptional(SyntaxKind.QuestionDotToken)) {
+                node.flags |= NodeFlags.PropagateNull;
+            }
+
             node.typeArguments = tryParse(parseTypeArgumentsInExpression);
             if (node.typeArguments || token() === SyntaxKind.OpenParenToken) {
                 node.arguments = parseArgumentList();
