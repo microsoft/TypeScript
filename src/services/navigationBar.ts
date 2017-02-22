@@ -17,21 +17,27 @@ namespace ts.NavigationBar {
     export function getNavigationBarItems(sourceFile: SourceFile, cancellationToken: ThrottledCancellationToken): NavigationBarItem[] {
         curCancellationToken = cancellationToken;
         curSourceFile = sourceFile;
-        const result = runWithCancellationToken(() => map(topLevelItems(rootNavigationBarNode(sourceFile)), convertToTopLevelItem), () => curSourceFile = undefined);
-        curSourceFile = undefined;
-        return result;
+        try {
+            return map(topLevelItems(rootNavigationBarNode(sourceFile)), convertToTopLevelItem);
+        }
+        finally {
+            curSourceFile = undefined;
+        }
     }
 
     export function getNavigationTree(sourceFile: SourceFile, cancellationToken: ThrottledCancellationToken): NavigationTree {
         curCancellationToken = cancellationToken;
         curSourceFile = sourceFile;
-        const result = runWithCancellationToken(() => convertToTree(rootNavigationBarNode(sourceFile)), () => curSourceFile = undefined);
-        curSourceFile = undefined;
-        return result;
+        try {
+            return convertToTree(rootNavigationBarNode(sourceFile));
+        }
+        finally {
+            curSourceFile = undefined;
+        }
     }
 
     // Keep sourceFile handy so we don't have to search for it every time we need to call `getText`.
-    let curCancellationToken: ThrottledCancellationToken;
+    let curCancellationToken: CancellationToken;
     let curSourceFile: SourceFile;
     function nodeText(node: Node): string {
         return node.getText(curSourceFile);
@@ -63,7 +69,7 @@ namespace ts.NavigationBar {
         const root: NavigationBarNode = { node: sourceFile, additionalNodes: undefined, parent: undefined, children: undefined, indent: 0 };
         parent = root;
         for (const statement of sourceFile.statements) {
-            addChildrenRecursively(statement, curCancellationToken);
+            addChildrenRecursively(statement);
         }
         endNode();
         Debug.assert(!parent && !parentsStack.length);
@@ -113,9 +119,9 @@ namespace ts.NavigationBar {
     }
 
     /** Look for navigation bar items in node's subtree, adding them to the current `parent`. */
-    function addChildrenRecursively(node: Node, cancellationToken: ThrottledCancellationToken): void {
+    function addChildrenRecursively(node: Node): void {
         function addChildrenRecursively(node: Node): void {
-            cancellationToken.throwIfCancellationRequested();
+            curCancellationToken.throwIfCancellationRequested();
 
             if (!node || isToken(node)) {
                 return;
