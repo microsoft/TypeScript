@@ -2961,14 +2961,15 @@
         ObjectLiteral    = 1 << 7,  // Originates in an object literal
         EvolvingArray    = 1 << 8,  // Evolving array type
         ObjectLiteralPatternWithComputedProperties = 1 << 9,  // Object literal pattern with computed properties
-        NonPrimitive        = 1 << 10,  // NonPrimitive object type
+        NonPrimitive = 1 << 10,  // NonPrimitive object type
+        AnonymousWithConstraint = 1 << 11, // Anonymous type with assigned constraint. Used for completion
         ClassOrInterface = Class | Interface
     }
 
     // Object types (TypeFlags.ObjectType)
     export interface ObjectType extends Type {
         objectFlags: ObjectFlags;
-        constraintType?: Type; // Contraint type for this object type. Used in completion with object literals
+        completionConstraintType?: Type; // Contraint type for this object type. Used in completion with object literals
     }
 
     /** Class and interface types (TypeFlags.Class and TypeFlags.Interface). */
@@ -3049,7 +3050,7 @@
     export interface MappedType extends ObjectType {
         declaration: MappedTypeNode;
         typeParameter?: TypeParameter;
-        constraintType?: Type;
+        completionConstraintType?: Type;
         templateType?: Type;
         modifiersType?: Type;
         mapper?: TypeMapper;  // Instantiation mapper

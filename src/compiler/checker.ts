@@ -4853,8 +4853,8 @@ namespace ts {
         }
 
         function getConstraintTypeFromMappedType(type: MappedType) {
-            return type.constraintType ||
-                (type.constraintType = instantiateType(getConstraintOfTypeParameter(getTypeParameterFromMappedType(type)), type.mapper || identityMapper) || unknownType);
+            return type.completionConstraintType ||
+                (type.completionConstraintType = instantiateType(getConstraintOfTypeParameter(getTypeParameterFromMappedType(type)), type.mapper || identityMapper) || unknownType);
         }
 
         function getTemplateTypeFromMappedType(type: MappedType) {
@@ -9556,9 +9556,10 @@ namespace ts {
                         if (!isTypeAssignableTo(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
                             context.inferredTypes[index] = inferredType = instantiatedConstraint;
                         }
-                        else if (inferredType.flags & TypeFlags.Object) {
+                        else if (inferredType.flags & TypeFlags.Object && (<ObjectType>inferredType).objectFlags & ObjectFlags.Anonymous) {
                             // Store constraint type for completion usage scenaries
-                            (<ObjectType>inferredType).constraintType = instantiatedConstraint;
+                            (<ObjectType>inferredType).objectFlags |= ObjectFlags.AnonymousWithConstraint;
+                            (<ObjectType>inferredType).completionConstraintType = instantiatedConstraint;
                         }
                     }
                 }
@@ -11636,8 +11637,8 @@ namespace ts {
             if (argIndex >= 0) {
                 const signature = getResolvedOrAnySignature(callTarget);
                 const type = getTypeAtPosition(signature, argIndex);
-                if (completion && type && type.flags & TypeFlags.Object && (<ObjectType>type).constraintType) {
-                    return (<ObjectType>type).constraintType;
+                if (completion && type && type.flags & TypeFlags.Object && (<ObjectType>type).objectFlags & ObjectFlags.AnonymousWithConstraint) {
+                    return (<ObjectType>type).completionConstraintType;
                 }
                 return type;
             }
@@ -11744,8 +11745,8 @@ namespace ts {
             const objectLiteral = <ObjectLiteralExpression>element.parent;
             let type = getApparentTypeOfContextualType(objectLiteral);
             if (type) {
-                if (completion && type.flags & TypeFlags.Object && (<ObjectType>type).constraintType) {
-                    type = (<ObjectType>type).constraintType;
+                if (completion && type.flags & TypeFlags.Object && (<ObjectType>type).objectFlags & ObjectFlags.AnonymousWithConstraint) {
+                    type = (<ObjectType>type).completionConstraintType;
                 }
                 if (!hasDynamicName(element)) {
                     // For a (non-symbol) computed property, there is no reason to look up the name
