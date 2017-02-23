@@ -4,6 +4,7 @@ class Doo {}
 class Scooby extends Doo {}
 
 //// [outFile.js]
+#!/usr/bin/env gjs
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -14,7 +15,6 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-#!/usr/bin/env gjs
 var Doo = (function () {
     function Doo() {
     }

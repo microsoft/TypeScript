@@ -274,6 +274,7 @@ namespace ts {
         function writeBundle(bundle: Bundle, output: EmitTextWriter) {
             const previousWriter = writer;
             setWriter(output);
+            emitShebangIfNeeded(bundle);
             emitHelpersIndirect(bundle);
             for (const sourceFile of bundle.sourceFiles) {
                 print(EmitHint.SourceFile, sourceFile, sourceFile);
@@ -285,6 +286,7 @@ namespace ts {
         function writeFile(sourceFile: SourceFile, output: EmitTextWriter) {
             const previousWriter = writer;
             setWriter(output);
+            emitShebangIfNeeded(sourceFile);
             print(EmitHint.SourceFile, sourceFile, sourceFile);
             reset();
             writer = previousWriter;
@@ -2051,7 +2053,6 @@ namespace ts {
 
         function emitSourceFile(node: SourceFile) {
             writeLine();
-            emitShebang();
             emitBodyIndirect(node, node.statements, emitSourceFileWorker);
         }
 
@@ -2095,11 +2096,26 @@ namespace ts {
         // Helpers
         //
 
-        function emitShebang() {
-            const shebang = getShebang(currentSourceFile.text);
-            if (shebang) {
-                write(shebang);
-                writeLine();
+        function emitShebangIfNeeded(sourceFileOrBundle: Bundle | SourceFile) {
+            if (sourceFileOrBundle.kind === SyntaxKind.SourceFile) {
+                emitShebangInSourceFile(sourceFileOrBundle as SourceFile);
+            }
+            else {
+                for (const sourceFile of (sourceFileOrBundle as Bundle).sourceFiles) {
+                    // Emit only the first Shebang with encounter
+                    if (emitShebangInSourceFile(sourceFile)) {
+                        break;
+                    }
+                }
+            }
+
+            function emitShebangInSourceFile(sourceFile: SourceFile): boolean {
+                const shebang = getShebang(sourceFile.text);
+                if (shebang) {
+                    write(shebang);
+                    writeLine();
+                    return true;
+                }
             }
         }
 
