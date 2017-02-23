@@ -1,0 +1,79 @@
+// @out: output.js
+// @allowJs: true
+// @strictNullChecks: true
+
+// @filename: a.js
+class C {
+    constructor() {
+        if (Math.random()) {
+            this.inConstructor = 0;
+        }
+        else {
+            this.inConstructor = "string"
+        }
+    }
+    method() {
+        if (Math.random()) {
+            this.inMethod = 0;
+        }
+        else {
+            this.inMethod = "string"
+        }
+    }
+    get() {
+        if (Math.random()) {
+            this.inGetter = 0;
+        }
+        else {
+            this.inGetter = "string"
+        }
+    }
+    set() {
+        if (Math.random()) {
+            this.inSetter = 0;
+        }
+        else {
+            this.inSetter = "string"
+        }
+    }
+    static method() {
+        if (Math.random()) {
+            this.inStaticMethod = 0;
+        }
+        else {
+            this.inStaticMethod = "string"
+        }
+    }
+    static get() {
+        if (Math.random()) {
+            this.inStaticGetter = 0;
+        }
+        else {
+            this.inStaticGetter = "string"
+        }
+    }
+    static set() {
+        if (Math.random()) {
+            this.inStaticSetter = 0;
+        }
+        else {
+            this.inStaticSetter = "string"
+        }
+    }
+}
+
+// @filename: b.ts
+var c = new C();
+
+var stringOrNumber: string | number;
+var stringOrNumber = c.inConstructor;
+
+var stringOrNumberOrUndefined: string | number | undefined;
+
+var stringOrNumberOrUndefined = c.inMethod;
+var stringOrNumberOrUndefined = c.inGetter;
+var stringOrNumberOrUndefined = c.inSetter;
+
+var stringOrNumberOrUndefined = C.inStaticMethod;
+var stringOrNumberOrUndefined = C.inStaticGetter;
+var stringOrNumberOrUndefined = C.inStaticSetter;
