@@ -555,11 +555,6 @@ namespace ts.projectSystem {
         constructor(private cancelAfterRequest = 0) {
         }
 
-        get throttleWaitMilliseconds() {
-            // For testing purposes disable the throttle
-            return 0;
-        }
-
         setRequest(requestId: number) {
             this.currentId = requestId;
         }
@@ -3495,8 +3490,6 @@ namespace ts.projectSystem {
                     compilerOptions: {}
                 })
             };
-
-            let operationCanceledExceptionThrown = false;
             const cancellationToken = new TestServerCancellationToken(/*cancelAfterRequest*/ 3);
             const host = createServerHost([f1, config]);
             const session = createSession(host, /*typingsInstaller*/ undefined, () => { }, cancellationToken);
@@ -3536,7 +3529,7 @@ namespace ts.projectSystem {
                 // The cancellation token will cancel the request the third time
                 // isCancellationRequested() is called.
                 cancellationToken.setRequestToCancel(session.getNextSeq());
-                operationCanceledExceptionThrown = false;
+                let operationCanceledExceptionThrown = false;
 
                 try {
                     session.executeCommandSeq(request);

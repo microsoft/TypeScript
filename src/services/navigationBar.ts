@@ -14,7 +14,7 @@ namespace ts.NavigationBar {
         indent: number; // # of parents
     }
 
-    export function getNavigationBarItems(sourceFile: SourceFile, cancellationToken: ThrottledCancellationToken): NavigationBarItem[] {
+    export function getNavigationBarItems(sourceFile: SourceFile, cancellationToken: CancellationToken): NavigationBarItem[] {
         curCancellationToken = cancellationToken;
         curSourceFile = sourceFile;
         try {
@@ -22,10 +22,11 @@ namespace ts.NavigationBar {
         }
         finally {
             curSourceFile = undefined;
+            curCancellationToken = undefined;
         }
     }
 
-    export function getNavigationTree(sourceFile: SourceFile, cancellationToken: ThrottledCancellationToken): NavigationTree {
+    export function getNavigationTree(sourceFile: SourceFile, cancellationToken: CancellationToken): NavigationTree {
         curCancellationToken = cancellationToken;
         curSourceFile = sourceFile;
         try {
@@ -33,6 +34,7 @@ namespace ts.NavigationBar {
         }
         finally {
             curSourceFile = undefined;
+            curCancellationToken = undefined;
         }
     }
 
@@ -112,7 +114,7 @@ namespace ts.NavigationBar {
         parent = parentsStack.pop();
     }
 
-    function addNodeWithRecursiveChild(node: Node, child: Node, addChildrenRecursively: (node: Node) => void): void {
+    function addNodeWithRecursiveChild(node: Node, child: Node): void {
         startNode(node);
         addChildrenRecursively(child);
         endNode();
@@ -120,136 +122,132 @@ namespace ts.NavigationBar {
 
     /** Look for navigation bar items in node's subtree, adding them to the current `parent`. */
     function addChildrenRecursively(node: Node): void {
-        function addChildrenRecursively(node: Node): void {
-            curCancellationToken.throwIfCancellationRequested();
+        curCancellationToken.throwIfCancellationRequested();
 
-            if (!node || isToken(node)) {
-                return;
-            }
-
-            switch (node.kind) {
-                case SyntaxKind.Constructor:
-                    // Get parameter properties, and treat them as being on the *same* level as the constructor, not under it.
-                    const ctr = <ConstructorDeclaration>node;
-                    addNodeWithRecursiveChild(ctr, ctr.body, addChildrenRecursively);
-
-                    // Parameter properties are children of the class, not the constructor.
-                    for (const param of ctr.parameters) {
-                        if (isParameterPropertyDeclaration(param)) {
-                            addLeafNode(param);
-                        }
-                    }
-                    break;
-
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                case SyntaxKind.MethodSignature:
-                    if (!hasDynamicName((<ClassElement | TypeElement>node))) {
-                        addNodeWithRecursiveChild(node, (<FunctionLikeDeclaration>node).body, addChildrenRecursively);
-                    }
-                    break;
-
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.PropertySignature:
-                    if (!hasDynamicName((<ClassElement | TypeElement>node))) {
-                        addLeafNode(node);
-                    }
-                    break;
-
-                case SyntaxKind.ImportClause:
-                    const importClause = <ImportClause>node;
-                    // Handle default import case e.g.:
-                    //    import d from "mod";
-                    if (importClause.name) {
-                        addLeafNode(importClause);
-                    }
-
-                    // Handle named bindings in imports e.g.:
-                    //    import * as NS from "mod";
-                    //    import {a, b as B} from "mod";
-                    const {namedBindings} = importClause;
-                    if (namedBindings) {
-                        if (namedBindings.kind === SyntaxKind.NamespaceImport) {
-                            addLeafNode(<NamespaceImport>namedBindings);
-                        }
-                        else {
-                            for (const element of (<NamedImports>namedBindings).elements) {
-                                addLeafNode(element);
-                            }
-                        }
-                    }
-                    break;
-
-                case SyntaxKind.BindingElement:
-                case SyntaxKind.VariableDeclaration:
-                    const decl = <VariableDeclaration>node;
-                    const name = decl.name;
-                    if (isBindingPattern(name)) {
-                        addChildrenRecursively(name);
-                    }
-                    else if (decl.initializer && isFunctionOrClassExpression(decl.initializer)) {
-                        // For `const x = function() {}`, just use the function node, not the const.
-                        addChildrenRecursively(decl.initializer);
-                    }
-                    else {
-                        addNodeWithRecursiveChild(decl, decl.initializer, addChildrenRecursively);
-                    }
-                    break;
-
-                case SyntaxKind.ArrowFunction:
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.FunctionExpression:
-                    addNodeWithRecursiveChild(node, (<FunctionLikeDeclaration>node).body, addChildrenRecursively);
-                    break;
-
-                case SyntaxKind.EnumDeclaration:
-                    startNode(node);
-                    for (const member of (<EnumDeclaration>node).members) {
-                        if (!isComputedProperty(member)) {
-                            addLeafNode(member);
-                        }
-                    }
-                    endNode();
-                    break;
-
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.ClassExpression:
-                case SyntaxKind.InterfaceDeclaration:
-                    startNode(node);
-                    for (const member of (<InterfaceDeclaration>node).members) {
-                        addChildrenRecursively(member);
-                    }
-                    endNode();
-                    break;
-
-                case SyntaxKind.ModuleDeclaration:
-                    addNodeWithRecursiveChild(node, getInteriorModule(<ModuleDeclaration>node).body, addChildrenRecursively);
-                    break;
-
-                case SyntaxKind.ExportSpecifier:
-                case SyntaxKind.ImportEqualsDeclaration:
-                case SyntaxKind.IndexSignature:
-                case SyntaxKind.CallSignature:
-                case SyntaxKind.ConstructSignature:
-                case SyntaxKind.TypeAliasDeclaration:
-                    addLeafNode(node);
-                    break;
-
-                default:
-                    forEach(node.jsDoc, jsDoc => {
-                        forEach(jsDoc.tags, tag => {
-                            if (tag.kind === SyntaxKind.JSDocTypedefTag) {
-                                addLeafNode(tag);
-                            }
-                        });
-                    });
-
-                    forEachChild(node, addChildrenRecursively);
-            }
+        if (!node || isToken(node)) {
+            return;
         }
 
-        addChildrenRecursively(node);
+        switch (node.kind) {
+            case SyntaxKind.Constructor:
+                // Get parameter properties, and treat them as being on the *same* level as the constructor, not under it.
+                const ctr = <ConstructorDeclaration>node;
+                addNodeWithRecursiveChild(ctr, ctr.body);
+
+                // Parameter properties are children of the class, not the constructor.
+                for (const param of ctr.parameters) {
+                    if (isParameterPropertyDeclaration(param)) {
+                        addLeafNode(param);
+                    }
+                }
+                break;
+
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.MethodSignature:
+                if (!hasDynamicName((<ClassElement | TypeElement>node))) {
+                    addNodeWithRecursiveChild(node, (<FunctionLikeDeclaration>node).body);
+                }
+                break;
+
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.PropertySignature:
+                if (!hasDynamicName((<ClassElement | TypeElement>node))) {
+                    addLeafNode(node);
+                }
+                break;
+
+            case SyntaxKind.ImportClause:
+                const importClause = <ImportClause>node;
+                // Handle default import case e.g.:
+                //    import d from "mod";
+                if (importClause.name) {
+                    addLeafNode(importClause);
+                }
+
+                // Handle named bindings in imports e.g.:
+                //    import * as NS from "mod";
+                //    import {a, b as B} from "mod";
+                const {namedBindings} = importClause;
+                if (namedBindings) {
+                    if (namedBindings.kind === SyntaxKind.NamespaceImport) {
+                        addLeafNode(<NamespaceImport>namedBindings);
+                    }
+                    else {
+                        for (const element of (<NamedImports>namedBindings).elements) {
+                            addLeafNode(element);
+                        }
+                    }
+                }
+                break;
+
+            case SyntaxKind.BindingElement:
+            case SyntaxKind.VariableDeclaration:
+                const decl = <VariableDeclaration>node;
+                const name = decl.name;
+                if (isBindingPattern(name)) {
+                    addChildrenRecursively(name);
+                }
+                else if (decl.initializer && isFunctionOrClassExpression(decl.initializer)) {
+                    // For `const x = function() {}`, just use the function node, not the const.
+                    addChildrenRecursively(decl.initializer);
+                }
+                else {
+                    addNodeWithRecursiveChild(decl, decl.initializer);
+                }
+                break;
+
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.FunctionExpression:
+                addNodeWithRecursiveChild(node, (<FunctionLikeDeclaration>node).body);
+                break;
+
+            case SyntaxKind.EnumDeclaration:
+                startNode(node);
+                for (const member of (<EnumDeclaration>node).members) {
+                    if (!isComputedProperty(member)) {
+                        addLeafNode(member);
+                    }
+                }
+                endNode();
+                break;
+
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ClassExpression:
+            case SyntaxKind.InterfaceDeclaration:
+                startNode(node);
+                for (const member of (<InterfaceDeclaration>node).members) {
+                    addChildrenRecursively(member);
+                }
+                endNode();
+                break;
+
+            case SyntaxKind.ModuleDeclaration:
+                addNodeWithRecursiveChild(node, getInteriorModule(<ModuleDeclaration>node).body);
+                break;
+
+            case SyntaxKind.ExportSpecifier:
+            case SyntaxKind.ImportEqualsDeclaration:
+            case SyntaxKind.IndexSignature:
+            case SyntaxKind.CallSignature:
+            case SyntaxKind.ConstructSignature:
+            case SyntaxKind.TypeAliasDeclaration:
+                addLeafNode(node);
+                break;
+
+            default:
+                forEach(node.jsDoc, jsDoc => {
+                    forEach(jsDoc.tags, tag => {
+                        if (tag.kind === SyntaxKind.JSDocTypedefTag) {
+                            addLeafNode(tag);
+                        }
+                    });
+                });
+
+                forEachChild(node, addChildrenRecursively);
+        }
     }
 
     /** Merge declarations of the same kind. */

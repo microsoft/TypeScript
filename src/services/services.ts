@@ -958,52 +958,11 @@ namespace ts {
     }
 
     class CancellationTokenObject implements CancellationToken {
-        throttleWaitMilliseconds?: number;
-
         constructor(private cancellationToken: HostCancellationToken) {
-            if (cancellationToken.throttleWaitMilliseconds !== undefined) {
-                this.throttleWaitMilliseconds = cancellationToken.throttleWaitMilliseconds;
-            }
         }
 
         public isCancellationRequested() {
             return this.cancellationToken && this.cancellationToken.isCancellationRequested();
-        }
-
-        public throwIfCancellationRequested(): void {
-            if (this.isCancellationRequested()) {
-                throw new OperationCanceledException();
-            }
-        }
-    }
-
-    /** A cancellation that throttles calls to the host */
-    export class ThrottledCancellationToken implements CancellationToken {
-        // Store when we last tried to cancel.  Checking cancellation can be expensive (as we have
-        // to marshall over to the host layer).  So we only bother actually checking once enough
-        // time has passed.
-        private lastCancellationCheckTime = 0;
-        // The minuimum duration to wait in milliseconds before querying host.
-        // The default of 10 milliseconds will be used unless throttleWaitMilliseconds
-        // is specified in the host cancellation token.
-        throttleWaitMilliseconds: number = 10;
-
-        constructor(private hostCancellationToken: HostCancellationToken) {
-            if (hostCancellationToken.throttleWaitMilliseconds !== undefined) {
-                this.throttleWaitMilliseconds = hostCancellationToken.throttleWaitMilliseconds;
-            }
-        }
-
-        public isCancellationRequested(): boolean {
-            const time = timestamp();
-            const duration = Math.abs(time - this.lastCancellationCheckTime);
-            if (duration >= this.throttleWaitMilliseconds) {
-                // Check no more than the min wait in milliseconds
-                this.lastCancellationCheckTime = time;
-                return this.hostCancellationToken.isCancellationRequested();
-            }
-
-            return false;
         }
 
         public throwIfCancellationRequested(): void {
@@ -1025,7 +984,6 @@ namespace ts {
 
         const useCaseSensitivefileNames = host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames();
         const cancellationToken = new CancellationTokenObject(host.getCancellationToken && host.getCancellationToken());
-        const throttledCancellationToken = new ThrottledCancellationToken(cancellationToken);
 
         const currentDirectory = host.getCurrentDirectory();
         // Check if the localized messages json is set, otherwise query the host for it
@@ -1583,11 +1541,11 @@ namespace ts {
         }
 
         function getNavigationBarItems(fileName: string): NavigationBarItem[] {
-            return NavigationBar.getNavigationBarItems(syntaxTreeCache.getCurrentSourceFile(fileName), throttledCancellationToken);
+            return NavigationBar.getNavigationBarItems(syntaxTreeCache.getCurrentSourceFile(fileName), cancellationToken);
         }
 
         function getNavigationTree(fileName: string): NavigationTree {
-            return NavigationBar.getNavigationTree(syntaxTreeCache.getCurrentSourceFile(fileName), throttledCancellationToken);
+            return NavigationBar.getNavigationTree(syntaxTreeCache.getCurrentSourceFile(fileName), cancellationToken);
         }
 
         function isTsOrTsxFile(fileName: string): boolean {
@@ -1626,7 +1584,7 @@ namespace ts {
         function getOutliningSpans(fileName: string): OutliningSpan[] {
             // doesn't use compiler - no need to synchronize with host
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            return OutliningElementsCollector.collectElements(sourceFile, throttledCancellationToken);
+            return OutliningElementsCollector.collectElements(sourceFile, cancellationToken);
         }
 
         function getBraceMatchingAtPosition(fileName: string, position: number) {

@@ -121,7 +121,6 @@ namespace ts {
 
     export interface HostCancellationToken {
         isCancellationRequested(): boolean;
-        throttleWaitMilliseconds?: number;
     }
 
     //

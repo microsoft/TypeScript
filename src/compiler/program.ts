@@ -72,20 +72,6 @@ namespace ts {
         return getNormalizedPathFromPathComponents(commonPathComponents);
     }
 
-    /* @internal */
-    export function runWithCancellationToken<T>(func: () => T, onCancel?: () => void): T {
-        try {
-            return func();
-        }
-        catch (e) {
-            if (e instanceof OperationCanceledException && onCancel) {
-                // We were canceled while performing the operation.
-                onCancel();
-            }
-            throw e;
-        }
-    }
-
     interface OutputFingerprint {
         hash: string;
         byteOrderMark: boolean;
