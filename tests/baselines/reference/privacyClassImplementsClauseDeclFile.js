@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/privacyClassImplementsClauseDeclFile.ts] ////
 
 //// [privacyClassImplementsClauseDeclFile_externalModule.ts]
-
 export module publicModule {
     export interface publicInterfaceInPublicModule {
     }

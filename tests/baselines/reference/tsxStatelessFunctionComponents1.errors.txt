@@ -1,25 +1,24 @@
-tests/cases/conformance/jsx/file.tsx(20,16): error TS2322: Type '{ naaame: "world"; }' is not assignable to type 'IntrinsicAttributes & { name: string; }'.
+tests/cases/conformance/jsx/file.tsx(19,16): error TS2322: Type '{ naaame: "world"; }' is not assignable to type 'IntrinsicAttributes & { name: string; }'.
   Property 'naaame' does not exist on type 'IntrinsicAttributes & { name: string; }'.
-tests/cases/conformance/jsx/file.tsx(28,15): error TS2322: Type '{ name: 42; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
+tests/cases/conformance/jsx/file.tsx(27,15): error TS2322: Type '{ name: 42; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
   Type '{ name: 42; }' is not assignable to type '{ name?: string; }'.
     Types of property 'name' are incompatible.
       Type '42' is not assignable to type 'string'.
-tests/cases/conformance/jsx/file.tsx(30,15): error TS2322: Type '{ naaaaaaame: "no"; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
+tests/cases/conformance/jsx/file.tsx(29,15): error TS2322: Type '{ naaaaaaame: "no"; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
   Property 'naaaaaaame' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
-tests/cases/conformance/jsx/file.tsx(35,23): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { "prop-name": string; }'.
+tests/cases/conformance/jsx/file.tsx(34,23): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { "prop-name": string; }'.
   Type '{}' is not assignable to type '{ "prop-name": string; }'.
     Property '"prop-name"' is missing in type '{}'.
-tests/cases/conformance/jsx/file.tsx(38,23): error TS2322: Type '{ prop1: true; }' is not assignable to type 'IntrinsicAttributes & {}'.
+tests/cases/conformance/jsx/file.tsx(37,23): error TS2322: Type '{ prop1: true; }' is not assignable to type 'IntrinsicAttributes & {}'.
   Property 'prop1' does not exist on type 'IntrinsicAttributes & {}'.
-tests/cases/conformance/jsx/file.tsx(39,24): error TS2322: Type '{ ref: (x: any) => any; }' is not assignable to type 'IntrinsicAttributes & {}'.
+tests/cases/conformance/jsx/file.tsx(38,24): error TS2322: Type '{ ref: (x: any) => any; }' is not assignable to type 'IntrinsicAttributes & {}'.
   Property 'ref' does not exist on type 'IntrinsicAttributes & {}'.
-tests/cases/conformance/jsx/file.tsx(42,16): error TS1005: ',' expected.
-tests/cases/conformance/jsx/file.tsx(46,24): error TS2322: Type '{ prop1: boolean; }' is not assignable to type 'IntrinsicAttributes & {}'.
+tests/cases/conformance/jsx/file.tsx(41,16): error TS1005: ',' expected.
+tests/cases/conformance/jsx/file.tsx(45,24): error TS2322: Type '{ prop1: boolean; }' is not assignable to type 'IntrinsicAttributes & {}'.
   Property 'prop1' does not exist on type 'IntrinsicAttributes & {}'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (8 errors) ====
-    
     function EmptyPropSFC() {
         return <div> Default Greeting </div>;
     }

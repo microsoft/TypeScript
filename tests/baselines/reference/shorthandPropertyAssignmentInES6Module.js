@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/shorthandPropertyAssignmentInES6Module.ts] ////
 
 //// [existingModule.ts]
-
 export var x = 1;
 
 //// [test.ts]

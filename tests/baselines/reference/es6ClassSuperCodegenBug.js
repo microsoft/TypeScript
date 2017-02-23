@@ -1,5 +1,4 @@
 //// [es6ClassSuperCodegenBug.ts]
-
 class A {
 	constructor(str1:string, str2:string) {}
 }

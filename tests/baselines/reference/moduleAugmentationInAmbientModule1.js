@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/moduleAugmentationInAmbientModule1.ts] ////
 
 //// [O.d.ts]
-
-
 declare module "Observable" {
     class Observable {}
 }

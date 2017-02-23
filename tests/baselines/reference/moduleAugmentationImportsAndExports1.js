@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/moduleAugmentationImportsAndExports1.ts] ////
 
 //// [f1.ts]
-
 export class A {}
 
 //// [f2.ts]

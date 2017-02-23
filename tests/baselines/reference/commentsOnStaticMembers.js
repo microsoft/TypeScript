@@ -1,5 +1,4 @@
 //// [commentsOnStaticMembers.ts]
-
 class test {
     /**
      * p1 comment appears in output

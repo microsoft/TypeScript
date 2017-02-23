@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/spread/objectSpreadStrictNull.ts ===
-
 function f(
 >f : (definiteBoolean: { sn: boolean; }, definiteString: { sn: string; }, optionalString: { sn?: string | undefined; }, optionalNumber: { sn?: number | undefined; }, undefinedString: { sn: string | undefined; }, undefinedNumber: { sn: number | undefined; }) => void
 

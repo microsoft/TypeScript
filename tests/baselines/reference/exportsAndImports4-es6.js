@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/es6/modules/exportsAndImports4-es6.ts] ////
 
 //// [t1.ts]
-
 export default "hello";
 
 //// [t2.ts]

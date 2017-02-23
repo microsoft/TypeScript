@@ -1,5 +1,4 @@
 //// [declarationEmitThisPredicates02.ts]
-
 export interface Foo {
     a: string;
     b: number;

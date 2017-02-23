@@ -1,5 +1,4 @@
 === tests/cases/compiler/declarationEmitExpressionInExtends.ts ===
-
 var x: {
 >x : new <T>(s: any) => Q
 

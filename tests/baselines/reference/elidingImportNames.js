@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/elidingImportNames.ts] ////
 
 //// [elidingImportNames_test.ts]
-
 import a = require('./elidingImportNames_main'); // alias used in typeof
 var b = a;
 var x: typeof a;

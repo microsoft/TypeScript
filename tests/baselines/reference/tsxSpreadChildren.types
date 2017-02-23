@@ -1,5 +1,4 @@
 === tests/cases/conformance/jsx/tsxSpreadChildren.tsx ===
-
 declare module JSX {
 >JSX : any
 

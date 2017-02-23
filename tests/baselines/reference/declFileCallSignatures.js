@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declFileCallSignatures.ts] ////
 
 //// [declFileCallSignatures_0.ts]
-
 export interface ICallSignature {
     /** This comment should appear for foo*/
     (): string;

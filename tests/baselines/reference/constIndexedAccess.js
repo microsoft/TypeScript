@@ -1,5 +1,4 @@
 //// [constIndexedAccess.ts]
-
 const enum numbers {
     zero,
     one

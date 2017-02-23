@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/exportStarForValues3.ts] ////
 
 //// [file1.ts]
-
 export interface Foo { x }
 
 //// [file2.ts]

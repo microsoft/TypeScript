@@ -1,5 +1,4 @@
 //// [declFileClassExtendsNull.ts]
-
 class ExtendsNull extends null {
 }
 

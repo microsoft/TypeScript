@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ExportEqualsInterop.ts] ////
 
 //// [modules.d.ts]
-
 declare module "interface" {
     interface Foo {
         x: number;

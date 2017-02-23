@@ -1,5 +1,4 @@
 //// [classAbstractAccessor.ts]
-
 abstract class A {
    abstract get a();
    abstract get aa() { return 1; } // error

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/missingImportAfterModuleImport.ts] ////
 
 //// [missingImportAfterModuleImport_0.ts]
-
 declare module "SubModule" {
     class SubModule {
         public static StaticVar: number;

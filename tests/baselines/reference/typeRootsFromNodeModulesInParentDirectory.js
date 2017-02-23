@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/typeRootsFromNodeModulesInParentDirectory.ts] ////
 
 //// [index.d.ts]
-
 declare module "xyz" {
     export const x: number;
 }

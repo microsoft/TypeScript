@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/mergedDeclarations6.ts] ////
 
 //// [a.ts]
-
 export class A {
     protected protected: any;
 

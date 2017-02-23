@@ -1,5 +1,4 @@
 //// [file.tsx]
-
 import React = require('react')
 
 // Error, can only spread object type

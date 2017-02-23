@@ -1,5 +1,4 @@
 //// [mixinClassesMembers.ts]
-
 declare class C1 {
     public a: number;
     protected b: number;

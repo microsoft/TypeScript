@@ -5,7 +5,6 @@ var x = 1;
 export = x;
 
 //// [file2.ts]
-
 import x = require("./file1"); 
 
 // augmentation for './file1'

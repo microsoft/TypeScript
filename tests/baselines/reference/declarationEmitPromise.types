@@ -1,5 +1,4 @@
 === tests/cases/compiler/declarationEmitPromise.ts ===
-
 export class bluebird<T> {
 >bluebird : bluebird<T>
 >T : T

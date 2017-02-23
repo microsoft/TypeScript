@@ -13,9 +13,8 @@ let x = Test; // emit test_1.default
 >Test : Symbol(Test, Decl(consumer.tsx, 1, 6))
 
 === tests/cases/compiler/component.d.ts ===
-
 declare module "Test" {
 	export default class Text { }
->Text : Symbol(Text, Decl(component.d.ts, 1, 23))
+>Text : Symbol(Text, Decl(component.d.ts, 0, 23))
 }
 

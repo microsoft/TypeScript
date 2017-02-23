@@ -1,5 +1,4 @@
 //// [narrowingConstrainedTypeParameter.ts]
-
 // Repro from #10811
 
 interface Pet {

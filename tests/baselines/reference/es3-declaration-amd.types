@@ -1,5 +1,4 @@
 === tests/cases/compiler/es3-declaration-amd.ts ===
-
 class A
 >A : A
 {

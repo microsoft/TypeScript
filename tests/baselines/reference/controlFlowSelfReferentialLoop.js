@@ -1,5 +1,4 @@
 //// [controlFlowSelfReferentialLoop.ts]
-
 // Repro from #12319
 
 function md5(string:string): void {

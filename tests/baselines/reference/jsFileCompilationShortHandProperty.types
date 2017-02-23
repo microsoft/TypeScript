@@ -1,5 +1,4 @@
 === tests/cases/compiler/a.js ===
-
 function foo() {
 >foo : () => { a: number; b: string; }
 

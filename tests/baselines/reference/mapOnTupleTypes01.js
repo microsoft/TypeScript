@@ -1,5 +1,4 @@
 //// [mapOnTupleTypes01.ts]
-
 export let mapOnLooseArrayLiteral = [1, 2, 3, 4].map(n => n * n);
 
 // Length 1

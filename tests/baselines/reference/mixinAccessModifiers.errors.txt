@@ -1,30 +1,29 @@
-tests/cases/conformance/classes/mixinAccessModifiers.ts(39,4): error TS2546: Property 'p' has conflicting declarations and is inaccessible in type 'Private & Private2'.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(43,4): error TS2546: Property 'p' has conflicting declarations and is inaccessible in type 'Private & Protected'.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(47,4): error TS2546: Property 'p' has conflicting declarations and is inaccessible in type 'Private & Public'.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(51,4): error TS2445: Property 'p' is protected and only accessible within class 'Protected & Protected2' and its subclasses.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(66,7): error TS2415: Class 'C1' incorrectly extends base class 'Private & Private2'.
+tests/cases/conformance/classes/mixinAccessModifiers.ts(38,4): error TS2546: Property 'p' has conflicting declarations and is inaccessible in type 'Private & Private2'.
+tests/cases/conformance/classes/mixinAccessModifiers.ts(42,4): error TS2546: Property 'p' has conflicting declarations and is inaccessible in type 'Private & Protected'.
+tests/cases/conformance/classes/mixinAccessModifiers.ts(46,4): error TS2546: Property 'p' has conflicting declarations and is inaccessible in type 'Private & Public'.
+tests/cases/conformance/classes/mixinAccessModifiers.ts(50,4): error TS2445: Property 'p' is protected and only accessible within class 'Protected & Protected2' and its subclasses.
+tests/cases/conformance/classes/mixinAccessModifiers.ts(65,7): error TS2415: Class 'C1' incorrectly extends base class 'Private & Private2'.
   Type 'C1' is not assignable to type 'Private'.
     Property 'p' has conflicting declarations and is inaccessible in type 'C1'.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(66,7): error TS4093: 'extends' clause of exported class 'C1' refers to a type whose name cannot be referenced.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(67,7): error TS2415: Class 'C2' incorrectly extends base class 'Private & Protected'.
+tests/cases/conformance/classes/mixinAccessModifiers.ts(65,7): error TS4093: 'extends' clause of exported class 'C1' refers to a type whose name cannot be referenced.
+tests/cases/conformance/classes/mixinAccessModifiers.ts(66,7): error TS2415: Class 'C2' incorrectly extends base class 'Private & Protected'.
   Type 'C2' is not assignable to type 'Private'.
     Property 'p' has conflicting declarations and is inaccessible in type 'C2'.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(67,7): error TS4093: 'extends' clause of exported class 'C2' refers to a type whose name cannot be referenced.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(68,7): error TS2415: Class 'C3' incorrectly extends base class 'Private & Public'.
+tests/cases/conformance/classes/mixinAccessModifiers.ts(66,7): error TS4093: 'extends' clause of exported class 'C2' refers to a type whose name cannot be referenced.
+tests/cases/conformance/classes/mixinAccessModifiers.ts(67,7): error TS2415: Class 'C3' incorrectly extends base class 'Private & Public'.
   Type 'C3' is not assignable to type 'Private'.
     Property 'p' has conflicting declarations and is inaccessible in type 'C3'.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(68,7): error TS4093: 'extends' clause of exported class 'C3' refers to a type whose name cannot be referenced.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(70,7): error TS4093: 'extends' clause of exported class 'C4' refers to a type whose name cannot be referenced.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(83,7): error TS4093: 'extends' clause of exported class 'C5' refers to a type whose name cannot be referenced.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(85,6): error TS2445: Property 'p' is protected and only accessible within class 'C4' and its subclasses.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(90,6): error TS2445: Property 's' is protected and only accessible within class 'typeof C4' and its subclasses.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(96,7): error TS4093: 'extends' clause of exported class 'C6' refers to a type whose name cannot be referenced.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(98,6): error TS2445: Property 'p' is protected and only accessible within class 'C4' and its subclasses.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(103,6): error TS2445: Property 's' is protected and only accessible within class 'typeof C4' and its subclasses.
+tests/cases/conformance/classes/mixinAccessModifiers.ts(67,7): error TS4093: 'extends' clause of exported class 'C3' refers to a type whose name cannot be referenced.
+tests/cases/conformance/classes/mixinAccessModifiers.ts(69,7): error TS4093: 'extends' clause of exported class 'C4' refers to a type whose name cannot be referenced.
+tests/cases/conformance/classes/mixinAccessModifiers.ts(82,7): error TS4093: 'extends' clause of exported class 'C5' refers to a type whose name cannot be referenced.
+tests/cases/conformance/classes/mixinAccessModifiers.ts(84,6): error TS2445: Property 'p' is protected and only accessible within class 'C4' and its subclasses.
+tests/cases/conformance/classes/mixinAccessModifiers.ts(89,6): error TS2445: Property 's' is protected and only accessible within class 'typeof C4' and its subclasses.
+tests/cases/conformance/classes/mixinAccessModifiers.ts(95,7): error TS4093: 'extends' clause of exported class 'C6' refers to a type whose name cannot be referenced.
+tests/cases/conformance/classes/mixinAccessModifiers.ts(97,6): error TS2445: Property 'p' is protected and only accessible within class 'C4' and its subclasses.
+tests/cases/conformance/classes/mixinAccessModifiers.ts(102,6): error TS2445: Property 's' is protected and only accessible within class 'typeof C4' and its subclasses.
 
 
 ==== tests/cases/conformance/classes/mixinAccessModifiers.ts (17 errors) ====
-    
     type Constructable = new (...args: any[]) => object;
     
     class Private {

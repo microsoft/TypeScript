@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/privacyInterfaceExtendsClauseDeclFile.ts] ////
 
 //// [privacyInterfaceExtendsClauseDeclFile_externalModule.ts]
-
 export module publicModule {
     export interface publicInterfaceInPublicModule {
     }

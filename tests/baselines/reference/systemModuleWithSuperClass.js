@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/systemModuleWithSuperClass.ts] ////
 
 //// [foo.ts]
-
 export class Foo {
     a: string;
 }

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declFileIndexSignatures.ts] ////
 
 //// [declFileIndexSignatures_0.ts]
-
 export interface IStringIndexSignature {
     [s: string]: string;
 }

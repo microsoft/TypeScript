@@ -1,5 +1,4 @@
 //// [file.tsx]
-
 function EmptyPropSFC() {
     return <div> Default Greeting </div>;
 }

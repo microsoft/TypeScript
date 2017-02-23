@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/alwaysStrictModule2.ts] ////
 
 //// [a.ts]
-
 module M {
     export function f() {
         var arguments = [];

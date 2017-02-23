@@ -1,5 +1,4 @@
 === tests/cases/compiler/castTest.ts ===
-
 var x : any = 0;
 >x : any
 >0 : 0

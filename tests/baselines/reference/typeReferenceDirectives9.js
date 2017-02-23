@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/typeReferenceDirectives9.ts] ////
 
 //// [index.d.ts]
-
-
 interface Lib { x }
 
 //// [main.ts]

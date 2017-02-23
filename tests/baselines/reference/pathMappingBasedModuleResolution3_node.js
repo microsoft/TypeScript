@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/pathMappingBasedModuleResolution3_node.ts] ////
 
 //// [file1.ts]
-
 // baseUrl set via command line
 
 import {x} from "folder2/file2"

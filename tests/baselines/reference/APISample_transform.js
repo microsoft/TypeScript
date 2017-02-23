@@ -1,5 +1,4 @@
 //// [APISample_transform.ts]
-
 /*
  * Note: This test is a public API sample. The sample sources can be found 
          at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#a-simple-transform-function

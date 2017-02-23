@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/moduleAugmentationGlobal1.ts] ////
 
 //// [f1.ts]
-
 export class A {x: number;}
 
 //// [f2.ts]

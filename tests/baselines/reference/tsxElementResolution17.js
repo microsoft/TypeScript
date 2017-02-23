@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/jsx/tsxElementResolution17.tsx] ////
 
 //// [file.tsx]
-
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements { }

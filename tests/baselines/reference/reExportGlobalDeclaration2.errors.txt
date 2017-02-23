@@ -7,7 +7,6 @@ tests/cases/compiler/file2.ts(4,9): error TS2661: Cannot export 'I2'. Only local
 
 
 ==== tests/cases/compiler/file1.d.ts (0 errors) ====
-    
     declare interface I1 {
         x: number
     }

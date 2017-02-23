@@ -1,5 +1,4 @@
 //// [noImplicitUseStrict_amd.ts]
-
 export var x = 0;
 
 //// [noImplicitUseStrict_amd.js]

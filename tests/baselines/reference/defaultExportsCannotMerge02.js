@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/es6/modules/defaultExportsCannotMerge02.ts] ////
 
 //// [m1.ts]
-
 export default class Decl {
 }
 

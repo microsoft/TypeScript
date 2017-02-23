@@ -1,5 +1,4 @@
 //// [commentsMultiModuleSingleFile.ts]
-
 /** this is multi declare module*/
 module multiM {
     /** class b*/

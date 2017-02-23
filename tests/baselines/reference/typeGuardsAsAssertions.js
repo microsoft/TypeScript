@@ -1,5 +1,4 @@
 //// [typeGuardsAsAssertions.ts]
-
 // Repro from #8513
 
 let cond: boolean;

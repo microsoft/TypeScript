@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/importShadowsGlobalName.ts] ////
 
 //// [Foo.ts]
-
 class Foo {}
 export = Foo;
 

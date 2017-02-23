@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/commentsMultiModuleMultiFile.ts] ////
 
 //// [commentsMultiModuleMultiFile_0.ts]
-
 /** this is multi declare module*/
 export module multiM {
     /// class b comment

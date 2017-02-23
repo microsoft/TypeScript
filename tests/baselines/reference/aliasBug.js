@@ -1,5 +1,4 @@
 //// [aliasBug.ts]
-
 module foo {    
     export class Provide {
     }

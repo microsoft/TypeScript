@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/contextualTypes/logicalAnd/contextuallyTypeLogicalAnd01.ts ===
-
 let x: (a: string) => string;
 >x : (a: string) => string
 >a : string

@@ -1,45 +1,44 @@
 === tests/cases/compiler/react.d.ts ===
-
 export = React;
->React : Symbol(React, Decl(react.d.ts, 2, 26))
+>React : Symbol(React, Decl(react.d.ts, 1, 26))
 
 export as namespace React;
->React : Symbol(React, Decl(react.d.ts, 1, 15))
+>React : Symbol(React, Decl(react.d.ts, 0, 15))
 
 declare namespace React {
->React : Symbol(React, Decl(react.d.ts, 2, 26))
+>React : Symbol(React, Decl(react.d.ts, 1, 26))
 
     function createClass(spec: any): ClassicComponentClass;
->createClass : Symbol(createClass, Decl(react.d.ts, 4, 25))
->spec : Symbol(spec, Decl(react.d.ts, 6, 25))
->ClassicComponentClass : Symbol(ClassicComponentClass, Decl(react.d.ts, 6, 59))
+>createClass : Symbol(createClass, Decl(react.d.ts, 3, 25))
+>spec : Symbol(spec, Decl(react.d.ts, 5, 25))
+>ClassicComponentClass : Symbol(ClassicComponentClass, Decl(react.d.ts, 5, 59))
 
     interface ClassicComponentClass {
->ClassicComponentClass : Symbol(ClassicComponentClass, Decl(react.d.ts, 6, 59))
+>ClassicComponentClass : Symbol(ClassicComponentClass, Decl(react.d.ts, 5, 59))
 
         new (props?: any): ClassicComponentClass;
->props : Symbol(props, Decl(react.d.ts, 9, 13))
->ClassicComponentClass : Symbol(ClassicComponentClass, Decl(react.d.ts, 6, 59))
+>props : Symbol(props, Decl(react.d.ts, 8, 13))
+>ClassicComponentClass : Symbol(ClassicComponentClass, Decl(react.d.ts, 5, 59))
     }
 }
 
 declare global {
->global : Symbol(global, Decl(react.d.ts, 11, 1))
+>global : Symbol(global, Decl(react.d.ts, 10, 1))
 
     namespace JSX {
->JSX : Symbol(JSX, Decl(react.d.ts, 13, 16))
+>JSX : Symbol(JSX, Decl(react.d.ts, 12, 16))
 
         interface ElementAttributesProperty { }
->ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(react.d.ts, 14, 19))
+>ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(react.d.ts, 13, 19))
     }
 }
 
 
 === tests/cases/compiler/src/components/TabBar.js ===
 export default React.createClass({
->React.createClass : Symbol(React.createClass, Decl(react.d.ts, 4, 25))
->React : Symbol(React, Decl(react.d.ts, 1, 15))
->createClass : Symbol(React.createClass, Decl(react.d.ts, 4, 25))
+>React.createClass : Symbol(React.createClass, Decl(react.d.ts, 3, 25))
+>React : Symbol(React, Decl(react.d.ts, 0, 15))
+>createClass : Symbol(React.createClass, Decl(react.d.ts, 3, 25))
 
   render() {
 >render : Symbol(render, Decl(TabBar.js, 0, 34))

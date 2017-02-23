@@ -1,5 +1,4 @@
 //// [es6ExportDefaultExpression.ts]
-
 export default (1 + 2);
 
 

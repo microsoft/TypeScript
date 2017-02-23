@@ -1,6 +1,4 @@
 //// [constDeclarations-access4.ts]
-
-
 declare module M {
     const x: number;
 }

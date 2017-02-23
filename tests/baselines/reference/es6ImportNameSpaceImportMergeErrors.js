@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ImportNameSpaceImportMergeErrors.ts] ////
 
 //// [es6ImportNameSpaceImportMergeErrors_0.ts]
-
 export var a = 10;
 
 //// [es6ImportNameSpaceImportMergeErrors_1.ts]

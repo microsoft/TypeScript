@@ -13,15 +13,14 @@ sourceFile:test.tsx
 >>>class AppComponent {
 1 >
 2 >^^^^^^^^^^^^^^^->
-1 >
-  >declare module JSX {
+1 >declare module JSX {
   >    interface IntrinsicElements {
   >        [s: string]: any;
   >    }
   >}
   >
   >
-1 >Emitted(3, 1) Source(8, 1) + SourceIndex(0)
+1 >Emitted(3, 1) Source(7, 1) + SourceIndex(0)
 ---
 >>>    render() {
 1->^^^^
@@ -30,8 +29,8 @@ sourceFile:test.tsx
 1->export class AppComponent {
   >    
 2 >    render
-1->Emitted(4, 5) Source(9, 5) + SourceIndex(0)
-2 >Emitted(4, 11) Source(9, 11) + SourceIndex(0)
+1->Emitted(4, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(4, 11) Source(8, 11) + SourceIndex(0)
 ---
 >>>        return createElement("div", null);
 1->^^^^^^^^
@@ -45,11 +44,11 @@ sourceFile:test.tsx
 3 >               
 4 >               <div />
 5 >                                         ;
-1->Emitted(5, 9) Source(10, 9) + SourceIndex(0)
-2 >Emitted(5, 15) Source(10, 15) + SourceIndex(0)
-3 >Emitted(5, 16) Source(10, 16) + SourceIndex(0)
-4 >Emitted(5, 42) Source(10, 23) + SourceIndex(0)
-5 >Emitted(5, 43) Source(10, 24) + SourceIndex(0)
+1->Emitted(5, 9) Source(9, 9) + SourceIndex(0)
+2 >Emitted(5, 15) Source(9, 15) + SourceIndex(0)
+3 >Emitted(5, 16) Source(9, 16) + SourceIndex(0)
+4 >Emitted(5, 42) Source(9, 23) + SourceIndex(0)
+5 >Emitted(5, 43) Source(9, 24) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -57,15 +56,15 @@ sourceFile:test.tsx
 1 >
   >    
 2 >    }
-1 >Emitted(6, 5) Source(11, 5) + SourceIndex(0)
-2 >Emitted(6, 6) Source(11, 6) + SourceIndex(0)
+1 >Emitted(6, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(6, 6) Source(10, 6) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
-1 >Emitted(7, 2) Source(12, 2) + SourceIndex(0)
+1 >Emitted(7, 2) Source(11, 2) + SourceIndex(0)
 ---
 >>>exports.AppComponent = AppComponent;
 1->
@@ -76,7 +75,7 @@ sourceFile:test.tsx
   >        return <div />;
   >    }
   >}
-1->Emitted(8, 1) Source(8, 1) + SourceIndex(0)
-2 >Emitted(8, 37) Source(12, 2) + SourceIndex(0)
+1->Emitted(8, 1) Source(7, 1) + SourceIndex(0)
+2 >Emitted(8, 37) Source(11, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=test.js.map

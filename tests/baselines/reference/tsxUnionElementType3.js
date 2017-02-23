@@ -1,5 +1,4 @@
 //// [file.tsx]
-
 import React = require('react');
 
 class RC1 extends React.Component<{x : number}, {}> {

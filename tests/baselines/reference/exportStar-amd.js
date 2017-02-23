@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/es6/modules/exportStar-amd.ts] ////
 
 //// [t1.ts]
-
 export var x = 1;
 export var y = 2;
 

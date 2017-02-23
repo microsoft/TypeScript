@@ -1,5 +1,4 @@
 //// [unusedClassesinNamespace4.ts]
-
 namespace Validation {
     class c1 {
 
