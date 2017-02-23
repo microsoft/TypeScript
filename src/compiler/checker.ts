@@ -8991,7 +8991,7 @@ namespace ts {
 
         function getWidenedTypeOfObjectLiteral(type: Type): Type {
             const members = createMap<Symbol>();
-            for (let prop of getPropertiesOfObjectType(type)) {
+            for (const prop of getPropertiesOfObjectType(type)) {
                 // Since get accessors already widen their return value there is no need to
                 // widen accessor based properties here.
                 members.set(prop.name, prop.flags & SymbolFlags.Property ? getWidenedProperty(prop) : prop);
