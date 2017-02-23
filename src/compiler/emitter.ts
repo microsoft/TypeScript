@@ -2102,7 +2102,7 @@ namespace ts {
             }
             else {
                 for (const sourceFile of (sourceFileOrBundle as Bundle).sourceFiles) {
-                    // Emit only the first Shebang with encounter
+                    // Emit only the first encountered shebang
                     if (emitShebangInSourceFile(sourceFile)) {
                         break;
                     }
