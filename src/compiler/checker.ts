@@ -8917,6 +8917,32 @@ namespace ts {
             return strictNullChecks ? getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull) : type;
         }
 
+        function getNullPropagatingType(type: Type) {
+            return strictNullChecks && (getTypeFacts(type) & TypeFacts.EQUndefinedOrNull) === 0
+                ? neverType
+                : undefinedType;
+        }
+
+        function propagateNullType(type: Type, propagatingType: Type) {
+            return propagatingType === neverType ? type : getUnionType([type, propagatingType]);
+        }
+
+        function propagateNullReturnType(signature: Signature, propagatingType: Type) {
+            if (propagatingType === neverType) {
+                return signature;
+            }
+
+            const returnType = getReturnTypeOfSignature(signature);
+            const propagatingReturnType = propagateNullType(returnType, propagatingType);
+            if (returnType === propagatingReturnType) {
+                return signature;
+            }
+
+            signature = cloneSignature(signature);
+            signature.resolvedReturnType = propagatingReturnType;
+            return signature;
+        }
+
         /**
          * Return true if type was inferred from an object literal or written as an object type literal
          * with no call or construct signatures.
@@ -13096,8 +13122,8 @@ namespace ts {
         }
 
         function checkNonNullType(type: Type, errorNode: Node): Type {
-            const kind = (strictNullChecks ? getFalsyFlags(type) : type.flags) & TypeFlags.Nullable;
-            if (kind) {
+            const kind = (strictNullChecks ? getFalsyFlags(type) : type.flags);
+            if (kind & TypeFlags.Nullable) {
                 error(errorNode, kind & TypeFlags.Undefined ? kind & TypeFlags.Null ?
                     Diagnostics.Object_is_possibly_null_or_undefined :
                     Diagnostics.Object_is_possibly_undefined :
@@ -13156,7 +13182,11 @@ namespace ts {
         }
 
         function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, right: Identifier) {
-            const type = checkNonNullExpression(left);
+            const propagateNull = node.flags & NodeFlags.PropagateNull;
+            const objectType = propagateNull ? checkExpression(left) : checkNonNullExpression(left);
+            const type = propagateNull ? getNonNullableType(objectType) : objectType;
+            const propagatingType = propagateNull ? getNullPropagatingType(objectType) : neverType;
+
             if (isTypeAny(type) || type === silentNeverType) {
                 return type;
             }
@@ -13205,10 +13235,10 @@ namespace ts {
             if (node.kind !== SyntaxKind.PropertyAccessExpression || assignmentKind === AssignmentKind.Definite ||
                 !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor)) &&
                 !(prop.flags & SymbolFlags.Method && propType.flags & TypeFlags.Union)) {
-                return propType;
+                return propagateNullType(propType, propagatingType);
             }
             const flowType = getFlowTypeOfReference(node, propType, /*assumeInitialized*/ true, /*flowContainer*/ undefined);
-            return assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType;
+            return propagateNullType(assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType, propagatingType);
         }
 
         function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean {
@@ -13279,7 +13309,10 @@ namespace ts {
         function checkIndexedAccess(node: ElementAccessExpression): Type {
             checkGrammarNullPropagation(node);
 
-            const objectType = checkNonNullExpression(node.expression);
+            const propagateNull = node.flags & NodeFlags.PropagateNull;
+            const objectType = propagateNull ? checkExpression(node.expression) : checkNonNullExpression(node.expression);
+            const type = propagateNull ? getNonNullableType(objectType) : objectType;
+            const propagatingType = propagateNull ? getNullPropagatingType(objectType) : neverType;
 
             const indexExpression = node.argumentExpression;
             if (!indexExpression) {
@@ -13299,16 +13332,16 @@ namespace ts {
 
             const indexType = isForInVariableForNumericPropertyNames(indexExpression) ? numberType : checkExpression(indexExpression);
 
-            if (objectType === unknownType || objectType === silentNeverType) {
-                return objectType;
+            if (type === unknownType || type === silentNeverType) {
+                return type;
             }
 
-            if (isConstEnumObjectType(objectType) && indexExpression.kind !== SyntaxKind.StringLiteral) {
+            if (isConstEnumObjectType(type) && indexExpression.kind !== SyntaxKind.StringLiteral) {
                 error(indexExpression, Diagnostics.A_const_enum_member_can_only_be_accessed_using_a_string_literal);
                 return unknownType;
             }
 
-            return checkIndexedAccessIndexType(getIndexedAccessType(objectType, indexType, node), node);
+            return propagateNullType(checkIndexedAccessIndexType(getIndexedAccessType(type, indexType, node), node), propagatingType);
         }
 
         function checkThatExpressionIsProperSymbolReference(expression: Expression, expressionType: Type, reportError: boolean): boolean {
@@ -14048,7 +14081,7 @@ namespace ts {
             }
         }
 
-        function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[], headMessage?: DiagnosticMessage): Signature {
+        function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[], propagatingType?: Type, headMessage?: DiagnosticMessage): Signature {
             const isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
             const isDecorator = node.kind === SyntaxKind.Decorator;
             const isJsxOpeningOrSelfClosingElement = isJsxOpeningLikeElement(node);
@@ -14154,7 +14187,7 @@ namespace ts {
                 result = chooseOverload(candidates, assignableRelation, signatureHelpTrailingComma);
             }
             if (result) {
-                return result;
+                return propagateNullReturnType(result, propagatingType || neverType);
             }
 
             // No signatures were applicable. Now report errors based on the last applicable signature with
@@ -14209,7 +14242,7 @@ namespace ts {
                         if (candidate.typeParameters && typeArguments) {
                             candidate = getSignatureInstantiation(candidate, map(typeArguments, getTypeFromTypeNode));
                         }
-                        return candidate;
+                        return propagateNullReturnType(candidate, propagatingType || neverType);
                     }
                 }
             }
@@ -14309,12 +14342,15 @@ namespace ts {
                 return resolveUntypedCall(node);
             }
 
-            const funcType = checkNonNullExpression(node.expression);
-            if (funcType === silentNeverType) {
+
+            const propagateNull = node.flags & NodeFlags.PropagateNull;
+            const funcType = propagateNull ? checkExpression(node.expression) : checkNonNullExpression(node.expression);
+            const type = propagateNull ? getNonNullableType(funcType) : funcType;
+            if (type === silentNeverType) {
                 return silentNeverSignature;
             }
-            const apparentType = getApparentType(funcType);
 
+            const apparentType = getApparentType(type);
             if (apparentType === unknownType) {
                 // Another error has already been reported
                 return resolveErrorCall(node);
@@ -14330,10 +14366,10 @@ namespace ts {
             // TS 1.0 Spec: 4.12
             // In an untyped function call no TypeArgs are permitted, Args can be any argument list, no contextual
             // types are provided for the argument expressions, and the result is always of type Any.
-            if (isUntypedFunctionCall(funcType, apparentType, callSignatures.length, constructSignatures.length)) {
+            if (isUntypedFunctionCall(type, apparentType, callSignatures.length, constructSignatures.length)) {
                 // The unknownType indicates that an error already occurred (and was reported).  No
                 // need to report another error in this case.
-                if (funcType !== unknownType && node.typeArguments) {
+                if (type !== unknownType && node.typeArguments) {
                     error(node, Diagnostics.Untyped_function_calls_may_not_accept_type_arguments);
                 }
                 return resolveUntypedCall(node);
@@ -14343,14 +14379,16 @@ namespace ts {
             // with multiple call signatures.
             if (!callSignatures.length) {
                 if (constructSignatures.length) {
-                    error(node, Diagnostics.Value_of_type_0_is_not_callable_Did_you_mean_to_include_new, typeToString(funcType));
+                    error(node, Diagnostics.Value_of_type_0_is_not_callable_Did_you_mean_to_include_new, typeToString(type));
                 }
                 else {
                     error(node, Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures, typeToString(apparentType));
                 }
                 return resolveErrorCall(node);
             }
-            return resolveCall(node, callSignatures, candidatesOutArray);
+
+            const propagatingType = propagateNull ? getNullPropagatingType(funcType) : neverType;
+            return resolveCall(node, callSignatures, candidatesOutArray, propagatingType);
         }
 
         /**
@@ -14384,8 +14422,10 @@ namespace ts {
                 }
             }
 
-            let expressionType = checkNonNullExpression(node.expression);
-            if (expressionType === silentNeverType) {
+            const propagateNull = node.flags & NodeFlags.PropagateNull;
+            const funcType = propagateNull ? checkExpression(node.expression) : checkNonNullExpression(node.expression);
+            const type = propagateNull ? getNonNullableType(funcType) : funcType;
+            if (type === silentNeverType) {
                 return silentNeverSignature;
             }
 
@@ -14394,8 +14434,8 @@ namespace ts {
             // function call, but using the construct signatures as the initial set of candidate
             // signatures for overload resolution. The result type of the function call becomes
             // the result type of the operation.
-            expressionType = getApparentType(expressionType);
-            if (expressionType === unknownType) {
+            const apparentType = getApparentType(type);
+            if (apparentType === unknownType) {
                 // Another error has already been reported
                 return resolveErrorCall(node);
             }
@@ -14404,7 +14444,7 @@ namespace ts {
             // Note, only class declarations can be declared abstract.
             // In the case of a merged class-module or class-interface declaration,
             // only the class declaration node will have the Abstract flag set.
-            const valueDecl = expressionType.symbol && getClassLikeDeclarationOfSymbol(expressionType.symbol);
+            const valueDecl = apparentType.symbol && getClassLikeDeclarationOfSymbol(apparentType.symbol);
             if (valueDecl && getModifierFlags(valueDecl) & ModifierFlags.Abstract) {
                 error(node, Diagnostics.Cannot_create_an_instance_of_the_abstract_class_0, declarationNameToString(valueDecl.name));
                 return resolveErrorCall(node);
@@ -14413,7 +14453,7 @@ namespace ts {
             // TS 1.0 spec: 4.11
             // If expressionType is of type Any, Args can be any argument
             // list and the result of the operation is of type Any.
-            if (isTypeAny(expressionType)) {
+            if (isTypeAny(apparentType)) {
                 if (node.typeArguments) {
                     error(node, Diagnostics.Untyped_function_calls_may_not_accept_type_arguments);
                 }
@@ -14424,19 +14464,21 @@ namespace ts {
             // but we are not including construct signatures that may have been added to the Object or
             // Function interface, since they have none by default. This is a bit of a leap of faith
             // that the user will not add any.
-            const constructSignatures = getSignaturesOfType(expressionType, SignatureKind.Construct);
+            const constructSignatures = getSignaturesOfType(apparentType, SignatureKind.Construct);
             if (constructSignatures.length) {
                 if (!isConstructorAccessible(node, constructSignatures[0])) {
                     return resolveErrorCall(node);
                 }
-                return resolveCall(node, constructSignatures, candidatesOutArray);
+
+                const propagatingType = propagateNull ? getNullPropagatingType(funcType) : neverType;
+                return resolveCall(node, constructSignatures, candidatesOutArray, propagatingType);
             }
 
             // If expressionType's apparent type is an object type with no construct signatures but
             // one or more call signatures, the expression is processed as a function call. A compile-time
             // error occurs if the result of the function call is not Void. The type of the result of the
             // operation is Any. It is an error to have a Void this type.
-            const callSignatures = getSignaturesOfType(expressionType, SignatureKind.Call);
+            const callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
             if (callSignatures.length) {
                 const signature = resolveCall(node, callSignatures, candidatesOutArray);
                 if (getReturnTypeOfSignature(signature) !== voidType) {
@@ -14566,7 +14608,7 @@ namespace ts {
                 return resolveErrorCall(node);
             }
 
-            return resolveCall(node, callSignatures, candidatesOutArray, headMessage);
+            return resolveCall(node, callSignatures, candidatesOutArray, /*propagatingType*/ undefined, headMessage);
         }
 
         /**
@@ -15405,13 +15447,15 @@ namespace ts {
                         booleanType;
                 case SyntaxKind.PlusPlusToken:
                 case SyntaxKind.MinusMinusToken:
-                    const ok = checkArithmeticOperandType(node.operand, checkNonNullType(operandType, node.operand),
-                        Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
+                    const propagateNull = node.operand.flags & NodeFlags.PropagateNull;
+                    const nonNullType = propagateNull ? getNonNullableType(operandType) : checkNonNullType(operandType, node.operand);
+                    const propagatingType = propagateNull ? getNullPropagatingType(operandType) : neverType;
+                    const ok = checkArithmeticOperandType(node.operand, nonNullType, Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
                     if (ok) {
                         // run check only if former checks succeeded to avoid reporting cascading errors
                         checkReferenceExpression(node.operand, Diagnostics.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access);
                     }
-                    return numberType;
+                    return propagateNullType(numberType, propagatingType);
             }
             return unknownType;
         }
@@ -15421,13 +15465,15 @@ namespace ts {
             if (operandType === silentNeverType) {
                 return silentNeverType;
             }
-            const ok = checkArithmeticOperandType(node.operand, checkNonNullType(operandType, node.operand),
-                Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
+            const propagateNull = node.operand.flags & NodeFlags.PropagateNull;
+            const nonNullType = propagateNull ? getNonNullableType(operandType) : checkNonNullType(operandType, node.operand);
+            const propagatingType = propagateNull ? getNullPropagatingType(operandType) : neverType;
+            const ok = checkArithmeticOperandType(node.operand, nonNullType, Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
             if (ok) {
                 // run check only if former checks succeeded to avoid reporting cascading errors
                 checkReferenceExpression(node.operand, Diagnostics.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access);
             }
-            return numberType;
+            return propagateNullType(numberType, propagatingType);
         }
 
         // Return true if type might be of the given kind. A union or intersection type might be of a given
@@ -15772,6 +15818,12 @@ namespace ts {
             }
             let leftType = checkExpression(left, contextualMapper);
             let rightType = checkExpression(right, contextualMapper);
+            let propagateNull = operator >= SyntaxKind.FirstAssignment && operator <= SyntaxKind.LastAssignment && left.flags & NodeFlags.PropagateNull;
+            let propagatingType = propagateNull ? getNullPropagatingType(leftType) : neverType;
+            if (propagateNull) {
+                leftType = getNonNullableType(leftType);
+            }
+
             switch (operator) {
                 case SyntaxKind.AsteriskToken:
                 case SyntaxKind.AsteriskAsteriskToken:
@@ -15819,7 +15871,7 @@ namespace ts {
                         }
                     }
 
-                    return numberType;
+                    return propagateNullType(numberType, propagatingType);
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.PlusEqualsToken:
                     if (leftType === silentNeverType || rightType === silentNeverType) {
@@ -15850,7 +15902,7 @@ namespace ts {
 
                         // Symbols are not allowed at all in arithmetic expressions
                         if (resultType && !checkForDisallowedESSymbolOperand(operator)) {
-                            return resultType;
+                            return propagateNullType(resultType, propagatingType);
                         }
                     }
 
@@ -15862,7 +15914,7 @@ namespace ts {
                     if (operator === SyntaxKind.PlusEqualsToken) {
                         checkAssignmentOperator(resultType);
                     }
-                    return resultType;
+                    return propagateNullType(resultType, propagatingType);
                 case SyntaxKind.LessThanToken:
                 case SyntaxKind.GreaterThanToken:
                 case SyntaxKind.LessThanEqualsToken:

@@ -230,6 +230,9 @@ namespace ts {
          * @param node A BinaryExpression node.
          */
         function visitBinaryExpression(node: BinaryExpression, noDestructuringValue: boolean): Expression {
+            // NOTE: null propagation is not currently handled in destructuring assignments:
+            //  [x?.y] = [1]                ->  [_a] = _b = [1], x == null ? _a : x.y = _a
+            //                          (or)->  [{ set value(_) { x == null ? _ : x.y = _ }}.value] = [1]
             if (isDestructuringAssignment(node) && node.left.transformFlags & TransformFlags.ContainsObjectRest) {
                 return flattenDestructuringAssignment(
                     node,
@@ -247,19 +250,30 @@ namespace ts {
                 );
             }
 
-            const left = visitNode(node.left, visitor, isExpression);
-            const right = visitNode(node.right, visitor, isExpression);
             if (isAssignmentExpression(node)) {
-                const nilReference = getNilReference(left);
-                if (nilReference) {
-                    return updateNilReference(
-                        nilReference,
-                        updateBinary(node, nilReference.whenFalse, right)
+                const referenceExpression = skipOuterExpressions(node.left);
+                if (referenceExpression.flags & NodeFlags.PropagateNull && isPropertyAccessOrElementAccess(referenceExpression)) {
+                    //  x?.y = 1                ->  _a = 1, x == null ? _a : x.y = _a
+                    //  x?.[y()] = 1            ->  _a = y(), _b = 1, x == null ? _b : x[_a] = _b
+                    //  x.y?.z = 1              ->  _a = x.y, _b = 1, _a == null ? _b : _a.z = _b
+                    //  x.y?.[z()] = 1          ->  _a = x.y, _b = z(), _c = 1, _a == null ? _c : _a[_b] = _c
+                    const expressions: Expression[] = [];
+                    const { baseValue, reference } = createReference(referenceExpression, hoistVariableDeclaration, expressions);
+                    const rhsValue = captureExpression(node.right, hoistVariableDeclaration, expressions);
+                    expressions.push(
+                        setTextRange(
+                            createConditional(
+                                createEquality(baseValue, createNull()),
+                                rhsValue,
+                                updateBinary(node, reference, rhsValue)
+                            ),
+                            node
+                        )
                     );
+                    return visitNode(inlineExpressions(expressions), visitor, isExpression);
                 }
             }
-
-            return updateBinary(node, left, right);
+            return visitEachChild(node, visitor, context);
         }
 
         /**
@@ -733,38 +747,16 @@ namespace ts {
                 && node.expression.kind !== SyntaxKind.SuperKeyword;
         }
 
-        function getNilReference(expression: Expression): ConditionalExpression {
-            expression = skipOuterExpressions(expression);
-            return isConditionalExpression(expression)
-                && isBinaryExpression(expression.condition)
-                && expression.condition.operatorToken.kind === SyntaxKind.EqualsEqualsToken
-                && expression.condition.right.kind === SyntaxKind.NullKeyword
-                && isVoidZero(expression.whenTrue)
-                 ? expression
-                 : undefined;
-        }
-
-        function updateNilReference(expression: ConditionalExpression, whenNotNil: Expression) {
-            return setTextRange(
-                createConditional(
-                    expression.condition,
-                    expression.whenTrue,
-                    whenNotNil
-                ),
-                whenNotNil
-            );
-        }
-
-        function propagateNull<T extends Node>(finishExpression: (node: T, nullableExpression: Expression) => Expression, node: T, nullableExpression: Expression): Expression;
-        function propagateNull<T extends Node, U>(finishExpression: (node: T, nullableExpression: Expression, data: U) => Expression, node: T, nullableExpression: Expression, data: U): Expression;
-        function propagateNull<T extends Node, U>(finishExpression: (node: T, nullableExpression: Expression, data: U) => Expression, node: T, nullableExpression: Expression, data?: U): Expression {
+        function propagateNull<T extends Node>(finishExpression: (node: T, nullableExpression: Expression) => Expression, node: T, referenceExpression: Expression): Expression;
+        function propagateNull<T extends Node, U>(finishExpression: (node: T, nullableExpression: Expression, data: U) => Expression, node: T, referenceExpression: Expression, data: U): Expression;
+        function propagateNull<T extends Node, U>(finishExpression: (node: T, nullableExpression: Expression, data: U) => Expression, node: T, referenceExpression: Expression, data?: U): Expression {
             if (node.flags & NodeFlags.PropagateNull) {
-                if (isIdentifier(nullableExpression)) {
+                if (isIdentifier(referenceExpression)) {
                     return setTextRange(
                         createConditional(
-                            createEquality(nullableExpression, createNull()),
+                            createEquality(referenceExpression, createNull()),
                             createVoidZero(),
-                            finishExpression(node, nullableExpression, data)
+                            finishExpression(node, referenceExpression, data)
                         ),
                         node
                     );
@@ -774,7 +766,7 @@ namespace ts {
                     return setTextRange(
                         createConditional(
                             createEquality(
-                                createAssignment(temp, nullableExpression),
+                                createAssignment(temp, referenceExpression),
                                 createNull()
                             ),
                             createVoidZero(),
@@ -784,7 +776,7 @@ namespace ts {
                     );
                 }
             }
-            return finishExpression(node, nullableExpression, data);
+            return finishExpression(node, referenceExpression, data);
         }
 
         function visitCallExpression(node: CallExpression): Expression {
@@ -800,30 +792,7 @@ namespace ts {
                 return propagateNull(finishNullableCallExpression, node, visitNode(target, visitor, isExpression), visitNode(thisArg, visitor, isExpression));
             }
 
-            const expression = visitNode(node.expression, visitor, isExpression);
-            const argumentsArray = visitNodes(node.arguments, visitor, isExpression);
-            const nilReference = getNilReference(expression);
-            if (nilReference) {
-                // NilReference shortcut in expression
-                //  x?.y()          ->  x == null ? void 0 : x.y();
-                //  x?.[y]()        ->  x == null ? void 0 : x[y]();
-                return updateNilReference(
-                    nilReference,
-                    updateCall(
-                        node,
-                        nilReference.whenFalse,
-                        /*typeArguments*/ undefined,
-                        argumentsArray
-                    )
-                );
-            }
-
-            return updateCall(
-                node,
-                expression,
-                /*typeArguments*/ undefined,
-                argumentsArray
-            );
+            return visitEachChild(node, visitor, context);
         }
 
         function finishNullableCallExpression(node: CallExpression, target: Expression, thisArg: Expression) {
@@ -852,7 +821,6 @@ namespace ts {
         }
 
         function visitNewExpression(node: NewExpression): Expression {
-            const expression = visitNode(node.expression, visitor, isExpression);
             if (isNullPropagatingExpression(node)) {
                 // null propagation in new:
                 //  new x?.()       ->  x == null ? void 0 : new x();
@@ -861,31 +829,10 @@ namespace ts {
                 //  new x[y]?.()    ->  (_a = x[y]) == null ? void 0 : new _a();
                 //  new (x.y)?.()   ->  (_a = x.y) == null ? void 0 : new _a();
                 //  new (x[y])?.()  ->  (_a = x[y]) == null ? void 0 : new _a();
-                return propagateNull(finishNullableNewExpression, node, expression);
+                return propagateNull(finishNullableNewExpression, node, visitNode(node.expression, visitor, isExpression));
             }
 
-            const argumentsArray = visitNodes(node.arguments, visitor, isExpression);
-            const nilReference = getNilReference(expression);
-            if (nilReference) {
-                // NilReference shortcut in expression
-                //  new x?.y()      ->  x == null ? void 0 : new x.y();
-                //  new x?.[y]()    ->  x == null ? void 0 : new x[y]();
-                return updateNilReference(
-                    nilReference,
-                    updateNew(
-                        node,
-                        nilReference.whenTrue,
-                        /*typeArguments*/ undefined,
-                        argumentsArray
-                    )
-                );
-            }
-
-            return updateNew(
-                node,
-                expression,
-                /*typeArguments*/ undefined,
-                argumentsArray);
+            return visitEachChild(node, visitor, context);
         }
 
         function finishNullableNewExpression(node: NewExpression, expression: Expression) {
@@ -903,35 +850,14 @@ namespace ts {
         }
 
         function visitPropertyAccess(node: PropertyAccessExpression): Expression {
-            const expression = visitNode(node.expression, visitor, isExpression);
             if (isNullPropagatingExpression(node)) {
                 // null propagation in property access
                 //  x?.y            -> x == null ? void 0 : x.y;
                 //  x.y?.z          -> (_a = x.y) == null ? void 0 : _a.z;
-                return propagateNull(finishNullablePropertyAccess, node, expression);
+                return propagateNull(finishNullablePropertyAccess, node, visitNode(node.expression, visitor, isExpression));
             }
 
-            const name = visitNode(node.name, visitor, isIdentifier);
-            const nilReference = getNilReference(expression);
-            if (nilReference) {
-                // NilReference shortcut in expression
-                //  x?.y.z          -> x == null ? void 0 : x.y.z;
-                //  x.y?.z.a        -> (_a = x.y) == null ? void 0 : _a.z.a;
-                return updateNilReference(
-                    nilReference,
-                    updatePropertyAccess(
-                        node,
-                        nilReference.whenFalse,
-                        name
-                    )
-                );
-            }
-
-            return updatePropertyAccess(
-                node,
-                expression,
-                name
-            );
+            return visitEachChild(node, visitor, context);
         }
 
         function finishNullablePropertyAccess(node: PropertyAccessExpression, expression: Expression) {
@@ -948,35 +874,13 @@ namespace ts {
         }
 
         function visitElementAccess(node: ElementAccessExpression): Expression {
-            const expression = visitNode(node.expression, visitor, isExpression);
             if (isNullPropagatingExpression(node)) {
                 // null propagation in element access
                 //  x?.[y]          -> x == null ? void 0 : x.[y];
                 //  x.y?.[z]        -> (_a = x.y) == null ? void 0 : _a.[z];
-                return propagateNull(finishNullableElementAccess, node, expression);
+                return propagateNull(finishNullableElementAccess, node, visitNode(node.expression, visitor, isExpression));
             }
-
-            const argumentExpression = visitNode(node.argumentExpression, visitor, isExpression);
-            const nilReference = getNilReference(expression);
-            if (nilReference) {
-                // NilReference shortcut in expression
-                //  x?.y.[z]        -> x == null ? void 0 : x.y.[z];
-                //  x.y?.z.[a]      -> (_a = x.y) == null ? void 0 : _a.z.[a];
-                return updateNilReference(
-                    nilReference,
-                    updateElementAccess(
-                        node,
-                        nilReference.whenFalse,
-                        argumentExpression
-                    )
-                );
-            }
-
-            return updateElementAccess(
-                node,
-                expression,
-                argumentExpression
-            );
+            return visitEachChild(node, visitor, context);
         }
 
         function finishNullableElementAccess(node: ElementAccessExpression, expression: Expression) {
@@ -992,44 +896,44 @@ namespace ts {
             );
         }
 
-        function visitDelete(node: DeleteExpression) {
-            const expression = visitNode(node.expression, visitor, isExpression);
-            const nilReference = getNilReference(expression);
-            if (nilReference) {
-                return setTextRange(
-                    createConditional(
-                        nilReference.condition,
-                        createTrue(),
-                        updateDelete(node, nilReference.whenFalse)
-                    ),
-                    node
+        function visitUnaryMutationExpression<T extends UnaryExpression>(node: T, referenceExpression: Expression, updateNode: (node: T, referenceExpression: Expression) => T): Expression {
+            if (referenceExpression.flags & NodeFlags.PropagateNull && isPropertyAccessOrElementAccess(referenceExpression)) {
+                const expressions: Expression[] = [];
+                const { baseValue, reference } = createReference(referenceExpression, hoistVariableDeclaration, expressions);
+                expressions.push(
+                    setTextRange(
+                        createConditional(
+                            createEquality(baseValue, createNull()),
+                            createVoidZero(),
+                            updateNode(
+                                node,
+                                reference
+                            )
+                        ),
+                        node
+                    )
                 );
+                return visitNode(inlineExpressions(expressions), visitor, isExpression);
             }
-            return updateDelete(node, expression);
+            return visitEachChild(node, visitor, context);
+        }
+
+        function visitDelete(node: DeleteExpression) {
+            return visitUnaryMutationExpression(node, node.expression, updateDelete);
         }
 
         function visitPrefix(node: PrefixUnaryExpression) {
-            const operand = visitNode(node.operand, visitor, isExpression);
-            const nilReference = getNilReference(operand);
-            if (nilReference) {
-                return updateNilReference(
-                    nilReference,
-                    updatePrefix(node, nilReference.whenFalse)
-                );
+            if (isPrefixOrPostfixUpdateExpression(node)) {
+                return visitUnaryMutationExpression(node, node.operand, updatePrefix);
             }
-            return updatePrefix(node, operand);
+            return visitEachChild(node, visitor, context);
         }
 
         function visitPostfix(node: PostfixUnaryExpression) {
-            const operand = visitNode(node.operand, visitor, isExpression);
-            const nilReference = getNilReference(operand);
-            if (nilReference) {
-                return updateNilReference(
-                    nilReference,
-                    updatePostfix(node, nilReference.whenFalse)
-                );
+            if (isPrefixOrPostfixUpdateExpression(node)) {
+                return visitUnaryMutationExpression(node, node.operand, updatePostfix);
             }
-            return updatePostfix(node, operand);
+            return visitEachChild(node, visitor, context);
         }
 
         function enableSubstitutionForAsyncMethodsWithSuper() {

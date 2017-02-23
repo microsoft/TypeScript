@@ -1739,13 +1739,17 @@ namespace ts {
     }
 
     export function createAssignment(left: ObjectLiteralExpression | ArrayLiteralExpression, right: Expression): DestructuringAssignment;
-    export function createAssignment(left: Expression, right: Expression): BinaryExpression;
+    export function createAssignment(left: Expression, right: Expression): AssignmentExpression<EqualsToken>;
     export function createAssignment(left: Expression, right: Expression) {
         return createBinary(left, SyntaxKind.EqualsToken, right);
     }
 
     export function createEquality(left: Expression, right: Expression) {
         return createBinary(left, SyntaxKind.EqualsEqualsToken, right);
+    }
+
+    export function createInequality(left: Expression, right: Expression) {
+        return createBinary(left, SyntaxKind.ExclamationEqualsToken, right);
     }
 
     export function createStrictEquality(left: Expression, right: Expression) {
@@ -2398,26 +2402,30 @@ namespace ts {
         return updated;
     }
 
-    export interface CallBinding {
-        target: LeftHandSideExpression;
-        thisArg: Expression;
-    }
-
-    function shouldBeCapturedInTempVariable(node: Expression, cacheIdentifiers: boolean): boolean {
-        const target = skipParentheses(node);
+    /**
+     * Determines whether an expression should be captured in a temp variable as part of an
+     * emit transformation where side-effects could be observed.
+     * @param node The expression to be tested.
+     * @param captureIdentifiers A value that indicates whether identifiers should be captured
+     * as well.
+     */
+    function shouldBeCapturedInTempVariable(node: Expression, captureIdentifiers?: boolean): boolean {
+        const target = skipOuterExpressions(node);
         switch (target.kind) {
             case SyntaxKind.Identifier:
-                return cacheIdentifiers;
+                return captureIdentifiers;
             case SyntaxKind.ThisKeyword:
+            case SyntaxKind.NullKeyword:
+            case SyntaxKind.TrueKeyword:
+            case SyntaxKind.FalseKeyword:
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.StringLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
                 return false;
+            case SyntaxKind.VoidExpression:
+                return (<VoidExpression>node).expression.kind === SyntaxKind.NumericLiteral;
             case SyntaxKind.ArrayLiteralExpression:
-                const elements = (<ArrayLiteralExpression>target).elements;
-                if (elements.length === 0) {
-                    return false;
-                }
-                return true;
+                return (<ArrayLiteralExpression>target).elements.length > 0;
             case SyntaxKind.ObjectLiteralExpression:
                 return (<ObjectLiteralExpression>target).properties.length > 0;
             default:
@@ -2425,82 +2433,151 @@ namespace ts {
         }
     }
 
-    export function createCallBinding(expression: Expression, recordTempVariable: (temp: Identifier) => void, languageVersion?: ScriptTarget, cacheIdentifiers?: boolean): CallBinding {
-        const callee = skipOuterExpressions(expression, OuterExpressionKinds.All);
+    /**
+     * Captures an expression in a temp variable.
+     * @param expression The expression to capture.
+     * @param recordTempVariable A callback used to record new temp variables.
+     * @param expressions The array of expressions into which capturing assignments should be added.
+     */
+     export function captureExpression(expression: Expression, recordTempVariable: (temp: Identifier) => void, expressions: Expression[]): Expression {
+        const temp = setTextRange(createTempVariable(recordTempVariable), expression);
+        expressions.push(setTextRange(createAssignment(temp, expression), expression));
+        return temp;
+    }
+
+    /**
+     * Captures an expression in a temp variable if it possibly contains side-effects.
+     * @param expression The expression to capture.
+     * @param recordTempVariable A callback used to record new temp variables.
+     * @param expressions The array of expressions into which capturing assignments should be added.
+     * @param captureIdentifiers A value indicating whether identifiers should be captured as well.
+     */
+    export function captureExpressionIfNeeded(expression: Expression, recordTempVariable: (temp: Identifier) => void, expressions: Expression[], captureIdentifiers?: boolean): Expression {
+        if (shouldBeCapturedInTempVariable(expression, captureIdentifiers)) {
+            return captureExpression(expression, recordTempVariable, expressions);
+        }
+        return expression;
+    }
+
+    // https://tc39.github.io/ecma262/#sec-reference-specification-type
+    export interface Reference {
+        baseValue: Expression;
+        reference: PropertyAccessExpression | ElementAccessExpression;
+    }
+
+    /**
+     * Creates an approximation of an ECMAScript `Reference` specification type.
+     * @param lhsReference The property or element access expression from which to create the reference.
+     * @param recordTempVariable A callback used to record new temp variables.
+     * @param expressions The array of expressions into which capturing assignments should be added.
+     */
+    export function createReference(lhsReference: PropertyAccessExpression | ElementAccessExpression, recordTempVariable: (temp: Identifier) => void, expressions: Expression[]): Reference {
+        const baseValue = captureExpressionIfNeeded(lhsReference.expression, recordTempVariable, expressions);
+        let reference: PropertyAccessExpression | ElementAccessExpression;
+        if (isPropertyAccessExpression(lhsReference)) {
+            reference = setTextRange(
+                createPropertyAccess(
+                    baseValue,
+                    lhsReference.name
+                ),
+                lhsReference
+            );
+        }
+        else {
+            reference = setTextRange(
+                createElementAccess(
+                    baseValue,
+                    lhsReference.argumentExpression
+                ),
+                lhsReference
+            );
+        }
+        return { baseValue, reference };
+    }
+
+    export interface CallBinding {
+        target: LeftHandSideExpression;
+        thisArg: Expression;
+    }
+
+    /**
+     * Returns a `CallBinding` for an expression that contains a reference to an expression to call
+     * and the `this` to be used for the call.
+     * @param expression The callee of a CallExpression.
+     * @param recordTempVariable A callback used to record new temp variables.
+     * @param languageVersion An optional `ScriptTarget` used to control the behavior of a `super` callee.
+     * @param captureIdentifiers A value indicating whether identifiers should be captured as well.
+     */
+    export function createCallBinding(expression: Expression, recordTempVariable: (temp: Identifier) => void, languageVersion?: ScriptTarget, captureIdentifiers?: boolean): CallBinding {
+        const callee = skipOuterExpressions(expression);
         let thisArg: Expression;
         let target: LeftHandSideExpression;
         if (isSuperProperty(callee)) {
             thisArg = createThis();
             target = callee;
         }
-        else if (callee.kind === SyntaxKind.SuperKeyword) {
+        else if (isSuper(callee)) {
             thisArg = createThis();
             target = languageVersion < ScriptTarget.ES2015
                 ? setTextRange(createIdentifier("_super"), callee)
-                : <PrimaryExpression>callee;
+                : callee;
         }
         else if (getEmitFlags(callee) & EmitFlags.HelperName) {
             thisArg = createVoidZero();
             target = parenthesizeForAccess(callee);
         }
-        else {
-            switch (callee.kind) {
-                case SyntaxKind.PropertyAccessExpression: {
-                    if (shouldBeCapturedInTempVariable((<PropertyAccessExpression>callee).expression, cacheIdentifiers)) {
-                        // for `a.b()` target is `(_a = a).b` and thisArg is `_a`
-                        thisArg = createTempVariable(recordTempVariable);
-                        target = createPropertyAccess(
-                            setTextRange(
-                                createAssignment(
-                                    thisArg,
-                                    (<PropertyAccessExpression>callee).expression
-                                ),
-                                (<PropertyAccessExpression>callee).expression
+        else if (isPropertyAccessExpression(callee)) {
+            if (shouldBeCapturedInTempVariable(callee.expression, captureIdentifiers)) {
+                // for `a.b()` target is `(_a = a).b` and thisArg is `_a`
+                thisArg = createTempVariable(recordTempVariable);
+                target = setTextRange(
+                    createPropertyAccess(
+                        setTextRange(
+                            createAssignment(
+                                thisArg,
+                                callee.expression
                             ),
-                            (<PropertyAccessExpression>callee).name,
-                            callee.flags & NodeFlags.PropagateNull
-                        );
-                        setTextRange(target, callee);
-                    }
-                    else {
-                        thisArg = (<PropertyAccessExpression>callee).expression;
-                        target = <PropertyAccessExpression>callee;
-                    }
-                    break;
-                }
-
-                case SyntaxKind.ElementAccessExpression: {
-                    if (shouldBeCapturedInTempVariable((<ElementAccessExpression>callee).expression, cacheIdentifiers)) {
-                        // for `a[b]()` target is `(_a = a)[b]` and thisArg is `_a`
-                        thisArg = createTempVariable(recordTempVariable);
-                        target = createElementAccess(
-                            setTextRange(
-                                createAssignment(
-                                    thisArg,
-                                    (<ElementAccessExpression>callee).expression
-                                ),
-                                (<ElementAccessExpression>callee).expression
-                            ),
-                            (<ElementAccessExpression>callee).argumentExpression,
-                            callee.flags & NodeFlags.PropagateNull
-                        );
-                        setTextRange(target, callee);
-                    }
-                    else {
-                        thisArg = (<ElementAccessExpression>callee).expression;
-                        target = <ElementAccessExpression>callee;
-                    }
-
-                    break;
-                }
-
-                default: {
-                    // for `a()` target is `a` and thisArg is `void 0`
-                    thisArg = createVoidZero();
-                    target = parenthesizeForAccess(expression);
-                    break;
-                }
+                            callee.expression
+                        ),
+                        callee.name,
+                        callee.flags & NodeFlags.PropagateNull
+                    ),
+                    callee
+                );
             }
+            else {
+                thisArg = callee.expression;
+                target = callee;
+            }
+        }
+        else if (isElementAccessExpression(callee)) {
+            if (shouldBeCapturedInTempVariable(callee.expression, captureIdentifiers)) {
+                // for `a[b]()` target is `(_a = a)[b]` and thisArg is `_a`
+                thisArg = createTempVariable(recordTempVariable);
+                target = setTextRange(
+                    createElementAccess(
+                        setTextRange(
+                            createAssignment(
+                                thisArg,
+                                callee.expression
+                            ),
+                            callee.expression
+                        ),
+                        callee.argumentExpression,
+                        callee.flags & NodeFlags.PropagateNull
+                    ),
+                    callee
+                );
+            }
+            else {
+                thisArg = callee.expression;
+                target = callee;
+            }
+        }
+        else {
+            // for `a()` target is `a` and thisArg is `void 0`
+            thisArg = createVoidZero();
+            target = parenthesizeForAccess(expression);
         }
 
         return { target, thisArg };
@@ -3271,8 +3348,8 @@ namespace ts {
     export function skipAssertions(node: Expression): Expression;
     export function skipAssertions(node: Node): Node;
     export function skipAssertions(node: Node): Node {
-        while (isAssertionExpression(node)) {
-            node = (<AssertionExpression>node).expression;
+        while (isAssertionExpression(node) || node.kind === SyntaxKind.NonNullExpression) {
+            node = (<AssertionExpression | NonNullExpression>node).expression;
         }
 
         return node;

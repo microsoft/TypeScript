@@ -3509,7 +3509,7 @@ namespace ts {
              *      5) --UnaryExpression[?Yield]
              */
             if (isUpdateExpression()) {
-                const incrementExpression = parseIncrementExpression();
+                const incrementExpression = parseUpdateExpression();
                 return token() === SyntaxKind.AsteriskAsteriskToken ?
                     <BinaryExpression>parseBinaryExpressionRest(getBinaryOperatorPrecedence(), incrementExpression) :
                     incrementExpression;
@@ -3577,7 +3577,7 @@ namespace ts {
                         return parseAwaitExpression();
                     }
                 default:
-                    return parseIncrementExpression();
+                    return parseUpdateExpression();
             }
         }
 
@@ -3617,9 +3617,9 @@ namespace ts {
         }
 
         /**
-         * Parse ES7 IncrementExpression. IncrementExpression is used instead of ES6's PostFixExpression.
+         * Parse ES7 UpdateExpression. UpdateExpression is used instead of ES6's PostFixExpression.
          *
-         * ES7 IncrementExpression[yield]:
+         * ES7 UpdateExpression[yield]:
          *      1) LeftHandSideExpression[?yield]
          *      2) LeftHandSideExpression[?yield] [[no LineTerminator here]]++
          *      3) LeftHandSideExpression[?yield] [[no LineTerminator here]]--
@@ -3627,7 +3627,7 @@ namespace ts {
          *      5) --LeftHandSideExpression[?yield]
          * In TypeScript (2), (3) are parsed as PostfixUnaryExpression. (4), (5) are parsed as PrefixUnaryExpression
          */
-        function parseIncrementExpression(): IncrementExpression {
+        function parseUpdateExpression(): UpdateExpression {
             if (token() === SyntaxKind.PlusPlusToken || token() === SyntaxKind.MinusMinusToken) {
                 const node = <PrefixUnaryExpression>createNode(SyntaxKind.PrefixUnaryExpression);
                 node.operator = <PrefixUnaryOperator>token();

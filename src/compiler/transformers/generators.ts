@@ -1120,7 +1120,7 @@ namespace ts {
                 //  .mark resumeLabel
                 //      _b.apply(_a, _c.concat([%sent%, 2]));
 
-                const { target, thisArg } = createCallBinding(node.expression, hoistVariableDeclaration, languageVersion, /*cacheIdentifiers*/ true);
+                const { target, thisArg } = createCallBinding(node.expression, hoistVariableDeclaration, languageVersion, /*captureIdentifiers*/ true);
                 return setOriginalNode(
                     createFunctionApply(
                         cacheExpression(visitNode(target, visitor, isLeftHandSideExpression)),

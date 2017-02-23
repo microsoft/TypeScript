@@ -1153,9 +1153,12 @@ namespace ts {
      * Determines whether a node is a property or element access expression for super.
      */
     export function isSuperProperty(node: Node): node is SuperProperty {
-        const kind = node.kind;
-        return (kind === SyntaxKind.PropertyAccessExpression || kind === SyntaxKind.ElementAccessExpression)
-            && (<PropertyAccessExpression | ElementAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword;
+        return isPropertyAccessOrElementAccess(node)
+            && isSuper(node.expression);
+    }
+
+    export function isSuper(node: Node): node is SuperExpression {
+        return node.kind === SyntaxKind.SuperKeyword;
     }
 
     export function getEntityNameFromTypeNode(node: TypeNode): EntityNameOrEntityNameExpression {
@@ -3104,6 +3107,19 @@ namespace ts {
         return false;
     }
 
+    export function isPrefixOrPostfixUpdateExpression(node: Node): node is PrefixUnaryUpdateExpression | PostfixUnaryExpression {
+        switch (node.kind) {
+            case SyntaxKind.PrefixUnaryExpression:
+            case SyntaxKind.PostfixUnaryExpression:
+                switch ((<PrefixUnaryExpression | PostfixUnaryExpression>node).operator) {
+                    case SyntaxKind.PlusPlusToken:
+                    case SyntaxKind.MinusMinusToken:
+                        return true;
+                }
+        }
+        return false;
+    }
+
     // Returns false if this heritage clause element's expression contains something unsupported
     // (i.e. not a name or dotted name).
     export function isSupportedExpressionWithTypeArguments(node: ExpressionWithTypeArguments): boolean {
@@ -3803,6 +3819,12 @@ namespace ts {
 
     export function isElementAccessExpression(node: Node): node is ElementAccessExpression {
         return node.kind === SyntaxKind.ElementAccessExpression;
+    }
+
+    export function isPropertyAccessOrElementAccess(node: Node): node is PropertyAccessExpression | ElementAccessExpression {
+        const kind = node.kind;
+        return kind === SyntaxKind.PropertyAccessExpression
+            || kind === SyntaxKind.ElementAccessExpression;
     }
 
     export function isBinaryExpression(node: Node): node is BinaryExpression {
