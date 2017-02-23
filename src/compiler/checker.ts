@@ -8983,11 +8983,19 @@ namespace ts {
             return regularNew;
         }
 
+        function getWidenedProperty(prop: Symbol): Symbol {
+            const original = getTypeOfSymbol(prop);
+            const widened = getWidenedType(original);
+            return widened === original ? prop : createSymbolWithType(prop, widened);
+        }
+
         function getWidenedTypeOfObjectLiteral(type: Type): Type {
-            const members = transformTypeOfMembers(type, prop => {
-                const widened = getWidenedType(prop);
-                return prop === widened ? prop : widened;
-            });
+            const members = createMap<Symbol>();
+            for (let prop of getPropertiesOfObjectType(type)) {
+                // Since get accessors already widen their return value there is no need to
+                // widen accessor based properties here.
+                members.set(prop.name, prop.flags & SymbolFlags.Property ? getWidenedProperty(prop) : prop);
+            };
             const stringIndexInfo = getIndexInfoOfType(type, IndexKind.String);
             const numberIndexInfo = getIndexInfoOfType(type, IndexKind.Number);
             return createAnonymousType(type.symbol, members, emptyArray, emptyArray,
@@ -11471,7 +11479,9 @@ namespace ts {
         }
 
         function getContainingObjectLiteral(func: FunctionLikeDeclaration) {
-            return func.kind === SyntaxKind.MethodDeclaration && func.parent.kind === SyntaxKind.ObjectLiteralExpression ? <ObjectLiteralExpression>func.parent :
+            return (func.kind === SyntaxKind.MethodDeclaration ||
+                func.kind === SyntaxKind.GetAccessor ||
+                func.kind === SyntaxKind.SetAccessor) && func.parent.kind === SyntaxKind.ObjectLiteralExpression ? <ObjectLiteralExpression>func.parent :
                 func.kind === SyntaxKind.FunctionExpression && func.parent.kind === SyntaxKind.PropertyAssignment ? <ObjectLiteralExpression>func.parent.parent :
                 undefined;
         }
@@ -11487,7 +11497,10 @@ namespace ts {
         }
 
         function getContextualThisParameterType(func: FunctionLikeDeclaration): Type {
-            if (isContextSensitiveFunctionOrObjectLiteralMethod(func) && func.kind !== SyntaxKind.ArrowFunction) {
+            if (func.kind === SyntaxKind.ArrowFunction) {
+                return undefined;
+            }
+            if (isContextSensitiveFunctionOrObjectLiteralMethod(func)) {
                 const contextualSignature = getContextualSignature(func);
                 if (contextualSignature) {
                     const thisParameter = contextualSignature.thisParameter;
@@ -11495,36 +11508,36 @@ namespace ts {
                         return getTypeOfSymbol(thisParameter);
                     }
                 }
-                const containingLiteral = getContainingObjectLiteral(func);
-                if (containingLiteral) {
-                    // We have an object literal method. Check if the containing object literal has a contextual type
-                    // and if that contextual type is or includes a ThisType<T>. If so, T is the contextual type for
-                    // 'this'. We continue looking in any directly enclosing object literals.
-                    let objectLiteral = containingLiteral;
-                    while (true) {
-                        const type = getApparentTypeOfContextualType(objectLiteral);
-                        if (type) {
-                            const thisType = getThisTypeFromContextualType(type);
-                            if (thisType) {
-                                return thisType;
-                            }
+            }
+            const containingLiteral = getContainingObjectLiteral(func);
+            if (containingLiteral) {
+                // We have an object literal method. Check if the containing object literal has a contextual type
+                // and if that contextual type is or includes a ThisType<T>. If so, T is the contextual type for
+                // 'this'. We continue looking in any directly enclosing object literals.
+                let objectLiteral = containingLiteral;
+                while (true) {
+                    const type = getApparentTypeOfContextualType(objectLiteral);
+                    if (type) {
+                        const thisType = getThisTypeFromContextualType(type);
+                        if (thisType) {
+                            return thisType;
                         }
-                        if (objectLiteral.parent.kind !== SyntaxKind.PropertyAssignment) {
-                            break;
-                        }
-                        objectLiteral = <ObjectLiteralExpression>objectLiteral.parent.parent;
                     }
-                    // There was no contextual ThisType<T> for the containing object literal, so the contextual type
-                    // for 'this' is the type of the object literal itself.
-                    return checkExpressionCached(containingLiteral);
+                    if (objectLiteral.parent.kind !== SyntaxKind.PropertyAssignment) {
+                        break;
+                    }
+                    objectLiteral = <ObjectLiteralExpression>objectLiteral.parent.parent;
                 }
-                // In an assignment of the form 'obj.xxx = function(...)' or 'obj[xxx] = function(...)', the
-                // contextual type for 'this' is 'obj'.
-                if (func.parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>func.parent).operatorToken.kind === SyntaxKind.EqualsToken) {
-                    const target = (<BinaryExpression>func.parent).left;
-                    if (target.kind === SyntaxKind.PropertyAccessExpression || target.kind === SyntaxKind.ElementAccessExpression) {
-                        return checkExpressionCached((<PropertyAccessExpression | ElementAccessExpression>target).expression);
-                    }
+                // There was no contextual ThisType<T> for the containing object literal, so the contextual type
+                // for 'this' is the type of the object literal itself.
+                return checkExpressionCached(containingLiteral);
+            }
+            // In an assignment of the form 'obj.xxx = function(...)' or 'obj[xxx] = function(...)', the
+            // contextual type for 'this' is 'obj'.
+            if (func.parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>func.parent).operatorToken.kind === SyntaxKind.EqualsToken) {
+                const target = (<BinaryExpression>func.parent).left;
+                if (target.kind === SyntaxKind.PropertyAccessExpression || target.kind === SyntaxKind.ElementAccessExpression) {
+                    return checkExpressionCached((<PropertyAccessExpression | ElementAccessExpression>target).expression);
                 }
             }
             return undefined;
@@ -12287,7 +12300,7 @@ namespace ts {
                     // A set accessor declaration is processed in the same manner
                     // as an ordinary function declaration with a single parameter and a Void return type.
                     Debug.assert(memberDecl.kind === SyntaxKind.GetAccessor || memberDecl.kind === SyntaxKind.SetAccessor);
-                    checkAccessorDeclaration(<AccessorDeclaration>memberDecl);
+                    checkNodeDeferred(memberDecl);
                 }
 
                 if (hasDynamicName(memberDecl)) {
@@ -16942,13 +16955,8 @@ namespace ts {
                     checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, returnType);
                 }
             }
-            if (node.parent.kind !== SyntaxKind.ObjectLiteralExpression) {
-                checkSourceElement(node.body);
-                registerForUnusedIdentifiersCheck(node);
-            }
-            else {
-                checkNodeDeferred(node);
-            }
+            checkSourceElement(node.body);
+            registerForUnusedIdentifiersCheck(node);
         }
 
         function checkAccessorDeclarationTypesIdentical(first: AccessorDeclaration, second: AccessorDeclaration, getAnnotatedType: (a: AccessorDeclaration) => Type, message: DiagnosticMessage) {
@@ -16957,11 +16965,6 @@ namespace ts {
             if (firstType && secondType && !isTypeIdenticalTo(firstType, secondType)) {
                 error(first, message);
             }
-        }
-
-        function checkAccessorDeferred(node: AccessorDeclaration) {
-            checkSourceElement(node.body);
-            registerForUnusedIdentifiersCheck(node);
         }
 
         function checkMissingDeclaration(node: Node) {
@@ -20630,7 +20633,7 @@ namespace ts {
                         break;
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
-                        checkAccessorDeferred(<AccessorDeclaration>node);
+                        checkAccessorDeclaration(<AccessorDeclaration>node);
                         break;
                     case SyntaxKind.ClassExpression:
                         checkClassExpressionDeferred(<ClassExpression>node);
