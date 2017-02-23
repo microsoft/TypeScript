@@ -323,7 +323,7 @@
         "category": "Error",
         "code": 1113
     },
-    "Duplicate label '{0}'": {
+    "Duplicate label '{0}'.": {
         "category": "Error",
         "code": 1114
     },
@@ -451,7 +451,7 @@
         "category": "Error",
         "code": 1148
     },
-    "File name '{0}' differs from already included file name '{1}' only in casing": {
+    "File name '{0}' differs from already included file name '{1}' only in casing.": {
         "category": "Error",
         "code": 1149
     },
@@ -459,7 +459,7 @@
         "category": "Error",
         "code": 1150
     },
-    "'const' declarations must be initialized": {
+    "'const' declarations must be initialized.": {
         "category": "Error",
         "code": 1155
     },
@@ -655,11 +655,11 @@
         "category": "Error",
         "code": 1210
     },
-    "A class declaration without the 'default' modifier must have a name": {
+    "A class declaration without the 'default' modifier must have a name.": {
         "category": "Error",
         "code": 1211
     },
-    "Identifier expected. '{0}' is a reserved word in strict mode": {
+    "Identifier expected. '{0}' is a reserved word in strict mode.": {
         "category": "Error",
         "code": 1212
     },
@@ -1111,7 +1111,7 @@
         "category": "Error",
         "code": 2360
     },
-    "The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter": {
+    "The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.": {
         "category": "Error",
         "code": 2361
     },
@@ -1135,7 +1135,7 @@
         "category": "Error",
         "code": 2366
     },
-    "Type parameter name cannot be '{0}'": {
+    "Type parameter name cannot be '{0}'.": {
         "category": "Error",
         "code": 2368
     },
@@ -1295,7 +1295,7 @@
         "category": "Error",
         "code": 2408
     },
-    "Return type of constructor signature must be assignable to the instance type of the class": {
+    "Return type of constructor signature must be assignable to the instance type of the class.": {
         "category": "Error",
         "code": 2409
     },
@@ -1315,7 +1315,7 @@
         "category": "Error",
         "code": 2413
     },
-    "Class name cannot be '{0}'": {
+    "Class name cannot be '{0}'.": {
         "category": "Error",
         "code": 2414
     },
@@ -1351,7 +1351,7 @@
         "category": "Error",
         "code": 2426
     },
-    "Interface name cannot be '{0}'": {
+    "Interface name cannot be '{0}'.": {
         "category": "Error",
         "code": 2427
     },
@@ -1363,7 +1363,7 @@
         "category": "Error",
         "code": 2430
     },
-    "Enum name cannot be '{0}'": {
+    "Enum name cannot be '{0}'.": {
         "category": "Error",
         "code": 2431
     },
@@ -1371,11 +1371,11 @@
         "category": "Error",
         "code": 2432
     },
-    "A namespace declaration cannot be in a different file from a class or function with which it is merged": {
+    "A namespace declaration cannot be in a different file from a class or function with which it is merged.": {
         "category": "Error",
         "code": 2433
     },
-    "A namespace declaration cannot be located prior to a class or function with which it is merged": {
+    "A namespace declaration cannot be located prior to a class or function with which it is merged.": {
         "category": "Error",
         "code": 2434
     },
@@ -1387,11 +1387,11 @@
         "category": "Error",
         "code": 2436
     },
-    "Module '{0}' is hidden by a local declaration with the same name": {
+    "Module '{0}' is hidden by a local declaration with the same name.": {
         "category": "Error",
         "code": 2437
     },
-    "Import name cannot be '{0}'": {
+    "Import name cannot be '{0}'.": {
         "category": "Error",
         "code": 2438
     },
@@ -1399,7 +1399,7 @@
         "category": "Error",
         "code": 2439
     },
-    "Import declaration conflicts with local declaration of '{0}'": {
+    "Import declaration conflicts with local declaration of '{0}'.": {
         "category": "Error",
         "code": 2440
     },
@@ -1459,7 +1459,7 @@
         "category": "Error",
         "code": 2456
     },
-    "Type alias name cannot be '{0}'": {
+    "Type alias name cannot be '{0}'.": {
         "category": "Error",
         "code": 2457
     },
@@ -1479,7 +1479,7 @@
         "category": "Error",
         "code": 2461
     },
-    "A rest element must be last in a destructuring pattern": {
+    "A rest element must be last in a destructuring pattern.": {
         "category": "Error",
         "code": 2462
     },
@@ -1563,7 +1563,7 @@
         "category": "Error",
         "code": 2483
     },
-    "Export declaration conflicts with exported declaration of '{0}'": {
+    "Export declaration conflicts with exported declaration of '{0}'.": {
         "category": "Error",
         "code": 2484
     },
@@ -1587,7 +1587,7 @@
         "category": "Error",
         "code": 2491
     },
-    "Cannot redeclare identifier '{0}' in catch clause": {
+    "Cannot redeclare identifier '{0}' in catch clause.": {
         "category": "Error",
         "code": 2492
     },
@@ -1831,7 +1831,7 @@
         "category": "Error",
         "code": 2602
     },
-    "Property '{0}' in type '{1}' is not assignable to type '{2}'": {
+    "Property '{0}' in type '{1}' is not assignable to type '{2}'.": {
         "category": "Error",
         "code": 2603
     },
@@ -1847,11 +1847,11 @@
         "category": "Error",
         "code": 2606
     },
-    "JSX element class does not support attributes because it does not have a '{0}' property": {
+    "JSX element class does not support attributes because it does not have a '{0}' property.": {
         "category": "Error",
         "code": 2607
     },
-    "The global type 'JSX.{0}' may not have more than one property": {
+    "The global type 'JSX.{0}' may not have more than one property.": {
         "category": "Error",
         "code": 2608
     },
@@ -1863,7 +1863,7 @@
         "category": "Error",
         "code": 2649
     },
-    "Cannot emit namespaced JSX elements in React": {
+    "Cannot emit namespaced JSX elements in React.": {
         "category": "Error",
         "code": 2650
     },
@@ -1887,11 +1887,11 @@
         "category": "Error",
         "code": 2656
     },
-    "JSX expressions must have one parent element": {
+    "JSX expressions must have one parent element.": {
         "category": "Error",
         "code": 2657
     },
-    "Type '{0}' provides no match for the signature '{1}'": {
+    "Type '{0}' provides no match for the signature '{1}'.": {
         "category": "Error",
         "code": 2658
     },
@@ -2071,11 +2071,11 @@
         "category": "Error",
         "code": 2702
     },
-    "The operand of a delete operator must be a property reference": {
+    "The operand of a delete operator must be a property reference.": {
         "category": "Error",
         "code": 2703
     },
-    "The operand of a delete operator cannot be a read-only property": {
+    "The operand of a delete operator cannot be a read-only property.": {
         "category": "Error",
         "code": 2704
     },
@@ -2409,7 +2409,7 @@
         "category": "Error",
         "code": 5011
     },
-    "Cannot read file '{0}': {1}": {
+    "Cannot read file '{0}': {1}.": {
         "category": "Error",
         "code": 5012
     },
@@ -2429,7 +2429,7 @@
         "category": "Error",
         "code": 5024
     },
-    "Could not write file '{0}': {1}": {
+    "Could not write file '{0}': {1}.": {
         "category": "Error",
         "code": 5033
     },
@@ -2465,11 +2465,11 @@
         "category": "Error",
         "code": 5056
     },
-    "Cannot find a tsconfig.json file at the specified directory: '{0}'": {
+    "Cannot find a tsconfig.json file at the specified directory: '{0}'.": {
         "category": "Error",
         "code": 5057
     },
-    "The specified path does not exist: '{0}'": {
+    "The specified path does not exist: '{0}'.": {
         "category": "Error",
         "code": 5058
     },
@@ -2481,11 +2481,11 @@
         "category": "Error",
         "code": 5060
     },
-    "Pattern '{0}' can have at most one '*' character": {
+    "Pattern '{0}' can have at most one '*' character.": {
         "category": "Error",
         "code": 5061
     },
-    "Substitution '{0}' in pattern '{1}' in can have at most one '*' character": {
+    "Substitution '{0}' in pattern '{1}' in can have at most one '*' character.": {
         "category": "Error",
         "code": 5062
     },
@@ -2557,11 +2557,11 @@
         "category": "Message",
         "code": 6012
     },
-    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'": {
+    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'.": {
         "category": "Message",
         "code": 6015
     },
-    "Specify module code generation: 'commonjs', 'amd', 'system', 'umd' or 'es2015'": {
+    "Specify module code generation: 'commonjs', 'amd', 'system', 'umd' or 'es2015'.": {
         "category": "Message",
         "code": 6016
     },
@@ -2573,7 +2573,7 @@
         "category": "Message",
         "code": 6019
     },
-    "Compile the project given the path to its configuration file, or to a folder with a 'tsconfig.json'": {
+    "Compile the project given the path to its configuration file, or to a folder with a 'tsconfig.json'.": {
         "category": "Message",
         "code": 6020
     },
@@ -2653,7 +2653,7 @@
         "category": "Error",
         "code": 6045
     },
-    "Argument for '{0}' option must be: {1}": {
+    "Argument for '{0}' option must be: {1}.": {
         "category": "Error",
         "code": 6046
     },
@@ -2741,7 +2741,7 @@
         "category": "Message",
         "code": 6072
     },
-    "Stylize errors and messages using color and context. (experimental)": {
+    "Stylize errors and messages using color and context (experimental).": {
         "category": "Message",
         "code": 6073
     },
@@ -2769,7 +2769,7 @@
         "category": "Message",
         "code": 6079
     },
-    "Specify JSX code generation: 'preserve', 'react-native', or 'react'": {
+    "Specify JSX code generation: 'preserve', 'react-native', or 'react'.": {
         "category": "Message",
         "code": 6080
     },
@@ -2785,7 +2785,7 @@
         "category": "Message",
         "code": 6083
     },
-    "Specify the object invoked for createElement and __spread when targeting 'react' JSX emit": {
+    "Specify the object invoked for createElement and __spread when targeting 'react' JSX emit.": {
         "category": "Message",
         "code": 6084
     },
@@ -2873,27 +2873,27 @@
         "category": "Message",
         "code": 6105
     },
-    "'baseUrl' option is set to '{0}', using this value to resolve non-relative module name '{1}'": {
+    "'baseUrl' option is set to '{0}', using this value to resolve non-relative module name '{1}'.": {
         "category": "Message",
         "code": 6106
     },
-    "'rootDirs' option is set, using it to resolve relative module name '{0}'": {
+    "'rootDirs' option is set, using it to resolve relative module name '{0}'.": {
         "category": "Message",
         "code": 6107
     },
-    "Longest matching prefix for '{0}' is '{1}'": {
+    "Longest matching prefix for '{0}' is '{1}'.": {
         "category": "Message",
         "code": 6108
     },
-    "Loading '{0}' from the root dir '{1}', candidate location '{2}'": {
+    "Loading '{0}' from the root dir '{1}', candidate location '{2}'.": {
         "category": "Message",
         "code": 6109
     },
-    "Trying other entries in 'rootDirs'": {
+    "Trying other entries in 'rootDirs'.": {
         "category": "Message",
         "code": 6110
     },
-    "Module resolution using 'rootDirs' has failed": {
+    "Module resolution using 'rootDirs' has failed.": {
         "category": "Message",
         "code": 6111
     },
@@ -2933,7 +2933,7 @@
         "category": "Message",
         "code": 6120
     },
-    "Resolving with primary search path '{0}'": {
+    "Resolving with primary search path '{0}'.": {
         "category": "Message",
         "code": 6121
     },
@@ -2949,7 +2949,7 @@
         "category": "Message",
         "code": 6124
     },
-    "Looking up in 'node_modules' folder, initial location '{0}'": {
+    "Looking up in 'node_modules' folder, initial location '{0}'.": {
         "category": "Message",
         "code": 6125
     },
@@ -2969,7 +2969,7 @@
         "category": "Error",
         "code": 6129
     },
-    "Resolving real path for '{0}', result '{1}'": {
+    "Resolving real path for '{0}', result '{1}'.": {
         "category": "Message",
         "code": 6130
     },
@@ -2977,7 +2977,7 @@
         "category": "Error",
         "code": 6131
     },
-    "File name '{0}' has a '{1}' extension - stripping it": {
+    "File name '{0}' has a '{1}' extension - stripping it.": {
         "category": "Message",
         "code": 6132
     },
@@ -2993,7 +2993,7 @@
         "category": "Message",
         "code": 6135
     },
-    "The maximum dependency depth to search under node_modules and load JavaScript files": {
+    "The maximum dependency depth to search under node_modules and load JavaScript files.": {
         "category": "Message",
         "code": 6136
     },
@@ -3009,7 +3009,7 @@
         "category": "Error",
         "code": 6140
     },
-    "Parse in strict mode and emit \"use strict\" for each source file": {
+    "Parse in strict mode and emit \"use strict\" for each source file.": {
         "category": "Message",
         "code": 6141
     },
@@ -3113,7 +3113,7 @@
         "category": "Error",
         "code": 7025
     },
-    "JSX element implicitly has type 'any' because no interface 'JSX.{0}' exists": {
+    "JSX element implicitly has type 'any' because no interface 'JSX.{0}' exists.": {
         "category": "Error",
         "code": 7026
     },
@@ -3241,7 +3241,7 @@
         "category": "Error",
         "code": 17004
     },
-    "A constructor cannot contain a 'super' call when its class extends 'null'": {
+    "A constructor cannot contain a 'super' call when its class extends 'null'.": {
         "category": "Error",
         "code": 17005
     },
@@ -3307,7 +3307,7 @@
         "category": "Message",
         "code": 90003
     },
-    "Remove declaration for: {0}": {
+    "Remove declaration for: '{0}'.": {
         "category": "Message",
         "code": 90004
     },
@@ -3323,7 +3323,7 @@
         "category": "Message",
         "code": 90008
     },
-    "Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig": {
+    "Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.": {
         "category": "Error",
         "code": 90009
     },
@@ -3331,23 +3331,23 @@
         "category": "Error",
         "code": 90010
     },
-    "Import {0} from {1}": {
+    "Import {0} from {1}.": {
         "category": "Message",
         "code": 90013
     },
-    "Change {0} to {1}": {
+    "Change {0} to {1}.": {
         "category": "Message",
         "code": 90014
     },
-    "Add {0} to existing import declaration from {1}": {
+    "Add {0} to existing import declaration from {1}.": {
         "category": "Message",
         "code": 90015
     },
-    "Add declaration for missing property '{0}'": {
+    "Add declaration for missing property '{0}'.": {
         "category": "Message",
         "code": 90016
     },
-    "Add index signature for missing property '{0}'": {
+    "Add index signature for missing property '{0}'.": {
         "category": "Message",
         "code": 90017
     },

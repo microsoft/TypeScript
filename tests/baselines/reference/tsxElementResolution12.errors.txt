@@ -1,5 +1,5 @@
-tests/cases/conformance/jsx/file.tsx(23,1): error TS2607: JSX element class does not support attributes because it does not have a 'pr' property
-tests/cases/conformance/jsx/file.tsx(25,1): error TS2607: JSX element class does not support attributes because it does not have a 'pr' property
+tests/cases/conformance/jsx/file.tsx(23,1): error TS2607: JSX element class does not support attributes because it does not have a 'pr' property.
+tests/cases/conformance/jsx/file.tsx(25,1): error TS2607: JSX element class does not support attributes because it does not have a 'pr' property.
 tests/cases/conformance/jsx/file.tsx(33,7): error TS2322: Type '{ x: "10"; }' is not assignable to type '{ x: number; }'.
   Types of property 'x' are incompatible.
     Type '"10"' is not assignable to type 'number'.
@@ -30,11 +30,11 @@ tests/cases/conformance/jsx/file.tsx(33,7): error TS2322: Type '{ x: "10"; }' is
     var Obj3: Obj3type;
     <Obj3 x={10} />; // Error
     ~~~~~~~~~~~~~~~
-!!! error TS2607: JSX element class does not support attributes because it does not have a 'pr' property
+!!! error TS2607: JSX element class does not support attributes because it does not have a 'pr' property.
     var attributes: any;
     <Obj3 {...attributes} />; // Error
     ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2607: JSX element class does not support attributes because it does not have a 'pr' property
+!!! error TS2607: JSX element class does not support attributes because it does not have a 'pr' property.
     <Obj3 {...{}} />; // OK
     
     interface Obj4type {

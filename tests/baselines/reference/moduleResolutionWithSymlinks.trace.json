@@ -25,6 +25,6 @@
     "File '/src/library-b/node_modules/library-a.d.ts' does not exist.",
     "File '/src/library-b/node_modules/library-a/package.json' does not exist.",
     "File '/src/library-b/node_modules/library-a/index.ts' exist - use it as a name resolution result.",
-    "Resolving real path for '/src/library-b/node_modules/library-a/index.ts', result '/src/library-a/index.ts'",
+    "Resolving real path for '/src/library-b/node_modules/library-a/index.ts', result '/src/library-a/index.ts'.",
     "======== Module name 'library-a' was successfully resolved to '/src/library-a/index.ts'. ========"
 ]
