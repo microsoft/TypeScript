@@ -3351,6 +3351,11 @@
         "category": "Message",
         "code": 90017
     },
+    "Initialize property '{0}' in the constructor.": {
+        "category": "Message",
+        "code": 90018
+    },
+
     "Octal literal types must use ES2015 syntax. Use the syntax '{0}'.": {
         "category": "Error",
         "code": 8017
