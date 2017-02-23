@@ -4796,10 +4796,6 @@ interface HTMLFormElement extends HTMLElement {
       */
     item(name?: any, index?: any): any;
     /**
-      * Retrieves a form object or an object from an elements collection.
-      */
-    namedItem(name: string): any;
-    /**
       * Fires when the user resets a form.
       */
     reset(): void;
