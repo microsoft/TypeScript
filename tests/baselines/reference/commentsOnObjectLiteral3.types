@@ -1,8 +1,8 @@
 === tests/cases/compiler/commentsOnObjectLiteral3.ts ===
 
 var v = {
->v : { prop: number; func: () => void; func1(): void; a: any; }
->{ //property prop: 1 /* multiple trailing comments */ /*trailing comments*/, //property func: function () { }, //PropertyName + CallSignature func1() { }, //getter get a() {  return this.prop; } /*trailing 1*/, //setter set a(value) {  this.prop = value; } // trailing 2} : { prop: number; func: () => void; func1(): void; a: any; }
+>v : { prop: number; func: () => void; func1(): void; a: number; }
+>{ //property prop: 1 /* multiple trailing comments */ /*trailing comments*/, //property func: function () { }, //PropertyName + CallSignature func1() { }, //getter get a() {  return this.prop; } /*trailing 1*/, //setter set a(value) {  this.prop = value; } // trailing 2} : { prop: number; func: () => void; func1(): void; a: number; }
 
  //property
  prop: 1 /* multiple trailing comments */ /*trailing comments*/,
@@ -21,25 +21,25 @@ var v = {
 
  //getter
  get a() {
->a : any
+>a : number
 
   return this.prop;
->this.prop : any
->this : any
->prop : any
+>this.prop : number
+>this : { prop: number; func: () => void; func1(): void; a: number; }
+>prop : number
 
  } /*trailing 1*/,
  //setter
  set a(value) {
->a : any
->value : any
+>a : number
+>value : number
 
   this.prop = value;
->this.prop = value : any
->this.prop : any
->this : any
->prop : any
->value : any
+>this.prop = value : number
+>this.prop : number
+>this : { prop: number; func: () => void; func1(): void; a: number; }
+>prop : number
+>value : number
 
  } // trailing 2
 };
