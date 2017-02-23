@@ -97,6 +97,7 @@ namespace ts {
             getBaseTypes,
             getBaseTypeOfLiteralType,
             getWidenedType,
+            getTypeWithThisArgument,
             getTypeFromTypeNode: node => {
                 node = getParseTreeNode(node, isTypeNode);
                 return node ? getTypeFromTypeNode(node) : unknownType;

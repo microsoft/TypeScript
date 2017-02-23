@@ -2411,6 +2411,7 @@
         getIndexTypeOfType(type: Type, kind: IndexKind): Type;
         getBaseTypes(type: InterfaceType): BaseType[];
         getBaseTypeOfLiteralType(type: Type): Type;
+        getTypeWithThisArgument(type: Type, thisArgument?: Type): Type;
         getWidenedType(type: Type): Type;
         getReturnTypeOfSignature(signature: Signature): Type;
         /**

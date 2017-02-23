@@ -23,7 +23,7 @@ namespace ts.codefix {
             const startPos = classDecl.members.pos;
 
             const classType = checker.getTypeAtLocation(classDecl) as InterfaceType;
-            const instantiatedExtendsType = checker.getBaseTypes(classType)[0];
+            const instantiatedExtendsType = checker.getTypeWithThisArgument(checker.getBaseTypes(classType)[0], classType.thisType);
 
             // Note that this is ultimately derived from a map indexed by symbol names,
             // so duplicates cannot occur.
