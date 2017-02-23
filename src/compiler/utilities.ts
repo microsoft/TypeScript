@@ -3126,6 +3126,14 @@ namespace ts {
         return tryGetClassExtendingExpressionWithTypeArguments(node) !== undefined;
     }
 
+    export function isExpressionWithTypeArgumentsInClassImplementsClause(node: Node): boolean {
+        return node.kind === SyntaxKind.ExpressionWithTypeArguments
+            && node.parent
+            && (<HeritageClause>node.parent).token === SyntaxKind.ImplementsKeyword
+            && node.parent.parent
+            && isClassLike(node.parent.parent);
+    }
+
     export function isEntityNameExpression(node: Expression): node is EntityNameExpression {
         return node.kind === SyntaxKind.Identifier ||
             node.kind === SyntaxKind.PropertyAccessExpression && isEntityNameExpression((<PropertyAccessExpression>node).expression);
