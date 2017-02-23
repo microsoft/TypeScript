@@ -176,11 +176,11 @@ namespace ts.projectSystem {
         }
     };
 
-    export function createSession(host: server.ServerHost, typingsInstaller?: server.ITypingsInstaller, projectServiceEventHandler?: server.ProjectServiceEventHandler, cancellationToken?: server.ServerCancellationToken) {
+    export function createSession(host: server.ServerHost, typingsInstaller?: server.ITypingsInstaller, projectServiceEventHandler?: server.ProjectServiceEventHandler, cancellationToken?: server.ServerCancellationToken, throttleWaitMilliseconds?: number) {
         if (typingsInstaller === undefined) {
             typingsInstaller = new TestTypingsInstaller("/a/data/", /*throttleLimit*/5, host);
         }
-        return new TestSession(host, cancellationToken || server.nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ projectServiceEventHandler !== undefined, projectServiceEventHandler);
+        return new TestSession(host, cancellationToken || server.nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ projectServiceEventHandler !== undefined, projectServiceEventHandler, throttleWaitMilliseconds);
     }
 
     export interface CreateProjectServiceParameters {
@@ -3320,6 +3320,7 @@ namespace ts.projectSystem {
                 },
                 resetRequest: noop
             }
+
             const session = createSession(host, /*typingsInstaller*/ undefined, /*projectServiceEventHandler*/ undefined, cancellationToken);
 
             expectedRequestId = session.getNextSeq();
@@ -3492,7 +3493,7 @@ namespace ts.projectSystem {
             };
             const cancellationToken = new TestServerCancellationToken(/*cancelAfterRequest*/ 3);
             const host = createServerHost([f1, config]);
-            const session = createSession(host, /*typingsInstaller*/ undefined, () => { }, cancellationToken);
+            const session = createSession(host, /*typingsInstaller*/ undefined, () => { }, cancellationToken, /*throttleWaitMilliseconds*/ 0);
             {
                 session.executeCommandSeq(<protocol.OpenRequest>{
                     command: "open",

@@ -3,6 +3,36 @@
 /* @internal */
 namespace ts.NavigationBar {
     /**
+     * Matches all whitespace characters in a string. Eg:
+     *
+     * "app.
+     *
+     * onactivated"
+     *
+     * matches because of the newline, whereas
+     *
+     * "app.onactivated"
+     *
+     * does not match.
+     */
+    const whiteSpaceRegex = /\s+/g;
+
+    // Keep sourceFile handy so we don't have to search for it every time we need to call `getText`.
+    let curCancellationToken: CancellationToken;
+    let curSourceFile: SourceFile;
+
+    /**
+     * For performance, we keep navigation bar parents on a stack rather than passing them through each recursion.
+     * `parent` is the current parent and is *not* stored in parentsStack.
+     * `startNode` sets a new parent and `endNode` returns to the previous parent.
+     */
+    let parentsStack: NavigationBarNode[] = [];
+    let parent: NavigationBarNode;
+
+    // NavigationBarItem requires an array, but will not mutate it, so just give it this for performance.
+    let emptyChildItemArray: NavigationBarItem[] = [];
+
+    /**
      * Represents a navigation bar item and its children.
      * The returned NavigationBarItem is more complicated and doesn't include 'parent', so we use these to do work before converting.
      */
@@ -21,8 +51,7 @@ namespace ts.NavigationBar {
             return map(topLevelItems(rootNavigationBarNode(sourceFile)), convertToTopLevelItem);
         }
         finally {
-            curSourceFile = undefined;
-            curCancellationToken = undefined;
+            reset();
         }
     }
 
@@ -33,14 +62,18 @@ namespace ts.NavigationBar {
             return convertToTree(rootNavigationBarNode(sourceFile));
         }
         finally {
-            curSourceFile = undefined;
-            curCancellationToken = undefined;
+            reset();
         }
     }
 
-    // Keep sourceFile handy so we don't have to search for it every time we need to call `getText`.
-    let curCancellationToken: CancellationToken;
-    let curSourceFile: SourceFile;
+    function reset() {
+        curSourceFile = undefined;
+        curCancellationToken = undefined;
+        parentsStack = [];
+        parent = undefined;
+        emptyChildItemArray = [];
+    }
+
     function nodeText(node: Node): string {
         return node.getText(curSourceFile);
     }
@@ -57,14 +90,6 @@ namespace ts.NavigationBar {
             parent.children = [child];
         }
     }
-
-    /*
-    For performance, we keep navigation bar parents on a stack rather than passing them through each recursion.
-    `parent` is the current parent and is *not* stored in parentsStack.
-    `startNode` sets a new parent and `endNode` returns to the previous parent.
-    */
-    const parentsStack: NavigationBarNode[] = [];
-    let parent: NavigationBarNode;
 
     function rootNavigationBarNode(sourceFile: SourceFile): NavigationBarNode {
         Debug.assert(!parentsStack.length);
@@ -500,9 +525,6 @@ namespace ts.NavigationBar {
         }
     }
 
-    // NavigationBarItem requires an array, but will not mutate it, so just give it this for performance.
-    const emptyChildItemArray: NavigationBarItem[] = [];
-
     function convertToTree(n: NavigationBarNode): NavigationTree {
         return {
             text: getItemName(n.node),
@@ -623,19 +645,4 @@ namespace ts.NavigationBar {
     function isFunctionOrClassExpression(node: Node): boolean {
         return node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction || node.kind === SyntaxKind.ClassExpression;
     }
-
-    /**
-     * Matches all whitespace characters in a string. Eg:
-     *
-     * "app.
-     *
-     * onactivated"
-     *
-     * matches because of the newline, whereas
-     *
-     * "app.onactivated"
-     *
-     * does not match.
-     */
-    const whiteSpaceRegex = /\s+/g;
 }
