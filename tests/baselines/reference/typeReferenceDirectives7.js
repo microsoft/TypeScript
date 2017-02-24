@@ -15,8 +15,8 @@ export let x: typeof $;
 export let y = () => x
 
 //// [app.js]
-/// <reference types="lib"/>
 "use strict";
+/// <reference types="lib"/>
 exports.__esModule = true;
 exports.$ = 1;
 exports.y = function () { return exports.x; };

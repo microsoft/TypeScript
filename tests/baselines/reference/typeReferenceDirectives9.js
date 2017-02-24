@@ -41,8 +41,8 @@ var Cls = (function () {
 }());
 exports.Cls = Cls;
 //// [mod1.js]
-/// <reference types="lib" />
 "use strict";
+/// <reference types="lib" />
 exports.__esModule = true;
 var main_1 = require("./main");
 main_1.Cls.prototype.foo = function () { return undefined; };

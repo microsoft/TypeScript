@@ -23,7 +23,6 @@ var M;
     }
     M.f = f;
 })(M || (M = {}));
-"use strict";
 var M;
 (function (M) {
     function f2() {

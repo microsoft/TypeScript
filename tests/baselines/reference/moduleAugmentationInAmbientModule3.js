@@ -38,8 +38,8 @@ x.foo2().x2;
 
 
 //// [main.js]
-/// <reference path="O.d.ts" />
 "use strict";
+/// <reference path="O.d.ts" />
 exports.__esModule = true;
 require("Map");
 var x;
