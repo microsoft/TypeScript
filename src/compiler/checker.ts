@@ -20898,7 +20898,9 @@ namespace ts {
                 return getSymbolOfNode(entityName.parent);
             }
 
-            if (isInJavaScriptFile(entityName) && entityName.parent.kind === SyntaxKind.PropertyAccessExpression) {
+            if (isInJavaScriptFile(entityName) &&
+                entityName.parent.kind === SyntaxKind.PropertyAccessExpression &&
+                entityName.parent === (entityName.parent.parent as BinaryExpression).left) {
                 // Check if this is a special property assignment
                 const specialPropertyAssignmentSymbol = getSpecialPropertyAssignmentSymbolFromEntityName(entityName);
                 if (specialPropertyAssignmentSymbol) {
