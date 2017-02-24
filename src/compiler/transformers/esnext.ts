@@ -224,25 +224,95 @@ namespace ts {
             return visitEachChild(node, noDestructuringValue ? visitorNoDestructuringValue : visitor, context);
         }
 
+        function containsSingleNullPropagatingTarget(element: BindingOrAssignmentElement): boolean {
+            const target = getTargetOfBindingOrAssignmentElement(element);
+            if (isBindingOrAssignmentPattern(target)) {
+                const elements = getElementsOfBindingOrAssignmentPattern(target);
+                return elements.length === 1 && containsSingleNullPropagatingTarget(elements[0]);
+            }
+            return isPropertyAccessOrElementAccess(target)
+                && (target.flags & NodeFlags.PropagateNull) !== 0;
+        }
+
+        function convertNullPropagatingReferenceToRefInAssignmentPattern(node: Node): VisitResult<Node> {
+            switch (node.kind) {
+                case SyntaxKind.ObjectLiteralExpression:
+                    return visitEachChild(node, convertNullPropagatingReferenceToRefInAssignmentPattern, context);
+                case SyntaxKind.PropertyAssignment:
+                    return updatePropertyAssignment(
+                        <PropertyAssignment>node,
+                        (<PropertyAssignment>node).name,
+                        visitNode((<PropertyAssignment>node).initializer, convertNullPropagatingReferenceToRefInAssignmentPattern, isExpression));
+                case SyntaxKind.SpreadAssignment:
+                    return updateSpreadAssignment(
+                        <SpreadAssignment>node,
+                        visitNode((<SpreadAssignment>node).expression, convertNullPropagatingReferenceToRefInAssignmentPattern, isExpression));
+                case SyntaxKind.ArrayLiteralExpression:
+                    return visitEachChild(node, convertNullPropagatingReferenceToRefInAssignmentPattern, context);
+                case SyntaxKind.SpreadElement:
+                    return updateSpread(
+                        <SpreadElement>node,
+                        visitNode((<SpreadElement>node).expression, convertNullPropagatingReferenceToRefInAssignmentPattern, isExpression));
+                case SyntaxKind.BinaryExpression:
+                    return updateBinary(
+                        <BinaryExpression>node,
+                        visitNode((<BinaryExpression>node).left, convertNullPropagatingReferenceToRefInAssignmentPattern, isExpression),
+                        (<BinaryExpression>node).right);
+
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
+                    if (node.flags & NodeFlags.PropagateNull) {
+                        const ref = createRef(<PropertyAccessExpression | ElementAccessExpression>node, hoistVariableDeclaration, CreateRefFlags.Writable);
+                        return setTextRange(createPropertyAccess(ref, "value"), node);
+                    }
+
+                default:
+                    return node;
+            }
+        }
+
         /**
          * Visits a BinaryExpression that contains a destructuring assignment.
          *
          * @param node A BinaryExpression node.
          */
         function visitBinaryExpression(node: BinaryExpression, noDestructuringValue: boolean): Expression {
-            // NOTE: null propagation is not currently handled in destructuring assignments:
-            //  [x?.y] = [1]                ->  [_a] = _b = [1], x == null ? _a : x.y = _a
-            //                          (or)->  [{ set value(_) { x == null ? _ : x.y = _ }}.value] = [1]
-            if (isDestructuringAssignment(node) && node.left.transformFlags & TransformFlags.ContainsObjectRest) {
-                return flattenDestructuringAssignment(
-                    node,
-                    visitor,
-                    context,
-                    FlattenLevel.ObjectRest,
-                    !noDestructuringValue
-                );
+            if (isDestructuringAssignment(node)) {
+                if (languageVersion >= ScriptTarget.ES2015) {
+                    // convert null propagating targets to `ref` bindings
+                    // we don't need to do this for ES5 as the down-leveling handles the binding
+                    node = visitNode(node, convertNullPropagatingReferenceToRefInAssignmentPattern, isBinaryExpression);
+                }
+                else {
+                    // The ES5/3 removes the need for a `ref` binding, but we must ensure we
+                    // capture the RHS.
+                    if (containsSingleNullPropagatingTarget(node) && !isIdentifier(node.right)) {
+                        const rhs = createTempVariable(hoistVariableDeclaration);
+                        node = createComma(
+                            createAssignment(rhs, node.right),
+                            updateBinary(
+                                node,
+                                node.left,
+                                rhs
+                            )
+                        ) as BinaryExpression;
+                        aggregateTransformFlags(node);
+                    }
+                }
             }
-            else if (node.operatorToken.kind === SyntaxKind.CommaToken) {
+
+            if (isDestructuringAssignment(node)) {
+                if (node.left.transformFlags & TransformFlags.ContainsObjectRest) {
+                    return flattenDestructuringAssignment(
+                        node,
+                        visitor,
+                        context,
+                        FlattenLevel.ObjectRest,
+                        !noDestructuringValue
+                    );
+                }
+            }
+            if (node.operatorToken.kind === SyntaxKind.CommaToken) {
                 return updateBinary(
                     node,
                     visitNode(node.left, visitorNoDestructuringValue, isExpression),
@@ -258,8 +328,10 @@ namespace ts {
                     //  x.y?.z = 1              ->  _a = x.y, _b = 1, _a == null ? _b : _a.z = _b
                     //  x.y?.[z()] = 1          ->  _a = x.y, _b = z(), _c = 1, _a == null ? _c : _a[_b] = _c
                     const expressions: Expression[] = [];
-                    const { baseValue, reference } = createReference(referenceExpression, hoistVariableDeclaration, expressions);
-                    const rhsValue = captureExpression(node.right, hoistVariableDeclaration, expressions);
+                    const { baseValue, reference } = createPropertyReference(referenceExpression, hoistVariableDeclaration, expressions);
+                    const rhsValue = isGeneratedIdentifier(node.right)
+                        ? node.right
+                        : captureExpression(node.right, hoistVariableDeclaration, expressions);
                     expressions.push(
                         setTextRange(
                             createConditional(
@@ -752,25 +824,31 @@ namespace ts {
         function propagateNull<T extends Node, U>(finishExpression: (node: T, nullableExpression: Expression, data: U) => Expression, node: T, referenceExpression: Expression, data?: U): Expression {
             if (node.flags & NodeFlags.PropagateNull) {
                 if (isIdentifier(referenceExpression)) {
-                    return setTextRange(
-                        createConditional(
-                            createEquality(referenceExpression, createNull()),
-                            createVoidZero(),
-                            finishExpression(node, referenceExpression, data)
+                    return setOriginalNode(
+                        setTextRange(
+                            createConditional(
+                                createEquality(referenceExpression, createNull()),
+                                createVoidZero(),
+                                finishExpression(node, referenceExpression, data)
+                            ),
+                            node
                         ),
                         node
                     );
                 }
                 else {
                     const temp = createTempVariable(hoistVariableDeclaration);
-                    return setTextRange(
-                        createConditional(
-                            createEquality(
-                                createAssignment(temp, referenceExpression),
-                                createNull()
+                    return setOriginalNode(
+                        setTextRange(
+                            createConditional(
+                                createEquality(
+                                    createAssignment(temp, referenceExpression),
+                                    createNull()
+                                ),
+                                createVoidZero(),
+                                finishExpression(node, temp, data)
                             ),
-                            createVoidZero(),
-                            finishExpression(node, temp, data)
+                            node
                         ),
                         node
                     );
@@ -899,7 +977,7 @@ namespace ts {
         function visitUnaryMutationExpression<T extends UnaryExpression>(node: T, referenceExpression: Expression, updateNode: (node: T, referenceExpression: Expression) => T): Expression {
             if (referenceExpression.flags & NodeFlags.PropagateNull && isPropertyAccessOrElementAccess(referenceExpression)) {
                 const expressions: Expression[] = [];
-                const { baseValue, reference } = createReference(referenceExpression, hoistVariableDeclaration, expressions);
+                const { baseValue, reference } = createPropertyReference(referenceExpression, hoistVariableDeclaration, expressions);
                 expressions.push(
                     setTextRange(
                         createConditional(

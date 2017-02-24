@@ -55,10 +55,11 @@ namespace ts {
         }
 
         let expressions: Expression[];
+        const compilerOptions = context.getCompilerOptions();
         const flattenContext: FlattenContext = {
             context,
             level,
-            downlevelIteration: context.getCompilerOptions().downlevelIteration,
+            downlevelIteration: compilerOptions.downlevelIteration,
             hoistTempVariables: true,
             emitExpression,
             emitBindingOrAssignment,
