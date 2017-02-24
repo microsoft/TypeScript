@@ -5897,15 +5897,52 @@ namespace ts {
             return getTypeFromNonGenericTypeReference(node, symbol);
         }
 
+        function getPrimitiveTypeFromJSDocTypeReference(node: JSDocTypeReference): Type {
+            if (isIdentifier(node.name)) {
+                switch (node.name.text) {
+                    case "String":
+                        return stringType;
+                    case "Number":
+                        return numberType;
+                    case "Boolean":
+                        return booleanType;
+                    case "Void":
+                        return voidType;
+                    case "Undefined":
+                        return undefinedType;
+                    case "Null":
+                        return nullType;
+                    case "Object":
+                        return anyType;
+                    case "Function":
+                        return anyFunctionType;
+                    case "Array":
+                    case "array":
+                        return !node.typeArguments || !node.typeArguments.length ? createArrayType(anyType) : undefined;
+                    case "Promise":
+                    case "promise":
+                        return !node.typeArguments || !node.typeArguments.length ? createPromiseType(anyType) : undefined;
+                }
+            }
+        }
+
+        function getTypeFromJSDocNullableTypeNode(node: JSDocNullableType) {
+            const type = getTypeFromTypeNode(node.type);
+            return strictNullChecks ? getUnionType([type, nullType]) : type;
+        }
+
         function getTypeFromTypeReference(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 let symbol: Symbol;
                 let type: Type;
                 if (node.kind === SyntaxKind.JSDocTypeReference) {
-                    const typeReferenceName = getTypeReferenceName(node);
-                    symbol = resolveTypeReferenceName(typeReferenceName);
-                    type = getTypeReferenceType(node, symbol);
+                    type = getPrimitiveTypeFromJSDocTypeReference(<JSDocTypeReference>node);
+                    if (!type) {
+                        const typeReferenceName = getTypeReferenceName(node);
+                        symbol = resolveTypeReferenceName(typeReferenceName);
+                        type = getTypeReferenceType(node, symbol);
+                    }
                 }
                 else {
                     // We only support expressions that are simple qualified names. For other expressions this produces undefined.
@@ -6812,12 +6849,6 @@ namespace ts {
                     return neverType;
                 case SyntaxKind.ObjectKeyword:
                     return nonPrimitiveType;
-                case SyntaxKind.JSDocNullKeyword:
-                    return nullType;
-                case SyntaxKind.JSDocUndefinedKeyword:
-                    return undefinedType;
-                case SyntaxKind.JSDocNeverKeyword:
-                    return neverType;
                 case SyntaxKind.ThisType:
                 case SyntaxKind.ThisKeyword:
                     return getTypeFromThisTypeNode(node);
@@ -6844,8 +6875,9 @@ namespace ts {
                     return getTypeFromUnionTypeNode(<UnionTypeNode>node);
                 case SyntaxKind.IntersectionType:
                     return getTypeFromIntersectionTypeNode(<IntersectionTypeNode>node);
-                case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.JSDocNullableType:
+                    return getTypeFromJSDocNullableTypeNode(<JSDocNullableType>node);
+                case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.JSDocNonNullableType:
                 case SyntaxKind.JSDocConstructorType:
                 case SyntaxKind.JSDocThisType:
