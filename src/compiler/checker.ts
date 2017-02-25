@@ -15818,8 +15818,8 @@ namespace ts {
             }
             let leftType = checkExpression(left, contextualMapper);
             let rightType = checkExpression(right, contextualMapper);
-            let propagateNull = operator >= SyntaxKind.FirstAssignment && operator <= SyntaxKind.LastAssignment && left.flags & NodeFlags.PropagateNull;
-            let propagatingType = propagateNull ? getNullPropagatingType(leftType) : neverType;
+            const propagateNull = operator >= SyntaxKind.FirstAssignment && operator <= SyntaxKind.LastAssignment && left.flags & NodeFlags.PropagateNull;
+            const propagatingType = propagateNull ? getNullPropagatingType(leftType) : neverType;
             if (propagateNull) {
                 leftType = getNonNullableType(leftType);
             }

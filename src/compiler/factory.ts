@@ -2376,12 +2376,21 @@ namespace ts {
         }
     }
 
-    export function insertLeadingStatement(dest: Statement, source: Statement) {
-        if (isBlock(dest)) {
-            return updateBlock(dest, setTextRange(createNodeArray([source, ...dest.statements]), dest.statements));
+    export function insertLeadingStatement(embeddedStatement: Statement, newStatement: Statement) {
+        if (isBlock(embeddedStatement)) {
+            return updateBlock(
+                embeddedStatement,
+                setTextRange(
+                    createNodeArray([newStatement, ...embeddedStatement.statements]),
+                    embeddedStatement.statements
+                )
+            );
         }
         else {
-            return createBlock(createNodeArray([dest, source]), /*multiLine*/ true);
+            return createBlock(
+                createNodeArray([newStatement, embeddedStatement]),
+                /*multiLine*/ true
+            );
         }
     }
 
@@ -2402,67 +2411,28 @@ namespace ts {
         return updated;
     }
 
-    export const enum CreateRefFlags {
-        Readable = 1 << 0,
-        Writable = 1 << 1,
-        ReadWrite = Readable | Writable,
-    }
-
     /**
-     * Creates an expression that can be used to bind a reference to an identifier or property.
+     * Creates an expression that can be used to bind a reference to an identifier, property access, or element access.
      *
-     * For an identifier `x`, this creates an expression similar to the following:
+     * This creates an expression similar to the following:
      *
      *    ({
      *        get value() { return x; },
      *        set value(_a) { x = _a; }
      *    })
      *
-     * For a property `x.y`, this creates an expression similar to the following:
-     *
-     *    (_a = x, {
-     *        get value() { return _a.y; },
-     *        set value(_b) { _a.y = _b; }
-     *    })
-     *
-     * For an element access `x[y()]`, this creates an expression similar to the following:
-     *
-     *    (_a = x, _b = y(), {
-     *        get value() { return _a[_b]; },
-     *        set value(_c) { _a[_b] = _c; }
-     *    })
+     * @param node The referenced expression.
+     * @param recordTempVariable A callback used to record temporary variables.
+     * @param writeOnly A value indicating whether to omit the `value` getter on the ref object.
      */
-    export function createRef(node: PropertyAccessExpression | ElementAccessExpression | Identifier, recordTempVariable: (node: Identifier) => void, flags?: CreateRefFlags) {
-        if (!flags) flags = CreateRefFlags.ReadWrite;
-        const paramName = flags & CreateRefFlags.Writable ? createTempVariable(/*recordTempVariable*/ undefined) : undefined;
-        let expressions: Expression[];
-        let getValue: Expression;
-        let putValue: Expression;
-        if (isPropertyAccessOrElementAccess(node)) {
-            expressions = [];
-            const { reference } = createPropertyReference(node, recordTempVariable, expressions, /*captureArgumentExpression*/ true);
-            // Copy null propagation flags
-            if (node.flags & NodeFlags.PropagateNull) {
-                reference.flags |= NodeFlags.PropagateNull;
-            }
-            if (flags & CreateRefFlags.Readable) {
-                getValue = reference
-            }
-            if (flags & CreateRefFlags.Writable) {
-                putValue = setSourceMapRange(createAssignment(reference, paramName), node);
-            }
-        }
-        else {
-            if (flags & CreateRefFlags.Readable) {
-                getValue = node;
-            }
-            if (flags & CreateRefFlags.Writable) {
-                putValue = setSourceMapRange(createAssignment(node, paramName), node);
-            }
-        }
-
+    export function createRefObject(node: PropertyAccessExpression | ElementAccessExpression | Identifier, recordTempVariable: (temp: Identifier) => void, writeOnly?: boolean) {
+        const expressions: Expression[] = [];
+        const paramName = createTempVariable(/*recordTempVariable*/ undefined);
+        const reference = isPropertyAccessOrElementAccess(node)
+            ? createPropertyReference(node, recordTempVariable, expressions, /*captureIdentifiers*/ false, /*captureArgumentExpression*/ true, /*copyNullPropagation*/ true).reference
+            : node;
         const properties: ObjectLiteralElementLike[] = [];
-        if (getValue) {
+        if (!writeOnly) {
             properties.push(
                 setSourceMapRange(
                     createGetAccessor(
@@ -2471,38 +2441,34 @@ namespace ts {
                         "value",
                         /*parameters*/ [],
                         /*type*/ undefined,
-                        createBlock([setSourceMapRange(createReturn(getValue), node)])
+                        createBlock([setSourceMapRange(createReturn(reference), node)])
                     ),
                     node
                 )
             );
         }
-        if (putValue) {
-            properties.push(
-                setSourceMapRange(
-                    createSetAccessor(
-                        /*decorators*/ undefined,
-                        /*modifiers*/ undefined,
-                        "value",
-                        [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, paramName)],
-                        createBlock([setSourceMapRange(createStatement(putValue), node)])
-                    ),
-                    node
-                )
-            );
-        }
-        const refExpression = setSourceMapRange(
-            setCommentRange(
-                createObjectLiteral(properties, /*multiLine*/ false),
+        properties.push(
+            setSourceMapRange(
+                createSetAccessor(
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    "value",
+                    [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, paramName)],
+                    createBlock([setSourceMapRange(createStatement(setSourceMapRange(createAssignment(reference, paramName), node)), node)])
+                ),
                 node
-            ),
-            node
+            )
         );
-        if (expressions) {
-            expressions.push(refExpression);
-            return inlineExpressions(expressions);
-        }
-        return refExpression;
+        expressions.push(
+            setSourceMapRange(
+                setCommentRange(
+                    createObjectLiteral(properties, /*multiLine*/ false),
+                    node
+                ),
+                node
+            )
+        );
+        return setTextRange(inlineExpressions(expressions), node);
     }
 
     /**
@@ -2518,6 +2484,7 @@ namespace ts {
             case SyntaxKind.Identifier:
                 return captureIdentifiers;
             case SyntaxKind.ThisKeyword:
+            case SyntaxKind.SuperKeyword:
             case SyntaxKind.NullKeyword:
             case SyntaxKind.TrueKeyword:
             case SyntaxKind.FalseKeyword:
@@ -2566,39 +2533,77 @@ namespace ts {
     export interface PropertyReference {
         baseValue: Expression;
         reference: PropertyAccessExpression | ElementAccessExpression;
+        thisValue?: Expression;
     }
 
     /**
      * Creates an approximation of an ECMAScript `Reference` specification type.
-     * @param lhsReference The property or element access expression from which to create the reference.
+     * @param referenceExpression The expression from which to create the reference.
      * @param recordTempVariable A callback used to record new temp variables.
-     * @param expressions The array of expressions into which capturing assignments should be added.
-     * @param captureArgumentExpression A value indicating whether to capture the argumentExpression of an ElementAccessExpression.
+     * @param expressions The array of expressions into which capturing assignments should be
+     * added. If not supplied, expression capturing occurs in-line in the reference.
+     * @param captureArgumentExpression A value indicating whether to capture the
+     * argumentExpression of an ElementAccessExpression.
+     * @param copyNullPropagation A value indicating whether to preserve null propagation flags.
      */
-    export function createPropertyReference(referenceExpression: PropertyAccessExpression | ElementAccessExpression, recordTempVariable: (temp: Identifier) => void, expressions: Expression[], captureArgumentExpression?: boolean): PropertyReference {
-        const baseValue = captureExpressionIfNeeded(referenceExpression.expression, recordTempVariable, expressions);
-        let reference: PropertyAccessExpression | ElementAccessExpression;
-        if (isPropertyAccessExpression(referenceExpression)) {
-            reference = setTextRange(
-                createPropertyAccess(
-                    baseValue,
-                    referenceExpression.name
-                ),
-                referenceExpression
-            );
+    export function createPropertyReference(node: PropertyAccessExpression | ElementAccessExpression, recordTempVariable: (temp: Identifier) => void, expressions?: Expression[], captureIdentifiers?: boolean, captureArgumentExpression?: boolean, copyNullPropagation?: boolean): PropertyReference {
+        let baseExpression: Expression = node.expression;
+        let baseValue = baseExpression;
+        let reference = node;
+        let thisValue: Expression;
+        if (shouldBeCapturedInTempVariable(baseExpression, captureIdentifiers)) {
+            if (expressions) {
+                baseValue = baseExpression = captureExpression(baseValue, recordTempVariable, expressions);
+            }
+            else {
+                baseValue = createTempVariable(recordTempVariable);
+                baseExpression = setTextRange(createAssignment(baseValue, baseExpression), baseExpression);
+            }
+        }
+        if (isPropertyAccessExpression(node)) {
+            reference = updatePropertyAccess(node, baseExpression, node.name);
         }
         else {
-            reference = setTextRange(
-                createElementAccess(
-                    baseValue,
-                    captureArgumentExpression
-                        ? captureExpressionIfNeeded(referenceExpression.argumentExpression, recordTempVariable, expressions)
-                        : referenceExpression.argumentExpression
-                ),
-                referenceExpression
+            let argumentExpression = node.argumentExpression;
+            let argumentValue = argumentExpression;
+            if (captureArgumentExpression && shouldBeCapturedInTempVariable(argumentExpression, captureIdentifiers)) {
+                if (expressions) {
+                    argumentValue = argumentExpression = captureExpression(argumentExpression, recordTempVariable, expressions);
+                }
+                else {
+                    argumentValue = createTempVariable(recordTempVariable);
+                    argumentExpression = setTextRange(createAssignment(argumentValue, argumentExpression), argumentExpression);
+                    baseExpression = baseValue === baseExpression
+                        ? inlineExpressions([argumentExpression, baseValue]) // simple literal or identifier
+                        : inlineExpressions([baseExpression, argumentExpression, baseValue]); // complex expression
+                }
+            }
+            reference = updateElementAccess(
+                node,
+                baseExpression,
+                argumentValue
             );
         }
-        return { baseValue, reference };
+        if (reference === node && !copyNullPropagation && reference.flags & NodeFlags.PropagateNull) {
+            reference = setTextRange(
+                isPropertyAccessExpression(reference)
+                    ? createPropertyAccess(
+                        reference.expression,
+                        reference.name,
+                        copyNullPropagation ? node.flags & NodeFlags.PropagateNull : 0
+                    )
+                    : createElementAccess(
+                        reference.expression,
+                        reference.argumentExpression,
+                        copyNullPropagation ? node.flags & NodeFlags.PropagateNull : 0
+                    ),
+                node
+            );
+        }
+        if (node.expression.kind === SyntaxKind.SuperKeyword) {
+            thisValue = createThis();
+        }
+        return { baseValue, reference, thisValue };
     }
 
     export interface CallBinding {
@@ -2618,9 +2623,16 @@ namespace ts {
         const callee = skipOuterExpressions(expression);
         let thisArg: Expression;
         let target: LeftHandSideExpression;
-        if (isSuperProperty(callee)) {
-            thisArg = createThis();
-            target = callee;
+        if (isPropertyAccessOrElementAccess(callee)) {
+            const { baseValue, reference, thisValue } = createPropertyReference(
+                callee,
+                recordTempVariable,
+                /*expressions*/ undefined,
+                captureIdentifiers,
+                /*captureArgumentExpression*/ false,
+                /*copyNullPropagation*/ true);
+            thisArg = thisValue || baseValue;
+            target = reference;
         }
         else if (isSuper(callee)) {
             thisArg = createThis();
@@ -2631,54 +2643,6 @@ namespace ts {
         else if (getEmitFlags(callee) & EmitFlags.HelperName) {
             thisArg = createVoidZero();
             target = parenthesizeForAccess(callee);
-        }
-        else if (isPropertyAccessExpression(callee)) {
-            if (shouldBeCapturedInTempVariable(callee.expression, captureIdentifiers)) {
-                // for `a.b()` target is `(_a = a).b` and thisArg is `_a`
-                thisArg = createTempVariable(recordTempVariable);
-                target = setTextRange(
-                    createPropertyAccess(
-                        setTextRange(
-                            createAssignment(
-                                thisArg,
-                                callee.expression
-                            ),
-                            callee.expression
-                        ),
-                        callee.name,
-                        callee.flags & NodeFlags.PropagateNull
-                    ),
-                    callee
-                );
-            }
-            else {
-                thisArg = callee.expression;
-                target = callee;
-            }
-        }
-        else if (isElementAccessExpression(callee)) {
-            if (shouldBeCapturedInTempVariable(callee.expression, captureIdentifiers)) {
-                // for `a[b]()` target is `(_a = a)[b]` and thisArg is `_a`
-                thisArg = createTempVariable(recordTempVariable);
-                target = setTextRange(
-                    createElementAccess(
-                        setTextRange(
-                            createAssignment(
-                                thisArg,
-                                callee.expression
-                            ),
-                            callee.expression
-                        ),
-                        callee.argumentExpression,
-                        callee.flags & NodeFlags.PropagateNull
-                    ),
-                    callee
-                );
-            }
-            else {
-                thisArg = callee.expression;
-                target = callee;
-            }
         }
         else {
             // for `a()` target is `a` and thisArg is `void 0`

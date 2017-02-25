@@ -1,0 +1,144 @@
+=== tests/cases/conformance/types/safeNavigation/types.safeNavigation.esnext.1.ts ===
+declare const x1: (() => number) | undefined | null;
+>x1 : Symbol(x1, Decl(types.safeNavigation.esnext.1.ts, 0, 13))
+
+declare const x2: { y: (() => number) | undefined | null; };
+>x2 : Symbol(x2, Decl(types.safeNavigation.esnext.1.ts, 1, 13))
+>y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 1, 19))
+
+declare const x3: { y: (() => number) | undefined | null; } | undefined | null;
+>x3 : Symbol(x3, Decl(types.safeNavigation.esnext.1.ts, 2, 13))
+>y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 2, 19))
+
+declare const x4: { y: { z: (() => number) | undefined | null; } };
+>x4 : Symbol(x4, Decl(types.safeNavigation.esnext.1.ts, 3, 13))
+>y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 3, 19))
+>z : Symbol(z, Decl(types.safeNavigation.esnext.1.ts, 3, 24))
+
+declare const x5: { y: { z: (() => number) | undefined | null; } | undefined | null } | undefined | null;
+>x5 : Symbol(x5, Decl(types.safeNavigation.esnext.1.ts, 4, 13))
+>y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 4, 19))
+>z : Symbol(z, Decl(types.safeNavigation.esnext.1.ts, 4, 24))
+
+declare const x6: { y: number } | undefined | null;
+>x6 : Symbol(x6, Decl(types.safeNavigation.esnext.1.ts, 5, 13))
+>y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 5, 19))
+
+declare const x7: { y: any };
+>x7 : Symbol(x7, Decl(types.safeNavigation.esnext.1.ts, 6, 13))
+>y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 6, 19))
+
+declare const x8: { y: { z: number } | undefined | null } | undefined | null;
+>x8 : Symbol(x8, Decl(types.safeNavigation.esnext.1.ts, 7, 13))
+>y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 7, 19))
+>z : Symbol(z, Decl(types.safeNavigation.esnext.1.ts, 7, 24))
+
+declare const y: "y";
+>y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 8, 13))
+
+declare const z: "z";
+>z : Symbol(z, Decl(types.safeNavigation.esnext.1.ts, 9, 13))
+
+x1?.();
+>x1 : Symbol(x1, Decl(types.safeNavigation.esnext.1.ts, 0, 13))
+
+(x1)?.();
+>x1 : Symbol(x1, Decl(types.safeNavigation.esnext.1.ts, 0, 13))
+
+x2.y?.();
+>x2.y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 1, 19))
+>x2 : Symbol(x2, Decl(types.safeNavigation.esnext.1.ts, 1, 13))
+>y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 1, 19))
+
+x2[y]?.();
+>x2 : Symbol(x2, Decl(types.safeNavigation.esnext.1.ts, 1, 13))
+>y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 8, 13))
+
+(x2.y)?.();
+>x2.y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 1, 19))
+>x2 : Symbol(x2, Decl(types.safeNavigation.esnext.1.ts, 1, 13))
+>y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 1, 19))
+
+(x2[y])?.();
+>x2 : Symbol(x2, Decl(types.safeNavigation.esnext.1.ts, 1, 13))
+>y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 8, 13))
+
+x3?.y?.();
+>x3?.y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 2, 19))
+>x3 : Symbol(x3, Decl(types.safeNavigation.esnext.1.ts, 2, 13))
+>y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 2, 19))
+
+x3?.[y]?.();
+>x3 : Symbol(x3, Decl(types.safeNavigation.esnext.1.ts, 2, 13))
+>y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 8, 13))
+
+x4.y.z?.();
+>x4.y.z : Symbol(z, Decl(types.safeNavigation.esnext.1.ts, 3, 24))
+>x4.y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 3, 19))
+>x4 : Symbol(x4, Decl(types.safeNavigation.esnext.1.ts, 3, 13))
+>y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 3, 19))
+>z : Symbol(z, Decl(types.safeNavigation.esnext.1.ts, 3, 24))
+
+x4.y[z]?.();
+>x4.y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 3, 19))
+>x4 : Symbol(x4, Decl(types.safeNavigation.esnext.1.ts, 3, 13))
+>y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 3, 19))
+>z : Symbol(z, Decl(types.safeNavigation.esnext.1.ts, 9, 13))
+
+(x4.y.z)?.();
+>x4.y.z : Symbol(z, Decl(types.safeNavigation.esnext.1.ts, 3, 24))
+>x4.y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 3, 19))
+>x4 : Symbol(x4, Decl(types.safeNavigation.esnext.1.ts, 3, 13))
+>y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 3, 19))
+>z : Symbol(z, Decl(types.safeNavigation.esnext.1.ts, 3, 24))
+
+(x4.y[z])?.();
+>x4.y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 3, 19))
+>x4 : Symbol(x4, Decl(types.safeNavigation.esnext.1.ts, 3, 13))
+>y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 3, 19))
+>z : Symbol(z, Decl(types.safeNavigation.esnext.1.ts, 9, 13))
+
+x5?.y?.z?.();
+>x5?.y?.z : Symbol(z, Decl(types.safeNavigation.esnext.1.ts, 4, 24))
+>x5?.y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 4, 19))
+>x5 : Symbol(x5, Decl(types.safeNavigation.esnext.1.ts, 4, 13))
+>y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 4, 19))
+>z : Symbol(z, Decl(types.safeNavigation.esnext.1.ts, 4, 24))
+
+x5?.y?.z;
+>x5?.y?.z : Symbol(z, Decl(types.safeNavigation.esnext.1.ts, 4, 24))
+>x5?.y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 4, 19))
+>x5 : Symbol(x5, Decl(types.safeNavigation.esnext.1.ts, 4, 13))
+>y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 4, 19))
+>z : Symbol(z, Decl(types.safeNavigation.esnext.1.ts, 4, 24))
+
+x5?.[y]?.[z];
+>x5 : Symbol(x5, Decl(types.safeNavigation.esnext.1.ts, 4, 13))
+>y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 8, 13))
+>z : Symbol(z, Decl(types.safeNavigation.esnext.1.ts, 9, 13))
+
+x6?.y = 1;
+>x6?.y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 5, 19))
+>x6 : Symbol(x6, Decl(types.safeNavigation.esnext.1.ts, 5, 13))
+>y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 5, 19))
+
+x6?.y += 1;
+>x6?.y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 5, 19))
+>x6 : Symbol(x6, Decl(types.safeNavigation.esnext.1.ts, 5, 13))
+>y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 5, 19))
+
+x6?.y *= 1;
+>x6?.y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 5, 19))
+>x6 : Symbol(x6, Decl(types.safeNavigation.esnext.1.ts, 5, 13))
+>y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 5, 19))
+
+x6?.y++;
+>x6?.y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 5, 19))
+>x6 : Symbol(x6, Decl(types.safeNavigation.esnext.1.ts, 5, 13))
+>y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 5, 19))
+
+++x6?.y;
+>x6?.y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 5, 19))
+>x6 : Symbol(x6, Decl(types.safeNavigation.esnext.1.ts, 5, 13))
+>y : Symbol(y, Decl(types.safeNavigation.esnext.1.ts, 5, 19))
+

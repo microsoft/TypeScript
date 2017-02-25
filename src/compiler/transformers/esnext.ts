@@ -79,6 +79,8 @@ namespace ts {
                     return visitVariableDeclaration(node as VariableDeclaration);
                 case SyntaxKind.ForOfStatement:
                     return visitForOfStatement(node as ForOfStatement, /*outermostLabeledStatement*/ undefined);
+                case SyntaxKind.ForInStatement:
+                    return visitForInStatement(node as ForInStatement, /*outermostLabeledStatement*/ undefined);
                 case SyntaxKind.ForStatement:
                     return visitForStatement(node as ForStatement);
                 case SyntaxKind.VoidExpression:
@@ -160,8 +162,11 @@ namespace ts {
         function visitLabeledStatement(node: LabeledStatement) {
             if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
                 const statement = unwrapInnermostStatementOfLabel(node);
-                if (statement.kind === SyntaxKind.ForOfStatement && (<ForOfStatement>statement).awaitModifier) {
-                    return visitForOfStatement(<ForOfStatement>statement, node);
+                switch (statement.kind) {
+                    case SyntaxKind.ForOfStatement:
+                        return visitForOfStatement(<ForOfStatement>statement, /*outermostLabeledStatement*/ node);
+                    case SyntaxKind.ForInStatement:
+                        return visitForInStatement(<ForInStatement>statement, /*outermostLabeledStatement*/ node);
                 }
                 return restoreEnclosingLabel(visitEachChild(node, visitor, context), node);
             }
@@ -262,7 +267,7 @@ namespace ts {
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
                     if (node.flags & NodeFlags.PropagateNull) {
-                        const ref = createRef(<PropertyAccessExpression | ElementAccessExpression>node, hoistVariableDeclaration, CreateRefFlags.Writable);
+                        const ref = createRefObject(<PropertyAccessExpression | ElementAccessExpression>node, hoistVariableDeclaration, /*writeOnly*/ true);
                         return setTextRange(createPropertyAccess(ref, "value"), node);
                     }
 
@@ -389,6 +394,9 @@ namespace ts {
             if (node.initializer.transformFlags & TransformFlags.ContainsObjectRest) {
                 node = transformForOfStatementWithObjectRest(node);
             }
+            if (isPropertyAccessOrElementAccess(node.initializer) && node.initializer.flags & NodeFlags.PropagateNull) {
+                node = transformForOfStatementWithNullPropagatingInitializer(node, node.initializer);
+            }
             if (node.awaitModifier) {
                 return transformForAwaitOfStatement(node, outermostLabeledStatement);
             }
@@ -432,6 +440,39 @@ namespace ts {
                 );
             }
             return node;
+        }
+
+        function transformForOfStatementWithNullPropagatingInitializer(node: ForOfStatement, initializer: PropertyAccessExpression | ElementAccessExpression) {
+            if (languageVersion >= ScriptTarget.ES2015) {
+                return updateForOf(
+                    node,
+                    node.awaitModifier,
+                    createPropertyAccess(createRefObject(initializer, hoistVariableDeclaration, /*writeOnly*/ true), "value"),
+                    node.expression,
+                    node.statement
+                );
+            }
+            else {
+                const temp = createTempVariable(hoistVariableDeclaration);
+                return updateForOf(
+                    node,
+                    node.awaitModifier,
+                    createVariableDeclarationList([createVariableDeclaration(temp)]),
+                    node.expression,
+                    insertLeadingStatement(
+                        node.statement,
+                        setTextRange(
+                            createStatement(
+                                setTextRange(
+                                    createAssignment(initializer, temp),
+                                    node.initializer
+                                )
+                            ),
+                            node.initializer
+                        )
+                    )
+                );
+            }
         }
 
         function convertForOfStatementHead(node: ForOfStatement, boundValue: Expression) {
@@ -578,6 +619,48 @@ namespace ts {
                     )
                 ])
             );
+        }
+
+        function visitForInStatement(node: ForInStatement, outermostLabeledStatement: LabeledStatement): VisitResult<Statement> {
+            if (isPropertyAccessOrElementAccess(node.initializer) && node.initializer.flags & NodeFlags.PropagateNull) {
+                node = transformForInStatementWithNullPropagatingInitializer(node, node.initializer);
+            }
+
+            return restoreEnclosingLabel(visitEachChild(node, visitor, context), outermostLabeledStatement);
+        }
+
+        function transformForInStatementWithNullPropagatingInitializer(node: ForInStatement, initializer: PropertyAccessExpression | ElementAccessExpression) {
+            if (languageVersion >= ScriptTarget.ES5) {
+                return updateForIn(
+                    node,
+                    createPropertyAccess(createRefObject(initializer, hoistVariableDeclaration, /*writeOnly*/ true), "value"),
+                    node.expression,
+                    node.statement
+                );
+            }
+            else {
+                const temp = createTempVariable(hoistVariableDeclaration);
+                return updateForIn(
+                    node,
+                    createVariableDeclarationList([createVariableDeclaration(temp)]),
+                    node.expression,
+                    insertLeadingStatement(
+                        node.statement,
+                        setTextRange(
+                            createStatement(
+                                setTextRange(
+                                    createAssignment(
+                                        initializer,
+                                        temp
+                                    ),
+                                    node.initializer
+                                )
+                            ),
+                            node.initializer
+                        )
+                    )
+                );
+            }
         }
 
         function visitParameter(node: ParameterDeclaration): ParameterDeclaration {
@@ -982,7 +1065,7 @@ namespace ts {
                     setTextRange(
                         createConditional(
                             createEquality(baseValue, createNull()),
-                            createVoidZero(),
+                            node.kind === SyntaxKind.DeleteExpression ? createTrue() : createVoidZero(),
                             updateNode(
                                 node,
                                 reference

@@ -1,0 +1,208 @@
+=== tests/cases/conformance/types/safeNavigation/types.safeNavigation.esnext.2.ts ===
+declare const x1: (() => number) | undefined | null;
+>x1 : (() => number) | null | undefined
+>null : null
+
+declare const x2: { y: (() => number) | undefined | null; };
+>x2 : { y: (() => number) | null | undefined; }
+>y : (() => number) | null | undefined
+>null : null
+
+declare const x3: { y: (() => number) | undefined | null; } | undefined | null;
+>x3 : { y: (() => number) | null | undefined; } | null | undefined
+>y : (() => number) | null | undefined
+>null : null
+>null : null
+
+declare const x4: { y: { z: (() => number) | undefined | null; } };
+>x4 : { y: { z: (() => number) | null | undefined; }; }
+>y : { z: (() => number) | null | undefined; }
+>z : (() => number) | null | undefined
+>null : null
+
+declare const x5: { y: { z: (() => number) | undefined | null; } | undefined | null } | undefined | null;
+>x5 : { y: { z: (() => number) | null | undefined; } | null | undefined; } | null | undefined
+>y : { z: (() => number) | null | undefined; } | null | undefined
+>z : (() => number) | null | undefined
+>null : null
+>null : null
+>null : null
+
+declare const x6: { y: number } | undefined | null;
+>x6 : { y: number; } | null | undefined
+>y : number
+>null : null
+
+declare const x7: { y: any };
+>x7 : { y: any; }
+>y : any
+
+declare const x8: { y: { z: number } | undefined | null } | undefined | null;
+>x8 : { y: { z: number; } | null | undefined; } | null | undefined
+>y : { z: number; } | null | undefined
+>z : number
+>null : null
+>null : null
+
+declare const y: "y";
+>y : "y"
+
+declare const z: "z";
+>z : "z"
+
+const a1 = x1?.();
+>a1 : number | undefined
+>x1?.() : number
+>x1 : (() => number) | null | undefined
+
+const a2 = (x1)?.();
+>a2 : number | undefined
+>(x1)?.() : number
+>(x1) : (() => number) | null | undefined
+>x1 : (() => number) | null | undefined
+
+const a3 = x2.y?.();
+>a3 : number | undefined
+>x2.y?.() : number
+>x2.y : (() => number) | null | undefined
+>x2 : { y: (() => number) | null | undefined; }
+>y : (() => number) | null | undefined
+
+const a4 = x2[y]?.();
+>a4 : number | undefined
+>x2[y]?.() : number
+>x2[y] : (() => number) | null | undefined
+>x2 : { y: (() => number) | null | undefined; }
+>y : "y"
+
+const a5 = (x2.y)?.();
+>a5 : number | undefined
+>(x2.y)?.() : number
+>(x2.y) : (() => number) | null | undefined
+>x2.y : (() => number) | null | undefined
+>x2 : { y: (() => number) | null | undefined; }
+>y : (() => number) | null | undefined
+
+const a6 = (x2[y])?.();
+>a6 : number | undefined
+>(x2[y])?.() : number
+>(x2[y]) : (() => number) | null | undefined
+>x2[y] : (() => number) | null | undefined
+>x2 : { y: (() => number) | null | undefined; }
+>y : "y"
+
+const a7 = x3?.y?.();
+>a7 : number | undefined
+>x3?.y?.() : number
+>x3?.y : (() => number) | null | undefined
+>x3 : { y: (() => number) | null | undefined; } | null | undefined
+>y : (() => number) | null | undefined
+
+const a8 = x3?.[y]?.();
+>a8 : number | undefined
+>x3?.[y]?.() : number
+>x3?.[y] : (() => number) | null | undefined
+>x3 : { y: (() => number) | null | undefined; } | null | undefined
+>y : "y"
+
+const a9 = x4.y.z?.();
+>a9 : number | undefined
+>x4.y.z?.() : number
+>x4.y.z : (() => number) | null | undefined
+>x4.y : { z: (() => number) | null | undefined; }
+>x4 : { y: { z: (() => number) | null | undefined; }; }
+>y : { z: (() => number) | null | undefined; }
+>z : (() => number) | null | undefined
+
+const a10 = x4.y[z]?.();
+>a10 : number | undefined
+>x4.y[z]?.() : number
+>x4.y[z] : (() => number) | null | undefined
+>x4.y : { z: (() => number) | null | undefined; }
+>x4 : { y: { z: (() => number) | null | undefined; }; }
+>y : { z: (() => number) | null | undefined; }
+>z : "z"
+
+const a11 = (x4.y.z)?.();
+>a11 : number | undefined
+>(x4.y.z)?.() : number
+>(x4.y.z) : (() => number) | null | undefined
+>x4.y.z : (() => number) | null | undefined
+>x4.y : { z: (() => number) | null | undefined; }
+>x4 : { y: { z: (() => number) | null | undefined; }; }
+>y : { z: (() => number) | null | undefined; }
+>z : (() => number) | null | undefined
+
+const a12 = (x4.y[z])?.();
+>a12 : number | undefined
+>(x4.y[z])?.() : number
+>(x4.y[z]) : (() => number) | null | undefined
+>x4.y[z] : (() => number) | null | undefined
+>x4.y : { z: (() => number) | null | undefined; }
+>x4 : { y: { z: (() => number) | null | undefined; }; }
+>y : { z: (() => number) | null | undefined; }
+>z : "z"
+
+const a13 = x5?.y?.z?.();
+>a13 : number | undefined
+>x5?.y?.z?.() : number
+>x5?.y?.z : (() => number) | null | undefined
+>x5?.y : { z: (() => number) | null | undefined; } | null | undefined
+>x5 : { y: { z: (() => number) | null | undefined; } | null | undefined; } | null | undefined
+>y : { z: (() => number) | null | undefined; } | null | undefined
+>z : (() => number) | null | undefined
+
+const a14 = x5?.y?.z;
+>a14 : (() => number) | null | undefined
+>x5?.y?.z : (() => number) | null | undefined
+>x5?.y : { z: (() => number) | null | undefined; } | null | undefined
+>x5 : { y: { z: (() => number) | null | undefined; } | null | undefined; } | null | undefined
+>y : { z: (() => number) | null | undefined; } | null | undefined
+>z : (() => number) | null | undefined
+
+const a15 = x5?.[y]?.[z];
+>a15 : (() => number) | null | undefined
+>x5?.[y]?.[z] : (() => number) | null | undefined
+>x5?.[y] : { z: (() => number) | null | undefined; } | null | undefined
+>x5 : { y: { z: (() => number) | null | undefined; } | null | undefined; } | null | undefined
+>y : "y"
+>z : "z"
+
+const a16 = x6?.y = 1;
+>a16 : 1
+>x6?.y = 1 : 1
+>x6?.y : number | undefined
+>x6 : { y: number; } | null | undefined
+>y : number | undefined
+>1 : 1
+
+const a17 = x6?.y += 1;
+>a17 : number | undefined
+>x6?.y += 1 : number | undefined
+>x6?.y : number | undefined
+>x6 : { y: number; } | null | undefined
+>y : number | undefined
+>1 : 1
+
+const a17a = x6?.y *= 1;
+>a17a : number | undefined
+>x6?.y *= 1 : number | undefined
+>x6?.y : number | undefined
+>x6 : { y: number; } | null | undefined
+>y : number | undefined
+>1 : 1
+
+const a18 = x6?.y++;
+>a18 : number | undefined
+>x6?.y++ : number | undefined
+>x6?.y : number | undefined
+>x6 : { y: number; } | null | undefined
+>y : number | undefined
+
+const a19 = ++x6?.y;
+>a19 : number | undefined
+>++x6?.y : number | undefined
+>x6?.y : number | undefined
+>x6 : { y: number; } | null | undefined
+>y : number | undefined
+

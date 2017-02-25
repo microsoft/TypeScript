@@ -1,0 +1,1595 @@
+=== tests/cases/conformance/emitter/es2015/safeNavigation/declarations.d.ts ===
+declare var x: any;
+>x : any
+
+declare var y: any;
+>y : any
+
+declare var f: ({
+>f : { (): void; <T>(): void; new (): any; new <T>(): any; }
+
+    (): void;
+    <T>(): void;
+>T : T
+
+    new (): any;
+    new <T>(): any;
+>T : T
+
+}) | undefined;
+declare var o: { y: typeof f; }
+>o : { y: { (): void; <T>(): void; new (): any; new <T>(): any; }; }
+>y : { (): void; <T>(): void; new (): any; new <T>(): any; }
+>f : { (): void; <T>(): void; new (): any; new <T>(): any; }
+
+declare class Base { x(): any; }
+>Base : Base
+>x : () => any
+
+declare namespace M {
+>M : typeof M
+
+    export class y {}
+>y : y
+
+    export class z<T> {}
+>z : z<T>
+>T : T
+}
+=== tests/cases/conformance/emitter/es2015/safeNavigation/propertyAccessOk.ts ===
+x.y
+>x.y : any
+>x : any
+>y : any
+
+x?.y
+>x?.y : any
+>x : any
+>y : any
+
+x?.y.z
+>x?.y.z : any
+>x?.y : any
+>x : any
+>y : any
+>z : any
+
+x.y?.z
+>x.y?.z : any
+>x.y : any
+>x : any
+>y : any
+>z : any
+
+x?.y?.z
+>x?.y?.z : any
+>x?.y : any
+>x : any
+>y : any
+>z : any
+
+=== tests/cases/conformance/emitter/es2015/safeNavigation/elementAccessOk.ts ===
+x["y"]
+>x["y"] : any
+>x : any
+>"y" : "y"
+
+x?.["y"]
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+
+x?.["y"]["z"]
+>x?.["y"]["z"] : any
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+>"z" : "z"
+
+x["y"]?.["z"]
+>x["y"]?.["z"] : any
+>x["y"] : any
+>x : any
+>"y" : "y"
+>"z" : "z"
+
+x?.["y"]?.["z"]
+>x?.["y"]?.["z"] : any
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+>"z" : "z"
+
+=== tests/cases/conformance/emitter/es2015/safeNavigation/callExpressionOk.ts ===
+x()
+>x() : any
+>x : any
+
+x?.()
+>x?.() : any
+>x : any
+
+x.y?.()
+>x.y?.() : any
+>x.y : any
+>x : any
+>y : any
+
+x["y"]?.()
+>x["y"]?.() : any
+>x["y"] : any
+>x : any
+>"y" : "y"
+
+f?.<number>()
+>f?.<number>() : void
+>f : { (): void; <T>(): void; new (): any; new <T>(): any; }
+
+o.y?.<number>()
+>o.y?.<number>() : void
+>o.y : { (): void; <T>(): void; new (): any; new <T>(): any; }
+>o : { y: { (): void; <T>(): void; new (): any; new <T>(): any; }; }
+>y : { (): void; <T>(): void; new (): any; new <T>(): any; }
+
+o["y"]?.<number>()
+>o["y"]?.<number>() : void
+>o["y"] : { (): void; <T>(): void; new (): any; new <T>(): any; }
+>o : { y: { (): void; <T>(): void; new (): any; new <T>(): any; }; }
+>"y" : "y"
+
+=== tests/cases/conformance/emitter/es2015/safeNavigation/newExpressionOk.ts ===
+new x()
+>new x() : any
+>x : any
+
+new x.y?.()
+>new x.y?.() : any
+>x.y : any
+>x : any
+>y : any
+
+new x["y"]?.()
+>new x["y"]?.() : any
+>x["y"] : any
+>x : any
+>"y" : "y"
+
+new f?.<number>()
+>new f?.<number>() : any
+>f : { (): void; <T>(): void; new (): any; new <T>(): any; }
+
+new o.y?.<number>()
+>new o.y?.<number>() : any
+>o.y : { (): void; <T>(): void; new (): any; new <T>(): any; }
+>o : { y: { (): void; <T>(): void; new (): any; new <T>(): any; }; }
+>y : { (): void; <T>(): void; new (): any; new <T>(): any; }
+
+new o["y"]?.<number>()
+>new o["y"]?.<number>() : any
+>o["y"] : { (): void; <T>(): void; new (): any; new <T>(): any; }
+>o : { y: { (): void; <T>(): void; new (): any; new <T>(): any; }; }
+>"y" : "y"
+
+=== tests/cases/conformance/emitter/es2015/safeNavigation/mixedOk.ts ===
+x?.y?.["z"]
+>x?.y?.["z"] : any
+>x?.y : any
+>x : any
+>y : any
+>"z" : "z"
+
+x?.["y"]?.z
+>x?.["y"]?.z : any
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+>z : any
+
+x?.y()
+>x?.y() : any
+>x?.y : any
+>x : any
+>y : any
+
+x?.y?.()
+>x?.y?.() : any
+>x?.y : any
+>x : any
+>y : any
+
+o?.y<number>()
+>o?.y<number>() : void
+>o?.y : { (): void; <T>(): void; new (): any; new <T>(): any; }
+>o : { y: { (): void; <T>(): void; new (): any; new <T>(): any; }; }
+>y : { (): void; <T>(): void; new (): any; new <T>(): any; }
+
+o?.y?.<number>()
+>o?.y?.<number>() : void
+>o?.y : { (): void; <T>(): void; new (): any; new <T>(): any; }
+>o : { y: { (): void; <T>(): void; new (): any; new <T>(): any; }; }
+>y : { (): void; <T>(): void; new (): any; new <T>(): any; }
+
+x?.["z"]()
+>x?.["z"]() : any
+>x?.["z"] : any
+>x : any
+>"z" : "z"
+
+x?.["z"]?.()
+>x?.["z"]?.() : any
+>x?.["z"] : any
+>x : any
+>"z" : "z"
+
+o?.["y"]<number>()
+>o?.["y"]<number>() : void
+>o?.["y"] : { (): void; <T>(): void; new (): any; new <T>(): any; }
+>o : { y: { (): void; <T>(): void; new (): any; new <T>(): any; }; }
+>"y" : "y"
+
+o?.["y"]?.<number>()
+>o?.["y"]?.<number>() : void
+>o?.["y"] : { (): void; <T>(): void; new (): any; new <T>(): any; }
+>o : { y: { (): void; <T>(): void; new (): any; new <T>(): any; }; }
+>"y" : "y"
+
+=== tests/cases/conformance/emitter/es2015/safeNavigation/mutationOk.ts ===
+x?.y = 1
+>x?.y = 1 : 1
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y += 1;
+>x?.y += 1 : any
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y -= 1;
+>x?.y -= 1 : number
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y *= 1;
+>x?.y *= 1 : number
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y /= 1;
+>x?.y /= 1 : number
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y %= 1;
+>x?.y %= 1 : number
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y **= 1;
+>x?.y **= 1 : number
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y |= 1;
+>x?.y |= 1 : number
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y &= 1;
+>x?.y &= 1 : number
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y ^= 1;
+>x?.y ^= 1 : number
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y <<= 1;
+>x?.y <<= 1 : number
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y >>= 1;
+>x?.y >>= 1 : number
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y >>>= 1;
+>x?.y >>>= 1 : number
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y++;
+>x?.y++ : number
+>x?.y : any
+>x : any
+>y : any
+
+x?.y--;
+>x?.y-- : number
+>x?.y : any
+>x : any
+>y : any
+
+++x?.y;
+>++x?.y : number
+>x?.y : any
+>x : any
+>y : any
+
+--x?.y;
+>--x?.y : number
+>x?.y : any
+>x : any
+>y : any
+
+delete x?.y;
+>delete x?.y : boolean
+>x?.y : any
+>x : any
+>y : any
+
+x?.["y"] = 1
+>x?.["y"] = 1 : 1
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+>1 : 1
+
+x?.["y"] += 1;
+>x?.["y"] += 1 : any
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+>1 : 1
+
+x?.["y"] -= 1;
+>x?.["y"] -= 1 : number
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+>1 : 1
+
+x?.["y"] *= 1;
+>x?.["y"] *= 1 : number
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+>1 : 1
+
+x?.["y"] /= 1;
+>x?.["y"] /= 1 : number
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+>1 : 1
+
+x?.["y"] %= 1;
+>x?.["y"] %= 1 : number
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+>1 : 1
+
+x?.["y"] **= 1;
+>x?.["y"] **= 1 : number
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+>1 : 1
+
+x?.["y"] |= 1;
+>x?.["y"] |= 1 : number
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+>1 : 1
+
+x?.["y"] &= 1;
+>x?.["y"] &= 1 : number
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+>1 : 1
+
+x?.["y"] ^= 1;
+>x?.["y"] ^= 1 : number
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+>1 : 1
+
+x?.["y"] <<= 1;
+>x?.["y"] <<= 1 : number
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+>1 : 1
+
+x?.["y"] >>= 1;
+>x?.["y"] >>= 1 : number
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+>1 : 1
+
+x?.["y"] >>>= 1;
+>x?.["y"] >>>= 1 : number
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+>1 : 1
+
+x?.["y"]++;
+>x?.["y"]++ : number
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+
+x?.["y"]--;
+>x?.["y"]-- : number
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+
+++x?.["y"];
+>++x?.["y"] : number
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+
+--x?.["y"];
+>--x?.["y"] : number
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+
+delete x?.["y"];
+>delete x?.["y"] : boolean
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+
+=== tests/cases/conformance/emitter/es2015/safeNavigation/arrayAssignmentPatternOk.ts ===
+[x?.y] = [1];
+>[x?.y] = [1] : [number]
+>[x?.y] : [any]
+>x?.y : any
+>x : any
+>y : any
+>[1] : [number]
+>1 : 1
+
+[x?.["y"]] = [1];
+>[x?.["y"]] = [1] : [number]
+>[x?.["y"]] : [any]
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+>[1] : [number]
+>1 : 1
+
+[...x?.y] = [1];
+>[...x?.y] = [1] : number[]
+>[...x?.y] : undefined[]
+>...x?.y : any
+>x?.y : any
+>x : any
+>y : any
+>[1] : number[]
+>1 : 1
+
+[...x?.["y"]] = [1];
+>[...x?.["y"]] = [1] : number[]
+>[...x?.["y"]] : undefined[]
+>...x?.["y"] : any
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+>[1] : number[]
+>1 : 1
+
+=== tests/cases/conformance/emitter/es2015/safeNavigation/objectAssignmentPatternOk.ts ===
+({ a: x?.y } = { a: 1 });
+>({ a: x?.y } = { a: 1 }) : { a: number; }
+>{ a: x?.y } = { a: 1 } : { a: number; }
+>{ a: x?.y } : { a: any; }
+>a : any
+>x?.y : any
+>x : any
+>y : any
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+
+({ a: x?.["y"] } = { a: 1 });
+>({ a: x?.["y"] } = { a: 1 }) : { a: number; }
+>{ a: x?.["y"] } = { a: 1 } : { a: number; }
+>{ a: x?.["y"] } : { a: any; }
+>a : any
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+
+=== tests/cases/conformance/emitter/es2015/safeNavigation/questionDotDigitIsConditionalOk.ts ===
+x?.3:1;
+>x?.3:1 : 1 | 0.3
+>x : any
+>.3 : 0.3
+>1 : 1
+
+=== tests/cases/conformance/emitter/es2015/safeNavigation/superPropertyInvocationOk.ts ===
+// supported for invocation of super property
+void class extends Base {
+>void class extends Base {    m() {        super.x?.();        super["x"]?.();    }} : undefined
+>class extends Base {    m() {        super.x?.();        super["x"]?.();    }} : typeof (Anonymous class)
+>Base : Base
+
+    m() {
+>m : () => void
+
+        super.x?.();
+>super.x?.() : any
+>super.x : () => any
+>super : Base
+>x : () => any
+
+        super["x"]?.();
+>super["x"]?.() : any
+>super["x"] : () => any
+>super : Base
+>"x" : "x"
+    }
+}
+
+=== tests/cases/conformance/emitter/es2015/safeNavigation/generalParsingOk.ts ===
+// object literals
+// - computed property names
+void { [x?.y]: 1 }
+>void { [x?.y]: 1 } : undefined
+>{ [x?.y]: 1 } : { [x: number]: number; }
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+void { [x?.["y"]]: 1 }
+>void { [x?.["y"]]: 1 } : undefined
+>{ [x?.["y"]]: 1 } : { [x: number]: number; }
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+>1 : 1
+
+void { [x?.()]: 1 }
+>void { [x?.()]: 1 } : undefined
+>{ [x?.()]: 1 } : { [x: number]: number; }
+>x?.() : any
+>x : any
+>1 : 1
+
+void { [new x?.()]: 1 }
+>void { [new x?.()]: 1 } : undefined
+>{ [new x?.()]: 1 } : { [x: number]: number; }
+>new x?.() : any
+>x : any
+>1 : 1
+
+// - property assignments
+void { a: x?.y }
+>void { a: x?.y } : undefined
+>{ a: x?.y } : { a: any; }
+>a : any
+>x?.y : any
+>x : any
+>y : any
+
+void { a: x?.["y"] }
+>void { a: x?.["y"] } : undefined
+>{ a: x?.["y"] } : { a: any; }
+>a : any
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+
+void { a: x?.() }
+>void { a: x?.() } : undefined
+>{ a: x?.() } : { a: any; }
+>a : any
+>x?.() : any
+>x : any
+
+void { a: new x?.() }
+>void { a: new x?.() } : undefined
+>{ a: new x?.() } : { a: any; }
+>a : any
+>new x?.() : any
+>x : any
+
+// classes
+// - computed property names
+// void class { [x?.y] = 1 }        // legal parse, but causes a checker error
+// void class { [x?.["y"]] = 1 }    // legal parse, but causes a checker error
+// void class { [x?.()] = 1 }       // legal parse, but causes a checker error
+// void class { [new f?.()] = 1 }   // legal parse, but causes a checker error
+void class { [Symbol?.toStringTag] = "" }
+>void class { [Symbol?.toStringTag] = "" } : undefined
+>class { [Symbol?.toStringTag] = "" } : typeof (Anonymous class)
+>Symbol?.toStringTag : symbol
+>Symbol : SymbolConstructor
+>toStringTag : symbol
+>"" : ""
+
+// - property declarations
+void class { a = x?.y }
+>void class { a = x?.y } : undefined
+>class { a = x?.y } : typeof (Anonymous class)
+>a : any
+>x?.y : any
+>x : any
+>y : any
+
+void class { a = x?.["y"] }
+>void class { a = x?.["y"] } : undefined
+>class { a = x?.["y"] } : typeof (Anonymous class)
+>a : any
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+
+void class { a = x?.() }
+>void class { a = x?.() } : undefined
+>class { a = x?.() } : typeof (Anonymous class)
+>a : any
+>x?.() : any
+>x : any
+
+void class { a = new x?.() }
+>void class { a = new x?.() } : undefined
+>class { a = new x?.() } : typeof (Anonymous class)
+>a : any
+>new x?.() : any
+>x : any
+
+// - heritage clauses
+void class extends M?.y {}
+>void class extends M?.y {} : undefined
+>class extends M?.y {} : typeof (Anonymous class)
+>M?.y : M.y
+>M : typeof M
+>y : typeof M.y
+
+void class extends M?.["y"] {}
+>void class extends M?.["y"] {} : undefined
+>class extends M?.["y"] {} : typeof (Anonymous class)
+>M?.["y"] : M.y
+>M : typeof M
+>"y" : "y"
+
+void class extends M?.z<number> {}
+>void class extends M?.z<number> {} : undefined
+>class extends M?.z<number> {} : typeof (Anonymous class)
+>M?.z : M.z<number>
+>M : typeof M
+>z : typeof M.z
+
+// - class decorators
+@x?.y class C1 {}
+>x?.y : any
+>x : any
+>y : any
+>C1 : C1
+
+@x?.["y"] class C2 {}
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+>C2 : C2
+
+@x?.() class C3 {}
+>x?.() : any
+>x : any
+>C3 : C3
+
+@new x?.() class C4 {}
+>new x?.() : any
+>x : any
+>C4 : C4
+
+// - member decorators
+class C5 { @x?.y m() {} }
+>C5 : C5
+>x?.y : any
+>x : any
+>y : any
+>m : () => void
+
+class C6 { @x?.["y"] m() {} } // allowed as ?.[ is not ambiguous with computed property names
+>C6 : C6
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+>m : () => void
+
+class C7 { @x?.() m() {} }
+>C7 : C7
+>x?.() : any
+>x : any
+>m : () => void
+
+class C8 { @new x?.() m () {} }
+>C8 : C8
+>new x?.() : any
+>x : any
+>m : () => void
+
+// - parameter decorators
+class C9 { m(@x?.y a) {} }
+>C9 : C9
+>m : (a: any) => void
+>x?.y : any
+>x : any
+>y : any
+>a : any
+
+class C10 { m(@x?.["y"] a) {} }
+>C10 : C10
+>m : (a: any) => void
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+>a : any
+
+class C11 { m(@x?.() a) {} }
+>C11 : C11
+>m : (a: any) => void
+>x?.() : any
+>x : any
+>a : any
+
+class C12 { m(@new x?.() a) {} }
+>C12 : C12
+>m : (a: any) => void
+>new x?.() : any
+>x : any
+>a : any
+
+// functions
+// - parameters
+void function (a = x?.y) {}
+>void function (a = x?.y) {} : undefined
+>function (a = x?.y) {} : (a?: any) => void
+>a : any
+>x?.y : any
+>x : any
+>y : any
+
+void function (a = x?.["y"]) {}
+>void function (a = x?.["y"]) {} : undefined
+>function (a = x?.["y"]) {} : (a?: any) => void
+>a : any
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+
+void function (a = x?.()) {}
+>void function (a = x?.()) {} : undefined
+>function (a = x?.()) {} : (a?: any) => void
+>a : any
+>x?.() : any
+>x : any
+
+void function (a = new x?.()) {}
+>void function (a = new x?.()) {} : undefined
+>function (a = new x?.()) {} : (a?: any) => void
+>a : any
+>new x?.() : any
+>x : any
+
+// - binding elements
+//   - initializers
+void function ({ a = x?.y }) {}
+>void function ({ a = x?.y }) {} : undefined
+>function ({ a = x?.y }) {} : ({a}: { a?: any; }) => void
+>a : any
+>x?.y : any
+>x : any
+>y : any
+
+void function ({ a = x?.["y"] }) {}
+>void function ({ a = x?.["y"] }) {} : undefined
+>function ({ a = x?.["y"] }) {} : ({a}: { a?: any; }) => void
+>a : any
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+
+void function ({ a = x?.() }) {}
+>void function ({ a = x?.() }) {} : undefined
+>function ({ a = x?.() }) {} : ({a}: { a?: any; }) => void
+>a : any
+>x?.() : any
+>x : any
+
+void function ({ a = new x?.() }) {}
+>void function ({ a = new x?.() }) {} : undefined
+>function ({ a = new x?.() }) {} : ({a}: { a?: any; }) => void
+>a : any
+>new x?.() : any
+>x : any
+
+//   - computed properties
+void function ({ [x?.y]: a }) {}
+>void function ({ [x?.y]: a }) {} : undefined
+>function ({ [x?.y]: a }) {} : ({[x?.y]: a}: {}) => void
+>x?.y : any
+>x : any
+>y : any
+>a : any
+
+void function ({ [x?.["y"]]: a }) {}
+>void function ({ [x?.["y"]]: a }) {} : undefined
+>function ({ [x?.["y"]]: a }) {} : ({[x?.["y"]]: a}: {}) => void
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+>a : any
+
+void function ({ [x?.()]: a }) {}
+>void function ({ [x?.()]: a }) {} : undefined
+>function ({ [x?.()]: a }) {} : ({[x?.()]: a}: {}) => void
+>x?.() : any
+>x : any
+>a : any
+
+void function ({ [new x?.()]: a }) {}
+>void function ({ [new x?.()]: a }) {}// arrow functions// - parameters((a = x?.y) => {}) : undefined
+>function ({ [new x?.()]: a }) {}// arrow functions// - parameters((a = x?.y) => {}) : void
+>function ({ [new x?.()]: a }) {} : ({[new x?.()]: a}: (a?: any) => void) => void
+>new x?.() : any
+>x : any
+>a : any
+
+// arrow functions
+// - parameters
+((a = x?.y) => {});
+>(a = x?.y) => {} : (a?: any) => void
+>a : any
+>x?.y : any
+>x : any
+>y : any
+
+((a = x?.["y"]) => {});
+>((a = x?.["y"]) => {}) : (a?: any) => void
+>(a = x?.["y"]) => {} : (a?: any) => void
+>a : any
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+
+((a = x?.()) => {});
+>((a = x?.()) => {}) : (a?: any) => void
+>(a = x?.()) => {} : (a?: any) => void
+>a : any
+>x?.() : any
+>x : any
+
+((a = new x?.()) => {});
+>((a = new x?.()) => {}) : (a?: any) => void
+>(a = new x?.()) => {} : (a?: any) => void
+>a : any
+>new x?.() : any
+>x : any
+
+// - expression bodies
+(() => x?.y);
+>(() => x?.y) : () => any
+>() => x?.y : () => any
+>x?.y : any
+>x : any
+>y : any
+
+(() => x?.["y"]);
+>(() => x?.["y"]) : () => any
+>() => x?.["y"] : () => any
+>x?.["y"] : any
+>x : any
+>"y" : "y"
+
+(() => x?.());
+>(() => x?.()) : () => any
+>() => x?.() : () => any
+>x?.() : any
+>x : any
+
+(() => new x?.());
+>(() => new x?.()) : () => any
+>() => new x?.() : () => any
+>new x?.() : any
+>x : any
+
+// parenthesis
+(x?.y);
+>(x?.y) : any
+>x?.y : any
+>x : any
+>y : any
+
+// comma
+x?.y, f();
+>x?.y, f() : void
+>x?.y : any
+>x : any
+>y : any
+>f() : void
+>f : { (): void; <T>(): void; new (): any; new <T>(): any; }
+
+f(), x?.y;
+>f(), x?.y : any
+>f() : void
+>f : { (): void; <T>(): void; new (): any; new <T>(): any; }
+>x?.y : any
+>x : any
+>y : any
+
+// conditional
+x?.y ? 0 : 1
+>x?.y ? 0 : 1 : 1 | 0
+>x?.y : any
+>x : any
+>y : any
+>0 : 0
+>1 : 1
+
+0 ? x?.y : 1;
+>0 ? x?.y : 1 : any
+>0 : 0
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+0 ? 1 : x?.y;
+>0 ? 1 : x?.y : any
+>0 : 0
+>1 : 1
+>x?.y : any
+>x : any
+>y : any
+
+// binary
+x?.y + 1;
+>x?.y + 1 : any
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y - 1;
+>x?.y - 1 : number
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y * 1;
+>x?.y * 1 : number
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y / 1;
+>x?.y / 1 : number
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y ** 1;
+>x?.y ** 1 : number
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y % 1;
+>x?.y % 1 : number
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y ^ 1;
+>x?.y ^ 1 : number
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y & 1;
+>x?.y & 1 : number
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y | 1;
+>x?.y | 1 : number
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y << 1;
+>x?.y << 1 : number
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y >> 1;
+>x?.y >> 1 : number
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y >>> 1;
+>x?.y >>> 1 : number
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y && 1;
+>x?.y && 1 : 0 | 1
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y || 1;
+>x?.y || 1 : any
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y == 1;
+>x?.y == 1 : boolean
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y === 1;
+>x?.y === 1 : boolean
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y != 1;
+>x?.y != 1 : boolean
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y !== 1;
+>x?.y !== 1 : boolean
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y < 1;
+>x?.y < 1 : boolean
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y <= 1;
+>x?.y <= 1 : boolean
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y > 1;
+>x?.y > 1 : boolean
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+x?.y >= 1;
+>x?.y >= 1 : boolean
+>x?.y : any
+>x : any
+>y : any
+>1 : 1
+
+1 + x?.y;
+>1 + x?.y : any
+>1 : 1
+>x?.y : any
+>x : any
+>y : any
+
+1 - x?.y;
+>1 - x?.y : number
+>1 : 1
+>x?.y : any
+>x : any
+>y : any
+
+1 * x?.y;
+>1 * x?.y : number
+>1 : 1
+>x?.y : any
+>x : any
+>y : any
+
+1 / x?.y;
+>1 / x?.y : number
+>1 : 1
+>x?.y : any
+>x : any
+>y : any
+
+1 ** x?.y;
+>1 ** x?.y : number
+>1 : 1
+>x?.y : any
+>x : any
+>y : any
+
+1 % x?.y;
+>1 % x?.y : number
+>1 : 1
+>x?.y : any
+>x : any
+>y : any
+
+1 ^ x?.y;
+>1 ^ x?.y : number
+>1 : 1
+>x?.y : any
+>x : any
+>y : any
+
+1 & x?.y;
+>1 & x?.y : number
+>1 : 1
+>x?.y : any
+>x : any
+>y : any
+
+1 | x?.y;
+>1 | x?.y : number
+>1 : 1
+>x?.y : any
+>x : any
+>y : any
+
+1 << x?.y;
+>1 << x?.y : number
+>1 : 1
+>x?.y : any
+>x : any
+>y : any
+
+1 >> x?.y;
+>1 >> x?.y : number
+>1 : 1
+>x?.y : any
+>x : any
+>y : any
+
+1 >>> x?.y;
+>1 >>> x?.y : number
+>1 : 1
+>x?.y : any
+>x : any
+>y : any
+
+1 && x?.y;
+>1 && x?.y : any
+>1 : 1
+>x?.y : any
+>x : any
+>y : any
+
+1 || x?.y;
+>1 || x?.y : any
+>1 : 1
+>x?.y : any
+>x : any
+>y : any
+
+1 == x?.y;
+>1 == x?.y : boolean
+>1 : 1
+>x?.y : any
+>x : any
+>y : any
+
+1 === x?.y;
+>1 === x?.y : boolean
+>1 : 1
+>x?.y : any
+>x : any
+>y : any
+
+1 != x?.y;
+>1 != x?.y : boolean
+>1 : 1
+>x?.y : any
+>x : any
+>y : any
+
+1 !== x?.y;
+>1 !== x?.y : boolean
+>1 : 1
+>x?.y : any
+>x : any
+>y : any
+
+1 < x?.y;
+>1 < x?.y : boolean
+>1 : 1
+>x?.y : any
+>x : any
+>y : any
+
+1 <= x?.y;
+>1 <= x?.y : boolean
+>1 : 1
+>x?.y : any
+>x : any
+>y : any
+
+1 > x?.y;
+>1 > x?.y : boolean
+>1 : 1
+>x?.y : any
+>x : any
+>y : any
+
+1 >= x?.y;
+>1 >= x?.y : boolean
+>1 : 1
+>x?.y : any
+>x : any
+>y : any
+
+// prefix unary
++x?.y;
+>+x?.y : number
+>x?.y : any
+>x : any
+>y : any
+
+-x?.y;
+>-x?.y : number
+>x?.y : any
+>x : any
+>y : any
+
+!x?.y;
+>!x?.y : boolean
+>x?.y : any
+>x : any
+>y : any
+
+~x?.y;
+>~x?.y : number
+>x?.y : any
+>x : any
+>y : any
+
+// unary
+void x?.y;
+>void x?.y : undefined
+>x?.y : any
+>x : any
+>y : any
+
+typeof x?.y;
+>typeof x?.y : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x?.y : any
+>x : any
+>y : any
+
+void function * () { yield x?.y; }
+>void function * () { yield x?.y; } : undefined
+>function * () { yield x?.y; } : () => IterableIterator<any>
+>yield x?.y : any
+>x?.y : any
+>x : any
+>y : any
+
+void async function() { await x?.y; }
+>void async function() { await x?.y; } : undefined
+>async function() { await x?.y; } : () => Promise<void>
+>await x?.y : any
+>x?.y : any
+>x : any
+>y : any
+
+// notnull
+x?.y!.z;
+>x?.y!.z : any
+>x?.y! : any
+>x?.y : any
+>x : any
+>y : any
+>z : any
+
+// assertions
+<string>x?.y;
+><string>x?.y : string
+>x?.y : any
+>x : any
+>y : any
+
+x?.y as string;
+>x?.y as string : string
+>x?.y : any
+>x : any
+>y : any
+
+// array literals
+[x?.y];
+>[x?.y] : any[]
+>x?.y : any
+>x : any
+>y : any
+
+[, x?.y];
+>[, x?.y] : any[]
+> : undefined
+>x?.y : any
+>x : any
+>y : any
+
+[...x?.y];
+>[...x?.y] : any[]
+>...x?.y : any
+>x?.y : any
+>x : any
+>y : any
+
+// literals
+1?.toString(); // no need for `..`
+>1?.toString() : string
+>1?.toString : (radix?: number) => string
+>1 : 1
+>toString : (radix?: number) => string
+
+1.?.toString();
+>1.?.toString() : string
+>1.?.toString : (radix?: number) => string
+>1. : 1
+>toString : (radix?: number) => string
+
+.0?.toString();
+>.0?.toString() : string
+>.0?.toString : (radix?: number) => string
+>.0 : 0
+>toString : (radix?: number) => string
+
+4e3?.toString();
+>4e3?.toString() : string
+>4e3?.toString : (radix?: number) => string
+>4e3 : 4000
+>toString : (radix?: number) => string
+
+1.e3?.toString();
+>1.e3?.toString() : string
+>1.e3?.toString : (radix?: number) => string
+>1.e3 : 1000
+>toString : (radix?: number) => string
+
+""?.toString();
+>""?.toString() : string
+>""?.toString : () => string
+>"" : ""
+>toString : () => string
+
+''?.toString();
+>''?.toString() : string
+>''?.toString : () => string
+>'' : ""
+>toString : () => string
+
+``?.toString();
+>``?.toString() : string
+>``?.toString : () => string
+>`` : string
+>toString : () => string
+
+/./?.toString();
+>/./?.toString() : string
+>/./?.toString : () => string
+>/./ : RegExp
+>toString : () => string
+
+/./g?.toString();
+>/./g?.toString() : string
+>/./g?.toString : () => string
+>/./g : RegExp
+>toString : () => string
+
+true?.toString();
+>true?.toString() : string
+>true?.toString : () => string
+>true : true
+>toString : () => string
+
+false?.toString();
+>false?.toString() : string
+>false?.toString : () => string
+>false : false
+>toString : () => string
+
+// templates
+`${x?.y}`;
+>`${x?.y}` : string
+>x?.y : any
+>x : any
+>y : any
+
+// variables
+var v = x?.y;
+>v : any
+>x?.y : any
+>x : any
+>y : any
+
+var [v] = x?.y;
+>v : any
+>x?.y : any
+>x : any
+>y : any
+
+var [v = x?.y] = [1];
+>v : any
+>x?.y : any
+>x : any
+>y : any
+>[1] : [number]
+>1 : 1
+
+var {v} = x?.y;
+>v : any
+>x?.y : any
+>x : any
+>y : any
+
+var {v = x?.y} = {v:1};
+>v : any
+>x?.y : any
+>x : any
+>y : any
+>{v:1} : { v?: number; }
+>v : number
+>1 : 1
+
+var {[x?.y]: v} = null;
+>x?.y : any
+>x : any
+>y : any
+>v : any
+>null : null
+
+// if/else if
+if (x?.y) {}
+>x?.y : any
+>x : any
+>y : any
+
+if (1) {} else if (x?.y) {}
+>1 : 1
+>x?.y : any
+>x : any
+>y : any
+
+// switch
+switch (x?.y) {}
+>x?.y : any
+>x : any
+>y : any
+
+switch (1) { case x?.y: break; }
+>1 : 1
+>x?.y : any
+>x : any
+>y : any
+
+// do/while
+do {} while (x?.y)
+>x?.y : any
+>x : any
+>y : any
+
+while (x?.y) {}
+>x?.y : any
+>x : any
+>y : any
+
+// for
+for (x?.y; x?.y; x?.y);
+>x?.y : any
+>x : any
+>y : any
+>x?.y : any
+>x : any
+>y : any
+>x?.y : any
+>x : any
+>y : any
+
+// for..in
+for (x?.y in {});
+>x?.y : any
+>x : any
+>y : any
+>{} : {}
+
+// for..of
+for (x?.y of []);
+>x?.y : any
+>x : any
+>y : any
+>[] : undefined[]
+
+// enums
+enum E {
+>E : E
+
+    a = x?.y
+>a : E
+>x?.y : any
+>x : any
+>y : any
+}
+
+=== tests/cases/conformance/emitter/es2015/safeNavigation/exportsOk.ts ===
+export default x?.y;
+>x?.y : any
+>x : any
+>y : any
+

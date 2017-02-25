@@ -1,0 +1,862 @@
+=== tests/cases/conformance/emitter/es2015/safeNavigation/declarations.d.ts ===
+declare var x: any;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+declare var y: any;
+>y : Symbol(y, Decl(declarations.d.ts, 1, 11))
+
+declare var f: ({
+>f : Symbol(f, Decl(declarations.d.ts, 2, 11))
+
+    (): void;
+    <T>(): void;
+>T : Symbol(T, Decl(declarations.d.ts, 4, 5))
+
+    new (): any;
+    new <T>(): any;
+>T : Symbol(T, Decl(declarations.d.ts, 6, 9))
+
+}) | undefined;
+declare var o: { y: typeof f; }
+>o : Symbol(o, Decl(declarations.d.ts, 8, 11))
+>y : Symbol(y, Decl(declarations.d.ts, 8, 16))
+>f : Symbol(f, Decl(declarations.d.ts, 2, 11))
+
+declare class Base { x(): any; }
+>Base : Symbol(Base, Decl(declarations.d.ts, 8, 31))
+>x : Symbol(Base.x, Decl(declarations.d.ts, 9, 20))
+
+declare namespace M {
+>M : Symbol(M, Decl(declarations.d.ts, 9, 32))
+
+    export class y {}
+>y : Symbol(y, Decl(declarations.d.ts, 10, 21))
+
+    export class z<T> {}
+>z : Symbol(z, Decl(declarations.d.ts, 11, 21))
+>T : Symbol(T, Decl(declarations.d.ts, 12, 19))
+}
+=== tests/cases/conformance/emitter/es2015/safeNavigation/propertyAccessOk.ts ===
+x.y
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y.z
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x.y?.z
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y?.z
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+=== tests/cases/conformance/emitter/es2015/safeNavigation/elementAccessOk.ts ===
+x["y"]
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.["y"]
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.["y"]["z"]
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x["y"]?.["z"]
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.["y"]?.["z"]
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+=== tests/cases/conformance/emitter/es2015/safeNavigation/callExpressionOk.ts ===
+x()
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.()
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x.y?.()
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x["y"]?.()
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+f?.<number>()
+>f : Symbol(f, Decl(declarations.d.ts, 2, 11))
+
+o.y?.<number>()
+>o.y : Symbol(y, Decl(declarations.d.ts, 8, 16))
+>o : Symbol(o, Decl(declarations.d.ts, 8, 11))
+>y : Symbol(y, Decl(declarations.d.ts, 8, 16))
+
+o["y"]?.<number>()
+>o : Symbol(o, Decl(declarations.d.ts, 8, 11))
+>"y" : Symbol(y, Decl(declarations.d.ts, 8, 16))
+
+=== tests/cases/conformance/emitter/es2015/safeNavigation/newExpressionOk.ts ===
+new x()
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+new x.y?.()
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+new x["y"]?.()
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+new f?.<number>()
+>f : Symbol(f, Decl(declarations.d.ts, 2, 11))
+
+new o.y?.<number>()
+>o.y : Symbol(y, Decl(declarations.d.ts, 8, 16))
+>o : Symbol(o, Decl(declarations.d.ts, 8, 11))
+>y : Symbol(y, Decl(declarations.d.ts, 8, 16))
+
+new o["y"]?.<number>()
+>o : Symbol(o, Decl(declarations.d.ts, 8, 11))
+>"y" : Symbol(y, Decl(declarations.d.ts, 8, 16))
+
+=== tests/cases/conformance/emitter/es2015/safeNavigation/mixedOk.ts ===
+x?.y?.["z"]
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.["y"]?.z
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y()
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y?.()
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+o?.y<number>()
+>o?.y : Symbol(y, Decl(declarations.d.ts, 8, 16))
+>o : Symbol(o, Decl(declarations.d.ts, 8, 11))
+>y : Symbol(y, Decl(declarations.d.ts, 8, 16))
+
+o?.y?.<number>()
+>o?.y : Symbol(y, Decl(declarations.d.ts, 8, 16))
+>o : Symbol(o, Decl(declarations.d.ts, 8, 11))
+>y : Symbol(y, Decl(declarations.d.ts, 8, 16))
+
+x?.["z"]()
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.["z"]?.()
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+o?.["y"]<number>()
+>o : Symbol(o, Decl(declarations.d.ts, 8, 11))
+>"y" : Symbol(y, Decl(declarations.d.ts, 8, 16))
+
+o?.["y"]?.<number>()
+>o : Symbol(o, Decl(declarations.d.ts, 8, 11))
+>"y" : Symbol(y, Decl(declarations.d.ts, 8, 16))
+
+=== tests/cases/conformance/emitter/es2015/safeNavigation/mutationOk.ts ===
+x?.y = 1
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y += 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y -= 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y *= 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y /= 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y %= 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y **= 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y |= 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y &= 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y ^= 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y <<= 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y >>= 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y >>>= 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y++;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y--;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+++x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+--x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+delete x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.["y"] = 1
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.["y"] += 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.["y"] -= 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.["y"] *= 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.["y"] /= 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.["y"] %= 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.["y"] **= 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.["y"] |= 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.["y"] &= 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.["y"] ^= 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.["y"] <<= 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.["y"] >>= 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.["y"] >>>= 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.["y"]++;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.["y"]--;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+++x?.["y"];
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+--x?.["y"];
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+delete x?.["y"];
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+=== tests/cases/conformance/emitter/es2015/safeNavigation/arrayAssignmentPatternOk.ts ===
+[x?.y] = [1];
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+[x?.["y"]] = [1];
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+[...x?.y] = [1];
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+[...x?.["y"]] = [1];
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+=== tests/cases/conformance/emitter/es2015/safeNavigation/objectAssignmentPatternOk.ts ===
+({ a: x?.y } = { a: 1 });
+>a : Symbol(a, Decl(objectAssignmentPatternOk.ts, 0, 2))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+>a : Symbol(a, Decl(objectAssignmentPatternOk.ts, 0, 16))
+
+({ a: x?.["y"] } = { a: 1 });
+>a : Symbol(a, Decl(objectAssignmentPatternOk.ts, 1, 2))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+>a : Symbol(a, Decl(objectAssignmentPatternOk.ts, 1, 20))
+
+=== tests/cases/conformance/emitter/es2015/safeNavigation/questionDotDigitIsConditionalOk.ts ===
+x?.3:1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+=== tests/cases/conformance/emitter/es2015/safeNavigation/superPropertyInvocationOk.ts ===
+// supported for invocation of super property
+void class extends Base {
+>Base : Symbol(Base, Decl(declarations.d.ts, 8, 31))
+
+    m() {
+>m : Symbol((Anonymous class).m, Decl(superPropertyInvocationOk.ts, 1, 25))
+
+        super.x?.();
+>super.x : Symbol(Base.x, Decl(declarations.d.ts, 9, 20))
+>super : Symbol(Base, Decl(declarations.d.ts, 8, 31))
+>x : Symbol(Base.x, Decl(declarations.d.ts, 9, 20))
+
+        super["x"]?.();
+>super : Symbol(Base, Decl(declarations.d.ts, 8, 31))
+>"x" : Symbol(Base.x, Decl(declarations.d.ts, 9, 20))
+    }
+}
+
+=== tests/cases/conformance/emitter/es2015/safeNavigation/generalParsingOk.ts ===
+// object literals
+// - computed property names
+void { [x?.y]: 1 }
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+void { [x?.["y"]]: 1 }
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+void { [x?.()]: 1 }
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+void { [new x?.()]: 1 }
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+// - property assignments
+void { a: x?.y }
+>a : Symbol(a, Decl(generalParsingOk.ts, 7, 6))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+void { a: x?.["y"] }
+>a : Symbol(a, Decl(generalParsingOk.ts, 8, 6))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+void { a: x?.() }
+>a : Symbol(a, Decl(generalParsingOk.ts, 9, 6))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+void { a: new x?.() }
+>a : Symbol(a, Decl(generalParsingOk.ts, 10, 6))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+// classes
+// - computed property names
+// void class { [x?.y] = 1 }        // legal parse, but causes a checker error
+// void class { [x?.["y"]] = 1 }    // legal parse, but causes a checker error
+// void class { [x?.()] = 1 }       // legal parse, but causes a checker error
+// void class { [new f?.()] = 1 }   // legal parse, but causes a checker error
+void class { [Symbol?.toStringTag] = "" }
+>Symbol?.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+// - property declarations
+void class { a = x?.y }
+>a : Symbol((Anonymous class).a, Decl(generalParsingOk.ts, 20, 12))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+void class { a = x?.["y"] }
+>a : Symbol((Anonymous class).a, Decl(generalParsingOk.ts, 21, 12))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+void class { a = x?.() }
+>a : Symbol((Anonymous class).a, Decl(generalParsingOk.ts, 22, 12))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+void class { a = new x?.() }
+>a : Symbol((Anonymous class).a, Decl(generalParsingOk.ts, 23, 12))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+// - heritage clauses
+void class extends M?.y {}
+>M?.y : Symbol(M.y, Decl(declarations.d.ts, 10, 21))
+>M : Symbol(M, Decl(declarations.d.ts, 9, 32))
+>y : Symbol(M.y, Decl(declarations.d.ts, 10, 21))
+
+void class extends M?.["y"] {}
+>M : Symbol(M, Decl(declarations.d.ts, 9, 32))
+>"y" : Symbol(M.y, Decl(declarations.d.ts, 10, 21))
+
+void class extends M?.z<number> {}
+>M?.z : Symbol(M.z, Decl(declarations.d.ts, 11, 21))
+>M : Symbol(M, Decl(declarations.d.ts, 9, 32))
+>z : Symbol(M.z, Decl(declarations.d.ts, 11, 21))
+
+// - class decorators
+@x?.y class C1 {}
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+>C1 : Symbol(C1, Decl(generalParsingOk.ts, 27, 34))
+
+@x?.["y"] class C2 {}
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+>C2 : Symbol(C2, Decl(generalParsingOk.ts, 29, 17))
+
+@x?.() class C3 {}
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+>C3 : Symbol(C3, Decl(generalParsingOk.ts, 30, 21))
+
+@new x?.() class C4 {}
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+>C4 : Symbol(C4, Decl(generalParsingOk.ts, 31, 18))
+
+// - member decorators
+class C5 { @x?.y m() {} }
+>C5 : Symbol(C5, Decl(generalParsingOk.ts, 32, 22))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+>m : Symbol(C5.m, Decl(generalParsingOk.ts, 34, 10))
+
+class C6 { @x?.["y"] m() {} } // allowed as ?.[ is not ambiguous with computed property names
+>C6 : Symbol(C6, Decl(generalParsingOk.ts, 34, 25))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+>m : Symbol(C6.m, Decl(generalParsingOk.ts, 35, 10))
+
+class C7 { @x?.() m() {} }
+>C7 : Symbol(C7, Decl(generalParsingOk.ts, 35, 29))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+>m : Symbol(C7.m, Decl(generalParsingOk.ts, 36, 10))
+
+class C8 { @new x?.() m () {} }
+>C8 : Symbol(C8, Decl(generalParsingOk.ts, 36, 26))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+>m : Symbol(C8.m, Decl(generalParsingOk.ts, 37, 10))
+
+// - parameter decorators
+class C9 { m(@x?.y a) {} }
+>C9 : Symbol(C9, Decl(generalParsingOk.ts, 37, 31))
+>m : Symbol(C9.m, Decl(generalParsingOk.ts, 39, 10))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+>a : Symbol(a, Decl(generalParsingOk.ts, 39, 13))
+
+class C10 { m(@x?.["y"] a) {} }
+>C10 : Symbol(C10, Decl(generalParsingOk.ts, 39, 26))
+>m : Symbol(C10.m, Decl(generalParsingOk.ts, 40, 11))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+>a : Symbol(a, Decl(generalParsingOk.ts, 40, 14))
+
+class C11 { m(@x?.() a) {} }
+>C11 : Symbol(C11, Decl(generalParsingOk.ts, 40, 31))
+>m : Symbol(C11.m, Decl(generalParsingOk.ts, 41, 11))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+>a : Symbol(a, Decl(generalParsingOk.ts, 41, 14))
+
+class C12 { m(@new x?.() a) {} }
+>C12 : Symbol(C12, Decl(generalParsingOk.ts, 41, 28))
+>m : Symbol(C12.m, Decl(generalParsingOk.ts, 42, 11))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+>a : Symbol(a, Decl(generalParsingOk.ts, 42, 14))
+
+// functions
+// - parameters
+void function (a = x?.y) {}
+>a : Symbol(a, Decl(generalParsingOk.ts, 46, 15))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+void function (a = x?.["y"]) {}
+>a : Symbol(a, Decl(generalParsingOk.ts, 47, 15))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+void function (a = x?.()) {}
+>a : Symbol(a, Decl(generalParsingOk.ts, 48, 15))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+void function (a = new x?.()) {}
+>a : Symbol(a, Decl(generalParsingOk.ts, 49, 15))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+// - binding elements
+//   - initializers
+void function ({ a = x?.y }) {}
+>a : Symbol(a, Decl(generalParsingOk.ts, 52, 16))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+void function ({ a = x?.["y"] }) {}
+>a : Symbol(a, Decl(generalParsingOk.ts, 53, 16))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+void function ({ a = x?.() }) {}
+>a : Symbol(a, Decl(generalParsingOk.ts, 54, 16))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+void function ({ a = new x?.() }) {}
+>a : Symbol(a, Decl(generalParsingOk.ts, 55, 16))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+//   - computed properties
+void function ({ [x?.y]: a }) {}
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+>a : Symbol(a, Decl(generalParsingOk.ts, 57, 16))
+
+void function ({ [x?.["y"]]: a }) {}
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+>a : Symbol(a, Decl(generalParsingOk.ts, 58, 16))
+
+void function ({ [x?.()]: a }) {}
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+>a : Symbol(a, Decl(generalParsingOk.ts, 59, 16))
+
+void function ({ [new x?.()]: a }) {}
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+>a : Symbol(a, Decl(generalParsingOk.ts, 60, 16))
+
+// arrow functions
+// - parameters
+((a = x?.y) => {});
+>a : Symbol(a, Decl(generalParsingOk.ts, 64, 2))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+((a = x?.["y"]) => {});
+>a : Symbol(a, Decl(generalParsingOk.ts, 65, 2))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+((a = x?.()) => {});
+>a : Symbol(a, Decl(generalParsingOk.ts, 66, 2))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+((a = new x?.()) => {});
+>a : Symbol(a, Decl(generalParsingOk.ts, 67, 2))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+// - expression bodies
+(() => x?.y);
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+(() => x?.["y"]);
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+(() => x?.());
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+(() => new x?.());
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+// parenthesis
+(x?.y);
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+// comma
+x?.y, f();
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+>f : Symbol(f, Decl(declarations.d.ts, 2, 11))
+
+f(), x?.y;
+>f : Symbol(f, Decl(declarations.d.ts, 2, 11))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+// conditional
+x?.y ? 0 : 1
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+0 ? x?.y : 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+0 ? 1 : x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+// binary
+x?.y + 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y - 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y * 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y / 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y ** 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y % 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y ^ 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y & 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y | 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y << 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y >> 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y >>> 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y && 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y || 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y == 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y === 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y != 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y !== 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y < 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y <= 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y > 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y >= 1;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+1 + x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+1 - x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+1 * x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+1 / x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+1 ** x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+1 % x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+1 ^ x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+1 & x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+1 | x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+1 << x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+1 >> x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+1 >>> x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+1 && x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+1 || x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+1 == x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+1 === x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+1 != x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+1 !== x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+1 < x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+1 <= x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+1 > x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+1 >= x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+// prefix unary
++x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+-x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+!x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+~x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+// unary
+void x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+typeof x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+void function * () { yield x?.y; }
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+void async function() { await x?.y; }
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+// notnull
+x?.y!.z;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+// assertions
+<string>x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+x?.y as string;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+// array literals
+[x?.y];
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+[, x?.y];
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+[...x?.y];
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+// literals
+1?.toString(); // no need for `..`
+>1?.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+1.?.toString();
+>1.?.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+.0?.toString();
+>.0?.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+4e3?.toString();
+>4e3?.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+1.e3?.toString();
+>1.e3?.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+""?.toString();
+>""?.toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
+
+''?.toString();
+>''?.toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
+
+``?.toString();
+>``?.toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
+
+/./?.toString();
+>/./?.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+
+/./g?.toString();
+>/./g?.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+
+true?.toString();
+>true?.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+
+false?.toString();
+>false?.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+
+// templates
+`${x?.y}`;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+// variables
+var v = x?.y;
+>v : Symbol(v, Decl(generalParsingOk.ts, 174, 3), Decl(generalParsingOk.ts, 175, 5), Decl(generalParsingOk.ts, 176, 5), Decl(generalParsingOk.ts, 177, 5), Decl(generalParsingOk.ts, 178, 5), Decl(generalParsingOk.ts, 179, 5))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+var [v] = x?.y;
+>v : Symbol(v, Decl(generalParsingOk.ts, 174, 3), Decl(generalParsingOk.ts, 175, 5), Decl(generalParsingOk.ts, 176, 5), Decl(generalParsingOk.ts, 177, 5), Decl(generalParsingOk.ts, 178, 5), Decl(generalParsingOk.ts, 179, 5))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+var [v = x?.y] = [1];
+>v : Symbol(v, Decl(generalParsingOk.ts, 174, 3), Decl(generalParsingOk.ts, 175, 5), Decl(generalParsingOk.ts, 176, 5), Decl(generalParsingOk.ts, 177, 5), Decl(generalParsingOk.ts, 178, 5), Decl(generalParsingOk.ts, 179, 5))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+var {v} = x?.y;
+>v : Symbol(v, Decl(generalParsingOk.ts, 174, 3), Decl(generalParsingOk.ts, 175, 5), Decl(generalParsingOk.ts, 176, 5), Decl(generalParsingOk.ts, 177, 5), Decl(generalParsingOk.ts, 178, 5), Decl(generalParsingOk.ts, 179, 5))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+var {v = x?.y} = {v:1};
+>v : Symbol(v, Decl(generalParsingOk.ts, 174, 3), Decl(generalParsingOk.ts, 175, 5), Decl(generalParsingOk.ts, 176, 5), Decl(generalParsingOk.ts, 177, 5), Decl(generalParsingOk.ts, 178, 5), Decl(generalParsingOk.ts, 179, 5))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+>v : Symbol(v, Decl(generalParsingOk.ts, 178, 18))
+
+var {[x?.y]: v} = null;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+>v : Symbol(v, Decl(generalParsingOk.ts, 174, 3), Decl(generalParsingOk.ts, 175, 5), Decl(generalParsingOk.ts, 176, 5), Decl(generalParsingOk.ts, 177, 5), Decl(generalParsingOk.ts, 178, 5), Decl(generalParsingOk.ts, 179, 5))
+
+// if/else if
+if (x?.y) {}
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+if (1) {} else if (x?.y) {}
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+// switch
+switch (x?.y) {}
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+switch (1) { case x?.y: break; }
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+// do/while
+do {} while (x?.y)
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+while (x?.y) {}
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+// for
+for (x?.y; x?.y; x?.y);
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+// for..in
+for (x?.y in {});
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+// for..of
+for (x?.y of []);
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+
+// enums
+enum E {
+>E : Symbol(E, Decl(generalParsingOk.ts, 200, 17))
+
+    a = x?.y
+>a : Symbol(E.a, Decl(generalParsingOk.ts, 203, 8))
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+}
+
+=== tests/cases/conformance/emitter/es2015/safeNavigation/exportsOk.ts ===
+export default x?.y;
+>x : Symbol(x, Decl(declarations.d.ts, 0, 11))
+

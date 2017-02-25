@@ -1,0 +1,188 @@
+=== tests/cases/conformance/types/safeNavigation/types.safeNavigation.esnext.1.ts ===
+declare const x1: (() => number) | undefined | null;
+>x1 : () => number
+>null : null
+
+declare const x2: { y: (() => number) | undefined | null; };
+>x2 : { y: () => number; }
+>y : () => number
+>null : null
+
+declare const x3: { y: (() => number) | undefined | null; } | undefined | null;
+>x3 : { y: () => number; }
+>y : () => number
+>null : null
+>null : null
+
+declare const x4: { y: { z: (() => number) | undefined | null; } };
+>x4 : { y: { z: () => number; }; }
+>y : { z: () => number; }
+>z : () => number
+>null : null
+
+declare const x5: { y: { z: (() => number) | undefined | null; } | undefined | null } | undefined | null;
+>x5 : { y: { z: () => number; }; }
+>y : { z: () => number; }
+>z : () => number
+>null : null
+>null : null
+>null : null
+
+declare const x6: { y: number } | undefined | null;
+>x6 : { y: number; }
+>y : number
+>null : null
+
+declare const x7: { y: any };
+>x7 : { y: any; }
+>y : any
+
+declare const x8: { y: { z: number } | undefined | null } | undefined | null;
+>x8 : { y: { z: number; }; }
+>y : { z: number; }
+>z : number
+>null : null
+>null : null
+
+declare const y: "y";
+>y : "y"
+
+declare const z: "z";
+>z : "z"
+
+x1?.();
+>x1?.() : number
+>x1 : () => number
+
+(x1)?.();
+>(x1)?.() : number
+>(x1) : () => number
+>x1 : () => number
+
+x2.y?.();
+>x2.y?.() : number
+>x2.y : () => number
+>x2 : { y: () => number; }
+>y : () => number
+
+x2[y]?.();
+>x2[y]?.() : number
+>x2[y] : () => number
+>x2 : { y: () => number; }
+>y : "y"
+
+(x2.y)?.();
+>(x2.y)?.() : number
+>(x2.y) : () => number
+>x2.y : () => number
+>x2 : { y: () => number; }
+>y : () => number
+
+(x2[y])?.();
+>(x2[y])?.() : number
+>(x2[y]) : () => number
+>x2[y] : () => number
+>x2 : { y: () => number; }
+>y : "y"
+
+x3?.y?.();
+>x3?.y?.() : number
+>x3?.y : () => number
+>x3 : { y: () => number; }
+>y : () => number
+
+x3?.[y]?.();
+>x3?.[y]?.() : number
+>x3?.[y] : () => number
+>x3 : { y: () => number; }
+>y : "y"
+
+x4.y.z?.();
+>x4.y.z?.() : number
+>x4.y.z : () => number
+>x4.y : { z: () => number; }
+>x4 : { y: { z: () => number; }; }
+>y : { z: () => number; }
+>z : () => number
+
+x4.y[z]?.();
+>x4.y[z]?.() : number
+>x4.y[z] : () => number
+>x4.y : { z: () => number; }
+>x4 : { y: { z: () => number; }; }
+>y : { z: () => number; }
+>z : "z"
+
+(x4.y.z)?.();
+>(x4.y.z)?.() : number
+>(x4.y.z) : () => number
+>x4.y.z : () => number
+>x4.y : { z: () => number; }
+>x4 : { y: { z: () => number; }; }
+>y : { z: () => number; }
+>z : () => number
+
+(x4.y[z])?.();
+>(x4.y[z])?.() : number
+>(x4.y[z]) : () => number
+>x4.y[z] : () => number
+>x4.y : { z: () => number; }
+>x4 : { y: { z: () => number; }; }
+>y : { z: () => number; }
+>z : "z"
+
+x5?.y?.z?.();
+>x5?.y?.z?.() : number
+>x5?.y?.z : () => number
+>x5?.y : { z: () => number; }
+>x5 : { y: { z: () => number; }; }
+>y : { z: () => number; }
+>z : () => number
+
+x5?.y?.z;
+>x5?.y?.z : () => number
+>x5?.y : { z: () => number; }
+>x5 : { y: { z: () => number; }; }
+>y : { z: () => number; }
+>z : () => number
+
+x5?.[y]?.[z];
+>x5?.[y]?.[z] : () => number
+>x5?.[y] : { z: () => number; }
+>x5 : { y: { z: () => number; }; }
+>y : "y"
+>z : "z"
+
+x6?.y = 1;
+>x6?.y = 1 : 1
+>x6?.y : number
+>x6 : { y: number; }
+>y : number
+>1 : 1
+
+x6?.y += 1;
+>x6?.y += 1 : number
+>x6?.y : number
+>x6 : { y: number; }
+>y : number
+>1 : 1
+
+x6?.y *= 1;
+>x6?.y *= 1 : number
+>x6?.y : number
+>x6 : { y: number; }
+>y : number
+>1 : 1
+
+x6?.y++;
+>x6?.y++ : number
+>x6?.y : number
+>x6 : { y: number; }
+>y : number
+
+++x6?.y;
+>++x6?.y : number
+>x6?.y : number
+>x6 : { y: number; }
+>y : number
+
