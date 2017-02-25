@@ -10041,8 +10041,31 @@ namespace ts {
             return f(type) ? type : neverType;
         }
 
-        function mapType(type: Type, f: (t: Type) => Type): Type {
-            return type.flags & TypeFlags.Union ? getUnionType(map((<UnionType>type).types, f)) : f(type);
+        // Apply a mapping function to a contextual type and return the resulting type. If the contextual type
+        // is a union type, the mapping function is applied to each constituent type and a union of the resulting
+        // types is returned.
+        function mapType(type: Type, mapper: (t: Type) => Type): Type {
+            if (!(type.flags & TypeFlags.Union)) {
+                return mapper(type);
+            }
+            const types = (<UnionType>type).types;
+            let mappedType: Type;
+            let mappedTypes: Type[];
+            for (const current of types) {
+                const t = mapper(current);
+                if (t) {
+                    if (!mappedType) {
+                        mappedType = t;
+                    }
+                    else if (!mappedTypes) {
+                        mappedTypes = [mappedType, t];
+                    }
+                    else {
+                        mappedTypes.push(t);
+                    }
+                }
+            }
+            return mappedTypes ? getUnionType(mappedTypes) : mappedType;
         }
 
         function extractTypesOfKind(type: Type, kind: TypeFlags) {
@@ -11491,7 +11514,7 @@ namespace ts {
         }
 
         function getThisTypeFromContextualType(type: Type): Type {
-            return applyToContextualType(type, t => {
+            return mapType(type, t => {
                 return t.flags & TypeFlags.Intersection ? forEach((<IntersectionType>t).types, getThisTypeArgument) : getThisTypeArgument(t);
             });
         }
@@ -11739,42 +11762,15 @@ namespace ts {
             return undefined;
         }
 
-        // Apply a mapping function to a contextual type and return the resulting type. If the contextual type
-        // is a union type, the mapping function is applied to each constituent type and a union of the resulting
-        // types is returned.
-        function applyToContextualType(type: Type, mapper: (t: Type) => Type): Type {
-            if (!(type.flags & TypeFlags.Union)) {
-                return mapper(type);
-            }
-            const types = (<UnionType>type).types;
-            let mappedType: Type;
-            let mappedTypes: Type[];
-            for (const current of types) {
-                const t = mapper(current);
-                if (t) {
-                    if (!mappedType) {
-                        mappedType = t;
-                    }
-                    else if (!mappedTypes) {
-                        mappedTypes = [mappedType, t];
-                    }
-                    else {
-                        mappedTypes.push(t);
-                    }
-                }
-            }
-            return mappedTypes ? getUnionType(mappedTypes) : mappedType;
-        }
-
         function getTypeOfPropertyOfContextualType(type: Type, name: string) {
-            return applyToContextualType(type, t => {
+            return mapType(type, t => {
                 const prop = t.flags & TypeFlags.StructuredType ? getPropertyOfType(t, name) : undefined;
                 return prop ? getTypeOfSymbol(prop) : undefined;
             });
         }
 
         function getIndexTypeOfContextualType(type: Type, kind: IndexKind) {
-            return applyToContextualType(type, t => getIndexTypeOfStructuredType(t, kind));
+            return mapType(type, t => getIndexTypeOfStructuredType(t, kind));
         }
 
         // Return true if the given contextual type is a tuple-like type
