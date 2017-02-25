@@ -268,7 +268,7 @@ let cplus: { p: number, plus(): void } = { ...c, plus() { return this.p + 1; } }
 >plus : () => number
 >this.p + 1 : number
 >this.p : number
->this : { plus(): number; p: number; }
+>this : { p: number; plus(): void; }
 >p : number
 >1 : 1
 

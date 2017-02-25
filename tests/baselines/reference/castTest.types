@@ -93,12 +93,12 @@ var p_cast = <Point> ({
 >Point : typeof Point
 >this.x + dx : number
 >this.x : number
->this : { x: number; y: number; add: (dx: number, dy: number) => Point; mult: (p: Point) => Point; }
+>this : Point
 >x : number
 >dx : number
 >this.y + dy : number
 >this.y : number
->this : { x: number; y: number; add: (dx: number, dy: number) => Point; mult: (p: Point) => Point; }
+>this : Point
 >y : number
 >dy : number
 

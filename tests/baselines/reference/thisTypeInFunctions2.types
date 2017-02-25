@@ -100,12 +100,12 @@ extend2({
 >init : () => void
 
         this // this: containing object literal type
->this : { init(): void; mine: number; foo(): void; }
+>this : IndexedWithoutThis
 
         this.mine
->this.mine : number
->this : { init(): void; mine: number; foo(): void; }
->mine : number
+>this.mine : any
+>this : IndexedWithoutThis
+>mine : any
 
         //this.willDestroy
     },
@@ -117,12 +117,12 @@ extend2({
 >foo : () => void
 
         this // this: containing object literal type
->this : { init(): void; mine: number; foo(): void; }
+>this : IndexedWithoutThis
 
         this.mine
->this.mine : number
->this : { init(): void; mine: number; foo(): void; }
->mine : number
+>this.mine : any
+>this : IndexedWithoutThis
+>mine : any
     }
 });
 
@@ -142,7 +142,7 @@ simple({
 >length : number
 >this.bar() : number
 >this.bar : () => number
->this : { foo(n: string): number; bar(): number; }
+>this : SimpleInterface
 >bar : () => number
 
     },

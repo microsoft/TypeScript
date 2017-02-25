@@ -41,51 +41,19 @@ tests/cases/conformance/fixSignatureCaching.ts(639,38): error TS2304: Cannot fin
 tests/cases/conformance/fixSignatureCaching.ts(640,13): error TS2304: Cannot find name 'window'.
 tests/cases/conformance/fixSignatureCaching.ts(641,13): error TS2304: Cannot find name 'window'.
 tests/cases/conformance/fixSignatureCaching.ts(704,18): error TS2339: Property 'prepareDetectionCache' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(704,45): error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
-tests/cases/conformance/fixSignatureCaching.ts(704,58): error TS2339: Property 'ua' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
-tests/cases/conformance/fixSignatureCaching.ts(704,67): error TS2339: Property 'maxPhoneWidth' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
-tests/cases/conformance/fixSignatureCaching.ts(705,25): error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
 tests/cases/conformance/fixSignatureCaching.ts(734,18): error TS2339: Property 'prepareDetectionCache' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(734,45): error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
-tests/cases/conformance/fixSignatureCaching.ts(734,58): error TS2339: Property 'ua' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
-tests/cases/conformance/fixSignatureCaching.ts(734,67): error TS2339: Property 'maxPhoneWidth' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
-tests/cases/conformance/fixSignatureCaching.ts(735,25): error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
 tests/cases/conformance/fixSignatureCaching.ts(783,18): error TS2339: Property 'prepareDetectionCache' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(783,45): error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
-tests/cases/conformance/fixSignatureCaching.ts(783,58): error TS2339: Property 'ua' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
-tests/cases/conformance/fixSignatureCaching.ts(783,67): error TS2339: Property 'maxPhoneWidth' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
-tests/cases/conformance/fixSignatureCaching.ts(784,25): error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
-tests/cases/conformance/fixSignatureCaching.ts(804,22): error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
-tests/cases/conformance/fixSignatureCaching.ts(805,22): error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
 tests/cases/conformance/fixSignatureCaching.ts(805,46): error TS2339: Property 'findMatch' does not exist on type '{}'.
 tests/cases/conformance/fixSignatureCaching.ts(805,61): error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(805,89): error TS2339: Property 'ua' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
-tests/cases/conformance/fixSignatureCaching.ts(807,25): error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
-tests/cases/conformance/fixSignatureCaching.ts(827,22): error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
-tests/cases/conformance/fixSignatureCaching.ts(828,22): error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
 tests/cases/conformance/fixSignatureCaching.ts(828,47): error TS2339: Property 'findMatches' does not exist on type '{}'.
 tests/cases/conformance/fixSignatureCaching.ts(828,64): error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(828,92): error TS2339: Property 'ua' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
-tests/cases/conformance/fixSignatureCaching.ts(830,25): error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
-tests/cases/conformance/fixSignatureCaching.ts(844,22): error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
-tests/cases/conformance/fixSignatureCaching.ts(845,22): error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
 tests/cases/conformance/fixSignatureCaching.ts(845,39): error TS2339: Property 'detectOS' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(845,53): error TS2339: Property 'ua' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
-tests/cases/conformance/fixSignatureCaching.ts(847,25): error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
 tests/cases/conformance/fixSignatureCaching.ts(869,25): error TS2339: Property 'getVersion' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(869,46): error TS2339: Property 'ua' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
 tests/cases/conformance/fixSignatureCaching.ts(890,25): error TS2339: Property 'getVersionStr' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(890,49): error TS2339: Property 'ua' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
 tests/cases/conformance/fixSignatureCaching.ts(912,36): error TS2339: Property 'findMatches' does not exist on type '{}'.
 tests/cases/conformance/fixSignatureCaching.ts(912,53): error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(912,83): error TS2339: Property 'ua' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
-tests/cases/conformance/fixSignatureCaching.ts(927,38): error TS2339: Property 'ua' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
 tests/cases/conformance/fixSignatureCaching.ts(941,33): error TS2339: Property 'isPhoneSized' does not exist on type '(userAgent: any, maxPhoneWidth: any) => void'.
-tests/cases/conformance/fixSignatureCaching.ts(941,68): error TS2339: Property 'maxPhoneWidth' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
-tests/cases/conformance/fixSignatureCaching.ts(951,22): error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
-tests/cases/conformance/fixSignatureCaching.ts(952,22): error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
 tests/cases/conformance/fixSignatureCaching.ts(952,42): error TS2339: Property 'mobileGrade' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(954,25): error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
 tests/cases/conformance/fixSignatureCaching.ts(959,16): error TS2304: Cannot find name 'window'.
 tests/cases/conformance/fixSignatureCaching.ts(959,42): error TS2304: Cannot find name 'window'.
 tests/cases/conformance/fixSignatureCaching.ts(960,22): error TS2339: Property 'isPhoneSized' does not exist on type '(userAgent: any, maxPhoneWidth: any) => void'.
@@ -103,7 +71,7 @@ tests/cases/conformance/fixSignatureCaching.ts(979,23): error TS2304: Cannot fin
 tests/cases/conformance/fixSignatureCaching.ts(980,37): error TS2304: Cannot find name 'window'.
 
 
-==== tests/cases/conformance/fixSignatureCaching.ts (103 errors) ====
+==== tests/cases/conformance/fixSignatureCaching.ts (71 errors) ====
     // Repro from #10697
     
     (function (define, undefined) {
@@ -894,15 +862,7 @@ tests/cases/conformance/fixSignatureCaching.ts(980,37): error TS2304: Cannot fin
                 impl.prepareDetectionCache(this._cache, this.ua, this.maxPhoneWidth);
                      ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2339: Property 'prepareDetectionCache' does not exist on type '{}'.
-                                                ~~~~~~
-!!! error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
-                                                             ~~
-!!! error TS2339: Property 'ua' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
-                                                                      ~~~~~~~~~~~~~
-!!! error TS2339: Property 'maxPhoneWidth' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
                 return this._cache.mobile;
-                            ~~~~~~
-!!! error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
             },
     
             /**
@@ -934,15 +894,7 @@ tests/cases/conformance/fixSignatureCaching.ts(980,37): error TS2304: Cannot fin
                 impl.prepareDetectionCache(this._cache, this.ua, this.maxPhoneWidth);
                      ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2339: Property 'prepareDetectionCache' does not exist on type '{}'.
-                                                ~~~~~~
-!!! error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
-                                                             ~~
-!!! error TS2339: Property 'ua' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
-                                                                      ~~~~~~~~~~~~~
-!!! error TS2339: Property 'maxPhoneWidth' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
                 return this._cache.phone;
-                            ~~~~~~
-!!! error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
             },
     
             /**
@@ -993,15 +945,7 @@ tests/cases/conformance/fixSignatureCaching.ts(980,37): error TS2304: Cannot fin
                 impl.prepareDetectionCache(this._cache, this.ua, this.maxPhoneWidth);
                      ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2339: Property 'prepareDetectionCache' does not exist on type '{}'.
-                                                ~~~~~~
-!!! error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
-                                                             ~~
-!!! error TS2339: Property 'ua' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
-                                                                      ~~~~~~~~~~~~~
-!!! error TS2339: Property 'maxPhoneWidth' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
                 return this._cache.tablet;
-                            ~~~~~~
-!!! error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
             },
     
             /**
@@ -1022,21 +966,13 @@ tests/cases/conformance/fixSignatureCaching.ts(980,37): error TS2304: Cannot fin
              */
             userAgent: function () {
                 if (this._cache.userAgent === undefined) {
-                         ~~~~~~
-!!! error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
                     this._cache.userAgent = impl.findMatch(impl.mobileDetectRules.uas, this.ua);
-                         ~~~~~~
-!!! error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
                                                  ~~~~~~~~~
 !!! error TS2339: Property 'findMatch' does not exist on type '{}'.
                                                                 ~~~~~~~~~~~~~~~~~
 !!! error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
-                                                                                            ~~
-!!! error TS2339: Property 'ua' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
                 }
                 return this._cache.userAgent;
-                            ~~~~~~
-!!! error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
             },
     
             /**
@@ -1057,21 +993,13 @@ tests/cases/conformance/fixSignatureCaching.ts(980,37): error TS2304: Cannot fin
              */
             userAgents: function () {
                 if (this._cache.userAgents === undefined) {
-                         ~~~~~~
-!!! error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
                     this._cache.userAgents = impl.findMatches(impl.mobileDetectRules.uas, this.ua);
-                         ~~~~~~
-!!! error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
                                                   ~~~~~~~~~~~
 !!! error TS2339: Property 'findMatches' does not exist on type '{}'.
                                                                    ~~~~~~~~~~~~~~~~~
 !!! error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
-                                                                                               ~~
-!!! error TS2339: Property 'ua' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
                 }
                 return this._cache.userAgents;
-                            ~~~~~~
-!!! error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
             },
     
             /**
@@ -1086,19 +1014,11 @@ tests/cases/conformance/fixSignatureCaching.ts(980,37): error TS2304: Cannot fin
              */
             os: function () {
                 if (this._cache.os === undefined) {
-                         ~~~~~~
-!!! error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
                     this._cache.os = impl.detectOS(this.ua);
-                         ~~~~~~
-!!! error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
                                           ~~~~~~~~
 !!! error TS2339: Property 'detectOS' does not exist on type '{}'.
-                                                        ~~
-!!! error TS2339: Property 'ua' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
                 }
                 return this._cache.os;
-                            ~~~~~~
-!!! error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
             },
     
             /**
@@ -1123,8 +1043,6 @@ tests/cases/conformance/fixSignatureCaching.ts(980,37): error TS2304: Cannot fin
                 return impl.getVersion(key, this.ua);
                             ~~~~~~~~~~
 !!! error TS2339: Property 'getVersion' does not exist on type '{}'.
-                                                 ~~
-!!! error TS2339: Property 'ua' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
             },
     
             /**
@@ -1148,8 +1066,6 @@ tests/cases/conformance/fixSignatureCaching.ts(980,37): error TS2304: Cannot fin
                 return impl.getVersionStr(key, this.ua);
                             ~~~~~~~~~~~~~
 !!! error TS2339: Property 'getVersionStr' does not exist on type '{}'.
-                                                    ~~
-!!! error TS2339: Property 'ua' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
             },
     
             /**
@@ -1176,8 +1092,6 @@ tests/cases/conformance/fixSignatureCaching.ts(980,37): error TS2304: Cannot fin
 !!! error TS2339: Property 'findMatches' does not exist on type '{}'.
                                                         ~~~~~~~~~~~~~~~~~
 !!! error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
-                                                                                      ~~
-!!! error TS2339: Property 'ua' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
             },
     
             /**
@@ -1193,8 +1107,6 @@ tests/cases/conformance/fixSignatureCaching.ts(980,37): error TS2304: Cannot fin
                     pattern = new RegExp(pattern, 'i');
                 }
                 return pattern.test(this.ua);
-                                         ~~
-!!! error TS2339: Property 'ua' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
             },
     
             /**
@@ -1211,8 +1123,6 @@ tests/cases/conformance/fixSignatureCaching.ts(980,37): error TS2304: Cannot fin
                 return MobileDetect.isPhoneSized(maxPhoneWidth || this.maxPhoneWidth);
                                     ~~~~~~~~~~~~
 !!! error TS2339: Property 'isPhoneSized' does not exist on type '(userAgent: any, maxPhoneWidth: any) => void'.
-                                                                       ~~~~~~~~~~~~~
-!!! error TS2339: Property 'maxPhoneWidth' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
             },
     
             /**
@@ -1223,17 +1133,11 @@ tests/cases/conformance/fixSignatureCaching.ts(980,37): error TS2304: Cannot fin
              */
             mobileGrade: function () {
                 if (this._cache.grade === undefined) {
-                         ~~~~~~
-!!! error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
                     this._cache.grade = impl.mobileGrade(this);
-                         ~~~~~~
-!!! error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
                                              ~~~~~~~~~~~
 !!! error TS2339: Property 'mobileGrade' does not exist on type '{}'.
                 }
                 return this._cache.grade;
-                            ~~~~~~
-!!! error TS2339: Property '_cache' does not exist on type '{ constructor: (userAgent: any, maxPhoneWidth: any) => void; mobile: () => any; phone: () => any; tablet: () => any; userAgent: () => any; userAgents: () => any; os: () => any; version: (key: any) => any; versionStr: (key: any) => any; is: (key: any) => any; match: (pattern: any) => any; isPhoneSized: (maxPhoneWidth: any) => any; mobileGrade: () => any; }'.
             }
         };
     

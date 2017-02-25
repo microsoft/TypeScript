@@ -90,12 +90,10 @@ extend2({
 >init : Symbol(init, Decl(thisTypeInFunctions2.ts, 32, 9))
 
         this // this: containing object literal type
->this : Symbol(__object, Decl(thisTypeInFunctions2.ts, 32, 8))
+>this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
 
         this.mine
->this.mine : Symbol(mine, Decl(thisTypeInFunctions2.ts, 37, 6))
->this : Symbol(__object, Decl(thisTypeInFunctions2.ts, 32, 8))
->mine : Symbol(mine, Decl(thisTypeInFunctions2.ts, 37, 6))
+>this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
 
         //this.willDestroy
     },
@@ -106,12 +104,10 @@ extend2({
 >foo : Symbol(foo, Decl(thisTypeInFunctions2.ts, 38, 13))
 
         this // this: containing object literal type
->this : Symbol(__object, Decl(thisTypeInFunctions2.ts, 32, 8))
+>this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
 
         this.mine
->this.mine : Symbol(mine, Decl(thisTypeInFunctions2.ts, 37, 6))
->this : Symbol(__object, Decl(thisTypeInFunctions2.ts, 32, 8))
->mine : Symbol(mine, Decl(thisTypeInFunctions2.ts, 37, 6))
+>this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
     }
 });
 
@@ -126,9 +122,9 @@ simple({
 >n.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >n : Symbol(n, Decl(thisTypeInFunctions2.ts, 46, 8))
 >length : Symbol(String.length, Decl(lib.d.ts, --, --))
->this.bar : Symbol(bar, Decl(thisTypeInFunctions2.ts, 48, 6))
->this : Symbol(__object, Decl(thisTypeInFunctions2.ts, 45, 7))
->bar : Symbol(bar, Decl(thisTypeInFunctions2.ts, 48, 6))
+>this.bar : Symbol(SimpleInterface.bar, Decl(thisTypeInFunctions2.ts, 13, 19))
+>this : Symbol(SimpleInterface, Decl(thisTypeInFunctions2.ts, 11, 1))
+>bar : Symbol(SimpleInterface.bar, Decl(thisTypeInFunctions2.ts, 13, 19))
 
     },
     bar() {
