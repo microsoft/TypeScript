@@ -1435,6 +1435,10 @@
         "category": "Error",
         "code": 2448
     },
+    "Class '{0}' used before its declaration.": {
+        "category": "Error",
+        "code": 2449
+    },
     "Cannot redeclare block-scoped variable '{0}'.": {
         "category": "Error",
         "code": 2451
@@ -2018,10 +2022,6 @@
     "Cannot extend an interface '{0}'. Did you mean 'implements'?": {
         "category": "Error",
         "code": 2689
-    },
-    "A class must be declared after its base class.": {
-        "category": "Error",
-        "code": 2690
     },
     "An import path cannot end with a '{0}' extension. Consider importing '{1}' instead.": {
         "category": "Error",
