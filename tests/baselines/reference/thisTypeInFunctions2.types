@@ -92,9 +92,9 @@ extend1({
     }
 });
 extend2({
->extend2({    init() {        this // this: containing object literal type        this.mine        //this.willDestroy    },    mine: 13,    foo() {        this // this: containing object literal type        this.mine    }}) : void
+>extend2({    init() {        this // this: containing object literal type        this.mine    },    mine: 13,    foo() {        this // this: containing object literal type        this.mine    }}) : void
 >extend2 : (args: IndexedWithoutThis) => void
->{    init() {        this // this: containing object literal type        this.mine        //this.willDestroy    },    mine: 13,    foo() {        this // this: containing object literal type        this.mine    }} : { init(): void; mine: number; foo(): void; }
+>{    init() {        this // this: containing object literal type        this.mine    },    mine: 13,    foo() {        this // this: containing object literal type        this.mine    }} : { init(): void; mine: number; foo(): void; }
 
     init() {
 >init : () => void
@@ -107,7 +107,6 @@ extend2({
 >this : IndexedWithoutThis
 >mine : any
 
-        //this.willDestroy
     },
     mine: 13,
 >mine : number

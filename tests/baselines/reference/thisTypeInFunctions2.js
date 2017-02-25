@@ -35,7 +35,6 @@ extend2({
     init() {
         this // this: containing object literal type
         this.mine
-        //this.willDestroy
     },
     mine: 13,
     foo() {
@@ -71,7 +70,6 @@ extend2({
     init: function () {
         this; // this: containing object literal type
         this.mine;
-        //this.willDestroy
     },
     mine: 13,
     foo: function () {
