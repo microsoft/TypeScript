@@ -11512,25 +11512,26 @@ namespace ts {
             const containingLiteral = getContainingObjectLiteral(func);
             if (containingLiteral) {
                 // We have an object literal method. Check if the containing object literal has a contextual type
-                // and if that contextual type is or includes a ThisType<T>. If so, T is the contextual type for
-                // 'this'. We continue looking in any directly enclosing object literals.
-                let objectLiteral = containingLiteral;
-                while (true) {
-                    const type = getApparentTypeOfContextualType(objectLiteral);
-                    if (type) {
-                        const thisType = getThisTypeFromContextualType(type);
-                        if (thisType) {
-                            return thisType;
-                        }
+                // that includes a ThisType<T>. If so, T is the contextual type for 'this'. We continue looking in
+                // any directly enclosing object literals.
+                const contextualType = getApparentTypeOfContextualType(containingLiteral);
+                let literal = containingLiteral;
+                let type = contextualType;
+                while (type) {
+                    const thisType = getThisTypeFromContextualType(type);
+                    if (thisType) {
+                        return thisType;
                     }
-                    if (objectLiteral.parent.kind !== SyntaxKind.PropertyAssignment) {
+                    if (literal.parent.kind !== SyntaxKind.PropertyAssignment) {
                         break;
                     }
-                    objectLiteral = <ObjectLiteralExpression>objectLiteral.parent.parent;
+                    literal = <ObjectLiteralExpression>literal.parent.parent;
+                    type = getApparentTypeOfContextualType(literal);
                 }
                 // There was no contextual ThisType<T> for the containing object literal, so the contextual type
-                // for 'this' is the type of the object literal itself.
-                return checkExpressionCached(containingLiteral);
+                // for 'this' is the contextual type for the containing object literal or the type of the object
+                // literal itself.
+                return contextualType || checkExpressionCached(containingLiteral);
             }
             // In an assignment of the form 'obj.xxx = function(...)' or 'obj[xxx] = function(...)', the
             // contextual type for 'this' is 'obj'.
