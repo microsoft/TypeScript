@@ -15929,10 +15929,14 @@ namespace ts {
                     checkAssignmentOperator(rightType);
                     return getRegularTypeOfObjectLiteral(rightType);
                 case SyntaxKind.CommaToken:
-                    if (!compilerOptions.allowUnreachableCode && isSideEffectFree(left) && right.text!=="eval") {
+                    if (!compilerOptions.allowUnreachableCode && isSideEffectFree(left) && !isEvalNode(right)) {
                         error(left, Diagnostics.Left_side_of_comma_operator_is_unused_and_has_no_side_effects);
                     }
                     return rightType;
+            }
+
+            function isEvalNode(node: Expression) {
+                return node.kind === SyntaxKind.Identifier && (node as Identifier).text === "eval";
             }
 
             // Return true if there was no error, false if there was an error.
