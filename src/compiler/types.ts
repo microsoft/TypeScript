@@ -2458,6 +2458,23 @@
         tryGetMemberInModuleExports(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
         getApparentType(type: Type): Type;
 
+        getUnionType(types: Type[]): Type;
+
+        createAnonymousType(symbol: Symbol, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], stringIndexInfo: IndexInfo, numberIndexInfo: IndexInfo): Type;
+        createSignature(declaration: SignatureDeclaration, typeParameters: TypeParameter[], thisParameter: Symbol | undefined, parameters: Symbol[],
+            resolvedReturnType: Type, typePredicate: TypePredicate, minArgumentCount: number, hasRestParameter: boolean, hasLiteralTypes: boolean): Signature;
+        createSymbol(flags: SymbolFlags, name: string): TransientSymbol;
+
+        getAnyType(): Type;
+        getStringType(): Type;
+        getNumberType(): Type;
+        getBooleanType(): Type;
+        getVoidType(): Type;
+        getUndefinedType(): Type;
+        getNullType(): Type;
+        getESSymbolType(): Type;
+        getNeverType(): Type;
+
         /* @internal */ tryFindAmbientModuleWithoutAugmentations(moduleName: string): Symbol;
 
         // Should not be called directly.  Should only be accessed through the Program instance.

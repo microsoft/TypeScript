@@ -185,7 +185,20 @@ namespace ts {
                 // since we are only interested in declarations of the module itself
                 return tryFindAmbientModule(moduleName, /*withAugmentations*/ false);
             },
-            getApparentType
+            getApparentType,
+            getUnionType,
+            createAnonymousType,
+            createSignature,
+            createSymbol,
+            getAnyType: () => anyType,
+            getStringType: () => stringType,
+            getNumberType: () => numberType,
+            getBooleanType: () => booleanType,
+            getVoidType: () => voidType,
+            getUndefinedType: () => undefinedType,
+            getNullType: () => nullType,
+            getESSymbolType: () => esSymbolType,
+            getNeverType: () => neverType,
         };
 
         const tupleTypes: GenericType[] = [];
@@ -2753,23 +2766,28 @@ namespace ts {
 
             function buildParameterDisplay(p: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 const parameterNode = <ParameterDeclaration>p.valueDeclaration;
-                if (isRestParameter(parameterNode)) {
-                    writePunctuation(writer, SyntaxKind.DotDotDotToken);
-                }
-                if (isBindingPattern(parameterNode.name)) {
-                    buildBindingPatternDisplay(<BindingPattern>parameterNode.name, writer, enclosingDeclaration, flags, symbolStack);
-                }
-                else {
+                if (!parameterNode) {
                     appendSymbolNameOnly(p, writer);
                 }
-                if (isOptionalParameter(parameterNode)) {
-                    writePunctuation(writer, SyntaxKind.QuestionToken);
+                else {
+                    if (isRestParameter(parameterNode)) {
+                        writePunctuation(writer, SyntaxKind.DotDotDotToken);
+                    }
+                    if (isBindingPattern(parameterNode.name)) {
+                        buildBindingPatternDisplay(<BindingPattern>parameterNode.name, writer, enclosingDeclaration, flags, symbolStack);
+                    }
+                    else {
+                        appendSymbolNameOnly(p, writer);
+                    }
+                    if (isOptionalParameter(parameterNode)) {
+                        writePunctuation(writer, SyntaxKind.QuestionToken);
+                    }
                 }
                 writePunctuation(writer, SyntaxKind.ColonToken);
                 writeSpace(writer);
 
                 let type = getTypeOfSymbol(p);
-                if (isRequiredInitializedParameter(parameterNode)) {
+                if (parameterNode && isRequiredInitializedParameter(parameterNode)) {
                     type = includeFalsyTypes(type, TypeFlags.Undefined);
                 }
                 buildTypeDisplay(type, writer, enclosingDeclaration, flags, symbolStack);

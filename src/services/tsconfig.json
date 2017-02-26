@@ -89,6 +89,7 @@
         "codefixes/fixes.ts",
         "codefixes/helpers.ts",
         "codefixes/importFixes.ts",
-        "codefixes/unusedIdentifierFixes.ts"
+        "codefixes/unusedIdentifierFixes.ts",
+        "codefixes/inferFromUsage.ts"
     ]
 }
