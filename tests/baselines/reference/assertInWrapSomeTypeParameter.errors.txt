@@ -1,5 +1,5 @@
-tests/cases/compiler/assertInWrapSomeTypeParameter.ts(2,26): error TS1005: '>' expected.
 tests/cases/compiler/assertInWrapSomeTypeParameter.ts(1,9): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/compiler/assertInWrapSomeTypeParameter.ts(2,26): error TS1005: '>' expected.
 
 
 ==== tests/cases/compiler/assertInWrapSomeTypeParameter.ts (2 errors) ====

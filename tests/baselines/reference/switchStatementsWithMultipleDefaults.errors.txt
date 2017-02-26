@@ -1,8 +1,9 @@
 tests/cases/compiler/switchStatementsWithMultipleDefaults.ts(9,5): error TS1113: A 'default' clause cannot appear more than once in a 'switch' statement.
 tests/cases/compiler/switchStatementsWithMultipleDefaults.ts(21,13): error TS1113: A 'default' clause cannot appear more than once in a 'switch' statement.
+tests/cases/compiler/switchStatementsWithMultipleDefaults.ts(28,22): error TS1108: A 'return' statement can only be used within a function body.
 
 
-==== tests/cases/compiler/switchStatementsWithMultipleDefaults.ts (2 errors) ====
+==== tests/cases/compiler/switchStatementsWithMultipleDefaults.ts (3 errors) ====
     
     var x = 10;
     
@@ -35,6 +36,8 @@ tests/cases/compiler/switchStatementsWithMultipleDefaults.ts(21,13): error TS111
                 def\u0061ult: // Error, fourth 'default' clause.
                 // Errors on fifth-seventh
                 default: return;
+                         ~~~~~~
+!!! error TS1108: A 'return' statement can only be used within a function body.
                 default: default:
             }
     }

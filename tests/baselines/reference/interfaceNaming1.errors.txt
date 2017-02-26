@@ -1,15 +1,15 @@
-tests/cases/compiler/interfaceNaming1.ts(1,11): error TS1005: ';' expected.
 tests/cases/compiler/interfaceNaming1.ts(1,1): error TS2304: Cannot find name 'interface'.
+tests/cases/compiler/interfaceNaming1.ts(1,11): error TS1005: ';' expected.
 tests/cases/compiler/interfaceNaming1.ts(3,1): error TS2304: Cannot find name 'interface'.
 tests/cases/compiler/interfaceNaming1.ts(3,13): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 
 
 ==== tests/cases/compiler/interfaceNaming1.ts (4 errors) ====
     interface { }
-              ~
-!!! error TS1005: ';' expected.
     ~~~~~~~~~
 !!! error TS2304: Cannot find name 'interface'.
+              ~
+!!! error TS1005: ';' expected.
     interface interface{ }
     interface & { }
     ~~~~~~~~~

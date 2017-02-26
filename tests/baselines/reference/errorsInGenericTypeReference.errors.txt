@@ -1,8 +1,8 @@
-tests/cases/compiler/errorsInGenericTypeReference.ts(25,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/errorsInGenericTypeReference.ts(12,17): error TS2304: Cannot find name 'V'.
 tests/cases/compiler/errorsInGenericTypeReference.ts(18,31): error TS2304: Cannot find name 'V'.
 tests/cases/compiler/errorsInGenericTypeReference.ts(23,29): error TS2304: Cannot find name 'V'.
 tests/cases/compiler/errorsInGenericTypeReference.ts(24,36): error TS2304: Cannot find name 'V'.
+tests/cases/compiler/errorsInGenericTypeReference.ts(25,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/errorsInGenericTypeReference.ts(25,27): error TS2304: Cannot find name 'V'.
 tests/cases/compiler/errorsInGenericTypeReference.ts(26,24): error TS2304: Cannot find name 'V'.
 tests/cases/compiler/errorsInGenericTypeReference.ts(31,36): error TS2304: Cannot find name 'V'.

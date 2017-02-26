@@ -1,10 +1,10 @@
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(4,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(12,39): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(8,38): error TS2304: Cannot find name 'TypeChecker'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(9,48): error TS2304: Cannot find name 'TypeLink'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(9,67): error TS2304: Cannot find name 'SymbolScope'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(10,30): error TS2304: Cannot find name 'Type'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(12,35): error TS2304: Cannot find name 'Type'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(12,39): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(29,36): error TS2304: Cannot find name 'SymbolScope'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(29,55): error TS2304: Cannot find name 'Type'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(67,54): error TS2304: Cannot find name 'SignatureGroup'.
@@ -56,10 +56,10 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(200,48): error T
 !!! error TS2304: Cannot find name 'Type'.
                 if (typeLinks) {
                     extendsList = new Type[];
-                                          ~~
-!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
                                       ~~~~
 !!! error TS2304: Cannot find name 'Type'.
+                                          ~~
+!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
                     for (var i = 0, len = typeLinks.length; i < len; i++) {
                         var typeLink = typeLinks[i];
                         this.checker.resolvingBases = true;

@@ -1,8 +1,8 @@
 tests/cases/conformance/classes/members/classTypes/instancePropertyInClassType.ts(4,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/members/classTypes/instancePropertyInClassType.ts(7,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/classTypes/instancePropertyInClassType.ts(17,14): error TS2349: Cannot invoke an expression whose type lacks a call signature.
 tests/cases/conformance/classes/members/classTypes/instancePropertyInClassType.ts(24,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/members/classTypes/instancePropertyInClassType.ts(27,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/classTypes/instancePropertyInClassType.ts(17,14): error TS2349: Cannot invoke an expression whose type lacks a call signature.
 tests/cases/conformance/classes/members/classTypes/instancePropertyInClassType.ts(37,14): error TS2349: Cannot invoke an expression whose type lacks a call signature.
 
 

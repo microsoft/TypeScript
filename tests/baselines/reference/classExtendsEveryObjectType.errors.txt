@@ -1,9 +1,9 @@
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(16,18): error TS1133: Type reference expected.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(16,20): error TS1005: ';' expected.
 tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(4,17): error TS2311: A class may only extend another class.
 tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(8,18): error TS2304: Cannot find name 'x'.
 tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(11,18): error TS2304: Cannot find name 'M'.
 tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(14,18): error TS2304: Cannot find name 'foo'.
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(16,18): error TS1133: Type reference expected.
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(16,20): error TS1005: ';' expected.
 
 
 ==== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts (6 errors) ====

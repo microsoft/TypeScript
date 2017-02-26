@@ -2,9 +2,9 @@ tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(79,16): error TS10
 tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(85,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(94,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(100,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(111,25): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
 tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(119,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(125,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(111,25): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
 tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts(217,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
 
 

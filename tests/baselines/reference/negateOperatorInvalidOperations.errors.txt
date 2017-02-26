@@ -1,13 +1,13 @@
 tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts(4,15): error TS1109: Expression expected.
 tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts(4,25): error TS1005: '=' expected.
 tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts(4,26): error TS1109: Expression expected.
-tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts(12,14): error TS1109: Expression expected.
 tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts(7,17): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts(7,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts(8,17): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts(8,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts(9,17): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts(9,29): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts(12,14): error TS1109: Expression expected.
 
 
 ==== tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts (10 errors) ====

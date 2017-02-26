@@ -1,12 +1,12 @@
 tests/cases/compiler/collisionSuperAndLocalFunctionInAccessors.ts(4,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/collisionSuperAndLocalFunctionInAccessors.ts(9,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/collisionSuperAndLocalFunctionInAccessors.ts(15,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/collisionSuperAndLocalFunctionInAccessors.ts(20,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/collisionSuperAndLocalFunctionInAccessors.ts(26,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/collisionSuperAndLocalFunctionInAccessors.ts(33,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/collisionSuperAndLocalFunctionInAccessors.ts(16,9): error TS2401: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+tests/cases/compiler/collisionSuperAndLocalFunctionInAccessors.ts(20,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/collisionSuperAndLocalFunctionInAccessors.ts(21,9): error TS2401: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+tests/cases/compiler/collisionSuperAndLocalFunctionInAccessors.ts(26,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/collisionSuperAndLocalFunctionInAccessors.ts(28,13): error TS2401: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+tests/cases/compiler/collisionSuperAndLocalFunctionInAccessors.ts(33,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/collisionSuperAndLocalFunctionInAccessors.ts(35,13): error TS2401: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
 
 

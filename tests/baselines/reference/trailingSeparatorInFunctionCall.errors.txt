@@ -1,7 +1,7 @@
-tests/cases/compiler/trailingSeparatorInFunctionCall.ts(4,7): error TS1009: Trailing comma not allowed.
-tests/cases/compiler/trailingSeparatorInFunctionCall.ts(9,8): error TS1009: Trailing comma not allowed.
 tests/cases/compiler/trailingSeparatorInFunctionCall.ts(4,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/trailingSeparatorInFunctionCall.ts(4,7): error TS1009: Trailing comma not allowed.
 tests/cases/compiler/trailingSeparatorInFunctionCall.ts(9,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/trailingSeparatorInFunctionCall.ts(9,8): error TS1009: Trailing comma not allowed.
 
 
 ==== tests/cases/compiler/trailingSeparatorInFunctionCall.ts (4 errors) ====
@@ -9,16 +9,16 @@ tests/cases/compiler/trailingSeparatorInFunctionCall.ts(9,1): error TS2346: Supp
     }
     
     f(1, 2, );
-          ~
-!!! error TS1009: Trailing comma not allowed.
     ~~~~~~~~~
 !!! error TS2346: Supplied parameters do not match any signature of call target.
+          ~
+!!! error TS1009: Trailing comma not allowed.
     
     function f2<T>(x: T, y: T) {
     }
     
     f2(1, 2, );
-           ~
-!!! error TS1009: Trailing comma not allowed.
     ~~~~~~~~~~
 !!! error TS2346: Supplied parameters do not match any signature of call target.
+           ~
+!!! error TS1009: Trailing comma not allowed.

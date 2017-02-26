@@ -1,10 +1,16 @@
 tests/cases/conformance/es6/yieldExpressions/YieldExpression3_es6.ts(1,9): error TS9001: Generators are not currently supported.
+tests/cases/conformance/es6/yieldExpressions/YieldExpression3_es6.ts(2,3): error TS9000: 'yield' expressions are not currently supported.
+tests/cases/conformance/es6/yieldExpressions/YieldExpression3_es6.ts(3,3): error TS9000: 'yield' expressions are not currently supported.
 
 
-==== tests/cases/conformance/es6/yieldExpressions/YieldExpression3_es6.ts (1 errors) ====
+==== tests/cases/conformance/es6/yieldExpressions/YieldExpression3_es6.ts (3 errors) ====
     function* foo() {
             ~
 !!! error TS9001: Generators are not currently supported.
       yield
+      ~~~~~
+!!! error TS9000: 'yield' expressions are not currently supported.
       yield
+      ~~~~~
+!!! error TS9000: 'yield' expressions are not currently supported.
     }

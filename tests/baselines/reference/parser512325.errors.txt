@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512325.ts(1,22): error TS1005: ';' expected.
 tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512325.ts(1,11): error TS2304: Cannot find name 'a'.
 tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512325.ts(1,15): error TS2304: Cannot find name 'b'.
 tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512325.ts(1,18): error TS2304: Cannot find name 'c'.
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512325.ts(1,22): error TS1005: ';' expected.
 tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512325.ts(1,25): error TS2304: Cannot find name 'a'.
 tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512325.ts(1,27): error TS2304: Cannot find name 'b'.
 tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512325.ts(1,29): error TS2304: Cannot find name 'c'.
@@ -9,14 +9,14 @@ tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512325.ts(1,29)
 
 ==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512325.ts (7 errors) ====
     var tt = (a, (b, c)) => a+b+c;
-                         ~~
-!!! error TS1005: ';' expected.
               ~
 !!! error TS2304: Cannot find name 'a'.
                   ~
 !!! error TS2304: Cannot find name 'b'.
                      ~
 !!! error TS2304: Cannot find name 'c'.
+                         ~~
+!!! error TS1005: ';' expected.
                             ~
 !!! error TS2304: Cannot find name 'a'.
                               ~

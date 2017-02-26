@@ -2,7 +2,6 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(16,1): err
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(17,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/compiler/typescript.ts' not found.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(18,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/services/typescriptServices.ts' not found.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(19,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/RealWorld/diff.ts' not found.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1430,9): error TS1128: Declaration or statement expected.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(21,21): error TS2305: Module 'Harness' has no exported member 'Assert'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(25,17): error TS2304: Cannot find name 'IIO'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(41,12): error TS2304: Cannot find name 'ActiveXObject'.
@@ -79,6 +78,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1340,38): 
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1344,165): error TS2304: Cannot find name 'TypeScript'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1345,26): error TS2304: Cannot find name 'TypeScript'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1426,25): error TS2304: Cannot find name 'TypeScript'.
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1430,9): error TS1128: Declaration or statement expected.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1430,17): error TS2304: Cannot find name 'optionRegex'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1440,29): error TS2304: Cannot find name 'optionRegex'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1461,23): error TS2304: Cannot find name 'TypeScript'.

@@ -1,5 +1,3 @@
-tests/cases/compiler/interfaceDeclaration4.ts(39,14): error TS1005: '{' expected.
-tests/cases/compiler/interfaceDeclaration4.ts(39,18): error TS1005: ';' expected.
 tests/cases/compiler/interfaceDeclaration4.ts(18,11): error TS2430: Interface 'I3' incorrectly extends interface 'I1'.
   Types of property 'item' are incompatible.
     Type 'number' is not assignable to type 'string'.
@@ -7,7 +5,9 @@ tests/cases/compiler/interfaceDeclaration4.ts(27,7): error TS2420: Class 'C2' in
   Property 'item' is missing in type 'C2'.
 tests/cases/compiler/interfaceDeclaration4.ts(36,7): error TS2420: Class 'C3' incorrectly implements interface 'I1'.
   Property 'item' is missing in type 'C3'.
+tests/cases/compiler/interfaceDeclaration4.ts(39,14): error TS1005: '{' expected.
 tests/cases/compiler/interfaceDeclaration4.ts(39,15): error TS2304: Cannot find name 'I1'.
+tests/cases/compiler/interfaceDeclaration4.ts(39,18): error TS1005: ';' expected.
 
 
 ==== tests/cases/compiler/interfaceDeclaration4.ts (6 errors) ====
@@ -62,8 +62,8 @@ tests/cases/compiler/interfaceDeclaration4.ts(39,15): error TS2304: Cannot find 
     interface Foo.I1 { }
                  ~
 !!! error TS1005: '{' expected.
-                     ~
-!!! error TS1005: ';' expected.
                   ~~
 !!! error TS2304: Cannot find name 'I1'.
+                     ~
+!!! error TS1005: ';' expected.
     
