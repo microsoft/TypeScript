@@ -20789,7 +20789,7 @@ var ts;
                     if (listEndToken !== 0 /* Unknown */) {
                         if (formattingScanner.isOnToken()) {
                             var tokenInfo = formattingScanner.readTokenInfo(parent);
-                            if (tokenInfo.token.kind === listEndToken) {
+                            if (tokenInfo.token.kind === listEndToken && ts.rangeContainsRange(parent, tokenInfo.token)) {
                                 consumeTokenAndAdvanceScanner(tokenInfo, parent, listDynamicIndentation);
                             }
                         }

@@ -1451,6 +1451,9 @@ module ts {
         InMultiLineCommentTrivia,
         InSingleQuoteStringLiteral,
         InDoubleQuoteStringLiteral,
+        InTemplateHeadOrNoSubstitutionTemplate,
+        InTemplateMiddleOrTail,
+        InTemplateSubstitutionPosition,
     }
 
     export enum TokenClass {
@@ -1476,7 +1479,7 @@ module ts {
     }
 
     export interface Classifier {
-        getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean): ClassificationResult;
+        getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): ClassificationResult;
     }
 
     export interface DocumentRegistry {
@@ -5638,6 +5641,10 @@ module ts {
         noRegexTable[SyntaxKind.TrueKeyword] = true;
         noRegexTable[SyntaxKind.FalseKeyword] = true;
 
+        // Just a stack of TemplateHeads and OpenCurlyBraces, used
+        // to perform rudimentary classification on templates.
+        var templateStack: SyntaxKind[] = [];
+
         function isAccessibilityModifier(kind: SyntaxKind) {
             switch (kind) {
                 case SyntaxKind.PublicKeyword:
@@ -5671,12 +5678,18 @@ module ts {
             // if there are more cases we want the classifier to be better at.
             return true;
         }
-
-        // 'classifyKeywordsInGenerics' should be 'true' when a syntactic classifier is not present.
-        function getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean): ClassificationResult {
+        
+        // If there is a syntactic classifier ('syntacticClassifierAbsent' is false),
+        // we will be more conservative in order to avoid conflicting with the syntactic classifier.
+        function getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): ClassificationResult {
             var offset = 0;
             var token = SyntaxKind.Unknown;
             var lastNonTriviaToken = SyntaxKind.Unknown;
+
+            // Empty out the template stack for reuse.
+            while (templateStack.length > 0) {
+                templateStack.pop();
+            }
 
             // If we're in a string literal, then prepend: "\
             // (and a newline).  That way when we lex we'll think we're still in a string literal.
@@ -5695,6 +5708,17 @@ module ts {
                 case EndOfLineState.InMultiLineCommentTrivia:
                     text = "/*\n" + text;
                     offset = 3;
+                    break;
+                case EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate:
+                    text = "`\n" + text;
+                    offset = 2;
+                    break;
+                case EndOfLineState.InTemplateMiddleOrTail:
+                    text = "}\n" + text;
+                    offset = 2;
+                    // fallthrough
+                case EndOfLineState.InTemplateSubstitutionPosition:
+                    templateStack.push(SyntaxKind.TemplateHead);
                     break;
             }
 
@@ -5757,14 +5781,47 @@ module ts {
                         angleBracketStack--;
                     }
                     else if (token === SyntaxKind.AnyKeyword ||
-                             token === SyntaxKind.StringKeyword ||
-                             token === SyntaxKind.NumberKeyword ||
-                             token === SyntaxKind.BooleanKeyword) {
-                        if (angleBracketStack > 0 && !classifyKeywordsInGenerics) {
+                        token === SyntaxKind.StringKeyword ||
+                        token === SyntaxKind.NumberKeyword ||
+                        token === SyntaxKind.BooleanKeyword) {
+                        if (angleBracketStack > 0 && !syntacticClassifierAbsent) {
                             // If it looks like we're could be in something generic, don't classify this 
                             // as a keyword.  We may just get overwritten by the syntactic classifier,
                             // causing a noisy experience for the user.
                             token = SyntaxKind.Identifier;
+                        }
+                    }
+                    else if (token === SyntaxKind.TemplateHead) {
+                        templateStack.push(token);
+                    }
+                    else if (token === SyntaxKind.OpenBraceToken) {
+                        // If we don't have anything on the template stack,
+                        // then we aren't trying to keep track of a previously scanned template head.
+                        if (templateStack.length > 0) {
+                            templateStack.push(token);
+                        }
+                    }
+                    else if (token === SyntaxKind.CloseBraceToken) {
+                        // If we don't have anything on the template stack,
+                        // then we aren't trying to keep track of a previously scanned template head.
+                        if (templateStack.length > 0) {
+                            var lastTemplateStackToken = lastOrUndefined(templateStack);
+
+                            if (lastTemplateStackToken === SyntaxKind.TemplateHead) {
+                                token = scanner.reScanTemplateToken();
+
+                                // Only pop on a TemplateTail; a TemplateMiddle indicates there is more for us.
+                                if (token === SyntaxKind.TemplateTail) {
+                                    templateStack.pop();
+                                }
+                                else {
+                                    Debug.assert(token === SyntaxKind.TemplateMiddle, "Should have been a template middle. Was " + token);
+                                }
+                            }
+                            else {
+                                Debug.assert(lastTemplateStackToken === SyntaxKind.OpenBraceToken, "Should have been an open brace. Was: " + token);
+                                templateStack.pop();
+                            }
                         }
                     }
 
@@ -5781,7 +5838,6 @@ module ts {
                 var start = scanner.getTokenPos();
                 var end = scanner.getTextPos();
 
-                // add the token
                 addResult(end - start, classFromKind(token));
 
                 if (end >= text.length) {
@@ -5810,6 +5866,22 @@ module ts {
                         if (scanner.isUnterminated()) {
                             result.finalLexState = EndOfLineState.InMultiLineCommentTrivia;
                         }
+                    }
+                    else if (isTemplateLiteralKind(token)) {
+                        if (scanner.isUnterminated()) {
+                            if (token === SyntaxKind.TemplateTail) {
+                                result.finalLexState = EndOfLineState.InTemplateMiddleOrTail;
+                            }
+                            else if (token === SyntaxKind.NoSubstitutionTemplateLiteral) {
+                                result.finalLexState = EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate;
+                            }
+                            else {
+                                Debug.fail("Only 'NoSubstitutionTemplateLiteral's and 'TemplateTail's can be unterminated; got SyntaxKind #" + token);
+                            }
+                        }
+                    }
+                    else if (templateStack.length > 0 && lastOrUndefined(templateStack) === SyntaxKind.TemplateHead) {
+                        result.finalLexState = EndOfLineState.InTemplateSubstitutionPosition;
                     }
                 }
             }
@@ -5913,6 +5985,9 @@ module ts {
                     return TokenClass.Whitespace;
                 case SyntaxKind.Identifier:
                 default:
+                    if (isTemplateLiteralKind(token)) {
+                        return TokenClass.StringLiteral; // maybe make a TemplateLiteral
+                    }
                     return TokenClass.Identifier;
             }
         }

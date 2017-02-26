@@ -2,9 +2,9 @@
 /// <reference path="..\..\..\..\src\harness\harnessLanguageService.ts" />
 
 interface Classification {
-    position: number;
     length: number;
     class: ts.TokenClass;
+    position: number;
 }
 
 interface ClassiferResult {
@@ -15,6 +15,7 @@ interface ClassiferResult {
 interface ClassificationEntry {
     value: any;
     class: ts.TokenClass;
+    position?: number;
 }
 
 describe('Colorization', function () {
@@ -60,16 +61,23 @@ describe('Colorization', function () {
         return undefined;
     }
 
-    function punctuation(text: string) { return { value: text, class: ts.TokenClass.Punctuation }; }
-    function keyword(text: string) { return { value: text, class: ts.TokenClass.Keyword }; }
-    function operator(text: string) { return { value: text, class: ts.TokenClass.Operator }; }
-    function comment(text: string) { return { value: text, class: ts.TokenClass.Comment }; }
-    function whitespace(text: string) { return { value: text, class: ts.TokenClass.Whitespace }; }
-    function identifier(text: string) { return { value: text, class: ts.TokenClass.Identifier }; }
-    function numberLiteral(text: string) { return { value: text, class: ts.TokenClass.NumberLiteral }; }
-    function stringLiteral(text: string) { return { value: text, class: ts.TokenClass.StringLiteral }; }
-    function regExpLiteral(text: string) { return { value: text, class: ts.TokenClass.RegExpLiteral }; }
-    function finalEndOfLineState(value: number) { return { value: value, class: <ts.TokenClass>undefined }; }
+    function punctuation(text: string, position?: number) { return createClassification(text, ts.TokenClass.Punctuation, position); }
+    function keyword(text: string, position?: number) { return createClassification(text, ts.TokenClass.Keyword, position); }
+    function operator(text: string, position?: number) { return createClassification(text, ts.TokenClass.Operator, position); }
+    function comment(text: string, position?: number) { return createClassification(text, ts.TokenClass.Comment, position); }
+    function whitespace(text: string, position?: number) { return createClassification(text, ts.TokenClass.Whitespace, position); }
+    function identifier(text: string, position?: number) { return createClassification(text, ts.TokenClass.Identifier, position); }
+    function numberLiteral(text: string, position?: number) { return createClassification(text, ts.TokenClass.NumberLiteral, position); }
+    function stringLiteral(text: string, position?: number) { return createClassification(text, ts.TokenClass.StringLiteral, position); }
+    function regExpLiteral(text: string, position?: number) { return createClassification(text, ts.TokenClass.RegExpLiteral, position); }
+    function finalEndOfLineState(value: number): ClassificationEntry { return { value: value, class: undefined, position: 0 }; }
+    function createClassification(text: string, tokenClass: ts.TokenClass, position?: number): ClassificationEntry {
+        return {
+            value: text,
+            class: tokenClass,
+            position: position,
+        };
+    }
 
     function test(text: string, initialEndOfLineState: ts.EndOfLineState, ...expectedEntries: ClassificationEntry[]): void {
         var result = getClassifications(text, initialEndOfLineState);
@@ -81,16 +89,21 @@ describe('Colorization', function () {
                 assert.equal(result.finalEndOfLineState, expectedEntry.value, "final endOfLineState does not match expected.");
             }
             else {
-                var actualEntryPosition = text.indexOf(expectedEntry.value);
+                var actualEntryPosition = expectedEntry.position !== undefined ? expectedEntry.position : text.indexOf(expectedEntry.value);
                 assert(actualEntryPosition >= 0, "token: '" + expectedEntry.value + "' does not exit in text: '" + text + "'.");
 
                 var actualEntry = getEntryAtPosistion(result, actualEntryPosition);
 
-                assert(actualEntry, "Could not find classification entry for '" + expectedEntry.value + "' at position: " + actualEntryPosition);
-                assert.equal(actualEntry.class, expectedEntry.class, "Classification class does not match expected. Expected: " + ts.TokenClass[expectedEntry.class] + ", Actual: " + ts.TokenClass[actualEntry.class]);
-                assert.equal(actualEntry.length, expectedEntry.value.length, "Classification length does not match expected. Expected: " + ts.TokenClass[expectedEntry.value.length] + ", Actual: " + ts.TokenClass[actualEntry.length]);
+                assert(actualEntry, "Could not find classification entry for '" + expectedEntry.value + "' at position: " + actualEntryPosition + "\n\n" + JSON.stringify(result));
+                assert.equal(actualEntry.class, expectedEntry.class,
+                    "Classification class does not match expected. Expected: " + ts.TokenClass[expectedEntry.class] + " - '" + expectedEntry.value + "', Actual: " + ts.TokenClass[actualEntry.class] + " - '" + getActualText(text, actualEntry) + "\n\n" + JSON.stringify(result));
+                assert.equal(actualEntry.length, expectedEntry.value.length, "Classification length does not match expected. Expected: " + expectedEntry.value.length + " - '" + expectedEntry.value + "', Actual: " + actualEntry.length + " - '" + getActualText(text, actualEntry) + "'\n\n" + JSON.stringify(result));
             }
         }
+    }
+
+    function getActualText(sourceText: string, classification: Classification): string {
+        return sourceText.substr(classification.position, classification.length);
     }
 
     describe("test getClassifications", function () {
@@ -289,6 +302,106 @@ describe('Colorization', function () {
                 keyword("public"),
                 identifier("var"),
                 finalEndOfLineState(ts.EndOfLineState.Start));
+        });
+
+        it("classifies a single line no substitution template string correctly", () => {
+            test("`number number public string`",
+                ts.EndOfLineState.Start,
+                stringLiteral("`number number public string`"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+        });
+        it("classifies substitution parts of a template string correctly", () => {
+            test("`number '${ 1 + 1 }' string '${ 'hello' }'`",
+                ts.EndOfLineState.Start,
+                stringLiteral("`number '${"),
+                numberLiteral("1"),
+                operator("+"),
+                numberLiteral("1"),
+                stringLiteral("}' string '${"),
+                stringLiteral("'hello'"),
+                stringLiteral("}'`"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+        });
+        it("classifies an unterminated no substitution template string correctly", () => {
+            test("`hello world",
+                ts.EndOfLineState.Start,
+                stringLiteral("`hello world"),
+                finalEndOfLineState(ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate));
+        });
+        it("classifies the entire line of an unterminated multiline no-substitution/head template", () => {
+            test("...",
+                ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate,
+                stringLiteral("..."),
+                finalEndOfLineState(ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate));
+        });
+        it("classifies the entire line of an unterminated multiline template middle/end",() => {
+            test("...",
+                ts.EndOfLineState.InTemplateMiddleOrTail,
+                stringLiteral("..."),
+                finalEndOfLineState(ts.EndOfLineState.InTemplateMiddleOrTail));
+        });
+        it("classifies a termination of a multiline template head", () => {
+            test("...${",
+                ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate,
+                stringLiteral("...${"),
+                finalEndOfLineState(ts.EndOfLineState.InTemplateSubstitutionPosition));
+        });
+        it("classifies the termination of a multiline no substitution template", () => {
+            test("...`",
+                ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate,
+                stringLiteral("...`"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+        });
+        it("classifies the substitution parts and middle/tail of a multiline template string", () => {
+            test("${ 1 + 1 }...`",
+                ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate,
+                stringLiteral("${"),
+                numberLiteral("1"),
+                operator("+"),
+                numberLiteral("1"),
+                stringLiteral("}...`"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+        });
+        it("classifies a template middle and propagates the end of line state",() => {
+            test("${ 1 + 1 }...`",
+                ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate,
+                stringLiteral("${"),
+                numberLiteral("1"),
+                operator("+"),
+                numberLiteral("1"),
+                stringLiteral("}...`"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+        });
+        it("classifies substitution expressions with curly braces appropriately", () => {
+            var pos = 0;
+            var lastLength = 0;
+
+            test("...${ () => { } } ${ { x: `1` } }...`",
+                ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate,
+                stringLiteral(track("...${"), pos),
+                punctuation(track(" ", "("), pos),
+                punctuation(track(")"), pos),
+                punctuation(track(" ", "=>"), pos),
+                punctuation(track(" ", "{"), pos),
+                punctuation(track(" ", "}"), pos),
+                stringLiteral(track(" ", "} ${"), pos),
+                punctuation(track(" ", "{"), pos),
+                identifier(track(" ", "x"), pos),
+                punctuation(track(":"), pos),
+                stringLiteral(track(" ", "`1`"), pos),
+                punctuation(track(" ", "}"), pos),
+                stringLiteral(track(" ", "}...`"), pos),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+
+            // Adjusts 'pos' by accounting for the length of each portion of the string,
+            // but only return the last given string
+            function track(...vals: string[]): string {
+                for (var i = 0, n = vals.length; i < n; i++) {
+                    pos += lastLength;
+                    lastLength = vals[i].length;
+                }
+                return ts.lastOrUndefined(vals);
+            }
         });
 
         it("classifies partially written generics correctly.", function () {
