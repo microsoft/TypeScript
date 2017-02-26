@@ -68,10 +68,14 @@ namespace ts.formatting {
             let indentationDelta: number;
 
             while (current) {
-                if (positionBelongsToNode(current, position, sourceFile) && shouldIndentChildNode(current, previous)) {
+                if (positionBelongsToNode(current, position, sourceFile) &&
+                    shouldIndentChildNode(current, previous)) {
+
                     currentStart = getStartLineAndCharacterForNode(current, sourceFile);
 
-                    if (nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken, current, lineAtPosition, sourceFile)) {
+                    if (listAtPositionPreventsIndentation(current, position, sourceFile) ||
+                        nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken, current, lineAtPosition, sourceFile)) {
+
                         indentationDelta = 0;
                     }
                     else {
@@ -157,7 +161,10 @@ namespace ts.formatting {
                 }
 
                 // increase indentation if parent node wants its content to be indented and parent and child nodes don't start on the same line
-                if (shouldIndentChildNode(parent, current) && !parentAndChildShareLine) {
+                if (shouldIndentChildNode(parent, current) &&
+                    !parentAndChildShareLine &&
+                    !containingListPreventsIndentation(current, sourceFile)) {
+
                     indentationDelta += options.indentSize;
                 }
 
@@ -264,49 +271,54 @@ namespace ts.formatting {
         function getContainingList(node: Node, sourceFile: SourceFile): NodeArray<Node> {
             if (node.parent) {
                 switch (node.parent.kind) {
-                    case SyntaxKind.TypeReference:
-                        if ((<TypeReferenceNode>node.parent).typeArguments &&
-                            rangeContainsStartEnd((<TypeReferenceNode>node.parent).typeArguments, node.getStart(sourceFile), node.getEnd())) {
-                            return (<TypeReferenceNode>node.parent).typeArguments;
-                        }
-                        break;
                     case SyntaxKind.ObjectLiteralExpression:
                         return (<ObjectLiteralExpression>node.parent).properties;
                     case SyntaxKind.ArrayLiteralExpression:
                         return (<ArrayLiteralExpression>node.parent).elements;
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.ArrowFunction:
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.MethodSignature:
-                    case SyntaxKind.CallSignature:
-                    case SyntaxKind.ConstructSignature: {
-                        const start = node.getStart(sourceFile);
-                        if ((<SignatureDeclaration>node.parent).typeParameters &&
-                            rangeContainsStartEnd((<SignatureDeclaration>node.parent).typeParameters, start, node.getEnd())) {
-                            return (<SignatureDeclaration>node.parent).typeParameters;
-                        }
-                        if (rangeContainsStartEnd((<SignatureDeclaration>node.parent).parameters, start, node.getEnd())) {
-                            return (<SignatureDeclaration>node.parent).parameters;
-                        }
-                        break;
-                    }
-                    case SyntaxKind.NewExpression:
-                    case SyntaxKind.CallExpression: {
-                        const start = node.getStart(sourceFile);
-                        if ((<CallExpression>node.parent).typeArguments &&
-                            rangeContainsStartEnd((<CallExpression>node.parent).typeArguments, start, node.getEnd())) {
-                            return (<CallExpression>node.parent).typeArguments;
-                        }
-                        if ((<CallExpression>node.parent).arguments &&
-                            rangeContainsStartEnd((<CallExpression>node.parent).arguments, start, node.getEnd())) {
-                            return (<CallExpression>node.parent).arguments;
-                        }
-                        break;
-                    }
+                    default:
+                        return getListByPosition(node.getStart(sourceFile), node.getEnd(), node.parent);
                 }
             }
             return undefined;
+        }
+
+        function getListByPosition(start: number, end: number, node: Node): NodeArray<Node> {
+            switch (node.kind) {
+                case SyntaxKind.TypeReference:
+                    if ((<TypeReferenceNode>node).typeArguments &&
+                        rangeContainsStartEnd((<TypeReferenceNode>node).typeArguments, start, end)) {
+                        return (<TypeReferenceNode>node).typeArguments;
+                    }
+                    break;
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.CallSignature:
+                case SyntaxKind.ConstructSignature: {
+                    if ((<SignatureDeclaration>node).typeParameters &&
+                        rangeContainsStartEnd((<SignatureDeclaration>node).typeParameters, start, end)) {
+                        return (<SignatureDeclaration>node).typeParameters;
+                    }
+                    if (rangeContainsStartEnd((<SignatureDeclaration>node).parameters, start, end)) {
+                        return (<SignatureDeclaration>node).parameters;
+                    }
+                    break;
+                }
+                case SyntaxKind.NewExpression:
+                case SyntaxKind.CallExpression: {
+                    if ((<CallExpression>node).typeArguments &&
+                        rangeContainsStartEnd((<CallExpression>node).typeArguments, start, end)) {
+                        return (<CallExpression>node).typeArguments;
+                    }
+                    if ((<CallExpression>node).arguments &&
+                        rangeContainsStartEnd((<CallExpression>node).arguments, start, end)) {
+                        return (<CallExpression>node).arguments;
+                    }
+                    break;
+                }
+            }
         }
 
         function getActualIndentationForListItem(node: Node, sourceFile: SourceFile, options: EditorSettings): number {
@@ -423,6 +435,47 @@ namespace ts.formatting {
 
         export function findFirstNonWhitespaceColumn(startPos: number, endPos: number, sourceFile: SourceFile, options: EditorSettings): number {
             return findFirstNonWhitespaceCharacterAndColumn(startPos, endPos, sourceFile, options).column;
+        }
+
+        function listAtPositionPreventsIndentation(parent: Node, position: number, sourceFile: SourceFile) {
+            const list = getListByPosition(position, position, parent);
+            if (!list || !list.length) {
+                return false;
+            }
+            return listPreventsIndentation(list, sourceFile);
+        }
+
+        function containingListPreventsIndentation(listItem: Node, sourceFile: SourceFile) {
+            const list = getContainingList(listItem, sourceFile);
+            if (!list) {
+                return false;
+            }
+            return listPreventsIndentation(list, sourceFile);
+        }
+
+        function listPreventsIndentation(list: NodeArray<Node>, sourceFile: SourceFile) {
+            const listStartLine = sourceFile.getLineAndCharacterOfPosition(list.pos).line;
+
+            for (const child of list) {
+                if (nodeStretchesFromLine(child, listStartLine, sourceFile)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /* @internal */
+        export function nodeStretchesFromLine(node: Node, line: number, sourceFile: SourceFile) {
+            const childEndLine = sourceFile.getLineAndCharacterOfPosition(node.getEnd()).line;
+            if (childEndLine === line) {
+                return false;
+            }
+            const childStartLine = sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile)).line;
+            if (childStartLine !== line) {
+                return false;
+            }
+            return true;
         }
 
         function nodeContentIsAlwaysIndented(kind: SyntaxKind): boolean {

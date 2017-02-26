@@ -55,6 +55,7 @@ namespace ts.formatting {
           *
           */
         getDelta(child: TextRangeWithKind): number;
+        clearDelta(): void;
         /**
           * Formatter calls this function when rule adds or deletes new lines from the text
           * so indentation scope can adjust values of indentation and delta.
@@ -166,7 +167,7 @@ namespace ts.formatting {
         return current;
     }
 
-    // Returns true if node is a element in some list in parent
+    // Returns true if node is an element in some list in parent
     // i.e. parent is class declaration with the list of members and node is one of members.
     function isListElement(parent: Node, node: Node): boolean {
         switch (parent.kind) {
@@ -517,6 +518,9 @@ namespace ts.formatting {
                 },
                 getIndentation: () => indentation,
                 getDelta: child => getEffectiveDelta(delta, child),
+                clearDelta: () => {
+                    delta = 0;
+                },
                 recomputeIndentation: lineAdded => {
                     if (node.parent && SmartIndenter.shouldIndentChildNode(node.parent, node)) {
                         if (lineAdded) {
@@ -590,8 +594,7 @@ namespace ts.formatting {
                 parentDynamicIndentation: DynamicIndentation,
                 parentStartLine: number,
                 undecoratedParentStartLine: number,
-                isListItem: boolean,
-                isFirstListItem?: boolean): number {
+                isListItem: boolean): number {
 
                 const childStartPos = child.getStart(sourceFile);
 
@@ -648,15 +651,11 @@ namespace ts.formatting {
                 }
 
                 const effectiveParentStartLine = child.kind === SyntaxKind.Decorator ? childStartLine : undecoratedParentStartLine;
-                const childIndentation = computeIndentation(child, childStartLine, childIndentationAmount, node, parentDynamicIndentation, effectiveParentStartLine);
+                const childIndentation = computeIndentation(child, childStartLine, childIndentationAmount, parent, parentDynamicIndentation, effectiveParentStartLine);
 
                 processNode(child, childContextNode, childStartLine, undecoratedChildStartLine, childIndentation.indentation, childIndentation.delta);
 
                 childContextNode = node;
-
-                if (isFirstListItem && parent.kind === SyntaxKind.ArrayLiteralExpression && inheritedIndentation === Constants.Unknown) {
-                    inheritedIndentation = childIndentation.indentation;
-                }
 
                 return inheritedIndentation;
             }
@@ -697,9 +696,13 @@ namespace ts.formatting {
                 }
 
                 let inheritedIndentation = Constants.Unknown;
-                for (let i = 0; i < nodes.length; i++) {
-                    const child = nodes[i];
-                    inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, startLine, startLine, /*isListItem*/ true, /*isFirstListItem*/ i === 0);
+                let listDeltaRemoved = false;
+                for (const child of nodes) {
+                    inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, startLine, startLine, /*isListItem*/ true);
+                    if (!listDeltaRemoved && SmartIndenter.nodeStretchesFromLine(child, startLine, sourceFile)) {
+                        listDynamicIndentation.clearDelta();
+                        listDeltaRemoved = true;
+                    }
                 }
 
                 if (listEndToken !== SyntaxKind.Unknown) {
