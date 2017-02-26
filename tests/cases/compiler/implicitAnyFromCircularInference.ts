@@ -24,6 +24,8 @@ var f1 = function () {
 // Error expected
 var f2 = () => f2();
 
+var f3 = () => f3;
+
 // Error expected
 function h() {
     return foo();
