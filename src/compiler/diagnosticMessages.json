@@ -1439,6 +1439,10 @@
         "category": "Error",
         "code": 2449
     },
+    "Enum '{0}' used before its declaration.": {
+        "category": "Error",
+        "code": 2450
+    },
     "Cannot redeclare block-scoped variable '{0}'.": {
         "category": "Error",
         "code": 2451
