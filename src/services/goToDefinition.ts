@@ -198,11 +198,11 @@ namespace ts.GoToDefinition {
             return false;
         }
 
-        function tryAddSignature(signatureDeclarations: Declaration[], selectConstructors: boolean, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
+        function tryAddSignature(signatureDeclarations: Declaration[] | undefined, selectConstructors: boolean, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
             const declarations: Declaration[] = [];
             let definition: Declaration | undefined;
 
-            for (const d of signatureDeclarations) {
+            if (signatureDeclarations) for (const d of signatureDeclarations) {
                 if (selectConstructors ? d.kind === SyntaxKind.Constructor : isSignatureDeclaration(d)) {
                     declarations.push(d);
                     if ((<FunctionLikeDeclaration>d).body) definition = d;
