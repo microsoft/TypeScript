@@ -986,6 +986,14 @@ namespace ts {
                             const typeAssertionExpression = <TypeAssertion>node;
                             diagnostics.push(createDiagnosticForNode(typeAssertionExpression.type, Diagnostics.type_assertion_expressions_can_only_be_used_in_a_ts_file));
                             return;
+                        case SyntaxKind.PropertyAccessExpression:
+                        case SyntaxKind.ElementAccessExpression:
+                        case SyntaxKind.CallExpression:
+                        case SyntaxKind.NewExpression:
+                            if (node.flags & NodeFlags.PropagateNull && !options.experimentalNullPropagation) {
+                                diagnostics.push(createDiagnosticForNode(node, Diagnostics.Experimental_support_for_null_propagation_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalNullPropagation_option_to_remove_this_warning));
+                            }
+                            break;
                     }
 
                     const prevParent = parent;

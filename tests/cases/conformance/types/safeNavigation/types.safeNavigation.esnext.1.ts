@@ -3,6 +3,7 @@
 // @noEmit: true
 // @module: commonjs
 // @strictNullChecks: false
+// @experimentalNullPropagation: true
 declare const x1: (() => number) | undefined | null;
 declare const x2: { y: (() => number) | undefined | null; };
 declare const x3: { y: (() => number) | undefined | null; } | undefined | null;

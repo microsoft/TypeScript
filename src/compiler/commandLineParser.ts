@@ -300,6 +300,12 @@ namespace ts {
             description: Diagnostics.Enables_experimental_support_for_emitting_type_metadata_for_decorators
         },
         {
+            name: "experimentalNullPropagation",
+            type: "boolean",
+            experimental: true,
+            description: Diagnostics.Enables_experimental_support_for_null_propagation
+        },
+        {
             name: "moduleResolution",
             type: createMapFromTemplate({
                 "node": ModuleResolutionKind.NodeJs,

@@ -13183,6 +13183,10 @@ namespace ts {
 
         function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, right: Identifier) {
             const propagateNull = node.flags & NodeFlags.PropagateNull;
+            if (propagateNull && !compilerOptions.experimentalNullPropagation) {
+                error(node, Diagnostics.Experimental_support_for_null_propagation_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalNullPropagation_option_to_remove_this_warning);
+            }
+
             const objectType = propagateNull ? checkExpression(left) : checkNonNullExpression(left);
             const type = propagateNull ? getNonNullableType(objectType) : objectType;
             const propagatingType = propagateNull ? getNullPropagatingType(objectType) : neverType;
@@ -13310,6 +13314,10 @@ namespace ts {
             checkGrammarNullPropagation(node);
 
             const propagateNull = node.flags & NodeFlags.PropagateNull;
+            if (propagateNull && !compilerOptions.experimentalNullPropagation) {
+                error(node, Diagnostics.Experimental_support_for_null_propagation_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalNullPropagation_option_to_remove_this_warning);
+            }
+
             const objectType = propagateNull ? checkExpression(node.expression) : checkNonNullExpression(node.expression);
             const type = propagateNull ? getNonNullableType(objectType) : objectType;
             const propagatingType = propagateNull ? getNullPropagatingType(objectType) : neverType;
@@ -14344,6 +14352,10 @@ namespace ts {
 
 
             const propagateNull = node.flags & NodeFlags.PropagateNull;
+            if (propagateNull && !compilerOptions.experimentalNullPropagation) {
+                error(node, Diagnostics.Experimental_support_for_null_propagation_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalNullPropagation_option_to_remove_this_warning);
+            }
+
             const funcType = propagateNull ? checkExpression(node.expression) : checkNonNullExpression(node.expression);
             const type = propagateNull ? getNonNullableType(funcType) : funcType;
             if (type === silentNeverType) {
@@ -14423,6 +14435,10 @@ namespace ts {
             }
 
             const propagateNull = node.flags & NodeFlags.PropagateNull;
+            if (propagateNull && !compilerOptions.experimentalNullPropagation) {
+                error(node, Diagnostics.Experimental_support_for_null_propagation_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalNullPropagation_option_to_remove_this_warning);
+            }
+
             const funcType = propagateNull ? checkExpression(node.expression) : checkNonNullExpression(node.expression);
             const type = propagateNull ? getNonNullableType(funcType) : funcType;
             if (type === silentNeverType) {

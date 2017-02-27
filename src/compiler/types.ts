@@ -3294,6 +3294,7 @@
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
         experimentalDecorators?: boolean;
+        experimentalNullPropagation?: boolean;
         forceConsistentCasingInFileNames?: boolean;
         /*@internal*/help?: boolean;
         importHelpers?: boolean;

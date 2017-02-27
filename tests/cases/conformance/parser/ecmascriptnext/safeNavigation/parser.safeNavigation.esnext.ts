@@ -3,6 +3,7 @@
 // @noEmit: true
 // @module: commonjs
 // @experimentalDecorators: true
+// @experimentalNullPropagation: true
 // @filename: declarations.d.ts
 declare var x: any;
 declare var y: any;
