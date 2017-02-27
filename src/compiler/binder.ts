@@ -2254,10 +2254,7 @@ namespace ts {
                     // this.foo assignment in a JavaScript class
                     // Bind this property to the containing class
                     const containingClass = container.parent;
-                    const symbol = hasModifier(container, ModifierFlags.Static)
-                        ? declareSymbol(containingClass.symbol.exports, containingClass.symbol, node, SymbolFlags.Property, SymbolFlags.None)
-                        : declareSymbol(containingClass.symbol.members, containingClass.symbol, node, SymbolFlags.Property, SymbolFlags.None);
-
+                    const symbol = declareSymbol(hasModifier(container, ModifierFlags.Static) ? containingClass.symbol.exports : containingClass.symbol.members, containingClass.symbol, node, SymbolFlags.Property, SymbolFlags.None);
                     if (symbol) {
                         // symbols declared through 'this' property assignements can be overwritten by subsequent method declarations
                         (symbol as Symbol).isReplaceableByMethod = true;

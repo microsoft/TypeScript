@@ -10,6 +10,7 @@ class C {
         else {
             this.inConstructor = "string"
         }
+        this.inMultiple = 0;
     }
     method() {
         if (Math.random()) {
@@ -18,6 +19,7 @@ class C {
         else {
             this.inMethod = "string"
         }
+        this.inMultiple = "string";
     }
     get() {
         if (Math.random()) {
@@ -26,6 +28,7 @@ class C {
         else {
             this.inGetter = "string"
         }
+        this.inMultiple = false;
     }
     set() {
         if (Math.random()) {
@@ -73,6 +76,11 @@ var stringOrNumberOrUndefined = c.inMethod;
 var stringOrNumberOrUndefined = c.inGetter;
 var stringOrNumberOrUndefined = c.inSetter;
 
+var stringOrNumberOrBoolean: string | number | boolean;
+
+var stringOrNumberOrBoolean = c.inMultiple;
+
+
 var stringOrNumberOrUndefined = C.inStaticMethod;
 var stringOrNumberOrUndefined = C.inStaticGetter;
 var stringOrNumberOrUndefined = C.inStaticSetter;
@@ -87,6 +95,7 @@ var C = (function () {
         else {
             this.inConstructor = "string";
         }
+        this.inMultiple = 0;
     }
     C.prototype.method = function () {
         if (Math.random()) {
@@ -95,6 +104,7 @@ var C = (function () {
         else {
             this.inMethod = "string";
         }
+        this.inMultiple = "string";
     };
     C.prototype.get = function () {
         if (Math.random()) {
@@ -103,6 +113,7 @@ var C = (function () {
         else {
             this.inGetter = "string";
         }
+        this.inMultiple = false;
     };
     C.prototype.set = function () {
         if (Math.random()) {
@@ -145,6 +156,8 @@ var stringOrNumberOrUndefined;
 var stringOrNumberOrUndefined = c.inMethod;
 var stringOrNumberOrUndefined = c.inGetter;
 var stringOrNumberOrUndefined = c.inSetter;
+var stringOrNumberOrBoolean;
+var stringOrNumberOrBoolean = c.inMultiple;
 var stringOrNumberOrUndefined = C.inStaticMethod;
 var stringOrNumberOrUndefined = C.inStaticGetter;
 var stringOrNumberOrUndefined = C.inStaticSetter;

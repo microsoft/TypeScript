@@ -11,6 +11,7 @@ class C {
         else {
             this.inConstructor = "string"
         }
+        this.inMultiple = 0;
     }
     method() {
         if (Math.random()) {
@@ -19,6 +20,7 @@ class C {
         else {
             this.inMethod = "string"
         }
+        this.inMultiple = "string";
     }
     get() {
         if (Math.random()) {
@@ -27,6 +29,7 @@ class C {
         else {
             this.inGetter = "string"
         }
+        this.inMultiple = false;
     }
     set() {
         if (Math.random()) {
@@ -73,6 +76,11 @@ var stringOrNumberOrUndefined: string | number | undefined;
 var stringOrNumberOrUndefined = c.inMethod;
 var stringOrNumberOrUndefined = c.inGetter;
 var stringOrNumberOrUndefined = c.inSetter;
+
+var stringOrNumberOrBoolean: string | number | boolean;
+
+var stringOrNumberOrBoolean = c.inMultiple;
+
 
 var stringOrNumberOrUndefined = C.inStaticMethod;
 var stringOrNumberOrUndefined = C.inStaticGetter;

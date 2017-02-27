@@ -25,6 +25,12 @@ class C {
 >inConstructor : string | number
 >"string" : "string"
         }
+        this.inMultiple = 0;
+>this.inMultiple = 0 : 0
+>this.inMultiple : string | number | boolean
+>this : this
+>inMultiple : string | number | boolean
+>0 : 0
     }
     method() {
 >method : () => void
@@ -50,6 +56,12 @@ class C {
 >inMethod : string | number | undefined
 >"string" : "string"
         }
+        this.inMultiple = "string";
+>this.inMultiple = "string" : "string"
+>this.inMultiple : string | number | boolean
+>this : this
+>inMultiple : string | number | boolean
+>"string" : "string"
     }
     get() {
 >get : () => void
@@ -75,6 +87,12 @@ class C {
 >inGetter : string | number | undefined
 >"string" : "string"
         }
+        this.inMultiple = false;
+>this.inMultiple = false : false
+>this.inMultiple : string | number | boolean
+>this : this
+>inMultiple : string | number | boolean
+>false : false
     }
     set() {
 >set : () => void
@@ -213,6 +231,16 @@ var stringOrNumberOrUndefined = c.inSetter;
 >c.inSetter : string | number | undefined
 >c : C
 >inSetter : string | number | undefined
+
+var stringOrNumberOrBoolean: string | number | boolean;
+>stringOrNumberOrBoolean : string | number | boolean
+
+var stringOrNumberOrBoolean = c.inMultiple;
+>stringOrNumberOrBoolean : string | number | boolean
+>c.inMultiple : string | number | boolean
+>c : C
+>inMultiple : string | number | boolean
+
 
 var stringOrNumberOrUndefined = C.inStaticMethod;
 >stringOrNumberOrUndefined : string | number | undefined
