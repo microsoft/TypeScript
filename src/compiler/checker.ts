@@ -10041,9 +10041,9 @@ namespace ts {
             return f(type) ? type : neverType;
         }
 
-        // Apply a mapping function to a contextual type and return the resulting type. If the contextual type
-        // is a union type, the mapping function is applied to each constituent type and a union of the resulting
-        // types is returned.
+        // Apply a mapping function to a type and return the resulting type. If the source type
+        // is a union type, the mapping function is applied to each constituent type and a union
+        // of the resulting types is returned.
         function mapType(type: Type, mapper: (t: Type) => Type): Type {
             if (!(type.flags & TypeFlags.Union)) {
                 return mapper(type);
