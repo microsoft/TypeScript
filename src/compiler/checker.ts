@@ -77,6 +77,8 @@ namespace ts {
             isUndefinedSymbol: symbol => symbol === undefinedSymbol,
             isArgumentsSymbol: symbol => symbol === argumentsSymbol,
             isUnknownSymbol: symbol => symbol === unknownSymbol,
+            isTypeAccessible,
+            isSymbolAccessible,
             getDiagnostics,
             getGlobalDiagnostics,
             getTypeOfSymbolAtLocation: (symbol, location) => {
@@ -1983,6 +1985,42 @@ namespace ts {
                 return true;
             }
             return false;
+        }
+
+        function isTypeAccessible(type: Type, enclosingDeclaration: Node, shouldComputeAliasesToMakeVisible: boolean): boolean {
+            const meaning = SymbolFlags.Type;
+
+            const typeSymbolIsAccessible = type && type.symbol && isSymbolAccessible(type.symbol, enclosingDeclaration, meaning, shouldComputeAliasesToMakeVisible).accessibility === SymbolAccessibility.Accessible;
+            if (typeSymbolIsAccessible) {
+                return true;
+            }
+
+            if (type.flags & TypeFlags.Intrinsic) {
+                return true;
+            }
+
+            if (type.flags & TypeFlags.UnionOrIntersection) {
+                return (type as UnionOrIntersectionType).types.every(type => isTypeAccessible(type, enclosingDeclaration, shouldComputeAliasesToMakeVisible));
+            }
+
+            if (type.flags & TypeFlags.Object) {
+                if ((type as ObjectType).objectFlags & ObjectFlags.ClassOrInterface) {
+
+                }
+                else if ((type as ObjectType).objectFlags & ObjectFlags.Anonymous /*Why doesn't ObjectLiteral work here?*/) {
+                    const members = type.symbol.members;
+                    for (const key in members) {
+                        const member = members.get(key);
+                        const memberType = getTypeOfSymbolAtLocation(member, enclosingDeclaration);
+                        if (!isTypeAccessible(memberType, enclosingDeclaration, shouldComputeAliasesToMakeVisible)) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+            }
+
+            return typeSymbolIsAccessible;
         }
 
         /**

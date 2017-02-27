@@ -16,7 +16,7 @@ namespace ts.codefix {
         // This is the identifier in the case of a class declaration
         // or the class keyword token in the case of a class expression.
         const token = getTokenAtPosition(sourceFile, start);
-        const checker = context.program.getTypeChecker();
+        const checker = context.program.getDiagnosticsProducingTypeChecker();
 
         if (isClassLike(token.parent)) {
             const classDecl = token.parent as ClassLikeDeclaration;

@@ -9,7 +9,7 @@ namespace ts.codefix {
         const sourceFile = context.sourceFile;
         const start = context.span.start;
         const token = getTokenAtPosition(sourceFile, start);
-        const checker = context.program.getTypeChecker();
+        const checker = context.program.getDiagnosticsProducingTypeChecker();
 
         const classDecl = getContainingClass(token);
         if (!classDecl) {

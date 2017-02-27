@@ -5,6 +5,7 @@ namespace ts.codefix {
      * Finds members of the resolved type that are missing in the class pointed to by class decl
      * and generates source code for the missing members.
      * @param possiblyMissingSymbols The collection of symbols to filter and then get insertions for.
+     * @param checker Must be a diagnostics-producing typechecker.
      * @returns Empty string iff there are no member insertions.
      */
     export function getMissingMembersInsertion(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: Symbol[], checker: TypeChecker, newlineChar: string): string {
@@ -30,6 +31,10 @@ namespace ts.codefix {
 
         const declaration = declarations[0] as Declaration;
         const name = declaration.name ? declaration.name.getText() : undefined;
+        if (!name) {
+            return "";
+        }
+
         const visibility = getVisibilityPrefixWithSpace(getModifierFlags(declaration));
 
         const type = checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration);
@@ -39,8 +44,11 @@ namespace ts.codefix {
             case SyntaxKind.SetAccessor:
             case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyDeclaration:
-                const typeString = checker.typeToString(type, enclosingDeclaration, TypeFormatFlags.None);
-                return `${visibility}${name}: ${typeString};${newlineChar}`;
+                if (checker.isTypeAccessible(type, enclosingDeclaration, /*shouldComputeAliasesToMakeVisible*/ false)) {
+                    const typeString = checker.typeToString(type, enclosingDeclaration, TypeFormatFlags.None);
+                    return `${visibility}${name}: ${typeString};${newlineChar}`;
+                }
+                return "";
 
             case SyntaxKind.MethodSignature:
             case SyntaxKind.MethodDeclaration:
