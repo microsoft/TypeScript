@@ -21,10 +21,6 @@ declare module "gulp-typescript" {
 import * as insert from "gulp-insert";
 import * as sourcemaps from "gulp-sourcemaps";
 import Q = require("q");
-declare global {
-    // `del` further depends on `Promise` (and is also not included), so we just, patch the global scope's Promise to Q's (which we already include in our deps because gulp depends on it)
-    type Promise<T> = Q.Promise<T>;
-}
 import del = require("del");
 import mkdirP = require("mkdirp");
 import minimist = require("minimist");
