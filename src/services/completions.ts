@@ -842,10 +842,6 @@ namespace ts.Completions {
                     const lineStart = getLineStartPositionForPosition(position, sourceFile);
                     shouldAppendAtSignBeforeJsDocTagName = sourceFile.text.substr(lineStart, position).indexOf("@") === -1;
 
-                    // This is for the case
-                    //      /**
-                    //       * |completion here|
-                    //       **/
                     if (shouldAppendAtSignBeforeJsDocTagName) {
                         isJsDocTagName = true;
                     }
