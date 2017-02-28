@@ -44,7 +44,9 @@ namespace ts.codefix {
                     return getCodeActionForVariable();
                 case Diagnostics.Parameter_0_implicitly_has_an_1_type.code:
                 case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code:
-                    return getCodeActionForParameter();
+                    //return getCodeActionForParameter();
+                    getCodeActionForParameter;
+                    return getCodeActionForParameters();
             }
         }
 
@@ -59,7 +61,7 @@ namespace ts.codefix {
                 }
             }
             else {
-                return createCodeActions(token.getEnd(), typeString);
+                 return createCodeActions(token.getEnd(), `: ${typeString}`);
             }
         }
 
@@ -75,7 +77,73 @@ namespace ts.codefix {
                 }
             }
             else {
-                return createCodeActions(token.getEnd(), typeString);
+                return createCodeActions(token.getEnd(), `: ${typeString}`);
+            }
+        }
+
+        function coalesceSignatures(declaration: FunctionLikeDeclaration, signatures: Signature[]): Signature {
+            const parameters = [];
+            let minArgumentCount = 0;;
+            for (let i = 0; i < declaration.parameters.length; i++) {
+                const parameterDeclaration = declaration.parameters[i];
+                const paramterTypes = [];
+                let seenInAllSignatures = true;
+                for (const signature of signatures) {
+                    if (i < signature.parameters.length) {
+                        const type = (<TransientSymbol>signature.parameters[i]).type;
+                        if (isValidInference(type)) {
+                            paramterTypes.push(checker.getBaseTypeOfLiteralType(type));
+                        }
+                    }
+                    else {
+                        seenInAllSignatures = false;
+                    }
+                }
+                if (seenInAllSignatures) {
+                    minArgumentCount++;
+                }
+                const symbol = <TransientSymbol>checker.createSymbol(SymbolFlags.FunctionScopedVariable, parameterDeclaration.name.getText());
+                symbol.type = paramterTypes.length ? checker.getUnionType(paramterTypes) : checker.getAnyType();
+                parameters.push(symbol);
+            }
+            return checker.createSignature(declaration, /*typeParameters*/ undefined, /*thisParameter*/ undefined, parameters, checker.getAnyType(), /*typePredicate*/ undefined, minArgumentCount, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
+        }
+
+        function getCodeActionForParameters() {
+
+            const containingFunction = getContainingFunction(token);
+            if (!containingFunction.name) {
+                return undefined;
+            }
+            //const parameterIndex = getParameterIndexInList(token, containingFunction.parameters);
+            //const types = [];
+            let signatures: Signature[] = [];
+            for (const reference of getReferences(containingFunction.name)) {
+                const token = getTokenAtPosition(program.getSourceFile(reference.fileName), reference.textSpan.start);
+                const type = getTypeFromContext(<Identifier>token, program.getTypeChecker());
+                if (!isValidInference(type)) {
+                    continue;
+                }
+
+                signatures = concatenate(signatures, containingFunction.kind === SyntaxKind.Constructor ? type.getConstructSignatures() : type.getCallSignatures());
+            }
+            const unifiedSignature: Signature = coalesceSignatures(containingFunction, signatures);
+
+            if (isInJavaScriptFile(sourceFile)) {
+                const declaration = getContainingFunction(token);
+                if (!declaration.jsDoc) {
+                    let newText = `/**${context.newLineCharacter}`;
+                    for (let i = 0; i < unifiedSignature.parameters.length; i++) {
+                        const paramter = unifiedSignature.parameters[i];
+                        const typeString = checker.typeToString((<TransientSymbol>paramter).type, token);
+                        newText += ` * @param {${typeString}${i + 1 > unifiedSignature.minArgumentCount ? "=" : ""}} ${paramter.name}${context.newLineCharacter}`
+                    }
+                    newText += ` */${context.newLineCharacter}`
+                    return createCodeActions(declaration.getStart(), newText);
+                }
+            }
+            else {
+                return undefined;
             }
         }
 
@@ -86,7 +154,7 @@ namespace ts.codefix {
                     fileName: sourceFile.fileName,
                     textChanges: [{
                         span: { start: startPos, length: 0 },
-                        newText: `: ${typeString}`
+                        newText: typeString
                     }]
                 }]
             }];
@@ -134,7 +202,7 @@ namespace ts.codefix {
                     const signatures = type.getCallSignatures();
                     for (const signature of signatures) {
                         const parameterType = signature.parameters.length > parameterIndex ? (<TransientSymbol>signature.parameters[parameterIndex]).type : undefined;
-                        types.push(checker.getBaseTypeOfLiteralType(parameterType) || checker.getUndefinedType());
+                        types.push(parameterType ? checker.getBaseTypeOfLiteralType(parameterType) : checker.getUndefinedType());
                     }
                 }
                 return types.length ? checker.getUnionType(types) : undefined;
@@ -283,7 +351,7 @@ namespace ts.codefix {
         }
 
         const returnType = checker.getBaseTypeOfLiteralType(getTypeFromContext(parent, checker) || checker.getAnyType());
-        const signature = checker.createSignature(/*declaration*/ undefined, /*typeParameters*/ undefined, /*thisParameter*/ undefined, parameters, returnType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
+        const signature = checker.createSignature(/*declaration*/ undefined, /*typeParameters*/ undefined, /*thisParameter*/ undefined, parameters, returnType, /*typePredicate*/ undefined, parent.arguments.length, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         return checker.createAnonymousType(/*symbol*/ undefined, /*members*/ createMap<Symbol>(), isCallExpression ? [signature] : [], isCallExpression ? [] : [signature], /*stringIndexInfo*/undefined, /*numberIndexInfo*/ undefined);
     }
 
