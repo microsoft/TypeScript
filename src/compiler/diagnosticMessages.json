@@ -3269,7 +3269,7 @@
         "category": "Error",
         "code": 17011
     },
-    "'{0}' is not a valid meta-property for keyword '{1}'. Did you mean '{0}'?": {
+    "'{0}' is not a valid meta-property for keyword '{1}'. Did you mean '{2}'?": {
         "category": "Error",
         "code": 17012
     },
