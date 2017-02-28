@@ -2464,6 +2464,7 @@
         createSignature(declaration: SignatureDeclaration, typeParameters: TypeParameter[], thisParameter: Symbol | undefined, parameters: Symbol[],
             resolvedReturnType: Type, typePredicate: TypePredicate, minArgumentCount: number, hasRestParameter: boolean, hasLiteralTypes: boolean): Signature;
         createSymbol(flags: SymbolFlags, name: string): TransientSymbol;
+        createIndexInfo(type: Type, isReadonly: boolean, declaration?: SignatureDeclaration): IndexInfo;
 
         getAnyType(): Type;
         getStringType(): Type;

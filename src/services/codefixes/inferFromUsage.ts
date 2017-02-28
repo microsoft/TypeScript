@@ -215,10 +215,7 @@ namespace ts.codefix {
             node = <Expression>node.parent;
         }
 
-        let contextualType = isPartOfExpression(node) && checker.getContextualType(node);
-        if (contextualType && isValidInference(contextualType)) {
-            return contextualType;
-        }
+
 
         switch (node.parent.kind) {
             case SyntaxKind.PostfixUnaryExpression:
@@ -233,6 +230,15 @@ namespace ts.codefix {
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
                 return getTypeFromCallExpressionContext(<CallExpression | NewExpression>node.parent, checker);
+            case SyntaxKind.PropertyAccessExpression:
+                return getTypeFromPropertyAccessExpressionContext(<PropertyAccessExpression>node.parent, checker);
+            case SyntaxKind.ElementAccessExpression:
+                return getTypeFromPropertyElementExpressionContext(<ElementAccessExpression>node.parent, node, checker);
+            default:
+                if (isPartOfExpression(node)) {
+                    const contextualType = checker.getContextualType(node);
+                    return isValidInference(contextualType) ? contextualType : undefined;
+                }
         }
     }
 
@@ -353,6 +359,28 @@ namespace ts.codefix {
         const returnType = checker.getBaseTypeOfLiteralType(getTypeFromContext(parent, checker) || checker.getAnyType());
         const signature = checker.createSignature(/*declaration*/ undefined, /*typeParameters*/ undefined, /*thisParameter*/ undefined, parameters, returnType, /*typePredicate*/ undefined, parent.arguments.length, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         return checker.createAnonymousType(/*symbol*/ undefined, /*members*/ createMap<Symbol>(), isCallExpression ? [signature] : [], isCallExpression ? [] : [signature], /*stringIndexInfo*/undefined, /*numberIndexInfo*/ undefined);
+    }
+
+    function getTypeFromPropertyAccessExpressionContext(parent: PropertyAccessExpression, checker: TypeChecker) {
+        const name = parent.name.text;
+        const symbol = checker.createSymbol(SymbolFlags.Property, name);
+        symbol.type = checker.getBaseTypeOfLiteralType(getTypeFromContext(parent, checker) || checker.getAnyType());
+        const members = createMap<Symbol>();
+        members.set(name, symbol);
+        return checker.createAnonymousType(/*symbol*/ undefined, members, /*callSignatures*/[], /*constructSignatures*/[], /*stringIndexInfo*/undefined, /*numberIndexInfo*/ undefined);
+    }
+
+    function getTypeFromPropertyElementExpressionContext(parent: ElementAccessExpression, node: Expression, checker: TypeChecker) {
+        if (node === parent.argumentExpression) {
+            return checker.getUnionType([checker.getStringType(), checker.getNumberType()]);
+        }
+        else {
+            const indextType = checker.getTypeAtLocation(parent.argumentExpression);
+            const isNumericIndexType = indextType.flags & TypeFlags.NumberLike;
+            const type = checker.getBaseTypeOfLiteralType(getTypeFromContext(parent, checker) || checker.getAnyType());
+            const indexer = checker.createIndexInfo(type, /*isReadonly*/ false);
+            return checker.createAnonymousType(/*symbol*/ undefined, /*members*/ createMap<Symbol>(), /*callSignatures*/[], /*constructSignatures*/[], /*stringIndexInfo*/ isNumericIndexType ? undefined : indexer, /*numberIndexInfo*/ isNumericIndexType ? indexer : undefined);
+        }
     }
 
     function isValidInference(type: Type) {

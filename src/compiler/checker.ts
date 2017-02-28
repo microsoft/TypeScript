@@ -190,6 +190,7 @@ namespace ts {
             createAnonymousType,
             createSignature,
             createSymbol,
+            createIndexInfo,
             getAnyType: () => anyType,
             getStringType: () => stringType,
             getNumberType: () => numberType,
