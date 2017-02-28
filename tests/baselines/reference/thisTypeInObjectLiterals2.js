@@ -31,15 +31,19 @@ let obj1 = {
 type Point = {
     x: number;
     y: number;
-    moveBy(dx: number, dy: number): void;
+    z?: number;
+    moveBy(dx: number, dy: number, dz?: number): void;
 }
 
 let p1: Point = {
     x: 10,
     y: 20,
-    moveBy(dx, dy) {
+    moveBy(dx, dy, dz) {
         this.x += dx;
         this.y += dy;
+        if (this.z && dz) {
+            this.z += dz;
+        }
     }
 };
 
@@ -48,9 +52,12 @@ declare function f1(p: Point): void;
 f1({
     x: 10,
     y: 20,
-    moveBy(dx, dy) {
+    moveBy(dx, dy, dz) {
         this.x += dx;
         this.y += dy;
+        if (this.z && dz) {
+            this.z += dz;
+        }
     }
 });
 
@@ -93,6 +100,51 @@ let x2 = makeObject2({
         }
     }
 });
+
+// Check pattern similar to Object.defineProperty and Object.defineProperties
+
+type PropDesc<T> = {
+    value?: T;
+    get?(): T;
+    set?(value: T): void;
+}
+
+type PropDescMap<T> = {
+    [K in keyof T]: PropDesc<T[K]>;
+}
+
+declare function defineProp<T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>): T & Record<K, U>;
+
+declare function defineProps<T, U>(obj: T, descs: PropDescMap<U> & ThisType<T>): T & U;
+
+let p10 = defineProp(p1, "foo", { value: 42 });
+p10.foo = p10.foo + 1;
+
+let p11 = defineProp(p1, "bar", {
+    get() {
+        return this.x;
+    },
+    set(value: number) {
+        this.x = value;
+    }
+});
+p11.bar = p11.bar + 1;
+
+let p12 = defineProps(p1, {
+    foo: {
+        value: 42
+    },
+    bar: {
+        get(): number {
+            return this.x;
+        },
+        set(value: number) {
+            this.x = value;
+        }
+    }
+});
+p12.foo = p12.foo + 1;
+p12.bar = p12.bar + 1;
 
 // Proof of concept for typing of Vue.js
 
@@ -168,17 +220,23 @@ var obj1 = {
 var p1 = {
     x: 10,
     y: 20,
-    moveBy: function (dx, dy) {
+    moveBy: function (dx, dy, dz) {
         this.x += dx;
         this.y += dy;
+        if (this.z && dz) {
+            this.z += dz;
+        }
     }
 };
 f1({
     x: 10,
     y: 20,
-    moveBy: function (dx, dy) {
+    moveBy: function (dx, dy, dz) {
         this.x += dx;
         this.y += dy;
+        if (this.z && dz) {
+            this.z += dz;
+        }
     }
 });
 var x1 = makeObject({
@@ -199,6 +257,32 @@ var x2 = makeObject2({
         }
     }
 });
+var p10 = defineProp(p1, "foo", { value: 42 });
+p10.foo = p10.foo + 1;
+var p11 = defineProp(p1, "bar", {
+    get: function () {
+        return this.x;
+    },
+    set: function (value) {
+        this.x = value;
+    }
+});
+p11.bar = p11.bar + 1;
+var p12 = defineProps(p1, {
+    foo: {
+        value: 42
+    },
+    bar: {
+        get: function () {
+            return this.x;
+        },
+        set: function (value) {
+            this.x = value;
+        }
+    }
+});
+p12.foo = p12.foo + 1;
+p12.bar = p12.bar + 1;
 var vue = new Vue({
     data: function () { return ({ x: 1, y: 2 }); },
     methods: {
@@ -240,7 +324,8 @@ declare let obj1: {
 declare type Point = {
     x: number;
     y: number;
-    moveBy(dx: number, dy: number): void;
+    z?: number;
+    moveBy(dx: number, dy: number, dz?: number): void;
 };
 declare let p1: Point;
 declare function f1(p: Point): void;
@@ -265,6 +350,22 @@ declare let x2: {
     y: number;
 } & {
     moveBy(dx: number, dy: number): void;
+};
+declare type PropDesc<T> = {
+    value?: T;
+    get?(): T;
+    set?(value: T): void;
+};
+declare type PropDescMap<T> = {
+    [K in keyof T]: PropDesc<T[K]>;
+};
+declare function defineProp<T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>): T & Record<K, U>;
+declare function defineProps<T, U>(obj: T, descs: PropDescMap<U> & ThisType<T>): T & U;
+declare let p10: Point & Record<"foo", number>;
+declare let p11: Point & Record<"bar", number>;
+declare let p12: Point & {
+    foo: number;
+    bar: number;
 };
 declare type Accessors<T> = {
     [K in keyof T]: (() => T[K]) | Computed<T[K]>;
