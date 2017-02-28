@@ -1,4 +1,5 @@
 // @declaration: true
+// @strictNullChecks: true
 // @noImplicitAny: true
 // @noImplicitThis: true
 // @target: es5
@@ -34,15 +35,19 @@ let obj1 = {
 type Point = {
     x: number;
     y: number;
-    moveBy(dx: number, dy: number): void;
+    z?: number;
+    moveBy(dx: number, dy: number, dz?: number): void;
 }
 
 let p1: Point = {
     x: 10,
     y: 20,
-    moveBy(dx, dy) {
+    moveBy(dx, dy, dz) {
         this.x += dx;
         this.y += dy;
+        if (this.z && dz) {
+            this.z += dz;
+        }
     }
 };
 
@@ -51,9 +56,12 @@ declare function f1(p: Point): void;
 f1({
     x: 10,
     y: 20,
-    moveBy(dx, dy) {
+    moveBy(dx, dy, dz) {
         this.x += dx;
         this.y += dy;
+        if (this.z && dz) {
+            this.z += dz;
+        }
     }
 });
 
@@ -96,6 +104,51 @@ let x2 = makeObject2({
         }
     }
 });
+
+// Check pattern similar to Object.defineProperty and Object.defineProperties
+
+type PropDesc<T> = {
+    value?: T;
+    get?(): T;
+    set?(value: T): void;
+}
+
+type PropDescMap<T> = {
+    [K in keyof T]: PropDesc<T[K]>;
+}
+
+declare function defineProp<T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>): T & Record<K, U>;
+
+declare function defineProps<T, U>(obj: T, descs: PropDescMap<U> & ThisType<T>): T & U;
+
+let p10 = defineProp(p1, "foo", { value: 42 });
+p10.foo = p10.foo + 1;
+
+let p11 = defineProp(p1, "bar", {
+    get() {
+        return this.x;
+    },
+    set(value: number) {
+        this.x = value;
+    }
+});
+p11.bar = p11.bar + 1;
+
+let p12 = defineProps(p1, {
+    foo: {
+        value: 42
+    },
+    bar: {
+        get(): number {
+            return this.x;
+        },
+        set(value: number) {
+            this.x = value;
+        }
+    }
+});
+p12.foo = p12.foo + 1;
+p12.bar = p12.bar + 1;
 
 // Proof of concept for typing of Vue.js
 
