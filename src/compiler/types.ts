@@ -381,9 +381,6 @@
         JSDocPropertyTag,
         JSDocTypeLiteral,
         JSDocLiteralType,
-        JSDocNullKeyword,
-        JSDocUndefinedKeyword,
-        JSDocNeverKeyword,
 
         // Synthesized list
         SyntaxList,
@@ -423,9 +420,9 @@
         LastBinaryOperator = CaretEqualsToken,
         FirstNode = QualifiedName,
         FirstJSDocNode = JSDocTypeExpression,
-        LastJSDocNode = JSDocNeverKeyword,
+        LastJSDocNode = JSDocLiteralType,
         FirstJSDocTagNode = JSDocComment,
-        LastJSDocTagNode = JSDocNeverKeyword
+        LastJSDocTagNode = JSDocLiteralType
     }
 
     export const enum NodeFlags {

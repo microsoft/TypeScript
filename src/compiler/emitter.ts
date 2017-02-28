@@ -1753,7 +1753,6 @@ namespace ts {
             else {
                 pushNameGenerationScope();
                 write("{");
-                increaseIndent();
                 emitBlockStatements(node);
                 write("}");
                 popNameGenerationScope();

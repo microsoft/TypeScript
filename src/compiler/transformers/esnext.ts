@@ -357,10 +357,12 @@ namespace ts {
             const values = createAsyncValuesHelper(context, expression, /*location*/ node.expression);
             const next = createYield(
                 /*asteriskToken*/ undefined,
-                createArrayLiteral([
-                    createLiteral("await"),
-                    createCall(createPropertyAccess(iterator, "next" ), /*typeArguments*/ undefined, [])
-                ])
+                enclosingFunctionFlags & FunctionFlags.Generator
+                    ? createArrayLiteral([
+                        createLiteral("await"),
+                        createCall(createPropertyAccess(iterator, "next" ), /*typeArguments*/ undefined, [])
+                    ])
+                    : createCall(createPropertyAccess(iterator, "next" ), /*typeArguments*/ undefined, [])
             );
 
             hoistVariableDeclaration(errorRecord);
@@ -431,10 +433,12 @@ namespace ts {
                                     createStatement(
                                         createYield(
                                             /*asteriskToken*/ undefined,
-                                            createArrayLiteral([
-                                                createLiteral("await"),
-                                                createFunctionCall(returnMethod, iterator, [])
-                                            ])
+                                            enclosingFunctionFlags & FunctionFlags.Generator
+                                                ? createArrayLiteral([
+                                                    createLiteral("await"),
+                                                    createFunctionCall(returnMethod, iterator, [])
+                                                ])
+                                                : createFunctionCall(returnMethod, iterator, [])
                                         )
                                     )
                                 ),
@@ -872,6 +876,7 @@ namespace ts {
         scoped: false,
         text: `
             var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
+                if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
                 var g = generator.apply(thisArg, _arguments || []), q = [], c, i;
                 return i = { next: verb("next"), "throw": verb("throw"), "return": verb("return") }, i[Symbol.asyncIterator] = function () { return this; }, i;
                 function verb(n) { return function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]), next(); }); }; }
@@ -932,6 +937,7 @@ namespace ts {
         scoped: false,
         text: `
             var __asyncValues = (this && this.__asyncIterator) || function (o) {
+                if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
                 var m = o[Symbol.asyncIterator];
                 return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
             };
