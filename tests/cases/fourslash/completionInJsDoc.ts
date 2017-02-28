@@ -2,29 +2,39 @@
 
 // @allowJs: true
 // @Filename: Foo.js
-/////** @/*1*/ */
-////var v1;
+//// /** @/*1*/ */
+//// var v1;
 ////
-/////** @p/*2*/ */
-////var v2;
+//// /** @p/*2*/ */
+//// var v2;
 ////
-/////** @param /*3*/ */
-////var v3;
+//// /** @param /*3*/ */
+//// var v3;
 ////
-/////** @param { n/*4*/ } bar */
-////var v4;
+//// /** @param { n/*4*/ } bar */
+//// var v4;
 ////
-/////** @type { n/*5*/ } */
-////var v5;
+//// /** @type { n/*5*/ } */
+//// var v5;
 ////
-////// @/*6*/
-////var v6;
+//// // @/*6*/
+//// var v6;
 ////
-////// @pa/*7*/
-////var v7;
+//// // @pa/*7*/
+//// var v7;
 ////
-/////** @return { n/*8*/ } */
-////var v8;
+//// /** @return { n/*8*/ } */
+//// var v8;
+////
+//// /** /*9*/ */
+////
+//// /**
+////  /*10*/
+//// */
+////
+//// /**
+////  * /*11*/
+////  */
 
 goTo.marker('1');
 verify.completionListContains("constructor");
@@ -55,3 +65,14 @@ verify.completionListIsEmpty();
 goTo.marker('8');
 verify.completionListContains('number');
 
+goTo.marker('9');
+verify.completionListCount(40);
+verify.completionListContains("@argument");
+
+goTo.marker('10');
+verify.completionListCount(40);
+verify.completionListContains("@return");
+
+goTo.marker('11');
+verify.completionListCount(40);
+verify.completionListContains("@argument");
