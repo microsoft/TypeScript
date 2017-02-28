@@ -199,10 +199,14 @@ namespace ts.GoToDefinition {
         }
 
         function tryAddSignature(signatureDeclarations: Declaration[] | undefined, selectConstructors: boolean, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
+            if (!signatureDeclarations) {
+                return false;
+            }
+
             const declarations: Declaration[] = [];
             let definition: Declaration | undefined;
 
-            if (signatureDeclarations) for (const d of signatureDeclarations) {
+            for (const d of signatureDeclarations) {
                 if (selectConstructors ? d.kind === SyntaxKind.Constructor : isSignatureDeclaration(d)) {
                     declarations.push(d);
                     if ((<FunctionLikeDeclaration>d).body) definition = d;
