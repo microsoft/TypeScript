@@ -16,11 +16,11 @@ namespace ts.Completions {
             return undefined;
         }
 
-        const { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, isJsDocTagName } = completionData;
+        const { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, isJsDocTagName, shouldAppendAtSignBeforeJsDocTagName } = completionData;
 
         if (isJsDocTagName) {
             // If the current position is a jsDoc tag name, only tag names should be provided for completion
-            return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries: JsDoc.getAllJsDocCompletionEntries() };
+            return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries: JsDoc.getAllJsDocCompletionEntries(shouldAppendAtSignBeforeJsDocTagName) };
         }
 
         const entries: CompletionEntry[] = [];
@@ -815,6 +815,12 @@ namespace ts.Completions {
         const isJavaScriptFile = isSourceFileJavaScript(sourceFile);
 
         let isJsDocTagName = false;
+        // This is for the case when users request completion in JsDoc without "@"
+        // i.e.
+        //      /**
+        //       * |completion here|
+        //       **/
+        let shouldAppendAtSignBeforeJsDocTagName = false;
 
         let start = timestamp();
         const currentToken = getTokenAtPosition(sourceFile, position);
@@ -826,10 +832,24 @@ namespace ts.Completions {
         log("getCompletionData: Is inside comment: " + (timestamp() - start));
 
         if (insideComment) {
-            // The current position is next to the '@' sign, when no tag name being provided yet.
-            // Provide a full list of tag names
-            if (hasDocComment(sourceFile, position) && sourceFile.text.charCodeAt(position - 1) === CharacterCodes.at) {
-                isJsDocTagName = true;
+            if (hasDocComment(sourceFile, position)) {
+                // The current position is next to the '@' sign, when no tag name being provided yet.
+                // Provide a full list of tag names
+                if (sourceFile.text.charCodeAt(position - 1) === CharacterCodes.at) {
+                    isJsDocTagName = true;
+                }
+                else {
+                    const lineStart = getLineStartPositionForPosition(position, sourceFile);
+                    shouldAppendAtSignBeforeJsDocTagName = sourceFile.text.substr(lineStart, position).indexOf("@") === -1;
+
+                    // This is for the case
+                    //      /**
+                    //       * |completion here|
+                    //       **/
+                    if (shouldAppendAtSignBeforeJsDocTagName) {
+                        isJsDocTagName = true;
+                    }
+                }
             }
 
             // Completion should work inside certain JsDoc tags. For example:
@@ -854,8 +874,8 @@ namespace ts.Completions {
                 }
             }
 
-            if (isJsDocTagName) {
-                return { symbols: undefined, isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, location: undefined, isRightOfDot: false, isJsDocTagName };
+            if (isJsDocTagName || shouldAppendAtSignBeforeJsDocTagName) {
+                return { symbols: undefined, isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, location: undefined, isRightOfDot: false, isJsDocTagName, shouldAppendAtSignBeforeJsDocTagName };
             }
 
             if (!insideJsDocTagExpression) {
@@ -983,7 +1003,7 @@ namespace ts.Completions {
 
         log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
 
-        return { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag), isJsDocTagName };
+        return { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag), isJsDocTagName, shouldAppendAtSignBeforeJsDocTagName };
 
         function getTypeScriptMemberSymbols(): void {
             // Right of dot member completion list
