@@ -1,4 +1,4 @@
-﻿/* @internal */
+/* @internal */
 namespace ts.JsDoc {
     const jsDocTagNames = [
         "augments",

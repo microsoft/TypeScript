@@ -1,5 +1,6 @@
 {
     "rules": {
+        "no-bom": true,
         "class-name": true,
         "comment-format": [true,
             "check-space"

@@ -226,7 +226,7 @@ namespace ts.server {
 
     /**
      * Represents operation that can schedule its next step to be executed later.
-     * Scheduling is done via instance of NextStep. If on current step subsequent step was not scheduled - operation is assumed to be completed. 
+     * Scheduling is done via instance of NextStep. If on current step subsequent step was not scheduled - operation is assumed to be completed.
      */
     class MultistepOperation {
         private requestId: number;

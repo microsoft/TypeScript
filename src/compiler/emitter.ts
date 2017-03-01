@@ -1,4 +1,4 @@
-﻿/// <reference path="checker.ts" />
+/// <reference path="checker.ts" />
 /// <reference path="transformer.ts" />
 /// <reference path="declarationEmitter.ts" />
 /// <reference path="sourcemap.ts" />

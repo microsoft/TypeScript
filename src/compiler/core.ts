@@ -1,4 +1,4 @@
-﻿/// <reference path="types.ts"/>
+/// <reference path="types.ts"/>
 /// <reference path="performance.ts" />
 
 namespace ts {
