@@ -21125,8 +21125,8 @@ namespace ts {
                 // A SyntaxKind.ExpressionWithTypeArguments is considered a type node, except when it occurs in the
                 // extends clause of a class. We handle that case here.
                 const classNode = getContainingClass(node);
-                const classType = getDeclaredTypeOfSymbol(getSymbolOfNode(classNode)) as InterfaceType; classType;
-                const baseType = getBaseTypes(classType)[0]; baseType;
+                const classType = getDeclaredTypeOfSymbol(getSymbolOfNode(classNode)) as InterfaceType;
+                const baseType = getBaseTypes(classType)[0];
                 return baseType && getTypeWithThisArgument(baseType, classType.thisType);
             }
 
