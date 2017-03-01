@@ -1,5 +1,5 @@
 /// <reference path="fourslash.ts" />
-
+// @noImplicitAny: true
 //// interface G<T, U> { }
 //// /**/
 //// var v4: G<G<any>, any>;
