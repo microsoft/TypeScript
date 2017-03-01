@@ -1,3 +1,4 @@
+// @noImplicitAny: true
 class A<T> { }
 
 var x: () => A;

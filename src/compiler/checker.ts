@@ -5396,7 +5396,6 @@ namespace ts {
                             error(errorNode,
                                 Diagnostics.Type_parameter_0_implicitly_has_type_any_because_it_was_not_supplied,
                                 typeToString(typeParameters[i]));
-                            errorNode = undefined;
                         }
                     }
 
@@ -5437,6 +5436,7 @@ namespace ts {
                     }
                 };
                 mapper.mappedTypes = context.typeParameters;
+                context.mapper = mapper;
             }
             return context.mapper;
         }

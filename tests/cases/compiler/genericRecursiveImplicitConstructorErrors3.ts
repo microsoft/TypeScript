@@ -1,10 +1,11 @@
+// @noImplicitAny: true
 module TypeScript {
     export class MemberName <A,B,C>{
         static create<A,B,C>(arg1: any, arg2?: any, arg3?: any): MemberName {
         }
     }
 }
- 
+
 module TypeScript {
     export class PullSymbol <A,B,C>{
         public type: PullTypeSymbol = null;
@@ -26,4 +27,4 @@ module TypeScript {
         }
     }
 }
- 
+

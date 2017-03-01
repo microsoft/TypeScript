@@ -1,14 +1,20 @@
-tests/cases/compiler/genericLambaArgWithoutTypeArguments.ts(7,11): error TS2314: Generic type 'Foo<T>' requires 1 type argument(s).
+tests/cases/compiler/genericLambaArgWithoutTypeArguments.ts(4,10): error TS7010: 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
+tests/cases/compiler/genericLambaArgWithoutTypeArguments.ts(4,14): error TS7006: Parameter 'a' implicitly has an 'any' type.
+tests/cases/compiler/genericLambaArgWithoutTypeArguments.ts(7,11): error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
 
 
-==== tests/cases/compiler/genericLambaArgWithoutTypeArguments.ts (1 errors) ====
+==== tests/cases/compiler/genericLambaArgWithoutTypeArguments.ts (3 errors) ====
     interface Foo<T> {
        x: T;
     }
     function foo(a) {
+             ~~~
+!!! error TS7010: 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
+                 ~
+!!! error TS7006: Parameter 'a' implicitly has an 'any' type.
        return null;
     }
     foo((arg: Foo) => { return arg.x; });
               ~~~
-!!! error TS2314: Generic type 'Foo<T>' requires 1 type argument(s).
+!!! error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
     

@@ -1296,25 +1296,25 @@ f14(a, b, d);
 
 // no inference, partially supplied
 f14<A>();
->f14<A>() : [A, {}, C]
+>f14<A>() : [A, any, C]
 >f14 : <T, U = V, V = C>(a?: T, b?: U, c?: V) => [T, U, V]
 >A : A
 
 f14<A>(a);
->f14<A>(a) : [A, {}, C]
+>f14<A>(a) : [A, any, C]
 >f14 : <T, U = V, V = C>(a?: T, b?: U, c?: V) => [T, U, V]
 >A : A
 >a : A
 
 f14<A>(a, b);
->f14<A>(a, b) : [A, {}, C]
+>f14<A>(a, b) : [A, any, C]
 >f14 : <T, U = V, V = C>(a?: T, b?: U, c?: V) => [T, U, V]
 >A : A
 >a : A
 >b : B
 
 f14<A>(a, b, c);
->f14<A>(a, b, c) : [A, {}, C]
+>f14<A>(a, b, c) : [A, any, C]
 >f14 : <T, U = V, V = C>(a?: T, b?: U, c?: V) => [T, U, V]
 >A : A
 >a : A
@@ -1500,25 +1500,25 @@ f16(a, b, b);
 
 // no inference, partially supplied
 f16<A>();
->f16<A>() : [A, {}, {}]
+>f16<A>() : [A, any, any]
 >f16 : <T, U = V, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
 >A : A
 
 f16<A>(a);
->f16<A>(a) : [A, {}, {}]
+>f16<A>(a) : [A, any, any]
 >f16 : <T, U = V, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
 >A : A
 >a : A
 
 f16<A>(a, b);
->f16<A>(a, b) : [A, {}, {}]
+>f16<A>(a, b) : [A, any, any]
 >f16 : <T, U = V, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
 >A : A
 >a : A
 >b : B
 
 f16<A>(a, b, b);
->f16<A>(a, b, b) : [A, {}, {}]
+>f16<A>(a, b, b) : [A, any, any]
 >f16 : <T, U = V, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
 >A : A
 >a : A
@@ -1732,25 +1732,25 @@ f18(a, b, c);
 
 // no inference, partially supplied
 f18<A>();
->f18<A>() : [A, {}, {} | C]
+>f18<A>() : [A, any, any]
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
 >A : A
 
 f18<A>(a);
->f18<A>(a) : [A, {}, {} | C]
+>f18<A>(a) : [A, any, any]
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
 >A : A
 >a : A
 
 f18<A>(a, b);
->f18<A>(a, b) : [A, {}, {} | C]
+>f18<A>(a, b) : [A, any, any]
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
 >A : A
 >a : A
 >b : B
 
 f18<A>(a, b, b);
->f18<A>(a, b, b) : [A, {}, {} | C]
+>f18<A>(a, b, b) : [A, any, any]
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
 >A : A
 >a : A
@@ -1758,7 +1758,7 @@ f18<A>(a, b, b);
 >b : B
 
 f18<A>(a, b, c);
->f18<A>(a, b, c) : [A, {}, {} | C]
+>f18<A>(a, b, c) : [A, any, any]
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
 >A : A
 >a : A
@@ -1973,25 +1973,25 @@ f20(a, b, c);
 
 // no inference, partially supplied
 f20<A>();
->f20<A>() : [A, {}, {} & C]
+>f20<A>() : [A, any, any]
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
 >A : A
 
 f20<A>(a);
->f20<A>(a) : [A, {}, {} & C]
+>f20<A>(a) : [A, any, any]
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
 >A : A
 >a : A
 
 f20<A>(a, b);
->f20<A>(a, b) : [A, {}, {} & C]
+>f20<A>(a, b) : [A, any, any]
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
 >A : A
 >a : A
 >b : B
 
 f20<A>(a, b, bc);
->f20<A>(a, b, bc) : [A, {}, {} & C]
+>f20<A>(a, b, bc) : [A, any, any]
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
 >A : A
 >a : A
@@ -2247,13 +2247,13 @@ interface i05<T = T> { a: T; }
 >T : T
 
 const i05c00 = (<i05>x).a;
->i05c00 : {}
->(<i05>x).a : {}
->(<i05>x) : i05<{}>
-><i05>x : i05<{}>
+>i05c00 : any
+>(<i05>x).a : any
+>(<i05>x) : i05<any>
+><i05>x : i05<any>
 >i05 : i05<T>
 >x : any
->a : {}
+>a : any
 
 const i05c01 = (<i05<number>>x).a;
 >i05c01 : number
@@ -2275,13 +2275,13 @@ interface i06<T = U, U = T> { a: [T, U]; }
 >U : U
 
 const i06c00 = (<i06>x).a;
->i06c00 : [{}, {}]
->(<i06>x).a : [{}, {}]
->(<i06>x) : i06<{}, {}>
-><i06>x : i06<{}, {}>
+>i06c00 : [any, any]
+>(<i06>x).a : [any, any]
+>(<i06>x) : i06<any, any>
+><i06>x : i06<any, any>
 >i06 : i06<T, U>
 >x : any
->a : [{}, {}]
+>a : [any, any]
 
 const i06c01 = (<i06<number>>x).a;
 >i06c01 : [number, number]

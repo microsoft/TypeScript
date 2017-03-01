@@ -1,10 +1,11 @@
 tests/cases/compiler/generics1.ts(10,14): error TS2344: Type 'A' does not satisfy the constraint 'B'.
   Property 'b' is missing in type 'A'.
-tests/cases/compiler/generics1.ts(13,9): error TS2314: Generic type 'G<T, U>' requires 2 type argument(s).
-tests/cases/compiler/generics1.ts(14,9): error TS2314: Generic type 'G<T, U>' requires 2 type argument(s).
+tests/cases/compiler/generics1.ts(13,9): error TS2707: Type parameter 'U' implicitly has type 'any' because it was not supplied.
+tests/cases/compiler/generics1.ts(14,9): error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
+tests/cases/compiler/generics1.ts(14,9): error TS2707: Type parameter 'U' implicitly has type 'any' because it was not supplied.
 
 
-==== tests/cases/compiler/generics1.ts (3 errors) ====
+==== tests/cases/compiler/generics1.ts (4 errors) ====
     interface A { a: string; }
     interface B extends A { b: string; }
     interface C extends B { c: string; }
@@ -22,8 +23,10 @@ tests/cases/compiler/generics1.ts(14,9): error TS2314: Generic type 'G<T, U>' re
     var v5: G<any, any>;           // Error, any does not satisfy constraint B
     var v6: G<any>;                // Error, wrong number of arguments
             ~~~~~~
-!!! error TS2314: Generic type 'G<T, U>' requires 2 type argument(s).
+!!! error TS2707: Type parameter 'U' implicitly has type 'any' because it was not supplied.
     var v7: G;                     // Error, no type arguments
             ~
-!!! error TS2314: Generic type 'G<T, U>' requires 2 type argument(s).
+!!! error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
+            ~
+!!! error TS2707: Type parameter 'U' implicitly has type 'any' because it was not supplied.
     

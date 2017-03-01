@@ -1,4 +1,5 @@
 //@module: amd
+// @noImplicitAny: true
 export interface A<T> {
    new (dbSet: DbSet<T>): T;
 }

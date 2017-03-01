@@ -1,5 +1,5 @@
-tests/cases/compiler/genericInterfacesWithoutTypeArguments.ts(3,8): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-tests/cases/compiler/genericInterfacesWithoutTypeArguments.ts(4,10): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+tests/cases/compiler/genericInterfacesWithoutTypeArguments.ts(3,8): error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
+tests/cases/compiler/genericInterfacesWithoutTypeArguments.ts(4,10): error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
 
 
 ==== tests/cases/compiler/genericInterfacesWithoutTypeArguments.ts (2 errors) ====
@@ -7,8 +7,8 @@ tests/cases/compiler/genericInterfacesWithoutTypeArguments.ts(4,10): error TS231
     class C<T> { }
     var i: I;
            ~
-!!! error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+!!! error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
     var c: C<I>;
              ~
-!!! error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+!!! error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
     

@@ -1,3 +1,4 @@
+// @noImplicitAny: true
 interface IFoo<T>{
 }
 class Bar {

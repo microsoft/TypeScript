@@ -1,3 +1,4 @@
+// @noImplicitAny: true
 interface A { a: string; }
 interface B extends A { b: string; }
 interface C extends B { c: string; }

@@ -1,4 +1,4 @@
-tests/cases/compiler/typeAliasDeclarationEmit.ts(4,37): error TS2314: Generic type 'callback' requires 1 type argument(s).
+tests/cases/compiler/typeAliasDeclarationEmit.ts(4,37): error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
 
 
 ==== tests/cases/compiler/typeAliasDeclarationEmit.ts (1 errors) ====
@@ -7,4 +7,4 @@ tests/cases/compiler/typeAliasDeclarationEmit.ts(4,37): error TS2314: Generic ty
     
     export type CallbackArray<T extends callback> = () => T;
                                         ~~~~~~~~
-!!! error TS2314: Generic type 'callback' requires 1 type argument(s).
+!!! error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.

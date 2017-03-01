@@ -1,5 +1,5 @@
 tests/cases/compiler/genericGetter2.ts(5,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/genericGetter2.ts(5,14): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+tests/cases/compiler/genericGetter2.ts(5,14): error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
 
 
 ==== tests/cases/compiler/genericGetter2.ts (2 errors) ====
@@ -11,7 +11,7 @@ tests/cases/compiler/genericGetter2.ts(5,14): error TS2314: Generic type 'A<T>' 
             ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                  ~
-!!! error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+!!! error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
             return this.data;
         }
     }

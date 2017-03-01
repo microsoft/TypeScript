@@ -7,7 +7,7 @@ class X<T> {
 var a: X<number>;
 
 class X2<T> {
-    p2: { [idx: number]: X2 } 
+    p2: { [idx: number]: X2 }
 }
 var a2: X2<number>;
 
@@ -32,7 +32,7 @@ class X6<T> {
 var a6: X6<number>;
 
 class X7<T> {
-    p7: { [idx: number]: Y } 
+    p7: { [idx: number]: Y }
 }
 var a7: X7<number>;
 
@@ -51,7 +51,7 @@ class X10<T> {
 }
 var a10: X10<number>;
 
- 
+
 
 
 //// [missingTypeArguments1.js]

@@ -1,4 +1,5 @@
 //@module: amd
+// @noImplicitAny: true
 export declare module TypeScript {
   class PullSymbol { }
   class PullSignatureSymbol <A,B,C> extends PullSymbol {
@@ -10,4 +11,4 @@ export declare module TypeScript {
   class PullTypeParameterSymbol <A,B,C> extends PullTypeSymbol {
   }
 }
- 
+

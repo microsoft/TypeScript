@@ -16,14 +16,12 @@ tests/cases/compiler/genericDefaultsErrors.ts(28,52): error TS2344: Type 'T' doe
   Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/genericDefaultsErrors.ts(29,37): error TS2344: Type 'T' does not satisfy the constraint 'number'.
 tests/cases/compiler/genericDefaultsErrors.ts(30,32): error TS2344: Type 'number' does not satisfy the constraint 'T'.
-tests/cases/compiler/genericDefaultsErrors.ts(33,15): error TS2707: Generic type 'i09<T, U, V>' requires between 2 and 3 type arguments.
-tests/cases/compiler/genericDefaultsErrors.ts(34,15): error TS2707: Generic type 'i09<T, U, V>' requires between 2 and 3 type arguments.
-tests/cases/compiler/genericDefaultsErrors.ts(37,15): error TS2707: Generic type 'i09<T, U, V>' requires between 2 and 3 type arguments.
+tests/cases/compiler/genericDefaultsErrors.ts(37,15): error TS2314: Generic type 'i09<T, U, V>' requires 3 or fewer type argument(s).
 tests/cases/compiler/genericDefaultsErrors.ts(39,20): error TS2304: Cannot find name 'T'.
 tests/cases/compiler/genericDefaultsErrors.ts(39,20): error TS4033: Property 'x' of exported interface has or is using private name 'T'.
 
 
-==== tests/cases/compiler/genericDefaultsErrors.ts (21 errors) ====
+==== tests/cases/compiler/genericDefaultsErrors.ts (19 errors) ====
     
     declare const x: any;
     
@@ -91,16 +89,12 @@ tests/cases/compiler/genericDefaultsErrors.ts(39,20): error TS4033: Property 'x'
     
     interface i09<T, U, V = number> { }
     type i09t00 = i09; // error
-                  ~~~
-!!! error TS2707: Generic type 'i09<T, U, V>' requires between 2 and 3 type arguments.
     type i09t01 = i09<1>; // error
-                  ~~~~~~
-!!! error TS2707: Generic type 'i09<T, U, V>' requires between 2 and 3 type arguments.
     type i09t02 = i09<1, 2>; // ok
     type i09t03 = i09<1, 2, 3>; // ok
     type i09t04 = i09<1, 2, 3, 4>; // error
                   ~~~~~~~~~~~~~~~
-!!! error TS2707: Generic type 'i09<T, U, V>' requires between 2 and 3 type arguments.
+!!! error TS2314: Generic type 'i09<T, U, V>' requires 3 or fewer type argument(s).
     
     interface i10 { x: T; } // error
                        ~

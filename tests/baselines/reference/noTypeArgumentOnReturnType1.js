@@ -1,6 +1,6 @@
 //// [noTypeArgumentOnReturnType1.ts]
 class A<T>{
- 
+
  foo(): A{
   return null;
  }

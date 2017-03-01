@@ -1,5 +1,6 @@
+// @noImplicitAny: true
 // it is an error to use a generic type without type arguments
-// all of these are errors 
+// all of these are errors
 
 interface I<T> {
     foo: T;
