@@ -24,7 +24,7 @@
 // @Filename: b.ts
 // const z: [|any|] = 0;
 
-verify.rangesWithSameTextReferenceEachOther();
+test.rangesByText().forEach((ranges, text) => verify.singleReferenceGroup(text, ranges));
 verify.rangesWithSameTextAreDocumentHighlights();
 
 goTo.rangeStart(test.ranges()[0]);

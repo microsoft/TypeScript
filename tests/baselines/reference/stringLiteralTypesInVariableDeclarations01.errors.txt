@@ -1,4 +1,4 @@
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(5,7): error TS1155: 'const' declarations must be initialized
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(5,7): error TS1155: 'const' declarations must be initialized.
 
 
 ==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts (1 errors) ====
@@ -8,7 +8,7 @@ tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarat
     let c: "bar";
     const d: "baz";
           ~
-!!! error TS1155: 'const' declarations must be initialized
+!!! error TS1155: 'const' declarations must be initialized.
     
     a = "";
     b = "foo";

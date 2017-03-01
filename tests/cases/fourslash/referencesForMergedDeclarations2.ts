@@ -6,9 +6,9 @@
 ////
 ////function ATest() { }
 ////
-////import [|alias|] = ATest; // definition
+////import [|{| "isWriteAccess": true, "isDefinition": true |}alias|] = ATest; // definition
 ////
 ////var a: [|alias|].Bar; // namespace
 ////[|alias|].call(this); // value
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("import alias = ATest");

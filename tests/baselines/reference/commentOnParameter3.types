@@ -1,0 +1,12 @@
+=== tests/cases/compiler/commentOnParameter3.ts ===
+function commentedParameters(
+>commentedParameters : (a: any, b: any) => void
+
+a /* parameter a */, 
+>a : any
+
+b /* parameter b */,
+>b : any
+
+/* extra comment */
+) { }

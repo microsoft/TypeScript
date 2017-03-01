@@ -37,7 +37,7 @@ namespace ts {
                     addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
                     return updateSourceFileNode(
                         node,
-                        createNodeArray(statements, node.statements));
+                        setTextRange(createNodeArray(statements), node.statements));
                 }
                 else {
                     return visitEachChild(node, visitor, context);
@@ -101,6 +101,7 @@ namespace ts {
             if (isIdentifier(node) && hint === EmitHint.Expression) {
                 return substituteExpressionIdentifier(node);
             }
+
             return node;
         }
 

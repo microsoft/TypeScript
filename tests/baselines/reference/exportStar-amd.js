@@ -32,6 +32,7 @@ foo;
 //// [t1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.x = 1;
     exports.y = 2;
 });
@@ -46,6 +47,7 @@ define(["require", "exports"], function (require, exports) {
 //// [t3.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var x = "x";
     exports.x = x;
     var y = "y";
@@ -59,6 +61,7 @@ define(["require", "exports", "./t1", "./t2", "./t3"], function (require, export
     function __export(m) {
         for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
     }
+    Object.defineProperty(exports, "__esModule", { value: true });
     __export(t1_1);
     __export(t2_1);
     __export(t3_1);
@@ -66,6 +69,7 @@ define(["require", "exports", "./t1", "./t2", "./t3"], function (require, export
 //// [main.js]
 define(["require", "exports", "./t4"], function (require, exports, t4_1) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     t4_1.default;
     t4_1.x;
     t4_1.y;

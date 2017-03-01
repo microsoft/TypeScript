@@ -23,6 +23,7 @@ let y = x.getCountAsString().toLowerCase();
 
 //// [f1.js]
 "use strict";
+exports.__esModule = true;
 var A = (function () {
     function A() {
     }
@@ -32,8 +33,10 @@ exports.A = A;
 ;
 //// [f2.js]
 "use strict";
+exports.__esModule = true;
 //// [f3.js]
 "use strict";
+exports.__esModule = true;
 require("./f2");
 var x = [1];
 var y = x.getCountAsString().toLowerCase();

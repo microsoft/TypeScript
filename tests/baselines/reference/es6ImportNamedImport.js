@@ -43,6 +43,7 @@ import { aaaa as bbbb } from "./es6ImportNamedImport_0";
 
 //// [es6ImportNamedImport_0.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = 10;
 exports.x = exports.a;
 exports.m = exports.a;
@@ -53,6 +54,7 @@ exports.z2 = 10;
 exports.aaaa = 10;
 //// [es6ImportNamedImport_1.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const es6ImportNamedImport_0_1 = require("./es6ImportNamedImport_0");
 var xxxx = es6ImportNamedImport_0_1.a;
 const es6ImportNamedImport_0_2 = require("./es6ImportNamedImport_0");
