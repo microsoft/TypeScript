@@ -41,6 +41,7 @@ compile(process.argv.slice(2), {
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 "use strict";
+exports.__esModule = true;
 var ts = require("typescript");
 function compile(fileNames, options) {
     var program = ts.createProgram(fileNames, options);

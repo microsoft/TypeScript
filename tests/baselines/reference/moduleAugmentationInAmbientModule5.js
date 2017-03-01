@@ -25,6 +25,7 @@ let y = x.getA().x;
 
 //// [f.js]
 "use strict";
+exports.__esModule = true;
 /// <reference path="array.d.ts"/>
 require("array");
 var x = [1];

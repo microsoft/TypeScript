@@ -17,7 +17,7 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(8,4): error TS17002: 
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(9,13): error TS1002: Unterminated string literal.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(10,1): error TS1003: Identifier expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(10,6): error TS17002: Expected corresponding JSX closing tag for 'a'.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(10,10): error TS2657: JSX expressions must have one parent element
+tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(10,10): error TS2657: JSX expressions must have one parent element.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(11,3): error TS1003: Identifier expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(11,5): error TS1003: Identifier expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(11,11): error TS1005: '>' expected.
@@ -120,7 +120,7 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,21): error TS1005:
          ~~~~
 !!! error TS17002: Expected corresponding JSX closing tag for 'a'.
              ~
-!!! error TS2657: JSX expressions must have one parent element
+!!! error TS2657: JSX expressions must have one parent element.
     <a:b.c></a:b.c>;
       ~
 !!! error TS1003: Identifier expected.

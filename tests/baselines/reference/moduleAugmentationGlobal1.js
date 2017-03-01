@@ -20,6 +20,7 @@ let y = x.getA().x;
 
 //// [f1.js]
 "use strict";
+exports.__esModule = true;
 var A = (function () {
     function A() {
     }
@@ -28,6 +29,7 @@ var A = (function () {
 exports.A = A;
 //// [f2.js]
 "use strict";
+exports.__esModule = true;
 var x = [1];
 var y = x.getA().x;
 

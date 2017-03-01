@@ -43,18 +43,14 @@ namespace ts {
             }
 
             if (node) {
-                const { pos, end } = getCommentRange(node);
-                const emitFlags = getEmitFlags(node);
+                hasWrittenComment = false;
+
+                const emitNode = node.emitNode;
+                const emitFlags = emitNode && emitNode.flags;
+                const { pos, end } = emitNode && emitNode.commentRange || node;
                 if ((pos < 0 && end < 0) || (pos === end)) {
                     // Both pos and end are synthesized, so just emit the node without comments.
-                    if (emitFlags & EmitFlags.NoNestedComments) {
-                        disabled = true;
-                        emitCallback(hint, node);
-                        disabled = false;
-                    }
-                    else {
-                        emitCallback(hint, node);
-                    }
+                    emitNodeWithSynthesizedComments(hint, node, emitNode, emitFlags, emitCallback);
                 }
                 else {
                     if (extendedDiagnostics) {
@@ -94,17 +90,10 @@ namespace ts {
                         performance.measure("commentTime", "preEmitNodeWithComment");
                     }
 
-                    if (emitFlags & EmitFlags.NoNestedComments) {
-                        disabled = true;
-                        emitCallback(hint, node);
-                        disabled = false;
-                    }
-                    else {
-                        emitCallback(hint, node);
-                    }
+                    emitNodeWithSynthesizedComments(hint, node, emitNode, emitFlags, emitCallback);
 
                     if (extendedDiagnostics) {
-                        performance.mark("beginEmitNodeWithComment");
+                        performance.mark("postEmitNodeWithComment");
                     }
 
                     // Restore previous container state.
@@ -119,9 +108,85 @@ namespace ts {
                     }
 
                     if (extendedDiagnostics) {
-                        performance.measure("commentTime", "beginEmitNodeWithComment");
+                        performance.measure("commentTime", "postEmitNodeWithComment");
                     }
                 }
+            }
+        }
+
+        function emitNodeWithSynthesizedComments(hint: EmitHint, node: Node, emitNode: EmitNode, emitFlags: EmitFlags, emitCallback: (hint: EmitHint, node: Node) => void) {
+            const leadingComments = emitNode && emitNode.leadingComments;
+            if (some(leadingComments)) {
+                if (extendedDiagnostics) {
+                    performance.mark("preEmitNodeWithSynthesizedComments");
+                }
+
+                forEach(leadingComments, emitLeadingSynthesizedComment);
+
+                if (extendedDiagnostics) {
+                    performance.measure("commentTime", "preEmitNodeWithSynthesizedComments");
+                }
+            }
+
+            emitNodeWithNestedComments(hint, node, emitFlags, emitCallback);
+
+            const trailingComments = emitNode && emitNode.trailingComments;
+            if (some(trailingComments)) {
+                if (extendedDiagnostics) {
+                    performance.mark("postEmitNodeWithSynthesizedComments");
+                }
+
+                forEach(trailingComments, emitTrailingSynthesizedComment);
+
+                if (extendedDiagnostics) {
+                    performance.measure("commentTime", "postEmitNodeWithSynthesizedComments");
+                }
+            }
+        }
+
+        function emitLeadingSynthesizedComment(comment: SynthesizedComment) {
+            if (comment.kind === SyntaxKind.SingleLineCommentTrivia) {
+                writer.writeLine();
+            }
+            writeSynthesizedComment(comment);
+            if (comment.hasTrailingNewLine || comment.kind === SyntaxKind.SingleLineCommentTrivia) {
+                writer.writeLine();
+            }
+            else {
+                writer.write(" ");
+            }
+        }
+
+        function emitTrailingSynthesizedComment(comment: SynthesizedComment) {
+            if (!writer.isAtStartOfLine()) {
+                writer.write(" ");
+            }
+            writeSynthesizedComment(comment);
+            if (comment.hasTrailingNewLine) {
+                writer.writeLine();
+            }
+        }
+
+        function writeSynthesizedComment(comment: SynthesizedComment) {
+            const text = formatSynthesizedComment(comment);
+            const lineMap = comment.kind === SyntaxKind.MultiLineCommentTrivia ? computeLineStarts(text) : undefined;
+            writeCommentRange(text, lineMap, writer, 0, text.length, newLine);
+        }
+
+        function formatSynthesizedComment(comment: SynthesizedComment) {
+            return comment.kind === SyntaxKind.MultiLineCommentTrivia
+                ? `/*${comment.text}*/`
+                : `//${comment.text}`;
+        }
+
+        function emitNodeWithNestedComments(hint: EmitHint, node: Node, emitFlags: EmitFlags, emitCallback: (hint: EmitHint, node: Node) => void) {
+            if (emitFlags & EmitFlags.NoNestedComments) {
+                disabled = true;
+                emitCallback(hint, node);
+                disabled = false;
+            }
+            else {
+                emitCallback(hint, node);
             }
         }
 

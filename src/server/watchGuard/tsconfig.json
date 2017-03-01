@@ -1,0 +1,10 @@
+{
+    "extends": "../../tsconfig-base",    
+    "compilerOptions": {
+        "removeComments": true,
+        "outFile": "../../../built/local/watchGuard.js"
+    },
+    "files": [
+        "watchGuard.ts"
+    ]
+}

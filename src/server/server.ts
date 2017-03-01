@@ -12,6 +12,7 @@ namespace ts.server {
 
     const childProcess: {
         fork(modulePath: string, args: string[], options?: { execArgv: string[], env?: MapLike<string> }): NodeChildProcess;
+        execFileSync(file: string, args: string[], options: { stdio: "ignore", env: MapLike<string> }): string | Buffer;
     } = require("child_process");
 
     const os: {
@@ -59,7 +60,7 @@ namespace ts.server {
 
     interface NodeChildProcess {
         send(message: any, sendHandle?: any): void;
-        on(message: "message", f: (m: any) => void): void;
+        on(message: "message" | "exit", f: (m: any) => void): void;
         kill(): void;
         pid: number;
     }
@@ -98,6 +99,8 @@ namespace ts.server {
         ctime: Date;
         birthtime: Date;
     }
+
+    type RequireResult = { module: {}, error: undefined } | { module: undefined, error: {} };
 
     const readline: {
         createInterface(options: ReadLineOptions): NodeJS.EventEmitter;
@@ -354,7 +357,7 @@ namespace ts.server {
     class IOSession extends Session {
         constructor(
             host: ServerHost,
-            cancellationToken: HostCancellationToken,
+            cancellationToken: ServerCancellationToken,
             installerEventPort: number,
             canUseEvents: boolean,
             useSingleInferredProject: boolean,
@@ -574,7 +577,84 @@ namespace ts.server {
         }
     }
 
+    function extractWatchDirectoryCacheKey(path: string, currentDriveKey: string) {
+        path = normalizeSlashes(path);
+        if (isUNCPath(path)) {
+            // UNC path: extract server name
+            // //server/location
+            //         ^ <- from 0 to this position
+            const firstSlash = path.indexOf(directorySeparator, 2);
+            return firstSlash !== -1 ? path.substring(0, firstSlash).toLowerCase() : path;
+        }
+        const rootLength = getRootLength(path);
+        if (rootLength === 0) {
+            // relative path - assume file is on the current drive
+            return currentDriveKey;
+        }
+        if (path.charCodeAt(1) === CharacterCodes.colon && path.charCodeAt(2) === CharacterCodes.slash) {
+            // rooted path that starts with c:/... - extract drive letter
+            return path.charAt(0).toLowerCase();
+        }
+        if (path.charCodeAt(0) === CharacterCodes.slash && path.charCodeAt(1) !== CharacterCodes.slash) {
+            // rooted path that starts with slash - /somename - use key for current drive
+            return currentDriveKey;
+        }
+        // do not cache any other cases
+        return undefined;
+    }
+
+    function isUNCPath(s: string): boolean {
+        return s.length > 2 && s.charCodeAt(0) === CharacterCodes.slash && s.charCodeAt(1) === CharacterCodes.slash;
+    }
+
     const sys = <ServerHost>ts.sys;
+    // use watchGuard process on Windows when node version is 4 or later
+    const useWatchGuard = process.platform === "win32" && getNodeMajorVersion() >= 4;
+    if (useWatchGuard) {
+        const currentDrive = extractWatchDirectoryCacheKey(sys.resolvePath(sys.getCurrentDirectory()), /*currentDriveKey*/ undefined);
+        const statusCache = createMap<boolean>();
+        const originalWatchDirectory = sys.watchDirectory;
+        sys.watchDirectory = function (path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher {
+            const cacheKey = extractWatchDirectoryCacheKey(path, currentDrive);
+            let status = cacheKey && statusCache.get(cacheKey);
+            if (status === undefined) {
+                if (logger.hasLevel(LogLevel.verbose)) {
+                    logger.info(`${cacheKey} for path ${path} not found in cache...`);
+                }
+                try {
+                    const args = [combinePaths(__dirname, "watchGuard.js"), path];
+                    if (logger.hasLevel(LogLevel.verbose)) {
+                        logger.info(`Starting ${process.execPath} with args ${JSON.stringify(args)}`);
+                    }
+                    childProcess.execFileSync(process.execPath, args, { stdio: "ignore", env: { "ELECTRON_RUN_AS_NODE": "1" } });
+                    status = true;
+                    if (logger.hasLevel(LogLevel.verbose)) {
+                        logger.info(`WatchGuard for path ${path} returned: OK`);
+                    }
+                }
+                catch (e) {
+                    status = false;
+                    if (logger.hasLevel(LogLevel.verbose)) {
+                        logger.info(`WatchGuard for path ${path} returned: ${e.message}`);
+                    }
+                }
+                if (cacheKey) {
+                    statusCache.set(cacheKey, status);
+                }
+            }
+            else if (logger.hasLevel(LogLevel.verbose)) {
+                logger.info(`watchDirectory for ${path} uses cached drive information.`);
+            }
+            if (status) {
+                // this drive is safe to use - call real 'watchDirectory'
+                return originalWatchDirectory.call(sys, path, callback, recursive);
+            }
+            else {
+                // this drive is unsafe - return no-op watcher
+                return { close() { } };
+            }
+        }
+    }
 
     // Override sys.write because fs.writeSync is not reliable on Node 4
     sys.write = (s: string) => writeMessage(new Buffer(s, "utf8"));
@@ -593,15 +673,23 @@ namespace ts.server {
         sys.gc = () => global.gc();
     }
 
-    let cancellationToken: HostCancellationToken;
+    sys.require = (initialDir: string, moduleName: string): RequireResult => {
+        const result = nodeModuleNameResolverWorker(moduleName, initialDir + "/program.ts", { moduleResolution: ts.ModuleResolutionKind.NodeJs, allowJs: true }, sys, undefined, /*jsOnly*/ true);
+        try {
+            return { module: require(result.resolvedModule.resolvedFileName), error: undefined };
+        }
+        catch (e) {
+            return { module: undefined, error: e };
+        }
+    };
+
+    let cancellationToken: ServerCancellationToken;
     try {
         const factory = require("./cancellationToken");
         cancellationToken = factory(sys.args);
     }
     catch (e) {
-        cancellationToken = {
-            isCancellationRequested: () => false
-        };
+        cancellationToken = nullCancellationToken;
     };
 
     let eventPort: number;

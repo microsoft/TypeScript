@@ -15,13 +15,14 @@ import r = require("./b");
 
 //// [b.js]
 "use strict";
+exports.__esModule = true;
 var Member = (function () {
     function Member() {
     }
     return Member;
 }());
 exports.Member = Member;
-exports.__esModule = true;
 exports["default"] = Member;
 //// [a.js]
 "use strict";
+exports.__esModule = true;

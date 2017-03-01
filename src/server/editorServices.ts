@@ -107,7 +107,7 @@ namespace ts.server {
     export interface HostConfiguration {
         formatCodeOptions: FormatCodeSettings;
         hostInfo: string;
-        extraFileExtensions?: FileExtensionInfo[];
+        extraFileExtensions?: JsFileExtensionInfo[];
     }
 
     interface ConfigFileConversionResult {
@@ -132,7 +132,7 @@ namespace ts.server {
     interface FilePropertyReader<T> {
         getFileName(f: T): string;
         getScriptKind(f: T): ScriptKind;
-        hasMixedContent(f: T, extraFileExtensions: FileExtensionInfo[]): boolean;
+        hasMixedContent(f: T, extraFileExtensions: JsFileExtensionInfo[]): boolean;
     }
 
     const fileNamePropertyReader: FilePropertyReader<string> = {
@@ -948,9 +948,9 @@ namespace ts.server {
 
         private openConfigFile(configFileName: NormalizedPath, clientFileName?: string): OpenConfigFileResult {
             const conversionResult = this.convertConfigFileContentToProjectOptions(configFileName);
-            const projectOptions = conversionResult.success
+            const projectOptions: ProjectOptions = conversionResult.success
                 ? conversionResult.projectOptions
-                : { files: [], compilerOptions: {} };
+                : { files: [], compilerOptions: {}, typeAcquisition: { enable: false } };
             const project = this.createAndAddConfiguredProject(configFileName, projectOptions, conversionResult.configFileErrors, clientFileName);
             return {
                 success: conversionResult.success,

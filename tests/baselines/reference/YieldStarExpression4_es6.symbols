@@ -1,0 +1,6 @@
+=== tests/cases/conformance/es6/yieldExpressions/YieldStarExpression4_es6.ts ===
+function *g() {
+>g : Symbol(g, Decl(YieldStarExpression4_es6.ts, 0, 0))
+
+    yield * [];
+}

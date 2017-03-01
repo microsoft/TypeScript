@@ -18,7 +18,7 @@ async function f() {
 >0 : 0
 
     await void <string> typeof <number> void await 0;
->await void <string> typeof <number> void await 0 : any
+>await void <string> typeof <number> void await 0 : undefined
 >void <string> typeof <number> void await 0 : undefined
 ><string> typeof <number> void await 0 : string
 >typeof <number> void await 0 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"

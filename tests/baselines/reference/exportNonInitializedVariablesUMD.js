@@ -45,6 +45,7 @@ export let h1: D = new D;
     }
 })(function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var ;
     let;
     var ;

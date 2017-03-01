@@ -533,6 +533,7 @@ export function f12_public(): C5_private { //error
 //// [privacyGloFunc.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var m1;
     (function (m1) {
         var C1_public = (function () {
