@@ -1554,7 +1554,10 @@ namespace ts {
                     }
                 }
                 else {
-                    result.push(...filter((doc as JSDoc).tags, tag => tag.kind === kind));
+                    const tags = (doc as JSDoc).tags;
+                    if (tags) {
+                        result.push(...filter(tags, tag => tag.kind === kind));
+                    }
                 }
             }
             return result;
