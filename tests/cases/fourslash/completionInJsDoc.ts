@@ -71,7 +71,7 @@ verify.completionListContains("@argument");
 
 goTo.marker('10');
 verify.completionListCount(40);
-verify.completionListContains("@return");
+verify.completionListContains("@returns");
 
 goTo.marker('11');
 verify.completionListCount(40);
