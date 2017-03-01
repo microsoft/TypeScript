@@ -11584,7 +11584,7 @@ namespace ts {
                 if (isBindingPattern(declaration.parent)) {
                     const parentDeclaration = declaration.parent.parent;
                     const name = declaration.propertyName || declaration.name;
-                    if (isVariableLike(parentDeclaration) &&
+                    if (parentDeclaration.kind !== SyntaxKind.BindingElement &&
                         parentDeclaration.type &&
                         !isBindingPattern(name)) {
                         const text = getTextOfPropertyName(name);
