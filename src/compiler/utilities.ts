@@ -3126,8 +3126,9 @@ namespace ts {
         return tryGetClassExtendingExpressionWithTypeArguments(node) !== undefined;
     }
 
-    export function isExpressionWithTypeArgumentsInClassImplementsClause(node: Node): boolean {
+    export function isExpressionWithTypeArgumentsInClassImplementsClause(node: Node): node is ExpressionWithTypeArguments {
         return node.kind === SyntaxKind.ExpressionWithTypeArguments
+            && isEntityNameExpression((node as ExpressionWithTypeArguments).expression)
             && node.parent
             && (<HeritageClause>node.parent).token === SyntaxKind.ImplementsKeyword
             && node.parent.parent
