@@ -91,15 +91,15 @@ var p_cast = <Point> ({
         return new Point(this.x + dx, this.y + dy);
 >new Point(this.x + dx, this.y + dy) : Point
 >Point : typeof Point
->this.x + dx : number
->this.x : number
->this : Point
->x : number
+>this.x + dx : any
+>this.x : any
+>this : any
+>x : any
 >dx : number
->this.y + dy : number
->this.y : number
->this : Point
->y : number
+>this.y + dy : any
+>this.y : any
+>this : any
+>y : any
 >dy : number
 
     },

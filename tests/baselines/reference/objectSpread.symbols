@@ -200,9 +200,6 @@ let cplus: { p: number, plus(): void } = { ...c, plus() { return this.p + 1; } }
 >plus : Symbol(plus, Decl(objectSpread.ts, 49, 23))
 >c : Symbol(c, Decl(objectSpread.ts, 45, 3))
 >plus : Symbol(plus, Decl(objectSpread.ts, 49, 48))
->this.p : Symbol(p, Decl(objectSpread.ts, 49, 12))
->this : Symbol(cplus, Decl(objectSpread.ts, 49, 10))
->p : Symbol(p, Decl(objectSpread.ts, 49, 12))
 
 cplus.plus();
 >cplus.plus : Symbol(plus, Decl(objectSpread.ts, 49, 23))

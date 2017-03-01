@@ -71,13 +71,7 @@ var p_cast = <Point> ({
 
         return new Point(this.x + dx, this.y + dy);
 >Point : Symbol(Point, Decl(castTest.ts, 11, 37))
->this.x : Symbol(Point.x, Decl(castTest.ts, 14, 1))
->this : Symbol(Point, Decl(castTest.ts, 11, 37))
->x : Symbol(Point.x, Decl(castTest.ts, 14, 1))
 >dx : Symbol(dx, Decl(castTest.ts, 25, 18))
->this.y : Symbol(Point.y, Decl(castTest.ts, 15, 14))
->this : Symbol(Point, Decl(castTest.ts, 11, 37))
->y : Symbol(Point.y, Decl(castTest.ts, 15, 14))
 >dy : Symbol(dy, Decl(castTest.ts, 25, 21))
 
     },

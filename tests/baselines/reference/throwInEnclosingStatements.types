@@ -104,7 +104,7 @@ var aa = {
 >biz : () => void
 
         throw this;
->this : { id: number; biz(): void; }
+>this : any
     }
 }
 
