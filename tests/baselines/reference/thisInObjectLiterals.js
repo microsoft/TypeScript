@@ -1,4 +1,5 @@
 //// [thisInObjectLiterals.ts]
+
 class MyClass {
     t: number;
 
