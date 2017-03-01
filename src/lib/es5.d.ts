@@ -140,7 +140,7 @@ interface ObjectConstructor {
       * Creates an object that has the specified prototype or that has null prototype.
       * @param o Object to use as a prototype. May be null.
       */
-    create<T extends object>(o: T | null): T | object;
+    create(o: object | null): any;
 
     /**
       * Creates an object that has the specified prototype, and that optionally contains specified properties.

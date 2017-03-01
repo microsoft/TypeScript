@@ -10,14 +10,13 @@ namespace ts {
 
     /*@internal*/
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
-    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean): EmitResult {
+    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean, transformers?: TransformerFactory<SourceFile>[]): EmitResult {
         const compilerOptions = host.getCompilerOptions();
         const moduleKind = getEmitModuleKind(compilerOptions);
         const sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
         const emittedFilesList: string[] = compilerOptions.listEmittedFiles ? [] : undefined;
         const emitterDiagnostics = createDiagnosticCollection();
         const newLine = host.getNewLine();
-        const transformers = emitOnlyDtsFiles ? [] : getTransformers(compilerOptions);
         const writer = createTextWriter(newLine);
         const sourceMap = createSourceMapWriter(host, writer);
 
@@ -29,7 +28,7 @@ namespace ts {
         const sourceFiles = getSourceFilesToEmit(host, targetSourceFile);
 
         // Transform the source files
-        const transform = transformFiles(resolver, host, sourceFiles, transformers);
+        const transform = transformNodes(resolver, host, compilerOptions, sourceFiles, transformers, /*allowDtsFiles*/ false);
 
         // Create a printer to print the nodes
         const printer = createPrinter(compilerOptions, {
@@ -38,7 +37,7 @@ namespace ts {
 
             // transform hooks
             onEmitNode: transform.emitNodeWithNotification,
-            onSubstituteNode: transform.emitNodeWithSubstitution,
+            substituteNode: transform.substituteNode,
 
             // sourcemap hooks
             onEmitSourceMapOfNode: sourceMap.emitNodeWithSourceMap,
@@ -56,9 +55,7 @@ namespace ts {
         performance.measure("printTime", "beforePrint");
 
         // Clean up emit nodes on parse tree
-        for (const sourceFile of sourceFiles) {
-            disposeEmitNodes(sourceFile);
-        }
+        transform.dispose();
 
         return {
             emitSkipped,
@@ -201,7 +198,7 @@ namespace ts {
             onEmitNode,
             onEmitHelpers,
             onSetSourceFile,
-            onSubstituteNode,
+            substituteNode,
         } = handlers;
 
         const newLine = getNewLineCharacter(printerOptions);
@@ -331,8 +328,8 @@ namespace ts {
             setWriter(/*output*/ undefined);
         }
 
-        function emit(node: Node, hint = EmitHint.Unspecified) {
-            pipelineEmitWithNotification(hint, node);
+        function emit(node: Node) {
+            pipelineEmitWithNotification(EmitHint.Unspecified, node);
         }
 
         function emitIdentifierName(node: Identifier) {
@@ -353,6 +350,7 @@ namespace ts {
         }
 
         function pipelineEmitWithComments(hint: EmitHint, node: Node) {
+            node = trySubstituteNode(hint, node);
             if (emitNodeWithComments && hint !== EmitHint.SourceFile) {
                 emitNodeWithComments(hint, node, pipelineEmitWithSourceMap);
             }
@@ -363,16 +361,7 @@ namespace ts {
 
         function pipelineEmitWithSourceMap(hint: EmitHint, node: Node) {
             if (onEmitSourceMapOfNode && hint !== EmitHint.SourceFile && hint !== EmitHint.IdentifierName) {
-                onEmitSourceMapOfNode(hint, node, pipelineEmitWithSubstitution);
-            }
-            else {
-                pipelineEmitWithSubstitution(hint, node);
-            }
-        }
-
-        function pipelineEmitWithSubstitution(hint: EmitHint, node: Node) {
-            if (onSubstituteNode) {
-                onSubstituteNode(hint, node, pipelineEmitWithHint);
+                onEmitSourceMapOfNode(hint, node, pipelineEmitWithHint);
             }
             else {
                 pipelineEmitWithHint(hint, node);
@@ -640,7 +629,7 @@ namespace ts {
             // If the node is an expression, try to emit it as an expression with
             // substitution.
             if (isExpression(node)) {
-                return pipelineEmitWithSubstitution(EmitHint.Expression, node);
+                return pipelineEmitExpression(trySubstituteNode(EmitHint.Expression, node));
             }
         }
 
@@ -737,6 +726,10 @@ namespace ts {
             }
         }
 
+        function trySubstituteNode(hint: EmitHint, node: Node) {
+            return node && substituteNode && substituteNode(hint, node) || node;
+        }
+
         function emitBodyIndirect(node: Node, elements: NodeArray<Node>, emitCallback: (node: Node) => void): void {
             if (emitBodyWithDetachedComments) {
                 emitBodyWithDetachedComments(node, elements, emitCallback);
@@ -759,9 +752,6 @@ namespace ts {
         // SyntaxKind.NumericLiteral
         function emitNumericLiteral(node: NumericLiteral) {
             emitLiteral(node);
-            if (node.trailingComment) {
-                write(` /*${node.trailingComment}*/`);
-            }
         }
 
         // SyntaxKind.StringLiteral
@@ -1450,6 +1440,7 @@ namespace ts {
         function emitForOfStatement(node: ForOfStatement) {
             const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos);
             write(" ");
+            emitWithSuffix(node.awaitModifier, " ");
             writeToken(SyntaxKind.OpenParenToken, openParenPos);
             emitForBinding(node.initializer);
             write(" of ");
@@ -1762,7 +1753,6 @@ namespace ts {
             else {
                 pushNameGenerationScope();
                 write("{");
-                increaseIndent();
                 emitBlockStatements(node);
                 write("}");
                 popNameGenerationScope();

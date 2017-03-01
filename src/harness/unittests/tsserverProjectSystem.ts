@@ -3035,6 +3035,33 @@ namespace ts.projectSystem {
             const inferredProject = projectService.inferredProjects[0];
             assert.isTrue(inferredProject.containsFile(<server.NormalizedPath>file1.path));
         });
+
+        it("should be able to handle @types if input file list is empty", () => {
+            const f = {
+                path: "/a/app.ts",
+                content: "let x = 1"
+            };
+            const config = {
+                path: "/a/tsconfig.json",
+                content: JSON.stringify({
+                    compiler: {},
+                    files: []
+                })
+            };
+            const t1 = {
+                path: "/a/node_modules/@types/typings/index.d.ts",
+                content: `export * from "./lib"`
+            };
+            const t2 = {
+                path: "/a/node_modules/@types/typings/lib.d.ts",
+                content: `export const x: number`
+            };
+            const host = createServerHost([f, config, t1, t2], { currentDirectory: getDirectoryPath(f.path) });
+            const projectService = createProjectService(host);
+
+            projectService.openClientFile(f.path);
+            projectService.checkNumberOfProjects({ configuredProjects: 1, inferredProjects: 1 });
+        });
     });
 
     describe("reload", () => {

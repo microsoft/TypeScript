@@ -6,7 +6,6 @@
 namespace ts {
     export function transformJsx(context: TransformationContext) {
         const compilerOptions = context.getCompilerOptions();
-        let currentSourceFile: SourceFile;
 
         return transformSourceFile;
 
@@ -20,12 +19,8 @@ namespace ts {
                 return node;
             }
 
-            currentSourceFile = node;
-
             const visited = visitEachChild(node, visitor, context);
             addEmitHelpers(visited, context.readEmitHelpers());
-
-            currentSourceFile = undefined;
             return visited;
         }
 

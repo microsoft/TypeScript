@@ -59,6 +59,21 @@ namespace ts {
     declare var global: any;
     declare var __filename: string;
 
+    export function getNodeMajorVersion() {
+        if (typeof process === "undefined") {
+            return undefined;
+        }
+        const version: string = process.version;
+        if (!version) {
+            return undefined;
+        }
+        const dot = version.indexOf(".");
+        if (dot === -1) {
+            return undefined;
+        }
+        return parseInt(version.substring(1, dot));
+    }
+
     declare class Enumerator {
         public atEnd(): boolean;
         public moveNext(): boolean;
@@ -315,9 +330,8 @@ namespace ts {
             }
             const watchedFileSet = createWatchedFileSet();
 
-            function isNode4OrLater(): boolean {
-                return parseInt(process.version.charAt(1)) >= 4;
-            }
+            const nodeVersion = getNodeMajorVersion();
+            const isNode4OrLater = nodeVersion >= 4;
 
             function isFileSystemCaseSensitive(): boolean {
                 // win32\win64 are case insensitive platforms
@@ -485,14 +499,12 @@ namespace ts {
                     // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows
                     // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
                     let options: any;
-                    if (!directoryExists(directoryName) || (isUNCPath(directoryName) && process.platform === "win32")) {
-                        // do nothing if either
-                        // - target folder does not exist
-                        // - this is UNC path on Windows (https://github.com/Microsoft/TypeScript/issues/13874)
+                    if (!directoryExists(directoryName)) {
+                        // do nothing if target folder does not exist
                         return noOpFileWatcher;
                     }
 
-                    if (isNode4OrLater() && (process.platform === "win32" || process.platform === "darwin")) {
+                    if (isNode4OrLater && (process.platform === "win32" || process.platform === "darwin")) {
                         options = { persistent: true, recursive: !!recursive };
                     }
                     else {
@@ -512,10 +524,6 @@ namespace ts {
                             };
                         }
                     );
-
-                    function isUNCPath(s: string): boolean {
-                        return s.length > 2 && s.charCodeAt(0) === CharacterCodes.slash && s.charCodeAt(1) === CharacterCodes.slash;
-                    }
                 },
                 resolvePath: function(path: string): string {
                     return _path.resolve(path);
