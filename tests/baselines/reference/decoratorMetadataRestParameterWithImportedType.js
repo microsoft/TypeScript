@@ -42,6 +42,7 @@ export class ClassA {
 
 //// [aux.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var SomeClass = (function () {
     function SomeClass() {
     }
@@ -50,6 +51,7 @@ var SomeClass = (function () {
 exports.SomeClass = SomeClass;
 //// [aux1.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var SomeClass1 = (function () {
     function SomeClass1() {
     }
@@ -58,6 +60,7 @@ var SomeClass1 = (function () {
 exports.SomeClass1 = SomeClass1;
 //// [aux2.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var SomeClass2 = (function () {
     function SomeClass2() {
     }
@@ -75,6 +78,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 var aux_1 = require("./aux");
 var aux1_1 = require("./aux1");
 function annotation() {

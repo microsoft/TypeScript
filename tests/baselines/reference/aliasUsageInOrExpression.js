@@ -26,6 +26,7 @@ var f: { x: IHasVisualizationModel } = <{ x: IHasVisualizationModel }>null ? { x
 
 //// [aliasUsageInOrExpression_backbone.js]
 "use strict";
+exports.__esModule = true;
 var Model = (function () {
     function Model() {
     }
@@ -44,6 +45,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+exports.__esModule = true;
 var Backbone = require("./aliasUsageInOrExpression_backbone");
 var VisualizationModel = (function (_super) {
     __extends(VisualizationModel, _super);
@@ -55,6 +57,7 @@ var VisualizationModel = (function (_super) {
 exports.VisualizationModel = VisualizationModel;
 //// [aliasUsageInOrExpression_main.js]
 "use strict";
+exports.__esModule = true;
 var moduleA = require("./aliasUsageInOrExpression_moduleA");
 var i;
 var d1 = i || moduleA;

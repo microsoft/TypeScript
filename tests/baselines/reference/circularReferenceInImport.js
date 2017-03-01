@@ -17,6 +17,7 @@ export function foo() {
 
 //// [app.js]
 "use strict";
+exports.__esModule = true;
 function foo() {
     return new Object();
 }

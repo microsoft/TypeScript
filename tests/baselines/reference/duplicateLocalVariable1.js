@@ -347,6 +347,7 @@ export var tests: TestRunner = (function () {
 
 //// [duplicateLocalVariable1.js]
 "use strict";
+exports.__esModule = true;
 / /;
 commonjs;
 var TestFileDir = ".\\TempTestFiles";
@@ -391,6 +392,7 @@ var TestRunner = (function () {
                     }
                 }
                 if (testResult === false) {
+                    //console.log(e.message);
                 }
             }
             if ((testcase.errorMessageRegEx !== undefined) && !exception) {

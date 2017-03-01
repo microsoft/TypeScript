@@ -358,6 +358,7 @@ export module m3 {
 
 //// [privacyImportParseErrors.js]
 "use strict";
+exports.__esModule = true;
 var m1;
 (function (m1) {
     var m1_M1_public;

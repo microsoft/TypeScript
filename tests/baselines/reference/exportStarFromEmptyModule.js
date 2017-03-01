@@ -25,6 +25,7 @@ X.A.r; // Error
 
 //// [exportStarFromEmptyModule_module1.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var A = (function () {
     function A() {
     }
@@ -38,6 +39,7 @@ exports.A = A;
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
+Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./exportStarFromEmptyModule_module2"));
 __export(require("./exportStarFromEmptyModule_module1"));
 var A = (function () {
@@ -48,6 +50,7 @@ var A = (function () {
 exports.A = A;
 //// [exportStarFromEmptyModule_module4.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var X = require("./exportStarFromEmptyModule_module3");
 var s;
 X.A.q;

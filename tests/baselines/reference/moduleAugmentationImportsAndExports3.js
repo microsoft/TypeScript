@@ -39,6 +39,7 @@ let b = a.foo().n;
 
 //// [f1.js]
 "use strict";
+exports.__esModule = true;
 var A = (function () {
     function A() {
     }
@@ -47,6 +48,7 @@ var A = (function () {
 exports.A = A;
 //// [f2.js]
 "use strict";
+exports.__esModule = true;
 var B = (function () {
     function B() {
     }
@@ -55,10 +57,12 @@ var B = (function () {
 exports.B = B;
 //// [f3.js]
 "use strict";
+exports.__esModule = true;
 var f1_1 = require("./f1");
 f1_1.A.prototype.foo = function () { return undefined; };
 //// [f4.js]
 "use strict";
+exports.__esModule = true;
 require("./f3");
 var a;
 var b = a.foo().n;

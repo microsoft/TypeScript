@@ -6,3 +6,4 @@
 
 //// [externalModuleWithoutCompilerFlag1.js]
 "use strict";
+exports.__esModule = true;

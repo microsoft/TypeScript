@@ -13,6 +13,7 @@ var x = (w1: WinJS) => { };
 
 //// [moduleInTypePosition1_0.js]
 "use strict";
+exports.__esModule = true;
 var Promise = (function () {
     function Promise() {
     }
@@ -21,4 +22,5 @@ var Promise = (function () {
 exports.Promise = Promise;
 //// [moduleInTypePosition1_1.js]
 "use strict";
+exports.__esModule = true;
 var x = function (w1) { };

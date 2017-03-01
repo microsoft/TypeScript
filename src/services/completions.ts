@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts.Completions {
-    type Log = (message: string) => void;
+    export type Log = (message: string) => void;
 
     export function getCompletionsAtPosition(host: LanguageServiceHost, typeChecker: TypeChecker, log: Log, compilerOptions: CompilerOptions, sourceFile: SourceFile, position: number): CompletionInfo | undefined {
         if (isInReferenceComment(sourceFile, position)) {
@@ -173,6 +173,18 @@ namespace ts.Completions {
             //      var y = require("/*completion position*/");
             return getStringLiteralCompletionEntriesFromModuleNames(<StringLiteral>node, compilerOptions, host, typeChecker);
         }
+        else if (isEqualityExpression(node.parent)) {
+            // Get completions from the type of the other operand
+            // i.e. switch (a) {
+            //         case '/*completion position*/'
+            //      }
+            return getStringLiteralCompletionEntriesFromType(typeChecker.getTypeAtLocation(node.parent.left === node ? node.parent.right : node.parent.left), typeChecker);
+        }
+        else if (isCaseOrDefaultClause(node.parent)) {
+            // Get completions from the type of the switch expression
+            // i.e. x === '/*completion position'
+            return getStringLiteralCompletionEntriesFromType(typeChecker.getTypeAtLocation((<SwitchStatement>node.parent.parent.parent).expression), typeChecker);
+        }
         else {
             const argumentInfo = SignatureHelp.getImmediatelyContainingArgumentInfo(node, position, sourceFile);
             if (argumentInfo) {
@@ -184,7 +196,7 @@ namespace ts.Completions {
 
             // Get completion for string literal from string literal type
             // i.e. var x: "hi" | "hello" = "/*completion position*/"
-            return getStringLiteralCompletionEntriesFromContextualType(<StringLiteral>node, typeChecker);
+            return getStringLiteralCompletionEntriesFromType(typeChecker.getContextualType(<StringLiteral>node), typeChecker);
         }
     }
 
@@ -228,8 +240,7 @@ namespace ts.Completions {
         return undefined;
     }
 
-    function getStringLiteralCompletionEntriesFromContextualType(node: StringLiteral, typeChecker: TypeChecker): CompletionInfo | undefined {
-        const type = typeChecker.getContextualType(node);
+    function getStringLiteralCompletionEntriesFromType(type: Type, typeChecker: TypeChecker): CompletionInfo | undefined {
         if (type) {
             const entries: CompletionEntry[] = [];
             addStringLiteralCompletionsFromType(type, entries, typeChecker);
@@ -904,13 +915,29 @@ namespace ts.Completions {
                 }
             }
             else if (sourceFile.languageVariant === LanguageVariant.JSX) {
-                if (kind === SyntaxKind.LessThanToken) {
-                    isRightOfOpenTag = true;
-                    location = contextToken;
-                }
-                else if (kind === SyntaxKind.SlashToken && contextToken.parent.kind === SyntaxKind.JsxClosingElement) {
-                    isStartingCloseTag = true;
-                    location = contextToken;
+                switch (contextToken.parent.kind) {
+                    case SyntaxKind.JsxClosingElement:
+                        if (kind === SyntaxKind.SlashToken) {
+                            isStartingCloseTag = true;
+                            location = contextToken;
+                        }
+                        break;
+
+                    case SyntaxKind.BinaryExpression:
+                        if (!((contextToken.parent as BinaryExpression).left.flags & NodeFlags.ThisNodeHasError)) {
+                            // It has a left-hand side, so we're not in an opening JSX tag.
+                            break;
+                        }
+                        // fall through
+
+                    case SyntaxKind.JsxSelfClosingElement:
+                    case SyntaxKind.JsxElement:
+                    case SyntaxKind.JsxOpeningElement:
+                        if (kind === SyntaxKind.LessThanToken) {
+                            isRightOfOpenTag = true;
+                            location = contextToken;
+                        }
+                        break;
                 }
             }
         }
@@ -1029,10 +1056,10 @@ namespace ts.Completions {
                 let attrsType: Type;
                 if ((jsxContainer.kind === SyntaxKind.JsxSelfClosingElement) || (jsxContainer.kind === SyntaxKind.JsxOpeningElement)) {
                     // Cursor is inside a JSX self-closing element or opening element
-                    attrsType = typeChecker.getJsxElementAttributesType(<JsxOpeningLikeElement>jsxContainer);
+                    attrsType = typeChecker.getAllAttributesTypeFromJsxOpeningLikeElement(<JsxOpeningLikeElement>jsxContainer);
 
                     if (attrsType) {
-                        symbols = filterJsxAttributes(typeChecker.getPropertiesOfType(attrsType), (<JsxOpeningLikeElement>jsxContainer).attributes);
+                        symbols = filterJsxAttributes(typeChecker.getPropertiesOfType(attrsType), (<JsxOpeningLikeElement>jsxContainer).attributes.properties);
                         isMemberCompletion = true;
                         isNewIdentifierLocation = false;
                         return true;
@@ -1374,13 +1401,18 @@ namespace ts.Completions {
                     case SyntaxKind.LessThanSlashToken:
                     case SyntaxKind.SlashToken:
                     case SyntaxKind.Identifier:
+                    case SyntaxKind.JsxAttributes:
                     case SyntaxKind.JsxAttribute:
                     case SyntaxKind.JsxSpreadAttribute:
                         if (parent && (parent.kind === SyntaxKind.JsxSelfClosingElement || parent.kind === SyntaxKind.JsxOpeningElement)) {
                             return <JsxOpeningLikeElement>parent;
                         }
                         else if (parent.kind === SyntaxKind.JsxAttribute) {
-                            return <JsxOpeningLikeElement>parent.parent;
+                            // Currently we parse JsxOpeningLikeElement as:
+                            //      JsxOpeningLikeElement
+                            //          attributes: JsxAttributes
+                            //             properties: NodeArray<JsxAttributeLike>
+                            return parent.parent.parent as JsxOpeningLikeElement;
                         }
                         break;
 
@@ -1389,7 +1421,11 @@ namespace ts.Completions {
                     // whose parent is a JsxOpeningLikeElement
                     case SyntaxKind.StringLiteral:
                         if (parent && ((parent.kind === SyntaxKind.JsxAttribute) || (parent.kind === SyntaxKind.JsxSpreadAttribute))) {
-                            return <JsxOpeningLikeElement>parent.parent;
+                            // Currently we parse JsxOpeningLikeElement as:
+                            //      JsxOpeningLikeElement
+                            //          attributes: JsxAttributes
+                            //             properties: NodeArray<JsxAttributeLike>
+                            return parent.parent.parent as JsxOpeningLikeElement;
                         }
 
                         break;
@@ -1397,13 +1433,21 @@ namespace ts.Completions {
                     case SyntaxKind.CloseBraceToken:
                         if (parent &&
                             parent.kind === SyntaxKind.JsxExpression &&
-                            parent.parent &&
-                            (parent.parent.kind === SyntaxKind.JsxAttribute)) {
-                            return <JsxOpeningLikeElement>parent.parent.parent;
+                            parent.parent && parent.parent.kind === SyntaxKind.JsxAttribute) {
+                            // Currently we parse JsxOpeningLikeElement as:
+                            //      JsxOpeningLikeElement
+                            //          attributes: JsxAttributes
+                            //             properties: NodeArray<JsxAttributeLike>
+                            //                  each JsxAttribute can have initializer as JsxExpression
+                            return parent.parent.parent.parent as JsxOpeningLikeElement;
                         }
 
                         if (parent && parent.kind === SyntaxKind.JsxSpreadAttribute) {
-                            return <JsxOpeningLikeElement>parent.parent;
+                            // Currently we parse JsxOpeningLikeElement as:
+                            //      JsxOpeningLikeElement
+                            //          attributes: JsxAttributes
+                            //             properties: NodeArray<JsxAttributeLike>
+                            return parent.parent.parent as JsxOpeningLikeElement;
                         }
 
                         break;
@@ -1755,5 +1799,16 @@ namespace ts.Completions {
         }
         catch (e) {}
         return undefined;
+    }
+
+    function isEqualityExpression(node: Node): node is BinaryExpression {
+        return isBinaryExpression(node) && isEqualityOperatorKind(node.operatorToken.kind);
+    }
+
+    function isEqualityOperatorKind(kind: SyntaxKind) {
+        return kind == SyntaxKind.EqualsEqualsToken ||
+            kind === SyntaxKind.ExclamationEqualsToken ||
+            kind === SyntaxKind.EqualsEqualsEqualsToken ||
+            kind === SyntaxKind.ExclamationEqualsEqualsToken;
     }
 }

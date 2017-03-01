@@ -57,3 +57,4 @@ internal/
 !tests/cases/projects/NodeModulesSearch/**/*
 !tests/baselines/reference/project/nodeModules*/**/*
 .idea
+yarn.lock

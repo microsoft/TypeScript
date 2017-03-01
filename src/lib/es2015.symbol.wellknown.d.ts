@@ -110,7 +110,7 @@ interface Map<K, V> {
     readonly [Symbol.toStringTag]: "Map";
 }
 
-interface WeakMap<K, V>{
+interface WeakMap<K extends object, V>{
     readonly [Symbol.toStringTag]: "WeakMap";
 }
 

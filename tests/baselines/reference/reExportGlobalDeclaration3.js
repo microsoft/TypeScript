@@ -18,3 +18,4 @@ export {NS2 as NNNS2};
 
 //// [file2.js]
 "use strict";
+exports.__esModule = true;

@@ -1,5 +1,6 @@
 define("outputdir_module_multifolder/ref/m1", ["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     exports.m1_a1 = 10;
     var m1_c1 = (function () {
         function m1_c1() {
@@ -15,6 +16,7 @@ define("outputdir_module_multifolder/ref/m1", ["require", "exports"], function (
 });
 define("outputdir_module_multifolder_ref/m2", ["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     exports.m2_a1 = 10;
     var m2_c1 = (function () {
         function m2_c1() {
@@ -30,6 +32,7 @@ define("outputdir_module_multifolder_ref/m2", ["require", "exports"], function (
 });
 define("outputdir_module_multifolder/test", ["require", "exports", "outputdir_module_multifolder/ref/m1", "outputdir_module_multifolder_ref/m2"], function (require, exports, m1, m2) {
     "use strict";
+    exports.__esModule = true;
     exports.a1 = 10;
     var c1 = (function () {
         function c1() {

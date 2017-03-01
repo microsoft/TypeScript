@@ -71,11 +71,11 @@ function TodoList({ todos }: TodoListProps) {
 >todo : TodoProp
 ><Todo key={todo.id} todo={todo.todo}/> : JSX.Element
 >Todo : (prop: { key: number; todo: string; }) => JSX.Element
->key : any
+>key : number
 >todo.id : number
 >todo : TodoProp
 >id : number
->todo : any
+>todo : string
 >todo.todo : string
 >todo : TodoProp
 >todo : string

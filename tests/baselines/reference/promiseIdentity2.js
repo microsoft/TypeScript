@@ -1,8 +1,8 @@
 //// [promiseIdentity2.ts]
-interface IPromise<T, V> {
+export interface IPromise<T, V> {
     then<U, W>(callback: (x: T) => IPromise<U, W>): IPromise<U, W>;
 }
-interface Promise<T, V> {
+export interface Promise<T, V> {
     then<U, W>(callback: (x: T) => Promise<T, U>): Promise<T, W>;
 }
 
@@ -12,6 +12,8 @@ var x: IPromise<string, number>;
 var x: Promise<any, string>;
 
 //// [promiseIdentity2.js]
+"use strict";
+exports.__esModule = true;
 // error because T is string in the first declaration, and T is boolean in the second
 // Return type and callback return type are ok because T is any in this particular Promise
 var x;

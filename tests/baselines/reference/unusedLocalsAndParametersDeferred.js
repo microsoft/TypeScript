@@ -162,6 +162,7 @@ N;
 
 //// [unusedLocalsAndParametersDeferred.js]
 "use strict";
+exports.__esModule = true;
 function defered(a) {
     return a();
 }

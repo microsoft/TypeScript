@@ -1,4 +1,4 @@
-// These utilities are common to multiple language service features.
+﻿// These utilities are common to multiple language service features.
 /* @internal */
 namespace ts {
     export const scanner: Scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
@@ -31,6 +31,7 @@ namespace ts {
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.CatchClause:
+            case SyntaxKind.JsxAttribute:
                 return SemanticMeaning.Value;
 
             case SyntaxKind.TypeParameter:
@@ -71,7 +72,10 @@ namespace ts {
     }
 
     export function getMeaningFromLocation(node: Node): SemanticMeaning {
-        if (node.parent.kind === SyntaxKind.ExportAssignment) {
+        if (node.kind === SyntaxKind.SourceFile) {
+            return SemanticMeaning.Value;
+        }
+        else if (node.parent.kind === SyntaxKind.ExportAssignment) {
             return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
         }
         else if (isInRightSideOfImport(node)) {
@@ -1116,6 +1120,22 @@ namespace ts {
     export function createTextSpanFromNode(node: Node, sourceFile?: SourceFile): TextSpan {
         return createTextSpanFromBounds(node.getStart(sourceFile), node.getEnd());
     }
+
+    export function isTypeKeyword(kind: SyntaxKind): boolean {
+        switch (kind) {
+            case SyntaxKind.AnyKeyword:
+            case SyntaxKind.BooleanKeyword:
+            case SyntaxKind.NeverKeyword:
+            case SyntaxKind.NumberKeyword:
+            case SyntaxKind.ObjectKeyword:
+            case SyntaxKind.StringKeyword:
+            case SyntaxKind.SymbolKeyword:
+            case SyntaxKind.VoidKeyword:
+                return true;
+            default:
+                return false;
+        }
+    }
 }
 
 // Display-part writer helpers
@@ -1147,7 +1167,8 @@ namespace ts {
             decreaseIndent: () => { indent--; },
             clear: resetWriter,
             trackSymbol: noop,
-            reportInaccessibleThisError: noop
+            reportInaccessibleThisError: noop,
+            reportIllegalExtends: noop
         };
 
         function writeIndent() {
@@ -1300,7 +1321,7 @@ namespace ts {
         return name;
     }
 
-    export function isImportOrExportSpecifierName(location: Node): boolean {
+    export function isImportOrExportSpecifierName(location: Node): location is Identifier {
         return location.parent &&
             (location.parent.kind === SyntaxKind.ImportSpecifier || location.parent.kind === SyntaxKind.ExportSpecifier) &&
             (<ImportOrExportSpecifier>location.parent).propertyName === location;

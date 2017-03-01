@@ -157,23 +157,17 @@ interface ObjectConstructor {
     getOwnPropertyNames(o: any): string[];
 
     /**
-      * Creates an object that has null prototype.
-      * @param o Object to use as a prototype. May be null
+      * Creates an object that has the specified prototype or that has null prototype.
+      * @param o Object to use as a prototype. May be null.
       */
-    create(o: null): any;
-
-    /**
-      * Creates an object that has the specified prototype, and that optionally contains specified properties.
-      * @param o Object to use as a prototype. May be null
-      */
-    create<T>(o: T): T;
+    create<T extends object>(o: T | null): T | object;
 
     /**
       * Creates an object that has the specified prototype, and that optionally contains specified properties.
       * @param o Object to use as a prototype. May be null
       * @param properties JavaScript object that contains one or more property descriptors.
       */
-    create(o: any, properties: PropertyDescriptorMap): any;
+    create(o: object | null, properties: PropertyDescriptorMap): any;
 
     /**
       * Adds a property to an object, or modifies attributes of an existing property.
@@ -361,14 +355,14 @@ interface String {
 
     /**
       * Replaces text in a string, using a regular expression or search string.
-      * @param searchValue A string that represents the regular expression.
+      * @param searchValue A string to search for.
       * @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
       */
     replace(searchValue: string, replaceValue: string): string;
 
     /**
       * Replaces text in a string, using a regular expression or search string.
-      * @param searchValue A string that represents the regular expression.
+      * @param searchValue A string to search for.
       * @param replacer A function that returns the replacement text.
       */
     replace(searchValue: string, replacer: (substring: string, ...args: any[]) => string): string;
@@ -1336,39 +1330,27 @@ interface PromiseLike<T> {
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of which ever callback is executed.
      */
-    then(
-        onfulfilled?: ((value: T) => T | PromiseLike<T>) | undefined | null,
-        onrejected?: ((reason: any) => T | PromiseLike<T>) | undefined | null): PromiseLike<T>;
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): PromiseLike<TResult1 | TResult2>;
+}
 
+/**
+ * Represents the completion of an asynchronous operation
+ */
+interface Promise<T> {
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of which ever callback is executed.
      */
-    then<TResult>(
-        onfulfilled: ((value: T) => T | PromiseLike<T>) | undefined | null,
-        onrejected: (reason: any) => TResult | PromiseLike<TResult>): PromiseLike<T | TResult>;
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
 
     /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * Attaches a callback for only the rejection of the Promise.
      * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
+     * @returns A Promise for the completion of the callback.
      */
-    then<TResult>(
-        onfulfilled: (value: T) => TResult | PromiseLike<TResult>,
-        onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): PromiseLike<TResult>;
-
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1, TResult2>(
-        onfulfilled: (value: T) => TResult1 | PromiseLike<TResult1>,
-        onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): PromiseLike<TResult1 | TResult2>;
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
 }
 
 interface ArrayLike<T> {
