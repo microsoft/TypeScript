@@ -1117,6 +1117,7 @@ namespace ts {
         // 1..toString is a valid property access, emit a dot after the literal
         // Also emit a dot if expression is a integer const enum value - it will appear in generated code as numeric literal
         function needsDotDotForPropertyAccess(expression: Expression) {
+            expression = skipOuterExpressions(expression, OuterExpressionKinds.PartiallyEmittedExpressions);
             if (expression.kind === SyntaxKind.NumericLiteral) {
                 // check if numeric literal is a decimal literal that was originally written with a dot
                 const text = getLiteralTextOfNode(<LiteralExpression>expression);

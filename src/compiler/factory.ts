@@ -2585,7 +2585,7 @@ namespace ts {
             );
         }
         if (reference === node && !copyNullPropagation && reference.flags & NodeFlags.PropagateNull) {
-            reference = setTextRange(
+            reference = updateNode(
                 isPropertyAccessExpression(reference)
                     ? createPropertyAccess(
                         reference.expression,
@@ -3249,8 +3249,7 @@ namespace ts {
         //
         const emittedExpression = skipPartiallyEmittedExpressions(expression);
         if (isLeftHandSideExpression(emittedExpression)
-            && (emittedExpression.kind !== SyntaxKind.NewExpression || (<NewExpression>emittedExpression).arguments)
-            && emittedExpression.kind !== SyntaxKind.NumericLiteral) {
+            && (emittedExpression.kind !== SyntaxKind.NewExpression || (<NewExpression>emittedExpression).arguments)) {
             return <LeftHandSideExpression>expression;
         }
 

@@ -3547,6 +3547,12 @@ namespace ts {
         return node.symbol && getDeclarationOfKind(node.symbol, kind) === node;
     }
 
+    export function isMemberExpressionOfCall(node: Node): node is PropertyAccessExpression | ElementAccessExpression {
+        return isPropertyAccessExpression(node)
+            && node.parent.kind === SyntaxKind.CallExpression
+            && (<CallExpression>node.parent).expression === node;
+    }
+
     // Node tests
     //
     // All node tests in the following list should *not* reference parent pointers so that

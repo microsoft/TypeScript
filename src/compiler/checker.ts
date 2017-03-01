@@ -216,6 +216,7 @@ namespace ts {
         const neverType = createIntrinsicType(TypeFlags.Never, "never");
         const silentNeverType = createIntrinsicType(TypeFlags.Never, "never");
         const nonPrimitiveType = createIntrinsicType(TypeFlags.NonPrimitive, "object");
+        const nilType = strictNullChecks ? createIntrinsicType(TypeFlags.Nil | TypeFlags.ContainsWideningType, "nil") : neverType;
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
@@ -326,49 +327,54 @@ namespace ts {
             TypeofNEHostObject = 1 << 13, // typeof x !== "xxx"
             EQUndefined = 1 << 14,        // x === undefined
             EQNull = 1 << 15,             // x === null
-            EQUndefinedOrNull = 1 << 16,  // x == undefined / x == null
-            NEUndefined = 1 << 17,        // x !== undefined
-            NENull = 1 << 18,             // x !== null
-            NEUndefinedOrNull = 1 << 19,  // x != undefined / x != null
-            Truthy = 1 << 20,             // x
-            Falsy = 1 << 21,              // !x
-            Discriminatable = 1 << 22,    // May have discriminant property
-            All = (1 << 23) - 1,
+            EQNil = 1 << 16,              // Null propagating type
+            EQUndefinedOrNull = 1 << 17,  // x == undefined / x == null
+            EQUndefinedOrNullOrNil = 1 << 18,
+            NEUndefined = 1 << 19,        // x !== undefined
+            NENull = 1 << 20,             // x !== null
+            NENil = 1 << 21,              // Not null propagating type
+            NEUndefinedOrNull = 1 << 22,  // x != undefined / x != null
+            NEUndefinedOrNullOrNil = 1 << 23,
+            Truthy = 1 << 24,             // x
+            Falsy = 1 << 25,              // !x
+            Discriminatable = 1 << 26,    // May have discriminant property
+            All = (1 << 27) - 1,
             // The following members encode facts about particular kinds of types for use in the getTypeFacts function.
             // The presence of a particular fact means that the given test is true for some (and possibly all) values
             // of that kind of type.
-            BaseStringStrictFacts = TypeofEQString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NEUndefinedOrNull,
-            BaseStringFacts = BaseStringStrictFacts  | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
+            BaseStringStrictFacts = TypeofEQString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NENil | NEUndefinedOrNull | NEUndefinedOrNullOrNil,
+            BaseStringFacts = BaseStringStrictFacts | EQUndefined | EQNull | EQNil | EQUndefinedOrNull | EQUndefinedOrNullOrNil | Falsy,
             StringStrictFacts = BaseStringStrictFacts | Truthy | Falsy,
             StringFacts = BaseStringFacts | Truthy,
             EmptyStringStrictFacts = BaseStringStrictFacts | Falsy,
             EmptyStringFacts = BaseStringFacts,
             NonEmptyStringStrictFacts = BaseStringStrictFacts | Truthy,
             NonEmptyStringFacts = BaseStringFacts | Truthy,
-            BaseNumberStrictFacts = TypeofEQNumber | TypeofNEString | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NEUndefinedOrNull,
-            BaseNumberFacts = BaseNumberStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
+            BaseNumberStrictFacts = TypeofEQNumber | TypeofNEString | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NENil | NEUndefinedOrNull | NEUndefinedOrNullOrNil,
+            BaseNumberFacts = BaseNumberStrictFacts | EQUndefined | EQNull | EQNil | EQUndefinedOrNull | EQUndefinedOrNullOrNil | Falsy,
             NumberStrictFacts = BaseNumberStrictFacts | Truthy | Falsy,
             NumberFacts = BaseNumberFacts | Truthy,
             ZeroStrictFacts = BaseNumberStrictFacts | Falsy,
             ZeroFacts = BaseNumberFacts,
             NonZeroStrictFacts = BaseNumberStrictFacts | Truthy,
             NonZeroFacts = BaseNumberFacts | Truthy,
-            BaseBooleanStrictFacts = TypeofEQBoolean | TypeofNEString | TypeofNENumber | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NEUndefinedOrNull,
-            BaseBooleanFacts = BaseBooleanStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
+            BaseBooleanStrictFacts = TypeofEQBoolean | TypeofNEString | TypeofNENumber | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NENil | NEUndefinedOrNull | NEUndefinedOrNullOrNil,
+            BaseBooleanFacts = BaseBooleanStrictFacts | EQUndefined | EQNull | EQNil | EQUndefinedOrNull | EQUndefinedOrNullOrNil | Falsy,
             BooleanStrictFacts = BaseBooleanStrictFacts | Truthy | Falsy,
             BooleanFacts = BaseBooleanFacts | Truthy,
             FalseStrictFacts = BaseBooleanStrictFacts | Falsy,
             FalseFacts = BaseBooleanFacts,
             TrueStrictFacts = BaseBooleanStrictFacts | Truthy,
             TrueFacts = BaseBooleanFacts | Truthy,
-            SymbolStrictFacts = TypeofEQSymbol | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NEUndefinedOrNull | Truthy,
-            SymbolFacts = SymbolStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
-            ObjectStrictFacts = TypeofEQObject | TypeofEQHostObject | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEFunction | NEUndefined | NENull | NEUndefinedOrNull | Truthy | Discriminatable,
-            ObjectFacts = ObjectStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
-            FunctionStrictFacts = TypeofEQFunction | TypeofEQHostObject | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | NEUndefined | NENull | NEUndefinedOrNull | Truthy | Discriminatable,
-            FunctionFacts = FunctionStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
-            UndefinedFacts = TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | EQUndefined | EQUndefinedOrNull | NENull | Falsy,
-            NullFacts = TypeofEQObject | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEFunction | TypeofNEHostObject | EQNull | EQUndefinedOrNull | NEUndefined | Falsy,
+            SymbolStrictFacts = TypeofEQSymbol | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NENil | NEUndefinedOrNull | NEUndefinedOrNullOrNil | Truthy,
+            SymbolFacts = SymbolStrictFacts | EQUndefined | EQNull | EQNil | EQUndefinedOrNull | EQUndefinedOrNullOrNil | Falsy,
+            ObjectStrictFacts = TypeofEQObject | TypeofEQHostObject | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEFunction | NEUndefined | NENull | NENil | NEUndefinedOrNull | NEUndefinedOrNullOrNil | Truthy | Discriminatable,
+            ObjectFacts = ObjectStrictFacts | EQUndefined | EQNull | EQNil | EQUndefinedOrNull | EQUndefinedOrNullOrNil | Falsy,
+            FunctionStrictFacts = TypeofEQFunction | TypeofEQHostObject | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | NEUndefined | NENull | NENil | NEUndefinedOrNull | NEUndefinedOrNullOrNil | Truthy | Discriminatable,
+            FunctionFacts = FunctionStrictFacts | EQUndefined | EQNull | EQNil | EQUndefinedOrNull | EQUndefinedOrNullOrNil | Falsy,
+            UndefinedFacts = TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | EQUndefined | EQUndefinedOrNullOrNil | EQUndefinedOrNull | NENull | NENil | Falsy,
+            NullFacts = TypeofEQObject | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEFunction | TypeofNEHostObject | EQNull | EQUndefinedOrNullOrNil | EQUndefinedOrNull | NEUndefined | NENil | Falsy,
+            NilFacts = TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | EQNil | EQUndefinedOrNullOrNil | NEUndefinedOrNull | NEUndefined | NENull | Falsy,
         }
 
         const typeofEQFacts = createMapFromTemplate({
@@ -2201,7 +2207,7 @@ namespace ts {
                 }
             }
             if (flags & TypeFlags.Null) result.push(nullType);
-            if (flags & TypeFlags.Undefined) result.push(undefinedType);
+            if (flags & TypeFlags.UndefinedLike) result.push(undefinedType);
             return result || types;
         }
 
@@ -8904,6 +8910,7 @@ namespace ts {
             if (flags & TypeFlags.Void) types.push(voidType);
             if (flags & TypeFlags.Undefined) types.push(undefinedType);
             if (flags & TypeFlags.Null) types.push(nullType);
+            if (flags & TypeFlags.Nil) types.push(nilType);
             return getUnionType(types);
         }
 
@@ -8913,33 +8920,31 @@ namespace ts {
                 type;
         }
 
-        function getNonNullableType(type: Type): Type {
-            return strictNullChecks ? getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull) : type;
+        function getNonNullableType(type: Type, propagateNil?: boolean): Type {
+            return strictNullChecks ? getTypeWithFacts(type, propagateNil ? TypeFacts.NEUndefinedOrNull : TypeFacts.NEUndefinedOrNullOrNil) : type;
         }
 
-        function getNullPropagatingType(type: Type) {
-            return strictNullChecks && (getTypeFacts(type) & TypeFacts.EQUndefinedOrNull) === 0
-                ? neverType
-                : undefinedType;
-        }
-
-        function propagateNullType(type: Type, propagatingType: Type) {
-            return propagatingType === neverType ? type : getUnionType([type, propagatingType]);
-        }
-
-        function propagateNullReturnType(signature: Signature, propagatingType: Type) {
-            if (propagatingType === neverType) {
-                return signature;
+        function checkNullPropagation(node: Node) {
+            if (node.flags & NodeFlags.PropagateNull) {
+                if (!compilerOptions.experimentalNullPropagation) {
+                    error(node, Diagnostics.Experimental_support_for_null_propagation_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalNullPropagation_option_to_remove_this_warning);
+                };
+                return strictNullChecks;
             }
+            return false;
+        }
 
-            const returnType = getReturnTypeOfSignature(signature);
-            const propagatingReturnType = propagateNullType(returnType, propagatingType);
-            if (returnType === propagatingReturnType) {
-                return signature;
+        function propagateNil(type: Type, sourceType: Type) {
+            return strictNullChecks && getTypeFacts(sourceType) & TypeFacts.EQUndefinedOrNullOrNil
+                ? getUnionType([type, nilType])
+                : type;
+        }
+
+        function propagateNilSignature(signature: Signature, sourceType: Type) {
+            if (strictNullChecks && getTypeFacts(sourceType) & TypeFacts.EQUndefinedOrNullOrNil) {
+                signature = cloneSignature(signature);
+                signature.resolvedReturnType = getUnionType([getReturnTypeOfSignature(signature), nilType]);
             }
-
-            signature = cloneSignature(signature);
-            signature.resolvedReturnType = propagatingReturnType;
             return signature;
         }
 
@@ -9023,6 +9028,9 @@ namespace ts {
             if (type.flags & TypeFlags.RequiresWidening) {
                 if (type.flags & TypeFlags.Nullable) {
                     return anyType;
+                }
+                if (type.flags & TypeFlags.Nil) {
+                    return strictNullChecks ? undefinedType : anyType;
                 }
                 if (getObjectFlags(type) & ObjectFlags.ObjectLiteral) {
                     return getWidenedTypeOfObjectLiteral(type);
@@ -9824,6 +9832,9 @@ namespace ts {
             }
             if (flags & TypeFlags.Null) {
                 return TypeFacts.NullFacts;
+            }
+            if (flags & TypeFlags.Nil) {
+                return TypeFacts.NilFacts;
             }
             if (flags & TypeFlags.ESSymbol) {
                 return strictNullChecks ? TypeFacts.SymbolStrictFacts : TypeFacts.SymbolFacts;
@@ -13117,19 +13128,21 @@ namespace ts {
             return true;
         }
 
-        function checkNonNullExpression(node: Expression | QualifiedName) {
-            return checkNonNullType(checkExpression(node), node);
+        function checkNonNullExpression(node: Expression | QualifiedName, propagateNil?: boolean) {
+            return checkNonNullType(checkExpression(node), node, propagateNil);
         }
 
-        function checkNonNullType(type: Type, errorNode: Node): Type {
-            const kind = (strictNullChecks ? getFalsyFlags(type) : type.flags);
-            if (kind & TypeFlags.Nullable) {
-                error(errorNode, kind & TypeFlags.Undefined ? kind & TypeFlags.Null ?
+        function checkNonNullType(type: Type, errorNode: Node, propagatesNil?: boolean): Type {
+            const disallowedFlags = propagatesNil ? TypeFlags.NilPropagatingNullable : TypeFlags.Nullable;
+            const kind = (strictNullChecks ? getFalsyFlags(type) : type.flags) & disallowedFlags;
+            if (kind) {
+                const undefinedFlags = propagatesNil ? TypeFlags.Undefined : TypeFlags.UndefinedLike;
+                error(errorNode, kind & undefinedFlags ? kind & TypeFlags.Null ?
                     Diagnostics.Object_is_possibly_null_or_undefined :
                     Diagnostics.Object_is_possibly_undefined :
                     Diagnostics.Object_is_possibly_null);
-                const t = getNonNullableType(type);
-                return t.flags & (TypeFlags.Nullable | TypeFlags.Never) ? unknownType : t;
+                const t = getNonNullableType(type, propagatesNil);
+                return t.flags & (disallowedFlags | TypeFlags.Never) ? unknownType : t;
             }
             return type;
         }
@@ -13182,14 +13195,9 @@ namespace ts {
         }
 
         function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, right: Identifier) {
-            const propagateNull = node.flags & NodeFlags.PropagateNull;
-            if (propagateNull && !compilerOptions.experimentalNullPropagation) {
-                error(node, Diagnostics.Experimental_support_for_null_propagation_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalNullPropagation_option_to_remove_this_warning);
-            }
-
-            const objectType = propagateNull ? checkExpression(left) : checkNonNullExpression(left);
-            const type = propagateNull ? getNonNullableType(objectType) : objectType;
-            const propagatingType = propagateNull ? getNullPropagatingType(objectType) : neverType;
+            const propagatesNil = checkNullPropagation(node);
+            const sourceType = propagatesNil ? checkExpression(left) : checkNonNullExpression(left);
+            const type = propagatesNil ? getNonNullableType(sourceType) : sourceType;
 
             if (isTypeAny(type) || type === silentNeverType) {
                 return type;
@@ -13239,10 +13247,12 @@ namespace ts {
             if (node.kind !== SyntaxKind.PropertyAccessExpression || assignmentKind === AssignmentKind.Definite ||
                 !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor)) &&
                 !(prop.flags & SymbolFlags.Method && propType.flags & TypeFlags.Union)) {
-                return propagateNullType(propType, propagatingType);
+                return propagatesNil ? propagateNil(propType, sourceType) : propType;
             }
+
             const flowType = getFlowTypeOfReference(node, propType, /*assumeInitialized*/ true, /*flowContainer*/ undefined);
-            return propagateNullType(assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType, propagatingType);
+            const resultType = assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType;
+            return propagatesNil ? propagateNil(resultType, sourceType) : resultType;
         }
 
         function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean {
@@ -13313,14 +13323,9 @@ namespace ts {
         function checkIndexedAccess(node: ElementAccessExpression): Type {
             checkGrammarNullPropagation(node);
 
-            const propagateNull = node.flags & NodeFlags.PropagateNull;
-            if (propagateNull && !compilerOptions.experimentalNullPropagation) {
-                error(node, Diagnostics.Experimental_support_for_null_propagation_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalNullPropagation_option_to_remove_this_warning);
-            }
-
-            const objectType = propagateNull ? checkExpression(node.expression) : checkNonNullExpression(node.expression);
-            const type = propagateNull ? getNonNullableType(objectType) : objectType;
-            const propagatingType = propagateNull ? getNullPropagatingType(objectType) : neverType;
+            const propagatesNil = checkNullPropagation(node);
+            const sourceType = propagatesNil ? checkExpression(node.expression) : checkNonNullExpression(node.expression);
+            const type = propagatesNil ? getNonNullableType(sourceType) : sourceType;
 
             const indexExpression = node.argumentExpression;
             if (!indexExpression) {
@@ -13349,7 +13354,8 @@ namespace ts {
                 return unknownType;
             }
 
-            return propagateNullType(checkIndexedAccessIndexType(getIndexedAccessType(type, indexType, node), node), propagatingType);
+            const resultType = checkIndexedAccessIndexType(getIndexedAccessType(type, indexType, node), node);
+            return propagatesNil ? propagateNil(resultType, sourceType) : resultType;
         }
 
         function checkThatExpressionIsProperSymbolReference(expression: Expression, expressionType: Type, reportError: boolean): boolean {
@@ -14089,7 +14095,7 @@ namespace ts {
             }
         }
 
-        function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[], propagatingType?: Type, headMessage?: DiagnosticMessage): Signature {
+        function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[], headMessage?: DiagnosticMessage): Signature {
             const isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
             const isDecorator = node.kind === SyntaxKind.Decorator;
             const isJsxOpeningOrSelfClosingElement = isJsxOpeningLikeElement(node);
@@ -14195,7 +14201,7 @@ namespace ts {
                 result = chooseOverload(candidates, assignableRelation, signatureHelpTrailingComma);
             }
             if (result) {
-                return propagateNullReturnType(result, propagatingType || neverType);
+                return result;
             }
 
             // No signatures were applicable. Now report errors based on the last applicable signature with
@@ -14250,7 +14256,7 @@ namespace ts {
                         if (candidate.typeParameters && typeArguments) {
                             candidate = getSignatureInstantiation(candidate, map(typeArguments, getTypeFromTypeNode));
                         }
-                        return propagateNullReturnType(candidate, propagatingType || neverType);
+                        return candidate;
                     }
                 }
             }
@@ -14350,19 +14356,15 @@ namespace ts {
                 return resolveUntypedCall(node);
             }
 
-
-            const propagateNull = node.flags & NodeFlags.PropagateNull;
-            if (propagateNull && !compilerOptions.experimentalNullPropagation) {
-                error(node, Diagnostics.Experimental_support_for_null_propagation_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalNullPropagation_option_to_remove_this_warning);
-            }
-
-            const funcType = propagateNull ? checkExpression(node.expression) : checkNonNullExpression(node.expression);
-            const type = propagateNull ? getNonNullableType(funcType) : funcType;
-            if (type === silentNeverType) {
+            const propagatesNil = checkNullPropagation(node);
+            const propagatesNilOfExpression = checkNullPropagation(node.expression);
+            const sourceType = propagatesNil ? checkExpression(node.expression) : checkNonNullExpression(node.expression, /*propagateNil*/ true);
+            const funcType = propagatesNil || propagatesNilOfExpression ? getNonNullableType(sourceType) : sourceType;
+            if (funcType === silentNeverType) {
                 return silentNeverSignature;
             }
 
-            const apparentType = getApparentType(type);
+            const apparentType = getApparentType(funcType);
             if (apparentType === unknownType) {
                 // Another error has already been reported
                 return resolveErrorCall(node);
@@ -14378,10 +14380,10 @@ namespace ts {
             // TS 1.0 Spec: 4.12
             // In an untyped function call no TypeArgs are permitted, Args can be any argument list, no contextual
             // types are provided for the argument expressions, and the result is always of type Any.
-            if (isUntypedFunctionCall(type, apparentType, callSignatures.length, constructSignatures.length)) {
+            if (isUntypedFunctionCall(funcType, apparentType, callSignatures.length, constructSignatures.length)) {
                 // The unknownType indicates that an error already occurred (and was reported).  No
                 // need to report another error in this case.
-                if (type !== unknownType && node.typeArguments) {
+                if (funcType !== unknownType && node.typeArguments) {
                     error(node, Diagnostics.Untyped_function_calls_may_not_accept_type_arguments);
                 }
                 return resolveUntypedCall(node);
@@ -14391,7 +14393,7 @@ namespace ts {
             // with multiple call signatures.
             if (!callSignatures.length) {
                 if (constructSignatures.length) {
-                    error(node, Diagnostics.Value_of_type_0_is_not_callable_Did_you_mean_to_include_new, typeToString(type));
+                    error(node, Diagnostics.Value_of_type_0_is_not_callable_Did_you_mean_to_include_new, typeToString(funcType));
                 }
                 else {
                     error(node, Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures, typeToString(apparentType));
@@ -14399,8 +14401,8 @@ namespace ts {
                 return resolveErrorCall(node);
             }
 
-            const propagatingType = propagateNull ? getNullPropagatingType(funcType) : neverType;
-            return resolveCall(node, callSignatures, candidatesOutArray, propagatingType);
+            const signature = resolveCall(node, callSignatures, candidatesOutArray);
+            return propagatesNil || propagatesNilOfExpression ? propagateNilSignature(signature, sourceType) : signature;
         }
 
         /**
@@ -14434,14 +14436,10 @@ namespace ts {
                 }
             }
 
-            const propagateNull = node.flags & NodeFlags.PropagateNull;
-            if (propagateNull && !compilerOptions.experimentalNullPropagation) {
-                error(node, Diagnostics.Experimental_support_for_null_propagation_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalNullPropagation_option_to_remove_this_warning);
-            }
-
-            const funcType = propagateNull ? checkExpression(node.expression) : checkNonNullExpression(node.expression);
-            const type = propagateNull ? getNonNullableType(funcType) : funcType;
-            if (type === silentNeverType) {
+            const propagatesNil = checkNullPropagation(node);
+            const sourceType = propagatesNil ? checkExpression(node.expression) : checkNonNullExpression(node.expression);
+            const funcType = propagatesNil ? getNonNullableType(sourceType) : sourceType;
+            if (funcType === silentNeverType) {
                 return silentNeverSignature;
             }
 
@@ -14450,7 +14448,7 @@ namespace ts {
             // function call, but using the construct signatures as the initial set of candidate
             // signatures for overload resolution. The result type of the function call becomes
             // the result type of the operation.
-            const apparentType = getApparentType(type);
+            const apparentType = getApparentType(funcType);
             if (apparentType === unknownType) {
                 // Another error has already been reported
                 return resolveErrorCall(node);
@@ -14486,8 +14484,8 @@ namespace ts {
                     return resolveErrorCall(node);
                 }
 
-                const propagatingType = propagateNull ? getNullPropagatingType(funcType) : neverType;
-                return resolveCall(node, constructSignatures, candidatesOutArray, propagatingType);
+                const signature = resolveCall(node, constructSignatures, candidatesOutArray);
+                return propagatesNil ? propagateNilSignature(signature, sourceType) : signature;
             }
 
             // If expressionType's apparent type is an object type with no construct signatures but
@@ -14503,7 +14501,7 @@ namespace ts {
                 if (getThisTypeOfSignature(signature) === voidType) {
                     error(node, Diagnostics.A_function_that_is_called_with_the_new_keyword_cannot_have_a_this_type_that_is_void);
                 }
-                return signature;
+                return propagatesNil ? propagateNilSignature(signature, sourceType) : signature;
             }
 
             error(node, Diagnostics.Cannot_use_new_with_an_expression_whose_type_lacks_a_call_or_construct_signature);
@@ -14624,7 +14622,7 @@ namespace ts {
                 return resolveErrorCall(node);
             }
 
-            return resolveCall(node, callSignatures, candidatesOutArray, /*propagatingType*/ undefined, headMessage);
+            return resolveCall(node, callSignatures, candidatesOutArray, headMessage);
         }
 
         /**
@@ -15463,15 +15461,14 @@ namespace ts {
                         booleanType;
                 case SyntaxKind.PlusPlusToken:
                 case SyntaxKind.MinusMinusToken:
-                    const propagateNull = node.operand.flags & NodeFlags.PropagateNull;
-                    const nonNullType = propagateNull ? getNonNullableType(operandType) : checkNonNullType(operandType, node.operand);
-                    const propagatingType = propagateNull ? getNullPropagatingType(operandType) : neverType;
-                    const ok = checkArithmeticOperandType(node.operand, nonNullType, Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
+                    const propagatesNil = checkNullPropagation(node.operand);
+                    const sourceType = propagatesNil ? operandType : checkNonNullType(operandType, node.operand);
+                    const ok = checkArithmeticOperandType(node.operand, getNonNullableType(sourceType), Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
                     if (ok) {
                         // run check only if former checks succeeded to avoid reporting cascading errors
                         checkReferenceExpression(node.operand, Diagnostics.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access);
                     }
-                    return propagateNullType(numberType, propagatingType);
+                    return propagatesNil ? propagateNil(numberType, sourceType) : numberType;
             }
             return unknownType;
         }
@@ -15481,15 +15478,14 @@ namespace ts {
             if (operandType === silentNeverType) {
                 return silentNeverType;
             }
-            const propagateNull = node.operand.flags & NodeFlags.PropagateNull;
-            const nonNullType = propagateNull ? getNonNullableType(operandType) : checkNonNullType(operandType, node.operand);
-            const propagatingType = propagateNull ? getNullPropagatingType(operandType) : neverType;
-            const ok = checkArithmeticOperandType(node.operand, nonNullType, Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
+            const propagatesNil = checkNullPropagation(node.operand);
+            const sourceType = propagatesNil ? operandType : checkNonNullType(operandType, node.operand);
+            const ok = checkArithmeticOperandType(node.operand, getNonNullableType(sourceType), Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
             if (ok) {
                 // run check only if former checks succeeded to avoid reporting cascading errors
                 checkReferenceExpression(node.operand, Diagnostics.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access);
             }
-            return propagateNullType(numberType, propagatingType);
+            return propagatesNil ? propagateNil(numberType, sourceType) : numberType;
         }
 
         // Return true if type might be of the given kind. A union or intersection type might be of a given
@@ -15832,14 +15828,10 @@ namespace ts {
             if (operator === SyntaxKind.EqualsToken && (left.kind === SyntaxKind.ObjectLiteralExpression || left.kind === SyntaxKind.ArrayLiteralExpression)) {
                 return checkDestructuringAssignment(left, checkExpression(right, contextualMapper), contextualMapper);
             }
+            const propagatesNil = operator >= SyntaxKind.FirstAssignment && operator <= SyntaxKind.LastAssignment && (left.flags & NodeFlags.PropagateNull) !== 0;
             let leftType = checkExpression(left, contextualMapper);
             let rightType = checkExpression(right, contextualMapper);
-            const propagateNull = operator >= SyntaxKind.FirstAssignment && operator <= SyntaxKind.LastAssignment && left.flags & NodeFlags.PropagateNull;
-            const propagatingType = propagateNull ? getNullPropagatingType(leftType) : neverType;
-            if (propagateNull) {
-                leftType = getNonNullableType(leftType);
-            }
-
+            const sourceType = leftType;
             switch (operator) {
                 case SyntaxKind.AsteriskToken:
                 case SyntaxKind.AsteriskAsteriskToken:
@@ -15867,7 +15859,7 @@ namespace ts {
                         return silentNeverType;
                     }
 
-                    leftType = checkNonNullType(leftType, left);
+                    leftType = propagatesNil ? getNonNullableType(sourceType) : checkNonNullType(sourceType, left);
                     rightType = checkNonNullType(rightType, right);
 
                     let suggestedOperator: SyntaxKind;
@@ -15887,7 +15879,7 @@ namespace ts {
                         }
                     }
 
-                    return propagateNullType(numberType, propagatingType);
+                    return propagatesNil ? propagateNil(numberType, sourceType) : numberType;
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.PlusEqualsToken:
                     if (leftType === silentNeverType || rightType === silentNeverType) {
@@ -15895,7 +15887,7 @@ namespace ts {
                     }
 
                     if (!isTypeOfKind(leftType, TypeFlags.Any | TypeFlags.StringLike) && !isTypeOfKind(rightType, TypeFlags.Any | TypeFlags.StringLike)) {
-                        leftType = checkNonNullType(leftType, left);
+                        leftType = propagatesNil ? getNonNullableType(sourceType) : checkNonNullType(sourceType, left);
                         rightType = checkNonNullType(rightType, right);
                     }
 
@@ -15918,7 +15910,7 @@ namespace ts {
 
                         // Symbols are not allowed at all in arithmetic expressions
                         if (resultType && !checkForDisallowedESSymbolOperand(operator)) {
-                            return propagateNullType(resultType, propagatingType);
+                            return propagatesNil ? propagateNil(resultType, sourceType) : resultType;
                         }
                     }
 
@@ -15930,7 +15922,7 @@ namespace ts {
                     if (operator === SyntaxKind.PlusEqualsToken) {
                         checkAssignmentOperator(resultType);
                     }
-                    return propagateNullType(resultType, propagatingType);
+                    return propagatesNil ? propagateNil(resultType, sourceType) : resultType;
                 case SyntaxKind.LessThanToken:
                 case SyntaxKind.GreaterThanToken:
                 case SyntaxKind.LessThanEqualsToken:

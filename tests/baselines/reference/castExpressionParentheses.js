@@ -75,11 +75,11 @@ a[0];
 a.b["0"];
 a().x;
 // should keep the parentheses in emit
-(1).foo;
-(1.).foo;
-(1.0).foo;
-(12e+34).foo;
-(0xff).foo;
+1..foo;
+1..foo;
+1.0.foo;
+12e+34.foo;
+0xff.foo;
 (1.0);
 (new A).foo;
 (typeof A).x;

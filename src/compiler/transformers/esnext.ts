@@ -151,8 +151,8 @@ namespace ts {
                         ? createAsyncDelegatorHelper(context, expression, expression)
                         : createArrayLiteral(
                             expression
-                            ? [createLiteral("yield"), expression]
-                            : [createLiteral("yield")]
+                                ? [createLiteral("yield"), expression]
+                                : [createLiteral("yield")]
                         )
                 );
             }
@@ -516,9 +516,9 @@ namespace ts {
                 enclosingFunctionFlags & FunctionFlags.Generator
                     ? createArrayLiteral([
                         createLiteral("await"),
-                        createCall(createPropertyAccess(iterator, "next" ), /*typeArguments*/ undefined, [])
+                        createCall(createPropertyAccess(iterator, "next"), /*typeArguments*/ undefined, [])
                     ])
-                    : createCall(createPropertyAccess(iterator, "next" ), /*typeArguments*/ undefined, [])
+                    : createCall(createPropertyAccess(iterator, "next"), /*typeArguments*/ undefined, [])
             );
 
             hoistVariableDeclaration(errorRecord);
@@ -826,7 +826,7 @@ namespace ts {
                             createToken(SyntaxKind.AsteriskToken),
                             node.name && getGeneratedNameForNode(node.name),
                             /*typeParameters*/ undefined,
-                            /*parameters*/ [],
+                            /*parameters*/[],
                             /*type*/ undefined,
                             updateBlock(
                                 node.body,
@@ -951,6 +951,31 @@ namespace ts {
                 //  (x[y])?.()      ->  (_a = x[y]) == null ? void 0 : _a.call(x);
                 const { target, thisArg } = createCallBinding(node.expression, hoistVariableDeclaration);
                 return propagateNull(finishNullableCallExpression, node, visitNode(target, visitor, isExpression), visitNode(thisArg, visitor, isExpression));
+            }
+            else if (isPropertyAccessOrElementAccess(node.expression) && node.expression.flags & NodeFlags.PropagateNull) {
+                //  x?.y()          ->  x == null ? void 0 : x.y();
+                const expressions: Expression[] = [];
+                const { baseValue, reference } = createPropertyReference(node.expression, hoistVariableDeclaration, expressions, /*captureIdentifiers*/ false, /*captureArgumentExpressions*/ true);
+                expressions.push(setOriginalNode(
+                    setTextRange(
+                        createConditional(
+                            createEquality(
+                                visitNode(baseValue, visitor, isExpression),
+                                createNull()
+                            ),
+                            createVoidZero(),
+                            updateCall(
+                                node,
+                                visitNode(reference, visitor, isExpression),
+                                /*typeArguments*/ undefined,
+                                visitNodes(node.arguments, visitor, isExpression)
+                            )
+                        ),
+                        node
+                    ),
+                    node
+                ));
+                return setTextRange(inlineExpressions(expressions), node);
             }
 
             return visitEachChild(node, visitor, context);
@@ -1259,7 +1284,7 @@ namespace ts {
         if (context.getCompilerOptions().target >= ScriptTarget.ES2015) {
             return createCall(createPropertyAccess(createIdentifier("Object"), "assign"),
                               /*typeArguments*/ undefined,
-                              attributesSegments);
+                attributesSegments);
         }
         context.requestEmitHelper(assignHelper);
         return createCall(

@@ -354,13 +354,13 @@ var _a, _b, _c, _d;
 //// [mixedOk.js]
 (_a = x == null ? void 0 : x.y) == null ? void 0 : _a["z"];
 (_b = x == null ? void 0 : x["y"]) == null ? void 0 : _b.z;
-(x == null ? void 0 : x.y)();
+x == null ? void 0 : x.y();
 (_c = x == null ? void 0 : x.y) == null ? void 0 : _c.call(x);
-(o == null ? void 0 : o.y)();
+o == null ? void 0 : o.y();
 (_d = o == null ? void 0 : o.y) == null ? void 0 : _d.call(o);
-(x == null ? void 0 : x["z"])();
+x == null ? void 0 : x["z"]();
 (_e = x == null ? void 0 : x["z"]) == null ? void 0 : _e.call(x);
-(o == null ? void 0 : o["y"])();
+o == null ? void 0 : o["y"]();
 (_f = o == null ? void 0 : o["y"]) == null ? void 0 : _f.call(o);
 var _a, _b, _c, _d, _e, _f;
 //// [mutationOk.js]
@@ -661,18 +661,18 @@ x == null ? void 0 : x.y;
 [, x == null ? void 0 : x.y];
 [...x == null ? void 0 : x.y];
 // literals
-((_a = 1) == null ? void 0 : _a.toString)(); // no need for `..`
-((_b = 1.) == null ? void 0 : _b.toString)();
-((_c = .0) == null ? void 0 : _c.toString)();
-((_d = 4e3) == null ? void 0 : _d.toString)();
-((_e = 1.e3) == null ? void 0 : _e.toString)();
-((_f = "") == null ? void 0 : _f.toString)();
-((_g = '') == null ? void 0 : _g.toString)();
-((_h = ``) == null ? void 0 : _h.toString)();
-((_j = /./) == null ? void 0 : _j.toString)();
-((_k = /./g) == null ? void 0 : _k.toString)();
-((_l = true) == null ? void 0 : _l.toString)();
-((_m = false) == null ? void 0 : _m.toString)();
+1 == null ? void 0 : 1..toString(); // no need for `..`
+1. == null ? void 0 : 1..toString();
+.0 == null ? void 0 : .0.toString();
+4e3 == null ? void 0 : 4e3.toString();
+1.e3 == null ? void 0 : 1.e3.toString();
+"" == null ? void 0 : "".toString();
+'' == null ? void 0 : ''.toString();
+`` == null ? void 0 : ``.toString();
+_a = /./, _a == null ? void 0 : (_a == null ? void 0 : _a.toString)();
+_b = /./g, _b == null ? void 0 : (_b == null ? void 0 : _b.toString)();
+true == null ? void 0 : true.toString();
+false == null ? void 0 : false.toString();
 // templates
 `${x == null ? void 0 : x.y}`;
 // variables
@@ -709,7 +709,7 @@ var E;
 (function (E) {
     E[E["a"] = x == null ? void 0 : x.y] = "a";
 })(E || (E = {}));
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
+var _a, _b;
 //// [exportsOk.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

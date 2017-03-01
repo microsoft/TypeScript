@@ -2888,16 +2888,22 @@
         NonPrimitive            = 1 << 24,  // intrinsic object type
         /* @internal */
         JsxAttributes           = 1 << 25,  // Jsx attributes type
+        /* @internal */
+        Nil                     = 1 << 26,  // The null propagating type
 
         /* @internal */
-        Nullable = Undefined | Null,
+        NilPropagatingNullable = Undefined | Null,
+        /* @internal */
+        UndefinedLike = Undefined | Nil,
+        /* @internal */
+        Nullable = Undefined | Null | Nil,
         Literal = StringLiteral | NumberLiteral | BooleanLiteral | EnumLiteral,
         StringOrNumberLiteral = StringLiteral | NumberLiteral,
         /* @internal */
-        DefinitelyFalsy = StringLiteral | NumberLiteral | BooleanLiteral | Void | Undefined | Null,
+        DefinitelyFalsy = StringLiteral | NumberLiteral | BooleanLiteral | Void | Undefined | Null | Nil,
         PossiblyFalsy = DefinitelyFalsy | String | Number | Boolean,
         /* @internal */
-        Intrinsic = Any | String | Number | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
+        Intrinsic = Any | String | Number | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Nil | Never | NonPrimitive,
         /* @internal */
         Primitive = String | Number | Boolean | Enum | ESSymbol | Void | Undefined | Null | Literal,
         StringLike = String | StringLiteral | Index,
