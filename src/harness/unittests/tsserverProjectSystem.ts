@@ -1713,6 +1713,115 @@ namespace ts.projectSystem {
             assert(completions && completions.entries[0].name !== "hello", `unexpected hello entry in completion list`);
         });
 
+        it("no tsconfig script block diagnostic errors", () => {
+
+            //  #1. Ensure no diagnostic errors when allowJs is true
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: ` `
+            };
+            const file2 = {
+                path: "/a/b/f2.html",
+                content: `var hello = "hello";`
+            };
+            const config1 = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({ compilerOptions: { allowJs: true } })
+            };
+
+            let host = createServerHost([file1, file2, config1, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
+            let session = createSession(host);
+
+            // Specify .html extension as mixed content in a configure host request
+            const extraFileExtensions = [{ extension: ".html", scriptKind: ScriptKind.JS, isMixedContent: true }];
+            const configureHostRequest = makeSessionRequest<protocol.ConfigureRequestArguments>(CommandNames.Configure, { extraFileExtensions });
+            session.executeCommand(configureHostRequest).response;
+
+            openFilesForSession([file1], session);
+            let projectService = session.getProjectService();
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+
+            let diagnostics = projectService.configuredProjects[0].getLanguageService().getCompilerOptionsDiagnostics();
+            assert.deepEqual(diagnostics, []);
+
+            //  #2. Ensure no errors when allowJs is false
+            const config2 = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({ compilerOptions: { allowJs: false } })
+            };
+
+            host = createServerHost([file1, file2, config2, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
+            session = createSession(host);
+
+            session.executeCommand(configureHostRequest).response;
+
+            openFilesForSession([file1], session);
+            projectService = session.getProjectService();
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+
+            diagnostics = projectService.configuredProjects[0].getLanguageService().getCompilerOptionsDiagnostics();
+            assert.deepEqual(diagnostics, []);
+
+            //  #3. Ensure no errors when compiler options aren't specified
+            const config3 = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({ })
+            };
+
+            host = createServerHost([file1, file2, config3, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
+            session = createSession(host);
+
+            session.executeCommand(configureHostRequest).response;
+
+            openFilesForSession([file1], session);
+            projectService = session.getProjectService();
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+
+            diagnostics = projectService.configuredProjects[0].getLanguageService().getCompilerOptionsDiagnostics();
+            assert.deepEqual(diagnostics, []);
+
+            //  #4. Ensure no errors when files are explicitly specified in tsconfig
+            const config4 = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({ compilerOptions: { allowJs: true }, files: [file1.path, file2.path] })
+            };
+
+            host = createServerHost([file1, file2, config4, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
+            session = createSession(host);
+
+            session.executeCommand(configureHostRequest).response;
+
+            openFilesForSession([file1], session);
+            projectService = session.getProjectService();
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+
+            diagnostics = projectService.configuredProjects[0].getLanguageService().getCompilerOptionsDiagnostics();
+            assert.deepEqual(diagnostics, []);
+
+            //  #4. Ensure no errors when files are explicitly excluded in tsconfig
+            const config5 = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({ compilerOptions: { allowJs: true }, exclude: [file2.path] })
+            };
+
+            host = createServerHost([file1, file2, config5, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
+            session = createSession(host);
+
+            session.executeCommand(configureHostRequest).response;
+
+            openFilesForSession([file1], session);
+            projectService = session.getProjectService();
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+
+            diagnostics = projectService.configuredProjects[0].getLanguageService().getCompilerOptionsDiagnostics();
+            assert.deepEqual(diagnostics, []);
+        });
+
         it("project structure update is deferred if files are not added\removed", () => {
             const file1 = {
                 path: "/a/b/f1.ts",
@@ -2925,6 +3034,33 @@ namespace ts.projectSystem {
 
             const inferredProject = projectService.inferredProjects[0];
             assert.isTrue(inferredProject.containsFile(<server.NormalizedPath>file1.path));
+        });
+
+        it("should be able to handle @types if input file list is empty", () => {
+            const f = {
+                path: "/a/app.ts",
+                content: "let x = 1"
+            };
+            const config = {
+                path: "/a/tsconfig.json",
+                content: JSON.stringify({
+                    compiler: {},
+                    files: []
+                })
+            };
+            const t1 = {
+                path: "/a/node_modules/@types/typings/index.d.ts",
+                content: `export * from "./lib"`
+            };
+            const t2 = {
+                path: "/a/node_modules/@types/typings/lib.d.ts",
+                content: `export const x: number`
+            };
+            const host = createServerHost([f, config, t1, t2], { currentDirectory: getDirectoryPath(f.path) });
+            const projectService = createProjectService(host);
+
+            projectService.openClientFile(f.path);
+            projectService.checkNumberOfProjects({ configuredProjects: 1, inferredProjects: 1 });
         });
     });
 

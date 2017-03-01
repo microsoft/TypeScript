@@ -66,6 +66,7 @@ namespace ts {
             case SyntaxKind.TypeParameter:
                 return visitNode(cbNode, (<TypeParameterDeclaration>node).name) ||
                     visitNode(cbNode, (<TypeParameterDeclaration>node).constraint) ||
+                    visitNode(cbNode, (<TypeParameterDeclaration>node).default) ||
                     visitNode(cbNode, (<TypeParameterDeclaration>node).expression);
             case SyntaxKind.ShorthandPropertyAssignment:
                 return visitNodes(cbNodes, node.decorators) ||
@@ -242,7 +243,8 @@ namespace ts {
                     visitNode(cbNode, (<ForInStatement>node).expression) ||
                     visitNode(cbNode, (<ForInStatement>node).statement);
             case SyntaxKind.ForOfStatement:
-                return visitNode(cbNode, (<ForOfStatement>node).initializer) ||
+                return visitNode(cbNode, (<ForOfStatement>node).awaitModifier) ||
+                    visitNode(cbNode, (<ForOfStatement>node).initializer) ||
                     visitNode(cbNode, (<ForOfStatement>node).expression) ||
                     visitNode(cbNode, (<ForOfStatement>node).statement);
             case SyntaxKind.ContinueStatement:
@@ -368,7 +370,9 @@ namespace ts {
             case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.JsxOpeningElement:
                 return visitNode(cbNode, (<JsxOpeningLikeElement>node).tagName) ||
-                    visitNodes(cbNodes, (<JsxOpeningLikeElement>node).attributes);
+                    visitNode(cbNode, (<JsxOpeningLikeElement>node).attributes);
+            case SyntaxKind.JsxAttributes:
+                return visitNodes(cbNodes, (<JsxAttributes>node).properties);
             case SyntaxKind.JsxAttribute:
                 return visitNode(cbNode, (<JsxAttribute>node).name) ||
                     visitNode(cbNode, (<JsxAttribute>node).initializer);
@@ -2100,6 +2104,10 @@ namespace ts {
                     // We do *not* want to consume the  >  as we're consuming the expression for "".
                     node.expression = parseUnaryExpressionOrHigher();
                 }
+            }
+
+            if (parseOptional(SyntaxKind.EqualsToken)) {
+                node.default = parseType();
             }
 
             return finishNode(node);
@@ -3865,14 +3873,20 @@ namespace ts {
             return result;
         }
 
+        function parseJsxAttributes(): JsxAttributes {
+            const jsxAttributes = <JsxAttributes>createNode(SyntaxKind.JsxAttributes);
+            jsxAttributes.properties = parseList(ParsingContext.JsxAttributes, parseJsxAttribute);
+            return finishNode(jsxAttributes);
+        }
+
         function parseJsxOpeningOrSelfClosingElement(inExpressionContext: boolean): JsxOpeningElement | JsxSelfClosingElement {
             const fullStart = scanner.getStartPos();
 
             parseExpected(SyntaxKind.LessThanToken);
 
             const tagName = parseJsxElementName();
+            const attributes = parseJsxAttributes();
 
-            const attributes = parseList(ParsingContext.JsxAttributes, parseJsxAttribute);
             let node: JsxOpeningLikeElement;
 
             if (token() === SyntaxKind.GreaterThanToken) {
@@ -4448,6 +4462,7 @@ namespace ts {
         function parseForOrForInOrForOfStatement(): Statement {
             const pos = getNodePos();
             parseExpected(SyntaxKind.ForKeyword);
+            const awaitToken = parseOptionalToken(SyntaxKind.AwaitKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
 
             let initializer: VariableDeclarationList | Expression = undefined;
@@ -4460,19 +4475,20 @@ namespace ts {
                 }
             }
             let forOrForInOrForOfStatement: IterationStatement;
-            if (parseOptional(SyntaxKind.InKeyword)) {
+            if (awaitToken ? parseExpected(SyntaxKind.OfKeyword) : parseOptional(SyntaxKind.OfKeyword)) {
+                const forOfStatement = <ForOfStatement>createNode(SyntaxKind.ForOfStatement, pos);
+                forOfStatement.awaitModifier = awaitToken;
+                forOfStatement.initializer = initializer;
+                forOfStatement.expression = allowInAnd(parseAssignmentExpressionOrHigher);
+                parseExpected(SyntaxKind.CloseParenToken);
+                forOrForInOrForOfStatement = forOfStatement;
+            }
+            else if (parseOptional(SyntaxKind.InKeyword)) {
                 const forInStatement = <ForInStatement>createNode(SyntaxKind.ForInStatement, pos);
                 forInStatement.initializer = initializer;
                 forInStatement.expression = allowInAnd(parseExpression);
                 parseExpected(SyntaxKind.CloseParenToken);
                 forOrForInOrForOfStatement = forInStatement;
-            }
-            else if (parseOptional(SyntaxKind.OfKeyword)) {
-                const forOfStatement = <ForOfStatement>createNode(SyntaxKind.ForOfStatement, pos);
-                forOfStatement.initializer = initializer;
-                forOfStatement.expression = allowInAnd(parseAssignmentExpressionOrHigher);
-                parseExpected(SyntaxKind.CloseParenToken);
-                forOrForInOrForOfStatement = forOfStatement;
             }
             else {
                 const forStatement = <ForStatement>createNode(SyntaxKind.ForStatement, pos);
@@ -5816,7 +5832,11 @@ namespace ts {
                     }
                 }
 
-                const range = { pos: triviaScanner.getTokenPos(), end: triviaScanner.getTextPos(), kind: triviaScanner.getToken() };
+                const range = {
+                    kind: <SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia>triviaScanner.getToken(),
+                    pos: triviaScanner.getTokenPos(),
+                    end: triviaScanner.getTextPos(),
+                };
 
                 const comment = sourceText.substring(range.pos, range.end);
                 const referencePathMatchResult = getFileReferenceFromReferencePath(comment, range);

@@ -334,6 +334,11 @@ namespace ts {
             description: Diagnostics.Disallow_inconsistently_cased_references_to_the_same_file
         },
         {
+            name: "downlevelIteration",
+            type: "boolean",
+            description: Diagnostics.Use_full_down_level_iteration_for_iterables_and_arrays_for_for_of_spread_and_destructuring_in_ES5_Slash3
+        },
+        {
             name: "baseUrl",
             type: "string",
             isFilePath: true,
@@ -418,6 +423,7 @@ namespace ts {
                     "es7": "lib.es2016.d.ts",
                     "es2016": "lib.es2016.d.ts",
                     "es2017": "lib.es2017.d.ts",
+                    "esnext": "lib.esnext.d.ts",
                     // Host only
                     "dom": "lib.dom.d.ts",
                     "dom.iterable": "lib.dom.iterable.d.ts",
@@ -437,6 +443,7 @@ namespace ts {
                     "es2017.object": "lib.es2017.object.d.ts",
                     "es2017.sharedmemory": "lib.es2017.sharedmemory.d.ts",
                     "es2017.string": "lib.es2017.string.d.ts",
+                    "esnext.asynciterable": "lib.esnext.asynciterable.d.ts",
                 }),
             },
             description: Diagnostics.Specify_library_files_to_be_included_in_the_compilation_Colon
@@ -459,6 +466,16 @@ namespace ts {
             name: "alwaysStrict",
             type: "boolean",
             description: Diagnostics.Parse_in_strict_mode_and_emit_use_strict_for_each_source_file
+        },
+        {
+            // A list of plugins to load in the language service
+            name: "plugins",
+            type: "list",
+            isTSConfigOnly: true,
+            element: {
+                name: "plugin",
+                type: "object"
+            }
         }
     ];
 
