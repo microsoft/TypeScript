@@ -670,6 +670,12 @@ namespace ts {
                 case SyntaxKind.CallExpression:
                     bindCallExpressionFlow(<CallExpression>node);
                     break;
+                case SyntaxKind.JSDocComment:
+                    bindJSDocComment(<JSDoc>node);
+                    break;
+                case SyntaxKind.JSDocTypedefTag:
+                    bindJSDocTypedefTag(<JSDocTypedefTag>node);
+                    break;
                 default:
                     bindEachChild(node);
                     break;
@@ -1335,6 +1341,26 @@ namespace ts {
             }
         }
 
+        function bindJSDocComment(node: JSDoc) {
+            forEachChild(node, n => {
+                if (n.kind !== SyntaxKind.JSDocTypedefTag) {
+                    bind(n);
+                }
+            });
+        }
+
+        function bindJSDocTypedefTag(node: JSDocTypedefTag) {
+            forEachChild(node, n => {
+                // if the node has a fullName "A.B.C", that means symbol "C" was already bound
+                // when we visit "fullName"; so when we visit the name "C" as the next child of
+                // the jsDocTypedefTag, we should skip binding it.
+                if (node.fullName && n === node.name && node.fullName.kind !== SyntaxKind.Identifier) {
+                    return;
+                }
+                bind(n);
+            });
+        }
+
         function bindCallExpressionFlow(node: CallExpression) {
             // If the target of the call expression is a function expression or arrow function we have
             // an immediately invoked function expression (IIFE). Initialize the flowNode property to
@@ -1874,6 +1900,18 @@ namespace ts {
             }
             node.parent = parent;
             const saveInStrictMode = inStrictMode;
+
+            // Even though in the AST the jsdoc @typedef node belongs to the current node,
+            // its symbol might be in the same scope with the current node's symbol. Consider:
+            // 
+            //     /** @typedef {string | number} MyType */
+            //     function foo();
+            //
+            // Here the current node is "foo", which is a container, but the scope of "MyType" should
+            // not be inside "foo". Therefore we always bind @typedef before bind the parent node,
+            // and skip binding this tag later when binding all the other jsdoc tags.
+            bindJSDocTypedefTagIfAny(node);
+
             // First we bind declaration nodes to a symbol if possible. We'll both create a symbol
             // and then potentially add the symbol to an appropriate symbol table. Possible
             // destination symbol tables are:
@@ -1906,6 +1944,27 @@ namespace ts {
                 subtreeTransformFlags |= computeTransformFlagsForNode(node, 0);
             }
             inStrictMode = saveInStrictMode;
+        }
+
+        function bindJSDocTypedefTagIfAny(node: Node) {
+            if (!node.jsDoc) {
+                return;
+            }
+
+            for (const jsDoc of node.jsDoc) {
+                if (!jsDoc.tags) {
+                    continue;
+                }
+
+                for (const tag of jsDoc.tags) {
+                    if (tag.kind === SyntaxKind.JSDocTypedefTag) {
+                        const savedParent = parent;
+                        parent = jsDoc;
+                        bind(tag);
+                        parent = savedParent;
+                    }
+                }
+            }
         }
 
         function updateStrictModeStatementList(statements: NodeArray<Statement>) {

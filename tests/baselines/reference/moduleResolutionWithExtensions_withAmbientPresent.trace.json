@@ -15,6 +15,6 @@
     "File '/node_modules/js.jsx' does not exist.",
     "File '/node_modules/js/package.json' does not exist.",
     "File '/node_modules/js/index.js' exist - use it as a name resolution result.",
-    "Resolving real path for '/node_modules/js/index.js', result '/node_modules/js/index.js'",
+    "Resolving real path for '/node_modules/js/index.js', result '/node_modules/js/index.js'.",
     "======== Module name 'js' was successfully resolved to '/node_modules/js/index.js'. ========"
 ]

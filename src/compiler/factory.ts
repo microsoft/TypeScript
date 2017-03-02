@@ -1189,7 +1189,7 @@ namespace ts {
     }
 
     export function createModuleBlock(statements: Statement[]) {
-        const node = <ModuleBlock>createSynthesizedNode(SyntaxKind.CaseBlock);
+        const node = <ModuleBlock>createSynthesizedNode(SyntaxKind.ModuleBlock);
         node.statements = createNodeArray(statements);
         return node;
     }

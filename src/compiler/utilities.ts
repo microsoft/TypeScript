@@ -435,8 +435,8 @@ namespace ts {
     }
 
     /** Given a symbol for a module, checks that it is either an untyped import or a shorthand ambient module. */
-    export function isShorthandAmbientModuleSymbol(moduleSymbol: Symbol): boolean {
-        return isShorthandAmbientModule(moduleSymbol.valueDeclaration);
+    export function isUntypedOrShorthandAmbientModuleSymbol(moduleSymbol: Symbol): boolean {
+        return !moduleSymbol.declarations || isShorthandAmbientModule(moduleSymbol.valueDeclaration);
     }
 
     function isShorthandAmbientModule(node: Node): boolean {
@@ -1557,7 +1557,10 @@ namespace ts {
                     }
                 }
                 else {
-                    result.push(...filter((doc as JSDoc).tags, tag => tag.kind === kind));
+                    const tags = (doc as JSDoc).tags;
+                    if (tags) {
+                        result.push(...filter(tags, tag => tag.kind === kind));
+                    }
                 }
             }
             return result;
