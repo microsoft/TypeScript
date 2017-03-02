@@ -1504,6 +1504,7 @@ namespace ts {
     export type JsxTagNameExpression = PrimaryExpression | PropertyAccessExpression;
 
     export interface JsxAttributes extends ObjectLiteralExpressionBase<JsxAttributeLike> {
+        parent?: JsxOpeningLikeElement;
     }
 
     /// The opening element of a <Tag>...</Tag> JsxElement
@@ -1523,7 +1524,7 @@ namespace ts {
 
     export interface JsxAttribute extends ObjectLiteralElement {
         kind: SyntaxKind.JsxAttribute;
-        parent?: JsxOpeningLikeElement;
+        parent?: JsxAttributes;
         name: Identifier;
         /// JSX attribute initializers are optional; <X y /> is sugar for <X y={true} />
         initializer?: StringLiteral | JsxExpression;
@@ -1531,7 +1532,7 @@ namespace ts {
 
     export interface JsxSpreadAttribute extends ObjectLiteralElement {
         kind: SyntaxKind.JsxSpreadAttribute;
-        parent?: JsxOpeningLikeElement;
+        parent?: JsxAttributes;
         expression: Expression;
     }
 
