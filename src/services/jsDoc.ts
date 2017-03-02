@@ -43,7 +43,7 @@ namespace ts.JsDoc {
         "version"
     ];
     let jsDocTagNameCompletionEntries: CompletionEntry[];
-    let jsDocTagNameWithAtSignCompletionEntries: CompletionEntry[];
+    let jsDocTagCompletionEntries: CompletionEntry[];
 
     export function getJsDocCommentsFromDeclarations(declarations: Declaration[]) {
         // Only collect doc comments from duplicate declarations once:
@@ -89,27 +89,26 @@ namespace ts.JsDoc {
         return undefined;
     }
 
-    export function getAllJsDocCompletionEntries(shouldAppendAtSign: boolean): CompletionEntry[] {
-        if (!shouldAppendAtSign) {
-            return jsDocTagNameCompletionEntries || (jsDocTagNameCompletionEntries = ts.map(jsDocTagNames, tagName => {
-                return {
-                    name: tagName,
-                    kind: ScriptElementKind.keyword,
-                    kindModifiers: "",
-                    sortText: "0",
-                };
-            }));
-        }
-        else {
-            return jsDocTagNameWithAtSignCompletionEntries || (jsDocTagNameWithAtSignCompletionEntries = ts.map(jsDocTagNames, tagName => {
-                return {
-                    name: `@${tagName}`,
-                    kind: ScriptElementKind.keyword,
-                    kindModifiers: "",
-                    sortText: "0"
-                }
-            }));
-        }
+    export function getJSDocTagNameCompletions(): CompletionEntry[] {
+        return jsDocTagNameCompletionEntries || (jsDocTagNameCompletionEntries = ts.map(jsDocTagNames, tagName => {
+            return {
+                name: tagName,
+                kind: ScriptElementKind.keyword,
+                kindModifiers: "",
+                sortText: "0",
+            };
+        }));
+    }
+
+    export function getJSDocTagCompletions(): CompletionEntry[] {
+        return jsDocTagCompletionEntries || (jsDocTagCompletionEntries = ts.map(jsDocTagNames, tagName => {
+            return {
+                name: `@${tagName}`,
+                kind: ScriptElementKind.keyword,
+                kindModifiers: "",
+                sortText: "0"
+            }
+        }));
     }
 
     /**
