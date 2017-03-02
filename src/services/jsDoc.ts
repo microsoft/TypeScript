@@ -42,7 +42,8 @@ namespace ts.JsDoc {
         "prop",
         "version"
     ];
-    let jsDocCompletionEntries: CompletionEntry[];
+    let jsDocTagNameCompletionEntries: CompletionEntry[];
+    let jsDocTagCompletionEntries: CompletionEntry[];
 
     export function getJsDocCommentsFromDeclarations(declarations: Declaration[]) {
         // Only collect doc comments from duplicate declarations once:
@@ -88,14 +89,25 @@ namespace ts.JsDoc {
         return undefined;
     }
 
-    export function getAllJsDocCompletionEntries(): CompletionEntry[] {
-        return jsDocCompletionEntries || (jsDocCompletionEntries = ts.map(jsDocTagNames, tagName => {
+    export function getJSDocTagNameCompletions(): CompletionEntry[] {
+        return jsDocTagNameCompletionEntries || (jsDocTagNameCompletionEntries = ts.map(jsDocTagNames, tagName => {
             return {
                 name: tagName,
                 kind: ScriptElementKind.keyword,
                 kindModifiers: "",
                 sortText: "0",
             };
+        }));
+    }
+
+    export function getJSDocTagCompletions(): CompletionEntry[] {
+        return jsDocTagCompletionEntries || (jsDocTagCompletionEntries = ts.map(jsDocTagNames, tagName => {
+            return {
+                name: `@${tagName}`,
+                kind: ScriptElementKind.keyword,
+                kindModifiers: "",
+                sortText: "0"
+            }
         }));
     }
 

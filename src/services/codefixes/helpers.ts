@@ -23,8 +23,6 @@ namespace ts.codefix {
      * @returns Empty string iff there we can't figure out a representation for `symbol` in `enclosingDeclaration`.
      */
     function getInsertionForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker, newlineChar: string): string {
-        // const name = symbol.getName();
-        const type = checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration);
         const declarations = symbol.getDeclarations();
         if (!(declarations && declarations.length)) {
             return "";
@@ -33,6 +31,8 @@ namespace ts.codefix {
         const declaration = declarations[0] as Declaration;
         const name = declaration.name ? declaration.name.getText() : undefined;
         const visibility = getVisibilityPrefixWithSpace(getModifierFlags(declaration));
+
+        const type = checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration);
 
         switch (declaration.kind) {
             case SyntaxKind.GetAccessor:
