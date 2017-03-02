@@ -36,6 +36,22 @@
 ////  * /*11*/
 ////  */
 
+//// /**
+////           /*12*/
+////  */
+
+//// /**
+////   *       /*13*/
+////   */
+
+//// /**
+////   * some comment /*14*/
+////   */
+
+//// /**
+////   * @param /*15*/
+////   */
+
 goTo.marker('1');
 verify.completionListContains("constructor");
 verify.completionListContains("param");
@@ -76,3 +92,17 @@ verify.completionListContains("@returns");
 goTo.marker('11');
 verify.completionListCount(40);
 verify.completionListContains("@argument");
+
+goTo.marker('12');
+verify.completionListCount(40);
+verify.completionListContains("@constructor");
+
+goTo.marker('13');
+verify.completionListCount(40);
+verify.completionListContains("@param");
+
+goTo.marker('14');
+verify.completionListIsEmpty();
+
+goTo.marker('15');
+verify.completionListIsEmpty();
