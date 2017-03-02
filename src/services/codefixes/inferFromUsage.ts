@@ -229,16 +229,19 @@ namespace ts.codefix {
                 return getTypeFromSwitchStatementLabelContext(<CaseOrDefaultClause>node.parent, checker);
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
-                return getTypeFromCallExpressionContext(<CallExpression | NewExpression>node.parent, checker);
+                if ((<CallExpression | NewExpression>node.parent).expression === node) {
+                    return getTypeFromCallExpressionContext(<CallExpression | NewExpression>node.parent, checker);
+                }
+                break;
             case SyntaxKind.PropertyAccessExpression:
                 return getTypeFromPropertyAccessExpressionContext(<PropertyAccessExpression>node.parent, checker);
             case SyntaxKind.ElementAccessExpression:
                 return getTypeFromPropertyElementExpressionContext(<ElementAccessExpression>node.parent, node, checker);
-            default:
-                if (isPartOfExpression(node)) {
-                    const contextualType = checker.getContextualType(node);
-                    return isValidInference(contextualType) ? contextualType : undefined;
-                }
+        }
+
+        if (isPartOfExpression(node)) {
+            const contextualType = checker.getContextualType(node);
+            return isValidInference(contextualType) ? contextualType : undefined;
         }
     }
 
@@ -311,6 +314,7 @@ namespace ts.codefix {
                 return checker.getUnionType([checker.getStringType(), checker.getNumberType()]);
 
             //  AssignmentOperators
+            case SyntaxKind.EqualsToken:
             case SyntaxKind.EqualsEqualsToken:
             case SyntaxKind.EqualsEqualsEqualsToken:
             case SyntaxKind.ExclamationEqualsEqualsToken:
@@ -375,7 +379,7 @@ namespace ts.codefix {
             return checker.getUnionType([checker.getStringType(), checker.getNumberType()]);
         }
         else {
-            const indextType = checker.getTypeAtLocation(parent.argumentExpression);
+            const indextType = checker.getTypeAtLocation(parent);
             const isNumericIndexType = indextType.flags & TypeFlags.NumberLike;
             const type = checker.getBaseTypeOfLiteralType(getTypeFromContext(parent, checker) || checker.getAnyType());
             const indexer = checker.createIndexInfo(type, /*isReadonly*/ false);
