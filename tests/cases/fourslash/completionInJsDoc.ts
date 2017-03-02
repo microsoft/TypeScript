@@ -35,22 +35,24 @@
 //// /**
 ////  * /*11*/
 ////  */
-
+////
 //// /**
 ////           /*12*/
 ////  */
-
+////
 //// /**
 ////   *       /*13*/
 ////   */
-
+////
 //// /**
 ////   * some comment /*14*/
 ////   */
-
+////
 //// /**
 ////   * @param /*15*/
 ////   */
+////
+//// /** @param /*16*/ */
 
 goTo.marker('1');
 verify.completionListContains("constructor");
@@ -105,4 +107,7 @@ goTo.marker('14');
 verify.completionListIsEmpty();
 
 goTo.marker('15');
+verify.completionListIsEmpty();
+
+goTo.marker('16');
 verify.completionListIsEmpty();

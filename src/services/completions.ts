@@ -59,7 +59,7 @@ namespace ts.Completions {
         }
 
         // Add keywords if this is not a member completion list
-        if (!isMemberCompletion && !(requestJsDocTag  && requestJsDocTagName)) {
+        if (!isMemberCompletion && !requestJsDocTag && !requestJsDocTagName) {
             addRange(entries, keywordCompletions);
         }
 
@@ -858,7 +858,7 @@ namespace ts.Completions {
                     //    *         |c|
                     //    */
                     const lineStart = getLineStartPositionForPosition(position, sourceFile);
-                    requestJsDocTag = !(sourceFile.text.substr(lineStart, position).match(/[^\*|\s|(/\*\*)]/));
+                    requestJsDocTag = !(sourceFile.text.substring(lineStart, position).match(/[^\*|\s|(/\*\*)]/));
                 }
             }
 
