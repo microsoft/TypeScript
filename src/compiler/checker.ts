@@ -21144,7 +21144,15 @@ namespace ts {
             }
 
             if (isPartOfTypeNode(node)) {
-                return getTypeFromTypeNode(<TypeNode>node);
+                let typeFromTypeNode = getTypeFromTypeNode(<TypeNode>node);
+
+                if (typeFromTypeNode && isExpressionWithTypeArgumentsInClassImplementsClause(node)) {
+                    const containingClass = getContainingClass(node);
+                    const classType = getTypeOfNode(containingClass) as InterfaceType;
+                    typeFromTypeNode = getTypeWithThisArgument(typeFromTypeNode, classType.thisType);
+                }
+
+                return typeFromTypeNode;
             }
 
             if (isPartOfExpression(node)) {
@@ -21154,7 +21162,10 @@ namespace ts {
             if (isExpressionWithTypeArgumentsInClassExtendsClause(node)) {
                 // A SyntaxKind.ExpressionWithTypeArguments is considered a type node, except when it occurs in the
                 // extends clause of a class. We handle that case here.
-                return getBaseTypes(<InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(node.parent.parent)))[0];
+                const classNode = getContainingClass(node);
+                const classType = getDeclaredTypeOfSymbol(getSymbolOfNode(classNode)) as InterfaceType;
+                const baseType = getBaseTypes(classType)[0];
+                return baseType && getTypeWithThisArgument(baseType, classType.thisType);
             }
 
             if (isTypeDeclaration(node)) {
