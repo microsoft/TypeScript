@@ -121,6 +121,7 @@
         "./unittests/projectErrors.ts",
         "./unittests/printer.ts",
         "./unittests/transform.ts",
-        "./unittests/customTransforms.ts"
+        "./unittests/customTransforms.ts",
+        "./unittests/textChanges.ts"
     ]
 }
