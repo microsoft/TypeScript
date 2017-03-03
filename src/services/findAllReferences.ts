@@ -133,7 +133,7 @@ namespace ts.FindAllReferences {
                 return { symbol };
             }
 
-            if (ts.isShorthandAmbientModuleSymbol(aliasedSymbol)) {
+            if (ts.isUntypedOrShorthandAmbientModuleSymbol(aliasedSymbol)) {
                 return { symbol, shorthandModuleSymbol: aliasedSymbol };
             }
 
