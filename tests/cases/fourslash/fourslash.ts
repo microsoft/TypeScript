@@ -92,6 +92,7 @@ declare namespace FourSlashInterface {
         InsertSpaceAfterFunctionKeywordForAnonymousFunctions: boolean;
         InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
         InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: boolean;
+        InsertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: boolean;
         InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: boolean;
         InsertSpaceAfterTypeAssertion: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
@@ -225,7 +226,7 @@ declare namespace FourSlashInterface {
         noMatchingBracePositionInCurrentFile(bracePosition: number): void;
         DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean): void;
         noDocCommentTemplate(): void;
-        rangeAfterCodeFix(expectedText: string, errorCode?: number): void;
+        rangeAfterCodeFix(expectedText: string, includeWhiteSpace?: boolean, errorCode?: number, index?: number): void;
         importFixAtPosition(expectedTextArray: string[], errorCode?: number): void;
 
         navigationBar(json: any): void;

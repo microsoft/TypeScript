@@ -23,8 +23,6 @@ namespace ts.codefix {
      * @returns Empty string iff there we can't figure out a representation for `symbol` in `enclosingDeclaration`.
      */
     function getInsertionForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker, newlineChar: string): string {
-        // const name = symbol.getName();
-        const type = checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration);
         const declarations = symbol.getDeclarations();
         if (!(declarations && declarations.length)) {
             return "";
@@ -32,7 +30,9 @@ namespace ts.codefix {
 
         const declaration = declarations[0] as Declaration;
         const name = declaration.name ? declaration.name.getText() : undefined;
-        const visibility = getVisibilityPrefix(getModifierFlags(declaration));
+        const visibility = getVisibilityPrefixWithSpace(getModifierFlags(declaration));
+
+        const type = checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration);
 
         switch (declaration.kind) {
             case SyntaxKind.GetAccessor:
@@ -58,7 +58,7 @@ namespace ts.codefix {
                 if (declarations.length === 1) {
                     Debug.assert(signatures.length === 1);
                     const sigString = checker.signatureToString(signatures[0], enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
-                    return `${visibility}${name}${sigString}${getMethodBodyStub(newlineChar)}`;
+                    return getStubbedMethod(visibility, name, sigString, newlineChar);
                 }
 
                 let result = "";
@@ -78,7 +78,7 @@ namespace ts.codefix {
                     bodySig = createBodySignatureWithAnyTypes(signatures, enclosingDeclaration, checker);
                 }
                 const sigString = checker.signatureToString(bodySig, enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
-                result += `${visibility}${name}${sigString}${getMethodBodyStub(newlineChar)}`;
+                result += getStubbedMethod(visibility, name, sigString, newlineChar);
 
                 return result;
             default:
@@ -138,11 +138,15 @@ namespace ts.codefix {
         }
     }
 
-    function getMethodBodyStub(newLineChar: string) {
-        return ` {${newLineChar}throw new Error('Method not implemented.');${newLineChar}}${newLineChar}`;
+    export function getStubbedMethod(visibility: string, name: string, sigString = "()", newlineChar: string): string {
+        return `${visibility}${name}${sigString}${getMethodBodyStub(newlineChar)}`;
     }
 
-    function getVisibilityPrefix(flags: ModifierFlags): string {
+    function getMethodBodyStub(newlineChar: string) {
+        return ` {${newlineChar}throw new Error('Method not implemented.');${newlineChar}}${newlineChar}`;
+    }
+
+    function getVisibilityPrefixWithSpace(flags: ModifierFlags): string {
         if (flags & ModifierFlags.Public) {
             return "public ";
         }

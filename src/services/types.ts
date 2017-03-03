@@ -39,7 +39,7 @@ namespace ts {
 
     export interface Signature {
         getDeclaration(): SignatureDeclaration;
-        getTypeParameters(): Type[];
+        getTypeParameters(): TypeParameter[];
         getParameters(): Symbol[];
         getReturnType(): Type;
         getDocumentationComment(): SymbolDisplayPart[];
@@ -170,6 +170,11 @@ namespace ts {
          * completions will not be provided
          */
         getDirectories?(directoryName: string): string[];
+
+        /**
+         * Gets a set of custom transformers to use during emit.
+         */
+        getCustomTransformers?(): CustomTransformers | undefined;
     }
 
     //
@@ -764,6 +769,11 @@ namespace ts {
         export const directory = "directory";
 
         export const externalModuleName = "external module name";
+
+        /**
+         * <JsxTagName attribute1 attribute2={0} />
+         **/
+        export const jsxAttribute = "JSX attribute";
     }
 
     export namespace ScriptElementKindModifier {

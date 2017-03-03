@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/file1.tsx(6,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists
+tests/cases/conformance/jsx/file1.tsx(6,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 
 
 ==== tests/cases/conformance/jsx/file1.tsx (1 errors) ====
@@ -9,5 +9,5 @@ tests/cases/conformance/jsx/file1.tsx(6,1): error TS7026: JSX element implicitly
     // Error under implicit any
     <div n='x' />;
     ~~~~~~~~~~~~~
-!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     

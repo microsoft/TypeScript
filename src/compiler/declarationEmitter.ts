@@ -190,6 +190,7 @@ namespace ts {
             const writer = <EmitTextWriterWithSymbolWriter>createTextWriter(newLine);
             writer.trackSymbol = trackSymbol;
             writer.reportInaccessibleThisError = reportInaccessibleThisError;
+            writer.reportIllegalExtends = reportIllegalExtends;
             writer.writeKeyword = writer.write;
             writer.writeOperator = writer.write;
             writer.writePunctuation = writer.write;
@@ -311,6 +312,14 @@ namespace ts {
         function trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
             handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ true));
             recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForSymbol(symbol, meaning));
+        }
+
+        function reportIllegalExtends() {
+            if (errorNameNode) {
+                reportedDeclarationError = true;
+                emitterDiagnostics.add(createDiagnosticForNode(errorNameNode, Diagnostics.extends_clause_of_exported_class_0_refers_to_a_type_whose_name_cannot_be_referenced,
+                    declarationNameToString(errorNameNode)));
+            }
         }
 
         function reportInaccessibleThisError() {
@@ -1010,6 +1019,23 @@ namespace ts {
                         emitTypeWithNewGetSymbolAccessibilityDiagnostic(node.constraint, getTypeParameterConstraintVisibilityError);
                     }
                 }
+                if (node.default && !isPrivateMethodTypeParameter(node)) {
+                    write(" = ");
+                    if (node.parent.kind === SyntaxKind.FunctionType ||
+                        node.parent.kind === SyntaxKind.ConstructorType ||
+                        (node.parent.parent && node.parent.parent.kind === SyntaxKind.TypeLiteral)) {
+                        Debug.assert(node.parent.kind === SyntaxKind.MethodDeclaration ||
+                            node.parent.kind === SyntaxKind.MethodSignature ||
+                            node.parent.kind === SyntaxKind.FunctionType ||
+                            node.parent.kind === SyntaxKind.ConstructorType ||
+                            node.parent.kind === SyntaxKind.CallSignature ||
+                            node.parent.kind === SyntaxKind.ConstructSignature);
+                        emitType(node.default);
+                    }
+                    else {
+                        emitTypeWithNewGetSymbolAccessibilityDiagnostic(node.default, getTypeParameterConstraintVisibilityError);
+                    }
+                }
 
                 function getTypeParameterConstraintVisibilityError(): SymbolAccessibilityDiagnostic {
                     // Type parameter constraints are named by user so we should always be able to name it
@@ -1071,7 +1097,7 @@ namespace ts {
             }
         }
 
-        function emitHeritageClause(typeReferences: ExpressionWithTypeArguments[], isImplementsList: boolean) {
+        function emitHeritageClause(className: Identifier, typeReferences: ExpressionWithTypeArguments[], isImplementsList: boolean) {
             if (typeReferences) {
                 write(isImplementsList ? " implements " : " extends ");
                 emitCommaList(typeReferences, emitTypeOfTypeReference);
@@ -1086,7 +1112,9 @@ namespace ts {
                 }
                 else {
                     writer.getSymbolAccessibilityDiagnostic = getHeritageClauseVisibilityError;
+                    errorNameNode = className;
                     resolver.writeBaseConstructorTypeOfClass(<ClassLikeDeclaration>enclosingDeclaration, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseTypeAliasValue, writer);
+                    errorNameNode = undefined;
                 }
 
                 function getHeritageClauseVisibilityError(): SymbolAccessibilityDiagnostic {
@@ -1096,11 +1124,11 @@ namespace ts {
                         // Class or Interface implemented/extended is inaccessible
                         diagnosticMessage = isImplementsList ?
                             Diagnostics.Implements_clause_of_exported_class_0_has_or_is_using_private_name_1 :
-                            Diagnostics.Extends_clause_of_exported_class_0_has_or_is_using_private_name_1;
+                            Diagnostics.extends_clause_of_exported_class_0_has_or_is_using_private_name_1;
                     }
                     else {
                         // interface is inaccessible
-                        diagnosticMessage = Diagnostics.Extends_clause_of_exported_interface_0_has_or_is_using_private_name_1;
+                        diagnosticMessage = Diagnostics.extends_clause_of_exported_interface_0_has_or_is_using_private_name_1;
                     }
 
                     return {
@@ -1136,9 +1164,10 @@ namespace ts {
             emitTypeParameters(node.typeParameters);
             const baseTypeNode = getClassExtendsHeritageClauseElement(node);
             if (baseTypeNode) {
-                emitHeritageClause([baseTypeNode], /*isImplementsList*/ false);
+                node.name
+                emitHeritageClause(node.name, [baseTypeNode], /*isImplementsList*/ false);
             }
-            emitHeritageClause(getClassImplementsHeritageClauseElements(node), /*isImplementsList*/ true);
+            emitHeritageClause(node.name, getClassImplementsHeritageClauseElements(node), /*isImplementsList*/ true);
             write(" {");
             writeLine();
             increaseIndent();
@@ -1160,7 +1189,7 @@ namespace ts {
             emitTypeParameters(node.typeParameters);
             const interfaceExtendsTypes = filter(getInterfaceBaseTypeNodes(node), base => isEntityNameExpression(base.expression));
             if (interfaceExtendsTypes && interfaceExtendsTypes.length) {
-                emitHeritageClause(interfaceExtendsTypes, /*isImplementsList*/ false);
+                emitHeritageClause(node.name, interfaceExtendsTypes, /*isImplementsList*/ false);
             }
             write(" {");
             writeLine();

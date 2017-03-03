@@ -16,11 +16,16 @@ namespace ts.Completions {
             return undefined;
         }
 
-        const { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, isJsDocTagName } = completionData;
+        const { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, requestJsDocTagName, requestJsDocTag } = completionData;
 
-        if (isJsDocTagName) {
+        if (requestJsDocTagName) {
             // If the current position is a jsDoc tag name, only tag names should be provided for completion
-            return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries: JsDoc.getAllJsDocCompletionEntries() };
+            return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries: JsDoc.getJSDocTagNameCompletions() };
+        }
+
+        if (requestJsDocTag) {
+            // If the current position is a jsDoc tag, only tags should be provided for completion
+            return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries: JsDoc.getJSDocTagCompletions() };
         }
 
         const entries: CompletionEntry[] = [];
@@ -54,7 +59,7 @@ namespace ts.Completions {
         }
 
         // Add keywords if this is not a member completion list
-        if (!isMemberCompletion && !isJsDocTagName) {
+        if (!isMemberCompletion && !requestJsDocTag && !requestJsDocTagName) {
             addRange(entries, keywordCompletions);
         }
 
@@ -814,7 +819,10 @@ namespace ts.Completions {
     function getCompletionData(typeChecker: TypeChecker, log: (message: string) => void, sourceFile: SourceFile, position: number) {
         const isJavaScriptFile = isSourceFileJavaScript(sourceFile);
 
-        let isJsDocTagName = false;
+        // JsDoc tag-name is just the name of the JSDoc tagname (exclude "@")
+        let requestJsDocTagName = false;
+        // JsDoc tag includes both "@" and tag-name
+        let requestJsDocTag = false;
 
         let start = timestamp();
         const currentToken = getTokenAtPosition(sourceFile, position);
@@ -826,10 +834,32 @@ namespace ts.Completions {
         log("getCompletionData: Is inside comment: " + (timestamp() - start));
 
         if (insideComment) {
-            // The current position is next to the '@' sign, when no tag name being provided yet.
-            // Provide a full list of tag names
-            if (hasDocComment(sourceFile, position) && sourceFile.text.charCodeAt(position - 1) === CharacterCodes.at) {
-                isJsDocTagName = true;
+            if (hasDocComment(sourceFile, position)) {
+                // The current position is next to the '@' sign, when no tag name being provided yet.
+                // Provide a full list of tag names
+                if (sourceFile.text.charCodeAt(position - 1) === CharacterCodes.at) {
+                    requestJsDocTagName = true;
+                }
+                else {
+                    // When completion is requested without "@", we will have check to make sure that
+                    // there are no comments prefix the request position. We will only allow "*" and space.
+                    // e.g
+                    //   /** |c| /*
+                    //
+                    //   /**
+                    //     |c|
+                    //    */
+                    //
+                    //   /**
+                    //    * |c|
+                    //    */
+                    //
+                    //   /**
+                    //    *         |c|
+                    //    */
+                    const lineStart = getLineStartPositionForPosition(position, sourceFile);
+                    requestJsDocTag = !(sourceFile.text.substring(lineStart, position).match(/[^\*|\s|(/\*\*)]/));
+                }
             }
 
             // Completion should work inside certain JsDoc tags. For example:
@@ -839,7 +869,7 @@ namespace ts.Completions {
             const tag = getJsDocTagAtPosition(sourceFile, position);
             if (tag) {
                 if (tag.tagName.pos <= position && position <= tag.tagName.end) {
-                    isJsDocTagName = true;
+                    requestJsDocTagName = true;
                 }
 
                 switch (tag.kind) {
@@ -854,8 +884,8 @@ namespace ts.Completions {
                 }
             }
 
-            if (isJsDocTagName) {
-                return { symbols: undefined, isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, location: undefined, isRightOfDot: false, isJsDocTagName };
+            if (requestJsDocTagName || requestJsDocTag) {
+                return { symbols: undefined, isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, location: undefined, isRightOfDot: false, requestJsDocTagName, requestJsDocTag };
             }
 
             if (!insideJsDocTagExpression) {
@@ -915,13 +945,29 @@ namespace ts.Completions {
                 }
             }
             else if (sourceFile.languageVariant === LanguageVariant.JSX) {
-                if (kind === SyntaxKind.LessThanToken) {
-                    isRightOfOpenTag = true;
-                    location = contextToken;
-                }
-                else if (kind === SyntaxKind.SlashToken && contextToken.parent.kind === SyntaxKind.JsxClosingElement) {
-                    isStartingCloseTag = true;
-                    location = contextToken;
+                switch (contextToken.parent.kind) {
+                    case SyntaxKind.JsxClosingElement:
+                        if (kind === SyntaxKind.SlashToken) {
+                            isStartingCloseTag = true;
+                            location = contextToken;
+                        }
+                        break;
+
+                    case SyntaxKind.BinaryExpression:
+                        if (!((contextToken.parent as BinaryExpression).left.flags & NodeFlags.ThisNodeHasError)) {
+                            // It has a left-hand side, so we're not in an opening JSX tag.
+                            break;
+                        }
+                        // fall through
+
+                    case SyntaxKind.JsxSelfClosingElement:
+                    case SyntaxKind.JsxElement:
+                    case SyntaxKind.JsxOpeningElement:
+                        if (kind === SyntaxKind.LessThanToken) {
+                            isRightOfOpenTag = true;
+                            location = contextToken;
+                        }
+                        break;
                 }
             }
         }
@@ -967,7 +1013,7 @@ namespace ts.Completions {
 
         log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
 
-        return { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag), isJsDocTagName };
+        return { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag), requestJsDocTagName, requestJsDocTag };
 
         function getTypeScriptMemberSymbols(): void {
             // Right of dot member completion list
@@ -1040,10 +1086,10 @@ namespace ts.Completions {
                 let attrsType: Type;
                 if ((jsxContainer.kind === SyntaxKind.JsxSelfClosingElement) || (jsxContainer.kind === SyntaxKind.JsxOpeningElement)) {
                     // Cursor is inside a JSX self-closing element or opening element
-                    attrsType = typeChecker.getJsxElementAttributesType(<JsxOpeningLikeElement>jsxContainer);
+                    attrsType = typeChecker.getAllAttributesTypeFromJsxOpeningLikeElement(<JsxOpeningLikeElement>jsxContainer);
 
                     if (attrsType) {
-                        symbols = filterJsxAttributes(typeChecker.getPropertiesOfType(attrsType), (<JsxOpeningLikeElement>jsxContainer).attributes);
+                        symbols = filterJsxAttributes(typeChecker.getPropertiesOfType(attrsType), (<JsxOpeningLikeElement>jsxContainer).attributes.properties);
                         isMemberCompletion = true;
                         isNewIdentifierLocation = false;
                         return true;
@@ -1385,13 +1431,18 @@ namespace ts.Completions {
                     case SyntaxKind.LessThanSlashToken:
                     case SyntaxKind.SlashToken:
                     case SyntaxKind.Identifier:
+                    case SyntaxKind.JsxAttributes:
                     case SyntaxKind.JsxAttribute:
                     case SyntaxKind.JsxSpreadAttribute:
                         if (parent && (parent.kind === SyntaxKind.JsxSelfClosingElement || parent.kind === SyntaxKind.JsxOpeningElement)) {
                             return <JsxOpeningLikeElement>parent;
                         }
                         else if (parent.kind === SyntaxKind.JsxAttribute) {
-                            return <JsxOpeningLikeElement>parent.parent;
+                            // Currently we parse JsxOpeningLikeElement as:
+                            //      JsxOpeningLikeElement
+                            //          attributes: JsxAttributes
+                            //             properties: NodeArray<JsxAttributeLike>
+                            return parent.parent.parent as JsxOpeningLikeElement;
                         }
                         break;
 
@@ -1400,7 +1451,11 @@ namespace ts.Completions {
                     // whose parent is a JsxOpeningLikeElement
                     case SyntaxKind.StringLiteral:
                         if (parent && ((parent.kind === SyntaxKind.JsxAttribute) || (parent.kind === SyntaxKind.JsxSpreadAttribute))) {
-                            return <JsxOpeningLikeElement>parent.parent;
+                            // Currently we parse JsxOpeningLikeElement as:
+                            //      JsxOpeningLikeElement
+                            //          attributes: JsxAttributes
+                            //             properties: NodeArray<JsxAttributeLike>
+                            return parent.parent.parent as JsxOpeningLikeElement;
                         }
 
                         break;
@@ -1408,13 +1463,21 @@ namespace ts.Completions {
                     case SyntaxKind.CloseBraceToken:
                         if (parent &&
                             parent.kind === SyntaxKind.JsxExpression &&
-                            parent.parent &&
-                            (parent.parent.kind === SyntaxKind.JsxAttribute)) {
-                            return <JsxOpeningLikeElement>parent.parent.parent;
+                            parent.parent && parent.parent.kind === SyntaxKind.JsxAttribute) {
+                            // Currently we parse JsxOpeningLikeElement as:
+                            //      JsxOpeningLikeElement
+                            //          attributes: JsxAttributes
+                            //             properties: NodeArray<JsxAttributeLike>
+                            //                  each JsxAttribute can have initializer as JsxExpression
+                            return parent.parent.parent.parent as JsxOpeningLikeElement;
                         }
 
                         if (parent && parent.kind === SyntaxKind.JsxSpreadAttribute) {
-                            return <JsxOpeningLikeElement>parent.parent;
+                            // Currently we parse JsxOpeningLikeElement as:
+                            //      JsxOpeningLikeElement
+                            //          attributes: JsxAttributes
+                            //             properties: NodeArray<JsxAttributeLike>
+                            return parent.parent.parent as JsxOpeningLikeElement;
                         }
 
                         break;

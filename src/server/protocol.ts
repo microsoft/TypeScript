@@ -820,7 +820,7 @@ namespace ts.server.protocol {
      * Represents a file in external project.
      * External project is project whose set of files, compilation options and open\close state
      * is maintained by the client (i.e. if all this data come from .csproj file in Visual Studio).
-     * External project will exist even if all files in it are closed and should be closed explicity.
+     * External project will exist even if all files in it are closed and should be closed explicitly.
      * If external project includes one or more tsconfig.json/jsconfig.json files then tsserver will
      * create configured project for every config file but will maintain a link that these projects were created
      * as a result of opening external project so they should be removed once external project is closed.
@@ -1766,6 +1766,20 @@ namespace ts.server.protocol {
         arguments: GeterrRequestArgs;
     }
 
+    export type RequestCompletedEventName = "requestCompleted";
+
+    /**
+     * Event that is sent when server have finished processing request with specified id.
+     */
+    export interface RequestCompletedEvent extends Event {
+        event: RequestCompletedEventName;
+        body: RequestCompletedEventBody;
+    }
+
+    export interface RequestCompletedEventBody {
+        request_seq: number;
+    }
+
     /**
       * Item of diagnostic information found in a DiagnosticEvent message.
       */
@@ -2204,6 +2218,7 @@ namespace ts.server.protocol {
         insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
         insertSpaceBeforeFunctionParenthesis?: boolean;
@@ -2253,6 +2268,7 @@ namespace ts.server.protocol {
         outDir?: string;
         outFile?: string;
         paths?: MapLike<string[]>;
+        plugins?: PluginImport[];
         preserveConstEnums?: boolean;
         project?: string;
         reactNamespace?: string;
