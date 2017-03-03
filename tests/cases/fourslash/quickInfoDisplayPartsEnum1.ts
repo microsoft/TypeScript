@@ -19,4 +19,6 @@
 /////*25*/eInstance1 = /*26*/constE./*27*/e2;
 /////*28*/eInstance1 = /*29*/constE./*30*/e3;
 
+//goTo.marker("2");
+//verify.verifyQuickInfoDisplayParts("enum member", "", { start: 0, length: 2 }, /*displayParts*/[], /*documentation*/[]);
 verify.baselineQuickInfo();
