@@ -1486,7 +1486,7 @@ namespace ts {
 
     // Clauses
 
-    export function createHeritageClause(token: SyntaxKind, types: ExpressionWithTypeArguments[]) {
+    export function createHeritageClause(token: HeritageClause["token"], types: ExpressionWithTypeArguments[]) {
         const node = <HeritageClause>createSynthesizedNode(SyntaxKind.HeritageClause);
         node.token = token;
         node.types = createNodeArray(types);

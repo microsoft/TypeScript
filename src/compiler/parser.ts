@@ -5437,9 +5437,10 @@ namespace ts {
         }
 
         function parseHeritageClause(): HeritageClause | undefined {
-            if (token() === SyntaxKind.ExtendsKeyword || token() === SyntaxKind.ImplementsKeyword) {
+            const tok = token();
+            if (tok === SyntaxKind.ExtendsKeyword || tok === SyntaxKind.ImplementsKeyword) {
                 const node = <HeritageClause>createNode(SyntaxKind.HeritageClause);
-                node.token = token();
+                node.token = tok;
                 nextToken();
                 node.types = parseDelimitedList(ParsingContext.HeritageClauseElement, parseExpressionWithTypeArguments);
                 return finishNode(node);

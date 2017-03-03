@@ -863,15 +863,13 @@ namespace ts {
         kind: SyntaxKind.ThisType;
     }
 
-    export interface FunctionOrConstructorTypeNode extends TypeNode, SignatureDeclaration {
-        kind: SyntaxKind.FunctionType | SyntaxKind.ConstructorType;
-    }
+    export type FunctionOrConstructorTypeNode = FunctionTypeNode | ConstructorTypeNode;
 
-    export interface FunctionTypeNode extends FunctionOrConstructorTypeNode {
+    export interface FunctionTypeNode extends TypeNode, SignatureDeclaration {
         kind: SyntaxKind.FunctionType;
     }
 
-    export interface ConstructorTypeNode extends FunctionOrConstructorTypeNode {
+    export interface ConstructorTypeNode extends TypeNode, SignatureDeclaration {
         kind: SyntaxKind.ConstructorType;
     }
 
@@ -908,17 +906,16 @@ namespace ts {
         elementTypes: NodeArray<TypeNode>;
     }
 
-    export interface UnionOrIntersectionTypeNode extends TypeNode {
-        kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType;
+    export type UnionOrIntersectionTypeNode = UnionTypeNode | IntersectionTypeNode;
+
+    export interface UnionTypeNode extends TypeNode {
+        kind: SyntaxKind.UnionType;
         types: NodeArray<TypeNode>;
     }
 
-    export interface UnionTypeNode extends UnionOrIntersectionTypeNode {
-        kind: SyntaxKind.UnionType;
-    }
-
-    export interface IntersectionTypeNode extends UnionOrIntersectionTypeNode {
+    export interface IntersectionTypeNode extends TypeNode {
         kind: SyntaxKind.IntersectionType;
+        types: NodeArray<TypeNode>;
     }
 
     export interface ParenthesizedTypeNode extends TypeNode {
@@ -1779,7 +1776,7 @@ namespace ts {
     export interface HeritageClause extends Node {
         kind: SyntaxKind.HeritageClause;
         parent?: InterfaceDeclaration | ClassDeclaration | ClassExpression;
-        token: SyntaxKind;
+        token: SyntaxKind.ExtendsKeyword | SyntaxKind.ImplementsKeyword;
         types?: NodeArray<ExpressionWithTypeArguments>;
     }
 
