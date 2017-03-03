@@ -653,7 +653,7 @@ namespace ts.server {
                 // this drive is unsafe - return no-op watcher
                 return { close() { } };
             }
-        }
+        };
     }
 
     // Override sys.write because fs.writeSync is not reliable on Node 4

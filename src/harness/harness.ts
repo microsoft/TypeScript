@@ -1017,7 +1017,7 @@ namespace Harness {
                     }
                     else {
                         if (!es6TestLibFileNameSourceFileMap.get(libFileName)) {
-                            es6TestLibFileNameSourceFileMap.set(libFileName, createSourceFileAndAssertInvariants(libFileName, IO.readFile(libFileName), scriptTarget))
+                            es6TestLibFileNameSourceFileMap.set(libFileName, createSourceFileAndAssertInvariants(libFileName, IO.readFile(libFileName), scriptTarget));
                         }
                     }
                 }

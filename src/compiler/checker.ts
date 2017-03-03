@@ -141,7 +141,7 @@ namespace ts {
             getAugmentedPropertiesOfType,
             getRootSymbols,
             getContextualType: node => {
-                node = getParseTreeNode(node, isExpression)
+                node = getParseTreeNode(node, isExpression);
                 return node ? getContextualType(node) : undefined;
             },
             getFullyQualifiedName,

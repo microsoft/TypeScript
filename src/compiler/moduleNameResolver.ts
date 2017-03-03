@@ -675,7 +675,7 @@ namespace ts {
     }
 
     export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache): ResolvedModuleWithFailedLookupLocations {
-        return nodeModuleNameResolverWorker(moduleName, containingFile, compilerOptions, host, cache, /* jsOnly*/ false);
+        return nodeModuleNameResolverWorker(moduleName, containingFile, compilerOptions, host, cache, /*jsOnly*/ false);
     }
 
     /* @internal */

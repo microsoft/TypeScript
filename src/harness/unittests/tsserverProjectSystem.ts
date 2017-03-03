@@ -3307,12 +3307,12 @@ namespace ts.projectSystem {
                 isCancellationRequested: () => false,
                 setRequest: requestId => {
                     if (expectedRequestId === undefined) {
-                        assert.isTrue(false, "unexpected call")
+                        assert.isTrue(false, "unexpected call");
                     }
                     assert.equal(requestId, expectedRequestId);
                 },
                 resetRequest: noop
-            }
+            };
             const session = createSession(host, /*typingsInstaller*/ undefined, /*projectServiceEventHandler*/ undefined, cancellationToken);
 
             expectedRequestId = session.getNextSeq();
@@ -3359,13 +3359,13 @@ namespace ts.projectSystem {
                         currentId = requestId;
                     },
                     resetRequest(requestId) {
-                        assert.equal(requestId, currentId, "unexpected request id in cancellation")
+                        assert.equal(requestId, currentId, "unexpected request id in cancellation");
                         currentId = undefined;
                     },
                     isCancellationRequested() {
                         return requestToCancel === currentId;
                     }
-                }
+                };
             })();
             const host = createServerHost([f1, config]);
             const session = createSession(host, /*typingsInstaller*/ undefined, () => {}, cancellationToken);

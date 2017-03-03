@@ -2136,7 +2136,7 @@ namespace FourSlash {
 
             const result = includeWhiteSpace
                 ? actualText === expectedText
-                : this.removeWhitespace(actualText) === this.removeWhitespace(expectedText)
+                : this.removeWhitespace(actualText) === this.removeWhitespace(expectedText);
 
             if (!result) {
                 this.raiseError(`Actual text doesn't match expected text. Actual:\n'${actualText}'\nExpected:\n'${expectedText}'`);
@@ -2173,7 +2173,7 @@ namespace FourSlash {
                     start: diagnostic.start,
                     length: diagnostic.length,
                     code: diagnostic.code
-                }
+                };
             });
             const dedupedDiagnositcs = ts.deduplicate(diagnosticsForCodeFix, ts.equalOwnProperties);
 

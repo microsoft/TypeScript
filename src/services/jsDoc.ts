@@ -107,7 +107,7 @@ namespace ts.JsDoc {
                 kind: ScriptElementKind.keyword,
                 kindModifiers: "",
                 sortText: "0"
-            }
+            };
         }));
     }
 
