@@ -4320,6 +4320,7 @@ interface EventInit {
     scoped?: boolean;
     bubbles?: boolean;
     cancelable?: boolean;
+    composed?: boolean;
 }
 
 interface EventModifierInit extends UIEventInit {
@@ -15938,9 +15939,15 @@ interface TouchEvent extends UIEvent {
     readonly which: number;
 }
 
+interface TouchEventInit extends EventModifierInit {
+    touches?: Touch[];
+    targetTouches?: Touch[];
+    changedTouches?: Touch[];
+}
+
 declare var TouchEvent: {
     prototype: TouchEvent;
-    new(): TouchEvent;
+    new (typeArg: string, touchEventInit?: TouchEventInit): TouchEvent;
 }
 
 interface TouchList {
