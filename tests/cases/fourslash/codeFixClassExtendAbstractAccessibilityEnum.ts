@@ -1,12 +1,8 @@
 /// <reference path='fourslash.ts' />
 
 //// namespace N {
-////     const enum Inaccessible {
-////         member
-////     };
-////     export const enum Accessible {
-////         member
-////     };
+////     const enum Inaccessible { member };
+////     export const enum Accessible { member };
 ////     export abstract class A {
 ////         abstract x: Inaccessible;
 ////         abstract y: Inaccessible.member;

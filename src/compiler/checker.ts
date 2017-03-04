@@ -1986,59 +1986,91 @@ namespace ts {
             return false;
         }
 
-        function isTypeAccessible(type: Type, enclosingDeclaration: Node, shouldComputeAliasesToMakeVisible: boolean): boolean {
-            type AccessibilityCheckerState = { inObjectTypeLiteral: boolean };
-            const state: AccessibilityCheckerState = { inObjectTypeLiteral: false };
+        function isTypeAccessible(type: Type, enclosingDeclaration: Node): boolean {
             const meaning = SymbolFlags.Type;
+            
+            return isTypeAccessibleWorker(type, /*inObjectLiteral*/ false);
 
-            const typeSymbolAccessibility = type && type.symbol && isSymbolAccessible(type.symbol, enclosingDeclaration, meaning, shouldComputeAliasesToMakeVisible).accessibility;
-            if (typeSymbolAccessibility === SymbolAccessibility.Accessible) {
-                return true;
-            }
+            function isTypeAccessibleWorker(type: Type, inObjectLiteral: boolean): boolean {
 
-            if (type.flags & TypeFlags.Intrinsic) {
-                return true;
-            }
+                const typeSymbolAccessibility = type && type.symbol && isSymbolAccessible(type.symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ false).accessibility;
+                if (typeSymbolAccessibility === SymbolAccessibility.Accessible) {
+                    return true;
+                }
 
-            if ( type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType && state.inObjectTypeLiteral) {
-                // TODO: Use recursion to track inObjectTypeLiteral
-                // TODO: Write a test for this
+                if (type.flags & (TypeFlags.Intrinsic | TypeFlags.Literal)) {
+                    return true;
+                }
+
+                if (inObjectLiteral && type.flags & TypeFlags.TypeParameter) {
+                    if ((type as TypeParameter).isThisType) {
+                        // TODO: test
+                        return false;
+                    }
+                    // TODO: test
+                    return isTypeAccessibleWorker((type as TypeParameter).constraint, inObjectLiteral);
+                }
+
+                const objectFlags = getObjectFlags(type);
+
+                if (objectFlags & ObjectFlags.ClassOrInterface) {
+                    // If type is a class or interface type that wasn't hit by the isSymbolAccessible check above,
+                    // type must be an anonymous class or interface.
+                    return false;
+                }
+
+                // handle type aliases? They are probably done above as part of isSymbolAccessible...
+                // But what about type arguments on aliases....
+                // TODO: resolve this. Write a test for this.
+
+                if (objectFlags & ObjectFlags.Reference) {
+                    // TODO: test the case where the name (symbol) of the type is accessible but its type arguments might not be,
+                    // and vice versa.
+                    // this case includes tuple types
+                    const typeArguments = (type as TypeReference).typeArguments || emptyArray;
+                    return allTypesVisible(typeArguments);
+                }
+
+                if (type.flags & TypeFlags.UnionOrIntersection) {
+                    return allTypesVisible((type as UnionOrIntersectionType).types);
+                }
+
+                if (type.flags & TypeFlags.Object && objectFlags & ObjectFlags.Mapped) {
+                    const typeParameter = getTypeParameterFromMappedType(<MappedType>type);
+                    const constraintType = getConstraintTypeFromMappedType(<MappedType>type);
+                    const templateType = getTemplateTypeFromMappedType(<MappedType>type);
+                    return (!typeParameter || isTypeAccessibleWorker(typeParameter, inObjectLiteral))
+                        && (!constraintType || isTypeAccessibleWorker((<MappedType>type).constraintType, inObjectLiteral))
+                        && (!templateType || isTypeAccessibleWorker((<MappedType>type).templateType, inObjectLiteral));
+                }
+
+                if (objectFlags & ObjectFlags.Anonymous) {
+                    // The type is an object literal type.
+                    const members = type.symbol.members;
+                    let allVisible = true;
+                    members && members.forEach((member) => {
+                        const memberType = getTypeOfSymbolAtLocation(member, enclosingDeclaration);
+                        allVisible = allVisible && isTypeAccessibleWorker(memberType, /*inObjectLiteral*/ true);
+                    });
+                    return allVisible;
+                }
+
+                if (type.flags & TypeFlags.Index) {
+                    // TODO: test
+                    return isTypeAccessibleWorker((<IndexType>type).type, inObjectLiteral);
+                }
+
+                if (type.flags & TypeFlags.IndexedAccess) {
+                    // TODO: test
+                    return isTypeAccessibleWorker((<IndexedAccessType>type).objectType, inObjectLiteral)
+                        && isTypeAccessibleWorker((<IndexedAccessType>type).indexType, inObjectLiteral);
+                }
+
                 return false;
             }
-
-            const objectFlags = getObjectFlags(type);
-
-            if (objectFlags & ObjectFlags.ClassOrInterface) {
-                // If type is a class or interface type that wasn't hit by the isSymbolAccessible check above,
-                // type must be an anonymous class or interface.
-                return false;
-            }
-
-            if (objectFlags & ObjectFlags.Reference) {
-                // This case includes tuple types.
-                const typeArguments = (type as TypeReference).typeArguments || emptyArray;
-                return allTypesVisible(typeArguments);
-            }
-
-            if (type.flags & TypeFlags.UnionOrIntersection) {
-                return allTypesVisible((type as UnionOrIntersectionType).types);
-            }
-
-            if (objectFlags & ObjectFlags.Anonymous) {
-                // The type is an object literal type.
-                const members = type.symbol.members;
-                let allVisible = true;
-                members.forEach((member) => {
-                    const memberType = getTypeOfSymbolAtLocation(member, enclosingDeclaration);
-                    allVisible = allVisible && isTypeAccessible(memberType, enclosingDeclaration, shouldComputeAliasesToMakeVisible);
-                });
-                return allVisible;
-            }
-
-            return false;
 
             function allTypesVisible(types: Type[]): boolean {
-                return types.every(type => isTypeAccessible(type, enclosingDeclaration, shouldComputeAliasesToMakeVisible));
+                return types.every(type => isTypeAccessible(type, enclosingDeclaration));
             }
         }
 

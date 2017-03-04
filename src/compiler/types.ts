@@ -2475,7 +2475,7 @@
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
         isUnknownSymbol(symbol: Symbol): boolean;
-        isTypeAccessible(type: Type, enclosingDeclaration: Node, shouldComputeAliasesToMakeVisible: boolean): boolean;
+        isTypeAccessible(type: Type, enclosingDeclaration: Node): boolean;
 
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;

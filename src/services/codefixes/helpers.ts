@@ -44,11 +44,11 @@ namespace ts.codefix {
             case SyntaxKind.SetAccessor:
             case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyDeclaration:
-                if (checker.isTypeAccessible(type, enclosingDeclaration, /*shouldComputeAliasesToMakeVisible*/ false)) {
+                // if (checker.isTypeAccessible(type, enclosingDeclaration)) {
                     const typeString = checker.typeToString(type, enclosingDeclaration, TypeFormatFlags.None);
                     return `${visibility}${name}: ${typeString};${newlineChar}`;
-                }
-                return "";
+                // }
+                // return "";
 
             case SyntaxKind.MethodSignature:
             case SyntaxKind.MethodDeclaration:
