@@ -46,7 +46,7 @@ namespace ts.codefix {
         function getMissingIndexSignatureInsertion(type: InterfaceType, kind: IndexKind, enclosingDeclaration: ClassLikeDeclaration, hasIndexSigOfKind: boolean) {
             if (!hasIndexSigOfKind) {
                 const IndexInfoOfKind = checker.getIndexInfoOfType(type, kind);
-                if (IndexInfoOfKind) {
+                if (IndexInfoOfKind && checker.isTypeAccessible(IndexInfoOfKind.type, enclosingDeclaration)) {
                     const writer = getSingleLineStringWriter();
                     checker.getSymbolDisplayBuilder().buildIndexSignatureDisplay(IndexInfoOfKind, writer, kind, enclosingDeclaration);
                     const result = writer.string();
