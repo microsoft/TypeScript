@@ -38,6 +38,9 @@ namespace ts.codefix {
 
             const checker = context.program.getDiagnosticsProducingTypeChecker();
             const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(binaryExpression.right)));
+            if (!checker.isTypeAccessible(widenedType, classDeclaration)) {
+                return undefined;
+            }
             typeString = checker.typeToString(widenedType);
         }
 
