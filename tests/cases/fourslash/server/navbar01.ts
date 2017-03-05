@@ -129,15 +129,15 @@ verify.navigationTree({
                     "childItems": [
                         {
                             "text": "value1",
-                            "kind": "const"
+                            "kind": "enum member"
                         },
                         {
                             "text": "value2",
-                            "kind": "const"
+                            "kind": "enum member"
                         },
                         {
                             "text": "value3",
-                            "kind": "const"
+                            "kind": "enum member"
                         }
                     ]
                 }
@@ -262,15 +262,15 @@ verify.navigationBar([
         "childItems": [
             {
                 "text": "value1",
-                "kind": "const"
+                "kind": "enum member"
             },
             {
                 "text": "value2",
-                "kind": "const"
+                "kind": "enum member"
             },
             {
                 "text": "value3",
-                "kind": "const"
+                "kind": "enum member"
             }
         ],
         "indent": 2

@@ -226,7 +226,7 @@ namespace ts.server {
 
     /**
      * Represents operation that can schedule its next step to be executed later.
-     * Scheduling is done via instance of NextStep. If on current step subsequent step was not scheduled - operation is assumed to be completed. 
+     * Scheduling is done via instance of NextStep. If on current step subsequent step was not scheduled - operation is assumed to be completed.
      */
     class MultistepOperation {
         private requestId: number;
@@ -239,7 +239,7 @@ namespace ts.server {
             this.next = {
                 immediate: action => this.immediate(action),
                 delay: (ms, action) => this.delay(ms, action)
-            }
+            };
         }
 
         public startNew(action: (next: NextStep) => void) {
@@ -262,7 +262,7 @@ namespace ts.server {
 
         private immediate(action: () => void) {
             const requestId = this.requestId;
-            Debug.assert(requestId === this.operationHost.getCurrentRequestId(), "immediate: incorrect request id")
+            Debug.assert(requestId === this.operationHost.getCurrentRequestId(), "immediate: incorrect request id");
             this.setImmediateId(this.operationHost.getServerHost().setImmediate(() => {
                 this.immediateId = undefined;
                 this.operationHost.executeWithRequestId(requestId, () => this.executeAction(action));
@@ -271,7 +271,7 @@ namespace ts.server {
 
         private delay(ms: number, action: () => void) {
             const requestId = this.requestId;
-            Debug.assert(requestId === this.operationHost.getCurrentRequestId(), "delay: incorrect request id")
+            Debug.assert(requestId === this.operationHost.getCurrentRequestId(), "delay: incorrect request id");
             this.setTimerHandle(this.operationHost.getServerHost().setTimeout(() => {
                 this.timerHandle = undefined;
                 this.operationHost.executeWithRequestId(requestId, () => this.executeAction(action));
@@ -351,7 +351,7 @@ namespace ts.server {
                 logError: (err, cmd) => this.logError(err, cmd),
                 sendRequestCompletedEvent: requestId => this.sendRequestCompletedEvent(requestId),
                 isCancellationRequested: () => cancellationToken.isCancellationRequested()
-            }
+            };
             this.errorCheck = new MultistepOperation(multistepOperationHost);
             this.projectService = new ProjectService(host, logger, cancellationToken, useSingleInferredProject, typingsInstaller, this.eventHander);
             this.gcTimer = new GcTimer(host, /*delay*/ 7000, logger);

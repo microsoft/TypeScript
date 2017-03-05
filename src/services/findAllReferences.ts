@@ -422,7 +422,7 @@ namespace ts.FindAllReferences {
             name,
             textSpan: references[0].textSpan,
             displayParts: [{ text: name, kind: ScriptElementKind.keyword }]
-        }
+        };
 
         return [{ definition, references }];
     }
@@ -613,7 +613,7 @@ namespace ts.FindAllReferences {
         const result: Node[] = [];
 
         for (const decl of classSymbol.members.get("__constructor").declarations) {
-            const ctrKeyword = ts.findChildOfKind(decl, ts.SyntaxKind.ConstructorKeyword, sourceFile)!
+            const ctrKeyword = ts.findChildOfKind(decl, ts.SyntaxKind.ConstructorKeyword, sourceFile)!;
             Debug.assert(decl.kind === SyntaxKind.Constructor && !!ctrKeyword);
             result.push(ctrKeyword);
         }

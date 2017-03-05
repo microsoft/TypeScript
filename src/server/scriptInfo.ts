@@ -48,7 +48,7 @@ namespace ts.server {
 
         public reloadFromFile(tempFileName?: string) {
             if (this.svc || (tempFileName !== this.fileName)) {
-                this.reload(this.getFileText(tempFileName))
+                this.reload(this.getFileText(tempFileName));
             }
             else {
                 this.setText(undefined);

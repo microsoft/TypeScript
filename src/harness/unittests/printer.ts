@@ -9,7 +9,7 @@ namespace ts {
                     Harness.Baseline.runBaseline(`printerApi/${prefix}.${name}.js`, () =>
                         printCallback(createPrinter({ newLine: NewLineKind.CarriageReturnLineFeed, ...options })));
                 });
-            }
+            };
         }
 
         describe("printFile", () => {
