@@ -9843,9 +9843,8 @@ namespace ts {
             if (flags & TypeFlags.NonPrimitive) {
                 return strictNullChecks ? TypeFacts.ObjectStrictFacts : TypeFacts.ObjectFacts;
             }
-            if (flags & TypeFlags.TypeParameter) {
-                const constraint = getConstraintOfTypeParameter(<TypeParameter>type);
-                return getTypeFacts(constraint || emptyObjectType);
+            if (flags & TypeFlags.TypeVariable) {
+                return getTypeFacts(getBaseConstraintOfType(<TypeVariable>type) || emptyObjectType);
             }
             if (flags & TypeFlags.UnionOrIntersection) {
                 return getTypeFactsOfTypes((<UnionOrIntersectionType>type).types);
@@ -10632,8 +10631,16 @@ namespace ts {
                     // is a supertype of that primitive type. For example, type 'any' can be narrowed
                     // to one of the primitive types.
                     const targetType = typeofTypesByName.get(literal.text);
-                    if (targetType && isTypeSubtypeOf(targetType, type)) {
-                        return targetType;
+                    if (targetType) {
+                        if (isTypeSubtypeOf(targetType, type)) {
+                            return targetType;
+                        }
+                        if (type.flags & TypeFlags.TypeVariable) {
+                            const constraint = getBaseConstraintOfType(<TypeVariable>type) || anyType;
+                            if (isTypeSubtypeOf(targetType, constraint)) {
+                                return getIntersectionType([type, targetType]);
+                            }
+                        }
                     }
                 }
                 const facts = assumeTrue ?
@@ -10731,10 +10738,9 @@ namespace ts {
                 // Otherwise, if the candidate type is assignable to the target type, narrow to the candidate
                 // type. Otherwise, the types are completely unrelated, so narrow to an intersection of the
                 // two types.
-                const targetType = type.flags & TypeFlags.TypeParameter ? getApparentType(type) : type;
                 return isTypeSubtypeOf(candidate, type) ? candidate :
                     isTypeAssignableTo(type, candidate) ? type :
-                    isTypeAssignableTo(candidate, targetType) ? candidate :
+                    isTypeAssignableTo(candidate, type) ? candidate :
                     getIntersectionType([type, candidate]);
             }
 
