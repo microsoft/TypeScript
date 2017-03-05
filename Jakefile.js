@@ -317,8 +317,14 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         if (opts.stripInternal) {
             options += " --stripInternal";
         }
-
-        options += " --target es5 --lib es5,scripthost --noUnusedLocals --noUnusedParameters";
+        options += " --target es5";
+        if (opts.lib) {
+            options += " --lib " + opts.lib
+        }
+        else {
+            options += " --lib es5,scripthost"
+        }
+        options += " --noUnusedLocals --noUnusedParameters";
 
         var cmd = host + " " + compilerPath + " " + options + " ";
         cmd = cmd + sources.join(" ");
@@ -1077,7 +1083,7 @@ desc("Compiles tslint rules to js");
 task("build-rules", ["build-rules-start"].concat(tslintRulesOutFiles).concat(["build-rules-end"]));
 tslintRulesFiles.forEach(function (ruleFile, i) {
     compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ false,
-        { noOutFile: true, generateDeclarations: false, outDir: path.join(builtLocalDirectory, "tslint") });
+        { noOutFile: true, generateDeclarations: false, outDir: path.join(builtLocalDirectory, "tslint"), lib: "es6" });
 });
 
 desc("Emit the start of the build-rules fold");
