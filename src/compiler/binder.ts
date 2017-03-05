@@ -1903,7 +1903,7 @@ namespace ts {
 
             // Even though in the AST the jsdoc @typedef node belongs to the current node,
             // its symbol might be in the same scope with the current node's symbol. Consider:
-            // 
+            //
             //     /** @typedef {string | number} MyType */
             //     function foo();
             //
