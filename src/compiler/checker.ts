@@ -141,7 +141,7 @@ namespace ts {
             getAugmentedPropertiesOfType,
             getRootSymbols,
             getContextualType: node => {
-                node = getParseTreeNode(node, isExpression)
+                node = getParseTreeNode(node, isExpression);
                 return node ? getContextualType(node) : undefined;
             },
             getFullyQualifiedName,
@@ -16131,7 +16131,7 @@ namespace ts {
         }
 
         function checkDeclarationInitializer(declaration: VariableLikeDeclaration) {
-            const type = checkExpressionCached(declaration.initializer);
+            const type = getTypeOfExpression(declaration.initializer, /*cache*/ true);
             return getCombinedNodeFlags(declaration) & NodeFlags.Const ||
                 getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration) ||
                 isTypeAssertion(declaration.initializer) ? type : getWidenedLiteralType(type);
@@ -16204,10 +16204,12 @@ namespace ts {
 
         // Returns the type of an expression. Unlike checkExpression, this function is simply concerned
         // with computing the type and may not fully check all contained sub-expressions for errors.
-        function getTypeOfExpression(node: Expression) {
+        // A cache argument of true indicates that if the function performs a full type check, it is ok
+        // to cache the result.
+        function getTypeOfExpression(node: Expression, cache?: boolean) {
             // Optimize for the common case of a call to a function with a single non-generic call
             // signature where we can just fetch the return type without checking the arguments.
-            if (node.kind === SyntaxKind.CallExpression && (<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword) {
+            if (node.kind === SyntaxKind.CallExpression && (<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(node, /*checkArgumentIsStringLiteral*/true)) {
                 const funcType = checkNonNullExpression((<CallExpression>node).expression);
                 const signature = getSingleCallSignature(funcType);
                 if (signature && !signature.typeParameters) {
@@ -16217,7 +16219,7 @@ namespace ts {
             // Otherwise simply call checkExpression. Ideally, the entire family of checkXXX functions
             // should have a parameter that indicates whether full error checking is required such that
             // we can perform the optimizations locally.
-            return checkExpression(node);
+            return cache ? checkExpressionCached(node) : checkExpression(node);
         }
 
         // Checks an expression and returns its type. The contextualMapper parameter serves two purposes: When
@@ -20674,7 +20676,7 @@ namespace ts {
                 }
 
                 if (potentialNewTargetCollisions.length) {
-                    forEach(potentialNewTargetCollisions, checkIfNewTargetIsCapturedInEnclosingScope)
+                    forEach(potentialNewTargetCollisions, checkIfNewTargetIsCapturedInEnclosingScope);
                     potentialNewTargetCollisions.length = 0;
                 }
 

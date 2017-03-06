@@ -585,7 +585,7 @@ namespace FourSlash {
         }
 
         private getGoToDefinition(): ts.DefinitionInfo[] {
-            return this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition)
+            return this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
         }
 
         public verifyGoToType(arg0: any, endMarkerNames?: string | string[]) {
@@ -926,7 +926,7 @@ namespace FourSlash {
             function rangeToReferenceEntry(r: Range) {
                 let { isWriteAccess, isDefinition } = (r.marker && r.marker.data) || { isWriteAccess: false, isDefinition: false };
                 isWriteAccess = !!isWriteAccess; isDefinition = !!isDefinition;
-                return { fileName: r.fileName, textSpan: { start: r.start, length: r.end - r.start }, isWriteAccess, isDefinition }
+                return { fileName: r.fileName, textSpan: { start: r.start, length: r.end - r.start }, isWriteAccess, isDefinition };
             }
         }
 
@@ -2136,7 +2136,7 @@ namespace FourSlash {
 
             const result = includeWhiteSpace
                 ? actualText === expectedText
-                : this.removeWhitespace(actualText) === this.removeWhitespace(expectedText)
+                : this.removeWhitespace(actualText) === this.removeWhitespace(expectedText);
 
             if (!result) {
                 this.raiseError(`Actual text doesn't match expected text. Actual:\n'${actualText}'\nExpected:\n'${expectedText}'`);
@@ -2173,7 +2173,7 @@ namespace FourSlash {
                     start: diagnostic.start,
                     length: diagnostic.length,
                     code: diagnostic.code
-                }
+                };
             });
             const dedupedDiagnositcs = ts.deduplicate(diagnosticsForCodeFix, ts.equalOwnProperties);
 

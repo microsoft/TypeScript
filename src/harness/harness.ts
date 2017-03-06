@@ -44,7 +44,7 @@ declare namespace NodeJS {
 declare var window: {};
 declare var XMLHttpRequest: {
     new(): XMLHttpRequest;
-}
+};
 interface XMLHttpRequest  {
     readonly readyState: number;
     readonly responseText: string;
@@ -1017,7 +1017,7 @@ namespace Harness {
                     }
                     else {
                         if (!es6TestLibFileNameSourceFileMap.get(libFileName)) {
-                            es6TestLibFileNameSourceFileMap.set(libFileName, createSourceFileAndAssertInvariants(libFileName, IO.readFile(libFileName), scriptTarget))
+                            es6TestLibFileNameSourceFileMap.set(libFileName, createSourceFileAndAssertInvariants(libFileName, IO.readFile(libFileName), scriptTarget));
                         }
                     }
                 }
