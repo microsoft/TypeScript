@@ -7,4 +7,5 @@
 ////      }
 ////  }
 
+// Note, neither property declaration not index signature declaration should be available.
 verify.not.codeFixAvailable();

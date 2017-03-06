@@ -2008,10 +2008,8 @@ namespace ts {
 
                 if (inObjectLiteral && type.flags & TypeFlags.TypeParameter) {
                     if ((type as TypeParameter).isThisType) {
-                        // TODO: test
                         return false;
                     }
-                    // TODO: test
                     return isTypeAccessibleWorker((type as TypeParameter).constraint, inObjectLiteral, /*inTypeAlias*/false, symbolStack);
                 }
 
@@ -2023,11 +2021,7 @@ namespace ts {
                     return false;
                 }
 
-                // handle type aliases? They are probably done above as part of isSymbolAccessible...
-                // But what about type arguments on aliases....
-
                 if (objectFlags & ObjectFlags.Reference) {
-                    // TODO: test the case where the name (symbol) of the type is accessible but its type arguments might not be,
                     // and vice versa.
                     // this case includes tuple types
                     const typeArguments = (type as TypeReference).typeArguments || emptyArray;
@@ -2059,12 +2053,10 @@ namespace ts {
                 }
 
                 if (type.flags & TypeFlags.Index) {
-                    // TODO: test
                     return isTypeAccessibleWorker((<IndexType>type).type, inObjectLiteral, /*inTypeAlias*/false, symbolStack);
                 }
 
                 if (type.flags & TypeFlags.IndexedAccess) {
-                    // TODO: test
                     return isTypeAccessibleWorker((<IndexedAccessType>type).objectType, inObjectLiteral, /*inTypeAlias*/false, symbolStack)
                         && isTypeAccessibleWorker((<IndexedAccessType>type).indexType, inObjectLiteral, /*inTypeAlias*/false, symbolStack);
                 }
@@ -2074,59 +2066,6 @@ namespace ts {
                 function allTypesVisible(types: Type[]): boolean {
                     return types.every(type => isTypeAccessibleWorker(type, inObjectLiteral, /*inTypeAlias*/false, symbolStack));
                 }
-
-                // function isAnonymousTypeAccessible(type: ObjectType, flags: TypeFormatFlags): boolean {
-                //     const symbol = type.symbol;
-                //     if (symbol) {
-                //         // Always use 'typeof T' for type of class, enum, and module objects
-                //         if (symbol.flags & SymbolFlags.Class && !getBaseTypeVariableOfClass(symbol) ||
-                //             symbol.flags & (SymbolFlags.Enum | SymbolFlags.ValueModule)) {
-                //             return true;
-                //         }
-                //         else if (shouldWriteTypeOfFunctionSymbol()) {
-                //             return true;
-                //         }
-                //         else if (contains(symbolStack, symbol)) {
-                //             // If type is an anonymous type literal in a type alias declaration, use type alias name
-                //             const typeAlias = getTypeAliasForTypeLiteral(type);
-                //             if (typeAlias) {
-                //                 // The specified symbol flags need to be reinterpreted as type flags
-                //                 buildSymbolDisplay(typeAlias, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, flags);
-                //             }
-                //             else {
-                //                 // Recursive usage, use any
-                //                 writeKeyword(writer, SyntaxKind.AnyKeyword);
-                //             }
-                //         }
-                //         else {
-                //             // Since instantiations of the same anonymous type have the same symbol, tracking symbols instead
-                //             // of types allows us to catch circular references to instantiations of the same anonymous type
-                //             if (!symbolStack) {
-                //                 symbolStack = [];
-                //             }
-                //             symbolStack.push(symbol);
-                //             writeLiteralType(type, flags);
-                //             symbolStack.pop();
-                //         }
-                //     }
-                //     else {
-                //         // Anonymous types with no symbol are never circular
-                //         writeLiteralType(type, flags);
-                //     }
-                //     function shouldWriteTypeOfFunctionSymbol() {
-                //         const isStaticMethodSymbol = !!(symbol.flags & SymbolFlags.Method &&  // typeof static method
-                //             forEach(symbol.declarations, declaration => getModifierFlags(declaration) & ModifierFlags.Static));
-                //         const isNonLocalFunctionSymbol = !!(symbol.flags & SymbolFlags.Function) &&
-                //             (symbol.parent || // is exported function symbol
-                //                 forEach(symbol.declarations, declaration =>
-                //                     declaration.parent.kind === SyntaxKind.SourceFile || declaration.parent.kind === SyntaxKind.ModuleBlock));
-                //         if (isStaticMethodSymbol || isNonLocalFunctionSymbol) {
-                //             // typeof is allowed only for static/non local functions
-                //             return !!(flags & TypeFormatFlags.UseTypeOfFunction) || // use typeof if format flags specify it
-                //                 (contains(symbolStack, symbol)); // it is type of the symbol uses itself recursively
-                //         }
-                //     }
-                // }
             }
         }
 
