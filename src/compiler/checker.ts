@@ -9177,13 +9177,14 @@ namespace ts {
             }
         }
 
-        function createInferenceContext(signature: Signature, inferUnionTypes: boolean): InferenceContext {
+        function createInferenceContext(signature: Signature, inferUnionTypes: boolean, useAnyForNoInferences: boolean): InferenceContext {
             const inferences = map(signature.typeParameters, createTypeInferencesObject);
             return {
                 signature,
                 inferUnionTypes,
                 inferences,
                 inferredTypes: new Array(signature.typeParameters.length),
+                useAnyForNoInferences
             };
         }
 
@@ -9612,6 +9613,9 @@ namespace ts {
                         if (!isTypeAssignableTo(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
                             context.inferredTypes[index] = inferredType = instantiatedConstraint;
                         }
+                    }
+                    if (context.useAnyForNoInferences && !inferences.length && inferredType === emptyObjectType) {
+                        context.inferredTypes[index] = inferredType = anyType;
                     }
                 }
                 else if (context.failedTypeParameterIndex === undefined || context.failedTypeParameterIndex > index) {
@@ -13634,7 +13638,7 @@ namespace ts {
 
         // Instantiate a generic signature in the context of a non-generic signature (section 3.8.5 in TypeScript spec)
         function instantiateSignatureInContextOf(signature: Signature, contextualSignature: Signature, contextualMapper: TypeMapper): Signature {
-            const context = createInferenceContext(signature, /*inferUnionTypes*/ true);
+            const context = createInferenceContext(signature, /*inferUnionTypes*/ true, /*useAnyForNoInferences*/ false);
             forEachMatchingParameterType(contextualSignature, signature, (source, target) => {
                 // Type parameters from outer context referenced by source type are fixed by instantiation of the source type
                 inferTypesWithContext(context, instantiateType(source, contextualMapper), target);
@@ -14335,7 +14339,7 @@ namespace ts {
                     let candidate: Signature;
                     let typeArgumentsAreValid: boolean;
                     const inferenceContext = originalCandidate.typeParameters
-                        ? createInferenceContext(originalCandidate, /*inferUnionTypes*/ false)
+                        ? createInferenceContext(originalCandidate, /*inferUnionTypes*/ false, /*useAnyForNoInferences*/ isInJavaScriptFile(node))
                         : undefined;
 
                     while (true) {
