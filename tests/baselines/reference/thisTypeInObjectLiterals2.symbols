@@ -1,0 +1,606 @@
+=== tests/cases/conformance/types/thisType/thisTypeInObjectLiterals2.ts ===
+
+// In methods of an object literal with no contextual type, 'this' has the type
+// of the object literal.
+
+let obj1 = {
+>obj1 : Symbol(obj1, Decl(thisTypeInObjectLiterals2.ts, 4, 3))
+
+    a: 1,
+>a : Symbol(a, Decl(thisTypeInObjectLiterals2.ts, 4, 12))
+
+    f() {
+>f : Symbol(f, Decl(thisTypeInObjectLiterals2.ts, 5, 9))
+
+        return this.a;
+>this.a : Symbol(a, Decl(thisTypeInObjectLiterals2.ts, 4, 12))
+>this : Symbol(obj1, Decl(thisTypeInObjectLiterals2.ts, 4, 10))
+>a : Symbol(a, Decl(thisTypeInObjectLiterals2.ts, 4, 12))
+
+    },
+    b: "hello",
+>b : Symbol(b, Decl(thisTypeInObjectLiterals2.ts, 8, 6))
+
+    c: {
+>c : Symbol(c, Decl(thisTypeInObjectLiterals2.ts, 9, 15))
+
+        g() {
+>g : Symbol(g, Decl(thisTypeInObjectLiterals2.ts, 10, 8))
+
+            this.g();
+>this.g : Symbol(g, Decl(thisTypeInObjectLiterals2.ts, 10, 8))
+>this : Symbol(__object, Decl(thisTypeInObjectLiterals2.ts, 10, 6))
+>g : Symbol(g, Decl(thisTypeInObjectLiterals2.ts, 10, 8))
+        }
+    },
+    get d() {
+>d : Symbol(d, Decl(thisTypeInObjectLiterals2.ts, 14, 6))
+
+        return this.a;
+>this.a : Symbol(a, Decl(thisTypeInObjectLiterals2.ts, 4, 12))
+>this : Symbol(obj1, Decl(thisTypeInObjectLiterals2.ts, 4, 10))
+>a : Symbol(a, Decl(thisTypeInObjectLiterals2.ts, 4, 12))
+
+    },
+    get e() {
+>e : Symbol(e, Decl(thisTypeInObjectLiterals2.ts, 17, 6), Decl(thisTypeInObjectLiterals2.ts, 20, 6))
+
+        return this.b;
+>this.b : Symbol(b, Decl(thisTypeInObjectLiterals2.ts, 8, 6))
+>this : Symbol(obj1, Decl(thisTypeInObjectLiterals2.ts, 4, 10))
+>b : Symbol(b, Decl(thisTypeInObjectLiterals2.ts, 8, 6))
+
+    },
+    set e(value) {
+>e : Symbol(e, Decl(thisTypeInObjectLiterals2.ts, 17, 6), Decl(thisTypeInObjectLiterals2.ts, 20, 6))
+>value : Symbol(value, Decl(thisTypeInObjectLiterals2.ts, 21, 10))
+
+        this.b = value;
+>this.b : Symbol(b, Decl(thisTypeInObjectLiterals2.ts, 8, 6))
+>this : Symbol(obj1, Decl(thisTypeInObjectLiterals2.ts, 4, 10))
+>b : Symbol(b, Decl(thisTypeInObjectLiterals2.ts, 8, 6))
+>value : Symbol(value, Decl(thisTypeInObjectLiterals2.ts, 21, 10))
+    }
+};
+
+// In methods of an object literal with a contextual type, 'this' has the
+// contextual type.
+
+type Point = {
+>Point : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 24, 2))
+
+    x: number;
+>x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+
+    y: number;
+>y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+
+    z?: number;
+>z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 31, 14))
+
+    moveBy(dx: number, dy: number, dz?: number): void;
+>moveBy : Symbol(moveBy, Decl(thisTypeInObjectLiterals2.ts, 32, 15))
+>dx : Symbol(dx, Decl(thisTypeInObjectLiterals2.ts, 33, 11))
+>dy : Symbol(dy, Decl(thisTypeInObjectLiterals2.ts, 33, 22))
+>dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 33, 34))
+}
+
+let p1: Point = {
+>p1 : Symbol(p1, Decl(thisTypeInObjectLiterals2.ts, 36, 3))
+>Point : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 24, 2))
+
+    x: 10,
+>x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 36, 17))
+
+    y: 20,
+>y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 37, 10))
+
+    moveBy(dx, dy, dz) {
+>moveBy : Symbol(moveBy, Decl(thisTypeInObjectLiterals2.ts, 38, 10))
+>dx : Symbol(dx, Decl(thisTypeInObjectLiterals2.ts, 39, 11))
+>dy : Symbol(dy, Decl(thisTypeInObjectLiterals2.ts, 39, 14))
+>dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 39, 18))
+
+        this.x += dx;
+>this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+>this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 29, 12))
+>x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+>dx : Symbol(dx, Decl(thisTypeInObjectLiterals2.ts, 39, 11))
+
+        this.y += dy;
+>this.y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+>this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 29, 12))
+>y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+>dy : Symbol(dy, Decl(thisTypeInObjectLiterals2.ts, 39, 14))
+
+        if (this.z && dz) {
+>this.z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 31, 14))
+>this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 29, 12))
+>z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 31, 14))
+>dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 39, 18))
+
+            this.z += dz;
+>this.z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 31, 14))
+>this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 29, 12))
+>z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 31, 14))
+>dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 39, 18))
+        }
+    }
+};
+
+declare function f1(p: Point): void;
+>f1 : Symbol(f1, Decl(thisTypeInObjectLiterals2.ts, 46, 2))
+>p : Symbol(p, Decl(thisTypeInObjectLiterals2.ts, 48, 20))
+>Point : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 24, 2))
+
+f1({
+>f1 : Symbol(f1, Decl(thisTypeInObjectLiterals2.ts, 46, 2))
+
+    x: 10,
+>x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 50, 4))
+
+    y: 20,
+>y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 51, 10))
+
+    moveBy(dx, dy, dz) {
+>moveBy : Symbol(moveBy, Decl(thisTypeInObjectLiterals2.ts, 52, 10))
+>dx : Symbol(dx, Decl(thisTypeInObjectLiterals2.ts, 53, 11))
+>dy : Symbol(dy, Decl(thisTypeInObjectLiterals2.ts, 53, 14))
+>dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 53, 18))
+
+        this.x += dx;
+>this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+>this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 29, 12))
+>x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+>dx : Symbol(dx, Decl(thisTypeInObjectLiterals2.ts, 53, 11))
+
+        this.y += dy;
+>this.y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+>this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 29, 12))
+>y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+>dy : Symbol(dy, Decl(thisTypeInObjectLiterals2.ts, 53, 14))
+
+        if (this.z && dz) {
+>this.z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 31, 14))
+>this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 29, 12))
+>z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 31, 14))
+>dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 53, 18))
+
+            this.z += dz;
+>this.z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 31, 14))
+>this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 29, 12))
+>z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 31, 14))
+>dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 53, 18))
+        }
+    }
+});
+
+// In methods of an object literal with a contextual type that includes some
+// ThisType<T>, 'this' is of type T.
+
+type ObjectDescriptor<D, M> = {
+>ObjectDescriptor : Symbol(ObjectDescriptor, Decl(thisTypeInObjectLiterals2.ts, 60, 3))
+>D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 65, 22))
+>M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 65, 24))
+
+    data?: D;
+>data : Symbol(data, Decl(thisTypeInObjectLiterals2.ts, 65, 31))
+>D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 65, 22))
+
+    methods?: M & ThisType<D & M>;  // Type of 'this' in methods is D & M
+>methods : Symbol(methods, Decl(thisTypeInObjectLiterals2.ts, 66, 13))
+>M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 65, 24))
+>ThisType : Symbol(ThisType, Decl(lib.d.ts, --, --))
+>D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 65, 22))
+>M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 65, 24))
+}
+
+declare function makeObject<D, M>(desc: ObjectDescriptor<D, M>): D & M;
+>makeObject : Symbol(makeObject, Decl(thisTypeInObjectLiterals2.ts, 68, 1))
+>D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 70, 28))
+>M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 70, 30))
+>desc : Symbol(desc, Decl(thisTypeInObjectLiterals2.ts, 70, 34))
+>ObjectDescriptor : Symbol(ObjectDescriptor, Decl(thisTypeInObjectLiterals2.ts, 60, 3))
+>D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 70, 28))
+>M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 70, 30))
+>D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 70, 28))
+>M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 70, 30))
+
+let x1 = makeObject({
+>x1 : Symbol(x1, Decl(thisTypeInObjectLiterals2.ts, 72, 3))
+>makeObject : Symbol(makeObject, Decl(thisTypeInObjectLiterals2.ts, 68, 1))
+
+    data: { x: 0, y: 0 },
+>data : Symbol(data, Decl(thisTypeInObjectLiterals2.ts, 72, 21))
+>x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 73, 11))
+>y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 73, 17))
+
+    methods: {
+>methods : Symbol(methods, Decl(thisTypeInObjectLiterals2.ts, 73, 25))
+
+        moveBy(dx: number, dy: number) {
+>moveBy : Symbol(moveBy, Decl(thisTypeInObjectLiterals2.ts, 74, 14))
+>dx : Symbol(dx, Decl(thisTypeInObjectLiterals2.ts, 75, 15))
+>dy : Symbol(dy, Decl(thisTypeInObjectLiterals2.ts, 75, 26))
+
+            this.x += dx;  // Strongly typed this
+>this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 73, 11))
+>x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 73, 11))
+>dx : Symbol(dx, Decl(thisTypeInObjectLiterals2.ts, 75, 15))
+
+            this.y += dy;  // Strongly typed this
+>this.y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 73, 17))
+>y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 73, 17))
+>dy : Symbol(dy, Decl(thisTypeInObjectLiterals2.ts, 75, 26))
+        }
+    }
+});
+
+// In methods contained in an object literal with a contextual type that includes
+// some ThisType<T>, 'this' is of type T.
+
+type ObjectDescriptor2<D, M> = ThisType<D & M> & {
+>ObjectDescriptor2 : Symbol(ObjectDescriptor2, Decl(thisTypeInObjectLiterals2.ts, 80, 3))
+>D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 85, 23))
+>M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 85, 25))
+>ThisType : Symbol(ThisType, Decl(lib.d.ts, --, --))
+>D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 85, 23))
+>M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 85, 25))
+
+    data?: D;
+>data : Symbol(data, Decl(thisTypeInObjectLiterals2.ts, 85, 50))
+>D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 85, 23))
+
+    methods?: M;
+>methods : Symbol(methods, Decl(thisTypeInObjectLiterals2.ts, 86, 13))
+>M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 85, 25))
+}
+
+declare function makeObject2<D, M>(desc: ObjectDescriptor<D, M>): D & M;
+>makeObject2 : Symbol(makeObject2, Decl(thisTypeInObjectLiterals2.ts, 88, 1))
+>D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 90, 29))
+>M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 90, 31))
+>desc : Symbol(desc, Decl(thisTypeInObjectLiterals2.ts, 90, 35))
+>ObjectDescriptor : Symbol(ObjectDescriptor, Decl(thisTypeInObjectLiterals2.ts, 60, 3))
+>D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 90, 29))
+>M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 90, 31))
+>D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 90, 29))
+>M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 90, 31))
+
+let x2 = makeObject2({
+>x2 : Symbol(x2, Decl(thisTypeInObjectLiterals2.ts, 92, 3))
+>makeObject2 : Symbol(makeObject2, Decl(thisTypeInObjectLiterals2.ts, 88, 1))
+
+    data: { x: 0, y: 0 },
+>data : Symbol(data, Decl(thisTypeInObjectLiterals2.ts, 92, 22))
+>x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 93, 11))
+>y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 93, 17))
+
+    methods: {
+>methods : Symbol(methods, Decl(thisTypeInObjectLiterals2.ts, 93, 25))
+
+        moveBy(dx: number, dy: number) {
+>moveBy : Symbol(moveBy, Decl(thisTypeInObjectLiterals2.ts, 94, 14))
+>dx : Symbol(dx, Decl(thisTypeInObjectLiterals2.ts, 95, 15))
+>dy : Symbol(dy, Decl(thisTypeInObjectLiterals2.ts, 95, 26))
+
+            this.x += dx;  // Strongly typed this
+>this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 93, 11))
+>x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 93, 11))
+>dx : Symbol(dx, Decl(thisTypeInObjectLiterals2.ts, 95, 15))
+
+            this.y += dy;  // Strongly typed this
+>this.y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 93, 17))
+>y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 93, 17))
+>dy : Symbol(dy, Decl(thisTypeInObjectLiterals2.ts, 95, 26))
+        }
+    }
+});
+
+// Check pattern similar to Object.defineProperty and Object.defineProperties
+
+type PropDesc<T> = {
+>PropDesc : Symbol(PropDesc, Decl(thisTypeInObjectLiterals2.ts, 100, 3))
+>T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 104, 14))
+
+    value?: T;
+>value : Symbol(value, Decl(thisTypeInObjectLiterals2.ts, 104, 20))
+>T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 104, 14))
+
+    get?(): T;
+>get : Symbol(get, Decl(thisTypeInObjectLiterals2.ts, 105, 14))
+>T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 104, 14))
+
+    set?(value: T): void;
+>set : Symbol(set, Decl(thisTypeInObjectLiterals2.ts, 106, 14))
+>value : Symbol(value, Decl(thisTypeInObjectLiterals2.ts, 107, 9))
+>T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 104, 14))
+}
+
+type PropDescMap<T> = {
+>PropDescMap : Symbol(PropDescMap, Decl(thisTypeInObjectLiterals2.ts, 108, 1))
+>T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 110, 17))
+
+    [K in keyof T]: PropDesc<T[K]>;
+>K : Symbol(K, Decl(thisTypeInObjectLiterals2.ts, 111, 5))
+>T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 110, 17))
+>PropDesc : Symbol(PropDesc, Decl(thisTypeInObjectLiterals2.ts, 100, 3))
+>T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 110, 17))
+>K : Symbol(K, Decl(thisTypeInObjectLiterals2.ts, 111, 5))
+}
+
+declare function defineProp<T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>): T & Record<K, U>;
+>defineProp : Symbol(defineProp, Decl(thisTypeInObjectLiterals2.ts, 112, 1))
+>T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 114, 28))
+>K : Symbol(K, Decl(thisTypeInObjectLiterals2.ts, 114, 30))
+>U : Symbol(U, Decl(thisTypeInObjectLiterals2.ts, 114, 48))
+>obj : Symbol(obj, Decl(thisTypeInObjectLiterals2.ts, 114, 52))
+>T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 114, 28))
+>name : Symbol(name, Decl(thisTypeInObjectLiterals2.ts, 114, 59))
+>K : Symbol(K, Decl(thisTypeInObjectLiterals2.ts, 114, 30))
+>desc : Symbol(desc, Decl(thisTypeInObjectLiterals2.ts, 114, 68))
+>PropDesc : Symbol(PropDesc, Decl(thisTypeInObjectLiterals2.ts, 100, 3))
+>U : Symbol(U, Decl(thisTypeInObjectLiterals2.ts, 114, 48))
+>ThisType : Symbol(ThisType, Decl(lib.d.ts, --, --))
+>T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 114, 28))
+>T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 114, 28))
+>Record : Symbol(Record, Decl(lib.d.ts, --, --))
+>K : Symbol(K, Decl(thisTypeInObjectLiterals2.ts, 114, 30))
+>U : Symbol(U, Decl(thisTypeInObjectLiterals2.ts, 114, 48))
+
+declare function defineProps<T, U>(obj: T, descs: PropDescMap<U> & ThisType<T>): T & U;
+>defineProps : Symbol(defineProps, Decl(thisTypeInObjectLiterals2.ts, 114, 120))
+>T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 116, 29))
+>U : Symbol(U, Decl(thisTypeInObjectLiterals2.ts, 116, 31))
+>obj : Symbol(obj, Decl(thisTypeInObjectLiterals2.ts, 116, 35))
+>T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 116, 29))
+>descs : Symbol(descs, Decl(thisTypeInObjectLiterals2.ts, 116, 42))
+>PropDescMap : Symbol(PropDescMap, Decl(thisTypeInObjectLiterals2.ts, 108, 1))
+>U : Symbol(U, Decl(thisTypeInObjectLiterals2.ts, 116, 31))
+>ThisType : Symbol(ThisType, Decl(lib.d.ts, --, --))
+>T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 116, 29))
+>T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 116, 29))
+>U : Symbol(U, Decl(thisTypeInObjectLiterals2.ts, 116, 31))
+
+let p10 = defineProp(p1, "foo", { value: 42 });
+>p10 : Symbol(p10, Decl(thisTypeInObjectLiterals2.ts, 118, 3))
+>defineProp : Symbol(defineProp, Decl(thisTypeInObjectLiterals2.ts, 112, 1))
+>p1 : Symbol(p1, Decl(thisTypeInObjectLiterals2.ts, 36, 3))
+>value : Symbol(value, Decl(thisTypeInObjectLiterals2.ts, 118, 33))
+
+p10.foo = p10.foo + 1;
+>p10.foo : Symbol(foo)
+>p10 : Symbol(p10, Decl(thisTypeInObjectLiterals2.ts, 118, 3))
+>foo : Symbol(foo)
+>p10.foo : Symbol(foo)
+>p10 : Symbol(p10, Decl(thisTypeInObjectLiterals2.ts, 118, 3))
+>foo : Symbol(foo)
+
+let p11 = defineProp(p1, "bar", {
+>p11 : Symbol(p11, Decl(thisTypeInObjectLiterals2.ts, 121, 3))
+>defineProp : Symbol(defineProp, Decl(thisTypeInObjectLiterals2.ts, 112, 1))
+>p1 : Symbol(p1, Decl(thisTypeInObjectLiterals2.ts, 36, 3))
+
+    get() {
+>get : Symbol(get, Decl(thisTypeInObjectLiterals2.ts, 121, 33))
+
+        return this.x;
+>this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+>this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 29, 12))
+>x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+
+    },
+    set(value: number) {
+>set : Symbol(set, Decl(thisTypeInObjectLiterals2.ts, 124, 6))
+>value : Symbol(value, Decl(thisTypeInObjectLiterals2.ts, 125, 8))
+
+        this.x = value;
+>this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+>this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 29, 12))
+>x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+>value : Symbol(value, Decl(thisTypeInObjectLiterals2.ts, 125, 8))
+    }
+});
+p11.bar = p11.bar + 1;
+>p11.bar : Symbol(bar)
+>p11 : Symbol(p11, Decl(thisTypeInObjectLiterals2.ts, 121, 3))
+>bar : Symbol(bar)
+>p11.bar : Symbol(bar)
+>p11 : Symbol(p11, Decl(thisTypeInObjectLiterals2.ts, 121, 3))
+>bar : Symbol(bar)
+
+let p12 = defineProps(p1, {
+>p12 : Symbol(p12, Decl(thisTypeInObjectLiterals2.ts, 131, 3))
+>defineProps : Symbol(defineProps, Decl(thisTypeInObjectLiterals2.ts, 114, 120))
+>p1 : Symbol(p1, Decl(thisTypeInObjectLiterals2.ts, 36, 3))
+
+    foo: {
+>foo : Symbol(foo, Decl(thisTypeInObjectLiterals2.ts, 131, 27))
+
+        value: 42
+>value : Symbol(value, Decl(thisTypeInObjectLiterals2.ts, 132, 10))
+
+    },
+    bar: {
+>bar : Symbol(bar, Decl(thisTypeInObjectLiterals2.ts, 134, 6))
+
+        get(): number {
+>get : Symbol(get, Decl(thisTypeInObjectLiterals2.ts, 135, 10))
+
+            return this.x;
+>this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+>this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 29, 12))
+>x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+
+        },
+        set(value: number) {
+>set : Symbol(set, Decl(thisTypeInObjectLiterals2.ts, 138, 10))
+>value : Symbol(value, Decl(thisTypeInObjectLiterals2.ts, 139, 12))
+
+            this.x = value;
+>this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+>this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 29, 12))
+>x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+>value : Symbol(value, Decl(thisTypeInObjectLiterals2.ts, 139, 12))
+        }
+    }
+});
+p12.foo = p12.foo + 1;
+>p12.foo : Symbol(foo, Decl(thisTypeInObjectLiterals2.ts, 131, 27))
+>p12 : Symbol(p12, Decl(thisTypeInObjectLiterals2.ts, 131, 3))
+>foo : Symbol(foo, Decl(thisTypeInObjectLiterals2.ts, 131, 27))
+>p12.foo : Symbol(foo, Decl(thisTypeInObjectLiterals2.ts, 131, 27))
+>p12 : Symbol(p12, Decl(thisTypeInObjectLiterals2.ts, 131, 3))
+>foo : Symbol(foo, Decl(thisTypeInObjectLiterals2.ts, 131, 27))
+
+p12.bar = p12.bar + 1;
+>p12.bar : Symbol(bar, Decl(thisTypeInObjectLiterals2.ts, 134, 6))
+>p12 : Symbol(p12, Decl(thisTypeInObjectLiterals2.ts, 131, 3))
+>bar : Symbol(bar, Decl(thisTypeInObjectLiterals2.ts, 134, 6))
+>p12.bar : Symbol(bar, Decl(thisTypeInObjectLiterals2.ts, 134, 6))
+>p12 : Symbol(p12, Decl(thisTypeInObjectLiterals2.ts, 131, 3))
+>bar : Symbol(bar, Decl(thisTypeInObjectLiterals2.ts, 134, 6))
+
+// Proof of concept for typing of Vue.js
+
+type Accessors<T> = { [K in keyof T]: (() => T[K]) | Computed<T[K]> };
+>Accessors : Symbol(Accessors, Decl(thisTypeInObjectLiterals2.ts, 145, 22))
+>T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 149, 15))
+>K : Symbol(K, Decl(thisTypeInObjectLiterals2.ts, 149, 23))
+>T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 149, 15))
+>T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 149, 15))
+>K : Symbol(K, Decl(thisTypeInObjectLiterals2.ts, 149, 23))
+>Computed : Symbol(Computed, Decl(thisTypeInObjectLiterals2.ts, 151, 39))
+>T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 149, 15))
+>K : Symbol(K, Decl(thisTypeInObjectLiterals2.ts, 149, 23))
+
+type Dictionary<T> = { [x: string]: T }
+>Dictionary : Symbol(Dictionary, Decl(thisTypeInObjectLiterals2.ts, 149, 70))
+>T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 151, 16))
+>x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 151, 24))
+>T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 151, 16))
+
+type Computed<T> = {
+>Computed : Symbol(Computed, Decl(thisTypeInObjectLiterals2.ts, 151, 39))
+>T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 153, 14))
+
+    get?(): T;
+>get : Symbol(get, Decl(thisTypeInObjectLiterals2.ts, 153, 20))
+>T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 153, 14))
+
+    set?(value: T): void;
+>set : Symbol(set, Decl(thisTypeInObjectLiterals2.ts, 154, 14))
+>value : Symbol(value, Decl(thisTypeInObjectLiterals2.ts, 155, 9))
+>T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 153, 14))
+}
+
+type VueOptions<D, M, P> = ThisType<D & M & P> & {
+>VueOptions : Symbol(VueOptions, Decl(thisTypeInObjectLiterals2.ts, 156, 1))
+>D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 158, 16))
+>M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 158, 18))
+>P : Symbol(P, Decl(thisTypeInObjectLiterals2.ts, 158, 21))
+>ThisType : Symbol(ThisType, Decl(lib.d.ts, --, --))
+>D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 158, 16))
+>M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 158, 18))
+>P : Symbol(P, Decl(thisTypeInObjectLiterals2.ts, 158, 21))
+
+    data?: D | (() => D);
+>data : Symbol(data, Decl(thisTypeInObjectLiterals2.ts, 158, 50))
+>D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 158, 16))
+>D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 158, 16))
+
+    methods?: M;
+>methods : Symbol(methods, Decl(thisTypeInObjectLiterals2.ts, 159, 25))
+>M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 158, 18))
+
+    computed?: Accessors<P>;
+>computed : Symbol(computed, Decl(thisTypeInObjectLiterals2.ts, 160, 16))
+>Accessors : Symbol(Accessors, Decl(thisTypeInObjectLiterals2.ts, 145, 22))
+>P : Symbol(P, Decl(thisTypeInObjectLiterals2.ts, 158, 21))
+}
+
+declare const Vue: new <D, M, P>(options: VueOptions<D, M, P>) => D & M & P;
+>Vue : Symbol(Vue, Decl(thisTypeInObjectLiterals2.ts, 164, 13))
+>D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 164, 24))
+>M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 164, 26))
+>P : Symbol(P, Decl(thisTypeInObjectLiterals2.ts, 164, 29))
+>options : Symbol(options, Decl(thisTypeInObjectLiterals2.ts, 164, 33))
+>VueOptions : Symbol(VueOptions, Decl(thisTypeInObjectLiterals2.ts, 156, 1))
+>D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 164, 24))
+>M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 164, 26))
+>P : Symbol(P, Decl(thisTypeInObjectLiterals2.ts, 164, 29))
+>D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 164, 24))
+>M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 164, 26))
+>P : Symbol(P, Decl(thisTypeInObjectLiterals2.ts, 164, 29))
+
+let vue = new Vue({
+>vue : Symbol(vue, Decl(thisTypeInObjectLiterals2.ts, 166, 3))
+>Vue : Symbol(Vue, Decl(thisTypeInObjectLiterals2.ts, 164, 13))
+
+    data: () => ({ x: 1, y: 2 }),
+>data : Symbol(data, Decl(thisTypeInObjectLiterals2.ts, 166, 19))
+>x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 167, 18))
+>y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 167, 24))
+
+    methods: {
+>methods : Symbol(methods, Decl(thisTypeInObjectLiterals2.ts, 167, 33))
+
+        f(x: string) {
+>f : Symbol(f, Decl(thisTypeInObjectLiterals2.ts, 168, 14))
+>x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 169, 10))
+
+            return this.x;
+>this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 167, 18))
+>x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 167, 18))
+        }
+    },
+    computed: {
+>computed : Symbol(computed, Decl(thisTypeInObjectLiterals2.ts, 172, 6))
+
+        test(): number {
+>test : Symbol(test, Decl(thisTypeInObjectLiterals2.ts, 173, 15))
+
+            return this.x;
+>this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 167, 18))
+>x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 167, 18))
+
+        },
+        hello: {
+>hello : Symbol(hello, Decl(thisTypeInObjectLiterals2.ts, 176, 10))
+
+            get() {
+>get : Symbol(get, Decl(thisTypeInObjectLiterals2.ts, 177, 16))
+
+                return "hi";
+            },
+            set(value: string) {
+>set : Symbol(set, Decl(thisTypeInObjectLiterals2.ts, 180, 14))
+>value : Symbol(value, Decl(thisTypeInObjectLiterals2.ts, 181, 16))
+            }
+        }
+    }
+});
+
+vue;
+>vue : Symbol(vue, Decl(thisTypeInObjectLiterals2.ts, 166, 3))
+
+vue.x;
+>vue.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 167, 18))
+>vue : Symbol(vue, Decl(thisTypeInObjectLiterals2.ts, 166, 3))
+>x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 167, 18))
+
+vue.f("abc");
+>vue.f : Symbol(f, Decl(thisTypeInObjectLiterals2.ts, 168, 14))
+>vue : Symbol(vue, Decl(thisTypeInObjectLiterals2.ts, 166, 3))
+>f : Symbol(f, Decl(thisTypeInObjectLiterals2.ts, 168, 14))
+
+vue.test;
+>vue.test : Symbol(test, Decl(thisTypeInObjectLiterals2.ts, 173, 15))
+>vue : Symbol(vue, Decl(thisTypeInObjectLiterals2.ts, 166, 3))
+>test : Symbol(test, Decl(thisTypeInObjectLiterals2.ts, 173, 15))
+
+vue.hello;
+>vue.hello : Symbol(hello, Decl(thisTypeInObjectLiterals2.ts, 176, 10))
+>vue : Symbol(vue, Decl(thisTypeInObjectLiterals2.ts, 166, 3))
+>hello : Symbol(hello, Decl(thisTypeInObjectLiterals2.ts, 176, 10))
+
