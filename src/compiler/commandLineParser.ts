@@ -468,6 +468,11 @@ namespace ts {
             description: Diagnostics.Parse_in_strict_mode_and_emit_use_strict_for_each_source_file
         },
         {
+            name: "strict",
+            type: "boolean",
+            description: Diagnostics.Enable_all_strict_type_checks
+        },
+        {
             // A list of plugins to load in the language service
             name: "plugins",
             type: "list",
@@ -520,7 +525,7 @@ namespace ts {
     export const defaultInitCompilerOptions: CompilerOptions = {
         module: ModuleKind.CommonJS,
         target: ScriptTarget.ES5,
-        noImplicitAny: false,
+        strict: true,
         sourceMap: false,
     };
 

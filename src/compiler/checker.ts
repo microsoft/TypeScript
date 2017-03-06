@@ -56,7 +56,9 @@ namespace ts {
         const modulekind = getEmitModuleKind(compilerOptions);
         const noUnusedIdentifiers = !!compilerOptions.noUnusedLocals || !!compilerOptions.noUnusedParameters;
         const allowSyntheticDefaultImports = typeof compilerOptions.allowSyntheticDefaultImports !== "undefined" ? compilerOptions.allowSyntheticDefaultImports : modulekind === ModuleKind.System;
-        const strictNullChecks = compilerOptions.strictNullChecks;
+        const strictNullChecks = compilerOptions.strictNullChecks === undefined ? compilerOptions.strict : compilerOptions.strictNullChecks;
+        const noImplicitAny = compilerOptions.noImplicitAny === undefined ? compilerOptions.strict : compilerOptions.noImplicitAny;
+        const noImplicitThis = compilerOptions.noImplicitThis === undefined ? compilerOptions.strict : compilerOptions.noImplicitThis;
 
         const emitResolver = createResolver();
 
@@ -1571,7 +1573,7 @@ namespace ts {
                     error(errorNode, diag, moduleReference, resolvedModule.resolvedFileName);
                     return undefined;
                 }
-                else if (compilerOptions.noImplicitAny && moduleNotFoundError) {
+                else if (noImplicitAny && moduleNotFoundError) {
                     error(errorNode,
                         Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type,
                         moduleReference,
@@ -3414,7 +3416,7 @@ namespace ts {
                 return addOptionality(declaredType, /*optional*/ declaration.questionToken && includeOptionality);
             }
 
-            if ((compilerOptions.noImplicitAny || declaration.flags & NodeFlags.JavaScriptFile) &&
+            if ((noImplicitAny || declaration.flags & NodeFlags.JavaScriptFile) &&
                 declaration.kind === SyntaxKind.VariableDeclaration && !isBindingPattern(declaration.name) &&
                 !(getCombinedModifierFlags(declaration) & ModifierFlags.Export) && !isInAmbientContext(declaration)) {
                 // If --noImplicitAny is on or the declaration is in a Javascript file,
@@ -3516,7 +3518,7 @@ namespace ts {
             if (isBindingPattern(element.name)) {
                 return getTypeFromBindingPattern(<BindingPattern>element.name, includePatternInType, reportErrors);
             }
-            if (reportErrors && compilerOptions.noImplicitAny && !declarationBelongsToPrivateAmbientMember(element)) {
+            if (reportErrors && noImplicitAny && !declarationBelongsToPrivateAmbientMember(element)) {
                 reportImplicitAnyError(element, anyType);
             }
             return anyType;
@@ -3614,7 +3616,7 @@ namespace ts {
             type = declaration.dotDotDotToken ? anyArrayType : anyType;
 
             // Report implicit any errors unless this is a private property within an ambient declaration
-            if (reportErrors && compilerOptions.noImplicitAny) {
+            if (reportErrors && noImplicitAny) {
                 if (!declarationBelongsToPrivateAmbientMember(declaration)) {
                     reportImplicitAnyError(declaration, type);
                 }
@@ -3733,7 +3735,7 @@ namespace ts {
                         }
                         // Otherwise, fall back to 'any'.
                         else {
-                            if (compilerOptions.noImplicitAny) {
+                            if (noImplicitAny) {
                                 if (setter) {
                                     error(setter, Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation, symbolToString(symbol));
                                 }
@@ -3748,7 +3750,7 @@ namespace ts {
                 }
                 if (!popTypeResolution()) {
                     type = anyType;
-                    if (compilerOptions.noImplicitAny) {
+                    if (noImplicitAny) {
                         const getter = <AccessorDeclaration>getDeclarationOfKind(symbol, SyntaxKind.GetAccessor);
                         error(getter, Diagnostics._0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, symbolToString(symbol));
                     }
@@ -3831,7 +3833,7 @@ namespace ts {
                 return unknownType;
             }
             // Otherwise variable has initializer that circularly references the variable itself
-            if (compilerOptions.noImplicitAny) {
+            if (noImplicitAny) {
                 error(symbol.valueDeclaration, Diagnostics._0_implicitly_has_type_any_because_it_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer,
                     symbolToString(symbol));
             }
@@ -5592,7 +5594,7 @@ namespace ts {
                 }
                 if (!popTypeResolution()) {
                     type = anyType;
-                    if (compilerOptions.noImplicitAny) {
+                    if (noImplicitAny) {
                         const declaration = <Declaration>signature.declaration;
                         if (declaration.name) {
                             error(declaration.name, Diagnostics._0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, declarationNameToString(declaration.name));
@@ -6552,7 +6554,7 @@ namespace ts {
                     return indexInfo.type;
                 }
                 if (accessExpression && !isConstEnumObjectType(objectType)) {
-                    if (compilerOptions.noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors) {
+                    if (noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors) {
                         if (getIndexTypeOfType(objectType, IndexKind.Number)) {
                             error(accessExpression.argumentExpression, Diagnostics.Element_implicitly_has_an_any_type_because_index_expression_is_not_of_type_number);
                         }
@@ -9146,7 +9148,7 @@ namespace ts {
         }
 
         function reportErrorsFromWidening(declaration: Declaration, type: Type) {
-            if (produceDiagnostics && compilerOptions.noImplicitAny && type.flags & TypeFlags.ContainsWideningType) {
+            if (produceDiagnostics && noImplicitAny && type.flags & TypeFlags.ContainsWideningType) {
                 // Report implicit any error within type if possible, otherwise report error on declaration
                 if (!reportWideningErrorsInType(type)) {
                     reportImplicitAnyError(declaration, type);
@@ -11056,7 +11058,7 @@ namespace ts {
             // control flow based type does include undefined.
             if (type === autoType || type === autoArrayType) {
                 if (flowType === autoType || flowType === autoArrayType) {
-                    if (compilerOptions.noImplicitAny) {
+                    if (noImplicitAny) {
                         error(declaration.name, Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined, symbolToString(symbol), typeToString(flowType));
                         error(node, Diagnostics.Variable_0_implicitly_has_an_1_type, symbolToString(symbol), typeToString(flowType));
                     }
@@ -11326,7 +11328,7 @@ namespace ts {
                 }
             }
 
-            if (compilerOptions.noImplicitThis) {
+            if (noImplicitThis) {
                 // With noImplicitThis, functions may not reference 'this' if it has type 'any'
                 error(node, Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation);
             }
@@ -12599,7 +12601,7 @@ namespace ts {
                     return links.resolvedSymbol = unknownSymbol;
                 }
                 else {
-                    if (compilerOptions.noImplicitAny) {
+                    if (noImplicitAny) {
                         error(node, Diagnostics.JSX_element_implicitly_has_type_any_because_no_interface_JSX_0_exists, JsxNames.IntrinsicElements);
                     }
                     return links.resolvedSymbol = unknownSymbol;
@@ -12987,7 +12989,7 @@ namespace ts {
             }
 
             if (jsxElementType === undefined) {
-                if (compilerOptions.noImplicitAny) {
+                if (noImplicitAny) {
                     error(errorNode, Diagnostics.JSX_element_implicitly_has_type_any_because_the_global_type_JSX_Element_does_not_exist);
                 }
             }
@@ -14810,7 +14812,7 @@ namespace ts {
                     if (funcSymbol && funcSymbol.members && funcSymbol.flags & SymbolFlags.Function) {
                         return getInferredClassType(funcSymbol);
                     }
-                    else if (compilerOptions.noImplicitAny) {
+                    else if (noImplicitAny) {
                         error(node, Diagnostics.new_expression_whose_target_lacks_a_construct_signature_implicitly_has_an_any_type);
                     }
                     return anyType;
@@ -15070,7 +15072,7 @@ namespace ts {
                         const iterableIteratorAny = functionFlags & FunctionFlags.Async
                             ? createAsyncIterableIteratorType(anyType) // AsyncGenerator function
                             : createIterableIteratorType(anyType); // Generator function
-                        if (compilerOptions.noImplicitAny) {
+                        if (noImplicitAny) {
                             error(func.asteriskToken,
                                 Diagnostics.Generator_implicitly_has_type_0_because_it_does_not_yield_any_values_Consider_supplying_a_return_type, typeToString(iterableIteratorAny));
                         }
@@ -16619,7 +16621,7 @@ namespace ts {
 
             if (produceDiagnostics) {
                 checkCollisionWithArgumentsInGeneratedCode(node);
-                if (compilerOptions.noImplicitAny && !node.type) {
+                if (noImplicitAny && !node.type) {
                     switch (node.kind) {
                         case SyntaxKind.ConstructSignature:
                             error(node, Diagnostics.Construct_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type);
@@ -17921,7 +17923,7 @@ namespace ts {
             if (produceDiagnostics && !node.type) {
                 // Report an implicit any error if there is no body, no explicit return type, and node is not a private method
                 // in an ambient context
-                if (compilerOptions.noImplicitAny && nodeIsMissing(node.body) && !isPrivateWithinAmbient(node)) {
+                if (noImplicitAny && nodeIsMissing(node.body) && !isPrivateWithinAmbient(node)) {
                     reportImplicitAnyError(node, anyType);
                 }
 
