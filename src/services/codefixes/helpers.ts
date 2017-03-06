@@ -71,12 +71,10 @@ namespace ts.codefix {
                     }
                     const sigString = checker.signatureToString(signature, enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
                     return getStubbedMethod(visibility, name, sigString, newlineChar);
-
                 }
 
                 let result = "";
                 for (let i = 0; i < signatures.length; i++) {
-
                     if (!isSignatureAccessible(signatures[i], enclosingDeclaration, checker)) {
                         return "";
                     }
@@ -178,7 +176,6 @@ namespace ts.codefix {
 
     const SymbolConstructor = objectAllocator.getSymbolConstructor();
 
-
     function isSignatureAccessible(signature: Signature, enclosingDeclaration: Node, checker: TypeChecker): boolean {
         const typeParameters = signature.getTypeParameters();
         const parameters = signature.getParameters();
@@ -187,5 +184,4 @@ namespace ts.codefix {
             && parameters.every(parameter => checker.isTypeAccessible(checker.getTypeOfSymbolAtLocation(parameter, enclosingDeclaration), enclosingDeclaration))
             && checker.isTypeAccessible(returnType, enclosingDeclaration);
     }
-
 }
