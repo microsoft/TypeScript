@@ -17,7 +17,7 @@
             "double",
             "avoid-escape"
         ],
-        "semicolon": [true, "ignore-bound-class-methods"],
+        "semicolon": [true, "always", "ignore-bound-class-methods"],
         "whitespace": [true,
             "check-branch",
             "check-decl",

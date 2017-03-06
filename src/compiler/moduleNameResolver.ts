@@ -675,7 +675,7 @@ namespace ts {
     }
 
     export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache): ResolvedModuleWithFailedLookupLocations {
-        return nodeModuleNameResolverWorker(moduleName, containingFile, compilerOptions, host, cache, /* jsOnly*/ false);
+        return nodeModuleNameResolverWorker(moduleName, containingFile, compilerOptions, host, cache, /*jsOnly*/ false);
     }
 
     /* @internal */
@@ -962,7 +962,7 @@ namespace ts {
         const result = cache && cache.get(containingDirectory);
         if (result) {
             if (traceEnabled) {
-                trace(host, Diagnostics.Resolution_for_module_0_was_found_in_cache, moduleName)
+                trace(host, Diagnostics.Resolution_for_module_0_was_found_in_cache, moduleName);
             }
             return { value: result.resolvedModule && { path: result.resolvedModule.resolvedFileName, extension: result.resolvedModule.extension } };
         }
