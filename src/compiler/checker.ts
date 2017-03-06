@@ -1989,9 +1989,9 @@ namespace ts {
         function isTypeAccessible(type: Type, enclosingDeclaration: Node): boolean {
             const meaning = SymbolFlags.Type;
 
-            return isTypeAccessibleWorker(type, /*inObjectLiteral*/ false, /*inTypeAlias*/true, /*symbolstack*/[]);
+            return isTypeAccessibleWorker(type, /*inObjectLiteral*/ false, /*inTypeAlias*/true);
 
-            function isTypeAccessibleWorker(type: Type, inObjectLiteral: boolean, inTypeAlias: boolean, symbolStack: Symbol[]): boolean {
+            function isTypeAccessibleWorker(type: Type, inObjectLiteral: boolean, inTypeAlias: boolean): boolean {
                 if (!type) {
                     return false;
                 }
@@ -2009,7 +2009,7 @@ namespace ts {
                     }
                     const constraint = getConstraintFromTypeParameter((<TypeParameter>type));
                     return typeSymbolAccessibility === SymbolAccessibility.Accessible
-                        && (!constraint || isTypeAccessibleWorker(constraint, inObjectLiteral, /*inTypeAlias*/false, symbolStack));
+                        && (!constraint || isTypeAccessibleWorker(constraint, inObjectLiteral, /*inTypeAlias*/false));
                 }
 
                 if (typeSymbolAccessibility === SymbolAccessibility.Accessible) {
@@ -2043,9 +2043,9 @@ namespace ts {
                     const typeParameter = getTypeParameterFromMappedType(<MappedType>type);
                     const constraintType = getConstraintTypeFromMappedType(<MappedType>type);
                     const templateType = getTemplateTypeFromMappedType(<MappedType>type);
-                    return (!typeParameter || isTypeAccessibleWorker(typeParameter, inObjectLiteral, /*inTypeAlias*/false, symbolStack))
-                        && (!constraintType || isTypeAccessibleWorker((<MappedType>type).constraintType, inObjectLiteral, /*inTypeAlias*/false, symbolStack))
-                        && (!templateType || isTypeAccessibleWorker((<MappedType>type).templateType, inObjectLiteral, /*inTypeAlias*/false, symbolStack));
+                    return (!typeParameter || isTypeAccessibleWorker(typeParameter, inObjectLiteral, /*inTypeAlias*/false))
+                        && (!constraintType || isTypeAccessibleWorker((<MappedType>type).constraintType, inObjectLiteral, /*inTypeAlias*/false))
+                        && (!templateType || isTypeAccessibleWorker((<MappedType>type).templateType, inObjectLiteral, /*inTypeAlias*/false));
                 }
 
                 if (objectFlags & ObjectFlags.Anonymous) {
@@ -2058,24 +2058,24 @@ namespace ts {
                     let allVisible = true;
                     members && members.forEach((member) => {
                         const memberType = getTypeOfSymbolAtLocation(member, enclosingDeclaration);
-                        allVisible = allVisible && isTypeAccessibleWorker(memberType, /*inObjectLiteral*/ true, /*inTypeAlias*/false, symbolStack);
+                        allVisible = allVisible && isTypeAccessibleWorker(memberType, /*inObjectLiteral*/ true, /*inTypeAlias*/false);
                     });
                     return allVisible;
                 }
 
                 if (type.flags & TypeFlags.Index) {
-                    return isTypeAccessibleWorker((<IndexType>type).type, inObjectLiteral, /*inTypeAlias*/false, symbolStack);
+                    return isTypeAccessibleWorker((<IndexType>type).type, inObjectLiteral, /*inTypeAlias*/false);
                 }
 
                 if (type.flags & TypeFlags.IndexedAccess) {
-                    return isTypeAccessibleWorker((<IndexedAccessType>type).objectType, inObjectLiteral, /*inTypeAlias*/false, symbolStack)
-                        && isTypeAccessibleWorker((<IndexedAccessType>type).indexType, inObjectLiteral, /*inTypeAlias*/false, symbolStack);
+                    return isTypeAccessibleWorker((<IndexedAccessType>type).objectType, inObjectLiteral, /*inTypeAlias*/false)
+                        && isTypeAccessibleWorker((<IndexedAccessType>type).indexType, inObjectLiteral, /*inTypeAlias*/false);
                 }
 
                 return false;
 
                 function allTypesVisible(types: Type[]): boolean {
-                    return types.every(type => isTypeAccessibleWorker(type, inObjectLiteral, /*inTypeAlias*/false, symbolStack));
+                    return types.every(type => isTypeAccessibleWorker(type, inObjectLiteral, /*inTypeAlias*/false));
                 }
             }
         }
