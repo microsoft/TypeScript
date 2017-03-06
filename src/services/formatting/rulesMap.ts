@@ -3,34 +3,58 @@
 /* @internal */
 namespace ts.formatting {
     export class RulesMap {
+        // This array is used during construction & updating of the rules buckets in the map
+        private rulesBucketConstructionStateList: RulesBucketConstructionState[];
+        private readonly lowPriorityCommonRules: Rule[];
+
         public map: RulesBucket[];
         public mapRowLength: number;
 
-        constructor() {
+        constructor(lowPriorityCommonRules: Rule[]) {
             this.map = [];
             this.mapRowLength = 0;
+            this.lowPriorityCommonRules = lowPriorityCommonRules;
         }
 
-        static create(rules: Rule[]): RulesMap {
-            const result = new RulesMap();
-            result.Initialize(rules);
+        static create(highPriorityCommonRules: Rule[], lowPriorityCommonRules: Rule[]): RulesMap {
+            const result = new RulesMap(lowPriorityCommonRules);
+            result.Initialize(highPriorityCommonRules);
             return result;
+        }
+
+        public Update(oldRules: Rule[], newRules: Rule[]): void {
+            const addRules = filter(newRules, r => oldRules.indexOf(r) < 0);
+            const deleteRules = filter(oldRules, r => newRules.indexOf(r) < 0);
+
+            if (addRules.length === 0 && deleteRules.length === 0) {
+                return;
+            }
+
+            // When updating the RulesMap always remove the low priority common rules
+            // and then reapply them after the new format options rules. This ensures
+            // the proper rule priority is maintained.
+            this.RemoveRules(deleteRules.concat(this.lowPriorityCommonRules));
+            this.FillRules(addRules.concat(this.lowPriorityCommonRules));
         }
 
         public Initialize(rules: Rule[]) {
             this.mapRowLength = SyntaxKind.LastToken + 1;
             this.map = <any>new Array(this.mapRowLength * this.mapRowLength); // new Array<RulesBucket>(this.mapRowLength * this.mapRowLength);
+            this.rulesBucketConstructionStateList = new Array(this.map.length); // new Array<RulesBucketConstructionState>(this.map.length);
 
-            // This array is used only during construction of the rulesbucket in the map
-            const rulesBucketConstructionStateList: RulesBucketConstructionState[] = <any>new Array(this.map.length); // new Array<RulesBucketConstructionState>(this.map.length);
-
-            this.FillRules(rules, rulesBucketConstructionStateList);
+            this.FillRules(rules);
             return this.map;
         }
 
-        public FillRules(rules: Rule[], rulesBucketConstructionStateList: RulesBucketConstructionState[]): void {
+        public FillRules(rules: Rule[]): void {
             rules.forEach((rule) => {
-                this.FillRule(rule, rulesBucketConstructionStateList);
+                this.AddOrRemoveRule(rule, RulesAction.Add);
+            });
+        }
+
+        public RemoveRules(rules: Rule[]): void {
+            rules.forEach((rule) => {
+                this.AddOrRemoveRule(rule, RulesAction.Remove);
             });
         }
 
@@ -40,7 +64,7 @@ namespace ts.formatting {
             return rulesBucketIndex;
         }
 
-        private FillRule(rule: Rule, rulesBucketConstructionStateList: RulesBucketConstructionState[]): void {
+        private AddOrRemoveRule(rule: Rule, action: RulesAction): void {
             const specificRule = rule.Descriptor.LeftTokenRange !== Shared.TokenRange.Any &&
                                rule.Descriptor.RightTokenRange !== Shared.TokenRange.Any;
 
@@ -49,11 +73,19 @@ namespace ts.formatting {
                     const rulesBucketIndex = this.GetRuleBucketIndex(left, right);
 
                     let rulesBucket = this.map[rulesBucketIndex];
-                    if (rulesBucket === undefined) {
-                        rulesBucket = this.map[rulesBucketIndex] = new RulesBucket();
+                    if (action === RulesAction.Add) {
+                        if (rulesBucket === undefined) {
+                            rulesBucket = this.map[rulesBucketIndex] = new RulesBucket();
+                        }
+                        rulesBucket.AddRule(rule, specificRule, this.rulesBucketConstructionStateList, rulesBucketIndex);
                     }
-
-                    rulesBucket.AddRule(rule, specificRule, rulesBucketConstructionStateList, rulesBucketIndex);
+                    else {
+                        if (rulesBucket === undefined) {
+                            // The rules bucket does not exist for this rule
+                            return;
+                        }
+                        rulesBucket.RemoveRule(rule, specificRule, this.rulesBucketConstructionStateList, rulesBucketIndex);
+                    }
                 });
             });
         }
@@ -74,6 +106,11 @@ namespace ts.formatting {
 
     const MaskBitSize = 5;
     const Mask = 0x1f;
+
+    enum RulesAction {
+        Add,
+        Remove
+    }
 
     export enum RulesPosition {
         IgnoreRulesSpecific = 0,
@@ -121,10 +158,17 @@ namespace ts.formatting {
             return index;
         }
 
-        public IncreaseInsertionIndex(maskPosition: RulesPosition): void {
+        public SetInsertionIndex(maskPosition: RulesPosition, action: RulesAction): void {
             let value = (this.rulesInsertionIndexBitmap >> maskPosition) & Mask;
-            value++;
-            Debug.assert((value & Mask) === value, "Adding more rules into the sub-bucket than allowed. Maximum allowed is 32 rules.");
+
+            if (action === RulesAction.Add) {
+                value++;
+                Debug.assert((value & Mask) === value, "Adding more rules into the sub-bucket than allowed. Maximum allowed is 32 rules.");
+            }
+            else {
+                value--;
+                Debug.assert(value >= 0, "Index should never be less than 0.");
+            }
 
             let temp = this.rulesInsertionIndexBitmap & ~(Mask << maskPosition);
             temp |= value << maskPosition;
@@ -145,6 +189,30 @@ namespace ts.formatting {
         }
 
         public AddRule(rule: Rule, specificTokens: boolean, constructionState: RulesBucketConstructionState[], rulesBucketIndex: number): void {
+            const position = this.GetMaskPosition(rule, specificTokens);
+            let state = constructionState[rulesBucketIndex];
+            if (state === undefined) {
+                state = constructionState[rulesBucketIndex] = new RulesBucketConstructionState();
+            }
+            const index = state.GetInsertionIndex(position);
+            this.rules.splice(index, 0, rule);
+            state.SetInsertionIndex(position, RulesAction.Add);
+        }
+
+        public RemoveRule(rule: Rule, specificTokens: boolean, constructionState: RulesBucketConstructionState[], rulesBucketIndex: number): void {
+            const position = this.GetMaskPosition(rule, specificTokens);
+            const state = constructionState[rulesBucketIndex];
+            if (state === undefined) {
+                return;
+            }
+            const index = this.rules.indexOf(rule);
+            if (index > -1) {
+                this.rules.splice(index, 1);
+                state.SetInsertionIndex(position, RulesAction.Remove);
+            }
+        }
+
+        private GetMaskPosition(rule: Rule, specificTokens: boolean): RulesPosition {
             let position: RulesPosition;
 
             if (rule.Operation.Action === RuleAction.Ignore) {
@@ -163,13 +231,7 @@ namespace ts.formatting {
                     RulesPosition.NoContextRulesAny;
             }
 
-            let state = constructionState[rulesBucketIndex];
-            if (state === undefined) {
-                state = constructionState[rulesBucketIndex] = new RulesBucketConstructionState();
-            }
-            const index = state.GetInsertionIndex(position);
-            this.rules.splice(index, 0, rule);
-            state.IncreaseInsertionIndex(position);
+            return position;
         }
     }
 }

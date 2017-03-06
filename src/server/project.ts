@@ -205,7 +205,7 @@ namespace ts.server {
             this.lsHost = new LSHost(this.projectService.host, this, this.projectService.cancellationToken);
             this.lsHost.setCompilationSettings(this.compilerOptions);
 
-            this.languageService = ts.createLanguageService(this.lsHost, this.documentRegistry);
+            this.languageService = ts.createLanguageService(this.lsHost, this.documentRegistry, this.projectService.getFormatCodeOptions());
 
             if (!languageServiceEnabled) {
                 this.disableLanguageService();
