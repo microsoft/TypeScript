@@ -11,6 +11,8 @@
 //// }
 //// class C extends N.A {[| |]}
 
+// TODO: (aozgaa) Figure out how to avoid resolving aliases and doing checks on the aliases themselves.
 verify.rangeAfterCodeFix(`
-    y: AccessibleGeneric<Inaccessible>;
+    y: number;
+    z: number;
 `);
