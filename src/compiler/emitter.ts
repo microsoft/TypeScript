@@ -2051,20 +2051,19 @@ namespace ts {
 
         function emitSourceFile(node: SourceFile) {
             writeLine();
-            // If the node is a sourceFile and it has prologueDirective (statmentOffSet is not zero) that is synthesize
-            // We will need to emit detached comment here because emitPrologueDirective will not emit comments of such prologue directive
             const statements = node.statements;
-            // Emit detached comment if there iare no prologue directives or this is a synthesized prologue directives.
-            // The synthesized node will have no leading comment so some comments may be missed.
-            const shouldEmitDetachedComment = statements.length === 0 ||
-                !isPrologueDirective(statements[0]) ||
-                (isPrologueDirective(statements[0]) && nodeIsSynthesized(statements[0]));
-            if (emitBodyWithDetachedComments && shouldEmitDetachedComment) {
-                emitBodyWithDetachedComments(node, statements, emitSourceFileWorker);
+            if (emitBodyWithDetachedComments) {
+                // Emit detached comment if there iare no prologue directives or this is a synthesized prologue directives.
+                // The synthesized node will have no leading comment so some comments may be missed.
+                const shouldEmitDetachedComment = statements.length === 0 ||
+                    !isPrologueDirective(statements[0]) ||
+                    nodeIsSynthesized(statements[0]);
+                if (shouldEmitDetachedComment) {
+                    emitBodyWithDetachedComments(node, statements, emitSourceFileWorker);
+                    return;
+                }
             }
-            else {
-                emitSourceFileWorker(node);
-            }
+            emitSourceFileWorker(node);
         }
 
         function emitSourceFileWorker(node: SourceFile) {
@@ -2111,7 +2110,7 @@ namespace ts {
         }
 
         function emitPrologueDirectivesIfNeeded(sourceFileOrBundle: Bundle | SourceFile) {
-            if (sourceFileOrBundle.kind === SyntaxKind.SourceFile) {
+            if (isSourceFile(sourceFileOrBundle)) {
                 setSourceFile(sourceFileOrBundle as SourceFile);
                 emitPrologueDirectives((sourceFileOrBundle as SourceFile).statements);
             }
@@ -2125,7 +2124,7 @@ namespace ts {
         }
 
         function emitShebangIfNeeded(sourceFileOrBundle: Bundle | SourceFile) {
-            if (sourceFileOrBundle.kind === SyntaxKind.SourceFile) {
+            if (isSourceFile(sourceFileOrBundle)) {
                 const shebang = getShebang(sourceFileOrBundle.text);
                 if (shebang) {
                     write(shebang);
