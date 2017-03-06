@@ -15,10 +15,10 @@
 //// class C extends N.A {[| |]}
 
 verify.rangeAfterCodeFix(`
-    abstract baz(a: Accessible) {
+    baz(a: N.Accessible) {
         throw new Error('Method not implemented.');
     }
-    abstract qux(): Accessible {
+    qux(): N.Accessible {
         throw new Error('Method not implemented.');
     }
-`)
+`);

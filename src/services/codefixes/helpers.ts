@@ -65,12 +65,21 @@ namespace ts.codefix {
                 }
                 if (declarations.length === 1) {
                     Debug.assert(signatures.length === 1);
-                    const sigString = checker.signatureToString(signatures[0], enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
+                    const signature = signatures[0];
+                    if (!isSignatureAccessible(signature, enclosingDeclaration, checker)) {
+                        return "";
+                    }
+                    const sigString = checker.signatureToString(signature, enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
                     return getStubbedMethod(visibility, name, sigString, newlineChar);
+
                 }
 
                 let result = "";
                 for (let i = 0; i < signatures.length; i++) {
+
+                    if (!isSignatureAccessible(signatures[i], enclosingDeclaration, checker)) {
+                        return "";
+                    }
                     const sigString = checker.signatureToString(signatures[i], enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
                     result += `${visibility}${name}${sigString};${newlineChar}`;
                 }
@@ -84,6 +93,9 @@ namespace ts.codefix {
                 else {
                     Debug.assert(declarations.length === signatures.length);
                     bodySig = createBodySignatureWithAnyTypes(signatures, enclosingDeclaration, checker);
+                }
+                if (!isSignatureAccessible(bodySig, enclosingDeclaration, checker)) {
+                    return "";
                 }
                 const sigString = checker.signatureToString(bodySig, enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
                 result += getStubbedMethod(visibility, name, sigString, newlineChar);
@@ -165,4 +177,15 @@ namespace ts.codefix {
     }
 
     const SymbolConstructor = objectAllocator.getSymbolConstructor();
+
+
+    function isSignatureAccessible(signature: Signature, enclosingDeclaration: Node, checker: TypeChecker): boolean {
+        const typeParameters = signature.getTypeParameters();
+        const parameters = signature.getParameters();
+        const returnType = signature.getReturnType();
+        return (!typeParameters || signature.typeParameters.every(typeParameter => checker.isTypeAccessible(typeParameter, enclosingDeclaration)))
+            && parameters.every(parameter => checker.isTypeAccessible(checker.getTypeOfSymbolAtLocation(parameter, enclosingDeclaration), enclosingDeclaration))
+            && checker.isTypeAccessible(returnType, enclosingDeclaration);
+    }
+
 }

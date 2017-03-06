@@ -6,15 +6,17 @@
 ////         member
 ////     };
 ////     export abstract class A {
-////         abstract x: { n: number, i: Inaccessible, s: string };
-////         abstract y: { n: number, a: Accessible };
+////         abstract x: {}
+////         abstract y: { n: number, i: Inaccessible, s: string };
+////         abstract z: { n: number, a: Accessible };
 ////     }
 //// }
 ////
 //// class C extends N.A {[| |]}
 
 verify.rangeAfterCodeFix(`
-    y: { n: number; a: N.Accessible; };
+    x: {};
+    z: { n: number; a: N.Accessible; };
 `);
 
 type T = {u: U};

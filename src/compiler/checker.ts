@@ -1988,11 +1988,11 @@ namespace ts {
 
         function isTypeAccessible(type: Type, enclosingDeclaration: Node): boolean {
             const meaning = SymbolFlags.Type;
-            
+
             return isTypeAccessibleWorker(type, /*inObjectLiteral*/ false, /*inTypeAlias*/true, /*symbolstack*/[]);
 
             function isTypeAccessibleWorker(type: Type, inObjectLiteral: boolean, inTypeAlias: boolean, symbolStack: Symbol[]): boolean {
-                if(inTypeAlias && type.aliasSymbol) {
+                if (inTypeAlias && type.aliasSymbol) {
                     return isSymbolAccessible(type.aliasSymbol, enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/false).accessibility === SymbolAccessibility.Accessible
                         && (!type.aliasTypeArguments || allTypesVisible(type.aliasTypeArguments));
                 }
@@ -2043,6 +2043,10 @@ namespace ts {
 
                 if (objectFlags & ObjectFlags.Anonymous) {
                     // The type is an object literal type.
+                    if (!type.symbol) {
+                        // Anonymous types without symbols are literals.
+                        return true;
+                    }
                     const members = type.symbol.members;
                     let allVisible = true;
                     members && members.forEach((member) => {
