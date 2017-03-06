@@ -1,0 +1,14 @@
+/a.ts(2,17): error TS2507: Type 'any' is not a constructor function type.
+
+
+==== /a.ts (1 errors) ====
+    import Foo from "foo";
+    class A extends Foo { }
+                    ~~~
+!!! error TS2507: Type 'any' is not a constructor function type.
+    
+==== /node_modules/foo/index.js (0 errors) ====
+    // Test that extending an untyped module is an error, unlike extending unknownSymbol.
+    
+    This file is not read.
+    

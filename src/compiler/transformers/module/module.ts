@@ -1152,7 +1152,7 @@ namespace ts {
                         createIdentifier("__esModule"),
                         createLiteral(true)
                     )
-                )
+                );
             }
             else {
                 statement = createStatement(

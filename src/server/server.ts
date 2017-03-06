@@ -47,14 +47,14 @@ namespace ts.server {
         if (process.env.XDG_CACHE_HOME) {
             return process.env.XDG_CACHE_HOME;
         }
-        const usersDir = platformIsDarwin ? "Users" : "home"
+        const usersDir = platformIsDarwin ? "Users" : "home";
         const homePath = (os.homedir && os.homedir()) ||
             process.env.HOME ||
             ((process.env.LOGNAME || process.env.USER) && `/${usersDir}/${process.env.LOGNAME || process.env.USER}`) ||
             os.tmpdir();
         const cacheFolder = platformIsDarwin
             ? "Library/Caches"
-            : ".cache"
+            : ".cache";
         return combinePaths(normalizeSlashes(homePath), cacheFolder);
     }
 
@@ -653,7 +653,7 @@ namespace ts.server {
                 // this drive is unsafe - return no-op watcher
                 return { close() { } };
             }
-        }
+        };
     }
 
     // Override sys.write because fs.writeSync is not reliable on Node 4

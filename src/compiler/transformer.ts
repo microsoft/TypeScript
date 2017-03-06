@@ -121,13 +121,13 @@ namespace ts {
             enableEmitNotification,
             isSubstitutionEnabled,
             isEmitNotificationEnabled,
-            get onSubstituteNode() { return onSubstituteNode },
+            get onSubstituteNode() { return onSubstituteNode; },
             set onSubstituteNode(value) {
                 Debug.assert(state < TransformationState.Initialized, "Cannot modify transformation hooks after initialization has completed.");
                 Debug.assert(value !== undefined, "Value must not be 'undefined'");
                 onSubstituteNode = value;
             },
-            get onEmitNode() { return onEmitNode },
+            get onEmitNode() { return onEmitNode; },
             set onEmitNode(value) {
                 Debug.assert(state < TransformationState.Initialized, "Cannot modify transformation hooks after initialization has completed.");
                 Debug.assert(value !== undefined, "Value must not be 'undefined'");

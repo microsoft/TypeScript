@@ -1164,7 +1164,7 @@ namespace ts {
             emitTypeParameters(node.typeParameters);
             const baseTypeNode = getClassExtendsHeritageClauseElement(node);
             if (baseTypeNode) {
-                node.name
+                node.name;
                 emitHeritageClause(node.name, [baseTypeNode], /*isImplementsList*/ false);
             }
             emitHeritageClause(node.name, getClassImplementsHeritageClauseElements(node), /*isImplementsList*/ true);

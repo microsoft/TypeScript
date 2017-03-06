@@ -17,7 +17,7 @@ namespace ts.codefix {
         }
 
         const startPos: number = classDecl.members.pos;
-        const classType = checker.getTypeAtLocation(classDecl);
+        const classType = checker.getTypeAtLocation(classDecl) as InterfaceType;
         const implementedTypeNodes = getClassImplementsHeritageClauseElements(classDecl);
 
         const hasNumericIndexSignature = !!checker.getIndexTypeOfType(classType, IndexKind.Number);
@@ -25,9 +25,9 @@ namespace ts.codefix {
 
         const result: CodeAction[] = [];
         for (const implementedTypeNode of implementedTypeNodes) {
-            const implementedType = checker.getTypeFromTypeNode(implementedTypeNode) as InterfaceType;
             // Note that this is ultimately derived from a map indexed by symbol names,
             // so duplicates cannot occur.
+            const implementedType = checker.getTypeAtLocation(implementedTypeNode) as InterfaceType;
             const implementedTypeSymbols = checker.getPropertiesOfType(implementedType);
             const nonPrivateMembers = implementedTypeSymbols.filter(symbol => !(getModifierFlags(symbol.valueDeclaration) & ModifierFlags.Private));
 
