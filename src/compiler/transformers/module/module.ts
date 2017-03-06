@@ -55,9 +55,7 @@ namespace ts {
          * @param node The SourceFile node.
          */
         function transformSourceFile(node: SourceFile) {
-            if (isDeclarationFile(node)
-                || !(isExternalModule(node)
-                    || compilerOptions.isolatedModules)) {
+            if (isDeclarationFile(node) || !(isExternalModule(node) || compilerOptions.isolatedModules)) {
                 return node;
             }
 
@@ -74,6 +72,14 @@ namespace ts {
             return aggregateTransformFlags(updated);
         }
 
+
+        function shouldEmitUnderscoreUnderscoreESModule() {
+            if (!currentModuleInfo.exportEquals && isExternalModule(currentSourceFile)) {
+                return true;
+            }
+            return false;
+        }
+
         /**
          * Transforms a SourceFile into a CommonJS module.
          *
@@ -85,7 +91,7 @@ namespace ts {
             const statements: Statement[] = [];
             const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, sourceElementVisitor);
 
-            if (!currentModuleInfo.exportEquals) {
+            if (shouldEmitUnderscoreUnderscoreESModule()) {
                 append(statements, createUnderscoreUnderscoreESModule());
             }
 
@@ -378,7 +384,7 @@ namespace ts {
             const statements: Statement[] = [];
             const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, sourceElementVisitor);
 
-            if (!currentModuleInfo.exportEquals) {
+            if (shouldEmitUnderscoreUnderscoreESModule()) {
                 append(statements, createUnderscoreUnderscoreESModule());
             }
 
