@@ -2,23 +2,29 @@
 
 
 //// namespace N {
-////     const enum Inaccessible { };
-////     export const enum Accessible { };
+////     class Inaccessible { a: number };
+////     export class Accessible { b: string };
 ////     export abstract class A {
-////         abstract foo(a: Inaccessible);
-////         abstract bar(): Inaccessible;
-////         abstract baz(a: Accessible);
-////         abstract qux(): Accessible;
+////         abstract x(a: Inaccessible);
+////         abstract y(): Inaccessible;
+////         abstract z(a: Accessible);
+////         abstract t<T extends Accessible>(): any;
+////         abstract u<T extends Inaccessible>(): any;
+////         abstract v<T extends Accessible>(): T;
+////         abstract w<T extends Inaccessible>(): T;
 ////     }
 //// }
 ////
 //// class C extends N.A {[| |]}
 
 verify.rangeAfterCodeFix(`
-    baz(a: N.Accessible) {
+    z(a: N.Accessible) {
         throw new Error('Method not implemented.');
     }
-    qux(): N.Accessible {
+    t<T extends N.Accessible>() {
+        throw new Error('Method not implemented.');
+    }
+    v<T extends N.Accessible>(): T {
         throw new Error('Method not implemented.');
     }
 `);

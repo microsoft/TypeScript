@@ -1992,25 +1992,32 @@ namespace ts {
             return isTypeAccessibleWorker(type, /*inObjectLiteral*/ false, /*inTypeAlias*/true, /*symbolstack*/[]);
 
             function isTypeAccessibleWorker(type: Type, inObjectLiteral: boolean, inTypeAlias: boolean, symbolStack: Symbol[]): boolean {
+                if (!type) {
+                    return false;
+                }
+
                 if (inTypeAlias && type.aliasSymbol) {
                     return isSymbolAccessible(type.aliasSymbol, enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/false).accessibility === SymbolAccessibility.Accessible
                         && (!type.aliasTypeArguments || allTypesVisible(type.aliasTypeArguments));
                 }
 
-                const typeSymbolAccessibility = type && type.symbol && isSymbolAccessible(type.symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ false).accessibility;
+                const typeSymbolAccessibility = type.symbol && isSymbolAccessible(type.symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ false).accessibility;
+
+                if (type.flags & TypeFlags.TypeParameter) {
+                    if (inObjectLiteral && (type as TypeParameter).isThisType) {
+                        return false;
+                    }
+                    const constraint = getConstraintFromTypeParameter((<TypeParameter>type));
+                    return typeSymbolAccessibility === SymbolAccessibility.Accessible
+                        && (!constraint || isTypeAccessibleWorker(constraint, inObjectLiteral, /*inTypeAlias*/false, symbolStack));
+                }
+
                 if (typeSymbolAccessibility === SymbolAccessibility.Accessible) {
                     return true;
                 }
 
                 if (type.flags & (TypeFlags.Intrinsic | TypeFlags.Literal)) {
                     return true;
-                }
-
-                if (inObjectLiteral && type.flags & TypeFlags.TypeParameter) {
-                    if ((type as TypeParameter).isThisType) {
-                        return false;
-                    }
-                    return isTypeAccessibleWorker((type as TypeParameter).constraint, inObjectLiteral, /*inTypeAlias*/false, symbolStack);
                 }
 
                 const objectFlags = getObjectFlags(type);
