@@ -2289,7 +2289,42 @@ namespace ts {
             declareSymbol(file.symbol.exports, file.symbol, <PropertyAccessExpression>node.left, SymbolFlags.Property | SymbolFlags.Export, SymbolFlags.None);
         }
 
+        function isExportsOrModuleExportsOrAlias(node: Node): boolean {
+            return isExportsIdentifier(node) ||
+                isModuleExportsPropertyAccessExpression(node) ||
+                isNameOfExportsOrModuleExportsAliasDeclaration(node);
+        }
+
+        function isNameOfExportsOrModuleExportsAliasDeclaration(node: Node) {
+            if (node.kind === SyntaxKind.Identifier) {
+                const symbol = container.locals.get((<Identifier>node).text);
+                if (symbol && symbol.valueDeclaration && symbol.valueDeclaration.kind === SyntaxKind.VariableDeclaration) {
+                    const declaration = symbol.valueDeclaration as VariableDeclaration;
+                    if (declaration.initializer) {
+                        return isExportsOrModuleExportsOrAliasOrAssignemnt(declaration.initializer);
+                    }
+                }
+            }
+            return false;
+        }
+
+        function isExportsOrModuleExportsOrAliasOrAssignemnt(node: Node): boolean {
+            return isExportsOrModuleExportsOrAlias(node) ||
+                (isAssignmentExpression(node, /*excludeCompoundAssignements*/ true) && (isExportsOrModuleExportsOrAliasOrAssignemnt(node.left) || isExportsOrModuleExportsOrAliasOrAssignemnt(node.right)));
+        }
+
         function bindModuleExportsAssignment(node: BinaryExpression) {
+            // A common practice in node modules is to set 'export = module.exports = {}', this ensures that 'exports'
+            // is still pointing to 'module.exports'.
+            // We do not want to consider this as 'export=' since a module can have only one of these.
+            // Similarlly we do not want to treat 'module.exports = exports' as an 'export='.
+            const assignedExpression = getRightMostAssignedExpression(node.right);
+            if (isEmptyObjectLiteral(assignedExpression) || isExportsOrModuleExportsOrAlias(assignedExpression)) {
+                // Mark it as a module in case there are no other exports in the file
+                setCommonJsModuleIndicator(node);
+                return;
+            }
+
             // 'module.exports = expr' assignment
             setCommonJsModuleIndicator(node);
             declareSymbol(file.symbol.exports, file.symbol, node, SymbolFlags.Property | SymbolFlags.Export | SymbolFlags.ValueModule, SymbolFlags.None);
@@ -2351,11 +2386,20 @@ namespace ts {
             leftSideOfAssignment.parent = node;
             target.parent = leftSideOfAssignment;
 
-            bindPropertyAssignment(target.text, leftSideOfAssignment, /*isPrototypeProperty*/ false);
+            if (isNameOfExportsOrModuleExportsAliasDeclaration(target)) {
+                // This can be an alias for the 'exports' or 'module.exports' names, e.g.
+                //    var util = module.exports;
+                //    util.property = function ...
+                bindExportsPropertyAssignment(node);
+            }
+            else {
+                bindPropertyAssignment(target.text, leftSideOfAssignment, /*isPrototypeProperty*/ false);
+            }
         }
 
         function bindPropertyAssignment(functionName: string, propertyAccessExpression: PropertyAccessExpression, isPrototypeProperty: boolean) {
             let targetSymbol = container.locals.get(functionName);
+
             if (targetSymbol && isDeclarationOfFunctionOrClassExpression(targetSymbol)) {
                 targetSymbol = (targetSymbol.valueDeclaration as VariableDeclaration).initializer.symbol;
             }
