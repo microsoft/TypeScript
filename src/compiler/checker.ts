@@ -3369,16 +3369,6 @@ namespace ts {
             return strictNullChecks && optional ? includeFalsyTypes(type, TypeFlags.Undefined) : type;
         }
 
-        /** remove undefined from the annotated type of a parameter when there is an initializer (that doesn't include undefined) */
-        function removeOptionalityFromAnnotation(annotatedType: Type, declaration: VariableLikeDeclaration): Type {
-            const annotationIncludesUndefined = strictNullChecks &&
-                declaration.kind === SyntaxKind.Parameter &&
-                declaration.initializer &&
-                getFalsyFlags(annotatedType) & TypeFlags.Undefined &&
-                !(getFalsyFlags(checkExpression(declaration.initializer)) & TypeFlags.Undefined);
-            return annotationIncludesUndefined ? getNonNullableType(annotatedType) : annotatedType;
-        }
-
         // Return the inferred type for a variable, parameter, or property declaration
         function getTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration, includeOptionality: boolean): Type {
             if (declaration.flags & NodeFlags.JavaScriptFile) {
@@ -3413,7 +3403,7 @@ namespace ts {
 
             // Use type from type annotation if one is present
             if (declaration.type) {
-                const declaredType = removeOptionalityFromAnnotation(getTypeFromTypeNode(declaration.type), declaration);
+                const declaredType = getTypeFromTypeNode(declaration.type);
                 return addOptionality(declaredType, /*optional*/ declaration.questionToken && includeOptionality);
             }
 
@@ -10265,14 +10255,11 @@ namespace ts {
             return false;
         }
 
-        function getFlowTypeOfReference(reference: Node, declaredType: Type, assumeInitialized: boolean, flowContainer: Node) {
+        function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node, couldBeUninitialized?: boolean) {
             let key: string;
-            if (!reference.flowNode || assumeInitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
+            if (!reference.flowNode || !couldBeUninitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
                 return declaredType;
             }
-            const initialType = assumeInitialized ? declaredType :
-                declaredType === autoType || declaredType === autoArrayType ? undefinedType :
-                includeFalsyTypes(declaredType, TypeFlags.Undefined);
             const visitedFlowStart = visitedFlowCount;
             const evolvedType = getTypeFromFlowType(getTypeAtFlowNode(reference.flowNode));
             visitedFlowCount = visitedFlowStart;
@@ -10951,6 +10938,16 @@ namespace ts {
             return symbol.flags & SymbolFlags.Variable && (getDeclarationNodeFlagsFromSymbol(symbol) & NodeFlags.Const) !== 0 && getTypeOfSymbol(symbol) !== autoArrayType;
         }
 
+        /** remove undefined from the annotated type of a parameter when there is an initializer (that doesn't include undefined) */
+        function removeOptionalityFromDeclaredType(declaredType: Type, declaration: VariableLikeDeclaration): Type {
+            const annotationIncludesUndefined = strictNullChecks &&
+                declaration.kind === SyntaxKind.Parameter &&
+                declaration.initializer &&
+                getFalsyFlags(declaredType) & TypeFlags.Undefined &&
+                !(getFalsyFlags(checkExpression(declaration.initializer)) & TypeFlags.Undefined);
+            return annotationIncludesUndefined ? getTypeWithFacts(declaredType, TypeFacts.NEUndefined) : declaredType;
+        }
+
         function checkIdentifier(node: Identifier): Type {
             const symbol = getResolvedSymbol(node);
             if (symbol === unknownSymbol) {
@@ -11069,7 +11066,10 @@ namespace ts {
             const assumeInitialized = isParameter || isOuterVariable ||
                 type !== autoType && type !== autoArrayType && (!strictNullChecks || (type.flags & TypeFlags.Any) !== 0 || isInTypeQuery(node)) ||
                 isInAmbientContext(declaration);
-            const flowType = getFlowTypeOfReference(node, type, assumeInitialized, flowContainer);
+            const initialType = assumeInitialized ? (isParameter ? removeOptionalityFromDeclaredType(type, getRootDeclaration(declaration) as VariableLikeDeclaration) : type) :
+                type === autoType || type === autoArrayType ? undefinedType :
+                includeFalsyTypes(type, TypeFlags.Undefined);
+            const flowType = getFlowTypeOfReference(node, type, initialType, flowContainer, !assumeInitialized);
             // A variable is considered uninitialized when it is possible to analyze the entire control flow graph
             // from declaration to use, and when the variable's declared type doesn't include undefined but the
             // control flow based type does include undefined.
@@ -11335,7 +11335,7 @@ namespace ts {
             if (isClassLike(container.parent)) {
                 const symbol = getSymbolOfNode(container.parent);
                 const type = hasModifier(container, ModifierFlags.Static) ? getTypeOfSymbol(symbol) : (<InterfaceType>getDeclaredTypeOfSymbol(symbol)).thisType;
-                return getFlowTypeOfReference(node, type, /*assumeInitialized*/ true, /*flowContainer*/ undefined);
+                return getFlowTypeOfReference(node, type);
             }
 
             if (isInJavaScriptFile(node)) {
@@ -13327,7 +13327,7 @@ namespace ts {
                 !(prop.flags & SymbolFlags.Method && propType.flags & TypeFlags.Union)) {
                 return propType;
             }
-            const flowType = getFlowTypeOfReference(node, propType, /*assumeInitialized*/ true, /*flowContainer*/ undefined);
+            const flowType = getFlowTypeOfReference(node, propType);
             return assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType;
         }
 
