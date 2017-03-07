@@ -1996,8 +1996,6 @@ namespace ts {
         }
 
         function isTypeAccessible(type: Type, enclosingDeclaration: Node): boolean {
-            const meaning = SymbolFlags.Type;
-
             return isTypeAccessibleWorker(type, /*inObjectLiteral*/ false, /*inTypeAlias*/true);
 
             function isTypeAccessibleWorker(type: Type, inObjectLiteral: boolean, inTypeAlias: boolean): boolean {
@@ -2010,7 +2008,7 @@ namespace ts {
                         && (!type.aliasTypeArguments || allTypesVisible(type.aliasTypeArguments));
                 }
 
-                const typeSymbolAccessibility = type.symbol && isSymbolAccessible(type.symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ false).accessibility;
+                const typeSymbolAccessibility = type.symbol && isSymbolAccessible(type.symbol, enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/ false).accessibility;
 
                 if (type.flags & TypeFlags.TypeParameter) {
                     if (inObjectLiteral && (type as TypeParameter).isThisType) {

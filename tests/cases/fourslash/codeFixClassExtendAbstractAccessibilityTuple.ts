@@ -5,8 +5,8 @@
 ////         member
 ////     };
 ////     export abstract class A {
-////         // abstract x: [number, Inaccessible, string];
-////         // abstract y: [number, Inaccessible.member];
+////         abstract x: [number, Inaccessible, string];
+////         abstract y: [number, Inaccessible.member];
 ////         abstract z: [number, string, this];
 ////     }
 //// }
