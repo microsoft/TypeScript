@@ -416,7 +416,7 @@ gulp.task(servicesFile, false, ["lib", "generate-diagnostics"], () => {
                 file.path = nodeDefinitionsFile;
                 return content + "\r\nexport = ts;";
             }))
-            .pipe(gulp.dest(".")),
+            .pipe(gulp.dest("src/services")),
         completedDts.pipe(clone())
             .pipe(insert.transform((content, file) => {
                 file.path = nodeStandaloneDefinitionsFile;
@@ -477,12 +477,12 @@ gulp.task(tsserverLibraryFile, false, [servicesFile], (done) => {
     return merge2([
         js.pipe(prependCopyright())
             .pipe(sourcemaps.write("."))
-            .pipe(gulp.dest(".")),
+            .pipe(gulp.dest("src/server")),
         dts.pipe(prependCopyright(/*outputCopyright*/true))
             .pipe(insert.transform((content) => {
                 return content + "\r\nexport = ts;\r\nexport as namespace ts;";
             }))
-            .pipe(gulp.dest("."))
+            .pipe(gulp.dest("src/server"))
     ]);
 });
 
