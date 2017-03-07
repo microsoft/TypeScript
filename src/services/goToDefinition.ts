@@ -1,4 +1,4 @@
-﻿/* @internal */
+/* @internal */
 namespace ts.GoToDefinition {
     export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number): DefinitionInfo[] {
         /// Triple slash reference comments

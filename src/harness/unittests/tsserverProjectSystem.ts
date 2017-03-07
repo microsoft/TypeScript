@@ -1,4 +1,4 @@
-﻿/// <reference path="..\harness.ts" />
+/// <reference path="..\harness.ts" />
 /// <reference path="../../server/typingsInstaller/typingsInstaller.ts" />
 
 namespace ts.projectSystem {
