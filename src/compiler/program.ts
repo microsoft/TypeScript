@@ -904,10 +904,9 @@ namespace ts {
 
                 Debug.assert(!!sourceFile.bindDiagnostics);
                 const bindDiagnostics = sourceFile.bindDiagnostics;
-                // For JavaScript files, we don't want to report semantic errors.
-                // Instead, we'll report errors for using TypeScript-only constructs from within a
-                // JavaScript file when we get syntactic diagnostics for the file.
-                const includeCheckDiagnostics = options.checkJsFiles || sourceFile.hasCheckDirective || !isSourceFileJavaScript(sourceFile);
+                // For JavaScript files, we don't want to report semantic errors unless ecplicitlly requested.
+                const includeCheckDiagnostics = !isSourceFileJavaScript(sourceFile) ||
+                    (sourceFile.checkJsDirective ? sourceFile.checkJsDirective.enabled : options.checkJsFiles);
                 const checkDiagnostics = includeCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : [];
                 const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
                 const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);

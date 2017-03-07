@@ -5817,7 +5817,7 @@ namespace ts {
             const typeReferenceDirectives: FileReference[] = [];
             const amdDependencies: { path: string; name: string }[] = [];
             let amdModuleName: string;
-            let hasCheckDirective = false;
+            let checkJsDirective: CheckJsDirective = undefined;
 
             // Keep scanning all the leading trivia in the file until we get to something that
             // isn't trivia.  Any single line comment will be analyzed to see if it is a
@@ -5880,8 +5880,15 @@ namespace ts {
                         }
                     }
 
-                    const checkDirectiveRegEx = /^\/\/\s*@check\s*/gim;
-                    hasCheckDirective = hasCheckDirective || !!checkDirectiveRegEx.exec(comment);
+                    const checkJsDirectiveRegEx = /^\/\/\/?\s*@check(\s+(true|false))?/gim;
+                    const checkJsDirectiveMatchResult = checkJsDirectiveRegEx.exec(comment);
+                    if (checkJsDirectiveMatchResult) {
+                        checkJsDirective = {
+                            enabled: compareStrings(checkJsDirectiveMatchResult[2], "false", /*ignoreCase*/ true) !== Comparison.EqualTo,
+                            end: range.end,
+                            pos: range.pos
+                        };
+                    }
                 }
             }
 
@@ -5889,7 +5896,7 @@ namespace ts {
             sourceFile.typeReferenceDirectives = typeReferenceDirectives;
             sourceFile.amdDependencies = amdDependencies;
             sourceFile.moduleName = amdModuleName;
-            sourceFile.hasCheckDirective = hasCheckDirective;
+            sourceFile.checkJsDirective = checkJsDirective;
         }
 
         function setExternalModuleIndicator(sourceFile: SourceFile) {

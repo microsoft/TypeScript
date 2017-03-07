@@ -1940,6 +1940,10 @@
         fileName: string;
     }
 
+    export interface CheckJsDirective extends TextRange {
+        enabled: boolean;
+    }
+
     export type CommentKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia;
 
     export interface CommentRange extends TextRange {
@@ -2272,7 +2276,7 @@
         /* @internal */ moduleAugmentations: LiteralExpression[];
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
         /* @internal */ ambientModuleNames: string[];
-        /* @internal */ hasCheckDirective: boolean;
+        /* @internal */ checkJsDirective: CheckJsDirective | undefined;
     }
 
     export interface Bundle extends Node {
