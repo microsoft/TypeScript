@@ -26,6 +26,13 @@ function foo4(x: string | undefined = undefined, b: number) {
     x = undefined;
 }
 
+type OptionalNullableString = string | null | undefined;
+function allowsNull(val: OptionalNullableString = "") {
+    val = null;
+    val = 'string and null are both ok';
+}
+allowsNull(null); // still allows passing null
+
 
 
 // .d.ts should have `string | undefined` for foo1, foo2, foo3 and foo4
@@ -81,6 +88,12 @@ function foo4(x, b) {
     x; // should be string | undefined
     x = undefined;
 }
+function allowsNull(val) {
+    if (val === void 0) { val = ""; }
+    val = null;
+    val = 'string and null are both ok';
+}
+allowsNull(null); // still allows passing null
 // .d.ts should have `string | undefined` for foo1, foo2, foo3 and foo4
 foo1(undefined, 1);
 foo2(undefined, 1);
@@ -111,6 +124,8 @@ declare function foo1(x: string | undefined, b: number): void;
 declare function foo2(x: string | undefined, b: number): void;
 declare function foo3(x: string | undefined, b: number): void;
 declare function foo4(x: string | undefined, b: number): void;
+declare type OptionalNullableString = string | null | undefined;
+declare function allowsNull(val?: OptionalNullableString): void;
 declare function removeUndefinedButNotFalse(x?: boolean): false | undefined;
 declare const cond: boolean;
 declare function removeNothing(y?: boolean | undefined): boolean;

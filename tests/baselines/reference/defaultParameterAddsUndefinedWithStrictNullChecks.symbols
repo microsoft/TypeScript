@@ -86,6 +86,23 @@ function foo4(x: string | undefined = undefined, b: number) {
 >undefined : Symbol(undefined)
 }
 
+type OptionalNullableString = string | null | undefined;
+>OptionalNullableString : Symbol(OptionalNullableString, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 25, 1))
+
+function allowsNull(val: OptionalNullableString = "") {
+>allowsNull : Symbol(allowsNull, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 27, 56))
+>val : Symbol(val, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 28, 20))
+>OptionalNullableString : Symbol(OptionalNullableString, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 25, 1))
+
+    val = null;
+>val : Symbol(val, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 28, 20))
+
+    val = 'string and null are both ok';
+>val : Symbol(val, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 28, 20))
+}
+allowsNull(null); // still allows passing null
+>allowsNull : Symbol(allowsNull, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 27, 56))
+
 
 
 // .d.ts should have `string | undefined` for foo1, foo2, foo3 and foo4
@@ -107,35 +124,35 @@ foo4(undefined, 1);
 
 
 function removeUndefinedButNotFalse(x = true) {
->removeUndefinedButNotFalse : Symbol(removeUndefinedButNotFalse, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 33, 19))
->x : Symbol(x, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 36, 36))
+>removeUndefinedButNotFalse : Symbol(removeUndefinedButNotFalse, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 40, 19))
+>x : Symbol(x, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 43, 36))
 
     if (x === false) {
->x : Symbol(x, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 36, 36))
+>x : Symbol(x, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 43, 36))
 
         return x;
->x : Symbol(x, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 36, 36))
+>x : Symbol(x, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 43, 36))
     }
 }
 
 declare const cond: boolean;
->cond : Symbol(cond, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 42, 13))
+>cond : Symbol(cond, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 49, 13))
 
 function removeNothing(y = cond ? true : undefined) {
->removeNothing : Symbol(removeNothing, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 42, 28))
->y : Symbol(y, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 43, 23))
->cond : Symbol(cond, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 42, 13))
+>removeNothing : Symbol(removeNothing, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 49, 28))
+>y : Symbol(y, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 50, 23))
+>cond : Symbol(cond, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 49, 13))
 >undefined : Symbol(undefined)
 
     if (y !== undefined) {
->y : Symbol(y, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 43, 23))
+>y : Symbol(y, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 50, 23))
 >undefined : Symbol(undefined)
 
         if (y === false) {
->y : Symbol(y, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 43, 23))
+>y : Symbol(y, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 50, 23))
 
             return y;
->y : Symbol(y, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 43, 23))
+>y : Symbol(y, Decl(defaultParameterAddsUndefinedWithStrictNullChecks.ts, 50, 23))
         }
     }
     return true;
