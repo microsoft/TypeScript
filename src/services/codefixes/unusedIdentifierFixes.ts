@@ -105,9 +105,10 @@ namespace ts.codefix {
                             else {
                                 // import |d,| * as ns from './file'
                                 const start = importClause.name.getStart();
-                                let end = findFirstNonSpaceCharPosStarting(importClause.name.end);
+                                const text = sourceFile.text;
+                                let end = getFirstNonSpaceCharacterPosition(text, importClause.name.end);
                                 if (sourceFile.text.charCodeAt(end) === CharacterCodes.comma) {
-                                    end = findFirstNonSpaceCharPosStarting(end + 1);
+                                    end = getFirstNonSpaceCharacterPosition(text, end + 1);
                                 }
 
                                 return createCodeFix("", start, end - start);
@@ -164,13 +165,6 @@ namespace ts.codefix {
 
                 const start = node.getStart();
                 return createCodeFix("", start, end - start);
-            }
-
-            function findFirstNonSpaceCharPosStarting(start: number) {
-                while (isWhiteSpace(sourceFile.text.charCodeAt(start))) {
-                    start += 1;
-                }
-                return start;
             }
 
             function createCodeFix(newText: string, start: number, length: number): CodeAction[] {

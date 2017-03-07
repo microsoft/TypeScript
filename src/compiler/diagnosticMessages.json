@@ -3355,6 +3355,16 @@
         "category": "Message",
         "code": 90017
     },
+    "Disable checking for this file.": {
+        "category": "Message",
+        "code": 90018
+    },
+    "Suppress this error message.": {
+        "category": "Message",
+        "code": 90019
+    },
+
+
     "Octal literal types must use ES2015 syntax. Use the syntax '{0}'.": {
         "category": "Error",
         "code": 8017
