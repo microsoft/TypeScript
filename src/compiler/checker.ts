@@ -3472,7 +3472,7 @@ namespace ts {
             return undefined;
         }
 
-        function getWidenedTypeFromJSSpecialPropetyDeclarations(symbol: Symbol) {
+        function getWidenedTypeFromJSSpecialPropertyDeclarations(symbol: Symbol) {
             const types: Type[] = [];
             let definedInConstructor = false;
             let definedInMethod = false;
@@ -3663,7 +3663,7 @@ namespace ts {
                 // * className.prototype.method = expr
                 if (declaration.kind === SyntaxKind.BinaryExpression ||
                     declaration.kind === SyntaxKind.PropertyAccessExpression && declaration.parent.kind === SyntaxKind.BinaryExpression) {
-                    type = getWidenedTypeFromJSSpecialPropetyDeclarations(symbol);
+                    type = getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
                 }
                 else {
                     type = getWidenedTypeForVariableLikeDeclaration(<VariableLikeDeclaration>declaration, /*reportErrors*/ true);
