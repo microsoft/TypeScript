@@ -10929,7 +10929,7 @@ namespace ts {
                 declaration.initializer &&
                 getFalsyFlags(declaredType) & TypeFlags.Undefined &&
                 !(getFalsyFlags(checkExpression(declaration.initializer)) & TypeFlags.Undefined);
-            return annotationIncludesUndefined ? getNonNullableType(declaredType) : declaredType;
+            return annotationIncludesUndefined ? getTypeWithFacts(declaredType, TypeFacts.NEUndefined) : declaredType;
         }
 
         function checkIdentifier(node: Identifier): Type {

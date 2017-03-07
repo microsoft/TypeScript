@@ -27,6 +27,13 @@ function foo4(x: string | undefined = undefined, b: number) {
     x = undefined;
 }
 
+type OptionalNullableString = string | null | undefined;
+function allowsNull(val: OptionalNullableString = "") {
+    val = null;
+    val = 'string and null are both ok';
+}
+allowsNull(null); // still allows passing null
+
 
 
 // .d.ts should have `string | undefined` for foo1, foo2, foo3 and foo4
