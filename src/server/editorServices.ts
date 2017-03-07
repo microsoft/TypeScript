@@ -140,7 +140,7 @@ namespace ts.server {
         getScriptKind: _ => undefined,
         hasMixedContent: (fileName, extraFileExtensions) => {
             const mixedContentExtensions = ts.map(ts.filter(extraFileExtensions, item => item.isMixedContent), item => item.extension);
-            return forEach(mixedContentExtensions, extension => fileExtensionIs(fileName, extension))
+            return forEach(mixedContentExtensions, extension => fileExtensionIs(fileName, extension));
         }
     };
 
@@ -1377,7 +1377,7 @@ namespace ts.server {
 
             // close projects that were missing in the input list
             forEachKey(projectsToClose, externalProjectName => {
-                this.closeExternalProject(externalProjectName, /*suppressRefresh*/ true)
+                this.closeExternalProject(externalProjectName, /*suppressRefresh*/ true);
             });
 
             this.refreshInferredProjects();

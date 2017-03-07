@@ -2,7 +2,7 @@
     "compilerOptions": {
         "module": "commonjs",
         "target": "es5",
-        "noImplicitAny": false,
+        "strict": true,
         "sourceMap": false,
         "noUnusedLocals": true
     }

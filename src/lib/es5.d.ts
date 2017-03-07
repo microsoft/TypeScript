@@ -147,7 +147,7 @@ interface ObjectConstructor {
       * @param o Object to use as a prototype. May be null
       * @param properties JavaScript object that contains one or more property descriptors.
       */
-    create(o: object | null, properties: PropertyDescriptorMap): any;
+    create(o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any;
 
     /**
       * Adds a property to an object, or modifies attributes of an existing property.
@@ -155,14 +155,14 @@ interface ObjectConstructor {
       * @param p The property name.
       * @param attributes Descriptor for the property. It can be for a data property or an accessor property.
       */
-    defineProperty(o: any, p: string, attributes: PropertyDescriptor): any;
+    defineProperty(o: any, p: string, attributes: PropertyDescriptor & ThisType<any>): any;
 
     /**
       * Adds one or more properties to an object, and/or modifies attributes of existing properties.
       * @param o Object on which to add or modify the properties. This can be a native JavaScript object or a DOM object.
       * @param properties JavaScript object that contains one or more descriptor objects. Each descriptor object describes a data property or an accessor property.
       */
-    defineProperties(o: any, properties: PropertyDescriptorMap): any;
+    defineProperties(o: any, properties: PropertyDescriptorMap & ThisType<any>): any;
 
     /**
       * Prevents the modification of attributes of existing properties, and prevents the addition of new properties.
@@ -1365,6 +1365,11 @@ type Pick<T, K extends keyof T> = {
 type Record<K extends string, T> = {
     [P in K]: T;
 }
+
+/**
+ * Marker for contextual 'this' type
+ */
+interface ThisType<T> { }
 
 /**
   * Represents a raw buffer of binary data, which is used to store data for the

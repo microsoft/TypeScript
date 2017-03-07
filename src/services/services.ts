@@ -412,7 +412,7 @@ namespace ts {
         getDeclaration(): SignatureDeclaration {
             return this.declaration;
         }
-        getTypeParameters(): Type[] {
+        getTypeParameters(): TypeParameter[] {
             return this.typeParameters;
         }
         getParameters(): Symbol[] {
