@@ -10242,8 +10242,11 @@ namespace ts {
             return reference.flowNode && (type.flags & TypeFlags.Narrowable || couldBeUninitialized);
         }
 
-        function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node) {
+        function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node, couldBeUninitialized?: boolean) {
             let key: string;
+            if (!isFlowNarrowable(reference, declaredType, couldBeUninitialized)) {
+                return declaredType;
+            }
             const visitedFlowStart = visitedFlowCount;
             const evolvedType = getTypeFromFlowType(getTypeAtFlowNode(reference.flowNode));
             visitedFlowCount = visitedFlowStart;
@@ -11053,7 +11056,7 @@ namespace ts {
             const initialType = assumeInitialized ? (isParameter ? removeOptionalityFromDeclaredType(type, getRootDeclaration(declaration) as VariableLikeDeclaration) : type) :
                 type === autoType || type === autoArrayType ? undefinedType :
                 includeFalsyTypes(type, TypeFlags.Undefined);
-            const flowType = isFlowNarrowable(node, type, !assumeInitialized) ? getFlowTypeOfReference(node, type, initialType, flowContainer) : type;
+            const flowType = getFlowTypeOfReference(node, type, initialType, flowContainer, !assumeInitialized);
             // A variable is considered uninitialized when it is possible to analyze the entire control flow graph
             // from declaration to use, and when the variable's declared type doesn't include undefined but the
             // control flow based type does include undefined.
@@ -11319,7 +11322,7 @@ namespace ts {
             if (isClassLike(container.parent)) {
                 const symbol = getSymbolOfNode(container.parent);
                 const type = hasModifier(container, ModifierFlags.Static) ? getTypeOfSymbol(symbol) : (<InterfaceType>getDeclaredTypeOfSymbol(symbol)).thisType;
-                return isFlowNarrowable(node, type) ? getFlowTypeOfReference(node, type) : type;
+                return getFlowTypeOfReference(node, type);
             }
 
             if (isInJavaScriptFile(node)) {
@@ -13310,7 +13313,7 @@ namespace ts {
                 !(prop.flags & SymbolFlags.Method && propType.flags & TypeFlags.Union)) {
                 return propType;
             }
-            const flowType = isFlowNarrowable(node, propType) ? getFlowTypeOfReference(node, propType) : propType;
+            const flowType = getFlowTypeOfReference(node, propType);
             return assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType;
         }
 
