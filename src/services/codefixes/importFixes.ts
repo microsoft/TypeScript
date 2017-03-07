@@ -1,4 +1,4 @@
-﻿/* @internal */
+/* @internal */
 namespace ts.codefix {
 
     type ImportCodeActionKind = "CodeChange" | "InsertingIntoExistingImport" | "NewImport";

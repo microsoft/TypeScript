@@ -1,4 +1,4 @@
-﻿/* @internal */
+/* @internal */
 namespace ts {
     export interface CodeFix {
         errorCodes: number[];

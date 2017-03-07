@@ -1,4 +1,4 @@
-﻿namespace ts {
+namespace ts {
     export interface TranspileOptions {
         compilerOptions?: CompilerOptions;
         fileName?: string;
