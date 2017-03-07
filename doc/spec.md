@@ -5051,7 +5051,7 @@ The body of an enum declaration defines zero or more enum members which are the 
 
 &emsp;&emsp;*EnumMember:*  
 &emsp;&emsp;&emsp;*PropertyName*  
-&emsp;&emsp;&emsp;*PropertyName*&emsp;=&emsp;*EnumValue*
+&emsp;&emsp;&emsp;*PropertyName*&emsp;`=`&emsp;*EnumValue*
 
 &emsp;&emsp;*EnumValue:*  
 &emsp;&emsp;&emsp;*AssignmentExpression*
