@@ -18,10 +18,12 @@ function foo2(x = "string", b: number) {
 
 function foo3(x: string | undefined = "string", b: number) {
     x.length; // ok, should be string
+    x = undefined;
 }
 
 function foo4(x: string | undefined = undefined, b: number) {
     x; // should be string | undefined
+    x = undefined;
 }
 
 
@@ -72,10 +74,12 @@ function foo2(x, b) {
 function foo3(x, b) {
     if (x === void 0) { x = "string"; }
     x.length; // ok, should be string
+    x = undefined;
 }
 function foo4(x, b) {
     if (x === void 0) { x = undefined; }
     x; // should be string | undefined
+    x = undefined;
 }
 // .d.ts should have `string | undefined` for foo1, foo2, foo3 and foo4
 foo1(undefined, 1);

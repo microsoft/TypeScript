@@ -86,7 +86,7 @@ function foo2(x = "string", b: number) {
 
 function foo3(x: string | undefined = "string", b: number) {
 >foo3 : (x: string | undefined, b: number) => void
->x : string
+>x : string | undefined
 >"string" : "string"
 >b : number
 
@@ -94,6 +94,11 @@ function foo3(x: string | undefined = "string", b: number) {
 >x.length : number
 >x : string
 >length : number
+
+    x = undefined;
+>x = undefined : undefined
+>x : string | undefined
+>undefined : undefined
 }
 
 function foo4(x: string | undefined = undefined, b: number) {
@@ -104,6 +109,11 @@ function foo4(x: string | undefined = undefined, b: number) {
 
     x; // should be string | undefined
 >x : string | undefined
+
+    x = undefined;
+>x = undefined : undefined
+>x : string | undefined
+>undefined : undefined
 }
 
 

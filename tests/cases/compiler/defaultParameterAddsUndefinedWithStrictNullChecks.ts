@@ -19,10 +19,12 @@ function foo2(x = "string", b: number) {
 
 function foo3(x: string | undefined = "string", b: number) {
     x.length; // ok, should be string
+    x = undefined;
 }
 
 function foo4(x: string | undefined = undefined, b: number) {
     x; // should be string | undefined
+    x = undefined;
 }
 
 
