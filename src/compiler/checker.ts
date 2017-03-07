@@ -11601,7 +11601,7 @@ namespace ts {
                     }
                 }
             }
-            if (compilerOptions.noImplicitThis) {
+            if (noImplicitThis) {
                 const containingLiteral = getContainingObjectLiteral(func);
                 if (containingLiteral) {
                     // We have an object literal method. Check if the containing object literal has a contextual type
@@ -11622,9 +11622,9 @@ namespace ts {
                         type = getApparentTypeOfContextualType(literal);
                     }
                     // There was no contextual ThisType<T> for the containing object literal, so the contextual type
-                    // for 'this' is the contextual type for the containing object literal or the type of the object
-                    // literal itself.
-                    return contextualType || checkExpressionCached(containingLiteral);
+                    // for 'this' is the non-null form of the contextual type for the containing object literal or
+                    // the type of the object literal itself.
+                    return contextualType ? getNonNullableType(contextualType) : checkExpressionCached(containingLiteral);
                 }
                 // In an assignment of the form 'obj.xxx = function(...)' or 'obj[xxx] = function(...)', the
                 // contextual type for 'this' is 'obj'.
