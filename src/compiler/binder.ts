@@ -2297,23 +2297,28 @@ namespace ts {
 
         function bindThisPropertyAssignment(node: BinaryExpression) {
             Debug.assert(isInJavaScriptFile(node));
-            // Declare a 'member' if the container is an ES5 class or ES6 constructor
-            if (container.kind === SyntaxKind.FunctionDeclaration || container.kind === SyntaxKind.FunctionExpression) {
-                container.symbol.members = container.symbol.members || createMap<Symbol>();
-                // It's acceptable for multiple 'this' assignments of the same identifier to occur
-                declareSymbol(container.symbol.members, container.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
-            }
-            else if (container.kind === SyntaxKind.Constructor) {
-                // this.foo assignment in a JavaScript class
-                // Bind this property to the containing class
-                const saveContainer = container;
-                container = container.parent;
-                const symbol = bindPropertyOrMethodOrAccessor(node, SymbolFlags.Property, SymbolFlags.None);
-                if (symbol) {
-                    // constructor-declared symbols can be overwritten by subsequent method declarations
-                    (symbol as Symbol).isReplaceableByMethod = true;
-                }
-                container = saveContainer;
+            switch (container.kind) {
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                    // Declare a 'member' if the container is an ES5 class or ES6 constructor
+                    container.symbol.members = container.symbol.members || createMap<Symbol>();
+                    // It's acceptable for multiple 'this' assignments of the same identifier to occur
+                    declareSymbol(container.symbol.members, container.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
+                    break;
+
+                case SyntaxKind.Constructor:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    // this.foo assignment in a JavaScript class
+                    // Bind this property to the containing class
+                    const containingClass = container.parent;
+                    const symbol = declareSymbol(hasModifier(container, ModifierFlags.Static) ? containingClass.symbol.exports : containingClass.symbol.members, containingClass.symbol, node, SymbolFlags.Property, SymbolFlags.None);
+                    if (symbol) {
+                        // symbols declared through 'this' property assignements can be overwritten by subsequent method declarations
+                        (symbol as Symbol).isReplaceableByMethod = true;
+                    }
+                    break;
             }
         }
 

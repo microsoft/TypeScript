@@ -3488,25 +3488,41 @@ namespace ts {
             return undefined;
         }
 
-        // Return the inferred type for a variable, parameter, or property declaration
-        function getTypeForJSSpecialPropertyDeclaration(declaration: Declaration): Type {
-            const expression = declaration.kind === SyntaxKind.BinaryExpression ? <BinaryExpression>declaration :
-                declaration.kind === SyntaxKind.PropertyAccessExpression ? <BinaryExpression>getAncestor(declaration, SyntaxKind.BinaryExpression) :
-                undefined;
+        function getWidenedTypeFromJSSpecialPropertyDeclarations(symbol: Symbol) {
+            const types: Type[] = [];
+            let definedInConstructor = false;
+            let definedInMethod = false;
+            for (const declaration of symbol.declarations) {
+                const expression = declaration.kind === SyntaxKind.BinaryExpression ? <BinaryExpression>declaration :
+                    declaration.kind === SyntaxKind.PropertyAccessExpression ? <BinaryExpression>getAncestor(declaration, SyntaxKind.BinaryExpression) :
+                        undefined;
 
-            if (!expression) {
-                return unknownType;
-            }
-
-            if (expression.flags & NodeFlags.JavaScriptFile) {
-                // If there is a JSDoc type, use it
-                const type = getTypeForDeclarationFromJSDocComment(expression.parent);
-                if (type && type !== unknownType) {
-                    return getWidenedType(type);
+                if (!expression) {
+                    return unknownType;
                 }
+
+                if (isPropertyAccessExpression(expression.left) && expression.left.expression.kind === SyntaxKind.ThisKeyword) {
+                    if (getThisContainer(expression, /*includeArrowFunctions*/ false).kind === SyntaxKind.Constructor) {
+                        definedInConstructor = true;
+                    }
+                    else {
+                        definedInMethod = true;
+                    }
+                }
+
+                if (expression.flags & NodeFlags.JavaScriptFile) {
+                    // If there is a JSDoc type, use it
+                    const type = getTypeForDeclarationFromJSDocComment(expression.parent);
+                    if (type && type !== unknownType) {
+                        types.push(getWidenedType(type));
+                        continue;
+                    }
+                }
+
+                types.push(getWidenedLiteralType(checkExpressionCached(expression.right)));
             }
 
-            return getWidenedLiteralType(checkExpressionCached(expression.right));
+            return getWidenedType(addOptionality(getUnionType(types, /*subtypeReduction*/ true), definedInMethod && !definedInConstructor));
         }
 
         // Return the type implied by a binding pattern element. This is the type of the initializer of the element if
@@ -3663,7 +3679,7 @@ namespace ts {
                 // * className.prototype.method = expr
                 if (declaration.kind === SyntaxKind.BinaryExpression ||
                     declaration.kind === SyntaxKind.PropertyAccessExpression && declaration.parent.kind === SyntaxKind.BinaryExpression) {
-                    type = getWidenedType(getUnionType(map(symbol.declarations, getTypeForJSSpecialPropertyDeclaration), /*subtypeReduction*/ true));
+                    type = getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
                 }
                 else {
                     type = getWidenedTypeForVariableLikeDeclaration(<VariableLikeDeclaration>declaration, /*reportErrors*/ true);
