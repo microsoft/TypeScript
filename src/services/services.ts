@@ -1,4 +1,4 @@
-﻿/// <reference path="..\compiler\program.ts"/>
+/// <reference path="..\compiler\program.ts"/>
 /// <reference path="..\compiler\commandLineParser.ts"/>
 
 /// <reference path='types.ts' />
