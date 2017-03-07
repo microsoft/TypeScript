@@ -1,4 +1,4 @@
-﻿/// <reference path="../../factory.ts" />
+/// <reference path="../../factory.ts" />
 /// <reference path="../../visitor.ts" />
 /// <reference path="../destructuring.ts" />
 

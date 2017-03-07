@@ -1,4 +1,4 @@
-﻿/// <reference path="..\..\harnessLanguageService.ts" />
+/// <reference path="..\..\harnessLanguageService.ts" />
 
 interface ClassificationEntry {
     value: any;
