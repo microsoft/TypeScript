@@ -519,6 +519,8 @@
         /* @internal */ localSymbol?: Symbol;           // Local symbol declared by node (initialized by binding only for exported nodes)
         /* @internal */ flowNode?: FlowNode;            // Associated FlowNode (initialized by binding)
         /* @internal */ emitNode?: EmitNode;            // Associated EmitNode (initialized by transforms)
+        /* @internal */ contextualType?: Type;          // Used to temporarily assign a contextual type during overload resolution
+        /* @internal */ contextualMapper?: TypeMapper;  // Mapper for contextual type
     }
 
     export interface NodeArray<T extends Node> extends Array<T>, TextRange {
@@ -963,7 +965,6 @@
 
     export interface Expression extends Node {
         _expressionBrand: any;
-        contextualType?: Type;  // Used to temporarily assign a contextual type during overload resolution
     }
 
     export interface OmittedExpression extends Expression {
@@ -3309,7 +3310,7 @@
         allowSyntheticDefaultImports?: boolean;
         allowUnreachableCode?: boolean;
         allowUnusedLabels?: boolean;
-        alwaysStrict?: boolean;
+        alwaysStrict?: boolean;  // Always combine with strict property
         baseUrl?: string;
         charset?: string;
         /* @internal */ configFilePath?: string;
@@ -3345,9 +3346,9 @@
         noEmitOnError?: boolean;
         noErrorTruncation?: boolean;
         noFallthroughCasesInSwitch?: boolean;
-        noImplicitAny?: boolean;
+        noImplicitAny?: boolean;  // Always combine with strict property
         noImplicitReturns?: boolean;
-        noImplicitThis?: boolean;
+        noImplicitThis?: boolean;  // Always combine with strict property
         noUnusedLocals?: boolean;
         noUnusedParameters?: boolean;
         noImplicitUseStrict?: boolean;
@@ -3370,7 +3371,8 @@
         skipDefaultLibCheck?: boolean;
         sourceMap?: boolean;
         sourceRoot?: string;
-        strictNullChecks?: boolean;
+        strict?: boolean;
+        strictNullChecks?: boolean;  // Always combine with strict property
         /* @internal */ stripInternal?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;

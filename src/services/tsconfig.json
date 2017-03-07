@@ -53,6 +53,7 @@
         "navigateTo.ts",
         "navigationBar.ts",
         "outliningElementsCollector.ts",
+        "pathCompletions.ts",
         "patternMatcher.ts",
         "preProcess.ts",
         "rename.ts",
