@@ -819,8 +819,8 @@ namespace ts {
             writeIfPresent(node.dotDotDotToken, "...");
             emit(node.name);
             writeIfPresent(node.questionToken, "?");
-            emitExpressionWithPrefix(" = ", node.initializer);
             emitWithPrefix(": ", node.type);
+            emitExpressionWithPrefix(" = ", node.initializer);
         }
 
         function emitDecorator(decorator: Decorator) {
