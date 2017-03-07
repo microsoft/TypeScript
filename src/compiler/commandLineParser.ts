@@ -483,7 +483,7 @@ namespace ts {
             }
         },
         {
-            name: "checkJsFiles",
+            name: "checkJs",
             type: "boolean",
             experimental: true,
             description: Diagnostics.Report_errors_in_js_files

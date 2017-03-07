@@ -906,7 +906,7 @@ namespace ts {
                 const bindDiagnostics = sourceFile.bindDiagnostics;
                 // For JavaScript files, we don't want to report semantic errors unless ecplicitlly requested.
                 const includeCheckDiagnostics = !isSourceFileJavaScript(sourceFile) ||
-                    (sourceFile.checkJsDirective ? sourceFile.checkJsDirective.enabled : options.checkJsFiles);
+                    (sourceFile.checkJsDirective ? sourceFile.checkJsDirective.enabled : options.checkJs);
                 const checkDiagnostics = includeCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : [];
                 const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
                 const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);

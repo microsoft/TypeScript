@@ -1,5 +1,5 @@
 // @allowJs: true
-// @checkJsFiles: false
+// @checkJs: false
 // @noEmit: true
 
 // @fileName: a.js
