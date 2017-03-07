@@ -10238,13 +10238,9 @@ namespace ts {
             return false;
         }
 
-        function isFlowNarrowable(reference: Node, type: Type, couldBeUninitialized?: boolean) {
-            return reference.flowNode && (type.flags & TypeFlags.Narrowable || couldBeUninitialized);
-        }
-
         function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node, couldBeUninitialized?: boolean) {
             let key: string;
-            if (!isFlowNarrowable(reference, declaredType, couldBeUninitialized)) {
+            if (!reference.flowNode || !couldBeUninitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
                 return declaredType;
             }
             const visitedFlowStart = visitedFlowCount;
