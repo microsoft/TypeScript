@@ -31,6 +31,31 @@ namespace ts.codefix {
             return undefined;
         }
 
+        const startPos = classDeclaration.members.pos;
+
+        if (token.parent.parent.kind === SyntaxKind.CallExpression) {
+
+            const callExpression = token.parent.parent as CallExpression;
+            const checker = context.program.getDiagnosticsProducingTypeChecker();
+            const signature = createBodySignatureFromCallExpression(callExpression, token.getText(), classDeclaration, checker);
+            const sigString = checker.signatureToString(signature, classDeclaration, TypeFormatFlags.SuppressAnyReturnType | TypeFormatFlags.WriteTypeArgumentsOfSignature, SignatureKind.Call);
+            const methodStub = getStubbedMethod("", token.getText(), sigString, context.newLineCharacter);
+
+            const methodFix =
+                {
+                    description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_declaration_for_missing_method_0), [token.getText()]),
+                    changes: [{
+                        fileName: sourceFile.fileName,
+                        textChanges: [{
+                            span: { start: startPos, length: 0 },
+                            newText: methodStub
+                        }]
+                    }]
+                };
+            
+            return [methodFix];
+        }
+
         let typeString = "any";
 
         if (token.parent.parent.kind === SyntaxKind.BinaryExpression) {
@@ -41,27 +66,30 @@ namespace ts.codefix {
             typeString = checker.typeToString(widenedType);
         }
 
-        const startPos = classDeclaration.members.pos;
+        const propertyFix =
+            {
+                description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_declaration_for_missing_property_0), [token.getText()]),
+                changes: [{
+                    fileName: sourceFile.fileName,
+                    textChanges: [{
+                        span: { start: startPos, length: 0 },
+                        newText: `${token.getFullText(sourceFile)}: ${typeString};`
+                    }]
+                }]
+            };
 
-        return [{
-            description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_declaration_for_missing_property_0), [token.getText()]),
-            changes: [{
-                fileName: sourceFile.fileName,
-                textChanges: [{
-                    span: { start: startPos, length: 0 },
-                    newText: `${token.getFullText(sourceFile)}: ${typeString};`
+        const indexSignatureFix =
+            {
+                description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_index_signature_for_missing_property_0), [token.getText()]),
+                changes: [{
+                    fileName: sourceFile.fileName,
+                    textChanges: [{
+                        span: { start: startPos, length: 0 },
+                        newText: `[name: string]: ${typeString};`
+                    }]
                 }]
-            }]
-        },
-        {
-            description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_index_signature_for_missing_property_0), [token.getText()]),
-            changes: [{
-                fileName: sourceFile.fileName,
-                textChanges: [{
-                    span: { start: startPos, length: 0 },
-                    newText: `[name: string]: ${typeString};`
-                }]
-            }]
-        }];
+            };
+
+        return [propertyFix, indexSignatureFix];
     }
 }
