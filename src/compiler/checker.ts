@@ -2750,7 +2750,15 @@ namespace ts {
             }
 
             function buildTypeParameterDisplay(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
-                appendSymbolNameOnly(tp.symbol, writer);
+                const declaration = tp.symbol && tp.symbol.declarations && tp.symbol.declarations[0] as TypeParameterDeclaration;
+                if(!declaration) {
+                    appendSymbolNameOnly(tp.symbol, writer);
+                }
+                else {
+                    const text = declaration.name.text;
+                    writer.writeSymbol(text, tp.symbol);
+                }
+                
                 const constraint = getConstraintOfTypeParameter(tp);
                 if (constraint) {
                     writeSpace(writer);
