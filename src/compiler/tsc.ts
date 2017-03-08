@@ -29,7 +29,7 @@ namespace ts {
         }
     }
 
-    function reportEmittedFiles(files: string[]): void {
+    function reportEmittedFiles(host: CompilerHost, files: string[]): void {
         if (!files || files.length == 0) {
             return;
         }
@@ -38,8 +38,9 @@ namespace ts {
 
         for (const file of files) {
             const filepath = getNormalizedAbsolutePath(file, currentDir);
+            const updated = host.isOutputFileUpdated ? host.isOutputFileUpdated(filepath) : true;
 
-            sys.write(`TSFILE: ${filepath}${sys.newLine}`);
+            sys.write(`TSFILE${updated ? "" : " (no changes)"}: ${filepath}${sys.newLine}`);
         }
     }
 
@@ -569,7 +570,7 @@ namespace ts {
 
             reportDiagnostics(sortAndDeduplicateDiagnostics(diagnostics), compilerHost);
 
-            reportEmittedFiles(emitOutput.emittedFiles);
+            reportEmittedFiles(compilerHost, emitOutput.emittedFiles);
 
             if (emitOutput.emitSkipped && diagnostics.length > 0) {
                 // If the emitter didn't emit anything, then pass that value along.
