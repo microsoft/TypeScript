@@ -3677,17 +3677,25 @@ namespace ts {
             //      CallExpression Arguments
             //      CallExpression[Expression]
             //      CallExpression.IdentifierName
-            //      super   (   ArgumentListopt   )
+            //      import (AssignmentExpression)
+            //      super Arguments
             //      super.IdentifierName
             //
-            // Because of the recursion in these calls, we need to bottom out first.  There are two
-            // bottom out states we can run into.  Either we see 'super' which must start either of
-            // the last two CallExpression productions.  Or we have a MemberExpression which either
-            // completes the LeftHandSideExpression, or starts the beginning of the first four
-            // CallExpression productions.
-            const expression = token() === SyntaxKind.SuperKeyword
-                ? parseSuperExpression()
-                : parseMemberExpressionOrHigher();
+            // Because of the recursion in these calls, we need to bottom out first. There are three
+            // bottom out states we can run into: 1) We see 'super' which must start either of
+            // the last two CallExpression productions. 2) We see 'import' which must start import call.
+            // 3)we have a MemberExpression which either completes the LeftHandSideExpression,
+            // or starts the beginning of the first four CallExpression productions.
+            let expression: MemberExpression;
+            if (token() === SyntaxKind.SuperKeyword) {
+                expression = parseSuperExpression();
+            }
+            else if (token() === SyntaxKind.ImportKeyword) {
+                expression = parseImportExpression();
+            }
+            else {
+                expression = parseMemberExpressionOrHigher();
+            }
 
             // Now, we *may* be complete.  However, we might have consumed the start of a
             // CallExpression.  As such, we need to consume the rest of it here to be complete.
@@ -3695,7 +3703,7 @@ namespace ts {
         }
 
         function parseMemberExpressionOrHigher(): MemberExpression {
-            // Note: to make our lives simpler, we decompose the the NewExpression productions and
+            // Note: to make our lives simpler, we decompose the NewExpression productions and
             // place ObjectCreationExpression and FunctionExpression into PrimaryExpression.
             // like so:
             //
@@ -3759,6 +3767,14 @@ namespace ts {
             parseExpectedToken(SyntaxKind.DotToken, /*reportAtCurrentPosition*/ false, Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
             node.name = parseRightSideOfDot(/*allowIdentifierNames*/ true);
             return finishNode(node);
+        }
+
+        function parseImportExpression(): MemberExpression {
+            const expression = parseTokenNode<PrimaryExpression>();
+            if (token() === SyntaxKind.OpenParenToken) {
+                return expression;
+            }
+            // (TODO(yuisu): Error Handling here 
         }
 
         function tagNamesAreEquivalent(lhs: JsxTagNameExpression, rhs: JsxTagNameExpression): boolean {

@@ -1043,6 +1043,10 @@ namespace ts {
         kind: SyntaxKind.SuperKeyword;
     }
 
+    export interface ImportExpression extends PrimaryExpression {
+        kind: SyntaxKind.ImportKeyword
+    }
+
     export interface DeleteExpression extends UnaryExpression {
         kind: SyntaxKind.DeleteExpression;
         expression: UnaryExpression;
@@ -1425,10 +1429,7 @@ namespace ts {
     }
 
     // see: https://tc39.github.io/ecma262/#prod-SuperProperty
-    export type SuperProperty
-        = SuperPropertyAccessExpression
-        | SuperElementAccessExpression
-        ;
+    export type SuperProperty = SuperPropertyAccessExpression | SuperElementAccessExpression;
 
     export interface CallExpression extends LeftHandSideExpression, Declaration {
         kind: SyntaxKind.CallExpression;
@@ -1440,6 +1441,10 @@ namespace ts {
     // see: https://tc39.github.io/ecma262/#prod-SuperCall
     export interface SuperCall extends CallExpression {
         expression: SuperExpression;
+    }
+
+    export interface ImportCall extends CallExpression {
+        expression: ImportExpression;
     }
 
     export interface ExpressionWithTypeArguments extends TypeNode {
