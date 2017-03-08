@@ -1,6 +1,6 @@
 === tests/cases/compiler/a.js ===
 
-// @check false
+// @ts-nocheck
 var x = "string";
 >x : string
 >"string" : "string"

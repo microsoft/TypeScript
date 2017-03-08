@@ -5880,11 +5880,11 @@ namespace ts {
                         }
                     }
 
-                    const checkJsDirectiveRegEx = /^\/\/\/?\s*@check(\s+(true|false))?/gim;
+                    const checkJsDirectiveRegEx = /^\/\/\/?\s*(@ts-check|@ts-nocheck)\s*$/gim;
                     const checkJsDirectiveMatchResult = checkJsDirectiveRegEx.exec(comment);
                     if (checkJsDirectiveMatchResult) {
                         checkJsDirective = {
-                            enabled: compareStrings(checkJsDirectiveMatchResult[2], "false", /*ignoreCase*/ true) !== Comparison.EqualTo,
+                            enabled: compareStrings(checkJsDirectiveMatchResult[1], "@ts-check", /*ignoreCase*/ true) === Comparison.EqualTo,
                             end: range.end,
                             pos: range.pos
                         };

@@ -3,6 +3,6 @@
 // @noEmit: true
 
 // @fileName: a.js
-// @check false
+// @ts-nocheck
 var x = "string";
 x = 0;
