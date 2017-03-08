@@ -9598,7 +9598,7 @@ namespace ts {
                                 getInferenceMapper(context)));
                     }
                     else {
-                        inferredType = emptyObjectType;
+                        inferredType = context.useAnyForNoInferences ? anyType : emptyObjectType;
                     }
 
                     inferenceSucceeded = true;
@@ -9613,9 +9613,6 @@ namespace ts {
                         if (!isTypeAssignableTo(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
                             context.inferredTypes[index] = inferredType = instantiatedConstraint;
                         }
-                    }
-                    if (context.useAnyForNoInferences && !inferences.length && inferredType === emptyObjectType) {
-                        context.inferredTypes[index] = inferredType = anyType;
                     }
                 }
                 else if (context.failedTypeParameterIndex === undefined || context.failedTypeParameterIndex > index) {
