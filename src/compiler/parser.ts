@@ -3686,11 +3686,15 @@ namespace ts {
             // the last two CallExpression productions. 2) We see 'import' which must start import call.
             // 3)we have a MemberExpression which either completes the LeftHandSideExpression,
             // or starts the beginning of the first four CallExpression productions.
-            let expression: MemberExpression;
+            let expression: LeftHandSideExpression;
             if (token() === SyntaxKind.SuperKeyword) {
                 expression = parseSuperExpression();
             }
-            else if (token() === SyntaxKind.ImportKeyword) {
+            else if (token() === SyntaxKind.ImportKeyword && lookAhead(nextTokenIsOpenParen)) {
+                // We don't want to eagerly consume all import keyword as import call expression.
+                // For example:
+                //      var foo3 = require("subfolder//*require0*/
+                //      import * as foo1 from "module-from-node//*import_as1*/  -> we want this import to be a statement rather than import call expression
                 expression = parseImportExpression();
             }
             else {
@@ -3769,12 +3773,12 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseImportExpression(): MemberExpression {
+        function parseImportExpression(): LeftHandSideExpression {
             const expression = parseTokenNode<PrimaryExpression>();
             if (token() === SyntaxKind.OpenParenToken) {
                 return expression;
             }
-            // (TODO(yuisu): Error Handling here 
+            Debug.assert(token() === SyntaxKind.OpenParenToken, "Parsing import expression expects open parenthesis after import keyword");
         }
 
         function tagNamesAreEquivalent(lhs: JsxTagNameExpression, rhs: JsxTagNameExpression): boolean {
@@ -4792,11 +4796,11 @@ namespace ts {
                 // however, we say they are here so that we may gracefully parse them and error later.
                 case SyntaxKind.CatchKeyword:
                 case SyntaxKind.FinallyKeyword:
+                case SyntaxKind.ImportKeyword:
                     return true;
 
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.ExportKeyword:
-                case SyntaxKind.ImportKeyword:
                     return isStartOfDeclaration();
 
                 case SyntaxKind.AsyncKeyword:
