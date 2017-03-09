@@ -422,7 +422,7 @@ compileFile(buildProtocolJs,
     [buildProtocolTs],
     [],
     /*useBuiltCompiler*/ false,
-    {noOutFile: true});
+    { noOutFile: true, lib: "es6" });
 
 file(buildProtocolDts, [buildProtocolTs, buildProtocolJs, typescriptServicesDts], function() {
 
