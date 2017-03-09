@@ -1,14 +1,18 @@
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(12,5): error TS2322: Type 'T[keyof T]' is not assignable to type 'U[keyof T]'.
-  Type 'T' is not assignable to type 'U'.
+  Type 'T[string]' is not assignable to type 'U[keyof T]'.
+    Type 'T' is not assignable to type 'U'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(17,5): error TS2322: Type 'T[K]' is not assignable to type 'U[K]'.
-  Type 'T' is not assignable to type 'U'.
+  Type 'T[string]' is not assignable to type 'U[K]'.
+    Type 'T' is not assignable to type 'U'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(21,5): error TS2536: Type 'keyof U' cannot be used to index type 'T'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(22,5): error TS2322: Type 'T[keyof U]' is not assignable to type 'U[keyof U]'.
-  Type 'T' is not assignable to type 'U'.
+  Type 'T[string]' is not assignable to type 'U[keyof U]'.
+    Type 'T' is not assignable to type 'U'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(22,12): error TS2536: Type 'keyof U' cannot be used to index type 'T'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(26,5): error TS2536: Type 'K' cannot be used to index type 'T'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(27,5): error TS2322: Type 'T[K]' is not assignable to type 'U[K]'.
-  Type 'T' is not assignable to type 'U'.
+  Type 'T[string]' is not assignable to type 'U[K]'.
+    Type 'T' is not assignable to type 'U'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(27,12): error TS2536: Type 'K' cannot be used to index type 'T'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(31,5): error TS2322: Type 'T[keyof T] | undefined' is not assignable to type 'T[keyof T]'.
   Type 'undefined' is not assignable to type 'T[keyof T]'.
@@ -17,13 +21,19 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(36,5): error TS2
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(41,5): error TS2322: Type 'U[keyof T] | undefined' is not assignable to type 'T[keyof T]'.
   Type 'undefined' is not assignable to type 'T[keyof T]'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(42,5): error TS2322: Type 'T[keyof T]' is not assignable to type 'U[keyof T] | undefined'.
-  Type 'T[keyof T]' is not assignable to type 'U[keyof T]'.
-    Type 'T' is not assignable to type 'U'.
+  Type 'T[string]' is not assignable to type 'U[keyof T] | undefined'.
+    Type 'T[string]' is not assignable to type 'U[keyof T]'.
+      Type 'T[keyof T]' is not assignable to type 'U[keyof T]'.
+        Type 'T[string]' is not assignable to type 'U[keyof T]'.
+          Type 'T' is not assignable to type 'U'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(46,5): error TS2322: Type 'U[K] | undefined' is not assignable to type 'T[K]'.
   Type 'undefined' is not assignable to type 'T[K]'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(47,5): error TS2322: Type 'T[K]' is not assignable to type 'U[K] | undefined'.
-  Type 'T[K]' is not assignable to type 'U[K]'.
-    Type 'T' is not assignable to type 'U'.
+  Type 'T[string]' is not assignable to type 'U[K] | undefined'.
+    Type 'T[string]' is not assignable to type 'U[K]'.
+      Type 'T[K]' is not assignable to type 'U[K]'.
+        Type 'T[string]' is not assignable to type 'U[K]'.
+          Type 'T' is not assignable to type 'U'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(52,5): error TS2542: Index signature in type 'Readonly<T>' only permits reading.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(57,5): error TS2542: Index signature in type 'Readonly<T>' only permits reading.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(62,5): error TS2542: Index signature in type 'Readonly<U>' only permits reading.
@@ -33,7 +43,8 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(76,5): error TS2
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(126,5): error TS2322: Type 'Partial<U>' is not assignable to type 'Identity<U>'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(142,5): error TS2322: Type '{ [P in keyof T]: T[P]; }' is not assignable to type '{ [P in keyof T]: U[P]; }'.
   Type 'T[P]' is not assignable to type 'U[P]'.
-    Type 'T' is not assignable to type 'U'.
+    Type 'T[string]' is not assignable to type 'U[P]'.
+      Type 'T' is not assignable to type 'U'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(147,5): error TS2322: Type '{ [P in keyof T]: T[P]; }' is not assignable to type '{ [P in keyof U]: U[P]; }'.
   Type 'keyof U' is not assignable to type 'keyof T'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(152,5): error TS2322: Type '{ [P in K]: T[P]; }' is not assignable to type '{ [P in keyof T]: T[P]; }'.
@@ -44,7 +55,8 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(162,5): error TS
   Type 'keyof T' is not assignable to type 'K'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(167,5): error TS2322: Type '{ [P in K]: T[P]; }' is not assignable to type '{ [P in K]: U[P]; }'.
   Type 'T[P]' is not assignable to type 'U[P]'.
-    Type 'T' is not assignable to type 'U'.
+    Type 'T[string]' is not assignable to type 'U[P]'.
+      Type 'T' is not assignable to type 'U'.
 
 
 ==== tests/cases/conformance/types/mapped/mappedTypeRelationships.ts (27 errors) ====
@@ -62,7 +74,8 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(167,5): error TS
         y[k] = x[k];  // Error
         ~~~~
 !!! error TS2322: Type 'T[keyof T]' is not assignable to type 'U[keyof T]'.
-!!! error TS2322:   Type 'T' is not assignable to type 'U'.
+!!! error TS2322:   Type 'T[string]' is not assignable to type 'U[keyof T]'.
+!!! error TS2322:     Type 'T' is not assignable to type 'U'.
     }
     
     function f4<T, U extends T, K extends keyof T>(x: T, y: U, k: K) {
@@ -70,7 +83,8 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(167,5): error TS
         y[k] = x[k];  // Error
         ~~~~
 !!! error TS2322: Type 'T[K]' is not assignable to type 'U[K]'.
-!!! error TS2322:   Type 'T' is not assignable to type 'U'.
+!!! error TS2322:   Type 'T[string]' is not assignable to type 'U[K]'.
+!!! error TS2322:     Type 'T' is not assignable to type 'U'.
     }
     
     function f5<T, U extends T>(x: T, y: U, k: keyof U) {
@@ -80,7 +94,8 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(167,5): error TS
         y[k] = x[k];  // Error
         ~~~~
 !!! error TS2322: Type 'T[keyof U]' is not assignable to type 'U[keyof U]'.
-!!! error TS2322:   Type 'T' is not assignable to type 'U'.
+!!! error TS2322:   Type 'T[string]' is not assignable to type 'U[keyof U]'.
+!!! error TS2322:     Type 'T' is not assignable to type 'U'.
                ~~~~
 !!! error TS2536: Type 'keyof U' cannot be used to index type 'T'.
     }
@@ -92,7 +107,8 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(167,5): error TS
         y[k] = x[k];  // Error
         ~~~~
 !!! error TS2322: Type 'T[K]' is not assignable to type 'U[K]'.
-!!! error TS2322:   Type 'T' is not assignable to type 'U'.
+!!! error TS2322:   Type 'T[string]' is not assignable to type 'U[K]'.
+!!! error TS2322:     Type 'T' is not assignable to type 'U'.
                ~~~~
 !!! error TS2536: Type 'K' cannot be used to index type 'T'.
     }
@@ -121,8 +137,11 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(167,5): error TS
         y[k] = x[k];  // Error
         ~~~~
 !!! error TS2322: Type 'T[keyof T]' is not assignable to type 'U[keyof T] | undefined'.
-!!! error TS2322:   Type 'T[keyof T]' is not assignable to type 'U[keyof T]'.
-!!! error TS2322:     Type 'T' is not assignable to type 'U'.
+!!! error TS2322:   Type 'T[string]' is not assignable to type 'U[keyof T] | undefined'.
+!!! error TS2322:     Type 'T[string]' is not assignable to type 'U[keyof T]'.
+!!! error TS2322:       Type 'T[keyof T]' is not assignable to type 'U[keyof T]'.
+!!! error TS2322:         Type 'T[string]' is not assignable to type 'U[keyof T]'.
+!!! error TS2322:           Type 'T' is not assignable to type 'U'.
     }
     
     function f13<T, U extends T, K extends keyof T>(x: T, y: Partial<U>, k: K) {
@@ -133,8 +152,11 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(167,5): error TS
         y[k] = x[k];  // Error
         ~~~~
 !!! error TS2322: Type 'T[K]' is not assignable to type 'U[K] | undefined'.
-!!! error TS2322:   Type 'T[K]' is not assignable to type 'U[K]'.
-!!! error TS2322:     Type 'T' is not assignable to type 'U'.
+!!! error TS2322:   Type 'T[string]' is not assignable to type 'U[K] | undefined'.
+!!! error TS2322:     Type 'T[string]' is not assignable to type 'U[K]'.
+!!! error TS2322:       Type 'T[K]' is not assignable to type 'U[K]'.
+!!! error TS2322:         Type 'T[string]' is not assignable to type 'U[K]'.
+!!! error TS2322:           Type 'T' is not assignable to type 'U'.
     }
     
     function f20<T>(x: T, y: Readonly<T>, k: keyof T) {
@@ -247,7 +269,8 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(167,5): error TS
         ~
 !!! error TS2322: Type '{ [P in keyof T]: T[P]; }' is not assignable to type '{ [P in keyof T]: U[P]; }'.
 !!! error TS2322:   Type 'T[P]' is not assignable to type 'U[P]'.
-!!! error TS2322:     Type 'T' is not assignable to type 'U'.
+!!! error TS2322:     Type 'T[string]' is not assignable to type 'U[P]'.
+!!! error TS2322:       Type 'T' is not assignable to type 'U'.
     }
     
     function f72<T, U extends T>(x: { [P in keyof T]: T[P] }, y: { [P in keyof U]: U[P] }) {
@@ -288,6 +311,7 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(167,5): error TS
         ~
 !!! error TS2322: Type '{ [P in K]: T[P]; }' is not assignable to type '{ [P in K]: U[P]; }'.
 !!! error TS2322:   Type 'T[P]' is not assignable to type 'U[P]'.
-!!! error TS2322:     Type 'T' is not assignable to type 'U'.
+!!! error TS2322:     Type 'T[string]' is not assignable to type 'U[P]'.
+!!! error TS2322:       Type 'T' is not assignable to type 'U'.
     }
     
