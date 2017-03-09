@@ -7,5 +7,4 @@
 ////      }
 ////  }
 
-// Note, neither property declaration not index signature declaration should be available.
-verify.not.codeFixAvailable();
+verify.rangeAfterCodeFix(`x: any;`, /*includeWhiteSpace*/ false, /*errorCode*/ undefined, 0);

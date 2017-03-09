@@ -2463,7 +2463,10 @@ namespace ts {
         getTypeAtLocation(node: Node): Type;
         getTypeFromTypeNode(node: TypeNode): Type;
         signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): string;
+        signatureToAccessibleString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): string | undefined;
+        indexSignatureToAccessibleString(info: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags): string | undefined;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
+        typeToAccessibleString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string | undefined;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
         getSymbolDisplayBuilder(): SymbolDisplayBuilder;
         getFullyQualifiedName(symbol: Symbol): string;
@@ -2476,7 +2479,6 @@ namespace ts {
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
         isUnknownSymbol(symbol: Symbol): boolean;
-        isTypeAccessible(type: Type, enclosingDeclaration: Node): boolean;
 
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;

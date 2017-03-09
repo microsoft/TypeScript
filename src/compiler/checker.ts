@@ -79,7 +79,6 @@ namespace ts {
             isUndefinedSymbol: symbol => symbol === undefinedSymbol,
             isArgumentsSymbol: symbol => symbol === argumentsSymbol,
             isUnknownSymbol: symbol => symbol === unknownSymbol,
-            isTypeAccessible,
             getDiagnostics,
             getGlobalDiagnostics,
             getTypeOfSymbolAtLocation: (symbol, location) => {
@@ -134,8 +133,17 @@ namespace ts {
             signatureToString: (signature, enclosingDeclaration?, flags?, kind?) => {
                 return signatureToString(signature, getParseTreeNode(enclosingDeclaration), flags, kind);
             },
+            signatureToAccessibleString: (signature, enclosingDeclaration?, flags?, kind?) => {
+                return signatureToAccessibleString(signature, getParseTreeNode(enclosingDeclaration), flags, kind);
+            },
+            indexSignatureToAccessibleString: (info, kind, enclosingDeclaration, globalFlags) => {
+                return indexSignatureToAccessibleString(info, kind, getParseTreeNode(enclosingDeclaration), globalFlags);
+            },
             typeToString: (type, enclosingDeclaration?, flags?) => {
                 return typeToString(type, getParseTreeNode(enclosingDeclaration), flags);
+            },
+            typeToAccessibleString: (type, enclosingDeclaration?, flags?) => {
+                return typeToAccessibleString(type, getParseTreeNode(enclosingDeclaration), flags);
             },
             getSymbolDisplayBuilder,
             symbolToString: (symbol, enclosingDeclaration?, meaning?) => {
@@ -1996,98 +2004,6 @@ namespace ts {
             return false;
         }
 
-        function isTypeAccessible(type: Type, enclosingDeclaration: Node): boolean {
-            return isTypeAccessibleWorker(type, /*inObjectLiteral*/ false, /*inTypeAlias*/true);
-
-            function isTypeAccessibleWorker(type: Type, inObjectLiteral: boolean, inTypeAlias: boolean): boolean {
-                if (!type) {
-                    return false;
-                }
-
-                if (inTypeAlias && type.aliasSymbol) {
-                    return isSymbolAccessible(type.aliasSymbol, enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/false).accessibility === SymbolAccessibility.Accessible
-                        && (!type.aliasTypeArguments || allTypesVisible(type.aliasTypeArguments));
-                }
-
-                const typeSymbolAccessibility = type.symbol && isSymbolAccessible(type.symbol, enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/ false).accessibility;
-
-                if (type.flags & TypeFlags.TypeParameter) {
-                    if (inObjectLiteral && (type as TypeParameter).isThisType) {
-                        return false;
-                    }
-                    const constraint = getConstraintFromTypeParameter((<TypeParameter>type));
-                    return typeSymbolAccessibility === SymbolAccessibility.Accessible
-                        && (!constraint || isTypeAccessibleWorker(constraint, inObjectLiteral, /*inTypeAlias*/false));
-                }
-
-                if (typeSymbolAccessibility === SymbolAccessibility.Accessible) {
-                    return true;
-                }
-
-                if (type.flags & (TypeFlags.Intrinsic | TypeFlags.Literal)) {
-                    return true;
-                }
-
-                const objectFlags = getObjectFlags(type);
-
-                if (objectFlags & ObjectFlags.ClassOrInterface) {
-                    // If type is a class or interface type that wasn't hit by the isSymbolAccessible check above,
-                    // type must be an anonymous class or interface.
-                    return false;
-                }
-
-                if (objectFlags & ObjectFlags.Reference) {
-                    // and vice versa.
-                    // this case includes tuple types
-                    const typeArguments = (type as TypeReference).typeArguments || emptyArray;
-                    return allTypesVisible(typeArguments);
-                }
-
-                if (type.flags & TypeFlags.UnionOrIntersection) {
-                    return allTypesVisible((type as UnionOrIntersectionType).types);
-                }
-
-                if (type.flags & TypeFlags.Object && objectFlags & ObjectFlags.Mapped) {
-                    const typeParameter = getTypeParameterFromMappedType(<MappedType>type);
-                    const constraintType = getConstraintTypeFromMappedType(<MappedType>type);
-                    const templateType = getTemplateTypeFromMappedType(<MappedType>type);
-                    return (!typeParameter || isTypeAccessibleWorker(typeParameter, inObjectLiteral, /*inTypeAlias*/false))
-                        && (!constraintType || isTypeAccessibleWorker((<MappedType>type).constraintType, inObjectLiteral, /*inTypeAlias*/false))
-                        && (!templateType || isTypeAccessibleWorker((<MappedType>type).templateType, inObjectLiteral, /*inTypeAlias*/false));
-                }
-
-                if (objectFlags & ObjectFlags.Anonymous) {
-                    // The type is an object literal type.
-                    if (!type.symbol) {
-                        // Anonymous types without symbols are literals.
-                        return true;
-                    }
-                    const members = type.symbol.members;
-                    let allVisible = true;
-                    members && members.forEach((member) => {
-                        const memberType = getTypeOfSymbolAtLocation(member, enclosingDeclaration);
-                        allVisible = allVisible && isTypeAccessibleWorker(memberType, /*inObjectLiteral*/ true, /*inTypeAlias*/false);
-                    });
-                    return allVisible;
-                }
-
-                if (type.flags & TypeFlags.Index) {
-                    return isTypeAccessibleWorker((<IndexType>type).type, inObjectLiteral, /*inTypeAlias*/false);
-                }
-
-                if (type.flags & TypeFlags.IndexedAccess) {
-                    return isTypeAccessibleWorker((<IndexedAccessType>type).objectType, inObjectLiteral, /*inTypeAlias*/false)
-                        && isTypeAccessibleWorker((<IndexedAccessType>type).indexType, inObjectLiteral, /*inTypeAlias*/false);
-                }
-
-                return false;
-
-                function allTypesVisible(types: Type[]): boolean {
-                    return types.every(type => isTypeAccessibleWorker(type, inObjectLiteral, /*inTypeAlias*/false));
-                }
-            }
-        }
-
         /**
          * Check if the given symbol in given enclosing declaration is accessible and mark all associated alias to be visible if requested
          *
@@ -2268,6 +2184,42 @@ namespace ts {
             return result;
         }
 
+        function signatureToAccessibleString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): string | undefined {
+            const writer = getSingleLineStringWriter();
+            let isTypeAccessible = true;
+            const oldTrackSymbol = writer.trackSymbol;
+            writer.trackSymbol = (symbol, enclosingDeclaration, meaning) => {
+                if (isTypeAccessible && isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/false).accessibility != SymbolAccessibility.Accessible) {
+                    isTypeAccessible = undefined;
+                }
+            }
+            getSymbolDisplayBuilder().buildSignatureDisplay(signature, writer, enclosingDeclaration, flags, kind);
+
+            const result = writer.string();
+            writer.trackSymbol = oldTrackSymbol;
+            releaseStringWriter(writer);
+
+            return isTypeAccessible && result;
+        }
+
+        function indexSignatureToAccessibleString(info: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags): string | undefined {
+            const writer = getSingleLineStringWriter();
+            let isTypeAccessible = true;
+            const oldTrackSymbol = writer.trackSymbol;
+            writer.trackSymbol = (symbol, enclosingDeclaration, meaning) => {
+                if (isTypeAccessible && isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/false).accessibility != SymbolAccessibility.Accessible) {
+                    isTypeAccessible = undefined;
+                }
+            }
+            getSymbolDisplayBuilder().buildIndexSignatureDisplay(info, writer, kind, enclosingDeclaration, globalFlags);
+
+            const result = writer.string();
+            writer.trackSymbol = oldTrackSymbol;
+            releaseStringWriter(writer);
+
+            return isTypeAccessible && result;
+        }
+
         function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
             const writer = getSingleLineStringWriter();
             getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
@@ -2279,6 +2231,25 @@ namespace ts {
                 result = result.substr(0, maxLength - "...".length) + "...";
             }
             return result;
+        }
+
+        function typeToAccessibleString(type: Type, enclosingDeclaration: Node, flags?: TypeFormatFlags): string | undefined {
+            const writer = getSingleLineStringWriter();
+            let isTypeAccessible = true;
+            const oldTrackSymbol = writer.trackSymbol;
+            writer.trackSymbol = (symbol, enclosingDeclaration, meaning) => {
+                if (isTypeAccessible && isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/false).accessibility != SymbolAccessibility.Accessible) {
+                    isTypeAccessible = undefined;
+                }
+            }
+
+            getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
+
+            const result = writer.string();
+            writer.trackSymbol = oldTrackSymbol;
+            releaseStringWriter(writer);
+
+            return isTypeAccessible && result;
         }
 
         function typePredicateToString(typePredicate: TypePredicate, enclosingDeclaration?: Declaration, flags?: TypeFormatFlags): string {

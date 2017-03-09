@@ -44,12 +44,8 @@ namespace ts.codefix {
             case SyntaxKind.SetAccessor:
             case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyDeclaration:
-                if (checker.isTypeAccessible(type, enclosingDeclaration)) {
-                    const typeString = checker.typeToString(type, enclosingDeclaration, TypeFormatFlags.None);
-                    return `${visibility}${name}: ${typeString};${newlineChar}`;
-                }
-                return "";
-
+                const typeString = checker.typeToAccessibleString(type, enclosingDeclaration, TypeFormatFlags.None);
+                return typeString ? `${visibility}${name}: ${typeString};${newlineChar}` : "";
             case SyntaxKind.MethodSignature:
             case SyntaxKind.MethodDeclaration:
                 // The signature for the implementation appears as an entry in `signatures` iff
@@ -66,20 +62,14 @@ namespace ts.codefix {
                 if (declarations.length === 1) {
                     Debug.assert(signatures.length === 1);
                     const signature = signatures[0];
-                    if (!isSignatureAccessible(signature, enclosingDeclaration, checker)) {
-                        return "";
-                    }
-                    const sigString = checker.signatureToString(signature, enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
-                    return getStubbedMethod(visibility, name, sigString, newlineChar);
+                    const sigString = checker.signatureToAccessibleString(signature, enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
+                    return sigString ? getStubbedMethod(visibility, name, sigString, newlineChar): "";
                 }
 
                 let result = "";
                 for (let i = 0; i < signatures.length; i++) {
-                    if (!isSignatureAccessible(signatures[i], enclosingDeclaration, checker)) {
-                        return "";
-                    }
-                    const sigString = checker.signatureToString(signatures[i], enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
-                    result += `${visibility}${name}${sigString};${newlineChar}`;
+                    const sigString = checker.signatureToAccessibleString(signatures[i], enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
+                    result += sigString ? `${visibility}${name}${sigString};${newlineChar}`: "";
                 }
 
                 // If there is a declaration with a body, it is the last declaration,
@@ -92,11 +82,8 @@ namespace ts.codefix {
                     Debug.assert(declarations.length === signatures.length);
                     bodySig = createBodySignatureWithAnyTypes(signatures, enclosingDeclaration, checker);
                 }
-                if (!isSignatureAccessible(bodySig, enclosingDeclaration, checker)) {
-                    return "";
-                }
-                const sigString = checker.signatureToString(bodySig, enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
-                result += getStubbedMethod(visibility, name, sigString, newlineChar);
+                const sigString = checker.signatureToAccessibleString(bodySig, enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
+                result += sigString ? getStubbedMethod(visibility, name, sigString, newlineChar): "";
 
                 return result;
             default:
@@ -175,13 +162,4 @@ namespace ts.codefix {
     }
 
     const SymbolConstructor = objectAllocator.getSymbolConstructor();
-
-    function isSignatureAccessible(signature: Signature, enclosingDeclaration: Node, checker: TypeChecker): boolean {
-        const typeParameters = signature.getTypeParameters();
-        const parameters = signature.getParameters();
-        const returnType = signature.getReturnType();
-        return (!typeParameters || signature.typeParameters.every(typeParameter => checker.isTypeAccessible(typeParameter, enclosingDeclaration)))
-            && parameters.every(parameter => checker.isTypeAccessible(checker.getTypeOfSymbolAtLocation(parameter, enclosingDeclaration), enclosingDeclaration))
-            && checker.isTypeAccessible(returnType, enclosingDeclaration);
-    }
 }

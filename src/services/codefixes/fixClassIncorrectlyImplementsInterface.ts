@@ -31,8 +31,8 @@ namespace ts.codefix {
             const implementedTypeSymbols = checker.getPropertiesOfType(implementedType);
             const nonPrivateMembers = implementedTypeSymbols.filter(symbol => !(getModifierFlags(symbol.valueDeclaration) & ModifierFlags.Private));
 
-            let insertion = getMissingIndexSignatureInsertion(implementedType, IndexKind.Number, classDecl, hasNumericIndexSignature);
-            insertion += getMissingIndexSignatureInsertion(implementedType, IndexKind.String, classDecl, hasStringIndexSignature);
+            let insertion = hasNumericIndexSignature ? "" : getMissingIndexSignatureInsertion(implementedType, IndexKind.Number, classDecl);
+            insertion += hasStringIndexSignature ? "" : getMissingIndexSignatureInsertion(implementedType, IndexKind.String, classDecl);
             insertion += getMissingMembersInsertion(classDecl, nonPrivateMembers, checker, context.newLineCharacter);
 
             const message = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Implement_interface_0), [implementedTypeNode.getText()]);
@@ -43,19 +43,10 @@ namespace ts.codefix {
 
         return result;
 
-        function getMissingIndexSignatureInsertion(type: InterfaceType, kind: IndexKind, enclosingDeclaration: ClassLikeDeclaration, hasIndexSigOfKind: boolean) {
-            if (!hasIndexSigOfKind) {
-                const IndexInfoOfKind = checker.getIndexInfoOfType(type, kind);
-                if (IndexInfoOfKind && checker.isTypeAccessible(IndexInfoOfKind.type, enclosingDeclaration)) {
-                    const writer = getSingleLineStringWriter();
-                    checker.getSymbolDisplayBuilder().buildIndexSignatureDisplay(IndexInfoOfKind, writer, kind, enclosingDeclaration);
-                    const result = writer.string();
-                    releaseStringWriter(writer);
-
-                    return result;
-                }
-            }
-            return "";
+        function getMissingIndexSignatureInsertion(type: InterfaceType, kind: IndexKind, enclosingDeclaration: ClassLikeDeclaration) {
+            const indexInfo = checker.getIndexInfoOfType(type, kind);
+            const indexSignature =  indexInfo && checker.indexSignatureToAccessibleString(indexInfo, kind, enclosingDeclaration, TypeFormatFlags.NoTruncation);
+            return indexSignature || "";
         }
 
         function pushAction(result: CodeAction[], insertion: string, description: string): void {
