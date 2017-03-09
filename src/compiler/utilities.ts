@@ -1,4 +1,4 @@
-﻿/// <reference path="sys.ts" />
+/// <reference path="sys.ts" />
 
 /* @internal */
 namespace ts {
@@ -1423,6 +1423,21 @@ namespace ts {
             return declaration.initializer && (declaration.initializer.kind === SyntaxKind.FunctionExpression || declaration.initializer.kind === SyntaxKind.ClassExpression);
         }
         return false;
+    }
+
+    export function getRightMostAssignedExpression(node: Node) {
+        while (isAssignmentExpression(node, /*excludeCompoundAssignements*/ true)) {
+            node = node.right;
+        }
+        return node;
+    }
+
+    export function isExportsIdentifier(node: Node) {
+        return isIdentifier(node) && node.text === "exports";
+    }
+
+    export function isModuleExportsPropertyAccessExpression(node: Node) {
+        return isPropertyAccessExpression(node) && isIdentifier(node.expression) && node.expression.text === "module" && node.name.text === "exports";
     }
 
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
@@ -3148,15 +3163,14 @@ namespace ts {
             (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node);
     }
 
-    export function isEmptyObjectLiteralOrArrayLiteral(expression: Node): boolean {
-        const kind = expression.kind;
-        if (kind === SyntaxKind.ObjectLiteralExpression) {
-            return (<ObjectLiteralExpression>expression).properties.length === 0;
-        }
-        if (kind === SyntaxKind.ArrayLiteralExpression) {
-            return (<ArrayLiteralExpression>expression).elements.length === 0;
-        }
-        return false;
+    export function isEmptyObjectLiteral(expression: Node): boolean {
+        return expression.kind === SyntaxKind.ObjectLiteralExpression &&
+            (<ObjectLiteralExpression>expression).properties.length === 0;
+    }
+
+    export function isEmptyArrayLiteral(expression: Node): boolean {
+        return expression.kind === SyntaxKind.ArrayLiteralExpression &&
+            (<ArrayLiteralExpression>expression).elements.length === 0;
     }
 
     export function getLocalSymbolForExportDefault(symbol: Symbol) {

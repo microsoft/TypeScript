@@ -1,0 +1,220 @@
+=== tests/cases/conformance/salsa/a.js ===
+
+class C {
+>C : Symbol(C, Decl(a.js, 0, 0))
+
+    constructor() {
+        if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+
+            this.inConstructor = 0;
+>this.inConstructor : Symbol(C.inConstructor, Decl(a.js, 3, 28), Decl(a.js, 6, 14))
+>this : Symbol(C, Decl(a.js, 0, 0))
+>inConstructor : Symbol(C.inConstructor, Decl(a.js, 3, 28), Decl(a.js, 6, 14))
+        }
+        else {
+            this.inConstructor = "string"
+>this.inConstructor : Symbol(C.inConstructor, Decl(a.js, 3, 28), Decl(a.js, 6, 14))
+>this : Symbol(C, Decl(a.js, 0, 0))
+>inConstructor : Symbol(C.inConstructor, Decl(a.js, 3, 28), Decl(a.js, 6, 14))
+        }
+        this.inMultiple = 0;
+>this.inMultiple : Symbol(C.inMultiple, Decl(a.js, 8, 9), Decl(a.js, 17, 9), Decl(a.js, 26, 9))
+>this : Symbol(C, Decl(a.js, 0, 0))
+>inMultiple : Symbol(C.inMultiple, Decl(a.js, 8, 9), Decl(a.js, 17, 9), Decl(a.js, 26, 9))
+    }
+    method() {
+>method : Symbol(C.method, Decl(a.js, 10, 5))
+
+        if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+
+            this.inMethod = 0;
+>this.inMethod : Symbol(C.inMethod, Decl(a.js, 12, 28), Decl(a.js, 15, 14))
+>this : Symbol(C, Decl(a.js, 0, 0))
+>inMethod : Symbol(C.inMethod, Decl(a.js, 12, 28), Decl(a.js, 15, 14))
+        }
+        else {
+            this.inMethod = "string"
+>this.inMethod : Symbol(C.inMethod, Decl(a.js, 12, 28), Decl(a.js, 15, 14))
+>this : Symbol(C, Decl(a.js, 0, 0))
+>inMethod : Symbol(C.inMethod, Decl(a.js, 12, 28), Decl(a.js, 15, 14))
+        }
+        this.inMultiple = "string";
+>this.inMultiple : Symbol(C.inMultiple, Decl(a.js, 8, 9), Decl(a.js, 17, 9), Decl(a.js, 26, 9))
+>this : Symbol(C, Decl(a.js, 0, 0))
+>inMultiple : Symbol(C.inMultiple, Decl(a.js, 8, 9), Decl(a.js, 17, 9), Decl(a.js, 26, 9))
+    }
+    get() {
+>get : Symbol(C.get, Decl(a.js, 19, 5))
+
+        if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+
+            this.inGetter = 0;
+>this.inGetter : Symbol(C.inGetter, Decl(a.js, 21, 28), Decl(a.js, 24, 14))
+>this : Symbol(C, Decl(a.js, 0, 0))
+>inGetter : Symbol(C.inGetter, Decl(a.js, 21, 28), Decl(a.js, 24, 14))
+        }
+        else {
+            this.inGetter = "string"
+>this.inGetter : Symbol(C.inGetter, Decl(a.js, 21, 28), Decl(a.js, 24, 14))
+>this : Symbol(C, Decl(a.js, 0, 0))
+>inGetter : Symbol(C.inGetter, Decl(a.js, 21, 28), Decl(a.js, 24, 14))
+        }
+        this.inMultiple = false;
+>this.inMultiple : Symbol(C.inMultiple, Decl(a.js, 8, 9), Decl(a.js, 17, 9), Decl(a.js, 26, 9))
+>this : Symbol(C, Decl(a.js, 0, 0))
+>inMultiple : Symbol(C.inMultiple, Decl(a.js, 8, 9), Decl(a.js, 17, 9), Decl(a.js, 26, 9))
+    }
+    set() {
+>set : Symbol(C.set, Decl(a.js, 28, 5))
+
+        if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+
+            this.inSetter = 0;
+>this.inSetter : Symbol(C.inSetter, Decl(a.js, 30, 28), Decl(a.js, 33, 14))
+>this : Symbol(C, Decl(a.js, 0, 0))
+>inSetter : Symbol(C.inSetter, Decl(a.js, 30, 28), Decl(a.js, 33, 14))
+        }
+        else {
+            this.inSetter = "string"
+>this.inSetter : Symbol(C.inSetter, Decl(a.js, 30, 28), Decl(a.js, 33, 14))
+>this : Symbol(C, Decl(a.js, 0, 0))
+>inSetter : Symbol(C.inSetter, Decl(a.js, 30, 28), Decl(a.js, 33, 14))
+        }
+    }
+    static method() {
+>method : Symbol(C.method, Decl(a.js, 36, 5))
+
+        if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+
+            this.inStaticMethod = 0;
+>this.inStaticMethod : Symbol(C.inStaticMethod, Decl(a.js, 38, 28), Decl(a.js, 41, 14))
+>this : Symbol(C, Decl(a.js, 0, 0))
+>inStaticMethod : Symbol(C.inStaticMethod, Decl(a.js, 38, 28), Decl(a.js, 41, 14))
+        }
+        else {
+            this.inStaticMethod = "string"
+>this.inStaticMethod : Symbol(C.inStaticMethod, Decl(a.js, 38, 28), Decl(a.js, 41, 14))
+>this : Symbol(C, Decl(a.js, 0, 0))
+>inStaticMethod : Symbol(C.inStaticMethod, Decl(a.js, 38, 28), Decl(a.js, 41, 14))
+        }
+    }
+    static get() {
+>get : Symbol(C.get, Decl(a.js, 44, 5))
+
+        if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+
+            this.inStaticGetter = 0;
+>this.inStaticGetter : Symbol(C.inStaticGetter, Decl(a.js, 46, 28), Decl(a.js, 49, 14))
+>this : Symbol(C, Decl(a.js, 0, 0))
+>inStaticGetter : Symbol(C.inStaticGetter, Decl(a.js, 46, 28), Decl(a.js, 49, 14))
+        }
+        else {
+            this.inStaticGetter = "string"
+>this.inStaticGetter : Symbol(C.inStaticGetter, Decl(a.js, 46, 28), Decl(a.js, 49, 14))
+>this : Symbol(C, Decl(a.js, 0, 0))
+>inStaticGetter : Symbol(C.inStaticGetter, Decl(a.js, 46, 28), Decl(a.js, 49, 14))
+        }
+    }
+    static set() {
+>set : Symbol(C.set, Decl(a.js, 52, 5))
+
+        if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+
+            this.inStaticSetter = 0;
+>this.inStaticSetter : Symbol(C.inStaticSetter, Decl(a.js, 54, 28), Decl(a.js, 57, 14))
+>this : Symbol(C, Decl(a.js, 0, 0))
+>inStaticSetter : Symbol(C.inStaticSetter, Decl(a.js, 54, 28), Decl(a.js, 57, 14))
+        }
+        else {
+            this.inStaticSetter = "string"
+>this.inStaticSetter : Symbol(C.inStaticSetter, Decl(a.js, 54, 28), Decl(a.js, 57, 14))
+>this : Symbol(C, Decl(a.js, 0, 0))
+>inStaticSetter : Symbol(C.inStaticSetter, Decl(a.js, 54, 28), Decl(a.js, 57, 14))
+        }
+    }
+}
+
+=== tests/cases/conformance/salsa/b.ts ===
+var c = new C();
+>c : Symbol(c, Decl(b.ts, 0, 3))
+>C : Symbol(C, Decl(a.js, 0, 0))
+
+var stringOrNumber: string | number;
+>stringOrNumber : Symbol(stringOrNumber, Decl(b.ts, 2, 3), Decl(b.ts, 3, 3))
+
+var stringOrNumber = c.inConstructor;
+>stringOrNumber : Symbol(stringOrNumber, Decl(b.ts, 2, 3), Decl(b.ts, 3, 3))
+>c.inConstructor : Symbol(C.inConstructor, Decl(a.js, 3, 28), Decl(a.js, 6, 14))
+>c : Symbol(c, Decl(b.ts, 0, 3))
+>inConstructor : Symbol(C.inConstructor, Decl(a.js, 3, 28), Decl(a.js, 6, 14))
+
+var stringOrNumberOrUndefined: string | number | undefined;
+>stringOrNumberOrUndefined : Symbol(stringOrNumberOrUndefined, Decl(b.ts, 5, 3), Decl(b.ts, 7, 3), Decl(b.ts, 8, 3), Decl(b.ts, 9, 3), Decl(b.ts, 16, 3), Decl(b.ts, 17, 3), Decl(b.ts, 18, 3))
+
+var stringOrNumberOrUndefined = c.inMethod;
+>stringOrNumberOrUndefined : Symbol(stringOrNumberOrUndefined, Decl(b.ts, 5, 3), Decl(b.ts, 7, 3), Decl(b.ts, 8, 3), Decl(b.ts, 9, 3), Decl(b.ts, 16, 3), Decl(b.ts, 17, 3), Decl(b.ts, 18, 3))
+>c.inMethod : Symbol(C.inMethod, Decl(a.js, 12, 28), Decl(a.js, 15, 14))
+>c : Symbol(c, Decl(b.ts, 0, 3))
+>inMethod : Symbol(C.inMethod, Decl(a.js, 12, 28), Decl(a.js, 15, 14))
+
+var stringOrNumberOrUndefined = c.inGetter;
+>stringOrNumberOrUndefined : Symbol(stringOrNumberOrUndefined, Decl(b.ts, 5, 3), Decl(b.ts, 7, 3), Decl(b.ts, 8, 3), Decl(b.ts, 9, 3), Decl(b.ts, 16, 3), Decl(b.ts, 17, 3), Decl(b.ts, 18, 3))
+>c.inGetter : Symbol(C.inGetter, Decl(a.js, 21, 28), Decl(a.js, 24, 14))
+>c : Symbol(c, Decl(b.ts, 0, 3))
+>inGetter : Symbol(C.inGetter, Decl(a.js, 21, 28), Decl(a.js, 24, 14))
+
+var stringOrNumberOrUndefined = c.inSetter;
+>stringOrNumberOrUndefined : Symbol(stringOrNumberOrUndefined, Decl(b.ts, 5, 3), Decl(b.ts, 7, 3), Decl(b.ts, 8, 3), Decl(b.ts, 9, 3), Decl(b.ts, 16, 3), Decl(b.ts, 17, 3), Decl(b.ts, 18, 3))
+>c.inSetter : Symbol(C.inSetter, Decl(a.js, 30, 28), Decl(a.js, 33, 14))
+>c : Symbol(c, Decl(b.ts, 0, 3))
+>inSetter : Symbol(C.inSetter, Decl(a.js, 30, 28), Decl(a.js, 33, 14))
+
+var stringOrNumberOrBoolean: string | number | boolean;
+>stringOrNumberOrBoolean : Symbol(stringOrNumberOrBoolean, Decl(b.ts, 11, 3), Decl(b.ts, 13, 3))
+
+var stringOrNumberOrBoolean = c.inMultiple;
+>stringOrNumberOrBoolean : Symbol(stringOrNumberOrBoolean, Decl(b.ts, 11, 3), Decl(b.ts, 13, 3))
+>c.inMultiple : Symbol(C.inMultiple, Decl(a.js, 8, 9), Decl(a.js, 17, 9), Decl(a.js, 26, 9))
+>c : Symbol(c, Decl(b.ts, 0, 3))
+>inMultiple : Symbol(C.inMultiple, Decl(a.js, 8, 9), Decl(a.js, 17, 9), Decl(a.js, 26, 9))
+
+
+var stringOrNumberOrUndefined = C.inStaticMethod;
+>stringOrNumberOrUndefined : Symbol(stringOrNumberOrUndefined, Decl(b.ts, 5, 3), Decl(b.ts, 7, 3), Decl(b.ts, 8, 3), Decl(b.ts, 9, 3), Decl(b.ts, 16, 3), Decl(b.ts, 17, 3), Decl(b.ts, 18, 3))
+>C.inStaticMethod : Symbol(C.inStaticMethod, Decl(a.js, 38, 28), Decl(a.js, 41, 14))
+>C : Symbol(C, Decl(a.js, 0, 0))
+>inStaticMethod : Symbol(C.inStaticMethod, Decl(a.js, 38, 28), Decl(a.js, 41, 14))
+
+var stringOrNumberOrUndefined = C.inStaticGetter;
+>stringOrNumberOrUndefined : Symbol(stringOrNumberOrUndefined, Decl(b.ts, 5, 3), Decl(b.ts, 7, 3), Decl(b.ts, 8, 3), Decl(b.ts, 9, 3), Decl(b.ts, 16, 3), Decl(b.ts, 17, 3), Decl(b.ts, 18, 3))
+>C.inStaticGetter : Symbol(C.inStaticGetter, Decl(a.js, 46, 28), Decl(a.js, 49, 14))
+>C : Symbol(C, Decl(a.js, 0, 0))
+>inStaticGetter : Symbol(C.inStaticGetter, Decl(a.js, 46, 28), Decl(a.js, 49, 14))
+
+var stringOrNumberOrUndefined = C.inStaticSetter;
+>stringOrNumberOrUndefined : Symbol(stringOrNumberOrUndefined, Decl(b.ts, 5, 3), Decl(b.ts, 7, 3), Decl(b.ts, 8, 3), Decl(b.ts, 9, 3), Decl(b.ts, 16, 3), Decl(b.ts, 17, 3), Decl(b.ts, 18, 3))
+>C.inStaticSetter : Symbol(C.inStaticSetter, Decl(a.js, 54, 28), Decl(a.js, 57, 14))
+>C : Symbol(C, Decl(a.js, 0, 0))
+>inStaticSetter : Symbol(C.inStaticSetter, Decl(a.js, 54, 28), Decl(a.js, 57, 14))
+

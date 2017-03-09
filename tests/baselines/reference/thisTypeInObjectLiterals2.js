@@ -47,9 +47,59 @@ let p1: Point = {
     }
 };
 
+let p2: Point | null = {
+    x: 10,
+    y: 20,
+    moveBy(dx, dy, dz) {
+        this.x += dx;
+        this.y += dy;
+        if (this.z && dz) {
+            this.z += dz;
+        }
+    }
+};
+
+let p3: Point | undefined = {
+    x: 10,
+    y: 20,
+    moveBy(dx, dy, dz) {
+        this.x += dx;
+        this.y += dy;
+        if (this.z && dz) {
+            this.z += dz;
+        }
+    }
+};
+
+let p4: Point | null | undefined = {
+    x: 10,
+    y: 20,
+    moveBy(dx, dy, dz) {
+        this.x += dx;
+        this.y += dy;
+        if (this.z && dz) {
+            this.z += dz;
+        }
+    }
+};
+
 declare function f1(p: Point): void;
 
 f1({
+    x: 10,
+    y: 20,
+    moveBy(dx, dy, dz) {
+        this.x += dx;
+        this.y += dy;
+        if (this.z && dz) {
+            this.z += dz;
+        }
+    }
+});
+
+declare function f2(p: Point | null | undefined): void;
+
+f2({
     x: 10,
     y: 20,
     moveBy(dx, dy, dz) {
@@ -196,6 +246,7 @@ vue.hello;
 //// [thisTypeInObjectLiterals2.js]
 // In methods of an object literal with no contextual type, 'this' has the type
 // of the object literal.
+"use strict";
 var obj1 = {
     a: 1,
     f: function () {
@@ -228,7 +279,51 @@ var p1 = {
         }
     }
 };
+var p2 = {
+    x: 10,
+    y: 20,
+    moveBy: function (dx, dy, dz) {
+        this.x += dx;
+        this.y += dy;
+        if (this.z && dz) {
+            this.z += dz;
+        }
+    }
+};
+var p3 = {
+    x: 10,
+    y: 20,
+    moveBy: function (dx, dy, dz) {
+        this.x += dx;
+        this.y += dy;
+        if (this.z && dz) {
+            this.z += dz;
+        }
+    }
+};
+var p4 = {
+    x: 10,
+    y: 20,
+    moveBy: function (dx, dy, dz) {
+        this.x += dx;
+        this.y += dy;
+        if (this.z && dz) {
+            this.z += dz;
+        }
+    }
+};
 f1({
+    x: 10,
+    y: 20,
+    moveBy: function (dx, dy, dz) {
+        this.x += dx;
+        this.y += dy;
+        if (this.z && dz) {
+            this.z += dz;
+        }
+    }
+});
+f2({
     x: 10,
     y: 20,
     moveBy: function (dx, dy, dz) {
@@ -328,7 +423,11 @@ declare type Point = {
     moveBy(dx: number, dy: number, dz?: number): void;
 };
 declare let p1: Point;
+declare let p2: Point | null;
+declare let p3: Point | undefined;
+declare let p4: Point | null | undefined;
 declare function f1(p: Point): void;
+declare function f2(p: Point | null | undefined): void;
 declare type ObjectDescriptor<D, M> = {
     data?: D;
     methods?: M & ThisType<D & M>;

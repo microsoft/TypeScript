@@ -141,6 +141,158 @@ let p1: Point = {
     }
 };
 
+let p2: Point | null = {
+>p2 : Point | null
+>Point : Point
+>null : null
+>{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
+
+    x: 10,
+>x : number
+>10 : 10
+
+    y: 20,
+>y : number
+>20 : 20
+
+    moveBy(dx, dy, dz) {
+>moveBy : (dx: number, dy: number, dz: number | undefined) => void
+>dx : number
+>dy : number
+>dz : number | undefined
+
+        this.x += dx;
+>this.x += dx : number
+>this.x : number
+>this : Point
+>x : number
+>dx : number
+
+        this.y += dy;
+>this.y += dy : number
+>this.y : number
+>this : Point
+>y : number
+>dy : number
+
+        if (this.z && dz) {
+>this.z && dz : number | undefined
+>this.z : number | undefined
+>this : Point
+>z : number | undefined
+>dz : number | undefined
+
+            this.z += dz;
+>this.z += dz : number
+>this.z : number
+>this : Point
+>z : number
+>dz : number
+        }
+    }
+};
+
+let p3: Point | undefined = {
+>p3 : Point | undefined
+>Point : Point
+>{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
+
+    x: 10,
+>x : number
+>10 : 10
+
+    y: 20,
+>y : number
+>20 : 20
+
+    moveBy(dx, dy, dz) {
+>moveBy : (dx: number, dy: number, dz: number | undefined) => void
+>dx : number
+>dy : number
+>dz : number | undefined
+
+        this.x += dx;
+>this.x += dx : number
+>this.x : number
+>this : Point
+>x : number
+>dx : number
+
+        this.y += dy;
+>this.y += dy : number
+>this.y : number
+>this : Point
+>y : number
+>dy : number
+
+        if (this.z && dz) {
+>this.z && dz : number | undefined
+>this.z : number | undefined
+>this : Point
+>z : number | undefined
+>dz : number | undefined
+
+            this.z += dz;
+>this.z += dz : number
+>this.z : number
+>this : Point
+>z : number
+>dz : number
+        }
+    }
+};
+
+let p4: Point | null | undefined = {
+>p4 : Point | null | undefined
+>Point : Point
+>null : null
+>{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
+
+    x: 10,
+>x : number
+>10 : 10
+
+    y: 20,
+>y : number
+>20 : 20
+
+    moveBy(dx, dy, dz) {
+>moveBy : (dx: number, dy: number, dz: number | undefined) => void
+>dx : number
+>dy : number
+>dz : number | undefined
+
+        this.x += dx;
+>this.x += dx : number
+>this.x : number
+>this : Point
+>x : number
+>dx : number
+
+        this.y += dy;
+>this.y += dy : number
+>this.y : number
+>this : Point
+>y : number
+>dy : number
+
+        if (this.z && dz) {
+>this.z && dz : number | undefined
+>this.z : number | undefined
+>this : Point
+>z : number | undefined
+>dz : number | undefined
+
+            this.z += dz;
+>this.z += dz : number
+>this.z : number
+>this : Point
+>z : number
+>dz : number
+        }
+    }
+};
+
 declare function f1(p: Point): void;
 >f1 : (p: Point) => void
 >p : Point
@@ -149,6 +301,62 @@ declare function f1(p: Point): void;
 f1({
 >f1({    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }}) : void
 >f1 : (p: Point) => void
+>{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
+
+    x: 10,
+>x : number
+>10 : 10
+
+    y: 20,
+>y : number
+>20 : 20
+
+    moveBy(dx, dy, dz) {
+>moveBy : (dx: number, dy: number, dz: number | undefined) => void
+>dx : number
+>dy : number
+>dz : number | undefined
+
+        this.x += dx;
+>this.x += dx : number
+>this.x : number
+>this : Point
+>x : number
+>dx : number
+
+        this.y += dy;
+>this.y += dy : number
+>this.y : number
+>this : Point
+>y : number
+>dy : number
+
+        if (this.z && dz) {
+>this.z && dz : number | undefined
+>this.z : number | undefined
+>this : Point
+>z : number | undefined
+>dz : number | undefined
+
+            this.z += dz;
+>this.z += dz : number
+>this.z : number
+>this : Point
+>z : number
+>dz : number
+        }
+    }
+});
+
+declare function f2(p: Point | null | undefined): void;
+>f2 : (p: Point | null | undefined) => void
+>p : Point | null | undefined
+>Point : Point
+>null : null
+
+f2({
+>f2({    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }}) : void
+>f2 : (p: Point | null | undefined) => void
 >{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
 
     x: 10,

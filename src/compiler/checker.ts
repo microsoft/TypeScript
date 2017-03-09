@@ -1,4 +1,4 @@
-﻿/// <reference path="moduleNameResolver.ts"/>
+/// <reference path="moduleNameResolver.ts"/>
 /// <reference path="binder.ts"/>
 
 /* @internal */
@@ -244,6 +244,7 @@ namespace ts {
         const silentNeverSignature = createSignature(undefined, undefined, undefined, emptyArray, silentNeverType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
 
         const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
+        const jsObjectLiteralIndexInfo = createIndexInfo(anyType, /*isReadonly*/ false);
 
         const globals = createMap<Symbol>();
         /**
@@ -3368,16 +3369,6 @@ namespace ts {
             return strictNullChecks && optional ? includeFalsyTypes(type, TypeFlags.Undefined) : type;
         }
 
-        /** remove undefined from the annotated type of a parameter when there is an initializer (that doesn't include undefined) */
-        function removeOptionalityFromAnnotation(annotatedType: Type, declaration: VariableLikeDeclaration): Type {
-            const annotationIncludesUndefined = strictNullChecks &&
-                declaration.kind === SyntaxKind.Parameter &&
-                declaration.initializer &&
-                getFalsyFlags(annotatedType) & TypeFlags.Undefined &&
-                !(getFalsyFlags(checkExpression(declaration.initializer)) & TypeFlags.Undefined);
-            return annotationIncludesUndefined ? getNonNullableType(annotatedType) : annotatedType;
-        }
-
         // Return the inferred type for a variable, parameter, or property declaration
         function getTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration, includeOptionality: boolean): Type {
             if (declaration.flags & NodeFlags.JavaScriptFile) {
@@ -3412,7 +3403,7 @@ namespace ts {
 
             // Use type from type annotation if one is present
             if (declaration.type) {
-                const declaredType = removeOptionalityFromAnnotation(getTypeFromTypeNode(declaration.type), declaration);
+                const declaredType = getTypeFromTypeNode(declaration.type);
                 return addOptionality(declaredType, /*optional*/ declaration.questionToken && includeOptionality);
             }
 
@@ -3487,25 +3478,41 @@ namespace ts {
             return undefined;
         }
 
-        // Return the inferred type for a variable, parameter, or property declaration
-        function getTypeForJSSpecialPropertyDeclaration(declaration: Declaration): Type {
-            const expression = declaration.kind === SyntaxKind.BinaryExpression ? <BinaryExpression>declaration :
-                declaration.kind === SyntaxKind.PropertyAccessExpression ? <BinaryExpression>getAncestor(declaration, SyntaxKind.BinaryExpression) :
-                undefined;
+        function getWidenedTypeFromJSSpecialPropertyDeclarations(symbol: Symbol) {
+            const types: Type[] = [];
+            let definedInConstructor = false;
+            let definedInMethod = false;
+            for (const declaration of symbol.declarations) {
+                const expression = declaration.kind === SyntaxKind.BinaryExpression ? <BinaryExpression>declaration :
+                    declaration.kind === SyntaxKind.PropertyAccessExpression ? <BinaryExpression>getAncestor(declaration, SyntaxKind.BinaryExpression) :
+                        undefined;
 
-            if (!expression) {
-                return unknownType;
-            }
-
-            if (expression.flags & NodeFlags.JavaScriptFile) {
-                // If there is a JSDoc type, use it
-                const type = getTypeForDeclarationFromJSDocComment(expression.parent);
-                if (type && type !== unknownType) {
-                    return getWidenedType(type);
+                if (!expression) {
+                    return unknownType;
                 }
+
+                if (isPropertyAccessExpression(expression.left) && expression.left.expression.kind === SyntaxKind.ThisKeyword) {
+                    if (getThisContainer(expression, /*includeArrowFunctions*/ false).kind === SyntaxKind.Constructor) {
+                        definedInConstructor = true;
+                    }
+                    else {
+                        definedInMethod = true;
+                    }
+                }
+
+                if (expression.flags & NodeFlags.JavaScriptFile) {
+                    // If there is a JSDoc type, use it
+                    const type = getTypeForDeclarationFromJSDocComment(expression.parent);
+                    if (type && type !== unknownType) {
+                        types.push(getWidenedType(type));
+                        continue;
+                    }
+                }
+
+                types.push(getWidenedLiteralType(checkExpressionCached(expression.right)));
             }
 
-            return getWidenedLiteralType(checkExpressionCached(expression.right));
+            return getWidenedType(addOptionality(getUnionType(types, /*subtypeReduction*/ true), definedInMethod && !definedInConstructor));
         }
 
         // Return the type implied by a binding pattern element. This is the type of the initializer of the element if
@@ -3662,7 +3669,7 @@ namespace ts {
                 // * className.prototype.method = expr
                 if (declaration.kind === SyntaxKind.BinaryExpression ||
                     declaration.kind === SyntaxKind.PropertyAccessExpression && declaration.parent.kind === SyntaxKind.BinaryExpression) {
-                    type = getWidenedType(getUnionType(map(symbol.declarations, getTypeForJSSpecialPropertyDeclaration), /*subtypeReduction*/ true));
+                    type = getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
                 }
                 else {
                     type = getWidenedTypeForVariableLikeDeclaration(<VariableLikeDeclaration>declaration, /*reportErrors*/ true);
@@ -9177,13 +9184,14 @@ namespace ts {
             }
         }
 
-        function createInferenceContext(signature: Signature, inferUnionTypes: boolean): InferenceContext {
+        function createInferenceContext(signature: Signature, inferUnionTypes: boolean, useAnyForNoInferences: boolean): InferenceContext {
             const inferences = map(signature.typeParameters, createTypeInferencesObject);
             return {
                 signature,
                 inferUnionTypes,
                 inferences,
                 inferredTypes: new Array(signature.typeParameters.length),
+                useAnyForNoInferences
             };
         }
 
@@ -9597,7 +9605,7 @@ namespace ts {
                                 getInferenceMapper(context)));
                     }
                     else {
-                        inferredType = emptyObjectType;
+                        inferredType = context.useAnyForNoInferences ? anyType : emptyObjectType;
                     }
 
                     inferenceSucceeded = true;
@@ -10248,14 +10256,11 @@ namespace ts {
             return false;
         }
 
-        function getFlowTypeOfReference(reference: Node, declaredType: Type, assumeInitialized: boolean, flowContainer: Node) {
+        function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node, couldBeUninitialized?: boolean) {
             let key: string;
-            if (!reference.flowNode || assumeInitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
+            if (!reference.flowNode || !couldBeUninitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
                 return declaredType;
             }
-            const initialType = assumeInitialized ? declaredType :
-                declaredType === autoType || declaredType === autoArrayType ? undefinedType :
-                includeFalsyTypes(declaredType, TypeFlags.Undefined);
             const visitedFlowStart = visitedFlowCount;
             const evolvedType = getTypeFromFlowType(getTypeAtFlowNode(reference.flowNode));
             visitedFlowCount = visitedFlowStart;
@@ -10934,6 +10939,16 @@ namespace ts {
             return symbol.flags & SymbolFlags.Variable && (getDeclarationNodeFlagsFromSymbol(symbol) & NodeFlags.Const) !== 0 && getTypeOfSymbol(symbol) !== autoArrayType;
         }
 
+        /** remove undefined from the annotated type of a parameter when there is an initializer (that doesn't include undefined) */
+        function removeOptionalityFromDeclaredType(declaredType: Type, declaration: VariableLikeDeclaration): Type {
+            const annotationIncludesUndefined = strictNullChecks &&
+                declaration.kind === SyntaxKind.Parameter &&
+                declaration.initializer &&
+                getFalsyFlags(declaredType) & TypeFlags.Undefined &&
+                !(getFalsyFlags(checkExpression(declaration.initializer)) & TypeFlags.Undefined);
+            return annotationIncludesUndefined ? getTypeWithFacts(declaredType, TypeFacts.NEUndefined) : declaredType;
+        }
+
         function checkIdentifier(node: Identifier): Type {
             const symbol = getResolvedSymbol(node);
             if (symbol === unknownSymbol) {
@@ -11052,7 +11067,10 @@ namespace ts {
             const assumeInitialized = isParameter || isOuterVariable ||
                 type !== autoType && type !== autoArrayType && (!strictNullChecks || (type.flags & TypeFlags.Any) !== 0 || isInTypeQuery(node)) ||
                 isInAmbientContext(declaration);
-            const flowType = getFlowTypeOfReference(node, type, assumeInitialized, flowContainer);
+            const initialType = assumeInitialized ? (isParameter ? removeOptionalityFromDeclaredType(type, getRootDeclaration(declaration) as VariableLikeDeclaration) : type) :
+                type === autoType || type === autoArrayType ? undefinedType :
+                includeFalsyTypes(type, TypeFlags.Undefined);
+            const flowType = getFlowTypeOfReference(node, type, initialType, flowContainer, !assumeInitialized);
             // A variable is considered uninitialized when it is possible to analyze the entire control flow graph
             // from declaration to use, and when the variable's declared type doesn't include undefined but the
             // control flow based type does include undefined.
@@ -11318,7 +11336,7 @@ namespace ts {
             if (isClassLike(container.parent)) {
                 const symbol = getSymbolOfNode(container.parent);
                 const type = hasModifier(container, ModifierFlags.Static) ? getTypeOfSymbol(symbol) : (<InterfaceType>getDeclaredTypeOfSymbol(symbol)).thisType;
-                return getFlowTypeOfReference(node, type, /*assumeInitialized*/ true, /*flowContainer*/ undefined);
+                return getFlowTypeOfReference(node, type);
             }
 
             if (isInJavaScriptFile(node)) {
@@ -11584,7 +11602,7 @@ namespace ts {
                     }
                 }
             }
-            if (compilerOptions.noImplicitThis) {
+            if (noImplicitThis) {
                 const containingLiteral = getContainingObjectLiteral(func);
                 if (containingLiteral) {
                     // We have an object literal method. Check if the containing object literal has a contextual type
@@ -11605,9 +11623,9 @@ namespace ts {
                         type = getApparentTypeOfContextualType(literal);
                     }
                     // There was no contextual ThisType<T> for the containing object literal, so the contextual type
-                    // for 'this' is the contextual type for the containing object literal or the type of the object
-                    // literal itself.
-                    return contextualType || checkExpressionCached(containingLiteral);
+                    // for 'this' is the non-null form of the contextual type for the containing object literal or
+                    // the type of the object literal itself.
+                    return contextualType ? getNonNullableType(contextualType) : checkExpressionCached(containingLiteral);
                 }
                 // In an assignment of the form 'obj.xxx = function(...)' or 'obj[xxx] = function(...)', the
                 // contextual type for 'this' is 'obj'.
@@ -12252,6 +12270,7 @@ namespace ts {
             const contextualType = getApparentTypeOfContextualType(node);
             const contextualTypeHasPattern = contextualType && contextualType.pattern &&
                 (contextualType.pattern.kind === SyntaxKind.ObjectBindingPattern || contextualType.pattern.kind === SyntaxKind.ObjectLiteralExpression);
+            const isJSObjectLiteral = !contextualType && isInJavaScriptFile(node);
             let typeFlags: TypeFlags = 0;
             let patternWithComputedProperties = false;
             let hasComputedStringProperty = false;
@@ -12389,8 +12408,8 @@ namespace ts {
             return createObjectLiteralType();
 
             function createObjectLiteralType() {
-                const stringIndexInfo = hasComputedStringProperty ? getObjectLiteralIndexInfo(node.properties, offset, propertiesArray, IndexKind.String) : undefined;
-                const numberIndexInfo = hasComputedNumberProperty ? getObjectLiteralIndexInfo(node.properties, offset, propertiesArray, IndexKind.Number) : undefined;
+                const stringIndexInfo = isJSObjectLiteral ? jsObjectLiteralIndexInfo : hasComputedStringProperty ? getObjectLiteralIndexInfo(node.properties, offset, propertiesArray, IndexKind.String) : undefined;
+                const numberIndexInfo = hasComputedNumberProperty && !isJSObjectLiteral ? getObjectLiteralIndexInfo(node.properties, offset, propertiesArray, IndexKind.Number) : undefined;
                 const result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
                 const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshLiteral;
                 result.flags |= TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag | (typeFlags & TypeFlags.PropagatingFlags);
@@ -13309,7 +13328,7 @@ namespace ts {
                 !(prop.flags & SymbolFlags.Method && propType.flags & TypeFlags.Union)) {
                 return propType;
             }
-            const flowType = getFlowTypeOfReference(node, propType, /*assumeInitialized*/ true, /*flowContainer*/ undefined);
+            const flowType = getFlowTypeOfReference(node, propType);
             return assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType;
         }
 
@@ -13634,7 +13653,7 @@ namespace ts {
 
         // Instantiate a generic signature in the context of a non-generic signature (section 3.8.5 in TypeScript spec)
         function instantiateSignatureInContextOf(signature: Signature, contextualSignature: Signature, contextualMapper: TypeMapper): Signature {
-            const context = createInferenceContext(signature, /*inferUnionTypes*/ true);
+            const context = createInferenceContext(signature, /*inferUnionTypes*/ true, /*useAnyForNoInferences*/ false);
             forEachMatchingParameterType(contextualSignature, signature, (source, target) => {
                 // Type parameters from outer context referenced by source type are fixed by instantiation of the source type
                 inferTypesWithContext(context, instantiateType(source, contextualMapper), target);
@@ -14335,7 +14354,7 @@ namespace ts {
                     let candidate: Signature;
                     let typeArgumentsAreValid: boolean;
                     const inferenceContext = originalCandidate.typeParameters
-                        ? createInferenceContext(originalCandidate, /*inferUnionTypes*/ false)
+                        ? createInferenceContext(originalCandidate, /*inferUnionTypes*/ false, /*useAnyForNoInferences*/ isInJavaScriptFile(node))
                         : undefined;
 
                     while (true) {
