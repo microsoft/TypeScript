@@ -13,14 +13,20 @@ namespace ts.server.typingsInstaller {
     } = require("path");
 
     class FileLog implements Log {
+        private logEnabled = true;
         constructor(private readonly logFile?: string) {
         }
 
         isEnabled() {
-            return this.logFile !== undefined;
+            return this.logEnabled && this.logFile !== undefined;
         }
         writeLine(text: string) {
-            fs.appendFileSync(this.logFile, text + sys.newLine);
+            try {
+                fs.appendFileSync(this.logFile, text + sys.newLine);
+            }
+            catch(e) {
+                this.logEnabled = false;
+            }
         }
     }
 
