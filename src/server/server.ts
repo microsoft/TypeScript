@@ -135,7 +135,7 @@ namespace ts.server {
                 try {
                     this.fd = fs.openSync(this.logFilename, "w");
                 }
-                catch(_) {
+                catch (e) {
                     // swallow the error and keep logging disabled if file cannot be opened
                 }
             }
@@ -461,8 +461,8 @@ namespace ts.server {
         const cmdLineVerbosity = getLogLevel(findArgument("--logVerbosity"));
         const envLogOptions = parseLoggingEnvironmentString(process.env["TSS_LOG"]);
 
-        const logFileName = cmdLineLogFileName 
-            ? stripQuotes(cmdLineLogFileName) 
+        const logFileName = cmdLineLogFileName
+            ? stripQuotes(cmdLineLogFileName)
             : envLogOptions.logToFile
                 ? envLogOptions.file || (__dirname + "/.log" + process.pid.toString())
                 : undefined;
