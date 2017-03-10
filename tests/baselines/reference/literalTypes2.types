@@ -781,9 +781,9 @@ function append<T>(a: T[], x: T): T[] {
     let result = a.slice();
 >result : T[]
 >a.slice() : T[]
->a.slice : (start?: number, end?: number) => T[]
+>a.slice : { (start?: 0): T[]; (start: number, end?: number): T[]; }
 >a : T[]
->slice : (start?: number, end?: number) => T[]
+>slice : { (start?: 0): T[]; (start: number, end?: number): T[]; }
 
     result.push(x);
 >result.push(x) : number

@@ -36,9 +36,9 @@ class ListWrapper2 {
 >array : Symbol(array, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 12, 43))
 >T : Symbol(T, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 12, 15))
 >T : Symbol(T, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 12, 15))
->array.slice : Symbol(Array.slice, Decl(lib.d.ts, --, --))
+>array.slice : Symbol(Array.slice, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >array : Symbol(array, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 12, 43))
->slice : Symbol(Array.slice, Decl(lib.d.ts, --, --))
+>slice : Symbol(Array.slice, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
   static reversed<T>(dit: typeof ListWrapper2, array: T[]): T[] {
 >reversed : Symbol(ListWrapper2.reversed, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 12, 87))
@@ -155,9 +155,9 @@ class ListWrapper {
 >array : Symbol(array, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 44, 42))
 >T : Symbol(T, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 44, 15))
 >T : Symbol(T, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 44, 15))
->array.slice : Symbol(Array.slice, Decl(lib.d.ts, --, --))
+>array.slice : Symbol(Array.slice, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >array : Symbol(array, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 44, 42))
->slice : Symbol(Array.slice, Decl(lib.d.ts, --, --))
+>slice : Symbol(Array.slice, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
   static forEachWithIndex<T>(dit: typeof ListWrapper, array: T[], fn: (t: T, n: number) => void) {
 >forEachWithIndex : Symbol(ListWrapper.forEachWithIndex, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 44, 86))
@@ -300,9 +300,9 @@ class ListWrapper {
 >ListWrapper : Symbol(ListWrapper, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 38, 1))
 >a : Symbol(a, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 68, 40))
 >b : Symbol(b, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 68, 50))
->a.concat : Symbol(Array.concat, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>a.concat : Symbol(Array.concat, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >a : Symbol(a, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 68, 40))
->concat : Symbol(Array.concat, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>concat : Symbol(Array.concat, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >b : Symbol(b, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 68, 50))
 
   static insert<T>(dit: typeof ListWrapper, list: T[], index: number, value: T) { list.splice(index, 0, value); }
@@ -490,9 +490,9 @@ class ListWrapper {
 >T : Symbol(T, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 101, 15))
 
     return l.slice(from, to === null ? undefined : to);
->l.slice : Symbol(Array.slice, Decl(lib.d.ts, --, --))
+>l.slice : Symbol(Array.slice, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >l : Symbol(l, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 101, 42))
->slice : Symbol(Array.slice, Decl(lib.d.ts, --, --))
+>slice : Symbol(Array.slice, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >from : Symbol(from, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 101, 50))
 >to : Symbol(to, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 101, 68))
 >undefined : Symbol(undefined)
