@@ -47,9 +47,15 @@ declare namespace ts.server {
     export type ActionInvalidate = "action::invalidate";
     export type EventBeginInstallTypes = "event::beginInstallTypes";
     export type EventEndInstallTypes = "event::endInstallTypes";
+    export type EventInitializationFailed = "event::initializationFailed";
 
     export interface TypingInstallerResponse {
-        readonly kind: ActionSet | ActionInvalidate | EventBeginInstallTypes | EventEndInstallTypes;
+        readonly kind: ActionSet | ActionInvalidate | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
+    }
+
+    export interface InitializationFailedResponse extends TypingInstallerResponse {
+        readonly kind: EventInitializationFailed;
+        readonly message: string;
     }
 
     export interface ProjectResponse extends TypingInstallerResponse {
