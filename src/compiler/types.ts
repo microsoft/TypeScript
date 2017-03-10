@@ -2463,10 +2463,7 @@ namespace ts {
         getTypeAtLocation(node: Node): Type;
         getTypeFromTypeNode(node: TypeNode): Type;
         signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): string;
-        signatureToAccessibleString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): string | undefined;
-        indexSignatureToAccessibleString(info: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags): string | undefined;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
-        typeToAccessibleString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string | undefined;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
         getSymbolDisplayBuilder(): SymbolDisplayBuilder;
         getFullyQualifiedName(symbol: Symbol): string;
@@ -2501,6 +2498,7 @@ namespace ts {
         /* @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
         /* @internal */ getGlobalDiagnostics(): Diagnostic[];
         /* @internal */ getEmitResolver(sourceFile?: SourceFile, cancellationToken?: CancellationToken): EmitResolver;
+        /* @internal */ isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, shouldComputeAliasesToMakeVisible: boolean): SymbolAccessibilityResult;
 
         /* @internal */ getNodeCount(): number;
         /* @internal */ getIdentifierCount(): number;

@@ -38,7 +38,7 @@ namespace ts.codefix {
 
             const checker = context.program.getDiagnosticsProducingTypeChecker();
             const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(binaryExpression.right)));
-            typeString = checker.typeToAccessibleString(widenedType, classDeclaration, TypeFormatFlags.NoTruncation) || typeString;
+            typeString = typeToAccessibleString(widenedType, classDeclaration, TypeFormatFlags.NoTruncation, checker) || typeString;
         }
 
         const startPos = classDeclaration.members.pos;

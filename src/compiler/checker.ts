@@ -133,17 +133,8 @@ namespace ts {
             signatureToString: (signature, enclosingDeclaration?, flags?, kind?) => {
                 return signatureToString(signature, getParseTreeNode(enclosingDeclaration), flags, kind);
             },
-            signatureToAccessibleString: (signature, enclosingDeclaration?, flags?, kind?) => {
-                return signatureToAccessibleString(signature, getParseTreeNode(enclosingDeclaration), flags, kind);
-            },
-            indexSignatureToAccessibleString: (info, kind, enclosingDeclaration, globalFlags) => {
-                return indexSignatureToAccessibleString(info, kind, getParseTreeNode(enclosingDeclaration), globalFlags);
-            },
             typeToString: (type, enclosingDeclaration?, flags?) => {
                 return typeToString(type, getParseTreeNode(enclosingDeclaration), flags);
-            },
-            typeToAccessibleString: (type, enclosingDeclaration?, flags?) => {
-                return typeToAccessibleString(type, getParseTreeNode(enclosingDeclaration), flags);
             },
             getSymbolDisplayBuilder,
             symbolToString: (symbol, enclosingDeclaration?, meaning?) => {
@@ -178,6 +169,7 @@ namespace ts {
             },
             getAliasedSymbol: resolveAlias,
             getEmitResolver,
+            isSymbolAccessible,
             getExportsOfModule: getExportsOfModuleAsArray,
             getExportsAndPropertiesOfModule,
             getAmbientModules,
@@ -2184,41 +2176,6 @@ namespace ts {
             return result;
         }
 
-        function signatureToAccessibleString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): string | undefined {
-            const writer = getSingleLineStringWriter();
-            let isTypeAccessible = true;
-            const oldTrackSymbol = writer.trackSymbol;
-            writer.trackSymbol = (symbol, enclosingDeclaration, meaning) => {
-                if (isTypeAccessible && isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/false).accessibility != SymbolAccessibility.Accessible) {
-                    isTypeAccessible = undefined;
-                }
-            }
-            getSymbolDisplayBuilder().buildSignatureDisplay(signature, writer, enclosingDeclaration, flags, kind);
-
-            const result = writer.string();
-            writer.trackSymbol = oldTrackSymbol;
-            releaseStringWriter(writer);
-
-            return isTypeAccessible && result;
-        }
-
-        function indexSignatureToAccessibleString(info: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags): string | undefined {
-            const writer = getSingleLineStringWriter();
-            let isTypeAccessible = true;
-            const oldTrackSymbol = writer.trackSymbol;
-            writer.trackSymbol = (symbol, enclosingDeclaration, meaning) => {
-                if (isTypeAccessible && isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/false).accessibility != SymbolAccessibility.Accessible) {
-                    isTypeAccessible = undefined;
-                }
-            }
-            getSymbolDisplayBuilder().buildIndexSignatureDisplay(info, writer, kind, enclosingDeclaration, globalFlags);
-
-            const result = writer.string();
-            writer.trackSymbol = oldTrackSymbol;
-            releaseStringWriter(writer);
-
-            return isTypeAccessible && result;
-        }
 
         function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
             const writer = getSingleLineStringWriter();
@@ -2231,25 +2188,6 @@ namespace ts {
                 result = result.substr(0, maxLength - "...".length) + "...";
             }
             return result;
-        }
-
-        function typeToAccessibleString(type: Type, enclosingDeclaration: Node, flags?: TypeFormatFlags): string | undefined {
-            const writer = getSingleLineStringWriter();
-            let isTypeAccessible = true;
-            const oldTrackSymbol = writer.trackSymbol;
-            writer.trackSymbol = (symbol, enclosingDeclaration, meaning) => {
-                if (isTypeAccessible && isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/false).accessibility != SymbolAccessibility.Accessible) {
-                    isTypeAccessible = undefined;
-                }
-            }
-
-            getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
-
-            const result = writer.string();
-            writer.trackSymbol = oldTrackSymbol;
-            releaseStringWriter(writer);
-
-            return isTypeAccessible && result;
         }
 
         function typePredicateToString(typePredicate: TypePredicate, enclosingDeclaration?: Declaration, flags?: TypeFormatFlags): string {

@@ -45,7 +45,7 @@ namespace ts.codefix {
 
         function getMissingIndexSignatureInsertion(type: InterfaceType, kind: IndexKind, enclosingDeclaration: ClassLikeDeclaration) {
             const indexInfo = checker.getIndexInfoOfType(type, kind);
-            const indexSignature =  indexInfo && checker.indexSignatureToAccessibleString(indexInfo, kind, enclosingDeclaration, TypeFormatFlags.NoTruncation);
+            const indexSignature =  indexInfo && indexSignatureToAccessibleString(indexInfo, kind, enclosingDeclaration, TypeFormatFlags.NoTruncation, checker);
             return indexSignature || "";
         }
 

@@ -44,7 +44,7 @@ namespace ts.codefix {
             case SyntaxKind.SetAccessor:
             case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyDeclaration:
-                const typeString = checker.typeToAccessibleString(type, enclosingDeclaration, TypeFormatFlags.None);
+                const typeString = typeToAccessibleString(type, enclosingDeclaration, TypeFormatFlags.NoTruncation, checker);
                 return typeString ? `${visibility}${name}: ${typeString};${newlineChar}` : "";
             case SyntaxKind.MethodSignature:
             case SyntaxKind.MethodDeclaration:
@@ -62,14 +62,14 @@ namespace ts.codefix {
                 if (declarations.length === 1) {
                     Debug.assert(signatures.length === 1);
                     const signature = signatures[0];
-                    const sigString = checker.signatureToAccessibleString(signature, enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
-                    return sigString ? getStubbedMethod(visibility, name, sigString, newlineChar): "";
+                    const sigString = signatureToAccessibleString(signature, enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType | TypeFormatFlags.NoTruncation, SignatureKind.Call, checker);
+                    return sigString ? getStubbedMethod(visibility, name, sigString, newlineChar) : "";
                 }
 
                 let result = "";
                 for (let i = 0; i < signatures.length; i++) {
-                    const sigString = checker.signatureToAccessibleString(signatures[i], enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
-                    result += sigString ? `${visibility}${name}${sigString};${newlineChar}`: "";
+                    const sigString = signatureToAccessibleString(signatures[i], enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType | TypeFormatFlags.NoTruncation, SignatureKind.Call, checker);
+                    result += sigString ? `${visibility}${name}${sigString};${newlineChar}` : "";
                 }
 
                 // If there is a declaration with a body, it is the last declaration,
@@ -82,8 +82,8 @@ namespace ts.codefix {
                     Debug.assert(declarations.length === signatures.length);
                     bodySig = createBodySignatureWithAnyTypes(signatures, enclosingDeclaration, checker);
                 }
-                const sigString = checker.signatureToAccessibleString(bodySig, enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
-                result += sigString ? getStubbedMethod(visibility, name, sigString, newlineChar): "";
+                const sigString = signatureToAccessibleString(bodySig, enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType | TypeFormatFlags.NoTruncation, SignatureKind.Call, checker);
+                result += sigString ? getStubbedMethod(visibility, name, sigString, newlineChar) : "";
 
                 return result;
             default:
@@ -162,4 +162,59 @@ namespace ts.codefix {
     }
 
     const SymbolConstructor = objectAllocator.getSymbolConstructor();
+
+    function signatureToAccessibleString(signature: Signature, enclosingDeclaration: Node, flags: TypeFormatFlags, kind: SignatureKind, checker: TypeChecker): string | undefined {
+        const writer = getSingleLineStringWriter();
+        let isTypeAccessible = true;
+        const oldTrackSymbol = writer.trackSymbol;
+        writer.trackSymbol = (symbol, enclosingDeclaration, meaning) => {
+            if (isTypeAccessible && checker.isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/false).accessibility != SymbolAccessibility.Accessible) {
+                isTypeAccessible = undefined;
+            }
+        }
+        checker.getSymbolDisplayBuilder().buildSignatureDisplay(signature, writer, enclosingDeclaration, flags, kind);
+
+        const result = writer.string();
+        writer.trackSymbol = oldTrackSymbol;
+        releaseStringWriter(writer);
+
+        return isTypeAccessible && result;
+    }
+
+    export function indexSignatureToAccessibleString(info: IndexInfo, kind: IndexKind, enclosingDeclaration: Node, globalFlags: TypeFormatFlags, checker: TypeChecker): string | undefined {
+        const writer = getSingleLineStringWriter();
+        let isTypeAccessible = true;
+        const oldTrackSymbol = writer.trackSymbol;
+        writer.trackSymbol = (symbol, enclosingDeclaration, meaning) => {
+            if (isTypeAccessible && checker.isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/false).accessibility != SymbolAccessibility.Accessible) {
+                isTypeAccessible = undefined;
+            }
+        }
+        checker.getSymbolDisplayBuilder().buildIndexSignatureDisplay(info, writer, kind, enclosingDeclaration, globalFlags);
+
+        const result = writer.string();
+        writer.trackSymbol = oldTrackSymbol;
+        releaseStringWriter(writer);
+
+        return isTypeAccessible && result;
+    }
+
+    export function typeToAccessibleString(type: Type, enclosingDeclaration: Node, flags: TypeFormatFlags, checker: TypeChecker): string | undefined {
+        const writer = getSingleLineStringWriter();
+        let isTypeAccessible = true;
+        const oldTrackSymbol = writer.trackSymbol;
+        writer.trackSymbol = (symbol, enclosingDeclaration, meaning) => {
+            if (isTypeAccessible && checker.isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/false).accessibility != SymbolAccessibility.Accessible) {
+                isTypeAccessible = undefined;
+            }
+        }
+
+        checker.getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
+
+        const result = writer.string();
+        writer.trackSymbol = oldTrackSymbol;
+        releaseStringWriter(writer);
+
+        return isTypeAccessible && result;
+    }
 }
