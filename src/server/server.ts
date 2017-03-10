@@ -304,9 +304,21 @@ namespace ts.server {
             });
         }
 
-        private handleMessage(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes) {
+        private handleMessage(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
             if (this.logger.hasLevel(LogLevel.verbose)) {
                 this.logger.info(`Received response: ${JSON.stringify(response)}`);
+            }
+
+            if (response.kind === EventInitializationFailed) {
+                if (!this.eventSender) {
+                    return;
+                }
+                const body: protocol.TypesInstallerInitializationFailedEventBody = {
+                    message: response.message
+                }
+                const eventName: protocol.TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
+                this.eventSender.event(body, eventName);
+                return;
             }
 
             if (response.kind === EventBeginInstallTypes) {
