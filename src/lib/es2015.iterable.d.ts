@@ -54,7 +54,9 @@ interface ArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from<T, U>(iterable: Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): Array<U>;
+    from<T, U>(iterable: Iterable<T>, mapfn: (this: undefined, v: T, k: number) => U): Array<U>;
+    from<T, U>(iterable: Iterable<T>, mapfn: (this: undefined, v: T, k: number) => U, thisArg: undefined): Array<U>;
+    from<Z, T, U>(iterable: Iterable<T>, mapfn: (this: Z, v: T, k: number) => U, thisArg: Z): Array<U>;
 
     /**
       * Creates an array from an iterable object.
@@ -180,7 +182,11 @@ interface Int8ArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array;
+    from(arrayLike: Iterable<number>, mapfn: (this: undefined, v: number, k: number) => number): Int8Array;
+    from(arrayLike: Iterable<number>, mapfn: (this: undefined, v: number, k: number) => number, thisArg: undefined): Int8Array;
+    from<Z>(arrayLike: Iterable<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Int8Array;
+
+    from(arrayLike: Iterable<number>): Int8Array;
 }
 
 /**
@@ -212,7 +218,11 @@ interface Uint8ArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array;
+    from(arrayLike: Iterable<number>, mapfn: (this: undefined, v: number, k: number) => number): Uint8Array;
+    from(arrayLike: Iterable<number>, mapfn: (this: undefined, v: number, k: number) => number, thisArg: undefined): Uint8Array;
+    from<Z>(arrayLike: Iterable<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Uint8Array;
+
+    from(arrayLike: Iterable<number>): Uint8Array;
 }
 
 /**
@@ -247,7 +257,11 @@ interface Uint8ClampedArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray;
+    from(arrayLike: Iterable<number>, mapfn: (this: undefined, v: number, k: number) => number): Uint8ClampedArray;
+    from(arrayLike: Iterable<number>, mapfn: (this: undefined, v: number, k: number) => number, thisArg: undefined): Uint8ClampedArray;
+    from<Z>(arrayLike: Iterable<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Uint8ClampedArray;
+
+    from(arrayLike: Iterable<number>): Uint8ClampedArray;
 }
 
 /**
@@ -281,7 +295,11 @@ interface Int16ArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array;
+    from(arrayLike: Iterable<number>, mapfn: (this: undefined, v: number, k: number) => number): Int16Array;
+    from(arrayLike: Iterable<number>, mapfn: (this: undefined, v: number, k: number) => number, thisArg: undefined): Int16Array;
+    from<Z>(arrayLike: Iterable<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Int16Array;
+
+    from(arrayLike: Iterable<number>): Int16Array;
 }
 
 /**
@@ -313,7 +331,11 @@ interface Uint16ArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array;
+    from(arrayLike: Iterable<number>, mapfn: (this: undefined, v: number, k: number) => number): Uint16Array;
+    from(arrayLike: Iterable<number>, mapfn: (this: undefined, v: number, k: number) => number, thisArg: undefined): Uint16Array;
+    from<Z>(arrayLike: Iterable<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Uint16Array;
+
+    from(arrayLike: Iterable<number>): Uint16Array;
 }
 
 /**
@@ -345,7 +367,11 @@ interface Int32ArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array;
+    from(arrayLike: Iterable<number>, mapfn: (this: undefined, v: number, k: number) => number): Int32Array;
+    from(arrayLike: Iterable<number>, mapfn: (this: undefined, v: number, k: number) => number, thisArg: undefined): Int32Array;
+    from<Z>(arrayLike: Iterable<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Int32Array;
+
+    from(arrayLike: Iterable<number>): Int32Array;
 }
 
 /**
@@ -377,7 +403,11 @@ interface Uint32ArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array;
+    from(arrayLike: Iterable<number>, mapfn: (this: undefined, v: number, k: number) => number): Uint32Array;
+    from(arrayLike: Iterable<number>, mapfn: (this: undefined, v: number, k: number) => number, thisArg: undefined): Uint32Array;
+    from<Z>(arrayLike: Iterable<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Uint32Array;
+
+    from(arrayLike: Iterable<number>): Uint32Array;
 }
 
 /**
@@ -409,7 +439,11 @@ interface Float32ArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array;
+    from(arrayLike: Iterable<number>, mapfn: (this: undefined, v: number, k: number) => number): Float32Array;
+    from(arrayLike: Iterable<number>, mapfn: (this: undefined, v: number, k: number) => number, thisArg: undefined): Float32Array;
+    from<Z>(arrayLike: Iterable<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Float32Array;
+
+    from(arrayLike: Iterable<number>): Float32Array;
 }
 
 /**
@@ -441,5 +475,9 @@ interface Float64ArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array;
+    from(arrayLike: Iterable<number>, mapfn: (this: undefined, v: number, k: number) => number): Float64Array;
+    from(arrayLike: Iterable<number>, mapfn: (this: undefined, v: number, k: number) => number, thisArg: undefined): Float64Array;
+    from<Z>(arrayLike: Iterable<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Float64Array;
+
+    from(arrayLike: Iterable<number>): Float64Array;
 }

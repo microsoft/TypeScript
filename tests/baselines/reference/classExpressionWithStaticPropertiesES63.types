@@ -42,10 +42,10 @@ for (let i = 0; i < 3; i++) {
 }
 arr.forEach(C => console.log(C.y()));
 >arr.forEach(C => console.log(C.y())) : void
->arr.forEach : (callbackfn: (value: { y(): number; }, index: number, array: { y(): number; }[]) => void, thisArg?: any) => void
+>arr.forEach : { (callbackfn: (this: undefined, value: { y(): number; }, index: number, array: { y(): number; }[]) => void): void; (callbackfn: (this: undefined, value: { y(): number; }, index: number, array: { y(): number; }[]) => void, thisArg: undefined): void; <Z>(callbackfn: (this: Z, value: { y(): number; }, index: number, array: { y(): number; }[]) => void, thisArg: Z): void; }
 >arr : { y(): number; }[]
->forEach : (callbackfn: (value: { y(): number; }, index: number, array: { y(): number; }[]) => void, thisArg?: any) => void
->C => console.log(C.y()) : (C: { y(): number; }) => any
+>forEach : { (callbackfn: (this: undefined, value: { y(): number; }, index: number, array: { y(): number; }[]) => void): void; (callbackfn: (this: undefined, value: { y(): number; }, index: number, array: { y(): number; }[]) => void, thisArg: undefined): void; <Z>(callbackfn: (this: Z, value: { y(): number; }, index: number, array: { y(): number; }[]) => void, thisArg: Z): void; }
+>C => console.log(C.y()) : (this: undefined, C: { y(): number; }) => any
 >C : { y(): number; }
 >console.log(C.y()) : any
 >console.log : any
