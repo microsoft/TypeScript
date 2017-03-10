@@ -131,6 +131,14 @@ namespace ts.server {
         constructor(private readonly logFilename: string,
             private readonly traceToConsole: boolean,
             private readonly level: LogLevel) {
+            if (this.logFilename) {
+                try {
+                    this.fd = fs.openSync(this.logFilename, "w");
+                }
+                catch (e) {
+                    // swallow the error and keep logging disabled if file cannot be opened
+                }
+            }
         }
 
         static padStringRight(str: string, padding: string) {
@@ -175,11 +183,6 @@ namespace ts.server {
         }
 
         msg(s: string, type: Msg.Types = Msg.Err) {
-            if (this.fd < 0) {
-                if (this.logFilename) {
-                    this.fd = fs.openSync(this.logFilename, "w");
-                }
-            }
             if (this.fd >= 0 || this.traceToConsole) {
                 s = s + "\n";
                 const prefix = Logger.padStringRight(type + " " + this.seq.toString(), "          ");
@@ -410,6 +413,9 @@ namespace ts.server {
     }
 
     function parseLoggingEnvironmentString(logEnvStr: string): LogOptions {
+        if (!logEnvStr) {
+            return {};
+        }
         const logEnv: LogOptions = { logToFile: true };
         const args = logEnvStr.split(" ");
         const len = args.length - 1;
@@ -422,8 +428,8 @@ namespace ts.server {
                         logEnv.file = stripQuotes(value);
                         break;
                     case "-level":
-                        const level: LogLevel = (<any>LogLevel)[value];
-                        logEnv.detailLevel = typeof level === "number" ? level : LogLevel.normal;
+                        const level = getLogLevel(value);
+                        logEnv.detailLevel = level !== undefined ? level : LogLevel.normal;
                         break;
                     case "-traceToConsole":
                         logEnv.traceToConsole = value.toLowerCase() === "true";
@@ -437,28 +443,32 @@ namespace ts.server {
         return logEnv;
     }
 
-    // TSS_LOG "{ level: "normal | verbose | terse", file?: string}"
-    function createLoggerFromEnv() {
-        let fileName: string = undefined;
-        let detailLevel = LogLevel.normal;
-        let traceToConsole = false;
-        const logEnvStr = process.env["TSS_LOG"];
-        if (logEnvStr) {
-            const logEnv = parseLoggingEnvironmentString(logEnvStr);
-            if (logEnv.logToFile) {
-                if (logEnv.file) {
-                    fileName = logEnv.file;
-                }
-                else {
-                    fileName = __dirname + "/.log" + process.pid.toString();
+    function getLogLevel(level: string) {
+        if (level) {
+            const l = level.toLowerCase();
+            for (const name in LogLevel) {
+                if (isNaN(+name) && l === name.toLowerCase()) {
+                    return <LogLevel><any>LogLevel[name];
                 }
             }
-            if (logEnv.detailLevel) {
-                detailLevel = logEnv.detailLevel;
-            }
-            traceToConsole = logEnv.traceToConsole;
         }
-        return new Logger(fileName, traceToConsole, detailLevel);
+        return undefined;
+    }
+
+    // TSS_LOG "{ level: "normal | verbose | terse", file?: string}"
+    function createLogger() {
+        const cmdLineLogFileName = findArgument("--logFile");
+        const cmdLineVerbosity = getLogLevel(findArgument("--logVerbosity"));
+        const envLogOptions = parseLoggingEnvironmentString(process.env["TSS_LOG"]);
+
+        const logFileName = cmdLineLogFileName
+            ? stripQuotes(cmdLineLogFileName)
+            : envLogOptions.logToFile
+                ? envLogOptions.file || (__dirname + "/.log" + process.pid.toString())
+                : undefined;
+
+        const logVerbosity = cmdLineVerbosity || envLogOptions.detailLevel;
+        return new Logger(logFileName, envLogOptions.traceToConsole, logVerbosity)
     }
     // This places log file in the directory containing editorServices.js
     // TODO: check that this location is writable
@@ -555,7 +565,6 @@ namespace ts.server {
     // to increase the chunk size or decrease the interval
     // time dynamically to match the large reference set?
     const pollingWatchedFileSet = createPollingWatchedFileSet();
-    const logger = createLoggerFromEnv();
 
     const pending: Buffer[] = [];
     let canWrite = true;
@@ -606,6 +615,8 @@ namespace ts.server {
     function isUNCPath(s: string): boolean {
         return s.length > 2 && s.charCodeAt(0) === CharacterCodes.slash && s.charCodeAt(1) === CharacterCodes.slash;
     }
+
+    const logger = createLogger();
 
     const sys = <ServerHost>ts.sys;
     // use watchGuard process on Windows when node version is 4 or later
