@@ -167,6 +167,8 @@ namespace ts {
                 return visitNode(cbNode, (<CallExpression>node).expression) ||
                     visitNodes(cbNodes, (<CallExpression>node).typeArguments) ||
                     visitNodes(cbNodes, (<CallExpression>node).arguments);
+            case SyntaxKind.ImportCallExpression:
+                return visitNode(cbNode, (<ImportCall>node).expression);
             case SyntaxKind.TaggedTemplateExpression:
                 return visitNode(cbNode, (<TaggedTemplateExpression>node).tag) ||
                     visitNode(cbNode, (<TaggedTemplateExpression>node).template);
@@ -3686,20 +3688,19 @@ namespace ts {
             // the last two CallExpression productions. 2) We see 'import' which must start import call.
             // 3)we have a MemberExpression which either completes the LeftHandSideExpression,
             // or starts the beginning of the first four CallExpression productions.
-            let expression: LeftHandSideExpression;
-            if (token() === SyntaxKind.SuperKeyword) {
-                expression = parseSuperExpression();
-            }
-            else if (token() === SyntaxKind.ImportKeyword && lookAhead(nextTokenIsOpenParen)) {
-                // We don't want to eagerly consume all import keyword as import call expression.
+
+            if (token() === SyntaxKind.ImportKeyword && lookAhead(nextTokenIsOpenParen)) {
+                // We don't want to eagerly consume all import keyword as import call expression so we look a head to find "("
                 // For example:
-                //      var foo3 = require("subfolder//*require0*/
-                //      import * as foo1 from "module-from-node//*import_as1*/  -> we want this import to be a statement rather than import call expression
-                expression = parseImportExpression();
+                //      var foo3 = require("subfolder
+                //      import * as foo1 from "module-from-node  -> we want this import to be a statement rather than import call expression
+                const importCall = parseImportCall();
+                if (importCall.expression.kind === SyntaxKind.StringLiteral) {
+                    (sourceFile.imports || (sourceFile.imports = [])).push(importCall.expression as StringLiteral);
+                }
+                return importCall;
             }
-            else {
-                expression = parseMemberExpressionOrHigher();
-            }
+            const expression = token() === SyntaxKind.SuperKeyword ? parseSuperExpression() : parseMemberExpressionOrHigher();
 
             // Now, we *may* be complete.  However, we might have consumed the start of a
             // CallExpression.  As such, we need to consume the rest of it here to be complete.
@@ -3773,12 +3774,13 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseImportExpression(): LeftHandSideExpression {
-            const expression = parseTokenNode<PrimaryExpression>();
-            if (token() === SyntaxKind.OpenParenToken) {
-                return expression;
-            }
-            Debug.assert(token() === SyntaxKind.OpenParenToken, "Parsing import expression expects open parenthesis after import keyword");
+        function parseImportCall(): ImportCall {
+            const importCallExpr = <ImportCall>createNode(SyntaxKind.ImportCallExpression);
+            parseExpected(SyntaxKind.ImportKeyword);
+            parseExpected(SyntaxKind.OpenParenToken);
+            importCallExpr.expression = parseAssignmentExpressionOrHigher();
+            parseExpected(SyntaxKind.CloseParenToken);
+            return finishNode(importCallExpr);
         }
 
         function tagNamesAreEquivalent(lhs: JsxTagNameExpression, rhs: JsxTagNameExpression): boolean {

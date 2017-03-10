@@ -1178,15 +1178,12 @@ namespace ts {
         }
 
         function collectExternalModuleReferences(file: SourceFile): void {
-            if (file.imports) {
-                return;
-            }
-
             const isJavaScriptFile = isSourceFileJavaScript(file);
             const isExternalModuleFile = isExternalModule(file);
             const isDtsFile = isDeclarationFile(file);
 
-            let imports: LiteralExpression[];
+            // file.imports may not be undefined if there exists dynamic import
+            let imports = file.imports;
             let moduleAugmentations: LiteralExpression[];
             let ambientModules: string[];
 

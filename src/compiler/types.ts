@@ -391,8 +391,12 @@ namespace ts {
         MergeDeclarationMarker,
         EndOfDeclarationMarker,
 
+        // Dynamic import
+        ImportCallExpression,
+
         // Enum value count
         Count,
+
         // Markers
         FirstAssignment = EqualsToken,
         LastAssignment = CaretEqualsToken,
@@ -1443,8 +1447,9 @@ namespace ts {
         expression: SuperExpression;
     }
 
-    export interface ImportCall extends CallExpression {
-        expression: ImportExpression;
+    export interface ImportCall extends LeftHandSideExpression, Declaration {
+        kind: SyntaxKind.ImportCallExpression;
+        expression: Expression;
     }
 
     export interface ExpressionWithTypeArguments extends TypeNode {
