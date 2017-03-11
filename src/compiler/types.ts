@@ -849,19 +849,14 @@ namespace ts {
         _typeNodeBrand: any;
     }
 
-    export type KeywordKind = SyntaxKind.AnyKeyword
-                            | SyntaxKind.NumberKeyword
-                            | SyntaxKind.ObjectKeyword
-                            | SyntaxKind.BooleanKeyword
-                            | SyntaxKind.StringKeyword
-                            | SyntaxKind.SymbolKeyword
-                            | SyntaxKind.VoidKeyword
-                            | SyntaxKind.UndefinedKeyword
-                            | SyntaxKind.NullKeyword
-                            | SyntaxKind.NeverKeyword;
-
     export interface KeywordTypeNode extends TypeNode {
-        kind: KeywordKind;
+        kind: SyntaxKind.AnyKeyword
+            | SyntaxKind.NumberKeyword
+            | SyntaxKind.ObjectKeyword
+            | SyntaxKind.BooleanKeyword
+            | SyntaxKind.StringKeyword
+            | SyntaxKind.SymbolKeyword
+            | SyntaxKind.VoidKeyword;
     }
 
     export interface ThisTypeNode extends TypeNode {
@@ -897,7 +892,7 @@ namespace ts {
         exprName: EntityName;
     }
 
-    /** A TypeLiteral is the declaration node for an anonymous symbol. */
+    // A TypeLiteral is the declaration node for an anonymous symbol.
     export interface TypeLiteralNode extends TypeNode, Declaration {
         kind: SyntaxKind.TypeLiteral;
         members: NodeArray<TypeElement>;
