@@ -761,7 +761,7 @@ namespace Harness {
             IO = IOImpl.Network;
             break;
         default:
-            throw new Error(`Unknown value '${environment}' for ExecutionEnvironment'.`);
+            throw new Error(`Unknown value '${environment}' for ExecutionEnvironment.`);
     }
 }
 
