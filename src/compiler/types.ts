@@ -1447,9 +1447,9 @@ namespace ts {
         expression: SuperExpression;
     }
 
-    export interface ImportCall extends LeftHandSideExpression, Declaration {
+    export interface ImportCallExpression extends LeftHandSideExpression, Declaration {
         kind: SyntaxKind.ImportCallExpression;
-        expression: Expression;
+        specifier: Expression;
     }
 
     export interface ExpressionWithTypeArguments extends TypeNode {
