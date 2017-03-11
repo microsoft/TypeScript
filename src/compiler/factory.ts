@@ -213,7 +213,42 @@ namespace ts {
             : node;
     }
 
+    // Types
+
+    export function createLiteralTypeNode(value: string | number | boolean) {
+        const literal = createLiteral(value);
+        const literalTypeNode = createSynthesizedNode(SyntaxKind.LiteralType) as LiteralTypeNode;
+        literalTypeNode.literal = literal;
+        return literalTypeNode;
+    }
+
+    export function createTypeReferenceNode(typeName: string | EntityName, typeArguments?: NodeArray<TypeNode>) {
+        const typeReference = createSynthesizedNode(SyntaxKind.TypeReference) as TypeReferenceNode;
+        typeReference.typeName = asName(typeName);
+        typeReference.typeName.parent
+        typeReference.typeArguments = typeArguments;
+        return typeReference;
+    }
+
+    export function createTypeParameterNode(name: string | Identifier, constraint?: TypeNode, defaultParameter?: TypeNode) {
+        const typeParameter = createSynthesizedNode(SyntaxKind.TypeParameter) as TypeParameterDeclaration;
+        typeParameter.name = asName(name);
+        typeParameter.constraint = constraint;
+        typeParameter.default = defaultParameter;
+
+        return typeParameter;
+    }
+
     // Signature elements
+
+    export function createSignature(kind: SyntaxKind, parameters: NodeArray<ParameterDeclaration>, name?: PropertyName, typeParameters?: NodeArray<TypeParameterDeclaration>, returnType?: TypeNode): SignatureDeclaration {
+        const signature = createSynthesizedNode(kind) as SignatureDeclaration;
+        signature.parameters = parameters;
+        signature.name = name;
+        signature.typeParameters = typeParameters;
+        signature.type = returnType;
+        return signature;
+    }
 
     export function createParameter(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression) {
         const node = <ParameterDeclaration>createSynthesizedNode(SyntaxKind.Parameter);
@@ -1801,7 +1836,7 @@ namespace ts {
         return typeof value === "string" || typeof value === "number" ? createLiteral(value) : value;
     }
 
-    function asNodeArray<T extends Node>(array: T[] | undefined): NodeArray<T> | undefined {
+    export function asNodeArray<T extends Node>(array: T[] | undefined): NodeArray<T> | undefined {
         return array ? createNodeArray(array) : undefined;
     }
 
