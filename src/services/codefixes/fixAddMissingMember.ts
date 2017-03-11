@@ -31,37 +31,50 @@ namespace ts.codefix {
             return undefined;
         }
 
-        let typeString = "any";
+        let typeNode: TypeNode = createKeywordTypeNode(SyntaxKind.AnyKeyword);
 
         if (token.parent.parent.kind === SyntaxKind.BinaryExpression) {
             const binaryExpression = token.parent.parent as BinaryExpression;
 
             const checker = context.program.getTypeChecker();
             const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(binaryExpression.right)));
-            typeString = checker.typeToString(widenedType);
+            typeNode = checker.createTypeNode(widenedType) || typeNode;
         }
 
-        const startPos = classDeclaration.members.pos;
+        const openBrace = getOpenBraceOfClassLike(classDeclaration, sourceFile);
 
-        return [{
+        const property = createProperty(
+              /*decorators*/undefined
+            , /*modifiers*/ undefined
+            , token.getText(sourceFile)
+            , /*questionToken*/ undefined
+            , typeNode
+            , /*initializer*/ undefined);
+        // TODO: make index signature.
+        const propertyChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+        propertyChangeTracker.insertNodeAfter(sourceFile, openBrace, property, { insertTrailingNewLine: true });
+
+        const stringTypeNode = createKeywordTypeNode(SyntaxKind.StringKeyword);
+        const indexingParameter = createParameter(
+             /*decorators*/ undefined
+            , /*modifiers*/ undefined
+            , /*dotDotDotToken*/ undefined
+            , "name"
+            , /*questionToken*/ undefined
+            , stringTypeNode);
+        const indexSignature = createIndexSignature(indexingParameter, typeNode);
+
+        // const startPos = classDeclaration.members.pos;
+        const indexSignatureChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+        indexSignatureChangeTracker.insertNodeAfter(sourceFile, openBrace, indexSignature, { insertTrailingNewLine: true });
+
+        return [{ 
             description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_declaration_for_missing_property_0), [token.getText()]),
-            changes: [{
-                fileName: sourceFile.fileName,
-                textChanges: [{
-                    span: { start: startPos, length: 0 },
-                    newText: `${token.getFullText(sourceFile)}: ${typeString};`
-                }]
-            }]
+            changes: propertyChangeTracker.getChanges()
         },
         {
             description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_index_signature_for_missing_property_0), [token.getText()]),
-            changes: [{
-                fileName: sourceFile.fileName,
-                textChanges: [{
-                    span: { start: startPos, length: 0 },
-                    newText: `[name: string]: ${typeString};`
-                }]
-            }]
+            changes: indexSignatureChangeTracker.getChanges()
         }];
     }
 }
