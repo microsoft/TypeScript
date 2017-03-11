@@ -14862,6 +14862,18 @@ namespace ts {
             return getReturnTypeOfSignature(signature);
         }
 
+        function checkImportCallExpression(node: ImportCallExpression): Type {
+            // resolveExternalModuleName will return undefined if the moduleReferenceExpression is not a string literal
+            const moduleSymbol = resolveExternalModuleName(node, node.specifier);
+            if (moduleSymbol) {
+                const esModuleSymbol = resolveESModuleSymbol(moduleSymbol, node.specifier);
+                if (esModuleSymbol) {
+                    return createPromiseReturnType(node, getTypeOfSymbol(esModuleSymbol));
+                }
+            }
+            return createPromiseReturnType(node, anyType);
+        }
+
         function isCommonJsRequire(node: Node) {
             if (!isRequireCall(node, /*checkArgumentIsStringLiteral*/true)) {
                 return false;
@@ -15068,14 +15080,18 @@ namespace ts {
             return emptyObjectType;
         }
 
-        function createPromiseReturnType(func: FunctionLikeDeclaration, promisedType: Type) {
+        function createPromiseReturnType(func: FunctionLikeDeclaration | ImportCallExpression, promisedType: Type) {
             const promiseType = createPromiseType(promisedType);
             if (promiseType === emptyObjectType) {
-                error(func, Diagnostics.An_async_function_or_method_must_return_a_Promise_Make_sure_you_have_a_declaration_for_Promise_or_include_ES2015_in_your_lib_option);
+                error(func, isImportCallExpression(func) ? 
+                    Diagnostics.An_async_function_or_method_must_return_a_Promise_Make_sure_you_have_a_declaration_for_Promise_or_include_ES2015_in_your_lib_option :
+                    Diagnostics.A_dynamic_import_call_must_return_a_Promise_Make_sure_you_have_a_declaration_for_Promise_or_include_ES2015_in_your_lib_option);
                 return unknownType;
             }
             else if (!getGlobalPromiseConstructorSymbol(/*reportErrors*/ true)) {
-                error(func, Diagnostics.An_async_function_or_method_in_ES5_SlashES3_requires_the_Promise_constructor_Make_sure_you_have_a_declaration_for_the_Promise_constructor_or_include_ES2015_in_your_lib_option);
+                error(func, isImportCallExpression(func) ?
+                    Diagnostics.An_async_function_or_method_in_ES5_SlashES3_requires_the_Promise_constructor_Make_sure_you_have_a_declaration_for_the_Promise_constructor_or_include_ES2015_in_your_lib_option :
+                    Diagnostics.A_dynamic_import_call_in_ES5_SlashES3_requires_the_Promise_constructor_Make_sure_you_have_a_declaration_for_the_Promise_constructor_or_include_ES2015_in_your_lib_option);
             }
 
             return promiseType;
@@ -16398,6 +16414,8 @@ namespace ts {
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
                     return checkCallExpression(<CallExpression>node);
+                case SyntaxKind.ImportCallExpression:
+                    return checkImportCallExpression(<ImportCallExpression>node);
                 case SyntaxKind.TaggedTemplateExpression:
                     return checkTaggedTemplateExpression(<TaggedTemplateExpression>node);
                 case SyntaxKind.ParenthesizedExpression:

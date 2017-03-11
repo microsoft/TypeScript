@@ -168,7 +168,7 @@ namespace ts {
                     visitNodes(cbNodes, (<CallExpression>node).typeArguments) ||
                     visitNodes(cbNodes, (<CallExpression>node).arguments);
             case SyntaxKind.ImportCallExpression:
-                return visitNode(cbNode, (<ImportCall>node).expression);
+                return visitNode(cbNode, (<ImportCallExpression>node).specifier);
             case SyntaxKind.TaggedTemplateExpression:
                 return visitNode(cbNode, (<TaggedTemplateExpression>node).tag) ||
                     visitNode(cbNode, (<TaggedTemplateExpression>node).template);
@@ -3695,8 +3695,8 @@ namespace ts {
                 //      var foo3 = require("subfolder
                 //      import * as foo1 from "module-from-node  -> we want this import to be a statement rather than import call expression
                 const importCall = parseImportCall();
-                if (importCall.expression.kind === SyntaxKind.StringLiteral) {
-                    (sourceFile.imports || (sourceFile.imports = [])).push(importCall.expression as StringLiteral);
+                if (importCall.specifier.kind === SyntaxKind.StringLiteral) {
+                    (sourceFile.imports || (sourceFile.imports = [])).push(importCall.specifier as StringLiteral);
                 }
                 return importCall;
             }
@@ -3774,11 +3774,11 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseImportCall(): ImportCall {
-            const importCallExpr = <ImportCall>createNode(SyntaxKind.ImportCallExpression);
+        function parseImportCall(): ImportCallExpression {
+            const importCallExpr = <ImportCallExpression>createNode(SyntaxKind.ImportCallExpression);
             parseExpected(SyntaxKind.ImportKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
-            importCallExpr.expression = parseAssignmentExpressionOrHigher();
+            importCallExpr.specifier = parseAssignmentExpressionOrHigher();
             parseExpected(SyntaxKind.CloseParenToken);
             return finishNode(importCallExpr);
         }

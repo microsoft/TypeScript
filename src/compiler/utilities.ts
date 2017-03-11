@@ -662,7 +662,7 @@ namespace ts {
         return n.kind === SyntaxKind.CallExpression && (<CallExpression>n).expression.kind === SyntaxKind.SuperKeyword;
     }
 
-    export function isImportCall(n: Node): n is ImportCall {
+    export function isImportCallExpression(n: Node): n is ImportCallExpression {
         return n.kind === SyntaxKind.ImportCallExpression;
     }
 
