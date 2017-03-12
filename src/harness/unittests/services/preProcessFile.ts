@@ -1,4 +1,4 @@
-﻿/// <reference path="..\..\harnessLanguageService.ts" />
+/// <reference path="..\..\harnessLanguageService.ts" />
 
 describe("PreProcessFile:", function () {
     function test(sourceText: string, readImportFile: boolean, detectJavaScriptImports: boolean, expectedPreProcess: ts.PreProcessedFileInfo): void {

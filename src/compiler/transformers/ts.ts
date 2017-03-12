@@ -1,4 +1,4 @@
-﻿/// <reference path="../factory.ts" />
+/// <reference path="../factory.ts" />
 /// <reference path="../visitor.ts" />
 /// <reference path="./destructuring.ts" />
 
@@ -472,7 +472,8 @@ namespace ts {
         }
 
         function visitSourceFile(node: SourceFile) {
-            const alwaysStrict = compilerOptions.alwaysStrict && !(isExternalModule(node) && moduleKind === ModuleKind.ES2015);
+            const alwaysStrict = (compilerOptions.alwaysStrict === undefined ? compilerOptions.strict : compilerOptions.alwaysStrict) &&
+                !(isExternalModule(node) && moduleKind === ModuleKind.ES2015);
             return updateSourceFileNode(
                 node,
                 visitLexicalEnvironment(node.statements, sourceElementVisitor, context, /*start*/ 0, alwaysStrict));

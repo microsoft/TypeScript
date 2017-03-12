@@ -2,50 +2,60 @@ import * as Lint from "tslint/lib";
 import * as ts from "typescript";
 
 export class Rule extends Lint.Rules.AbstractRule {
-    public static FAILURE_STRING_FACTORY = (name: string, currently: string) => `Tag boolean argument as '${name}' (currently '${currently}')`;
+    public static FAILURE_STRING_FACTORY(name: string, currently?: string): string {
+        const current = currently ? ` (currently '${currently}')` : "";
+        return `Tag boolean argument as '${name}'${current}`;
+    }
 
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
+        // Cheat to get type checker
         const program = ts.createProgram([sourceFile.fileName], Lint.createCompilerOptions());
         const checker = program.getTypeChecker();
-        return this.applyWithWalker(new BooleanTriviaWalker(checker, program.getSourceFile(sourceFile.fileName), this.getOptions()));
+        return this.applyWithFunction(program.getSourceFile(sourceFile.fileName), ctx => walk(ctx, checker));
     }
 }
 
-class BooleanTriviaWalker extends Lint.RuleWalker {
-    constructor(private checker: ts.TypeChecker, file: ts.SourceFile, opts: Lint.IOptions) {
-        super(file, opts);
+function walk(ctx: Lint.WalkContext<void>, checker: ts.TypeChecker): void {
+    ts.forEachChild(ctx.sourceFile, recur);
+    function recur(node: ts.Node): void {
+        if (node.kind === ts.SyntaxKind.CallExpression) {
+            checkCall(node as ts.CallExpression);
+        }
+        ts.forEachChild(node, recur);
     }
 
-    visitCallExpression(node: ts.CallExpression) {
-        super.visitCallExpression(node);
-        if (node.arguments && node.arguments.some(arg => arg.kind === ts.SyntaxKind.TrueKeyword || arg.kind === ts.SyntaxKind.FalseKeyword)) {
-            const targetCallSignature = this.checker.getResolvedSignature(node);
-            if (!!targetCallSignature) {
-                const targetParameters = targetCallSignature.getParameters();
-                const source = this.getSourceFile();
-                for (let index = 0; index < targetParameters.length; index++) {
-                    const param = targetParameters[index];
-                    const arg = node.arguments[index];
-                    if (!(arg && param)) {
-                        continue;
-                    }
+    function checkCall(node: ts.CallExpression): void {
+        if (!node.arguments || !node.arguments.some(arg => arg.kind === ts.SyntaxKind.TrueKeyword || arg.kind === ts.SyntaxKind.FalseKeyword)) {
+            return;
+        }
 
-                    const argType = this.checker.getContextualType(arg);
-                    if (argType && (argType.getFlags() & ts.TypeFlags.Boolean)) {
-                        if (arg.kind !== ts.SyntaxKind.TrueKeyword && arg.kind !== ts.SyntaxKind.FalseKeyword) {
-                            continue;
-                        }
-                        let triviaContent: string;
-                        const ranges = ts.getLeadingCommentRanges(arg.getFullText(), 0);
-                        if (ranges && ranges.length === 1 && ranges[0].kind === ts.SyntaxKind.MultiLineCommentTrivia) {
-                            triviaContent = arg.getFullText().slice(ranges[0].pos + 2, ranges[0].end - 2); // +/-2 to remove /**/
-                        }
+        const targetCallSignature = checker.getResolvedSignature(node);
+        if (!targetCallSignature) {
+            return;
+        }
 
-                        const paramName = param.getName();
-                        if (triviaContent !== paramName && triviaContent !== paramName + ":") {
-                            this.addFailure(this.createFailure(arg.getStart(source), arg.getWidth(source), Rule.FAILURE_STRING_FACTORY(param.getName(), triviaContent)));
-                        }
-                    }
+        const targetParameters = targetCallSignature.getParameters();
+        for (let index = 0; index < targetParameters.length; index++) {
+            const param = targetParameters[index];
+            const arg = node.arguments[index];
+            if (!(arg && param)) {
+                continue;
+            }
+
+            const argType = checker.getContextualType(arg);
+            if (argType && (argType.getFlags() & ts.TypeFlags.Boolean)) {
+                if (arg.kind !== ts.SyntaxKind.TrueKeyword && arg.kind !== ts.SyntaxKind.FalseKeyword) {
+                    continue;
+                }
+                let triviaContent: string | undefined;
+                const ranges = ts.getLeadingCommentRanges(arg.getFullText(), 0);
+                if (ranges && ranges.length === 1 && ranges[0].kind === ts.SyntaxKind.MultiLineCommentTrivia) {
+                    triviaContent = arg.getFullText().slice(ranges[0].pos + 2, ranges[0].end - 2); // +/-2 to remove /**/
+                }
+
+                const paramName = param.getName();
+                if (triviaContent !== paramName && triviaContent !== paramName + ":") {
+                    ctx.addFailureAtNode(arg, Rule.FAILURE_STRING_FACTORY(param.getName(), triviaContent));
                 }
             }
         }

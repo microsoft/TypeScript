@@ -1,4 +1,4 @@
-﻿/// <reference path="moduleNameResolver.ts"/>
+/// <reference path="moduleNameResolver.ts"/>
 /// <reference path="binder.ts"/>
 
 /* @internal */
@@ -56,7 +56,9 @@ namespace ts {
         const modulekind = getEmitModuleKind(compilerOptions);
         const noUnusedIdentifiers = !!compilerOptions.noUnusedLocals || !!compilerOptions.noUnusedParameters;
         const allowSyntheticDefaultImports = typeof compilerOptions.allowSyntheticDefaultImports !== "undefined" ? compilerOptions.allowSyntheticDefaultImports : modulekind === ModuleKind.System;
-        const strictNullChecks = compilerOptions.strictNullChecks;
+        const strictNullChecks = compilerOptions.strictNullChecks === undefined ? compilerOptions.strict : compilerOptions.strictNullChecks;
+        const noImplicitAny = compilerOptions.noImplicitAny === undefined ? compilerOptions.strict : compilerOptions.noImplicitAny;
+        const noImplicitThis = compilerOptions.noImplicitThis === undefined ? compilerOptions.strict : compilerOptions.noImplicitThis;
 
         const emitResolver = createResolver();
 
@@ -141,7 +143,7 @@ namespace ts {
             getAugmentedPropertiesOfType,
             getRootSymbols,
             getContextualType: node => {
-                node = getParseTreeNode(node, isExpression)
+                node = getParseTreeNode(node, isExpression);
                 return node ? getContextualType(node) : undefined;
             },
             getFullyQualifiedName,
@@ -242,6 +244,7 @@ namespace ts {
         const silentNeverSignature = createSignature(undefined, undefined, undefined, emptyArray, silentNeverType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
 
         const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
+        const jsObjectLiteralIndexInfo = createIndexInfo(anyType, /*isReadonly*/ false);
 
         const globals = createMap<Symbol>();
         /**
@@ -259,6 +262,7 @@ namespace ts {
         let globalNumberType: ObjectType;
         let globalBooleanType: ObjectType;
         let globalRegExpType: ObjectType;
+        let globalThisType: GenericType;
         let anyArrayType: Type;
         let autoArrayType: Type;
         let anyReadonlyArrayType: Type;
@@ -432,6 +436,12 @@ namespace ts {
             ResolvedBaseConstructorType,
             DeclaredType,
             ResolvedReturnType
+        }
+
+        const enum CheckMode {
+            Normal = 0,                // Normal type checking
+            SkipContextSensitive = 1,  // Skip context sensitive function expressions
+            Inferential = 2,           // Inferential typing
         }
 
         const builtinGlobals = createMap<Symbol>();
@@ -1564,7 +1574,7 @@ namespace ts {
                     error(errorNode, diag, moduleReference, resolvedModule.resolvedFileName);
                     return undefined;
                 }
-                else if (compilerOptions.noImplicitAny && moduleNotFoundError) {
+                else if (noImplicitAny && moduleNotFoundError) {
                     error(errorNode,
                         Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type,
                         moduleReference,
@@ -3359,16 +3369,6 @@ namespace ts {
             return strictNullChecks && optional ? includeFalsyTypes(type, TypeFlags.Undefined) : type;
         }
 
-        /** remove undefined from the annotated type of a parameter when there is an initializer (that doesn't include undefined) */
-        function removeOptionalityFromAnnotation(annotatedType: Type, declaration: VariableLikeDeclaration): Type {
-            const annotationIncludesUndefined = strictNullChecks &&
-                declaration.kind === SyntaxKind.Parameter &&
-                declaration.initializer &&
-                getFalsyFlags(annotatedType) & TypeFlags.Undefined &&
-                !(getFalsyFlags(checkExpression(declaration.initializer)) & TypeFlags.Undefined);
-            return annotationIncludesUndefined ? getNonNullableType(annotatedType) : annotatedType;
-        }
-
         // Return the inferred type for a variable, parameter, or property declaration
         function getTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration, includeOptionality: boolean): Type {
             if (declaration.flags & NodeFlags.JavaScriptFile) {
@@ -3403,11 +3403,11 @@ namespace ts {
 
             // Use type from type annotation if one is present
             if (declaration.type) {
-                const declaredType = removeOptionalityFromAnnotation(getTypeFromTypeNode(declaration.type), declaration);
+                const declaredType = getTypeFromTypeNode(declaration.type);
                 return addOptionality(declaredType, /*optional*/ declaration.questionToken && includeOptionality);
             }
 
-            if ((compilerOptions.noImplicitAny || declaration.flags & NodeFlags.JavaScriptFile) &&
+            if ((noImplicitAny || declaration.flags & NodeFlags.JavaScriptFile) &&
                 declaration.kind === SyntaxKind.VariableDeclaration && !isBindingPattern(declaration.name) &&
                 !(getCombinedModifierFlags(declaration) & ModifierFlags.Export) && !isInAmbientContext(declaration)) {
                 // If --noImplicitAny is on or the declaration is in a Javascript file,
@@ -3478,25 +3478,41 @@ namespace ts {
             return undefined;
         }
 
-        // Return the inferred type for a variable, parameter, or property declaration
-        function getTypeForJSSpecialPropertyDeclaration(declaration: Declaration): Type {
-            const expression = declaration.kind === SyntaxKind.BinaryExpression ? <BinaryExpression>declaration :
-                declaration.kind === SyntaxKind.PropertyAccessExpression ? <BinaryExpression>getAncestor(declaration, SyntaxKind.BinaryExpression) :
-                undefined;
+        function getWidenedTypeFromJSSpecialPropertyDeclarations(symbol: Symbol) {
+            const types: Type[] = [];
+            let definedInConstructor = false;
+            let definedInMethod = false;
+            for (const declaration of symbol.declarations) {
+                const expression = declaration.kind === SyntaxKind.BinaryExpression ? <BinaryExpression>declaration :
+                    declaration.kind === SyntaxKind.PropertyAccessExpression ? <BinaryExpression>getAncestor(declaration, SyntaxKind.BinaryExpression) :
+                        undefined;
 
-            if (!expression) {
-                return unknownType;
-            }
-
-            if (expression.flags & NodeFlags.JavaScriptFile) {
-                // If there is a JSDoc type, use it
-                const type = getTypeForDeclarationFromJSDocComment(expression.parent);
-                if (type && type !== unknownType) {
-                    return getWidenedType(type);
+                if (!expression) {
+                    return unknownType;
                 }
+
+                if (isPropertyAccessExpression(expression.left) && expression.left.expression.kind === SyntaxKind.ThisKeyword) {
+                    if (getThisContainer(expression, /*includeArrowFunctions*/ false).kind === SyntaxKind.Constructor) {
+                        definedInConstructor = true;
+                    }
+                    else {
+                        definedInMethod = true;
+                    }
+                }
+
+                if (expression.flags & NodeFlags.JavaScriptFile) {
+                    // If there is a JSDoc type, use it
+                    const type = getTypeForDeclarationFromJSDocComment(expression.parent);
+                    if (type && type !== unknownType) {
+                        types.push(getWidenedType(type));
+                        continue;
+                    }
+                }
+
+                types.push(getWidenedLiteralType(checkExpressionCached(expression.right)));
             }
 
-            return getWidenedLiteralType(checkExpressionCached(expression.right));
+            return getWidenedType(addOptionality(getUnionType(types, /*subtypeReduction*/ true), definedInMethod && !definedInConstructor));
         }
 
         // Return the type implied by a binding pattern element. This is the type of the initializer of the element if
@@ -3509,7 +3525,7 @@ namespace ts {
             if (isBindingPattern(element.name)) {
                 return getTypeFromBindingPattern(<BindingPattern>element.name, includePatternInType, reportErrors);
             }
-            if (reportErrors && compilerOptions.noImplicitAny && !declarationBelongsToPrivateAmbientMember(element)) {
+            if (reportErrors && noImplicitAny && !declarationBelongsToPrivateAmbientMember(element)) {
                 reportImplicitAnyError(element, anyType);
             }
             return anyType;
@@ -3607,7 +3623,7 @@ namespace ts {
             type = declaration.dotDotDotToken ? anyArrayType : anyType;
 
             // Report implicit any errors unless this is a private property within an ambient declaration
-            if (reportErrors && compilerOptions.noImplicitAny) {
+            if (reportErrors && noImplicitAny) {
                 if (!declarationBelongsToPrivateAmbientMember(declaration)) {
                     reportImplicitAnyError(declaration, type);
                 }
@@ -3653,7 +3669,7 @@ namespace ts {
                 // * className.prototype.method = expr
                 if (declaration.kind === SyntaxKind.BinaryExpression ||
                     declaration.kind === SyntaxKind.PropertyAccessExpression && declaration.parent.kind === SyntaxKind.BinaryExpression) {
-                    type = getWidenedType(getUnionType(map(symbol.declarations, getTypeForJSSpecialPropertyDeclaration), /*subtypeReduction*/ true));
+                    type = getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
                 }
                 else {
                     type = getWidenedTypeForVariableLikeDeclaration(<VariableLikeDeclaration>declaration, /*reportErrors*/ true);
@@ -3726,7 +3742,7 @@ namespace ts {
                         }
                         // Otherwise, fall back to 'any'.
                         else {
-                            if (compilerOptions.noImplicitAny) {
+                            if (noImplicitAny) {
                                 if (setter) {
                                     error(setter, Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation, symbolToString(symbol));
                                 }
@@ -3741,7 +3757,7 @@ namespace ts {
                 }
                 if (!popTypeResolution()) {
                     type = anyType;
-                    if (compilerOptions.noImplicitAny) {
+                    if (noImplicitAny) {
                         const getter = <AccessorDeclaration>getDeclarationOfKind(symbol, SyntaxKind.GetAccessor);
                         error(getter, Diagnostics._0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, symbolToString(symbol));
                     }
@@ -3824,7 +3840,7 @@ namespace ts {
                 return unknownType;
             }
             // Otherwise variable has initializer that circularly references the variable itself
-            if (compilerOptions.noImplicitAny) {
+            if (noImplicitAny) {
                 error(symbol.valueDeclaration, Diagnostics._0_implicitly_has_type_any_because_it_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer,
                     symbolToString(symbol));
             }
@@ -3957,7 +3973,7 @@ namespace ts {
                 return true;
             }
             if (type.flags & TypeFlags.TypeVariable) {
-                const constraint = getBaseConstraintOfType(<TypeVariable>type);
+                const constraint = getBaseConstraintOfType(type);
                 return constraint && isValidBaseType(constraint) && isMixinConstructorType(constraint);
             }
             return false;
@@ -4973,16 +4989,32 @@ namespace ts {
         }
 
         function getConstraintOfType(type: TypeVariable | UnionOrIntersectionType): Type {
-            return type.flags & TypeFlags.TypeParameter ? getConstraintOfTypeParameter(<TypeParameter>type) : getBaseConstraintOfType(type);
+            return type.flags & TypeFlags.TypeParameter ? getConstraintOfTypeParameter(<TypeParameter>type) :
+                type.flags & TypeFlags.IndexedAccess ? getConstraintOfIndexedAccess(<IndexedAccessType>type) :
+                getBaseConstraintOfType(type);
         }
 
         function getConstraintOfTypeParameter(typeParameter: TypeParameter): Type {
             return hasNonCircularBaseConstraint(typeParameter) ? getConstraintFromTypeParameter(typeParameter) : undefined;
         }
 
-        function getBaseConstraintOfType(type: TypeVariable | UnionOrIntersectionType): Type {
-            const constraint = getResolvedBaseConstraint(type);
-            return constraint !== noConstraintType && constraint !== circularConstraintType ? constraint : undefined;
+        function getConstraintOfIndexedAccess(type: IndexedAccessType) {
+            const baseObjectType = getBaseConstraintOfType(type.objectType);
+            const baseIndexType = getBaseConstraintOfType(type.indexType);
+            return baseObjectType || baseIndexType ? getIndexedAccessType(baseObjectType || type.objectType, baseIndexType || type.indexType) : undefined;
+        }
+
+        function getBaseConstraintOfType(type: Type): Type {
+            if (type.flags & (TypeFlags.TypeVariable | TypeFlags.UnionOrIntersection)) {
+                const constraint = getResolvedBaseConstraint(<TypeVariable | UnionOrIntersectionType>type);
+                if (constraint !== noConstraintType && constraint !== circularConstraintType) {
+                    return constraint;
+                }
+            }
+            else if (type.flags & TypeFlags.Index) {
+                return stringType;
+            }
+            return undefined;
         }
 
         function hasNonCircularBaseConstraint(type: TypeVariable): boolean {
@@ -5080,7 +5112,7 @@ namespace ts {
          * type itself. Note that the apparent type of a union type is the union type itself.
          */
         function getApparentType(type: Type): Type {
-            const t = type.flags & TypeFlags.TypeVariable ? getBaseConstraintOfType(<TypeVariable>type) || emptyObjectType : type;
+            const t = type.flags & TypeFlags.TypeVariable ? getBaseConstraintOfType(type) || emptyObjectType : type;
             return t.flags & TypeFlags.Intersection ? getApparentTypeOfIntersectionType(<IntersectionType>t) :
                 t.flags & TypeFlags.StringLike ? globalStringType :
                 t.flags & TypeFlags.NumberLike ? globalNumberType :
@@ -5629,7 +5661,7 @@ namespace ts {
                 }
                 if (!popTypeResolution()) {
                     type = anyType;
-                    if (compilerOptions.noImplicitAny) {
+                    if (noImplicitAny) {
                         const declaration = <Declaration>signature.declaration;
                         if (declaration.name) {
                             error(declaration.name, Diagnostics._0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, declarationNameToString(declaration.name));
@@ -6119,6 +6151,11 @@ namespace ts {
             return deferredGlobalIterableIteratorType || (deferredGlobalIterableIteratorType = getGlobalType("IterableIterator", /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
+        function getGlobalTypeOrUndefined(name: string, arity = 0): ObjectType {
+            const symbol = getGlobalSymbol(name, SymbolFlags.Type, /*diagnostic*/ undefined);
+            return symbol && <GenericType>getTypeOfGlobalSymbol(symbol, arity);
+        }
+
         /**
          * Returns a type that is inside a namespace at the global scope, e.g.
          * getExportedTypeFromNamespace('JSX', 'Element') returns the JSX.Element type
@@ -6576,7 +6613,7 @@ namespace ts {
                     return indexInfo.type;
                 }
                 if (accessExpression && !isConstEnumObjectType(objectType)) {
-                    if (compilerOptions.noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors) {
+                    if (noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors) {
                         if (getIndexTypeOfType(objectType, IndexKind.Number)) {
                             error(accessExpression.argumentExpression, Diagnostics.Element_implicitly_has_an_any_type_because_index_expression_is_not_of_type_number);
                         }
@@ -7936,7 +7973,7 @@ namespace ts {
                     }
                     // A type S is related to a type T[K] if S is related to A[K], where K is string-like and
                     // A is the apparent type of S.
-                    const constraint = getBaseConstraintOfType(<IndexedAccessType>target);
+                    const constraint = getBaseConstraintOfType(target);
                     if (constraint) {
                         if (result = isRelatedTo(source, constraint, reportErrors)) {
                             errorInfo = saveErrorInfo;
@@ -7976,7 +8013,7 @@ namespace ts {
                 else if (source.flags & TypeFlags.IndexedAccess) {
                     // A type S[K] is related to a type T if A[K] is related to T, where K is string-like and
                     // A is the apparent type of S.
-                    const constraint = getBaseConstraintOfType(<IndexedAccessType>source);
+                    const constraint = getConstraintOfType(<IndexedAccessType>source);
                     if (constraint) {
                         if (result = isRelatedTo(constraint, target, reportErrors)) {
                             errorInfo = saveErrorInfo;
@@ -9051,11 +9088,19 @@ namespace ts {
             return regularNew;
         }
 
+        function getWidenedProperty(prop: Symbol): Symbol {
+            const original = getTypeOfSymbol(prop);
+            const widened = getWidenedType(original);
+            return widened === original ? prop : createSymbolWithType(prop, widened);
+        }
+
         function getWidenedTypeOfObjectLiteral(type: Type): Type {
-            const members = transformTypeOfMembers(type, prop => {
-                const widened = getWidenedType(prop);
-                return prop === widened ? prop : widened;
-            });
+            const members = createMap<Symbol>();
+            for (const prop of getPropertiesOfObjectType(type)) {
+                // Since get accessors already widen their return value there is no need to
+                // widen accessor based properties here.
+                members.set(prop.name, prop.flags & SymbolFlags.Property ? getWidenedProperty(prop) : prop);
+            };
             const stringIndexInfo = getIndexInfoOfType(type, IndexKind.String);
             const numberIndexInfo = getIndexInfoOfType(type, IndexKind.Number);
             return createAnonymousType(type.symbol, members, emptyArray, emptyArray,
@@ -9162,7 +9207,7 @@ namespace ts {
         }
 
         function reportErrorsFromWidening(declaration: Declaration, type: Type) {
-            if (produceDiagnostics && compilerOptions.noImplicitAny && type.flags & TypeFlags.ContainsWideningType) {
+            if (produceDiagnostics && noImplicitAny && type.flags & TypeFlags.ContainsWideningType) {
                 // Report implicit any error within type if possible, otherwise report error on declaration
                 if (!reportWideningErrorsInType(type)) {
                     reportImplicitAnyError(declaration, type);
@@ -9191,13 +9236,14 @@ namespace ts {
             }
         }
 
-        function createInferenceContext(signature: Signature, inferUnionTypes: boolean): InferenceContext {
+        function createInferenceContext(signature: Signature, inferUnionTypes: boolean, useAnyForNoInferences: boolean): InferenceContext {
             const inferences = map(signature.typeParameters, createTypeInferencesObject);
             return {
                 signature,
                 inferUnionTypes,
                 inferences,
                 inferredTypes: new Array(signature.typeParameters.length),
+                useAnyForNoInferences
             };
         }
 
@@ -9611,7 +9657,7 @@ namespace ts {
                                 getInferenceMapper(context)));
                     }
                     else {
-                        inferredType = emptyObjectType;
+                        inferredType = context.useAnyForNoInferences ? anyType : emptyObjectType;
                     }
 
                     inferenceSucceeded = true;
@@ -9879,9 +9925,8 @@ namespace ts {
             if (flags & TypeFlags.NonPrimitive) {
                 return strictNullChecks ? TypeFacts.ObjectStrictFacts : TypeFacts.ObjectFacts;
             }
-            if (flags & TypeFlags.TypeParameter) {
-                const constraint = getConstraintOfTypeParameter(<TypeParameter>type);
-                return getTypeFacts(constraint || emptyObjectType);
+            if (flags & TypeFlags.TypeVariable) {
+                return getTypeFacts(getBaseConstraintOfType(type) || emptyObjectType);
             }
             if (flags & TypeFlags.UnionOrIntersection) {
                 return getTypeFactsOfTypes((<UnionOrIntersectionType>type).types);
@@ -10101,8 +10146,31 @@ namespace ts {
             return f(type) ? type : neverType;
         }
 
-        function mapType(type: Type, f: (t: Type) => Type): Type {
-            return type.flags & TypeFlags.Union ? getUnionType(map((<UnionType>type).types, f)) : f(type);
+        // Apply a mapping function to a type and return the resulting type. If the source type
+        // is a union type, the mapping function is applied to each constituent type and a union
+        // of the resulting types is returned.
+        function mapType(type: Type, mapper: (t: Type) => Type): Type {
+            if (!(type.flags & TypeFlags.Union)) {
+                return mapper(type);
+            }
+            const types = (<UnionType>type).types;
+            let mappedType: Type;
+            let mappedTypes: Type[];
+            for (const current of types) {
+                const t = mapper(current);
+                if (t) {
+                    if (!mappedType) {
+                        mappedType = t;
+                    }
+                    else if (!mappedTypes) {
+                        mappedTypes = [mappedType, t];
+                    }
+                    else {
+                        mappedTypes.push(t);
+                    }
+                }
+            }
+            return mappedTypes ? getUnionType(mappedTypes) : mappedType;
         }
 
         function extractTypesOfKind(type: Type, kind: TypeFlags) {
@@ -10240,14 +10308,11 @@ namespace ts {
             return false;
         }
 
-        function getFlowTypeOfReference(reference: Node, declaredType: Type, assumeInitialized: boolean, flowContainer: Node) {
+        function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node, couldBeUninitialized?: boolean) {
             let key: string;
-            if (!reference.flowNode || assumeInitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
+            if (!reference.flowNode || !couldBeUninitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
                 return declaredType;
             }
-            const initialType = assumeInitialized ? declaredType :
-                declaredType === autoType || declaredType === autoArrayType ? undefinedType :
-                includeFalsyTypes(declaredType, TypeFlags.Undefined);
             const visitedFlowStart = visitedFlowCount;
             const evolvedType = getTypeFromFlowType(getTypeAtFlowNode(reference.flowNode));
             visitedFlowCount = visitedFlowStart;
@@ -10668,8 +10733,16 @@ namespace ts {
                     // is a supertype of that primitive type. For example, type 'any' can be narrowed
                     // to one of the primitive types.
                     const targetType = typeofTypesByName.get(literal.text);
-                    if (targetType && isTypeSubtypeOf(targetType, type)) {
-                        return targetType;
+                    if (targetType) {
+                        if (isTypeSubtypeOf(targetType, type)) {
+                            return targetType;
+                        }
+                        if (type.flags & TypeFlags.TypeVariable) {
+                            const constraint = getBaseConstraintOfType(type) || anyType;
+                            if (isTypeSubtypeOf(targetType, constraint)) {
+                                return getIntersectionType([type, targetType]);
+                            }
+                        }
                     }
                 }
                 const facts = assumeTrue ?
@@ -10767,10 +10840,9 @@ namespace ts {
                 // Otherwise, if the candidate type is assignable to the target type, narrow to the candidate
                 // type. Otherwise, the types are completely unrelated, so narrow to an intersection of the
                 // two types.
-                const targetType = type.flags & TypeFlags.TypeParameter ? getApparentType(type) : type;
                 return isTypeSubtypeOf(candidate, type) ? candidate :
                     isTypeAssignableTo(type, candidate) ? type :
-                    isTypeAssignableTo(candidate, targetType) ? candidate :
+                    isTypeAssignableTo(candidate, type) ? candidate :
                     getIntersectionType([type, candidate]);
             }
 
@@ -10919,6 +10991,16 @@ namespace ts {
             return symbol.flags & SymbolFlags.Variable && (getDeclarationNodeFlagsFromSymbol(symbol) & NodeFlags.Const) !== 0 && getTypeOfSymbol(symbol) !== autoArrayType;
         }
 
+        /** remove undefined from the annotated type of a parameter when there is an initializer (that doesn't include undefined) */
+        function removeOptionalityFromDeclaredType(declaredType: Type, declaration: VariableLikeDeclaration): Type {
+            const annotationIncludesUndefined = strictNullChecks &&
+                declaration.kind === SyntaxKind.Parameter &&
+                declaration.initializer &&
+                getFalsyFlags(declaredType) & TypeFlags.Undefined &&
+                !(getFalsyFlags(checkExpression(declaration.initializer)) & TypeFlags.Undefined);
+            return annotationIncludesUndefined ? getTypeWithFacts(declaredType, TypeFacts.NEUndefined) : declaredType;
+        }
+
         function checkIdentifier(node: Identifier): Type {
             const symbol = getResolvedSymbol(node);
             if (symbol === unknownSymbol) {
@@ -11037,13 +11119,16 @@ namespace ts {
             const assumeInitialized = isParameter || isOuterVariable ||
                 type !== autoType && type !== autoArrayType && (!strictNullChecks || (type.flags & TypeFlags.Any) !== 0 || isInTypeQuery(node)) ||
                 isInAmbientContext(declaration);
-            const flowType = getFlowTypeOfReference(node, type, assumeInitialized, flowContainer);
+            const initialType = assumeInitialized ? (isParameter ? removeOptionalityFromDeclaredType(type, getRootDeclaration(declaration) as VariableLikeDeclaration) : type) :
+                type === autoType || type === autoArrayType ? undefinedType :
+                includeFalsyTypes(type, TypeFlags.Undefined);
+            const flowType = getFlowTypeOfReference(node, type, initialType, flowContainer, !assumeInitialized);
             // A variable is considered uninitialized when it is possible to analyze the entire control flow graph
             // from declaration to use, and when the variable's declared type doesn't include undefined but the
             // control flow based type does include undefined.
             if (type === autoType || type === autoArrayType) {
                 if (flowType === autoType || flowType === autoArrayType) {
-                    if (compilerOptions.noImplicitAny) {
+                    if (noImplicitAny) {
                         error(declaration.name, Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined, symbolToString(symbol), typeToString(flowType));
                         error(node, Diagnostics.Variable_0_implicitly_has_an_1_type, symbolToString(symbol), typeToString(flowType));
                     }
@@ -11303,7 +11388,7 @@ namespace ts {
             if (isClassLike(container.parent)) {
                 const symbol = getSymbolOfNode(container.parent);
                 const type = hasModifier(container, ModifierFlags.Static) ? getTypeOfSymbol(symbol) : (<InterfaceType>getDeclaredTypeOfSymbol(symbol)).thisType;
-                return getFlowTypeOfReference(node, type, /*assumeInitialized*/ true, /*flowContainer*/ undefined);
+                return getFlowTypeOfReference(node, type);
             }
 
             if (isInJavaScriptFile(node)) {
@@ -11313,7 +11398,7 @@ namespace ts {
                 }
             }
 
-            if (compilerOptions.noImplicitThis) {
+            if (noImplicitThis) {
                 // With noImplicitThis, functions may not reference 'this' if it has type 'any'
                 error(node, Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation);
             }
@@ -11538,13 +11623,68 @@ namespace ts {
             }
         }
 
+        function getContainingObjectLiteral(func: FunctionLikeDeclaration) {
+            return (func.kind === SyntaxKind.MethodDeclaration ||
+                func.kind === SyntaxKind.GetAccessor ||
+                func.kind === SyntaxKind.SetAccessor) && func.parent.kind === SyntaxKind.ObjectLiteralExpression ? <ObjectLiteralExpression>func.parent :
+                func.kind === SyntaxKind.FunctionExpression && func.parent.kind === SyntaxKind.PropertyAssignment ? <ObjectLiteralExpression>func.parent.parent :
+                undefined;
+        }
+
+        function getThisTypeArgument(type: Type): Type {
+            return getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).target === globalThisType ? (<TypeReference>type).typeArguments[0] : undefined;
+        }
+
+        function getThisTypeFromContextualType(type: Type): Type {
+            return mapType(type, t => {
+                return t.flags & TypeFlags.Intersection ? forEach((<IntersectionType>t).types, getThisTypeArgument) : getThisTypeArgument(t);
+            });
+        }
+
         function getContextualThisParameterType(func: FunctionLikeDeclaration): Type {
-            if (isContextSensitiveFunctionOrObjectLiteralMethod(func) && func.kind !== SyntaxKind.ArrowFunction) {
+            if (func.kind === SyntaxKind.ArrowFunction) {
+                return undefined;
+            }
+            if (isContextSensitiveFunctionOrObjectLiteralMethod(func)) {
                 const contextualSignature = getContextualSignature(func);
                 if (contextualSignature) {
                     const thisParameter = contextualSignature.thisParameter;
                     if (thisParameter) {
                         return getTypeOfSymbol(thisParameter);
+                    }
+                }
+            }
+            if (noImplicitThis) {
+                const containingLiteral = getContainingObjectLiteral(func);
+                if (containingLiteral) {
+                    // We have an object literal method. Check if the containing object literal has a contextual type
+                    // that includes a ThisType<T>. If so, T is the contextual type for 'this'. We continue looking in
+                    // any directly enclosing object literals.
+                    const contextualType = getApparentTypeOfContextualType(containingLiteral);
+                    let literal = containingLiteral;
+                    let type = contextualType;
+                    while (type) {
+                        const thisType = getThisTypeFromContextualType(type);
+                        if (thisType) {
+                            return instantiateType(thisType, getContextualMapper(containingLiteral));
+                        }
+                        if (literal.parent.kind !== SyntaxKind.PropertyAssignment) {
+                            break;
+                        }
+                        literal = <ObjectLiteralExpression>literal.parent.parent;
+                        type = getApparentTypeOfContextualType(literal);
+                    }
+                    // There was no contextual ThisType<T> for the containing object literal, so the contextual type
+                    // for 'this' is the non-null form of the contextual type for the containing object literal or
+                    // the type of the object literal itself.
+                    return contextualType ? getNonNullableType(contextualType) : checkExpressionCached(containingLiteral);
+                }
+                // In an assignment of the form 'obj.xxx = function(...)' or 'obj[xxx] = function(...)', the
+                // contextual type for 'this' is 'obj'.
+                if (func.parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>func.parent).operatorToken.kind === SyntaxKind.EqualsToken) {
+                    const target = (<BinaryExpression>func.parent).left;
+                    if (target.kind === SyntaxKind.PropertyAccessExpression || target.kind === SyntaxKind.ElementAccessExpression) {
+                        return checkExpressionCached((<PropertyAccessExpression | ElementAccessExpression>target).expression);
                     }
                 }
             }
@@ -11746,42 +11886,15 @@ namespace ts {
             return undefined;
         }
 
-        // Apply a mapping function to a contextual type and return the resulting type. If the contextual type
-        // is a union type, the mapping function is applied to each constituent type and a union of the resulting
-        // types is returned.
-        function applyToContextualType(type: Type, mapper: (t: Type) => Type): Type {
-            if (!(type.flags & TypeFlags.Union)) {
-                return mapper(type);
-            }
-            const types = (<UnionType>type).types;
-            let mappedType: Type;
-            let mappedTypes: Type[];
-            for (const current of types) {
-                const t = mapper(current);
-                if (t) {
-                    if (!mappedType) {
-                        mappedType = t;
-                    }
-                    else if (!mappedTypes) {
-                        mappedTypes = [mappedType, t];
-                    }
-                    else {
-                        mappedTypes.push(t);
-                    }
-                }
-            }
-            return mappedTypes ? getUnionType(mappedTypes) : mappedType;
-        }
-
         function getTypeOfPropertyOfContextualType(type: Type, name: string) {
-            return applyToContextualType(type, t => {
+            return mapType(type, t => {
                 const prop = t.flags & TypeFlags.StructuredType ? getPropertyOfType(t, name) : undefined;
                 return prop ? getTypeOfSymbol(prop) : undefined;
             });
         }
 
         function getIndexTypeOfContextualType(type: Type, kind: IndexKind) {
-            return applyToContextualType(type, t => getIndexTypeOfStructuredType(t, kind));
+            return mapType(type, t => getIndexTypeOfStructuredType(t, kind));
         }
 
         // Return true if the given contextual type is a tuple-like type
@@ -11940,6 +12053,16 @@ namespace ts {
             return undefined;
         }
 
+        function getContextualMapper(node: Node) {
+            while (node) {
+                if (node.contextualMapper) {
+                    return node.contextualMapper;
+                }
+                node = node.parent;
+            }
+            return identityMapper;
+        }
+
         // If the given type is an object or union type, if that type has a single signature, and if
         // that signature is non-generic, return the signature. Otherwise return undefined.
         function getNonGenericSignature(type: Type, node: FunctionExpression | ArrowFunction | MethodDeclaration): Signature {
@@ -12030,31 +12153,12 @@ namespace ts {
             return result;
         }
 
-        /**
-         * Detect if the mapper implies an inference context. Specifically, there are 4 possible values
-         * for a mapper. Let's go through each one of them:
-         *
-         *    1. undefined - this means we are not doing inferential typing, but we may do contextual typing,
-         *       which could cause us to assign a parameter a type
-         *    2. identityMapper - means we want to avoid assigning a parameter a type, whether or not we are in
-         *       inferential typing (context is undefined for the identityMapper)
-         *    3. a mapper created by createInferenceMapper - we are doing inferential typing, we want to assign
-         *       types to parameters and fix type parameters (context is defined)
-         *    4. an instantiation mapper created by createTypeMapper or createTypeEraser - this should never be
-         *       passed as the contextual mapper when checking an expression (context is undefined for these)
-         *
-         * isInferentialContext is detecting if we are in case 3
-         */
-        function isInferentialContext(mapper: TypeMapper) {
-            return mapper && mapper.context;
-        }
-
-        function checkSpreadExpression(node: SpreadElement, contextualMapper?: TypeMapper): Type {
+        function checkSpreadExpression(node: SpreadElement, checkMode?: CheckMode): Type {
             if (languageVersion < ScriptTarget.ES2015 && compilerOptions.downlevelIteration) {
                 checkExternalEmitHelpers(node, ExternalEmitHelpers.SpreadIncludes);
             }
 
-            const arrayOrIterableType = checkExpression(node.expression, contextualMapper);
+            const arrayOrIterableType = checkExpression(node.expression, checkMode);
             return checkIteratedTypeOrElementType(arrayOrIterableType, node.expression, /*allowStringInput*/ false, /*allowAsyncIterable*/ false);
         }
 
@@ -12063,7 +12167,7 @@ namespace ts {
                 (node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.EqualsToken);
         }
 
-        function checkArrayLiteral(node: ArrayLiteralExpression, contextualMapper?: TypeMapper): Type {
+        function checkArrayLiteral(node: ArrayLiteralExpression, checkMode?: CheckMode): Type {
             const elements = node.elements;
             let hasSpreadElement = false;
             const elementTypes: Type[] = [];
@@ -12082,7 +12186,7 @@ namespace ts {
                     // get the contextual element type from it. So we do something similar to
                     // getContextualTypeForElementExpression, which will crucially not error
                     // if there is no index type / iterated type.
-                    const restArrayType = checkExpression((<SpreadElement>e).expression, contextualMapper);
+                    const restArrayType = checkExpression((<SpreadElement>e).expression, checkMode);
                     const restElementType = getIndexTypeOfType(restArrayType, IndexKind.Number) ||
                         getIteratedTypeOrElementType(restArrayType, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterable*/ false, /*checkAssignability*/ false);
                     if (restElementType) {
@@ -12090,7 +12194,7 @@ namespace ts {
                     }
                 }
                 else {
-                    const type = checkExpressionForMutableLocation(e, contextualMapper);
+                    const type = checkExpressionForMutableLocation(e, checkMode);
                     elementTypes.push(type);
                 }
                 hasSpreadElement = hasSpreadElement || e.kind === SyntaxKind.SpreadElement;
@@ -12205,7 +12309,7 @@ namespace ts {
             return createIndexInfo(unionType, /*isReadonly*/ false);
         }
 
-        function checkObjectLiteral(node: ObjectLiteralExpression, contextualMapper?: TypeMapper): Type {
+        function checkObjectLiteral(node: ObjectLiteralExpression, checkMode?: CheckMode): Type {
             const inDestructuringPattern = isAssignmentTarget(node);
             // Grammar checking
             checkGrammarObjectLiteralExpression(node, inDestructuringPattern);
@@ -12218,6 +12322,7 @@ namespace ts {
             const contextualType = getApparentTypeOfContextualType(node);
             const contextualTypeHasPattern = contextualType && contextualType.pattern &&
                 (contextualType.pattern.kind === SyntaxKind.ObjectBindingPattern || contextualType.pattern.kind === SyntaxKind.ObjectLiteralExpression);
+            const isJSObjectLiteral = !contextualType && isInJavaScriptFile(node);
             let typeFlags: TypeFlags = 0;
             let patternWithComputedProperties = false;
             let hasComputedStringProperty = false;
@@ -12232,14 +12337,14 @@ namespace ts {
                     isObjectLiteralMethod(memberDecl)) {
                     let type: Type;
                     if (memberDecl.kind === SyntaxKind.PropertyAssignment) {
-                        type = checkPropertyAssignment(<PropertyAssignment>memberDecl, contextualMapper);
+                        type = checkPropertyAssignment(<PropertyAssignment>memberDecl, checkMode);
                     }
                     else if (memberDecl.kind === SyntaxKind.MethodDeclaration) {
-                        type = checkObjectLiteralMethod(<MethodDeclaration>memberDecl, contextualMapper);
+                        type = checkObjectLiteralMethod(<MethodDeclaration>memberDecl, checkMode);
                     }
                     else {
                         Debug.assert(memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment);
-                        type = checkExpressionForMutableLocation((<ShorthandPropertyAssignment>memberDecl).name, contextualMapper);
+                        type = checkExpressionForMutableLocation((<ShorthandPropertyAssignment>memberDecl).name, checkMode);
                     }
 
                     typeFlags |= type.flags;
@@ -12308,7 +12413,7 @@ namespace ts {
                     // A set accessor declaration is processed in the same manner
                     // as an ordinary function declaration with a single parameter and a Void return type.
                     Debug.assert(memberDecl.kind === SyntaxKind.GetAccessor || memberDecl.kind === SyntaxKind.SetAccessor);
-                    checkAccessorDeclaration(<AccessorDeclaration>memberDecl);
+                    checkNodeDeferred(memberDecl);
                 }
 
                 if (hasDynamicName(memberDecl)) {
@@ -12355,8 +12460,8 @@ namespace ts {
             return createObjectLiteralType();
 
             function createObjectLiteralType() {
-                const stringIndexInfo = hasComputedStringProperty ? getObjectLiteralIndexInfo(node.properties, offset, propertiesArray, IndexKind.String) : undefined;
-                const numberIndexInfo = hasComputedNumberProperty ? getObjectLiteralIndexInfo(node.properties, offset, propertiesArray, IndexKind.Number) : undefined;
+                const stringIndexInfo = isJSObjectLiteral ? jsObjectLiteralIndexInfo : hasComputedStringProperty ? getObjectLiteralIndexInfo(node.properties, offset, propertiesArray, IndexKind.String) : undefined;
+                const numberIndexInfo = hasComputedNumberProperty && !isJSObjectLiteral ? getObjectLiteralIndexInfo(node.properties, offset, propertiesArray, IndexKind.Number) : undefined;
                 const result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
                 const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshLiteral;
                 result.flags |= TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag | (typeFlags & TypeFlags.PropagatingFlags);
@@ -12445,7 +12550,7 @@ namespace ts {
          * @remarks Because this function calls getSpreadType, it needs to use the same checks as checkObjectLiteral,
          * which also calls getSpreadType.
          */
-        function createJsxAttributesTypeFromAttributesProperty(openingLikeElement: JsxOpeningLikeElement, filter?: (symbol: Symbol) => boolean, contextualMapper?: TypeMapper) {
+        function createJsxAttributesTypeFromAttributesProperty(openingLikeElement: JsxOpeningLikeElement, filter?: (symbol: Symbol) => boolean, checkMode?: CheckMode) {
             const attributes = openingLikeElement.attributes;
             let attributesTable = createMap<Symbol>();
             let spread: Type = emptyObjectType;
@@ -12454,7 +12559,7 @@ namespace ts {
                 const member = attributeDecl.symbol;
                 if (isJsxAttribute(attributeDecl)) {
                     const exprType = attributeDecl.initializer ?
-                        checkExpression(attributeDecl.initializer, contextualMapper) :
+                        checkExpression(attributeDecl.initializer, checkMode) :
                         trueType;  // <Elem attr /> is sugar for <Elem attr={true} />
 
                     const attributeSymbol = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.name);
@@ -12525,8 +12630,8 @@ namespace ts {
          * (See "checkApplicableSignatureForJsxOpeningLikeElement" for how the function is used)
          * @param node a JSXAttributes to be resolved of its type
          */
-        function checkJsxAttributes(node: JsxAttributes, contextualMapper?: TypeMapper) {
-            return createJsxAttributesTypeFromAttributesProperty(node.parent as JsxOpeningLikeElement, /*filter*/ undefined, contextualMapper);
+        function checkJsxAttributes(node: JsxAttributes, checkMode?: CheckMode) {
+            return createJsxAttributesTypeFromAttributesProperty(node.parent as JsxOpeningLikeElement, /*filter*/ undefined, checkMode);
         }
 
         function getJsxType(name: string) {
@@ -12567,7 +12672,7 @@ namespace ts {
                     return links.resolvedSymbol = unknownSymbol;
                 }
                 else {
-                    if (compilerOptions.noImplicitAny) {
+                    if (noImplicitAny) {
                         error(node, Diagnostics.JSX_element_implicitly_has_type_any_because_no_interface_JSX_0_exists, JsxNames.IntrinsicElements);
                     }
                     return links.resolvedSymbol = unknownSymbol;
@@ -12955,7 +13060,7 @@ namespace ts {
             }
 
             if (jsxElementType === undefined) {
-                if (compilerOptions.noImplicitAny) {
+                if (noImplicitAny) {
                     error(errorNode, Diagnostics.JSX_element_implicitly_has_type_any_because_the_global_type_JSX_Element_does_not_exist);
                 }
             }
@@ -13019,9 +13124,9 @@ namespace ts {
             }
         }
 
-        function checkJsxExpression(node: JsxExpression, contextualMapper?: TypeMapper) {
+        function checkJsxExpression(node: JsxExpression, checkMode?: CheckMode) {
             if (node.expression) {
-                const type = checkExpression(node.expression, contextualMapper);
+                const type = checkExpression(node.expression, checkMode);
                 if (node.dotDotDotToken && type !== anyType && !isArrayType(type)) {
                     error(node, Diagnostics.JSX_spread_child_must_be_an_array_type, node.toString(), typeToString(type));
                 }
@@ -13275,7 +13380,7 @@ namespace ts {
                 !(prop.flags & SymbolFlags.Method && propType.flags & TypeFlags.Union)) {
                 return propType;
             }
-            const flowType = getFlowTypeOfReference(node, propType, /*assumeInitialized*/ true, /*flowContainer*/ undefined);
+            const flowType = getFlowTypeOfReference(node, propType);
             return assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType;
         }
 
@@ -13600,7 +13705,7 @@ namespace ts {
 
         // Instantiate a generic signature in the context of a non-generic signature (section 3.8.5 in TypeScript spec)
         function instantiateSignatureInContextOf(signature: Signature, contextualSignature: Signature, contextualMapper: TypeMapper): Signature {
-            const context = createInferenceContext(signature, /*inferUnionTypes*/ true);
+            const context = createInferenceContext(signature, /*inferUnionTypes*/ true, /*useAnyForNoInferences*/ false);
             forEachMatchingParameterType(contextualSignature, signature, (source, target) => {
                 // Type parameters from outer context referenced by source type are fixed by instantiation of the source type
                 inferTypesWithContext(context, instantiateType(source, contextualMapper), target);
@@ -14301,7 +14406,7 @@ namespace ts {
                     let candidate: Signature;
                     let typeArgumentsAreValid: boolean;
                     const inferenceContext = originalCandidate.typeParameters
-                        ? createInferenceContext(originalCandidate, /*inferUnionTypes*/ false)
+                        ? createInferenceContext(originalCandidate, /*inferUnionTypes*/ false, /*useAnyForNoInferences*/ isInJavaScriptFile(node))
                         : undefined;
 
                     while (true) {
@@ -14778,7 +14883,7 @@ namespace ts {
                     if (funcSymbol && funcSymbol.members && funcSymbol.flags & SymbolFlags.Function) {
                         return getInferredClassType(funcSymbol);
                     }
-                    else if (compilerOptions.noImplicitAny) {
+                    else if (noImplicitAny) {
                         error(node, Diagnostics.new_expression_whose_target_lacks_a_construct_signature_implicitly_has_an_any_type);
                     }
                     return anyType;
@@ -14882,9 +14987,9 @@ namespace ts {
             return signature.parameters.length > 0 ? getTypeAtPosition(signature, 0) : neverType;
         }
 
-        function assignContextualParameterTypes(signature: Signature, context: Signature, mapper: TypeMapper) {
+        function assignContextualParameterTypes(signature: Signature, context: Signature, mapper: TypeMapper, checkMode: CheckMode) {
             const len = signature.parameters.length - (signature.hasRestParameter ? 1 : 0);
-            if (isInferentialContext(mapper)) {
+            if (checkMode === CheckMode.Inferential) {
                 for (let i = 0; i < len; i++) {
                     const declaration = <ParameterDeclaration>signature.parameters[i].valueDeclaration;
                     if (declaration.type) {
@@ -14898,21 +15003,21 @@ namespace ts {
                     if (!parameter) {
                         signature.thisParameter = createSymbolWithType(context.thisParameter, undefined);
                     }
-                    assignTypeToParameterAndFixTypeParameters(signature.thisParameter, getTypeOfSymbol(context.thisParameter), mapper);
+                    assignTypeToParameterAndFixTypeParameters(signature.thisParameter, getTypeOfSymbol(context.thisParameter), mapper, checkMode);
                 }
             }
             for (let i = 0; i < len; i++) {
                 const parameter = signature.parameters[i];
                 if (!(<ParameterDeclaration>parameter.valueDeclaration).type) {
                     const contextualParameterType = getTypeAtPosition(context, i);
-                    assignTypeToParameterAndFixTypeParameters(parameter, contextualParameterType, mapper);
+                    assignTypeToParameterAndFixTypeParameters(parameter, contextualParameterType, mapper, checkMode);
                 }
             }
             if (signature.hasRestParameter && isRestParameterIndex(context, signature.parameters.length - 1)) {
                 const parameter = lastOrUndefined(signature.parameters);
                 if (!(<ParameterDeclaration>parameter.valueDeclaration).type) {
                     const contextualParameterType = getTypeOfSymbol(lastOrUndefined(context.parameters));
-                    assignTypeToParameterAndFixTypeParameters(parameter, contextualParameterType, mapper);
+                    assignTypeToParameterAndFixTypeParameters(parameter, contextualParameterType, mapper, checkMode);
                 }
             }
         }
@@ -14932,7 +15037,7 @@ namespace ts {
             }
         }
 
-        function assignTypeToParameterAndFixTypeParameters(parameter: Symbol, contextualType: Type, mapper: TypeMapper) {
+        function assignTypeToParameterAndFixTypeParameters(parameter: Symbol, contextualType: Type, mapper: TypeMapper, checkMode: CheckMode) {
             const links = getSymbolLinks(parameter);
             if (!links.type) {
                 links.type = instantiateType(contextualType, mapper);
@@ -14944,7 +15049,7 @@ namespace ts {
                 }
                 assignBindingElementTypes(<ParameterDeclaration>parameter.valueDeclaration);
             }
-            else if (isInferentialContext(mapper)) {
+            else if (checkMode === CheckMode.Inferential) {
                 // Even if the parameter already has a type, it might be because it was given a type while
                 // processing the function as an argument to a prior signature during overload resolution.
                 // If this was the case, it may have caused some type parameters to be fixed. So here,
@@ -15012,7 +15117,7 @@ namespace ts {
             return promiseType;
         }
 
-        function getReturnTypeFromBody(func: FunctionLikeDeclaration, contextualMapper?: TypeMapper): Type {
+        function getReturnTypeFromBody(func: FunctionLikeDeclaration, checkMode?: CheckMode): Type {
             const contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
             if (!func.body) {
                 return unknownType;
@@ -15021,7 +15126,7 @@ namespace ts {
             const functionFlags = getFunctionFlags(func);
             let type: Type;
             if (func.body.kind !== SyntaxKind.Block) {
-                type = checkExpressionCached(<Expression>func.body, contextualMapper);
+                type = checkExpressionCached(<Expression>func.body, checkMode);
                 if (functionFlags & FunctionFlags.Async) {
                     // From within an async function you can return either a non-promise value or a promise. Any
                     // Promise/A+ compatible implementation will always assimilate any foreign promise, so the
@@ -15033,12 +15138,12 @@ namespace ts {
             else {
                 let types: Type[];
                 if (functionFlags & FunctionFlags.Generator) { // Generator or AsyncGenerator function
-                    types = checkAndAggregateYieldOperandTypes(func, contextualMapper);
+                    types = checkAndAggregateYieldOperandTypes(func, checkMode);
                     if (types.length === 0) {
                         const iterableIteratorAny = functionFlags & FunctionFlags.Async
                             ? createAsyncIterableIteratorType(anyType) // AsyncGenerator function
                             : createIterableIteratorType(anyType); // Generator function
-                        if (compilerOptions.noImplicitAny) {
+                        if (noImplicitAny) {
                             error(func.asteriskToken,
                                 Diagnostics.Generator_implicitly_has_type_0_because_it_does_not_yield_any_values_Consider_supplying_a_return_type, typeToString(iterableIteratorAny));
                         }
@@ -15046,7 +15151,7 @@ namespace ts {
                     }
                 }
                 else {
-                    types = checkAndAggregateReturnExpressionTypes(func, contextualMapper);
+                    types = checkAndAggregateReturnExpressionTypes(func, checkMode);
                     if (!types) {
                         // For an async function, the return type will not be never, but rather a Promise for never.
                         return functionFlags & FunctionFlags.Async
@@ -15090,13 +15195,13 @@ namespace ts {
                 : widenedType; // Generator function, AsyncGenerator function, or normal function
         }
 
-        function checkAndAggregateYieldOperandTypes(func: FunctionLikeDeclaration, contextualMapper: TypeMapper): Type[] {
+        function checkAndAggregateYieldOperandTypes(func: FunctionLikeDeclaration, checkMode: CheckMode): Type[] {
             const aggregatedTypes: Type[] = [];
             const functionFlags = getFunctionFlags(func);
             forEachYieldExpression(<Block>func.body, yieldExpression => {
                 const expr = yieldExpression.expression;
                 if (expr) {
-                    let type = checkExpressionCached(expr, contextualMapper);
+                    let type = checkExpressionCached(expr, checkMode);
                     if (yieldExpression.asteriskToken) {
                         // A yield* expression effectively yields everything that its operand yields
                         type = checkIteratedTypeOrElementType(type, yieldExpression.expression, /*allowStringInput*/ false, (functionFlags & FunctionFlags.Async) !== 0);
@@ -15136,7 +15241,7 @@ namespace ts {
             return true;
         }
 
-        function checkAndAggregateReturnExpressionTypes(func: FunctionLikeDeclaration, contextualMapper: TypeMapper): Type[] {
+        function checkAndAggregateReturnExpressionTypes(func: FunctionLikeDeclaration, checkMode: CheckMode): Type[] {
             const functionFlags = getFunctionFlags(func);
             const aggregatedTypes: Type[] = [];
             let hasReturnWithNoExpression = functionHasImplicitReturn(func);
@@ -15144,7 +15249,7 @@ namespace ts {
             forEachReturnStatement(<Block>func.body, returnStatement => {
                 const expr = returnStatement.expression;
                 if (expr) {
-                    let type = checkExpressionCached(expr, contextualMapper);
+                    let type = checkExpressionCached(expr, checkMode);
                     if (functionFlags & FunctionFlags.Async) {
                         // From within an async function you can return either a non-promise value or a promise. Any
                         // Promise/A+ compatible implementation will always assimilate any foreign promise, so the
@@ -15231,7 +15336,7 @@ namespace ts {
             }
         }
 
-        function checkFunctionExpressionOrObjectLiteralMethod(node: FunctionExpression | MethodDeclaration, contextualMapper?: TypeMapper): Type {
+        function checkFunctionExpressionOrObjectLiteralMethod(node: FunctionExpression | MethodDeclaration, checkMode?: CheckMode): Type {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
 
             // Grammar checking
@@ -15241,7 +15346,7 @@ namespace ts {
             }
 
             // The identityMapper object is used to indicate that function expressions are wildcards
-            if (contextualMapper === identityMapper && isContextSensitive(node)) {
+            if (checkMode === CheckMode.SkipContextSensitive && isContextSensitive(node)) {
                 checkNodeDeferred(node);
                 return anyFunctionType;
             }
@@ -15249,7 +15354,7 @@ namespace ts {
             const links = getNodeLinks(node);
             const type = getTypeOfSymbol(node.symbol);
             const contextSensitive = isContextSensitive(node);
-            const mightFixTypeParameters = contextSensitive && isInferentialContext(contextualMapper);
+            const mightFixTypeParameters = contextSensitive && checkMode === CheckMode.Inferential;
 
             // Check if function expression is contextually typed and assign parameter types if so.
             // See the comment in assignTypeToParameterAndFixTypeParameters to understand why we need to
@@ -15265,10 +15370,10 @@ namespace ts {
                     if (contextualSignature) {
                         const signature = getSignaturesOfType(type, SignatureKind.Call)[0];
                         if (contextSensitive) {
-                            assignContextualParameterTypes(signature, contextualSignature, contextualMapper || identityMapper);
+                            assignContextualParameterTypes(signature, contextualSignature, getContextualMapper(node), checkMode);
                         }
                         if (mightFixTypeParameters || !node.type && !signature.resolvedReturnType) {
-                            const returnType = getReturnTypeFromBody(node, contextualMapper);
+                            const returnType = getReturnTypeFromBody(node, checkMode);
                             if (!signature.resolvedReturnType) {
                                 signature.resolvedReturnType = returnType;
                             }
@@ -15644,7 +15749,7 @@ namespace ts {
             }
         }
 
-        function checkArrayLiteralAssignment(node: ArrayLiteralExpression, sourceType: Type, contextualMapper?: TypeMapper): Type {
+        function checkArrayLiteralAssignment(node: ArrayLiteralExpression, sourceType: Type, checkMode?: CheckMode): Type {
             if (languageVersion < ScriptTarget.ES2015 && compilerOptions.downlevelIteration) {
                 checkExternalEmitHelpers(node, ExternalEmitHelpers.Read);
             }
@@ -15655,13 +15760,13 @@ namespace ts {
             const elementType = checkIteratedTypeOrElementType(sourceType, node, /*allowStringInput*/ false, /*allowAsyncIterable*/ false) || unknownType;
             const elements = node.elements;
             for (let i = 0; i < elements.length; i++) {
-                checkArrayLiteralDestructuringElementAssignment(node, sourceType, i, elementType, contextualMapper);
+                checkArrayLiteralDestructuringElementAssignment(node, sourceType, i, elementType, checkMode);
             }
             return sourceType;
         }
 
         function checkArrayLiteralDestructuringElementAssignment(node: ArrayLiteralExpression, sourceType: Type,
-            elementIndex: number, elementType: Type, contextualMapper?: TypeMapper) {
+            elementIndex: number, elementType: Type, checkMode?: CheckMode) {
             const elements = node.elements;
             const element = elements[elementIndex];
             if (element.kind !== SyntaxKind.OmittedExpression) {
@@ -15673,7 +15778,7 @@ namespace ts {
                             ? getTypeOfPropertyOfType(sourceType, propName)
                             : elementType;
                     if (type) {
-                        return checkDestructuringAssignment(element, type, contextualMapper);
+                        return checkDestructuringAssignment(element, type, checkMode);
                     }
                     else {
                         // We still need to check element expression here because we may need to set appropriate flag on the expression
@@ -15697,7 +15802,7 @@ namespace ts {
                             error((<BinaryExpression>restExpression).operatorToken, Diagnostics.A_rest_element_cannot_have_an_initializer);
                         }
                         else {
-                            return checkDestructuringAssignment(restExpression, createArrayType(elementType), contextualMapper);
+                            return checkDestructuringAssignment(restExpression, createArrayType(elementType), checkMode);
                         }
                     }
                 }
@@ -15705,7 +15810,7 @@ namespace ts {
             return undefined;
         }
 
-        function checkDestructuringAssignment(exprOrAssignment: Expression | ShorthandPropertyAssignment, sourceType: Type, contextualMapper?: TypeMapper): Type {
+        function checkDestructuringAssignment(exprOrAssignment: Expression | ShorthandPropertyAssignment, sourceType: Type, checkMode?: CheckMode): Type {
             let target: Expression;
             if (exprOrAssignment.kind === SyntaxKind.ShorthandPropertyAssignment) {
                 const prop = <ShorthandPropertyAssignment>exprOrAssignment;
@@ -15716,7 +15821,7 @@ namespace ts {
                         !(getFalsyFlags(checkExpression(prop.objectAssignmentInitializer)) & TypeFlags.Undefined)) {
                         sourceType = getTypeWithFacts(sourceType, TypeFacts.NEUndefined);
                     }
-                    checkBinaryLikeExpression(prop.name, prop.equalsToken, prop.objectAssignmentInitializer, contextualMapper);
+                    checkBinaryLikeExpression(prop.name, prop.equalsToken, prop.objectAssignmentInitializer, checkMode);
                 }
                 target = (<ShorthandPropertyAssignment>exprOrAssignment).name;
             }
@@ -15725,20 +15830,20 @@ namespace ts {
             }
 
             if (target.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>target).operatorToken.kind === SyntaxKind.EqualsToken) {
-                checkBinaryExpression(<BinaryExpression>target, contextualMapper);
+                checkBinaryExpression(<BinaryExpression>target, checkMode);
                 target = (<BinaryExpression>target).left;
             }
             if (target.kind === SyntaxKind.ObjectLiteralExpression) {
                 return checkObjectLiteralAssignment(<ObjectLiteralExpression>target, sourceType);
             }
             if (target.kind === SyntaxKind.ArrayLiteralExpression) {
-                return checkArrayLiteralAssignment(<ArrayLiteralExpression>target, sourceType, contextualMapper);
+                return checkArrayLiteralAssignment(<ArrayLiteralExpression>target, sourceType, checkMode);
             }
-            return checkReferenceAssignment(target, sourceType, contextualMapper);
+            return checkReferenceAssignment(target, sourceType, checkMode);
         }
 
-        function checkReferenceAssignment(target: Expression, sourceType: Type, contextualMapper?: TypeMapper): Type {
-            const targetType = checkExpression(target, contextualMapper);
+        function checkReferenceAssignment(target: Expression, sourceType: Type, checkMode?: CheckMode): Type {
+            const targetType = checkExpression(target, checkMode);
             const error = target.parent.kind === SyntaxKind.SpreadAssignment ?
                 Diagnostics.The_target_of_an_object_rest_assignment_must_be_a_variable_or_a_property_access :
                 Diagnostics.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access;
@@ -15826,17 +15931,17 @@ namespace ts {
                 getUnionType([type1, type2], /*subtypeReduction*/ true);
         }
 
-        function checkBinaryExpression(node: BinaryExpression, contextualMapper?: TypeMapper) {
-            return checkBinaryLikeExpression(node.left, node.operatorToken, node.right, contextualMapper, node);
+        function checkBinaryExpression(node: BinaryExpression, checkMode?: CheckMode) {
+            return checkBinaryLikeExpression(node.left, node.operatorToken, node.right, checkMode, node);
         }
 
-        function checkBinaryLikeExpression(left: Expression, operatorToken: Node, right: Expression, contextualMapper?: TypeMapper, errorNode?: Node) {
+        function checkBinaryLikeExpression(left: Expression, operatorToken: Node, right: Expression, checkMode?: CheckMode, errorNode?: Node) {
             const operator = operatorToken.kind;
             if (operator === SyntaxKind.EqualsToken && (left.kind === SyntaxKind.ObjectLiteralExpression || left.kind === SyntaxKind.ArrayLiteralExpression)) {
-                return checkDestructuringAssignment(left, checkExpression(right, contextualMapper), contextualMapper);
+                return checkDestructuringAssignment(left, checkExpression(right, checkMode), checkMode);
             }
-            let leftType = checkExpression(left, contextualMapper);
-            let rightType = checkExpression(right, contextualMapper);
+            let leftType = checkExpression(left, checkMode);
+            let rightType = checkExpression(right, checkMode);
             switch (operator) {
                 case SyntaxKind.AsteriskToken:
                 case SyntaxKind.AsteriskAsteriskToken:
@@ -16103,10 +16208,10 @@ namespace ts {
             return anyType;
         }
 
-        function checkConditionalExpression(node: ConditionalExpression, contextualMapper?: TypeMapper): Type {
+        function checkConditionalExpression(node: ConditionalExpression, checkMode?: CheckMode): Type {
             checkExpression(node.condition);
-            const type1 = checkExpression(node.whenTrue, contextualMapper);
-            const type2 = checkExpression(node.whenFalse, contextualMapper);
+            const type1 = checkExpression(node.whenTrue, checkMode);
+            const type2 = checkExpression(node.whenFalse, checkMode);
             return getBestChoiceType(type1, type2);
         }
 
@@ -16139,15 +16244,20 @@ namespace ts {
             return stringType;
         }
 
-        function checkExpressionWithContextualType(node: Expression, contextualType: Type, contextualMapper?: TypeMapper): Type {
+        function checkExpressionWithContextualType(node: Expression, contextualType: Type, contextualMapper: TypeMapper): Type {
             const saveContextualType = node.contextualType;
+            const saveContextualMapper = node.contextualMapper;
             node.contextualType = contextualType;
-            const result = checkExpression(node, contextualMapper);
+            node.contextualMapper = contextualMapper;
+            const checkMode = contextualMapper === identityMapper ? CheckMode.SkipContextSensitive :
+                contextualMapper ? CheckMode.Inferential : CheckMode.Normal;
+            const result = checkExpression(node, checkMode);
             node.contextualType = saveContextualType;
+            node.contextualMapper = saveContextualMapper;
             return result;
         }
 
-        function checkExpressionCached(node: Expression, contextualMapper?: TypeMapper): Type {
+        function checkExpressionCached(node: Expression, checkMode?: CheckMode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 // When computing a type that we're going to cache, we need to ignore any ongoing control flow
@@ -16155,7 +16265,7 @@ namespace ts {
                 // to the top of the stack ensures all transient types are computed from a known point.
                 const saveFlowLoopStart = flowLoopStart;
                 flowLoopStart = flowLoopCount;
-                links.resolvedType = checkExpression(node, contextualMapper);
+                links.resolvedType = checkExpression(node, checkMode);
                 flowLoopStart = saveFlowLoopStart;
             }
             return links.resolvedType;
@@ -16167,7 +16277,7 @@ namespace ts {
         }
 
         function checkDeclarationInitializer(declaration: VariableLikeDeclaration) {
-            const type = checkExpressionCached(declaration.initializer);
+            const type = getTypeOfExpression(declaration.initializer, /*cache*/ true);
             return getCombinedNodeFlags(declaration) & NodeFlags.Const ||
                 getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration) ||
                 isTypeAssertion(declaration.initializer) ? type : getWidenedLiteralType(type);
@@ -16176,7 +16286,7 @@ namespace ts {
         function isLiteralContextualType(contextualType: Type) {
             if (contextualType) {
                 if (contextualType.flags & TypeFlags.TypeVariable) {
-                    const constraint = getBaseConstraintOfType(<TypeVariable>contextualType) || emptyObjectType;
+                    const constraint = getBaseConstraintOfType(contextualType) || emptyObjectType;
                     // If the type parameter is constrained to the base primitive type we're checking for,
                     // consider this a literal context. For example, given a type parameter 'T extends string',
                     // this causes us to infer string literal types for T.
@@ -16190,12 +16300,12 @@ namespace ts {
             return false;
         }
 
-        function checkExpressionForMutableLocation(node: Expression, contextualMapper?: TypeMapper): Type {
-            const type = checkExpression(node, contextualMapper);
+        function checkExpressionForMutableLocation(node: Expression, checkMode?: CheckMode): Type {
+            const type = checkExpression(node, checkMode);
             return isTypeAssertion(node) || isLiteralContextualType(getContextualType(node)) ? type : getWidenedLiteralType(type);
         }
 
-        function checkPropertyAssignment(node: PropertyAssignment, contextualMapper?: TypeMapper): Type {
+        function checkPropertyAssignment(node: PropertyAssignment, checkMode?: CheckMode): Type {
             // Do not use hasDynamicName here, because that returns false for well known symbols.
             // We want to perform checkComputedPropertyName for all computed properties, including
             // well known symbols.
@@ -16203,10 +16313,10 @@ namespace ts {
                 checkComputedPropertyName(<ComputedPropertyName>node.name);
             }
 
-            return checkExpressionForMutableLocation((<PropertyAssignment>node).initializer, contextualMapper);
+            return checkExpressionForMutableLocation((<PropertyAssignment>node).initializer, checkMode);
         }
 
-        function checkObjectLiteralMethod(node: MethodDeclaration, contextualMapper?: TypeMapper): Type {
+        function checkObjectLiteralMethod(node: MethodDeclaration, checkMode?: CheckMode): Type {
             // Grammar checking
             checkGrammarMethod(node);
 
@@ -16217,19 +16327,19 @@ namespace ts {
                 checkComputedPropertyName(<ComputedPropertyName>node.name);
             }
 
-            const uninstantiatedType = checkFunctionExpressionOrObjectLiteralMethod(node, contextualMapper);
-            return instantiateTypeWithSingleGenericCallSignature(node, uninstantiatedType, contextualMapper);
+            const uninstantiatedType = checkFunctionExpressionOrObjectLiteralMethod(node, checkMode);
+            return instantiateTypeWithSingleGenericCallSignature(node, uninstantiatedType, checkMode);
         }
 
-        function instantiateTypeWithSingleGenericCallSignature(node: Expression | MethodDeclaration, type: Type, contextualMapper?: TypeMapper) {
-            if (isInferentialContext(contextualMapper)) {
+        function instantiateTypeWithSingleGenericCallSignature(node: Expression | MethodDeclaration, type: Type, checkMode?: CheckMode) {
+            if (checkMode === CheckMode.Inferential) {
                 const signature = getSingleCallSignature(type);
                 if (signature && signature.typeParameters) {
                     const contextualType = getApparentTypeOfContextualType(<Expression>node);
                     if (contextualType) {
                         const contextualSignature = getSingleCallSignature(contextualType);
                         if (contextualSignature && !contextualSignature.typeParameters) {
-                            return getOrCreateTypeFromSignature(instantiateSignatureInContextOf(signature, contextualSignature, contextualMapper));
+                            return getOrCreateTypeFromSignature(instantiateSignatureInContextOf(signature, contextualSignature, getContextualMapper(node)));
                         }
                     }
                 }
@@ -16240,10 +16350,12 @@ namespace ts {
 
         // Returns the type of an expression. Unlike checkExpression, this function is simply concerned
         // with computing the type and may not fully check all contained sub-expressions for errors.
-        function getTypeOfExpression(node: Expression) {
+        // A cache argument of true indicates that if the function performs a full type check, it is ok
+        // to cache the result.
+        function getTypeOfExpression(node: Expression, cache?: boolean) {
             // Optimize for the common case of a call to a function with a single non-generic call
             // signature where we can just fetch the return type without checking the arguments.
-            if (node.kind === SyntaxKind.CallExpression && (<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword) {
+            if (node.kind === SyntaxKind.CallExpression && (<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(node, /*checkArgumentIsStringLiteral*/true)) {
                 const funcType = checkNonNullExpression((<CallExpression>node).expression);
                 const signature = getSingleCallSignature(funcType);
                 if (signature && !signature.typeParameters) {
@@ -16253,7 +16365,7 @@ namespace ts {
             // Otherwise simply call checkExpression. Ideally, the entire family of checkXXX functions
             // should have a parameter that indicates whether full error checking is required such that
             // we can perform the optimizations locally.
-            return checkExpression(node);
+            return cache ? checkExpressionCached(node) : checkExpression(node);
         }
 
         // Checks an expression and returns its type. The contextualMapper parameter serves two purposes: When
@@ -16263,14 +16375,14 @@ namespace ts {
         // object, it serves as an indicator that all contained function and arrow expressions should be considered to
         // have the wildcard function type; this form of type check is used during overload resolution to exclude
         // contextually typed function and arrow expressions in the initial phase.
-        function checkExpression(node: Expression | QualifiedName, contextualMapper?: TypeMapper): Type {
+        function checkExpression(node: Expression | QualifiedName, checkMode?: CheckMode): Type {
             let type: Type;
             if (node.kind === SyntaxKind.QualifiedName) {
                 type = checkQualifiedName(<QualifiedName>node);
             }
             else {
-                const uninstantiatedType = checkExpressionWorker(<Expression>node, contextualMapper);
-                type = instantiateTypeWithSingleGenericCallSignature(<Expression>node, uninstantiatedType, contextualMapper);
+                const uninstantiatedType = checkExpressionWorker(<Expression>node, checkMode);
+                type = instantiateTypeWithSingleGenericCallSignature(<Expression>node, uninstantiatedType, checkMode);
             }
 
             if (isConstEnumObjectType(type)) {
@@ -16290,7 +16402,7 @@ namespace ts {
             return type;
         }
 
-        function checkExpressionWorker(node: Expression, contextualMapper: TypeMapper): Type {
+        function checkExpressionWorker(node: Expression, checkMode: CheckMode): Type {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     return checkIdentifier(<Identifier>node);
@@ -16312,9 +16424,9 @@ namespace ts {
                 case SyntaxKind.RegularExpressionLiteral:
                     return globalRegExpType;
                 case SyntaxKind.ArrayLiteralExpression:
-                    return checkArrayLiteral(<ArrayLiteralExpression>node, contextualMapper);
+                    return checkArrayLiteral(<ArrayLiteralExpression>node, checkMode);
                 case SyntaxKind.ObjectLiteralExpression:
-                    return checkObjectLiteral(<ObjectLiteralExpression>node, contextualMapper);
+                    return checkObjectLiteral(<ObjectLiteralExpression>node, checkMode);
                 case SyntaxKind.PropertyAccessExpression:
                     return checkPropertyAccessExpression(<PropertyAccessExpression>node);
                 case SyntaxKind.ElementAccessExpression:
@@ -16325,12 +16437,12 @@ namespace ts {
                 case SyntaxKind.TaggedTemplateExpression:
                     return checkTaggedTemplateExpression(<TaggedTemplateExpression>node);
                 case SyntaxKind.ParenthesizedExpression:
-                    return checkExpression((<ParenthesizedExpression>node).expression, contextualMapper);
+                    return checkExpression((<ParenthesizedExpression>node).expression, checkMode);
                 case SyntaxKind.ClassExpression:
                     return checkClassExpression(<ClassExpression>node);
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
-                    return checkFunctionExpressionOrObjectLiteralMethod(<FunctionExpression>node, contextualMapper);
+                    return checkFunctionExpressionOrObjectLiteralMethod(<FunctionExpression>node, checkMode);
                 case SyntaxKind.TypeOfExpression:
                     return checkTypeOfExpression(<TypeOfExpression>node);
                 case SyntaxKind.TypeAssertionExpression:
@@ -16351,23 +16463,23 @@ namespace ts {
                 case SyntaxKind.PostfixUnaryExpression:
                     return checkPostfixUnaryExpression(<PostfixUnaryExpression>node);
                 case SyntaxKind.BinaryExpression:
-                    return checkBinaryExpression(<BinaryExpression>node, contextualMapper);
+                    return checkBinaryExpression(<BinaryExpression>node, checkMode);
                 case SyntaxKind.ConditionalExpression:
-                    return checkConditionalExpression(<ConditionalExpression>node, contextualMapper);
+                    return checkConditionalExpression(<ConditionalExpression>node, checkMode);
                 case SyntaxKind.SpreadElement:
-                    return checkSpreadExpression(<SpreadElement>node, contextualMapper);
+                    return checkSpreadExpression(<SpreadElement>node, checkMode);
                 case SyntaxKind.OmittedExpression:
                     return undefinedWideningType;
                 case SyntaxKind.YieldExpression:
                     return checkYieldExpression(<YieldExpression>node);
                 case SyntaxKind.JsxExpression:
-                    return checkJsxExpression(<JsxExpression>node, contextualMapper);
+                    return checkJsxExpression(<JsxExpression>node, checkMode);
                 case SyntaxKind.JsxElement:
                     return checkJsxElement(<JsxElement>node);
                 case SyntaxKind.JsxSelfClosingElement:
                     return checkJsxSelfClosingElement(<JsxSelfClosingElement>node);
                 case SyntaxKind.JsxAttributes:
-                    return checkJsxAttributes(<JsxAttributes>node, contextualMapper);
+                    return checkJsxAttributes(<JsxAttributes>node, checkMode);
                 case SyntaxKind.JsxOpeningElement:
                     Debug.fail("Shouldn't ever directly check a JsxOpeningElement");
             }
@@ -16580,7 +16692,7 @@ namespace ts {
 
             if (produceDiagnostics) {
                 checkCollisionWithArgumentsInGeneratedCode(node);
-                if (compilerOptions.noImplicitAny && !node.type) {
+                if (noImplicitAny && !node.type) {
                     switch (node.kind) {
                         case SyntaxKind.ConstructSignature:
                             error(node, Diagnostics.Construct_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type);
@@ -16961,13 +17073,8 @@ namespace ts {
                     checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, returnType);
                 }
             }
-            if (node.parent.kind !== SyntaxKind.ObjectLiteralExpression) {
-                checkSourceElement(node.body);
-                registerForUnusedIdentifiersCheck(node);
-            }
-            else {
-                checkNodeDeferred(node);
-            }
+            checkSourceElement(node.body);
+            registerForUnusedIdentifiersCheck(node);
         }
 
         function checkAccessorDeclarationTypesIdentical(first: AccessorDeclaration, second: AccessorDeclaration, getAnnotatedType: (a: AccessorDeclaration) => Type, message: DiagnosticMessage) {
@@ -16976,11 +17083,6 @@ namespace ts {
             if (firstType && secondType && !isTypeIdenticalTo(firstType, secondType)) {
                 error(first, message);
             }
-        }
-
-        function checkAccessorDeferred(node: AccessorDeclaration) {
-            checkSourceElement(node.body);
-            registerForUnusedIdentifiersCheck(node);
         }
 
         function checkMissingDeclaration(node: Node) {
@@ -17073,7 +17175,7 @@ namespace ts {
             // Check if we're indexing with a numeric type and the object type is a generic
             // type with a constraint that has a numeric index signature.
             if (maybeTypeOfKind(objectType, TypeFlags.TypeVariable) && isTypeOfKind(indexType, TypeFlags.NumberLike)) {
-                const constraint = getBaseConstraintOfType(<TypeVariable | UnionOrIntersectionType>objectType);
+                const constraint = getBaseConstraintOfType(objectType);
                 if (constraint && getIndexInfoOfType(constraint, IndexKind.Number)) {
                     return type;
                 }
@@ -17891,7 +17993,7 @@ namespace ts {
             if (produceDiagnostics && !node.type) {
                 // Report an implicit any error if there is no body, no explicit return type, and node is not a private method
                 // in an ambient context
-                if (compilerOptions.noImplicitAny && nodeIsMissing(node.body) && !isPrivateWithinAmbient(node)) {
+                if (noImplicitAny && nodeIsMissing(node.body) && !isPrivateWithinAmbient(node)) {
                     reportImplicitAnyError(node, anyType);
                 }
 
@@ -20648,7 +20750,7 @@ namespace ts {
                         break;
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
-                        checkAccessorDeferred(<AccessorDeclaration>node);
+                        checkAccessorDeclaration(<AccessorDeclaration>node);
                         break;
                     case SyntaxKind.ClassExpression:
                         checkClassExpressionDeferred(<ClassExpression>node);
@@ -20709,7 +20811,7 @@ namespace ts {
                 }
 
                 if (potentialNewTargetCollisions.length) {
-                    forEach(potentialNewTargetCollisions, checkIfNewTargetIsCapturedInEnclosingScope)
+                    forEach(potentialNewTargetCollisions, checkIfNewTargetIsCapturedInEnclosingScope);
                     potentialNewTargetCollisions.length = 0;
                 }
 
@@ -21179,7 +21281,15 @@ namespace ts {
             }
 
             if (isPartOfTypeNode(node)) {
-                return getTypeFromTypeNode(<TypeNode>node);
+                let typeFromTypeNode = getTypeFromTypeNode(<TypeNode>node);
+
+                if (typeFromTypeNode && isExpressionWithTypeArgumentsInClassImplementsClause(node)) {
+                    const containingClass = getContainingClass(node);
+                    const classType = getTypeOfNode(containingClass) as InterfaceType;
+                    typeFromTypeNode = getTypeWithThisArgument(typeFromTypeNode, classType.thisType);
+                }
+
+                return typeFromTypeNode;
             }
 
             if (isPartOfExpression(node)) {
@@ -21189,7 +21299,10 @@ namespace ts {
             if (isExpressionWithTypeArgumentsInClassExtendsClause(node)) {
                 // A SyntaxKind.ExpressionWithTypeArguments is considered a type node, except when it occurs in the
                 // extends clause of a class. We handle that case here.
-                return getBaseTypes(<InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(node.parent.parent)))[0];
+                const classNode = getContainingClass(node);
+                const classType = getDeclaredTypeOfSymbol(getSymbolOfNode(classNode)) as InterfaceType;
+                const baseType = getBaseTypes(classType)[0];
+                return baseType && getTypeWithThisArgument(baseType, classType.thisType);
             }
 
             if (isTypeDeclaration(node)) {
@@ -21994,9 +22107,9 @@ namespace ts {
             anyArrayType = createArrayType(anyType);
             autoArrayType = createArrayType(autoType);
 
-            const symbol = getGlobalSymbol("ReadonlyArray", SymbolFlags.Type, /*diagnostic*/ undefined);
-            globalReadonlyArrayType = symbol && <GenericType>getTypeOfGlobalSymbol(symbol, /*arity*/ 1);
+            globalReadonlyArrayType = <GenericType>getGlobalTypeOrUndefined("ReadonlyArray", /*arity*/ 1);
             anyReadonlyArrayType = globalReadonlyArrayType ? createTypeFromGenericGlobalType(globalReadonlyArrayType, [anyType]) : anyArrayType;
+            globalThisType = <GenericType>getGlobalTypeOrUndefined("ThisType", /*arity*/ 1);
         }
 
         function checkExternalEmitHelpers(location: Node, helpers: ExternalEmitHelpers) {

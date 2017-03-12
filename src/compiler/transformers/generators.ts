@@ -1,4 +1,4 @@
-﻿/// <reference path="../factory.ts" />
+/// <reference path="../factory.ts" />
 /// <reference path="../visitor.ts" />
 
 // Transforms generator functions into a compatible ES5 representation with similar runtime

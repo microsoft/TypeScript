@@ -19,11 +19,20 @@ function foo2(x = "string", b: number) {
 
 function foo3(x: string | undefined = "string", b: number) {
     x.length; // ok, should be string
+    x = undefined;
 }
 
 function foo4(x: string | undefined = undefined, b: number) {
     x; // should be string | undefined
+    x = undefined;
 }
+
+type OptionalNullableString = string | null | undefined;
+function allowsNull(val: OptionalNullableString = "") {
+    val = null;
+    val = 'string and null are both ok';
+}
+allowsNull(null); // still allows passing null
 
 
 

@@ -496,7 +496,7 @@ namespace ts.projectSystem {
                 const emitOutput = host.readFile(path + ".js");
                 assert.equal(emitOutput, f.content + newLine, "content of emit output should be identical with the input + newline");
             }
-        })
+        });
 
         it("should emit specified file", () => {
             const file1 = {

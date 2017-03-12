@@ -37,7 +37,7 @@ function createCancellationToken(args: string[]): ServerCancellationToken {
     // when client wants to signal cancellation it should create a named pipe with name=<cancellationPipeName>
     // server will synchronously check the presence of the pipe and treat its existance as indicator that current request should be canceled.
     // in case if client prefers to use more fine-grained schema than one name for all request it can add '*' to the end of cancelellationPipeName.
-    // in this case pipe name will be build dynamically as <cancellationPipeName><request_seq>. 
+    // in this case pipe name will be build dynamically as <cancellationPipeName><request_seq>.
     if (cancellationPipeName.charAt(cancellationPipeName.length - 1) === "*") {
         const namePrefix = cancellationPipeName.slice(0, -1);
         if (namePrefix.length === 0 || namePrefix.indexOf("*") >= 0) {
