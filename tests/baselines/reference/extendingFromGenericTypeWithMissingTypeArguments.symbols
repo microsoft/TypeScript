@@ -1,0 +1,67 @@
+=== tests/cases/compiler/extendingFromGenericTypeWithMissingTypeArguments.ts ===
+class C1<T> {
+>C1 : Symbol(C1, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 0, 0))
+>T : Symbol(T, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 0, 9))
+
+    c1_prop: T;
+>c1_prop : Symbol(C1.c1_prop, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 0, 13))
+>T : Symbol(T, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 0, 9))
+}
+class D1 extends C1 {
+>D1 : Symbol(D1, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 2, 1))
+>C1 : Symbol(C1, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 0, 0))
+
+    d1_prop: number;
+>d1_prop : Symbol(D1.d1_prop, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 3, 21))
+}
+
+var d1 = new D1();
+>d1 : Symbol(d1, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 7, 3), Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 20, 3))
+>D1 : Symbol(D1, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 2, 1))
+
+d1.c1_prop; // any
+>d1.c1_prop : Symbol(C1.c1_prop, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 0, 13))
+>d1 : Symbol(d1, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 7, 3), Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 20, 3))
+>c1_prop : Symbol(C1.c1_prop, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 0, 13))
+
+d1.d1_prop;
+>d1.d1_prop : Symbol(D1.d1_prop, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 3, 21))
+>d1 : Symbol(d1, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 7, 3), Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 20, 3))
+>d1_prop : Symbol(D1.d1_prop, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 3, 21))
+
+
+class C2<T> {
+>C2 : Symbol(C2, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 9, 11))
+>T : Symbol(T, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 12, 9))
+
+    constructor(a: T) { }
+>a : Symbol(a, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 13, 16))
+>T : Symbol(T, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 12, 9))
+
+    c1_prop: T;
+>c1_prop : Symbol(C2.c1_prop, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 13, 25))
+>T : Symbol(T, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 12, 9))
+}
+class D2 extends C2 {
+>D2 : Symbol(D2, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 15, 1))
+>C2 : Symbol(C2, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 9, 11))
+
+    d1_prop: number;
+>d1_prop : Symbol(D2.d1_prop, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 16, 21))
+}
+
+var d1 = new D2(2);
+>d1 : Symbol(d1, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 7, 3), Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 20, 3))
+>D2 : Symbol(D2, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 15, 1))
+
+d1.c1_prop; // any
+>d1.c1_prop : Symbol(C1.c1_prop, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 0, 13))
+>d1 : Symbol(d1, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 7, 3), Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 20, 3))
+>c1_prop : Symbol(C1.c1_prop, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 0, 13))
+
+d1.d1_prop;
+>d1.d1_prop : Symbol(D1.d1_prop, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 3, 21))
+>d1 : Symbol(d1, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 7, 3), Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 20, 3))
+>d1_prop : Symbol(D1.d1_prop, Decl(extendingFromGenericTypeWithMissingTypeArguments.ts, 3, 21))
+
+
