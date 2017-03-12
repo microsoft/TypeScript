@@ -2332,6 +2332,7 @@ namespace ts {
 
         function bindThisPropertyAssignment(node: BinaryExpression) {
             Debug.assert(isInJavaScriptFile(node));
+            const container = getThisContainer(node, /*includeArrowFunctions*/false);
             switch (container.kind) {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
@@ -2342,6 +2343,7 @@ namespace ts {
                     break;
 
                 case SyntaxKind.Constructor:
+                case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
