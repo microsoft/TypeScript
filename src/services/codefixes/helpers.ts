@@ -28,7 +28,7 @@ namespace ts.codefix {
 
         let newNodes: Node[] = [];
         for (const symbol of missingMembers) {
-            const newNode = getNewNodeForMemberSymbol(symbol, classDeclaration, checker);
+            const newNode = createNewNodeForMemberSymbol(symbol, classDeclaration, checker);
             if (newNode) {
                 if (Array.isArray(newNode)) {
                     newNodes = newNodes.concat(newNode);
@@ -44,7 +44,7 @@ namespace ts.codefix {
     /**
      * @returns Empty string iff there we can't figure out a representation for `symbol` in `enclosingDeclaration`.
      */
-    function getNewNodeForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker): Node[] | Node | undefined {
+    function createNewNodeForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker): Node[] | Node | undefined {
         const declarations = symbol.getDeclarations();
         if (!(declarations && declarations.length)) {
             return undefined;
@@ -52,8 +52,7 @@ namespace ts.codefix {
 
         const declaration = declarations[0] as Declaration;
         const name = declaration.name ? declaration.name.getText() : undefined;
-        const visibility = getVisibilityPrefixWithSpace(getModifierFlags(declaration));
-
+        const modifiers = [createVisibilityModifier(getModifierFlags(declaration))];
         const type = checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration);
 
         switch (declaration.kind) {
@@ -86,43 +85,55 @@ namespace ts.codefix {
                 }
                 if (declarations.length === 1) {
                     Debug.assert(signatures.length === 1);
-                    // TODO: extract signature declaration from a signature.
-                    // const sigString = checker.signatureToString(signatures[0], enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
+                    // TODO: suppress any return type
                     // TODO: get parameters working.
                     // TODO: add support for type parameters.
-                    return createStubbedMethod([visibility], name, /*typeParameters*/undefined, []);
+                    const signature = signatures[0];
+                    const newParameterNodes = signature.getParameters().map(symbol => createParameterDeclarationFromSymbol(symbol, enclosingDeclaration, checker));
+                    const returnType = checker.createTypeNode(signature.resolvedReturnType);
+                    return createStubbedMethod(modifiers, name, /*typeParameters*/undefined, newParameterNodes, returnType);
                 }
 
                 let signatureDeclarations = [];
                 for (let i = 0; i < signatures.length; i++) {
                     // const sigString = checker.signatureToString(signatures[i], enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
                     // TODO: make signatures instead of methods
-                    signatureDeclarations.push(createStubbedMethod([visibility], name, /*typeParameters*/undefined, []));
+                    const signature = signatures[i];
+                    const newParameterNodes = signature.getParameters().map(symbol => createParameterDeclarationFromSymbol(symbol, enclosingDeclaration, checker));
+                    const returnType = checker.createTypeNode(signature.resolvedReturnType);
+                    signatureDeclarations.push(createMethod(
+                          /*decorators*/ undefined
+                        , modifiers
+                        , /*asteriskToken*/ undefined
+                        , name
+                        , /*typeParameters*/undefined
+                        , newParameterNodes
+                        , returnType
+                        , /*body*/undefined));
                 }
 
-                // If there is a declaration with a body, it is the last declaration,
-                // and it isn't caught by `getSignaturesOfType`.
-                let bodySig: Signature | undefined = undefined;
                 if (declarations.length > signatures.length) {
-                    bodySig = checker.getSignatureFromDeclaration(declarations[declarations.length - 1] as SignatureDeclaration);
+                    let signature = checker.getSignatureFromDeclaration(declarations[declarations.length - 1] as SignatureDeclaration);
+                    const newParameterNodes = signature.getParameters().map(symbol => createParameterDeclarationFromSymbol(symbol, enclosingDeclaration, checker));
+                    const returnType = checker.createTypeNode(signature.resolvedReturnType);
+                    signatureDeclarations.push(createStubbedMethod(modifiers, name, /*typeParameters*/undefined, newParameterNodes, returnType));
                 }
                 else {
                     Debug.assert(declarations.length === signatures.length);
-                    bodySig = createBodySignatureWithAnyTypes(signatures, enclosingDeclaration, checker);
+                    const methodImplementingSignatures = createMethodImplementingSignatures(signatures, enclosingDeclaration, name, modifiers);
+                    signatureDeclarations.push(methodImplementingSignatures);
                 }
-                // const sigString = checker.signatureToString(bodySig, enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
-                signatureDeclarations.push(createStubbedMethod([visibility], name, /*typeParameters*/undefined, []));
-                
                 return signatureDeclarations;
             default:
                 return undefined;
         }
     }
 
-    function createBodySignatureWithAnyTypes(signatures: Signature[], enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker): Signature {
-        const newSignatureDeclaration = createNode(SyntaxKind.CallSignature) as SignatureDeclaration;
-        newSignatureDeclaration.parent = enclosingDeclaration;
-        newSignatureDeclaration.name = signatures[0].getDeclaration().name;
+    // TODO: infer types of arguments?
+    function createMethodImplementingSignatures(signatures: Signature[], enclosingDeclaration: ClassLikeDeclaration, name: string, modifiers: Modifier[] | undefined): MethodDeclaration {
+        const newMethodDeclaration = createNode(SyntaxKind.CallSignature) as SignatureDeclaration;
+        newMethodDeclaration.parent = enclosingDeclaration;
+        newMethodDeclaration.name = signatures[0].getDeclaration().name;
 
         let maxNonRestArgs = -1;
         let maxArgsIndex = 0;
@@ -133,42 +144,47 @@ namespace ts.codefix {
             minArgumentCount = Math.min(sig.minArgumentCount, minArgumentCount);
             hasRestParameter = hasRestParameter || sig.hasRestParameter;
             const nonRestLength = sig.parameters.length - (sig.hasRestParameter ? 1 : 0);
-            if (nonRestLength > maxNonRestArgs) {
+            if (nonRestLength >= maxNonRestArgs) {
                 maxNonRestArgs = nonRestLength;
                 maxArgsIndex = i;
             }
         }
         const maxArgsParameterSymbolNames = signatures[maxArgsIndex].getParameters().map(symbol => symbol.getName());
 
-        const optionalToken = createToken(SyntaxKind.QuestionToken);
-
-        newSignatureDeclaration.parameters = createNodeArray<ParameterDeclaration>();
+        const parameters = createNodeArray<ParameterDeclaration>();
         for (let i = 0; i < maxNonRestArgs; i++) {
-            const newParameter = createParameterDeclarationWithoutType(i, minArgumentCount, newSignatureDeclaration);
-            newSignatureDeclaration.parameters.push(newParameter);
+            const newParameter = createParameter(
+                  /*decorators*/ undefined
+                , /*modifiers*/ undefined
+                , /*dotDotDotToken*/ undefined
+                , maxArgsParameterSymbolNames[i]
+                , /*questionToken*/ i >= minArgumentCount ? createToken(SyntaxKind.QuestionToken) : undefined
+                , /*type*/ undefined
+                , /*initializer*/ undefined);
+            parameters.push(newParameter);
         }
 
         if (hasRestParameter) {
-            const restParameter = createParameterDeclarationWithoutType(maxNonRestArgs, minArgumentCount, newSignatureDeclaration);
-            restParameter.dotDotDotToken = createToken(SyntaxKind.DotDotDotToken);
-            newSignatureDeclaration.parameters.push(restParameter);
+            const restParameter = createParameter(
+                  /*decorators*/ undefined
+                , /*modifiers*/ undefined
+                , createToken(SyntaxKind.DotDotDotToken)
+                , maxArgsParameterSymbolNames[maxNonRestArgs] || "rest"
+                , /*questionToken*/ maxNonRestArgs >= minArgumentCount ? createToken(SyntaxKind.QuestionToken) : undefined
+                , /*type*/ undefined
+                , /*initializer*/ undefined);
+            parameters.push(restParameter);
         }
 
-        return checker.getSignatureFromDeclaration(newSignatureDeclaration);
-
-        function createParameterDeclarationWithoutType(index: number, minArgCount: number, enclosingSignatureDeclaration: SignatureDeclaration): ParameterDeclaration {
-            const newParameter = createNode(SyntaxKind.Parameter) as ParameterDeclaration;
-
-            newParameter.symbol = new SymbolConstructor(SymbolFlags.FunctionScopedVariable, maxArgsParameterSymbolNames[index] || "rest");
-            newParameter.symbol.valueDeclaration = newParameter;
-            newParameter.symbol.declarations = [newParameter];
-            newParameter.parent = enclosingSignatureDeclaration;
-            if (index >= minArgCount) {
-                newParameter.questionToken = optionalToken;
-            }
-
-            return newParameter;
-        }
+        return createMethod(
+              /*decorators*/ undefined
+            , modifiers
+            , /*asteriskToken*/ undefined
+            , name
+            , /*typeParameters*/undefined
+            , parameters
+            , /*type*/ undefined
+            , /*body*/undefined);
     }
 
     export function createStubbedMethod(modifiers: Modifier[], name: string, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], returnType?: TypeNode) {
@@ -187,13 +203,13 @@ namespace ts.codefix {
         return createBlock(
             [createThrow(
                 createNew(
-                      createIdentifier('Error')
+                    createIdentifier('Error')
                     , /*typeArguments*/undefined
                     , [createLiteral('Method not implemented.')]))]
             , /*multiline*/true);
     }
 
-    function getVisibilityPrefixWithSpace(flags: ModifierFlags) {
+    function createVisibilityModifier(flags: ModifierFlags) {
         if (flags & ModifierFlags.Public) {
             return createToken(SyntaxKind.PublicKeyword);
         }
@@ -203,5 +219,18 @@ namespace ts.codefix {
         return undefined;
     }
 
-    const SymbolConstructor = objectAllocator.getSymbolConstructor();
+    function createParameterDeclarationFromSymbol(parameterSymbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker) {
+        const parameterDeclaration = parameterSymbol.getDeclarations()[0] as ParameterDeclaration;
+        const parameterType = checker.getTypeOfSymbolAtLocation(parameterSymbol, enclosingDeclaration);
+        const parameterTypeNode = checker.createTypeNode(parameterType);
+        // TODO: deep cloning of decorators/any node.
+        const parameterNode = createParameter(
+            parameterDeclaration.decorators && parameterDeclaration.decorators.map(getSynthesizedClone)
+            , parameterDeclaration.modifiers && parameterDeclaration.modifiers.map(getSynthesizedClone)
+            , parameterDeclaration.dotDotDotToken && createToken(SyntaxKind.DotDotDotToken)
+            , parameterDeclaration.name
+            , parameterDeclaration.questionToken && createToken(SyntaxKind.QuestionToken)
+            , parameterTypeNode);
+        return parameterNode;
+    }
 }
