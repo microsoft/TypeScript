@@ -673,7 +673,7 @@ namespace ts {
         initializer?: Expression;           // Optional initializer
     }
 
-    export interface    BindingElement extends Declaration {
+    export interface BindingElement extends Declaration {
         kind: SyntaxKind.BindingElement;
         parent?: BindingPattern;
         propertyName?: PropertyName;        // Binding property name (in object binding pattern)
@@ -849,19 +849,17 @@ namespace ts {
         _typeNodeBrand: any;
     }
 
-    export type KeywordKind = SyntaxKind.AnyKeyword
-                            | SyntaxKind.NumberKeyword
-                            | SyntaxKind.ObjectKeyword
-                            | SyntaxKind.BooleanKeyword
-                            | SyntaxKind.StringKeyword
-                            | SyntaxKind.SymbolKeyword
-                            | SyntaxKind.VoidKeyword
-                            | SyntaxKind.UndefinedKeyword
-                            | SyntaxKind.NullKeyword
-                            | SyntaxKind.NeverKeyword;
-
     export interface KeywordTypeNode extends TypeNode {
-        kind: KeywordKind;
+        kind: SyntaxKind.AnyKeyword
+            | SyntaxKind.NumberKeyword
+            | SyntaxKind.ObjectKeyword
+            | SyntaxKind.BooleanKeyword
+            | SyntaxKind.StringKeyword
+            | SyntaxKind.SymbolKeyword
+            | SyntaxKind.VoidKeyword
+            | SyntaxKind.UndefinedKeyword
+            | SyntaxKind.NullKeyword
+            | SyntaxKind.NeverKeyword;
     }
 
     export interface ThisTypeNode extends TypeNode {

@@ -2190,7 +2190,7 @@ namespace ts {
         }
 
         function createTypeNode(type: Type) {
-            let encounteredError = false;
+            // let encounteredError = false;
             let checkAlias = true;
 
             return createTypeNodeWorker(type);
@@ -2224,9 +2224,17 @@ namespace ts {
                 if (type.flags & TypeFlags.Number) {
                     return createKeywordTypeNode(SyntaxKind.NumberKeyword);
                 }
-                if (type.flags & (TypeFlags.Boolean | TypeFlags.StringOrNumberLiteral)) {
+                if(type.flags & TypeFlags.Boolean) {
+                    // TODO: this is probably x: boolean. How do we deal with x: true ?
+                    return createKeywordTypeNode(SyntaxKind.BooleanKeyword);
+                }
+                if (type.flags & (TypeFlags.StringLiteral)) {
                     // TODO: check if this actually works with boolean.
-                    return createLiteralTypeNode((<LiteralType>type).text);
+                    return createLiteralTypeNode((createLiteral((<LiteralType>type).text)));
+                }
+                if (type.flags & (TypeFlags.NumberLiteral)) {
+                    // TODO: check if this actually works with boolean.
+                    return createLiteralTypeNode((createNumericLiteral((<LiteralType>type).text)));
                 }
                 if (type.flags & TypeFlags.Void) {
                     return createKeywordTypeNode(SyntaxKind.VoidKeyword);
@@ -2279,11 +2287,10 @@ namespace ts {
 
                 if (objectFlags & ObjectFlags.ClassOrInterface) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
-                    // If type is a class or interface type that wasn't hit by the isSymbolAccessible check above,
-                    // type must be an anonymous class or interface.
-
-                    encounteredError = true;
-                    return undefined;
+                    const name = getNameOfSymbol(type.symbol);
+                    // TODO: handle type arguments.
+                    // TODO: handle anonymous classes.
+                    return createTypeReferenceNode(name);
                 }
 
                 if (objectFlags & ObjectFlags.Reference) {

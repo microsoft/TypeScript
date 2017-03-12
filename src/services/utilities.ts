@@ -1386,6 +1386,6 @@ namespace ts {
     }
 
     export function getOpenBraceOfClassLike(declaration: ClassLikeDeclaration, sourceFile: SourceFile) {
-        return getTokenAtPosition(sourceFile, declaration.members.pos);
+        return getTokenAtPosition(sourceFile, declaration.members.pos - 1);
     }
 }

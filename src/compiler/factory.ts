@@ -234,22 +234,74 @@ namespace ts {
         return <KeywordTypeNode>createSynthesizedNode(kind);
     }
 
-
-    export function createLiteralTypeNode(value: string | number | boolean) {
-        const literal = createLiteral(value);
+    export function createLiteralTypeNode(literal: Expression) {
         const literalTypeNode = createSynthesizedNode(SyntaxKind.LiteralType) as LiteralTypeNode;
         literalTypeNode.literal = literal;
         return literalTypeNode;
+    }
+
+    export function updateLiteralTypeNode(node: LiteralTypeNode, literal: Expression) {
+        return node.literal !== literal
+            ? updateNode(createLiteralTypeNode(literal), node)
+            : node;
     }
 
     // TODO: handle qualified names, ie EntityName's.
     export function createTypeReferenceNode(typeName: string | Identifier, typeArguments?: NodeArray<TypeNode>) {
         const typeReference = createSynthesizedNode(SyntaxKind.TypeReference) as TypeReferenceNode;
         typeReference.typeName = asName(typeName);
-        typeReference.typeName.parent
         typeReference.typeArguments = typeArguments;
         return typeReference;
     }
+
+    export function updateTypeReferenceNode(node: TypeReferenceNode, typeName: Identifier, typeArguments?: NodeArray<TypeNode>) {
+        return node.typeName !== typeName
+            || node.typeArguments !== typeArguments
+            ? updateNode(createTypeReferenceNode(typeName, typeArguments), node)
+            : node;
+    }
+
+    export function createUnionOrIntersectionTypeNode(kind: SyntaxKind.UnionType, types: TypeNode[]): UnionTypeNode;
+    export function createUnionOrIntersectionTypeNode(kind: SyntaxKind.IntersectionType, types: TypeNode[]): IntersectionTypeNode;
+    export function createUnionOrIntersectionTypeNode(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, types: TypeNode[]): UnionOrIntersectionTypeNode;
+    export function createUnionOrIntersectionTypeNode(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, types: TypeNode[]): UnionOrIntersectionTypeNode {
+        const unionTypeNode = createSynthesizedNode(kind) as UnionTypeNode | IntersectionTypeNode;
+        unionTypeNode.types = asNodeArray(types);
+        return unionTypeNode;
+    }
+
+    export function updateUnionOrIntersectionTypeNode(node: UnionOrIntersectionTypeNode, kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, types: NodeArray<TypeNode>) {
+        return node.types !== types
+            || node.kind !== kind
+            ? updateNode(createUnionOrIntersectionTypeNode(kind, types), node)
+            : node;
+    }
+
+    export function createTypeLiteralNode(members: TypeElement[]) {
+        const typeLiteralNode = createSynthesizedNode(SyntaxKind.LiteralType) as TypeLiteralNode;
+        typeLiteralNode.members = asNodeArray(members);
+        return typeLiteralNode;
+    }
+
+    export function updateTypeLiteralNode(node: TypeLiteralNode, members: NodeArray<TypeElement>) {
+        return node.members !== members
+            ? updateNode(createTypeLiteralNode(members), node)
+            : node;
+    }
+
+    export function createTupleTypeNode(elementTypes: TypeNode[]) {
+        const tupleTypeNode = createSynthesizedNode(SyntaxKind.TupleType) as TupleTypeNode;
+        tupleTypeNode.elementTypes = asNodeArray(elementTypes);
+        return tupleTypeNode;
+    }
+
+    export function updateTypleTypeNode(node: TupleTypeNode, elementTypes: TypeNode[]) {
+        return node.elementTypes !== elementTypes
+            ? updateNode(createTupleTypeNode(elementTypes), node)
+            : node;
+    }
+
+    // Type Declarations
 
     export function createTypeParameterNode(name: string | Identifier, constraint?: TypeNode, defaultParameter?: TypeNode) {
         const typeParameter = createSynthesizedNode(SyntaxKind.TypeParameter) as TypeParameterDeclaration;
@@ -259,31 +311,6 @@ namespace ts {
 
         return typeParameter;
     }
-
-    export function createUnionTypeNode(types: NodeArray<TypeNode>) {
-        const unionTypeNode = createSynthesizedNode(SyntaxKind.UnionType) as UnionTypeNode;
-        unionTypeNode.types = asNodeArray(types);
-        return unionTypeNode;
-    }
-
-    export function createIntersectionTypeNode(types: NodeArray<TypeNode>) {
-        const intersectionTypeNode = createSynthesizedNode(SyntaxKind.IntersectionType) as IntersectionTypeNode;
-        intersectionTypeNode.types = asNodeArray(types);
-        return intersectionTypeNode;
-    }
-
-    export function createTypeLiteralNode(typeElements: TypeElement[]) {
-        const typeLiteralNode = createSynthesizedNode(SyntaxKind.LiteralType) as TypeLiteralNode;
-        typeLiteralNode.members = asNodeArray(typeElements);
-        return typeLiteralNode;
-    }
-
-    export function createTupleTypeNode(types: NodeArray<TypeNode>) {
-        const tupleTypeNode = createSynthesizedNode(SyntaxKind.TupleType) as TupleTypeNode;
-        tupleTypeNode.elementTypes = asNodeArray(types);
-        return tupleTypeNode;
-    }
-
 
     // Signature elements
 
@@ -298,16 +325,26 @@ namespace ts {
     }
 
     // TODO: check usage of name...
-    export function createIndexSignature(parameter: ParameterDeclaration, type: TypeNode, decorators?: Decorator[], modifiers?: Modifier[]): IndexSignatureDeclaration {
+    // TODO: create entry in visitor.ts
+    export function createIndexSignatureDeclaration(parameters: ParameterDeclaration[], type: TypeNode, decorators?: Decorator[], modifiers?: Modifier[]): IndexSignatureDeclaration {
         const indexSignature = createSignature(
               SyntaxKind.IndexSignature
-            , asNodeArray([parameter])
+            , asNodeArray(parameters)
             , /*name*/ undefined
             , /*typeParameters*/undefined
             , type) as IndexSignatureDeclaration;
         indexSignature.decorators = asNodeArray(decorators);
         indexSignature.modifiers = asNodeArray(modifiers);
         return indexSignature;
+    }
+
+    export function updateIndexSignatureDeclaration(node: IndexSignatureDeclaration, parameters: ParameterDeclaration[], type: TypeNode, decorators?: Decorator[], modifiers?: Modifier[]) {
+        return node.parameters !== parameters
+            || node.type !== type
+            || node.decorators !== decorators
+            || node.modifiers !== modifiers
+            ? updateNode(createIndexSignatureDeclaration(parameters, type, decorators, modifiers), node)
+            : node;
     }
 
     export function createParameter(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression) {

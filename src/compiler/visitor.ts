@@ -212,13 +212,9 @@ namespace ts {
         }
 
         const kind = node.kind;
+
         // No need to visit nodes with no children.
         if ((kind > SyntaxKind.FirstToken && kind <= SyntaxKind.LastToken)) {
-            return node;
-        }
-
-        // We do not yet support types.
-        if ((kind >= SyntaxKind.TypePredicate && kind <= SyntaxKind.LiteralType)) {
             return node;
         }
 
@@ -241,6 +237,13 @@ namespace ts {
                     visitNode((<ComputedPropertyName>node).expression, visitor, isExpression));
 
             // Signature elements
+            case SyntaxKind.IndexSignature:
+                return updateIndexSignatureDeclaration(<IndexSignatureDeclaration>node
+                , nodesVisitor((<IndexSignatureDeclaration>node).parameters, visitor)
+                , visitNode((<IndexSignatureDeclaration>node).type, visitor)
+                , nodesVisitor((<IndexSignatureDeclaration>node).decorators, visitor, isDecorator)
+                , nodesVisitor((<IndexSignatureDeclaration>node).modifiers, visitor, isModifier));
+
             case SyntaxKind.Parameter:
                 return updateParameter(<ParameterDeclaration>node,
                     nodesVisitor((<ParameterDeclaration>node).decorators, visitor, isDecorator),
@@ -254,7 +257,60 @@ namespace ts {
                 return updateDecorator(<Decorator>node,
                     visitNode((<Decorator>node).expression, visitor, isExpression));
 
-            // Type member
+            // Keyword Types
+
+            case SyntaxKind.AnyKeyword:
+            case SyntaxKind.NumberKeyword:
+            case SyntaxKind.ObjectKeyword:
+            case SyntaxKind.BooleanKeyword:
+            case SyntaxKind.StringKeyword:
+            case SyntaxKind.SymbolKeyword:
+            case SyntaxKind.VoidKeyword:
+            case SyntaxKind.UndefinedKeyword:
+            case SyntaxKind.NullKeyword:
+            case SyntaxKind.NeverKeyword:
+            case SyntaxKind.NeverKeyword:
+                return node;
+
+            // Types
+
+            case SyntaxKind.TypePredicate:
+                throw new Error("reached unsupported type.");
+            case SyntaxKind.TypeReference:
+                return updateTypeReferenceNode(<TypeReferenceNode>node
+                     , visitNode((<TypeReferenceNode>node).typeName as Identifier, visitor)
+                     , nodesVisitor((<TypeReferenceNode>node).typeArguments, visitor)
+                );
+            case SyntaxKind.FunctionType:
+                throw new Error("reached unsupported type.");
+            case SyntaxKind.ConstructorType:
+                throw new Error("reached unsupported type.");
+            case SyntaxKind.TypeQuery:
+                throw new Error("reached unsupported type.");
+            case SyntaxKind.TypeLiteral:
+                throw new Error("reached unsupported type.");
+            case SyntaxKind.ArrayType:
+                throw new Error("reached unsupported type.");
+            case SyntaxKind.TupleType:
+                throw new Error("reached unsupported type.");
+            case SyntaxKind.UnionType:
+            case SyntaxKind.IntersectionType:
+                throw new Error("reached unsupported type.");
+            case SyntaxKind.ParenthesizedType:
+                throw new Error("reached unsupported type.");
+            case SyntaxKind.ThisType:
+                throw new Error("reached unsupported type.");
+            case SyntaxKind.TypeOperator:
+                throw new Error("reached unsupported type.");
+            case SyntaxKind.IndexedAccessType:
+                throw new Error("reached unsupported type.");
+            case SyntaxKind.MappedType:
+                throw new Error("reached unsupported type.");
+            case SyntaxKind.LiteralType:
+                throw new Error("reached unsupported type.");
+
+            // Type members
+
             case SyntaxKind.PropertyDeclaration:
                 return updateProperty(<PropertyDeclaration>node,
                     nodesVisitor((<PropertyDeclaration>node).decorators, visitor, isDecorator),

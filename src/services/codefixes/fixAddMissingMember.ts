@@ -62,13 +62,12 @@ namespace ts.codefix {
             , "name"
             , /*questionToken*/ undefined
             , stringTypeNode);
-        const indexSignature = createIndexSignature(indexingParameter, typeNode);
+        const indexSignature = createIndexSignatureDeclaration([indexingParameter], typeNode);
 
-        // const startPos = classDeclaration.members.pos;
         const indexSignatureChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
         indexSignatureChangeTracker.insertNodeAfter(sourceFile, openBrace, indexSignature, { insertTrailingNewLine: true });
 
-        return [{ 
+        return [{
             description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_declaration_for_missing_property_0), [token.getText()]),
             changes: propertyChangeTracker.getChanges()
         },
