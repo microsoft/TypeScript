@@ -1666,6 +1666,14 @@ declare namespace ts.server.protocol {
         telemetryEventName: string;
         payload: any;
     }
+    type TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
+    interface TypesInstallerInitializationFailedEvent extends Event {
+        event: TypesInstallerInitializationFailedEventName;
+        body: TypesInstallerInitializationFailedEventBody;
+    }
+    interface TypesInstallerInitializationFailedEventBody {
+        message: string;
+    }
     type TypingsInstalledTelemetryEventName = "typingsInstalled";
     interface TypingsInstalledTelemetryEventBody extends TelemetryEventBody {
         telemetryEventName: TypingsInstalledTelemetryEventName;

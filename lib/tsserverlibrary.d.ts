@@ -3253,8 +3253,13 @@ declare namespace ts.server {
     type ActionInvalidate = "action::invalidate";
     type EventBeginInstallTypes = "event::beginInstallTypes";
     type EventEndInstallTypes = "event::endInstallTypes";
+    type EventInitializationFailed = "event::initializationFailed";
     interface TypingInstallerResponse {
-        readonly kind: ActionSet | ActionInvalidate | EventBeginInstallTypes | EventEndInstallTypes;
+        readonly kind: ActionSet | ActionInvalidate | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
+    }
+    interface InitializationFailedResponse extends TypingInstallerResponse {
+        readonly kind: EventInitializationFailed;
+        readonly message: string;
     }
     interface ProjectResponse extends TypingInstallerResponse {
         readonly projectName: string;
@@ -3288,6 +3293,7 @@ declare namespace ts.server {
     const ActionInvalidate: ActionInvalidate;
     const EventBeginInstallTypes: EventBeginInstallTypes;
     const EventEndInstallTypes: EventEndInstallTypes;
+    const EventInitializationFailed: EventInitializationFailed;
     namespace Arguments {
         const GlobalCacheLocation = "--globalTypingsCacheLocation";
         const LogFile = "--logFile";
@@ -4024,6 +4030,14 @@ declare namespace ts.server.protocol {
     interface TelemetryEventBody {
         telemetryEventName: string;
         payload: any;
+    }
+    type TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
+    interface TypesInstallerInitializationFailedEvent extends Event {
+        event: TypesInstallerInitializationFailedEventName;
+        body: TypesInstallerInitializationFailedEventBody;
+    }
+    interface TypesInstallerInitializationFailedEventBody {
+        message: string;
     }
     type TypingsInstalledTelemetryEventName = "typingsInstalled";
     interface TypingsInstalledTelemetryEventBody extends TelemetryEventBody {
