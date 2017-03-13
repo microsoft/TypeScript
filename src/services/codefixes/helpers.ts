@@ -51,6 +51,7 @@ namespace ts.codefix {
         }
 
         const declaration = declarations[0] as Declaration;
+        // TODO: get name as identifier or computer property name, etc.
         const name = declaration.name ? declaration.name.getText() : undefined;
         const visibilityModifier = createVisibilityModifier(getModifierFlags(declaration));
         const modifiers = visibilityModifier ? [visibilityModifier] : undefined;

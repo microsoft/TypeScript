@@ -4065,7 +4065,7 @@ namespace ts {
     export type Transformer<T extends Node> = (node: T) => T;
 
     /**
-     * A function that accepts and possible transforms a node.
+     * A function that accepts and possibly transforms a node.
      */
     export type Visitor = (node: Node) => VisitResult<Node>;
 

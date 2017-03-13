@@ -3,6 +3,28 @@
 /// <reference path="utilities.ts" />
 
 namespace ts {
+
+    
+    export const nullTransformationContext: TransformationContext = {
+        enableEmitNotification: noop,
+        enableSubstitution: noop,
+        endLexicalEnvironment: () => undefined,
+        getCompilerOptions: notImplemented,
+        getEmitHost: notImplemented,
+        getEmitResolver: notImplemented,
+        hoistFunctionDeclaration: noop,
+        hoistVariableDeclaration: noop,
+        isEmitNotificationEnabled: notImplemented,
+        isSubstitutionEnabled: notImplemented,
+        onEmitNode: noop,
+        onSubstituteNode: notImplemented,
+        readEmitHelpers: notImplemented,
+        requestEmitHelper: noop,
+        resumeLexicalEnvironment: noop,
+        startLexicalEnvironment: noop,
+        suspendLexicalEnvironment: noop
+    };
+
     /**
      * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
      *
@@ -813,7 +835,8 @@ namespace ts {
                     visitNode((<PartiallyEmittedExpression>node).expression, visitor, isExpression));
 
             default:
-                return node;
+                throw new Error("not handled");
+                // return node;
         }
     }
 

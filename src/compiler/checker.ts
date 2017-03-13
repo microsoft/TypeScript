@@ -2196,25 +2196,6 @@ namespace ts {
 
             return createTypeNodeWorker(type);
 
-            // function createTypeDeclaration(type: Type): Declaration {
-            //     if (!type) {
-            //         if (undefinedArgumentIsError) { encounteredError = true; }
-            //         return undefined;
-            //     }
-            //     if (type.flags & TypeFlags.TypeParameter) {
-            //         const constraint = createTypeNodeWorker(getConstraintFromTypeParameter(<TypeParameter>type)) as TypeNode;
-            //         const defaultParameter = createTypeNodeWorker(getDefaultFromTypeParameter(<TypeParameter>type)) as TypeNode;
-            //         if (!type.symbol) {
-            //             encounteredError = true;
-            //             throw new Error("No symbol for type parameter so can't get name");
-            //         }
-            //         const name = getNameOfSymbol(type.symbol);
-            //         return createTypeParameterDeclaration(name, constraint, defaultParameter);
-            //     }
-
-            //     throw new Error("type declarations not implemented.");
-            // }
-
             function createTypeNodeWorker(type: Type): TypeNode {
                 if (!type) {
                     if (undefinedArgumentIsError) { encounteredError = true; }
@@ -2267,6 +2248,9 @@ namespace ts {
                     throw new Error("ESSymbol not implemented");
                 }
                 if (type.flags & TypeFlags.TypeParameter) {
+                    if ((<TypeParameter>type).isThisType) {
+                        return createThis();
+                    }
                     throw new Error("Type Parameter declarations only handled in other worker.");
                 }
                 if (type.flags & TypeFlags.Union) {
@@ -2332,26 +2316,11 @@ namespace ts {
                 //     return typeSymbolAccessibility === SymbolAccessibility.Accessible
                 //         && (!constraint || isTypeAccessibleWorker(constraint, inObjectLiteral, /*inTypeAlias*/false));
                 // }
-                // if (typeSymbolAccessibility === SymbolAccessibility.Accessible) {
-                //     return true;
-                // }
-                // if (type.flags & (TypeFlags.Intrinsic | TypeFlags.Literal)) {
-                //     return true;
-                // }
                 // const objectFlags = getObjectFlags(type);
                 // if (objectFlags & ObjectFlags.ClassOrInterface) {
                 //     // If type is a class or interface type that wasn't hit by the isSymbolAccessible check above,
                 //     // type must be an anonymous class or interface.
                 //     return false;
-                // }
-                // if (objectFlags & ObjectFlags.Reference) {
-                //     // and vice versa.
-                //     // this case includes tuple types
-                //     const typeArguments = (type as TypeReference).typeArguments || emptyArray;
-                //     return allTypesVisible(typeArguments);
-                // }
-                // if (type.flags & TypeFlags.UnionOrIntersection) {
-                //     return allTypesVisible((type as UnionOrIntersectionType).types);
                 // }
 
                 if (objectFlags & ObjectFlags.Mapped) {
@@ -2370,25 +2339,68 @@ namespace ts {
 
 
                         // mapToTypeDeclarationsArray(type)
-                        throw new Error("object literal types not implemented.");
+                        throw new Error("unknown case.");
                     }
-                    // what case is this?
-                    throw new Error("unknown case.")
-                    // const members = type.symbol.members;
-                    // let allVisible = true;
-                    // members && members.forEach((member) => {
-                    //     const memberType = getTypeOfSymbolAtLocation(member, enclosingDeclaration);
-                    //     allVisible = allVisible && isTypeAccessibleWorker(memberType, /*inObjectLiteral*/ true, /*inTypeAlias*/false);
-                    // });
-                    // return allVisible;
+
+                    const members = type.symbol.members;
+                    const newMembers: TypeElement[] = [];
+                    memberLoop: for(const key in members){
+                        const oldMember = members.get(key);
+                        const name = getNameOfSymbol(oldMember);
+                        const oldDeclaration = oldMember.declarations && oldMember.declarations[0] as TypeElement;
+                        if(!oldDeclaration) {
+                            continue memberLoop;
+                        }
+
+                        const kind = oldDeclaration.kind;
+
+                        switch (kind) {
+                            case SyntaxKind.PropertySignature:
+                                const optional = !!oldDeclaration.questionToken;
+                                newMembers.push(createPropertySignature(
+                                    createIdentifier(name)
+                                    , optional ? createToken(SyntaxKind.QuestionToken) : undefined
+                                    , createTypeNode(getTypeOfSymbol(oldMember))));
+                            case SyntaxKind.MethodSignature:
+                            case SyntaxKind.CallSignature:
+                            case SyntaxKind.ConstructSignature:
+                            case SyntaxKind.IndexSignature:
+                            default:
+                                throw new Error("type literal constituent not implemented.");
+                        }
+                    }   
+                    return createTypeLiteralNode(newMembers);
                 }
 
                 Debug.fail("Should be unreachable.");
+
+                // function createTypeParameterDeclarationFromType(type: Type): TypeParameterDeclaration {
+                //     if (!type) {
+                //         if (undefinedArgumentIsError) { encounteredError = true; }
+                //         return undefined;
+                //     }
+                //     if (type.flags & TypeFlags.TypeParameter) {
+                //         const constraint = createTypeNodeWorker(getConstraintFromTypeParameter(<TypeParameter>type)) as TypeNode;
+                //         const defaultParameter = createTypeNodeWorker(getDefaultFromTypeParameter(<TypeParameter>type)) as TypeNode;
+                //         if (!type.symbol) {
+                //             encounteredError = true;
+                //             throw new Error("No symbol for type parameter so can't get name");
+                //         }
+                //         const name = getNameOfSymbol(type.symbol);
+                //         return createTypeParameterDeclaration(name, constraint, defaultParameter);
+                //     }
+                //     throw new Error("type declarations not implemented.");
+                // }
 
                 /** Note that mapToTypeNodeArray(undefined) === undefined. */
                 function mapToTypeNodeArray(types: Type[]): NodeArray<TypeNode> {
                     return asNodeArray(types && types.map(createTypeNodeWorker) as TypeNode[]);
                 }
+
+                // /** Note that mapToTypeNodeArray(undefined) === undefined. */
+                // function mapToTypeParameterArray(types: Type[]): NodeArray<TypeNode> {
+                //     return asNodeArray(types && types.map(createTypeParameterDeclarationFromType) as TypeNode[]);
+                // }
             }
         }
 

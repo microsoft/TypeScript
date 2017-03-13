@@ -7,7 +7,7 @@
 ////     [2]: boolean;
 //// }
 ////
-//// class C implements I {[|  |]}
+//// class C implements I {[| |]}
 
 verify.rangeAfterCodeFix(`
     ["foo"](o: any): boolean {

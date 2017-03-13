@@ -67,6 +67,14 @@ namespace ts {
         return clone;
     }
 
+    /* @internal */
+    export function getSynthesizedDeepClone<T extends Node>(node: T | undefined): T {
+        if (node === undefined) {
+            return undefined;
+        }
+        return getSynthesizedClone(visitEachChild(node, getSynthesizedClone, nullTransformationContext));
+    }
+
     // Literals
 
     export function createLiteral(value: string): StringLiteral;
@@ -173,11 +181,11 @@ namespace ts {
     }
 
     export function createThis() {
-        return <PrimaryExpression>createSynthesizedNode(SyntaxKind.ThisKeyword);
+        return <PrimaryExpression & TypeNode>createSynthesizedNode(SyntaxKind.ThisKeyword);
     }
 
     export function createNull() {
-        return <PrimaryExpression>createSynthesizedNode(SyntaxKind.NullKeyword);
+        return <PrimaryExpression & TypeNode>createSynthesizedNode(SyntaxKind.NullKeyword);
     }
 
     export function createTrue() {

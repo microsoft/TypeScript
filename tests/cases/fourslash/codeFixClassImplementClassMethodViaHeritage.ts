@@ -8,8 +8,8 @@
 ////
 //// }
 ////
-//// class C3 implements C2 {[| |]
-////     f2(){}
+//// class C3 implements C2 {[| 
+////     |]f2(){}
 //// }
 
 verify.rangeAfterCodeFix(`f1(): void{
