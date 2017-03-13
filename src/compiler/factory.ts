@@ -306,13 +306,21 @@ namespace ts {
 
     // Type Declarations
 
-    export function createTypeParameterNode(name: string | Identifier, constraint?: TypeNode, defaultParameter?: TypeNode) {
+    export function createTypeParameterDeclaration(name: string | Identifier, constraint?: TypeNode, defaultParameter?: TypeNode) {
         const typeParameter = createSynthesizedNode(SyntaxKind.TypeParameter) as TypeParameterDeclaration;
         typeParameter.name = asName(name);
         typeParameter.constraint = constraint;
         typeParameter.default = defaultParameter;
 
         return typeParameter;
+    }
+
+    export function updateTypeParameterDeclaration(node: TypeParameterDeclaration, name: Identifier, constraint?: TypeNode, defaultParameter?: TypeNode) {
+        return node.name !== name
+            || node.constraint !== constraint
+            || node.default !== defaultParameter
+            ? updateNode(createTypeParameterDeclaration(name, constraint, defaultParameter), node)
+            : node;
     }
 
     // Signature elements
@@ -330,12 +338,11 @@ namespace ts {
     // TODO: check usage of name...
     // TODO: create entry in visitor.ts
     export function createIndexSignatureDeclaration(parameters: ParameterDeclaration[], type: TypeNode, decorators?: Decorator[], modifiers?: Modifier[]): IndexSignatureDeclaration {
-        const indexSignature = createSignature(
-              SyntaxKind.IndexSignature
-            , asNodeArray(parameters)
-            , /*name*/ undefined
-            , /*typeParameters*/undefined
-            , type) as IndexSignatureDeclaration;
+        const indexSignature = createSynthesizedNode(SyntaxKind.IndexSignature) as IndexSignatureDeclaration;
+        // indexSignature.name = asName(name);
+        // type parameters
+        indexSignature.parameters = asNodeArray(parameters);
+        indexSignature.type = type;
         indexSignature.decorators = asNodeArray(decorators);
         indexSignature.modifiers = asNodeArray(modifiers);
         return indexSignature;

@@ -309,7 +309,22 @@ namespace ts {
             case SyntaxKind.LiteralType:
                 throw new Error("reached unsupported type.");
 
+            // Type Declarations
+
+            case SyntaxKind.TypeParameter:
+                return updateTypeParameterDeclaration(<TypeParameterDeclaration>node
+                    , visitNode((<TypeParameterDeclaration>node).name, visitor, isIdentifier)
+                    , visitNode((<TypeParameterDeclaration>node).constraint, visitor, isTypeNode)
+                    , visitNode((<TypeParameterDeclaration>node).default, visitor, isTypeNode));
+
             // Type members
+
+            case SyntaxKind.IndexSignature:
+                updateIndexSignatureDeclaration(<IndexSignatureDeclaration>node
+                    , nodesVisitor((<IndexSignatureDeclaration>node).parameters, visitor, isParameter)
+                    , visitNode((<IndexSignatureDeclaration>node).type, visitor, isTypeNode)
+                    , nodesVisitor((<IndexSignatureDeclaration>node).decorators, visitor, isDecorator)
+                    , nodesVisitor((<IndexSignatureDeclaration>node).modifiers, visitor, isModifier));
 
             case SyntaxKind.PropertyDeclaration:
                 return updateProperty(<PropertyDeclaration>node,

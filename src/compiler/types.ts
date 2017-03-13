@@ -818,7 +818,7 @@ namespace ts {
         body?: FunctionBody;
     }
 
-    // For when we encounter a semicolon in a class declaration.  ES6 allows these as class elements.
+    /** For when we encounter a semicolon in a class declaration. ES6 allows these as class elements.*/
     export interface SemicolonClassElement extends ClassElement {
         kind: SyntaxKind.SemicolonClassElement;
     }
