@@ -10,8 +10,8 @@ namespace ts.codefix {
 
         const changeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
 
-        for (let i = newNodes.length - 1; i >= 0; i--) {
-            changeTracker.insertNodeAfter(sourceFile, insertAfter, newNodes[i], { insertTrailingNewLine: true });
+        for (const newNode of newNodes) {
+            changeTracker.insertNodeAfter(sourceFile, insertAfter, newNode, { insertTrailingNewLine: true });
         }
         return changeTracker.getChanges();
     }
@@ -52,7 +52,8 @@ namespace ts.codefix {
 
         const declaration = declarations[0] as Declaration;
         const name = declaration.name ? declaration.name.getText() : undefined;
-        const modifiers = [createVisibilityModifier(getModifierFlags(declaration))];
+        const visibilityModifier = createVisibilityModifier(getModifierFlags(declaration));
+        const modifiers = visibilityModifier ? [visibilityModifier] : undefined;
         const type = checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration);
 
         switch (declaration.kind) {
@@ -64,7 +65,7 @@ namespace ts.codefix {
                 // TODO: add modifiers.
                 const property = createProperty(
                       /*decorators*/undefined
-                    , /*modifiers*/ undefined
+                    , modifiers
                     , name
                     , /*questionToken*/ undefined
                     , typeNode
