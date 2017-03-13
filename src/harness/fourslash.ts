@@ -1851,16 +1851,40 @@ namespace FourSlash {
 
             const unsatisfiedRanges: Range[] = [];
 
+            const delayedErrors: string[] = [];
             for (const range of ranges) {
                 const length = range.end - range.start;
                 const matchingImpl = ts.find(implementations, impl =>
                     range.fileName === impl.fileName && range.start === impl.textSpan.start && length === impl.textSpan.length);
                 if (matchingImpl) {
+                    if (range.marker && range.marker.data) {
+                        const expected = <{ displayParts?: ts.SymbolDisplayPart[], parts: string[], kind?: string }>range.marker.data;
+                        if (expected.displayParts) {
+                            if (!ts.arrayIsEqualTo(expected.displayParts, matchingImpl.displayParts, displayPartIsEqualTo)) {
+                                delayedErrors.push(`Mismatched display parts: expected ${JSON.stringify(expected.displayParts)}, actual ${JSON.stringify(matchingImpl.displayParts)}`);
+                            }
+                        }
+                        else if (expected.parts) {
+                            const actualParts = matchingImpl.displayParts.map(p => p.text);
+                            if (!ts.arrayIsEqualTo(expected.parts, actualParts)) {
+                                delayedErrors.push(`Mismatched non-tagged display parts: expected ${JSON.stringify(expected.parts)}, actual ${JSON.stringify(actualParts)}`);
+                            }
+                        }
+                        if (expected.kind !== undefined) {
+                            if (expected.kind !== matchingImpl.kind) {
+                                delayedErrors.push(`Mismatched kind: expected ${JSON.stringify(expected.kind)}, actual ${JSON.stringify(matchingImpl.kind)}`);
+                            }
+                        }
+                    }
+
                     matchingImpl.matched = true;
                 }
                 else {
                     unsatisfiedRanges.push(range);
                 }
+            }
+            if (delayedErrors.length) {
+                this.raiseError(delayedErrors.join("\n"));
             }
 
             const unmatchedImplementations = implementations.filter(impl => !impl.matched);
@@ -1885,6 +1909,10 @@ namespace FourSlash {
 
             function implementationsAreEqual(a: ImplementationLocationInformation, b: ImplementationLocationInformation) {
                 return a.fileName === b.fileName && TestState.textSpansEqual(a.textSpan, b.textSpan);
+            }
+
+            function displayPartIsEqualTo(a: ts.SymbolDisplayPart, b: ts.SymbolDisplayPart): boolean {
+                return a.kind === b.kind && a.text === b.text;
             }
         }
 
