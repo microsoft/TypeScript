@@ -54,13 +54,12 @@ namespace ts.codefix {
                 return undefined;
             }
             const typeNode = checker.createTypeNode(indexInfoOfKind.type);
-            let name: string;
             const newIndexSignatureDeclaration = createIndexSignatureDeclaration(
                 [createParameter(
                       /*decorators*/undefined
                     , /*modifiers*/ undefined
                     , /*dotDotDotToken*/ undefined
-                    , name
+                    ,  getNameFromIndexInfo(indexInfoOfKind)
                     , /*questionToken*/ undefined
                     , kind === IndexKind.String ? createKeywordTypeNode(SyntaxKind.StringKeyword) : createKeywordTypeNode(SyntaxKind.NumberKeyword))]
                 , typeNode);

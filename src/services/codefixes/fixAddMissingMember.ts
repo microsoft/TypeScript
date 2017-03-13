@@ -59,7 +59,7 @@ namespace ts.codefix {
              /*decorators*/ undefined
             , /*modifiers*/ undefined
             , /*dotDotDotToken*/ undefined
-            , "name"
+            , "x"
             , /*questionToken*/ undefined
             , stringTypeNode);
         const indexSignature = createIndexSignatureDeclaration([indexingParameter], typeNode);

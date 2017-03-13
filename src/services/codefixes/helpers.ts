@@ -234,4 +234,8 @@ namespace ts.codefix {
             , parameterTypeNode);
         return parameterNode;
     }
+
+    export function getNameFromIndexInfo(info: IndexInfo) {
+        return info.declaration ? declarationNameToString(info.declaration.parameters[0].name) : "x"
+    }
 }
