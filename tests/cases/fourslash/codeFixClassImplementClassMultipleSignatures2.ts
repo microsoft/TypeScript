@@ -13,6 +13,6 @@ verify.rangeAfterCodeFix(`
     method(a: string, b: number): Function;
     method(a: string): Function;
     method(a: string | number, b?: string | number): boolean | Function {
-        throw new Error('Method not implemented.');
+        throw new Error("Method not implemented.");
     }
 `);

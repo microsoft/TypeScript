@@ -7,6 +7,6 @@
 //// class C extends A<number> {[| |]}
 
 verify.rangeAfterCodeFix(`f(x: number): number{
-    throw new Error('Method not implemented.');
+    throw new Error("Method not implemented.");
 }
 `);

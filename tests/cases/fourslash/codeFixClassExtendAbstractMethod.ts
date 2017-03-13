@@ -15,6 +15,6 @@ verify.rangeAfterCodeFix(`
     f(a: string, b: number): Function;
     f(a: string): Function;
     f(a: any, b?: any) {
-        throw new Error('Method not implemented.');
+        throw new Error("Method not implemented.");
     }
 `);

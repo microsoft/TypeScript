@@ -11,11 +11,11 @@
 
 verify.rangeAfterCodeFix(`
     ["foo"](o: any): boolean {
-        throw new Error('Method not implemented.');
+        throw new Error("Method not implemented.");
     }
     ["x"]: boolean;
     [1](): string {
-        throw new Error('Method not implemented.');
+        throw new Error("Method not implemented.");
     }
     [2]: boolean;
 `);

@@ -14,6 +14,6 @@ verify.rangeAfterCodeFix(`
     y: this;
     z: A;
     foo(): number {
-        throw new Error('Method not implemented.');
+        throw new Error("Method not implemented.");
     }
 `);
