@@ -91,9 +91,11 @@ namespace ts.codefix {
                     // TODO: get parameters working.
                     // TODO: add support for type parameters.
                     const signature = signatures[0];
+                    const newTypeParameters = signature.typeParameters && signature.typeParameters.map(checker.createTypeParameterDeclarationFromType);
                     const newParameterNodes = signature.getParameters().map(symbol => createParameterDeclarationFromSymbol(symbol, enclosingDeclaration, checker));
-                    const returnType = checker.createTypeNode(signature.resolvedReturnType);
-                    return createStubbedMethod(modifiers, name, /*typeParameters*/undefined, newParameterNodes, returnType);
+                    
+                    const returnType = checker.createTypeNode(checker.getReturnTypeOfSignature(signature));
+                    return createStubbedMethod(modifiers, name, newTypeParameters, newParameterNodes, returnType);
                 }
 
                 let signatureDeclarations = [];
@@ -101,6 +103,7 @@ namespace ts.codefix {
                     // const sigString = checker.signatureToString(signatures[i], enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
                     // TODO: make signatures instead of methods
                     const signature = signatures[i];
+                    const newTypeParameters = signature.typeParameters && signature.typeParameters.map(checker.createTypeParameterDeclarationFromType);
                     const newParameterNodes = signature.getParameters().map(symbol => createParameterDeclarationFromSymbol(symbol, enclosingDeclaration, checker));
                     const returnType = checker.createTypeNode(signature.resolvedReturnType);
                     signatureDeclarations.push(createMethod(
@@ -108,7 +111,7 @@ namespace ts.codefix {
                         , modifiers
                         , /*asteriskToken*/ undefined
                         , name
-                        , /*typeParameters*/undefined
+                        , newTypeParameters
                         , newParameterNodes
                         , returnType
                         , /*body*/undefined));
@@ -116,9 +119,10 @@ namespace ts.codefix {
 
                 if (declarations.length > signatures.length) {
                     let signature = checker.getSignatureFromDeclaration(declarations[declarations.length - 1] as SignatureDeclaration);
+                    const newTypeParameters = signature.typeParameters && signature.typeParameters.map(checker.createTypeParameterDeclarationFromType);
                     const newParameterNodes = signature.getParameters().map(symbol => createParameterDeclarationFromSymbol(symbol, enclosingDeclaration, checker));
                     const returnType = checker.createTypeNode(signature.resolvedReturnType);
-                    signatureDeclarations.push(createStubbedMethod(modifiers, name, /*typeParameters*/undefined, newParameterNodes, returnType));
+                    signatureDeclarations.push(createStubbedMethod(modifiers, name, newTypeParameters, newParameterNodes, returnType));
                 }
                 else {
                     Debug.assert(declarations.length === signatures.length);

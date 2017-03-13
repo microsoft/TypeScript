@@ -2466,8 +2466,11 @@ namespace ts {
          */
         /* @internal */ getParameterType(signature: Signature, parameterIndex: number): Type;
         getNonNullableType(type: Type): Type;
+
         /** Note that the resulting type node cannot be checked. */
         createTypeNode(type: Type): TypeNode;
+        /** Note that the resulting type node cannot be checked. */
+        createTypeParameterDeclarationFromType(type: Type): TypeParameterDeclaration;
 
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolAtLocation(node: Node): Symbol;
