@@ -5,7 +5,6 @@ interface DOMTokenList {
 }
 
 interface NodeList {
-    
     [Symbol.iterator](): IterableIterator<Node>
 }
 
