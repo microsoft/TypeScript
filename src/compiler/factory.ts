@@ -273,10 +273,9 @@ namespace ts {
         return unionTypeNode;
     }
 
-    export function updateUnionOrIntersectionTypeNode(node: UnionOrIntersectionTypeNode, kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, types: NodeArray<TypeNode>) {
+    export function updateUnionOrIntersectionTypeNode(node: UnionOrIntersectionTypeNode, types: NodeArray<TypeNode>) {
         return node.types !== types
-            || node.kind !== kind
-            ? updateNode(createUnionOrIntersectionTypeNode(kind, types), node)
+            ? updateNode(createUnionOrIntersectionTypeNode(node.kind, types), node)
             : node;
     }
 

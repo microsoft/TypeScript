@@ -275,39 +275,40 @@ namespace ts {
             // Types
 
             case SyntaxKind.TypePredicate:
-                throw new Error("reached unsupported type.");
+                throw new Error("reached unsupported type in visitor.");
             case SyntaxKind.TypeReference:
                 return updateTypeReferenceNode(<TypeReferenceNode>node
                      , visitNode((<TypeReferenceNode>node).typeName as Identifier, visitor)
                      , nodesVisitor((<TypeReferenceNode>node).typeArguments, visitor)
                 );
             case SyntaxKind.FunctionType:
-                throw new Error("reached unsupported type.");
+                throw new Error("reached unsupported type in visitor.");
             case SyntaxKind.ConstructorType:
-                throw new Error("reached unsupported type.");
+                throw new Error("reached unsupported type in visitor.");
             case SyntaxKind.TypeQuery:
-                throw new Error("reached unsupported type.");
+                throw new Error("reached unsupported type in visitor.");
             case SyntaxKind.TypeLiteral:
-                throw new Error("reached unsupported type.");
+                throw new Error("reached unsupported type in visitor.");
             case SyntaxKind.ArrayType:
-                throw new Error("reached unsupported type.");
+                throw new Error("reached unsupported type in visitor.");
             case SyntaxKind.TupleType:
-                throw new Error("reached unsupported type.");
+                throw new Error("reached unsupported type in visitor.");
             case SyntaxKind.UnionType:
             case SyntaxKind.IntersectionType:
-                throw new Error("reached unsupported type.");
+                return updateUnionOrIntersectionTypeNode(<UnionOrIntersectionTypeNode>node
+                , nodesVisitor((<UnionOrIntersectionTypeNode>node).types, visitor, isTypeNode));
             case SyntaxKind.ParenthesizedType:
-                throw new Error("reached unsupported type.");
+                throw new Error("reached unsupported type in visitor.");
             case SyntaxKind.ThisType:
-                throw new Error("reached unsupported type.");
+                throw new Error("reached unsupported type in visitor.");
             case SyntaxKind.TypeOperator:
-                throw new Error("reached unsupported type.");
+                throw new Error("reached unsupported type in visitor.");
             case SyntaxKind.IndexedAccessType:
-                throw new Error("reached unsupported type.");
+                throw new Error("reached unsupported type in visitor.");
             case SyntaxKind.MappedType:
-                throw new Error("reached unsupported type.");
+                throw new Error("reached unsupported type in visitor.");
             case SyntaxKind.LiteralType:
-                throw new Error("reached unsupported type.");
+                throw new Error("reached unsupported type in visitor.");
 
             // Type Declarations
 

@@ -2190,20 +2190,34 @@ namespace ts {
         }
 
         function createTypeNode(type: Type) {
-            // let encounteredError = false;
+            let undefinedArgumentIsError = true;
+            let encounteredError = false;
             let checkAlias = true;
 
             return createTypeNodeWorker(type);
 
             // function createTypeDeclaration(type: Type): Declaration {
             //     if (!type) {
+            //         if (undefinedArgumentIsError) { encounteredError = true; }
             //         return undefined;
             //     }
-            //     throw new Error("not implemented.");
+            //     if (type.flags & TypeFlags.TypeParameter) {
+            //         const constraint = createTypeNodeWorker(getConstraintFromTypeParameter(<TypeParameter>type)) as TypeNode;
+            //         const defaultParameter = createTypeNodeWorker(getDefaultFromTypeParameter(<TypeParameter>type)) as TypeNode;
+            //         if (!type.symbol) {
+            //             encounteredError = true;
+            //             throw new Error("No symbol for type parameter so can't get name");
+            //         }
+            //         const name = getNameOfSymbol(type.symbol);
+            //         return createTypeParameterDeclaration(name, constraint, defaultParameter);
+            //     }
+
+            //     throw new Error("type declarations not implemented.");
             // }
 
             function createTypeNodeWorker(type: Type): TypeNode {
                 if (!type) {
+                    if (undefinedArgumentIsError) { encounteredError = true; }
                     return undefined;
                 }
 
@@ -2229,11 +2243,9 @@ namespace ts {
                     return createKeywordTypeNode(SyntaxKind.BooleanKeyword);
                 }
                 if (type.flags & (TypeFlags.StringLiteral)) {
-                    // TODO: check if this actually works with boolean.
                     return createLiteralTypeNode((createLiteral((<LiteralType>type).text)));
                 }
                 if (type.flags & (TypeFlags.NumberLiteral)) {
-                    // TODO: check if this actually works with boolean.
                     return createLiteralTypeNode((createNumericLiteral((<LiteralType>type).text)));
                 }
                 if (type.flags & TypeFlags.Void) {
@@ -2249,40 +2261,27 @@ namespace ts {
                     return createKeywordTypeNode(SyntaxKind.NeverKeyword);
                 }
                 if (type.flags & TypeFlags.Enum) {
-                    throw new Error("not implemented");
+                    throw new Error("enum not implemented");
                 }
                 if (type.flags & TypeFlags.ESSymbol) {
-                    throw new Error("not implemented");
+                    throw new Error("ESSymbol not implemented");
                 }
                 if (type.flags & TypeFlags.TypeParameter) {
                     throw new Error("Type Parameter declarations only handled in other worker.");
-                    // const constraint = createTypeNodeWorker(getConstraintFromTypeParameter(<TypeParameter>type)) as TypeNode;
-                    // const defaultParameter = createTypeNodeWorker(getDefaultFromTypeParameter(<TypeParameter>type)) as TypeNode;
-                    // if (!type.symbol) {
-                    //     encounteredError = true;
-                    //     throw new Error("No symbol for type parameter so can't get name");
-                    // }
-                    // const name = getNameOfSymbol(type.symbol);
-                    // return createTypeParameterNode(name, constraint, defaultParameter);
                 }
                 if (type.flags & TypeFlags.Union) {
-                    throw new Error("not implemented");
+                    return createUnionOrIntersectionTypeNode(SyntaxKind.UnionType, mapToTypeNodeArray((type as UnionType).types));
                 }
                 if (type.flags & TypeFlags.Intersection) {
-                    throw new Error("not implemented");
+                    return createUnionOrIntersectionTypeNode(SyntaxKind.IntersectionType, mapToTypeNodeArray((type as UnionType).types));
                 }
                 if (type.flags & TypeFlags.Index) {
-                    throw new Error("not implemented");
+                    throw new Error("index not implemented");
                 }
                 if (type.flags & TypeFlags.IndexedAccess) {
-                    throw new Error("not implemented");
+                    throw new Error("indexed access not implemented");
                 }
 
-                // if(type.flags & TypeFlags.Object) {
-                //     throw new Error("not implemented");
-                // }
-
-                // TODO: should these be within the if above (check with asserts)
                 const objectFlags = getObjectFlags(type);
 
                 if (objectFlags & ObjectFlags.ClassOrInterface) {
@@ -2390,10 +2389,6 @@ namespace ts {
                 function mapToTypeNodeArray(types: Type[]): NodeArray<TypeNode> {
                     return asNodeArray(types && types.map(createTypeNodeWorker) as TypeNode[]);
                 }
-
-                // function mapToTypeDeclarationsArray(types: Type[]): NodeArray<Declaration> {
-                //     return asNodeArray(types && types.map(createTypeDeclaration));
-                // }
             }
         }
 
