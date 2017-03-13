@@ -3694,7 +3694,7 @@ namespace ts {
                 // For example:
                 //      var foo3 = require("subfolder
                 //      import * as foo1 from "module-from-node  -> we want this import to be a statement rather than import call expression
-                const importCall = parseImportCall();
+                const importCall = parseImportCallExpression();
                 if (importCall.specifier.kind === SyntaxKind.StringLiteral) {
                     (sourceFile.imports || (sourceFile.imports = [])).push(importCall.specifier as StringLiteral);
                 }
@@ -3774,7 +3774,7 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseImportCall(): ImportCallExpression {
+        function parseImportCallExpression(): ImportCallExpression {
             const importCallExpr = <ImportCallExpression>createNode(SyntaxKind.ImportCallExpression);
             parseExpected(SyntaxKind.ImportKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
