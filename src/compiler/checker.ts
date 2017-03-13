@@ -5129,7 +5129,8 @@ namespace ts {
             const excludeModifiers = isUnion ? ModifierFlags.NonPublicAccessibilityModifier : 0;
             // Flags we want to propagate to the result if they exist in all source symbols
             let commonFlags = isUnion ? SymbolFlags.None : SymbolFlags.Optional;
-            let checkFlags = CheckFlags.SyntheticProperty;
+            let syntheticFlag = CheckFlags.SyntheticMethod;
+            let checkFlags = 0;
             for (const current of types) {
                 const type = getApparentType(current);
                 if (type !== unknownType) {
@@ -5148,6 +5149,9 @@ namespace ts {
                             (modifiers & ModifierFlags.Protected ? CheckFlags.ContainsProtected : 0) |
                             (modifiers & ModifierFlags.Private ? CheckFlags.ContainsPrivate : 0) |
                             (modifiers & ModifierFlags.Static ? CheckFlags.ContainsStatic : 0);
+                        if (!isMethodLike(prop)) {
+                            syntheticFlag = CheckFlags.SyntheticProperty;
+                        }
                     }
                     else if (isUnion) {
                         checkFlags |= CheckFlags.Partial;
@@ -5177,7 +5181,7 @@ namespace ts {
                 propTypes.push(type);
             }
             const result = createSymbol(SymbolFlags.Property | commonFlags, name);
-            result.checkFlags = checkFlags;
+            result.checkFlags = syntheticFlag | checkFlags;
             result.containingType = containingType;
             result.declarations = declarations;
             result.type = isUnion ? getUnionType(propTypes) : getIntersectionType(propTypes);
@@ -8630,7 +8634,7 @@ namespace ts {
         // Invoke the callback for each underlying property symbol of the given symbol and return the first
         // value that isn't undefined.
         function forEachProperty<T>(prop: Symbol, callback: (p: Symbol) => T): T {
-            if (getCheckFlags(prop) & CheckFlags.SyntheticProperty) {
+            if (getCheckFlags(prop) & CheckFlags.Synthetic) {
                 for (const t of (<TransientSymbol>prop).containingType.types) {
                     const p = getPropertyOfType(t, prop.name);
                     const result = p && forEachProperty(p, callback);
@@ -13112,7 +13116,7 @@ namespace ts {
                 const flags = getCombinedModifierFlags(s.valueDeclaration);
                 return s.parent && s.parent.flags & SymbolFlags.Class ? flags : flags & ~ModifierFlags.AccessibilityModifier;
             }
-            if (getCheckFlags(s) & CheckFlags.SyntheticProperty) {
+            if (getCheckFlags(s) & CheckFlags.Synthetic) {
                 const checkFlags = (<TransientSymbol>s).checkFlags;
                 const accessModifier = checkFlags & CheckFlags.ContainsPrivate ? ModifierFlags.Private :
                     checkFlags & CheckFlags.ContainsPublic ? ModifierFlags.Public :
@@ -13128,6 +13132,10 @@ namespace ts {
 
         function getDeclarationNodeFlagsFromSymbol(s: Symbol): NodeFlags {
             return s.valueDeclaration ? getCombinedNodeFlags(s.valueDeclaration) : 0;
+        }
+
+        function isMethodLike(symbol: Symbol) {
+            return !!(symbol.flags & SymbolFlags.Method || getCheckFlags(symbol) & CheckFlags.SyntheticMethod);
         }
 
         /**
@@ -13159,11 +13167,11 @@ namespace ts {
                 //   where this references the constructor function object of a derived class,
                 //   a super property access is permitted and must specify a public static member function of the base class.
                 if (languageVersion < ScriptTarget.ES2015) {
-                    const propKind = getDeclarationKindFromSymbol(prop);
-                    if (propKind !== SyntaxKind.MethodDeclaration && propKind !== SyntaxKind.MethodSignature) {
-                        // `prop` refers to a *property* declared in the super class
-                        // rather than a *method*, so it does not satisfy the above criteria.
-
+                    const hasNonMethodDeclaration = forEachProperty(prop, p => {
+                        const propKind = getDeclarationKindFromSymbol(p);
+                        return propKind !== SyntaxKind.MethodDeclaration && propKind !== SyntaxKind.MethodSignature;
+                    });
+                    if (hasNonMethodDeclaration) {
                         error(errorNode, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
                         return false;
                     }
@@ -19697,7 +19705,7 @@ namespace ts {
                     else {
                         // derived overrides base.
                         const derivedDeclarationFlags = getDeclarationModifierFlagsFromSymbol(derived);
-                        if ((baseDeclarationFlags & ModifierFlags.Private) || (derivedDeclarationFlags & ModifierFlags.Private)) {
+                        if (baseDeclarationFlags & ModifierFlags.Private || derivedDeclarationFlags & ModifierFlags.Private) {
                             // either base or derived property is private - not override, skip it
                             continue;
                         }
@@ -19707,28 +19715,24 @@ namespace ts {
                             continue;
                         }
 
-                        if ((base.flags & derived.flags & SymbolFlags.Method) || ((base.flags & SymbolFlags.PropertyOrAccessor) && (derived.flags & SymbolFlags.PropertyOrAccessor))) {
+                        if (isMethodLike(base) && isMethodLike(derived) || base.flags & SymbolFlags.PropertyOrAccessor && derived.flags & SymbolFlags.PropertyOrAccessor) {
                             // method is overridden with method or property/accessor is overridden with property/accessor - correct case
                             continue;
                         }
 
                         let errorMessage: DiagnosticMessage;
-                        if (base.flags & SymbolFlags.Method) {
+                        if (isMethodLike(base)) {
                             if (derived.flags & SymbolFlags.Accessor) {
                                 errorMessage = Diagnostics.Class_0_defines_instance_member_function_1_but_extended_class_2_defines_it_as_instance_member_accessor;
                             }
                             else {
-                                Debug.assert((derived.flags & SymbolFlags.Property) !== 0);
                                 errorMessage = Diagnostics.Class_0_defines_instance_member_function_1_but_extended_class_2_defines_it_as_instance_member_property;
                             }
                         }
                         else if (base.flags & SymbolFlags.Property) {
-                            Debug.assert((derived.flags & SymbolFlags.Method) !== 0);
                             errorMessage = Diagnostics.Class_0_defines_instance_member_property_1_but_extended_class_2_defines_it_as_instance_member_function;
                         }
                         else {
-                            Debug.assert((base.flags & SymbolFlags.Accessor) !== 0);
-                            Debug.assert((derived.flags & SymbolFlags.Method) !== 0);
                             errorMessage = Diagnostics.Class_0_defines_instance_member_accessor_1_but_extended_class_2_defines_it_as_instance_member_function;
                         }
 
@@ -21387,7 +21391,7 @@ namespace ts {
         }
 
         function getRootSymbols(symbol: Symbol): Symbol[] {
-            if (getCheckFlags(symbol) & CheckFlags.SyntheticProperty) {
+            if (getCheckFlags(symbol) & CheckFlags.Synthetic) {
                 const symbols: Symbol[] = [];
                 const name = symbol.name;
                 forEach(getSymbolLinks(symbol).containingType.types, t => {
