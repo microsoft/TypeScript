@@ -503,6 +503,18 @@ namespace ts {
             : node;
     }
 
+    export function createImportCall(specifier: Expression): ImportCallExpression {
+        const node = <ImportCallExpression>createSynthesizedNode(SyntaxKind.ImportCallExpression);
+        node.specifier = specifier;
+        return node;
+    }
+
+    export function updateImportCall(node: ImportCallExpression, specifier: Expression): ImportCallExpression {
+        return node.specifier !== specifier
+            ? updateNode(createImportCall(specifier), node)
+            : node;
+    }
+
     export function createTaggedTemplate(tag: Expression, template: TemplateLiteral) {
         const node = <TaggedTemplateExpression>createSynthesizedNode(SyntaxKind.TaggedTemplateExpression);
         node.tag = parenthesizeForAccess(tag);
