@@ -106,6 +106,7 @@ namespace ts {
             getParameterType: getTypeAtPosition,
             getReturnTypeOfSignature,
             getNonNullableType,
+            createTypeNode,
             getSymbolsInScope: (location, meaning) => {
                 location = getParseTreeNode(location);
                 return location ? getSymbolsInScope(location, meaning) : [];
@@ -2186,6 +2187,221 @@ namespace ts {
                 result = result.substr(0, maxLength - "...".length) + "...";
             }
             return result;
+        }
+
+        function createTypeNode(type: Type) {
+            let undefinedArgumentIsError = true;
+            let encounteredError = false;
+            let checkAlias = true;
+
+            return createTypeNodeWorker(type);
+
+            function createTypeNodeWorker(type: Type): TypeNode {
+                if (!type) {
+                    if (undefinedArgumentIsError) { encounteredError = true; }
+                    return undefined;
+                }
+
+                if (checkAlias && type.aliasSymbol) {
+                    const name = getNameOfSymbol(type.aliasSymbol);
+                    const typeArguments = mapToTypeNodeArray(type.aliasTypeArguments);
+                    return createTypeReferenceNode(createIdentifier(name), typeArguments);
+                }
+                checkAlias = false;
+
+                if (type.flags & TypeFlags.Any) {
+                    // TODO: add other case where type ends up being `any`.
+                    return createKeywordTypeNode(SyntaxKind.StringKeyword);
+                }
+                if (type.flags & TypeFlags.String) {
+                    return createKeywordTypeNode(SyntaxKind.StringKeyword);
+                }
+                if (type.flags & TypeFlags.Number) {
+                    return createKeywordTypeNode(SyntaxKind.NumberKeyword);
+                }
+                if(type.flags & TypeFlags.Boolean) {
+                    // TODO: this is probably x: boolean. How do we deal with x: true ?
+                    return createKeywordTypeNode(SyntaxKind.BooleanKeyword);
+                }
+                if (type.flags & (TypeFlags.StringLiteral)) {
+                    return createLiteralTypeNode((createLiteral((<LiteralType>type).text)));
+                }
+                if (type.flags & (TypeFlags.NumberLiteral)) {
+                    return createLiteralTypeNode((createNumericLiteral((<LiteralType>type).text)));
+                }
+                if (type.flags & TypeFlags.Void) {
+                    return createKeywordTypeNode(SyntaxKind.VoidKeyword);
+                }
+                if (type.flags & TypeFlags.Undefined) {
+                    return createKeywordTypeNode(SyntaxKind.UndefinedKeyword);
+                }
+                if (type.flags & TypeFlags.Null) {
+                    return createKeywordTypeNode(SyntaxKind.NullKeyword);
+                }
+                if (type.flags & TypeFlags.Never) {
+                    return createKeywordTypeNode(SyntaxKind.NeverKeyword);
+                }
+                if (type.flags & TypeFlags.Enum) {
+                    throw new Error("enum not implemented");
+                }
+                if (type.flags & TypeFlags.ESSymbol) {
+                    throw new Error("ESSymbol not implemented");
+                }
+                if (type.flags & TypeFlags.TypeParameter) {
+                    if ((<TypeParameter>type).isThisType) {
+                        return createThis();
+                    }
+                    throw new Error("Type Parameter declarations only handled in other worker.");
+                }
+                if (type.flags & TypeFlags.Union) {
+                    return createUnionOrIntersectionTypeNode(SyntaxKind.UnionType, mapToTypeNodeArray((type as UnionType).types));
+                }
+                if (type.flags & TypeFlags.Intersection) {
+                    return createUnionOrIntersectionTypeNode(SyntaxKind.IntersectionType, mapToTypeNodeArray((type as UnionType).types));
+                }
+                if (type.flags & TypeFlags.Index) {
+                    throw new Error("index not implemented");
+                }
+                if (type.flags & TypeFlags.IndexedAccess) {
+                    throw new Error("indexed access not implemented");
+                }
+
+                const objectFlags = getObjectFlags(type);
+
+                if (objectFlags & ObjectFlags.ClassOrInterface) {
+                    Debug.assert(!!(type.flags & TypeFlags.Object));
+                    const name = getNameOfSymbol(type.symbol);
+                    // TODO: handle type arguments.
+                    // TODO: handle anonymous classes.
+                    return createTypeReferenceNode(name);
+                }
+
+                if (objectFlags & ObjectFlags.Reference) {
+                    Debug.assert(!!(type.flags & TypeFlags.Object));
+                    // and vice versa.
+                    // this case includes tuple types
+                    // TODO: test empty tuples, see if they are coherent.
+                    const typeArguments = (type as TypeReference).typeArguments || emptyArray;
+                    return createTupleTypeNode(mapToTypeNodeArray(typeArguments))
+                }
+
+                // keyword types
+                // this type node
+                // function type node
+                // constructor type node
+                // type reference node
+                // type predicate node - is Foo (for return types)
+                // type query node -- typeof number
+                // type literal node (like object literal)
+                // array type
+                // tuple type
+                // union type
+                // might need parens
+                // intersection type
+                // Type operator node (eg (ie?): keyof T)
+                // IndexedAccess Type Node
+                // mapped type node
+                // literal type node
+
+                // if (inTypeAlias && type.aliasSymbol) {
+                //     return isSymbolAccessible(type.aliasSymbol, enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/false).accessibility === SymbolAccessibility.Accessible
+                //         && (!type.aliasTypeArguments || allTypesVisible(type.aliasTypeArguments));
+                // }
+                // const typeSymbolAccessibility = type.symbol && isSymbolAccessible(type.symbol, enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/ false).accessibility;
+                // if (type.flags & TypeFlags.TypeParameter) {
+                //     if (inObjectLiteral && (type as TypeParameter).isThisType) {
+                //         return false;
+                //     }
+                //     const constraint = getConstraintFromTypeParameter((<TypeParameter>type));
+                //     return typeSymbolAccessibility === SymbolAccessibility.Accessible
+                //         && (!constraint || isTypeAccessibleWorker(constraint, inObjectLiteral, /*inTypeAlias*/false));
+                // }
+                // const objectFlags = getObjectFlags(type);
+                // if (objectFlags & ObjectFlags.ClassOrInterface) {
+                //     // If type is a class or interface type that wasn't hit by the isSymbolAccessible check above,
+                //     // type must be an anonymous class or interface.
+                //     return false;
+                // }
+
+                if (objectFlags & ObjectFlags.Mapped) {
+                    Debug.assert(!!(type.flags & TypeFlags.Object));
+                    // const typeParameter = getTypeParameterFromMappedType(<MappedType>type);
+                    // const constraintType = getConstraintTypeFromMappedType(<MappedType>type);
+                    // const templateType = getTemplateTypeFromMappedType(<MappedType>type);
+                    throw new Error("Mapped types not implemented");
+                }
+
+                if (objectFlags & ObjectFlags.Anonymous) {
+                    Debug.assert(!!(type.flags & TypeFlags.Object));
+                    // The type is an object literal type.
+                    if (!type.symbol) {
+                        // Anonymous types without symbols are literals.
+
+
+                        // mapToTypeDeclarationsArray(type)
+                        throw new Error("unknown case.");
+                    }
+
+                    const members = type.symbol.members;
+                    const newMembers: TypeElement[] = [];
+                    memberLoop: for(const key in members){
+                        const oldMember = members.get(key);
+                        const name = getNameOfSymbol(oldMember);
+                        const oldDeclaration = oldMember.declarations && oldMember.declarations[0] as TypeElement;
+                        if(!oldDeclaration) {
+                            continue memberLoop;
+                        }
+
+                        const kind = oldDeclaration.kind;
+
+                        switch (kind) {
+                            case SyntaxKind.PropertySignature:
+                                const optional = !!oldDeclaration.questionToken;
+                                newMembers.push(createPropertySignature(
+                                    createIdentifier(name)
+                                    , optional ? createToken(SyntaxKind.QuestionToken) : undefined
+                                    , createTypeNode(getTypeOfSymbol(oldMember))));
+                            case SyntaxKind.MethodSignature:
+                            case SyntaxKind.CallSignature:
+                            case SyntaxKind.ConstructSignature:
+                            case SyntaxKind.IndexSignature:
+                            default:
+                                throw new Error("type literal constituent not implemented.");
+                        }
+                    }   
+                    return createTypeLiteralNode(newMembers);
+                }
+
+                Debug.fail("Should be unreachable.");
+
+                // function createTypeParameterDeclarationFromType(type: Type): TypeParameterDeclaration {
+                //     if (!type) {
+                //         if (undefinedArgumentIsError) { encounteredError = true; }
+                //         return undefined;
+                //     }
+                //     if (type.flags & TypeFlags.TypeParameter) {
+                //         const constraint = createTypeNodeWorker(getConstraintFromTypeParameter(<TypeParameter>type)) as TypeNode;
+                //         const defaultParameter = createTypeNodeWorker(getDefaultFromTypeParameter(<TypeParameter>type)) as TypeNode;
+                //         if (!type.symbol) {
+                //             encounteredError = true;
+                //             throw new Error("No symbol for type parameter so can't get name");
+                //         }
+                //         const name = getNameOfSymbol(type.symbol);
+                //         return createTypeParameterDeclaration(name, constraint, defaultParameter);
+                //     }
+                //     throw new Error("type declarations not implemented.");
+                // }
+
+                /** Note that mapToTypeNodeArray(undefined) === undefined. */
+                function mapToTypeNodeArray(types: Type[]): NodeArray<TypeNode> {
+                    return asNodeArray(types && types.map(createTypeNodeWorker) as TypeNode[]);
+                }
+
+                // /** Note that mapToTypeNodeArray(undefined) === undefined. */
+                // function mapToTypeParameterArray(types: Type[]): NodeArray<TypeNode> {
+                //     return asNodeArray(types && types.map(createTypeParameterDeclarationFromType) as TypeNode[]);
+                // }
+            }
         }
 
         function typePredicateToString(typePredicate: TypePredicate, enclosingDeclaration?: Declaration, flags?: TypeFormatFlags): string {
@@ -6954,6 +7170,10 @@ namespace ts {
                     return unknownType;
             }
         }
+
+        // export function synthesizeTypeNode(type: Type, enclosingDeclaration: Node): TypeNode {
+        //     throw new Error("Not implemented" + enclosingDeclaration);
+        // }
 
         function instantiateList<T>(items: T[], mapper: TypeMapper, instantiator: (item: T, mapper: TypeMapper) => T): T[] {
             if (items && items.length) {

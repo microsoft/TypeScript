@@ -11,11 +11,7 @@ var ts = require("./lib/typescript");
 
 // Variables
 var compilerDirectory = "src/compiler/";
-var servicesDirectory = "src/services/";
 var serverDirectory = "src/server/";
-var typingsInstallerDirectory = "src/server/typingsInstaller";
-var cancellationTokenDirectory = "src/server/cancellationToken";
-var watchGuardDirectory = "src/server/watchGuard";
 var harnessDirectory = "src/harness/";
 var libraryDirectory = "src/lib/";
 var scriptsDirectory = "scripts/";
@@ -131,6 +127,7 @@ var harnessSources = harnessCoreSources.concat([
     "matchFiles.ts",
     "initializeTSConfig.ts",
     "printer.ts",
+    "textChanges.ts",
     "transform.ts",
     "customTransforms.ts",
 ].map(function (f) {

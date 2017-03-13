@@ -16,7 +16,7 @@ namespace ts.codefix {
             return undefined;
         }
 
-        const startPos: number = classDecl.members.pos;
+        const openBrace = getOpenBraceOfClassLike(classDecl, sourceFile);
         const classType = checker.getTypeAtLocation(classDecl) as InterfaceType;
         const implementedTypeNodes = getClassImplementsHeritageClauseElements(classDecl);
 
@@ -31,43 +31,45 @@ namespace ts.codefix {
             const implementedTypeSymbols = checker.getPropertiesOfType(implementedType);
             const nonPrivateMembers = implementedTypeSymbols.filter(symbol => !(getModifierFlags(symbol.valueDeclaration) & ModifierFlags.Private));
 
-            let insertion = getMissingIndexSignatureInsertion(implementedType, IndexKind.Number, classDecl, hasNumericIndexSignature);
-            insertion += getMissingIndexSignatureInsertion(implementedType, IndexKind.String, classDecl, hasStringIndexSignature);
-            insertion += getMissingMembersInsertion(classDecl, nonPrivateMembers, checker, context.newLineCharacter);
-
+            let newNodes: Node[] = [];
+            createAndAddMissingIndexSignatureDeclaration(implementedType, IndexKind.Number, hasNumericIndexSignature, newNodes);
+            createAndAddMissingIndexSignatureDeclaration(implementedType, IndexKind.String, hasStringIndexSignature, newNodes);
+            newNodes = newNodes.concat(createMissingMemberNodes(classDecl, nonPrivateMembers, checker));
             const message = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Implement_interface_0), [implementedTypeNode.getText()]);
-            if (insertion) {
-                pushAction(result, insertion, message);
+            if (newNodes.length > 0) {
+                pushAction(result, newNodes, message);
             }
         }
 
         return result;
 
-        function getMissingIndexSignatureInsertion(type: InterfaceType, kind: IndexKind, enclosingDeclaration: ClassLikeDeclaration, hasIndexSigOfKind: boolean) {
-            if (!hasIndexSigOfKind) {
-                const IndexInfoOfKind = checker.getIndexInfoOfType(type, kind);
-                if (IndexInfoOfKind) {
-                    const writer = getSingleLineStringWriter();
-                    checker.getSymbolDisplayBuilder().buildIndexSignatureDisplay(IndexInfoOfKind, writer, kind, enclosingDeclaration);
-                    const result = writer.string();
-                    releaseStringWriter(writer);
-
-                    return result;
-                }
+        function createAndAddMissingIndexSignatureDeclaration(type: InterfaceType, kind: IndexKind, hasIndexSigOfKind: boolean, newNodes: Node[]): void {
+            if (hasIndexSigOfKind) {
+                return undefined;
             }
-            return "";
+
+            const indexInfoOfKind = checker.getIndexInfoOfType(type, kind);
+
+            if (!indexInfoOfKind) {
+                return undefined;
+            }
+            const typeNode = checker.createTypeNode(indexInfoOfKind.type);
+            const newIndexSignatureDeclaration = createIndexSignatureDeclaration(
+                [createParameter(
+                      /*decorators*/undefined
+                    , /*modifiers*/ undefined
+                    , /*dotDotDotToken*/ undefined
+                    ,  getNameFromIndexInfo(indexInfoOfKind)
+                    , /*questionToken*/ undefined
+                    , kind === IndexKind.String ? createKeywordTypeNode(SyntaxKind.StringKeyword) : createKeywordTypeNode(SyntaxKind.NumberKeyword))]
+                , typeNode);
+            newNodes.push(newIndexSignatureDeclaration);
         }
 
-        function pushAction(result: CodeAction[], insertion: string, description: string): void {
+        function pushAction(result: CodeAction[], newNodes: Node[], description: string): void {
             const newAction: CodeAction = {
                 description: description,
-                changes: [{
-                    fileName: sourceFile.fileName,
-                    textChanges: [{
-                        span: { start: startPos, length: 0 },
-                        newText: insertion
-                    }]
-                }]
+                changes: newNodesToChanges(newNodes, openBrace, context)
             };
             result.push(newAction);
         }

@@ -818,7 +818,7 @@ namespace ts {
         body?: FunctionBody;
     }
 
-    // For when we encounter a semicolon in a class declaration.  ES6 allows these as class elements.
+    /** For when we encounter a semicolon in a class declaration. ES6 allows these as class elements.*/
     export interface SemicolonClassElement extends ClassElement {
         kind: SyntaxKind.SemicolonClassElement;
     }
@@ -856,7 +856,10 @@ namespace ts {
             | SyntaxKind.BooleanKeyword
             | SyntaxKind.StringKeyword
             | SyntaxKind.SymbolKeyword
-            | SyntaxKind.VoidKeyword;
+            | SyntaxKind.VoidKeyword
+            | SyntaxKind.UndefinedKeyword
+            | SyntaxKind.NullKeyword
+            | SyntaxKind.NeverKeyword;
     }
 
     export interface ThisTypeNode extends TypeNode {
@@ -892,7 +895,7 @@ namespace ts {
         exprName: EntityName;
     }
 
-    // A TypeLiteral is the declaration node for an anonymous symbol.
+    /** A TypeLiteral is the declaration node for an anonymous symbol. */
     export interface TypeLiteralNode extends TypeNode, Declaration {
         kind: SyntaxKind.TypeLiteral;
         members: NodeArray<TypeElement>;
@@ -2205,6 +2208,16 @@ namespace ts {
         name: string;
     }
 
+    /* @internal */
+    /**
+     * Subset of properties from SourceFile that are used in multiple utility functions
+     */
+    export interface SourceFileLike {
+        readonly text: string;
+        lineMap: number[];
+    }
+
+
     // Source files are declarations when they are external modules.
     export interface SourceFile extends Declaration {
         kind: SyntaxKind.SourceFile;
@@ -2453,6 +2466,8 @@ namespace ts {
          */
         /* @internal */ getParameterType(signature: Signature, parameterIndex: number): Type;
         getNonNullableType(type: Type): Type;
+        /** Note that the resulting type node cannot be checked. */
+        createTypeNode(type: Type): TypeNode;
 
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolAtLocation(node: Node): Symbol;
@@ -4051,7 +4066,7 @@ namespace ts {
     export type Transformer<T extends Node> = (node: T) => T;
 
     /**
-     * A function that accepts and possible transforms a node.
+     * A function that accepts and possibly transforms a node.
      */
     export type Visitor = (node: Node) => VisitResult<Node>;
 
@@ -4132,6 +4147,8 @@ namespace ts {
         /*@internal*/ onEmitSourceMapOfPosition?: (pos: number) => void;
         /*@internal*/ onEmitHelpers?: (node: Node, writeLines: (text: string) => void) => void;
         /*@internal*/ onSetSourceFile?: (node: SourceFile) => void;
+        /*@internal*/ onBeforeEmitNodeArray?: (nodes: NodeArray<any>) => void;
+        /*@internal*/ onAfterEmitNodeArray?: (nodes: NodeArray<any>) => void;
     }
 
     export interface PrinterOptions {
