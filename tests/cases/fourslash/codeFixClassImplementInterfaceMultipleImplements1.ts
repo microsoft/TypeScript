@@ -7,13 +7,12 @@
 ////     y: number;
 //// }
 ////
-//// class C implements I1,I2 {[|
+//// class C implements I1,I2 {[| |]
 ////     y: number;
-//// |]}
+//// }
 
 verify.rangeAfterCodeFix(`
 x: number;
-y: number;
 `);
 
 verify.not.codeFixAvailable();

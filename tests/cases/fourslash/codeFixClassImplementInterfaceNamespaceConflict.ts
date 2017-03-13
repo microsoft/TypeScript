@@ -9,8 +9,7 @@
 ////     f1();
 //// }
 ////
-//// class C1 implements N1.I1 {[|
-//// |]}
+//// class C1 implements N1.I1 {[| |]}
 
 verify.rangeAfterCodeFix(`
 x: number;

@@ -4,8 +4,7 @@
 ////     f(x: number, y: this): I
 //// }
 ////
-//// class C implements I {[|
-//// |]}
+//// class C implements I {[| |]}
 
 verify.rangeAfterCodeFix(`
 f(x: number,y: this): I {

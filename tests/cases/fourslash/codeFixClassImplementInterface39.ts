@@ -9,8 +9,7 @@
 ////     f1();
 //// }
 ////
-//// class C1 implements N1.I1 {[|
-//// |]}
+//// class C1 implements N1.I1 {[| |]}
 
 verify.rangeAfterCodeFix(`f1(): string{
     throw new Error('Method not implemented.');
