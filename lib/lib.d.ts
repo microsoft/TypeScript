@@ -18053,6 +18053,10 @@ declare var URLSearchParams: {
 interface NodeListOf<TNode extends Node> extends NodeList {
     length: number;
     item(index: number): TNode;
+    keys(): ArrayLike<number>;
+    values(): ArrayLike<[number, TNode]>;
+    entries(): ArrayLike<TNode>;
+    forEach():void;
     [index: number]: TNode;
 }
 
