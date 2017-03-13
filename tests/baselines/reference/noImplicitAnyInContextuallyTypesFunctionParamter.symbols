@@ -8,7 +8,7 @@ regexMatchList.forEach(match => ''.replace(match, ''));
 >regexMatchList : Symbol(regexMatchList, Decl(noImplicitAnyInContextuallyTypesFunctionParamter.ts, 1, 3))
 >forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >match : Symbol(match, Decl(noImplicitAnyInContextuallyTypesFunctionParamter.ts, 2, 23))
->''.replace : Symbol(String.replace, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->replace : Symbol(String.replace, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>''.replace : Symbol(String.replace, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>replace : Symbol(String.replace, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >match : Symbol(match, Decl(noImplicitAnyInContextuallyTypesFunctionParamter.ts, 2, 23))
 
