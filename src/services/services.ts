@@ -25,6 +25,7 @@
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='formatting\smartIndenter.ts' />
 /// <reference path='codeFixProvider.ts' />
+/// <reference path='refactorProvider.ts' />
 /// <reference path='codefixes\fixes.ts' />
 
 namespace ts {
@@ -1898,11 +1899,56 @@ namespace ts {
             return Rename.getRenameInfo(program.getTypeChecker(), defaultLibFileName, getCanonicalFileName, getValidSourceFile(fileName), position);
         }
 
+        function getRefactorDiagnostics(fileName: string, range?: TextRange): RefactorDiagnostic[] {
+            synchronizeHostData();
+            const newLineCharacter = host.getNewLine();
+            if (range) {
+                const nonBoundSourceFile = getNonBoundSourceFile(fileName);
+                const context: LightRefactorContext = { newLineCharacter, nonBoundSourceFile };
+                return refactor.getRefactorDiagnosticsForRange(range, context);
+            }
+
+            const boundSourceFile = getValidSourceFile(fileName);
+            const program = getProgram();
+            const context: RefactorContext = { boundSourceFile, newLineCharacter, program, rulesProvider: ruleProvider };
+            const result: RefactorDiagnostic[] = [];
+
+            forEachChild(boundSourceFile, visitor);
+            return result;
+
+            function visitor(node: Node): void {
+                const diags = refactor.getSuggestedRefactorDiagnosticsForNode(node, context);
+                if (diags.length > 0) {
+                    addRange(result, diags);
+                }
+
+                forEachChild(node, visitor);
+            }
+        }
+
+        function getCodeActionsForRefactorAtPosition(
+            fileName: string,
+            range: TextRange,
+            refactorCode: number,
+            formatOptions: FormatCodeSettings): CodeAction[] {
+
+            const context: RefactorContext = {
+                boundSourceFile: getValidSourceFile(fileName),
+                newLineCharacter: host.getNewLine(),
+                program: getProgram(),
+                rulesProvider: getRuleProvider(formatOptions)
+            };
+
+            return refactor.getCodeActionsForRefactor(refactorCode, range, context);
+        }
+
         return {
             dispose,
             cleanupSemanticCache,
             getSyntacticDiagnostics,
             getSemanticDiagnostics,
+            getRefactorDiagnostics,
+            getCodeActionsForRefactorAtPosition,
             getCompilerOptionsDiagnostics,
             getSyntacticClassifications,
             getSemanticClassifications,

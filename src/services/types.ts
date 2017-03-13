@@ -250,6 +250,9 @@ namespace ts {
 
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[]): CodeAction[];
 
+        getRefactorDiagnostics(fileName: string, range?: TextRange): RefactorDiagnostic[];
+        getCodeActionsForRefactorAtPosition(fileName: string, range: TextRange, refactorCode: number, formatOptions: FormatCodeSettings): CodeAction[];
+
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
 
         getProgram(): Program;
@@ -338,6 +341,13 @@ namespace ts {
         description: string;
         /** Text changes to apply to each file as part of the code action */
         changes: FileTextChanges[];
+    }
+
+    export interface RefactorDiagnostic {
+        start: number;
+        end: number;
+        text: string;
+        code: number;
     }
 
     export interface TextInsertion {

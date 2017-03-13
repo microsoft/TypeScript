@@ -85,7 +85,7 @@ namespace ts.server {
     }
 
     export interface EventSender {
-        event(payload: any, eventName: string): void;
+        event<T>(payload: T, eventName: string): void;
     }
 
     function allEditsBeforePos(edits: ts.TextChange[], pos: number) {
@@ -190,6 +190,9 @@ namespace ts.server {
         /* @internal */
         export const GetCodeFixesFull: protocol.CommandTypes.GetCodeFixesFull = "getCodeFixes-full";
         export const GetSupportedCodeFixes: protocol.CommandTypes.GetSupportedCodeFixes = "getSupportedCodeFixes";
+
+        export const GetRefactorsForRange: protocol.CommandTypes.GetRefactorsForRange = "getRefactorsForRange";
+        export const GetCodeActionsForRefactor: protocol.CommandTypes.GetCodeActionsForRefactor = "getCodeActionsForRefactor";
     }
 
     export function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string {
@@ -219,7 +222,7 @@ namespace ts.server {
         getCurrentRequestId(): number;
         sendRequestCompletedEvent(requestId: number): void;
         getServerHost(): ServerHost;
-        isCancellationRequested():  boolean;
+        isCancellationRequested(): boolean;
         executeWithRequestId(requestId: number, action: () => void): void;
         logError(error: Error, message: string): void;
     }
@@ -300,7 +303,7 @@ namespace ts.server {
             }
         }
 
-        private setTimerHandle(timerHandle: any) {;
+        private setTimerHandle(timerHandle: any) {
             if (this.timerHandle !== undefined) {
                 this.operationHost.getServerHost().clearTimeout(this.timerHandle);
             }
@@ -380,7 +383,7 @@ namespace ts.server {
                     break;
                 case ProjectLanguageServiceStateEvent:
                     const eventName: protocol.ProjectLanguageServiceStateEventName = "projectLanguageServiceState";
-                    this.event(<protocol.ProjectLanguageServiceStateEventBody>{
+                    this.event<protocol.ProjectLanguageServiceStateEventBody>({
                         projectName: event.data.project.getProjectName(),
                         languageServiceEnabled: event.data.languageServiceEnabled
                     }, eventName);
@@ -424,7 +427,7 @@ namespace ts.server {
             this.send(ev);
         }
 
-        public event(info: any, eventName: string) {
+        public event<T>(info: T, eventName: string) {
             const ev: protocol.Event = {
                 seq: 0,
                 type: "event",
@@ -459,7 +462,7 @@ namespace ts.server {
                 }
 
                 const bakedDiags = diags.map((diag) => formatDiag(file, project, diag));
-                this.event({ file: file, diagnostics: bakedDiags }, "semanticDiag");
+                this.event<protocol.DiagnosticEventBody>({ file: file, diagnostics: bakedDiags }, "semanticDiag");
             }
             catch (err) {
                 this.logError(err, "semantic check");
@@ -471,7 +474,7 @@ namespace ts.server {
                 const diags = project.getLanguageService().getSyntacticDiagnostics(file);
                 if (diags) {
                     const bakedDiags = diags.map((diag) => formatDiag(file, project, diag));
-                    this.event({ file: file, diagnostics: bakedDiags }, "syntaxDiag");
+                    this.event<protocol.DiagnosticEventBody>({ file: file, diagnostics: bakedDiags }, "syntaxDiag");
                 }
             }
             catch (err) {
@@ -501,9 +504,12 @@ namespace ts.server {
                         this.syntacticCheck(checkSpec.fileName, checkSpec.project);
                         next.immediate(() => {
                             this.semanticCheck(checkSpec.fileName, checkSpec.project);
-                            if (checkList.length > index) {
-                                next.delay(followMs, checkOne);
-                            }
+                            next.immediate(() => {
+                                this.checkRefactorDiagnostics(checkSpec.fileName, checkSpec.project);
+                                if (checkList.length > index) {
+                                    next.delay(followMs, checkOne);
+                                }
+                            })
                         });
                     }
                 }
@@ -1296,8 +1302,8 @@ namespace ts.server {
             return !items
                 ? undefined
                 : simplifiedResult
-                ? this.decorateNavigationBarItems(items, project.getScriptInfoForNormalizedPath(file))
-                : items;
+                    ? this.decorateNavigationBarItems(items, project.getScriptInfoForNormalizedPath(file))
+                    : items;
         }
 
         private decorateNavigationTree(tree: ts.NavigationTree, scriptInfo: ScriptInfo): protocol.NavigationTree {
@@ -1323,8 +1329,8 @@ namespace ts.server {
             return !tree
                 ? undefined
                 : simplifiedResult
-                ? this.decorateNavigationTree(tree, project.getScriptInfoForNormalizedPath(file))
-                : tree;
+                    ? this.decorateNavigationTree(tree, project.getScriptInfoForNormalizedPath(file))
+                    : tree;
         }
 
         private getNavigateToItems(args: protocol.NavtoRequestArgs, simplifiedResult: boolean): protocol.NavtoItem[] | NavigateToItem[] {
@@ -1411,6 +1417,64 @@ namespace ts.server {
             return ts.getSupportedCodeFixes();
         }
 
+        private extractStartAndEndPositionFromTextRangeRequestArgs(args: protocol.TextRangeRequestArgs, scriptInfo: ScriptInfo): { startPosition: number, endPosition: number } {
+            const startPosition = getStartPosition();
+            const endPosition = getEndPosition();
+            return { startPosition, endPosition };
+
+            function getStartPosition() {
+                return args.startPosition !== undefined ? args.startPosition : scriptInfo.lineOffsetToPosition(args.startLine, args.startOffset);
+            }
+
+            function getEndPosition() {
+                return args.endPosition !== undefined ? args.endPosition : scriptInfo.lineOffsetToPosition(args.endLine, args.endOffset);
+            }
+        }
+
+        private normalizeRefactorDiagnostics(refactorDiags: RefactorDiagnostic[], scriptInfo: ScriptInfo): protocol.RefactorDiagnostic[] {
+            return map(refactorDiags, refactorDiag => {
+                return <protocol.RefactorDiagnostic>{
+                    code: refactorDiag.code,
+                    text: refactorDiag.text,
+                    start: scriptInfo.positionToLineOffset(refactorDiag.start),
+                    end: scriptInfo.positionToLineOffset(refactorDiag.end)
+                };
+            })
+        }
+
+        private checkRefactorDiagnostics(file: NormalizedPath, project: Project): void {
+            const scriptInfo = project.getScriptInfoForNormalizedPath(file);
+            const refactorDiags = project.getLanguageService().getRefactorDiagnostics(file);
+            const normalizedDiags = this.normalizeRefactorDiagnostics(refactorDiags, scriptInfo);
+
+            this.event<protocol.RefactorDiagnosticEventBody>({ file, diagnostics: normalizedDiags }, "refactorDiag");
+        }
+
+        private getRefactorDiagnosticsForRange(args: protocol.GetRefactorsForRangeRequestArgs): protocol.RefactorDiagnostic[] {
+            const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
+            const scriptInfo = project.getScriptInfoForNormalizedPath(file);
+            const { startPosition, endPosition } = this.extractStartAndEndPositionFromTextRangeRequestArgs(args, scriptInfo);
+
+            const range = <TextRange>{ pos: startPosition, end: endPosition };
+            const refactorDiags = project.getLanguageService().getRefactorDiagnostics(file, range);
+            return this.normalizeRefactorDiagnostics(refactorDiags, scriptInfo);
+        }
+
+        private getCodeActionsForRefactorDiagnostic(args: protocol.GetCodeActionsForRefactorRequestArgs): protocol.CodeAction[] {
+            const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
+            const scriptInfo = project.getScriptInfoForNormalizedPath(file);
+            const { startPosition, endPosition } = this.extractStartAndEndPositionFromTextRangeRequestArgs(args, scriptInfo);
+
+            const actions = project.getLanguageService().getCodeActionsForRefactorAtPosition(
+                file,
+                { pos: startPosition, end: endPosition },
+                args.refactorCode,
+                this.projectService.getFormatCodeOptions()
+            );
+
+            return map(actions, action => this.mapCodeAction(action, scriptInfo));
+        }
+
         private getCodeFixes(args: protocol.CodeFixRequestArgs, simplifiedResult: boolean): protocol.CodeAction[] | CodeAction[] {
             if (args.errorCodes.length === 0) {
                 return undefined;
@@ -1418,8 +1482,7 @@ namespace ts.server {
             const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
 
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
-            const startPosition = getStartPosition();
-            const endPosition = getEndPosition();
+            const { startPosition, endPosition } = this.extractStartAndEndPositionFromTextRangeRequestArgs(args, scriptInfo);
 
             const codeActions = project.getLanguageService().getCodeFixesAtPosition(file, startPosition, endPosition, args.errorCodes);
             if (!codeActions) {
@@ -1430,14 +1493,6 @@ namespace ts.server {
             }
             else {
                 return codeActions;
-            }
-
-            function getStartPosition() {
-                return args.startPosition !== undefined ? args.startPosition : scriptInfo.lineOffsetToPosition(args.startLine, args.startOffset);
-            }
-
-            function getEndPosition() {
-                return args.endPosition !== undefined ? args.endPosition : scriptInfo.lineOffsetToPosition(args.endLine, args.endOffset);
             }
         }
 
@@ -1469,8 +1524,8 @@ namespace ts.server {
             return !spans
                 ? undefined
                 : simplifiedResult
-                ? spans.map(span => this.decorateSpan(span, scriptInfo))
-                : spans;
+                    ? spans.map(span => this.decorateSpan(span, scriptInfo))
+                    : spans;
         }
 
         private getDiagnosticsForProject(next: NextStep, delay: number, fileName: string): void {
@@ -1771,6 +1826,12 @@ namespace ts.server {
             },
             [CommandNames.GetSupportedCodeFixes]: () => {
                 return this.requiredResponse(this.getSupportedCodeFixes());
+            },
+            [CommandNames.GetRefactorsForRange]: (request: protocol.GetRefactorsForRangeRequest) => {
+                return this.requiredResponse(this.getRefactorDiagnosticsForRange(request.arguments));
+            },
+            [CommandNames.GetCodeActionsForRefactor]: (request: protocol.GetCodeActionsForRefactorRequest) => {
+                return this.requiredResponse(this.getCodeActionsForRefactorDiagnostic(request.arguments));
             }
         });
 
@@ -1828,7 +1889,7 @@ namespace ts.server {
             let request: protocol.Request;
             try {
                 request = <protocol.Request>JSON.parse(message);
-                const {response, responseRequired} = this.executeCommand(request);
+                const { response, responseRequired } = this.executeCommand(request);
 
                 if (this.logger.hasLevel(LogLevel.requestTime)) {
                     const elapsedTime = hrTimeToMilliseconds(this.hrtime(start)).toFixed(4);

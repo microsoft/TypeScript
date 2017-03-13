@@ -313,6 +313,7 @@ namespace ts.projectSystem {
             this.map[timeoutId] = cb.bind(undefined, ...args);
             return timeoutId;
         }
+
         unregister(id: any) {
             if (typeof id === "number") {
                 delete this.map[id];
@@ -328,10 +329,13 @@ namespace ts.projectSystem {
         }
 
         invoke() {
+            // Note: invoking a callback may result in new callbacks been queued,
+            // so do not clear the entire callback list regardless. Only remove the
+            // ones we have invoked.
             for (const key in this.map) {
                 this.map[key]();
+                delete this.map[key];
             }
-            this.map = [];
         }
     }
 
@@ -3446,10 +3450,18 @@ namespace ts.projectSystem {
                 assert.equal(e1.event, "syntaxDiag");
                 host.clearOutput();
 
+                // the semanticDiag message
                 host.runQueuedImmediateCallbacks();
-                assert.equal(host.getOutput().length, 2, "expect 2 messages");
+                assert.equal(host.getOutput().length, 1, "expect 1 messages");
                 const e2 = <protocol.Event>getMessage(0);
                 assert.equal(e2.event, "semanticDiag");
+                host.clearOutput();
+
+                // the refactor diagnostics check
+                host.runQueuedImmediateCallbacks();
+                assert.equal(host.getOutput().length, 2, "expect 2 messages");
+                const e3 = <protocol.Event>getMessage(0);
+                assert.equal(e3.event, "refactorDiag");
                 verifyRequestCompleted(getErrId, 1);
 
                 requestToCancel = -1;

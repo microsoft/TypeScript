@@ -95,6 +95,9 @@ namespace ts.server.protocol {
         /* @internal */
         export type GetCodeFixesFull = "getCodeFixes-full";
         export type GetSupportedCodeFixes = "getSupportedCodeFixes";
+
+        export type GetRefactorsForRange = "getRefactorsForRange";
+        export type GetCodeActionsForRefactor = "getCodeActionsForRefactor";
     }
 
     /**
@@ -395,6 +398,55 @@ namespace ts.server.protocol {
     }
 
     /**
+     * An diagnostic information suggesting refactors at applicable positions without
+     * clients asking.
+     */
+    export interface RefactorDiagnostic {
+        text: string;
+        code: number;
+        start: Location;
+        end: Location;
+    }
+
+    export interface RefactorDiagnosticEventBody {
+        file: string;
+        diagnostics: RefactorDiagnostic[];
+    }
+
+    /**
+     * Returns a list of applicable refactors at a given position. This request does not actually
+     * compute the refactors; instead it goes through faster checks to determine what is possible.
+     */
+    export interface GetRefactorsForRangeRequest extends Request {
+        command: CommandTypes.GetRefactorsForRange;
+        arguments: GetRefactorsForRangeRequestArgs;
+    }
+
+    export interface GetRefactorsForRangeRequestArgs extends TextRangeRequestArgs {
+    }
+
+    export interface GetRefactorsForRangeResponse extends Response {
+        body?: RefactorDiagnostic[];
+    }
+
+    /**
+     * Computes the code actions for a given refactor. This is normally called after the user commited one
+     * of the applicable refactors provided by the "GetApplicableRefactors" API.
+     */
+    export interface GetCodeActionsForRefactorRequest extends Request {
+        command: CommandTypes.GetCodeActionsForRefactor;
+        arguments: GetCodeActionsForRefactorRequestArgs;
+    }
+
+    export interface GetCodeActionsForRefactorRequestArgs extends GetRefactorsForRangeRequestArgs {
+        refactorCode: number;
+    }
+
+    export interface GetCodeActionsForRefactorResponse extends Response {
+        body?: CodeAction[];
+    }
+
+    /**
       * Request for the available codefixes at a specific position.
       */
     export interface CodeFixRequest extends Request {
@@ -402,10 +454,7 @@ namespace ts.server.protocol {
         arguments: CodeFixRequestArgs;
     }
 
-    /**
-      * Instances of this interface specify errorcodes on a specific location in a sourcefile.
-      */
-    export interface CodeFixRequestArgs extends FileRequestArgs {
+    export interface TextRangeRequestArgs extends FileRequestArgs {
         /**
           * The line number for the request (1-based).
           */
@@ -437,7 +486,12 @@ namespace ts.server.protocol {
          */
         /* @internal */
         endPosition?: number;
+    }
 
+    /**
+      * Instances of this interface specify errorcodes on a specific location in a sourcefile.
+      */
+    export interface CodeFixRequestArgs extends TextRangeRequestArgs {
         /**
           * Errorcodes we want to get the fixes for.
           */

@@ -79,6 +79,7 @@
         "formatting/rulesProvider.ts",
         "formatting/smartIndenter.ts",
         "formatting/tokenRange.ts",
+        "refactorProvider.ts",
         "codeFixProvider.ts",
         "codefixes/fixAddMissingMember.ts",
         "codefixes/fixExtendsInterfaceBecomesImplements.ts",
