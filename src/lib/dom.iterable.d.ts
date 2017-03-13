@@ -5,9 +5,14 @@ interface DOMTokenList {
 }
 
 interface NodeList {
+    
     [Symbol.iterator](): IterableIterator<Node>
 }
 
 interface NodeListOf<TNode extends Node> {
+    keys(): IterableIterator<number>;
+    values(): IterableIterator<[number, TNode]>;
+    entries(): IterableIterator<TNode>;
+    forEach(): void;
     [Symbol.iterator](): IterableIterator<TNode>
 }
