@@ -279,7 +279,7 @@ namespace ts {
                 return updateDecorator(<Decorator>node,
                     visitNode((<Decorator>node).expression, visitor, isExpression));
 
-            // Keyword Types
+            // Keyword Types and This
 
             case SyntaxKind.AnyKeyword:
             case SyntaxKind.NumberKeyword:
@@ -292,6 +292,7 @@ namespace ts {
             case SyntaxKind.NullKeyword:
             case SyntaxKind.NeverKeyword:
             case SyntaxKind.NeverKeyword:
+            case SyntaxKind.ThisKeyword:
                 return node;
 
             // Types
@@ -300,8 +301,8 @@ namespace ts {
                 throw new Error("reached unsupported type in visitor.");
             case SyntaxKind.TypeReference:
                 return updateTypeReferenceNode(<TypeReferenceNode>node
-                     , visitNode((<TypeReferenceNode>node).typeName as Identifier, visitor)
-                     , nodesVisitor((<TypeReferenceNode>node).typeArguments, visitor)
+                     , visitNode((<TypeReferenceNode>node).typeName, visitor, isEntityName)
+                     , nodesVisitor((<TypeReferenceNode>node).typeArguments, visitor, isTypeNode)
                 );
             case SyntaxKind.FunctionType:
                 throw new Error("reached unsupported type in visitor.");
@@ -310,9 +311,9 @@ namespace ts {
             case SyntaxKind.TypeQuery:
                 throw new Error("reached unsupported type in visitor.");
             case SyntaxKind.TypeLiteral:
-                throw new Error("reached unsupported type in visitor.");
+                return updateTypeLiteralNode((<TypeLiteralNode>node), nodesVisitor((<TypeLiteralNode>node).members, visitor));
             case SyntaxKind.ArrayType:
-                throw new Error("reached unsupported type in visitor.");
+                return updateArrayTypeNode(<ArrayTypeNode>node, visitNode((<ArrayTypeNode>node).elementType, visitor, isTypeNode));
             case SyntaxKind.TupleType:
                 throw new Error("reached unsupported type in visitor.");
             case SyntaxKind.UnionType:
@@ -342,8 +343,14 @@ namespace ts {
 
             // Type members
 
+            case SyntaxKind.PropertySignature:
+                return updatePropertySignature((<PropertySignature>node)
+                    , visitNode((<PropertySignature>node).name, visitor, isPropertyName)
+                    , visitNode((<PropertySignature>node).questionToken, visitor, isToken)
+                    , visitNode((<PropertySignature>node).type, visitor, isTypeNode));
+
             case SyntaxKind.IndexSignature:
-                updateIndexSignatureDeclaration(<IndexSignatureDeclaration>node
+                return updateIndexSignatureDeclaration(<IndexSignatureDeclaration>node
                     , nodesVisitor((<IndexSignatureDeclaration>node).parameters, visitor, isParameter)
                     , visitNode((<IndexSignatureDeclaration>node).type, visitor, isTypeNode)
                     , nodesVisitor((<IndexSignatureDeclaration>node).decorators, visitor, isDecorator)

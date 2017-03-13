@@ -189,11 +189,11 @@ namespace ts {
     }
 
     export function createTrue() {
-        return <BooleanLiteral>createSynthesizedNode(SyntaxKind.TrueKeyword);
+        return <BooleanLiteral & TypeNode>createSynthesizedNode(SyntaxKind.TrueKeyword);
     }
 
     export function createFalse() {
-        return <BooleanLiteral>createSynthesizedNode(SyntaxKind.FalseKeyword);
+        return <BooleanLiteral & TypeNode>createSynthesizedNode(SyntaxKind.FalseKeyword);
     }
 
     // Names
@@ -226,15 +226,6 @@ namespace ts {
 
     // Type Elements
 
-    export function createPropertySignature(name: PropertyName, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression): PropertySignature {
-        const propertySignature = createSynthesizedNode(SyntaxKind.PropertySignature) as PropertySignature;
-        propertySignature.name = name;
-        propertySignature.questionToken = questionToken;
-        propertySignature.type = type;
-        propertySignature.initializer = initializer;
-        return propertySignature;
-    }
-
     export function createConstructSignature() {
         throw new Error("not implemented.");
     }
@@ -258,14 +249,26 @@ namespace ts {
     }
 
     // TODO: handle qualified names, ie EntityName's.
-    export function createTypeReferenceNode(typeName: string | Identifier, typeArguments?: NodeArray<TypeNode>) {
+    export function createTypeReferenceNode(typeName: string | EntityName, typeArguments?: NodeArray<TypeNode>) {
         const typeReference = createSynthesizedNode(SyntaxKind.TypeReference) as TypeReferenceNode;
-        typeReference.typeName = asName(typeName);
+        
+        typeReference.typeName = isQualifiedName(<EntityName>typeName) ? <QualifiedName>typeName : asName(<string | Identifier>typeName);
         typeReference.typeArguments = typeArguments;
         return typeReference;
     }
 
-    export function updateTypeReferenceNode(node: TypeReferenceNode, typeName: Identifier, typeArguments?: NodeArray<TypeNode>) {
+    export function createArrayTypeNode(elementType: TypeNode): ArrayTypeNode {
+        const arrayTypeNode = createSynthesizedNode(SyntaxKind.ArrayType) as ArrayTypeNode;
+        arrayTypeNode.elementType = elementType;
+        return arrayTypeNode;
+    }
+    
+    export function updateArrayTypeNode(node: ArrayTypeNode, elementType: TypeNode): ArrayTypeNode {
+        return node.elementType !== elementType
+             ? updateNode(createArrayTypeNode(elementType), node)
+             : node;
+    }
+    export function updateTypeReferenceNode(node: TypeReferenceNode, typeName: EntityName, typeArguments?: NodeArray<TypeNode>) {
         return node.typeName !== typeName
             || node.typeArguments !== typeArguments
             ? updateNode(createTypeReferenceNode(typeName, typeArguments), node)
@@ -288,7 +291,7 @@ namespace ts {
     }
 
     export function createTypeLiteralNode(members: TypeElement[]) {
-        const typeLiteralNode = createSynthesizedNode(SyntaxKind.LiteralType) as TypeLiteralNode;
+        const typeLiteralNode = createSynthesizedNode(SyntaxKind.TypeLiteral) as TypeLiteralNode;
         typeLiteralNode.members = asNodeArray(members);
         return typeLiteralNode;
     }
@@ -332,7 +335,24 @@ namespace ts {
 
     // Signature elements
 
-    /** Note, can also be used to construct index signatures. */
+    export function createPropertySignature(name: PropertyName, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression): PropertySignature {
+        const propertySignature = createSynthesizedNode(SyntaxKind.PropertySignature) as PropertySignature;
+        propertySignature.name = name;
+        propertySignature.questionToken = questionToken;
+        propertySignature.type = type;
+        propertySignature.initializer = initializer;
+        return propertySignature;
+    }
+
+    export function updatePropertySignature(node: PropertySignature, name: PropertyName, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression) {
+        return node.name !== name
+            || node.questionToken !== questionToken
+            || node.type !== type
+            || node.initializer !== initializer
+            ? updateNode(createPropertySignature(name, questionToken, type, initializer), node)
+            : node;
+    }
+
     export function createSignature(kind: SyntaxKind, parameters: NodeArray<ParameterDeclaration>, name?: PropertyName, typeParameters?: NodeArray<TypeParameterDeclaration>, returnType?: TypeNode): SignatureDeclaration {
         const signature = createSynthesizedNode(kind) as SignatureDeclaration;
         signature.parameters = parameters;
