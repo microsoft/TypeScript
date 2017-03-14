@@ -3,7 +3,6 @@
 //// interface I {
 ////     [x: number]: I;
 //// }
-////
 //// class C implements I {[| |]}
 
 verify.rangeAfterCodeFix(`
