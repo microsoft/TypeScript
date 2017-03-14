@@ -482,10 +482,33 @@ namespace ts {
                     return visitEndOfDeclarationMarker(<EndOfDeclarationMarker>node);
 
                 default:
-                    // This visitor does not descend into the tree, as export/import statements
-                    // are only transformed at the top level of a file.
-                    return node;
+                    return visitEachChild(node, visitor, context);
             }
+        }
+
+        function visitor(node: Node): VisitResult<Node> {
+            // This visitor does not need to descend into the tree if there is no dynamic import,
+            // as export/import statements are only transformed at the top level of a file.
+            if (!currentSourceFile.containsDynamicImport) {
+                return node;
+            }
+
+            switch (node.kind) {
+                case SyntaxKind.ImportCallExpression:
+                    return visitImportCallExpression(<ImportCallExpression>node);
+                default:
+                    return visitEachChild(node, visitor, context);
+            }
+        }
+
+        function visitImportCallExpression(node: ImportCallExpression): Expression{
+            return createCall(
+                createPropertyAccess(
+                    createCall(/*expression*/ createPropertyAccess(createIdentifier("Promise"), "resolve"), /*typeArguments*/ undefined, /*argumentsArray*/ []),
+                    "then"),
+                /*typeArguments*/ undefined,
+                [ createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, /*parameters*/ undefined, /*type*/ undefined, createToken(SyntaxKind.EqualsGreaterThanToken), createCall(createIdentifier("require"), /*typeArguments*/ undefined, [node.specifier]))]
+            );
         }
 
         /**
@@ -780,7 +803,7 @@ namespace ts {
                                 node.asteriskToken,
                                 getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                                 /*typeParameters*/ undefined,
-                                node.parameters,
+                                visitNodes(node.parameters, visitor),
                                 /*type*/ undefined,
                                 node.body
                             ),
@@ -822,7 +845,7 @@ namespace ts {
                                 visitNodes(node.modifiers, modifierVisitor, isModifier),
                                 getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                                 /*typeParameters*/ undefined,
-                                node.heritageClauses,
+                                visitNodes(node.heritageClauses, visitor),
                                 node.members
                             ),
                             node
@@ -884,7 +907,7 @@ namespace ts {
                 }
             }
             else {
-                statements = append(statements, node);
+                statements = append(statements, visitEachChild(node, visitor, context));
             }
 
             if (hasAssociatedEndOfDeclarationMarker(node)) {
@@ -907,7 +930,7 @@ namespace ts {
         function transformInitializedVariable(node: VariableDeclaration): Expression {
             if (isBindingPattern(node.name)) {
                 return flattenDestructuringAssignment(
-                    node,
+                    visitNode(node, visitor),
                     /*visitor*/ undefined,
                     context,
                     FlattenLevel.All,
@@ -924,7 +947,7 @@ namespace ts {
                         ),
                         /*location*/ node.name
                     ),
-                    node.initializer
+                    visitNode(node.initializer, visitor)
                 );
             }
         }

@@ -2282,6 +2282,7 @@ namespace ts {
         /* @internal */ moduleAugmentations: LiteralExpression[];
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
         /* @internal */ ambientModuleNames: string[];
+        /* @internal */ containsDynamicImport?: boolean;
     }
 
     export interface Bundle extends Node {

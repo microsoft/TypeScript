@@ -461,7 +461,7 @@ namespace ts {
     }
 
     export function isExternalModule(file: SourceFile): boolean {
-        return file.externalModuleIndicator !== undefined;
+        return file.externalModuleIndicator !== undefined || file.containsDynamicImport;
     }
 
     // Produces a new SourceFile for the 'newText' provided. The 'textChangeRange' parameter
@@ -2778,6 +2778,7 @@ namespace ts {
                 case SyntaxKind.SlashToken:
                 case SyntaxKind.SlashEqualsToken:
                 case SyntaxKind.Identifier:
+                case SyntaxKind.ImportKeyword:
                     return true;
                 default:
                     return isIdentifier();
@@ -3698,6 +3699,7 @@ namespace ts {
                 if (importCall.specifier.kind === SyntaxKind.StringLiteral) {
                     (sourceFile.imports || (sourceFile.imports = [])).push(importCall.specifier as StringLiteral);
                 }
+                sourceFile.containsDynamicImport = true;
                 return importCall;
             }
             const expression = token() === SyntaxKind.SuperKeyword ? parseSuperExpression() : parseMemberExpressionOrHigher();
