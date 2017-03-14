@@ -68,11 +68,18 @@ namespace ts {
     }
 
     /* @internal */
+    /**
+     * Note this implementation is inefficient in that all nodes except leaves are cloned twice,
+     * First by the explicit call below and then again as part of updateNode.
+     * We need to clone before visiting the children because otherwise updateNode
+     * will overwrite the synthesized span with the original node's span.
+     */
     export function getSynthesizedDeepClone<T extends Node>(node: T | undefined): T {
         if (node === undefined) {
             return undefined;
         }
-        return getSynthesizedClone(visitEachChild(node, getSynthesizedClone, nullTransformationContext));
+        const clone = getSynthesizedClone(node);
+        return visitEachChild(clone, getSynthesizedDeepClone, nullTransformationContext);
     }
 
     // Literals
