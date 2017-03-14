@@ -5,6 +5,10 @@ interface DOMTokenList {
 }
 
 interface NodeList {
+    keys(): IterableIterator<number>;
+    values(): IterableIterator<[number, Node]>;
+    entries(): IterableIterator<Node>;
+    forEach(): void;
     [Symbol.iterator](): IterableIterator<Node>
 }
 
