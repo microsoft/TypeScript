@@ -482,11 +482,11 @@ namespace ts {
                     return visitEndOfDeclarationMarker(<EndOfDeclarationMarker>node);
 
                 default:
-                    return visitEachChild(node, visitor, context);
+                    return visitEachChild(node, importCallExpressionVisitor, context);
             }
         }
 
-        function visitor(node: Node): VisitResult<Node> {
+        function importCallExpressionVisitor(node: Node): VisitResult<Node> {
             // This visitor does not need to descend into the tree if there is no dynamic import,
             // as export/import statements are only transformed at the top level of a file.
             if (!currentSourceFile.containsDynamicImport) {
@@ -497,7 +497,7 @@ namespace ts {
                 case SyntaxKind.ImportCallExpression:
                     return visitImportCallExpression(<ImportCallExpression>node);
                 default:
-                    return visitEachChild(node, visitor, context);
+                    return visitEachChild(node, importCallExpressionVisitor, context);
             }
         }
 
@@ -803,9 +803,9 @@ namespace ts {
                                 node.asteriskToken,
                                 getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                                 /*typeParameters*/ undefined,
-                                visitNodes(node.parameters, visitor),
+                                visitNodes(node.parameters, importCallExpressionVisitor),
                                 /*type*/ undefined,
-                                node.body
+                                visitEachChild(node.body, importCallExpressionVisitor, context)
                             ),
                             /*location*/ node
                         ),
@@ -814,7 +814,7 @@ namespace ts {
                 );
             }
             else {
-                statements = append(statements, node);
+                statements = append(statements, visitEachChild(node, importCallExpressionVisitor, context));
             }
 
             if (hasAssociatedEndOfDeclarationMarker(node)) {
@@ -845,7 +845,7 @@ namespace ts {
                                 visitNodes(node.modifiers, modifierVisitor, isModifier),
                                 getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                                 /*typeParameters*/ undefined,
-                                visitNodes(node.heritageClauses, visitor),
+                                visitNodes(node.heritageClauses, importCallExpressionVisitor),
                                 node.members
                             ),
                             node
@@ -855,7 +855,7 @@ namespace ts {
                 );
             }
             else {
-                statements = append(statements, node);
+                statements = append(statements, visitEachChild(node, importCallExpressionVisitor, context));
             }
 
             if (hasAssociatedEndOfDeclarationMarker(node)) {
@@ -907,7 +907,7 @@ namespace ts {
                 }
             }
             else {
-                statements = append(statements, visitEachChild(node, visitor, context));
+                statements = append(statements, visitEachChild(node, importCallExpressionVisitor, context));
             }
 
             if (hasAssociatedEndOfDeclarationMarker(node)) {
@@ -930,7 +930,7 @@ namespace ts {
         function transformInitializedVariable(node: VariableDeclaration): Expression {
             if (isBindingPattern(node.name)) {
                 return flattenDestructuringAssignment(
-                    visitNode(node, visitor),
+                    visitNode(node, importCallExpressionVisitor),
                     /*visitor*/ undefined,
                     context,
                     FlattenLevel.All,
@@ -947,7 +947,7 @@ namespace ts {
                         ),
                         /*location*/ node.name
                     ),
-                    visitNode(node.initializer, visitor)
+                    visitNode(node.initializer, importCallExpressionVisitor)
                 );
             }
         }
