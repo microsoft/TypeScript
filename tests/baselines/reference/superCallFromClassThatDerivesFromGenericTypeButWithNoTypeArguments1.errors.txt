@@ -1,10 +1,8 @@
 tests/cases/compiler/superCallFromClassThatDerivesFromGenericTypeButWithNoTypeArguments1.ts(8,17): error TS2707: Type parameter 'T1' implicitly has type 'any' because it was not supplied.
 tests/cases/compiler/superCallFromClassThatDerivesFromGenericTypeButWithNoTypeArguments1.ts(8,17): error TS2707: Type parameter 'T2' implicitly has type 'any' because it was not supplied.
-tests/cases/compiler/superCallFromClassThatDerivesFromGenericTypeButWithNoTypeArguments1.ts(9,21): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/superCallFromClassThatDerivesFromGenericTypeButWithNoTypeArguments1.ts(9,27): error TS7006: Parameter 'value' implicitly has an 'any' type.
 
 
-==== tests/cases/compiler/superCallFromClassThatDerivesFromGenericTypeButWithNoTypeArguments1.ts (4 errors) ====
+==== tests/cases/compiler/superCallFromClassThatDerivesFromGenericTypeButWithNoTypeArguments1.ts (2 errors) ====
     
     class A<T1, T2> {
         constructor(private map: (value: T1) => T2) {
@@ -18,8 +16,4 @@ tests/cases/compiler/superCallFromClassThatDerivesFromGenericTypeButWithNoTypeAr
                     ~
 !!! error TS2707: Type parameter 'T2' implicitly has type 'any' because it was not supplied.
         constructor() { super(value => String(value)); }
-                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
-                              ~~~~~
-!!! error TS7006: Parameter 'value' implicitly has an 'any' type.
     }

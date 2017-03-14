@@ -1,4 +1,4 @@
-/// <reference path="moduleNameResolver.ts"/>
+﻿/// <reference path="moduleNameResolver.ts"/>
 /// <reference path="binder.ts"/>
 
 /* @internal */
@@ -3986,16 +3986,13 @@ namespace ts {
         function getConstructorsForTypeArguments(type: Type, typeArgumentNodes: TypeNode[]): Signature[] {
             const typeArgCount = length(typeArgumentNodes);
             return filter(getSignaturesOfType(type, SignatureKind.Construct),
-                sig => typeArgCount >= getMinTypeArgumentCount(sig.typeParameters) && typeArgCount <= length(sig.typeParameters));
+                sig => typeArgCount <= length(sig.typeParameters));
         }
 
         function getInstantiatedConstructorsForTypeArguments(type: Type, typeArgumentNodes: TypeNode[]): Signature[] {
             let signatures = getConstructorsForTypeArguments(type, typeArgumentNodes);
-            if (typeArgumentNodes) {
-                const typeArguments = map(typeArgumentNodes, getTypeFromTypeNode);
-                signatures = map(signatures, sig => getSignatureInstantiation(sig, typeArguments));
-            }
-            return signatures;
+            const typeArguments = length(typeArgumentNodes) ? map(typeArgumentNodes, getTypeFromTypeNode): undefined
+            return signatures && map(signatures, sig => length(sig.typeParameters) ? getSignatureInstantiation(sig, typeArguments) : sig);
         }
 
         /**
