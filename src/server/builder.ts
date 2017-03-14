@@ -1,7 +1,6 @@
 ﻿/// <reference path="..\compiler\commandLineParser.ts" />
 /// <reference path="..\services\services.ts" />
 /// <reference path="session.ts" />
-/// <reference types="node" />
 
 namespace ts.server {
 

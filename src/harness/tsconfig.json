@@ -6,6 +6,10 @@
         "declaration": false,
         "types": [
             "node", "mocha", "chai"
+        ],
+        "lib": [
+            "es6",
+            "scripthost"
         ]
     },
     "files": [

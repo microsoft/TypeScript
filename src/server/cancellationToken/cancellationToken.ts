@@ -48,7 +48,7 @@ function createCancellationToken(args: string[]): ServerCancellationToken {
         return {
             isCancellationRequested: () =>  perRequestPipeName !== undefined && pipeExists(perRequestPipeName),
             setRequest(requestId: number) {
-                currentRequestId = currentRequestId;
+                currentRequestId = requestId;
                 perRequestPipeName = namePrefix + requestId;
             },
             resetRequest(requestId: number) {
