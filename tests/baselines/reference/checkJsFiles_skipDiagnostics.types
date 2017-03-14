@@ -1,0 +1,47 @@
+=== tests/cases/compiler/a.js ===
+
+var x = 0;
+>x : number
+>0 : 0
+
+
+/// @ts-suppress
+x();
+>x() : any
+>x : number
+
+/// @ts-suppress
+x();
+>x() : any
+>x : number
+
+/// @ts-suppress
+x(
+>x(    2,    3) : any
+>x : number
+
+    2,
+>2 : 2
+
+    3);
+>3 : 3
+
+
+
+// @ts-suppress
+// come comment
+// some other comment
+
+// @anohter
+
+x();
+>x() : any
+>x : number
+
+
+
+// @ts-suppress: no call signature
+x();
+>x() : any
+>x : number
+

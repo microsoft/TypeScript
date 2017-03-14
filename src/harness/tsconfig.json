@@ -1,4 +1,4 @@
-{
+﻿{
     "extends": "../tsconfig-base",
     "compilerOptions": {
         "removeComments": false,
@@ -81,6 +81,7 @@
         "../services/codefixes/helpers.ts",
         "../services/codefixes/importFixes.ts",
         "../services/codefixes/unusedIdentifierFixes.ts",
+        "../services/codefixes/disableJsDiagnostics.ts",
 
         "harness.ts",
         "sourceMapRecorder.ts",

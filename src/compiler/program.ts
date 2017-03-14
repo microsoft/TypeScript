@@ -4,6 +4,7 @@
 
 namespace ts {
     const emptyArray: any[] = [];
+    const suppressDiagnosticCommentRegEx = /(^\s*$)|(^\s*\/\/\/?\s*(@ts-suppress)?)/;
 
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string {
         while (true) {
@@ -923,8 +924,34 @@ namespace ts {
                 const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
                 const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
 
-                return bindDiagnostics.concat(checkDiagnostics, fileProcessingDiagnosticsInFile, programDiagnosticsInFile);
+                const diagnostics = bindDiagnostics.concat(checkDiagnostics, fileProcessingDiagnosticsInFile, programDiagnosticsInFile);
+                return isSourceFileJavaScript(sourceFile)
+                    ? filter(diagnostics, shouldReportDiagnostic)
+                    : diagnostics;
             });
+        }
+
+        /**
+         * Skip errors if previous line start with '// @ts-suppress' comment, not counting non-empty non-comment lines
+         */
+        function shouldReportDiagnostic(diagnostic: Diagnostic) {
+            const { file, start } = diagnostic;
+            const lineStarts = getLineStarts(file);
+            let { line } = computeLineAndCharacterOfPosition(lineStarts, start);
+            while (line > 0) {
+                const previousLineText = file.text.slice(lineStarts[line - 1], lineStarts[line]);
+                const result = suppressDiagnosticCommentRegEx.exec(previousLineText);
+                if (!result) {
+                    // non-empty line
+                    return true;
+                }
+                if (result[3]) {
+                    // @ts-suppress
+                    return false;
+                }
+                line--;
+            }
+            return true;
         }
 
         function getJavaScriptSyntacticDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {
