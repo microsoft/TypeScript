@@ -7,8 +7,8 @@
 ////     y: number;
 //// }
 ////
-//// class C implements I1,I2 {[| |]
-////     y: number;
+//// class C implements I1,I2 {[|
+////     |]y: number;
 //// }
 
 verify.rangeAfterCodeFix(`

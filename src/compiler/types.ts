@@ -2471,6 +2471,8 @@ namespace ts {
         createTypeNode(type: Type): TypeNode;
         /** Note that the resulting type node cannot be checked. */
         createTypeParameterDeclarationFromType(type: Type): TypeParameterDeclaration;
+        /** Note that the resulting type node cannot be checked. */
+        createIndexSignatureFromIndexInfo(indexInfo: IndexInfo, kind: IndexKind): IndexSignatureDeclaration
 
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolAtLocation(node: Node): Symbol;

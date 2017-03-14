@@ -524,6 +524,10 @@ namespace ts {
     export function declarationNameToString(name: DeclarationName) {
         return getFullWidth(name) === 0 ? "(Missing)" : getTextOfNode(name);
     }
+    
+    export function getNameFromIndexInfo(info: IndexInfo) {
+        return info.declaration ? declarationNameToString(info.declaration.parameters[0].name) : undefined;
+    }
 
     export function getTextOfPropertyName(name: PropertyName): string {
         switch (name.kind) {

@@ -53,18 +53,7 @@ namespace ts.codefix {
             if (!indexInfoOfKind) {
                 return undefined;
             }
-            const typeNode = checker.createTypeNode(indexInfoOfKind.type);
-            const newIndexSignatureDeclaration = createIndexSignatureDeclaration(
-                [createParameter(
-                      /*decorators*/undefined
-                    , /*modifiers*/ undefined
-                    , /*dotDotDotToken*/ undefined
-                    ,  getNameFromIndexInfo(indexInfoOfKind)
-                    , /*questionToken*/ undefined
-                    , kind === IndexKind.String ? createKeywordTypeNode(SyntaxKind.StringKeyword) : createKeywordTypeNode(SyntaxKind.NumberKeyword))]
-                , typeNode
-                , /*decorators*/undefined
-                , /*modifiers*/ undefined);
+            const newIndexSignatureDeclaration = checker.createIndexSignatureFromIndexInfo(indexInfoOfKind, kind);
             newNodes.push(newIndexSignatureDeclaration);
         }
 

@@ -108,6 +108,7 @@ namespace ts {
             getNonNullableType,
             createTypeNode,
             createTypeParameterDeclarationFromType,
+            createIndexSignatureFromIndexInfo,
             getSymbolsInScope: (location, meaning) => {
                 location = getParseTreeNode(location);
                 return location ? getSymbolsInScope(location, meaning) : [];
@@ -2190,16 +2191,13 @@ namespace ts {
             return result;
         }
 
-        function createTypeParameterDeclarationFromType(type: Type): TypeParameterDeclaration {
+        function createTypeParameterDeclarationFromType(type: TypeParameter): TypeParameterDeclaration {
             if (!(type && type.symbol && type.flags & TypeFlags.TypeParameter)) {
                 return undefined;
             }
 
-            const constraint = createTypeNode(getConstraintFromTypeParameter(<TypeParameter>type)) as TypeNode;
-            const defaultParameter = createTypeNode(getDefaultFromTypeParameter(<TypeParameter>type)) as TypeNode;
-            if (!type.symbol) {
-                return undefined;
-            }
+            const constraint = createTypeNode(getConstraintFromTypeParameter(type)) as TypeNode;
+            const defaultParameter = createTypeNode(getDefaultFromTypeParameter(type)) as TypeNode;
 
             const name = symbolToString(type.symbol);
             return createTypeParameterDeclaration(name, constraint, defaultParameter);
@@ -2212,8 +2210,10 @@ namespace ts {
             let checkAlias = true;
 
             let result = createTypeNodeWorker(type);
-            (<any>result).__type_source = type;
-            (<any>result).__type_source_str = typeToString(type);
+            if (result) {
+                (<any>result).__type_source = type;
+                (<any>result).__type_source_str = typeToString(type);
+            }
             return result;
 
             function createTypeNodeWorker(type: Type): TypeNode {
@@ -2299,7 +2299,16 @@ namespace ts {
                     return createTypeReferenceNode(name, /*typeParameters*/undefined);
                 }
                 if (type.flags & TypeFlags.TypeParameter) {
-                    throw new Error("Type Parameter declarations only handled in other worker.");
+                    const constraint = createTypeNode(getConstraintFromTypeParameter(<TypeParameter>type)) as TypeNode;
+                    const defaultParameter = createTypeNode(getDefaultFromTypeParameter(<TypeParameter>type)) as TypeNode;
+                    if(constraint || defaultParameter) {
+                        // Type parameters in type position can't have constraints or defaults.
+                        encounteredError = true;
+                        return undefined;
+                    }
+                    // TODO: get qualified name when necessary instead of string.
+                    const name = symbolToString(type.symbol);
+                    return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                 }
 
                 // accessible type aliasSymbol
@@ -2312,7 +2321,7 @@ namespace ts {
                 checkAlias = false;
 
                 if (type.flags & TypeFlags.Union) {
-                    return createUnionOrIntersectionTypeNode(SyntaxKind.UnionType, mapToTypeNodeArray((type as UnionType).types));
+                    return createUnionOrIntersectionTypeNode(SyntaxKind.UnionType, mapToTypeNodeArray(formatUnionTypes((<UnionType>type).types)));
                 }
                 if (type.flags & TypeFlags.Intersection) {
                     return createUnionOrIntersectionTypeNode(SyntaxKind.IntersectionType, mapToTypeNodeArray((type as UnionType).types));
@@ -2467,32 +2476,27 @@ namespace ts {
                     });
                     return typeElements.length ? typeElements : undefined;
                 }
-
-                function createIndexSignatureFromIndexInfo(indexInfo: IndexInfo, kind: IndexKind) {
-                    const stringTypeNode = createKeywordTypeNode(kind === IndexKind.String ? SyntaxKind.StringKeyword : SyntaxKind.NumberKeyword);
-
-                    const name = (indexInfo.declaration && indexInfo.declaration.name && getTextOfPropertyName(indexInfo.declaration.name)) || "x";
-                    const indexingParameter = createParameter(
-                              /*decorators*/ undefined
-                        , /*modifiers*/ undefined
-                        , /*dotDotDotToken*/ undefined
-                        , name
-                        , /*questionToken*/ undefined
-                        , stringTypeNode
-                        , /*initializer*/ undefined);
-                    const typeNode = createTypeNode(indexInfo.type);
-                    return createIndexSignatureDeclaration(
-                        [indexingParameter]
-                        , typeNode
-                        , /*decoarators*/ undefined
-                        , indexInfo.isReadonly ? [createToken(SyntaxKind.ReadonlyKeyword)] : undefined);
-                }
-
-                // /** Note that mapToTypeNodeArray(undefined) === undefined. */
-                // function mapToTypeParameterArray(types: Type[]): NodeArray<TypeNode> {
-                //     return asNodeArray(types && types.map(createTypeParameterDeclarationFromType) as TypeNode[]);
-                // }
             }
+        }
+
+        function createIndexSignatureFromIndexInfo(indexInfo: IndexInfo, kind: IndexKind): IndexSignatureDeclaration {
+            const indexerTypeNode = createKeywordTypeNode(kind === IndexKind.String ? SyntaxKind.StringKeyword : SyntaxKind.NumberKeyword);
+
+            const name = getNameFromIndexInfo(indexInfo);
+            const indexingParameter = createParameter(
+                              /*decorators*/ undefined
+                , /*modifiers*/ undefined
+                , /*dotDotDotToken*/ undefined
+                , name
+                , /*questionToken*/ undefined
+                , indexerTypeNode
+                , /*initializer*/ undefined);
+            const typeNode = createTypeNode(indexInfo.type);
+            return createIndexSignatureDeclaration(
+                [indexingParameter]
+                , typeNode
+                , /*decorators*/ undefined
+                , indexInfo.isReadonly ? [createToken(SyntaxKind.ReadonlyKeyword)] : undefined);
         }
 
         function typePredicateToString(typePredicate: TypePredicate, enclosingDeclaration?: Declaration, flags?: TypeFormatFlags): string {

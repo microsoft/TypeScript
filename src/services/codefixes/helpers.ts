@@ -52,10 +52,10 @@ namespace ts.codefix {
 
         const declaration = declarations[0] as Declaration;
         // TODO: get name as identifier or computer property name, etc.
-        const name = declaration.name ? declaration.name.getText() : undefined;
+        const name = declaration.name ? getSynthesizedDeepClone(declaration.name) as PropertyName : undefined;
         const visibilityModifier = createVisibilityModifier(getModifierFlags(declaration));
         const modifiers = visibilityModifier ? [visibilityModifier] : undefined;
-        const type = checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration);
+        const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
 
         switch (declaration.kind) {
             case SyntaxKind.GetAccessor:
@@ -94,7 +94,7 @@ namespace ts.codefix {
                     const newTypeParameters = signature.typeParameters && signature.typeParameters.map(checker.createTypeParameterDeclarationFromType);
                     const newParameterNodes = signature.getParameters().map(symbol => createParameterDeclarationFromSymbol(symbol, enclosingDeclaration, checker));
                     
-                    const returnType = checker.createTypeNode(checker.getReturnTypeOfSignature(signature));
+                    const returnType = checker.createTypeNode(checker.getWidenedType(checker.getReturnTypeOfSignature(signature)));
                     return createStubbedMethod(modifiers, name, newTypeParameters, newParameterNodes, returnType);
                 }
 
@@ -121,7 +121,7 @@ namespace ts.codefix {
                     let signature = checker.getSignatureFromDeclaration(declarations[declarations.length - 1] as SignatureDeclaration);
                     const newTypeParameters = signature.typeParameters && signature.typeParameters.map(checker.createTypeParameterDeclarationFromType);
                     const newParameterNodes = signature.getParameters().map(symbol => createParameterDeclarationFromSymbol(symbol, enclosingDeclaration, checker));
-                    const returnType = checker.createTypeNode(signature.resolvedReturnType);
+                    const returnType = checker.createTypeNode(checker.getWidenedType(checker.getReturnTypeOfSignature(signature)));
                     signatureDeclarations.push(createStubbedMethod(modifiers, name, newTypeParameters, newParameterNodes, returnType));
                 }
                 else {
@@ -135,7 +135,7 @@ namespace ts.codefix {
         }
     }
 
-    function createMethodImplementingSignatures(signatures: Signature[], name: string, modifiers: Modifier[] | undefined): MethodDeclaration {
+    function createMethodImplementingSignatures(signatures: Signature[], name: PropertyName, modifiers: Modifier[] | undefined): MethodDeclaration {
         Debug.assert(signatures && signatures.length > 0);
 
         let maxNonRestArgs = -1;
@@ -189,7 +189,7 @@ namespace ts.codefix {
             , /*returnType*/ undefined);
     }
 
-    export function createStubbedMethod(modifiers: Modifier[], name: string, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], returnType: TypeNode | undefined) {
+    export function createStubbedMethod(modifiers: Modifier[], name: PropertyName, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], returnType: TypeNode | undefined) {
         return createMethod(
               /*decorators*/undefined
             , modifiers
@@ -223,7 +223,7 @@ namespace ts.codefix {
 
     function createParameterDeclarationFromSymbol(parameterSymbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker) {
         const parameterDeclaration = parameterSymbol.getDeclarations()[0] as ParameterDeclaration;
-        const parameterType = checker.getTypeOfSymbolAtLocation(parameterSymbol, enclosingDeclaration);
+        const parameterType = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(parameterSymbol, enclosingDeclaration));
         const parameterTypeNode = checker.createTypeNode(parameterType);
         // TODO: deep cloning of decorators/any node.
         const parameterNode = createParameter(
@@ -235,9 +235,5 @@ namespace ts.codefix {
             , parameterTypeNode
             , /*initializer*/ undefined);
         return parameterNode;
-    }
-
-    export function getNameFromIndexInfo(info: IndexInfo) {
-        return info.declaration ? declarationNameToString(info.declaration.parameters[0].name) : "x"
     }
 }
