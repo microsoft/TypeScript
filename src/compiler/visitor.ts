@@ -270,7 +270,7 @@ namespace ts {
                 return updateParameter(<ParameterDeclaration>node,
                     nodesVisitor((<ParameterDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<ParameterDeclaration>node).modifiers, visitor, isModifier),
-                    (<ParameterDeclaration>node).dotDotDotToken,
+                    visitNode((<ParameterDeclaration>node).dotDotDotToken, visitor),
                     visitNode((<ParameterDeclaration>node).name, visitor, isBindingName),
                     visitNode((<ParameterDeclaration>node).questionToken, visitor, isToken),
                     visitNode((<ParameterDeclaration>node).type, visitor, isTypeNode),
@@ -294,7 +294,7 @@ namespace ts {
             case SyntaxKind.NeverKeyword:
             case SyntaxKind.NeverKeyword:
             case SyntaxKind.ThisKeyword:
-                return node;
+                throw new Error("should be caught above");
 
             // Types
 
@@ -332,7 +332,8 @@ namespace ts {
             case SyntaxKind.MappedType:
                 throw new Error("reached unsupported type in visitor.");
             case SyntaxKind.LiteralType:
-                throw new Error("reached unsupported type in visitor.");
+                return updateLiteralTypeNode(<LiteralTypeNode>node
+                , visitNode((<LiteralTypeNode>node).literal, visitor, isExpression));
 
             // Type Declarations
 
