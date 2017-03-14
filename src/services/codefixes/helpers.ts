@@ -94,18 +94,17 @@ namespace ts.codefix {
                     const newTypeParameters = signature.typeParameters && signature.typeParameters.map(checker.createTypeParameterDeclarationFromType);
                     const newParameterNodes = signature.getParameters().map(symbol => createParameterDeclarationFromSymbol(symbol, enclosingDeclaration, checker));
                     
-                    const returnType = checker.createTypeNode(checker.getWidenedType(checker.getReturnTypeOfSignature(signature)));
+                    const returnType = createTypeNodeExceptAny(checker.getReturnTypeOfSignature(signature), checker);
                     return createStubbedMethod(modifiers, name, newTypeParameters, newParameterNodes, returnType);
                 }
 
                 let signatureDeclarations = [];
                 for (let i = 0; i < signatures.length; i++) {
-                    // const sigString = checker.signatureToString(signatures[i], enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
                     // TODO: make signatures instead of methods
                     const signature = signatures[i];
                     const newTypeParameters = signature.typeParameters && signature.typeParameters.map(checker.createTypeParameterDeclarationFromType);
                     const newParameterNodes = signature.getParameters().map(symbol => createParameterDeclarationFromSymbol(symbol, enclosingDeclaration, checker));
-                    const returnType = checker.createTypeNode(signature.resolvedReturnType);
+                    const returnType = createTypeNodeExceptAny(checker.getReturnTypeOfSignature(signature), checker);
                     signatureDeclarations.push(createMethod(
                           /*decorators*/ undefined
                         , modifiers
@@ -121,7 +120,7 @@ namespace ts.codefix {
                     let signature = checker.getSignatureFromDeclaration(declarations[declarations.length - 1] as SignatureDeclaration);
                     const newTypeParameters = signature.typeParameters && signature.typeParameters.map(checker.createTypeParameterDeclarationFromType);
                     const newParameterNodes = signature.getParameters().map(symbol => createParameterDeclarationFromSymbol(symbol, enclosingDeclaration, checker));
-                    const returnType = checker.createTypeNode(checker.getWidenedType(checker.getReturnTypeOfSignature(signature)));
+                    const returnType = createTypeNodeExceptAny(checker.getReturnTypeOfSignature(signature), checker);
                     signatureDeclarations.push(createStubbedMethod(modifiers, name, newTypeParameters, newParameterNodes, returnType));
                 }
                 else {
@@ -235,5 +234,10 @@ namespace ts.codefix {
             , parameterTypeNode
             , /*initializer*/ undefined);
         return parameterNode;
+    }
+
+    function createTypeNodeExceptAny(type: Type, checker: TypeChecker) {
+        const typeNode = checker.createTypeNode(type);
+        return typeNode && typeNode.kind !== SyntaxKind.AnyKeyword ? typeNode : undefined;
     }
 }
