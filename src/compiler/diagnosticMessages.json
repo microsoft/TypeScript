@@ -1,4 +1,4 @@
-{
+﻿{
     "Unterminated string literal.": {
         "category": "Error",
         "code": 1002
@@ -3362,6 +3362,14 @@
     "Suppress this error message.": {
         "category": "Message",
         "code": 90019
+    },
+    "Initialize property '{0}' in the constructor.": {
+        "category": "Message",
+        "code": 90020
+    },
+    "Initialize static property '{0}'.": {
+        "category": "Message",
+        "code": 90021
     },
 
 
