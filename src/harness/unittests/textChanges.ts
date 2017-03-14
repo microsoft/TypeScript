@@ -130,7 +130,7 @@ namespace M
                         /*body */ createBlock(statements)
                 );
 
-                changeTracker.insertNodeBefore(sourceFile, /*before*/findChild("M2", sourceFile), newFunction, { insertTrailingNewLine: true });
+                changeTracker.insertNodeBefore(sourceFile, /*before*/findChild("M2", sourceFile), newFunction, { suffix: newLineCharacter });
 
                 // replace statements with return statement
                 const newStatement = createReturn(
@@ -139,7 +139,7 @@ namespace M
                         /*typeArguments*/ undefined,
                         /*argumentsArray*/ emptyArray
                     ));
-                changeTracker.replaceNodeRange(sourceFile, statements[0], lastOrUndefined(statements), newStatement, { insertTrailingNewLine: true });
+                changeTracker.replaceNodeRange(sourceFile, statements[0], lastOrUndefined(statements), newStatement, { suffix: newLineCharacter });
             });
         }
         {
@@ -255,10 +255,10 @@ var z = 3; // comment 5
 // comment 6
 var a = 4; // comment 7`;
             runSingleFileTest("replaceRange", setNewLineForOpenBraceInFunctions, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-                changeTracker.replaceRange(sourceFile, { pos: text.indexOf("var y"), end: text.indexOf("var a") }, createTestClass(), { insertTrailingNewLine: true });
+                changeTracker.replaceRange(sourceFile, { pos: text.indexOf("var y"), end: text.indexOf("var a") }, createTestClass(), { suffix: newLineCharacter });
             });
             runSingleFileTest("replaceRangeWithForcedIndentation", setNewLineForOpenBraceInFunctions, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-                changeTracker.replaceRange(sourceFile, { pos: text.indexOf("var y"), end: text.indexOf("var a") }, createTestClass(), { insertTrailingNewLine: true, indentation: 8, delta: 0 });
+                changeTracker.replaceRange(sourceFile, { pos: text.indexOf("var y"), end: text.indexOf("var a") }, createTestClass(), { suffix: newLineCharacter, indentation: 8, delta: 0 });
             });
 
             runSingleFileTest("replaceRangeNoLineBreakBefore", setNewLineForOpenBraceInFunctions, `const x = 1, y = "2";`, /*validateNodes*/ false, (sourceFile, changeTracker) => {
@@ -287,13 +287,13 @@ var z = 3; // comment 5
 // comment 6
 var a = 4; // comment 7`;
             runSingleFileTest("replaceNode1", setNewLineForOpenBraceInFunctions, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-                changeTracker.replaceNode(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), { insertTrailingNewLine: true });
+                changeTracker.replaceNode(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), { suffix: newLineCharacter });
             });
             runSingleFileTest("replaceNode2", setNewLineForOpenBraceInFunctions, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-                changeTracker.replaceNode(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), { useNonAdjustedStartPosition: true, insertTrailingNewLine: true, insertLeadingNewLine: true });
+                changeTracker.replaceNode(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), { useNonAdjustedStartPosition: true, suffix: newLineCharacter, prefix: newLineCharacter });
             });
             runSingleFileTest("replaceNode3", setNewLineForOpenBraceInFunctions, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-                changeTracker.replaceNode(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), { useNonAdjustedEndPosition: true, insertTrailingNewLine: true });
+                changeTracker.replaceNode(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), { useNonAdjustedEndPosition: true, suffix: newLineCharacter });
             });
             runSingleFileTest("replaceNode4", setNewLineForOpenBraceInFunctions, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
                 changeTracker.replaceNode(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), { useNonAdjustedStartPosition: true, useNonAdjustedEndPosition: true });
@@ -312,13 +312,13 @@ var z = 3; // comment 5
 // comment 6
 var a = 4; // comment 7`;
             runSingleFileTest("replaceNodeRange1", setNewLineForOpenBraceInFunctions, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-                changeTracker.replaceNodeRange(sourceFile, findVariableStatementContaining("y", sourceFile), findVariableStatementContaining("z", sourceFile), createTestClass(), { insertTrailingNewLine: true });
+                changeTracker.replaceNodeRange(sourceFile, findVariableStatementContaining("y", sourceFile), findVariableStatementContaining("z", sourceFile), createTestClass(), { suffix: newLineCharacter });
             });
             runSingleFileTest("replaceNodeRange2", setNewLineForOpenBraceInFunctions, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-                changeTracker.replaceNodeRange(sourceFile, findVariableStatementContaining("y", sourceFile), findVariableStatementContaining("z", sourceFile), createTestClass(), { useNonAdjustedStartPosition: true, insertTrailingNewLine: true, insertLeadingNewLine: true });
+                changeTracker.replaceNodeRange(sourceFile, findVariableStatementContaining("y", sourceFile), findVariableStatementContaining("z", sourceFile), createTestClass(), { useNonAdjustedStartPosition: true, suffix: newLineCharacter, prefix: newLineCharacter });
             });
             runSingleFileTest("replaceNodeRange3", setNewLineForOpenBraceInFunctions, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-                changeTracker.replaceNodeRange(sourceFile, findVariableStatementContaining("y", sourceFile), findVariableStatementContaining("z", sourceFile), createTestClass(), { useNonAdjustedEndPosition: true, insertTrailingNewLine: true });
+                changeTracker.replaceNodeRange(sourceFile, findVariableStatementContaining("y", sourceFile), findVariableStatementContaining("z", sourceFile), createTestClass(), { useNonAdjustedEndPosition: true, suffix: newLineCharacter });
             });
             runSingleFileTest("replaceNodeRange4", setNewLineForOpenBraceInFunctions, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
                 changeTracker.replaceNodeRange(sourceFile, findVariableStatementContaining("y", sourceFile), findVariableStatementContaining("z", sourceFile), createTestClass(), { useNonAdjustedStartPosition: true, useNonAdjustedEndPosition: true });
@@ -334,7 +334,7 @@ var z = 3; // comment 5
 // comment 6
 var a = 4; // comment 7`;
             runSingleFileTest("insertNodeAt1", setNewLineForOpenBraceInFunctions, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-                changeTracker.insertNodeAt(sourceFile, text.indexOf("var y"), createTestClass(), { insertTrailingNewLine: true });
+                changeTracker.insertNodeAt(sourceFile, text.indexOf("var y"), createTestClass(), { suffix: newLineCharacter });
             });
             runSingleFileTest("insertNodeAt2", setNewLineForOpenBraceInFunctions, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 changeTracker.insertNodeAt(sourceFile, text.indexOf("; // comment 4"), createTestVariableDeclaration("z1"));
@@ -352,16 +352,16 @@ namespace M {
     var a = 4; // comment 7
 }`;
             runSingleFileTest("insertNodeBefore1", setNewLineForOpenBraceInFunctions, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-                changeTracker.insertNodeBefore(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), { insertTrailingNewLine: true });
+                changeTracker.insertNodeBefore(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), { suffix: newLineCharacter });
             });
             runSingleFileTest("insertNodeBefore2", setNewLineForOpenBraceInFunctions, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-                changeTracker.insertNodeBefore(sourceFile, findChild("M", sourceFile), createTestClass(), { insertTrailingNewLine: true });
+                changeTracker.insertNodeBefore(sourceFile, findChild("M", sourceFile), createTestClass(), { suffix: newLineCharacter });
             });
             runSingleFileTest("insertNodeAfter1", setNewLineForOpenBraceInFunctions, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-                changeTracker.insertNodeAfter(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), { insertTrailingNewLine: true });
+                changeTracker.insertNodeAfter(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), { suffix: newLineCharacter });
             });
             runSingleFileTest("insertNodeAfter2", setNewLineForOpenBraceInFunctions, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-                changeTracker.insertNodeAfter(sourceFile, findChild("M", sourceFile), createTestClass(), { insertLeadingNewLine: true });
+                changeTracker.insertNodeAfter(sourceFile, findChild("M", sourceFile), createTestClass(), { prefix: newLineCharacter });
             });
         }
         {
@@ -385,7 +385,7 @@ class A {
 }
 `;
             runSingleFileTest("insertNodeAfter3", noop, text1, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-                changeTracker.insertNodeAfter(sourceFile, findOpenBraceForConstructor(sourceFile), createTestSuperCall(), { insertTrailingNewLine: true });
+                changeTracker.insertNodeAfter(sourceFile, findOpenBraceForConstructor(sourceFile), createTestSuperCall(), { suffix: newLineCharacter });
             });
             const text2 = `
 class A {
@@ -395,7 +395,7 @@ class A {
 }
 `;
             runSingleFileTest("insertNodeAfter4", noop, text2, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-                changeTracker.insertNodeAfter(sourceFile, findVariableStatementContaining("x", sourceFile), createTestSuperCall(), { insertTrailingNewLine: true });
+                changeTracker.insertNodeAfter(sourceFile, findVariableStatementContaining("x", sourceFile), createTestSuperCall(), { suffix: newLineCharacter });
             });
             const text3 = `
 class A {
@@ -405,7 +405,7 @@ class A {
 }
 `;
             runSingleFileTest("insertNodeAfter3-block with newline", noop, text3, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-                changeTracker.insertNodeAfter(sourceFile, findOpenBraceForConstructor(sourceFile), createTestSuperCall(), { insertTrailingNewLine: true });
+                changeTracker.insertNodeAfter(sourceFile, findOpenBraceForConstructor(sourceFile), createTestSuperCall(), { suffix: newLineCharacter });
             });
         }
         {
@@ -498,7 +498,7 @@ function foo(a: number,b: string,c = true) {
                 changeTracker.deleteNodeInList(sourceFile, findChild("c", sourceFile));
             });
         }
-{
+        {
             const text = `
 function foo(
     a: number,
@@ -515,6 +515,140 @@ function foo(
             runSingleFileTest("deleteNodeInList15", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 changeTracker.deleteNodeInList(sourceFile, findChild("c", sourceFile));
             });
+        }
+        {
+            const text = `
+const x = 1, y = 2;`;
+            runSingleFileTest("insertNodeInListAfter1", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createVariableDeclaration("z", /*type*/ undefined, createLiteral(1)));
+            });
+            runSingleFileTest("insertNodeInListAfter2", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(sourceFile, findChild("y", sourceFile), createVariableDeclaration("z", /*type*/ undefined, createLiteral(1)));
+            });
+        }
+        {
+            const text = `
+const /*x*/ x = 1, /*y*/ y = 2;`;
+            runSingleFileTest("insertNodeInListAfter3", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createVariableDeclaration("z", /*type*/ undefined, createLiteral(1)));
+            });
+            runSingleFileTest("insertNodeInListAfter4", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(sourceFile, findChild("y", sourceFile), createVariableDeclaration("z", /*type*/ undefined, createLiteral(1)));
+            });
+        }
+        {
+            const text = `
+const x = 1;`;
+            runSingleFileTest("insertNodeInListAfter5", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createVariableDeclaration("z", /*type*/ undefined, createLiteral(1)));
+            });
+        }
+        {
+            const text = `
+const x = 1, 
+    y = 2;`;
+            runSingleFileTest("insertNodeInListAfter6", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createVariableDeclaration("z", /*type*/ undefined, createLiteral(1)));
+            });
+            runSingleFileTest("insertNodeInListAfter7", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(sourceFile, findChild("y", sourceFile), createVariableDeclaration("z", /*type*/ undefined, createLiteral(1)));
+            });
+        }
+        {
+            const text = `
+const /*x*/ x = 1, 
+    /*y*/ y = 2;`;
+            runSingleFileTest("insertNodeInListAfter8", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createVariableDeclaration("z", /*type*/ undefined, createLiteral(1)));
+            });
+            runSingleFileTest("insertNodeInListAfter9", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(sourceFile, findChild("y", sourceFile), createVariableDeclaration("z", /*type*/ undefined, createLiteral(1)));
+            });
+        }
+        {
+            const text = `
+import {
+    x
+} from "bar"`;
+            runSingleFileTest("insertNodeInListAfter10", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createImportSpecifier(createIdentifier("b"), createIdentifier("a")));
+            })
+        }
+        {
+            const text = `
+import {
+    x // this is x
+} from "bar"`;
+            runSingleFileTest("insertNodeInListAfter11", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createImportSpecifier(createIdentifier("b"), createIdentifier("a")));
+            })
+        }
+        {
+            const text = `
+import {
+    x
+} from "bar"`;
+            runSingleFileTest("insertNodeInListAfter12", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createImportSpecifier(undefined, createIdentifier("a")));
+            })
+        }
+        {
+            const text = `
+import {
+    x // this is x
+} from "bar"`;
+            runSingleFileTest("insertNodeInListAfter13", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createImportSpecifier(undefined, createIdentifier("a")));
+            })
+        }
+        {
+            const text = `
+import {
+    x0,
+    x
+} from "bar"`;
+            runSingleFileTest("insertNodeInListAfter14", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createImportSpecifier(createIdentifier("b"), createIdentifier("a")));
+            })
+        }
+        {
+            const text = `
+import {
+    x0,
+    x // this is x
+} from "bar"`;
+            runSingleFileTest("insertNodeInListAfter15", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createImportSpecifier(createIdentifier("b"), createIdentifier("a")));
+            })
+        }
+        {
+            const text = `
+import {
+    x0,
+    x
+} from "bar"`;
+            runSingleFileTest("insertNodeInListAfter16", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createImportSpecifier(undefined, createIdentifier("a")));
+            })
+        }
+        {
+            const text = `
+import {
+    x0,
+    x // this is x
+} from "bar"`;
+            runSingleFileTest("insertNodeInListAfter17", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createImportSpecifier(undefined, createIdentifier("a")));
+            })
+        }
+        {
+            const text = `
+import {
+    x0, x
+} from "bar"`;
+            runSingleFileTest("insertNodeInListAfter18", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createImportSpecifier(undefined, createIdentifier("a")));
+            })
         }
     });
 }

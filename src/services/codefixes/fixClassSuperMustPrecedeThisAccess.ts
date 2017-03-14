@@ -27,7 +27,7 @@ namespace ts.codefix {
                 }
             }
             const changeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
-            changeTracker.insertNodeAfter(sourceFile, getOpenBrace(<ConstructorDeclaration>constructor, sourceFile), superCall, { insertTrailingNewLine: true });
+            changeTracker.insertNodeAfter(sourceFile, getOpenBrace(<ConstructorDeclaration>constructor, sourceFile), superCall, { suffix: context.newLineCharacter });
             changeTracker.deleteNode(sourceFile, superCall);
 
             return [{

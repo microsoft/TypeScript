@@ -132,7 +132,7 @@ namespace ts.codefix {
                             else {
                                 const previousToken = getTokenAtPosition(sourceFile, namespaceImport.pos - 1);
                                 if (previousToken && previousToken.kind === SyntaxKind.CommaToken) {
-                                    const startPosition = textChanges.getAdjustedStartPosition(sourceFile, previousToken, {}, /*forDeleteOperation*/ true);
+                                    const startPosition = textChanges.getAdjustedStartPosition(sourceFile, previousToken, {}, textChanges.Position.FullStart);
                                     return deleteRange({ pos: startPosition, end: namespaceImport.end });
                                 }
                                 return deleteRange(namespaceImport);
