@@ -1,0 +1,70 @@
+=== tests/cases/compiler/extendingFromGenericTypeWithMissingTypeArguments.ts ===
+class C1<T> {
+>C1 : C1<T>
+>T : T
+
+    c1_prop: T;
+>c1_prop : T
+>T : T
+}
+class D1 extends C1 {
+>D1 : D1
+>C1 : C1<any>
+
+    d1_prop: number;
+>d1_prop : number
+}
+
+var d1 = new D1();
+>d1 : D1
+>new D1() : D1
+>D1 : typeof D1
+
+d1.c1_prop; // any
+>d1.c1_prop : any
+>d1 : D1
+>c1_prop : any
+
+d1.d1_prop;
+>d1.d1_prop : number
+>d1 : D1
+>d1_prop : number
+
+
+class C2<T> {
+>C2 : C2<T>
+>T : T
+
+    constructor(a: T) { }
+>a : T
+>T : T
+
+    c1_prop: T;
+>c1_prop : T
+>T : T
+}
+class D2 extends C2 {
+>D2 : D2
+>C2 : C2<any>
+
+    d1_prop: number;
+>d1_prop : number
+}
+
+var d1 = new D2(2);
+>d1 : D1
+>new D2(2) : D2
+>D2 : typeof D2
+>2 : 2
+
+d1.c1_prop; // any
+>d1.c1_prop : any
+>d1 : D1
+>c1_prop : any
+
+d1.d1_prop;
+>d1.d1_prop : number
+>d1 : D1
+>d1_prop : number
+
+

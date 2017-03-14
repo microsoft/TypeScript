@@ -1,8 +1,7 @@
 tests/cases/compiler/recursiveBaseConstructorCreation3.ts(6,27): error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
-tests/cases/compiler/recursiveBaseConstructorCreation3.ts(9,11): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 
 
-==== tests/cases/compiler/recursiveBaseConstructorCreation3.ts (2 errors) ====
+==== tests/cases/compiler/recursiveBaseConstructorCreation3.ts (1 errors) ====
     declare class base<T> {
     }
     declare class abc<T> extends base<T> {
@@ -13,7 +12,5 @@ tests/cases/compiler/recursiveBaseConstructorCreation3.ts(9,11): error TS2351: C
 !!! error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
     }
     
-    var bar = new xyz(); // Error: Invalid 'new' expression.
-              ~~~~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+    var bar = new xyz();
     var r: xyz = bar.foo;
