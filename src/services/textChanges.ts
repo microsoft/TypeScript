@@ -360,7 +360,7 @@ namespace ts.textChanges {
             return visited;
         }
         // clone nodearray if necessary
-        const nodeArray = visited === nodes ? createNodeArray(visited) : visited;
+        const nodeArray = visited === nodes ? createNodeArray(visited.slice(0)) : visited;
         nodeArray.pos = getPos(nodes);
         nodeArray.end = getEnd(nodes);
         return nodeArray;

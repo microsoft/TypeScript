@@ -126,7 +126,7 @@ namespace ts.codefix {
                 }
                 else {
                     Debug.assert(declarations.length === signatures.length);
-                    const methodImplementingSignatures = createMethodImplementingSignatures(signatures, enclosingDeclaration, name, modifiers);
+                    const methodImplementingSignatures = createMethodImplementingSignatures(signatures, name, modifiers);
                     signatureDeclarations.push(methodImplementingSignatures);
                 }
                 return signatureDeclarations;
@@ -135,11 +135,8 @@ namespace ts.codefix {
         }
     }
 
-    // TODO: infer types of arguments?
-    function createMethodImplementingSignatures(signatures: Signature[], enclosingDeclaration: ClassLikeDeclaration, name: string, modifiers: Modifier[] | undefined): MethodDeclaration {
-        const newMethodDeclaration = createNode(SyntaxKind.CallSignature) as SignatureDeclaration;
-        newMethodDeclaration.parent = enclosingDeclaration;
-        newMethodDeclaration.name = signatures[0].getDeclaration().name;
+    function createMethodImplementingSignatures(signatures: Signature[], name: string, modifiers: Modifier[] | undefined): MethodDeclaration {
+        Debug.assert(signatures && signatures.length > 0);
 
         let maxNonRestArgs = -1;
         let maxArgsIndex = 0;
@@ -157,46 +154,45 @@ namespace ts.codefix {
         }
         const maxArgsParameterSymbolNames = signatures[maxArgsIndex].getParameters().map(symbol => symbol.getName());
 
-        const parameters = createNodeArray<ParameterDeclaration>();
+        const parameters: ParameterDeclaration[] = [];
         for (let i = 0; i < maxNonRestArgs; i++) {
+            const anyType = createKeywordTypeNode(SyntaxKind.AnyKeyword);
             const newParameter = createParameter(
                   /*decorators*/ undefined
                 , /*modifiers*/ undefined
                 , /*dotDotDotToken*/ undefined
                 , maxArgsParameterSymbolNames[i]
                 , /*questionToken*/ i >= minArgumentCount ? createToken(SyntaxKind.QuestionToken) : undefined
-                , /*type*/ undefined
+                , anyType
                 , /*initializer*/ undefined);
             parameters.push(newParameter);
         }
 
         if (hasRestParameter) {
+            const anyType = createKeywordTypeNode(SyntaxKind.AnyKeyword);
             const restParameter = createParameter(
                   /*decorators*/ undefined
                 , /*modifiers*/ undefined
                 , createToken(SyntaxKind.DotDotDotToken)
                 , maxArgsParameterSymbolNames[maxNonRestArgs] || "rest"
                 , /*questionToken*/ maxNonRestArgs >= minArgumentCount ? createToken(SyntaxKind.QuestionToken) : undefined
-                , /*type*/ undefined
+                , anyType
                 , /*initializer*/ undefined);
             parameters.push(restParameter);
         }
 
-        return createMethod(
-              /*decorators*/ undefined
-            , modifiers
-            , /*asteriskToken*/ undefined
+        return createStubbedMethod(
+            modifiers
             , name
             , /*typeParameters*/undefined
             , parameters
-            , /*type*/ undefined
-            , /*body*/undefined);
+            , /*returnType*/ undefined);
     }
 
-    export function createStubbedMethod(modifiers: Modifier[], name: string, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], returnType?: TypeNode) {
+    export function createStubbedMethod(modifiers: Modifier[], name: string, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], returnType: TypeNode | undefined) {
         return createMethod(
               /*decorators*/undefined
-            , /*modifiers*/modifiers
+            , modifiers
             , /*asteriskToken*/undefined
             , name
             , typeParameters
@@ -231,12 +227,13 @@ namespace ts.codefix {
         const parameterTypeNode = checker.createTypeNode(parameterType);
         // TODO: deep cloning of decorators/any node.
         const parameterNode = createParameter(
-            parameterDeclaration.decorators && parameterDeclaration.decorators.map(getSynthesizedClone)
-            , parameterDeclaration.modifiers && parameterDeclaration.modifiers.map(getSynthesizedClone)
+            parameterDeclaration.decorators && parameterDeclaration.decorators.map(getSynthesizedDeepClone)
+            , parameterDeclaration.modifiers && parameterDeclaration.modifiers.map(getSynthesizedDeepClone)
             , parameterDeclaration.dotDotDotToken && createToken(SyntaxKind.DotDotDotToken)
-            , parameterDeclaration.name
+            , getSynthesizedDeepClone(parameterDeclaration.name)
             , parameterDeclaration.questionToken && createToken(SyntaxKind.QuestionToken)
-            , parameterTypeNode);
+            , parameterTypeNode
+            , /*initializer*/ undefined);
         return parameterNode;
     }
 

@@ -895,7 +895,7 @@ namespace ts {
         exprName: EntityName;
     }
 
-    /** A TypeLiteral is the declaration node for an anonymous symbol. */
+    // A TypeLiteral is the declaration node for an anonymous symbol.
     export interface TypeLiteralNode extends TypeNode, Declaration {
         kind: SyntaxKind.TypeLiteral;
         members: NodeArray<TypeElement>;

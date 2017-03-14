@@ -2361,7 +2361,7 @@ namespace ts {
                         return createArrayTypeNode(elementType);
                     }
                     else if (type.target.objectFlags & ObjectFlags.Tuple) {
-                        return createTupleTypeNode(mapToTypeNodeArray(typeArguments.slice(0, getTypeReferenceArity(type))));
+                        return createTupleTypeNode(typeArguments.length > 0 ? mapToTypeNodeArray(typeArguments.slice(0, getTypeReferenceArity(type))) : undefined);
                     }
                     else {
                         // TODO: handle type parameters in qualified names...
@@ -2406,7 +2406,7 @@ namespace ts {
                             entityName = nameIdentifier;
                         }
                         const typeParameterCount = (type.target.typeParameters || emptyArray).length;
-                        const typeArgumentNodes = mapToTypeNodeArray(typeArguments.slice(i, typeParameterCount - i));
+                        const typeArgumentNodes = mapToTypeNodeArray(typeArguments.length > 0 ? typeArguments.slice(i, typeParameterCount - i) : undefined);
                         return createTypeReferenceNode(entityName, typeArgumentNodes);
                     }
                 }
@@ -2478,7 +2478,8 @@ namespace ts {
                         , /*dotDotDotToken*/ undefined
                         , name
                         , /*questionToken*/ undefined
-                        , stringTypeNode);
+                        , stringTypeNode
+                        , /*initializer*/ undefined);
                     const typeNode = createTypeNode(indexInfo.type);
                     return createIndexSignatureDeclaration(
                         [indexingParameter]
@@ -7260,10 +7261,6 @@ namespace ts {
                     return unknownType;
             }
         }
-
-        // export function synthesizeTypeNode(type: Type, enclosingDeclaration: Node): TypeNode {
-        //     throw new Error("Not implemented" + enclosingDeclaration);
-        // }
 
         function instantiateList<T>(items: T[], mapper: TypeMapper, instantiator: (item: T, mapper: TypeMapper) => T): T[] {
             if (items && items.length) {

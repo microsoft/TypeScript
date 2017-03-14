@@ -475,6 +475,7 @@ namespace ts {
                     /*modifiers*/ undefined,
                     node.dotDotDotToken,
                     getGeneratedNameForNode(node),
+                    node.questionToken,
                     /*type*/ undefined,
                     visitNode(node.initializer, visitor, isExpression)
                 );

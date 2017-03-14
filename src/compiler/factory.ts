@@ -355,8 +355,6 @@ namespace ts {
 
     export function createIndexSignatureDeclaration(parameters: ParameterDeclaration[], type: TypeNode, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined): IndexSignatureDeclaration {
         const indexSignature = createSynthesizedNode(SyntaxKind.IndexSignature) as IndexSignatureDeclaration;
-        // indexSignature.name = asName(name);
-        // type parameters
         indexSignature.parameters = asNodeArray(parameters);
         indexSignature.type = type;
         indexSignature.decorators = asNodeArray(decorators);
@@ -373,6 +371,8 @@ namespace ts {
             : node;
     }
 
+    // Signature elements
+
     export function createParameter(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression) {
         const node = <ParameterDeclaration>createSynthesizedNode(SyntaxKind.Parameter);
         node.decorators = asNodeArray(decorators);
@@ -385,11 +385,12 @@ namespace ts {
         return node;
     }
 
-    export function updateParameter(node: ParameterDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: BindingName, type: TypeNode | undefined, initializer: Expression | undefined) {
+    export function updateParameter(node: ParameterDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
             || node.dotDotDotToken !== dotDotDotToken
             || node.name !== name
+            || node.questionToken !== questionToken
             || node.type !== type
             || node.initializer !== initializer
             ? updateNode(createParameter(decorators, modifiers, dotDotDotToken, name, node.questionToken, type, initializer), node)
@@ -438,7 +439,7 @@ namespace ts {
         node.asteriskToken = asteriskToken;
         node.name = asName(name);
         node.typeParameters = asNodeArray(typeParameters);
-        node.parameters = createNodeArray(parameters);
+        node.parameters = asNodeArray(parameters);
         node.type = type;
         node.body = body;
         return node;
