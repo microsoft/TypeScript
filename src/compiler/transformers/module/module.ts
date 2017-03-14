@@ -501,13 +501,73 @@ namespace ts {
             }
         }
 
-        function visitImportCallExpression(node: ImportCallExpression): Expression{
+        function visitImportCallExpression(node: ImportCallExpression): Expression {
+            switch (compilerOptions.module) {
+                case ModuleKind.CommonJS:
+                    return transformImportCallExpressionCommonJS(node);
+                case ModuleKind.AMD:
+                    return transformImportCallExpressionAMD(node);
+                case ModuleKind.UMD:
+                    return transformImportCallExpressionUMD(node);
+            }
+            Debug.assert(false, "All supported module kind in this transformation step should have been handled");
+        }
+
+        function transformImportCallExpressionUMD(node: ImportCallExpression): Expression {
+            // (function (factory) {
+            //      ... (regular UMD)
+            // }
+            // })(function (require, exports, useSyncRequire) {
+            //      "use strict";
+            //      Object.defineProperty(exports, "__esModule", { value: true });
+            //      require.length === 1 ?
+            //          /*CommonJs Require*/ Promise.resolve().then(() => require('blah'));
+            //          /*Amd Require*/ new Promise(resolve => require(['blah'], resolve));
+            // });
+            const require = createIdentifier("require");
+            return createConditional(
+                /*condition*/ createBinary(createPropertyAccess(require, /*name*/ "length"), /*operator*/ createToken(SyntaxKind.EqualsEqualsEqualsToken), createNumericLiteral("1")),
+                /*whenTrue*/ transformImportCallExpressionCommonJS(node),
+                /*whenFalse*/ transformImportCallExpressionAMD(node)
+            );
+        }
+
+        function transformImportCallExpressionAMD(node: ImportCallExpression): Expression {
+            // improt("./blah")
+            // emit as
+            // define(["require", "exports", "blah"], function (require, exports) {
+            //     ...
+            //     new Promise(resolve => require(['blah'], resolve));
+            // });
+            const resolve = createIdentifier("resolve");
+            return createNew(
+                createIdentifier("Promise"),
+                /*typeArguments*/ undefined,
+                [
+                    createArrowFunction(
+                        /*modifiers*/undefined,
+                        /*typeParameters*/ undefined,
+                        [createParameter(/*decorator*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ resolve)],
+                        /*type*/ undefined,
+                        createToken(SyntaxKind.EqualsGreaterThanToken),
+                        createCall(createIdentifier("require"), /*typeArguments*/ undefined, [createArrayLiteral([node.specifier]), resolve])
+                    )
+                ]
+            );
+        }
+ 
+    function transformImportCallExpressionCommonJS(node: ImportCallExpression): Expression {
+            // import("./blah")
+            // emit as
+            // Promise.resolve().then(() => require("./blah"));
+            // We have to wrap require in then callback so that require is done in asynchronously
+            // if we simply do require in resolve callback in Promise constructor. We will execute the loading immediately
             return createCall(
                 createPropertyAccess(
-                    createCall(/*expression*/ createPropertyAccess(createIdentifier("Promise"), "resolve"), /*typeArguments*/ undefined, /*argumentsArray*/ []),
+                    createCall(/*expression*/ createPropertyAccess(createIdentifier("Promise"), "resolve"), /*typeArguments*/ undefined, /*argumentsArray*/[]),
                     "then"),
                 /*typeArguments*/ undefined,
-                [ createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, /*parameters*/ undefined, /*type*/ undefined, createToken(SyntaxKind.EqualsGreaterThanToken), createCall(createIdentifier("require"), /*typeArguments*/ undefined, [node.specifier]))]
+                [createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, /*parameters*/ undefined, /*type*/ undefined, createToken(SyntaxKind.EqualsGreaterThanToken), createCall(createIdentifier("require"), /*typeArguments*/ undefined, [node.specifier]))]
             );
         }
 
