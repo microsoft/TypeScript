@@ -276,8 +276,8 @@ namespace ts.formatting {
         function isOnToken(): boolean {
             Debug.assert(scanner !== undefined);
 
-            const current = (lastTokenInfo && lastTokenInfo.token.kind) || scanner.getToken();
-            const startPos = (lastTokenInfo && lastTokenInfo.token.pos) || scanner.getStartPos();
+            const current = lastTokenInfo ? lastTokenInfo.token.kind : scanner.getToken();
+            const startPos = lastTokenInfo ? lastTokenInfo.token.pos : scanner.getStartPos();
             return startPos < endPos && current !== SyntaxKind.EndOfFileToken && !isTrivia(current);
         }
 
