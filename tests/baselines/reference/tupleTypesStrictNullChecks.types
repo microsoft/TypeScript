@@ -1,0 +1,19 @@
+=== tests/cases/compiler/tupleTypesStrictNullChecks.ts ===
+var et: [] = [];
+>et : []
+>[] : []
+
+var et0 = et[0];  // never
+>et0 : never
+>et[0] : never
+>et : []
+>0 : 0
+
+var et0: never;
+>et0 : never
+
+et = [];    // Ok
+>et = [] : []
+>et : []
+>[] : []
+
