@@ -62,7 +62,11 @@ namespace ts.codefix {
             , "x"
             , /*questionToken*/ undefined
             , stringTypeNode);
-        const indexSignature = createIndexSignatureDeclaration([indexingParameter], typeNode);
+        const indexSignature = createIndexSignatureDeclaration(
+              [indexingParameter]
+            , typeNode
+            , /*decorators*/undefined
+            , /*modifiers*/ undefined);
 
         const indexSignatureChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
         indexSignatureChangeTracker.insertNodeAfter(sourceFile, openBrace, indexSignature, { insertTrailingNewLine: true });

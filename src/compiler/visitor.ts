@@ -302,8 +302,8 @@ namespace ts {
             case SyntaxKind.TypeReference:
                 return updateTypeReferenceNode(<TypeReferenceNode>node
                      , visitNode((<TypeReferenceNode>node).typeName, visitor, isEntityName)
-                     , nodesVisitor((<TypeReferenceNode>node).typeArguments, visitor, isTypeNode)
-                );
+                     , nodesVisitor((<TypeReferenceNode>node).typeArguments, visitor, isTypeNode));
+
             case SyntaxKind.FunctionType:
                 throw new Error("reached unsupported type in visitor.");
             case SyntaxKind.ConstructorType:
@@ -347,7 +347,8 @@ namespace ts {
                 return updatePropertySignature((<PropertySignature>node)
                     , visitNode((<PropertySignature>node).name, visitor, isPropertyName)
                     , visitNode((<PropertySignature>node).questionToken, visitor, isToken)
-                    , visitNode((<PropertySignature>node).type, visitor, isTypeNode));
+                    , visitNode((<PropertySignature>node).type, visitor, isTypeNode)
+                    , visitNode((<PropertySignature>node).initializer, visitor, isExpression));
 
             case SyntaxKind.IndexSignature:
                 return updateIndexSignatureDeclaration(<IndexSignatureDeclaration>node

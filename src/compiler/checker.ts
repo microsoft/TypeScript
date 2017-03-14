@@ -2211,7 +2211,10 @@ namespace ts {
             let inObjectTypeLiteral = false;
             let checkAlias = true;
 
-            return createTypeNodeWorker(type);
+            let result = createTypeNodeWorker(type);
+            (<any>result).__type_source = type;
+            (<any>result).__type_source_str = typeToString(type);
+            return result;
 
             function createTypeNodeWorker(type: Type): TypeNode {
                 if (!type) {
@@ -2221,12 +2224,6 @@ namespace ts {
 
                 const typeString = typeToString(type); typeString; // TODO: remove.
 
-                if (checkAlias && type.aliasSymbol) {
-                    const name = getNameOfSymbol(type.aliasSymbol);
-                    const typeArguments = mapToTypeNodeArray(type.aliasTypeArguments);
-                    return createTypeReferenceNode(createIdentifier(name), typeArguments);
-                }
-                checkAlias = false;
 
                 if (type.flags & TypeFlags.Any) {
                     // TODO: add other case where type ends up being `any`.
@@ -2271,14 +2268,14 @@ namespace ts {
                 if (type.flags & TypeFlags.ESSymbol) {
                     throw new Error("ESSymbol not implemented");
                 }
-                if (type.flags & TypeFlags.TypeParameter) {
-                    if ((<TypeParameter>type).isThisType) {
-                        if (inObjectTypeLiteral) {
-                            encounteredError = true;
-                        }
-                        return createThis();
+                if (type.flags & TypeFlags.NonPrimitive) {
+                    throw new Error("Non primitive not implemented");
+                }
+                if (type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType) {
+                    if (inObjectTypeLiteral) {
+                        encounteredError = true;
                     }
-                    throw new Error("Type Parameter declarations only handled in other worker.");
+                    return createThis();
                 }
 
                 const objectFlags = getObjectFlags(type);
@@ -2291,64 +2288,35 @@ namespace ts {
                     return createTypeReferenceNodeFromType(<TypeReference>type);
                 }
 
+                if (type.flags & TypeFlags.EnumLiteral) {
+                    throw new Error("Enum literal not implemented");
+                }
+                if (objectFlags & ObjectFlags.ClassOrInterface) {
+                    Debug.assert(!!(type.flags & TypeFlags.Object));
+                    const name = getNameOfSymbol(type.symbol);
+                    // TODO: handle type arguments.
+                    // TODO: handle anonymous classes.
+                    return createTypeReferenceNode(name, /*typeParameters*/undefined);
+                }
+                if (type.flags & TypeFlags.TypeParameter) {
+                    throw new Error("Type Parameter declarations only handled in other worker.");
+                }
+
+                // accessible type aliasSymbol
+                // TODO: move back up later on?
+                if (checkAlias && type.aliasSymbol) {
+                    const name = getNameOfSymbol(type.aliasSymbol);
+                    const typeArgumentNodes = mapToTypeNodeArray(type.aliasTypeArguments);
+                    return createTypeReferenceNode(createIdentifier(name), typeArgumentNodes);
+                }
+                checkAlias = false;
+
                 if (type.flags & TypeFlags.Union) {
                     return createUnionOrIntersectionTypeNode(SyntaxKind.UnionType, mapToTypeNodeArray((type as UnionType).types));
                 }
                 if (type.flags & TypeFlags.Intersection) {
                     return createUnionOrIntersectionTypeNode(SyntaxKind.IntersectionType, mapToTypeNodeArray((type as UnionType).types));
                 }
-                if (type.flags & TypeFlags.Index) {
-                    throw new Error("index not implemented");
-                }
-                if (type.flags & TypeFlags.IndexedAccess) {
-                    throw new Error("indexed access not implemented");
-                }
-
-                if (objectFlags & ObjectFlags.ClassOrInterface) {
-                    Debug.assert(!!(type.flags & TypeFlags.Object));
-                    const name = getNameOfSymbol(type.symbol);
-                    // TODO: handle type arguments.
-                    // TODO: handle anonymous classes.
-                    return createTypeReferenceNode(name);
-                }
-
-                // keyword types
-                // this type node
-                // function type node
-                // constructor type node
-                // type reference node
-                // type predicate node - is Foo (for return types)
-                // type query node -- typeof number
-                // type literal node (like object literal)
-                // array type
-                // tuple type
-                // union type
-                // might need parens
-                // intersection type
-                // Type operator node (eg (ie?): keyof T)
-                // IndexedAccess Type Node
-                // mapped type node
-                // literal type node
-
-                // if (inTypeAlias && type.aliasSymbol) {
-                //     return isSymbolAccessible(type.aliasSymbol, enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/false).accessibility === SymbolAccessibility.Accessible
-                //         && (!type.aliasTypeArguments || allTypesVisible(type.aliasTypeArguments));
-                // }
-                // const typeSymbolAccessibility = type.symbol && isSymbolAccessible(type.symbol, enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/ false).accessibility;
-                // if (type.flags & TypeFlags.TypeParameter) {
-                //     if (inObjectLiteral && (type as TypeParameter).isThisType) {
-                //         return false;
-                //     }
-                //     const constraint = getConstraintFromTypeParameter((<TypeParameter>type));
-                //     return typeSymbolAccessibility === SymbolAccessibility.Accessible
-                //         && (!constraint || isTypeAccessibleWorker(constraint, inObjectLiteral, /*inTypeAlias*/false));
-                // }
-                // const objectFlags = getObjectFlags(type);
-                // if (objectFlags & ObjectFlags.ClassOrInterface) {
-                //     // If type is a class or interface type that wasn't hit by the isSymbolAccessible check above,
-                //     // type must be an anonymous class or interface.
-                //     return false;
-                // }
 
                 if (objectFlags & ObjectFlags.Mapped) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
@@ -2368,6 +2336,15 @@ namespace ts {
                     }
 
                     return createTypeLiteralNodeFromType(<ObjectType>type);
+                }
+
+                // TODO: string or number literal here or above?
+
+                if (type.flags & TypeFlags.Index) {
+                    throw new Error("index not implemented");
+                }
+                if (type.flags & TypeFlags.IndexedAccess) {
+                    throw new Error("indexed access not implemented");
                 }
 
                 Debug.fail("Should be unreachable.");
@@ -2476,7 +2453,8 @@ namespace ts {
                                 typeElements.push(createPropertySignature(
                                     createIdentifier(memberName)
                                     , optional ? createToken(SyntaxKind.QuestionToken) : undefined
-                                    , createTypeNode(typeOfOldMember)));
+                                    , createTypeNode(typeOfOldMember)
+                                    , /*initializer*/undefined));
                                 break;
                             case SyntaxKind.MethodSignature:
                             case SyntaxKind.CallSignature:

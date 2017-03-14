@@ -62,7 +62,9 @@ namespace ts.codefix {
                     ,  getNameFromIndexInfo(indexInfoOfKind)
                     , /*questionToken*/ undefined
                     , kind === IndexKind.String ? createKeywordTypeNode(SyntaxKind.StringKeyword) : createKeywordTypeNode(SyntaxKind.NumberKeyword))]
-                , typeNode);
+                , typeNode
+                , /*decorators*/undefined
+                , /*modifiers*/ undefined);
             newNodes.push(newIndexSignatureDeclaration);
         }
 
