@@ -31,7 +31,7 @@ namespace ts.codefix {
             return undefined;
         }
 
-        const isStatic = hasModifier(getThisContainer(token, /*includeArrowFunctions*/ false), ModifierFlags.Static);
+        const isStatic = hasModifier(classMemberDeclaration, ModifierFlags.Static);
 
         return isInJavaScriptFile(sourceFile) ? getActionsForAddMissingMemberInJavaScriptFile() : getActionsForAddMissingMemberInTypeScriptFile();
 
@@ -54,7 +54,7 @@ namespace ts.codefix {
                     fileName: sourceFile.fileName,
                     textChanges: [{
                         span: { start: startPos, length: 0 },
-                        newText: `${isStatic ? "static " : ""}${token.getFullText(sourceFile)}: ${typeString};`
+                        newText: `${isStatic ? "static " : ""}${token.getText(sourceFile)}: ${typeString};`
                     }]
                 }]
             }];
