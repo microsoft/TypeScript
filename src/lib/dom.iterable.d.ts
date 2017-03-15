@@ -29,9 +29,9 @@ interface NodeListOf<TNode extends Node> {
     /** 
       * Returns an list of values in the list
       */
-    entries(): IterableIterator<Node>;
+    entries(): IterableIterator<TNode>;
         
-    forEach(callbackfn: (value: Node, index: number, listObj: NodeList) => void, thisArg?: any): void;
+    forEach(callbackfn: (value: TNode, index: number, listObj: NodeList) => void, thisArg?: any): void;
     /** 
       * Returns an list of keys in the list
       */
@@ -39,6 +39,6 @@ interface NodeListOf<TNode extends Node> {
     /** 
       * Returns an array of key, value pairs for every entry in the list
       */
-    values(): IterableIterator<[number, Node]>;    
+    values(): IterableIterator<[number, TNode]>;    
     [Symbol.iterator](): IterableIterator<TNode>
 }
