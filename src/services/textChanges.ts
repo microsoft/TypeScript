@@ -253,6 +253,18 @@ namespace ts.textChanges {
         }
 
         public insertNodeAfter(sourceFile: SourceFile, after: Node, newNode: Node, options: InsertNodeOptions & ConfigurableEnd = {}) {
+            if ((isStatementButNotDeclaration(after)) || isClassElement(after)) {
+                // check if previous statement ends with semicolon
+                // if not - insert semicolon to preserve the code from changing the meaning due to ASI
+                if (sourceFile.text.charCodeAt(after.end - 1) !== CharacterCodes.semicolon) {
+                    this.changes.push({
+                        sourceFile,
+                        options: {},
+                        range: { pos: after.end, end: after.end },
+                        node: createToken(SyntaxKind.SemicolonToken)
+                    })
+                }
+            }
             const endPosition = getAdjustedEndPosition(sourceFile, after, options);
             this.changes.push({ sourceFile, options, useIndentationFromFile: true, node: newNode, range: { pos: endPosition, end: endPosition } });
             return this;
