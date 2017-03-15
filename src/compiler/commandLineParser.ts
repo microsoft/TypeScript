@@ -479,14 +479,12 @@ namespace ts {
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Deprecated_Use_skipLibCheck_instead_Skip_type_checking_of_default_library_declaration_files
         },
-
         {
             name: "charset",
             type: "string",
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.The_character_set_of_the_input_files
         },
-        compileOnSaveCommandLineOption,
         {
             name: "emitBOM",
             type: "boolean",
