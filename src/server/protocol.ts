@@ -2127,6 +2127,17 @@ namespace ts.server.protocol {
         payload: any;
     }
 
+    export type TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
+
+    export interface TypesInstallerInitializationFailedEvent extends Event {
+        event: TypesInstallerInitializationFailedEventName;
+        body: TypesInstallerInitializationFailedEventBody;
+    }
+
+    export interface TypesInstallerInitializationFailedEventBody {
+        message: string;
+    }
+
     export type TypingsInstalledTelemetryEventName = "typingsInstalled";
 
     export interface TypingsInstalledTelemetryEventBody extends TelemetryEventBody {

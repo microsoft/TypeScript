@@ -2209,6 +2209,16 @@ namespace ts {
         name: string;
     }
 
+    /* @internal */
+    /**
+     * Subset of properties from SourceFile that are used in multiple utility functions
+     */
+    export interface SourceFileLike {
+        readonly text: string;
+        lineMap: number[];
+    }
+
+
     // Source files are declarations when they are external modules.
     export interface SourceFile extends Declaration {
         kind: SyntaxKind.SourceFile;
@@ -4138,6 +4148,8 @@ namespace ts {
         /*@internal*/ onEmitSourceMapOfPosition?: (pos: number) => void;
         /*@internal*/ onEmitHelpers?: (node: Node, writeLines: (text: string) => void) => void;
         /*@internal*/ onSetSourceFile?: (node: SourceFile) => void;
+        /*@internal*/ onBeforeEmitNodeArray?: (nodes: NodeArray<any>) => void;
+        /*@internal*/ onAfterEmitNodeArray?: (nodes: NodeArray<any>) => void;
     }
 
     export interface PrinterOptions {

@@ -13,14 +13,20 @@ namespace ts.server.typingsInstaller {
     } = require("path");
 
     class FileLog implements Log {
+        private logEnabled = true;
         constructor(private readonly logFile?: string) {
         }
 
         isEnabled() {
-            return this.logFile !== undefined;
+            return this.logEnabled && this.logFile !== undefined;
         }
         writeLine(text: string) {
-            fs.appendFileSync(this.logFile, text + sys.newLine);
+            try {
+                fs.appendFileSync(this.logFile, text + sys.newLine);
+            }
+            catch(e) {
+                this.logEnabled = false;
+            }
         }
     }
 
@@ -68,6 +74,8 @@ namespace ts.server.typingsInstaller {
         private readonly npmPath: string;
         readonly typesRegistry: Map<void>;
 
+        private delayedInitializationError: InitializationFailedResponse;
+
         constructor(globalTypingsCacheLocation: string, throttleLimit: number, log: Log) {
             super(
                 sys,
@@ -93,6 +101,11 @@ namespace ts.server.typingsInstaller {
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`Error updating ${TypesRegistryPackageName} package: ${(<Error>e).message}`);
                 }
+                // store error info to report it later when it is known that server is already listening to events from typings installer
+                this.delayedInitializationError = {
+                    kind: "event::initializationFailed",
+                    message: (<Error>e).message
+                };
             }
 
             this.typesRegistry = loadTypesRegistryFile(getTypesRegistryFileLocation(globalTypingsCacheLocation), this.installTypingHost, this.log);
@@ -100,6 +113,11 @@ namespace ts.server.typingsInstaller {
 
         listen() {
             process.on("message", (req: DiscoverTypings | CloseProject) => {
+                if (this.delayedInitializationError) {
+                    // report initializationFailed error
+                    this.sendResponse(this.delayedInitializationError);
+                    this.delayedInitializationError = undefined;
+                }
                 switch (req.kind) {
                     case "discover":
                         this.install(req);
@@ -110,7 +128,7 @@ namespace ts.server.typingsInstaller {
             });
         }
 
-        protected sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes) {
+        protected sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Sending response: ${JSON.stringify(response)}`);
             }

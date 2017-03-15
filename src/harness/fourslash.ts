@@ -22,6 +22,10 @@
 namespace FourSlash {
     ts.disableIncrementalParsing = false;
 
+    function normalizeNewLines(s: string) {
+        return s.replace(/\r\n/g, "\n");
+    }
+
     // Represents a parsed source file with metadata
     export interface FourSlashFile {
         // The contents of the file (with markers, etc stripped out)
@@ -1958,8 +1962,7 @@ namespace FourSlash {
 
         public verifyCurrentFileContent(text: string) {
             const actual = this.getFileContent(this.activeFile.fileName);
-            const replaceNewlines = (str: string) => str.replace(/\r\n/g, "\n");
-            if (replaceNewlines(actual) !== replaceNewlines(text)) {
+            if (normalizeNewLines(actual) !== normalizeNewLines(text)) {
                 throw new Error("verifyCurrentFileContent\n" +
                     "\tExpected: \"" + text + "\"\n" +
                     "\t  Actual: \"" + actual + "\"");
@@ -2135,7 +2138,7 @@ namespace FourSlash {
             const actualText = this.rangeText(ranges[0]);
 
             const result = includeWhiteSpace
-                ? actualText === expectedText
+                ? normalizeNewLines(actualText) === normalizeNewLines(expectedText)
                 : this.removeWhitespace(actualText) === this.removeWhitespace(expectedText);
 
             if (!result) {
@@ -2185,7 +2188,7 @@ namespace FourSlash {
                     continue;
                 }
 
-                const newActions = this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.length, [diagnostic.code]);
+                const newActions = this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.length, [diagnostic.code], this.formatCodeSettings);
                 if (newActions && newActions.length) {
                     actions = actions ? actions.concat(newActions) : newActions;
                 }
@@ -2248,22 +2251,23 @@ namespace FourSlash {
 
             if (expected === undefined) {
                 if (actual) {
-                    this.raiseError(name + " failed - expected no template but got {newText: \"" + actual.newText + "\" caretOffset: " + actual.caretOffset + "}");
+                    this.raiseError(`${name} failed - expected no template but got {newText: "${actual.newText}", caretOffset: ${actual.caretOffset}}`);
                 }
 
                 return;
             }
             else {
                 if (actual === undefined) {
-                    this.raiseError(name + " failed - expected the template {newText: \"" + actual.newText + "\" caretOffset: " + actual.caretOffset + "} but got nothing instead");
+                    this.raiseError(`${name} failed - expected the template {newText: "${expected.newText}", caretOffset: "${expected.caretOffset}"} but got nothing instead`);
+                    
                 }
 
                 if (actual.newText !== expected.newText) {
-                    this.raiseError(name + " failed - expected insertion:\n" + this.clarifyNewlines(expected.newText) + "\nactual insertion:\n" + this.clarifyNewlines(actual.newText));
+                    this.raiseError(`${name} failed - expected insertion:\n"${this.clarifyNewlines(expected.newText)}"\nactual insertion:\n"${this.clarifyNewlines(actual.newText)}"`);
                 }
 
                 if (actual.caretOffset !== expected.caretOffset) {
-                    this.raiseError(name + " failed - expected caretOffset: " + expected.caretOffset + ",\nactual caretOffset:" + actual.caretOffset);
+                    this.raiseError(`${name} failed - expected caretOffset: ${expected.caretOffset}\nactual caretOffset:${actual.caretOffset}`);
                 }
             }
         }
