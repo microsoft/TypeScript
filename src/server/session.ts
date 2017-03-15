@@ -651,16 +651,21 @@ namespace ts.server {
             }
 
             return occurrences.map(occurrence => {
-                const { fileName, isWriteAccess, textSpan } = occurrence;
+                const { fileName, isWriteAccess, textSpan, isInString } = occurrence;
                 const scriptInfo = project.getScriptInfo(fileName);
                 const start = scriptInfo.positionToLineOffset(textSpan.start);
                 const end = scriptInfo.positionToLineOffset(ts.textSpanEnd(textSpan));
-                return {
+                const result: protocol.OccurrencesResponseItem = {
                     start,
                     end,
                     file: fileName,
-                    isWriteAccess,
+                    isWriteAccess
                 };
+                // no need to serialize the property if it is not true
+                if (isInString) {
+                    result.isInString = isInString;
+                }
+                return result;
             });
         }
 

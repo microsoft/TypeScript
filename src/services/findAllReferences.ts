@@ -1044,7 +1044,9 @@ namespace ts.FindAllReferences {
 
                 const type = getStringLiteralTypeForNode(<StringLiteral>node, typeChecker);
                 if (type === searchType) {
-                    references.push(getReferenceEntryFromNode(node));
+                    const reference = getReferenceEntryFromNode(node);
+                    reference.isInString = true;
+                    references.push(reference);
                 }
             }
         }

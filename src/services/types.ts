@@ -364,6 +364,7 @@ namespace ts {
         fileName: string;
         isWriteAccess: boolean;
         isDefinition: boolean;
+        isInString?: true;
     }
 
     export interface ImplementationLocation {
@@ -385,6 +386,7 @@ namespace ts {
 
     export interface HighlightSpan {
         fileName?: string;
+        isInString?: true;
         textSpan: TextSpan;
         kind: string;
     }
