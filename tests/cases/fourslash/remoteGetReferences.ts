@@ -95,10 +95,10 @@
 //////Increments
 ////[|remotefooCls|].[|remoteclsSVar|]++;
 ////remotemodTest.remotemodVar++;
-////[|remoteglobalVar|] = [|remoteglobalVar|] + [|remoteglobalVar|];
+////[|{| "isWriteAccess": true |}remoteglobalVar|] = [|remoteglobalVar|] + [|remoteglobalVar|];
 ////
 //////ETC - Other cases
-////[|remoteglobalVar|] = 3;
+////[|{| "isWriteAccess": true |}remoteglobalVar|] = 3;
 ////
 //////Find References misses method param
 ////var
@@ -119,16 +119,16 @@
 ////});
 
 // @Filename: remoteGetReferences_2.ts
-////var [|remoteglobalVar|]: number = 2;
+////var [|{| "isWriteAccess": true, "isDefinition": true |}remoteglobalVar|]: number = 2;
 ////
-////class [|remotefooCls|] {
+////class [|{| "isWriteAccess": true, "isDefinition": true |}remotefooCls|] {
 ////	//Declare
-////	[|remoteclsVar|] = 1;
-////	static [|remoteclsSVar|] = 1;
+////	[|{| "isWriteAccess": true, "isDefinition": true |}remoteclsVar|] = 1;
+////	static [|{| "isWriteAccess": true, "isDefinition": true |}remoteclsSVar|] = 1;
 ////
 ////	constructor(public remoteclsParam: number) {
 ////		//Increments
-////		[|remoteglobalVar|]++;
+////		[|{| "isWriteAccess": true |}remoteglobalVar|]++;
 ////		this.[|remoteclsVar|]++;
 ////		[|remotefooCls|].[|remoteclsSVar|]++;
 ////		this.remoteclsParam++;
@@ -142,7 +142,7 @@
 ////
 ////	//Increments
 ////	[|remotefooCls|].[|remoteclsSVar|]++;
-////	[|remoteglobalVar|]++;
+////	[|{| "isWriteAccess": true |}remoteglobalVar|]++;
 ////	remotemodTest.remotemodVar++;
 ////	remotefnVar++;
 ////
@@ -155,7 +155,7 @@
 ////	export var remotemodVar: number;
 ////
 ////	//Increments
-////	[|remoteglobalVar|]++;
+////	[|{| "isWriteAccess": true |}remoteglobalVar|]++;
 ////	[|remotefooCls|].[|remoteclsSVar|]++;
 ////	remotemodVar++;
 ////
@@ -167,7 +167,7 @@
 ////        static remoteboo = remotefoo;
 ////
 ////		//Increments
-////		[|remoteglobalVar|]++;
+////		[|{| "isWriteAccess": true |}remoteglobalVar|]++;
 ////		[|remotefooCls|].[|remoteclsSVar|]++;
 ////		remotemodVar++;
 ////    }
@@ -177,4 +177,24 @@
 ////	}
 ////}
 
-verify.rangesWithSameTextReferenceEachOther();
+test.rangesByText().forEach((ranges, text) => {
+    const definition = (() => {
+        switch (text) {
+            case "remotefooCls": return "class remotefooCls";
+            case "remoteglobalVar": return "var remoteglobalVar: number";
+            case "remoteclsSVar": return "(property) remotefooCls.remoteclsSVar: number";
+            case "remoteclsVar": return "(property) remotefooCls.remoteclsVar: number";
+            default: throw new Error(text);
+        }
+    })();
+
+    if (text === "remotefooCls") {
+        verify.referenceGroups([ranges[0], ...ranges.slice(2)], [{ definition, ranges }]);
+        verify.referenceGroups(ranges[1], [
+            { definition: "constructor remotefooCls(remoteclsParam: number): remotefooCls", ranges}
+        ]);
+    }
+    else {
+        verify.singleReferenceGroup(definition, ranges);
+    }
+});

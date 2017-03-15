@@ -1,5 +1,5 @@
 tests/cases/compiler/a.js(5,5): error TS1117: An object literal cannot have multiple properties with the same name in strict mode.
-tests/cases/compiler/a.js(7,5): error TS1212: Identifier expected. 'let' is a reserved word in strict mode
+tests/cases/compiler/a.js(7,5): error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
 tests/cases/compiler/a.js(8,8): error TS1102: 'delete' cannot be called on an identifier in strict mode.
 tests/cases/compiler/a.js(10,10): error TS1100: Invalid use of 'eval' in strict mode.
 tests/cases/compiler/a.js(12,10): error TS1100: Invalid use of 'arguments' in strict mode.
@@ -23,7 +23,7 @@ tests/cases/compiler/d.js(2,11): error TS1005: ',' expected.
     };
     var let = 10; // error
         ~~~
-!!! error TS1212: Identifier expected. 'let' is a reserved word in strict mode
+!!! error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
     delete a; // error
            ~
 !!! error TS1102: 'delete' cannot be called on an identifier in strict mode.

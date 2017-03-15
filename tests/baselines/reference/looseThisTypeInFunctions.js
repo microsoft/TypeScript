@@ -1,4 +1,5 @@
 //// [looseThisTypeInFunctions.ts]
+
 interface I {
     n: number;
     explicitThis(this: this, m: number): number;

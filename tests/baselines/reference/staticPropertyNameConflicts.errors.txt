@@ -9,17 +9,17 @@ tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameCon
 tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(41,12): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCallerFn'.
 tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(47,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArguments'.
 tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(52,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(62,12): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function '(Anonymous class)'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(67,12): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function '(Anonymous class)'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(73,12): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function '(Anonymous class)'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(78,12): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function '(Anonymous class)'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(84,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function '(Anonymous class)'.
+tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(62,12): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticName_Anonymous'.
+tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(67,12): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticNameFn_Anonymous'.
+tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(73,12): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLength_Anonymous'.
+tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(78,12): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLengthFn_Anonymous'.
+tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(84,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype_Anonymous'.
 tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(89,12): error TS2300: Duplicate identifier 'prototype'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(89,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function '(Anonymous class)'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(95,12): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function '(Anonymous class)'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(100,12): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function '(Anonymous class)'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(106,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function '(Anonymous class)'.
-tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(111,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function '(Anonymous class)'.
+tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(89,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn_Anonymous'.
+tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(95,12): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCaller_Anonymous'.
+tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(100,12): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCallerFn_Anonymous'.
+tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(106,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArguments_Anonymous'.
+tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(111,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn_Anonymous'.
 tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(121,16): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticName'.
 tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(128,16): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticNameFn'.
 tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts(136,16): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLength'.
@@ -119,14 +119,14 @@ tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameCon
     var StaticName_Anonymous = class {
         static name: number; // error
                ~~~~
-!!! error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function '(Anonymous class)'.
+!!! error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticName_Anonymous'.
         name: string; // ok
     }
     
     var StaticNameFn_Anonymous = class {
         static name() {} // error
                ~~~~
-!!! error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function '(Anonymous class)'.
+!!! error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticNameFn_Anonymous'.
         name() {} // ok
     }
     
@@ -134,14 +134,14 @@ tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameCon
     var StaticLength_Anonymous = class {
         static length: number; // error
                ~~~~~~
-!!! error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function '(Anonymous class)'.
+!!! error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLength_Anonymous'.
         length: string; // ok
     }
     
     var StaticLengthFn_Anonymous = class {
         static length() {} // error
                ~~~~~~
-!!! error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function '(Anonymous class)'.
+!!! error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLengthFn_Anonymous'.
         length() {} // ok
     }
     
@@ -149,7 +149,7 @@ tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameCon
     var StaticPrototype_Anonymous = class {
         static prototype: number; // error
                ~~~~~~~~~
-!!! error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function '(Anonymous class)'.
+!!! error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype_Anonymous'.
         prototype: string; // ok
     }
     
@@ -158,7 +158,7 @@ tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameCon
                ~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'prototype'.
                ~~~~~~~~~
-!!! error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function '(Anonymous class)'.
+!!! error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn_Anonymous'.
         prototype() {} // ok
     }
     
@@ -166,14 +166,14 @@ tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameCon
     var StaticCaller_Anonymous = class {
         static caller: number; // error
                ~~~~~~
-!!! error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function '(Anonymous class)'.
+!!! error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCaller_Anonymous'.
         caller: string; // ok
     }
     
     var StaticCallerFn_Anonymous = class {
         static caller() {} // error
                ~~~~~~
-!!! error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function '(Anonymous class)'.
+!!! error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCallerFn_Anonymous'.
         caller() {} // ok
     }
     
@@ -181,14 +181,14 @@ tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameCon
     var StaticArguments_Anonymous = class {
         static arguments: number; // error
                ~~~~~~~~~
-!!! error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function '(Anonymous class)'.
+!!! error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArguments_Anonymous'.
         arguments: string; // ok
     }
     
     var StaticArgumentsFn_Anonymous = class {
         static arguments() {} // error
                ~~~~~~~~~
-!!! error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function '(Anonymous class)'.
+!!! error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn_Anonymous'.
         arguments() {} // ok
     }
     

@@ -345,7 +345,7 @@ interface ObjectConstructor {
       * @param o The object to change its prototype.
       * @param proto The value of the new prototype or null.
       */
-    setPrototypeOf(o: any, proto: any): any;
+    setPrototypeOf(o: any, proto: object | null): any;
 
     /**
       * Gets the own property descriptor of the specified object.

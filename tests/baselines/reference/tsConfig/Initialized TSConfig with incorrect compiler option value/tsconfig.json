@@ -2,19 +2,19 @@
     "compilerOptions": {
         // Basic Options
 
-        // Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'
+        // Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'.
         "target": "es5",
 
-        // Specify module code generation: 'commonjs', 'amd', 'system', 'umd' or 'es2015'
+        // Specify module code generation: 'commonjs', 'amd', 'system', 'umd' or 'es2015'.
         "module": "commonjs",
 
         // Specify library files to be included in the compilation: 
-        "lib": ["es5","es2015.promise"]
+        "lib": ["es5","es2015.promise"],
 
         // Allow javascript files to be compiled.
         // "allowJs": true,
 
-        // Specify JSX code generation: 'preserve', 'react-native', or 'react'
+        // Specify JSX code generation: 'preserve', 'react-native', or 'react'.
         // "jsx": "preserve",
 
         // Generates corresponding '.d.ts' file.
@@ -47,6 +47,9 @@
 
         // Strict Checks
 
+        // Enable all strict type checks.
+        "strict": true,
+
         // Raise error on expressions and declarations with an implied 'any' type.
         // "noImplicitAny": true,
 
@@ -62,7 +65,7 @@
         // Report errors on unused parameters.
         // "noUnusedParameters": true,
 
-        // Parse in strict mode and emit "use strict" for each source file
+        // Parse in strict mode and emit "use strict" for each source file.
         // "alwaysStrict": true,
 
         // Report error when not all code paths in function return a value.

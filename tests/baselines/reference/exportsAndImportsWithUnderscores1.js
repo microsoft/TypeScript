@@ -16,8 +16,8 @@ const { __, _, ___ } = R;
 
 //// [m1.js]
 "use strict";
-var R;
 exports.__esModule = true;
+var R;
 exports["default"] = R = {
     "__": 20,
     "_": 10,
@@ -25,5 +25,6 @@ exports["default"] = R = {
 };
 //// [m2.js]
 "use strict";
+exports.__esModule = true;
 var m1_1 = require("./m1");
 var __ = m1_1["default"].__, _ = m1_1["default"]._, ___ = m1_1["default"].___;

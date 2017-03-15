@@ -10,14 +10,13 @@ namespace ts {
 
     /*@internal*/
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
-    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean): EmitResult {
+    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean, transformers?: TransformerFactory<SourceFile>[]): EmitResult {
         const compilerOptions = host.getCompilerOptions();
         const moduleKind = getEmitModuleKind(compilerOptions);
         const sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
         const emittedFilesList: string[] = compilerOptions.listEmittedFiles ? [] : undefined;
         const emitterDiagnostics = createDiagnosticCollection();
         const newLine = host.getNewLine();
-        const transformers = emitOnlyDtsFiles ? [] : getTransformers(compilerOptions);
         const writer = createTextWriter(newLine);
         const sourceMap = createSourceMapWriter(host, writer);
 
@@ -29,7 +28,7 @@ namespace ts {
         const sourceFiles = getSourceFilesToEmit(host, targetSourceFile);
 
         // Transform the source files
-        const transform = transformFiles(resolver, host, sourceFiles, transformers);
+        const transform = transformNodes(resolver, host, compilerOptions, sourceFiles, transformers, /*allowDtsFiles*/ false);
 
         // Create a printer to print the nodes
         const printer = createPrinter(compilerOptions, {
@@ -38,7 +37,7 @@ namespace ts {
 
             // transform hooks
             onEmitNode: transform.emitNodeWithNotification,
-            onSubstituteNode: transform.emitNodeWithSubstitution,
+            substituteNode: transform.substituteNode,
 
             // sourcemap hooks
             onEmitSourceMapOfNode: sourceMap.emitNodeWithSourceMap,
@@ -56,9 +55,7 @@ namespace ts {
         performance.measure("printTime", "beforePrint");
 
         // Clean up emit nodes on parse tree
-        for (const sourceFile of sourceFiles) {
-            disposeEmitNodes(sourceFile);
-        }
+        transform.dispose();
 
         return {
             emitSkipped,
@@ -201,7 +198,9 @@ namespace ts {
             onEmitNode,
             onEmitHelpers,
             onSetSourceFile,
-            onSubstituteNode,
+            substituteNode,
+            onBeforeEmitNodeArray,
+            onAfterEmitNodeArray
         } = handlers;
 
         const newLine = getNewLineCharacter(printerOptions);
@@ -211,6 +210,7 @@ namespace ts {
             emitNodeWithComments,
             emitBodyWithDetachedComments,
             emitTrailingCommentsOfPosition,
+            emitLeadingCommentsOfPosition,
         } = comments;
 
         let currentSourceFile: SourceFile;
@@ -330,8 +330,8 @@ namespace ts {
             setWriter(/*output*/ undefined);
         }
 
-        function emit(node: Node, hint = EmitHint.Unspecified) {
-            pipelineEmitWithNotification(hint, node);
+        function emit(node: Node) {
+            pipelineEmitWithNotification(EmitHint.Unspecified, node);
         }
 
         function emitIdentifierName(node: Identifier) {
@@ -352,6 +352,7 @@ namespace ts {
         }
 
         function pipelineEmitWithComments(hint: EmitHint, node: Node) {
+            node = trySubstituteNode(hint, node);
             if (emitNodeWithComments && hint !== EmitHint.SourceFile) {
                 emitNodeWithComments(hint, node, pipelineEmitWithSourceMap);
             }
@@ -362,16 +363,7 @@ namespace ts {
 
         function pipelineEmitWithSourceMap(hint: EmitHint, node: Node) {
             if (onEmitSourceMapOfNode && hint !== EmitHint.SourceFile && hint !== EmitHint.IdentifierName) {
-                onEmitSourceMapOfNode(hint, node, pipelineEmitWithSubstitution);
-            }
-            else {
-                pipelineEmitWithSubstitution(hint, node);
-            }
-        }
-
-        function pipelineEmitWithSubstitution(hint: EmitHint, node: Node) {
-            if (onSubstituteNode) {
-                onSubstituteNode(hint, node, pipelineEmitWithHint);
+                onEmitSourceMapOfNode(hint, node, pipelineEmitWithHint);
             }
             else {
                 pipelineEmitWithHint(hint, node);
@@ -603,6 +595,8 @@ namespace ts {
                     return emitJsxClosingElement(<JsxClosingElement>node);
                 case SyntaxKind.JsxAttribute:
                     return emitJsxAttribute(<JsxAttribute>node);
+                case SyntaxKind.JsxAttributes:
+                    return emitJsxAttributes(<JsxAttributes>node);
                 case SyntaxKind.JsxSpreadAttribute:
                     return emitJsxSpreadAttribute(<JsxSpreadAttribute>node);
                 case SyntaxKind.JsxExpression:
@@ -637,7 +631,12 @@ namespace ts {
             // If the node is an expression, try to emit it as an expression with
             // substitution.
             if (isExpression(node)) {
-                return pipelineEmitWithSubstitution(EmitHint.Expression, node);
+                return pipelineEmitExpression(trySubstituteNode(EmitHint.Expression, node));
+            }
+
+            if (isToken(node)) {
+                writeTokenText(kind);
+                return;
             }
         }
 
@@ -734,6 +733,10 @@ namespace ts {
             }
         }
 
+        function trySubstituteNode(hint: EmitHint, node: Node) {
+            return node && substituteNode && substituteNode(hint, node) || node;
+        }
+
         function emitBodyIndirect(node: Node, elements: NodeArray<Node>, emitCallback: (node: Node) => void): void {
             if (emitBodyWithDetachedComments) {
                 emitBodyWithDetachedComments(node, elements, emitCallback);
@@ -756,9 +759,6 @@ namespace ts {
         // SyntaxKind.NumericLiteral
         function emitNumericLiteral(node: NumericLiteral) {
             emitLiteral(node);
-            if (node.trailingComment) {
-                write(` /*${node.trailingComment}*/`);
-            }
         }
 
         // SyntaxKind.StringLiteral
@@ -826,8 +826,8 @@ namespace ts {
             writeIfPresent(node.dotDotDotToken, "...");
             emit(node.name);
             writeIfPresent(node.questionToken, "?");
-            emitExpressionWithPrefix(" = ", node.initializer);
             emitWithPrefix(": ", node.type);
+            emitExpressionWithPrefix(" = ", node.initializer);
         }
 
         function emitDecorator(decorator: Decorator) {
@@ -1346,6 +1346,10 @@ namespace ts {
             else {
                 writeToken(SyntaxKind.OpenBraceToken, node.pos, /*contextNode*/ node);
                 emitBlockStatements(node);
+                // We have to call emitLeadingComments explicitly here because otherwise leading comments of the close brace token will not be emitted
+                increaseIndent();
+                emitLeadingCommentsOfPosition(node.statements.end);
+                decreaseIndent();
                 writeToken(SyntaxKind.CloseBraceToken, node.statements.end, /*contextNode*/ node);
             }
         }
@@ -1443,6 +1447,7 @@ namespace ts {
         function emitForOfStatement(node: ForOfStatement) {
             const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos);
             write(" ");
+            emitWithSuffix(node.awaitModifier, " ");
             writeToken(SyntaxKind.OpenParenToken, openParenPos);
             emitForBinding(node.initializer);
             write(" of ");
@@ -1555,6 +1560,10 @@ namespace ts {
             emitSignatureAndBody(node, emitSignatureHead);
         }
 
+        function emitBlockCallback(_hint: EmitHint, body: Node): void {
+            emitBlockFunctionBody(<Block>body);
+        }
+
         function emitSignatureAndBody(node: FunctionLikeDeclaration, emitSignatureHead: (node: SignatureDeclaration) => void) {
             const body = node.body;
             if (body) {
@@ -1566,12 +1575,22 @@ namespace ts {
 
                     if (getEmitFlags(node) & EmitFlags.ReuseTempVariableScope) {
                         emitSignatureHead(node);
-                        emitBlockFunctionBody(body);
+                        if (onEmitNode) {
+                            onEmitNode(EmitHint.Unspecified, body, emitBlockCallback);
+                        }
+                        else {
+                            emitBlockFunctionBody(body);
+                        }
                     }
                     else {
                         pushNameGenerationScope();
                         emitSignatureHead(node);
-                        emitBlockFunctionBody(body);
+                        if (onEmitNode) {
+                            onEmitNode(EmitHint.Unspecified, body, emitBlockCallback);
+                        }
+                        else {
+                            emitBlockFunctionBody(body);
+                        }
                         popNameGenerationScope();
                     }
 
@@ -1755,7 +1774,6 @@ namespace ts {
             else {
                 pushNameGenerationScope();
                 write("{");
-                increaseIndent();
                 emitBlockStatements(node);
                 write("}");
                 popNameGenerationScope();
@@ -1886,15 +1904,21 @@ namespace ts {
             write("<");
             emitJsxTagName(node.tagName);
             write(" ");
-            emitList(node, node.attributes, ListFormat.JsxElementAttributes);
+            // We are checking here so we won't re-enter the emiting pipeline and emit extra sourcemap
+            if (node.attributes.properties && node.attributes.properties.length > 0) {
+                emit(node.attributes);
+            }
             write("/>");
         }
 
         function emitJsxOpeningElement(node: JsxOpeningElement) {
             write("<");
             emitJsxTagName(node.tagName);
-            writeIfAny(node.attributes, " ");
-            emitList(node, node.attributes, ListFormat.JsxElementAttributes);
+            writeIfAny(node.attributes.properties, " ");
+            // We are checking here so we won't re-enter the emitting pipeline and emit extra sourcemap
+            if (node.attributes.properties && node.attributes.properties.length > 0) {
+                emit(node.attributes);
+            }
             write(">");
         }
 
@@ -1906,6 +1930,10 @@ namespace ts {
             write("</");
             emitJsxTagName(node.tagName);
             write(">");
+        }
+
+        function emitJsxAttributes(node: JsxAttributes) {
+            emitList(node, node.properties, ListFormat.JsxElementAttributes);
         }
 
         function emitJsxAttribute(node: JsxAttribute) {
@@ -2193,6 +2221,10 @@ namespace ts {
                 write(getOpeningBracket(format));
             }
 
+            if (onBeforeEmitNodeArray) {
+                onBeforeEmitNodeArray(children);
+            }
+
             if (isEmpty) {
                 // Write a line terminator if the parent node was multi-line
                 if (format & ListFormat.MultiLine) {
@@ -2228,6 +2260,15 @@ namespace ts {
 
                     // Write the delimiter if this is not the first node.
                     if (previousSibling) {
+                        // i.e
+                        //      function commentedParameters(
+                        //          /* Parameter a */
+                        //          a
+                        //          /* End of parameter a */ -> this comment isn't considered to be trailing comment of parameter "a" due to newline
+                        //          ,
+                        if (delimiter && previousSibling.end !== parentNode.end) {
+                            emitLeadingCommentsOfPosition(previousSibling.end);
+                        }
                         write(delimiter);
 
                         // Write either a line terminator or whitespace to separate the elements.
@@ -2274,6 +2315,17 @@ namespace ts {
                     write(",");
                 }
 
+
+                // Emit any trailing comment of the last element in the list
+                // i.e
+                //       var array = [...
+                //          2
+                //          /* end of element 2 */
+                //       ];
+                if (previousSibling && delimiter && previousSibling.end !== parentNode.end) {
+                    emitLeadingCommentsOfPosition(previousSibling.end);
+                }
+
                 // Decrease the indent, if requested.
                 if (format & ListFormat.Indented) {
                     decreaseIndent();
@@ -2286,6 +2338,10 @@ namespace ts {
                 else if (format & ListFormat.SpaceBetweenBraces) {
                     write(" ");
                 }
+            }
+
+            if (onAfterEmitNodeArray) {
+                onAfterEmitNodeArray(children);
             }
 
             if (format & ListFormat.BracketsMask) {

@@ -13,6 +13,25 @@ namespace ts.server {
         findInComments: boolean;
     }
 
+    /* @internal */
+    export function extractMessage(message: string) {
+        // Read the content length
+        const contentLengthPrefix = "Content-Length: ";
+        const lines = message.split(/\r?\n/);
+        Debug.assert(lines.length >= 2, "Malformed response: Expected 3 lines in the response.");
+
+        const contentLengthText = lines[0];
+        Debug.assert(contentLengthText.indexOf(contentLengthPrefix) === 0, "Malformed response: Response text did not contain content-length header.");
+        const contentLength = parseInt(contentLengthText.substring(contentLengthPrefix.length));
+
+        // Read the body
+        const responseBody = lines[2];
+
+        // Verify content length
+        Debug.assert(responseBody.length + 1 === contentLength, "Malformed response: Content length did not match the response's body length.");
+        return responseBody;
+    }
+
     export class SessionClient implements LanguageService {
         private sequence: number = 0;
         private lineMaps: ts.Map<number[]> = ts.createMap<number[]>();
@@ -84,7 +103,7 @@ namespace ts.server {
             while (!foundResponseMessage) {
                 lastMessage = this.messages.shift();
                 Debug.assert(!!lastMessage, "Did not receive any responses.");
-                const responseBody = processMessage(lastMessage);
+                const responseBody = extractMessage(lastMessage);
                 try {
                     response = JSON.parse(responseBody);
                     // the server may emit events before emitting the response. We
@@ -109,24 +128,6 @@ namespace ts.server {
             Debug.assert(!!response.body, "Malformed response: Unexpected empty response body.");
 
             return response;
-
-            function processMessage(message: string) {
-                // Read the content length
-                const contentLengthPrefix = "Content-Length: ";
-                const lines = message.split("\r\n");
-                Debug.assert(lines.length >= 2, "Malformed response: Expected 3 lines in the response.");
-
-                const contentLengthText = lines[0];
-                Debug.assert(contentLengthText.indexOf(contentLengthPrefix) === 0, "Malformed response: Response text did not contain content-length header.");
-                const contentLength = parseInt(contentLengthText.substring(contentLengthPrefix.length));
-
-                // Read the body
-                const responseBody = lines[2];
-
-                // Verify content length
-                Debug.assert(responseBody.length + 1 === contentLength, "Malformed response: Content length did not match the response's body length.");
-                return responseBody;
-            }
         }
 
         openFile(fileName: string, content?: string, scriptKindName?: "TS" | "JS" | "TSX" | "JSX"): void {

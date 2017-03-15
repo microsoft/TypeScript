@@ -8,12 +8,17 @@ import { k } from "kquery";
 import { l } from "lquery";
 >l : 2
 
-j + k + l;
+import { m } from "mquery";
+>m : 3
+
+j + k + l + m;
+>j + k + l + m : number
 >j + k + l : number
 >j + k : number
 >j : number
 >k : number
 >l : 2
+>m : 3
 
 === /node_modules/@types/jquery/jquery.d.ts ===
 export const j: number;
@@ -27,4 +32,9 @@ export const k: number;
 export const l = 2;
 >l : 2
 >2 : 2
+
+=== /node_modules/@types/mquery/mquery/index.tsx ===
+export const m = 3;
+>m : 3
+>3 : 3
 

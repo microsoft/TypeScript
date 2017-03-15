@@ -1061,6 +1061,7 @@ module publicModuleInGlobal {
 
 //// [privacyAccessorDeclFile_externalModule.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var privateClass = (function () {
     function privateClass() {
     }

@@ -4,7 +4,11 @@ namespace ts {
         getChildCount(sourceFile?: SourceFile): number;
         getChildAt(index: number, sourceFile?: SourceFile): Node;
         getChildren(sourceFile?: SourceFile): Node[];
+        /* @internal */
+        getChildren(sourceFile?: SourceFileLike): Node[];
         getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number;
+        /* @internal */
+        getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number;
         getFullStart(): number;
         getEnd(): number;
         getWidth(sourceFile?: SourceFile): number;
@@ -39,7 +43,7 @@ namespace ts {
 
     export interface Signature {
         getDeclaration(): SignatureDeclaration;
-        getTypeParameters(): Type[];
+        getTypeParameters(): TypeParameter[];
         getParameters(): Symbol[];
         getReturnType(): Type;
         getDocumentationComment(): SymbolDisplayPart[];
@@ -57,6 +61,10 @@ namespace ts {
         getLineStarts(): number[];
         getPositionOfLineAndCharacter(line: number, character: number): number;
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
+    }
+
+    export interface SourceFileLike {
+        getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
     }
 
     /**
@@ -170,6 +178,11 @@ namespace ts {
          * completions will not be provided
          */
         getDirectories?(directoryName: string): string[];
+
+        /**
+         * Gets a set of custom transformers to use during emit.
+         */
+        getCustomTransformers?(): CustomTransformers | undefined;
     }
 
     //
@@ -243,7 +256,7 @@ namespace ts {
 
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
 
-        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[]): CodeAction[];
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[];
 
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
 
@@ -701,8 +714,7 @@ namespace ts {
 
         /** enum E */
         export const enumElement = "enum";
-        // TODO: GH#9983
-        export const enumMemberElement = "const";
+        export const enumMemberElement = "enum member";
 
         /**
          * Inside module and script only
@@ -765,6 +777,11 @@ namespace ts {
         export const directory = "directory";
 
         export const externalModuleName = "external module name";
+
+        /**
+         * <JsxTagName attribute1 attribute2={0} />
+         **/
+        export const jsxAttribute = "JSX attribute";
     }
 
     export namespace ScriptElementKindModifier {

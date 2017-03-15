@@ -5,4 +5,4 @@
 ////var a;
 ////a["[|blah|]"];
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup('"blah"');

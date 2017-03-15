@@ -32,7 +32,7 @@ module Dotted {
 var a = <foundFirst  x="hello" />;
 >a : Symbol(a, Decl(tsxElementResolution.tsx, 17, 3))
 >foundFirst : Symbol(JSX.IntrinsicElements.foundFirst, Decl(tsxElementResolution.tsx, 2, 30))
->x : Symbol(x, Decl(tsxElementResolution.tsx, 3, 15))
+>x : Symbol(x, Decl(tsxElementResolution.tsx, 17, 19))
 
 var b = <string_named />;
 >b : Symbol(b, Decl(tsxElementResolution.tsx, 18, 3))

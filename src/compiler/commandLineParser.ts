@@ -138,6 +138,7 @@ namespace ts {
                     "es2017.object": "lib.es2017.object.d.ts",
                     "es2017.sharedmemory": "lib.es2017.sharedmemory.d.ts",
                     "es2017.string": "lib.es2017.string.d.ts",
+                    "esnext.asynciterable": "lib.esnext.asynciterable.d.ts",
                 }),
             },
             showInSimplifiedHelpView: true,
@@ -225,6 +226,12 @@ namespace ts {
             description: Diagnostics.Import_emit_helpers_from_tslib
         },
         {
+            name: "downlevelIteration",
+            type: "boolean",
+            category: Diagnostics.Basic_Options,
+            description: Diagnostics.Use_full_down_level_iteration_for_iterables_and_arrays_for_for_of_spread_and_destructuring_in_ES5_Slash3
+        },
+        {
             name: "isolatedModules",
             type: "boolean",
             category: Diagnostics.Basic_Options,
@@ -232,6 +239,13 @@ namespace ts {
         },
 
         // Strict Checks
+        {
+            name: "strict",
+            type: "boolean",
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Strict_Checks,
+            description: Diagnostics.Enable_all_strict_type_checks
+        },
         {
             name: "noImplicitAny",
             type: "boolean",
@@ -599,6 +613,17 @@ namespace ts {
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.The_maximum_dependency_depth_to_search_under_node_modules_and_load_JavaScript_files
         },
+        {
+            // A list of plugins to load in the language service
+            name: "plugins",
+            type: "list",
+            isTSConfigOnly: true,
+            element: {
+                name: "plugin",
+                type: "object"
+            },
+            description: Diagnostics.List_of_Language_Service_plugins
+        }
     ];
 
     /* @internal */
@@ -641,7 +666,9 @@ namespace ts {
     /* @internal */
     export const defaultInitCompilerOptions: CompilerOptions = {
         module: ModuleKind.CommonJS,
-        target: ScriptTarget.ES5
+        target: ScriptTarget.ES5,
+        strict: true,
+        sourceMap: false,
     };
 
     let optionNameMapCache: OptionNameMap;
@@ -1038,7 +1065,7 @@ namespace ts {
       * @param basePath A root directory to resolve relative path entries in the config
       *    file to. e.g. outDir
       */
-    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions: CompilerOptions = {}, configFileName?: string, resolutionStack: Path[] = [], extraFileExtensions: FileExtensionInfo[] = []): ParsedCommandLine {
+    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions: CompilerOptions = {}, configFileName?: string, resolutionStack: Path[] = [], extraFileExtensions: JsFileExtensionInfo[] = []): ParsedCommandLine {
         const errors: Diagnostic[] = [];
         basePath = normalizeSlashes(basePath);
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
@@ -1384,7 +1411,7 @@ namespace ts {
      * @param host The host used to resolve files and directories.
      * @param errors An array for diagnostic reporting.
      */
-    function matchFileNames(fileNames: string[], include: string[], exclude: string[], basePath: string, options: CompilerOptions, host: ParseConfigHost, errors: Diagnostic[], extraFileExtensions: FileExtensionInfo[]): ExpandResult {
+    function matchFileNames(fileNames: string[], include: string[], exclude: string[], basePath: string, options: CompilerOptions, host: ParseConfigHost, errors: Diagnostic[], extraFileExtensions: JsFileExtensionInfo[]): ExpandResult {
         basePath = normalizePath(basePath);
 
         // The exclude spec list is converted into a regular expression, which allows us to quickly
@@ -1559,7 +1586,7 @@ namespace ts {
      */
     function hasFileWithHigherPriorityExtension(file: string, literalFiles: Map<string>, wildcardFiles: Map<string>, extensions: string[], keyMapper: (value: string) => string) {
         const extensionPriority = getExtensionPriority(file, extensions);
-        const adjustedExtensionPriority = adjustExtensionPriority(extensionPriority);
+        const adjustedExtensionPriority = adjustExtensionPriority(extensionPriority, extensions);
         for (let i = ExtensionPriority.Highest; i < adjustedExtensionPriority; i++) {
             const higherPriorityExtension = extensions[i];
             const higherPriorityPath = keyMapper(changeExtension(file, higherPriorityExtension));
@@ -1581,7 +1608,7 @@ namespace ts {
      */
     function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: Map<string>, extensions: string[], keyMapper: (value: string) => string) {
         const extensionPriority = getExtensionPriority(file, extensions);
-        const nextExtensionPriority = getNextLowestExtensionPriority(extensionPriority);
+        const nextExtensionPriority = getNextLowestExtensionPriority(extensionPriority, extensions);
         for (let i = nextExtensionPriority; i < extensions.length; i++) {
             const lowerPriorityExtension = extensions[i];
             const lowerPriorityPath = keyMapper(changeExtension(file, lowerPriorityExtension));
