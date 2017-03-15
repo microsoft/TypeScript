@@ -31,7 +31,7 @@ interface NodeListOf<TNode extends Node> {
       */
     entries(): IterableIterator<TNode>;
         
-    forEach(callbackfn: (value: TNode, index: number, listObj: NodeList) => void, thisArg?: any): void;
+    forEach(callbackfn: (value: TNode, index: number, listObj: NodeListOf<TNode>) => void, thisArg?: any): void;
     /** 
       * Returns an list of keys in the list
       */
