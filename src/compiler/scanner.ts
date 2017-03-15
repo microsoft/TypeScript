@@ -333,7 +333,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function getLineStarts(sourceFile: SourceFile): number[] {
+    export function getLineStarts(sourceFile: SourceFileLike): number[] {
         return sourceFile.lineMap || (sourceFile.lineMap = computeLineStarts(sourceFile.text));
     }
 
