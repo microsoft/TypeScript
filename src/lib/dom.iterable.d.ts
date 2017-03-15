@@ -6,10 +6,11 @@ interface DOMTokenList {
 
 interface NodeList {
 
+
     /** 
-      * Returns an list of values in the list
-      */
-    entries(): IterableIterator<Node>;
+    * Returns an array of key, value pairs for every entry in the list
+    */
+    entries(): IterableIterator<[number, Node]>;
     /**
       * Performs the specified action for each node in an list.
       * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the list.
@@ -20,20 +21,22 @@ interface NodeList {
       * Returns an list of keys in the list
       */
     keys(): IterableIterator<number>;
+
     /** 
-      * Returns an array of key, value pairs for every entry in the list
+      * Returns an list of values in the list
       */
-    values(): IterableIterator<[number, Node]>;
+    values(): IterableIterator<Node>;
    
 
     [Symbol.iterator](): IterableIterator<Node>
 }
 
 interface NodeListOf<TNode extends Node> {
+
     /** 
-      * Returns an list of values in the list
-      */
-    entries(): IterableIterator<TNode>;
+    * Returns an array of key, value pairs for every entry in the list
+    */
+    entries(): IterableIterator<[number, TNode]>;
 
     /**
       * Performs the specified action for each node in an list.
@@ -46,8 +49,9 @@ interface NodeListOf<TNode extends Node> {
       */
     keys(): IterableIterator<number>;
     /** 
-      * Returns an array of key, value pairs for every entry in the list
+      * Returns an list of values in the list
       */
-    values(): IterableIterator<[number, TNode]>;    
+    values(): IterableIterator<TNode>;   
+     
     [Symbol.iterator](): IterableIterator<TNode>
 }
