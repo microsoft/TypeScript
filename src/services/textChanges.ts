@@ -270,6 +270,11 @@ namespace ts.textChanges {
             return this;
         }
 
+        /**
+         * This function should be used to insert nodes in lists when nodes  don't carry separators as the part of the node range,
+         * i.e. arguments in arguments lists, parameters in parameter lists etc. Statements or class elements are different in sense that 
+         * for them separators are treated as the part of the node.
+         */
         public insertNodeInListAfter(sourceFile: SourceFile, after: Node, newNode: Node) {
             const containingList = formatting.SmartIndenter.getContainingList(after, sourceFile);
             if (!containingList) {
