@@ -2293,25 +2293,18 @@ namespace ts {
                 }
                 if (objectFlags & ObjectFlags.ClassOrInterface) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
+                    // TODO: Detect whether class is named and fail if not.
                     const name = getNameOfSymbol(type.symbol);
                     // TODO: handle type arguments.
-                    // TODO: handle anonymous classes.
                     return createTypeReferenceNode(name, /*typeParameters*/undefined);
                 }
                 if (type.flags & TypeFlags.TypeParameter) {
-                    const constraint = createTypeNode(getConstraintFromTypeParameter(<TypeParameter>type)) as TypeNode;
-                    const defaultParameter = createTypeNode(getDefaultFromTypeParameter(<TypeParameter>type)) as TypeNode;
-                    if(constraint || defaultParameter) {
-                        // Type parameters in type position can't have constraints or defaults.
-                        encounteredError = true;
-                        return undefined;
-                    }
                     // TODO: get qualified name when necessary instead of string.
                     const name = symbolToString(type.symbol);
+                    // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
                     return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                 }
 
-                // accessible type aliasSymbol
                 // TODO: move back up later on?
                 if (checkAlias && type.aliasSymbol) {
                     const name = getNameOfSymbol(type.aliasSymbol);

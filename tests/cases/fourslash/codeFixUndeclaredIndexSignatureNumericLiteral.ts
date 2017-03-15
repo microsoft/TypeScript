@@ -8,7 +8,7 @@
 
 verify.rangeAfterCodeFix(`
 class A {
-    [name: string]: number;
+    [x: string]: number;
 
     constructor() {
         this.x = 10;

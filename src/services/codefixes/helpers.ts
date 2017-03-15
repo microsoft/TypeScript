@@ -225,7 +225,7 @@ namespace ts.codefix {
 
     function createParameterDeclarationFromSymbol(parameterSymbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker) {
         const parameterDeclaration = parameterSymbol.getDeclarations()[0] as ParameterDeclaration;
-        const parameterType = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(parameterSymbol, enclosingDeclaration));
+        const parameterType = checker.getTypeOfSymbolAtLocation(parameterSymbol, enclosingDeclaration);
         const parameterTypeNode = checker.createTypeNode(parameterType);
         // TODO: deep cloning of decorators/any node.
         const parameterNode = createParameter(
