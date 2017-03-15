@@ -253,7 +253,10 @@ namespace ts.textChanges {
         }
 
         public insertNodeAfter(sourceFile: SourceFile, after: Node, newNode: Node, options: InsertNodeOptions & ConfigurableEnd = {}) {
-            if ((isStatementButNotDeclaration(after)) || isClassElement(after)) {
+            if ((isStatementButNotDeclaration(after)) ||
+                 after.kind === SyntaxKind.PropertyDeclaration ||
+                 after.kind === SyntaxKind.PropertySignature ||
+                 after.kind === SyntaxKind.MethodSignature) {
                 // check if previous statement ends with semicolon
                 // if not - insert semicolon to preserve the code from changing the meaning due to ASI
                 if (sourceFile.text.charCodeAt(after.end - 1) !== CharacterCodes.semicolon) {

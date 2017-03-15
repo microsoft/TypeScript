@@ -728,6 +728,58 @@ class A {
         }
         {
             const text = `
+class A {
+    x() {
+    }
+}
+`
+            runSingleFileTest("insertNodeInClassAfterNodeWithoutSeparator2", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
+                const newNode = createProperty(
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    createComputedPropertyName(createLiteral(1)),
+                    /*questionToken*/ undefined,
+                    createKeywordTypeNode(SyntaxKind.AnyKeyword),
+                    /*initializer*/ undefined);
+                changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), newNode, { suffix: newLineCharacter });
+            });
+        }
+        {
+            const text = `
+interface A {
+    x
+}
+`
+            runSingleFileTest("insertNodeInInterfaceAfterNodeWithoutSeparator1", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
+                const newNode = createProperty(
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    createComputedPropertyName(createLiteral(1)),
+                    /*questionToken*/ undefined,
+                    createKeywordTypeNode(SyntaxKind.AnyKeyword),
+                    /*initializer*/ undefined);
+                changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), newNode, { suffix: newLineCharacter });
+            });
+        }
+        {
+            const text = `
+interface A {
+    x()
+}
+`
+            runSingleFileTest("insertNodeInInterfaceAfterNodeWithoutSeparator2", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
+                const newNode = createProperty(
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    createComputedPropertyName(createLiteral(1)),
+                    /*questionToken*/ undefined,
+                    createKeywordTypeNode(SyntaxKind.AnyKeyword),
+                    /*initializer*/ undefined);
+                changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), newNode, { suffix: newLineCharacter });
+            });
+        }
+        {
+            const text = `
 let x = foo
 `
             runSingleFileTest("insertNodeInStatementListAfterNodeWithoutSeparator1", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
