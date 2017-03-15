@@ -3137,7 +3137,7 @@
         "category": "Message",
         "code": 6172
     },
-    "Strict Checks": {
+    "Strict Type Checks": {
         "category": "Message",
         "code": 6173
     },
@@ -3149,7 +3149,7 @@
         "category": "Message",
         "code": 6175
     },
-    "JSX Options": {
+    "Additional Checks": {
         "category": "Message",
         "code": 6176
     },

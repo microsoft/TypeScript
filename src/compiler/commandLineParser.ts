@@ -238,68 +238,70 @@ namespace ts {
             description: Diagnostics.Unconditionally_emit_imports_for_unresolved_files
         },
 
-        // Strict Checks
+        // Strict Type Checks
         {
             name: "strict",
             type: "boolean",
             showInSimplifiedHelpView: true,
-            category: Diagnostics.Strict_Checks,
+            category: Diagnostics.Strict_Type_Checks,
             description: Diagnostics.Enable_all_strict_type_checks
         },
         {
             name: "noImplicitAny",
             type: "boolean",
             showInSimplifiedHelpView: true,
-            category: Diagnostics.Strict_Checks,
+            category: Diagnostics.Strict_Type_Checks,
             description: Diagnostics.Raise_error_on_expressions_and_declarations_with_an_implied_any_type,
         },
         {
             name: "strictNullChecks",
             type: "boolean",
             showInSimplifiedHelpView: true,
-            category: Diagnostics.Strict_Checks,
+            category: Diagnostics.Strict_Type_Checks,
             description: Diagnostics.Enable_strict_null_checks
         },
         {
             name: "noImplicitThis",
             type: "boolean",
             showInSimplifiedHelpView: true,
-            category: Diagnostics.Strict_Checks,
+            category: Diagnostics.Strict_Type_Checks,
             description: Diagnostics.Raise_error_on_this_expressions_with_an_implied_any_type,
         },
+        {
+            name: "alwaysStrict",
+            type: "boolean",
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Strict_Type_Checks,
+            description: Diagnostics.Parse_in_strict_mode_and_emit_use_strict_for_each_source_file
+        },
+
+        // Additional Checks
         {
             name: "noUnusedLocals",
             type: "boolean",
             showInSimplifiedHelpView: true,
-            category: Diagnostics.Strict_Checks,
+            category: Diagnostics.Additional_Checks,
             description: Diagnostics.Report_errors_on_unused_locals,
         },
         {
             name: "noUnusedParameters",
             type: "boolean",
             showInSimplifiedHelpView: true,
-            category: Diagnostics.Strict_Checks,
+            category: Diagnostics.Additional_Checks,
             description: Diagnostics.Report_errors_on_unused_parameters,
-        },
-        {
-            name: "alwaysStrict",
-            type: "boolean",
-            showInSimplifiedHelpView: true,
-            category: Diagnostics.Strict_Checks,
-            description: Diagnostics.Parse_in_strict_mode_and_emit_use_strict_for_each_source_file
         },
         {
             name: "noImplicitReturns",
             type: "boolean",
             showInSimplifiedHelpView: true,
-            category: Diagnostics.Strict_Checks,
+            category: Diagnostics.Additional_Checks,
             description: Diagnostics.Report_error_when_not_all_code_paths_in_function_return_a_value
         },
         {
             name: "noFallthroughCasesInSwitch",
             type: "boolean",
             showInSimplifiedHelpView: true,
-            category: Diagnostics.Strict_Checks,
+            category: Diagnostics.Additional_Checks,
             description: Diagnostics.Report_errors_for_fallthrough_cases_in_switch_statement
         },
 
@@ -404,14 +406,6 @@ namespace ts {
             description: Diagnostics.Emit_the_source_alongside_the_sourcemaps_within_a_single_file_requires_inlineSourceMap_or_sourceMap_to_be_set
         },
 
-        // JSX
-        {
-            name: "jsxFactory",
-            type: "string",
-            category: Diagnostics.JSX_Options,
-            description: Diagnostics.Specify_the_JSX_factory_function_to_use_when_targeting_react_JSX_emit_e_g_React_createElement_or_h
-        },
-
         // Experimental
         {
             name: "experimentalDecorators",
@@ -427,6 +421,12 @@ namespace ts {
         },
 
         // Advanced
+        {
+            name: "jsxFactory",
+            type: "string",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Specify_the_JSX_factory_function_to_use_when_targeting_react_JSX_emit_e_g_React_createElement_or_h
+        },
         {
             name: "diagnostics",
             type: "boolean",
