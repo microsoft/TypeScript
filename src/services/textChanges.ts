@@ -483,10 +483,7 @@ namespace ts.textChanges {
 
         private static normalize(changes: Change[]) {
             // order changes by start position
-            const normalized = changes
-                .map((c, i) => ({ c, i }))
-                .sort(({ c: a, i: i1 }, { c: b, i: i2 }) => (a.range.pos - b.range.pos) || i1 - i2)
-                .map(({ c }) => c);
+            const normalized = stableSort(changes, (a, b) => a.range.pos - b.range.pos);
             // verify that end position of the change is less than start position of the next change
             for (let i = 0; i < normalized.length - 2; i++) {
                 Debug.assert(normalized[i].range.end <= normalized[i + 1].range.pos);
