@@ -1,4 +1,4 @@
-/// <reference path="sys.ts" />
+﻿/// <reference path="sys.ts" />
 /// <reference path="emitter.ts" />
 /// <reference path="core.ts" />
 
@@ -918,8 +918,7 @@ namespace ts {
                 Debug.assert(!!sourceFile.bindDiagnostics);
                 const bindDiagnostics = sourceFile.bindDiagnostics;
                 // For JavaScript files, we don't want to report semantic errors unless explicitly requested.
-                const includeCheckDiagnostics = !isSourceFileJavaScript(sourceFile) ||
-                    (sourceFile.checkJsDirective ? sourceFile.checkJsDirective.enabled : options.checkJs);
+                const includeCheckDiagnostics = !isSourceFileJavaScript(sourceFile) || isCheckJsEnabledForFile(sourceFile, options);
                 const checkDiagnostics = includeCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : [];
                 const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
                 const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);

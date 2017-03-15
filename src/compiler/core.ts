@@ -1,4 +1,4 @@
-/// <reference path="types.ts"/>
+﻿/// <reference path="types.ts"/>
 /// <reference path="performance.ts" />
 
 namespace ts {
@@ -2359,5 +2359,9 @@ namespace ts {
         if (fileExtensionIs(path, ".jsx")) {
             return Extension.Jsx;
         }
+    }
+
+    export function isCheckJsEnabledForFile(sourceFile: SourceFile, compilerOptions: CompilerOptions) {
+        return sourceFile.checkJsDirective ? sourceFile.checkJsDirective.enabled : compilerOptions.checkJs;
     }
 }

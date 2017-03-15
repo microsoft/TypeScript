@@ -1,4 +1,4 @@
-/* @internal */
+﻿/* @internal */
 namespace ts.codefix {
     registerCodeFix({
         errorCodes: getApplicableDiagnosticCodes(),
@@ -10,10 +10,6 @@ namespace ts.codefix {
         return Object.keys(allDiagnostcs)
             .filter(d => allDiagnostcs[d] && allDiagnostcs[d].category === DiagnosticCategory.Error)
             .map(d => allDiagnostcs[d].code);
-    }
-
-    function shouldCheckJsFile(sourceFile: SourceFile, compilerOptions: CompilerOptions) {
-        return sourceFile.checkJsDirective ? sourceFile.checkJsDirective.enabled : compilerOptions.checkJs;
     }
 
     function getSuppressCommentLocationForLocation(sourceFile: SourceFile, position: number, newLineCharacter: string) {
@@ -46,7 +42,7 @@ namespace ts.codefix {
     function getDisableJsDiagnosticsCodeActions(context: CodeFixContext): CodeAction[] | undefined {
         const { sourceFile, program, newLineCharacter, span } = context;
 
-        if (!isInJavaScriptFile(sourceFile) || !shouldCheckJsFile(sourceFile, program.getCompilerOptions())) {
+        if (!isInJavaScriptFile(sourceFile) || !isCheckJsEnabledForFile(sourceFile, program.getCompilerOptions())) {
             return undefined;
         }
 
