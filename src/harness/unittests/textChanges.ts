@@ -667,5 +667,47 @@ class A {
                 }
             });
         }
+        {
+            const text = `
+class A {
+    x
+}
+`;
+            runSingleFileTest("insertNodeAfterInClass1", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
+                changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), createProperty(undefined, undefined, "a", undefined, createKeywordTypeNode(SyntaxKind.BooleanKeyword), undefined), { suffix: newLineCharacter });
+            });
+        }
+        {
+            const text = `
+class A {
+    x;
+}
+`;
+            runSingleFileTest("insertNodeAfterInClass2", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
+                changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), createProperty(undefined, undefined, "a", undefined, createKeywordTypeNode(SyntaxKind.BooleanKeyword), undefined), { suffix: newLineCharacter });
+            });
+        }
+        {
+            const text = `
+class A {
+    x;
+    y = 1;
+}
+`;
+            runSingleFileTest("deleteNodeAfterInClass1", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
+                changeTracker.deleteNode(sourceFile, findChild("x", sourceFile));
+            });
+        }
+        {
+            const text = `
+class A {
+    x
+    y = 1;
+}
+`;
+            runSingleFileTest("deleteNodeAfterInClass2", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
+                changeTracker.deleteNode(sourceFile, findChild("x", sourceFile));
+            });
+        }
     });
 }
