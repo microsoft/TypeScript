@@ -10,10 +10,13 @@ namespace ts.codefix {
                 return undefined;
             }
 
-            const newPosition = getOpenBraceEnd(<ConstructorDeclaration>token.parent, sourceFile);
+            const changeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+            const superCall = createStatement(createCall(createSuper(), /*typeArguments*/ undefined, /*argumentsArray*/ emptyArray));
+            changeTracker.insertNodeAfter(sourceFile, getOpenBrace(<ConstructorDeclaration>token.parent, sourceFile), superCall, { suffix: context.newLineCharacter });
+
             return [{
                 description: getLocaleSpecificMessage(Diagnostics.Add_missing_super_call),
-                changes: [{ fileName: sourceFile.fileName, textChanges: [{ newText: "super();", span: { start: newPosition, length: 0 } }] }]
+                changes: changeTracker.getChanges()
             }];
         }
     });

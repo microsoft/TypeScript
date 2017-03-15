@@ -154,9 +154,9 @@ namespace ts {
      * Starts a new lexical environment and visits a parameter list, suspending the lexical
      * environment upon completion.
      */
-    export function visitParameterList(nodes: NodeArray<ParameterDeclaration>, visitor: Visitor, context: TransformationContext) {
+    export function visitParameterList(nodes: NodeArray<ParameterDeclaration>, visitor: Visitor, context: TransformationContext, nodesVisitor = visitNodes) {
         context.startLexicalEnvironment();
-        const updated = visitNodes(nodes, visitor, isParameterDeclaration);
+        const updated = nodesVisitor(nodes, visitor, isParameterDeclaration);
         context.suspendLexicalEnvironment();
         return updated;
     }
@@ -204,9 +204,9 @@ namespace ts {
      * @param visitor The callback used to visit each child.
      * @param context A lexical environment context for the visitor.
      */
-    export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext): T | undefined;
+    export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: typeof visitNodes): T | undefined;
 
-    export function visitEachChild(node: Node, visitor: Visitor, context: TransformationContext): Node {
+    export function visitEachChild(node: Node, visitor: Visitor, context: TransformationContext, nodesVisitor = visitNodes): Node {
         if (node === undefined) {
             return undefined;
         }
@@ -243,8 +243,8 @@ namespace ts {
             // Signature elements
             case SyntaxKind.Parameter:
                 return updateParameter(<ParameterDeclaration>node,
-                    visitNodes((<ParameterDeclaration>node).decorators, visitor, isDecorator),
-                    visitNodes((<ParameterDeclaration>node).modifiers, visitor, isModifier),
+                    nodesVisitor((<ParameterDeclaration>node).decorators, visitor, isDecorator),
+                    nodesVisitor((<ParameterDeclaration>node).modifiers, visitor, isModifier),
                     (<ParameterDeclaration>node).dotDotDotToken,
                     visitNode((<ParameterDeclaration>node).name, visitor, isBindingName),
                     visitNode((<ParameterDeclaration>node).type, visitor, isTypeNode),
@@ -257,55 +257,55 @@ namespace ts {
             // Type member
             case SyntaxKind.PropertyDeclaration:
                 return updateProperty(<PropertyDeclaration>node,
-                    visitNodes((<PropertyDeclaration>node).decorators, visitor, isDecorator),
-                    visitNodes((<PropertyDeclaration>node).modifiers, visitor, isModifier),
+                    nodesVisitor((<PropertyDeclaration>node).decorators, visitor, isDecorator),
+                    nodesVisitor((<PropertyDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<PropertyDeclaration>node).name, visitor, isPropertyName),
                     visitNode((<PropertyDeclaration>node).type, visitor, isTypeNode),
                     visitNode((<PropertyDeclaration>node).initializer, visitor, isExpression));
 
             case SyntaxKind.MethodDeclaration:
                 return updateMethod(<MethodDeclaration>node,
-                    visitNodes((<MethodDeclaration>node).decorators, visitor, isDecorator),
-                    visitNodes((<MethodDeclaration>node).modifiers, visitor, isModifier),
+                    nodesVisitor((<MethodDeclaration>node).decorators, visitor, isDecorator),
+                    nodesVisitor((<MethodDeclaration>node).modifiers, visitor, isModifier),
                     (<MethodDeclaration>node).asteriskToken,
                     visitNode((<MethodDeclaration>node).name, visitor, isPropertyName),
-                    visitNodes((<MethodDeclaration>node).typeParameters, visitor, isTypeParameter),
-                    visitParameterList((<MethodDeclaration>node).parameters, visitor, context),
+                    nodesVisitor((<MethodDeclaration>node).typeParameters, visitor, isTypeParameter),
+                    visitParameterList((<MethodDeclaration>node).parameters, visitor, context, nodesVisitor),
                     visitNode((<MethodDeclaration>node).type, visitor, isTypeNode),
                     visitFunctionBody((<MethodDeclaration>node).body, visitor, context));
 
             case SyntaxKind.Constructor:
                 return updateConstructor(<ConstructorDeclaration>node,
-                    visitNodes((<ConstructorDeclaration>node).decorators, visitor, isDecorator),
-                    visitNodes((<ConstructorDeclaration>node).modifiers, visitor, isModifier),
-                    visitParameterList((<ConstructorDeclaration>node).parameters, visitor, context),
+                    nodesVisitor((<ConstructorDeclaration>node).decorators, visitor, isDecorator),
+                    nodesVisitor((<ConstructorDeclaration>node).modifiers, visitor, isModifier),
+                    visitParameterList((<ConstructorDeclaration>node).parameters, visitor, context, nodesVisitor),
                     visitFunctionBody((<ConstructorDeclaration>node).body, visitor, context));
 
             case SyntaxKind.GetAccessor:
                 return updateGetAccessor(<GetAccessorDeclaration>node,
-                    visitNodes((<GetAccessorDeclaration>node).decorators, visitor, isDecorator),
-                    visitNodes((<GetAccessorDeclaration>node).modifiers, visitor, isModifier),
+                    nodesVisitor((<GetAccessorDeclaration>node).decorators, visitor, isDecorator),
+                    nodesVisitor((<GetAccessorDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<GetAccessorDeclaration>node).name, visitor, isPropertyName),
-                    visitParameterList((<GetAccessorDeclaration>node).parameters, visitor, context),
+                    visitParameterList((<GetAccessorDeclaration>node).parameters, visitor, context, nodesVisitor),
                     visitNode((<GetAccessorDeclaration>node).type, visitor, isTypeNode),
                     visitFunctionBody((<GetAccessorDeclaration>node).body, visitor, context));
 
             case SyntaxKind.SetAccessor:
                 return updateSetAccessor(<SetAccessorDeclaration>node,
-                    visitNodes((<SetAccessorDeclaration>node).decorators, visitor, isDecorator),
-                    visitNodes((<SetAccessorDeclaration>node).modifiers, visitor, isModifier),
+                    nodesVisitor((<SetAccessorDeclaration>node).decorators, visitor, isDecorator),
+                    nodesVisitor((<SetAccessorDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<SetAccessorDeclaration>node).name, visitor, isPropertyName),
-                    visitParameterList((<SetAccessorDeclaration>node).parameters, visitor, context),
+                    visitParameterList((<SetAccessorDeclaration>node).parameters, visitor, context, nodesVisitor),
                     visitFunctionBody((<SetAccessorDeclaration>node).body, visitor, context));
 
             // Binding patterns
             case SyntaxKind.ObjectBindingPattern:
                 return updateObjectBindingPattern(<ObjectBindingPattern>node,
-                    visitNodes((<ObjectBindingPattern>node).elements, visitor, isBindingElement));
+                    nodesVisitor((<ObjectBindingPattern>node).elements, visitor, isBindingElement));
 
             case SyntaxKind.ArrayBindingPattern:
                 return updateArrayBindingPattern(<ArrayBindingPattern>node,
-                    visitNodes((<ArrayBindingPattern>node).elements, visitor, isArrayBindingElement));
+                    nodesVisitor((<ArrayBindingPattern>node).elements, visitor, isArrayBindingElement));
 
             case SyntaxKind.BindingElement:
                 return updateBindingElement(<BindingElement>node,
@@ -317,11 +317,11 @@ namespace ts {
             // Expression
             case SyntaxKind.ArrayLiteralExpression:
                 return updateArrayLiteral(<ArrayLiteralExpression>node,
-                    visitNodes((<ArrayLiteralExpression>node).elements, visitor, isExpression));
+                    nodesVisitor((<ArrayLiteralExpression>node).elements, visitor, isExpression));
 
             case SyntaxKind.ObjectLiteralExpression:
                 return updateObjectLiteral(<ObjectLiteralExpression>node,
-                    visitNodes((<ObjectLiteralExpression>node).properties, visitor, isObjectLiteralElementLike));
+                    nodesVisitor((<ObjectLiteralExpression>node).properties, visitor, isObjectLiteralElementLike));
 
             case SyntaxKind.PropertyAccessExpression:
                 return updatePropertyAccess(<PropertyAccessExpression>node,
@@ -336,14 +336,14 @@ namespace ts {
             case SyntaxKind.CallExpression:
                 return updateCall(<CallExpression>node,
                     visitNode((<CallExpression>node).expression, visitor, isExpression),
-                    visitNodes((<CallExpression>node).typeArguments, visitor, isTypeNode),
-                    visitNodes((<CallExpression>node).arguments, visitor, isExpression));
+                    nodesVisitor((<CallExpression>node).typeArguments, visitor, isTypeNode),
+                    nodesVisitor((<CallExpression>node).arguments, visitor, isExpression));
 
             case SyntaxKind.NewExpression:
                 return updateNew(<NewExpression>node,
                     visitNode((<NewExpression>node).expression, visitor, isExpression),
-                    visitNodes((<NewExpression>node).typeArguments, visitor, isTypeNode),
-                    visitNodes((<NewExpression>node).arguments, visitor, isExpression));
+                    nodesVisitor((<NewExpression>node).typeArguments, visitor, isTypeNode),
+                    nodesVisitor((<NewExpression>node).arguments, visitor, isExpression));
 
             case SyntaxKind.TaggedTemplateExpression:
                 return updateTaggedTemplate(<TaggedTemplateExpression>node,
@@ -361,19 +361,19 @@ namespace ts {
 
             case SyntaxKind.FunctionExpression:
                 return updateFunctionExpression(<FunctionExpression>node,
-                    visitNodes((<FunctionExpression>node).modifiers, visitor, isModifier),
+                    nodesVisitor((<FunctionExpression>node).modifiers, visitor, isModifier),
                     (<FunctionExpression>node).asteriskToken,
                     visitNode((<FunctionExpression>node).name, visitor, isIdentifier),
-                    visitNodes((<FunctionExpression>node).typeParameters, visitor, isTypeParameter),
-                    visitParameterList((<FunctionExpression>node).parameters, visitor, context),
+                    nodesVisitor((<FunctionExpression>node).typeParameters, visitor, isTypeParameter),
+                    visitParameterList((<FunctionExpression>node).parameters, visitor, context, nodesVisitor),
                     visitNode((<FunctionExpression>node).type, visitor, isTypeNode),
                     visitFunctionBody((<FunctionExpression>node).body, visitor, context));
 
             case SyntaxKind.ArrowFunction:
                 return updateArrowFunction(<ArrowFunction>node,
-                    visitNodes((<ArrowFunction>node).modifiers, visitor, isModifier),
-                    visitNodes((<ArrowFunction>node).typeParameters, visitor, isTypeParameter),
-                    visitParameterList((<ArrowFunction>node).parameters, visitor, context),
+                    nodesVisitor((<ArrowFunction>node).modifiers, visitor, isModifier),
+                    nodesVisitor((<ArrowFunction>node).typeParameters, visitor, isTypeParameter),
+                    visitParameterList((<ArrowFunction>node).parameters, visitor, context, nodesVisitor),
                     visitNode((<ArrowFunction>node).type, visitor, isTypeNode),
                     visitFunctionBody((<ArrowFunction>node).body, visitor, context));
 
@@ -415,7 +415,7 @@ namespace ts {
             case SyntaxKind.TemplateExpression:
                 return updateTemplateExpression(<TemplateExpression>node,
                     visitNode((<TemplateExpression>node).head, visitor, isTemplateHead),
-                    visitNodes((<TemplateExpression>node).templateSpans, visitor, isTemplateSpan));
+                    nodesVisitor((<TemplateExpression>node).templateSpans, visitor, isTemplateSpan));
 
             case SyntaxKind.YieldExpression:
                 return updateYield(<YieldExpression>node,
@@ -428,15 +428,15 @@ namespace ts {
 
             case SyntaxKind.ClassExpression:
                 return updateClassExpression(<ClassExpression>node,
-                    visitNodes((<ClassExpression>node).modifiers, visitor, isModifier),
+                    nodesVisitor((<ClassExpression>node).modifiers, visitor, isModifier),
                     visitNode((<ClassExpression>node).name, visitor, isIdentifier),
-                    visitNodes((<ClassExpression>node).typeParameters, visitor, isTypeParameter),
-                    visitNodes((<ClassExpression>node).heritageClauses, visitor, isHeritageClause),
-                    visitNodes((<ClassExpression>node).members, visitor, isClassElement));
+                    nodesVisitor((<ClassExpression>node).typeParameters, visitor, isTypeParameter),
+                    nodesVisitor((<ClassExpression>node).heritageClauses, visitor, isHeritageClause),
+                    nodesVisitor((<ClassExpression>node).members, visitor, isClassElement));
 
             case SyntaxKind.ExpressionWithTypeArguments:
                 return updateExpressionWithTypeArguments(<ExpressionWithTypeArguments>node,
-                    visitNodes((<ExpressionWithTypeArguments>node).typeArguments, visitor, isTypeNode),
+                    nodesVisitor((<ExpressionWithTypeArguments>node).typeArguments, visitor, isTypeNode),
                     visitNode((<ExpressionWithTypeArguments>node).expression, visitor, isExpression));
 
             case SyntaxKind.AsExpression:
@@ -457,11 +457,11 @@ namespace ts {
             // Element
             case SyntaxKind.Block:
                 return updateBlock(<Block>node,
-                    visitNodes((<Block>node).statements, visitor, isStatement));
+                    nodesVisitor((<Block>node).statements, visitor, isStatement));
 
             case SyntaxKind.VariableStatement:
                 return updateVariableStatement(<VariableStatement>node,
-                    visitNodes((<VariableStatement>node).modifiers, visitor, isModifier),
+                    nodesVisitor((<VariableStatement>node).modifiers, visitor, isModifier),
                     visitNode((<VariableStatement>node).declarationList, visitor, isVariableDeclarationList));
 
             case SyntaxKind.ExpressionStatement:
@@ -549,61 +549,61 @@ namespace ts {
 
             case SyntaxKind.VariableDeclarationList:
                 return updateVariableDeclarationList(<VariableDeclarationList>node,
-                    visitNodes((<VariableDeclarationList>node).declarations, visitor, isVariableDeclaration));
+                    nodesVisitor((<VariableDeclarationList>node).declarations, visitor, isVariableDeclaration));
 
             case SyntaxKind.FunctionDeclaration:
                 return updateFunctionDeclaration(<FunctionDeclaration>node,
-                    visitNodes((<FunctionDeclaration>node).decorators, visitor, isDecorator),
-                    visitNodes((<FunctionDeclaration>node).modifiers, visitor, isModifier),
+                    nodesVisitor((<FunctionDeclaration>node).decorators, visitor, isDecorator),
+                    nodesVisitor((<FunctionDeclaration>node).modifiers, visitor, isModifier),
                     (<FunctionDeclaration>node).asteriskToken,
                     visitNode((<FunctionDeclaration>node).name, visitor, isIdentifier),
-                    visitNodes((<FunctionDeclaration>node).typeParameters, visitor, isTypeParameter),
-                    visitParameterList((<FunctionDeclaration>node).parameters, visitor, context),
+                    nodesVisitor((<FunctionDeclaration>node).typeParameters, visitor, isTypeParameter),
+                    visitParameterList((<FunctionDeclaration>node).parameters, visitor, context, nodesVisitor),
                     visitNode((<FunctionDeclaration>node).type, visitor, isTypeNode),
                     visitFunctionBody((<FunctionExpression>node).body, visitor, context));
 
             case SyntaxKind.ClassDeclaration:
                 return updateClassDeclaration(<ClassDeclaration>node,
-                    visitNodes((<ClassDeclaration>node).decorators, visitor, isDecorator),
-                    visitNodes((<ClassDeclaration>node).modifiers, visitor, isModifier),
+                    nodesVisitor((<ClassDeclaration>node).decorators, visitor, isDecorator),
+                    nodesVisitor((<ClassDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<ClassDeclaration>node).name, visitor, isIdentifier),
-                    visitNodes((<ClassDeclaration>node).typeParameters, visitor, isTypeParameter),
-                    visitNodes((<ClassDeclaration>node).heritageClauses, visitor, isHeritageClause),
-                    visitNodes((<ClassDeclaration>node).members, visitor, isClassElement));
+                    nodesVisitor((<ClassDeclaration>node).typeParameters, visitor, isTypeParameter),
+                    nodesVisitor((<ClassDeclaration>node).heritageClauses, visitor, isHeritageClause),
+                    nodesVisitor((<ClassDeclaration>node).members, visitor, isClassElement));
 
             case SyntaxKind.EnumDeclaration:
                 return updateEnumDeclaration(<EnumDeclaration>node,
-                    visitNodes((<EnumDeclaration>node).decorators, visitor, isDecorator),
-                    visitNodes((<EnumDeclaration>node).modifiers, visitor, isModifier),
+                    nodesVisitor((<EnumDeclaration>node).decorators, visitor, isDecorator),
+                    nodesVisitor((<EnumDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<EnumDeclaration>node).name, visitor, isIdentifier),
-                    visitNodes((<EnumDeclaration>node).members, visitor, isEnumMember));
+                    nodesVisitor((<EnumDeclaration>node).members, visitor, isEnumMember));
 
             case SyntaxKind.ModuleDeclaration:
                 return updateModuleDeclaration(<ModuleDeclaration>node,
-                    visitNodes((<ModuleDeclaration>node).decorators, visitor, isDecorator),
-                    visitNodes((<ModuleDeclaration>node).modifiers, visitor, isModifier),
+                    nodesVisitor((<ModuleDeclaration>node).decorators, visitor, isDecorator),
+                    nodesVisitor((<ModuleDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<ModuleDeclaration>node).name, visitor, isIdentifier),
                     visitNode((<ModuleDeclaration>node).body, visitor, isModuleBody));
 
             case SyntaxKind.ModuleBlock:
                 return updateModuleBlock(<ModuleBlock>node,
-                    visitNodes((<ModuleBlock>node).statements, visitor, isStatement));
+                    nodesVisitor((<ModuleBlock>node).statements, visitor, isStatement));
 
             case SyntaxKind.CaseBlock:
                 return updateCaseBlock(<CaseBlock>node,
-                    visitNodes((<CaseBlock>node).clauses, visitor, isCaseOrDefaultClause));
+                    nodesVisitor((<CaseBlock>node).clauses, visitor, isCaseOrDefaultClause));
 
             case SyntaxKind.ImportEqualsDeclaration:
                 return updateImportEqualsDeclaration(<ImportEqualsDeclaration>node,
-                    visitNodes((<ImportEqualsDeclaration>node).decorators, visitor, isDecorator),
-                    visitNodes((<ImportEqualsDeclaration>node).modifiers, visitor, isModifier),
+                    nodesVisitor((<ImportEqualsDeclaration>node).decorators, visitor, isDecorator),
+                    nodesVisitor((<ImportEqualsDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<ImportEqualsDeclaration>node).name, visitor, isIdentifier),
                     visitNode((<ImportEqualsDeclaration>node).moduleReference, visitor, isModuleReference));
 
             case SyntaxKind.ImportDeclaration:
                 return updateImportDeclaration(<ImportDeclaration>node,
-                    visitNodes((<ImportDeclaration>node).decorators, visitor, isDecorator),
-                    visitNodes((<ImportDeclaration>node).modifiers, visitor, isModifier),
+                    nodesVisitor((<ImportDeclaration>node).decorators, visitor, isDecorator),
+                    nodesVisitor((<ImportDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<ImportDeclaration>node).importClause, visitor, isImportClause),
                     visitNode((<ImportDeclaration>node).moduleSpecifier, visitor, isExpression));
 
@@ -618,7 +618,7 @@ namespace ts {
 
             case SyntaxKind.NamedImports:
                 return updateNamedImports(<NamedImports>node,
-                    visitNodes((<NamedImports>node).elements, visitor, isImportSpecifier));
+                    nodesVisitor((<NamedImports>node).elements, visitor, isImportSpecifier));
 
             case SyntaxKind.ImportSpecifier:
                 return updateImportSpecifier(<ImportSpecifier>node,
@@ -627,20 +627,20 @@ namespace ts {
 
             case SyntaxKind.ExportAssignment:
                 return updateExportAssignment(<ExportAssignment>node,
-                    visitNodes((<ExportAssignment>node).decorators, visitor, isDecorator),
-                    visitNodes((<ExportAssignment>node).modifiers, visitor, isModifier),
+                    nodesVisitor((<ExportAssignment>node).decorators, visitor, isDecorator),
+                    nodesVisitor((<ExportAssignment>node).modifiers, visitor, isModifier),
                     visitNode((<ExportAssignment>node).expression, visitor, isExpression));
 
             case SyntaxKind.ExportDeclaration:
                 return updateExportDeclaration(<ExportDeclaration>node,
-                    visitNodes((<ExportDeclaration>node).decorators, visitor, isDecorator),
-                    visitNodes((<ExportDeclaration>node).modifiers, visitor, isModifier),
+                    nodesVisitor((<ExportDeclaration>node).decorators, visitor, isDecorator),
+                    nodesVisitor((<ExportDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<ExportDeclaration>node).exportClause, visitor, isNamedExports),
                     visitNode((<ExportDeclaration>node).moduleSpecifier, visitor, isExpression));
 
             case SyntaxKind.NamedExports:
                 return updateNamedExports(<NamedExports>node,
-                    visitNodes((<NamedExports>node).elements, visitor, isExportSpecifier));
+                    nodesVisitor((<NamedExports>node).elements, visitor, isExportSpecifier));
 
             case SyntaxKind.ExportSpecifier:
                 return updateExportSpecifier(<ExportSpecifier>node,
@@ -656,12 +656,12 @@ namespace ts {
             case SyntaxKind.JsxElement:
                 return updateJsxElement(<JsxElement>node,
                     visitNode((<JsxElement>node).openingElement, visitor, isJsxOpeningElement),
-                    visitNodes((<JsxElement>node).children, visitor, isJsxChild),
+                    nodesVisitor((<JsxElement>node).children, visitor, isJsxChild),
                     visitNode((<JsxElement>node).closingElement, visitor, isJsxClosingElement));
 
             case SyntaxKind.JsxAttributes:
                 return updateJsxAttributes(<JsxAttributes>node,
-                    visitNodes((<JsxAttributes>node).properties, visitor, isJsxAttributeLike));
+                    nodesVisitor((<JsxAttributes>node).properties, visitor, isJsxAttributeLike));
 
             case SyntaxKind.JsxSelfClosingElement:
                 return updateJsxSelfClosingElement(<JsxSelfClosingElement>node,
@@ -694,15 +694,15 @@ namespace ts {
             case SyntaxKind.CaseClause:
                 return updateCaseClause(<CaseClause>node,
                     visitNode((<CaseClause>node).expression, visitor, isExpression),
-                    visitNodes((<CaseClause>node).statements, visitor, isStatement));
+                    nodesVisitor((<CaseClause>node).statements, visitor, isStatement));
 
             case SyntaxKind.DefaultClause:
                 return updateDefaultClause(<DefaultClause>node,
-                    visitNodes((<DefaultClause>node).statements, visitor, isStatement));
+                    nodesVisitor((<DefaultClause>node).statements, visitor, isStatement));
 
             case SyntaxKind.HeritageClause:
                 return updateHeritageClause(<HeritageClause>node,
-                    visitNodes((<HeritageClause>node).types, visitor, isExpressionWithTypeArguments));
+                    nodesVisitor((<HeritageClause>node).types, visitor, isExpressionWithTypeArguments));
 
             case SyntaxKind.CatchClause:
                 return updateCatchClause(<CatchClause>node,

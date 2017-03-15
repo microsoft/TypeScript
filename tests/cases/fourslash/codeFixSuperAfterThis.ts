@@ -6,8 +6,10 @@
 ////    private a:number;
 ////    constructor() {[|
 ////        this.a = 12;
-////        super();|]
-////    }
+////        super();
+////    |]}
 ////}
-
-verify.rangeAfterCodeFix("super(); this.a = 12;");
+verify.rangeAfterCodeFix(`
+        super();
+        this.a = 12;
+    `, /*includeWhiteSpace*/ true);

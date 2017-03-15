@@ -1483,8 +1483,9 @@ namespace ts.server {
 
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const { startPosition, endPosition } = this.extractStartAndEndPositionFromTextRangeRequestArgs(args, scriptInfo);
+            const formatOptions = this.projectService.getFormatCodeOptions(file);
 
-            const codeActions = project.getLanguageService().getCodeFixesAtPosition(file, startPosition, endPosition, args.errorCodes);
+            const codeActions = project.getLanguageService().getCodeFixesAtPosition(file, startPosition, endPosition, args.errorCodes, formatOptions);
             if (!codeActions) {
                 return undefined;
             }

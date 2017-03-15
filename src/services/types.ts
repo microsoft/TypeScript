@@ -4,7 +4,11 @@ namespace ts {
         getChildCount(sourceFile?: SourceFile): number;
         getChildAt(index: number, sourceFile?: SourceFile): Node;
         getChildren(sourceFile?: SourceFile): Node[];
+        /* @internal */
+        getChildren(sourceFile?: SourceFileLike): Node[];
         getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number;
+        /* @internal */
+        getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number;
         getFullStart(): number;
         getEnd(): number;
         getWidth(sourceFile?: SourceFile): number;
@@ -57,6 +61,10 @@ namespace ts {
         getLineStarts(): number[];
         getPositionOfLineAndCharacter(line: number, character: number): number;
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
+    }
+
+    export interface SourceFileLike {
+        getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
     }
 
     /**
@@ -248,7 +256,7 @@ namespace ts {
 
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
 
-        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[]): CodeAction[];
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[];
 
         getRefactorDiagnostics(fileName: string, range?: TextRange): RefactorDiagnostic[];
         getCodeActionsForRefactorAtPosition(fileName: string, range: TextRange, refactorCode: number, formatOptions: FormatCodeSettings): CodeAction[];
