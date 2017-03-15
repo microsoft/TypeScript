@@ -253,11 +253,31 @@ namespace ts.textChanges {
         }
 
         public insertNodeAfter(sourceFile: SourceFile, after: Node, newNode: Node, options: InsertNodeOptions & ConfigurableEnd = {}) {
+            if ((isStatementButNotDeclaration(after)) ||
+                 after.kind === SyntaxKind.PropertyDeclaration ||
+                 after.kind === SyntaxKind.PropertySignature ||
+                 after.kind === SyntaxKind.MethodSignature) {
+                // check if previous statement ends with semicolon
+                // if not - insert semicolon to preserve the code from changing the meaning due to ASI
+                if (sourceFile.text.charCodeAt(after.end - 1) !== CharacterCodes.semicolon) {
+                    this.changes.push({
+                        sourceFile,
+                        options: {},
+                        range: { pos: after.end, end: after.end },
+                        node: createToken(SyntaxKind.SemicolonToken)
+                    })
+                }
+            }
             const endPosition = getAdjustedEndPosition(sourceFile, after, options);
             this.changes.push({ sourceFile, options, useIndentationFromFile: true, node: newNode, range: { pos: endPosition, end: endPosition } });
             return this;
         }
 
+        /**
+         * This function should be used to insert nodes in lists when nodes  don't carry separators as the part of the node range,
+         * i.e. arguments in arguments lists, parameters in parameter lists etc. Statements or class elements are different in sense that 
+         * for them separators are treated as the part of the node.
+         */
         public insertNodeInListAfter(sourceFile: SourceFile, after: Node, newNode: Node) {
             const containingList = formatting.SmartIndenter.getContainingList(after, sourceFile);
             if (!containingList) {
@@ -463,10 +483,7 @@ namespace ts.textChanges {
 
         private static normalize(changes: Change[]) {
             // order changes by start position
-            const normalized = changes
-                .map((c, i) => ({ c, i }))
-                .sort(({ c: a, i: i1 }, { c: b, i: i2 }) => (a.range.pos - b.range.pos) || i1 - i2)
-                .map(({ c }) => c);
+            const normalized = stableSort(changes, (a, b) => a.range.pos - b.range.pos);
             // verify that end position of the change is less than start position of the next change
             for (let i = 0; i < normalized.length - 2; i++) {
                 Debug.assert(normalized[i].range.end <= normalized[i + 1].range.pos);

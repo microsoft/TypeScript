@@ -1,12 +1,12 @@
 ===ORIGINAL===
 
-class A {
+interface A {
     x
 }
 
 ===MODIFIED===
 
-class A {
+interface A {
     x;
-    a: boolean;
+    [1]: any;
 }

@@ -1,12 +1,14 @@
 ===ORIGINAL===
 
 class A {
-    x
+    x() {
+    }
 }
 
 ===MODIFIED===
 
 class A {
-    x;
-    a: boolean;
+    x() {
+    }
+    [1]: any;
 }
