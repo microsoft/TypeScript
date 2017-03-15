@@ -10,7 +10,9 @@ interface NodeList {
       * Returns an list of values in the list
       */
     entries(): IterableIterator<Node>;
-        
+    /** 
+      * Executes a provided function once per NodeList element.
+      */  
     forEach(callbackfn: (value: Node, index: number, listObj: NodeList) => void, thisArg?: any): void;
     /** 
       * Returns an list of keys in the list
@@ -30,7 +32,10 @@ interface NodeListOf<TNode extends Node> {
       * Returns an list of values in the list
       */
     entries(): IterableIterator<TNode>;
-        
+
+    /** 
+      * Executes a provided function once per NodeList element.
+      */  
     forEach(callbackfn: (value: TNode, index: number, listObj: NodeListOf<TNode>) => void, thisArg?: any): void;
     /** 
       * Returns an list of keys in the list
