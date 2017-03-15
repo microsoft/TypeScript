@@ -650,5 +650,22 @@ import {
                 changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createImportSpecifier(undefined, createIdentifier("a")));
             })
         }
+        {
+            const text = `
+class A {
+    x;
+}`;
+            runSingleFileTest("insertNodeAfterMultipleNodes", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
+                let newNodes = [];
+                for (let i = 0; i < 11 /*error doesn't occur with fewer nodes*/; ++i) {
+                    newNodes.push(
+                        createProperty(undefined, undefined, i + "", undefined, undefined, undefined));
+                }
+                const insertAfter = findChild("x", sourceFile);
+                for (const newNode of newNodes) {
+                    changeTracker.insertNodeAfter(sourceFile, insertAfter, newNode, { suffix: newLineCharacter });
+                }
+            });
+        }
     });
 }
