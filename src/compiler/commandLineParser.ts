@@ -980,7 +980,12 @@ namespace ts {
             }
         }
 
+        function makePadding(paddingLength: number): string {
+            return Array(paddingLength + 1).join(" ");
+        }
+
         function writeConfigurations() {
+            // Filter applicable options to place in the file
             const categorizedOptions = reduceLeft(
                 filter(optionDeclarations, o => o.category !== Diagnostics.CommandLine_Options && o.category !== Diagnostics.Advanced_Options),
                 (memo, value) => {
@@ -990,44 +995,59 @@ namespace ts {
                     }
                     return memo;
                 }, <MapLike<CommandLineOption[]>>{});
-            const knownKesyCount = getOwnKeys(configurations.compilerOptions).length;
 
-            const newLine = "\n";
-            const tab = "    ";
-
-            let result = "";
+            // Serialize all options and thier descriptions
+            let marginLength = 0;
             let seenKnownKeys = 0;
-            result += `{${newLine}`;
-            result += `${tab}"compilerOptions": {${newLine}`;
+            const nameColumn: string[] = [];
+            const descriptionColumn: string[] = [];
+            const knownKesyCount = getOwnKeys(configurations.compilerOptions).length;
             for (const category in categorizedOptions) {
-                result += `${tab}${tab}// ${category}${newLine}`;
-                result += `${newLine}`;
+                if (nameColumn.length !== 0) {
+                    nameColumn.push("");
+                    descriptionColumn.push("");
+                }
+                nameColumn.push(`/* ${category} */`);
+                descriptionColumn.push("");
                 for (const option of categorizedOptions[category]) {
-                    result += `${tab}${tab}// ${option.description && getLocaleSpecificMessage(option.description) || option.name}${newLine}`;
+                    let optionName;
                     if (configurations.compilerOptions[option.name]) {
-                        result += `${tab}${tab}"${option.name}": ${JSON.stringify(configurations.compilerOptions[option.name])}${(seenKnownKeys += 1) === knownKesyCount ? "" : ","}${newLine}`;
+                        optionName = `"${option.name}": ${JSON.stringify(configurations.compilerOptions[option.name])}${(seenKnownKeys += 1) === knownKesyCount ? "" : ","}`;
                     }
                     else {
-                        result += `${tab}${tab}// "${option.name}": ${JSON.stringify(getDefaultValueForOption(option))},${newLine}`;
+                        optionName = `// "${option.name}": ${JSON.stringify(getDefaultValueForOption(option))},`;
                     }
-                    result += `${newLine}`;
+                    nameColumn.push(optionName);
+                    descriptionColumn.push(`/* ${option.description && getLocaleSpecificMessage(option.description) || option.name} */`);
+                    marginLength = Math.max(optionName.length, marginLength);
                 }
-                result += `${newLine}`;
+            }
+
+            // Write the output
+            const tab = makePadding(2);
+            const result: string[] = [];
+            result.push(`{`);
+            result.push(`${tab}"compilerOptions": {`);
+            // Print out each row, aligning all the descriptions on the same column.
+            for (let i = 0; i < nameColumn.length; i++) {
+                const optionName = nameColumn[i];
+                const description = descriptionColumn[i];
+                result.push(tab + tab + optionName + makePadding(marginLength - optionName.length + 2) + description);
             }
             if (configurations.files && configurations.files.length) {
-                result += `${tab}},${newLine}`;
-                result += `${tab}"files": [${newLine}`;
+                result.push(`${tab}},`);
+                result.push(`${tab}"files": [`);
                 for (let i = 0; i < configurations.files.length; i++) {
-                    result += `${tab}${tab}${JSON.stringify(configurations.files[i])}${i === configurations.files.length - 1 ? "" : ","}${newLine}`;
+                    result.push(`${tab}${tab}${JSON.stringify(configurations.files[i])}${i === configurations.files.length - 1 ? "" : ","}`);
                 }
-                result += `${tab}]${newLine}`;
+                result.push(`${tab}]`);
             }
             else {
-                result += `${tab}}${newLine}`;
+                result.push(`${tab}}`);
             }
-            result += `}${newLine}`;
+            result.push(`}`);
 
-            return result;
+            return result.join(sys.newLine);
         }
     }
 
