@@ -190,6 +190,7 @@ namespace ts.textChanges {
         public deleteNodeInList(sourceFile: SourceFile, node: Node) {
             const containingList = formatting.SmartIndenter.getContainingList(node, sourceFile);
             if (!containingList) {
+                Debug.fail("node is not a list element");
                 return this;
             }
             const index = containingList.indexOf(node);
@@ -260,6 +261,7 @@ namespace ts.textChanges {
         public insertNodeInListAfter(sourceFile: SourceFile, after: Node, newNode: Node) {
             const containingList = formatting.SmartIndenter.getContainingList(after, sourceFile);
             if (!containingList) {
+                Debug.fail("node is not a list element");
                 return this;
             }
             const index = containingList.indexOf(after);
