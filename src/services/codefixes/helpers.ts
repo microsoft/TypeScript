@@ -11,7 +11,7 @@ namespace ts.codefix {
         const changeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
 
         for (const newNode of newNodes) {
-            changeTracker.insertNodeAfter(sourceFile, insertAfter, newNode, { insertTrailingNewLine: true });
+            changeTracker.insertNodeAfter(sourceFile, insertAfter, newNode, { suffix: context.newLineCharacter });
         }
         return changeTracker.getChanges();
     }
@@ -137,20 +137,23 @@ namespace ts.codefix {
     function createMethodImplementingSignatures(signatures: Signature[], name: PropertyName, modifiers: Modifier[] | undefined): MethodDeclaration {
         Debug.assert(signatures && signatures.length > 0);
 
-        let maxNonRestArgs = -1;
         let maxArgsIndex = 0;
+        /** This is *a* signature with the maximal number of arguments,
+         * such that if there is a "maximal" signature without rest arguments,
+         * this is one of them.
+        */
+        let maxArgsSignature = signatures[0];
         let minArgumentCount = signatures[0].minArgumentCount;
-        let hasRestParameter = false;
+        let someSigHasRestParameter = false;
         for (let i = 0; i < signatures.length; i++) {
             const sig = signatures[i];
             minArgumentCount = Math.min(sig.minArgumentCount, minArgumentCount);
-            hasRestParameter = hasRestParameter || sig.hasRestParameter;
-            const nonRestLength = sig.parameters.length - (sig.hasRestParameter ? 1 : 0);
-            if (nonRestLength >= maxNonRestArgs) {
-                maxNonRestArgs = nonRestLength;
-                maxArgsIndex = i;
+            someSigHasRestParameter = someSigHasRestParameter || sig.hasRestParameter;
+            if (sig.parameters.length >= maxArgsSignature.parameters.length && (!sig.hasRestParameter || maxArgsSignature.hasRestParameter)) {
+                maxArgsSignature = sig;
             }
         }
+        const maxNonRestArgs =  maxArgsSignature.parameters.length - (maxArgsSignature.hasRestParameter ? 1 : 0);
         const maxArgsParameterSymbolNames = signatures[maxArgsIndex].getParameters().map(symbol => symbol.getName());
 
         const parameters: ParameterDeclaration[] = [];
@@ -167,15 +170,15 @@ namespace ts.codefix {
             parameters.push(newParameter);
         }
 
-        if (hasRestParameter) {
-            const anyType = createKeywordTypeNode(SyntaxKind.AnyKeyword);
+        if (someSigHasRestParameter) {
+            const anyArrayType = createArrayTypeNode(createKeywordTypeNode(SyntaxKind.AnyKeyword));
             const restParameter = createParameter(
                   /*decorators*/ undefined
                 , /*modifiers*/ undefined
                 , createToken(SyntaxKind.DotDotDotToken)
                 , maxArgsParameterSymbolNames[maxNonRestArgs] || "rest"
                 , /*questionToken*/ maxNonRestArgs >= minArgumentCount ? createToken(SyntaxKind.QuestionToken) : undefined
-                , anyType
+                , anyArrayType
                 , /*initializer*/ undefined);
             parameters.push(restParameter);
         }

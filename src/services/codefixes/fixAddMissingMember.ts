@@ -52,7 +52,7 @@ namespace ts.codefix {
             , /*initializer*/ undefined);
         // TODO: make index signature.
         const propertyChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
-        propertyChangeTracker.insertNodeAfter(sourceFile, openBrace, property, { insertTrailingNewLine: true });
+        propertyChangeTracker.insertNodeAfter(sourceFile, openBrace, property, { suffix: context.newLineCharacter });
 
         const stringTypeNode = createKeywordTypeNode(SyntaxKind.StringKeyword);
         const indexingParameter = createParameter(
@@ -70,7 +70,7 @@ namespace ts.codefix {
             , /*modifiers*/ undefined);
 
         const indexSignatureChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
-        indexSignatureChangeTracker.insertNodeAfter(sourceFile, openBrace, indexSignature, { insertTrailingNewLine: true });
+        indexSignatureChangeTracker.insertNodeAfter(sourceFile, openBrace, indexSignature, { suffix: context.newLineCharacter });
 
         return [{
             description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_declaration_for_missing_property_0), [token.getText()]),

@@ -2340,8 +2340,8 @@ namespace ts {
                     // The type is an object literal type.
                     if (!type.symbol) {
                         // Anonymous types without symbols are literals.
-                        // mapToTypeDeclarationsArray(type)
-                        throw new Error("unknown case.");
+                        // TODO: handle this case correctly.
+                        noop();
                     }
 
                     return createTypeLiteralNodeFromType(<ObjectType>type);
@@ -2471,7 +2471,7 @@ namespace ts {
                             case SyntaxKind.IndexSignature:
                                 throw new Error("type literal constituent not implemented.");
                             default:
-                                throw new Error("Unknown case.");
+                                throw new Error("Unknown resolved member kind.");
                         }
                     });
                     return typeElements.length ? typeElements : undefined;
