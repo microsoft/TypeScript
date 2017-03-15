@@ -407,10 +407,8 @@ namespace ts.textChanges {
             changesPerFile.forEachValue(path => {
                 const changesInFile = changesPerFile.get(path);
                 const sourceFile = changesInFile[0].sourceFile;
-                ChangeTracker.normalize(changesInFile);
-
                 const fileTextChanges: FileTextChanges = { fileName: sourceFile.fileName, textChanges: [] };
-                for (const c of changesInFile) {
+                for (const c of ChangeTracker.normalize(changesInFile)) {
                     fileTextChanges.textChanges.push({
                         span: this.computeSpan(c, sourceFile),
                         newText: this.computeNewText(c, sourceFile)
@@ -463,11 +461,15 @@ namespace ts.textChanges {
 
         private static normalize(changes: Change[]) {
             // order changes by start position
-            changes.sort((a, b) => a.range.pos - b.range.pos);
+            const normalized = changes
+                .map((c, i) => ({ c, i }))
+                .sort(({ c: a, i: i1 }, { c: b, i: i2 }) => (a.range.pos - b.range.pos) || i1 - i2)
+                .map(({ c }) => c);
             // verify that end position of the change is less than start position of the next change
-            for (let i = 0; i < changes.length - 2; i++) {
-                Debug.assert(changes[i].range.end <= changes[i + 1].range.pos);
+            for (let i = 0; i < normalized.length - 2; i++) {
+                Debug.assert(normalized[i].range.end <= normalized[i + 1].range.pos);
             }
+            return normalized;
         }
     }
 
