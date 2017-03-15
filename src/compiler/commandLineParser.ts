@@ -665,8 +665,7 @@ namespace ts {
     export const defaultInitCompilerOptions: CompilerOptions = {
         module: ModuleKind.CommonJS,
         target: ScriptTarget.ES5,
-        strict: true,
-        sourceMap: false,
+        strict: true
     };
 
     let optionNameMapCache: OptionNameMap;
@@ -1011,7 +1010,7 @@ namespace ts {
                 descriptionColumn.push("");
                 for (const option of categorizedOptions[category]) {
                     let optionName;
-                    if (configurations.compilerOptions[option.name]) {
+                    if (hasProperty(configurations.compilerOptions, option.name)) {
                         optionName = `"${option.name}": ${JSON.stringify(configurations.compilerOptions[option.name])}${(seenKnownKeys += 1) === knownKesyCount ? "" : ","}`;
                     }
                     else {
