@@ -1511,6 +1511,9 @@ namespace ts {
                     return undefined;
                 }
             }
+            else if (name.kind === SyntaxKind.ParenthesizedExpression) {
+                return getSymbolOfNode(name.expression);
+            }
             else {
                 Debug.fail("Unknown entity name kind.");
             }
@@ -21069,7 +21072,6 @@ namespace ts {
 
             if (isHeritageClauseElementIdentifier(<EntityName>entityName)) {
                 let meaning = SymbolFlags.None;
-
                 // In an interface or class, we're definitely interested in a type.
                 if (entityName.parent.kind === SyntaxKind.ExpressionWithTypeArguments) {
                     meaning = SymbolFlags.Type;
@@ -21084,9 +21086,13 @@ namespace ts {
                 }
 
                 meaning |= SymbolFlags.Alias;
-                return resolveEntityName(<EntityName>entityName, meaning);
+                const entityNameSymbol = resolveEntityName(<EntityName>entityName, meaning);
+                if (entityNameSymbol) {
+                    return entityNameSymbol;
+                }
             }
-            else if (isPartOfExpression(entityName)) {
+            
+            if (isPartOfExpression(entityName)) {
                 if (nodeIsMissing(entityName)) {
                     // Missing entity name.
                     return undefined;
