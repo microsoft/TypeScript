@@ -241,16 +241,7 @@ namespace ts.codefix {
         for (const reference of references) {
             getTypeFromContext(reference, checker, usageContext);
         }
-        const callContexts = isConstructor ? usageContext.constructContexts : usageContext.callContexts;
-        const types = [];
-        if (callContexts) {
-            for (const callContext of callContexts) {
-                if (callContext.argumentTypes.length > parameterIndex) {
-                    types.push(checker.getWidenedType(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[parameterIndex])));
-                }
-            }
-        }
-        return types.length ? checker.getUnionType(types) : checker.getAnyType();
+        return getParameterTypeFromCallContexts(parameterIndex, isConstructor ? usageContext.constructContexts : usageContext.callContexts, checker);
     }
 
     function getTypeFromUsageContext(usageContext: UsageContext, checker: TypeChecker): Type {
@@ -264,15 +255,15 @@ namespace ts.codefix {
             return checker.getStringType();
         }
         else if (usageContext.candidateTypes) {
-            return checker.getUnionType(map(usageContext.candidateTypes, t => checker.getWidenedType(checker.getBaseTypeOfLiteralType(t))));
+            return checker.getWidenedType(checker.getUnionType(map(usageContext.candidateTypes, t => checker.getBaseTypeOfLiteralType(t)), true));
         }
         else if (usageContext.properties && hasCallContext(usageContext.properties.get("then"))) {
-            const type = checker.getAnyType()
-            return checker.createPromiseType(type);
+            const paramType = getParameterTypeFromCallContexts(0, usageContext.properties.get("then").callContexts, checker);
+            const types = paramType.getCallSignatures().map(c => c.getReturnType());
+            return checker.createPromiseType(types.length ? checker.getUnionType(types, true) : checker.getAnyType());
         }
         else if (usageContext.properties && hasCallContext(usageContext.properties.get("push"))) {
-            const type = checker.getAnyType()
-            return checker.createArrayType(type);
+            return checker.createArrayType(getParameterTypeFromCallContexts(0, usageContext.properties.get("push").callContexts, checker));
         }
         else if (usageContext.properties || usageContext.callContexts || usageContext.constructContexts || usageContext.numberIndexContext || usageContext.stringIndexContext) {
             const members = createMap<Symbol>();
@@ -312,6 +303,18 @@ namespace ts.codefix {
         else {
             return checker.getAnyType();
         }
+    }
+
+    function getParameterTypeFromCallContexts(parameterIndex: number, callContexts: CallContext[], checker: TypeChecker) {
+        const types = [];
+        if (callContexts) {
+            for (const callContext of callContexts) {
+                if (callContext.argumentTypes.length > parameterIndex) {
+                    types.push(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[parameterIndex]));
+                }
+            }
+        }
+        return types.length ? checker.getWidenedType(checker.getUnionType(types, true)) : checker.getAnyType();
     }
 
     function getSignatureFromCallContext(callContext: CallContext, checker: TypeChecker): Signature {
