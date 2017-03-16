@@ -58,13 +58,15 @@ namespace ts.codefix {
                 }
             }
             else {
-                 return createCodeActions(token.getEnd(), `: ${typeString}`);
+                return createCodeActions(token.getEnd(), `: ${typeString}`);
             }
         }
 
         function getCodeActionForParameter() {
-            const type = inferTypeForParameterFromUsage(<Identifier>token) ||
-                inferTypeForVariableFromUsage(<Identifier>token);
+            let type = inferTypeForParameterFromUsage(<Identifier>token);
+            if (!isValidInference(type)) {
+                type = inferTypeForVariableFromUsage(<Identifier>token);
+            }
             const typeString = checker.typeToString(type || checker.getAnyType(), token, TypeFormatFlags.NoTruncation);
             if (isInJavaScriptFile(sourceFile)) {
                 const declaration = getContainingFunction(token);
@@ -157,7 +159,7 @@ namespace ts.codefix {
             }];
         }
 
-        function getReferences(token: PropertyName) {
+        function getReferences(token: PropertyName | Token<SyntaxKind.ConstructorKeyword>) {
             const references = FindAllReferences.findReferencedSymbols(
                 checker,
                 cancellationToken,
@@ -172,92 +174,227 @@ namespace ts.codefix {
             return references[0].references;
         }
 
-        function inferTypeForVariableFromUsage(token: Identifier) {
-            const types = [];
-            for (const reference of getReferences(token)) {
-                const token = getTokenAtPosition(program.getSourceFile(reference.fileName), reference.textSpan.start);
-                const type = getTypeFromContext(<Identifier>token, checker);
-                if (!isValidInference(type)) {
-                    continue;
-                }
-                types.push(checker.getBaseTypeOfLiteralType(type));
+        function inferTypeForVariableFromUsage(token: PropertyName) {
+            const references = getReferences(token).map(r => <Identifier>getTokenAtPosition(program.getSourceFile(r.fileName), r.textSpan.start));
+            return inferTypeFromReferences(references, checker);
+        }
+
+        function getFirstChildOfKind(node: Node, sourcefile: SourceFile, kind: SyntaxKind) {
+            for (const child of node.getChildren(sourcefile)) {
+                if (child.kind === kind) return child;
             }
-            return types.length ? checker.getUnionType(types) : undefined;
         }
 
         function inferTypeForParameterFromUsage(token: Identifier) {
             const containingFunction = getContainingFunction(token);
-            if (containingFunction.name) {
-                const parameterIndex = getParameterIndexInList(token, containingFunction.parameters);
-                const types = [];
-                for (const reference of getReferences(containingFunction.name)) {
-                    const token = getTokenAtPosition(program.getSourceFile(reference.fileName), reference.textSpan.start);
-                    const type = getTypeFromContext(<Identifier>token, checker);
-                    if (!isValidInference(type)) {
-                        continue;
-                    }
-                    const signatures = type.getCallSignatures();
-                    for (const signature of signatures) {
-                        const parameterType = signature.parameters.length > parameterIndex ? (<TransientSymbol>signature.parameters[parameterIndex]).type : undefined;
-                        types.push(parameterType ? checker.getBaseTypeOfLiteralType(parameterType) : checker.getUndefinedType());
-                    }
+
+            if (containingFunction.kind === SyntaxKind.SetAccessor) {
+                return inferTypeForVariableFromUsage((<SetAccessorDeclaration>containingFunction).name);
+            }
+            else if (containingFunction.kind === SyntaxKind.Constructor || containingFunction.kind === SyntaxKind.FunctionExpression ||
+                containingFunction.kind === SyntaxKind.FunctionDeclaration || containingFunction.kind === SyntaxKind.MethodDeclaration ||
+                containingFunction.kind === SyntaxKind.MethodSignature) {
+                const isConstructor = containingFunction.kind === SyntaxKind.Constructor;
+
+                let searchToken = isConstructor ?
+                    <Token<SyntaxKind.ConstructorKeyword>>getFirstChildOfKind(containingFunction, sourceFile, SyntaxKind.ConstructorKeyword) :
+                    containingFunction.name;
+                if (searchToken) {
+                    const parameterIndex = getParameterIndexInList(token, containingFunction.parameters);
+                    const references = getReferences(searchToken).map(r => <Identifier>getTokenAtPosition(program.getSourceFile(r.fileName), r.textSpan.start));
+                    return inferTypeForParameterFromReferences(references, parameterIndex, isConstructor, checker);
                 }
-                return types.length ? checker.getUnionType(types) : undefined;
+            }
+            else {
+                return checker.getAnyType();
             }
         }
     }
 
-    function getTypeFromContext(node: Expression, checker: TypeChecker): Type {
+    interface CallContext {
+        argumentTypes: Type[];
+        returnType: UsageContext;
+    }
+
+    interface UsageContext {
+        isNumber?: boolean;
+        isString?: boolean;
+        isNumberOrString?: boolean;
+        candidateTypes?: Type[];
+        properties?: Map<UsageContext>;
+        callContexts?: CallContext[];
+        constructContexts?: CallContext[];
+        numberIndexContext?: UsageContext;
+        stringIndexContext?: UsageContext;
+    }
+
+    function inferTypeFromReferences(references: Identifier[], checker: TypeChecker): Type {
+        const usageContext: UsageContext = {};
+        for (const reference of references) {
+            getTypeFromContext(reference, checker, usageContext);
+        }
+        return getTypeFromUsageContext(usageContext, checker);
+    }
+
+    function inferTypeForParameterFromReferences(references: Identifier[], parameterIndex: number, isConstructor: boolean, checker: TypeChecker) {
+        const usageContext: UsageContext = {};
+        for (const reference of references) {
+            getTypeFromContext(reference, checker, usageContext);
+        }
+        const callContexts = isConstructor ? usageContext.constructContexts : usageContext.callContexts;
+        const types = [];
+        if (callContexts) {
+            for (const callContext of callContexts) {
+                if (callContext.argumentTypes.length > parameterIndex) {
+                    types.push(checker.getWidenedType(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[parameterIndex])));
+                }
+            }
+        }
+        return types.length ? checker.getUnionType(types) : checker.getAnyType();
+    }
+
+    function getTypeFromUsageContext(usageContext: UsageContext, checker: TypeChecker): Type {
+        if (usageContext.isNumberOrString && !usageContext.isNumber && !usageContext.isString) {
+            return checker.getUnionType([checker.getNumberType(), checker.getStringType()]);
+        }
+        else if (usageContext.isNumber) {
+            return checker.getNumberType();
+        }
+        else if (usageContext.isString) {
+            return checker.getStringType();
+        }
+        else if (usageContext.candidateTypes) {
+            return checker.getUnionType(map(usageContext.candidateTypes, t => checker.getWidenedType(checker.getBaseTypeOfLiteralType(t))));
+        }
+        else if (usageContext.properties && hasCallContext(usageContext.properties.get("then"))) {
+            const type = checker.getAnyType()
+            return checker.createPromiseType(type);
+        }
+        else if (usageContext.properties && hasCallContext(usageContext.properties.get("push"))) {
+            const type = checker.getAnyType()
+            return checker.createArrayType(type);
+        }
+        else if (usageContext.properties || usageContext.callContexts || usageContext.constructContexts || usageContext.numberIndexContext || usageContext.stringIndexContext) {
+            const members = createMap<Symbol>();
+            const callSignatures: Signature[] = [];
+            const constructSignatures: Signature[] = [];
+            let stringIndexInfo: IndexInfo;
+            let numberIndexInfo: IndexInfo;
+
+            if (usageContext.properties) {
+                usageContext.properties.forEach((context, name) => {
+                    const symbol = checker.createSymbol(SymbolFlags.Property, name);
+                    symbol.type = getTypeFromUsageContext(context, checker);
+                    members.set(name, symbol);
+                });
+            }
+
+            if (usageContext.callContexts) {
+                for (const callConext of usageContext.callContexts) {
+                    callSignatures.push(getSignatureFromCallContext(callConext, checker));
+                }            }
+
+            if (usageContext.constructContexts) {
+                for (const constructContext of usageContext.constructContexts) {
+                    constructSignatures.push(getSignatureFromCallContext(constructContext, checker));
+                }            }
+
+            if (usageContext.numberIndexContext) {
+                numberIndexInfo = checker.createIndexInfo(getTypeFromUsageContext(usageContext.numberIndexContext, checker), /*isReadonly*/ false);
+            }
+
+            if (usageContext.stringIndexContext) {
+                stringIndexInfo = checker.createIndexInfo(getTypeFromUsageContext(usageContext.stringIndexContext, checker), /*isReadonly*/ false);
+            }
+
+            return checker.createAnonymousType(/*symbol*/ undefined, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
+        }
+        else {
+            return checker.getAnyType();
+        }
+    }
+
+    function getSignatureFromCallContext(callContext: CallContext, checker: TypeChecker): Signature {
+        const parameters: Symbol[] = [];
+        for (let i = 0; i < callContext.argumentTypes.length; i++) {
+            const symbol = checker.createSymbol(SymbolFlags.FunctionScopedVariable, `p${i}`);
+            symbol.type = checker.getWidenedType(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[i]));
+            parameters.push(symbol);        }
+        const returnType = getTypeFromUsageContext(callContext.returnType, checker);
+        return checker.createSignature(/*declaration*/ undefined, /*typeParameters*/ undefined, /*thisParameter*/ undefined, parameters, returnType, /*typePredicate*/ undefined, callContext.argumentTypes.length, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
+    }
+
+    function hasCallContext(usageContext: UsageContext) {
+        return usageContext && usageContext.callContexts;
+    }
+
+    function getTypeFromContext(node: Expression, checker: TypeChecker, usageContext: UsageContext): void {
         while (isRightSideOfQualifiedNameOrPropertyAccess(node)) {
             node = <Expression>node.parent;
         }
 
         switch (node.parent.kind) {
             case SyntaxKind.PostfixUnaryExpression:
-                return checker.getNumberType();
+                usageContext.isNumber = true;
+                break;
             case SyntaxKind.PrefixUnaryExpression:
-                return getTypeFromPrefixUnaryExpressionContext(<PrefixUnaryExpression>node.parent, checker);
+                getTypeFromPrefixUnaryExpressionContext(<PrefixUnaryExpression>node.parent, usageContext);
+                break;
             case SyntaxKind.BinaryExpression:
-                return getTypeFromBinaryExpressionContext(node, <BinaryExpression>node.parent, checker);
+                getTypeFromBinaryExpressionContext(node, <BinaryExpression>node.parent, checker, usageContext);
+                break;
             case SyntaxKind.CaseClause:
             case SyntaxKind.DefaultClause:
-                return getTypeFromSwitchStatementLabelContext(<CaseOrDefaultClause>node.parent, checker);
+                getTypeFromSwitchStatementLabelContext(<CaseOrDefaultClause>node.parent, checker, usageContext);
+                break;
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
                 if ((<CallExpression | NewExpression>node.parent).expression === node) {
-                    return getTypeFromCallExpressionContext(<CallExpression | NewExpression>node.parent, checker);
+                    getTypeFromCallExpressionContext(<CallExpression | NewExpression>node.parent, checker, usageContext);
+                }
+                else {
+                    getContextualType(node, checker, usageContext);
                 }
                 break;
             case SyntaxKind.PropertyAccessExpression:
-                return getTypeFromPropertyAccessExpressionContext(<PropertyAccessExpression>node.parent, checker);
+                getTypeFromPropertyAccessExpressionContext(<PropertyAccessExpression>node.parent, checker, usageContext);
+                break;
             case SyntaxKind.ElementAccessExpression:
-                return getTypeFromPropertyElementExpressionContext(<ElementAccessExpression>node.parent, node, checker);
-        }
-
-        if (isPartOfExpression(node)) {
-            const contextualType = checker.getContextualType(node);
-            return isValidInference(contextualType) ? contextualType : undefined;
+                getTypeFromPropertyElementExpressionContext(<ElementAccessExpression>node.parent, node, checker, usageContext);
+                break;
+            default:
+                return getContextualType(node, checker, usageContext);
         }
     }
 
-    function getTypeFromPrefixUnaryExpressionContext(node: PrefixUnaryExpression, checker: TypeChecker): Type {
+    function getContextualType(node: Expression, checker: TypeChecker, usageContext: UsageContext): void {
+        if (isPartOfExpression(node)) {
+            const contextualType = checker.getContextualType(node);
+            if (isValidInference(contextualType)) {
+                (usageContext.candidateTypes || (usageContext.candidateTypes = [])).push(contextualType);
+            }
+        }
+    }
+
+    function getTypeFromPrefixUnaryExpressionContext(node: PrefixUnaryExpression, usageContext: UsageContext): void {
         switch (node.operator) {
             case SyntaxKind.PlusPlusToken:
             case SyntaxKind.MinusMinusToken:
             case SyntaxKind.MinusToken:
             case SyntaxKind.TildeToken:
-                return checker.getNumberType();
+                usageContext.isNumber = true;
+                break;
 
             case SyntaxKind.PlusToken:
-                return checker.getUnionType([checker.getStringType(), checker.getNumberType()]);
+                usageContext.isNumberOrString = true;
+                break;
 
-            case SyntaxKind.ExclamationToken:
-                // no inferences here;
-                return undefined;
+            // case SyntaxKind.ExclamationToken:
+            // no inferences here;
         }
     }
 
-    function getTypeFromBinaryExpressionContext(node: Expression, parent: BinaryExpression, checker: TypeChecker): Type {
+    function getTypeFromBinaryExpressionContext(node: Expression, parent: BinaryExpression, checker: TypeChecker, usageContext: UsageContext): void {
         switch (parent.operatorToken.kind) {
             // ExponentiationOperator
             case SyntaxKind.AsteriskAsteriskToken:
@@ -298,15 +435,17 @@ namespace ts.codefix {
             case SyntaxKind.LessThanEqualsToken:
             case SyntaxKind.GreaterThanToken:
             case SyntaxKind.GreaterThanEqualsToken:
-                return checker.getNumberType();
+                usageContext.isNumber = true;
+                break;
 
             case SyntaxKind.PlusEqualsToken:
             case SyntaxKind.PlusToken:
                 const otherOperandType = checker.getTypeAtLocation(parent.left === node ? parent.right : parent.left);
                 if (isValidInference(otherOperandType) && (otherOperandType.flags & (TypeFlags.NumberLike | TypeFlags.StringLike))) {
-                    return otherOperandType;
+                    // TODO: handel enums, and keyof
                 }
-                return checker.getUnionType([checker.getStringType(), checker.getNumberType()]);
+                usageContext.isNumberOrString = true;
+                break;
 
             //  AssignmentOperators
             case SyntaxKind.EqualsToken:
@@ -314,11 +453,15 @@ namespace ts.codefix {
             case SyntaxKind.EqualsEqualsEqualsToken:
             case SyntaxKind.ExclamationEqualsEqualsToken:
             case SyntaxKind.ExclamationEqualsToken:
-                return checker.getTypeAtLocation(parent.left === node ? parent.right : parent.left);
+                const type = checker.getTypeAtLocation(parent.left === node ? parent.right : parent.left);
+                if (isValidInference(type)) {
+                    (usageContext.candidateTypes || (usageContext.candidateTypes = [])).push(type);
+                }
+                break;
 
             case SyntaxKind.InKeyword:
                 if (node === parent.left) {
-                    return checker.getStringType();
+                    usageContext.isString = true;
                 }
                 break;
 
@@ -328,7 +471,12 @@ namespace ts.codefix {
                     (node.parent.parent.kind === SyntaxKind.VariableDeclaration || isAssignmentExpression(node.parent.parent, /*excludeCompoundAssignment*/ true))) {
                     // var x = x || {};
                     // TODO: use getFalsyflagsOfType
-                    return checker.getUnionType([checker.getTypeAtLocation(parent.right), checker.getNullType(), checker.getUndefinedType()]);
+                    const expressionType = checker.getTypeAtLocation(parent.right);
+                    if (isValidInference(expressionType)) {
+                        (usageContext.candidateTypes || (usageContext.candidateTypes = [])).push(expressionType);
+                        //usageContext.candidateTypes.push(checker.getNullType());
+                        //usageContext.candidateTypes.push(checker.getUndefinedType());
+                    }
                 }
                 break;
 
@@ -340,45 +488,54 @@ namespace ts.codefix {
         }
     }
 
-    function getTypeFromSwitchStatementLabelContext(parent: CaseOrDefaultClause, checker: TypeChecker): Type {
-        return checker.getTypeAtLocation((<SwitchStatement>parent.parent.parent).expression);
+    function getTypeFromSwitchStatementLabelContext(parent: CaseOrDefaultClause, checker: TypeChecker, usageContext: UsageContext): void {
+        const type = checker.getTypeAtLocation((<SwitchStatement>parent.parent.parent).expression);
+        if (isValidInference(type)) {
+            (usageContext.candidateTypes || (usageContext.candidateTypes = [])).push(type);
+        }
     }
 
-    function getTypeFromCallExpressionContext(parent: CallExpression | NewExpression, checker: TypeChecker): Type {
-        const isCallExpression = parent.kind === SyntaxKind.CallExpression;
-        const parameters: Symbol[] = [];
+    function getTypeFromCallExpressionContext(parent: CallExpression | NewExpression, checker: TypeChecker, usageContext: UsageContext): void {
+        const callContext: CallContext = { argumentTypes: [], returnType: {} };
 
-        for (let i = 0; i < parent.arguments.length; i++) {
-            const type = checker.getTypeAtLocation(parent.arguments[i]);
-            const symbol = checker.createSymbol(SymbolFlags.FunctionScopedVariable, `p${i}`);
-            symbol.type = type;
-            parameters.push(symbol);
+        for (const argument of parent.arguments) {
+            callContext.argumentTypes.push(checker.getTypeAtLocation(argument));
         }
 
-        const returnType = checker.getBaseTypeOfLiteralType(getTypeFromContext(parent, checker) || checker.getAnyType());
-        const signature = checker.createSignature(/*declaration*/ undefined, /*typeParameters*/ undefined, /*thisParameter*/ undefined, parameters, returnType, /*typePredicate*/ undefined, parent.arguments.length, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
-        return checker.createAnonymousType(/*symbol*/ undefined, /*members*/ createMap<Symbol>(), isCallExpression ? [signature] : [], isCallExpression ? [] : [signature], /*stringIndexInfo*/undefined, /*numberIndexInfo*/ undefined);
+        getTypeFromContext(parent, checker, callContext.returnType);
+        if (parent.kind === SyntaxKind.CallExpression) {
+            (usageContext.callContexts || (usageContext.callContexts = [])).push(callContext);
+        }
+        else {
+            (usageContext.constructContexts || (usageContext.constructContexts = [])).push(callContext);
+        }
     }
 
-    function getTypeFromPropertyAccessExpressionContext(parent: PropertyAccessExpression, checker: TypeChecker) {
+    function getTypeFromPropertyAccessExpressionContext(parent: PropertyAccessExpression, checker: TypeChecker, usageContext: UsageContext): void {
         const name = parent.name.text;
-        const symbol = checker.createSymbol(SymbolFlags.Property, name);
-        symbol.type = checker.getBaseTypeOfLiteralType(getTypeFromContext(parent, checker) || checker.getAnyType());
-        const members = createMap<Symbol>();
-        members.set(name, symbol);
-        return checker.createAnonymousType(/*symbol*/ undefined, members, /*callSignatures*/[], /*constructSignatures*/[], /*stringIndexInfo*/undefined, /*numberIndexInfo*/ undefined);
+        if (!usageContext.properties) {
+            usageContext.properties = createMap<UsageContext>();
+        }
+        const propertyUsageContext = {};
+        getTypeFromContext(parent, checker, propertyUsageContext);
+        usageContext.properties.set(name, propertyUsageContext);
     }
 
-    function getTypeFromPropertyElementExpressionContext(parent: ElementAccessExpression, node: Expression, checker: TypeChecker) {
+    function getTypeFromPropertyElementExpressionContext(parent: ElementAccessExpression, node: Expression, checker: TypeChecker, usageContext: UsageContext): void {
         if (node === parent.argumentExpression) {
-            return checker.getUnionType([checker.getStringType(), checker.getNumberType()]);
+            usageContext.isNumberOrString = true;
+            return;
         }
         else {
             const indextType = checker.getTypeAtLocation(parent);
-            const isNumericIndexType = indextType.flags & TypeFlags.NumberLike;
-            const type = checker.getBaseTypeOfLiteralType(getTypeFromContext(parent, checker) || checker.getAnyType());
-            const indexer = checker.createIndexInfo(type, /*isReadonly*/ false);
-            return checker.createAnonymousType(/*symbol*/ undefined, /*members*/ createMap<Symbol>(), /*callSignatures*/[], /*constructSignatures*/[], /*stringIndexInfo*/ isNumericIndexType ? undefined : indexer, /*numberIndexInfo*/ isNumericIndexType ? indexer : undefined);
+            const indexUsageContext = {};
+            getTypeFromContext(parent, checker, indexUsageContext);
+            if (indextType.flags & TypeFlags.NumberLike) {
+                usageContext.numberIndexContext = indexUsageContext;
+            }
+            else {
+                usageContext.stringIndexContext = indexUsageContext;
+            }
         }
     }
 
