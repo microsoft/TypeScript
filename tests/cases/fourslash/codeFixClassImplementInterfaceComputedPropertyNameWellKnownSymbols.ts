@@ -17,7 +17,6 @@
 ////     [Symbol.toStringTag]: string;
 ////     [Symbol.unscopables]: any;
 //// }
-////
 //// class C implements I<number> {[|  |]}
 
 verify.rangeAfterCodeFix(`

@@ -856,6 +856,7 @@ namespace ts {
             | SyntaxKind.BooleanKeyword
             | SyntaxKind.StringKeyword
             | SyntaxKind.SymbolKeyword
+            | SyntaxKind.ThisKeyword
             | SyntaxKind.VoidKeyword
             | SyntaxKind.UndefinedKeyword
             | SyntaxKind.NullKeyword

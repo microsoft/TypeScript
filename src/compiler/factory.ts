@@ -255,6 +255,22 @@ namespace ts {
             : node;
     }
 
+    export function createSignatureDeclaration<T extends SignatureDeclaration>(kind: SyntaxKind, name: string | PropertyName | undefined, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): T {
+        const signatureDeclaration = createSynthesizedNode(kind) as T;
+        signatureDeclaration.name = asName(name);
+        signatureDeclaration.typeParameters = asNodeArray(typeParameters);
+        signatureDeclaration.type = type;
+        return signatureDeclaration;
+    }
+
+    export function updateSignatureDeclaration<T extends SignatureDeclaration>(node: T, name: string | PropertyName | undefined, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): T {
+        return node.name !== name
+            || node.typeParameters !== typeParameters
+            || node.type !== type
+            ? <T>updateNode(createSignatureDeclaration(node.kind, name, typeParameters, parameters, type), node)
+            : node;
+    }
+    
     export function createTypeReferenceNode(typeName: string | EntityName, typeArguments: NodeArray<TypeNode> | undefined) {
         const typeReference = createSynthesizedNode(SyntaxKind.TypeReference) as TypeReferenceNode;
 
@@ -318,6 +334,24 @@ namespace ts {
     export function updateTypleTypeNode(node: TupleTypeNode, elementTypes: TypeNode[]) {
         return node.elementTypes !== elementTypes
             ? updateNode(createTupleTypeNode(elementTypes), node)
+            : node;
+    }
+
+    export function createMappedTypeNode(readonlyToken: ReadonlyToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | undefined, type: TypeNode | undefined): MappedTypeNode {
+        const mappedTypeNode = createSynthesizedNode(SyntaxKind.MappedType) as MappedTypeNode;
+        mappedTypeNode.readonlyToken = readonlyToken;
+        mappedTypeNode.typeParameter = typeParameter;
+        mappedTypeNode.questionToken = questionToken;
+        mappedTypeNode.type = type;
+        return mappedTypeNode;
+    }
+
+    export function updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | undefined, type: TypeNode | undefined): MappedTypeNode {
+        return node.readonlyToken !== readonlyToken
+            || node.typeParameter !== typeParameter
+            || node.questionToken !== questionToken
+            || node.type !== type
+            ? updateNode(createMappedTypeNode(readonlyToken, typeParameter, questionToken, type), node)
             : node;
     }
 

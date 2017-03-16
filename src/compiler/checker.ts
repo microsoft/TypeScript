@@ -2322,10 +2322,18 @@ namespace ts {
 
                 if (objectFlags & ObjectFlags.Mapped) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
-                    // const typeParameter = getTypeParameterFromMappedType(<MappedType>type);
+
+                    // TODO: does typeParameter have the same constraint or do we need to overwrite it somehow?
+                    const typeParameter = getTypeParameterFromMappedType(<MappedType>type);
                     // const constraintType = getConstraintTypeFromMappedType(<MappedType>type);
-                    // const templateType = getTemplateTypeFromMappedType(<MappedType>type);
-                    throw new Error("Mapped types not implemented");
+                    const typeParameterNode = createTypeParameterDeclarationFromType(typeParameter);
+
+                    const templateTypeNode = createTypeNode(getTemplateTypeFromMappedType(<MappedType>type));
+                    const readonlyToken = (<MappedType>type).declaration && (<MappedType>type).declaration.readonlyToken ? createToken(SyntaxKind.ReadonlyKeyword) : undefined;
+                    const questionToken = (<MappedType>type).declaration && (<MappedType>type).declaration.questionToken ? createToken(SyntaxKind.QuestionToken) : undefined;
+
+                    // TODO: test.
+                    return createMappedTypeNode(readonlyToken, typeParameterNode, questionToken, templateTypeNode);
                 }
 
                 if (objectFlags & ObjectFlags.Anonymous) {
@@ -2334,6 +2342,7 @@ namespace ts {
                     if (!type.symbol) {
                         // Anonymous types without symbols are literals.
                         // TODO: handle this case correctly.
+                        // TODO: test.
                         noop();
                     }
 
@@ -2343,9 +2352,11 @@ namespace ts {
                 // TODO: string or number literal here or above?
 
                 if (type.flags & TypeFlags.Index) {
+                    // TODO: implement and test.
                     throw new Error("index not implemented");
                 }
                 if (type.flags & TypeFlags.IndexedAccess) {
+                    // TODO: implement and test.
                     throw new Error("indexed access not implemented");
                 }
 
@@ -2414,7 +2425,6 @@ namespace ts {
                 }
 
                 function createTypeLiteralNodeFromType(type: ObjectType) {
-                    // TODO: do we need to do something for mapped types here???
                     const resolvedType = resolveStructuredTypeMembers(type);
                     const newMembers = createTypeNodesFromResolvedType(resolvedType);
                     return createTypeLiteralNode(newMembers);
@@ -2446,21 +2456,29 @@ namespace ts {
                         }
 
                         const kind = oldDeclaration.kind;
-                        const memberName = symbolToString(memberSymbol);
+                        const memberName = getSynthesizedDeepClone(oldDeclaration.name);
+                        const memberType = getTypeOfSymbol(memberSymbol);
 
                         switch (kind) {
                             case SyntaxKind.PropertySignature:
                                 const optional = !!oldDeclaration.questionToken;
-                                const typeOfOldMember = getTypeOfSymbol(memberSymbol);
                                 typeElements.push(createPropertySignature(
-                                    createIdentifier(memberName)
+                                    memberName
                                     , optional ? createToken(SyntaxKind.QuestionToken) : undefined
-                                    , createTypeNode(typeOfOldMember)
+                                    , createTypeNode(memberType)
                                     , /*initializer*/undefined));
                                 break;
                             case SyntaxKind.MethodSignature:
                             case SyntaxKind.CallSignature:
                             case SyntaxKind.ConstructSignature:
+                                const signatureType = getSignaturesOfSymbol(memberSymbol);
+                                signatureType
+                                createSignatureDeclaration
+                                throw new Error("signature problems.");
+                                // name ?: PropertyName;
+                                // typeParameters ?: NodeArray<TypeParameterDeclaration>;
+                                // parameters: NodeArray<ParameterDeclaration>;
+                                // type ?: TypeNode;
                             case SyntaxKind.IndexSignature:
                                 throw new Error("type literal constituent not implemented.");
                             default:

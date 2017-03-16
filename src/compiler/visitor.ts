@@ -258,13 +258,23 @@ namespace ts {
                 return updateComputedPropertyName(<ComputedPropertyName>node,
                     visitNode((<ComputedPropertyName>node).expression, visitor, isExpression));
 
-            // Signature elements
+            // Signatures and Signature Elements
+            case SyntaxKind.FunctionType:
+            case SyntaxKind.CallSignature:
+            case SyntaxKind.ConstructSignature:
+            case SyntaxKind.MethodSignature:
+                return updateSignatureDeclaration(<SignatureDeclaration>node
+                    , visitNode((<SignatureDeclaration>node).name, visitor, isPropertyName)
+                    , nodesVisitor((<SignatureDeclaration>node).typeParameters, visitor, isTypeParameter)
+                    , nodesVisitor((<SignatureDeclaration>node).parameters, visitor, isParameter)
+                    , visitNode((<SignatureDeclaration>node).type, visitor, isTypeNode));
+
             case SyntaxKind.IndexSignature:
                 return updateIndexSignatureDeclaration(<IndexSignatureDeclaration>node
-                , nodesVisitor((<IndexSignatureDeclaration>node).parameters, visitor)
-                , visitNode((<IndexSignatureDeclaration>node).type, visitor)
-                , nodesVisitor((<IndexSignatureDeclaration>node).decorators, visitor, isDecorator)
-                , nodesVisitor((<IndexSignatureDeclaration>node).modifiers, visitor, isModifier));
+                    , nodesVisitor((<IndexSignatureDeclaration>node).parameters, visitor)
+                    , visitNode((<IndexSignatureDeclaration>node).type, visitor, isTypeNode)
+                    , nodesVisitor((<IndexSignatureDeclaration>node).decorators, visitor, isDecorator)
+                    , nodesVisitor((<IndexSignatureDeclaration>node).modifiers, visitor, isModifier));
 
             case SyntaxKind.Parameter:
                 return updateParameter(<ParameterDeclaration>node,
