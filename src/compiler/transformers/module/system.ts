@@ -677,7 +677,7 @@ namespace ts {
                         visitNode(node.body, visitor, isBlock)));
             }
             else {
-                hoistedStatements = append(hoistedStatements, node);
+                hoistedStatements = append(hoistedStatements, visitEachChild(node, visitor, context));
             }
 
             if (hasAssociatedEndOfDeclarationMarker(node)) {

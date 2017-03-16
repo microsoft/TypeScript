@@ -510,7 +510,7 @@ namespace ts {
                 case ModuleKind.UMD:
                     return transformImportCallExpressionUMD(node);
             }
-            Debug.assert(false, "All supported module kind in this transformation step should have been handled");
+            Debug.fail("All supported module kind in this transformation step should have been handled");
         }
 
         function transformImportCallExpressionUMD(node: ImportCallExpression): Expression {
