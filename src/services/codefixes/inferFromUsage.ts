@@ -1,4 +1,4 @@
-/* @internal */
+﻿/* @internal */
 namespace ts.codefix {
     registerCodeFix({
         errorCodes: [
@@ -24,8 +24,7 @@ namespace ts.codefix {
         getCodeActions: getActionsForAddExplicitTypeAnnotation
     });
 
-    function getActionsForAddExplicitTypeAnnotation(context: CodeFixContext): CodeAction[] | undefined {
-        const { sourceFile, program, span: { start }, cancellationToken } = context;
+    function getActionsForAddExplicitTypeAnnotation({ sourceFile, program, span: { start }, errorCode, cancellationToken, newLineCharacter}: CodeFixContext): CodeAction[] | undefined {
         const token = getTokenAtPosition(sourceFile, start);
 
         if (!isIdentifier(token)) {
@@ -37,26 +36,24 @@ namespace ts.codefix {
         return getCodeAction();
 
         function getCodeAction() {
-            switch (context.errorCode) {
+            switch (errorCode) {
                 case Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined.code:
                 case Diagnostics.Variable_0_implicitly_has_an_1_type.code:
                 case Diagnostics.Member_0_implicitly_has_an_1_type.code:
                     return getCodeActionForVariable();
                 case Diagnostics.Parameter_0_implicitly_has_an_1_type.code:
                 case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code:
-                    //return getCodeActionForParameter();
-                    getCodeActionForParameter;
-                    return getCodeActionForParameters();
+                    return getCodeActionForParameter();
             }
         }
 
         function getCodeActionForVariable() {
             const type = inferTypeForVariableFromUsage(<Identifier>token);
-            const typeString = checker.typeToString(type || checker.getAnyType(), token);
+            const typeString = checker.typeToString(type || checker.getAnyType(), token, TypeFormatFlags.NoTruncation);
             if (isInJavaScriptFile(sourceFile)) {
                 const declaration = getAncestor(token, SyntaxKind.VariableStatement);
                 if (!declaration.jsDoc) {
-                    const newText = `/** @type {${typeString}} */${context.newLineCharacter}`;
+                    const newText = `/** @type {${typeString}} */${newLineCharacter}`;
                     return createCodeActions(declaration.getStart(), newText);
                 }
             }
@@ -68,11 +65,11 @@ namespace ts.codefix {
         function getCodeActionForParameter() {
             const type = inferTypeForParameterFromUsage(<Identifier>token) ||
                 inferTypeForVariableFromUsage(<Identifier>token);
-            const typeString = checker.typeToString(type || checker.getAnyType(), token);
+            const typeString = checker.typeToString(type || checker.getAnyType(), token, TypeFormatFlags.NoTruncation);
             if (isInJavaScriptFile(sourceFile)) {
                 const declaration = getContainingFunction(token);
                 if (!declaration.jsDoc) {
-                    const newText = `/** @param {${typeString}} ${token.getText()} */${context.newLineCharacter}`;
+                    const newText = `/** @param {${typeString}} ${token.getText()} */${newLineCharacter}`;
                     return createCodeActions(declaration.getStart(), newText);
                 }
             }
@@ -81,79 +78,79 @@ namespace ts.codefix {
             }
         }
 
-        function coalesceSignatures(declaration: FunctionLikeDeclaration, signatures: Signature[]): Signature {
-            const parameters = [];
-            let minArgumentCount = 0;;
-            for (let i = 0; i < declaration.parameters.length; i++) {
-                const parameterDeclaration = declaration.parameters[i];
-                const paramterTypes = [];
-                let seenInAllSignatures = true;
-                for (const signature of signatures) {
-                    if (i < signature.parameters.length) {
-                        const type = (<TransientSymbol>signature.parameters[i]).type;
-                        if (isValidInference(type)) {
-                            paramterTypes.push(checker.getBaseTypeOfLiteralType(type));
-                        }
-                    }
-                    else {
-                        seenInAllSignatures = false;
-                    }
-                }
-                if (seenInAllSignatures) {
-                    minArgumentCount++;
-                }
-                const symbol = <TransientSymbol>checker.createSymbol(SymbolFlags.FunctionScopedVariable, parameterDeclaration.name.getText());
-                symbol.type = paramterTypes.length ? checker.getUnionType(paramterTypes) : checker.getAnyType();
-                parameters.push(symbol);
-            }
-            return checker.createSignature(declaration, /*typeParameters*/ undefined, /*thisParameter*/ undefined, parameters, checker.getAnyType(), /*typePredicate*/ undefined, minArgumentCount, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
-        }
+        //function coalesceSignatures(declaration: FunctionLikeDeclaration, signatures: Signature[]): Signature {
+        //    const parameters = [];
+        //    let minArgumentCount = 0;;
+        //    for (let i = 0; i < declaration.parameters.length; i++) {
+        //        const parameterDeclaration = declaration.parameters[i];
+        //        const paramterTypes = [];
+        //        let seenInAllSignatures = true;
+        //        for (const signature of signatures) {
+        //            if (i < signature.parameters.length) {
+        //                const type = (<TransientSymbol>signature.parameters[i]).type;
+        //                if (isValidInference(type)) {
+        //                    paramterTypes.push(checker.getBaseTypeOfLiteralType(type));
+        //                }
+        //            }
+        //            else {
+        //                seenInAllSignatures = false;
+        //            }
+        //        }
+        //        if (seenInAllSignatures) {
+        //            minArgumentCount++;
+        //        }
+        //        const symbol = <TransientSymbol>checker.createSymbol(SymbolFlags.FunctionScopedVariable, parameterDeclaration.name.getText());
+        //        symbol.type = paramterTypes.length ? checker.getUnionType(paramterTypes) : checker.getAnyType();
+        //        parameters.push(symbol);
+        //    }
+        //    return checker.createSignature(declaration, /*typeParameters*/ undefined, /*thisParameter*/ undefined, parameters, checker.getAnyType(), /*typePredicate*/ undefined, minArgumentCount, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
+        //}
 
-        function getCodeActionForParameters() {
+        //function getCodeActionForParameters() {
 
-            const containingFunction = getContainingFunction(token);
-            if (!containingFunction.name) {
-                return undefined;
-            }
-            //const parameterIndex = getParameterIndexInList(token, containingFunction.parameters);
-            //const types = [];
-            let signatures: Signature[] = [];
-            for (const reference of getReferences(containingFunction.name)) {
-                const token = getTokenAtPosition(program.getSourceFile(reference.fileName), reference.textSpan.start);
-                const type = getTypeFromContext(<Identifier>token, program.getTypeChecker());
-                if (!isValidInference(type)) {
-                    continue;
-                }
+        //    const containingFunction = getContainingFunction(token);
+        //    if (!containingFunction.name) {
+        //        return undefined;
+        //    }
+        //    //const parameterIndex = getParameterIndexInList(token, containingFunction.parameters);
+        //    //const types = [];
+        //    let signatures: Signature[] = [];
+        //    for (const reference of getReferences(containingFunction.name)) {
+        //        const token = getTokenAtPosition(program.getSourceFile(reference.fileName), reference.textSpan.start);
+        //        const type = getTypeFromContext(<Identifier>token, program.getTypeChecker());
+        //        if (!isValidInference(type)) {
+        //            continue;
+        //        }
 
-                signatures = concatenate(signatures, containingFunction.kind === SyntaxKind.Constructor ? type.getConstructSignatures() : type.getCallSignatures());
-            }
-            const unifiedSignature: Signature = coalesceSignatures(containingFunction, signatures);
+        //        signatures = concatenate(signatures, containingFunction.kind === SyntaxKind.Constructor ? type.getConstructSignatures() : type.getCallSignatures());
+        //    }
+        //    const unifiedSignature: Signature = coalesceSignatures(containingFunction, signatures);
 
-            if (isInJavaScriptFile(sourceFile)) {
-                const declaration = getContainingFunction(token);
-                if (!declaration.jsDoc) {
-                    let newText = `/**${context.newLineCharacter}`;
-                    for (let i = 0; i < unifiedSignature.parameters.length; i++) {
-                        const paramter = unifiedSignature.parameters[i];
-                        const typeString = checker.typeToString((<TransientSymbol>paramter).type, token);
-                        newText += ` * @param {${typeString}${i + 1 > unifiedSignature.minArgumentCount ? "=" : ""}} ${paramter.name}${context.newLineCharacter}`
-                    }
-                    newText += ` */${context.newLineCharacter}`
-                    return createCodeActions(declaration.getStart(), newText);
-                }
-            }
-            else {
-                return undefined;
-            }
-        }
+        //    if (isInJavaScriptFile(sourceFile)) {
+        //        const declaration = getContainingFunction(token);
+        //        if (!declaration.jsDoc) {
+        //            let newText = `/**${newLineCharacter}`;
+        //            for (let i = 0; i < unifiedSignature.parameters.length; i++) {
+        //                const paramter = unifiedSignature.parameters[i];
+        //                const typeString = checker.typeToString((<TransientSymbol>paramter).type, token);
+        //                newText += ` * @param {${typeString}${i + 1 > unifiedSignature.minArgumentCount ? "=" : ""}} ${paramter.name}${newLineCharacter}`
+        //            }
+        //            newText += ` */${newLineCharacter}`
+        //            return createCodeActions(declaration.getStart(), newText);
+        //        }
+        //    }
+        //    else {
+        //        return undefined;
+        //    }
+        //}
 
-        function createCodeActions(startPos: number, typeString: string) {
+        function createCodeActions(start: number, typeString: string) {
             return [{
                 description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Infer_type_of_0), [token.getText()]),
                 changes: [{
                     fileName: sourceFile.fileName,
                     textChanges: [{
-                        span: { start: startPos, length: 0 },
+                        span: { start, length: 0 },
                         newText: typeString
                     }]
                 }]
@@ -178,8 +175,8 @@ namespace ts.codefix {
         function inferTypeForVariableFromUsage(token: Identifier) {
             const types = [];
             for (const reference of getReferences(token)) {
-                const token = getTokenAtPosition(context.program.getSourceFile(reference.fileName), reference.textSpan.start);
-                const type = getTypeFromContext(<Identifier>token, context.program.getTypeChecker());
+                const token = getTokenAtPosition(program.getSourceFile(reference.fileName), reference.textSpan.start);
+                const type = getTypeFromContext(<Identifier>token, checker);
                 if (!isValidInference(type)) {
                     continue;
                 }
@@ -195,7 +192,7 @@ namespace ts.codefix {
                 const types = [];
                 for (const reference of getReferences(containingFunction.name)) {
                     const token = getTokenAtPosition(program.getSourceFile(reference.fileName), reference.textSpan.start);
-                    const type = getTypeFromContext(<Identifier>token, program.getTypeChecker());
+                    const type = getTypeFromContext(<Identifier>token, checker);
                     if (!isValidInference(type)) {
                         continue;
                     }
@@ -214,8 +211,6 @@ namespace ts.codefix {
         while (isRightSideOfQualifiedNameOrPropertyAccess(node)) {
             node = <Expression>node.parent;
         }
-
-
 
         switch (node.parent.kind) {
             case SyntaxKind.PostfixUnaryExpression:
