@@ -255,25 +255,8 @@ namespace ts {
             : node;
     }
 
-    export function createSignatureDeclaration<T extends SignatureDeclaration>(kind: SyntaxKind, name: string | PropertyName | undefined, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): T {
-        const signatureDeclaration = createSynthesizedNode(kind) as T;
-        signatureDeclaration.name = asName(name);
-        signatureDeclaration.typeParameters = asNodeArray(typeParameters);
-        signatureDeclaration.type = type;
-        return signatureDeclaration;
-    }
-
-    export function updateSignatureDeclaration<T extends SignatureDeclaration>(node: T, name: string | PropertyName | undefined, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): T {
-        return node.name !== name
-            || node.typeParameters !== typeParameters
-            || node.type !== type
-            ? <T>updateNode(createSignatureDeclaration(node.kind, name, typeParameters, parameters, type), node)
-            : node;
-    }
-    
     export function createTypeReferenceNode(typeName: string | EntityName, typeArguments: NodeArray<TypeNode> | undefined) {
         const typeReference = createSynthesizedNode(SyntaxKind.TypeReference) as TypeReferenceNode;
-
         typeReference.typeName = isQualifiedName(<EntityName>typeName) ? <QualifiedName>typeName : asName(<string | Identifier>typeName);
         typeReference.typeArguments = typeArguments;
         return typeReference;
@@ -284,6 +267,16 @@ namespace ts {
             || node.typeArguments !== typeArguments
             ? updateNode(createTypeReferenceNode(typeName, typeArguments), node)
             : node;
+    }
+
+    export function createTypeQueryNode(exprName: EntityName) {
+        const typeQueryNode = createSynthesizedNode(SyntaxKind.TypeQuery) as TypeQueryNode;
+        typeQueryNode.exprName = exprName;
+        return typeQueryNode;
+    }
+
+    export function updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName) {
+        return node.exprName !== exprName ? updateNode(createTypeQueryNode(exprName) , node) : node;
     }
 
     export function createArrayTypeNode(elementType: TypeNode): ArrayTypeNode {
@@ -355,6 +348,33 @@ namespace ts {
             : node;
     }
 
+    export function createTypeOperatorNode(type: TypeNode) {
+        const typeOperatorNode = createSynthesizedNode(SyntaxKind.TypeOperator) as TypeOperatorNode;
+        typeOperatorNode.operator = SyntaxKind.KeyOfKeyword;
+        typeOperatorNode.type = type
+        return typeOperatorNode;
+    }
+
+    export function updateTypeOperatorNode(node: TypeOperatorNode, type: TypeNode) {
+        return node.type !== type ? updateNode(createTypeOperatorNode(type), node) : node;
+    }
+
+    export function createIndexedAccessTypeNode(objectType: TypeNode, indexType: TypeNode) {
+        const indexedAccessTypeNode = createSynthesizedNode(SyntaxKind.IndexedAccessType) as IndexedAccessTypeNode;
+        indexedAccessTypeNode.objectType = objectType;
+        indexedAccessTypeNode.indexType = indexType;
+        return indexedAccessTypeNode;
+    }
+
+
+    export function updateIndexedAccessTypeNode(node: IndexedAccessTypeNode, objectType: TypeNode, indexType: TypeNode) {
+        return node.objectType !== objectType
+            || node.indexType !== indexType
+            ? updateNode(createIndexedAccessTypeNode(objectType, indexType), node)
+            : node;
+    }
+
+
     // Type Declarations
 
     export function createTypeParameterDeclaration(name: string | Identifier, constraint: TypeNode | undefined, defaultParameter: TypeNode | undefined) {
@@ -371,6 +391,24 @@ namespace ts {
             || node.constraint !== constraint
             || node.default !== defaultParameter
             ? updateNode(createTypeParameterDeclaration(name, constraint, defaultParameter), node)
+            : node;
+    }
+
+    export function createSignatureDeclaration<T extends SignatureDeclaration>(kind: SyntaxKind, name: string | PropertyName | undefined, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): T {
+        const signatureDeclaration = createSynthesizedNode(kind) as T;
+        signatureDeclaration.name = asName(name);
+        signatureDeclaration.typeParameters = asNodeArray(typeParameters);
+        signatureDeclaration.parameters = asNodeArray(parameters);
+        signatureDeclaration.type = type;
+        return signatureDeclaration;
+    }
+
+    export function updateSignatureDeclaration<T extends SignatureDeclaration>(node: T, name: string | PropertyName | undefined, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): T {
+        return node.name !== name
+            || node.typeParameters !== typeParameters
+            || node.parameters !== parameters
+            || node.type !== type
+            ? <T>updateNode(createSignatureDeclaration(node.kind, name, typeParameters, parameters, type), node)
             : node;
     }
 

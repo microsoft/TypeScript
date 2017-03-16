@@ -320,13 +320,13 @@ namespace ts {
             case SyntaxKind.ConstructorType:
                 throw new Error("reached unsupported type in visitor.");
             case SyntaxKind.TypeQuery:
-                throw new Error("reached unsupported type in visitor.");
+                return updateTypeQueryNode((<TypeQueryNode>node), visitNode((<TypeQueryNode>node).exprName, visitor, isEntityName));
             case SyntaxKind.TypeLiteral:
                 return updateTypeLiteralNode((<TypeLiteralNode>node), nodesVisitor((<TypeLiteralNode>node).members, visitor));
             case SyntaxKind.ArrayType:
                 return updateArrayTypeNode(<ArrayTypeNode>node, visitNode((<ArrayTypeNode>node).elementType, visitor, isTypeNode));
             case SyntaxKind.TupleType:
-                throw new Error("reached unsupported type in visitor.");
+                return updateTypleTypeNode((<TupleTypeNode>node), nodesVisitor((<TupleTypeNode>node).elementTypes, visitor, isTypeNode));
             case SyntaxKind.UnionType:
             case SyntaxKind.IntersectionType:
                 return updateUnionOrIntersectionTypeNode(<UnionOrIntersectionTypeNode>node
@@ -336,9 +336,11 @@ namespace ts {
             case SyntaxKind.ThisType:
                 throw new Error("reached unsupported type in visitor.");
             case SyntaxKind.TypeOperator:
-                throw new Error("reached unsupported type in visitor.");
+                return updateTypeOperatorNode(<TypeOperatorNode>node, visitNode((<TypeOperatorNode>node).type, visitor, isTypeNode));
             case SyntaxKind.IndexedAccessType:
-                throw new Error("reached unsupported type in visitor.");
+                return updateIndexedAccessTypeNode((<IndexedAccessTypeNode>node)
+                , visitNode((<IndexedAccessTypeNode>node).objectType, visitor, isTypeNode)
+                , visitNode((<IndexedAccessTypeNode>node).indexType, visitor, isTypeNode));
             case SyntaxKind.MappedType:
                 throw new Error("reached unsupported type in visitor.");
             case SyntaxKind.LiteralType:
