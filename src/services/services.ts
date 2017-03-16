@@ -1397,7 +1397,7 @@ namespace ts {
                             textSpan: highlightSpan.textSpan,
                             isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
                             isDefinition: false,
-                            isInString: highlightSpan.isInString
+                            isInString: highlightSpan.isInString,
                         });
                     }
                 }

@@ -659,7 +659,7 @@ namespace ts.server {
                     start,
                     end,
                     file: fileName,
-                    isWriteAccess
+                    isWriteAccess,
                 };
                 // no need to serialize the property if it is not true
                 if (isInString) {
