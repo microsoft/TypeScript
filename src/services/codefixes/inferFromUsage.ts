@@ -372,10 +372,7 @@ namespace ts.codefix {
 
     function getContextualType(node: Expression, checker: TypeChecker, usageContext: UsageContext): void {
         if (isPartOfExpression(node)) {
-            const contextualType = checker.getContextualType(node);
-            if (isValidInference(contextualType)) {
-                (usageContext.candidateTypes || (usageContext.candidateTypes = [])).push(contextualType);
-            }
+            addCandidateType(usageContext, checker.getContextualType(node));
         }
     }
 
@@ -439,8 +436,8 @@ namespace ts.codefix {
             case SyntaxKind.GreaterThanToken:
             case SyntaxKind.GreaterThanEqualsToken:
                 const operandType = checker.getTypeAtLocation(parent.left === node ? parent.right : parent.left);
-                if (isValidInference(operandType) && operandType.flags & TypeFlags.EnumLike) {
-                    (usageContext.candidateTypes || (usageContext.candidateTypes)).push(operandType);
+                if (operandType.flags & TypeFlags.EnumLike) {
+                    addCandidateType(usageContext, operandType);
                 }
                 else {
                     usageContext.isNumber = true;
@@ -450,8 +447,8 @@ namespace ts.codefix {
             case SyntaxKind.PlusEqualsToken:
             case SyntaxKind.PlusToken:
                 const otherOperandType = checker.getTypeAtLocation(parent.left === node ? parent.right : parent.left);
-                if (isValidInference(otherOperandType) && otherOperandType.flags & TypeFlags.EnumLike) {
-                    (usageContext.candidateTypes || (usageContext.candidateTypes)).push(otherOperandType);
+                if (otherOperandType.flags & TypeFlags.EnumLike) {
+                    addCandidateType(usageContext, otherOperandType);
                 }
                 else {
                     usageContext.isNumberOrString = true;
@@ -464,10 +461,7 @@ namespace ts.codefix {
             case SyntaxKind.EqualsEqualsEqualsToken:
             case SyntaxKind.ExclamationEqualsEqualsToken:
             case SyntaxKind.ExclamationEqualsToken:
-                const type = checker.getTypeAtLocation(parent.left === node ? parent.right : parent.left);
-                if (isValidInference(type)) {
-                    (usageContext.candidateTypes || (usageContext.candidateTypes = [])).push(type);
-                }
+                addCandidateType(usageContext, checker.getTypeAtLocation(parent.left === node ? parent.right : parent.left));
                 break;
 
             case SyntaxKind.InKeyword:
@@ -482,12 +476,7 @@ namespace ts.codefix {
                     (node.parent.parent.kind === SyntaxKind.VariableDeclaration || isAssignmentExpression(node.parent.parent, /*excludeCompoundAssignment*/ true))) {
                     // var x = x || {};
                     // TODO: use getFalsyflagsOfType
-                    const expressionType = checker.getTypeAtLocation(parent.right);
-                    if (isValidInference(expressionType)) {
-                        (usageContext.candidateTypes || (usageContext.candidateTypes = [])).push(expressionType);
-                        //usageContext.candidateTypes.push(checker.getNullType());
-                        //usageContext.candidateTypes.push(checker.getUndefinedType());
-                    }
+                    addCandidateType(usageContext, checker.getTypeAtLocation(parent.right));
                 }
                 break;
 
@@ -500,18 +489,14 @@ namespace ts.codefix {
     }
 
     function getTypeFromSwitchStatementLabelContext(parent: CaseOrDefaultClause, checker: TypeChecker, usageContext: UsageContext): void {
-        const type = checker.getTypeAtLocation((<SwitchStatement>parent.parent.parent).expression);
-        if (isValidInference(type)) {
-            (usageContext.candidateTypes || (usageContext.candidateTypes = [])).push(type);
-        }
+        addCandidateType(usageContext, checker.getTypeAtLocation((<SwitchStatement>parent.parent.parent).expression));
     }
 
     function getTypeFromCallExpressionContext(parent: CallExpression | NewExpression, checker: TypeChecker, usageContext: UsageContext): void {
-        const callContext: CallContext = { argumentTypes: [], returnType: {} };
-
-        for (const argument of parent.arguments) {
-            callContext.argumentTypes.push(checker.getTypeAtLocation(argument));
-        }
+        const callContext: CallContext = {
+            argumentTypes: parent.arguments.map(a => checker.getTypeAtLocation(a)),
+            returnType: {}
+        };
 
         getTypeFromContext(parent, checker, callContext.returnType);
         if (parent.kind === SyntaxKind.CallExpression) {
@@ -547,6 +532,12 @@ namespace ts.codefix {
             else {
                 usageContext.stringIndexContext = indexUsageContext;
             }
+        }
+    }
+
+    function addCandidateType(context: UsageContext, type: Type) {
+        if (isValidInference(type)) {
+            (context.candidateTypes || (context.candidateTypes = [])).push(type);
         }
     }
 
