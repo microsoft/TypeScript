@@ -138,13 +138,7 @@ namespace ts.codefix {
                 return getCodeActionForImport(symbol, /*isDefault*/ false, /*isNamespaceImport*/ true);
             }
 
-            const candidateModules = checker.getAmbientModules();
-            for (const otherSourceFile of allSourceFiles) {
-                if (otherSourceFile !== sourceFile && isExternalOrCommonJsModule(otherSourceFile)) {
-                    candidateModules.push(otherSourceFile.symbol);
-                }
-            }
-
+            const candidateModules = getOtherModuleSymbols(allSourceFiles, sourceFile, checker);
             for (const moduleSymbol of candidateModules) {
                 context.cancellationToken.throwIfCancellationRequested();
 
@@ -154,7 +148,7 @@ namespace ts.codefix {
                     const localSymbol = getLocalSymbolForExportDefault(defaultExport);
                     if (localSymbol && localSymbol.name === name && checkSymbolHasMeaning(localSymbol, currentTokenMeaning)) {
                         // check if this symbol is already used
-                        const symbolId = getUniqueSymbolId(localSymbol);
+                        const symbolId = getUniqueSymbolId(localSymbol, checker);
                         symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, /*isDefault*/ true));
                     }
                 }
@@ -162,7 +156,7 @@ namespace ts.codefix {
                 // check exports with the same name
                 const exportSymbolWithIdenticalName = checker.tryGetMemberInModuleExports(name, moduleSymbol);
                 if (exportSymbolWithIdenticalName && checkSymbolHasMeaning(exportSymbolWithIdenticalName, currentTokenMeaning)) {
-                    const symbolId = getUniqueSymbolId(exportSymbolWithIdenticalName);
+                    const symbolId = getUniqueSymbolId(exportSymbolWithIdenticalName, checker);
                     symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol));
                 }
             }
@@ -170,7 +164,7 @@ namespace ts.codefix {
             return symbolIdActionMap.getAllActions();
 
             function getImportDeclarations(moduleSymbol: Symbol) {
-                const moduleSymbolId = getUniqueSymbolId(moduleSymbol);
+                const moduleSymbolId = getUniqueSymbolId(moduleSymbol, checker);
 
                 const cached = cachedImportDeclarations[moduleSymbolId];
                 if (cached) {
@@ -200,13 +194,6 @@ namespace ts.codefix {
                     }
                     return undefined;
                 }
-            }
-
-            function getUniqueSymbolId(symbol: Symbol) {
-                if (symbol.flags & SymbolFlags.Alias) {
-                    return getSymbolId(checker.getAliasedSymbol(symbol));
-                }
-                return getSymbolId(symbol);
             }
 
             function checkSymbolHasMeaning(symbol: Symbol, meaning: SemanticMeaning) {

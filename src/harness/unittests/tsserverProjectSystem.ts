@@ -3278,6 +3278,43 @@ namespace ts.projectSystem {
         });
     });
 
+    describe("import in completion list", () => {
+        it("should include exported members of all source files", () => {
+            const file1: FileOrFolder = {
+                path: "/a/b/file1.ts",
+                content: `
+                export function Test1() { }
+                export function Test2() { }
+                `
+            };
+            const file2: FileOrFolder = {
+                path: "/a/b/file2.ts",
+                content: `
+                import { Test2 } from "./file1";
+
+                t`
+            };
+            const configFile: FileOrFolder = {
+                path: "/a/b/tsconfig.json",
+                content: "{}"
+            };
+
+            const host = createServerHost([file1, file2, configFile]);
+            const service = createProjectService(host);
+            service.openClientFile(file2.path);
+
+            const completions1 = service.configuredProjects[0].getLanguageService().getCompletionsAtPosition(file2.path, file2.path.length);
+            const test1Entry = find(completions1.entries, e => e.name === "Test1");
+            const test2Entry = find(completions1.entries, e => e.name === "Test2");
+
+            assert.isDefined(test1Entry, "should contain 'Test1'");
+            assert.isDefined(test2Entry, "should contain 'Test2'");
+
+            assert.isTrue(test1Entry.hasAction, "should set the 'hasAction' property to true for Test1");
+            assert.isUndefined(test2Entry.hasAction, "should not set the 'hasAction' property for Test2");
+        });
+    });
+
     describe("import helpers", () => {
         it("should not crash in tsserver", () => {
             const f1 = {
@@ -3486,43 +3523,6 @@ namespace ts.projectSystem {
             function getMessage(n: number) {
                 return JSON.parse(server.extractMessage(host.getOutput()[n]));
             }
-        });
-    });
-
-    describe("import in completion list", () => {
-        it("should include exported members of all source files", () => {
-            const file1: FileOrFolder = {
-                path: "/a/b/file1.ts",
-                content: `
-                export function Test1() { }
-                export function Test2() { }
-                `
-            };
-            const file2: FileOrFolder = {
-                path: "/a/b/file2.ts",
-                content: `
-                import { Test2 } from "./file1";
-
-                t`
-            };
-            const configFile: FileOrFolder = {
-                path: "/a/b/tsconfig.json",
-                content: "{}"
-            };
-
-            const host = createServerHost([file1, file2, configFile]);
-            const service = createProjectService(host);
-            service.openClientFile(file2.path);
-
-            const completions1 = service.configuredProjects[0].getLanguageService().getCompletionsAtPosition(file2.path, file2.path.length);
-            const test1Entry = find(completions1.entries, e => e.name === "Test1");
-            const test2Entry = find(completions1.entries, e => e.name === "Test2");
-
-            assert.isTrue(test1Entry !== undefined, "should contain 'Test1'");
-            assert.isTrue(test2Entry !== undefined, "should contain 'Test2'");
-
-            assert.isTrue(test1Entry.hasAction === true, "should set the 'hasAction' property to true for Test1");
-            assert.isTrue(test2Entry.hasAction === undefined, "should not set the 'hasAction' property for Test2");
         });
     });
 

@@ -68,10 +68,6 @@ namespace ts.Completions {
         return { isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation: isNewIdentifierLocation, entries };
     }
 
-    function getSymbolIdAsString(symbol: Symbol) {
-        return getSymbolId(symbol) + "";
-    }
-
     function getJavaScriptCompletionEntries(sourceFile: SourceFile, position: number, uniqueNames: Map<string>, target: ScriptTarget): CompletionEntry[] {
         const entries: CompletionEntry[] = [];
 
@@ -134,7 +130,7 @@ namespace ts.Completions {
                 if (entry) {
                     const id = escapeIdentifier(entry.name);
                     if (!uniqueNames.get(id)) {
-                        if (symbolActionMap && symbolActionMap.has(getSymbolIdAsString(symbol))) {
+                        if (symbolActionMap && symbolActionMap.has(getUniqueSymbolIdAsString(symbol, typeChecker))) {
                             entry.hasAction = true;
                         }
                         entries.push(entry);
@@ -687,23 +683,18 @@ namespace ts.Completions {
         }
 
         function getSymbolsFromOtherSourceFileExports(tokenText: string) {
-            const allPotentialModules = typeChecker.getAmbientModules();
             const tokenTextLowerCase = tokenText.toLowerCase();
-            const symbolIdMap = arrayToMap(symbols, s => getSymbolIdAsString(s));
-            for (const otherSourceFile of allSourceFiles) {
-                if (otherSourceFile !== sourceFile && isExternalOrCommonJsModule(otherSourceFile)) {
-                    allPotentialModules.push(otherSourceFile.symbol);
-                }
-            }
+            const symbolIdMap = arrayToMap(symbols, s => getUniqueSymbolIdAsString(s, typeChecker));
 
+            const allPotentialModules = getOtherModuleSymbols(allSourceFiles, sourceFile, typeChecker);
             for (const moduleSymbol of allPotentialModules) {
                 // check the default export
                 const defaultExport = typeChecker.tryGetMemberInModuleExports("default", moduleSymbol);
                 if (defaultExport) {
                     const localSymbol = getLocalSymbolForExportDefault(defaultExport);
-                    if (localSymbol && !symbolIdMap.has(getSymbolIdAsString(localSymbol)) && startsWith(localSymbol.name.toLowerCase(), tokenTextLowerCase)) {
+                    if (localSymbol && !symbolIdMap.has(getUniqueSymbolIdAsString(localSymbol, typeChecker)) && startsWith(localSymbol.name.toLowerCase(), tokenTextLowerCase)) {
                         symbols.push(localSymbol);
-                        symbolActionMap.set(getSymbolIdAsString(localSymbol), true);
+                        symbolActionMap.set(getUniqueSymbolIdAsString(localSymbol, typeChecker), true);
                     }
                 }
 
@@ -711,9 +702,9 @@ namespace ts.Completions {
                 const allExportedSymbols = typeChecker.getExportsOfModule(moduleSymbol);
                 if (allExportedSymbols) {
                     for (const exportedSymbol of allExportedSymbols) {
-                        if (exportedSymbol.name && !symbolIdMap.has(getSymbolIdAsString(exportedSymbol)) && startsWith(exportedSymbol.name.toLowerCase(), tokenTextLowerCase)) {
+                        if (exportedSymbol.name && !symbolIdMap.has(getUniqueSymbolIdAsString(exportedSymbol, typeChecker)) && startsWith(exportedSymbol.name.toLowerCase(), tokenTextLowerCase)) {
                             symbols.push(exportedSymbol);
-                            symbolActionMap.set(getSymbolIdAsString(exportedSymbol), true);
+                            symbolActionMap.set(getUniqueSymbolIdAsString(exportedSymbol, typeChecker), true);
                         }
                     }
                 }

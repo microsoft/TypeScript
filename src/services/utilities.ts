@@ -1356,6 +1356,31 @@ namespace ts {
         return ensureScriptKind(fileName, scriptKind);
     }
 
+    export function getOtherModuleSymbols(
+        sourceFiles: SourceFile[],
+        currentSourceFile: SourceFile,
+        typeChecker: TypeChecker
+    ) {
+        const results: Symbol[] = typeChecker.getAmbientModules();
+        for (const otherSourceFile of sourceFiles) {
+            if (otherSourceFile !== currentSourceFile && isExternalOrCommonJsModule(otherSourceFile)) {
+                results.push(otherSourceFile.symbol);
+            }
+        }
+        return results;
+    }
+
+    export function getUniqueSymbolIdAsString(symbol: Symbol, typeChecker: TypeChecker) {
+        return getUniqueSymbolId(symbol, typeChecker) + "";
+    }
+
+    export function getUniqueSymbolId(symbol: Symbol, typeChecker: TypeChecker) {
+        if (symbol.flags & SymbolFlags.Alias) {
+            return getSymbolId(typeChecker.getAliasedSymbol(symbol));
+        }
+        return getSymbolId(symbol);
+    }
+
     export function sanitizeConfigFile(configFileName: string, content: string) {
         const options: TranspileOptions = {
             fileName: "config.js",
