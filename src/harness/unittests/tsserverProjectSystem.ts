@@ -1109,6 +1109,28 @@ namespace ts.projectSystem {
             checkNumberOfInferredProjects(projectService, 0);
         });
 
+        it("external project with .min.js file", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: "let x = 1;"
+            };
+            const file2 = {
+                path: "/a/lib/thing.min.js",
+                content: "let x = 3;"
+            };
+
+            const externalProjectName = "externalproject";
+            const host = createServerHost([file1, file2]);
+            const projectService = createProjectService(host);
+            projectService.openExternalProject({
+                rootFiles: toExternalFiles([file1.path, file2.path]),
+                options: {},
+                projectFileName: externalProjectName
+            });
+
+            checkProjectActualFiles(projectService.externalProjects[0], [file1.path]);
+        });
+
         it("external project that included config files", () => {
             const file1 = {
                 path: "/a/b/f1.ts",
