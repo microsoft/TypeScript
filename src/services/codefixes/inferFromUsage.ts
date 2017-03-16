@@ -438,16 +438,24 @@ namespace ts.codefix {
             case SyntaxKind.LessThanEqualsToken:
             case SyntaxKind.GreaterThanToken:
             case SyntaxKind.GreaterThanEqualsToken:
-                usageContext.isNumber = true;
+                const operandType = checker.getTypeAtLocation(parent.left === node ? parent.right : parent.left);
+                if (isValidInference(operandType) && operandType.flags & TypeFlags.EnumLike) {
+                    (usageContext.candidateTypes || (usageContext.candidateTypes)).push(operandType);
+                }
+                else {
+                    usageContext.isNumber = true;
+                }
                 break;
 
             case SyntaxKind.PlusEqualsToken:
             case SyntaxKind.PlusToken:
                 const otherOperandType = checker.getTypeAtLocation(parent.left === node ? parent.right : parent.left);
-                if (isValidInference(otherOperandType) && (otherOperandType.flags & (TypeFlags.NumberLike | TypeFlags.StringLike))) {
-                    // TODO: handel enums, and keyof
+                if (isValidInference(otherOperandType) && otherOperandType.flags & TypeFlags.EnumLike) {
+                    (usageContext.candidateTypes || (usageContext.candidateTypes)).push(otherOperandType);
                 }
-                usageContext.isNumberOrString = true;
+                else {
+                    usageContext.isNumberOrString = true;
+                }
                 break;
 
             //  AssignmentOperators
