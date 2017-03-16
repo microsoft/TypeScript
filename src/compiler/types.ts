@@ -2468,14 +2468,12 @@ namespace ts {
         /* @internal */ getParameterType(signature: Signature, parameterIndex: number): Type;
         getNonNullableType(type: Type): Type;
 
-        /** Note that the resulting type node cannot be checked. */
+        /** Note that the resulting nodes cannot be checked. */
         createTypeNode(type: Type): TypeNode;
-        /** Note that the resulting type node cannot be checked. */
-        createTypeParameterDeclarationFromType(type: Type): TypeParameterDeclaration;
-        /** Note that the resulting type node cannot be checked. */
-        createIndexSignatureFromIndexInfo(indexInfo: IndexInfo, kind: IndexKind): IndexSignatureDeclaration
-        /** Note that the resulting type node cannot be checked. */
-        createParameterDeclarationFromSymbol(parameterSymbol: Symbol): ParameterDeclaration;
+        /** Note that the resulting nodes cannot be checked. */
+        createIndexSignatureFromIndexInfo(indexInfo: IndexInfo, kind: IndexKind): IndexSignatureDeclaration;
+        /** Note that the resulting nodes cannot be checked. */
+        createSignatureParts(signature: Signature): SignatureParts;
 
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolAtLocation(node: Node): Symbol;
@@ -3228,6 +3226,12 @@ namespace ts {
         type: Type;
         isReadonly: boolean;
         declaration?: SignatureDeclaration;
+    }
+
+    export interface SignatureParts {
+        typeParameters: TypeParameterDeclaration[] | undefined;
+        parameters: ParameterDeclaration[];
+        type: TypeNode;
     }
 
     /* @internal */

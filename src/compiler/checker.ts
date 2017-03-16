@@ -107,9 +107,8 @@ namespace ts {
             getReturnTypeOfSignature,
             getNonNullableType,
             createTypeNode,
-            createTypeParameterDeclarationFromType,
             createIndexSignatureFromIndexInfo,
-            createParameterDeclarationFromSymbol,
+            createSignatureParts,
             getSymbolsInScope: (location, meaning) => {
                 location = getParseTreeNode(location);
                 return location ? getSymbolsInScope(location, meaning) : [];
@@ -2220,13 +2219,6 @@ namespace ts {
                 , parameterTypeNode
                 , /*initializer*/ undefined);
             return parameterNode;
-        }
-
-        /* @internal */
-        type SignatureParts = {
-            typeParameters: TypeParameterDeclaration[] | undefined;
-            parameters: ParameterDeclaration[];
-            type: TypeNode;
         }
 
         // TODO: expose this, remove copy from helper, possibly don't expose createParameter/TypeParameter?

@@ -93,7 +93,7 @@ namespace ts.codefix {
                     // TODO: get parameters working.
                     // TODO: add support for type parameters.
                     const signature = signatures[0];
-                    const signatureParts = getSignatureParts(signature);
+                    const signatureParts = checker.createSignatureParts(signature);
                     return createStubbedMethod(modifiers, name, optional, signatureParts.typeParameters, signatureParts.parameters, signatureParts.type);
                 }
 
@@ -101,7 +101,7 @@ namespace ts.codefix {
                 for (let i = 0; i < signatures.length; i++) {
                     // TODO: make signatures instead of methods
                     const signature = signatures[i];
-                    const signatureParts = getSignatureParts(signature);
+                    const signatureParts = checker.createSignatureParts(signature);
                     signatureDeclarations.push(createMethod(
                           /*decorators*/ undefined
                         , modifiers
@@ -116,7 +116,7 @@ namespace ts.codefix {
 
                 if (declarations.length > signatures.length) {
                     let signature = checker.getSignatureFromDeclaration(declarations[declarations.length - 1] as SignatureDeclaration);
-                    const signatureParts = getSignatureParts(signature);
+                    const signatureParts = checker.createSignatureParts(signature);
                     signatureDeclarations.push(createStubbedMethod(modifiers, name, optional, signatureParts.typeParameters, signatureParts.parameters, signatureParts.type));
                 }
                 else {
@@ -127,20 +127,6 @@ namespace ts.codefix {
                 return signatureDeclarations;
             default:
                 return undefined;
-        }
-
-        type SignatureParts = {
-            typeParameters: TypeParameterDeclaration[];
-            parameters: ParameterDeclaration[];
-            type: TypeNode;
-        }
-
-        function getSignatureParts(signature: Signature): SignatureParts {
-            return {
-                typeParameters: signature.typeParameters && signature.typeParameters.map(checker.createTypeParameterDeclarationFromType),
-                parameters: signature.getParameters().map(symbol => checker.createParameterDeclarationFromSymbol(symbol)),
-                type: createTypeNodeExceptAny(checker.getReturnTypeOfSignature(signature), checker)
-            }
         }
     }
 
@@ -233,10 +219,5 @@ namespace ts.codefix {
             return createToken(SyntaxKind.ProtectedKeyword);
         }
         return undefined;
-    }
-
-    function createTypeNodeExceptAny(type: Type, checker: TypeChecker) {
-        const typeNode = checker.createTypeNode(type);
-        return typeNode && typeNode.kind !== SyntaxKind.AnyKeyword ? typeNode : undefined;
     }
 }
