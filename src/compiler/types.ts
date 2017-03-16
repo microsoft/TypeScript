@@ -1,4 +1,4 @@
-namespace ts {
+﻿namespace ts {
     /**
      * Type of objects whose values are all of the same type.
      * The `in` and `for-in` operators can *not* be safely used,
@@ -2509,6 +2509,8 @@ namespace ts {
         getNullType(): Type;
         getESSymbolType(): Type;
         getNeverType(): Type;
+        createArrayType(elementType: Type): Type;
+        createPromiseType(type: Type): Type;
 
         /* @internal */ tryFindAmbientModuleWithoutAugmentations(moduleName: string): Symbol;
 

@@ -1,4 +1,4 @@
-/// <reference path="moduleNameResolver.ts"/>
+﻿/// <reference path="moduleNameResolver.ts"/>
 /// <reference path="binder.ts"/>
 
 /* @internal */
@@ -196,6 +196,8 @@ namespace ts {
             getAnyType: () => anyType,
             getStringType: () => stringType,
             getNumberType: () => numberType,
+            createPromiseType,
+            createArrayType,
             getBooleanType: () => booleanType,
             getVoidType: () => voidType,
             getUndefinedType: () => undefinedType,
