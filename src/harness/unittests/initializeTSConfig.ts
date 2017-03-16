@@ -1,4 +1,4 @@
-/// <reference path="..\harness.ts" />
+﻿/// <reference path="..\harness.ts" />
 /// <reference path="..\..\compiler\commandLineParser.ts" />
 
 namespace ts {
@@ -12,7 +12,8 @@ namespace ts {
                 it(`Correct output for ${outputFileName}`, () => {
                     Harness.Baseline.runBaseline(outputFileName, () => {
                         if (initResult) {
-                            return initResult;
+                            // normalize line endings
+                            return initResult.replace(new RegExp(sys.newLine, "g"), "\n");
                         }
                         else {
                             // This can happen if compiler recieve invalid compiler-options
