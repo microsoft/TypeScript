@@ -2413,10 +2413,6 @@
         "category": "Error",
         "code": 5012
     },
-    "Unsupported file encoding.": {
-        "category": "Error",
-        "code": 5013
-    },
     "Failed to parse file '{0}': {1}.": {
         "category": "Error",
         "code": 5014

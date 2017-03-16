@@ -382,7 +382,9 @@ namespace ts.server {
                 const end = this.lineOffsetToPosition(fileName, entry.end);
                 return {
                     fileName,
-                    textSpan: ts.createTextSpanFromBounds(start, end)
+                    textSpan: ts.createTextSpanFromBounds(start, end),
+                    kind: ScriptElementKind.unknown,
+                    displayParts: []
                 };
             });
         }
