@@ -119,6 +119,7 @@ namespace ts {
                     "es7": "lib.es2016.d.ts",
                     "es2016": "lib.es2016.d.ts",
                     "es2017": "lib.es2017.d.ts",
+                    "esnext": "lib.esnext.d.ts",
                     // Host only
                     "dom": "lib.dom.d.ts",
                     "dom.iterable": "lib.dom.iterable.d.ts",
