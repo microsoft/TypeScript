@@ -364,6 +364,7 @@ namespace ts {
         fileName: string;
         isWriteAccess: boolean;
         isDefinition: boolean;
+        isInString?: true;
     }
 
     export interface ImplementationLocation {
@@ -385,6 +386,7 @@ namespace ts {
 
     export interface HighlightSpan {
         fileName?: string;
+        isInString?: true;
         textSpan: TextSpan;
         kind: string;
     }
@@ -586,6 +588,7 @@ namespace ts {
           */
         replacementSpan?: TextSpan;
         hasAction?: true;
+        sourceFileName?: string;
     }
 
     export interface CompletionEntryDetails {
@@ -594,6 +597,7 @@ namespace ts {
         kindModifiers: string;   // see ScriptElementKindModifier, comma separated
         displayParts: SymbolDisplayPart[];
         documentation: SymbolDisplayPart[];
+        codeActions?: CodeAction[];
     }
 
     export interface OutliningSpan {

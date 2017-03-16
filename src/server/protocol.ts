@@ -622,6 +622,11 @@ namespace ts.server.protocol {
           * True if the occurrence is a write location, false otherwise.
           */
         isWriteAccess: boolean;
+
+        /**
+         * True if the occurrence is in a string, undefined otherwise;
+         */
+        isInString?: true;
     }
 
     export interface OccurrencesResponse extends Response {
@@ -1225,7 +1230,9 @@ namespace ts.server.protocol {
         arguments: CommitCompletionWithCodeActionRequestArgs;
     }
 
-    export interface CommitCompletionWithCodeActionRequestArgs extends CodeFixRequestArgs {
+    export interface CommitCompletionWithCodeActionRequestArgs extends FileRequestArgs {
+        itemName: string;
+        sourceFileName: string;
     }
 
     export interface CommitCompletionWithCodeActionResponse extends Response {
@@ -1535,6 +1542,11 @@ namespace ts.server.protocol {
          * made to avoid errors. The code action is normally adding an additional import statement.
          */
         hasAction?: true;
+        /**
+         * ONLY has value when hasAction = true
+         * Used to find the corresponding completion item symbol for additional code actions
+         */
+        sourceFileName?: string;
     }
 
     /**
@@ -1562,6 +1574,11 @@ namespace ts.server.protocol {
           * Documentation strings for the symbol.
           */
         documentation: SymbolDisplayPart[];
+
+        /**
+         * The associated code actions for this entry
+         */
+        codeActions?: CodeAction[];
     }
 
     export interface CompletionsResponse extends Response {

@@ -112,6 +112,13 @@ namespace ts.codefix {
         }
     }
 
+    export function test(symbol: Symbol) {
+        const moduleSymbols = map(symbol.getDeclarations(), decl => {
+            // TODO: ambient modules?
+            
+        });
+    }
+
     registerCodeFix({
         errorCodes: [
             Diagnostics.Cannot_find_name_0.code,
@@ -138,7 +145,13 @@ namespace ts.codefix {
                 return getCodeActionForImport(symbol, /*isDefault*/ false, /*isNamespaceImport*/ true);
             }
 
-            const candidateModules = getOtherModuleSymbols(allSourceFiles, sourceFile, checker);
+            const candidateModules = checker.getAmbientModules();
+            for (const otherSourceFile of allSourceFiles) {
+                if (otherSourceFile !== sourceFile && isExternalOrCommonJsModule(otherSourceFile)) {
+                    candidateModules.push(otherSourceFile.symbol);
+                }
+            }
+
             for (const moduleSymbol of candidateModules) {
                 context.cancellationToken.throwIfCancellationRequested();
 
@@ -288,7 +301,6 @@ namespace ts.codefix {
                     }
 
                     function getTextChangeForImportClause(importClause: ImportClause): FileTextChanges[] {
-                        //const newImportText = isDefault ? `default as ${name}` : name;
                         const importList = <NamedImports>importClause.namedBindings;
                         const newImportSpecifier = createImportSpecifier(/*propertyName*/ undefined, createIdentifier(name));
                         // case 1:
@@ -543,7 +555,7 @@ namespace ts.codefix {
             }
 
             function createChangeTracker() {
-                return textChanges.ChangeTracker.fromCodeFixContext(context);;
+                return textChanges.ChangeTracker.fromCodeFixContext(context);
             }
 
             function createCodeAction(

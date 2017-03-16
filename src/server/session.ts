@@ -108,7 +108,6 @@ namespace ts.server {
         /* @internal */
         export const CompletionsFull: protocol.CommandTypes.CompletionsFull = "completions-full";
         export const CompletionDetails: protocol.CommandTypes.CompletionDetails = "completionEntryDetails";
-        export const CommitCompletionWithCodeAction: protocol.CommandTypes.CommitCompletionWithCodeAction = "commitCompletionWithCodeAction";
         export const CompileOnSaveAffectedFileList: protocol.CommandTypes.CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList";
         export const CompileOnSaveEmitFile: protocol.CommandTypes.CompileOnSaveEmitFile = "compileOnSaveEmitFile";
         export const Configure: protocol.CommandTypes.Configure = "configure";
@@ -652,16 +651,21 @@ namespace ts.server {
             }
 
             return occurrences.map(occurrence => {
-                const { fileName, isWriteAccess, textSpan } = occurrence;
+                const { fileName, isWriteAccess, textSpan, isInString } = occurrence;
                 const scriptInfo = project.getScriptInfo(fileName);
                 const start = scriptInfo.positionToLineOffset(textSpan.start);
                 const end = scriptInfo.positionToLineOffset(ts.textSpanEnd(textSpan));
-                return {
+                const result: protocol.OccurrencesResponseItem = {
                     start,
                     end,
                     file: fileName,
                     isWriteAccess,
                 };
+                // no need to serialize the property if it is not true
+                if (isInString) {
+                    result.isInString = isInString;
+                }
+                return result;
             });
         }
 
@@ -1135,10 +1139,17 @@ namespace ts.server {
             if (simplifiedResult) {
                 return completions.entries.reduce((result: protocol.CompletionEntry[], entry: ts.CompletionEntry) => {
                     if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) === 0)) {
-                        const { name, kind, kindModifiers, sortText, replacementSpan } = entry;
+                        const { name, kind, kindModifiers, sortText, replacementSpan, hasAction, sourceFileName } = entry;
                         const convertedSpan: protocol.TextSpan =
                             replacementSpan ? this.decorateSpan(replacementSpan, scriptInfo) : undefined;
-                        result.push({ name, kind, kindModifiers, sortText, replacementSpan: convertedSpan });
+
+                        const newEntry: protocol.CompletionEntry = { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan };
+                        // avoid serialization when hasAction = false
+                        if (hasAction) {
+                            newEntry.hasAction = true;
+                            newEntry.sourceFileName = sourceFileName;
+                        }
+                        result.push(newEntry);
                     }
                     return result;
                 }, []).sort((a, b) => ts.compareStrings(a.name, b.name));
@@ -1156,7 +1167,8 @@ namespace ts.server {
             return args.entryNames.reduce((accum: protocol.CompletionEntryDetails[], entryName: string) => {
                 const details = project.getLanguageService().getCompletionEntryDetails(file, position, entryName);
                 if (details) {
-                    accum.push(details);
+                    const mappedCodeActions = map(details.codeActions, action => this.mapCodeAction(action, scriptInfo));
+                    accum.push({ ...details, codeActions: mappedCodeActions });
                 }
                 return accum;
             }, []);
@@ -1182,11 +1194,6 @@ namespace ts.server {
                 }
             }
             return result;
-        }
-
-        private getCodeActionAfterCommittingCompletion(args: protocol.CommitCompletionWithCodeActionRequest) {
-            args.arguments.errorCodes = [Diagnostics.Cannot_find_name_0.code];
-            return this.getCodeFixes(args.arguments, /*simplifiedResult*/ true);
         }
 
         private emitFile(args: protocol.CompileOnSaveEmitFileRequestArgs) {
@@ -1672,9 +1679,6 @@ namespace ts.server {
             },
             [CommandNames.CompileOnSaveEmitFile]: (request: protocol.CompileOnSaveEmitFileRequest) => {
                 return this.requiredResponse(this.emitFile(request.arguments));
-            },
-            [CommandNames.CommitCompletionWithCodeAction]: (request: protocol.CommitCompletionWithCodeActionRequest) => {
-                return this.requiredResponse(this.getCodeActionAfterCommittingCompletion(request));
             },
             [CommandNames.SignatureHelp]: (request: protocol.SignatureHelpRequest) => {
                 return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ true));

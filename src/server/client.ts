@@ -240,7 +240,9 @@ namespace ts.server {
             const request = this.processRequest<protocol.CompletionDetailsRequest>(CommandNames.CompletionDetails, args);
             const response = this.processResponse<protocol.CompletionDetailsResponse>(request);
             Debug.assert(response.body.length === 1, "Unexpected length of completion details response body.");
-            return response.body[0];
+
+            const convertedCodeActions = map(response.body[0].codeActions, codeAction => this.convertCodeActions(codeAction, fileName));
+            return { ...response.body[0], codeActions: convertedCodeActions };
         }
 
         getCompletionEntrySymbol(_fileName: string, _position: number, _entryName: string): Symbol {

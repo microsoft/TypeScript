@@ -132,6 +132,7 @@ namespace ts.Completions {
                     if (!uniqueNames.get(id)) {
                         if (symbolActionMap && symbolActionMap.has(getUniqueSymbolIdAsString(symbol, typeChecker))) {
                             entry.hasAction = true;
+                            entry.sourceFileName = location.getSourceFile().fileName;
                         }
                         entries.push(entry);
                         uniqueNames.set(id, id);
@@ -287,7 +288,7 @@ namespace ts.Completions {
         // Compute all the completion symbols again.
         const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles);
         if (completionData) {
-            const { symbols, location } = completionData;
+            const { symbols, location, symbolActionMap } = completionData;
 
             // Find the symbol with the matching entry name.
             // We don't need to perform character checks here because we're only comparing the
@@ -296,13 +297,20 @@ namespace ts.Completions {
             const symbol = forEach(symbols, s => getCompletionEntryDisplayNameForSymbol(typeChecker, s, compilerOptions.target, /*performCharacterChecks*/ false, location) === entryName ? s : undefined);
 
             if (symbol) {
+
+                let codeActions: CodeAction[];
+                if (symbolActionMap.has(getUniqueSymbolIdAsString(symbol, typeChecker))) {
+                    codeActions = [];
+                }
+
                 const { displayParts, documentation, symbolKind } = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, location, location, SemanticMeaning.All);
                 return {
                     name: entryName,
                     kindModifiers: SymbolDisplay.getSymbolModifiers(symbol),
                     kind: symbolKind,
                     displayParts,
-                    documentation
+                    documentation,
+                    codeActions
                 };
             }
         }
@@ -315,7 +323,8 @@ namespace ts.Completions {
                 kind: ScriptElementKind.keyword,
                 kindModifiers: ScriptElementKindModifier.none,
                 displayParts: [displayPart(entryName, SymbolDisplayPartKind.keyword)],
-                documentation: undefined
+                documentation: undefined,
+                codeActions: undefined
             };
         }
 
@@ -488,7 +497,7 @@ namespace ts.Completions {
                             // It has a left-hand side, so we're not in an opening JSX tag.
                             break;
                         }
-                        // fall through
+                    // fall through
 
                     case SyntaxKind.JsxSelfClosingElement:
                     case SyntaxKind.JsxElement:
