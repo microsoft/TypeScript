@@ -394,29 +394,37 @@ namespace ts {
             : node;
     }
 
-    export function createSignatureDeclaration<T extends SignatureDeclaration>(kind: SyntaxKind, name: string | PropertyName | undefined, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): T {
+    // TODO: ask if we should have multiple implementations. Some T's can't have question token.
+    export function createSignatureDeclaration<T extends SignatureDeclaration>(kind: SyntaxKind, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined): T;
+    export function createSignatureDeclaration<T extends SignatureDeclaration & TypeElement>(kind: SyntaxKind, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined): T;
+    export function createSignatureDeclaration<T extends SignatureDeclaration & TypeElement>(kind: SyntaxKind, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined, name?: string | PropertyName, questionToken?: QuestionToken): T {
         const signatureDeclaration = createSynthesizedNode(kind) as T;
-        signatureDeclaration.name = asName(name);
         signatureDeclaration.typeParameters = asNodeArray(typeParameters);
         signatureDeclaration.parameters = asNodeArray(parameters);
         signatureDeclaration.type = type;
+        signatureDeclaration.name = asName(name);
+        signatureDeclaration.questionToken = questionToken;
         return signatureDeclaration;
     }
 
-    export function updateSignatureDeclaration<T extends SignatureDeclaration>(node: T, name: string | PropertyName | undefined, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): T {
-        return node.name !== name
-            || node.typeParameters !== typeParameters
+    // TODO: figure out right type annotation for this function.
+    export function updateSignatureDeclaration<T extends SignatureDeclaration>(node: T, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): T;
+    export function updateSignatureDeclaration<T extends SignatureDeclaration & TypeElement>(node: T, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined, name: PropertyName, questionToken: QuestionToken | undefined): T;
+    export function updateSignatureDeclaration<T extends SignatureDeclaration & TypeElement>(node: T, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined, name?: PropertyName, questionToken?: QuestionToken): T {
+        return node.typeParameters !== typeParameters
             || node.parameters !== parameters
             || node.type !== type
-            ? <T>updateNode(createSignatureDeclaration(node.kind, name, typeParameters, parameters, type), node)
+            || node.name !== name
+            || node.questionToken !== questionToken
+            ? updateNode(createSignatureDeclaration<T>(node.kind, typeParameters, parameters, type, name, questionToken), node)
             : node;
     }
 
     // Signature elements
 
-    export function createPropertySignature(name: PropertyName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): PropertySignature {
+    export function createPropertySignature(name: PropertyName | string, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): PropertySignature {
         const propertySignature = createSynthesizedNode(SyntaxKind.PropertySignature) as PropertySignature;
-        propertySignature.name = name;
+        propertySignature.name = asName(name);
         propertySignature.questionToken = questionToken;
         propertySignature.type = type;
         propertySignature.initializer = initializer;
@@ -511,12 +519,13 @@ namespace ts {
             : node;
     }
 
-    export function createMethod(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | PropertyName, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined) {
+    export function createMethod(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined) {
         const node = <MethodDeclaration>createSynthesizedNode(SyntaxKind.MethodDeclaration);
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
         node.asteriskToken = asteriskToken;
         node.name = asName(name);
+        node.questionToken = questionToken;
         node.typeParameters = asNodeArray(typeParameters);
         node.parameters = asNodeArray(parameters);
         node.type = type;
@@ -524,7 +533,7 @@ namespace ts {
         return node;
     }
 
-    export function updateMethod(node: MethodDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: PropertyName, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined) {
+    export function updateMethod(node: MethodDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: PropertyName, questionToken: QuestionToken | undefined, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
             || node.asteriskToken !== asteriskToken
@@ -533,7 +542,7 @@ namespace ts {
             || node.parameters !== parameters
             || node.type !== type
             || node.body !== body
-            ? updateNode(createMethod(decorators, modifiers, asteriskToken, name, typeParameters, parameters, type, body), node)
+            ? updateNode(createMethod(decorators, modifiers, asteriskToken, name, questionToken, typeParameters, parameters, type, body), node)
             : node;
     }
 

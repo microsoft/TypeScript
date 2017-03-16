@@ -85,56 +85,66 @@ namespace ts.codefix {
                 if (!(signatures && signatures.length > 0)) {
                     return undefined;
                 }
+
+                const optional = !!(symbol.flags & SymbolFlags.Optional);
                 if (declarations.length === 1) {
                     Debug.assert(signatures.length === 1);
                     // TODO: suppress any return type
                     // TODO: get parameters working.
                     // TODO: add support for type parameters.
                     const signature = signatures[0];
-                    const newTypeParameters = signature.typeParameters && signature.typeParameters.map(checker.createTypeParameterDeclarationFromType);
-                    const newParameterNodes = signature.getParameters().map(symbol => createParameterDeclarationFromSymbol(symbol, enclosingDeclaration, checker));
-                    
-                    const returnType = createTypeNodeExceptAny(checker.getReturnTypeOfSignature(signature), checker);
-                    return createStubbedMethod(modifiers, name, newTypeParameters, newParameterNodes, returnType);
+                    const signatureParts = getSignatureParts(signature);
+                    return createStubbedMethod(modifiers, name, optional, signatureParts.typeParameters, signatureParts.parameters, signatureParts.type);
                 }
 
                 let signatureDeclarations = [];
                 for (let i = 0; i < signatures.length; i++) {
                     // TODO: make signatures instead of methods
                     const signature = signatures[i];
-                    const newTypeParameters = signature.typeParameters && signature.typeParameters.map(checker.createTypeParameterDeclarationFromType);
-                    const newParameterNodes = signature.getParameters().map(symbol => createParameterDeclarationFromSymbol(symbol, enclosingDeclaration, checker));
-                    const returnType = createTypeNodeExceptAny(checker.getReturnTypeOfSignature(signature), checker);
+                    const signatureParts = getSignatureParts(signature);
                     signatureDeclarations.push(createMethod(
                           /*decorators*/ undefined
                         , modifiers
                         , /*asteriskToken*/ undefined
                         , name
-                        , newTypeParameters
-                        , newParameterNodes
-                        , returnType
+                        , optional ? createToken(SyntaxKind.QuestionToken) : undefined
+                        , signatureParts.typeParameters
+                        , signatureParts.parameters
+                        , signatureParts.type
                         , /*body*/undefined));
                 }
 
                 if (declarations.length > signatures.length) {
                     let signature = checker.getSignatureFromDeclaration(declarations[declarations.length - 1] as SignatureDeclaration);
-                    const newTypeParameters = signature.typeParameters && signature.typeParameters.map(checker.createTypeParameterDeclarationFromType);
-                    const newParameterNodes = signature.getParameters().map(symbol => createParameterDeclarationFromSymbol(symbol, enclosingDeclaration, checker));
-                    const returnType = createTypeNodeExceptAny(checker.getReturnTypeOfSignature(signature), checker);
-                    signatureDeclarations.push(createStubbedMethod(modifiers, name, newTypeParameters, newParameterNodes, returnType));
+                    const signatureParts = getSignatureParts(signature);
+                    signatureDeclarations.push(createStubbedMethod(modifiers, name, optional, signatureParts.typeParameters, signatureParts.parameters, signatureParts.type));
                 }
                 else {
                     Debug.assert(declarations.length === signatures.length);
-                    const methodImplementingSignatures = createMethodImplementingSignatures(signatures, name, modifiers);
+                    const methodImplementingSignatures = createMethodImplementingSignatures(signatures, name, optional, modifiers);
                     signatureDeclarations.push(methodImplementingSignatures);
                 }
                 return signatureDeclarations;
             default:
                 return undefined;
         }
+
+        type SignatureParts = {
+            typeParameters: TypeParameterDeclaration[];
+            parameters: ParameterDeclaration[];
+            type: TypeNode;
+        }
+
+        function getSignatureParts(signature: Signature): SignatureParts {
+            return {
+                typeParameters: signature.typeParameters && signature.typeParameters.map(checker.createTypeParameterDeclarationFromType),
+                parameters: signature.getParameters().map(symbol => checker.createParameterDeclarationFromSymbol(symbol)),
+                type: createTypeNodeExceptAny(checker.getReturnTypeOfSignature(signature), checker)
+            }
+        }
     }
 
-    function createMethodImplementingSignatures(signatures: Signature[], name: PropertyName, modifiers: Modifier[] | undefined): MethodDeclaration {
+    function createMethodImplementingSignatures(signatures: Signature[], name: PropertyName, optional: boolean, modifiers: Modifier[] | undefined): MethodDeclaration {
         Debug.assert(signatures && signatures.length > 0);
 
         let maxArgsIndex = 0;
@@ -153,7 +163,7 @@ namespace ts.codefix {
                 maxArgsSignature = sig;
             }
         }
-        const maxNonRestArgs =  maxArgsSignature.parameters.length - (maxArgsSignature.hasRestParameter ? 1 : 0);
+        const maxNonRestArgs = maxArgsSignature.parameters.length - (maxArgsSignature.hasRestParameter ? 1 : 0);
         const maxArgsParameterSymbolNames = signatures[maxArgsIndex].getParameters().map(symbol => symbol.getName());
 
         const parameters: ParameterDeclaration[] = [];
@@ -186,17 +196,19 @@ namespace ts.codefix {
         return createStubbedMethod(
             modifiers
             , name
+            , optional
             , /*typeParameters*/undefined
             , parameters
             , /*returnType*/ undefined);
     }
 
-    export function createStubbedMethod(modifiers: Modifier[], name: PropertyName, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], returnType: TypeNode | undefined) {
+    export function createStubbedMethod(modifiers: Modifier[], name: PropertyName, optional: boolean, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], returnType: TypeNode | undefined) {
         return createMethod(
               /*decorators*/undefined
             , modifiers
             , /*asteriskToken*/undefined
             , name
+            , optional ? createToken(SyntaxKind.QuestionToken) : undefined
             , typeParameters
             , parameters
             , returnType
@@ -221,22 +233,6 @@ namespace ts.codefix {
             return createToken(SyntaxKind.ProtectedKeyword);
         }
         return undefined;
-    }
-
-    function createParameterDeclarationFromSymbol(parameterSymbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker) {
-        const parameterDeclaration = parameterSymbol.getDeclarations()[0] as ParameterDeclaration;
-        const parameterType = checker.getTypeOfSymbolAtLocation(parameterSymbol, enclosingDeclaration);
-        const parameterTypeNode = checker.createTypeNode(parameterType);
-        // TODO: deep cloning of decorators/any node.
-        const parameterNode = createParameter(
-            parameterDeclaration.decorators && parameterDeclaration.decorators.map(getSynthesizedDeepClone)
-            , parameterDeclaration.modifiers && parameterDeclaration.modifiers.map(getSynthesizedDeepClone)
-            , parameterDeclaration.dotDotDotToken && createToken(SyntaxKind.DotDotDotToken)
-            , getSynthesizedDeepClone(parameterDeclaration.name)
-            , parameterDeclaration.questionToken && createToken(SyntaxKind.QuestionToken)
-            , parameterTypeNode
-            , /*initializer*/ undefined);
-        return parameterNode;
     }
 
     function createTypeNodeExceptAny(type: Type, checker: TypeChecker) {

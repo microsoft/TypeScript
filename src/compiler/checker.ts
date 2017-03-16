@@ -109,6 +109,7 @@ namespace ts {
             createTypeNode,
             createTypeParameterDeclarationFromType,
             createIndexSignatureFromIndexInfo,
+            createParameterDeclarationFromSymbol,
             getSymbolsInScope: (location, meaning) => {
                 location = getParseTreeNode(location);
                 return location ? getSymbolsInScope(location, meaning) : [];
@@ -2203,6 +2204,45 @@ namespace ts {
             return createTypeParameterDeclaration(name, constraint, defaultParameter);
         }
 
+        // TODO: enclosing declaration appears to be unused in getTypeOfSymbolAtLocation
+        function createParameterDeclarationFromSymbol(parameterSymbol: Symbol): ParameterDeclaration {
+            const parameterDeclaration = parameterSymbol.declarations[0] as ParameterDeclaration;
+            const parameterType = getTypeOfSymbol(parameterSymbol);
+            const parameterTypeNode = checker.createTypeNode(parameterType);
+            // TODO: clone binding names correctly.
+            // TODO: copy initialzer in a way that checks whether all symbols used in expression are accessible here, and qualify them appropriately.
+            const parameterNode = createParameter(
+                parameterDeclaration.decorators && parameterDeclaration.decorators.map(getSynthesizedDeepClone)
+                , parameterDeclaration.modifiers && parameterDeclaration.modifiers.map(getSynthesizedDeepClone)
+                , parameterDeclaration.dotDotDotToken && createToken(SyntaxKind.DotDotDotToken)
+                , getSynthesizedDeepClone(parameterDeclaration.name)
+                , parameterDeclaration.questionToken && createToken(SyntaxKind.QuestionToken)
+                , parameterTypeNode
+                , /*initializer*/ undefined);
+            return parameterNode;
+        }
+
+        /* @internal */
+        type SignatureParts = {
+            typeParameters: TypeParameterDeclaration[] | undefined;
+            parameters: ParameterDeclaration[];
+            type: TypeNode;
+        }
+
+        // TODO: expose this, remove copy from helper, possibly don't expose createParameter/TypeParameter?
+        function createSignatureParts(signature: Signature): SignatureParts {
+            return {
+                typeParameters: signature.typeParameters && signature.typeParameters.map(createTypeParameterDeclarationFromType),
+                parameters: signature.parameters.map(createParameterDeclarationFromSymbol),
+                type: createTypeNodeExceptAny(getReturnTypeOfSignature(signature))
+            }
+
+            function createTypeNodeExceptAny(type: Type): TypeNode | undefined {
+                const typeNode = createTypeNode(type);
+                return typeNode && typeNode.kind !== SyntaxKind.AnyKeyword ? typeNode : undefined;
+            }
+        }
+
         function createTypeNode(type: Type): TypeNode {
             let undefinedArgumentIsError = true;
             let encounteredError = false;
@@ -2322,22 +2362,6 @@ namespace ts {
                     return createUnionOrIntersectionTypeNode(SyntaxKind.IntersectionType, mapToTypeNodeArray((type as UnionType).types));
                 }
 
-                if (objectFlags & ObjectFlags.Mapped) {
-                    Debug.assert(!!(type.flags & TypeFlags.Object));
-
-                    // TODO: does typeParameter have the same constraint or do we need to overwrite it somehow?
-                    const typeParameter = getTypeParameterFromMappedType(<MappedType>type);
-                    // const constraintType = getConstraintTypeFromMappedType(<MappedType>type);
-                    const typeParameterNode = createTypeParameterDeclarationFromType(typeParameter);
-
-                    const templateTypeNode = createTypeNode(getTemplateTypeFromMappedType(<MappedType>type));
-                    const readonlyToken = (<MappedType>type).declaration && (<MappedType>type).declaration.readonlyToken ? createToken(SyntaxKind.ReadonlyKeyword) : undefined;
-                    const questionToken = (<MappedType>type).declaration && (<MappedType>type).declaration.questionToken ? createToken(SyntaxKind.QuestionToken) : undefined;
-
-                    // TODO: test.
-                    return createMappedTypeNode(readonlyToken, typeParameterNode, questionToken, templateTypeNode);
-                }
-
                 if (objectFlags & (ObjectFlags.Anonymous | ObjectFlags.Mapped)) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
                     // The type is an object literal type.
@@ -2371,57 +2395,25 @@ namespace ts {
                     return asNodeArray(types && types.map(createTypeNodeWorker) as TypeNode[]);
                 }
 
-                /******** START COPY  *********/
-
-            // function buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, symbolStack?: Symbol[]) {
-            //     const globalFlagsToPass = globalFlags & TypeFormatFlags.WriteOwnNameForAnyLike;
-            //     let inObjectTypeLiteral = false;
-            //     return writeType(type, globalFlags);
-
-            //     function writeType(type: Type, flags: TypeFormatFlags) {
-                    // // const nextFlags = flags & ~TypeFormatFlags.InTypeAlias;
-                    // // // Write undefined/null type as any
-                    // // if (type.flags & TypeFlags.Intrinsic) {
-                    // //     // Special handling for unknown / resolving types, they should show up as any and not unknown or __resolving
-                    // //     writer.writeKeyword(!(globalFlags & TypeFormatFlags.WriteOwnNameForAnyLike) && isTypeAny(type)
-                    // //         ? "any"
-                    // //         : (<IntrinsicType>type).intrinsicName);
-                    // // }
-                    // // else if (type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType) {
-                    // //     if (inObjectTypeLiteral) {
-                    // //         writer.reportInaccessibleThisError();
-                    // //     }
-                    // //     writer.writeKeyword("this");
-                    // // }
-                    // else if (getObjectFlags(type) & ObjectFlags.Reference) {
-                    //     writeTypeReference(<TypeReference>type, nextFlags);
-                    // }
-                    // else if (type.flags & TypeFlags.EnumLiteral) {
-                    //     buildSymbolDisplay(getParentOfSymbol(type.symbol), writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, nextFlags);
-                    //     writePunctuation(writer, SyntaxKind.DotToken);
-                    //     appendSymbolNameOnly(type.symbol, writer);
-                    // }
-                //     else if (getObjectFlags(type) & ObjectFlags.ClassOrInterface || type.flags & (TypeFlags.Enum | TypeFlags.TypeParameter)) {
-                //         // The specified symbol flags need to be reinterpreted as type flags
-                //         buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, nextFlags);
-                //     }
-                //     else if (!(flags & TypeFormatFlags.InTypeAlias) && type.aliasSymbol &&
-                //         isSymbolAccessible(type.aliasSymbol, enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/ false).accessibility === SymbolAccessibility.Accessible) {
-                //         const typeArguments = type.aliasTypeArguments;
-                //         writeSymbolTypeReference(type.aliasSymbol, typeArguments, 0, length(typeArguments), nextFlags);
-                //     }
-                //     else if (type.flags & TypeFlags.UnionOrIntersection) {
-                //         writeUnionOrIntersectionType(<UnionOrIntersectionType>type, nextFlags);
-                //     }
-                //     else if (getObjectFlags(type) & (ObjectFlags.Anonymous | ObjectFlags.Mapped)) {
-                //         writeAnonymousType(<ObjectType>type, nextFlags);
-                //     }
+                // TODO: implement when this is testable.
                 //     else if (type.flags & TypeFlags.StringOrNumberLiteral) {
                 //         writer.writeStringLiteral(literalTypeToString(<LiteralType>type));
-                //     }
-                // }
 
-                /******** END COPY  *********/
+                function createMappedTypeNodeFromType(type: MappedType) {
+                    Debug.assert(!!(type.flags & TypeFlags.Object));
+
+                    // TODO: does typeParameter have the same constraint or do we need to overwrite it somehow?
+                    const typeParameter = getTypeParameterFromMappedType(<MappedType>type);
+                    // const constraintType = getConstraintTypeFromMappedType(<MappedType>type);
+                    const typeParameterNode = createTypeParameterDeclarationFromType(typeParameter);
+
+                    const templateTypeNode = createTypeNode(getTemplateTypeFromMappedType(<MappedType>type));
+                    const readonlyToken = (<MappedType>type).declaration && (<MappedType>type).declaration.readonlyToken ? createToken(SyntaxKind.ReadonlyKeyword) : undefined;
+                    const questionToken = (<MappedType>type).declaration && (<MappedType>type).declaration.questionToken ? createToken(SyntaxKind.QuestionToken) : undefined;
+
+                    // TODO: test.
+                    return createMappedTypeNode(readonlyToken, typeParameterNode, questionToken, templateTypeNode);
+                }
 
                 function createAnonymousTypeNode(type: ObjectType): TypeNode {
                     const symbol = type.symbol;
@@ -2439,7 +2431,7 @@ namespace ts {
                             const typeAlias = getTypeAliasForTypeLiteral(type);
                             if (typeAlias) {
                                 // The specified symbol flags need to be reinterpreted as type flags
-                                const entityName = getEntityNameFromSymbol(typeAlias, enclosingDeclaration);
+                                const entityName = createNameFromSymbol(typeAlias, enclosingDeclaration);
                                 return createTypeReferenceNode(entityName, /*typeArguments*/ undefined);
                             }
                             else {
@@ -2453,14 +2445,14 @@ namespace ts {
                                 symbolStack = [];
                             }
                             symbolStack.push(symbol);
-                            let result = createTypeLiteralNodeFromType(type);
+                            let result = createTypeNodeFromObjectType(type);
                             symbolStack.pop();
                             return result;
                         }
                     }
                     else {
                         // Anonymous types with no symbol are never circular
-                        return createTypeLiteralNodeFromType(type);
+                        return createTypeNodeFromObjectType(type);
                     }
 
                     function shouldWriteTypeOfFunctionSymbol() {
@@ -2477,103 +2469,48 @@ namespace ts {
                     }
                 }
 
-                function writeLiteralType(type: ObjectType, flags: TypeFormatFlags) {
+                function createTypeNodeFromObjectType(type: ObjectType): TypeNode {
                     if (type.objectFlags & ObjectFlags.Mapped) {
                         if (getConstraintTypeFromMappedType(<MappedType>type).flags & (TypeFlags.TypeParameter | TypeFlags.Index)) {
-                            writeMappedType(<MappedType>type);
-                            return;
+                            return createMappedTypeNodeFromType(<MappedType>type);
                         }
                     }
 
                     const resolved = resolveStructuredTypeMembers(type);
                     if (!resolved.properties.length && !resolved.stringIndexInfo && !resolved.numberIndexInfo) {
                         if (!resolved.callSignatures.length && !resolved.constructSignatures.length) {
-                            writePunctuation(writer, SyntaxKind.OpenBraceToken);
-                            writePunctuation(writer, SyntaxKind.CloseBraceToken);
-                            return;
+                            return createTypeLiteralNode(/*members*/ undefined);
                         }
 
                         if (resolved.callSignatures.length === 1 && !resolved.constructSignatures.length) {
-                            const parenthesizeSignature = shouldAddParenthesisAroundFunctionType(resolved.callSignatures[0], flags);
-                            if (parenthesizeSignature) {
-                                writePunctuation(writer, SyntaxKind.OpenParenToken);
-                            }
-                            buildSignatureDisplay(resolved.callSignatures[0], writer, enclosingDeclaration, globalFlagsToPass | TypeFormatFlags.WriteArrowStyleSignature, /*kind*/ undefined, symbolStack);
-                            if (parenthesizeSignature) {
-                                writePunctuation(writer, SyntaxKind.CloseParenToken);
-                            }
-                            return;
+                            const signature = resolved.callSignatures[0];
+                            const signatureParts = createSignatureParts(signature);
+                            return createSignatureDeclaration<FunctionTypeNode>(SyntaxKind.FunctionType, signatureParts.typeParameters, signatureParts.parameters, signatureParts.type);
                         }
                         if (resolved.constructSignatures.length === 1 && !resolved.callSignatures.length) {
-                            if (flags & TypeFormatFlags.InElementType) {
-                                writePunctuation(writer, SyntaxKind.OpenParenToken);
-                            }
-                            writeKeyword(writer, SyntaxKind.NewKeyword);
-                            writeSpace(writer);
-                            buildSignatureDisplay(resolved.constructSignatures[0], writer, enclosingDeclaration, globalFlagsToPass | TypeFormatFlags.WriteArrowStyleSignature, /*kind*/ undefined, symbolStack);
-                            if (flags & TypeFormatFlags.InElementType) {
-                                writePunctuation(writer, SyntaxKind.CloseParenToken);
-                            }
-                            return;
+                            const signature = resolved.constructSignatures[0];
+                            const signatureParts = createSignatureParts(signature);
+                            return createSignatureDeclaration<ConstructorTypeNode>(SyntaxKind.ConstructorType, signatureParts.typeParameters, signatureParts.parameters, signatureParts.type);
                         }
                     }
 
                     const saveInObjectTypeLiteral = inObjectTypeLiteral;
                     inObjectTypeLiteral = true;
-                    writePunctuation(writer, SyntaxKind.OpenBraceToken);
-                    writer.writeLine();
-                    writer.increaseIndent();
-                    writeObjectLiteralType(resolved);
-                    writer.decreaseIndent();
-                    writePunctuation(writer, SyntaxKind.CloseBraceToken);
+                    const members = createTypeNodesFromResolvedType(resolved);
                     inObjectTypeLiteral = saveInObjectTypeLiteral;
-                }
-
-                function writeObjectLiteralType(resolved: ResolvedType) {
-                    for (const signature of resolved.callSignatures) {
-                        buildSignatureDisplay(signature, writer, enclosingDeclaration, globalFlagsToPass, /*kind*/ undefined, symbolStack);
-                        writePunctuation(writer, SyntaxKind.SemicolonToken);
-                        writer.writeLine();
-                    }
-                    for (const signature of resolved.constructSignatures) {
-                        buildSignatureDisplay(signature, writer, enclosingDeclaration, globalFlagsToPass, SignatureKind.Construct, symbolStack);
-                        writePunctuation(writer, SyntaxKind.SemicolonToken);
-                        writer.writeLine();
-                    }
-                    buildIndexSignatureDisplay(resolved.stringIndexInfo, writer, IndexKind.String, enclosingDeclaration, globalFlags, symbolStack);
-                    buildIndexSignatureDisplay(resolved.numberIndexInfo, writer, IndexKind.Number, enclosingDeclaration, globalFlags, symbolStack);
-                    for (const p of resolved.properties) {
-                        const t = getTypeOfSymbol(p);
-                        if (p.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(t).length) {
-                            const signatures = getSignaturesOfType(t, SignatureKind.Call);
-                            for (const signature of signatures) {
-                                writePropertyWithModifiers(p);
-                                buildSignatureDisplay(signature, writer, enclosingDeclaration, globalFlagsToPass, /*kind*/ undefined, symbolStack);
-                                writePunctuation(writer, SyntaxKind.SemicolonToken);
-                                writer.writeLine();
-                            }
-                        }
-                        else {
-                            writePropertyWithModifiers(p);
-                            writePunctuation(writer, SyntaxKind.ColonToken);
-                            writeSpace(writer);
-                            writeType(t, TypeFormatFlags.None);
-                            writePunctuation(writer, SyntaxKind.SemicolonToken);
-                            writer.writeLine();
-                        }
-                    }
+                    return createTypeLiteralNode(members);
                 }
 
                 function createTypeQueryNodeFromType(type: Type) {
                     const symbol = type.symbol;
                     if (symbol) {
                         // TODO: get entity name instead.
-                        const entityName = createIdentifier(symbolToString(symbol));
+                        const entityName = createNameFromSymbol(symbol);
                         return createTypeQueryNode(entityName);
                     }
                 }
 
-                function getEntityNameFromSymbol(symbol: Symbol, enclosingDeclaration: Node): EntityName {
+                function createNameFromSymbol(symbol: Symbol): EntityName {
                     symbol; enclosingDeclaration;
                     // TODO: actually implement this
                     return createIdentifier(symbolToString(symbol, enclosingDeclaration));
@@ -2636,67 +2573,53 @@ namespace ts {
                     }
                 }
 
-                function createTypeLiteralNodeFromType(type: ObjectType) {
-                    const resolvedType = resolveStructuredTypeMembers(type);
-                    const newMembers = createTypeNodesFromResolvedType(resolvedType);
-                    return createTypeLiteralNode(newMembers);
-                }
-
                 function createTypeNodesFromResolvedType(resolvedType: ResolvedType): TypeElement[] {
                     const typeElements: TypeElement[] = [];
-                    for(const signature of resolvedType.callSignatures) {
-                        signature;
-                        throw new Error("call signatures not implemented");
+                    for (const signature of resolvedType.callSignatures) {
+                        const signatureParts = createSignatureParts(signature);
+                        typeElements.push(createSignatureDeclaration<CallSignatureDeclaration>(SyntaxKind.CallSignature, signatureParts.typeParameters, signatureParts.parameters, signatureParts.type));
                     }
                     for (const signature of resolvedType.constructSignatures) {
-                        signature;
-                        throw new Error("Construct signatures not implemented");
+                        const signatureParts = createSignatureParts(signature);
+                        typeElements.push(createSignatureDeclaration<ConstructSignatureDeclaration>(SyntaxKind.ConstructSignature, signatureParts.typeParameters, signatureParts.parameters, signatureParts.type));
                     }
                     if (resolvedType.stringIndexInfo) {
                         typeElements.push(createIndexSignatureFromIndexInfo(resolvedType.stringIndexInfo, IndexKind.String));
                     }
                     if (resolvedType.numberIndexInfo) {
-                        typeElements.push(createIndexSignatureFromIndexInfo(resolvedType.stringIndexInfo, IndexKind.Number));
+                        typeElements.push(createIndexSignatureFromIndexInfo(resolvedType.numberIndexInfo, IndexKind.Number));
                     }
 
-                    const members = resolvedType.members;
+                    const properties = resolvedType.properties;
+                    if (!properties) {
+                        return typeElements;
+                    }
 
-                    members.forEach(memberSymbol => {
-                        const oldDeclaration = memberSymbol.declarations && memberSymbol.declarations[0] as TypeElement;
+                    for (const propertySymbol of properties) {
+                        const propertyType = getTypeOfSymbol(propertySymbol);
+                        const oldDeclaration = propertySymbol.declarations && propertySymbol.declarations[0] as TypeElement;
                         if (!oldDeclaration) {
                             return;
                         }
-
-                        const kind = oldDeclaration.kind;
-                        const memberName = getSynthesizedDeepClone(oldDeclaration.name);
-                        const memberType = getTypeOfSymbol(memberSymbol);
-
-                        switch (kind) {
-                            case SyntaxKind.PropertySignature:
-                                const optional = !!oldDeclaration.questionToken;
-                                typeElements.push(createPropertySignature(
-                                    memberName
-                                    , optional ? createToken(SyntaxKind.QuestionToken) : undefined
-                                    , createTypeNode(memberType)
-                                    , /*initializer*/undefined));
-                                break;
-                            case SyntaxKind.MethodSignature:
-                            case SyntaxKind.CallSignature:
-                            case SyntaxKind.ConstructSignature:
-                                const signatureType = getSignaturesOfSymbol(memberSymbol);
-                                signatureType
-                                createSignatureDeclaration
-                                throw new Error("signature problems.");
-                                // name ?: PropertyName;
-                                // typeParameters ?: NodeArray<TypeParameterDeclaration>;
-                                // parameters: NodeArray<ParameterDeclaration>;
-                                // type ?: TypeNode;
-                            case SyntaxKind.IndexSignature:
-                                throw new Error("type literal constituent not implemented.");
-                            default:
-                                throw new Error("Unknown resolved member kind.");
+                        const propertyName = getSynthesizedDeepClone(oldDeclaration.name);
+                        const optionalToken = propertySymbol.flags & SymbolFlags.Optional ? createToken(SyntaxKind.QuestionToken) : undefined;;
+                        if (propertySymbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(propertyType).length) {
+                            const signatures = getSignaturesOfType(propertyType, SignatureKind.Call);
+                            for (const signature of signatures) {
+                                const signatureParts = createSignatureParts(signature);
+                                const methodDeclaration = createSignatureDeclaration<MethodSignature>(SyntaxKind.MethodSignature, signatureParts.typeParameters, signatureParts.parameters, signatureParts.type, propertyName, optionalToken);
+                                methodDeclaration.questionToken = optionalToken;
+                                typeElements.push(methodDeclaration);
+                            }
                         }
-                    });
+                        else {
+                            typeElements.push(createPropertySignature(
+                                propertyName
+                                , optionalToken
+                                , createTypeNode(propertyType)
+                                , /*initializer*/undefined));
+                        }
+                    }
                     return typeElements.length ? typeElements : undefined;
                 }
             }
