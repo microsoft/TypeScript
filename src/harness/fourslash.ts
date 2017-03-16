@@ -928,9 +928,13 @@ namespace FourSlash {
             }
 
             function rangeToReferenceEntry(r: Range) {
-                let { isWriteAccess, isDefinition } = (r.marker && r.marker.data) || { isWriteAccess: false, isDefinition: false };
+                let { isWriteAccess, isDefinition, isInString } = (r.marker && r.marker.data) || { isWriteAccess: false, isDefinition: false, isInString: undefined };
                 isWriteAccess = !!isWriteAccess; isDefinition = !!isDefinition;
-                return { fileName: r.fileName, textSpan: { start: r.start, length: r.end - r.start }, isWriteAccess, isDefinition };
+                const result: any = { fileName: r.fileName, textSpan: { start: r.start, length: r.end - r.start }, isWriteAccess, isDefinition };
+                if (isInString !== undefined) {
+                    result.isInString = isInString;
+                }
+                return result;
             }
         }
 
