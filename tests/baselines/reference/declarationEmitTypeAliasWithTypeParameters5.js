@@ -12,6 +12,7 @@ function foo() {
 
 //// [declarationEmitTypeAliasWithTypeParameters5.js]
 "use strict";
+exports.__esModule = true;
 function foo() {
     return {};
 }

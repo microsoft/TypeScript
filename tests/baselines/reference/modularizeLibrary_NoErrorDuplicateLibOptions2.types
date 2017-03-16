@@ -9,9 +9,9 @@ function f(x: number, y: number, z: number) {
 
     return Array.from(arguments);
 >Array.from(arguments) : any[]
->Array.from : { <T, U>(iterable: Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(arrayLike: ArrayLike<T>): T[]; }
+>Array.from : { <T, U>(iterable: Iterable<T>, mapfn: (this: undefined, v: T, k: number) => U): U[]; <T, U>(iterable: Iterable<T>, mapfn: (this: undefined, v: T, k: number) => U, thisArg: undefined): U[]; <Z, T, U>(iterable: Iterable<T>, mapfn: (this: Z, v: T, k: number) => U, thisArg: Z): U[]; <T>(iterable: Iterable<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (this: undefined, v: T, k: number) => U): U[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (this: undefined, v: T, k: number) => U, thisArg: undefined): U[]; <Z, T, U>(arrayLike: ArrayLike<T>, mapfn: (this: Z, v: T, k: number) => U, thisArg: Z): U[]; <T>(arrayLike: ArrayLike<T>): T[]; }
 >Array : ArrayConstructor
->from : { <T, U>(iterable: Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(arrayLike: ArrayLike<T>): T[]; }
+>from : { <T, U>(iterable: Iterable<T>, mapfn: (this: undefined, v: T, k: number) => U): U[]; <T, U>(iterable: Iterable<T>, mapfn: (this: undefined, v: T, k: number) => U, thisArg: undefined): U[]; <Z, T, U>(iterable: Iterable<T>, mapfn: (this: Z, v: T, k: number) => U, thisArg: Z): U[]; <T>(iterable: Iterable<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (this: undefined, v: T, k: number) => U): U[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (this: undefined, v: T, k: number) => U, thisArg: undefined): U[]; <Z, T, U>(arrayLike: ArrayLike<T>, mapfn: (this: Z, v: T, k: number) => U, thisArg: Z): U[]; <T>(arrayLike: ArrayLike<T>): T[]; }
 >arguments : IArguments
 }
 
@@ -148,10 +148,10 @@ declare var console: any;
 
 out().then(() => {
 >out().then(() => {    console.log("Yea!");}) : Promise<void>
->out().then : { (onfulfilled?: (value: {}) => {} | PromiseLike<{}>, onrejected?: (reason: any) => {} | PromiseLike<{}>): Promise<{}>; <TResult>(onfulfilled: (value: {}) => {} | PromiseLike<{}>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<{} | TResult>; <TResult>(onfulfilled: (value: {}) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult1, TResult2>(onfulfilled: (value: {}) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; }
+>out().then : <TResult1 = {}, TResult2 = never>(onfulfilled?: (value: {}) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >out() : Promise<{}>
 >out : () => Promise<{}>
->then : { (onfulfilled?: (value: {}) => {} | PromiseLike<{}>, onrejected?: (reason: any) => {} | PromiseLike<{}>): Promise<{}>; <TResult>(onfulfilled: (value: {}) => {} | PromiseLike<{}>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<{} | TResult>; <TResult>(onfulfilled: (value: {}) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult1, TResult2>(onfulfilled: (value: {}) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; }
+>then : <TResult1 = {}, TResult2 = never>(onfulfilled?: (value: {}) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >() => {    console.log("Yea!");} : () => void
 
     console.log("Yea!");

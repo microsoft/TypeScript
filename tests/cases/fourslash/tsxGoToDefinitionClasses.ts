@@ -13,8 +13,10 @@
 //// }
 //// var x = <My/*c*/Class />;
 //// var y = <MyClass f/*p*/oo= 'hello' />;
+//// var z = <MyCl/*w*/ass wrong= 'hello' />;
 
 verify.goToDefinition({
     c: "ct",
-    p: "pt"
+    p: "pt",
+    w: "ct"
 });

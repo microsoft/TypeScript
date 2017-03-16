@@ -1,21 +1,23 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: B.ts
-////export default class /*1*/[|B|] {
+////export default class /*1*/[|{| "isWriteAccess": true, "isDefinition": true |}B|] {
 ////    test() {
 ////    }
 ////}
 
 // @Filename: A.ts
-////import [|B|] from "./B";
+////import [|{| "isWriteAccess": true, "isDefinition": true |}B|] from "./B";
 ////let b = new [|B|]();
 ////b.test();
 
 goTo.marker("1");
 verify.occurrencesAtPositionCount(1);
 
-const [C, B0, B1] = test.ranges();
-verify.rangesReferenceEachOther();
+const ranges = test.ranges();
+const [C, B0, B1] = ranges;
+verify.referenceGroups([C, B0], [{ definition: "class B", ranges }]);
+verify.referenceGroups(B1, [{ definition: "constructor B(): B", ranges }]);
 
 goTo.rangeStart(C);
 verify.renameLocations(false, false, [C, B0, B1]);

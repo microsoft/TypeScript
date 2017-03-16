@@ -1,4 +1,4 @@
-﻿namespace ts {
+namespace ts {
     /**
       * The document registry represents a store of SourceFile objects that can be shared between
       * multiple LanguageService instances. A LanguageService instance holds on the SourceFile (AST)

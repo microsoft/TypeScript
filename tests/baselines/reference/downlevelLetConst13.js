@@ -21,6 +21,7 @@ export module M {
 
 //// [downlevelLetConst13.js]
 'use strict';
+Object.defineProperty(exports, "__esModule", { value: true });
 // exported let\const bindings should not be renamed
 exports.foo = 10;
 exports.bar = "123";

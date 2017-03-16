@@ -19,6 +19,7 @@ export { foo, baz, baz as quux, buzz, bizz };
 
 //// [server.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var foo = 2;
 exports.foo = foo;
 exports.foo = foo = 3;

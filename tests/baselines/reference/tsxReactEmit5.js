@@ -16,7 +16,7 @@ export var React;
 import {React} from "./test";
 // Should emit test_1.React.createElement
 //  and React.__spread
-var foo;
+var foo: any;
 var spread1 = <div x='' {...foo} y='' />;
 
 
@@ -31,6 +31,7 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
     }
     return t;
 };
+exports.__esModule = true;
 var test_1 = require("./test");
 // Should emit test_1.React.createElement
 //  and React.__spread

@@ -125,6 +125,7 @@ function f6() {
 //// [typeGuardsAsAssertions.js]
 // Repro from #8513
 "use strict";
+exports.__esModule = true;
 var cond;
 exports.none = { none: '' };
 function isSome(value) {

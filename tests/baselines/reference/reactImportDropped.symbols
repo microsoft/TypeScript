@@ -60,6 +60,6 @@ import {layout} from '../../utils/theme'; // <- DO NOT DROP this import
 const x = <TabBar height={layout.footerHeight} />;
 >x : Symbol(x, Decl(NavigationView.js, 2, 5))
 >TabBar : Symbol(TabBar, Decl(NavigationView.js, 0, 6))
->height : Symbol(layout)
+>height : Symbol(height, Decl(NavigationView.js, 2, 17))
 >layout : Symbol(layout, Decl(NavigationView.js, 1, 8))
 

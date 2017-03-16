@@ -20,6 +20,7 @@ namespace NS1 {
 //// [exportedBlockScopedDeclarations.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var foo = foo; // compile error
     exports.bar = exports.bar; // should be compile error
     function f() {

@@ -1,14 +1,14 @@
 === tests/cases/compiler/promiseIdentity.ts ===
-interface IPromise<T> {
+export interface IPromise<T> {
 >IPromise : Symbol(IPromise, Decl(promiseIdentity.ts, 0, 0))
->T : Symbol(T, Decl(promiseIdentity.ts, 0, 19))
+>T : Symbol(T, Decl(promiseIdentity.ts, 0, 26))
 
     then<U>(callback: (x: T) => IPromise<U>): IPromise<U>;
->then : Symbol(IPromise.then, Decl(promiseIdentity.ts, 0, 23))
+>then : Symbol(IPromise.then, Decl(promiseIdentity.ts, 0, 30))
 >U : Symbol(U, Decl(promiseIdentity.ts, 1, 9))
 >callback : Symbol(callback, Decl(promiseIdentity.ts, 1, 12))
 >x : Symbol(x, Decl(promiseIdentity.ts, 1, 23))
->T : Symbol(T, Decl(promiseIdentity.ts, 0, 19))
+>T : Symbol(T, Decl(promiseIdentity.ts, 0, 26))
 >IPromise : Symbol(IPromise, Decl(promiseIdentity.ts, 0, 0))
 >U : Symbol(U, Decl(promiseIdentity.ts, 1, 9))
 >IPromise : Symbol(IPromise, Decl(promiseIdentity.ts, 0, 0))

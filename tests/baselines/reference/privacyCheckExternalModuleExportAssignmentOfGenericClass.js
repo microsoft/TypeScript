@@ -24,6 +24,7 @@ var Foo = (function () {
 module.exports = Foo;
 //// [privacyCheckExternalModuleExportAssignmentOfGenericClass_1.js]
 "use strict";
+exports.__esModule = true;
 
 
 //// [privacyCheckExternalModuleExportAssignmentOfGenericClass_0.d.ts]

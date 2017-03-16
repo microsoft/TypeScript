@@ -14,11 +14,13 @@ export { v }
 
 //// [0.js]
 "use strict";
+exports.__esModule = true;
 {
     var obj = true;
 }
 //// [1.js]
 "use strict";
+exports.__esModule = true;
 var v = "str" || true;
 exports.v = v;
 

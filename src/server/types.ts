@@ -9,6 +9,7 @@ declare namespace ts.server {
         data: any;
     }
 
+    type RequireResult = { module: {}, error: undefined } | { module: undefined, error: {} };
     export interface ServerHost extends System {
         setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
         clearTimeout(timeoutId: any): void;
@@ -16,6 +17,7 @@ declare namespace ts.server {
         clearImmediate(timeoutId: any): void;
         gc?(): void;
         trace?(s: string): void;
+        require?(initialPath: string, moduleName: string): RequireResult;
     }
 
     export interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
@@ -45,9 +47,15 @@ declare namespace ts.server {
     export type ActionInvalidate = "action::invalidate";
     export type EventBeginInstallTypes = "event::beginInstallTypes";
     export type EventEndInstallTypes = "event::endInstallTypes";
+    export type EventInitializationFailed = "event::initializationFailed";
 
     export interface TypingInstallerResponse {
-        readonly kind: ActionSet | ActionInvalidate | EventBeginInstallTypes | EventEndInstallTypes;
+        readonly kind: ActionSet | ActionInvalidate | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
+    }
+
+    export interface InitializationFailedResponse extends TypingInstallerResponse {
+        readonly kind: EventInitializationFailed;
+        readonly message: string;
     }
 
     export interface ProjectResponse extends TypingInstallerResponse {

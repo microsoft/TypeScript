@@ -30,6 +30,7 @@ export class MyComponent {
 //// [file.jsx]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var MyComponent = (function () {
         function MyComponent() {
         }

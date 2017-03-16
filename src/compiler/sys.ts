@@ -1,4 +1,4 @@
-﻿/// <reference path="core.ts"/>
+/// <reference path="core.ts"/>
 
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;
@@ -58,6 +58,21 @@ namespace ts {
     declare var process: any;
     declare var global: any;
     declare var __filename: string;
+
+    export function getNodeMajorVersion() {
+        if (typeof process === "undefined") {
+            return undefined;
+        }
+        const version: string = process.version;
+        if (!version) {
+            return undefined;
+        }
+        const dot = version.indexOf(".");
+        if (dot === -1) {
+            return undefined;
+        }
+        return parseInt(version.substring(1, dot));
+    }
 
     declare class Enumerator {
         public atEnd(): boolean;
@@ -315,9 +330,8 @@ namespace ts {
             }
             const watchedFileSet = createWatchedFileSet();
 
-            function isNode4OrLater(): boolean {
-                return parseInt(process.version.charAt(1)) >= 4;
-            }
+            const nodeVersion = getNodeMajorVersion();
+            const isNode4OrLater = nodeVersion >= 4;
 
             function isFileSystemCaseSensitive(): boolean {
                 // win32\win64 are case insensitive platforms
@@ -486,10 +500,11 @@ namespace ts {
                     // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
                     let options: any;
                     if (!directoryExists(directoryName)) {
+                        // do nothing if target folder does not exist
                         return noOpFileWatcher;
                     }
 
-                    if (isNode4OrLater() && (process.platform === "win32" || process.platform === "darwin")) {
+                    if (isNode4OrLater && (process.platform === "win32" || process.platform === "darwin")) {
                         options = { persistent: true, recursive: !!recursive };
                     }
                     else {

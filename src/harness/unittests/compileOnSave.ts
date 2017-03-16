@@ -4,6 +4,7 @@
 
 namespace ts.projectSystem {
     import CommandNames = server.CommandNames;
+    const nullCancellationToken = server.nullCancellationToken;
 
     function createTestTypingsInstaller(host: server.ServerHost) {
         return new TestTypingsInstaller("/a/data/", /*throttleLimit*/5, host);
@@ -495,7 +496,7 @@ namespace ts.projectSystem {
                 const emitOutput = host.readFile(path + ".js");
                 assert.equal(emitOutput, f.content + newLine, "content of emit output should be identical with the input + newline");
             }
-        })
+        });
 
         it("should emit specified file", () => {
             const file1 = {
@@ -520,7 +521,7 @@ namespace ts.projectSystem {
 
             const expectedEmittedFileName = "/a/b/f1.js";
             assert.isTrue(host.fileExists(expectedEmittedFileName));
-            assert.equal(host.readFile(expectedEmittedFileName), `"use strict";\r\nfunction Foo() { return 10; }\r\nexports.Foo = Foo;\r\n`);
+            assert.equal(host.readFile(expectedEmittedFileName), `"use strict";\r\nexports.__esModule = true;\r\nfunction Foo() { return 10; }\r\nexports.Foo = Foo;\r\n`);
         });
 
         it("shoud not emit js files in external projects", () => {
