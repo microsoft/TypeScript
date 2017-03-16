@@ -87,9 +87,6 @@ namespace ts {
             return sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
         }
 
-        // returned by CScript sys environment
-        const unsupportedFileEncodingErrorCode = -2147024809;
-
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile {
             let text: string;
             try {
@@ -100,9 +97,7 @@ namespace ts {
             }
             catch (e) {
                 if (onError) {
-                    onError(e.number === unsupportedFileEncodingErrorCode
-                        ? createCompilerDiagnostic(Diagnostics.Unsupported_file_encoding).messageText
-                        : e.message);
+                    onError(e.message);
                 }
                 text = "";
             }
