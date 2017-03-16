@@ -4,15 +4,19 @@ namespace ts.FindAllReferences {
     export interface FindReferencesContext<T extends DocumentSpan> {
         readonly typeChecker: TypeChecker;
         readonly cancellationToken: CancellationToken;
-        getReferenceEntryFromNode(node: Node): T;
+        getReferenceEntryFromNode(node: Node, isInString?: boolean): T;
         getReferenceEntryForSpanInFile(fileName: string, span: TextSpan): T;
     }
 
     export class DefaultFindReferencesContext implements FindReferencesContext<ReferenceEntry>  {
         constructor(readonly typeChecker: TypeChecker, readonly cancellationToken: CancellationToken) {
         }
-        getReferenceEntryFromNode(node: Node): ReferenceEntry {
-            return getReferenceEntryFromNode(node);
+        getReferenceEntryFromNode(node: Node, isInString?: boolean): ReferenceEntry {
+            const reference = getReferenceEntryFromNode(node);
+            if (isInString) {
+                reference.isInString = true;
+            }
+            return reference;
         }
         getReferenceEntryForSpanInFile(fileName: string, textSpan: TextSpan): ReferenceEntry {
             return { textSpan, fileName, isWriteAccess: false, isDefinition: false };
@@ -23,7 +27,7 @@ namespace ts.FindAllReferences {
         constructor(readonly typeChecker: TypeChecker, readonly cancellationToken: CancellationToken) {
         }
         getReferenceEntryFromNode(node: Node): ImplementationLocation {
-            const entry = <ImplementationLocation>getReferenceEntryFromNode(node);
+            const entry = <ImplementationLocation><any>getReferenceEntryFromNode(node);
             const symbol = this.typeChecker.getSymbolAtLocation(isDeclaration(node) && node.name ? node.name : node);
             if (symbol) {
                 const def = getDefinition(symbol, node, this.typeChecker);
@@ -1090,7 +1094,7 @@ namespace ts.FindAllReferences {
 
                 const type = getStringLiteralTypeForNode(<StringLiteral>node, typeChecker);
                 if (type === searchType) {
-                    references.push(context.getReferenceEntryFromNode(node));
+                    references.push(context.getReferenceEntryFromNode(node, /*isInString*/ true));
                 }
             }
         }
@@ -1403,7 +1407,7 @@ namespace ts.FindAllReferences {
         }
     }
 
-    export function getReferenceEntriesForShorthandPropertyAssignment<T extends DocumentSpan>(node: Node, context: FindReferencesContext<T>, result: ReferenceEntry[]): void {
+    export function getReferenceEntriesForShorthandPropertyAssignment<T extends DocumentSpan>(node: Node, context: FindReferencesContext<T>, result: T[]): void {
         const { typeChecker } = context;
         const refSymbol = typeChecker.getSymbolAtLocation(node);
         const shorthandSymbol = typeChecker.getShorthandAssignmentValueSymbol(refSymbol.valueDeclaration);

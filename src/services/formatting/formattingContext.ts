@@ -15,7 +15,7 @@ namespace ts.formatting {
         private contextNodeBlockIsOnOneLine: boolean;
         private nextNodeBlockIsOnOneLine: boolean;
 
-        constructor(public sourceFile: SourceFile, public formattingRequestKind: FormattingRequestKind) {
+        constructor(public readonly sourceFile: SourceFileLike, public formattingRequestKind: FormattingRequestKind) {
         }
 
         public updateContext(currentRange: TextRangeWithKind, currentTokenParent: Node, nextRange: TextRangeWithKind, nextTokenParent: Node, commonParent: Node) {

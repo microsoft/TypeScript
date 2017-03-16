@@ -621,6 +621,11 @@ namespace ts.server.protocol {
           * True if the occurrence is a write location, false otherwise.
           */
         isWriteAccess: boolean;
+
+        /**
+         * True if the occurrence is in a string, undefined otherwise;
+         */
+        isInString?: true;
     }
 
     export interface OccurrencesResponse extends Response {

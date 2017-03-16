@@ -38,7 +38,8 @@ namespace ts.DocumentHighlights {
 
                 documentHighlights.highlightSpans.push({
                     textSpan: referenceEntry.textSpan,
-                    kind: referenceEntry.isWriteAccess ? HighlightSpanKind.writtenReference : HighlightSpanKind.reference
+                    kind: referenceEntry.isWriteAccess ? HighlightSpanKind.writtenReference : HighlightSpanKind.reference,
+                    isInString: referenceEntry.isInString
                 });
             }
         }
