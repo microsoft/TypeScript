@@ -2431,7 +2431,7 @@ namespace ts {
                             const typeAlias = getTypeAliasForTypeLiteral(type);
                             if (typeAlias) {
                                 // The specified symbol flags need to be reinterpreted as type flags
-                                const entityName = createNameFromSymbol(typeAlias, enclosingDeclaration);
+                                const entityName = createNameFromSymbol(typeAlias);
                                 return createTypeReferenceNode(entityName, /*typeArguments*/ undefined);
                             }
                             else {
