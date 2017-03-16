@@ -1,4 +1,4 @@
-﻿/// <reference path="sys.ts" />
+/// <reference path="sys.ts" />
 
 /* @internal */
 namespace ts {
@@ -435,8 +435,8 @@ namespace ts {
     }
 
     /** Given a symbol for a module, checks that it is either an untyped import or a shorthand ambient module. */
-    export function isShorthandAmbientModuleSymbol(moduleSymbol: Symbol): boolean {
-        return isShorthandAmbientModule(moduleSymbol.valueDeclaration);
+    export function isUntypedOrShorthandAmbientModuleSymbol(moduleSymbol: Symbol): boolean {
+        return !moduleSymbol.declarations || isShorthandAmbientModule(moduleSymbol.valueDeclaration);
     }
 
     function isShorthandAmbientModule(node: Node): boolean {
@@ -1425,6 +1425,21 @@ namespace ts {
         return false;
     }
 
+    export function getRightMostAssignedExpression(node: Node) {
+        while (isAssignmentExpression(node, /*excludeCompoundAssignements*/ true)) {
+            node = node.right;
+        }
+        return node;
+    }
+
+    export function isExportsIdentifier(node: Node) {
+        return isIdentifier(node) && node.text === "exports";
+    }
+
+    export function isModuleExportsPropertyAccessExpression(node: Node) {
+        return isPropertyAccessExpression(node) && isIdentifier(node.expression) && node.expression.text === "module" && node.name.text === "exports";
+    }
+
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
     /// assignments we treat as special in the binder
     export function getSpecialPropertyAssignmentKind(expression: Node): SpecialPropertyAssignmentKind {
@@ -1554,7 +1569,10 @@ namespace ts {
                     }
                 }
                 else {
-                    result.push(...filter((doc as JSDoc).tags, tag => tag.kind === kind));
+                    const tags = (doc as JSDoc).tags;
+                    if (tags) {
+                        result.push(...filter(tags, tag => tag.kind === kind));
+                    }
                 }
             }
             return result;
@@ -3126,6 +3144,15 @@ namespace ts {
         return tryGetClassExtendingExpressionWithTypeArguments(node) !== undefined;
     }
 
+    export function isExpressionWithTypeArgumentsInClassImplementsClause(node: Node): node is ExpressionWithTypeArguments {
+        return node.kind === SyntaxKind.ExpressionWithTypeArguments
+            && isEntityNameExpression((node as ExpressionWithTypeArguments).expression)
+            && node.parent
+            && (<HeritageClause>node.parent).token === SyntaxKind.ImplementsKeyword
+            && node.parent.parent
+            && isClassLike(node.parent.parent);
+    }
+
     export function isEntityNameExpression(node: Expression): node is EntityNameExpression {
         return node.kind === SyntaxKind.Identifier ||
             node.kind === SyntaxKind.PropertyAccessExpression && isEntityNameExpression((<PropertyAccessExpression>node).expression);
@@ -3136,15 +3163,14 @@ namespace ts {
             (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node);
     }
 
-    export function isEmptyObjectLiteralOrArrayLiteral(expression: Node): boolean {
-        const kind = expression.kind;
-        if (kind === SyntaxKind.ObjectLiteralExpression) {
-            return (<ObjectLiteralExpression>expression).properties.length === 0;
-        }
-        if (kind === SyntaxKind.ArrayLiteralExpression) {
-            return (<ArrayLiteralExpression>expression).elements.length === 0;
-        }
-        return false;
+    export function isEmptyObjectLiteral(expression: Node): boolean {
+        return expression.kind === SyntaxKind.ObjectLiteralExpression &&
+            (<ObjectLiteralExpression>expression).properties.length === 0;
+    }
+
+    export function isEmptyArrayLiteral(expression: Node): boolean {
+        return expression.kind === SyntaxKind.ArrayLiteralExpression &&
+            (<ArrayLiteralExpression>expression).elements.length === 0;
     }
 
     export function getLocalSymbolForExportDefault(symbol: Symbol) {

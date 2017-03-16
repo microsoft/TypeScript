@@ -1,4 +1,4 @@
-﻿/* @internal */
+/* @internal */
 namespace ts.GoToDefinition {
     export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number): DefinitionInfo[] {
         /// Triple slash reference comments
@@ -198,7 +198,11 @@ namespace ts.GoToDefinition {
             return false;
         }
 
-        function tryAddSignature(signatureDeclarations: Declaration[], selectConstructors: boolean, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
+        function tryAddSignature(signatureDeclarations: Declaration[] | undefined, selectConstructors: boolean, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
+            if (!signatureDeclarations) {
+                return false;
+            }
+
             const declarations: Declaration[] = [];
             let definition: Declaration | undefined;
 

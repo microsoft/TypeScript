@@ -9,7 +9,7 @@ namespace ts {
                     Harness.Baseline.runBaseline(`printerApi/${prefix}.${name}.js`, () =>
                         printCallback(createPrinter({ newLine: NewLineKind.CarriageReturnLineFeed, ...options })));
                 });
-            }
+            };
         }
 
         describe("printFile", () => {
@@ -45,6 +45,9 @@ namespace ts {
 
                 // comment9
                 console.log(1 + 2);
+
+                // comment10
+                function functionWithDefaultArgValue(argument: string = "defaultValue"): void { }
             `, ScriptTarget.ES2015);
 
             printsCorrectly("default", {}, printer => printer.printFile(sourceFile));

@@ -2127,6 +2127,17 @@ namespace ts.server.protocol {
         payload: any;
     }
 
+    export type TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
+
+    export interface TypesInstallerInitializationFailedEvent extends Event {
+        event: TypesInstallerInitializationFailedEventName;
+        body: TypesInstallerInitializationFailedEventBody;
+    }
+
+    export interface TypesInstallerInitializationFailedEventBody {
+        message: string;
+    }
+
     export type TypingsInstalledTelemetryEventName = "typingsInstalled";
 
     export interface TypingsInstalledTelemetryEventBody extends TelemetryEventBody {
@@ -2218,6 +2229,7 @@ namespace ts.server.protocol {
         insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
         insertSpaceBeforeFunctionParenthesis?: boolean;

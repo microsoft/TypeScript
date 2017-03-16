@@ -1,10 +1,10 @@
-﻿/* @internal */
+/* @internal */
 namespace ts.codefix {
 
     type ImportCodeActionKind = "CodeChange" | "InsertingIntoExistingImport" | "NewImport";
     interface ImportCodeAction extends CodeAction {
-        kind: ImportCodeActionKind,
-        moduleSpecifier?: string
+        kind: ImportCodeActionKind;
+        moduleSpecifier?: string;
     }
 
     enum ModuleSpecifierComparison {
@@ -75,7 +75,7 @@ namespace ts.codefix {
         getAllActions() {
             let result: ImportCodeAction[] = [];
             for (const key in this.symbolIdToActionMap) {
-                result = concatenate(result, this.symbolIdToActionMap[key])
+                result = concatenate(result, this.symbolIdToActionMap[key]);
             }
             return result;
         }

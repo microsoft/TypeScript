@@ -1,4 +1,4 @@
-﻿/* @internal */
+/* @internal */
 namespace ts.FindAllReferences {
     export function findReferencedSymbols(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFiles: SourceFile[], sourceFile: SourceFile, position: number, findInStrings: boolean, findInComments: boolean, isForRename: boolean): ReferencedSymbol[] | undefined {
         const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
@@ -133,7 +133,7 @@ namespace ts.FindAllReferences {
                 return { symbol };
             }
 
-            if (ts.isShorthandAmbientModuleSymbol(aliasedSymbol)) {
+            if (ts.isUntypedOrShorthandAmbientModuleSymbol(aliasedSymbol)) {
                 return { symbol, shorthandModuleSymbol: aliasedSymbol };
             }
 
@@ -422,7 +422,7 @@ namespace ts.FindAllReferences {
             name,
             textSpan: references[0].textSpan,
             displayParts: [{ text: name, kind: ScriptElementKind.keyword }]
-        }
+        };
 
         return [{ definition, references }];
     }
@@ -613,7 +613,7 @@ namespace ts.FindAllReferences {
         const result: Node[] = [];
 
         for (const decl of classSymbol.members.get("__constructor").declarations) {
-            const ctrKeyword = ts.findChildOfKind(decl, ts.SyntaxKind.ConstructorKeyword, sourceFile)!
+            const ctrKeyword = ts.findChildOfKind(decl, ts.SyntaxKind.ConstructorKeyword, sourceFile)!;
             Debug.assert(decl.kind === SyntaxKind.Constructor && !!ctrKeyword);
             result.push(ctrKeyword);
         }

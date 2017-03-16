@@ -290,6 +290,11 @@ namespace ts {
         return resolutions;
     }
 
+    interface DiagnosticCache {
+        perFile?: FileMap<Diagnostic[]>;
+        allDiagnostics?: Diagnostic[];
+    }
+
     export function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program {
         let program: Program;
         let files: SourceFile[] = [];
@@ -297,6 +302,9 @@ namespace ts {
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
         let classifiableNames: Map<string>;
+
+        let cachedSemanticDiagnosticsForFile: DiagnosticCache = {};
+        let cachedDeclarationDiagnosticsForFile: DiagnosticCache = {};
 
         let resolvedTypeReferenceDirectives = createMap<ResolvedTypeReferenceDirective>();
         let fileProcessingDiagnostics = createDiagnosticCollection();
@@ -899,6 +907,10 @@ namespace ts {
         }
 
         function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
+            return getAndCacheDiagnostics(sourceFile, cancellationToken, cachedSemanticDiagnosticsForFile, getSemanticDiagnosticsForFileNoCache);
+        }
+
+        function getSemanticDiagnosticsForFileNoCache(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
             return runWithCancellationToken(() => {
                 const typeChecker = getDiagnosticsProducingTypeChecker();
 
@@ -1094,12 +1106,42 @@ namespace ts {
             });
         }
 
-        function getDeclarationDiagnosticsWorker(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
+        function getDeclarationDiagnosticsWorker(sourceFile: SourceFile | undefined, cancellationToken: CancellationToken): Diagnostic[] {
+            return getAndCacheDiagnostics(sourceFile, cancellationToken, cachedDeclarationDiagnosticsForFile, getDeclarationDiagnosticsForFileNoCache);
+        }
+
+        function getDeclarationDiagnosticsForFileNoCache(sourceFile: SourceFile| undefined, cancellationToken: CancellationToken) {
             return runWithCancellationToken(() => {
                 const resolver = getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile, cancellationToken);
                 // Don't actually write any files since we're just getting diagnostics.
                 return ts.getDeclarationDiagnostics(getEmitHost(noop), resolver, sourceFile);
             });
+        }
+
+        function getAndCacheDiagnostics(
+            sourceFile: SourceFile | undefined,
+            cancellationToken: CancellationToken,
+            cache: DiagnosticCache,
+            getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken) => Diagnostic[]) {
+
+            const cachedResult = sourceFile
+                ? cache.perFile && cache.perFile.get(sourceFile.path)
+                : cache.allDiagnostics;
+
+            if (cachedResult) {
+                return cachedResult;
+            }
+            const result = getDiagnostics(sourceFile, cancellationToken) || emptyArray;
+            if (sourceFile) {
+                if (!cache.perFile) {
+                    cache.perFile = createFileMap<Diagnostic[]>();
+                }
+                cache.perFile.set(sourceFile.path, result);
+            }
+            else {
+                cache.allDiagnostics = result;
+            }
+            return result;
         }
 
         function getDeclarationDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
@@ -1630,7 +1672,7 @@ namespace ts {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "lib", "noLib"));
             }
 
-            if (options.noImplicitUseStrict && options.alwaysStrict) {
+            if (options.noImplicitUseStrict && (options.alwaysStrict === undefined ? options.strict : options.alwaysStrict)) {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noImplicitUseStrict", "alwaysStrict"));
             }
 
