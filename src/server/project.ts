@@ -1041,6 +1041,14 @@ namespace ts.server {
             super(externalProjectName, ProjectKind.External, projectService, documentRegistry, /*hasExplicitListOfFiles*/ true, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
         }
 
+        addRoot(info: ScriptInfo) {
+            // Exclude project-included .min.js files
+            if (info.fileName.match(/\.min\.js$/i) !== null) {
+                return;
+            }
+            super.addRoot(info);
+        }
+
         getProjectRootPath() {
             if (this.projectFilePath) {
                 return getDirectoryPath(this.projectFilePath);
