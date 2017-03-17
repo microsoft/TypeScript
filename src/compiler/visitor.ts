@@ -224,9 +224,9 @@ namespace ts {
      * @param visitor The callback used to visit each child.
      * @param context A lexical environment context for the visitor.
      */
-    export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: typeof visitNodes): T | undefined;
+    export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
 
-    export function visitEachChild(node: Node, visitor: Visitor, context: TransformationContext, nodesVisitor = visitNodes): Node {
+    export function visitEachChild(node: Node, visitor: Visitor, context: TransformationContext, nodesVisitor = visitNodes, tokenVisitor?: Visitor): Node {
         if (node === undefined) {
             return undefined;
         }
@@ -274,7 +274,7 @@ namespace ts {
                     visitParameterList((<SignatureDeclaration & TypeElement>node).parameters, visitor, context, nodesVisitor),
                     visitNode((<SignatureDeclaration & TypeElement>node).type, visitor, isTypeNode),
                     visitNode((<SignatureDeclaration & TypeElement>node).name, visitor, isPropertyName),
-                    visitNode((<SignatureDeclaration & TypeElement>node).questionToken, visitor, isToken));
+                    visitNode((<SignatureDeclaration & TypeElement>node).questionToken, tokenVisitor, isToken));
 
             case SyntaxKind.IndexSignature:
                 return updateIndexSignatureDeclaration(<IndexSignatureDeclaration>node,
@@ -287,9 +287,9 @@ namespace ts {
                 return updateParameter(<ParameterDeclaration>node,
                     nodesVisitor((<ParameterDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<ParameterDeclaration>node).modifiers, visitor, isModifier),
-                    visitNode((<ParameterDeclaration>node).dotDotDotToken, visitor),
+                    visitNode((<ParameterDeclaration>node).dotDotDotToken, tokenVisitor, isToken),
                     visitNode((<ParameterDeclaration>node).name, visitor, isBindingName),
-                    visitNode((<ParameterDeclaration>node).questionToken, visitor, isToken),
+                    visitNode((<ParameterDeclaration>node).questionToken, tokenVisitor, isToken),
                     visitNode((<ParameterDeclaration>node).type, visitor, isTypeNode),
                     visitNode((<ParameterDeclaration>node).initializer, visitor, isExpression));
 
@@ -335,9 +335,9 @@ namespace ts {
                     visitNode((<IndexedAccessTypeNode>node).indexType, visitor, isTypeNode));
             case SyntaxKind.MappedType:
                 return updateMappedTypeNode((<MappedTypeNode>node),
-                    visitNode((<MappedTypeNode>node).readonlyToken, visitor, isToken),
+                    visitNode((<MappedTypeNode>node).readonlyToken, tokenVisitor, isToken),
                     visitNode((<MappedTypeNode>node).typeParameter, visitor, isTypeParameter),
-                    visitNode((<MappedTypeNode>node).questionToken, visitor, isToken),
+                    visitNode((<MappedTypeNode>node).questionToken, tokenVisitor, isToken),
                     visitNode((<MappedTypeNode>node).type, visitor, isTypeNode));
 
             case SyntaxKind.LiteralType:
@@ -357,7 +357,7 @@ namespace ts {
             case SyntaxKind.PropertySignature:
                 return updatePropertySignature((<PropertySignature>node),
                     visitNode((<PropertySignature>node).name, visitor, isPropertyName),
-                    visitNode((<PropertySignature>node).questionToken, visitor, isToken),
+                    visitNode((<PropertySignature>node).questionToken, tokenVisitor, isToken),
                     visitNode((<PropertySignature>node).type, visitor, isTypeNode),
                     visitNode((<PropertySignature>node).initializer, visitor, isExpression));
 
@@ -380,9 +380,9 @@ namespace ts {
                 return updateMethod(<MethodDeclaration>node,
                     nodesVisitor((<MethodDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<MethodDeclaration>node).modifiers, visitor, isModifier),
-                    visitNode((<MethodDeclaration>node).asteriskToken, visitor, isToken),
+                    visitNode((<MethodDeclaration>node).asteriskToken, tokenVisitor, isToken),
                     visitNode((<MethodDeclaration>node).name, visitor, isPropertyName),
-                    visitNode((<MethodDeclaration>node).questionToken, visitor, isToken),
+                    visitNode((<MethodDeclaration>node).questionToken, tokenVisitor, isToken),
                     nodesVisitor((<MethodDeclaration>node).typeParameters, visitor, isTypeParameter),
                     visitParameterList((<MethodDeclaration>node).parameters, visitor, context, nodesVisitor),
                     visitNode((<MethodDeclaration>node).type, visitor, isTypeNode),
@@ -423,7 +423,7 @@ namespace ts {
 
             case SyntaxKind.BindingElement:
                 return updateBindingElement(<BindingElement>node,
-                    (<BindingElement>node).dotDotDotToken,
+                    visitNode((<BindingElement>node).dotDotDotToken, tokenVisitor, isToken),
                     visitNode((<BindingElement>node).propertyName, visitor, isPropertyName),
                     visitNode((<BindingElement>node).name, visitor, isBindingName),
                     visitNode((<BindingElement>node).initializer, visitor, isExpression));
@@ -476,7 +476,7 @@ namespace ts {
             case SyntaxKind.FunctionExpression:
                 return updateFunctionExpression(<FunctionExpression>node,
                     nodesVisitor((<FunctionExpression>node).modifiers, visitor, isModifier),
-                    (<FunctionExpression>node).asteriskToken,
+                    visitNode((<FunctionExpression>node).asteriskToken, tokenVisitor, isToken),
                     visitNode((<FunctionExpression>node).name, visitor, isIdentifier),
                     nodesVisitor((<FunctionExpression>node).typeParameters, visitor, isTypeParameter),
                     visitParameterList((<FunctionExpression>node).parameters, visitor, context, nodesVisitor),
@@ -533,7 +533,7 @@ namespace ts {
 
             case SyntaxKind.YieldExpression:
                 return updateYield(<YieldExpression>node,
-                    (<YieldExpression>node).asteriskToken,
+                    visitNode((<YieldExpression>node).asteriskToken, tokenVisitor, isToken),
                     visitNode((<YieldExpression>node).expression, visitor, isExpression));
 
             case SyntaxKind.SpreadElement:
@@ -669,7 +669,7 @@ namespace ts {
                 return updateFunctionDeclaration(<FunctionDeclaration>node,
                     nodesVisitor((<FunctionDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<FunctionDeclaration>node).modifiers, visitor, isModifier),
-                    (<FunctionDeclaration>node).asteriskToken,
+                    visitNode((<FunctionDeclaration>node).asteriskToken, tokenVisitor, isToken),
                     visitNode((<FunctionDeclaration>node).name, visitor, isIdentifier),
                     nodesVisitor((<FunctionDeclaration>node).typeParameters, visitor, isTypeParameter),
                     visitParameterList((<FunctionDeclaration>node).parameters, visitor, context, nodesVisitor),
