@@ -1838,6 +1838,11 @@ namespace ts {
 
     export type ModuleReference = EntityName | ExternalModuleReference;
 
+    /**
+     * One of:
+     * - import x = require("mod");
+     * - import x = M.x;
+     */
     export interface ImportEqualsDeclaration extends DeclarationStatement {
         kind: SyntaxKind.ImportEqualsDeclaration;
         parent?: SourceFile | ModuleBlock;

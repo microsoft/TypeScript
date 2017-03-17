@@ -5643,9 +5643,6 @@ namespace ts {
         }
 
         function parseImportEqualsDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: NodeArray<Modifier>, identifier: ts.Identifier): ImportEqualsDeclaration {
-            // ImportEquals declaration of type:
-            // import x = require("mod"); or
-            // import x = M.x;
             const importEqualsDeclaration = <ImportEqualsDeclaration>createNode(SyntaxKind.ImportEqualsDeclaration, fullStart);
             importEqualsDeclaration.decorators = decorators;
             importEqualsDeclaration.modifiers = modifiers;
