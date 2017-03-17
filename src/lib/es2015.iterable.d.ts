@@ -91,7 +91,7 @@ interface IArguments {
 }
 
 interface Map<K, V> {
-    [Symbol.iterator](): IterableIterator<[K,V]>;
+    [Symbol.iterator](): IterableIterator<[K, V]>;
     entries(): IterableIterator<[K, V]>;
     keys(): IterableIterator<K>;
     values(): IterableIterator<V>;
