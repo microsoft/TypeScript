@@ -15,14 +15,18 @@ namespace ts.FindAllReferences {
         | { type: "string"; node: ts.StringLiteral };
 
     export type Entry = NodeEntry | SpanEntry;
-    export interface NodeEntry { type: "node"; node: Node; }
+    export interface NodeEntry {
+        type: "node";
+        node: Node;
+        isInString?: true;
+    }
     interface SpanEntry {
         type: "span";
         fileName: string;
         textSpan: TextSpan;
     }
-    export function nodeEntry(node: ts.Node): NodeEntry {
-        return { type: "node", node };
+    export function nodeEntry(node: ts.Node, isInString?: true): NodeEntry {
+        return { type: "node", node, isInString };
     }
 
     export interface Options {
@@ -163,13 +167,13 @@ namespace ts.FindAllReferences {
             return { textSpan: entry.textSpan, fileName: entry.fileName, isWriteAccess: false, isDefinition: false };
         }
 
-        const { node } = entry;
+        const { node, isInString } = entry;
         return {
             fileName: node.getSourceFile().fileName,
             textSpan: getTextSpan(node),
             isWriteAccess: isWriteAccess(node),
             isDefinition: isDeclarationName(node) || isLiteralComputedPropertyDeclarationName(node),
-            isInString: node.kind === ts.SyntaxKind.StringLiteral ? true : undefined
+            isInString
         };
     }
 
@@ -211,13 +215,13 @@ namespace ts.FindAllReferences {
             return { fileName, span: { textSpan, kind: HighlightSpanKind.reference } };
         }
 
-        const { node } = entry;
+        const { node, isInString } = entry;
         const fileName = entry.node.getSourceFile().fileName;
         const writeAccess = isWriteAccess(node);
         const span: HighlightSpan = {
             textSpan: getTextSpan(node),
             kind: writeAccess ? HighlightSpanKind.writtenReference : HighlightSpanKind.reference,
-            isInString: node.kind === ts.SyntaxKind.StringLiteral ? true : undefined
+            isInString
         };
         return { fileName, span };
     }
@@ -1355,7 +1359,7 @@ namespace ts.FindAllReferences.Core {
 
                 const type = getStringLiteralTypeForNode(<StringLiteral>node, checker);
                 if (type === searchType) {
-                    references.push(nodeEntry(node));
+                    references.push(nodeEntry(node, /*isInString*/true));
                 }
             }
         }
