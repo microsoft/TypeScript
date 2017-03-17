@@ -564,11 +564,11 @@ namespace ts.server {
             switch (project.projectKind) {
                 case ProjectKind.External:
                     removeItemFromSet(this.externalProjects, <ExternalProject>project);
-                    this.projectToSizeMap.delete((project as ExternalProject).externalProjectName);
+                    delete this.projectToSizeMap[(project as ExternalProject).externalProjectName];
                     break;
                 case ProjectKind.Configured:
                     removeItemFromSet(this.configuredProjects, <ConfiguredProject>project);
-                    this.projectToSizeMap.delete((project as ConfiguredProject).canonicalConfigFilePath);
+                    delete this.projectToSizeMap[(project as ConfiguredProject).canonicalConfigFilePath];
                     break;
                 case ProjectKind.Inferred:
                     removeItemFromSet(this.inferredProjects, <InferredProject>project);
@@ -861,10 +861,10 @@ namespace ts.server {
             }
 
             let availableSpace = maxProgramSizeForNonTsFiles;
-            this.projectToSizeMap.set(name, 0);
-            this.projectToSizeMap.forEach(size => {
-                availableSpace -= size;
-            });
+            this.projectToSizeMap[name] = 0;
+            for (const key in this.projectToSizeMap) {
+                availableSpace -= (this.projectToSizeMap[key] || 0);
+            }
 
             let totalNonTsFileSize = 0;
             for (const f of fileNames) {
@@ -874,12 +874,12 @@ namespace ts.server {
                 }
                 totalNonTsFileSize += this.host.getFileSize(fileName);
                 if (totalNonTsFileSize > availableSpace) {
-                    this.projectToSizeMap.set(name, totalNonTsFileSize);
+                    this.projectToSizeMap[name] = totalNonTsFileSize;
                     return true;
                 }
             }
 
-            this.projectToSizeMap.set(name, totalNonTsFileSize);
+            this.projectToSizeMap[name] = totalNonTsFileSize;
             return false;
         }
 
