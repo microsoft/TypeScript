@@ -31,7 +31,7 @@ namespace ts.codefix {
 
             const newNodes = createMissingMemberNodes(classDeclaration, abstractAndNonPrivateExtendsSymbols, checker);
             const changes = newNodesToChanges(newNodes, getOpenBraceOfClassLike(classDeclaration, sourceFile), context);
-            if(changes && changes.length > 0) {
+            if (changes && changes.length > 0) {
                 return [{
                     description: getLocaleSpecificMessage(Diagnostics.Implement_inherited_abstract_class),
                     changes

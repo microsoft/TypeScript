@@ -3,17 +3,28 @@ namespace ts.codefix {
 
     export function newNodesToChanges(newNodes: Node[], insertAfter: Node, context: CodeFixContext) {
         const sourceFile = context.sourceFile;
-        if (!(newNodes)) {
-            throw new Error("newNodesToChanges expects an array");
-        }
 
         const changeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
 
         for (const newNode of newNodes) {
             changeTracker.insertNodeAfter(sourceFile, insertAfter, newNode, { suffix: context.newLineCharacter });
         }
-        // TODO (aozgaa): concatenate changes into a single change.
-        return changeTracker.getChanges();
+
+        const changes = changeTracker.getChanges();
+        if (!(changes && changes.length > 0)) {
+            return changes;
+        }
+
+        Debug.assert(changes.length === 1);
+        const consolidatedChanges: FileTextChanges[] = [{
+            fileName: changes[0].fileName,
+            textChanges: [{
+                span: changes[0].textChanges[0].span,
+                newText: changes[0].textChanges.reduce((prev, cur) => prev + cur.newText, "")
+            }]
+
+        }]
+        return consolidatedChanges;
     }
 
     /**

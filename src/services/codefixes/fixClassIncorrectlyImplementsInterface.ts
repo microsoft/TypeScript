@@ -45,13 +45,13 @@ namespace ts.codefix {
 
         function createAndAddMissingIndexSignatureDeclaration(type: InterfaceType, kind: IndexKind, hasIndexSigOfKind: boolean, newNodes: Node[]): void {
             if (hasIndexSigOfKind) {
-                return undefined;
+                return;
             }
 
             const indexInfoOfKind = checker.getIndexInfoOfType(type, kind);
 
             if (!indexInfoOfKind) {
-                return undefined;
+                return;
             }
             const newIndexSignatureDeclaration = checker.createIndexSignatureFromIndexInfo(indexInfoOfKind, kind, classDeclaration);
             newNodes.push(newIndexSignatureDeclaration);
