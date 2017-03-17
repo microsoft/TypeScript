@@ -38,7 +38,7 @@ namespace ts.codefix {
 
             const checker = context.program.getTypeChecker();
             const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(binaryExpression.right)));
-            typeNode = checker.createTypeNode(widenedType) || typeNode;
+            typeNode = checker.createTypeNode(widenedType, classDeclaration) || typeNode;
         }
 
         const openBrace = getOpenBraceOfClassLike(classDeclaration, sourceFile);

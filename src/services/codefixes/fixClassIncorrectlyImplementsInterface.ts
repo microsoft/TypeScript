@@ -11,14 +11,14 @@ namespace ts.codefix {
         const token = getTokenAtPosition(sourceFile, start);
         const checker = context.program.getTypeChecker();
 
-        const classDecl = getContainingClass(token);
-        if (!classDecl) {
+        const classDeclaration = getContainingClass(token);
+        if (!classDeclaration) {
             return undefined;
         }
 
-        const openBrace = getOpenBraceOfClassLike(classDecl, sourceFile);
-        const classType = checker.getTypeAtLocation(classDecl) as InterfaceType;
-        const implementedTypeNodes = getClassImplementsHeritageClauseElements(classDecl);
+        const openBrace = getOpenBraceOfClassLike(classDeclaration, sourceFile);
+        const classType = checker.getTypeAtLocation(classDeclaration) as InterfaceType;
+        const implementedTypeNodes = getClassImplementsHeritageClauseElements(classDeclaration);
 
         const hasNumericIndexSignature = !!checker.getIndexTypeOfType(classType, IndexKind.Number);
         const hasStringIndexSignature = !!checker.getIndexTypeOfType(classType, IndexKind.String);
@@ -34,7 +34,7 @@ namespace ts.codefix {
             let newNodes: Node[] = [];
             createAndAddMissingIndexSignatureDeclaration(implementedType, IndexKind.Number, hasNumericIndexSignature, newNodes);
             createAndAddMissingIndexSignatureDeclaration(implementedType, IndexKind.String, hasStringIndexSignature, newNodes);
-            newNodes = newNodes.concat(createMissingMemberNodes(classDecl, nonPrivateMembers, checker));
+            newNodes = newNodes.concat(createMissingMemberNodes(classDeclaration, nonPrivateMembers, checker));
             const message = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Implement_interface_0), [implementedTypeNode.getText()]);
             if (newNodes.length > 0) {
                 pushAction(result, newNodes, message);
@@ -53,7 +53,7 @@ namespace ts.codefix {
             if (!indexInfoOfKind) {
                 return undefined;
             }
-            const newIndexSignatureDeclaration = checker.createIndexSignatureFromIndexInfo(indexInfoOfKind, kind);
+            const newIndexSignatureDeclaration = checker.createIndexSignatureFromIndexInfo(indexInfoOfKind, kind, classDeclaration);
             newNodes.push(newIndexSignatureDeclaration);
         }
 

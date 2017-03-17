@@ -62,7 +62,7 @@ namespace ts.codefix {
             case SyntaxKind.SetAccessor:
             case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyDeclaration:
-                const typeNode = checker.createTypeNode(type);
+                const typeNode = checker.createTypeNode(type, enclosingDeclaration);
                 // TODO: add modifiers.
                 const property = createProperty(
                       /*decorators*/undefined
@@ -89,11 +89,8 @@ namespace ts.codefix {
                 const optional = !!(symbol.flags & SymbolFlags.Optional);
                 if (declarations.length === 1) {
                     Debug.assert(signatures.length === 1);
-                    // TODO: suppress any return type
-                    // TODO: get parameters working.
-                    // TODO: add support for type parameters.
                     const signature = signatures[0];
-                    const signatureParts = checker.createSignatureParts(signature);
+                    const signatureParts = checker.createSignatureParts(signature, enclosingDeclaration);
                     return createStubbedMethod(modifiers, name, optional, signatureParts.typeParameters, signatureParts.parameters, signatureParts.type);
                 }
 
@@ -101,7 +98,7 @@ namespace ts.codefix {
                 for (let i = 0; i < signatures.length; i++) {
                     // TODO: make signatures instead of methods
                     const signature = signatures[i];
-                    const signatureParts = checker.createSignatureParts(signature);
+                    const signatureParts = checker.createSignatureParts(signature, enclosingDeclaration);
                     signatureDeclarations.push(createMethod(
                           /*decorators*/ undefined
                         , modifiers
@@ -116,7 +113,7 @@ namespace ts.codefix {
 
                 if (declarations.length > signatures.length) {
                     let signature = checker.getSignatureFromDeclaration(declarations[declarations.length - 1] as SignatureDeclaration);
-                    const signatureParts = checker.createSignatureParts(signature);
+                    const signatureParts = checker.createSignatureParts(signature, enclosingDeclaration);
                     signatureDeclarations.push(createStubbedMethod(modifiers, name, optional, signatureParts.typeParameters, signatureParts.parameters, signatureParts.type));
                 }
                 else {

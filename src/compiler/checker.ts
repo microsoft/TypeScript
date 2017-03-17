@@ -2191,23 +2191,23 @@ namespace ts {
             return result;
         }
 
-        function createTypeParameterDeclarationFromType(type: TypeParameter): TypeParameterDeclaration {
+        function createTypeParameterDeclarationFromType(type: TypeParameter, enclosingDeclaration: Node): TypeParameterDeclaration {
             if (!(type && type.symbol && type.flags & TypeFlags.TypeParameter)) {
                 return undefined;
             }
 
-            const constraint = createTypeNode(getConstraintFromTypeParameter(type)) as TypeNode;
-            const defaultParameter = createTypeNode(getDefaultFromTypeParameter(type)) as TypeNode;
+            const constraint = createTypeNode(getConstraintFromTypeParameter(type), enclosingDeclaration);
+            const defaultParameter = createTypeNode(getDefaultFromTypeParameter(type), enclosingDeclaration);
 
             const name = symbolToString(type.symbol);
             return createTypeParameterDeclaration(name, constraint, defaultParameter);
         }
 
         // TODO: enclosing declaration appears to be unused in getTypeOfSymbolAtLocation
-        function createParameterDeclarationFromSymbol(parameterSymbol: Symbol): ParameterDeclaration {
+        function createParameterDeclarationFromSymbol(parameterSymbol: Symbol, enclosingDeclaration: Node): ParameterDeclaration {
             const parameterDeclaration = parameterSymbol.declarations[0] as ParameterDeclaration;
             const parameterType = getTypeOfSymbol(parameterSymbol);
-            const parameterTypeNode = checker.createTypeNode(parameterType);
+            const parameterTypeNode = createTypeNode(parameterType, enclosingDeclaration);
             // TODO: clone binding names correctly.
             // TODO: copy initialzer in a way that checks whether all symbols used in expression are accessible here, and qualify them appropriately.
             const parameterNode = createParameter(
@@ -2222,25 +2222,24 @@ namespace ts {
         }
 
         // TODO: expose this, remove copy from helper, possibly don't expose createParameter/TypeParameter?
-        function createSignatureParts(signature: Signature): SignatureParts {
+        function createSignatureParts(signature: Signature, enclosingDeclaration: Node): SignatureParts {
             return {
-                typeParameters: signature.typeParameters && signature.typeParameters.map(createTypeParameterDeclarationFromType),
-                parameters: signature.parameters.map(createParameterDeclarationFromSymbol),
+                typeParameters: signature.typeParameters && signature.typeParameters.map(parameter => createTypeParameterDeclarationFromType(parameter,enclosingDeclaration)),
+                parameters: signature.parameters.map(parameter => createParameterDeclarationFromSymbol(parameter,enclosingDeclaration)),
                 type: createTypeNodeExceptAny(getReturnTypeOfSignature(signature))
             }
 
             function createTypeNodeExceptAny(type: Type): TypeNode | undefined {
-                const typeNode = createTypeNode(type);
+                const typeNode = createTypeNode(type, enclosingDeclaration);
                 return typeNode && typeNode.kind !== SyntaxKind.AnyKeyword ? typeNode : undefined;
             }
         }
 
-        function createTypeNode(type: Type): TypeNode {
+        function createTypeNode(type: Type, enclosingDeclaration: Node): TypeNode {
             let undefinedArgumentIsError = true;
             let encounteredError = false;
             let inObjectTypeLiteral = false;
             let checkAlias = true;
-            let enclosingDeclaration: Node = undefined; // TODO: add parameter.
             let symbolStack: Symbol[] = undefined;
 
             let result = createTypeNodeWorker(type);
@@ -2256,7 +2255,7 @@ namespace ts {
                     return undefined;
                 }
 
-                const typeString = typeToString(type); typeString; // TODO: remove.
+                const typeString = typeToString(type, enclosingDeclaration); typeString; // TODO: remove.
 
                 if (type.flags & TypeFlags.Any) {
                     // TODO: add other case where type ends up being `any`.
@@ -2315,14 +2314,7 @@ namespace ts {
 
                 if (objectFlags & ObjectFlags.Reference) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
-                    // and vice versa.
-                    // this case includes tuple types
-                    // TODO: test empty tuples, see if they are coherent.
                     return createTypeReferenceNodeFromType(<TypeReference>type);
-                }
-
-                if (type.flags & TypeFlags.EnumLiteral) {
-                    throw new Error("Enum literal not implemented");
                 }
                 if (objectFlags & ObjectFlags.ClassOrInterface) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
@@ -2397,9 +2389,9 @@ namespace ts {
                     // TODO: does typeParameter have the same constraint or do we need to overwrite it somehow?
                     const typeParameter = getTypeParameterFromMappedType(<MappedType>type);
                     // const constraintType = getConstraintTypeFromMappedType(<MappedType>type);
-                    const typeParameterNode = createTypeParameterDeclarationFromType(typeParameter);
+                    const typeParameterNode = createTypeParameterDeclarationFromType(typeParameter, enclosingDeclaration);
 
-                    const templateTypeNode = createTypeNode(getTemplateTypeFromMappedType(<MappedType>type));
+                    const templateTypeNode = createTypeNode(getTemplateTypeFromMappedType(<MappedType>type), enclosingDeclaration);
                     const readonlyToken = (<MappedType>type).declaration && (<MappedType>type).declaration.readonlyToken ? createToken(SyntaxKind.ReadonlyKeyword) : undefined;
                     const questionToken = (<MappedType>type).declaration && (<MappedType>type).declaration.questionToken ? createToken(SyntaxKind.QuestionToken) : undefined;
 
@@ -2474,12 +2466,12 @@ namespace ts {
 
                         if (resolved.callSignatures.length === 1 && !resolved.constructSignatures.length) {
                             const signature = resolved.callSignatures[0];
-                            const signatureParts = createSignatureParts(signature);
+                            const signatureParts = createSignatureParts(signature, enclosingDeclaration);
                             return createSignatureDeclaration<FunctionTypeNode>(SyntaxKind.FunctionType, signatureParts.typeParameters, signatureParts.parameters, signatureParts.type);
                         }
                         if (resolved.constructSignatures.length === 1 && !resolved.callSignatures.length) {
                             const signature = resolved.constructSignatures[0];
-                            const signatureParts = createSignatureParts(signature);
+                            const signatureParts = createSignatureParts(signature, enclosingDeclaration);
                             return createSignatureDeclaration<ConstructorTypeNode>(SyntaxKind.ConstructorType, signatureParts.typeParameters, signatureParts.parameters, signatureParts.type);
                         }
                     }
@@ -2559,18 +2551,18 @@ namespace ts {
                 function createTypeNodesFromResolvedType(resolvedType: ResolvedType): TypeElement[] {
                     const typeElements: TypeElement[] = [];
                     for (const signature of resolvedType.callSignatures) {
-                        const signatureParts = createSignatureParts(signature);
+                        const signatureParts = createSignatureParts(signature, enclosingDeclaration);
                         typeElements.push(createSignatureDeclaration<CallSignatureDeclaration>(SyntaxKind.CallSignature, signatureParts.typeParameters, signatureParts.parameters, signatureParts.type));
                     }
                     for (const signature of resolvedType.constructSignatures) {
-                        const signatureParts = createSignatureParts(signature);
+                        const signatureParts = createSignatureParts(signature, enclosingDeclaration);
                         typeElements.push(createSignatureDeclaration<ConstructSignatureDeclaration>(SyntaxKind.ConstructSignature, signatureParts.typeParameters, signatureParts.parameters, signatureParts.type));
                     }
                     if (resolvedType.stringIndexInfo) {
-                        typeElements.push(createIndexSignatureFromIndexInfo(resolvedType.stringIndexInfo, IndexKind.String));
+                        typeElements.push(createIndexSignatureFromIndexInfo(resolvedType.stringIndexInfo, IndexKind.String, enclosingDeclaration));
                     }
                     if (resolvedType.numberIndexInfo) {
-                        typeElements.push(createIndexSignatureFromIndexInfo(resolvedType.numberIndexInfo, IndexKind.Number));
+                        typeElements.push(createIndexSignatureFromIndexInfo(resolvedType.numberIndexInfo, IndexKind.Number, enclosingDeclaration));
                     }
 
                     const properties = resolvedType.properties;
@@ -2589,7 +2581,7 @@ namespace ts {
                         if (propertySymbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(propertyType).length) {
                             const signatures = getSignaturesOfType(propertyType, SignatureKind.Call);
                             for (const signature of signatures) {
-                                const signatureParts = createSignatureParts(signature);
+                                const signatureParts = createSignatureParts(signature, enclosingDeclaration);
                                 const methodDeclaration = createSignatureDeclaration<MethodSignature>(SyntaxKind.MethodSignature, signatureParts.typeParameters, signatureParts.parameters, signatureParts.type, propertyName, optionalToken);
                                 methodDeclaration.questionToken = optionalToken;
                                 typeElements.push(methodDeclaration);
@@ -2599,7 +2591,7 @@ namespace ts {
                             typeElements.push(createPropertySignature(
                                 propertyName
                                 , optionalToken
-                                , createTypeNode(propertyType)
+                                , createTypeNodeWorker(propertyType)
                                 , /*initializer*/undefined));
                         }
                     }
@@ -2608,7 +2600,7 @@ namespace ts {
             }
         }
 
-        function createIndexSignatureFromIndexInfo(indexInfo: IndexInfo, kind: IndexKind): IndexSignatureDeclaration {
+        function createIndexSignatureFromIndexInfo(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration: Node): IndexSignatureDeclaration {
             const indexerTypeNode = createKeywordTypeNode(kind === IndexKind.String ? SyntaxKind.StringKeyword : SyntaxKind.NumberKeyword);
 
             const name = getNameFromIndexInfo(indexInfo);
@@ -2620,7 +2612,7 @@ namespace ts {
                 , /*questionToken*/ undefined
                 , indexerTypeNode
                 , /*initializer*/ undefined);
-            const typeNode = createTypeNode(indexInfo.type);
+            const typeNode = createTypeNode(indexInfo.type, enclosingDeclaration);
             return createIndexSignatureDeclaration(
                 [indexingParameter]
                 , typeNode
