@@ -1813,7 +1813,7 @@ namespace ts {
         kind: SyntaxKind.ModuleDeclaration;
         parent?: ModuleBody | SourceFile;
         name: ModuleName;
-        body?: ModuleBody | JSDocNamespaceDeclaration | Identifier;
+        body?: ModuleBody | JSDocNamespaceDeclaration;
     }
 
     export type NamespaceBody = ModuleBlock | NamespaceDeclaration;
@@ -1838,6 +1838,11 @@ namespace ts {
 
     export type ModuleReference = EntityName | ExternalModuleReference;
 
+    /**
+     * One of:
+     * - import x = require("mod");
+     * - import x = M.x;
+     */
     export interface ImportEqualsDeclaration extends DeclarationStatement {
         kind: SyntaxKind.ImportEqualsDeclaration;
         parent?: SourceFile | ModuleBlock;
@@ -1889,7 +1894,6 @@ namespace ts {
     export interface NamespaceExportDeclaration extends DeclarationStatement {
         kind: SyntaxKind.NamespaceExportDeclaration;
         name: Identifier;
-        moduleReference: LiteralLikeNode;
     }
 
     export interface ExportDeclaration extends DeclarationStatement {
