@@ -6,12 +6,9 @@ export class B {
 }
 
 // @filename: 2.ts
-// We use Promise<any> for now as there is no way to specify shape of module object
-function foo(x: Promise<any>) {
-    x.then(value => {
-        let b = new value.B();
-        b.print();
-    })
+async function foo() {
+    class C extends (await import("./0")).B {}
+    var c = new C();
+    c.print();
 }
-
-foo(import("./0"));
+foo();

@@ -1,10 +1,17 @@
 ﻿// @module: es2018
-// @lib: es2015
+// @target: esnext
 // @filename: 0.ts
-export function foo(){}
+export class B {
+    print() { return "I am B"}
+}
 
-// @filename: 1.ts
-import * as Zero from "./0"  // Should preserve ES2015 module syntax
-import("./0");
-var p1 = import("./0");
-export default p1;
+// @filename: 2.ts
+// We use Promise<any> for now as there is no way to specify shape of module object
+function foo(x: Promise<any>) {
+    x.then(value => {
+        let b = new value.B();
+        b.print();
+    })
+}
+
+foo(import("./0"));

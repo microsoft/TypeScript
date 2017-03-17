@@ -5,10 +5,22 @@ export class B {
     print() { return "I am B"}
 }
 
+export function foo() { return "foo" }
+
+// @filename: 1.ts
+export function backup() { return "backup"; }
+
 // @filename: 2.ts
-async function foo() {
-    class C extends (await import("./0")).B {}
-    var c = new C();
-    c.print();
+declare var console: any;
+class C {
+    private myModule = import("./0");
+    method() {
+        this.myModule.then(Zero => {
+            console.log(Zero.foo());
+        }, async err => {
+            console.log(err);
+            let one = await import("./1");
+            console.log(one.backup());
+        });
+    }
 }
-foo();
