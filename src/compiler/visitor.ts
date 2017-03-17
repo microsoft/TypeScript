@@ -333,13 +333,18 @@ namespace ts {
                 return updateTypeOperatorNode(<TypeOperatorNode>node, visitNode((<TypeOperatorNode>node).type, visitor, isTypeNode));
             case SyntaxKind.IndexedAccessType:
                 return updateIndexedAccessTypeNode((<IndexedAccessTypeNode>node)
-                , visitNode((<IndexedAccessTypeNode>node).objectType, visitor, isTypeNode)
-                , visitNode((<IndexedAccessTypeNode>node).indexType, visitor, isTypeNode));
+                    , visitNode((<IndexedAccessTypeNode>node).objectType, visitor, isTypeNode)
+                    , visitNode((<IndexedAccessTypeNode>node).indexType, visitor, isTypeNode));
             case SyntaxKind.MappedType:
-                throw new Error("reached unsupported type in visitor.");
+                return updateMappedTypeNode((<MappedTypeNode>node)
+                    , visitNode((<MappedTypeNode>node).readonlyToken, visitor, isToken)
+                    , visitNode((<MappedTypeNode>node).typeParameter, visitor, isTypeParameter)
+                    , visitNode((<MappedTypeNode>node).questionToken, visitor, isToken)
+                    , visitNode((<MappedTypeNode>node).type, visitor, isTypeNode));
+
             case SyntaxKind.LiteralType:
                 return updateLiteralTypeNode(<LiteralTypeNode>node
-                , visitNode((<LiteralTypeNode>node).literal, visitor, isExpression));
+                    , visitNode((<LiteralTypeNode>node).literal, visitor, isExpression));
 
             // Type Declarations
 

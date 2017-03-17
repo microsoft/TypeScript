@@ -50,7 +50,6 @@ namespace ts.codefix {
             , /*questionToken*/ undefined
             , typeNode
             , /*initializer*/ undefined);
-        // TODO: make index signature.
         const propertyChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
         propertyChangeTracker.insertNodeAfter(sourceFile, openBrace, property, { suffix: context.newLineCharacter });
 

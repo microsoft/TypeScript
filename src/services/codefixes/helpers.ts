@@ -4,7 +4,6 @@ namespace ts.codefix {
     export function newNodesToChanges(newNodes: Node[], insertAfter: Node, context: CodeFixContext) {
         const sourceFile = context.sourceFile;
         if (!(newNodes)) {
-            // TODO: make the appropriate value flow through gracefully.
             throw new Error("newNodesToChanges expects an array");
         }
 
@@ -13,6 +12,7 @@ namespace ts.codefix {
         for (const newNode of newNodes) {
             changeTracker.insertNodeAfter(sourceFile, insertAfter, newNode, { suffix: context.newLineCharacter });
         }
+        // TODO (aozgaa): concatenate changes into a single change.
         return changeTracker.getChanges();
     }
 
@@ -51,7 +51,6 @@ namespace ts.codefix {
         }
 
         const declaration = declarations[0] as Declaration;
-        // TODO: get name as identifier or computer property name, etc.
         const name = declaration.name ? getSynthesizedDeepClone(declaration.name) as PropertyName : undefined;
         const visibilityModifier = createVisibilityModifier(getModifierFlags(declaration));
         const modifiers = visibilityModifier ? [visibilityModifier] : undefined;
@@ -63,7 +62,6 @@ namespace ts.codefix {
             case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyDeclaration:
                 const typeNode = checker.createTypeNode(type, enclosingDeclaration);
-                // TODO: add modifiers.
                 const property = createProperty(
                       /*decorators*/undefined
                     , modifiers
@@ -96,7 +94,6 @@ namespace ts.codefix {
 
                 let signatureDeclarations = [];
                 for (let i = 0; i < signatures.length; i++) {
-                    // TODO: make signatures instead of methods
                     const signature = signatures[i];
                     const signatureParts = checker.createSignatureParts(signature, enclosingDeclaration);
                     signatureDeclarations.push(createMethod(
