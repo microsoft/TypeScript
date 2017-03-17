@@ -8,25 +8,21 @@ namespace ts.FindAllReferences {
     }
 
     type Definition =
-        | { type: "symbol"; symbol: Symbol; node: Node; }
-        | { type: "label"; node: Identifier; }
-        | { type: "keyword"; node: ts.Node; }
-        | { type: "this"; node: ts.Node; }
+        | { type: "symbol"; symbol: Symbol; node: Node }
+        | { type: "label"; node: Identifier }
+        | { type: "keyword"; node: ts.Node }
+        | { type: "this"; node: ts.Node }
         | { type: "string"; node: ts.StringLiteral };
 
     export type Entry = NodeEntry | SpanEntry;
-    export interface NodeEntry {
-        type: "node";
-        node: Node;
-        isInString: boolean;
-    }
+    export interface NodeEntry { type: "node"; node: Node; }
     interface SpanEntry {
         type: "span";
         fileName: string;
         textSpan: TextSpan;
     }
-    export function nodeEntry(node: ts.Node, isInString = false): NodeEntry {
-        return { type: "node", node, isInString };
+    export function nodeEntry(node: ts.Node): NodeEntry {
+        return { type: "node", node };
     }
 
     export interface Options {
@@ -167,13 +163,13 @@ namespace ts.FindAllReferences {
             return { textSpan: entry.textSpan, fileName: entry.fileName, isWriteAccess: false, isDefinition: false };
         }
 
-        const { node, isInString } = entry;
+        const { node } = entry;
         return {
             fileName: node.getSourceFile().fileName,
             textSpan: getTextSpan(node),
             isWriteAccess: isWriteAccess(node),
             isDefinition: isDeclarationName(node) || isLiteralComputedPropertyDeclarationName(node),
-            isInString: isInString ? true : undefined
+            isInString: node.kind === ts.SyntaxKind.StringLiteral ? true : undefined
         };
     }
 
@@ -215,13 +211,13 @@ namespace ts.FindAllReferences {
             return { fileName, span: { textSpan, kind: HighlightSpanKind.reference } };
         }
 
-        const { node, isInString } = entry;
+        const { node } = entry;
         const fileName = entry.node.getSourceFile().fileName;
         const writeAccess = isWriteAccess(node);
         const span: HighlightSpan = {
             textSpan: getTextSpan(node),
             kind: writeAccess ? HighlightSpanKind.writtenReference : HighlightSpanKind.reference,
-            isInString: isInString ? true : undefined
+            isInString: node.kind === ts.SyntaxKind.StringLiteral ? true : undefined
         };
         return { fileName, span };
     }
@@ -483,7 +479,7 @@ namespace ts.FindAllReferences.Core {
                 references = symbolIdToReferences[symbolId] = [];
                 result.push({ definition: { type: "symbol", symbol: referenceSymbol, node: searchLocation }, references });
             }
-            return node => references.push({ type: "node", node, isInString: false });
+            return node => references.push(nodeEntry(node));
         }
 
         function addStringOrCommentReference(fileName: string, textSpan: TextSpan): void {
@@ -1359,7 +1355,7 @@ namespace ts.FindAllReferences.Core {
 
                 const type = getStringLiteralTypeForNode(<StringLiteral>node, checker);
                 if (type === searchType) {
-                    references.push(nodeEntry(node, /*isInString*/true));
+                    references.push(nodeEntry(node));
                 }
             }
         }
