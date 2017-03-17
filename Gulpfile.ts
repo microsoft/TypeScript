@@ -391,7 +391,7 @@ gulp.task(builtLocalCompiler, false, [servicesFile], () => {
         .pipe(localCompilerProject())
         .pipe(prependCopyright())
         .pipe(sourcemaps.write("."))
-        .pipe(gulp.dest("."));
+        .pipe(gulp.dest("src/compiler"));
 });
 
 gulp.task(servicesFile, false, ["lib", "generate-diagnostics"], () => {
@@ -417,13 +417,13 @@ gulp.task(servicesFile, false, ["lib", "generate-diagnostics"], () => {
                 file.path = nodeDefinitionsFile;
                 return content + "\r\nexport = ts;";
             }))
-            .pipe(gulp.dest(".")),
+            .pipe(gulp.dest("src/services")),
         completedDts.pipe(clone())
             .pipe(insert.transform((content, file) => {
                 file.path = nodeStandaloneDefinitionsFile;
                 return content.replace(/declare (namespace|module) ts/g, 'declare module "typescript"');
             }))
-    ]).pipe(gulp.dest("."));
+    ]).pipe(gulp.dest("src/services"));
 });
 
 // cancellationToken.js
@@ -449,7 +449,7 @@ gulp.task(typingsInstallerJs, false, [servicesFile], () => {
         .pipe(cancellationTokenProject())
         .pipe(prependCopyright())
         .pipe(sourcemaps.write("."))
-        .pipe(gulp.dest("."));
+        .pipe(gulp.dest("src/server/typingsInstaller"));
 });
 
 const serverFile = path.join(builtLocalDirectory, "tsserver.js");
@@ -462,7 +462,7 @@ gulp.task(serverFile, false, [servicesFile, typingsInstallerJs, cancellationToke
         .pipe(serverProject())
         .pipe(prependCopyright())
         .pipe(sourcemaps.write("."))
-        .pipe(gulp.dest("."));
+        .pipe(gulp.dest("src/server"));
 });
 
 const tsserverLibraryFile = path.join(builtLocalDirectory, "tsserverlibrary.js");
@@ -478,12 +478,12 @@ gulp.task(tsserverLibraryFile, false, [servicesFile], (done) => {
     return merge2([
         js.pipe(prependCopyright())
             .pipe(sourcemaps.write("."))
-            .pipe(gulp.dest(".")),
+            .pipe(gulp.dest("src/server")),
         dts.pipe(prependCopyright(/*outputCopyright*/true))
             .pipe(insert.transform((content) => {
                 return content + "\r\nexport = ts;\r\nexport as namespace ts;";
             }))
-            .pipe(gulp.dest("."))
+            .pipe(gulp.dest("src/server"))
     ]);
 });
 
@@ -557,7 +557,7 @@ gulp.task(run, false, [servicesFile], () => {
         .pipe(sourcemaps.init())
         .pipe(testProject())
         .pipe(sourcemaps.write(".", { includeContent: false, sourceRoot: "../../" }))
-        .pipe(gulp.dest("."));
+        .pipe(gulp.dest("src/harness"));
 });
 
 const internalTests = "internal/";
@@ -779,7 +779,7 @@ gulp.task("browserify", "Runs browserify on run.js to produce a file suitable fo
                 });
         }))
         .pipe(sourcemaps.write(".", { includeContent: false }))
-        .pipe(gulp.dest("."));
+        .pipe(gulp.dest("src/harness"));
 });
 
 
@@ -961,7 +961,7 @@ gulp.task("update-sublime", "Updates the sublime plugin's tsserver", ["local", s
 });
 
 gulp.task("build-rules", "Compiles tslint rules to js", () => {
-    const settings: tsc.Settings = getCompilerSettings({ module: "commonjs" }, /*useBuiltCompiler*/ false);
+    const settings: tsc.Settings = getCompilerSettings({ module: "commonjs", "lib": ["es6"] }, /*useBuiltCompiler*/ false);
     const dest = path.join(builtLocalDirectory, "tslint");
     return gulp.src("scripts/tslint/**/*.ts")
         .pipe(newer({

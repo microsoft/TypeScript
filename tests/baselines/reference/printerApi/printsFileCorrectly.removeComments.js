@@ -15,3 +15,4 @@ const enum E2 {
     second
 }
 console.log(1 + 2);
+function functionWithDefaultArgValue(argument: string = "defaultValue"): void { }

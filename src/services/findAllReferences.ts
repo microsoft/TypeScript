@@ -1,4 +1,4 @@
-﻿/// <reference path="./importTracker.ts" />
+/// <reference path="./importTracker.ts" />
 
 /* @internal */
 namespace ts.FindAllReferences {

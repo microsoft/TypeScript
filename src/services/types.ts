@@ -4,7 +4,11 @@ namespace ts {
         getChildCount(sourceFile?: SourceFile): number;
         getChildAt(index: number, sourceFile?: SourceFile): Node;
         getChildren(sourceFile?: SourceFile): Node[];
+        /* @internal */
+        getChildren(sourceFile?: SourceFileLike): Node[];
         getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number;
+        /* @internal */
+        getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number;
         getFullStart(): number;
         getEnd(): number;
         getWidth(sourceFile?: SourceFile): number;
@@ -57,6 +61,10 @@ namespace ts {
         getLineStarts(): number[];
         getPositionOfLineAndCharacter(line: number, character: number): number;
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
+    }
+
+    export interface SourceFileLike {
+        getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
     }
 
     /**
@@ -248,7 +256,7 @@ namespace ts {
 
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
 
-        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[]): CodeAction[];
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[];
 
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
 
@@ -346,21 +354,23 @@ namespace ts {
         caretOffset: number;
     }
 
-    export interface RenameLocation {
+    export interface DocumentSpan {
         textSpan: TextSpan;
         fileName: string;
     }
 
-    export interface ReferenceEntry {
-        textSpan: TextSpan;
-        fileName: string;
+    export interface RenameLocation extends DocumentSpan {
+    }
+
+    export interface ReferenceEntry extends DocumentSpan {
         isWriteAccess: boolean;
         isDefinition: boolean;
+        isInString?: true;
     }
 
-    export interface ImplementationLocation {
-        textSpan: TextSpan;
-        fileName: string;
+    export interface ImplementationLocation extends DocumentSpan {
+        kind: string;
+        displayParts: SymbolDisplayPart[];
     }
 
     export interface DocumentHighlights {
@@ -377,6 +387,7 @@ namespace ts {
 
     export interface HighlightSpan {
         fileName?: string;
+        isInString?: true;
         textSpan: TextSpan;
         kind: string;
     }
@@ -468,9 +479,12 @@ namespace ts {
         displayParts: SymbolDisplayPart[];
     }
 
-    export interface ReferencedSymbol {
+    export interface ReferencedSymbolOf<T extends DocumentSpan> {
         definition: ReferencedSymbolDefinitionInfo;
-        references: ReferenceEntry[];
+        references: T[];
+    }
+
+    export interface ReferencedSymbol extends ReferencedSymbolOf<ReferenceEntry> {
     }
 
     export enum SymbolDisplayPartKind {
@@ -706,8 +720,7 @@ namespace ts {
 
         /** enum E */
         export const enumElement = "enum";
-        // TODO: GH#9983
-        export const enumMemberElement = "const";
+        export const enumMemberElement = "enum member";
 
         /**
          * Inside module and script only

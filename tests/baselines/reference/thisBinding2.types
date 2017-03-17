@@ -67,10 +67,10 @@ var messenger = {
 >setTimeout(() => { var x = this.message; }, 3000) : number
 >setTimeout : (expression: any, msec?: number, language?: any) => number
 >() => { var x = this.message; } : () => void
->x : any
->this.message : any
->this : any
->message : any
+>x : string
+>this.message : string
+>this : { message: string; start: () => number; }
+>message : string
 >3000 : 3000
     }
 };

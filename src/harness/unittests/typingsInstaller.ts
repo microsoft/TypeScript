@@ -1,4 +1,4 @@
-﻿/// <reference path="../harness.ts" />
+/// <reference path="../harness.ts" />
 /// <reference path="./tsserverProjectSystem.ts" />
 /// <reference path="../../server/typingsInstaller/typingsInstaller.ts" />
 
@@ -56,7 +56,7 @@ namespace ts.projectSystem {
                 path: "/a/config.js",
                 content: "export let x = 1"
             };
-            const typesCache = "/cache"
+            const typesCache = "/cache";
             const typesConfig = {
                 path: typesCache + "/node_modules/@types/config/index.d.ts",
                 content: "export let y: number;"
@@ -74,7 +74,7 @@ namespace ts.projectSystem {
                     super(host, { typesRegistry: createTypesRegistry("config"), globalTypingsCacheLocation: typesCache });
                 }
                 installWorker(_requestId: number, _args: string[], _cwd: string, _cb: server.typingsInstaller.RequestCompletedAction) {
-                    assert(false, "should not be called")
+                    assert(false, "should not be called");
                 }
             })();
             const service = createProjectService(host, { typingsInstaller: installer });

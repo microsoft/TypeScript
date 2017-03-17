@@ -1,4 +1,4 @@
-﻿/// <reference path="types.ts"/>
+/// <reference path="types.ts"/>
 /// <reference path="performance.ts" />
 
 namespace ts {
@@ -84,7 +84,7 @@ namespace ts {
                     this.index++;
                     return { value: this.selector(this.data, this.keys[index]), done: false };
                 }
-                return { value: undefined as never, done: true }
+                return { value: undefined as never, done: true };
             }
         }
 
@@ -140,7 +140,7 @@ namespace ts {
                     action(this.data[key], key);
                 }
             }
-        }
+        };
     }
 
     export function createFileMap<T>(keyMapper?: (key: string) => string): FileMap<T> {
