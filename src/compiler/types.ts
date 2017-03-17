@@ -1849,7 +1849,6 @@ namespace ts {
     }
 
     export interface ExternalModuleReference extends Node {
-        parent: ImportEqualsDeclaration;
         kind: SyntaxKind.ExternalModuleReference;
         parent?: ImportEqualsDeclaration;
         expression?: Expression;
@@ -1909,7 +1908,6 @@ namespace ts {
     }
 
     export interface NamedExports extends Node {
-        parent: ExportDeclaration;
         kind: SyntaxKind.NamedExports;
         parent?: ExportDeclaration;
         elements: NodeArray<ExportSpecifier>;
@@ -1925,7 +1923,6 @@ namespace ts {
     }
 
     export interface ExportSpecifier extends Declaration {
-        parent: NamedExports;
         kind: SyntaxKind.ExportSpecifier;
         parent?: NamedExports;
         propertyName?: Identifier;  // Name preceding "as" keyword (or undefined when "as" is absent)

@@ -479,6 +479,7 @@ namespace ts {
         displayParts: SymbolDisplayPart[];
     }
 
+    //!!! internal implementation details leaked!!!
     export interface ReferencedSymbolOf<T extends DocumentSpan> {
         definition: ReferencedSymbolDefinitionInfo;
         references: T[];

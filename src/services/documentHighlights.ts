@@ -21,19 +21,15 @@ namespace ts.DocumentHighlights {
         return referenceEntries && convertReferencedSymbols(referenceEntries);
     }
 
-    function convertReferencedSymbols(referenceEntries: ReferenceEntry[]): DocumentHighlights[] {
+    function convertReferencedSymbols(referenceEntries: FindAllReferences.Entry[]): DocumentHighlights[] {
         const fileNameToDocumentHighlights = createMap<HighlightSpan[]>();
-        for (const referenceEntry of referenceEntries) {
-            const fileName = referenceEntry.fileName;
+        for (const entry of referenceEntries) {
+            const { fileName, span } = FindAllReferences.toHighlightSpan(entry);
             let highlightSpans = fileNameToDocumentHighlights.get(fileName);
             if (!highlightSpans) {
                 fileNameToDocumentHighlights.set(fileName, highlightSpans = []);
             }
-
-            highlightSpans.push({
-                textSpan: referenceEntry.textSpan,
-                kind: referenceEntry.isWriteAccess ? HighlightSpanKind.writtenReference : HighlightSpanKind.reference
-            });
+            highlightSpans.push(span);
         }
 
         return arrayFrom(fileNameToDocumentHighlights.entries(), ([fileName, highlightSpans ]) => ({ fileName, highlightSpans }));

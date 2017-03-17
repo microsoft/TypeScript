@@ -992,7 +992,7 @@ namespace FourSlash {
 
             for (const startRange of toArray(startRanges)) {
                 this.goToRangeStart(startRange);
-                const fullActual = this.findReferencesAtCaret().map<ReferenceJson>(({ definition, references }) => ({
+                const fullActual = ts.map<ts.ReferencedSymbol, ReferenceJson>(this.findReferencesAtCaret(), ({ definition, references }) => ({
                     definition: definition.displayParts.map(d => d.text).join(""),
                     ranges: references
                 }));
@@ -2383,7 +2383,7 @@ namespace FourSlash {
             else {
                 if (actual === undefined) {
                     this.raiseError(`${name} failed - expected the template {newText: "${expected.newText}", caretOffset: "${expected.caretOffset}"} but got nothing instead`);
-                    
+
                 }
 
                 if (actual.newText !== expected.newText) {
