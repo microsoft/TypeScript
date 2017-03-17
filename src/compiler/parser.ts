@@ -3696,10 +3696,6 @@ namespace ts {
                 //      var foo3 = require("subfolder
                 //      import * as foo1 from "module-from-node  -> we want this import to be a statement rather than import call expression
                 const importCall = parseImportCallExpression();
-                if (importCall.specifier.kind === SyntaxKind.StringLiteral) {
-                    (sourceFile.imports || (sourceFile.imports = [])).push(importCall.specifier as StringLiteral);
-                }
-                sourceFile.containsDynamicImport = true;
                 return importCall;
             }
             const expression = token() === SyntaxKind.SuperKeyword ? parseSuperExpression() : parseMemberExpressionOrHigher();

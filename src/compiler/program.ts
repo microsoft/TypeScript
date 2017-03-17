@@ -1183,7 +1183,7 @@ namespace ts {
             const isDtsFile = isDeclarationFile(file);
 
             // file.imports may not be undefined if there exists dynamic import
-            let imports = file.imports;
+            let imports: LiteralExpression[];
             let moduleAugmentations: LiteralExpression[];
             let ambientModules: string[];
 
@@ -1202,9 +1202,7 @@ namespace ts {
 
             for (const node of file.statements) {
                 collectModuleReferences(node, /*inAmbientModule*/ false);
-                if (isJavaScriptFile) {
-                    collectRequireCalls(node);
-                }
+                collectImportOrRequireCalls(node);
             }
 
             file.imports = imports || emptyArray;
@@ -1266,12 +1264,15 @@ namespace ts {
                 }
             }
 
-            function collectRequireCalls(node: Node): void {
-                if (isRequireCall(node, /*checkArgumentIsStringLiteral*/true)) {
+            function collectImportOrRequireCalls(node: Node): void {
+                if (isJavaScriptFile && isRequireCall(node, /*checkArgumentIsStringLiteral*/true)) {
                     (imports || (imports = [])).push(<StringLiteral>(<CallExpression>node).arguments[0]);
                 }
+                else if (node.kind === SyntaxKind.ImportCallExpression && (<ImportCallExpression>node).specifier.kind === SyntaxKind.StringLiteral) {
+                    (imports || (imports = [])).push(<StringLiteral>(<ImportCallExpression>node).specifier);
+                }
                 else {
-                    forEachChild(node, collectRequireCalls);
+                    forEachChild(node, collectImportOrRequireCalls);
                 }
             }
         }
