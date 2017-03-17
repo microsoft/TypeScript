@@ -63,12 +63,12 @@ namespace ts.codefix {
             case SyntaxKind.PropertyDeclaration:
                 const typeNode = checker.createTypeNode(type, enclosingDeclaration);
                 const property = createProperty(
-                      /*decorators*/undefined
-                    , modifiers
-                    , name
-                    , /*questionToken*/ undefined
-                    , typeNode
-                    , /*initializer*/ undefined);
+                    /*decorators*/undefined,
+                    modifiers,
+                    name,
+                    /*questionToken*/ undefined,
+                    typeNode,
+                    /*initializer*/ undefined);
                 return property;
             case SyntaxKind.MethodSignature:
             case SyntaxKind.MethodDeclaration:
@@ -97,15 +97,15 @@ namespace ts.codefix {
                     const signature = signatures[i];
                     const signatureParts = checker.createSignatureParts(signature, enclosingDeclaration);
                     signatureDeclarations.push(createMethod(
-                          /*decorators*/ undefined
-                        , modifiers
-                        , /*asteriskToken*/ undefined
-                        , name
-                        , optional ? createToken(SyntaxKind.QuestionToken) : undefined
-                        , signatureParts.typeParameters
-                        , signatureParts.parameters
-                        , signatureParts.type
-                        , /*body*/undefined));
+                        /*decorators*/ undefined,
+                        modifiers,
+                        /*asteriskToken*/ undefined,
+                        name,
+                        optional ? createToken(SyntaxKind.QuestionToken) : undefined,
+                        signatureParts.typeParameters,
+                        signatureParts.parameters,
+                        signatureParts.type,
+                        /*body*/undefined));
                 }
 
                 if (declarations.length > signatures.length) {
@@ -150,59 +150,59 @@ namespace ts.codefix {
         for (let i = 0; i < maxNonRestArgs; i++) {
             const anyType = createKeywordTypeNode(SyntaxKind.AnyKeyword);
             const newParameter = createParameter(
-                  /*decorators*/ undefined
-                , /*modifiers*/ undefined
-                , /*dotDotDotToken*/ undefined
-                , maxArgsParameterSymbolNames[i]
-                , /*questionToken*/ i >= minArgumentCount ? createToken(SyntaxKind.QuestionToken) : undefined
-                , anyType
-                , /*initializer*/ undefined);
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                /*dotDotDotToken*/ undefined,
+                maxArgsParameterSymbolNames[i],
+                /*questionToken*/ i >= minArgumentCount ? createToken(SyntaxKind.QuestionToken) : undefined,
+                anyType,
+                /*initializer*/ undefined);
             parameters.push(newParameter);
         }
 
         if (someSigHasRestParameter) {
             const anyArrayType = createArrayTypeNode(createKeywordTypeNode(SyntaxKind.AnyKeyword));
             const restParameter = createParameter(
-                  /*decorators*/ undefined
-                , /*modifiers*/ undefined
-                , createToken(SyntaxKind.DotDotDotToken)
-                , maxArgsParameterSymbolNames[maxNonRestArgs] || "rest"
-                , /*questionToken*/ maxNonRestArgs >= minArgumentCount ? createToken(SyntaxKind.QuestionToken) : undefined
-                , anyArrayType
-                , /*initializer*/ undefined);
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                createToken(SyntaxKind.DotDotDotToken),
+                maxArgsParameterSymbolNames[maxNonRestArgs] || "rest",
+                /*questionToken*/ maxNonRestArgs >= minArgumentCount ? createToken(SyntaxKind.QuestionToken) : undefined,
+                anyArrayType,
+                /*initializer*/ undefined);
             parameters.push(restParameter);
         }
 
         return createStubbedMethod(
-            modifiers
-            , name
-            , optional
-            , /*typeParameters*/undefined
-            , parameters
-            , /*returnType*/ undefined);
+            modifiers,
+            name,
+            optional,
+            /*typeParameters*/undefined,
+            parameters,
+            /*returnType*/ undefined);
     }
 
     export function createStubbedMethod(modifiers: Modifier[], name: PropertyName, optional: boolean, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], returnType: TypeNode | undefined) {
         return createMethod(
-              /*decorators*/undefined
-            , modifiers
-            , /*asteriskToken*/undefined
-            , name
-            , optional ? createToken(SyntaxKind.QuestionToken) : undefined
-            , typeParameters
-            , parameters
-            , returnType
-            , createStubbedMethodBody());
+            /*decorators*/undefined,
+            modifiers,
+            /*asteriskToken*/undefined,
+            name,
+            optional ? createToken(SyntaxKind.QuestionToken) : undefined,
+            typeParameters,
+            parameters,
+            returnType,
+            createStubbedMethodBody());
     }
 
     function createStubbedMethodBody() {
         return createBlock(
             [createThrow(
                 createNew(
-                    createIdentifier('Error')
-                    , /*typeArguments*/undefined
-                    , [createLiteral('Method not implemented.')]))]
-            , /*multiline*/true);
+                    createIdentifier('Error'),
+                    /*typeArguments*/undefined,
+                    [createLiteral('Method not implemented.')]))],
+            /*multiline*/true);
     }
 
     function createVisibilityModifier(flags: ModifierFlags) {

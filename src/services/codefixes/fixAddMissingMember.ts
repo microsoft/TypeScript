@@ -44,29 +44,29 @@ namespace ts.codefix {
         const openBrace = getOpenBraceOfClassLike(classDeclaration, sourceFile);
 
         const property = createProperty(
-              /*decorators*/undefined
-            , /*modifiers*/ undefined
-            , token.getText(sourceFile)
-            , /*questionToken*/ undefined
-            , typeNode
-            , /*initializer*/ undefined);
+            /*decorators*/undefined,
+            /*modifiers*/ undefined,
+            token.getText(sourceFile),
+            /*questionToken*/ undefined,
+            typeNode,
+            /*initializer*/ undefined);
         const propertyChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
         propertyChangeTracker.insertNodeAfter(sourceFile, openBrace, property, { suffix: context.newLineCharacter });
 
         const stringTypeNode = createKeywordTypeNode(SyntaxKind.StringKeyword);
         const indexingParameter = createParameter(
-             /*decorators*/ undefined
-            , /*modifiers*/ undefined
-            , /*dotDotDotToken*/ undefined
-            , "x"
-            , /*questionToken*/ undefined
-            , stringTypeNode
-            , /*initializer*/ undefined);
+            /*decorators*/ undefined,
+            /*modifiers*/ undefined,
+            /*dotDotDotToken*/ undefined,
+            "x",
+            /*questionToken*/ undefined,
+            stringTypeNode,
+            /*initializer*/ undefined);
         const indexSignature = createIndexSignatureDeclaration(
-              [indexingParameter]
-            , typeNode
-            , /*decorators*/undefined
-            , /*modifiers*/ undefined);
+            [indexingParameter],
+            typeNode,
+            /*decorators*/undefined,
+            /*modifiers*/ undefined);
 
         const indexSignatureChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
         indexSignatureChangeTracker.insertNodeAfter(sourceFile, openBrace, indexSignature, { suffix: context.newLineCharacter });

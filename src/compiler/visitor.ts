@@ -2,9 +2,7 @@
 /// <reference path="factory.ts" />
 /// <reference path="utilities.ts" />
 
-namespace ts {
-
-    
+namespace ts { 
     export const nullTransformationContext: TransformationContext = {
         enableEmitNotification: noop,
         enableSubstitution: noop,
@@ -265,25 +263,25 @@ namespace ts {
             case SyntaxKind.ConstructorType:
             case SyntaxKind.CallSignature:
             case SyntaxKind.ConstructSignature:
-                return updateSignatureDeclaration(<SignatureDeclaration>node
-                    , nodesVisitor((<SignatureDeclaration>node).typeParameters, visitor, isTypeParameter)
-                    , visitParameterList((<SignatureDeclaration>node).parameters, visitor, context, nodesVisitor)
-                    , visitNode((<SignatureDeclaration>node).type, visitor, isTypeNode));
+                return updateSignatureDeclaration(<SignatureDeclaration>node,
+                    nodesVisitor((<SignatureDeclaration>node).typeParameters, visitor, isTypeParameter),
+                    visitParameterList((<SignatureDeclaration>node).parameters, visitor, context, nodesVisitor),
+                    visitNode((<SignatureDeclaration>node).type, visitor, isTypeNode));
 
             case SyntaxKind.MethodSignature:
-                return updateSignatureDeclaration(<SignatureDeclaration & TypeElement>node
-                    , nodesVisitor((<SignatureDeclaration & TypeElement>node).typeParameters, visitor, isTypeParameter)
-                    , visitParameterList((<SignatureDeclaration & TypeElement>node).parameters, visitor, context, nodesVisitor)
-                    , visitNode((<SignatureDeclaration & TypeElement>node).type, visitor, isTypeNode)
-                    , visitNode((<SignatureDeclaration & TypeElement>node).name, visitor, isPropertyName)
-                    , visitNode((<SignatureDeclaration & TypeElement>node).questionToken, visitor, isToken));
+                return updateSignatureDeclaration(<SignatureDeclaration & TypeElement>node,
+                    nodesVisitor((<SignatureDeclaration & TypeElement>node).typeParameters, visitor, isTypeParameter),
+                    visitParameterList((<SignatureDeclaration & TypeElement>node).parameters, visitor, context, nodesVisitor),
+                    visitNode((<SignatureDeclaration & TypeElement>node).type, visitor, isTypeNode),
+                    visitNode((<SignatureDeclaration & TypeElement>node).name, visitor, isPropertyName),
+                    visitNode((<SignatureDeclaration & TypeElement>node).questionToken, visitor, isToken));
 
             case SyntaxKind.IndexSignature:
-                return updateIndexSignatureDeclaration(<IndexSignatureDeclaration>node
-                    , visitParameterList((<IndexSignatureDeclaration>node).parameters, visitor, context, nodesVisitor)
-                    , visitNode((<IndexSignatureDeclaration>node).type, visitor, isTypeNode)
-                    , nodesVisitor((<IndexSignatureDeclaration>node).decorators, visitor, isDecorator)
-                    , nodesVisitor((<IndexSignatureDeclaration>node).modifiers, visitor, isModifier));
+                return updateIndexSignatureDeclaration(<IndexSignatureDeclaration>node,
+                    visitParameterList((<IndexSignatureDeclaration>node).parameters, visitor, context, nodesVisitor),
+                    visitNode((<IndexSignatureDeclaration>node).type, visitor, isTypeNode),
+                    nodesVisitor((<IndexSignatureDeclaration>node).decorators, visitor, isDecorator),
+                    nodesVisitor((<IndexSignatureDeclaration>node).modifiers, visitor, isModifier));
 
             case SyntaxKind.Parameter:
                 return updateParameter(<ParameterDeclaration>node,
@@ -304,9 +302,9 @@ namespace ts {
             case SyntaxKind.TypePredicate:
                 throw new Error("reached unsupported type in visitor.");
             case SyntaxKind.TypeReference:
-                return updateTypeReferenceNode(<TypeReferenceNode>node
-                    , visitNode((<TypeReferenceNode>node).typeName, visitor, isEntityName)
-                    , nodesVisitor((<TypeReferenceNode>node).typeArguments, visitor, isTypeNode));
+                return updateTypeReferenceNode(<TypeReferenceNode>node,
+                    visitNode((<TypeReferenceNode>node).typeName, visitor, isEntityName),
+                    nodesVisitor((<TypeReferenceNode>node).typeArguments, visitor, isTypeNode));
 
             case SyntaxKind.TypeQuery:
                 return updateTypeQueryNode((<TypeQueryNode>node), visitNode((<TypeQueryNode>node).exprName, visitor, isEntityName));
@@ -322,8 +320,8 @@ namespace ts {
 
             case SyntaxKind.UnionType:
             case SyntaxKind.IntersectionType:
-                return updateUnionOrIntersectionTypeNode(<UnionOrIntersectionTypeNode>node
-                    , nodesVisitor((<UnionOrIntersectionTypeNode>node).types, visitor, isTypeNode));
+                return updateUnionOrIntersectionTypeNode(<UnionOrIntersectionTypeNode>node,
+                    nodesVisitor((<UnionOrIntersectionTypeNode>node).types, visitor, isTypeNode));
 
             case SyntaxKind.ParenthesizedType:
                 throw new Error("reached unsupported type in visitor.");
@@ -332,43 +330,43 @@ namespace ts {
             case SyntaxKind.TypeOperator:
                 return updateTypeOperatorNode(<TypeOperatorNode>node, visitNode((<TypeOperatorNode>node).type, visitor, isTypeNode));
             case SyntaxKind.IndexedAccessType:
-                return updateIndexedAccessTypeNode((<IndexedAccessTypeNode>node)
-                    , visitNode((<IndexedAccessTypeNode>node).objectType, visitor, isTypeNode)
-                    , visitNode((<IndexedAccessTypeNode>node).indexType, visitor, isTypeNode));
+                return updateIndexedAccessTypeNode((<IndexedAccessTypeNode>node),
+                    visitNode((<IndexedAccessTypeNode>node).objectType, visitor, isTypeNode),
+                    visitNode((<IndexedAccessTypeNode>node).indexType, visitor, isTypeNode));
             case SyntaxKind.MappedType:
-                return updateMappedTypeNode((<MappedTypeNode>node)
-                    , visitNode((<MappedTypeNode>node).readonlyToken, visitor, isToken)
-                    , visitNode((<MappedTypeNode>node).typeParameter, visitor, isTypeParameter)
-                    , visitNode((<MappedTypeNode>node).questionToken, visitor, isToken)
-                    , visitNode((<MappedTypeNode>node).type, visitor, isTypeNode));
+                return updateMappedTypeNode((<MappedTypeNode>node),
+                    visitNode((<MappedTypeNode>node).readonlyToken, visitor, isToken),
+                    visitNode((<MappedTypeNode>node).typeParameter, visitor, isTypeParameter),
+                    visitNode((<MappedTypeNode>node).questionToken, visitor, isToken),
+                    visitNode((<MappedTypeNode>node).type, visitor, isTypeNode));
 
             case SyntaxKind.LiteralType:
-                return updateLiteralTypeNode(<LiteralTypeNode>node
-                    , visitNode((<LiteralTypeNode>node).literal, visitor, isExpression));
+                return updateLiteralTypeNode(<LiteralTypeNode>node,
+                    visitNode((<LiteralTypeNode>node).literal, visitor, isExpression));
 
             // Type Declarations
 
             case SyntaxKind.TypeParameter:
-                return updateTypeParameterDeclaration(<TypeParameterDeclaration>node
-                    , visitNode((<TypeParameterDeclaration>node).name, visitor, isIdentifier)
-                    , visitNode((<TypeParameterDeclaration>node).constraint, visitor, isTypeNode)
-                    , visitNode((<TypeParameterDeclaration>node).default, visitor, isTypeNode));
+                return updateTypeParameterDeclaration(<TypeParameterDeclaration>node,
+                    visitNode((<TypeParameterDeclaration>node).name, visitor, isIdentifier),
+                    visitNode((<TypeParameterDeclaration>node).constraint, visitor, isTypeNode),
+                    visitNode((<TypeParameterDeclaration>node).default, visitor, isTypeNode));
 
             // Type members
 
             case SyntaxKind.PropertySignature:
-                return updatePropertySignature((<PropertySignature>node)
-                    , visitNode((<PropertySignature>node).name, visitor, isPropertyName)
-                    , visitNode((<PropertySignature>node).questionToken, visitor, isToken)
-                    , visitNode((<PropertySignature>node).type, visitor, isTypeNode)
-                    , visitNode((<PropertySignature>node).initializer, visitor, isExpression));
+                return updatePropertySignature((<PropertySignature>node),
+                    visitNode((<PropertySignature>node).name, visitor, isPropertyName),
+                    visitNode((<PropertySignature>node).questionToken, visitor, isToken),
+                    visitNode((<PropertySignature>node).type, visitor, isTypeNode),
+                    visitNode((<PropertySignature>node).initializer, visitor, isExpression));
 
             case SyntaxKind.IndexSignature:
-                return updateIndexSignatureDeclaration(<IndexSignatureDeclaration>node
-                    , visitParameterList((<IndexSignatureDeclaration>node).parameters, visitor, context, nodesVisitor)
-                    , visitNode((<IndexSignatureDeclaration>node).type, visitor, isTypeNode)
-                    , nodesVisitor((<IndexSignatureDeclaration>node).decorators, visitor, isDecorator)
-                    , nodesVisitor((<IndexSignatureDeclaration>node).modifiers, visitor, isModifier));
+                return updateIndexSignatureDeclaration(<IndexSignatureDeclaration>node,
+                    visitParameterList((<IndexSignatureDeclaration>node).parameters, visitor, context, nodesVisitor),
+                    visitNode((<IndexSignatureDeclaration>node).type, visitor, isTypeNode),
+                    nodesVisitor((<IndexSignatureDeclaration>node).decorators, visitor, isDecorator),
+                    nodesVisitor((<IndexSignatureDeclaration>node).modifiers, visitor, isModifier));
 
             case SyntaxKind.PropertyDeclaration:
                 return updateProperty(<PropertyDeclaration>node,

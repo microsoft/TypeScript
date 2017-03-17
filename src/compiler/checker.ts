@@ -2210,13 +2210,13 @@ namespace ts {
             // TODO: how should we clone members/modifiers?
             // TODO: check initializer accessibility correctly.
             const parameterNode = createParameter(
-                parameterDeclaration.decorators && parameterDeclaration.decorators.map(getSynthesizedDeepClone)
-                , parameterDeclaration.modifiers && parameterDeclaration.modifiers.map(getSynthesizedDeepClone)
-                , parameterDeclaration.dotDotDotToken && createToken(SyntaxKind.DotDotDotToken)
-                , getSynthesizedDeepClone(parameterDeclaration.name)
-                , parameterDeclaration.questionToken && createToken(SyntaxKind.QuestionToken)
-                , parameterTypeNode
-                , parameterDeclaration.initializer && getSynthesizedDeepClone(parameterDeclaration.initializer));
+                parameterDeclaration.decorators && parameterDeclaration.decorators.map(getSynthesizedDeepClone),
+                parameterDeclaration.modifiers && parameterDeclaration.modifiers.map(getSynthesizedDeepClone),
+                parameterDeclaration.dotDotDotToken && createToken(SyntaxKind.DotDotDotToken),
+                getSynthesizedDeepClone(parameterDeclaration.name),
+                parameterDeclaration.questionToken && createToken(SyntaxKind.QuestionToken),
+                parameterTypeNode,
+                parameterDeclaration.initializer && getSynthesizedDeepClone(parameterDeclaration.initializer));
             return parameterNode;
         }
 
@@ -2558,10 +2558,10 @@ namespace ts {
                         }
                         else {
                             typeElements.push(createPropertySignature(
-                                propertyName
-                                , optionalToken
-                                , createTypeNodeWorker(propertyType)
-                                , /*initializer*/undefined));
+                                propertyName,
+                                optionalToken,
+                                createTypeNodeWorker(propertyType),
+                               /*initializer*/undefined));
                         }
                     }
                     return typeElements.length ? typeElements : undefined;
@@ -2636,19 +2636,19 @@ namespace ts {
 
             const name = getNameFromIndexInfo(indexInfo);
             const indexingParameter = createParameter(
-                              /*decorators*/ undefined
-                , /*modifiers*/ undefined
-                , /*dotDotDotToken*/ undefined
-                , name
-                , /*questionToken*/ undefined
-                , indexerTypeNode
-                , /*initializer*/ undefined);
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                /*dotDotDotToken*/ undefined,
+                name,
+                /*questionToken*/ undefined,
+                indexerTypeNode,
+                /*initializer*/ undefined);
             const typeNode = createTypeNode(indexInfo.type, enclosingDeclaration);
             return createIndexSignatureDeclaration(
-                [indexingParameter]
-                , typeNode
-                , /*decorators*/ undefined
-                , indexInfo.isReadonly ? [createToken(SyntaxKind.ReadonlyKeyword)] : undefined);
+                [indexingParameter],
+                typeNode,
+                /*decorators*/ undefined,
+                indexInfo.isReadonly ? [createToken(SyntaxKind.ReadonlyKeyword)] : undefined);
         }
 
         function typePredicateToString(typePredicate: TypePredicate, enclosingDeclaration?: Declaration, flags?: TypeFormatFlags): string {
