@@ -2163,6 +2163,8 @@ namespace ts {
                     return bindJsxAttribute(<JsxAttribute>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
 
                 // Imports and exports
+                case SyntaxKind.ImportCallExpression:
+                    return bindImportCallExpression(<ImportCallExpression>node);
                 case SyntaxKind.ImportEqualsDeclaration:
                 case SyntaxKind.NamespaceImport:
                 case SyntaxKind.ImportSpecifier:
@@ -2264,6 +2266,15 @@ namespace ts {
             else if (!node.exportClause) {
                 // All export * declarations are collected in an __export symbol
                 declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.ExportStar, SymbolFlags.None);
+            }
+        }
+
+        function bindImportCallExpression(node: ImportCallExpression) {
+            if (!file.dynamicImportIndicator) {
+                file.dynamicImportIndicator = node;
+                if (!file.externalModuleIndicator) {
+                    bindSourceFileAsExternalModule();
+                }
             }
         }
 

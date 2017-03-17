@@ -2253,6 +2253,7 @@ namespace ts {
         /* @internal */ externalModuleIndicator: Node;
         // The first node that causes this file to be a CommonJS module
         /* @internal */ commonJsModuleIndicator: Node;
+        /* @internal */ dynamicImportIndicator: Node;
 
         /* @internal */ identifiers: Map<string>;
         /* @internal */ nodeCount: number;
@@ -2282,7 +2283,6 @@ namespace ts {
         /* @internal */ moduleAugmentations: LiteralExpression[];
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
         /* @internal */ ambientModuleNames: string[];
-        /* @internal */ containsDynamicImport?: boolean;
     }
 
     export interface Bundle extends Node {

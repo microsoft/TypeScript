@@ -1644,7 +1644,7 @@ namespace ts {
             if (node.resolvedTypeReferenceDirectiveNames !== undefined) updated.resolvedTypeReferenceDirectiveNames = node.resolvedTypeReferenceDirectiveNames;
             if (node.imports !== undefined) updated.imports = node.imports;
             if (node.moduleAugmentations !== undefined) updated.moduleAugmentations = node.moduleAugmentations;
-            if (node.containsDynamicImport !== undefined) updated.containsDynamicImport = node.containsDynamicImport;
+            if (node.dynamicImportIndicator !== undefined) updated.dynamicImportIndicator = node.dynamicImportIndicator;
             return updateNode(updated, node);
         }
 

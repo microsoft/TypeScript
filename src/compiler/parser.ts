@@ -461,7 +461,11 @@ namespace ts {
     }
 
     export function isExternalModule(file: SourceFile): boolean {
-        return file.externalModuleIndicator !== undefined || file.containsDynamicImport;
+        return file.externalModuleIndicator !== undefined;
+    }
+
+    export function containedDynamicImport(file: SourceFile): boolean {
+        return file.dynamicImportIndicator !== undefined;
     }
 
     // Produces a new SourceFile for the 'newText' provided. The 'textChangeRange' parameter
