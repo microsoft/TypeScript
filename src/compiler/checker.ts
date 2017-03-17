@@ -2327,22 +2327,22 @@ namespace ts {
                 if (objectFlags & ObjectFlags.ClassOrInterface) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
                     // TODO: Detect whether class is named and fail if not.
-                    const name = getNameOfSymbol(type.symbol);
+                    const name = createNameFromSymbol(type.symbol);
                     // TODO: handle type arguments.
                     return createTypeReferenceNode(name, /*typeParameters*/undefined);
                 }
                 if (type.flags & TypeFlags.TypeParameter) {
                     // TODO: get qualified name when necessary instead of string.
-                    const name = symbolToString(type.symbol);
+                    const name = createNameFromSymbol(type.symbol);
                     // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
                     return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                 }
 
                 // TODO: move back up later on?
                 if (checkAlias && type.aliasSymbol) {
-                    const name = getNameOfSymbol(type.aliasSymbol);
+                    const name = createNameFromSymbol(type.aliasSymbol);
                     const typeArgumentNodes = mapToTypeNodeArray(type.aliasTypeArguments);
-                    return createTypeReferenceNode(createIdentifier(name), typeArgumentNodes);
+                    return createTypeReferenceNode(name, typeArgumentNodes);
                 }
                 checkAlias = false;
 
@@ -2357,15 +2357,12 @@ namespace ts {
                 if (objectFlags & (ObjectFlags.Anonymous | ObjectFlags.Mapped)) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
                     // The type is an object literal type.
-                    if (!type.symbol) {
-                        // Anonymous types without symbols are literals.
-                        // TODO: handle this case correctly.
-                        // TODO: test.
-                        noop();
-                    }
-
                     return createAnonymousTypeNode(<ObjectType>type);
                 }
+                
+                // TODO: implement when this is testable.
+                //     else if (type.flags & TypeFlags.StringOrNumberLiteral) {
+                //         writer.writeStringLiteral(literalTypeToString(<LiteralType>type));
 
                 if (type.flags & TypeFlags.Index) {
                     // TODO: test.
@@ -2382,14 +2379,17 @@ namespace ts {
 
                 Debug.fail("Should be unreachable.");
 
-                /** Note that mapToTypeNodeArray(undefined) === undefined. */
                 function mapToTypeNodeArray(types: Type[]): NodeArray<TypeNode> {
-                    return asNodeArray(types && types.map(createTypeNodeWorker) as TypeNode[]);
+                    return types && asNodeArray(types.map(createTypeNodeWorker) as TypeNode[]);
                 }
 
-                // TODO: implement when this is testable.
-                //     else if (type.flags & TypeFlags.StringOrNumberLiteral) {
-                //         writer.writeStringLiteral(literalTypeToString(<LiteralType>type));
+                function createNameFromSymbol(symbol: Symbol): Identifier;
+                function createNameFromSymbol(symbol: Symbol): EntityName;
+                function createNameFromSymbol(symbol: Symbol): EntityName {
+                    symbol; enclosingDeclaration;
+                    // TODO: actually implement this
+                    return createIdentifier(symbolToString(symbol, enclosingDeclaration));
+                }
 
                 function createMappedTypeNodeFromType(type: MappedType) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
@@ -2414,8 +2414,6 @@ namespace ts {
                         if (symbol.flags & SymbolFlags.Class && !getBaseTypeVariableOfClass(symbol) ||
                             symbol.flags & (SymbolFlags.Enum | SymbolFlags.ValueModule) ||
                             shouldWriteTypeOfFunctionSymbol()) {
-                            // TODO: test.
-                            // TODO: get entity name from symbol.
                             return createTypeQueryNodeFromType(type);
                         }
                         else if (contains(symbolStack, symbol)) {
@@ -2443,7 +2441,7 @@ namespace ts {
                         }
                     }
                     else {
-                        // Anonymous types with no symbol are never circular
+                        // Anonymous types without a symbol are never circular.
                         return createTypeNodeFromObjectType(type);
                     }
 
@@ -2496,16 +2494,9 @@ namespace ts {
                 function createTypeQueryNodeFromType(type: Type) {
                     const symbol = type.symbol;
                     if (symbol) {
-                        // TODO: get entity name instead.
                         const entityName = createNameFromSymbol(symbol);
                         return createTypeQueryNode(entityName);
                     }
-                }
-
-                function createNameFromSymbol(symbol: Symbol): EntityName {
-                    symbol; enclosingDeclaration;
-                    // TODO: actually implement this
-                    return createIdentifier(symbolToString(symbol, enclosingDeclaration));
                 }
 
                 function createTypeReferenceNodeFromType(type: TypeReference) {
@@ -2535,8 +2526,8 @@ namespace ts {
                                 // the default outer type arguments), we don't show the group.
                                 // TODO: figure out how to handle type arguments
                                 if (!rangeEquals(outerTypeParameters, typeArguments, start, i)) {
-                                    const name = symbolToString(parent);
-                                    const qualifiedNamePart = createIdentifier(name); // createTypeReferenceNode(name, mapToTypeNodeArray(typeArguments.slice(start, i - start)));
+                                    const name = createNameFromSymbol(parent);
+                                    const qualifiedNamePart = name; // createTypeReferenceNode(name, mapToTypeNodeArray(typeArguments.slice(start, i - start)));
                                     if (!qualifiedName) {
                                         qualifiedName = createQualifiedName(qualifiedNamePart, /*right*/undefined);
                                     }
@@ -2549,7 +2540,7 @@ namespace ts {
                             }
                         }
                         let entityName: EntityName = undefined;
-                        const nameIdentifier = createIdentifier(symbolToString(type.symbol));
+                        const nameIdentifier = createNameFromSymbol(type.symbol);
                         if (qualifiedName) {
                             // TODO: handle checking of type arguments for qualified names?
                             Debug.assert(!qualifiedName.right);
