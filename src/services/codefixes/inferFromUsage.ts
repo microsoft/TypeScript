@@ -27,7 +27,7 @@ namespace ts.codefix {
     function getActionsForAddExplicitTypeAnnotation({ sourceFile, program, span: { start }, errorCode, cancellationToken, newLineCharacter}: CodeFixContext): CodeAction[] | undefined {
         const token = getTokenAtPosition(sourceFile, start);
 
-        if (!isIdentifier(token)) {
+        if (!isIdentifier(token) && token.kind !== SyntaxKind.DotDotDotToken) {
             return undefined;
         }
 
@@ -42,8 +42,9 @@ namespace ts.codefix {
                 case Diagnostics.Member_0_implicitly_has_an_1_type.code:
                     return getCodeActionForVariable();
                 case Diagnostics.Parameter_0_implicitly_has_an_1_type.code:
+                    return getCodeActionForParameter(/*isRestParam*/ false);
                 case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code:
-                    return getCodeActionForParameter();
+                    return getCodeActionForParameter(/*isRestParam*/ true);
             }
         }
 
@@ -54,29 +55,34 @@ namespace ts.codefix {
                 const declaration = getAncestor(token, SyntaxKind.VariableStatement);
                 if (!declaration.jsDoc) {
                     const newText = `/** @type {${typeString}} */${newLineCharacter}`;
-                    return createCodeActions(declaration.getStart(), newText);
+                    return createCodeActions(token.getText(), declaration.getStart(), newText);
                 }
             }
             else {
-                return createCodeActions(token.getEnd(), `: ${typeString}`);
+                return createCodeActions(token.getText(), token.getEnd(), `: ${typeString}`);
             }
         }
 
-        function getCodeActionForParameter() {
-            let type = inferTypeForParameterFromUsage(<Identifier>token);
+        function getCodeActionForParameter(isRestParameter: boolean) {
+            const parameterDeclaration = <ParameterDeclaration>getAncestor(token, SyntaxKind.Parameter);
+            if (!isIdentifier(parameterDeclaration.name)) {
+                return undefined;
+            }
+
+            let type = inferTypeForParameterFromUsage(parameterDeclaration.name, isRestParameter);
             if (!isValidInference(type)) {
-                type = inferTypeForVariableFromUsage(<Identifier>token);
+                type = inferTypeForVariableFromUsage(parameterDeclaration.name);
             }
             const typeString = checker.typeToString(type || checker.getAnyType(), token, TypeFormatFlags.NoTruncation);
             if (isInJavaScriptFile(sourceFile)) {
                 const declaration = getContainingFunction(token);
                 if (!declaration.jsDoc) {
                     const newText = `/** @param {${typeString}} ${token.getText()} */${newLineCharacter}`;
-                    return createCodeActions(declaration.getStart(), newText);
+                    return createCodeActions(parameterDeclaration.name.getText(), declaration.getStart(), newText);
                 }
             }
             else {
-                return createCodeActions(token.getEnd(), `: ${typeString}`);
+                return createCodeActions(parameterDeclaration.name.getText(), parameterDeclaration.getEnd(), `: ${typeString}`);
             }
         }
 
@@ -146,9 +152,9 @@ namespace ts.codefix {
         //    }
         //}
 
-        function createCodeActions(start: number, typeString: string) {
+        function createCodeActions(name: string, start: number, typeString: string) {
             return [{
-                description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Infer_type_of_0), [token.getText()]),
+                description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Infer_type_of_0), [name]),
                 changes: [{
                     fileName: sourceFile.fileName,
                     textChanges: [{
@@ -185,7 +191,7 @@ namespace ts.codefix {
             }
         }
 
-        function inferTypeForParameterFromUsage(token: Identifier) {
+        function inferTypeForParameterFromUsage(token: Identifier, isRestParameter: boolean) {
             const containingFunction = getContainingFunction(token);
 
             if (containingFunction.kind === SyntaxKind.SetAccessor) {
@@ -202,7 +208,7 @@ namespace ts.codefix {
                 if (searchToken) {
                     const parameterIndex = getParameterIndexInList(token, containingFunction.parameters);
                     const references = getReferences(searchToken).map(r => <Identifier>getTokenAtPosition(program.getSourceFile(r.fileName), r.textSpan.start));
-                    return inferTypeForParameterFromReferences(references, parameterIndex, isConstructor, checker);
+                    return inferTypeForParameterFromReferences(references, parameterIndex, isConstructor, isRestParameter, checker);
                 }
             }
             else {
@@ -236,12 +242,12 @@ namespace ts.codefix {
         return getTypeFromUsageContext(usageContext, checker);
     }
 
-    function inferTypeForParameterFromReferences(references: Identifier[], parameterIndex: number, isConstructor: boolean, checker: TypeChecker) {
+    function inferTypeForParameterFromReferences(references: Identifier[], parameterIndex: number, isConstructor: boolean, isRestParameter: boolean, checker: TypeChecker) {
         const usageContext: UsageContext = {};
         for (const reference of references) {
             getTypeFromContext(reference, checker, usageContext);
         }
-        return getParameterTypeFromCallContexts(parameterIndex, isConstructor ? usageContext.constructContexts : usageContext.callContexts, checker);
+        return getParameterTypeFromCallContexts(parameterIndex, isConstructor ? usageContext.constructContexts : usageContext.callContexts, isRestParameter, checker);
     }
 
     function getTypeFromUsageContext(usageContext: UsageContext, checker: TypeChecker): Type {
@@ -258,12 +264,12 @@ namespace ts.codefix {
             return checker.getWidenedType(checker.getUnionType(map(usageContext.candidateTypes, t => checker.getBaseTypeOfLiteralType(t)), true));
         }
         else if (usageContext.properties && hasCallContext(usageContext.properties.get("then"))) {
-            const paramType = getParameterTypeFromCallContexts(0, usageContext.properties.get("then").callContexts, checker);
+            const paramType = getParameterTypeFromCallContexts(0, usageContext.properties.get("then").callContexts, /*isRestParameter*/ false, checker);
             const types = paramType.getCallSignatures().map(c => c.getReturnType());
             return checker.createPromiseType(types.length ? checker.getUnionType(types, true) : checker.getAnyType());
         }
         else if (usageContext.properties && hasCallContext(usageContext.properties.get("push"))) {
-            return checker.createArrayType(getParameterTypeFromCallContexts(0, usageContext.properties.get("push").callContexts, checker));
+            return checker.createArrayType(getParameterTypeFromCallContexts(0, usageContext.properties.get("push").callContexts, /*isRestParameter*/ false, checker));
         }
         else if (usageContext.properties || usageContext.callContexts || usageContext.constructContexts || usageContext.numberIndexContext || usageContext.stringIndexContext) {
             const members = createMap<Symbol>();
@@ -283,12 +289,14 @@ namespace ts.codefix {
             if (usageContext.callContexts) {
                 for (const callConext of usageContext.callContexts) {
                     callSignatures.push(getSignatureFromCallContext(callConext, checker));
-                }            }
+                }
+            }
 
             if (usageContext.constructContexts) {
                 for (const constructContext of usageContext.constructContexts) {
                     constructSignatures.push(getSignatureFromCallContext(constructContext, checker));
-                }            }
+                }
+            }
 
             if (usageContext.numberIndexContext) {
                 numberIndexInfo = checker.createIndexInfo(getTypeFromUsageContext(usageContext.numberIndexContext, checker), /*isReadonly*/ false);
@@ -305,16 +313,22 @@ namespace ts.codefix {
         }
     }
 
-    function getParameterTypeFromCallContexts(parameterIndex: number, callContexts: CallContext[], checker: TypeChecker) {
-        const types = [];
+    function getParameterTypeFromCallContexts(parameterIndex: number, callContexts: CallContext[], isRestParameter: boolean, checker: TypeChecker) {
+        let types: Type[]  = [];
         if (callContexts) {
             for (const callContext of callContexts) {
                 if (callContext.argumentTypes.length > parameterIndex) {
-                    types.push(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[parameterIndex]));
+                    if (isRestParameter) {
+                        types = concatenate(types, map(callContext.argumentTypes.slice(parameterIndex), a => checker.getBaseTypeOfLiteralType(a)));
+                    }
+                    else {
+                        types.push(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[parameterIndex]));
+                    }
                 }
             }
         }
-        return types.length ? checker.getWidenedType(checker.getUnionType(types, true)) : checker.getAnyType();
+        const type = types.length ? checker.getWidenedType(checker.getUnionType(types, true)) : checker.getAnyType();
+        return isRestParameter ? checker.createArrayType(type) : type;
     }
 
     function getSignatureFromCallContext(callContext: CallContext, checker: TypeChecker): Signature {
@@ -322,7 +336,8 @@ namespace ts.codefix {
         for (let i = 0; i < callContext.argumentTypes.length; i++) {
             const symbol = checker.createSymbol(SymbolFlags.FunctionScopedVariable, `p${i}`);
             symbol.type = checker.getWidenedType(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[i]));
-            parameters.push(symbol);        }
+            parameters.push(symbol);
+        }
         const returnType = getTypeFromUsageContext(callContext.returnType, checker);
         return checker.createSignature(/*declaration*/ undefined, /*typeParameters*/ undefined, /*thisParameter*/ undefined, parameters, returnType, /*typePredicate*/ undefined, callContext.argumentTypes.length, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
     }
