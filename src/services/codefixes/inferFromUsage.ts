@@ -465,6 +465,12 @@ namespace ts.codefix {
                 if (otherOperandType.flags & TypeFlags.EnumLike) {
                     addCandidateType(usageContext, otherOperandType);
                 }
+                else if (otherOperandType.flags & TypeFlags.NumberLike) {
+                    addCandidateType(usageContext, checker.getNumberType());
+                }
+                else if (otherOperandType.flags & TypeFlags.StringLike) {
+                    addCandidateType(usageContext, checker.getStringType());
+                }
                 else {
                     usageContext.isNumberOrString = true;
                 }

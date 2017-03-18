@@ -1,11 +1,9 @@
 /// <reference path='fourslash.ts' />
 
 // @noImplicitAny: true
-////[|var foo|];
+////[|var foo;|]
 ////function f() {
 ////    foo += 2;
 ////}
 
-debugger;
-
-verify.rangeAfterCodeFix("var foo: number");
+verify.rangeAfterCodeFix("var foo: number;");
