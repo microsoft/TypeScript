@@ -1,4 +1,4 @@
-//
+﻿//
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -2143,6 +2143,11 @@ namespace FourSlash {
             }
         }
 
+        public printCodeFixes() {
+            const codeFixes = this.getCodeFixActions(this.activeFile.fileName);
+            Harness.IO.log(stringify(codeFixes));
+        }
+
         /**
          * Applies fixes for the errors in fileName and compares the results to
          * expectedContents after all fixes have been applied.
@@ -3737,6 +3742,10 @@ namespace FourSlashInterface {
 
         public printCompletionListMembers() {
             this.state.printCompletionListMembers();
+        }
+
+        public printCodeFixes() {
+            this.state.printCodeFixes();
         }
 
         public printBreakpointLocation(pos: number) {
