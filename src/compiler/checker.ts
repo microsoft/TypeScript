@@ -18595,7 +18595,19 @@ namespace ts {
             // Grammar checking
             checkGrammarStatementInAmbientContext(node);
 
-            checkExpression(node.expression);
+            const type = checkExpression(node.expression);
+
+            // Check for missing 'await' keyword in async functions
+            if (type && 
+                deferredGlobalPromiseType && 
+                (type.symbol === deferredGlobalPromiseType.symbol) && 
+                (node.expression.kind === ts.SyntaxKind.CallExpression)) {
+                // Calls to async functions without await inside async functions are disallowed
+                const container = getContainingFunction(node);
+                if (container && isAsyncFunction(container)) {
+                    error(node.expression, Diagnostics.Return_value_of_async_function_call_was_discarded_Did_you_mean_to_await_its_result);
+                }
+            }
         }
 
         function checkIfStatement(node: IfStatement) {
