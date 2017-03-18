@@ -3006,6 +3006,42 @@ namespace ts.projectSystem {
             const errorResult = <protocol.Diagnostic[]>session.executeCommand(dTsFileGetErrRequest).response;
             assert.isTrue(errorResult.length === 0);
         });
+
+        it("should be turned on for js-only external projects with skipLibCheck=false", () => {
+            const jsFile = {
+                path: "/a/b/file1.js",
+                content: "let x =1;"
+            };
+            const dTsFile = {
+                path: "/a/b/file2.d.ts",
+                content: `
+                interface T {
+                    name: string;
+                };
+                interface T {
+                    name: number;
+                };`
+            };
+            const host = createServerHost([jsFile, dTsFile]);
+            const session = createSession(host);
+
+            const openExternalProjectRequest = makeSessionRequest<protocol.OpenExternalProjectArgs>(
+                CommandNames.OpenExternalProject,
+                {
+                    projectFileName: "project1",
+                    rootFiles: toExternalFiles([jsFile.path, dTsFile.path]),
+                    options: { skipLibCheck: false }
+                }
+            );
+            session.executeCommand(openExternalProjectRequest);
+
+            const dTsFileGetErrRequest = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(
+                CommandNames.SemanticDiagnosticsSync,
+                { file: dTsFile.path }
+            );
+            const errorResult = <protocol.Diagnostic[]>session.executeCommand(dTsFileGetErrRequest).response;
+            assert.isTrue(errorResult.length === 0);
+        });
     });
 
     describe("non-existing directories listed in config file input array", () => {
