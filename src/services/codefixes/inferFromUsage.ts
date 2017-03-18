@@ -10,7 +10,7 @@ namespace ts.codefix {
             Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code,
 
             // Diagnostics.Binding_element_0_implicitly_has_an_1_type.code,
-            // Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation.code,
+            Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation.code,
             // Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation.code,
             // Diagnostics.new_expression_whose_target_lacks_a_construct_signature_implicitly_has_an_any_type.code,
             // Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type.code,
@@ -31,6 +31,8 @@ namespace ts.codefix {
             return undefined;
         }
 
+        const containingFunction = getContainingFunction(token);
+
         const checker = program.getTypeChecker();
 
         return getCodeAction();
@@ -41,8 +43,15 @@ namespace ts.codefix {
                 case Diagnostics.Variable_0_implicitly_has_an_1_type.code:
                 case Diagnostics.Member_0_implicitly_has_an_1_type.code:
                     return getCodeActionForVariable();
+                case Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation.code:
+                    return getCodeActionForSetAccessor(<SetAccessorDeclaration> containingFunction);
                 case Diagnostics.Parameter_0_implicitly_has_an_1_type.code:
-                    return getCodeActionForParameter(/*isRestParam*/ false);
+                    if (containingFunction.kind === SyntaxKind.SetAccessor) {
+                        return getCodeActionForSetAccessor(<SetAccessorDeclaration>containingFunction);
+                    }
+                    else {
+                        return getCodeActionForParameter(/*isRestParam*/ false);
+                    }
                 case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code:
                     return getCodeActionForParameter(/*isRestParam*/ true);
             }
@@ -75,14 +84,36 @@ namespace ts.codefix {
             }
             const typeString = checker.typeToString(type || checker.getAnyType(), token, TypeFormatFlags.NoTruncation);
             if (isInJavaScriptFile(sourceFile)) {
-                const declaration = getContainingFunction(token);
-                if (!declaration.jsDoc) {
+                if (!containingFunction.jsDoc) {
                     const newText = `/** @param {${typeString}} ${token.getText()} */${newLineCharacter}`;
-                    return createCodeActions(parameterDeclaration.name.getText(), declaration.getStart(), newText);
+                    return createCodeActions(parameterDeclaration.name.getText(), containingFunction.getStart(), newText);
                 }
             }
             else {
                 return createCodeActions(parameterDeclaration.name.getText(), parameterDeclaration.getEnd(), `: ${typeString}`);
+            }
+        }
+
+        function getCodeActionForSetAccessor(setAccessorDeclaration: SetAccessorDeclaration) {
+            const setAccessorParameter = setAccessorDeclaration.parameters[0];
+            if (!setAccessorParameter || !isIdentifier(setAccessorParameter.name)) {
+                return undefined;
+            }
+
+            let type = inferTypeForVariableFromUsage(setAccessorDeclaration.name);
+            if (!isValidInference(type)) {
+                type = inferTypeForVariableFromUsage(setAccessorParameter.name);
+            }
+
+            const typeString = checker.typeToString(type || checker.getAnyType(), token, TypeFormatFlags.NoTruncation);
+            if (isInJavaScriptFile(sourceFile)) {
+                if (!setAccessorDeclaration.jsDoc) {
+                    const newText = `/** @param {${typeString}} ${setAccessorParameter.getText()} */${newLineCharacter}`;
+                    return createCodeActions(setAccessorDeclaration.name.getText(), setAccessorDeclaration.getStart(), newText);
+                }
+            }
+            else {
+                return createCodeActions(setAccessorDeclaration.name.getText(), setAccessorParameter.name.getEnd(), `: ${typeString}`);
             }
         }
 
@@ -192,12 +223,7 @@ namespace ts.codefix {
         }
 
         function inferTypeForParameterFromUsage(token: Identifier, isRestParameter: boolean) {
-            const containingFunction = getContainingFunction(token);
-
-            if (containingFunction.kind === SyntaxKind.SetAccessor) {
-                return inferTypeForVariableFromUsage((<SetAccessorDeclaration>containingFunction).name);
-            }
-            else if (containingFunction.kind === SyntaxKind.Constructor || containingFunction.kind === SyntaxKind.FunctionExpression ||
+            if (containingFunction.kind === SyntaxKind.Constructor || containingFunction.kind === SyntaxKind.FunctionExpression ||
                 containingFunction.kind === SyntaxKind.FunctionDeclaration || containingFunction.kind === SyntaxKind.MethodDeclaration ||
                 containingFunction.kind === SyntaxKind.MethodSignature) {
                 const isConstructor = containingFunction.kind === SyntaxKind.Constructor;
