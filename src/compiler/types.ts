@@ -2226,7 +2226,7 @@ namespace ts {
         endOfFileToken: Token<SyntaxKind.EndOfFileToken>;
 
         fileName: string;
-        /* internal */ path: Path;
+        /* @internal */ path: Path;
         text: string;
 
         amdDependencies: AmdDependency[];
