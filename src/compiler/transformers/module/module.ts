@@ -55,7 +55,7 @@ namespace ts {
          * @param node The SourceFile node.
          */
         function transformSourceFile(node: SourceFile) {
-            if (isDeclarationFile(node) || !(isExternalModule(node) || compilerOptions.isolatedModules || containedDynamicImport(node))) {
+            if (isDeclarationFile(node) || !(isExternalModule(node) || compilerOptions.isolatedModules || node.transformFlags & TransformFlags.ContainsDynamicImport)) {
                 return node;
             }
 
@@ -489,7 +489,7 @@ namespace ts {
         function importCallExpressionVisitor(node: Node): VisitResult<Node> {
             // This visitor does not need to descend into the tree if there is no dynamic import,
             // as export/import statements are only transformed at the top level of a file.
-            if (!currentSourceFile.containsDynamicImport) {
+            if (!(node.transformFlags & TransformFlags.ContainsDynamicImport)) {
                 return node;
             }
 

@@ -1268,7 +1268,7 @@ namespace ts {
                 if (isJavaScriptFile && isRequireCall(node, /*checkArgumentIsStringLiteral*/true)) {
                     (imports || (imports = [])).push(<StringLiteral>(<CallExpression>node).arguments[0]);
                 }
-                else if (node.kind === SyntaxKind.ImportCallExpression && (<ImportCallExpression>node).specifier.kind === SyntaxKind.StringLiteral) {
+                else if (isImportCallExpression(node) && node.specifier.kind === SyntaxKind.StringLiteral) {
                     (imports || (imports = [])).push(<StringLiteral>(<ImportCallExpression>node).specifier);
                 }
                 else {

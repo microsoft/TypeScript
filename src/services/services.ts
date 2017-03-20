@@ -458,7 +458,6 @@ namespace ts {
         public hasNoDefaultLib: boolean;
         public externalModuleIndicator: Node; // The first node that causes this file to be an external module
         public commonJsModuleIndicator: Node; // The first node that causes this file to be a CommonJS module
-        public dynamicImportIndicator: Node; // The first dynamic import in this file
         public nodeCount: number;
         public identifierCount: number;
         public symbolCount: number;

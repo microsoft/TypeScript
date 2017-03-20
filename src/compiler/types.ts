@@ -2253,7 +2253,6 @@ namespace ts {
         /* @internal */ externalModuleIndicator: Node;
         // The first node that causes this file to be a CommonJS module
         /* @internal */ commonJsModuleIndicator: Node;
-        /* @internal */ dynamicImportIndicator: Node;
 
         /* @internal */ identifiers: Map<string>;
         /* @internal */ nodeCount: number;
@@ -3810,7 +3809,9 @@ namespace ts {
         ContainsYield = 1 << 24,
         ContainsHoistedDeclarationOrCompletion = 1 << 25,
 
-        HasComputedFlags = 1 << 29, // Transform flags have been computed.
+        ContainsDynamicImport = 1 << 26,
+
+        HasComputedFlags = 1 << 27, // Transform flags have been computed.
 
         // Assertions
         // - Bitmasks that are used to assert facts about the syntax of a node and its subtree.
