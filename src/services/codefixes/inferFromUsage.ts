@@ -4,21 +4,23 @@ namespace ts.codefix {
         errorCodes: [
             Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined.code,
             //Diagnostics.Variable_0_implicitly_has_an_1_type.code,
-            Diagnostics.Parameter_0_implicitly_has_an_1_type.code,
+
             Diagnostics.Member_0_implicitly_has_an_1_type.code,
-            //Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type.code,
+
+            Diagnostics.Parameter_0_implicitly_has_an_1_type.code,
             Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code,
 
-            // Diagnostics.Binding_element_0_implicitly_has_an_1_type.code,
+            Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation.code,
+            Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type.code,
+
             Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation.code,
-            // Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation.code,
+
+             //Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type.code,
+            // Diagnostics.Binding_element_0_implicitly_has_an_1_type.code,
             // Diagnostics.new_expression_whose_target_lacks_a_construct_signature_implicitly_has_an_any_type.code,
-            // Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type.code,
             // Diagnostics.Function_expression_which_lacks_return_type_annotation_implicitly_has_an_0_return_type.code,
-            // Diagnostics.Construct_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type.code,
             // Diagnostics.Element_implicitly_has_an_any_type_because_index_expression_is_not_of_type_number.code,
             // Diagnostics.Element_implicitly_has_an_any_type_because_type_0_has_no_index_signature.code,
-            // Diagnostics.Call_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type.code,
             // Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation.code,
         ],
         getCodeActions: getActionsForAddExplicitTypeAnnotation
@@ -54,6 +56,13 @@ namespace ts.codefix {
                     }
                 case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code:
                     return getCodeActionForParameter(/*isRestParam*/ true);
+                case Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation.code:
+                    return getCodeActionForGetAccessor(<GetAccessorDeclaration>containingFunction);
+                case Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type.code:
+                    if (containingFunction.kind === SyntaxKind.GetAccessor) {
+                        return getCodeActionForGetAccessor(<GetAccessorDeclaration>containingFunction);
+                    }
+                    return undefined;
             }
         }
 
@@ -116,6 +125,23 @@ namespace ts.codefix {
                 return createCodeActions(setAccessorDeclaration.name.getText(), setAccessorParameter.name.getEnd(), `: ${typeString}`);
             }
         }
+
+        function getCodeActionForGetAccessor(getAccessorDeclaration: GetAccessorDeclaration) {
+            let type = inferTypeForVariableFromUsage(getAccessorDeclaration.name);
+
+            const typeString = checker.typeToString(type || checker.getAnyType(), token, TypeFormatFlags.NoTruncation);
+            if (isInJavaScriptFile(sourceFile)) {
+                if (!getAccessorDeclaration.jsDoc) {
+                    const newText = `/** @type {${typeString}} */${newLineCharacter}`;
+                    return createCodeActions(getAccessorDeclaration.name.getText(), getAccessorDeclaration.getStart(), newText);
+                }
+            }
+            else {
+                const closeParenToken = getFirstChildOfKind(getAccessorDeclaration, sourceFile, SyntaxKind.CloseParenToken);
+                return createCodeActions(getAccessorDeclaration.name.getText(), closeParenToken.getEnd(), `: ${typeString}`);
+            }
+        }
+
 
         //function coalesceSignatures(declaration: FunctionLikeDeclaration, signatures: Signature[]): Signature {
         //    const parameters = [];
