@@ -202,7 +202,7 @@ namespace ts {
                 if (len >= 2 && buffer[0] === 0xFE && buffer[1] === 0xFF) {
                     // Big endian UTF-16 byte order mark detected. Since big endian is not supported by node.js,
                     // flip all byte pairs and treat as little endian.
-                    len &= ~1;
+                    len &= ~1; // Round down to a multiple of 2
                     for (let i = 0; i < len; i += 2) {
                         const temp = buffer[i];
                         buffer[i] = buffer[i + 1];
