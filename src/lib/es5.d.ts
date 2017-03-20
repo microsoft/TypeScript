@@ -2,8 +2,6 @@
 /// ECMAScript APIs
 /////////////////////////////
 
-// tslint:disable no-var-keyword
-
 declare const NaN: number;
 declare const Infinity: number;
 

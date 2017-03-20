@@ -931,7 +931,7 @@ namespace FourSlash {
                 const { isWriteAccess, isDefinition, isInString } = (r.marker && r.marker.data) || { isWriteAccess: false, isDefinition: false, isInString: undefined };
                 const result: ts.ReferenceEntry = { fileName: r.fileName, textSpan: { start: r.start, length: r.end - r.start }, isWriteAccess: !!isWriteAccess, isDefinition: !!isDefinition };
                 if (isInString !== undefined) {
-                    result.isInString = isInString
+                    result.isInString = isInString;
                 }
                 return result;
             }

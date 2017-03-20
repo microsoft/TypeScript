@@ -2,6 +2,7 @@
 import * as cp from "child_process";
 import * as path from "path";
 import * as fs from "fs";
+import child_process = require("child_process");
 import originalGulp = require("gulp");
 import helpMaker = require("gulp-help");
 import runSequence = require("run-sequence");
@@ -1019,39 +1020,15 @@ function spawnLintWorker(files: {path: string}[], callback: (failures: number) =
 }
 
 gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: --f[iles]=regex", ["build-rules"], () => {
-    const fileMatcher = RegExp(cmdLineOptions["files"]);
     if (fold.isTravis()) console.log(fold.start("lint"));
-
-    let files: {stat: fs.Stats, path: string}[] = [];
-    return gulp.src(lintTargets, { read: false })
-        .pipe(through2.obj((chunk, enc, cb) => {
-            files.push(chunk);
-            cb();
-        }, (cb) => {
-            files = files.filter(file =>  fileMatcher.test(file.path)).sort((filea, fileb) => filea.stat.size - fileb.stat.size);
-            const workerCount = cmdLineOptions["workers"];
-            for (let i = 0; i < workerCount; i++) {
-                spawnLintWorker(files, finished);
-            }
-
-            let completed = 0;
-            let failures = 0;
-            function finished(fails) {
-                completed++;
-                failures += fails;
-                if (completed === workerCount) {
-                    if (fold.isTravis()) console.log(fold.end("lint"));
-                    if (failures > 0) {
-                        throw new Error(`Linter errors: ${failures}`);
-                    }
-                    else {
-                        cb();
-                    }
-                }
-            }
-        }));
+    const fileMatcher = cmdLineOptions["files"];
+    const files = fileMatcher
+        ? `src/**/${fileMatcher}`
+        : "Gulpfile.ts 'src/**/*.ts' --exclude src/lib/es5.d.ts --exclude 'src/lib/*.generated.d.ts' --exclude 'src/harness/unittests/services/**/*.ts'";
+    const cmd = `node node_modules/tslint/bin/tslint ${files} --format stylish`;
+    console.log("Linting: " + cmd);
+    child_process.execSync(cmd, { stdio: [0, 1, 2] });
 });
-
 
 gulp.task("default", "Runs 'local'", ["local"]);
 

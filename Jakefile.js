@@ -1177,43 +1177,16 @@ function spawnLintWorker(files, callback) {
 }
 
 desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex");
-task("lint", ["build-rules"], function () {
+task("lint", ["build-rules"], () => {
     if (fold.isTravis()) console.log(fold.start("lint"));
-    var startTime = mark();
-    var failed = 0;
-    var fileMatcher = RegExp(process.env.f || process.env.file || process.env.files || "");
-    var done = {};
-    for (var i in lintTargets) {
-        var target = lintTargets[i];
-        if (!done[target] && fileMatcher.test(target)) {
-            done[target] = fs.statSync(target).size;
-        }
-    }
-
-    var workerCount = (process.env.workerCount && +process.env.workerCount) || os.cpus().length;
-
-    var names = Object.keys(done).sort(function (namea, nameb) {
-        return done[namea] - done[nameb];
+    const fileMatcher = process.env.f || process.env.file || process.env.files;
+    const files = fileMatcher
+        ? `src/**/${fileMatcher}`
+        : "Gulpfile.ts 'src/**/*.ts' --exclude src/lib/es5.d.ts --exclude 'src/lib/*.generated.d.ts' --exclude 'src/harness/unittests/services/**/*.ts'";
+    const cmd = `node node_modules/tslint/bin/tslint ${files} --format stylish`;
+    console.log("Linting: " + cmd);
+    jake.exec([cmd], { interactive: true }, () => {
+        if (fold.isTravis()) console.log(fold.end("lint"));
+        complete();
     });
-
-    for (var i = 0; i < workerCount; i++) {
-        spawnLintWorker(names, finished);
-    }
-
-    var completed = 0;
-    var failures = 0;
-    function finished(fails) {
-        completed++;
-        failures += fails;
-        if (completed === workerCount) {
-            measure(startTime);
-            if (fold.isTravis()) console.log(fold.end("lint"));
-            if (failures > 0) {
-                fail('Linter errors.', failed);
-            }
-            else {
-                complete();
-            }
-        }
-    }
-}, { async: true });
+});
