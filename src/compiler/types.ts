@@ -1450,7 +1450,7 @@ namespace ts {
         kind: SyntaxKind.NewExpression;
         expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
-        arguments: NodeArray<Expression>;
+        arguments?: NodeArray<Expression>;
     }
 
     export interface TaggedTemplateExpression extends MemberExpression {
