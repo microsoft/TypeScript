@@ -14863,6 +14863,10 @@ namespace ts {
         }
 
         function checkImportCallExpression(node: ImportCallExpression): Type {
+            if (modulekind === ModuleKind.ES2015) {
+                grammarErrorOnNode(node, Diagnostics.Dynamic_import_cannot_be_used_when_targeting_ECMAScript_2015_modules);
+            }
+
             // resolveExternalModuleName will return undefined if the moduleReferenceExpression is not a string literal
             const moduleSymbol = resolveExternalModuleName(node, node.specifier);
             if (moduleSymbol) {

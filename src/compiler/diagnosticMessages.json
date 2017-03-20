@@ -867,6 +867,10 @@
         "category": "Error",
         "code": 1319
     },
+    "Dynamic import cannot be used when targeting ECMAScript 2015 modules.": {
+        "category": "Error",
+        "code": 1320
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -1862,10 +1866,6 @@
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
         "code": 2649
-    },
-    "Cannot emit namespaced JSX elements in React.": {
-        "category": "Error",
-        "code": 2650
     },
     "A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.": {
         "category": "Error",
