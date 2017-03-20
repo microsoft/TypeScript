@@ -3863,6 +3863,9 @@ namespace ts {
                     parseErrorAtPosition(openingTagName.pos, openingTagName.end - openingTagName.pos, Diagnostics.JSX_element_0_has_no_corresponding_closing_tag, getTextOfNodeFromSourceText(sourceText, openingTagName));
                     break;
                 }
+                else if (token() === SyntaxKind.ConflictMarkerTrivia) {
+                    break;
+                }
                 result.push(parseJsxChild());
             }
 

@@ -749,7 +749,7 @@ gulp.task("browserify", "Runs browserify on run.js to produce a file suitable fo
             const originalMap = file.sourceMap;
             const prebundledContent = file.contents.toString();
             // Make paths absolute to help sorcery deal with all the terrible paths being thrown around
-            originalMap.sources = originalMap.sources.map(s => path.resolve(s));
+            originalMap.sources = originalMap.sources.map(s => path.resolve(path.join("src/harness", s)));
             // intoStream (below) makes browserify think the input file is named this, so this is what it puts in the sourcemap
             originalMap.file = "built/local/_stream_0.js";
 
