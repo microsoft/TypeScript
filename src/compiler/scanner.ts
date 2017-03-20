@@ -1716,7 +1716,14 @@ namespace ts {
             while (pos < end) {
                 pos++;
                 char = text.charCodeAt(pos);
-                if ((char === CharacterCodes.openBrace) || (char === CharacterCodes.lessThan)) {
+                if (char === CharacterCodes.openBrace) {
+                    break;
+                }
+                if (char === CharacterCodes.lessThan) {
+                    if (isConflictMarkerTrivia(text, pos)) {
+                        pos = scanConflictMarkerTrivia(text, pos, error);
+                        return token = SyntaxKind.ConflictMarkerTrivia;
+                    }
                     break;
                 }
             }
