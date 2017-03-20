@@ -1919,7 +1919,7 @@ namespace ts {
             return result;
 
             function visitor(node: Node): void {
-                const diags = refactor.getSuggestedRefactorDiagnosticsForNode(node, context);
+                const diags = refactor.getSuggestableRefactorDiagnosticsForNode(node, context);
                 if (diags.length > 0) {
                     addRange(result, diags);
                 }

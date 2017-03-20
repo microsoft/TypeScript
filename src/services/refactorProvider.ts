@@ -7,6 +7,9 @@ namespace ts {
         /** An unique code associated with each refactor */
         refactorCode: number;
 
+        /** Indicates whether the refactor can be suggested without the editor asking for it  */
+        canBeSuggested: boolean;
+
         /** Compute the associated code actions */
         getCodeActions(range: TextRange, context: RefactorContext): CodeAction[];
     }
@@ -26,6 +29,10 @@ namespace ts {
     export type Refactor = SuggestableRefactor | NonSuggestableRefactor;
 
     export interface LightRefactorContext {
+        /** 
+         * The AST that was not bound, so the symbols associated with the nodes are not accessible.
+         * Such a source file should be cheap to get.
+         */
         nonBoundSourceFile: SourceFile;
         newLineCharacter: string;
     }
@@ -64,7 +71,7 @@ namespace ts {
             return results;
         }
 
-        export function getSuggestedRefactorDiagnosticsForNode(node: Node, context: RefactorContext) {
+        export function getSuggestableRefactorDiagnosticsForNode(node: Node, context: RefactorContext) {
             const result: RefactorDiagnostic[] = [];
             for (const code in suggestableRefactors) {
                 const refactor = suggestableRefactors[code];

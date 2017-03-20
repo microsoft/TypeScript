@@ -422,7 +422,7 @@ namespace ts.server.protocol {
         arguments: GetRefactorsForRangeRequestArgs;
     }
 
-    export interface GetRefactorsForRangeRequestArgs extends TextRangeRequestArgs {
+    export interface GetRefactorsForRangeRequestArgs extends FileRangeRequestArgs {
     }
 
     export interface GetRefactorsForRangeResponse extends Response {
@@ -454,7 +454,7 @@ namespace ts.server.protocol {
         arguments: CodeFixRequestArgs;
     }
 
-    export interface TextRangeRequestArgs extends FileRequestArgs {
+    export interface FileRangeRequestArgs extends FileRequestArgs {
         /**
           * The line number for the request (1-based).
           */
@@ -491,7 +491,7 @@ namespace ts.server.protocol {
     /**
       * Instances of this interface specify errorcodes on a specific location in a sourcefile.
       */
-    export interface CodeFixRequestArgs extends TextRangeRequestArgs {
+    export interface CodeFixRequestArgs extends FileRangeRequestArgs {
         /**
           * Errorcodes we want to get the fixes for.
           */

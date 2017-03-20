@@ -692,7 +692,7 @@ namespace ts.server {
             return response.body.map(entry => this.convertCodeActions(entry, fileName));
         }
 
-        getRefactorDiagnostics(fileName: string, range?: TextRange): RefactorDiagnostic[] {
+        getRefactorDiagnostics(fileName: string, range: TextRange): RefactorDiagnostic[] {
             const startLineOffset = this.positionToOneBasedLineOffset(fileName, range.pos);
             const endLineOffset = this.positionToOneBasedLineOffset(fileName, range.end);
 

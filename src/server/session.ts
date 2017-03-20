@@ -1417,17 +1417,21 @@ namespace ts.server {
             return ts.getSupportedCodeFixes();
         }
 
-        private extractStartAndEndPositionFromTextRangeRequestArgs(args: protocol.TextRangeRequestArgs, scriptInfo: ScriptInfo): { startPosition: number, endPosition: number } {
+        private extractStartAndEndPositionFromTextRangeRequestArgs(args: protocol.FileRangeRequestArgs, scriptInfo: ScriptInfo): { startPosition: number, endPosition: number } {
             const startPosition = getStartPosition();
             const endPosition = getEndPosition();
             return { startPosition, endPosition };
 
             function getStartPosition() {
-                return args.startPosition !== undefined ? args.startPosition : scriptInfo.lineOffsetToPosition(args.startLine, args.startOffset);
+                return args.startPosition !== undefined
+                    ? args.startPosition
+                    : args.startPosition = scriptInfo.lineOffsetToPosition(args.startLine, args.startOffset);
             }
 
             function getEndPosition() {
-                return args.endPosition !== undefined ? args.endPosition : scriptInfo.lineOffsetToPosition(args.endLine, args.endOffset);
+                return args.endPosition !== undefined
+                    ? args.endPosition
+                    : args.startPosition = scriptInfo.lineOffsetToPosition(args.endLine, args.endOffset);
             }
         }
 
