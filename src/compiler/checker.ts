@@ -1068,9 +1068,10 @@ namespace ts {
                 // block-scoped variable and namespace module. However, only when we
                 // try to resolve name in /*1*/ which is used in variable position,
                 // we want to check for block-scoped
-                if (meaning & SymbolFlags.BlockScopedVariable) {
+                if (meaning & SymbolFlags.BlockScopedVariable ||
+                    ((meaning & SymbolFlags.Class || meaning & SymbolFlags.Enum) && (meaning & SymbolFlags.Value) === SymbolFlags.Value)) {
                     const exportOrLocalSymbol = getExportSymbolOfValueSymbolIfExported(result);
-                    if (exportOrLocalSymbol.flags & SymbolFlags.BlockScopedVariable) {
+                    if (exportOrLocalSymbol.flags & SymbolFlags.BlockScopedVariable || exportOrLocalSymbol.flags & SymbolFlags.Class || exportOrLocalSymbol.flags & SymbolFlags.Enum) {
                         checkResolvedBlockScopedVariable(exportOrLocalSymbol, errorLocation);
                     }
                 }
@@ -1183,14 +1184,22 @@ namespace ts {
         }
 
         function checkResolvedBlockScopedVariable(result: Symbol, errorLocation: Node): void {
-            Debug.assert((result.flags & SymbolFlags.BlockScopedVariable) !== 0);
+            Debug.assert(!!(result.flags & SymbolFlags.BlockScopedVariable || result.flags & SymbolFlags.Class || result.flags & SymbolFlags.Enum));
             // Block-scoped variables cannot be used before their definition
-            const declaration = forEach(result.declarations, d => isBlockOrCatchScoped(d) ? d : undefined);
+            const declaration = forEach(result.declarations, d => isBlockOrCatchScoped(d) || isClassLike(d) || (d.kind === SyntaxKind.EnumDeclaration) ? d : undefined);
 
-            Debug.assert(declaration !== undefined, "Block-scoped variable declaration is undefined");
+            Debug.assert(declaration !== undefined, "Declaration to checkResolvedBlockScopedVariable is undefined");
 
             if (!isInAmbientContext(declaration) && !isBlockScopedNameDeclaredBeforeUse(declaration, errorLocation)) {
-                error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationNameToString(declaration.name));
+                if (result.flags & SymbolFlags.BlockScopedVariable) {
+                    error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationNameToString(declaration.name));
+                }
+                else if (result.flags & SymbolFlags.Class) {
+                    error(errorLocation, Diagnostics.Class_0_used_before_its_declaration, declarationNameToString(declaration.name));
+                }
+                else if (result.flags & SymbolFlags.Enum) {
+                    error(errorLocation, Diagnostics.Enum_0_used_before_its_declaration, declarationNameToString(declaration.name));
+                }
             }
         }
 
@@ -13322,10 +13331,17 @@ namespace ts {
                 }
                 return unknownType;
             }
-            if (prop.valueDeclaration &&
-                isInPropertyInitializer(node) &&
-                !isBlockScopedNameDeclaredBeforeUse(prop.valueDeclaration, right)) {
-                error(right, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, right.text);
+            if (prop.valueDeclaration) {
+                if (isInPropertyInitializer(node) &&
+                    !isBlockScopedNameDeclaredBeforeUse(prop.valueDeclaration, right)) {
+                    error(right, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, right.text);
+                }
+                if (prop.valueDeclaration.kind === SyntaxKind.ClassDeclaration &&
+                    node.parent && node.parent.kind !== SyntaxKind.TypeReference &&
+                    !isInAmbientContext(prop.valueDeclaration) &&
+                    !isBlockScopedNameDeclaredBeforeUse(prop.valueDeclaration, right)) {
+                    error(right, Diagnostics.Class_0_used_before_its_declaration, right.text);
+                }
             }
 
             markPropertyAsReferenced(prop);
@@ -19570,14 +19586,6 @@ namespace ts {
                         Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
                     if (baseConstructorType.flags & TypeFlags.TypeVariable && !isMixinConstructorType(staticType)) {
                         error(node.name || node, Diagnostics.A_mixin_class_must_have_a_constructor_with_a_single_rest_parameter_of_type_any);
-                    }
-
-                    if (baseType.symbol && baseType.symbol.valueDeclaration &&
-                        !isInAmbientContext(baseType.symbol.valueDeclaration) &&
-                        baseType.symbol.valueDeclaration.kind === SyntaxKind.ClassDeclaration) {
-                        if (!isBlockScopedNameDeclaredBeforeUse(baseType.symbol.valueDeclaration, node)) {
-                            error(baseTypeNode, Diagnostics.A_class_must_be_declared_after_its_base_class);
-                        }
                     }
 
                     if (!(staticBaseType.symbol && staticBaseType.symbol.flags & SymbolFlags.Class) && !(baseConstructorType.flags & TypeFlags.TypeVariable)) {
