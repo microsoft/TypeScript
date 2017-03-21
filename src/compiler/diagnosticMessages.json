@@ -3165,6 +3165,10 @@
       "category": "Error",
       "code": 7035
     },
+    "Dynamic import's specifier must be of type 'string', but here has type '{0}'.": {
+      "category": "Error",
+      "code": 7036
+    },
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000

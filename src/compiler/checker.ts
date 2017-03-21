@@ -14873,6 +14873,10 @@ namespace ts {
                 grammarErrorOnNode(node, Diagnostics.Dynamic_import_cannot_be_used_when_targeting_ECMAScript_2015_modules);
             }
 
+            const specifierType = checkExpression(node.specifier);
+            if (!isTypeAssignableTo(specifierType, stringType)) {
+                error(node.specifier, Diagnostics.Dynamic_import_s_specifier_must_be_of_type_string_but_here_has_type_0, typeToString(specifierType));
+           }
             // resolveExternalModuleName will return undefined if the moduleReferenceExpression is not a string literal
             const moduleSymbol = resolveExternalModuleName(node, node.specifier);
             if (moduleSymbol) {
