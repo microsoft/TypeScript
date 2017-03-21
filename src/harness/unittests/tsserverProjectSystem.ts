@@ -983,6 +983,41 @@ namespace ts.projectSystem {
             checkProjectRootFiles(projectService.configuredProjects[0], [commonFile1.path, commonFile2.path]);
         });
 
+        it("should disable features when the files are too large", () => {
+            const file1 = {
+                path: "/a/b/f1.js",
+                content: "let x =1;",
+                fileSize: 10 * 1024 * 1024
+            };
+            const file2 = {
+                path: "/a/b/f2.js",
+                content: "let y =1;",
+                fileSize: 6 * 1024 * 1024
+            };
+            const file3 = {
+                path: "/a/b/f3.js",
+                content: "let y =1;",
+                fileSize: 6 * 1024 * 1024
+            };
+
+            const proj1name = "proj1", proj2name = "proj2", proj3name = "proj3";
+
+            const host = createServerHost([file1, file2, file3]);
+            const projectService = createProjectService(host);
+
+            projectService.openExternalProject({ rootFiles: toExternalFiles([file1.path]), options: {}, projectFileName: proj1name });
+            const proj1 = projectService.findProject(proj1name);
+            assert.isTrue(proj1.languageServiceEnabled);
+
+            projectService.openExternalProject({ rootFiles: toExternalFiles([file2.path]), options: {}, projectFileName: proj2name });
+            const proj2 = projectService.findProject(proj2name);
+            assert.isTrue(proj2.languageServiceEnabled);
+
+            projectService.openExternalProject({ rootFiles: toExternalFiles([file3.path]), options: {}, projectFileName: proj3name });
+            const proj3 = projectService.findProject(proj3name);
+            assert.isFalse(proj3.languageServiceEnabled);
+        });
+
         it("should use only one inferred project if 'useOneInferredProject' is set", () => {
             const file1 = {
                 path: "/a/b/main.ts",
