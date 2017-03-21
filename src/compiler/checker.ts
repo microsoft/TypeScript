@@ -284,6 +284,8 @@ namespace ts {
         let deferredGlobalAsyncIterableIteratorType: GenericType;
         let deferredGlobalTemplateStringsArrayType: ObjectType;
         let deferredJsxElementClassType: Type;
+        let deferredJsxElementType: Type;
+        let deferredJsxStatelessElementType: Type;
 
         let deferredNodes: Node[];
         let deferredUnusedIdentifierNodes: Node[];
@@ -404,7 +406,6 @@ namespace ts {
         });
         const typeofType = createTypeofType();
 
-        let jsxElementType: Type;
         let _jsxNamespace: string;
         let _jsxFactoryEntity: EntityName;
 
@@ -12462,12 +12463,12 @@ namespace ts {
                 type.flags & TypeFlags.UnionOrIntersection && !forEach((<UnionOrIntersectionType>type).types, t => !isValidSpreadType(t)));
         }
 
-        function checkJsxSelfClosingElement(node: JsxSelfClosingElement) {
+        function checkJsxSelfClosingElement(node: JsxSelfClosingElement): Type {
             checkJsxOpeningLikeElement(node);
-            return jsxElementType || anyType;
+            return getJsxGlobalElementType() || anyType;
         }
 
-        function checkJsxElement(node: JsxElement) {
+        function checkJsxElement(node: JsxElement): Type {
             // Check attributes
             checkJsxOpeningLikeElement(node.openingElement);
 
@@ -12494,7 +12495,7 @@ namespace ts {
                 }
             }
 
-            return jsxElementType || anyType;
+            return getJsxGlobalElementType() || anyType;
         }
 
         /**
@@ -12735,13 +12736,14 @@ namespace ts {
         function defaultTryGetJsxStatelessFunctionAttributesType(openingLikeElement: JsxOpeningLikeElement, elementType: Type, elemInstanceType: Type, elementClassType?: Type): Type {
             Debug.assert(!(elementType.flags & TypeFlags.Union));
             if (!elementClassType || !isTypeAssignableTo(elemInstanceType, elementClassType)) {
-                if (jsxElementType) {
+                const jsxStatelessElementType = getJsxGlobalStatelessElementType();
+                if (jsxStatelessElementType) {
                     // We don't call getResolvedSignature here because we have already resolve the type of JSX Element.
                     const callSignature = getResolvedJsxStatelessFunctionSignature(openingLikeElement, elementType, /*candidatesOutArray*/ undefined);
                     if (callSignature !== unknownSignature) {
                         const callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
                         let paramType = callReturnType && (callSignature.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature.parameters[0]));
-                        if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType)) {
+                        if (callReturnType && isTypeAssignableTo(callReturnType, jsxStatelessElementType)) {
                             // Intersect in JSX.IntrinsicAttributes if it exists
                             const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes);
                             if (intrinsicAttributes !== unknownType) {
@@ -12769,7 +12771,8 @@ namespace ts {
             Debug.assert(!(elementType.flags & TypeFlags.Union));
             if (!elementClassType || !isTypeAssignableTo(elemInstanceType, elementClassType)) {
                 // Is this is a stateless function component? See if its single signature's return type is assignable to the JSX Element Type
-                if (jsxElementType) {
+                const jsxStatelessElementType = getJsxGlobalStatelessElementType();
+                if (jsxStatelessElementType) {
                     // We don't call getResolvedSignature because here we have already resolve the type of JSX Element.
                     const candidatesOutArray: Signature[] = [];
                     getResolvedJsxStatelessFunctionSignature(openingLikeElement, elementType, candidatesOutArray);
@@ -12778,7 +12781,7 @@ namespace ts {
                     for (const candidate of candidatesOutArray) {
                         const callReturnType = getReturnTypeOfSignature(candidate);
                         const paramType = callReturnType && (candidate.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(candidate.parameters[0]));
-                        if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType)) {
+                        if (callReturnType && isTypeAssignableTo(callReturnType, jsxStatelessElementType)) {
                             let shouldBeCandidate = true;
                             for (const attribute of openingLikeElement.attributes.properties) {
                                 if (isJsxAttribute(attribute) &&
@@ -13022,6 +13025,23 @@ namespace ts {
             return deferredJsxElementClassType;
         }
 
+        function getJsxGlobalElementType(): Type {
+            if (!deferredJsxElementType) {
+                deferredJsxElementType = getExportedTypeFromNamespace(JsxNames.JSX, JsxNames.Element);
+            }
+            return deferredJsxElementType;
+        }
+
+        function getJsxGlobalStatelessElementType(): Type {
+            if (!deferredJsxStatelessElementType) {
+                const jsxElementType = getJsxGlobalElementType();
+                if (jsxElementType) {
+                    deferredJsxStatelessElementType = getUnionType([jsxElementType, nullType]);
+                }
+            }
+            return deferredJsxStatelessElementType;
+        }
+
         /**
          * Returns all the properties of the Jsx.IntrinsicElements interface
          */
@@ -13036,7 +13056,7 @@ namespace ts {
                 error(errorNode, Diagnostics.Cannot_use_JSX_unless_the_jsx_flag_is_provided);
             }
 
-            if (jsxElementType === undefined) {
+            if (getJsxGlobalElementType() === undefined) {
                 if (noImplicitAny) {
                     error(errorNode, Diagnostics.JSX_element_implicitly_has_type_any_because_the_global_type_JSX_Element_does_not_exist);
                 }
@@ -22080,7 +22100,6 @@ namespace ts {
             globalNumberType = getGlobalType("Number", /*arity*/ 0, /*reportErrors*/ true);
             globalBooleanType = getGlobalType("Boolean", /*arity*/ 0, /*reportErrors*/ true);
             globalRegExpType = getGlobalType("RegExp", /*arity*/ 0, /*reportErrors*/ true);
-            jsxElementType = getExportedTypeFromNamespace("JSX", JsxNames.Element);
             anyArrayType = createArrayType(anyType);
             autoArrayType = createArrayType(autoType);
 
