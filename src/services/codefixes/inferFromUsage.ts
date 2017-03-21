@@ -250,7 +250,7 @@ namespace ts.codefix {
     function inferTypeFromReferences(references: Identifier[], checker: TypeChecker): Type | undefined {
         const usageContext: UsageContext = {};
         for (const reference of references) {
-            getTypeFromContext(reference, checker, usageContext);
+            inferTypeFromContext(reference, checker, usageContext);
         }
         return getTypeFromUsageContext(usageContext, checker);
     }
@@ -258,7 +258,7 @@ namespace ts.codefix {
     function inferTypeForParameterFromReferences(references: Identifier[], parameterIndex: number, isConstructor: boolean, isRestParameter: boolean, checker: TypeChecker): Type | undefined {
         const usageContext: UsageContext = {};
         for (const reference of references) {
-            getTypeFromContext(reference, checker, usageContext);
+            inferTypeFromContext(reference, checker, usageContext);
         }
         return getParameterTypeFromCallContexts(parameterIndex, isConstructor ? usageContext.constructContexts : usageContext.callContexts, isRestParameter, checker);
     }
@@ -359,11 +359,7 @@ namespace ts.codefix {
         return checker.createSignature(/*declaration*/ undefined, /*typeParameters*/ undefined, /*thisParameter*/ undefined, parameters, returnType, /*typePredicate*/ undefined, callContext.argumentTypes.length, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
     }
 
-    function hasCallContext(usageContext: UsageContext) {
-        return usageContext && usageContext.callContexts;
-    }
-
-    function getTypeFromContext(node: Expression, checker: TypeChecker, usageContext: UsageContext): void {
+    function inferTypeFromContext(node: Expression, checker: TypeChecker, usageContext: UsageContext): void {
         while (isRightSideOfQualifiedNameOrPropertyAccess(node)) {
             node = <Expression>node.parent;
         }
@@ -373,42 +369,42 @@ namespace ts.codefix {
                 usageContext.isNumber = true;
                 break;
             case SyntaxKind.PrefixUnaryExpression:
-                getTypeFromPrefixUnaryExpressionContext(<PrefixUnaryExpression>node.parent, usageContext);
+                inferTypeFromPrefixUnaryExpressionContext(<PrefixUnaryExpression>node.parent, usageContext);
                 break;
             case SyntaxKind.BinaryExpression:
-                getTypeFromBinaryExpressionContext(node, <BinaryExpression>node.parent, checker, usageContext);
+                inferTypeFromBinaryExpressionContext(node, <BinaryExpression>node.parent, checker, usageContext);
                 break;
             case SyntaxKind.CaseClause:
             case SyntaxKind.DefaultClause:
-                getTypeFromSwitchStatementLabelContext(<CaseOrDefaultClause>node.parent, checker, usageContext);
+                inferTypeFromSwitchStatementLabelContext(<CaseOrDefaultClause>node.parent, checker, usageContext);
                 break;
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
                 if ((<CallExpression | NewExpression>node.parent).expression === node) {
-                    getTypeFromCallExpressionContext(<CallExpression | NewExpression>node.parent, checker, usageContext);
+                    inferTypeFromCallExpressionContext(<CallExpression | NewExpression>node.parent, checker, usageContext);
                 }
                 else {
-                    getContextualType(node, checker, usageContext);
+                    inferTypeFromContextualType(node, checker, usageContext);
                 }
                 break;
             case SyntaxKind.PropertyAccessExpression:
-                getTypeFromPropertyAccessExpressionContext(<PropertyAccessExpression>node.parent, checker, usageContext);
+                inferTypeFromPropertyAccessExpressionContext(<PropertyAccessExpression>node.parent, checker, usageContext);
                 break;
             case SyntaxKind.ElementAccessExpression:
-                getTypeFromPropertyElementExpressionContext(<ElementAccessExpression>node.parent, node, checker, usageContext);
+                inferTypeFromPropertyElementExpressionContext(<ElementAccessExpression>node.parent, node, checker, usageContext);
                 break;
             default:
-                return getContextualType(node, checker, usageContext);
+                return inferTypeFromContextualType(node, checker, usageContext);
         }
     }
 
-    function getContextualType(node: Expression, checker: TypeChecker, usageContext: UsageContext): void {
+    function inferTypeFromContextualType(node: Expression, checker: TypeChecker, usageContext: UsageContext): void {
         if (isPartOfExpression(node)) {
             addCandidateType(usageContext, checker.getContextualType(node));
         }
     }
 
-    function getTypeFromPrefixUnaryExpressionContext(node: PrefixUnaryExpression, usageContext: UsageContext): void {
+    function inferTypeFromPrefixUnaryExpressionContext(node: PrefixUnaryExpression, usageContext: UsageContext): void {
         switch (node.operator) {
             case SyntaxKind.PlusPlusToken:
             case SyntaxKind.MinusMinusToken:
@@ -426,7 +422,7 @@ namespace ts.codefix {
         }
     }
 
-    function getTypeFromBinaryExpressionContext(node: Expression, parent: BinaryExpression, checker: TypeChecker, usageContext: UsageContext): void {
+    function inferTypeFromBinaryExpressionContext(node: Expression, parent: BinaryExpression, checker: TypeChecker, usageContext: UsageContext): void {
         switch (parent.operatorToken.kind) {
             // ExponentiationOperator
             case SyntaxKind.AsteriskAsteriskToken:
@@ -526,11 +522,11 @@ namespace ts.codefix {
         }
     }
 
-    function getTypeFromSwitchStatementLabelContext(parent: CaseOrDefaultClause, checker: TypeChecker, usageContext: UsageContext): void {
+    function inferTypeFromSwitchStatementLabelContext(parent: CaseOrDefaultClause, checker: TypeChecker, usageContext: UsageContext): void {
         addCandidateType(usageContext, checker.getTypeAtLocation((<SwitchStatement>parent.parent.parent).expression));
     }
 
-    function getTypeFromCallExpressionContext(parent: CallExpression | NewExpression, checker: TypeChecker, usageContext: UsageContext): void {
+    function inferTypeFromCallExpressionContext(parent: CallExpression | NewExpression, checker: TypeChecker, usageContext: UsageContext): void {
         const callContext: CallContext = {
             argumentTypes: [],
             returnType: {}
@@ -542,7 +538,7 @@ namespace ts.codefix {
             }
         }
 
-        getTypeFromContext(parent, checker, callContext.returnType);
+        inferTypeFromContext(parent, checker, callContext.returnType);
         if (parent.kind === SyntaxKind.CallExpression) {
             (usageContext.callContexts || (usageContext.callContexts = [])).push(callContext);
         }
@@ -551,17 +547,17 @@ namespace ts.codefix {
         }
     }
 
-    function getTypeFromPropertyAccessExpressionContext(parent: PropertyAccessExpression, checker: TypeChecker, usageContext: UsageContext): void {
+    function inferTypeFromPropertyAccessExpressionContext(parent: PropertyAccessExpression, checker: TypeChecker, usageContext: UsageContext): void {
         const name = parent.name.text;
         if (!usageContext.properties) {
             usageContext.properties = createMap<UsageContext>();
         }
         const propertyUsageContext = {};
-        getTypeFromContext(parent, checker, propertyUsageContext);
+        inferTypeFromContext(parent, checker, propertyUsageContext);
         usageContext.properties.set(name, propertyUsageContext);
     }
 
-    function getTypeFromPropertyElementExpressionContext(parent: ElementAccessExpression, node: Expression, checker: TypeChecker, usageContext: UsageContext): void {
+    function inferTypeFromPropertyElementExpressionContext(parent: ElementAccessExpression, node: Expression, checker: TypeChecker, usageContext: UsageContext): void {
         if (node === parent.argumentExpression) {
             usageContext.isNumberOrString = true;
             return;
@@ -569,7 +565,7 @@ namespace ts.codefix {
         else {
             const indextType = checker.getTypeAtLocation(parent);
             const indexUsageContext = {};
-            getTypeFromContext(parent, checker, indexUsageContext);
+            inferTypeFromContext(parent, checker, indexUsageContext);
             if (indextType.flags & TypeFlags.NumberLike) {
                 usageContext.numberIndexContext = indexUsageContext;
             }
@@ -588,6 +584,11 @@ namespace ts.codefix {
     function isValidInference(type: Type) {
         return type && !(type.flags & TypeFlags.Any) && !(type.flags & TypeFlags.Never);
     }
+
+    function hasCallContext(usageContext: UsageContext) {
+        return usageContext && usageContext.callContexts;
+    }
+
 
     function getParameterIndexInList(parameter: ParameterDeclaration, list: NodeArray<ParameterDeclaration>) {
         for (let i = 0; i < list.length; i++) {
