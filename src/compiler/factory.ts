@@ -1,4 +1,4 @@
-﻿/// <reference path="core.ts"/>
+/// <reference path="core.ts"/>
 /// <reference path="utilities.ts"/>
 
 namespace ts {
@@ -1099,6 +1099,10 @@ namespace ts {
             : node;
     }
 
+    export function createKeywordTypeNode(kind: KeywordTypeNode["kind"]): KeywordTypeNode {
+        return <KeywordTypeNode>createSynthesizedNode(kind);
+    }
+
     export function createFunctionDeclaration(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | Identifier | undefined, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined) {
         const node = <FunctionDeclaration>createSynthesizedNode(SyntaxKind.FunctionDeclaration);
         node.decorators = asNodeArray(decorators);
@@ -1185,7 +1189,7 @@ namespace ts {
     }
 
     export function createModuleBlock(statements: Statement[]) {
-        const node = <ModuleBlock>createSynthesizedNode(SyntaxKind.CaseBlock);
+        const node = <ModuleBlock>createSynthesizedNode(SyntaxKind.ModuleBlock);
         node.statements = createNodeArray(statements);
         return node;
     }
