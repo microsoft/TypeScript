@@ -208,7 +208,7 @@ namespace ts.codefix {
         }
 
         function inferTypeForVariableFromUsage(token: Identifier) {
-            return InferFromReference.inferTypeFromReferences(getReferences(token), checker);
+            return InferFromReference.inferTypeFromReferences(getReferences(token), checker, cancellationToken);
         }
 
         function inferTypeForParameterFromUsage(containingFunction: FunctionLikeDeclaration, parameterIndex: number, isRestParameter: boolean) {
@@ -223,7 +223,7 @@ namespace ts.codefix {
                         <Token<SyntaxKind.ConstructorKeyword>>getFirstChildOfKind(containingFunction, sourceFile, SyntaxKind.ConstructorKeyword) :
                         containingFunction.name;
                     if (searchToken) {
-                        return InferFromReference.inferTypeForParameterFromReferences(getReferences(searchToken), parameterIndex, isConstructor, isRestParameter, checker);
+                        return InferFromReference.inferTypeForParameterFromReferences(getReferences(searchToken), parameterIndex, isConstructor, isRestParameter, checker, cancellationToken);
                     }
             }
         }
@@ -247,17 +247,19 @@ namespace ts.codefix {
             stringIndexContext?: UsageContext;
         }
 
-        export function inferTypeFromReferences(references: Identifier[], checker: TypeChecker): Type | undefined {
+        export function inferTypeFromReferences(references: Identifier[], checker: TypeChecker, cancellationToken: CancellationToken): Type | undefined {
             const usageContext: UsageContext = {};
             for (const reference of references) {
+                cancellationToken.throwIfCancellationRequested();
                 inferTypeFromContext(reference, checker, usageContext);
             }
             return getTypeFromUsageContext(usageContext, checker);
         }
 
-        export function inferTypeForParameterFromReferences(references: Identifier[], parameterIndex: number, isConstructor: boolean, isRestParameter: boolean, checker: TypeChecker): Type | undefined {
+        export function inferTypeForParameterFromReferences(references: Identifier[], parameterIndex: number, isConstructor: boolean, isRestParameter: boolean, checker: TypeChecker, cancellationToken: CancellationToken): Type | undefined {
             const usageContext: UsageContext = {};
             for (const reference of references) {
+                cancellationToken.throwIfCancellationRequested();
                 inferTypeFromContext(reference, checker, usageContext);
             }
             return getParameterTypeFromCallContexts(parameterIndex, isConstructor ? usageContext.constructContexts : usageContext.callContexts, isRestParameter, checker);
