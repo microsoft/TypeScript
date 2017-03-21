@@ -7434,6 +7434,12 @@ namespace ts {
         /**
          * This is *not* a bi-directional relationship.
          * If one needs to check both directions for comparability, use a second call to this function or 'checkTypeComparableTo'.
+         *
+         * A type S is comparable to a type T if some (but not necessarily all) of the possible values of S are also possible values of T.
+         * It is used to check following cases:
+         *   - the types of the left and right sides of equality/inequality operators (`===`, `!==`, `==`, `!=`).
+         *   - the types of `case` clause expressions and their respective `switch` expressions.
+         *   - the type of an expression in a type assertion with the type being asserted.
          */
         function isTypeComparableTo(source: Type, target: Type): boolean {
             return isTypeRelatedTo(source, target, comparableRelation);
