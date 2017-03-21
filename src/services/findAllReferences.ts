@@ -279,7 +279,7 @@ namespace ts.FindAllReferences.Core {
         if (!symbol) {
             // String literal might be a property (and thus have a symbol), so do this here rather than in getReferencedSymbolsSpecial.
             if (!options.implementations && node.kind === SyntaxKind.StringLiteral) {
-                return getReferencesForStringLiteral(<StringLiteral>node, sourceFiles, checker, cancellationToken);
+                return getReferencesForStringLiteral(<StringLiteral>node, sourceFiles, cancellationToken);
             }
             // Can't have references to something that we have no symbol for.
             return undefined;
@@ -1328,19 +1328,13 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
-    function getReferencesForStringLiteral(node: StringLiteral, sourceFiles: SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken): SymbolAndEntries[] {
-        const type = getStringLiteralTypeForNode(node, checker);
-
-        if (!type) {
-            // nothing to do here. moving on
-            return undefined;
-        }
-
+    function getReferencesForStringLiteral(node: StringLiteral, sourceFiles: SourceFile[], cancellationToken: CancellationToken): SymbolAndEntries[] {
         const references: NodeEntry[] = [];
 
         for (const sourceFile of sourceFiles) {
-            const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, type.text, sourceFile.getStart(), sourceFile.getEnd(), cancellationToken);
-            getReferencesForStringLiteralInFile(sourceFile, type, possiblePositions, references);
+            cancellationToken.throwIfCancellationRequested();
+            const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, node.text, sourceFile.getStart(), sourceFile.getEnd(), cancellationToken);
+            getReferencesForStringLiteralInFile(sourceFile, node.text, possiblePositions, references);
         }
 
         return [{
@@ -1348,17 +1342,10 @@ namespace ts.FindAllReferences.Core {
             references
         }];
 
-        function getReferencesForStringLiteralInFile(sourceFile: SourceFile, searchType: Type, possiblePositions: number[], references: Push<NodeEntry>): void {
+        function getReferencesForStringLiteralInFile(sourceFile: SourceFile, searchText: string, possiblePositions: number[], references: Push<NodeEntry>): void {
             for (const position of possiblePositions) {
-                cancellationToken.throwIfCancellationRequested();
-
                 const node = getTouchingWord(sourceFile, position);
-                if (!node || node.kind !== SyntaxKind.StringLiteral) {
-                    return;
-                }
-
-                const type = getStringLiteralTypeForNode(<StringLiteral>node, checker);
-                if (type === searchType) {
+                if (node && node.kind === SyntaxKind.StringLiteral && (node as StringLiteral).text === searchText) {
                     references.push(nodeEntry(node, /*isInString*/true));
                 }
             }

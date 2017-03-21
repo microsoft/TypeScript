@@ -37,15 +37,12 @@ namespace ts.Rename {
             }
         }
         else if (node.kind === SyntaxKind.StringLiteral) {
-            const type = getStringLiteralTypeForNode(<StringLiteral>node, typeChecker);
-            if (type) {
-                if (isDefinedInLibraryFile(node)) {
-                    return getRenameInfoError(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library);
-                }
-
-                const displayName = stripQuotes(type.text);
-                return getRenameInfoSuccess(displayName, displayName, ScriptElementKind.variableElement, ScriptElementKindModifier.none, node, sourceFile);
+            if (isDefinedInLibraryFile(node)) {
+                return getRenameInfoError(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library);
             }
+
+            const displayName = stripQuotes((node as StringLiteral).text);
+            return getRenameInfoSuccess(displayName, displayName, ScriptElementKind.variableElement, ScriptElementKindModifier.none, node, sourceFile);
         }
     }
 

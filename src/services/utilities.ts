@@ -364,15 +364,6 @@ namespace ts {
         }
     }
 
-    export function getStringLiteralTypeForNode(node: StringLiteral | LiteralTypeNode, typeChecker: TypeChecker): LiteralType {
-        const searchNode = node.parent.kind === SyntaxKind.LiteralType ? <LiteralTypeNode>node.parent : node;
-        const type = typeChecker.getTypeAtLocation(searchNode);
-        if (type && type.flags & TypeFlags.StringLiteral) {
-            return <LiteralType>type;
-        }
-        return undefined;
-    }
-
     export function isThis(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.ThisKeyword:
