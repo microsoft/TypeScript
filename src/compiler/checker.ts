@@ -15138,7 +15138,7 @@ namespace ts {
                     }
                 }
                 // Return a union of the return expression types.
-                type = getUnionType(yieldTypes ? yieldTypes.concat(types) : types, /*subtypeReduction*/ true);
+                type = getUnionType(types, /*subtypeReduction*/ true);
 
                 if (functionFlags & FunctionFlags.Generator) { // AsyncGenerator function or Generator function
                     type = functionFlags & FunctionFlags.Async
