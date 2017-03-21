@@ -873,7 +873,7 @@ namespace ts.server {
                 }
                 totalNonTsFileSize += this.host.getFileSize(fileName);
                 if (totalNonTsFileSize > maxProgramSizeForNonTsFiles) {
-                    this.projectToSizeMap[name] = totalNonTsFileSize;
+                    // Keep the size as zero since it's disabled
                     return true;
                 }
             }
