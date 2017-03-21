@@ -481,10 +481,10 @@ namespace ts.codefix {
                         addCandidateType(usageContext, otherOperandType);
                     }
                     else if (otherOperandType.flags & TypeFlags.NumberLike) {
-                        addCandidateType(usageContext, checker.getNumberType());
+                        usageContext.isNumber = true;
                     }
                     else if (otherOperandType.flags & TypeFlags.StringLike) {
-                        addCandidateType(usageContext, checker.getStringType());
+                        usageContext.isString = true;
                     }
                     else {
                         usageContext.isNumberOrString = true;
@@ -578,13 +578,9 @@ namespace ts.codefix {
         }
 
         function addCandidateType(context: UsageContext, type: Type) {
-            if (isValidInference(type)) {
+            if (type && !(type.flags & TypeFlags.Any) && !(type.flags & TypeFlags.Never)) {
                 (context.candidateTypes || (context.candidateTypes = [])).push(type);
             }
-        }
-
-        function isValidInference(type: Type) {
-            return type && !(type.flags & TypeFlags.Any) && !(type.flags & TypeFlags.Never);
         }
 
         function hasCallContext(usageContext: UsageContext) {
