@@ -1778,7 +1778,7 @@ namespace ts {
         kind: SyntaxKind.HeritageClause;
         parent?: InterfaceDeclaration | ClassDeclaration | ClassExpression;
         token: SyntaxKind.ExtendsKeyword | SyntaxKind.ImplementsKeyword;
-        types?: NodeArray<ExpressionWithTypeArguments>;
+        types: NodeArray<ExpressionWithTypeArguments>;
     }
 
     export interface TypeAliasDeclaration extends DeclarationStatement {
