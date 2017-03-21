@@ -19,7 +19,6 @@ namespace ts.codefix {
 
             // Property declarations
             Diagnostics.Member_0_implicitly_has_an_1_type.code,
-            // Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type.code,
 
             // Diagnostics.Binding_element_0_implicitly_has_an_1_type.code,
         ],
@@ -29,17 +28,27 @@ namespace ts.codefix {
     function getActionsForAddExplicitTypeAnnotation({ sourceFile, program, span: { start }, errorCode, cancellationToken, newLineCharacter }: CodeFixContext): CodeAction[] | undefined {
         const token = getTokenAtPosition(sourceFile, start);
 
-        if (!isIdentifier(token) && token.kind !== SyntaxKind.DotDotDotToken) {
-            return undefined;
+        switch (token.kind) {
+            case SyntaxKind.Identifier:
+            case SyntaxKind.DotDotDotToken:
+            case SyntaxKind.PublicKeyword:
+            case SyntaxKind.PrivateKeyword:
+            case SyntaxKind.ProtectedKeyword:
+            case SyntaxKind.ReadonlyKeyword:
+                // Allowed
+                break;
+            default:
+                return undefined;
         }
 
         const containingFunction = getContainingFunction(token);
         const checker = program.getTypeChecker();
 
         switch (errorCode) {
-            // Variable declarations
+            // Variable and Property declarations
+            case Diagnostics.Member_0_implicitly_has_an_1_type.code:
             case Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined.code:
-                return getCodeActionForVariableDeclaration(<VariableDeclaration>token.parent);
+                return getCodeActionForVariableDeclaration(<PropertyDeclaration | PropertySignature | VariableDeclaration>token.parent);
             case Diagnostics.Variable_0_implicitly_has_an_1_type.code:
                 return getCodeActionForVariableUsage(<Identifier>token);
 
@@ -63,13 +72,16 @@ namespace ts.codefix {
 
             // Property declarations
             case Diagnostics.Member_0_implicitly_has_an_1_type.code:
-                // todo
-                return undefined;
+                return getCodeActionForVariableDeclaration(<VariableDeclaration>token.parent);
          }
 
-        function getCodeActionForVariableDeclaration(declaration: VariableDeclaration) {
+        function getCodeActionForVariableDeclaration(declaration: VariableDeclaration | PropertyDeclaration | PropertySignature) {
             const type = inferTypeForVariableFromUsage(declaration.name);
-            const typeString = checker.typeToString(type || checker.getAnyType(), declaration, TypeFormatFlags.NoTruncation);
+            if (!type) {
+                return undefined;
+            }
+
+            const typeString = checker.typeToString(type, declaration, TypeFormatFlags.NoTruncation);
             if (isInJavaScriptFile(sourceFile)) {
                 const declarationStatement = getAncestor(declaration, SyntaxKind.VariableStatement);
                 if (!declarationStatement.jsDoc) {
@@ -96,7 +108,10 @@ namespace ts.codefix {
             if (!isValidInference(type)) {
                 type = inferTypeForVariableFromUsage(parameterDeclaration.name);
             }
-            const typeString = checker.typeToString(type || checker.getAnyType(), token, TypeFormatFlags.NoTruncation);
+            if (!type) {
+                return undefined;
+            }
+            const typeString = checker.typeToString(type, token, TypeFormatFlags.NoTruncation);
             if (isInJavaScriptFile(sourceFile)) {
                 if (!containingFunction.jsDoc) {
                     const newText = `/** @param {${typeString}} ${token.getText()} */${newLineCharacter}`;
@@ -119,7 +134,11 @@ namespace ts.codefix {
                 type = inferTypeForVariableFromUsage(setAccessorParameter.name);
             }
 
-            const typeString = checker.typeToString(type || checker.getAnyType(), token, TypeFormatFlags.NoTruncation);
+            if (!type) {
+                return undefined;
+            }
+
+            const typeString = checker.typeToString(type, token, TypeFormatFlags.NoTruncation);
             if (isInJavaScriptFile(sourceFile)) {
                 if (!setAccessorDeclaration.jsDoc) {
                     const newText = `/** @param {${typeString}} ${setAccessorParameter.getText()} */${newLineCharacter}`;
@@ -133,8 +152,11 @@ namespace ts.codefix {
 
         function getCodeActionForGetAccessor(getAccessorDeclaration: GetAccessorDeclaration) {
             let type = inferTypeForVariableFromUsage(getAccessorDeclaration.name);
+            if (!type) {
+                return undefined;
+            }
 
-            const typeString = checker.typeToString(type || checker.getAnyType(), token, TypeFormatFlags.NoTruncation);
+            const typeString = checker.typeToString(type, token, TypeFormatFlags.NoTruncation);
             if (isInJavaScriptFile(sourceFile)) {
                 if (!getAccessorDeclaration.jsDoc) {
                     const newText = `/** @type {${typeString}} */${newLineCharacter}`;
@@ -509,9 +531,15 @@ namespace ts.codefix {
 
     function getTypeFromCallExpressionContext(parent: CallExpression | NewExpression, checker: TypeChecker, usageContext: UsageContext): void {
         const callContext: CallContext = {
-            argumentTypes: parent.arguments.map(a => checker.getTypeAtLocation(a)),
+            argumentTypes: [],
             returnType: {}
         };
+
+        if (parent.arguments) {
+            for (const argument of parent.arguments) {
+                callContext.argumentTypes.push(checker.getTypeAtLocation(argument));
+            }
+        }
 
         getTypeFromContext(parent, checker, callContext.returnType);
         if (parent.kind === SyntaxKind.CallExpression) {
