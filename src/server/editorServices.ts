@@ -880,7 +880,7 @@ namespace ts.server {
             }
 
             this.projectToSizeMap[name] = totalNonTsFileSize;
-            return totalNonTsFileSize < availableSpace;
+            return totalNonTsFileSize > availableSpace;
         }
 
         private createAndAddExternalProject(projectFileName: string, files: protocol.ExternalFile[], options: protocol.ExternalProjectCompilerOptions, typeAcquisition: TypeAcquisition) {
