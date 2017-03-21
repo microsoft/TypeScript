@@ -872,14 +872,14 @@ namespace ts.server {
                     continue;
                 }
                 totalNonTsFileSize += this.host.getFileSize(fileName);
-                if (totalNonTsFileSize > availableSpace) {
+                if (totalNonTsFileSize > maxProgramSizeForNonTsFiles) {
                     this.projectToSizeMap[name] = totalNonTsFileSize;
                     return true;
                 }
             }
 
             this.projectToSizeMap[name] = totalNonTsFileSize;
-            return false;
+            return totalNonTsFileSize < availableSpace;
         }
 
         private createAndAddExternalProject(projectFileName: string, files: protocol.ExternalFile[], options: protocol.ExternalProjectCompilerOptions, typeAcquisition: TypeAcquisition) {
