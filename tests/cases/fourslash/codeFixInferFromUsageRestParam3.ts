@@ -2,7 +2,7 @@
 
 // @noImplicitAny: true
 ////function f(a: number, [|...rest |]){
-////    console.log(JSON.stringify(rest));
+////    rest.push(22);
 ////}
 
-verify.rangeAfterCodeFix("...rest: any[]");
+verify.rangeAfterCodeFix("...rest: number[]");

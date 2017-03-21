@@ -57,7 +57,7 @@ namespace ts.codefix {
                 if (isSetAccessor(containingFunction)) {
                     return getCodeActionForSetAccessor(containingFunction);
                 }
-                // Fall through
+            // Fall through
             case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code:
                 return getCodeActionForParameter(<ParameterDeclaration>token.parent);
 
@@ -73,9 +73,15 @@ namespace ts.codefix {
             // Property declarations
             case Diagnostics.Member_0_implicitly_has_an_1_type.code:
                 return getCodeActionForVariableDeclaration(<VariableDeclaration>token.parent);
-         }
+        }
+
+        return undefined;
 
         function getCodeActionForVariableDeclaration(declaration: VariableDeclaration | PropertyDeclaration | PropertySignature) {
+            if (!isIdentifier(declaration.name)) {
+                return undefined;
+            }
+
             const type = inferTypeForVariableFromUsage(declaration.name);
             if (!type) {
                 return undefined;
@@ -104,7 +110,8 @@ namespace ts.codefix {
                 return undefined;
             }
             const isRestParameter = !!parameterDeclaration.dotDotDotToken;
-            let type = inferTypeForParameterFromUsage(parameterDeclaration.name, isRestParameter);
+            const parameterIndex = getParameterIndexInList(parameterDeclaration, containingFunction.parameters);
+            let type = inferTypeForParameterFromUsage(containingFunction, parameterIndex, isRestParameter);
             if (!isValidInference(type)) {
                 type = inferTypeForVariableFromUsage(parameterDeclaration.name);
             }
@@ -125,7 +132,7 @@ namespace ts.codefix {
 
         function getCodeActionForSetAccessor(setAccessorDeclaration: SetAccessorDeclaration) {
             const setAccessorParameter = setAccessorDeclaration.parameters[0];
-            if (!setAccessorParameter || !isIdentifier(setAccessorParameter.name)) {
+            if (!setAccessorParameter || !isIdentifier(setAccessorDeclaration.name) || !isIdentifier(setAccessorParameter.name)) {
                 return undefined;
             }
 
@@ -151,6 +158,10 @@ namespace ts.codefix {
         }
 
         function getCodeActionForGetAccessor(getAccessorDeclaration: GetAccessorDeclaration) {
+            if (!isIdentifier(getAccessorDeclaration.name)) {
+                return undefined;
+            }
+
             let type = inferTypeForVariableFromUsage(getAccessorDeclaration.name);
             if (!type) {
                 return undefined;
@@ -194,41 +205,27 @@ namespace ts.codefix {
             Debug.assert(!!references, "Found no references!");
             Debug.assert(references.length === 1, "Found more references than expected");
 
-            return references[0].references;
+            return map(references[0].references, r => <Identifier>getTokenAtPosition(program.getSourceFile(r.fileName), r.textSpan.start));
         }
 
-        function inferTypeForVariableFromUsage(token: BindingName  | PropertyName) {
-            if (!isIdentifier(token)) {
-                // TODO: Support Binding Patterns
-                return undefined;
-            }
-            const references = getReferences(token).map(r => <Identifier>getTokenAtPosition(program.getSourceFile(r.fileName), r.textSpan.start));
-            return inferTypeFromReferences(references, checker);
+        function inferTypeForVariableFromUsage(token: Identifier) {
+            return inferTypeFromReferences(getReferences(token), checker);
         }
 
-        function getFirstChildOfKind(node: Node, sourcefile: SourceFile, kind: SyntaxKind) {
-            for (const child of node.getChildren(sourcefile)) {
-                if (child.kind === kind) return child;
-            }
-        }
-
-        function inferTypeForParameterFromUsage(token: Identifier, isRestParameter: boolean) {
-            if (containingFunction.kind === SyntaxKind.Constructor || containingFunction.kind === SyntaxKind.FunctionExpression ||
-                containingFunction.kind === SyntaxKind.FunctionDeclaration || containingFunction.kind === SyntaxKind.MethodDeclaration ||
-                containingFunction.kind === SyntaxKind.MethodSignature) {
-                const isConstructor = containingFunction.kind === SyntaxKind.Constructor;
-
-                let searchToken = isConstructor ?
-                    <Token<SyntaxKind.ConstructorKeyword>>getFirstChildOfKind(containingFunction, sourceFile, SyntaxKind.ConstructorKeyword) :
-                    containingFunction.name;
-                if (searchToken) {
-                    const parameterIndex = getParameterIndexInList(token, containingFunction.parameters);
-                    const references = getReferences(searchToken).map(r => <Identifier>getTokenAtPosition(program.getSourceFile(r.fileName), r.textSpan.start));
-                    return inferTypeForParameterFromReferences(references, parameterIndex, isConstructor, isRestParameter, checker);
-                }
-            }
-            else {
-                return checker.getAnyType();
+        function inferTypeForParameterFromUsage(containingFunction: FunctionLikeDeclaration, parameterIndex: number, isRestParameter: boolean) {
+            switch (containingFunction.kind) {
+                case SyntaxKind.Constructor:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                    const isConstructor = containingFunction.kind === SyntaxKind.Constructor;
+                    let searchToken = isConstructor ?
+                        <Token<SyntaxKind.ConstructorKeyword>>getFirstChildOfKind(containingFunction, sourceFile, SyntaxKind.ConstructorKeyword) :
+                        containingFunction.name;
+                    if (searchToken) {
+                        return inferTypeForParameterFromReferences(getReferences(searchToken), parameterIndex, isConstructor, isRestParameter, checker);
+                    }
             }
         }
     }
@@ -250,7 +247,7 @@ namespace ts.codefix {
         stringIndexContext?: UsageContext;
     }
 
-    function inferTypeFromReferences(references: Identifier[], checker: TypeChecker): Type {
+    function inferTypeFromReferences(references: Identifier[], checker: TypeChecker): Type | undefined {
         const usageContext: UsageContext = {};
         for (const reference of references) {
             getTypeFromContext(reference, checker, usageContext);
@@ -258,7 +255,7 @@ namespace ts.codefix {
         return getTypeFromUsageContext(usageContext, checker);
     }
 
-    function inferTypeForParameterFromReferences(references: Identifier[], parameterIndex: number, isConstructor: boolean, isRestParameter: boolean, checker: TypeChecker) {
+    function inferTypeForParameterFromReferences(references: Identifier[], parameterIndex: number, isConstructor: boolean, isRestParameter: boolean, checker: TypeChecker): Type | undefined {
         const usageContext: UsageContext = {};
         for (const reference of references) {
             getTypeFromContext(reference, checker, usageContext);
@@ -266,7 +263,7 @@ namespace ts.codefix {
         return getParameterTypeFromCallContexts(parameterIndex, isConstructor ? usageContext.constructContexts : usageContext.callContexts, isRestParameter, checker);
     }
 
-    function getTypeFromUsageContext(usageContext: UsageContext, checker: TypeChecker): Type {
+    function getTypeFromUsageContext(usageContext: UsageContext, checker: TypeChecker): Type | undefined {
         if (usageContext.isNumberOrString && !usageContext.isNumber && !usageContext.isString) {
             return checker.getUnionType([checker.getNumberType(), checker.getStringType()]);
         }
@@ -325,12 +322,12 @@ namespace ts.codefix {
             return checker.createAnonymousType(/*symbol*/ undefined, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
         }
         else {
-            return checker.getAnyType();
+            return undefined;
         }
     }
 
     function getParameterTypeFromCallContexts(parameterIndex: number, callContexts: CallContext[], isRestParameter: boolean, checker: TypeChecker) {
-        let types: Type[]  = [];
+        let types: Type[] = [];
         if (callContexts) {
             for (const callContext of callContexts) {
                 if (callContext.argumentTypes.length > parameterIndex) {
@@ -343,8 +340,12 @@ namespace ts.codefix {
                 }
             }
         }
-        const type = types.length ? checker.getWidenedType(checker.getUnionType(types, true)) : checker.getAnyType();
-        return isRestParameter ? checker.createArrayType(type) : type;
+
+        if (types.length) {
+            const type = checker.getWidenedType(checker.getUnionType(types, true));
+            return isRestParameter ? checker.createArrayType(type) : type;
+        }
+        return undefined;
     }
 
     function getSignatureFromCallContext(callContext: CallContext, checker: TypeChecker): Signature {
@@ -588,10 +589,16 @@ namespace ts.codefix {
         return type && !(type.flags & TypeFlags.Any) && !(type.flags & TypeFlags.Never);
     }
 
-    function getParameterIndexInList(parameter: Identifier, list: NodeArray<ParameterDeclaration>) {
-        var paramDeclaration = <ParameterDeclaration>getAncestor(parameter, SyntaxKind.Parameter);
+    function getParameterIndexInList(parameter: ParameterDeclaration, list: NodeArray<ParameterDeclaration>) {
         for (let i = 0; i < list.length; i++) {
-            if (paramDeclaration === list[i]) return i;
+            if (parameter === list[i]) return i;
+        }
+        return -1;
+    }
+
+    function getFirstChildOfKind(node: Node, sourcefile: SourceFile, kind: SyntaxKind) {
+        for (const child of node.getChildren(sourcefile)) {
+            if (child.kind === kind) return child;
         }
     }
 }
