@@ -1,4 +1,4 @@
-﻿/// <reference path="core.ts"/>
+/// <reference path="core.ts"/>
 /// <reference path="utilities.ts"/>
 
 namespace ts {
@@ -1097,6 +1097,10 @@ namespace ts {
             || node.finallyBlock !== finallyBlock
             ? updateNode(createTry(tryBlock, catchClause, finallyBlock), node)
             : node;
+    }
+
+    export function createKeywordTypeNode(kind: KeywordTypeNode["kind"]): KeywordTypeNode {
+        return <KeywordTypeNode>createSynthesizedNode(kind);
     }
 
     export function createFunctionDeclaration(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | Identifier | undefined, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined) {

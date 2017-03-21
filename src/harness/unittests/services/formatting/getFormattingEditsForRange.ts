@@ -1,4 +1,4 @@
-﻿///<reference path='_project.ts'/>
+///<reference path='_project.ts'/>
 
 describe('getFormattingEditsForRange', function() {
     //

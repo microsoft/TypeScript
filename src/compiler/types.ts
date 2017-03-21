@@ -1,4 +1,4 @@
-﻿namespace ts {
+namespace ts {
     /**
      * Type of objects whose values are all of the same type.
      * The `in` and `for-in` operators can *not* be safely used,
@@ -519,6 +519,8 @@
         /* @internal */ localSymbol?: Symbol;           // Local symbol declared by node (initialized by binding only for exported nodes)
         /* @internal */ flowNode?: FlowNode;            // Associated FlowNode (initialized by binding)
         /* @internal */ emitNode?: EmitNode;            // Associated EmitNode (initialized by transforms)
+        /* @internal */ contextualType?: Type;          // Used to temporarily assign a contextual type during overload resolution
+        /* @internal */ contextualMapper?: TypeMapper;  // Mapper for contextual type
     }
 
     export interface NodeArray<T extends Node> extends Array<T>, TextRange {
@@ -963,7 +965,6 @@
 
     export interface Expression extends Node {
         _expressionBrand: any;
-        contextualType?: Type;  // Used to temporarily assign a contextual type during overload resolution
     }
 
     export interface OmittedExpression extends Expression {
@@ -1812,7 +1813,7 @@
         kind: SyntaxKind.ModuleDeclaration;
         parent?: ModuleBody | SourceFile;
         name: ModuleName;
-        body?: ModuleBody | JSDocNamespaceDeclaration | Identifier;
+        body?: ModuleBody | JSDocNamespaceDeclaration;
     }
 
     export type NamespaceBody = ModuleBlock | NamespaceDeclaration;
@@ -1837,6 +1838,11 @@
 
     export type ModuleReference = EntityName | ExternalModuleReference;
 
+    /**
+     * One of:
+     * - import x = require("mod");
+     * - import x = M.x;
+     */
     export interface ImportEqualsDeclaration extends DeclarationStatement {
         kind: SyntaxKind.ImportEqualsDeclaration;
         parent?: SourceFile | ModuleBlock;
@@ -1888,7 +1894,6 @@
     export interface NamespaceExportDeclaration extends DeclarationStatement {
         kind: SyntaxKind.NamespaceExportDeclaration;
         name: Identifier;
-        moduleReference: LiteralLikeNode;
     }
 
     export interface ExportDeclaration extends DeclarationStatement {
@@ -2204,6 +2209,16 @@
         name: string;
     }
 
+    /* @internal */
+    /**
+     * Subset of properties from SourceFile that are used in multiple utility functions
+     */
+    export interface SourceFileLike {
+        readonly text: string;
+        lineMap: number[];
+    }
+
+
     // Source files are declarations when they are external modules.
     export interface SourceFile extends Declaration {
         kind: SyntaxKind.SourceFile;
@@ -2211,7 +2226,7 @@
         endOfFileToken: Token<SyntaxKind.EndOfFileToken>;
 
         fileName: string;
-        /* internal */ path: Path;
+        /* @internal */ path: Path;
         text: string;
 
         amdDependencies: AmdDependency[];
@@ -2810,13 +2825,15 @@
     export const enum CheckFlags {
         Instantiated      = 1 << 0,         // Instantiated symbol
         SyntheticProperty = 1 << 1,         // Property in union or intersection type
-        Readonly          = 1 << 2,         // Readonly transient symbol
-        Partial           = 1 << 3,         // Synthetic property present in some but not all constituents
-        HasNonUniformType = 1 << 4,         // Synthetic property with non-uniform type in constituents
-        ContainsPublic    = 1 << 5,         // Synthetic property with public constituent(s)
-        ContainsProtected = 1 << 6,         // Synthetic property with protected constituent(s)
-        ContainsPrivate   = 1 << 7,         // Synthetic property with private constituent(s)
-        ContainsStatic    = 1 << 8,         // Synthetic property with static constituent(s)
+        SyntheticMethod   = 1 << 2,         // Method in union or intersection type
+        Readonly          = 1 << 3,         // Readonly transient symbol
+        Partial           = 1 << 4,         // Synthetic property present in some but not all constituents
+        HasNonUniformType = 1 << 5,         // Synthetic property with non-uniform type in constituents
+        ContainsPublic    = 1 << 6,         // Synthetic property with public constituent(s)
+        ContainsProtected = 1 << 7,         // Synthetic property with protected constituent(s)
+        ContainsPrivate   = 1 << 8,         // Synthetic property with private constituent(s)
+        ContainsStatic    = 1 << 9,         // Synthetic property with static constituent(s)
+        Synthetic = SyntheticProperty | SyntheticMethod
     }
 
     /* @internal */
@@ -3234,6 +3251,7 @@
         mapper?: TypeMapper;                // Type mapper for this inference context
         failedTypeParameterIndex?: number;  // Index of type parameter for which inference failed
         // It is optional because in contextual signature instantiation, nothing fails
+        useAnyForNoInferences?: boolean;    // Use any instead of {} for no inferences
     }
 
     /* @internal */
@@ -3308,7 +3326,7 @@
         allowSyntheticDefaultImports?: boolean;
         allowUnreachableCode?: boolean;
         allowUnusedLabels?: boolean;
-        alwaysStrict?: boolean;
+        alwaysStrict?: boolean;  // Always combine with strict property
         baseUrl?: string;
         charset?: string;
         /* @internal */ configFilePath?: string;
@@ -3344,9 +3362,9 @@
         noEmitOnError?: boolean;
         noErrorTruncation?: boolean;
         noFallthroughCasesInSwitch?: boolean;
-        noImplicitAny?: boolean;
+        noImplicitAny?: boolean;  // Always combine with strict property
         noImplicitReturns?: boolean;
-        noImplicitThis?: boolean;
+        noImplicitThis?: boolean;  // Always combine with strict property
         noUnusedLocals?: boolean;
         noUnusedParameters?: boolean;
         noImplicitUseStrict?: boolean;
@@ -3369,7 +3387,8 @@
         skipDefaultLibCheck?: boolean;
         sourceMap?: boolean;
         sourceRoot?: string;
-        strictNullChecks?: boolean;
+        strict?: boolean;
+        strictNullChecks?: boolean;  // Always combine with strict property
         /* @internal */ stripInternal?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
@@ -4129,6 +4148,8 @@
         /*@internal*/ onEmitSourceMapOfPosition?: (pos: number) => void;
         /*@internal*/ onEmitHelpers?: (node: Node, writeLines: (text: string) => void) => void;
         /*@internal*/ onSetSourceFile?: (node: SourceFile) => void;
+        /*@internal*/ onBeforeEmitNodeArray?: (nodes: NodeArray<any>) => void;
+        /*@internal*/ onAfterEmitNodeArray?: (nodes: NodeArray<any>) => void;
     }
 
     export interface PrinterOptions {

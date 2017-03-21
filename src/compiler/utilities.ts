@@ -1,4 +1,4 @@
-﻿/// <reference path="sys.ts" />
+/// <reference path="sys.ts" />
 
 /* @internal */
 namespace ts {
@@ -184,7 +184,7 @@ namespace ts {
         return false;
     }
 
-    export function getStartPositionOfLine(line: number, sourceFile: SourceFile): number {
+    export function getStartPositionOfLine(line: number, sourceFile: SourceFileLike): number {
         Debug.assert(line >= 0);
         return getLineStarts(sourceFile)[line];
     }
@@ -204,7 +204,7 @@ namespace ts {
         return value !== undefined;
     }
 
-    export function getEndLinePosition(line: number, sourceFile: SourceFile): number {
+    export function getEndLinePosition(line: number, sourceFile: SourceFileLike): number {
         Debug.assert(line >= 0);
         const lineStarts = getLineStarts(sourceFile);
 
@@ -255,7 +255,11 @@ namespace ts {
         return !nodeIsMissing(node);
     }
 
-    export function getTokenPosOfNode(node: Node, sourceFile?: SourceFile, includeJsDoc?: boolean): number {
+    export function isToken(n: Node): boolean {
+        return n.kind >= SyntaxKind.FirstToken && n.kind <= SyntaxKind.LastToken;
+    }
+
+    export function getTokenPosOfNode(node: Node, sourceFile?: SourceFileLike, includeJsDoc?: boolean): number {
         // With nodes that have no width (i.e. 'Missing' nodes), we actually *don't*
         // want to skip trivia because this will launch us forward to the next token.
         if (nodeIsMissing(node)) {
@@ -289,7 +293,7 @@ namespace ts {
         return node.kind >= SyntaxKind.FirstJSDocTagNode && node.kind <= SyntaxKind.LastJSDocTagNode;
     }
 
-    export function getNonDecoratorTokenPosOfNode(node: Node, sourceFile?: SourceFile): number {
+    export function getNonDecoratorTokenPosOfNode(node: Node, sourceFile?: SourceFileLike): number {
         if (nodeIsMissing(node) || !node.decorators) {
             return getTokenPosOfNode(node, sourceFile);
         }
@@ -1425,6 +1429,21 @@ namespace ts {
         return false;
     }
 
+    export function getRightMostAssignedExpression(node: Node) {
+        while (isAssignmentExpression(node, /*excludeCompoundAssignements*/ true)) {
+            node = node.right;
+        }
+        return node;
+    }
+
+    export function isExportsIdentifier(node: Node) {
+        return isIdentifier(node) && node.text === "exports";
+    }
+
+    export function isModuleExportsPropertyAccessExpression(node: Node) {
+        return isPropertyAccessExpression(node) && isIdentifier(node.expression) && node.expression.text === "module" && node.name.text === "exports";
+    }
+
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
     /// assignments we treat as special in the binder
     export function getSpecialPropertyAssignmentKind(expression: Node): SpecialPropertyAssignmentKind {
@@ -2476,7 +2495,7 @@ namespace ts {
         return indentStrings[1].length;
     }
 
-    export function createTextWriter(newLine: String): EmitTextWriter {
+    export function createTextWriter(newLine: string): EmitTextWriter {
         let output: string;
         let indent: number;
         let lineStart: boolean;
@@ -3148,15 +3167,14 @@ namespace ts {
             (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node);
     }
 
-    export function isEmptyObjectLiteralOrArrayLiteral(expression: Node): boolean {
-        const kind = expression.kind;
-        if (kind === SyntaxKind.ObjectLiteralExpression) {
-            return (<ObjectLiteralExpression>expression).properties.length === 0;
-        }
-        if (kind === SyntaxKind.ArrayLiteralExpression) {
-            return (<ArrayLiteralExpression>expression).elements.length === 0;
-        }
-        return false;
+    export function isEmptyObjectLiteral(expression: Node): boolean {
+        return expression.kind === SyntaxKind.ObjectLiteralExpression &&
+            (<ObjectLiteralExpression>expression).properties.length === 0;
+    }
+
+    export function isEmptyArrayLiteral(expression: Node): boolean {
+        return expression.kind === SyntaxKind.ArrayLiteralExpression &&
+            (<ArrayLiteralExpression>expression).elements.length === 0;
     }
 
     export function getLocalSymbolForExportDefault(symbol: Symbol) {

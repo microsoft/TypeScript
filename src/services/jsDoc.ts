@@ -1,4 +1,4 @@
-﻿/* @internal */
+/* @internal */
 namespace ts.JsDoc {
     const jsDocTagNames = [
         "augments",
@@ -178,7 +178,8 @@ namespace ts.JsDoc {
         const posLineAndChar = sourceFile.getLineAndCharacterOfPosition(position);
         const lineStart = sourceFile.getLineStarts()[posLineAndChar.line];
 
-        const indentationStr = sourceFile.text.substr(lineStart, posLineAndChar.character);
+        // replace non-whitespace characters in prefix with spaces.
+        const indentationStr = sourceFile.text.substr(lineStart, posLineAndChar.character).replace(/\S/i, () => " ");
         const isJavaScriptFile = hasJavaScriptFileExtension(sourceFile.fileName);
 
         let docParams = "";

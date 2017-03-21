@@ -34,12 +34,6 @@ var _chai: typeof chai = require("chai");
 var assert: typeof _chai.assert = _chai.assert;
 declare var __dirname: string; // Node-specific
 var global: NodeJS.Global = <any>Function("return this").call(undefined);
-declare namespace NodeJS {
-    export interface Global {
-        WScript: typeof WScript;
-        ActiveXObject: typeof ActiveXObject;
-    }
-}
 
 declare var window: {};
 declare var XMLHttpRequest: {
@@ -60,14 +54,10 @@ namespace Utils {
     export const enum ExecutionEnvironment {
         Node,
         Browser,
-        CScript
     }
 
     export function getExecutionEnvironment() {
-        if (typeof WScript !== "undefined" && typeof ActiveXObject === "function") {
-            return ExecutionEnvironment.CScript;
-        }
-        else if (typeof window !== "undefined") {
+        if (typeof window !== "undefined") {
             return ExecutionEnvironment.Browser;
         }
         else {
@@ -93,7 +83,6 @@ namespace Utils {
     export function evalFile(fileContents: string, fileName: string, nodeContext?: any) {
         const environment = getExecutionEnvironment();
         switch (environment) {
-            case ExecutionEnvironment.CScript:
             case ExecutionEnvironment.Browser:
                 eval(fileContents);
                 break;
@@ -516,83 +505,6 @@ namespace Harness {
     export const virtualFileSystemRoot = "/";
 
     namespace IOImpl {
-        declare class Enumerator {
-            public atEnd(): boolean;
-            public moveNext(): boolean;
-            public item(): any;
-            constructor(o: any);
-        }
-
-        export namespace CScript {
-            let fso: any;
-            if (global.ActiveXObject) {
-                fso = new global.ActiveXObject("Scripting.FileSystemObject");
-            }
-            else {
-                fso = {};
-            }
-
-            export const args = () => ts.sys.args;
-            export const getExecutingFilePath = () => ts.sys.getExecutingFilePath();
-            export const exit = (exitCode: number) => ts.sys.exit(exitCode);
-            export const resolvePath = (path: string) => ts.sys.resolvePath(path);
-            export const getCurrentDirectory = () => ts.sys.getCurrentDirectory();
-            export const newLine = () => harnessNewLine;
-            export const useCaseSensitiveFileNames = () => ts.sys.useCaseSensitiveFileNames;
-
-            export const readFile: typeof IO.readFile = path => ts.sys.readFile(path);
-            export const writeFile: typeof IO.writeFile = (path, content) => ts.sys.writeFile(path, content);
-            export const directoryName: typeof IO.directoryName = fso.GetParentFolderName;
-            export const getDirectories: typeof IO.getDirectories = dir => ts.sys.getDirectories(dir);
-            export const directoryExists: typeof IO.directoryExists = fso.FolderExists;
-            export const fileExists: typeof IO.fileExists = fso.FileExists;
-            export const log: typeof IO.log = global.WScript && global.WScript.StdOut.WriteLine;
-            export const getEnvironmentVariable: typeof IO.getEnvironmentVariable = name => ts.sys.getEnvironmentVariable(name);
-            export const readDirectory: typeof IO.readDirectory = (path, extension, exclude, include) => ts.sys.readDirectory(path, extension, exclude, include);
-
-            export function createDirectory(path: string) {
-                if (directoryExists(path)) {
-                    fso.CreateFolder(path);
-                }
-            }
-
-            export function deleteFile(path: string) {
-                if (fileExists(path)) {
-                    fso.DeleteFile(path, true); // true: delete read-only files
-                }
-            }
-
-            export let listFiles: typeof IO.listFiles = (path, spec?, options?) => {
-                options = options || <{ recursive?: boolean; }>{};
-                function filesInFolder(folder: any, root: string): string[] {
-                    let paths: string[] = [];
-                    let fc: any;
-
-                    if (options.recursive) {
-                        fc = new Enumerator(folder.subfolders);
-
-                        for (; !fc.atEnd(); fc.moveNext()) {
-                            paths = paths.concat(filesInFolder(fc.item(), root + "\\" + fc.item().Name));
-                        }
-                    }
-
-                    fc = new Enumerator(folder.files);
-
-                    for (; !fc.atEnd(); fc.moveNext()) {
-                        if (!spec || fc.item().Name.match(spec)) {
-                            paths.push(root + "\\" + fc.item().Name);
-                        }
-                    }
-
-                    return paths;
-                }
-
-                const folder: any = fso.GetFolder(path);
-
-                return filesInFolder(folder, path);
-            };
-        }
-
         export namespace Node {
             declare const require: any;
             let fs: any, pathModule: any;
@@ -840,16 +752,16 @@ namespace Harness {
         }
     }
 
-    switch (Utils.getExecutionEnvironment()) {
-        case Utils.ExecutionEnvironment.CScript:
-            IO = IOImpl.CScript;
-            break;
+    const environment = Utils.getExecutionEnvironment();
+    switch (environment) {
         case Utils.ExecutionEnvironment.Node:
             IO = IOImpl.Node;
             break;
         case Utils.ExecutionEnvironment.Browser:
             IO = IOImpl.Network;
             break;
+        default:
+            throw new Error(`Unknown value '${environment}' for ExecutionEnvironment.`);
     }
 }
 
@@ -873,7 +785,7 @@ namespace Harness {
         /** Aggregate various writes into a single array of lines. Useful for passing to the
          *  TypeScript compiler to fill with source code or errors.
          */
-        export class WriterAggregator implements ITextWriter {
+        export class WriterAggregator {
             public lines: string[] = [];
             public currentLine = <string>undefined;
 

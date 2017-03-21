@@ -447,8 +447,8 @@ namespace ts.Completions {
                 return undefined;
             }
 
-            const { parent, kind } = contextToken;
-            if (kind === SyntaxKind.DotToken) {
+            let parent = contextToken.parent;
+            if (contextToken.kind === SyntaxKind.DotToken) {
                 if (parent.kind === SyntaxKind.PropertyAccessExpression) {
                     node = (<PropertyAccessExpression>contextToken.parent).expression;
                     isRightOfDot = true;
@@ -464,16 +464,24 @@ namespace ts.Completions {
                 }
             }
             else if (sourceFile.languageVariant === LanguageVariant.JSX) {
-                switch (contextToken.parent.kind) {
+                // <UI.Test /* completion position */ />
+                // If the tagname is a property access expression, we will then walk up to the top most of property access expression.
+                // Then, try to get a JSX container and its associated attributes type.
+                if (parent && parent.kind === SyntaxKind.PropertyAccessExpression) {
+                    contextToken = parent;
+                    parent = parent.parent;
+                }
+
+                switch (parent.kind) {
                     case SyntaxKind.JsxClosingElement:
-                        if (kind === SyntaxKind.SlashToken) {
+                        if (contextToken.kind === SyntaxKind.SlashToken) {
                             isStartingCloseTag = true;
                             location = contextToken;
                         }
                         break;
 
                     case SyntaxKind.BinaryExpression:
-                        if (!((contextToken.parent as BinaryExpression).left.flags & NodeFlags.ThisNodeHasError)) {
+                        if (!((parent as BinaryExpression).left.flags & NodeFlags.ThisNodeHasError)) {
                             // It has a left-hand side, so we're not in an opening JSX tag.
                             break;
                         }
@@ -482,7 +490,7 @@ namespace ts.Completions {
                     case SyntaxKind.JsxSelfClosingElement:
                     case SyntaxKind.JsxElement:
                     case SyntaxKind.JsxOpeningElement:
-                        if (kind === SyntaxKind.LessThanToken) {
+                        if (contextToken.kind === SyntaxKind.LessThanToken) {
                             isRightOfOpenTag = true;
                             location = contextToken;
                         }
@@ -950,6 +958,7 @@ namespace ts.Completions {
                     case SyntaxKind.LessThanSlashToken:
                     case SyntaxKind.SlashToken:
                     case SyntaxKind.Identifier:
+                    case SyntaxKind.PropertyAccessExpression:
                     case SyntaxKind.JsxAttributes:
                     case SyntaxKind.JsxAttribute:
                     case SyntaxKind.JsxSpreadAttribute:

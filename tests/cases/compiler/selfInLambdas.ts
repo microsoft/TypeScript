@@ -1,3 +1,6 @@
+// @noImplicitAny: true
+// @noImplicitThis: true
+
 interface MouseEvent {
     x: number;
     y: number;

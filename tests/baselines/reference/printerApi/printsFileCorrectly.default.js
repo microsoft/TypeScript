@@ -23,3 +23,5 @@ const enum E2 {
 }
 // comment9
 console.log(1 + 2);
+// comment10
+function functionWithDefaultArgValue(argument: string = "defaultValue"): void { }
