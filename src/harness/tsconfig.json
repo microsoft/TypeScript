@@ -6,6 +6,10 @@
         "declaration": false,
         "types": [
             "node", "mocha", "chai"
+        ],
+        "lib": [
+            "es6",
+            "scripthost"
         ]
     },
     "files": [
@@ -121,6 +125,7 @@
         "./unittests/projectErrors.ts",
         "./unittests/printer.ts",
         "./unittests/transform.ts",
-        "./unittests/customTransforms.ts"
+        "./unittests/customTransforms.ts",
+        "./unittests/textChanges.ts"
     ]
 }

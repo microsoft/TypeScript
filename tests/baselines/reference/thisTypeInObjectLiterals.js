@@ -1,4 +1,5 @@
 //// [thisTypeInObjectLiterals.ts]
+
 let o = {
     d: "bar",
     m() {

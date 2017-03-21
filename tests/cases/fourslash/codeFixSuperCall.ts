@@ -1,10 +1,11 @@
-/// <reference path='../fourslash.ts' />
+/// <reference path='fourslash.ts' />
 
 ////class Base{
 ////}
 ////class C extends Base{
-////    constructor() {[| |]
-////    }
+////    constructor() {[|
+////    |]}
 ////}
-
-verify.rangeAfterCodeFix('super();');
+verify.rangeAfterCodeFix(`
+        super();
+    `, /*includeWhitespace*/ true);

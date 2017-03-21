@@ -1,5 +1,7 @@
 {
+    "rulesDirectory": "built/local/tslint",
     "rules": {
+        "no-bom": true,
         "class-name": true,
         "comment-format": [true,
             "check-space"
@@ -17,7 +19,7 @@
             "double",
             "avoid-escape"
         ],
-        "semicolon": [true, "ignore-bound-class-methods"],
+        "semicolon": [true, "always", "ignore-bound-class-methods"],
         "whitespace": [true,
             "check-branch",
             "check-decl",
@@ -48,5 +50,5 @@
         "object-literal-surrounding-space": true,
         "no-type-assertion-whitespace": true,
         "no-in-operator": true
-  }
+    }
 }

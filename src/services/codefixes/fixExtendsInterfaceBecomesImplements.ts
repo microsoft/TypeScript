@@ -21,26 +21,20 @@ namespace ts.codefix {
                 return undefined;
             }
 
-            let changeStart = extendsToken.getStart(sourceFile);
-            let changeEnd = extendsToken.getEnd();
-            const textChanges: TextChange[] = [{ newText: " implements", span: { start: changeStart, length: changeEnd - changeStart } }];
+            const changeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+            changeTracker.replaceNode(sourceFile, extendsToken, createToken(SyntaxKind.ImplementsKeyword));
 
             // We replace existing keywords with commas.
             for (let i = 1; i < heritageClauses.length; i++) {
                 const keywordToken = heritageClauses[i].getFirstToken();
                 if (keywordToken) {
-                    changeStart = keywordToken.getStart(sourceFile);
-                    changeEnd = keywordToken.getEnd();
-                    textChanges.push({ newText: ",", span: { start: changeStart, length: changeEnd - changeStart } });
+                    changeTracker.replaceNode(sourceFile, keywordToken, createToken(SyntaxKind.CommaToken));
                 }
             }
 
             const result = [{
                 description: getLocaleSpecificMessage(Diagnostics.Change_extends_to_implements),
-                changes: [{
-                    fileName: sourceFile.fileName,
-                    textChanges: textChanges
-                }]
+                changes: changeTracker.getChanges()
             }];
 
             return result;

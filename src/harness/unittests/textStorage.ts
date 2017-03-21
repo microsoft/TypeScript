@@ -65,6 +65,6 @@ namespace ts.textStorage {
 
             ts1.getLineInfo(0);
             assert.isTrue(ts1.hasScriptVersionCache(), "have script version cache - 2");
-        })
+        });
     });
 }

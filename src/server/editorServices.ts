@@ -1,4 +1,4 @@
-﻿/// <reference path="..\compiler\commandLineParser.ts" />
+/// <reference path="..\compiler\commandLineParser.ts" />
 /// <reference path="..\services\services.ts" />
 /// <reference path="utilities.ts" />
 /// <reference path="session.ts" />
@@ -140,7 +140,7 @@ namespace ts.server {
         getScriptKind: _ => undefined,
         hasMixedContent: (fileName, extraFileExtensions) => {
             const mixedContentExtensions = ts.map(ts.filter(extraFileExtensions, item => item.isMixedContent), item => item.extension);
-            return forEach(mixedContentExtensions, extension => fileExtensionIs(fileName, extension))
+            return forEach(mixedContentExtensions, extension => fileExtensionIs(fileName, extension));
         }
     };
 
@@ -948,9 +948,9 @@ namespace ts.server {
 
         private openConfigFile(configFileName: NormalizedPath, clientFileName?: string): OpenConfigFileResult {
             const conversionResult = this.convertConfigFileContentToProjectOptions(configFileName);
-            const projectOptions = conversionResult.success
+            const projectOptions: ProjectOptions = conversionResult.success
                 ? conversionResult.projectOptions
-                : { files: [], compilerOptions: {} };
+                : { files: [], compilerOptions: {}, typeAcquisition: { enable: false } };
             const project = this.createAndAddConfiguredProject(configFileName, projectOptions, conversionResult.configFileErrors, clientFileName);
             return {
                 success: conversionResult.success,
@@ -1377,7 +1377,7 @@ namespace ts.server {
 
             // close projects that were missing in the input list
             forEachKey(projectsToClose, externalProjectName => {
-                this.closeExternalProject(externalProjectName, /*suppressRefresh*/ true)
+                this.closeExternalProject(externalProjectName, /*suppressRefresh*/ true);
             });
 
             this.refreshInferredProjects();
