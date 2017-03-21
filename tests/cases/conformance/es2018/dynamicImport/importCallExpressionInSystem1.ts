@@ -1,4 +1,4 @@
-﻿// @module: umd
+﻿// @module: system
 // @target: esnext
 // @filename: 0.ts
 export function foo() { return "foo"; }
