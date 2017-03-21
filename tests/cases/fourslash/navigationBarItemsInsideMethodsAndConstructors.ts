@@ -36,7 +36,7 @@ verify.navigationTree({
                             "childItems": [
                                 {
                                     "text": "LocalEnumMemberInConstructor",
-                                    "kind": "const"
+                                    "kind": "enum member"
                                 }
                             ]
                         },
@@ -64,7 +64,7 @@ verify.navigationTree({
                             "childItems": [
                                 {
                                     "text": "LocalEnumMemberInMethod",
-                                    "kind": "const"
+                                    "kind": "enum member"
                                 }
                             ]
                         },
@@ -144,7 +144,7 @@ verify.navigationBar([
         "childItems": [
             {
                 "text": "LocalEnumMemberInConstructor",
-                "kind": "const"
+                "kind": "enum member"
             }
         ],
         "indent": 3
@@ -184,7 +184,7 @@ verify.navigationBar([
         "childItems": [
             {
                 "text": "LocalEnumMemberInMethod",
-                "kind": "const"
+                "kind": "enum member"
             }
         ],
         "indent": 3

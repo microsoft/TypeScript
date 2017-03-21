@@ -30,11 +30,11 @@ namespace ts.formatting {
         RescanJsxText,
     }
 
-    export function getFormattingScanner(sourceFile: SourceFile, startPos: number, endPos: number): FormattingScanner {
+    export function getFormattingScanner(text: string, languageVariant: LanguageVariant, startPos: number, endPos: number): FormattingScanner {
         Debug.assert(scanner === undefined, "Scanner should be undefined");
-        scanner = sourceFile.languageVariant === LanguageVariant.JSX ? jsxScanner : standardScanner;
+        scanner = languageVariant === LanguageVariant.JSX ? jsxScanner : standardScanner;
 
-        scanner.setText(sourceFile.text);
+        scanner.setText(text);
         scanner.setTextPos(startPos);
 
         let wasNewLine = true;
@@ -276,8 +276,8 @@ namespace ts.formatting {
         function isOnToken(): boolean {
             Debug.assert(scanner !== undefined);
 
-            const current = (lastTokenInfo && lastTokenInfo.token.kind) || scanner.getToken();
-            const startPos = (lastTokenInfo && lastTokenInfo.token.pos) || scanner.getStartPos();
+            const current = lastTokenInfo ? lastTokenInfo.token.kind : scanner.getToken();
+            const startPos = lastTokenInfo ? lastTokenInfo.token.pos : scanner.getStartPos();
             return startPos < endPos && current !== SyntaxKind.EndOfFileToken && !isTrivia(current);
         }
 

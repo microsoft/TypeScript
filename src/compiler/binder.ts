@@ -182,7 +182,7 @@ namespace ts {
         return bindSourceFile;
 
         function bindInStrictMode(file: SourceFile, opts: CompilerOptions): boolean {
-            if (opts.alwaysStrict && !isDeclarationFile(file)) {
+            if ((opts.alwaysStrict === undefined ? opts.strict : opts.alwaysStrict) && !isDeclarationFile(file)) {
                 // bind in strict mode source files with alwaysStrict option
                 return true;
             }
@@ -669,6 +669,12 @@ namespace ts {
                     break;
                 case SyntaxKind.CallExpression:
                     bindCallExpressionFlow(<CallExpression>node);
+                    break;
+                case SyntaxKind.JSDocComment:
+                    bindJSDocComment(<JSDoc>node);
+                    break;
+                case SyntaxKind.JSDocTypedefTag:
+                    bindJSDocTypedefTag(<JSDocTypedefTag>node);
                     break;
                 default:
                     bindEachChild(node);
@@ -1335,6 +1341,26 @@ namespace ts {
             }
         }
 
+        function bindJSDocComment(node: JSDoc) {
+            forEachChild(node, n => {
+                if (n.kind !== SyntaxKind.JSDocTypedefTag) {
+                    bind(n);
+                }
+            });
+        }
+
+        function bindJSDocTypedefTag(node: JSDocTypedefTag) {
+            forEachChild(node, n => {
+                // if the node has a fullName "A.B.C", that means symbol "C" was already bound
+                // when we visit "fullName"; so when we visit the name "C" as the next child of
+                // the jsDocTypedefTag, we should skip binding it.
+                if (node.fullName && n === node.name && node.fullName.kind !== SyntaxKind.Identifier) {
+                    return;
+                }
+                bind(n);
+            });
+        }
+
         function bindCallExpressionFlow(node: CallExpression) {
             // If the target of the call expression is a function expression or arrow function we have
             // an immediately invoked function expression (IIFE). Initialize the flowNode property to
@@ -1874,6 +1900,18 @@ namespace ts {
             }
             node.parent = parent;
             const saveInStrictMode = inStrictMode;
+
+            // Even though in the AST the jsdoc @typedef node belongs to the current node,
+            // its symbol might be in the same scope with the current node's symbol. Consider:
+            //
+            //     /** @typedef {string | number} MyType */
+            //     function foo();
+            //
+            // Here the current node is "foo", which is a container, but the scope of "MyType" should
+            // not be inside "foo". Therefore we always bind @typedef before bind the parent node,
+            // and skip binding this tag later when binding all the other jsdoc tags.
+            bindJSDocTypedefTagIfAny(node);
+
             // First we bind declaration nodes to a symbol if possible. We'll both create a symbol
             // and then potentially add the symbol to an appropriate symbol table. Possible
             // destination symbol tables are:
@@ -1906,6 +1944,27 @@ namespace ts {
                 subtreeTransformFlags |= computeTransformFlagsForNode(node, 0);
             }
             inStrictMode = saveInStrictMode;
+        }
+
+        function bindJSDocTypedefTagIfAny(node: Node) {
+            if (!node.jsDoc) {
+                return;
+            }
+
+            for (const jsDoc of node.jsDoc) {
+                if (!jsDoc.tags) {
+                    continue;
+                }
+
+                for (const tag of jsDoc.tags) {
+                    if (tag.kind === SyntaxKind.JSDocTypedefTag) {
+                        const savedParent = parent;
+                        parent = jsDoc;
+                        bind(tag);
+                        parent = savedParent;
+                    }
+                }
+            }
         }
 
         function updateStrictModeStatementList(statements: NodeArray<Statement>) {
@@ -2230,7 +2289,42 @@ namespace ts {
             declareSymbol(file.symbol.exports, file.symbol, <PropertyAccessExpression>node.left, SymbolFlags.Property | SymbolFlags.Export, SymbolFlags.None);
         }
 
+        function isExportsOrModuleExportsOrAlias(node: Node): boolean {
+            return isExportsIdentifier(node) ||
+                isModuleExportsPropertyAccessExpression(node) ||
+                isNameOfExportsOrModuleExportsAliasDeclaration(node);
+        }
+
+        function isNameOfExportsOrModuleExportsAliasDeclaration(node: Node) {
+            if (node.kind === SyntaxKind.Identifier) {
+                const symbol = container.locals.get((<Identifier>node).text);
+                if (symbol && symbol.valueDeclaration && symbol.valueDeclaration.kind === SyntaxKind.VariableDeclaration) {
+                    const declaration = symbol.valueDeclaration as VariableDeclaration;
+                    if (declaration.initializer) {
+                        return isExportsOrModuleExportsOrAliasOrAssignemnt(declaration.initializer);
+                    }
+                }
+            }
+            return false;
+        }
+
+        function isExportsOrModuleExportsOrAliasOrAssignemnt(node: Node): boolean {
+            return isExportsOrModuleExportsOrAlias(node) ||
+                (isAssignmentExpression(node, /*excludeCompoundAssignements*/ true) && (isExportsOrModuleExportsOrAliasOrAssignemnt(node.left) || isExportsOrModuleExportsOrAliasOrAssignemnt(node.right)));
+        }
+
         function bindModuleExportsAssignment(node: BinaryExpression) {
+            // A common practice in node modules is to set 'export = module.exports = {}', this ensures that 'exports'
+            // is still pointing to 'module.exports'.
+            // We do not want to consider this as 'export=' since a module can have only one of these.
+            // Similarlly we do not want to treat 'module.exports = exports' as an 'export='.
+            const assignedExpression = getRightMostAssignedExpression(node.right);
+            if (isEmptyObjectLiteral(assignedExpression) || isExportsOrModuleExportsOrAlias(assignedExpression)) {
+                // Mark it as a module in case there are no other exports in the file
+                setCommonJsModuleIndicator(node);
+                return;
+            }
+
             // 'module.exports = expr' assignment
             setCommonJsModuleIndicator(node);
             declareSymbol(file.symbol.exports, file.symbol, node, SymbolFlags.Property | SymbolFlags.Export | SymbolFlags.ValueModule, SymbolFlags.None);
@@ -2238,23 +2332,30 @@ namespace ts {
 
         function bindThisPropertyAssignment(node: BinaryExpression) {
             Debug.assert(isInJavaScriptFile(node));
-            // Declare a 'member' if the container is an ES5 class or ES6 constructor
-            if (container.kind === SyntaxKind.FunctionDeclaration || container.kind === SyntaxKind.FunctionExpression) {
-                container.symbol.members = container.symbol.members || createMap<Symbol>();
-                // It's acceptable for multiple 'this' assignments of the same identifier to occur
-                declareSymbol(container.symbol.members, container.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
-            }
-            else if (container.kind === SyntaxKind.Constructor) {
-                // this.foo assignment in a JavaScript class
-                // Bind this property to the containing class
-                const saveContainer = container;
-                container = container.parent;
-                const symbol = bindPropertyOrMethodOrAccessor(node, SymbolFlags.Property, SymbolFlags.None);
-                if (symbol) {
-                    // constructor-declared symbols can be overwritten by subsequent method declarations
-                    (symbol as Symbol).isReplaceableByMethod = true;
-                }
-                container = saveContainer;
+            const container = getThisContainer(node, /*includeArrowFunctions*/false);
+            switch (container.kind) {
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                    // Declare a 'member' if the container is an ES5 class or ES6 constructor
+                    container.symbol.members = container.symbol.members || createMap<Symbol>();
+                    // It's acceptable for multiple 'this' assignments of the same identifier to occur
+                    declareSymbol(container.symbol.members, container.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
+                    break;
+
+                case SyntaxKind.Constructor:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    // this.foo assignment in a JavaScript class
+                    // Bind this property to the containing class
+                    const containingClass = container.parent;
+                    const symbol = declareSymbol(hasModifier(container, ModifierFlags.Static) ? containingClass.symbol.exports : containingClass.symbol.members, containingClass.symbol, node, SymbolFlags.Property, SymbolFlags.None);
+                    if (symbol) {
+                        // symbols declared through 'this' property assignements can be overwritten by subsequent method declarations
+                        (symbol as Symbol).isReplaceableByMethod = true;
+                    }
+                    break;
             }
         }
 
@@ -2287,11 +2388,20 @@ namespace ts {
             leftSideOfAssignment.parent = node;
             target.parent = leftSideOfAssignment;
 
-            bindPropertyAssignment(target.text, leftSideOfAssignment, /*isPrototypeProperty*/ false);
+            if (isNameOfExportsOrModuleExportsAliasDeclaration(target)) {
+                // This can be an alias for the 'exports' or 'module.exports' names, e.g.
+                //    var util = module.exports;
+                //    util.property = function ...
+                bindExportsPropertyAssignment(node);
+            }
+            else {
+                bindPropertyAssignment(target.text, leftSideOfAssignment, /*isPrototypeProperty*/ false);
+            }
         }
 
         function bindPropertyAssignment(functionName: string, propertyAccessExpression: PropertyAccessExpression, isPrototypeProperty: boolean) {
             let targetSymbol = container.locals.get(functionName);
+
             if (targetSymbol && isDeclarationOfFunctionOrClassExpression(targetSymbol)) {
                 targetSymbol = (targetSymbol.valueDeclaration as VariableDeclaration).initializer.symbol;
             }

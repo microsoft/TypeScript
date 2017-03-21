@@ -11,11 +11,7 @@ var ts = require("./lib/typescript");
 
 // Variables
 var compilerDirectory = "src/compiler/";
-var servicesDirectory = "src/services/";
 var serverDirectory = "src/server/";
-var typingsInstallerDirectory = "src/server/typingsInstaller";
-var cancellationTokenDirectory = "src/server/cancellationToken";
-var watchGuardDirectory = "src/server/watchGuard";
 var harnessDirectory = "src/harness/";
 var libraryDirectory = "src/lib/";
 var scriptsDirectory = "scripts/";
@@ -131,6 +127,7 @@ var harnessSources = harnessCoreSources.concat([
     "matchFiles.ts",
     "initializeTSConfig.ts",
     "printer.ts",
+    "textChanges.ts",
     "transform.ts",
     "customTransforms.ts",
 ].map(function (f) {
@@ -328,8 +325,14 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         if (opts.stripInternal) {
             options += " --stripInternal";
         }
-
-        options += " --target es5 --lib es5,scripthost --noUnusedLocals --noUnusedParameters";
+        options += " --target es5";
+        if (opts.lib) {
+            options += " --lib " + opts.lib
+        }
+        else {
+            options += " --lib es5"
+        }
+        options += " --noUnusedLocals --noUnusedParameters";
 
         var cmd = host + " " + compilerPath + " " + options + " ";
         cmd = cmd + sources.join(" ");
@@ -416,7 +419,7 @@ compileFile(buildProtocolJs,
     [buildProtocolTs],
     [],
     /*useBuiltCompiler*/ false,
-    {noOutFile: true});
+    { noOutFile: true, lib: "es6" });
 
 file(buildProtocolDts, [buildProtocolTs, buildProtocolJs, typescriptServicesDts], function() {
 
@@ -578,16 +581,16 @@ compileFile(
 file(typescriptServicesDts, [servicesFile]);
 
 var cancellationTokenFile = path.join(builtLocalDirectory, "cancellationToken.js");
-compileFile(cancellationTokenFile, cancellationTokenSources, [builtLocalDirectory].concat(cancellationTokenSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { outDir: builtLocalDirectory, noOutFile: true });
+compileFile(cancellationTokenFile, cancellationTokenSources, [builtLocalDirectory].concat(cancellationTokenSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { types: ["node"], outDir: builtLocalDirectory, noOutFile: true, lib: "es6" });
 
 var typingsInstallerFile = path.join(builtLocalDirectory, "typingsInstaller.js");
-compileFile(typingsInstallerFile, typingsInstallerSources, [builtLocalDirectory].concat(typingsInstallerSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { outDir: builtLocalDirectory, noOutFile: false });
+compileFile(typingsInstallerFile, typingsInstallerSources, [builtLocalDirectory].concat(typingsInstallerSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { types: ["node"], outDir: builtLocalDirectory, noOutFile: false, lib: "es6" });
 
 var watchGuardFile = path.join(builtLocalDirectory, "watchGuard.js");
-compileFile(watchGuardFile, watchGuardSources, [builtLocalDirectory].concat(watchGuardSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { outDir: builtLocalDirectory, noOutFile: false });
+compileFile(watchGuardFile, watchGuardSources, [builtLocalDirectory].concat(watchGuardSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { types: ["node"], outDir: builtLocalDirectory, noOutFile: false, lib: "es6" });
 
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
-compileFile(serverFile, serverSources, [builtLocalDirectory, copyright, cancellationTokenFile, typingsInstallerFile, watchGuardFile].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { types: ["node"], preserveConstEnums: true });
+compileFile(serverFile, serverSources, [builtLocalDirectory, copyright, cancellationTokenFile, typingsInstallerFile, watchGuardFile].concat(serverSources).concat(servicesSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { types: ["node"], preserveConstEnums: true, lib: "es6" });
 var tsserverLibraryFile = path.join(builtLocalDirectory, "tsserverlibrary.js");
 var tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverlibrary.d.ts");
 compileFile(
@@ -711,7 +714,7 @@ compileFile(
     /*prereqs*/[builtLocalDirectory, tscFile].concat(libraryTargets).concat(servicesSources).concat(harnessSources),
     /*prefixes*/[],
     /*useBuiltCompiler:*/ true,
-    /*opts*/ { inlineSourceMap: true, types: ["node", "mocha", "chai"] });
+    /*opts*/ { inlineSourceMap: true, types: ["node", "mocha", "chai"], lib: "es6" });
 
 var internalTests = "internal/";
 
@@ -1098,7 +1101,8 @@ var tslintRules = [
     "noInOperatorRule",
     "noIncrementDecrementRule",
     "objectLiteralSurroundingSpaceRule",
-    "noTypeAssertionWhitespaceRule"
+    "noTypeAssertionWhitespaceRule",
+    "noBomRule"
 ];
 var tslintRulesFiles = tslintRules.map(function (p) {
     return path.join(tslintRuleDir, p + ".ts");
@@ -1110,7 +1114,7 @@ desc("Compiles tslint rules to js");
 task("build-rules", ["build-rules-start"].concat(tslintRulesOutFiles).concat(["build-rules-end"]));
 tslintRulesFiles.forEach(function (ruleFile, i) {
     compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ false,
-        { noOutFile: true, generateDeclarations: false, outDir: path.join(builtLocalDirectory, "tslint") });
+        { noOutFile: true, generateDeclarations: false, outDir: path.join(builtLocalDirectory, "tslint"), lib: "es6" });
 });
 
 desc("Emit the start of the build-rules fold");
@@ -1173,43 +1177,16 @@ function spawnLintWorker(files, callback) {
 }
 
 desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex");
-task("lint", ["build-rules"], function () {
+task("lint", ["build-rules"], () => {
     if (fold.isTravis()) console.log(fold.start("lint"));
-    var startTime = mark();
-    var failed = 0;
-    var fileMatcher = RegExp(process.env.f || process.env.file || process.env.files || "");
-    var done = {};
-    for (var i in lintTargets) {
-        var target = lintTargets[i];
-        if (!done[target] && fileMatcher.test(target)) {
-            done[target] = fs.statSync(target).size;
-        }
-    }
-
-    var workerCount = (process.env.workerCount && +process.env.workerCount) || os.cpus().length;
-
-    var names = Object.keys(done).sort(function (namea, nameb) {
-        return done[namea] - done[nameb];
+    const fileMatcher = process.env.f || process.env.file || process.env.files;
+    const files = fileMatcher
+        ? `src/**/${fileMatcher}`
+        : "Gulpfile.ts 'src/**/*.ts' --exclude src/lib/es5.d.ts --exclude 'src/lib/*.generated.d.ts' --exclude 'src/harness/unittests/services/**/*.ts'";
+    const cmd = `node node_modules/tslint/bin/tslint ${files} --format stylish`;
+    console.log("Linting: " + cmd);
+    jake.exec([cmd], { interactive: true }, () => {
+        if (fold.isTravis()) console.log(fold.end("lint"));
+        complete();
     });
-
-    for (var i = 0; i < workerCount; i++) {
-        spawnLintWorker(names, finished);
-    }
-
-    var completed = 0;
-    var failures = 0;
-    function finished(fails) {
-        completed++;
-        failures += fails;
-        if (completed === workerCount) {
-            measure(startTime);
-            if (fold.isTravis()) console.log(fold.end("lint"));
-            if (failures > 0) {
-                fail('Linter errors.', failed);
-            }
-            else {
-                complete();
-            }
-        }
-    }
-}, { async: true });
+});

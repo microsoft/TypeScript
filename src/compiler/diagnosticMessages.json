@@ -2417,10 +2417,6 @@
         "category": "Error",
         "code": 5012
     },
-    "Unsupported file encoding.": {
-        "category": "Error",
-        "code": 5013
-    },
     "Failed to parse file '{0}': {1}.": {
         "category": "Error",
         "code": 5014
@@ -3049,6 +3045,10 @@
         "category": "Message",
         "code": 6149
     },
+    "Enable all strict type checks.": {
+        "category": "Message",
+        "code": 6150
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -3273,7 +3273,7 @@
         "category": "Error",
         "code": 17011
     },
-    "'{0}' is not a valid meta-property for keyword '{1}'. Did you mean '{0}'?": {
+    "'{0}' is not a valid meta-property for keyword '{1}'. Did you mean '{2}'?": {
         "category": "Error",
         "code": 17012
     },

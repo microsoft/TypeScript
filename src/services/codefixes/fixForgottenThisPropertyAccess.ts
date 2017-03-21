@@ -5,11 +5,15 @@ namespace ts.codefix {
         getCodeActions: (context: CodeFixContext) => {
             const sourceFile = context.sourceFile;
             const token = getTokenAtPosition(sourceFile, context.span.start);
-            const start = token.getStart(sourceFile);
+            if (token.kind !== SyntaxKind.Identifier) {
+                return undefined;
+            }
+            const changeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+            changeTracker.replaceNode(sourceFile, token, createPropertyAccess(createThis(), <Identifier>token));
 
             return [{
                 description: getLocaleSpecificMessage(Diagnostics.Add_this_to_unresolved_variable),
-                changes: [{ fileName: sourceFile.fileName, textChanges: [{ newText: "this.", span: { start, length: 0 } }] }]
+                changes: changeTracker.getChanges()
             }];
         }
     });
