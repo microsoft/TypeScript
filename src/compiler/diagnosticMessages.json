@@ -3161,6 +3161,10 @@
         "category": "Error",
         "code": 7034
     },
+    "Cannot resolve dynamic import, implicitly has a 'Promise<any>' type.": {
+      "category": "Error",
+      "code": 7035
+    },
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000

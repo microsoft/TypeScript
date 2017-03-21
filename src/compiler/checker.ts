@@ -14875,6 +14875,9 @@ namespace ts {
                     return createPromiseReturnType(node, getTypeOfSymbol(esModuleSymbol));
                 }
             }
+            if (noImplicitAny) {
+                error(node, Diagnostics.Cannot_resolve_dynamic_import_implicitly_has_a_Promise_any_type);
+            }
             return createPromiseReturnType(node, anyType);
         }
 
