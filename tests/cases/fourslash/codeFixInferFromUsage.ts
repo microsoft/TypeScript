@@ -6,4 +6,4 @@
 ////    foo += 2;
 ////}
 
-verify.rangeAfterCodeFix("var foo: number;");
+verify.rangeAfterCodeFix("var foo: number;",/*includeWhiteSpace*/ undefined, /*errorCode*/ undefined, 0);

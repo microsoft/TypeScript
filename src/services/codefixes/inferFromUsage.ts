@@ -2,31 +2,31 @@
 namespace ts.codefix {
     registerCodeFix({
         errorCodes: [
+            // Variable declarations
             Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined.code,
-            //Diagnostics.Variable_0_implicitly_has_an_1_type.code,
+            Diagnostics.Variable_0_implicitly_has_an_1_type.code,
 
-            Diagnostics.Member_0_implicitly_has_an_1_type.code,
-
+            // Parameter declarations
             Diagnostics.Parameter_0_implicitly_has_an_1_type.code,
             Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code,
 
+            // Get Accessor declarations
             Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation.code,
             Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type.code,
 
+            // Set Accessor declarations
             Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation.code,
 
-             //Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type.code,
+            // Property declarations
+            Diagnostics.Member_0_implicitly_has_an_1_type.code,
+            // Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type.code,
+
             // Diagnostics.Binding_element_0_implicitly_has_an_1_type.code,
-            // Diagnostics.new_expression_whose_target_lacks_a_construct_signature_implicitly_has_an_any_type.code,
-            // Diagnostics.Function_expression_which_lacks_return_type_annotation_implicitly_has_an_0_return_type.code,
-            // Diagnostics.Element_implicitly_has_an_any_type_because_index_expression_is_not_of_type_number.code,
-            // Diagnostics.Element_implicitly_has_an_any_type_because_type_0_has_no_index_signature.code,
-            // Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation.code,
         ],
         getCodeActions: getActionsForAddExplicitTypeAnnotation
     });
 
-    function getActionsForAddExplicitTypeAnnotation({ sourceFile, program, span: { start }, errorCode, cancellationToken, newLineCharacter}: CodeFixContext): CodeAction[] | undefined {
+    function getActionsForAddExplicitTypeAnnotation({ sourceFile, program, span: { start }, errorCode, cancellationToken, newLineCharacter }: CodeFixContext): CodeAction[] | undefined {
         const token = getTokenAtPosition(sourceFile, start);
 
         if (!isIdentifier(token) && token.kind !== SyntaxKind.DotDotDotToken) {
@@ -34,59 +34,64 @@ namespace ts.codefix {
         }
 
         const containingFunction = getContainingFunction(token);
-
         const checker = program.getTypeChecker();
 
-        return getCodeAction();
+        switch (errorCode) {
+            // Variable declarations
+            case Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined.code:
+                return getCodeActionForVariableDeclaration(<VariableDeclaration>token.parent);
+            case Diagnostics.Variable_0_implicitly_has_an_1_type.code:
+                return getCodeActionForVariableUsage(<Identifier>token);
 
-        function getCodeAction() {
-            switch (errorCode) {
-                case Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined.code:
-                case Diagnostics.Variable_0_implicitly_has_an_1_type.code:
-                case Diagnostics.Member_0_implicitly_has_an_1_type.code:
-                    return getCodeActionForVariable();
-                case Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation.code:
-                    return getCodeActionForSetAccessor(<SetAccessorDeclaration> containingFunction);
-                case Diagnostics.Parameter_0_implicitly_has_an_1_type.code:
-                    if (containingFunction.kind === SyntaxKind.SetAccessor) {
-                        return getCodeActionForSetAccessor(<SetAccessorDeclaration>containingFunction);
-                    }
-                    else {
-                        return getCodeActionForParameter(/*isRestParam*/ false);
-                    }
-                case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code:
-                    return getCodeActionForParameter(/*isRestParam*/ true);
-                case Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation.code:
-                    return getCodeActionForGetAccessor(<GetAccessorDeclaration>containingFunction);
-                case Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type.code:
-                    if (containingFunction.kind === SyntaxKind.GetAccessor) {
-                        return getCodeActionForGetAccessor(<GetAccessorDeclaration>containingFunction);
-                    }
-                    return undefined;
-            }
-        }
+            // Paramtert declarations
+            case Diagnostics.Parameter_0_implicitly_has_an_1_type.code:
+                if (isSetAccessor(containingFunction)) {
+                    return getCodeActionForSetAccessor(containingFunction);
+                }
+                // Fall through
+            case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code:
+                return getCodeActionForParameter(<ParameterDeclaration>token.parent);
 
-        function getCodeActionForVariable() {
-            const type = inferTypeForVariableFromUsage(<Identifier>token);
-            const typeString = checker.typeToString(type || checker.getAnyType(), token, TypeFormatFlags.NoTruncation);
+            // Get Accessor declarations
+            case Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation.code:
+            case Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type.code:
+                return isGetAccessor(containingFunction) ? getCodeActionForGetAccessor(containingFunction) : undefined;
+
+            // Set Accessor declarations
+            case Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation.code:
+                return isSetAccessor(containingFunction) ? getCodeActionForSetAccessor(containingFunction) : undefined;
+
+            // Property declarations
+            case Diagnostics.Member_0_implicitly_has_an_1_type.code:
+                // todo
+                return undefined;
+         }
+
+        function getCodeActionForVariableDeclaration(declaration: VariableDeclaration) {
+            const type = inferTypeForVariableFromUsage(declaration.name);
+            const typeString = checker.typeToString(type || checker.getAnyType(), declaration, TypeFormatFlags.NoTruncation);
             if (isInJavaScriptFile(sourceFile)) {
-                const declaration = getAncestor(token, SyntaxKind.VariableStatement);
-                if (!declaration.jsDoc) {
+                const declarationStatement = getAncestor(declaration, SyntaxKind.VariableStatement);
+                if (!declarationStatement.jsDoc) {
                     const newText = `/** @type {${typeString}} */${newLineCharacter}`;
-                    return createCodeActions(token.getText(), declaration.getStart(), newText);
+                    return createCodeActions(declaration.getText(), declarationStatement.getStart(), newText);
                 }
             }
             else {
-                return createCodeActions(token.getText(), token.getEnd(), `: ${typeString}`);
+                return createCodeActions(declaration.name.getText(), declaration.name.getEnd(), `: ${typeString}`);
             }
         }
 
-        function getCodeActionForParameter(isRestParameter: boolean) {
-            const parameterDeclaration = <ParameterDeclaration>getAncestor(token, SyntaxKind.Parameter);
+        function getCodeActionForVariableUsage(token: Identifier) {
+            const symbol = checker.getSymbolAtLocation(token);
+            return symbol && symbol.valueDeclaration && getCodeActionForVariableDeclaration(<VariableDeclaration>symbol.valueDeclaration);
+        }
+
+        function getCodeActionForParameter(parameterDeclaration: ParameterDeclaration) {
             if (!isIdentifier(parameterDeclaration.name)) {
                 return undefined;
             }
-
+            const isRestParameter = !!parameterDeclaration.dotDotDotToken;
             let type = inferTypeForParameterFromUsage(parameterDeclaration.name, isRestParameter);
             if (!isValidInference(type)) {
                 type = inferTypeForVariableFromUsage(parameterDeclaration.name);
@@ -142,73 +147,6 @@ namespace ts.codefix {
             }
         }
 
-
-        //function coalesceSignatures(declaration: FunctionLikeDeclaration, signatures: Signature[]): Signature {
-        //    const parameters = [];
-        //    let minArgumentCount = 0;;
-        //    for (let i = 0; i < declaration.parameters.length; i++) {
-        //        const parameterDeclaration = declaration.parameters[i];
-        //        const paramterTypes = [];
-        //        let seenInAllSignatures = true;
-        //        for (const signature of signatures) {
-        //            if (i < signature.parameters.length) {
-        //                const type = (<TransientSymbol>signature.parameters[i]).type;
-        //                if (isValidInference(type)) {
-        //                    paramterTypes.push(checker.getBaseTypeOfLiteralType(type));
-        //                }
-        //            }
-        //            else {
-        //                seenInAllSignatures = false;
-        //            }
-        //        }
-        //        if (seenInAllSignatures) {
-        //            minArgumentCount++;
-        //        }
-        //        const symbol = <TransientSymbol>checker.createSymbol(SymbolFlags.FunctionScopedVariable, parameterDeclaration.name.getText());
-        //        symbol.type = paramterTypes.length ? checker.getUnionType(paramterTypes) : checker.getAnyType();
-        //        parameters.push(symbol);
-        //    }
-        //    return checker.createSignature(declaration, /*typeParameters*/ undefined, /*thisParameter*/ undefined, parameters, checker.getAnyType(), /*typePredicate*/ undefined, minArgumentCount, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
-        //}
-
-        //function getCodeActionForParameters() {
-
-        //    const containingFunction = getContainingFunction(token);
-        //    if (!containingFunction.name) {
-        //        return undefined;
-        //    }
-        //    //const parameterIndex = getParameterIndexInList(token, containingFunction.parameters);
-        //    //const types = [];
-        //    let signatures: Signature[] = [];
-        //    for (const reference of getReferences(containingFunction.name)) {
-        //        const token = getTokenAtPosition(program.getSourceFile(reference.fileName), reference.textSpan.start);
-        //        const type = getTypeFromContext(<Identifier>token, program.getTypeChecker());
-        //        if (!isValidInference(type)) {
-        //            continue;
-        //        }
-
-        //        signatures = concatenate(signatures, containingFunction.kind === SyntaxKind.Constructor ? type.getConstructSignatures() : type.getCallSignatures());
-        //    }
-        //    const unifiedSignature: Signature = coalesceSignatures(containingFunction, signatures);
-
-        //    if (isInJavaScriptFile(sourceFile)) {
-        //        const declaration = getContainingFunction(token);
-        //        if (!declaration.jsDoc) {
-        //            let newText = `/**${newLineCharacter}`;
-        //            for (let i = 0; i < unifiedSignature.parameters.length; i++) {
-        //                const paramter = unifiedSignature.parameters[i];
-        //                const typeString = checker.typeToString((<TransientSymbol>paramter).type, token);
-        //                newText += ` * @param {${typeString}${i + 1 > unifiedSignature.minArgumentCount ? "=" : ""}} ${paramter.name}${newLineCharacter}`
-        //            }
-        //            newText += ` */${newLineCharacter}`
-        //            return createCodeActions(declaration.getStart(), newText);
-        //        }
-        //    }
-        //    else {
-        //        return undefined;
-        //    }
-        //}
-
         function createCodeActions(name: string, start: number, typeString: string) {
             return [{
                 description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Infer_type_of_0), [name]),
@@ -237,7 +175,11 @@ namespace ts.codefix {
             return references[0].references;
         }
 
-        function inferTypeForVariableFromUsage(token: PropertyName) {
+        function inferTypeForVariableFromUsage(token: BindingName  | PropertyName) {
+            if (!isIdentifier(token)) {
+                // TODO: Support Binding Patterns
+                return undefined;
+            }
             const references = getReferences(token).map(r => <Identifier>getTokenAtPosition(program.getSourceFile(r.fileName), r.textSpan.start));
             return inferTypeFromReferences(references, checker);
         }

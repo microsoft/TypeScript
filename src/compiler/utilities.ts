@@ -1,4 +1,4 @@
-/// <reference path="sys.ts" />
+﻿/// <reference path="sys.ts" />
 
 /* @internal */
 namespace ts {
@@ -4663,5 +4663,13 @@ namespace ts {
      */
     export function unescapeIdentifier(identifier: string): string {
         return identifier.length >= 3 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ && identifier.charCodeAt(2) === CharacterCodes._ ? identifier.substr(1) : identifier;
+    }
+
+    export function isSetAccessor(node: Node): node is SetAccessorDeclaration {
+        return node.kind === SyntaxKind.SetAccessor;
+    }
+
+    export function isGetAccessor(node: Node): node is GetAccessorDeclaration {
+        return node.kind === SyntaxKind.GetAccessor;
     }
 }
