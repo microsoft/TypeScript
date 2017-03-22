@@ -125,7 +125,7 @@ namespace ts {
                 visitNodes(node.modifiers, visitor, isModifier),
                 node.asteriskToken,
                 node.name,
-                node.questionToken,
+                /*questionToken*/ undefined,
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,

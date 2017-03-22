@@ -475,7 +475,7 @@ namespace ts {
                     /*modifiers*/ undefined,
                     node.dotDotDotToken,
                     getGeneratedNameForNode(node),
-                    node.questionToken,
+                    /*questionToken*/ undefined,
                     /*type*/ undefined,
                     visitNode(node.initializer, visitor, isExpression)
                 );
@@ -541,7 +541,7 @@ namespace ts {
                     ? undefined
                     : node.asteriskToken,
                 visitNode(node.name, visitor, isPropertyName),
-                visitNode(node.questionToken, visitor, isToken),
+                visitNode(/*questionToken*/ undefined, visitor, isToken),
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,

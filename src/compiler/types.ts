@@ -2473,11 +2473,11 @@ namespace ts {
         getNonNullableType(type: Type): Type;
 
         /** Note that the resulting nodes cannot be checked. */
-        createTypeNode(type: Type, enclosingDeclaration: Node): TypeNode;
+        typeToTypeNode(type: Type, enclosingDeclaration: Node): TypeNode;
         /** Note that the resulting nodes cannot be checked. */
-        createIndexSignatureFromIndexInfo(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration: Node): IndexSignatureDeclaration;
+        indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration: Node): IndexSignatureDeclaration;
         /** Note that the resulting nodes cannot be checked. */
-        createSignatureParts(signature: Signature, enclosingDeclaration: Node): SignatureParts;
+        signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration: Node): SignatureDeclaration;
 
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolAtLocation(node: Node): Symbol;

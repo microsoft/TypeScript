@@ -744,8 +744,8 @@ namespace ts {
                 //
                 //     let a: A.B.C;
                 //
-                // Calling isPartOfTypeNode would consider the qualified name A.B a type node. Only C or
-                // A.B.C is a type node.
+                // Calling isPartOfTypeNode would consider the qualified name A.B a type node.
+                // Only C and A.B.C are type nodes.
                 if (SyntaxKind.FirstTypeNode <= parent.kind && parent.kind <= SyntaxKind.LastTypeNode) {
                     return true;
                 }
@@ -3735,7 +3735,7 @@ namespace ts {
      * of a TypeNode.
      */
     export function isTypeNode(node: Node): node is TypeNode {
-        return isTypeNodeKind(node.kind);
+        return node && isTypeNodeKind(node.kind) && (!node.parent || isPartOfTypeNode(node));
     }
 
     // Binding patterns

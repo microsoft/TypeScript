@@ -64,7 +64,7 @@ namespace ts.codefix {
         const declaration = declarations[0] as Declaration;
         const name = declaration.name ? getSynthesizedDeepClone(declaration.name) as PropertyName : undefined;
         const visibilityModifier = createVisibilityModifier(getModifierFlags(declaration));
-        const modifiers = visibilityModifier ? [visibilityModifier] : undefined;
+        const modifiers = visibilityModifier ? createNodeArray([visibilityModifier]) : undefined;
         const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
 
         switch (declaration.kind) {
@@ -72,7 +72,7 @@ namespace ts.codefix {
             case SyntaxKind.SetAccessor:
             case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyDeclaration:
-                const typeNode = checker.createTypeNode(type, enclosingDeclaration);
+                const typeNode = checker.typeToTypeNode(type, enclosingDeclaration);
                 const property = createProperty(
                     /*decorators*/undefined,
                     modifiers,
@@ -99,30 +99,32 @@ namespace ts.codefix {
                 if (declarations.length === 1) {
                     Debug.assert(signatures.length === 1);
                     const signature = signatures[0];
-                    const signatureParts = checker.createSignatureParts(signature, enclosingDeclaration);
-                    return createStubbedMethod(modifiers, name, optional, signatureParts.typeParameters, signatureParts.parameters, signatureParts.type);
+                    const signatureDeclaration = checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration) as MethodDeclaration;
+                    signatureDeclaration.modifiers = modifiers;
+                    signatureDeclaration.name = name;
+                    signatureDeclaration.questionToken = optional ? createToken(SyntaxKind.QuestionToken) : undefined;
+                    signatureDeclaration.body = createStubbedMethodBody();
+                    return signatureDeclaration;
                 }
 
                 let signatureDeclarations = [];
                 for (let i = 0; i < signatures.length; i++) {
                     const signature = signatures[i];
-                    const signatureParts = checker.createSignatureParts(signature, enclosingDeclaration);
-                    signatureDeclarations.push(createMethod(
-                        /*decorators*/ undefined,
-                        modifiers,
-                        /*asteriskToken*/ undefined,
-                        name,
-                        optional ? createToken(SyntaxKind.QuestionToken) : undefined,
-                        signatureParts.typeParameters,
-                        signatureParts.parameters,
-                        signatureParts.type,
-                        /*body*/undefined));
+                    const signatureDeclaration = checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration) as MethodDeclaration;
+                    signatureDeclaration.modifiers = modifiers;
+                    signatureDeclaration.name = name;
+                    signatureDeclaration.questionToken = optional ? createToken(SyntaxKind.QuestionToken) : undefined;
+                    signatureDeclarations.push(signatureDeclaration);
                 }
 
                 if (declarations.length > signatures.length) {
                     let signature = checker.getSignatureFromDeclaration(declarations[declarations.length - 1] as SignatureDeclaration);
-                    const signatureParts = checker.createSignatureParts(signature, enclosingDeclaration);
-                    signatureDeclarations.push(createStubbedMethod(modifiers, name, optional, signatureParts.typeParameters, signatureParts.parameters, signatureParts.type));
+                    const signatureDeclaration = checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration) as MethodDeclaration;
+                    signatureDeclaration.modifiers = modifiers;
+                    signatureDeclaration.name = name;
+                    signatureDeclaration.questionToken = optional ? createToken(SyntaxKind.QuestionToken) : undefined;
+                    signatureDeclaration.body = createStubbedMethodBody();
+                    signatureDeclarations.push(signatureDeclaration);
                 }
                 else {
                     Debug.assert(declarations.length === signatures.length);
@@ -195,9 +197,9 @@ namespace ts.codefix {
 
     export function createStubbedMethod(modifiers: Modifier[], name: PropertyName, optional: boolean, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], returnType: TypeNode | undefined) {
         return createMethod(
-            /*decorators*/undefined,
+            /*decorators*/ undefined,
             modifiers,
-            /*asteriskToken*/undefined,
+            /*asteriskToken*/ undefined,
             name,
             optional ? createToken(SyntaxKind.QuestionToken) : undefined,
             typeParameters,

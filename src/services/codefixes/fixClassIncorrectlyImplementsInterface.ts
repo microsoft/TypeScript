@@ -53,7 +53,7 @@ namespace ts.codefix {
             if (!indexInfoOfKind) {
                 return;
             }
-            const newIndexSignatureDeclaration = checker.createIndexSignatureFromIndexInfo(indexInfoOfKind, kind, classDeclaration);
+            const newIndexSignatureDeclaration = checker.indexInfoToIndexSignatureDeclaration(indexInfoOfKind, kind, classDeclaration);
             newNodes.push(newIndexSignatureDeclaration);
         }
 
