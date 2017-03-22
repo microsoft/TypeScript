@@ -2492,14 +2492,6 @@
         tryGetMemberInModuleExports(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
         getApparentType(type: Type): Type;
 
-        getUnionType(types: Type[], subtypeReduction?: boolean): Type;
-
-        createAnonymousType(symbol: Symbol, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], stringIndexInfo: IndexInfo, numberIndexInfo: IndexInfo): Type;
-        createSignature(declaration: SignatureDeclaration, typeParameters: TypeParameter[], thisParameter: Symbol | undefined, parameters: Symbol[],
-            resolvedReturnType: Type, typePredicate: TypePredicate, minArgumentCount: number, hasRestParameter: boolean, hasLiteralTypes: boolean): Signature;
-        createSymbol(flags: SymbolFlags, name: string): TransientSymbol;
-        createIndexInfo(type: Type, isReadonly: boolean, declaration?: SignatureDeclaration): IndexInfo;
-
         getAnyType(): Type;
         getStringType(): Type;
         getNumberType(): Type;
@@ -2509,9 +2501,14 @@
         getNullType(): Type;
         getESSymbolType(): Type;
         getNeverType(): Type;
+        getUnionType(types: Type[], subtypeReduction?: boolean): Type;
         createArrayType(elementType: Type): Type;
         createPromiseType(type: Type): Type;
 
+        /* @internal */ createAnonymousType(symbol: Symbol, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], stringIndexInfo: IndexInfo, numberIndexInfo: IndexInfo): Type;
+        /* @internal */ createSignature(declaration: SignatureDeclaration, typeParameters: TypeParameter[], thisParameter: Symbol | undefined, parameters: Symbol[], resolvedReturnType: Type, typePredicate: TypePredicate, minArgumentCount: number, hasRestParameter: boolean, hasLiteralTypes: boolean): Signature;
+        /* @internal */ createSymbol(flags: SymbolFlags, name: string): TransientSymbol;
+        /* @internal */ createIndexInfo(type: Type, isReadonly: boolean, declaration?: SignatureDeclaration): IndexInfo;
         /* @internal */ isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, shouldComputeAliasToMarkVisible: boolean): SymbolAccessibilityResult;
 
         /* @internal */ tryFindAmbientModuleWithoutAugmentations(moduleName: string): Symbol;
