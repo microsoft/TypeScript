@@ -62,7 +62,8 @@ namespace ts.codefix {
         }
 
         const declaration = declarations[0] as Declaration;
-        const name = <PropertyName>declaration.name;
+        // Clone name to remove leading trivia.
+        const name = getSynthesizedClone(<PropertyName>declaration.name);
         const visibilityModifier = createVisibilityModifier(getModifierFlags(declaration));
         const modifiers = visibilityModifier ? createNodeArray([visibilityModifier]) : undefined;
         const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
@@ -226,5 +227,13 @@ namespace ts.codefix {
             return createToken(SyntaxKind.ProtectedKeyword);
         }
         return undefined;
+    }
+
+    function stripComments(node: Node): Node {
+        if(node === undefined) {
+            return node;
+        }
+        const strippedChildren = visitEachChild(node, stripComments, nullTransformationContext);
+        return strippedChildren === node ? getSynthesizedClone(strippedChildren) : strippedChildren;
     }
 }

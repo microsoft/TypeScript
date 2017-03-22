@@ -2208,13 +2208,13 @@ namespace ts {
             const parameterDeclaration = parameterSymbol.declarations[0] as ParameterDeclaration;
             const parameterType = getTypeOfSymbol(parameterSymbol);
             const parameterTypeNode = typeToTypeNode(parameterType, enclosingDeclaration);
-            // TODO: how should we clone members/modifiers?
             // TODO: check initializer accessibility correctly.
             const parameterNode = createParameter(
                 parameterDeclaration.decorators,
                 parameterDeclaration.modifiers,
                 parameterDeclaration.dotDotDotToken && createToken(SyntaxKind.DotDotDotToken),
-                parameterDeclaration.name,
+                // Clone name to remove trivia.
+                getSynthesizedClone(parameterDeclaration.name),
                 parameterDeclaration.questionToken && createToken(SyntaxKind.QuestionToken),
                 parameterTypeNode,
                 parameterDeclaration.initializer);
