@@ -29,7 +29,8 @@ var thirdParty = "ThirdPartyNoticeText.txt";
 var nodeModulesPathPrefix = path.resolve("./node_modules/.bin/") + path.delimiter;
 if (process.env.path !== undefined) {
     process.env.path = nodeModulesPathPrefix + process.env.path;
-} else if (process.env.PATH !== undefined) {
+}
+else if (process.env.PATH !== undefined) {
     process.env.PATH = nodeModulesPathPrefix + process.env.PATH;
 }
 
@@ -312,13 +313,15 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         if (useDebugMode) {
             if (opts.inlineSourceMap) {
                 options += " --inlineSourceMap --inlineSources";
-            } else {
+            }
+            else {
                 options += " -sourcemap";
                 if (!opts.noMapRoot) {
                     options += " -mapRoot file:///" + path.resolve(path.dirname(outFile));
                 }
             }
-        } else {
+        }
+        else {
             options += " --newLine LF";
         }
 
@@ -748,7 +751,8 @@ function exec(cmd, completeHandler, errorHandler) {
     ex.addListener("error", function (e, status) {
         if (errorHandler) {
             errorHandler(e, status);
-        } else {
+        }
+        else {
             fail("Process exited with code " + status);
         }
     });
@@ -1006,21 +1010,32 @@ task("baseline-accept", function () {
 
 function acceptBaseline(sourceFolder, targetFolder) {
     console.log('Accept baselines from ' + sourceFolder + ' to ' + targetFolder);
-    var files = fs.readdirSync(sourceFolder);
     var deleteEnding = '.delete';
-    for (var i in files) {
-        var filename = files[i];
-        var fullLocalPath = path.join(sourceFolder, filename);
-        if (fs.statSync(fullLocalPath).isFile()) {
-            if (filename.substr(filename.length - deleteEnding.length) === deleteEnding) {
-                filename = filename.substr(0, filename.length - deleteEnding.length);
-                fs.unlinkSync(path.join(targetFolder, filename));
-            } else {
-                var target = path.join(targetFolder, filename);
-                if (fs.existsSync(target)) {
-                    fs.unlinkSync(target);
+
+    acceptBaselineFolder(sourceFolder, targetFolder);
+
+    function acceptBaselineFolder(sourceFolder, targetFolder) {
+        var files = fs.readdirSync(sourceFolder);
+
+        for (var i in files) {
+            var filename = files[i];
+            var fullLocalPath = path.join(sourceFolder, filename);
+            var stat = fs.statSync(fullLocalPath);
+            if (stat.isFile()) {
+                if (filename.substr(filename.length - deleteEnding.length) === deleteEnding) {
+                    filename = filename.substr(0, filename.length - deleteEnding.length);
+                    fs.unlinkSync(path.join(targetFolder, filename));
                 }
-                fs.renameSync(path.join(sourceFolder, filename), target);
+                else {
+                    var target = path.join(targetFolder, filename);
+                    if (fs.existsSync(target)) {
+                        fs.unlinkSync(target);
+                    }
+                    fs.renameSync(path.join(sourceFolder, filename), target);
+                }
+            }
+            else if (stat.isDirectory()) {
+                acceptBaselineFolder(fullLocalPath, path.join(targetFolder, filename));
             }
         }
     }

@@ -3325,6 +3325,7 @@ namespace ts {
     export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[];
 
     export interface CompilerOptions {
+        /*@internal*/ all?: boolean;
         allowJs?: boolean;
         /*@internal*/ allowNonTsExtensions?: boolean;
         allowSyntheticDefaultImports?: boolean;
@@ -3517,8 +3518,10 @@ namespace ts {
         shortName?: string;                                     // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
         description?: DiagnosticMessage;                        // The message describing what the command line switch does
         paramType?: DiagnosticMessage;                          // The name to be used for a non-boolean option's parameter
-        experimental?: boolean;
         isTSConfigOnly?: boolean;                               // True if option can only be specified via tsconfig.json file
+        isCommandLineOnly?: boolean;
+        showInSimplifiedHelpView?: boolean;
+        category?: DiagnosticMessage;
     }
 
     /* @internal */
