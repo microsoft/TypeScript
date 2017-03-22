@@ -87,9 +87,6 @@ namespace ts {
             return sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
         }
 
-        // returned by CScript sys environment
-        const unsupportedFileEncodingErrorCode = -2147024809;
-
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile {
             let text: string;
             try {
@@ -100,9 +97,7 @@ namespace ts {
             }
             catch (e) {
                 if (onError) {
-                    onError(e.number === unsupportedFileEncodingErrorCode
-                        ? createCompilerDiagnostic(Diagnostics.Unsupported_file_encoding).messageText
-                        : e.message);
+                    onError(e.message);
                 }
                 text = "";
             }
@@ -303,8 +298,8 @@ namespace ts {
         let noDiagnosticsTypeChecker: TypeChecker;
         let classifiableNames: Map<string>;
 
-        let cachedSemanticDiagnosticsForFile: DiagnosticCache = {};
-        let cachedDeclarationDiagnosticsForFile: DiagnosticCache = {};
+        const cachedSemanticDiagnosticsForFile: DiagnosticCache = {};
+        const cachedDeclarationDiagnosticsForFile: DiagnosticCache = {};
 
         let resolvedTypeReferenceDirectives = createMap<ResolvedTypeReferenceDirective>();
         let fileProcessingDiagnostics = createDiagnosticCollection();
@@ -1110,7 +1105,7 @@ namespace ts {
             return getAndCacheDiagnostics(sourceFile, cancellationToken, cachedDeclarationDiagnosticsForFile, getDeclarationDiagnosticsForFileNoCache);
         }
 
-        function getDeclarationDiagnosticsForFileNoCache(sourceFile: SourceFile| undefined, cancellationToken: CancellationToken) {
+        function getDeclarationDiagnosticsForFileNoCache(sourceFile: SourceFile | undefined, cancellationToken: CancellationToken) {
             return runWithCancellationToken(() => {
                 const resolver = getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile, cancellationToken);
                 // Don't actually write any files since we're just getting diagnostics.

@@ -59,8 +59,8 @@ const f6 = async function * () {
 }
 === tests/cases/conformance/emitter/esnext/asyncGenerators/F7.ts ===
 const f7 = async function * () {
->f7 : () => AsyncIterableIterator<any>
->async function * () {    return 1;} : () => AsyncIterableIterator<any>
+>f7 : () => AsyncIterableIterator<1>
+>async function * () {    return 1;} : () => AsyncIterableIterator<1>
 
     return 1;
 >1 : 1

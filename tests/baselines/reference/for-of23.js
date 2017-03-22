@@ -1,8 +1,4 @@
 //// [for-of23.ts]
-for (const v of new FooIterator) {
-    const v = 0; // new scope
-}
-
 class Foo { }
 class FooIterator {
     next() {
@@ -16,10 +12,11 @@ class FooIterator {
     }
 }
 
-//// [for-of23.js]
 for (const v of new FooIterator) {
     const v = 0; // new scope
 }
+
+//// [for-of23.js]
 class Foo {
 }
 class FooIterator {
@@ -32,4 +29,7 @@ class FooIterator {
     [Symbol.iterator]() {
         return this;
     }
+}
+for (const v of new FooIterator) {
+    const v = 0; // new scope
 }

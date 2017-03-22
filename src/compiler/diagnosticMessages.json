@@ -1435,6 +1435,14 @@
         "category": "Error",
         "code": 2448
     },
+    "Class '{0}' used before its declaration.": {
+        "category": "Error",
+        "code": 2449
+    },
+    "Enum '{0}' used before its declaration.": {
+        "category": "Error",
+        "code": 2450
+    },
     "Cannot redeclare block-scoped variable '{0}'.": {
         "category": "Error",
         "code": 2451
@@ -2019,10 +2027,6 @@
         "category": "Error",
         "code": 2689
     },
-    "A class must be declared after its base class.": {
-        "category": "Error",
-        "code": 2690
-    },
     "An import path cannot end with a '{0}' extension. Consider importing '{1}' instead.": {
         "category": "Error",
         "code": 2691
@@ -2412,10 +2416,6 @@
     "Cannot read file '{0}': {1}.": {
         "category": "Error",
         "code": 5012
-    },
-    "Unsupported file encoding.": {
-        "category": "Error",
-        "code": 5013
     },
     "Failed to parse file '{0}': {1}.": {
         "category": "Error",

@@ -80,7 +80,7 @@ class C7 {
 >C7 : C7
 
     async * f() {
->f : () => AsyncIterableIterator<any>
+>f : () => AsyncIterableIterator<1>
 
         return 1;
 >1 : 1

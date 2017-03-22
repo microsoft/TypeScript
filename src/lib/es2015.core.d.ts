@@ -268,7 +268,7 @@ interface Object {
       * Determines whether an object has a property with the specified name.
       * @param v A property name.
       */
-    hasOwnProperty(v: PropertyKey): boolean
+    hasOwnProperty(v: PropertyKey): boolean;
 
     /**
       * Determines whether a specified property is enumerable.
@@ -486,10 +486,10 @@ interface String {
     bold(): string;
 
     /** Returns a <tt> HTML element */
-    fixed(): string
+    fixed(): string;
 
     /** Returns a <font> HTML element and sets the color attribute value */
-    fontcolor(color: string): string
+    fontcolor(color: string): string;
 
     /** Returns a <font> HTML element and sets the size attribute value */
     fontsize(size: number): string;
