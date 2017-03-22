@@ -215,6 +215,19 @@ namespace ts.codefix {
 
             return typeString;
         }
+
+        function getParameterIndexInList(parameter: ParameterDeclaration, list: NodeArray<ParameterDeclaration>) {
+            for (let i = 0; i < list.length; i++) {
+                if (parameter === list[i]) return i;
+            }
+            return -1;
+        }
+
+        function getFirstChildOfKind(node: Node, sourcefile: SourceFile, kind: SyntaxKind) {
+            for (const child of node.getChildren(sourcefile)) {
+                if (child.kind === kind) return child;
+            }
+        }
     }
 
     namespace InferFromReference {
@@ -575,17 +588,5 @@ namespace ts.codefix {
             return usageContext && usageContext.callContexts;
         }
     }
-
-    function getParameterIndexInList(parameter: ParameterDeclaration, list: NodeArray<ParameterDeclaration>) {
-        for (let i = 0; i < list.length; i++) {
-            if (parameter === list[i]) return i;
-        }
-        return -1;
-    }
-
-    function getFirstChildOfKind(node: Node, sourcefile: SourceFile, kind: SyntaxKind) {
-        for (const child of node.getChildren(sourcefile)) {
-            if (child.kind === kind) return child;
-        }
-    }
 }
+ 
