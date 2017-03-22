@@ -225,7 +225,7 @@ namespace ts {
             return sys.exit(ExitStatus.Success);
         }
 
-        if (commandLine.options.help) {
+        if (commandLine.options.help || commandLine.options.all) {
             printVersion();
             printHelp(commandLine.options.all);
             return sys.exit(ExitStatus.Success);
