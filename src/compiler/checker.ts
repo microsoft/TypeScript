@@ -204,6 +204,7 @@ namespace ts {
             getNullType: () => nullType,
             getESSymbolType: () => esSymbolType,
             getNeverType: () => neverType,
+            isSymbolAccessible
         };
 
         const tupleTypes: GenericType[] = [];

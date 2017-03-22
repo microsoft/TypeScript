@@ -87,7 +87,10 @@ namespace ts.codefix {
                 return undefined;
             }
 
-            const typeString = checker.typeToString(type, declaration, TypeFormatFlags.NoTruncation);
+            const typeString = typeToString(type, declaration);
+            if (!typeString) {
+                return undefined;
+            }
             if (isInJavaScriptFile(sourceFile)) {
                 const declarationStatement = getAncestor(declaration, SyntaxKind.VariableStatement);
                 if (!declarationStatement.jsDoc) {
@@ -119,7 +122,10 @@ namespace ts.codefix {
                 return undefined;
             }
 
-            const typeString = checker.typeToString(type, token, TypeFormatFlags.NoTruncation);
+            const typeString = typeToString(type, containingFunction);
+            if (!typeString) {
+                return undefined;
+            }
             if (isInJavaScriptFile(sourceFile)) {
                 if (!containingFunction.jsDoc) {
                     const newText = `/** @param {${typeString}} ${token.getText()} */${newLineCharacter}`;
@@ -144,7 +150,11 @@ namespace ts.codefix {
                 return undefined;
             }
 
-            const typeString = checker.typeToString(type, token, TypeFormatFlags.NoTruncation);
+            const typeString = typeToString(type, containingFunction);
+            if (!typeString) {
+                return undefined;
+            }
+
             if (isInJavaScriptFile(sourceFile)) {
                 if (!setAccessorDeclaration.jsDoc) {
                     const newText = `/** @param {${typeString}} ${setAccessorParameter.getText()} */${newLineCharacter}`;
@@ -166,7 +176,11 @@ namespace ts.codefix {
                 return undefined;
             }
 
-            const typeString = checker.typeToString(type, token, TypeFormatFlags.NoTruncation);
+            const typeString = typeToString(type, containingFunction);
+            if (!typeString) {
+                return undefined;
+            }
+
             if (isInJavaScriptFile(sourceFile)) {
                 if (!getAccessorDeclaration.jsDoc) {
                     const newText = `/** @type {${typeString}} */${newLineCharacter}`;
@@ -226,6 +240,28 @@ namespace ts.codefix {
                         return InferFromReference.inferTypeForParameterFromReferences(getReferences(searchToken), parameterIndex, isConstructor, isRestParameter, checker, cancellationToken);
                     }
             }
+        }
+
+        function typeToString(type: Type, enclosingDeclaration: Declaration) {
+            let typeIsAccessible = true;
+
+            const writer = getSingleLineStringWriter();
+            writer.trackSymbol = (symbol, declaration, meaning) => {
+                if (checker.isSymbolAccessible(symbol, declaration, meaning, false).accessibility !== SymbolAccessibility.Accessible) {
+                    typeIsAccessible = false;
+                }
+            };
+            writer.reportIllegalExtends = writer.reportInaccessibleThisError = () => {
+                typeIsAccessible = false;
+            };
+
+            checker.getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration);
+            const typeString = typeIsAccessible ? writer.string() : undefined;
+
+            releaseStringWriter(writer);
+            writer.trackSymbol = writer.reportIllegalExtends = writer.reportInaccessibleThisError = noop;
+
+            return typeString;
         }
     }
 
