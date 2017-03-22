@@ -135,7 +135,7 @@ namespace ts.server {
                 try {
                     this.fd = fs.openSync(this.logFilename, "w");
                 }
-                catch(_) {
+                catch (_) {
                     // swallow the error and keep logging disabled if file cannot be opened
                 }
             }
@@ -315,7 +315,7 @@ namespace ts.server {
                 }
                 const body: protocol.TypesInstallerInitializationFailedEventBody = {
                     message: response.message
-                }
+                };
                 const eventName: protocol.TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
                 this.eventSender.event(body, eventName);
                 return;
@@ -473,14 +473,14 @@ namespace ts.server {
         const cmdLineVerbosity = getLogLevel(findArgument("--logVerbosity"));
         const envLogOptions = parseLoggingEnvironmentString(process.env["TSS_LOG"]);
 
-        const logFileName = cmdLineLogFileName 
-            ? stripQuotes(cmdLineLogFileName) 
+        const logFileName = cmdLineLogFileName
+            ? stripQuotes(cmdLineLogFileName)
             : envLogOptions.logToFile
                 ? envLogOptions.file || (__dirname + "/.log" + process.pid.toString())
                 : undefined;
 
         const logVerbosity = cmdLineVerbosity || envLogOptions.detailLevel;
-        return new Logger(logFileName, envLogOptions.traceToConsole, logVerbosity)
+        return new Logger(logFileName, envLogOptions.traceToConsole, logVerbosity);
     }
     // This places log file in the directory containing editorServices.js
     // TODO: check that this location is writable
