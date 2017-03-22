@@ -31,7 +31,7 @@ namespace ts.codefix {
             return undefined;
         }
 
-        let typeNode: TypeNode = createKeywordTypeNode(SyntaxKind.AnyKeyword);
+        let typeNode: TypeNode;
 
         if (token.parent.parent.kind === SyntaxKind.BinaryExpression) {
             const binaryExpression = token.parent.parent as BinaryExpression;
@@ -40,6 +40,8 @@ namespace ts.codefix {
             const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(binaryExpression.right)));
             typeNode = checker.typeToTypeNode(widenedType, classDeclaration) || typeNode;
         }
+
+        typeNode = typeNode ? typeNode : createKeywordTypeNode(SyntaxKind.AnyKeyword);
 
         const openBrace = getOpenBraceOfClassLike(classDeclaration, sourceFile);
 

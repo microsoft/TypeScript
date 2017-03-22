@@ -62,7 +62,7 @@ namespace ts.codefix {
         }
 
         const declaration = declarations[0] as Declaration;
-        const name = declaration.name ? getSynthesizedDeepClone(declaration.name) as PropertyName : undefined;
+        const name = <PropertyName>declaration.name;
         const visibilityModifier = createVisibilityModifier(getModifierFlags(declaration));
         const modifiers = visibilityModifier ? createNodeArray([visibilityModifier]) : undefined;
         const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));

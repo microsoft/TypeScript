@@ -67,15 +67,6 @@ namespace ts {
         return clone;
     }
 
-    /* @internal */
-    export function getSynthesizedDeepClone<T extends Node>(node: T | undefined): T {
-        if (node === undefined) {
-            return undefined;
-        }
-        const clone = visitEachChild(node, getSynthesizedDeepClone, nullTransformationContext);
-        return clone === node ? getSynthesizedClone(node) : clone;
-    }
-
     // Literals
 
     export function createLiteral(value: string): StringLiteral;
@@ -227,9 +218,7 @@ namespace ts {
 
     // Type Elements
 
-    export function createConstructSignature() {
-        throw new Error("not implemented.");
-    }
+    // TODO: add signatures
 
     // Types
 
@@ -251,7 +240,7 @@ namespace ts {
 
     export function createTypeReferenceNode(typeName: string | EntityName, typeArguments: NodeArray<TypeNode> | undefined) {
         const typeReference = createSynthesizedNode(SyntaxKind.TypeReference) as TypeReferenceNode;
-        typeReference.typeName = isQualifiedName(<EntityName>typeName) ? <QualifiedName>typeName : asName(<string | Identifier>typeName);
+        typeReference.typeName = asName(typeName);
         typeReference.typeArguments = typeArguments;
         return typeReference;
     }
@@ -388,7 +377,7 @@ namespace ts {
             : node;
     }
 
-    // TODO: ask if we should have multiple implementations. Some T's can't have question token.
+    // TODO: Split according to AST nodes.
     export function createSignatureDeclaration<T extends SignatureDeclaration>(kind: SyntaxKind, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined): T;
     export function createSignatureDeclaration<T extends SignatureDeclaration & TypeElement>(kind: SyntaxKind, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined): T;
     export function createSignatureDeclaration<T extends SignatureDeclaration & TypeElement>(kind: SyntaxKind, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined, name?: string | PropertyName, questionToken?: QuestionToken): T {
@@ -2030,7 +2019,8 @@ namespace ts {
     function asName(name: string | Identifier): Identifier;
     function asName(name: string | BindingName): BindingName;
     function asName(name: string | PropertyName): PropertyName;
-    function asName(name: string | Identifier | BindingName | PropertyName) {
+    function asName(name: string | EntityName): EntityName;
+    function asName(name: string | Identifier | BindingName | PropertyName | QualifiedName) {
         return typeof name === "string" ? createIdentifier(name) : name;
     }
 
