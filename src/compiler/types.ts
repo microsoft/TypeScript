@@ -391,9 +391,6 @@ namespace ts {
         MergeDeclarationMarker,
         EndOfDeclarationMarker,
 
-        // Dynamic import
-        ImportCallExpression,
-
         // Enum value count
         Count,
 
@@ -1447,9 +1444,12 @@ namespace ts {
         expression: SuperExpression;
     }
 
-    export interface ImportCallExpression extends LeftHandSideExpression, Declaration {
-        kind: SyntaxKind.ImportCallExpression;
-        specifier: Expression;
+    export interface ImportExpression extends PrimaryExpression {
+        kind: SyntaxKind.ImportKeyword;
+    }
+
+    export interface ImportCall extends CallExpression {
+        expression: ImportExpression;
     }
 
     export interface ExpressionWithTypeArguments extends TypeNode {

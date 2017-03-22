@@ -3297,6 +3297,14 @@
         "category": "Error",
         "code": 17013
     },
+    "Dynamic import can only have one specifier as an argument.": {
+        "category": "Error",
+        "code": 17014
+    },
+    "Specifier of dynamic import cannot be spread element.": {
+        "category": "Error",
+        "code": 17015
+    },
 
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",

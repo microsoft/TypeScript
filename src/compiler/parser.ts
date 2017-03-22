@@ -167,8 +167,6 @@ namespace ts {
                 return visitNode(cbNode, (<CallExpression>node).expression) ||
                     visitNodes(cbNodes, (<CallExpression>node).typeArguments) ||
                     visitNodes(cbNodes, (<CallExpression>node).arguments);
-            case SyntaxKind.ImportCallExpression:
-                return visitNode(cbNode, (<ImportCallExpression>node).specifier);
             case SyntaxKind.TaggedTemplateExpression:
                 return visitNode(cbNode, (<TaggedTemplateExpression>node).tag) ||
                     visitNode(cbNode, (<TaggedTemplateExpression>node).template);
@@ -3654,6 +3652,20 @@ namespace ts {
                 return finishNode(node);
             }
 
+            if (isImportCall(expression)) {
+                // Check that the argument array is strictly of length 1 and the argument is assignment-expression
+                const arguments = expression.arguments;
+                if (arguments.length !== 1) {
+                    parseErrorAtPosition(arguments.pos, arguments.end - arguments.pos, Diagnostics.Dynamic_import_can_only_have_one_specifier_as_an_argument);
+                }
+
+                // see: parseArgumentOrArrayLiteralElement...we use this function which parse arguments of callExpression to parse specifier for dynamic import.
+                // parseArgumentOrArrayLiteralElement allows spread element to be in an argument list which is not allowed in dynamic import.
+                if (expression.arguments.length >= 1 && isSpreadExpression(arguments[0])) {
+                    parseErrorAtPosition(arguments.pos, arguments.end - arguments.pos, Diagnostics.Specifier_of_dynamic_import_cannot_be_spread_element);
+                }
+            }
+
             return expression;
         }
 
@@ -3689,16 +3701,17 @@ namespace ts {
             // the last two CallExpression productions. 2) We see 'import' which must start import call.
             // 3)we have a MemberExpression which either completes the LeftHandSideExpression,
             // or starts the beginning of the first four CallExpression productions.
-
+            let expression: MemberExpression;
             if (token() === SyntaxKind.ImportKeyword && lookAhead(nextTokenIsOpenParen)) {
                 // We don't want to eagerly consume all import keyword as import call expression so we look a head to find "("
                 // For example:
                 //      var foo3 = require("subfolder
                 //      import * as foo1 from "module-from-node  -> we want this import to be a statement rather than import call expression
-                const importCall = parseImportCallExpression();
-                return importCall;
+                expression = parseTokenNode<PrimaryExpression>();
             }
-            const expression = token() === SyntaxKind.SuperKeyword ? parseSuperExpression() : parseMemberExpressionOrHigher();
+            else {
+                expression = token() === SyntaxKind.SuperKeyword ? parseSuperExpression() : parseMemberExpressionOrHigher();
+            }
 
             // Now, we *may* be complete.  However, we might have consumed the start of a
             // CallExpression.  As such, we need to consume the rest of it here to be complete.
@@ -3770,15 +3783,6 @@ namespace ts {
             parseExpectedToken(SyntaxKind.DotToken, /*reportAtCurrentPosition*/ false, Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
             node.name = parseRightSideOfDot(/*allowIdentifierNames*/ true);
             return finishNode(node);
-        }
-
-        function parseImportCallExpression(): ImportCallExpression {
-            const importCallExpr = <ImportCallExpression>createNode(SyntaxKind.ImportCallExpression);
-            parseExpected(SyntaxKind.ImportKeyword);
-            parseExpected(SyntaxKind.OpenParenToken);
-            importCallExpr.specifier = parseAssignmentExpressionOrHigher();
-            parseExpected(SyntaxKind.CloseParenToken);
-            return finishNode(importCallExpr);
         }
 
         function tagNamesAreEquivalent(lhs: JsxTagNameExpression, rhs: JsxTagNameExpression): boolean {

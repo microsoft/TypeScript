@@ -493,15 +493,15 @@ namespace ts {
                 return node;
             }
 
-            switch (node.kind) {
-                case SyntaxKind.ImportCallExpression:
-                    return visitImportCallExpression(<ImportCallExpression>node);
-                default:
-                    return visitEachChild(node, importCallExpressionVisitor, context);
+            if (isImportCall(node)) {
+                return visitImportCallExpression(<ImportCall>node);
+            }
+            else {
+                return visitEachChild(node, importCallExpressionVisitor, context);
             }
         }
 
-        function visitImportCallExpression(node: ImportCallExpression): Expression {
+        function visitImportCallExpression(node: ImportCall): Expression {
             switch (compilerOptions.module) {
                 case ModuleKind.CommonJS:
                     return transformImportCallExpressionCommonJS(node);
@@ -513,7 +513,7 @@ namespace ts {
             Debug.fail("All supported module kind in this transformation step should have been handled");
         }
 
-        function transformImportCallExpressionUMD(node: ImportCallExpression): Expression {
+        function transformImportCallExpressionUMD(node: ImportCall): Expression {
             // (function (factory) {
             //      ... (regular UMD)
             // }
@@ -532,7 +532,7 @@ namespace ts {
             );
         }
 
-        function transformImportCallExpressionAMD(node: ImportCallExpression): Expression {
+        function transformImportCallExpressionAMD(node: ImportCall): Expression {
             // improt("./blah")
             // emit as
             // define(["require", "exports", "blah"], function (require, exports) {
@@ -550,13 +550,13 @@ namespace ts {
                         [createParameter(/*decorator*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ resolve)],
                         /*type*/ undefined,
                         createToken(SyntaxKind.EqualsGreaterThanToken),
-                        createCall(createIdentifier("require"), /*typeArguments*/ undefined, [createArrayLiteral([node.specifier]), resolve])
+                        createCall(createIdentifier("require"), /*typeArguments*/ undefined, [createArrayLiteral([node.arguments[0]]), resolve])
                     )
                 ]
             );
         }
  
-    function transformImportCallExpressionCommonJS(node: ImportCallExpression): Expression {
+    function transformImportCallExpressionCommonJS(node: ImportCall): Expression {
             // import("./blah")
             // emit as
             // Promise.resolve().then(() => require("./blah"));
@@ -567,7 +567,7 @@ namespace ts {
                     createCall(/*expression*/ createPropertyAccess(createIdentifier("Promise"), "resolve"), /*typeArguments*/ undefined, /*argumentsArray*/[]),
                     "then"),
                 /*typeArguments*/ undefined,
-                [createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, /*parameters*/ undefined, /*type*/ undefined, createToken(SyntaxKind.EqualsGreaterThanToken), createCall(createIdentifier("require"), /*typeArguments*/ undefined, [node.specifier]))]
+                [createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, /*parameters*/ undefined, /*type*/ undefined, createToken(SyntaxKind.EqualsGreaterThanToken), createCall(createIdentifier("require"), /*typeArguments*/ undefined, [node.arguments[0]]))]
             );
         }
 

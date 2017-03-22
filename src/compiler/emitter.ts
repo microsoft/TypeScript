@@ -655,6 +655,7 @@ namespace ts {
                 case SyntaxKind.SuperKeyword:
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.ThisKeyword:
+                case SyntaxKind.ImportKeyword:
                     writeTokenText(kind);
                     return;
 
@@ -671,8 +672,6 @@ namespace ts {
                     return emitCallExpression(<CallExpression>node);
                 case SyntaxKind.NewExpression:
                     return emitNewExpression(<NewExpression>node);
-                case SyntaxKind.ImportCallExpression:
-                    return emitImportCallExpression(<ImportCallExpression>node);
                 case SyntaxKind.TaggedTemplateExpression:
                     return emitTaggedTemplateExpression(<TaggedTemplateExpression>node);
                 case SyntaxKind.TypeAssertionExpression:
@@ -1153,13 +1152,6 @@ namespace ts {
             emitExpression(node.expression);
             emitTypeArguments(node, node.typeArguments);
             emitExpressionList(node, node.arguments, ListFormat.NewExpressionArguments);
-        }
-
-        function emitImportCallExpression(node: ImportCallExpression) {
-            write("import");
-            write("(");
-            emitExpression(node.specifier);
-            write(")");
         }
 
         function emitTaggedTemplateExpression(node: TaggedTemplateExpression) {

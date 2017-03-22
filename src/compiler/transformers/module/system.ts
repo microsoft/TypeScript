@@ -1459,7 +1459,7 @@ namespace ts {
                 && node.kind === SyntaxKind.BinaryExpression) {
                 return visitDestructuringAssignment(<DestructuringAssignment>node);
             }
-            else if (isImportCallExpression(node)) {
+            else if (isImportCall(node)) {
                 return visitImportCallExpression(node);
             }
             else if ((node.transformFlags & TransformFlags.ContainsDestructuringAssignment) || (node.transformFlags & TransformFlags.ContainsDynamicImport)) {
@@ -1470,7 +1470,7 @@ namespace ts {
             }
         }
 
-        function visitImportCallExpression(node: ImportCallExpression): Expression {
+        function visitImportCallExpression(node: ImportCall): Expression {
             // import("./blah")
             // emit as
             // System.register([], function (_export, _context) {
@@ -1487,7 +1487,7 @@ namespace ts {
                     createIdentifier("import")
                 ),
                 /*typeArguments*/ undefined,
-                [node.specifier]
+                [node.arguments[0]]
             );
         }
 

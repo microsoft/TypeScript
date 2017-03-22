@@ -14830,6 +14830,10 @@ namespace ts {
                 return voidType;
             }
 
+            if (node.expression.kind === SyntaxKind.ImportKeyword) {
+                return checkImportCallExpression(<CallExpression>node);
+            }
+
             if (node.kind === SyntaxKind.NewExpression) {
                 const declaration = signature.declaration;
 
@@ -14868,19 +14872,21 @@ namespace ts {
             return getReturnTypeOfSignature(signature);
         }
 
-        function checkImportCallExpression(node: ImportCallExpression): Type {
+        function checkImportCallExpression(node: CallExpression): Type {
             if (modulekind === ModuleKind.ES2015) {
                 grammarErrorOnNode(node, Diagnostics.Dynamic_import_cannot_be_used_when_targeting_ECMAScript_2015_modules);
             }
 
-            const specifierType = checkExpression(node.specifier);
+            // We already error in parse if arguments list is not length of 1
+            const specifier = node.arguments[0];
+            const specifierType = checkExpression(specifier);
             if (!isTypeAssignableTo(specifierType, stringType)) {
-                error(node.specifier, Diagnostics.Dynamic_import_s_specifier_must_be_of_type_string_but_here_has_type_0, typeToString(specifierType));
+                error(specifier, Diagnostics.Dynamic_import_s_specifier_must_be_of_type_string_but_here_has_type_0, typeToString(specifierType));
             }
             // resolveExternalModuleName will return undefined if the moduleReferenceExpression is not a string literal
-            const moduleSymbol = resolveExternalModuleName(node, node.specifier);
+            const moduleSymbol = resolveExternalModuleName(node, specifier);
             if (moduleSymbol) {
-                const esModuleSymbol = resolveESModuleSymbol(moduleSymbol, node.specifier);
+                const esModuleSymbol = resolveESModuleSymbol(moduleSymbol, specifier);
                 if (esModuleSymbol) {
                     return createPromiseReturnType(node, getTypeOfSymbol(esModuleSymbol));
                 }
@@ -15097,16 +15103,16 @@ namespace ts {
             return emptyObjectType;
         }
 
-        function createPromiseReturnType(func: FunctionLikeDeclaration | ImportCallExpression, promisedType: Type) {
+        function createPromiseReturnType(func: FunctionLikeDeclaration | CallExpression, promisedType: Type) {
             const promiseType = createPromiseType(promisedType);
             if (promiseType === emptyObjectType) {
-                error(func, isImportCallExpression(func) ? 
+                error(func, isImportCall(func) ? 
                     Diagnostics.A_dynamic_import_call_must_return_a_Promise_Make_sure_you_have_a_declaration_for_Promise_or_include_ES2015_in_your_lib_option :
                     Diagnostics.An_async_function_or_method_must_return_a_Promise_Make_sure_you_have_a_declaration_for_Promise_or_include_ES2015_in_your_lib_option);
                 return unknownType;
             }
             else if (!getGlobalPromiseConstructorSymbol(/*reportErrors*/ true)) {
-                error(func, isImportCallExpression(func) ?
+                error(func, isImportCall(func) ?
                     Diagnostics.A_dynamic_import_call_in_ES5_SlashES3_requires_the_Promise_constructor_Make_sure_you_have_a_declaration_for_the_Promise_constructor_or_include_ES2015_in_your_lib_option :
                     Diagnostics.An_async_function_or_method_in_ES5_SlashES3_requires_the_Promise_constructor_Make_sure_you_have_a_declaration_for_the_Promise_constructor_or_include_ES2015_in_your_lib_option);                    
             }
@@ -16431,8 +16437,6 @@ namespace ts {
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
                     return checkCallExpression(<CallExpression>node);
-                case SyntaxKind.ImportCallExpression:
-                    return checkImportCallExpression(<ImportCallExpression>node);
                 case SyntaxKind.TaggedTemplateExpression:
                     return checkTaggedTemplateExpression(<TaggedTemplateExpression>node);
                 case SyntaxKind.ParenthesizedExpression:

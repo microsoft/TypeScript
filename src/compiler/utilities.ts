@@ -662,8 +662,8 @@ namespace ts {
         return n.kind === SyntaxKind.CallExpression && (<CallExpression>n).expression.kind === SyntaxKind.SuperKeyword;
     }
 
-    export function isImportCallExpression(n: Node): n is ImportCallExpression {
-        return n.kind === SyntaxKind.ImportCallExpression;
+    export function isImportCall(n: Node): n is ImportCall {
+        return n.kind === SyntaxKind.CallExpression && (<CallExpression>n).expression.kind === SyntaxKind.ImportKeyword;
     }
 
     export function isPrologueDirective(node: Node): node is PrologueDirective {
@@ -3891,7 +3891,6 @@ namespace ts {
             || kind === SyntaxKind.SuperKeyword
             || kind === SyntaxKind.NonNullExpression
             || kind === SyntaxKind.MetaProperty
-            || kind === SyntaxKind.ImportCallExpression;
     }
 
     export function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression {

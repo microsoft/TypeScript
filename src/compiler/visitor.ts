@@ -339,10 +339,6 @@ namespace ts {
                     visitNodes((<CallExpression>node).typeArguments, visitor, isTypeNode),
                     visitNodes((<CallExpression>node).arguments, visitor, isExpression));
 
-            case SyntaxKind.ImportCallExpression:
-                return updateImportCall(<ImportCallExpression>node,
-                    visitNode((<ImportCallExpression>node).specifier, visitor, isExpression));
-
             case SyntaxKind.NewExpression:
                 return updateNew(<NewExpression>node,
                     visitNode((<NewExpression>node).expression, visitor, isExpression),

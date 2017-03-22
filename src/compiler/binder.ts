@@ -2725,6 +2725,10 @@ namespace ts {
             transformFlags |= TransformFlags.AssertES2015;
         }
 
+        if (expression.kind === SyntaxKind.ImportKeyword) {
+            transformFlags |= TransformFlags.ContainsDynamicImport;
+        }
+
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
         return transformFlags & ~TransformFlags.ArrayLiteralOrCallOrNewExcludes;
     }
@@ -3495,9 +3499,6 @@ namespace ts {
             case SyntaxKind.BreakStatement:
                 transformFlags |= TransformFlags.ContainsHoistedDeclarationOrCompletion;
                 break;
-
-            case SyntaxKind.ImportCallExpression:
-                transformFlags |= TransformFlags.ContainsDynamicImport;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
