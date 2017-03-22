@@ -19,13 +19,11 @@ namespace ts.codefix {
 
             // Property declarations
             Diagnostics.Member_0_implicitly_has_an_1_type.code,
-
-            // Diagnostics.Binding_element_0_implicitly_has_an_1_type.code,
         ],
         getCodeActions: getActionsForAddExplicitTypeAnnotation
     });
 
-    function getActionsForAddExplicitTypeAnnotation({ sourceFile, program, span: { start }, errorCode, cancellationToken, newLineCharacter }: CodeFixContext): CodeAction[] | undefined {
+    function getActionsForAddExplicitTypeAnnotation({ sourceFile, program, span: { start }, errorCode, cancellationToken }: CodeFixContext): CodeAction[] | undefined {
         const token = getTokenAtPosition(sourceFile, start);
 
         switch (token.kind) {
@@ -83,24 +81,13 @@ namespace ts.codefix {
             }
 
             const type = inferTypeForVariableFromUsage(declaration.name);
-            if (!type) {
-                return undefined;
-            }
+            const typeString = type && typeToString(type, declaration);
 
-            const typeString = typeToString(type, declaration);
             if (!typeString) {
                 return undefined;
             }
-            if (isInJavaScriptFile(sourceFile)) {
-                const declarationStatement = getAncestor(declaration, SyntaxKind.VariableStatement);
-                if (!declarationStatement.jsDoc) {
-                    const newText = `/** @type {${typeString}} */${newLineCharacter}`;
-                    return createCodeActions(declaration.getText(), declarationStatement.getStart(), newText);
-                }
-            }
-            else {
-                return createCodeActions(declaration.name.getText(), declaration.name.getEnd(), `: ${typeString}`);
-            }
+
+            return createCodeActions(declaration.name.getText(), declaration.name.getEnd(), `: ${typeString}`);
         }
 
         function getCodeActionForVariableUsage(token: Identifier) {
@@ -118,23 +105,13 @@ namespace ts.codefix {
 
             let type = inferTypeForParameterFromUsage(containingFunction, parameterIndex, isRestParameter) ||
                 inferTypeForVariableFromUsage(parameterDeclaration.name);
-            if (!type) {
-                return undefined;
-            }
 
-            const typeString = typeToString(type, containingFunction);
+            const typeString = type && typeToString(type, containingFunction);
             if (!typeString) {
                 return undefined;
             }
-            if (isInJavaScriptFile(sourceFile)) {
-                if (!containingFunction.jsDoc) {
-                    const newText = `/** @param {${typeString}} ${token.getText()} */${newLineCharacter}`;
-                    return createCodeActions(parameterDeclaration.name.getText(), containingFunction.getStart(), newText);
-                }
-            }
-            else {
-                return createCodeActions(parameterDeclaration.name.getText(), parameterDeclaration.getEnd(), `: ${typeString}`);
-            }
+
+            return createCodeActions(parameterDeclaration.name.getText(), parameterDeclaration.getEnd(), `: ${typeString}`);
         }
 
         function getCodeActionForSetAccessor(setAccessorDeclaration: SetAccessorDeclaration) {
@@ -143,27 +120,14 @@ namespace ts.codefix {
                 return undefined;
             }
 
-            let type = inferTypeForVariableFromUsage(setAccessorDeclaration.name) ||
+            const type = inferTypeForVariableFromUsage(setAccessorDeclaration.name) ||
                 inferTypeForVariableFromUsage(setAccessorParameter.name);
-
-            if (!type) {
-                return undefined;
-            }
-
-            const typeString = typeToString(type, containingFunction);
+            const typeString = type && typeToString(type, containingFunction);
             if (!typeString) {
                 return undefined;
             }
 
-            if (isInJavaScriptFile(sourceFile)) {
-                if (!setAccessorDeclaration.jsDoc) {
-                    const newText = `/** @param {${typeString}} ${setAccessorParameter.getText()} */${newLineCharacter}`;
-                    return createCodeActions(setAccessorDeclaration.name.getText(), setAccessorDeclaration.getStart(), newText);
-                }
-            }
-            else {
-                return createCodeActions(setAccessorDeclaration.name.getText(), setAccessorParameter.name.getEnd(), `: ${typeString}`);
-            }
+            return createCodeActions(setAccessorDeclaration.name.getText(), setAccessorParameter.name.getEnd(), `: ${typeString}`);
         }
 
         function getCodeActionForGetAccessor(getAccessorDeclaration: GetAccessorDeclaration) {
@@ -171,26 +135,14 @@ namespace ts.codefix {
                 return undefined;
             }
 
-            let type = inferTypeForVariableFromUsage(getAccessorDeclaration.name);
-            if (!type) {
-                return undefined;
-            }
-
-            const typeString = typeToString(type, containingFunction);
+            const type = inferTypeForVariableFromUsage(getAccessorDeclaration.name);
+            const typeString = type && typeToString(type, containingFunction);
             if (!typeString) {
                 return undefined;
             }
 
-            if (isInJavaScriptFile(sourceFile)) {
-                if (!getAccessorDeclaration.jsDoc) {
-                    const newText = `/** @type {${typeString}} */${newLineCharacter}`;
-                    return createCodeActions(getAccessorDeclaration.name.getText(), getAccessorDeclaration.getStart(), newText);
-                }
-            }
-            else {
-                const closeParenToken = getFirstChildOfKind(getAccessorDeclaration, sourceFile, SyntaxKind.CloseParenToken);
-                return createCodeActions(getAccessorDeclaration.name.getText(), closeParenToken.getEnd(), `: ${typeString}`);
-            }
+            const closeParenToken = getFirstChildOfKind(getAccessorDeclaration, sourceFile, SyntaxKind.CloseParenToken);
+            return createCodeActions(getAccessorDeclaration.name.getText(), closeParenToken.getEnd(), `: ${typeString}`);
         }
 
         function createCodeActions(name: string, start: number, typeString: string) {
