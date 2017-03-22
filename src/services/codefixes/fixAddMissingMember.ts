@@ -1,4 +1,4 @@
-﻿/* @internal */
+/* @internal */
 namespace ts.codefix {
     registerCodeFix({
         errorCodes: [Diagnostics.Property_0_does_not_exist_on_type_1.code],

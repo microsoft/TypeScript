@@ -1,10 +1,10 @@
-﻿/// <reference path="sys.ts" />
+/// <reference path="sys.ts" />
 /// <reference path="emitter.ts" />
 /// <reference path="core.ts" />
 
 namespace ts {
     const emptyArray: any[] = [];
-    const suppressDiagnosticCommentRegEx = /(^\s*$)|(^\s*\/\/\/?\s*(@ts-suppress)?)/;
+    const ignoreDiagnosticCommentRegEx = /(^\s*$)|(^\s*\/\/\/?\s*(@ts-ignore)?)/;
 
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string {
         while (true) {
@@ -926,7 +926,7 @@ namespace ts {
         }
 
         /**
-         * Skip errors if previous line start with '// @ts-suppress' comment, not counting non-empty non-comment lines
+         * Skip errors if previous line start with '// @ts-ignore' comment, not counting non-empty non-comment lines
          */
         function shouldReportDiagnostic(diagnostic: Diagnostic) {
             const { file, start } = diagnostic;
@@ -934,13 +934,13 @@ namespace ts {
             let { line } = computeLineAndCharacterOfPosition(lineStarts, start);
             while (line > 0) {
                 const previousLineText = file.text.slice(lineStarts[line - 1], lineStarts[line]);
-                const result = suppressDiagnosticCommentRegEx.exec(previousLineText);
+                const result = ignoreDiagnosticCommentRegEx.exec(previousLineText);
                 if (!result) {
                     // non-empty line
                     return true;
                 }
                 if (result[3]) {
-                    // @ts-suppress
+                    // @ts-ignore
                     return false;
                 }
                 line--;

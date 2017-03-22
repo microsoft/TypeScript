@@ -12,6 +12,6 @@
 
 // Disable checking for next line
 verify.rangeAfterCodeFix(`/** comment */
-// @ts-suppress
+// @ts-ignore
 x = 1;`, /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
 

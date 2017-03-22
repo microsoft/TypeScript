@@ -6,20 +6,20 @@
 var x = 0;
 
 
-/// @ts-suppress
+/// @ts-ignore
 x();
 
-/// @ts-suppress
+/// @ts-ignore
 x();
 
-/// @ts-suppress
+/// @ts-ignore
 x(
     2,
     3);
 
 
 
-// @ts-suppress
+// @ts-ignore
 // come comment
 // some other comment
 
@@ -29,5 +29,5 @@ x();
 
 
 
-// @ts-suppress: no call signature
+// @ts-ignore: no call signature
 x();
