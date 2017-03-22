@@ -1099,6 +1099,10 @@ namespace ts {
             : node;
     }
 
+    export function createKeywordTypeNode(kind: KeywordTypeNode["kind"]): KeywordTypeNode {
+        return <KeywordTypeNode>createSynthesizedNode(kind);
+    }
+
     export function createFunctionDeclaration(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | Identifier | undefined, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined) {
         const node = <FunctionDeclaration>createSynthesizedNode(SyntaxKind.FunctionDeclaration);
         node.decorators = asNodeArray(decorators);
@@ -1482,7 +1486,7 @@ namespace ts {
 
     // Clauses
 
-    export function createHeritageClause(token: SyntaxKind, types: ExpressionWithTypeArguments[]) {
+    export function createHeritageClause(token: HeritageClause["token"], types: ExpressionWithTypeArguments[]) {
         const node = <HeritageClause>createSynthesizedNode(SyntaxKind.HeritageClause);
         node.token = token;
         node.types = createNodeArray(types);

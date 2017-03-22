@@ -68,7 +68,6 @@ C = tslib_1.__decorate([
     dec
 ], C);
 //// [script.js]
-"use strict";
 var tslib_1 = require("tslib");
 var A = (function () {
     function A() {

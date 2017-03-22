@@ -17,7 +17,7 @@ declare var Map: MapConstructor;
 
 interface ReadonlyMap<K, V> {
     forEach(callbackfn: (value: V, key: K, map: ReadonlyMap<K, V>) => void, thisArg?: any): void;
-    get(key: K): V|undefined;
+    get(key: K): V | undefined;
     has(key: K): boolean;
     readonly size: number;
 }

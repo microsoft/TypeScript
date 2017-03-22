@@ -130,7 +130,7 @@ namespace ts.codefix {
 
             // this is a module id -> module import declaration map
             const cachedImportDeclarations: (ImportDeclaration | ImportEqualsDeclaration)[][] = [];
-            let cachedNewImportInsertPosition: number;
+            let lastImportDeclaration: Node;
 
             const currentTokenMeaning = getMeaningFromLocation(token);
             if (context.errorCode === Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code) {
@@ -138,14 +138,14 @@ namespace ts.codefix {
                 return getCodeActionForImport(symbol, /*isDefault*/ false, /*isNamespaceImport*/ true);
             }
 
-            const allPotentialModules = checker.getAmbientModules();
+            const candidateModules = checker.getAmbientModules();
             for (const otherSourceFile of allSourceFiles) {
                 if (otherSourceFile !== sourceFile && isExternalOrCommonJsModule(otherSourceFile)) {
-                    allPotentialModules.push(otherSourceFile.symbol);
+                    candidateModules.push(otherSourceFile.symbol);
                 }
             }
 
-            for (const moduleSymbol of allPotentialModules) {
+            for (const moduleSymbol of candidateModules) {
                 context.cancellationToken.throwIfCancellationRequested();
 
                 // check the default export
@@ -277,14 +277,12 @@ namespace ts.codefix {
                          * If the existing import declaration already has a named import list, just
                          * insert the identifier into that list.
                          */
-                        const textChange = getTextChangeForImportClause(namedImportDeclaration.importClause);
+                        const fileTextChanges = getTextChangeForImportClause(namedImportDeclaration.importClause);
                         const moduleSpecifierWithoutQuotes = stripQuotes(namedImportDeclaration.moduleSpecifier.getText());
                         actions.push(createCodeAction(
                             Diagnostics.Add_0_to_existing_import_declaration_from_1,
                             [name, moduleSpecifierWithoutQuotes],
-                            textChange.newText,
-                            textChange.span,
-                            sourceFile.fileName,
+                            fileTextChanges,
                             "InsertingIntoExistingImport",
                             moduleSpecifierWithoutQuotes
                         ));
@@ -302,49 +300,30 @@ namespace ts.codefix {
                         return declaration.moduleReference.getText();
                     }
 
-                    function getTextChangeForImportClause(importClause: ImportClause): TextChange {
-                        const newImportText = isDefault ? `default as ${name}` : name;
+                    function getTextChangeForImportClause(importClause: ImportClause): FileTextChanges[] {
                         const importList = <NamedImports>importClause.namedBindings;
+                        const newImportSpecifier = createImportSpecifier(/*propertyName*/ undefined, createIdentifier(name));
                         // case 1:
                         // original text: import default from "module"
                         // change to: import default, { name } from "module"
-                        if (!importList && importClause.name) {
-                            const start = importClause.name.getEnd();
-                            return {
-                                newText: `, { ${newImportText} }`,
-                                span: { start, length: 0 }
-                            };
-                        }
-
                         // case 2:
                         // original text: import {} from "module"
                         // change to: import { name } from "module"
-                        if (importList.elements.length === 0) {
-                            const start = importList.getStart();
-                            return {
-                                newText: `{ ${newImportText} }`,
-                                span: { start, length: importList.getEnd() - start }
-                            };
+                        if (!importList || importList.elements.length === 0) {
+                            const newImportClause = createImportClause(importClause.name, createNamedImports([newImportSpecifier]));
+                            return createChangeTracker().replaceNode(sourceFile, importClause, newImportClause).getChanges();
                         }
 
-                        // case 3:
-                        // original text: import { foo, bar } from "module"
-                        // change to: import { foo, bar, name } from "module"
-                        const insertPoint = importList.elements[importList.elements.length - 1].getEnd();
                         /**
                          * If the import list has one import per line, preserve that. Otherwise, insert on same line as last element
                          *     import {
                          *         foo
                          *     } from "./module";
                          */
-                        const startLine = getLineOfLocalPosition(sourceFile, importList.getStart());
-                        const endLine = getLineOfLocalPosition(sourceFile, importList.getEnd());
-                        const oneImportPerLine = endLine - startLine > importList.elements.length;
-
-                        return {
-                            newText: `,${oneImportPerLine ? context.newLineCharacter : " "}${newImportText}`,
-                            span: { start: insertPoint, length: 0 }
-                        };
+                        return createChangeTracker().insertNodeInListAfter(
+                            sourceFile,
+                            importList.elements[importList.elements.length - 1],
+                            newImportSpecifier).getChanges();
                     }
 
                     function getCodeActionForNamespaceImport(declaration: ImportDeclaration | ImportEqualsDeclaration): ImportCodeAction {
@@ -370,48 +349,47 @@ namespace ts.codefix {
                         return createCodeAction(
                             Diagnostics.Change_0_to_1,
                             [name, `${namespacePrefix}.${name}`],
-                            `${namespacePrefix}.`,
-                            { start: token.getStart(), length: 0 },
-                            sourceFile.fileName,
+                            createChangeTracker().replaceNode(sourceFile, token, createPropertyAccess(createIdentifier(namespacePrefix), name)).getChanges(),
                             "CodeChange"
                         );
                     }
                 }
 
                 function getCodeActionForNewImport(moduleSpecifier?: string): ImportCodeAction {
-                    if (!cachedNewImportInsertPosition) {
+                    if (!lastImportDeclaration) {
                         // insert after any existing imports
-                        let lastModuleSpecifierEnd = -1;
-                        for (const moduleSpecifier of sourceFile.imports) {
-                            const end = moduleSpecifier.getEnd();
-                            if (!lastModuleSpecifierEnd || end > lastModuleSpecifierEnd) {
-                                lastModuleSpecifierEnd = end;
+                        for (let i = sourceFile.statements.length - 1; i >= 0; i--) {
+                            const statement = sourceFile.statements[i];
+                            if (statement.kind === SyntaxKind.ImportEqualsDeclaration || statement.kind === SyntaxKind.ImportDeclaration) {
+                                lastImportDeclaration = statement;
+                                break;
                             }
                         }
-                        cachedNewImportInsertPosition = lastModuleSpecifierEnd > 0 ? sourceFile.getLineEndOfPosition(lastModuleSpecifierEnd) : sourceFile.getStart();
                     }
 
                     const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
                     const moduleSpecifierWithoutQuotes = stripQuotes(moduleSpecifier || getModuleSpecifierForNewImport());
-                    const importStatementText = isDefault
-                        ? `import ${name} from "${moduleSpecifierWithoutQuotes}"`
+                    const changeTracker = createChangeTracker();
+                    const importClause = isDefault
+                        ? createImportClause(createIdentifier(name), /*namedBindings*/ undefined)
                         : isNamespaceImport
-                            ? `import * as ${name} from "${moduleSpecifierWithoutQuotes}"`
-                            : `import { ${name} } from "${moduleSpecifierWithoutQuotes}"`;
+                            ? createImportClause(/*name*/ undefined, createNamespaceImport(createIdentifier(name)))
+                            : createImportClause(/*name*/ undefined, createNamedImports([createImportSpecifier(/*propertyName*/ undefined, createIdentifier(name))]));
+                    const importDecl = createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, importClause, createLiteral(moduleSpecifierWithoutQuotes));
+                    if (!lastImportDeclaration) {
+                        changeTracker.insertNodeAt(sourceFile, sourceFile.getStart(), importDecl, { suffix: `${context.newLineCharacter}${context.newLineCharacter}` });
+                    }
+                    else {
+                        changeTracker.insertNodeAfter(sourceFile, lastImportDeclaration, importDecl, { suffix: context.newLineCharacter });
+                    }
 
                     // if this file doesn't have any import statements, insert an import statement and then insert a new line
                     // between the only import statement and user code. Otherwise just insert the statement because chances
                     // are there are already a new line seperating code and import statements.
-                    const newText = cachedNewImportInsertPosition === sourceFile.getStart()
-                        ? `${importStatementText};${context.newLineCharacter}${context.newLineCharacter}`
-                        : `${context.newLineCharacter}${importStatementText};`;
-
                     return createCodeAction(
                         Diagnostics.Import_0_from_1,
                         [name, `"${moduleSpecifierWithoutQuotes}"`],
-                        newText,
-                        { start: cachedNewImportInsertPosition, length: 0 },
-                        sourceFile.fileName,
+                        changeTracker.getChanges(),
                         "NewImport",
                         moduleSpecifierWithoutQuotes
                     );
@@ -576,17 +554,19 @@ namespace ts.codefix {
 
             }
 
+            function createChangeTracker() {
+                return textChanges.ChangeTracker.fromCodeFixContext(context);
+            }
+
             function createCodeAction(
                 description: DiagnosticMessage,
                 diagnosticArgs: string[],
-                newText: string,
-                span: TextSpan,
-                fileName: string,
+                changes: FileTextChanges[],
                 kind: ImportCodeActionKind,
                 moduleSpecifier?: string): ImportCodeAction {
                 return {
                     description: formatMessage.apply(undefined, [undefined, description].concat(<any[]>diagnosticArgs)),
-                    changes: [{ fileName, textChanges: [{ newText, span }] }],
+                    changes,
                     kind,
                     moduleSpecifier
                 };

@@ -301,6 +301,8 @@ namespace ts {
         let deferredGlobalAsyncIterableIteratorType: GenericType;
         let deferredGlobalTemplateStringsArrayType: ObjectType;
         let deferredJsxElementClassType: Type;
+        let deferredJsxElementType: Type;
+        let deferredJsxStatelessElementType: Type;
 
         let deferredNodes: Node[];
         let deferredUnusedIdentifierNodes: Node[];
@@ -421,7 +423,6 @@ namespace ts {
         });
         const typeofType = createTypeofType();
 
-        let jsxElementType: Type;
         let _jsxNamespace: string;
         let _jsxFactoryEntity: EntityName;
 
@@ -1085,9 +1086,10 @@ namespace ts {
                 // block-scoped variable and namespace module. However, only when we
                 // try to resolve name in /*1*/ which is used in variable position,
                 // we want to check for block-scoped
-                if (meaning & SymbolFlags.BlockScopedVariable) {
+                if (meaning & SymbolFlags.BlockScopedVariable ||
+                    ((meaning & SymbolFlags.Class || meaning & SymbolFlags.Enum) && (meaning & SymbolFlags.Value) === SymbolFlags.Value)) {
                     const exportOrLocalSymbol = getExportSymbolOfValueSymbolIfExported(result);
-                    if (exportOrLocalSymbol.flags & SymbolFlags.BlockScopedVariable) {
+                    if (exportOrLocalSymbol.flags & SymbolFlags.BlockScopedVariable || exportOrLocalSymbol.flags & SymbolFlags.Class || exportOrLocalSymbol.flags & SymbolFlags.Enum) {
                         checkResolvedBlockScopedVariable(exportOrLocalSymbol, errorLocation);
                     }
                 }
@@ -1200,14 +1202,22 @@ namespace ts {
         }
 
         function checkResolvedBlockScopedVariable(result: Symbol, errorLocation: Node): void {
-            Debug.assert((result.flags & SymbolFlags.BlockScopedVariable) !== 0);
+            Debug.assert(!!(result.flags & SymbolFlags.BlockScopedVariable || result.flags & SymbolFlags.Class || result.flags & SymbolFlags.Enum));
             // Block-scoped variables cannot be used before their definition
-            const declaration = forEach(result.declarations, d => isBlockOrCatchScoped(d) ? d : undefined);
+            const declaration = forEach(result.declarations, d => isBlockOrCatchScoped(d) || isClassLike(d) || (d.kind === SyntaxKind.EnumDeclaration) ? d : undefined);
 
-            Debug.assert(declaration !== undefined, "Block-scoped variable declaration is undefined");
+            Debug.assert(declaration !== undefined, "Declaration to checkResolvedBlockScopedVariable is undefined");
 
             if (!isInAmbientContext(declaration) && !isBlockScopedNameDeclaredBeforeUse(declaration, errorLocation)) {
-                error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationNameToString(declaration.name));
+                if (result.flags & SymbolFlags.BlockScopedVariable) {
+                    error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationNameToString(declaration.name));
+                }
+                else if (result.flags & SymbolFlags.Class) {
+                    error(errorLocation, Diagnostics.Class_0_used_before_its_declaration, declarationNameToString(declaration.name));
+                }
+                else if (result.flags & SymbolFlags.Enum) {
+                    error(errorLocation, Diagnostics.Enum_0_used_before_its_declaration, declarationNameToString(declaration.name));
+                }
             }
         }
 
@@ -5151,7 +5161,8 @@ namespace ts {
             const excludeModifiers = isUnion ? ModifierFlags.NonPublicAccessibilityModifier : 0;
             // Flags we want to propagate to the result if they exist in all source symbols
             let commonFlags = isUnion ? SymbolFlags.None : SymbolFlags.Optional;
-            let checkFlags = CheckFlags.SyntheticProperty;
+            let syntheticFlag = CheckFlags.SyntheticMethod;
+            let checkFlags = 0;
             for (const current of types) {
                 const type = getApparentType(current);
                 if (type !== unknownType) {
@@ -5170,6 +5181,9 @@ namespace ts {
                             (modifiers & ModifierFlags.Protected ? CheckFlags.ContainsProtected : 0) |
                             (modifiers & ModifierFlags.Private ? CheckFlags.ContainsPrivate : 0) |
                             (modifiers & ModifierFlags.Static ? CheckFlags.ContainsStatic : 0);
+                        if (!isMethodLike(prop)) {
+                            syntheticFlag = CheckFlags.SyntheticProperty;
+                        }
                     }
                     else if (isUnion) {
                         checkFlags |= CheckFlags.Partial;
@@ -5199,7 +5213,7 @@ namespace ts {
                 propTypes.push(type);
             }
             const result = createSymbol(SymbolFlags.Property | commonFlags, name);
-            result.checkFlags = checkFlags;
+            result.checkFlags = syntheticFlag | checkFlags;
             result.containingType = containingType;
             result.declarations = declarations;
             result.type = isUnion ? getUnionType(propTypes) : getIntersectionType(propTypes);
@@ -8652,7 +8666,7 @@ namespace ts {
         // Invoke the callback for each underlying property symbol of the given symbol and return the first
         // value that isn't undefined.
         function forEachProperty<T>(prop: Symbol, callback: (p: Symbol) => T): T {
-            if (getCheckFlags(prop) & CheckFlags.SyntheticProperty) {
+            if (getCheckFlags(prop) & CheckFlags.Synthetic) {
                 for (const t of (<TransientSymbol>prop).containingType.types) {
                     const p = getPropertyOfType(t, prop.name);
                     const result = p && forEachProperty(p, callback);
@@ -12471,12 +12485,12 @@ namespace ts {
                 type.flags & TypeFlags.UnionOrIntersection && !forEach((<UnionOrIntersectionType>type).types, t => !isValidSpreadType(t)));
         }
 
-        function checkJsxSelfClosingElement(node: JsxSelfClosingElement) {
+        function checkJsxSelfClosingElement(node: JsxSelfClosingElement): Type {
             checkJsxOpeningLikeElement(node);
-            return jsxElementType || anyType;
+            return getJsxGlobalElementType() || anyType;
         }
 
-        function checkJsxElement(node: JsxElement) {
+        function checkJsxElement(node: JsxElement): Type {
             // Check attributes
             checkJsxOpeningLikeElement(node.openingElement);
 
@@ -12503,7 +12517,7 @@ namespace ts {
                 }
             }
 
-            return jsxElementType || anyType;
+            return getJsxGlobalElementType() || anyType;
         }
 
         /**
@@ -12744,13 +12758,14 @@ namespace ts {
         function defaultTryGetJsxStatelessFunctionAttributesType(openingLikeElement: JsxOpeningLikeElement, elementType: Type, elemInstanceType: Type, elementClassType?: Type): Type {
             Debug.assert(!(elementType.flags & TypeFlags.Union));
             if (!elementClassType || !isTypeAssignableTo(elemInstanceType, elementClassType)) {
-                if (jsxElementType) {
+                const jsxStatelessElementType = getJsxGlobalStatelessElementType();
+                if (jsxStatelessElementType) {
                     // We don't call getResolvedSignature here because we have already resolve the type of JSX Element.
                     const callSignature = getResolvedJsxStatelessFunctionSignature(openingLikeElement, elementType, /*candidatesOutArray*/ undefined);
                     if (callSignature !== unknownSignature) {
                         const callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
                         let paramType = callReturnType && (callSignature.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature.parameters[0]));
-                        if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType)) {
+                        if (callReturnType && isTypeAssignableTo(callReturnType, jsxStatelessElementType)) {
                             // Intersect in JSX.IntrinsicAttributes if it exists
                             const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes);
                             if (intrinsicAttributes !== unknownType) {
@@ -12778,7 +12793,8 @@ namespace ts {
             Debug.assert(!(elementType.flags & TypeFlags.Union));
             if (!elementClassType || !isTypeAssignableTo(elemInstanceType, elementClassType)) {
                 // Is this is a stateless function component? See if its single signature's return type is assignable to the JSX Element Type
-                if (jsxElementType) {
+                const jsxStatelessElementType = getJsxGlobalStatelessElementType();
+                if (jsxStatelessElementType) {
                     // We don't call getResolvedSignature because here we have already resolve the type of JSX Element.
                     const candidatesOutArray: Signature[] = [];
                     getResolvedJsxStatelessFunctionSignature(openingLikeElement, elementType, candidatesOutArray);
@@ -12787,7 +12803,7 @@ namespace ts {
                     for (const candidate of candidatesOutArray) {
                         const callReturnType = getReturnTypeOfSignature(candidate);
                         const paramType = callReturnType && (candidate.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(candidate.parameters[0]));
-                        if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType)) {
+                        if (callReturnType && isTypeAssignableTo(callReturnType, jsxStatelessElementType)) {
                             let shouldBeCandidate = true;
                             for (const attribute of openingLikeElement.attributes.properties) {
                                 if (isJsxAttribute(attribute) &&
@@ -13031,6 +13047,23 @@ namespace ts {
             return deferredJsxElementClassType;
         }
 
+        function getJsxGlobalElementType(): Type {
+            if (!deferredJsxElementType) {
+                deferredJsxElementType = getExportedTypeFromNamespace(JsxNames.JSX, JsxNames.Element);
+            }
+            return deferredJsxElementType;
+        }
+
+        function getJsxGlobalStatelessElementType(): Type {
+            if (!deferredJsxStatelessElementType) {
+                const jsxElementType = getJsxGlobalElementType();
+                if (jsxElementType) {
+                    deferredJsxStatelessElementType = getUnionType([jsxElementType, nullType]);
+                }
+            }
+            return deferredJsxStatelessElementType;
+        }
+
         /**
          * Returns all the properties of the Jsx.IntrinsicElements interface
          */
@@ -13045,7 +13078,7 @@ namespace ts {
                 error(errorNode, Diagnostics.Cannot_use_JSX_unless_the_jsx_flag_is_provided);
             }
 
-            if (jsxElementType === undefined) {
+            if (getJsxGlobalElementType() === undefined) {
                 if (noImplicitAny) {
                     error(errorNode, Diagnostics.JSX_element_implicitly_has_type_any_because_the_global_type_JSX_Element_does_not_exist);
                 }
@@ -13134,7 +13167,7 @@ namespace ts {
                 const flags = getCombinedModifierFlags(s.valueDeclaration);
                 return s.parent && s.parent.flags & SymbolFlags.Class ? flags : flags & ~ModifierFlags.AccessibilityModifier;
             }
-            if (getCheckFlags(s) & CheckFlags.SyntheticProperty) {
+            if (getCheckFlags(s) & CheckFlags.Synthetic) {
                 const checkFlags = (<TransientSymbol>s).checkFlags;
                 const accessModifier = checkFlags & CheckFlags.ContainsPrivate ? ModifierFlags.Private :
                     checkFlags & CheckFlags.ContainsPublic ? ModifierFlags.Public :
@@ -13150,6 +13183,10 @@ namespace ts {
 
         function getDeclarationNodeFlagsFromSymbol(s: Symbol): NodeFlags {
             return s.valueDeclaration ? getCombinedNodeFlags(s.valueDeclaration) : 0;
+        }
+
+        function isMethodLike(symbol: Symbol) {
+            return !!(symbol.flags & SymbolFlags.Method || getCheckFlags(symbol) & CheckFlags.SyntheticMethod);
         }
 
         /**
@@ -13181,11 +13218,11 @@ namespace ts {
                 //   where this references the constructor function object of a derived class,
                 //   a super property access is permitted and must specify a public static member function of the base class.
                 if (languageVersion < ScriptTarget.ES2015) {
-                    const propKind = getDeclarationKindFromSymbol(prop);
-                    if (propKind !== SyntaxKind.MethodDeclaration && propKind !== SyntaxKind.MethodSignature) {
-                        // `prop` refers to a *property* declared in the super class
-                        // rather than a *method*, so it does not satisfy the above criteria.
-
+                    const hasNonMethodDeclaration = forEachProperty(prop, p => {
+                        const propKind = getDeclarationKindFromSymbol(p);
+                        return propKind !== SyntaxKind.MethodDeclaration && propKind !== SyntaxKind.MethodSignature;
+                    });
+                    if (hasNonMethodDeclaration) {
                         error(errorNode, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
                         return false;
                     }
@@ -13336,10 +13373,17 @@ namespace ts {
                 }
                 return unknownType;
             }
-            if (prop.valueDeclaration &&
-                isInPropertyInitializer(node) &&
-                !isBlockScopedNameDeclaredBeforeUse(prop.valueDeclaration, right)) {
-                error(right, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, right.text);
+            if (prop.valueDeclaration) {
+                if (isInPropertyInitializer(node) &&
+                    !isBlockScopedNameDeclaredBeforeUse(prop.valueDeclaration, right)) {
+                    error(right, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, right.text);
+                }
+                if (prop.valueDeclaration.kind === SyntaxKind.ClassDeclaration &&
+                    node.parent && node.parent.kind !== SyntaxKind.TypeReference &&
+                    !isInAmbientContext(prop.valueDeclaration) &&
+                    !isBlockScopedNameDeclaredBeforeUse(prop.valueDeclaration, right)) {
+                    error(right, Diagnostics.Class_0_used_before_its_declaration, right.text);
+                }
             }
 
             markPropertyAsReferenced(prop);
@@ -15124,8 +15168,8 @@ namespace ts {
             else {
                 let types: Type[];
                 if (functionFlags & FunctionFlags.Generator) { // Generator or AsyncGenerator function
-                    types = checkAndAggregateYieldOperandTypes(func, checkMode);
-                    if (types.length === 0) {
+                    types = concatenate(checkAndAggregateYieldOperandTypes(func, checkMode), checkAndAggregateReturnExpressionTypes(func, checkMode));
+                    if (!types || types.length === 0) {
                         const iterableIteratorAny = functionFlags & FunctionFlags.Async
                             ? createAsyncIterableIteratorType(anyType) // AsyncGenerator function
                             : createIterableIteratorType(anyType); // Generator function
@@ -19586,14 +19630,6 @@ namespace ts {
                         error(node.name || node, Diagnostics.A_mixin_class_must_have_a_constructor_with_a_single_rest_parameter_of_type_any);
                     }
 
-                    if (baseType.symbol && baseType.symbol.valueDeclaration &&
-                        !isInAmbientContext(baseType.symbol.valueDeclaration) &&
-                        baseType.symbol.valueDeclaration.kind === SyntaxKind.ClassDeclaration) {
-                        if (!isBlockScopedNameDeclaredBeforeUse(baseType.symbol.valueDeclaration, node)) {
-                            error(baseTypeNode, Diagnostics.A_class_must_be_declared_after_its_base_class);
-                        }
-                    }
-
                     if (!(staticBaseType.symbol && staticBaseType.symbol.flags & SymbolFlags.Class) && !(baseConstructorType.flags & TypeFlags.TypeVariable)) {
                         // When the static base type is a "class-like" constructor function (but not actually a class), we verify
                         // that all instantiated base constructor signatures return the same type. We can simply compare the type
@@ -19719,7 +19755,7 @@ namespace ts {
                     else {
                         // derived overrides base.
                         const derivedDeclarationFlags = getDeclarationModifierFlagsFromSymbol(derived);
-                        if ((baseDeclarationFlags & ModifierFlags.Private) || (derivedDeclarationFlags & ModifierFlags.Private)) {
+                        if (baseDeclarationFlags & ModifierFlags.Private || derivedDeclarationFlags & ModifierFlags.Private) {
                             // either base or derived property is private - not override, skip it
                             continue;
                         }
@@ -19729,28 +19765,24 @@ namespace ts {
                             continue;
                         }
 
-                        if ((base.flags & derived.flags & SymbolFlags.Method) || ((base.flags & SymbolFlags.PropertyOrAccessor) && (derived.flags & SymbolFlags.PropertyOrAccessor))) {
+                        if (isMethodLike(base) && isMethodLike(derived) || base.flags & SymbolFlags.PropertyOrAccessor && derived.flags & SymbolFlags.PropertyOrAccessor) {
                             // method is overridden with method or property/accessor is overridden with property/accessor - correct case
                             continue;
                         }
 
                         let errorMessage: DiagnosticMessage;
-                        if (base.flags & SymbolFlags.Method) {
+                        if (isMethodLike(base)) {
                             if (derived.flags & SymbolFlags.Accessor) {
                                 errorMessage = Diagnostics.Class_0_defines_instance_member_function_1_but_extended_class_2_defines_it_as_instance_member_accessor;
                             }
                             else {
-                                Debug.assert((derived.flags & SymbolFlags.Property) !== 0);
                                 errorMessage = Diagnostics.Class_0_defines_instance_member_function_1_but_extended_class_2_defines_it_as_instance_member_property;
                             }
                         }
                         else if (base.flags & SymbolFlags.Property) {
-                            Debug.assert((derived.flags & SymbolFlags.Method) !== 0);
                             errorMessage = Diagnostics.Class_0_defines_instance_member_property_1_but_extended_class_2_defines_it_as_instance_member_function;
                         }
                         else {
-                            Debug.assert((base.flags & SymbolFlags.Accessor) !== 0);
-                            Debug.assert((derived.flags & SymbolFlags.Method) !== 0);
                             errorMessage = Diagnostics.Class_0_defines_instance_member_accessor_1_but_extended_class_2_defines_it_as_instance_member_function;
                         }
 
@@ -21409,7 +21441,7 @@ namespace ts {
         }
 
         function getRootSymbols(symbol: Symbol): Symbol[] {
-            if (getCheckFlags(symbol) & CheckFlags.SyntheticProperty) {
+            if (getCheckFlags(symbol) & CheckFlags.Synthetic) {
                 const symbols: Symbol[] = [];
                 const name = symbol.name;
                 forEach(getSymbolLinks(symbol).containingType.types, t => {
@@ -22090,7 +22122,6 @@ namespace ts {
             globalNumberType = getGlobalType("Number", /*arity*/ 0, /*reportErrors*/ true);
             globalBooleanType = getGlobalType("Boolean", /*arity*/ 0, /*reportErrors*/ true);
             globalRegExpType = getGlobalType("RegExp", /*arity*/ 0, /*reportErrors*/ true);
-            jsxElementType = getExportedTypeFromNamespace("JSX", JsxNames.Element);
             anyArrayType = createArrayType(anyType);
             autoArrayType = createArrayType(autoType);
 

@@ -13,6 +13,7 @@ namespace ts {
         newLineCharacter: string;
         host: LanguageServiceHost;
         cancellationToken: CancellationToken;
+        rulesProvider: formatting.RulesProvider;
     }
 
     export namespace codefix {
