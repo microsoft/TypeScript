@@ -2266,7 +2266,8 @@ namespace ts {
                     return createKeywordTypeNode(SyntaxKind.BooleanKeyword);
                 }
                 if (type.flags & TypeFlags.Enum) {
-                    throw new Error ("enums not implemented")
+                    const name = createNameFromSymbol(type.symbol);
+                    return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                 }
                 if (type.flags & (TypeFlags.StringLiteral)) {
                     return createLiteralTypeNode((createLiteral((<LiteralType>type).text)));
@@ -2278,7 +2279,8 @@ namespace ts {
                     return (<IntrinsicType>type).intrinsicName === "true" ? createTrue() : createFalse();
                 }
                 if (type.flags & TypeFlags.EnumLiteral) {
-                    throw new Error("enum literal not implemented");
+                    const name = createNameFromSymbol(type.symbol);
+                    return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                 }
                 if (type.flags & TypeFlags.Void) {
                     return createKeywordTypeNode(SyntaxKind.VoidKeyword);
