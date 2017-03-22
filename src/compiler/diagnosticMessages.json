@@ -871,6 +871,15 @@
         "category": "Error",
         "code": 1320
     },
+    "Dynamic import must have one specifier as an argument.": {
+        "category": "Error",
+        "code": 1321
+    },
+    "Specifier of dynamic import cannot be spread element.": {
+        "category": "Error",
+        "code": 1322
+    },
+
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -3296,14 +3305,6 @@
     "Meta-property '{0}' is only allowed in the body of a function declaration, function expression, or constructor.": {
         "category": "Error",
         "code": 17013
-    },
-    "Dynamic import can only have one specifier as an argument.": {
-        "category": "Error",
-        "code": 17014
-    },
-    "Specifier of dynamic import cannot be spread element.": {
-        "category": "Error",
-        "code": 17015
     },
 
     "Circularity detected while resolving configuration: {0}": {

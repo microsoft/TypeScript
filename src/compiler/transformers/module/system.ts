@@ -1487,7 +1487,7 @@ namespace ts {
                     createIdentifier("import")
                 ),
                 /*typeArguments*/ undefined,
-                [node.arguments[0]]
+                node.arguments
             );
         }
 

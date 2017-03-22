@@ -3652,20 +3652,6 @@ namespace ts {
                 return finishNode(node);
             }
 
-            if (isImportCall(expression)) {
-                // Check that the argument array is strictly of length 1 and the argument is assignment-expression
-                const arguments = expression.arguments;
-                if (arguments.length !== 1) {
-                    parseErrorAtPosition(arguments.pos, arguments.end - arguments.pos, Diagnostics.Dynamic_import_can_only_have_one_specifier_as_an_argument);
-                }
-
-                // see: parseArgumentOrArrayLiteralElement...we use this function which parse arguments of callExpression to parse specifier for dynamic import.
-                // parseArgumentOrArrayLiteralElement allows spread element to be in an argument list which is not allowed in dynamic import.
-                if (expression.arguments.length >= 1 && isSpreadExpression(arguments[0])) {
-                    parseErrorAtPosition(arguments.pos, arguments.end - arguments.pos, Diagnostics.Specifier_of_dynamic_import_cannot_be_spread_element);
-                }
-            }
-
             return expression;
         }
 

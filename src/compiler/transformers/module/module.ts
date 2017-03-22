@@ -543,17 +543,14 @@ namespace ts {
             return createNew(
                 createIdentifier("Promise"),
                 /*typeArguments*/ undefined,
-                [
-                    createArrowFunction(
-                        /*modifiers*/undefined,
-                        /*typeParameters*/ undefined,
-                        [createParameter(/*decorator*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ resolve)],
-                        /*type*/ undefined,
-                        createToken(SyntaxKind.EqualsGreaterThanToken),
-                        createCall(createIdentifier("require"), /*typeArguments*/ undefined, [createArrayLiteral([node.arguments[0]]), resolve])
-                    )
-                ]
-            );
+                [createArrowFunction(
+                    /*modifiers*/undefined,
+                    /*typeParameters*/ undefined,
+                    [createParameter(/*decorator*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ resolve)],
+                    /*type*/ undefined,
+                    createToken(SyntaxKind.EqualsGreaterThanToken),
+                    createCall(createIdentifier("require"), /*typeArguments*/ undefined, node.arguments.concat([resolve]))
+                )]);
         }
  
     function transformImportCallExpressionCommonJS(node: ImportCall): Expression {
@@ -564,11 +561,20 @@ namespace ts {
             // if we simply do require in resolve callback in Promise constructor. We will execute the loading immediately
             return createCall(
                 createPropertyAccess(
-                    createCall(/*expression*/ createPropertyAccess(createIdentifier("Promise"), "resolve"), /*typeArguments*/ undefined, /*argumentsArray*/[]),
-                    "then"),
+                    createCall(
+                        createPropertyAccess(createIdentifier("Promise"), "resolve"),
+                        /*typeArguments*/ undefined,
+                        /*argumentsArray*/[]
+                    ), "then"),
                 /*typeArguments*/ undefined,
-                [createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, /*parameters*/ undefined, /*type*/ undefined, createToken(SyntaxKind.EqualsGreaterThanToken), createCall(createIdentifier("require"), /*typeArguments*/ undefined, [node.arguments[0]]))]
-            );
+                [createArrowFunction(
+                    /*modifiers*/ undefined,
+                    /*typeParameters*/ undefined,
+                    /*parameters*/ undefined,
+                    /*type*/ undefined,
+                    createToken(SyntaxKind.EqualsGreaterThanToken),
+                    createCall(createIdentifier("require"), /*typeArguments*/ undefined, node.arguments)
+                )]);
         }
 
         /**

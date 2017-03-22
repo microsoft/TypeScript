@@ -14824,14 +14824,15 @@ namespace ts {
             // Grammar checking; stop grammar-checking if checkGrammarTypeArguments return true
             checkGrammarTypeArguments(node, node.typeArguments) || checkGrammarArguments(node, node.arguments);
 
+            // Dynamic import is not need  to go through regular resolve signature.
+            if (node.expression.kind === SyntaxKind.ImportKeyword) {
+                return checkImportCallExpression(<ImportCall>node);
+            }
+
             const signature = getResolvedSignature(node);
 
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 return voidType;
-            }
-
-            if (node.expression.kind === SyntaxKind.ImportKeyword) {
-                return checkImportCallExpression(<CallExpression>node);
             }
 
             if (node.kind === SyntaxKind.NewExpression) {
@@ -14872,7 +14873,12 @@ namespace ts {
             return getReturnTypeOfSignature(signature);
         }
 
-        function checkImportCallExpression(node: CallExpression): Type {
+        function checkImportCallExpression(node: ImportCall): Type {
+            // Check grammar of dynamic import
+            if (checkGrammarImportCallExpression(node)) {
+                return createPromiseReturnType(node, anyType);
+            }
+
             if (modulekind === ModuleKind.ES2015) {
                 grammarErrorOnNode(node, Diagnostics.Dynamic_import_cannot_be_used_when_targeting_ECMAScript_2015_modules);
             }
@@ -23363,6 +23369,23 @@ namespace ts {
                 }
             });
             return result;
+        }
+
+        /**
+         * 
+         * @param node 
+         */
+        function checkGrammarImportCallExpression(node: ImportCall): boolean {
+            const arguments = node.arguments;
+            if (arguments.length !== 1) {
+                return grammarErrorOnNode(node, Diagnostics.Dynamic_import_must_have_one_specifier_as_an_argument);
+            }
+
+            // see: parseArgumentOrArrayLiteralElement...we use this function which parse arguments of callExpression to parse specifier for dynamic import.
+            // parseArgumentOrArrayLiteralElement allows spread element to be in an argument list which is not allowed as specifier in dynamic import.
+            if (isSpreadExpression(arguments[0])) {
+                return grammarErrorOnNode(arguments[0], Diagnostics.Specifier_of_dynamic_import_cannot_be_spread_element);
+            }
         }
     }
 }

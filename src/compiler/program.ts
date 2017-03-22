@@ -1268,8 +1268,8 @@ namespace ts {
                 if (isJavaScriptFile && isRequireCall(node, /*checkArgumentIsStringLiteral*/true)) {
                     (imports || (imports = [])).push(<StringLiteral>(<CallExpression>node).arguments[0]);
                 }
-                // we can safely get the first argument in the list here because we already issue parsing error if the length is not 1
-                else if (isImportCall(node) && node.arguments[0].kind === SyntaxKind.StringLiteral) {
+                // we have to check the argument list has length of 1. We will still have to process these even though we have parsing error.
+                else if (isImportCall(node) && node.arguments.length === 1 && node.arguments[0].kind === SyntaxKind.StringLiteral) {
                     (imports || (imports = [])).push(<StringLiteral>(<CallExpression>node).arguments[0]);
                 }
                 else {
