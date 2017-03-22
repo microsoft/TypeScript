@@ -15,7 +15,7 @@ namespace ts {
             shortName: "h",
             type: "boolean",
             showInSimplifiedHelpView: true,
-            category: Diagnostics.CommandLine_Options,
+            category: Diagnostics.Command_line_Options,
             description: Diagnostics.Print_this_message,
         },
         {
@@ -27,7 +27,7 @@ namespace ts {
             name: "all",
             type: "boolean",
             showInSimplifiedHelpView: true,
-            category: Diagnostics.CommandLine_Options,
+            category: Diagnostics.Command_line_Options,
             description: Diagnostics.Show_all_compiler_options,
         },
         {
@@ -35,14 +35,14 @@ namespace ts {
             shortName: "v",
             type: "boolean",
             showInSimplifiedHelpView: true,
-            category: Diagnostics.CommandLine_Options,
+            category: Diagnostics.Command_line_Options,
             description: Diagnostics.Print_the_compiler_s_version,
         },
         {
             name: "init",
             type: "boolean",
             showInSimplifiedHelpView: true,
-            category: Diagnostics.CommandLine_Options,
+            category: Diagnostics.Command_line_Options,
             description: Diagnostics.Initializes_a_TypeScript_project_and_creates_a_tsconfig_json_file,
         },
         {
@@ -51,7 +51,7 @@ namespace ts {
             type: "string",
             isFilePath: true,
             showInSimplifiedHelpView: true,
-            category: Diagnostics.CommandLine_Options,
+            category: Diagnostics.Command_line_Options,
             paramType: Diagnostics.FILE_OR_DIRECTORY,
             description: Diagnostics.Compile_the_project_given_the_path_to_its_configuration_file_or_to_a_folder_with_a_tsconfig_json,
         },
@@ -59,7 +59,7 @@ namespace ts {
             name: "pretty",
             type: "boolean",
             showInSimplifiedHelpView: true,
-            category: Diagnostics.CommandLine_Options,
+            category: Diagnostics.Command_line_Options,
             description: Diagnostics.Stylize_errors_and_messages_using_color_and_context_experimental
         },
         {
@@ -67,7 +67,7 @@ namespace ts {
             shortName: "w",
             type: "boolean",
             showInSimplifiedHelpView: true,
-            category: Diagnostics.CommandLine_Options,
+            category: Diagnostics.Command_line_Options,
             description: Diagnostics.Watch_input_files,
         },
 
@@ -230,13 +230,13 @@ namespace ts {
             name: "downlevelIteration",
             type: "boolean",
             category: Diagnostics.Basic_Options,
-            description: Diagnostics.Use_full_down_level_iteration_for_iterables_and_arrays_for_for_of_spread_and_destructuring_in_ES5_Slash3
+            description: Diagnostics.Provide_full_support_for_iterables_in_for_of_spread_and_destructuring_when_targeting_ES5_or_ES3
         },
         {
             name: "isolatedModules",
             type: "boolean",
             category: Diagnostics.Basic_Options,
-            description: Diagnostics.Unconditionally_emit_imports_for_unresolved_files
+            description: Diagnostics.Transpile_each_file_as_a_separate_module_similar_to_ts_transpileModule
         },
 
         // Strict Type Checks
@@ -244,35 +244,35 @@ namespace ts {
             name: "strict",
             type: "boolean",
             showInSimplifiedHelpView: true,
-            category: Diagnostics.Strict_Type_Checks,
-            description: Diagnostics.Enable_all_strict_type_checks
+            category: Diagnostics.Strict_Type_Checking_Options,
+            description: Diagnostics.Enable_all_strict_type_checking_options
         },
         {
             name: "noImplicitAny",
             type: "boolean",
             showInSimplifiedHelpView: true,
-            category: Diagnostics.Strict_Type_Checks,
+            category: Diagnostics.Strict_Type_Checking_Options,
             description: Diagnostics.Raise_error_on_expressions_and_declarations_with_an_implied_any_type,
         },
         {
             name: "strictNullChecks",
             type: "boolean",
             showInSimplifiedHelpView: true,
-            category: Diagnostics.Strict_Type_Checks,
+            category: Diagnostics.Strict_Type_Checking_Options,
             description: Diagnostics.Enable_strict_null_checks
         },
         {
             name: "noImplicitThis",
             type: "boolean",
             showInSimplifiedHelpView: true,
-            category: Diagnostics.Strict_Type_Checks,
+            category: Diagnostics.Strict_Type_Checking_Options,
             description: Diagnostics.Raise_error_on_this_expressions_with_an_implied_any_type,
         },
         {
             name: "alwaysStrict",
             type: "boolean",
             showInSimplifiedHelpView: true,
-            category: Diagnostics.Strict_Type_Checks,
+            category: Diagnostics.Strict_Type_Checking_Options,
             description: Diagnostics.Parse_in_strict_mode_and_emit_use_strict_for_each_source_file
         },
 
@@ -331,7 +331,7 @@ namespace ts {
             type: "object",
             isTSConfigOnly: true,
             category: Diagnostics.Module_Resolution_Options,
-            description: Diagnostics.List_of_path_mapping_entries_for_module_names_to_locations_relative_to_the_baseUrl
+            description: Diagnostics.A_series_of_entries_which_re_map_imports_to_lookup_locations_relative_to_the_baseUrl
 
         },
         {
@@ -346,7 +346,7 @@ namespace ts {
                 isFilePath: true
             },
             category: Diagnostics.Module_Resolution_Options,
-            description: Diagnostics.List_of_root_folders_whose_combined_content_represent_the_structure_of_the_project_at_runtime
+            description: Diagnostics.List_of_root_folders_whose_combined_content_represents_the_structure_of_the_project_at_runtime
         },
         {
             name: "typeRoots",
@@ -383,7 +383,7 @@ namespace ts {
             type: "string",
             isFilePath: true,
             paramType: Diagnostics.LOCATION,
-            category: Diagnostics.SourceMap_Options,
+            category: Diagnostics.Source_Map_Options,
             description: Diagnostics.Specify_the_location_where_debugger_should_locate_TypeScript_files_instead_of_source_locations,
         },
         {
@@ -391,19 +391,19 @@ namespace ts {
             type: "string",
             isFilePath: true,
             paramType: Diagnostics.LOCATION,
-            category: Diagnostics.SourceMap_Options,
+            category: Diagnostics.Source_Map_Options,
             description: Diagnostics.Specify_the_location_where_debugger_should_locate_map_files_instead_of_generated_locations,
         },
         {
             name: "inlineSourceMap",
             type: "boolean",
-            category: Diagnostics.SourceMap_Options,
+            category: Diagnostics.Source_Map_Options,
             description: Diagnostics.Emit_a_single_file_with_source_maps_instead_of_having_a_separate_file
         },
         {
             name: "inlineSources",
             type: "boolean",
-            category: Diagnostics.SourceMap_Options,
+            category: Diagnostics.Source_Map_Options,
             description: Diagnostics.Emit_the_source_alongside_the_sourcemaps_within_a_single_file_requires_inlineSourceMap_or_sourceMap_to_be_set
         },
 
@@ -438,7 +438,7 @@ namespace ts {
             name: "extendedDiagnostics",
             type: "boolean",
             category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Show_extended_diagnostic_information
+            description: Diagnostics.Show_verbose_diagnostic_information
         },
         {
             name: "traceResolution",
@@ -496,7 +496,7 @@ namespace ts {
             name: "locale",
             type: "string",
             category: Diagnostics.Advanced_Options,
-            description: Diagnostics.The_locale_to_use_to_show_error_messages_e_g_en_us
+            description: Diagnostics.The_locale_used_when_displaying_messages_to_the_user_e_g_en_us
         },
         {
             name: "newLine",
@@ -512,7 +512,7 @@ namespace ts {
             name: "noErrorTruncation",
             type: "boolean",
             category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Do_not_truncation_error_messages
+            description: Diagnostics.Do_not_truncate_error_messages
         },
         {
             name: "noLib",
@@ -524,7 +524,7 @@ namespace ts {
             name: "noResolve",
             type: "boolean",
             category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Do_not_add_triple_slash_references_or_module_import_targets_to_the_list_of_compiled_files
+            description: Diagnostics.Do_not_add_triple_slash_references_or_imported_modules_to_the_list_of_compiled_files
         },
         {
             name: "stripInternal",
@@ -536,7 +536,7 @@ namespace ts {
             name: "disableSizeLimit",
             type: "boolean",
             category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Disable_size_limitation_on_JavaScript_project
+            description: Diagnostics.Disable_size_limitations_on_JavaScript_projects
         },
         {
             name: "noImplicitUseStrict",
@@ -621,7 +621,7 @@ namespace ts {
                 name: "plugin",
                 type: "object"
             },
-            description: Diagnostics.List_of_Language_Service_plugins
+            description: Diagnostics.List_of_language_service_plugins
         }
     ];
 
@@ -932,7 +932,7 @@ namespace ts {
                 if (hasProperty(options, name)) {
                     // tsconfig only options cannot be specified via command line,
                     // so we can assume that only types that can appear here string | number | boolean
-                    if (optionsNameMap.has(name) && optionsNameMap.get(name).category === Diagnostics.CommandLine_Options) {
+                    if (optionsNameMap.has(name) && optionsNameMap.get(name).category === Diagnostics.Command_line_Options) {
                         continue;
                     }
                     const value = options[name];
@@ -987,7 +987,7 @@ namespace ts {
         function writeConfigurations() {
             // Filter applicable options to place in the file
             const categorizedOptions = reduceLeft(
-                filter(optionDeclarations, o => o.category !== Diagnostics.CommandLine_Options && o.category !== Diagnostics.Advanced_Options),
+                filter(optionDeclarations, o => o.category !== Diagnostics.Command_line_Options && o.category !== Diagnostics.Advanced_Options),
                 (memo, value) => {
                     if (value.category) {
                         const name = getLocaleSpecificMessage(value.category);

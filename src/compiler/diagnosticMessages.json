@@ -3045,7 +3045,7 @@
         "category": "Message",
         "code": 6149
     },
-    "Show extended diagnostic information.": {
+    "Show verbose diagnostic information.": {
         "category": "Message",
         "code": 6150
     },
@@ -3057,7 +3057,7 @@
         "category": "Message",
         "code": 6152
     },
-    "Unconditionally emit imports for unresolved files.": {
+    "Transpile each file as a separate module (similar to 'ts.transpileModule').": {
         "category": "Message",
         "code": 6153
     },
@@ -3069,11 +3069,11 @@
         "category": "Message",
         "code": 6155
     },
-    "The locale to use to show error messages, e.g. 'en-us'.": {
+    "The locale used when displaying messages to the user (e.g. 'en-us')": {
         "category": "Message",
         "code": 6156
     },
-    "Do not generate custom helper functions like __extends in compiled output.": {
+    "Do not generate custom helper functions like '__extends' in compiled output.": {
         "category": "Message",
         "code": 6157
     },
@@ -3081,7 +3081,7 @@
         "category": "Message",
         "code": 6158
     },
-    "Do not add triple-slash references or module import targets to the list of compiled files.": {
+    "Do not add triple-slash references or imported modules to the list of compiled files.": {
         "category": "Message",
         "code": 6159
     },
@@ -3093,7 +3093,7 @@
         "category": "Message",
         "code": 6161
     },
-    "Disable size limitation on JavaScript project.": {
+    "Disable size limitations on JavaScript projects.": {
         "category": "Message",
         "code": 6162
     },
@@ -3105,7 +3105,7 @@
         "category": "Message",
         "code": 6164
     },
-    "Do not truncation error messages.": {
+    "Do not truncate error messages.": {
         "category": "Message",
         "code": 6165
     },
@@ -3113,11 +3113,11 @@
         "category": "Message",
         "code": 6166
     },
-    "List of path mapping entries for module names to locations relative to the 'baseUrl'.": {
+    "A series of entries which re-map imports to lookup locations relative to the 'baseUrl'.": {
         "category": "Message",
         "code": 6167
     },
-    "List of root folders whose combined content represent the structure of the project at runtime.": {
+    "List of root folders whose combined content represents the structure of the project at runtime.": {
         "category": "Message",
         "code": 6168
     },
@@ -3129,7 +3129,7 @@
         "category": "Message",
         "code": 6170
     },
-    "CommandLine Options": {
+    "Command-line Options": {
         "category": "Message",
         "code": 6171
     },
@@ -3137,7 +3137,7 @@
         "category": "Message",
         "code": 6172
     },
-    "Strict Type Checks": {
+    "Strict Type-Checking Options": {
         "category": "Message",
         "code": 6173
     },
@@ -3145,7 +3145,7 @@
         "category": "Message",
         "code": 6174
     },
-    "SourceMap Options": {
+    "Source Map Options": {
         "category": "Message",
         "code": 6175
     },
@@ -3161,15 +3161,15 @@
         "category": "Message",
         "code": 6178
     },
-    "Use full down-level iteration for iterables and arrays for 'for-of', spread, and destructuring in ES5/3.": {
+    "Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'.": {
         "category": "Message",
         "code": 6179
     },
-    "Enable all strict type checks.": {
+    "Enable all strict type-checking options.": {
         "category": "Message",
         "code": 6180
     },
-    "List of Language Service plugins.": {
+    "List of language service plugins.": {
         "category": "Message",
         "code": 6181
     },
