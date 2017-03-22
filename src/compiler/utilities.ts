@@ -1,4 +1,4 @@
-﻿/// <reference path="sys.ts" />
+/// <reference path="sys.ts" />
 
 /* @internal */
 namespace ts {

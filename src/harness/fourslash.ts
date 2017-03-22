@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -2261,7 +2261,7 @@ namespace FourSlash {
             else {
                 if (actual === undefined) {
                     this.raiseError(`${name} failed - expected the template {newText: "${expected.newText}", caretOffset: "${expected.caretOffset}"} but got nothing instead`);
-                    
+
                 }
 
                 if (actual.newText !== expected.newText) {

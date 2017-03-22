@@ -1,4 +1,4 @@
-﻿/* @internal */
+/* @internal */
 namespace ts.codefix {
     registerCodeFix({
         errorCodes: [
@@ -103,7 +103,7 @@ namespace ts.codefix {
             const isRestParameter = !!parameterDeclaration.dotDotDotToken;
             const parameterIndex = getParameterIndexInList(parameterDeclaration, containingFunction.parameters);
 
-            let type = inferTypeForParameterFromUsage(containingFunction, parameterIndex, isRestParameter) ||
+            const type = inferTypeForParameterFromUsage(containingFunction, parameterIndex, isRestParameter) ||
                 inferTypeForVariableFromUsage(parameterDeclaration.name);
 
             const typeString = type && typeToString(type, containingFunction);
@@ -185,7 +185,7 @@ namespace ts.codefix {
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
                     const isConstructor = containingFunction.kind === SyntaxKind.Constructor;
-                    let searchToken = isConstructor ?
+                    const searchToken = isConstructor ?
                         <Token<SyntaxKind.ConstructorKeyword>>getFirstChildOfKind(containingFunction, sourceFile, SyntaxKind.ConstructorKeyword) :
                         containingFunction.name;
                     if (searchToken) {
@@ -589,4 +589,3 @@ namespace ts.codefix {
         }
     }
 }
- 
