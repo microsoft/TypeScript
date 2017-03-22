@@ -29,7 +29,8 @@ var thirdParty = "ThirdPartyNoticeText.txt";
 var nodeModulesPathPrefix = path.resolve("./node_modules/.bin/") + path.delimiter;
 if (process.env.path !== undefined) {
     process.env.path = nodeModulesPathPrefix + process.env.path;
-} else if (process.env.PATH !== undefined) {
+}
+else if (process.env.PATH !== undefined) {
     process.env.PATH = nodeModulesPathPrefix + process.env.PATH;
 }
 
@@ -312,13 +313,15 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         if (useDebugMode) {
             if (opts.inlineSourceMap) {
                 options += " --inlineSourceMap --inlineSources";
-            } else {
+            }
+            else {
                 options += " -sourcemap";
                 if (!opts.noMapRoot) {
                     options += " -mapRoot file:///" + path.resolve(path.dirname(outFile));
                 }
             }
-        } else {
+        }
+        else {
             options += " --newLine LF";
         }
 
@@ -748,7 +751,8 @@ function exec(cmd, completeHandler, errorHandler) {
     ex.addListener("error", function (e, status) {
         if (errorHandler) {
             errorHandler(e, status);
-        } else {
+        }
+        else {
             fail("Process exited with code " + status);
         }
     });
@@ -1021,7 +1025,8 @@ function acceptBaseline(sourceFolder, targetFolder) {
                 if (filename.substr(filename.length - deleteEnding.length) === deleteEnding) {
                     filename = filename.substr(0, filename.length - deleteEnding.length);
                     fs.unlinkSync(path.join(targetFolder, filename));
-                } else {
+                }
+                else {
                     var target = path.join(targetFolder, filename);
                     if (fs.existsSync(target)) {
                         fs.unlinkSync(target);
