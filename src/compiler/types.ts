@@ -2540,11 +2540,10 @@ namespace ts {
 
     export enum NodeBuilderFlags {
         None                                    = 0,
-        allowUndefinedNode                      = 1 << 0,
-        allowThisInObjectLiteral                = 1 << 1,
-        allowQualifedNameInPlaceOfIdentifier    = 1 << 2,
-        allowTypeParameterInQualifiedName       = 1 << 3,
-        allowAnonymousIdentifier                = 1 << 4
+        allowThisInObjectLiteral                = 1 << 0,
+        allowQualifedNameInPlaceOfIdentifier    = 1 << 1,
+        allowTypeParameterInQualifiedName       = 1 << 2,
+        allowAnonymousIdentifier                = 1 << 3
     }
 
     export interface SymbolDisplayBuilder {

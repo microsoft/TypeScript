@@ -2235,14 +2235,14 @@ namespace ts {
                 let checkAlias = true;
                 let symbolStack: Symbol[] = undefined;
 
-                return typeToTypeNodeWorker(type, flags);
+                return typeToTypeNodeWorker(type);
 
-                function typeToTypeNodeWorker(type: Type, flags: NodeBuilderFlags): TypeNode {
+                function typeToTypeNodeWorker(type: Type): TypeNode {
                     if (!type) {
-                        encounteredError = encounteredError || !(flags & NodeBuilderFlags.allowUndefinedNode);
+                        encounteredError = true;
+                        // TODO(aozgaa): should we return implict any (undefined) or explicit any (keywordtypenode)?
                         return undefined;
                     }
-                    flags = flags & ~NodeBuilderFlags.allowUndefinedNode;
 
                     if (type.flags & TypeFlags.Any) {
                         return createKeywordTypeNode(SyntaxKind.AnyKeyword);
@@ -2302,7 +2302,7 @@ namespace ts {
 
                     if (objectFlags & ObjectFlags.Reference) {
                         Debug.assert(!!(type.flags & TypeFlags.Object));
-                        return typeReferenceToTypeReferenceNode(<TypeReference>type);
+                        return typeReferenceToTypeNode  (<TypeReference>type);
                     }
                     if (objectFlags & ObjectFlags.ClassOrInterface) {
                         Debug.assert(!!(type.flags & TypeFlags.Object));
@@ -2339,19 +2339,19 @@ namespace ts {
 
                     if (type.flags & TypeFlags.Index) {
                         const indexedType = (<IndexType>type).type;
-                        const indexTypeNode = typeToTypeNodeWorker(indexedType, flags);
+                        const indexTypeNode = typeToTypeNodeWorker(indexedType);
                         return createTypeOperatorNode(indexTypeNode);
                     }
                     if (type.flags & TypeFlags.IndexedAccess) {
-                        const objectTypeNode = typeToTypeNodeWorker((<IndexedAccessType>type).objectType, flags);
-                        const indexTypeNode = typeToTypeNodeWorker((<IndexedAccessType>type).indexType, flags);
+                        const objectTypeNode = typeToTypeNodeWorker((<IndexedAccessType>type).objectType);
+                        const indexTypeNode = typeToTypeNodeWorker((<IndexedAccessType>type).indexType);
                         return createIndexedAccessTypeNode(objectTypeNode, indexTypeNode);
                     }
 
                     Debug.fail("Should be unreachable.");
 
                     function mapToTypeNodeArray(types: Type[]): NodeArray<TypeNode> {
-                        return types && asNodeArray(types.map(typeToTypeNodeWorker) as TypeNode[]);
+                        return types && asNodeArray(types.map(typeToTypeNodeWorker).filter(node => !!node));
                     }
 
                     function createMappedTypeNodeFromType(type: MappedType) {
@@ -2359,7 +2359,8 @@ namespace ts {
                         const typeParameter = getTypeParameterFromMappedType(<MappedType>type);
                         const typeParameterNode = typeParameterToDeclaration(typeParameter, enclosingDeclaration, flags);
 
-                        const templateTypeNode = typeToTypeNodeWorker(getTemplateTypeFromMappedType(<MappedType>type), flags | NodeBuilderFlags.allowUndefinedNode);
+                        const templateType = getTemplateTypeFromMappedType(<MappedType>type)
+                        const templateTypeNode = templateType && typeToTypeNodeWorker(templateType);
                         const readonlyToken = (<MappedType>type).declaration && (<MappedType>type).declaration.readonlyToken ? createToken(SyntaxKind.ReadonlyKeyword) : undefined;
                         const questionToken = (<MappedType>type).declaration && (<MappedType>type).declaration.questionToken ? createToken(SyntaxKind.QuestionToken) : undefined;
 
@@ -2456,10 +2457,10 @@ namespace ts {
                         }
                     }
 
-                    function typeReferenceToTypeReferenceNode(type: TypeReference) {
+                    function typeReferenceToTypeNode(type: TypeReference) {
                         const typeArguments: Type[] = type.typeArguments || emptyArray;
                         if (type.target === globalArrayType) {
-                            const elementType = typeToTypeNodeWorker(typeArguments[0], flags);
+                            const elementType = typeToTypeNodeWorker(typeArguments[0]);
                             return createArrayTypeNode(elementType);
                         }
                         else if (type.target.objectFlags & ObjectFlags.Tuple) {
@@ -2547,10 +2548,12 @@ namespace ts {
                                 }
                             }
                             else {
+                                // TODO(aozgaa): should we create a node with explicit or implict any?
+                                const propertyTypeNode = propertyType ? typeToTypeNodeWorker(propertyType) : createKeywordTypeNode(SyntaxKind.AnyKeyword);
                                 typeElements.push(createPropertySignature(
                                     propertyName,
                                     optionalToken,
-                                    typeToTypeNodeWorker(propertyType, flags),
+                                    propertyTypeNode,
                                /*initializer*/undefined));
                             }
                         }
@@ -2599,11 +2602,12 @@ namespace ts {
                     return undefined;
                 }
 
-                const constraint = typeToTypeNodeHelper(getConstraintFromTypeParameter(type), enclosingDeclaration, flags | NodeBuilderFlags.allowUndefinedNode);
-                const defaultParameter = typeToTypeNodeHelper(getDefaultFromTypeParameter(type), enclosingDeclaration, flags | NodeBuilderFlags.allowUndefinedNode);
-;
+                const constraint = getConstraintFromTypeParameter(type);
+                const constraintNode = constraint && typeToTypeNodeHelper(constraint, enclosingDeclaration, flags);
+                const defaultParameter = getDefaultFromTypeParameter(type);
+                const defaultParameterNode = defaultParameter && typeToTypeNodeHelper(defaultParameter, enclosingDeclaration, flags);
                 const name = symbolToName(type.symbol, enclosingDeclaration, /*mustBeIdentifier*/ true, flags);
-                return createTypeParameterDeclaration(name, constraint, defaultParameter);
+                return createTypeParameterDeclaration(name, constraintNode, defaultParameterNode);
             }
 
             function symbolToParameterDeclaration(parameterSymbol: Symbol, enclosingDeclaration: Node, flags: NodeBuilderFlags): ParameterDeclaration {
@@ -2635,7 +2639,7 @@ namespace ts {
                 const isTypeParameter = symbol.flags & SymbolFlags.TypeParameter;
                 if (!isTypeParameter && enclosingDeclaration) {
                     chain = getSymbolChain(symbol, meaning, /*endOfChain*/ true);
-                    // TODO: check whether type pointed to by symbol requires type arguments to be printed.
+                    // TODO(aozgaa): check whether type pointed to by symbol requires type arguments to be printed.
                     Debug.assert(chain && chain.length > 0);
                 }
                 else {
@@ -2645,7 +2649,7 @@ namespace ts {
                 parentSymbol = undefined;
                 if (mustBeIdentifier && chain.length !== 1) {
                     encounteredError = encounteredError || !(flags & NodeBuilderFlags.allowQualifedNameInPlaceOfIdentifier);
-                    // TODO: failing to get an identifier when we expect one generates an unprintable node.
+                    // TODO(aozgaa): failing to get an identifier when we expect one generates an unprintable node.
                     // Should error handling be more severe?
                 }
                 return createEntityNameFromSymbolChain(chain, chain.length - 1);
@@ -2656,7 +2660,7 @@ namespace ts {
                     const symbol = chain[index];
                     let typeParameterString = "";
                     if (index > 0) {
-                        // TODO: is the parentSymbol wrong?
+                        // TODO(aozgaa): is the parentSymbol wrong?
                         const parentSymbol = chain[index - 1];
                         let typeParameters: TypeParameter[];
                         if (getCheckFlags(symbol) & CheckFlags.Instantiated) {
