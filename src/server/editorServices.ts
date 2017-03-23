@@ -564,11 +564,11 @@ namespace ts.server {
             switch (project.projectKind) {
                 case ProjectKind.External:
                     removeItemFromSet(this.externalProjects, <ExternalProject>project);
-                    delete this.projectToSizeMap[(project as ExternalProject).externalProjectName];
+                    this.projectToSizeMap.delete((project as ExternalProject).externalProjectName);
                     break;
                 case ProjectKind.Configured:
                     removeItemFromSet(this.configuredProjects, <ConfiguredProject>project);
-                    delete this.projectToSizeMap[(project as ConfiguredProject).canonicalConfigFilePath];
+                    this.projectToSizeMap.delete((project as ConfiguredProject).canonicalConfigFilePath);
                     break;
                 case ProjectKind.Inferred:
                     removeItemFromSet(this.inferredProjects, <InferredProject>project);
@@ -861,10 +861,8 @@ namespace ts.server {
             }
 
             let availableSpace = maxProgramSizeForNonTsFiles;
-            this.projectToSizeMap[name] = 0;
-            for (const key in this.projectToSizeMap) {
-                availableSpace -= (this.projectToSizeMap[key] || 0);
-            }
+            this.projectToSizeMap.set(name, 0);
+            this.projectToSizeMap.forEach(val => (availableSpace -= (val || 0)));
 
             let totalNonTsFileSize = 0;
             for (const f of fileNames) {
@@ -883,7 +881,7 @@ namespace ts.server {
                 return true;
             }
 
-            this.projectToSizeMap[name] = totalNonTsFileSize;
+            this.projectToSizeMap.set(name, totalNonTsFileSize);
             return false;
         }
 
