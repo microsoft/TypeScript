@@ -2473,11 +2473,11 @@ namespace ts {
         getNonNullableType(type: Type): Type;
 
         /** Note that the resulting nodes cannot be checked. */
-        typeToTypeNode(type: Type, enclosingDeclaration: Node): TypeNode;
+        typeToTypeNode(type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): TypeNode;
         /** Note that the resulting nodes cannot be checked. */
-        indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration: Node): IndexSignatureDeclaration;
+        signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): SignatureDeclaration;
         /** Note that the resulting nodes cannot be checked. */
-        signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration: Node): SignatureDeclaration;
+        indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): IndexSignatureDeclaration;
 
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolAtLocation(node: Node): Symbol;
@@ -2528,6 +2528,23 @@ namespace ts {
         /* @internal */ getIdentifierCount(): number;
         /* @internal */ getSymbolCount(): number;
         /* @internal */ getTypeCount(): number;
+    }
+
+    /** Note that any resulting nodes cannot be checked. */
+    /* @internal */
+    export interface NodeBuilder {
+        typeToTypeNode(type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): TypeNode;
+        signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): SignatureDeclaration;
+        indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): IndexSignatureDeclaration;
+    }
+
+    export enum NodeBuilderFlags {
+        None                                    = 0,
+        allowUndefinedNode                      = 1 << 0,
+        allowThisInObjectLiteral                = 1 << 1,
+        allowQualifedNameInPlaceOfIdentifier    = 1 << 2,
+        allowTypeParameterInQualifiedName       = 1 << 3,
+        allowAnonymousIdentifier                = 1 << 4
     }
 
     export interface SymbolDisplayBuilder {
