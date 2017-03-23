@@ -100,7 +100,7 @@ namespace ts.codefix {
                 if (declarations.length === 1) {
                     Debug.assert(signatures.length === 1);
                     const signature = signatures[0];
-                    const signatureDeclaration = checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration) as MethodDeclaration;
+                    const signatureDeclaration = <MethodDeclaration>checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration);
                     signatureDeclaration.modifiers = modifiers;
                     signatureDeclaration.name = name;
                     signatureDeclaration.questionToken = optional ? createToken(SyntaxKind.QuestionToken) : undefined;
@@ -111,7 +111,7 @@ namespace ts.codefix {
                 let signatureDeclarations = [];
                 for (let i = 0; i < signatures.length; i++) {
                     const signature = signatures[i];
-                    const signatureDeclaration = checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration) as MethodDeclaration;
+                    const signatureDeclaration = <MethodDeclaration>checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration);
                     signatureDeclaration.modifiers = modifiers;
                     signatureDeclaration.name = name;
                     signatureDeclaration.questionToken = optional ? createToken(SyntaxKind.QuestionToken) : undefined;
@@ -120,7 +120,7 @@ namespace ts.codefix {
 
                 if (declarations.length > signatures.length) {
                     let signature = checker.getSignatureFromDeclaration(declarations[declarations.length - 1] as SignatureDeclaration);
-                    const signatureDeclaration = checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration) as MethodDeclaration;
+                    const signatureDeclaration = <MethodDeclaration>checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration);
                     signatureDeclaration.modifiers = modifiers;
                     signatureDeclaration.name = name;
                     signatureDeclaration.questionToken = optional ? createToken(SyntaxKind.QuestionToken) : undefined;
@@ -197,7 +197,7 @@ namespace ts.codefix {
     }
 
     export function createStubbedMethod(modifiers: Modifier[], name: PropertyName, optional: boolean, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], returnType: TypeNode | undefined) {
-        return createMethod(
+        return createMethodDeclaration(
             /*decorators*/ undefined,
             modifiers,
             /*asteriskToken*/ undefined,

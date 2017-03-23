@@ -260,21 +260,36 @@ namespace ts {
 
             // Signatures and Signature Elements
             case SyntaxKind.FunctionType:
+                return updateFunctionTypeNode(<FunctionTypeNode>node,
+                    nodesVisitor((<FunctionTypeNode>node).typeParameters, visitor, isTypeParameter),
+                    visitParameterList((<FunctionTypeNode>node).parameters, visitor, context, nodesVisitor),
+                    visitNode((<FunctionTypeNode>node).type, visitor, isTypeNode));
+
             case SyntaxKind.ConstructorType:
+                return updateConstructorTypeNode(<ConstructorTypeNode>node,
+                    nodesVisitor((<ConstructorTypeNode>node).typeParameters, visitor, isTypeParameter),
+                    visitParameterList((<ConstructorTypeNode>node).parameters, visitor, context, nodesVisitor),
+                    visitNode((<ConstructorTypeNode>node).type, visitor, isTypeNode));
+
             case SyntaxKind.CallSignature:
+                return updateCallSignatureDeclaration(<CallSignatureDeclaration>node,
+                    nodesVisitor((<CallSignatureDeclaration>node).typeParameters, visitor, isTypeParameter),
+                    visitParameterList((<CallSignatureDeclaration>node).parameters, visitor, context, nodesVisitor),
+                    visitNode((<CallSignatureDeclaration>node).type, visitor, isTypeNode));
+
             case SyntaxKind.ConstructSignature:
-                return updateSignatureDeclaration(<SignatureDeclaration>node,
-                    nodesVisitor((<SignatureDeclaration>node).typeParameters, visitor, isTypeParameter),
-                    visitParameterList((<SignatureDeclaration>node).parameters, visitor, context, nodesVisitor),
-                    visitNode((<SignatureDeclaration>node).type, visitor, isTypeNode));
+                return updateConstructSignatureDeclaration(<ConstructSignatureDeclaration>node,
+                    nodesVisitor((<ConstructSignatureDeclaration>node).typeParameters, visitor, isTypeParameter),
+                    visitParameterList((<ConstructSignatureDeclaration>node).parameters, visitor, context, nodesVisitor),
+                    visitNode((<ConstructSignatureDeclaration>node).type, visitor, isTypeNode));
 
             case SyntaxKind.MethodSignature:
-                return updateSignatureDeclaration(<SignatureDeclaration & TypeElement>node,
-                    nodesVisitor((<SignatureDeclaration & TypeElement>node).typeParameters, visitor, isTypeParameter),
-                    visitParameterList((<SignatureDeclaration & TypeElement>node).parameters, visitor, context, nodesVisitor),
-                    visitNode((<SignatureDeclaration & TypeElement>node).type, visitor, isTypeNode),
-                    visitNode((<SignatureDeclaration & TypeElement>node).name, visitor, isPropertyName),
-                    visitNode((<SignatureDeclaration & TypeElement>node).questionToken, tokenVisitor, isToken));
+                return updateMethodSignature(<MethodSignature>node,
+                    nodesVisitor((<MethodSignature>node).typeParameters, visitor, isTypeParameter),
+                    visitParameterList((<MethodSignature>node).parameters, visitor, context, nodesVisitor),
+                    visitNode((<MethodSignature>node).type, visitor, isTypeNode),
+                    visitNode((<MethodSignature>node).name, visitor, isPropertyName),
+                    visitNode((<MethodSignature>node).questionToken, tokenVisitor, isToken));
 
             case SyntaxKind.IndexSignature:
                 return updateIndexSignatureDeclaration(<IndexSignatureDeclaration>node,
