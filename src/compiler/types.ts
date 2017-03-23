@@ -2473,11 +2473,11 @@ namespace ts {
         getNonNullableType(type: Type): Type;
 
         /** Note that the resulting nodes cannot be checked. */
-        typeToTypeNode(type: Type, enclosingDeclaration: Node): TypeNode;
+        typeToTypeNode(type: Type, enclosingDeclaration?: Node, returnNodeOnError?: boolean): TypeNode;
         /** Note that the resulting nodes cannot be checked. */
-        indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration: Node): IndexSignatureDeclaration;
+        signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, returnNodeOnError?: boolean): SignatureDeclaration;
         /** Note that the resulting nodes cannot be checked. */
-        signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration: Node): SignatureDeclaration;
+        indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, returnNodeOnError?: boolean): IndexSignatureDeclaration;
 
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolAtLocation(node: Node): Symbol;
@@ -2528,6 +2528,20 @@ namespace ts {
         /* @internal */ getIdentifierCount(): number;
         /* @internal */ getSymbolCount(): number;
         /* @internal */ getTypeCount(): number;
+    }
+
+    /** Note that the resulting nodes cannot be checked. */
+    /* @internal */
+    export interface NodeBuilder {
+        typeToTypeNode(type: Type, enclosingDeclaration?: Node, returnNodeOnError?: boolean): NodeBuilderResult<TypeNode>;
+        signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node): NodeBuilderResult<SignatureDeclaration>;
+        indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration: Node): NodeBuilderResult<IndexSignatureDeclaration>;
+    }
+
+    /* @internal */
+    export interface NodeBuilderResult<T> {
+        value: T;
+        error?: boolean;
     }
 
     export interface SymbolDisplayBuilder {
