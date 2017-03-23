@@ -2488,6 +2488,7 @@ namespace ts {
         getAugmentedPropertiesOfType(type: Type): Symbol[];
         getRootSymbols(symbol: Symbol): Symbol[];
         getContextualType(node: Expression): Type;
+        getContextualTypeForCompletion(node: Expression): Type;
         getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[]): Signature;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature;
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
@@ -3014,13 +3015,15 @@ namespace ts {
         ObjectLiteral    = 1 << 7,  // Originates in an object literal
         EvolvingArray    = 1 << 8,  // Evolving array type
         ObjectLiteralPatternWithComputedProperties = 1 << 9,  // Object literal pattern with computed properties
-        NonPrimitive        = 1 << 10,  // NonPrimitive object type
+        NonPrimitive = 1 << 10,  // NonPrimitive object type
+        AnonymousWithConstraint = 1 << 11, // Anonymous type with assigned constraint. Used for completion
         ClassOrInterface = Class | Interface
     }
 
     // Object types (TypeFlags.ObjectType)
     export interface ObjectType extends Type {
         objectFlags: ObjectFlags;
+        completionConstraintType?: Type; // Contraint type for this object type. Used in completion with object literals
     }
 
     /** Class and interface types (TypeFlags.Class and TypeFlags.Interface). */
