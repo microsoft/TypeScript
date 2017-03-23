@@ -2257,7 +2257,7 @@ namespace ts {
                         return createKeywordTypeNode(SyntaxKind.BooleanKeyword);
                     }
                     if (type.flags & TypeFlags.Enum) {
-                        const name = symbolToName(type.symbol, enclosingDeclaration, /*mustBeIdentifier*/ false, flags);
+                        const name = symbolToName(type.symbol, enclosingDeclaration, /*expectsIdentifier*/ false, flags);
                         return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                     }
                     if (type.flags & (TypeFlags.StringLiteral)) {
@@ -2270,7 +2270,7 @@ namespace ts {
                         return (<IntrinsicType>type).intrinsicName === "true" ? createTrue() : createFalse();
                     }
                     if (type.flags & TypeFlags.EnumLiteral) {
-                        const name = symbolToName(type.symbol, enclosingDeclaration, /*mustBeIdentifier*/ false, flags);
+                        const name = symbolToName(type.symbol, enclosingDeclaration, /*expectsIdentifier*/ false, flags);
                         return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                     }
                     if (type.flags & TypeFlags.Void) {
@@ -2306,18 +2306,18 @@ namespace ts {
                     }
                     if (objectFlags & ObjectFlags.ClassOrInterface) {
                         Debug.assert(!!(type.flags & TypeFlags.Object));
-                        const name = symbolToName(type.symbol, enclosingDeclaration, /*mustBeIdentifier*/ false, flags);
+                        const name = symbolToName(type.symbol, enclosingDeclaration, /*expectsIdentifier*/ false, flags);
                         // TODO(aozgaa): handle type arguments.
                         return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                     }
                     if (type.flags & TypeFlags.TypeParameter) {
-                        const name = symbolToName(type.symbol, enclosingDeclaration, /*mustBeIdentifier*/ false, flags);
+                        const name = symbolToName(type.symbol, enclosingDeclaration, /*expectsIdentifier*/ false, flags);
                         // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
                         return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                     }
 
                     if (checkAlias && type.aliasSymbol) {
-                        const name = symbolToName(type.aliasSymbol, enclosingDeclaration, /*mustBeIdentifier*/ false, flags);
+                        const name = symbolToName(type.aliasSymbol, enclosingDeclaration, /*expectsIdentifier*/ false, flags);
                         const typeArgumentNodes = mapToTypeNodeArray(type.aliasTypeArguments);
                         return createTypeReferenceNode(name, typeArgumentNodes);
                     }
@@ -2381,7 +2381,7 @@ namespace ts {
                                 const typeAlias = getTypeAliasForTypeLiteral(type);
                                 if (typeAlias) {
                                     // The specified symbol flags need to be reinterpreted as type flags
-                                    const entityName = symbolToName(typeAlias, enclosingDeclaration, /*mustBeIdentifier*/ false, flags);
+                                    const entityName = symbolToName(typeAlias, enclosingDeclaration, /*expectsIdentifier*/ false, flags);
                                     return createTypeReferenceNode(entityName, /*typeArguments*/ undefined);
                                 }
                                 else {
@@ -2452,7 +2452,7 @@ namespace ts {
                     function createTypeQueryNodeFromType(type: Type) {
                         const symbol = type.symbol;
                         if (symbol) {
-                            const entityName = symbolToName(symbol, enclosingDeclaration, /*mustBeIdentifier*/ false, flags);
+                            const entityName = symbolToName(symbol, enclosingDeclaration, /*expectsIdentifier*/ false, flags);
                             return createTypeQueryNode(entityName);
                         }
                     }
@@ -2482,7 +2482,7 @@ namespace ts {
                                     // When type parameters are their own type arguments for the whole group (i.e. we have
                                     // the default outer type arguments), we don't show the group.
                                     if (!rangeEquals(outerTypeParameters, typeArguments, start, i)) {
-                                        const qualifiedNamePart = symbolToName(parent, enclosingDeclaration, /*mustBeIdentifier*/ true, flags);
+                                        const qualifiedNamePart = symbolToName(parent, enclosingDeclaration, /*expectsIdentifier*/ true, flags);
                                         if (!qualifiedName) {
                                             qualifiedName = createQualifiedName(qualifiedNamePart, /*right*/ undefined);
                                         }
@@ -2495,7 +2495,7 @@ namespace ts {
                                 }
                             }
                             let entityName: EntityName = undefined;
-                            const nameIdentifier = symbolToName(type.symbol, enclosingDeclaration, /*mustBeIdentifier*/ true, flags);
+                            const nameIdentifier = symbolToName(type.symbol, enclosingDeclaration, /*expectsIdentifier*/ true, flags);
                             if (qualifiedName) {
                                 Debug.assert(!qualifiedName.right);
                                 qualifiedName.right = nameIdentifier;
@@ -2606,7 +2606,7 @@ namespace ts {
                 const constraintNode = constraint && typeToTypeNodeHelper(constraint, enclosingDeclaration, flags);
                 const defaultParameter = getDefaultFromTypeParameter(type);
                 const defaultParameterNode = defaultParameter && typeToTypeNodeHelper(defaultParameter, enclosingDeclaration, flags);
-                const name = symbolToName(type.symbol, enclosingDeclaration, /*mustBeIdentifier*/ true, flags);
+                const name = symbolToName(type.symbol, enclosingDeclaration, /*expectsIdentifier*/ true, flags);
                 return createTypeParameterDeclaration(name, constraintNode, defaultParameterNode);
             }
 
@@ -2627,19 +2627,17 @@ namespace ts {
                 return parameterNode;
             }
 
-            function symbolToName(symbol: Symbol, enclosingDeclaration: Node | undefined, mustBeIdentifier: true, flags: NodeBuilderFlags): Identifier;
-            function symbolToName(symbol: Symbol, enclosingDeclaration: Node, mustBeIdentifier: false, flags: NodeBuilderFlags): EntityName;
-            function symbolToName(symbol: Symbol, enclosingDeclaration: Node | undefined, mustBeIdentifier: boolean, flags: NodeBuilderFlags): EntityName {
+            function symbolToName(symbol: Symbol, enclosingDeclaration: Node | undefined, expectsIdentifier: true, flags: NodeBuilderFlags): Identifier;
+            function symbolToName(symbol: Symbol, enclosingDeclaration: Node | undefined, expectsIdentifier: false, flags: NodeBuilderFlags): EntityName;
+            function symbolToName(symbol: Symbol, enclosingDeclaration: Node | undefined, expectsIdentifier: boolean, flags: NodeBuilderFlags): EntityName {
                 let parentSymbol: Symbol;
                 let meaning: SymbolFlags;
 
-                // Get qualified name if the symbol is not a type parameter
-                // and there is an enclosing declaration.
+                // Try to get qualified name if the symbol is not a type parameter and there is an enclosing declaration.
                 let chain: Symbol[];
                 const isTypeParameter = symbol.flags & SymbolFlags.TypeParameter;
                 if (!isTypeParameter && enclosingDeclaration) {
                     chain = getSymbolChain(symbol, meaning, /*endOfChain*/ true);
-                    // TODO(aozgaa): check whether type pointed to by symbol requires type arguments to be printed.
                     Debug.assert(chain && chain.length > 0);
                 }
                 else {
@@ -2647,10 +2645,8 @@ namespace ts {
                 }
 
                 parentSymbol = undefined;
-                if (mustBeIdentifier && chain.length !== 1) {
+                if (expectsIdentifier && chain.length !== 1) {
                     encounteredError = encounteredError || !(flags & NodeBuilderFlags.allowQualifedNameInPlaceOfIdentifier);
-                    // TODO(aozgaa): failing to get an identifier when we expect one generates an unprintable node.
-                    // Should error handling be more severe?
                 }
                 return createEntityNameFromSymbolChain(chain, chain.length - 1);
 
@@ -2660,7 +2656,6 @@ namespace ts {
                     const symbol = chain[index];
                     let typeParameterString = "";
                     if (index > 0) {
-                        // TODO(aozgaa): is the parentSymbol wrong?
                         const parentSymbol = chain[index - 1];
                         let typeParameters: TypeParameter[];
                         if (getCheckFlags(symbol) & CheckFlags.Instantiated) {
