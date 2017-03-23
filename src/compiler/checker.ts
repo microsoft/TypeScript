@@ -2192,16 +2192,13 @@ namespace ts {
             return result;
         }
 
-        function unwrapNodeBuilderResult<T>(result: NodeBuilderResult<T>, returnValueOnError: boolean): T | undefined {
-            return !result.error || returnValueOnError ? result.value : undefined;
-        }
-
         function getNodeBuilder(): NodeBuilder {
             if (nodeBuilderCache) {
                 return nodeBuilderCache;
             }
 
             let encounteredError = false;
+
             nodeBuilderCache = {
                 typeToTypeNode,
                 indexInfoToIndexSignatureDeclaration,
@@ -2210,21 +2207,40 @@ namespace ts {
 
             return nodeBuilderCache;
 
-            function typeToTypeNode(type: Type, enclosingDeclaration?: Node, emitNodeOnError?: boolean): NodeBuilderResult<TypeNode> {
-                let toNodeEncounteredErrorCache = encounteredError;
-                encounteredError = false;
+            function typeToTypeNode(type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): TypeNode {
+                const helper = () => typeToTypeNodeHelper(type, enclosingDeclaration, flags);
+                return callHelperWithErrorHandling(helper);
+            }
+
+            function indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): IndexSignatureDeclaration {
+                const helper = () => indexInfoToIndexSignatureDeclarationHelper(indexInfo, kind, enclosingDeclaration, flags);
+                return callHelperWithErrorHandling(helper);
+            }
+
+            function signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): SignatureDeclaration {
+                const helper = () => signatureToSignatureDeclarationHelper(signature, kind, enclosingDeclaration, flags);
+                return callHelperWithErrorHandling(helper);
+            }
+
+            function callHelperWithErrorHandling<T extends Node>(nodeBuilderHelper: () => T): T | undefined {
+                const encounteredErrorCache = encounteredError;
+                const resultingNode = nodeBuilderHelper();
+                const result = encounteredError ? undefined : resultingNode;
+                encounteredError = encounteredErrorCache;
+                return result;
+            }
+
+            function typeToTypeNodeHelper(type: Type, enclosingDeclaration: Node, flags: NodeBuilderFlags): TypeNode {
                 let inObjectTypeLiteral = false;
                 let checkAlias = true;
                 let symbolStack: Symbol[] = undefined;
 
-                const resultingNode = typeToTypeNodeWorker(type);
-                const result = encounteredError && !emitNodeOnError ? undefined : resultingNode;
-                encounteredError = toNodeEncounteredErrorCache;
-                return result;
+                return typeToTypeNodeWorker(type);
 
-                function typeToTypeNodeWorker(type: Type): NodeBuilderResult<TypeNode> {
+                function typeToTypeNodeWorker(type: Type): TypeNode {
                     if (!type) {
                         encounteredError = true;
+                        // TODO(aozgaa): should we return implict any (undefined) or explicit any (keywordtypenode)?
                         return undefined;
                     }
 
@@ -2241,7 +2257,7 @@ namespace ts {
                         return createKeywordTypeNode(SyntaxKind.BooleanKeyword);
                     }
                     if (type.flags & TypeFlags.Enum) {
-                        const name = symbolToName(type.symbol, enclosingDeclaration);
+                        const name = symbolToName(type.symbol, enclosingDeclaration, /*expectsIdentifier*/ false, flags);
                         return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                     }
                     if (type.flags & (TypeFlags.StringLiteral)) {
@@ -2254,7 +2270,7 @@ namespace ts {
                         return (<IntrinsicType>type).intrinsicName === "true" ? createTrue() : createFalse();
                     }
                     if (type.flags & TypeFlags.EnumLiteral) {
-                        const name = symbolToName(type.symbol, enclosingDeclaration);
+                        const name = symbolToName(type.symbol, enclosingDeclaration, /*expectsIdentifier*/ false, flags);
                         return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                     }
                     if (type.flags & TypeFlags.Void) {
@@ -2277,7 +2293,7 @@ namespace ts {
                     }
                     if (type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType) {
                         if (inObjectTypeLiteral) {
-                            encounteredError = true;
+                            encounteredError = encounteredError || !(flags & NodeBuilderFlags.allowThisInObjectLiteral);
                         }
                         return createThis();
                     }
@@ -2286,22 +2302,22 @@ namespace ts {
 
                     if (objectFlags & ObjectFlags.Reference) {
                         Debug.assert(!!(type.flags & TypeFlags.Object));
-                        return typeReferenceToTypeReferenceNode(<TypeReference>type);
+                        return typeReferenceToTypeNode  (<TypeReference>type);
                     }
                     if (objectFlags & ObjectFlags.ClassOrInterface) {
                         Debug.assert(!!(type.flags & TypeFlags.Object));
-                        const name = symbolToName(type.symbol, enclosingDeclaration);
+                        const name = symbolToName(type.symbol, enclosingDeclaration, /*expectsIdentifier*/ false, flags);
                         // TODO(aozgaa): handle type arguments.
                         return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                     }
                     if (type.flags & TypeFlags.TypeParameter) {
-                        const name = symbolToName(type.symbol, enclosingDeclaration);
+                        const name = symbolToName(type.symbol, enclosingDeclaration, /*expectsIdentifier*/ false, flags);
                         // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
                         return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                     }
 
                     if (checkAlias && type.aliasSymbol) {
-                        const name = symbolToName(type.aliasSymbol, enclosingDeclaration);
+                        const name = symbolToName(type.aliasSymbol, enclosingDeclaration, /*expectsIdentifier*/ false, flags);
                         const typeArgumentNodes = mapToTypeNodeArray(type.aliasTypeArguments);
                         return createTypeReferenceNode(name, typeArgumentNodes);
                     }
@@ -2335,15 +2351,16 @@ namespace ts {
                     Debug.fail("Should be unreachable.");
 
                     function mapToTypeNodeArray(types: Type[]): NodeArray<TypeNode> {
-                        return types && asNodeArray(types.map(typeToTypeNodeWorker) as TypeNode[]);
+                        return types && asNodeArray(types.map(typeToTypeNodeWorker).filter(node => !!node));
                     }
 
                     function createMappedTypeNodeFromType(type: MappedType) {
                         Debug.assert(!!(type.flags & TypeFlags.Object));
                         const typeParameter = getTypeParameterFromMappedType(<MappedType>type);
-                        const typeParameterNode = typeParameterToDeclaration(typeParameter, enclosingDeclaration);
+                        const typeParameterNode = typeParameterToDeclaration(typeParameter, enclosingDeclaration, flags);
 
-                        const templateTypeNode = typeToTypeNodeWorker(getTemplateTypeFromMappedType(<MappedType>type));
+                        const templateType = getTemplateTypeFromMappedType(<MappedType>type)
+                        const templateTypeNode = templateType && typeToTypeNodeWorker(templateType);
                         const readonlyToken = (<MappedType>type).declaration && (<MappedType>type).declaration.readonlyToken ? createToken(SyntaxKind.ReadonlyKeyword) : undefined;
                         const questionToken = (<MappedType>type).declaration && (<MappedType>type).declaration.questionToken ? createToken(SyntaxKind.QuestionToken) : undefined;
 
@@ -2364,7 +2381,7 @@ namespace ts {
                                 const typeAlias = getTypeAliasForTypeLiteral(type);
                                 if (typeAlias) {
                                     // The specified symbol flags need to be reinterpreted as type flags
-                                    const entityName = symbolToName(typeAlias, enclosingDeclaration);
+                                    const entityName = symbolToName(typeAlias, enclosingDeclaration, /*expectsIdentifier*/ false, flags);
                                     return createTypeReferenceNode(entityName, /*typeArguments*/ undefined);
                                 }
                                 else {
@@ -2417,11 +2434,11 @@ namespace ts {
 
                             if (resolved.callSignatures.length === 1 && !resolved.constructSignatures.length) {
                                 const signature = resolved.callSignatures[0];
-                                return <FunctionTypeNode>signatureToSignatureDeclaration(signature, SyntaxKind.FunctionType, enclosingDeclaration, emitNodeOnError);
+                                return <FunctionTypeNode>signatureToSignatureDeclarationHelper(signature, SyntaxKind.FunctionType, enclosingDeclaration, flags);
                             }
                             if (resolved.constructSignatures.length === 1 && !resolved.callSignatures.length) {
                                 const signature = resolved.constructSignatures[0];
-                                return <ConstructorTypeNode>signatureToSignatureDeclaration(signature, SyntaxKind.ConstructorType, enclosingDeclaration, emitNodeOnError);
+                                return <ConstructorTypeNode>signatureToSignatureDeclarationHelper(signature, SyntaxKind.ConstructorType, enclosingDeclaration, flags);
                             }
                         }
 
@@ -2435,12 +2452,12 @@ namespace ts {
                     function createTypeQueryNodeFromType(type: Type) {
                         const symbol = type.symbol;
                         if (symbol) {
-                            const entityName = symbolToName(symbol, enclosingDeclaration);
+                            const entityName = symbolToName(symbol, enclosingDeclaration, /*expectsIdentifier*/ false, flags);
                             return createTypeQueryNode(entityName);
                         }
                     }
 
-                    function typeReferenceToTypeReferenceNode(type: TypeReference) {
+                    function typeReferenceToTypeNode(type: TypeReference) {
                         const typeArguments: Type[] = type.typeArguments || emptyArray;
                         if (type.target === globalArrayType) {
                             const elementType = typeToTypeNodeWorker(typeArguments[0]);
@@ -2465,7 +2482,7 @@ namespace ts {
                                     // When type parameters are their own type arguments for the whole group (i.e. we have
                                     // the default outer type arguments), we don't show the group.
                                     if (!rangeEquals(outerTypeParameters, typeArguments, start, i)) {
-                                        const qualifiedNamePart = symbolToName(parent, enclosingDeclaration, /*mustBeIdentifier*/ true);
+                                        const qualifiedNamePart = symbolToName(parent, enclosingDeclaration, /*expectsIdentifier*/ true, flags);
                                         if (!qualifiedName) {
                                             qualifiedName = createQualifiedName(qualifiedNamePart, /*right*/ undefined);
                                         }
@@ -2478,7 +2495,7 @@ namespace ts {
                                 }
                             }
                             let entityName: EntityName = undefined;
-                            const nameIdentifier = symbolToName(type.symbol, enclosingDeclaration, /*mustBeIdentifier*/ true);
+                            const nameIdentifier = symbolToName(type.symbol, enclosingDeclaration, /*expectsIdentifier*/ true, flags);
                             if (qualifiedName) {
                                 Debug.assert(!qualifiedName.right);
                                 qualifiedName.right = nameIdentifier;
@@ -2496,16 +2513,16 @@ namespace ts {
                     function createTypeNodesFromResolvedType(resolvedType: ResolvedType): TypeElement[] {
                         const typeElements: TypeElement[] = [];
                         for (const signature of resolvedType.callSignatures) {
-                            typeElements.push(<CallSignatureDeclaration>signatureToSignatureDeclaration(signature, SyntaxKind.CallSignature, enclosingDeclaration, emitNodeOnError));
+                            typeElements.push(<CallSignatureDeclaration>signatureToSignatureDeclarationHelper(signature, SyntaxKind.CallSignature, enclosingDeclaration, flags));
                         }
                         for (const signature of resolvedType.constructSignatures) {
-                            typeElements.push(<ConstructSignatureDeclaration>signatureToSignatureDeclaration(signature, SyntaxKind.ConstructSignature, enclosingDeclaration, emitNodeOnError));
+                            typeElements.push(<ConstructSignatureDeclaration>signatureToSignatureDeclarationHelper(signature, SyntaxKind.ConstructSignature, enclosingDeclaration, flags));
                         }
                         if (resolvedType.stringIndexInfo) {
-                            typeElements.push(indexInfoToIndexSignatureDeclaration(resolvedType.stringIndexInfo, IndexKind.String, enclosingDeclaration, emitNodeOnError));
+                            typeElements.push(indexInfoToIndexSignatureDeclarationHelper(resolvedType.stringIndexInfo, IndexKind.String, enclosingDeclaration, flags));
                         }
                         if (resolvedType.numberIndexInfo) {
-                            typeElements.push(indexInfoToIndexSignatureDeclaration(resolvedType.numberIndexInfo, IndexKind.Number, enclosingDeclaration, emitNodeOnError));
+                            typeElements.push(indexInfoToIndexSignatureDeclarationHelper(resolvedType.numberIndexInfo, IndexKind.Number, enclosingDeclaration, flags));
                         }
 
                         const properties = resolvedType.properties;
@@ -2524,17 +2541,20 @@ namespace ts {
                             if (propertySymbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(propertyType).length) {
                                 const signatures = getSignaturesOfType(propertyType, SignatureKind.Call);
                                 for (const signature of signatures) {
-                                    const methodDeclaration = <MethodSignature>signatureToSignatureDeclaration(signature, SyntaxKind.MethodSignature, enclosingDeclaration, emitNodeOnError);
+                                    const methodDeclaration = <MethodSignature>signatureToSignatureDeclarationHelper(signature, SyntaxKind.MethodSignature, enclosingDeclaration, flags);
                                     methodDeclaration.name = propertyName;
                                     methodDeclaration.questionToken = optionalToken;
                                     typeElements.push(methodDeclaration);
                                 }
                             }
                             else {
+
+                                // TODO(aozgaa): should we create a node with explicit or implict any?
+                                const propertyTypeNode = propertyType ? typeToTypeNodeWorker(propertyType) : createKeywordTypeNode(SyntaxKind.AnyKeyword);
                                 typeElements.push(createPropertySignature(
                                     propertyName,
                                     optionalToken,
-                                    typeToTypeNodeWorker(propertyType),
+                                    propertyTypeNode,
                                /*initializer*/undefined));
                             }
                         }
@@ -2543,10 +2563,7 @@ namespace ts {
                 }
             }
 
-            function indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration: Node, emitNodeOnError?: boolean): IndexSignatureDeclaration {
-                const encounteredErrorCache = encounteredError;
-                encounteredError = false;
-
+            function indexInfoToIndexSignatureDeclarationHelper(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration: Node, flags: NodeBuilderFlags): IndexSignatureDeclaration {
                 const indexerTypeNode = createKeywordTypeNode(kind === IndexKind.String ? SyntaxKind.StringKeyword : SyntaxKind.NumberKeyword);
 
                 const name = getNameFromIndexInfo(indexInfo);
@@ -2558,55 +2575,46 @@ namespace ts {
                 /*questionToken*/ undefined,
                     indexerTypeNode,
                 /*initializer*/ undefined);
-                const typeNode = typeToTypeNode(indexInfo.type, enclosingDeclaration, emitNodeOnError);
-                const result = !encounteredError || emitNodeOnError ? createIndexSignatureDeclaration(
+                const typeNode = typeToTypeNodeHelper(indexInfo.type, enclosingDeclaration, flags);
+                return createIndexSignatureDeclaration(
                     [indexingParameter],
                     typeNode,
                     /*decorators*/ undefined,
-                    indexInfo.isReadonly ? [createToken(SyntaxKind.ReadonlyKeyword)] : undefined)
-                    : undefined;
-                encounteredError = encounteredErrorCache;
-                return result;
+                    indexInfo.isReadonly ? [createToken(SyntaxKind.ReadonlyKeyword)] : undefined);
             }
 
-            function signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, emitNodeOnError?: boolean): SignatureDeclaration {
-                const encounteredErrorCache = encounteredError;
-                encounteredError = false;
+            function signatureToSignatureDeclarationHelper(signature: Signature, kind: SyntaxKind, enclosingDeclaration: Node, flags: NodeBuilderFlags): SignatureDeclaration {
 
-                const typeParameters = signature.typeParameters && signature.typeParameters.map(parameter => typeParameterToDeclaration(parameter, enclosingDeclaration));
-                const parameters = signature.parameters.map(parameter => symbolToParameterDeclaration(parameter, enclosingDeclaration));
+                const typeParameters = signature.typeParameters && signature.typeParameters.map(parameter => typeParameterToDeclaration(parameter, enclosingDeclaration, flags));
+                const parameters = signature.parameters.map(parameter => symbolToParameterDeclaration(parameter, enclosingDeclaration, flags));
                 const type = typeToTypeNodeExceptAny(getReturnTypeOfSignature(signature));
 
-                const result = !encounteredError || emitNodeOnError ? createSignatureDeclaration(kind, typeParameters, parameters, type) : undefined;
-                encounteredError = encounteredErrorCache;
-                return result;
+                return createSignatureDeclaration(kind, typeParameters, parameters, type);
 
                 function typeToTypeNodeExceptAny(type: Type): TypeNode | undefined {
-                    const typeNode = typeToTypeNode(type, enclosingDeclaration, emitNodeOnError);
+                    // Note, this call will *not* mark encounteredError.
+                    const typeNode = typeToTypeNode(type, enclosingDeclaration);
                     return typeNode && typeNode.kind !== SyntaxKind.AnyKeyword ? typeNode : undefined;
                 }
             }
 
-            function typeParameterToDeclaration(type: TypeParameter, enclosingDeclaration?: Node, returnNodeOnError?: boolean): TypeParameterDeclaration {
+            function typeParameterToDeclaration(type: TypeParameter, enclosingDeclaration: Node, flags: NodeBuilderFlags): TypeParameterDeclaration {
                 if (!(type && type.symbol && type.flags & TypeFlags.TypeParameter)) {
                     return undefined;
                 }
 
-                const constraint = typeToTypeNode(getConstraintFromTypeParameter(type), enclosingDeclaration);
-                const defaultParameter = typeToTypeNode(getDefaultFromTypeParameter(type), enclosingDeclaration);
-
-                let toNodeEncounteredErrorCache = encounteredError;
-                encounteredError = false;
-                const name = symbolToName(type.symbol, enclosingDeclaration, /*mustBeIdentifier*/ true);
-                let result = encounteredError && !returnNodeOnError ? undefined : createTypeParameterDeclaration(name, constraint, defaultParameter);
-                encounteredError = toNodeEncounteredErrorCache;
-                return result;
+                const constraint = getConstraintFromTypeParameter(type);
+                const constraintNode = constraint && typeToTypeNodeHelper(constraint, enclosingDeclaration, flags);
+                const defaultParameter = getDefaultFromTypeParameter(type);
+                const defaultParameterNode = defaultParameter && typeToTypeNodeHelper(defaultParameter, enclosingDeclaration, flags);
+                const name = symbolToName(type.symbol, enclosingDeclaration, /*expectsIdentifier*/ true, flags);
+                return createTypeParameterDeclaration(name, constraintNode, defaultParameterNode);
             }
 
-            function symbolToParameterDeclaration(parameterSymbol: Symbol, enclosingDeclaration?: Node): ParameterDeclaration {
+            function symbolToParameterDeclaration(parameterSymbol: Symbol, enclosingDeclaration: Node, flags: NodeBuilderFlags): ParameterDeclaration {
                 const parameterDeclaration = parameterSymbol.declarations[0] as ParameterDeclaration;
                 const parameterType = getTypeOfSymbol(parameterSymbol);
-                const parameterTypeNode = typeToTypeNode(parameterType, enclosingDeclaration);
+                const parameterTypeNode = typeToTypeNodeHelper(parameterType, enclosingDeclaration, flags);
                 // TODO(aozgaa): check initializer accessibility correctly.
                 const parameterNode = createParameter(
                     parameterDeclaration.decorators,
@@ -2620,19 +2628,17 @@ namespace ts {
                 return parameterNode;
             }
 
-            function symbolToName(symbol: Symbol, enclosingDeclaration: Node | undefined, mustBeIdentifier: true): Identifier;
-            function symbolToName(symbol: Symbol, enclosingDeclaration?: Node, mustBeIdentifier?: false): EntityName;
-            function symbolToName(symbol: Symbol, enclosingDeclaration: Node | undefined, mustBeIdentifier: boolean | undefined): EntityName {
+            function symbolToName(symbol: Symbol, enclosingDeclaration: Node | undefined, expectsIdentifier: true, flags: NodeBuilderFlags): Identifier;
+            function symbolToName(symbol: Symbol, enclosingDeclaration: Node | undefined, expectsIdentifier: false, flags: NodeBuilderFlags): EntityName;
+            function symbolToName(symbol: Symbol, enclosingDeclaration: Node | undefined, expectsIdentifier: boolean, flags: NodeBuilderFlags): EntityName {
                 let parentSymbol: Symbol;
                 let meaning: SymbolFlags;
 
-                // Get qualified name if the symbol is not a type parameter
-                // and there is an enclosing declaration.
+                // Try to get qualified name if the symbol is not a type parameter and there is an enclosing declaration.
                 let chain: Symbol[];
                 const isTypeParameter = symbol.flags & SymbolFlags.TypeParameter;
                 if (!isTypeParameter && enclosingDeclaration) {
                     chain = getSymbolChain(symbol, meaning, /*endOfChain*/ true);
-                    // TODO: check whether type pointed to by symbol requires type arguments to be printed.
                     Debug.assert(chain && chain.length > 0);
                 }
                 else {
@@ -2640,10 +2646,9 @@ namespace ts {
                 }
 
                 parentSymbol = undefined;
-                if (mustBeIdentifier && chain.length !== 1) {
-                    encounteredError = true;
-                    // TODO: failing to get an identifier when we expect one generates an unprintable node.
-                    // Should error handling be more severe?
+
+                if (expectsIdentifier && chain.length !== 1) {
+                    encounteredError = encounteredError || !(flags & NodeBuilderFlags.allowQualifedNameInPlaceOfIdentifier);
                 }
                 return createEntityNameFromSymbolChain(chain, chain.length - 1);
 
@@ -2653,7 +2658,7 @@ namespace ts {
                     const symbol = chain[index];
                     let typeParameterString = "";
                     if (index > 0) {
-                        // TODO: is the parentSymbol wrong?
+
                         const parentSymbol = chain[index - 1];
                         let typeParameters: TypeParameter[];
                         if (getCheckFlags(symbol) & CheckFlags.Instantiated) {
@@ -2666,7 +2671,8 @@ namespace ts {
                             }
                         }
                         if (typeParameters && typeParameters.length > 0) {
-                            encounteredError = true;
+                            encounteredError = encounteredError || !(flags & NodeBuilderFlags.allowTypeParameterInQualifiedName);;
+
                             const writer = getSingleLineStringWriter();
                             const displayBuilder = getSymbolDisplayBuilder();
                             displayBuilder.buildDisplayForTypeParametersAndDelimiters(typeParameters, writer, enclosingDeclaration, 0);
@@ -2724,7 +2730,7 @@ namespace ts {
                         if (declaration.parent && declaration.parent.kind === SyntaxKind.VariableDeclaration) {
                             return declarationNameToString((<VariableDeclaration>declaration.parent).name);
                         }
-                        encounteredError = true;
+                        encounteredError = encounteredError || !(flags & NodeBuilderFlags.allowAnonymousIdentifier);
                         switch (declaration.kind) {
                             case SyntaxKind.ClassExpression:
                                 return "(Anonymous class)";

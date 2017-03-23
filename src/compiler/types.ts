@@ -2473,11 +2473,12 @@ namespace ts {
         getNonNullableType(type: Type): Type;
 
         /** Note that the resulting nodes cannot be checked. */
-        typeToTypeNode(type: Type, enclosingDeclaration?: Node, returnNodeOnError?: boolean): TypeNode;
+
+        typeToTypeNode(type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): TypeNode;
         /** Note that the resulting nodes cannot be checked. */
-        signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, returnNodeOnError?: boolean): SignatureDeclaration;
+        signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): SignatureDeclaration;
         /** Note that the resulting nodes cannot be checked. */
-        indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, returnNodeOnError?: boolean): IndexSignatureDeclaration;
+        indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): IndexSignatureDeclaration;
 
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolAtLocation(node: Node): Symbol;
@@ -2530,18 +2531,20 @@ namespace ts {
         /* @internal */ getTypeCount(): number;
     }
 
-    /** Note that the resulting nodes cannot be checked. */
+    /** Note that any resulting nodes cannot be checked. */
     /* @internal */
     export interface NodeBuilder {
-        typeToTypeNode(type: Type, enclosingDeclaration?: Node, returnNodeOnError?: boolean): NodeBuilderResult<TypeNode>;
-        signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node): NodeBuilderResult<SignatureDeclaration>;
-        indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration: Node): NodeBuilderResult<IndexSignatureDeclaration>;
+        typeToTypeNode(type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): TypeNode;
+        signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): SignatureDeclaration;
+        indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): IndexSignatureDeclaration;
     }
 
-    /* @internal */
-    export interface NodeBuilderResult<T> {
-        value: T;
-        error?: boolean;
+    export enum NodeBuilderFlags {
+        None                                    = 0,
+        allowThisInObjectLiteral                = 1 << 0,
+        allowQualifedNameInPlaceOfIdentifier    = 1 << 1,
+        allowTypeParameterInQualifiedName       = 1 << 2,
+        allowAnonymousIdentifier                = 1 << 3
     }
 
     export interface SymbolDisplayBuilder {
