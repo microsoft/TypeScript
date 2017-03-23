@@ -3014,7 +3014,6 @@ namespace ts {
         ObjectLiteral    = 1 << 7,  // Originates in an object literal
         EvolvingArray    = 1 << 8,  // Evolving array type
         ObjectLiteralPatternWithComputedProperties = 1 << 9,  // Object literal pattern with computed properties
-        NonPrimitive        = 1 << 10,  // NonPrimitive object type
         ClassOrInterface = Class | Interface
     }
 

@@ -8277,8 +8277,8 @@ namespace ts {
                 maybeStack[depth].set(id, RelationComparisonResult.Succeeded);
                 depth++;
                 const saveExpandingFlags = expandingFlags;
-                if (!(expandingFlags & 1) && isDeeplyNestedGeneric(source, sourceStack, depth)) expandingFlags |= 1;
-                if (!(expandingFlags & 2) && isDeeplyNestedGeneric(target, targetStack, depth)) expandingFlags |= 2;
+                if (!(expandingFlags & 1) && isDeeplyNestedType(source, sourceStack, depth)) expandingFlags |= 1;
+                if (!(expandingFlags & 2) && isDeeplyNestedType(target, targetStack, depth)) expandingFlags |= 2;
                 let result: Ternary;
                 if (expandingFlags === 3) {
                     result = Ternary.Maybe;
@@ -8698,21 +8698,23 @@ namespace ts {
             return false;
         }
 
-        // Return true if the given type is part of a deeply nested chain of generic instantiations. We consider this to be the case
-        // when structural type comparisons have been started for 10 or more instantiations of the same generic type. It is possible,
-        // though highly unlikely, for this test to be true in a situation where a chain of instantiations is not infinitely expanding.
-        // Effectively, we will generate a false positive when two types are structurally equal to at least 10 levels, but unequal at
-        // some level beyond that.
-        function isDeeplyNestedGeneric(type: Type, stack: Type[], depth: number): boolean {
-            // We track type references (created by createTypeReference) and instantiated types (created by instantiateType)
-            if (getObjectFlags(type) & (ObjectFlags.Reference | ObjectFlags.Instantiated) && depth >= 5) {
+        // Return true if the given type is deeply nested. We consider this to be the case when structural type comparisons
+        // for 5 or more occurrences or instantiations of the type have been recorded on the given stack. It is possible,
+        // though highly unlikely, for this test to be true in a situation where a chain of instantiations is not infinitely
+        // expanding. Effectively, we will generate a false positive when two types are structurally equal to at least 5
+        // levels, but unequal at some level beyond that.
+        function isDeeplyNestedType(type: Type, stack: Type[], depth: number): boolean {
+            // We track all object types that have an associated symbol (representing the origin of the type)
+            if (depth >= 5 && type.flags & TypeFlags.Object) {
                 const symbol = type.symbol;
-                let count = 0;
-                for (let i = 0; i < depth; i++) {
-                    const t = stack[i];
-                    if (getObjectFlags(t) & (ObjectFlags.Reference | ObjectFlags.Instantiated) && t.symbol === symbol) {
-                        count++;
-                        if (count >= 5) return true;
+                if (symbol) {
+                    let count = 0;
+                    for (let i = 0; i < depth; i++) {
+                        const t = stack[i];
+                        if (t.flags & TypeFlags.Object && t.symbol === symbol) {
+                            count++;
+                            if (count >= 5) return true;
+                        }
                     }
                 }
             }
@@ -9455,7 +9457,7 @@ namespace ts {
                         if (isInProcess(source, target)) {
                             return;
                         }
-                        if (isDeeplyNestedGeneric(source, sourceStack, depth) && isDeeplyNestedGeneric(target, targetStack, depth)) {
+                        if (isDeeplyNestedType(source, sourceStack, depth) && isDeeplyNestedType(target, targetStack, depth)) {
                             return;
                         }
                         const key = source.id + "," + target.id;
