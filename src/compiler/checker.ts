@@ -61,7 +61,7 @@ namespace ts {
         const noImplicitThis = compilerOptions.noImplicitThis === undefined ? compilerOptions.strict : compilerOptions.noImplicitThis;
 
         const emitResolver = createResolver();
-        let nodeBuilderCache: NodeBuilder | undefined;
+        const nodeBuilder = getNodeBuilder();
 
         const undefinedSymbol = createSymbol(SymbolFlags.Property, "undefined");
         undefinedSymbol.declarations = [];
@@ -107,9 +107,9 @@ namespace ts {
             getParameterType: getTypeAtPosition,
             getReturnTypeOfSignature,
             getNonNullableType,
-            typeToTypeNode: getNodeBuilder().typeToTypeNode,
-            indexInfoToIndexSignatureDeclaration: getNodeBuilder().indexInfoToIndexSignatureDeclaration,
-            signatureToSignatureDeclaration: getNodeBuilder().signatureToSignatureDeclaration,
+            typeToTypeNode: nodeBuilder.typeToTypeNode,
+            indexInfoToIndexSignatureDeclaration: nodeBuilder.indexInfoToIndexSignatureDeclaration,
+            signatureToSignatureDeclaration: nodeBuilder.signatureToSignatureDeclaration,
             getSymbolsInScope: (location, meaning) => {
                 location = getParseTreeNode(location);
                 return location ? getSymbolsInScope(location, meaning) : [];
@@ -2203,42 +2203,35 @@ namespace ts {
         }
 
         function getNodeBuilder(): NodeBuilder {
-            if (nodeBuilderCache) {
-                return nodeBuilderCache;
-            }
 
             let encounteredError = false;
 
-            nodeBuilderCache = {
-                typeToTypeNode,
-                indexInfoToIndexSignatureDeclaration,
-                signatureToSignatureDeclaration
+            return {
+                typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags) => {
+                    Debug.assert(encounteredError === false, "Nested call into nodeBuilder are forbidden.");
+                    encounteredError = false;
+                    const resultingNode = typeToTypeNodeHelper(type, enclosingDeclaration, flags);
+                    const result = encounteredError ? undefined : resultingNode;
+                    encounteredError = false;
+                    return result;
+                },
+                indexInfoToIndexSignatureDeclaration: (indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags) => {
+                    Debug.assert(encounteredError === false, "Nested call into nodeBuilder are forbidden.");
+                    encounteredError = false;
+                    const resultingNode = indexInfoToIndexSignatureDeclarationHelper(indexInfo, kind, enclosingDeclaration, flags)
+                    const result = encounteredError ? undefined : resultingNode;
+                    encounteredError = false;
+                    return result;
+                },
+                signatureToSignatureDeclaration: (signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags) => {
+                    Debug.assert(encounteredError === false, "Nested call into nodeBuilder are forbidden.");
+                    encounteredError = false;
+                    const resultingNode = signatureToSignatureDeclarationHelper(signature, kind, enclosingDeclaration, flags);
+                    const result = encounteredError ? undefined : resultingNode;
+                    encounteredError = false;
+                    return result;
+                }
             };
-
-            return nodeBuilderCache;
-
-            function typeToTypeNode(type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): TypeNode {
-                const helper = () => typeToTypeNodeHelper(type, enclosingDeclaration, flags);
-                return callHelperWithErrorHandling(helper);
-            }
-
-            function indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): IndexSignatureDeclaration {
-                const helper = () => indexInfoToIndexSignatureDeclarationHelper(indexInfo, kind, enclosingDeclaration, flags);
-                return callHelperWithErrorHandling(helper);
-            }
-
-            function signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): SignatureDeclaration {
-                const helper = () => signatureToSignatureDeclarationHelper(signature, kind, enclosingDeclaration, flags);
-                return callHelperWithErrorHandling(helper);
-            }
-
-            function callHelperWithErrorHandling<T extends Node>(nodeBuilderHelper: () => T): T | undefined {
-                const encounteredErrorCache = encounteredError;
-                const resultingNode = nodeBuilderHelper();
-                const result = encounteredError ? undefined : resultingNode;
-                encounteredError = encounteredErrorCache;
-                return result;
-            }
 
             function typeToTypeNodeHelper(type: Type, enclosingDeclaration: Node, flags: NodeBuilderFlags): TypeNode {
                 let inObjectTypeLiteral = false;
@@ -2597,13 +2590,12 @@ namespace ts {
 
                 const typeParameters = signature.typeParameters && signature.typeParameters.map(parameter => typeParameterToDeclaration(parameter, enclosingDeclaration, flags));
                 const parameters = signature.parameters.map(parameter => symbolToParameterDeclaration(parameter, enclosingDeclaration, flags));
-                const type = typeToTypeNodeExceptAny(getReturnTypeOfSignature(signature));
+                const returnTypeNode = typeToTypeNodeExceptAny(getReturnTypeOfSignature(signature));
 
-                return createSignatureDeclaration(kind, typeParameters, parameters, type);
+                return createSignatureDeclaration(kind, typeParameters, parameters, returnTypeNode);
 
                 function typeToTypeNodeExceptAny(type: Type): TypeNode | undefined {
-                    // Note, this call will *not* mark encounteredError.
-                    const typeNode = typeToTypeNode(type, enclosingDeclaration);
+                    const typeNode = type && typeToTypeNodeHelper(type, enclosingDeclaration, flags);
                     return typeNode && typeNode.kind !== SyntaxKind.AnyKeyword ? typeNode : undefined;
                 }
             }
