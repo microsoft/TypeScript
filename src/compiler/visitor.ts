@@ -2,7 +2,7 @@
 /// <reference path="factory.ts" />
 /// <reference path="utilities.ts" />
 
-namespace ts { 
+namespace ts {
     export const nullTransformationContext: TransformationContext = {
         enableEmitNotification: noop,
         enableSubstitution: noop,

@@ -1,4 +1,5 @@
 tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(4,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
+tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(127,33): error TS2449: Class 'TokenInfo' used before its declaration.
 tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(127,42): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
 tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(128,36): error TS2304: Cannot find name 'string'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(128,42): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
@@ -342,7 +343,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(356,53): error 
 tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(449,40): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
 
 
-==== tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts (342 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts (343 errors) ====
     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
     // See LICENSE.txt in the project root for complete license information.
     
@@ -472,6 +473,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(449,40): error 
         }
     
         export var tokenTable = new TokenInfo[];
+                                    ~~~~~~~~~
+!!! error TS2449: Class 'TokenInfo' used before its declaration.
                                              ~~
 !!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
         export var nodeTypeTable = new string[];

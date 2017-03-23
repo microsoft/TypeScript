@@ -927,10 +927,9 @@ namespace FourSlash {
                 this.assertObjectsEqual<ReferencesJson>(fullActual, fullExpected);
             }
 
-            function rangeToReferenceEntry(r: Range) {
-                let { isWriteAccess, isDefinition, isInString } = (r.marker && r.marker.data) || { isWriteAccess: false, isDefinition: false, isInString: undefined };
-                isWriteAccess = !!isWriteAccess; isDefinition = !!isDefinition;
-                const result: any = { fileName: r.fileName, textSpan: { start: r.start, length: r.end - r.start }, isWriteAccess, isDefinition };
+            function rangeToReferenceEntry(r: Range): ts.ReferenceEntry {
+                const { isWriteAccess, isDefinition, isInString } = (r.marker && r.marker.data) || { isWriteAccess: false, isDefinition: false, isInString: undefined };
+                const result: ts.ReferenceEntry = { fileName: r.fileName, textSpan: { start: r.start, length: r.end - r.start }, isWriteAccess: !!isWriteAccess, isDefinition: !!isDefinition };
                 if (isInString !== undefined) {
                     result.isInString = isInString;
                 }
@@ -2291,7 +2290,6 @@ namespace FourSlash {
             else {
                 if (actual === undefined) {
                     this.raiseError(`${name} failed - expected the template {newText: "${expected.newText}", caretOffset: "${expected.caretOffset}"} but got nothing instead`);
-                    
                 }
 
                 if (actual.newText !== expected.newText) {

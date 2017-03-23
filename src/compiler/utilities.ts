@@ -524,7 +524,7 @@ namespace ts {
     export function declarationNameToString(name: DeclarationName) {
         return getFullWidth(name) === 0 ? "(Missing)" : getTextOfNode(name);
     }
-    
+
     export function getNameFromIndexInfo(info: IndexInfo) {
         return info.declaration ? declarationNameToString(info.declaration.parameters[0].name) : undefined;
     }
@@ -2679,7 +2679,7 @@ namespace ts {
             if (sourceFiles.length) {
                 const jsFilePath = options.outFile || options.out;
                 const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
-                const declarationFilePath = options.declaration ? removeFileExtension(jsFilePath) + ".d.ts" : undefined;
+                const declarationFilePath = options.declaration ? removeFileExtension(jsFilePath) + ".d.ts" : "";
                 action({ jsFilePath, sourceMapFilePath, declarationFilePath }, createBundle(sourceFiles), emitOnlyDtsFiles);
             }
         }

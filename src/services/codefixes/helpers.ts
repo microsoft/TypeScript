@@ -23,7 +23,7 @@ namespace ts.codefix {
                 newText: changes[0].textChanges.reduce((prev, cur) => prev + cur.newText, "")
             }]
 
-        }]
+        }];
         return consolidatedChanges;
     }
 
@@ -108,7 +108,7 @@ namespace ts.codefix {
                     return signatureDeclaration;
                 }
 
-                let signatureDeclarations = [];
+                const signatureDeclarations = [];
                 for (let i = 0; i < signatures.length; i++) {
                     const signature = signatures[i];
                     const signatureDeclaration = <MethodDeclaration>checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration);
@@ -119,7 +119,7 @@ namespace ts.codefix {
                 }
 
                 if (declarations.length > signatures.length) {
-                    let signature = checker.getSignatureFromDeclaration(declarations[declarations.length - 1] as SignatureDeclaration);
+                    const signature = checker.getSignatureFromDeclaration(declarations[declarations.length - 1] as SignatureDeclaration);
                     const signatureDeclaration = <MethodDeclaration>checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration);
                     signatureDeclaration.modifiers = modifiers;
                     signatureDeclaration.name = name;
@@ -141,7 +141,6 @@ namespace ts.codefix {
     function createMethodImplementingSignatures(signatures: Signature[], name: PropertyName, optional: boolean, modifiers: Modifier[] | undefined): MethodDeclaration {
         Debug.assert(signatures && signatures.length > 0);
 
-        let maxArgsIndex = 0;
         /** This is *a* signature with the maximal number of arguments,
          * such that if there is a "maximal" signature without rest arguments,
          * this is one of them.
@@ -158,7 +157,7 @@ namespace ts.codefix {
             }
         }
         const maxNonRestArgs = maxArgsSignature.parameters.length - (maxArgsSignature.hasRestParameter ? 1 : 0);
-        const maxArgsParameterSymbolNames = signatures[maxArgsIndex].getParameters().map(symbol => symbol.getName());
+        const maxArgsParameterSymbolNames = maxArgsSignature.parameters.map(symbol => symbol.getName());
 
         const parameters: ParameterDeclaration[] = [];
         for (let i = 0; i < maxNonRestArgs; i++) {
@@ -213,9 +212,9 @@ namespace ts.codefix {
         return createBlock(
             [createThrow(
                 createNew(
-                    createIdentifier('Error'),
+                    createIdentifier("Error"),
                     /*typeArguments*/undefined,
-                    [createLiteral('Method not implemented.')]))],
+                    [createLiteral("Method not implemented.")]))],
             /*multiline*/true);
     }
 
@@ -230,7 +229,7 @@ namespace ts.codefix {
     }
 
     function stripComments(node: Node): Node {
-        if(node === undefined) {
+        if (node === undefined) {
             return node;
         }
         const strippedChildren = visitEachChild(node, stripComments, nullTransformationContext);

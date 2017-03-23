@@ -46,7 +46,7 @@ namespace ts {
      */
     /* @internal */
     export function getSynthesizedClone<T extends Node>(node: T | undefined): T {
-        if(node === undefined) {
+        if (node === undefined) {
             return undefined;
         }
         // We don't use "clone" from core.ts here, as we need to preserve the prototype chain of
@@ -334,7 +334,7 @@ namespace ts {
     export function createTypeOperatorNode(type: TypeNode) {
         const typeOperatorNode = createSynthesizedNode(SyntaxKind.TypeOperator) as TypeOperatorNode;
         typeOperatorNode.operator = SyntaxKind.KeyOfKeyword;
-        typeOperatorNode.type = type
+        typeOperatorNode.type = type;
         return typeOperatorNode;
     }
 
@@ -423,7 +423,7 @@ namespace ts {
         return <ConstructSignatureDeclaration>updateSignatureDeclaration(node, typeParameters, parameters, type);
     }
 
-    export function createMethodSignature(typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined): MethodSignature{
+    export function createMethodSignature(typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined): MethodSignature {
         const methodSignature = createSignatureDeclaration(SyntaxKind.MethodSignature, typeParameters, parameters, type) as MethodSignature;
         methodSignature.name = asName(name);
         methodSignature.questionToken = questionToken;
@@ -1749,7 +1749,7 @@ namespace ts {
 
     // Clauses
 
-    export function createHeritageClause(token: SyntaxKind, types: ExpressionWithTypeArguments[]) {
+    export function createHeritageClause(token: HeritageClause["token"], types: ExpressionWithTypeArguments[]) {
         const node = <HeritageClause>createSynthesizedNode(SyntaxKind.HeritageClause);
         node.token = token;
         node.types = createNodeArray(types);

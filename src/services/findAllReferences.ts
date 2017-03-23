@@ -36,11 +36,11 @@ namespace ts.FindAllReferences {
             }
             else if (node.kind === SyntaxKind.ObjectLiteralExpression) {
                 entry.kind = ScriptElementKind.interfaceElement;
-                entry.displayParts = [punctuationPart(SyntaxKind.OpenParenToken), textPart("object literal"), punctuationPart(SyntaxKind.CloseParenToken)]
+                entry.displayParts = [punctuationPart(SyntaxKind.OpenParenToken), textPart("object literal"), punctuationPart(SyntaxKind.CloseParenToken)];
             }
             else if (node.kind === SyntaxKind.ClassExpression) {
                 entry.kind = ScriptElementKind.localClassElement;
-                entry.displayParts = [punctuationPart(SyntaxKind.OpenParenToken), textPart("anonymous local class"), punctuationPart(SyntaxKind.CloseParenToken)]
+                entry.displayParts = [punctuationPart(SyntaxKind.OpenParenToken), textPart("anonymous local class"), punctuationPart(SyntaxKind.CloseParenToken)];
             }
             else {
                 entry.kind = getNodeKind(node);
@@ -335,7 +335,7 @@ namespace ts.FindAllReferences {
 
         // if this symbol is visible from its parent container, e.g. exported, then bail out
         // if symbol correspond to the union property - bail out
-        if (symbol.parent || (symbol.flags & SymbolFlags.Transient && (<TransientSymbol>symbol).checkFlags & CheckFlags.SyntheticProperty)) {
+        if (symbol.parent || (symbol.flags & SymbolFlags.Transient && (<TransientSymbol>symbol).checkFlags & CheckFlags.Synthetic)) {
             return undefined;
         }
 
