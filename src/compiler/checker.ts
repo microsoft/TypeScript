@@ -61,7 +61,7 @@ namespace ts {
         const noImplicitThis = compilerOptions.noImplicitThis === undefined ? compilerOptions.strict : compilerOptions.noImplicitThis;
 
         const emitResolver = createResolver();
-        const nodeBuilder = getNodeBuilder();
+        const nodeBuilder = createNodeBuilder();
 
         const undefinedSymbol = createSymbol(SymbolFlags.Property, "undefined");
         undefinedSymbol.declarations = [];
@@ -2202,7 +2202,7 @@ namespace ts {
             return result;
         }
 
-        function getNodeBuilder(): NodeBuilder {
+        function createNodeBuilder(): NodeBuilder {
 
             let encounteredError = false;
 
