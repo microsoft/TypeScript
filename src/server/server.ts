@@ -733,7 +733,7 @@ namespace ts.server {
     if (localeStr) {
         validateLocaleAndSetLanguage(localeStr, sys);
     }
-    
+
     const typingSafeListLocation = findArgument("--typingSafeListLocation");
 
     const useSingleInferredProject = hasArgument("--useSingleInferredProject");
