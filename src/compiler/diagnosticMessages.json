@@ -879,6 +879,10 @@
         "category": "Error",
         "code": 1322
     },
+    "Dynamic import cannot have type arguments": {
+        "category": "Error",
+        "code": 1323
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

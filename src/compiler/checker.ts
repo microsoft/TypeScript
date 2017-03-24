@@ -14834,11 +14834,6 @@ namespace ts {
             // Grammar checking; stop grammar-checking if checkGrammarTypeArguments return true
             checkGrammarTypeArguments(node, node.typeArguments) || checkGrammarArguments(node, node.arguments);
 
-            // Dynamic import is not need  to go through regular resolve signature.
-            if (node.expression.kind === SyntaxKind.ImportKeyword) {
-                return checkImportCallExpression(<ImportCall>node);
-            }
-
             const signature = getResolvedSignature(node);
 
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
@@ -14885,7 +14880,7 @@ namespace ts {
 
         function checkImportCallExpression(node: ImportCall): Type {
             // Check grammar of dynamic import
-            if (checkGrammarImportCallExpression(node)) {
+            if (checkGrammarArguments(node, node.arguments) || checkGrammarImportCallExpression(node)) {
                 return createPromiseReturnType(node, anyType);
             }
 
@@ -14893,7 +14888,6 @@ namespace ts {
                 grammarErrorOnNode(node, Diagnostics.Dynamic_import_cannot_be_used_when_targeting_ECMAScript_2015_modules);
             }
 
-            // We already error in parse if arguments list is not length of 1
             const specifier = node.arguments[0];
             const specifierType = checkExpression(specifier);
             if (!isTypeAssignableTo(specifierType, stringType)) {
@@ -16449,6 +16443,9 @@ namespace ts {
                     return checkIndexedAccess(<ElementAccessExpression>node);
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
+                    if ((<CallExpression>node).expression.kind === SyntaxKind.ImportKeyword) {
+                        return checkImportCallExpression(<ImportCall>node);
+                    }
                     return checkCallExpression(<CallExpression>node);
                 case SyntaxKind.TaggedTemplateExpression:
                     return checkTaggedTemplateExpression(<TaggedTemplateExpression>node);
@@ -23386,6 +23383,10 @@ namespace ts {
             const arguments = node.arguments;
             if (arguments.length !== 1) {
                 return grammarErrorOnNode(node, Diagnostics.Dynamic_import_must_have_one_specifier_as_an_argument);
+            }
+
+            if (node.typeArguments) {
+                return grammarErrorOnNode(node, Diagnostics.Dynamic_import_cannot_have_type_arguments);
             }
 
             // see: parseArgumentOrArrayLiteralElement...we use this function which parse arguments of callExpression to parse specifier for dynamic import.
