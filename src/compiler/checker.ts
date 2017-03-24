@@ -2218,7 +2218,7 @@ namespace ts {
                 indexInfoToIndexSignatureDeclaration: (indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags) => {
                     Debug.assert(encounteredError === false, "Nested call into nodeBuilder are forbidden.");
                     encounteredError = false;
-                    const resultingNode = indexInfoToIndexSignatureDeclarationHelper(indexInfo, kind, enclosingDeclaration, flags)
+                    const resultingNode = indexInfoToIndexSignatureDeclarationHelper(indexInfo, kind, enclosingDeclaration, flags);
                     const result = encounteredError ? undefined : resultingNode;
                     encounteredError = false;
                     return result;
@@ -2568,8 +2568,8 @@ namespace ts {
 
             function indexInfoToIndexSignatureDeclarationHelper(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration: Node, flags: NodeBuilderFlags): IndexSignatureDeclaration {
                 const indexerTypeNode = createKeywordTypeNode(kind === IndexKind.String ? SyntaxKind.StringKeyword : SyntaxKind.NumberKeyword);
-
                 const name = getNameFromIndexInfo(indexInfo);
+
                 const indexingParameter = createParameter(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,

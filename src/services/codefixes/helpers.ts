@@ -67,6 +67,7 @@ namespace ts.codefix {
         const visibilityModifier = createVisibilityModifier(getModifierFlags(declaration));
         const modifiers = visibilityModifier ? createNodeArray([visibilityModifier]) : undefined;
         const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
+        const optional = !!(symbol.flags & SymbolFlags.Optional);
 
         switch (declaration.kind) {
             case SyntaxKind.GetAccessor:
@@ -78,7 +79,7 @@ namespace ts.codefix {
                     /*decorators*/undefined,
                     modifiers,
                     name,
-                    /*questionToken*/ undefined,
+                    optional ? createToken(SyntaxKind.QuestionToken) : undefined,
                     typeNode,
                     /*initializer*/ undefined);
                 return property;
@@ -96,36 +97,27 @@ namespace ts.codefix {
                     return undefined;
                 }
 
-                const optional = !!(symbol.flags & SymbolFlags.Optional);
                 if (declarations.length === 1) {
                     Debug.assert(signatures.length === 1);
                     const signature = signatures[0];
-                    const signatureDeclaration = <MethodDeclaration>checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration);
-                    signatureDeclaration.modifiers = modifiers;
-                    signatureDeclaration.name = name;
-                    signatureDeclaration.questionToken = optional ? createToken(SyntaxKind.QuestionToken) : undefined;
-                    signatureDeclaration.body = createStubbedMethodBody();
-                    return signatureDeclaration;
+                    return signatureToMethodDeclaration(signature, enclosingDeclaration, createStubbedMethodBody());
                 }
 
                 const signatureDeclarations = [];
                 for (let i = 0; i < signatures.length; i++) {
                     const signature = signatures[i];
-                    const signatureDeclaration = <MethodDeclaration>checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration);
-                    signatureDeclaration.modifiers = modifiers;
-                    signatureDeclaration.name = name;
-                    signatureDeclaration.questionToken = optional ? createToken(SyntaxKind.QuestionToken) : undefined;
-                    signatureDeclarations.push(signatureDeclaration);
+                    const methodDeclaration = signatureToMethodDeclaration(signature, enclosingDeclaration);
+                    if (methodDeclaration) {
+                        signatureDeclarations.push(methodDeclaration);
+                    }
                 }
 
                 if (declarations.length > signatures.length) {
                     const signature = checker.getSignatureFromDeclaration(declarations[declarations.length - 1] as SignatureDeclaration);
-                    const signatureDeclaration = <MethodDeclaration>checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration);
-                    signatureDeclaration.modifiers = modifiers;
-                    signatureDeclaration.name = name;
-                    signatureDeclaration.questionToken = optional ? createToken(SyntaxKind.QuestionToken) : undefined;
-                    signatureDeclaration.body = createStubbedMethodBody();
-                    signatureDeclarations.push(signatureDeclaration);
+                    const methodDeclaration = signatureToMethodDeclaration(signature, enclosingDeclaration, createStubbedMethodBody());
+                    if (methodDeclaration) {
+                        signatureDeclarations.push(methodDeclaration);
+                    }
                 }
                 else {
                     Debug.assert(declarations.length === signatures.length);
@@ -135,6 +127,17 @@ namespace ts.codefix {
                 return signatureDeclarations;
             default:
                 return undefined;
+        }
+
+        function signatureToMethodDeclaration(signature: Signature, enclosingDeclaration: Node, body?: Block) {
+            const signatureDeclaration = <MethodDeclaration>checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration);
+            if (signatureDeclaration) {
+                signatureDeclaration.modifiers = modifiers;
+                signatureDeclaration.name = name;
+                signatureDeclaration.questionToken = optional ? createToken(SyntaxKind.QuestionToken) : undefined;
+                signatureDeclaration.body = body;
+            }
+            return signatureDeclaration;
         }
     }
 
