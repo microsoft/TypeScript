@@ -1,29 +1,30 @@
 ﻿/* @internal */
 namespace ts {
     interface BaseRefactor {
-        /** Description of the refactor to display in the UI of the editor */
-        description: string;
-
         /** An unique code associated with each refactor */
-        refactorCode: number;
-
+        refactorKind: RefactorKind;
         /** Indicates whether the refactor can be suggested without the editor asking for it  */
-        canBeSuggested: boolean;
-
+        suggestable: boolean;
         /** Compute the associated code actions */
-        getCodeActions(range: TextRange, context: RefactorContext): CodeAction[];
+        getCodeActions(context: RefactorContext, positionOrRange: number | TextRange): CodeAction[];
     }
 
     export interface SuggestableRefactor extends BaseRefactor {
-        canBeSuggested: true;
-        isApplicableForNode(node: Node, context: RefactorContext): boolean;
+        suggestable: true;
+        /**
+         * The corresponding refactor diagnostic code this refactor generates. All suggestableRefactors
+         * generate one refactor diagnostic and handle it accordingly.
+         */
+        diagnosticCode: number;
+        createRefactorDiagnosticIfApplicable(node: Node, context: RefactorContext): Diagnostic | undefined;
     }
 
     export interface NonSuggestableRefactor extends BaseRefactor {
-        canBeSuggested: false;
-
+        suggestable: false;
+        /** Description of the refactor to display in the UI of the editor */
+        description: string;
         /** A fast syntactic check to see if the refactor is applicable at given position. */
-        isApplicableForRange(range: TextRange, context: LightRefactorContext): boolean;
+        isApplicableForPositionOrRange(positionOrRange: number | TextRange, context: LightRefactorContext): boolean;
     }
 
     export type Refactor = SuggestableRefactor | NonSuggestableRefactor;
@@ -45,55 +46,77 @@ namespace ts {
     }
 
     export namespace refactor {
-        // A map with the refactor code as key, the refactor itself as value
+        // A map with the diagnostic code as key, the refactors themselves as value
+        // e.g.  suggestableRefactors[diagnosticCode] -> the refactor you want
         const suggestableRefactors: SuggestableRefactor[] = [];
+        // A map with the refactor code as key, the refactor itself as value
+        // e.g.  nonSuggestableRefactors[refactorCode] -> the refactor you want
         const nonSuggestableRefactors: NonSuggestableRefactor[] = [];
 
         export function registerRefactor(refactor: Refactor) {
-            switch (refactor.canBeSuggested) {
+            switch (refactor.suggestable) {
                 case true:
-                    suggestableRefactors[refactor.refactorCode] = refactor;
+                    suggestableRefactors[refactor.diagnosticCode] = refactor;
                     break;
                 case false:
-                    nonSuggestableRefactors[refactor.refactorCode] = refactor;
+                    nonSuggestableRefactors[refactor.refactorKind] = refactor;
                     break;
             }
         }
 
-        export function getRefactorDiagnosticsForRange(range: TextRange, context: LightRefactorContext) {
-            const results: RefactorDiagnostic[] = [];
+        export function getApplicableRefactors(
+            context: LightRefactorContext,
+            positionOrRange: number | TextRange): ApplicableRefactorInfo[] | undefined {
+
+            let results: ApplicableRefactorInfo[];
             for (const code in nonSuggestableRefactors) {
                 const refactor = nonSuggestableRefactors[code];
-                if (refactor && refactor.isApplicableForRange(range, context)) {
-                    results.push(createRefactorDiagnostic(refactor, range));
+                if (refactor.isApplicableForPositionOrRange(positionOrRange, context)) {
+                    (results || (results = [])).push({ refactorKind: refactor.refactorKind, description: refactor.description });
                 }
             }
             return results;
         }
 
-        export function getSuggestableRefactorDiagnosticsForNode(node: Node, context: RefactorContext) {
-            const result: RefactorDiagnostic[] = [];
-            for (const code in suggestableRefactors) {
-                const refactor = suggestableRefactors[code];
-                if (refactor.isApplicableForNode(node, context)) {
-                    result.push(createRefactorDiagnostic(refactor, node));
+        export function getRefactorDiagnosticsForNode(context: RefactorContext, node: Node): Diagnostic[] | undefined {
+            let result: Diagnostic[];
+            for (const key in suggestableRefactors) {
+                const refactor = suggestableRefactors[key];
+                const newDiag = refactor.createRefactorDiagnosticIfApplicable(node, context);
+                if (newDiag) {
+                    (result || (result = [])).push(newDiag);
                 }
             }
             return result;
         }
 
-        function createRefactorDiagnostic(refactor: Refactor, range: TextRange) {
-            return <RefactorDiagnostic>{
-                code: refactor.refactorCode,
-                start: range.pos,
-                end: range.end,
-                text: refactor.description
-            };
-        }
+        export function getRefactorCodeActions(
+            context: RefactorContext,
+            positionOrRange: number | TextRange,
+            refactorKinds?: RefactorKind[],
+            diagnosticCodes?: number[]) {
 
-        export function getCodeActionsForRefactor(refactorCode: number, range: TextRange, context: RefactorContext): CodeAction[] {
-            const refactor = suggestableRefactors[refactorCode] || nonSuggestableRefactors[refactorCode];
-            return refactor && refactor.getCodeActions(range, context);
+            let result: CodeAction[] = [];
+            if (refactorKinds !== undefined) {
+                for (const refactorKind of refactorKinds) {
+                    const refactor = nonSuggestableRefactors[refactorKind];
+                    const codeActions = refactor.getCodeActions(context, positionOrRange);
+                    if (codeActions) {
+                        addRange(result, codeActions);
+                    }
+                }
+            }
+            if (diagnosticCodes !== undefined) {
+                for (const diagnosticCode of diagnosticCodes) {
+                    const refactor = suggestableRefactors[diagnosticCode];
+                    const codeActions = refactor && refactor.getCodeActions(context, positionOrRange);
+                    if (codeActions) {
+                        addRange(result, codeActions);
+                    }
+                }
+            }
+
+            return result;
         }
     }
 }

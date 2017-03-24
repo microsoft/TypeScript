@@ -489,8 +489,8 @@ namespace FourSlash {
             return diagnostics;
         }
 
-        private getRefactorDiagnostics(fileName: string, range?: ts.TextRange): ts.RefactorDiagnostic[] {
-            return this.languageService.getRefactorDiagnostics(fileName, range);
+        private getRefactorDiagnostics(fileName: string): ts.Diagnostic[] {
+            return this.languageService.getRefactorDiagnostics(fileName);
         }
 
         private getAllDiagnostics(): ts.Diagnostic[] {
@@ -2200,20 +2200,15 @@ namespace FourSlash {
             return actions;
         }
 
-        private getRefactorActions(fileName: string, range?: ts.TextRange, formattingOptions?: ts.FormatCodeSettings): ts.CodeAction[] {
-            const diagnostics = this.getRefactorDiagnostics(fileName, range);
-            const actions: ts.CodeAction[] = [];
-            formattingOptions = formattingOptions || this.formatCodeSettings;
-
-            for (const diagnostic of diagnostics) {
-                const diagnosticRange: ts.TextRange = {
-                    pos: diagnostic.start,
-                    end: diagnostic.end
-                };
-                const newActions = this.languageService.getCodeActionsForRefactorAtPosition(fileName, diagnosticRange, diagnostic.code, formattingOptions);
-                actions.push.apply(actions, newActions);
+        private applyAllCodeActions(fileName: string, codeActions: ts.CodeAction[]): void {
+            if (!codeActions) {
+                return;
             }
-            return actions;
+
+            for (const codeAction of codeActions) {
+                const fileChanges = ts.find(codeAction.changes, change => change.fileName === fileName);
+                this.applyEdits(fileChanges.fileName, fileChanges.textChanges, /*isFormattingEdit*/ false);
+            }
         }
 
         private applyCodeAction(fileName: string, actions: ts.CodeAction[], index?: number): void {
@@ -2574,42 +2569,79 @@ namespace FourSlash {
             }
         }
 
-        public verifyRefactorAvailable(negative: boolean) {
-            // The ranges are used only when the refactors require a range as input information. For example the "extractMethod" refactor
-            // onlye one range is allowed per test
-            const ranges = this.getRanges();
-            if (ranges.length > 1) {
-                throw new Error("only one refactor range is allowed per test");
-            }
+        public verifyRefactorDiagnosticsAvailableAtMarker(negative: boolean, markerName: string, diagnosticCode?: number) {
+            const marker = this.getMarkerByName(markerName);
+            const markerPos = marker.position;
+            let foundDiagnostic = false;
 
-            const range = ranges[0] ? { pos: ranges[0].start, end: ranges[0].end } : undefined;
-            const refactorDiagnostics = this.getRefactorDiagnostics(this.activeFile.fileName, range);
-            if (negative && refactorDiagnostics.length > 0) {
-                this.raiseError(`verifyRefactorAvailable failed - expected no refactors but found some.`);
+            const refactorDiagnostics = this.getRefactorDiagnostics(this.activeFile.fileName);
+            for (const diag of refactorDiagnostics) {
+                if (diag.start <= markerPos && diag.start + diag.length >= markerPos) {
+                    foundDiagnostic = diagnosticCode === undefined || diagnosticCode === diag.code;
+                }
             }
-            if (!negative && refactorDiagnostics.length === 0) {
-                this.raiseError(`verifyRefactorAvailable failed: expected refactor diagnostics but none found.`);
+            
+            if (negative && foundDiagnostic) {
+                this.raiseError(`verifyRefactorDiagnosticsAvailableAtMarker failed - expected no refactor diagnostic at marker ${markerName} but found some.`);
+            }
+            if (!negative && !foundDiagnostic) {
+                this.raiseError(`verifyRefactorDiagnosticsAvailableAtMarker failed - expected a refactor diagnostic at marker ${markerName} but found none.`);
             }
         }
 
-        public verifyFileAfterApplyingRefactors(expectedContent: string, formattingOptions?: ts.FormatCodeSettings) {
+        public verifyApplicableRefactorAvailableAtMarker(negative: boolean, markerName: string) {
+            const marker = this.getMarkerByName(markerName);
+            const applicableRefactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, marker.position);
+            const isAvailable = applicableRefactors && applicableRefactors.length > 0;
+            if (negative && isAvailable) {
+                this.raiseError(`verifyApplicableRefactorAvailableAtMarker failed - expected no refactor at marker ${markerName} but found some.`);
+            }
+            if (!negative && !isAvailable) {
+                this.raiseError(`verifyApplicableRefactorAvailableAtMarker failed - expected a refactor at marker ${markerName} but found none.`);
+            }
+        }
+
+        public verifyApplicableRefactorAvailableForRange(negative: boolean) {
             const ranges = this.getRanges();
-            if (ranges.length > 1) {
-                throw new Error("only one refactor range is allowed per test");
+            if (!(ranges && ranges.length === 1)) {
+                throw new Error("Exactly one refactor range is allowed per test.");
             }
 
-            const range = ranges[0] ? { pos: ranges[0].start, end: ranges[0].end } : undefined;
-            const actions = this.getRefactorActions(this.activeFile.fileName, range, formattingOptions);
+            const applicableRefactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, { pos: ranges[0].start, end: ranges[0].end });
+            const isAvailable = applicableRefactors && applicableRefactors.length > 0;
+            if (negative && isAvailable) {
+                this.raiseError(`verifyApplicableRefactorAvailableForRange failed - expected no refactor but found some.`);
+            }
+            if (!negative && !isAvailable) {
+                this.raiseError(`verifyApplicableRefactorAvailableForRange failed - expected a refactor but found none.`);
+            }
+        }
 
-            // Each refactor diagnostic will return one code action, but multiple refactor diagnostics can point to the same
-            // code action. For example in the case of "convert function to es6 class":
-            //
-            //       function foo() { }
-            //                ^^^
-            //       foo.prototype.getName = function () { return "name"; };
-            //       ^^^
-            // These two diagnostics result in the same code action, so we only apply the first one.
-            this.applyCodeAction(this.activeFile.fileName, actions, /*index*/ 0);
+        public verifyFileAfterApplyingRefactorAtMarker(
+            markerName: string,
+            expectedContent: string,
+            refactorKindToApply?: ts.RefactorKind,
+            formattingOptions?: ts.FormatCodeSettings) {
+
+            formattingOptions = formattingOptions || this.formatCodeSettings;
+            const markerPos = this.getMarkerByName(markerName).position;
+            const diagnostics = this.getRefactorDiagnostics(this.activeFile.fileName);
+
+            const diagnosticCodesAtMarker: number[] = [];
+            for (const diagnostic of diagnostics) {
+                if (diagnostic.start <= markerPos && diagnostic.start + diagnostic.length >= markerPos) {
+                    diagnosticCodesAtMarker.push(diagnostic.code);
+                }
+            }
+
+            const applicableRefactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, markerPos);
+            const applicableRefactorKinds = 
+                ts.map(ts.filter(applicableRefactors, ar => refactorKindToApply === undefined || refactorKindToApply === ar.refactorKind),
+                    refactorInfo => refactorInfo.refactorKind);
+            const codeActions = this.languageService.getRefactorCodeActions(
+                this.activeFile.fileName, formattingOptions, markerPos, applicableRefactorKinds, diagnosticCodesAtMarker);
+
+            this.applyAllCodeActions(this.activeFile.fileName, codeActions);
             const actualContent = this.getFileContent(this.activeFile.fileName);
 
             if (this.normalizeNewlines(actualContent) !== this.normalizeNewlines(expectedContent)) {
@@ -3409,8 +3441,16 @@ namespace FourSlashInterface {
             this.state.verifyCodeFixAvailable(this.negative);
         }
 
-        public refactorAvailable() {
-            this.state.verifyRefactorAvailable(this.negative);
+        public refactorDiagnosticsAvailableAtMarker(markerName: string, refactorCode?: number) {
+            this.state.verifyRefactorDiagnosticsAvailableAtMarker(this.negative, markerName, refactorCode);
+        }
+
+        public applicableRefactorAvailableAtMarker(markerName: string) {
+            this.state.verifyApplicableRefactorAvailableAtMarker(this.negative, markerName);
+        }
+
+        public applicableRefactorAvailableForRange(){
+            this.state.verifyApplicableRefactorAvailableForRange(this.negative);
         }
     }
 
@@ -3618,8 +3658,8 @@ namespace FourSlashInterface {
             this.state.verifyRangeAfterCodeFix(expectedText, includeWhiteSpace, errorCode, index);
         }
 
-        public fileAfterApplyingRefactors(expectedContent: string, formattingOptions: ts.FormatCodeSettings): void {
-            this.state.verifyFileAfterApplyingRefactors(expectedContent, formattingOptions);
+        public fileAfterApplyingRefactorsAtMarker(markerName: string, expectedContent: string, refactorKindToApply?: ts.RefactorKind, formattingOptions?: ts.FormatCodeSettings): void {
+            this.state.verifyFileAfterApplyingRefactorAtMarker(markerName, expectedContent, refactorKindToApply, formattingOptions);
         }
 
         public importFixAtPosition(expectedTextArray: string[], errorCode?: number): void {

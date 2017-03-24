@@ -3301,6 +3301,7 @@ namespace ts {
         Warning,
         Error,
         Message,
+        Refactor
     }
 
     export enum ModuleResolutionKind {

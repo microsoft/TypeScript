@@ -191,8 +191,8 @@ namespace ts.server {
         export const GetCodeFixesFull: protocol.CommandTypes.GetCodeFixesFull = "getCodeFixes-full";
         export const GetSupportedCodeFixes: protocol.CommandTypes.GetSupportedCodeFixes = "getSupportedCodeFixes";
 
-        export const GetRefactorsForRange: protocol.CommandTypes.GetRefactorsForRange = "getRefactorsForRange";
-        export const GetCodeActionsForRefactor: protocol.CommandTypes.GetCodeActionsForRefactor = "getCodeActionsForRefactor";
+        export const GetApplicableRefactors: protocol.CommandTypes.GetApplicableRefactors = "getApplicableRefactors";
+        export const GetRefactorCodeActions: protocol.CommandTypes.GetRefactorCodeActions = "getRefactorCodeActions";
     }
 
     export function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string {
@@ -505,7 +505,7 @@ namespace ts.server {
                         next.immediate(() => {
                             this.semanticCheck(checkSpec.fileName, checkSpec.project);
                             next.immediate(() => {
-                                this.checkRefactorDiagnostics(checkSpec.fileName, checkSpec.project);
+                                this.refactorDiagnosticsCheck(checkSpec.fileName, checkSpec.project);
                                 if (checkList.length > index) {
                                     next.delay(followMs, checkOne);
                                 }
@@ -1417,66 +1417,56 @@ namespace ts.server {
             return ts.getSupportedCodeFixes();
         }
 
-        private extractStartAndEndPositionFromTextRangeRequestArgs(args: protocol.FileRangeRequestArgs, scriptInfo: ScriptInfo): { startPosition: number, endPosition: number } {
-            const startPosition = getStartPosition();
-            const endPosition = getEndPosition();
-            return { startPosition, endPosition };
-
-            function getStartPosition() {
-                return args.startPosition !== undefined
-                    ? args.startPosition
-                    : args.startPosition = scriptInfo.lineOffsetToPosition(args.startLine, args.startOffset);
-            }
-
-            function getEndPosition() {
-                return args.endPosition !== undefined
-                    ? args.endPosition
-                    : args.startPosition = scriptInfo.lineOffsetToPosition(args.endLine, args.endOffset);
-            }
-        }
-
-        private normalizeRefactorDiagnostics(refactorDiags: RefactorDiagnostic[], scriptInfo: ScriptInfo): protocol.RefactorDiagnostic[] {
-            return map(refactorDiags, refactorDiag => {
-                return <protocol.RefactorDiagnostic>{
-                    code: refactorDiag.code,
-                    text: refactorDiag.text,
-                    start: scriptInfo.positionToLineOffset(refactorDiag.start),
-                    end: scriptInfo.positionToLineOffset(refactorDiag.end)
-                };
-            })
-        }
-
-        private checkRefactorDiagnostics(file: NormalizedPath, project: Project): void {
-            const scriptInfo = project.getScriptInfoForNormalizedPath(file);
+        private refactorDiagnosticsCheck(file: NormalizedPath, project: Project): void {
             const refactorDiags = project.getLanguageService().getRefactorDiagnostics(file);
-            const normalizedDiags = this.normalizeRefactorDiagnostics(refactorDiags, scriptInfo);
+            const diagnostics = refactorDiags.map(d => formatDiag(file, project, d));
 
-            this.event<protocol.RefactorDiagnosticEventBody>({ file, diagnostics: normalizedDiags }, "refactorDiag");
+            this.event<protocol.DiagnosticEventBody>({ file, diagnostics }, "refactorDiag");
         }
 
-        private getRefactorDiagnosticsForRange(args: protocol.GetRefactorsForRangeRequestArgs): protocol.RefactorDiagnostic[] {
-            const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
-            const scriptInfo = project.getScriptInfoForNormalizedPath(file);
-            const { startPosition, endPosition } = this.extractStartAndEndPositionFromTextRangeRequestArgs(args, scriptInfo);
-
-            const range = <TextRange>{ pos: startPosition, end: endPosition };
-            const refactorDiags = project.getLanguageService().getRefactorDiagnostics(file, range);
-            return this.normalizeRefactorDiagnostics(refactorDiags, scriptInfo);
+        private isLocation(locationOrSpan: protocol.LocationOrSpanWithPosition): locationOrSpan is protocol.LocationWithPosition {
+            return (<any>locationOrSpan).start === undefined;
         }
 
-        private getCodeActionsForRefactorDiagnostic(args: protocol.GetCodeActionsForRefactorRequestArgs): protocol.CodeAction[] {
+        private extractPositionAndRange(args: protocol.FileLocationOrSpanWithPositionRequestArgs, scriptInfo: ScriptInfo): { position: number, textRange: TextRange } {
+            let position: number;
+            let textRange: TextRange;
+            if (this.isLocation(args.locationOrSpan)) {
+                position = getPosition(args.locationOrSpan);
+            }
+            else {
+                textRange = {
+                    pos: getPosition(args.locationOrSpan.start),
+                    end: getPosition(args.locationOrSpan.end)
+                };
+            }
+            return { position, textRange };
+
+            function getPosition(loc: protocol.LocationWithPosition) {
+                return loc.position !== undefined ? loc.position : scriptInfo.lineOffsetToPosition(loc.line, loc.offset);
+            }
+        }
+
+        private getApplicableRefactors(args: protocol.Refactor.GetApplicableRefactorsRequestArgs): protocol.Refactor.ApplicableRefactorInfo[] {
             const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
-            const { startPosition, endPosition } = this.extractStartAndEndPositionFromTextRangeRequestArgs(args, scriptInfo);
+            const { position, textRange } = this.extractPositionAndRange(args, scriptInfo);
+            return project.getLanguageService().getApplicableRefactors(file, position || textRange);
+        }
 
-            const actions = project.getLanguageService().getCodeActionsForRefactorAtPosition(
+        private getRefactorCodeActions(args: protocol.Refactor.GetRefactorCodeActionsRequestArgs): protocol.CodeAction[] {
+            const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
+            const scriptInfo = project.getScriptInfoForNormalizedPath(file);
+            const { position, textRange } = this.extractPositionAndRange(args, scriptInfo);
+
+            const result = project.getLanguageService().getRefactorCodeActions(
                 file,
-                { pos: startPosition, end: endPosition },
-                args.refactorCode,
-                this.projectService.getFormatCodeOptions()
+                this.projectService.getFormatCodeOptions(),
+                position || textRange,
+                args.refactorKinds,
+                args.diagnosticCodes
             );
-
-            return map(actions, action => this.mapCodeAction(action, scriptInfo));
+            return map(result, action => this.mapCodeAction(action, scriptInfo));
         }
 
         private getCodeFixes(args: protocol.CodeFixRequestArgs, simplifiedResult: boolean): protocol.CodeAction[] | CodeAction[] {
@@ -1486,7 +1476,8 @@ namespace ts.server {
             const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
 
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
-            const { startPosition, endPosition } = this.extractStartAndEndPositionFromTextRangeRequestArgs(args, scriptInfo);
+            const startPosition = getStartPosition();
+            const endPosition = getEndPosition();
             const formatOptions = this.projectService.getFormatCodeOptions(file);
 
             const codeActions = project.getLanguageService().getCodeFixesAtPosition(file, startPosition, endPosition, args.errorCodes, formatOptions);
@@ -1498,6 +1489,18 @@ namespace ts.server {
             }
             else {
                 return codeActions;
+            }
+
+            function getStartPosition() {
+                return args.startPosition !== undefined
+                    ? args.startPosition
+                    : args.startPosition = scriptInfo.lineOffsetToPosition(args.startLine, args.startOffset);
+            }
+
+            function getEndPosition() {
+                return args.endPosition !== undefined
+                    ? args.endPosition
+                    : args.startPosition = scriptInfo.lineOffsetToPosition(args.endLine, args.endOffset);
             }
         }
 
@@ -1832,11 +1835,11 @@ namespace ts.server {
             [CommandNames.GetSupportedCodeFixes]: () => {
                 return this.requiredResponse(this.getSupportedCodeFixes());
             },
-            [CommandNames.GetRefactorsForRange]: (request: protocol.GetRefactorsForRangeRequest) => {
-                return this.requiredResponse(this.getRefactorDiagnosticsForRange(request.arguments));
+            [CommandNames.GetApplicableRefactors]: (request: protocol.Refactor.GetApplicableRefactorsRequest) => {
+                return this.requiredResponse(this.getApplicableRefactors(request.arguments));
             },
-            [CommandNames.GetCodeActionsForRefactor]: (request: protocol.GetCodeActionsForRefactorRequest) => {
-                return this.requiredResponse(this.getCodeActionsForRefactorDiagnostic(request.arguments));
+            [CommandNames.GetRefactorCodeActions]: (request: protocol.Refactor.GetRefactorCodeActionsRequest) => {
+                return this.requiredResponse(this.getRefactorCodeActions(request.arguments));
             }
         });
 

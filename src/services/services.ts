@@ -1901,26 +1901,19 @@ namespace ts {
             return Rename.getRenameInfo(program.getTypeChecker(), defaultLibFileName, getCanonicalFileName, getValidSourceFile(fileName), position);
         }
 
-        function getRefactorDiagnostics(fileName: string, range?: TextRange): RefactorDiagnostic[] {
-            synchronizeHostData();
+        function getRefactorDiagnostics(fileName: string): Diagnostic[] {
             const newLineCharacter = host.getNewLine();
-            if (range) {
-                const nonBoundSourceFile = getNonBoundSourceFile(fileName);
-                const context: LightRefactorContext = { newLineCharacter, nonBoundSourceFile };
-                return refactor.getRefactorDiagnosticsForRange(range, context);
-            }
-
             const boundSourceFile = getValidSourceFile(fileName);
             const program = getProgram();
             const context: RefactorContext = { boundSourceFile, newLineCharacter, program, rulesProvider: ruleProvider };
-            const result: RefactorDiagnostic[] = [];
+            const result: Diagnostic[] = [];
 
             forEachChild(boundSourceFile, visitor);
             return result;
 
             function visitor(node: Node): void {
-                const diags = refactor.getSuggestableRefactorDiagnosticsForNode(node, context);
-                if (diags.length > 0) {
+                const diags = refactor.getRefactorDiagnosticsForNode(context, node);
+                if (diags) {
                     addRange(result, diags);
                 }
 
@@ -1928,11 +1921,20 @@ namespace ts {
             }
         }
 
-        function getCodeActionsForRefactorAtPosition(
+        function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange): ApplicableRefactorInfo[] {
+            synchronizeHostData();
+            const newLineCharacter = host.getNewLine();
+            const nonBoundSourceFile = getNonBoundSourceFile(fileName);
+            const context: LightRefactorContext = { newLineCharacter, nonBoundSourceFile };
+            return refactor.getApplicableRefactors(context, positionOrRange);
+        }
+
+        function getRefactorCodeActions(
             fileName: string,
-            range: TextRange,
-            refactorCode: number,
-            formatOptions: FormatCodeSettings): CodeAction[] {
+            formatOptions: FormatCodeSettings,
+            positionOrRange: number | TextRange,
+            refactorKinds?: RefactorKind[],
+            diagnosticCodes?: number[]): CodeAction[] {
 
             const context: RefactorContext = {
                 boundSourceFile: getValidSourceFile(fileName),
@@ -1941,7 +1943,7 @@ namespace ts {
                 rulesProvider: getRuleProvider(formatOptions)
             };
 
-            return refactor.getCodeActionsForRefactor(refactorCode, range, context);
+            return refactor.getRefactorCodeActions(context, positionOrRange, refactorKinds, diagnosticCodes);
         }
 
         return {
@@ -1950,7 +1952,8 @@ namespace ts {
             getSyntacticDiagnostics,
             getSemanticDiagnostics,
             getRefactorDiagnostics,
-            getCodeActionsForRefactorAtPosition,
+            getApplicableRefactors,
+            getRefactorCodeActions,
             getCompilerOptionsDiagnostics,
             getSyntacticClassifications,
             getSemanticClassifications,

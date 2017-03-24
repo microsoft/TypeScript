@@ -194,6 +194,7 @@ namespace ts {
 
         getSyntacticDiagnostics(fileName: string): Diagnostic[];
         getSemanticDiagnostics(fileName: string): Diagnostic[];
+        getRefactorDiagnostics(fileName: string): Diagnostic[];
 
         // TODO: Rename this to getProgramDiagnostics to better indicate that these are any
         // diagnostics present for the program level, and not just 'options' diagnostics.
@@ -258,8 +259,9 @@ namespace ts {
 
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[];
 
-        getRefactorDiagnostics(fileName: string, range?: TextRange): RefactorDiagnostic[];
-        getCodeActionsForRefactorAtPosition(fileName: string, range: TextRange, refactorCode: number, formatOptions: FormatCodeSettings): CodeAction[];
+        getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange): ApplicableRefactorInfo[];
+        getRefactorCodeActions(
+            fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorKinds?: RefactorKind[], diagnosticCodes?: number[]): CodeAction[];
 
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
 
@@ -351,11 +353,12 @@ namespace ts {
         changes: FileTextChanges[];
     }
 
-    export interface RefactorDiagnostic {
-        start: number;
-        end: number;
-        text: string;
-        code: number;
+    export interface ApplicableRefactorInfo {
+        refactorKind: RefactorKind;
+        description: string;
+    }
+
+    export enum RefactorKind {
     }
 
     export interface TextInsertion {

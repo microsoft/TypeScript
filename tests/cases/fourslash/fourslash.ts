@@ -148,7 +148,9 @@ declare namespace FourSlashInterface {
         implementationListIsEmpty(): void;
         isValidBraceCompletionAtPosition(openingBrace?: string): void;
         codeFixAvailable(): void;
-        refactorAvailable(): void;
+        applicableRefactorAvailableAtMarker(markerName: string): void;
+        refactorDiagnosticsAvailableAtMarker(markerName: string, diagnosticCode?: number): void;
+        applicableRefactorAvailableForRange(): void;
     }
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
@@ -228,7 +230,7 @@ declare namespace FourSlashInterface {
         DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean): void;
         noDocCommentTemplate(): void;
         rangeAfterCodeFix(expectedText: string, includeWhiteSpace?: boolean, errorCode?: number, index?: number): void;
-        fileAfterApplyingRefactors(expectedText: string, formattingOptions?: FormatCodeOptions): void;
+        fileAfterApplyingRefactorAtMarker(markerName: string, expectedText: string, refactorKindToApply?: number, formattingOptions?: FormatCodeOptions): void;
         importFixAtPosition(expectedTextArray: string[], errorCode?: number): void;
 
         navigationBar(json: any): void;

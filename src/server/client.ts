@@ -692,48 +692,53 @@ namespace ts.server {
             return response.body.map(entry => this.convertCodeActions(entry, fileName));
         }
 
-        getRefactorDiagnostics(fileName: string, range: TextRange): RefactorDiagnostic[] {
-            const startLineOffset = this.positionToOneBasedLineOffset(fileName, range.pos);
-            const endLineOffset = this.positionToOneBasedLineOffset(fileName, range.end);
-
-            const args: protocol.GetRefactorsForRangeRequestArgs = {
-                file: fileName,
-                startLine: startLineOffset.line,
-                startOffset: startLineOffset.offset,
-                endLine: endLineOffset.line,
-                endOffset: endLineOffset.offset,
-            };
-
-            const request = this.processRequest<protocol.GetRefactorsForRangeRequest>(CommandNames.GetRefactorsForRange, args);
-            const response = this.processResponse<protocol.GetRefactorsForRangeResponse>(request);
-
-            return response.body.map(entry => {
-                return <RefactorDiagnostic>{
-                    code: entry.code,
-                    end: this.lineOffsetToPosition(fileName, entry.end),
-                    start: this.lineOffsetToPosition(fileName, entry.start),
-                    text: entry.text
-                };
-            });
+        getRefactorDiagnostics(_fileName: string): Diagnostic[] {
+            return notImplemented();
         }
 
-        getCodeActionsForRefactorAtPosition(fileName: string, range: TextRange, refactorCode: number): CodeAction[] {
-            const startLineOffset = this.positionToOneBasedLineOffset(fileName, range.pos);
-            const endLineOffset = this.positionToOneBasedLineOffset(fileName, range.end);
+        private positionOrRangeToLocationOrSpan(positionOrRange: number | TextRange, fileName: string) {
+            let locationOrSpan: protocol.LocationOrSpanWithPosition;
+            if (typeof positionOrRange === "number") {
+                locationOrSpan = this.positionToOneBasedLineOffset(fileName, positionOrRange);
+            }
+            else {
+                locationOrSpan = positionOrRange
+                    ? { start: this.positionToOneBasedLineOffset(fileName, positionOrRange.pos), end: this.positionToOneBasedLineOffset(fileName, positionOrRange.end) }
+                    : undefined;
+            }
+            return locationOrSpan;
+        }
 
-            const args: protocol.GetCodeActionsForRefactorRequestArgs = {
+        getApplicableRefactors(fileName: string, positionOrRange: number | TextRange): ApplicableRefactorInfo[] {
+            const args: protocol.Refactor.GetApplicableRefactorsRequestArgs = {
                 file: fileName,
-                startLine: startLineOffset.line,
-                startOffset: startLineOffset.offset,
-                endLine: endLineOffset.line,
-                endOffset: endLineOffset.offset,
-                refactorCode
+                locationOrSpan: this.positionOrRangeToLocationOrSpan(positionOrRange, fileName)
             };
 
-            const request = this.processRequest<protocol.GetCodeActionsForRefactorRequest>(CommandNames.GetCodeActionsForRefactor, args);
-            const response = this.processResponse<protocol.GetCodeActionsForRefactorResponse>(request);
+            const request = this.processRequest<protocol.Refactor.GetApplicableRefactorsRequest>(CommandNames.GetApplicableRefactors, args);
+            const response = this.processResponse<protocol.Refactor.GetApplicableRefactorsResponse>(request);
 
-            return response.body.map(entry => this.convertCodeActions(entry, fileName));
+            return response.body;
+        }
+
+        getRefactorCodeActions(
+            fileName: string,
+            _formatOptions: FormatCodeSettings,
+            positionOrRange: number | TextRange,
+            refactorKinds?: RefactorKind[],
+            diagnosticCodes?: number[]) {
+
+            const args: protocol.Refactor.GetRefactorCodeActionsRequestArgs = {
+                file: fileName,
+                locationOrSpan: this.positionOrRangeToLocationOrSpan(positionOrRange, fileName),
+                refactorKinds,
+                diagnosticCodes
+            };
+
+            const request = this.processRequest<protocol.Refactor.GetRefactorCodeActionsRequest>(CommandNames.GetRefactorCodeActions, args);
+            const codeActions = this.processResponse<protocol.Refactor.GetRefactorCodeActionsResponse>(request).body;
+
+            return map(codeActions, codeAction => this.convertCodeActions(codeAction, fileName));
         }
 
         convertCodeActions(entry: protocol.CodeAction, fileName: string): CodeAction {
