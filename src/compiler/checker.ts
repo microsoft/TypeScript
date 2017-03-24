@@ -19559,7 +19559,7 @@ namespace ts {
         }
 
         function checkClassLikeDeclaration(node: ClassLikeDeclaration) {
-            checkGrammarClassDeclarationHeritageClauses(node);
+            checkGrammarClassLikeDeclaration(node);
             checkDecorators(node);
             if (node.name) {
                 checkTypeNameIsReserved(node.name, Diagnostics.Class_name_cannot_be_0);
@@ -22518,6 +22518,11 @@ namespace ts {
             const file = getSourceFileOfNode(node);
             return checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarTypeParameterList(node.typeParameters, file) ||
                 checkGrammarParameterList(node.parameters) || checkGrammarArrowFunction(node, file);
+        }
+
+        function checkGrammarClassLikeDeclaration(node: ClassLikeDeclaration): boolean {
+            const file = getSourceFileOfNode(node);
+            return checkGrammarClassDeclarationHeritageClauses(node) || checkGrammarTypeParameterList(node.typeParameters, file);
         }
 
         function checkGrammarArrowFunction(node: FunctionLikeDeclaration, file: SourceFile): boolean {
