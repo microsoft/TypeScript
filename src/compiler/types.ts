@@ -2548,7 +2548,9 @@ namespace ts {
         allowThisInObjectLiteral                = 1 << 0,
         allowQualifedNameInPlaceOfIdentifier    = 1 << 1,
         allowTypeParameterInQualifiedName       = 1 << 2,
-        allowAnonymousIdentifier                = 1 << 3
+        allowAnonymousIdentifier                = 1 << 3,
+        allowEmptyUnionOrIntersection           = 1 << 4,
+        allowEmptyTuple                         = 1 << 5
     }
 
     export interface SymbolDisplayBuilder {

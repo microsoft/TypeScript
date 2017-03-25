@@ -238,10 +238,10 @@ namespace ts {
             : node;
     }
 
-    export function createTypeReferenceNode(typeName: string | EntityName, typeArguments: NodeArray<TypeNode> | undefined) {
+    export function createTypeReferenceNode(typeName: string | EntityName, typeArguments: TypeNode[] | undefined) {
         const typeReference = createSynthesizedNode(SyntaxKind.TypeReference) as TypeReferenceNode;
         typeReference.typeName = asName(typeName);
-        typeReference.typeArguments = typeArguments;
+        typeReference.typeArguments = asNodeArray(typeArguments);
         return typeReference;
     }
 
