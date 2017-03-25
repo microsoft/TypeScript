@@ -4,6 +4,23 @@ interface DOMTokenList {
     [Symbol.iterator](): IterableIterator<string>;
 }
 
+interface FormData {
+    /**
+     * Returns an array of key, value pairs for every entry in the list
+     */
+    entries(): IterableIterator<[string, any]>;
+    /**
+     * Returns a list of keys in the list
+     */
+    keys(): IterableIterator<string>;
+    /**
+     * Returns a list of values in the list
+     */
+    values(): IterableIterator<any>;
+
+    [Symbol.iterator](): IterableIterator<any>;
+}
+
 interface NodeList {
     /**
     * Returns an array of key, value pairs for every entry in the list
