@@ -247,6 +247,7 @@ namespace ts {
                     nodesVisitor((<ParameterDeclaration>node).modifiers, visitor, isModifier),
                     (<ParameterDeclaration>node).dotDotDotToken,
                     visitNode((<ParameterDeclaration>node).name, visitor, isBindingName),
+                    visitNode((<ParameterDeclaration>node).questionToken, visitor),
                     visitNode((<ParameterDeclaration>node).type, visitor, isTypeNode),
                     visitNode((<ParameterDeclaration>node).initializer, visitor, isExpression));
 
