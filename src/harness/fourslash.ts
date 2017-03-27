@@ -2610,7 +2610,7 @@ namespace FourSlash {
                     foundDiagnostic = diagnosticCode === undefined || diagnosticCode === diag.code;
                 }
             }
-            
+
             if (negative && foundDiagnostic) {
                 this.raiseError(`verifyRefactorDiagnosticsAvailableAtMarker failed - expected no refactor diagnostic at marker ${markerName} but found some.`);
             }
@@ -2665,7 +2665,7 @@ namespace FourSlash {
             }
 
             const applicableRefactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, markerPos);
-            const applicableRefactorKinds = 
+            const applicableRefactorKinds =
                 ts.map(ts.filter(applicableRefactors, ar => refactorKindToApply === undefined || refactorKindToApply === ar.refactorKind),
                     refactorInfo => refactorInfo.refactorKind);
             const codeActions = this.languageService.getRefactorCodeActions(
@@ -3479,7 +3479,7 @@ namespace FourSlashInterface {
             this.state.verifyApplicableRefactorAvailableAtMarker(this.negative, markerName);
         }
 
-        public applicableRefactorAvailableForRange(){
+        public applicableRefactorAvailableForRange() {
             this.state.verifyApplicableRefactorAvailableForRange(this.negative);
         }
     }

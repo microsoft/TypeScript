@@ -508,7 +508,7 @@ namespace ts.server {
                                 if (checkList.length > index) {
                                     next.delay(followMs, checkOne);
                                 }
-                            })
+                            });
                         });
                     }
                 }

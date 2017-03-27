@@ -1,4 +1,4 @@
-﻿/* @internal */
+/* @internal */
 namespace ts {
     interface BaseRefactor {
         /** An unique code associated with each refactor */
@@ -30,7 +30,7 @@ namespace ts {
     export type Refactor = SuggestableRefactor | NonSuggestableRefactor;
 
     export interface LightRefactorContext {
-        /** 
+        /**
          * The AST that was not bound, so the symbols associated with the nodes are not accessible.
          * Such a source file should be cheap to get.
          */
@@ -96,7 +96,7 @@ namespace ts {
             refactorKinds?: RefactorKind[],
             diagnosticCodes?: number[]) {
 
-            let result: CodeAction[] = [];
+            const result: CodeAction[] = [];
             if (refactorKinds !== undefined) {
                 for (const refactorKind of refactorKinds) {
                     const refactor = nonSuggestableRefactors[refactorKind];
