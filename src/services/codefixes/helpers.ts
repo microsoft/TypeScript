@@ -11,7 +11,7 @@ namespace ts.codefix {
         }
 
         const changes = changeTracker.getChanges();
-        if (!(changes && changes.length > 0)) {
+        if (!some(changes)) {
             return changes;
         }
 
@@ -93,7 +93,7 @@ namespace ts.codefix {
                 // (eg: an abstract method or interface declaration), there is a 1-1
                 // correspondence of declarations and signatures.
                 const signatures = checker.getSignaturesOfType(type, SignatureKind.Call);
-                if (!(signatures && signatures.length > 0)) {
+                if (!some(signatures)) {
                     return undefined;
                 }
 
@@ -103,7 +103,7 @@ namespace ts.codefix {
                     return signatureToMethodDeclaration(signature, enclosingDeclaration, createStubbedMethodBody());
                 }
 
-                const signatureDeclarations = [];
+                const signatureDeclarations: MethodDeclaration[] = [];
                 for (let i = 0; i < signatures.length; i++) {
                     const signature = signatures[i];
                     const methodDeclaration = signatureToMethodDeclaration(signature, enclosingDeclaration);
@@ -132,6 +132,7 @@ namespace ts.codefix {
         function signatureToMethodDeclaration(signature: Signature, enclosingDeclaration: Node, body?: Block) {
             const signatureDeclaration = <MethodDeclaration>checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration);
             if (signatureDeclaration) {
+                signatureDeclaration.decorators = undefined;
                 signatureDeclaration.modifiers = modifiers;
                 signatureDeclaration.name = name;
                 signatureDeclaration.questionToken = optional ? createToken(SyntaxKind.QuestionToken) : undefined;
@@ -142,8 +143,6 @@ namespace ts.codefix {
     }
 
     function createMethodImplementingSignatures(signatures: Signature[], name: PropertyName, optional: boolean, modifiers: Modifier[] | undefined): MethodDeclaration {
-        Debug.assert(signatures && signatures.length > 0);
-
         /** This is *a* signature with the maximal number of arguments,
          * such that if there is a "maximal" signature without rest arguments,
          * this is one of them.
@@ -154,7 +153,9 @@ namespace ts.codefix {
         for (let i = 0; i < signatures.length; i++) {
             const sig = signatures[i];
             minArgumentCount = Math.min(sig.minArgumentCount, minArgumentCount);
-            someSigHasRestParameter = someSigHasRestParameter || sig.hasRestParameter;
+            if (sig.hasRestParameter) {
+                someSigHasRestParameter = true;
+            }
             if (sig.parameters.length >= maxArgsSignature.parameters.length && (!sig.hasRestParameter || maxArgsSignature.hasRestParameter)) {
                 maxArgsSignature = sig;
             }

@@ -1676,7 +1676,7 @@ namespace FourSlash {
             // We get back a set of edits, but langSvc.editScript only accepts one at a time. Use this to keep track
             // of the incremental offset from each edit to the next. Assumption is that these edit ranges don't overlap
             let runningOffset = 0;
-            edits = ts.stableSort(edits, (a, b) => a.span.start - b.span.start);
+            edits = edits.sort((a, b) => a.span.start - b.span.start);
             // Get a snapshot of the content of the file so we can make sure any formatting edits didn't destroy non-whitespace characters
             const oldContent = this.getFileContent(fileName);
 

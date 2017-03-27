@@ -326,10 +326,12 @@ namespace ts {
 
             case SyntaxKind.TypeOperator:
                 return updateTypeOperatorNode(<TypeOperatorNode>node, visitNode((<TypeOperatorNode>node).type, visitor, isTypeNode));
+
             case SyntaxKind.IndexedAccessType:
                 return updateIndexedAccessTypeNode((<IndexedAccessTypeNode>node),
                     visitNode((<IndexedAccessTypeNode>node).objectType, visitor, isTypeNode),
                     visitNode((<IndexedAccessTypeNode>node).indexType, visitor, isTypeNode));
+
             case SyntaxKind.MappedType:
                 return updateMappedTypeNode((<MappedTypeNode>node),
                     visitNode((<MappedTypeNode>node).readonlyToken, tokenVisitor, isToken),
