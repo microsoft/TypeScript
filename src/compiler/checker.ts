@@ -2202,28 +2202,7 @@ namespace ts {
             return result;
         }
 
-        function createNodeBuilder(): NodeBuilder {
-
-            interface NodeBuilderContext {
-                readonly enclosingDeclaration: Node | undefined;
-                readonly flags: NodeBuilderFlags | undefined;
-                encounteredError: boolean;
-                inObjectTypeLiteral: boolean;
-                checkAlias: boolean;
-                symbolStack: Symbol[] | undefined;
-            }
-
-            function createNodeBuilderContext(enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): NodeBuilderContext {
-                return {
-                    enclosingDeclaration,
-                    flags,
-                    encounteredError: false,
-                    inObjectTypeLiteral: false,
-                    checkAlias: true,
-                    symbolStack: undefined
-                };
-            }
-
+        function createNodeBuilder() {
             let context: NodeBuilderContext;
 
             return {
@@ -2246,6 +2225,26 @@ namespace ts {
                     return result;
                 }
             };
+
+            interface NodeBuilderContext {
+                readonly enclosingDeclaration: Node | undefined;
+                readonly flags: NodeBuilderFlags | undefined;
+                encounteredError: boolean;
+                inObjectTypeLiteral: boolean;
+                checkAlias: boolean;
+                symbolStack: Symbol[] | undefined;
+            }
+
+            function createNodeBuilderContext(enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): NodeBuilderContext {
+                return {
+                    enclosingDeclaration,
+                    flags,
+                    encounteredError: false,
+                    inObjectTypeLiteral: false,
+                    checkAlias: true,
+                    symbolStack: undefined
+                };
+            }
 
             function typeToTypeNodeHelper(type: Type): TypeNode {
                 if (!type) {

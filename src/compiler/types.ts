@@ -2535,14 +2535,6 @@ namespace ts {
         /* @internal */ getTypeCount(): number;
     }
 
-    /** Note that any resulting nodes cannot be checked. */
-    /* @internal */
-    export interface NodeBuilder {
-        typeToTypeNode(type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): TypeNode;
-        signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): SignatureDeclaration;
-        indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): IndexSignatureDeclaration;
-    }
-
     export enum NodeBuilderFlags {
         None                                    = 0,
         allowThisInObjectLiteral                = 1 << 0,
