@@ -271,7 +271,8 @@ namespace ts.server {
             public readonly cancellationToken: HostCancellationToken,
             public readonly useSingleInferredProject: boolean,
             readonly typingsInstaller: ITypingsInstaller = nullTypingsInstaller,
-            private readonly eventHandler?: ProjectServiceEventHandler) {
+            private readonly eventHandler?: ProjectServiceEventHandler,
+            public readonly throttleWaitMilliseconds?: number) {
 
             Debug.assert(!!host.createHash, "'ServerHost.createHash' is required for ProjectService");
 

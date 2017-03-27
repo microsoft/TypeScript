@@ -337,7 +337,8 @@ namespace ts.server {
             private hrtime: (start?: number[]) => number[],
             protected logger: Logger,
             protected readonly canUseEvents: boolean,
-            eventHandler?: ProjectServiceEventHandler) {
+            eventHandler?: ProjectServiceEventHandler,
+            private readonly throttleWaitMilliseconds?: number) {
 
             this.eventHander = canUseEvents
                 ? eventHandler || (event => this.defaultEventHandler(event))
@@ -352,7 +353,7 @@ namespace ts.server {
                 isCancellationRequested: () => cancellationToken.isCancellationRequested()
             };
             this.errorCheck = new MultistepOperation(multistepOperationHost);
-            this.projectService = new ProjectService(host, logger, cancellationToken, useSingleInferredProject, typingsInstaller, this.eventHander);
+            this.projectService = new ProjectService(host, logger, cancellationToken, useSingleInferredProject, typingsInstaller, this.eventHander, this.throttleWaitMilliseconds);
             this.gcTimer = new GcTimer(host, /*delay*/ 7000, logger);
         }
 
