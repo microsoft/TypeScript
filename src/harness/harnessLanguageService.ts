@@ -785,6 +785,71 @@ namespace Harness.LanguageService {
                         }),
                         error: undefined
                     };
+                case "mock-vue":
+                    return {
+                        module: () => ({
+                            create(info: ts.server.PluginCreateInfo) {
+                                const clssf = ts.createLanguageServiceSourceFile;
+                                const ulssf = ts.updateLanguageServiceSourceFile;
+                                ts.overrideCreateupdateLanguageServiceSourceFile(
+                                    (fileName, scriptSnapshot, scriptTarget, version, setNodeParents, scriptKind?) => {
+                                        if (interested(fileName)) {
+                                            const wrapped = scriptSnapshot;
+                                            scriptSnapshot = {
+                                                getChangeRange: old => wrapped.getChangeRange(old),
+                                                getLength: () => wrapped.getLength(),
+                                                getText: (start, end) => parse(wrapped.getText(0, wrapped.getLength())).slice(start, end),
+                                            };
+                                        }
+                                        var sourceFile = clssf(fileName, scriptSnapshot, scriptTarget, version, setNodeParents, scriptKind);
+                                        return sourceFile;
+                                    },
+                                    (sourceFile, scriptSnapshot, version, textChangeRange, aggressiveChecks?) => {
+                                        if (interested(sourceFile.fileName)) {
+                                            const wrapped = scriptSnapshot;
+                                            scriptSnapshot = {
+                                                getChangeRange: old => wrapped.getChangeRange(old),
+                                                getLength: () => wrapped.getLength(),
+                                                getText: (start, end) => parse(wrapped.getText(0, wrapped.getLength())).slice(start, end),
+                                            };
+                                        }
+                                        var sourceFile = ulssf(sourceFile, scriptSnapshot, version, textChangeRange, aggressiveChecks);
+                                        return sourceFile;
+                                    });
+                                return makeDefaultProxy(info);
+
+                                function interested(filename: string) {
+                                    return filename.length;
+                                }
+                                function parse(text: string) {
+                                    const start = text.indexOf("<script>") + "<script>".length;
+                                    const end = text.indexOf("</script>");
+                                    return text.slice(0, start).replace(/./g, ' ') + text.slice(start, end) + text.slice(end).replace(/./g, ' ');
+                                }
+                            },
+                            resolveModules() {
+                                return (rmn: any) =>
+                                    (moduleName: string, containingFile: string, compilerOptions: ts.CompilerOptions, host: ts.ModuleResolutionHost, cache?: ts.ModuleResolutionCache) => {
+                                        if (importInterested(moduleName)) {
+                                            return {
+                                                resolvedModule: {
+                                                    extension: ts.Extension.Ts,
+                                                    isExternalLibraryImport: true,
+                                                    resolvedFileName: containingFile.slice(0, containingFile.lastIndexOf("/")) + "/" + moduleName,
+                                                }
+                                            }
+                                        }
+                                        else {
+                                            return rmn(moduleName, containingFile, compilerOptions, host, cache);
+                                        }
+                                    };
+                                function importInterested(filename: string) {
+                                    return filename.charAt(0) === "." && filename.slice(-4) === ".vue";
+                                }
+                            }
+                        }),
+                        error: undefined
+                    };
 
                 default:
                     return {
