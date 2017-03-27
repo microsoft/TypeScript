@@ -2295,10 +2295,10 @@ namespace ts {
                     return createKeywordTypeNode(SyntaxKind.NeverKeyword);
                 }
                 if (type.flags & TypeFlags.ESSymbol) {
-                    throw new Error("ESSymbol not implemented");
+                    return createKeywordTypeNode(SyntaxKind.SymbolKeyword);
                 }
                 if (type.flags & TypeFlags.NonPrimitive) {
-                    throw new Error("Non primitive not implemented");
+                    return createKeywordTypeNode(SyntaxKind.ObjectKeyword);
                 }
                 if (type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType) {
                     if (context.inObjectTypeLiteral) {

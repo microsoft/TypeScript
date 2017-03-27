@@ -4,10 +4,16 @@
 
 //// enum E { a,b,c }
 //// interface I {
-////     a: E.a
+////     x: E;
+////     y: E.a
+////     z: symbol;
+////     w: object;
 //// }
 //// class C implements I {[| |]}
 
 verify.rangeAfterCodeFix(`
-    a: E.a;
+    x: E;
+    y: E.a;
+    z: symbol;
+    w: object;
 `);
