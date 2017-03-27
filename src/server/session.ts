@@ -31,7 +31,8 @@ namespace ts.server {
         }
         else {
             // For configured projects, require that skipLibCheck be set also
-            return project.getCompilerOptions().skipLibCheck && project.isJsOnlyProject();
+            const options = project.getCompilerOptions();
+            return options.skipLibCheck && !options.checkJs && project.isJsOnlyProject();
         }
     }
 
