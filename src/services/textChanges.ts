@@ -57,7 +57,7 @@ namespace ts.textChanges {
      *        ^ - pos for the next variable declaration will point here
      * const y; // this is y
      *        ^ - end for previous variable declaration
-     * Usually leading trivia of the variable declaration 'y' should not include trailing trivia (whitespace, comment 'this is x' and newline) from the preceding 
+     * Usually leading trivia of the variable declaration 'y' should not include trailing trivia (whitespace, comment 'this is x' and newline) from the preceding
      * variable declaration and trailing trivia for 'y' should include (whitespace, comment 'this is y', newline).
      * By default when removing nodes we adjust start and end positions to respect specification of the trivia above.
      * If pos\end should be interpreted literally 'useNonAdjustedStartPosition' or 'useNonAdjustedEndPosition' should be set to true
@@ -265,7 +265,7 @@ namespace ts.textChanges {
                         options: {},
                         range: { pos: after.end, end: after.end },
                         node: createToken(SyntaxKind.SemicolonToken)
-                    })
+                    });
                 }
             }
             const endPosition = getAdjustedEndPosition(sourceFile, after, options);
@@ -275,7 +275,7 @@ namespace ts.textChanges {
 
         /**
          * This function should be used to insert nodes in lists when nodes  don't carry separators as the part of the node range,
-         * i.e. arguments in arguments lists, parameters in parameter lists etc. Statements or class elements are different in sense that 
+         * i.e. arguments in arguments lists, parameters in parameter lists etc. Statements or class elements are different in sense that
          * for them separators are treated as the part of the node.
          */
         public insertNodeInListAfter(sourceFile: SourceFile, after: Node, newNode: Node) {
@@ -307,8 +307,8 @@ namespace ts.textChanges {
                     //   c,
                     // result - '*' denotes leading trivia that will be inserted after new text (displayed as '#')
                     //   a,*
-                    //***insertedtext<separator>#
-                    //###b,
+                    // ***insertedtext<separator>#
+                    // ###b,
                     //   c,
                     // find line and character of the next element
                     const lineAndCharOfNextElement = getLineAndCharacterOfPosition(sourceFile, skipWhitespacesAndLineBreaks(sourceFile.text, containingList[index + 1].getFullStart()));
@@ -317,7 +317,7 @@ namespace ts.textChanges {
                     let prefix: string;
                     let startPos: number;
                     if (lineAndCharOfNextToken.line === lineAndCharOfNextElement.line) {
-                        // next element is located on the same line with separator: 
+                        // next element is located on the same line with separator:
                         // a,$$$$b
                         //  ^    ^
                         //  |    |-next element
@@ -393,7 +393,7 @@ namespace ts.textChanges {
                     // insert element before the line break on the line that contains 'after' element
                     let insertPos = skipTrivia(sourceFile.text, end, /*stopAfterLineBreak*/ true, /*stopAtComments*/ false);
                     if (insertPos !== end && isLineBreak(sourceFile.text.charCodeAt(insertPos - 1))) {
-                        insertPos--
+                        insertPos--;
                     }
                     this.changes.push({
                         sourceFile,

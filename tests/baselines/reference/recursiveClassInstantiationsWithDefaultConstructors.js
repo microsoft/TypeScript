@@ -1,13 +1,13 @@
 //// [recursiveClassInstantiationsWithDefaultConstructors.ts]
-var a = new TypeScript2.MemberNameArray()
 module TypeScript2 {
-export class MemberName {
-public prefix: string = "";
-}
-export class MemberNameArray extends MemberName {
-}
+    export class MemberName {
+        public prefix: string = "";
+    }
+    export class MemberNameArray extends MemberName {
+    }
 }
 
+var a = new TypeScript2.MemberNameArray()
 
 //// [recursiveClassInstantiationsWithDefaultConstructors.js]
 var __extends = (this && this.__extends) || (function () {
@@ -20,7 +20,6 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var a = new TypeScript2.MemberNameArray();
 var TypeScript2;
 (function (TypeScript2) {
     var MemberName = (function () {
@@ -39,3 +38,4 @@ var TypeScript2;
     }(MemberName));
     TypeScript2.MemberNameArray = MemberNameArray;
 })(TypeScript2 || (TypeScript2 = {}));
+var a = new TypeScript2.MemberNameArray();

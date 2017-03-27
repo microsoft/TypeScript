@@ -301,7 +301,6 @@ namespace ts.codefix {
                     }
 
                     function getTextChangeForImportClause(importClause: ImportClause): FileTextChanges[] {
-                        //const newImportText = isDefault ? `default as ${name}` : name;
                         const importList = <NamedImports>importClause.namedBindings;
                         const newImportSpecifier = createImportSpecifier(/*propertyName*/ undefined, createIdentifier(name));
                         // case 1:
@@ -556,7 +555,7 @@ namespace ts.codefix {
             }
 
             function createChangeTracker() {
-                return textChanges.ChangeTracker.fromCodeFixContext(context);;
+                return textChanges.ChangeTracker.fromCodeFixContext(context);
             }
 
             function createCodeAction(

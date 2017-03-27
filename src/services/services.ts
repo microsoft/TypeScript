@@ -211,6 +211,10 @@ namespace ts {
 
             return child.kind < SyntaxKind.FirstNode ? child : child.getLastToken(sourceFile);
         }
+
+        public forEachChild<T>(cbNode: (node: Node) => T, cbNodeArray?: (nodes: Node[]) => T): T {
+            return forEachChild(this, cbNode, cbNodeArray);
+        }
     }
 
     class TokenOrIdentifierObject implements Node {
@@ -282,6 +286,10 @@ namespace ts {
         }
 
         public getLastToken(): Node {
+            return undefined;
+        }
+
+        public forEachChild<T>(): T {
             return undefined;
         }
     }
@@ -1397,7 +1405,8 @@ namespace ts {
                             fileName: entry.fileName,
                             textSpan: highlightSpan.textSpan,
                             isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
-                            isDefinition: false
+                            isDefinition: false,
+                            isInString: highlightSpan.isInString,
                         });
                     }
                 }
