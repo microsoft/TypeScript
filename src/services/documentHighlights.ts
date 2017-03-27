@@ -245,7 +245,7 @@ namespace ts.DocumentHighlights {
                     if (statement.kind === SyntaxKind.ContinueStatement) {
                         continue;
                     }
-                // Fall through.
+                    // falls through
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
                 case SyntaxKind.ForOfStatement:

@@ -144,7 +144,7 @@ namespace ts.OutliningElementsCollector {
                         });
                         break;
                     }
-                // Fallthrough.
+                    // falls through
 
                 case SyntaxKind.ModuleBlock: {
                     const openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile);

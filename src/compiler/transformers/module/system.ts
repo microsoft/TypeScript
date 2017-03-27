@@ -477,8 +477,8 @@ namespace ts {
                                 // module is imported only for side-effects, no emit required
                                 break;
                             }
+                            // falls through
 
-                        // fall-through
                         case SyntaxKind.ImportEqualsDeclaration:
                             Debug.assert(importVariableName !== undefined);
                             // save import into the local

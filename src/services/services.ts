@@ -635,7 +635,7 @@ namespace ts {
                         if (!hasModifier(node, ModifierFlags.ParameterPropertyModifier)) {
                             break;
                         }
-                    // fall through
+                        // falls through
                     case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.BindingElement: {
                         const decl = <VariableDeclaration>node;
@@ -646,6 +646,7 @@ namespace ts {
                         if (decl.initializer)
                             visit(decl.initializer);
                     }
+                        // falls through
                     case SyntaxKind.EnumMember:
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.PropertySignature:
@@ -2028,7 +2029,7 @@ namespace ts {
                 if (node.parent.kind === SyntaxKind.ComputedPropertyName) {
                     return isObjectLiteralElement(node.parent.parent) ? node.parent.parent : undefined;
                 }
-            // intentionally fall through
+                // falls through
             case SyntaxKind.Identifier:
                 return isObjectLiteralElement(node.parent) &&
                     (node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression || node.parent.parent.kind === SyntaxKind.JsxAttributes) &&

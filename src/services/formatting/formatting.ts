@@ -483,9 +483,8 @@ namespace ts.formatting {
                 case SyntaxKind.MethodDeclaration:
                     if ((<MethodDeclaration>node).asteriskToken) {
                         return SyntaxKind.AsteriskToken;
-                    }/*
-                    fall-through
-                    */
+                    }
+                    // falls through
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.Parameter:
                     return (<Declaration>node).name.kind;
