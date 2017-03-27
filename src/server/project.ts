@@ -102,6 +102,13 @@ namespace ts.server {
     export interface PluginModule {
         create(createInfo: PluginCreateInfo): LanguageService;
         getExternalFiles?(proj: Project): string[];
+        resolveModules?(createInfo: PluginCreateInfo): PluginResolveModules;
+    }
+
+    export type ModuleResolver = (moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache) => ResolvedModuleWithFailedLookupLocations;
+
+    export type PluginResolveModules = {
+        (plugin: ModuleResolver): ModuleResolver;
     }
 
     export interface PluginModuleFactory {
@@ -904,6 +911,9 @@ namespace ts.server {
 
                 const pluginModule = pluginModuleFactory({ typescript: ts });
                 this.languageService = pluginModule.create(info);
+                if (pluginModule.resolveModules) {
+                    this.lsHost.overrideResolveModuleName(pluginModule.resolveModules(info));
+                }
                 this.plugins.push(pluginModule);
             }
             catch (e) {
