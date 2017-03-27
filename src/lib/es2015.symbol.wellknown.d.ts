@@ -137,7 +137,7 @@ interface Function {
     [Symbol.hasInstance](value: any): boolean;
 }
 
-interface GeneratorFunction extends Function {
+interface GeneratorFunction {
     readonly [Symbol.toStringTag]: "GeneratorFunction";
 }
 
