@@ -46,9 +46,6 @@ namespace ts {
      */
     /* @internal */
     export function getSynthesizedClone<T extends Node>(node: T | undefined): T {
-        if (node === undefined) {
-            return undefined;
-        }
         // We don't use "clone" from core.ts here, as we need to preserve the prototype chain of
         // the original node. We also need to exclude specific properties and only include own-
         // properties (to skip members already defined on the shared prototype).
@@ -169,23 +166,23 @@ namespace ts {
     // Reserved words
 
     export function createSuper() {
-        return <PrimaryExpression>createSynthesizedNode(SyntaxKind.SuperKeyword);
+        return <SuperExpression>createSynthesizedNode(SyntaxKind.SuperKeyword);
     }
 
     export function createThis() {
-        return <PrimaryExpression & TypeNode>createSynthesizedNode(SyntaxKind.ThisKeyword);
+        return <ThisExpression & Token<SyntaxKind.ThisKeyword>>createSynthesizedNode(SyntaxKind.ThisKeyword);
     }
 
     export function createNull() {
-        return <PrimaryExpression & TypeNode>createSynthesizedNode(SyntaxKind.NullKeyword);
+        return <NullLiteral & Token<SyntaxKind.NullKeyword>>createSynthesizedNode(SyntaxKind.NullKeyword);
     }
 
     export function createTrue() {
-        return <BooleanLiteral & TypeNode>createSynthesizedNode(SyntaxKind.TrueKeyword);
+        return <BooleanLiteral & Token<SyntaxKind.TrueKeyword>>createSynthesizedNode(SyntaxKind.TrueKeyword);
     }
 
     export function createFalse() {
-        return <BooleanLiteral & TypeNode>createSynthesizedNode(SyntaxKind.FalseKeyword);
+        return <BooleanLiteral & Token<SyntaxKind.FalseKeyword>>createSynthesizedNode(SyntaxKind.FalseKeyword);
     }
 
     // Names
@@ -218,11 +215,74 @@ namespace ts {
 
     // Type Elements
 
-    // TODO: add signatures
+    export function createSignatureDeclaration(kind: SyntaxKind, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined) {
+        const signatureDeclaration = createSynthesizedNode(kind) as SignatureDeclaration;
+        signatureDeclaration.typeParameters = asNodeArray(typeParameters);
+        signatureDeclaration.parameters = asNodeArray(parameters);
+        signatureDeclaration.type = type;
+        return signatureDeclaration;
+    }
+
+    function updateSignatureDeclaration(node: SignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined) {
+        return node.typeParameters !== typeParameters
+            || node.parameters !== parameters
+            || node.type !== type
+            ? updateNode(createSignatureDeclaration(node.kind, typeParameters, parameters, type), node)
+            : node;
+    }
+
+    export function createFunctionTypeNode(typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined) {
+        return createSignatureDeclaration(SyntaxKind.FunctionType, typeParameters, parameters, type) as FunctionTypeNode;
+    }
+
+    export function updateFunctionTypeNode(node: FunctionTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined) {
+        return <FunctionTypeNode>updateSignatureDeclaration(node, typeParameters, parameters, type);
+    }
+
+    export function createConstructorTypeNode(typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined) {
+        return createSignatureDeclaration(SyntaxKind.ConstructorType, typeParameters, parameters, type) as ConstructorTypeNode;
+    }
+
+    export function updateConstructorTypeNode(node: ConstructorTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined) {
+        return <ConstructorTypeNode>updateSignatureDeclaration(node, typeParameters, parameters, type);
+    }
+
+    export function createCallSignatureDeclaration(typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined) {
+        return createSignatureDeclaration(SyntaxKind.CallSignature, typeParameters, parameters, type) as CallSignatureDeclaration;
+    }
+
+    export function updateCallSignatureDeclaration(node: CallSignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined) {
+        return <CallSignatureDeclaration>updateSignatureDeclaration(node, typeParameters, parameters, type);
+    }
+
+    export function createConstructSignatureDeclaration(typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined) {
+        return createSignatureDeclaration(SyntaxKind.ConstructSignature, typeParameters, parameters, type) as ConstructSignatureDeclaration;
+    }
+
+    export function updateConstructSignatureDeclaration(node: ConstructSignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined) {
+        return <ConstructSignatureDeclaration>updateSignatureDeclaration(node, typeParameters, parameters, type);
+    }
+
+    export function createMethodSignature(typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined) {
+        const methodSignature = createSignatureDeclaration(SyntaxKind.MethodSignature, typeParameters, parameters, type) as MethodSignature;
+        methodSignature.name = asName(name);
+        methodSignature.questionToken = questionToken;
+        return methodSignature;
+    }
+
+    export function updateMethodSignature(node: MethodSignature, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined, name: PropertyName, questionToken: QuestionToken | undefined) {
+        return node.typeParameters !== typeParameters
+            || node.parameters !== parameters
+            || node.type !== type
+            || node.name !== name
+            || node.questionToken !== questionToken
+            ? updateNode(createMethodSignature(typeParameters, parameters, type, name, questionToken), node)
+            : node;
+    }
 
     // Types
 
-    export function createKeywordTypeNode(kind: KeywordTypeNode["kind"]): KeywordTypeNode {
+    export function createKeywordTypeNode(kind: KeywordTypeNode["kind"]) {
         return <KeywordTypeNode>createSynthesizedNode(kind);
     }
 
@@ -259,10 +319,10 @@ namespace ts {
     }
 
     export function updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName) {
-        return node.exprName !== exprName ? updateNode(createTypeQueryNode(exprName) , node) : node;
+        return node.exprName !== exprName ? updateNode(createTypeQueryNode(exprName), node) : node;
     }
 
-    export function createArrayTypeNode(elementType: TypeNode): ArrayTypeNode {
+    export function createArrayTypeNode(elementType: TypeNode) {
         const arrayTypeNode = createSynthesizedNode(SyntaxKind.ArrayType) as ArrayTypeNode;
         arrayTypeNode.elementType = elementType;
         return arrayTypeNode;
@@ -277,9 +337,9 @@ namespace ts {
     export function createUnionOrIntersectionTypeNode(kind: SyntaxKind.UnionType, types: TypeNode[]): UnionTypeNode;
     export function createUnionOrIntersectionTypeNode(kind: SyntaxKind.IntersectionType, types: TypeNode[]): IntersectionTypeNode;
     export function createUnionOrIntersectionTypeNode(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, types: TypeNode[]): UnionOrIntersectionTypeNode;
-    export function createUnionOrIntersectionTypeNode(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, types: TypeNode[]): UnionOrIntersectionTypeNode {
+    export function createUnionOrIntersectionTypeNode(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, types: TypeNode[]) {
         const unionTypeNode = createSynthesizedNode(kind) as UnionTypeNode | IntersectionTypeNode;
-        unionTypeNode.types = asNodeArray(types);
+        unionTypeNode.types = createNodeArray(types);
         return unionTypeNode;
     }
 
@@ -291,7 +351,7 @@ namespace ts {
 
     export function createTypeLiteralNode(members: TypeElement[]) {
         const typeLiteralNode = createSynthesizedNode(SyntaxKind.TypeLiteral) as TypeLiteralNode;
-        typeLiteralNode.members = asNodeArray(members);
+        typeLiteralNode.members = createNodeArray(members);
         return typeLiteralNode;
     }
 
@@ -303,7 +363,7 @@ namespace ts {
 
     export function createTupleTypeNode(elementTypes: TypeNode[]) {
         const tupleTypeNode = createSynthesizedNode(SyntaxKind.TupleType) as TupleTypeNode;
-        tupleTypeNode.elementTypes = asNodeArray(elementTypes);
+        tupleTypeNode.elementTypes = createNodeArray(elementTypes);
         return tupleTypeNode;
     }
 
@@ -349,7 +409,6 @@ namespace ts {
         return indexedAccessTypeNode;
     }
 
-
     export function updateIndexedAccessTypeNode(node: IndexedAccessTypeNode, objectType: TypeNode, indexType: TypeNode) {
         return node.objectType !== objectType
             || node.indexType !== indexType
@@ -357,86 +416,22 @@ namespace ts {
             : node;
     }
 
-
     // Type Declarations
 
-    export function createTypeParameterDeclaration(name: string | Identifier, constraint: TypeNode | undefined, defaultParameter: TypeNode | undefined) {
+    export function createTypeParameterDeclaration(name: string | Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined) {
         const typeParameter = createSynthesizedNode(SyntaxKind.TypeParameter) as TypeParameterDeclaration;
         typeParameter.name = asName(name);
         typeParameter.constraint = constraint;
-        typeParameter.default = defaultParameter;
+        typeParameter.default = defaultType;
 
         return typeParameter;
     }
 
-    export function updateTypeParameterDeclaration(node: TypeParameterDeclaration, name: Identifier, constraint: TypeNode | undefined, defaultParameter: TypeNode | undefined) {
+    export function updateTypeParameterDeclaration(node: TypeParameterDeclaration, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined) {
         return node.name !== name
             || node.constraint !== constraint
-            || node.default !== defaultParameter
-            ? updateNode(createTypeParameterDeclaration(name, constraint, defaultParameter), node)
-            : node;
-    }
-
-    // TODO: Split according to AST nodes.
-    export function createSignatureDeclaration(kind: SyntaxKind, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined) {
-        const signatureDeclaration = createSynthesizedNode(kind) as SignatureDeclaration;
-        signatureDeclaration.typeParameters = asNodeArray(typeParameters);
-        signatureDeclaration.parameters = asNodeArray(parameters);
-        signatureDeclaration.type = type;
-        return signatureDeclaration;
-    }
-
-    export function updateSignatureDeclaration(node: SignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined) {
-        return node.typeParameters !== typeParameters
-            || node.parameters !== parameters
-            || node.type !== type
-            ? updateNode(createSignatureDeclaration(node.kind, typeParameters, parameters, type), node)
-            : node;
-    }
-
-    export function createFunctionTypeNode(typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined): FunctionTypeNode {
-        return createSignatureDeclaration(SyntaxKind.FunctionType, typeParameters, parameters, type) as FunctionTypeNode;
-    }
-
-    export function updateFunctionTypeNode(node: FunctionTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): FunctionTypeNode {
-        return <FunctionTypeNode>updateSignatureDeclaration(node, typeParameters, parameters, type);
-    }
-
-    export function createConstructorTypeNode(typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined): ConstructorTypeNode {
-        return createSignatureDeclaration(SyntaxKind.ConstructorType, typeParameters, parameters, type) as ConstructorTypeNode;
-    }
-    export function updateConstructorTypeNode(node: ConstructorTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): ConstructorTypeNode {
-        return <ConstructorTypeNode>updateSignatureDeclaration(node, typeParameters, parameters, type);
-    }
-
-    export function createCallSignatureDeclaration(typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined): CallSignatureDeclaration {
-        return createSignatureDeclaration(SyntaxKind.CallSignature, typeParameters, parameters, type) as CallSignatureDeclaration;
-    }
-    export function updateCallSignatureDeclaration(node: CallSignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): CallSignatureDeclaration {
-        return <CallSignatureDeclaration>updateSignatureDeclaration(node, typeParameters, parameters, type);
-    }
-
-    export function createConstructSignatureDeclaration(typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined): ConstructSignatureDeclaration {
-        return createSignatureDeclaration(SyntaxKind.ConstructSignature, typeParameters, parameters, type) as ConstructSignatureDeclaration;
-    }
-    export function updateConstructSignatureDeclaration(node: ConstructSignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): ConstructSignatureDeclaration {
-        return <ConstructSignatureDeclaration>updateSignatureDeclaration(node, typeParameters, parameters, type);
-    }
-
-    export function createMethodSignature(typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined): MethodSignature {
-        const methodSignature = createSignatureDeclaration(SyntaxKind.MethodSignature, typeParameters, parameters, type) as MethodSignature;
-        methodSignature.name = asName(name);
-        methodSignature.questionToken = questionToken;
-        return methodSignature;
-    }
-
-    export function updateMethodSignature(node: MethodSignature, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined, name?: PropertyName, questionToken?: QuestionToken): MethodSignature {
-        return node.typeParameters !== typeParameters
-            || node.parameters !== parameters
-            || node.type !== type
-            || node.name !== name
-            || node.questionToken !== questionToken
-            ? updateNode(createMethodSignature(typeParameters, parameters, type, name, questionToken), node)
+            || node.default !== defaultType
+            ? updateNode(createTypeParameterDeclaration(name, constraint, defaultType), node)
             : node;
     }
 

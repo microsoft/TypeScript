@@ -1034,15 +1034,15 @@ namespace ts {
         _primaryExpressionBrand: any;
     }
 
-    export interface NullLiteral extends PrimaryExpression {
+    export interface NullLiteral extends PrimaryExpression, TypeNode {
         kind: SyntaxKind.NullKeyword;
     }
 
-    export interface BooleanLiteral extends PrimaryExpression {
+    export interface BooleanLiteral extends PrimaryExpression, TypeNode {
         kind: SyntaxKind.TrueKeyword | SyntaxKind.FalseKeyword;
     }
 
-    export interface ThisExpression extends PrimaryExpression {
+    export interface ThisExpression extends PrimaryExpression, TypeNode {
         kind: SyntaxKind.ThisKeyword;
     }
 
