@@ -169,6 +169,7 @@ namespace ts {
             },
             getAliasedSymbol: resolveAlias,
             getEmitResolver,
+            isSymbolAccessible,
             getExportsOfModule: getExportsOfModuleAsArray,
             getExportsAndPropertiesOfModule,
             getAmbientModules,
@@ -2184,6 +2185,7 @@ namespace ts {
 
             return result;
         }
+
 
         function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
             const writer = getSingleLineStringWriter();

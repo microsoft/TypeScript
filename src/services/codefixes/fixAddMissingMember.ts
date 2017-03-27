@@ -36,9 +36,9 @@ namespace ts.codefix {
         if (token.parent.parent.kind === SyntaxKind.BinaryExpression) {
             const binaryExpression = token.parent.parent as BinaryExpression;
 
-            const checker = context.program.getTypeChecker();
+            const checker = context.program.getDiagnosticsProducingTypeChecker();
             const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(binaryExpression.right)));
-            typeString = checker.typeToString(widenedType);
+            typeString = typeToAccessibleString(widenedType, classDeclaration, TypeFormatFlags.NoTruncation, checker) || typeString;
         }
 
         const startPos = classDeclaration.members.pos;

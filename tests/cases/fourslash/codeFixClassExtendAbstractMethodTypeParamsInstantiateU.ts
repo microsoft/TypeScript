@@ -7,7 +7,7 @@
 //// class C<U> extends A<U> {[|
 //// |]}    
 
-verify.rangeAfterCodeFix(`f(x: U): U{
+verify.rangeAfterCodeFix(`f(x: U): U {
     throw new Error('Method not implemented.');
 }
 `);

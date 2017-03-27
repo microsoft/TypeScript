@@ -9,7 +9,7 @@ namespace ts.codefix {
         const sourceFile = context.sourceFile;
         const start = context.span.start;
         const token = getTokenAtPosition(sourceFile, start);
-        const checker = context.program.getTypeChecker();
+        const checker = context.program.getDiagnosticsProducingTypeChecker();
 
         const classDecl = getContainingClass(token);
         if (!classDecl) {
@@ -31,8 +31,8 @@ namespace ts.codefix {
             const implementedTypeSymbols = checker.getPropertiesOfType(implementedType);
             const nonPrivateMembers = implementedTypeSymbols.filter(symbol => !(getModifierFlags(symbol.valueDeclaration) & ModifierFlags.Private));
 
-            let insertion = getMissingIndexSignatureInsertion(implementedType, IndexKind.Number, classDecl, hasNumericIndexSignature);
-            insertion += getMissingIndexSignatureInsertion(implementedType, IndexKind.String, classDecl, hasStringIndexSignature);
+            let insertion = hasNumericIndexSignature ? "" : getMissingIndexSignatureInsertion(implementedType, IndexKind.Number, classDecl);
+            insertion += hasStringIndexSignature ? "" : getMissingIndexSignatureInsertion(implementedType, IndexKind.String, classDecl);
             insertion += getMissingMembersInsertion(classDecl, nonPrivateMembers, checker, context.newLineCharacter);
 
             const message = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Implement_interface_0), [implementedTypeNode.getText()]);
@@ -43,19 +43,10 @@ namespace ts.codefix {
 
         return result;
 
-        function getMissingIndexSignatureInsertion(type: InterfaceType, kind: IndexKind, enclosingDeclaration: ClassLikeDeclaration, hasIndexSigOfKind: boolean) {
-            if (!hasIndexSigOfKind) {
-                const IndexInfoOfKind = checker.getIndexInfoOfType(type, kind);
-                if (IndexInfoOfKind) {
-                    const writer = getSingleLineStringWriter();
-                    checker.getSymbolDisplayBuilder().buildIndexSignatureDisplay(IndexInfoOfKind, writer, kind, enclosingDeclaration);
-                    const result = writer.string();
-                    releaseStringWriter(writer);
-
-                    return result;
-                }
-            }
-            return "";
+        function getMissingIndexSignatureInsertion(type: InterfaceType, kind: IndexKind, enclosingDeclaration: ClassLikeDeclaration) {
+            const indexInfo = checker.getIndexInfoOfType(type, kind);
+            const indexSignature =  indexInfo && indexSignatureToAccessibleString(indexInfo, kind, enclosingDeclaration, TypeFormatFlags.NoTruncation, checker);
+            return indexSignature || "";
         }
 
         function pushAction(result: CodeAction[], insertion: string, description: string): void {
