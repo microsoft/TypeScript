@@ -11929,8 +11929,8 @@ namespace ts {
                 // If this is a function in a JS file, it might be a class method. Check if it's the RHS
                 // of a x.prototype.y = function [name]() { .... }
                 if (container.kind === SyntaxKind.FunctionExpression &&
-                    isInJavaScriptFile(container.parent) &&
-                    getSpecialPropertyAssignmentKind(container.parent) === SpecialPropertyAssignmentKind.PrototypeProperty) {
+                    container.parent.kind === SyntaxKind.BinaryExpression &&
+                    getSpecialPropertyAssignmentKind(container.parent as BinaryExpression) === SpecialPropertyAssignmentKind.PrototypeProperty) {
                     // Get the 'x' of 'x.prototype.y = f' (here, 'f' is 'container')
                     const className = (((container.parent as BinaryExpression)   // x.prototype.y = f
                         .left as PropertyAccessExpression)       // x.prototype.y
@@ -21641,7 +21641,7 @@ namespace ts {
         }
 
         function getSpecialPropertyAssignmentSymbolFromEntityName(entityName: EntityName | PropertyAccessExpression) {
-            const specialPropertyAssignmentKind = getSpecialPropertyAssignmentKind(entityName.parent.parent);
+            const specialPropertyAssignmentKind = getSpecialPropertyAssignmentKind(entityName.parent.parent as BinaryExpression);
             switch (specialPropertyAssignmentKind) {
                 case SpecialPropertyAssignmentKind.ExportsProperty:
                 case SpecialPropertyAssignmentKind.PrototypeProperty:
