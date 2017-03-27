@@ -1384,4 +1384,8 @@ namespace ts {
         // First token is the open curly, this is where we want to put the 'super' call.
         return constructor.body.getFirstToken(sourceFile);
     }
+
+    export function getOpenBraceOfClassLike(declaration: ClassLikeDeclaration, sourceFile: SourceFile) {
+        return getTokenAtPosition(sourceFile, declaration.members.pos - 1);
+    }
 }

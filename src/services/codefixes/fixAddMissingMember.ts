@@ -31,37 +31,55 @@ namespace ts.codefix {
             return undefined;
         }
 
-        let typeString = "any";
+        let typeNode: TypeNode;
 
         if (token.parent.parent.kind === SyntaxKind.BinaryExpression) {
             const binaryExpression = token.parent.parent as BinaryExpression;
 
             const checker = context.program.getTypeChecker();
             const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(binaryExpression.right)));
-            typeString = checker.typeToString(widenedType);
+            typeNode = checker.typeToTypeNode(widenedType, classDeclaration) || typeNode;
         }
 
-        const startPos = classDeclaration.members.pos;
+        typeNode = typeNode ? typeNode : createKeywordTypeNode(SyntaxKind.AnyKeyword);
+
+        const openBrace = getOpenBraceOfClassLike(classDeclaration, sourceFile);
+
+        const property = createProperty(
+            /*decorators*/undefined,
+            /*modifiers*/ undefined,
+            token.getText(sourceFile),
+            /*questionToken*/ undefined,
+            typeNode,
+            /*initializer*/ undefined);
+        const propertyChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+        propertyChangeTracker.insertNodeAfter(sourceFile, openBrace, property, { suffix: context.newLineCharacter });
+
+        const stringTypeNode = createKeywordTypeNode(SyntaxKind.StringKeyword);
+        const indexingParameter = createParameter(
+            /*decorators*/ undefined,
+            /*modifiers*/ undefined,
+            /*dotDotDotToken*/ undefined,
+            "x",
+            /*questionToken*/ undefined,
+            stringTypeNode,
+            /*initializer*/ undefined);
+        const indexSignature = createIndexSignatureDeclaration(
+            /*decorators*/undefined,
+            /*modifiers*/ undefined,
+            [indexingParameter],
+            typeNode);
+
+        const indexSignatureChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+        indexSignatureChangeTracker.insertNodeAfter(sourceFile, openBrace, indexSignature, { suffix: context.newLineCharacter });
 
         return [{
             description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_declaration_for_missing_property_0), [token.getText()]),
-            changes: [{
-                fileName: sourceFile.fileName,
-                textChanges: [{
-                    span: { start: startPos, length: 0 },
-                    newText: `${token.getFullText(sourceFile)}: ${typeString};`
-                }]
-            }]
+            changes: propertyChangeTracker.getChanges()
         },
         {
             description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_index_signature_for_missing_property_0), [token.getText()]),
-            changes: [{
-                fileName: sourceFile.fileName,
-                textChanges: [{
-                    span: { start: startPos, length: 0 },
-                    newText: `[name: string]: ${typeString};`
-                }]
-            }]
+            changes: indexSignatureChangeTracker.getChanges()
         }];
     }
 }
