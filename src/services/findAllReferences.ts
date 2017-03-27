@@ -935,8 +935,6 @@ namespace ts.FindAllReferences.Core {
             addReference(referenceLocation, search.symbol, search.location, state);
         }
 
-        const classSymbol = skipAliases(search.symbol, state.checker);
-        Debug.assert(isClassLike(classSymbol.valueDeclaration));
         const pusher = state.referenceAdder(search.symbol, search.location);
 
         if (isClassLike(referenceLocation.parent)) {
@@ -1685,10 +1683,6 @@ namespace ts.FindAllReferences.Core {
         }
 
         return false;
-    }
-
-    function skipAliases(symbol: Symbol, checker: TypeChecker): Symbol {
-        return symbol.flags & SymbolFlags.Alias ? checker.getAliasedSymbol(symbol) : symbol;
     }
 
     /**
