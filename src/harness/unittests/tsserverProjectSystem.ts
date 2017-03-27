@@ -1,4 +1,4 @@
-﻿/// <reference path="..\harness.ts" />
+/// <reference path="..\harness.ts" />
 /// <reference path="../../server/typingsInstaller/typingsInstaller.ts" />
 
 namespace ts.projectSystem {
@@ -547,6 +547,12 @@ namespace ts.projectSystem {
         readonly getEnvironmentVariable = notImplemented;
     }
 
+    /**
+      * Test server cancellation token used to mock host token cancellation requests.
+      * The cancelAfterRequest constructor param specifies how many isCancellationRequested() calls
+      * should be made before canceling the token. The id of the request to cancel should be set with
+      * setRequestToCancel();
+      */
     export class TestServerCancellationToken implements server.ServerCancellationToken {
         private currentId = -1;
         private requestToCancel = -1;
@@ -565,12 +571,15 @@ namespace ts.projectSystem {
         }
 
         resetRequest(requestId: number) {
-            assert.equal(requestId, this.currentId, "unexpected request id in cancellation")
+            assert.equal(requestId, this.currentId, "unexpected request id in cancellation");
             this.currentId = undefined;
         }
 
         isCancellationRequested() {
             this.isCancellationRequestedCount++;
+            // If the request id is the request to cancel and isCancellationRequestedCount
+            // has been met then cancel the request. Ex: cancel the request if it is a
+            // nav bar request & isCancellationRequested() has already been called three times.
             return this.requestToCancel === this.currentId && this.isCancellationRequestedCount >= this.cancelAfterRequest;
         }
 
@@ -662,7 +671,7 @@ namespace ts.projectSystem {
 
             checkProjectActualFiles(service.configuredProjects[0], []);
             checkProjectActualFiles(service.inferredProjects[0], [f1.path]);
-        })
+        });
 
         it("create configured project without file list", () => {
             const configFile: FileOrFolder = {
@@ -1041,6 +1050,41 @@ namespace ts.projectSystem {
             checkProjectRootFiles(projectService.configuredProjects[0], [commonFile1.path, commonFile2.path]);
         });
 
+        it("should disable features when the files are too large", () => {
+            const file1 = {
+                path: "/a/b/f1.js",
+                content: "let x =1;",
+                fileSize: 10 * 1024 * 1024
+            };
+            const file2 = {
+                path: "/a/b/f2.js",
+                content: "let y =1;",
+                fileSize: 6 * 1024 * 1024
+            };
+            const file3 = {
+                path: "/a/b/f3.js",
+                content: "let y =1;",
+                fileSize: 6 * 1024 * 1024
+            };
+
+            const proj1name = "proj1", proj2name = "proj2", proj3name = "proj3";
+
+            const host = createServerHost([file1, file2, file3]);
+            const projectService = createProjectService(host);
+
+            projectService.openExternalProject({ rootFiles: toExternalFiles([file1.path]), options: {}, projectFileName: proj1name });
+            const proj1 = projectService.findProject(proj1name);
+            assert.isTrue(proj1.languageServiceEnabled);
+
+            projectService.openExternalProject({ rootFiles: toExternalFiles([file2.path]), options: {}, projectFileName: proj2name });
+            const proj2 = projectService.findProject(proj2name);
+            assert.isTrue(proj2.languageServiceEnabled);
+
+            projectService.openExternalProject({ rootFiles: toExternalFiles([file3.path]), options: {}, projectFileName: proj3name });
+            const proj3 = projectService.findProject(proj3name);
+            assert.isFalse(proj3.languageServiceEnabled);
+        });
+
         it("should use only one inferred project if 'useOneInferredProject' is set", () => {
             const file1 = {
                 path: "/a/b/main.ts",
@@ -1215,7 +1259,7 @@ namespace ts.projectSystem {
 
             const host = createServerHost([f1, f2, libFile]);
             const service = createProjectService(host);
-            service.openExternalProject({ projectFileName: "/a/b/project", rootFiles: toExternalFiles([f1.path, f2.path]), options: {} })
+            service.openExternalProject({ projectFileName: "/a/b/project", rootFiles: toExternalFiles([f1.path, f2.path]), options: {} });
 
             service.openClientFile(f1.path);
             service.openClientFile(f2.path, "let x: string");
@@ -1247,7 +1291,7 @@ namespace ts.projectSystem {
 
             const host = createServerHost([f1, f2, libFile]);
             const service = createProjectService(host);
-            service.openExternalProject({ projectFileName: "/a/b/project", rootFiles: [{ fileName: f1.path }, { fileName: f2.path, hasMixedContent: true }], options: {} })
+            service.openExternalProject({ projectFileName: "/a/b/project", rootFiles: [{ fileName: f1.path }, { fileName: f2.path, hasMixedContent: true }], options: {} });
 
             service.openClientFile(f1.path);
             service.openClientFile(f2.path, "let somelongname: string");
@@ -2074,7 +2118,7 @@ namespace ts.projectSystem {
 
             for (const f of [f2, f3]) {
                 const scriptInfo = projectService.getScriptInfoForNormalizedPath(server.toNormalizedPath(f.path));
-                assert.equal(scriptInfo.containingProjects.length, 0, `expect 0 containing projects for '${f.path}'`)
+                assert.equal(scriptInfo.containingProjects.length, 0, `expect 0 containing projects for '${f.path}'`);
             }
         });
 
@@ -2190,7 +2234,7 @@ namespace ts.projectSystem {
                 projectFileName,
                 rootFiles: [toExternalFile(f1.path)],
                 options: {}
-            })
+            });
             projectService.openClientFile(f1.path, "let x = 1;\nlet y = 2;");
 
             projectService.checkNumberOfProjects({ externalProjects: 1 });
@@ -3040,6 +3084,42 @@ namespace ts.projectSystem {
             const errorResult = <protocol.Diagnostic[]>session.executeCommand(dTsFileGetErrRequest).response;
             assert.isTrue(errorResult.length === 0);
         });
+
+        it("should be turned on for js-only external projects with skipLibCheck=false", () => {
+            const jsFile = {
+                path: "/a/b/file1.js",
+                content: "let x =1;"
+            };
+            const dTsFile = {
+                path: "/a/b/file2.d.ts",
+                content: `
+                interface T {
+                    name: string;
+                };
+                interface T {
+                    name: number;
+                };`
+            };
+            const host = createServerHost([jsFile, dTsFile]);
+            const session = createSession(host);
+
+            const openExternalProjectRequest = makeSessionRequest<protocol.OpenExternalProjectArgs>(
+                CommandNames.OpenExternalProject,
+                {
+                    projectFileName: "project1",
+                    rootFiles: toExternalFiles([jsFile.path, dTsFile.path]),
+                    options: { skipLibCheck: false }
+                }
+            );
+            session.executeCommand(openExternalProjectRequest);
+
+            const dTsFileGetErrRequest = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(
+                CommandNames.SemanticDiagnosticsSync,
+                { file: dTsFile.path }
+            );
+            const errorResult = <protocol.Diagnostic[]>session.executeCommand(dTsFileGetErrRequest).response;
+            assert.isTrue(errorResult.length === 0);
+        });
     });
 
     describe("non-existing directories listed in config file input array", () => {
@@ -3068,6 +3148,33 @@ namespace ts.projectSystem {
 
             const inferredProject = projectService.inferredProjects[0];
             assert.isTrue(inferredProject.containsFile(<server.NormalizedPath>file1.path));
+        });
+
+        it("should be able to handle @types if input file list is empty", () => {
+            const f = {
+                path: "/a/app.ts",
+                content: "let x = 1"
+            };
+            const config = {
+                path: "/a/tsconfig.json",
+                content: JSON.stringify({
+                    compiler: {},
+                    files: []
+                })
+            };
+            const t1 = {
+                path: "/a/node_modules/@types/typings/index.d.ts",
+                content: `export * from "./lib"`
+            };
+            const t2 = {
+                path: "/a/node_modules/@types/typings/lib.d.ts",
+                content: `export const x: number`
+            };
+            const host = createServerHost([f, config, t1, t2], { currentDirectory: getDirectoryPath(f.path) });
+            const projectService = createProjectService(host);
+
+            projectService.openClientFile(f.path);
+            projectService.checkNumberOfProjects({ configuredProjects: 1, inferredProjects: 1 });
         });
     });
 
@@ -3314,12 +3421,12 @@ namespace ts.projectSystem {
                 isCancellationRequested: () => false,
                 setRequest: requestId => {
                     if (expectedRequestId === undefined) {
-                        assert.isTrue(false, "unexpected call")
+                        assert.isTrue(false, "unexpected call");
                     }
                     assert.equal(requestId, expectedRequestId);
                 },
                 resetRequest: noop
-            }
+            };
 
             const session = createSession(host, /*typingsInstaller*/ undefined, /*projectServiceEventHandler*/ undefined, cancellationToken);
 
@@ -3540,6 +3647,52 @@ namespace ts.projectSystem {
                     operationCanceledExceptionThrown = true;
                 }
                 assert(operationCanceledExceptionThrown, "Operation Canceled Exception not thrown for request: " + JSON.stringify(request));
+            }
+        });
+    });
+
+    describe("occurence highlight on string", () => {
+        it("should be marked if only on string values", () => {
+            const file1: FileOrFolder = {
+                path: "/a/b/file1.ts",
+                content: `let t1 = "div";\nlet t2 = "div";\nlet t3 = { "div": 123 };\nlet t4 = t3["div"];`
+            };
+
+            const host = createServerHost([file1]);
+            const session = createSession(host);
+            const projectService = session.getProjectService();
+
+            projectService.openClientFile(file1.path);
+            {
+                const highlightRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(
+                    CommandNames.Occurrences,
+                    { file: file1.path, line: 1, offset: 11 }
+                );
+                const highlightResponse = session.executeCommand(highlightRequest).response as protocol.OccurrencesResponseItem[];
+                const firstOccurence = highlightResponse[0];
+                assert.isTrue(firstOccurence.isInString, "Highlights should be marked with isInString");
+            }
+
+            {
+                const highlightRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(
+                    CommandNames.Occurrences,
+                    { file: file1.path, line: 3, offset: 13 }
+                );
+                const highlightResponse = session.executeCommand(highlightRequest).response as protocol.OccurrencesResponseItem[];
+                assert.isTrue(highlightResponse.length === 2);
+                const firstOccurence = highlightResponse[0];
+                assert.isUndefined(firstOccurence.isInString, "Highlights should not be marked with isInString if on property name");
+            }
+
+            {
+                const highlightRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(
+                    CommandNames.Occurrences,
+                    { file: file1.path, line: 4, offset: 14 }
+                );
+                const highlightResponse = session.executeCommand(highlightRequest).response as protocol.OccurrencesResponseItem[];
+                assert.isTrue(highlightResponse.length === 2);
+                const firstOccurence = highlightResponse[0];
+                assert.isUndefined(firstOccurence.isInString, "Highlights should not be marked with isInString if on indexer");
             }
         });
     });

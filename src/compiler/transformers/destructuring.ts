@@ -6,6 +6,7 @@ namespace ts {
     interface FlattenContext {
         context: TransformationContext;
         level: FlattenLevel;
+        downlevelIteration: boolean;
         hoistTempVariables: boolean;
         emitExpression: (value: Expression) => void;
         emitBindingOrAssignment: (target: BindingOrAssignmentElementTarget, value: Expression, location: TextRange, original: Node) => void;
@@ -42,7 +43,7 @@ namespace ts {
         let value: Expression;
         if (isDestructuringAssignment(node)) {
             value = node.right;
-            while (isEmptyObjectLiteralOrArrayLiteral(node.left)) {
+            while (isEmptyArrayLiteral(node.left) || isEmptyObjectLiteral(node.left)) {
                 if (isDestructuringAssignment(value)) {
                     location = node = value;
                     value = node.right;
@@ -57,6 +58,7 @@ namespace ts {
         const flattenContext: FlattenContext = {
             context,
             level,
+            downlevelIteration: context.getCompilerOptions().downlevelIteration,
             hoistTempVariables: true,
             emitExpression,
             emitBindingOrAssignment,
@@ -146,6 +148,7 @@ namespace ts {
         const flattenContext: FlattenContext = {
             context,
             level,
+            downlevelIteration: context.getCompilerOptions().downlevelIteration,
             hoistTempVariables,
             emitExpression,
             emitBindingOrAssignment,
@@ -312,7 +315,23 @@ namespace ts {
     function flattenArrayBindingOrAssignmentPattern(flattenContext: FlattenContext, parent: BindingOrAssignmentElement, pattern: ArrayBindingOrAssignmentPattern, value: Expression, location: TextRange) {
         const elements = getElementsOfBindingOrAssignmentPattern(pattern);
         const numElements = elements.length;
-        if (numElements !== 1 && (flattenContext.level < FlattenLevel.ObjectRest || numElements === 0)) {
+        if (flattenContext.level < FlattenLevel.ObjectRest && flattenContext.downlevelIteration) {
+            // Read the elements of the iterable into an array
+            value = ensureIdentifier(
+                flattenContext,
+                createReadHelper(
+                    flattenContext.context,
+                    value,
+                    numElements > 0 && getRestIndicatorOfBindingOrAssignmentElement(elements[numElements - 1])
+                        ? undefined
+                        : numElements,
+                    location
+                ),
+                /*reuseIdentifierExpressions*/ false,
+                location
+            );
+        }
+        else if (numElements !== 1 && (flattenContext.level < FlattenLevel.ObjectRest || numElements === 0)) {
             // For anything other than a single-element destructuring we need to generate a temporary
             // to ensure value is evaluated exactly once. Additionally, if we have zero elements
             // we need to emit *something* to ensure that in case a 'var' keyword was already emitted,
@@ -448,7 +467,7 @@ namespace ts {
     }
 
     function makeBindingElement(name: Identifier) {
-        return createBindingElement(/*propertyName*/ undefined, /*dotDotDotToken*/ undefined, name);
+        return createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, name);
     }
 
     function makeAssignmentElement(name: Identifier) {

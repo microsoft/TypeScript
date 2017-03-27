@@ -8,5 +8,4 @@
 //// } |]
 
 verify.rangeAfterCodeFix(`namespace greeter {
-    // some legit comments
 }`);

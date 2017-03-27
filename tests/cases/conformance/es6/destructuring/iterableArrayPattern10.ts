@@ -1,6 +1,4 @@
 //@target: ES6
-function fun([a, b]) { }
-fun(new FooIterator);
 class Bar { x }
 class Foo extends Bar { y }
 class FooIterator {
@@ -15,3 +13,6 @@ class FooIterator {
         return this;
     }
 }
+
+function fun([a, b]) { }
+fun(new FooIterator);

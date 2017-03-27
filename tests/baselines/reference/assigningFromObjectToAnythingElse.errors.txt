@@ -1,11 +1,8 @@
 tests/cases/compiler/assigningFromObjectToAnythingElse.ts(3,1): error TS2322: Type 'Object' is not assignable to type 'RegExp'.
   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
     Property 'exec' is missing in type 'Object'.
-tests/cases/compiler/assigningFromObjectToAnythingElse.ts(5,5): error TS2322: Type 'object | Object' is not assignable to type 'String'.
-  Type 'object' is not assignable to type 'String'.
-    Property 'charAt' is missing in type '{}'.
-tests/cases/compiler/assigningFromObjectToAnythingElse.ts(6,5): error TS2322: Type 'object | Number' is not assignable to type 'String'.
-  Type 'object' is not assignable to type 'String'.
+tests/cases/compiler/assigningFromObjectToAnythingElse.ts(5,17): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/assigningFromObjectToAnythingElse.ts(6,17): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/compiler/assigningFromObjectToAnythingElse.ts(8,5): error TS2322: Type 'Object' is not assignable to type 'Error'.
   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
     Property 'name' is missing in type 'Object'.
@@ -21,14 +18,11 @@ tests/cases/compiler/assigningFromObjectToAnythingElse.ts(8,5): error TS2322: Ty
 !!! error TS2322:     Property 'exec' is missing in type 'Object'.
     
     var a: String = Object.create<Object>("");
-        ~
-!!! error TS2322: Type 'object | Object' is not assignable to type 'String'.
-!!! error TS2322:   Type 'object' is not assignable to type 'String'.
-!!! error TS2322:     Property 'charAt' is missing in type '{}'.
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     var c: String = Object.create<Number>(1);
-        ~
-!!! error TS2322: Type 'object | Number' is not assignable to type 'String'.
-!!! error TS2322:   Type 'object' is not assignable to type 'String'.
+                    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     
     var w: Error = new Object();
         ~

@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "lib": ["es5", "scripthost"],
+        "lib": ["es5"],
         "noEmitOnError": true,
         "noImplicitAny": true,
         "noImplicitThis": true,

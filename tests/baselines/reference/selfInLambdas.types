@@ -1,4 +1,5 @@
 === tests/cases/compiler/selfInLambdas.ts ===
+
 interface MouseEvent {
 >MouseEvent : MouseEvent
 
@@ -43,16 +44,16 @@ var o = {
 
             this.counter++
 >this.counter++ : number
->this.counter : any
->this : any
->counter : any
+>this.counter : number
+>this : { counter: number; start: () => void; }
+>counter : number
 
             var f = () => this.counter;
->f : () => any
->() => this.counter : () => any
->this.counter : any
->this : any
->counter : any
+>f : () => number
+>() => this.counter : () => number
+>this.counter : number
+>this : { counter: number; start: () => void; }
+>counter : number
 
         }
 

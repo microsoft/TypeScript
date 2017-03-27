@@ -1,0 +1,6 @@
+=== tests/cases/compiler/yieldExpression1.ts ===
+function* foo() {
+>foo : Symbol(foo, Decl(yieldExpression1.ts, 0, 0))
+
+    yield
+}

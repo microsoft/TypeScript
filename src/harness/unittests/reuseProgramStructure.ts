@@ -1,4 +1,4 @@
-﻿/// <reference path="..\harness.ts" />
+/// <reference path="..\harness.ts" />
 /// <reference path="..\..\harness\harnessLanguageService.ts" />
 
 namespace ts {
