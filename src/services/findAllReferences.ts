@@ -339,7 +339,7 @@ namespace ts.FindAllReferences.Core {
         // otherwise we'll need to search globally (i.e. include each file).
         const scope = getSymbolScope(symbol);
         if (scope) {
-            getReferencesInContainer(scope, search, state);
+            getReferencesInContainer(scope, scope.getSourceFile(), search, state);
         }
         else {
             // Global search
@@ -516,7 +516,7 @@ namespace ts.FindAllReferences.Core {
         // For each import, find all references to that import in its source file.
         for (const [importLocation, importSymbol] of importSearches) {
             state.cancellationToken.throwIfCancellationRequested();
-            getReferencesInContainer(importLocation.getSourceFile(), state.createSearch(importLocation, importSymbol, ImportExport.Export), state);
+            getReferencesInSourceFile(importLocation.getSourceFile(), state.createSearch(importLocation, importSymbol, ImportExport.Export), state);
         }
 
         if (indirectUsers.length) {
@@ -543,14 +543,14 @@ namespace ts.FindAllReferences.Core {
     // Go to the symbol we imported from and find references for it.
     function searchForImportedSymbol(symbol: Symbol, state: State): void {
         for (const declaration of symbol.declarations) {
-            getReferencesInContainer(declaration.getSourceFile(), state.createSearch(declaration, symbol, ImportExport.Import), state);
+            getReferencesInSourceFile(declaration.getSourceFile(), state.createSearch(declaration, symbol, ImportExport.Import), state);
         }
     }
 
     /** Search for all occurences of an identifier in a source file (and filter out the ones that match). */
     function searchForName(sourceFile: SourceFile, search: Search, state: State): void {
         if (sourceFileHasName(sourceFile, search.escapedText)) {
-            getReferencesInContainer(sourceFile, search, state);
+            getReferencesInSourceFile(sourceFile, search, state);
         }
     }
 
@@ -748,13 +748,16 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
+    function getReferencesInSourceFile(sourceFile: ts.SourceFile, search: Search, state: State): void {
+        return getReferencesInContainer(sourceFile, sourceFile, search, state);
+    }
+
     /**
      * Search within node "container" for references for a search value, where the search value is defined as a
      * tuple of(searchSymbol, searchText, searchLocation, and searchMeaning).
      * searchLocation: a node where the search value
      */
-    function getReferencesInContainer(container: Node, search: Search, state: State): void {
-        const sourceFile = container.getSourceFile();
+    function getReferencesInContainer(container: Node, sourceFile: ts.SourceFile, search: Search, state: State): void {
         if (!state.markSearchedSymbol(sourceFile, search.symbol)) {
             return;
         }
