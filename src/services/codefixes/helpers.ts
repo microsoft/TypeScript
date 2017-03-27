@@ -86,6 +86,43 @@ namespace ts.codefix {
         }
     }
 
+    export function createBodySignatureFromCallExpression(callExpression: CallExpression, name: string, enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker): Signature {
+        const newSignatureDeclaration = createNode(SyntaxKind.CallSignature) as SignatureDeclaration;
+        newSignatureDeclaration.parent = enclosingDeclaration;
+        newSignatureDeclaration.name = createNode(SyntaxKind.Identifier) as Identifier;
+        newSignatureDeclaration.name.text = name;
+
+        const argCount = callExpression.arguments.length;
+        newSignatureDeclaration.parameters = createNodeArray<ParameterDeclaration>();
+
+        for(let i = 0; i < argCount; i++) {
+            const newParameter = createParameterDeclarationWithoutType(`arg${i}`, newSignatureDeclaration, /*optional*/ false);
+            newSignatureDeclaration.parameters.push(newParameter);
+        }
+        
+        const typeArgCount = callExpression.typeArguments ? callExpression.typeArguments.length : 0;
+        newSignatureDeclaration.typeParameters = createNodeArray<TypeParameterDeclaration>();
+        for(let i = 0; i < typeArgCount; i++) {
+            const newTypeParameter = createNode(SyntaxKind.TypeParameter) as TypeParameterDeclaration;
+            newTypeParameter.parent = newSignatureDeclaration;
+
+            const name = typeArgCount < 8 ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`;
+
+            newTypeParameter.symbol = new SymbolConstructor(SymbolFlags.FunctionScopedVariable, name);
+            newTypeParameter.symbol.valueDeclaration = newTypeParameter;
+            newTypeParameter.symbol.declarations = [newTypeParameter];
+            newTypeParameter.symbol.flags = SymbolFlags.TypeParameter;
+
+            newTypeParameter.name = createNode(SyntaxKind.Identifier) as Identifier;
+            newTypeParameter.name.text = name;
+            newTypeParameter.name.parent = newTypeParameter;
+
+            newSignatureDeclaration.typeParameters.push(newTypeParameter);
+        }
+
+        return checker.getSignatureFromDeclaration(newSignatureDeclaration);
+    }
+
     function createBodySignatureWithAnyTypes(signatures: Signature[], enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker): Signature {
         const newSignatureDeclaration = createNode(SyntaxKind.CallSignature) as SignatureDeclaration;
         newSignatureDeclaration.parent = enclosingDeclaration;
@@ -107,36 +144,37 @@ namespace ts.codefix {
         }
         const maxArgsParameterSymbolNames = signatures[maxArgsIndex].getParameters().map(symbol => symbol.getName());
 
-        const optionalToken = createToken(SyntaxKind.QuestionToken);
 
         newSignatureDeclaration.parameters = createNodeArray<ParameterDeclaration>();
         for (let i = 0; i < maxNonRestArgs; i++) {
-            const newParameter = createParameterDeclarationWithoutType(i, minArgumentCount, newSignatureDeclaration);
+            const newParameter = createParameterDeclarationWithoutType(maxArgsParameterSymbolNames[i], newSignatureDeclaration, i >= minArgumentCount);
             newSignatureDeclaration.parameters.push(newParameter);
         }
 
         if (hasRestParameter) {
-            const restParameter = createParameterDeclarationWithoutType(maxNonRestArgs, minArgumentCount, newSignatureDeclaration);
+            const restParameter = createParameterDeclarationWithoutType(maxArgsParameterSymbolNames[maxNonRestArgs] || "rest", newSignatureDeclaration, maxNonRestArgs >= minArgumentCount);
             restParameter.dotDotDotToken = createToken(SyntaxKind.DotDotDotToken);
             newSignatureDeclaration.parameters.push(restParameter);
         }
 
         return checker.getSignatureFromDeclaration(newSignatureDeclaration);
+    }
 
-        function createParameterDeclarationWithoutType(index: number, minArgCount: number, enclosingSignatureDeclaration: SignatureDeclaration): ParameterDeclaration {
-            const newParameter = createNode(SyntaxKind.Parameter) as ParameterDeclaration;
+    const optionalToken = createToken(SyntaxKind.QuestionToken);
 
-            newParameter.symbol = new SymbolConstructor(SymbolFlags.FunctionScopedVariable, maxArgsParameterSymbolNames[index] || "rest");
-            newParameter.symbol.valueDeclaration = newParameter;
-            newParameter.symbol.declarations = [newParameter];
-            newParameter.parent = enclosingSignatureDeclaration;
-            if (index >= minArgCount) {
+    function createParameterDeclarationWithoutType(name: string, enclosingSignatureDeclaration: SignatureDeclaration, optional?: boolean): ParameterDeclaration {
+        const newParameter = createNode(SyntaxKind.Parameter) as ParameterDeclaration;
+
+        newParameter.symbol = new SymbolConstructor(SymbolFlags.FunctionScopedVariable, name);
+        newParameter.symbol.valueDeclaration = newParameter;
+        newParameter.symbol.declarations = [newParameter];
+        newParameter.parent = enclosingSignatureDeclaration;
+            if (optional) {
                 newParameter.questionToken = optionalToken;
             }
 
             return newParameter;
         }
-    }
 
     export function getStubbedMethod(visibility: string, name: string, sigString = "()", newlineChar: string): string {
         return `${visibility}${name}${sigString}${getMethodBodyStub(newlineChar)}`;
