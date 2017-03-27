@@ -53,7 +53,7 @@ async function * f6() {
 }
 === tests/cases/conformance/emitter/esnext/asyncGenerators/F7.ts ===
 async function * f7() {
->f7 : () => AsyncIterableIterator<any>
+>f7 : () => AsyncIterableIterator<1>
 
     return 1;
 >1 : 1

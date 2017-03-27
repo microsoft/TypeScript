@@ -24,7 +24,7 @@ namespace ts.server.typingsInstaller {
             try {
                 fs.appendFileSync(this.logFile, text + sys.newLine);
             }
-            catch(e) {
+            catch (e) {
                 this.logEnabled = false;
             }
         }

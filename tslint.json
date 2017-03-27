@@ -1,4 +1,5 @@
 {
+    "rulesDirectory": "built/local/tslint",
     "rules": {
         "no-bom": true,
         "class-name": true,
@@ -49,5 +50,5 @@
         "object-literal-surrounding-space": true,
         "no-type-assertion-whitespace": true,
         "no-in-operator": true
-  }
+    }
 }

@@ -52,7 +52,7 @@ namespace ts.SymbolDisplay {
         if (flags & SymbolFlags.Constructor) return ScriptElementKind.constructorImplementationElement;
 
         if (flags & SymbolFlags.Property) {
-            if (flags & SymbolFlags.Transient && (<TransientSymbol>symbol).checkFlags & CheckFlags.SyntheticProperty) {
+            if (flags & SymbolFlags.Transient && (<TransientSymbol>symbol).checkFlags & CheckFlags.Synthetic) {
                 // If union property is result of union of non method (property/accessors/variables), it is labeled as property
                 const unionPropertyKind = forEach(typeChecker.getRootSymbols(symbol), rootSymbol => {
                     const rootSymbolFlags = rootSymbol.getFlags();
@@ -419,7 +419,7 @@ namespace ts.SymbolDisplay {
         if (!documentation) {
             documentation = symbol.getDocumentationComment();
             if (documentation.length === 0 && symbol.flags & SymbolFlags.Property) {
-                // For some special property access expressions like `experts.foo = foo` or `module.exports.foo = foo`
+                // For some special property access expressions like `exports.foo = foo` or `module.exports.foo = foo`
                 // there documentation comments might be attached to the right hand side symbol of their declarations.
                 // The pattern of such special property access is that the parent symbol is the symbol of the file.
                 if (symbol.parent && forEach(symbol.parent.declarations, declaration => declaration.kind === SyntaxKind.SourceFile)) {

@@ -619,7 +619,7 @@ namespace ts.FindAllReferences.Core {
         }
 
         // If this is a synthetic property, it's a property and must be searched for globally.
-        if ((flags & SymbolFlags.Transient && (<TransientSymbol>symbol).checkFlags & CheckFlags.SyntheticProperty)) {
+        if ((flags & SymbolFlags.Transient && (<TransientSymbol>symbol).checkFlags & CheckFlags.Synthetic)) {
             return undefined;
         }
 

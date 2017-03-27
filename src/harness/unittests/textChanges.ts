@@ -2,6 +2,9 @@
 /// <reference path="..\..\services\textChanges.ts" />
 /// <reference path="..\harness.ts" />
 
+// Some tests have trailing whitespace
+// tslint:disable trim-trailing-whitespace
+
 namespace ts {
     describe("textChanges", () => {
         function findChild(name: string, n: Node) {
@@ -572,7 +575,7 @@ import {
 } from "bar"`;
             runSingleFileTest("insertNodeInListAfter10", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createImportSpecifier(createIdentifier("b"), createIdentifier("a")));
-            })
+            });
         }
         {
             const text = `
@@ -581,7 +584,7 @@ import {
 } from "bar"`;
             runSingleFileTest("insertNodeInListAfter11", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createImportSpecifier(createIdentifier("b"), createIdentifier("a")));
-            })
+            });
         }
         {
             const text = `
@@ -590,7 +593,7 @@ import {
 } from "bar"`;
             runSingleFileTest("insertNodeInListAfter12", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createImportSpecifier(undefined, createIdentifier("a")));
-            })
+            });
         }
         {
             const text = `
@@ -599,7 +602,7 @@ import {
 } from "bar"`;
             runSingleFileTest("insertNodeInListAfter13", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createImportSpecifier(undefined, createIdentifier("a")));
-            })
+            });
         }
         {
             const text = `
@@ -609,7 +612,7 @@ import {
 } from "bar"`;
             runSingleFileTest("insertNodeInListAfter14", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createImportSpecifier(createIdentifier("b"), createIdentifier("a")));
-            })
+            });
         }
         {
             const text = `
@@ -619,7 +622,7 @@ import {
 } from "bar"`;
             runSingleFileTest("insertNodeInListAfter15", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createImportSpecifier(createIdentifier("b"), createIdentifier("a")));
-            })
+            });
         }
         {
             const text = `
@@ -629,7 +632,7 @@ import {
 } from "bar"`;
             runSingleFileTest("insertNodeInListAfter16", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createImportSpecifier(undefined, createIdentifier("a")));
-            })
+            });
         }
         {
             const text = `
@@ -639,7 +642,7 @@ import {
 } from "bar"`;
             runSingleFileTest("insertNodeInListAfter17", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createImportSpecifier(undefined, createIdentifier("a")));
-            })
+            });
         }
         {
             const text = `
@@ -648,7 +651,7 @@ import {
 } from "bar"`;
             runSingleFileTest("insertNodeInListAfter18", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createImportSpecifier(undefined, createIdentifier("a")));
-            })
+            });
         }
         {
             const text = `
@@ -656,7 +659,7 @@ class A {
     x;
 }`;
             runSingleFileTest("insertNodeAfterMultipleNodes", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-                let newNodes = [];
+                const newNodes = [];
                 for (let i = 0; i < 11 /*error doesn't occur with fewer nodes*/; ++i) {
                     newNodes.push(
                         createProperty(undefined, undefined, i + "", undefined, undefined, undefined));
@@ -714,7 +717,7 @@ class A {
 class A {
     x = foo
 }
-`
+`;
             runSingleFileTest("insertNodeInClassAfterNodeWithoutSeparator1", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 const newNode = createProperty(
                     /*decorators*/ undefined,
@@ -732,7 +735,7 @@ class A {
     x() {
     }
 }
-`
+`;
             runSingleFileTest("insertNodeInClassAfterNodeWithoutSeparator2", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 const newNode = createProperty(
                     /*decorators*/ undefined,
@@ -749,7 +752,7 @@ class A {
 interface A {
     x
 }
-`
+`;
             runSingleFileTest("insertNodeInInterfaceAfterNodeWithoutSeparator1", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 const newNode = createProperty(
                     /*decorators*/ undefined,
@@ -766,7 +769,7 @@ interface A {
 interface A {
     x()
 }
-`
+`;
             runSingleFileTest("insertNodeInInterfaceAfterNodeWithoutSeparator2", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 const newNode = createProperty(
                     /*decorators*/ undefined,
@@ -781,7 +784,7 @@ interface A {
         {
             const text = `
 let x = foo
-`
+`;
             runSingleFileTest("insertNodeInStatementListAfterNodeWithoutSeparator1", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 const newNode = createStatement(createParen(createLiteral(1)));
                 changeTracker.insertNodeAfter(sourceFile, findVariableStatementContaining("x", sourceFile), newNode, { suffix: newLineCharacter });

@@ -1,4 +1,4 @@
-{
+﻿{
     "Unterminated string literal.": {
         "category": "Error",
         "code": 1002
@@ -1435,6 +1435,14 @@
         "category": "Error",
         "code": 2448
     },
+    "Class '{0}' used before its declaration.": {
+        "category": "Error",
+        "code": 2449
+    },
+    "Enum '{0}' used before its declaration.": {
+        "category": "Error",
+        "code": 2450
+    },
     "Cannot redeclare block-scoped variable '{0}'.": {
         "category": "Error",
         "code": 2451
@@ -2018,10 +2026,6 @@
     "Cannot extend an interface '{0}'. Did you mean 'implements'?": {
         "category": "Error",
         "code": 2689
-    },
-    "A class must be declared after its base class.": {
-        "category": "Error",
-        "code": 2690
     },
     "An import path cannot end with a '{0}' extension. Consider importing '{1}' instead.": {
         "category": "Error",
@@ -2781,7 +2785,7 @@
         "category": "Message",
         "code": 6083
     },
-    "Specify the object invoked for createElement and __spread when targeting 'react' JSX emit.": {
+    "[Deprecated] Use '--jsxFactory' instead. Specify the object invoked for createElement when targeting 'react' JSX emit": {
         "category": "Message",
         "code": 6084
     },
@@ -3037,14 +3041,139 @@
         "category": "Message",
         "code": 6148
     },
-    "Use full down-level iteration for iterables and arrays for 'for-of', spread, and destructuring in ES5/3.": {
+    "Show diagnostic information.": {
         "category": "Message",
         "code": 6149
     },
-    "Enable all strict type checks.": {
+    "Show verbose diagnostic information.": {
         "category": "Message",
         "code": 6150
     },
+    "Emit a single file with source maps instead of having a separate file.": {
+        "category": "Message",
+        "code": 6151
+    },
+    "Emit the source alongside the sourcemaps within a single file; requires '--inlineSourceMap' or '--sourceMap' to be set.": {
+        "category": "Message",
+        "code": 6152
+    },
+    "Transpile each file as a separate module (similar to 'ts.transpileModule').": {
+        "category": "Message",
+        "code": 6153
+    },
+    "Print names of generated files part of the compilation.": {
+        "category": "Message",
+        "code": 6154
+    },
+    "Print names of files part of the compilation.": {
+        "category": "Message",
+        "code": 6155
+    },
+    "The locale used when displaying messages to the user (e.g. 'en-us')": {
+        "category": "Message",
+        "code": 6156
+    },
+    "Do not generate custom helper functions like '__extends' in compiled output.": {
+        "category": "Message",
+        "code": 6157
+    },
+    "Do not include the default library file (lib.d.ts).": {
+        "category": "Message",
+        "code": 6158
+    },
+    "Do not add triple-slash references or imported modules to the list of compiled files.": {
+        "category": "Message",
+        "code": 6159
+    },
+    "[Deprecated] Use '--skipLibCheck' instead. Skip type checking of default library declaration files.": {
+        "category": "Message",
+        "code": 6160
+    },
+    "List of folders to include type definitions from.": {
+        "category": "Message",
+        "code": 6161
+    },
+    "Disable size limitations on JavaScript projects.": {
+        "category": "Message",
+        "code": 6162
+    },
+    "The character set of the input files.": {
+        "category": "Message",
+        "code": 6163
+    },
+    "Emit a UTF-8 Byte Order Mark (BOM) in the beginning of output files.": {
+        "category": "Message",
+        "code": 6164
+    },
+    "Do not truncate error messages.": {
+        "category": "Message",
+        "code": 6165
+    },
+    "Output directory for generated declaration files.": {
+        "category": "Message",
+        "code": 6166
+    },
+    "A series of entries which re-map imports to lookup locations relative to the 'baseUrl'.": {
+        "category": "Message",
+        "code": 6167
+    },
+    "List of root folders whose combined content represents the structure of the project at runtime.": {
+        "category": "Message",
+        "code": 6168
+    },
+    "Show all compiler options.": {
+        "category": "Message",
+        "code": 6169
+    },
+    "[Deprecated] Use '--outFile' instead. Concatenate and emit output to single file": {
+        "category": "Message",
+        "code": 6170
+    },
+    "Command-line Options": {
+        "category": "Message",
+        "code": 6171
+    },
+    "Basic Options": {
+        "category": "Message",
+        "code": 6172
+    },
+    "Strict Type-Checking Options": {
+        "category": "Message",
+        "code": 6173
+    },
+    "Module Resolution Options": {
+        "category": "Message",
+        "code": 6174
+    },
+    "Source Map Options": {
+        "category": "Message",
+        "code": 6175
+    },
+    "Additional Checks": {
+        "category": "Message",
+        "code": 6176
+    },
+    "Experimental Options": {
+        "category": "Message",
+        "code": 6177
+    },
+    "Advanced Options": {
+        "category": "Message",
+        "code": 6178
+    },
+    "Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'.": {
+        "category": "Message",
+        "code": 6179
+    },
+    "Enable all strict type-checking options.": {
+        "category": "Message",
+        "code": 6180
+    },
+    "List of language service plugins.": {
+        "category": "Message",
+        "code": 6181
+    },
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

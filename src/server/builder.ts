@@ -1,4 +1,4 @@
-﻿/// <reference path="..\compiler\commandLineParser.ts" />
+/// <reference path="..\compiler\commandLineParser.ts" />
 /// <reference path="..\services\services.ts" />
 /// <reference path="session.ts" />
 

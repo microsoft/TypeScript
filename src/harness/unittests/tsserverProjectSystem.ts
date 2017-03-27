@@ -1007,6 +1007,41 @@ namespace ts.projectSystem {
             checkProjectRootFiles(projectService.configuredProjects[0], [commonFile1.path, commonFile2.path]);
         });
 
+        it("should disable features when the files are too large", () => {
+            const file1 = {
+                path: "/a/b/f1.js",
+                content: "let x =1;",
+                fileSize: 10 * 1024 * 1024
+            };
+            const file2 = {
+                path: "/a/b/f2.js",
+                content: "let y =1;",
+                fileSize: 6 * 1024 * 1024
+            };
+            const file3 = {
+                path: "/a/b/f3.js",
+                content: "let y =1;",
+                fileSize: 6 * 1024 * 1024
+            };
+
+            const proj1name = "proj1", proj2name = "proj2", proj3name = "proj3";
+
+            const host = createServerHost([file1, file2, file3]);
+            const projectService = createProjectService(host);
+
+            projectService.openExternalProject({ rootFiles: toExternalFiles([file1.path]), options: {}, projectFileName: proj1name });
+            const proj1 = projectService.findProject(proj1name);
+            assert.isTrue(proj1.languageServiceEnabled);
+
+            projectService.openExternalProject({ rootFiles: toExternalFiles([file2.path]), options: {}, projectFileName: proj2name });
+            const proj2 = projectService.findProject(proj2name);
+            assert.isTrue(proj2.languageServiceEnabled);
+
+            projectService.openExternalProject({ rootFiles: toExternalFiles([file3.path]), options: {}, projectFileName: proj3name });
+            const proj3 = projectService.findProject(proj3name);
+            assert.isFalse(proj3.languageServiceEnabled);
+        });
+
         it("should use only one inferred project if 'useOneInferredProject' is set", () => {
             const file1 = {
                 path: "/a/b/main.ts",
@@ -2995,6 +3030,42 @@ namespace ts.projectSystem {
                     projectFileName: "project1",
                     rootFiles: toExternalFiles([jsFile.path, dTsFile.path]),
                     options: {}
+                }
+            );
+            session.executeCommand(openExternalProjectRequest);
+
+            const dTsFileGetErrRequest = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(
+                CommandNames.SemanticDiagnosticsSync,
+                { file: dTsFile.path }
+            );
+            const errorResult = <protocol.Diagnostic[]>session.executeCommand(dTsFileGetErrRequest).response;
+            assert.isTrue(errorResult.length === 0);
+        });
+
+        it("should be turned on for js-only external projects with skipLibCheck=false", () => {
+            const jsFile = {
+                path: "/a/b/file1.js",
+                content: "let x =1;"
+            };
+            const dTsFile = {
+                path: "/a/b/file2.d.ts",
+                content: `
+                interface T {
+                    name: string;
+                };
+                interface T {
+                    name: number;
+                };`
+            };
+            const host = createServerHost([jsFile, dTsFile]);
+            const session = createSession(host);
+
+            const openExternalProjectRequest = makeSessionRequest<protocol.OpenExternalProjectArgs>(
+                CommandNames.OpenExternalProject,
+                {
+                    projectFileName: "project1",
+                    rootFiles: toExternalFiles([jsFile.path, dTsFile.path]),
+                    options: { skipLibCheck: false }
                 }
             );
             session.executeCommand(openExternalProjectRequest);
