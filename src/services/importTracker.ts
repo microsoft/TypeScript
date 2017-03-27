@@ -36,7 +36,7 @@ namespace ts.FindAllReferences {
     type ImporterOrCallExpression = Importer | CallExpression;
 
     /** Returns import statements that directly reference the exporting module, and a list of files that may access the module through a namespace. */
-    function getImportersForExport(sourceFiles: SourceFile[], allDirectImports: ImporterOrCallExpression[][], { exportingModuleSymbol, exportKind }: ExportInfo, checker: TypeChecker): { directImports: Importer[], indirectUsers: SourceFile[] } {
+    function getImportersForExport(sourceFiles: SourceFile[], allDirectImports: Map<ImporterOrCallExpression[]>, { exportingModuleSymbol, exportKind }: ExportInfo, checker: TypeChecker): { directImports: Importer[], indirectUsers: SourceFile[] } {
         const markSeenDirectImport = nodeSeenTracker<ImporterOrCallExpression>();
         const markSeenIndirectUser = nodeSeenTracker<SourceFileLike>();
         const directImports: Importer[] = [];
@@ -148,7 +148,7 @@ namespace ts.FindAllReferences {
         }
 
         function getDirectImports(moduleSymbol: Symbol): ImporterOrCallExpression[] | undefined {
-            return allDirectImports[getSymbolId(moduleSymbol)];
+            return allDirectImports.get(getSymbolId(moduleSymbol).toString());
         }
     }
 
@@ -173,7 +173,7 @@ namespace ts.FindAllReferences {
 
         function handleImport(decl: Importer): void {
             if (decl.kind === SyntaxKind.ImportEqualsDeclaration) {
-                if (isProperImportEquals(decl)) {
+                if (isExternalModuleImportEquals(decl)) {
                     handleNamespaceImportLike(decl.name);
                 }
                 return;
@@ -274,17 +274,17 @@ namespace ts.FindAllReferences {
     }
 
     /** Returns a map from a module symbol Id to all import statements that directly reference the module. */
-    function getDirectImportsMap(sourceFiles: SourceFile[], checker: TypeChecker): ImporterOrCallExpression[][] {
-        const map: ImporterOrCallExpression[][] = [];
+    function getDirectImportsMap(sourceFiles: SourceFile[], checker: TypeChecker): Map<ImporterOrCallExpression[]> {
+        const map = createMap<ImporterOrCallExpression[]>();
 
         for (const sourceFile of sourceFiles) {
             forEachImport(sourceFile, (importDecl, moduleSpecifier) => {
                 const moduleSymbol = checker.getSymbolAtLocation(moduleSpecifier);
                 if (moduleSymbol) {
-                    const id = getSymbolId(moduleSymbol);
-                    let imports = map[id];
+                    const id = getSymbolId(moduleSymbol).toString();
+                    let imports = map.get(id);
                     if (!imports) {
-                        imports = map[id] = [];
+                        map.set(id, imports = []);
                     }
                     imports.push(importDecl);
                 }
@@ -371,8 +371,7 @@ namespace ts.FindAllReferences {
      * @param comingFromExport If we are doing a search for all exports, don't bother looking backwards for the imported symbol, since that's the reason we're here.
      */
     export function getImportOrExportSymbol(node: Node, symbol: Symbol, checker: TypeChecker, comingFromExport: boolean): ImportedSymbol | ExportedSymbol | undefined {
-        const ex = getExport();
-        return ex || comingFromExport ? ex : getImport();
+        return comingFromExport ? getExport() : getExport() || getImport();
 
         function getExport(): ExportedSymbol | ImportedSymbol | undefined {
             const { parent } = node;
@@ -459,7 +458,9 @@ namespace ts.FindAllReferences {
         const { parent } = node;
         switch (parent.kind) {
             case SyntaxKind.ImportEqualsDeclaration:
-                return (parent as ImportEqualsDeclaration).name === node ? { isNamedImport: false } : undefined;
+                return (parent as ImportEqualsDeclaration).name === node && isExternalModuleImportEquals(parent as ImportEqualsDeclaration)
+                    ? { isNamedImport: false }
+                    : undefined;
             case SyntaxKind.ImportSpecifier:
                 // For a rename import `{ foo as bar }`, don't search for the imported symbol. Just find local uses of `bar`.
                 return (parent as ImportSpecifier).propertyName ? undefined : { isNamedImport: true };
@@ -522,7 +523,7 @@ namespace ts.FindAllReferences {
         return node.kind === SyntaxKind.ModuleDeclaration && (node as ModuleDeclaration).name.kind === SyntaxKind.StringLiteral;
     }
 
-    function isProperImportEquals({ moduleReference }: ImportEqualsDeclaration): boolean {
+    function isExternalModuleImportEquals({ moduleReference }: ImportEqualsDeclaration): boolean {
         return moduleReference.kind === SyntaxKind.ExternalModuleReference && moduleReference.expression.kind === SyntaxKind.StringLiteral
     }
 }

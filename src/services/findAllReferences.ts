@@ -520,17 +520,18 @@ namespace ts.FindAllReferences.Core {
         }
 
         if (indirectUsers.length) {
-            const indirectSearch = (() => {
-                switch (exportInfo.exportKind) {
-                    case ExportKind.Named:
-                        return state.createSearch(exportLocation, exportSymbol, ImportExport.Export);
-                    case ExportKind.Default:
-                        // Search for a property access to '.default'. This can't be renamed.
-                        return state.isForRename ? undefined : state.createSearch(exportLocation, exportSymbol, ImportExport.Export, { text: "default" });
-                    case ExportKind.ExportEquals:
-                        return undefined;
-                }
-            })();
+            let indirectSearch: Search | undefined;
+            switch (exportInfo.exportKind) {
+                case ExportKind.Named:
+                    indirectSearch = state.createSearch(exportLocation, exportSymbol, ImportExport.Export);
+                    break;
+                case ExportKind.Default:
+                    // Search for a property access to '.default'. This can't be renamed.
+                    indirectSearch = state.isForRename ? undefined : state.createSearch(exportLocation, exportSymbol, ImportExport.Export, { text: "default" });
+                    break;
+                case ExportKind.ExportEquals:
+                    break;
+            }
             if (indirectSearch) {
                 for (const indirectUser of indirectUsers) {
                     state.cancellationToken.throwIfCancellationRequested();
@@ -549,13 +550,9 @@ namespace ts.FindAllReferences.Core {
 
     /** Search for all occurences of an identifier in a source file (and filter out the ones that match). */
     function searchForName(sourceFile: SourceFile, search: Search, state: State): void {
-        if (sourceFileHasName(sourceFile, search.escapedText)) {
+        if (getNameTable(sourceFile).get(search.escapedText) !== undefined) {
             getReferencesInSourceFile(sourceFile, search, state);
         }
-    }
-
-    function sourceFileHasName(sourceFile: SourceFile, escapedName: string): boolean {
-        return getNameTable(sourceFile).get(escapedName) !== undefined;
     }
 
     function getPropertySymbolOfDestructuringAssignment(location: Node, checker: TypeChecker): Symbol | undefined {
@@ -613,7 +610,9 @@ namespace ts.FindAllReferences.Core {
             return undefined;
         }
 
-        // The only symbols with parents *not* globally acessible are exports of external modules, and only then if they do not have `export as namespace`.
+        // If the symbol has a parent, it's globally visible.
+        // Unless that parent is an external module, then we should only search in the module (and recurse on the export later).
+        // But if the parent is a module that has `export as namespace`, then the symbol *is* globally visible.
         if (parent && !((parent.flags & SymbolFlags.Module) && isExternalModuleSymbol(parent) && !parent.globalExports)) {
             return undefined;
         }

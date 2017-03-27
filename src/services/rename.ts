@@ -31,6 +31,13 @@ namespace ts.Rename {
                     return getRenameInfoError(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library);
                 }
 
+                // Cannot rename `default` as in `import { default as foo } from "./someModule";
+                if (node.kind === SyntaxKind.Identifier &&
+                        (node as Identifier).originalKeywordKind === SyntaxKind.DefaultKeyword &&
+                        symbol.parent.flags & ts.SymbolFlags.Module) {
+                    return undefined;
+                }
+
                 const displayName = stripQuotes(getDeclaredName(typeChecker, symbol, node));
                 const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, node);
                 return kind ? getRenameInfoSuccess(displayName, typeChecker.getFullyQualifiedName(symbol), kind, SymbolDisplay.getSymbolModifiers(symbol), node, sourceFile) : undefined;
@@ -82,11 +89,8 @@ namespace ts.Rename {
     }
 
     function nodeIsEligibleForRename(node: Node): boolean {
-        if (node.kind === SyntaxKind.Identifier) {
-            // Cannot rename `default` as in `import { default as foo } from "./someModule";
-            return (node as Identifier).originalKeywordKind !== SyntaxKind.DefaultKeyword;
-        }
-        return node.kind === SyntaxKind.StringLiteral ||
+        return node.kind === ts.SyntaxKind.Identifier ||
+            node.kind === SyntaxKind.StringLiteral ||
             isLiteralNameOfPropertyDeclarationOrIndexAccess(node) ||
             isThis(node);
     }

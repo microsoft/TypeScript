@@ -9,12 +9,20 @@
 // @Filename: /c.ts
 ////import { a } from "./b";
 ////a.[|default|]();
+////
+////declare const x: { [|{| "isWriteAccess": true, "isDefinition": true |}default|]: number };
+////x.[|default|];
 
-verify.singleReferenceGroup("function f(): void");
+const [r0, r1, r2, r3] = test.ranges();
 
-const [r0, r1] = test.ranges();
+verify.singleReferenceGroup("function f(): void", [r0, r1]);
+verify.singleReferenceGroup("(property) default: number", [r2, r3]);
 
 verify.rangesAreRenameLocations([r0]);
 
+// Can't rename a default import.
 goTo.rangeStart(r1);
 verify.renameInfoFailed();
+
+// Can rename a default property.
+verify.rangesAreRenameLocations([r2, r3]);
