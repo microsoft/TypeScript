@@ -17,7 +17,7 @@ namespace ts.FindAllReferences {
         return (exportSymbol, exportInfo, isForRename) => {
             const { directImports, indirectUsers } = getImportersForExport(sourceFiles, allDirectImports, exportInfo, checker);
             return { indirectUsers, ...getSearchesFromDirectImports(directImports, exportSymbol, exportInfo.exportKind, checker, isForRename) };
-        }
+        };
     }
 
     /** Info about an exported symbol to perform recursive search on. */
@@ -86,7 +86,7 @@ namespace ts.FindAllReferences {
                     case SyntaxKind.ImportDeclaration:
                         const namedBindings = direct.importClause && direct.importClause.namedBindings;
                         if (namedBindings && namedBindings.kind === SyntaxKind.NamespaceImport) {
-                            handleNamespaceImport(direct, namedBindings.name)
+                            handleNamespaceImport(direct, namedBindings.name);
                         }
                         else {
                             directImports.push(direct);
@@ -418,7 +418,7 @@ namespace ts.FindAllReferences {
                     // Get the symbol for the `export =` node; its parent is the module it's the export of.
                     const exportingModuleSymbol = parent.symbol.parent;
                     Debug.assert(!!exportingModuleSymbol);
-                    return { kind: ImportExport.Export, symbol, exportInfo: { exportingModuleSymbol, exportKind: ExportKind.ExportEquals } }
+                    return { kind: ImportExport.Export, symbol, exportInfo: { exportingModuleSymbol, exportKind: ExportKind.ExportEquals } };
                 }
             }
         }
@@ -445,7 +445,7 @@ namespace ts.FindAllReferences {
 
         function exportInfo(symbol: Symbol, kind: ExportKind): ExportedSymbol {
             const exportInfo = getExportInfo(symbol, kind, checker);
-            return exportInfo && { kind: ImportExport.Export, symbol, exportInfo }
+            return exportInfo && { kind: ImportExport.Export, symbol, exportInfo };
         }
 
         // Not meant for use with export specifiers or export assignment.
@@ -524,6 +524,6 @@ namespace ts.FindAllReferences {
     }
 
     function isExternalModuleImportEquals({ moduleReference }: ImportEqualsDeclaration): boolean {
-        return moduleReference.kind === SyntaxKind.ExternalModuleReference && moduleReference.expression.kind === SyntaxKind.StringLiteral
+        return moduleReference.kind === SyntaxKind.ExternalModuleReference && moduleReference.expression.kind === SyntaxKind.StringLiteral;
     }
 }

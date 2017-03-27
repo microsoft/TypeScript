@@ -561,7 +561,7 @@ namespace FourSlash {
                 const errors = this.getDiagnostics(fileName);
                 if (errors.length) {
                     this.printErrorLog(/*expectErrors*/ false, errors);
-                    const error = errors[0]
+                    const error = errors[0];
                     this.raiseError(`Found an error: ${error.file.fileName}@${error.start}: ${error.messageText}`);
                 }
             });
@@ -1174,7 +1174,7 @@ namespace FourSlash {
             let findInStrings: boolean, findInComments: boolean, ranges: Range[];
             if (ts.isArray(options)) {
                 findInStrings = findInComments = false;
-                ranges = options
+                ranges = options;
             }
             else {
                 findInStrings = !!options.findInStrings;
