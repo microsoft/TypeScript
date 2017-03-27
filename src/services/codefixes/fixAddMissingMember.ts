@@ -65,10 +65,10 @@ namespace ts.codefix {
             stringTypeNode,
             /*initializer*/ undefined);
         const indexSignature = createIndexSignatureDeclaration(
-            [indexingParameter],
-            typeNode,
             /*decorators*/undefined,
-            /*modifiers*/ undefined);
+            /*modifiers*/ undefined,
+            [indexingParameter],
+            typeNode);
 
         const indexSignatureChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
         indexSignatureChangeTracker.insertNodeAfter(sourceFile, openBrace, indexSignature, { suffix: context.newLineCharacter });

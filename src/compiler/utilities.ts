@@ -3735,7 +3735,7 @@ namespace ts {
      * of a TypeNode.
      */
     export function isTypeNode(node: Node): node is TypeNode {
-        return node && isTypeNodeKind(node.kind);
+        return isTypeNodeKind(node.kind);
     }
 
     // Binding patterns

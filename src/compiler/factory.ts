@@ -286,6 +286,10 @@ namespace ts {
         return <KeywordTypeNode>createSynthesizedNode(kind);
     }
 
+    export function createThisTypeNode() {
+        return <ThisTypeNode>createSynthesizedNode(SyntaxKind.ThisType);
+    }
+
     export function createLiteralTypeNode(literal: Expression) {
         const literalTypeNode = createSynthesizedNode(SyntaxKind.LiteralType) as LiteralTypeNode;
         literalTypeNode.literal = literal;
@@ -309,6 +313,20 @@ namespace ts {
         return node.typeName !== typeName
             || node.typeArguments !== typeArguments
             ? updateNode(createTypeReferenceNode(typeName, typeArguments), node)
+            : node;
+    }
+
+    export function createTypePredicateNode(parameterName: Identifier | ThisTypeNode | string, type: TypeNode) {
+        const typePredicateNode = createSynthesizedNode(SyntaxKind.TypePredicate) as TypePredicateNode;
+        typePredicateNode.parameterName = asName(parameterName);
+        typePredicateNode.type = type;
+        return typePredicateNode;
+    }
+
+    export function updateTypePredicateNode(node: TypePredicateNode, parameterName: Identifier | ThisTypeNode, type: TypeNode) {
+        return node.parameterName !== parameterName
+            || node.type !== type
+            ? updateNode(createTypePredicateNode(parameterName, type), node)
             : node;
     }
 
@@ -455,21 +473,21 @@ namespace ts {
             : node;
     }
 
-    export function createIndexSignatureDeclaration(parameters: ParameterDeclaration[], type: TypeNode, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined): IndexSignatureDeclaration {
+    export function createIndexSignatureDeclaration(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, parameters: ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration {
         const indexSignature = createSynthesizedNode(SyntaxKind.IndexSignature) as IndexSignatureDeclaration;
-        indexSignature.parameters = asNodeArray(parameters);
-        indexSignature.type = type;
         indexSignature.decorators = asNodeArray(decorators);
         indexSignature.modifiers = asNodeArray(modifiers);
+        indexSignature.parameters = createNodeArray(parameters);
+        indexSignature.type = type;
         return indexSignature;
     }
 
-    export function updateIndexSignatureDeclaration(node: IndexSignatureDeclaration, parameters: ParameterDeclaration[], type: TypeNode, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined) {
+    export function updateIndexSignatureDeclaration(node: IndexSignatureDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, parameters: ParameterDeclaration[], type: TypeNode) {
         return node.parameters !== parameters
             || node.type !== type
             || node.decorators !== decorators
             || node.modifiers !== modifiers
-            ? updateNode(createIndexSignatureDeclaration(parameters, type, decorators, modifiers), node)
+            ? updateNode(createIndexSignatureDeclaration(decorators, modifiers, parameters, type), node)
             : node;
     }
 
@@ -542,7 +560,7 @@ namespace ts {
         node.name = asName(name);
         node.questionToken = questionToken;
         node.typeParameters = asNodeArray(typeParameters);
-        node.parameters = asNodeArray(parameters);
+        node.parameters = createNodeArray(parameters);
         node.type = type;
         node.body = body;
         return node;
@@ -2052,7 +2070,8 @@ namespace ts {
     function asName(name: string | BindingName): BindingName;
     function asName(name: string | PropertyName): PropertyName;
     function asName(name: string | EntityName): EntityName;
-    function asName(name: string | Identifier | BindingName | PropertyName | QualifiedName) {
+    function asName(name: string | Identifier | ThisTypeNode): Identifier | ThisTypeNode;
+    function asName(name: string | Identifier | BindingName | PropertyName | QualifiedName | ThisTypeNode) {
         return typeof name === "string" ? createIdentifier(name) : name;
     }
 
@@ -2060,7 +2079,7 @@ namespace ts {
         return typeof value === "string" || typeof value === "number" ? createLiteral(value) : value;
     }
 
-    export function asNodeArray<T extends Node>(array: T[] | undefined): NodeArray<T> | undefined {
+    function asNodeArray<T extends Node>(array: T[] | undefined): NodeArray<T> | undefined {
         return array ? createNodeArray(array) : undefined;
     }
 

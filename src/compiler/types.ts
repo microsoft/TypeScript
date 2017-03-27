@@ -1042,7 +1042,7 @@ namespace ts {
         kind: SyntaxKind.TrueKeyword | SyntaxKind.FalseKeyword;
     }
 
-    export interface ThisExpression extends PrimaryExpression, TypeNode {
+    export interface ThisExpression extends PrimaryExpression, KeywordTypeNode {
         kind: SyntaxKind.ThisKeyword;
     }
 
@@ -3246,12 +3246,6 @@ namespace ts {
         type: Type;
         isReadonly: boolean;
         declaration?: SignatureDeclaration;
-    }
-
-    export interface SignatureParts {
-        typeParameters: TypeParameterDeclaration[] | undefined;
-        parameters: ParameterDeclaration[];
-        type: TypeNode;
     }
 
     /* @internal */

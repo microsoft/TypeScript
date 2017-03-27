@@ -230,12 +230,4 @@ namespace ts.codefix {
         }
         return undefined;
     }
-
-    function stripComments(node: Node): Node {
-        if (node === undefined) {
-            return node;
-        }
-        const strippedChildren = visitEachChild(node, stripComments, nullTransformationContext);
-        return strippedChildren === node ? getSynthesizedClone(strippedChildren) : strippedChildren;
-    }
 }

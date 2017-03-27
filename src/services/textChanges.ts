@@ -528,6 +528,26 @@ namespace ts.textChanges {
         return skipTrivia(s, 0) === s.length;
     }
 
+    const nullTransformationContext: TransformationContext = {
+        enableEmitNotification: noop,
+        enableSubstitution: noop,
+        endLexicalEnvironment: () => undefined,
+        getCompilerOptions: notImplemented,
+        getEmitHost: notImplemented,
+        getEmitResolver: notImplemented,
+        hoistFunctionDeclaration: noop,
+        hoistVariableDeclaration: noop,
+        isEmitNotificationEnabled: notImplemented,
+        isSubstitutionEnabled: notImplemented,
+        onEmitNode: noop,
+        onSubstituteNode: notImplemented,
+        readEmitHelpers: notImplemented,
+        requestEmitHelper: noop,
+        resumeLexicalEnvironment: noop,
+        startLexicalEnvironment: noop,
+        suspendLexicalEnvironment: noop
+    };
+
     function assignPositionsToNode(node: Node): Node {
         const visited = visitEachChild(node, assignPositionsToNode, nullTransformationContext, assignPositionsToNodeArray, assignPositionsToNode);
         // create proxy node for non synthesized nodes

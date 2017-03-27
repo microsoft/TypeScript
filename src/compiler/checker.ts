@@ -2610,18 +2610,27 @@ namespace ts {
                     /*initializer*/ undefined);
                 const typeNode = typeToTypeNodeHelper(indexInfo.type);
                 return createIndexSignatureDeclaration(
-                    [indexingParameter],
-                    typeNode,
                     /*decorators*/ undefined,
-                    indexInfo.isReadonly ? [createToken(SyntaxKind.ReadonlyKeyword)] : undefined);
+                    indexInfo.isReadonly ? [createToken(SyntaxKind.ReadonlyKeyword)] : undefined,
+                    [indexingParameter],
+                    typeNode);
             }
 
             function signatureToSignatureDeclarationHelper(signature: Signature, kind: SyntaxKind): SignatureDeclaration {
 
                 const typeParameters = signature.typeParameters && signature.typeParameters.map(parameter => typeParameterToDeclaration(parameter));
                 const parameters = signature.parameters.map(parameter => symbolToParameterDeclaration(parameter));
-                const returnType = getReturnTypeOfSignature(signature);
-                const returnTypeNode = returnType && typeToTypeNodeHelper(returnType);
+                let returnTypeNode: TypeNode | TypePredicate;
+                if (signature.typePredicate) {
+                    const typePredicate = signature.typePredicate;
+                    const parameterName = typePredicate.kind === TypePredicateKind.Identifier ? createIdentifier((<IdentifierTypePredicate>typePredicate).parameterName) : createThisTypeNode();
+                    const typeNode = typeToTypeNodeHelper(typePredicate.type);
+                    returnTypeNode = createTypePredicateNode(parameterName, typeNode);
+                }
+                else {
+                    const returnType = getReturnTypeOfSignature(signature);
+                    returnTypeNode = returnType && typeToTypeNodeHelper(returnType);
+                }
                 const returnTypeNodeExceptAny = returnTypeNode && returnTypeNode.kind !== SyntaxKind.AnyKeyword ? returnTypeNode : undefined;
 
                 return createSignatureDeclaration(kind, typeParameters, parameters, returnTypeNodeExceptAny);
